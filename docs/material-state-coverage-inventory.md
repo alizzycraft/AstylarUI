@@ -2,6 +2,14 @@
 
 ## Evidence boundary
 
+September30 cold canonical export failed before publication: four independent
+source bindings were missing and the failed build reported259 unresolved style
+differences. Focused replay now isolates and corrects the shared historical-producer
+guard for the exact two new checkpoint inventory registrations:4/4 affected binding
+checks and28/28 existing transition checks pass without changing classifications.
+The unresolved population has not been recomputed; full validation and canonical
+refresh remain pending. See the current handoff for retained logs and exact metrics.
+
 Canonical source registration now includes the launch module and regression
 test omitted from the old explicit inventory:537 current paths versus535 in
 the published package. The existing focused test proves exactly two appended

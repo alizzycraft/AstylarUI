@@ -32,6 +32,20 @@ test('shared font inventory registration preserves the full historical producer'
   assert.throws(() => restoreStackingProducer(current + '\n// unrelated change'));
 });
 
+test('checkpoint inventory registration preserves the exact pre-registration producer', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previous = execFileSync('git', ['show', 'e15fddd^:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  const registration = "    'tests/material-parity/run-checkpoint.mjs',\n    'tests/material-parity/run-checkpoint.spec.mjs',\n";
+  assert.equal(current.split(registration).length, 2);
+  assert.equal(current.replace(registration, ''), previous);
+  assert.equal(restoreStackingProducer(current).restoredSource, restoreStackingProducer(previous).restoredSource);
+  for (const changed of [current.replace(registration, registration.repeat(2)),
+    current.replace('tests/material-parity/run-checkpoint.spec.mjs', 'tests/material-parity/unreviewed.spec.mjs'),
+    current.replace(registration, registration.split('\n').slice(0, 1).join('\n') + '\n'),
+    current + '\n// unrelated change']) assert.throws(() => restoreStackingProducer(changed));
+});
+
 test('prepared input followup restores the complete accepted prepared-input predecessor', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';
   const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');

@@ -2,6 +2,38 @@
 
 ## Current audit checkpoint — September 30
 
+**Cold export failed; shared inventory guard now reconciled:** the complete
+current-ancestry cold export from `e450a5b` terminated with validation failure
+after 2,178,415.7494ms (36.31 minutes), before canonical publication. Retain
+`artifacts/material-parity/cold-canonical-export-e450a5b.log`. It reported four
+missing independently bound source populations (alignment/font, text alignment,
+LTR alignment and reviewed inputs), plus259 unresolved resolved-style differences.
+That count is a failed-build result, not259 newly demonstrated core defects.
+Evidence-session metrics:2 collectors,10 memory hits,0 disk hits,1,205 files,
+89,154,859 bytes read and the same bytes reverified; peak recorded RSS about4.9GB.
+The published canonical package remains unchanged; no full acceptance advanced.
+
+The smallest reduction identified the shared guard: removing only the exact two
+new checkpoint inventory entries in memory restored the authenticated historical
+producer. The existing stacking-producer restoration now reverses only that exact
+pair and still requires the complete historical digest. Regression proof rejects
+duplicate, renamed, partial registrations and unrelated producer edits. No
+classification logic, canonical fixture, renderer or historical evidence changed.
+
+Final focused recheck: all four affected source-binding adapters independently
+replay original sources and membership without writes,4/4 pass,zero skips/failures,
+124,972.4693ms. Retain `artifacts/material-parity/checkpoint-inventory-binding-recheck.log`.
+Full existing producer-transition suite passes28/28,zero skips/failures,
+27,595.2665ms; retain `artifacts/material-parity/checkpoint-inventory-transition-recheck.log`.
+Earlier test handles were missing and no corresponding process was live; their
+lost output was not counted as passing. These retained rechecks are authoritative.
+
+Next: reconcile remaining unresolved attributions with the restored bindings using
+focused population checks before another full export. The259 failed-build count
+has not been recomputed. Broader family/state mapping and paint gaps, compact-index
+refresh, canonical validation and final full browser gates remain pending. Do not
+repeat the36-minute export merely to record this guard correction.
+
 **Remaining launch-related review receipts reconciled without changing findings:**
 the scalar-layer review and membership generators rerun against their pinned
 capture change only the live runner SHA and its dependent review-file SHA.

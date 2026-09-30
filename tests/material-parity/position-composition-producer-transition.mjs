@@ -36,6 +36,14 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
 export function restoreStackingProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  // Launch-module registration adds dependencies to the live inventory, not
+  // classification logic. Reverse only the exact pair before authenticating
+  // the complete historical producer; fresh capture policy is not conserved.
+  const checkpointInventory = "    'tests/material-parity/run-checkpoint.mjs',\n    'tests/material-parity/run-checkpoint.spec.mjs',\n";
+  if (restored.includes(checkpointInventory)) {
+    assert.equal(restored.split(checkpointInventory).length, 2);
+    restored = restored.replace(checkpointInventory, '');
+  }
   // The import-order repair registers shared collector data; it changes no
   // producer calculations. Remove only that exact inventory addition before
   // authenticating the entire historical producer below.
