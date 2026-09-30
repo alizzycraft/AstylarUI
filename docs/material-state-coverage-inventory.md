@@ -7,6 +7,10 @@ reference datepicker Escape-detachment timeout, zero skips/cancellations.
 Focused replay passes but does not erase that intermittent failure. Failure-only
 dispatch/focus/modifier/popup diagnostics are now retained in test output;
 integration and final acceptance remain unresolved.
+Bounded calendar instrumentation demonstrates the old focus/class readiness
+predicate can accept a pending enter animation. It now awaits the actual finite
+animation and verifies the reference close guard is clear before Escape; focused
+proof passes. Historical timeout attribution and renewed integration remain open.
 
 Supplemental ordinary dark/mobile timepicker: real input click opens both;
 wheel 144 changes scrollTop and first-option position by 144 CSS px on both.

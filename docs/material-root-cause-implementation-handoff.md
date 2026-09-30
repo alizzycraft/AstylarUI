@@ -2,6 +2,27 @@
 
 ## Current audit checkpoint — September 30
 
+**Datepicker readiness gap demonstrated, instrumentation corrected:** a bounded
+reference-only opening timeline in the existing calendar test observes the old
+class predicate=true AND focusedCell=true while the enter animation is running,
+pending=true/currentTime=0, with no animation events yet. This is a real browser
+negative control for the prior readiness proxy, not an invented synthetic input.
+Material `MatDatepickerBase.close()` returns without closing when content's
+`_isAnimating` is true, and animationstart/end update that flag/class. Thus
+class absence/focus alone cannot establish the intended settled action boundary.
+The test now awaits the popup's actual finite animation promises and two rAFs,
+then checks class absence and reads/asserts the reference close guard=false
+before the unchanged Escape action. No duration sleep, retry, animation disabling,
+style alteration or threshold change. Timeline diagnostics retain key target,
+modifier state and start/end/cancel events on a future failure. The demonstrated
+readiness defect is in the harness; attributing the original timeout specifically
+to the close guard remains provisional because its dispatch timeline was not
+captured. Initial timeline-only probes pass in 7,869/7,308ms; the corrected
+focused probe passes 1/1 in 8,295ms and 9,063ms, recording enter start/end and clear close
+guard. The prior unfiltered 23/24 result remains authoritative until integration
+is rerun; focused success is not a claim that intermittent failure is eliminated.
+No renderer, fixture, canonical finding or retained capture changed.
+
 **Browser proof batch integration is NOT green:** from `0c919dd`, the unfiltered
 `node --test tests/material-parity/sort-focus-structure.spec.mjs` completes in
 225,783ms with 23/24 passing, one failure, zero skips/cancellations. New tooltip

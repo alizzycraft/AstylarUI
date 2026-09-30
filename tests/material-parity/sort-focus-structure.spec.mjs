@@ -818,11 +818,17 @@ test('datepicker keyboard opening and pointer month/date boundaries locate calen
       await page.evaluate(() => {
         window.__calendarAuditKeys = [];
         window.__calendarAuditDispatch = [];
+        window.__calendarAnimationEvents = [];
+        for (const type of ['animationstart', 'animationend', 'animationcancel'])
+          document.addEventListener(type, event => {
+            if (event.target?.tagName === 'MAT-DATEPICKER-CONTENT')
+              window.__calendarAnimationEvents.push({ type, name: event.animationName, time: performance.now() });
+          }, true);
         document.addEventListener('keydown', event => window.__calendarAuditKeys.push(event.key), true);
         document.addEventListener('keydown', event => window.__calendarAuditDispatch.push({ key: event.key,
           modifiers: { alt: event.altKey, control: event.ctrlKey, shift: event.shiftKey, meta: event.metaKey },
           target: event.target?.outerHTML?.slice(0, 200), active: document.activeElement?.outerHTML?.slice(0, 200),
-          popupClass: document.querySelector('mat-datepicker-content')?.className ?? null }), true);
+          popupClass: document.querySelector('mat-datepicker-content')?.className ?? null, time: performance.now() }), true);
       });
       const steps = [];
       const snapshot = async boundary => {
@@ -845,17 +851,45 @@ test('datepicker keyboard opening and pointer month/date boundaries locate calen
       for (const key of ['Tab', 'Alt+ArrowDown', 'Escape']) {
         await page.keyboard.press(key);
         if (mode === 'reference' && key === 'Alt+ArrowDown') {
+          t.diagnostic(JSON.stringify({ calendarInitialReadiness: await page.evaluate(() => {
+            const popup = document.querySelector('mat-datepicker-content');
+            return { oldClassPredicate: !!popup && !popup.classList.contains('mat-datepicker-content-animating'),
+              focusedCell: !!document.activeElement?.classList.contains('mat-calendar-body-cell'),
+              animations: popup?.getAnimations().map(animation => ({ playState: animation.playState,
+                pending: animation.pending, currentTime: animation.currentTime })),
+              events: window.__calendarAnimationEvents };
+          }) }));
           await page.waitForFunction(() => document.activeElement?.classList.contains('mat-calendar-body-cell'));
+          // Class absence can also precede animationstart. Await the actual
+          // finite animation, then its event-driven class/close-guard update.
+          await page.evaluate(async () => {
+            const popup = document.querySelector('mat-datepicker-content');
+            await Promise.all(popup.getAnimations().filter(animation => animation.effect?.getTiming().iterations !== Infinity)
+              .map(animation => animation.finished));
+            await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+          });
           await page.waitForFunction(() => {
             const popup = document.querySelector('mat-datepicker-content');
             return popup && !popup.classList.contains('mat-datepicker-content-animating');
           });
+          t.diagnostic(JSON.stringify({ calendarPreEscape: await page.evaluate(() => ({
+            events: window.__calendarAnimationEvents,
+            className: document.querySelector('mat-datepicker-content')?.className,
+            closeGuardAnimating: window.ng.getComponent(document.querySelector('mat-datepicker-content'))._isAnimating,
+            animations: document.querySelector('mat-datepicker-content')?.getAnimations().map(animation => ({
+              playState: animation.playState, pending: animation.pending, currentTime: animation.currentTime,
+              endTime: animation.effect.getComputedTiming().endTime,
+            })), time: performance.now(),
+          })) }));
+          assert.equal(await page.evaluate(() => window.ng.getComponent(document.querySelector('mat-datepicker-content'))._isAnimating), false);
         }
         if (mode === 'reference' && key === 'Escape') {
           try { await page.locator('mat-datepicker-content').waitFor({ state: 'detached' }); }
           catch (error) {
             t.diagnostic(JSON.stringify({ failedCalendarEscape: await page.evaluate(() => ({
               dispatch: window.__calendarAuditDispatch, focus: document.activeElement?.outerHTML?.slice(0, 200),
+              animations: window.__calendarAnimationEvents,
+              closeGuardAnimating: window.ng.getComponent(document.querySelector('mat-datepicker-content'))?._isAnimating,
               popup: document.querySelector('mat-datepicker-content')?.outerHTML.slice(0, 400) ?? null,
             })) }));
             throw error;
