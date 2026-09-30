@@ -2,6 +2,28 @@
 
 ## Current audit checkpoint — October 1
 
+**Field popup cycles expose retained caret materials, not a resource plateau:**
+`node --test --test-name-pattern="dark mobile field popup cycles" tests/material-parity/sort-focus-structure.spec.mjs`
+passes the diagnostic counterexample1/1 in14,298.9964ms. Retain
+`artifacts/material-parity/field-popup-cursor-retention-8c2f911-verified.log` plus
+the original failed plateau runs `field-popup-cleanup-8c2f911.log` and
+`field-popup-material-owners-8c2f911.log`; do not relabel them as cleanup passes.
+Frozen authenticated showcase,Chrome154,dark/mobile390×844 DPR2; three real
+input-click/Escape cycles per side/family. Autocomplete2 and timepicker48 options
+match; dismissal removes every option and preserves empty value/input focus with
+aria-expanded false. Candidate post-dismissal material counts19→20→21 and26→27→28,
+respectively. Unbound `cursorMaterial_<family>-control` owners accumulate1→2→3,
+with previous unique IDs retained. Meshes/textures/cache/observers/plugin counts
+stay stable after the first cycle; whole-surface disposal clears sampled resources.
+The test explicitly requires the observed non-plateau and reports
+resourcePlateauAccepted false. No threshold or existing acceptance gate changed.
+Source hypothesis: TextSelectionService.createTextCursor allocates a separate
+material; TextInputManager.disposeTextInput/TextCursorRenderer.disposeCursor
+dispose the caret mesh without explicit material disposal. Public equal-input
+reduction and exact frozen teardown-path attribution are next; not yet a general
+confirmed lifecycle root cause or evidence about GPU/late-async ownership.
+No renderer/canonical fixture edit. Source receipts reconcile at a coherent milestone.
+
 **Equal-input public text separates backing rasterization from fractional sampling:**
 `node --test --test-name-pattern="public equal-input text separates" tests/material-parity/input-boundary-evidence.spec.mjs`
 passes1/1 in8,542.1597ms; retain `artifacts/material-parity/public-text-backing-phase-a9591d1-final.log`

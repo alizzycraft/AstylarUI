@@ -2,6 +2,15 @@
 
 ## Evidence boundary
 
+October1 dark/mobile autocomplete/timepicker three-cycle cleanup proof records
+matched2/48 options, complete semantic removal and retained empty-input focus.
+It also disproves material plateaus:19→20→21 and26→27→28, with1→2→3 retained
+unbound cursor materials. Other sampled counts plateau; whole-surface disposal
+clears them. Diagnostic counterexample passes1/1 in14,298.9964ms, not lifecycle
+acceptance. Original failed plateau logs retained; see handoff and
+`field-popup-cursor-retention-8c2f911-verified.log`. Public reduction/exact teardown
+attribution next; other profiles, paint and late-async isolation remain open.
+
 October1 equal-input public text phase proof passes1/1 in8,542.1597ms, eight
 paired origin/DPR cases, pinned Roboto and no Material plugin. Projected origins
 match native content origins; unchanged local textures yield DPR2 opaque minima

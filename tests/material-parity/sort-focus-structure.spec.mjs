@@ -1331,6 +1331,116 @@ test('dark mobile overlay cycles retain focus and semantic cleanup boundaries', 
   });
 });
 
+test('dark mobile field popup cycles diagnose retained cursor materials', async t => {
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    assert.equal(browser.version(), '154.0.8037.58');
+    const failedPlateaus = [];
+    for (const family of ['autocomplete', 'timepicker']) {
+      const observations = {};
+      for (const mode of ['reference', 'astylar']) {
+        const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
+        const errors = []; page.on('pageerror', error => errors.push(String(error)));
+        try {
+          await page.goto(`${baseUrl}/${mode}/${family}?benchmark=1&profile=dark`);
+          await page.locator('.frame').waitFor();
+          if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+          const settle = async () => {
+            if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+            await page.evaluate(async () => { await document.fonts.ready;
+              await Promise.all(document.getAnimations().filter(animation => animation.effect?.getTiming().iterations !== Infinity).map(animation => animation.finished.catch(() => {})));
+              await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))); });
+          };
+          const snapshot = async () => page.evaluate(({ mode, family }) => {
+            const selector = mode === 'reference' ? (family === 'autocomplete' ? '.mat-mdc-autocomplete-panel' : '.mat-timepicker-panel')
+              : `[data-astylar-id="${family === 'autocomplete' ? 'field-options' : 'timepicker-options'}"]`;
+            const popup = document.querySelector(selector), input = document.querySelector(mode === 'reference' ? `#${family}-control` : `[data-astylar-id="${family}-control"]`);
+            let resources = null, unboundMaterials = null;
+            if (mode === 'astylar') {
+              const surface = window.ng.getComponent(document.querySelector('app-astylar-showcase')).surface, scene = surface.scene;
+              const text = surface.host.inspection.textRenderingService;
+              unboundMaterials = scene.materials.filter(material => !scene.meshes.some(mesh => mesh.material === material))
+                .map(material => ({ name: material.name, uniqueId: material.uniqueId }));
+              resources = { meshes: scene.meshes.length, materials: scene.materials.length, textures: scene.textures.length,
+                loadedTextures: scene.getEngine().getLoadedTexturesCache().length, cacheSize: text.getCacheStats().size,
+                plugins: surface.diagnostics.pluginResources,
+                observers: Object.fromEntries(['onPointerObservable', 'onPrePointerObservable', 'onKeyboardObservable',
+                  'onPreKeyboardObservable', 'onBeforeRenderObservable', 'onAfterRenderObservable', 'onDisposeObservable']
+                  .map(name => [name, scene[name].observers.length])) };
+            }
+            return { popupCount: document.querySelectorAll(selector).length,
+              options: popup ? [...popup.querySelectorAll('[role="option"]')].map(node => node.textContent.trim()) : [],
+              allOptionCount: document.querySelectorAll('[role="option"]').length,
+              focus: document.activeElement?.getAttribute('data-astylar-id') || document.activeElement?.id || document.activeElement?.tagName,
+              inputFocused: document.activeElement === input, value: input.value, expanded: input.getAttribute('aria-expanded'), resources, unboundMaterials };
+          }, { mode, family });
+          await settle(); const initial = await snapshot(), cycles = [];
+          for (let cycle = 0; cycle < 3; cycle++) {
+            await page.mouse.click(10, 10); await settle();
+            const point = await page.evaluate(({ mode, family }) => {
+              if (mode === 'reference') { const b = document.getElementById(`${family}-control`).getBoundingClientRect(); return { x: b.x + b.width / 2, y: b.y + b.height / 2 }; }
+              const b = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([`${family}-control`], false).elements[`${family}-control`].borderBox;
+              const canvas = document.querySelector('canvas').getBoundingClientRect(); return { x: canvas.x + b.left + b.width / 2, y: canvas.y + b.top + b.height / 2 };
+            }, { mode, family });
+            await page.mouse.click(point.x, point.y);
+            const selector = mode === 'reference' ? (family === 'autocomplete' ? '.mat-mdc-autocomplete-panel' : '.mat-timepicker-panel')
+              : `[data-astylar-id="${family === 'autocomplete' ? 'field-options' : 'timepicker-options'}"]`;
+            await page.locator(selector).waitFor({ state: 'visible' }); await settle();
+            const opened = await snapshot();
+            await page.keyboard.press('Escape'); await page.locator(selector).waitFor({ state: 'detached' }); await settle();
+            cycles.push({ opened, closed: await snapshot() });
+          }
+          const disposal = mode === 'astylar' ? await page.evaluate(async () => {
+            const surface = window.ng.getComponent(document.querySelector('app-astylar-showcase')).surface;
+            const scene = surface.scene, engine = scene.getEngine(), text = surface.host.inspection.textRenderingService;
+            surface.dispose(); await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+            return { disposed: surface.disposed, sceneDisposed: scene.isDisposed, engineDisposed: engine.isDisposed,
+              meshes: scene.meshes.length, materials: scene.materials.length, textures: scene.textures.length,
+              loadedTextures: engine.getLoadedTexturesCache().length, cacheSize: text.getCacheStats().size,
+              plugins: surface.diagnostics.pluginResources };
+          }) : null;
+          observations[mode] = { initial, cycles, disposal, errors };
+        } finally { await page.close(); }
+      }
+      t.diagnostic(JSON.stringify({ family, observations }));
+      for (const mode of ['reference', 'astylar']) {
+        assert.deepEqual(observations[mode].errors, []);
+        for (const { opened, closed } of observations[mode].cycles) {
+          assert.equal(opened.popupCount, 1); assert.equal(opened.options.length, family === 'autocomplete' ? 2 : 48);
+          assert.equal(closed.popupCount, 0); assert.equal(closed.allOptionCount, 0); assert.deepEqual(closed.options, []);
+          assert.equal(closed.value, '');
+          assert.equal(closed.inputFocused, true); assert.equal(closed.expanded, 'false');
+        }
+      }
+      const plateau = observations.astylar.cycles[0].closed.resources;
+      for (let i = 0; i < 3; i++) assert.deepEqual(observations.astylar.cycles[i].opened.options, observations.reference.cycles[i].opened.options);
+      for (const [index, cycle] of observations.astylar.cycles.entries()) {
+        const { materials, ...stable } = cycle.closed.resources;
+        const { materials: initialMaterials, ...initialStable } = plateau;
+        assert.deepEqual(stable, initialStable);
+        assert.equal(materials, initialMaterials + index, 'preserve the observed material growth, not a plateau pass');
+        const cursorMaterials = cycle.closed.unboundMaterials.filter(material => material.name === `cursorMaterial_${family}-control`);
+        assert.equal(cursorMaterials.length, index + 1);
+        if (index > 0) for (const retained of observations.astylar.cycles[index - 1].closed.unboundMaterials.filter(material => material.name === `cursorMaterial_${family}-control`)) {
+          assert.ok(cursorMaterials.some(material => material.uniqueId === retained.uniqueId));
+        }
+        if (JSON.stringify(cycle.closed.resources) !== JSON.stringify(plateau)) failedPlateaus.push({ family, cycle: index,
+          baseline: plateau, actual: cycle.closed.resources, unboundMaterials: cycle.closed.unboundMaterials });
+      }
+      assert.deepEqual(observations.astylar.disposal, { disposed: true, sceneDisposed: true, engineDisposed: true,
+        meshes: 0, materials: 0, textures: 0, loadedTextures: 0, cacheSize: 0,
+        plugins: { owners: 0, resources: 0, cleanups: 0, pending: 0 } });
+    }
+    // Audit classification proof, not an acceptance gate. The original failed
+    // plateau runs are retained; this assertion requires the counterexample.
+    assert.equal(failedPlateaus.length, 4);
+    assert.throws(() => assert.deepEqual(failedPlateaus, [], 'field popup resources must plateau after dismissal'),
+      /field popup resources must plateau/);
+    t.diagnostic(JSON.stringify({ resourcePlateauAccepted: false, classification: 'retained unbound cursor materials',
+      failedCases: failedPlateaus.map(({ family, cycle }) => ({ family, cycle })),
+      limitation: 'frozen dark mobile three-cycle observation; public reduction and full teardown-path attribution pending' }));
+  });
+});
+
 test('paginator keyboard transitions separate native activation from disabled-interactive focus', async () => {
   const candidateSource = readFileSync('examples/material-showcase/src/app/astylar.component.ts', 'utf8');
   const materialSource = readFileSync('node_modules/@angular/material/fesm2022/paginator.mjs', 'utf8');
