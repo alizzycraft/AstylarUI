@@ -2,6 +2,11 @@
 
 ## Evidence boundary
 
+Supplemental ordinary dark/mobile tooltip paint check: full-frame DPR 2 ink
+offsets differ by .00125448 CSS px, excluding a large vertical displacement in
+this settled state. Effective font/alignment ownership, horizontal ink and local
+sharpness remain pending; do not generalize to historical or other-profile paint.
+
 This is a **reviewed/pending checklist**, not acceptance. The last complete
 enforced output capture is
 `artifacts/material-parity/enforced-full-2b6cddc/latest-report.json`

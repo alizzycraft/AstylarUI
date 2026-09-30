@@ -5,6 +5,7 @@ import { createServer } from 'node:http';
 import path from 'node:path';
 import { chromium } from 'playwright-core';
 import { PNG } from 'pngjs';
+import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-metrics.mjs';
 import { collectSortFocusStructure, inspectSortTrees } from '../../scripts/audit-material-sort-focus-structure.mjs';
 import { fingerprintDirectory } from './run-checkpoint.mjs';
 
@@ -1311,12 +1312,26 @@ test('ordinary dark mobile tooltip separates keyboard opening from pointer paint
         await settle();
         await page.evaluate(() => Promise.all(document.getAnimations().filter(animation => animation.effect?.getTiming().iterations !== Infinity).map(animation => animation.finished.catch(() => {}))));
         const hovered = await sample();
+        // Full-frame pixels preserve the fractional device-pixel origin; a clip
+        // can round its origin independently of the measured popup box.
+        const fullImage = PNG.sync.read(await page.screenshot({ caret: 'hide' }));
+        const p = hovered.popup.box;
+        const ink = measureTextInkCenter(fullImage, { left: p.x, top: p.y,
+          right: p.x + p.width, bottom: p.y + p.height, width: p.width, height: p.height }, 2);
+        const typography = await page.evaluate(mode => {
+          const keys = ['fontFamily', 'fontSize', 'fontWeight', 'lineHeight', 'letterSpacing', 'textAlign'];
+          const style = mode === 'reference'
+            ? getComputedStyle(document.querySelector('.mat-mdc-tooltip-surface'))
+            : window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['tooltip-popup']).inputTree.nodes
+              .find(node => node.authored?.id === 'tooltip-popup').resolvedStyle;
+          return Object.fromEntries(keys.map(key => [key, style[key] ?? null]));
+        }, mode);
         const image = PNG.sync.read(await page.screenshot({ clip: hovered.popup.box, caret: 'hide' }));
         const colors = new Map();
         for (let i = 0; i < image.data.length; i += 4) { const color = [...image.data.subarray(i, i + 3)].join(','); colors.set(color, (colors.get(color) ?? 0) + 1); }
         await page.mouse.move(10, 10); await settle();
         await page.locator(mode === 'reference' ? '.mat-mdc-tooltip-surface' : '[data-astylar-id="tooltip-popup"]').waitFor({ state: 'detached' });
-        observations[mode] = { focused, hovered, commonColors: [...colors].sort((a, b) => b[1] - a[1]).slice(0, 5), closed: await sample(), errors };
+        observations[mode] = { focused, hovered, ink, typography, commonColors: [...colors].sort((a, b) => b[1] - a[1]).slice(0, 5), closed: await sample(), errors };
       } finally { await page.close(); }
     }
     t.diagnostic(JSON.stringify(observations));
@@ -1335,6 +1350,10 @@ test('ordinary dark mobile tooltip separates keyboard opening from pointer paint
       assert.ok(observations[mode].commonColors.some(([color, count]) => color === '245,239,244' && count > 100));
     }
     assert.ok(Math.abs(observations.reference.focused.popup.box.height - 24) < .01);
+    for (const mode of ['reference', 'astylar']) assert.ok(observations[mode].ink?.inkPixels > 100);
+    // Frozen-profile diagnostic only, not sharpness or input-equivalence acceptance.
+    assert.ok(textCenterOffsetError(observations.reference.ink, observations.astylar.ink) < .01);
+    t.diagnostic(`Full-frame vertical ink-offset difference: ${textCenterOffsetError(observations.reference.ink, observations.astylar.ink)} CSS px; not a sharpness or equal-input acceptance gate.`);
   });
 });
 

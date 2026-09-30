@@ -2,6 +2,26 @@
 
 ## Current audit checkpoint — September 30
 
+**Tooltip vertical ink, ordinary dark/mobile:** the existing frozen-build test
+now measures full-frame PNG pixels with `measureTextInkCenter`, rather than
+using a separately rounded crop origin. At 390×844 DPR 2, native/candidate ink
+centers are 241.72522/241.72835 CSS px; their offsets from their own popup centers
+are .647095/.648350px (difference .00125448px), with 1,226/1,224 measured ink
+pixels. This rules out the reported large vertical displacement for this
+settled profile/state, not for historical captures or other profiles. Optical
+ink center is not CSS line-box center: do not shift text to remove the shared
+.65px offset. Native computed and candidate resolved size/weight/line-height/
+letter-spacing agree at 12px/400/16px/.4px, but candidate popup fontFamily and
+textAlign are absent at this measurement stage, versus native Roboto/center.
+Inherited/effective font and horizontal placement still require owner tracing;
+these absences are not assumed defaults or demonstrated core faults. Existing
+antialias palette differences remain, and ink centering cannot prove sharpness.
+`node --test --test-name-pattern="ordinary dark mobile tooltip" tests/material-parity/sort-focus-structure.spec.mjs`
+passes 1/1 in 5,328ms diagnostic and 7,502ms with the additional assertion;
+no renderer, fixture, canonical export or retained capture was changed.
+Next decisive paint check: trace effective text owner/font and apply the existing
+calibrated local edge metric, separating fractional raster phase from blur.
+
 **Ordinary tooltip focus/hover, dark/mobile:** the frozen Chrome 154 showcase is
 opened with `?profile=dark` **without benchmark mode** at 390×844 DPR 2. Real Tab
 focuses both triggers, but only Material opens its tooltip. Candidate authoring
