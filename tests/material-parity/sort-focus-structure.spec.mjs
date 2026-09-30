@@ -718,6 +718,89 @@ test('select real keyboard boundaries distinguish custom Material options from c
   });
 });
 
+test('editable popup keyboard boundaries locate autocomplete and timepicker interaction ownership', async () => {
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    const observations = {};
+    for (const family of ['autocomplete', 'timepicker', 'datepicker']) {
+      observations[family] = {};
+      for (const mode of ['reference', 'astylar']) {
+        const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+        const errors = [];
+        page.on('pageerror', error => errors.push(String(error)));
+        await page.goto(`${baseUrl}/${mode}/${family}?benchmark=1&profile=light`);
+        await page.locator('.frame').waitFor();
+        if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+        await page.evaluate(() => {
+          window.__popupAuditKeys = [];
+          document.addEventListener('keydown', event => window.__popupAuditKeys.push(event.key), true);
+        });
+        const steps = [];
+        for (const key of family === 'datepicker' ? ['Tab'] : ['Tab', 'ArrowDown', 'Enter', 'Escape']) {
+          await page.keyboard.press(key);
+          if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+          await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+          steps.push(await page.evaluate(({ mode, family, key }) => {
+            const input = document.querySelector(mode === 'reference' ? `#${family}-control` : `[data-astylar-id="${family}-control"]`);
+            const active = document.getElementById(input.getAttribute('aria-activedescendant'));
+            const options = [...document.querySelectorAll(mode === 'reference' ? '[role="option"]' : `[data-astylar-id^="${family}-option-"][role="option"]`)];
+            return { key, focused: document.activeElement === input, focusText: document.activeElement?.textContent.trim(),
+              value: input.value, expanded: input.getAttribute('aria-expanded'), activeText: active?.textContent.trim() ?? null,
+              keys: window.__popupAuditKeys,
+              calendarCount: document.querySelectorAll(mode === 'reference' ? 'mat-datepicker-content' : '[data-astylar-id="datepicker-popup"]').length,
+              options: options.map(option => ({ text: option.textContent.trim(), selected: option.getAttribute('aria-selected') })),
+              appKeys: mode === 'astylar' ? window.__ASTYLAR_MATERIAL_BENCHMARK__.events()
+                .filter(event => event.type === 'keydown').map(event => event.targetId) : [],
+            };
+          }, { mode, family, key }));
+        }
+        observations[family][mode] = { steps, errors };
+        await page.close();
+      }
+    }
+    assert.equal(browser.version(), '154.0.8037.58');
+    const boundary = step => [step.key, step.focused, step.value, step.expanded, step.activeText];
+    assert.deepEqual(observations.autocomplete.reference.steps.map(boundary), [
+      ['Tab', true, '', 'true', null], ['ArrowDown', true, '', 'true', 'Cape Town'],
+      ['Enter', true, 'Cape Town', 'false', null], ['Escape', true, 'Cape Town', 'false', null],
+    ]);
+    assert.deepEqual(observations.autocomplete.astylar.steps.map(boundary), [
+      ['Tab', true, '', 'true', null], ['ArrowDown', true, '', 'true', null],
+      ['Enter', true, '', 'true', null], ['Escape', true, '', 'false', null],
+    ]);
+    assert.deepEqual(observations.timepicker.reference.steps.map(boundary), [
+      ['Tab', true, '', 'false', null], ['ArrowDown', true, '', 'true', '12:00 AM'],
+      ['Enter', true, '12:00 AM', 'false', null], ['Escape', true, '', 'false', null],
+    ]);
+    assert.deepEqual(observations.timepicker.astylar.steps.map(boundary), [
+      ['Tab', true, '', 'true', '12:00 AM'], ['ArrowDown', true, '', 'true', '12:00 AM'],
+      ['Enter', true, '', 'true', '12:00 AM'], ['Escape', true, '', 'false', null],
+    ]);
+    for (const family of ['autocomplete', 'timepicker', 'datepicker']) {
+      for (const mode of ['reference', 'astylar']) {
+        assert.deepEqual(observations[family][mode].errors, []);
+        assert.deepEqual(observations[family][mode].steps.at(-1).keys,
+          family === 'datepicker' ? ['Tab'] : ['Tab', 'ArrowDown', 'Enter', 'Escape']);
+      }
+      if (family === 'datepicker') {
+        for (const mode of ['reference', 'astylar']) {
+          assert.deepEqual(observations[family][mode].steps.map(boundary), [['Tab', true, '', null, null]]);
+          assert.equal(observations[family][mode].steps[0].calendarCount, 0);
+        }
+      } else {
+        assert.deepEqual(observations[family].astylar.steps.at(-1).appKeys, Array(3).fill(`${family}-control`));
+        assert.deepEqual(observations[family].astylar.steps.at(-1).options, []);
+      }
+    }
+    assert.deepEqual(observations.autocomplete.reference.steps[0].options, observations.autocomplete.astylar.steps[0].options);
+    const referenceTimes = observations.timepicker.reference.steps[1].options;
+    const candidateTimes = observations.timepicker.astylar.steps[1].options;
+    assert.equal(referenceTimes.length, 48);
+    assert.deepEqual(referenceTimes.map(option => option.text), candidateTimes.map(option => option.text));
+    assert.ok(referenceTimes.every(option => option.selected === 'false'));
+    assert.deepEqual(candidateTimes.map(option => option.selected), ['true', ...Array(47).fill('false')]);
+  });
+});
+
 async function withFrozenShowcase(run) {
   const browserRoot = path.resolve('examples/material-showcase/dist/material-showcase/browser');
   const checkpoint = JSON.parse(readFileSync('artifacts/material-parity/caret-visible-checkpoint-154/checkpoint/manifest.json'));

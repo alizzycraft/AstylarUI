@@ -176,6 +176,43 @@ Other keys, disabled/dark/responsive states, local paint and repeated observer/r
 cleanup remain open; option DOM removal alone does not prove resource disposal.
 No renderer, fixture, or original capture was changed.
 
+**Editable-popup keyboard boundaries:** the unresolved question was whether
+autocomplete/timepicker input focus and option navigation diverged in key
+delivery, application handlers or popup reconciliation. A paired real-key
+Chrome 154/light/1440×900/DPR 1 proof uses the same authenticated frozen build
+and records Tab, ArrowDown, Enter and Escape boundaries. Autocomplete opens on
+Tab on both sides with the same two unselected option labels. Material then
+activates Cape Town on ArrowDown and writes it/closes on Enter; candidate
+receives both keys but retains an empty value, no active descendant and an
+open list. Escape removes candidate options and retains input focus.
+
+Timepicker differs earlier: real Tab leaves Material closed but opens the
+candidate. Material ArrowDown opens with 12:00 AM active, and Enter writes it
+and closes; candidate receives the keys but retains empty value/open list.
+All 48 option labels agree. Material has no selected option for the empty
+input; candidate marks option 0 selected regardless of input value. A final
+closed Escape clears Material's committed time: installed Material's
+`MatTimepickerInput._handleKeydown` explicitly clears a non-null value there,
+so this observation is not treated as unexplained data loss. Its input opens
+on Arrow keys or clicks on the form-field overlay origin, without a focus
+listener. Candidate authors unconditional opening in its focus callback,
+Escape-only keyboard handling, constant empty time value and fixed option-0
+active/selected attributes (`examples/material-showcase/src/app/astylar.component.ts`).
+The first demonstrated boundaries are therefore interaction/state authoring,
+not missing core key delivery. Real Tab on datepicker is a negative control:
+both inputs focus without any calendar DOM. Clicking into timepicker and
+Tab-focusing it are distinct reference actions; do not generalize the user's
+click-to-open expectation to all focus origins or change datepicker behavior.
+
+The focused `--test-name-pattern="editable popup keyboard"` browser proof
+passes 1/1 with zero page errors across all six pages. The complete focused
+`node --test tests/material-parity/sort-focus-structure.spec.mjs` suite passes
+12/12 in 60,015 ms. This establishes light
+desktop keyboard state/semantic boundaries only. Pointer-origin scope,
+disabled/other navigation/edit keys, dark/responsive states, local caret/popup
+paint, scrollbar reachability and repeated observer/resource cleanup remain.
+No renderer, comparison input or original capture was changed.
+
 **Independent replay:** a separate cold
 `ASTYLAR_AUDIT_COLD=1; ASTYLAR_AUDIT_PROGRESS=1; node scripts/export-material-input-audit-current-ancestry.mjs --check`
 completed with exit 0. It revalidated the full audit, rehashed the evidence
