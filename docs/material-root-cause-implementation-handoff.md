@@ -38,6 +38,25 @@ dark/responsive states and actual text-selection paint remain to review. The
 existing Home/End browser-version assertion stays pinned to its historical
 capture; the current-browser test does not pretend to replay Chrome 153 rasters.
 
+**Caret-capture limitation and next coverage order:** the authenticated
+input-boundary producer calls `page.screenshot({ clip })`. Installed
+Playwright 1.62.1 defaults to `caret: 'hide'`; a focused Chrome
+154 native-input control twice confirmed that explicit `caret: 'initial'`
+reveals a narrow blinking caret that `hide` suppresses. Thus the retained
+reference focused-empty rasters cannot establish native caret visibility or
+caret-paint parity. The Astylar canvas caret in those crops is not subject to
+that native-caret suppression. This is a capture-instrumentation limitation,
+not evidence that the renderer lacks or correctly paints a caret. The focused
+test passed twice, 1/1 each, without modifying the original capture. Priority:
+(1) obtain caret-visible paired boundaries with exact current build/browser
+provenance, then evaluate empty caret and forward/backward selection paint in
+the five text-input families across applicable dark and responsive states;
+(2) extend the narrower light/DPR1 overlay keyboard evidence only for states
+not already covered by existing authenticated captures; (3) reconcile the
+remaining source-derived family/state checklist; (4) run the complete current
+audit harness and unfiltered browser gates. Do not recapture old evidence in
+place or interpret the current 436/1,875 matrix counts as that checklist.
+
 **Export reconciliation and remaining gates:** streaming package authentication
 found 79 sections before and after, with no added or removed sections. Exactly
 seven changed: `sourceFingerprints`, `controlLineBoxes`, `discrepancies`,

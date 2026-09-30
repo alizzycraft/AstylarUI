@@ -6,6 +6,7 @@ import path from 'node:path';
 import test from 'node:test';
 import ts from 'typescript';
 import { chromium } from 'playwright-core';
+import { PNG } from 'pngjs';
 import { fingerprintDirectory } from './run-checkpoint.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { propertyGroups } from './input-equivalence-policy.mjs';
@@ -154,6 +155,52 @@ test('native Tab selection is collapsed by the served semantic-state synchroniza
     if (browser) await browser.close();
     await new Promise(resolve => server.close(resolve));
   }
+});
+
+test('retained reference screenshots suppress the native caret by Playwright default', async () => {
+  const producer = 'scripts/audit-material-input-boundaries.mjs';
+  const source = readFileSync(producer);
+  assert.equal(hash(source), report.capture.sources.find(item => item.file === producer)?.sha256);
+  assert.match(source.toString(), /page\.screenshot\(\{ clip \}\)/,
+    'retained capture did not use the default screenshot caret setting');
+  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 300, height: 100 } });
+    await page.setContent('<input id="probe">');
+    await page.locator('#probe').evaluate(input => {
+      input.style.font = '20px Arial';
+      input.style.caretColor = 'black';
+      input.style.width = '200px';
+      input.style.height = '40px';
+    });
+    await page.locator('#probe').focus();
+    assert.equal(await page.locator('#probe').evaluate(input => document.activeElement === input), true);
+    const clip = { x: 0, y: 0, width: 240, height: 60 };
+    const hidden = PNG.sync.read(await page.screenshot({ clip, caret: 'hide' }));
+    let observedNativeCaret = false;
+    for (let sample = 0; sample < 8; sample++) {
+      const initial = PNG.sync.read(await page.screenshot({ clip, caret: 'initial' }));
+      let pixels = 0, minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+      for (let y = 0; y < initial.height; y++) for (let x = 0; x < initial.width; x++) {
+        const i = (y * initial.width + x) * 4;
+        if (initial.data[i] === hidden.data[i] &&
+            initial.data[i + 1] === hidden.data[i + 1] &&
+            initial.data[i + 2] === hidden.data[i + 2]) continue;
+        pixels++; minX = Math.min(minX, x); maxX = Math.max(maxX, x);
+        minY = Math.min(minY, y); maxY = Math.max(maxY, y);
+      }
+      if (pixels > 0) {
+        assert.ok(maxX - minX <= 3 && maxY - minY >= 10,
+          `Screenshot option changed more than the native caret: ${JSON.stringify({ pixels, minX, maxX, minY, maxY })}`);
+        observedNativeCaret = true;
+        break;
+      }
+      await page.waitForTimeout(100);
+    }
+    assert.equal(observedNativeCaret, true,
+      'Explicit initial caret option did not reveal a native caret in timed screenshots');
+    await page.close();
+  } finally { await browser.close(); }
 });
 
 test('retained input boundaries authenticate all runtime assets, trees, actions and local rasters', () => {
