@@ -46,7 +46,7 @@ source-derived applicability review before it can be closed as inapplicable.
 | Icon | 12 / 8 | passive inspect | Static/inspect captured; confirm passive icon/semantic applicability. |
 | List | 12 / 40 | — | Common states captured; verify list-item keyboard/focus behavior and child ownership. |
 | Table | 12 / 40 | — | Common states captured; distinguish table cells from the separate sort interaction and review keyboard applicability. |
-| Sort | 12 / 48 | activate-twice | Two pointer activations captured; real Tab/Enter/Space order/direction and focus paint remain. |
+| Sort | 12 / 48 | activate-twice | Two pointer activations captured. Current Chrome 154 light desktop DPR 1 real Tab/Enter/Space proof finds an authored keyboard activation gap: both sides focus and receive keys, but only Material changes direction. Focus paint, other profiles/DPRs and complete sort input mapping remain. |
 | Paginator | 12 / 40 | — | Common states captured; page-size/next/previous keyboard and selected-page transitions need source review. |
 | Tree | 12 / 40 | — | Common states captured; node expansion/collapse by keyboard and focus order remain. |
 | Form-field | 12 / 64 | edit-empty-blur, disabled, error | Light desktop DPR 1/2 input boundaries include real Tab, edit and selection; Chrome 154 DPR 1 caret-visible proof covers empty focus. Dark/responsive caret and selection paint remain. |

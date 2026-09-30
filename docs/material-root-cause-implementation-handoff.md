@@ -21,6 +21,28 @@ from programmatic focus or final-only mobile Escape observations. Every family
 still has pending input/state applicability review; the output pass is not
 promoted to audit completion.
 
+**Sort real-key boundary:** the remaining question was whether two passing
+pointer activations also represent Tab/Enter/Space sort behavior. Competing
+explanations were a missing keyboard event in core, an application/plugin
+handler omission, or a paint-only arrow difference. A focused paired browser
+test authenticates the unchanged 1,887-file frozen showcase build against the
+Chrome 154 checkpoint, then drives real Tab, Enter, Space and Enter at
+1440×900, DPR 1, light profile. Both triggers receive Tab focus and all three
+key-down events; the Astylar application event callback records all three.
+The Material directive changes `aria-sort` from `none` to `ascending`,
+`descending`, `ascending`, with store direction `asc`, `desc`, `asc`.
+The Astylar trigger retains absent `aria-sort` and `asc` throughout. Neither
+DOM path synthesizes a click; Material's sort directive owns key activation.
+Current candidate source declares a focusable `div` with `role="button"` and
+updates sort state in `handleClick`, while its `handleKeydown` handles only Escape
+(`examples/material-showcase/src/app/astylar.component.ts`). Thus the first
+demonstrated divergence is application/plugin interaction authoring after
+delivered key events, not a proven core key-delivery or arrow-paint defect.
+The focused `sort-focus-structure.spec.mjs` suite passes 3/3. This does not
+resolve sort focus paint or other profile/DPR states and does not authorize a
+fixture-only parity workaround; implementation should first define equivalent
+keyboard behavior through the appropriate public interaction contract.
+
 **Independent replay:** a separate cold
 `ASTYLAR_AUDIT_COLD=1; ASTYLAR_AUDIT_PROGRESS=1; node scripts/export-material-input-audit-current-ancestry.mjs --check`
 completed with exit 0. It revalidated the full audit, rehashed the evidence
