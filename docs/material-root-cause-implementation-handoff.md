@@ -79,6 +79,31 @@ defect. The focused browser suite passes 5/5. Space activation, exact event
 order, focus paint, other profile/DPR states and other role-based components
 remain open. No fixture, renderer or reference input was altered.
 
+**Composite-control keyboard boundary:** a single paired Chrome 154/light/
+1440×900/DPR 1 test on the same authenticated frozen showcase build drives
+real Tab/Space on chips and slide-toggle, Tab/Space/Enter on expansion, and
+Tab/ArrowLeft/Enter/ArrowRight on button-toggle, tabs and stepper. Material
+chip 0 changes selection on Space; its switch changes checked; its expansion
+header changes `aria-expanded` false → true → false on Space/Enter. Material
+button-toggle moves focus and selection Grid → List → Grid. Material tabs and
+stepper move focus to the second option on ArrowLeft, select it on Enter, then
+move focus back on ArrowRight without changing the selection. In all six
+candidate cases the application callback records every driven keydown but the
+initial selection/focus/expanded state persists. Candidate source authors role
+nodes (tabs use buttons, the other five use divs), handles their state changes
+in `handleClick`, and handles only Escape in `handleKeydown`
+(`examples/material-showcase/src/app/astylar.component.ts`). The first observed
+divergence is therefore missing composite activation/navigation authoring after
+key delivery, not a proven core key-routing fault or a paint-only discrepancy.
+The Material tab/step and expansion components own internal selection/expanded
+state; the showcase store alone cannot measure them, so the proof asserts focus
+and ARIA state at each action boundary. The focused suite passes 7/7. This
+classification is restricted to the six controls, three driven key sequences,
+light desktop DPR 1 and the pinned build; focus/selection paint, other keys,
+profiles, content visibility and full input mapping remain open. Do not patch
+fixtures for screenshot similarity or infer that all ARIA roles should acquire
+Material composite behavior from core.
+
 **Independent replay:** a separate cold
 `ASTYLAR_AUDIT_COLD=1; ASTYLAR_AUDIT_PROGRESS=1; node scripts/export-material-input-audit-current-ancestry.mjs --check`
 completed with exit 0. It revalidated the full audit, rehashed the evidence

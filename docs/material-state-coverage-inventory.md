@@ -42,7 +42,7 @@ source-derived applicability review before it can be closed as inapplicable.
 | Divider | 16 / 8 | passive inspect | Static/inspect captured; confirm passive semantics and input/style correspondence. |
 | Badge | 12 / 40 | — | Common states captured; confirm whether pointer/focus actions are meaningful rather than treating their green results as behavior proof. |
 | Card | 12 / 40 | — | Common states captured; review interactive descendants and keyboard applicability. |
-| Chips | 12 / 64 | alternate activation, disabled, selected | Pointer and selection states captured; real Tab/Space selection and focused visual state remain. |
+| Chips | 12 / 64 | alternate activation, disabled, selected | Chrome 154 light desktop DPR 1 real Tab/Space proof: Material chip 0 changes selected, while role-only candidate receives keydown but stays selected. Focus paint, other keys/profiles and full input mapping remain. |
 | Icon | 12 / 8 | passive inspect | Static/inspect captured; confirm passive icon/semantic applicability. |
 | List | 12 / 40 | — | Common states captured; verify list-item keyboard/focus behavior and child ownership. |
 | Table | 12 / 40 | — | Common states captured; distinguish table cells from the separate sort interaction and review keyboard applicability. |
@@ -56,15 +56,15 @@ source-derived applicability review before it can be closed as inapplicable.
 | Radio | 12 / 56 | disabled, selected | Pointer/selected states captured. Current Chrome 154 light desktop DPR 1 Tab/ArrowLeft/ArrowRight proof finds Material native radio focus/selection follows team → solo → team; candidate role-only `div` receives both keys but remains on team. Focus paint, Space, event ordering and other profiles/DPRs remain. |
 | Select | 12 / 82 | commit/reopen, hover content, disabled, selected, open, M | Pointer commit and mobile final Escape captured; native expanded-option pixels are uninspectable, so keyboard focus/value/index/events/dismissal and candidate popup cleanup remain. |
 | Slider | 12 / 66 | drag-start/end, disabled, comparison-pane drags | Both handles have eight real drag samples and one End-key activation; full keyboard stepping, smooth travel and local thumb paint still require equal-input review. |
-| Slide-toggle | 12 / 56 | disabled, selected | Pointer/selection captured; real Tab/Space, focus/hover state and inactive minus paint remain. |
+| Slide-toggle | 12 / 56 | disabled, selected | Chrome 154 light desktop DPR 1 real Tab/Space proof: Material switch changes checked, while role-only candidate receives keydown but stays checked. Focus/hover, inactive minus paint, other profiles remain. |
 | Datepicker | 12 / 99 | secondary view, hover content, outside/canvas dismissal, disabled, error, open, short viewport, M | Light desktop input boundaries and collision/mobile cases exist; real calendar keyboard/day/year navigation, caret paint and dark/responsive focus remain. Preserve its distinct focus contract. |
 | Timepicker | 12 / 98 | wheel scroll, hover content, outside/canvas dismissal, disabled, error, open, M | Wheel and light desktop input boundaries exist; real focus-to-popup/key routing, scrollbar reachability, caret paint and dark/responsive focus remain. |
 | Button | 12 / 48 | disabled | Pointer/held/disabled captured; real Tab/Enter/Space activation and focus paint remain. |
-| Button-toggle | 12 / 56 | disabled, selected | Pointer/selected captured; real keyboard selection and selected/inactive edge/hover paint remain. |
+| Button-toggle | 12 / 56 | disabled, selected | Chrome 154 light desktop DPR 1 Tab/ArrowLeft/Enter/ArrowRight proof: Material focus and selection move Grid → List → Grid; candidate receives keys but stays on Grid. Edge/hover paint and other profiles remain. |
 | Menu | 12 / 82 | hover content, outside/canvas dismissal, disabled, open, M | Retained light 900×700 DPR 1 ArrowDown/Escape capture exists; dark/responsive keyboard and repeated focus/cleanup remain. |
-| Tabs | 12 / 58 | disabled, selected, M | Selection and mobile final Escape states captured; real Tab/arrow-key panel transitions and visibility/focus ownership remain. |
-| Stepper | 12 / 56 | disabled, selected | Pointer/selection captured; real keyboard step navigation/focus and content visibility remain. |
-| Expansion | 12 / 56 | disabled, open | Open and pointer states captured; real Tab/Enter/Space toggle and focus/arrow paint remain. |
+| Tabs | 12 / 58 | disabled, selected, M | Chrome 154 light desktop DPR 1 Tab/ArrowLeft/Enter/ArrowRight proof: Material Arrow moves focus to Activity, Enter selects it, Arrow returns focus; candidate receives keys but stays on Overview. Panel paint/visibility and other profiles remain. |
+| Stepper | 12 / 56 | disabled, selected | Chrome 154 light desktop DPR 1 Tab/ArrowLeft/Enter/ArrowRight proof: Material Arrow moves focus to Review, Enter selects it, Arrow returns focus; candidate receives keys but stays on Details. Content visibility and other profiles remain. |
+| Expansion | 12 / 56 | disabled, open | Chrome 154 light desktop DPR 1 Tab/Space/Enter proof: Material header toggles `aria-expanded` false → true → false internally; role-only candidate receives both keys but stays false. Focus/arrow paint and other profiles remain. |
 | Bottom-sheet | 12 / 51 | open, comparison-pane, M | Retained light 900×700 DPR 1 Tab/Escape capture exists; surface-local modality, dark/responsive intermediate open geometry and cleanup remain. |
 | Dialog | 12 / 66 | hover content, outside dismissal, open, M | Retained light 900×700 DPR 1 Tab/Escape capture exists; dark/responsive focus restoration, panel paint and repeated cleanup remain. |
 | Snack-bar | 12 / 59 | activate-twice, open, auto-dismiss, comparison-pane | Reopen and one timed expiry case captured; confirm visible action/position during lifetime and keyboard action/dismissal across applicable profiles. |
@@ -83,9 +83,13 @@ source-derived applicability review before it can be closed as inapplicable.
    core placement, clipping, dismissal, focus containment and resource cleanup.
    Reuse the authenticated light keyboard captures before adding only missing
    profile/DPR/intermediate states.
-3. Keyboard-operable selection controls: real Tab, Space/Enter and arrow-key
-   paths for chips, checkbox, radio, select, slider, sort, tabs and stepper.
-   Programmatic `focus()` and final pointer activation do not cover these.
+3. Keyboard-operable selection controls: the current light desktop key probes
+   classify sort, checkbox, radio, chips, slide-toggle, button-toggle, tabs,
+   stepper and expansion at their first state/focus divergence. Select, slider,
+   other keys, profiles, focus paint and complete input mapping remain. The
+   candidate callback receives keys; its Escape-only handler does not implement
+   the reference components' activation/composite navigation. Programmatic
+   `focus()` and final pointer activation do not cover these paths.
 4. Source-derived applicability for passive/composite families, then complete
    canonical source/finding integration, the current 302-file audit harness,
    and unfiltered enforced browser/release gates. Keep input-equivalence

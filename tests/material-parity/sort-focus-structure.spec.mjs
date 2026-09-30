@@ -215,6 +215,151 @@ test('radio real Tab and Arrow keys locate the selection-routing boundary', asyn
   });
 });
 
+test('composite controls expose their Tab and Space activation boundary', async () => {
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    const observations = {};
+    for (const family of ['chips', 'slide-toggle', 'expansion']) {
+      observations[family] = {};
+      for (const mode of ['reference', 'astylar']) {
+        const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+        const errors = [];
+        page.on('pageerror', error => errors.push(String(error)));
+        await page.goto(`${baseUrl}/${mode}/${family}?benchmark=1&profile=light`);
+        await page.locator('.frame').waitFor();
+        if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+        const steps = [];
+        for (const key of family === 'expansion' ? ['Tab', 'Space', 'Enter'] : ['Tab', 'Space']) {
+          await page.keyboard.press(key);
+          if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+          await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+          steps.push(await page.evaluate(({ mode, family }) => {
+            const state = mode === 'reference'
+              ? window.ng.getComponent(document.querySelector('app-reference')).store.state()
+              : window.__ASTYLAR_MATERIAL_BENCHMARK__.state();
+            return {
+              kind: `${document.activeElement?.tagName.toLowerCase()}:${document.activeElement?.getAttribute('role')}`,
+              value: family === 'chips' ? state.chipSelections : family === 'slide-toggle' ? state.selected : state.open,
+              ariaState: document.activeElement?.getAttribute(family === 'chips' ? 'aria-selected' :
+                family === 'slide-toggle' ? 'aria-checked' : 'aria-expanded'),
+            };
+          }, { mode, family }));
+        }
+        observations[family][mode] = {
+          steps,
+          appEvents: mode === 'astylar' ? await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.events()) : [],
+          errors,
+        };
+        await page.close();
+      }
+    }
+    assert.equal(browser.version(), '154.0.8037.58');
+    for (const family of ['chips', 'slide-toggle', 'expansion']) {
+      assert.deepEqual(observations[family].reference.errors, []);
+      assert.deepEqual(observations[family].astylar.errors, []);
+      assert.equal(observations[family].reference.steps[0].ariaState,
+        family === 'expansion' ? 'false' : 'true');
+      assert.equal(observations[family].astylar.steps[0].ariaState,
+        family === 'expansion' ? 'false' : 'true');
+    }
+    assert.deepEqual(observations.chips.reference.steps.map(step => [step.kind, step.value, step.ariaState]), [
+      ['button:option', [true, true], 'true'], ['button:option', [false, true], 'false'],
+    ]);
+    assert.deepEqual(observations.chips.astylar.steps.map(step => [step.kind, step.value, step.ariaState]), [
+      ['div:option', [true, true], 'true'], ['div:option', [true, true], 'true'],
+    ]);
+    assert.deepEqual(observations['slide-toggle'].reference.steps.map(step => [step.kind, step.value, step.ariaState]), [
+      ['button:switch', true, 'true'], ['button:switch', false, 'false'],
+    ]);
+    assert.deepEqual(observations['slide-toggle'].astylar.steps.map(step => [step.kind, step.value, step.ariaState]), [
+      ['div:switch', true, 'true'], ['div:switch', true, 'true'],
+    ]);
+    // The reference panel manages expanded state internally; its showcase store remains false.
+    assert.deepEqual(observations.expansion.reference.steps.map(step => [step.kind, step.value, step.ariaState]), [
+      ['mat-expansion-panel-header:button', false, 'false'],
+      ['mat-expansion-panel-header:button', false, 'true'],
+      ['mat-expansion-panel-header:button', false, 'false'],
+    ]);
+    assert.deepEqual(observations.expansion.astylar.steps.map(step => [step.kind, step.value, step.ariaState]), [
+      ['div:button', false, 'false'], ['div:button', false, 'false'], ['div:button', false, 'false'],
+    ]);
+    for (const [family, targetId, expectedKeydowns] of [
+      ['chips', 'chip-0', 1], ['slide-toggle', 'slide-toggle-primary', 1],
+      ['expansion', 'expansion-primary', 2],
+    ]) {
+      assert.equal(observations[family].astylar.appEvents.filter(event =>
+        event.type === 'keydown' && event.targetId === targetId).length, expectedKeydowns,
+      `${family} keydowns reach the authored application callback`);
+    }
+  });
+});
+
+test('composite selection controls expose their arrow-key boundary', async () => {
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    const observations = {};
+    for (const family of ['button-toggle', 'tabs', 'stepper']) {
+      observations[family] = {};
+      for (const mode of ['reference', 'astylar']) {
+        const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+        const errors = [];
+        page.on('pageerror', error => errors.push(String(error)));
+        await page.goto(`${baseUrl}/${mode}/${family}?benchmark=1&profile=light`);
+        await page.locator('.frame').waitFor();
+        if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+        const steps = [];
+        for (const key of ['Tab', 'ArrowLeft', 'Enter', 'ArrowRight']) {
+          await page.keyboard.press(key);
+          if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+          await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+          steps.push(await page.evaluate(mode => {
+            const state = mode === 'reference'
+              ? window.ng.getComponent(document.querySelector('app-reference')).store.state()
+              : window.__ASTYLAR_MATERIAL_BENCHMARK__.state();
+            const active = document.activeElement;
+            const options = [...document.querySelectorAll('[role="tab"], [role="radio"]')];
+            return {
+              focusIndex: options.indexOf(active),
+              selected: state.selected,
+              options: options.map(element => element.getAttribute('aria-selected') ?? element.getAttribute('aria-checked')),
+            };
+          }, mode));
+        }
+        observations[family][mode] = {
+          steps,
+          appEvents: mode === 'astylar' ? await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.events()) : [],
+          errors,
+        };
+        await page.close();
+      }
+    }
+    assert.equal(browser.version(), '154.0.8037.58');
+    const boundary = step => [step.focusIndex, step.selected, step.options];
+    assert.deepEqual(observations['button-toggle'].reference.steps.map(boundary), [
+      [1, true, ['false', 'true']], [0, false, ['true', 'false']],
+      [0, false, ['true', 'false']], [1, true, ['false', 'true']],
+    ]);
+    assert.deepEqual(observations['button-toggle'].astylar.steps.map(boundary),
+      Array.from({ length: 4 }, () => [1, true, ['false', 'true']]));
+    for (const family of ['tabs', 'stepper']) {
+      // Arrow keys move Material focus, then Enter selects; the showcase store is not the tab/step owner.
+      assert.deepEqual(observations[family].reference.steps.map(boundary), [
+        [0, true, ['true', 'false']], [1, true, ['true', 'false']],
+        [1, true, ['false', 'true']], [0, true, ['false', 'true']],
+      ]);
+      assert.deepEqual(observations[family].astylar.steps.map(boundary),
+        Array.from({ length: 4 }, () => [0, true, ['true', 'false']]));
+    }
+    for (const [family, targetId] of [
+      ['button-toggle', 'button-toggle-two'], ['tabs', 'tab-overview'], ['stepper', 'step-details'],
+    ]) {
+      assert.equal(observations[family].astylar.appEvents.filter(event =>
+        event.type === 'keydown' && event.targetId === targetId).length, 3,
+      `${family} keydowns reach the authored application callback`);
+      assert.deepEqual(observations[family].reference.errors, []);
+      assert.deepEqual(observations[family].astylar.errors, []);
+    }
+  });
+});
+
 async function withFrozenShowcase(run) {
   const browserRoot = path.resolve('examples/material-showcase/dist/material-showcase/browser');
   const checkpoint = JSON.parse(readFileSync('artifacts/material-parity/caret-visible-checkpoint-154/checkpoint/manifest.json'));
