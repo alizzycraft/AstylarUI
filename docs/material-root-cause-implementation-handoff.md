@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 30
 
+**Launch receipt registration is now bounded in the canonical producer:** the
+existing source inventory tracked the runner but omitted its newly responsible
+checkpoint/launch module. Append exactly `run-checkpoint.mjs` and
+`run-checkpoint.spec.mjs` under `tests/material-parity`: current inventory537,
+published snapshot535. The existing inventory test preserves the pinned535-file
+producer SHA and all earlier paths/order/digests. Removing only the exact two
+registration lines must reproduce the pinned producer byte-for-byte; no other
+producer logic, classification or normalization change is accepted.
+`node --test --test-name-pattern='records source fingerprints and actual visual acceptance fields' tests/material-parity/input-equivalence-audit.spec.mjs`
+passes1/1 in2,339.6654ms. After registration, focused position replay passes3/3
+in3,356.6981ms; the preceding slider replay passed5/5 in5,091.0862ms. Settled
+position/slider findings need no reopened rendering investigation. Export launcher
+`--dry-run` confirms all five retained baseline paths and complete arguments;
+it does NOT authenticate the evidence or run the exporter. Source registration
+is complete, but canonical export/check, independent cold replay, index refresh,
+remaining comparison/state coverage and final browser/release gates are pending.
+No new framework, capture, source finding or renderer/fixture change in this batch.
+
 **Native scrollbar capture policy corrected at the harness boundary:** Material
 runner and focused drag proof now share `materialBrowserLaunchOptions` from
 the existing checkpoint module: headless Chrome, ignore only `--hide-scrollbars`,

@@ -1786,8 +1786,8 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 535);
-  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 535);
+  assert.equal(audit.sourceFingerprints.length, 537);
+  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 537);
   const alignmentFiles = [
     'tests/material-parity/alignment-survey-conservation.mjs',
     'tests/material-parity/alignment-survey-conservation.spec.mjs',
@@ -1852,9 +1852,12 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   assert.equal(createHash('sha256').update(currentSource).digest('hex'),
     'a787e493d0e36d37fe5517bba8a6c3ba7a876f5bdb5ff7991e4d5bdcd0a0ebd0');
-  assert.equal(createHash('sha256').update(readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8')
-    .replace(/\r\n/g, '\n')).digest('hex'),
-  'a787e493d0e36d37fe5517bba8a6c3ba7a876f5bdb5ff7991e4d5bdcd0a0ebd0');
+  const launchFiles = ['tests/material-parity/run-checkpoint.mjs', 'tests/material-parity/run-checkpoint.spec.mjs'];
+  const liveSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8').replace(/\r\n/g, '\n');
+  const launchRegistration = launchFiles.map(file => `    '${file}',\n`).join('');
+  assert.equal(liveSource.split(launchRegistration).length, 2, 'launch receipts are registered exactly once');
+  assert.equal(liveSource.replace(launchRegistration, ''), currentSource,
+    'current producer differs from pinned 535-file baseline only by the two launch receipt registrations');
   const expectedFiles = listedFiles(currentSource);
   assert.equal(expectedFiles.length, 535);
   assert.deepEqual(expectedFiles.filter(file => stage424Files.includes(file)), stage424Files,
@@ -1862,13 +1865,13 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const laterFiles = expectedFiles.filter(file => !stage424Files.includes(file));
   assert.equal(laterFiles.length, 111);
   assert.equal(new Set(laterFiles).size, 111);
-  assert.deepEqual(audit.sourceFingerprints.map(e => e.file), expectedFiles,
-    'every current source path matches the immutable 535-file producer revision');
-  assert.deepEqual(audit.sourceFingerprints.map(e => e.file).filter(f => !followupFiles.includes(f) && !alignmentFiles.includes(f) && !additions.includes(f) && !visibilityFiles.includes(f) && !positionFiles.includes(f) && !laterFiles.includes(f)), baselineFiles,
+  assert.deepEqual(audit.sourceFingerprints.map(e => e.file), [...expectedFiles, ...launchFiles],
+    'all 535 pinned paths remain ordered and exactly two launch receipt dependencies are appended');
+  assert.deepEqual(audit.sourceFingerprints.map(e => e.file).filter(f => !followupFiles.includes(f) && !alignmentFiles.includes(f) && !additions.includes(f) && !visibilityFiles.includes(f) && !positionFiles.includes(f) && !laterFiles.includes(f) && !launchFiles.includes(f)), baselineFiles,
     'every previous fingerprint remains in original order');
   assert.deepEqual(audit.sourceFingerprints.map(e => e.file).filter(f => !baselineFiles.includes(f)).sort(),
-    [...followupFiles, ...alignmentFiles, ...additions, ...visibilityFiles, ...positionFiles, ...laterFiles].sort(), 'only the preserved 116 prior additions and 111 source-registered later dependencies are added');
-  for (const file of [...followupFiles, ...alignmentFiles, ...additions, ...visibilityFiles, ...positionFiles, ...laterFiles]) assert.deepEqual(audit.sourceFingerprints.filter(entry => entry.file === file),
+    [...followupFiles, ...alignmentFiles, ...additions, ...visibilityFiles, ...positionFiles, ...laterFiles, ...launchFiles].sort(), 'only preserved earlier additions and the two launch receipt dependencies are added');
+  for (const file of [...followupFiles, ...alignmentFiles, ...additions, ...visibilityFiles, ...positionFiles, ...laterFiles, ...launchFiles]) assert.deepEqual(audit.sourceFingerprints.filter(entry => entry.file === file),
     [{ file, sha256: createHash('sha256').update(readFileSync(file, 'utf8').replace(/\r\n/g, '\n')).digest('hex') }]);
   assert.ok(audit.focusedProofs.some(entry => entry.file ===
     'tests/material-parity/followup-input-canonical-integration.spec.mjs' && entry.status !== 'missing'));

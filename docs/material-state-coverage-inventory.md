@@ -2,6 +2,14 @@
 
 ## Evidence boundary
 
+Canonical source registration now includes the launch module and regression
+test omitted from the old explicit inventory:537 current paths versus535 in
+the published package. The existing focused test proves exactly two appended
+paths, unchanged earlier order/digests and otherwise byte-identical producer
+logic. Position/slider replay remains valid; no classifications were changed.
+Export/check and independent cold reconciliation remain pending, so compact
+queries still refer to the published historical snapshot, not refreshed sources.
+
 Scrollbar dragging now has an explicit paired dark/mobile DPR2 check. The
 headless driver's default `--hide-scrollbars` hid native platform scrollbars;
 the focused proof removes that flag and verifies the actual

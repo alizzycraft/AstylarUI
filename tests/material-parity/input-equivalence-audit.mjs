@@ -9401,6 +9401,8 @@ function sourceFingerprints(root) {
     'tests/material-parity/disabled-ink-source-transition.mjs',
     'tests/material-parity/disabled-ink-source-transition.spec.mjs',
     'tests/material-parity/disabled-ink-precision-preparation.spec.mjs',
+    'tests/material-parity/run-checkpoint.mjs',
+    'tests/material-parity/run-checkpoint.spec.mjs',
   ];
   return files.map((file) => ({ file, sha256: createHash('sha256')
     .update(readFileSync(path.resolve(root, file), 'utf8').replace(/\r\n/g, '\n')).digest('hex') }));
