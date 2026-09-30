@@ -1210,6 +1210,76 @@ test('paginator keyboard transitions separate native activation from disabled-in
   });
 });
 
+test('dark mobile modal Tab cycles separate authored modality from core containment', async t => {
+  const candidateSource = readFileSync('examples/material-showcase/src/app/astylar.component.ts', 'utf8');
+  assert.match(candidateSource, /id: `\$\{family\}-overlay`, class: 'modal-overlay bottom-sheet-overlay', role: 'dialog'/);
+  assert.match(candidateSource, /type: 'dialog' as const, id: `\$\{family\}-overlay`, class: 'modal-overlay', open: true, modal: true/);
+  const runtimeSource = readFileSync('src/lib/astylar-interaction-runtime.ts', 'utf8');
+  assert.match(runtimeSource, /element\.type === 'dialog' && element\.open && element\.modal && element\.id/);
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    assert.equal(browser.version(), '154.0.8037.58');
+    const observations = {};
+    for (const family of ['bottom-sheet', 'dialog']) {
+      observations[family] = {};
+      for (const mode of ['reference', 'astylar']) {
+        const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
+        try {
+          const errors = []; page.on('pageerror', error => errors.push(String(error)));
+          await page.goto(`${baseUrl}/${mode}/${family}?benchmark=1&profile=dark`);
+          await page.locator('.frame').waitFor();
+          if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+          const point = await page.evaluate(({ mode, family }) => {
+            if (mode === 'reference') { const box = document.getElementById(`${family}-primary`).getBoundingClientRect(); return { x: box.x + box.width / 2, y: box.y + box.height / 2 }; }
+            const box = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([`${family}-primary`], false).elements[`${family}-primary`].borderBox;
+            const canvas = document.querySelector('canvas').getBoundingClientRect();
+            return { x: canvas.x + box.left + box.width / 2, y: canvas.y + box.top + box.height / 2 };
+          }, { mode, family });
+          await page.mouse.click(point.x, point.y);
+          if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+          await page.evaluate(() => Promise.all(document.getAnimations().filter(animation => animation.effect?.getTiming().iterations !== Infinity).map(animation => animation.finished.catch(() => {}))));
+          const samples = [];
+          const sample = async action => {
+            await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+            samples.push(await page.evaluate(({ mode, family, action }) => {
+              const active = document.activeElement;
+              const popup = mode === 'reference' ? document.querySelector(family === 'dialog' ? '.mat-mdc-dialog-container' : '.mat-bottom-sheet-container') : document.querySelector(`[data-astylar-id="${family}-overlay"]`);
+              const trigger = mode === 'reference' ? document.getElementById(`${family}-primary`) : document.querySelector(`[data-astylar-id="${family}-primary"]`);
+              return { action, focus: active?.getAttribute('data-astylar-id') || active?.getAttribute('data-parity-id') || active?.id || (active?.tagName === 'BODY' ? 'BODY' : active?.textContent?.trim()) || active?.tagName,
+                inside: !!popup?.contains(active), popup: !!popup, tag: popup?.tagName, modal: popup?.getAttribute('aria-modal'),
+                triggerInert: !!trigger?.closest('[inert]') };
+            }, { mode, family, action }));
+          };
+          await sample('open');
+          for (let i = 0; i < 5; i++) { await page.keyboard.press('Tab'); await sample('Tab'); }
+          for (let i = 0; i < 5; i++) { await page.keyboard.press('Shift+Tab'); await sample('Shift+Tab'); }
+          observations[family][mode] = samples;
+          assert.deepEqual(errors, []);
+        } finally { await page.close(); }
+      }
+    }
+    t.diagnostic(JSON.stringify(observations));
+    for (const family of ['bottom-sheet', 'dialog']) for (const mode of ['reference', 'astylar']) {
+      assert.equal(observations[family][mode].length, 11);
+      assert.ok(observations[family][mode].every(sample => sample.popup));
+    }
+    const dialogOrder = ['dialog-cancel', 'dialog-save', 'dialog-cancel', 'dialog-save', 'dialog-cancel', 'dialog-save',
+      'dialog-cancel', 'dialog-save', 'dialog-cancel', 'dialog-save', 'dialog-cancel'];
+    for (const mode of ['reference', 'astylar']) {
+      assert.deepEqual(observations.dialog[mode].map(sample => sample.focus), dialogOrder);
+      assert.ok(observations.dialog[mode].every(sample => sample.inside));
+    }
+    assert.ok(observations.dialog.astylar.every(sample => sample.modal === 'true' && sample.triggerInert));
+    assert.deepEqual(observations['bottom-sheet'].reference.map(sample => sample.focus),
+      ['Share', 'Copy link', 'Share', 'Copy link', 'Share', 'Copy link', 'Share', 'Copy link', 'Share', 'Copy link', 'Share']);
+    assert.ok(observations['bottom-sheet'].reference.every(sample => sample.inside));
+    const sheet = observations['bottom-sheet'].astylar;
+    assert.deepEqual(sheet.slice(0, 4).map(sample => sample.focus),
+      ['bottom-sheet-primary', 'bottom-sheet-dismiss', 'bottom-sheet-copy', 'BODY']);
+    assert.deepEqual(sheet.slice(0, 4).map(sample => sample.inside), [false, true, true, false]);
+    assert.ok(sheet.every(sample => sample.tag === 'DIV' && sample.modal === null && !sample.triggerInert));
+  });
+});
+
 test('dark mobile real-key selections distinguish direction state from highlight paint', async t => {
   await withFrozenShowcase(async (browser, baseUrl) => {
     assert.equal(browser.version(), '154.0.8037.58');

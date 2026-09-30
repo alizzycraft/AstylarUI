@@ -2,6 +2,31 @@
 
 ## Current audit checkpoint — September 30
 
+**Dark/mobile modal Tab boundary:** the authenticated frozen showcase in Chrome
+154.0.8037.58, dark 390×844 DPR 2, is pointer-opened and sampled after every
+one of five real Tab and five Shift+Tab actions. Dialog cycles Cancel/Save in
+both directions on both sides; candidate marks the trigger inert and exposes
+`aria-modal=true`. This is positive evidence for the authored modal-dialog
+containment path, not dismissal restoration or global/surface-local isolation.
+Material bottom-sheet cycles Share/Copy link throughout, but candidate starts
+on the trigger, enters its two options, then escapes to BODY/canvas/trigger.
+It is authored `div role=dialog`, with no open/modal dialog contract, unlike
+candidate dialog's `type=dialog, open=true, modal=true`. The core runtime's
+`buildActiveModalDialog` and semantic bridge's `applyModalInertness` select that
+explicit contract; a role does not implement a focus trap. Material's
+`MatBottomSheetContainer._trapFocus` explicitly invokes CDK trapping even though
+the reference container exposes `aria-modal=false`. First divergence is the
+missing application/plugin focus-scope contract, not proof that core modal
+dialog Tab handling is broken. Do not blindly change aria-modal or replace the
+reference container to obtain equal output; preserve its surface-local scope
+and determine the equivalent supported focus-scope authoring at implementation.
+The candidate's repeated backward Tab at the outside trigger remains an
+observed secondary behavior, not assigned a cause by this probe. Surface-local
+modality, popup paint and internal observer/GPU cleanup remain pending.
+`node --test --test-name-pattern="dark mobile modal Tab cycles" tests/material-parity/sort-focus-structure.spec.mjs`
+passes 1/1 twice (10,748ms initial, 8,170ms with exact focus/containment assertions),
+with no page errors. No captures, canonical export, fixture or renderer edits.
+
 **Forward/backward selection paint, dark/mobile:** the existing frozen-browser
 test helper authenticates all 1,887 served files, then real Tab/Control+A/type
 `Atlas`/Home/Shift+Right×3 selects 0–3 on both form-field controls in Chrome
