@@ -1079,6 +1079,72 @@ test('tree navigation and native button activation distinguish widget authoring 
   });
 });
 
+test('button keyboard activation and disabled skipping retain native focus boundaries', async t => {
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    assert.equal(browser.version(), '154.0.8037.58');
+    const observations = {};
+    for (const mode of ['reference', 'astylar']) {
+      const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+      try {
+        const errors = []; page.on('pageerror', error => errors.push(String(error)));
+        await page.goto(`${baseUrl}/${mode}/button?profile=light`);
+        await page.locator('.frame').waitFor();
+        if (mode === 'astylar') {
+          await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+          await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+        }
+        await page.evaluate(() => {
+          window.__buttonBoundaryEvents = [];
+          for (const type of ['keydown', 'keyup', 'click']) document.addEventListener(type, event => {
+            const button = event.target.closest?.('button');
+            const id = button?.getAttribute('data-astylar-id') || button?.id;
+            if (id?.startsWith('button-')) window.__buttonBoundaryEvents.push({ type, id, domId: button.id, key: event.key ?? null });
+          }, true);
+        });
+        const steps = [];
+        for (const key of ['Tab', 'Enter', 'Space', 'Tab', 'Enter', 'Space', 'Tab', 'Shift+Tab']) {
+          await page.keyboard.press(key);
+          if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+          await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+          steps.push(await page.evaluate(({ mode, key }) => ({ key,
+            focus: document.activeElement?.getAttribute('data-astylar-id') || document.activeElement?.id || document.activeElement?.tagName,
+            semanticDomId: document.activeElement?.id ?? null,
+            domEvents: structuredClone(window.__buttonBoundaryEvents),
+            appClicks: mode === 'astylar' ? window.__ASTYLAR_MATERIAL_BENCHMARK__.events()
+              .filter(event => event.type === 'click').map(event => event.targetId) : null,
+          }), { mode, key }));
+        }
+        const disabled = await page.evaluate(mode => {
+          const button = document.querySelector(mode === 'reference' ? '#button-disabled' : '[data-astylar-id="button-disabled"]');
+          return { tag: button.tagName, disabled: button.disabled, tabIndex: button.tabIndex };
+        }, mode);
+        observations[mode] = { steps, disabled, errors };
+      } finally { await page.close(); }
+    }
+    t.diagnostic(JSON.stringify({ buttonKeyboardBoundary: observations }));
+    const focus = ['button-primary', 'button-primary', 'button-primary', 'button-secondary',
+      'button-secondary', 'button-secondary', 'BODY', 'button-secondary'];
+    for (const mode of ['reference', 'astylar']) {
+      assert.deepEqual(observations[mode].steps.map(step => step.focus), focus);
+      assert.equal(observations[mode].disabled.tag, 'BUTTON');
+      assert.equal(observations[mode].disabled.disabled, true);
+      assert.deepEqual(observations[mode].errors, []);
+    }
+    assert.deepEqual(observations.reference.steps.at(-1).domEvents.filter(event => event.type === 'click').map(event => event.id),
+      ['button-primary', 'button-primary', 'button-secondary', 'button-secondary']);
+    for (const type of ['keydown', 'keyup']) {
+      assert.deepEqual(observations.astylar.steps.at(-1).domEvents.filter(event => event.type === type).map(event => [event.id, event.key]),
+        observations.reference.steps.at(-1).domEvents.filter(event => event.type === type).map(event => [event.id, event.key]));
+    }
+    assert.equal(observations.astylar.steps.at(-1).domEvents.filter(event => event.type === 'click').length, 0,
+      'candidate activation is typed runtime dispatch, not a native semantic DOM click');
+    assert.deepEqual(observations.astylar.steps.map(step => step.appClicks), [[], ['button-primary'],
+      ['button-primary', 'button-primary'], ['button-primary', 'button-primary'],
+      ['button-primary', 'button-primary', 'button-secondary'],
+      ...Array.from({ length: 3 }, () => ['button-primary', 'button-primary', 'button-secondary', 'button-secondary'])]);
+  });
+});
+
 test('side-mode sidenav Escape applicability is checked without inventing focusable content', async () => {
   const referenceSource = readFileSync('examples/material-showcase/src/app/reference.component.ts', 'utf8');
   const candidateSource = readFileSync('examples/material-showcase/src/app/astylar.component.ts', 'utf8');

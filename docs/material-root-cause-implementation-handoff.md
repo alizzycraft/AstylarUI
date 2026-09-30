@@ -2,6 +2,26 @@
 
 ## Current audit checkpoint — September 30
 
+**Button keyboard/disabled focus question answered at a bounded state boundary:**
+the existing frozen-build browser suite now drives ordinary (non-benchmark) light
+desktop1440×900/DPR1 routes using real Tab/Enter/Space and reverse Tab in
+Chrome154.0.8037.58. Both sides use native BUTTON elements: enabled Primary and
+Secondary activate twice, the disabled third button is skipped, and focus visits
+Primary → Secondary → BODY → Secondary. Reference DOM click identities and
+candidate public typed click identities agree at every action boundary. Candidate
+semantic DOM emits no click, so equal activation is not a claim of native DOM event
+transport/order equivalence. Keydown/keyup target/key sequences agree; runtime
+errors are empty. No renderer or canonical fixture edits.
+
+The initial diagnostic failed because generated semantic DOM IDs were mistaken
+for authored IDs. The listener and focus measurements now prefer data-astylar-id,
+while retaining raw DOM IDs in evidence; this is an instrumentation correction,
+not input normalization. Existing build authentication remains in force.
+`node --test --test-name-pattern='button keyboard activation and disabled skipping' tests/material-parity/sort-focus-structure.spec.mjs`
+passes1/1,zero skips/failures,4,496.8109ms (TAP total4,965.3548ms) on final recheck.
+The coverage ledger records only this proven boundary; focus/ripple raster paint,
+other profiles, full input mapping and cross-transport ordering remain pending.
+
 **Historical launch-source replay reconciled; export remains pending:** the
 canonical export attempted from `e15fddd` encountered two nested source guards
 requiring the pre-launch runner digest while the live runner included the reviewed
