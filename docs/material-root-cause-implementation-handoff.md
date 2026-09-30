@@ -43,6 +43,23 @@ resolve sort focus paint or other profile/DPR states and does not authorize a
 fixture-only parity workaround; implementation should first define equivalent
 keyboard behavior through the appropriate public interaction contract.
 
+**Checkbox native-control boundary:** following the sort result, the specific
+question was whether a role-only checkbox has the same first divergence, or
+whether core drops its Space key. On the same authenticated frozen build and
+Chrome 154 light 1440×900 DPR 1 host, real Tab focuses both targets. Real Space
+changes Material's native `input:checkbox` and store selection from true to
+false. Astylar's authored `div role="checkbox"` retains `aria-checked="true"`
+and selection true; its application event log records the keydown. The
+comparison only changes checkbox state in `handleClick`, and `handleKeydown`
+handles only Escape (`examples/material-showcase/src/app/astylar.component.ts`).
+The public compatibility contract supports an input with
+`inputType: 'checkbox'` and Space activation. Thus this case is an application
+control-kind/activation authoring gap before any demonstrated core paint or
+keyboard-delivery fault, not proof that all role-based controls share one cause.
+The existing focused browser suite passes 4/4. Focus-ring paint, exact event
+ordering, other profiles/DPRs and the other selection families remain open.
+No fixture, renderer or reference input was altered.
+
 **Independent replay:** a separate cold
 `ASTYLAR_AUDIT_COLD=1; ASTYLAR_AUDIT_PROGRESS=1; node scripts/export-material-input-audit-current-ancestry.mjs --check`
 completed with exit 0. It revalidated the full audit, rehashed the evidence

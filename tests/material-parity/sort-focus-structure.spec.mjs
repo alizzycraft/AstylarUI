@@ -42,29 +42,13 @@ test('sort structure proof rejects missing or ambiguous paint ownership', () => 
 });
 
 test('real Tab and key activation expose the authored sort interaction gap', async () => {
-  const browserRoot = path.resolve('examples/material-showcase/dist/material-showcase/browser');
-  const checkpoint = JSON.parse(readFileSync('artifacts/material-parity/caret-visible-checkpoint-154/checkpoint/manifest.json'));
-  assert.deepEqual(fingerprintDirectory(browserRoot), checkpoint.provenance.browserFiles);
-  const server = createServer((request, response) => {
-    const pathname = decodeURIComponent(new URL(request.url, 'http://127.0.0.1').pathname);
-    const candidate = path.resolve(browserRoot, pathname.replace(/^\/+/, ''));
-    const target = candidate.startsWith(browserRoot + path.sep) && path.extname(candidate) && existsSync(candidate)
-      ? candidate : path.join(browserRoot, 'index.csr.html');
-    const extension = path.extname(target);
-    response.writeHead(200, { 'content-type': extension === '.js' ? 'text/javascript' :
-      extension === '.css' ? 'text/css' : extension === '.woff2' ? 'font/woff2' : 'text/html' });
-    response.end(readFileSync(target));
-  });
-  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
-  let browser;
-  try {
-    browser = await chromium.launch({ channel: 'chrome', headless: true });
+  await withFrozenShowcase(async (browser, baseUrl) => {
     const observations = {};
     for (const mode of ['reference', 'astylar']) {
       const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
       const errors = [];
       page.on('pageerror', error => errors.push(String(error)));
-      await page.goto(`http://127.0.0.1:${server.address().port}/${mode}/sort?benchmark=1&profile=light`);
+      await page.goto(`${baseUrl}/${mode}/sort?benchmark=1&profile=light`);
       await page.locator('.frame').waitFor();
       if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
       await page.evaluate(() => {
@@ -126,8 +110,77 @@ test('real Tab and key activation expose the authored sort interaction gap', asy
     'candidate application callback receives all three keys; its event log does not retain key values');
     assert.deepEqual(observations.reference.errors, []);
     assert.deepEqual(observations.astylar.errors, []);
+  });
+});
+
+test('checkbox real Tab and Space distinguishes role authoring from core key delivery', async () => {
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    const observations = {};
+    for (const mode of ['reference', 'astylar']) {
+      const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+      const errors = [];
+      page.on('pageerror', error => errors.push(String(error)));
+      await page.goto(`${baseUrl}/${mode}/checkbox?benchmark=1&profile=light`);
+      await page.locator('.frame').waitFor();
+      if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+      await page.keyboard.press('Tab');
+      await page.keyboard.press('Space');
+      if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+      observations[mode] = await page.evaluate(mode => {
+        const target = mode === 'reference' ? document.querySelector('#checkbox-primary-input') :
+          document.querySelector('[data-astylar-id="checkbox-primary"]');
+        return {
+          focused: document.activeElement === target,
+          kind: target instanceof HTMLInputElement ? `${target.tagName.toLowerCase()}:${target.type}` :
+            `${target.tagName.toLowerCase()}:${target.getAttribute('role')}`,
+          checked: target instanceof HTMLInputElement ? target.checked : target.getAttribute('aria-checked'),
+          selected: mode === 'reference'
+            ? window.ng.getComponent(document.querySelector('app-reference')).store.state().selected
+            : window.__ASTYLAR_MATERIAL_BENCHMARK__.state().selected,
+          appEvents: mode === 'astylar' ? window.__ASTYLAR_MATERIAL_BENCHMARK__.events() : [],
+        };
+      }, mode);
+      observations[mode].errors = errors;
+      await page.close();
+    }
+    assert.equal(browser.version(), '154.0.8037.58');
+    assert.equal(observations.reference.focused, true);
+    assert.equal(observations.astylar.focused, true);
+    assert.equal(observations.reference.kind, 'input:checkbox');
+    assert.equal(observations.astylar.kind, 'div:checkbox');
+    assert.equal(observations.reference.checked, false);
+    assert.equal(observations.reference.selected, false);
+    assert.equal(observations.astylar.checked, 'true');
+    assert.equal(observations.astylar.selected, true);
+    assert.equal(observations.astylar.appEvents.filter(event =>
+      event.type === 'keydown' && event.targetId === 'checkbox-primary').length, 1);
+    assert.deepEqual(observations.reference.errors, []);
+    assert.deepEqual(observations.astylar.errors, []);
+  });
+});
+
+async function withFrozenShowcase(run) {
+  const browserRoot = path.resolve('examples/material-showcase/dist/material-showcase/browser');
+  const checkpoint = JSON.parse(readFileSync('artifacts/material-parity/caret-visible-checkpoint-154/checkpoint/manifest.json'));
+  assert.deepEqual(fingerprintDirectory(browserRoot), checkpoint.provenance.browserFiles);
+  const server = createServer((request, response) => {
+    const pathname = decodeURIComponent(new URL(request.url, 'http://127.0.0.1').pathname);
+    const candidate = path.resolve(browserRoot, pathname.replace(/^\/+/, ''));
+    const target = candidate.startsWith(browserRoot + path.sep) && path.extname(candidate) && existsSync(candidate)
+      ? candidate : path.join(browserRoot, 'index.csr.html');
+    const extension = path.extname(target);
+    response.writeHead(200, { 'content-type': extension === '.js' ? 'text/javascript' :
+      extension === '.css' ? 'text/css' : extension === '.woff2' ? 'font/woff2' : 'text/html' });
+    response.end(readFileSync(target));
+  });
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  let browser;
+  try {
+    browser = await chromium.launch({ channel: 'chrome', headless: true });
+    await run(browser, `http://127.0.0.1:${server.address().port}`);
   } finally {
     if (browser) await browser.close();
     await new Promise(resolve => server.close(resolve));
   }
-});
+}
