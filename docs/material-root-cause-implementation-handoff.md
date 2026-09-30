@@ -2,6 +2,26 @@
 
 ## Current audit checkpoint — October 1
 
+**Native-scrollbar launch applicability covers all configured timepicker wheel cases:**
+the existing runner from `bb53103`, `--skip-build --interaction-only`,
+`ASTYLAR_MATERIAL_FAMILIES=timepicker`,
+`ASTYLAR_MATERIAL_INTERACTION_STATES=open-scroll`, and
+`ASTYLAR_MATERIAL_ARTIFACTS=artifacts/material-parity/native-scrollbar-profile-coverage-bb53103`
+exits0. No profile/viewport filter is set. All eight configured cases (light/dark/
+contrast/custom × desktop DPR1/2) pass unchanged per-case gates, scrollTop144px
+on both sides,8/8 focused rasters and zero runtime errors. Chrome154.0.8037.58;
+effective nativeScrollbarsHidden=false. Minimum full-frame SSIM .9708016265;
+minimum existing phase-registered focused similarity .9163597763. Aggregate
+acceptance remains false:8/1,875 interaction cases, no static cases.
+Retain the named capture and adjacent capture/verification logs. Report SHA-256
+`77aa387b313e776bf45858464760b0edf564ab74757a47cf47e71fcf293a3ebf`.
+Read-only verification checks exact configured membership/order, current complete
+harness module graph, and the same1,887 preserved build files; all pass.
+This closes launch applicability for these wheel cases, not exact thumb/track paint,
+dragging, mobile profiles, equal-input mapping or full browser acceptance. Existing
+documented drag limitation is not reinvestigated. Next: remaining overlay input/
+paint mapping and source-derived state applicability in the coverage inventory.
+
 **Independent cold canonical check passed:** from pushed `f6a6d0d`,
 `node scripts/export-material-input-audit-current-ancestry.mjs --check` with
 `ASTYLAR_AUDIT_COLD=1` and `ASTYLAR_AUDIT_PROGRESS=1` exits0 in

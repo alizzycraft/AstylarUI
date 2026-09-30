@@ -2,6 +2,16 @@
 
 ## Evidence boundary
 
+October1 corrected launch policy now covers every configured timepicker
+`open-scroll` case: all four themes × desktop DPR1/2,8/8 per-case passes,
+equal144px scroll offsets,8/8 existing focused-raster gates and zero runtime
+errors. Exact configured membership/current harness graph/preserved1,887-file
+build fingerprints verify. Retain
+`artifacts/material-parity/native-scrollbar-profile-coverage-bb53103` and adjacent
+logs; see current handoff for report hash and metrics. This closes launch
+applicability for those wheel cases only. Aggregate acceptance is false; exact
+scrollbar paint/track behavior, mobile profiles and full input mapping remain open.
+
 October1 independent current-ancestry cold `--check` from `f6a6d0d` passes
 in2,508,067.0026ms (41.80minutes), with1,205 files/89,154,859 bytes reverified
 and0 invalidations. The canonical comparison succeeds without publication;
