@@ -2,6 +2,29 @@
 
 ## Current audit checkpoint — September 30
 
+**Overlay resource-count plateau:** the existing dark/mobile open/Escape-cycle
+test now reuses public surface diagnostics for scene/plugin counts and reads
+Babylon's loaded-texture cache plus seven scene observer lists. It samples the
+settled initial state, every opening and every dismissal for menu, bottom-sheet
+and dialog in the authenticated Chrome 154 build, dark 390×844 DPR 2. Initial
+scene counts are 12 meshes/12 materials/3 textures in all three. Each of three
+post-dismissal states is identical: menu/sheet 12/14/5, dialog 12/13/7; loaded
+texture counts are respectively 5/5/7. The popup adds meshes/materials while
+open; dialog's open materials change 27→29→29, but all closed counts return to
+13. Plugin counts remain owners=2/resources=0/cleanups=1/pending=0. All seven
+observer lists remain fixed: pointer=2, dispose=3, pre-pointer/keyboard/
+pre-keyboard/before-render/after-render=0. Exact plateau assertions reject
+cumulative count growth and preserve the existing focus/semantic cleanup checks.
+This closes the previously unmeasured post-dismissal count question for these
+cycles; it does not establish zero retained resources, cache ownership, GPU
+driver allocation release, full surface disposal or other overlay/profile
+coverage. The first-open retained texture/material increases remain explicit
+and require lifetime/ownership review before being classified as legitimate
+caching. No renderer/fixture/export/artifact changes. Verification:
+`node --test --test-name-pattern="dark mobile overlay cycles" tests/material-parity/sort-focus-structure.spec.mjs`
+passes 1/1 (21,141ms diagnostic; 21,094ms with plateau assertions and initial
+snapshot), with no page errors.
+
 **Dark/mobile modal Tab boundary:** the authenticated frozen showcase in Chrome
 154.0.8037.58, dark 390×844 DPR 2, is pointer-opened and sampled after every
 one of five real Tab and five Shift+Tab actions. Dialog cycles Cancel/Save in

@@ -1079,7 +1079,7 @@ test('side-mode sidenav Escape applicability is checked without inventing focusa
   });
 });
 
-test('dark mobile overlay cycles retain focus and semantic cleanup boundaries', async () => {
+test('dark mobile overlay cycles retain focus and semantic cleanup boundaries', async t => {
   await withFrozenShowcase(async (browser, baseUrl) => {
     const observations = {};
     for (const family of ['menu', 'bottom-sheet', 'dialog']) {
@@ -1095,13 +1095,27 @@ test('dark mobile overlay cycles retain focus and semantic cleanup boundaries', 
           const active = document.activeElement;
           const refSelector = family === 'menu' ? '.mat-mdc-menu-panel' : family === 'dialog' ? '.mat-mdc-dialog-container' : '.mat-bottom-sheet-container';
           const popup = mode === 'reference' ? document.querySelector(refSelector) : document.querySelector(`[data-astylar-id="${family === 'menu' ? 'menu-popup' : `${family}-overlay`}"]`);
+          let resources = null;
+          if (mode === 'astylar') {
+            const diagnostics = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([], false).diagnostics.surface;
+            const surface = window.ng.getComponent(document.querySelector('app-astylar-showcase')).surface;
+            const scene = surface.scene;
+            resources = { scene: diagnostics.resources, plugins: diagnostics.pluginResources,
+              loadedTextures: scene.getEngine().getLoadedTexturesCache().length,
+              observers: Object.fromEntries(['onPointerObservable', 'onPrePointerObservable', 'onKeyboardObservable',
+                'onPreKeyboardObservable', 'onBeforeRenderObservable', 'onAfterRenderObservable', 'onDisposeObservable']
+                .map(name => [name, scene[name].observers.length])) };
+          }
           return { focus: active?.getAttribute('data-astylar-id') || active?.getAttribute('data-parity-id') || active?.id || (active?.tagName === 'BODY' ? 'BODY' : active?.textContent?.trim()) || active?.tagName,
             popupCount: mode === 'reference' ? document.querySelectorAll(refSelector).length : document.querySelectorAll(`[data-astylar-id="${family === 'menu' ? 'menu-popup' : `${family}-overlay`}"]`).length,
             controls: popup ? [...popup.querySelectorAll('button,a')].map(node => node.getAttribute('data-astylar-id') || node.getAttribute('data-parity-id') || node.textContent.trim()) : [],
             canvases: document.querySelectorAll('canvas').length,
+            resources,
             open: mode === 'astylar' ? window.__ASTYLAR_MATERIAL_BENCHMARK__.state().open : null };
         }, { mode, family });
         const cycles = [];
+        if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+        const initial = await snapshot();
         for (let cycle = 0; cycle < 3; cycle++) {
           const point = await page.evaluate(({ mode, family }) => {
             if (mode === 'reference') {
@@ -1123,7 +1137,7 @@ test('dark mobile overlay cycles retain focus and semantic cleanup boundaries', 
           await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
           cycles.push({ opened, closed: await snapshot() });
         }
-        observations[family][mode] = { cycles, errors };
+        observations[family][mode] = { initial, cycles, errors };
         await page.close();
       }
     }
@@ -1132,6 +1146,23 @@ test('dark mobile overlay cycles retain focus and semantic cleanup boundaries', 
     const referenceControls = { menu: ['Rename', 'Delete'], 'bottom-sheet': ['Share', 'Copy link'], dialog: ['dialog-cancel', 'dialog-save'] };
     const candidateControls = { menu: ['menu-rename', 'menu-delete'], 'bottom-sheet': ['bottom-sheet-dismiss', 'bottom-sheet-copy'], dialog: ['dialog-cancel', 'dialog-save'] };
     for (const family of ['menu', 'bottom-sheet', 'dialog']) {
+      t.diagnostic(JSON.stringify({ family, initialResources: observations[family].astylar.initial.resources,
+        resources: observations[family].astylar.cycles.map(cycle => ({
+        opened: cycle.opened.resources, closed: cycle.closed.resources })) }));
+      const plateau = observations[family].astylar.cycles[0].closed.resources;
+      assert.deepEqual(plateau.scene, { meshes: 12, materials: family === 'dialog' ? 13 : 14, textures: family === 'dialog' ? 7 : 5 });
+      assert.deepEqual(plateau.plugins, { owners: 2, resources: 0, cleanups: 1, pending: 0 });
+      assert.equal(plateau.loadedTextures, plateau.scene.textures);
+      assert.deepEqual(plateau.observers, { onPointerObservable: 2, onPrePointerObservable: 0,
+        onKeyboardObservable: 0, onPreKeyboardObservable: 0, onBeforeRenderObservable: 0,
+        onAfterRenderObservable: 0, onDisposeObservable: 3 });
+      for (const cycle of observations[family].astylar.cycles) {
+        assert.deepEqual(cycle.closed.resources, plateau, `${family} post-dismissal resources grew`);
+        assert.ok(cycle.opened.resources.scene.meshes > plateau.scene.meshes);
+        assert.ok(cycle.opened.resources.scene.materials > plateau.scene.materials);
+        assert.deepEqual(cycle.opened.resources.observers, plateau.observers);
+        assert.deepEqual(cycle.opened.resources.plugins, plateau.plugins);
+      }
       for (const mode of ['reference', 'astylar']) {
         assert.deepEqual(observations[family][mode].errors, []);
         assert.equal(observations[family][mode].cycles.length, 3);
