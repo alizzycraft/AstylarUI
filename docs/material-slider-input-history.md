@@ -34,6 +34,18 @@ core interaction has been corrected.
 
 ## Relation to demonstrated root causes
 
+A subsequent authenticated Chrome 154 paired-pointer proof in
+`tests/material-parity/sort-focus-structure.spec.mjs` supplies browser causality
+that this source-history review alone lacked. Default 30/65 hit ownership is
+correct, but at 60/80 the visual start thumb lies over the authored right-half
+input and moves `slider-primary`; at 20/40 the visual end thumb lies over the
+left-half input and moves `slider-start`. The candidate's fixed half-domain
+clamping and hit boxes therefore reproduce the swapped-thumb symptom in those
+cross-midpoint states. See the current checkpoint in
+[the implementation handoff](material-root-cause-implementation-handoff.md).
+This does not turn the historical commits into evidence of author intent or
+explain the independent core range defects below.
+
 The independent [public range reproduction](material-public-range-drag-audit.md)
 uses equal-input controls without Material, half-domains, invisible overlapping
 owners or plugin visual callbacks. Its 16 update cases demonstrate premature

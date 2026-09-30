@@ -125,6 +125,30 @@ the reported swapped-thumb pointer drag, pointer hit testing, continuous
 travel, or local thumb paint. Those remain separate investigations. The
 focused browser proof passes 1/1; no renderer or fixture input was changed.
 
+**Slider visible-thumb pointer ownership:** the competing explanations for
+the reported swapped handles were stale historical behavior, core routing to
+the wrong authored owner, or a mismatch between the candidate visual and its
+invisible hit inputs. A paired real-pointer Chrome 154/light/1440×900/DPR 1
+proof uses the authenticated frozen build and presses the actual visual thumb
+centers. At default start=30/end=65, both candidate down/up events retain the
+correct owner and both short drags move only that thumb to the same final
+values as Material (40/65 and 30/75). This does not explain every historical
+swap. At start=60/end=80, however, the candidate draws the start thumb at 60%
+while its authored start input is clamped to 50% and occupies only the left
+half. Pressing that visible start thumb routes to `slider-primary`, immediately
+changes the end input from 80 to 60, and ends with candidate store 60/65;
+Material moves the start thumb to 65/80. The symmetric start=20/end=40 case
+draws the end thumb at 40% while its end input is clamped to 50% and occupies
+only the right half. Pressing it routes to `slider-start`, ending with store
+40/40; Material moves the end thumb to 20/45. Paired pointer X positions differ
+by under 2 CSS pixels. The first demonstrated swap is therefore candidate
+input/visual hit-region authoring, not a proven core inversion of the two
+authored owner IDs. The separate equal-input core range capture, release,
+paint, and travel-geometry defects remain confirmed by their own reductions;
+this proof neither repairs nor invalidates them. Both focused pointer tests
+pass 2/2. Other states, crossing transitions, profiles/DPRs, and complete
+pointer-cancel/release ownership remain open. No fixture or renderer was edited.
+
 **Independent replay:** a separate cold
 `ASTYLAR_AUDIT_COLD=1; ASTYLAR_AUDIT_PROGRESS=1; node scripts/export-material-input-audit-current-ancestry.mjs --check`
 completed with exit 0. It revalidated the full audit, rehashed the evidence

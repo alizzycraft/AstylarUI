@@ -428,6 +428,188 @@ test('slider keyboard stepping exposes the authored range-constraint boundary', 
   });
 });
 
+test('slider pointer-down ownership is measured at both visual thumb centers', async () => {
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    const observations = {};
+    for (const thumb of ['start', 'end']) {
+      observations[thumb] = {};
+      for (const mode of ['reference', 'astylar']) {
+        const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+        const errors = [];
+        page.on('pageerror', error => errors.push(String(error)));
+        await page.goto(`${baseUrl}/${mode}/slider?benchmark=1&profile=light`);
+        await page.locator('.frame').waitFor();
+        if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+        const drag = mode === 'reference' ? await (async () => {
+          const track = await page.locator('mat-slider .mdc-slider__track').boundingBox();
+          const visual = await page.locator('mat-slider mat-slider-visual-thumb').nth(thumb === 'start' ? 0 : 1).boundingBox();
+          return {
+            from: { x: visual.x + visual.width / 2, y: visual.y + visual.height / 2 },
+            to: { x: track.x + track.width * (thumb === 'start' ? .4 : .75), y: visual.y + visual.height / 2 },
+          };
+        })() : await page.evaluate(thumb => {
+          const box = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['slider-visual'], false).elements['slider-visual'].borderBox;
+          const canvas = document.querySelector('canvas').getBoundingClientRect();
+          const state = window.__ASTYLAR_MATERIAL_BENCHMARK__.state();
+          const ratio = (thumb === 'start' ? state.sliderStart : state.sliderValue) / 100;
+          return {
+            from: { x: canvas.x + box.left + box.width * ratio, y: canvas.y + box.top + box.height / 2 },
+            to: { x: canvas.x + box.left + box.width * (thumb === 'start' ? .4 : .75),
+              y: canvas.y + box.top + box.height / 2 },
+          };
+        }, thumb);
+        const steps = [];
+        const snapshot = async boundary => steps.push(await page.evaluate(({ mode, boundary }) => {
+          const state = mode === 'reference'
+            ? window.ng.getComponent(document.querySelector('app-reference')).store.state()
+            : window.__ASTYLAR_MATERIAL_BENCHMARK__.state();
+          return {
+            boundary,
+            values: ['slider-start', 'slider-primary'].map(id => mode === 'reference'
+              ? document.querySelector(`#${id}`)?.value : document.querySelector(`[data-astylar-id="${id}"]`)?.value),
+            state: [state.sliderStart, state.sliderValue],
+            events: mode === 'astylar' ? window.__ASTYLAR_MATERIAL_BENCHMARK__.events()
+              .filter(event => ['pointerdown', 'pointerup', 'input', 'change'].includes(event.type)) : [],
+          };
+        }, { mode, boundary }));
+        await snapshot('initial');
+        await page.mouse.move(drag.from.x, drag.from.y);
+        await page.mouse.down();
+        await snapshot('down');
+        for (let index = 1; index <= 4; index++) {
+          await page.mouse.move(drag.from.x + (drag.to.x - drag.from.x) * index / 4, drag.from.y);
+          await page.evaluate(() => new Promise(resolve => requestAnimationFrame(resolve)));
+          await snapshot(`move-${index}`);
+        }
+        await page.mouse.up();
+        if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+        await snapshot('up');
+        observations[thumb][mode] = { drag, steps, errors };
+        await page.close();
+      }
+    }
+    assert.equal(browser.version(), '154.0.8037.58');
+    for (const [thumb, owner, fixedIndex, expectedFinal] of [
+      ['start', 'slider-start', 1, ['40', '65']],
+      ['end', 'slider-primary', 0, ['30', '75']],
+    ]) {
+      const reference = observations[thumb].reference;
+      const candidate = observations[thumb].astylar;
+      assert.deepEqual(reference.errors, []);
+      assert.deepEqual(candidate.errors, []);
+      assert.ok(Math.abs(reference.drag.from.x - candidate.drag.from.x) < 2,
+        `${thumb} pointer begins at the paired visual thumb center`);
+      assert.deepEqual(reference.steps.map(step => step.boundary),
+        ['initial', 'down', 'move-1', 'move-2', 'move-3', 'move-4', 'up']);
+      assert.deepEqual(candidate.steps.map(step => step.boundary),
+        ['initial', 'down', 'move-1', 'move-2', 'move-3', 'move-4', 'up']);
+      assert.deepEqual(reference.steps.at(-1).values, expectedFinal);
+      assert.deepEqual(candidate.steps.at(-1).values, expectedFinal);
+      assert.deepEqual(candidate.steps.at(-1).state, expectedFinal.map(Number));
+      assert.ok(candidate.steps.every(step => step.values[fixedIndex] === candidate.steps[0].values[fixedIndex]),
+        `${thumb} drag must not change the other thumb`);
+      assert.deepEqual(candidate.steps[1].events.filter(event => event.type === 'pointerdown')
+        .map(event => event.targetId), [owner]);
+      assert.deepEqual(candidate.steps.at(-1).events.filter(event => event.type === 'pointerup')
+        .map(event => event.targetId), [owner]);
+      assert.ok(candidate.steps.at(-1).events.filter(event => event.type === 'input').length >= 3);
+      assert.ok(candidate.steps.at(-1).events.filter(event => event.type === 'input')
+        .every(event => event.targetId === owner), `${thumb} input events retain their down owner`);
+      assert.deepEqual(candidate.steps.at(-1).events.filter(event => event.type === 'change')
+        .map(event => event.targetId), [owner]);
+    }
+  });
+});
+
+test('slider cross-midpoint visual thumbs reveal fixed-half hit ownership', async () => {
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    const observations = {};
+    for (const scenario of [
+      { name: 'start-above-midpoint', start: 60, end: 80, thumb: 'start' },
+      { name: 'end-below-midpoint', start: 20, end: 40, thumb: 'end' },
+    ]) {
+      observations[scenario.name] = {};
+      for (const mode of ['reference', 'astylar']) {
+        const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+        const errors = [];
+        page.on('pageerror', error => errors.push(String(error)));
+        await page.goto(`${baseUrl}/${mode}/slider?benchmark=1&profile=light`);
+        await page.locator('.frame').waitFor();
+        if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+        await page.evaluate(({ mode, start, end }) => {
+          const component = window.ng.getComponent(document.querySelector(
+            mode === 'reference' ? 'app-reference' : 'app-astylar-showcase'));
+          component.store.patchState({ sliderStart: start, sliderValue: end });
+        }, { mode, start: scenario.start, end: scenario.end });
+        if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+        const point = mode === 'reference' ? await (async () => {
+          const box = await page.locator('mat-slider mat-slider-visual-thumb')
+            .nth(scenario.thumb === 'start' ? 0 : 1).boundingBox();
+          return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+        })() : await page.evaluate(({ thumb, start, end }) => {
+          const box = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['slider-visual'], false).elements['slider-visual'].borderBox;
+          const canvas = document.querySelector('canvas').getBoundingClientRect();
+          return {
+            x: canvas.x + box.left + box.width * (thumb === 'start' ? start : end) / 100,
+            y: canvas.y + box.top + box.height / 2,
+          };
+        }, scenario);
+        const snapshot = async () => page.evaluate(mode => ({
+          values: ['slider-start', 'slider-primary'].map(id => mode === 'reference'
+            ? document.querySelector(`#${id}`)?.value : document.querySelector(`[data-astylar-id="${id}"]`)?.value),
+          state: mode === 'reference'
+            ? (() => { const s = window.ng.getComponent(document.querySelector('app-reference')).store.state();
+              return [s.sliderStart, s.sliderValue]; })()
+            : (() => { const s = window.__ASTYLAR_MATERIAL_BENCHMARK__.state();
+              return [s.sliderStart, s.sliderValue]; })(),
+          events: mode === 'astylar' ? window.__ASTYLAR_MATERIAL_BENCHMARK__.events()
+            .filter(event => ['pointerdown', 'pointerup', 'input', 'change'].includes(event.type)) : [],
+        }), mode);
+        const initial = await snapshot();
+        await page.mouse.move(point.x, point.y);
+        await page.mouse.down();
+        const down = await snapshot();
+        await page.mouse.move(point.x + 20, point.y);
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(resolve)));
+        const moved = await snapshot();
+        await page.mouse.up();
+        if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+        observations[scenario.name][mode] = { point, initial, down, moved, up: await snapshot(), errors };
+        await page.close();
+      }
+    }
+    assert.equal(browser.version(), '154.0.8037.58');
+    for (const [name, initial, referenceFinal, candidateInitial, wrongOwner, candidateFinal] of [
+      ['start-above-midpoint', ['60', '80'], ['65', '80'], ['50', '80'], 'slider-primary', ['50', '65']],
+      ['end-below-midpoint', ['20', '40'], ['20', '45'], ['20', '50'], 'slider-start', ['40', '50']],
+    ]) {
+      const reference = observations[name].reference;
+      const candidate = observations[name].astylar;
+      assert.deepEqual(reference.errors, []);
+      assert.deepEqual(candidate.errors, []);
+      assert.ok(Math.abs(reference.point.x - candidate.point.x) < 2,
+        `${name} uses the paired visual thumb center`);
+      assert.deepEqual(reference.initial.values, initial);
+      assert.deepEqual(candidate.initial.state, initial.map(Number));
+      assert.deepEqual(candidate.initial.values, candidateInitial,
+        `${name} semantic input value is clamped away from the visual thumb`);
+      assert.deepEqual(reference.up.values, referenceFinal);
+      assert.deepEqual(candidate.down.events.filter(event => event.type === 'pointerdown')
+        .map(event => event.targetId), [wrongOwner]);
+      assert.deepEqual(candidate.down.events.filter(event => event.type === 'input')
+        .map(event => event.targetId), [wrongOwner]);
+      assert.deepEqual(candidate.up.events.filter(event => event.type === 'pointerup')
+        .map(event => event.targetId), [wrongOwner]);
+      assert.deepEqual(candidate.up.events.filter(event => event.type === 'change')
+        .map(event => event.targetId), [wrongOwner]);
+      assert.deepEqual(candidate.up.values, candidateFinal);
+      assert.notDeepEqual(candidate.up.state, reference.up.state,
+        `${name} changes the wrong store thumb`);
+    }
+  });
+});
+
 async function withFrozenShowcase(run) {
   const browserRoot = path.resolve('examples/material-showcase/dist/material-showcase/browser');
   const checkpoint = JSON.parse(readFileSync('artifacts/material-parity/caret-visible-checkpoint-154/checkpoint/manifest.json'));
