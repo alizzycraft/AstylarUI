@@ -1641,6 +1641,98 @@ test('dark mobile real-key selections distinguish direction state from highlight
   });
 });
 
+test('dark mobile timepicker wheel separates scroll state from scrollbar paint', async t => {
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    assert.equal(browser.version(), '154.0.8037.58');
+    const observations = {};
+    for (const mode of ['reference', 'astylar']) {
+      const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
+      try {
+        const errors = []; page.on('pageerror', error => errors.push(String(error)));
+        await page.goto(`${baseUrl}/${mode}/timepicker?profile=dark`);
+        await page.locator('.frame').waitFor();
+        if (mode === 'astylar') {
+          await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+          await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+          const point = await page.evaluate(() => {
+            const box = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['timepicker-control'], false).elements['timepicker-control'].borderBox;
+            const canvas = document.querySelector('canvas').getBoundingClientRect();
+            return { x: canvas.x + box.left + box.width / 2, y: canvas.y + box.top + box.height / 2 };
+          });
+          await page.mouse.click(point.x, point.y);
+        } else await page.locator('#timepicker-control').click();
+        await page.locator(mode === 'reference' ? '.mat-timepicker-panel' : '[data-astylar-id="timepicker-options"]').waitFor({ state: 'visible' });
+        const settle = async () => {
+          if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+          await page.evaluate(async () => { await document.fonts.ready;
+            await Promise.all(document.getAnimations().filter(animation => animation.effect?.getTiming().iterations !== Infinity).map(animation => animation.finished.catch(() => {})));
+            await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))); });
+        };
+        const sample = () => page.evaluate(mode => {
+          if (mode === 'reference') {
+            const panel = document.querySelector('.mat-timepicker-panel');
+            const first = panel.querySelector('[role="option"]');
+            return { box: panel.getBoundingClientRect().toJSON(), scrollTop: panel.scrollTop,
+              scrollHeight: panel.scrollHeight, clientHeight: panel.clientHeight,
+              firstOption: first?.getBoundingClientRect().toJSON() };
+          }
+          const measured = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['timepicker-options', 'timepicker-option-0'], false);
+          const canvas = document.querySelector('canvas').getBoundingClientRect();
+          const box = id => { const value = measured.elements[id].borderBox;
+            return { x: canvas.x + value.left, y: canvas.y + value.top, width: value.width, height: value.height }; };
+          const scroll = measured.diagnostics.surface.scrolling.containers['timepicker-options'];
+          const surface = window.ng.getComponent(document.querySelector('app-astylar-showcase')).surface;
+          const thumb = surface.scene.getMeshByName('astylar-scrollbar-thumb-timepicker-options');
+          return { box: box('timepicker-options'), ...scroll, firstOption: box('timepicker-option-0'),
+            scrollbar: thumb ? { visible: thumb.isVisible && thumb.isEnabled(), localY: thumb.position.y,
+              diffuse: thumb.material?.diffuseColor?.toHexString() } : null };
+        }, mode);
+        await settle(); const before = await sample();
+        const beforePixels = PNG.sync.read(await page.screenshot({ caret: 'hide' }));
+        await page.mouse.move(before.box.x + before.box.width / 2, before.box.y + before.box.height / 2);
+        await page.mouse.wheel(0, 144);
+        await page.waitForFunction(mode => mode === 'reference'
+          ? document.querySelector('.mat-timepicker-panel').scrollTop > 0
+          : window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([], false).diagnostics.surface.scrolling.containers['timepicker-options'].scrollTop > 0, mode);
+        await settle(); const after = await sample();
+        const afterPixels = PNG.sync.read(await page.screenshot({ caret: 'hide' }));
+        let scrollbarStripChanged = 0;
+        const left = Math.floor((before.box.x + before.box.width - 12) * 2), right = Math.floor((before.box.x + before.box.width) * 2);
+        const top = Math.floor(before.box.y * 2), bottom = Math.floor((before.box.y + before.box.height) * 2);
+        for (let y = top; y < bottom; y++) for (let x = left; x < right; x++) {
+          const i = (y * beforePixels.width + x) * 4;
+          if ([0, 1, 2].some(channel => beforePixels.data[i + channel] !== afterPixels.data[i + channel])) scrollbarStripChanged++;
+        }
+        const thumbPixels = image => {
+          let count = 0, firstY = null, lastY = null;
+          for (let y = top; y < bottom; y++) for (let x = left; x < right; x++) {
+            const i = (y * image.width + x) * 4;
+            if (image.data[i] === 139 && image.data[i + 1] === 135 && image.data[i + 2] === 141) {
+              count++; firstY ??= y; lastY = y;
+            }
+          }
+          return { count, firstY, lastY };
+        };
+        observations[mode] = { before, after, scrollbarStripChanged,
+          candidateThumbPixels: mode === 'astylar' ? { before: thumbPixels(beforePixels), after: thumbPixels(afterPixels) } : null, errors };
+      } finally { await page.close(); }
+    }
+    t.diagnostic(JSON.stringify(observations));
+    for (const mode of ['reference', 'astylar']) {
+      assert.equal(observations[mode].before.scrollTop, 0);
+      assert.equal(observations[mode].after.scrollTop, 144);
+      assert.ok(Math.abs(observations[mode].before.firstOption.y - observations[mode].after.firstOption.y - 144) < .01);
+      assert.deepEqual(observations[mode].errors, []);
+    }
+    assert.equal(observations.reference.before.scrollHeight - observations.astylar.before.scrollHeight, 8);
+    const thumb = observations.astylar.candidateThumbPixels;
+    assert.ok(thumb.before.count > 100 && thumb.after.count > 100);
+    assert.ok(thumb.after.firstY > thumb.before.firstY);
+    assert.equal(observations.astylar.before.scrollbar.visible, true);
+    assert.equal(observations.astylar.after.scrollbar.visible, true);
+  });
+});
+
 test('comparison iframe overlays expose parent control focus scope', async t => {
   await withFrozenShowcase(async (browser, baseUrl) => {
     assert.equal(browser.version(), '154.0.8037.58');

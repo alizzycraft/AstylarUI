@@ -2,6 +2,11 @@
 
 ## Evidence boundary
 
+Supplemental ordinary dark/mobile timepicker: real input click opens both;
+wheel 144 changes scrollTop and first-option position by 144 CSS px on both.
+Candidate thumb pixels are present and move. Reference/candidate content extents
+differ by 8px; end reachability, thumb shape/travel/drag and other profiles remain.
+
 Supplemental comparison-host scope: Chrome 154 at 1440×900 DPR 1 verifies
 settled bottom-sheet/dialog open on candidate, reference or both (six cases).
 The parent selector remains clickable/focused and real closed-select keys change

@@ -2,6 +2,28 @@
 
 ## Current audit checkpoint — September 30
 
+**Timepicker wheel versus scrollbar paint, ordinary dark/mobile:** real input
+click opens both pickers at 390×844 DPR 2, without benchmark mode or state
+injection. Wheel delta 144 produces scrollTop 0→144 and first-option y movement
+of 144 CSS px on both sides. Panel boxes are both 260×256, at x65/y237.08.
+Candidate scroll diagnostics and measured option boxes agree with the movement.
+Its live scrollbar mesh is enabled/visible with #8B878D paint; exact matching
+pixels in the rightmost 12-CSS-pixel strip move from device rows 479–529
+(816 pixels) to 506–561 (896 pixels). This rules out an absent/stationary
+candidate thumb for this state, not incorrect shape, thickness, travel ratio,
+dragging or other profiles. Mesh localY is recorded only as paint-boundary
+evidence, not used for layout or CSS-space calculations. Reference scrollHeight
+is 2,320px, candidate 2,312px, both clientHeight 256px: preserve this unresolved
+8px extent difference for padding/content-bound tracing. It is not normalized
+away or assigned to core without equivalent-input proof. Clicking the input
+opens both here, unlike historical reports; no datepicker behavior is changed.
+`node --test --test-name-pattern="dark mobile timepicker wheel" tests/material-parity/sort-focus-structure.spec.mjs`
+passes 1/1 in 6,116ms initial, 6,651ms with live thumb/pixel inspection and
+5,393ms with explicit scroll/pixel assertions,
+zero page errors. Screenshots remain in-memory, no new retained capture or
+canonical rebuild. Next: trace trailing-padding/extent ownership and exercise
+end reachability, rather than repeating the already-working wheel action.
+
 **Comparison-page overlay scope:** a new boundary in the existing frozen-build
 browser spec opens bottom-sheet/dialog in the actual `/compare` iframe host at
 1440×900 DPR 1. Six cases cover candidate-only, reference-only and both-open.
