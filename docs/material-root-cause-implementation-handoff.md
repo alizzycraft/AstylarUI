@@ -2,6 +2,49 @@
 
 ## Current audit checkpoint — September 30
 
+**Equal-input selection paint is now separated from caret and Material authoring:**
+the same in-memory public reduction adds text input and textarea containing
+`Atlas`, each at DPR 1/2, with exactly the same declarations and real keys.
+Forward [0,3], collapsed [5,5] and backward [2,5] agree, including forward/backward
+semantic direction. Selected glyphs and opaque background are visible on both
+sides; collapse removes highlight pixels and candidate highlight owners.
+Native background is RGB(46,97,205); candidate is RGB(23,63,107)/#173F6B with
+white selected foreground, matching the pre-existing documented contrast-aware
+policy. `TextHighlightMeshFactory.chooseSelectionColors` selects the dark member
+of its fixed pair for this light background, before projection. This is a
+documented core paint-policy difference, NOT a Material-only input mismatch,
+fixture compensation, demonstrated blur or parity pass. Strict browser-paint
+equivalence would require reconciling that core contract, not changing comparison
+CSS to force either palette.
+
+At DPR2, exact highlight-color forward bounds (control-relative physical px)
+are native (16,2)–(53,45), input candidate (16,0)–(52,45), textarea candidate
+(16,0)–(52,47). Backward: native (46,2)–(87,45), input candidate
+(47,0)–(86,45), textarea candidate (47,0)–(86,47). White changed foreground
+pixels at DPR2 are native 156/160 versus candidate 139/156 (forward/backward).
+These prove visible paint, not equal glyph masks or geometry. Native computed
+outline is `auto 1px rgb(16,16,16)`, border-width=0, line-height=24px. Native
+outline occlusion, selection caret paint and crop clipping remain confounders
+for edge/height attribution; no core geometry diagnosis is made from these
+color-only bounds. Native screenshot caret hiding does not hide the Babylon
+caret and is explicitly NOT paired caret-paint evidence.
+
+Focused selection checks pass 1/1 in 12,477.848ms and 11,730.335ms. Optional
+`ASTYLAR_AUDIT_TEXT_CASE` limits the existing proof to declared cases and reports
+that filtering; it changes no fixture or assertion. Final integration of the
+entire public case list (no case filter) passes 1/1, zero skips/failures, twelve
+paired cases in 74,420.214ms. Command remains
+`node --test --test-name-pattern='public equal-input empty caret' tests/material-parity/input-boundary-evidence.spec.mjs`;
+this is the complete public diagnostic, not the whole historical file or release
+matrix. Bundle SHA `857563dba56ebfee71271b4a2cc8efa5122f7f10a9b107ce625847701be06d86`;
+the same 2,515 dependency inputs and core hashes below are revalidated before/after.
+Installed highlight-factory SHA:
+`3414940718ffa7769b9333233bae25f4f53a9ef1f394861ec45cbd1ceae4056f`.
+No capture directory, canonical fixture, renderer or large audit export changed.
+Next: revisit the global coverage ledger to prioritize remaining mapped states
+and unresolved evidence, rather than repeat these settled core/control probes.
+Full selection glyph/geometry equivalence and final canonical/browser gates remain open.
+
 **Caret coverage expanded without a second harness:** the same public reduction
 now covers plain input, placeholder input by pointer, the identical placeholder
 input by real Tab, and textarea, each at DPR 1/2 (eight paired cases). Native
@@ -62,8 +105,9 @@ The unchanged `shipped caret geometry fixes width` focused regression also
 passes 1/1 in 9,497.901ms using its pinned shipped methods and Babylon 8.15.1
 NullEngine; the optional color filter has not changed its full-delta evidence.
 No canonical fixture, renderer, historical capture or full export changed.
-Next text-paint gaps: equal-input selection paint and broader textarea
-composition; Material profile/state mappings and final gates remain open.
+Remaining text-paint gaps: complete selection glyph/geometry equivalence and
+broader textarea composition; Material profile/state mappings and final gates
+remain open. The bounded equal-input selection state/palette result is above.
 
 **Equal-input public empty-caret WebGL reduction:** the existing
 `input-boundary-evidence.spec.mjs` now mounts one empty text input through the

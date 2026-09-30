@@ -2,6 +2,19 @@
 
 ## Evidence boundary
 
+Public equal-input reduction now integrates twelve paired cases at DPR1/2:
+the eight caret cases below plus input/textarea forward/backward selection and
+collapse. Endpoint/direction state agrees; selected background and white glyph
+pixels are visible, and collapse releases background pixels and highlight owners.
+Native platform blue differs from the documented candidate dark-contrast palette
+(#173F6B for the identical light background). This is a core policy difference,
+not an authoring compensation. Pixel bounds/white counts are recorded, but native
+auto 1px focus outline, crop clipping and caret capture differ; full glyph and
+highlight geometry equivalence remain unproven. Complete public diagnostic
+passes 1/1 in 74,420.214ms, twelve pairs, no case filter; it is not a release pass.
+The handoff records source ownership, receipts and limits. Remaining global
+coverage/state mapping and final canonical/browser gates must still be completed.
+
 Current public caret proof includes eight paired cases: plain input, placeholder
 input by pointer and by Tab, and textarea, each at DPR 1/2. Placeholder initializes
 the padded x=28px origin, but pointer focus uses placeholder indices for empty

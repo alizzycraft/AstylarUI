@@ -457,7 +457,8 @@ test('public equal-input empty caret has paired WebGL raster evidence', async t 
       import { Astylar } from 'astylarui';
       const mode = new URLSearchParams(location.search).get('mode');
       const variant = new URLSearchParams(location.search).get('variant');
-      const child = {type:variant==='textarea'?'textarea':'input',inputType:'text',id:'audit-empty',value:'',ariaLabel:'empty input',
+      const child = {type:variant.endsWith('textarea')?'textarea':'input',inputType:'text',id:'audit-empty',
+        value:variant.startsWith('selection')?'Atlas':'',ariaLabel:'empty input',
         ...(variant.startsWith('placeholder')?{placeholder:'Project name'}:{})};
       const site = { root: { children: [child] },
         styles: [{selector:'#audit-empty',position:'absolute',left:'20px',top:'40px',width:'228px',height:'24px',
@@ -476,6 +477,7 @@ test('public equal-input empty caret has paired WebGL raster evidence', async t 
         document.head.append(css);
         const input=document.createElement(child.type); input.id='audit-empty';
         if(child.type==='input') input.type='text';
+        input.value=child.value;
         if(child.placeholder) input.placeholder=child.placeholder;
         input.setAttribute('aria-label','empty input'); stage.append(input);
       } else {
@@ -489,8 +491,13 @@ test('public equal-input empty caret has paired WebGL raster evidence', async t 
         const input=mode==='reference'?document.getElementById('audit-empty'):
           document.querySelector('[data-astylar-id="audit-empty"]');
         if(!(input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement)) throw Error('Missing public control');
-        return {site,focused:input===document.activeElement,value:input.value,selection:[input.selectionStart,input.selectionEnd],
+        const computed=mode==='reference'?getComputedStyle(input):null;
+        return {site,focused:input===document.activeElement,value:input.value,selection:[input.selectionStart,input.selectionEnd],direction:input.selectionDirection,
+          nativeFocusPaint:computed?{outlineStyle:computed.outlineStyle,outlineWidth:computed.outlineWidth,
+            outlineColor:computed.outlineColor,borderWidth:computed.borderWidth,lineHeight:computed.lineHeight}:null,
           resolved:surface?.inspectResolvedStyles()??null,diagnostics:surface?.diagnostics??null,
+          highlights:surface?.scene.meshes.filter(m=>m.metadata?.highlight?.ownerElementId==='audit-empty').map(m=>({
+            visible:m.isVisible&&m.isEnabled(),color:m.material?.emissiveColor?.toHexString(),alpha:m.material?.alpha}))??[],
           cursorMeshes:surface?.scene.meshes.filter(m=>/cursor/i.test(m.name)).map(m=>({name:m.name,enabled:m.isEnabled(),visible:m.isVisible}))??[],
           coreControl:surface?.scene.meshes.filter(m=>m.metadata?.textInput).map(m=>{
             const c=m.metadata.textInput; return {value:c.value,textContent:c.textContent,cursorPosition:c.cursorPosition,
@@ -516,7 +523,10 @@ test('public equal-input empty caret has paired WebGL raster evidence', async t 
   const results = [], errors = [];
   try {
     browser = await chromium.launch({ channel: 'chrome', headless: true });
-    for (const variant of ['plain', 'placeholder', 'placeholder-keyboard', 'textarea']) for (const dpr of [1, 2]) {
+    const allCases = ['plain', 'placeholder', 'placeholder-keyboard', 'textarea', 'selection-input', 'selection-textarea'];
+    const cases = process.env.ASTYLAR_AUDIT_TEXT_CASE?.split(',') ?? allCases;
+    assert.ok(cases.length && cases.every(value => allCases.includes(value)));
+    for (const variant of cases) for (const dpr of [1, 2]) {
       const pair = {};
       for (const mode of ['reference', 'astylar']) {
         const context = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: dpr });
@@ -525,6 +535,43 @@ test('public equal-input empty caret has paired WebGL raster evidence', async t 
           page.on('pageerror', error => errors.push(String(error)));
           await page.goto(`http://127.0.0.1:${server.address().port}/?mode=${mode}&variant=${variant}`);
           await page.waitForFunction(() => !!window.caretAudit);
+          if (variant.startsWith('selection')) {
+            await page.mouse.click(50, 52);
+            await page.keyboard.press('Home');
+            await page.evaluate(() => window.caretAudit.settle());
+            const clip = {x:20,y:40,width:228,height:24};
+            const baseline = await page.screenshot({clip,caret:'hide'});
+            const samples = [];
+            const sample = async label => {
+              await page.evaluate(() => window.caretAudit.settle());
+              const state = await page.evaluate(() => window.caretAudit.snapshot());
+              const pixels = await page.screenshot({clip,caret:'hide'});
+              const before = PNG.sync.read(baseline), after = PNG.sync.read(pixels), palette = new Map();
+              for (let i=0;i<after.data.length;i+=4) {
+                if (after.data[i]===before.data[i]&&after.data[i+1]===before.data[i+1]&&after.data[i+2]===before.data[i+2]) continue;
+                const color=[...after.data.subarray(i,i+3)].join(','); palette.set(color,(palette.get(color)??0)+1);
+              }
+              samples.push({label,value:state.value,selection:state.selection,direction:state.direction,focused:state.focused,
+                core:state.coreControl,highlights:state.highlights,commonChangedColors:[...palette].sort((a,b)=>b[1]-a[1]).slice(0,6),
+                nativeFocusPaint:state.nativeFocusPaint,
+                whiteForegroundPixels:palette.get('255,255,255')??0,
+                highlightRaster:rasterDifference(pixels,baseline,mode==='reference'?[46,97,205]:[23,63,107])});
+              assert.equal(state.value,'Atlas'); assert.equal(state.focused,true);
+              if(mode==='astylar') assert.deepEqual(state.diagnostics.messages,[]);
+            };
+            for(let i=0;i<3;i++) await page.keyboard.press('Shift+ArrowRight');
+            await sample('forward');
+            // Collapse first; keep the previously isolated End-on-selection
+            // defect separate from this selection-paint investigation.
+            await page.keyboard.press('ArrowRight'); await page.keyboard.press('End');
+            await sample('collapsed');
+            for(let i=0;i<3;i++) await page.keyboard.press('Shift+ArrowLeft');
+            await sample('backward');
+            pair[mode]={site:(await page.evaluate(()=>window.caretAudit.snapshot())).site,samples};
+            t.diagnostic(JSON.stringify({variant,dpr,mode,samples}));
+            assert.equal(await page.evaluate(()=>window.caretAudit.dispose()),true);
+            continue;
+          }
           const initial = await page.evaluate(() => window.caretAudit.snapshot());
           assert.equal(initial.focused, false); assert.equal(initial.value, '');
           // Interior crop excludes native platform focus outline. Baseline subtraction
@@ -592,6 +639,24 @@ test('public equal-input empty caret has paired WebGL raster evidence', async t 
         } finally { await context.close(); }
       }
       assert.deepEqual(pair.reference.site, pair.astylar.site);
+      if (variant.startsWith('selection')) {
+        for(const mode of ['reference','astylar']) {
+          const samples=pair[mode].samples;
+          assert.deepEqual(samples.map(s=>s.selection),[[0,3],[5,5],[2,5]]);
+          assert.equal(samples[0].direction,'forward');assert.equal(samples[2].direction,'backward');
+          for(const i of [0,2]) {
+            assert.equal(samples[i].commonChangedColors[0][0],mode==='reference'?'46,97,205':'23,63,107');
+            assert.ok(samples[i].highlightRaster.count>0,'selected background must be visible');
+            assert.ok(samples[i].whiteForegroundPixels>0,'selected white foreground must be visible');
+            if(mode==='astylar') assert.deepEqual(samples[i].highlights,[{visible:true,color:'#173F6B',alpha:1}]);
+          }
+          assert.equal(samples[1].highlightRaster.count,0,'collapse removes the observed highlight pixels');
+        }
+        assert.deepEqual(pair.astylar.samples[1].highlights,[],'collapse releases candidate highlight owners');
+        results.push({variant,dpr,selections:{reference:pair.reference.samples,astylar:pair.astylar.samples},
+          classification:'equal-authored-input; selection-state-agrees; documented-contrast-palette-differs; highlight-bounds-confounded-by-native-outline-and-clipping'});
+        continue;
+      }
       assert.equal(pair.reference.paint.bounds.maxX - pair.reference.paint.bounds.minX + 1, dpr);
       assert.deepEqual(pair.reference.paint.colors, ['208,188,255']);
       assert.deepEqual(pair.reference.editedEmpty, pair.reference.paint, 'native insertion stays at the same padded origin after equal editing');
@@ -629,8 +694,9 @@ test('public equal-input empty caret has paired WebGL raster evidence', async t 
     assert.equal(coreSources.length, 2);
     t.diagnostic(JSON.stringify({ browser: browser.version(), packages, bundleSha256: hash(bundle),
       dependencyCount: inputs.length, dependencyReceiptSha256: hash(JSON.stringify(inputs)), coreSources, results,
-      classification: 'core-initial-origin-defect-input-and-textarea; placeholder-pointer-index-defect; textarea-glyph-bound-center-update-inconsistency; width-policy-differs',
-      limitation: 'installed packed public consumer, not frozen Material bundle; native focus outline excluded from interior crop; all Material states and clipping remain unproven' }));
+      cases, focused:!!process.env.ASTYLAR_AUDIT_TEXT_CASE,
+      classification: 'core-caret-initialization-and-placeholder-pointer-defects; equal-input-selection-palette-documented-difference',
+      limitation: 'installed packed public consumer, not frozen Material bundle; selection background bounds can be occluded by native focus outline or crop; native-only caret hide is not caret parity evidence; all Material states and full selection raster remain unproven' }));
   } finally {
     await browser?.close();
     await new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve()));
