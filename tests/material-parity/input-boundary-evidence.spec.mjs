@@ -203,6 +203,75 @@ test('retained reference screenshots suppress the native caret by Playwright def
   } finally { await browser.close(); }
 });
 
+test('current paired caret-visible capture binds its pixels to unequal caret authoring', () => {
+  const currentFile = 'artifacts/material-parity/caret-visible-form-field-154/latest-report.json';
+  const currentBytes = readFileSync(currentFile);
+  assert.equal(hash(currentBytes), '8111da2cef29dd5a79af5e2723f4cdb73f98a56328860178a14d7301628992c3');
+  const current = JSON.parse(currentBytes);
+  const manifest = JSON.parse(readFileSync(current.capture.checkpointManifest.file));
+  const historicalManifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
+  assert.equal(current.browser, '154.0.8037.58');
+  assert.deepEqual(manifest.provenance.browserFiles, historicalManifest.provenance.browserFiles);
+  assert.equal(manifest.provenance.installedDependencies, historicalManifest.provenance.installedDependencies);
+  assert.equal(manifest.provenance.browserFiles.length, 1887);
+  assert.deepEqual(validateSupplementalCapture(current, { reportFile: currentFile,
+    expectedProvenance: manifest.provenance, script: 'scripts/audit-material-visible-caret.mjs',
+    styleProperties: Object.values(propertyGroups).flat() }), { status: 'checkpoint-bound', errors: [] });
+  assert.deepEqual(current.results.map(row => row.state), Array.from({ length: 6 }, (_, i) => `focused-empty-${i}`));
+  for (const row of current.results) for (const mode of ['reference', 'astylar']) {
+    const side = row[mode];
+    assert.equal(side.observation.control.value, '');
+    assert.equal(side.observation.control.focused, true);
+    for (const item of [side.screenshot, side.hiddenCaretControl]) {
+      assert.equal(hash(readFileSync(item.file)), item.sha256, `${row.state}/${mode}/${item.caret}`);
+      assert.deepEqual(item.clip, side.screenshot.clip);
+    }
+    assert.equal(side.screenshot.caret, 'initial');
+    assert.equal(side.hiddenCaretControl.caret, 'hide');
+    assert.equal(side.nativeCaretPixelDelta.changedPixels,
+      rasterDifference(readFileSync(side.screenshot.file), readFileSync(side.hiddenCaretControl.file)).count);
+  }
+  const first = current.results[0], off = current.results[2];
+  assert.deepEqual(first.reference.nativeCaretPixelDelta,
+    { changedPixels: 19, bounds: { minX: 16, minY: 19, maxX: 16, maxY: 37 } });
+  assert.equal(first.astylar.nativeCaretPixelDelta.changedPixels, 0);
+  assert.deepEqual(off.reference.nativeCaretPixelDelta, { changedPixels: 0, bounds: null });
+  const referenceOnOff = rasterDifference(readFileSync(first.reference.screenshot.file),
+    readFileSync(off.reference.screenshot.file));
+  const astylarOnOff = rasterDifference(readFileSync(first.astylar.screenshot.file),
+    readFileSync(off.astylar.screenshot.file));
+  assert.deepEqual(referenceOnOff, { count: 19, bounds: { minX: 16, minY: 19, maxX: 16, maxY: 37 },
+    colors: ['103,80,164'] });
+  assert.deepEqual(astylarOnOff.bounds, { minX: 15, minY: 18, maxX: 16, maxY: 37 });
+  assert.ok(astylarOnOff.colors.includes('29,27,32'));
+  const referenceTree = JSON.parse(readFileSync(first.reference.inputTree.file));
+  const candidateTree = JSON.parse(readFileSync(first.astylar.inputTree.file));
+  const referenceInput = referenceTree.nodes.find(node => node.attributes?.id === 'form-field-control');
+  const candidateInput = candidateTree.nodes.find(node => node.authored?.id === 'form-field-control');
+  assert.equal(referenceTree.styles[referenceInput.style].caretColor, 'rgb(103, 80, 164)');
+  assert.ok(referenceInput.rules.map(index => referenceTree.rules[index]).some(rule =>
+    rule.declarations?.['caret-color']?.value.includes('--mat-form-field-filled-caret-color')));
+  assert.equal(candidateInput.resolvedStyle.caretColor, undefined);
+  assert.equal(candidateInput.resolvedStyle.color, '#1d1b20');
+});
+
+function rasterDifference(firstBytes, secondBytes) {
+  const first = PNG.sync.read(firstBytes), second = PNG.sync.read(secondBytes);
+  assert.equal(first.width, second.width);
+  assert.equal(first.height, second.height);
+  let count = 0, minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  const colors = new Set();
+  for (let y = 0; y < first.height; y++) for (let x = 0; x < first.width; x++) {
+    const i = (y * first.width + x) * 4;
+    if (first.data[i] === second.data[i] && first.data[i + 1] === second.data[i + 1] &&
+        first.data[i + 2] === second.data[i + 2]) continue;
+    count++; minX = Math.min(minX, x); minY = Math.min(minY, y);
+    maxX = Math.max(maxX, x); maxY = Math.max(maxY, y);
+    colors.add([first.data[i], first.data[i + 1], first.data[i + 2]].join(','));
+  }
+  return { count, bounds: count ? { minX, minY, maxX, maxY } : null, colors: [...colors].sort() };
+}
+
 test('retained input boundaries authenticate all runtime assets, trees, actions and local rasters', () => {
   const manifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
   assert.deepEqual(validateSupplementalCapture(report, { reportFile: file,

@@ -48,14 +48,49 @@ caret-paint parity. The Astylar canvas caret in those crops is not subject to
 that native-caret suppression. This is a capture-instrumentation limitation,
 not evidence that the renderer lacks or correctly paints a caret. The focused
 test passed twice, 1/1 each, without modifying the original capture. Priority:
-(1) obtain caret-visible paired boundaries with exact current build/browser
-provenance, then evaluate empty caret and forward/backward selection paint in
-the five text-input families across applicable dark and responsive states;
+(1) extend caret-visible paired boundaries from the new form-field proof to
+the other text-input families and applicable dark/responsive states, then
+evaluate empty caret and forward/backward selection paint;
 (2) extend the narrower light/DPR1 overlay keyboard evidence only for states
 not already covered by existing authenticated captures; (3) reconcile the
 remaining source-derived family/state checklist; (4) run the complete current
 audit harness and unfiltered browser gates. Do not recapture old evidence in
 place or interpret the current 436/1,875 matrix counts as that checklist.
+
+**Current caret-visible form-field proof:** a report-only, form-field/light/desktop
+checkpoint was captured with Chrome 154.0.8037.58 against the frozen showcase
+build. Its 1,887 browser-file hashes and installed-dependency receipt exactly
+match the Chrome 153 baseline; the browser version differs. The filtered
+checkpoint's case inventory and current harness receipts are not asserted to
+match that full baseline. A new producer
+uses the existing supplemental capture/verifier, real Tab and delete actions,
+six 125ms focused-empty samples, full input trees, and paired
+`caret: 'initial'`/`'hide'` local rasters. The immutable report is
+`artifacts/material-parity/caret-visible-form-field-154/latest-report.json`
+(SHA-256 `8111da2c…`). It records no runtime errors and validates as
+checkpoint-bound. The reference caret is visible in three samples (a 1px
+purple line, RGB 103/80/164; 19 changed pixels); Astylar's canvas caret is
+visible independently and its on/off raster changes two columns, including
+RGB 29/27/32. Blink phases are not synchronized and are not compared as if
+they were. The paired input boxes have the same measured x/width/height to
+the captured precision.
+
+The first color divergence is **input authoring**: the reference input's
+matched Material rule declares `caret-color` from
+`--mat-form-field-filled-caret-color` / `--mat-sys-primary`, resolving to
+RGB 103/80/164. The Astylar input's authored/resolved style omits
+`caretColor` and retains text color `#1d1b20`; core's `auto` path uses that
+text color. Do not change the fixture as an audit fix or attribute this color
+difference to projection. The candidate's wider caret may also expose a
+general core paint mismatch (`TextSelectionService.createTextCursor` requests
+2 CSS px), but equal-caret-color public proof is still needed before that
+separate cause is confirmed. This one family/profile/DPR does not establish
+the other text-input states or full caret parity. The focused authenticated
+capture test (`node --test --test-name-pattern='current paired caret-visible
+capture' tests/material-parity/input-boundary-evidence.spec.mjs`) passed 1/1;
+the selected four input-boundary tests passed 4/4 and the new producer passed
+`node --check`. The checkpoint's report-only static case passed 1/1; it is not
+an enforced matrix result. Complete harness and browser gates remain pending.
 
 **Export reconciliation and remaining gates:** streaming package authentication
 found 79 sections before and after, with no added or removed sections. Exactly
