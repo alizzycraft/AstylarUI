@@ -360,6 +360,74 @@ test('composite selection controls expose their arrow-key boundary', async () =>
   });
 });
 
+test('slider keyboard stepping exposes the authored range-constraint boundary', async () => {
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    const observations = {};
+    for (const mode of ['reference', 'astylar']) {
+      const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+      const errors = [];
+      page.on('pageerror', error => errors.push(String(error)));
+      await page.goto(`${baseUrl}/${mode}/slider?benchmark=1&profile=light`);
+      await page.locator('.frame').waitFor();
+      if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+      const steps = [];
+      for (const key of ['Tab', 'ArrowRight', 'ArrowRight', 'ArrowRight', 'Tab', 'ArrowLeft', 'ArrowLeft', 'ArrowLeft']) {
+        await page.keyboard.press(key);
+        if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+        steps.push(await page.evaluate(mode => {
+          const inputs = ['slider-start', 'slider-primary'].map(id => mode === 'reference'
+            ? document.querySelector(`#${id}`) : document.querySelector(`[data-astylar-id="${id}"]`));
+          const state = mode === 'reference'
+            ? window.ng.getComponent(document.querySelector('app-reference')).store.state()
+            : window.__ASTYLAR_MATERIAL_BENCHMARK__.state();
+          return {
+            focusIndex: inputs.indexOf(document.activeElement),
+            inputs: inputs.map(input => ({ value: input?.value, min: input?.min, max: input?.max, step: input?.step })),
+            state: [state.sliderStart, state.sliderValue],
+          };
+        }, mode));
+      }
+      observations[mode] = {
+        steps,
+        appEvents: mode === 'astylar' ? await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.events()) : [],
+        errors,
+      };
+      await page.close();
+    }
+    assert.equal(browser.version(), '154.0.8037.58');
+    assert.deepEqual(observations.reference.errors, []);
+    assert.deepEqual(observations.astylar.errors, []);
+    assert.deepEqual(observations.reference.steps[0].inputs, [
+      { value: '30', min: '0', max: '65', step: '5' },
+      { value: '65', min: '30', max: '100', step: '5' },
+    ]);
+    assert.deepEqual(observations.astylar.steps[0].inputs, [
+      { value: '30', min: '0', max: '50', step: '1' },
+      { value: '65', min: '50', max: '100', step: '1' },
+    ]);
+    const boundary = step => [step.focusIndex, step.inputs.map(input => input.value), step.state];
+    assert.deepEqual(observations.reference.steps.map(boundary), [
+      [0, ['30', '65'], [30, 65]], [0, ['35', '65'], [35, 65]],
+      [0, ['40', '65'], [40, 65]], [0, ['45', '65'], [45, 65]],
+      [1, ['45', '65'], [45, 65]], [1, ['45', '60'], [45, 60]],
+      [1, ['45', '55'], [45, 55]], [1, ['45', '50'], [45, 50]],
+    ]);
+    assert.deepEqual(observations.astylar.steps.map(boundary), [
+      [0, ['30', '65'], [30, 65]], [0, ['31', '65'], [30, 65]],
+      [0, ['32', '65'], [30, 65]], [0, ['35', '65'], [35, 65]],
+      [1, ['35', '65'], [35, 65]], [1, ['35', '64'], [35, 65]],
+      [1, ['35', '63'], [35, 65]], [1, ['35', '60'], [35, 60]],
+    ]);
+    assert.deepEqual(observations.astylar.appEvents.filter(event => event.type === 'input')
+      .map(event => [event.targetId, event.value]), [
+      ['slider-start', '31'], ['slider-start', '32'], ['slider-start', '33'],
+      ['slider-primary', '64'], ['slider-primary', '63'], ['slider-primary', '62'],
+    ]);
+    assert.equal(observations.astylar.appEvents.filter(event => event.type === 'change').length, 6);
+  });
+});
+
 async function withFrozenShowcase(run) {
   const browserRoot = path.resolve('examples/material-showcase/dist/material-showcase/browser');
   const checkpoint = JSON.parse(readFileSync('artifacts/material-parity/caret-visible-checkpoint-154/checkpoint/manifest.json'));

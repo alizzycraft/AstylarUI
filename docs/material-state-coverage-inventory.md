@@ -55,7 +55,7 @@ source-derived applicability review before it can be closed as inapplicable.
 | Checkbox | 12 / 56 | disabled, selected | Pointer, hover and selected states captured. Current Chrome 154 light desktop DPR 1 real Tab/Space proof finds native HTML `input:checkbox` versus candidate `div role=checkbox`: both focus and candidate receives keydown, but only HTML toggles. Focus-ring paint, event order, and other profiles/DPRs remain. |
 | Radio | 12 / 56 | disabled, selected | Pointer/selected states captured. Current Chrome 154 light desktop DPR 1 Tab/ArrowLeft/ArrowRight proof finds Material native radio focus/selection follows team → solo → team; candidate role-only `div` receives both keys but remains on team. Focus paint, Space, event ordering and other profiles/DPRs remain. |
 | Select | 12 / 82 | commit/reopen, hover content, disabled, selected, open, M | Pointer commit and mobile final Escape captured; native expanded-option pixels are uninspectable, so keyboard focus/value/index/events/dismissal and candidate popup cleanup remain. |
-| Slider | 12 / 66 | drag-start/end, disabled, comparison-pane drags | Both handles have eight real drag samples and one End-key activation; full keyboard stepping, smooth travel and local thumb paint still require equal-input review. |
+| Slider | 12 / 66 | drag-start/end, disabled, comparison-pane drags | Chrome 154 light desktop DPR 1 real Tab/Arrow proof: reference thumbs use shared 0–100, step 5 with dynamic peer limits; candidate authors 0–50/50–100, step 1. Candidate events deliver 31/32/33 and 64/63/62 but the shared store rounds to multiples of 5, producing delayed jumps. Pointer thumb ownership/smooth travel, other keys/profiles and local paint remain. |
 | Slide-toggle | 12 / 56 | disabled, selected | Chrome 154 light desktop DPR 1 real Tab/Space proof: Material switch changes checked, while role-only candidate receives keydown but stays checked. Focus/hover, inactive minus paint, other profiles remain. |
 | Datepicker | 12 / 99 | secondary view, hover content, outside/canvas dismissal, disabled, error, open, short viewport, M | Light desktop input boundaries and collision/mobile cases exist; real calendar keyboard/day/year navigation, caret paint and dark/responsive focus remain. Preserve its distinct focus contract. |
 | Timepicker | 12 / 98 | wheel scroll, hover content, outside/canvas dismissal, disabled, error, open, M | Wheel and light desktop input boundaries exist; real focus-to-popup/key routing, scrollbar reachability, caret paint and dark/responsive focus remain. |
@@ -85,11 +85,13 @@ source-derived applicability review before it can be closed as inapplicable.
    profile/DPR/intermediate states.
 3. Keyboard-operable selection controls: the current light desktop key probes
    classify sort, checkbox, radio, chips, slide-toggle, button-toggle, tabs,
-   stepper and expansion at their first state/focus divergence. Select, slider,
+   stepper, expansion and slider at their first state/focus divergence. Select,
    other keys, profiles, focus paint and complete input mapping remain. The
-   candidate callback receives keys; its Escape-only handler does not implement
-   the reference components' activation/composite navigation. Programmatic
-   `focus()` and final pointer activation do not cover these paths.
+   candidate callback receives composite keys; its Escape-only handler does
+   not implement the reference components' activation/navigation. Slider has
+   a distinct authored range/step versus store-normalization conflict, not a
+   missing-keydown result. Programmatic `focus()` and final pointer activation
+   do not cover these paths.
 4. Source-derived applicability for passive/composite families, then complete
    canonical source/finding integration, the current 302-file audit harness,
    and unfiltered enforced browser/release gates. Keep input-equivalence

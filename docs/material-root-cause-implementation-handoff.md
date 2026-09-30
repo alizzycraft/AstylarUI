@@ -104,6 +104,27 @@ profiles, content visibility and full input mapping remain open. Do not patch
 fixtures for screenshot similarity or infer that all ARIA roles should acquire
 Material composite behavior from core.
 
+**Slider keyboard-step and state-contract boundary:** the next unresolved
+question was whether the reported short/jerky slider movement begins in core
+range key routing, authored range constraints, or the showcase state adapter.
+The same authenticated frozen Chrome 154/light/1440×900/DPR 1 build drives real
+Tab and three ArrowRight presses on the start thumb, then Tab and three
+ArrowLeft presses on the end thumb. Material's `mat-slider` authors min 0, max
+100, step 5; its current native inputs expose start max equal to the end value
+and end min equal to the start value. Both thumbs progress in 5-unit steps,
+30→35→40→45 and 65→60→55→50. The candidate authors two distinct range
+inputs with fixed 0–50 and 50–100 bounds and step 1
+(`examples/material-showcase/src/app/astylar.component.ts`). Its input/change
+callbacks receive 31/32/33 and 64/63/62, but `ShowcaseStore` normalizes each
+patch to a multiple of 5 (`showcase.store.ts`), retaining 30 and 65 for the
+first two presses and then jumping to 35 and 60. The first divergence is
+authored input constraints and step, compounded by application state
+normalization/re-render; core does deliver the keys and 1-unit range changes
+requested by those inputs. This scoped proof does not establish the cause of
+the reported swapped-thumb pointer drag, pointer hit testing, continuous
+travel, or local thumb paint. Those remain separate investigations. The
+focused browser proof passes 1/1; no renderer or fixture input was changed.
+
 **Independent replay:** a separate cold
 `ASTYLAR_AUDIT_COLD=1; ASTYLAR_AUDIT_PROGRESS=1; node scripts/export-material-input-audit-current-ancestry.mjs --check`
 completed with exit 0. It revalidated the full audit, rehashed the evidence
