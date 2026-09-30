@@ -805,7 +805,7 @@ test('editable popup keyboard boundaries locate autocomplete and timepicker inte
   });
 });
 
-test('datepicker keyboard opening and pointer month/date boundaries locate calendar authoring gaps', async () => {
+test('datepicker keyboard opening and pointer month/date boundaries locate calendar authoring gaps', async t => {
   await withFrozenShowcase(async (browser, baseUrl) => {
     const observations = {};
     for (const mode of ['reference', 'astylar']) {
@@ -817,7 +817,12 @@ test('datepicker keyboard opening and pointer month/date boundaries locate calen
       if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
       await page.evaluate(() => {
         window.__calendarAuditKeys = [];
+        window.__calendarAuditDispatch = [];
         document.addEventListener('keydown', event => window.__calendarAuditKeys.push(event.key), true);
+        document.addEventListener('keydown', event => window.__calendarAuditDispatch.push({ key: event.key,
+          modifiers: { alt: event.altKey, control: event.ctrlKey, shift: event.shiftKey, meta: event.metaKey },
+          target: event.target?.outerHTML?.slice(0, 200), active: document.activeElement?.outerHTML?.slice(0, 200),
+          popupClass: document.querySelector('mat-datepicker-content')?.className ?? null }), true);
       });
       const steps = [];
       const snapshot = async boundary => {
@@ -846,8 +851,16 @@ test('datepicker keyboard opening and pointer month/date boundaries locate calen
             return popup && !popup.classList.contains('mat-datepicker-content-animating');
           });
         }
-        if (mode === 'reference' && key === 'Escape')
-          await page.locator('mat-datepicker-content').waitFor({ state: 'detached' });
+        if (mode === 'reference' && key === 'Escape') {
+          try { await page.locator('mat-datepicker-content').waitFor({ state: 'detached' }); }
+          catch (error) {
+            t.diagnostic(JSON.stringify({ failedCalendarEscape: await page.evaluate(() => ({
+              dispatch: window.__calendarAuditDispatch, focus: document.activeElement?.outerHTML?.slice(0, 200),
+              popup: document.querySelector('mat-datepicker-content')?.outerHTML.slice(0, 400) ?? null,
+            })) }));
+            throw error;
+          }
+        }
         await snapshot(key);
       }
       const clickCandidate = async id => {

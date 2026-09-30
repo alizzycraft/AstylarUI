@@ -2,6 +2,28 @@
 
 ## Current audit checkpoint — September 30
 
+**Browser proof batch integration is NOT green:** from `0c919dd`, the unfiltered
+`node --test tests/material-parity/sort-focus-structure.spec.mjs` completes in
+225,783ms with 23/24 passing, one failure, zero skips/cancellations. New tooltip
+phase/font, timepicker wheel/end-padding and six comparison-host scope cases
+pass in the batch. The failing existing datepicker test times out for 30s
+waiting for reference `mat-datepicker-content` to detach after Alt+Down/Escape.
+The timeout observations show the popup first animating, then continuously
+present without the animating class. Existing pre-Escape waits had observed a
+focused calendar cell and absent animating class; this is insufficient to
+assign the intermittent cause. A focused replay subsequently passes 1/1 in
+8,427ms; it does NOT supersede the unfiltered failure or establish a fix.
+The same spec now records failure-only key target, focus owner, modifiers and
+popup class/markup before rethrowing the original timeout. Actions, reference,
+timeout and assertions are unchanged; no repeated Escape or automatic retry.
+Material's `_getCloseStream` accepts unmodified Escape; animation events update
+the content class. Delivery/modifier state versus opening/focus/event readiness
+remain competing explanations, requiring failure-time evidence rather than
+more blind whole-suite reruns. Next: use the added diagnostics on a bounded
+datepicker reproduction, then repeat batch integration only after the cause is
+understood. Canonical/browser final acceptance remains pending. No rendering
+input, canonical finding, retained capture or source export changed.
+
 **Timepicker 8px extent cause and end reachability:** extending the same ordinary
 dark/mobile wheel proof with computed/resolved padding and a real wheel-to-end
 action resolves the prior extent question upstream of rendering. Material panel

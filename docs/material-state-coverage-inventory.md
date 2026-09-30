@@ -2,6 +2,12 @@
 
 ## Evidence boundary
 
+Latest shared browser-proof integration from `0c919dd`: 23/24 pass, one
+reference datepicker Escape-detachment timeout, zero skips/cancellations.
+Focused replay passes but does not erase that intermittent failure. Failure-only
+dispatch/focus/modifier/popup diagnostics are now retained in test output;
+integration and final acceptance remain unresolved.
+
 Supplemental ordinary dark/mobile timepicker: real input click opens both;
 wheel 144 changes scrollTop and first-option position by 144 CSS px on both.
 Candidate thumb pixels are present and move. The 8px extent difference matches
