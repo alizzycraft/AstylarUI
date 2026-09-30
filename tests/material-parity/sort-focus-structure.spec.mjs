@@ -1271,6 +1271,100 @@ test('paginator keyboard transitions separate native activation from disabled-in
   });
 });
 
+test('dark mobile snackbar keyboard activation exposes visible action and dismissal', async t => {
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    assert.equal(browser.version(), '154.0.8037.58');
+    const observations = {};
+    for (const mode of ['reference', 'astylar']) {
+      const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
+      try {
+        const errors = []; page.on('pageerror', error => errors.push(String(error)));
+        await page.goto(`${baseUrl}/${mode}/snack-bar?benchmark=1&profile=dark`);
+        await page.locator('.frame').waitFor();
+        if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+        const settle = async () => {
+          if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+          await page.evaluate(async () => { await document.fonts.ready;
+            await Promise.all(document.getAnimations().filter(animation => animation.effect?.getTiming().iterations !== Infinity).map(animation => animation.finished.catch(() => {})));
+            await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))); });
+        };
+        await settle();
+        const baseline = PNG.sync.read(await page.screenshot({ caret: 'hide' }));
+        await page.keyboard.press('Tab');
+        const trigger = await page.evaluate(() => document.activeElement?.getAttribute('data-astylar-id') || document.activeElement?.id);
+        assert.equal(trigger, 'snack-bar-primary');
+        await page.keyboard.press('Enter'); await settle();
+        const opened = await page.evaluate(mode => {
+          const popup = mode === 'reference' ? document.querySelector('.mat-mdc-snack-bar-container') : document.querySelector('[data-astylar-id="snack-bar-surface"]');
+          if (!popup) throw Error('Keyboard activation did not create snackbar');
+          let box = popup.getBoundingClientRect().toJSON();
+          let paint;
+          if (mode === 'astylar') {
+            const measurement = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['snack-bar-surface']);
+            const measured = measurement.elements['snack-bar-surface'].borderBox;
+            const canvas = document.querySelector('canvas').getBoundingClientRect();
+            box = { x: canvas.x + measured.left, y: canvas.y + measured.top, width: measured.width, height: measured.height };
+            const style = measurement.inputTree.nodes.find(node => node.authored?.id === 'snack-bar-surface').resolvedStyle;
+            paint = { background: style.background, color: style.color, width: style.width };
+          } else {
+            const surface = popup.querySelector('.mdc-snackbar__surface');
+            const label = popup.querySelector('.mat-mdc-snack-bar-label');
+            paint = { background: getComputedStyle(surface).backgroundColor, color: getComputedStyle(label).color,
+              width: getComputedStyle(surface).width };
+          }
+          return { box, paint, text: popup.textContent.replace(/\s+/g, ' ').trim(),
+            focus: document.activeElement?.getAttribute('data-astylar-id') || document.activeElement?.id };
+        }, mode);
+        const image = PNG.sync.read(await page.screenshot({ caret: 'hide' }));
+        const { box } = opened;
+        const left = Math.max(0, Math.ceil(box.x * 2)), top = Math.max(0, Math.ceil(box.y * 2));
+        const right = Math.min(image.width, Math.floor((box.x + box.width) * 2));
+        const bottom = Math.min(image.height, Math.floor((box.y + box.height) * 2));
+        assert.ok(right > left && bottom > top, 'snackbar is wholly outside the viewport');
+        let changed = 0; const palette = new Map();
+        for (let y = top; y < bottom; y++) for (let x = left; x < right; x++) {
+          const i = (y * image.width + x) * 4;
+          if (image.data[i] === baseline.data[i] && image.data[i + 1] === baseline.data[i + 1] && image.data[i + 2] === baseline.data[i + 2]) continue;
+          changed++; const color = [...image.data.subarray(i, i + 3)].join(',');
+          palette.set(color, (palette.get(color) ?? 0) + 1);
+        }
+        await page.keyboard.press('Tab'); await settle();
+        const actionFocus = await page.evaluate(() => document.activeElement?.getAttribute('data-astylar-id') || document.activeElement?.textContent.trim());
+        await page.keyboard.press('Enter'); await settle();
+        if (mode === 'reference') await page.locator('.mat-mdc-snack-bar-container').waitFor({ state: 'detached' });
+        const closed = await page.evaluate(mode => ({ popupCount: document.querySelectorAll(mode === 'reference' ? '.mat-mdc-snack-bar-container' : '[data-astylar-id="snack-bar-surface"]').length,
+          open: mode === 'astylar' ? window.__ASTYLAR_MATERIAL_BENCHMARK__.state().open : null,
+          focus: document.activeElement?.getAttribute('data-astylar-id') || document.activeElement?.id || document.activeElement?.tagName }), mode);
+        observations[mode] = { opened, raster: { changed, commonChangedColors: [...palette].sort((a, b) => b[1] - a[1]).slice(0, 5) }, actionFocus, closed, errors };
+      } finally { await page.close(); }
+    }
+    t.diagnostic(JSON.stringify(observations));
+    for (const mode of ['reference', 'astylar']) {
+      assert.ok(observations[mode].raster.changed > 1000);
+      assert.equal(observations[mode].closed.popupCount, 0);
+      assert.deepEqual(observations[mode].errors, []);
+    }
+    assert.equal(observations.reference.opened.text, 'Project saved UNDO');
+    assert.equal(observations.astylar.opened.text, 'Project savedUNDO');
+    assert.equal(observations.reference.actionFocus, 'UNDO');
+    assert.equal(observations.astylar.actionFocus, 'snack-bar-dismiss');
+    assert.equal(observations.astylar.closed.open, false);
+    assert.equal(observations.astylar.closed.focus, 'snack-bar-primary');
+    assert.equal(observations.reference.closed.focus, 'BODY');
+    assert.deepEqual(observations.astylar.opened.paint, { background: '#322f35', color: '#ffffff', width: '344px' });
+    assert.equal(observations.reference.raster.commonChangedColors[0][0], '50,48,51');
+    assert.equal(observations.astylar.raster.commonChangedColors[0][0], '50,47,53');
+    assert.ok(observations.reference.raster.commonChangedColors.some(([color, count]) => color === '245,239,244' && count > 100));
+    assert.ok(observations.astylar.raster.commonChangedColors.some(([color, count]) => color === '255,255,255' && count > 100));
+    for (const mode of ['reference', 'astylar']) {
+      assert.ok(Math.abs(observations[mode].opened.box.y - 788) < .01);
+      assert.ok(Math.abs(observations[mode].opened.box.height - 48) < .01);
+    }
+    assert.equal(observations.reference.opened.box.width, 374);
+    assert.ok(Math.abs(observations.astylar.opened.box.width - 344) < .01);
+  });
+});
+
 test('dark mobile modal Tab cycles separate authored modality from core containment', async t => {
   const candidateSource = readFileSync('examples/material-showcase/src/app/astylar.component.ts', 'utf8');
   assert.match(candidateSource, /id: `\$\{family\}-overlay`, class: 'modal-overlay bottom-sheet-overlay', role: 'dialog'/);

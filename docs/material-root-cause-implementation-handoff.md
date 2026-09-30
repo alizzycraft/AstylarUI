@@ -2,6 +2,30 @@
 
 ## Current audit checkpoint — September 30
 
+**Snackbar keyboard/action visibility, dark/mobile:** on the authenticated frozen
+Chrome 154 build, dark 390×844 DPR 2, real Tab/Enter opens both snackbars without
+state injection. Both surfaces are visibly painted in the viewport at y=788,
+height=48, bottom=836; native/candidate local regions change 71,808/66,004 device
+pixels from the closed baseline. Native computed background/label color are
+RGB 50/48/51 and 245/239/244, observed in pixels; candidate resolved requests are
+`#322f35`/`#ffffff`, also observed in pixels. Width differs: native 374px at x=8,
+candidate fixed 344px at x=23. Candidate `.snack-surface` explicitly authors
+that width and palette, so classify these first differences as unequal
+application styling, not a demonstrated core position or color conversion fault.
+Tab reaches UNDO on both; Enter dismisses both. Candidate restores its trigger
+via the explicit `id.endsWith('-dismiss')` focus callback; native ends at BODY
+when the action is removed. This is another authored interaction distinction.
+The initial probe sampled Material before asynchronous exit detachment and
+failed its zero-popup assertion; waiting for actual container detachment closes
+that instrumentation timing gap, without changing actions or reference truth.
+The existing spec now checks visible foreground/background pixels, geometry,
+resolved paint inputs, action focus, dismissal and page errors. It does not
+establish screenshot/input parity, timed expiry, repeated action cleanup, other
+profiles, or explain historical missing-snackbar reports with different inputs.
+`node --test --test-name-pattern="dark mobile snackbar keyboard" tests/material-parity/sort-focus-structure.spec.mjs`
+passes 1/1 in 5,521ms after detachment synchronization and 5,429ms with resolved
+paint evidence. Screenshots remain in memory; renderer/fixtures/export unchanged.
+
 **Retained texture ownership and final disposal:** the same frozen dark/mobile
 overlay-cycle test now reads the existing internal inspection's text-cache
 statistics/retained texture identities before calling public `surface.dispose()`.
