@@ -438,6 +438,13 @@ test('shipped caret geometry fixes width before projection independently of care
 });
 
 test('public equal-input empty caret has paired WebGL raster evidence', async t => {
+  const calibration = new PNG({width:2,height:1});
+  calibration.data.set([208,188,255,255,136,136,136,255]);
+  const removed = new PNG({width:2,height:1});
+  removed.data.set([232,224,235,255,232,224,235,255]);
+  assert.deepEqual(rasterDifference(PNG.sync.write(calibration),PNG.sync.write(removed),[208,188,255]),
+    {count:1,bounds:{minX:0,minY:0,maxX:0,maxY:0},colors:['208,188,255']},
+    'caret-color isolation preserves the requested foreground and rejects unrelated glyph changes');
   // Compile a public consumer in memory: no canonical fixture, Material plugin,
   // renderer replacement, retained mesh mutation or capture directory.
   const consumer = path.resolve('examples/material-showcase');
@@ -449,8 +456,11 @@ test('public equal-input empty caret has paired WebGL raster evidence', async t 
       import { createApplication } from '@angular/platform-browser';
       import { Astylar } from 'astylarui';
       const mode = new URLSearchParams(location.search).get('mode');
-      const site = { root: { children: [{type:'input',inputType:'text',id:'audit-empty',value:'',ariaLabel:'empty input'}] },
-        styles: [{selector:'input',position:'absolute',left:'20px',top:'40px',width:'228px',height:'24px',
+      const variant = new URLSearchParams(location.search).get('variant');
+      const child = {type:variant==='textarea'?'textarea':'input',inputType:'text',id:'audit-empty',value:'',ariaLabel:'empty input',
+        ...(variant.startsWith('placeholder')?{placeholder:'Project name'}:{})};
+      const site = { root: { children: [child] },
+        styles: [{selector:'#audit-empty',position:'absolute',left:'20px',top:'40px',width:'228px',height:'24px',
           boxSizing:'border-box',display:'block',margin:'0',padding:'0',paddingLeft:'8px',paddingRight:'8px',borderWidth:'0',borderRadius:'0',
           background:'#e8e0eb',color:'#e6e1e5',caretColor:'#d0bcff',
           fontFamily:'Arial',fontSize:'16px',fontWeight:'400',lineHeight:'24px',textAlign:'left'}] };
@@ -464,7 +474,9 @@ test('public equal-input empty caret has paired WebGL raster evidence', async t 
         css.textContent=site.styles.map(({selector,...values})=>selector+'{'+Object.entries(values)
           .map(([key,value])=>key.replace(/[A-Z]/g,c=>'-'+c.toLowerCase())+':'+value).join(';')+'}').join('');
         document.head.append(css);
-        const input=document.createElement('input'); input.id='audit-empty'; input.type='text';
+        const input=document.createElement(child.type); input.id='audit-empty';
+        if(child.type==='input') input.type='text';
+        if(child.placeholder) input.placeholder=child.placeholder;
         input.setAttribute('aria-label','empty input'); stage.append(input);
       } else {
         application=await createApplication({providers:[provideZonelessChangeDetection()]});
@@ -476,10 +488,13 @@ test('public equal-input empty caret has paired WebGL raster evidence', async t 
       window.caretAudit={settle,snapshot(){
         const input=mode==='reference'?document.getElementById('audit-empty'):
           document.querySelector('[data-astylar-id="audit-empty"]');
-        if(!(input instanceof HTMLInputElement)) throw Error('Missing public control');
+        if(!(input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement)) throw Error('Missing public control');
         return {site,focused:input===document.activeElement,value:input.value,selection:[input.selectionStart,input.selectionEnd],
           resolved:surface?.inspectResolvedStyles()??null,diagnostics:surface?.diagnostics??null,
-          cursorMeshes:surface?.scene.meshes.filter(m=>/cursor/i.test(m.name)).map(m=>({name:m.name,enabled:m.isEnabled(),visible:m.isVisible}))??[]};
+          cursorMeshes:surface?.scene.meshes.filter(m=>/cursor/i.test(m.name)).map(m=>({name:m.name,enabled:m.isEnabled(),visible:m.isVisible}))??[],
+          coreControl:surface?.scene.meshes.filter(m=>m.metadata?.textInput).map(m=>{
+            const c=m.metadata.textInput; return {value:c.value,textContent:c.textContent,cursorPosition:c.cursorPosition,
+              selection:[c.selectionStart,c.selectionEnd],origin:c.visualTextLeftEdgeCss};})??[]};
       },dispose(){surface?.dispose();application?.destroy();return surface?.disposed??true;}};
     ` }, bundle: true, write: false, format: 'esm', platform: 'browser', target: 'es2022', metafile: true });
   const inputs = Object.keys(built.metafile.inputs).filter(file => path.basename(file) !== 'equal-input-caret.mjs')
@@ -498,14 +513,14 @@ test('public equal-input empty caret has paired WebGL raster evidence', async t 
   const results = [], errors = [];
   try {
     browser = await chromium.launch({ channel: 'chrome', headless: true });
-    for (const dpr of [1, 2]) {
+    for (const variant of ['plain', 'placeholder', 'placeholder-keyboard', 'textarea']) for (const dpr of [1, 2]) {
       const pair = {};
       for (const mode of ['reference', 'astylar']) {
         const context = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: dpr });
         try {
           const page = await context.newPage();
           page.on('pageerror', error => errors.push(String(error)));
-          await page.goto(`http://127.0.0.1:${server.address().port}/?mode=${mode}`);
+          await page.goto(`http://127.0.0.1:${server.address().port}/?mode=${mode}&variant=${variant}`);
           await page.waitForFunction(() => !!window.caretAudit);
           const initial = await page.evaluate(() => window.caretAudit.snapshot());
           assert.equal(initial.focused, false); assert.equal(initial.value, '');
@@ -514,20 +529,24 @@ test('public equal-input empty caret has paired WebGL raster evidence', async t 
           const clip = { x: 24, y: 44, width: 220, height: 16 };
           const baseline = await page.screenshot({ clip, caret: 'initial' });
           const stageBaseline = await page.screenshot({ clip: { x: 0, y: 0, width: 390, height: 140 }, caret: 'initial' });
-          await page.mouse.click(50, 52);
+          if (variant === 'placeholder-keyboard') await page.keyboard.press('Tab');
+          else await page.mouse.click(50, 52);
           await page.evaluate(() => window.caretAudit.settle());
           const focused = await page.evaluate(() => window.caretAudit.snapshot());
           assert.equal(focused.focused, true); assert.equal(focused.value, '');
           assert.deepEqual(focused.selection, [0, 0]);
           let paint = { count: 0 }, stageDelta = { count: 0 };
           for (let sample = 0; sample < 6; sample++) {
-            const delta = rasterDifference(await page.screenshot({ clip, caret: 'initial' }), baseline);
+            const delta = rasterDifference(await page.screenshot({ clip, caret: 'initial' }), baseline,
+              variant === 'plain' ? undefined : [208, 188, 255]);
             if (delta.count > paint.count) paint = delta;
-            const fullDelta = rasterDifference(await page.screenshot({ clip: { x: 0, y: 0, width: 390, height: 140 }, caret: 'initial' }), stageBaseline);
+            const fullDelta = rasterDifference(await page.screenshot({ clip: { x: 0, y: 0, width: 390, height: 140 }, caret: 'initial' }), stageBaseline,
+              variant === 'plain' ? undefined : [208, 188, 255]);
             if (fullDelta.count > stageDelta.count) stageDelta = fullDelta;
             await page.waitForTimeout(125);
           }
-          pair[mode] = { site: focused.site, paint, stageDelta, resolved: focused.resolved, cursorMeshes: focused.cursorMeshes };
+          pair[mode] = { site: focused.site, paint, stageDelta, resolved: focused.resolved,
+            initialCore:focused.coreControl,cursorMeshes: focused.cursorMeshes };
           if (mode === 'reference') assert.ok(paint.count > 0, 'native empty caret must paint');
           if (mode === 'astylar') {
             assert.deepEqual(focused.diagnostics.messages, [], 'minimal public input must have no unsupported declarations');
@@ -537,22 +556,34 @@ test('public equal-input empty caret has paired WebGL raster evidence', async t 
             // Same empty value reached through editing exercises the normal text
             // display path. No cursor/mesh state is set by the diagnostic.
             await page.keyboard.type('A');
-            assert.equal(await page.evaluate(() => window.caretAudit.snapshot().value), 'A');
+            await page.evaluate(() => window.caretAudit.settle());
+            const typed = await page.evaluate(() => window.caretAudit.snapshot());
+            assert.equal(typed.value, 'A');
+            if (mode === 'astylar') {
+              assert.equal(focused.coreControl[0].cursorPosition, variant === 'placeholder' ? 3 : 0);
+              assert.equal(typed.coreControl[0].cursorPosition, variant === 'placeholder' ? 4 : 1);
+            }
             await page.keyboard.press('Backspace');
             await page.evaluate(() => window.caretAudit.settle());
             const edited = await page.evaluate(() => window.caretAudit.snapshot());
-            assert.equal(edited.value, ''); assert.equal(edited.focused, true);
-            assert.deepEqual(edited.selection, [0, 0]);
+            t.diagnostic(JSON.stringify({ variant, dpr, mode, typed: {value:typed.value,selection:typed.selection},
+              deleted: {value:edited.value,selection:edited.selection,focused:edited.focused}, typedCore:typed.coreControl,deletedCore:edited.coreControl }));
+            const placeholderDeletionDefect = mode === 'astylar' && variant === 'placeholder';
+            assert.equal(edited.value, placeholderDeletionDefect ? 'A' : '', `${variant}/${mode}/DPR${dpr} Backspace after settled typing`);
+            assert.equal(edited.focused, true);
+            assert.deepEqual(edited.selection, placeholderDeletionDefect ? [1, 1] : [0, 0]);
+            pair[mode].deletion = {value:edited.value,selection:edited.selection,core:edited.coreControl,
+              classification:placeholderDeletionDefect?'exposed-placeholder-deletion-defect':'empty-state-reached'};
             let editedEmpty = { count: 0 };
-            for (let sample = 0; sample < 6; sample++) {
+            for (let sample = 0; !placeholderDeletionDefect && sample < 6; sample++) {
               const delta = rasterDifference(await page.screenshot({ clip: mode === 'astylar'
                 ? { x: 0, y: 0, width: 390, height: 140 } : clip, caret: 'initial' }),
-                mode === 'astylar' ? stageBaseline : baseline);
+                mode === 'astylar' ? stageBaseline : baseline, variant === 'plain' ? undefined : [208, 188, 255]);
               if (delta.count > editedEmpty.count) editedEmpty = delta;
               await page.waitForTimeout(125);
             }
-            assert.ok(editedEmpty.count > 0);
-            pair[mode].editedEmpty = editedEmpty;
+            if (!placeholderDeletionDefect) assert.ok(editedEmpty.count > 0);
+            pair[mode].editedEmpty = placeholderDeletionDefect ? null : editedEmpty;
           }
           assert.equal(await page.evaluate(() => window.caretAudit.dispose()), true);
         } finally { await context.close(); }
@@ -561,13 +592,25 @@ test('public equal-input empty caret has paired WebGL raster evidence', async t 
       assert.equal(pair.reference.paint.bounds.maxX - pair.reference.paint.bounds.minX + 1, dpr);
       assert.deepEqual(pair.reference.paint.colors, ['208,188,255']);
       assert.deepEqual(pair.reference.editedEmpty, pair.reference.paint, 'native insertion stays at the same padded origin after equal editing');
-      assert.equal(pair.astylar.paint.count, 0, 'record the initial caret outside the padded interior, not parity');
       const center = paint => (paint.bounds.minX + paint.bounds.maxX + 1) / (2 * dpr);
-      assert.equal(center(pair.astylar.stageDelta), 21.5, 'initial empty caret takes the core insertion-edge fallback');
-      assert.equal(center(pair.astylar.editedEmpty), 28, 'editing establishes the authored padded insertion edge');
-      results.push({ dpr, reference: pair.reference.paint, astylar: pair.astylar.paint,
+      if (variant === 'plain') {
+        assert.equal(pair.astylar.paint.count, 0, 'record the initial caret outside the padded interior, not parity');
+        assert.equal(center(pair.astylar.stageDelta), 21.5, 'initial empty caret takes the core insertion-edge fallback');
+        assert.equal(center(pair.astylar.editedEmpty), 28, 'editing establishes the authored padded insertion edge');
+      } else if (variant === 'textarea') {
+        assert.equal(center(pair.astylar.stageDelta), 21.5, 'textarea shares initial insertion-edge fallback');
+        assert.equal(center(pair.astylar.editedEmpty), 28, 'textarea editing initializes the padded origin');
+        assert.equal((pair.astylar.editedEmpty.bounds.minY - pair.astylar.stageDelta.bounds.minY) / dpr, 4,
+          'record the unexplained four-CSS-pixel textarea caret shift after editing');
+      } else {
+        assert.equal(center(pair.astylar.stageDelta), 28, 'placeholder paint initializes the padded origin');
+        if (variant === 'placeholder-keyboard') assert.deepEqual(pair.astylar.editedEmpty, pair.astylar.stageDelta);
+      }
+      t.diagnostic(JSON.stringify({ variant, dpr, reference: pair.reference.paint, astylar: pair.astylar.stageDelta, editedEmpty: pair.astylar.editedEmpty }));
+      results.push({ variant, dpr, reference: pair.reference.paint, astylar: pair.astylar.paint,
         referenceEditedEmpty: pair.reference.editedEmpty, stageDelta: pair.astylar.stageDelta,
-        editedEmpty: pair.astylar.editedEmpty, cursorMeshes: pair.astylar.cursorMeshes,
+        editedEmpty: pair.astylar.editedEmpty, deletion:pair.astylar.deletion,cursorMeshes: pair.astylar.cursorMeshes,
+        initialCore:pair.astylar.initialCore,
         effective: pair.astylar.resolved.elements.find(e => e.id === 'audit-empty').effective });
     }
     assert.deepEqual(errors, []);
@@ -576,7 +619,7 @@ test('public equal-input empty caret has paired WebGL raster evidence', async t 
     assert.equal(coreSources.length, 2);
     t.diagnostic(JSON.stringify({ browser: browser.version(), packages, bundleSha256: hash(bundle),
       dependencyCount: inputs.length, dependencyReceiptSha256: hash(JSON.stringify(inputs)), coreSources, results,
-      classification: 'core-empty-input-initial-origin-diverges-from-edited-origin; caret-width-policy-also-differs',
+      classification: 'core-initial-origin-defect-input-and-textarea; placeholder-pointer-index-defect; textarea-vertical-shift-unexplained; width-policy-differs',
       limitation: 'installed packed public consumer, not frozen Material bundle; native focus outline excluded from interior crop; all Material states and clipping remain unproven' }));
   } finally {
     await browser?.close();
@@ -584,7 +627,7 @@ test('public equal-input empty caret has paired WebGL raster evidence', async t 
   }
 });
 
-function rasterDifference(firstBytes, secondBytes) {
+function rasterDifference(firstBytes, secondBytes, exactForeground) {
   const first = PNG.sync.read(firstBytes), second = PNG.sync.read(secondBytes);
   assert.equal(first.width, second.width);
   assert.equal(first.height, second.height);
@@ -592,6 +635,9 @@ function rasterDifference(firstBytes, secondBytes) {
   const colors = new Set();
   for (let y = 0; y < first.height; y++) for (let x = 0; x < first.width; x++) {
     const i = (y * first.width + x) * 4;
+    // Opt-in caret-color isolation excludes removed placeholder glyphs and the
+    // native focus outline. Other evidence retains the original full delta.
+    if (exactForeground && exactForeground.some((value, channel) => first.data[i + channel] !== value)) continue;
     if (first.data[i] === second.data[i] && first.data[i + 1] === second.data[i + 1] &&
         first.data[i + 2] === second.data[i + 2]) continue;
     count++; minX = Math.min(minX, x); minY = Math.min(minY, y);

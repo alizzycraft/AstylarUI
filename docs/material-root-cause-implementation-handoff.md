@@ -2,6 +2,54 @@
 
 ## Current audit checkpoint — September 30
 
+**Caret coverage expanded without a second harness:** the same public reduction
+now covers plain input, placeholder input by pointer, the identical placeholder
+input by real Tab, and textarea, each at DPR 1/2 (eight paired cases). Native
+typing/deletion returns to empty in all cases. The placeholder initializes the
+correct x=28px origin, so the initial-origin finding is NOT universal. However,
+clicking at (50,52) leaves the empty candidate core cursor/selection at 3, while
+the semantic input reports [0,0]. Typing `A` produces core cursor 4 versus semantic
+1; Backspace leaves `A`, core cursor 3 and semantic 1. This reproduces at both
+DPRs, including after explicit settlement of typing. Real Tab instead starts
+core cursor 0, typing gives 1 and Backspace clears it; its caret stays at x=28px.
+This is a pointer-placeholder index defect, not a general deletion failure.
+
+Owning path: `updateTextDisplay` registers placeholder display text/metrics for
+selection (manager 432); `PointerInteractionService` resolves that entry and
+calls `beginSelection` (26–29); controller `getCaretIndexForPoint` derives indices
+from display characters. Manager `applyControllerState` copies the index without
+clamping to actual editable content (257–270), insertion advances the invalid
+index (832–841), and Backspace substrings at it (960–967). Read-only live core
+metadata verifies the invalid index before typing, rather than guessing from the
+semantic mirror, whose native selection setter clamps it. The keyboard contrast
+rules out an unconditional inability to delete a one-character placeholder input.
+
+Textarea without placeholder also starts at x=21.5px, then moves to x=28px after
+the identical type/delete sequence, confirming that the initialization finding
+extends beyond single-line input. Its exact requested-color caret rows shift
+43–60 to 47–64 at DPR1 and 85–122 to 93–130 at DPR2: **4 CSS px downward**.
+This vertical discrepancy is observed but its detailed metric/line-placement
+cause remains unassigned. `updateCursorPosition` has a textarea-specific line
+center projection (1041–1054); that source branch is a lead, not yet causal proof.
+
+The foreground isolation has a synthetic positive/negative calibration and
+retains the original unfiltered delta for plain-input evidence. It excludes
+placeholder removal and native focus outline only for this bounded caret-color
+question; it does not prove AA, glyph sharpness or full paint parity. Initial
+expanded runs failed on placeholder Backspace (`A` != empty), 30,825.300ms and
+24,921.265ms; added settlement did not fix the failure. Final diagnostics
+explicitly assert/preserve that defect, leave edited-empty paint null for that
+case, and never synthesize a cleared state. Final focused pass: 1/1,
+67,596.265ms, zero failures/skips, eight paired cases, not parity acceptance.
+Bundle SHA `06ce6d85caa2635c2eca61f21636b5e3a5f98a0b868b31b52da77658da56e624`;
+installed dependencies/versions/core hashes remain those recorded below.
+The unchanged `shipped caret geometry fixes width` focused regression also
+passes 1/1 in 9,497.901ms using its pinned shipped methods and Babylon 8.15.1
+NullEngine; the optional color filter has not changed its full-delta evidence.
+No canonical fixture, renderer, historical capture or full export changed.
+Next text-paint gaps: textarea vertical metric origin and equal-input selection
+paint; broader Material profile/state mappings and final gates remain open.
+
 **Equal-input public empty-caret WebGL reduction:** the existing
 `input-boundary-evidence.spec.mjs` now mounts one empty text input through the
 installed package-root `Astylar` API, with native CSS generated from exactly the

@@ -2,6 +2,17 @@
 
 ## Evidence boundary
 
+Current public caret proof includes eight paired cases: plain input, placeholder
+input by pointer and by Tab, and textarea, each at DPR 1/2. Placeholder initializes
+the padded x=28px origin, but pointer focus uses placeholder indices for empty
+content (core cursor 3 → 4 after typing `A` → 3 after Backspace, value remains
+`A`; native clears). Tab is a positive contrast: core 0 → 1 → 0 and value clears.
+Textarea reproduces x=21.5px initial/x=28px edited origin and separately shifts
+the caret down 4 CSS px after editing; detailed vertical cause remains pending.
+Focused diagnostic passes 1/1 in 67,596.265ms while explicitly asserting the
+exposed defects, not claiming parity. The handoff records initial failed runs,
+source ownership, exact pixel bounds and unchanged installed dependency receipt.
+
 Equal-input public core text input (no placeholder/Material plugin) now has
 real Chrome 154 WebGL/native caret evidence at DPR 1 and 2. The initial empty
 candidate caret center is x=21.5px, versus the authored/native padded insertion
