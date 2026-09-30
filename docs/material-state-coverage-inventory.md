@@ -3,9 +3,12 @@
 ## Evidence boundary
 
 Supplemental ordinary dark/mobile tooltip paint check: full-frame DPR 2 ink
-offsets differ by .00125448 CSS px, excluding a large vertical displacement in
-this settled state. Effective font/alignment ownership, horizontal ink and local
-sharpness remain pending; do not generalize to historical or other-profile paint.
+offsets differ by .00125448 CSS px. Live texture paint resolves the inherited
+Roboto/Arial/sans-serif font and left alignment within a shrink-wrapped texture.
+Raw local SSIM .735369 becomes .999993 under existing x=1-device-pixel phase
+registration, with retained edge energy: no observed blur in this settled state.
+Phase cause, general alignment equivalence and other profiles remain pending;
+do not generalize to historical or other-profile paint.
 
 This is a **reviewed/pending checklist**, not acceptance. The last complete
 enforced output capture is

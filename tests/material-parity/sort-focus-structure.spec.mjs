@@ -6,6 +6,8 @@ import path from 'node:path';
 import { chromium } from 'playwright-core';
 import { PNG } from 'pngjs';
 import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-metrics.mjs';
+import { cropRgba } from '../parity/sharpness-metrics.mjs';
+import { evaluateFocusedRaster } from './focused-raster-metrics.mjs';
 import { collectSortFocusStructure, inspectSortTrees } from '../../scripts/audit-material-sort-focus-structure.mjs';
 import { fingerprintDirectory } from './run-checkpoint.mjs';
 
@@ -1276,6 +1278,7 @@ test('ordinary dark mobile tooltip separates keyboard opening from pointer paint
   await withFrozenShowcase(async (browser, baseUrl) => {
     assert.equal(browser.version(), '154.0.8037.58');
     const observations = {};
+    const textRasters = {};
     for (const mode of ['reference', 'astylar']) {
       const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
       try {
@@ -1316,6 +1319,11 @@ test('ordinary dark mobile tooltip separates keyboard opening from pointer paint
         // can round its origin independently of the measured popup box.
         const fullImage = PNG.sync.read(await page.screenshot({ caret: 'hide' }));
         const p = hovered.popup.box;
+        // Equal-size interior crops contain the complete label, excluding only
+        // rounded surface corners. Do not rescale or move the rendered content.
+        textRasters[mode] = cropRgba(fullImage, { left: Math.floor(p.x * 2) + 8,
+          top: Math.floor(p.y * 2) + 8, right: Math.floor(p.x * 2) + 204,
+          bottom: Math.floor(p.y * 2) + 40 });
         const ink = measureTextInkCenter(fullImage, { left: p.x, top: p.y,
           right: p.x + p.width, bottom: p.y + p.height, width: p.width, height: p.height }, 2);
         const typography = await page.evaluate(mode => {
@@ -1324,7 +1332,13 @@ test('ordinary dark mobile tooltip separates keyboard opening from pointer paint
             ? getComputedStyle(document.querySelector('.mat-mdc-tooltip-surface'))
             : window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['tooltip-popup']).inputTree.nodes
               .find(node => node.authored?.id === 'tooltip-popup').resolvedStyle;
-          return Object.fromEntries(keys.map(key => [key, style[key] ?? null]));
+          const paint = mode === 'astylar' ? (() => {
+            const surface = window.ng.getComponent(document.querySelector('app-astylar-showcase')).surface;
+            const text = surface.host.inspection.textRenderingService;
+            return [...text.getRetainedTextures()].map(texture => text.inspectTexturePaintInputs(texture))
+              .filter(inputs => inputs?.text === 'Create a project');
+          })() : null;
+          return { resolved: Object.fromEntries(keys.map(key => [key, style[key] ?? null])), paint };
         }, mode);
         const image = PNG.sync.read(await page.screenshot({ clip: hovered.popup.box, caret: 'hide' }));
         const colors = new Map();
@@ -1354,6 +1368,20 @@ test('ordinary dark mobile tooltip separates keyboard opening from pointer paint
     // Frozen-profile diagnostic only, not sharpness or input-equivalence acceptance.
     assert.ok(textCenterOffsetError(observations.reference.ink, observations.astylar.ink) < .01);
     t.diagnostic(`Full-frame vertical ink-offset difference: ${textCenterOffsetError(observations.reference.ink, observations.astylar.ink)} CSS px; not a sharpness or equal-input acceptance gate.`);
+    const raster = { unregistered: evaluateFocusedRaster(textRasters.reference, textRasters.astylar, { maximumPhaseOffset: 0 }),
+      phaseRegistered: evaluateFocusedRaster(textRasters.reference, textRasters.astylar) };
+    t.diagnostic(JSON.stringify({ tooltipTextRaster: raster }));
+    const paints = observations.astylar.typography.paint;
+    assert.equal(paints.length, 1);
+    assert.equal(paints[0].style.fontFamily, 'Roboto, Arial, sans-serif');
+    assert.equal(paints[0].style.textAlign, 'left');
+    assert.equal(paints[0].style.fontSize, 12);
+    assert.equal(paints[0].style.lineHeight * paints[0].style.fontSize, 16);
+    // Preserve the observed phase instead of concealing it in an aligned-only
+    // score. These bounds describe this frozen diagnostic, not release gates.
+    assert.deepEqual(raster.phaseRegistered.phaseOffset, { x: 1, y: 0 });
+    assert.ok(raster.unregistered.similarity < .8);
+    assert.ok(raster.phaseRegistered.similarity > .99);
   });
 });
 

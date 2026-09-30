@@ -2,6 +2,30 @@
 
 ## Current audit checkpoint — September 30
 
+**Tooltip effective font and local raster phase:** the ordinary dark/mobile
+test now reads the existing live texture paint-input inspection, not the hidden
+semantic DOM's computed text. The single retained `Create a project` texture
+records Roboto/Arial/sans-serif, size 12, weight 400, line-height multiplier 4/3,
+letter-spacing .4, color #f5eff4 and textAlign left, maxWidth 90.79834 CSS px.
+Thus popup-level missing fontFamily does not mean absent effective font. Left
+texture alignment plus shrink-wrapped width and authored flex centering is not
+the same input representation as Material's centered text; no classification
+of complete structure/alignment equivalence follows from this short label.
+Existing focused-raster metrics compare equal 196×32-device-pixel interior crops
+from full frames, without scaling the content. Unregistered SSIM is .735369;
+the existing ±1-device-pixel registration selects x=1/y=0 and yields .99999335,
+gradient energy retention 1.00000391, gradient RMSE .00051064 and color error
+.00015774. Raw metrics remain visible: registration must not erase the phase
+observation or prove its cause. This state does not show the reported blur;
+the remaining horizontal phase needs placement/texture-projection attribution
+if treated as a defect. Synthetic metric tests separately reject blur and
+four-pixel displacement. No generic diagnostic threshold is promoted to an
+acceptance gate, and no comparison or renderer offset is changed. Other
+profiles, equal-input general text reductions and final gates remain pending.
+Verification: the focused ordinary-tooltip test passes 1/1 in 5,589ms diagnostic
+and 7,181ms asserted; `node --test tests/material-parity/focused-raster-metrics.spec.mjs`
+passes 5/5 in 200ms. No retained captures or canonical export were generated.
+
 **Tooltip vertical ink, ordinary dark/mobile:** the existing frozen-build test
 now measures full-frame PNG pixels with `measureTextInkCenter`, rather than
 using a separately rounded crop origin. At 390×844 DPR 2, native/candidate ink
