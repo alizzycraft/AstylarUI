@@ -4,7 +4,7 @@
 
 Scrollbar dragging now has an explicit paired dark/mobile DPR2 check. The
 headless driver's default `--hide-scrollbars` hid native platform scrollbars;
-the focused proof removes that flag only for this check and verifies the actual
+the focused proof removes that flag and verifies the actual
 launch arguments. Native thumb pixels are found before driving real held drags
 of 20/40/60px: scrollTop progresses 211/421/632. Candidate thumb pixels are
 visible, but scrollTop stays 0/0/0 and pointer events target underlying options.
@@ -12,9 +12,14 @@ The live thumb is non-pickable, matching core paint ownership and the existing
 documented exclusion of thumb dragging. This is a core capability limitation,
 not popup padding or world-coordinate attribution. Wheel behavior remains
 verified separately. Other profiles, track clicks and complete paint remain.
-The current full runner has no native-scrollbar launch override; native scrollbar
-paint/interaction acceptance needs explicit instrumentation review before the
-final capture. Historical capture applicability is not inferred from this check.
+The full runner now shares this corrected launch policy, records stable requested
+and effective settings plus driver version/hash, and rechecks them at restart
+and publication. Checkpoint reuse rejects missing/changed launch evidence. A
+filtered dark desktop DPR2 open-scroll runner capture passes its single case
+with SSIM .9958658920 and equal scroll offsets144px; aggregate acceptance remains
+false because the full matrix is required. Final native-scrollbar paint coverage
+and canonical source-fingerprint reconciliation remain pending. Historical
+captures are not relabeled current. See handoff for the retained evidence receipt.
 
 Public equal-input reduction now integrates twelve paired cases at DPR1/2:
 the eight caret cases below plus input/textarea forward/backward selection and
@@ -98,11 +103,14 @@ enforced output capture is
 `artifacts/material-parity/enforced-full-2b6cddc/latest-report.json`
 (SHA-256 `a6f832635e896809661dcbb35eb2447e9e6ce3fb8c718ee7d7d969e3f051892c`),
 Chrome 153.0.8010.53. It reports 436/436 static and 1,875/1,875 interaction
-cases passing its output gates. Its checkpoint's `benchmark.config.mjs` and
-`run-material-parity.mjs` hashes still equal the current files
-(`a55e95ab…` and `d0ded55f…` respectively). This validates the *configured
-action inventory* against current source, not current-browser pixels or input
-equivalence. The later Chrome 154 caret checkpoint uses the identical 1,887
+cases passing its output gates. Its checkpoint's `benchmark.config.mjs` remains
+current (`a55e95ab…`), so configured action inventory is unchanged. Harness hashes
+are now different after the native-scrollbar instrumentation correction:
+`run-material-parity.mjs` historical `d0ded55f…` versus current `e01ef9dc…`, and
+`run-checkpoint.mjs` historical `3f995b53…` versus current `50d158b4…`.
+Do not describe that capture as current-harness acceptance. The action inventory
+does not prove current-browser pixels or input equivalence. The later Chrome154
+caret checkpoint uses the identical1,887
 served build-file hashes and installed-dependency receipt, but is only a
 form-field/light/desktop diagnostic.
 
@@ -149,7 +157,7 @@ source-derived applicability review before it can be closed as inapplicable.
 | Slider | 12 / 66 | drag-start/end, disabled, comparison-pane drags | Chrome 154 light desktop DPR 1 Tab/Arrow proof: reference uses 0–100/step 5 and peer limits; candidate uses fixed 0–50/50–100/step 1 while the store rounds to 5, producing delayed jumps. Paired pointer proof: default 30/65 thumb centers target correctly; at 60/80 the visible start thumb hits `slider-primary`, and at 20/40 the visible end thumb hits `slider-start`, because half-width hit owners disagree with full-domain visuals. Other states/profiles, general travel geometry, capture cleanup and local paint remain. |
 | Slide-toggle | 12 / 56 | disabled, selected | Chrome 154 light desktop DPR 1 real Tab/Space proof: Material switch changes checked, while role-only candidate receives keydown but stays checked. Focus/hover, inactive minus paint, other profiles remain. |
 | Datepicker | 12 / 99 | secondary view, hover content, outside/canvas dismissal, disabled, error, open, short viewport, M | Chrome 154 light desktop DPR 1: Tab stays closed on both; Alt+Down opens only Material. Pointer-open Material focuses the calendar and Home/Right moves active day 1 → 2; candidate keeps icon focus. Candidate receives Next/day-1 clicks but month/value/open state stay unchanged; Material advances, writes the date and closes. Secondary year/month navigation, disabled/dark/responsive states, local caret/calendar paint and resource cleanup remain. |
-| Timepicker | 12 / 98 | wheel scroll, hover content, outside/canvas dismissal, disabled, error, open, M | Chrome 154 light desktop DPR 1 real Tab leaves Material closed but candidate opens; Material ArrowDown opens and Enter writes 12:00 AM/closes, while candidate receives keys but stays empty/open. Candidate always marks option 0 selected; empty Material input has none selected. Escape removes candidate options; closed Material Escape clears its committed value. Datepicker Tab negative control stays closed on both. Dark/mobile DPR2 pointer opening, wheel144, final-option reachability and thumb pixels verified; 20/40/60px native thumb drag gives scrollTop211/421/632, candidate0/0/0 with underlying option events: documented core dragging limitation. Native scrollbar launch suppression corrected only in this proof. Other keys/profiles, track clicks, complete paint and resource cleanup remain. |
+| Timepicker | 12 / 98 | wheel scroll, hover content, outside/canvas dismissal, disabled, error, open, M | Chrome 154 light desktop DPR 1 real Tab leaves Material closed but candidate opens; Material ArrowDown opens and Enter writes 12:00 AM/closes, while candidate receives keys but stays empty/open. Candidate always marks option 0 selected; empty Material input has none selected. Escape removes candidate options; closed Material Escape clears its committed value. Datepicker Tab negative control stays closed on both. Dark/mobile DPR2 pointer opening, wheel144, final-option reachability and thumb pixels verified; 20/40/60px native thumb drag gives scrollTop211/421/632, candidate0/0/0 with underlying option events: documented core dragging limitation. Shared full-runner launch policy now preserves native scrollbars with effective receipts; filtered dark desktop DPR2 open-scroll case passes, not aggregate acceptance. Other keys/profiles, track clicks, complete paint and resource cleanup remain. |
 | Button | 12 / 48 | disabled | Pointer/held/disabled captured; real Tab/Enter/Space activation and focus paint remain. |
 | Button-toggle | 12 / 56 | disabled, selected | Chrome 154 light desktop DPR 1 Tab/ArrowLeft/Enter/ArrowRight proof: Material focus and selection move Grid → List → Grid; candidate receives keys but stays on Grid. Edge/hover paint and other profiles remain. |
 | Menu | 12 / 82 | hover content, outside/canvas dismissal, disabled, open, M | Retained light 900×700 DPR 1 ArrowDown/Escape capture exists. Dark/mobile DPR 2 open/Escape: HTML focuses Rename, candidate remains on trigger; both restore trigger/remove controls. Post-dismissal counts plateau (12 meshes/14 materials/5 textures); all textures are owned text-cache entries and public disposal clears sampled runtime resources, cache, plugin ownership and observers. Dark Arrow/navigation, paint, retained-material ownership and multi-surface/late-async lifetime remain. |

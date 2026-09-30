@@ -2,6 +2,51 @@
 
 ## Current audit checkpoint — September 30
 
+**Native scrollbar capture policy corrected at the harness boundary:** Material
+runner and focused drag proof now share `materialBrowserLaunchOptions` from
+the existing checkpoint module: headless Chrome, ignore only `--hide-scrollbars`,
+add `--enable-automation` for read-only command inspection. Effective command
+flags must confirm headless/native-scrollbars-visible. Requested settings,
+effective flags and Playwright1.62.1 launch-bundle hash enter checkpoint provenance;
+transient profile paths do not. Restart and pre-publication inspection reject
+changed launch/driver evidence. Missing launch receipts or changed nested flags/
+driver hash reject resume; no archived capture is overwritten or upgraded.
+
+`node --test tests/material-parity/run-checkpoint.spec.mjs` passes5/5, zero
+skips/failures, in164.4139ms (final recheck173.2682ms). Tests include missing
+launch metadata, nested flag/hash mutations, positive/negative effective flags,
+stable profile-independent receipts and session cleanup on rejection. Their four
+successful scratch cases now use established `withAuditScratch`; no new scratch
+directories remain. Live dark/mobile wheel/drag check with the shared policy
+passes1/1 in8,496.9447ms.
+`node --check tests/material-parity/run-material-parity.mjs` passes.
+
+One real runner report-only capture uses `--skip-build --interaction-only`,
+family=timepicker/profile=dark/interaction viewport=desktop-dpr2/state=open-scroll.
+Retained directory `artifacts/material-parity/native-scrollbar-capture-SWMREM`;
+report SHA `95011fbcad91ceb7fd35652c699b111db36d94dd0b2c45003a61050ddb6eaa64`.
+Chrome154.0.8037.58 records effective nativeScrollbarsHidden=false and driver SHA
+below. Single case passes unchanged per-case gates, SSIM .9958658920, focused
+raster .9660481211, scrollTop144px on both, zero runtime errors. Full aggregate
+acceptance is correctly false because only1/1875 interactions ran. The scratch
+wrapper initially misused that aggregate flag for its filtered check and threw;
+its failure evidence is retained. Subsequent authenticated checkpoint read proves
+per-case acceptance=true and exact current harness/build fingerprint equality,
+without repeating the capture. Do not call this a full acceptance pass or a
+native-thumb paint/drag acceptance test: the focused drag proof owns that claim.
+
+This instrumentation edit changes canonical source/harness fingerprints. The
+historical full-capture checkpoint confirms runner SHA `d0ded55f…` changed to
+`e01ef9dc…`, and checkpoint module `3f995b53…` to `50d158b4…`; the benchmark
+configuration/action inventory is unchanged.
+The
+September30 compressed audit remains its immutable prior snapshot, not a refreshed
+current-source audit. Source/finding export reconciliation, independent cold replay,
+remaining coverage and final unfiltered gates are required at the next integration
+milestone. No comparison fixture, renderer, threshold or original captured bytes
+changed. Historical keyboard/geometry observations retain their stated provenance;
+new scrollbar paint or layout claims need the corrected launch environment.
+
 **Scrollbar drag and native capture boundary:** the existing dark/mobile
 timepicker wheel proof now drives visible thumbs with real 20/40/60px held
 pointer motion, sampling each action boundary. Chrome154, 390×844 DPR2,
@@ -36,8 +81,9 @@ asserts the flag absent, uses a strictly neutral-gray raster detector, and
 requires real native drag progression as its positive control. All other shared
 proofs retain their existing launch defaults. Driver bundle SHA
 `9393fa79e1c67c74edc26b610d65a4f7ed73d345a762465cc88340a33a2454ac`.
-`run-material-parity.mjs:1056` likewise has no override: investigate native
-scrollbar paint acceptance before the final enforced capture, without silently
+At discovery, `run-material-parity.mjs:1056` likewise had no override; the harness
+correction above now addresses launch evidence. Verify native scrollbar paint
+acceptance before the final enforced capture, without silently
 relabeling historical evidence. Earlier wheel state proof remains valid but
 does not establish native thumb paint. The corrected focused check initially
 passes 1/1 in 8,576.2577ms. Final assertions pass 1/1, zero failures/skips,

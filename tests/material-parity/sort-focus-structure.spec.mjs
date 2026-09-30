@@ -9,7 +9,7 @@ import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-me
 import { cropRgba } from '../parity/sharpness-metrics.mjs';
 import { evaluateFocusedRaster } from './focused-raster-metrics.mjs';
 import { collectSortFocusStructure, inspectSortTrees } from '../../scripts/audit-material-sort-focus-structure.mjs';
-import { fingerprintDirectory } from './run-checkpoint.mjs';
+import { fingerprintDirectory, materialBrowserLaunchOptions, inspectMaterialBrowserLaunch } from './run-checkpoint.mjs';
 
 test('sort focus structure replays all authenticated source trees without equating paint substitutes', () => {
   const report = collectSortFocusStructure();
@@ -1691,11 +1691,8 @@ test('dark mobile real-key selections distinguish direction state from highlight
 test('dark mobile timepicker wheel separates scroll state from scrollbar paint', async t => {
   await withFrozenShowcase(async (browser, baseUrl) => {
     assert.equal(browser.version(), '154.0.8037.58');
-    const commandSession = await browser.newBrowserCDPSession();
-    const { arguments: launchArguments } = await commandSession.send('Browser.getBrowserCommandLine');
-    await commandSession.detach();
-    t.diagnostic(JSON.stringify({ nativeScrollbarsHidden: launchArguments.includes('--hide-scrollbars') }));
-    assert.equal(launchArguments.includes('--hide-scrollbars'), false);
+    const launch = await inspectMaterialBrowserLaunch(browser, materialBrowserLaunchOptions());
+    t.diagnostic(JSON.stringify({ browserLaunch: launch }));
     const observations = {};
     for (const mode of ['reference', 'astylar']) {
       const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
@@ -1873,13 +1870,13 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
       firstDivergence: 'painted scrollbar thumb is non-pickable; pointer targets underlying options',
       nativeDragScrollTop: observations.reference.drag.steps.map(step => step.scrollTop),
       candidateDragScrollTop: observations.astylar.drag.steps.map(step => step.scrollTop),
-      nativeScrollbarHarnessCorrection: 'omit --hide-scrollbars for this diagnostic only',
+      nativeScrollbarHarnessCorrection: 'shared Material launch omits --hide-scrollbars and records effective evidence',
       acceptance: false,
     } }));
     for (const mode of ['reference', 'astylar']) for (const step of observations[mode].drag.steps) {
       assert.ok(Math.abs(observations[mode].before.firstOption.y - step.firstOption.y - step.scrollTop) < .01);
     }
-  }, { ignoreDefaultArgs: ['--hide-scrollbars'], args: ['--enable-automation'] });
+  }, materialBrowserLaunchOptions());
 });
 
 test('comparison iframe overlays expose parent control focus scope', async t => {

@@ -2,8 +2,34 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, readdirSync, renameSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { createRequire } from 'node:module';
 
 const digest = (value) => createHash('sha256').update(value).digest('hex');
+
+/** Headless must not remove platform scrollbar paint or pointer targets. */
+export function materialBrowserLaunchOptions(channel = 'chrome') {
+  return { channel, headless: true, ignoreDefaultArgs: ['--hide-scrollbars'], args: ['--enable-automation'] };
+}
+
+/** Capture only stable launch evidence; transient profile paths must not poison resume. */
+export async function inspectMaterialBrowserLaunch(browser, requested) {
+  const session = await browser.newBrowserCDPSession();
+  let actual;
+  try { actual = (await session.send('Browser.getBrowserCommandLine')).arguments; }
+  finally { await session.detach(); }
+  assert.equal(actual.includes('--hide-scrollbars'), false, 'Material capture must preserve native scrollbars.');
+  assert.ok(actual.some(argument => argument === '--headless' || argument.startsWith('--headless=')),
+    'Material headless launch evidence is missing.');
+  const require = createRequire(import.meta.url);
+  const packagePath = require.resolve('playwright-core/package.json');
+  const driver = path.join(path.dirname(packagePath), 'lib/coreBundle.js');
+  return {
+    requested: structuredClone(requested),
+    effective: { headless: true, nativeScrollbarsHidden: false },
+    driver: { package: 'playwright-core', version: JSON.parse(readFileSync(packagePath, 'utf8')).version,
+      launchBundle: 'lib/coreBundle.js', sha256: digest(readFileSync(driver)) },
+  };
+}
 
 /** Fingerprint the harness's literal local import graph, not unrelated audit edits. */
 export function fingerprintModuleGraph(root, entry) {

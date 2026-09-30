@@ -17,7 +17,7 @@ import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-me
 import { compareBottomShadowProfiles } from './shadow-profile-metrics.mjs';
 import { effectiveBrowserCursor, interactionLayerCursorProbe } from './cursor-metrics.mjs';
 import { captureBrowserInputTree } from './input-tree-evidence.mjs';
-import { fingerprintDirectory, fingerprintModuleGraph, materialCaseKey, openMaterialCheckpoint } from './run-checkpoint.mjs';
+import { fingerprintDirectory, fingerprintModuleGraph, materialBrowserLaunchOptions, inspectMaterialBrowserLaunch, materialCaseKey, openMaterialCheckpoint } from './run-checkpoint.mjs';
 
 const root = process.cwd();
 const enforce = process.argv.includes('--enforce');
@@ -73,6 +73,8 @@ const mobileFlowCases = staticOnly ? [] : materialMobileFlowCases.filter(({ fami
   (interactionStateFilter.size === 0 || interactionStateFilter.has('open-dismiss')));
 let browser;
 let server;
+let browserLaunchEvidence;
+const browserLaunchOptions = materialBrowserLaunchOptions(process.env['ASTYLAR_MATERIAL_BROWSER_CHANNEL'] ?? 'chrome');
 
 try {
   validateConfiguration();
@@ -83,6 +85,7 @@ try {
   browser = await launchBrowser();
   const checkpoint = openMaterialCheckpoint({ directory: artifacts, resume: process.argv.includes('--resume'), provenance: {
     browser: await browser.version(), platform: process.platform, architecture: process.arch, node: process.version,
+    browserLaunch: browserLaunchEvidence,
     browserFiles: fingerprintDirectory(browserRoot),
     harnessFiles: fingerprintModuleGraph(root, 'tests/material-parity/run-material-parity.mjs'),
     installedDependencies: createHash('sha256').update(readFileSync(path.join(root, 'node_modules/.package-lock.json'))).digest('hex'),
@@ -115,6 +118,8 @@ try {
   }
   const summary = summarize(results);
   const interactionSummary = summarizeInteractions(interactions);
+  assert.deepEqual(await inspectMaterialBrowserLaunch(browser, browserLaunchOptions), browserLaunchEvidence,
+    'Material browser launch dependencies changed during capture.');
   const report = {
     schemaVersion: 1,
     generatedAt: new Date().toISOString(),
@@ -1054,10 +1059,17 @@ async function compareOverlayPlacement(referencePage, astylarPage, astylarMeasur
 }
 
 async function launchBrowser() {
-  return chromium.launch({
-    channel: process.env['ASTYLAR_MATERIAL_BROWSER_CHANNEL'] ?? 'chrome',
-    headless: true,
-  });
+  const launched = await chromium.launch(browserLaunchOptions);
+  try {
+    const evidence = await inspectMaterialBrowserLaunch(launched, browserLaunchOptions);
+    if (browserLaunchEvidence) assert.deepEqual(evidence, browserLaunchEvidence,
+      'Material browser restart changed launch evidence.');
+    else browserLaunchEvidence = evidence;
+    return launched;
+  } catch (error) {
+    await launched.close();
+    throw error;
+  }
 }
 
 async function recycleBrowserIfNeeded(index) {
