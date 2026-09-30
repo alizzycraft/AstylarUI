@@ -24,8 +24,16 @@ test('public input lifecycle isolates caret material retention without Material 
     ['text/text-selection.service','createTextCursor'],
     ['dom/input/text-cursor.renderer','disposeCursor'],
     ['dom/input/text-input.manager','disposeTextInput'],
+    ['dom/input/text-input.manager','handleFocus'],
+    ['dom/input/input-element.service','releaseInputMesh'],
+    ['dom/input/input-element.service','cleanup'],
+    ['dom/renderer.service','createSiteFromData'],
+    ['../../lib/astylar-scene-resources','replace'],
+    ['../../lib/astylar-scene-resources','clearMaterials'],
+    ['../../lib/astylar-visual-resource-reconciler','stage'],
+    ['../../lib/astylar','createScene'],
   ].map(([module,name])=>{
-    const sourceFile='src/app/services/'+module+'.ts';
+    const sourceFile=path.normalize('src/app/services/'+module+'.ts');
     const installedFile=path.join(consumer,'node_modules/astylarui/dist/lib/app/services',module+'.js');
     const source=readFileSync(sourceFile,'utf8'), installed=readFileSync(installedFile,'utf8');
     const compiled=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022}}).outputText;
@@ -67,7 +75,8 @@ test('public input lifecycle isolates caret material retention without Material 
           meshes:scene.meshes.length,materials:scene.materials.length,textures:scene.textures.length,
           cursors:cursors.map(m=>({id:m.uniqueId,name:m.name,material:m.material?.uniqueId})),
           cursorMaterials:materials.map(m=>({id:m.uniqueId,name:m.name,
-            bound:scene.meshes.some(mesh=>mesh.material===m)})),diagnostics:surface.diagnostics.messages};};
+            bound:scene.meshes.some(mesh=>mesh.material===m)})),
+          tracked:surface.diagnostics.resources,diagnostics:surface.diagnostics.messages};};
       await settle();
       window.lifetimeAudit={settle,snapshot,async update(present,revision){
         await surface.update(documentFor(present,revision));await settle();return snapshot();},
@@ -114,14 +123,22 @@ test('public input lifecycle isolates caret material retention without Material 
       packages:Object.fromEntries(['@angular/core','@babylonjs/core','astylarui'].map(name=>
         [name,JSON.parse(readFileSync(path.join(consumer,'node_modules',name,'package.json'))).version])),
       dependencyReceipt:hash(Buffer.from(JSON.stringify(inputs))),methods,samples,disposed,errors,
+      ownershipAttribution:{firstDivergence:'post-render focus allocates resources outside synchronous transaction ownership',
+        cleanupGap:'cursor mesh disposal does not dispose its separate material',
+        updateDistinction:'focus restoration inside replacement transaction adopts replacement material',
+        classification:'confirmed-core-lifecycle-defect',scope:'one public input, Chrome154 DPR2; not GPU or performance attribution'},
       resourcePlateauAccepted:false}));
     assert.deepEqual(errors,[]);
     const first=samples.find(sample=>sample.label==='focus-0');
+    const mounted=samples.find(sample=>sample.label==='mounted');
+    assert.deepEqual(mounted.tracked,{meshes:mounted.meshes,materials:mounted.materials,textures:mounted.textures});
     assert.equal(first.focused,true);assert.equal(first.cursorMaterials.length,1);assert.equal(first.cursors.length,1);
     for(const sample of samples.filter(sample=>/^(focus|blur)-/.test(sample.label))) {
       assert.equal(sample.value,'Atlas');assert.equal(sample.focused,sample.label.startsWith('focus-'));
       assert.deepEqual(sample.cursorMaterials,first.cursorMaterials,'blur/refocus negative control retains one bound material');
       assert.deepEqual(sample.cursors,first.cursors);
+      assert.deepEqual(sample.tracked,mounted.tracked,'post-render focus allocations are outside synchronous transaction ownership');
+      assert.ok(sample.meshes>sample.tracked.meshes);assert.ok(sample.materials>sample.tracked.materials);
     }
     for(const sample of samples.filter(sample=>sample.label.startsWith('update-'))) {
       assert.equal(sample.focused,true);assert.equal(sample.value,'Atlas');
@@ -134,6 +151,8 @@ test('public input lifecycle isolates caret material retention without Material 
       const recreated=samples.find(sample=>sample.label==='recreated-'+cycle);
       assert.equal(removed.value,null);assert.equal(removed.focused,false);assert.deepEqual(removed.cursors,[]);
       assert.equal(removed.cursorMaterials.length,cycle+1);assert.ok(removed.cursorMaterials.every(material=>!material.bound));
+      assert.equal(removed.materials-removed.tracked.materials,removed.cursorMaterials.length,
+        'every material outside transaction ownership after removal is a retained caret material');
       assert.equal(recreated.value,'Atlas');assert.equal(recreated.focused,true);assert.equal(recreated.cursors.length,1);
       assert.equal(recreated.cursorMaterials.length,cycle+2);
       assert.deepEqual(recreated.cursorMaterials.filter(material=>!material.bound),removed.cursorMaterials);

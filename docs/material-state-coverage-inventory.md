@@ -2,6 +2,18 @@
 
 ## Evidence boundary
 
+October1 caret ownership attribution identifies the first divergence: ordinary
+post-render focus creates resources outside synchronous transaction ownership.
+Tracked/live counts match at mount, then focus increases only live counts.
+After removal, the live-minus-tracked material count exactly equals the retained
+unbound caret population. Input cleanup disposes the mesh, not its separate
+material; focus restored inside replace() is adopted, explaining later update
+cleanup. Installed complete owning methods match current transpilation. Existing
+public diagnostic passes1/1 in5,752.5181ms; retain ownership logs and see handoff.
+Confirmed core lifecycle defect for this reduction, not GPU/performance attribution.
+Recent focused-source reconciliation is now the next coherent milestone; full
+family/profile/state mapping and final acceptance remain incomplete.
+
 October1 public input lifecycle reduction confirms retained caret materials
 without a Material plugin. Blur/refocus retains one bound material; same-ID
 background updates retain the first orphan but plateau at two caret materials.

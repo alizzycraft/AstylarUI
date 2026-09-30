@@ -2,6 +2,34 @@
 
 ## Current audit checkpoint — October 1
 
+**Caret ownership first divergence identified: focus outside the render transaction.**
+The existing public lifecycle reduction now records surface diagnostic resource
+counts alongside live scene owners. At mount, tracked/live counts match3 meshes,
+5 materials,1 texture. After ordinary focus, live counts12/8/1 but tracked counts
+remain3/5/1. After each complete removal, tracked materials remain1 while the
+live-minus-tracked delta exactly equals the1→2→3 unbound caret materials.
+Installed createScene, AstylarSceneResources.replace/clearMaterials, visual stage,
+renderer createSiteFromData, input cleanup/release and caret focus/disposal methods
+match complete transpiled current methods; all source/dependency receipts rehashed.
+The first meaningful ownership divergence is post-render focus allocation:
+TextInputManager.handleFocus creates the cursor/material outside replace(), with
+no adoption; releaseInputMesh → disposeInputElement → disposeTextInput →
+disposeCursor releases the mesh but not its separate material. Removed inputs also
+pass through renderer createSiteFromData → input cleanup. replace() snapshots
+new allocations only during its render callback and clears only adopted materials.
+In createScene, restoration of focused control state occurs inside that callback,
+so later replacement caret materials are adopted and cleared on the next rebuild;
+the first post-render material stays outside ownership. This explains both the
+same-ID plateau and remove/recreate accumulation without a plugin workaround.
+Confirmed core lifecycle ownership/cleanup defect under this public reduction;
+not evidence of GPU retention or the user's lag cause. Implementation should
+own interaction-created resources and release the caret's separate material at
+its actual lifetime boundary, not force popup rebuilds or dispose foreign materials.
+Retain `public-caret-ownership-e1a737f-verified.log` (1/1,5,752.5181ms) and final
+diagnostic log. Next coherent milestone: reconcile the recent focused-source
+changes once, then continue unresolved profile/state and multi-surface/late-async
+coverage. No renderer/fixture fix, threshold change, or full-gate acceptance.
+
 **Public input lifecycle confirms caret-material retention without Material:**
 `node --test --test-name-pattern="public input lifecycle isolates" tests/material-parity/input-boundary-evidence.spec.mjs`
 passes the diagnostic counterexample1/1 in5,605.1914ms (test4,662.9397ms).
