@@ -4,6 +4,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { createServer } from 'node:http';
 import path from 'node:path';
 import { chromium } from 'playwright-core';
+import { PNG } from 'pngjs';
 import { collectSortFocusStructure, inspectSortTrees } from '../../scripts/audit-material-sort-focus-structure.mjs';
 import { fingerprintDirectory } from './run-checkpoint.mjs';
 
@@ -1206,6 +1207,98 @@ test('paginator keyboard transitions separate native activation from disabled-in
       assert.deepEqual(observations.reference.steps[index].buttons[buttonIndex], { disabled: false, ariaDisabled: 'true', tabindex: -1 });
       assert.deepEqual(observations.astylar.steps[index].buttons[buttonIndex], { disabled: true, ariaDisabled: null, tabindex: 0 });
     }
+  });
+});
+
+test('dark mobile real-key selections distinguish direction state from highlight paint', async t => {
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    assert.equal(browser.version(), '154.0.8037.58');
+    const observations = {};
+    for (const mode of ['reference', 'astylar']) {
+      const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
+      try {
+        const errors = []; page.on('pageerror', error => errors.push(String(error)));
+        await page.goto(`${baseUrl}/${mode}/form-field?benchmark=1&profile=dark`);
+        await page.locator('.frame').waitFor();
+        if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+        await page.keyboard.press('Tab');
+        await page.keyboard.press('Control+A');
+        await page.keyboard.type('Atlas');
+        const samples = [];
+        const sample = async label => {
+          if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+          await page.evaluate(async () => { await document.fonts.ready;
+            await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))); });
+          const observation = await page.evaluate(mode => {
+            const id = 'form-field-control';
+            const node = mode === 'reference' ? document.getElementById(id) : document.querySelector(`[data-astylar-id="${id}"]`);
+            if (mode === 'reference') return { value: node.value, selection: [node.selectionStart, node.selectionEnd],
+              direction: node.selectionDirection, focused: document.activeElement === node, box: node.getBoundingClientRect().toJSON() };
+            // Read-only diagnostic adapter, as in the retained input-boundary
+            // producer. Never inject selection state or change authored input.
+            const surface = window.ng.getComponent(document.querySelector('app-astylar-showcase')).surface;
+            const input = surface.host.inputElementService.getInputElement(id);
+            const box = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([id], false).elements[id].borderBox;
+            const canvas = document.querySelector('canvas').getBoundingClientRect();
+            const meshes = surface.scene.meshes.filter(mesh => mesh.metadata?.highlight?.ownerElementId === id);
+            return { value: input.value, selection: [input.selectionStart, input.selectionEnd], cursor: input.cursorPosition,
+              focused: input.focused, semanticSelection: [node.selectionStart, node.selectionEnd, node.selectionDirection],
+              highlights: meshes.map(mesh => ({ visible: mesh.isVisible && mesh.isEnabled(),
+                material: mesh.material?.emissiveColor?.toHexString(), alpha: mesh.material?.alpha })),
+              box: { x: canvas.x + box.left, y: canvas.y + box.top, width: box.width, height: box.height } };
+          }, mode);
+          const image = PNG.sync.read(await page.screenshot({ clip: observation.box, caret: 'hide' }));
+          samples.push({ label, observation, image });
+        };
+        await sample('typed');
+        await page.keyboard.press('Home');
+        for (let i = 0; i < 3; i++) await page.keyboard.press('Shift+ArrowRight');
+        await sample('forward');
+        // Collapse via ArrowRight before End: the previously proven End-on-
+        // selection defect is not a confounder of this backward-paint check.
+        await page.keyboard.press('ArrowRight');
+        await page.keyboard.press('End');
+        await sample('end-collapsed');
+        for (let i = 0; i < 3; i++) await page.keyboard.press('Shift+ArrowLeft');
+        await sample('backward');
+        const baseline = samples[0].image;
+        observations[mode] = samples.map(({ label, observation, image }) => {
+          assert.equal(image.width, baseline.width); assert.equal(image.height, baseline.height);
+          let changed = 0; const palette = new Map();
+          for (let i = 0; i < image.data.length; i += 4) {
+            if (image.data[i] === baseline.data[i] && image.data[i + 1] === baseline.data[i + 1] && image.data[i + 2] === baseline.data[i + 2]) continue;
+            changed++; const color = [...image.data.subarray(i, i + 3)].join(',');
+            palette.set(color, (palette.get(color) ?? 0) + 1);
+          }
+          return { label, ...observation, raster: { changed, commonChangedColors: [...palette].sort((a, b) => b[1] - a[1]).slice(0, 5) } };
+        });
+        assert.deepEqual(errors, []);
+      } finally { await page.close(); }
+    }
+    t.diagnostic(JSON.stringify(observations));
+    for (const mode of ['reference', 'astylar']) {
+      for (const sample of observations[mode]) { assert.equal(sample.value, 'Atlas'); assert.equal(sample.focused, true); }
+      assert.deepEqual(observations[mode][1].selection, [0, 3]);
+      assert.deepEqual(observations[mode][2].selection, [5, 5]);
+      assert.deepEqual(observations[mode][3].selection, [2, 5]);
+      for (const index of [1, 3]) assert.ok(observations[mode][index].raster.changed > 0);
+    }
+    assert.equal(observations.reference[1].direction, 'forward');
+    assert.equal(observations.reference[3].direction, 'backward');
+    assert.equal(observations.astylar[1].cursor, 3);
+    assert.equal(observations.astylar[3].cursor, 2);
+    for (const index of [1, 3]) {
+      const native = observations.reference[index], candidate = observations.astylar[index];
+      assert.equal(native.raster.commonChangedColors[0][0], '46,97,205');
+      assert.ok(native.raster.commonChangedColors.some(([color, count]) => color === '255,255,255' && count > 100));
+      assert.equal(candidate.raster.commonChangedColors[0][0], '154,213,255');
+      assert.ok(candidate.raster.commonChangedColors.some(([color, count]) => color === '0,0,0' && count > 100));
+      assert.deepEqual(candidate.highlights, [{ visible: true, material: '#9AD5FF', alpha: 1 }]);
+      assert.deepEqual(candidate.semanticSelection, [...candidate.selection, index === 1 ? 'forward' : 'backward']);
+      for (const key of ['x', 'y', 'width', 'height']) assert.ok(Math.abs(native.box[key] - candidate.box[key]) < .01);
+    }
+    for (const mode of ['reference', 'astylar']) assert.equal(observations[mode][2].raster.changed, 0);
+    assert.deepEqual(observations.astylar[2].highlights, []);
   });
 });
 

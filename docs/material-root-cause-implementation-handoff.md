@@ -2,6 +2,31 @@
 
 ## Current audit checkpoint — September 30
 
+**Forward/backward selection paint, dark/mobile:** the existing frozen-browser
+test helper authenticates all 1,887 served files, then real Tab/Control+A/type
+`Atlas`/Home/Shift+Right×3 selects 0–3 on both form-field controls in Chrome
+154.0.8037.58, dark 390×844 DPR 2. ArrowRight collapses the range before End,
+then Shift+Left×3 selects 2–5 backward on both. This deliberately excludes the
+already-proven End-on-existing-selection fault from a paint question; it does
+not fix, waive or change that fault or the canonical action sequence. Both
+logical and semantic direction endpoints agree and remain focused. Local
+caret-hidden rasters prove actual selected background/foreground pixels, not
+only mesh presence: HTML uses RGB 46/97/205 with white glyphs; candidate uses
+154/213/255 with black glyphs, backed by its visible opaque `#9AD5FF` highlight.
+Collapsing restores the identical unselected crop and removes the highlight.
+Input boxes agree within .01 CSS px. The palette difference matches the explicit
+contrast-aware black/white selection policy in `docs/compatibility/html-css.md`
+and `TextHighlightMeshFactory.chooseSelectionColors`/`createHighlightRecord`:
+classify as documented paint limitation, not browser-equivalent paint or a new
+direction/missing-highlight defect. Background/foreground authoring still differs
+in the showcase, so these crops do not establish full equal-input shaping,
+clipping or sharpness. Other profiles, controls, pointer selection and general
+line-box coverage remain pending. Existing test only; screenshots are in-memory,
+no new artifact run or canonical export. Verification:
+`node --test --test-name-pattern="dark mobile real-key selections" tests/material-parity/sort-focus-structure.spec.mjs`
+passes 1/1 twice (4,974ms initial, 4,338ms with explicit palette/direction/cleanup
+assertions), with no page errors. Renderer and comparison fixtures unchanged.
+
 **Caret geometry isolated from color:** the existing input-boundary spec executes
 the four complete caret methods extracted from authenticated served chunk
 `chunk-3JXWRYJY.js` (SHA `f366533b…`) with actual Babylon 8.15.1 NullEngine
