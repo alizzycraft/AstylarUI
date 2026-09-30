@@ -966,6 +966,68 @@ test('passive comparison applicability is distinguished from composite child con
   });
 });
 
+test('tree navigation and native button activation distinguish widget authoring from shared key delivery', async () => {
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    const observations = {};
+    for (const family of ['tree', 'core', 'toolbar', 'card']) {
+      observations[family] = {};
+      for (const mode of ['reference', 'astylar']) {
+        const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+        const errors = [];
+        page.on('pageerror', error => errors.push(String(error)));
+        await page.goto(`${baseUrl}/${mode}/${family}?benchmark=1&profile=light`);
+        await page.locator('.frame').waitFor();
+        if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+        await page.evaluate(() => {
+          window.__treeButtonEvents = [];
+          for (const type of ['keydown', 'click']) document.addEventListener(type, event => {
+            window.__treeButtonEvents.push({ type, key: event.key ?? null,
+              id: event.target.id || event.target.getAttribute('data-astylar-id') });
+          }, true);
+        });
+        const steps = [];
+        for (const key of family === 'tree' ? ['Tab', 'ArrowDown', 'ArrowDown', 'Home', 'End'] : ['Tab', 'Enter', 'Space']) {
+          await page.keyboard.press(key);
+          if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+          await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+          steps.push(await page.evaluate(({ mode, key }) => ({ key,
+            focus: mode === 'reference' ? document.activeElement?.id : document.activeElement?.getAttribute('data-astylar-id'),
+            events: window.__treeButtonEvents,
+            appEvents: mode === 'astylar' ? window.__ASTYLAR_MATERIAL_BENCHMARK__.events()
+              .filter(event => ['keydown', 'click'].includes(event.type)).map(event => [event.type, event.targetId]) : [],
+          }), { mode, key }));
+        }
+        observations[family][mode] = { steps, errors };
+        await page.close();
+      }
+    }
+    assert.equal(browser.version(), '154.0.8037.58');
+    assert.deepEqual(observations.tree.reference.steps.map(step => step.focus),
+      ['tree-item-0', 'tree-item-1', 'tree-item-2', 'tree-item-0', 'tree-item-2']);
+    assert.deepEqual(observations.tree.astylar.steps.map(step => step.focus), Array(5).fill('tree-item-0'));
+    assert.deepEqual(observations.tree.astylar.steps.at(-1).appEvents,
+      Array.from({ length: 4 }, () => ['keydown', 'tree-item-0']));
+    for (const mode of ['reference', 'astylar']) {
+      assert.deepEqual(observations.tree[mode].steps.at(-1).events.filter(event => event.type === 'keydown').map(event => event.key),
+        ['Tab', 'ArrowDown', 'ArrowDown', 'Home', 'End']);
+    }
+    for (const [family, id] of [['core', 'core-primary'], ['toolbar', 'toolbar-action'], ['card', 'card-open']]) {
+      for (const mode of ['reference', 'astylar']) {
+        assert.deepEqual(observations[family][mode].steps.map(step => step.focus), Array(3).fill(id));
+        assert.deepEqual(observations[family][mode].steps.at(-1).events.filter(event => event.type === 'keydown').map(event => event.key),
+          ['Tab', 'Enter', ' ']);
+      }
+      assert.deepEqual(observations[family].reference.steps.at(-1).events.filter(event => event.type === 'click').map(event => event.id), [id, id]);
+      assert.deepEqual(observations[family].astylar.steps[1].appEvents, [['keydown', id], ['click', id]]);
+      assert.deepEqual(observations[family].astylar.steps[2].appEvents,
+        [['keydown', id], ['click', id], ['keydown', id], ['click', id]]);
+    }
+    for (const family of ['tree', 'core', 'toolbar', 'card']) {
+      for (const mode of ['reference', 'astylar']) assert.deepEqual(observations[family][mode].errors, []);
+    }
+  });
+});
+
 async function withFrozenShowcase(run) {
   const browserRoot = path.resolve('examples/material-showcase/dist/material-showcase/browser');
   const checkpoint = JSON.parse(readFileSync('artifacts/material-parity/caret-visible-checkpoint-154/checkpoint/manifest.json'));

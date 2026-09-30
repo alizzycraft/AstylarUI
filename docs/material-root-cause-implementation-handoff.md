@@ -2,6 +2,29 @@
 
 ## Current audit checkpoint — September 30
 
+**Tree navigation and native-button positive controls:** the unresolved question
+was whether leaf-tree navigation fails before key delivery or after it in widget
+authoring. On the authenticated unchanged frozen showcase, Chrome
+154.0.8037.58/light/1440×900/DPR 1, real Tab/ArrowDown/ArrowDown/Home/End moves
+Material focus through nodes 0→1→2→0→2. Candidate focus remains at node 0 while
+all four navigation keydowns reach the application callback. Current
+`astylar.component.ts` authors fixed node tabindex 0/-1 and `handleKeydown`
+handles only Escape; the first demonstrated divergence is missing tree
+interaction authoring, not core key delivery. As positive controls, real
+Tab/Enter/Space focuses and activates `core-primary`, `toolbar-action` and
+`card-open` on both sides. Reference DOM click events and candidate application
+click callbacks each record two correctly attributed activations. Candidate
+activation is routed through its bridge, not an identical native DOM click
+stream; exact ordering, held states, focus/ripple paint and other profiles
+remain open. The existing focused test
+`node --test --test-name-pattern="tree navigation and native" tests/material-parity/sort-focus-structure.spec.mjs`
+passes 1/1 in 12,011 ms with no page errors. No renderer, comparison input,
+original capture or canonical classification changed; no new capture directory
+was generated. Remaining priorities are overlay/focus lifecycle and missing
+state boundaries, then unresolved style/paint mapping and final integration.
+The canonical refresh below is validated, but its remaining receipt leaf-diffs
+and complete harness/browser gates are not waived by this focused result.
+
 **Current canonical export:** a cold
 `node scripts/export-material-input-audit-current-ancestry.mjs` completed the
 full production build, validation, evidence-session verification and canonical
