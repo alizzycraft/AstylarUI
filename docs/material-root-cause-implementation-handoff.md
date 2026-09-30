@@ -2,6 +2,23 @@
 
 ## Current audit checkpoint — September 30
 
+**Browser proof integration milestone:** after committed caret/selection,
+modal-Tab, overlay-count/disposal and snackbar-action increments, the unfiltered
+shared proof suite `node --test tests/material-parity/sort-focus-structure.spec.mjs`
+passes **21/21**, zero failures/skips/cancellations, in **171,418ms** on the
+authenticated 1,887-file Chrome 154 showcase. This integrates source-owner
+checks, real keyboard/pointer widget boundaries, passive applicability, slider
+constraints/hit ownership, calendar/editable popups, modal containment,
+selection pixels and overlay/snackbar cleanup. Its diagnostic assertions
+preserve unequal-input and known-failure observations; passing is not input or
+output parity acceptance. No canonical export, rendering source or retained
+capture changed, and no new capture directory was generated. The dependency-
+validated compact tooltip query remains applicable (929 working records).
+Do not repeat this complete suite for the prose-only milestone update.
+Next: missing tooltip dark/responsive real focus/hover paint, remaining
+text-control/profile mapping, surface-local overlay scope and equal-input
+WebGL reductions; final canonical and unfiltered output/release gates remain.
+
 **Snackbar keyboard/action visibility, dark/mobile:** on the authenticated frozen
 Chrome 154 build, dark 390×844 DPR 2, real Tab/Enter opens both snackbars without
 state injection. Both surfaces are visibly painted in the viewport at y=788,
