@@ -60,6 +60,25 @@ The existing focused browser suite passes 4/4. Focus-ring paint, exact event
 ordering, other profiles/DPRs and the other selection families remain open.
 No fixture, renderer or reference input was altered.
 
+**Radio group arrow boundary:** the unresolved question was whether the
+checkbox's role-only control-kind gap also applies to radio group navigation,
+or whether Astylar drops Arrow keys before application handling. A focused
+paired Chrome 154/light/1440×900/DPR 1 probe authenticates the frozen served
+build, then sends real Tab, ArrowLeft and ArrowRight. Both sides initially
+focus the selected Team option. Material's native `input:radio` moves focus and
+selection Team → Solo → Team; the candidate `div role="radio"` retains Team
+focus and selection. Its application event log records both Arrow keydowns on
+`radio-team`. The candidate's `handleKeydown` handles only Escape; its radio
+selection updates on click/input, not Arrow keydown
+(`examples/material-showcase/src/app/astylar.component.ts`). Public Astylar
+supports `inputType: 'radio'` and native-style radio Arrow navigation
+(`src/app/services/dom/input/input-element.service.ts`), which this fixture
+does not author. The first demonstrated divergence is control-kind and
+interaction authoring after key delivery, not a confirmed core radio-navigation
+defect. The focused browser suite passes 5/5. Space activation, exact event
+order, focus paint, other profile/DPR states and other role-based components
+remain open. No fixture, renderer or reference input was altered.
+
 **Independent replay:** a separate cold
 `ASTYLAR_AUDIT_COLD=1; ASTYLAR_AUDIT_PROGRESS=1; node scripts/export-material-input-audit-current-ancestry.mjs --check`
 completed with exit 0. It revalidated the full audit, rehashed the evidence

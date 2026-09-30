@@ -160,6 +160,61 @@ test('checkbox real Tab and Space distinguishes role authoring from core key del
   });
 });
 
+test('radio real Tab and Arrow keys locate the selection-routing boundary', async () => {
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    const observations = {};
+    for (const mode of ['reference', 'astylar']) {
+      const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+      const errors = [];
+      page.on('pageerror', error => errors.push(String(error)));
+      await page.goto(`${baseUrl}/${mode}/radio?benchmark=1&profile=light`);
+      await page.locator('.frame').waitFor();
+      if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+      const steps = [];
+      for (const key of ['Tab', 'ArrowLeft', 'ArrowRight']) {
+        await page.keyboard.press(key);
+        if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+        steps.push(await page.evaluate(mode => ({
+          focus: mode === 'reference' ? document.activeElement?.value :
+            document.activeElement?.getAttribute('data-astylar-id')?.replace('radio-', ''),
+          kind: document.activeElement instanceof HTMLInputElement ? 'input:radio' :
+            `div:${document.activeElement?.getAttribute('role')}`,
+          selected: mode === 'reference'
+            ? window.ng.getComponent(document.querySelector('app-reference')).store.state().selected
+            : window.__ASTYLAR_MATERIAL_BENCHMARK__.state().selected,
+          solo: mode === 'reference' ? document.querySelector('mat-radio-button[value="solo"] input')?.checked :
+            document.querySelector('[data-astylar-id="radio-solo"]')?.getAttribute('aria-checked') === 'true',
+          team: mode === 'reference' ? document.querySelector('mat-radio-button[value="team"] input')?.checked :
+            document.querySelector('[data-astylar-id="radio-team"]')?.getAttribute('aria-checked') === 'true',
+        }), mode));
+      }
+      observations[mode] = {
+        steps,
+        appEvents: mode === 'astylar' ? await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.events()) : [],
+        errors,
+      };
+      await page.close();
+    }
+    assert.equal(browser.version(), '154.0.8037.58');
+    assert.deepEqual(observations.reference.steps, [
+      { focus: 'team', kind: 'input:radio', selected: true, solo: false, team: true },
+      { focus: 'solo', kind: 'input:radio', selected: false, solo: true, team: false },
+      { focus: 'team', kind: 'input:radio', selected: true, solo: false, team: true },
+    ]);
+    assert.deepEqual(observations.astylar.steps, [
+      { focus: 'team', kind: 'div:radio', selected: true, solo: false, team: true },
+      { focus: 'team', kind: 'div:radio', selected: true, solo: false, team: true },
+      { focus: 'team', kind: 'div:radio', selected: true, solo: false, team: true },
+    ]);
+    assert.equal(observations.astylar.appEvents.filter(event =>
+      event.type === 'keydown' && event.targetId === 'radio-team').length, 2,
+    'both arrow keydowns reached the authored radio option');
+    assert.deepEqual(observations.reference.errors, []);
+    assert.deepEqual(observations.astylar.errors, []);
+  });
+});
+
 async function withFrozenShowcase(run) {
   const browserRoot = path.resolve('examples/material-showcase/dist/material-showcase/browser');
   const checkpoint = JSON.parse(readFileSync('artifacts/material-parity/caret-visible-checkpoint-154/checkpoint/manifest.json'));
