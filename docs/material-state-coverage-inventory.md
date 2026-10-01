@@ -2,6 +2,17 @@
 
 ## Evidence boundary
 
+October1 classification integration adds three bounded source definitions to the
+existing producer: scroll client geometry and caret ownership are confirmed core
+defects in their reductions; text raster fidelity remains suspected pending its
+compatibility scope. All135 predecessor definitions and all earlier observations
+remain. Four integration checks pass4/4; three public diagnostic runs pass3/3 with
+identical authenticated dependencies and bundles. Receipt hashes and exact
+observations/classifications are checked, not inferred from test declaration
+presence. Canonical export/check of the coherent batch is next; no new canonical
+publication or full-gate acceptance is claimed. See the current handoff for logs,
+negative cases and coverage priorities.
+
 October1 producer preparation registers the two recent proof files and five
 diagnostic entries in the existing source/proof inventories. Focused conservation
 and source-fingerprint checks each pass1/1;537 preceding fingerprints and all

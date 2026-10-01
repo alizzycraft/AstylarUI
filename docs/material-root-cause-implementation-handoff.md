@@ -2,6 +2,33 @@
 
 ## Current audit checkpoint — October 1
 
+**Recent source classifications are integrated in the producer; coherent export is next.**
+The existing policy adds three bounded findings to the135 unchanged predecessor
+definitions: confirmed scroll client-area divergence before projection, confirmed
+caret interaction/resource ownership and cleanup defect, and suspected text
+raster fidelity defect with demonstrated backing/phase effects but an unresolved
+compatibility decision. Exact observations, source witnesses, owners, focused
+proofs and SHA-256-pinned original logs travel with these records. Current
+validation rehashes those receipts and rejects missing/changed evidence or altered
+classification/observations; no scalar finding or original captured input changes.
+The tooltip/popup diagnostics remain distinct scoped supporting proofs, not
+duplicate core causes or blanket attribution of historical symptoms.
+Four existing-suite focused checks pass4/4 in7,189.1463ms, including preservation
+of all135 prior definitions and negative classification/observation/receipt cases.
+Three public browser diagnostics pass3/3 in21,794.703ms; all reproduce identical
+bundles and authenticated2,515-input receipts under Chrome154.0.8037.58.
+Retain recent-source-diagnostic-integration-bd79e4b-passed.log,
+recent-public-source-applicability-bd79e4b.log and
+recent-public-source-receipt-comparison-bd79e4b.log. Initial test failures are
+retained separately: an unanchored export-removal regex accidentally edited a
+literal in the comparison only, the partial synthetic fixture retains its known
+missing root-style evidence, and the inputEquivalent assertion originally used
+coverage instead of summary. Corrections preserve original production evidence
+and do not suppress the partial-fixture validation failure. No renderer/fixture
+fix or complete acceptance. Next: export/check this539-fingerprint/138-source
+finding producer as one coherent batch, authenticate conservation against the
+preserved c3e0d7d1 predecessor, then resume the coverage priorities below.
+
 **Recent proof inventory registration closes the producer-discovery gap; export remains pending.**
 The existing producer now fingerprints input-boundary-evidence.spec.mjs and
 sort-focus-structure.spec.mjs and registers their five gutter, text-raster,

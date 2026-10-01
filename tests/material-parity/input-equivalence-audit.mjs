@@ -999,6 +999,22 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   if (requireComplete && report.summary.unresolvedAttributions > 0) errors.push(`${report.summary.unresolvedAttributions} resolved-style differences still lack root-cause attribution`);
   if (report.summary.unexplainedSourceFindings !== 0) errors.push(`${report.summary.unexplainedSourceFindings} source findings are unexplained`);
   if (report.summary.undetectedSourceDefinitions !== 0) errors.push(`${report.summary.undetectedSourceDefinitions} expected source findings were not detected`);
+  // Source-backed diagnostic receipts are immutable evidence, not test-presence claims.
+  for (const definition of sourceAuditDefinitions.filter(entry => entry.evidence)) {
+    const finding = report.sourceFindings.find(entry => entry.id === definition.id);
+    if (!finding || JSON.stringify(finding.evidence) !== JSON.stringify(definition.evidence) ||
+        JSON.stringify(finding.observation) !== JSON.stringify(definition.observation) ||
+        finding.classification !== definition.classification || finding.justification !== definition.justification) {
+      errors.push(`${definition.id}: source diagnostic classification or receipt differs from policy`);
+    }
+    for (const receipt of definition.evidence) {
+      const absolute = path.resolve(root, receipt.file), relative = path.relative(path.resolve(root), absolute);
+      if (relative.startsWith('..') || path.isAbsolute(relative) || !existsSync(absolute) ||
+          createHash('sha256').update(readFileSync(absolute)).digest('hex') !== receipt.sha256) {
+        errors.push(`${definition.id}: source diagnostic receipt missing, changed or outside root`);
+      }
+    }
+  }
   if (report.coverage.missingElements.length > 0) errors.push(`${report.coverage.missingElements.length} measured mappings are missing on one side`);
   if (report.coverage.missingInputEvidence.length > 0) errors.push(`${report.coverage.missingInputEvidence.length} cases lack paired root style evidence`);
   if (report.coverage.duplicateCases.length > 0) errors.push(`${report.coverage.duplicateCases.length} duplicate case records`);

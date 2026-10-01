@@ -1767,6 +1767,45 @@ test('recent public and popup proofs join existing inventories without changing 
   }
 });
 
+test('recent source diagnostics conserve predecessor findings and reject altered receipts or conclusions', () => {
+  const audit = buildMaterialInputAudit(parityReport({}, {}));
+  const previous = execFileSync('git', ['show', 'bd79e4b:tests/material-parity/input-equivalence-policy.mjs'],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  const priorDefinitions = new Function(previous.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
+  assert.equal(priorDefinitions.length, 135);
+  assert.equal(audit.sourceFindings.length, 138);
+  for (const [index, { locations, detected, ...definition }] of audit.sourceFindings.slice(3).entries())
+    assert.equal(JSON.stringify(definition), JSON.stringify(priorDefinitions[index]), priorDefinitions[index].id);
+  assert.ok(audit.sourceFindings.every(entry => entry.detected));
+  const expected = ['core-scroll-client-area-does-not-reserve-native-gutter',
+    'core-caret-focus-allocation-escapes-render-owner', 'core-text-transparent-backing-and-local-raster-phase'];
+  assert.deepEqual(audit.sourceFindings.slice(0, 3).map(entry => entry.id), expected);
+  const validation = () => validateMaterialInputAudit(audit, { requireComplete: false });
+  // This deliberately partial synthetic capture has no paired root-style receipt.
+  // Keep that unrelated failure explicit rather than treating this as full acceptance.
+  assert.deepEqual(validation(), ['1 cases lack paired root style evidence']);
+  for (const finding of audit.sourceFindings.slice(0, 3)) {
+    assert.ok(finding.observation.element && finding.observation.states.length && finding.owner && finding.focusedProof);
+    for (const receipt of finding.evidence) {
+      assert.equal(createHash('sha256').update(readFileSync(receipt.file)).digest('hex'), receipt.sha256);
+    }
+    const original = structuredClone(finding);
+    finding.evidence = [];
+    assert.ok(validation().some(error => error.includes(finding.id) && /differs from policy/.test(error)));
+    Object.assign(finding, structuredClone(original));
+    finding.classification = 'equivalent-representation';
+    assert.ok(validation().some(error => error.includes(finding.id) && /differs from policy/.test(error)));
+    Object.assign(finding, structuredClone(original));
+    finding.observation.astylar = 'matches reference';
+    assert.ok(validation().some(error => error.includes(finding.id) && /differs from policy/.test(error)));
+    Object.assign(finding, structuredClone(original));
+  }
+  assert.equal(audit.sourceFindings[0].classification, 'confirmed-core-renderer-defect');
+  assert.equal(audit.sourceFindings[1].classification, 'confirmed-core-renderer-defect');
+  assert.equal(audit.sourceFindings[2].classification, 'suspected-core-renderer-defect');
+  assert.equal(audit.summary.inputEquivalent, false);
+});
+
 test('records source fingerprints and actual visual acceptance fields', () => {
   const additions = [
     ...['reviewed-source-batch-audit-source-binding.mjs', 'reviewed-source-batch-audit-source-binding.spec.mjs',
@@ -1907,8 +1946,12 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const proofStart = liveSource.lastIndexOf('\n', calls[0].getStart(liveAst)) + 1;
   const proofEnd = liveSource.indexOf('\n', calls.at(-1).end) + 1;
   const withoutRecentProofs = liveSource.slice(0, proofStart) + liveSource.slice(proofEnd);
-  assert.equal(withoutRecentProofs.replace(launchRegistration, '').replace(recentRegistration, ''), currentSource,
-    'only launch receipts and five recent proof registrations differ from the pinned producer');
+  const receiptStart = withoutRecentProofs.indexOf('  // Source-backed diagnostic receipts are immutable evidence');
+  const receiptEnd = withoutRecentProofs.indexOf('  if (report.coverage.missingElements.length', receiptStart);
+  assert.ok(receiptStart > 0 && receiptEnd > receiptStart);
+  const withoutReceiptValidation = withoutRecentProofs.slice(0, receiptStart) + withoutRecentProofs.slice(receiptEnd);
+  assert.equal(withoutReceiptValidation.replace(launchRegistration, '').replace(recentRegistration, ''), currentSource,
+    'only receipt validation, launch receipts and five recent proof registrations differ from the pinned producer');
   const expectedFiles = listedFiles(currentSource);
   assert.equal(expectedFiles.length, 535);
   assert.deepEqual(expectedFiles.filter(file => stage424Files.includes(file)), stage424Files,
