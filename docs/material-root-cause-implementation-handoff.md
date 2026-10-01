@@ -25,6 +25,12 @@ zero unresolved rows. Retain the focused registration logs
 canonical export logs. This is evidence/inventory maintenance only: no
 renderer, plugin, fixture, or parity outcome was changed.
 
+The post-publication source-fingerprint reconciliation independently streamed
+the canonical payload and rehashed all 539 recorded paths with the producer's
+LF-normalization rule: 539/539 match and zero paths changed. The mismatch list
+digest is the empty-list digest
+`01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b`.
+
 ## Current audit checkpoint — October 1
 
 **The repaired 145-finding canonical export is conserved and indexed.**
