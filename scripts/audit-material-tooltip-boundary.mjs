@@ -59,10 +59,13 @@ try {
               class: node.className, style: { display: getComputedStyle(node).display,
                 visibility: getComputedStyle(node).visibility, opacity: getComputedStyle(node).opacity },
               box: node.getBoundingClientRect().toJSON() });
+            const measurement = mode === 'astylar' ? api.measure(['tooltip-popup'], false) : null;
             return { referencePopup: describe(popup), referenceShown: !!popup?.parentElement.classList.contains('mat-mdc-tooltip-show'),
               describedBy: describedBy ?? null, description: describe(description || null),
               candidateOpen: mode === 'astylar' ? api.state().open : null,
-              candidatePopupBox: mode === 'astylar' ? api.measure(['tooltip-popup'], false).elements['tooltip-popup']?.borderBox ?? null : null,
+              candidatePopupBox: measurement?.elements['tooltip-popup']?.borderBox ?? null,
+              candidatePaintDepth: measurement?.elements['tooltip-popup']?.paintDepth ?? null,
+              candidateCamera: measurement?.diagnostics?.camera ?? null,
               scrollY, scrollHeight: document.documentElement.scrollHeight,
               currentTriggerBox: trigger?.getBoundingClientRect().toJSON() ?? null,
               canvasBox: document.querySelector('canvas')?.getBoundingClientRect().toJSON() ?? null,

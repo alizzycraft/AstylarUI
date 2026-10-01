@@ -1151,6 +1151,15 @@ export class AstylarShowcaseComponent {
       return [id, {
         exists: true,
         borderBox: { left, top, right, bottom, width: right - left, height: bottom - top },
+        // Read-only audit diagnostics: retain the final mesh depth and camera
+        // bounds alongside CSS-space measurements. These values are observed
+        // after layout/projection and never feed authoring or interaction.
+        paintDepth: {
+          meshZ: mesh.position.z,
+          enabled: mesh.isEnabled(),
+          visible: mesh.isVisible,
+          visibility: mesh.visibility,
+        },
         authoredStyle,
         authoredStructure: authoredStructures[id],
         resolvedStyle: materialStyleSnapshot(resolvedStyle),
@@ -1192,6 +1201,10 @@ export class AstylarShowcaseComponent {
       inputTree: authoredSiteData ? collectAuthoredInputTree(authoredSiteData.root, authoredStyles, resolvedInputs.effective, resolvedInputs) : undefined,
       diagnostics: {
         surface: surface.diagnostics,
+        camera: {
+          position: { x: camera.position.x, y: camera.position.y, z: camera.position.z },
+          viewport: { x: viewport.x, y: viewport.y, width: viewport.width, height: viewport.height },
+        },
         clearColor: surface.scene.clearColor.toHexString(),
         backgroundPick: backgroundPick ? {
           name: backgroundPick.name,
