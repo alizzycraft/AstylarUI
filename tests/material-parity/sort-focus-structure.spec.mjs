@@ -1217,6 +1217,9 @@ test('dark mobile overlay cycles retain focus and semantic cleanup boundaries', 
             const surface = window.ng.getComponent(document.querySelector('app-astylar-showcase')).surface;
             const scene = surface.scene;
             resources = { scene: diagnostics.resources, plugins: diagnostics.pluginResources,
+              live: { meshes: scene.meshes.length, materials: scene.materials.length, textures: scene.textures.length },
+              unboundMaterials: scene.materials.filter(material => !scene.meshes.some(mesh => mesh.material === material))
+                .map(material => ({ name: material.name, uniqueId: material.uniqueId })),
               loadedTextures: scene.getEngine().getLoadedTexturesCache().length,
               observers: Object.fromEntries(['onPointerObservable', 'onPrePointerObservable', 'onKeyboardObservable',
                 'onPreKeyboardObservable', 'onBeforeRenderObservable', 'onAfterRenderObservable', 'onDisposeObservable']
@@ -1288,6 +1291,9 @@ test('dark mobile overlay cycles retain focus and semantic cleanup boundaries', 
         opened: cycle.opened.resources, closed: cycle.closed.resources })) }));
       const plateau = observations[family].astylar.cycles[0].closed.resources;
       const disposal = observations[family].astylar.disposal;
+      assert.deepEqual(observations[family].astylar.cycles.map(cycle => cycle.closed.resources.live.materials),
+        { menu: [19, 20, 21], 'bottom-sheet': [18, 19, 20], dialog: [17, 20, 23] }[family],
+        'preserve the live-material counterexample, not cleanup acceptance');
       const textureCount = family === 'dialog' ? 7 : 5;
       assert.deepEqual(disposal.before, { cache: { size: textureCount, maxSize: 100,
         references: [...Array(textureCount - 3).fill(0), 1, 1, 1] }, sceneTextures: textureCount, ownedTextTextures: textureCount });
@@ -1303,7 +1309,14 @@ test('dark mobile overlay cycles retain focus and semantic cleanup boundaries', 
         onKeyboardObservable: 0, onPreKeyboardObservable: 0, onBeforeRenderObservable: 0,
         onAfterRenderObservable: 0, onDisposeObservable: 3 });
       for (const cycle of observations[family].astylar.cycles) {
-        assert.deepEqual(cycle.closed.resources, plateau, `${family} post-dismissal resources grew`);
+        const { live, unboundMaterials, ...tracked } = cycle.closed.resources;
+        const { live: baselineLive, unboundMaterials: baselineUnbound, ...trackedPlateau } = plateau;
+        assert.deepEqual(tracked, trackedPlateau, `${family} post-dismissal tracked resources grew`);
+        assert.equal(live.meshes, tracked.scene.meshes);
+        assert.equal(live.textures, tracked.scene.textures);
+        // Preserve live identities independently: a tracked plateau is not a
+        // live-material acceptance assertion. Public reduction owns attribution.
+        assert.ok(live.materials >= tracked.scene.materials);
         assert.ok(cycle.opened.resources.scene.meshes > plateau.scene.meshes);
         assert.ok(cycle.opened.resources.scene.materials > plateau.scene.materials);
         assert.deepEqual(cycle.opened.resources.observers, plateau.observers);

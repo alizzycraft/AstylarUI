@@ -13,7 +13,8 @@ derivation and additive inventory conservation now pass: 135 prior source findin
 unchanged plus 3 additions, 5 added proofs with 34 existing line-only updates,
 and 2 added/5 changed authenticated fingerprints. Compact import and verification
 pass, preserving 39,904 control/typography records and 0 unresolved scalar groups.
-Independent cold check is launched; full gates and complete family/state coverage
+Independent cold check exits0 in39.80minutes for this138-finding snapshot;
+subsequent public/overlay proof integration, full gates and complete family/state coverage
 remain pending. See the current handoff and retained export/section logs. Input
 equivalence is still false; the family/state gaps below remain unchanged.
 
@@ -370,7 +371,10 @@ cycles leave5/10/15 orphan materials at both DPR1 and DPR2. Installed complete
 typed and legacy owning methods match current-source transpilation. Integrate
 this bounded finding/proof after the live cold check, then extend per-family
 cleanup checks. Earlier menu/sheet/dialog tracked-count plateaus are not proofs
-of stable live materials. See the current handoff; no renderer fix or canonical
+of stable live materials: expanded dark/mobile checks show live19/20/21,
+18/19/20 and17/20/23 respectively, with retained trigger pseudo-state identities.
+Their focus/semantic and tracked-resource assertions remain intact; live sequences
+are diagnostic counterexamples, not cleanup acceptance. See the current handoff; no renderer fix or canonical
 whole-audit acceptance is inferred; new canonical classification remains pending.
 Ordinary comparison iframe replacement does not
 retain old snackbar timers across a switch to Menu, in the bounded DPR1 probe.

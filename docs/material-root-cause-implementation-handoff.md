@@ -2,7 +2,7 @@
 
 ## Current audit checkpoint — October 1
 
-**Validated export and exact canonical conservation complete; independent check pending.**
+**Validated export, exact canonical conservation and independent cold check complete.**
 The d2a4176 cold export completes in2,332,358.4972ms (38.87minutes), with
 1,205 files reverified,0 disk hits and0 invalidations. It retains436 static and
 1,875 interaction cases,8,483 scalar groups and389,202 occurrences, and publishes
@@ -44,8 +44,11 @@ Compact import and verification pass: 8,483 scalar groups, 138 source findings,
 39,904 control/typography differences, 389,202 occurrences and 0 unresolved
 scalar groups; the new index is 72,704,115 bytes. Retain
 `cold-export-d2a4176-compact-import.log`; unresolved scalar count is not acceptance.
-Independent cold check is launched with the complete current-ancestry baseline;
-retain `cold-canonical-check-d2a4176.log` and await its terminal result.
+Independent cold check exits0 in2,387,864.305ms (39.80minutes) with the complete
+current-ancestry baseline, identical436/1,875 coverage and138 source findings.
+It reverifies1,205 files with0 invalidations; retain
+`cold-canonical-check-d2a4176.log`. This applies to the checked138-finding snapshot,
+not subsequent standalone proofs or their pending canonical integration.
 Full harness/browser/release gates and remaining family/state coverage stay open.
 Canonical conservation is not rendering or whole-audit acceptance. Continue the
 remaining coverage priorities without changing the check's source dependencies.
@@ -107,6 +110,27 @@ zero tracked/live resources after disposal. Both DPR cases pass in6,720.4529ms;
 retain `public-pseudo-material-ownership-61b4fc9-strict.log`, SHA-256
 7e4b76703625c171e7d1dfeb595759f0bd75b1a65e3545a267e57f9a8cf02cd2.
 This strengthens the diagnostic assertions, not the rendering acceptance claim.
+The same reproduction is now appended to the existing
+`tests/material-parity/input-boundary-evidence.spec.mjs` without shifting prior
+declarations. Focused node:test passes1/1 in8,862.9769ms; retain
+`public-pseudo-material-ownership-durable-08bc98c.log`, SHA-256
+e7c2ac9ff7eca5dda529f4b80653c7c4c77f0cd10886320d658f63557986e09b.
+Canonical source/proof registration is a pending coherent integration batch.
+
+The existing dark/mobile overlay lifecycle test now observes live counts and
+unbound identities independently of tracked diagnostics. Its focus/semantic,
+tracked plateau and final-disposal checks still pass1/1 (19,295.9405ms), but
+post-dismissal live materials grow: Menu19/20/21 versus tracked14,
+Bottom-sheet18/19/20 versus tracked14, Dialog17/20/23 versus tracked13.
+Meshes/textures remain equal to tracked counts. Retained identities include
+trigger hover/focus/active materials; not every unbound material is unowned,
+so use live-minus-tracked and the separate public removal proof for attribution.
+Retain `overlay-live-resources-08bc98c.log`, SHA-256
+766b0a29f109c408dcc45b534aa0497f8a02619965e24fec094979a5feb15cf6.
+Exact live sequences are now diagnostic assertions, explicitly not lifecycle
+acceptance. The strict focused replay passes1/1 in17,739.9337ms; retain
+`overlay-live-resources-08bc98c-strict.log`. Other profiles, async replacement
+and local overlay paint remain open.
 
 The earlier application-scale counterexample remains preserved. Three actual
 snackbar trigger/UNDO cycles in light desktop DPR1 and dark mobile DPR2 leave

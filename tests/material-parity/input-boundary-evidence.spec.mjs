@@ -1219,3 +1219,90 @@ test('historical keyboard evidence retains selection mismatch and native email o
     }
   }
 });
+
+test('public button pointer states diagnose materials outside render ownership', async t => {
+  const consumer = path.resolve('examples/material-showcase');
+  const methods = [['src/lib/astylar.ts','lib/astylar.js','applyElementPseudoState'],
+    ['src/lib/astylar.ts','lib/astylar.js','setButtonLabelPseudoMaterial'],
+    ['src/lib/astylar-scene-resources.ts','lib/astylar-scene-resources.js','replace'],
+    ['src/app/services/dom/elements/element-interaction.service.ts','app/services/dom/elements/element-interaction.service.js','setupMouseEvents'],
+    ['src/app/services/dom/elements/element-interaction.service.ts','app/services/dom/elements/element-interaction.service.js','applyElementMaterial'],
+    ['src/app/services/babylon-mesh.service.ts','app/services/babylon-mesh.service.js','createMaterial']].map(([sourceFile, relative, method]) => {
+    const installedFile = path.join(consumer, 'node_modules/astylarui/dist/lib', relative);
+    const source = readFileSync(sourceFile, 'utf8'), installed = readFileSync(installedFile, 'utf8');
+    const compiled = ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 } }).outputText;
+    const extract = code => {
+      const ast = ts.createSourceFile('method.js', code, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS), matches = [];
+      assert.equal(ast.parseDiagnostics.length, 0);
+      const visit = n => { if (ts.isMethodDeclaration(n) && n.name.getText(ast) === method) matches.push(n.getText(ast).replace(/\s+/g, ' ').trim()); ts.forEachChild(n, visit); };
+      visit(ast); assert.equal(matches.length, 1); return matches[0];
+    };
+    assert.equal(extract(installed), extract(compiled));
+    return { method, sourceFile, sourceSha256: hash(source), installedFile, installedSha256: hash(installed) };
+  });
+  const applicationSource = `import '@angular/compiler';
+  import {provideZonelessChangeDetection} from '@angular/core';
+  import {createApplication} from '@angular/platform-browser';
+  import {Astylar} from 'astylarui';
+  document.body.style.cssText='margin:0';
+  const outside=document.createElement('button');outside.id='outside';outside.textContent='Outside';document.body.append(outside);
+  const canvas=document.createElement('canvas');canvas.style.cssText='display:block;width:390px;height:160px';document.body.append(canvas);
+  const app=await createApplication({providers:[provideZonelessChangeDetection()]});
+  const site=present=>({root:{children:present?[{type:'button',id:'probe',value:'Probe',ariaLabel:'Probe'}]:[]},styles:[
+  {selector:'#probe',position:'absolute',left:'20px',top:'20px',width:'120px',height:'40px',padding:'0',borderWidth:'0',background:'#dddddd',color:'#222222',fontFamily:'Arial',fontSize:'14px'},
+  {selector:'#probe:hover',background:'#cccccc'},{selector:'#probe:focus',background:'#bbbbbb'},{selector:'#probe:active',background:'#aaaaaa'}]});
+  const clicks=[];const surface=app.injector.get(Astylar).mount(canvas,site(true),{diagnostics:{logLevel:'silent'},events:{handlers:{probe:{click:e=>clicks.push(e.targetId)}}}});
+  const scene=surface.scene;const settle=async()=>{await document.fonts.ready;await surface.whenSettled();await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));};
+  const snapshot=()=>({tracked:surface.diagnostics.resources,live:{meshes:scene.meshes.length,materials:scene.materials.length,textures:scene.textures.length},materials:scene.materials.map(m=>({id:m.uniqueId,name:m.name,bound:scene.meshes.some(mesh=>mesh.material===m)})),focus:document.activeElement?.getAttribute('data-astylar-id')??document.activeElement?.id,clicks:[...clicks],diagnostics:surface.diagnostics.messages});
+  await settle();window.pseudoAudit={settle,snapshot,point(){const c=canvas.getBoundingClientRect();return{x:c.x+80,y:c.y+40};},async update(present){await surface.update(site(present));await settle();return snapshot();},dispose(){surface.dispose();app.destroy();return snapshot();}};`;
+  const esbuild = createRequire(path.join(consumer, 'package.json'))('esbuild');
+  const built = await esbuild.build({ absWorkingDir: process.cwd(), stdin: { resolveDir: consumer, sourcefile: 'public-pseudo-ownership.mjs', contents: applicationSource }, bundle: true, write: false, metafile: true, format: 'esm', platform: 'browser', target: 'es2022' });
+  const diskFiles = Object.keys(built.metafile.inputs).filter(file => existsSync(path.resolve(file))).sort();
+  const virtualFiles = Object.keys(built.metafile.inputs).filter(file => !existsSync(path.resolve(file)));
+  assert.equal(virtualFiles.length, 1); assert.ok(virtualFiles[0].endsWith('public-pseudo-ownership.mjs'));
+  const inputs = diskFiles.map(file => ({ file, sha256: hash(readFileSync(path.resolve(file))) }));
+  assert.ok(!inputs.some(i => i.file.includes('material-showcase/src') || /^src[\\/]/.test(i.file)));
+  const server = createServer((req, res) => { const script = req.url === '/audit.js'; res.setHeader('content-type', script ? 'text/javascript' : 'text/html'); res.end(script ? built.outputFiles[0].contents : '<!doctype html><script type="module" src="/audit.js"></script>'); });
+  await new Promise(r => server.listen(0, '127.0.0.1', r));
+  const start = performance.now(), results = []; let browser;
+  try {
+    browser = await chromium.launch({ channel: 'chrome', headless: true });
+    for (const dpr of [1, 2]) {
+      const page = await browser.newPage({ viewport: { width: 390, height: 400 }, deviceScaleFactor: dpr }), errors = [];
+      page.on('pageerror', e => errors.push(String(e)));
+      try {
+        await page.goto('http://127.0.0.1:' + server.address().port); await page.waitForFunction(() => !!window.pseudoAudit);
+        const samples = [], sample = async label => { await page.evaluate(() => window.pseudoAudit.settle()); const s = await page.evaluate(() => window.pseudoAudit.snapshot()); samples.push({ label, ...s }); return s; };
+        await sample('mount');
+        for (let i = 0; i < 3; i++) { await page.evaluate(() => window.pseudoAudit.update(false)); await sample('no-interaction-removed-' + i); await page.evaluate(() => window.pseudoAudit.update(true)); }
+        for (let i = 0; i < 3; i++) {
+          const p = await page.evaluate(() => window.pseudoAudit.point()); await page.mouse.move(p.x, p.y); await sample('hover-' + i);
+          await page.mouse.down(); await sample('held-' + i); await page.mouse.up(); await sample('clicked-' + i);
+          await page.locator('#outside').click(); await sample('blur-' + i);
+          await page.evaluate(() => window.pseudoAudit.update(false)); await sample('removed-' + i); await page.evaluate(() => window.pseudoAudit.update(true));
+        }
+        const disposed = await page.evaluate(() => window.pseudoAudit.dispose());
+        t.diagnostic(JSON.stringify({ dpr, samples, disposed, errors }));
+        assert.deepEqual(errors, []);
+        for (const s of samples.filter(s => s.label.startsWith('no-interaction-removed'))) assert.deepEqual(s.live, s.tracked);
+        const removed = samples.filter(s => s.label.startsWith('removed'));
+        assert.deepEqual(removed.map(s => s.live.materials - s.tracked.materials), [5, 10, 15]);
+        for (const [cycle, s] of removed.entries()) {
+          assert.equal(s.live.meshes, s.tracked.meshes);
+          assert.equal(s.live.textures, s.tracked.textures);
+          assert.equal(s.materials.filter(m => !m.bound).length, 5 * (cycle + 1));
+          assert.deepEqual(s.clicks, Array(cycle + 1).fill('probe'));
+          assert.deepEqual(s.diagnostics, []);
+        }
+        assert.deepEqual(disposed.live, { meshes: 0, materials: 0, textures: 0 });
+        assert.deepEqual(disposed.tracked, disposed.live);
+        results.push({ dpr, samples, disposed, errors });
+      } finally { await page.close(); }
+    }
+    for (const i of inputs) assert.equal(hash(readFileSync(path.resolve(i.file))), i.sha256);
+    t.diagnostic(JSON.stringify({ browser: browser.version(), applicationSource, applicationSha256: hash(applicationSource), methods,
+      bundleSha256: hash(built.outputFiles[0].contents), dependencyCount: inputs.length, dependencyReceipt: hash(JSON.stringify(inputs)), results,
+      elapsedMs: performance.now() - start, scope: 'Plugin-free public button pointer pseudo-state lifecycle at DPR1/2; owning methods match current source. Diagnostic counterexample, not lifecycle or equal-rendering acceptance.', acceptance: false }));
+  } finally { if (browser) await browser.close(); await new Promise(r => server.close(r)); }
+
+});
