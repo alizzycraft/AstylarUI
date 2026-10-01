@@ -2,6 +2,31 @@
 
 ## Current audit checkpoint — October 1
 
+**Cold export from895e37f succeeds, but recent focused proofs are outside its inventory.**
+`node scripts/export-material-input-audit-current-ancestry.mjs` with cold/progress
+settings exits0 in2,533,311.1756ms (42.22minutes). Validation and session rehash
+pass:2 collectors,10 memory hits,0 disk hits/invalidations,1,205 files and89,154,859
+bytes read/reverified. Retain `cold-canonical-export-895e37f.log` and
+`cold-export-895e37f-identity-scope.log`. Canonical manifest/payload are identical
+to the preserved c3e0d7d1… predecessor:62,820,374 compressed bytes, all findings,
+values, classifications, references and receipts unchanged. Compact import reuses
+the existing generation; verification retains8,483 scalar groups,135 source
+findings,39,904 control differences,389,202 occurrences,0 unresolved attributions.
+Configured capture membership remains436 static/1,875 interaction; input equivalent
+remains false. No new generation or duplicate predecessor snapshot needed.
+Important scope: sourceFingerprints and focusedProofInventory do not include
+input-boundary-evidence.spec.mjs or sort-focus-structure.spec.mjs. Thus this export
+does not integrate their newly added gutter/text/caret/popup proofs into canonical
+source findings. Their independent runtime/source receipts and checked-in tests
+remain current evidence, with explicit handoff/coverage references; canonical
+integration of these findings is still pending. The previous independent cold
+check applies to the same byte-identical canonical package, not to those additions;
+no new --check run is claimed. Next: integrate new proofs through the existing
+inventory/finding mechanisms as a coherent batch, then continue missing family/state
+coverage and current harness/browser gates. Preflight actual producer dependencies
+before any further expensive export; status or unrelated test edits alone do not
+invalidate this canonical package. No renderer/fixture edit or audit completion.
+
 **Caret ownership first divergence identified: focus outside the render transaction.**
 The existing public lifecycle reduction now records surface diagnostic resource
 counts alongside live scene owners. At mount, tracked/live counts match3 meshes,

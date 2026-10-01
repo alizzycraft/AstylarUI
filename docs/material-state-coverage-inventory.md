@@ -2,6 +2,18 @@
 
 ## Evidence boundary
 
+October1 cold export from895e37f validates/reverifies1,205 files in42.22minutes
+with0 invalidations and produces the identical c3e0d7d1… canonical package.
+Compact import reuses that generation; all counts/classifications/receipts remain.
+This is baseline validation, not integration of recent browser proofs: existing
+source/proof inventories exclude input-boundary-evidence.spec.mjs and
+sort-focus-structure.spec.mjs. Their independently authenticated gutter/text/caret
+and popup findings remain checked-in evidence; canonical finding integration is
+still pending. Previous independent cold check applies to the identical baseline
+only; no new --check claimed. Retain export/identity/import logs, see handoff.
+Next coherent batch integrates these proofs through existing mechanisms, without
+repeating settled investigations. Full family/state and current gates remain open.
+
 October1 caret ownership attribution identifies the first divergence: ordinary
 post-render focus creates resources outside synchronous transaction ownership.
 Tracked/live counts match at mount, then focus increases only live counts.

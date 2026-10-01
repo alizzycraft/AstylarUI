@@ -111,6 +111,11 @@ Do not change evidence during a session; completion rejects changed inputs.
 
 Track collectors executed, memory/disk hits, bytes read and elapsed time. Do not
 rebuild the canonical package just to update review prose or status.
+Before scheduling an export, check whether changed files are actually consumed
+by the producer's source/proof inventory or dependency graph. A new standalone
+focused proof can be current independently without changing the canonical report.
+Integrate such findings through the existing inventory/classification mechanisms
+in a coherent batch; exporting an unchanged producer does not integrate them.
 
 ## Retention and measurements
 
