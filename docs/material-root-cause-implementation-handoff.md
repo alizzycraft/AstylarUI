@@ -21,7 +21,17 @@ The probe preserves the original dark-mobile assertions in their source; its
 variant explicitly tests visibility/action closure, not fixed-theme styling.
 Together with earlier dark-mobile and light-desktop evidence, this narrows the
 current visibility gap but does not explain historical missing-snackbar reports,
-prove full paint/fade equivalence, tablet behavior, or resource/late-disposal safety.
+prove full paint/fade equivalence or resource/late-disposal safety.
+The tablet gap is now covered separately by
+`snackbar-tablet-visibility.probe.mjs`: all four actual themes at 900x700 DPR1
+open at x278/y644, width344/height48, with reachable UNDO and dismissal.
+Capture takes 19,237.8169ms; independent replay verifies the reused collector
+hash, six dependencies, eight PNG hashes, geometry and original observations.
+Log `snackbar-tablet-visibility-ab77890.log` SHA-256:
+862af07264606dcb87f78c59dc8dd183c04d65f4b8574bfe61fcaab484ebce36.
+This extends visibility/action coverage only. Palette and post-dismissal focus
+remain unequal; fade, complete paint, historical attribution and ownership
+remain pending. Do not repeat these captures unchanged.
 No fixture/renderer changes or new producer registration were made. The145-finding
 cold export remains live; conserve its inputs and validate publication before
 updating the canonical working index. Do not recapture these six populations for

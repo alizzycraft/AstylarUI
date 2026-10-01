@@ -9,8 +9,13 @@ UNDO is keyboard reachable and dismisses both. Six dependencies and12 PNGs
 rehash successfully; retained log is `snackbar-missing-profiles-59566c1.log`,
 SHA-2561675044d647234fe966d4e5ed6f25249b0108b7f810a29fe9173e16429864ac0.
 Mobile widths374px/344px and post-dismissal BODY/trigger focus remain unequal.
-This closes only these visibility/action coverage gaps; historical absence,
-tablet/fade/local paint acceptance and repeated ownership remain unresolved.
+All four tablet themes (900x700 DPR1) also open centered at x278/y644 with
+width344/height48 and keyboard-reachable UNDO dismissal. The existing collector
+is hash-pinned and reused without changing the original evidence; six source
+receipts and eight PNGs reverify. Log `snackbar-tablet-visibility-ab77890.log`
+SHA-256: 862af07264606dcb87f78c59dc8dd183c04d65f4b8574bfe61fcaab484ebce36.
+This closes these visibility/action coverage gaps; historical absence,
+fade/local paint acceptance and repeated ownership remain unresolved.
 This standalone capture is not part of the currently running canonical export.
 
 Current producer registration totals145 findings; published canonical remains139.
