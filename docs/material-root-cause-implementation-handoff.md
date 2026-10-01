@@ -26,6 +26,16 @@ original collector hash, without changing source fixtures or assertions.
 Implementation handoff: restore equivalent wrapper padding, suffix sizing and
 child composition after confirming required core support. Do not merely set the
 candidate input to200px or change its right offset to28px to imitate this capture.
+History replay identifies commit `7159b1d5266ed4bc03b56581b8034526abae892b`
+(`fix(showcase): tighten Material component parity`) as introducing both48px
+reservations while retaining the existing side padding. For a hypothetical
+unchanged260px shell, preceding declarations request228px and new declarations
+180px. This is an output-oriented showcase-input change, not a renderer sizing
+fix; original author intent, old runtime output and a hidden core defect remain
+unproved. Retain `picker-input-width-history-27cd43a.log`, SHA-256:
+d0f87ff38a2260be5df8140b73b114c3f2310e87f4cf95628f4a7f815e223c52.
+Both complete Git blobs and the current source hash are recorded; source-bound
+assertions verify introduction and retained padding without browser recapture.
 No all-theme/viewport equivalence or native validity behavior is proved here;
 this conclusion supersedes only the pending20px-width attribution below.
 

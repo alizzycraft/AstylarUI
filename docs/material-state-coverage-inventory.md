@@ -11,6 +11,9 @@ receipts and the reused collector hash authenticate; arithmetic assertions pass.
 Retain `picker-input-width-ancestor-7ecaa9b-verified.log`, SHA-256:
 6b40e07fac6c2c197c3d1e54d70f8fa047aaebfdeb7407acbb95148b4df4e734.
 Restore equivalent composition later, not a capture-specific width/offset.
+Historical introduction is source-bound to `7159b1d` in
+`picker-input-width-history-27cd43a.log`; the same padding remains before/after.
+This identifies a showcase-input parity change, not original renderer causation.
 Other theme/viewport and vertical-residual questions remain separate.
 
 Dark/mobile DPR2 selection coverage now includes autocomplete, datepicker and
