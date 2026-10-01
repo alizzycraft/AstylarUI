@@ -2,6 +2,31 @@
 
 ## Current audit checkpoint — October 1
 
+**Missing form-field selection profiles expose a custom geometry gap.** Real
+Tab/type/Home/Shift+ArrowRight/collapse/End/Shift+ArrowLeft at mobile DPR2 in
+light, contrast and custom preserves forward[0,3], collapsed[5,5] and
+backward[2,5] endpoints in both surfaces. Native selection paint is46,97,205;
+candidate paint is23,63,107 with white selected glyphs in both directions.
+Existing dark expectations could not be reused unchanged: the initial run
+correctly rejects the light candidate against the dark palette. The diagnostic
+then parameterizes only candidate palette expectations for the source's bright
+background branch, retaining native paint and geometry assertions. Light passes;
+contrast fails the existing.01CSSpx geometry limit at deltaY+.0131225586;
+custom fails at deltaY-1.9818725586. Do not weaken that limit or offset fixtures.
+Retain `selection-mobile-profiles.probe.mjs`, the initial
+`selection-mobile-profiles-fb18f7b.log`, and the palette-bound/custom logs.
+Their authenticated SHA-256 values are respectively
+f185f3c1c4748e5b2e9d622c80b2d91913014d1ab5a0cac890477ba22e1acc2c
+and cbf651ccc0e21e1ac02be4eb54e9f58dba3e6a972a40cf56db2af2f4435776d8;
+`selection-mobile-profiles-fb18f7b-receipts.log` reverifies seven dependencies
+for both after failure. Custom final revalidation also checks frozen browser
+files. These are diagnostic failures, not parity acceptance; raster summaries
+are observed palettes, not retained crop-byte sharpness proof. Next decisive
+check: trace custom input and ancestor used positions/line boxes to distinguish
+authored theme scaling from core layout/projection. Plain input remains an email
+control with null native selection endpoints; do not substitute text authoring
+to claim its coverage. Remaining families/empty caret and final gates stay open.
+
 **Mobile theme applicability of four keyboard gaps verified.** The decisive
 question was whether checkbox/chip/slide-toggle/expansion activation failures
 were confined to the existing light/desktop capture or changed with theme/mobile

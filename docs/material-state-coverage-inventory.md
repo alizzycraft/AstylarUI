@@ -2,6 +2,16 @@
 
 ## Evidence boundary
 
+Form-field forward/backward selection now has bounded mobile DPR2 light,
+contrast and custom observations in addition to existing dark evidence.
+Endpoints agree after the deliberate collapse before End; paint palettes differ.
+Light passes the existing diagnostic, contrast/custom fail its unchanged.01px
+geometry assertion (deltaY+.0131225586/-1.9818725586). Seven dependency receipts
+reverify; failures remain explicit. See the handoff and
+`selection-mobile-profiles-fb18f7b-receipts.log`. Next trace custom ancestor/input
+used geometry before attributing the larger offset. Other input families,
+email endpoint limits, empty caret and complete paint acceptance remain open.
+
 Mobile keyboard applicability is now verified for checkbox, chips, slide-toggle
 and expansion in all four actual themes at390x844 DPR2:16 paired cases reuse
 existing assertions, with8 checks passing and6 dependency receipts reverified.
