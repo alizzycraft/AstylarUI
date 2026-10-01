@@ -230,6 +230,29 @@ identity, a general compositing proof, final root-cause attribution for the DPR1
 residual, or authorization for candidate-only offsets/opaque textures. Resolve
 the core global raster-phase/fidelity contract with the existing public reduction.
 
+**Timepicker ordinary-theme applicability revalidated.** The URL-only historical
+ordinary dark/mobile wheel probe also ran the default light theme. Its scroll
+observations remain evidence, but not a verified dark-profile claim. The new
+probe applies each theme through the existing command and verifies runtime fields.
+Eight pairs (four themes, desktop1440x1000 DPR1/mobile390x844 DPR2) pass in
+61,086.7057ms, preserving effective native-scrollbar launch receipts and32 strip
+PNGs. Retain `timepicker-applied-theme.probe.mjs` and
+`timepicker-applied-theme-f423ff5.log`, SHA-256
+2fb3d0afc48983c7762fa324362355c78d2682c7d41bb046d4602b82419dfe10.
+Independent replay authenticates all32 strips and seven pinned files; retain
+`timepicker-applied-theme-f423ff5-replay.log`. In every pair, native Tab leaves
+the picker closed but candidate Tab opens it; pointer field clicks open both.
+Wheel144 moves content144px and changes each scrollbar strip; large wheel reaches
+all48 options and outside click dismisses both. Panel widths match at720px desktop
+and260px mobile, but this is not a comparison with the inner input or full field
+box. Native client area reserves15px platform gutter; candidate reserves0 and
+its thumb is visible but non-pickable. Native48px option rows, unselected empty
+value and2064px maximum scroll contrast with candidate48px rows, option0 selected
+and2056px maximum scroll. Existing8px bottom-padding omission remains distinct
+from the core gutter defect. No thumb drag was repeated; prior drag limitation,
+local option text/clock paint, exact field/panel input mapping, tablet and disabled/
+error states remain separate coverage. No datepicker focus behavior was changed.
+
 The existing dark/mobile overlay lifecycle test now observes live counts and
 unbound identities independently of tracked diagnostics. Its focus/semantic,
 tracked plateau and final-disposal checks still pass1/1 (19,295.9405ms), but

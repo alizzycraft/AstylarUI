@@ -48,6 +48,14 @@ profile origins. Fixed-plane nearest/alpha replay nearly reconstructs candidate
 screen crops but not native crops, narrowing the main difference to local raster
 and fractional phase. Exact DPR1 residual attribution and the core text-fidelity
 contract remain open; no fixture offset or opaque-texture workaround is accepted.
+Timepicker ordinary-mode theme coverage now has eight verified pairs across all
+four themes and desktop DPR1/mobile DPR2. Actual Tab/click/wheel144/end/outside
+boundaries and32 authenticated scrollbar strips preserve focus-opening, initial
+selection, gutter and trailing-padding differences. Wheel movement and final
+option reachability work in every pair; thumb dragging was not rerun or accepted.
+The older URL-only ordinary dark/mobile label is qualified as default light.
+Field/panel input mapping, option/clock text paint, tablet and disabled/error
+coverage remain open; see the current handoff for receipts and exact limits.
 
 The following checkpoints are historical, not the current publication status.
 
