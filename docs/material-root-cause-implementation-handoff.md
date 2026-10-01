@@ -1,5 +1,30 @@
 # Material audit: evidence-led implementation priorities
 
+## Current audit checkpoint — October 1 (boundary-proof registration)
+
+The Tab-selection, popup-state, and email-edit boundary probes are now
+registered in the canonical focused-proof inventory as one authenticated
+bounded proof. The proof inventory is 123 entries; its focused registration,
+workflow, and producer-transition checks pass. The first export attempt
+correctly rejected a stale standalone-proof batch hash; after updating that
+reviewed transition guard, all four source collectors report `bound` and the
+warm canonical export completed in 2,595,622.3ms. It preserves 436/436 static,
+1,875/1,875 interaction, 8,483 unique differences, 389,202 occurrences, 145
+source findings, and zero unresolved compact finding rows. The new manifest is
+compressed SHA-256
+`5c64ce52b07ac3e27e5405d66fede10c937adc3bb02dee8434bc3d126f08454c` and
+decoded SHA-256
+`0b4c2c63e5b0d3711eab0c346999435df17d8b83e877810fdcd2dc218a1bab6e`.
+`audit:findings:import` and `audit:findings:verify` both pass with 8,483
+discrepancies, 145 source findings, 39,904 controls, 389,202 occurrences and
+zero unresolved rows. Retain the focused registration logs
+`standalone-proof-registration-focused.log`,
+`standalone-proof-registration-inventory-focused.log`,
+`standalone-proof-registration-workflow-focused.log`, and
+`standalone-proof-registration-source-transition-focused.log`, plus the two
+canonical export logs. This is evidence/inventory maintenance only: no
+renderer, plugin, fixture, or parity outcome was changed.
+
 ## Current audit checkpoint — October 1
 
 **The repaired 145-finding canonical export is conserved and indexed.**
