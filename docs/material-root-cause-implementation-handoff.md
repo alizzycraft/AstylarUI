@@ -2,6 +2,30 @@
 
 ## Current audit checkpoint — October 1
 
+**Registration export failed safely; exact conservation repair verified.**
+The cold145-finding export terminates with exit1 after2,241,795.2319ms. Four
+source-binding replays are invalid and259 style groups lose their attributions;
+publication is blocked. The preceding63MB payload hash remains unchanged.
+Retain `cold-canonical-export-registration-batch.log`, SHA-256:
+6e377d345ae1c3a0be59f12a3ed3ac8ef3bab59675c0f0ba65807ec8fff40208.
+Focused replays identify the common cause: `restoreStackingProducer` had no
+authenticated reversal for the seven newly appended standalone-proof entries.
+Removing exactly that block reproduces the entire4aec685 producer byte-for-byte.
+The existing conservation mechanism now authenticates its complete block hash
+before reversal; the historical whole-source hash stays unchanged. Negative
+controls reject changed proof identity/scope, duplicate entries, changed mapping
+logic and unrelated additions. No classification, observation or threshold is
+relaxed. Full producer-transition suite:30/30 pass in33,691.9007ms.
+All four binding collectors then replay successfully:72/49/4/134 groups and
+4,016/2,677/178/3,325 observations, complete membership and no missing observations.
+These259 groups exactly account for the failed export's attribution loss.
+Retain `registration-batch-bindings-verified-5d5c8fb.log`, SHA-256:
+6cbef3fc4e5199875b037dcb383de8fec2d2da4803f8e726ae2753542431eabe.
+The invalid-binding diagnostic is also retained. One repaired canonical export
+and predecessor conservation remain required; targeted binding success is not
+publication or full-audit acceptance. Earlier live-export statements below
+describe their collection-time boundary, not a currently running original job.
+
 **Picker input-width first divergence is unequal authored ancestor composition.**
 The existing authenticated ancestor collector, reused by
 `picker-input-width-ancestor.probe.mjs`, checks both pickers at applied dark/mobile

@@ -20,6 +20,30 @@ import { restoreOwnerBoundaryProducer } from './position-composition-producer-tr
 import { restorePreparedInputProducer } from './position-composition-producer-transition.mjs';
 import { restorePreparedInputFollowupProducer, restoreStackingProducer } from './position-composition-producer-transition.mjs';
 
+test('registered standalone proof batch conserves the entire preceding producer and rejects changed proofs', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previous = execFileSync('git', ['show', '4aec685:' + file],
+    { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  const start = "    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\\('retained progress paint binds";
+  const from = current.indexOf(start), to = current.indexOf('  ];\n}\n', from);
+  assert.ok(from >= 0 && to > from);
+  const block = current.slice(from, to);
+  assert.equal(block.split('    proof(root,').length - 1, 7);
+  assert.equal(current.slice(0, from) + current.slice(to), previous);
+  assert.equal(restoreStackingProducer(current).restoredSource, restoreStackingProducer(previous).restoredSource);
+  for (const phrase of ['retained progress paint binds', 'retained compact empty and filled inputs',
+    'retained keyboard profiles replay', 'retained empty caret rasters preserve',
+    'retained applied-theme popup focus', 'retained selection states preserve',
+    'retained tooltip textures separate', 'Not DPR1 cause resolution']) {
+    assert.ok(block.includes(phrase));
+    assert.throws(() => restoreStackingProducer(current.replace(phrase, 'unreviewed proof change')));
+  }
+  assert.throws(() => restoreStackingProducer(current.replace(block, block.repeat(2))));
+  assert.throws(() => restoreStackingProducer(current.replace('function reviewedTemplateTextMappings(', 'function unreviewedMappings(')));
+  assert.throws(() => restoreStackingProducer(current + '\n// unrelated'));
+});
+
 test('recent diagnostic integration preserves historical producer and rejects changed evidence guards', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';
   const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');

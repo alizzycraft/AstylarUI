@@ -2,6 +2,18 @@
 
 ## Evidence boundary
 
+The145-finding registration export failed validation without replacing the
+139-finding publication. The historical producer guard did not recognize the
+seven added proof-inventory entries; its rejection invalidated four collectors
+and left259 groups unattributed. Exact block authentication/reversal now preserves
+the entire preceding producer and unchanged historical hash. All30 transition
+tests pass, including mutation controls. Targeted collectors recover precisely
+259 groups/10,196 observations with complete membership. Retain
+`registration-batch-bindings-verified-5d5c8fb.log`, SHA-256:
+6cbef3fc4e5199875b037dcb383de8fec2d2da4803f8e726ae2753542431eabe.
+Repaired canonical export/conservation is still pending. Original export is no
+longer live; statements below that refer to it were true at collection time.
+
 Both dark/mobile picker input-width failures now have paired ancestor evidence:
 native260-16px left inset-44px suffix=200px; candidate260-48px right reservation
 -16px left padding-16px right padding=180px. Authored declarations survive

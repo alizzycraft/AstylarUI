@@ -36,6 +36,20 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
 export function restoreStackingProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  // Seven registered standalone proofs add discovery only. Authenticate their
+  // entire exact block before reversal; the complete historical hash below
+  // still owns all prior logic, classifications and inventory entries.
+  const standaloneProofStart = "    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\\('retained progress paint binds";
+  if (restored.includes(standaloneProofStart)) {
+    assert.equal(restored.split(standaloneProofStart).length, 2, 'repeated standalone proof batch');
+    const from = restored.indexOf(standaloneProofStart);
+    const to = restored.indexOf('  ];\n}\n', from);
+    assert.ok(to > from, 'missing standalone proof inventory end');
+    assert.equal(hash(restored.slice(from, to)),
+      '3352daecd66b06432b3bfa8f9c2bc7f63e697f4f31f37d6f61a33ae79cf17575',
+      'registered standalone proof batch changed');
+    restored = restored.slice(0, from) + restored.slice(to);
+  }
   const pointerProofStart = "    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\\('public button pointer states";
   if (restored.includes(pointerProofStart)) {
     assert.equal(restored.split(pointerProofStart).length, 2);
