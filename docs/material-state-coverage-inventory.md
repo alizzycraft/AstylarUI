@@ -2,6 +2,17 @@
 
 ## Evidence boundary
 
+The batched139-finding export now exits0 with all436/1,875 original cases and
+8,483 groups/389,202 occurrences retained. Exact predecessor conservation is
+running through the existing streamed comparator; compact import, independent
+check, current standalone-proof registration and final gates remain pending.
+See current handoff and `cold-canonical-export-0a0b5d6.log`; historical138-finding
+validation below is not validation of this new publication.
+Stored CSS layout inspection also excludes projection as the source of the
+light/custom field-origin residual: pre-projection differences are.001875/.018125px,
+with projection adding only about.000002px. Earlier origin attribution remains
+open. See `input-origin-css-boundary-1507c39-replay.log` and current handoff.
+
 The custom form-field2px geometry component is now classified as application
 authoring: native infix padding12px versus candidate authored/resolved/used
 offset10px. Four light/custom mobile pages and exact replay decompose total

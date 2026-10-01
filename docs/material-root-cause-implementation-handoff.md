@@ -2,6 +2,32 @@
 
 ## Current audit checkpoint — October 1
 
+**139-finding cold export completed; conservation review pending.** The batched
+0a0b5d6 producer export exits0 in2,822,742.5915ms (47.05minutes), preserving
+436/436 static,1,875/1,875 interaction,8,483 scalar groups and389,202 occurrences.
+It reverifies1,205 files with0 invalidations and publishes139 source findings.
+Compressed SHA-256 is8b13bcc4db9ed30a70c32a36b296aa5ae1597529451af772e57ef004f882b21e;
+decoded SHA-256 is7651b878c2d87765dbec49a86e72840830df08136cfd7f8533108edffa437923.
+Retain `cold-canonical-export-0a0b5d6.log`. Publication validation is not exact
+predecessor conservation or full audit acceptance. The existing section-digest
+comparison now authenticates the retained6ffdc6e1 predecessor and current docs;
+do not restart it while its handle is live. Changed sections, inventory/proof
+receipts, compact import and independent canonical check remain pending. Recent
+standalone profile/ancestor probes are not yet registered by this producer.
+
+**Field-origin residual occurs before projection.** Read-only inspection of
+stored CSS layout boxes for light/custom mobile DPR2 places the candidate field
+at181.08/208.44 before Babylon conversion; native fields are181.078125/208.421875.
+Projection adds only.0000018311/.0000024414px, not the.001875/.018125px layout
+residual. This closes projection as the cause for these two origin differences,
+not their earlier layout/authoring attribution. Retain
+`input-origin-css-boundary.probe.mjs`, `input-origin-css-boundary-1507c39.log`
+(7,829.6094ms), SHA-256
+85d4df5ff1ffe4fb474794ca3192b187585c27d921d87e9ddc3a2427ea52af62,
+and its replay log. Eight dependencies/frozen browser fingerprints reverify;
+exact CSS ancestor composition is checked separately from projected bounds.
+Do not round these observations into equivalence or change fixture coordinates.
+
 **Custom form-field offset traced to unequal authored placement.** Four frozen
 Chrome154 pages compare light/custom mobile DPR2 input/ancestor computed styles
 with candidate authored trees and normal/interaction resolved styles. Native
