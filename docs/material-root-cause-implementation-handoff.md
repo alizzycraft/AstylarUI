@@ -24,9 +24,14 @@ records,389,202 occurrences and0 unresolved scalar groups,72,705,521 index bytes
 All138 complete preceding source-finding row hashes/order remain unchanged plus
 one added confirmed-core row; retain
 `cold-export-0a0b5d6-source-conservation-verified.log` and compact import/verify logs.
-Three stream integrity tests pass. The existing exact-leaf comparator is still
-running for the other six changed sections. Their receipt derivation, independent
-canonical check and final gates remain pending; do not approve from counts or
+Three stream integrity tests pass. The existing exact-leaf comparator exits0 in
+196,748.137ms, preserving all paths/shapes and raw values/classifications in the
+six changed data sections. Exactly148 leaves change:48 control-line-box module
+receipts,48 corresponding control-typography receipts,48 embedded scalar proof
+hashes, the source-finding count138 to139, one owner-caret module receipt, and one
+reviewed-batch report hash/module receipt each. Retain
+`cold-export-0a0b5d6-leaf-comparison.log`. Derivation of the embedded/report hashes,
+independent canonical check and final gates remain pending; do not approve from counts or
 commit the canonical package yet. Recent standalone profile/ancestor probes are
 not yet registered by this producer.
 

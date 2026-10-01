@@ -8,8 +8,10 @@ all79 sections (70 unchanged/9 changed). All138 prior full source findings remai
 unchanged in order plus one addition; all539 fingerprint paths and112 prior
 proof definitions remain, with seven file hashes/36 exact declaration-line
 changes and three added proofs. Compact import/verification passes, preserving
-39,904 control records. Exact leaves/receipt derivation for six changed data
-sections, independent check, standalone-proof registration and final gates
+39,904 control records. Exact-leaf comparison now preserves raw values,
+classifications and all paths/shapes in six changed data sections:148 changed
+leaves are count/source/proof receipts. Embedded/report hash derivation,
+independent check, standalone-proof registration and final gates
 remain pending. See the current handoff; these counts are not acceptance.
 See current handoff and `cold-canonical-export-0a0b5d6.log`; historical138-finding
 validation below is not validation of this new publication.
