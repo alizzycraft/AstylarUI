@@ -2,6 +2,42 @@
 
 ## Current audit checkpoint — October 1
 
+**The repaired 145-finding canonical export is conserved and indexed.**
+The named current-ancestry launcher completed in 2,655,501.765ms
+(44.26 minutes), covering all 436 static and 1,875 interaction cases. It
+published 145 source findings with 8,483 unique scalar differences and
+389,202 occurrences; input equivalence remains false. The new manifest is
+compressed SHA-256 `ab4f009f2edf7136a1030d0648662d1ca0a1a9ace6220b79c788f7563698fbde`
+and decoded SHA-256
+`8e1b6d10edd6ef9e1bcd4ff01fad31b5f4ff460c58ae37ae6e2e3e7421871c25`.
+The compact working index is independently verified with 8,483 discrepancies,
+145 source findings, 39,904 control records, 389,202 occurrences and zero
+unresolved scalar rows; its current index digest is
+`1c29849f2ca5ecc5a5af3d5f1625b921b9dc98cc6c73fa1f7770acad56d3ed0e`.
+
+Exact predecessor conservation retains all 79 report sections: 70 section
+digests are unchanged, and the nine changed sections are limited to the
+registered finding/proof batch and its authenticated source/module receipts.
+All 539 source-fingerprint paths remain; five hashes change. The preceding
+139 source-finding rows are byte/value-conserved and six additions are present.
+Of 115 preceding focused proofs, 81 remain unchanged; the remaining changes
+are receipt or line-only transitions accounted for by the existing proof
+inventory, and seven new focused proofs are appended. The streaming leaf
+comparison found 148 permitted changed leaves and no membership, ordering or
+unrelated raw-observation loss. Retain the authenticated logs
+`cold-canonical-export-registration-repaired-fde2b69.log`,
+`registration-export-fde2b69-section-comparison.log`,
+`registration-export-fde2b69-conservation.log`,
+`registration-export-fde2b69-compact-import.log`, and
+`registration-export-fde2b69-compact-verify.log`.
+
+This closes publication and predecessor conservation for the current additive
+batch, not the audit itself. The browser matrix, all-state input equivalence,
+remaining root-cause reductions and final release gates remain open. Do not
+rerun this 44-minute export for documentation-only changes; integrate future
+standalone evidence through the existing producer inventory and conservation
+checks.
+
 **Email discrepancy now has a direct core editing-route boundary.**
 `email-native-edit-routing.probe.mjs` reuses the frozen input collector for one
 normal light/desktop DPR1 email pair. Input type remains email; real Tab and
