@@ -2,6 +2,15 @@
 
 ## Evidence boundary
 
+The custom form-field2px geometry component is now classified as application
+authoring: native infix padding12px versus candidate authored/resolved/used
+offset10px. Four light/custom mobile pages and exact replay decompose total
+delta into that mismatch plus.0181274414px field-origin residual. The latter
+remains separate/unclassified; no projection fix or compensating offset is
+authorized. See `custom-input-ancestor-boundary-3553c1b.log` and current handoff.
+Auxiliary-node machine-readable integration remains pending after the live
+export; this does not establish whole-family equivalence.
+
 Form-field forward/backward selection now has bounded mobile DPR2 light,
 contrast and custom observations in addition to existing dark evidence.
 Endpoints agree after the deliberate collapse before End; paint palettes differ.

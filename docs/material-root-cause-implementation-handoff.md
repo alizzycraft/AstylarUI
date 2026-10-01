@@ -2,6 +2,30 @@
 
 ## Current audit checkpoint — October 1
 
+**Custom form-field offset traced to unequal authored placement.** Four frozen
+Chrome154 pages compare light/custom mobile DPR2 input/ancestor computed styles
+with candidate authored trees and normal/interaction resolved styles. Native
+custom infix padding places the24px input12px below the field top; candidate
+`.field-input-region.compact-filled-input-region` explicitly requests10px and
+both resolved stages/actual layout honor10px. The field origins differ by
+.0181274414px; therefore total input delta is exactly that residual minus2px,
+-1.9818725586px. Light offsets both equal24px, leaving only.0018768311px origin
+residual. Input widths/heights agree. First divergence for the2px component is
+application authoring, not a Babylon coordinate conversion defect. Current
+source is `examples/material-showcase/src/app/astylar.component.ts:568`;
+blame traces the10px rule to f286fb17, `fix(material): align field popup parity`.
+Do not change it during this audit or infer that correcting it resolves the
+remaining origin/raster differences. Retain
+`custom-input-ancestor-boundary.probe.mjs`,
+`custom-input-ancestor-boundary-3553c1b.log` (14,254.1039ms), SHA-256
+f349fc7cda87c68d284910a0615577a6acf382a1377af1028b10b6114cf390c1,
+and its replay log. Exact offset decomposition and eight source/proof receipts
+reverify; frozen browser fingerprints reverify in the capture. This closes the
+custom2px attribution question only. Next coherent integration must register
+this auxiliary-node/history evidence without recapturing settled selection
+behavior; remaining field-origin quantization and other input families remain
+separate. The canonical export is still live and its inputs remain unchanged.
+
 **Missing form-field selection profiles expose a custom geometry gap.** Real
 Tab/type/Home/Shift+ArrowRight/collapse/End/Shift+ArrowLeft at mobile DPR2 in
 light, contrast and custom preserves forward[0,3], collapsed[5,5] and
