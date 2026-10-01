@@ -2,6 +2,33 @@
 
 ## Current audit checkpoint — October 1
 
+**Picker input-width first divergence is unequal authored ancestor composition.**
+The existing authenticated ancestor collector, reused by
+`picker-input-width-ancestor.probe.mjs`, checks both pickers at applied dark/mobile
+390x844 DPR2 after real Tab/type. Native260px wrapper has16px left padding and
+zero right padding; its suffix occupies44px (40px content plus4px left padding).
+The native infix/input is therefore260-16-44=200px. Candidate260px primary has
+an absolute input-region with authored/resolved right48px and padding `0 16px`:
+region212px, input260-48-16-16=180px. Its excess right padding16px plus excess
+suffix reservation4px accounts for the complete20px loss in both families.
+Source declarations at astylar.component.ts:550,552–554 survive resolution;
+both used border-box measurements obey the corresponding equations. This is
+an application-authoring composition mismatch before projection, not evidence
+that core shrinks an equivalently authored input by20px. The small vertical
+residual remains independent and is not explained away by this result.
+Capture takes8,739.2042ms, eight dependencies reverify, and independent arithmetic
+assertions pass for both families. Retain
+`picker-input-width-ancestor-7ecaa9b-verified.log`, SHA-256:
+6b40e07fac6c2c197c3d1e54d70f8fa047aaebfdeb7407acbb95148b4df4e734.
+The initial wrapper guard rejected a non-unique replacement before browser launch;
+its failure log remains. The corrected wrapper binds the exact DOM call and the
+original collector hash, without changing source fixtures or assertions.
+Implementation handoff: restore equivalent wrapper padding, suffix sizing and
+child composition after confirming required core support. Do not merely set the
+candidate input to200px or change its right offset to28px to imitate this capture.
+No all-theme/viewport equivalence or native validity behavior is proved here;
+this conclusion supersedes only the pending20px-width attribution below.
+
 **Remaining editable-popup selection families: state works; two width gates fail.**
 `popup-input-selection.probe.mjs` reuses the complete existing dark-mobile
 form-field real-key selection proof for autocomplete, datepicker and timepicker,

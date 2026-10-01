@@ -2,6 +2,17 @@
 
 ## Evidence boundary
 
+Both dark/mobile picker input-width failures now have paired ancestor evidence:
+native260-16px left inset-44px suffix=200px; candidate260-48px right reservation
+-16px left padding-16px right padding=180px. Authored declarations survive
+resolution and the measured boxes obey these equations. First divergence is
+unequal application composition, not a proved projection fault. Eight source
+receipts and the reused collector hash authenticate; arithmetic assertions pass.
+Retain `picker-input-width-ancestor-7ecaa9b-verified.log`, SHA-256:
+6b40e07fac6c2c197c3d1e54d70f8fa047aaebfdeb7407acbb95148b4df4e734.
+Restore equivalent composition later, not a capture-specific width/offset.
+Other theme/viewport and vertical-residual questions remain separate.
+
 Dark/mobile DPR2 selection coverage now includes autocomplete, datepicker and
 timepicker through the existing real-key sequence. All three preserve `Atlas`,
 focus, forward/backward/collapsed endpoints and semantic direction. Autocomplete
