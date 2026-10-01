@@ -32,6 +32,17 @@ receipt. Shared snackbar/tooltip depth remains a hypothesis until that missing
 receipt is captured through the existing boundary instrumentation; no tooltip
 offset, z-index, or fixture change is justified in the meantime.
 
+The missing receipt is now addressed by a read-only instrumentation increment
+in commit `c479097f`: the existing benchmark `measure()` API exposes each
+selected mesh's final depth/visibility and the active camera position/viewport,
+and `audit-material-tooltip-boundary.mjs` records those fields for the existing
+tooltip states. `npx tsc -p examples/material-showcase/tsconfig.app.json
+--noEmit --pretty false` passes. This changes no authored input or renderer
+behavior. The retained canonical export is intentionally stale against these
+two producer sources; a new authenticated tooltip boundary capture and source
+fingerprint reconciliation are required before any canonical export or shared
+depth classification.
+
 The Tab-selection, popup-state, and email-edit boundary probes are now
 registered in the canonical focused-proof inventory as one authenticated
 bounded proof. The proof inventory is 123 entries; its focused registration,
