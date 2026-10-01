@@ -38941,7 +38941,7 @@
       "file": "examples/material-showcase/src/app/astylar.component.ts",
       "introduced": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
       "introducedSourceSha256": "6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24",
-      "currentSourceSha256": "2c2979adc26453138e25dffeaeed18d3669514994eea662236ca8649ea00a863",
+      "currentSourceSha256": "71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd",
       "first": {
         "line": 421,
         "text": "if (family === 'expansion') return [{ type: 'article', id: 'expansion-shell', class: 'expansion-panel', children: [{ type: 'button', id: 'expansion-primary', class: 'expansion-trigger', disabled: state.disabled, ariaExpanded: state.open, ariaControls: 'expansion-content', value: 'Advanced settings' }, { type: 'span', id: 'expansion-chevron', class: 'expansion-chevron', textContent: state.open ? '⌃' : '⌄' }, ...(state.open ? [{ type: 'p' as const, id: 'expansion-content', textContent: 'Additional options.' }] : [])] }];"
@@ -38959,11 +38959,11 @@
     },
     {
       "file": "examples/material-showcase/src/app/astylar.component.ts",
-      "sha256": "b7957cd9e651efdf85bcbb70d7b9dd4fd8fbddb18c1b616ab6c9d54d3937ff90"
+      "sha256": "b493a355679903f988e29f0dafbb95d2d6cce41275302fce5c978ae55f423b9f"
     },
     {
       "file": "tests/material-parity/run-material-parity.mjs",
-      "sha256": "c3cabcfde7b9a0cd911eb919774e258145aefc629ff308a48f1f51ece0f34e10"
+      "sha256": "33c5a4b31a5140bb19e524eaa9fba5bbbb877b45a38f6f0be5722fbe09113f6a"
     },
     {
       "file": "scripts/audit-material-expansion-title-inputs.mjs",
