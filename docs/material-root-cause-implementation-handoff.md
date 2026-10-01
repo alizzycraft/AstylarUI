@@ -38,6 +38,15 @@ rerun this 44-minute export for documentation-only changes; integrate future
 standalone evidence through the existing producer inventory and conservation
 checks.
 
+The first post-publication focused workflow run caught one stale bookkeeping
+assertion: `audit-workflow.spec.mjs` still expected the original 107 proof
+pointers after the retained public/popup inventory had grown to 122. The
+assertion was corrected to the current deliberate inventory size; all six
+focused workflow checks then passed in 1,538.8698ms. The initial failure log is
+retained as `registration-export-fde2b69-workflow-focused.log` and the corrected
+run as `registration-export-fde2b69-workflow-focused-corrected.log`. This was an
+audit-test maintenance issue, not evidence that any proof pointer was missing.
+
 **Email discrepancy now has a direct core editing-route boundary.**
 `email-native-edit-routing.probe.mjs` reuses the frozen input collector for one
 normal light/desktop DPR1 email pair. Input type remains email; real Tab and
