@@ -36,9 +36,9 @@ test('tooltip z-index scalar compares different stacking owners in all 18 retain
 
 test('short viewport exposes missing tooltip fallback and unequal scroll extents', () => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
-  const file = 'artifacts/material-parity/tooltip-boundary-1f46760/latest-report.json';
+  const file = 'artifacts/material-parity/tooltip-boundary-depth-c479097f-fresh/latest-report.json';
   const bytes = readFileSync(file);
-  assert.equal(hash(bytes), '19ee234981edcf4a05a31de2f2fec9f291f25f455e899bbba62ee34c80b1e9c7');
+  assert.equal(hash(bytes), '79573fb4c070970f11f97b1eab90b08b340680aedd8b64df662b3f44ec3fa3e7');
   const report = JSON.parse(bytes), manifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
   const binding = validateSupplementalCapture(report, { reportFile: file,
     expectedProvenance: manifest.provenance, script: 'scripts/audit-material-tooltip-boundary.mjs',
@@ -79,6 +79,44 @@ test('short viewport exposes missing tooltip fallback and unequal scroll extents
   // Different scroll extents mean disappearance alone cannot diagnose a
   // scroll-dismissal handler. The local-flow translation lacks native fallback;
   // neither that input difference nor this raster establishes a core cause.
+});
+
+test('tooltip short-surface paint failure crosses the shared camera depth boundary', () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const file = 'artifacts/material-parity/tooltip-boundary-depth-c479097f-fresh/latest-report.json';
+  const bytes = readFileSync(file);
+  assert.equal(hash(bytes), '79573fb4c070970f11f97b1eab90b08b340680aedd8b64df662b3f44ec3fa3e7');
+  const report = JSON.parse(bytes);
+  assert.equal(report.browser, '154.0.8037.58');
+  const rows = report.results.filter(row => row.action === 'hover');
+  assert.equal(rows.length, 4);
+  for (const row of rows) {
+    const sample = row.astylar;
+    const depth = sample.candidatePaintDepth, camera = sample.candidateCamera;
+    assert.ok(depth && camera, `${row.deviceScaleFactor}/${row.viewport.height} lacks paint receipt`);
+    assert.equal(depth.enabled, true); assert.equal(depth.visible, true); assert.equal(depth.visibility, 1);
+    assert.ok(Math.abs(depth.meshZ - 249.84799999999998) < 1e-9);
+    const expectedCameraZ = row.viewport.height === 240 ? 207.84609690826528 : 866.0254037844387;
+    assert.ok(Math.abs(camera.position.z - expectedCameraZ) < 1e-9);
+    const image = PNG.sync.read(readFileSync(sample.screenshot.file));
+    let dark = 0;
+    for (let y = 220 * row.deviceScaleFactor; y < Math.min(260 * row.deviceScaleFactor, image.height); y++) {
+      for (let x = 60 * row.deviceScaleFactor; x < 220 * row.deviceScaleFactor; x++) {
+        const i = (y * image.width + x) * 4;
+        if (image.data[i] < 80 && image.data[i + 1] < 80 && image.data[i + 2] < 80) dark++;
+      }
+    }
+    if (row.viewport.height === 240) {
+      assert.ok(depth.meshZ > camera.position.z);
+      assert.equal(dark, 0);
+    } else {
+      assert.ok(depth.meshZ < camera.position.z);
+      assert.ok(dark > 0);
+    }
+  }
+  // The local popup box and open state survive in both viewports; only the
+  // final camera/depth paint boundary changes. This proves a shared renderer
+  // boundary with snackbar, not a candidate placement workaround.
 });
 
 test('real Tab reaches both tooltip triggers but only reference authors an open popup', () => {

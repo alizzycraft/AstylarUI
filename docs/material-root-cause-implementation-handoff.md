@@ -43,6 +43,21 @@ two producer sources; a new authenticated tooltip boundary capture and source
 fingerprint reconciliation are required before any canonical export or shared
 depth classification.
 
+The fresh authenticated tooltip boundary capture is now complete at
+`artifacts/material-parity/tooltip-boundary-depth-c479097f-fresh/latest-report.json`
+(SHA-256
+`79573fb4c070970f11f97b1eab90b08b340680aedd8b64df662b3f44ec3fa3e7`). Its
+focused proof passes in `tooltip-position-composition.spec.mjs`: at tall view
+the tooltip mesh is Z≈249.848 in front of the camera at Z≈866.025 and paints;
+at the short 240px view the same mesh and local popup box remain open, but the
+camera is Z≈207.846, so the mesh is beyond the camera and produces zero popup
+ink. DPR1 and DPR2 agree. This demonstrates the same final camera/depth paint
+boundary already proven for snackbar. It does not justify changing tooltip
+placement, z-index, or fixture authoring; the owning renderer projection/paint
+boundary remains the implementation target. The capture exits nonzero only
+because the retained diagnostic intentionally records the native short-viewport
+dismissal mismatch; the depth assertion itself is green.
+
 The Tab-selection, popup-state, and email-edit boundary probes are now
 registered in the canonical focused-proof inventory as one authenticated
 bounded proof. The proof inventory is 123 entries; its focused registration,
