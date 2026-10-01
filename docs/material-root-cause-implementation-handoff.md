@@ -2,6 +2,31 @@
 
 ## Current audit checkpoint — October 1
 
+**Additional snackbar visibility coverage, independent of the live export.**
+The retained `snackbar-missing-profiles.probe.mjs` reuses the existing frozen
+showcase helper and real Tab/Enter/UNDO action sequence for six missing
+populations: light mobile, dark desktop, contrast desktop/mobile and custom
+desktop/mobile. Actual theme fields are asserted, not inferred from URL labels.
+Desktop1440x1000 DPR1 and mobile390x844 DPR2 cases all show visible local pixels,
+reachable UNDO and zero popup controls after dismissal; no page errors occur.
+Capture takes30,857.1066ms. Independent replay rehashes all six source receipts
+and12 local PNGs. Log `snackbar-missing-profiles-59566c1.log` SHA-256:
+1675044d647234fe966d4e5ed6f25249b0108b7f810a29fe9173e16429864ac0.
+Both panels are48px high and8px above the viewport bottom. Desktop widths are344px;
+mobile reference is374px while candidate remains344px. UNDO dismissal leaves
+native focus at BODY and candidate focus on its trigger. These are retained
+input/focus differences, not accepted parity. A representative custom mobile
+candidate crop was visually inspected as well as hash-verified.
+The probe preserves the original dark-mobile assertions in their source; its
+variant explicitly tests visibility/action closure, not fixed-theme styling.
+Together with earlier dark-mobile and light-desktop evidence, this narrows the
+current visibility gap but does not explain historical missing-snackbar reports,
+prove full paint/fade equivalence, tablet behavior, or resource/late-disposal safety.
+No fixture/renderer changes or new producer registration were made. The145-finding
+cold export remains live; conserve its inputs and validate publication before
+updating the canonical working index. Do not recapture these six populations for
+ledger-only changes.
+
 **Current registration batch:145 producer findings,139 published.** Six additive
 source findings and seven focused-proof entries use the existing policy/inventory:
 `plugin-linear-progress-right-origin-and-track-input-mismatch`,

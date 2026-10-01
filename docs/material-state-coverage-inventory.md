@@ -2,6 +2,17 @@
 
 ## Evidence boundary
 
+Independent snackbar coverage now checks six previously missing applied-theme
+populations: light mobile, dark desktop, contrast/custom desktop and mobile.
+Real Tab/Enter opens visible panels48px high and8px above the viewport bottom;
+UNDO is keyboard reachable and dismisses both. Six dependencies and12 PNGs
+rehash successfully; retained log is `snackbar-missing-profiles-59566c1.log`,
+SHA-2561675044d647234fe966d4e5ed6f25249b0108b7f810a29fe9173e16429864ac0.
+Mobile widths374px/344px and post-dismissal BODY/trigger focus remain unequal.
+This closes only these visibility/action coverage gaps; historical absence,
+tablet/fade/local paint acceptance and repeated ownership remain unresolved.
+This standalone capture is not part of the currently running canonical export.
+
 Current producer registration totals145 findings; published canonical remains139.
 Progress-bar, compact input-state inset, empty-input caret color and custom-control keyboard
 handler findings join existing policy/proof inventories without changing previous
