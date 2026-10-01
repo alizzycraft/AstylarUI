@@ -2,6 +2,41 @@
 
 ## Current audit checkpoint — October 1
 
+**Authenticated popup selectors close the sampled native state-measurement gap.**
+`field-popup-state-boundaries.probe.mjs` reuses the same frozen collector for
+autocomplete/date/time across normal/error/disabled light-desktop DPR1 states.
+The installed Material templates identify native DIV listboxes
+`.mat-mdc-autocomplete-panel` and `.mat-timepicker-panel`, not the old assumed
+custom-element selectors. All18 pages have the asserted actual theme/state and
+no page errors; independent replay authenticates11 source receipts and verifies
+panel presence, options, aria-expanded and aria-controls relations at each real
+action boundary. Autocomplete normal/error has two options after Tab on both
+sides; disabled stays closed. Datepicker normal/error stays closed on input Tab
+and input click, then opens on icon click on both sides. Disabled native pickers
+stay closed; candidate Enter/icon clicks still open their authored panels, as
+already attributed to omitted disabled suffix state.
+Timepicker normal/error native Tab remains closed; candidate Tab opens48 options.
+Pointer input click opens both; subsequent icon click keeps native open but
+closes candidate. First divergence is candidate focus authoring at
+astylar.component.ts:117–118 (unconditional open) and icon click at269–270
+(toggle). Native `MatTimepickerInput._handleClick` and `MatTimepickerToggle._open`
+request guarded open, not a focus-triggered open or an icon toggle. These are
+application state-contract differences, extending the existing focus finding,
+not a projection diagnosis. Preserve the distinct datepicker contract.
+Capture takes40,281.2733ms. Retain
+`field-popup-state-boundaries-19dfafe2.log`, SHA-256:
+6cf5b08bd1b0110ca1e4611bd563309ab0d2d06dae49c6f752624184553171cd.
+The inherited header/footer retain the original disabled collector wording;
+its openedDisabledCandidateFamilies summary incorrectly includes enabled cases.
+Use the wrapper scope and per-case actual condition/state, never that summary
+as disabled evidence. Native visible boxes and semantic/control linkage are
+observed; candidate semantic presence/store state is not raster visibility.
+Datepicker's content host role is not the nested dialog role; no missing native
+dialog semantics are inferred. Native animation completion, other profiles,
+popup child commit/dismissal, paint and full parity remain separate coverage.
+This standalone evidence does not change the producer consumed by the live
+export and awaits the existing coherent registration/integration mechanism.
+
 **Normal/error Tab boundary isolates the shared form-field selection cause.**
 The retained `tab-selection-error-boundary.probe.mjs` reuses the five-input
 collector and the existing native selection-setter instrumentation, restricted
