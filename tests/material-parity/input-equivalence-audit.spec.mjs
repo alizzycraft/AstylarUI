@@ -1748,7 +1748,7 @@ test('recent public and popup proofs join existing inventories without changing 
     ['show', 'a6217c5:tests/material-parity/input-equivalence-audit.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }));
   assert.deepEqual(current.fingerprints, beforePointer.fingerprints);
-  assert.deepEqual(current.proofs.slice(3, -6), beforePointer.proofs);
+  assert.deepEqual(current.proofs.slice(3, -7), beforePointer.proofs);
   const pointerNames = ['public button pointer states diagnose materials outside render ownership',
     'dark mobile overlay cycles retain focus and semantic cleanup boundaries'];
   for (const [index, entry] of current.proofs.slice(0, 2).entries()) {
@@ -1763,9 +1763,9 @@ test('recent public and popup proofs join existing inventories without changing 
   assert.deepEqual(current.fingerprints.slice(0, 537), prior.fingerprints);
   assert.deepEqual(current.fingerprints.slice(537), files.map(file => ({ file,
     sha256: createHash('sha256').update(readFileSync(file, 'utf8').replace(/\r\n/g, '\n')).digest('hex') })));
-  assert.equal(current.proofs.length, prior.proofs.length + 14);
-  assert.deepEqual(current.proofs.slice(8, -6), prior.proofs);
-  for (const [index, entry] of current.proofs.slice(-6).entries()) {
+  assert.equal(current.proofs.length, prior.proofs.length + 15);
+  assert.deepEqual(current.proofs.slice(8, -7), prior.proofs);
+  for (const [index, entry] of current.proofs.slice(-7).entries()) {
     assert.equal(entry.file, 'tests/material-parity/input-equivalence-audit.spec.mjs');
     assert.notEqual(entry.status, 'missing');
     assert.match(entry.status, /retained/);
@@ -1773,7 +1773,7 @@ test('recent public and popup proofs join existing inventories without changing 
     assert.ok(readFileSync(entry.file, 'utf8').split(/\r?\n/)[entry.line - 1].includes(
       ['retained progress paint binds', 'retained compact empty and filled inputs bind', 'retained keyboard profiles replay',
         'retained empty caret rasters preserve', 'retained applied-theme popup focus states preserve',
-        'retained selection states preserve'][index]));
+        'retained selection states preserve', 'retained tooltip textures separate'][index]));
   }
   const expectedNames = ['public equal-input overflow isolates scrollbar gutter before projection',
     'public equal-input text separates fractional origins from texture raster phase',
@@ -2136,6 +2136,60 @@ test('retained selection states preserve palettes and original geometry failures
   const definitions = new Function(prior.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
   assert.equal(definitions.length, 144);
   assert.equal(JSON.stringify(sourceAuditDefinitions.slice(0, 144)), JSON.stringify(definitions));
+});
+
+test('retained tooltip textures separate popup placement from raster phase', async () => {
+  const { PNG } = await import('pngjs');
+  const { evaluateFocusedRaster } = await import('./focused-raster-metrics.mjs');
+  const file = 'artifacts/material-parity/tooltip-layout-texture-boundary-5fe51fb.log';
+  const raw = readFileSync(file), digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  assert.equal(digest(raw), '13ba687136975012cd967251a702d7b01c77ceb076c42df1ba5bd01c59050cd6');
+  const records = raw.toString().trim().split(/\r?\n/).map(line => JSON.parse(line));
+  const replayRaw = readFileSync('artifacts/material-parity/tooltip-layout-texture-boundary-5fe51fb-replay.log');
+  assert.equal(digest(replayRaw), '939b20537845092d102f6ebead14a9e4bd63dc92cea8fc245824df53527f6f12');
+  const replay = replayRaw.toString().trim().split(/\r?\n/).map(line => JSON.parse(line));
+  const terminal = records.at(-1); assert.equal(terminal.cases, 4);
+  assert.equal(terminal.pinned.length, 10);
+  for (const receipt of terminal.pinned) assert.equal(digest(readFileSync(receipt.file)), receipt.sha256);
+  const textureHashes = [];
+  for (const [index, row] of records.slice(0, -1).entries()) {
+    const native = row.observations.reference, candidate = row.observations.astylar;
+    assert.deepEqual(native.errors, []); assert.deepEqual(candidate.errors, []);
+    assert.deepEqual(candidate.appliedTheme, native.appliedTheme);
+    const surface = candidate.hovered.popup, layout = surface.layout[0];
+    assert.equal(layout.logicalSize.height, 16);
+    assert.equal(native.hovered.popup.layout.lineHeight, '16px');
+    assert.equal(native.hovered.popup.layout.range.height, 14);
+    assert.equal(native.hovered.popup.layout.fontLoaded, true);
+    const owner = layout.owners[0].projectedCss;
+    assert.ok(Math.abs(owner.left - surface.box.x - 8) < .0001);
+    assert.ok(Math.abs(owner.top - surface.box.y - 4) < .0001);
+    const texture = Buffer.from(layout.texturePng.split(',')[1], 'base64');
+    assert.equal(digest(texture), replay[index].textureSha256);
+    if (row.viewport.deviceScaleFactor === 2) textureHashes.push(digest(texture));
+    const image = PNG.sync.read(texture);
+    const bounds = { minX: image.width, minY: image.height, maxX: -1, maxY: -1, opaque: 0, partial: 0 };
+    for (let y = 0; y < image.height; y++) for (let x = 0; x < image.width; x++) {
+      const alpha = image.data[(y * image.width + x) * 4 + 3];
+      if (!alpha) continue;
+      bounds.minX = Math.min(bounds.minX, x); bounds.minY = Math.min(bounds.minY, y);
+      bounds.maxX = Math.max(bounds.maxX, x); bounds.maxY = Math.max(bounds.maxY, y);
+      if (alpha === 255) bounds.opaque++; else bounds.partial++;
+    }
+    assert.deepEqual(bounds, layout.alphaBounds); assert.deepEqual(bounds, replay[index].alphaBounds);
+    const rasters = [native, candidate].map(observation => {
+      const crop = Buffer.from(observation.crop.pngBase64, 'base64');
+      assert.equal(digest(crop), observation.crop.sha256); return PNG.sync.read(crop);
+    });
+    const unregistered = evaluateFocusedRaster(...rasters, { maximumPhaseOffset: 0 });
+    const registered = evaluateFocusedRaster(...rasters);
+    assert.equal(JSON.stringify(unregistered), JSON.stringify(row.metrics.unregistered));
+    assert.equal(JSON.stringify(registered), JSON.stringify(row.metrics.phaseRegistered));
+    assert.equal(unregistered.matches, false);
+    if (row.viewport.deviceScaleFactor === 1) assert.equal(registered.matches, false);
+  }
+  assert.equal(textureHashes.length, 3); assert.equal(new Set(textureHashes).size, 1);
+  assert.equal(replay.at(-1).acceptance, false);
 });
 
 test('recent source diagnostics conserve predecessor findings and reject altered receipts or conclusions', () => {

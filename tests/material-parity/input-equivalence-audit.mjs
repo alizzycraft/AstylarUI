@@ -9670,6 +9670,8 @@ function focusedProofInventory(root) {
       'retained tooltip/timepicker focus-state and theme applicability diagnostic', 'Authenticates applied-theme captures,24 tooltip crops and32 timepicker strips; exact Tab/pointer/dismissal boundaries remain unequal. Source-extracted focus callback preserves datepicker non-opening. Not text fidelity, thumb-drag, equivalent inner-input geometry or full current runtime acceptance.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('retained selection states preserve palettes and original geometry failures'/,
       'retained light/contrast/custom selection paint-policy diagnostic', 'Authenticates original diagnostic captures and seven dependencies each; exact forward/backward endpoints agree, palette summaries differ and contrast/custom geometry failures remain. Core contrast palette source is bound. Not crop-byte sharpness, isolated paint acceptance or a resolved native-platform compatibility decision.'),
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('retained tooltip textures separate popup placement from raster phase'/,
+      'retained tooltip CPU-texture and local raster-phase diagnostic', 'Authenticates four applied-theme capture cases, ten dependencies, eight local crops and four CPU textures; recomputes alpha bounds and exact serialized raster metrics. Logical line box16px differs from native14px glyph bounds, not font line-height. Identical DPR2 textures preserve different screen phases. Not DPR1 cause resolution, exact GPU composition, global text fidelity or permission for corrective offsets.'),
   ];
 }
 

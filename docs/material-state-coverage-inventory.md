@@ -5,7 +5,13 @@
 Current producer registration totals145 findings; published canonical remains139.
 Progress-bar, compact input-state inset, empty-input caret color and custom-control keyboard
 handler findings join existing policy/proof inventories without changing previous
-entries. Eight focused checks pass in7,278.0276ms. Selection paint-policy now also
+entries. Nine focused checks pass in6,858.2981ms. Tooltip texture proof now joins
+the inventory without a duplicate diagnosis: four cases/ten dependencies, eight
+local crops/four CPU textures authenticate; alpha bounds and complete serialized
+raster metrics reproduce. Identical DPR2 textures preserve differing screen
+phases; DPR1 remains failing after registration. Native14px glyph bounds versus
+16px line boxes is not a line-height mismatch. Standalone registration is batched;
+canonical export/conservation is next, not full audit acceptance. Selection paint-policy also
 joins those inventories: light/contrast/custom endpoints agree, observed palettes
 differ, seven dependencies per original capture reverify and both original
 geometry failures stay asserted. Classification is suspected core compatibility

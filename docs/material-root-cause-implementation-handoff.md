@@ -3,7 +3,7 @@
 ## Current audit checkpoint — October 1
 
 **Current registration batch:145 producer findings,139 published.** Six additive
-source findings and focused-proof entries use the existing policy/inventory:
+source findings and seven focused-proof entries use the existing policy/inventory:
 `plugin-linear-progress-right-origin-and-track-input-mismatch`,
 `fixture-compact-input-inset-conditioned-on-nonempty-value`, and
 `fixture-composite-keyboard-handler-omits-activation-and-navigation`, and
@@ -47,15 +47,24 @@ native-platform selection contract and isolated paint acceptance remain open.
 Original contrast/custom .01px geometry failures are asserted, not weakened;
 custom inset remains application-owned. Palette summaries do not prove crop-byte
 sharpness. This completes registration of that bounded selection observation.
-`node --test --test-name-pattern='retained selection states|retained applied-theme popup|retained empty caret|retained keyboard profiles|retained compact empty|
+Tooltip CPU-texture proof now joins the existing inventory, without changing the
+preceding core raster-phase finding. It authenticates the four-case capture/replay,
+ten dependencies, eight local crops and four CPU textures, recomputes alpha bounds
+and both complete serialized raster metrics exactly. DPR2 textures agree byte for
+byte across light/contrast/custom origins while screen phase differs; DPR1 remains
+diagnostic-failing after registration. Native14px glyph range and both16px logical
+line boxes are preserved as different measurements, not a line-height mismatch.
+No offset/opaque-texture workaround, new diagnosis or current GPU attribution is
+introduced. This closes the remaining standalone registration batch.
+`node --test --test-name-pattern='retained tooltip textures|retained selection states|retained applied-theme popup|retained empty caret|retained keyboard profiles|retained compact empty|
 retained progress paint|recent source diagnostics conserve|recent public and popup
-proofs join' tests/material-parity/input-equivalence-audit.spec.mjs` passes8/8 in
-7,278.0276ms. Existing receipt/classification/conclusion negative controls pass;
+proofs join' tests/material-parity/input-equivalence-audit.spec.mjs` passes9/9 in
+6,858.2981ms. Existing receipt/classification/conclusion negative controls pass;
 their deliberate missing-root-style error remains explicit, not acceptance.
 Prior progress test's unavailable `sharp` import was replaced by existing `pngjs`;
 that was test dependency selection, not rendering. No new browser capture or audit
-framework is added. Next register remaining tooltip texture
-observations before one coherent export/conservation milestone. Do not repeat
+framework is added. Next run one coherent cold export/conservation milestone,
+then continue remaining state/paint/ownership coverage and final gates. Do not repeat
 settled progress, compact-inset or keyboard-delivery investigations.
 
 **Independent cold canonical check complete; standalone integration remains.**
