@@ -13,7 +13,7 @@ import { followupInputAttributions } from './followup-input-proposal-transition.
 const hash = x => createHash('sha256').update(x).digest('hex');
 const same = (a, b, message) => assert.ok(isDeepStrictEqual(a, b), message);
 const transitionFile = 'docs/material-followup-input-transition-dry-run.json';
-const transitionRevision = 'a30dfa3';
+const transitionRevision = 'aa96c89f';
 const originalFile = 'artifacts/material-parity/current-ancestry-audit/latest-report.json';
 const originalSha256 = 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a';
 const population = report => Object.fromEntries(['results', 'interactions'].map(kind => [kind,
