@@ -2,10 +2,16 @@
 
 ## Evidence boundary
 
-Current producer registration totals143 findings; published canonical remains139.
+Current producer registration totals144 findings; published canonical remains139.
 Progress-bar, compact input-state inset, empty-input caret color and custom-control keyboard
 handler findings join existing policy/proof inventories without changing previous
-entries. Six focused checks pass in6,680.7164ms. Empty-caret replay authenticates
+entries. Seven focused checks pass in6,946.0726ms. Popup focus now joins the same
+policy/proof inventories:12 tooltip and8 timepicker paired applied-theme cases,
+24/32 authenticated crops/strips and10/7 dependency receipts. Native Tab opens
+tooltip only; candidate Tab opens timepicker only. Pointer interaction opens
+both and leave/outside dismisses both. Current extracted callback preserves date
+non-opening. Tooltip texture fidelity and timepicker gutter/selection/inner-input
+geometry/drag remain separate open scopes. Empty-caret replay authenticates
 432 local PNGs/six dependencies, verifies every reported contiguous stroke and
 preserves14 geometry diagnostic failures across18 mobile profile/family pairs.
 Visible candidate carets do not establish equivalent color/width/position; native

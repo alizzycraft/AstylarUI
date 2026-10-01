@@ -1748,7 +1748,7 @@ test('recent public and popup proofs join existing inventories without changing 
     ['show', 'a6217c5:tests/material-parity/input-equivalence-audit.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }));
   assert.deepEqual(current.fingerprints, beforePointer.fingerprints);
-  assert.deepEqual(current.proofs.slice(3, -4), beforePointer.proofs);
+  assert.deepEqual(current.proofs.slice(3, -5), beforePointer.proofs);
   const pointerNames = ['public button pointer states diagnose materials outside render ownership',
     'dark mobile overlay cycles retain focus and semantic cleanup boundaries'];
   for (const [index, entry] of current.proofs.slice(0, 2).entries()) {
@@ -1763,16 +1763,16 @@ test('recent public and popup proofs join existing inventories without changing 
   assert.deepEqual(current.fingerprints.slice(0, 537), prior.fingerprints);
   assert.deepEqual(current.fingerprints.slice(537), files.map(file => ({ file,
     sha256: createHash('sha256').update(readFileSync(file, 'utf8').replace(/\r\n/g, '\n')).digest('hex') })));
-  assert.equal(current.proofs.length, prior.proofs.length + 12);
-  assert.deepEqual(current.proofs.slice(8, -4), prior.proofs);
-  for (const [index, entry] of current.proofs.slice(-4).entries()) {
+  assert.equal(current.proofs.length, prior.proofs.length + 13);
+  assert.deepEqual(current.proofs.slice(8, -5), prior.proofs);
+  for (const [index, entry] of current.proofs.slice(-5).entries()) {
     assert.equal(entry.file, 'tests/material-parity/input-equivalence-audit.spec.mjs');
     assert.notEqual(entry.status, 'missing');
     assert.match(entry.status, /retained/);
     assert.match(entry.description, /Not/);
     assert.ok(readFileSync(entry.file, 'utf8').split(/\r?\n/)[entry.line - 1].includes(
       ['retained progress paint binds', 'retained compact empty and filled inputs bind', 'retained keyboard profiles replay',
-        'retained empty caret rasters preserve'][index]));
+        'retained empty caret rasters preserve', 'retained applied-theme popup focus states preserve'][index]));
   }
   const expectedNames = ['public equal-input overflow isolates scrollbar gutter before projection',
     'public equal-input text separates fractional origins from texture raster phase',
@@ -2020,13 +2020,84 @@ test('retained empty caret rasters preserve visibility and unequal ink inputs', 
   assert.equal(JSON.stringify(sourceAuditDefinitions.slice(0, 142)), JSON.stringify(definitions));
 });
 
+test('retained applied-theme popup focus states preserve action boundaries', async () => {
+  const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');
+  const finding = sourceAuditDefinitions.find(entry => entry.id === 'fixture-tooltip-timepicker-focus-popup-state-mismatch');
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  const themes = {};
+  new Function('exports', ts.transpileModule(readFileSync('examples/material-showcase/src/app/theme.ts', 'utf8'),
+    { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS } }).outputText)(themes);
+  const rasterCounts = [];
+  for (const [index, receipt] of finding.evidence.entries()) {
+    const raw = readFileSync(receipt.file); assert.equal(digest(raw), receipt.sha256);
+    const records = raw.toString().trim().split(/\r?\n/).map(line => JSON.parse(line));
+    const terminal = records.at(-1), cases = records.slice(0, -1);
+    assert.equal(terminal.browser, '154.0.8037.58');
+    assert.equal(terminal.pinned.length, index === 0 ? 10 : 7);
+    for (const input of terminal.pinned) assert.equal(digest(readFileSync(input.file)), input.sha256);
+    assert.equal(cases.length, index === 0 ? 12 : 8);
+    const populations = new Set(); let rasters = 0;
+    for (const row of cases) {
+      populations.add(`${row.profile}/${row.viewport.id}`);
+      for (const mode of ['reference', 'astylar']) {
+        const observation = row.observations[mode];
+        assert.deepEqual(observation.errors, []);
+        assert.deepEqual(observation[index === 0 ? 'appliedTheme' : 'theme'], themes.MATERIAL_THEME_PROFILES[row.profile]);
+        const crops = index === 0 ? [observation.crop] : [observation.beforeStrip, observation.afterStrip];
+        for (const crop of crops) { assert.equal(digest(Buffer.from(crop.pngBase64, 'base64')), crop.sha256); rasters++; }
+        if (index === 0) {
+          assert.equal(observation.focused.focus, 'tooltip-primary');
+          assert.equal(!!observation.focused.popup, mode === 'reference');
+          assert.ok(observation.hovered.popup);
+          assert.equal(observation.closed.popup, null);
+          const { trigger, popup } = observation.hovered;
+          assert.ok(Math.abs(popup.box.height - 24) < .00001);
+          assert.ok(Math.abs(popup.box.y - trigger.y - trigger.height - 8) < .00001);
+          assert.ok(Math.abs(popup.box.x + popup.box.width / 2 - trigger.x - trigger.width / 2) < .00001);
+        } else {
+          assert.equal(observation.tab.focused, true);
+          assert.equal(observation.tab.value, '');
+          assert.equal(!!observation.tab.popup, mode === 'astylar');
+          assert.ok(observation.before.popup);
+          assert.equal(observation.closed.popup, null);
+          assert.equal(observation.before.popup.optionCount, 48);
+          assert.equal(observation.after.popup.scrollTop - observation.before.popup.scrollTop, 144);
+          assert.equal(observation.before.popup.box.width - observation.before.popup.clientWidth, mode === 'reference' ? 15 : 0);
+          assert.equal(observation.end.popup.scrollTop, mode === 'reference' ? 2064 : 2056);
+        }
+      }
+    }
+    const expected = finding.observation.profiles.flatMap(profile =>
+      (index === 0 ? ['desktop', 'tablet', 'mobile'] : ['desktop', 'mobile']).map(viewport => `${profile}/${viewport}`));
+    assert.deepEqual([...populations].sort(), expected.sort()); rasterCounts.push(rasters);
+  }
+  assert.deepEqual(rasterCounts, [24, 32]);
+  const source = readFileSync(finding.file, 'utf8');
+  assert.match(source, new RegExp(finding.pattern));
+  const match = source.match(/focus: \(event: AstylarEvent\) => this\.zone\.run\(\(\) => \{([\s\S]*?)\n\s*\}\),\n\s*blur:/);
+  assert.ok(match);
+  const callback = new Function('event', ts.transpileModule(match[1],
+    { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText);
+  const calls = [], context = { recordEvent() {}, canonicalFocusTarget: id => id,
+    authoredTreeDependsOnFocus: () => false, store: { patchState: state => calls.push(state) } };
+  callback.call(context, { targetId: 'tooltip-primary' });
+  callback.call(context, { targetId: 'datepicker-control' });
+  assert.deepEqual(calls, []);
+  callback.call(context, { targetId: 'timepicker-control' });
+  assert.deepEqual(calls, [{ open: true }]);
+  const prior = execFileSync('git', ['show', '877be22:tests/material-parity/input-equivalence-policy.mjs'], { encoding: 'utf8' });
+  const definitions = new Function(prior.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
+  assert.equal(definitions.length, 143);
+  assert.equal(JSON.stringify(sourceAuditDefinitions.slice(0, 143)), JSON.stringify(definitions));
+});
+
 test('recent source diagnostics conserve predecessor findings and reject altered receipts or conclusions', () => {
   const audit = buildMaterialInputAudit(parityReport({}, {}));
   const previous = execFileSync('git', ['show', 'bd79e4b:tests/material-parity/input-equivalence-policy.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const priorDefinitions = new Function(previous.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
   assert.equal(priorDefinitions.length, 135);
-  assert.equal(audit.sourceFindings.length, 143);
+  assert.equal(audit.sourceFindings.length, 144);
   const precedingPolicy = execFileSync('git', ['show', 'a6217c5:tests/material-parity/input-equivalence-policy.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const precedingDefinitions = new Function(precedingPolicy.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();

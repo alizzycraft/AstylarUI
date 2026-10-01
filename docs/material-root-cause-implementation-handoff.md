@@ -2,12 +2,13 @@
 
 ## Current audit checkpoint — October 1
 
-**Current registration batch:143 producer findings,139 published.** Four additive
+**Current registration batch:144 producer findings,139 published.** Five additive
 source findings and focused-proof entries use the existing policy/inventory:
 `plugin-linear-progress-right-origin-and-track-input-mismatch`,
 `fixture-compact-input-inset-conditioned-on-nonempty-value`, and
 `fixture-composite-keyboard-handler-omits-activation-and-navigation`, and
-`fixture-text-input-primary-caret-color-omitted`.
+`fixture-text-input-primary-caret-color-omitted`, and
+`fixture-tooltip-timepicker-focus-popup-state-mismatch`.
 Every preceding definition/proof remains unchanged. Progress authenticates16
 rasters/eight dependencies and exact foreground counterexamples; compact input
 authenticates eight pages/eight dependencies and preserves origin residuals.
@@ -27,14 +28,23 @@ The first test attempt incorrectly asserted no caretColor anywhere in the
 component, catching the unrelated select-control transparent caret; the corrected
 assertion binds only the two field-control rules. A proof-description casing
 assertion also failed and was corrected without changing observations/thresholds.
-`node --test --test-name-pattern='retained empty caret|retained keyboard profiles|retained compact empty|
+Popup focus replay authenticates applied-theme captures,10/7 pinned dependencies,
+24 tooltip crops/32 timepicker strips over12/8 paired cases. Tab opens only native
+tooltip and only candidate timepicker; pointer hover/field clicks open both,
+leave/outside dismisses both. Current source-extracted focus callback opens time
+but neither tooltip nor date. Preserve this action distinction and prior manual
+reports; do not claim all focus methods behave alike or change date behavior.
+Tooltip pointer boxes remain centered8px below/24px high, but raster fidelity is
+not accepted. Timepicker15px/0px client gutters,2064px/2056px maximum scroll and
+inner-input width remain unequal and separate; no thumb-drag proof is added.
+`node --test --test-name-pattern='retained applied-theme popup|retained empty caret|retained keyboard profiles|retained compact empty|
 retained progress paint|recent source diagnostics conserve|recent public and popup
-proofs join' tests/material-parity/input-equivalence-audit.spec.mjs` passes6/6 in
-6,680.7164ms. Existing receipt/classification/conclusion negative controls pass;
+proofs join' tests/material-parity/input-equivalence-audit.spec.mjs` passes7/7 in
+6,946.0726ms. Existing receipt/classification/conclusion negative controls pass;
 their deliberate missing-root-style error remains explicit, not acceptance.
 Prior progress test's unavailable `sharp` import was replaced by existing `pngjs`;
 that was test dependency selection, not rendering. No new browser capture or audit
-framework is added. Next register applicable selection/tooltip/timepicker
+framework is added. Next register remaining selection paint/tooltip texture
 observations before one coherent export/conservation milestone. Do not repeat
 settled progress, compact-inset or keyboard-delivery investigations.
 

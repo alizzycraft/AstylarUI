@@ -1524,6 +1524,27 @@ export const sourceAuditDefinitions = Object.freeze([
       stage: 'unequal effective caret-color inputs before text/caret paint' },
     justification: 'Explicit initial/hide screenshot capture and localized replay authenticate432 rasters over18 missing mobile DPR2 profile/family pairs. Both sides expose contiguous caret strokes with empty values and focus; native ink follows primary while candidate omits caretColor and paints fixed text ink. Fourteen pairs retain original geometry diagnostic failures. Autocomplete animation contaminates whole-crop differences, so only localized stroke evidence supports caret existence. This closes bounded absence, not matched stroke width/position, all-state sharpness, tablet/disabled/error, or current full-browser acceptance. The existing independent public stroke-width defect remains separate; restore equivalent color inputs before evaluating core paint.',
   }),
+  Object.freeze({
+    id: 'fixture-tooltip-timepicker-focus-popup-state-mismatch',
+    introducedBy: 'current generic focus callback; historical first-bad runtime not established',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`if \(event\.targetId === 'autocomplete-control' \|\| event\.targetId === 'timepicker-control'\) \{\s*this\.store\.patchState\(\{ open: true \}\);`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase action-specific focus/pointer popup state authoring',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: retained applied-theme popup focus states preserve action boundaries',
+    evidence: [{ file: 'artifacts/material-parity/tooltip-profile-paint-0a0b5d6-applied.log',
+      sha256: 'bc159c1992d928af4ab62df5618f3e81de67d0311d316bb879377dc44df9288f' },
+      { file: 'artifacts/material-parity/timepicker-applied-theme-f423ff5.log',
+        sha256: '2fb3d0afc48983c7762fa324362355c78d2682c7d41bb046d4602b82419dfe10' }],
+    observation: { component: 'tooltip and timepicker', element: 'focused trigger/input', dpr: [1, 2],
+      profiles: ['light', 'dark', 'contrast', 'custom'],
+      states: ['real Tab', 'pointer hover or field click', 'leave or outside dismissal'],
+      property: 'popup presence after Tab', reference: { tooltip: true, timepicker: false },
+      astylar: { tooltip: false, timepicker: true },
+      population: '12 tooltip desktop/tablet/mobile pairs and8 timepicker desktop/mobile pairs',
+      stage: 'application focus callback state before popup layout/paint' },
+    justification: 'Applied-theme frozen captures verify actual runtime fields before each action. Tab opens only the native tooltip and only the candidate timepicker; subsequent pointer interactions open both and leave/outside actions dismiss both. Current focus callback opens autocomplete/timepicker without a tooltip focus transition; source-extracted execution preserves datepicker non-opening as a separate control. This is action-specific input/state inequality, not a common displaced-overlay diagnosis or authorization to change datepicker behavior. Hover tooltip anchoring is centered8px below at24px height, but profile raster phases/sharpness remain diagnostic failures. Timepicker inner-input/panel geometry, scrollbar gutter, option selection/padding and thumb-drag limitations remain separate. No all-state paint, current runtime or final parity acceptance follows.',
+  }),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({
