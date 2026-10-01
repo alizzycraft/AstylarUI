@@ -2,6 +2,22 @@
 
 ## Evidence boundary
 
+All five text-input families now have bounded visible-empty-caret evidence in
+all four actual themes at mobile DPR2:18 missing paired cases reuse the existing
+collector and two prior dark cases remain applicable. Six timed initial/hide
+captures per side retain432 new local PNGs. Localized replay authenticates each
+and distinguishes caret strokes from autocomplete animation. Both sides show
+carets, but native primary ink versus candidate omitted caretColor/fixed text
+ink remains unequal. Fourteen new pairs retain geometry diagnostic failures;
+this is not paint/input parity or tablet/disabled/error coverage. See current
+handoff and `empty-caret-missing-profiles-128fdec-local-replay.log`.
+Compact empty-versus-filled form-field positions are now traced to the
+state-conditioned application class: candidate empty16px, filled6px/10px;
+native6px/12px in either state. Exact delta replay preserves the separate
+field-origin residual. See `empty-filled-input-ancestor-boundary-128fdec-replay.log`.
+These standalone observations await coherent producer registration after the
+live canonical check; no source/fixture change or full acceptance follows.
+
 Retained light desktop empty-focus rasters now demonstrate candidate caret
 visibility for all five text-input families at DPR1/2, not only form-field.
 Eighty authenticated paired rasters show candidate strokes in2/3 of four timed

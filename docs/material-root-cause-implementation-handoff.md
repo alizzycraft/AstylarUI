@@ -2,6 +2,45 @@
 
 ## Current audit checkpoint — October 1
 
+**Missing all-theme mobile empty-caret populations checked.** Reuse of the
+existing dark-mobile collector, with explicit screenshot `caret: initial/hide`
+and actual runtime theme verification, covers18 missing paired cases: all five
+text-input families in light/contrast/custom, plus autocomplete/date/time in
+dark. The existing dark form-field/email proof supplies the other two cases.
+The new collection completes in102,799.2134ms, retains432 local PNGs, reports
+no page errors, and reverifies six dependencies/frozen browser fingerprints.
+Retain `empty-caret-missing-profiles.probe.mjs`, its128fdec capture directory,
+and `empty-caret-missing-profiles-128fdec.log`, SHA-256
+826b30d54c6be9d21250c02c9d5ff81338dc3a3d8b0a480de7f15760b8255498.
+Whole-crop initial/hide differences include autocomplete animation in some
+samples and are not caret-only proof. The separate localized replay authenticates
+all432 PNGs and isolates contiguous caret-color strokes inside the empty input;
+both sides expose such strokes in every pair. Retain
+`empty-caret-missing-profiles-128fdec-local-replay.log`, SHA-256
+f8c664f73e3eac49e7a3881c7ffb63d2f5d874fd36ff86433bd5376ac6c7a3f4.
+Native caret ink follows profile primary; candidate omits caretColor and retains
+the fixed text color#1d1b20. Geometry remains explicitly diagnostic-failing in
+14/18 new pairs, including picker input width and compact empty-input position;
+none is normalized away. This closes bounded mobile visible-caret existence,
+not input equivalence, matched stroke geometry, tablet/disabled/error behavior,
+all-state sharpness, or current-source full browser acceptance. Register these
+standalone observations in the next coherent producer batch, not mid-cold-check.
+
+**Compact empty/filled displacement starts in application authoring.** Eight
+read-only pages reuse the ancestor collector at mobile DPR2 for contrast/custom
+and empty/filled form-field states. Native used infix padding stays6px/12px.
+Candidate omits `compact-filled-input-region` while empty and requests/resolves/
+uses16px; when filled, it requests/resolves/uses6px/10px. Source at
+`astylar.component.ts:912` gates that class on `density < 0 && !empty`; top rules
+are at550/551/568. Exact replay decomposes input delta into field-origin residual
+plus unequal inset: contrast empty+10.0131225586px versus filled+.0131225586px;
+custom empty+4.0181274414px versus filled-1.9818725586px. The larger state-dependent
+offset is not a projection defect. Earlier origin residuals remain separate.
+Retain `empty-filled-input-ancestor-boundary.probe.mjs`, its128fdec capture and
+replay logs. Capture SHA-256 is4105695c856d6962b6701c47d6052b462725ff93e5c132a58bdfdf7005831e3d;
+eight dependencies reverify and collection takes11,551.7665ms. This proves the
+first divergence for these four form-field states, not every family or a fix.
+
 **Retained empty-caret visibility reviewed across five families.** Reuse of the
 authenticated light desktop input-boundary capture, without new browser output,
 checks80 local rasters: four timed empty-focus samples on both sides for
