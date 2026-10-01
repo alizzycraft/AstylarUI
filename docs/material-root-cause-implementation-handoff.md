@@ -2,11 +2,12 @@
 
 ## Current audit checkpoint — October 1
 
-**Current registration batch:142 producer findings,139 published.** Three additive
+**Current registration batch:143 producer findings,139 published.** Four additive
 source findings and focused-proof entries use the existing policy/inventory:
 `plugin-linear-progress-right-origin-and-track-input-mismatch`,
 `fixture-compact-input-inset-conditioned-on-nonempty-value`, and
-`fixture-composite-keyboard-handler-omits-activation-and-navigation`.
+`fixture-composite-keyboard-handler-omits-activation-and-navigation`, and
+`fixture-text-input-primary-caret-color-omitted`.
 Every preceding definition/proof remains unchanged. Progress authenticates16
 rasters/eight dependencies and exact foreground counterexamples; compact input
 authenticates eight pages/eight dependencies and preserves origin residuals.
@@ -17,14 +18,23 @@ keys do nothing, Escape still closes/focuses. Observed delivery is not lost core
 keydown. Tabs Enter still clicks its already-focused item; no all-key claim follows.
 Both keyboard log SHA-256 receipts are recorded in the machine policy. Additional
 keys, tablet/disabled/error, focus paint and complete control contract remain open.
-`node --test --test-name-pattern='retained keyboard profiles|retained compact empty|
+Empty-caret replay authenticates432 PNGs and six dependencies over18 missing
+mobile DPR2 pairs, verifies localized contiguous ink against every reported
+stroke and confirms empty/focused controls. Native primary ink versus candidate
+omitted caretColor/fixed text ink is input inequality, not caret absence. All14
+geometry diagnostic failures stay explicit; width/core paint remain separate.
+The first test attempt incorrectly asserted no caretColor anywhere in the
+component, catching the unrelated select-control transparent caret; the corrected
+assertion binds only the two field-control rules. A proof-description casing
+assertion also failed and was corrected without changing observations/thresholds.
+`node --test --test-name-pattern='retained empty caret|retained keyboard profiles|retained compact empty|
 retained progress paint|recent source diagnostics conserve|recent public and popup
-proofs join' tests/material-parity/input-equivalence-audit.spec.mjs` passes5/5 in
-5,787.0761ms. Existing receipt/classification/conclusion negative controls pass;
+proofs join' tests/material-parity/input-equivalence-audit.spec.mjs` passes6/6 in
+6,680.7164ms. Existing receipt/classification/conclusion negative controls pass;
 their deliberate missing-root-style error remains explicit, not acceptance.
 Prior progress test's unavailable `sharp` import was replaced by existing `pngjs`;
 that was test dependency selection, not rendering. No new browser capture or audit
-framework is added. Next register applicable caret/selection/tooltip/timepicker
+framework is added. Next register applicable selection/tooltip/timepicker
 observations before one coherent export/conservation milestone. Do not repeat
 settled progress, compact-inset or keyboard-delivery investigations.
 

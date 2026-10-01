@@ -1502,6 +1502,28 @@ export const sourceAuditDefinitions = Object.freeze([
       stage: 'custom-control authoring and Escape-only application state handler' },
     justification: 'The retained36 paired all-theme mobile DPR2 cases preserve20 original assertion checks. Keydown arrives at candidate callbacks, while native controls change activation/selection or composite focus and candidate state remains unchanged. Current source routes keydown to a handler accepting only Escape while an overlay is open. This is evidence of unequal application/custom-control behavior, not lost core key delivery or a claim that every key is inert: tabs Enter clicks its already-focused item. Restore reference-equivalent control semantics/state routing at the responsible boundary; separately reduce any missing public core keyboard contract before assigning core ownership. Additional keys, tablet/disabled/error states, focus paint and all-profile lifetime remain open.',
   }),
+  Object.freeze({
+    id: 'fixture-text-input-primary-caret-color-omitted',
+    introducedBy: 'current fixed field text color and omitted caretColor; historical first-bad runtime not established',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.field-control'[^\n]*color: '#1d1b20'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase input caret-color token translation; stroke geometry remains core-owned',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: retained empty caret rasters preserve visibility and unequal ink inputs',
+    evidence: [{ file: 'artifacts/material-parity/empty-caret-missing-profiles-128fdec.log',
+      sha256: '826b30d54c6be9d21250c02c9d5ff81338dc3a3d8b0a480de7f15760b8255498' },
+      { file: 'artifacts/material-parity/empty-caret-missing-profiles-128fdec-local-replay.log',
+        sha256: 'f8c664f73e3eac49e7a3881c7ffb63d2f5d874fd36ff86433bd5376ac6c7a3f4' }],
+    observation: { component: 'five text-input families', element: 'focused empty input', dpr: [2],
+      profiles: ['light', 'dark', 'contrast', 'custom'], viewport: { width: 390, height: 844 },
+      states: ['real Tab, select-all, delete', 'six timed empty-focus samples'],
+      families: ['form-field', 'input', 'autocomplete', 'datepicker', 'timepicker'],
+      population: '18 missing mobile profile/family pairs; dark form-field/email remain separate prior evidence',
+      property: 'caretColor and visible stroke', reference: 'profile primary ink',
+      astylar: 'caretColor omitted; fixed text ink #1d1b20; visible sampled strokes',
+      stage: 'unequal effective caret-color inputs before text/caret paint' },
+    justification: 'Explicit initial/hide screenshot capture and localized replay authenticate432 rasters over18 missing mobile DPR2 profile/family pairs. Both sides expose contiguous caret strokes with empty values and focus; native ink follows primary while candidate omits caretColor and paints fixed text ink. Fourteen pairs retain original geometry diagnostic failures. Autocomplete animation contaminates whole-crop differences, so only localized stroke evidence supports caret existence. This closes bounded absence, not matched stroke width/position, all-state sharpness, tablet/disabled/error, or current full-browser acceptance. The existing independent public stroke-width defect remains separate; restore equivalent color inputs before evaluating core paint.',
+  }),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({

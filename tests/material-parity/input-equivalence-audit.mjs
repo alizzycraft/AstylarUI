@@ -9664,6 +9664,8 @@ function focusedProofInventory(root) {
       'retained compact state-conditioned input inset diagnostic', 'Authenticates eight pages/eight dependencies and the original collector. Native state-independent infix padding differs from candidate authored class/resolved/used top; exact delta decomposition preserves separate field-origin residuals. Not all-family parity, residual attribution or renderer correction.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('retained keyboard profiles replay original assertions and bind the Escape-only handler'/,
       'retained all-theme mobile custom-control keyboard diagnostic', 'Authenticates both capture receipts and dependencies, replays20 original assertion blocks over36 paired cases, and binds current Escape-only application routing. Key delivery is observed; tabs Enter still clicks its focused item. Not all-key, tablet/disabled/error, focus-paint or core routing acceptance.'),
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('retained empty caret rasters preserve visibility and unequal ink inputs'/,
+      'retained mobile empty-caret visibility and color diagnostic', 'Authenticates432 initial/hide rasters,18 pairs and six dependencies, preserves14 geometry diagnostic failures and binds localized contiguous ink strokes to empty focused controls. Unequal effective caret colors remain application inputs. Not matched stroke geometry, whole-crop animation or all-state sharpness acceptance.'),
   ];
 }
 

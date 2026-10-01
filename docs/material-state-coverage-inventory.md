@@ -2,10 +2,16 @@
 
 ## Evidence boundary
 
-Current producer registration totals142 findings; published canonical remains139.
-Progress-bar, compact input-state inset and the shared custom-control keyboard
+Current producer registration totals143 findings; published canonical remains139.
+Progress-bar, compact input-state inset, empty-input caret color and custom-control keyboard
 handler findings join existing policy/proof inventories without changing previous
-entries. Five focused checks pass in5,787.0761ms. Keyboard replay authenticates
+entries. Six focused checks pass in6,680.7164ms. Empty-caret replay authenticates
+432 local PNGs/six dependencies, verifies every reported contiguous stroke and
+preserves14 geometry diagnostic failures across18 mobile profile/family pairs.
+Visible candidate carets do not establish equivalent color/width/position; native
+primary ink versus omitted caretColor/fixed candidate text ink remains unequal.
+The text-field source omission check excludes select's intentional transparent
+caret. Keyboard replay authenticates
 both logs/dependencies and20 original assertion blocks over36 paired all-theme
 mobile DPR2 cases: delivery is observed, corresponding state transitions differ.
 Tabs Enter still clicks the focused item. The extracted current handler also

@@ -1748,7 +1748,7 @@ test('recent public and popup proofs join existing inventories without changing 
     ['show', 'a6217c5:tests/material-parity/input-equivalence-audit.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }));
   assert.deepEqual(current.fingerprints, beforePointer.fingerprints);
-  assert.deepEqual(current.proofs.slice(3, -3), beforePointer.proofs);
+  assert.deepEqual(current.proofs.slice(3, -4), beforePointer.proofs);
   const pointerNames = ['public button pointer states diagnose materials outside render ownership',
     'dark mobile overlay cycles retain focus and semantic cleanup boundaries'];
   for (const [index, entry] of current.proofs.slice(0, 2).entries()) {
@@ -1763,15 +1763,16 @@ test('recent public and popup proofs join existing inventories without changing 
   assert.deepEqual(current.fingerprints.slice(0, 537), prior.fingerprints);
   assert.deepEqual(current.fingerprints.slice(537), files.map(file => ({ file,
     sha256: createHash('sha256').update(readFileSync(file, 'utf8').replace(/\r\n/g, '\n')).digest('hex') })));
-  assert.equal(current.proofs.length, prior.proofs.length + 11);
-  assert.deepEqual(current.proofs.slice(8, -3), prior.proofs);
-  for (const [index, entry] of current.proofs.slice(-3).entries()) {
+  assert.equal(current.proofs.length, prior.proofs.length + 12);
+  assert.deepEqual(current.proofs.slice(8, -4), prior.proofs);
+  for (const [index, entry] of current.proofs.slice(-4).entries()) {
     assert.equal(entry.file, 'tests/material-parity/input-equivalence-audit.spec.mjs');
     assert.notEqual(entry.status, 'missing');
     assert.match(entry.status, /retained/);
     assert.match(entry.description, /Not/);
     assert.ok(readFileSync(entry.file, 'utf8').split(/\r?\n/)[entry.line - 1].includes(
-      ['retained progress paint binds', 'retained compact empty and filled inputs bind', 'retained keyboard profiles replay'][index]));
+      ['retained progress paint binds', 'retained compact empty and filled inputs bind', 'retained keyboard profiles replay',
+        'retained empty caret rasters preserve'][index]));
   }
   const expectedNames = ['public equal-input overflow isolates scrollbar gutter before projection',
     'public equal-input text separates fractional origins from texture raster phase',
@@ -1956,13 +1957,76 @@ test('retained keyboard profiles replay original assertions and bind the Escape-
   assert.equal(JSON.stringify(sourceAuditDefinitions.slice(0, 141)), JSON.stringify(definitions));
 });
 
+test('retained empty caret rasters preserve visibility and unequal ink inputs', async () => {
+  const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');
+  const { PNG } = await import('pngjs');
+  const finding = sourceAuditDefinitions.find(entry => entry.id === 'fixture-text-input-primary-caret-color-omitted');
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  const bytes = finding.evidence.map(receipt => {
+    const raw = readFileSync(receipt.file); assert.equal(digest(raw), receipt.sha256); return raw;
+  });
+  const capture = bytes[0].toString().trim().split(/\r?\n/).map(line => JSON.parse(line));
+  const replay = JSON.parse(bytes[1]);
+  assert.equal(replay.captureLogSha256, digest(bytes[0]));
+  assert.equal(capture[0].receipts.length, 6);
+  for (const receipt of capture[0].receipts) assert.equal(digest(readFileSync(receipt.file)), receipt.sha256);
+  const rasters = capture.flatMap(row => row.diagnostic?.raster ? [row.diagnostic.raster] : []);
+  assert.equal(rasters.length, 216);
+  for (const raster of rasters) {
+    assert.equal(raster.control.value, ''); assert.equal(raster.control.focused, true);
+    assert.deepEqual(raster.control.selection, raster.family === 'input' ? [null, null] : [0, 0]);
+    for (const mode of ['initial', 'hide']) assert.equal(digest(readFileSync(raster[mode].file)), raster[mode].sha256);
+  }
+  assert.equal(replay.results.length, 18);
+  assert.equal(replay.authenticatedRasters, 432);
+  assert.equal(replay.results.filter(result => result.geometryDiagnosticFailure).length, 14);
+  const primary = { light: '103,80,164', dark: '208,188,255', contrast: '0,0,0', custom: '0,106,106' };
+  const populations = new Set();
+  for (const result of replay.results) {
+    populations.add(`${result.profile}/${result.family}`);
+    assert.equal(result.candidateAuthoring.caretColor, null);
+    assert.equal(result.candidateAuthoring.color, '#1d1b20');
+    assert.equal(result.referenceAuthoring.caretColor.replace(/^rgb\(|\)$/g, '').replaceAll(' ', ''), primary[result.profile]);
+    for (const mode of ['reference', 'astylar']) {
+      assert.equal(result.strokes[mode].length, 6);
+      assert.ok(result.strokes[mode].some(sample => sample.columns.length > 0));
+      for (const sample of result.strokes[mode]) {
+        assert.equal(sample.color, mode === 'reference' ? primary[result.profile] : '29,27,32');
+        const raster = rasters.find(r => r.profile === result.profile && r.family === result.family && r.mode === mode && r.index === sample.index);
+        assert.ok(raster);
+        const image = PNG.sync.read(readFileSync(raster.initial.file));
+        for (const column of sample.columns) {
+          assert.equal(column.count, column.maxY - column.minY + 1);
+          assert.ok(column.count >= 10 && column.x < 24 && column.maxY < image.height);
+          for (let y = column.minY; y <= column.maxY; y++) {
+            const offset = (y * image.width + column.x) * 4;
+            assert.equal([...image.data.subarray(offset, offset + 3)].join(','), sample.color);
+          }
+        }
+      }
+    }
+  }
+  const expected = finding.observation.profiles.flatMap(profile => finding.observation.families
+    .filter(family => profile !== 'dark' || !['form-field', 'input'].includes(family)).map(family => `${profile}/${family}`));
+  assert.deepEqual([...populations].sort(), expected.sort());
+  const application = readFileSync(finding.file, 'utf8');
+  assert.match(application, new RegExp(finding.pattern));
+  const fieldRules = application.split(/\r?\n/).filter(line => /selector: '\.field-control(?::focus)?'/.test(line));
+  assert.equal(fieldRules.length, 2);
+  for (const rule of fieldRules) assert.doesNotMatch(rule, /caretColor\s*:/);
+  const prior = execFileSync('git', ['show', 'df491b1:tests/material-parity/input-equivalence-policy.mjs'], { encoding: 'utf8' });
+  const definitions = new Function(prior.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
+  assert.equal(definitions.length, 142);
+  assert.equal(JSON.stringify(sourceAuditDefinitions.slice(0, 142)), JSON.stringify(definitions));
+});
+
 test('recent source diagnostics conserve predecessor findings and reject altered receipts or conclusions', () => {
   const audit = buildMaterialInputAudit(parityReport({}, {}));
   const previous = execFileSync('git', ['show', 'bd79e4b:tests/material-parity/input-equivalence-policy.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const priorDefinitions = new Function(previous.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
   assert.equal(priorDefinitions.length, 135);
-  assert.equal(audit.sourceFindings.length, 142);
+  assert.equal(audit.sourceFindings.length, 143);
   const precedingPolicy = execFileSync('git', ['show', 'a6217c5:tests/material-parity/input-equivalence-policy.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const precedingDefinitions = new Function(precedingPolicy.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
