@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — October 1 (boundary-proof registration)
 
+The first resumed bounded root-cause gate is green. `npm run
+audit:test:focused -- origin` passes the opt-in origin-motion review in
+18,952.9705ms: all 59 groups / 1,368 observations replay from authenticated
+inputs, 36 complete groups / 704 observations qualify for reviewed
+declaration-stage attribution, 23 groups / 664 observations remain guarded,
+and 42 negative controls reject changed targets, explicit or ancestor origins,
+named animations, missing ancestry/provenance, candidate motion, and changed
+scalars. This answers only the browser-used-versus-candidate-declaration
+stage question; it does not establish computed origins, reference-box
+equality, CSS layout, final projection, or raster equivalence. No recapture or
+canonical export is justified by this unchanged-input check. The next bounded
+investigation remains the shared overlay-box boundary: retain the package-route
+CSS-box/projection proof and trace representative snackbar, tooltip, and sheet
+inputs through clipping and paint, without repeating the historical position
+survey or changing component authoring.
+
 The Tab-selection, popup-state, and email-edit boundary probes are now
 registered in the canonical focused-proof inventory as one authenticated
 bounded proof. The proof inventory is 123 entries; its focused registration,
