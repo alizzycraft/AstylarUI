@@ -2,10 +2,15 @@
 
 ## Evidence boundary
 
-Current producer registration totals144 findings; published canonical remains139.
+Current producer registration totals145 findings; published canonical remains139.
 Progress-bar, compact input-state inset, empty-input caret color and custom-control keyboard
 handler findings join existing policy/proof inventories without changing previous
-entries. Seven focused checks pass in6,946.0726ms. Popup focus now joins the same
+entries. Eight focused checks pass in7,278.0276ms. Selection paint-policy now also
+joins those inventories: light/contrast/custom endpoints agree, observed palettes
+differ, seven dependencies per original capture reverify and both original
+geometry failures stay asserted. Classification is suspected core compatibility
+issue pending native-platform contract/isolated paint proof, not confirmed core
+projection failure or crop-byte sharpness. Popup focus joins the same
 policy/proof inventories:12 tooltip and8 timepicker paired applied-theme cases,
 24/32 authenticated crops/strips and10/7 dependency receipts. Native Tab opens
 tooltip only; candidate Tab opens timepicker only. Pointer interaction opens

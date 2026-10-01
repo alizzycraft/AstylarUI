@@ -9668,6 +9668,8 @@ function focusedProofInventory(root) {
       'retained mobile empty-caret visibility and color diagnostic', 'Authenticates432 initial/hide rasters,18 pairs and six dependencies, preserves14 geometry diagnostic failures and binds localized contiguous ink strokes to empty focused controls. Unequal effective caret colors remain application inputs. Not matched stroke geometry, whole-crop animation or all-state sharpness acceptance.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('retained applied-theme popup focus states preserve action boundaries'/,
       'retained tooltip/timepicker focus-state and theme applicability diagnostic', 'Authenticates applied-theme captures,24 tooltip crops and32 timepicker strips; exact Tab/pointer/dismissal boundaries remain unequal. Source-extracted focus callback preserves datepicker non-opening. Not text fidelity, thumb-drag, equivalent inner-input geometry or full current runtime acceptance.'),
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('retained selection states preserve palettes and original geometry failures'/,
+      'retained light/contrast/custom selection paint-policy diagnostic', 'Authenticates original diagnostic captures and seven dependencies each; exact forward/backward endpoints agree, palette summaries differ and contrast/custom geometry failures remain. Core contrast palette source is bound. Not crop-byte sharpness, isolated paint acceptance or a resolved native-platform compatibility decision.'),
   ];
 }
 

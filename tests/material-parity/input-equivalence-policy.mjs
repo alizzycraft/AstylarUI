@@ -1545,6 +1545,26 @@ export const sourceAuditDefinitions = Object.freeze([
       stage: 'application focus callback state before popup layout/paint' },
     justification: 'Applied-theme frozen captures verify actual runtime fields before each action. Tab opens only the native tooltip and only the candidate timepicker; subsequent pointer interactions open both and leave/outside actions dismiss both. Current focus callback opens autocomplete/timepicker without a tooltip focus transition; source-extracted execution preserves datepicker non-opening as a separate control. This is action-specific input/state inequality, not a common displaced-overlay diagnosis or authorization to change datepicker behavior. Hover tooltip anchoring is centered8px below at24px height, but profile raster phases/sharpness remain diagnostic failures. Timepicker inner-input/panel geometry, scrollbar gutter, option selection/padding and thumb-drag limitations remain separate. No all-state paint, current runtime or final parity acceptance follows.',
   }),
+  Object.freeze({
+    id: 'core-selection-contrast-palette-differs-from-native-default',
+    introducedBy: 'current contrast-based highlight policy; historical first-bad runtime and compatibility decision not established',
+    file: 'src/app/services/dom/interaction/text-highlight-mesh.factory.ts',
+    pattern: String.raw`const DARK_SELECTION = Color3\.FromHexString\('#173f6b'\);`,
+    classification: 'suspected-core-renderer-defect',
+    owner: 'core selection paint policy and native-platform compatibility contract',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: retained selection states preserve palettes and original geometry failures',
+    evidence: [{ file: 'artifacts/material-parity/selection-mobile-profiles-fb18f7b-palette-bound.log',
+      sha256: 'f185f3c1c4748e5b2e9d622c80b2d91913014d1ab5a0cac890477ba22e1acc2c' },
+      { file: 'artifacts/material-parity/selection-mobile-profiles-fb18f7b-custom.log',
+        sha256: 'cbf651ccc0e21e1ac02be4eb54e9f58dba3e6a972a40cf56db2af2f4435776d8' }],
+    observation: { component: 'form-field', element: 'form-field-control', dpr: [2],
+      profiles: ['light', 'contrast', 'custom'], viewport: { width: 390, height: 844 },
+      states: ['typed Atlas', 'forward selection', 'collapsed End', 'backward selection'],
+      property: 'selection highlight palette', reference: '46,97,205 with white selected glyphs',
+      astylar: '23,63,107 with white selected glyphs',
+      stage: 'core contrast-based palette choice; geometry remains separately attributed' },
+    justification: 'Retained real-key mobile observations agree on [5,5], [0,3], [5,5], [2,5] endpoints but expose different native/candidate highlight palettes. Seven dependencies per capture include the current core highlight source. Its fixed dark palette and contrast-based choice explain candidate ink policy, not a coordinate error. Existing contrast/custom .01px geometry assertions fail and remain retained; custom inset mismatch is separately application-owned. Classification stays suspected pending the native-platform selection compatibility decision and isolated equal-input paint acceptance; accessibility-driven palette selection may require an explicit documented difference. Observed palette summaries are not retained crop-byte sharpness proof. Other families, native email endpoint limits and full selection/editing behavior remain open. Do not compensate fixture background or weaken geometry thresholds.',
+  }),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({

@@ -1748,7 +1748,7 @@ test('recent public and popup proofs join existing inventories without changing 
     ['show', 'a6217c5:tests/material-parity/input-equivalence-audit.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }));
   assert.deepEqual(current.fingerprints, beforePointer.fingerprints);
-  assert.deepEqual(current.proofs.slice(3, -5), beforePointer.proofs);
+  assert.deepEqual(current.proofs.slice(3, -6), beforePointer.proofs);
   const pointerNames = ['public button pointer states diagnose materials outside render ownership',
     'dark mobile overlay cycles retain focus and semantic cleanup boundaries'];
   for (const [index, entry] of current.proofs.slice(0, 2).entries()) {
@@ -1763,16 +1763,17 @@ test('recent public and popup proofs join existing inventories without changing 
   assert.deepEqual(current.fingerprints.slice(0, 537), prior.fingerprints);
   assert.deepEqual(current.fingerprints.slice(537), files.map(file => ({ file,
     sha256: createHash('sha256').update(readFileSync(file, 'utf8').replace(/\r\n/g, '\n')).digest('hex') })));
-  assert.equal(current.proofs.length, prior.proofs.length + 13);
-  assert.deepEqual(current.proofs.slice(8, -5), prior.proofs);
-  for (const [index, entry] of current.proofs.slice(-5).entries()) {
+  assert.equal(current.proofs.length, prior.proofs.length + 14);
+  assert.deepEqual(current.proofs.slice(8, -6), prior.proofs);
+  for (const [index, entry] of current.proofs.slice(-6).entries()) {
     assert.equal(entry.file, 'tests/material-parity/input-equivalence-audit.spec.mjs');
     assert.notEqual(entry.status, 'missing');
     assert.match(entry.status, /retained/);
     assert.match(entry.description, /Not/);
     assert.ok(readFileSync(entry.file, 'utf8').split(/\r?\n/)[entry.line - 1].includes(
       ['retained progress paint binds', 'retained compact empty and filled inputs bind', 'retained keyboard profiles replay',
-        'retained empty caret rasters preserve', 'retained applied-theme popup focus states preserve'][index]));
+        'retained empty caret rasters preserve', 'retained applied-theme popup focus states preserve',
+        'retained selection states preserve'][index]));
   }
   const expectedNames = ['public equal-input overflow isolates scrollbar gutter before projection',
     'public equal-input text separates fractional origins from texture raster phase',
@@ -2091,13 +2092,59 @@ test('retained applied-theme popup focus states preserve action boundaries', asy
   assert.equal(JSON.stringify(sourceAuditDefinitions.slice(0, 143)), JSON.stringify(definitions));
 });
 
+test('retained selection states preserve palettes and original geometry failures', async () => {
+  const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');
+  const finding = sourceAuditDefinitions.find(entry => entry.id === 'core-selection-contrast-palette-differs-from-native-default');
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  const observations = [];
+  for (const receipt of finding.evidence) {
+    const raw = readFileSync(receipt.file); assert.equal(digest(raw), receipt.sha256);
+    const text = raw.toString();
+    const records = text.trim().split(/\r?\n/).filter(line => line.startsWith('{"')).map(line => JSON.parse(line));
+    assert.equal(records[0].receipts.length, 7);
+    for (const input of records[0].receipts) assert.equal(digest(readFileSync(input.file)), input.sha256);
+    assert.match(text, /Math\.abs\(native\.box\[key\] - candidate\.box\[key\]\) < \.01/);
+    observations.push(...records.filter(row => row.profile && row.diagnostic));
+  }
+  assert.deepEqual(observations.map(row => row.profile), finding.observation.profiles);
+  for (const row of observations) {
+    const native = row.diagnostic.reference, candidate = row.diagnostic.astylar;
+    assert.deepEqual(native.map(state => state.label), ['typed', 'forward', 'end-collapsed', 'backward']);
+    const expected = [[5, 5], [0, 3], [5, 5], [2, 5]];
+    assert.deepEqual(native.map(state => state.selection), expected);
+    assert.deepEqual(candidate.map(state => state.selection), expected);
+    for (const [index, state] of candidate.entries()) {
+      assert.equal(state.value, 'Atlas'); assert.equal(state.focused, true);
+      assert.equal(native[index].value, 'Atlas'); assert.equal(native[index].focused, true);
+      if (index === 1 || index === 3) {
+        assert.equal(native[index].raster.commonChangedColors[0][0], '46,97,205');
+        assert.equal(state.raster.commonChangedColors[0][0], '23,63,107');
+        assert.ok(native[index].raster.commonChangedColors.some(([ink]) => ink === '255,255,255'));
+        assert.ok(state.raster.commonChangedColors.some(([ink]) => ink === '255,255,255'));
+        assert.equal(state.highlights[0].material, '#173F6B');
+      }
+      const delta = state.box.y - native[index].box.y;
+      assert.equal(delta, { light: .0018768310546875, contrast: .01312255859375, custom: -1.98187255859375 }[row.profile]);
+      assert.equal(Math.abs(delta) < .01, row.profile === 'light');
+    }
+  }
+  const core = readFileSync(finding.file, 'utf8');
+  assert.match(core, new RegExp(finding.pattern));
+  assert.match(core, /relativeLuminance\(background\) < 0\.45 \? LIGHT_SELECTION : DARK_SELECTION/);
+  assert.equal(finding.classification, 'suspected-core-renderer-defect');
+  const prior = execFileSync('git', ['show', 'a5219b1:tests/material-parity/input-equivalence-policy.mjs'], { encoding: 'utf8' });
+  const definitions = new Function(prior.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
+  assert.equal(definitions.length, 144);
+  assert.equal(JSON.stringify(sourceAuditDefinitions.slice(0, 144)), JSON.stringify(definitions));
+});
+
 test('recent source diagnostics conserve predecessor findings and reject altered receipts or conclusions', () => {
   const audit = buildMaterialInputAudit(parityReport({}, {}));
   const previous = execFileSync('git', ['show', 'bd79e4b:tests/material-parity/input-equivalence-policy.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const priorDefinitions = new Function(previous.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
   assert.equal(priorDefinitions.length, 135);
-  assert.equal(audit.sourceFindings.length, 144);
+  assert.equal(audit.sourceFindings.length, 145);
   const precedingPolicy = execFileSync('git', ['show', 'a6217c5:tests/material-parity/input-equivalence-policy.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const precedingDefinitions = new Function(precedingPolicy.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();

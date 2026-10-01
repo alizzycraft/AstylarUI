@@ -2,13 +2,14 @@
 
 ## Current audit checkpoint — October 1
 
-**Current registration batch:144 producer findings,139 published.** Five additive
+**Current registration batch:145 producer findings,139 published.** Six additive
 source findings and focused-proof entries use the existing policy/inventory:
 `plugin-linear-progress-right-origin-and-track-input-mismatch`,
 `fixture-compact-input-inset-conditioned-on-nonempty-value`, and
 `fixture-composite-keyboard-handler-omits-activation-and-navigation`, and
 `fixture-text-input-primary-caret-color-omitted`, and
-`fixture-tooltip-timepicker-focus-popup-state-mismatch`.
+`fixture-tooltip-timepicker-focus-popup-state-mismatch`, and
+`core-selection-contrast-palette-differs-from-native-default`.
 Every preceding definition/proof remains unchanged. Progress authenticates16
 rasters/eight dependencies and exact foreground counterexamples; compact input
 authenticates eight pages/eight dependencies and preserves origin residuals.
@@ -37,14 +38,23 @@ reports; do not claim all focus methods behave alike or change date behavior.
 Tooltip pointer boxes remain centered8px below/24px high, but raster fidelity is
 not accepted. Timepicker15px/0px client gutters,2064px/2056px maximum scroll and
 inner-input width remain unequal and separate; no thumb-drag proof is added.
-`node --test --test-name-pattern='retained applied-theme popup|retained empty caret|retained keyboard profiles|retained compact empty|
+Selection replay authenticates both original diagnostic logs and seven dependencies
+each. Light/contrast/custom endpoints [5,5]/[0,3]/[5,5]/[2,5] agree; observed native
+46,97,205 and candidate23,63,107 highlight palettes differ with white selected
+glyphs. Current core source chooses a fixed contrast palette. Classification is
+suspected core compatibility/paint-policy issue, not a confirmed coordinate bug:
+native-platform selection contract and isolated paint acceptance remain open.
+Original contrast/custom .01px geometry failures are asserted, not weakened;
+custom inset remains application-owned. Palette summaries do not prove crop-byte
+sharpness. This completes registration of that bounded selection observation.
+`node --test --test-name-pattern='retained selection states|retained applied-theme popup|retained empty caret|retained keyboard profiles|retained compact empty|
 retained progress paint|recent source diagnostics conserve|recent public and popup
-proofs join' tests/material-parity/input-equivalence-audit.spec.mjs` passes7/7 in
-6,946.0726ms. Existing receipt/classification/conclusion negative controls pass;
+proofs join' tests/material-parity/input-equivalence-audit.spec.mjs` passes8/8 in
+7,278.0276ms. Existing receipt/classification/conclusion negative controls pass;
 their deliberate missing-root-style error remains explicit, not acceptance.
 Prior progress test's unavailable `sharp` import was replaced by existing `pngjs`;
 that was test dependency selection, not rendering. No new browser capture or audit
-framework is added. Next register remaining selection paint/tooltip texture
+framework is added. Next register remaining tooltip texture
 observations before one coherent export/conservation milestone. Do not repeat
 settled progress, compact-inset or keyboard-delivery investigations.
 
