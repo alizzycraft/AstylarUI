@@ -2,6 +2,16 @@
 
 ## Evidence boundary
 
+Mobile keyboard applicability is now verified for checkbox, chips, slide-toggle
+and expansion in all four actual themes at390x844 DPR2:16 paired cases reuse
+existing assertions, with8 checks passing and6 dependency receipts reverified.
+Native activation changes state; candidate keys reach the application callback
+without activation. This extends the known Escape-only application-handler gap,
+not core key-delivery attribution. See the current handoff and
+`keyboard-mobile-profiles-09e2287.log`. Additional keys/families, disabled/error,
+focus paint and complete input mapping remain pending. This standalone probe
+does not change canonical coverage or publication status.
+
 Current October1 d2a4176 cold export validates and publishes138 source findings,
 retaining8,483 scalar groups,389,202 occurrences and436/1,875 static/interaction
 cases. Authenticated predecessor/current section comparison preserves all79

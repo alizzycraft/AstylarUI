@@ -2,6 +2,30 @@
 
 ## Current audit checkpoint — October 1
 
+**Mobile theme applicability of four keyboard gaps verified.** The decisive
+question was whether checkbox/chip/slide-toggle/expansion activation failures
+were confined to the existing light/desktop capture or changed with theme/mobile
+key delivery. Reuse of the two existing keyboard proof bodies, with unchanged
+assertions, at390x844 DPR2 across light/dark/contrast/custom passes8 checks covering
+16 paired cases in51,257.2258ms. Each page verifies actual runtime theme fields,
+not just URL parameters. Native Space changes checkbox, chip and switch state;
+native expansion Space/Enter changes its internal aria-expanded state while its
+showcase store stays false. Candidate focus and application keydown delivery
+work, but all four candidate states remain unchanged. No page errors occur.
+This extends the existing application-handler diagnosis: current
+`examples/material-showcase/src/app/astylar.component.ts:396` routes only Escape,
+not activation; it does not establish a new core key-delivery defect. Preserve
+`artifacts/material-parity/keyboard-mobile-profiles.probe.mjs` and
+`keyboard-mobile-profiles-09e2287.log`, SHA-256
+abf20370156f5f3d163bfb8d1f9366257edef61193c5be06b31954ce8983293b.
+Six dependency receipts and frozen browser fingerprints are reverified at
+completion; the original proof-body hashes are retained. This is frozen-bundle
+diagnostic coverage, not current-source full-matrix or focus/hover paint
+acceptance. Other families, additional keys and disabled/error states remain
+open. Next: remaining input/paint mapping and caret/selection boundaries, then
+batched proof integration after the still-live0a0b5d6 export finishes. No export
+dependency, renderer or fixture was changed for this check.
+
 **Validated export, exact canonical conservation and independent cold check complete.**
 The d2a4176 cold export completes in2,332,358.4972ms (38.87minutes), with
 1,205 files reverified,0 disk hits and0 invalidations. It retains436 static and
