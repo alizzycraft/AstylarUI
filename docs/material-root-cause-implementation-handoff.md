@@ -13,6 +13,17 @@ not evidence for a renderer or component-authoring fix. Do not weaken the
 assertion or promote a new export until the reviewer is reconciled to the
 authenticated current-ancestry input and its negative controls remain green.
 
+The decisive comparison is bounded to `expansion-primary`: the authenticated
+Chrome-154 current-ancestry tree (`current-ancestry-audit` SHA-256
+`b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a`) records
+the native `mat-expansion-panel` owner with an active `sheet:4/0`
+`box-sizing: content-box` declaration in all 68 expansion observations. The
+candidate remains the authored `expansion-trigger` owner with local
+`boxSizing: border-box`. The prior omission proof was therefore valid only
+against the older captured stylesheet; accepting the new export requires a
+source-transition classification that preserves this unequal owner/input
+evidence, rather than treating the declaration as a renderer discrepancy.
+
 The previously authenticated package therefore remains the canonical state:
 no canonical files were changed by the failed refresh. The next bounded audit
 step is to reduce this drift to the smallest current expansion-panel input,
