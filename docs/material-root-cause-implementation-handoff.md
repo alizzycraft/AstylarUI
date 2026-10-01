@@ -5,13 +5,15 @@
 The optimized canonical refresh was attempted once with
 `node scripts/export-material-input-audit-current-ancestry.mjs` and stopped at
 the existing `box-sizing-authoring-review.mjs` assertion before writing a new
-canonical package. The current reference stylesheet now exposes an active
-`.mat-expansion-panel` rule to the omission reviewer, while that reviewer
-expects no applicable candidate rule. The focused box-sizing review still
-passes against its retained fixtures, so this is audit-input/reviewer drift,
-not evidence for a renderer or component-authoring fix. Do not weaken the
-assertion or promote a new export until the reviewer is reconciled to the
-authenticated current-ancestry input and its negative controls remain green.
+canonical package. The authenticated capture already contains an active
+`.mat-expansion-panel` rule, while the omission reviewer expects no applicable
+native request. The immediate trigger is that the historical expansion-owner
+follow-up binding became invalid after producer-source fingerprints changed,
+so that owner classification was not applied before box-sizing review. The
+focused box-sizing review still passes against its retained fixtures, so this
+is audit-input/replay dependency drift, not evidence for a renderer or
+component-authoring fix. Do not weaken the assertion or promote a new export
+until the replay is reconciled and its negative controls remain green.
 
 The decisive comparison is bounded to `expansion-primary`: the authenticated
 Chrome-154 current-ancestry tree (`current-ancestry-audit` SHA-256
@@ -19,8 +21,8 @@ Chrome-154 current-ancestry tree (`current-ancestry-audit` SHA-256
 the native `mat-expansion-panel` owner with an active `sheet:4/0`
 `box-sizing: content-box` declaration in all 68 expansion observations. The
 candidate remains the authored `expansion-trigger` owner with local
-`boxSizing: border-box`. The prior omission proof was therefore valid only
-against the older captured stylesheet; accepting the new export requires a
+`boxSizing: border-box`. The retained omission proof cannot be replayed while
+the owner follow-up is unbound; accepting the new export requires a
 source-transition classification that preserves this unequal owner/input
 evidence, rather than treating the declaration as a renderer discrepancy.
 
