@@ -2,6 +2,17 @@
 
 ## Evidence boundary
 
+Dark/mobile DPR2 selection coverage now includes autocomplete, datepicker and
+timepicker through the existing real-key sequence. All three preserve `Atlas`,
+focus, forward/backward/collapsed endpoints and semantic direction. Autocomplete
+passes the original proof; both pickers retain a .01px geometry failure because
+the native input is200px wide and candidate180px. The observed palette mismatch
+remains; no renderer fix or paint parity follows. Nine dependencies and24 PNGs
+rehash successfully; log `popup-input-selection-3a47c43.log` SHA-256:
+101a663943c986f916f33cce1b3a0e494811d233ef052b5222a68690314f9721.
+Other themes/viewports, validity/commit/full editing and isolated paint remain
+open. This standalone evidence is not registered in the live canonical export.
+
 Independent snackbar coverage now checks six previously missing applied-theme
 populations: light mobile, dark desktop, contrast/custom desktop and mobile.
 Real Tab/Enter opens visible panels48px high and8px above the viewport bottom;

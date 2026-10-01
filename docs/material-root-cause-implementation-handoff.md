@@ -2,6 +2,33 @@
 
 ## Current audit checkpoint — October 1
 
+**Remaining editable-popup selection families: state works; two width gates fail.**
+`popup-input-selection.probe.mjs` reuses the complete existing dark-mobile
+form-field real-key selection proof for autocomplete, datepicker and timepicker,
+changing only family route/control IDs and adding actual-theme checks and PNG
+retention. No canonical input or original assertion is changed. All three keep
+value `Atlas`, focus, endpoints [5,5]/[0,3]/[5,5]/[2,5] and semantic direction at
+the typed/forward/collapsed-end/backward boundaries. Native and candidate collapsed
+states have zero changed pixels and candidate highlights are removed.
+Autocomplete passes all original assertions. Datepicker and timepicker preserve
+the original .01px geometry failures: native input width200px, candidate180px.
+All three have deltaY +.0018768310546875px; no common translation fault is proved.
+Both selected directions expose the existing native46,97,205/white versus
+candidate154,213,255/black palette mismatch. Palette summaries are not full
+sharpness acceptance. The candidate declares right48px/auto width on the picker
+input-region (astylar.component.ts:552–553); compare both complete used ancestor
+boxes before attributing the20px difference to that declaration alone.
+Capture completes in15,963.6689ms with two retained diagnostic failures, not a
+passing parity result. Independent replay verifies all nine dependencies and24
+PNG hashes, endpoints, focus, collapsed rasters and removed highlights. Retain
+`popup-input-selection-3a47c43.log`, SHA-256:
+101a663943c986f916f33cce1b3a0e494811d233ef052b5222a68690314f9721.
+This covers one dark/mobile real-key sequence per family, not invalid-date/time
+commit behavior, other themes/viewports, full editing, or all selection paint.
+The email comparison remains a native email control with null selection endpoints;
+do not change its input type to make the selection test applicable.
+The proof is standalone while the canonical export runs; no producer input changed.
+
 **Additional snackbar visibility coverage, independent of the live export.**
 The retained `snackbar-missing-profiles.probe.mjs` reuses the existing frozen
 showcase helper and real Tab/Enter/UNDO action sequence for six missing
