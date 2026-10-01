@@ -18,6 +18,20 @@ CSS-box/projection proof and trace representative snackbar, tooltip, and sheet
 inputs through clipping and paint, without repeating the historical position
 survey or changing component authoring.
 
+The retained overlay replays now close the applicability check for this batch.
+`node --test --test-name-pattern="ordinary snackbar opens"
+tests/material-parity/snackbar-position-observation.spec.mjs` passes 1/1, and
+the three retained tooltip checks (`tooltip z-index scalar`, `short viewport
+exposes`, and `real Tab reaches`) pass 3/3. The evidence demonstrates the
+snackbar short-surface camera/depth paint failure, tooltip stacking-owner
+substitution, tooltip short-viewport fallback/scroll divergence, and tooltip
+keyboard-opening divergence. It does **not** demonstrate that the actual
+Material tooltip mesh is beyond the camera in the short state: the tooltip
+boundary report retains CSS boxes and pixels but no candidate mesh/camera
+receipt. Shared snackbar/tooltip depth remains a hypothesis until that missing
+receipt is captured through the existing boundary instrumentation; no tooltip
+offset, z-index, or fixture change is justified in the meantime.
+
 The Tab-selection, popup-state, and email-edit boundary probes are now
 registered in the canonical focused-proof inventory as one authenticated
 bounded proof. The proof inventory is 123 entries; its focused registration,
