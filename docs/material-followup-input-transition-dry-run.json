@@ -16,14 +16,14 @@
   },
   "binding": {
     "file": "docs/material-followup-input-proposal-binding.json",
-    "sha256": "fad7db90e601806414c32397c0c48b71c11ca3340fde5da57454ba30e4e3e43a",
+    "sha256": "0b4aa4ccfebc1513ffc194cc302824649b17b5a7c84b444fd4a77429d9bfc216",
     "independentlyReplayed": true
   },
   "changedGroups": 66,
   "changedObservations": 2640,
   "remainingUnresolved": 1960,
   "originalOrderedRowDigestsSha256": "721d7c2883313c55c8369bb19a80afe954da0fc6ffcecc8d55cac0fd53896aa4",
-  "projectedOrderedRowDigestsSha256": "6d74056c73c615d2a2a4b77d6fc2f00290d9256d108039baabdcd61d6f850fba",
+  "projectedOrderedRowDigestsSha256": "8707de50f6375b2c41fcaf2f034a3a8a949f1f293a5d7d247c554d4e2752ef7f",
   "otherCompleteRows": 8273,
   "otherOrderedRowDigestsSha256": "c46a8886a4cb7d306fa879978581782a1ebe8a1224f1aeb2ddd6bac8608ffe1c",
   "canonicalFilesChanged": false,
@@ -2901,7 +2901,7 @@
       "element": "expansion-primary",
       "property": "appearance",
       "originalCompleteRowSha256": "3984b556bc5b9fc2a8d71de5ed153dc1e1b2df611b03963cb87e18dc695b3977",
-      "projectedCompleteRowSha256": "5489acc5bba8eb8e055a935d4c1fe66f56ac28b99beed4326a5b43481d690eb5",
+      "projectedCompleteRowSha256": "2dffedd15e888fbfd6d39157961d4169686856cb65fd102e5d38e24c1748a7cc",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -3068,8 +3068,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -3161,7 +3161,7 @@
       "element": "expansion-primary",
       "property": "backgroundColor",
       "originalCompleteRowSha256": "8bafd48297ebf04b28264999a55d87cf0e09ec3638c1b61db81af69c7e942b2a",
-      "projectedCompleteRowSha256": "d77e7504ff2598c94f2b8ca28780a1ec5acedd1cf6bc23105b213854c1e0aadd",
+      "projectedCompleteRowSha256": "e1345895f8aa665a89ae095b41c8aba350f3a81c602549a0254519e563256628",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -3325,8 +3325,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -3361,7 +3361,7 @@
       "element": "expansion-primary",
       "property": "backgroundColor",
       "originalCompleteRowSha256": "cb7bcefe7bd5d0930bdae9951c09e601b8d1a991a9f1b76d44210a20585c0d5c",
-      "projectedCompleteRowSha256": "680b6d167b250623a58951a368ace93c1c5c161994c2b282dcac0968e7c6e055",
+      "projectedCompleteRowSha256": "4c74452ad3e3586ad2b394819f7e4024d425066fbf9aabd8af58ab13784b72ec",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -3525,8 +3525,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -3561,7 +3561,7 @@
       "element": "expansion-primary",
       "property": "backgroundColor",
       "originalCompleteRowSha256": "ab3ee8383331fbc452d03ec7cfbd5167b93b6fe292e8a06b292ab4ba1e2b0475",
-      "projectedCompleteRowSha256": "4d14ad2ad416ccc722adec4d5f2f550681f58d950cc2963a4d0b1ffbc367e649",
+      "projectedCompleteRowSha256": "aae1e6275d10268d18b9536769b18c8c939bebb0dae3151de995bb0be9ef093e",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -3725,8 +3725,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -3761,7 +3761,7 @@
       "element": "expansion-primary",
       "property": "backgroundColor",
       "originalCompleteRowSha256": "a9679c6481567d0d35d20a64286e3914f7d4b71bfea446210afa678b38dbe1b4",
-      "projectedCompleteRowSha256": "5bfd9bf6f6226b8c5cbb99d3e15c27468325bed0057ba185f3dcff0b9cf442ed",
+      "projectedCompleteRowSha256": "c649bdd3974779eba6c3ea0f8144214b269361fead285c72ff5a18ff0921082a",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -3925,8 +3925,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -3961,7 +3961,7 @@
       "element": "expansion-primary",
       "property": "backgroundColor",
       "originalCompleteRowSha256": "977a64fc41a51806c21a74ab797472623bc0b29c81f3108ee33676895a0770e5",
-      "projectedCompleteRowSha256": "9a11b20d601bf76b339572a6adb6cd1b0014dbafdfdba64168c370c7e6dcb1e1",
+      "projectedCompleteRowSha256": "89efcc0177d96112472e03c0d5f7cdc8046df955639f375956b22b95a5badf74",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -4118,8 +4118,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -4145,7 +4145,7 @@
       "element": "expansion-primary",
       "property": "backgroundColor",
       "originalCompleteRowSha256": "5e24ec2a1db93c9e1987074575703f2b2fc7fbfa170945a11571f741ebb34c5d",
-      "projectedCompleteRowSha256": "1354b512a2ab64558d8fab1f16cc855fe6f1b96b2d40873a0a7b265c84891570",
+      "projectedCompleteRowSha256": "61396d72be3a95014848bf3a23353df77a9608817f10a08d9b78b75370e39f02",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -4299,8 +4299,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -4328,7 +4328,7 @@
       "element": "expansion-primary",
       "property": "backgroundColor",
       "originalCompleteRowSha256": "f1f4a5c3469ecd00fbb29fa0ed88bb2fa509e815f7f41b861667903d952f046b",
-      "projectedCompleteRowSha256": "e94831ea4cdcf894cbd1aac24e72af619ddbf8fab16c0a662a2865b0021e99db",
+      "projectedCompleteRowSha256": "1cd9df45cea1e496d853dfe548c9ddd9f1d96ac852787f0ca0a817b5e546f6bd",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -4485,8 +4485,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -4512,7 +4512,7 @@
       "element": "expansion-primary",
       "property": "backgroundColor",
       "originalCompleteRowSha256": "ad91c48e14f403aa7b57b05931915496e67244906e93a7dc468c625746f6e884",
-      "projectedCompleteRowSha256": "02e599b6447a7df820717a656e01b584f6fa5fb9243803795028d0aae75fbcfa",
+      "projectedCompleteRowSha256": "f86306053032aff6d335cba156eeafa7269e5c860e38184e16fcf3d517bfece1",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -4666,8 +4666,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -4695,7 +4695,7 @@
       "element": "expansion-primary",
       "property": "backgroundColor",
       "originalCompleteRowSha256": "1f7fcfcc48e50e951fd07b547b6c1b01ffb6c6dd8b6bd147a04e677fafe9af91",
-      "projectedCompleteRowSha256": "0a7b7ea99013f3bdc753d8699b13aec1d72b96287a11d60b4eb36ed412dc1f79",
+      "projectedCompleteRowSha256": "b4f2166bb7eefd559aa4f09ae646f0cc23f5441a1d72290990f997d9fded49da",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -4852,8 +4852,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -4879,7 +4879,7 @@
       "element": "expansion-primary",
       "property": "backgroundColor",
       "originalCompleteRowSha256": "c6348ae9cb69df26985399d477d5754b4b8d856b0f56bf2a06a01f8ae33882f2",
-      "projectedCompleteRowSha256": "afa78813317156418a88798d6d83b7234c2c265e5f0fdd02d3a5f7a746bcca8b",
+      "projectedCompleteRowSha256": "d2856c686e557f4cc1afbae894131558c981138633d160fbe7ee58870cc0c0ba",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -5033,8 +5033,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -5062,7 +5062,7 @@
       "element": "expansion-primary",
       "property": "backgroundColor",
       "originalCompleteRowSha256": "cc95f18f056e838a5427411d317af4ebbbe773e02bedf88374dd4f001f160487",
-      "projectedCompleteRowSha256": "792935852e6d987d17976d88af82f2474faf0c84504221ee41f928f4a0f62e17",
+      "projectedCompleteRowSha256": "ccbcd1313280392339eeb1f4a224e1f3bea3c75666d5ef55c8de344b46d0f4ed",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -5219,8 +5219,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -5246,7 +5246,7 @@
       "element": "expansion-primary",
       "property": "backgroundColor",
       "originalCompleteRowSha256": "d79738fcb517ad49b26a3273f26fb2678ff55a0f5f3f4ee8600b5c9b6beaea97",
-      "projectedCompleteRowSha256": "49d4d6dac5d4b58c0116d7cd52420b7fe5124907089de20ea0221dd7146a36dc",
+      "projectedCompleteRowSha256": "13ed6748f804734b007cd4a0b6224703806838545c6ecd117f392ecd554917fe",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -5400,8 +5400,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -5429,7 +5429,7 @@
       "element": "expansion-primary",
       "property": "borderBottomLeftRadius",
       "originalCompleteRowSha256": "d7c2257d3cb8270918c2c34b2d2d0bf08db6695c51d3d511ced1abdf1eab65e9",
-      "projectedCompleteRowSha256": "62eecb15f811bb7a79d1a17688e041acd368d8c8124498bec4d4615aa02b92c4",
+      "projectedCompleteRowSha256": "fc863cff0ce75fb76296e360ae57afc3c6e348edd37aff51228ed28d4dfbecec",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -5597,8 +5597,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -5690,7 +5690,7 @@
       "element": "expansion-primary",
       "property": "borderBottomRightRadius",
       "originalCompleteRowSha256": "bf9bff228689da6d61f6df6fc7ae85bedfcd6f923c42bc5e8fcfba2e980521d2",
-      "projectedCompleteRowSha256": "17420cbe84b15eea1a33a430f947dcadda8abab2fc4171e491d29bb9de63377d",
+      "projectedCompleteRowSha256": "0bee6acd46fc0f9d812b022408eb5cf82865096b790bfbe3475a6f61e09f487b",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -5858,8 +5858,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -5951,7 +5951,7 @@
       "element": "expansion-primary",
       "property": "borderTopLeftRadius",
       "originalCompleteRowSha256": "a4c0363cedb4327c9981ff80ea52682082335e45e2cd24d3ce8584c91d93b935",
-      "projectedCompleteRowSha256": "f6ad2a63f1526475287f09d99e8788610c111248cc0c37c4daafee6870f74486",
+      "projectedCompleteRowSha256": "9b75189ee829245d86f3bd7d5e8b76fdf7008f4e4df1bb643a6a431f6881d8ed",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -6119,8 +6119,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -6212,7 +6212,7 @@
       "element": "expansion-primary",
       "property": "borderTopRightRadius",
       "originalCompleteRowSha256": "6ed51b54fd74d2992ab12a41f8a4153d3119318d04992fa2042a06a38dd090c5",
-      "projectedCompleteRowSha256": "36206d12716874f1745252ec735498d1901e1fb82c2f8a40bb4b144e0f184f15",
+      "projectedCompleteRowSha256": "0595d1a30d4eacb89fa2186309b28410ef1d2fe27cfce63f9ff7bf4a82795363",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -6380,8 +6380,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -6473,7 +6473,7 @@
       "element": "expansion-primary",
       "property": "bottom",
       "originalCompleteRowSha256": "506b511fce0b71566457274fd7e9c36ef06a662399bdcc956081bbca79a9b81f",
-      "projectedCompleteRowSha256": "9e8867d9912c5f1f4d2cf34b5873d3b23a8162dc2730f31632e5ac407bf97c2c",
+      "projectedCompleteRowSha256": "100ea989efb0d028d6e558dccf62db2a1427efa54dde8b8a3ea66879be5b2d1c",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -6640,8 +6640,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -6733,7 +6733,7 @@
       "element": "expansion-primary",
       "property": "boxShadow",
       "originalCompleteRowSha256": "9217648a912a3dd1fd5f72275d0a1994f784f6c79aa4aea4eb63a7bece7e2469",
-      "projectedCompleteRowSha256": "a88cf1af3486205bb82089745b529bebb99c7ea8ef325a1bc4d01094cd3d7ca1",
+      "projectedCompleteRowSha256": "aa7a44a97fcf5e4bb02a4805a491631c5e2da87733ce4d2a1dafa15bc9ef7f36",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -6900,8 +6900,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -6993,7 +6993,7 @@
       "element": "expansion-primary",
       "property": "boxSizing",
       "originalCompleteRowSha256": "e24d4a1c6663e84827d4d839dffb76016e7ca0ee6b190febc0c46385d2de6c9f",
-      "projectedCompleteRowSha256": "0d7bbe514eb17d82965e22664566914ca3c4dc39551fcc16acd5674c2a3ada2d",
+      "projectedCompleteRowSha256": "9819ae951d8f24ad36c951531f6cf267826ab89d806d879fca6277f9c3a7e417",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -7161,8 +7161,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -7254,7 +7254,7 @@
       "element": "expansion-primary",
       "property": "color",
       "originalCompleteRowSha256": "09b6814a795eeb2c6e988f37494ad5d3223860be3b86447704ce618c663e4ebf",
-      "projectedCompleteRowSha256": "87b31410c40263ec0deb7a0b2df8fcc8840e0dd264173793509266dba54b4c8a",
+      "projectedCompleteRowSha256": "a1accbb96d6d7b9e5eaab6ccbb29c9492d1643f9b544461797baa74d2462bd6b",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -7411,8 +7411,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -7438,7 +7438,7 @@
       "element": "expansion-primary",
       "property": "color",
       "originalCompleteRowSha256": "3cac195ea805685bdd9ee8622182532596453e7ecc8eea8baf7d17644da6156c",
-      "projectedCompleteRowSha256": "70a4f2d3abe52679b65cb1245a9998fa7800cf38850de6a9359312d8909a810d",
+      "projectedCompleteRowSha256": "a02ca41188e49cf426e3981b35faf719c22835118ee1f5d5ea4b4d80f623786b",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -7595,8 +7595,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -7622,7 +7622,7 @@
       "element": "expansion-primary",
       "property": "color",
       "originalCompleteRowSha256": "7f7f316fd2a6286800b39c1ee3cf07c5ef5eadf93e26cff3f1a48822ba42a874",
-      "projectedCompleteRowSha256": "5716b871ad366ea2d1e16cffc7fb3be22dac5a4ad45c77c36e2ab369fa783893",
+      "projectedCompleteRowSha256": "84ef1cd89a6d1c4978a3aa57888c7367999c44719a639d602b2355e3a0376127",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -7779,8 +7779,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -7806,7 +7806,7 @@
       "element": "expansion-primary",
       "property": "color",
       "originalCompleteRowSha256": "78403a179859d8e67489a9182b1ef3e45a30fc9d33c9ea4fd6b341d89e7a6a0e",
-      "projectedCompleteRowSha256": "607657d93f1ec1efab2470903392e81758e28f3d3b329585e915f02618bf92da",
+      "projectedCompleteRowSha256": "12cf43f6689c32e2426730d59bb26cb13d157b3f3a7b05cc2da9fe4b4e779ad4",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -7963,8 +7963,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -7990,7 +7990,7 @@
       "element": "expansion-primary",
       "property": "display",
       "originalCompleteRowSha256": "6d31a0166121cd64092975da75fc118f1134747cb0638286674d10055f38bfa1",
-      "projectedCompleteRowSha256": "3cba66f0fe8595b90a82dbc1a709f5809ffe42889ec53cd4a91ecadf9d71c730",
+      "projectedCompleteRowSha256": "ccb2e144feabb847c7abbb211e53f94f87ae0c5f7ed22fc2fe14d3ea69c9e532",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -8158,8 +8158,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -8251,7 +8251,7 @@
       "element": "expansion-primary",
       "property": "fontWeight",
       "originalCompleteRowSha256": "9f526d37dcdffacd8ca179048c206cc8021af6007cdb66bba3c508722ebe4481",
-      "projectedCompleteRowSha256": "03028c62363ddddd565e8838023956f6e52b879a374730584d8fcfbbe87788f8",
+      "projectedCompleteRowSha256": "bd2b5ed9989ae5b2d1ca166986b0a0fd440a7bac0521995ad7c2d76d276e2ce3",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -8419,8 +8419,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -8512,7 +8512,7 @@
       "element": "expansion-primary",
       "property": "height",
       "originalCompleteRowSha256": "dff3c418fd4aea3608b06ce1f9831b7dbf575d5722e4f38204c90f24f98114a2",
-      "projectedCompleteRowSha256": "706111863b4d7df94873d1d45e4f3d36807177baa45344b848c801df161f93bb",
+      "projectedCompleteRowSha256": "cebbb6dfec12151bf682c6a6104d3721aef9fad44effc1d519a318e9171eb22f",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -8681,8 +8681,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -8718,7 +8718,7 @@
       "element": "expansion-primary",
       "property": "height",
       "originalCompleteRowSha256": "0f4b08e5949dcf05924ca303e2318b7b4c4cdfa5a37309799d27ae783dffc85f",
-      "projectedCompleteRowSha256": "510a4ef80493a86a6465da345f0ba9fcbbde23bac6f3fa97ce91531afca0f4a1",
+      "projectedCompleteRowSha256": "f22153f2317660aa731002c673cefc04f0b00df8a7bb01b683c1292c888025df",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -8881,8 +8881,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -8912,7 +8912,7 @@
       "element": "expansion-primary",
       "property": "height",
       "originalCompleteRowSha256": "c1e9058904759abd1dcd023763d01a3573eefefe42e0467881c1cfa7a45a9dea",
-      "projectedCompleteRowSha256": "4bc41313209dcc8389e217a61638fa849d3096e1bcf37399a0872f2a49fd76ab",
+      "projectedCompleteRowSha256": "d558f290af0f67d13818339099f1ffc332b4bc17b33577b9f53669ac3aed6dee",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -9075,8 +9075,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -9106,7 +9106,7 @@
       "element": "expansion-primary",
       "property": "left",
       "originalCompleteRowSha256": "83fc444409b4999d79b69daa0bfa9a8644c3d1ae68727550366faa2c2c455905",
-      "projectedCompleteRowSha256": "7940669d59740826d40e4055d2a886c4e199d7bc5a277a201077fec61e09764d",
+      "projectedCompleteRowSha256": "639362bcecf75733aa8ee557b192bd7ae2e1ef720acdb90445561407aa6f7bcf",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -9273,8 +9273,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -9366,7 +9366,7 @@
       "element": "expansion-primary",
       "property": "letterSpacing",
       "originalCompleteRowSha256": "d1061942880a50ee7dd7c2842557b57547dd1af0451ea2749a7c1b294b70504b",
-      "projectedCompleteRowSha256": "e4604f77ae827996e1a41a27a620e61d2642da0e34688e64c6f4170daecec87c",
+      "projectedCompleteRowSha256": "fda5293c8080702a974475155d861ce71e6c55d346aa0ff80ea0fec73483df5d",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -9533,8 +9533,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -9626,7 +9626,7 @@
       "element": "expansion-primary",
       "property": "lineHeight",
       "originalCompleteRowSha256": "02d62907cd625d3af2b2a84b6b113245bb44f078539ea08992378b325ec97e03",
-      "projectedCompleteRowSha256": "934860fa55cf2aff039d2cffbe3c0058f04bf444018a08944f75e0a74ed8a7b5",
+      "projectedCompleteRowSha256": "e3026c00a0857b43c49b4309be41a9f29ad831f241b9aa3f0f678ae96d875555",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -9793,8 +9793,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -9886,7 +9886,7 @@
       "element": "expansion-primary",
       "property": "overflowX",
       "originalCompleteRowSha256": "7a8234618fe28f615c1384ee0441005577f350f587ca4dde42f068b59c24a375",
-      "projectedCompleteRowSha256": "8ad8c5e2b802dcc046fad2ddcef11f6be94e8be1304d379af1a91abcea393b55",
+      "projectedCompleteRowSha256": "e586ea260beaac30ae488d4145cdf21c5a5cdd7edb8effd4fefc74411d0e0c13",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -10053,8 +10053,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -10146,7 +10146,7 @@
       "element": "expansion-primary",
       "property": "overflowY",
       "originalCompleteRowSha256": "3f8ecf88620629ac57bef448d6a75e1e829906d43047e61ac2af26c2206d376f",
-      "projectedCompleteRowSha256": "e48aed9242dd77d9fcee80418328a36c818210f168190c99c913339ea3c3e519",
+      "projectedCompleteRowSha256": "974c56c310ecb63d45402d280f022f22c4294d62327799beddd91a0405c94ac2",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -10313,8 +10313,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -10406,7 +10406,7 @@
       "element": "expansion-primary",
       "property": "paddingLeft",
       "originalCompleteRowSha256": "a1ea498d94e357d100ee1dd518f7ad381037be4d2051480d6c047a41b69bb979",
-      "projectedCompleteRowSha256": "f8a74317cde9f09d9fd706d326eeacf67fa662bcd4c69a0221d5486d99231b76",
+      "projectedCompleteRowSha256": "bf1bdb6d931b4bc9cb69c333a3a8eb77bb95b1d9f9ae372dac6a4a6b88ae2f55",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -10574,8 +10574,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -10650,7 +10650,7 @@
       "element": "expansion-primary",
       "property": "paddingLeft",
       "originalCompleteRowSha256": "e06d5bbc0d29f5b50e643ae485dc85d28d8e1a745f8f24247a95371c5beaf832",
-      "projectedCompleteRowSha256": "7bdb376670bcd89708aa1b0241693b0b25f80f53293f64978badd8b62b26a663",
+      "projectedCompleteRowSha256": "225457ccf9b589152e7bfb3494eff4678d979f2d307c26869ce4827d26a5ce13",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -10818,8 +10818,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -10860,7 +10860,7 @@
       "element": "expansion-primary",
       "property": "paddingRight",
       "originalCompleteRowSha256": "0d66d2d1333f469d20556ce25d08b6545cf79f8a9d1b7989b8e4420258d92254",
-      "projectedCompleteRowSha256": "7e5ede471ea7c0d0cb4849698a2d92e3b85b1fe29509bfdc84e8f9e7125c1162",
+      "projectedCompleteRowSha256": "4dc3d7fc42a1d5a6c0153c22cf401e884441dee07d5001b41d93600b72c17841",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -11028,8 +11028,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -11104,7 +11104,7 @@
       "element": "expansion-primary",
       "property": "paddingRight",
       "originalCompleteRowSha256": "04b4f85dbf6465f87d4a60f4dbb616979460ae2647324a98c6bbafdc4281e83c",
-      "projectedCompleteRowSha256": "e6d27f9d54112c9a1bfc1cb605bb46904aa86b6e2edff261d5939f2daa00d857",
+      "projectedCompleteRowSha256": "78585eca132165a0fe0b0db6a40b9d3b1d48d106f4d79b95d5d067c830375b35",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -11272,8 +11272,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -11314,7 +11314,7 @@
       "element": "expansion-primary",
       "property": "position",
       "originalCompleteRowSha256": "72d6edc7f20cc2dbdf9b1561926d589ed14f2c04be516a005e6da4a089605189",
-      "projectedCompleteRowSha256": "4aa13856ea30abc6530888550b198e16e9f7c22544bd479b14c9cf39c3d6cc71",
+      "projectedCompleteRowSha256": "29cff6e7b6051e88f26813e24661cc8ce78de845902870b8206ac141d8fc4581",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -11481,8 +11481,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -11574,7 +11574,7 @@
       "element": "expansion-primary",
       "property": "right",
       "originalCompleteRowSha256": "8a7c48ac1c4eca3075164afe503bc76d0b07aea43238d0e47d852bb133ea9ca9",
-      "projectedCompleteRowSha256": "0cf4dfb7861841f45252557d52fb92790fa0fd07e241c95ab6c0e38840769f47",
+      "projectedCompleteRowSha256": "489bea61a69b9012d2550c9a35fa74cd7ce10ceba7d72a546235d71bd99f0b79",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -11741,8 +11741,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -11834,7 +11834,7 @@
       "element": "expansion-primary",
       "property": "textAlign",
       "originalCompleteRowSha256": "e795d408f79e46f566c1f85bd93a524910baf5b7c3dc1b96655ab25e05fb338b",
-      "projectedCompleteRowSha256": "c2497387dafd68775eee60820ff77cc5127d040fee58a7dcece1ba0c10582809",
+      "projectedCompleteRowSha256": "144b806f15ce778d5fb0fe14746364fe581756c347260ff055e92715344c2adb",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -12002,8 +12002,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -12095,7 +12095,7 @@
       "element": "expansion-primary",
       "property": "top",
       "originalCompleteRowSha256": "f0d0c130e18bf1c8c8ca8420a5633ebf42753d4d7e06231ae7ec0cf43425635a",
-      "projectedCompleteRowSha256": "534301041341207b6622a1b867ec89c57fb105a91d91dc389b28cbf4eff26d25",
+      "projectedCompleteRowSha256": "bef4caa6ccd4e72dd971afb23f3315932aa9168081051104ac7e137efe198ba5",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -12262,8 +12262,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
@@ -12355,7 +12355,7 @@
       "element": "expansion-primary",
       "property": "verticalAlign",
       "originalCompleteRowSha256": "98d8e113ce031f94f6eb24eea6eccbb06aeeb4af9c6bc2876ed11ce73e09638f",
-      "projectedCompleteRowSha256": "3800bf822563e31aa3d384d0da8cfe4c28747599f049043e1e9fc82f5d06e95d",
+      "projectedCompleteRowSha256": "e048139a0e2c907a3440c17cbcdf729dbc5a05517b017ed127fc5cbe4c61f186",
       "projectedRow": {
         "family": "expansion",
         "element": "expansion-primary",
@@ -12522,8 +12522,8 @@
           "proposalKind": "expansionOwner",
           "sourcePlan": {
             "file": "docs/material-expansion-owner-attribution-plan.json",
-            "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-            "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+            "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+            "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
             "sourceProofsReplayed": true,
             "originalCanonicalJoinReplayed": true
           },
