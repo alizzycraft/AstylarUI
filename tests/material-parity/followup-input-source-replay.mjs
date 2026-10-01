@@ -11,7 +11,7 @@ import { bindPreciseAuditNormalization, preciseAuditNormalization } from './audi
 
 const hash = x => createHash('sha256').update(x).digest('hex');
 const digest = x => hash(JSON.stringify(x));
-const bindingRevision = '11bd538';
+const bindingRevision = 'd2e773ae';
 const bindingFile = 'docs/material-followup-input-proposal-binding.json';
 const collectors = {
   leafFamily: collectLeafFontFamily,
@@ -82,15 +82,29 @@ function readPinned(file, revision) {
 // Return a projected copy only after every other source and observation matches.
 export function conserveExpansionOwnerProof(proof, proofBytes) {
   const projected = structuredClone(proof), historical = JSON.parse(proofBytes);
-  const file = 'tests/material-parity/run-material-parity.mjs';
-  const current = projected.sourceFingerprints.filter(s => s.file === file);
-  const prior = historical.sourceFingerprints.filter(s => s.file === file);
-  assert.equal(current.length, 1); assert.equal(prior.length, 1);
-  const source = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
-  assert.equal(hash(source), current[0].sha256);
-  if (current[0].sha256 !== prior[0].sha256) {
-    assert.equal(hash(restoreGapCaptureDiagnostics(source)), prior[0].sha256);
-    current[0].sha256 = prior[0].sha256;
+  const restoreAstylarDiagnostics = source => {
+    let restored = source.replaceAll('\r\n', '\n');
+    const replaceOnce = (before, after) => {
+      assert.equal(restored.split(before).length, 2, 'Astylar diagnostic restoration must match exactly once');
+      restored = restored.replace(before, after);
+    };
+    replaceOnce(`        // Read-only audit diagnostics: retain the final mesh depth and camera\n        // bounds alongside CSS-space measurements. These values are observed\n        // after layout/projection and never feed authoring or interaction.\n        paintDepth: {\n          meshZ: mesh.position.z,\n          enabled: mesh.isEnabled(),\n          visible: mesh.isVisible,\n          visibility: mesh.visibility,\n        },\n`, '');
+    replaceOnce(`        camera: {\n          position: { x: camera.position.x, y: camera.position.y, z: camera.position.z },\n          viewport: { x: viewport.x, y: viewport.y, width: viewport.width, height: viewport.height },\n        },\n`, '');
+    return restored;
+  };
+  for (const file of ['tests/material-parity/run-material-parity.mjs', 'examples/material-showcase/src/app/astylar.component.ts']) {
+    const current = projected.sourceFingerprints.filter(s => s.file === file);
+    const prior = historical.sourceFingerprints.filter(s => s.file === file);
+    assert.equal(current.length, 1); assert.equal(prior.length, 1);
+    const source = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+    assert.equal(hash(source), current[0].sha256);
+    if (current[0].sha256 !== prior[0].sha256) {
+      const restored = file.endsWith('/astylar.component.ts') ? restoreAstylarDiagnostics(source) : restoreGapCaptureDiagnostics(source);
+      assert.equal(hash(restored), prior[0].sha256);
+      // A refreshed source-transition receipt intentionally retains the live
+      // diagnostic fingerprint; only the known diagnostic-only delta is
+      // accepted, and the full source hash remains authenticated above.
+    }
   }
   assert.equal(JSON.stringify(projected, null, 2) + '\n', proofBytes,
     'expansion source proof changed beyond reviewed capture diagnostics');
