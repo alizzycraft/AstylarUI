@@ -1748,7 +1748,7 @@ test('recent public and popup proofs join existing inventories without changing 
     ['show', 'a6217c5:tests/material-parity/input-equivalence-audit.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }));
   assert.deepEqual(current.fingerprints, beforePointer.fingerprints);
-  assert.deepEqual(current.proofs.slice(3, -7), beforePointer.proofs);
+  assert.deepEqual(current.proofs.slice(3, -8), beforePointer.proofs);
   const pointerNames = ['public button pointer states diagnose materials outside render ownership',
     'dark mobile overlay cycles retain focus and semantic cleanup boundaries'];
   for (const [index, entry] of current.proofs.slice(0, 2).entries()) {
@@ -1763,9 +1763,9 @@ test('recent public and popup proofs join existing inventories without changing 
   assert.deepEqual(current.fingerprints.slice(0, 537), prior.fingerprints);
   assert.deepEqual(current.fingerprints.slice(537), files.map(file => ({ file,
     sha256: createHash('sha256').update(readFileSync(file, 'utf8').replace(/\r\n/g, '\n')).digest('hex') })));
-  assert.equal(current.proofs.length, prior.proofs.length + 15);
-  assert.deepEqual(current.proofs.slice(8, -7), prior.proofs);
-  for (const [index, entry] of current.proofs.slice(-7).entries()) {
+  assert.equal(current.proofs.length, prior.proofs.length + 16);
+  assert.deepEqual(current.proofs.slice(8, -8), prior.proofs);
+  for (const [index, entry] of current.proofs.slice(-8, -1).entries()) {
     assert.equal(entry.file, 'tests/material-parity/input-equivalence-audit.spec.mjs');
     assert.notEqual(entry.status, 'missing');
     assert.match(entry.status, /retained/);
@@ -1775,6 +1775,13 @@ test('recent public and popup proofs join existing inventories without changing 
         'retained empty caret rasters preserve', 'retained applied-theme popup focus states preserve',
         'retained selection states preserve', 'retained tooltip textures separate'][index]));
   }
+  const boundaryProof = current.proofs.at(-1);
+  assert.equal(boundaryProof.file, 'tests/material-parity/input-equivalence-audit.spec.mjs');
+  assert.notEqual(boundaryProof.status, 'missing');
+  assert.match(boundaryProof.status, /retained/);
+  assert.match(boundaryProof.description, /Tab selection|popup-state|email/i);
+  assert.ok(readFileSync(boundaryProof.file, 'utf8').split(/\r?\n/)[boundaryProof.line - 1].includes(
+    'retained Tab, popup-state and email-edit boundaries preserve exact action evidence'));
   const expectedNames = ['public equal-input overflow isolates scrollbar gutter before projection',
     'public equal-input text separates fractional origins from texture raster phase',
     'public input lifecycle isolates caret material retention without Material plugins',
@@ -2190,6 +2197,47 @@ test('retained tooltip textures separate popup placement from raster phase', asy
   }
   assert.equal(textureHashes.length, 3); assert.equal(new Set(textureHashes).size, 1);
   assert.equal(replay.at(-1).acceptance, false);
+});
+
+test('retained Tab, popup-state and email-edit boundaries preserve exact action evidence', () => {
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  const readRecords = (file, sha256) => {
+    const raw = readFileSync(file);
+    assert.equal(digest(raw), sha256);
+    return raw.toString().trim().split(/\r?\n/).filter(Boolean).map(line => JSON.parse(line));
+  };
+  const tab = readRecords('artifacts/material-parity/tab-selection-error-boundary-69cd82b7-verified.log',
+    'b000d7f5cdc9c7c27ebea1a4ef6526ed31ab401966df1d73947fdfc59ae8d95b');
+  const tabCases = tab.filter(row => row.samples);
+  assert.equal(tabCases.length, 8);
+  for (const condition of ['normal', 'error']) {
+    const native = tabCases.find(row => row.family === 'form-field' && row.condition === condition && row.mode === 'reference');
+    const candidate = tabCases.find(row => row.family === 'form-field' && row.condition === condition && row.mode === 'astylar');
+    assert.deepEqual(native.samples.find(sample => sample.label === 'tab').selection, [0, 5]);
+    const focused = candidate.samples.find(sample => sample.label === 'tab');
+    assert.deepEqual(focused.selection, [0, 0]);
+    assert.ok(focused.tabEvidence.writes.some(write => write.stack.includes('AstylarSemanticBridge.applyControlState')));
+  }
+  const popup = readRecords('artifacts/material-parity/field-popup-state-boundaries-19dfafe2.log',
+    '6cf5b08bd1b0110ca1e4611bd563309ab0d2d06dae49c6f752624184553171cd');
+  const popupCases = popup.filter(row => row.samples);
+  assert.equal(popupCases.length, 18);
+  for (const condition of ['normal', 'error']) {
+    const native = popupCases.find(row => row.family === 'timepicker' && row.condition === condition && row.mode === 'reference');
+    const candidate = popupCases.find(row => row.family === 'timepicker' && row.condition === condition && row.mode === 'astylar');
+    assert.equal(native.samples.find(sample => sample.label === 'tab').open, false);
+    assert.equal(candidate.samples.find(sample => sample.label === 'tab').open, true);
+    assert.equal(native.samples.find(sample => sample.label === 'icon-click').open, true);
+    assert.equal(candidate.samples.find(sample => sample.label === 'icon-click').open, false);
+  }
+  const email = readRecords('artifacts/material-parity/email-native-edit-routing-d8807345.log',
+    '19af8fced1859dde5d31f4d8514132078c677c9bcec170c99cafbd0159aae332');
+  const emailCandidate = email.find(row => row.mode === 'astylar').samples.find(sample => sample.label === 'type');
+  const emailNative = email.find(row => row.mode === 'reference').samples.find(sample => sample.label === 'type');
+  assert.equal(emailNative.value, 'Z');
+  assert.equal(emailCandidate.value, 'Zteam@example.com');
+  assert.ok(emailCandidate.events.some(event => event.stage === 'preventDefault' && event.stack.includes('KeyboardInputHandler.handleTextInput')));
+  assert.ok(!emailCandidate.events.some(event => event.event === 'beforeinput' || event.event === 'input'));
 });
 
 test('recent source diagnostics conserve predecessor findings and reject altered receipts or conclusions', () => {
