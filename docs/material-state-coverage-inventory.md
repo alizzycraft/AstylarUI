@@ -2,6 +2,22 @@
 
 ## Evidence boundary
 
+The independent139-finding cold canonical check now exits0 in43.84minutes:
+all436/1,875 cases,8,483 groups/389,202 occurrences remain, with1,205 files
+reverified and0 invalidations. See `cold-canonical-check-4aec685.log` and current
+handoff. Earlier pending-check statements below are historical; standalone
+proof registration and final acceptance gates remain pending.
+
+Progress paint now has eight paired all-theme mobile DPR2 cases,16 authenticated
+rasters and eight reverified dependencies. At64/100 the bar's first divergence is
+the plugin's positive center displacement (right fill versus reference left fill),
+with independently unequal authored track colors. Spinner's-38degree/decreasing
+CSS-angle construction differs from native-90degree SVG rotation/increasing
+traversal. See `progress-paint-input-boundary-711eec2-replay.log` and current
+handoff. This is bounded plugin/input attribution, not whole-arc raster or
+resource-lifetime acceptance. Existing canonical spinner finding is strengthened;
+new standalone observations await coherent producer registration.
+
 All five text-input families now have bounded visible-empty-caret evidence in
 all four actual themes at mobile DPR2:18 missing paired cases reuse the existing
 collector and two prior dark cases remain applicable. Six timed initial/hide
@@ -479,8 +495,8 @@ source-derived applicability review before it can be closed as inapplicable.
 | Dialog | 12 / 66 | hover content, outside dismissal, open, M | Retained light 900×700 DPR 1 Tab/Escape capture exists. Dark/mobile DPR 2 open/Escape: both focus Cancel; HTML restores trigger, candidate ends at BODY. Tab/Shift+Tab stays inside Cancel/Save on both; candidate modal contract makes trigger inert. Post-dismissal counts plateau (12/13/7); all textures are text-cache owned and public disposal clears sampled runtime/cache/plugin/observer counts. Surface-local scope, panel paint, retained-material ownership and multi-surface/late-async lifetime remain. |
 | Snack-bar | 12 / 59 | activate-twice, open, auto-dismiss, comparison-pane | Chrome 154 dark/mobile DPR2 Tab/Enter opens both at y=788/height=48 with local foreground/background pixels; UNDO dismisses both. Width/palette differ at authored input (native374px vs fixed344px); candidate restores trigger, native ends at BODY. Four real-target timer probes in light desktop DPR1 and dark mobile DPR2 preserve a reopened snackbar past the original expiry, expire it on the new lifetime, and dismiss a third opening through UNDO. Exact fade/local paint, other profiles, repeated resources and late disposal remain. Retain snackbar-reopen-expiry-5918ea7-verified.log; see handoff for the rejected hidden-proxy targeting diagnostic. |
 | Tooltip | 12 / 50 | open, comparison-pane hover/held | Retained light desktop DPR 1/2 real Tab capture proves opening-state authoring differs. Chrome 154 ordinary non-benchmark dark/mobile DPR 2 likewise opens only HTML on Tab; pointer hover opens both, centered 8px below each trigger, 24px high, with actual common background/foreground pixels; leave removes both. Unequal connected-overlay/relative-flow composition remains despite this geometry. Local sharpness, touch/scroll/fallback and other profiles remain. |
-| Progress-bar | 12 / 8 | passive inspect | Authored determinate 64/100 (`.64` candidate ratio); paired Tab finds no controls and both semantic progressbars expose min=0/max=100/now=64. Keyboard actions and indeterminate phase are inapplicable. Geometry/paint/plugin ownership remain. |
-| Progress-spinner | 12 / 8 | passive inspect | Authored determinate 64/100 (`.64` candidate ratio); paired Tab finds no controls and min/max/now match 0/100/64. Keyboard actions and indeterminate phase are inapplicable. Arc geometry/paint/plugin ownership remain. |
+| Progress-bar | 12 / 8 | passive inspect | Determinate64/100 semantics agree; keyboard/indeterminate phase inapplicable. Eight paired progress-family paint cases identify all-theme mobile right-fill plugin center calculation and unequal track-color inputs. Used-size height, remaining viewport/value paint and full resource ownership remain open; not input parity. |
+| Progress-spinner | 12 / 8 | passive inspect | Determinate64/100 semantics agree; keyboard/indeterminate phase inapplicable. All-theme mobile native-90degree SVG rotation versus plugin-38degree/decreasing CSS angles strengthens existing source finding. Whole-arc/cap raster, remaining viewport/value paint and full resource ownership remain open; not input parity. |
 
 ## Priority and ownership of the remaining checks
 

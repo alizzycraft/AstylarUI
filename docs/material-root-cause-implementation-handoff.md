@@ -2,6 +2,50 @@
 
 ## Current audit checkpoint — October 1
 
+**Independent cold canonical check complete; standalone integration remains.**
+`ASTYLAR_AUDIT_COLD=1 ASTYLAR_AUDIT_PROGRESS=1 node
+scripts/export-material-input-audit-current-ancestry.mjs --check` exits0 in
+2,630,594.6473ms (43.84minutes). It preserves436/436 static,1,875/1,875
+interaction,8,483 groups,389,202 occurrences and139 source findings, with
+1,205 files/89,154,859 bytes reverified and0 invalidations. Retain
+`cold-canonical-check-4aec685.log`, SHA-256
+efd64aa8faf24a5753689f7ae75b9470f043faf5b46e54d9a36c77226c94ddb3.
+This closes the independent publication check previously pending below, not
+input equivalence, registration of subsequent standalone proofs, or final gates.
+Do not repeat this export/check for ledger-only edits.
+
+**Determinate progress paint diverges first in plugin/application inputs.**
+The existing frozen-showcase helper captures16 pages (eight pairs) across all
+four actual themes at mobile390x844 DPR2/Chrome154.0.8037.58. Collection takes
+26,989.0084ms with0 page errors; all16 raster hashes and eight dependency hashes
+reverify. Retain `progress-paint-input-boundary.probe.mjs`, its711eec2 directory,
+capture and replay logs. Capture SHA-256 is
+69a8310dc9bbce45185d4014525b1f4c161f8672745ce66073ecba4f4599dae1.
+For64/100, native bar scales from its left origin to166.4px of260px; candidate
+plugin requests positive46.8 CSS px displacement and fills the right-hand64%.
+Exact10%/90% track samples corroborate this reversal in every profile. The first
+divergence is `material-plugin/material-showcase.plugin.ts:129–133`, not an
+unexpected final projection. Blame attributes the CSS adapter expression to
+e4ca3db4; its predecessor already used the positive displacement in world-scaled
+units. This establishes inherited source sign, not a historical first-bad runtime.
+Native computed track is rgb(232,224,235) in all profiles; candidate authored
+track is#e7e0ec except dark#49454f, consistent with unequal raster samples.
+Classify these as application/plugin authoring defects. Candidate authored8px
+height versus actual assigned4px remains a separate used-size question; do not
+claim the observed bar is8px high or compensate its origin.
+
+Native spinner radius45px/stroke10px and dash282.743px/offset101.788px accompany
+an explicit SVG container rotation of-90degrees. Candidate radius/stroke agree
+but source at152–157 starts at-38degrees and decreases CSS polar angle, unlike
+the reference's increasing SVG traversal. This strengthens the existing
+`plugin-circular-progress-start-angle` finding, not a new core-coordinate claim.
+The plugin owns indicator construction and must express reference-equivalent
+CSS geometry before final projection. Tube/SVG cap and whole-arc raster
+equivalence, other values/viewports, and complete resource lifetime remain open.
+Next integrate these and the recent keyboard/caret/selection/tooltip/timepicker
+standalone observations through the existing producer inventory in one batch;
+then address remaining state/input coverage. No new audit framework is needed.
+
 **Missing all-theme mobile empty-caret populations checked.** Reuse of the
 existing dark-mobile collector, with explicit screenshot `caret: initial/hide`
 and actual runtime theme verification, covers18 missing paired cases: all five
