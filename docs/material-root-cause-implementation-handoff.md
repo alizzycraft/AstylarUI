@@ -199,6 +199,36 @@ Pending after the live export: correct ordinary-test profile labels/guards and
 register the new bounded coverage through existing tests. URL-only ordinary
 timepicker diagnostics likewise require actual-theme revalidation before any
 dark-profile claim. Benchmark-mode captures are not invalidated by this finding.
+The next boundary probe targets only four decisive cases (light desktop/mobile,
+contrast/custom mobile), rather than repeating12 pairs. It preserves native
+text-run bounds, loaded-font state, candidate CPU texture PNGs/alpha bounds and
+final projected text planes, without repainting or moving either side. All four
+complete in19,056.2269ms with no errors. Retain
+`tooltip-layout-texture-boundary.probe.mjs` and
+`tooltip-layout-texture-boundary-5fe51fb.log`, SHA-256
+13ba687136975012cd967251a702d7b01c77ceb076c42df1ba5bd01c59050cd6.
+Independent replay confirms the plane starts at popup+8px X/+4px Y and the
+native text run at popup+8px X. Native text-run height14px is not a line-box
+height mismatch: native line-height and candidate logical texture height are16px.
+Candidate DPR2 textures are byte-identical for all three tested profile origins
+(SHA-25615ec4b370a14e8e7b345347171a50764f8c0ed2b110595a08dc9865a359d333b),
+while native/candidate screen phases differ. DPR1 texture has492 partially opaque
+pixels and no fully opaque pixels; DPR2 has249 opaque/1,137 partial pixels.
+This describes backing raster, not proof that opacity alone causes the residual.
+RGB channel-coverage spreads are similarly small on both sides, so this probe
+does not support attributing the gap to native LCD versus grayscale antialiasing.
+Retain `tooltip-layout-texture-boundary-5fe51fb-replay.log`.
+An offline fixed-plane model uses measured pixel centers, nearest texel sampling
+and straight-alpha composition on the captured background, with no offset search.
+It nearly reconstructs candidate screen crops: DPR1 similarity.99912 (mean
+channel error.2466/max59), DPR2>.99999 (mean.00957/max1), while similarities to
+native remain.68352/.73543/.49828/.49543. Retain
+`tooltip-layout-texture-boundary-5fe51fb-sampling.log`. This locates most observed
+screen difference in the retained local raster/fractional sampling phase rather
+than a displaced popup or broadly wrong GPU composition. It is not exact pixel
+identity, a general compositing proof, final root-cause attribution for the DPR1
+residual, or authorization for candidate-only offsets/opaque textures. Resolve
+the core global raster-phase/fidelity contract with the existing public reduction.
 
 The existing dark/mobile overlay lifecycle test now observes live counts and
 unbound identities independently of tracked diagnostics. Its focus/semantic,

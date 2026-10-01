@@ -41,6 +41,13 @@ This extends bounded paint coverage, not input equivalence or sharpness acceptan
 See the handoff for receipts and pending durable profile guards after the live
 export. Ordinary URL-only timepicker theme claims also require revalidation;
 benchmark-mode captures remain applicable.
+Four targeted tooltip boundary cases further preserve native text-run geometry,
+candidate CPU texture bytes and projected text planes. Insets/16px line boxes
+match the authored intent; DPR2 local textures remain byte-identical across
+profile origins. Fixed-plane nearest/alpha replay nearly reconstructs candidate
+screen crops but not native crops, narrowing the main difference to local raster
+and fractional phase. Exact DPR1 residual attribution and the core text-fidelity
+contract remain open; no fixture offset or opaque-texture workaround is accepted.
 
 The following checkpoints are historical, not the current publication status.
 
