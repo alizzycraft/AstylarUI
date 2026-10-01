@@ -2,6 +2,16 @@
 
 ## Evidence boundary
 
+Retained light desktop empty-focus rasters now demonstrate candidate caret
+visibility for all five text-input families at DPR1/2, not only form-field.
+Eighty authenticated paired rasters show candidate strokes in2/3 of four timed
+samples per population; native samples hide the caret through the original
+capture default. This is historical visibility evidence, not paired caret
+paint equivalence or current/profile-wide acceptance. See
+`empty-caret-retained-raster-replay-4aec685.log` and current handoff. The next
+native/candidate caret check must explicitly preserve native caret visibility;
+do not recapture to repeat the settled historical candidate-absence question.
+
 The batched139-finding export now exits0 with all436/1,875 original cases and
 8,483 groups/389,202 occurrences retained. Section comparison authenticates
 all79 sections (70 unchanged/9 changed). All138 prior full source findings remain

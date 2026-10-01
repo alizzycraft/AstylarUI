@@ -2,6 +2,27 @@
 
 ## Current audit checkpoint — October 1
 
+**Retained empty-caret visibility reviewed across five families.** Reuse of the
+authenticated light desktop input-boundary capture, without new browser output,
+checks80 local rasters: four timed empty-focus samples on both sides for
+form-field, email input, autocomplete, datepicker and timepicker at DPR1/2.
+Every candidate population contains a contiguous dark caret stroke in2 or3 of
+its four samples: two device-pixel columns with18 exact foreground pixels each
+at DPR1; four columns with38 each at DPR2. Empty value and focus are asserted.
+This extends the previously inspected form-field candidate visibility to all
+five historical families, not current all-profile acceptance. Native left-edge
+regions contain only background because the original producer omits the caret
+screenshot option, whose Playwright default hides native carets. Do not treat
+that absence as a native defect or infer matched caret width/color/geometry.
+Retain `empty-caret-retained-raster-census-4aec685.log`, SHA-256
+fdc61fc169eca9167e2d4ac7c7c781139802eecfc81a9c76bd2e08c1b19bcff3,
+and `empty-caret-retained-raster-replay-4aec685.log`. Replay authenticates all80
+rasters and their exact stroke pixels against report SHA-25639df94e0.
+The existing complete runtime/tree/action/raster validator passes1/1 in
+2,178.1132ms. Next paired caret capture must preserve native caret visibility
+and distinguish unequal caret-color authoring; do not repeat this historical
+census. No producer dependency was edited during the live cold check.
+
 **139-finding cold export and exact predecessor conservation complete.** The batched
 0a0b5d6 producer export exits0 in2,822,742.5915ms (47.05minutes), preserving
 436/436 static,1,875/1,875 interaction,8,483 scalar groups and389,202 occurrences.
@@ -46,6 +67,15 @@ all nine changed sections and permits committing the canonical publication.
 Independent cold canonical check and final gates remain pending. Recent
 standalone profile/ancestor probes are not yet registered by this producer;
 conservation is not input equivalence or full audit acceptance.
+
+Publication is committed and pushed as4aec685 on
+`codex/material-audit-alignment-integration`. The independent cold canonical
+check is running with the complete named baseline launcher and
+`ASTYLAR_AUDIT_COLD=1`, `ASTYLAR_AUDIT_PROGRESS=1`; retain
+`cold-canonical-check-4aec685.log`. Its observed `build-audit` phase is not a
+terminal result or acceptance. Keep producer dependencies unchanged until it
+terminates. The push succeeds with the existing GitHub large-file warning for
+the59.91MB compressed canonical package; no LFS or history change was made.
 
 **Field-origin residual occurs before projection.** Read-only inspection of
 stored CSS layout boxes for light/custom mobile DPR2 places the candidate field
