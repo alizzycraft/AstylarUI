@@ -2,6 +2,35 @@
 
 ## Current audit checkpoint — October 1
 
+**Normal/error Tab boundary isolates the shared form-field selection cause.**
+The retained `tab-selection-error-boundary.probe.mjs` reuses the five-input
+collector and the existing native selection-setter instrumentation, restricted
+to form-field/email and normal/error states at actual light/desktop DPR1.
+All eight pages remain enabled, have the expected aria-invalid state and no
+page errors. In both form-field states, native Tab selects [0,5]; candidate
+focusin initially observes the same [0,5], then the served
+`AstylarSemanticBridge.applyControlState`/`syncControlStates` call stack writes
+selection [0,0]. Candidate semantic and core selection settle at [0,0]; typing
+produces `ZAtlas` instead of native `Z`. This locates the first divergence in
+shared core semantic synchronization, not error-specific reconciliation,
+authoring offsets or Babylon projection. It extends the existing Tab proof;
+it is not a new independent defect or authorization to implement a fix.
+Native email selection endpoints remain null and no candidate setter writes
+are observable. Its identical normal/error editing symptom (`Z` versus
+`Zteam@example.com`) is confirmed, but the exact selection cause is not proved
+for that input type. Do not replace email with text to conceal that limitation.
+Capture takes15,630.1292ms. Independent replay verifies all eight dependency
+receipts, both original collector/instrumentation source hashes, the complete
+instrumentation block hash and the exact action-boundary results. Retain
+`tab-selection-error-boundary-69cd82b7-verified.log`, SHA-256:
+b000d7f5cdc9c7c27ebea1a4ef6526ed31ab401966df1d73947fdfc59ae8d95b,
+and the initial pre-browser extraction-guard failure. The inherited collector
+header still describes its original disabled scope; the wrapper header and
+actual normal/error assertions define this variant's scope. No selection paint
+or other-profile acceptance is claimed. Register these bounded proofs through
+the existing inventory in a coherent batch after the live export completes;
+do not repeat unchanged captures or count this standalone evidence as canonical.
+
 **Error-state editing and error-description ownership are now sampled separately.**
 The reused five-input collector, parameterized only for `interaction=error`,
 checks actual light/desktop DPR1 state at initial/Tab/type/Enter/pointer boundaries.

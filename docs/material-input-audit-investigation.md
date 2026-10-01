@@ -4,7 +4,7 @@ This is an investigation record, not a declaration of completed parity or a rend
 The machine report is generated separately from the full benchmark output.
 
 For the current remaining-work ledger, use the dated checkpoint in
-[the root-cause handoff](material-root-cause-implementation-handoff.md#current-audit-checkpoint--september-24).
+[the root-cause handoff](material-root-cause-implementation-handoff.md#current-audit-checkpoint--october-1).
 The entries below are historical investigation results; their counts and
 in-flight-process descriptions are not current status.
 
