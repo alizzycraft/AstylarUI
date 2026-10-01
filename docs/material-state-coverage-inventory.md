@@ -363,11 +363,16 @@ source-derived applicability review before it can be closed as inapplicable.
 New shared lifecycle evidence changes the next decisive check: real-pointer
 snackbar cycles in light desktop DPR1 and dark mobile DPR2 keep tracked materials
 at13 while live materials grow17/19/21, with retained hover/focus/active materials
-and whole-surface disposal clearing sampled resources. Isolate the core public
-button pseudo-state allocation/adoption boundary before extending per-family
+and whole-surface disposal clearing sampled resources. A plugin-free public
+button reduction now confirms the core post-render allocation/adoption defect:
+no-interaction replacement controls retain no orphans, while three pointer-state
+cycles leave5/10/15 orphan materials at both DPR1 and DPR2. Installed complete
+typed and legacy owning methods match current-source transpilation. Integrate
+this bounded finding/proof after the live cold check, then extend per-family
 cleanup checks. Earlier menu/sheet/dialog tracked-count plateaus are not proofs
 of stable live materials. See the current handoff; no renderer fix or canonical
-classification is inferred yet. Ordinary comparison iframe replacement does not
+whole-audit acceptance is inferred; new canonical classification remains pending.
+Ordinary comparison iframe replacement does not
 retain old snackbar timers across a switch to Menu, in the bounded DPR1 probe.
 
 1. Shared remaining coverage: native scrollbar capture applicability and

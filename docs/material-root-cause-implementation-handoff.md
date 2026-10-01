@@ -69,7 +69,39 @@ assert the delivered target. No fixture inputs changed. This does not establish
 precise fade timing, local paint, resource cleanup, late disposal, all profiles
 or original historical missing-snackbar attribution. Full gates remain pending.
 
-**New pointer-lifecycle counterexample; public reduction is next.** Three actual
+**Confirmed public pointer-state material ownership defect.** The plugin-free
+package-root button reduction passes its diagnostic assertions at DPR1 and DPR2
+in Chrome154 (6,493.9709ms). Three remove/recreate cycles without interaction
+leave tracked/live counts equal. Three hover/held/click/blur/remove cycles instead
+leave 5/10/15 orphan materials, including cached hover/focus/active materials and
+the legacy `probe-material`. Whole-surface disposal clears all sampled resources.
+Retain `artifacts/material-parity/public-pseudo-material-ownership.probe.mjs` and
+`public-pseudo-material-ownership-80c30cd-verified.log`, SHA-256
+3db5c9246839ebe6eaa138e3a2cd71ea6e23933bb011c36a168ca8dd97a7fdd4.
+The log pins the application, served bundle and reverified disk dependencies.
+Complete installed methods match current-source transpilation for
+`applyElementPseudoState`, `setButtonLabelPseudoMaterial` and resource `replace`.
+Independent AST comparison also matches complete legacy `setupMouseEvents`,
+`applyElementMaterial` and mesh `createMaterial` methods. The legacy interaction
+source/installed hashes are respectively
+47255cbe15e58cbe5f8ac2819aedda24122165d6a7cbd16ee0ce65110e716410 /
+4ee2def7e631d963c81a82f30f54d79cebd8c72c550031e52a1d1c8de1cc3b3f;
+mesh source/installed hashes are
+a1a1adab9ffdc0e9edbc43a6d4c835ee7b2f6094b9cbd3a13484ccd0923f0a2c /
+0a69b9ae2a31abaecc5a8bd07b77f0852e9a7a58ce65cc3afbf17023c1bc25f7.
+First divergence is post-render interaction allocation: typed pseudo-state
+materials at src/lib/astylar.ts:1374 and legacy solid-background replacement at
+src/app/services/dom/elements/element-interaction.service.ts:885 are created
+outside synchronous resource `replace()` and not adopted. By contrast,
+`setButtonLabelPseudoMaterial` explicitly adopts its texture and material.
+The narrow implementation owner is core late-allocation/adoption and replacement
+lifetime, not Material styling or a plugin workaround. Keep this separate from
+the caret allocation subtype. Gradient/border paths, GPU retention, performance
+attribution and all-family lifecycle acceptance are not proven by this reduction.
+Canonical integration of this new finding remains pending the live independent
+cold check; this diagnostic does not change its producer dependencies.
+
+The earlier application-scale counterexample remains preserved. Three actual
 snackbar trigger/UNDO cycles in light desktop DPR1 and dark mobile DPR2 leave
 tracked materials at 13 but live materials at 17/19/21. Live-minus-tracked is
 4/6/8; retained identities are trigger hover/focus/active state materials, not
@@ -78,11 +110,9 @@ plateau. Whole-surface disposal clears sampled scene/cache/plugin resources.
 Retain the failed assertion in `snackbar-resource-cycles-33c33ed.log` and the
 identity diagnostic `snackbar-resource-identities-33c33ed.log` (10,369.5262ms),
 SHA-256 27fb54191883cb024fa7d6821601984ec28da5deec0f0d66ae31073c2abc4027.
-Current `Astylar.applyElementPseudoState` creates mesh-cached state materials at
-src/lib/astylar.ts:1374 outside synchronous render ownership; the tracker captures
-new allocations inside replace(). This is a suspected shared interaction-resource
-ownership defect, not yet a plugin-free public proof or verified frozen/current
-method binding. Next: public button reduction, then adoption/replacement tracing.
+The public reduction above now confirms the bounded core ownership diagnosis.
+Next: integrate its durable proof/classification in the existing audit inventory,
+then extend only the outstanding per-family live-resource observations.
 Prior tracked-only menu/sheet/dialog plateaus do not prove live-material stability;
 extend those checks only after the shared cause is isolated. Do not infer GPU
 retention, performance attribution, general lifetime acceptance or a renderer fix.
