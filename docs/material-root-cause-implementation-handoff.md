@@ -116,6 +116,23 @@ declarations. Focused node:test passes1/1 in8,862.9769ms; retain
 `public-pseudo-material-ownership-durable-08bc98c.log`, SHA-256
 e7c2ac9ff7eca5dda529f4b80653c7c4c77f0cd10886320d658f63557986e09b.
 Canonical source/proof registration is a pending coherent integration batch.
+That batch is now prepared in the existing producer/policy: one confirmed
+pointer-material source definition is appended, retaining all138 preceding
+definitions exactly, and two diagnostic proofs are prepended while preserving
+all preceding proof entries. The539-file source inventory remains unchanged in
+membership/order. Three focused inventory/conservation/receipt checks pass3/3
+in6,511.251ms, retaining `pointer-integration-conservation-a6217c5-verified.log`.
+The complete producer restoration suite passes29/29 in26,616.8178ms; specific
+pointer-count and acceptance-text mutation controls pass1/1 in634.4848ms.
+Retain `pointer-producer-conservation-a6217c5.log` and
+`pointer-transition-negative-controls-a6217c5.log`. The source pattern initially
+misidentified a local assignment instead of the actual mesh-metadata assignment;
+the focused check rejected it. A separate inventory test rejected its outdated
+five-proof removal expectation; it now authenticates the exact seven additions.
+Retain both failed logs separately. This prepares139 definitions for the next
+coherent canonical integration; the checked-in canonical snapshot still contains
+138. Do not rerun the40-minute export solely for this status update: batch the
+remaining durable shared-boundary proofs before the next milestone.
 
 The existing dark/mobile overlay lifecycle test now observes live counts and
 unbound identities independently of tracked diagnostics. Its focus/semantic,

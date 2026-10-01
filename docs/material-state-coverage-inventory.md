@@ -17,6 +17,11 @@ Independent cold check exits0 in39.80minutes for this138-finding snapshot;
 subsequent public/overlay proof integration, full gates and complete family/state coverage
 remain pending. See the current handoff and retained export/section logs. Input
 equivalence is still false; the family/state gaps below remain unchanged.
+The existing source/proof producer now prepares139 definitions (one appended
+pointer-material finding), conserving all138 preceding definitions and adding
+two diagnostic proof entries. Focused conservation and mutation checks pass;
+the next batched canonical export/check remains pending. This is not a new
+published139-finding snapshot or full family/profile acceptance.
 
 The following checkpoints are historical, not the current publication status.
 

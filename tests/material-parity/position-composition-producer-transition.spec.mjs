@@ -28,6 +28,8 @@ test('recent diagnostic integration preserves historical producer and rejects ch
   assert.equal(restoreStackingProducer(current).restoredSource, restoreStackingProducer(previous).restoredSource);
   for (const [before, after] of [
     ['receipt.sha256', "'unverified'"],
+    ['pointer-state remove/recreate leaves5/10/15', 'pointer-state remove/recreate leaves0/0/0'],
+    ['not stable live-resource acceptance', 'stable live-resource acceptance'],
     ['finding.classification !== definition.classification', 'false'],
     ['not lifecycle acceptance, GPU retention evidence', 'lifecycle acceptance, GPU retention evidence'],
     ['tests/material-parity/sort-focus-structure.spec.mjs', 'tests/material-parity/unreviewed.spec.mjs'],

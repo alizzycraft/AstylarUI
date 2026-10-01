@@ -1429,6 +1429,22 @@ export const sourceAuditDefinitions = Object.freeze([
     focusedProof: 'tests/material-parity/icon-asset-input.spec.mjs: all 20 original SVG/PNG owners and asset/dimension negative controls',
     justification: 'The reference renders an inline currentColor SVG inside mat-icon. The candidate replaces its original SVG URL with fixed 24px light/dark PNGs; the historical asset comment cites transparent-pixel stability in the Babylon texture loader. All 20 captured owners bind the same SVG path, xMidYMid meet viewport and exact raster assets. Native wrapper objectFit fill versus candidate image contain is not a like-for-like image-fit comparison. Fixed raster resolution and baked theme ink do not preserve vector/currentColor inputs across DPR, size or color changes. Restore equivalent asset and paint inputs only after reducing SVG loading/alpha behavior through public APIs; this proof establishes historical input substitution, not a confirmed remaining core texture defect or raster equivalence.',
   }),
+  Object.freeze({
+    id: 'core-pointer-state-material-allocation-escapes-render-owner',
+    introducedBy: 'current public pointer lifecycle reduction; first-bad revision and historical performance attribution not established',
+    file: 'src/lib/astylar.ts',
+    pattern: String.raw`mesh\.metadata\[materialKey\] = this\.babylonMeshService\.createMaterial\(`,
+    classification: 'confirmed-core-renderer-defect',
+    owner: 'core interaction-created material adoption and replacement lifetime',
+    focusedProof: 'tests/material-parity/input-boundary-evidence.spec.mjs: public button pointer states diagnose materials outside render ownership; tests/material-parity/sort-focus-structure.spec.mjs: dark mobile overlay cycles retain focus and semantic cleanup boundaries',
+    evidence: [{ file: 'artifacts/material-parity/public-pseudo-material-ownership-61b4fc9-strict.log', sha256: '7e4b76703625c171e7d1dfeb595759f0bd75b1a65e3545a267e57f9a8cf02cd2' },
+      { file: 'artifacts/material-parity/overlay-live-resources-08bc98c.log', sha256: '766b0a29f109c408dcc45b534aa0497f8a02619965e24fec094979a5feb15cf6' }],
+    observation: { component: 'plugin-free public button', element: 'probe', dpr: [1, 2],
+      states: ['no-interaction remove/recreate', 'hover', 'held', 'click', 'blur', 'remove/recreate', 'surface disposal'],
+      property: 'live-minus-tracked materials after removal', reference: 'zero retained materials for removed control',
+      astylar: [5, 10, 15], stage: 'post-render pointer-state allocation outside synchronous resource ownership' },
+    justification: 'Plugin-free package-root Chrome154 reproduction at DPR1/2 retains no orphans across three no-interaction replacements, but pointer-state cycles leave5/10/15 unbound materials after removal. Complete installed/current typed pseudo-state, label-material, resource replace, legacy pointer setup/material and mesh allocation methods match. Typed state materials and legacy solid-background replacement are allocated outside synchronous replace without adoption; label-state textures/materials explicitly adopt. Menu/sheet/dialog live counts grow19/20/21,18/19/20,17/20/23 while tracked counts plateau, with corresponding trigger state identities. Unbound alone does not mean unowned: combine tracked/live counts, stable identities and the public removal control. Whole-surface disposal clears resources but does not satisfy element replacement lifetime. This is a separate allocation subtype from the caret finding; no plugin compensation, GPU usage, lag attribution, gradient/border generalization or all-profile/late-async acceptance follows.',
+  }),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({

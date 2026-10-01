@@ -36,6 +36,15 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
 export function restoreStackingProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  const pointerProofStart = "    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\\('public button pointer states";
+  if (restored.includes(pointerProofStart)) {
+    assert.equal(restored.split(pointerProofStart).length, 2);
+    const from = restored.indexOf(pointerProofStart);
+    const to = restored.indexOf("    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\\('public equal-input overflow", from);
+    assert.ok(to > from);
+    assert.equal(hash(restored.slice(from, to)), 'd83b64b4ba38001d2a42f33706845c385d5b48502aa11f4f2a845482eb0eabca', 'pointer lifecycle proof integration changed');
+    restored = restored.slice(0, from) + restored.slice(to);
+  }
   // Recent diagnostics add discovery and receipt validation, not historical
   // scalar classification. Authenticate each complete addition before reversal;
   // the unchanged full-predecessor hash below still rejects all other changes.

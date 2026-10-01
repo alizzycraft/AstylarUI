@@ -1744,20 +1744,33 @@ test('recent public and popup proofs join existing inventories without changing 
       (readFileSync, path, createHash);
   };
   const prior = inventories(predecessor), current = inventories(source);
+  const beforePointer = inventories(execFileSync('git',
+    ['show', 'a6217c5:tests/material-parity/input-equivalence-audit.mjs'],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }));
+  assert.deepEqual(current.fingerprints, beforePointer.fingerprints);
+  assert.deepEqual(current.proofs.slice(2), beforePointer.proofs);
+  const pointerNames = ['public button pointer states diagnose materials outside render ownership',
+    'dark mobile overlay cycles retain focus and semantic cleanup boundaries'];
+  for (const [index, entry] of current.proofs.slice(0, 2).entries()) {
+    assert.notEqual(entry.status, 'missing');
+    assert.match(entry.status, /diagnostic counterexample/);
+    assert.match(entry.description, /not/);
+    assert.ok(readFileSync(entry.file, 'utf8').split(/\r?\n/)[entry.line - 1].includes(pointerNames[index]));
+  }
   assert.equal(prior.fingerprints.length, 537);
   assert.equal(current.fingerprints.length, 539);
   assert.equal(new Set(current.fingerprints.map(e => e.file)).size, 539);
   assert.deepEqual(current.fingerprints.slice(0, 537), prior.fingerprints);
   assert.deepEqual(current.fingerprints.slice(537), files.map(file => ({ file,
     sha256: createHash('sha256').update(readFileSync(file, 'utf8').replace(/\r\n/g, '\n')).digest('hex') })));
-  assert.equal(current.proofs.length, prior.proofs.length + 5);
-  assert.deepEqual(current.proofs.slice(5), prior.proofs);
+  assert.equal(current.proofs.length, prior.proofs.length + 7);
+  assert.deepEqual(current.proofs.slice(7), prior.proofs);
   const expectedNames = ['public equal-input overflow isolates scrollbar gutter before projection',
     'public equal-input text separates fractional origins from texture raster phase',
     'public input lifecycle isolates caret material retention without Material plugins',
     'dark mobile field popup cycles diagnose retained cursor materials',
     'ordinary dark mobile tooltip separates keyboard opening from pointer paint'];
-  for (const [index, entry] of current.proofs.slice(0, 5).entries()) {
+  for (const [index, entry] of current.proofs.slice(2, 7).entries()) {
     assert.equal(entry.file, files[index < 3 ? 0 : 1]);
     assert.notEqual(entry.status, 'missing');
     const line = readFileSync(entry.file, 'utf8').split(/\r?\n/)[entry.line - 1];
@@ -1773,8 +1786,15 @@ test('recent source diagnostics conserve predecessor findings and reject altered
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const priorDefinitions = new Function(previous.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
   assert.equal(priorDefinitions.length, 135);
-  assert.equal(audit.sourceFindings.length, 138);
-  for (const [index, { locations, detected, ...definition }] of audit.sourceFindings.slice(3).entries())
+  assert.equal(audit.sourceFindings.length, 139);
+  const precedingPolicy = execFileSync('git', ['show', 'a6217c5:tests/material-parity/input-equivalence-policy.mjs'],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  const precedingDefinitions = new Function(precedingPolicy.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
+  assert.equal(precedingDefinitions.length, 138);
+  for (const [index, { locations, detected, ...definition }] of audit.sourceFindings.slice(0, 138).entries())
+    assert.equal(JSON.stringify(definition), JSON.stringify(precedingDefinitions[index]), precedingDefinitions[index].id);
+  assert.equal(audit.sourceFindings.at(-1).id, 'core-pointer-state-material-allocation-escapes-render-owner');
+  for (const [index, { locations, detected, ...definition }] of audit.sourceFindings.slice(3, 138).entries())
     assert.equal(JSON.stringify(definition), JSON.stringify(priorDefinitions[index]), priorDefinitions[index].id);
   assert.ok(audit.sourceFindings.every(entry => entry.detected));
   const expected = ['core-scroll-client-area-does-not-reserve-native-gutter',
@@ -1784,7 +1804,7 @@ test('recent source diagnostics conserve predecessor findings and reject altered
   // This deliberately partial synthetic capture has no paired root-style receipt.
   // Keep that unrelated failure explicit rather than treating this as full acceptance.
   assert.deepEqual(validation(), ['1 cases lack paired root style evidence']);
-  for (const finding of audit.sourceFindings.slice(0, 3)) {
+  for (const finding of [...audit.sourceFindings.slice(0, 3), audit.sourceFindings.at(-1)]) {
     assert.ok(finding.observation.element && finding.observation.states.length && finding.owner && finding.focusedProof);
     for (const receipt of finding.evidence) {
       assert.equal(createHash('sha256').update(readFileSync(receipt.file)).digest('hex'), receipt.sha256);
@@ -1941,7 +1961,7 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   assert.equal(liveSource.split(recentRegistration).length, 2);
   const liveAst = ts.createSourceFile('live.mjs', liveSource, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   const inventoryNode = liveAst.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory');
-  const calls = inventoryNode.body.statements.find(ts.isReturnStatement).expression.elements.slice(0, 5);
+  const calls = inventoryNode.body.statements.find(ts.isReturnStatement).expression.elements.slice(0, 7);
   assert.ok(calls.every(n => ts.isCallExpression(n) && recentProofFiles.includes(n.arguments[1].text)));
   const proofStart = liveSource.lastIndexOf('\n', calls[0].getStart(liveAst)) + 1;
   const proofEnd = liveSource.indexOf('\n', calls.at(-1).end) + 1;
@@ -1951,7 +1971,7 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   assert.ok(receiptStart > 0 && receiptEnd > receiptStart);
   const withoutReceiptValidation = withoutRecentProofs.slice(0, receiptStart) + withoutRecentProofs.slice(receiptEnd);
   assert.equal(withoutReceiptValidation.replace(launchRegistration, '').replace(recentRegistration, ''), currentSource,
-    'only receipt validation, launch receipts and five recent proof registrations differ from the pinned producer');
+    'only receipt validation, launch receipts and seven recent proof registrations differ from the pinned producer');
   const expectedFiles = listedFiles(currentSource);
   assert.equal(expectedFiles.length, 535);
   assert.deepEqual(expectedFiles.filter(file => stage424Files.includes(file)), stage424Files,
