@@ -64,6 +64,18 @@ to a current conclusion until a fresh dependency-validated sheet checkpoint is
 captured. No focus, pointer-events, containment, or sheet geometry change is
 justified from that stale probe.
 
+A fresh dependency-validated Chrome-154 interaction run is now retained at
+`artifacts/material-parity/bottom-sheet-current-checkpoint-1aa2d884/latest-report.json`
+(SHA-256
+`7f69912467b819b1bc2a60fa4664c18396e10f0f6d7b4266bb42de99a522f694`). Both
+the 900×800 comparison-pane activation and the 390×844 mobile open/dismiss flow
+show two sheet rows, a full-width panel, exact overlay placement, and matching
+focus; the run passes both interaction cases. The previously reported
+cut-off/small-sheet behavior is therefore not reproducible in the current
+build and is retained as historical evidence, not promoted to a current core
+diagnosis. Remaining sheet work is limited to untested dismissal/pointer states
+and source-reconciliation of this capture.
+
 The Tab-selection, popup-state, and email-edit boundary probes are now
 registered in the canonical focused-proof inventory as one authenticated
 bounded proof. The proof inventory is 123 entries; its focused registration,
