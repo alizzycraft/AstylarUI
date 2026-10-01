@@ -2,6 +2,15 @@
 
 ## Evidence boundary
 
+October1 b03908f export failed validation, preserving the c3e0d7d1 canonical
+package. Four historical binders rejected producer additions not yet handled by
+the existing source-transition receipt; normalization remains unchanged. Exact
+addition authentication/restoration now passes29 conservation tests and3 focused
+producer checks. Direct replay binds all259 affected groups with complete original
+case/input coverage; see the current handoff and retained binding log. Canonical
+export/check and conservation remain pending, not proven by these narrow checks.
+The family/state gaps and priorities below remain unchanged.
+
 October1 classification integration adds three bounded source definitions to the
 existing producer: scroll client geometry and caret ownership are confirmed core
 defects in their reductions; text raster fidelity remains suspected pending its

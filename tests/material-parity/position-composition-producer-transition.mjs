@@ -36,6 +36,29 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
 export function restoreStackingProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  // Recent diagnostics add discovery and receipt validation, not historical
+  // scalar classification. Authenticate each complete addition before reversal;
+  // the unchanged full-predecessor hash below still rejects all other changes.
+  const diagnosticInventory = "    'tests/material-parity/input-boundary-evidence.spec.mjs',\n    'tests/material-parity/sort-focus-structure.spec.mjs',\n";
+  if (restored.includes(diagnosticInventory)) {
+    assert.equal(restored.split(diagnosticInventory).length, 2);
+    restored = restored.replace(diagnosticInventory, '');
+  }
+  for (const [start, end, expected] of [
+    ['  // Source-backed diagnostic receipts are immutable evidence, not test-presence claims.\n',
+      '  if (report.coverage.missingElements.length',
+      '8e240baf9f8073815a08e06794582a0d047468bb86c7fc7049e8a2dc3c2bca6b'],
+    ["    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\\('public equal-input overflow",
+      "    proof(root, 'src/parity/rounded-radius.audit.spec.ts',",
+      'fb71f1027b9c03310778705c8f5b54ea85133717e3177947fb846ae43cb0964e'],
+  ]) {
+    if (!restored.includes(start)) continue;
+    assert.equal(restored.split(start).length, 2, 'repeated diagnostic integration boundary');
+    const from = restored.indexOf(start), to = restored.indexOf(end, from);
+    assert.ok(to > from, 'missing diagnostic integration end');
+    assert.equal(hash(restored.slice(from, to)), expected, 'reviewed diagnostic addition changed');
+    restored = restored.slice(0, from) + restored.slice(to);
+  }
   // Launch-module registration adds dependencies to the live inventory, not
   // classification logic. Reverse only the exact pair before authenticating
   // the complete historical producer; fresh capture policy is not conserved.

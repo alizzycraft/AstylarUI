@@ -2,6 +2,38 @@
 
 ## Current audit checkpoint — October 1
 
+**Export failure diagnosed; historical source binding restored in focused replay.**
+The b03908f cold export terminated with validation failure: four source binders
+were invalid and259 scalar groups lost attribution. Retain
+`artifacts/material-parity/cold-canonical-export-b03908f.log`; the canonical gzip
+still hashes to c3e0d7d1bd0cefda54cec42d43ddf57bdbb0a40cf7ef75026daa5280d5f6937c.
+Competing explanations were changed normalization/observations versus an incomplete
+producer-transition receipt. Direct replay confirmed normalization unchanged and
+located the first rejection in restoreStackingProducer's complete historical hash.
+The recent inventory/proof registration and diagnostic receipt-validator additions
+were not reversed by that existing transition. It now authenticates each exact
+addition before reversal, retaining the original full-predecessor hash and rejecting
+altered diagnostic guards, proof scope, registration and unrelated source changes.
+No captured input, scalar normalization, renderer or fixture changes.
+
+`node --test tests/material-parity/position-composition-producer-transition.spec.mjs`
+passes29/29 in23,013.3451ms. An initial run rejected an ambiguous proof-block
+boundary; selecting the unique first proof fixes the test/transition only.
+The existing producer's three focused inventory/receipt/fingerprint checks pass3/3
+in7,301.5978ms; retain `recent-diagnostic-producer-conservation-b03908f.log`.
+Direct source binders independently return bound/complete across2,311 cases and
+6,946 inputs: alignment/font72 groups/4,016 observations, text alignment49/2,677,
+LTR alignment4/178, reviewed inputs134/3,325. Retain
+`recent-diagnostic-source-binding-b03908f.log`. These259 groups explain the failed
+export population, but source replay is not fresh canonical publication or full
+acceptance. Next: one coherent canonical export/check and authenticated conservation
+against the retained c3 predecessor; reuse its existing streamed section digests.
+Then shared overlay/scrollbar input/paint coverage, text-input action boundaries,
+focus/lifecycle and multi-surface gaps, composite keyboard states, passive mapping,
+and current harness/unfiltered browser/release gates. Do not repeat settled proofs.
+
+### Earlier checkpoints
+
 **Recent source classifications are integrated in the producer; coherent export is next.**
 The existing policy adds three bounded findings to the135 unchanged predecessor
 definitions: confirmed scroll client-area divergence before projection, confirmed

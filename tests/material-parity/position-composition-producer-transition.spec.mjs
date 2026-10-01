@@ -20,6 +20,25 @@ import { restoreOwnerBoundaryProducer } from './position-composition-producer-tr
 import { restorePreparedInputProducer } from './position-composition-producer-transition.mjs';
 import { restorePreparedInputFollowupProducer, restoreStackingProducer } from './position-composition-producer-transition.mjs';
 
+test('recent diagnostic integration preserves historical producer and rejects changed evidence guards', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previous = execFileSync('git', ['show', '449586c:' + file],
+    { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreStackingProducer(current).restoredSource, restoreStackingProducer(previous).restoredSource);
+  for (const [before, after] of [
+    ['receipt.sha256', "'unverified'"],
+    ['finding.classification !== definition.classification', 'false'],
+    ['not lifecycle acceptance, GPU retention evidence', 'lifecycle acceptance, GPU retention evidence'],
+    ['tests/material-parity/sort-focus-structure.spec.mjs', 'tests/material-parity/unreviewed.spec.mjs'],
+    ['const beforeStackingReviews =', 'const unreviewedStackingReviews ='],
+  ]) {
+    assert.ok(current.includes(before));
+    assert.throws(() => restoreStackingProducer(current.replace(before, after)));
+  }
+  assert.throws(() => restoreStackingProducer(current + '\n// unrelated'));
+});
+
 test('shared font inventory registration preserves the full historical producer', () => {
   const current = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8').replaceAll('\r\n', '\n');
   const registration = "    'scripts/material-container-font-targets.mjs',\n";
@@ -38,7 +57,8 @@ test('checkpoint inventory registration preserves the exact pre-registration pro
   const previous = execFileSync('git', ['show', 'e15fddd^:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
   const registration = "    'tests/material-parity/run-checkpoint.mjs',\n    'tests/material-parity/run-checkpoint.spec.mjs',\n";
   assert.equal(current.split(registration).length, 2);
-  assert.equal(current.replace(registration, ''), previous);
+  const registered = execFileSync('git', ['show', 'e15fddd:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  assert.equal(registered.replace(registration, ''), previous);
   assert.equal(restoreStackingProducer(current).restoredSource, restoreStackingProducer(previous).restoredSource);
   for (const changed of [current.replace(registration, registration.repeat(2)),
     current.replace('tests/material-parity/run-checkpoint.spec.mjs', 'tests/material-parity/unreviewed.spec.mjs'),
