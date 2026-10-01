@@ -55,6 +55,15 @@ boundary remains the implementation target. The capture exits nonzero only
 because the retained diagnostic intentionally records the native short-viewport
 dismissal mismatch; the depth assertion itself is green.
 
+The next sheet-modality gate is still pending. The retained `sheet-focus-probe`
+was captured with Chrome 153, and the current focused replay correctly rejected
+its frozen browser asset manifest against Chrome 154 before exercising behavior.
+That is an evidence-applicability gap, not a modality result: the historical
+observation that the sheet allowed focus to leave its panel cannot be promoted
+to a current conclusion until a fresh dependency-validated sheet checkpoint is
+captured. No focus, pointer-events, containment, or sheet geometry change is
+justified from that stale probe.
+
 The Tab-selection, popup-state, and email-edit boundary probes are now
 registered in the canonical focused-proof inventory as one authenticated
 bounded proof. The proof inventory is 123 entries; its focused registration,
