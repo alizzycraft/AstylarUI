@@ -2,6 +2,33 @@
 
 ## Current audit checkpoint — October 1
 
+**Error-state editing and error-description ownership are now sampled separately.**
+The reused five-input collector, parameterized only for `interaction=error`,
+checks actual light/desktop DPR1 state at initial/Tab/type/Enter/pointer boundaries.
+All10 pages keep controls enabled and report aria-invalid=true; all accept the
+typed marker. Native Tab/type replaces initial form-field/email text with `Z`;
+candidate produces `ZAtlas`/`Zteam@example.com`. Empty autocomplete/date/time
+inputs produce `Z` on both. The initial endsWith-Z assertion rejected candidate
+insertion at the beginning, not absence of editing. Its misleading failure
+message is retained and explicitly corrected here, not treated as an error-state
+editing-disable diagnosis. Both original diagnostic failures remain; independent
+replay asserts the exact unequal values. Next decisive check for this discrepancy
+is selection state at Tab before typing, distinguishing the known shared focus/
+selection issue from error-specific reconciliation. No new core cause is inferred.
+Native form-field input describes its error text via aria-describedby; candidate
+has no description link even though its authored error span exists. Candidate
+input authoring at astylar.component.ts:917 omits ariaDescribedby while the error
+span is created at919. Restore the equivalent error/hint description relation
+through the existing semantic contract, not duplicate text in an aria label.
+Capture takes21,402.4783ms; eight dependencies and the original collector hash
+reverify. Retain `error-field-editing-13ca779-boundaries.log`, SHA-256:
+64751a63b9cfeb9af9c3fed5658d5910ad3d300487421af761c5fbf319c32f4d,
+and the initial failure log. Native autocomplete/timepicker popup selectors in
+this inherited collector are not authenticated against their actual panel tags;
+do not use its native open=false flags to classify error-state popup behavior.
+No paint, all-profile or whole editing parity is claimed; standalone integration
+remains pending while the repaired canonical export runs.
+
 **Disabled field activation: picker suffix state is omitted in authoring.**
 `disabled-field-activation.probe.mjs` checks five families at actual light theme,
 1440x900 DPR1 with the existing `interaction=disabled` state. Real Tab/type/Enter,

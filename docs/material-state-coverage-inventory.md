@@ -2,6 +2,19 @@
 
 ## Evidence boundary
 
+Error-state coverage now samples five light/desktop DPR1 input families. All
+inputs are enabled, expose aria-invalid=true and accept typing. Native Tab/type
+replaces existing form-field/email values with `Z`; candidate inserts at the
+beginning instead. This needs pre-type selection inspection, not a claim that
+error state blocks editing. Native form-field error description is linked to
+the input; candidate error text exists but input authoring omits ariaDescribedby.
+Eight source receipts and the original collector hash reverify; retain
+`error-field-editing-13ca779-boundaries.log`, SHA-256:
+64751a63b9cfeb9af9c3fed5658d5910ad3d300487421af761c5fbf319c32f4d.
+Both diagnostic assertion failures are retained. Do not classify native popup
+states from this collector's unverified autocomplete/timepicker panel selectors.
+Selection cause, paint and other profiles/viewports remain pending.
+
 Disabled activation coverage now includes five light/desktop DPR1 input families.
 All text controls stay disabled and retain values under real Tab/type/Enter and
 rendered-target clicks. Form-field/email/autocomplete are skipped and stay closed.
