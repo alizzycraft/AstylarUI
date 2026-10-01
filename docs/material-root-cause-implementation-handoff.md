@@ -26,6 +26,25 @@ open. Next: remaining input/paint mapping and caret/selection boundaries, then
 batched proof integration after the still-live0a0b5d6 export finishes. No export
 dependency, renderer or fixture was changed for this check.
 
+The same missing-profile question is now closed for sort, radio, button-toggle,
+tabs and stepper: three existing proof bodies pass12 unchanged-assertion checks
+across20 paired mobile DPR2 cases in67,313.9835ms, with all four runtime themes
+verified and six dependency receipts/frozen browser files reverified. Sort
+reference key activation changes aria-sort/direction; candidate stays asc with
+aria-sort absent. Radio/button-toggle reference arrows change selection;
+tabs/stepper reference arrows move focus and Enter selects. Candidate key events
+reach the application but do not make those transitions. Tabs does emit a click
+on Enter for the already-focused item; this is not evidence that navigation
+works. No page errors occur. Preserve
+`keyboard-selection-mobile-profiles.probe.mjs` and
+`keyboard-selection-mobile-profiles-207c5a8-verified.log`, SHA-256
+9b27a26ffcd960060b6eb56d39ce91d9df20b8a001e8649b3a4b88a360440ae3.
+The initial invocation failed before browser startup because the diagnostic
+script had not been created; its separate log is retained, not counted as
+coverage. These nine families now have bounded all-theme mobile activation
+evidence; tablet, disabled/error, other keys and focus paint remain open. No new
+canonical publication or renderer fix is inferred.
+
 **Validated export, exact canonical conservation and independent cold check complete.**
 The d2a4176 cold export completes in2,332,358.4972ms (38.87minutes), with
 1,205 files reverified,0 disk hits and0 invalidations. It retains436 static and

@@ -11,6 +11,14 @@ not core key-delivery attribution. See the current handoff and
 `keyboard-mobile-profiles-09e2287.log`. Additional keys/families, disabled/error,
 focus paint and complete input mapping remain pending. This standalone probe
 does not change canonical coverage or publication status.
+Sort, radio, button-toggle, tabs and stepper now also have the same bounded
+all-theme mobile DPR2 evidence:12 checks across20 paired cases verify reference
+activation/navigation versus candidate delivered keys without those state
+transitions. Tabs Enter clicks the already-focused item, not an arrow-selected
+peer. Six dependency receipts/frozen browser files reverify; see
+`keyboard-selection-mobile-profiles-207c5a8-verified.log` in the handoff.
+All nine families' tablet/disabled/error/additional-key and focus-paint gaps
+remain open; slider/select and text-input boundaries are separate questions.
 
 Current October1 d2a4176 cold export validates and publishes138 source findings,
 retaining8,483 scalar groups,389,202 occurrences and436/1,875 static/interaction
