@@ -50,6 +50,25 @@ Full harness/browser/release gates and remaining family/state coverage stay open
 Canonical conservation is not rendering or whole-audit acceptance. Continue the
 remaining coverage priorities without changing the check's source dependencies.
 
+**Bounded snackbar timer-overlap question answered.** Chrome 154 frozen-bundle
+real-input probing passes four paired cases: light desktop DPR1 and dark mobile
+DPR2, reference and candidate. Reopen after three seconds targets the actual
+trigger, remains open after the original deadline, expires on the new lifetime,
+then a third opening dismisses through UNDO. Seven action-boundary samples per
+case preserve times, popup membership and delivered click targets; no page errors.
+Retain `snackbar-reopen-expiry-5918ea7-verified.log` (42,099.5768ms), SHA-256
+7b61a0dc4d68c73e1a84e3745653baaceb823d72e36e11cde016a8add10ec07d.
+The existing source uses cancellation plus generation guards and delays timer
+start until settlement; the existing component test covers the corresponding
+4,000/1,001/3,999ms overlap. It was inspected, not rerun here. The initial browser
+failure is a diagnostic targeting mistake, not a demonstrated timer defect:
+hidden semantic proxy geometry sent the repeat click to `page`. Retain that log
+and `snackbar-reopen-expiry-5918ea7-action-boundaries.log`; corrected pointer
+coordinates reuse the existing rendered-box measurement plus canvas offset and
+assert the delivered target. No fixture inputs changed. This does not establish
+precise fade timing, local paint, resource cleanup, late disposal, all profiles
+or original historical missing-snackbar attribution. Full gates remain pending.
+
 ### Earlier checkpoints
 
 **Export failure diagnosed; historical source binding restored in focused replay.**
