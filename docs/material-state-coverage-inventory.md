@@ -22,6 +22,13 @@ pointer-material finding), conserving all138 preceding definitions and adding
 two diagnostic proof entries. Focused conservation and mutation checks pass;
 the next batched canonical export/check remains pending. This is not a new
 published139-finding snapshot or full family/profile acceptance.
+Public same-document two-surface modal isolation now has a durable DPR1/2 proof:
+equal authored IDs stay native-ID isolated, only the modal surface becomes inert,
+peer pointer/Escape and the outside selector remain independent, and first-surface
+disposal preserves the surviving peer. Four complete installed/current methods
+match; focused proof and registration checks pass. This closes that bounded core
+scope question, not Material panel paint/restoration or late-async lifetime. See
+the current handoff for receipts and the next batched integration milestone.
 
 The following checkpoints are historical, not the current publication status.
 

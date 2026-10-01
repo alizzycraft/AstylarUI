@@ -42,7 +42,7 @@ export function restoreStackingProducer(source) {
     const from = restored.indexOf(pointerProofStart);
     const to = restored.indexOf("    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\\('public equal-input overflow", from);
     assert.ok(to > from);
-    assert.equal(hash(restored.slice(from, to)), 'd83b64b4ba38001d2a42f33706845c385d5b48502aa11f4f2a845482eb0eabca', 'pointer lifecycle proof integration changed');
+    assert.equal(hash(restored.slice(from, to)), '988e8e22172c945977ee52e0727c4249110f81941525eddefbf1bb55262f1af9', 'pointer lifecycle proof integration changed');
     restored = restored.slice(0, from) + restored.slice(to);
   }
   // Recent diagnostics add discovery and receipt validation, not historical

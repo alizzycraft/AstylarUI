@@ -134,6 +134,32 @@ coherent canonical integration; the checked-in canonical snapshot still contains
 138. Do not rerun the40-minute export solely for this status update: batch the
 remaining durable shared-boundary proofs before the next milestone.
 
+**Public same-document modal isolation is now durable at DPR1/2.** The existing
+input-boundary suite embeds the retained package-root application with two
+surfaces sharing authored IDs. Only the modal surface background becomes inert;
+Tab moves to its Cancel control, while peer pointer input and the outside selector
+remain usable. Peer Escape does not dismiss the first modal. Disposing the first
+surface removes its semantic root/resources without changing the peer; the peer
+remains clickable and final disposal clears both. Four complete installed/current
+semantic and interaction methods match. The test avoids redundant disposal of
+the first surface, a diagnostic cleanup correction rather than changed modal
+authoring. Both DPR cases pass1/1 in6,154.2257ms. Retain
+`public-modal-isolation-durable-9c39ad3-verified.log`, SHA-256
+b4206af9ae761991270681857e40ef3be0f46f27c3f2e72ff9199a33fa151876.
+The initial check failed before browser launch because esbuild reports its
+virtual input relative to the consumer root, not the repository root; retain
+`public-modal-isolation-durable-9c39ad3.log`. The corrected exact path assertion
+preserves the single virtual entry and rehashes all actual disk dependencies.
+This answers bounded core same-document isolation, not Material authoring,
+restoration, late async work, all profiles or equal-rendering acceptance.
+Its proof joins the pending batch without adding another source defect. Three
+inventory/conservation/receipt checks pass3/3 in7,622.6352ms and exact historical
+producer restoration/mutation checks pass1/1 in826.685ms. Retain
+`modal-public-integration-9c39ad3.log` and
+`modal-public-producer-conservation-9c39ad3.log`. The next batched canonical
+export will integrate139 findings and three additional proofs; the complete
+current-ancestry launch dry-run resolves all five required evidence inputs.
+
 The existing dark/mobile overlay lifecycle test now observes live counts and
 unbound identities independently of tracked diagnostics. Its focus/semantic,
 tracked plateau and final-disposal checks still pass1/1 (19,295.9405ms), but

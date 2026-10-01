@@ -1306,3 +1306,85 @@ test('public button pointer states diagnose materials outside render ownership',
   } finally { if (browser) await browser.close(); await new Promise(r => server.close(r)); }
 
 });
+
+test('public same-document surfaces isolate modal focus and independent disposal', async t => {
+  const consumer = path.resolve('examples/material-showcase');
+  const methods = [
+    ['astylar-semantic-bridge', 'applyModalInertnessFor'],
+    ['astylar-semantic-bridge', 'semanticEventElementId'],
+    ['astylar-interaction-runtime', 'moveFocus'],
+    ['astylar-interaction-runtime', 'isAllowedByModal'],
+  ].map(([module, method]) => {
+    const sourceFile = 'src/lib/' + module + '.ts';
+    const installedFile = path.join(consumer, 'node_modules/astylarui/dist/lib/lib', module + '.js');
+    const source = readFileSync(sourceFile, 'utf8'), installed = readFileSync(installedFile, 'utf8');
+    const compiled = ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 } }).outputText;
+    const extract = code => {
+      const ast = ts.createSourceFile('method.js', code, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS), matches = [];
+      assert.equal(ast.parseDiagnostics.length, 0);
+      const visit = node => { if (ts.isMethodDeclaration(node) && node.name.getText(ast) === method) matches.push(node.getText(ast).replace(/\s+/g, ' ').trim()); ts.forEachChild(node, visit); };
+      visit(ast); assert.equal(matches.length, 1); return matches[0];
+    };
+    assert.equal(extract(installed), extract(compiled));
+    return { sourceFile, sourceSha256: hash(source), installedFile, installedSha256: hash(installed), method };
+  });
+  const applicationSource = "\nimport '@angular/compiler';\nimport {provideZonelessChangeDetection} from '@angular/core';\nimport {createApplication} from '@angular/platform-browser';\nimport {Astylar} from 'astylarui';\ndocument.body.style.cssText='margin:0';\nconst select=document.createElement('select');select.id='outside';select.innerHTML='<option>One</option><option>Two</option>';document.body.append(select);\nconst app=await createApplication({providers:[provideZonelessChangeDetection()]});\nconst handles=[],hosts=[];\nconst site=(modal,peer=false)=>({root:{children:[{type:'button',id:'background',value:peer?'Peer':'Trigger'},...(!peer?[{type:'dialog',id:'modal',open:modal,modal:true,children:[{type:'button',id:'action',value:'Continue',autofocus:true},{type:'button',id:'cancel',value:'Cancel'}]}]:[])]},styles:[\n{selector:'#background',position:'absolute',left:'20px',top:'20px',width:'120px',height:'40px',padding:'0',borderWidth:'0',background:'#eeeeee',fontFamily:'Arial',fontSize:'14px'},\n{selector:'#modal',position:'absolute',left:'10px',top:'70px',width:'280px',height:'90px',padding:'0',borderWidth:'0',background:'#ffffff',display:'flex'},\n{selector:'#action,#cancel',width:'120px',height:'40px',padding:'0',borderWidth:'0',background:'#eeeeee',fontFamily:'Arial',fontSize:'14px'}]});\nfor(let i=0;i<2;i++){const host=document.createElement('section');host.id='surface-'+i;document.body.append(host);hosts.push(host);const canvas=document.createElement('canvas');canvas.style.cssText='display:block;width:390px;height:180px';host.append(canvas);handles.push(app.injector.get(Astylar).mount(canvas,site(false,i===1),{diagnostics:{logLevel:'silent'}}));}\nconst settle=async()=>{await document.fonts.ready;await Promise.all(handles.filter(s=>!s.disposed).map(s=>s.whenSettled()));await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));};\nconst snapshot=()=>({active:document.activeElement?.getAttribute('data-astylar-id')??document.activeElement?.id,activeHost:document.activeElement?.closest('section')?.id??null,\noutsideInert:select.inert,surfaces:handles.map((s,i)=>({disposed:s.disposed,modalOpen:hosts[i].querySelector('[data-astylar-id=\"modal\"]')?.open??false,backgroundInert:hosts[i].querySelector('[data-astylar-id=\"background\"]')?.inert??null,\nsemanticRoots:hosts[i].querySelectorAll('[data-astylar-semantic-root]').length,resources:s.diagnostics.resources,messages:s.diagnostics.messages})),nativeIds:[...document.querySelectorAll('[data-astylar-id=\"background\"]')].map(n=>n.id)});\nawait settle();window.isolationAudit={settle,snapshot,async open(){await handles[0].update(site(true));await settle();},disposeFirst(){handles[0].dispose();},dispose(){handles.filter(s=>!s.disposed).forEach(s=>s.dispose());app.destroy();return snapshot();}};\n";
+  const built = await createRequire(path.join(consumer, 'package.json'))('esbuild').build({
+    absWorkingDir: process.cwd(), stdin: { resolveDir: consumer, sourcefile: 'public-modal-isolation.mjs', contents: applicationSource },
+    bundle: true, write: false, metafile: true, format: 'esm', platform: 'browser', target: 'es2022' });
+  const diskFiles = Object.keys(built.metafile.inputs).filter(file => existsSync(path.resolve(file))).sort();
+  const virtualFiles = Object.keys(built.metafile.inputs).filter(file => !existsSync(path.resolve(file)));
+  assert.deepEqual(virtualFiles, [path.relative(process.cwd(), path.join(consumer, 'public-modal-isolation.mjs')).replaceAll('\\', '/')]);
+  const inputs = diskFiles.map(file => ({ file, sha256: hash(readFileSync(path.resolve(file))) }));
+  assert.ok(!inputs.some(input => /^src[\\/]/.test(input.file) || input.file.includes('material-showcase/src')));
+  const server = createServer((req, res) => { const script = req.url === '/audit.js';
+    res.setHeader('content-type', script ? 'text/javascript' : 'text/html');
+    res.end(script ? built.outputFiles[0].contents : '<!doctype html><script type="module" src="/audit.js"></script>'); });
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  let browser; const results = [], started = performance.now();
+  try {
+    browser = await chromium.launch({ channel: 'chrome', headless: true });
+    for (const dpr of [1, 2]) {
+      const page = await browser.newPage({ viewport: { width: 800, height: 600 }, deviceScaleFactor: dpr });
+      const errors = []; page.on('pageerror', error => errors.push(String(error)));
+      try {
+        await page.goto('http://127.0.0.1:' + server.address().port);
+        await page.waitForFunction(() => !!window.isolationAudit);
+        const samples = [], sample = async label => { await page.evaluate(() => window.isolationAudit.settle());
+          const state = await page.evaluate(() => window.isolationAudit.snapshot()); samples.push({ label, ...state });
+          assert.equal(state.outsideInert, false);
+          for (const surface of state.surfaces) assert.deepEqual(surface.messages, []);
+          return state; };
+        const mounted = await sample('mounted');
+        assert.equal(new Set(mounted.nativeIds).size, 2, 'equal authored IDs must have isolated native IDs');
+        await page.evaluate(() => window.isolationAudit.open()); const opened = await sample('modal-open');
+        assert.equal(opened.active, 'action'); assert.equal(opened.activeHost, 'surface-0');
+        assert.equal(opened.surfaces[0].backgroundInert, true); assert.equal(opened.surfaces[1].backgroundInert, false);
+        await page.keyboard.press('Tab'); assert.equal((await sample('modal-tab')).active, 'cancel');
+        const peerPoint = await page.locator('#surface-1 canvas').evaluate(canvas => { const box = canvas.getBoundingClientRect(); return { x: box.x + 80, y: box.y + 40 }; });
+        await page.mouse.click(peerPoint.x, peerPoint.y); const peer = await sample('peer-pointer');
+        assert.equal(peer.activeHost, 'surface-1'); assert.equal(peer.active, 'background');
+        await page.keyboard.press('Escape'); const escaped = await sample('peer-escape');
+        assert.equal(escaped.surfaces[0].modalOpen, true, 'peer Escape must not dismiss another surface modal');
+        await page.locator('#outside').selectOption({ index: 1 }); await page.locator('#outside').focus();
+        assert.equal((await sample('outside-selector')).active, 'outside');
+        await page.evaluate(() => window.isolationAudit.disposeFirst()); const removed = await sample('first-disposed');
+        assert.equal(removed.surfaces[0].semanticRoots, 0);
+        assert.deepEqual(removed.surfaces[0].resources, { meshes: 0, materials: 0, textures: 0 });
+        assert.deepEqual(removed.surfaces[1], mounted.surfaces[1]);
+        await page.mouse.click(peerPoint.x, peerPoint.y); const survived = await sample('surviving-peer');
+        assert.equal(survived.activeHost, 'surface-1'); assert.equal(survived.active, 'background');
+        const disposed = await page.evaluate(() => window.isolationAudit.dispose());
+        assert.deepEqual(disposed.nativeIds, []);
+        for (const surface of disposed.surfaces) { assert.equal(surface.disposed, true); assert.equal(surface.semanticRoots, 0);
+          assert.deepEqual(surface.resources, { meshes: 0, materials: 0, textures: 0 }); assert.deepEqual(surface.messages, []); }
+        assert.deepEqual(errors, []); results.push({ dpr, samples, disposed, errors });
+      } finally { await page.close(); }
+    }
+    for (const input of inputs) assert.equal(hash(readFileSync(path.resolve(input.file))), input.sha256);
+    t.diagnostic(JSON.stringify({ browser: browser.version(), applicationSource, methods,
+      bundleSha256: hash(built.outputFiles[0].contents), dependencyCount: inputs.length, dependencyReceipt: hash(JSON.stringify(inputs)),
+      results, elapsedMs: performance.now() - started,
+      scope: 'Public same-document modal isolation DPR1/2; not Material input equivalence, equal-rendering acceptance, focus restoration, late async work or all profiles.' }));
+  } finally { if (browser) await browser.close(); await new Promise(resolve => server.close(resolve)); }
+});
