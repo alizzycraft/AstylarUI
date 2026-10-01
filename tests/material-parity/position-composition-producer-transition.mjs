@@ -46,7 +46,7 @@ export function restoreStackingProducer(source) {
     const to = restored.indexOf('  ];\n}\n', from);
     assert.ok(to > from, 'missing standalone proof inventory end');
     assert.equal(hash(restored.slice(from, to)),
-      '3352daecd66b06432b3bfa8f9c2bc7f63e697f4f31f37d6f61a33ae79cf17575',
+      'f02f2bdb2fc17da8dcf452da8e855c55d6cb4b0f0d665cfdb45702252ad18232',
       'registered standalone proof batch changed');
     restored = restored.slice(0, from) + restored.slice(to);
   }

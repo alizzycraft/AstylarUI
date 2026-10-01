@@ -29,13 +29,14 @@ test('registered standalone proof batch conserves the entire preceding producer 
   const from = current.indexOf(start), to = current.indexOf('  ];\n}\n', from);
   assert.ok(from >= 0 && to > from);
   const block = current.slice(from, to);
-  assert.equal(block.split('    proof(root,').length - 1, 7);
+  assert.equal(block.split('    proof(root,').length - 1, 8);
   assert.equal(current.slice(0, from) + current.slice(to), previous);
   assert.equal(restoreStackingProducer(current).restoredSource, restoreStackingProducer(previous).restoredSource);
   for (const phrase of ['retained progress paint binds', 'retained compact empty and filled inputs',
     'retained keyboard profiles replay', 'retained empty caret rasters preserve',
     'retained applied-theme popup focus', 'retained selection states preserve',
-    'retained tooltip textures separate', 'Not DPR1 cause resolution']) {
+    'retained tooltip textures separate', 'retained Tab, popup-state and email-edit boundaries',
+    'Not DPR1 cause resolution']) {
     assert.ok(block.includes(phrase));
     assert.throws(() => restoreStackingProducer(current.replace(phrase, 'unreviewed proof change')));
   }
