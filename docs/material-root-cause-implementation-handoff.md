@@ -1,5 +1,25 @@
 # Material audit: evidence-led implementation priorities
 
+## Current audit checkpoint — October 2 (current-ancestry refresh blocker)
+
+The optimized canonical refresh was attempted once with
+`node scripts/export-material-input-audit-current-ancestry.mjs` and stopped at
+the existing `box-sizing-authoring-review.mjs` assertion before writing a new
+canonical package. The current reference stylesheet now exposes an active
+`.mat-expansion-panel` rule to the omission reviewer, while that reviewer
+expects no applicable candidate rule. The focused box-sizing review still
+passes against its retained fixtures, so this is audit-input/reviewer drift,
+not evidence for a renderer or component-authoring fix. Do not weaken the
+assertion or promote a new export until the reviewer is reconciled to the
+authenticated current-ancestry input and its negative controls remain green.
+
+The previously authenticated package therefore remains the canonical state:
+no canonical files were changed by the failed refresh. The next bounded audit
+step is to reduce this drift to the smallest current expansion-panel input,
+determine whether the stylesheet/source transition is intentional, and update
+only the audit reviewer/receipt if the evidence supports it. After that, rerun
+the single named export, import/verify findings, and reconcile source hashes.
+
 ## Current audit checkpoint — October 1 (boundary-proof registration)
 
 The first resumed bounded root-cause gate is green. `npm run
