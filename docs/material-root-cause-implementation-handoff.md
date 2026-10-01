@@ -160,6 +160,46 @@ producer restoration/mutation checks pass1/1 in826.685ms. Retain
 export will integrate139 findings and three additional proofs; the complete
 current-ancestry launch dry-run resolves all five required evidence inputs.
 
+**Tooltip profile coverage corrected; DPR-specific raster gap remains.** The
+ordinary showcase ignores URL `profile` unless `benchmark=1` (ShowcaseStore
+constructor). The historical test titled ordinary dark/mobile tooltip therefore
+establishes ordinary light/mobile behavior, not dark-profile coverage. Preserve
+its observations, but do not retain the theme claim. A first12-pair extension
+repeated the same mistake; retain `tooltip-profile-paint-0a0b5d6.log` as rejected
+four-theme evidence. This is an instrumentation/profile-applicability defect,
+not permission to change showcase inputs or renderer paint.
+The corrected diagnostic uses the existing `showcase:theme` command, asserts
+acceptance and exact runtime theme fields before capture, and retains initial
+light-theme negative controls. All four profiles at desktop1440x1000 DPR1,
+tablet768x1024 DPR1 and mobile390x844 DPR2 complete12 paired cases in48,022.7614ms.
+Retain `tooltip-profile-paint.probe.mjs` and
+`tooltip-profile-paint-0a0b5d6-applied.log`, SHA-256
+bc159c1992d928af4ab62df5618f3e81de67d0311d316bb879377dc44df9288f.
+Each case captures real Tab, pointer hover and leave, actual popup geometry,
+resolved/paint inputs, local PNG bytes and diagnostic metrics. Native Tab opens;
+candidate Tab does not. Both pointer popups remain centered8px below the trigger,
+24px high, and leave removes both, with no page errors. Native width106.8125px
+versus candidate106.79833984375px is preserved, not rounded to equivalence.
+Independent replay authenticates24 PNG crops and all10 pinned files and exactly
+recomputes both serialized raster metric sets; retain
+`tooltip-profile-paint-0a0b5d6-replay-complete.log`. Earlier replay diagnostics
+failed from mixed ESM/require syntax and JSON losing signed zero; keep both logs.
+The final check compares exact serialized metric values, not weakened thresholds.
+DPR1 light/dark/custom crops have unregistered similarity.68229 and registered
+.71185; contrast has.70788/.72852. A one-device-pixel shift does not explain the
+DPR1 residual. DPR2 registration reaches>.99999 but preserves actual failures:
+light/dark phase(1,0), contrast(1,1), custom(1,-1). Contrast/custom vertical ink
+offset differences are.50999/.48500 CSSpx; others remain<.026px. Registration is
+diagnostic, not rendering acceptance or a proposed text offset. These results
+extend the raster question beyond one mobile/theme case and show that correct
+popup anchoring is insufficient to establish text fidelity. The separate public
+backing/fractional-origin reduction remains relevant, but exact attribution of
+these profile-specific texture phases and original user blur remains open.
+Pending after the live export: correct ordinary-test profile labels/guards and
+register the new bounded coverage through existing tests. URL-only ordinary
+timepicker diagnostics likewise require actual-theme revalidation before any
+dark-profile claim. Benchmark-mode captures are not invalidated by this finding.
+
 The existing dark/mobile overlay lifecycle test now observes live counts and
 unbound identities independently of tracked diagnostics. Its focus/semantic,
 tracked plateau and final-disposal checks still pass1/1 (19,295.9405ms), but

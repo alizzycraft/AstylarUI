@@ -29,6 +29,18 @@ disposal preserves the surviving peer. Four complete installed/current methods
 match; focused proof and registration checks pass. This closes that bounded core
 scope question, not Material panel paint/restoration or late-async lifetime. See
 the current handoff for receipts and the next batched integration milestone.
+New contradictory profile evidence qualifies ordinary-mode results: URL `profile`
+is ignored without `benchmark=1`, so the old ordinary dark/mobile tooltip proof
+was light/mobile. A corrected diagnostic explicitly applies and verifies themes
+through the existing showcase command for all12 profile/viewport pairs. Tab
+opening differs on all pairs; hover popups are centered8px below triggers and24px
+high, and leave removes both. All24 local crops authenticate and replay exactly.
+DPR1 residual raster differences remain even after phase registration; DPR2
+contrast/custom also show vertical phases and roughly.5CSSpx ink-offset differences.
+This extends bounded paint coverage, not input equivalence or sharpness acceptance.
+See the handoff for receipts and pending durable profile guards after the live
+export. Ordinary URL-only timepicker theme claims also require revalidation;
+benchmark-mode captures remain applicable.
 
 The following checkpoints are historical, not the current publication status.
 
