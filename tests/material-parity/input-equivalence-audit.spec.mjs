@@ -1783,20 +1783,78 @@ test('recent public and popup proofs join existing inventories without changing 
   }
 });
 
+test('retained progress paint binds plugin geometry and unequal track inputs', async () => {
+  const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');
+  const finding = sourceAuditDefinitions.find(entry => entry.id === 'plugin-linear-progress-right-origin-and-track-input-mismatch');
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  const raw = readFileSync(finding.evidence[0].file);
+  assert.equal(digest(raw), finding.evidence[0].sha256);
+  const capture = JSON.parse(raw.toString().trim().split(/\r?\n/).find(line => line.startsWith('{"receipts"')));
+  assert.equal(capture.results.length, 16);
+  assert.equal(capture.receipts.length, 8);
+  for (const receipt of capture.receipts) assert.equal(digest(readFileSync(receipt.file)), receipt.sha256);
+  for (const result of capture.results) {
+    assert.deepEqual(result.errors, []);
+    assert.equal(digest(readFileSync(result.raster.file)), result.raster.sha256);
+  }
+  const plugin = readFileSync(finding.file, 'utf8');
+  assert.match(plugin, new RegExp(finding.pattern));
+  assert.match(plugin, /const materialStartAngle = -Math\.PI \/ 2 \+ Math\.PI \* 13 \/ 45/);
+  assert.match(plugin, /const angle = materialStartAngle -/);
+  const { PNG } = await import('pngjs');
+  const foreground = { light: [103, 80, 164], dark: [208, 188, 255], contrast: [0, 0, 0], custom: [0, 106, 106] };
+  for (const [index, profile] of finding.observation.profiles.entries()) {
+    const native = capture.results.find(r => r.family === 'progress-bar' && r.profile === profile && r.mode === 'reference');
+    const candidate = capture.results.find(r => r.family === 'progress-bar' && r.profile === profile && r.mode === 'astylar');
+    const primary = native.snapshot.rows.find(row => row.class?.includes('primary-bar'));
+    assert.equal(primary.style.transform, 'matrix(0.64, 0, 0, 1, 0, 0)');
+    assert.equal(primary.style.transformOrigin, '0px 0px');
+    assert.equal(primary.box.left, native.snapshot.box.left);
+    assert.ok(Math.abs(primary.box.width - 166.4) < .00001);
+    const track = native.snapshot.rows.find(row => row.class?.includes('buffer-bar'));
+    assert.equal(track.style.backgroundColor, finding.observation.reference.track);
+    assert.equal(candidate.snapshot.input.authored.data['track-color'], finding.observation.astylar.track[index]);
+    const indicator = candidate.snapshot.children.find(mesh => mesh.name.endsWith('-indicator'));
+    assert.equal(indicator.position[0], finding.observation.astylar.centerCss);
+    assert.equal(indicator.scaling[0], .64);
+    assert.ok(Math.abs(indicator.projectedDeviceBox.right / 2 - (candidate.snapshot.box.x + 260)) < .00001);
+    for (const [result, filledFraction] of [[native, .1], [candidate, .9]]) {
+      const image = PNG.sync.read(readFileSync(result.raster.file));
+      const pixel = fraction => {
+        const x = Math.floor((result.snapshot.box.x + fraction * result.snapshot.box.width - result.raster.clip.x) * 2);
+        const y = Math.floor((result.snapshot.box.y + result.snapshot.box.height / 2 - result.raster.clip.y) * 2);
+        assert.ok(x >= 0 && x < image.width && y >= 0 && y < image.height);
+        return [...image.data.subarray((y * image.width + x) * 4, (y * image.width + x) * 4 + 3)];
+      };
+      assert.deepEqual(pixel(filledFraction), foreground[profile]);
+      assert.notDeepEqual(pixel(1 - filledFraction), foreground[profile]);
+    }
+    const spinner = capture.results.find(r => r.family === 'progress-spinner' && r.profile === profile && r.mode === 'reference');
+    const container = spinner.snapshot.rows.find(row => row.class?.includes('determinate-container'));
+    assert.equal(container.style.transform, 'matrix(0, -1, 1, 0, 0, 0)');
+  }
+  // Publication is additive. No earlier finding is reworded by this integration.
+  const prior = execFileSync('git', ['show', '1cd2099:tests/material-parity/input-equivalence-policy.mjs'], { encoding: 'utf8' });
+  const definitions = new Function(prior.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
+  assert.equal(definitions.length, 139);
+  assert.equal(JSON.stringify(sourceAuditDefinitions.slice(0, 139)), JSON.stringify(definitions));
+});
+
 test('recent source diagnostics conserve predecessor findings and reject altered receipts or conclusions', () => {
   const audit = buildMaterialInputAudit(parityReport({}, {}));
   const previous = execFileSync('git', ['show', 'bd79e4b:tests/material-parity/input-equivalence-policy.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const priorDefinitions = new Function(previous.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
   assert.equal(priorDefinitions.length, 135);
-  assert.equal(audit.sourceFindings.length, 139);
+  assert.equal(audit.sourceFindings.length, 140);
   const precedingPolicy = execFileSync('git', ['show', 'a6217c5:tests/material-parity/input-equivalence-policy.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const precedingDefinitions = new Function(precedingPolicy.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
   assert.equal(precedingDefinitions.length, 138);
   for (const [index, { locations, detected, ...definition }] of audit.sourceFindings.slice(0, 138).entries())
     assert.equal(JSON.stringify(definition), JSON.stringify(precedingDefinitions[index]), precedingDefinitions[index].id);
-  assert.equal(audit.sourceFindings.at(-1).id, 'core-pointer-state-material-allocation-escapes-render-owner');
+  assert.equal(audit.sourceFindings[138].id, 'core-pointer-state-material-allocation-escapes-render-owner');
+  assert.equal(audit.sourceFindings[139].id, 'plugin-linear-progress-right-origin-and-track-input-mismatch');
   for (const [index, { locations, detected, ...definition }] of audit.sourceFindings.slice(3, 138).entries())
     assert.equal(JSON.stringify(definition), JSON.stringify(priorDefinitions[index]), priorDefinitions[index].id);
   assert.ok(audit.sourceFindings.every(entry => entry.detected));
@@ -1807,7 +1865,7 @@ test('recent source diagnostics conserve predecessor findings and reject altered
   // This deliberately partial synthetic capture has no paired root-style receipt.
   // Keep that unrelated failure explicit rather than treating this as full acceptance.
   assert.deepEqual(validation(), ['1 cases lack paired root style evidence']);
-  for (const finding of [...audit.sourceFindings.slice(0, 3), audit.sourceFindings.at(-1)]) {
+  for (const finding of [...audit.sourceFindings.slice(0, 3), ...audit.sourceFindings.slice(138)]) {
     assert.ok(finding.observation.element && finding.observation.states.length && finding.owner && finding.focusedProof);
     for (const receipt of finding.evidence) {
       assert.equal(createHash('sha256').update(readFileSync(receipt.file)).digest('hex'), receipt.sha256);

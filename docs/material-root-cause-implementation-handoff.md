@@ -2,6 +2,23 @@
 
 ## Current audit checkpoint — October 1
 
+**Progress source finding registered; canonical publication remains139.** The
+existing source policy now appends
+`plugin-linear-progress-right-origin-and-track-input-mismatch` with an immutable
+capture receipt, exact observation fields and plugin/application ownership.
+The producer scans140 definitions; no previous139 definition is changed.
+`node --test --test-name-pattern='retained progress paint binds|recent source
+diagnostics conserve' tests/material-parity/input-equivalence-audit.spec.mjs`
+passes2/2 in2,857.4826ms. The new proof rehashes all16 rasters/eight dependencies,
+checks source formula, native transform/track, candidate data/center/projected
+edge and exact10%/90% foreground counterexamples; the existing synthetic audit
+negative controls also reject altered receipts/classification/conclusions.
+Its deliberate missing-root-style failure remains explicit, not acceptance.
+An initial test attempted unavailable `sharp`; replacing that import with the
+already-used `pngjs` decoder fixes test dependency selection, not rendering.
+This registration is not a new canonical export. Batch remaining standalone
+findings before the next expensive publication/conservation milestone.
+
 **Independent cold canonical check complete; standalone integration remains.**
 `ASTYLAR_AUDIT_COLD=1 ASTYLAR_AUDIT_PROGRESS=1 node
 scripts/export-material-input-audit-current-ancestry.mjs --check` exits0 in

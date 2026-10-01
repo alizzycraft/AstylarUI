@@ -1445,6 +1445,24 @@ export const sourceAuditDefinitions = Object.freeze([
       astylar: [5, 10, 15], stage: 'post-render pointer-state allocation outside synchronous resource ownership' },
     justification: 'Plugin-free package-root Chrome154 reproduction at DPR1/2 retains no orphans across three no-interaction replacements, but pointer-state cycles leave5/10/15 unbound materials after removal. Complete installed/current typed pseudo-state, label-material, resource replace, legacy pointer setup/material and mesh allocation methods match. Typed state materials and legacy solid-background replacement are allocated outside synchronous replace without adoption; label-state textures/materials explicitly adopt. Menu/sheet/dialog live counts grow19/20/21,18/19/20,17/20/23 while tracked counts plateau, with corresponding trigger state identities. Unbound alone does not mean unowned: combine tracked/live counts, stable identities and the public removal control. Whole-surface disposal clears resources but does not satisfy element replacement lifetime. This is a separate allocation subtype from the caret finding; no plugin compensation, GPU usage, lag attribution, gradient/border generalization or all-profile/late-async acceptance follows.',
   }),
+  Object.freeze({
+    id: 'plugin-linear-progress-right-origin-and-track-input-mismatch',
+    introducedBy: 'e4ca3db4 CSS adapter migration retains predecessor positive displacement; historical first-bad runtime not established',
+    file: 'examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts',
+    pattern: String.raw`let centerCss = mode === 'determinate' \|\| mode === 'buffer'\s*\? widthCss \* \(1 - amount\) / 2`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'Material plugin CSS-space linear-progress geometry and application track-color inputs',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: retained progress paint binds plugin geometry and unequal track inputs',
+    evidence: [{ file: 'artifacts/material-parity/progress-paint-input-boundary-711eec2.log',
+      sha256: '69a8310dc9bbce45185d4014525b1f4c161f8672745ce66073ecba4f4599dae1' }],
+    observation: { component: 'progress-bar', element: 'progress-bar-primary', dpr: [2],
+      profiles: ['light', 'dark', 'contrast', 'custom'], viewport: { width: 390, height: 844 },
+      states: ['determinate 64/100'], property: 'indicator CSS center and track color',
+      reference: { fillOrigin: 'left', width: 166.4, track: 'rgb(232, 224, 235)' },
+      astylar: { centerCss: 46.8, fillOrigin: 'right', track: ['#e7e0ec', '#49454f', '#e7e0ec', '#e7e0ec'] },
+      stage: 'plugin CSS geometry and authored data before final projection' },
+    justification: 'Four actual-theme mobile DPR2 paired captures bind native left-origin scale .64 to a 166.4px fill in a 260px track, while the candidate requests positive46.8 CSS px displacement and projected/raster observations fill the right64%. The source center formula is the first unequal input, not unexpected core projection. Native track rgb(232,224,235) differs from candidate authored light/contrast/custom #e7e0ec and dark #49454f, with exact foreground/track samples agreeing with those inputs. The same capture strengthens the existing spinner start-angle finding: native SVG rotation -90degrees versus plugin -38degrees and decreasing CSS angles. No whole-arc/cap raster, other value/viewport, used-height, lifetime or historical first-bad runtime acceptance follows. Restore equivalent plugin geometry/data, never compensate core layout or final projection.',
+  }),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({

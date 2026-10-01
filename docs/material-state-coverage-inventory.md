@@ -2,6 +2,13 @@
 
 ## Evidence boundary
 
+Progress-bar's bounded source/input finding is now registered in the existing
+producer policy with its authenticated capture. Two focused checks pass,
+including exact original139-definition conservation and retained local pixels.
+Producer source definitions total140; published canonical findings remain139
+until batched export/conservation. Other standalone registration and final gates
+are still pending; no rendering or fixture correction is authorized.
+
 The independent139-finding cold canonical check now exits0 in43.84minutes:
 all436/1,875 cases,8,483 groups/389,202 occurrences remain, with1,205 files
 reverified and0 invalidations. See `cold-canonical-check-4aec685.log` and current
