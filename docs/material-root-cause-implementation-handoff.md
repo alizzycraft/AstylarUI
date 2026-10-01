@@ -2,6 +2,38 @@
 
 ## Current audit checkpoint — October 1
 
+**Email discrepancy now has a direct core editing-route boundary.**
+`email-native-edit-routing.probe.mjs` reuses the frozen input collector for one
+normal light/desktop DPR1 email pair. Input type remains email; real Tab and
+typing are observed without injected focus/value/selection. Native trusted
+keydown is followed by trusted beforeinput/input (`insertText`, data `Z`),
+replacing `team@example.com` with `Z`. Candidate Tab leaves managed core
+selection [0,0,0]. At the first key-Z preventDefault call, the served
+`KeyboardInputHandler.handleTextInput` stack has already changed core value to
+`Zteam@example.com` and selection [1,1,1], while the native semantic value is
+still `team@example.com`. The semantic root then also prevents default; no
+native beforeinput/input reaches the document observer, and the synchronized
+candidate value becomes `Zteam@example.com`. This locates the unequal edit in
+the core-managed keyboard/selection path before native default editing or paint,
+not an application insertion handler, email styling or final projection.
+It narrows the earlier email uncertainty: the routing/value divergence is
+demonstrated; the exact native email selection range is still unobservable.
+Do not attribute this to a setSelectionRange write: email is excluded from that
+branch in AstylarSemanticBridge.applyControlState at539–542. The semantic
+keydown owner at284–291 delegates to core, prevents non-Tab defaults and stops
+propagation. Implementation must preserve the native editing contract for this
+input type rather than switching email to text or adding a fixture selection
+override. A package-root isolated email reproduction and other editing/input
+methods remain required before a general correction is accepted.
+Capture takes5,042.6228ms with no page errors. Independent replay authenticates
+nine source receipts and asserts exact values, trusted native events, candidate
+managed selection and the served prevention stack. Retain
+`email-native-edit-routing-d8807345.log`, SHA-256:
+19af8fced1859dde5d31f4d8514132078c677c9bcec170c99cafbd0159aae332.
+No error-state cause is extrapolated from this normal-only routing trace; the
+earlier paired error probe establishes the same symptom separately. No new
+renderer/fixture mutation, canonical registration or paint acceptance occurs.
+
 **Authenticated popup selectors close the sampled native state-measurement gap.**
 `field-popup-state-boundaries.probe.mjs` reuses the same frozen collector for
 autocomplete/date/time across normal/error/disabled light-desktop DPR1 states.
