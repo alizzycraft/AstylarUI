@@ -55,6 +55,14 @@ boundary remains the implementation target. The capture exits nonzero only
 because the retained diagnostic intentionally records the native short-viewport
 dismissal mismatch; the depth assertion itself is green.
 
+The post-instrumentation receipt reconciliation streamed all 539 canonical
+source paths and found exactly three expected mismatches: the tooltip boundary
+producer, its composition proof, and `examples/material-showcase/src/app/
+astylar.component.ts` (the three files changed in this diagnostic batch). The
+remaining 536 receipts match byte-for-byte under the producer LF-normalization
+rule. This is a source transition, not evidence that any unrelated finding
+changed; one named canonical export/check is justified to rebind the package.
+
 The next sheet-modality gate is still pending. The retained `sheet-focus-probe`
 was captured with Chrome 153, and the current focused replay correctly rejected
 its frozen browser asset manifest against Chrome 154 before exercising behavior.
