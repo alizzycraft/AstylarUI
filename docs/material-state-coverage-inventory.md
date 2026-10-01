@@ -2,6 +2,23 @@
 
 ## Evidence boundary
 
+Current October1 d2a4176 cold export validates and publishes138 source findings,
+retaining8,483 scalar groups,389,202 occurrences and436/1,875 static/interaction
+cases. Authenticated predecessor/current section comparison preserves all79
+ordered sections:70 unchanged and9 requiring exact explanation. Changed scalar
+records are not approved from unchanged counts. Exact-leaf comparison preserves
+all raw values, classifications, observations and record paths/shapes in six
+changed sections;148 changes are count/source/proof receipts. Exact proof-hash
+derivation and additive inventory conservation now pass: 135 prior source findings
+unchanged plus 3 additions, 5 added proofs with 34 existing line-only updates,
+and 2 added/5 changed authenticated fingerprints. Compact import and verification
+pass, preserving 39,904 control/typography records and 0 unresolved scalar groups.
+Independent cold check is launched; full gates and complete family/state coverage
+remain pending. See the current handoff and retained export/section logs. Input
+equivalence is still false; the family/state gaps below remain unchanged.
+
+The following checkpoints are historical, not the current publication status.
+
 October1 b03908f export failed validation, preserving the c3e0d7d1 canonical
 package. Four historical binders rejected producer additions not yet handled by
 the existing source-transition receipt; normalization remains unchanged. Exact

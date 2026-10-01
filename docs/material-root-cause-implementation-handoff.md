@@ -2,6 +2,56 @@
 
 ## Current audit checkpoint — October 1
 
+**Validated export and exact canonical conservation complete; independent check pending.**
+The d2a4176 cold export completes in2,332,358.4972ms (38.87minutes), with
+1,205 files reverified,0 disk hits and0 invalidations. It retains436 static and
+1,875 interaction cases,8,483 scalar groups and389,202 occurrences, and publishes
+138 source findings. Input equivalence remains false. Retain
+`artifacts/material-parity/cold-canonical-export-d2a4176.log`.
+The compressed package is6ffdc6e1dfc319c44235aa149d837c6558c8d7d7b60f8d2e827a884337d823fe;
+decoded SHA-256 isb7f33c0ec9d4e9d0e7a446dfb857a65b725c266ef0f23425ba4ea1981cf0363d.
+The existing streamed section check authenticates both packages and preserves
+all79 ordered section names:70 sections unchanged,9 changed. Retain
+`cold-export-d2a4176-section-comparison.log` (175,546.0445ms).
+Changed sections are sourceFingerprints, controlLineBoxes, summary, discrepancies,
+ownerCaretInputs, reviewedSourceBatchInputs, controlTypography, sourceFindings
+and focusedProofs. Counts alone do not establish conservation: exact changed
+leaves are independently explained by receipt derivation. The three inventories reconcile:
+all135 preceding source findings and their order remain unchanged, with exactly3
+additions;2 fingerprints are added and5 source hashes change, all bound to current
+files and the895e37f predecessor;5 proofs are added and34 existing proof entries
+change only declaration line numbers. Retain
+`cold-export-d2a4176-inventory-comparison-verified.log` (124,665.8881ms) and
+`cold-export-d2a4176-inventory-source-binding.log`. The existing
+leaf comparator authenticates both streams and preserves all record paths/shapes.
+Exactly148 leaves change:48 control-line-box module receipts,48 corresponding
+control-typography receipts,48 embedded scalar control-proof hashes, one source
+finding count, one owner-caret module receipt and one reviewed-batch module/report
+receipt each. Raw values, classifications and observations remain unchanged in
+these six sections. Retain `cold-export-d2a4176-leaf-comparison.log`
+(153,341.0593ms). The reviewed-batch report hash changes exactly because its
+single producer-module receipt changes; fresh independent collection reproduces
+the current hash and replacing only that receipt reproduces the predecessor hash.
+Retain `cold-export-d2a4176-report-receipt-conservation.log`. All 48 embedded
+proof hashes derive exactly from replacing the conserved control module receipt;
+retain `cold-export-d2a4176-embedded-proof-conservation.log` (65,615.2155ms).
+The existing embedded-receipt negative-control test passes 1/1 in 1,006.1704ms.
+The three focused stream integrity tests pass; two
+historical production checks are skipped, not current acceptance. An inventory
+comparison rejected the diagnostic's assumption that proof status is unique;
+use file/status/description identity, retaining the failed log separately.
+Compact import and verification pass: 8,483 scalar groups, 138 source findings,
+39,904 control/typography differences, 389,202 occurrences and 0 unresolved
+scalar groups; the new index is 72,704,115 bytes. Retain
+`cold-export-d2a4176-compact-import.log`; unresolved scalar count is not acceptance.
+Independent cold check is launched with the complete current-ancestry baseline;
+retain `cold-canonical-check-d2a4176.log` and await its terminal result.
+Full harness/browser/release gates and remaining family/state coverage stay open.
+Canonical conservation is not rendering or whole-audit acceptance. Continue the
+remaining coverage priorities without changing the check's source dependencies.
+
+### Earlier checkpoints
+
 **Export failure diagnosed; historical source binding restored in focused replay.**
 The b03908f cold export terminated with validation failure: four source binders
 were invalid and259 scalar groups lost attribution. Retain
