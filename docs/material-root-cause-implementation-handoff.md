@@ -2,6 +2,30 @@
 
 ## Current audit checkpoint — October 1
 
+**Disabled field activation: picker suffix state is omitted in authoring.**
+`disabled-field-activation.probe.mjs` checks five families at actual light theme,
+1440x900 DPR1 with the existing `interaction=disabled` state. Real Tab/type/Enter,
+rendered input-center clicks and picker-icon clicks leave all disabled text-input
+values unchanged. Form-field/email/autocomplete are skipped on Tab and remain
+closed. Both native picker icons are disabled/tabIndex-1 and stay inert; candidate
+icons are enabled/tabIndex0, receive Tab focus and open on Enter and icon click.
+The current candidate icon literals at astylar.component.ts:1033–1034 omit
+`disabled`, and the icon click branches at257–271 toggle open state without a
+disabled check. The first divergence is application-authoring state propagation,
+not failure to honor a declared disabled input. Implementation must restore the
+same disabled suffix contract through core-supported authoring, not hide the
+icon or add a non-renderer coordinate/hit-test workaround.
+Capture takes45,785.445ms; eight dependencies reverify, all10 pages have no errors,
+and independent replay asserts exact focus/open/value boundaries plus the source
+omission. Retain `disabled-field-activation-fde2b69.log`, SHA-256:
+dcb6505e1b25c76f1f28d5707ea2f473c06b3e21c24c7a177742b3276cd0b7c5.
+Input-center clicks leave native focus at BODY and candidate focus at CANVAS;
+this separate background/surface-focus observation is not silently equated or
+attributed to a disabled-input defect. Other profiles/viewports, disabled paint,
+popup child interaction and full focus semantics remain pending. No source
+fixture/core mutation or new producer registration occurs during the repaired
+canonical export; this standalone state evidence awaits coherent integration.
+
 **Registration export failed safely; exact conservation repair verified.**
 The cold145-finding export terminates with exit1 after2,241,795.2319ms. Four
 source-binding replays are invalid and259 style groups lose their attributions;

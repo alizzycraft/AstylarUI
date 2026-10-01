@@ -2,6 +2,18 @@
 
 ## Evidence boundary
 
+Disabled activation coverage now includes five light/desktop DPR1 input families.
+All text controls stay disabled and retain values under real Tab/type/Enter and
+rendered-target clicks. Form-field/email/autocomplete are skipped and stay closed.
+Native date/time suffix buttons are disabled and inert; candidate suffix buttons
+omit disabled authoring, remain tabbable and open on Enter/click. First divergence
+is application state propagation, not declared-disabled core handling. Eight
+receipts authenticate10 pages; retained log `disabled-field-activation-fde2b69.log`
+SHA-256: dcb6505e1b25c76f1f28d5707ea2f473c06b3e21c24c7a177742b3276cd0b7c5.
+Native BODY versus candidate CANVAS focus after disabled-field pointer clicks is
+retained separately. Other profiles/viewports, disabled paint and full focus
+contract remain unproved. This evidence is not in the live repaired export.
+
 The145-finding registration export failed validation without replacing the
 139-finding publication. The historical producer guard did not recognize the
 seven added proof-inventory entries; its rejection invalidated four collectors
