@@ -32,6 +32,10 @@ export must not silently preserve it or weaken the box-sizing assertion. The
 next check is a focused source-transition review that replays the 68 panel
 owners, updates the follow-up receipt only if its invariants still hold, and
 then verifies the resulting box-sizing/owner classification before export.
+The historical mapping and proposal files remain pinned to their verified
+commits; the transient regenerated receipt was not installed in place because
+doing so would leave the transition binding inconsistent. A new transition
+commit and canonical join are required if this evidence is promoted.
 
 The previously authenticated package therefore remains the canonical state:
 no canonical files were changed by the failed refresh. The next bounded audit
