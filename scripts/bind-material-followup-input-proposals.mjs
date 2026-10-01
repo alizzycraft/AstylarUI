@@ -20,7 +20,7 @@ const definitions = {
   leafWeightTracking: { revision: '4ddda33', file: 'docs/material-leaf-weight-tracking-attribution-plan.json',
     baseline: currentRevision, collect: collectLeafWeightTrackingAttribution,
     attribution: 'reviewed-leaf-weight-tracking-observation-stage' },
-  expansionOwner: { revision: 'eb95c6a', file: 'docs/material-expansion-owner-attribution-plan.json',
+  expansionOwner: { revision: 'a2aa64a6', file: 'docs/material-expansion-owner-attribution-plan.json',
     baseline: currentRevision, collect: collectExpansionOwnerAttribution,
     attribution: 'reviewed-expansion-panel-header-owner-mismatch' },
   controlFontStyle: { revision: '48a0c55', file: 'docs/material-control-font-style-attribution-plan.json',
