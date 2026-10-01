@@ -100,6 +100,13 @@ the caret allocation subtype. Gradient/border paths, GPU retention, performance
 attribution and all-family lifecycle acceptance are not proven by this reduction.
 Canonical integration of this new finding remains pending the live independent
 cold check; this diagnostic does not change its producer dependencies.
+The strict replay now includes all six installed/current method bindings in the
+reproduction and explicitly asserts exact5/10/15 unbound materials, delivered
+`probe` clicks, stable tracked/live mesh and texture counts, no diagnostics and
+zero tracked/live resources after disposal. Both DPR cases pass in6,720.4529ms;
+retain `public-pseudo-material-ownership-61b4fc9-strict.log`, SHA-256
+7e4b76703625c171e7d1dfeb595759f0bd75b1a65e3545a267e57f9a8cf02cd2.
+This strengthens the diagnostic assertions, not the rendering acceptance claim.
 
 The earlier application-scale counterexample remains preserved. Three actual
 snackbar trigger/UNDO cycles in light desktop DPR1 and dark mobile DPR2 leave
