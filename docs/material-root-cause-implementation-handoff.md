@@ -10,10 +10,25 @@ Compressed SHA-256 is8b13bcc4db9ed30a70c32a36b296aa5ae1597529451af772e57ef004f88
 decoded SHA-256 is7651b878c2d87765dbec49a86e72840830df08136cfd7f8533108edffa437923.
 Retain `cold-canonical-export-0a0b5d6.log`. Publication validation is not exact
 predecessor conservation or full audit acceptance. The existing section-digest
-comparison now authenticates the retained6ffdc6e1 predecessor and current docs;
-do not restart it while its handle is live. Changed sections, inventory/proof
-receipts, compact import and independent canonical check remain pending. Recent
-standalone profile/ancestor probes are not yet registered by this producer.
+comparison authenticates the retained6ffdc6e1 predecessor/current docs and
+preserves all79 ordered sections:70 unchanged,9 changed. Retain
+`cold-export-0a0b5d6-section-comparison.log`. Both source/proof inventory token
+digests independently match those canonical sections. All539 fingerprint paths
+remain; seven hashes change. All112 preceding proof definitions remain, with36
+line-only changes whose declaration text exactly matches both source locations;
+three proofs are added. Retain
+`cold-export-0a0b5d6-inventory-conservation-verified.log`; the initial stricter
+line-equality failure is retained separately, not normalized away. Authenticated
+compact import/verification passes:8,483 groups,139 source findings,39,904 control
+records,389,202 occurrences and0 unresolved scalar groups,72,705,521 index bytes.
+All138 complete preceding source-finding row hashes/order remain unchanged plus
+one added confirmed-core row; retain
+`cold-export-0a0b5d6-source-conservation-verified.log` and compact import/verify logs.
+Three stream integrity tests pass. The existing exact-leaf comparator is still
+running for the other six changed sections. Their receipt derivation, independent
+canonical check and final gates remain pending; do not approve from counts or
+commit the canonical package yet. Recent standalone profile/ancestor probes are
+not yet registered by this producer.
 
 **Field-origin residual occurs before projection.** Read-only inspection of
 stored CSS layout boxes for light/custom mobile DPR2 places the candidate field

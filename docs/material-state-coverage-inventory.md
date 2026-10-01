@@ -3,9 +3,14 @@
 ## Evidence boundary
 
 The batched139-finding export now exits0 with all436/1,875 original cases and
-8,483 groups/389,202 occurrences retained. Exact predecessor conservation is
-running through the existing streamed comparator; compact import, independent
-check, current standalone-proof registration and final gates remain pending.
+8,483 groups/389,202 occurrences retained. Section comparison authenticates
+all79 sections (70 unchanged/9 changed). All138 prior full source findings remain
+unchanged in order plus one addition; all539 fingerprint paths and112 prior
+proof definitions remain, with seven file hashes/36 exact declaration-line
+changes and three added proofs. Compact import/verification passes, preserving
+39,904 control records. Exact leaves/receipt derivation for six changed data
+sections, independent check, standalone-proof registration and final gates
+remain pending. See the current handoff; these counts are not acceptance.
 See current handoff and `cold-canonical-export-0a0b5d6.log`; historical138-finding
 validation below is not validation of this new publication.
 Stored CSS layout inspection also excludes projection as the source of the
