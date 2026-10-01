@@ -31,8 +31,8 @@
     },
     "expansionOwner": {
       "file": "docs/material-expansion-owner-attribution-plan.json",
-      "revision": "eb95c6a94530670d53c3764e5b8e7274d6b2ad5a",
-      "sha256": "4b89eaddb659e5221e759cc6f275d2584a449fb03f6d331bd869f41b3a195c0a",
+      "revision": "a2aa64a63ef1a4fdf3fc9ba0bd4ffe0cabe08b1e",
+      "sha256": "4b45e4de99ab4cddd399b8a07862165c7891efafa2fd536361579f225470a66c",
       "sourceProofsReplayed": true,
       "originalCanonicalJoinReplayed": true
     },
