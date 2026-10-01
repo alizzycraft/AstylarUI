@@ -16,7 +16,9 @@ test('all canonical proof pointers resolve after focused/integration test moves'
   const inspect = reader => vm.runInNewContext(code + '; focusedProofInventory(root)',
     { readFileSync: reader, path, root: process.cwd() });
   const proofs = inspect(readFileSync);
-  assert.equal(proofs.length, 107);
+  // The canonical inventory now includes the fifteen retained public/popup
+  // proofs added since the original 107-pointer baseline.
+  assert.equal(proofs.length, 122);
   assert.ok(proofs.every(p => Number.isInteger(p.line) && p.line > 0 && p.status !== 'missing'));
   const broken = inspect((file, encoding) => file.endsWith('slider-input-box-integration.spec.mjs')
     ? '' : readFileSync(file, encoding));
