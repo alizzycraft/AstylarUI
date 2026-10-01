@@ -69,6 +69,33 @@ assert the delivered target. No fixture inputs changed. This does not establish
 precise fade timing, local paint, resource cleanup, late disposal, all profiles
 or original historical missing-snackbar attribution. Full gates remain pending.
 
+**New pointer-lifecycle counterexample; public reduction is next.** Three actual
+snackbar trigger/UNDO cycles in light desktop DPR1 and dark mobile DPR2 leave
+tracked materials at 13 but live materials at 17/19/21. Live-minus-tracked is
+4/6/8; retained identities are trigger hover/focus/active state materials, not
+caret materials. Meshes (12), textures/cache (5), plugin counts and observers
+plateau. Whole-surface disposal clears sampled scene/cache/plugin resources.
+Retain the failed assertion in `snackbar-resource-cycles-33c33ed.log` and the
+identity diagnostic `snackbar-resource-identities-33c33ed.log` (10,369.5262ms),
+SHA-256 27fb54191883cb024fa7d6821601984ec28da5deec0f0d66ae31073c2abc4027.
+Current `Astylar.applyElementPseudoState` creates mesh-cached state materials at
+src/lib/astylar.ts:1374 outside synchronous render ownership; the tracker captures
+new allocations inside replace(). This is a suspected shared interaction-resource
+ownership defect, not yet a plugin-free public proof or verified frozen/current
+method binding. Next: public button reduction, then adoption/replacement tracing.
+Prior tracked-only menu/sheet/dialog plateaus do not prove live-material stability;
+extend those checks only after the shared cause is isolated. Do not infer GPU
+retention, performance attribution, general lifetime acceptance or a renderer fix.
+
+The ordinary comparison's family selector replaces both iframe realms. A paired
+1900x1000 DPR1 probe switches open snackbars to Menu; both two-item menus remain
+open six seconds later, with no instrumented old-frame 5000ms callback. Retain
+`snackbar-family-replacement-33c33ed.log` (14,050.9264ms), SHA-256
+d71a9c22edb0287291346b8aeff98f3de46b0c690dc969637b7eabbcfe3479c4.
+This closes the bounded cross-document timer question, not same-realm component
+destruction, pending async disposal or core resource ownership. Source inputs
+remain unchanged while the independent cold check runs.
+
 ### Earlier checkpoints
 
 **Export failure diagnosed; historical source binding restored in focused replay.**

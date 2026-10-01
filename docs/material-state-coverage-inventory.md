@@ -360,6 +360,16 @@ source-derived applicability review before it can be closed as inapplicable.
 
 ## Priority and ownership of the remaining checks
 
+New shared lifecycle evidence changes the next decisive check: real-pointer
+snackbar cycles in light desktop DPR1 and dark mobile DPR2 keep tracked materials
+at13 while live materials grow17/19/21, with retained hover/focus/active materials
+and whole-surface disposal clearing sampled resources. Isolate the core public
+button pseudo-state allocation/adoption boundary before extending per-family
+cleanup checks. Earlier menu/sheet/dialog tracked-count plateaus are not proofs
+of stable live materials. See the current handoff; no renderer fix or canonical
+classification is inferred yet. Ordinary comparison iframe replacement does not
+retain old snackbar timers across a switch to Menu, in the bounded DPR1 probe.
+
 1. Shared remaining coverage: native scrollbar capture applicability and
    overlay input/paint mapping, including unresolved profiles and state boundaries.
    Do not repeat the settled wheel/drag or keyboard authoring proofs without
