@@ -39,6 +39,16 @@ commits; the transient regenerated receipt was not installed in place because
 doing so would leave the transition binding inconsistent. A new transition
 commit and canonical join are required if this evidence is promoted.
 
+That transition has now been completed through the existing infrastructure:
+the refreshed binding replays 66 groups / 2,640 observations, including 43
+expansion-owner groups / 1,596 observations, and the source replayer is bound
+again. The only newly admitted producer changes are the exact read-only camera,
+depth, geometry, and browser-launch diagnostics; the replayer proves their
+removal restores the pinned producer hashes and retains the live diagnostic
+fingerprints. This is evidence authentication, not a renderer or fixture
+change. The canonical export still remains pending until the focused transition
+tests and one named current-ancestry export pass.
+
 The previously authenticated package therefore remains the canonical state:
 no canonical files were changed by the failed refresh. The next bounded audit
 step is to reduce this drift to the smallest current expansion-panel input,
