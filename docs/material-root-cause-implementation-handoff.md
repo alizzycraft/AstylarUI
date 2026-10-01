@@ -2,43 +2,35 @@
 
 ## Current audit checkpoint — October 1
 
-**Compact input finding registered and retained proofs inventoried.** The existing
-source policy appends `fixture-compact-input-inset-conditioned-on-nonempty-value`
-with the exact eight-page capture receipt and contrast/custom empty/filled inset
-observations. All preceding140 definitions remain unchanged; producer total141
-does not change the published139-finding snapshot. The new focused test binds
-native padding, authored class/rules, resolved/used top and exact input-delta
-decomposition while leaving both field-origin residuals separately open.
-Existing focused-proof inventory now appends this and the progress-paint proof;
-the inventory check conserves every predecessor entry and verifies both new
-declaration locations. No new report/test framework or browser capture is added.
-`node --test --test-name-pattern='retained compact empty|retained progress paint|
-recent source diagnostics conserve|recent public and popup proofs join'
-tests/material-parity/input-equivalence-audit.spec.mjs` passes4/4 in5,314.2385ms.
-Next register applicable remaining keyboard/caret/selection/tooltip/timepicker
-observations before one coherent canonical export/conservation milestone.
-Do not repeat the settled compact-inset or progress-paint investigations.
-
-**Progress source finding registered; canonical publication remains139.** The
-existing source policy now appends
-`plugin-linear-progress-right-origin-and-track-input-mismatch` with an immutable
-capture receipt, exact observation fields and plugin/application ownership.
-The producer scans140 definitions; no previous139 definition is changed.
-`node --test --test-name-pattern='retained progress paint binds|recent source
-diagnostics conserve' tests/material-parity/input-equivalence-audit.spec.mjs`
-passes2/2 in2,857.4826ms. The new proof rehashes all16 rasters/eight dependencies,
-checks source formula, native transform/track, candidate data/center/projected
-edge and exact10%/90% foreground counterexamples; the existing synthetic audit
-negative controls also reject altered receipts/classification/conclusions.
-Its deliberate missing-root-style failure remains explicit, not acceptance.
-An initial test attempted unavailable `sharp`; replacing that import with the
-already-used `pngjs` decoder fixes test dependency selection, not rendering.
-This registration is not a new canonical export. Batch remaining standalone
-findings before the next expensive publication/conservation milestone.
+**Current registration batch:142 producer findings,139 published.** Three additive
+source findings and focused-proof entries use the existing policy/inventory:
+`plugin-linear-progress-right-origin-and-track-input-mismatch`,
+`fixture-compact-input-inset-conditioned-on-nonempty-value`, and
+`fixture-composite-keyboard-handler-omits-activation-and-navigation`.
+Every preceding definition/proof remains unchanged. Progress authenticates16
+rasters/eight dependencies and exact foreground counterexamples; compact input
+authenticates eight pages/eight dependencies and preserves origin residuals.
+Keyboard authenticates both retained logs and six dependencies each, then replays
+all20 original assertion blocks over36 paired all-theme mobile DPR2 cases. Source
+extraction executes the current Escape-only handler: tested activation/navigation
+keys do nothing, Escape still closes/focuses. Observed delivery is not lost core
+keydown. Tabs Enter still clicks its already-focused item; no all-key claim follows.
+Both keyboard log SHA-256 receipts are recorded in the machine policy. Additional
+keys, tablet/disabled/error, focus paint and complete control contract remain open.
+`node --test --test-name-pattern='retained keyboard profiles|retained compact empty|
+retained progress paint|recent source diagnostics conserve|recent public and popup
+proofs join' tests/material-parity/input-equivalence-audit.spec.mjs` passes5/5 in
+5,787.0761ms. Existing receipt/classification/conclusion negative controls pass;
+their deliberate missing-root-style error remains explicit, not acceptance.
+Prior progress test's unavailable `sharp` import was replaced by existing `pngjs`;
+that was test dependency selection, not rendering. No new browser capture or audit
+framework is added. Next register applicable caret/selection/tooltip/timepicker
+observations before one coherent export/conservation milestone. Do not repeat
+settled progress, compact-inset or keyboard-delivery investigations.
 
 **Independent cold canonical check complete; standalone integration remains.**
-`ASTYLAR_AUDIT_COLD=1 ASTYLAR_AUDIT_PROGRESS=1 node
-scripts/export-material-input-audit-current-ancestry.mjs --check` exits0 in
+`node scripts/export-material-input-audit-current-ancestry.mjs --check`, with
+`ASTYLAR_AUDIT_COLD=1` and `ASTYLAR_AUDIT_PROGRESS=1`, exits0 in
 2,630,594.6473ms (43.84minutes). It preserves436/436 static,1,875/1,875
 interaction,8,483 groups,389,202 occurrences and139 source findings, with
 1,205 files/89,154,859 bytes reverified and0 invalidations. Retain

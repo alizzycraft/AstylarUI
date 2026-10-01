@@ -1481,6 +1481,27 @@ export const sourceAuditDefinitions = Object.freeze([
       stage: 'state-conditioned authored class and resolved top before final projection' },
     justification: 'Eight retained pages bind native infix padding6/12px in both empty and filled states to candidate authored/resolved/used top16px when empty and6/10px when filled. The application compactFilled gate excludes the compact input-region class for empty values. Exact geometry decomposition accounts for contrast empty+10px and custom empty+4px/filled-2px separately from field-origin residuals .0131225586/.0181274414px. This proves an application input mismatch for these four form-field states, not a core projection defect, all-family equivalence, residual-origin attribution or historical first-bad runtime. Restore reference density/input semantics rather than moving rendered glyphs or adding a corrective offset.',
   }),
+  Object.freeze({
+    id: 'fixture-composite-keyboard-handler-omits-activation-and-navigation',
+    introducedBy: 'current Escape-only showcase key handler; historical first-bad runtime not established',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`private handleKeydown\(id: string, event: AstylarEvent\): void \{\s*if \(event\.key !== 'Escape' \|\| !this\.store\.state\(\)\.open\) return;`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase custom-control semantics, activation and composite keyboard state routing',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: retained keyboard profiles replay original assertions and bind the Escape-only handler',
+    evidence: [{ file: 'artifacts/material-parity/keyboard-mobile-profiles-09e2287.log',
+      sha256: 'abf20370156f5f3d163bfb8d1f9366257edef61193c5be06b31954ce8983293b' },
+      { file: 'artifacts/material-parity/keyboard-selection-mobile-profiles-207c5a8-verified.log',
+        sha256: '9b27a26ffcd960060b6eb56d39ce91d9df20b8a001e8649b3a4b88a360440ae3' }],
+    observation: { component: 'nine custom control families', element: 'focused semantic target', dpr: [2],
+      profiles: ['light', 'dark', 'contrast', 'custom'], viewport: { width: 390, height: 844 },
+      states: ['real Tab focus', 'Space/Enter activation where tested', 'ArrowLeft/ArrowRight composite navigation where tested'],
+      families: ['checkbox', 'chips', 'slide-toggle', 'expansion', 'sort', 'radio', 'button-toggle', 'tabs', 'stepper'],
+      property: 'keyboard-induced state transition', reference: 'tested activation/navigation changes state',
+      astylar: 'keydown reaches application callback without corresponding activation/navigation; tabs Enter still clicks focused item',
+      stage: 'custom-control authoring and Escape-only application state handler' },
+    justification: 'The retained36 paired all-theme mobile DPR2 cases preserve20 original assertion checks. Keydown arrives at candidate callbacks, while native controls change activation/selection or composite focus and candidate state remains unchanged. Current source routes keydown to a handler accepting only Escape while an overlay is open. This is evidence of unequal application/custom-control behavior, not lost core key delivery or a claim that every key is inert: tabs Enter clicks its already-focused item. Restore reference-equivalent control semantics/state routing at the responsible boundary; separately reduce any missing public core keyboard contract before assigning core ownership. Additional keys, tablet/disabled/error states, focus paint and all-profile lifetime remain open.',
+  }),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({

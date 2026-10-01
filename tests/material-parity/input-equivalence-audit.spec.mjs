@@ -1748,7 +1748,7 @@ test('recent public and popup proofs join existing inventories without changing 
     ['show', 'a6217c5:tests/material-parity/input-equivalence-audit.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }));
   assert.deepEqual(current.fingerprints, beforePointer.fingerprints);
-  assert.deepEqual(current.proofs.slice(3, -2), beforePointer.proofs);
+  assert.deepEqual(current.proofs.slice(3, -3), beforePointer.proofs);
   const pointerNames = ['public button pointer states diagnose materials outside render ownership',
     'dark mobile overlay cycles retain focus and semantic cleanup boundaries'];
   for (const [index, entry] of current.proofs.slice(0, 2).entries()) {
@@ -1763,15 +1763,15 @@ test('recent public and popup proofs join existing inventories without changing 
   assert.deepEqual(current.fingerprints.slice(0, 537), prior.fingerprints);
   assert.deepEqual(current.fingerprints.slice(537), files.map(file => ({ file,
     sha256: createHash('sha256').update(readFileSync(file, 'utf8').replace(/\r\n/g, '\n')).digest('hex') })));
-  assert.equal(current.proofs.length, prior.proofs.length + 10);
-  assert.deepEqual(current.proofs.slice(8, -2), prior.proofs);
-  for (const [index, entry] of current.proofs.slice(-2).entries()) {
+  assert.equal(current.proofs.length, prior.proofs.length + 11);
+  assert.deepEqual(current.proofs.slice(8, -3), prior.proofs);
+  for (const [index, entry] of current.proofs.slice(-3).entries()) {
     assert.equal(entry.file, 'tests/material-parity/input-equivalence-audit.spec.mjs');
     assert.notEqual(entry.status, 'missing');
     assert.match(entry.status, /retained/);
     assert.match(entry.description, /Not/);
     assert.ok(readFileSync(entry.file, 'utf8').split(/\r?\n/)[entry.line - 1].includes(
-      index === 0 ? 'retained progress paint binds' : 'retained compact empty and filled inputs bind'));
+      ['retained progress paint binds', 'retained compact empty and filled inputs bind', 'retained keyboard profiles replay'][index]));
   }
   const expectedNames = ['public equal-input overflow isolates scrollbar gutter before projection',
     'public equal-input text separates fractional origins from texture raster phase',
@@ -1892,13 +1892,77 @@ test('retained compact empty and filled inputs bind authored inset before projec
   assert.equal(JSON.stringify(sourceAuditDefinitions.slice(0, 140)), JSON.stringify(definitions));
 });
 
+test('retained keyboard profiles replay original assertions and bind the Escape-only handler', async () => {
+  const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');
+  const finding = sourceAuditDefinitions.find(entry => entry.id === 'fixture-composite-keyboard-handler-omits-activation-and-navigation');
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  const source = readFileSync('tests/material-parity/sort-focus-structure.spec.mjs', 'utf8');
+  const groups = [
+    [['checkbox real Tab and Space', 'composite controls expose their Tab'], ['radio real Tab', 'composite selection controls']],
+    [['real Tab and key activation', 'radio real Tab', 'composite selection controls'],
+      ['checkbox real Tab', 'composite controls expose their Tab', 'slider keyboard stepping']],
+  ];
+  let checks = 0;
+  for (const [groupIndex, receipt] of finding.evidence.entries()) {
+    const bytes = readFileSync(receipt.file);
+    assert.equal(digest(bytes), receipt.sha256);
+    const records = bytes.toString().trim().split(/\r?\n/).map(line => JSON.parse(line));
+    const header = records[0], terminal = records.at(-1);
+    assert.equal(header.receipts.length, 6);
+    for (const input of header.receipts) assert.equal(digest(readFileSync(input.file)), input.sha256);
+    assert.equal(digest(source.slice(source.indexOf('async function withFrozenShowcase('))), header.helperSha256);
+    const assertions = groups[groupIndex][0].map((start, index) => {
+      const begin = source.indexOf(`test('${start}`);
+      const end = source.indexOf(`test('${groups[groupIndex][1][index]}`, begin);
+      assert.ok(begin >= 0 && end > begin);
+      const block = source.slice(begin, end);
+      assert.equal(digest(block), header.originalBlockSha256[index]);
+      const marker = "assert.equal(browser.version(), '154.0.8037.58');";
+      assert.ok(block.includes(marker));
+      const tail = block.slice(block.indexOf(marker) + marker.length).replace(/\s*\}\);\s*\}\);\s*$/, '');
+      return new Function('assert', 'observations', tail);
+    });
+    const observations = records.filter(row => row.observations);
+    assert.equal(observations.length, groupIndex === 0 ? 8 : 12);
+    for (const [index, row] of observations.entries()) {
+      assert.equal(row.profile, finding.observation.profiles[Math.floor(index / assertions.length)]);
+      assertions[index % assertions.length](assert, row.observations);
+      checks++;
+    }
+    assert.equal(terminal.checks, observations.length);
+    assert.equal(terminal.pairedCases, groupIndex === 0 ? 16 : 20);
+  }
+  assert.equal(checks, 20);
+  const application = readFileSync(finding.file, 'utf8');
+  assert.match(application, new RegExp(finding.pattern));
+  assert.match(application, /keydown:.*this\.recordEvent\(event\); this\.handleKeydown\(id, event\)/);
+  const ast = ts.createSourceFile('application.ts', application, ts.ScriptTarget.Latest, true);
+  const component = ast.statements.find(node => ts.isClassDeclaration(node) && node.members.some(member => member.name?.getText(ast) === 'handleKeydown'));
+  const method = component.members.find(member => member.name?.getText(ast) === 'handleKeydown').getText(ast);
+  const exports = {};
+  new Function('exports', ts.transpileModule(`class Probe { ${method} } exports.Probe = Probe;`,
+    { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS } }).outputText)(exports);
+  const calls = [], probe = new exports.Probe();
+  probe.store = { state: () => ({ open: true }), patchState: state => calls.push(state) };
+  probe.family = () => 'diagnostic';
+  probe.surface = { focus: id => calls.push(id) };
+  for (const key of [' ', 'Enter', 'ArrowLeft', 'ArrowRight']) probe.handleKeydown('target', { key });
+  assert.deepEqual(calls, []);
+  probe.handleKeydown('target', { key: 'Escape' });
+  assert.deepEqual(calls, [{ open: false }, 'diagnostic-primary']);
+  const prior = execFileSync('git', ['show', 'de21004:tests/material-parity/input-equivalence-policy.mjs'], { encoding: 'utf8' });
+  const definitions = new Function(prior.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
+  assert.equal(definitions.length, 141);
+  assert.equal(JSON.stringify(sourceAuditDefinitions.slice(0, 141)), JSON.stringify(definitions));
+});
+
 test('recent source diagnostics conserve predecessor findings and reject altered receipts or conclusions', () => {
   const audit = buildMaterialInputAudit(parityReport({}, {}));
   const previous = execFileSync('git', ['show', 'bd79e4b:tests/material-parity/input-equivalence-policy.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const priorDefinitions = new Function(previous.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
   assert.equal(priorDefinitions.length, 135);
-  assert.equal(audit.sourceFindings.length, 141);
+  assert.equal(audit.sourceFindings.length, 142);
   const precedingPolicy = execFileSync('git', ['show', 'a6217c5:tests/material-parity/input-equivalence-policy.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const precedingDefinitions = new Function(precedingPolicy.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();

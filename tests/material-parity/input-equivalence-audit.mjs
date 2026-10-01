@@ -9662,6 +9662,8 @@ function focusedProofInventory(root) {
       'retained all-theme mobile progress input/paint counterexample', 'Authenticates16 local rasters and eight dependencies; native left-origin bar versus plugin positive CSS center/right fill and unequal track-color data are bound to source and exact pixels. Spinner transform strengthens the existing angle finding. Not whole-arc raster, used-height, lifetime or all-viewport acceptance.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('retained compact empty and filled inputs bind authored inset before projection'/,
       'retained compact state-conditioned input inset diagnostic', 'Authenticates eight pages/eight dependencies and the original collector. Native state-independent infix padding differs from candidate authored class/resolved/used top; exact delta decomposition preserves separate field-origin residuals. Not all-family parity, residual attribution or renderer correction.'),
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('retained keyboard profiles replay original assertions and bind the Escape-only handler'/,
+      'retained all-theme mobile custom-control keyboard diagnostic', 'Authenticates both capture receipts and dependencies, replays20 original assertion blocks over36 paired cases, and binds current Escape-only application routing. Key delivery is observed; tabs Enter still clicks its focused item. Not all-key, tablet/disabled/error, focus-paint or core routing acceptance.'),
   ];
 }
 

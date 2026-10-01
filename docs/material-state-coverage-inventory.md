@@ -2,20 +2,17 @@
 
 ## Evidence boundary
 
-Compact form-field empty/filled inset is now an authenticated producer finding:
-`fixture-compact-input-inset-conditioned-on-nonempty-value`. Producer total141
-conserves all preceding140 definitions; canonical publication remains139.
-Progress and compact-input tests now also join the existing proof inventory,
-preserving all earlier entries. Four focused checks pass in5,314.2385ms.
-The compact proof separates the application inset mismatch from the still-open
-field-origin residual; no all-family or renderer-equivalence claim follows.
-
-Progress-bar's bounded source/input finding is now registered in the existing
-producer policy with its authenticated capture. Two focused checks pass,
-including exact original139-definition conservation and retained local pixels.
-Producer source definitions total140; published canonical findings remain139
-until batched export/conservation. Other standalone registration and final gates
-are still pending; no rendering or fixture correction is authorized.
+Current producer registration totals142 findings; published canonical remains139.
+Progress-bar, compact input-state inset and the shared custom-control keyboard
+handler findings join existing policy/proof inventories without changing previous
+entries. Five focused checks pass in5,787.0761ms. Keyboard replay authenticates
+both logs/dependencies and20 original assertion blocks over36 paired all-theme
+mobile DPR2 cases: delivery is observed, corresponding state transitions differ.
+Tabs Enter still clicks the focused item. The extracted current handler also
+rejects tested activation/navigation keys while Escape works. This is bounded
+application/control-state attribution, not all-key/core-delivery acceptance.
+Compact input-origin residuals and remaining standalone registration/final gates
+stay open. See current handoff; no renderer or fixture correction is authorized.
 
 The independent139-finding cold canonical check now exits0 in43.84minutes:
 all436/1,875 cases,8,483 groups/389,202 occurrences remain, with1,205 files
