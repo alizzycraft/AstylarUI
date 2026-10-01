@@ -2,6 +2,23 @@
 
 ## Current audit checkpoint — October 1
 
+**Compact input finding registered and retained proofs inventoried.** The existing
+source policy appends `fixture-compact-input-inset-conditioned-on-nonempty-value`
+with the exact eight-page capture receipt and contrast/custom empty/filled inset
+observations. All preceding140 definitions remain unchanged; producer total141
+does not change the published139-finding snapshot. The new focused test binds
+native padding, authored class/rules, resolved/used top and exact input-delta
+decomposition while leaving both field-origin residuals separately open.
+Existing focused-proof inventory now appends this and the progress-paint proof;
+the inventory check conserves every predecessor entry and verifies both new
+declaration locations. No new report/test framework or browser capture is added.
+`node --test --test-name-pattern='retained compact empty|retained progress paint|
+recent source diagnostics conserve|recent public and popup proofs join'
+tests/material-parity/input-equivalence-audit.spec.mjs` passes4/4 in5,314.2385ms.
+Next register applicable remaining keyboard/caret/selection/tooltip/timepicker
+observations before one coherent canonical export/conservation milestone.
+Do not repeat the settled compact-inset or progress-paint investigations.
+
 **Progress source finding registered; canonical publication remains139.** The
 existing source policy now appends
 `plugin-linear-progress-right-origin-and-track-input-mismatch` with an immutable

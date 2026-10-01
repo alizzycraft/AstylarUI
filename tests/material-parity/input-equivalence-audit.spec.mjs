@@ -1748,7 +1748,7 @@ test('recent public and popup proofs join existing inventories without changing 
     ['show', 'a6217c5:tests/material-parity/input-equivalence-audit.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }));
   assert.deepEqual(current.fingerprints, beforePointer.fingerprints);
-  assert.deepEqual(current.proofs.slice(3), beforePointer.proofs);
+  assert.deepEqual(current.proofs.slice(3, -2), beforePointer.proofs);
   const pointerNames = ['public button pointer states diagnose materials outside render ownership',
     'dark mobile overlay cycles retain focus and semantic cleanup boundaries'];
   for (const [index, entry] of current.proofs.slice(0, 2).entries()) {
@@ -1763,8 +1763,16 @@ test('recent public and popup proofs join existing inventories without changing 
   assert.deepEqual(current.fingerprints.slice(0, 537), prior.fingerprints);
   assert.deepEqual(current.fingerprints.slice(537), files.map(file => ({ file,
     sha256: createHash('sha256').update(readFileSync(file, 'utf8').replace(/\r\n/g, '\n')).digest('hex') })));
-  assert.equal(current.proofs.length, prior.proofs.length + 8);
-  assert.deepEqual(current.proofs.slice(8), prior.proofs);
+  assert.equal(current.proofs.length, prior.proofs.length + 10);
+  assert.deepEqual(current.proofs.slice(8, -2), prior.proofs);
+  for (const [index, entry] of current.proofs.slice(-2).entries()) {
+    assert.equal(entry.file, 'tests/material-parity/input-equivalence-audit.spec.mjs');
+    assert.notEqual(entry.status, 'missing');
+    assert.match(entry.status, /retained/);
+    assert.match(entry.description, /Not/);
+    assert.ok(readFileSync(entry.file, 'utf8').split(/\r?\n/)[entry.line - 1].includes(
+      index === 0 ? 'retained progress paint binds' : 'retained compact empty and filled inputs bind'));
+  }
   const expectedNames = ['public equal-input overflow isolates scrollbar gutter before projection',
     'public equal-input text separates fractional origins from texture raster phase',
     'public input lifecycle isolates caret material retention without Material plugins',
@@ -1840,13 +1848,57 @@ test('retained progress paint binds plugin geometry and unequal track inputs', a
   assert.equal(JSON.stringify(sourceAuditDefinitions.slice(0, 139)), JSON.stringify(definitions));
 });
 
+test('retained compact empty and filled inputs bind authored inset before projection', async () => {
+  const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');
+  const finding = sourceAuditDefinitions.find(entry => entry.id === 'fixture-compact-input-inset-conditioned-on-nonempty-value');
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  const raw = readFileSync(finding.evidence[0].file);
+  assert.equal(digest(raw), finding.evidence[0].sha256);
+  const records = raw.toString().trim().split(/\r?\n/).map(line => JSON.parse(line));
+  const capture = records.find(record => record.results);
+  assert.equal(digest(readFileSync(records[0].originalCollector.file)), records[0].originalCollector.sha256);
+  assert.equal(capture.results.length, 8);
+  assert.equal(capture.receipts.length, 8);
+  for (const receipt of capture.receipts) assert.equal(digest(readFileSync(receipt.file)), receipt.sha256);
+  assert.match(readFileSync(finding.file, 'utf8'), new RegExp(finding.pattern));
+  for (const profile of finding.observation.profiles) for (const [index, state] of ['empty', 'filled'].entries()) {
+    const native = capture.results.find(r => r.profile === profile && r.state === state && r.mode === 'reference').snapshot;
+    const candidate = capture.results.find(r => r.profile === profile && r.state === state && r.mode === 'astylar').snapshot;
+    const input = native.rows.find(row => row.id === 'form-field-control');
+    const field = native.rows.find(row => row.id === 'form-field-primary');
+    const infix = native.rows.find(row => row.class?.includes('mat-mdc-form-field-infix'));
+    const region = candidate.rows.find(row => row.id === finding.observation.element);
+    const shell = candidate.rows.find(row => row.id === 'form-field-primary');
+    const control = candidate.rows.find(row => row.id === 'form-field-control');
+    const node = candidate.tree.find(row => row.authored?.id === finding.observation.element);
+    const expected = finding.observation.astylar[profile][index];
+    const reference = finding.observation.reference[profile][index];
+    assert.equal(Number.parseFloat(infix.style.paddingTop), reference);
+    assert.equal(input.box.top - field.box.top, reference);
+    assert.equal(node.authored.class.includes('compact-filled-input-region'), state === 'filled');
+    assert.equal(Number.parseFloat(node.resolvedStyle.top), expected);
+    assert.equal(Number.parseFloat(region.style.top), expected);
+    assert.equal(region.box.top - shell.box.top, expected);
+    const lastRule = region.authoredStyle.filter(rule => rule.declarations.top).at(-1);
+    assert.equal(Number.parseFloat(lastRule.declarations.top), expected);
+    const residual = shell.box.top + candidate.canvas.y - field.box.top;
+    const delta = control.box.top + candidate.canvas.y - input.box.top;
+    assert.equal(delta, expected - reference + residual);
+    assert.equal(residual, profile === 'contrast' ? .01312255859375 : .01812744140625);
+  }
+  const prior = execFileSync('git', ['show', '7360a72:tests/material-parity/input-equivalence-policy.mjs'], { encoding: 'utf8' });
+  const definitions = new Function(prior.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
+  assert.equal(definitions.length, 140);
+  assert.equal(JSON.stringify(sourceAuditDefinitions.slice(0, 140)), JSON.stringify(definitions));
+});
+
 test('recent source diagnostics conserve predecessor findings and reject altered receipts or conclusions', () => {
   const audit = buildMaterialInputAudit(parityReport({}, {}));
   const previous = execFileSync('git', ['show', 'bd79e4b:tests/material-parity/input-equivalence-policy.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const priorDefinitions = new Function(previous.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
   assert.equal(priorDefinitions.length, 135);
-  assert.equal(audit.sourceFindings.length, 140);
+  assert.equal(audit.sourceFindings.length, 141);
   const precedingPolicy = execFileSync('git', ['show', 'a6217c5:tests/material-parity/input-equivalence-policy.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const precedingDefinitions = new Function(precedingPolicy.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();

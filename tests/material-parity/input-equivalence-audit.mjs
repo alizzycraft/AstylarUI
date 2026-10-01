@@ -9658,6 +9658,10 @@ function focusedProofInventory(root) {
       'covered', 'Plugin range geometry proves increasing CSS X remains increasing render-local X at the final projection boundary.'),
     proof(root, 'docs/coordinate-system-remediation.md', /right-handed/i,
       'documented', 'Coordinate remediation records the right-handed scene and final CssBabylonProjection boundary.'),
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('retained progress paint binds plugin geometry and unequal track inputs'/,
+      'retained all-theme mobile progress input/paint counterexample', 'Authenticates16 local rasters and eight dependencies; native left-origin bar versus plugin positive CSS center/right fill and unequal track-color data are bound to source and exact pixels. Spinner transform strengthens the existing angle finding. Not whole-arc raster, used-height, lifetime or all-viewport acceptance.'),
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('retained compact empty and filled inputs bind authored inset before projection'/,
+      'retained compact state-conditioned input inset diagnostic', 'Authenticates eight pages/eight dependencies and the original collector. Native state-independent infix padding differs from candidate authored class/resolved/used top; exact delta decomposition preserves separate field-origin residuals. Not all-family parity, residual attribution or renderer correction.'),
   ];
 }
 

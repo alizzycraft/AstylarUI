@@ -1463,6 +1463,24 @@ export const sourceAuditDefinitions = Object.freeze([
       stage: 'plugin CSS geometry and authored data before final projection' },
     justification: 'Four actual-theme mobile DPR2 paired captures bind native left-origin scale .64 to a 166.4px fill in a 260px track, while the candidate requests positive46.8 CSS px displacement and projected/raster observations fill the right64%. The source center formula is the first unequal input, not unexpected core projection. Native track rgb(232,224,235) differs from candidate authored light/contrast/custom #e7e0ec and dark #49454f, with exact foreground/track samples agreeing with those inputs. The same capture strengthens the existing spinner start-angle finding: native SVG rotation -90degrees versus plugin -38degrees and decreasing CSS angles. No whole-arc/cap raster, other value/viewport, used-height, lifetime or historical first-bad runtime acceptance follows. Restore equivalent plugin geometry/data, never compensate core layout or final projection.',
   }),
+  Object.freeze({
+    id: 'fixture-compact-input-inset-conditioned-on-nonempty-value',
+    introducedBy: 'current compactFilled density/nonempty gate; historical first-bad runtime not established',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`const compactFilled = theme\.density < 0 && !empty;`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase field input-region class and density-token translation',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: retained compact empty and filled inputs bind authored inset before projection',
+    evidence: [{ file: 'artifacts/material-parity/empty-filled-input-ancestor-boundary-128fdec.log',
+      sha256: '4105695c856d6962b6701c47d6052b462725ff93e5c132a58bdfdf7005831e3d' }],
+    observation: { component: 'form-field', element: 'form-field-input-region', dpr: [2],
+      profiles: ['contrast', 'custom'], viewport: { width: 390, height: 844 },
+      states: ['focused empty', 'focused filled'], property: 'input inset from field top',
+      reference: { contrast: [6, 6], custom: [12, 12] },
+      astylar: { contrast: [16, 6], custom: [16, 10] },
+      stage: 'state-conditioned authored class and resolved top before final projection' },
+    justification: 'Eight retained pages bind native infix padding6/12px in both empty and filled states to candidate authored/resolved/used top16px when empty and6/10px when filled. The application compactFilled gate excludes the compact input-region class for empty values. Exact geometry decomposition accounts for contrast empty+10px and custom empty+4px/filled-2px separately from field-origin residuals .0131225586/.0181274414px. This proves an application input mismatch for these four form-field states, not a core projection defect, all-family equivalence, residual-origin attribution or historical first-bad runtime. Restore reference density/input semantics rather than moving rendered glyphs or adding a corrective offset.',
+  }),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({
