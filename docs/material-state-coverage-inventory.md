@@ -10,9 +10,12 @@ proof definitions remain, with seven file hashes/36 exact declaration-line
 changes and three added proofs. Compact import/verification passes, preserving
 39,904 control records. Exact-leaf comparison now preserves raw values,
 classifications and all paths/shapes in six changed data sections:148 changed
-leaves are count/source/proof receipts. Embedded/report hash derivation,
-independent check, standalone-proof registration and final gates
-remain pending. See the current handoff; these counts are not acceptance.
+leaves are count/source/proof receipts. Exact receipt-only reconstruction now
+reproduces all48 embedded scalar hashes and the independently collected motion
+report hash, conserving all121 groups/7,254 observations. The existing receipt
+negative-control test passes1/1; see the current handoff and retained derivation
+logs. Independent cold check, standalone-proof registration and final gates
+remain pending; conservation and counts are not acceptance.
 See current handoff and `cold-canonical-export-0a0b5d6.log`; historical138-finding
 validation below is not validation of this new publication.
 Stored CSS layout inspection also excludes projection as the source of the

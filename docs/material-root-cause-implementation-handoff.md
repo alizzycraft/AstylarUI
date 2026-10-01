@@ -2,7 +2,7 @@
 
 ## Current audit checkpoint — October 1
 
-**139-finding cold export completed; conservation review pending.** The batched
+**139-finding cold export and exact predecessor conservation complete.** The batched
 0a0b5d6 producer export exits0 in2,822,742.5915ms (47.05minutes), preserving
 436/436 static,1,875/1,875 interaction,8,483 scalar groups and389,202 occurrences.
 It reverifies1,205 files with0 invalidations and publishes139 source findings.
@@ -30,10 +30,22 @@ six changed data sections. Exactly148 leaves change:48 control-line-box module
 receipts,48 corresponding control-typography receipts,48 embedded scalar proof
 hashes, the source-finding count138 to139, one owner-caret module receipt, and one
 reviewed-batch report hash/module receipt each. Retain
-`cold-export-0a0b5d6-leaf-comparison.log`. Derivation of the embedded/report hashes,
-independent canonical check and final gates remain pending; do not approve from counts or
-commit the canonical package yet. Recent standalone profile/ancestor probes are
-not yet registered by this producer.
+`cold-export-0a0b5d6-leaf-comparison.log`. The authenticated current stream now
+reproduces all48 changed embedded scalar proof hashes by replacing only the
+exact producer-module receipt (fc10acc2 to578b7efa); no observation is changed.
+Retain `cold-export-0a0b5d6-embedded-proof-conservation.log` (95,478.5900ms).
+Independent motion collection likewise reproduces the reviewed-batch report
+hash transition dc2acccd toac94a86f by that one receipt replacement, preserving
+all121 groups/7,254 observations and complete historical non-receipt evidence.
+Six dependencies reverify; retain
+`cold-export-0a0b5d6-report-receipt-conservation.log` (33,191.0455ms).
+The existing `embedded scalar control receipts follow only exact producer
+transitions` negative-control test passes1/1 (1,348.1112ms), including changed
+paint, forged receipt and wrong-owner rejection. This completes explanation of
+all nine changed sections and permits committing the canonical publication.
+Independent cold canonical check and final gates remain pending. Recent
+standalone profile/ancestor probes are not yet registered by this producer;
+conservation is not input equivalence or full audit acceptance.
 
 **Field-origin residual occurs before projection.** Read-only inspection of
 stored CSS layout boxes for light/custom mobile DPR2 places the candidate field
