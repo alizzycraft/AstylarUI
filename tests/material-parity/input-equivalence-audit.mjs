@@ -9403,6 +9403,8 @@ function sourceFingerprints(root) {
     'tests/material-parity/disabled-ink-precision-preparation.spec.mjs',
     'tests/material-parity/run-checkpoint.mjs',
     'tests/material-parity/run-checkpoint.spec.mjs',
+    'tests/material-parity/input-boundary-evidence.spec.mjs',
+    'tests/material-parity/sort-focus-structure.spec.mjs',
   ];
   return files.map((file) => ({ file, sha256: createHash('sha256')
     .update(readFileSync(path.resolve(root, file), 'utf8').replace(/\r\n/g, '\n')).digest('hex') }));
@@ -9410,6 +9412,16 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('public equal-input overflow isolates scrollbar gutter before projection'/,
+      'public equal-input scrollbar client-gutter diagnostic', 'Chrome154 DPR1/2 gives the native 260px overflow box a platform scrollbar gutter, while candidate client size remains 260px before projection. The installed createContainer method matches current source. Hidden overflow is a separate control with no candidate public scroll container. This isolates a core client-geometry support gap, not native scrollbar styling, wheel/thumb acceptance, all-platform gutter size or attribution of every unequal Material popup input.'),
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('public equal-input text separates fractional origins from texture raster phase'/,
+      'public equal-input text raster-backing and fractional-origin diagnostic', 'Pinned Roboto, four fractional CSS origins and DPR1/2 distinguish transparent-canvas raster backing and local texture sampling phase. Correct projected planes and line boxes rule out position/baseline displacement in this reduction; direct opaque canvas content matches native crops in eight cases. This is a bounded core paint/fidelity investigation, not permission to make all textures opaque, offset tooltip text, or claim other fonts/backgrounds and profiles equivalent.'),
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('public input lifecycle isolates caret material retention without Material plugins'/,
+      'public input caret ownership diagnostic counterexample', 'Chrome154 DPR2 public input focus allocates caret resources outside the synchronous render owner; remove/recreate leaves 1/2/3 unbound caret materials. Current methods match installed source, and tracked/live diagnostics locate first divergence at post-render focus. Whole-surface disposal clears scene resources. The test preserves the failed plateau invariant; it is not lifecycle acceptance, GPU retention evidence or attribution of user-visible lag.'),
+    proof(root, 'tests/material-parity/sort-focus-structure.spec.mjs', /test\('dark mobile field popup cycles diagnose retained cursor materials'/,
+      'dark mobile autocomplete/timepicker cursor-retention diagnostic counterexample', 'Three real-pointer open/Escape/blur cycles preserve option and focus state but retain 1/2/3 unbound cursor materials in each candidate family. Observer/plugin counts stay stable and whole-surface disposal clears resources. The independent public input reduction demonstrates a core caret ownership defect; this frozen-bundle popup proof does not runtime-instrument every teardown or certify other profiles, late async work, GPU usage or performance.'),
+    proof(root, 'tests/material-parity/sort-focus-structure.spec.mjs', /test\('ordinary dark mobile tooltip separates keyboard opening from pointer paint'/,
+      'dark mobile tooltip keyboard-authoring and local texture-phase diagnostic', 'This retained state centers both popups 8px below the trigger at 24px height. Native Tab opens the tooltip but candidate Tab does not. Candidate text texture and projected plane isolate a one-device-pixel raster-phase difference; diagnostic registration is not acceptance. Historical blur/offset symptoms, other states and input equivalence remain open; no candidate-only paint or anchor correction follows.'),
     proof(root, 'src/parity/rounded-radius.audit.spec.ts', /describe\('public rounded radius audit'/,
       'public equal-input oversized corner radius rendering', 'Current installed-package div and button surfaces preserve 9999px radius inputs but render four-vertex rectangles; native capsules and 24px/36px candidate controls distinguish the shape defect at DPR1/2. Source-extracted kernel proof traces sampling density to the unnormalized radius. Retained failures are diagnostic evidence, not historical-bundle attribution or complete antialiasing parity.'),
     proof(root, 'tests/material-parity/prepared-alignment-canonical-integration.spec.mjs', /test\('canonical prepared alignment matches/,

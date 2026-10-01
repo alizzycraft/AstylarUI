@@ -2,6 +2,14 @@
 
 ## Evidence boundary
 
+October1 producer preparation registers the two recent proof files and five
+diagnostic entries in the existing source/proof inventories. Focused conservation
+and source-fingerprint checks each pass1/1;537 preceding fingerprints and all
+preceding proof entries remain. This closes discovery only: canonical source
+finding classifications, a fresh coherent export/check and final coverage gates
+remain pending. The following cold-export checkpoint describes the predecessor,
+not a publication of these registrations. Continue from the current handoff.
+
 October1 cold export from895e37f validates/reverifies1,205 files in42.22minutes
 with0 invalidations and produces the identical c3e0d7d1… canonical package.
 Compact import reuses that generation; all counts/classifications/receipts remain.

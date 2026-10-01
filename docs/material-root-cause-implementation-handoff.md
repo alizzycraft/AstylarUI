@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — October 1
 
+**Recent proof inventory registration closes the producer-discovery gap; export remains pending.**
+The existing producer now fingerprints input-boundary-evidence.spec.mjs and
+sort-focus-structure.spec.mjs and registers their five gutter, text-raster,
+caret-ownership, popup-retention and tooltip-phase diagnostics. All537 prior
+fingerprints and all prior focused-proof entries remain unchanged and ordered.
+Two focused existing-suite checks pass independently: inventory conservation
+1/1 in2,331.2932ms and production source-fingerprint/visual-acceptance fields
+1/1 in3,260.5955ms. These checks prove registration/conservation, not execution
+of the browser proofs or fresh canonical publication. No renderer, fixture,
+classification or threshold changed. The checked-in c3e0d7d1 package still
+describes its preceding producer. Next: integrate bounded source-finding
+classifications through the existing policy definitions, with retained runtime
+receipts and explicit applicability limits, then export/check the coherent batch
+once. Do not re-export merely for this status update or call registration an
+input-equivalence pass. Remaining coverage priority is shared overlay/scrollbar
+inputs and paint, text-input action boundaries, focus/lifecycle and multi-surface
+coverage, composite keyboard states, then passive-family mapping and full gates.
+
 **Cold export from895e37f succeeds, but recent focused proofs are outside its inventory.**
 `node scripts/export-material-input-audit-current-ancestry.mjs` with cold/progress
 settings exits0 in2,533,311.1756ms (42.22minutes). Validation and session rehash
