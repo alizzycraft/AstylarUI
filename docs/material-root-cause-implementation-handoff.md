@@ -46,6 +46,10 @@ focused workflow checks then passed in 1,538.8698ms. The initial failure log is
 retained as `registration-export-fde2b69-workflow-focused.log` and the corrected
 run as `registration-export-fde2b69-workflow-focused-corrected.log`. This was an
 audit-test maintenance issue, not evidence that any proof pointer was missing.
+Post-publication focused position checks pass 3/3 in 3,975.2754ms and focused
+slider source-binding checks pass 5/5 in 5,673.2623ms, including all 156
+retained native slider owners. These are regression checks only; they do not
+replace the pending browser matrix or final release gates.
 
 **Email discrepancy now has a direct core editing-route boundary.**
 `email-native-edit-routing.probe.mjs` reuses the frozen input collector for one
