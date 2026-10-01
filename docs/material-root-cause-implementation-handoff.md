@@ -24,6 +24,15 @@ against the older captured stylesheet; accepting the new export requires a
 source-transition classification that preserves this unequal owner/input
 evidence, rather than treating the declaration as a renderer discrepancy.
 
+The direct follow-up collector confirms the boundary: `collectFollowupInputAuditInputs`
+returns `binding.status: invalid` with `expansion source proof changed beyond
+reviewed capture diagnostics`. Consequently the historical 68-observation
+expansion owner attribution is not reusable for this current input, and the
+export must not silently preserve it or weaken the box-sizing assertion. The
+next check is a focused source-transition review that replays the 68 panel
+owners, updates the follow-up receipt only if its invariants still hold, and
+then verifies the resulting box-sizing/owner classification before export.
+
 The previously authenticated package therefore remains the canonical state:
 no canonical files were changed by the failed refresh. The next bounded audit
 step is to reduce this drift to the smallest current expansion-panel input,
