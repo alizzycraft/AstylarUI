@@ -15,15 +15,16 @@ export function applyBoxSizingReviews(rows, cases, inventory, normalize) {
     if (row.property !== 'boxSizing' || row.attribution !== 'unresolved') return row;
     const explicit = Object.hasOwn(explicitBoxSizingTargets, row.element);
     const native = Object.hasOwn(nativeBoxSizingTargets, row.element);
-    const prove = explicit ? proveExplicitBoxSizing : native ? proveNativeBoxSizingRequest : proveBoxSizingOmission;
+    const referenceRequest = Object.hasOwn(referenceBoxSizingTargets, row.element);
+    const prove = explicit ? proveExplicitBoxSizing : native || referenceRequest ? proveNativeBoxSizingRequest : proveBoxSizingOmission;
     return applyModalBoxReview([row], cases.filter(e => row.states.includes(e.state ?? 'static')), inventory, normalize, {
       family: row.family, element: row.element, properties: ['boxSizing'],
-      attribution: boxSizingReviewAttributions[explicit ? 0 : native ? 1 : 2],
-      classification: explicit ? 'application-plugin-authoring-defect' : 'parity-harness-defect',
-      owner: explicit ? 'showcase authored box-sizing inputs' : 'computed browser versus local candidate box-sizing measurement',
+      attribution: boxSizingReviewAttributions[explicit ? 0 : native || referenceRequest ? 1 : 2],
+      classification: explicit || referenceRequest ? 'application-plugin-authoring-defect' : 'parity-harness-defect',
+      owner: explicit || referenceRequest ? 'showcase authored box-sizing inputs' : 'computed browser versus local candidate box-sizing measurement',
       justification: explicit
         ? 'Original corresponding owners retain native content-box and one explicit candidate border-box request, verified against all three captured stages. Preserve differing owner structure and overlay mapping gaps. This establishes unequal authored inputs, not deliberate compensation intent, a used-box defect or a renderer cause.'
-        : native
+        : native || referenceRequest
           ? 'Original native owners carry explicit border-box requests while corresponding candidate owners omit boxSizing in matching rules and all local stages. Preserve generated and private-plugin owners. Computed browser values and local candidate declarations are different measurement stages; no candidate computed default or used-size equivalence is inferred.'
           : 'Original native computed boxSizing is compared with absent candidate local declarations, with no captured own box-sizing/all request on either owner. Preserve native table border-box separately from content-box observations and retain generated/private owner identity. Neither candidate computed defaults, historical user-agent rules nor used geometry are established by this observation-stage difference.',
       prove: (entry, r, a) => {
@@ -80,9 +81,16 @@ export const nativeBoxSizingTargets = Object.freeze({
   'snack-bar-surface': ['snack-bar', '.mat-mdc-snackbar-surface', 34],
   'toolbar-primary': ['toolbar', '.mat-toolbar-row, .mat-toolbar-single-row', 52],
 });
+export const referenceBoxSizingTargets = Object.freeze({
+  'expansion-primary': ['expansion', '.mat-expansion-panel', 68],
+});
+// Material's expansion container explicitly retains content-box. Keep this
+// separate from the native border-box controls: the evidence is still an
+// authored reference request versus an omitted candidate-local request.
+export const nativeBoxSizingExpected = Object.freeze({ 'expansion-primary': 'content-box' });
 
 export function proveNativeBoxSizingRequest(entry, input, reference, candidate) {
-  const target = nativeBoxSizingTargets[input.id]; assert.ok(target);
+  const target = nativeBoxSizingTargets[input.id] ?? referenceBoxSizingTargets[input.id]; assert.ok(target);
   const [family, selector] = target; assert.equal(entry.family, family);
   const ast = one(candidate.nodes.filter(n => n.authored?.id === input.id));
   let native, identity;
@@ -95,7 +103,8 @@ export function proveNativeBoxSizingRequest(entry, input, reference, candidate) 
   assert.equal(ast.authored.type, input.astylarStructure.type);
   if (input.id === 'slider-visual') assert.equal(ast.authored.type, 'showcase.material:range-visual');
   for (const [key, value] of Object.entries(input.reference)) assert.equal(reference.styles[native.style][key], value);
-  assert.equal(input.reference.boxSizing, 'border-box');
+  const expectedBoxSizing = nativeBoxSizingExpected[input.id] ?? 'border-box';
+  assert.equal(input.reference.boxSizing, expectedBoxSizing);
   for (const n of [native, ast]) {
     assert.equal(relevant(n.inline ?? n.authored?.style), false);
     assert.ok(!/(?:^|;)\s*(?:box-sizing|all)\s*:/i.test(n.attributes?.style ?? n.authored?.attributes?.style ?? ''));
@@ -103,7 +112,7 @@ export function proveNativeBoxSizingRequest(entry, input, reference, candidate) 
   const requests = native.rules.map(i => reference.rules[i]).filter(r => r.active && relevant(r.declarations))
     .map(r => ({ selector: r.selector, conditions: r.conditions,
       declarations: Object.fromEntries(Object.entries(r.declarations).filter(([k]) => relevant({ [k]: true }))) }));
-  assert.deepEqual(requests, [{ selector, conditions: [], declarations: { 'box-sizing': { value: 'border-box', important: false } } }]);
+  assert.deepEqual(requests, [{ selector, conditions: [], declarations: { 'box-sizing': { value: expectedBoxSizing, important: false } } }]);
   assert.deepEqual(candidate.rules.filter(r => rootInitialSelectorCanApply(r.selector, ast.authored) && relevant(r)), []);
   for (const [stage, scalar] of [['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'],
     ['interactionResolvedStyle', 'astylarInteractionResolvedStyle']]) {
