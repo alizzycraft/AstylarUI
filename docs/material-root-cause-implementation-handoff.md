@@ -14928,3 +14928,9 @@ serialization-contract defect, not source-value drift, input inequivalence or
 renderer behavior. Preserve the failure and route the next audit-only change
 through the existing canonical serialization correction; do not rewrite the
 binding digest or weaken the equality guard.
+
+The existing serialization-boundary unit proof
+(`tests/material-parity/canonical-transition-composition.spec.mjs`) passes
+2/2. It already enforces the correct remedy—complete ordered value equality
+before carrying frozen serialization—so the remaining work is to route the
+follow-up transition through that boundary, not to alter historical digests.
