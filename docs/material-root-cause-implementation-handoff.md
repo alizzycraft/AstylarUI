@@ -98,6 +98,25 @@ bottom-sheet focus theft therefore remains a separate component overlay/input
 ownership question; this generic proof cannot be promoted as bottom-sheet
 equivalence or used to justify a global modality change.
 
+## Current audit checkpoint — October 2 (bottom-sheet focus theft reproduced)
+
+The existing `audit-material-overlay-focus-runtime.mjs` probe was run against
+the current development showcase at Chrome 154/DPR1 for menu, bottom-sheet and
+dialog opening. The retained current-runtime result is
+`artifacts/material-parity/overlay-focus-current-20261002-localhost/result.json`
+(SHA-256
+`5fc0f667da9cedc751d064753d2700ca217c50886ca6d55c61b577f26895a117`). Its
+wrapper controls pass with zero runtime errors and three served source receipts.
+
+For the bottom sheet, the reference focus moves from the opener to the sheet's
+`Share` action after release. AstylarUI instead leaves focus on the opener and
+repeatedly refocuses its semantic opener; the sheet is present but its action
+never becomes active. This reproduces the user's focus-stealing report against
+current runtime inputs and localizes it to the Material bottom-sheet overlay /
+semantic-focus path. It does not justify disabling global modality or changing
+sheet geometry/pointer styles; the generic modal isolation proof above remains
+green.
+
 ## Current audit checkpoint — October 2 (current-ancestry export reconciled)
 
 The current-ancestry export/check now completes with the source-receipt
