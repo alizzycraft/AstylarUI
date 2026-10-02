@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
+import { isDeepStrictEqual } from 'node:util';
 import ts from 'typescript';
 import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
 import { bindPreciseAuditNormalization, preciseAuditNormalization } from './audit-normalization-contracts.mjs';
@@ -16,6 +17,22 @@ const helperImport = '../tests/material-parity/alignment-survey-conservation.mjs
 const helperName = 'conserveAlignmentSurveySnapshot';
 const hash = x => createHash('sha256').update(x).digest('hex');
 const normalized = x => x.toString('utf8').replaceAll('\r\n', '\n');
+const astylarSourceFile = 'examples/material-showcase/src/app/astylar.component.ts';
+
+// The current showcase source contains two additive, read-only measurements used
+// by the audit. Historical surveys may retain the pre-diagnostic source receipt;
+// accept that transition only when removing the exact blocks restores the
+// authenticated historical bytes.
+export function restoreAstylarDiagnostics(source) {
+  let restored = normalized(source);
+  const removeOnce = block => {
+    assert.equal(restored.split(block).length, 2, 'Astylar diagnostic transition must match exactly once');
+    restored = restored.replace(block, '');
+  };
+  removeOnce(`        // Read-only audit diagnostics: retain the final mesh depth and camera\n        // bounds alongside CSS-space measurements. These values are observed\n        // after layout/projection and never feed authoring or interaction.\n        paintDepth: {\n          meshZ: mesh.position.z,\n          enabled: mesh.isEnabled(),\n          visible: mesh.isVisible,\n          visibility: mesh.visibility,\n        },\n`);
+  removeOnce(`        camera: {\n          position: { x: camera.position.x, y: camera.position.y, z: camera.position.z },\n          viewport: { x: viewport.x, y: viewport.y, width: viewport.width, height: viewport.height },\n        },\n`);
+  return restored;
+}
 const definitions = {
   'docs/material-vertical-align-population.json': ['scripts/audit-material-vertical-align-population.mjs', 'collectVerticalAlignPopulation', 'sourceFingerprints'],
   'docs/material-text-align-ancestry.json': ['scripts/audit-material-text-align-ancestry.mjs', 'collectTextAlignAncestry', 'sourceFingerprints'],
@@ -152,6 +169,11 @@ export function verifyAlignmentSurveyConservation(reportFile, current, {
     const oldBytes = readBaseline(receipt.file); assert.equal(hash(normalized(oldBytes)), old.sha256);
     let proof;
     if (receipt.file === auditFile) proof = verifyAlignmentAuditProjection(oldBytes, currentBytes);
+    else if (receipt.file === astylarSourceFile) {
+      const historical = normalized(oldBytes), current = normalized(currentBytes);
+      assert.equal(restoreAstylarDiagnostics(current), historical);
+      proof = { additiveReadOnlyDiagnosticsOnly: true, completeHistoricalSourceConserved: true };
+    }
     else if (receipt.file === 'tests/material-parity/run-material-parity.mjs') {
       assert.equal(restoreGapCaptureDiagnostics(normalized(currentBytes)), normalized(oldBytes));
       proof = { additiveCaptureDiagnosticsOnly: true, completeHistoricalCaptureSourceConserved: true };
@@ -170,6 +192,18 @@ export function verifyAlignmentSurveyConservation(reportFile, current, {
     }
     changes.push({ file: receipt.file, historicalSha256: old.sha256, currentSha256: receipt.sha256, proof });
     receipts[i] = old;
+  }
+  if (Object.hasOwn(projected, 'explicitCandidateRequestHistory') &&
+      !isDeepStrictEqual(projected.explicitCandidateRequestHistory, original.explicitCandidateRequestHistory)) {
+    const currentHistory = projected.explicitCandidateRequestHistory;
+    const historicalHistory = original.explicitCandidateRequestHistory;
+    assert.deepEqual(currentHistory.file, historicalHistory.file);
+    assert.deepEqual(currentHistory.requests, historicalHistory.requests);
+    assert.deepEqual(currentHistory.historicalRenderingReplayed, historicalHistory.historicalRenderingReplayed);
+    assert.deepEqual(currentHistory.concealedCoreCauseProven, historicalHistory.concealedCoreCauseProven);
+    const historicalSource = readBaseline(astylarSourceFile);
+    assert.equal(restoreAstylarDiagnostics(readCurrent(astylarSourceFile)), normalized(historicalSource));
+    projected.explicitCandidateRequestHistory = historicalHistory;
   }
   assert.equal(hash(JSON.stringify(projected)), hash(JSON.stringify(original)), 'survey observations or non-source metadata changed');
   return { report: original, evidence: { reportFile, baseline: alignmentSurveyBaseline,
