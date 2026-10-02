@@ -1,5 +1,29 @@
 # Material audit: evidence-led implementation priorities
 
+## Current audit checkpoint — October 2 (receipt reconciliation passed; binding coverage remains)
+
+After the expansion-owner transition, button-paint transition, and slider-pointer
+transition were each committed and pushed (`a2aa64a6`/`fecb28bd`/`d2e773ae`/
+`aa96c89f`/`732f592a`/`fee96e27`/`fe5588db`, `7b7c8229`, `ece6754e`), the named
+current-ancestry exporter was rerun once. Its full build and evidence-session
+verification completed after 2,085,506 ms (about 34.76 minutes): 1,205 files and
+89,154,859 bytes were reverified, with no invalidated reads. The two previously
+stale source-receipt boundaries now pass; no canonical package was published.
+
+Validation then stopped on the audit binding gate, not on a renderer assertion:
+`overlaySurfaceAuditInputs`, `chipPaintAuditInputs`, `reviewedSourceBatchInputs`,
+`alignmentFontInputs`, and `ltrAlignmentInputs` lack independently bound original
+source evidence in this current refresh, and 379 resolved-style differences still
+lack root-cause attribution. The prior canonical package therefore remains
+authoritative. This is an audit evidence/coverage gap, not permission to alter
+renderer behavior, plugin authoring, fixtures, thresholds, or reference truth.
+
+The next bounded question is whether those five populations already have retained
+source-transition receipts that can be revalidated and rebound from current
+producer hashes. Start with compact status/membership checks and focused negative
+controls; do not rerun the full exporter until the affected bindings are proven
+`bound` and the 379 rows have a documented coverage disposition.
+
 ## Current audit checkpoint — October 2 (current-ancestry refresh blocker)
 
 The optimized canonical refresh was attempted once with
