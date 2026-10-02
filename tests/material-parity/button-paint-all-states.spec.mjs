@@ -42,3 +42,21 @@ test('all-state button collector freshly replays every source tree with writes p
     inactive: result.inactive, preserved: result.preserved },
   { cases: 2311, observations: 600, active: 235, inactive: 365, preserved: 146 });
 });
+
+test('all-state source receipt accepts only the reviewed read-only Astylar diagnostics transition', () => {
+  const file = 'examples/material-showcase/src/app/astylar.component.ts';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const restore = value => {
+    let restored = value;
+    const removeOnce = block => {
+      assert.equal(restored.split(block).length, 2, 'diagnostic transition must match exactly once');
+      restored = restored.replace(block, '');
+    };
+    removeOnce(`        // Read-only audit diagnostics: retain the final mesh depth and camera\n        // bounds alongside CSS-space measurements. These values are observed\n        // after layout/projection and never feed authoring or interaction.\n        paintDepth: {\n          meshZ: mesh.position.z,\n          enabled: mesh.isEnabled(),\n          visible: mesh.isVisible,\n          visibility: mesh.visibility,\n        },\n`);
+    removeOnce(`        camera: {\n          position: { x: camera.position.x, y: camera.position.y, z: camera.position.z },\n          viewport: { x: viewport.x, y: viewport.y, width: viewport.width, height: viewport.height },\n        },\n`);
+    return restored;
+  };
+  const hash = value => createHash('sha256').update(value).digest('hex');
+  assert.equal(hash(current), 'b493a355679903f988e29f0dafbb95d2d6cce41275302fce5c978ae55f423b9f');
+  assert.equal(hash(restore(current)), 'b7957cd9e651efdf85bcbb70d7b9dd4fd8fbddb18c1b616ab6c9d54d3937ff90');
+});
