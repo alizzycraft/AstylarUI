@@ -21,6 +21,25 @@ attribution remain unproven. The next decisive check is therefore a bounded
 late-async/multi-surface ownership probe, not a repeated full export and not a
 component popup workaround.
 
+## Current audit checkpoint — October 2 (scroll client-area divergence revalidated)
+
+The existing public equal-input overflow proof was then rerun:
+
+`node --test --test-name-pattern="public equal-input overflow isolates
+scrollbar gutter before projection" tests/material-parity/input-boundary-evidence.spec.mjs`
+
+passes at Chrome 154 on DPR1 and DPR2. With the same 260x128 CSS box and 400px
+child, native `overflow:auto` reports a 245px client width while the candidate
+reports 260px; native `overflow:scroll` reports 245x113 while the candidate
+reports 260x128. Hidden overflow agrees at 260x128, isolating the divergence to
+the core scroll client-area calculation before final projection rather than a
+Material popup width or fixture adjustment. The proof deliberately does not
+claim scrollbar raster, wheel/thumb movement, or cross-platform gutter parity;
+those remain the next bounded scroll-runtime questions. This keeps the repeated
+timepicker/select/autocomplete width and missing-scrollbar reports grouped under
+one core geometry investigation without treating the current diagnostic as
+complete scrollbar behavior.
+
 ## Current audit checkpoint — October 2 (current-ancestry export reconciled)
 
 The current-ancestry export/check now completes with the source-receipt
