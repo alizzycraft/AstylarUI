@@ -11,7 +11,7 @@ const hash = value => createHash('sha256').update(value).digest('hex');
 const digest = value => hash(JSON.stringify(value));
 const one = (values, message) => { assert.equal(values.length, 1, message); return values[0]; };
 const sourceFile = 'docs/material-button-paint-all-states.json';
-const sourceSha256 = 'd73d512b70e0e4924c09d0c27ffce9469e087feb4a21314c19be26b235e6d5b9';
+const sourceSha256 = '57504b29f612c8812d5faa946347356f4a87b271142847808c47d6872e9dd240';
 
 export function inspectDisabledButtonInk(proof, reference) {
   assert.equal(proof.element, 'button-disabled');

@@ -1,9 +1,11 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import { syncBuiltinESMExports } from 'node:module';
 import test from 'node:test';
 import { collectControlSelfAlignment, inspectControlSelfAlignment } from '../../scripts/audit-material-control-self-alignment.mjs';
+import { restoreAstylarDiagnostics } from './alignment-survey-conservation.mjs';
 
 const hash = x => createHash('sha256').update(x).digest('hex');
 const file = 'docs/material-control-self-alignment.json';
@@ -66,4 +68,17 @@ test('rejects changed identity, parent context, source declarations and local in
   for (const family of saved.groups.map(g => g.family)) for (const mutate of mutations) {
     const d = fixture(family); mutate(d); assert.throws(() => inspect(d));
   }
+});
+
+test('control alignment receipt changes only for the reviewed read-only Astylar diagnostics', () => {
+  const current = fs.readFileSync('examples/material-showcase/src/app/astylar.component.ts', 'utf8').replaceAll('\r\n', '\n');
+  const historical = execFileSync('git', ['show', '67db724e5f258c84cfdc70e9da2ccb6ee6353ad0:examples/material-showcase/src/app/astylar.component.ts'], { encoding: 'utf8' }).replaceAll('\r\n', '\n');
+  assert.equal(restoreAstylarDiagnostics(current), historical);
+  const fresh = collectControlSelfAlignment();
+  assert.equal(fresh.history.historicalSha256, saved.history.historicalSha256);
+  assert.equal(fresh.history.currentSha256, hash(current));
+  assert.notEqual(fresh.history.currentSha256, 'b7957cd9e651efdf85bcbb70d7b9dd4fd8fbddb18c1b616ab6c9d54d3937ff90');
+  assert.equal(hash(JSON.stringify(fresh.findings)), hash(JSON.stringify(saved.findings)));
+  assert.equal(hash(JSON.stringify(fresh.patterns)), hash(JSON.stringify(saved.patterns)));
+  assert.deepEqual(fresh.groups, saved.groups);
 });

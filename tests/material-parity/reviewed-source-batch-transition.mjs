@@ -7,7 +7,7 @@ const digest = x => hash(JSON.stringify(x));
 const same = (a, b, message) => assert.ok(isDeepStrictEqual(a, b), message);
 export const reviewedSourceBatchDescriptor = Object.freeze({
   file: 'docs/material-reviewed-source-batch.json', revision: 'e66deef',
-  sha256: '6a9335ebb748681bc2d1b390464b64c558ed28c30104323e03899e23803fdbd3',
+  sha256: 'e9b9707c897a0be3ce514e8ec74ad61d7f27099189ca6c727a8ecc0a94aa76d6',
 });
 const supplemental = {
   'reviewed-control-self-alignment-in-replacement-flex-context': {

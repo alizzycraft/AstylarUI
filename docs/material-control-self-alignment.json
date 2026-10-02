@@ -18476,7 +18476,7 @@
     "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
     "file": "examples/material-showcase/src/app/astylar.component.ts",
     "historicalSha256": "6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24",
-    "currentSha256": "b7957cd9e651efdf85bcbb70d7b9dd4fd8fbddb18c1b616ab6c9d54d3937ff90",
+    "currentSha256": "b493a355679903f988e29f0dafbb95d2d6cce41275302fce5c978ae55f423b9f",
     "historicalWitnesses": [
       {
         "family": "button-toggle",

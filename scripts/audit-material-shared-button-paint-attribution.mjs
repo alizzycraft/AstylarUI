@@ -14,7 +14,7 @@ const digest = x => hash(JSON.stringify(x));
 const same = (a, b, message) => assert.ok(isDeepStrictEqual(a, b), message);
 const revision = '67db724e5f258c84cfdc70e9da2ccb6ee6353ad0';
 const sourceFile = 'docs/material-button-paint-all-states.json';
-const sourceHash = 'd73d512b70e0e4924c09d0c27ffce9469e087feb4a21314c19be26b235e6d5b9';
+const sourceHash = '57504b29f612c8812d5faa946347356f4a87b271142847808c47d6872e9dd240';
 const signature = r => JSON.stringify([r.family, r.element, r.property, r.reference, r.astylar]);
 
 // Pure proposal only. The caller must authenticate/replay the complete source

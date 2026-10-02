@@ -10,7 +10,7 @@ import { applyOverlayTriggerPaintReview, overlayTriggerPaintAttribution } from '
 test('overlay trigger paint joins all 53 observations without flattening native states', () => {
   const hash = value => createHash('sha256').update(value).digest('hex');
   const bytes = readFileSync('docs/material-button-paint-all-states.json', 'utf8').replaceAll('\r\n', '\n');
-  assert.equal(hash(bytes), 'd73d512b70e0e4924c09d0c27ffce9469e087feb4a21314c19be26b235e6d5b9');
+  assert.equal(hash(bytes), '57504b29f612c8812d5faa946347356f4a87b271142847808c47d6872e9dd240');
   const source = collectButtonPaintAllStates(); assert.deepEqual(source, JSON.parse(bytes));
   const snapshot = { generation: 'd25a9078972edf1884a4e56a7c17f4a7b3d249d3ed22933811f69daa4aafda9a',
     indexSha256: 'c1934e90c7ca80ff121da83a6871d10da201f798f37cdb92f8badce7c24529ad' };

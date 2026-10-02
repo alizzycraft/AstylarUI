@@ -3,11 +3,11 @@
   "kind": "prepared-reviewed-source-batch",
   "sources": {
     "docs/material-owner-initial-motion-review.json": "f8f90799191604823875d849fb6ae56de46dd96c37e3f91c8d540bdd48916294",
-    "docs/material-control-self-alignment.json": "f63c2a8791f8fa8be456538d446dde3b9198f06e310cbee01cbbf797142a18db",
-    "docs/material-content-flex-requests.json": "46cdcbaaa758f1bb8661b47d943c39647671ba89dea414fa7b9531fe056aadd9",
-    "docs/material-badge-whitespace-audit.json": "2bb6325b1e0c409348f1af75209ea121a3b8c4da8d90347d0fac77a0fa9d71e4",
-    "docs/material-button-paint-all-states.json": "d73d512b70e0e4924c09d0c27ffce9469e087feb4a21314c19be26b235e6d5b9",
-    "docs/material-button-base-alpha.json": "340b875a4cf1ced5c42f736a6041538f834fad04f5929c9a6a2fb96d0cf923df",
+    "docs/material-control-self-alignment.json": "2ba997e7f1913a03cfbcdeff3bf309f885030110247b872fee06a22449dc540c",
+    "docs/material-content-flex-requests.json": "1bcbac81b2ac653c964b98108aa53409445c852370e9a8d864d21e620f48efa6",
+    "docs/material-badge-whitespace-audit.json": "b22f39cdbfeadfbc9b5d51367b02f3d7b655182d16056a3b55b8f96f2dcc7ff1",
+    "docs/material-button-paint-all-states.json": "57504b29f612c8812d5faa946347356f4a87b271142847808c47d6872e9dd240",
+    "docs/material-button-base-alpha.json": "c3722149c04da56498c81544b949903d271236e252675e01a886ae7281c63c7e",
     "docs/material-motion-delay-target-review.json": "cbaa92d9fc5900bb7a0efc6b8f99a9ee0d3fde3edd0c1080840fc9ddd4c4ddd4"
   },
   "sourceReportsFreshlyReplayed": true,
