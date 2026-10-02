@@ -87,6 +87,17 @@ renderer overlay projection/paint boundary as the root-cause target. No new
 capture or canonical export is justified because the retained dependencies and
 source receipts are unchanged.
 
+## Current audit checkpoint — October 2 (generic modal isolation boundary)
+
+The existing public same-document modal isolation proof also passes at DPR1 and
+DPR2. An open modal makes its own background inert, while an unrelated peer
+surface and an outside native selector remain independently focusable; closing
+and disposing one surface does not dispose or inert the other. This rejects a
+blanket core modal rule that blocks the entire window. The reported Material
+bottom-sheet focus theft therefore remains a separate component overlay/input
+ownership question; this generic proof cannot be promoted as bottom-sheet
+equivalence or used to justify a global modality change.
+
 ## Current audit checkpoint — October 2 (current-ancestry export reconciled)
 
 The current-ancestry export/check now completes with the source-receipt
