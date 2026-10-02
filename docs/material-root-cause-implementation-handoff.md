@@ -14750,3 +14750,23 @@ separate from the core visibility support gap. The benchmark pins tab phase to 1
 it supplies no proof of live intermediate animation. Restore equivalent owner
 structure only after general core support is proven, not through another custom
 paint or offset adjustment.
+
+## Bottom-sheet keyboard focus boundary (current runtime)
+
+The current localhost showcase keyboard probe was rerun against the current
+runtime with `--keyboard` (24 cases, zero probe errors, source matches 3,
+wrapper-boundary controls pass). The retained result is
+`artifacts/material-parity/overlay-focus-keyboard-current-20261002-localhost/result.json`.
+
+The reference bottom sheet transfers focus into the sheet's action link when it
+opens, keeps Tab cycling within the sheet, and restores focus to the opener on
+Escape. Astylar instead leaves focus on the opener's semantic control when the
+sheet opens; Tab moves through dismiss/copy controls but then escapes to BODY,
+and Escape leaves focus on the semantic opener while closing the overlay. This
+is a bounded Material bottom-sheet semantic-focus/trap-and-restore defect, not
+evidence for a blanket global modality policy: the generic same-document modal
+isolation proof still passes for peer-surface interaction and independent
+disposal. Fix the shared overlay focus lifecycle/semantic ownership, then add a
+focused regression covering initial focus, Tab wrap, Escape close and opener
+restore. Do not hide the defect with page-level pointer interception or a
+component-only focus hack.
