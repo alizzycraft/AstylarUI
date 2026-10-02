@@ -14809,3 +14809,20 @@ placement and scroll-dismissal contract gap. Do not collapse the latter into a
 generic renderer offset or use a fixture translation; generalize the core-owned
 CSS-space connected-placement/lifecycle contract after the camera-depth fix is
 isolated.
+
+### Source-bound depth trace
+
+The equal-input runtime result maps directly to current source. The candidate
+overlay authors `z-index:1000`; `StackingContextManager.rootContextDepth()` uses
+`0.01 + zIndex * 0.25`, producing world z≈250.01 (the observed surface z is
+249.949 after ancestry/mesh placement). `BabylonCameraService.initialize()`
+derives camera distance from CSS viewport height: at 240px it is 207.846, while
+at 1000px it is 866.025. Thus the same CSS stacking input changes from in-front
+to behind the positive-Z camera solely because viewport height changes. The
+camera clip range still contains the scalar value, so widening the clip range
+would not restore the correct camera-facing ordering. The first divergent
+contract is the renderer's CSS z-index-to-world-depth mapping relative to its
+viewport-dependent camera origin, not plugin placement or Babylon projection of
+the already-resolved x/y box. A fix must preserve CSS-space layout and make the
+final depth mapping camera-relative; do not lower the overlay z-index or add a
+short-viewport component offset.
