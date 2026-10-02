@@ -14891,3 +14891,14 @@ partitioning caused by running this producer in isolation, not absent source
 signatures or new renderer discrepancies. Keep them separate until the other
 review populations are present; do not merge them or mark canonical coverage
 proven from this partial pipeline.
+
+The bounded source-binding batch
+(`alignment-font-audit-source-binding`, `ltr-alignment-audit-source-binding`,
+`reviewed-input-audit-source-binding`, `position-composition-audit-source-binding`
+and `chip-motion-context`) completed 20/20 with no failures. It independently
+replays the original alignment/font, LTR, reviewed-input, position and chip
+motion receipts, and rejects altered direction, membership, source order,
+unbound callers and unsupported claims. This validates the individual
+provenance machinery but does not promote any of the five populations into
+the current canonical join; `canonicalCoverageProven` remains false and no
+renderer attribution follows from these receipt checks.
