@@ -14770,3 +14770,42 @@ disposal. Fix the shared overlay focus lifecycle/semantic ownership, then add a
 focused regression covering initial focus, Tab wrap, Escape close and opener
 restore. Do not hide the defect with page-level pointer interception or a
 component-only focus hack.
+
+## Current frozen popup boundary reproduction (snackbar and tooltip)
+
+The existing boundary producers were rerun against the exact static showcase
+tree whose checkpoint fingerprint is 1,887/1,887 files (zero differences). The
+Angular dev-server attempt was rejected as invalid because it served HMR/dev
+assets; the accepted rerun used the frozen `dist` tree and the existing
+fallback server. No fixture or renderer input was changed.
+
+The snackbar report is
+`artifacts/material-parity/snackbar-boundary-current-20261002c/latest-report.json`
+(SHA-256
+`cb9cf915e73d68a4d38935dd86ffff9369e4b8dd15c1bb1ab307e1fc99c76618`). At
+900x1000, the open candidate surface is visible and its mesh is at z=249.949
+with camera z=866.025. At 900x240, the retained CSS/projection box still exactly
+matches the reference (278,184,344x48) and state remains open, but the same mesh
+z=249.949 is now beyond the camera at z=207.846; the candidate paints zero dark
+pixels while the reference paints 15,707 (DPR1), with the same result at DPR2.
+This confirms a core final paint/camera-depth reachability defect for short
+surfaces. It is not a snackbar placement, width, or fixture-size discrepancy.
+The fixed world-depth band is selected before the viewport-dependent camera
+distance, so a valid CSS-space overlay can fall behind the camera as the
+surface becomes short. Keep the CSS box and stacking inputs unchanged; fix the
+shared projection/clip-depth contract at the renderer boundary.
+
+The tooltip report is
+`artifacts/material-parity/tooltip-boundary-current-20261002/latest-report.json`
+(SHA-256
+`ce31bd4a705f67fa8bdbdbbe5abc3a8c9b8afb66efb3a33bb49edb6f353210e8`). At
+900x1000, candidate and reference popup tops agree within 0.002px. At 900x240,
+the candidate popup remains at y=229.08 while the reference connected popup is
+at y=149.08, and the candidate mesh again has z=249.848 beyond camera z=207.846.
+The short-viewport wheel sequence also leaves the candidate open while the
+reference dismisses it. These are two separate findings: (1) the shared
+camera-depth reachability defect above, and (2) a Material/plugin connected
+placement and scroll-dismissal contract gap. Do not collapse the latter into a
+generic renderer offset or use a fixture translation; generalize the core-owned
+CSS-space connected-placement/lifecycle contract after the camera-depth fix is
+isolated.
