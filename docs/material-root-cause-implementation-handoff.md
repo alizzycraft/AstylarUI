@@ -1,5 +1,30 @@
 # Material audit: evidence-led implementation priorities
 
+## Current audit checkpoint — October 2 (current-ancestry export reconciled)
+
+The current-ancestry export/check now completes with the source-receipt
+transition corrections applied (`a9dc2d3d`), and the canonical package was
+refreshed in `0e60faed`. The authenticated cold export read 1,205 evidence
+files / 89,154,859 bytes with no invalidations and produced 436/436 static and
+1,875/1,875 interaction coverage, 8,483 unique differences, 389,202
+occurrences, 145 source findings, and zero unresolved attributions. The exact
+current-ancestry `--check` and `npm run audit:findings:verify` both pass; the
+compressed manifest is `31cb7dad66cd5b2e1df55a954c4fe635fcf750622ae78defac05c9963a40ce1a`.
+No renderer, plugin, fixture, threshold, or reference input changed.
+
+The focused workflow audit suite passes 6/6. The historical
+`followup-input-canonical-integration.spec.mjs` still fails at intermediate
+row 3400 because it replays a September 19 transition against later producer
+sources and canonical batches; pinning only its package does not make that
+source graph historical. This is retained as a stale historical integration
+gate, not treated as a current canonical discrepancy or repaired by weakening
+conservation. The generic integration wrapper also has no workflow integration
+entries. Current acceptance evidence therefore comes from the explicit
+current-ancestry export/check and findings verifier, while the next bounded
+audit question is whether the historical transition proof should be replayed
+in its full historical source graph or retained as a clearly bounded archival
+check.
+
 ## Current audit checkpoint — October 2 (receipt reconciliation passed; binding coverage remains)
 
 After the expansion-owner transition, button-paint transition, and slider-pointer
