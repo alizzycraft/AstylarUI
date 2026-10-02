@@ -1,5 +1,26 @@
 # Material audit: evidence-led implementation priorities
 
+## Current audit checkpoint — October 2 (caret ownership proof revalidated)
+
+The smallest current shared-cause check for the reported AstylarUI lag was
+rerun against the served package with no Material plugins:
+
+`node --test --test-name-pattern="public input lifecycle isolates caret
+material retention" tests/material-parity/input-boundary-evidence.spec.mjs`
+
+passes on Chrome 154.0.8037.58 at DPR2. The authenticated runtime trace still
+shows focus/update/remove/recreate cycles leaving one, two, then three
+unbound `cursorMaterial_*` resources while the tracked surface counts remain
+unchanged; full surface disposal returns meshes, materials, and textures to
+zero. The trace binds the current source methods and served bundle, so this is
+not stale canonical evidence or a Material/plugin fixture effect. It confirms
+the existing `core-caret-focus-allocation-escapes-render-owner` finding and
+keeps its scope explicit: one public input, Chrome 154, synchronous focus and
+replacement lifecycle; late-async, multi-surface, and user-performance
+attribution remain unproven. The next decisive check is therefore a bounded
+late-async/multi-surface ownership probe, not a repeated full export and not a
+component popup workaround.
+
 ## Current audit checkpoint — October 2 (current-ancestry export reconciled)
 
 The current-ancestry export/check now completes with the source-receipt
