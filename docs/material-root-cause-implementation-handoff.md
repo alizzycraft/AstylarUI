@@ -14868,3 +14868,13 @@ checked-out showcase dependencies. The focused command
 Do not relabel the historical swapped-thumb/jerky-drag finding as current evidence and do not weaken its fingerprint guard. Reconcile the exact dependency snapshot in an isolated, recoverable run (or produce a fresh capture from the current pinned runtime) before attributing behavior to the renderer. Until then, classify the range track as evidence-stale and keep the existing historical finding separate from current-runtime conclusions.
 
 The current dependency-independent slider source/ownership gates do pass 10/10 (`slider-peer-pointer-survey`, `slider-position-request-review` and `slider-input-box-source-binding`). They continue to support the already recorded scoped result: default visible-thumb ownership is correct, while out-of-range authored hit regions can swap the apparent owner; this is an application/input-authoring issue distinct from the stale equal-input drag, travel and paint claims. No new slider renderer attribution is justified by these gates.
+
+The attempted combined reconciliation batch (`reviewed-authoring-canonical-integration`,
+`reviewed-source-batch-pipeline`, `position-composition-producer-transition`,
+`audit-section-digests` and `tooltip-wrapping-canonical-integration`) emitted 35
+passing subtests but then ran CPU-active for more than 50 minutes without
+reaching a terminal TAP result. It was interrupted to avoid an unbounded,
+low-yield replay. The partial output is not treated as a completed batch or as
+evidence that the five current bindings are repaired. The next run must split
+these checks into bounded, single-purpose commands and capture each terminal
+result separately.
