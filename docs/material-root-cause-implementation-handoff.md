@@ -40,6 +40,16 @@ timepicker/select/autocomplete width and missing-scrollbar reports grouped under
 one core geometry investigation without treating the current diagnostic as
 complete scrollbar behavior.
 
+The existing dark-mobile timepicker wheel diagnostic was attempted next, but
+did not reach its scrolling assertions: `withFrozenShowcase` rejected the
+current build because the retained Chrome-154 browser manifest has a different
+chunk set and `main.js` hash. This is a stale served-build receipt boundary,
+not a timepicker behavior result and not evidence to weaken the test. The
+scroll-runtime question therefore remains open until a dependency-validated
+current build is bound (or the retained historical source graph is restored);
+no component scroll, width, or scrollbar workaround is justified from this
+failed replay.
+
 ## Current audit checkpoint — October 2 (current-ancestry export reconciled)
 
 The current-ancestry export/check now completes with the source-receipt
