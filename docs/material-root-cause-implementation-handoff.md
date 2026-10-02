@@ -14857,3 +14857,12 @@ other high-z surface on short viewports; verify tall/short heights, DPR1/2,
 multiple z-index bands and ordinary non-overlay content before removing any
 component-specific placement workarounds. The existing four focused popup tests
 remain the regression gate; no canonical fixture rewrite is authorized.
+
+## Range/slider evidence freshness checkpoint
+
+The next planned high-impact track is the public range/slider interaction
+cluster, but its retained evidence is not currently runnable against the
+checked-out showcase dependencies. The focused command
+`node --test --test-concurrency=1 tests/material-parity/public-range-drag-evidence.spec.mjs tests/material-parity/public-range-travel.spec.mjs tests/material-parity/public-range-paint.spec.mjs` reached 8/11 subtests; the three failures are dependency-fingerprint guards, not new behavior observations. The current showcase install is Angular Common 20.3.31 with `common.mjs` SHA-256 `0ec92260d1ddb26d9794a603f6ec3bb9cc662e5de5c32a48c2a603909298dd40`, while the retained range captures require SHA-256 `ecd9f39a4e63c12b088f299bc9966b113ec88949b3de4311c644ab4686a1aad9` (the available prior snapshot is Angular Common 20.3.29). The current install was verified restored after the read-only comparison attempt; no dependency or application files were changed.
+
+Do not relabel the historical swapped-thumb/jerky-drag finding as current evidence and do not weaken its fingerprint guard. Reconcile the exact dependency snapshot in an isolated, recoverable run (or produce a fresh capture from the current pinned runtime) before attributing behavior to the renderer. Until then, classify the range track as evidence-stale and keep the existing historical finding separate from current-runtime conclusions.
