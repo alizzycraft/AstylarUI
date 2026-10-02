@@ -14902,3 +14902,18 @@ unbound callers and unsupported claims. This validates the individual
 provenance machinery but does not promote any of the five populations into
 the current canonical join; `canonicalCoverageProven` remains false and no
 renderer attribution follows from these receipt checks.
+
+The bounded canonical reviewed-input check was rerun with its single test
+pattern and failed after 516,299ms at the prepared-alignment conservation
+path. A direct predecessor replay isolates the earlier boundary: `stageFollowupInputTransitions`
+(`tests/material-parity/followup-input-proposal-transition.mjs:66`) computes
+the current non-selected-row digest
+`6fcfdb76b336cd370c387bf2a883a9851f64811b0513e49e10df27e5594acb3a`, while
+the authenticated follow-up binding for canonical revision
+`957774af2ac560f2059ca05782fb1b6b47b1038c` requires
+`c46a8886a4cb7d306fa879978581782a1ebe8a1224f1aeb2ddd6bac8608ffe1c`.
+Therefore the row-3400 failure is a producer/canonical-predecessor drift
+before prepared alignment, not a renderer or fixture result. Preserve both
+digests and the historical binding; reconcile the exact predecessor source
+graph or produce a fresh source-bound transition before attempting another
+canonical refresh.
