@@ -526,10 +526,11 @@ export function applyStepperLabelColorReview(rows, cases, retained, normalize) {
 export function applyDisabledLabelColorReview(rows, evidence) {
   assert.deepEqual(evidence.counts, { groups: 8, cases: 24, observations: 32, ownColorOmitted: 24 });
   assert.equal(evidence.observations.length, 32);
+  const labelElements = new Set(['checkbox-label', 'radio-solo-label', 'radio-team-label', 'expansion-title']);
   return rows.map(row => {
     if (row.attribution !== 'unresolved' || row.property !== 'color' ||
         !['checkbox', 'radio', 'expansion'].includes(row.family) ||
-        row.states.length !== 1 || row.states[0] !== 'disabled') return row;
+        row.states.length !== 1 || row.states[0] !== 'disabled' || !labelElements.has(row.element)) return row;
     const observations = evidence.observations.filter(o => o.family === row.family && o.element === row.element &&
       o.reference === row.reference && (o.candidateLocal ?? undefined) === row.astylar);
     const keys = observations.map(o => o.case);
