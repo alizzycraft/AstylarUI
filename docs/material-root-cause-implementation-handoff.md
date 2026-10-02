@@ -14826,3 +14826,10 @@ viewport-dependent camera origin, not plugin placement or Babylon projection of
 the already-resolved x/y box. A fix must preserve CSS-space layout and make the
 final depth mapping camera-relative; do not lower the overlay z-index or add a
 short-viewport component offset.
+
+Implementation order: place this camera-relative depth correction ahead of the
+generic connected-overlay migration. It is shared by snackbar, tooltip and any
+other high-z surface on short viewports; verify tall/short heights, DPR1/2,
+multiple z-index bands and ordinary non-overlay content before removing any
+component-specific placement workarounds. The existing four focused popup tests
+remain the regression gate; no canonical fixture rewrite is authorized.
