@@ -14959,3 +14959,16 @@ changes from `5a7fb8f3…` to `ec49ba65…`, while all proposal counts and hashe
 remain unchanged. Classify this as stale source-fingerprint provenance and
 require a receipt-only transition proof before promotion; it is not a new
 comparison finding.
+
+The receipt-only proof now passes for the prepared-alignment boundary: all
+non-receipt row values and source-join hashes remain equal, and 43 expansion
+source-plan receipts are safely carried from the frozen canonical rows. The
+next canonical integration check then stops on a separate applicability gap:
+the current authenticated payload is 8,483 rows / 389,202 occurrences
+(`31cb7dad…` / `e60c251a…`), while the hardcoded historical prepared-alignment
+baseline `67db724e…` is 8,339 rows / 386,891 occurrences
+(`72b148d9…` / `ee6db8ce…`). The checked-in canonical-generation metadata
+still describes the older 8,339 export. This is canonical export/provenance
+drift, not a renderer or input-equivalence result. Do not relax the row-count
+guard or reinterpret the historical replay; reconcile the source-bound
+baseline/export lineage before running another full canonical transition.

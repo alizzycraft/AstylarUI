@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { readCaretConservationRows } from './owner-caret-canonical-conservation.mjs';
-import { conserveIntermediateCanonicalRows } from './canonical-transition-composition.mjs';
+import { conserveIntermediateCanonicalRows, reconcileSourcePlanReceipts } from './canonical-transition-composition.mjs';
 import { collectAlignmentFontAuditInputs, stageAlignmentFontTransitions } from './alignment-font-audit-source-binding.mjs';
 import { collectTextAlignAuditInputs, stageTextAlignTransitions } from './text-align-audit-source-binding.mjs';
 import { collectLtrAlignmentAuditInputs, stageLtrAlignmentTransitions } from './ltr-alignment-audit-source-binding.mjs';
@@ -13,7 +13,11 @@ import { inspectPreparedComposition } from '../../scripts/audit-prepared-alignme
 export async function replayPreparedAlignmentCanonicalTransition(expectedBefore) {
   const canonical = await readCaretConservationRows(file => execFileSync('git',
     ['show', `67db724e5f258c84cfdc70e9da2ccb6ee6353ad0:${file}`], { maxBuffer: 64 * 1024 * 1024 }));
-  const intermediate = expectedBefore ? conserveIntermediateCanonicalRows(expectedBefore, canonical.rows) : undefined;
+  const receiptReconciled = expectedBefore ? reconcileSourcePlanReceipts(expectedBefore, canonical.rows) : undefined;
+  if (receiptReconciled) assert.equal(receiptReconciled.reconciled, 43);
+  const intermediate = receiptReconciled
+    ? conserveIntermediateCanonicalRows(receiptReconciled.rows, canonical.rows)
+    : undefined;
   const sourcePath = 'artifacts/material-parity/current-ancestry-audit/latest-report.json';
   const source = JSON.parse(readFileSync(sourcePath)), stages = [];
   let rows = canonical.rows;

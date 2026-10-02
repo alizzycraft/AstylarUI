@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { conserveIntermediateCanonicalRows } from './canonical-transition-composition.mjs';
+import { conserveIntermediateCanonicalRows, reconcileSourcePlanReceipts } from './canonical-transition-composition.mjs';
 
 function fixture() {
   const expected = [
@@ -50,4 +50,19 @@ test('intermediate composition refuses raw evidence, attribution, membership and
       /intermediate canonical row/, `changed-evidence mutation ${index}`);
   }
   assert.equal(mutations.length, 13);
+});
+
+test('source-plan receipt reconciliation preserves values and carries frozen receipt only', () => {
+  const expected = [{ key: 'same', reviewEvidence: {
+    sourcePlan: { file: 'plan.json', revision: 'current', sha256: 'new', sourceProofsReplayed: true, originalCanonicalJoinReplayed: true },
+    originalCompleteRowSha256: 'row', originalObservationsSha256: 'observations', inputEquivalent: false,
+  } }];
+  const frozen = [{ key: 'same', reviewEvidence: {
+    sourcePlan: { file: 'plan.json', revision: 'frozen', sha256: 'old', sourceProofsReplayed: true, originalCanonicalJoinReplayed: true },
+    originalCompleteRowSha256: 'row', originalObservationsSha256: 'observations', inputEquivalent: false,
+  } }];
+  const result = reconcileSourcePlanReceipts(expected, frozen);
+  assert.equal(result.reconciled, 1);
+  assert.deepEqual(result.rows, frozen);
+  assert.notDeepEqual(result.rows, expected);
 });
