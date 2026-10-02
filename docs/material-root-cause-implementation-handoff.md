@@ -14917,3 +14917,14 @@ before prepared alignment, not a renderer or fixture result. Preserve both
 digests and the historical binding; reconcile the exact predecessor source
 graph or produce a fresh source-bound transition before attempting another
 canonical refresh.
+
+The follow-up predecessor comparison now closes that question: all 8,339 rows
+are semantically equal to the authenticated `957774a` payload, with zero
+structural/value differences, but 134 rows differ only in JSON property order
+(first at row 247). This explains the `6fcf…` versus `c46a…` digest mismatch:
+the transition guard hashes `JSON.stringify` output before the existing
+serialization-only conservation boundary. It is an audit-pipeline
+serialization-contract defect, not source-value drift, input inequivalence or
+renderer behavior. Preserve the failure and route the next audit-only change
+through the existing canonical serialization correction; do not rewrite the
+binding digest or weaken the equality guard.
