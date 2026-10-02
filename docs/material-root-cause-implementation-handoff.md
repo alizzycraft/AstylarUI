@@ -72,6 +72,21 @@ the already confirmed client-area/gutter divergence and a separate scrollbar
 hit-testing/interaction defect. It is not a component width workaround or a
 fixture change; both acceptance flags remain false pending core remediation.
 
+## Current audit checkpoint — October 2 (overlay paint boundary revalidated)
+
+The retained overlay evidence was rechecked with four focused tests:
+
+`node --test --test-name-pattern="(snackbar opens in bounds|tooltip short-surface paint failure|tooltip z-index scalar|short viewport exposes)" tests/material-parity/snackbar-position-observation.spec.mjs tests/material-parity/tooltip-position-composition.spec.mjs`
+
+All four pass. Snackbar placement is in bounds but its short-surface paint is
+behind the active camera. Tooltip paint crosses the same camera/depth boundary;
+the remaining tooltip differences are separately identified as stacking-owner
+and short-viewport fallback/scroll-extents divergences. These results reject a
+component-local offset, z-index, or fixture workaround and keep the owning
+renderer overlay projection/paint boundary as the root-cause target. No new
+capture or canonical export is justified because the retained dependencies and
+source receipts are unchanged.
+
 ## Current audit checkpoint — October 2 (current-ancestry export reconciled)
 
 The current-ancestry export/check now completes with the source-receipt
