@@ -14948,3 +14948,14 @@ transition, not a renderer, plugin, fixture or input-equivalence discrepancy.
 Reconcile the plan-revision receipt or preserve the historical metadata at the
 serialization boundary; do not rewrite canonical values or weaken the row
 comparison.
+
+The underlying expansion-plan comparison confirms this is a narrow source
+receipt transition. Between the frozen plan revision and the current plan,
+the 43-group proposal payload is byte-equivalent; only three mapping-receipt
+fields changed in `docs/material-expansion-owner-mapping.json`: its
+`currentSourceSha256`, the `astylar.component.ts` source hash and the
+`run-material-parity.mjs` source hash. The source-proof digest consequently
+changes from `5a7fb8f3…` to `ec49ba65…`, while all proposal counts and hashes
+remain unchanged. Classify this as stale source-fingerprint provenance and
+require a receipt-only transition proof before promotion; it is not a new
+comparison finding.
