@@ -14827,6 +14827,30 @@ the already-resolved x/y box. A fix must preserve CSS-space layout and make the
 final depth mapping camera-relative; do not lower the overlay z-index or add a
 short-viewport component offset.
 
+## Connected-placement ownership check
+
+The focused source-contract test passes and remains explicit: Angular Material
+20.0.5 uses `createFlexibleConnectedPositionStrategy`, fallback origin/overlay
+position pairs, a viewport margin, scrollable-ancestor registration and
+clipping dismissal. The Astylar public plugin render/surface contexts expose no
+connected-anchor, viewport-collision or scroll-lifecycle primitive; the only
+analogous helpers (`positionDropdown`, `shouldPlacePopupAbove` and
+`choosePopupDirection`) are private to `SelectManager` and are not exported.
+The checked reference module digest is
+`75d4207bc0b6e97105c0ff88f80c5017e4df00af13f92b5bdaa19a80bcb81a2a`.
+
+There is also a concrete application-side CSS-first violation in
+`examples/material-showcase/src/app/astylar.component.ts:423-437`:
+`connectedOverlayTop` calls `measure(...).borderBox` (which projects Babylon
+mesh bounds through `Vector3.Project`) and feeds the resulting `anchor.top`
+into the next authored CSS `top`. This is not a renderer diagnosis and must
+not be generalized into a plugin workaround. The next implementation owner is
+a shared core CSS-space connected-placement/lifecycle API, followed by
+migration of tooltip and the other connected overlays; the application must
+query authoritative pre-projection layout boxes instead of reconstructing
+anchors from meshes. Edge fallback, scroll dismissal, resize and first-open/
+update behavior remain unverified until that equivalent contract exists.
+
 Implementation order: place this camera-relative depth correction ahead of the
 generic connected-overlay migration. It is shared by snackbar, tooltip and any
 other high-z surface on short viewports; verify tall/short heights, DPR1/2,
