@@ -92,6 +92,16 @@ export function conserveExpansionOwnerProof(proof, proofBytes) {
     replaceOnce(`        camera: {\n          position: { x: camera.position.x, y: camera.position.y, z: camera.position.z },\n          viewport: { x: viewport.x, y: viewport.y, width: viewport.width, height: viewport.height },\n        },\n`, '');
     return restored;
   };
+  const restoreExpansionTitleReceipt = source => {
+    let restored = source;
+    const replaceOnce = (before, after) => {
+      assert.equal(restored.split(before).length, 2, 'Expansion title receipt restoration must match exactly once');
+      restored = restored.replace(before, after);
+    };
+    replaceOnce("import { restoreAstylarDiagnostics } from '../tests/material-parity/alignment-survey-conservation.mjs';\n", '');
+    replaceOnce('hash(restoreAstylarDiagnostics(source))', 'hash(source)');
+    return restored;
+  };
   for (const file of ['tests/material-parity/run-material-parity.mjs', 'examples/material-showcase/src/app/astylar.component.ts']) {
     const current = projected.sourceFingerprints.filter(s => s.file === file);
     const prior = historical.sourceFingerprints.filter(s => s.file === file);
@@ -106,6 +116,13 @@ export function conserveExpansionOwnerProof(proof, proofBytes) {
       // accepted, and the full source hash remains authenticated above.
     }
   }
+  const currentTitle = projected.sourceFingerprints.filter(s => s.file === 'scripts/audit-material-expansion-title-inputs.mjs');
+  const priorTitle = historical.sourceFingerprints.filter(s => s.file === 'scripts/audit-material-expansion-title-inputs.mjs');
+  assert.equal(currentTitle.length, 1); assert.equal(priorTitle.length, 1);
+  const titleSource = readFileSync('scripts/audit-material-expansion-title-inputs.mjs', 'utf8').replaceAll('\r\n', '\n');
+  assert.equal(hash(titleSource), currentTitle[0].sha256);
+  assert.equal(hash(restoreExpansionTitleReceipt(titleSource)), priorTitle[0].sha256);
+  currentTitle[0].sha256 = priorTitle[0].sha256;
   assert.equal(JSON.stringify(projected, null, 2) + '\n', proofBytes,
     'expansion source proof changed beyond reviewed capture diagnostics');
   return projected;
