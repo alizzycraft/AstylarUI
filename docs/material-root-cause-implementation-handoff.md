@@ -14934,3 +14934,17 @@ The existing serialization-boundary unit proof
 2/2. It already enforces the correct remedy—complete ordered value equality
 before carrying frozen serialization—so the remaining work is to route the
 follow-up transition through that boundary, not to alter historical digests.
+
+The corrected prepared-alignment comparison (using the exact historical
+revision `67db724e5f258c84cfdc70e9da2ccb6ee6353ad0` and preserving the 957
+serialization boundary) localizes row 3400 to review-evidence metadata only.
+Its family, element, property, scalar values, classification, attribution,
+occurrences, cases and states are identical. The sole difference is
+`reviewEvidence.sourcePlan`: the replay expects expansion-owner revision
+`a2aa64a6…` / SHA `4b45…`, while the frozen canonical row retains
+`eb95c6a9…` / SHA `4b89…`. The proposal hash and original-row/observation
+hashes are identical. This is stale source-plan provenance in the audit
+transition, not a renderer, plugin, fixture or input-equivalence discrepancy.
+Reconcile the plan-revision receipt or preserve the historical metadata at the
+serialization boundary; do not rewrite canonical values or weaken the row
+comparison.
