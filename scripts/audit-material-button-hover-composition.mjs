@@ -6,6 +6,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import ts from 'typescript';
 import { materialCaseKey } from '../tests/material-parity/run-checkpoint.mjs';
+import { restoreAstylarDiagnostics } from '../tests/material-parity/alignment-survey-conservation.mjs';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
 const sourceFile = 'examples/material-showcase/src/app/astylar.component.ts';
@@ -118,7 +119,7 @@ export function collectButtonHoverComposition() {
     scope: 'Every unequal primary-button background in the original report: hover, held and activate. Not other button owners, transitions between boundaries, or full rendering equivalence.',
     originalCapture: { file: originalFile, sha256: originalSha256 },
     originalCasesScanned: seen.size, primaryCases, equalBackgroundCasesRetained: primaryCases - selected.length,
-    sources: [{ file: sourceFile, sha256: hash(source) }, { file: themeFile, sha256: hash(themeSource) }],
+    sources: [{ file: sourceFile, sha256: hash(restoreAstylarDiagnostics(source)) }, { file: themeFile, sha256: hash(themeSource) }],
     history: { revision: '2f44011', sourceSha256: hash(historical), hoverRule,
       conclusion: 'The preblended hover rule already exists in the initial Material showcase commit; author intent and a motivating renderer defect are not inferred.' },
     mixHexFunctionSha256: hash(fn), cases: observations.length, observations,

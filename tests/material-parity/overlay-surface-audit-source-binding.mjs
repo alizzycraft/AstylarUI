@@ -6,6 +6,7 @@ import { bindOwnerCaretCaptureSubset } from './owner-caret-audit-source-binding.
 import { collectTooltipPositionComposition } from './tooltip-position-composition.mjs';
 import { proveSnackbarSurfaceRequests, proveTooltipSizingRequests, applyOverlaySurfaceRows,
   snackbarSurfaceValues } from './overlay-surface-review.mjs';
+import { restoreAstylarDiagnostics } from './alignment-survey-conservation.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 export function restoreTooltipStackingProofAddition(source) {
@@ -35,6 +36,8 @@ function prepare(report) {
     let text = readFileSync(source.file, 'utf8').replaceAll('\r\n', '\n');
     if (source.file === 'tests/material-parity/tooltip-position-composition.mjs' && hash(text) !== source.sha256)
       text = restoreTooltipStackingProofAddition(text);
+    if (source.file === 'examples/material-showcase/src/app/astylar.component.ts' && hash(text) !== source.sha256)
+      text = restoreAstylarDiagnostics(text);
     assert.equal(hash(text), source.sha256);
   }
   const population = readBound({ file: 'docs/material-position-input-population.json',

@@ -4,6 +4,7 @@ import { readFileSync, realpathSync } from 'node:fs';
 import path from 'node:path';
 import { bindOwnerCaretCaptureSubset } from './owner-caret-audit-source-binding.mjs';
 import { applyChipPaintRows } from './chip-position-inspection.mjs';
+import { restoreAstylarDiagnostics } from './alignment-survey-conservation.mjs';
 
 export const chipPaintAttribution = 'reviewed-chip-state-layer-substitution';
 const hash = value => createHash('sha256').update(value).digest('hex');
@@ -17,7 +18,12 @@ function prepare(report) {
   assert.equal(bindOwnerCaretCaptureSubset(report, JSON.parse(bytes)).coverage.complete, true);
   const reviewBytes = readFileSync(reviewSource.file); assert.equal(hash(reviewBytes), reviewSource.sha256);
   const review = JSON.parse(reviewBytes);
-  for (const source of review.sources) assert.equal(hash(readFileSync(source.file, 'utf8').replaceAll('\r\n', '\n')), source.sha256);
+  for (const source of review.sources) {
+    let text = readFileSync(source.file, 'utf8').replaceAll('\r\n', '\n');
+    if (source.file === 'examples/material-showcase/src/app/astylar.component.ts' && hash(text) !== source.sha256)
+      text = restoreAstylarDiagnostics(text);
+    assert.equal(hash(text), source.sha256);
+  }
   assert.equal(review.groups.length, 10);
   for (const group of review.groups) for (const observation of group.reviewEvidence.observations) {
     const [r, a] = ['reference', 'astylar'].map(side => {

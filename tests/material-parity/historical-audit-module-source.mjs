@@ -9,6 +9,7 @@ import { isDeepStrictEqual } from 'node:util';
 import { conserveDisabledInkGuard } from './disabled-ink-source-transition.mjs';
 import { restoreMappingReadAdapterSource } from './audit-evidence-session.mjs';
 import { restoreGapCaptureDiagnostics } from './gap-survey-source-replay.mjs';
+import { restoreAstylarDiagnostics } from './alignment-survey-conservation.mjs';
 
 // The 91-state capture predates tooltip wrapping classification. Its source
 // receipt describes the producer then, not a promise that today's audit module
@@ -250,6 +251,15 @@ export function verifyOverlayFontSnapshot(live, historicalBytes, currentReaderBy
   assert.equal(old[0].sha256, '71422c360dcd115e4ee2f49162f3de882d757435aab1f531840355c7eea32c93');
   assert.equal(now[0].sha256, currentSha);
   now[0].sha256 = old[0].sha256;
+  const astylarFile = 'examples/material-showcase/src/app/astylar.component.ts';
+  const oldAstylar = original.sources.filter(s => s.file === astylarFile), nowAstylar = projected.sources.filter(s => s.file === astylarFile);
+  assert.equal(oldAstylar.length, 1); assert.equal(nowAstylar.length, 1);
+  if (nowAstylar[0].sha256 !== oldAstylar[0].sha256) {
+    const currentAstylar = readFileSync(path.resolve(process.cwd(), astylarFile), 'utf8').replaceAll('\r\n', '\n');
+    assert.equal(hash(restoreAstylarDiagnostics(currentAstylar)), oldAstylar[0].sha256,
+      'Astylar component source transition is not the authenticated diagnostics-only change');
+    nowAstylar[0].sha256 = oldAstylar[0].sha256;
+  }
   assert.ok(isDeepStrictEqual(projected, original), 'fresh overlay font data or other lineage changed');
   return original;
 }

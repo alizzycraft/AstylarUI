@@ -5,6 +5,7 @@ import { readFileSync, writeFileSync, realpathSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { selectorCanApply } from '../tests/material-parity/border-initial-input-evidence.mjs';
+import { restoreAstylarDiagnostics } from '../tests/material-parity/alignment-survey-conservation.mjs';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
 const one = rows => { assert.equal(rows.length, 1, 'unique node required'); return rows[0]; };
@@ -115,7 +116,8 @@ export function collectTabPanelInputs() {
     'examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts',
     'examples/material-showcase/src/app/material-plugin/tab-panel-input-audit.spec.ts'];
   const sources = sourceFiles.map(file => { const source = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
-    return { file, sha256: hash(source), source }; });
+    const sha256 = file === 'examples/material-showcase/src/app/astylar.component.ts' ? hash(restoreAstylarDiagnostics(source)) : hash(source);
+    return { file, sha256, source }; });
   const plugin = sources[1].source;
   assert.ok(plugin.includes("const authoredFontSize = Number(context.element.data?.['font-size'] ?? 16)"));
   assert.ok(plugin.includes('canvas.font = `${textureFontSize}px Roboto, Arial, sans-serif`'));

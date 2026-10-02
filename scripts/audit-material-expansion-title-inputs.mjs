@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync, realpathSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { restoreAstylarDiagnostics } from '../tests/material-parity/alignment-survey-conservation.mjs';
 import { selectorCanApply } from '../tests/material-parity/border-initial-input-evidence.mjs';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
@@ -128,7 +129,7 @@ export function collectExpansionTitleInputs() {
   assert.match(currentOverride.text, /padding: '0'/); assert.doesNotMatch(currentOverride.text, /transform:/);
   return { schemaVersion: 1, kind: 'original-expansion-title-component-font-inputs', originalCapture: { file, sha256 },
     originalCasesScanned: seen.size, observations: findings.length, counts, findings,
-    history: { sourceFile, currentSourceSha256: hash(source), current: excerpt(source), revision,
+    history: { sourceFile, currentSourceSha256: hash(restoreAstylarDiagnostics(source)), current: excerpt(source), revision,
       beforeSourceSha256: hash(before), afterSourceSha256: hash(after), before: excerpt(before), after: excerpt(after),
       limitation: 'Records the compact-only title override introduction, not developer intent, the whole commit quality, or a new renderer diagnosis. Existing expansion source findings and retained-typography evidence remain independent.' },
     canonicalAttributionChanged: false, rendererChanged: false, inputEquivalent: false };

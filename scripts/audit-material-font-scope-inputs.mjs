@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync, realpathSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { restoreAstylarDiagnostics } from '../tests/material-parity/alignment-survey-conservation.mjs';
 import { selectorCanApply } from '../tests/material-parity/border-initial-input-evidence.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -140,7 +141,7 @@ function sourceHistory() {
   assert.match(onlyRule(conversion.before, '.paginator').text, /fontSize: '13px'/);
   assert.doesNotMatch(onlyRule(conversion.after, '.paginator').text, /fontSize:/);
   assert.match(onlyRule(conversion.after, '.paginator-container').text, /fontSize: '12px'/);
-  return { file, currentSourceSha256: hash(current), currentRules, revisions,
+  return { file, currentSourceSha256: hash(restoreAstylarDiagnostics(current)), currentRules, revisions,
     limitation: 'Source changes establish what moved, not developer intent or whether all changes in a mixed core/example commit were compensations. Existing toolbar measured-width and line-height findings remain separate.' };
 }
 

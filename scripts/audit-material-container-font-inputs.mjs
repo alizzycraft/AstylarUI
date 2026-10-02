@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync, realpathSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { restoreAstylarDiagnostics } from '../tests/material-parity/alignment-survey-conservation.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const digest = value => hash(JSON.stringify(value));
@@ -115,7 +116,7 @@ export function collectContainerFontInputs() {
   });
   return { schemaVersion: 1, kind: 'original-list-table-container-font-authoring',
     originalCapture: { file, sha256 }, originalCasesScanned: seen.size, observations: observations.length,
-    counts, findings: observations, currentSource: { file: sourceFile, sha256: hash(source) },
+    counts, findings: observations, currentSource: { file: sourceFile, sha256: hash(restoreAstylarDiagnostics(source)) },
     history: { revision: '2f44011', sourceSha256: hash(historical), rules,
       tableChange: { revision: tableRevision, beforeSourceSha256: hash(beforeTable), afterSourceSha256: hash(afterTable),
         before: ruleAt(beforeTable, 'table', 14), after: ruleAt(afterTable, 'table', 16) },

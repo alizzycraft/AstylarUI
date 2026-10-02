@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync, realpathSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { restoreAstylarDiagnostics } from '../tests/material-parity/alignment-survey-conservation.mjs';
 import { selectorCanApply } from '../tests/material-parity/border-initial-input-evidence.mjs';
 import { inspectFontScopeInputs } from './audit-material-font-scope-inputs.mjs';
 import { inspectContainerFontStages } from './audit-material-container-font-stages.mjs';
@@ -108,7 +109,7 @@ function history() {
     const matches = rows.filter(r => r.text.includes(`selector: '${selector}',`)); assert.ok(matches.length);
     for (const row of matches) assert.doesNotMatch(row.text, /fontFamily:|fontWeight:|letterSpacing:|\bfont:|\ball:/);
   }
-  return { file, initialRevision: revision, initialSourceSha256: hash(initial), currentSourceSha256: hash(current), before, after,
+  return { file, initialRevision: revision, initialSourceSha256: hash(initial), currentSourceSha256: hash(restoreAstylarDiagnostics(current)), before, after,
     limitation: 'The selected host omissions exist in both initial and current authoring. This does not prove every intervening revision was identical or attribute intent; prior descendant-size and width/offset findings remain separate.' };
 }
 
