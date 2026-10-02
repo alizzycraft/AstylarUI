@@ -14881,3 +14881,13 @@ result separately.
 
 The bounded receipt/membership command
 `node --test --test-concurrency=1 tests/material-parity/audit-section-digests.spec.mjs tests/material-parity/reviewed-source-batch-pipeline.spec.mjs` completed with 4 passing and 2 intentional skips. Its production pipeline reports 8,365 groups, 146 changed groups, 6,295 changed observations, 8,216 unchanged-complete rows, and 3 residual split rows; `canonicalCoverageProven` remains false. This confirms the reviewed-source receipt machinery is reusable, but it does not close the current-ancestry binding gap or justify a refresh. The three residual rows are the next smallest concrete membership target.
+
+The residual-row query is now resolved: all three are the `badge-count`
+`fontStyle: normal`, `textTransform: none` and `wordSpacing: 0` signatures.
+Each already exists in the predecessor as an unresolved row; the current
+review adds a second `reviewed-owner-motion-initial-observation-stage` row
+for the reviewed subset. They are therefore deliberate occurrence/state
+partitioning caused by running this producer in isolation, not absent source
+signatures or new renderer discrepancies. Keep them separate until the other
+review populations are present; do not merge them or mark canonical coverage
+proven from this partial pipeline.
