@@ -50,6 +50,28 @@ current build is bound (or the retained historical source graph is restored);
 no component scroll, width, or scrollbar workaround is justified from this
 failed replay.
 
+## Current audit checkpoint — October 2 (current timepicker scroll diagnostic bound)
+
+The frozen-showcase helper now accepts an explicit
+`ASTYLAR_MATERIAL_SHOWCASE_CHECKPOINT` path while retaining the historical
+checkpoint as its default. A separate current-build manifest was created at
+`artifacts/material-parity/timepicker-current-checkpoint-20261002/checkpoint/manifest.json`
+(1,887 browser files; manifest SHA-256
+`4ab2624411c22e45b90e8a4d2f65c9a44f92e4caa54a7e544ad2e9ea9a7c588d`); the
+historical manifest was not modified.
+
+Rerunning the existing dark-mobile timepicker wheel diagnostic against that
+manifest passes its behavioral assertions. Native and candidate wheel input
+both advance the option list, so the missing-wheel hypothesis is rejected.
+The native option width is 245px with a 15px scrollbar gutter, while the
+candidate option width is 260px. The candidate paints a scrollbar thumb, but
+its thumb is non-pickable and pointer-down/up land on different underlying
+options; native thumb dragging advances scrollTop to 211/421/632 while the
+candidate remains at 0. This is decisive evidence for two core-owned issues:
+the already confirmed client-area/gutter divergence and a separate scrollbar
+hit-testing/interaction defect. It is not a component width workaround or a
+fixture change; both acceptance flags remain false pending core remediation.
+
 ## Current audit checkpoint — October 2 (current-ancestry export reconciled)
 
 The current-ancestry export/check now completes with the source-receipt

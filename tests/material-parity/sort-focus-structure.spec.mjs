@@ -2232,7 +2232,9 @@ test('comparison iframe overlays expose parent control focus scope', async t => 
 
 async function withFrozenShowcase(run, launchOptions = {}) {
   const browserRoot = path.resolve('examples/material-showcase/dist/material-showcase/browser');
-  const checkpoint = JSON.parse(readFileSync('artifacts/material-parity/caret-visible-checkpoint-154/checkpoint/manifest.json'));
+  const checkpointFile = process.env.ASTYLAR_MATERIAL_SHOWCASE_CHECKPOINT ??
+    'artifacts/material-parity/caret-visible-checkpoint-154/checkpoint/manifest.json';
+  const checkpoint = JSON.parse(readFileSync(checkpointFile));
   assert.deepEqual(fingerprintDirectory(browserRoot), checkpoint.provenance.browserFiles);
   const server = createServer((request, response) => {
     const pathname = decodeURIComponent(new URL(request.url, 'http://127.0.0.1').pathname);
