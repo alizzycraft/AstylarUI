@@ -15146,3 +15146,39 @@ to the companion prepared-alignment and follow-up gates, then check later
 classification continuity and final acceptance. Do not repeat the retained
 artifact search or the now-proven color population census without changed
 dependencies.
+
+October 3 companion-gate continuation: the existing serial integration run
+has completed the follow-up test successfully (618,540 ms). It authenticates
+the immutable `4650791a…` classification endpoint and conserves all 8,339
+rows / 386,891 observations: exactly 191 groups / 9,511 observations change,
+and 8,148 other complete rows retain digest `5b8e1cb5…`. The prepared-alignment
+companion also passes (224,945 ms): exactly 125 groups / 6,871 observations
+change, and 8,214 other complete rows retain digest `410260b6…`. The combined
+command `node --test --test-concurrency=1
+tests/material-parity/prepared-alignment-canonical-integration.spec.mjs
+tests/material-parity/followup-input-canonical-integration.spec.mjs` completes
+with exit 0, 2/2 tests passed, no skips, in 846,691 ms. No renderer or
+comparison inputs changed. The compact findings verifier passes with 8,483
+discrepancies, 145 source findings, 39,904 controls, 389,202 occurrences and
+zero unresolved scalar groups; that is classification coverage, not proof of
+equal rendering inputs or final acceptance.
+
+Remaining acceptance gaps, in order: verify later classification continuity
+using existing source-specific gates, reconcile
+the canonical source fingerprints in one integration batch, then run the full
+audit harness and enforced browser matrix. All three changed companion files
+are explicitly fingerprinted by `sourceFingerprints` in the producer, so the
+unchanged canonical payload must not be described as source-fresh after this
+batch. Historical caret/gap integration suites also pin older production
+normalization; inspect their preflight assumptions before expensive execution.
+Their older proof is not current acceptance merely because source coverage is
+complete. Reuse the already-proven normalization population and 325-group
+current membership checks unless their relevant dependencies change.
+
+A direct TypeScript function-text preflight confirms that the caret integration
+suite's pinned historical source differs only at `normalizeColor` among its
+asserted functions. The gap and reviewed-authoring suites' asserted function
+sets remain identical. This is not a test pass; it identifies the precise
+caret preflight boundary to reconcile before costly production replay. Retain
+the old normalizer for historical proof and require precise current scalars
+through the existing normalization-transition evidence, not rounded live input.

@@ -1,13 +1,13 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 import { collectFollowupInputProposalBinding } from '../../scripts/bind-material-followup-input-proposals.mjs';
 import { stageFollowupInputTransitions } from './followup-input-proposal-transition.mjs';
 import { readCaretConservationRows } from './owner-caret-canonical-conservation.mjs';
-import { replayPreparedAlignmentCanonicalTransition } from './prepared-alignment-canonical-transition.mjs';
+import { replayPreparedAlignmentCanonicalTransition, readPreparedAlignmentClassificationBoundary,
+  preparedAlignmentClassificationRevision } from './prepared-alignment-canonical-transition.mjs';
 
 const digest = x => createHash('sha256').update(JSON.stringify(x)).digest('hex');
 const fields = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
@@ -20,7 +20,7 @@ test('canonical followup findings match full source-replayed transitions and pre
   assert.deepEqual(original.manifest, binding.canonicalPayload);
   const expected = stageFollowupInputTransitions(original.rows, binding);
   const prepared = await replayPreparedAlignmentCanonicalTransition(expected.rows);
-  const current = await readCaretConservationRows(file => readFileSync(file));
+  const current = await readPreparedAlignmentClassificationBoundary();
   assert.equal(current.rows.length, 8339);
   assert.equal(current.rows.reduce((n, r) => n + r.occurrences, 0), 386891);
   assert.equal(current.rows.filter(r => r.attribution === 'unresolved').length, 1835);
@@ -40,5 +40,7 @@ test('canonical followup findings match full source-replayed transitions and pre
   console.log(JSON.stringify({ canonicalRows: current.rows.length, rawObservations: 386891,
     changedGroups: changed, changedObservations: observations, otherCompleteRows: other.length,
     otherOrderedRowDigestsSha256: digest(other.map(digest)), remainingUnresolved: 1835,
-    currentCanonicalManifest: current.manifest, inputEquivalent: false, renderingEquivalent: false }));
+    historicalClassificationRevision: preparedAlignmentClassificationRevision, historicalCanonicalManifest: current.manifest,
+    inputEquivalent: false, renderingEquivalent: false,
+    limitation: 'Historical complete-row conservation. Current retained membership and normalization population have separate enforced tests in reviewed-input-canonical-integration.spec.mjs; later classifications and final acceptance remain separate.' }));
 });

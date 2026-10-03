@@ -8,6 +8,15 @@ import { collectTextAlignAuditInputs, stageTextAlignTransitions } from './text-a
 import { collectLtrAlignmentAuditInputs, stageLtrAlignmentTransitions } from './ltr-alignment-audit-source-binding.mjs';
 import { inspectPreparedComposition } from '../../scripts/audit-prepared-alignment-composition.mjs';
 
+// Complete-row classification conservation owns this immutable endpoint.
+// Current membership and normalization population are independently enforced
+// by reviewed-input-canonical-integration.spec.mjs against today's payload.
+export const preparedAlignmentClassificationRevision = '4650791a7208b841dd29f1ced015f98234949623';
+export function readPreparedAlignmentClassificationBoundary() {
+  return readCaretConservationRows(file => execFileSync('git',
+    ['show', `${preparedAlignmentClassificationRevision}:${file}`], { maxBuffer: 64 * 1024 * 1024 }));
+}
+
 // Independently replay all sources against the authenticated pre-integration
 // payload. Earlier transitions must match every complete intermediate row.
 export async function replayPreparedAlignmentCanonicalTransition(expectedBefore) {
