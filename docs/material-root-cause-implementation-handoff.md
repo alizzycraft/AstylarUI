@@ -33,6 +33,18 @@ Audit only: no renderer/plugin/fixture remediation is authorized. Continue in
   and freshness of the retained audit, not equal-input rendering or final gates.
 - Next: execute the complete 302-file audit harness, then the three independent
   unfiltered browser gates. Preserve terminal failures and do not weaken scope.
+- The complete harness is live in session 95322; retained output is
+  `artifacts/material-parity/audit-harness-5028979e.log`. Through test 61 it
+  reports one failure at test 52 (border normalization transition) and two
+  historical opt-in receipt skips. These are not a terminal harness result.
+  The border transition rejects the changed whole-module classifier hash.
+  Read-only AST comparison against `4650791a` shows its four directly called
+  collector/classifier bodies unchanged, but their shared `ordinaryTypes`
+  dependency now additionally permits `h1` through `h6`. Thus function-body
+  equality alone cannot establish historical replay applicability. Next:
+  preserve the live run, then use the existing historical replay infrastructure
+  to distinguish frozen historical membership from current classifier behavior;
+  do not repin the hash or describe the failed conservation gate as passing.
 - Final gates still pending: complete 302-file audit harness and unfiltered
   enforced general, TTS and Material browser suites, with separate statuses so
   an early failure cannot skip another suite. No diagnostic filters are set.
