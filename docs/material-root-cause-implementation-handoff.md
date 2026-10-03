@@ -15044,3 +15044,41 @@ generation history and source bindings. Reconstructing that transition requires
 independent source evidence; merely reversing classifications remains invalid.
 Other coverage/root-cause work can proceed while this final integration gap is
 kept explicit.
+
+October 3 source-history reconciliation corrects the earlier interpretation of
+the population drift. Commit `704b2eb299c4fb654229b74a9f5b51877cbf6f98`
+deliberately corrected `normalizeColor`: fractional sRGB channels and RGB/alpha
+precision are retained instead of rounded. The existing independent
+`material-color-normalization-transition.json` authenticates the same original
+capture and accounts for 144 newly exposed root-background groups / 2,311
+observations plus 66 changed-value groups / 612 observations. Its focused suite
+was rerun: `node --test --test-concurrency=1
+tests/material-parity/color-normalization-precision.spec.mjs`, 4/4 passed,
+5,159 ms. No non-color or candidate-stage values change in that capture census.
+
+Both full payloads were authenticated using `readCaretConservationRows` before
+comparing scalar groups. The historical `67db724e` payload has 8,339 rows but
+8,215 distinct scalar keys; the retained pre-root payload has 8,483 rows but
+8,359 keys. Classification is part of the producer's row-grouping signature,
+so a one-row-per-scalar map discards legitimate separate classifications.
+Across all 8,149 shared keys, aggregating every row gives zero changes in
+occurrence totals, sampled case sets or state sets, and zero changes in the
+number of rows per key. These checks preserve duplicates and use deep value
+comparison rather than JSON member ordering. Sampled case lists are capped;
+this does not prove complete per-observation membership by itself.
+
+The earlier 1,796 raw-row difference count therefore does not demonstrate
+1,796 changed observations and must not justify requiring a fabricated
+unclassified predecessor. The 210 added / 66 removed keys are accounted for
+by the precision correction's 144 new and 66 changed-value groups. Source
+inventory growth alone did not diagnose the cause. Existing border/caret
+normalization-transition proofs separately revalidate 50 formerly classified
+changed-value groups; the other 16 need their later source-bound reviews joined.
+
+Next integrate an explicit source-authenticated normalization transition into
+the existing canonical replay chain, preserving its historical classification
+boundary and proving complete current membership from the original capture.
+Use the existing color census and border/caret/source-batch proofs rather than
+searching again for a missing pre-classification export. Do not merely change
+the 8,339-row assertions to 8,483: both precision and later classification
+transitions must be accounted for before final canonical acceptance.
