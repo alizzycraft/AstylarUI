@@ -15191,3 +15191,67 @@ Its test body never runs. Do not rerun the expensive builder or call that body
 green. The next correction must explicitly authenticate the historical/current
 normalization transition and preserve raw-input, pending-owner and unrelated
 complete-row conservation; simply deleting the assertion is insufficient.
+
+The caret integration comparison now has an explicit precise-normalization
+adapter under verification. It authenticates the old normalizer with the pinned
+survey receipt and the current normalizer with `preciseAuditNormalization`;
+all other guarded functions remain exactly equal. Its historical classifier
+variant replaces only `normalizeColor`, then conserves every other complete
+AST statement (apart from import relocation), and authenticates the resulting
+precise contract again. This isolates classification differences under equal
+scalar inputs; it does not claim unchanged historical output. All original
+raw-input, pending-case, unrelated-row and mutation assertions remain intact.
+Successful scratch uses the established cleanup helper; failures are retained.
+The run cleared the formerly failing top-level preflight but then failed at
+`all unrelated complete findings unchanged` (exit 1, 349,923 ms including
+preflight). Earlier scalar equality and caret population assertions passed.
+The failure input is retained in `artifacts/material-parity/caret-integration-9yen0v/report.json`
+(504,039 bytes). A direct four-case old/current normalization comparison finds
+only four reference root-background precision changes and no caret-value
+changes. That narrows the normalization effect but does not diagnose the
+unrelated classification differences.
+
+The diagnostic rerun completed with exit 1 in 345,430 ms. Both complete arrays
+are retained under `artifacts/material-parity/caret-integration-AH9zDF/` as
+`previous-rows.json` and `current-rows.json`, alongside its capture. All 393
+scalar rows remain identical; 79 classifications differ (including the two
+intended caret reviews), across later border, anchor, motion, typography,
+range and overlay reviews. One previously reviewed badge-label `fontWeight`
+row changes from generic initial-style to leaf-weight/tracking attribution.
+The root-background hypothesis does not explain these changes. No assertions
+were excluded or relaxed to manufacture a pass.
+
+The precision-adapted baseline attempt is superseded, not accepted: it still
+compared the pre-caret classifier with dozens of later classification changes.
+The original conservation proof now replays both immutable producer endpoints,
+`68eaa7d1…` and the caret-introduction commit `7feb4fbe63052acf896057b68522e6e3a5dd9e57`.
+It authenticates the original normalizer at both endpoints and conserves every
+statement apart from import relocation. All original population, pending-owner,
+unrelated-row and mutation controls remain. Historical verification passes
+1/1 in 568,286 ms: 390 unchanged scalar rows, exactly two caret groups /
+observations newly classified, two cases still pending, and 388 unchanged
+complete unrelated rows with digest `d998d382…`. The retained failure arrays
+describe today's later classifications, not this historical endpoint. Successful
+scratch is removed through `withAuditScratch`; failure captures remain.
+Do not repeat the diagnostic rebuild: its complete arrays now answer which
+rows changed. Current precise-value membership has the separate result below.
+
+Current caret continuity is independently proven against the authenticated
+`31cb7dad…` compressed / `e60c251a…` decoded canonical payload. Direct execution
+of the existing `readCaretConservationRows`, `collectOwnerCaretInputs` and
+`validateOwnerCaretAttributionRows` requires bound original-source evidence,
+exactly 118 groups / 3,154 observations, and complete classification metadata,
+raw scalar values and case/state membership. The command exits 0. Compact
+index counts agree but were not substituted for this full-row check. Later
+reviews of the 896 originally pending observations, complete unrelated-row
+conservation and final current export/rendering acceptance remain separate.
+No new collector or report was created. The current join is now enforced in
+the existing `reviewed-input-canonical-integration.spec.mjs`; command
+`node --test --test-concurrency=1 --test-name-pattern="canonical current caret"
+tests/material-parity/reviewed-input-canonical-integration.spec.mjs` passes
+1/1 with no skips in 90,763 ms. It also retains the independently expected
+27 groups / 896 originally pending observations without claiming their later
+classifications. The historical test's post-result edits only indent the loader
+and expand the same resolved Git revision to its full hash; syntax verification
+passes. Changed test fingerprints still require the planned batched export
+reconciliation. No renderer, fixture or audit-producer code changed.

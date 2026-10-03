@@ -1,42 +1,57 @@
 import assert from 'node:assert/strict';
 import { isDeepStrictEqual } from 'node:util';
 import test from 'node:test';
-import { readFileSync, writeFileSync, mkdtempSync, rmSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
-import { buildMaterialInputAudit, validateMaterialInputAudit, renderMaterialInputAuditMarkdown } from './input-equivalence-audit.mjs';
 import { ownerCaretAttributions } from './owner-caret-classification.mjs';
+import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { withAuditScratch } from './audit-scratch.mjs';
 
 const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
 const baselineCommit = '68eaa7d1a573055feed65a0a650d13cd6f19c3d9';
+const classificationCommit = '7feb4fbe63052acf896057b68522e6e3a5dd9e57';
 const source = execFileSync('git', ['show', `${baselineCommit}:${moduleFile}`], { maxBuffer: 4 * 1024 * 1024 }).toString('utf8');
 const parse = text => ts.createSourceFile(moduleFile, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
-const parsed = parse(source), current = parse(readFileSync(moduleFile, 'utf8'));
+const currentSource = execFileSync('git', ['show', `${classificationCommit}:${moduleFile}`],
+  { maxBuffer: 4 * 1024 * 1024 }).toString('utf8');
+const parsed = parse(source), current = parse(currentSource);
 const parent = JSON.parse(readFileSync('docs/material-owner-caret-input-survey.json'));
+bindOwnerCaretNormalization(source, parent.productionNormalization);
+bindOwnerCaretNormalization(currentSource, parent.productionNormalization);
+const extract = (file, name) => {
+  const nodes = file.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+  assert.equal(nodes.length, 1); return nodes[0].getText(file);
+};
 for (const name of [...parent.productionNormalization.functions, 'reviewedTemplateTextMappings', 'equivalentValue']) {
-  const extract = file => {
-    const nodes = file.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
-    assert.equal(nodes.length, 1); return nodes[0].getText(file);
-  };
-  assert.equal(extract(current), extract(parsed), `unchanged production ${name}`);
+  assert.equal(extract(current, name), extract(parsed, name), `unchanged production ${name}`);
 }
-let relocated = source;
-for (const node of [...parsed.statements.filter(ts.isImportDeclaration)].reverse()) {
-  if (!node.moduleSpecifier.text.startsWith('./')) continue;
-  const s = node.moduleSpecifier, url = new URL(s.text, pathToFileURL(path.resolve(moduleFile))).href;
-  relocated = relocated.slice(0, s.getStart(parsed)) + JSON.stringify(url) + relocated.slice(s.end);
+// This original complete-row proof owns the immutable caret-classification
+// transition. Today's precision and later classifications have separate gates.
+async function loadHistoricalProducer(source) {
+  let relocated = source;
+  const normalizedPrior = parse(source);
+  for (const node of [...normalizedPrior.statements.filter(ts.isImportDeclaration)].reverse()) {
+    if (!node.moduleSpecifier.text.startsWith('./')) continue;
+    const s = node.moduleSpecifier, url = new URL(s.text, pathToFileURL(path.resolve(moduleFile))).href;
+    relocated = relocated.slice(0, s.getStart(normalizedPrior)) + JSON.stringify(url) + relocated.slice(s.end);
+  }
+  const relocatedFile = parse(relocated);
+  assert.equal(relocatedFile.statements.length, normalizedPrior.statements.length);
+  for (let i = 0; i < normalizedPrior.statements.length; i++) {
+    const withoutPath = (node, file) => ts.isImportDeclaration(node)
+      ? node.getText(file).replace(node.moduleSpecifier.getText(file), '<import>') : node.getText(file);
+    const before = normalizedPrior.statements[i], after = relocatedFile.statements[i];
+    assert.equal(withoutPath(before, normalizedPrior), withoutPath(after, relocatedFile));
+  }
+  return import(`data:text/javascript;base64,${Buffer.from(relocated).toString('base64')}`);
 }
-const relocatedFile = parse(relocated);
-assert.equal(relocatedFile.statements.length, parsed.statements.length);
-for (let i = 0; i < parsed.statements.length; i++) {
-  const withoutPath = (node, file) => ts.isImportDeclaration(node)
-    ? node.getText(file).replace(node.moduleSpecifier.getText(file), '<import>') : node.getText(file);
-  assert.equal(withoutPath(parsed.statements[i], parsed), withoutPath(relocatedFile.statements[i], relocatedFile));
-}
-const prior = await import(`data:text/javascript;base64,${Buffer.from(relocated).toString('base64')}`);
+const prior = await loadHistoricalProducer(source);
+const { buildMaterialInputAudit, validateMaterialInputAudit, renderMaterialInputAuditMarkdown } =
+  await loadHistoricalProducer(currentSource);
 const original = JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));
 const proof = JSON.parse(readFileSync('docs/material-owner-caret-attribution.json'));
 const local = proof.findings.find(r => r.disposition === ownerCaretAttributions.local && r.observations.length > 13);
@@ -56,9 +71,8 @@ const identity = r => JSON.stringify([r.family, r.element, r.property, r.referen
 const hash = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const attributed = r => Object.values(ownerCaretAttributions).includes(r.attribution);
 
-test('production caret integration preserves original inputs prior findings and pending observations', () => {
-  const directory = mkdtempSync(path.resolve('artifacts/material-parity/caret-integration-'));
-  try {
+test('production caret integration preserves original inputs prior findings and pending observations', () =>
+  withAuditScratch('caret-integration-', directory => {
     const raw = { ...original, results: select(original.results, 'static'), interactions: select(original.interactions, 'interaction') };
     assert.equal(raw.results.length + raw.interactions.length, 4);
     const rawHash = hash(raw), file = path.join(directory, 'report.json'); writeFileSync(file, JSON.stringify(raw));
@@ -87,7 +101,21 @@ test('production caret integration preserves original inputs prior findings and 
         'renderingEquivalent', 'rendererCauseProven', 'wholeElementInputEquivalent']) assert.equal(row.reviewEvidence[flag], false);
     }
     const others = report => report.discrepancies.filter(r => !keys.has(identity(r)));
-    assert.ok(isDeepStrictEqual(others(audit), others(previous)), 'all unrelated complete findings unchanged');
+    const currentOthers = others(audit), previousOthers = others(previous);
+    if (!isDeepStrictEqual(currentOthers, previousOthers)) {
+      writeFileSync(path.join(directory, 'previous-rows.json'), JSON.stringify(previous.discrepancies, null, 2));
+      writeFileSync(path.join(directory, 'current-rows.json'), JSON.stringify(audit.discrepancies, null, 2));
+      const differences = currentOthers.flatMap((row, index) => {
+        const before = previousOthers[index];
+        if (isDeepStrictEqual(row, before)) return [];
+        return [{ index, family: row.family, element: row.element, property: row.property,
+          changedFields: [...new Set([...Object.keys(row), ...Object.keys(before ?? {})])]
+            .filter(key => !isDeepStrictEqual(row[key], before?.[key])) }];
+      });
+      console.error(JSON.stringify({ unrelatedRowDifferences: differences,
+        previousRows: previousOthers.length, currentRows: currentOthers.length }));
+    }
+    assert.ok(isDeepStrictEqual(currentOthers, previousOthers), 'all unrelated complete findings unchanged');
     for (const finding of [range, tooltip]) {
       const row = audit.discrepancies.find(r => r.family === finding.family && r.element === finding.element && r.property === 'caretColor');
       assert.equal(row?.attribution, 'unresolved', 'pending owner must not be promoted');
@@ -105,13 +133,10 @@ test('production caret integration preserves original inputs prior findings and 
       const copy = structuredClone(audit); mutate(copy);
       assert.ok(validate(copy).length, 'production validator must reject lost or fabricated caret evidence');
     }
-    console.log(JSON.stringify({ baselineCommit, diagnosticCases: 4, attributedGroups: 2,
+    console.log(JSON.stringify({ baselineCommit, historicalClassificationCommit: classificationCommit,
+      currentCanonicalAcceptanceProven: false, diagnosticCases: 4, attributedGroups: 2,
       attributedObservations: 2, pendingObservations: 2, missingObservations: 4046,
       unchangedScalarRows: audit.discrepancies.length, unchangedCompleteRows: others(audit).length,
       unchangedCompleteRowsSha256: hash(others(audit)), inputEquivalent: false,
       fullCanonicalConservationVerified: false }));
-  } finally {
-    const boundary = path.resolve('artifacts/material-parity') + path.sep;
-    assert.ok(directory.startsWith(boundary)); rmSync(directory, { recursive: true, force: true });
-  }
-});
+  }));
