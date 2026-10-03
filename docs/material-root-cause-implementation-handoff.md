@@ -58,6 +58,19 @@ Audit only: no renderer/plugin/fixture remediation is authorized. Continue in
   These do not automatically refresh historical receipts: exact retained-source
   replay and current applicability must be established separately. No failing
   assertion or expected fingerprint was changed during the run.
+- Additional live-run applicability checks: the border transition's frozen
+  368 observations contain 240 button/button, 96 span/span and 32
+  mat-panel-title/span pairs, not headings. This bounds the changed type-set
+  concern but does not replace complete historical/current replay. Button
+  fixed-width integration (72) likewise fails historical/current scalar equality;
+  surveys 76, 81, 92 and 112 reject the same old border-module fingerprint.
+  Held trace 88 rejects its capture-runner receipt. Held-update proof 90 rejects
+  installed Angular common bytes; its immutable report records core/platform-
+  browser 20.3.29, while installed common/core/platform-browser are 20.3.31.
+  Preserve historical served-bundle evidence; establish current applicability
+  through authenticated historical dependencies or a separate fresh capture,
+  never by replacing dependency hashes. The current harness remains live and
+  these are not terminal totals.
 - Final gates still pending: complete 302-file audit harness and unfiltered
   enforced general, TTS and Material browser suites, with separate statuses so
   an early failure cannot skip another suite. No diagnostic filters are set.
