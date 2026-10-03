@@ -71,6 +71,19 @@ Audit only: no renderer/plugin/fixture remediation is authorized. Continue in
   through authenticated historical dependencies or a separate fresh capture,
   never by replacing dependency hashes. The current harness remains live and
   these are not terminal totals.
+- Case-index live-run failures introduce a separate historical migration gap:
+  test 140's restore guard expects the positioning-only inventory count 424,
+  while current `input-equivalence-audit.spec.mjs` asserts 539 and explicitly
+  includes later/launch/recent proof groups. Test 142's exact additive-policy
+  projection rejects today's policy hash. Receipt tests 144–149 additionally
+  reject the changed showcase diagnostics dependency. Verify those intervening
+  source transitions with the existing restoration infrastructure after the run;
+  simply repinning counts/hashes would not prove assertion conservation.
+  Button state-paint test 124's displayed diff is the same showcase fingerprint.
+  Source-binding negative controls repeatedly recollect the corpus: fixed-width
+  mutation replay 80 passed in 228,474 ms. This identifies a remaining uncached
+  validation path; any later optimization must authenticate dependencies and
+  retain every negative control, not reduce corpus or assertion coverage.
 - Final gates still pending: complete 302-file audit harness and unfiltered
   enforced general, TTS and Material browser suites, with separate statuses so
   an early failure cannot skip another suite. No diagnostic filters are set.
