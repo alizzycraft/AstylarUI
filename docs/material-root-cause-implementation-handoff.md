@@ -15017,3 +15017,11 @@ only 6,543 shared signatures are raw-identical. Therefore the 8,483-row
 transition is not an append that can be safely joined to the 8,339-row
 baseline. It is a source/capture/normalization transition requiring its own
 authenticated predecessor; no row-order or metadata-only workaround is valid.
+
+The embedded source-fingerprint comparison localizes the transition further:
+`67db724e` carries 346 fingerprints, while the retained 8,483-row export
+carries 381. There are 35 added source files, 12 changed hashes and no
+removals. The additions are reviewed-batch/source-binding audit producers and
+their guards. This confirms producer/provenance drift as the reason the raw
+population is not replay-compatible; it is not evidence of a renderer or
+fixture discrepancy.
