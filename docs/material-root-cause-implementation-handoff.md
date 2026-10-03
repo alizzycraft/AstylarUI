@@ -24,8 +24,15 @@ Audit only: no renderer/plugin/fixture remediation is authorized. Continue in
   The human report changes only three test-line references. Compact import and
   verification passed; all 48,532 indexed complete finding rows match their
   previous complete-row hashes, with unchanged summary/coverage metadata.
-- Next: perform the independent cold canonical check using the named launcher
-  and all five retained baseline inputs. Do not edit consumed inputs while live.
+- Independent cold canonical check passed with exit 0 in session 3946:
+  `ASTYLAR_AUDIT_COLD=1` and the named launcher `--check`, with all five retained
+  inputs, completed in 2,544,021 ms. Full validation, dependency rehashing,
+  complete canonical comparison and human-report freshness passed. The session
+  executed two collectors with 10 memory hits, zero disk hits, zero invalidations
+  and the same 1,205 files / 89,154,859 bytes. This establishes reproducibility
+  and freshness of the retained audit, not equal-input rendering or final gates.
+- Next: execute the complete 302-file audit harness, then the three independent
+  unfiltered browser gates. Preserve terminal failures and do not weaken scope.
 - Final gates still pending: complete 302-file audit harness and unfiltered
   enforced general, TTS and Material browser suites, with separate statuses so
   an early failure cannot skip another suite. No diagnostic filters are set.
