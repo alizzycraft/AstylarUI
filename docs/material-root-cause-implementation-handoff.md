@@ -15009,3 +15009,11 @@ signatures are present there, and all 134 are already classified. This proves
 the artifact is a post-transition snapshot with reusable raw membership, not
 an unresolved replay predecessor; the serialization-only boundary cannot
 legitimately erase those classification differences.
+
+The raw population comparison now answers the disjoint-composition question:
+`67db724e` versus `pre-root-classification-e5a8bf2` has 210 added keyed rows,
+66 removed keyed rows, and 1,796 shared signatures whose raw evidence changed;
+only 6,543 shared signatures are raw-identical. Therefore the 8,483-row
+transition is not an append that can be safely joined to the 8,339-row
+baseline. It is a source/capture/normalization transition requiring its own
+authenticated predecessor; no row-order or metadata-only workaround is valid.
