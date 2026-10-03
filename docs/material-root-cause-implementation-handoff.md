@@ -15000,3 +15000,12 @@ predecessor. Reversing those classifications would manufacture evidence and is
 out of scope. The canonical replay remains honestly failing until a genuine
 pre-classification 8,483-row export or a source-authenticated disjoint
 population composition is available.
+
+The direct retained-payload comparison is complete: `pre-root-classification-
+e5a8bf2` and the current payload have zero raw-row differences and the same
+8,483/389,202 population, but 2,023 rows differ in serialized ordering and
+1,833 rows differ in classification metadata. All 134 reviewed-input proposal
+signatures are present there, and all 134 are already classified. This proves
+the artifact is a post-transition snapshot with reusable raw membership, not
+an unresolved replay predecessor; the serialization-only boundary cannot
+legitimately erase those classification differences.
