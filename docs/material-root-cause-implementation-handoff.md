@@ -1,5 +1,34 @@
 # Material audit: evidence-led implementation priorities
 
+## Current resumption ledger — October 3
+
+Audit only: no renderer/plugin/fixture remediation is authorized. Continue in
+`codex/material-audit-alignment-integration`; latest pushed proof commit is
+`1ea8e86b`. Preserve the equal-input/CSS-space contract and retained failures.
+
+- Coverage: 36 families, 436/436 static and 1,875/1,875 interaction/mobile-flow
+  cases; retained canonical snapshot has 8,483 scalar groups / 389,202
+  occurrences and zero unresolved scalar signatures. This is not equal-input
+  rendering or final acceptance.
+- Proven current joins: earlier reviews 325 groups / 12,836 observations,
+  caret 118 / 3,154, later source batch 146 / 6,295, root backgrounds 144 /
+  2,311. Historical complete-row gates are explicitly pinned to their real
+  endpoints; they do not stand in for current classification checks.
+- Next: finish the named complete-baseline export in live session 92674,
+  inspect its validation/conservation result, reconcile the compact index,
+  and perform the independent cold canonical check. Do not restart the export
+  unless its actual process is terminal; do not edit consumed inputs while live.
+- Final gates still pending: complete 302-file audit harness and unfiltered
+  enforced general, TTS and Material browser suites, with separate statuses so
+  an early failure cannot skip another suite. No diagnostic filters are set.
+- Root-cause priorities and limitations remain in the checkpoints below and
+  the generated audit plan. Previously settled population/caret diagnostics
+  must not be rebuilt without changed dependencies or contradictory evidence.
+
+The dated sections below preserve historical reasoning and receipts. Consult
+their explicit scope/limitations, not their former "current" wording, when
+deciding applicability. Detailed October 3 transition results are at the end.
+
 ## Current audit checkpoint — October 2 (caret ownership proof revalidated)
 
 The smallest current shared-cause check for the reported AstylarUI lag was
