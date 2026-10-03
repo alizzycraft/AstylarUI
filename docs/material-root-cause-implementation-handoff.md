@@ -15255,3 +15255,18 @@ classifications. The historical test's post-result edits only indent the loader
 and expand the same resolved Git revision to its full hash; syntax verification
 passes. Changed test fingerprints still require the planned batched export
 reconciliation. No renderer, fixture or audit-producer code changed.
+
+October 3 later current-classification join passes 1/1 in 134,974 ms:
+`node --test --test-concurrency=1 --test-name-pattern="canonical later source-batch"
+tests/material-parity/reviewed-input-canonical-integration.spec.mjs`.
+One authenticated canonical read is shared by the existing source-batch and
+root-background collectors/validators. Complete bound original coverage, raw
+values, metadata, owner and full case/state membership match all 146 / 6,295
+and 144 / 2,311 groups/observations respectively. This closes those two current
+membership joins, not unrelated classification conservation or equal rendering.
+The producer is unchanged; its consumed proof files now require batched
+fingerprint reconciliation. Next export with the complete named baseline and
+validated reuse, then perform independent cold canonical acceptance and the
+unfiltered gates. Current full harness discovery is 302 files (294 Material,
+four general, four TTS), retaining all 46 legacy files. The existing historical
+110/170-file failures must not be described as current full acceptance.

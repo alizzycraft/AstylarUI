@@ -19,10 +19,36 @@ import { collectTextAlignAuditInputs, validateTextAlignClassifications } from '.
 import { collectLtrAlignmentAuditInputs, validateLtrAlignmentClassifications } from './ltr-alignment-audit-source-binding.mjs';
 import { collectOwnerCaretInputs } from './owner-caret-source-binding.mjs';
 import { validateOwnerCaretAttributionRows } from './owner-caret-attribution-coverage.mjs';
+import { collectReviewedSourceBatchAuditInputs, validateReviewedSourceBatchClassifications }
+  from './reviewed-source-batch-audit-source-binding.mjs';
+import { collectRootBackgroundAuditInputs, validateRootBackgroundClassifications }
+  from './root-background-classification-preparation.mjs';
 
 const digest = x => createHash('sha256').update(JSON.stringify(x)).digest('hex');
 const fields = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
 const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !fields.has(key)));
+
+test('canonical later source-batch and root-background classifications retain complete source-proven membership after normalization', async () => {
+  const parityPath = 'artifacts/material-parity/current-ancestry-audit/latest-report.json';
+  const source = JSON.parse(readFileSync(parityPath));
+  const current = await readCaretConservationRows(readFileSync);
+  const results = [];
+  for (const [collect, validate, groups, observations] of [
+    [collectReviewedSourceBatchAuditInputs, validateReviewedSourceBatchClassifications, 146, 6295],
+    [collectRootBackgroundAuditInputs, validateRootBackgroundClassifications, 144, 2311],
+  ]) {
+    const evidence = collect(source, { parityPath });
+    assert.equal(evidence.binding.status, 'bound', evidence.binding.error);
+    assert.equal(evidence.coverage.complete, true);
+    assert.equal(evidence.groups.length, groups);
+    assert.equal(evidence.observations.length, observations);
+    assert.deepEqual(validate(evidence, current.rows), []);
+    results.push({ groups, observations });
+  }
+  console.log(JSON.stringify({ currentManifest: current.manifest, sourceReplayedReviews: results,
+    groups: 290, observations: 8606, completeSourceClassificationMembershipProven: true,
+    unrelatedClassificationsProven: false, inputEquivalent: false, renderingEquivalent: false }));
+});
 
 test('canonical current caret classifications retain complete source-proven membership after normalization', async () => {
   const parityPath = 'artifacts/material-parity/current-ancestry-audit/latest-report.json';
