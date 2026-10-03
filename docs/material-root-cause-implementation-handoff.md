@@ -45,6 +45,19 @@ Audit only: no renderer/plugin/fixture remediation is authorized. Continue in
   preserve the live run, then use the existing historical replay infrastructure
   to distinguish frozen historical membership from current classifier behavior;
   do not repin the hash or describe the failed conservation gate as passing.
+- Through test 71 the same live harness additionally fails button box-sizing
+  integration (62), original-owner survey (66), and source binding (70).
+  Test 62 compares a historical builder against today's precision-preserving
+  builder and exposes root-background/color scalar differences; retained scratch:
+  `artifacts/material-parity/button-box-sizing-integration-3p0oxl`.
+  Read-only fingerprint inspection isolates test 66 to the showcase component
+  and capture runner, and test 70 to the scratch-retention test and shared border
+  module. The scratch test diff is the established `withAuditScratch` migration;
+  showcase changes add post-projection depth/camera diagnostics, while runner
+  changes add geometry/paint evidence and authenticated browser launch checks.
+  These do not automatically refresh historical receipts: exact retained-source
+  replay and current applicability must be established separately. No failing
+  assertion or expected fingerprint was changed during the run.
 - Final gates still pending: complete 302-file audit harness and unfiltered
   enforced general, TTS and Material browser suites, with separate statuses so
   an early failure cannot skip another suite. No diagnostic filters are set.
