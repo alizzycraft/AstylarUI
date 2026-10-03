@@ -14,10 +14,18 @@ Audit only: no renderer/plugin/fixture remediation is authorized. Continue in
   caret 118 / 3,154, later source batch 146 / 6,295, root backgrounds 144 /
   2,311. Historical complete-row gates are explicitly pinned to their real
   endpoints; they do not stand in for current classification checks.
-- Next: finish the named complete-baseline export in live session 92674,
-  inspect its validation/conservation result, reconcile the compact index,
-  and perform the independent cold canonical check. Do not restart the export
-  unless its actual process is terminal; do not edit consumed inputs while live.
+- Complete-baseline export finished with exit 0 in session 92674: validation,
+  dependency verification and publication passed in 2,782,420 ms. The session
+  authenticated 1,205 files / 89,154,859 bytes with zero invalidations, 10 memory
+  hits and one disk hit. Fresh package SHA-256 is
+  `d7e7ed4fdd942932e33b10281ad7d518e0a8783b0cbf22485a9bc936c8108cd9`;
+  decoded SHA-256 is
+  `7e4117593b01ee68c9313bd7dc331c30ff95b9d09953f8b0d98b26c2d8b72f87`.
+  The human report changes only three test-line references. Compact import and
+  verification passed; all 48,532 indexed complete finding rows match their
+  previous complete-row hashes, with unchanged summary/coverage metadata.
+- Next: perform the independent cold canonical check using the named launcher
+  and all five retained baseline inputs. Do not edit consumed inputs while live.
 - Final gates still pending: complete 302-file audit harness and unfiltered
   enforced general, TTS and Material browser suites, with separate statuses so
   an early failure cannot skip another suite. No diagnostic filters are set.
