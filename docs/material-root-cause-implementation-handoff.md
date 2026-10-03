@@ -14991,3 +14991,12 @@ The exact retained artifact check confirms 8,483 rows / 389,202 occurrences
 partially classified `c24b7833` artifact or alter the 8,339-row predecessor;
 the missing source-bound export must be regenerated or the transition must be
 recomposed as an explicitly disjoint population with independent evidence.
+
+The retained pre-root artifact is population-compatible but not transition-
+compatible: its 8,483 rows / 389,202 occurrences are raw-equivalent to the
+current payload, yet all 134 reviewed-input proposal groups are already
+classified there. It therefore cannot replace the unresolved `67db724e`
+predecessor. Reversing those classifications would manufacture evidence and is
+out of scope. The canonical replay remains honestly failing until a genuine
+pre-classification 8,483-row export or a source-authenticated disjoint
+population composition is available.
