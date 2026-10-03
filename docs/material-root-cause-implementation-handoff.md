@@ -15025,3 +15025,22 @@ removals. The additions are reviewed-batch/source-binding audit producers and
 their guards. This confirms producer/provenance drift as the reason the raw
 population is not replay-compatible; it is not evidence of a renderer or
 fixture discrepancy.
+
+October 3 bounded retained-export search: inspected embedded source inventories
+in 51 unique gzip audit packages under `artifacts/material-parity`, restricting
+candidate manifests to 53–63 MB compressed and deduplicating by declared payload
+SHA. Every inventory was readable within a 4 MB decoded prefix; no full report
+was expanded and no scratch artifact was created. The only 381-fingerprint
+candidate was the already-reviewed `pre-root-classification-e5a8bf2` package
+(`d4dc68ab…`). Later retained exports carry different inventories (392–534
+fingerprints); the failed prepared-alignment export carries 356. This bounded
+search supplies no missing predecessor. Fingerprint counts are an exclusion
+screen, not authentication or proof of input equivalence.
+
+Close repeated retained-export searches for this population unless a new
+candidate appears. The next provenance action is to trace the producer change
+that added root-color records and changed shared raw evidence, using existing
+generation history and source bindings. Reconstructing that transition requires
+independent source evidence; merely reversing classifications remains invalid.
+Other coverage/root-cause work can proceed while this final integration gap is
+kept explicit.
