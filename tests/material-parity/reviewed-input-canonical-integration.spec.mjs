@@ -11,10 +11,24 @@ import { collectFollowupInputProposalBinding } from '../../scripts/bind-material
 import { stageFollowupInputTransitions } from './followup-input-proposal-transition.mjs';
 import { conserveIntermediateCanonicalRows } from './canonical-transition-composition.mjs';
 import { replayPreparedAlignmentCanonicalTransition } from './prepared-alignment-canonical-transition.mjs';
+import { collectColorNormalizationTransition, verifyCanonicalColorPopulationTransition } from '../../scripts/audit-material-color-normalization-transition.mjs';
 
 const digest = x => createHash('sha256').update(JSON.stringify(x)).digest('hex');
 const fields = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
 const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !fields.has(key)));
+
+test('canonical color population matches the independently replayed normalization transition', async () => {
+  const transition = collectColorNormalizationTransition();
+  assert.deepEqual(transition, JSON.parse(readFileSync('docs/material-color-normalization-transition.json')));
+  const previous = await readCaretConservationRows(file => execFileSync('git',
+    ['show', `${transition.previous.revision}:${file}`], { maxBuffer: 64 * 1024 * 1024 }));
+  const current = await readCaretConservationRows(readFileSync);
+  const proof = verifyCanonicalColorPopulationTransition(previous.rows, current.rows, transition);
+  assert.equal(proof.exposedGroups, 144); assert.equal(proof.exposedObservations, 2311);
+  assert.equal(proof.changedValueGroups, 66); assert.equal(proof.changedValueObservations, 612);
+  assert.equal(proof.previousObservations, 386891); assert.equal(proof.currentObservations, 389202);
+  console.log(JSON.stringify({ ...proof, previousManifest: previous.manifest, currentManifest: current.manifest }));
+});
 
 test('canonical reviewed inputs match independently replayed full-population transitions and conserve every other complete row', async () => {
   const original = await readReviewedProposalCanonical();

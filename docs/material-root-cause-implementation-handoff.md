@@ -15082,3 +15082,28 @@ Use the existing color census and border/caret/source-batch proofs rather than
 searching again for a missing pre-classification export. Do not merely change
 the 8,339-row assertions to 8,483: both precision and later classification
 transitions must be accounted for before final canonical acceptance.
+
+The normalization boundary now has an executable canonical population gate in
+the existing `reviewed-input-canonical-integration.spec.mjs` suite, using the
+existing color-transition collector and authenticated payload reader. It sums
+all classification-split rows per scalar key, applies exactly the source
+census's new/changed color values, and compares the entire destination scalar
+population and occurrence counts. Unrelated values, lost observations and
+ambiguous transitions fail. This supplements, rather than replaces, the
+historical complete-row classification assertions; those remain unchanged.
+
+Verification: the precision suite passes 5/5 (5,914 ms), including negative
+controls. `node --test --test-concurrency=1 --test-name-pattern="canonical color
+population" tests/material-parity/reviewed-input-canonical-integration.spec.mjs`
+passes 1/1 (135,352 ms). Both full compressed and decoded payloads were
+authenticated: pre-correction revision `4650791a…` (`ea3c521a…` compressed,
+`ac5026a8…` decoded) and current (`31cb7dad…`, `e60c251a…`). The exact result is
+8,215 to 8,359 scalar keys, 386,891 to 389,202 occurrences, 144 exposed groups /
+2,311 observations, and 66 changed-value groups / 612 observations. No report
+was regenerated and no scratch capture was retained.
+
+This closes scalar-population reconciliation. It does not close complete case
+membership or classification continuity: the proof explicitly reports both as
+false. Next compose the historical prepared classification boundary with the
+already-existing current-value border/caret and later source-review proofs.
+Keep source-fingerprint freshness and full enforced browser acceptance separate.

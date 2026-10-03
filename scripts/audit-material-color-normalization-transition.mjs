@@ -22,6 +22,56 @@ function bind(source) {
 
 // Scalar population transition only. This does not replay prior source-owner
 // classifications or replace the canonical audit's complete builder/validator.
+export function verifyCanonicalColorPopulationTransition(previousRows, currentRows, transition) {
+  const key = (row, values = { reference: row.reference, candidate: row.astylar }) =>
+    JSON.stringify([row.family, row.element, row.property, values.reference ?? null, values.candidate ?? null]);
+  const population = rows => {
+    const result = new Map();
+    for (const row of rows) {
+      assert.ok(Number.isSafeInteger(row.occurrences) && row.occurrences > 0, 'invalid scalar occurrence count');
+      const id = key(row);
+      result.set(id, (result.get(id) ?? 0) + row.occurrences);
+    }
+    return result;
+  };
+  // Classification may split one scalar into several rows. Preserve all their
+  // observations; never use a one-row-per-scalar map for this boundary.
+  const expected = population(previousRows), actual = population(currentRows);
+  const beforeKeys = new Set(), afterKeys = new Set();
+  let exposedGroups = 0, exposedObservations = 0, changedValueGroups = 0, changedValueObservations = 0;
+  for (const finding of transition.findings) {
+    assert.ok(['newly-visible-difference', 'changed-difference-values'].includes(finding.outcome),
+      'unsupported normalization transition outcome');
+    assert.ok(Number.isSafeInteger(finding.occurrences) && finding.occurrences > 0);
+    assert.equal(new Set(finding.cases).size, finding.occurrences, 'transition membership is incomplete or duplicated');
+    const before = key(finding, finding.before), after = key(finding, finding.after);
+    assert.notEqual(before, after, 'normalization transition did not change values');
+    assert.ok(!afterKeys.has(after), 'ambiguous destination scalar'); afterKeys.add(after);
+    if (finding.outcome === 'newly-visible-difference') {
+      assert.equal(finding.before.reference, finding.before.candidate, 'exposed scalar was previously unequal');
+      assert.ok(!expected.has(before), 'previously equal scalar appears in discrepancy population');
+      exposedGroups++; exposedObservations += finding.occurrences;
+    } else {
+      assert.notEqual(finding.before.reference, finding.before.candidate);
+      assert.ok(!beforeKeys.has(before), 'duplicate source scalar'); beforeKeys.add(before);
+      assert.equal(expected.get(before), finding.occurrences, 'historical scalar membership differs from source census');
+      expected.delete(before);
+      changedValueGroups++; changedValueObservations += finding.occurrences;
+    }
+    assert.notEqual(finding.after.reference, finding.after.candidate);
+    assert.ok(!expected.has(after), 'normalization destination collides with another scalar');
+    expected.set(after, finding.occurrences);
+  }
+  assert.deepEqual([...actual].sort(), [...expected].sort(),
+    'canonical scalar population differs beyond source-proven color normalization');
+  return { previousScalarKeys: population(previousRows).size, currentScalarKeys: actual.size,
+    exposedGroups, exposedObservations, changedValueGroups, changedValueObservations,
+    previousObservations: previousRows.reduce((n, r) => n + r.occurrences, 0),
+    currentObservations: currentRows.reduce((n, r) => n + r.occurrences, 0),
+    classificationContinuityProven: false, completeCaseMembershipProven: false,
+    inputEquivalent: false, renderingEquivalent: false };
+}
+
 export function collectColorNormalizationTransition() {
   const previous = bind(execFileSync('git', ['show', `${revision}:${moduleFile}`], { encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 }));
   assert.equal(previous.sha256, '8929720cf30769ac3148458bf954402466f6f296c0d764c3123cd797f1e9300e');

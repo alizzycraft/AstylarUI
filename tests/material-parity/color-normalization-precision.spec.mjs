@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import ts from 'typescript';
-import { collectColorNormalizationTransition } from '../../scripts/audit-material-color-normalization-transition.mjs';
+import { collectColorNormalizationTransition, verifyCanonicalColorPopulationTransition } from '../../scripts/audit-material-color-normalization-transition.mjs';
 
 const file = 'tests/material-parity/input-equivalence-audit.mjs';
 const source = readFileSync(file, 'utf8');
@@ -59,4 +59,30 @@ test('complete capture changes only color evidence and exposes exactly the sourc
   assert.deepEqual(actual, expected);
   assert.equal(report.priorClassificationsRevalidated, false);
   assert.equal(report.canonicalReportRegenerated, false);
+});
+
+test('canonical color population preserves split classifications and rejects unrelated drift', () => {
+  const row = (reference, occurrences, property = 'color') =>
+    ({ family: 'example', element: 'owner', property, reference, astylar: 'candidate', occurrences });
+  const previous = [row('old', 1), row('old', 2), row('unchanged', 4)];
+  const current = [row('new', 3), row('unchanged', 4), row('exposed', 2)];
+  const transition = { findings: [
+    { ...row('old', 3), outcome: 'changed-difference-values',
+      before: { reference: 'old', candidate: 'candidate' }, after: { reference: 'new', candidate: 'candidate' }, cases: ['a', 'b', 'c'] },
+    { ...row('exposed', 2), outcome: 'newly-visible-difference',
+      before: { reference: 'candidate', candidate: 'candidate' }, after: { reference: 'exposed', candidate: 'candidate' }, cases: ['a', 'b'] },
+  ] };
+  const result = verifyCanonicalColorPopulationTransition(previous, current, transition);
+  assert.equal(result.previousObservations, 7); assert.equal(result.currentObservations, 9);
+  assert.equal(result.classificationContinuityProven, false);
+  assert.equal(result.completeCaseMembershipProven, false);
+  for (const altered of [current.slice(1), [...current, row('unexpected', 1)],
+    current.map(r => r.reference === 'unchanged' ? { ...r, occurrences: 5 } : r),
+    current.map(r => r.reference === 'unchanged' ? { ...r, property: 'backgroundColor' } : r)]) {
+    assert.throws(() => verifyCanonicalColorPopulationTransition(previous, altered, transition));
+  }
+  const missingSource = structuredClone(transition); missingSource.findings[0].cases.pop();
+  assert.throws(() => verifyCanonicalColorPopulationTransition(previous, current, missingSource));
+  assert.throws(() => verifyCanonicalColorPopulationTransition(previous, current,
+    { findings: [...transition.findings, transition.findings[0]] }));
 });
