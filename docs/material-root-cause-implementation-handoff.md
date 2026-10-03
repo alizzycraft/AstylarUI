@@ -15182,3 +15182,12 @@ sets remain identical. This is not a test pass; it identifies the precise
 caret preflight boundary to reconcile before costly production replay. Retain
 the old normalizer for historical proof and require precise current scalars
 through the existing normalization-transition evidence, not rounded live input.
+
+The unchanged caret integration file was then executed once to establish the
+failure directly: `node --test
+tests/material-parity/owner-caret-canonical-integration.spec.mjs` exits 1 in
+1,740 ms at its top-level `unchanged production normalizeColor` assertion.
+Its test body never runs. Do not rerun the expensive builder or call that body
+green. The next correction must explicitly authenticate the historical/current
+normalization transition and preserve raw-input, pending-owner and unrelated
+complete-row conservation; simply deleting the assertion is insufficient.
