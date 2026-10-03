@@ -14974,13 +14974,20 @@ guard or reinterpret the historical replay; reconcile the source-bound
 baseline/export lineage before running another full canonical transition.
 
 Comparing the authenticated payloads shows why the historical baseline cannot
-be silently replaced: the first 8,483-row export in this ancestry
-(`e62e8468`, later retained by `c8a5fc1d`) is not a pure
+be silently replaced: the retained `pre-visibility-222667e` artifact is the
+`c24b7833` export with 8,483 rows, not a pure
 metadata refresh of `67db724e`. It adds 210 keyed scalar records and removes
 66, for a net +144 rows; the additions span every showcase family (including
 radio, button, checkbox and expansion) and include four-state root color
 records. This is a capture/source-population transition, not a renderer
-classification transition. The 8,483-row export is already partially
-classified (1,674 unresolved at `e62e8468`, 439 at `c8a5fc1d`), so it cannot serve as the unresolved predecessor
+classification transition. That export is already partially classified
+(1,689 unresolved), so it cannot serve as the unresolved predecessor
 for replaying the prepared batches. Retain this delta as evidence and locate
 the source-bound pre-classification export before continuing.
+
+The exact retained artifact check confirms 8,483 rows / 389,202 occurrences
+(`923a4b5b…` / `89e1beff…`) versus the 8,339-row `67db724e` predecessor. No
+8,483-row pre-classification payload is retained. Do not substitute the
+partially classified `c24b7833` artifact or alter the 8,339-row predecessor;
+the missing source-bound export must be regenerated or the transition must be
+recomposed as an explicitly disjoint population with independent evidence.
