@@ -12,10 +12,40 @@ import { stageFollowupInputTransitions } from './followup-input-proposal-transit
 import { conserveIntermediateCanonicalRows } from './canonical-transition-composition.mjs';
 import { replayPreparedAlignmentCanonicalTransition } from './prepared-alignment-canonical-transition.mjs';
 import { collectColorNormalizationTransition, verifyCanonicalColorPopulationTransition } from '../../scripts/audit-material-color-normalization-transition.mjs';
+import { collectReviewedInputAuditInputs, validateReviewedInputClassifications } from './reviewed-input-audit-source-binding.mjs';
+import { collectFollowupInputAuditInputs, validateFollowupInputClassifications } from './followup-input-audit-source-binding.mjs';
+import { collectAlignmentFontAuditInputs, validateAlignmentFontClassifications } from './alignment-font-audit-source-binding.mjs';
+import { collectTextAlignAuditInputs, validateTextAlignClassifications } from './text-align-audit-source-binding.mjs';
+import { collectLtrAlignmentAuditInputs, validateLtrAlignmentClassifications } from './ltr-alignment-audit-source-binding.mjs';
 
 const digest = x => createHash('sha256').update(JSON.stringify(x)).digest('hex');
 const fields = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
 const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !fields.has(key)));
+
+test('canonical earlier classifications retain complete source-proven membership after normalization', async () => {
+  const parityPath = 'artifacts/material-parity/current-ancestry-audit/latest-report.json';
+  const source = JSON.parse(readFileSync(parityPath));
+  const current = await readCaretConservationRows(readFileSync);
+  const results = [];
+  for (const [collect, validate, groups, observations] of [
+    [collectReviewedInputAuditInputs, validateReviewedInputClassifications, 134, 3325],
+    [collectFollowupInputAuditInputs, validateFollowupInputClassifications, 66, 2640],
+    [collectAlignmentFontAuditInputs, validateAlignmentFontClassifications, 72, 4016],
+    [collectTextAlignAuditInputs, validateTextAlignClassifications, 49, 2677],
+    [collectLtrAlignmentAuditInputs, validateLtrAlignmentClassifications, 4, 178],
+  ]) {
+    const evidence = collect(source, { parityPath });
+    assert.equal(evidence.binding.status, 'bound', evidence.binding.error);
+    assert.equal(evidence.coverage.complete, true);
+    assert.equal(evidence.groups.length, groups);
+    assert.equal(evidence.coverage.suppliedObservations, observations);
+    assert.deepEqual(validate(evidence, current.rows), []);
+    results.push({ groups, observations });
+  }
+  console.log(JSON.stringify({ currentManifest: current.manifest, sourceReplayedReviews: results,
+    groups: 325, observations: 12836, completeReviewedMembershipProven: true,
+    unrelatedClassificationsProven: false, inputEquivalent: false, renderingEquivalent: false }));
+});
 
 test('canonical color population matches the independently replayed normalization transition', async () => {
   const transition = collectColorNormalizationTransition();
@@ -53,7 +83,12 @@ test('canonical reviewed inputs match independently replayed full-population tra
   assert.equal(finalExpected.changedGroups, 66); assert.equal(finalExpected.changedObservations, 2640);
   assert.equal(finalExpected.otherCompleteRows, 8273);
   const prepared = await replayPreparedAlignmentCanonicalTransition(finalExpected.rows);
-  const current = await readCaretConservationRows(file => readFileSync(file));
+  // This complete-row invariant owns the historical classification boundary.
+  // Current normalization/population and all 325 surviving reviewed groups
+  // are independently checked above against today's authenticated payload.
+  const classificationRevision = '4650791a7208b841dd29f1ced015f98234949623';
+  const current = await readCaretConservationRows(file => execFileSync('git',
+    ['show', `${classificationRevision}:${file}`], { maxBuffer: 64 * 1024 * 1024 }));
   assert.equal(current.rows.length, 8339); assert.equal(current.rows.reduce((n, r) => n + r.occurrences, 0), 386891);
   assert.equal(current.rows.filter(r => r.attribution === 'unresolved').length, 1835,
     'verified proposal classifications have not all reached the canonical report');
@@ -76,6 +111,7 @@ test('canonical reviewed inputs match independently replayed full-population tra
     otherOrderedRowDigestsSha256: digest(other.map(digest)), remainingUnresolved: 1835,
     originalReviewedGroups: expected.changedGroups, independentlyVerifiedFollowupGroups: finalExpected.changedGroups,
     intermediateSerializationOnlyRows: conserved.serializationOnlyRows,
-    currentCanonicalManifest: current.manifest, inputEquivalent: false, renderingEquivalent: false,
-    limitation: 'Authenticates every current/frozen payload byte and compares every complete discrepancy against independently replayed sources and the reviewed metadata transition. Fresh builder/report equivalence requires the separate canonical CLI --check; full enforced rendering acceptance remains separate.' }));
+    historicalClassificationRevision: classificationRevision, historicalCanonicalManifest: current.manifest,
+    inputEquivalent: false, renderingEquivalent: false,
+    limitation: 'Authenticates the historical classification boundary and compares every complete discrepancy against independently replayed sources. Current normalization population and retained classifications have separate checks in this suite. Later unrelated classification conservation, fresh builder/report equivalence and full enforced rendering acceptance remain separate.' }));
 });

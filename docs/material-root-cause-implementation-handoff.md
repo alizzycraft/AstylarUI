@@ -15107,3 +15107,42 @@ membership or classification continuity: the proof explicitly reports both as
 false. Next compose the historical prepared classification boundary with the
 already-existing current-value border/caret and later source-review proofs.
 Keep source-fingerprint freshness and full enforced browser acceptance separate.
+
+October 3 reviewed-input lineage is verified at its actual boundaries. The
+existing reviewed-input canonical suite now independently replays all five
+source populations against the authenticated current payload: 134/3,325,
+66/2,640, 72/4,016, 49/2,677 and 4/178 groups/observations. The existing strict
+validators require identical attribution, justification, owning subsystem,
+source evidence, scalar values, occurrence counts, sampled cases, complete
+`reviewedCases` and states. All 325 groups / 12,836 observations pass, with
+complete original-capture coverage. Command:
+`node --test --test-concurrency=1 --test-name-pattern="canonical earlier
+classifications" tests/material-parity/reviewed-input-canonical-integration.spec.mjs`,
+1/1 passed, 250,409 ms.
+
+The original complete-row test retains every assertion but now reads its
+pre-normalization endpoint from immutable revision `4650791a…`, not today's
+expanded population. Current acceptance is separately enforced by the above
+membership test and the normalization-population test. The historical command
+with `--test-name-pattern="canonical reviewed inputs match"` passes 1/1 in
+725,736 ms: all 8,339 rows / 386,891 observations match the independently
+composed transitions, exactly 325 rows / 12,836 observations change, and all
+8,014 unrelated complete rows retain digest `8957656d…`. No conservation
+assertion or threshold was removed. This does not prove conservation of later
+unrelated classifications; those require their existing source-specific gates.
+
+A reporting-description edit in the producer was attempted and rejected by its
+whole-source transition guard before row comparison (82,488 ms). That exact
+edit was reverted; a direct `restoreMappedBorderInitialProducer` preflight
+passes afterward. The producer and canonical package remain unchanged.
+Its old focused-proof description consequently refers to the historical
+"current" endpoint; the suite's explicit receipts and this ledger define the
+actual scope. Harness inventory checks pass 4/4 (582 ms). Before another costly
+historical replay after a producer edit, run its existing source-restoration
+preflight to reject unsupported source drift early.
+
+Next apply the same proven historical endpoint/current-membership distinction
+to the companion prepared-alignment and follow-up gates, then check later
+classification continuity and final acceptance. Do not repeat the retained
+artifact search or the now-proven color population census without changed
+dependencies.
