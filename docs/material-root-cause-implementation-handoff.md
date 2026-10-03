@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 3
 
+- October 4 bounded applicability check: live harness failures 286 (field-flow)
+  and 306 (field-shrink) were compared property-by-property using their existing
+  read-only report builders. Only `environment` and `sourceFingerprints` differ:
+  Angular 20.3.29 versus installed 20.3.31, and the installed AstylarUI
+  `package.json` receipt (`8299fd2a…` versus `7f8513e9…`). All cases, log receipts,
+  classifications, conclusions and other report fields are identical. This
+  isolates these two failures to historical/current environment reconstruction,
+  not changed captured geometry. It does not authenticate current runtime
+  applicability. Preserve the historical reports and failing assertions; next
+  establish historical dependency provenance or capture a separate current proof,
+  sharing the dependency investigation already required by held-update test 90.
+  Harness session 95322 remains live in gap-review canonical integration; no
+  terminal harness totals or final browser acceptance are claimed.
+
 Audit only: no renderer/plugin/fixture remediation is authorized. Continue in
 `codex/material-audit-alignment-integration`; latest pushed proof commit is
 `1ea8e86b`. Preserve the equal-input/CSS-space contract and retained failures.
