@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 3
 
+- October 4 tests 1549–1576 all pass (28 checks, retained harness log).
+  Alignment adapter/plan replay preserves original ancestry, exact membership,
+  raw fields and unrelated reviews; proposal and population mutation controls
+  pass without claiming canonical integration. Text-ink calibration retains
+  DPR-to-CSS conversion. Toolbar and tooltip retained proofs replay, including
+  the tooltip camera-depth failure, missing fallback, differing stacking owners,
+  sizing omissions and overlay-to-local-flow substitution. Passing defect proofs
+  does not mean those defects were fixed. The connected-placement inspection
+  explicitly leaves public placement and live edge fallback unproven; historical
+  and current evidence must not be conflated. The harness continues in tooltip
+  wrapping canonical integration (worker 28504), with final outcome pending.
+
 - October 4 tests 1476–1548 all pass (73 checks, retained harness log):
   stacking/position/stepper evidence, paginator/tooltip/calendar action-inventory
   replay and negative controls, supplemental provenance, tabs and alignment.
