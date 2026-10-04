@@ -2,6 +2,19 @@
 
 ## Current resumption ledger — October 3
 
+- October 4 root provenance failures remain explicit: test 1369 stops at
+  `root-flow-height-override-evidence.spec.mjs:27` on the LF-normalized border
+  evidence receipt (`a809c257…` current versus `3dbcf33f…` retained). Its 164-case,
+  138 repeated-root / 26 control, 414-property and false-equivalence assertions
+  were reached; the subsequent per-case declaration replay was not. Test 1384
+  stops at `root-initial-style-evidence.spec.mjs:137` on the input-audit producer
+  receipt (`787618f9…` versus `b6b4e62b…`), after complete durable-index membership
+  comparison; its final candidate-omission assertion was not reached. These join
+  the existing border/producer applicability investigation, not a new rendering
+  diagnosis. Preserve historical receipts and establish semantic replay before
+  claiming current applicability. The retained harness log records both failures;
+  the run remains nonterminal in root-shadow canonical integration.
+
 - October 4 continuation: tests 1328–1330 pass. Current earlier-classification
   membership retains 325 groups / 12,836 observations. Independent color replay
   accounts for 144 exposed groups / 2,311 observations and 66 changed-value
