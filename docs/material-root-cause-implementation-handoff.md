@@ -2,6 +2,22 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 mapped-owner applicability gate 1152 is closed: the complete mapping
+  suite passes 6/6 with no skips (83,864 ms), including all original mapping,
+  generated-owner, active-panel and unchanged-report assertions. Its read-only
+  CLI reopens the full original tree population and checks all nonreceipt fields
+  without changing historical report bytes. The existing conservation module
+  now authenticates the fully pinned saved report, all seven actual current
+  receipts, the established root producer, survey opt-in and border transitions,
+  and the complete original CLI source after reversing only its new check block.
+  Controls reject changed observations, altered saved findings, stale receipts
+  and unrelated executable edits in every dependency. The complete shared
+  motion/source-conservation suite also passes 4/4 (34,287 ms). This closes historical
+  evidence applicability, not current candidate computed values or rendering
+  equivalence. No report, renderer, fixture or canonical classification changed.
+  Batch consumed proof-source reconciliation with the remaining gate work;
+  complete coverage and current unfiltered browser acceptance remain outstanding.
+
 - October 5 mapping diagnostic answers the next applicability question:
   read-only execution of the unchanged mapping collector, retaining its original
   membership CLI prerequisite and replacing only publication with complete

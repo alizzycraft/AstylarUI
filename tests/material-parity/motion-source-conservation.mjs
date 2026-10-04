@@ -91,6 +91,32 @@ export async function verifyOwnerInitialMembershipReplay(saved, fresh, readCurre
   assert.deepEqual({ ...fresh, sourceFingerprints: saved.sourceFingerprints }, saved, 'owner membership evidence changed');
 }
 
+export async function verifyOwnerInitialMappingReplay(saved, fresh, readCurrent = file => readFileSync(file, 'utf8')) {
+  assert.equal(hash(JSON.stringify(saved)), 'fa6fc5373793aa959046199c5dd18adec6fdb0192fd1f7a24fde66abb76f381c',
+    'retained owner mapping evidence changed');
+  const { verifyRootInitialSourceApplicability } = await import('../../scripts/diagnose-material-root-initial-receipt.mjs');
+  const { readGapSurveySource } = await import('./gap-survey-source-replay.mjs');
+  const root = JSON.parse(readCurrent('docs/material-root-initial-style-audit.json'));
+  const producer = 'tests/material-parity/input-equivalence-audit.mjs';
+  assert.deepEqual(saved.sourceFingerprints.find(s => s.file === producer), root.sourceFingerprints.find(s => s.file === producer));
+  verifyRootInitialSourceApplicability(root, { sourcesOnly: true, readSource: readCurrent });
+  assert.deepEqual(fresh.sourceFingerprints.map(s => s.file), saved.sourceFingerprints.map(s => s.file));
+  for (const [index, descriptor] of saved.sourceFingerprints.entries()) {
+    const current = lf(readCurrent(descriptor.file));
+    assert.equal(fresh.sourceFingerprints[index].sha256, hash(current), 'owner mapping receipt is not current');
+    if (descriptor.file === producer) continue;
+    let restored = current;
+    if (descriptor.file === 'tests/material-parity/owner-initial-style-survey.mjs') restored = restoreOwnerInitialSurveyOptIns(current);
+    else if (descriptor.file === 'scripts/audit-material-owner-initial-mappings.mjs') {
+      const instrumentation = "if (process.argv.includes('--check')) {\n  const { verifyOwnerInitialMappingReplay } = await import('../tests/material-parity/motion-source-conservation.mjs');\n  await verifyOwnerInitialMappingReplay(JSON.parse(readFileSync(target)), result);\n}";
+      assert.equal(current.split(instrumentation).length, 2, 'owner mapping instrumentation must match exactly once');
+      restored = current.replace(instrumentation, "if (process.argv.includes('--check')) assert.equal(readFileSync(target, 'utf8').replaceAll('\\r\\n', '\\n'), output, 'mapped owner report is stale');");
+    } else restored = readGapSurveySource(descriptor, { current: readCurrent });
+    assert.equal(hash(restored), descriptor.sha256, `unreviewed mapping source: ${descriptor.file}`);
+  }
+  assert.deepEqual({ ...fresh, sourceFingerprints: saved.sourceFingerprints }, saved, 'owner mapping evidence changed');
+}
+
 export async function verifyOwnerInitialSurveyReplay(saved, fresh, readCurrent = file => readFileSync(file, 'utf8')) {
   assert.equal(hash(JSON.stringify(saved)), '08c9590fd82a77ff377d58ca571a2cdfad90711749af47c854354fd987f9aec3',
     'retained owner survey evidence changed');

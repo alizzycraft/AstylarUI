@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { inspectOwnerInitialStyle } from './owner-initial-style-survey.mjs';
+import { verifyOwnerInitialMappingReplay } from './motion-source-conservation.mjs';
 
 const raw = JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));
 const load = (family, element) => {
@@ -91,6 +92,22 @@ test('mapped survey rejects fabricated, conflicting or transplanted generated ow
     const v = structuredClone(badge); mutate(v);
     assert.equal(inspect(v).disposition, 'requires-specific-review', `mutation ${i}`);
     assert.ok(inspect(v).issues.some(x => ['owner-mapping', 'incomplete-surface-ancestry', 'scalar-tree-disagreement', 'scalar-tree-content-disagreement'].includes(x.reason)), `mutation ${i}`);
+  }
+});
+
+test('mapping applicability rejects changed findings, forged receipts and unrelated sources', async () => {
+  const report = JSON.parse(readFileSync('docs/material-owner-initial-style-mappings.json'));
+  const hash = text => createHash('sha256').update(text.replaceAll('\r\n', '\n')).digest('hex');
+  const current = { ...report, sourceFingerprints: report.sourceFingerprints.map(s => ({ ...s, sha256: hash(readFileSync(s.file, 'utf8')) })) };
+  await verifyOwnerInitialMappingReplay(report, current);
+  await assert.rejects(verifyOwnerInitialMappingReplay(report, { ...current, observations: 31507 }));
+  await assert.rejects(verifyOwnerInitialMappingReplay(report, { ...current, sourceFingerprints: report.sourceFingerprints }));
+  await assert.rejects(verifyOwnerInitialMappingReplay({ ...report, groups: [] }, current));
+  for (const descriptor of report.sourceFingerprints) {
+    const reader = file => readFileSync(file, 'utf8') + (file === descriptor.file ? '\nconst unreviewedMappingChange = true;\n' : '');
+    const changed = { ...current, sourceFingerprints: current.sourceFingerprints.map(s => s.file === descriptor.file
+      ? { ...s, sha256: hash(reader(s.file)) } : s) };
+    await assert.rejects(verifyOwnerInitialMappingReplay(report, changed, reader));
   }
 });
 

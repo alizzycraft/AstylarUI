@@ -69,7 +69,10 @@ const result = { schemaVersion: 1, kind: 'owner-initial-style-reviewed-mapping-s
     'All inherited/used-value consumers, motion/state requests and final rendering obligations remain independent.',
     'No authored tree is rewritten or assigned a synthetic ID to force a match.'] };
 const output = JSON.stringify(result, null, 2) + '\n';
-if (process.argv.includes('--check')) assert.equal(readFileSync(target, 'utf8').replaceAll('\r\n', '\n'), output, 'mapped owner report is stale');
+if (process.argv.includes('--check')) {
+  const { verifyOwnerInitialMappingReplay } = await import('../tests/material-parity/motion-source-conservation.mjs');
+  await verifyOwnerInitialMappingReplay(JSON.parse(readFileSync(target)), result);
+}
 else writeFileSync(target, output);
 console.log(JSON.stringify({ groups: result.groupCount, observations: result.observations,
   capturedObservationStageGroups: result.capturedObservationStageGroups, canonicalAttributionChanged: false }));
