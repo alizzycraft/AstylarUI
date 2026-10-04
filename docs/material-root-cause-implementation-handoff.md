@@ -45,6 +45,26 @@
   and current unfiltered browser gates remain required. Historical test or output
   passes do not establish current equal-input rendering acceptance.
 
+- Owner-initial integration failure 1147 is closed: the unchanged original test
+  first reproduced its stale unresolved-visibility assertion (1/1 failed,
+  279,063 ms overall). Its strengthened assertion now passes the full existing
+  integration and seven original attribution mutation controls (1/1,
+  2,334,294 ms overall; 2,331,595 ms test body). The two paired stepper cases
+  replay the exact panel ownership classification from authenticated original
+  unresolved metadata and its complete row digest. Hidden-state support is not
+  waived, visible omission is not declared causal, and animation/rendering
+  equivalence remain unproven. Added forged-membership control is rejected.
+  The complete panel-state suite also passes 3/3 (3,899 ms), preserving all 138
+  tab/stepper observations. No renderer, fixture, canonical row or threshold was
+  changed. One intermediate run was deliberately stopped before completion to
+  correct the new assertion's serialization-order bug; it is not a passing run.
+  This legacy integration body performs repeated full validation without the
+  existing evidence-session wrapper: consider applying that established wrapper
+  as a separate verified efficiency increment, retaining all assertions and
+  end-of-session dependency authentication. Do not repeat this uncached gate
+  for documentation-only work. Remaining priority: membership CLI applicability
+  gates 1155/1156, then dependent mapping replay 1152 and the wider acceptance queue.
+
 - Owner-survey applicability failure 1165 is now closed. The original
   `owner survey reopens all paired trees` test passes 1/1 (76,435 ms overall),
   rebuilding all 600 groups / 1,734 cases / 32,144 observations and checking that

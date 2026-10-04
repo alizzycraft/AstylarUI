@@ -10,6 +10,7 @@ import { bindPreciseAuditNormalization } from './audit-normalization-contracts.m
 import { bindOwnerInitialStyleSource, collectOwnerInitialStyleEvidence, classifyOwnerInitialStyleInput,
   validateOwnerInitialStyleSource, ownerInitialStyleAttribution } from './owner-initial-style-attribution.mjs';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
+import { applyPanelVisibilityOwnership, validatePanelVisibilityOwnership } from '../../scripts/audit-material-panel-state-ownership.mjs';
 
 const index = JSON.parse(readFileSync('docs/material-owner-initial-style-membership.json'));
 const bytes = readFileSync(index.capture.file);
@@ -331,7 +332,30 @@ test('owner initial canonical integration preserves earlier classifications and 
   assert.ok(ownerRows.every(r => r.reviewedCases.length === r.occurrences && r.classification === 'parity-harness-defect'));
   const content = audit.discrepancies.filter(r => r.element === 'stepper-content');
   assert.ok(content.some(r => r.attribution === 'reviewed-stage-mismatch'), 'existing static retained-text classification must survive');
-  assert.ok(content.some(r => r.property === 'visibility' && r.attribution === 'unresolved'), 'visibility requests must not be waived');
+  const visibility = content.filter(r => r.property === 'visibility');
+  assert.equal(visibility.length, 1);
+  const row = visibility[0];
+  assert.equal(row.attribution, 'reviewed-panel-visibility-state-owner-substitution');
+  assert.equal(row.classification, 'application-plugin-authoring-defect');
+  assert.equal(row.reference, 'visible'); assert.equal(row.astylar, undefined);
+  assert.equal(row.occurrences, 2); assert.equal(row.reviewEvidence.observations.length, 2);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const prior = Object.fromEntries(Object.entries(row).flatMap(([key, value]) => !metadata.has(key)
+    ? [[key, value]] : Object.hasOwn(row.reviewEvidence.priorMetadata, key)
+      ? [[key, row.reviewEvidence.priorMetadata[key]]] : []));
+  assert.equal(prior.attribution, 'unresolved');
+  assert.equal(createHash('sha256').update(JSON.stringify(prior)).digest('hex'), row.reviewEvidence.originalRowSha256);
+  assert.deepEqual(applyPanelVisibilityOwnership([prior], cases, inventory, bindPreciseAuditNormalization()), visibility,
+    'classification must replay exact paired state-owner evidence, not waive visibility support');
+  for (const proof of row.reviewEvidence.observations) {
+    assert.equal(proof.state.equivalentStateOwnerStructure, false);
+    assert.equal(proof.activeVisibilityOmissionIsCause, false);
+    assert.equal(proof.coreVisibilitySupportGapWaived, false);
+    assert.equal(proof.liveAnimationVerified, false);
+    assert.equal(proof.inputEquivalent, false);
+  }
+  const forged = structuredClone(visibility); forged[0].reviewedCases.pop();
+  assert.equal(validatePanelVisibilityOwnership(forged, [prior], cases, inventory, bindPreciseAuditNormalization()).length, 1);
   assert.ok(content.some(r => r.property === 'fontStyle' && r.attribution === ownerInitialStyleAttribution && r.occurrences === 1));
   const errors = a => validateMaterialInputAudit(a, { requireComplete: false }).filter(e => e.includes('owner initial-style'));
   assert.deepEqual(errors(audit), []);
