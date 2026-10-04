@@ -2346,8 +2346,8 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 539);
-  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 539);
+  assert.equal(audit.sourceFingerprints.length, 541);
+  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 541);
   const alignmentFiles = [
     'tests/material-parity/alignment-survey-conservation.mjs',
     'tests/material-parity/alignment-survey-conservation.spec.mjs',
@@ -2414,7 +2414,9 @@ test('records source fingerprints and actual visual acceptance fields', () => {
     'a787e493d0e36d37fe5517bba8a6c3ba7a876f5bdb5ff7991e4d5bdcd0a0ebd0');
   const launchFiles = ['tests/material-parity/run-checkpoint.mjs', 'tests/material-parity/run-checkpoint.spec.mjs'];
   const recentProofFiles = ['tests/material-parity/input-boundary-evidence.spec.mjs',
-    'tests/material-parity/sort-focus-structure.spec.mjs'];
+    'tests/material-parity/sort-focus-structure.spec.mjs',
+    'scripts/diagnose-material-root-initial-receipt.mjs',
+    'tests/material-parity/case-index-assertion-migration.mjs'];
   const liveSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8').replace(/\r\n/g, '\n');
   const launchRegistration = launchFiles.map(file => `    '${file}',\n`).join('');
   assert.equal(liveSource.split(launchRegistration).length, 2, 'launch receipts are registered exactly once');

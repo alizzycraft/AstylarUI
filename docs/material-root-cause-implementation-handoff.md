@@ -23,6 +23,27 @@
   and current unfiltered browser gates remain required. Historical test or output
   passes do not establish current equal-input rendering acceptance.
 
+October 4 dependency closure increment: both missing applicability helpers now
+join the existing explicit source inventory, raising it from 539 to 541. The
+existing migration proof authenticates the updated exact inventory block and
+restores the earlier assertions; an independent whole-producer comparison against
+`c3e0be17` admits only those two appended paths. The existing mapped-border source
+restorer reverses exactly that registration before its unchanged complete
+historical digest check. Its unrelated-source rejection controls remain effective.
+`node --test tests/material-parity/case-index-assertion-migration.spec.mjs` passes
+3/3 (42,246 ms), including nine forged receipts and nine unrelated dependency
+edits. No classification, rendering input or historical hash is repinned.
+
+The original inventory callback was also executed directly with its test-name
+filter: its 541 counts pass, but it fails at the whole producer comparison against
+`116d8fab…` (1/1 failed, 2,556 ms). That comparison predates the already reviewed
+mapped-border integrations; its stripped current source remains 4,739 bytes longer.
+This is a separate pre-existing guard gap, not proof that the two-path registration
+changes classifications. Next authenticate those producer transitions in this
+existing callback before repeating it; preserve ordered 535-path predecessor
+membership, appended dependency hashes and full negative conservation checks.
+Canonical export remains deferred until that original inventory check is reconciled.
+
 - Root initial-style source question narrowed with the existing diagnostic:
   `node scripts/diagnose-material-root-initial-receipt.mjs --sources-only`
   passes (2.60 s). Its former `7cc8e93^` anchor was not the retained receipt;

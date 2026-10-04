@@ -800,7 +800,14 @@ export function restoreMappedButtonResetProducer(source) {
 
 export function restoreMappedBorderInitialProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
-  let restored = current.includes('  const beforeMappedButtonResets =') ? restoreMappedButtonResetProducer(current).restoredSource : current;
+  const applicabilityRegistration = "    'scripts/diagnose-material-root-initial-receipt.mjs',\n" +
+    "    'tests/material-parity/case-index-assertion-migration.mjs',\n";
+  const hasApplicabilityRegistration = current.includes(applicabilityRegistration);
+  if (hasApplicabilityRegistration) assert.equal(current.split(applicabilityRegistration).length, 2);
+  const predecessor = hasApplicabilityRegistration ? current.replace(applicabilityRegistration, '') : current;
+  // The existing complete restored digest below authenticates this exact
+  // append-only inventory change as well as all earlier producer transitions.
+  let restored = predecessor.includes('  const beforeMappedButtonResets =') ? restoreMappedButtonResetProducer(predecessor).restoredSource : predecessor;
   for (const [from, to] of [
     ['  applyMappedBorderInitial, validateMappedBorderInitial, mappedBorderInitialAttribution,\n', ''],
     ["  const beforeMappedBorderInitials = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],

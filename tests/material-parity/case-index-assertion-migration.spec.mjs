@@ -9,6 +9,15 @@ const previous = execFileSync('git', ['show', `6833850:${file}`], { maxBuffer: 8
 const current = readFileSync(file, 'utf8');
 
 test('entire legacy suite conserves statements outside nine receipt checks and the exact inventory extension', () => {
+  const producerFile = 'tests/material-parity/input-equivalence-audit.mjs';
+  const registration = "    'scripts/diagnose-material-root-initial-receipt.mjs',\n" +
+    "    'tests/material-parity/case-index-assertion-migration.mjs',\n";
+  const producer = readFileSync(producerFile, 'utf8').replaceAll('\r\n', '\n');
+  const predecessor = execFileSync('git', ['show', `c3e0be17:${producerFile}`],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n');
+  assert.equal(producer.split(registration).length, 2, 'exact two dependency registrations');
+  assert.ok(producer.replace(registration, '') === predecessor,
+    'entire producer conserved except the two appended applicability dependencies');
   const result = verifyCaseIndexAssertionMigration(previous, current);
   assert.equal(result.replacedReceiptAssertions, 9);
   assert.equal(result.allOtherStatementsConserved, true);
@@ -59,13 +68,14 @@ test('migration proof rejects unrelated assertion changes, missing checks and wr
     current.replace('assert.equal(index.sourceFingerprints.length, 11)', 'assert.equal(index.sourceFingerprints.length, 10)'),
     current.replace("assertHistoricalCaseIndexSources('docs/material-container-caret-audit.json', index);", ''),
     current.replace("assertHistoricalCaseIndexSources('docs/material-container-caret-audit.json', index)", "assertHistoricalCaseIndexSources('docs/material-root-height-audit.json', index)"),
-    current.replace('audit.sourceFingerprints.length, 539', 'audit.sourceFingerprints.length, 538'),
+    current.replace('audit.sourceFingerprints.length, 541', 'audit.sourceFingerprints.length, 540'),
     current.replace('laterFiles.length, 111', 'laterFiles.length, 110'),
     current.replace('stage424Files.length, 424', 'stage424Files.length, 423'),
     current.replace("ts.createSourceFile('inventory.mjs', source", "ts.createSourceFile('inventory.mjs', baselineSource"),
     current.replace('calls.every(n => ts.isCallExpression(n)', 'calls.some(n => ts.isCallExpression(n)'),
     current.replace('345051b81ed3305bd3fa14ee97e67407936e4b50659df44f420089de1d370a6f', '0'.repeat(64)),
     current.replace(' && !recentProofFiles.includes(f)', ''),
+    current.replace("'scripts/diagnose-material-root-initial-receipt.mjs',", "'scripts/unreviewed-applicability.mjs',"),
     current.replace('...expectedFiles, ...launchFiles, ...recentProofFiles', '...expectedFiles, ...recentProofFiles'),
     current.replace("'reviewed-source-batch-pipeline.spec.mjs',", "'wrong-source.spec.mjs',"),
     current.replace(' && !additions.includes(f)', ''),

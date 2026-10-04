@@ -33,8 +33,8 @@ export function restoreInventoryAssertion(source) {
     const extension = statements.slice(extensionStart, extensionEnd + 1);
     assert.equal(createHash('sha256').update(extension.map(n =>
       printer.printNode(ts.EmitHint.Unspecified, n, ast)).join('\n')).digest('hex'),
-    '4fa84ae74f905b4504c0df0c879b087816af75fce5d8b13d897a9533a00a870f',
-    'authenticated 424-to-539 inventory extension changed');
+    '9ce6111112707328b2491c8a2e15584054e7826d283287f96e232cae998421ce',
+    'authenticated 424-to-541 inventory extension changed');
     // This block retains both pinned producer hashes, ordered prior membership,
     // exact launch/recent registrations and the eight added proof registrations.
     // Authenticate all of it before restoring the older callback for comparison.
@@ -56,8 +56,8 @@ assert.ok(ts.isArrayLiteralExpression(declaration.initializer));
 assert.ok(declaration.initializer.elements.every(ts.isStringLiteral));
 const baselineFiles = declaration.initializer.elements.map(n => n.text);`);
     for (const [current, previous] of [
-      ['audit.sourceFingerprints.length, 539', 'audit.sourceFingerprints.length, 424'],
-      ['entry.file)).size, 539', 'entry.file)).size, 424'],
+      ['audit.sourceFingerprints.length, 541', 'audit.sourceFingerprints.length, 424'],
+      ['entry.file)).size, 541', 'entry.file)).size, 424'],
       [' && !laterFiles.includes(f) && !launchFiles.includes(f) && !recentProofFiles.includes(f)', ''],
       ['...positionFiles, ...laterFiles, ...launchFiles, ...recentProofFiles', '...positionFiles'],
       ['only preserved earlier additions and explicit recent dependencies are added',
