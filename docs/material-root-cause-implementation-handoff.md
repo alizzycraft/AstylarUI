@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 3
 
+- October 4 slider-border canonical integration completes: tests 1412–1416
+  pass, preserving raw scalar values and the sixteen reviewed border-property
+  attributions. Historical conservation and later gap/grid/shadow evidence
+  controls reject missing evidence, changed coverage and fabricated equivalence.
+  The five tests took 583,144 / 269,531 / 1,283,447 / 1,540,339 / 2,716,197 ms;
+  retain these results rather than rerunning unchanged integration. Tests
+  1417–1428 also pass the original owner, binding, disabled-opacity and native
+  box-request proofs. These results establish audit evidence/conservation, not
+  used geometry, slider drag correctness or visual rendering equivalence.
+  The same unfiltered harness remains nonterminal and has advanced to
+  `slider-input-box-integration.spec.mjs` (worker 9252).
+
 - October 4 root-shadow integration finishes with tests 1393–1396 passing.
   The production comparison conserves scalar rows and attribution precedence
   for 36 shadow groups / 277 selected cases, explicitly authenticating the
