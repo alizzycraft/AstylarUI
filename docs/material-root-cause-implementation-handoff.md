@@ -34,6 +34,16 @@
   producer's historical/current source applicability remains unresolved, and no
   receipt, durable index, input-equivalence or rendering claim was changed.
 
+  Exact producer receipt recovery locates `b6b4e62b…` at
+  `7feb4fbe63052acf896057b68522e6e3a5dd9e57`. TypeScript statement comparison
+  confirms identical current/historical bodies for `collectFullTreeInventory`,
+  `caseKey`, and `collectReferenceContextGaps`, plus the exact
+  `referenceContextProperties` declaration. Thus the whole-file producer change
+  is not a demonstrated change to this inventory path. The durable root index
+  still has four changed receipts: producer, producer spec, border evidence and
+  input-equivalence policy. Preserve their failing guards; this narrow inventory
+  comparison does not authenticate the complete producer, policy or test suite.
+
 - October 4 continuation: tests 1328–1330 pass. Current earlier-classification
   membership retains 325 groups / 12,836 observations. Independent color replay
   accounts for 144 exposed groups / 2,311 observations and 66 changed-value
