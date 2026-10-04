@@ -23,6 +23,7 @@ import { collectModalPositionInspection, proveModalPositionInspection, proveDial
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { restoreControlPositionProducer } from './position-composition-producer-transition.mjs';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
+import { resolveGeneratedReferenceNode } from './generated-node-mapping-evidence.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
 import { proveSnackbarSurfaceRequests, collectOverlaySurfaceReview, applyOverlaySurfaceRows,
   overlaySurfacePredecessor } from './overlay-surface-review.mjs';

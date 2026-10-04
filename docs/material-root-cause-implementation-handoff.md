@@ -2,6 +2,27 @@
 
 ## Current resumption ledger — October 3
 
+- October 4 the unfiltered 302-file harness is terminal: 1,653 tests,
+  1,532 pass, 119 fail, two skip, zero cancelled/todo; exit 1 and duration
+  84,578,940 ms. Original log: `audit-harness-5028979e.log`. Do not restart
+  the entire unchanged harness. Tests 1600–1653 pass visibility, wrapping,
+  fixture/inventory and calibrated metric checks. Visibility integration
+  conserves 8,347 unrelated rows while reviewing 15 groups / 530 observations;
+  wrapping conserves all 8,483 raw rows and changes only 30 reviewed groups.
+  Public package proofs reject visibility and wordBreak without fixture
+  workarounds. These are evidence/support checks, not full browser acceptance.
+  The two skips are original tests 30–31 and require explicit reconciliation.
+
+- Post-harness instrumentation repair: modal inspection test 913 called
+  `resolveGeneratedReferenceNode` without importing its existing owner. Added
+  that import only; no assertions, fixtures or renderer code changed. Focused
+  command `node --test --test-name-pattern='overlay position tokens belong to
+  different compositions in all 59 original states'
+  tests/material-parity/modal-position-inspection.spec.mjs` passes (1/1).
+  It now authenticates all 59 states: differing fixed-parent/fixed-owner and
+  flow-axis compositions, plus 34 snackbar padding substitutions. Both
+  inputEquivalenceProven and rendererCauseProven remain false.
+
 - October 4 test 1585 passes the complete 91-population typography survey.
   Test 1586 fails in `bind-material-vertical-align-population.mjs:152` before
   completing frozen canonical authentication: the live followup binding differs
