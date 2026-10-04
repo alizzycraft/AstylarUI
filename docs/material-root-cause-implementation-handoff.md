@@ -2,6 +2,16 @@
 
 ## Current resumption ledger — October 3
 
+- Historical dependency recovery: read-only hashing of the public cursor capture
+  `public-cursor-defaults-audit-v2/latest-report.json`'s provenance `bundleInputs`
+  found all 2,515 node_modules receipts present and byte-identical under
+  `examples/material-showcase/node_modules.audit-prior-junction`. Angular common
+  is 20.3.29 with the required `ecd9f39a…` module hash. No installation was switched.
+  This authenticates the available dependency bytes for that historical capture,
+  not all source/artifact receipts, other captures, current served code or browser
+  acceptance. After the harness, use isolated historical replay with every original
+  guard retained; keep current-runtime proof separate and preserve this directory.
+
 - Pending range-context command failure 1174 is a confirmed module-initialization
   fault, not a range rendering result: `audit-material-overlay-caret-context.mjs:17`
   eagerly reads `rangeCaretAttribution` before initialization. Read-only TypeScript
