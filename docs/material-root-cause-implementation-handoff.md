@@ -1,6 +1,27 @@
 # Material audit: evidence-led implementation priorities
 
-## Current resumption ledger — October 3
+## Current resumption ledger — October 4
+
+- Root-initial applicability is closed by pushed `c3e0be17`: all eight focused
+  tests pass, including the original five root-initial assertions and eighteen
+  receipt/source mutation controls. The earlier pending notes below are history,
+  not current blockers. No historical evidence or meaningful color difference
+  was rewritten.
+- Export preflight passes the named baseline's five required path checks; no
+  diagnostic filter variables are set. However, AST inspection of the current
+  explicit 539-file source inventory finds the root-initial proof registered
+  but not `scripts/diagnose-material-root-initial-receipt.mjs` or
+  `tests/material-parity/case-index-assertion-migration.mjs`, which now own its
+  applicability validation. An export before closing that dependency inventory
+  would omit provenance for newly consumed code. Do not repeat an unchanged
+  canonical build. Next register/authenticate this dependency closure through
+  the existing source/proof inventory, conserving its pinned predecessor and
+  negative controls, then perform the coherent export and independent cold check.
+- Remaining priorities: current canonical source/proof reconciliation first;
+  then remaining historical failure populations separated into stale evidence
+  boundaries versus substantive defects; complete comparison/state coverage
+  and current unfiltered browser gates remain required. Historical test or output
+  passes do not establish current equal-input rendering acceptance.
 
 - Root initial-style source question narrowed with the existing diagnostic:
   `node scripts/diagnose-material-root-initial-receipt.mjs --sources-only`
