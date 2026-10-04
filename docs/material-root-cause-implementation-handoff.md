@@ -2,6 +2,25 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 overlay applicability investigation narrows gate 1297 without
+  changing its evidence: the unchanged remaining-overlay suite finishes 4/5
+  (6,641 ms). All original declaration traces reproduce, tooltip wrapping
+  authoring remains unequal, and the 18 unreplayed tooltip context gaps remain
+  explicit. Only the normalized context-reader receipt fails (`58e7b62b…`
+  current versus `71422c36…` retained). A bounded six-revision search recovers
+  the exact retained full reader at `693a95fef7497966bde3f504d4eb932d2a20eafc`;
+  the intermediate path-containment reader at `2144373313de34a4f331bf63fcb7b77825e43856`
+  has `e94b253c…`, already authenticated by the existing overlay-font restoration.
+  The complete existing original-context suite passes 10/10 (37,863 ms), including
+  all 91 states / 200 owner proofs, path-containment controls, changed source and
+  forged coverage/ancestor/runtime/lineage rejection. Current-to-retained diff
+  changes only containment ownership and authenticated dependency readers; it
+  does not change declaration calculations. Gate 1297 remains open until the
+  exact full-source chain and the other four changed receipts are integrated
+  into its existing assertion with effective negative controls. Do not rerun
+  these unchanged suites merely to restate that conclusion. This is historical
+  ancestry applicability, not popup sizing or current candidate rendering proof.
+
 - October 5 fresh range-default proof confirms the historical defect still exists
   without treating old receipts as current. `npm run material-showcase:prepare`
   exits 0, rebuilding and packing the library, installing it and clearing Angular
