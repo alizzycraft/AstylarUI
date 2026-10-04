@@ -95,6 +95,21 @@ The remaining membership task is to wire this existing proof into the original
 CLI and receipt assertions with mutation controls and complete report equality;
 1155/1156 are not yet closed.
 
+Range public-proof failure 1292 is not a demonstrated browser-defaults change:
+the complete current LF bytes, converted only to CRLF, reproduce its saved raw
+`82fb3a97…` receipt exactly (`c429bec0…` current LF). The same complete-byte
+encoding check authenticates `style-defaults.service.ts`. Across all 18 saved
+receipts, nine differ; seven remain unauthenticated: style service, dimension
+service, creation service, capability catalog, HTML/CSS guidance, installed
+AstylarUI package metadata, and showcase spec configuration. The report's stated
+baseline `e1807400…` does not recover those exact raw or normalized source
+receipts, so a baseline Git diff cannot establish their applicability. Preserve
+the original six observations and two failing public runs as historical evidence;
+do not generalize the two encoding-only transitions to the seven other sources.
+Next recover their exact retained provenance or run the existing minimal public
+proof against a freshly authenticated current build, retaining its honest failed
+cases. No current renderer cause or public-proof gate closure is claimed.
+
 Failure 1147 separately asserts that stepper-content visibility must remain
 unresolved, but the production chain now applies the independently tested
 panel-state ownership review. Its original test is being replayed unchanged
