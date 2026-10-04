@@ -12,9 +12,23 @@
   535 pinned paths and 424-path predecessor still ordered. The original inventory
   callback passes 1/1 (3,789 ms); the migration/mutation suite passes 3/3.
   The named baseline's five required paths exist and no diagnostic filter
-  variables are set. Next perform the coherent export and independent cold check.
-- Remaining priorities: current canonical source/proof reconciliation first;
-  then remaining historical failure populations separated into stale evidence
+  variables are set. The coherent export and independent cold check now pass.
+- Canonical reconciliation milestone: the named complete five-input export passes
+  in 2,374,034 ms. Independent `ASTYLAR_AUDIT_COLD=1` / progress-enabled
+  `node scripts/export-material-input-audit-current-ancestry.mjs --check` passes
+  in 2,434,854 ms, including validation, read-input verification and complete
+  canonical comparison. Cold session: two collectors, ten memory hits, zero disk
+  hits; 1,205 files / 89,154,859 bytes read and independently rehashed.
+  Coverage remains 436/436 static and 1,875/1,875 interaction cases, 8,483
+  differences / 389,202 occurrences and 145 source findings. Input equivalent
+  remains **no**. Payload SHA-256 `12a3cc97f936cadeee398e021b98b8ddd72c63560671e206fb005431a45b9d64`
+  (62,831,555 compressed bytes); decoded SHA-256
+  `e89acd63604e12286ee68c7ec3bbb508b19c39f3773200000fba4feb489ff8a9`
+  (2,222,834,862 bytes). Markdown's complete comparison admits only updated
+  focused-proof source line references. This is reproducibility, not current
+  browser or equal-input rendering acceptance.
+- Remaining priorities: refresh the authenticated compact index once; then
+  remaining historical failure populations separated into stale evidence
   boundaries versus substantive defects; complete comparison/state coverage
   and current unfiltered browser gates remain required. Historical test or output
   passes do not establish current equal-input rendering acceptance.
