@@ -45,6 +45,22 @@
   and current unfiltered browser gates remain required. Historical test or output
   passes do not establish current equal-input rendering acceptance.
 
+Owner survey failure 1165 narrowed, not closed: the original read-only CLI
+test still fails 1/1 (63,220 ms) at complete report equality. A read-only
+in-memory execution of the unchanged collector body, with only publication
+replaced by complete nonreceipt comparison, passes: all 600 groups, 1,734 cases,
+32,144 observations, capture, baseline, limits and other fields are identical.
+Only `owner-initial-style-survey.mjs` and `border-initial-input-evidence.mjs`
+receipts differ. Thus this replay does not demonstrate changed observations.
+The survey's source diff adds explicit appearance/font-weight/tracking/line-height
+opt-ins and their aliases; the legacy collector does not pass those options.
+Existing `motion-source-conservation.mjs` already restores optional typography
+and font-weight extensions, while `gap-survey-source-replay.mjs` authenticates
+the border transition. Next reuse those exact-source mechanisms to authenticate
+this historical survey endpoint, retain unrelated-edit rejection controls, then
+replay the original CLI. Do not repin saved receipts or call this gate passing;
+canonical integration, computed candidate values and rendering remain false.
+
 October 4 dependency closure increment: both missing applicability helpers now
 join the existing explicit source inventory, raising it from 539 to 541. The
 existing migration proof authenticates the updated exact inventory block and
