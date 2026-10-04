@@ -15899,6 +15899,21 @@ and expand the same resolved Git revision to its full hash; syntax verification
 passes. Changed test fingerprints still require the planned batched export
 reconciliation. No renderer, fixture or audit-producer code changed.
 
+October 4 resumed preflight: `node --test
+tests/material-parity/case-index-assertion-migration.spec.mjs` fails 2/2
+(2,728 ms). The positive check stops at the positioning restoration: it
+expects inventory count 424, whereas the current callback explicitly checks
+539. The negative count mutation also still targets 424, making it a no-op;
+its `assert.notEqual` prints the entire large suite. Do not rerun this unchanged
+check or interpret its failures as rendering evidence. The current callback
+already authenticates the 424-path producer at `9a4a2340…` and the subsequent
+535-path producer at `116d8fab…`, then appends two launch and two recent proof
+dependencies. Next extend the existing migration verifier to authenticate that
+exact added block and reverse only its reviewed inventory changes before the
+original whole-suite AST conservation check; update the negative controls to
+mutate actual current tokens and give bounded failure diagnostics. No receipt
+waiver, canonical export, or renderer change is justified by this preflight.
+
 October 3 later current-classification join passes 1/1 in 134,974 ms:
 `node --test --test-concurrency=1 --test-name-pattern="canonical later source-batch"
 tests/material-parity/reviewed-input-canonical-integration.spec.mjs`.
