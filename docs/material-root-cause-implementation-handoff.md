@@ -2,6 +2,21 @@
 
 ## Current resumption ledger — October 3
 
+- Tooltip applicability integrated: `node scripts/check-material-tooltip-caret-context.mjs`
+  now passes all 18 cases / 1,602 original scalar checks / 3,816 root properties,
+  34 invalid-evidence controls, four parent-source controls, two additional
+  unrelated-runner/mapping rejection controls and two changed-observation
+  controls. The collector authenticates exact historical raw runner bytes and
+  mapping transition through existing helpers, executes both normalization
+  contracts, and revalidates caret values on original reference/candidate
+  owners and all fresh reference styles. All 18 changed background-color
+  observations are retained with raw/historical/current values in
+  `normalizationRevalidation`; whole-style equivalence remains false.
+  Complete saved review comparison allows only authenticated receipt changes
+  and this independently checked new diagnostic field. No evidence files were
+  written and caret initialization remains 4/4. Overlay source applicability
+  and canonical source-graph integration are still pending.
+
 - Tooltip normalization population answered: the existing normalization-contract
   suite now authenticates the retained context capture and every case file,
   binds the original September source descriptor directly from `42fd473`, and

@@ -8,6 +8,10 @@ import ts from 'typescript';
 import { inspectOwnerCaretInput } from '../tests/material-parity/owner-caret-input-evidence.mjs';
 import { resolveOriginAliasPair } from '../tests/material-parity/origin-alias-mapping-evidence.mjs';
 import { bindOwnerCaretNormalization } from '../tests/material-parity/owner-caret-source-binding.mjs';
+import { bindPreciseAuditNormalization } from '../tests/material-parity/audit-normalization-contracts.mjs';
+import { recoverOriginalOverlayRunnerSource } from '../tests/material-parity/original-overlay-runner-source.mjs';
+import { restoreMappingReadAdapterSource } from '../tests/material-parity/audit-evidence-session.mjs';
+import { readGapSurveySource } from '../tests/material-parity/gap-survey-source-replay.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 export const tooltipCaretCaptureFile = 'artifacts/material-parity/tooltip-caret-context-audit-v1/latest-report.json';
@@ -44,12 +48,14 @@ export function collectTooltipCaretContext({ readBytes = readFileSync } = {}) {
     { maxBuffer: 4 * 1024 * 1024 });
   for (const s of raw.capture.sources) {
     if (s.file === moduleFile) assert.equal(hash(historicalSource), s.sha256, 'historical tooltip audit source changed');
+    else if (s.file === sources[3]) recoverOriginalOverlayRunnerSource(s, read(s.file, true));
+    else if (s.file === sources[7]) restoreMappingReadAdapterSource(s, read(s.file, true));
     else hashed(s, true);
   }
   const historicalAuditSource = { file: moduleFile, revision: historicalRevision,
     recorded: hash(historicalSource), current: hash(read(moduleFile, true)),
     historicalReceiptPreserved: true, currentNormalizationVerified: true };
-  const runner = read(sources[3], true).toString('utf8');
+  const runner = recoverOriginalOverlayRunnerSource(raw.capture.sources[3], read(sources[3], true)).bytes.toString('utf8');
   const parsed = ts.createSourceFile(sources[3], runner, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   const names = ['profileTheme', 'sendShowcaseCommand', 'waitForThemeApplied', 'settleInteraction',
     'setBenchmarkPhase', 'interactionTargetBox', 'popupHoverBox', 'performInteraction'];
@@ -66,13 +72,16 @@ export function collectTooltipCaretContext({ readBytes = readFileSync } = {}) {
   const originalProperties = [...list.matchAll(/'([^']+)'/g)].map(m => m[1]); assert.equal(originalProperties.length, 89);
   assert.deepEqual(raw.capture.styleProperties, [...originalProperties, ...motion]);
   const parent = JSON.parse(hashed(raw.parent, true));
-  bindOwnerCaretNormalization(read(parent.productionNormalization.module, true).toString('utf8'), parent.productionNormalization);
+  const historicalNormalize = bindOwnerCaretNormalization(historicalSource.toString('utf8'), parent.productionNormalization);
+  const currentNormalize = bindPreciseAuditNormalization(read(moduleFile, true).toString('utf8'));
   const parentSourceChecks = parent.sourceFingerprints.map(s => {
     const current = hash(read(s.file, true).toString('utf8').replaceAll('\r\n', '\n'));
     const normalization = s.file === parent.productionNormalization.module;
-    if (!normalization) assert.equal(current, s.sha256, s.file);
+    if (normalization) assert.equal(hash(historicalSource.toString('utf8').replaceAll('\r\n', '\n')), s.sha256);
+    else readGapSurveySource(s, { current: file => read(file, true).toString('utf8') });
     return { file: s.file, recorded: s.sha256, current,
-      verification: normalization ? 'exact-executed-normalization-functions' : 'complete-source' };
+      verification: normalization ? 'historical-replay-and-current-caret-value-revalidation'
+        : current !== s.sha256 ? 'exact-historical-source-restoration' : 'complete-source' };
   });
   const groups = parent.groups.filter(g => g.family === 'tooltip' && g.element === 'tooltip-popup' &&
     g.reasonCounts['unreviewed-captured-root-context']);
@@ -80,7 +89,7 @@ export function collectTooltipCaretContext({ readBytes = readFileSync } = {}) {
   assert.equal(wanted.size, 18); assert.equal(raw.cases, 18);
   assert.deepEqual(raw.results.map(r => r.case).sort(), [...wanted.keys()].sort());
   const assets = new Map(manifest.provenance.browserFiles.map(a => [a.file, a.sha256]));
-  const rows = [], missingAliases = new Set(); let rootProperties = 0;
+  const rows = [], missingAliases = new Set(), normalizationDifferences = []; let rootProperties = 0, stylesChecked = 0;
   for (const descriptor of raw.results) {
     const result = JSON.parse(hashed(descriptor)), record = JSON.parse(hashed(result.checkpointRecord));
     assert.equal(record.sha256, hash(JSON.stringify(record.result))); assert.equal(JSON.parse(record.key).kind, 'interaction');
@@ -97,6 +106,18 @@ export function collectTooltipCaretContext({ readBytes = readFileSync } = {}) {
     const reference = JSON.parse(hashed(e.inputTrees.reference)), candidate = JSON.parse(hashed(e.inputTrees.astylar));
     const inputs = e.styleInputs.filter(i => i.id === 'tooltip-popup'); assert.equal(inputs.length, 1);
     const input = inputs[0]; assert.equal(hash(JSON.stringify(input)), original.inputSha256);
+    for (const style of [input.reference, input.astylar, ...result.freshReferenceTree.styles]) {
+      const before = historicalNormalize(style), after = currentNormalize(style);
+      assert.equal(before.caretColor, after.caretColor, 'tooltip caret normalization changed');
+    }
+    for (const [index, style] of result.freshReferenceTree.styles.entries()) {
+      stylesChecked++;
+      const before = historicalNormalize(style), after = currentNormalize(style);
+      for (const property of new Set([...Object.keys(before), ...Object.keys(after)])) {
+        if (before[property] !== after[property]) normalizationDifferences.push({ case: key, style: index, property,
+          raw: style[property], historical: before[property], current: after[property] });
+      }
+    }
     const caret = inspectOwnerCaretInput(input, reference, candidate, { family: e.family });
     assert.equal(hash(JSON.stringify(caret)), original.proofSha256);
     const alias = resolveOriginAliasPair(e, reference, candidate, input); assert.equal(alias.status, 'mapped');
@@ -154,6 +175,8 @@ export function collectTooltipCaretContext({ readBytes = readFileSync } = {}) {
     parentSourceChecks, historicalAuditSource,
     capture: { file: tooltipCaretCaptureFile, sha256: hash(bytes) }, browser: raw.browser,
     cases: rows.length, originalScalarChecks: rows.length * 89, rootProperties,
+    normalizationRevalidation: { stylesChecked, caretValuesPreserved: true, wholeStyleEquivalent: normalizationDifferences.length === 0,
+      differences: normalizationDifferences },
     missingEnumeratedAliases: [...missingAliases].sort(), observations: rows,
     canonicalAttributionChanged: false, ...Object.fromEntries(flags.map(f => [f, false])),
     limitation: 'Fresh reference-only external context and owner motion at original hover/held boundaries. Original scalar/identity proofs match, but unrecorded historical motion/ancestry and candidate computed/visible behavior remain unproven.' };

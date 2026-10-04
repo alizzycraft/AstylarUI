@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
+import { isDeepStrictEqual } from 'node:util';
 import { collectTooltipCaretContext, tooltipCaretCaptureFile, tooltipCaretSurveyFile } from './audit-material-tooltip-caret-context.mjs';
 
 assert.equal(process.argv.length, 2);
@@ -13,7 +14,25 @@ const raw = JSON.parse(read(tooltipCaretCaptureFile));
 const resultFile = raw.results[0].file, originalResult = JSON.parse(read(resultFile));
 const baseline = collectTooltipCaretContext({ readBytes: read });
 const saved = JSON.parse(read(tooltipCaretSurveyFile)); delete saved.sourceFingerprints;
-assert.deepEqual(baseline, saved); assert.equal(baseline.cases, 18); assert.equal(baseline.originalScalarChecks, 1602);
+const reconciled = structuredClone(saved);
+for (const file of ['tests/material-parity/run-material-parity.mjs',
+  'tests/material-parity/generated-node-mapping-evidence.mjs',
+  'tests/material-parity/border-initial-input-evidence.mjs', 'tests/material-parity/input-equivalence-audit.mjs']) {
+  const before = reconciled.parentSourceChecks.filter(s => s.file === file);
+  const after = baseline.parentSourceChecks.filter(s => s.file === file);
+  assert.equal(before.length, 1); assert.equal(after.length, 1);
+  assert.equal(before[0].recorded, after[0].recorded);
+  before[0].current = after[0].current; before[0].verification = after[0].verification;
+}
+assert.equal(reconciled.historicalAuditSource.recorded, baseline.historicalAuditSource.recorded);
+reconciled.historicalAuditSource.current = baseline.historicalAuditSource.current;
+const { normalizationRevalidation, ...replayed } = baseline;
+assert.ok(isDeepStrictEqual(replayed, reconciled), 'tooltip review differs beyond authenticated source receipts');
+assert.deepEqual([normalizationRevalidation.stylesChecked, normalizationRevalidation.caretValuesPreserved,
+  normalizationRevalidation.wholeStyleEquivalent, normalizationRevalidation.differences.length], [351, true, false, 18]);
+assert.equal(new Set(normalizationRevalidation.differences.map(d => d.case)).size, 18);
+assert.ok(normalizationRevalidation.differences.every(d => d.property === 'backgroundColor' && d.historical !== d.current));
+assert.equal(baseline.cases, 18); assert.equal(baseline.originalScalarChecks, 1602);
 assert.equal(baseline.rootProperties, 3816);
 function variant(change, top = false) {
   const capture = structuredClone(raw), result = structuredClone(originalResult);
@@ -64,7 +83,7 @@ const resultChanges = [
 assert.equal(originalResult.state, 'held');
 for (const [i, change] of captureChanges.entries()) assert.throws(variant(change, true), `capture rejection ${i}`);
 for (const [i, change] of resultChanges.entries()) assert.throws(variant(change), `result rejection ${i}`);
-const normalization = baseline.parentSourceChecks.find(s => s.verification === 'exact-executed-normalization-functions');
+const normalization = baseline.parentSourceChecks.find(s => s.verification === 'historical-replay-and-current-caret-value-revalidation');
 assert.ok(normalization); assert.notEqual(normalization.recorded, normalization.current);
 for (const digest of ['0'.repeat(64), normalization.current])
   assert.throws(variant(r => { r.capture.sources.find(s => s.file === normalization.file).sha256 = digest; }, true),
@@ -78,6 +97,13 @@ for (const source of [normalization, inspector]) {
   assert.notEqual(changed, original);
   assert.throws(() => collectTooltipCaretContext({ readBytes: file => path.resolve(file) === absolute
     ? Buffer.from(changed) : read(file) }), 'changed executed normalization or complete dependency must fail');
+}
+for (const file of ['tests/material-parity/run-material-parity.mjs',
+  'tests/material-parity/generated-node-mapping-evidence.mjs']) {
+  const absolute = path.resolve(file), original = read(absolute);
+  assert.throws(() => collectTooltipCaretContext({ readBytes: candidate => path.resolve(candidate) === absolute
+    ? Buffer.concat([original, Buffer.from('\n// unauthenticated transition\n')]) : read(candidate) }),
+  'historical source restoration must reject unrelated changes');
 }
 // New motion/context values are measurements to retain, not constants to force
 // back to the original expectation. These controls do not edit evidence files.
@@ -96,4 +122,5 @@ for (const r of [baseline, changedMotion, changedAncestor])
 console.log(JSON.stringify({ cases: baseline.cases, originalScalarChecks: baseline.originalScalarChecks,
   rootProperties: baseline.rootProperties, negativeControls: captureChanges.length + resultChanges.length,
   parentSourceRejectionControls: 4,
+  sourceTransitionRejectionControls: 2, normalizationDifferencesRetained: normalizationRevalidation.differences.length,
   changedObservationControls: 2, savedReportMatches: true, evidenceFilesWritten: false }));
