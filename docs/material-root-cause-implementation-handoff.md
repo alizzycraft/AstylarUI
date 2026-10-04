@@ -2,6 +2,16 @@
 
 ## Current resumption ledger — October 3
 
+- Prepared composition failure 1262 is a historical/current endpoint comparison,
+  not a demonstrated row-conservation failure: the retained dry-run report passes
+  its 125-group / 6,871-observation and 8,339-row assertions, then line 61 of
+  `prepared-alignment-composition.spec.mjs` compares its frozen canonical receipt
+  (`72b148d9…`, decoded `ee6db8ce…`) to the current package (`d7e7ed4f…`, decoded
+  `7e411759…`). Assertions after that line were not reached. Preserve the dry-run
+  endpoint and its explicit non-integration scope; reconcile it through the
+  existing historical integration proof, keeping current classification checks
+  separate. Do not regenerate the historical report or simply replace its hash.
+
 - Historical dependency recovery: read-only hashing of the public cursor capture
   `public-cursor-defaults-audit-v2/latest-report.json`'s provenance `bundleInputs`
   found all 2,515 node_modules receipts present and byte-identical under
