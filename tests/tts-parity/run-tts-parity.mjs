@@ -23,7 +23,7 @@ import {
 
 const root = process.cwd();
 const demo = path.join(root, 'examples', 'ai-tts-demo');
-const artifacts = path.join(root, 'artifacts', 'tts-parity');
+const artifacts = path.resolve(root, process.env['ASTYLAR_TTS_ARTIFACTS'] ?? 'artifacts/tts-parity');
 const referenceRoot = path.join(root, 'tests', 'tts-parity', 'reference');
 const port = Number(process.env['ASTYLAR_TTS_PARITY_PORT'] ?? 4421);
 const baseUrl = `http://127.0.0.1:${port}`;

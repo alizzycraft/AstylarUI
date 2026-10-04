@@ -1,9 +1,27 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import path from 'node:path';
+import { runInNewContext } from 'node:vm';
 import {
   acceptance, interactionApplicability, interactionScenarios, measurementIds, states,
   textMeasurementIds, viewports,
 } from './benchmark.config.mjs';
+
+test('isolated TTS artifacts preserve the complete original capture and acceptance code', () => {
+  const source = readFileSync('tests/tts-parity/run-tts-parity.mjs', 'utf8').replaceAll('\r\n', '\n');
+  const current = "const artifacts = path.resolve(root, process.env['ASTYLAR_TTS_ARTIFACTS'] ?? 'artifacts/tts-parity');";
+  assert.equal(source.split(current).length, 2);
+  const restored = source.replace(current, "const artifacts = path.join(root, 'artifacts', 'tts-parity');");
+  assert.equal(createHash('sha256').update(restored).digest('hex'),
+    '7703e6fe149fb442a73b203beeb476494201c80a19098075a47f05846aabaa22');
+  for (const requested of [undefined, 'artifacts/tts-fresh-test', path.resolve('artifacts/tts-absolute-test')]) {
+    const actual = runInNewContext(current + '\nartifacts',
+      { root: process.cwd(), path, process: { env: { ASTYLAR_TTS_ARTIFACTS: requested } } });
+    assert.equal(actual, path.resolve(process.cwd(), requested ?? 'artifacts/tts-parity'));
+  }
+});
 
 test('application benchmark owns named viewport and DPR profiles', () => {
   assert.deepEqual(states, ['initial', 'generated']);

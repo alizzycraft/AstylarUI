@@ -2,6 +2,19 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 TTS gate preparation now supports optional
+  `ASTYLAR_TTS_ARTIFACTS` publication isolation, retaining its original default
+  directory. The existing benchmark-config suite passes 3/3 (132 ms), including
+  complete original runner conservation after reversing only the destination
+  declaration, evaluated default/relative/absolute paths and all original
+  viewport/DPR/interaction contracts. No TTS capture, rendering input, threshold
+  or scenario changed; no full TTS build was launched alongside the live general
+  build. This is preparation, not acceptance. General diagnostic session 69538
+  remains live: CPU activity advanced but startup is still incomplete. Its memory
+  initially improved, then esbuild grew again to about 4.3 GB private bytes, so
+  reduced concurrency has not yet demonstrated a successful startup or proved
+  the cause. Keep polling the same owned process; do not launch another copy.
+
 - October 5 current general gate is not passing: unfiltered `npm run parity:check`
   exits 1 before fixture capture because its owned Angular server does not become
   reachable within the existing 120-second startup limit. No current report was
