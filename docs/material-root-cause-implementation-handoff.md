@@ -2,6 +2,30 @@
 
 ## Current resumption ledger — October 3
 
+- Frozen browser coverage restored without repinning: generated style comments
+  contained the copied app's absolute directory. In-memory restoration of that
+  directory plus generated chunk references authenticated 1,884 files; adjusting
+  source-map generated columns for the removed path text authenticated the
+  remaining three exact map hashes. All 1,887 expected files were authenticated
+  before materializing `examples/material-showcase/.audit-historical-build-1275fa1d/dist/authenticated-replay/browser`.
+  The reconstruction script is retained in that owned temporary directory as
+  `check-source-map-reconstruction.mjs`; no authored styles/inputs or checkpoint
+  bytes were altered. The frozen test helper now accepts
+  `ASTYLAR_MATERIAL_SHOWCASE_BROWSER_ROOT` but retains its complete original
+  directory-fingerprint assertion and unchanged default root.
+  With that variable set to the authenticated directory, `node --test
+  tests/material-parity/sort-focus-structure.spec.mjs` passes 26/26 (176,906 ms),
+  including all 24 previously blocked real-browser bodies. This authenticates
+  historical behavior / defect proofs, not current output-parity acceptance.
+  Slider fixed-half ownership, authored range constraints, tooltip keyboard
+  opening, popup/focus/resource boundaries and scrollbar limitations remain
+  exposed. Timepicker native scrollbar drag moves 211/421/632 while candidate
+  remains 0/0/0 with non-pickable thumb and 15px gutter discrepancy; iframe
+  bottom-sheet/dialog overlays allow parent selector focus in all six modes.
+  Final unfiltered current browser gates and remaining source applicability
+  failures are still required. Preserve this one authenticated build while
+  consolidating the larger failed reconstruction scratch separately.
+
 - Isolated historical rebuild attempted in
   `examples/material-showcase/.audit-historical-build-1275fa1d`; live source
   stays b493a355… and the copied pre-diagnostics component authenticates as
