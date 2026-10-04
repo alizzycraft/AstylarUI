@@ -2,6 +2,25 @@
 
 ## Current resumption ledger — October 3
 
+- October 4 bounded harness follow-up: test 913 in
+  `modal-position-inspection.spec.mjs` aborts at line 1318 with
+  `ReferenceError: resolveGeneratedReferenceNode is not defined`. The test calls
+  the existing exported helper in `generated-node-mapping-evidence.mjs` but has
+  no import or local binding. This is a confirmed test-instrumentation fault,
+  not evidence for a renderer diagnosis or completion of the claimed 59-state
+  composition proof. After the live run, add the missing import and run that
+  specific proof; preserve the original failure and do not weaken its assertions.
+- Grid canonical integration test 1120 fails at the whole-scalar conservation
+  assertion in `owner-grid-initial-canonical-integration.spec.mjs:68`, comparing
+  historical producer `364f46a3` with today's producer. The first visible delta
+  adds root-background discrepancies: fractional reference
+  `rgba(245.879925,240.73989,248.60001,1)` versus candidate `rgba(246,241,249,1)`.
+  Later grid/precedence assertions are not reached; this is not a grid-layout
+  failure diagnosis. Reconcile the historical precision endpoint using existing
+  conservation infrastructure while preserving the meaningful color differences.
+  Evidence for both failures remains in `audit-harness-5028979e.log`; session
+  95322 is nonterminal and was confirmed live in grid source-binding work.
+
 - October 4 bounded applicability check: live harness failures 286 (field-flow)
   and 306 (field-shrink) were compared property-by-property using their existing
   read-only report builders. Only `environment` and `sourceFingerprints` differ:
