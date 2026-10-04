@@ -2,6 +2,24 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 remaining-overlay receipt gate 1297 is closed in its original
+  assertion: combined remaining-overlay and original-context suites pass 16/16
+  with no skips (38,450 ms). All 48 groups / 1,424 observations, 50 cases,
+  178 owner identities and complete original declaration traces remain checked.
+  The existing overlay-font reader restoration is shared, not duplicated; it
+  authenticates the complete `e94b253c…` intermediate before reversing only the
+  containment-helper extraction to the complete original `71422c36…` digest.
+  The new consumer guard pins the whole unchanged retained report and composes
+  the established root producer, border, mapping-reader and capture-diagnostic
+  source checks. Altered evidence and unrelated executable edits in each of
+  ten recorded dependencies are rejected. All original-context controls still
+  pass across 91 states / 200 owner proofs. Tooltip's 18 missing external-context
+  observations and unequal wrapping requests remain explicit; candidate computed
+  values and rendering equivalence remain false. No captured bytes, report,
+  renderer or fixture changed. The standalone ancestry producer CLI was not
+  changed or claimed passing. These consumed proof-source edits belong to the
+  next coherent canonical reconciliation batch, not a standalone export.
+
 - October 5 overlay applicability investigation narrows gate 1297 without
   changing its evidence: the unchanged remaining-overlay suite finishes 4/5
   (6,641 ms). All original declaration traces reproduce, tooltip wrapping

@@ -3,6 +3,7 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-review.mjs';
+import { verifyRemainingOverlaySources } from './historical-audit-module-source.mjs';
 
 const report = JSON.parse(readFileSync('docs/material-remaining-overlay-ancestry-review.json'));
 const hash = value => createHash('sha256').update(value).digest('hex');
@@ -10,7 +11,7 @@ const read = d => { const b = readFileSync(d.file); assert.equal(hash(b), d.sha2
 const source = read(report.source);
 const groups = source.groups.filter(g => Object.keys(g.reasons).length === 1 && g.reasons['incomplete-surface-ancestry']);
 
-test('remaining overlay index preserves all 48 groups and 1424 exact source observations', () => {
+test('remaining overlay index preserves all 48 groups and 1424 exact source observations', async () => {
   assert.equal(report.groups.length, 48); assert.equal(report.observations, 1424);
   for (const [i, row] of report.groups.entries()) {
     const g = groups[i];
@@ -21,8 +22,16 @@ test('remaining overlay index preserves all 48 groups and 1424 exact source obse
   assert.equal(new Set(report.cases).size, 50);
   assert.equal(new Set(report.owners.map(o => JSON.stringify([o.case, o.element]))).size, 178);
   for (const item of report.patterns) assert.equal(hash(JSON.stringify(item.trace)), item.sha256);
-  for (const f of report.sourceFingerprints)
-    assert.equal(hash(readFileSync(f.file, 'utf8').replaceAll('\r\n', '\n')), f.sha256);
+  await verifyRemainingOverlaySources(report);
+});
+
+test('remaining overlay applicability rejects changed evidence and unrelated dependency edits', async () => {
+  await assert.rejects(verifyRemainingOverlaySources({ ...report, observations: 1423 }));
+  await assert.rejects(verifyRemainingOverlaySources({ ...report, sourceFingerprints: [] }));
+  for (const source of report.sourceFingerprints) {
+    const reader = file => readFileSync(file, 'utf8') + (file === source.file ? '\nconst unreviewedOverlayChange = true;\n' : '');
+    await assert.rejects(verifyRemainingOverlaySources(report, reader), undefined, source.file);
+  }
 });
 
 test('every declaration trace reproduces from its original hash-bound trees', () => {

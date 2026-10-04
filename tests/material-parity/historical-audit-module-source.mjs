@@ -229,12 +229,9 @@ export function conserveOriginalOverlayContextSnapshot(context, { root = process
 // not the captured font observations. Preserve the historical snapshot only
 // after full fresh replay matches it and the current reader is exactly the
 // reviewed corrected implementation. Never rewrite its original source receipt.
-export function verifyOverlayFontSnapshot(live, historicalBytes, currentReaderBytes) {
-  assert.equal(hash(historicalBytes), '3f06636fd36443605c6a5df9667ab159d2abc0a87672bd1546d5aabbfabfa759',
-    'historical overlay font snapshot changed');
+export function restoreOriginalOverlayContextReader(currentReaderBytes, { original = false } = {}) {
   const reader = currentReaderBytes.toString('utf8').replaceAll('\r\n', '\n');
-  const currentSha = hash(reader);
-  const restored = reader.replace("import { restoreMappingReadAdapterSource } from './audit-evidence-session.mjs';\n", '')
+  let restored = reader.replace("import { restoreMappingReadAdapterSource } from './audit-evidence-session.mjs';\n", '')
     .replace("import { recoverOriginalOverlayRunnerSource } from './original-overlay-runner-source.mjs';\n", '')
     .replace("    if (source && item.file === 'tests/material-parity/run-material-parity.mjs')\n" +
       "      return recoverOriginalOverlayRunnerSource(item, bytes).bytes;\n", '')
@@ -244,6 +241,45 @@ export function verifyOverlayFontSnapshot(live, historicalBytes, currentReaderBy
       "      restoreMappingReadAdapterSource(item, bytes); return bytes;\n    }\n", '');
   assert.equal(hash(restored), 'e94b253c1c51105c785ee361863fc1d58d5b8b7b406911d6853d7b3c5b56016f',
     'overlay reader differs from the reviewed shared-dependency correction');
+  if (original) {
+    const start = restored.indexOf('const inside =');
+    const end = restored.indexOf('export function collectOriginalOverlayContextSurvey', start);
+    assert.ok(start > 0 && end > start);
+    const inside = restored.slice(start, restored.indexOf('\n', start));
+    restored = restored.slice(0, start) + restored.slice(end);
+    restored = restored.replace("export function collectOriginalOverlayContextSurvey(reportFile, { root = process.cwd(), readBytes = readFileSync } = {}) {\n",
+      "export function collectOriginalOverlayContextSurvey(reportFile, { root = process.cwd(), readBytes = readFileSync } = {}) {\n  " + inside + '\n');
+    restored = restored.replace('if (readBytes === readFileSync) assertOriginalOverlayEvidencePath(root, file, source);',
+      'if (readBytes === readFileSync) assert.ok(inside(realpathSync(boundary), realpathSync(absolute)));');
+    assert.equal(hash(restored), '71422c360dcd115e4ee2f49162f3de882d757435aab1f531840355c7eea32c93',
+      'unreviewed original overlay reader source change');
+  }
+  return restored;
+}
+
+export async function verifyRemainingOverlaySources(report, readCurrent = file => readFileSync(file, 'utf8')) {
+  assert.equal(hash(JSON.stringify(report)), '2e50044b7afaefb60c5a253ff4aac06d0c10c9293f7e391832fbdef56ad9eb38',
+    'retained remaining-overlay evidence changed');
+  const { verifyRootInitialSourceApplicability } = await import('../../scripts/diagnose-material-root-initial-receipt.mjs');
+  const { readGapSurveySource } = await import('./gap-survey-source-replay.mjs');
+  const root = JSON.parse(readCurrent('docs/material-root-initial-style-audit.json'));
+  assert.deepEqual(report.sourceFingerprints.find(s => s.file === originalOverlayAuditSourceFile),
+    root.sourceFingerprints.find(s => s.file === originalOverlayAuditSourceFile));
+  verifyRootInitialSourceApplicability(root, { sourcesOnly: true, readSource: readCurrent });
+  for (const source of report.sourceFingerprints) {
+    if (source.file === originalOverlayAuditSourceFile) continue;
+    const restored = source.file === 'tests/material-parity/original-overlay-context-survey.mjs'
+      ? restoreOriginalOverlayContextReader(readCurrent(source.file), { original: true })
+      : readGapSurveySource(source, { current: readCurrent });
+    assert.equal(hash(restored.replaceAll('\r\n', '\n')), source.sha256);
+  }
+}
+
+export function verifyOverlayFontSnapshot(live, historicalBytes, currentReaderBytes) {
+  assert.equal(hash(historicalBytes), '3f06636fd36443605c6a5df9667ab159d2abc0a87672bd1546d5aabbfabfa759',
+    'historical overlay font snapshot changed');
+  const currentSha = hash(currentReaderBytes.toString('utf8').replaceAll('\r\n', '\n'));
+  restoreOriginalOverlayContextReader(currentReaderBytes);
   const original = JSON.parse(historicalBytes), projected = structuredClone(live);
   const file = 'tests/material-parity/original-overlay-context-survey.mjs';
   const old = original.sources.filter(s => s.file === file), now = projected.sources.filter(s => s.file === file);
