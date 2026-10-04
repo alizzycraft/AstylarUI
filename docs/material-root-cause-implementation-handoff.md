@@ -2,6 +2,19 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 startup diagnosis changed approach after the reduced-concurrency
+  attempt's esbuild memory grew past 9 GB without readiness. Verified owned
+  Angular 19108 / esbuild 5356 were deliberately stopped; session 69538 ends
+  exit 1 and is not a successful build. The new live session 70743 runs the same
+  app with `--prebundle=false`, `NG_BUILD_MAX_WORKERS=1`, `GOMAXPROCS=2` and
+  `NG_BUILD_DEBUG_PERF=1`. These are diagnostic build controls, not a fixture or
+  renderer change, and no parity acceptance is claimed. Performance output now
+  proves config reading, Angular program creation, analysis, diagnostics and TS
+  emission completed; 4,865 JS-emission callbacks are reported. Their cumulative
+  12,973-second total is not wall-clock duration. This narrows the observed
+  startup stage but does not yet prove prebundling causality. Startup remains
+  live/incomplete; poll session 70743 rather than the terminal 69538 handle.
+
 - October 5 TTS gate preparation now supports optional
   `ASTYLAR_TTS_ARTIFACTS` publication isolation, retaining its original default
   directory. The existing benchmark-config suite passes 3/3 (132 ms), including
