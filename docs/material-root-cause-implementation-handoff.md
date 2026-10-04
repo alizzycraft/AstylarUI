@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 3
 
+- October 4 tests 1476–1548 all pass (73 checks, retained harness log):
+  stacking/position/stepper evidence, paginator/tooltip/calendar action-inventory
+  replay and negative controls, supplemental provenance, tabs and alignment.
+  Stacking retains nine groups / 590 observations and rejects changed owner
+  requests; tabs retain all 140 label mappings and 70 border-to-strip
+  substitutions. Alignment keeps ambiguous/inherited requests and capture gaps
+  explicit rather than inventing computed values. These passes authenticate
+  retained evidence and validators; they do not replace the browser interaction
+  bodies blocked at tests 1450–1473 or establish current rendering equivalence.
+  No new failure occurs in this batch. The same harness remains nonterminal
+  in `text-align-audit-source-binding.spec.mjs` (worker 16012).
+
 - October 4 slider input-box integration tests 1429–1430 pass: fourteen
   classified rows / twenty occurrences preserve every scalar value, case/state
   membership and complete non-target row. Missing bindings, changed values,
