@@ -2,6 +2,21 @@
 
 ## Current resumption ledger — October 3
 
+- Tooltip normalization population answered: the existing normalization-contract
+  suite now authenticates the retained context capture and every case file,
+  binds the original September source descriptor directly from `42fd473`, and
+  compares historical/current normalization of all 351 fresh reference styles
+  in 18 cases. Exactly 18 values change, one background color per case;
+  all caret-color values remain identical. Old sRGB conversion rounded channels
+  to integer bytes; precise conversion preserves decimal channels (for example
+  39/37/44 becomes 38.800035/36.660075/44.440125). These background differences
+  must not be normalized away or called current/historical full equivalence.
+  `node --test tests/material-parity/audit-normalization-contracts.spec.mjs`
+  passes 4/4, including existing false-contract/changed-source controls.
+  Next: integrate caret-only revalidation into the tooltip collector while
+  retaining raw color values and exact historical receipts; overlay coverage
+  remains independently pending. No renderer or fixture changed.
+
 - October 4 tooltip applicability probe: the first raw runner guard fails
   e01ef9dc… versus b2477a12…. In-memory use of the existing exact overlay
   runner reconstruction passes that boundary; the next guard is the mapping
