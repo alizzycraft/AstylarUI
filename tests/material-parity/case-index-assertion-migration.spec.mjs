@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import test from 'node:test';
 import { verifyCaseIndexAssertionMigration } from './case-index-assertion-migration.mjs';
+import { verifyRootInitialSourceApplicability } from '../../scripts/diagnose-material-root-initial-receipt.mjs';
 const file = 'tests/material-parity/input-equivalence-audit.spec.mjs';
 const previous = execFileSync('git', ['show', `6833850:${file}`], { maxBuffer: 8 * 1024 * 1024 });
 const current = readFileSync(file, 'utf8');
@@ -38,6 +39,20 @@ test('entire legacy suite conserves statements outside nine receipt checks and t
   ]);
   assert.deepEqual(result.addedFocusedImports, ['./border-initial-input-evidence.mjs', './audit-normalization-contracts.mjs']);
   assert.match(result.originalSuiteAstSha256, /^[a-f0-9]{64}$/);
+});
+
+test('root initial applicability authenticates every receipt and rejects unrelated source mutations', () => {
+  const saved = JSON.parse(readFileSync('docs/material-root-initial-style-audit.json'));
+  assert.equal(verifyRootInitialSourceApplicability(saved).testProjection.allOtherStatementsConserved, true);
+  for (const descriptor of saved.sourceFingerprints) {
+    const forged = structuredClone(saved);
+    forged.sourceFingerprints.find(s => s.file === descriptor.file).sha256 = '0'.repeat(64);
+    assert.throws(() => verifyRootInitialSourceApplicability(forged), descriptor.file);
+    assert.throws(() => verifyRootInitialSourceApplicability(saved, { readSource: file => {
+      const bytes = readFileSync(file);
+      return file === descriptor.file ? Buffer.concat([bytes, Buffer.from('\nconst unrelatedSourceChange = true;\n')]) : bytes;
+    } }), descriptor.file);
+  }
 });
 test('migration proof rejects unrelated assertion changes, missing checks and wrong index identity', () => {
   for (const changed of [

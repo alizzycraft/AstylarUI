@@ -9,21 +9,20 @@ import { verifyCaseIndexAssertionMigration } from '../tests/material-parity/case
 import { verifyOverlayMappingAuditProjection } from '../tests/material-parity/historical-audit-module-source.mjs';
 import { readGapSurveySource } from '../tests/material-parity/gap-survey-source-replay.mjs';
 
-// Preserve the original fingerprint failure, but establish the complete root
-// index and the assertions after that guard before proposing a metadata refresh.
-const sourcesOnly = process.argv.length === 3 && process.argv[2] === '--sources-only';
-assert.ok(process.argv.length === 2 || sourcesOnly, 'Usage: node scripts/diagnose-material-root-initial-receipt.mjs [--sources-only]');
+// Authenticate source applicability without replacing historical receipts.
+// The CLI additionally replays the original complete root index and report tests.
 const hash = value => createHash('sha256').update(value).digest('hex');
 const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
 const indexFile = 'docs/material-root-initial-style-audit.json';
-const saved = JSON.parse(readFileSync(indexFile));
+export function verifyRootInitialSourceApplicability(saved, { sourcesOnly = false,
+  readSource = file => readFileSync(file) } = {}) {
 const baseline = execFileSync('git', ['rev-parse', '4dc770a'], { encoding: 'utf8' }).trim();
 const previous = execFileSync('git', ['show', `${baseline}:${moduleFile}`], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
 assert.equal(hash(previous.replaceAll('\r\n', '\n')), saved.sourceFingerprints.find(s => s.file === moduleFile).sha256);
 const parse = source => ts.createSourceFile(moduleFile, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
-const current = parse(readFileSync(moduleFile, 'utf8')), prior = parse(previous);
+const current = parse(readSource(moduleFile).toString()), prior = parse(previous);
 const producerProjection = verifyOverlayMappingAuditProjection(
-  saved.sourceFingerprints.find(s => s.file === moduleFile), readFileSync(moduleFile), Buffer.from(previous));
+  saved.sourceFingerprints.find(s => s.file === moduleFile), readSource(moduleFile), Buffer.from(previous));
 const selectedFunctions = ['collectFullTreeInventory', 'collectReferenceContextGaps', 'caseKey'];
 const functionText = (ast, name) => {
   const matches = ast.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
@@ -60,12 +59,12 @@ for (let i = 0; i < priorTestAst.statements.length; i++) {
 }
 assert.deepEqual(changedTestStatements, ['records source fingerprints and actual visual acceptance fields']);
 const testProjection = sourcesOnly ? { currentSuiteConservationProven: false, migrationReplayPending: true }
-  : verifyCaseIndexAssertionMigration(intermediateTest, readFileSync(auditTestFile));
+  : verifyCaseIndexAssertionMigration(intermediateTest, readSource(auditTestFile));
 
 const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
 const oldPolicy = execFileSync('git', ['show', `${baseline}:${policyFile}`], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
 assert.equal(hash(oldPolicy.replaceAll('\r\n', '\n')), saved.sourceFingerprints.find(s => s.file === policyFile).sha256);
-const policyBefore = parse(oldPolicy), policyAfter = parse(readFileSync(policyFile, 'utf8'));
+const policyBefore = parse(oldPolicy), policyAfter = parse(readSource(policyFile).toString());
 assert.equal(policyBefore.statements.length, policyAfter.statements.length);
 let oldDefinitions, newDefinitions;
 for (let i = 0; i < policyBefore.statements.length; i++) {
@@ -91,7 +90,37 @@ for (let i = 0; i < policyBefore.statements.length; i++) {
 }
 assert.deepEqual([oldDefinitions.length, newDefinitions.length], [132, 145]);
 const border = saved.sourceFingerprints.find(s => s.file === 'tests/material-parity/border-initial-input-evidence.mjs');
-assert.equal(hash(readGapSurveySource(border).replaceAll('\r\n', '\n')), border.sha256);
+assert.equal(hash(readGapSurveySource(border, { current: file => readSource(file).toString() })
+  .replaceAll('\r\n', '\n')), border.sha256);
+const proofFile = 'tests/material-parity/root-initial-style-evidence.spec.mjs';
+const proofDescriptor = saved.sourceFingerprints.find(s => s.file === proofFile);
+let proofSource = readSource(proofFile).toString().replaceAll('\r\n', '\n');
+const proofImport = "import { verifyRootInitialSourceApplicability } from '../../scripts/diagnose-material-root-initial-receipt.mjs';\n";
+const proofGuard = "  const applicability = verifyRootInitialSourceApplicability(durable);\n" +
+  "  assert.equal(applicability.testProjection.allOtherStatementsConserved, true);\n" +
+  "  assert.equal(applicability.producerProjection.normalizationTransition.historicalAndCurrentColorValuesEquivalent, false);";
+assert.equal(proofSource.split(proofImport).length, 2);
+assert.equal(proofSource.split(proofGuard).length, 2);
+proofSource = proofSource.replace(proofImport, '').replace(proofGuard,
+  "  for (const source of durable.sourceFingerprints)\n" +
+  "    assert.equal(hash(readFileSync(source.file, 'utf8').replaceAll('\\r\\n', '\\n')), source.sha256, source.file);");
+assert.equal(hash(proofSource), proofDescriptor.sha256, 'entire root-initial suite conservation');
+for (const descriptor of saved.sourceFingerprints) {
+  if ([moduleFile, auditTestFile, policyFile, border.file, proofFile].includes(descriptor.file)) continue;
+  assert.equal(hash(readSource(descriptor.file).toString().replaceAll('\r\n', '\n')),
+    descriptor.sha256, descriptor.file);
+}
+return { baseline, selectedFunctions, producerProjection, changedTestStatements, testProjection };
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
+const sourcesOnly = process.argv.length === 3 && process.argv[2] === '--sources-only';
+assert.ok(process.argv.length === 2 || sourcesOnly, 'Usage: node scripts/diagnose-material-root-initial-receipt.mjs [--sources-only]');
+const saved = JSON.parse(readFileSync(indexFile));
+const { baseline, selectedFunctions, producerProjection, changedTestStatements, testProjection } =
+  verifyRootInitialSourceApplicability(saved, { sourcesOnly });
+const auditTestFile = 'tests/material-parity/input-equivalence-audit.spec.mjs';
+const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
 
 if (sourcesOnly) {
   console.log(JSON.stringify({ kind: 'root-initial-style-source-applicability-diagnostic', baseline,
@@ -106,9 +135,11 @@ if (sourcesOnly) {
 
 const file = 'tests/material-parity/root-initial-style-evidence.spec.mjs';
 const source = readFileSync(file, 'utf8');
-const anchor = "  for (const source of durable.sourceFingerprints)\n    assert.equal(hash(readFileSync(source.file, 'utf8').replaceAll('\\r\\n', '\\n')), source.sha256, source.file);";
+const anchor = "  const applicability = verifyRootInitialSourceApplicability(durable);\n" +
+  "  assert.equal(applicability.testProjection.allOtherStatementsConserved, true);\n" +
+  "  assert.equal(applicability.producerProjection.normalizationTransition.historicalAndCurrentColorValuesEquivalent, false);";
 const normalized = source.replaceAll('\r\n', '\n');
-assert.equal(normalized.split(anchor).length, 2, 'exact original source-fingerprint guard');
+assert.equal(normalized.split(anchor).length, 2, 'exact authenticated source-applicability guard');
 const insertion = `
   for (const p of proofs) {
     assert.equal(p.candidatePath[1].comparison[p.property], undefined);
@@ -119,9 +150,9 @@ const insertion = `
     const current = hash(readFileSync(s.file, 'utf8').replaceAll('\\r\\n', '\\n'));
     return current === s.sha256 ? [] : [{ file: s.file, previous: s.sha256, current }];
   });
-  assert.deepEqual(diagnosticChanges.map(s => s.file), ${JSON.stringify([moduleFile, auditTestFile, 'tests/material-parity/border-initial-input-evidence.mjs', policyFile])});
+  assert.deepEqual(diagnosticChanges.map(s => s.file), ${JSON.stringify([moduleFile, auditTestFile, file, 'tests/material-parity/border-initial-input-evidence.mjs', policyFile])});
   const { sourceFingerprints: diagnosticReceipts, ...diagnosticPayload } = durable;
-  console.log(JSON.stringify({ kind: 'root-initial-style-stale-receipt-diagnostic',
+  console.log(JSON.stringify({ kind: 'root-initial-style-source-applicability-replay',
     source: ${JSON.stringify(file)}, sourceSha256: ${JSON.stringify(hash(normalized))}, baseline: ${JSON.stringify(baseline)},
     unchangedFunctions: ${JSON.stringify(selectedFunctions)},
     changedTestStatements: ${JSON.stringify(changedTestStatements)},
@@ -156,3 +187,4 @@ for (let i = 0; i < parsed.statements.length; i++) {
   assert.equal(omitPath(parsed.statements[i], parsed), omitPath(moved.statements[i], moved));
 }
 await import(`data:text/javascript;base64,${Buffer.from(relocated).toString('base64')}`);
+}

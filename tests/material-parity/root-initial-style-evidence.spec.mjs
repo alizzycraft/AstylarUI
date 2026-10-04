@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { verifyRootInitialSourceApplicability } from '../../scripts/diagnose-material-root-initial-receipt.mjs';
 import { collectFullTreeInventory, buildMaterialInputAudit, validateMaterialInputAudit } from './input-equivalence-audit.mjs';
 import { collectRootInitialStyleInputs, classifyRootInitialStyleInput, rootInitialStyleValues,
   rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
@@ -133,8 +134,9 @@ test('root initial-style collector covers the full captured root survey without 
     return source.cases.map(c => `${c}/${g.property}`);
   }).sort();
   assert.deepEqual(indexed, actual, 'The durable index must cover every independently collected observation exactly once');
-  for (const source of durable.sourceFingerprints)
-    assert.equal(hash(readFileSync(source.file, 'utf8').replaceAll('\r\n', '\n')), source.sha256, source.file);
+  const applicability = verifyRootInitialSourceApplicability(durable);
+  assert.equal(applicability.testProjection.allOtherStatementsConserved, true);
+  assert.equal(applicability.producerProjection.normalizationTransition.historicalAndCurrentColorValuesEquivalent, false);
   for (const p of proofs) assert.equal(p.candidatePath[1].comparison[p.property], undefined);
 });
 

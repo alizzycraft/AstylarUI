@@ -15933,6 +15933,25 @@ the inventory-migration applicability question, not the remaining root-initial
 receipt integration or final canonical/rendering acceptance. No evidence files,
 renderer, fixtures or historical receipts were rewritten.
 
+Root-initial receipt reconciliation is now integrated using the existing
+diagnostic's exported `verifyRootInitialSourceApplicability`, not repinned
+historical hashes. It authenticates the producer, complete legacy suite, policy
+and border transitions; every other recorded dependency still requires exact
+bytes. The modified root-initial test reconstructs to its entire original
+`b1fc7ec4…` digest after reversing only the new import and source guard.
+Nine forged receipts and nine unrelated dependency edits are rejected, including
+the test itself and the injected border-reader boundary. The original population,
+complete membership, scalar omission, classification and negative assertions
+remain intact. Color-value equivalence explicitly remains false.
+
+`node --test tests/material-parity/case-index-assertion-migration.spec.mjs
+tests/material-parity/root-initial-style-evidence.spec.mjs` passes 8/8 with no
+skips (52,588 ms), including all five original root-initial tests. This closes
+the retained root-initial applicability failure, not equal rendering or final
+canonical acceptance. No capture, durable report, fixture or renderer changed.
+The updated consumed proof fingerprints belong in the planned coherent export
+batch; do not rebuild the canonical package solely for this ledger edit.
+
 October 3 later current-classification join passes 1/1 in 134,974 ms:
 `node --test --test-concurrency=1 --test-name-pattern="canonical later source-batch"
 tests/material-parity/reviewed-input-canonical-integration.spec.mjs`.
