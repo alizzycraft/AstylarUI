@@ -2,6 +2,22 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 current general gate is not passing: unfiltered `npm run parity:check`
+  exits 1 before fixture capture because its owned Angular server does not become
+  reachable within the existing 120-second startup limit. No current report was
+  published. Direct startup also remains in Building beyond that limit. Read-only
+  diagnostics find about 319 MiB free physical RAM, 9.5 GiB page-file usage and
+  5.7 GB private esbuild memory; near-stationary CPU counters suggest a stalled
+  build but do not prove its cause. Only the verified owned diagnostic processes
+  (Angular 19060 / child esbuild 24068) were deliberately stopped; that attempt
+  is not a successful build. One new diagnostic startup uses
+  `NG_BUILD_MAX_WORKERS=1` and `GOMAXPROCS=2`, without source or rendering-input
+  changes. Its live process is Angular 19108 (exec session 69538); at the latest
+  observation free memory is about 3 GiB and child esbuild private memory about
+  409 MB, but it has not reported ready or failed. Poll this same handle before
+  any retry. Memory-pressure causality and full browser acceptance remain open;
+  do not increase thresholds, shorten coverage or reuse a stale served build.
+
 - October 5 current-gate preparation: the general parity runner previously had
   a fixed `artifacts/parity` publication path. Its new optional
   `ASTYLAR_PARITY_ARTIFACTS` destination permits fresh-run isolation without
