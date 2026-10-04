@@ -2,6 +2,23 @@
 
 ## Current resumption ledger — October 3
 
+- October 4 slider input-box integration tests 1429–1430 pass: fourteen
+  classified rows / twenty occurrences preserve every scalar value, case/state
+  membership and complete non-target row. Missing bindings, changed values,
+  duplicated rows and unsupported equivalence claims are rejected. Durations
+  were 236,183 and 529,554 ms; do not rerun unchanged. Tests 1431–1449 also
+  pass retained slider owner/binding/pointer/position and snackbar/sort evidence
+  checks. These remain evidence replays, not new browser interaction acceptance.
+  Tests 1450–1473 fail before browser launch at the shared
+  `sort-focus-structure.spec.mjs:2238` frozen-showcase directory fingerprint
+  assertion. The current built browser-file inventory differs from
+  `caret-visible-checkpoint-154/checkpoint/manifest.json`; their keyboard,
+  dragging, overlay and scrolling bodies therefore have not run. Reconcile
+  this shared build applicability boundary without replacing historical
+  receipts or describing the twenty-four failures as fresh interaction defects.
+  Prepared-inventory controls 1474–1475 pass. The harness continues in stacking
+  review (worker 24196), so its final outcome remains pending.
+
 - October 4 slider-border canonical integration completes: tests 1412–1416
   pass, preserving raw scalar values and the sixteen reviewed border-property
   attributions. Historical conservation and later gap/grid/shadow evidence
