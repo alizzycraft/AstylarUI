@@ -2,6 +2,24 @@
 
 ## Current resumption ledger — October 3
 
+- Post-harness skipped receipt checks were explicitly executed with
+  `ASTYLAR_AUDIT_RECEIPT_COMPARE=1`: initial 3/5 pass, two historical/current
+  fingerprint failures. These are September 30 transition checks, not current
+  snapshot acceptance. They now read the published package and module directly
+  from `e93b23b` and authenticate both compressed/decoded historical packages.
+  The full section comparison passes (191,272 ms): the original four section
+  counts and exactly 99 receipt leaves are preserved. The source-report check
+  initially exposed a second boundary: its retained JSON (hash f8f90799…)
+  predates publication-time receipt refresh. Actual source files at `e93b23b`
+  reconstruct bcc50d1d…; changing only the normalization receipt reconstructs
+  predecessor 3c1f5992… . No expected transition hash was repinned.
+  The focused source-transition rerun passes 1/1 (21,593 ms). It also freshly
+  replays all 121 motion groups / 7,254 observations, authenticates all four
+  live source hashes and proves every non-receipt field matches the historical
+  report. Current source receipts remain distinct; neither original artifacts
+  nor canonical findings changed. Original harness skips are thus covered by
+  explicit subsequent executions, not silently called passing in that run.
+
 - Post-harness alignment historical replay repair: the frozen join now reads
   its reservation directly from recorded Git revision `11bd538`, consistently
   with canonical rows / normalization from `957774a`, rather than requiring a

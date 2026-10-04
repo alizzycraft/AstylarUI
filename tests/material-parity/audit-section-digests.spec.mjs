@@ -66,11 +66,11 @@ test('published current-ancestry receipt leaves reconcile with the authenticated
   { skip: process.env.ASTYLAR_AUDIT_RECEIPT_COMPARE !== '1' }, async t => {
     const hash = bytes => createHash('sha256').update(bytes).digest('hex');
     const beforeManifest = JSON.parse(execFileSync('git', ['show', 'e93b23b^:docs/material-input-equivalence-audit.json']));
-    const afterManifest = JSON.parse(readFileSync('docs/material-input-equivalence-audit.json'));
+    const afterManifest = JSON.parse(execFileSync('git', ['show', 'e93b23b:docs/material-input-equivalence-audit.json']));
     assert.equal(beforeManifest.compressedSha256, 'db1b33c93c9169169fda86f5e6b36bf38fb1981d3c0aef0ef82cc44ef7b05b1c');
     assert.equal(afterManifest.compressedSha256, '3ec576a364a9a9f2c906d7aad0b58047ab2b10ecc9d5b5d88a5967932fe4f048');
     const before = execFileSync('git', ['show', `e93b23b^:docs/${beforeManifest.payload}`], { maxBuffer: 100e6 });
-    const after = readFileSync(`docs/${afterManifest.payload}`);
+    const after = execFileSync('git', ['show', `e93b23b:docs/${afterManifest.payload}`], { maxBuffer: 100e6 });
     async function* authenticated(bytes, manifest) {
       assert.equal(bytes.length, manifest.compressedBytes);
       assert.equal(hash(bytes), manifest.compressedSha256);
@@ -92,7 +92,7 @@ test('published current-ancestry receipt leaves reconcile with the authenticated
     const oldModule = '2328c46161964f252c3cc75f80e632016c4e5570998f5d2add5d6323a4d69cb4';
     const newModule = 'a787e493d0e36d37fe5517bba8a6c3ba7a876f5bdb5ff7991e4d5bdcd0a0ebd0';
     assert.equal(hash(execFileSync('git', ['show', '2b6cddc:tests/material-parity/input-equivalence-audit.mjs'], { maxBuffer: 4e6 })), oldModule);
-    assert.equal(hash(readFileSync('tests/material-parity/input-equivalence-audit.mjs')), newModule);
+    assert.equal(hash(execFileSync('git', ['show', 'e93b23b:tests/material-parity/input-equivalence-audit.mjs'], { maxBuffer: 4e6 })), newModule);
     const expected = [
       [['controlLineBoxes', 'observations', '#', 'normalizationReconciliation', 'currentModuleSha256'], oldModule, newModule, 48],
       [['ownerCaretInputs', 'binding', 'completeSource', 'sources', '#', 'current'], oldModule, newModule, 1],
@@ -114,8 +114,27 @@ test('source-conservation report hash transition is explained by one normalizati
     const { collectOwnerInitialMotion } = await import('../../scripts/audit-material-owner-initial-motion.mjs');
     const hash = value => createHash('sha256').update(JSON.stringify(value, null, 2) + '\n').digest('hex');
     const fresh = collectOwnerInitialMotion();
-    assert.equal(hash(fresh), 'bcc50d1d844e6f49070455d0076ef716e5708b87fa362c0f7badcbc3524977f3');
-    const before = structuredClone(fresh);
+    const historical = JSON.parse(execFileSync('git', ['show', 'e93b23b:docs/material-owner-initial-motion-review.json'], { maxBuffer: 32e6 }));
+    assert.equal(hash(historical), 'f8f90799191604823875d849fb6ae56de46dd96c37e3f91c8d540bdd48916294');
+    // The retained source report predates the published package's receipt
+    // refresh. Reconstruct that refresh from actual files at its Git revision.
+    for (const receipt of historical.sourceFingerprints) {
+      const bytes = execFileSync('git', ['show', `e93b23b:${receipt.file}`],
+        { encoding: 'utf8', maxBuffer: 4e6 }).replaceAll('\r\n', '\n');
+      receipt.sha256 = createHash('sha256').update(bytes).digest('hex');
+    }
+    assert.equal(hash(historical), 'bcc50d1d844e6f49070455d0076ef716e5708b87fa362c0f7badcbc3524977f3');
+    // Authenticate live receipts separately, then conserve every other field.
+    // Historical evidence is never overwritten or mislabeled as a live report.
+    assert.deepEqual(fresh.sourceFingerprints.map(s => s.file), historical.sourceFingerprints.map(s => s.file));
+    for (const receipt of fresh.sourceFingerprints) {
+      const bytes = readFileSync(receipt.file, 'utf8').replaceAll('\r\n', '\n');
+      assert.equal(createHash('sha256').update(bytes).digest('hex'), receipt.sha256);
+    }
+    const { sourceFingerprints: liveReceipts, ...liveEvidence } = fresh;
+    const { sourceFingerprints: historicalReceipts, ...historicalEvidence } = historical;
+    assert.deepEqual(liveEvidence, historicalEvidence);
+    const before = structuredClone(historical);
     const receipts = before.sourceFingerprints.filter(source => source.file === 'tests/material-parity/input-equivalence-audit.mjs');
     assert.equal(receipts.length, 1);
     assert.equal(receipts[0].sha256, 'a787e493d0e36d37fe5517bba8a6c3ba7a876f5bdb5ff7991e4d5bdcd0a0ebd0');
