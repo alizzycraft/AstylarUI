@@ -27,7 +27,10 @@ const result = { schemaVersion: 1, kind: 'owner-initial-style-canonical-case-mem
     'No canonical row, original scalar, renderer, fixture or reference is rewritten.',
     'This binding accepts only the reviewed static-stage sibling classification; any new competing classification requires fresh review.'] };
 const output = JSON.stringify(result, null, 2) + '\n';
-if (process.argv.includes('--check')) assert.equal(readFileSync(target, 'utf8').replaceAll('\r\n', '\n'), output, 'owner membership report is stale');
+if (process.argv.includes('--check')) {
+  const { verifyOwnerInitialMembershipReplay } = await import('../tests/material-parity/motion-source-conservation.mjs');
+  await verifyOwnerInitialMembershipReplay(JSON.parse(readFileSync(target)), result);
+}
 else writeFileSync(target, output);
 console.log(JSON.stringify({ groups: result.groupCount, unresolvedOccurrences: result.unresolvedOccurrences,
   preservedStaticOccurrences: result.preservedStaticOccurrences, splitGroups: result.splitGroups, canonicalAttributionChanged: false }));

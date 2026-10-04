@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { bindOwnerInitialMembership } from './owner-initial-style-membership.mjs';
+import { verifyOwnerInitialMembershipReplay } from './motion-source-conservation.mjs';
 
 const file = 'docs/material-owner-initial-style-membership.json';
 const report = JSON.parse(readFileSync(file));
@@ -57,7 +58,7 @@ test('membership binding rejects altered membership, duplicate observations and 
   }
 });
 
-test('membership report covers all 600 groups while retaining 636 already-reviewed observations', () => {
+test('membership report covers all 600 groups while retaining 636 already-reviewed observations', async () => {
   assert.equal(report.groupCount, 600); assert.equal(report.groups.length, 600);
   assert.equal(report.unresolvedOccurrences, 31508); assert.equal(report.preservedStaticOccurrences, 636);
   assert.equal(report.splitGroups, 51); assert.equal(report.canonicalAttributionChanged, false);
@@ -71,8 +72,23 @@ test('membership report covers all 600 groups while retaining 636 already-review
     assert.equal(g.cases.length, source.canonicalOccurrences);
     assert.equal(g.membershipVerified, true); assert.equal(g.inputEquivalent, false); assert.equal(g.renderingEquivalent, false);
   }
-  for (const source of report.sourceFingerprints)
-    assert.equal(hash(readFileSync(source.file, 'utf8').replaceAll('\r\n', '\n')), source.sha256, source.file);
+  const current = { ...report, sourceFingerprints: report.sourceFingerprints.map(s => ({ ...s,
+    sha256: hash(readFileSync(s.file, 'utf8').replaceAll('\r\n', '\n')) })) };
+  await verifyOwnerInitialMembershipReplay(report, current);
+});
+
+test('membership applicability rejects changed findings, forged receipts and unrelated sources', async () => {
+  const current = { ...report, sourceFingerprints: report.sourceFingerprints.map(s => ({ ...s,
+    sha256: hash(readFileSync(s.file, 'utf8').replaceAll('\r\n', '\n')) })) };
+  await assert.rejects(verifyOwnerInitialMembershipReplay(report, { ...current, unresolvedOccurrences: 31507 }));
+  await assert.rejects(verifyOwnerInitialMembershipReplay(report, { ...current, sourceFingerprints: report.sourceFingerprints }));
+  await assert.rejects(verifyOwnerInitialMembershipReplay({ ...report, groups: [] }, current));
+  for (const descriptor of report.sourceFingerprints) {
+    const reader = file => readFileSync(file, 'utf8') + (file === descriptor.file ? '\nconst unreviewedMembershipChange = true;\n' : '');
+    const changed = { ...current, sourceFingerprints: current.sourceFingerprints.map(s => s.file === descriptor.file
+      ? { ...s, sha256: hash(reader(s.file).replaceAll('\r\n', '\n')) } : s) };
+    await assert.rejects(verifyOwnerInitialMembershipReplay(report, changed, reader));
+  }
 });
 
 test('membership replay reopens original trees and matches the complete report without rewriting it', () => {

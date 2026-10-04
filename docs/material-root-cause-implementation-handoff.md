@@ -45,6 +45,24 @@
   and current unfiltered browser gates remain required. Historical test or output
   passes do not establish current equal-input rendering acceptance.
 
+- October 5 membership gates 1155/1156 are closed: the complete existing suite
+  passes 5/5 (19,315 ms), retaining all 600 groups, 31,508 unresolved occurrences,
+  636 independently preserved static observations and 51 split groups. The
+  original read-only CLI reproduces every nonreceipt field and checks unchanged
+  report bytes. Its source guard reuses the root-initial producer/policy proof
+  against identical historical descriptors, authenticates actual current
+  receipts, and restores only the exact new CLI-check instrumentation before
+  checking the whole original producer digest. The saved report is fully pinned.
+  Controls reject changed findings, changed retained evidence, stale receipts
+  and unrelated executable edits in each of six dependencies. The first new
+  control used only a comment; the producer's established AST comparison ignores
+  comments, so that control was corrected to a new executable statement rather
+  than weakening the verifier. Full motion/source-conservation suite passes 4/4
+  (34,178 ms). Rendering and input equivalence remain false. No report, fixture,
+  renderer or canonical classification was rewritten. Next original mapping
+  gate 1152 can now reach its own replay; it previously stopped at this prerequisite.
+  These proof-source changes belong to the next coherent canonical batch.
+
 - Owner-initial integration failure 1147 is closed: the unchanged original test
   first reproduced its stale unresolved-visibility assertion (1/1 failed,
   279,063 ms overall). Its strengthened assertion now passes the full existing

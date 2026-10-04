@@ -67,6 +67,30 @@ export function restoreOwnerInitialSurveyOptIns(source) {
   return restored;
 }
 
+export async function verifyOwnerInitialMembershipReplay(saved, fresh, readCurrent = file => readFileSync(file, 'utf8')) {
+  assert.equal(hash(JSON.stringify(saved)), 'c4eff56d33ad83761928bdb7637432cf566729097f239ac45b33ab63f06c2e93',
+    'retained owner membership evidence changed');
+  const { verifyRootInitialSourceApplicability } = await import('../../scripts/diagnose-material-root-initial-receipt.mjs');
+  const root = JSON.parse(readCurrent('docs/material-root-initial-style-audit.json'));
+  const shared = ['tests/material-parity/input-equivalence-audit.mjs', 'tests/material-parity/input-equivalence-policy.mjs'];
+  for (const file of shared) assert.deepEqual(saved.sourceFingerprints.find(s => s.file === file), root.sourceFingerprints.find(s => s.file === file));
+  verifyRootInitialSourceApplicability(root, { sourcesOnly: true, readSource: readCurrent });
+  assert.deepEqual(fresh.sourceFingerprints.map(s => s.file), saved.sourceFingerprints.map(s => s.file));
+  for (const [index, descriptor] of saved.sourceFingerprints.entries()) {
+    const current = lf(readCurrent(descriptor.file));
+    assert.equal(fresh.sourceFingerprints[index].sha256, hash(current), 'owner membership receipt is not current');
+    if (shared.includes(descriptor.file)) continue;
+    let restored = current;
+    if (descriptor.file === 'scripts/audit-material-owner-initial-membership.mjs') {
+      const instrumentation = "if (process.argv.includes('--check')) {\n  const { verifyOwnerInitialMembershipReplay } = await import('../tests/material-parity/motion-source-conservation.mjs');\n  await verifyOwnerInitialMembershipReplay(JSON.parse(readFileSync(target)), result);\n}";
+      assert.equal(current.split(instrumentation).length, 2, 'owner membership instrumentation must match exactly once');
+      restored = current.replace(instrumentation, "if (process.argv.includes('--check')) assert.equal(readFileSync(target, 'utf8').replaceAll('\\r\\n', '\\n'), output, 'owner membership report is stale');");
+    }
+    assert.equal(hash(restored), descriptor.sha256, `unreviewed membership source: ${descriptor.file}`);
+  }
+  assert.deepEqual({ ...fresh, sourceFingerprints: saved.sourceFingerprints }, saved, 'owner membership evidence changed');
+}
+
 export async function verifyOwnerInitialSurveyReplay(saved, fresh, readCurrent = file => readFileSync(file, 'utf8')) {
   assert.equal(hash(JSON.stringify(saved)), '08c9590fd82a77ff377d58ca571a2cdfad90711749af47c854354fd987f9aec3',
     'retained owner survey evidence changed');
