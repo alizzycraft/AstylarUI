@@ -2,6 +2,16 @@
 
 ## Current resumption ledger — October 3
 
+- Remaining-overlay failure 1297 reaches its 48-group / 1,424-observation,
+  case/owner identity and trace-digest assertions, then rejects the normalized
+  source receipt at `remaining-overlay-ancestry-review.spec.mjs:25`. A bounded
+  read-only check finds five changed receipts: original overlay context survey,
+  border initial evidence, input audit producer, generated-node mapping evidence,
+  and capture runner. The first is `58e7b62b…` versus retained `71422c36…`.
+  Do not label this a failed declaration replay: that is a separate subsequent
+  test. Preserve the historical index and establish semantic applicability using
+  existing source replay; raw versus LF-normalized receipts must remain distinct.
+
 - Prepared composition failure 1262 is a historical/current endpoint comparison,
   not a demonstrated row-conservation failure: the retained dry-run report passes
   its 125-group / 6,871-observation and 8,339-row assertions, then line 60 of
