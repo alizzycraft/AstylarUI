@@ -6,8 +6,9 @@ import { pathToFileURL } from 'node:url';
 import ts from 'typescript';
 import { inspectOwnerCaretInput } from '../tests/material-parity/owner-caret-input-evidence.mjs';
 import { applyModalBoxReview } from '../tests/material-parity/modal-position-inspection.mjs';
+import { motionCaretAttribution } from '../tests/material-parity/component-caret-attributions.mjs';
+export { motionCaretAttribution } from '../tests/material-parity/component-caret-attributions.mjs';
 
-export const motionCaretAttribution = 'reviewed-motion-caret-request-omission';
 const motionCaretOwners = { chips: ['chip-0', 'chip-1'], tabs: ['tab-overview', 'tab-activity', 'tab-panel'] };
 export function proveMotionCaretRequests(entry, reference, candidate, element) {
   assert.ok(motionCaretOwners[entry.family]?.includes(element));

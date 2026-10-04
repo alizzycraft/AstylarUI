@@ -9,6 +9,8 @@ import { inspectOwnerCaretInput } from '../tests/material-parity/owner-caret-inp
 import { restoreMappingReadAdapterSource } from '../tests/material-parity/audit-evidence-session.mjs';
 import { borderEvidenceBaseline, verifyBorderEvidenceSourceTransition } from '../tests/material-parity/position-composition-producer-transition.mjs';
 import { applyModalBoxReview } from '../tests/material-parity/modal-position-inspection.mjs';
+import { rangeCaretAttribution } from '../tests/material-parity/component-caret-attributions.mjs';
+export { rangeCaretAttribution } from '../tests/material-parity/component-caret-attributions.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const digest = value => hash(JSON.stringify(value));
@@ -16,7 +18,6 @@ const flags = { inputEquivalent: false, computedCandidateVerified: false, descen
   renderingEquivalent: false, rendererCauseProven: false };
 export const rangeCaretSurveyFile = 'docs/material-range-caret-input-survey.json';
 
-export const rangeCaretAttribution = 'reviewed-range-caret-observation-stage';
 export function applyRangeCaretReviews(rows, cases, inventory, normalize) {
   return ['slider-primary', 'slider-start'].reduce((values, element) =>
     applyModalBoxReview(values, cases, inventory, normalize, {

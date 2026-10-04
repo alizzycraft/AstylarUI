@@ -11,8 +11,9 @@ import { collectTooltipCaretContext } from './audit-material-tooltip-caret-conte
 import { collectOriginalOverlayContextSurvey } from '../tests/material-parity/original-overlay-context-survey.mjs';
 import { bindOwnerCaretNormalization } from '../tests/material-parity/owner-caret-source-binding.mjs';
 import { applyModalBoxReview } from '../tests/material-parity/modal-position-inspection.mjs';
-import { applyRangeCaretReviews, rangeCaretAttribution } from './audit-material-range-caret-inputs.mjs';
-import { applyMotionCaretReviews, motionCaretAttribution } from './audit-material-caret-motion-context.mjs';
+import { applyRangeCaretReviews } from './audit-material-range-caret-inputs.mjs';
+import { applyMotionCaretReviews } from './audit-material-caret-motion-context.mjs';
+import { rangeCaretAttribution, motionCaretAttribution } from '../tests/material-parity/component-caret-attributions.mjs';
 
 const componentCaretAttributions = new Set([rangeCaretAttribution, motionCaretAttribution,
   'reviewed-overlay-motion-caret-request-omission', 'reviewed-overlay-caret-local-observation-boundary']);

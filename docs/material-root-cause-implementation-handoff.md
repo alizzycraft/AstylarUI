@@ -2,6 +2,23 @@
 
 ## Current resumption ledger — October 3
 
+- Post-harness caret initialization repair: the standalone range command
+  reproducibly failed before collection with a temporal-dead-zone read at
+  `audit-material-overlay-caret-context.mjs:17`. The dependency path runs from
+  range collector through owner evidence / origin aliases / aggregation back
+  to component caret collectors. Shared range/motion attribution constants now
+  belong to dependency-free `component-caret-attributions.mjs`; existing script
+  exports re-export those unchanged values. No delayed reads, duplicated values,
+  classification changes, assertion waivers or renderer edits were introduced.
+  `node --test tests/material-parity/component-caret-attributions.spec.mjs`
+  passes 4/4, testing fresh processes entered through all three collectors.
+  The real pending-caret command suite still fails 0/3, now at intact provenance
+  checks rather than initialization: tooltip runner e01ef9dc… versus b2477a12…,
+  owner normalization 27fcf8d7… versus 8929720c…, and range runner 33c5a4b3…
+  versus c3cabcf… . Their complete collectors have therefore not passed.
+  Changed collector source/module graphs require explicit applicability and
+  canonical source-receipt reconciliation; do not export merely to repin them.
+
 - October 4 the unfiltered 302-file harness is terminal: 1,653 tests,
   1,532 pass, 119 fail, two skip, zero cancelled/todo; exit 1 and duration
   84,578,940 ms. Original log: `audit-harness-5028979e.log`. Do not restart
