@@ -2,6 +2,23 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 startup observation advanced: the same session 70743 completed
+  application bundle generation in 1,058.668 seconds and announced
+  `http://127.0.0.1:4300/`. This disproves a permanently stuck build for this
+  attempt, not a parity failure or memory-pressure cause. The first HTTP probe
+  timed out after 10 seconds while readiness was being announced; a second
+  20-second probe is pending (session 15287). Do not infer HTTP readiness from
+  the announcement alone. Broad Tailwind discovery now has terminal evidence:
+  session 71170 inventories 39,314 files in 45,009.76 ms, including historical
+  build source maps and retained audit JSON; its subsequent zero-candidate
+  delta is not a total candidate count. Fresh direct-scan session 29753 exits 0:
+  118,294.22 ms, 39,314 files, 176,217 candidates, 132 `tw:`-prefixed candidates.
+  This establishes broad discovery overhead but does not attribute the full
+  1,059-second build to Tailwind. Canonical stylesheet and fixture inputs remain
+  unchanged. If HTTP becomes ready, the existing `ASTYLAR_PARITY_BASE_URL`
+  runner option can use this server for the complete unfiltered gate without
+  spawning another build; startup evidence remains separately reported.
+
 - October 5 resumed startup investigation: session 70743 is confirmed live
   (Angular 25040, owned esbuild child 16952), with no port-4300 listener.
   Esbuild now consumes 10,301,435,904 private bytes and has accumulated 69.73 CPU
