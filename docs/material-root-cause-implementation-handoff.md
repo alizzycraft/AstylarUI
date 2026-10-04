@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 mapping diagnostic answers the next applicability question:
+  read-only execution of the unchanged mapping collector, retaining its original
+  membership CLI prerequisite and replacing only publication with complete
+  nonreceipt equality, exits 0. All 600 groups / 31,508 observations and 326
+  captured-observation-stage groups match the immutable saved report; canonical
+  attribution remains unchanged and no evidence files were written. The earlier
+  process handle was missing on resumption, so its unknown terminal result was
+  not counted; the new observed run supplies this result. This establishes that
+  findings did not change, not that current source applicability is closed.
+  Next reuse the existing source-conservation helpers to authenticate all seven
+  mapping dependencies and actual current receipts, preserve complete report
+  equality, and reject unrelated source edits before closing gate 1152.
+  Historical replay still does not establish current rendering equivalence.
+
 - Root-initial applicability is closed by pushed `c3e0be17`: all eight focused
   tests pass, including the original five root-initial assertions and eighteen
   receipt/source mutation controls. The earlier pending notes below are history,
