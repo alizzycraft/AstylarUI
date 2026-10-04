@@ -2,6 +2,17 @@
 
 ## Current resumption ledger — October 3
 
+- Reviewed-authoring integration 1318 fails whole-scalar conservation at
+  `reviewed-authoring-canonical-integration.spec.mjs:84` after 404,735 ms,
+  comparing frozen producer `c391a6fb` with the current producer. The first
+  visible additions are fractional root-background reference colors versus
+  rounded candidate colors, matching the precision-endpoint reconciliation
+  already required by grid/owner-gap integration; remaining deltas still need
+  conservation analysis. Later precedence assertions were not reached. Its
+  separate detached-evidence/inflated-claim validation test 1319 passes after
+  5,147,193 ms. This is not rendering equivalence or a terminal harness result.
+  The harness has advanced to reviewed-input source-binding; preserve the run.
+
 - Remaining-overlay failure 1297 reaches its 48-group / 1,424-observation,
   case/owner identity and trace-digest assertions, then rejects the normalized
   source receipt at `remaining-overlay-ancestry-review.spec.mjs:25`. A bounded
