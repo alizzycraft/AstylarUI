@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 3
 
+- October 4 tooltip applicability probe: the first raw runner guard fails
+  e01ef9dc… versus b2477a12…. In-memory use of the existing exact overlay
+  runner reconstruction passes that boundary; the next guard is the mapping
+  adapter (51f017cc… versus c21d439f…), also covered by the existing exact
+  restoration. The next decisive blocker is NOT a receipt-only delta:
+  `bindOwnerCaretNormalization` rejects canonical-style function 27fcf8d…
+  versus historical 8929720c…. Historical and current normalization must be
+  replayed against this population before any applicability claim. Temporary
+  collector changes were removed; no assertions or saved findings were changed.
+  Next: use the existing historical/precise normalization contracts to compare
+  all tooltip observations and retain meaningful differences, then reconcile
+  receipts only if the complete population supports it. Do not repeatedly
+  execute the unchanged raw guard or regenerate the canonical report yet.
+
 - October 4 range-caret applicability: fresh replay failed at the runner's
   complete source guard (c3cabcf… versus 33c5a4…), before reading case evidence.
   The range collector now reuses the existing exact historical runner
