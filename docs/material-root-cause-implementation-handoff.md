@@ -84,6 +84,17 @@ complete policy or close original CLI gates 1155/1156. Next reuse the root-initi
 whole-policy transition proof and guard complete current receipts/report equality;
 do not regenerate the historical membership report.
 
+That whole-policy applicability step now passes (2,793 ms): the membership and
+root-initial reports carry exactly the same producer and policy descriptors,
+and `verifyRootInitialSourceApplicability(root, { sourcesOnly: true })`
+authenticates the current full sources against those retained receipts. Its
+whole-policy comparison preserves all 132 original definitions within 145
+current definitions and every other original statement, admitting only the
+already bounded additions. No historical report or receipt is rewritten.
+The remaining membership task is to wire this existing proof into the original
+CLI and receipt assertions with mutation controls and complete report equality;
+1155/1156 are not yet closed.
+
 Failure 1147 separately asserts that stepper-content visibility must remain
 unresolved, but the production chain now applies the independently tested
 panel-state ownership review. Its original test is being replayed unchanged
