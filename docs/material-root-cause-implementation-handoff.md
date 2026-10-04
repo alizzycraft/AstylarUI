@@ -2,6 +2,21 @@
 
 ## Current resumption ledger — October 3
 
+- Isolated historical rebuild attempted in
+  `examples/material-showcase/.audit-historical-build-1275fa1d`; live source
+  stays b493a355… and the copied pre-diagnostics component authenticates as
+  b7957cd9… . Development build succeeds but matches only 61/1,887 checkpoint
+  files: dependency map paths become `../node_modules` rather than
+  `node_modules`. A bounded logical-path alternative using a dependency junction
+  and `--preserve-symlinks` succeeds and improves matching to 1,879/1,887,
+  still NOT an authenticated checkpoint. Remaining differences concern three
+  chunk/map pairs (comparison component, showcase component and shared Material
+  modules), `compare/index.html` and `main.js`. Do not use either build for the
+  frozen tests or repeat unchanged builds. Both failed reconstructions remain
+  in the owned temporary directory for diagnosis; its node_modules junction
+  targets the original app dependencies and must be unlinked, never followed,
+  during scoped cleanup. No live build or historical evidence was overwritten.
+
 - Shared build chunk source attribution: the replacement is
   `chunk-JPEJK334.js` (e9b44703…) / map (47654b64…). Its four embedded sources
   are assets, ripple controller, input-evidence collector and showcase component.
