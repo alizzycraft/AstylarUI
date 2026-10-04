@@ -2,6 +2,27 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 current general browser gate reaches capture but fails, rather than
+  failing startup: HTTP probe 15287 returns 200 (58,030 bytes); unfiltered
+  `npm run parity:check` uses the existing ready server through
+  `ASTYLAR_PARITY_BASE_URL=http://127.0.0.1:4300` and fresh destination
+  `artifacts/parity-current-ready-20261005`. Session 51981 exits 1 at the
+  Astylar readiness wait for `three-value-box-shorthand` (30 seconds). Ninety-eight
+  fixture directories are retained; no aggregate report was published and no
+  partial run is accepted. A fresh browser reaches the same unchanged fixture's
+  ready report in 1,826 ms with no errors. The original focused runner with
+  `--fixture=three-value-box-shorthand --enforce-focused` exits 0: one render,
+  SSIM 1.0000, 100% edges within tolerance, maximum edge error zero, text/runtime/
+  sharpness clean. Its separate report is
+  `artifacts/parity-three-value-diagnostic-20261005/latest-report.json`, SHA-256
+  `e4ed81d21b2ab283569cb6f8a4b31d8167735fc983a602018fe9946e2142e082`.
+  This does not reproduce a fixture-local defect; long-run resource pressure
+  and transient settlement remain competing explanations, not confirmed causes.
+  Full acceptance remains failing/incomplete. After both runs terminated, owned
+  diagnostic Angular 25040 and child esbuild 16952 were identity-checked and
+  deliberately stopped to free resources before independent TTS verification.
+  No renderer, reference, fixture, threshold or readiness timeout changed.
+
 - October 5 startup observation advanced: the same session 70743 completed
   application bundle generation in 1,058.668 seconds and announced
   `http://127.0.0.1:4300/`. This disproves a permanently stuck build for this
