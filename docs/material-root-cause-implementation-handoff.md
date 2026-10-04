@@ -2,6 +2,22 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 the existing range-proof suite now authenticates both retained fresh
+  browser logs and the unchanged public probe, compares all six complete repeated
+  observations, asserts Chrome 154 explicitly and conserves every historical
+  observation field except that browser-version field. It reuses the original
+  six-case authored-input/style-stage/geometry validator rather than creating
+  another report or framework. The new focused assertion passes 1/1 (141 ms).
+  The complete original suite remains honestly failing 3/4 (175 ms): the unchanged
+  historical eighteen-source receipt assertion rejects `browser-defaults.ts`.
+  No old receipt, observation, failure or source-applicability requirement was
+  waived. The current complete Material gate remains live (session 21768) after
+  fresh package preparation and a 35.787-second build. Its actual checkpoint
+  module graph was independently compared with the current graph and is unchanged;
+  this added spec is outside that graph. No capture input or rendered code changed.
+  The new focused proof is available through the existing canonical source
+  inventory, but the next coherent canonical integration/check is still required.
+
 - October 5 independent unfiltered TTS gate is complete and failing: session
   91639 runs `npm run tts-parity:check` with fresh
   `ASTYLAR_TTS_ARTIFACTS=artifacts/tts-parity-current-20261005`, no interaction

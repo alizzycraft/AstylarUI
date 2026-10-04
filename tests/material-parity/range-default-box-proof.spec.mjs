@@ -90,3 +90,31 @@ test('range default-box proof retains exact source and installed-runtime fingerp
     assert.equal(createHash('sha256').update(readFileSync(source.file)).digest('hex'), source.sha256, source.file);
   }
 });
+
+test('fresh range default-box runs authenticate unchanged public inputs and retain every failing observation', () => {
+  const probe = 'examples/material-showcase/src/app/range-default-box-audit.spec.ts';
+  assert.equal(createHash('sha256').update(readFileSync(probe)).digest('hex'),
+    '68de22c89904ea01aafbf359a43a870b90fbcb37887f64e2ce52fbe08d61322f');
+  const receipts = [
+    '32406db9ea6dfae6ac60ddd92805605606c5559cfdc0ff7fdc3736d0e42f8be1',
+    'ba430f741f655825bd1baba7cfe710c42fc8922392f1fccb77d8813d9e4e53a7',
+  ];
+  const runs = receipts.map((receipt, index) => {
+    const bytes = readFileSync(`artifacts/material-parity/range-current-689c9611-20261005/run-${index + 1}.log`);
+    assert.equal(createHash('sha256').update(bytes).digest('hex'), receipt);
+    return { exitCode: 1, tests: 6, passed: 4, failed: 2, commandOutput: bytes.toString('utf8') };
+  });
+  const observations = runs.map(run => [...run.commandOutput.matchAll(
+    /INFO: 'MATERIAL_RANGE_DEFAULT_BOX_PROOF',\s*'(\{[\s\S]*?\})'/g,
+  )].map(match => JSON.parse(match[1].replace(/\r?\n/g, ''))));
+  assert.deepEqual(sorted(observations[0]), sorted(observations[1]));
+  for (const observation of observations[0]) assert.equal(observation.userAgent,
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36');
+  const withoutUserAgent = values => sorted(values).map(({ userAgent, ...observation }) => observation);
+  assert.deepEqual(withoutUserAgent(observations[0]), withoutUserAgent(report.observations),
+    'all observation fields except the explicitly changed browser version must be conserved');
+  // Reuse all original input, style-stage, geometry and six-case checks. This
+  // fresh observation replay does not waive the historical source-receipt test
+  // above or establish current applicability of its eighteen dependencies.
+  verifyEvidence({ ...report, observations: observations[0], runs });
+});
