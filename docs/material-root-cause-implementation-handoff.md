@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 3
 
+- October 4 tooltip wrapping integration tests 1577–1584 all pass in the
+  retained unfiltered harness. Production integration preserves scalar values
+  and existing classification precedence; negative controls reject missing
+  bindings, lost rows and false equivalence. The two integration bodies took
+  550,369 and 1,514,547 ms; do not repeat unchanged. Source binding covers the
+  complete original family population and all 36 observed differences, retains
+  non-equivalence obligations and public wordWrap aliases, and rejects changed
+  populations, missing retained evidence, altered traces and forged computed or
+  raster claims. These passes do not establish repaired tooltip rendering.
+  The same harness has advanced to tracking-input populations (worker 24620);
+  final harness outcome and build-fingerprint reconciliation remain pending.
+
 - October 4 tests 1549–1576 all pass (28 checks, retained harness log).
   Alignment adapter/plan replay preserves original ancestry, exact membership,
   raw fields and unrelated reviews; proposal and population mutation controls
