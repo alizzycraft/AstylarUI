@@ -45,7 +45,24 @@
   and current unfiltered browser gates remain required. Historical test or output
   passes do not establish current equal-input rendering acceptance.
 
-Owner survey failure 1165 source boundary: `restoreOwnerInitialSurveyOptIns`
+- Owner-survey applicability failure 1165 is now closed. The original
+  `owner survey reopens all paired trees` test passes 1/1 (76,435 ms overall),
+  rebuilding all 600 groups / 1,734 cases / 32,144 observations and checking that
+  the retained report bytes are unchanged. The read-only CLI check authenticates
+  the complete immutable saved report, actual current receipts, exact survey
+  opt-in and border transitions, and the entire producer after reversing only
+  its new check instrumentation. Every nonreceipt report field must match.
+  Source-conservation suite passes 4/4 (48,227 ms), including rejection of
+  changed observations, changed retained evidence, stale receipts and unrelated
+  edits in each of the five dependencies. Canonical integration, candidate
+  computed-value verification and rendering equivalence remain false. Integrate
+  these source changes in the next coherent canonical batch, not a standalone
+  expensive export. Next triage the remaining owner-initial failure population
+  (1147/1152/1155/1156) against existing panel-state and source-transition proofs;
+  current unfiltered browser gates and coverage acceptance remain outstanding.
+
+Historical investigation notes for failure 1165 (superseded by closure above):
+`restoreOwnerInitialSurveyOptIns`
 now restores the complete retained survey source byte-for-byte to Git `a99cc87d`
 and its unchanged `77ea9fd…` digest. Four negative controls reject unrelated
 edits, duplicate source, enabling appearance by default, and changed font-style

@@ -76,6 +76,9 @@ const result = { schemaVersion: 1, kind: 'mapped-owner-initial-style-triage', ca
     'Equal initial keywords do not prove equal wrapping, typography, visibility, hit testing or raster output.',
     'Overlay paths outside the captured main/page ancestry are deliberately not accepted by this reader.'] };
 const output = JSON.stringify(result, null, 2) + '\n';
-if (process.argv.includes('--check')) assert.equal(readFileSync(target, 'utf8').replaceAll('\r\n', '\n'), output, 'owner initial-style survey is stale');
+if (process.argv.includes('--check')) {
+  const { verifyOwnerInitialSurveyReplay } = await import('../tests/material-parity/motion-source-conservation.mjs');
+  await verifyOwnerInitialSurveyReplay(JSON.parse(readFileSync(target, 'utf8')), result);
+}
 else writeFileSync(target, output);
 console.log(JSON.stringify(Object.fromEntries(Object.entries(result).filter(([k]) => ['groupCount', 'caseCount', 'observations', 'matchingOccurrenceCountGroups', 'capturedObservationStageGroupsWithMatchingCount', 'canonicalIntegration'].includes(k)))));

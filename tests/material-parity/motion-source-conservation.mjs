@@ -67,6 +67,31 @@ export function restoreOwnerInitialSurveyOptIns(source) {
   return restored;
 }
 
+export async function verifyOwnerInitialSurveyReplay(saved, fresh, readCurrent = file => readFileSync(file, 'utf8')) {
+  assert.equal(hash(JSON.stringify(saved)), '08c9590fd82a77ff377d58ca571a2cdfad90711749af47c854354fd987f9aec3',
+    'retained owner survey evidence changed');
+  const { readGapSurveySource } = await import('./gap-survey-source-replay.mjs');
+  const files = ['tests/material-parity/owner-initial-style-baseline.mjs',
+    'scripts/audit-material-owner-initial-styles.mjs', 'tests/material-parity/owner-initial-style-survey.mjs',
+    'tests/material-parity/root-initial-style-evidence.mjs', 'tests/material-parity/border-initial-input-evidence.mjs'];
+  assert.deepEqual(saved.sourceFingerprints.map(s => s.file), files);
+  assert.deepEqual(fresh.sourceFingerprints.map(s => s.file), files);
+  for (const [index, descriptor] of saved.sourceFingerprints.entries()) {
+    const current = lf(readCurrent(descriptor.file));
+    assert.equal(fresh.sourceFingerprints[index].sha256, hash(current), 'owner survey receipt is not current');
+    let restored = current;
+    if (descriptor.file.endsWith('/owner-initial-style-survey.mjs')) restored = restoreOwnerInitialSurveyOptIns(current);
+    else if (descriptor.file === 'scripts/audit-material-owner-initial-styles.mjs') {
+      const instrumentation = "if (process.argv.includes('--check')) {\n  const { verifyOwnerInitialSurveyReplay } = await import('../tests/material-parity/motion-source-conservation.mjs');\n  await verifyOwnerInitialSurveyReplay(JSON.parse(readFileSync(target, 'utf8')), result);\n}";
+      assert.equal(current.split(instrumentation).length, 2, 'owner survey check instrumentation must match exactly once');
+      restored = current.replace(instrumentation, "if (process.argv.includes('--check')) assert.equal(readFileSync(target, 'utf8').replaceAll('\\r\\n', '\\n'), output, 'owner initial-style survey is stale');");
+    } else restored = readGapSurveySource(descriptor, { current: readCurrent });
+    assert.equal(hash(restored), descriptor.sha256, `unreviewed owner survey source: ${descriptor.file}`);
+  }
+  assert.deepEqual({ ...fresh, sourceFingerprints: saved.sourceFingerprints }, saved,
+    'owner initial-style survey evidence changed');
+}
+
 // This is a deliberately conservative named-declaration dependency closure.
 // Property/local identifiers may over-include declarations, never justify
 // skipping one. A newly reachable import fails rather than silently escaping
