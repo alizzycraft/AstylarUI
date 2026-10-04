@@ -7,16 +7,12 @@
   receipt/source mutation controls. The earlier pending notes below are history,
   not current blockers. No historical evidence or meaningful color difference
   was rewritten.
-- Export preflight passes the named baseline's five required path checks; no
-  diagnostic filter variables are set. However, AST inspection of the current
-  explicit 539-file source inventory finds the root-initial proof registered
-  but not `scripts/diagnose-material-root-initial-receipt.mjs` or
-  `tests/material-parity/case-index-assertion-migration.mjs`, which now own its
-  applicability validation. An export before closing that dependency inventory
-  would omit provenance for newly consumed code. Do not repeat an unchanged
-  canonical build. Next register/authenticate this dependency closure through
-  the existing source/proof inventory, conserving its pinned predecessor and
-  negative controls, then perform the coherent export and independent cold check.
+- Export dependency closure is now complete for the root-initial applicability
+  helpers: all 541 inventory paths are independently checked, with the previous
+  535 pinned paths and 424-path predecessor still ordered. The original inventory
+  callback passes 1/1 (3,789 ms); the migration/mutation suite passes 3/3.
+  The named baseline's five required paths exist and no diagnostic filter
+  variables are set. Next perform the coherent export and independent cold check.
 - Remaining priorities: current canonical source/proof reconciliation first;
   then remaining historical failure populations separated into stale evidence
   boundaries versus substantive defects; complete comparison/state coverage
@@ -36,13 +32,18 @@ edits. No classification, rendering input or historical hash is repinned.
 
 The original inventory callback was also executed directly with its test-name
 filter: its 541 counts pass, but it fails at the whole producer comparison against
-`116d8fab…` (1/1 failed, 2,556 ms). That comparison predates the already reviewed
-mapped-border integrations; its stripped current source remains 4,739 bytes longer.
-This is a separate pre-existing guard gap, not proof that the two-path registration
-changes classifications. Next authenticate those producer transitions in this
-existing callback before repeating it; preserve ordered 535-path predecessor
-membership, appended dependency hashes and full negative conservation checks.
-Canonical export remains deferred until that original inventory check is reconciled.
+`116d8fab…` (1/1 failed, 2,556 ms). The initial mapped-border explanation was
+disproved by complete AST comparison: all 299 statements match except the
+focused-proof inventory, which contains eight additional retained-proof calls
+after the original 107 entries. The current inventory has 123 proof calls:
+eight public additions, the intact 107 original calls, and eight retained additions.
+The latter eight are now authenticated by complete printed-AST digest
+`b5a012e6…`; removing exactly both added spans plus the already reviewed receipt
+validation and registrations restores the whole pinned producer byte-for-byte.
+The original callback passes 1/1 (3,789 ms), and migration plus source/receipt
+mutation controls pass 3/3. The original full-suite digest remains `3ec0eb51…`.
+Negative controls additionally reject a shortened retained-proof span and a
+forged proof digest. No producer behavior was changed in this correction.
 
 - Root initial-style source question narrowed with the existing diagnostic:
   `node scripts/diagnose-material-root-initial-receipt.mjs --sources-only`

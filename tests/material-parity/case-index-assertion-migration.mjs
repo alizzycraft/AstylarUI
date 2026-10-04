@@ -29,11 +29,11 @@ export function restoreInventoryAssertion(source) {
   if (extensionStart !== -1) {
     const extensionEnd = statements.findIndex(n => n.getText(ast).startsWith(
       'assert.deepEqual(audit.sourceFingerprints.map(e => e.file), [...expectedFiles'));
-    assert.equal(extensionEnd - extensionStart + 1, 32, 'inventory extension statement coverage changed');
+    assert.equal(extensionEnd - extensionStart + 1, 39, 'inventory extension statement coverage changed');
     const extension = statements.slice(extensionStart, extensionEnd + 1);
     assert.equal(createHash('sha256').update(extension.map(n =>
       printer.printNode(ts.EmitHint.Unspecified, n, ast)).join('\n')).digest('hex'),
-    '9ce6111112707328b2491c8a2e15584054e7826d283287f96e232cae998421ce',
+    'a5bc184397351d9d942bab054b55e928a6b015f2ad1c114d5057ce8d6da4b438',
     'authenticated 424-to-541 inventory extension changed');
     // This block retains both pinned producer hashes, ordered prior membership,
     // exact launch/recent registrations and the eight added proof registrations.

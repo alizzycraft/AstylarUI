@@ -76,6 +76,8 @@ test('migration proof rejects unrelated assertion changes, missing checks and wr
     current.replace('345051b81ed3305bd3fa14ee97e67407936e4b50659df44f420089de1d370a6f', '0'.repeat(64)),
     current.replace(' && !recentProofFiles.includes(f)', ''),
     current.replace("'scripts/diagnose-material-root-initial-receipt.mjs',", "'scripts/unreviewed-applicability.mjs',"),
+    current.replace('elements.slice(-8)', 'elements.slice(-7)'),
+    current.replace('b5a012e6363332a86a27f4fcdbd68cd44b85bd0eb5a73c5655363171f3eba593', '0'.repeat(64)),
     current.replace('...expectedFiles, ...launchFiles, ...recentProofFiles', '...expectedFiles, ...recentProofFiles'),
     current.replace("'reviewed-source-batch-pipeline.spec.mjs',", "'wrong-source.spec.mjs',"),
     current.replace(' && !additions.includes(f)', ''),

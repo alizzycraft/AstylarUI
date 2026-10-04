@@ -2428,13 +2428,21 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   assert.ok(calls.every(n => ts.isCallExpression(n) && recentProofFiles.includes(n.arguments[1].text)));
   const proofStart = liveSource.lastIndexOf('\n', calls[0].getStart(liveAst)) + 1;
   const proofEnd = liveSource.indexOf('\n', calls.at(-1).end) + 1;
-  const withoutRecentProofs = liveSource.slice(0, proofStart) + liveSource.slice(proofEnd);
+  const retainedProofCalls = inventoryNode.body.statements.find(ts.isReturnStatement).expression.elements.slice(-8);
+  assert.ok(retainedProofCalls.every(n => ts.isCallExpression(n) && n.arguments[1].text === 'tests/material-parity/input-equivalence-audit.spec.mjs'));
+  const proofPrinter = ts.createPrinter({ removeComments: true, newLine: ts.NewLineKind.LineFeed });
+  assert.equal(createHash('sha256').update(retainedProofCalls.map(n => proofPrinter.printNode(ts.EmitHint.Unspecified, n, liveAst)).join('\n')).digest('hex'),
+    'b5a012e6363332a86a27f4fcdbd68cd44b85bd0eb5a73c5655363171f3eba593');
+  const retainedStart = liveSource.lastIndexOf('\n', retainedProofCalls[0].getStart(liveAst)) + 1;
+  const retainedEnd = liveSource.indexOf('\n', retainedProofCalls.at(-1).end) + 1;
+  const withoutRetainedProofs = liveSource.slice(0, retainedStart) + liveSource.slice(retainedEnd);
+  const withoutRecentProofs = withoutRetainedProofs.slice(0, proofStart) + withoutRetainedProofs.slice(proofEnd);
   const receiptStart = withoutRecentProofs.indexOf('  // Source-backed diagnostic receipts are immutable evidence');
   const receiptEnd = withoutRecentProofs.indexOf('  if (report.coverage.missingElements.length', receiptStart);
   assert.ok(receiptStart > 0 && receiptEnd > receiptStart);
   const withoutReceiptValidation = withoutRecentProofs.slice(0, receiptStart) + withoutRecentProofs.slice(receiptEnd);
   assert.equal(withoutReceiptValidation.replace(launchRegistration, '').replace(recentRegistration, ''), currentSource,
-    'only receipt validation, launch receipts and eight recent proof registrations differ from the pinned producer');
+    'only receipt validation, launch/applicability receipts and sixteen authenticated proof registrations differ from the pinned producer');
   const expectedFiles = listedFiles(currentSource);
   assert.equal(expectedFiles.length, 535);
   assert.deepEqual(expectedFiles.filter(file => stage424Files.includes(file)), stage424Files,
