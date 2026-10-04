@@ -15,6 +15,17 @@
   claiming current applicability. The retained harness log records both failures;
   the run remains nonterminal in root-shadow canonical integration.
 
+  Independent read-only reconciliation found the exact retained border module at
+  `1abee46d3aa838496bda40f5edaa7608025e4bed` (`3dbcf33f…`). Its exported
+  `selectorCanApply` function—the border dependency imported by root initial-style
+  evidence—is textually identical to the current function. A direct current
+  `inspectRootFlowHeightOverrides` replay authenticated the original capture and
+  every input-tree receipt and exactly reproduced all 164 retained proof objects,
+  including the 138 repeated-root cases (3.56 s, exit 0). This closes the specific
+  root-height declaration-replay uncertainty, not the whole border module's
+  applicability, current rendering, or test 1384's producer receipt. The original
+  test 1369 receipt guard remains failing and was not changed or waived.
+
 - October 4 continuation: tests 1328–1330 pass. Current earlier-classification
   membership retains 325 groups / 12,836 observations. Independent color replay
   accounts for 144 exposed groups / 2,311 observations and 66 changed-value
