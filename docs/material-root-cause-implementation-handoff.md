@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 3
 
+- Shared browser-build applicability narrowed by fresh complete-directory
+  fingerprints: current showcase has 1,887 files, of which 1,884 exactly match
+  `caret-visible-checkpoint-154`. The differences are missing historical
+  `chunk-BSWHRDFS.js` (132fa568…) and its map (8077f95b…), plus changed
+  `main.js` (ea9875e2… to 9e076a6c…). Two available retained builds
+  (`tooltip-keyboard-build-813f658` and `button-held-update-angular-build`)
+  each contain 971 files and match only 56 / one checkpoint files respectively;
+  neither is a substitute for that checkpoint. The three historical hashes
+  are absent from the compaction manifest, and that chunk is absent from the
+  primary/material worktrees' built browser directories. Do not repin the
+  checkpoint or overwrite current dist. Next decisive check is the changed
+  chunk/source applicability or an isolated authenticated reconstruction; the
+  24 browser bodies blocked by this guard remain unexecuted.
+
 - Post-harness skipped receipt checks were explicitly executed with
   `ASTYLAR_AUDIT_RECEIPT_COMPARE=1`: initial 3/5 pass, two historical/current
   fingerprint failures. These are September 30 transition checks, not current
