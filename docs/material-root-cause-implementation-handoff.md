@@ -15914,6 +15914,25 @@ original whole-suite AST conservation check; update the negative controls to
 mutate actual current tokens and give bounded failure diagnostics. No receipt
 waiver, canonical export, or renderer change is justified by this preflight.
 
+The October 4 migration repair now authenticates all 32 added inventory
+statements and the exact extracted inventory reader, restoring only the reviewed
+539-to-424 changes before the earlier conservation chain. Whole-suite AST
+conservation passes with original digest `3ec0eb51…`; all nine original receipt
+assertions and other original statements remain conserved. The focused migration
+suite passes 2/2 (8,439 ms), including effective current-count, pinned producer,
+shared reader, ordered registration, membership and unrelated-source mutations.
+Failure diagnostics now remain bounded without weakening complete equality.
+
+`node scripts/diagnose-material-root-initial-receipt.mjs` clears this preflight
+and verifies all 2,311 cases / 30,043 observations across 468 durable groups,
+original membership digest `58968692…`, and unchanged non-receipt payload digest
+`a43e00ee…`. Its five-test execution finishes 4/5 passing (36,945 ms), with the
+original stale source-fingerprint assertion deliberately still failing. The
+current report-join test and its forged-proof/coverage controls pass. This closes
+the inventory-migration applicability question, not the remaining root-initial
+receipt integration or final canonical/rendering acceptance. No evidence files,
+renderer, fixtures or historical receipts were rewritten.
+
 October 3 later current-classification join passes 1/1 in 134,974 ms:
 `node --test --test-concurrency=1 --test-name-pattern="canonical later source-batch"
 tests/material-parity/reviewed-input-canonical-integration.spec.mjs`.

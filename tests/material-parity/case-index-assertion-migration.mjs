@@ -24,6 +24,51 @@ export function restoreInventoryAssertion(source) {
     '20da22f11520f94760ed996f0c25c6673795b9f1d4e33696c9249360c8d6a52c', 'independent inventory table changed');
   let restored = callback.getText(ast);
   restored = restored.replace(declaration.getText(ast), '');
+  const statements = [...callback.body.statements];
+  const extensionStart = statements.findIndex(n => n.getText(ast).startsWith('const stage424Source'));
+  if (extensionStart !== -1) {
+    const extensionEnd = statements.findIndex(n => n.getText(ast).startsWith(
+      'assert.deepEqual(audit.sourceFingerprints.map(e => e.file), [...expectedFiles'));
+    assert.equal(extensionEnd - extensionStart + 1, 32, 'inventory extension statement coverage changed');
+    const extension = statements.slice(extensionStart, extensionEnd + 1);
+    assert.equal(createHash('sha256').update(extension.map(n =>
+      printer.printNode(ts.EmitHint.Unspecified, n, ast)).join('\n')).digest('hex'),
+    '4fa84ae74f905b4504c0df0c879b087816af75fce5d8b13d897a9533a00a870f',
+    'authenticated 424-to-539 inventory extension changed');
+    // This block retains both pinned producer hashes, ordered prior membership,
+    // exact launch/recent registrations and the eight added proof registrations.
+    // Authenticate all of it before restoring the older callback for comparison.
+    for (const statement of extension) restored = restored.replace(statement.getText(ast), '');
+    const listReader = statements.filter(n => n.getText(ast).startsWith('const listedFiles ='));
+    assert.equal(listReader.length, 1);
+    assert.equal(createHash('sha256').update(printer.printNode(ts.EmitHint.Unspecified,
+      listReader[0], ast)).digest('hex'),
+    '9eca412253554098f0f43d5f5368a18b3437eb4660504276c4aefc8f219b6928',
+    'shared inventory reader changed');
+    restored = restored.replace(listReader[0].getText(ast), '');
+    const baselineRead = 'const baselineFiles = listedFiles(baselineSource);';
+    assert.equal(restored.split(baselineRead).length, 2);
+    restored = restored.replace(baselineRead, `const ast = ts.createSourceFile('baseline.mjs', baselineSource, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+const fn = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'sourceFingerprints');
+const declaration = fn.body.statements.filter(ts.isVariableStatement)
+    .flatMap(n => [...n.declarationList.declarations]).find(n => n.name.getText(ast) === 'files');
+assert.ok(ts.isArrayLiteralExpression(declaration.initializer));
+assert.ok(declaration.initializer.elements.every(ts.isStringLiteral));
+const baselineFiles = declaration.initializer.elements.map(n => n.text);`);
+    for (const [current, previous] of [
+      ['audit.sourceFingerprints.length, 539', 'audit.sourceFingerprints.length, 424'],
+      ['entry.file)).size, 539', 'entry.file)).size, 424'],
+      [' && !laterFiles.includes(f) && !launchFiles.includes(f) && !recentProofFiles.includes(f)', ''],
+      ['...positionFiles, ...laterFiles, ...launchFiles, ...recentProofFiles', '...positionFiles'],
+      ['only preserved earlier additions and explicit recent dependencies are added',
+        'only the independently inventoried 38 follow-up, 10 alignment and 39 additional and 14 visibility and 15 positioning dependencies are added'],
+    ]) {
+      const expectedOccurrences = current.startsWith('...positionFiles,') ? 3 : 2;
+      assert.equal(restored.split(current).length, expectedOccurrences,
+        `missing or repeated later inventory assertion: ${current}`);
+      restored = restored.replaceAll(current, previous);
+    }
+  }
   const positioning = callback.body.statements.filter(n => ts.isVariableStatement(n)
     && n.declarationList.declarations[0]?.name.getText(ast) === 'positionFiles');
   if (positioning.length) {
@@ -152,7 +197,11 @@ export function verifyCaseIndexAssertionMigration(previous, current) {
   assert.deepEqual([...seen].sort(), [...caseIndexReceiptFiles].sort());
   let restored = after.text;
   for (const edit of edits.sort((a, b) => b.start - a.start)) restored = restored.slice(0, edit.start) + edit.text + restored.slice(edit.end);
-  assert.equal(canonical(parse(restored)), canonical(before), 'suite changed beyond nine receipt assertions, one import and the authenticated inventory extension');
+  const restoredCanonical = canonical(parse(restored)), previousCanonical = canonical(before);
+  // Keep complete equality, but avoid printing two megabyte-sized suites when
+  // one assertion diverges. The hashes are diagnostics, not the equality test.
+  assert.ok(restoredCanonical === previousCanonical,
+    `suite changed beyond nine receipt assertions, one import and the authenticated inventory extension; restored=${createHash('sha256').update(restoredCanonical).digest('hex')}; previous=${createHash('sha256').update(previousCanonical).digest('hex')}`);
   return { replacedReceiptAssertions: seen.size, allOtherStatementsConserved: true, addedIsolatedTests, mappingReadAdapterAuthenticated,
     addedFocusedImports: ['./border-initial-input-evidence.mjs', './audit-normalization-contracts.mjs'],
     captureDiagnosticsProjectionAuthenticated: true,

@@ -24,6 +24,16 @@ test('entire legacy suite conserves statements outside nine receipt checks and t
     'mapped button reset classification preserves full membership and rejects forged rows',
     'mapped border integration rejects classifications without authenticated original cases',
     'border initial-color heading owners retain conservative declaration and provenance checks',
+    'recent public and popup proofs join existing inventories without changing predecessor entries',
+    'retained progress paint binds plugin geometry and unequal track inputs',
+    'retained compact empty and filled inputs bind authored inset before projection',
+    'retained keyboard profiles replay original assertions and bind the Escape-only handler',
+    'retained empty caret rasters preserve visibility and unequal ink inputs',
+    'retained applied-theme popup focus states preserve action boundaries',
+    'retained selection states preserve palettes and original geometry failures',
+    'retained tooltip textures separate popup placement from raster phase',
+    'retained Tab, popup-state and email-edit boundaries preserve exact action evidence',
+    'recent source diagnostics conserve predecessor findings and reject altered receipts or conclusions',
     'descendant color ancestry rejects broken links and intervening requests without claiming owner equivalence',
   ]);
   assert.deepEqual(result.addedFocusedImports, ['./border-initial-input-evidence.mjs', './audit-normalization-contracts.mjs']);
@@ -34,7 +44,14 @@ test('migration proof rejects unrelated assertion changes, missing checks and wr
     current.replace('assert.equal(index.sourceFingerprints.length, 11)', 'assert.equal(index.sourceFingerprints.length, 10)'),
     current.replace("assertHistoricalCaseIndexSources('docs/material-container-caret-audit.json', index);", ''),
     current.replace("assertHistoricalCaseIndexSources('docs/material-container-caret-audit.json', index)", "assertHistoricalCaseIndexSources('docs/material-root-height-audit.json', index)"),
-    current.replace('audit.sourceFingerprints.length, 424', 'audit.sourceFingerprints.length, 423'),
+    current.replace('audit.sourceFingerprints.length, 539', 'audit.sourceFingerprints.length, 538'),
+    current.replace('laterFiles.length, 111', 'laterFiles.length, 110'),
+    current.replace('stage424Files.length, 424', 'stage424Files.length, 423'),
+    current.replace("ts.createSourceFile('inventory.mjs', source", "ts.createSourceFile('inventory.mjs', baselineSource"),
+    current.replace('calls.every(n => ts.isCallExpression(n)', 'calls.some(n => ts.isCallExpression(n)'),
+    current.replace('345051b81ed3305bd3fa14ee97e67407936e4b50659df44f420089de1d370a6f', '0'.repeat(64)),
+    current.replace(' && !recentProofFiles.includes(f)', ''),
+    current.replace('...expectedFiles, ...launchFiles, ...recentProofFiles', '...expectedFiles, ...recentProofFiles'),
     current.replace("'reviewed-source-batch-pipeline.spec.mjs',", "'wrong-source.spec.mjs',"),
     current.replace(' && !additions.includes(f)', ''),
     current + "\ntest('additional case index', () => {});\n",
@@ -47,6 +64,7 @@ test('migration proof rejects unrelated assertion changes, missing checks and wr
     current + "\nimport './unreviewed-side-effects.mjs';\n",
     current.replace("restoreGapCaptureDiagnostics(readFileSync(source.file, 'utf8'))", 'source.sha256'),
   ]) {
-    assert.notEqual(changed, current); assert.throws(() => verifyCaseIndexAssertionMigration(previous, changed));
+    assert.ok(changed !== current, 'negative control must change the current suite');
+    assert.throws(() => verifyCaseIndexAssertionMigration(previous, changed));
   }
 });
