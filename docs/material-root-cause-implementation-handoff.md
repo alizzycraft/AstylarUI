@@ -71,6 +71,19 @@ open until full source applicability and complete replay are proven. Existing
 `policyProjection` addresses an intermediate `3256863a…` policy, not the current
 `6516e9c5…` source, so it cannot be reused unchecked.
 
+Membership diagnostic now proves complete nonreceipt report equality (read-only
+execution of the unchanged collector body, publication replaced only by full
+comparison): 600 groups, 31,508 unresolved occurrences, 636 preserved static
+observations, 51 split groups, canonical attribution unchanged. Existing
+`verifyOverlayMappingAuditProjection` authenticates the membership producer
+against `4dc770a` / `b6b4e62b…`: all 226 retained statements match (digest
+`c4250eaf…`); color/disabled-ink corrections remain explicitly unequal, not
+normalized away. The policy's complete `implicitReferenceValues` declaration
+matches that authenticated predecessor. This does not yet authenticate the
+complete policy or close original CLI gates 1155/1156. Next reuse the root-initial
+whole-policy transition proof and guard complete current receipts/report equality;
+do not regenerate the historical membership report.
+
 Failure 1147 separately asserts that stepper-content visibility must remain
 unresolved, but the production chain now applies the independently tested
 panel-state ownership review. Its original test is being replayed unchanged
@@ -643,7 +656,7 @@ forged proof digest. No producer behavior was changed in this correction.
   application/plugin authoring defect. It explicitly leaves used visibility,
   hidden-state support, animation, focus and accessibility unproven. The row was
   not dropped or promoted to rendering equivalence. Reconcile this older
-  integration assertion with the later panel ownership proof, preserving the
+integration assertion with the later panel ownership proof, preserving the
   historical endpoint and separate current checks rather than waiving visibility.
   Failures 1152/1156 reject a stale complete owner-membership report; 1155 stops
   at producer SHA `787618f9…` versus retained `b6b4e62b…`. Exact report-field
