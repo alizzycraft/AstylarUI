@@ -26,6 +26,14 @@
   applicability, current rendering, or test 1384's producer receipt. The original
   test 1369 receipt guard remains failing and was not changed or waived.
 
+  A separate direct current collector check authenticated the original root
+  survey capture, found no inventory errors, and checked every final candidate
+  omission assertion: 2,311 cases / 30,043 unique case-property observations all
+  remain omitted at `candidatePath[1].comparison` (exit 0). These are the final
+  assertions not reached by test 1384. This closes that assertion gap only; the
+  producer's historical/current source applicability remains unresolved, and no
+  receipt, durable index, input-equivalence or rendering claim was changed.
+
 - October 4 continuation: tests 1328–1330 pass. Current earlier-classification
   membership retains 325 groups / 12,836 observations. Independent color replay
   accounts for 144 exposed groups / 2,311 observations and 66 changed-value
