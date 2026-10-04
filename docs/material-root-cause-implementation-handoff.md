@@ -2,6 +2,19 @@
 
 ## Current resumption ledger — October 3
 
+- Shared build chunk source attribution: the replacement is
+  `chunk-JPEJK334.js` (e9b44703…) / map (47654b64…). Its four embedded sources
+  are assets, ripple controller, input-evidence collector and showcase component.
+  The first three exactly equal `c479097f^`; the component exactly equals
+  `c479097f` (b493a355…), whose predecessor is b7957cd9… . That commit adds
+  only returned paint-depth / camera diagnostic fields after projection.
+  Existing source-replay proofs already authenticate removal of precisely those
+  additions. This narrows the meaningful build-source change to read-only
+  diagnostics rather than altered comparison inputs, but is not byte-exact
+  historical build authentication. An isolated pre-diagnostics rebuild remains
+  the preferred next check; never remove diagnostics from the live application
+  or merely bless the replacement hashes in the historical checkpoint.
+
 - Shared browser-build applicability narrowed by fresh complete-directory
   fingerprints: current showcase has 1,887 files, of which 1,884 exactly match
   `caret-visible-checkpoint-154`. The differences are missing historical
