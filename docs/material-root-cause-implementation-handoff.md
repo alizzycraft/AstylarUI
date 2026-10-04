@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 3
 
+- October 4 test 1585 passes the complete 91-population typography survey.
+  Test 1586 fails in `bind-material-vertical-align-population.mjs:152` before
+  completing frozen canonical authentication: the live followup binding differs
+  from its pinned `11bd538` predecessor. Inspection of `d2e773ae` shows exactly
+  the expansion-plan revision/hash transition; `a2aa64a6` changes only that
+  plan's source-mapping receipt (5a7fb8f3… to ec49ba65…), not its findings.
+  This locates the stale historical/current dependency boundary but does not
+  yet authenticate the downstream canonical replay. Preserve both versions;
+  reconcile explicit historical consumption rather than blindly repinning.
+  Tests 1587–1599 pass proposal/negative controls, complete alignment survey,
+  442 structural mapping gaps with 59 authored-rule capture gaps retained,
+  6,444 unrelated proof conservation, no-write regeneration, and visibility
+  ancestry controls. Final harness outcome remains pending.
+
 - October 4 tooltip wrapping integration tests 1577–1584 all pass in the
   retained unfiltered harness. Production integration preserves scalar values
   and existing classification precedence; negative controls reject missing
