@@ -2,6 +2,22 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 resumed startup investigation: session 70743 is confirmed live
+  (Angular 25040, owned esbuild child 16952), with no port-4300 listener.
+  Esbuild now consumes 10,301,435,904 private bytes and has accumulated 69.73 CPU
+  seconds; disabling prebundling has not established readiness. Repository-wide
+  Tailwind discovery remains a hypothesis: the installed PostCSS plugin defaults
+  to the working directory and `**/*`, while `src/styles.css` supplies no explicit
+  source boundary. A bounded `src` scan completed in 113.78 ms (366 files,
+  9,320 candidates); unchanged stylesheet compilation with diagnostic `base=src`
+  completed in 183.78 ms (14,700 output bytes). This restricted control is not
+  an accepted stylesheet or authorization to narrow required source coverage.
+  Repository-discovery session 26438 is now missing and its terminal output was
+  not recovered; neither success nor its elapsed time is known. Do not report
+  it as passing. Next decisive work must recover or directly observe broad
+  discovery and distinguish it from bundling, without changing canonical inputs
+  or starting another competing Angular build. Full gates remain incomplete.
+
 - October 5 startup diagnosis changed approach after the reduced-concurrency
   attempt's esbuild memory grew past 9 GB without readiness. Verified owned
   Angular 19108 / esbuild 5356 were deliberately stopped; session 69538 ends
