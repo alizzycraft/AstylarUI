@@ -2,6 +2,24 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 independent unfiltered TTS gate is complete and failing: session
+  91639 runs `npm run tts-parity:check` with fresh
+  `ASTYLAR_TTS_ARTIFACTS=artifacts/tts-parity-current-20261005`, no interaction
+  filter or skip-build. Library rebuild/consumer refresh completes; the demo
+  production build completes in 47.158 seconds. Enforced verification exits 1
+  at calibrated acceptance, not infrastructure: 10 scenarios, infrastructure
+  complete, 3/10 accepted, minimum SSIM 0.946221, maximum geometry edge error
+  2.000 px; visibility, scroll ownership, reachability and visible text match
+  10/10. Sharpness passes 31/36 regions. All 70 interaction steps are captured,
+  48 accepted, minimum local SSIM 0.429636. Static and interaction acceptance
+  are both false. Original thresholds and reference remain unchanged. Preserve
+  `artifacts/tts-parity-current-20261005/latest-report.json`, SHA-256
+  `830f83233292cdec968488ab1693655af1e210d660833cfcc0c057559d348476`,
+  and its complete case artifacts. This current output failure is not a new
+  Material input-equivalence classification or authorization to fix rendering.
+  Next independent gate is complete unfiltered Material verification; remaining
+  provenance integration and general readiness-failure diagnosis stay open.
+
 - October 5 current general browser gate reaches capture but fails, rather than
   failing startup: HTTP probe 15287 returns 200 (58,030 bytes); unfiltered
   `npm run parity:check` uses the existing ready server through
