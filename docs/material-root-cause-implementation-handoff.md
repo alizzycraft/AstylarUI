@@ -2,6 +2,19 @@
 
 ## Current resumption ledger — October 3
 
+- October 4 continuation: tests 1328–1330 pass. Current earlier-classification
+  membership retains 325 groups / 12,836 observations. Independent color replay
+  accounts for 144 exposed groups / 2,311 observations and 66 changed-value
+  groups / 612 observations (386,891 historical to 389,202 current occurrences).
+  Historical full-row integration at `4650791a` independently replays all 325
+  reviewed changes across 8,339 rows and conserves the 8,014 other complete rows
+  (ordered digest `8957656d…`); 134 intermediate rows differ only in serialization.
+  Historical classification conservation, current membership, and current color
+  population are separate proven scopes. Later unrelated classification
+  conservation, fresh builder/report equivalence and full enforced browser
+  acceptance remain unproven. Test 1330 took 874,290 ms; reuse this retained proof
+  unless its relevant inputs change. The overall harness is still nonterminal.
+
 - October 4 live-run checkpoint: canonical reviewed-input integration tests
   1326 and 1327 pass against current package `d7e7ed4f…` / decoded `7e411759…`.
   Test 1326 conserves complete source-proven classification membership for
