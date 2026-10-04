@@ -9,7 +9,8 @@ import { resolveOriginAliasPair } from '../tests/material-parity/origin-alias-ma
 import { rootInitialSelectorCanApply } from '../tests/material-parity/root-initial-style-evidence.mjs';
 import { collectTooltipCaretContext } from './audit-material-tooltip-caret-context.mjs';
 import { collectOriginalOverlayContextSurvey } from '../tests/material-parity/original-overlay-context-survey.mjs';
-import { bindOwnerCaretNormalization } from '../tests/material-parity/owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization, bindPreciseAuditNormalization } from '../tests/material-parity/audit-normalization-contracts.mjs';
+import { readGapSurveySource } from '../tests/material-parity/gap-survey-source-replay.mjs';
 import { applyModalBoxReview } from '../tests/material-parity/modal-position-inspection.mjs';
 import { applyRangeCaretReviews } from './audit-material-range-caret-inputs.mjs';
 import { applyMotionCaretReviews } from './audit-material-caret-motion-context.mjs';
@@ -171,13 +172,18 @@ export function collectOverlayCaretContext() {
   assert.equal(parentBytes, execFileSync('git', ['show', `${revision}:${parentFile}`],
     { maxBuffer: 32 * 1024 * 1024, encoding: 'utf8' }).replaceAll('\r\n', '\n'));
   const parent = JSON.parse(parentBytes);
-  bindOwnerCaretNormalization(readFileSync(parent.productionNormalization.module, 'utf8'), parent.productionNormalization);
+  const historicalNormalize = bindHistoricalAuditNormalization(parent.productionNormalization, revision);
+  const currentNormalize = bindPreciseAuditNormalization();
   const parentSourceChecks = parent.sourceFingerprints.map(s => {
     const current = hash(readFileSync(s.file, 'utf8').replaceAll('\r\n', '\n'));
     const normalization = s.file === parent.productionNormalization.module;
-    if (!normalization) assert.equal(current, s.sha256, s.file);
+    if (normalization) {
+      const historical = execFileSync('git', ['show', `${revision}:${s.file}`], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+      assert.equal(hash(historical.replaceAll('\r\n', '\n')), s.sha256);
+    } else readGapSurveySource(s);
     return { file: s.file, recorded: s.sha256, current,
-      verification: normalization ? 'exact-executed-normalization-functions' : 'complete-source' };
+      verification: normalization ? 'historical-replay-and-current-caret-value-revalidation'
+        : current !== s.sha256 ? 'exact-historical-source-restoration' : 'complete-source' };
   });
   const groups = parent.groups.filter(g => g.reasonCounts['unreviewed-captured-root-context']); assert.equal(groups.length, 13);
   const legacy = collectOriginalOverlayContextSurvey('artifacts/material-parity/original-overlay-context-current-ancestry-audit/latest-report.json');
@@ -207,6 +213,9 @@ export function collectOverlayCaretContext() {
       const reference = hashed(e.inputTrees.reference), candidate = hashed(e.inputTrees.astylar);
       const inputs = e.styleInputs.filter(i => i.id === g.element); assert.equal(inputs.length, 1); const input = inputs[0];
       assert.equal(hash(JSON.stringify(input)), o.inputSha256);
+      for (const style of [input.reference, input.astylar])
+        assert.equal(historicalNormalize(style).caretColor, currentNormalize(style).caretColor,
+          'overlay caret normalization changed');
       const proof = inspectOwnerCaretInput(input, reference, candidate, { family: g.family });
       assert.equal(hash(JSON.stringify(proof)), o.proofSha256);
       assert.deepEqual(proof.issues.map(i => i.reason), o.reasons);

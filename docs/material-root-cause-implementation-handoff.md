@@ -2,6 +2,25 @@
 
 ## Current resumption ledger — October 3
 
+- Overlay caret applicability integrated: all 13 groups / 109 cases / 378
+  observations / 33,642 original scalar checks replay with exact historical
+  receipts and current caret-only normalization revalidation. The 59 scalar
+  rule gaps, 210 motion-request observations and zero direct caret/reset
+  observations remain unchanged; no candidate/computed/rendering equivalence
+  is inferred. Complete saved-data comparison permits only authenticated
+  source receipt changes and independently verified mapping-source receipts;
+  sensitivity controls now mutate the reconciled baseline, so existing
+  receipt differences cannot make them pass trivially.
+  The tooltip's real on-disk reader reuses the existing exact TypeScript-package
+  containment rule for the shared dependency junction; project sources and
+  artifacts retain strict real containment plus all original byte checks.
+  Injected and on-disk tooltip readers produce identical complete results.
+  `node scripts/check-material-overlay-caret-context.mjs` passes with 15
+  invalid-input, 13 changed-evidence and 12 conservation controls.
+  Combined pending-context and initialization tests pass 7/7 (31,248 ms).
+  Canonical source-graph integration and other failure populations remain
+  pending; these successes do not replace current browser acceptance.
+
 - Overlay font provenance hole corrected: a changed component receipt was
   replaced with the historical receipt after authenticating the actual source,
   without first requiring the supplied changed receipt to equal that source.

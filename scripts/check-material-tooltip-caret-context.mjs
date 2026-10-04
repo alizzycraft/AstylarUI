@@ -13,6 +13,7 @@ const cache = new Map(), read = file => {
 const raw = JSON.parse(read(tooltipCaretCaptureFile));
 const resultFile = raw.results[0].file, originalResult = JSON.parse(read(resultFile));
 const baseline = collectTooltipCaretContext({ readBytes: read });
+assert.ok(isDeepStrictEqual(collectTooltipCaretContext(), baseline), 'on-disk tooltip reader differs from injected reader');
 const saved = JSON.parse(read(tooltipCaretSurveyFile)); delete saved.sourceFingerprints;
 const reconciled = structuredClone(saved);
 for (const file of ['tests/material-parity/run-material-parity.mjs',

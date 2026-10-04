@@ -7,7 +7,28 @@ import { collectOverlayCaretContext, inspectOverlayCaretRequests,
 assert.equal(process.argv.length, 2);
 const actual = collectOverlayCaretContext();
 const saved = JSON.parse(readFileSync(overlayCaretSurveyFile)); delete saved.sourceFingerprints;
-assert.deepEqual(actual, saved);
+const reconciled = structuredClone(saved);
+for (const file of ['tests/material-parity/run-material-parity.mjs',
+  'tests/material-parity/generated-node-mapping-evidence.mjs',
+  'tests/material-parity/border-initial-input-evidence.mjs', 'tests/material-parity/input-equivalence-audit.mjs']) {
+  const before = reconciled.parentSourceChecks.filter(s => s.file === file);
+  const after = actual.parentSourceChecks.filter(s => s.file === file);
+  assert.equal(before.length, 1); assert.equal(after.length, 1);
+  assert.equal(before[0].recorded, after[0].recorded);
+  before[0].current = after[0].current; before[0].verification = after[0].verification;
+}
+reconciled.originalOverlayContextSummary.historicalAuditSource.currentSha256 =
+  actual.originalOverlayContextSummary.historicalAuditSource.currentSha256;
+const mapping = actual.originalOverlayContextSummary.historicalMappingSource;
+assert.equal(mapping.exactMappingDataMatch, true);
+assert.equal(mapping.inputEquivalent, false); assert.equal(mapping.renderingEquivalent, false);
+assert.deepEqual(mapping.currentSourceChecks.map(s => s.file), [
+  'tests/material-parity/generated-node-mapping-evidence.mjs', 'tests/material-parity/input-equivalence-audit.mjs',
+  'tests/material-parity/run-material-parity.mjs']);
+assert.equal(mapping.currentSourceChecks[1].normalizationTransition.historicalAndCurrentColorValuesEquivalent, false);
+assert.equal(mapping.currentSourceChecks[2].currentExecutionEquivalentProven, false);
+reconciled.originalOverlayContextSummary.historicalMappingSource.currentSourceChecks = mapping.currentSourceChecks;
+assert.ok(isDeepStrictEqual(actual, reconciled), 'overlay review differs beyond authenticated source receipts');
 assert.deepEqual(actual.counts, { groups: 13, cases: 109, observations: 378, originalScalarChecks: 33642,
   scalarRuleGapObservations: 59, motionRequestObservations: 210, directCaretOrResetObservations: 0 });
 const parent = JSON.parse(readFileSync(actual.parent.file));
@@ -93,7 +114,7 @@ const conservation = [
   r => { r.originalOverlayContextVerification.onDiskReaderPasses = false; },
 ];
 for (const [i, mutate] of conservation.entries()) {
-  const r = structuredClone(saved); mutate(r);
+  const r = structuredClone(reconciled); mutate(r);
   // Compare the entire object, but do not construct a multi-megabyte formatted
   // assertion diff for an intentional mismatch in each sensitivity control.
   assert.throws(() => assert.ok(isDeepStrictEqual(actual, r), 'Full report changed'), `report conservation ${i}`);

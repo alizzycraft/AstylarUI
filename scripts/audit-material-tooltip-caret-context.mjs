@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { readFileSync, realpathSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import ts from 'typescript';
@@ -12,6 +12,7 @@ import { bindPreciseAuditNormalization } from '../tests/material-parity/audit-no
 import { recoverOriginalOverlayRunnerSource } from '../tests/material-parity/original-overlay-runner-source.mjs';
 import { restoreMappingReadAdapterSource } from '../tests/material-parity/audit-evidence-session.mjs';
 import { readGapSurveySource } from '../tests/material-parity/gap-survey-source-replay.mjs';
+import { assertOriginalOverlayEvidencePath } from '../tests/material-parity/original-overlay-context-survey.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 export const tooltipCaretCaptureFile = 'artifacts/material-parity/tooltip-caret-context-audit-v1/latest-report.json';
@@ -22,7 +23,7 @@ export function collectTooltipCaretContext({ readBytes = readFileSync } = {}) {
   const read = (file, source = false) => {
     const base = path.resolve(root, source ? '.' : 'artifacts/material-parity'), absolute = path.resolve(root, file);
     assert.ok(inside(base, absolute));
-    if (readBytes === readFileSync) assert.ok(inside(realpathSync(base), realpathSync(absolute)));
+    if (readBytes === readFileSync) assertOriginalOverlayEvidencePath(root, file, source);
     return readBytes(absolute);
   };
   const hashed = (d, source = false) => {
