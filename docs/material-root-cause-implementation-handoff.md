@@ -27,8 +27,20 @@
   (2,222,834,862 bytes). Markdown's complete comparison admits only updated
   focused-proof source line references. This is reproducibility, not current
   browser or equal-input rendering acceptance.
-- Remaining priorities: refresh the authenticated compact index once; then
-  remaining historical failure populations separated into stale evidence
+- Compact refresh and verification pass for the new package: 8,483 scalar rows,
+  145 source findings, 39,904 control differences and 389,202 occurrences;
+  72,712,604 compact bytes. Zero unresolved scalar labels does not establish
+  current browser acceptance or close the retained failed proof populations.
+- Panel-state applicability failure 1170 is closed: the existing exact
+  `readGapSurveySource` restoration authenticates all three retained source
+  receipts, admits only the already proven showcase diagnostic additions, and
+  rejects unrelated source edits. All 138 observations (70 tabs / 68 stepper)
+  and every nonreceipt report field are unchanged. The complete panel suite
+  passes 3/3 in 4,392 ms, retaining scalar conservation, state/linkage/content
+  controls, and explicit no-live-animation/no-rendering-equivalence limits.
+  The original report remains immutable. This test-source change belongs to
+  the next coherent canonical integration batch; do not re-export for it alone.
+- Remaining priorities: historical failure populations separated into stale evidence
   boundaries versus substantive defects; complete comparison/state coverage
   and current unfiltered browser gates remain required. Historical test or output
   passes do not establish current equal-input rendering acceptance.

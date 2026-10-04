@@ -8,6 +8,7 @@ import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
+import { readGapSurveySource } from './gap-survey-source-replay.mjs';
 
 test('panel visibility scalar review conserves all 138 state-owner observations', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
@@ -44,7 +45,22 @@ test('panel visibility scalar review conserves all 138 state-owner observations'
 
 test('all tab and stepper captures bind active text and unequal retained state owners', () => {
   const report = collectPanelStateOwnership();
-  assert.deepEqual(report, JSON.parse(readFileSync('docs/material-panel-state-ownership.json')));
+  const retained = JSON.parse(readFileSync('docs/material-panel-state-ownership.json'));
+  const lfHash = source => createHash('sha256').update(source.replaceAll('\r\n', '\n')).digest('hex');
+  assert.deepEqual(report.currentSourceReceipts.map(s => s.file), retained.currentSourceReceipts.map(s => s.file));
+  for (const receipt of retained.currentSourceReceipts) {
+    const descriptor = { file: receipt.file, sha256: receipt.lfSha256 };
+    assert.equal(lfHash(readGapSurveySource(descriptor)), receipt.lfSha256);
+    assert.equal(report.currentSourceReceipts.find(s => s.file === receipt.file).lfSha256,
+      lfHash(readFileSync(receipt.file, 'utf8')));
+    assert.throws(() => readGapSurveySource(descriptor, {
+      current: file => readFileSync(file, 'utf8') + '\nconst unrelatedPanelSourceMutation = true;\n',
+    }));
+  }
+  // Only authenticated read-only diagnostic additions are reversible. Keep the
+  // saved report immutable and compare every other complete field unchanged;
+  // this does not establish current runtime/rendering or live animation parity.
+  assert.deepEqual({ ...report, currentSourceReceipts: retained.currentSourceReceipts }, retained);
   assert.deepEqual(report.counts, { observations: 138, tabs: 70, stepper: 68 });
   assert.equal(new Set(report.observations.map(o => o.case)).size, 138);
   assert.ok(report.observations.every(o => o.classification === 'application-plugin-authoring-defect'
