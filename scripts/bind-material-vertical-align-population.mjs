@@ -148,9 +148,11 @@ export async function collectVerticalAlignCanonicalPlan() {
   const originalBytes = readFileSync(proof.originalCapture.file); assert.equal(hash(originalBytes), proof.originalCapture.sha256);
   const normalize = bindHistoricalAuditNormalization(normalization, '957774a');
   const reservedFile = 'docs/material-followup-input-proposal-binding.json';
-  const reservedBytes = readFileSync(reservedFile, 'utf8').replaceAll('\r\n', '\n');
-  assert.equal(reservedBytes, execFileSync('git', ['show', `11bd538:${reservedFile}`],
-    { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 }).replaceAll('\r\n', '\n'));
+  // This join authenticates the frozen canonical revision, not the current
+  // followup plan. Read the reservation from its recorded Git owner just as
+  // the canonical rows and normalization below are read historically.
+  const reservedBytes = execFileSync('git', ['show', `11bd538:${reservedFile}`],
+    { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 }).replaceAll('\r\n', '\n');
   const existingPlan = JSON.parse(reservedBytes);
   const canonical = await readCaretConservationRows(file => execFileSync('git', ['show', `957774a:${file}`], { maxBuffer: 64 * 1024 * 1024 }));
   assert.deepEqual(existingPlan.canonicalPayload, canonical.manifest);

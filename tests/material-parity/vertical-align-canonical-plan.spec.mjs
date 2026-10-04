@@ -9,6 +9,11 @@ const file = 'docs/material-vertical-align-canonical-plan.json';
 test('alignment membership independently replays all original proofs and authenticates the frozen canonical payload without writes', () => {
   const before = readFileSync(file);
   const guard = `import fs from 'node:fs';import{syncBuiltinESMExports}from'node:module';
+    const read=fs.readFileSync;fs.readFileSync=(file,...args)=>{
+      if(String(file).replaceAll('\\\\','/').endsWith('docs/material-followup-input-proposal-binding.json'))
+        throw Error('HISTORICAL_REPLAY_READ_LIVE_RESERVATION');
+      return read(file,...args);
+    };
     fs.writeFileSync=()=>{throw Error('CHECK_MODE_ATTEMPTED_WRITE')};syncBuiltinESMExports();`;
   const receipt = JSON.parse(execFileSync(process.execPath, ['--max-old-space-size=1536', '--import',
     'data:text/javascript;base64,' + Buffer.from(guard).toString('base64'),

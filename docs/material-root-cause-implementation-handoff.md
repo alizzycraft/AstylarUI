@@ -2,6 +2,21 @@
 
 ## Current resumption ledger — October 3
 
+- Post-harness alignment historical replay repair: the frozen join now reads
+  its reservation directly from recorded Git revision `11bd538`, consistently
+  with canonical rows / normalization from `957774a`, rather than requiring a
+  newer live followup file to equal that older reservation. It still checks
+  canonical payload identity and exact complete original memberships; its
+  output and historical receipt are unchanged. The test explicitly forbids
+  live reservation reads as well as writes. Command `node --test
+  tests/material-parity/vertical-align-canonical-plan.spec.mjs` passes 3/3
+  (135,851 ms), including complete original-proof / frozen-payload replay and
+  missing/duplicate/changed/overclaim controls. The authenticated report retains
+  68 proposed groups / 3,848 observations, two gaps, 45 earlier reviews, one
+  reservation / 68 observations and 8,271 other complete rows. This resolves
+  harness test 1586's historical-consumption error, not current rendering or
+  whole-audit source applicability. No findings or canonical files changed.
+
 - Post-harness caret initialization repair: the standalone range command
   reproducibly failed before collection with a temporal-dead-zone read at
   `audit-material-overlay-caret-context.mjs:17`. The dependency path runs from
