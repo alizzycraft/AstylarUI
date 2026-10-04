@@ -2,6 +2,23 @@
 
 ## Current resumption ledger — October 3
 
+- Pending range-context command failure 1174 is a confirmed module-initialization
+  fault, not a range rendering result: `audit-material-overlay-caret-context.mjs:17`
+  eagerly reads `rangeCaretAttribution` before initialization. Read-only TypeScript
+  import tracing identifies the cycle: range collector -> owner caret evidence ->
+  origin alias mapping -> input audit producer -> overlay position review ->
+  overlay caret collector -> range collector. Repair this instrumentation boundary
+  after the live harness, then test the actual command entry point and retained
+  review semantics; do not waive the original owners or unequal control domains.
+- Public cursor/range/vertical-align failures 1263, 1270, 1273, 1277 and 1281
+  stop at the same installed Angular common receipt (`0ec92260…` versus historical
+  `ecd9f39a…`), before their substantive checks. Share the dependency-provenance
+  investigation already required by test 90; preserve original served assets and
+  never substitute a new hash as proof of applicability. Range default-box test
+  1292 separately rejects `browser-defaults.ts` (`c429bec0…` versus `82fb3a97…`);
+  its source change requires independent applicability inspection. These failures
+  remain in the retained live harness log, not current-browser defect diagnoses.
+
 - Initial-style harness failure 1147 expects unresolved stepper content visibility
   (`owner-initial-style-attribution.spec.mjs:334`). Authenticated compact finding
   `0ba187a6ffefef38eb51493da38633cb644a9e6df02672f4ab6913d175fe91e6`
