@@ -2,6 +2,23 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 grid gate 1120 is narrowed without rerunning its expensive builders:
+  the existing normalization binder authenticates all seven normalization
+  functions at its exact predecessor `364f46a3` (historical digest `8929720c…`)
+  and the current precise contract (`27fcf8d7…`). The original capture is
+  reauthenticated (`b07ef154…`) and the test's exact 36-static/74-interaction
+  selection is independently repeated. Comparing every mapped owner's scalar
+  stages yields 117 changed unequal-color occurrences in 43 groups, including
+  110 previously hidden unequal occurrences, and zero non-color normalization
+  changes. This explains why unchanged whole-scalar equality is not a valid
+  assertion across these two endpoints; it does not diagnose grid layout or
+  prove classification continuity. Preserve both endpoints and every precise
+  color difference. Next integrate the existing color-transition population
+  verifier for this exact subset and separately conserve classifications/case
+  membership; do not drop color rows or substitute rounded live values. The
+  read-only diagnostic exits 0 in 3.862 seconds, creates no capture/report, and
+  leaves gate 1120 open. Material full capture session 21768 remains live.
+
 - October 5 the existing range-proof suite now authenticates both retained fresh
   browser logs and the unchanged public probe, compares all six complete repeated
   observations, asserts Chrome 154 explicitly and conserves every historical
