@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 3
 
+- Initial-style harness failure 1147 expects unresolved stepper content visibility
+  (`owner-initial-style-attribution.spec.mjs:334`). Authenticated compact finding
+  `0ba187a6ffefef38eb51493da38633cb644a9e6df02672f4ab6913d175fe91e6`
+  retains all 68 cases and prior unresolved metadata; its current attribution is
+  `reviewed-panel-visibility-state-owner-substitution`, classified as an
+  application/plugin authoring defect. It explicitly leaves used visibility,
+  hidden-state support, animation, focus and accessibility unproven. The row was
+  not dropped or promoted to rendering equivalence. Reconcile this older
+  integration assertion with the later panel ownership proof, preserving the
+  historical endpoint and separate current checks rather than waiving visibility.
+  Failures 1152/1156 reject a stale complete owner-membership report; 1155 stops
+  at producer SHA `787618f9…` versus retained `b6b4e62b…`. Exact report-field
+  conservation/applicability remains to be checked; do not merely repin receipts.
+
 - October 4 bounded harness follow-up: test 913 in
   `modal-position-inspection.spec.mjs` aborts at line 1318 with
   `ReferenceError: resolveGeneratedReferenceNode is not defined`. The test calls
