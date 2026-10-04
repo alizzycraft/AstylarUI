@@ -37,6 +37,21 @@ test('capture diagnostic additions preserve historical gap source and reject oth
   assert.throws(() => readGapSurveySource({ ...descriptor, sha256: '0'.repeat(64) }));
 });
 
+test('historical showcase source permits only exact read-only diagnostics additions', () => {
+  const file = 'examples/material-showcase/src/app/astylar.component.ts';
+  const before = execFileSync('git', ['show', `c479097f^:${file}`], { encoding: 'utf8', maxBuffer: 2 * 1024 * 1024 }).replaceAll('\r\n', '\n');
+  const current = readFileSync(file, 'utf8');
+  const descriptor = { file, sha256: sha(before) };
+  assert.equal(readGapSurveySource(descriptor), before);
+  assert.equal(readGapSurveySource(descriptor, { current: () => before }), before);
+  for (const changed of [current + '\n// unrelated change\n', current.replace('meshZ: mesh.position.z', 'meshZ: 0'),
+    current.replace('paintDepth: {', 'differentDepth: {')]) {
+    assert.notEqual(changed, current);
+    assert.throws(() => readGapSurveySource(descriptor, { current: () => changed }));
+  }
+  assert.throws(() => readGapSurveySource({ ...descriptor, sha256: '0'.repeat(64) }));
+});
+
 test('border source reconciliation pins complete snapshots and rejects unrelated or helper changes', () => {
   const file = 'tests/material-parity/border-initial-input-evidence.mjs';
   const descriptor = survey.sourceFingerprints.find(s => s.file === file);

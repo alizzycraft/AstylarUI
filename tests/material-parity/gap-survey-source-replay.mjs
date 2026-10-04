@@ -6,6 +6,7 @@ import ts from 'typescript';
 import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
 import { restoreMappingReadAdapterSource } from './audit-evidence-session.mjs';
 import { borderEvidenceBaseline, verifyBorderEvidenceSourceTransition } from './position-composition-producer-transition.mjs';
+import { restoreAstylarDiagnostics } from './alignment-survey-conservation.mjs';
 
 const hash = text => createHash('sha256').update(text.replaceAll('\r\n', '\n')).digest('hex');
 export const gapSurveyNormalizationRevision = '4650791a7208b841dd29f1ced015f98234949623';
@@ -78,6 +79,9 @@ export function readGapSurveySource(descriptor, readers = {}) {
     ? readHistorical(gapSurveyNormalizationRevision, descriptor.file) : readCurrent(descriptor.file);
   if (descriptor.file === 'tests/material-parity/run-material-parity.mjs' && hash(source) !== descriptor.sha256) {
     source = restoreGapCaptureDiagnostics(source);
+  }
+  if (descriptor.file === 'examples/material-showcase/src/app/astylar.component.ts' && hash(source) !== descriptor.sha256) {
+    source = restoreAstylarDiagnostics(source);
   }
   if (descriptor.file === 'tests/material-parity/generated-node-mapping-evidence.mjs' && hash(source) !== descriptor.sha256) {
     source = restoreMappingReadAdapterSource(descriptor, source);

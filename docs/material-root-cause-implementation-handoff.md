@@ -2,6 +2,24 @@
 
 ## Current resumption ledger — October 3
 
+- Root shadow/height receipt blockers closed through existing historical readers:
+  `readGapSurveySource` now permits the showcase's exact two read-only diagnostic
+  additions only when reversal restores the entire retained source digest.
+  Unrelated additions, altered diagnostic blocks and forged receipts reject.
+  Gap-source plus root-shadow tests pass 12/12 (12,871 ms), including complete
+  2,311-case / 36-family proof replay and independent browser serialization at
+  DPR 1/2 (Chrome 154.0.8037.58); shadow alpha 0.133 versus 0.14 remains unequal.
+  Root-height evidence tests now use the same exact reader for border/showcase
+  applicability; their self-fingerprinted original assertions are authenticated
+  after reversing only the receipt-loop substitution. All 164 cases, 138
+  repeated roots, 26 controls and 414 reviewed property observations replay,
+  with original invalid-formatting/ambiguous-owner controls intact.
+  Root-height plus caret-initialization tests pass 6/6 (3,016 ms).
+  This closes harness failures 1369/1397, not candidate used paint, height
+  behavior or current full browser acceptance. Root initial-style producer/
+  policy applicability (1384), canonical reconciliation and other unresolved
+  populations remain pending. No historical report hashes were repinned.
+
 - Overlay caret applicability integrated: all 13 groups / 109 cases / 378
   observations / 33,642 original scalar checks replay with exact historical
   receipts and current caret-only normalization revalidation. The 59 scalar

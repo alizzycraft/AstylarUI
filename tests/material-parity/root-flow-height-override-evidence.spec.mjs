@@ -3,6 +3,8 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import test from 'node:test';
 import { inspectRootFlowHeightOverrides } from './root-flow-height-override-evidence.mjs';
+import { readGapSurveySource } from './gap-survey-source-replay.mjs';
+import ts from 'typescript';
 
 const hash = b => createHash('sha256').update(b).digest('hex');
 const durable = JSON.parse(readFileSync('docs/material-root-flow-height-overrides.json'));
@@ -24,7 +26,29 @@ test('repeated root selector proof preserves all 164 affected-family cases and h
     'tests/material-parity/root-flow-height-override-evidence.spec.mjs', 'tests/material-parity/root-initial-style-evidence.mjs',
     'tests/material-parity/border-initial-input-evidence.mjs', 'examples/material-showcase/src/app/astylar.component.ts',
     'examples/material-showcase/src/app/reference.component.ts']);
-  for (const s of durable.sourceFingerprints) assert.equal(hash(readFileSync(s.file, 'utf8').replaceAll('\r\n', '\n')), s.sha256);
+  for (const s of durable.sourceFingerprints) {
+    if (s.file !== 'tests/material-parity/root-flow-height-override-evidence.spec.mjs') {
+      assert.equal(hash(readGapSurveySource(s).replaceAll('\r\n', '\n')), s.sha256);
+      continue;
+    }
+    // Preserve every original assertion while authenticating this exact
+    // historical-source reader substitution in the self-fingerprinted test.
+    const source = readFileSync(s.file, 'utf8').replaceAll('\r\n', '\n');
+    const ast = ts.createSourceFile(s.file, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    assert.equal(ast.parseDiagnostics.length, 0);
+    const loops = [];
+    const visit = node => {
+      if (ts.isForOfStatement(node) && node.expression.getText(ast) === 'durable.sourceFingerprints') loops.push(node);
+      ts.forEachChild(node, visit);
+    };
+    visit(ast); assert.equal(loops.length, 1);
+    let restored = source.slice(0, loops[0].getStart(ast)) +
+      "for (const s of durable.sourceFingerprints) assert.equal(hash(readFileSync(s.file, 'utf8').replaceAll('\\r\\n', '\\n')), s.sha256);" + source.slice(loops[0].end);
+    for (const line of ["import { readGapSurveySource } from './gap-survey-source-replay.mjs';\n", "import ts from 'typescript';\n"]) {
+      assert.equal(restored.split(line).length, 2); restored = restored.replace(line, '');
+    }
+    assert.equal(hash(restored), s.sha256, 'root-height assertions changed outside receipt reconciliation');
+  }
   for (let i = 0; i < entries.length; i++) {
     const e = entries[i], o = durable.observations[i];
     assert.equal(o.case, `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`);
