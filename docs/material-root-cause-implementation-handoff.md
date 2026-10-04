@@ -4,7 +4,7 @@
 
 - Prepared composition failure 1262 is a historical/current endpoint comparison,
   not a demonstrated row-conservation failure: the retained dry-run report passes
-  its 125-group / 6,871-observation and 8,339-row assertions, then line 61 of
+  its 125-group / 6,871-observation and 8,339-row assertions, then line 60 of
   `prepared-alignment-composition.spec.mjs` compares its frozen canonical receipt
   (`72b148d9…`, decoded `ee6db8ce…`) to the current package (`d7e7ed4f…`, decoded
   `7e411759…`). Assertions after that line were not reached. Preserve the dry-run
