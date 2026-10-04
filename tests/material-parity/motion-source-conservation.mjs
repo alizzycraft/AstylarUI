@@ -45,6 +45,28 @@ export function restoreTypographyMotionOptIns(source, kind) {
   return restored;
 }
 
+export function restoreOwnerInitialSurveyOptIns(source) {
+  let restored = restoreTypographyMotionOptIns(source, 'survey');
+  const replacements = [
+    ["fontStyle: ['font'], fontWeight: ['font', 'fontvariationsettings'],", "fontStyle: ['font'],"],
+    ['reviewedAppearance = false, reviewedFontWeight = false', 'reviewedAppearance = false'],
+    ["  const initialValues = { ...ownerInitialValues,\n    ...(reviewedAppearance ? { appearance: 'none' } : {}),\n    ...(reviewedFontWeight ? { fontWeight: '400' } : {}) };",
+      "  const initialValues = reviewedAppearance ? { ...ownerInitialValues, appearance: 'none' } : ownerInitialValues;"],
+    ["  appearance: ['webkitappearance', 'mozappearance'],\n", ''],
+    ["export function inspectOwnerInitialStyle(input, property, reference, candidate,\n  { family, reviewedGeneratedOwners = false, reviewedAppearance = false } = {}) {\n  // Opt in separately: the historical survey and attribution population must\n  // not expand merely because a new property is being investigated.\n  const initialValues = reviewedAppearance ? { ...ownerInitialValues, appearance: 'none' } : ownerInitialValues;",
+      'export function inspectOwnerInitialStyle(input, property, reference, candidate, { family, reviewedGeneratedOwners = false } = {}) {'],
+    ['Object.hasOwn(initialValues, property)', 'Object.hasOwn(ownerInitialValues, property)'],
+    ['reference.styles[n.style]?.[property] !== initialValues[property]', 'reference.styles[n.style]?.[property] !== ownerInitialValues[property]'],
+  ];
+  for (const [before, after] of replacements) {
+    assert.equal(restored.split(before).length, 2, 'initial survey opt-in restoration must match exactly once');
+    restored = restored.replace(before, after);
+  }
+  assert.equal(hash(restored), '77ea9fd39297f31e067f83b262f33a466b6b9a4b501071a178d993be170b731c',
+    'unreviewed original owner survey source change');
+  return restored;
+}
+
 // This is a deliberately conservative named-declaration dependency closure.
 // Property/local identifiers may over-include declarations, never justify
 // skipping one. A newly reachable import fails rather than silently escaping

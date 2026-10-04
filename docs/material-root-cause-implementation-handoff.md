@@ -45,6 +45,18 @@
   and current unfiltered browser gates remain required. Historical test or output
   passes do not establish current equal-input rendering acceptance.
 
+Owner survey failure 1165 source boundary: `restoreOwnerInitialSurveyOptIns`
+now restores the complete retained survey source byte-for-byte to Git `a99cc87d`
+and its unchanged `77ea9fd…` digest. Four negative controls reject unrelated
+edits, duplicate source, enabling appearance by default, and changed font-style
+defaults. The focused original-survey and typography restoration checks pass
+2/2 (1,407 ms); the complete existing motion source-conservation suite also
+passes 3/3 (36,474 ms), including retained finding and mapping mutation checks.
+This closes the survey-source applicability question, not the
+original CLI gate: next wire authenticated source transitions into its complete
+report comparison without repinning historical receipts or admitting unrelated
+producer edits. No corpus replay/export is justified for this helper alone.
+
 Owner survey failure 1165 narrowed, not closed: the original read-only CLI
 test still fails 1/1 (63,220 ms) at complete report equality. A read-only
 in-memory execution of the unchanged collector body, with only publication

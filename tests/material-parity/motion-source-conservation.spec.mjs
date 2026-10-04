@@ -3,7 +3,20 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { collectOwnerInitialMotion } from '../../scripts/audit-material-owner-initial-motion.mjs';
-import { verifyMotionSourceConservation, restoreTypographyMotionOptIns } from './motion-source-conservation.mjs';
+import { verifyMotionSourceConservation, restoreTypographyMotionOptIns, restoreOwnerInitialSurveyOptIns } from './motion-source-conservation.mjs';
+
+test('original owner survey opt-ins restore the complete retained source and reject changed defaults', () => {
+  const file = 'tests/material-parity/owner-initial-style-survey.mjs';
+  const current = readFileSync(file, 'utf8');
+  const retained = execFileSync('git', ['show', `a99cc87d:${file}`], { encoding: 'utf8' }).replaceAll('\r\n', '\n');
+  assert.equal(restoreOwnerInitialSurveyOptIns(current), retained);
+  for (const changed of [current + '\n// unrelated\n', current + current,
+    current.replace('reviewedAppearance = false', 'reviewedAppearance = true'),
+    current.replace("fontStyle: 'normal'", "fontStyle: 'italic'")]) {
+    assert.notEqual(changed, current);
+    assert.throws(() => restoreOwnerInitialSurveyOptIns(changed));
+  }
+});
 
 test('typography opt-ins restore exact predecessors and reject unrelated or duplicated source edits', () => {
   for (const [kind, file] of [['survey', 'tests/material-parity/owner-initial-style-survey.mjs'],
