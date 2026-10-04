@@ -2,6 +2,34 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 fresh range-default proof confirms the historical defect still exists
+  without treating old receipts as current. `npm run material-showcase:prepare`
+  exits 0, rebuilding and packing the library, installing it and clearing Angular
+  cache. All 416 installed compiled files match `dist/lib` byte-for-byte; the
+  complete 419-file installed tree remains unchanged across the two browser runs
+  (tree receipt `f8381d039cdd55b3e374320c7fcab7ed666bde514bed5fa8ce523f8f2dd94dd3`).
+  Both executions of `npm --prefix examples/material-showcase test -- --watch=false
+  --browsers=ChromeHeadless --include=src/app/range-default-box-audit.spec.ts`
+  exit 1 with exactly two omitted-border failures and four explicit-border
+  successes. All six complete observations repeat identically and match the
+  historical observations except browser user agent (now Chrome Headless 154,
+  DPR 1; Babylon 8.56.2). The existing NG0914 zoneless/Zone.js warning remains.
+  The equal-input probe is unchanged (`68de22c8…` raw source receipt).
+  First divergence is resolved defaults: `browser-defaults.ts` input defaults
+  supply 1px solid / 4px radius through `getElementTypeDefaults(elementType)`;
+  Chrome range resolves 0px / none / 0px. Content-box output is 122x46 versus
+  120x44; border-box geometry matches while the resolved styles still differ.
+  Explicit shared zero/two-pixel controls pass. This confirms a current core
+  defaults defect, not swapped-thumb or dragging causality, and does not close
+  the historical raw-source gate 1292 by waiving its seven unverified receipts.
+  Failed evidence is retained separately under
+  `artifacts/material-parity/range-current-689c9611-20261005/run-1.log`
+  (SHA-256 `32406db9ea6dfae6ac60ddd92805605606c5559cfdc0ff7fdc3736d0e42f8be1`)
+  and `run-2.log`
+  (`ba430f741f655825bd1baba7cfe710c42fc8922392f1fccb77d8813d9e4e53a7`).
+  Complete replay, repeat equality, installed-tree continuity and built/installed
+  byte equality checks exit 0. No renderer, fixture or historical report changed.
+
 - October 5 mapped-owner applicability gate 1152 is closed: the complete mapping
   suite passes 6/6 with no skips (83,864 ms), including all original mapping,
   generated-owner, active-panel and unchanged-report assertions. Its read-only
