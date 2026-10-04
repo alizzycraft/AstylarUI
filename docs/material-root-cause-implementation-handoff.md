@@ -17,6 +17,14 @@
   equivalence remains unproven. The overall harness has advanced and is still
   nonterminal.
 
+  Subsequent tests 1401–1404 independently pass the complete original capture
+  and tree replay: all 2,311 shadow proof objects exactly match the durable
+  survey, and all 36 classification groups retain their complete membership.
+  Selected/duplicated/changed populations, lost traces and unsupported raster
+  claims are rejected. This closes the per-case replay gap left by test 1397,
+  not its historical showcase-source applicability or candidate used paint.
+  The harness has advanced to slider-border canonical integration.
+
 - October 4 root provenance failures remain explicit: test 1369 stops at
   `root-flow-height-override-evidence.spec.mjs:27` on the LF-normalized border
   evidence receipt (`a809c257…` current versus `3dbcf33f…` retained). Its 164-case,
