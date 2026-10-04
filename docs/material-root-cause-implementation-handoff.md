@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 3
 
+- October 4 live-run checkpoint: canonical reviewed-input integration tests
+  1326 and 1327 pass against current package `d7e7ed4f…` / decoded `7e411759…`.
+  Test 1326 conserves complete source-proven classification membership for
+  290 groups / 8,606 observations (146 later source-batch groups plus 144 root
+  background groups); test 1327 conserves 118 caret groups / 3,154 observations.
+  Both explicitly leave unrelated classifications and input/rendering equivalence
+  unproven. These are membership proofs, not closure of earlier whole-scalar
+  conservation failures. Session 95322 remains nonterminal; worker 25896 was
+  confirmed live in reviewed-input canonical integration. Next reconcile the
+  terminal harness results, then repair the two isolated instrumentation faults
+  and resolve historical/current applicability before final browser gates.
+
 - Reviewed-authoring integration 1318 fails whole-scalar conservation at
   `reviewed-authoring-canonical-integration.spec.mjs:84` after 404,735 ms,
   comparing frozen producer `c391a6fb` with the current producer. The first
