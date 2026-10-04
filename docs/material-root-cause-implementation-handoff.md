@@ -2,6 +2,28 @@
 
 ## Current resumption ledger — October 3
 
+- Root initial-style source question narrowed with the existing diagnostic:
+  `node scripts/diagnose-material-root-initial-receipt.mjs --sources-only`
+  passes (2.60 s). Its former `7cc8e93^` anchor was not the retained receipt;
+  authenticated `4dc770a` matches producer b6b4e62b… and suite 0a373bad… .
+  Existing projection verification conserves 226 complete retained producer
+  statements (c4250eaf…), with color/disabled-ink corrections explicitly NOT
+  equated. Inventory functions `collectFullTreeInventory`,
+  `collectReferenceContextGaps`, `caseKey` and the reference context declaration
+  exactly match the retained source. Policy has seven statements: only its
+  classification list and source finding table change, both complete new
+  statements are pinned. All 132 prior finding definitions remain identical
+  and ordered; 13 new definitions and `documented-limitation` are additions.
+  Shared border selector restoration also authenticates. No case evidence,
+  historical receipt or canonical classification is changed by this mode.
+  The complete legacy-suite bridge remains pending: existing migration helper
+  assumes the 424-entry positioning inventory, while current suite explicitly
+  checks 539 entries with later/launch/recent proof lists. Default diagnostic
+  execution still rejects that mismatch; do not call full-suite applicability
+  green or repeat that unchanged failure. Next: reconcile the existing inventory
+  migration using those independently enumerated additions, then rerun the
+  original root membership guard. Canonical/browser acceptance remains pending.
+
 - Root shadow/height receipt blockers closed through existing historical readers:
   `readGapSurveySource` now permits the showcase's exact two read-only diagnostic
   additions only when reversal restores the entire retained source digest.
