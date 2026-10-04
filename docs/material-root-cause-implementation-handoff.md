@@ -2,6 +2,16 @@
 
 ## Current resumption ledger — October 3
 
+- Reconstruction retention check: exact owned scratch targets for removal are
+  the two generated server bundle directories and `.angular` build cache;
+  browser failure inputs, configs/source and reconstruction script are retained.
+  Targets resolved beneath the owned scratch and recursive inspection found no
+  reparse points. The environment rejected the deletion before process launch;
+  nothing was removed and no alternate deletion mechanism was attempted.
+  A fresh full fingerprint check still authenticates all 1,887 browser files.
+  Cleanup remains pending separately from audit acceptance; do not interpret
+  this retention limitation as a renderer defect or restart the build.
+
 - Frozen browser coverage restored without repinning: generated style comments
   contained the copied app's absolute directory. In-memory restoration of that
   directory plus generated chunk references authenticated 1,884 files; adjusting
