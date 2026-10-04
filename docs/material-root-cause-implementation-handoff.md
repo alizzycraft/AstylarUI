@@ -61,6 +61,24 @@
   (1147/1152/1155/1156) against existing panel-state and source-transition proofs;
   current unfiltered browser gates and coverage acceptance remain outstanding.
 
+Owner-initial follow-on triage: failures 1155/1156 have exactly two changed
+source receipts in the retained membership report: `input-equivalence-audit.mjs`
+(`b6b4e62b…` to `d6b8c674…`) and `input-equivalence-policy.mjs`
+(`7e939aec…` to `6516e9c5…`). Failure 1152's retained mapping report has the
+same producer transition plus the survey opt-ins and border transition already
+authenticated above. No saved report has been rewritten; these gates remain
+open until full source applicability and complete replay are proven. Existing
+`policyProjection` addresses an intermediate `3256863a…` policy, not the current
+`6516e9c5…` source, so it cannot be reused unchecked.
+
+Failure 1147 separately asserts that stepper-content visibility must remain
+unresolved, but the production chain now applies the independently tested
+panel-state ownership review. Its original test is being replayed unchanged
+before updating the assertion to require exact state-owner evidence and retain
+the hidden-state/live-animation limitations. Do not replace it with an expected
+classification string alone. The remaining priority is classification/source
+applicability, followed by coverage and fresh unfiltered browser acceptance.
+
 Historical investigation notes for failure 1165 (superseded by closure above):
 `restoreOwnerInitialSurveyOptIns`
 now restores the complete retained survey source byte-for-byte to Git `a99cc87d`
