@@ -2,6 +2,21 @@
 
 ## Current resumption ledger — October 3
 
+- October 4 root-shadow integration finishes with tests 1393–1396 passing.
+  The production comparison conserves scalar rows and attribution precedence
+  for 36 shadow groups / 277 selected cases, explicitly authenticating the
+  fractional-background transition and six later root-flow groups separately.
+  Its detached/missing-evidence and false-claim controls also pass. The two
+  expensive tests took 759,120 ms and 2,153,117 ms; do not repeat unchanged.
+  Test 1397 subsequently fails at `root-shadow-input-evidence.spec.mjs:33` on
+  the showcase source receipt (`b493a355…` current versus `b7957cd9…` retained),
+  after its 2,311-case membership and classification-limit assertions but before
+  the full per-case shadow replay. It joins the existing showcase-source
+  applicability question, not a failed shadow-paint proof. Browser-only shadow
+  serialization checks 1399–1400 pass at DPR 1/2; candidate paint/raster
+  equivalence remains unproven. The overall harness has advanced and is still
+  nonterminal.
+
 - October 4 root provenance failures remain explicit: test 1369 stops at
   `root-flow-height-override-evidence.spec.mjs:27` on the LF-normalized border
   evidence receipt (`a809c257…` current versus `3dbcf33f…` retained). Its 164-case,
