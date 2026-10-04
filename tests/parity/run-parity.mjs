@@ -9,7 +9,7 @@ import { compareSharpness, cropRgba, evaluateSharpness } from './sharpness-metri
 
 const ROOT = process.cwd();
 const BASE_URL = process.env['ASTYLAR_PARITY_BASE_URL'] ?? 'http://127.0.0.1:4300';
-const ARTIFACTS_DIR = path.join(ROOT, 'artifacts', 'parity');
+const ARTIFACTS_DIR = path.resolve(ROOT, process.env['ASTYLAR_PARITY_ARTIFACTS'] ?? 'artifacts/parity');
 const enforceThresholds = process.argv.includes('--enforce');
 const enforceFocusedThresholds = process.argv.includes('--enforce-focused');
 const fixtureArgument = process.argv.find((argument) => argument.startsWith('--fixture='));

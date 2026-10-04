@@ -2,6 +2,17 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 current-gate preparation: the general parity runner previously had
+  a fixed `artifacts/parity` publication path. Its new optional
+  `ASTYLAR_PARITY_ARTIFACTS` destination permits fresh-run isolation without
+  overwriting retained evidence. Existing default behavior remains unchanged.
+  Both fixture-manifest tests pass (609 ms), including complete original runner
+  source conservation after reversing only this destination declaration, and
+  evaluated default/relative/absolute destination controls. No fixture, threshold,
+  capture calculation or rendering code changed. This is instrumentation proof,
+  not a passing full gate. Run unfiltered `npm run parity:check` against a fresh
+  absolute destination next; do not substitute old output evidence.
+
 - October 5 remaining-overlay receipt gate 1297 is closed in its original
   assertion: combined remaining-overlay and original-context suites pass 16/16
   with no skips (38,450 ms). All 48 groups / 1,424 observations, 50 cases,

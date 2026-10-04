@@ -2,6 +2,23 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { build } from 'esbuild';
+import { createHash } from 'node:crypto';
+import path from 'node:path';
+import { runInNewContext } from 'node:vm';
+
+test('isolated general parity artifacts preserve the complete original capture and acceptance code', async () => {
+  const source = (await readFile('tests/parity/run-parity.mjs', 'utf8')).replaceAll('\r\n', '\n');
+  const current = "const ARTIFACTS_DIR = path.resolve(ROOT, process.env['ASTYLAR_PARITY_ARTIFACTS'] ?? 'artifacts/parity');";
+  assert.equal(source.split(current).length, 2);
+  const restored = source.replace(current, "const ARTIFACTS_DIR = path.join(ROOT, 'artifacts', 'parity');");
+  assert.equal(createHash('sha256').update(restored).digest('hex'),
+    'ed32cc811ca7a7e3b3190c7d1950ee2ea0106a1face9d37530b83854f1188aa1');
+  for (const requested of [undefined, 'artifacts/parity-fresh-test', path.resolve('artifacts/parity-absolute-test')]) {
+    const actual = runInNewContext(current + '\nARTIFACTS_DIR',
+      { ROOT: process.cwd(), path, process: { env: { ASTYLAR_PARITY_ARTIFACTS: requested } } });
+    assert.equal(actual, path.resolve(process.cwd(), requested ?? 'artifacts/parity'));
+  }
+});
 
 const RUNNER_FIELDS = [
   'viewportIds',
