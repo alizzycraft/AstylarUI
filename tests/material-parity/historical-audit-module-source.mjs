@@ -256,6 +256,7 @@ export function verifyOverlayFontSnapshot(live, historicalBytes, currentReaderBy
   assert.equal(oldAstylar.length, 1); assert.equal(nowAstylar.length, 1);
   if (nowAstylar[0].sha256 !== oldAstylar[0].sha256) {
     const currentAstylar = readFileSync(path.resolve(process.cwd(), astylarFile), 'utf8').replaceAll('\r\n', '\n');
+    assert.equal(nowAstylar[0].sha256, hash(currentAstylar), 'current Astylar component receipt does not match actual source');
     assert.equal(hash(restoreAstylarDiagnostics(currentAstylar)), oldAstylar[0].sha256,
       'Astylar component source transition is not the authenticated diagnostics-only change');
     nowAstylar[0].sha256 = oldAstylar[0].sha256;

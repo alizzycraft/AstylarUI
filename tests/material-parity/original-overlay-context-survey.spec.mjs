@@ -22,6 +22,10 @@ test('overlay font snapshot retains its historical receipt only after complete d
   const before = structuredClone(live);
   assert.deepEqual(verifyOverlayFontSnapshot(live, historical, reader), JSON.parse(historical));
   assert.deepEqual(live, before);
+  const withCurrentComponent = structuredClone(live);
+  withCurrentComponent.sources.find(s => s.file === 'examples/material-showcase/src/app/astylar.component.ts').sha256 =
+    hash(readFileSync('examples/material-showcase/src/app/astylar.component.ts', 'utf8').replaceAll('\r\n', '\n'));
+  assert.deepEqual(verifyOverlayFontSnapshot(withCurrentComponent, historical, reader), JSON.parse(historical));
   const mutations = [
     r => { r.findings.pop(); }, r => { r.observations--; },
     r => { r.findings[0].proof.inputEquivalent = true; },

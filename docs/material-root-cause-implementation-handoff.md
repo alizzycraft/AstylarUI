@@ -2,6 +2,16 @@
 
 ## Current resumption ledger — October 3
 
+- Overlay font provenance hole corrected: a changed component receipt was
+  replaced with the historical receipt after authenticating the actual source,
+  without first requiring the supplied changed receipt to equal that source.
+  The verifier now checks that equality before the exact diagnostics reversal.
+  Original false-receipt sensitivity tests pass again, and an added positive
+  control accepts the actual current component receipt without mutating the
+  historical data. Original overlay context suite passes 10/10 (30,064 ms);
+  the updated font-specific control passes 1/1. This tightens instrumentation
+  authentication only; it does not alter captured inputs or rendering.
+
 - Tooltip applicability integrated: `node scripts/check-material-tooltip-caret-context.mjs`
   now passes all 18 cases / 1,602 original scalar checks / 3,816 root properties,
   34 invalid-evidence controls, four parent-source controls, two additional
