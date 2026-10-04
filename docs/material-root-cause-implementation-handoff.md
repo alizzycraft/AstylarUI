@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 3
 
+- October 4 range-caret applicability: fresh replay failed at the runner's
+  complete source guard (c3cabcf… versus 33c5a4…), before reading case evidence.
+  The range collector now reuses the existing exact historical runner
+  restoration, including launch and additive paint diagnostics transitions;
+  the restored entire source must still match the original digest. This is
+  historical applicability only, not current capture execution equivalence.
+  `node scripts/check-material-range-caret-inputs.mjs` passes four groups,
+  78 cases, 156 observations and 13,884 scalar checks, with 18 invalid-input,
+  six changed-evidence, 14 conservation and two unreviewed-runner rejection
+  controls. Saved review content remains equal except authenticated receipts;
+  no report files are written. Caret initialization tests still pass 4/4.
+  Tooltip/overlay caret applicability and canonical source-graph integration
+  remain pending; do not repeat the completed range replay unchanged.
+
 - Reconstruction retention check: exact owned scratch targets for removal are
   the two generated server bundle directories and `.angular` build cache;
   browser failure inputs, configs/source and reconstruction script are retained.

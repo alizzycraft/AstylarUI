@@ -10,6 +10,7 @@ import { restoreMappingReadAdapterSource } from '../tests/material-parity/audit-
 import { borderEvidenceBaseline, verifyBorderEvidenceSourceTransition } from '../tests/material-parity/position-composition-producer-transition.mjs';
 import { applyModalBoxReview } from '../tests/material-parity/modal-position-inspection.mjs';
 import { rangeCaretAttribution } from '../tests/material-parity/component-caret-attributions.mjs';
+import { restoreGapCaptureDiagnostics } from '../tests/material-parity/gap-survey-source-replay.mjs';
 export { rangeCaretAttribution } from '../tests/material-parity/component-caret-attributions.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -99,13 +100,16 @@ export function collectRangeCaretInputs() {
     const normalization = s.file === parent.productionNormalization.module;
     const mappingAdapter = s.file === 'tests/material-parity/generated-node-mapping-evidence.mjs' && current !== s.sha256;
     const borderTransition = s.file === 'tests/material-parity/border-initial-input-evidence.mjs' && current !== s.sha256;
-    if (mappingAdapter) restoreMappingReadAdapterSource(s, bytes);
+    const runnerTransition = s.file === 'tests/material-parity/run-material-parity.mjs' && current !== s.sha256;
+    if (runnerTransition) assert.equal(hash(restoreGapCaptureDiagnostics(bytes.toString('utf8'))), s.sha256);
+    else if (mappingAdapter) restoreMappingReadAdapterSource(s, bytes);
     else if (borderTransition) {
       const historical = execFileSync('git', ['show', `${borderEvidenceBaseline}:${s.file}`]);
       assert.equal(verifyBorderEvidenceSourceTransition(historical, bytes).historicalSha256, s.sha256);
     } else if (!normalization) assert.equal(current, s.sha256, s.file);
     return { file: s.file, recorded: s.sha256, current,
       verification: normalization ? 'historical-replay-and-current-caret-value-revalidation'
+        : runnerTransition ? 'exact-additive-diagnostics-reversal-with-complete-historical-source-conserved'
         : mappingAdapter ? 'exact-reader-import-transition-with-complete-mapping-source-conserved'
         : borderTransition ? 'authenticated-border-extension-with-shared-selector-conserved' : 'complete-source' };
   });

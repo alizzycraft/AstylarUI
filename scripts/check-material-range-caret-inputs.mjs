@@ -7,8 +7,17 @@ import { applyRangeCaretReviews, validateRangeCaretReviews, rangeCaretAttributio
 import { queryFindings } from './audit-findings-store.mjs';
 import { collectFullTreeInventory } from '../tests/material-parity/input-equivalence-audit.mjs';
 import { bindPreciseAuditNormalization } from '../tests/material-parity/audit-normalization-contracts.mjs';
+import { restoreGapCaptureDiagnostics } from '../tests/material-parity/gap-survey-source-replay.mjs';
 
 assert.equal(process.argv.length, 2);
+// Historical applicability must reject any runner change outside the exact
+// authenticated transition, including a change to the original launch contract.
+const runnerSource = readFileSync('tests/material-parity/run-material-parity.mjs', 'utf8');
+for (const changed of [runnerSource + '\n// unreviewed change\n',
+  runnerSource.replace("?? 'chrome'", "?? 'chromium'")]) {
+  assert.notEqual(changed, runnerSource);
+  assert.throws(() => restoreGapCaptureDiagnostics(changed));
+}
 // Original proof digests are checked in memory by the collector. At the saved
 // report boundary JSON omits undefined synthetic-root type fields; compare its
 // exact wire representation, without filling omissions with null or a type.
@@ -20,6 +29,7 @@ assert.deepEqual(saved, JSON.parse(execFileSync('git', ['show', `a6c98bdc7c596a3
 // pinned normalization contracts. Only their current receipts may differ.
 const reconciled = structuredClone(saved);
 for (const file of ['tests/material-parity/border-initial-input-evidence.mjs',
+  'tests/material-parity/run-material-parity.mjs',
   'tests/material-parity/generated-node-mapping-evidence.mjs', 'tests/material-parity/input-equivalence-audit.mjs']) {
   const before = reconciled.parentSourceChecks.filter(s => s.file === file);
   const after = actual.parentSourceChecks.filter(s => s.file === file);
@@ -130,4 +140,5 @@ for (const mutate of [r => r.splice(r.findIndex(x => x.attribution === rangeCare
 }
 console.log(JSON.stringify({ groups: actual.groups, observations: actual.observations, cases: actual.selectedCases,
   originalScalarChecks: actual.originalScalarChecks, negativeControls: negative.length,
-  changedEvidenceControls: changedControls, conservationControls: conservation.length, savedReportMatches: true, filesWritten: false }));
+  changedEvidenceControls: changedControls, conservationControls: conservation.length,
+  runnerSourceRejectionControls: 2, savedReportMatches: true, filesWritten: false }));
