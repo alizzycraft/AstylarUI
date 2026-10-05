@@ -115,6 +115,19 @@ not live-process status):
    other 1,133 rows. Reuse the existing subset-aware source-batch validator and
    preserve complete raw rows while reconciling metadata stage-by-stage.
 
+   Read-only stage reconciliation now proves exact replay for 259 of the 1,241
+   changed rows, against the retained previous rows and all 110 captured cases:
+   typography observation 45/45 complete JSON matches; box-sizing 47/47;
+   grid/height 81/81; custom-owner boundary 86/86. Original tree inventory has
+   zero errors; the existing validators for the latter three stages report
+   zero errors. The last batch takes 3.162 seconds without a full builder.
+   All 108 source-batch rows also match the pinned plan's actual formatter in
+   all five metadata fields, but that formatter check is not source replay.
+   No original test assertion, producer, normalization or source receipt is
+   changed. These scoped replays do not close whole-population conservation;
+   982 rows remain outside this newly replayed population (including the 108
+   source-batch rows needing their independent source-bound transition).
+
    Canonical push with command-local post buffering succeeds; remote then
    advances through `8fb22120` to `783c2b6c`. Independent cold canonical check
    session 62091 is live, using all five named baseline paths; log:
