@@ -2,12 +2,18 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 
 const hash = text => createHash('sha256').update(text).digest('hex');
+const tooltipOwnershipProof = "    proof(root, 'tests/material-parity/sort-focus-structure.spec.mjs', /test\\('ordinary tooltip repeated hover and leave exposes live ownership separately from tracked counts'/,\n" +
+  "      'ordinary dark mobile tooltip live-material retention diagnostic counterexample', 'Current-full checkpoint-bound dark/mobile390x844 DPR2 actual hover/leave cycles open one paired tooltip and remove it each time. Tracked materials remain13/13/13 while live materials grow14/15/16 with accumulating unbound hover identities; final disposal clears sampled resources. The independently reduced public pointer-state proof supplies the core allocation cause. This retains a failed live plateau, not lifecycle acceptance, all-profile cleanup, GPU retention or user-visible lag attribution.'),\n";
 const standaloneCoverageProof = "    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\\('retained standalone visibility disabled and selection cohorts preserve exact receipts and failures'/,\n" +
   "      'retained standalone visibility, disabled activation and popup selection evidence', 'Authenticates all 73 dependency/screenshot receipts across six snackbar desktop/mobile profiles, four tablet themes, five disabled fields and three popup-input selections. Exact visibility/action boundaries, unequal disabled suffix state and both original picker geometry failures remain asserted. Historical replay only; not current rendering acceptance, all-state paint, complete ownership or case inspection closure.'),\n";
 // Reverse only the exact extraction of the unchanged production scalar stages.
 // Whole-module equality remains mandatory before any older transition runs.
 export function restoreScalarReviewExtraction(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes(tooltipOwnershipProof)) {
+    assert.equal(current.split(tooltipOwnershipProof).length, 2, 'repeated tooltip ownership registration');
+    current = current.replace(tooltipOwnershipProof, '');
+  }
   if (current.includes(standaloneCoverageProof)) {
     assert.equal(current.split(standaloneCoverageProof).length, 2, 'repeated standalone coverage registration');
     current = current.replace(standaloneCoverageProof, '');

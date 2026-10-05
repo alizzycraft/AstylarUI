@@ -2,6 +2,17 @@
 
 ## Current resumption ledger — October 5
 
+- Reconciliation failure localized and alignment conservation restored: current
+  producer differs from4de3203e only by standalone and tooltip proof registrations.
+  `restoreScalarReviewExtraction` already reversed the former but rejected the
+  latter before its unchanged whole-source SHA assertion. It now reverses only
+  the exact unique tooltip registration; the original hash remains mandatory.
+  Existing alignment-survey-conservation suite passes6/6, exit0,21,264.608ms,
+  including behavior/import/wrapper mutation controls. This answers the shared
+  alignment projection failure, not complete collector/export acceptance. Next
+  run the existing reviewed-input and alignment binding checks before scheduling
+  another coherent canonical reconciliation;259 attribution closure is unproven.
+
 - October 6 canonical tooltip/slider batch is terminal **exit1**, not pending:
   `canonical-tooltip-slider-batch-20261006.log`. Validation rejects independent
   original-source binding for alignmentFontInputs, textAlignInputs,
