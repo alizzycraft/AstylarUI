@@ -32,12 +32,14 @@ test('spacing reviews distinguish slider parent relocation from badge anchor sub
   assert.deepEqual(result.map(raw), rows.map(raw));
   for (let i = 0; i < rows.length; i++) if (!changed.includes(result[i])) assert.deepEqual(result[i], rows[i]);
   assert.deepEqual(validateSliderMarginReviews(result, rows, cases, inventory, normalize), []);
+  assert.deepEqual(validateSliderMarginReviews(JSON.parse(JSON.stringify(result)), rows, cases, inventory, normalize), []);
   assert.deepEqual(validateBadgeMarginReviews(result, rows, cases, inventory, normalize), []);
   for (const row of changed) {
     assert.equal(row.reviewEvidence.inputEquivalent, false); assert.equal(row.reviewEvidence.renderingEquivalent, false);
     const altered = structuredClone(result); altered.find(r => r.element === row.element && r.property === row.property).reviewedCases.pop();
     const validate = row.family === 'slider' ? validateSliderMarginReviews : validateBadgeMarginReviews;
     assert.equal(validate(altered, rows, cases, inventory, normalize).length, 1);
+    if (row.family === 'slider') assert.equal(validate(JSON.parse(JSON.stringify(altered)), rows, cases, inventory, normalize).length, 1);
   }
   const entry = cases.find(e => e.family === 'slider');
   const pair = modalInventoryTrees(inventory, `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`);

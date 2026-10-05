@@ -36,10 +36,12 @@ test('expansion and tree formatting conserve 256 observations without assuming i
   assert.deepEqual(applied.map(raw), rows.map(raw));
   applied.forEach((r, i) => { if (!changed.includes(r)) assert.deepEqual(r, rows[i]); });
   assert.deepEqual(validateExpansionTreeFormattingReviews(applied, rows, cases, inventory, normalize), []);
+  assert.deepEqual(validateExpansionTreeFormattingReviews(JSON.parse(JSON.stringify(applied)), rows, cases, inventory, normalize), []);
   const alignment = changed.find(r => r.property === 'textAlign');
   assert.equal(alignment.classification, 'parity-harness-defect'); assert.equal(alignment.astylar, undefined);
   const forged = structuredClone(applied); forged.find(r => r.attribution === 'reviewed-expansion-tree-formatting-substitution').reviewedCases.pop();
   assert.equal(validateExpansionTreeFormattingReviews(forged, rows, cases, inventory, normalize).length, 1);
+  assert.equal(validateExpansionTreeFormattingReviews(JSON.parse(JSON.stringify(forged)), rows, cases, inventory, normalize).length, 1);
   const key = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
   assert.throws(() => applyExpansionTreeFormattingReviews(rows, cases.filter(e => key(e) !== changed[0].reviewedCases[0]), inventory, normalize));
   for (const family of ['expansion', 'tree']) {
@@ -74,8 +76,10 @@ test('tooltip shrink preserves 80 observations across distinct parent contracts'
   assert.deepEqual(applied.map(raw), rows.map(raw));
   applied.forEach((r, i) => { if (!changed.includes(r)) assert.deepEqual(r, rows[i]); });
   assert.deepEqual(validateTooltipShrinkReviews(applied, rows, cases, inventory, normalize), []);
+  assert.deepEqual(validateTooltipShrinkReviews(JSON.parse(JSON.stringify(applied)), rows, cases, inventory, normalize), []);
   const forged = structuredClone(applied); forged.find(r => r.attribution === 'reviewed-tooltip-shrink-composition-substitution').reviewedCases.pop();
   assert.equal(validateTooltipShrinkReviews(forged, rows, cases, inventory, normalize).length, 1);
+  assert.equal(validateTooltipShrinkReviews(JSON.parse(JSON.stringify(forged)), rows, cases, inventory, normalize).length, 1);
   const key = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
   assert.throws(() => applyTooltipShrinkReviews(rows, cases.filter(e => key(e) !== changed[0].reviewedCases[0]), inventory, normalize));
   for (const row of changed) {
@@ -114,9 +118,11 @@ test('dialog action spacing binds 416 observations to omitted Material requests'
   assert.deepEqual(applied.map(raw), rows.map(raw));
   applied.forEach((r, i) => { if (!changed.includes(r)) assert.deepEqual(r, rows[i]); });
   assert.deepEqual(validateDialogActionSpacingReviews(applied, rows, cases, inventory, normalize), []);
+  assert.deepEqual(validateDialogActionSpacingReviews(JSON.parse(JSON.stringify(applied)), rows, cases, inventory, normalize), []);
   assert.equal(new Set(changed.flatMap(r => r.reviewedCases)).size, 32);
   const forged = structuredClone(applied); forged.find(r => r.attribution === 'reviewed-dialog-action-spacing-request-omission').reviewedCases.pop();
   assert.equal(validateDialogActionSpacingReviews(forged, rows, cases, inventory, normalize).length, 1);
+  assert.equal(validateDialogActionSpacingReviews(JSON.parse(JSON.stringify(forged)), rows, cases, inventory, normalize).length, 1);
   const key = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
   const gaps = applyDialogPanelGapReview(rows, cases, inventory, normalize);
   const gapChanges = gaps.filter((r, i) => r !== rows[i]);
@@ -215,9 +221,11 @@ test('choice spacing preserves all 341 observations including the custom mobile 
   assert.deepEqual(applied.map(raw), rows.map(raw));
   applied.forEach((r, i) => { if (!changed.includes(r)) assert.deepEqual(r, rows[i]); });
   assert.deepEqual(validateChoiceSpacingReviews(applied, rows, cases, inventory, normalize), []);
+  assert.deepEqual(validateChoiceSpacingReviews(JSON.parse(JSON.stringify(applied)), rows, cases, inventory, normalize), []);
   assert.deepEqual(changed.find(r => r.element === 'checkbox-label').reviewedCases, ['static:checkbox@custom/mobile']);
   const forged = structuredClone(applied); forged.find(r => r.attribution === 'reviewed-choice-spacing-authoring-substitution').reviewedCases.pop();
   assert.equal(validateChoiceSpacingReviews(forged, rows, cases, inventory, normalize).length, 1);
+  assert.equal(validateChoiceSpacingReviews(JSON.parse(JSON.stringify(forged)), rows, cases, inventory, normalize).length, 1);
   assert.throws(() => applyChoiceSpacingReviews(rows, cases.slice(1), inventory, normalize));
   for (const row of changed) {
     const entry = cases.find(e => row.cases.includes(`${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`));
@@ -293,8 +301,10 @@ test('stepper spacing preserves all 340 owner substitutions without inferring fl
   assert.deepEqual(applied.map(raw), rows.map(raw));
   applied.forEach((r, i) => { if (!changed.includes(r)) assert.deepEqual(r, rows[i]); });
   assert.deepEqual(validateStepperSpacingReviews(applied, rows, cases, inventory, normalize), []);
+  assert.deepEqual(validateStepperSpacingReviews(JSON.parse(JSON.stringify(applied)), rows, cases, inventory, normalize), []);
   const forged = structuredClone(applied); forged.find(r => r.attribution === 'reviewed-stepper-spacing-composition-substitution').reviewedCases.pop();
   assert.equal(validateStepperSpacingReviews(forged, rows, cases, inventory, normalize).length, 1);
+  assert.equal(validateStepperSpacingReviews(JSON.parse(JSON.stringify(forged)), rows, cases, inventory, normalize).length, 1);
   assert.throws(() => applyStepperSpacingReviews(rows, cases.slice(1), inventory, normalize));
   for (const profile of ['light', 'dark', 'contrast', 'custom']) {
     const entry = cases.find(e => e.profile === profile);
@@ -331,8 +341,10 @@ test('list spacing preserves padded block versus unpadded flex composition acros
   assert.deepEqual(applied.map(raw), rows.map(raw));
   for (let i = 0; i < rows.length; i++) if (!changed.includes(applied[i])) assert.deepEqual(applied[i], rows[i]);
   assert.deepEqual(validateListSpacingReviews(applied, rows, cases, inventory, normalize), []);
+  assert.deepEqual(validateListSpacingReviews(JSON.parse(JSON.stringify(applied)), rows, cases, inventory, normalize), []);
   const forged = structuredClone(applied); forged.find(r => r.attribution === 'reviewed-list-spacing-composition-substitution').reviewedCases.pop();
   assert.equal(validateListSpacingReviews(forged, rows, cases, inventory, normalize).length, 1);
+  assert.equal(validateListSpacingReviews(JSON.parse(JSON.stringify(forged)), rows, cases, inventory, normalize).length, 1);
   const entry = cases.find(e => e.profile === 'contrast');
   const pair = modalInventoryTrees(inventory, `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`);
   const proof = proveListSpacingComposition(entry, ...pair);

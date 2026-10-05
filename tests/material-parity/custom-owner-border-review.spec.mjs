@@ -32,8 +32,10 @@ test('final owner style boundaries conserve all 94 observations', () => {
   assert.deepEqual(applied.map(raw), rows.map(raw));
   applied.forEach((r, i) => { if (!changed.includes(r)) assert.deepEqual(r, rows[i]); });
   assert.deepEqual(validateFinalOwnerStyleReviews(applied, rows, cases, inventory, normalize), []);
+  assert.deepEqual(validateFinalOwnerStyleReviews(JSON.parse(JSON.stringify(applied)), rows, cases, inventory, normalize), []);
   const forged = structuredClone(applied); forged.find(r => r.attribution === 'reviewed-final-owner-style-boundary').reviewedCases.pop();
   assert.equal(validateFinalOwnerStyleReviews(forged, rows, cases, inventory, normalize).length, 1);
+  assert.equal(validateFinalOwnerStyleReviews(JSON.parse(JSON.stringify(forged)), rows, cases, inventory, normalize).length, 1);
   const key = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
   assert.throws(() => applyFinalOwnerStyleReviews(rows, cases.filter(e => key(e) !== changed[0].reviewedCases[0]), inventory, normalize));
   for (const row of changed) {

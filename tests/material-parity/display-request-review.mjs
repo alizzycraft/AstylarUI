@@ -68,9 +68,11 @@ export function applyExpansionTreeFormattingReviews(rows, cases, inventory, norm
 }
 
 export function validateExpansionTreeFormattingReviews(rows, originalRows, cases, inventory, normalize) {
+  // Audit evidence is persisted JSON. Compare the entire serialized rows, not
+  // live-only undefined properties; values, membership and order stay enforced.
   try {
     const select = values => values.filter(r => ['reviewed-expansion-tree-formatting-substitution', 'reviewed-expansion-text-alignment-observation-stage'].includes(r.attribution));
-    assert.deepEqual(select(rows), select(applyExpansionTreeFormattingReviews(originalRows, cases, inventory, normalize)));
+    assert.equal(JSON.stringify(select(rows)), JSON.stringify(select(applyExpansionTreeFormattingReviews(originalRows, cases, inventory, normalize))));
     return [];
   } catch (error) { return [`expansion/tree formatting lacks original evidence: ${error.message}`]; }
 }
@@ -139,7 +141,7 @@ export function applyTooltipShrinkReviews(rows, cases, inventory, normalize) {
 export function validateTooltipShrinkReviews(rows, originalRows, cases, inventory, normalize) {
   try {
     const select = values => values.filter(r => r.attribution === 'reviewed-tooltip-shrink-composition-substitution');
-    assert.deepEqual(select(rows), select(applyTooltipShrinkReviews(originalRows, cases, inventory, normalize)));
+    assert.equal(JSON.stringify(select(rows)), JSON.stringify(select(applyTooltipShrinkReviews(originalRows, cases, inventory, normalize))));
     return [];
   } catch (error) { return [`tooltip shrink lacks original evidence: ${error.message}`]; }
 }
@@ -255,7 +257,7 @@ export function applyDialogActionSpacingReviews(rows, cases, inventory, normaliz
 export function validateDialogActionSpacingReviews(rows, originalRows, cases, inventory, normalize) {
   try {
     const select = values => values.filter(r => r.attribution === 'reviewed-dialog-action-spacing-request-omission');
-    assert.deepEqual(select(rows), select(applyDialogActionSpacingReviews(originalRows, cases, inventory, normalize)));
+    assert.equal(JSON.stringify(select(rows)), JSON.stringify(select(applyDialogActionSpacingReviews(originalRows, cases, inventory, normalize))));
     return [];
   } catch (error) { return [`dialog action spacing lacks original evidence: ${error.message}`]; }
 }
@@ -405,7 +407,7 @@ export function applyChoiceSpacingReviews(rows, cases, inventory, normalize) {
 export function validateChoiceSpacingReviews(rows, originalRows, cases, inventory, normalize) {
   try {
     const select = values => values.filter(r => r.attribution === 'reviewed-choice-spacing-authoring-substitution');
-    assert.deepEqual(select(rows), select(applyChoiceSpacingReviews(originalRows, cases, inventory, normalize)));
+    assert.equal(JSON.stringify(select(rows)), JSON.stringify(select(applyChoiceSpacingReviews(originalRows, cases, inventory, normalize))));
     return [];
   } catch (error) { return [`choice spacing lacks original evidence: ${error.message}`]; }
 }
@@ -589,7 +591,7 @@ export function applyStepperSpacingReviews(rows, cases, inventory, normalize) {
 export function validateStepperSpacingReviews(rows, originalRows, cases, inventory, normalize) {
   try {
     const select = values => values.filter(r => r.attribution === 'reviewed-stepper-spacing-composition-substitution');
-    assert.deepEqual(select(rows), select(applyStepperSpacingReviews(originalRows, cases, inventory, normalize)));
+    assert.equal(JSON.stringify(select(rows)), JSON.stringify(select(applyStepperSpacingReviews(originalRows, cases, inventory, normalize))));
     return [];
   } catch (error) { return [`stepper spacing composition lacks original evidence: ${error.message}`]; }
 }
@@ -663,7 +665,7 @@ export function applyListSpacingReviews(rows, cases, inventory, normalize) {
 export function validateListSpacingReviews(rows, originalRows, cases, inventory, normalize) {
   try {
     const select = values => values.filter(r => r.attribution === 'reviewed-list-spacing-composition-substitution');
-    assert.deepEqual(select(rows), select(applyListSpacingReviews(originalRows, cases, inventory, normalize)));
+    assert.equal(JSON.stringify(select(rows)), JSON.stringify(select(applyListSpacingReviews(originalRows, cases, inventory, normalize))));
     return [];
   } catch (error) { return [`list spacing composition lacks original evidence: ${error.message}`]; }
 }

@@ -87,8 +87,10 @@ test('remaining range and tab overflow inputs retain exact owner boundaries', ()
   assert.deepEqual(applied.map(raw), rows.map(raw));
   applied.forEach((row, i) => { if (!changed.includes(row)) assert.deepEqual(row, rows[i]); });
   assert.deepEqual(validateControlOverflowOwnerBoundaries(applied, rows, cases, inventory, normalize), []);
+  assert.deepEqual(validateControlOverflowOwnerBoundaries(JSON.parse(JSON.stringify(applied)), rows, cases, inventory, normalize), []);
   const forged = structuredClone(applied); forged.find(row => row.attribution === 'reviewed-control-overflow-owner-boundary').reviewedCases.pop();
   assert.equal(validateControlOverflowOwnerBoundaries(forged, rows, cases, inventory, normalize).length, 1);
+  assert.equal(validateControlOverflowOwnerBoundaries(JSON.parse(JSON.stringify(forged)), rows, cases, inventory, normalize).length, 1);
   const entry = cases.find(e => e.family === 'tabs');
   const pair = modalInventoryTrees(inventory, `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`);
   const proof = proveControlOverflowOwnerBoundary(entry, ...pair, 'tab-overview');

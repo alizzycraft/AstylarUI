@@ -5,6 +5,41 @@
 Current next-action summary (older entries below are chronological evidence,
 not live-process status):
 
+Latest closure: independent cold canonical check passes at `b073faa6` before
+the instrumentation correction below. Fresh existing source-batch collection
+against the exact 110-case diagnostic (`35622f289c9a8576679702c77be4b9bceb4a58f8a402be88f3639ffc0af15b37`)
+passes in 40.981 seconds: binding bound, 108 groups / 318 observations, all raw
+rows conserved and four classification mutations rejected. Seven source proofs
+are freshly replayed; historical receipts remain unchanged. This closes the
+remaining individual source-replay gap: all 1,241 changed rows now have replay
+evidence. It does not close the separate complete historical conservation test.
+
+The ten validators with live-only undefined fields now compare complete JSON
+rows, consistent with the established persisted audit contract. Existing tests
+add persisted positive and negative checks; original assertions are retained.
+An initial focused run passes 9/10; the overflow test correctly rejects its
+changed historical test-source receipt. The existing restoration boundary now
+reverses only the two exact added assertions and still checks the original
+whole-source SHA, without repinning it. Final focused command is `node --test
+--test-concurrency=1 --test-name-pattern="expansion and tree formatting|tooltip
+shrink preserves|dialog action spacing binds|choice spacing preserves|stepper
+spacing preserves|list spacing preserves|final owner style boundaries|spacing
+reviews distinguish|remaining range and tab overflow|tooltip word-break request
+preserves|root shadow builder overflow dependencies"` over the existing display,
+custom-owner, slider-position, control-overflow, wrapping-populations and
+root-shadow-canonical spec files: 11/11 pass in 40.008 seconds. A separate actual
+ten-stage replay validates all 44 persisted rows and rejects 40 mutations
+(missing row, forged scalar, missing reviewed case, explicit unexpected null),
+3.226 seconds. No raw serialized row, renderer or fixture changes.
+
+Next: integrate the independently justified later review transitions into the
+existing historical reconstruction while preserving complete raw rows and the
+original final digest assertion. Reconcile consumed validator/test fingerprints
+in that coherent batch, then run applicable integration and remaining full gates.
+The successful cold check predates these source edits; do not describe the
+canonical source fingerprints as current after this correction. No heavy audit
+or build process remains live from the sessions recorded above.
+
 1. Resolve retained grid metadata conservation without exempting categories.
    Session 51039 / Node 16224 runs one current builder and the existing full
    validator over the authenticated 110-case failure input. Its JSON-to-JSON

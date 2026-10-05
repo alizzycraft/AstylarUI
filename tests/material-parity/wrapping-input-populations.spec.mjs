@@ -200,9 +200,11 @@ test('tooltip word-break request preserves all 18 paired owners and eight unpair
   assert.deepEqual(reviewed.map(raw), rows.map(raw));
   reviewed.forEach((r, i) => { if (!changed.includes(r)) assert.deepEqual(r, rows[i]); });
   assert.deepEqual(validateTooltipWordBreakReview(reviewed, rows, all, inventory, normalize), []);
+  assert.deepEqual(validateTooltipWordBreakReview(JSON.parse(JSON.stringify(reviewed)), rows, all, inventory, normalize), []);
   const forged = structuredClone(reviewed);
   forged.find(r => r.attribution === tooltipWordBreakAttribution).reviewedCases.pop();
   assert.equal(validateTooltipWordBreakReview(forged, rows, all, inventory, normalize).length, 1);
+  assert.equal(validateTooltipWordBreakReview(JSON.parse(JSON.stringify(forged)), rows, all, inventory, normalize).length, 1);
   assert.throws(() => applyTooltipWordBreakReview(rows, all.filter(e => e !== paired[0]), inventory, normalize));
   for (const source of bindTooltipWordBreakSupport().sources)
     assert.throws(() => bindTooltipWordBreakSupport(file => readFileSync(file, 'utf8') +

@@ -12,6 +12,14 @@ import { proveSliderMarginOwner } from './slider-position-request-review.mjs';
 // preserve every original assertion and authenticate the complete predecessor.
 export function restoreOverflowStageTestSource(source) {
   let restored = source.replaceAll('\r\n', '\n');
+  // Authenticate the original complete test after reversing only this added
+  // persisted-JSON assertion; the historical receipt and all old checks stay.
+  const persistedAssertion = '  assert.deepEqual(validateControlOverflowOwnerBoundaries(JSON.parse(JSON.stringify(applied)), rows, cases, inventory, normalize), []);\n';
+  assert.equal(restored.split(persistedAssertion).length, 2, 'persisted overflow assertion changed');
+  restored = restored.replace(persistedAssertion, '');
+  const persistedNegative = '  assert.equal(validateControlOverflowOwnerBoundaries(JSON.parse(JSON.stringify(forged)), rows, cases, inventory, normalize).length, 1);\n';
+  assert.equal(restored.split(persistedNegative).length, 2, 'persisted overflow negative control changed');
+  restored = restored.replace(persistedNegative, '');
   const substitutions = [
     ["  // Later owner/typography stages now follow this bounded three-function stage.\n" +
       "  // Execute its actual production declaration, not the final discrepancies tail.\n" +
@@ -320,7 +328,7 @@ export function applyControlOverflowOwnerBoundaries(rows, cases, inventory, norm
 export function validateControlOverflowOwnerBoundaries(rows, originalRows, cases, inventory, normalize) {
   try {
     const select = values => values.filter(row => row.attribution === 'reviewed-control-overflow-owner-boundary');
-    assert.deepEqual(select(rows), select(applyControlOverflowOwnerBoundaries(originalRows, cases, inventory, normalize)));
+    assert.equal(JSON.stringify(select(rows)), JSON.stringify(select(applyControlOverflowOwnerBoundaries(originalRows, cases, inventory, normalize))));
     return [];
   } catch (error) { return [`control overflow owner boundary lacks original ancestry proof: ${error.message}`]; }
 }

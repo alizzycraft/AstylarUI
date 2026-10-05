@@ -59,7 +59,7 @@ export function applySliderMarginReviews(rows, cases, inventory, normalize) {
 export function validateSliderMarginReviews(rows, originalRows, cases, inventory, normalize) {
   try {
     const select = values => values.filter(r => r.attribution === 'reviewed-slider-margin-owner-boundary');
-    assert.deepEqual(select(rows), select(applySliderMarginReviews(originalRows, cases, inventory, normalize)));
+    assert.equal(JSON.stringify(select(rows)), JSON.stringify(select(applySliderMarginReviews(originalRows, cases, inventory, normalize))));
     return [];
   } catch (error) { return [`slider margin owner boundary lacks original evidence: ${error.message}`]; }
 }

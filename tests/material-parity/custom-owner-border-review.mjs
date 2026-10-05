@@ -109,7 +109,7 @@ export function applyFinalOwnerStyleReviews(rows, cases, inventory, normalize) {
 export function validateFinalOwnerStyleReviews(rows, originalRows, cases, inventory, normalize) {
   try {
     const select = values => values.filter(r => r.attribution === 'reviewed-final-owner-style-boundary');
-    assert.deepEqual(select(rows), select(applyFinalOwnerStyleReviews(originalRows, cases, inventory, normalize)));
+    assert.equal(JSON.stringify(select(rows)), JSON.stringify(select(applyFinalOwnerStyleReviews(originalRows, cases, inventory, normalize))));
     return [];
   } catch (error) { return [`final owner styles lack original evidence: ${error.message}`]; }
 }

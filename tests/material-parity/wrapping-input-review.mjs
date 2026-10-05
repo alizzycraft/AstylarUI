@@ -667,7 +667,7 @@ export function applyTooltipWordBreakReview(rows, cases, inventory, normalize) {
 export function validateTooltipWordBreakReview(rows, originalRows, cases, inventory, normalize) {
   try {
     const select = values => values.filter(r => r.attribution === tooltipWordBreakAttribution);
-    assert.deepEqual(select(rows), select(applyTooltipWordBreakReview(originalRows, cases, inventory, normalize)));
+    assert.equal(JSON.stringify(select(rows)), JSON.stringify(select(applyTooltipWordBreakReview(originalRows, cases, inventory, normalize))));
     return [];
   } catch (error) { return [`tooltip word-break support review does not replay: ${error.message}`]; }
 }
