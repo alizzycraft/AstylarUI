@@ -12,11 +12,18 @@ not live-process status):
    builder completes in 279.897 seconds: all 1,241 retained rows match exactly
    in JSON representation, zero unmatched, owner-initial binding `bound`.
    This resolves reproduction of the retained metadata, not independent
-   justification of every classification. The full existing validator remains
-   live; its terminal result is pending. Bounded output is durably captured in
+   justification of every classification. The existing full validator is now
+   terminal, total elapsed 544.546 seconds. It reports exactly six missing
+   independently bound original sources: overlay surface, chip paint, position
+   followup, position composition, visibility and root background. No other
+   validation errors are reported for this subset. These are not waived:
+   the partial 110-case input cannot supply required complete-capture bindings.
+   Next authenticate that boundary and reconcile using the complete retained
+   capture, rather than claiming this diagnostic passed full validation.
+   Bounded output is durably captured in
    `artifacts/material-parity/owner-grid-integration-vjGiTG/current-json-replay.log`;
-   no canonical package is written. PID and session are confirmed live after
-   dispatch. Await this handle; do not restart on an observation timeout.
+   no canonical package is written. Session 51039 exits 0 because the diagnostic
+   reports validator errors; that process status is not an acceptance result.
 2. Reconcile changed consumed source fingerprints in one coherent canonical
    batch, using the complete named current-ancestry baseline and independent
    cold validation. Historical applicability proofs are not current rendering
