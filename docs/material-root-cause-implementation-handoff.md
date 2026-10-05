@@ -2,6 +2,27 @@
 
 ## Current resumption ledger — October 4
 
+- The grid owner/followup conflict is now localized to **expansion-primary /
+  appearance**, `static:expansion@light/desktop`. Read-only source/population
+  inspection over the retained 110-case scratch capture finds 2,697 historical
+  owner observations versus 3,486 current observations. Joining the exact pinned
+  followup transition shows one new generic owner admission at that case, absent
+  from the original owner classifier. The initial diagnostic incorrectly looked
+  for observations inside review metadata; the corrected check uses complete
+  `reviewedCases` membership and authenticates transition bytes at `aa96c89f`.
+  The cause is historical dependency contamination: the relocated old producer
+  uses its old early fallback ordering but imports today's expanded classifier.
+  This is not permission to overwrite an earlier attribution.
+
+  The pending grid spec now pins that owner dependency to its same historical
+  producer revision `364f46a309319201317919b6a23dd1aadd08f405`, authenticates
+  the entire source SHA `a7bf825a…`, and proves every statement conserved after
+  import-path relocation. Both historical color endpoints use that dependency;
+  the current producer remains unchanged. The reconstruction overwrite guard is
+  untouched. Full integration session **35583** is live following this specific
+  correction; do not edit its graph, restart it, or commit the pending spec until
+  terminal verification. No fixture or renderer was changed.
+
 - Border-normalization gate 52 is now integrated at the existing producer.
   `node --test tests/material-parity/border-normalization-transition.spec.mjs`
   passes **5/5**, exit 0 in **92,509 ms**, with no skips. All four original
