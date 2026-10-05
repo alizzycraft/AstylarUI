@@ -2,6 +2,21 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 layout proposal gate 854 is still a current receipt failure
+  (focused original assertion fails in 3,205 ms): control-alignment report
+  `2ba997e7…` versus pinned `f63c2a87…`. Its exact original is authenticated
+  from `9042c8aa92aa0db1a56e0d846e0bc4e5ac8b4ff6`. Fresh
+  `collectControlSelfAlignment` equals the entire current saved report and
+  replays 2,311 cases / 272 observations. The only historical difference is
+  `history.currentSha256`: actual current component bytes are hashed, the
+  existing exact diagnostic restoration yields the historical component hash,
+  and restoring only that receipt yields complete equality with the original
+  report (read-only check exits 0, 4,569 ms). Next integrate this authenticated
+  report transition into the existing layout producer without repinning its
+  proof receipt; all eight groups / 492 observations and the frozen payload still
+  require the original full replay. Grid session 41035 remains the active graph,
+  so its consumed producer is unchanged. No unchanged failing rerun.
+
 - October 5 component-overlay caret proof is independently current: its original
   focused assertion passes 1/1 (5,684 ms), replaying 13 groups / 378 observations,
   retaining 59 scalar-rule gaps and rejecting altered candidate caret authoring.
