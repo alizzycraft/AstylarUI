@@ -2,6 +2,19 @@
 
 ## Current resumption ledger — October 5
 
+- Root production build 65207 is terminal and cancelled, not accepted. The
+  exact owned ng process 13524 and its esbuild child 1712 were revalidated by
+  command line and parent ID, then stopped because the child held 4,480,466,944
+  resident bytes and free RAM had fallen to 421,756 KiB. The session exits 1
+  without a successful build report. Stopping only those owned processes
+  restores free RAM to 4,968,968 KiB; read-only grid validation 70790 / Node
+  8516 remains live. Do not interpret a live handle or observation timeout as
+  completion, use partial `dist` output, or start the general gate from this
+  cancelled build. Next let validation release memory, then choose a bounded
+  build-memory strategy without changing CSS inputs or excluding fixtures.
+  The previously observed broad Tailwind scan remains a performance concern,
+  not authorization to change the rendering source scope in this audit.
+
 - Button box-sizing source-binding gate 70 is replayable through the existing
   historical component launcher. Read-only investigation proves complete
   original test-source equality after reversing only the scratch-cleanup
