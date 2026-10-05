@@ -2,6 +2,23 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 sorter receipt provenance is located: scanning all 37 file revisions
+  finds exact `7f1af071…` bytes at `a6217c5173f956ab57dba74013e14dd89b61245f`
+  (153,018 bytes, raw Git and LF identical). The complete diff to the subsequent
+  predecessor contains only the checkpoint-path environment override; the next
+  commit adds the browser-root override already conserved above. This closes
+  the missing-original question, not execution of the six retained proofs.
+  Next authenticate both exact launch-path additions against that original and
+  retain every original observation and provenance assertion.
+  Grid session 48691 is now terminal: 0/1, 533,997 ms, with failure scratch
+  `artifacts/material-parity/owner-grid-integration-OquzN2` preserved. It clears
+  the revised color/root checks but stops in `assertCaretClassificationDelta`
+  pending-row conservation: prior/current attribution is
+  `reviewed-overlay-caret-local-observation-boundary`, not the assumed
+  `unresolved`. Do not rerun unchanged or weaken the coverage validator.
+  Next trace that exact historical pending population and determine whether the
+  baseline already owns its review or whether current classification is wrong.
+
 - October 5 source-transition preflight now passes: the complete current sorter
   source equals its `64a58a6d^` predecessor after reversing only the explicit
   browser-build-root environment override. The predecessor's raw Git SHA is
