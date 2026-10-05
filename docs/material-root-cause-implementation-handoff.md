@@ -53,8 +53,10 @@
   Complete byte/order comparison and Markdown equality pass. The check reverified
   the same 1,205 files / 89,154,859 bytes with zero invalidations. Source/export
   reconciliation is closed for this snapshot; inspection accounting and remaining
-  acceptance gates are not. Publish this coherent receipt increment and refresh
-  the compact working index once before using it for membership reconciliation.
+  acceptance gates are not. Publication is committed/pushed as `8dc0bd2a`.
+  The compact working index was refreshed once and verified: 8,483 scalar groups,
+  145 source findings, 39,904 control rows / 389,202 occurrences, zero unattributed
+  scalar groups. This last count is not a remaining-inspection count.
 - Closed dependency gap: the exact 6,349-byte range-default installed package
   metadata was recovered from an authenticated project npm-cache tarball. Its
   original SHA-256 is preserved in
@@ -86,14 +88,16 @@ framework or rerun settled captures. A documented rendering failure counts as
 inspected when its applicable audit obligations are addressed; it need not be
 fixed during this audit. Preserve uncertain and uninspected obligations explicitly.
 
-Read-only inventory reconciliation identifies a concrete accounting obstacle:
-its opening chronology still calls
+Inventory reconciliation identified a concrete accounting obstacle:
+its older opening chronology calls
 139 findings published and the 145-finding export pending, while the current
 ledger records the completed 145-finding export. These are historical evidence
-boundaries, not new unresolved source investigations. The independent check is
-now complete. Reconcile those statements and standalone-registration
-claims against the completed export's exact memberships before assigning case
-inspection statuses. Reuse existing receipts; do not infer inclusion merely
+boundaries, not new unresolved source investigations. A new current evidence
+boundary in the existing inventory now supersedes those publication statements,
+names the seven integrated bounded diagnostic cohorts, and preserves the
+remaining standalone-membership questions. Reconcile standalone-registration
+claims against exact memberships before assigning case inspection statuses.
+Reuse existing receipts; do not infer inclusion merely
 from the total finding count. Highest-impact remaining obligations are shared
 overlay/text paint and profile applicability, keyboard state/focus boundaries,
 and live resource ownership; the incomplete general gate remains separate.

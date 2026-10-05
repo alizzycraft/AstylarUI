@@ -1,6 +1,46 @@
 # Material comparison/state coverage inventory
 
-## Evidence boundary
+## Current evidence boundary — October 5
+
+The canonical snapshot published in `8dc0bd2a` contains 145 source findings,
+8,483 scalar groups and 389,202 scalar occurrences. Complete export and independent
+cold check both pass; the compact index is imported and verified against compressed
+SHA-256 `cc1c6b3fc953b342155d9d0282e4257e3aa45bf0231a61630a69ea39b16d96ca`.
+See `artifacts/material-parity/canonical-independent-after-grid-20261005.log`
+and the current implementation handoff. The older 139-finding publication and
+pending 145-finding registration statements below are historical, not current.
+
+The published findings' regression-protection section explicitly includes the
+retained compact input inset, mobile custom-control keyboard, mobile empty-caret,
+tooltip/timepicker focus, selection paint-policy, tooltip CPU-texture/phase, and
+Tab selection/popup-state/email editing diagnostics. Their bounded conclusions
+are integrated; their stated remaining paint, profile, state and ownership gaps
+are not closed by registration. Standalone snackbar extra-profile/tablet visibility,
+popup-input selection and disabled-field activation evidence below must still
+have exact membership and current applicability reconciled; their inclusion is
+not inferred from a 145-finding total.
+
+Configured capture coverage is 436 static plus 1,875 interaction cases across
+36 families. The latest complete output run is `current-full-20261005`, with
+436 static passes and 1,870 interaction passes / five failures. The canonical
+input baseline's `visualParityGreen` describes its pinned historical capture,
+not this current output run or input equivalence.
+
+Inspection accounting remains incomplete: the existing family table records
+reviewed and pending obligations, not mutually exclusive per-case full/partial/
+untouched/blocked statuses. Do not assign a case full inspection solely because
+its screenshot passed, its scalar differences were attributed, or its family has
+a source finding. Conversely, a rendering failure need not be fixed to finish
+its inspection. Case-level completion requires mapping applicable input,
+structure, state, paint, history and ownership obligations to the exact existing
+evidence, including source applicability and explicit remaining uncertainty.
+
+## Retained evidence chronology
+
+Entries below preserve the evidence boundary when each investigation was recorded.
+Use the current boundary above for publication status; retain the original logs,
+failures and limitations. Family/state obligations later in this document still
+require consolidation with these newer bounded proofs.
 
 Error-state coverage now samples five light/desktop DPR1 input families. All
 inputs are enabled, expose aria-invalid=true and accept typing. Native Tab/type
