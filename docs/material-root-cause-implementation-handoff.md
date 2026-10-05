@@ -26,15 +26,44 @@ not live-process status):
    reports validator errors; that process status is not an acceptance result.
 2. Reconcile changed consumed source fingerprints in one coherent canonical
    batch, using the complete named current-ancestry baseline and independent
-   cold validation. Full baseline export is now session 25586 / Node 26564,
+   cold validation. Full baseline export session 25586 / Node 26564 is terminal
+   exit 0, complete in 4,364.941 seconds. It passes full validation and evidence
+   session verification: 1,205 files / 89,154,859 bytes rechecked, zero
+   invalidations, two collectors and ten memory hits. This closes the six
+   partial-capture binding gaps at complete scope. Coverage is 436/436 static,
+   1,875/1,875 interactions, 8,483 differences / 389,202 occurrences and 145
+   source findings. Input equivalence remains false. Construction takes
+   942.289 seconds; full validation completes at 4,212.708 seconds. Resident
+   memory briefly reaches 5,702,430,720 bytes with 112,716 KiB physical RAM
+   free, then drops during encoding; no cancellation or concurrent build occurs.
+   Decoded new package bytes are completely identical to the predecessor after
+   reversing exactly eleven authenticated current source fingerprints and the
+   grid proof line 55-to-99 citation. Streaming SHA-256 conservation covers all
+   2,222,834,862 bytes; no findings, original values, classifications or coverage
+   change. New gzip SHA-256 is
+   `42d11fb89f777b0955d4e59658832a469cd969102f08c328ea4d82d281772d41`;
+   decoded SHA-256 is
+   `b3024ece2b69b5385326f0dbd66d435f698fd5f08f66d73ec8ea393bb53f0559`.
+   Compact import and verification pass: 8,483 scalar records, 145 source
+   findings, 39,904 control records, 389,202 occurrences, zero unresolved
+   scalar groups; compact shards remain 72,712,604 bytes. Independent canonical
+   check, historical grid reconciliation and remaining acceptance stay pending.
+
+   The exported fingerprint includes the pending grid diagnostic source. Its
+   scoped diff has been reviewed, syntax and whitespace checks pass, and three
+   read-only executions of the actual failure-instrumentation block pass
+   (equal data writes nothing; metadata drift and reordering retain complete
+   pairs and still fail the original assertion). The recorded 110-case run
+   remains 0/1: publishing its verified diagnostic source does not declare the
+   historical conservation test fixed, exempt later metadata or close that gate.
+
+   Invocation:
    started with `ASTYLAR_AUDIT_COLD=1`, `ASTYLAR_AUDIT_PROGRESS=1` and
    `node scripts/export-material-input-audit-current-ancestry.mjs`.
    The named launcher preflight confirms all five required paths. Output is
    retained at `artifacts/material-parity/canonical-reconciliation-20261005.log`.
    The existing exporter checks complete validation and session dependencies
-   before publishing; no partial flag or error filtering is used. The handle
-   and owned child are confirmed live. Do not mutate consumed sources, start
-   another memory-heavy job or describe startup as acceptance. Historical
+   before publishing; no partial flag or error filtering is used. Historical
    applicability proofs are not current rendering
    acceptance. The original grid integration still fails; its pending spec
    changes are not committed or described as passing.
