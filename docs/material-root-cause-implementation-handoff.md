@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 4
 
+- Grid session 41035 is now terminal, **0/1 passing**, exit 1 in 706,092 ms
+  (test body 702,476 ms). Failure evidence is retained at
+  `artifacts/material-parity/owner-grid-integration-9YOfQk/report.json`.
+  The newly source-validated component caret restoration passed; the next
+  assertion fails in `later-reviewed-input-conservation.mjs:38`, where followup
+  reconstruction requires historical attribution `unresolved` but receives
+  `reviewed-owner-initial-style-observation-stage`. This is a newly exposed
+  review-precedence conflict, not evidence that the grid renderer regressed.
+  Do not broaden the reconstruction exemption or rerun this unchanged expensive
+  test. Next identify the exact conflicting group and authenticate the relevant
+  owner/followup precedence against the existing review proofs. The failed spec
+  remains uncommitted. Its graph is no longer live, so coherent audit-source
+  integration may proceed; the separate full Material browser run remains live.
+
 - October 5 border-normalization gate 52 has a demonstrated source-applicability
   gap, not a newly demonstrated border-rendering failure. The original four-test
   suite finishes 3/4 passing in 7,354 ms; its population replay stops at the
