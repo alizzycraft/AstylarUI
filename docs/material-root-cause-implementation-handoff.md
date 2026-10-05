@@ -8,8 +8,12 @@ not live-process status):
 1. Resolve retained grid metadata conservation without exempting categories.
    Session 51039 / Node 16224 runs one current builder and the existing full
    validator over the authenticated 110-case failure input. Its JSON-to-JSON
-   comparison avoids the demonstrated live-object omission artifact. Bounded
-   output is durably captured in
+   comparison avoids the demonstrated live-object omission artifact. The
+   builder completes in 279.897 seconds: all 1,241 retained rows match exactly
+   in JSON representation, zero unmatched, owner-initial binding `bound`.
+   This resolves reproduction of the retained metadata, not independent
+   justification of every classification. The full existing validator remains
+   live; its terminal result is pending. Bounded output is durably captured in
    `artifacts/material-parity/owner-grid-integration-vjGiTG/current-json-replay.log`;
    no canonical package is written. PID and session are confirmed live after
    dispatch. Await this handle; do not restart on an observation timeout.
