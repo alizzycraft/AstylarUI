@@ -7,11 +7,20 @@
   suite passes 30/30; complete conservation suite passes 8/8. Exact whole-source
   restoration and all 1,133 retained later scalar rows are proved. Earlier
   source-batch replay authenticates 108 groups / 318 observations independently.
-- Live owning gate: session 63530, the grid integration rerun with Node heap
-  1536 MiB. Observe that handle before any restart or consumed-source edits.
-  The exact remaining-membership adjustment in the grid spec is not yet committed
-  or accepted. Original grid/box, field-host, gap and caret proofs, complete final
-  row digest, counts and negative controls remain in place.
+- Closed owning gate: result-recovery session 28207 passes 1/1, exit 0,
+  2,163,138.644 ms, Node heap 1536 MiB. Durable output is at
+  `artifacts/material-parity/owner-grid-result-recovery-20261005.log`.
+  Session 63530 is missing and its Node process 24648 is absent; its terminal
+  result could not be recovered from the available thread history or terminal.
+  No new failure scratch was found, but absence of scratch is not a passing
+  test receipt. The single result-recovery rerun closes that observation gap.
+  The exact remaining-membership adjustment passes the original grid/box,
+  field-host, gap and caret proofs and negative controls: 36 static / 74
+  interaction cases, 6,459 unchanged scalar rows, and 6,091 complete unrelated
+  rows with original SHA-256
+  `bdeb5643013337116b121740b4866781eadc684e069c3af35a44018af0ccc23e`.
+  Successful scratch was removed by the existing retention helper. This is
+  subset integration, not complete canonical conservation or input equivalence.
 - Previous grid run 57619 is terminal, exit 1. Preserve
   `artifacts/material-parity/owner-grid-integration-WBi70r`. The replay tried
   to re-review an already separately authenticated field-host row through an
@@ -27,6 +36,11 @@
   The independent cold check at `b073faa6` predates these edits. After the grid
   gate closes, use the existing complete current-ancestry launcher and independent
   check; do not manually repin metadata or recapture unchanged browser inputs.
+  Result-recovery preflight: the launcher's `--dry-run` succeeds with all five
+  retained paths supplied; D: has 3,553,333,248 free bytes after grid completion.
+  This checks invocation completeness only, not input authentication or canonical
+  acceptance. Next commit the verified integration, then run complete export and
+  independent cold check through that launcher with durable logs.
 - Closed dependency gap: the exact 6,349-byte range-default installed package
   metadata was recovered from an authenticated project npm-cache tarball. Its
   original SHA-256 is preserved in
@@ -55,6 +69,13 @@ is released, consider a bounded failure diagnostic at that existing boundary,
 keeping the same timeout, failure propagation and full acceptance matrix. This
 identifies a specific evidence gap; it does not confirm a renderer or resource
 leak, authorize one, or justify another unchanged heavyweight build attempt.
+The existing `fixture-manifest.spec.mjs` owns whole-source capture/acceptance
+conservation; its isolated-artifact assertion passes 1/1 on the current runner
+(158.043 ms). Any readiness diagnostic must preserve that original SHA through
+an exact authenticated reversal of the diagnostic-only block, not repin it.
+The existing responsive capture catch already retains latest report/page errors;
+the initial `captureMode` wait lacks that evidence. This narrows the required
+instrumentation boundary without changing timeouts or claiming a runtime cause.
 
 ## Retained evidence and chronology
 

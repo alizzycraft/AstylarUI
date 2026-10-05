@@ -187,7 +187,14 @@ test('owner grid production integration preserves original scalars, earlier prec
     assert.ok([...laterCarets].every(signature => !signatures.has(signature)),
       'authenticated caret reviews cannot replace original grid/box, field-host or gap proofs');
     for (const signature of laterCarets) signatures.add(signature);
-    const restored = independentlyReconstructBeforeReviewedInputs(componentConserved, previous);
+    // Every excluded signature above has its own original source-authenticated
+    // proof. Later scalar stages must not re-review that already owned input
+    // through a different historical omission rule. Preserve the exact final
+    // complete unrelated-row assertion below, not a named-category exemption.
+    const remaining = rows => rows.filter(r => !signatures.has(JSON.stringify(scalar(r))));
+    const restored = independentlyReconstructBeforeReviewedInputs(
+      { ...componentConserved, discrepancies: remaining(componentConserved.discrepancies) },
+      { ...previous, discrepancies: remaining(previous.discrepancies) });
     assert.equal(restored.changes.length, 55);
     assert.equal(restored.changes.reduce((n, r) => n + r.occurrences, 0), 109);
     const other = report => (report === audit ? restored.rows : report.discrepancies)
