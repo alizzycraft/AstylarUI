@@ -2,6 +2,19 @@
 
 ## Current resumption ledger — October 5
 
+- Evidence registration gap closed at producer source: the existing focused-proof
+  inventory now includes the ordinary tooltip three-cycle ownership counterexample,
+  and the existing core pointer-state finding pins its verified log SHA-256
+  `caface4e…`. No new cause, acceptance pass or framework is introduced. Canonical
+  export/index reconciliation remains pending for this coherent source batch;
+  do not infer registration in the already-published `db0ba9f…` package.
+  Existing workflow validation initially exposed stale count123 (actual125:
+  prior standalone registration plus tooltip). Exact count and unique tooltip
+  membership now pass with all125 pointers resolved and the original missing-
+  source negative control preserved: 2/2 tests, exit0, 1,555.184ms. Both producer
+  modules pass syntax checks; scoped diff check passes. No browser rerun was
+  needed for registration of the already-verified immutable diagnostic.
+
 - Tooltip live-material ownership question answered by a bounded existing-
   harness diagnostic: ordinary dark/mobile DPR2 actual hover/leave three times,
   native/candidate popup removal succeeds, tracked materials13/13/13 but live

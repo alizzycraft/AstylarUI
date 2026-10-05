@@ -9437,6 +9437,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/sort-focus-structure.spec.mjs', /test\('ordinary tooltip repeated hover and leave exposes live ownership separately from tracked counts'/,
+      'ordinary dark mobile tooltip live-material retention diagnostic counterexample', 'Current-full checkpoint-bound dark/mobile390x844 DPR2 actual hover/leave cycles open one paired tooltip and remove it each time. Tracked materials remain13/13/13 while live materials grow14/15/16 with accumulating unbound hover identities; final disposal clears sampled resources. The independently reduced public pointer-state proof supplies the core allocation cause. This retains a failed live plateau, not lifecycle acceptance, all-profile cleanup, GPU retention or user-visible lag attribution.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('public button pointer states diagnose materials outside render ownership'/,
       'public pointer-state material ownership diagnostic counterexample', 'Plugin-free public button DPR1/2 controls retain no materials without interaction; pointer-state remove/recreate leaves5/10/15 live-minus-tracked materials. Six complete installed/current methods bind typed and legacy allocation to the core owner. Whole-surface disposal clears sampled resources. This preserves the failed element-lifetime invariant, not lifecycle acceptance, GPU retention evidence or performance attribution.'),
     proof(root, 'tests/material-parity/sort-focus-structure.spec.mjs', /test\('dark mobile overlay cycles retain focus and semantic cleanup boundaries'/,

@@ -16,9 +16,11 @@ test('all canonical proof pointers resolve after focused/integration test moves'
   const inspect = reader => vm.runInNewContext(code + '; focusedProofInventory(root)',
     { readFileSync: reader, path, root: process.cwd() });
   const proofs = inspect(readFileSync);
-  // The canonical inventory now includes the sixteen retained public/popup
-  // proofs added since the original 107-pointer baseline.
-  assert.equal(proofs.length, 123);
+  // Original 107 plus sixteen public/popup proofs, the retained standalone
+  // cohort registration, and the ordinary tooltip ownership counterexample.
+  assert.equal(proofs.length, 125);
+  assert.equal(proofs.filter(p => p.status ===
+    'ordinary dark mobile tooltip live-material retention diagnostic counterexample').length, 1);
   assert.ok(proofs.every(p => Number.isInteger(p.line) && p.line > 0 && p.status !== 'missing'));
   const broken = inspect((file, encoding) => file.endsWith('slider-input-box-integration.spec.mjs')
     ? '' : readFileSync(file, encoding));
