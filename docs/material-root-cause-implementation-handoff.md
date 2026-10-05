@@ -48,6 +48,18 @@
   direct functions imply unchanged transitive behavior. No live dependency was
   edited; grid and Material browser sessions remain live.
 
+  The subsequent full read-only producer replay also exits 0: all 40 groups,
+  368 observations and 84 cases replay, with every observation retaining its
+  classification. After authenticating actual current classifier bytes and
+  restoring only `classifier.sha256` in the in-memory comparison, the **entire**
+  report deeply equals the saved report. No saved evidence was written. This
+  establishes the exact report transition needed for integration; retain the
+  separate original/current population check because source authentication
+  alone does not justify the current collector semantics. `inputEquivalent`
+  remains false. The diagnostic's first import attempt failed before collection
+  because data-URL modules cannot resolve bare/relative imports; explicit import
+  resolution corrected that diagnostic boundary, without changing producer code.
+
 - October 5 surface proposal gate 910 remains a current original-assertion
   failure (37,215 ms), but its exact data conservation is independently proven:
   fresh `collectOverlaySurfaceReview` has 13 groups / 344 observations and
