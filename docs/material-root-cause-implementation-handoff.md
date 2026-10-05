@@ -103,6 +103,24 @@ not live-process status):
    Receipt correspondence is not independent classification validation, and no
    category exemption or original assertion change follows from this check.
 
+   The next read-only membership check resolves that receipt mismatch for all
+   108 receipt-bearing rows: the authenticated source plan describes full-capture
+   groups, whereas this test has 110 selected cases. Intersecting each plan's
+   ordered cases with the retained subset reproduces all 108 occurrence counts,
+   case samples and state arrays exactly, with zero missing groups or errors.
+   All 83 motion rows have different full/subset occurrence counts (for example,
+   badge-count overflowWrap has 52 full observations versus one selected static
+   observation). Thus full-row receipt mismatch alone does not show predecessor
+   metadata drift. This does not authenticate classifications or resolve the
+   other 1,133 rows. Reuse the existing subset-aware source-batch validator and
+   preserve complete raw rows while reconciling metadata stage-by-stage.
+
+   Canonical push with command-local post buffering succeeds; remote then
+   advances through `8fb22120` to `783c2b6c`. Independent cold canonical check
+   session 62091 is live, using all five named baseline paths; log:
+   `artifacts/material-parity/canonical-independent-check-20261005.log`.
+   No source/proof edits or concurrent heavy build occur during that check.
+
 - The follow-on fresh-versus-retained comparison has a demonstrated
   representation trap. Existing production `collectStyleDiscrepancies`, driven
   by the authenticated owner-initial evidence and the same isolated evidence
