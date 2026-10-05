@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 overlay-font single-source payload claim is proven at its actual
+  historical endpoints: `7cd5cb7` to
+  `4650791a7208b841dd29f1ced015f98234949623`. Complete source equality permits
+  exactly the eager-to-deferred target initializer change. The existing
+  `assertSingleSourcePayloadChange` authenticates both Git packages and compares
+  all 1,993,322,418 decoded bytes: exactly one source receipt changes; every
+  other decoded byte is identical, and observations/classifications do not
+  change. The human-readable audit is byte-identical too (exit 0, 8,758 ms).
+  This explains the stale test's endpoint error, not today's canonical validity.
+  Next update that original historical assertion to read the pinned corrected
+  endpoint, retaining its complete byte verifier and existing corruption controls.
+  Grid session 7353 and current Material session 21768 remain live; the latter
+  has reached contrast datepicker interactions. No shared source edits.
+
 - October 5 recovery fingerprint gap is independently explained, not repinned:
   fresh `collectOverlayAlignmentRecovery` output differs at exactly one ordered
   source descriptor, `original-overlay-context-survey.mjs`. Its actual current
