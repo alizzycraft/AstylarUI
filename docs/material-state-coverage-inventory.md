@@ -95,6 +95,20 @@ evidence, including source applicability and explicit remaining uncertainty.
 
 ### Applicable-obligation reconciliation — October 5
 
+Current equal-input text applicability is now checked independently of historical
+tooltip replay. The existing public package-root proof ran on Chrome 154.0.8037.58,
+Angular 20.3.31 / Babylon 8.56.2 / AstylarUI 0.2.0, comparing the installed complete
+canvas-paint and baseline methods with current source transpilation and rehashing
+all 2,515 bundle dependencies. Four CSS X origins (80/80.25/80.5/80.75px) at each
+DPR1/2 preserve equal authored text/style objects and projected content origins.
+Opaque direct canvas matches all eight native content crops, while renderer paint
+still differs; transparent backing and fractional local-raster phase remain
+distinct effects. The diagnostic passes 1/1 (8,137.685 ms), with acceptance false.
+Retain `artifacts/material-parity/public-text-phase-current-applicability-20261005.log`.
+This closes current-method applicability of the bounded core text-paint finding,
+not all tooltip styles/states, other fonts/backgrounds, calibrated sharpness or
+current full rendering acceptance. No placement-offset workaround is justified.
+
 The following bounded checks supersede broad pending wording in the family
 table below. They close investigation questions, not complete case inspection
 or current rendering acceptance. Existing historical replay verifies the original

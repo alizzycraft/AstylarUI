@@ -2,6 +2,19 @@
 
 ## Current resumption ledger — October 5
 
+- Shared text-paint applicability question is answered by the existing public
+  equal-input origin/DPR proof, not another Material capture. Current installed
+  canvas-paint/baseline methods match current source transpilation; all 2,515
+  bundle dependencies rehash. Eight paired cases preserve projected origins,
+  while opaque direct canvas matches native content crops and renderer raster
+  differs. Thus unequal Material authoring or displaced planes are not necessary
+  causes for this bounded defect; backing and local-raster phase effects remain
+  separate. Test passes 1/1 in 8,137.685 ms with acceptance false; log:
+  `artifacts/material-parity/public-text-phase-current-applicability-20261005.log`.
+  This is current-method diagnostic evidence, not general sharpness acceptance.
+  Next map retained tooltip profile/state paint boundaries without redoing this
+  origin experiment; other fonts/backgrounds and final full gates remain open.
+
 - Coverage reconciliation now maps six bounded family/state obligations to the
   existing authenticated Tab/popup/email and standalone proofs. Their combined
   focused replay passes 2/2, no skips, in 1,302.618 ms, authenticating 103 receipts.
