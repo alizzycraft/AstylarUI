@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 5
 
+- Extra installed imports are now explicitly accounted for in the same
+  existing-suite source-binding check: 110 exactly match authored named import
+  identities; 171 are compiler namespace aliases to Angular core or an authored
+  module. All 644 non-import identifier uses of those aliases are confined to
+  the six named generated metadata fields or `ɵɵngDeclareClassMetadata` calls;
+  none escapes into implementation code. Focused check passes 1/1, terminal
+  exit 0 (4,775.237 ms). This closes the 281-extra-binding classification gap,
+  not the content/correctness of DI/component metadata or export wiring.
+  Remaining build/source applicability work should target those specific inputs,
+  not repeat class/body/import inspection. Canonical suite-fingerprint export
+  reconciliation remains queued for the coherent proof batch.
+
 - Same existing runtime/source assertion now checks all 373 source runtime
   import bindings against installed bindings and exact ordered equality of all
   four non-Angular module expression effects. It passes 1/1, terminal exit 0,

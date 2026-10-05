@@ -91,10 +91,14 @@ test('captured runtime class bodies match current repository compilation without
   let variableCount = 0;
   let importCount = 0;
   let effectCount = 0;
+  let authoredExtraCount = 0;
+  let namespaceExtraCount = 0;
+  let metadataUseCount = 0;
   for (const module of modules) {
     const sourceFile = path.join('src', module.slice('node_modules/astylarui/dist/lib/'.length)
       .replace(/\.js$/, '.ts'));
-    const compiled = ts.transpileModule(readFileSync(sourceFile, 'utf8'), {
+    const source = readFileSync(sourceFile, 'utf8');
+    const compiled = ts.transpileModule(source, {
       compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022,
         experimentalDecorators: true },
     }).outputText;
@@ -104,6 +108,50 @@ test('captured runtime class bodies match current repository compilation without
     assert.deepEqual(installedProjection.declarations, sourceClasses, sourceFile);
     for (const binding of sourceProjection.imports)
       assert.ok(installedProjection.imports.has(binding), `${sourceFile}: missing runtime import ${binding}`);
+    const authored = ts.createSourceFile(sourceFile, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+    const authoredBindings = new Set();
+    const authoredModules = new Set();
+    for (const statement of authored.statements) if (ts.isImportDeclaration(statement)) {
+      const from = statement.moduleSpecifier.text;
+      authoredModules.add(from);
+      const bindings = statement.importClause?.namedBindings;
+      if (bindings && ts.isNamedImports(bindings)) for (const element of bindings.elements)
+        authoredBindings.add(`${from}|${element.propertyName?.text ?? element.name.text}|${element.name.text}`);
+    }
+    const namespaceNames = new Set();
+    for (const binding of installedProjection.imports) if (!sourceProjection.imports.has(binding)) {
+      const [from, imported, local] = binding.split('|');
+      if (authoredBindings.has(binding)) authoredExtraCount++;
+      else {
+        assert.ok(imported === 'namespace' && /^i\d+$/.test(local)
+          && (from === '@angular/core' || authoredModules.has(from)), `${sourceFile}: unexplained extra import ${binding}`);
+        namespaceNames.add(local);
+        namespaceExtraCount++;
+      }
+    }
+    const installedAst = ts.createSourceFile('installed.js', readFileSync(path.join(consumer, module), 'utf8'),
+      ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    const inspectNamespaceUse = node => {
+      if (ts.isIdentifier(node) && namespaceNames.has(node.text)) {
+        let owner = node;
+        let allowed = false;
+        while (owner) {
+          if (ts.isImportDeclaration(owner)) { allowed = true; break; }
+          if (ts.isPropertyDeclaration(owner) && generated.has(owner.name.getText(installedAst))) {
+            allowed = true; metadataUseCount++; break;
+          }
+          if (ts.isExpressionStatement(owner) && ts.isCallExpression(owner.expression)
+            && ts.isPropertyAccessExpression(owner.expression.expression)
+            && owner.expression.expression.name.text === 'ɵɵngDeclareClassMetadata') {
+            allowed = true; metadataUseCount++; break;
+          }
+          owner = owner.parent;
+        }
+        assert.ok(allowed, `${sourceFile}: compiler namespace escapes metadata: ${node.text}`);
+      }
+      ts.forEachChild(node, inspectNamespaceUse);
+    };
+    inspectNamespaceUse(installedAst);
     importCount += sourceProjection.imports.size;
     effectCount += [...sourceClasses.keys()].filter(key => key.startsWith('effect:')).length;
     classCount += [...sourceClasses.keys()].filter(key => key.startsWith('class:')).length;
@@ -115,6 +163,9 @@ test('captured runtime class bodies match current repository compilation without
   assert.equal(variableCount, 53, 'Variable scope changed; reconcile coverage.');
   assert.equal(importCount, 373, 'Runtime import scope changed; reconcile coverage.');
   assert.equal(effectCount, 4, 'Module effect scope changed; reconcile coverage.');
+  assert.equal(authoredExtraCount, 110, 'Authored DI import scope changed.');
+  assert.equal(namespaceExtraCount, 171, 'Generated namespace scope changed.');
+  assert.equal(metadataUseCount, 644, 'Generated namespace metadata use scope changed.');
 });
 
 test('public input lifecycle isolates caret material retention without Material plugins', async t => {
