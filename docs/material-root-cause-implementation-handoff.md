@@ -2,6 +2,23 @@
 
 ## Current resumption ledger — October 4
 
+- Border-normalization gate 52 is now integrated at the existing producer.
+  `node --test tests/material-parity/border-normalization-transition.spec.mjs`
+  passes **5/5**, exit 0 in **92,509 ms**, with no skips. All four original
+  assertions remain; the added control rejects unrelated source changes and
+  equal-count population drift. Both normalization modes replay the entire
+  historical/current collector populations before any frozen-report comparison.
+  Current classifier hash and `unchanged: false` are explicit in the fresh
+  report; check mode restores only the independently authenticated historical
+  descriptor and removes its new transition diagnostic, then checks complete
+  deep equality and the original full report digest with writes prohibited.
+  All 40 groups / 368 observations retain their original classifications.
+  The frozen report was not repinned or rewritten. This closes retained border
+  applicability, not full canonical acceptance or rendering parity. Include the
+  changed producer/proof dependencies in the planned coherent reconciliation;
+  do not export solely for this bounded increment. Next resolve the exact grid
+  owner/followup precedence conflict before its next expensive integration run.
+
 - Grid session 41035 is now terminal, **0/1 passing**, exit 1 in 706,092 ms
   (test body 702,476 ms). Failure evidence is retained at
   `artifacts/material-parity/owner-grid-integration-9YOfQk/report.json`.

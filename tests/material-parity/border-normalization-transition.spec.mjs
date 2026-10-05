@@ -3,7 +3,8 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { revalidateBorderColorObservation, verifyBorderInventorySource } from '../../scripts/audit-material-border-normalization-transition.mjs';
+import { revalidateBorderColorObservation, verifyBorderInventorySource, verifyBorderClassifierPopulation } from '../../scripts/audit-material-border-normalization-transition.mjs';
+import { readGapSurveySource } from './gap-survey-source-replay.mjs';
 import { bindHistoricalAuditNormalization, bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 
 const file = 'docs/material-border-normalization-transition.json';
@@ -44,9 +45,28 @@ test('all affected border observations replay the complete frozen payload and or
   assert.equal(result.groups, 40); assert.equal(result.observations, 368);
   assert.deepEqual(result.outcomes, { 'classification-retained': 368 });
   assert.equal(result.reportSha256, hash(before)); assert.deepEqual(readFileSync(file), before);
+  assert.equal(result.completePopulationConserved, true);
+  assert.equal(result.historicalPayloadConserved, true);
+  assert.equal(result.currentClassifierSha256, hash(readFileSync(report.classifier.file, 'utf8').replaceAll('\r\n', '\n')));
   assert.equal(report.historicalCanonical.completeRows, 8339);
   assert.equal(report.classifier.unchanged, true);
   assert.equal(report.canonicalReportRegenerated, false); assert.equal(report.inputEquivalent, false);
+});
+
+test('classifier source and complete population guards reject unrelated edits and equal-count proof drift', () => {
+  const descriptor = JSON.parse(readFileSync(file)).classifier;
+  const source = readFileSync(descriptor.file, 'utf8');
+  for (const changed of [source + '\nexport const unreviewed = true;\n',
+    source.replace('function collectBorderInitialInputs(', 'function alteredBorderInitialInputs(')])
+    assert.throws(() => readGapSurveySource(descriptor, { current: () => changed }));
+  const original = { collectBorderInitialInputs: () => [{ case: 'a', color: 'red' }],
+    collectButtonBorderResetInputs: () => [{ case: 'b', color: 'blue' }] };
+  const normalizers = [x => x, x => x];
+  assert.equal(verifyBorderClassifierPopulation(original, original, {}, normalizers).length, 4);
+  for (const collector of Object.keys(original)) for (const mutation of [
+    () => [], () => [{ case: 'wrong', color: 'red' }], () => [{ case: 'a', color: 'green' }]])
+    assert.throws(() => verifyBorderClassifierPopulation(original,
+      { ...original, [collector]: mutation }, {}, normalizers));
 });
 
 test('current classifiers receive precise scalars and never historical rounded colors', () => {

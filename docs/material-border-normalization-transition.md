@@ -33,11 +33,24 @@ all 8,339 complete discrepancy rows for the exact old-value join. It then
 rebuilds the inventory from the original trees for every affected case and
 requires no tree, style-stage, or reference-context gaps.
 
-The border classifier module must be byte-identical to that historical revision
-after line-ending normalization. `collectFullTreeInventory`,
+The historical classifier source is authenticated against that revision. Later
+source additions require the existing complete-snapshot transition guard and
+complete original/current collector population equality over all 84 cases at
+both normalization boundaries. This extra check is necessary because the shared
+type whitelist gained headings even though the directly used functions did not
+change. Equal counts or selected samples are insufficient. Current source identity
+and its changed status remain explicit in `classifier` / `classifierTransition`.
+`collectFullTreeInventory`,
 `collectReferenceContextGaps`, and `caseKey` must also retain their exact function
 source. Historical and current normalizers are authenticated and executed
 separately. No classifier is changed to obtain these retained results.
+
+Check mode compares the entire fresh payload with the frozen historical report
+after restoring only its authenticated classifier descriptor and removing the
+new transition diagnostic. It does not overwrite or repin the saved report.
+The CLI records current classifier identity, full population conservation, and
+historical payload conservation separately. Source mutation and equal-count
+population-drift controls must reject before historical reuse is accepted.
 
 Old classifications must replay against the exact historical values and row
 metadata. The current classifier receives current values and freshly rebuilt

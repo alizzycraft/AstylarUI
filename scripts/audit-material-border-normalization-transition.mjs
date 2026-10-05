@@ -11,6 +11,7 @@ import { collectColorNormalizationTransition } from './audit-material-color-norm
 import { bindHistoricalAuditNormalization, bindPreciseAuditNormalization, preciseAuditNormalization }
   from '../tests/material-parity/audit-normalization-contracts.mjs';
 import { readCaretConservationRows } from '../tests/material-parity/owner-caret-canonical-conservation.mjs';
+import { readGapSurveySource } from '../tests/material-parity/gap-survey-source-replay.mjs';
 import { borderColorProperties, borderInitialAttribution, buttonBorderResetAttribution,
   collectBorderInitialInputs, collectButtonBorderResetInputs, classifyBorderInitialInput, classifyButtonBorderResetInput }
   from '../tests/material-parity/border-initial-input-evidence.mjs';
@@ -41,6 +42,18 @@ export function verifyBorderInventorySource(previous, current) {
   return { file, historicalRevision: revision, functions: after, unchanged: true };
 }
 
+// Authenticate source snapshots separately: a shared type whitelist changed even
+// though these collector bodies did not. Complete population equality is required
+// at both normalization boundaries, not just equal display samples or counts.
+export function verifyBorderClassifierPopulation(previous, current, inventory, normalizers) {
+  return normalizers.flatMap((normalize, normalization) =>
+    ['collectBorderInitialInputs', 'collectButtonBorderResetInputs'].map(collector => {
+      const before = previous[collector](inventory, normalize), after = current[collector](inventory, normalize);
+      same(after, before, `${collector} complete population changed at normalization ${normalization}`);
+      return { normalization, collector, proofs: before.length };
+    }));
+}
+
 // Historical input and attribution must replay exactly. Current rejection is
 // reported as lost coverage, never coerced into the historical classification.
 export function revalidateBorderColorObservation(input, group, row, beforeProof, afterProof, before, after) {
@@ -68,7 +81,10 @@ export function revalidateBorderColorObservation(input, group, row, beforeProof,
 export async function collectBorderNormalizationTransition() {
   const source = readFileSync(moduleFile, 'utf8').replaceAll('\r\n', '\n');
   const oldSource = execFileSync('git', ['show', `${revision}:${moduleFile}`], { encoding: 'utf8' }).replaceAll('\r\n', '\n');
-  assert.equal(hash(source), hash(oldSource), 'border classifier changed; review separately from normalization');
+  assert.equal(readGapSurveySource({ file: moduleFile, sha256: hash(oldSource) }), oldSource);
+  const historicalClassifiers = await import('data:text/javascript;base64,' + Buffer.from(oldSource.replace(
+    /from '(\.\/[^']+)'/g, (_, relative) => `from '${pathToFileURL(path.resolve(path.dirname(moduleFile), relative)).href}'`
+  )).toString('base64'));
   const inventorySource = verifyBorderInventorySource(execFileSync('git',
     ['show', `${revision}:${preciseAuditNormalization.module}`], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }),
   readFileSync(preciseAuditNormalization.module, 'utf8'));
@@ -95,6 +111,8 @@ export async function collectBorderNormalizationTransition() {
     ...collectBorderInitialInputs(inventory, normalize), ...collectButtonBorderResetInputs(inventory, normalize)
   ].map(p => [identity(p.case, p.element), p]));
   const oldProofs = collect(previous), newProofs = collect(current);
+  const classifierPopulation = verifyBorderClassifierPopulation(historicalClassifiers,
+    { collectBorderInitialInputs, collectButtonBorderResetInputs }, inventory, [previous, current]);
   const entries = new Map(cases.map(e => [key(e), e])), seen = new Set(), counts = {};
   const findings = selected.map(({ group, row }) => {
     assert.equal(row.occurrences, group.occurrences); assert.equal(group.cases.length, group.occurrences);
@@ -113,7 +131,11 @@ export async function collectBorderNormalizationTransition() {
   return { schemaVersion: 1, kind: 'material-border-color-normalization-revalidation',
     capture: transition.capture, previous: transition.previous, current: preciseAuditNormalization,
     historicalCanonical: { revision, manifest: canonical.manifest, completeRows: canonical.rows.length },
-    classifier: { file: moduleFile, historicalRevision: revision, sha256: hash(source), unchanged: true },
+    classifier: { file: moduleFile, historicalRevision: revision, sha256: hash(source), unchanged: source === oldSource },
+    classifierTransition: {
+      historicalClassifier: { file: moduleFile, historicalRevision: revision, sha256: hash(oldSource), unchanged: true },
+      currentSha256: hash(source), completeSourceSnapshotsAuthenticated: true,
+      completePopulationConserved: true, population: classifierPopulation },
     inventorySource,
     counts: { groups: findings.length, observations: seen.size, cases: cases.length, outcomes: counts }, findings,
     canonicalReportRegenerated: false, rendererChanged: false, comparisonInputsChanged: false, inputEquivalent: false,
@@ -122,9 +144,22 @@ export async function collectBorderNormalizationTransition() {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   assert.ok(process.argv.length === 2 || process.argv.length === 3 && process.argv[2] === '--check');
-  const report = await collectBorderNormalizationTransition(), output = JSON.stringify(report, null, 2) + '\n';
+  const report = await collectBorderNormalizationTransition();
   const file = 'docs/material-border-normalization-transition.json';
+  let compared = report;
+  if (process.argv[2] === '--check') {
+    // Preserve the frozen historical report, not a repinned receipt. Current
+    // source identity stays explicit in the collected report and CLI result.
+    compared = structuredClone(report);
+    compared.classifier = compared.classifierTransition.historicalClassifier;
+    delete compared.classifierTransition;
+    same(compared, JSON.parse(readFileSync(file, 'utf8')), 'complete historical border payload changed');
+  }
+  const output = JSON.stringify(compared, null, 2) + '\n';
   if (process.argv[2] === '--check') assert.equal(hash(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')), hash(output));
   else writeFileSync(file, output);
-  console.log(JSON.stringify({ ...report.counts, reportSha256: hash(output) }));
+  console.log(JSON.stringify({ ...report.counts, reportSha256: hash(output),
+    currentClassifierSha256: report.classifier.sha256,
+    completePopulationConserved: report.classifierTransition.completePopulationConserved,
+    historicalPayloadConserved: process.argv[2] === '--check' }));
 }
