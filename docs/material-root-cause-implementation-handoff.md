@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 surface proposal gate 910 remains a current original-assertion
+  failure (37,215 ms), but its exact data conservation is independently proven:
+  fresh `collectOverlaySurfaceReview` has 13 groups / 344 observations and
+  differs only in two ordered source receipts. Tooltip placement source restores
+  completely to authenticated `e526f852^` SHA `259d6d7b…` after removing the
+  separate added stacking-proof block; component source restores through the
+  existing diagnostic helper. Actual current source hashes are checked first.
+  Restoring only those authenticated descriptors yields complete deep equality
+  with the saved proposal (read-only execution exits 0). Next integrate the
+  exact source transitions into the existing surface assertion and exercise
+  its original predecessor/membership/corruption controls. Do not repin sources,
+  rerun the unchanged failure, or interpret conserved proposal data as current
+  rendering acceptance. Grid session 41035 is still the live integration graph.
+
 - October 5 layout proposal gate 854 is still a current receipt failure
   (focused original assertion fails in 3,205 ms): control-alignment report
   `2ba997e7…` versus pinned `f63c2a87…`. Its exact original is authenticated
