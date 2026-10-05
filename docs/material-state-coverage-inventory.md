@@ -126,6 +126,23 @@ evidence, including source applicability and explicit remaining uncertainty.
 
 ### Applicable-obligation reconciliation — October 5
 
+Slider full-domain ownership applicability is now observed on the current-full
+checkpoint, not only inferred from retained source: existing test `slider cross-
+midpoint visual thumbs reveal fixed-half hit ownership` passes1/1 (9,360.244ms)
+while asserting the counterexample. At60/80 the start visual thumb targets
+slider-primary (end owner); at20/40 the end visual thumb targets slider-start.
+Reference pointer steps yield65/80 and20/45; candidate semantics clamp the
+visual values to50/80 and20/50, and pointer state changes the wrong thumb.
+The whole served directory is hash-bound by the existing helper to current-full
+manifest before launch. Log: slider-cross-midpoint-current-20261005.log, SHA-256
+`4228a65cd836f8348083f1fce444132ceba571a170fafaebf7ee0dee9ff2e80a`. Original
+assertions and fixtures are unchanged. An initial attempt used an unrecognized
+checkpoint environment variable and failed historical-checkpoint comparison
+before launch; corrected documented helper option produced the observation.
+This closes current-build applicability for these two light desktop DPR1
+diagnostic scenarios only. Default-domain success, other profiles, smooth travel,
+local paint, lifecycle and historical first-bad revision remain separate.
+
 Tooltip live ownership has a bounded current-build counterexample rather than
 only a missing measurement: ordinary dark/mobile390×844 DPR2, three actual
 hover/leave cycles. Both sides open one tooltip and remove it on leave. Candidate

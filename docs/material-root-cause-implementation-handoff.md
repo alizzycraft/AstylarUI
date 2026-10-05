@@ -2,6 +2,14 @@
 
 ## Current resumption ledger — October 5
 
+- Slider full-domain hit-owner finding has current-build runtime applicability:
+  existing cross-midpoint test, exact current-full manifest, light desktop DPR1,
+  two scenarios,1/1 terminalexit0 (9,360.244ms). Visible start60/end80 targets end
+  owner; visible start20/end40 targets start owner. Diagnostic assertions retain
+  wrong-owner changes and semantic half-domain clamps, not parity acceptance.
+  Evidence/scope in inventory; no fixture/test-body changes. Next close slider
+  travel/paint/state obligations separately and integrate pending canonical batch.
+
 - Required-state applicability now has an explicit36-family partition in the
   existing inventory, derived from reference controls, configured declarations
   and prior family evidence. A read-only membership check matches all36 names
