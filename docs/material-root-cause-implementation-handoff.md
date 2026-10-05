@@ -115,7 +115,7 @@ not live-process status):
    other 1,133 rows. Reuse the existing subset-aware source-batch validator and
    preserve complete raw rows while reconciling metadata stage-by-stage.
 
-   Read-only stage reconciliation now proves exact JSON replay for 728 of the 1,241
+   Read-only stage reconciliation now proves exact JSON replay for 1,011 of the 1,241
    changed rows, against the retained previous rows and all 110 captured cases:
    typography observation 45/45 complete JSON matches; box-sizing 47/47;
    grid/height 81/81; custom-owner boundary 86/86. Original tree inventory has
@@ -142,11 +142,29 @@ not live-process status):
    validator is changed or failure filtered: 696 of these 728 rows also pass
    the existing validators directly in persisted representation. The remaining
    32 prove serialized conservation only and retain this representation issue.
+   Position/clipping/wrapping batch adds 117 exact rows in 2.768 seconds:
+   chip position 10, button offsets 36, mapped visible overflow 8, clipping 16,
+   heading overflow 4, table overflow 2, control overflow ownership 6, range
+   overflow 4, tab-panel overflow 2, wrapping 28 and tooltip word-break 1.
+   The last two ownership/support populations (6 plus 1) retain persisted
+   deep-equality errors while live validators pass; all other validators empty.
+   No selected snackbar-position row exists; its empty invocation is not coverage.
+   Color/paint adds 21 exact rows (13 component color, 8 paint) with independent
+   paint-source collection and empty validators, 12.933 seconds. Appearance/
+   shadow/omitted paint adds 19 exact rows (2 sheet, 3 owner, 2 range initial,
+   6 nonwidget, 1 card shadow, 3 focus shadow, 2 omitted paint), empty validators,
+   1.323 seconds. Scalar joins add 43 exact rows (12 sheet typography, 9 dialog,
+   6 tab, 12 retained font and 4 overlay overflow), empty validators, 3.498 seconds.
+   Border/radius adds 83 exact rows (39 mapped initial, 8 mapped button reset,
+   8 card token, 28 full-radius), empty validators, 2.433 seconds. The raw
+   captured cases, prior rows and all current raw fields remain unchanged.
+   Across the 1,011 serialized matches, 972 also pass existing persisted-row
+   validators; 39 retain the explicit persisted/live representation discrepancy.
    All 108 source-batch rows also match the pinned plan's actual formatter in
    all five metadata fields, but that formatter check is not source replay.
    No original test assertion, producer, normalization or source receipt is
    changed. These scoped replays do not close whole-population conservation;
-   513 rows remain outside this newly replayed population (including the 108
+   230 rows remain outside this newly replayed population (including the 108
    source-batch rows needing their independent source-bound transition).
 
    Canonical push with command-local post buffering succeeds; remote then
@@ -154,6 +172,8 @@ not live-process status):
    session 62091 is live, using all five named baseline paths; log:
    `artifacts/material-parity/canonical-independent-check-20261005.log`.
    No source/proof edits or concurrent heavy build occur during that check.
+   Session 62091 reaches full validation after 899.512 seconds with resident
+   memory 3,115,356,160 bytes. It remains live; that phase change is not a pass.
 
 - The follow-on fresh-versus-retained comparison has a demonstrated
   representation trap. Existing production `collectStyleDiscrepancies`, driven
