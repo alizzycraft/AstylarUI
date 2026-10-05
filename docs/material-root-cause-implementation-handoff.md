@@ -2,6 +2,19 @@
 
 ## Current resumption ledger — October 5
 
+- Canonical reconciliation preflight found a specific stale historical producer
+  transition before expensive aggregation. Existing whole-source conservation
+  now accounts explicitly for the ninth leading tooltip registration and pins
+  the prior standalone registration AST hash `1de7aac9…`; original last-eight
+  proof hashes remain checked. Bounded execution of that existing assertion
+  still fails whole-source equality: first difference is the added exported
+  `replayMaterialScalarReviewStages` helper (normalized offset22313; net380
+  characters after permitted removals), not the new proof registration. Next
+  authenticate that helper's prior integration and exact conservation boundary;
+  do not delete equality, repin the historical producer or launch a doomed full
+  export. Syntax/diff checks pass; the full integration test is not passing.
+  Resource preflight free physical memory1,049,864KiB; no full build/export run.
+
 - Evidence registration gap closed at producer source: the existing focused-proof
   inventory now includes the ordinary tooltip three-cycle ownership counterexample,
   and the existing core pointer-state finding pins its verified log SHA-256

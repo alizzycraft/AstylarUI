@@ -2515,14 +2515,30 @@ test('records source fingerprints and actual visual acceptance fields', () => {
     'tests/material-parity/sort-focus-structure.spec.mjs',
     'scripts/diagnose-material-root-initial-receipt.mjs',
     'tests/material-parity/case-index-assertion-migration.mjs'];
-  const liveSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8').replace(/\r\n/g, '\n');
+  let liveSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8').replace(/\r\n/g, '\n');
+  const registrationAst = ts.createSourceFile('registration.mjs', liveSource, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const registrationInventory = registrationAst.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory');
+  const standalone = registrationInventory.body.statements.find(ts.isReturnStatement).expression.elements.filter(n =>
+    n.arguments[3].text === 'retained standalone visibility, disabled activation and popup selection evidence');
+  assert.equal(standalone.length, 1);
+  assert.equal(createHash('sha256').update(ts.createPrinter({ removeComments: true, newLine: ts.NewLineKind.LineFeed })
+    .printNode(ts.EmitHint.Unspecified, standalone[0], registrationAst)).digest('hex'),
+    '1de7aac999a50f591080a294159a4e9ff013f263d48c9b0e1256093f8fabb9fd');
+  const standaloneStart = liveSource.lastIndexOf('\n', standalone[0].getStart(registrationAst)) + 1;
+  const standaloneEnd = liveSource.indexOf('\n', standalone[0].end) + 1;
+  liveSource = liveSource.slice(0, standaloneStart) + liveSource.slice(standaloneEnd);
   const launchRegistration = launchFiles.map(file => `    '${file}',\n`).join('');
   assert.equal(liveSource.split(launchRegistration).length, 2, 'launch receipts are registered exactly once');
   const recentRegistration = recentProofFiles.map(file => `    '${file}',\n`).join('');
   assert.equal(liveSource.split(recentRegistration).length, 2);
   const liveAst = ts.createSourceFile('live.mjs', liveSource, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   const inventoryNode = liveAst.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory');
-  const calls = inventoryNode.body.statements.find(ts.isReturnStatement).expression.elements.slice(0, 8);
+  const calls = inventoryNode.body.statements.find(ts.isReturnStatement).expression.elements.slice(0, 9);
+  assert.equal(calls[0].arguments[1].text, 'tests/material-parity/sort-focus-structure.spec.mjs');
+  assert.equal(calls[0].arguments[2].getText(liveAst),
+    "/test\\('ordinary tooltip repeated hover and leave exposes live ownership separately from tracked counts'/");
+  assert.equal(calls[0].arguments[3].text,
+    'ordinary dark mobile tooltip live-material retention diagnostic counterexample');
   assert.ok(calls.every(n => ts.isCallExpression(n) && recentProofFiles.includes(n.arguments[1].text)));
   const proofStart = liveSource.lastIndexOf('\n', calls[0].getStart(liveAst)) + 1;
   const proofEnd = liveSource.indexOf('\n', calls.at(-1).end) + 1;
@@ -2540,7 +2556,7 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   assert.ok(receiptStart > 0 && receiptEnd > receiptStart);
   const withoutReceiptValidation = withoutRecentProofs.slice(0, receiptStart) + withoutRecentProofs.slice(receiptEnd);
   assert.equal(withoutReceiptValidation.replace(launchRegistration, '').replace(recentRegistration, ''), currentSource,
-    'only receipt validation, launch/applicability receipts and sixteen authenticated proof registrations differ from the pinned producer');
+    'only receipt validation, launch/applicability receipts and eighteen authenticated proof registrations differ from the pinned producer');
   const expectedFiles = listedFiles(currentSource);
   assert.equal(expectedFiles.length, 535);
   assert.deepEqual(expectedFiles.filter(file => stage424Files.includes(file)), stage424Files,
