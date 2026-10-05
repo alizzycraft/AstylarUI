@@ -166,6 +166,21 @@ in the justified full general gate once the served-build readiness/provenance
 preflight succeeds; do not repeat the failed heavyweight build hypotheses.
 Current browser-gate acceptance remains incomplete; no runtime cause is claimed.
 
+General-gate served-build preflight: port 4300 has no listener. The retained
+`dist/astylarui/browser` distribution dates to September 21; its copied fixture
+manifest nevertheless exactly matches current `public/parity/fixtures.json`
+(167 fixtures, SHA-256
+`4bea5bb80009a73477b7234de003429450d5835040f319b8df64909ea95f434b`).
+Timestamp alone therefore does not establish staleness. No browser source maps
+or source-bound build receipt were found in that distribution; fixture-manifest
+equality does not authenticate the renderer/application bundle against current
+sources. Do not silently serve it as current acceptance. Observed available
+physical RAM is approximately 4.1 GiB; no heavyweight build was launched or prior
+failed memory hypotheses repeated. A current successful served build with
+authenticated source applicability remains required for the full general gate.
+Until then, continue independent inspection obligations rather than recapture
+the known locally passing three-value fixture or accept this older distribution.
+
 ## Retained evidence and chronology
 
 Older entries below are evidence history, not current process status. The ledger
