@@ -2,6 +2,21 @@
 
 ## Current resumption ledger — October 5
 
+- Complete mapped installed-runtime/build reconciliation now passes 88/88
+  modules (read-only replay, terminal exit 0). The prior generated-template
+  mismatch came from resolving the repository-root Angular 20.0.6 linker
+  instead of the showcase's Angular 20.3.31 linker. Resolving
+  `@angular/compiler-cli/linker/babel` with `createRequire` anchored to the
+  showcase package and applying the build worker's `sourceMapping:false` /
+  `linkerJitMode:false` options reproduces every mapped module after the same
+  esbuild formatting canonicalization. No renderer drift is inferred from
+  `domElementStart` versus `elementStart`; this supersedes the unresolved
+  template statement below. All 88 installed per-module maps name repository
+  TypeScript paths but omit `sourcesContent`, so they supply zero authenticated
+  current-source-content bindings. The remaining gap is source-to-installed
+  compilation/configuration provenance, not compiled-browser/module mismatch.
+  Do not recapture the unchanged browser to solve that source provenance gap.
+
 - Source-map applicability check (read-only, terminal exit 0): all 17 mapped
   showcase `src/` files match their embedded `sourcesContent` byte-for-byte.
   All 88 mapped installed AstylarUI modules exist. Direct comparison differs
