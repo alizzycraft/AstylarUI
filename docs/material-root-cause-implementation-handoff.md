@@ -2,6 +2,19 @@
 
 ## Current resumption ledger — October 5
 
+- Current-source class-body applicability now has a durable existing-suite
+  assertion: `node --test --test-name-pattern="captured runtime class bodies"
+  tests/material-parity/input-boundary-evidence.spec.mjs`, terminal exit 0,
+  1/1 pass (4,355.592 ms total). All 88 mapped installed modules resolve to
+  current TypeScript files; all 80 named class bodies match ES2022 compilation
+  after esbuild formatting, with exact class membership and only six named
+  Angular-generated metadata fields excluded. The check preserves constructors,
+  fields and methods, but deliberately does not prove imports, inheritance,
+  module-level functions/constants or Angular metadata. Next bind those remaining
+  whole-module inputs rather than recapture class behavior. Adding this assertion
+  changes an owning suite fingerprint: queue canonical reconciliation for the
+  next coherent proof batch, not a documentation-only export or parity claim.
+
 - Complete mapped installed-runtime/build reconciliation now passes 88/88
   modules (read-only replay, terminal exit 0). The prior generated-template
   mismatch came from resolving the repository-root Angular 20.0.6 linker

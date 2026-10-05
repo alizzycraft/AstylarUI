@@ -18,6 +18,50 @@ const bytes = readFileSync(file);
 assert.equal(hash(bytes), '39df94e0eb87480d3824927a41a9950d1d275f7c97ab97a571c449efdc6da7d7');
 const report = JSON.parse(bytes);
 
+test('captured runtime class bodies match current repository compilation without Angular metadata', async () => {
+  const { transform } = await import('esbuild');
+  const consumer = 'examples/material-showcase';
+  const map = JSON.parse(readFileSync(path.join(consumer,
+    'dist/material-showcase/browser/chunk-3JXWRYJY.js.map'), 'utf8'));
+  const modules = map.sources.filter(file => file.startsWith('node_modules/astylarui/'));
+  assert.equal(modules.length, 88, 'Mapped runtime scope changed; reconcile coverage explicitly.');
+  const generated = new Set(['ɵfac', 'ɵprov', 'ɵcmp', 'ɵdir', 'ɵmod', 'ɵinj']);
+  const extract = async code => {
+    const ast = ts.createSourceFile('proof.js', code, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    assert.equal(ast.parseDiagnostics.length, 0);
+    const classes = [];
+    const visit = node => {
+      if ((ts.isClassDeclaration(node) || ts.isClassExpression(node)) && node.name) classes.push(node);
+      ts.forEachChild(node, visit);
+    };
+    visit(ast);
+    const result = new Map();
+    for (const node of classes) {
+      assert.equal(result.has(node.name.text), false, 'Duplicate class identity.');
+      const members = node.members.filter(member => !generated.has(member.name?.getText(ast)));
+      const text = `class Proof extends Object {${members.map(member => member.getText(ast)).join('\n')}}`;
+      result.set(node.name.text, (await transform(text, {
+        loader: 'js', legalComments: 'none', minifyWhitespace: true,
+      })).code);
+    }
+    return result;
+  };
+  let classCount = 0;
+  for (const module of modules) {
+    const sourceFile = path.join('src', module.slice('node_modules/astylarui/dist/lib/'.length)
+      .replace(/\.js$/, '.ts'));
+    const compiled = ts.transpileModule(readFileSync(sourceFile, 'utf8'), {
+      compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022,
+        experimentalDecorators: true },
+    }).outputText;
+    const sourceClasses = await extract(compiled);
+    assert.deepEqual(await extract(readFileSync(path.join(consumer, module), 'utf8')),
+      sourceClasses, sourceFile);
+    classCount += sourceClasses.size;
+  }
+  assert.equal(classCount, 80, 'Class scope changed; do not infer whole-module provenance.');
+});
+
 test('public input lifecycle isolates caret material retention without Material plugins', async t => {
   const consumer = path.resolve('examples/material-showcase');
   const methods = [
