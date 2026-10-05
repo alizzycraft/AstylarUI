@@ -106,6 +106,18 @@ evidence, including source applicability and explicit remaining uncertainty.
 
 ### Applicable-obligation reconciliation — October 5
 
+Tooltip configured/supplemental applicability is now explicit. The maintained
+benchmark has 12 static cases and 50 interactions: focus/hover/held/activate/
+activate-leave/open at desktop DPR1/2 for all four themes, plus light comparison
+pane hover/held. No configured mobile/tablet interaction matrix is implied.
+The existing supplemental `tooltip-state-audit-v2/latest-report.json` under
+`supplemental-current-ancestry-audit` has 30 light-desktop action boundaries:
+DPR1/2 × benchmark-open/benchmark-hover/ordinary × initial/hover/press/release/
+leave. SHA-256 `1a554bf3b3bd477a2e7fe148640b07fe539731e4611e32b1e8f7ed2289e68a61`.
+Its existing validator owns complete tree/trace provenance and state-presence
+claims; neither this metadata census nor those claims establish local paint,
+mobile/tablet action coverage or a larger fully inspected denominator.
+
 Tooltip desktop benchmark `open` state is a separate eight-case obligation:
 light/dark/contrast/custom × desktop DPR1/2. Current authenticated compact row
 `8d1fdbe60c443c9e22bff5e40db229b958f2ebab586bde22cce48ff85ed6b017`

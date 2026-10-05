@@ -2,6 +2,16 @@
 
 ## Current resumption ledger — October 5
 
+- Tooltip coverage denominator clarified from current benchmark and retained
+  supplemental report: 12 configured static / 50 interaction cases versus 30
+  supplemental light-desktop action boundaries. The latter covers both DPRs,
+  three ordinary/benchmark cohorts and five pointer boundaries, not additional
+  all-theme mobile/tablet paint coverage. Exact report digest and matrix are in
+  the existing inventory. State-presence evidence and paired-raster evidence
+  must be mapped separately; next identify unmatched paint/profile obligations.
+  Resource preflight still has about 1.0 GiB physical memory available; no full
+  multi-GiB harness or browser build was launched.
+
 - Full-harness preflight corrects the stale 302-file scope: current discovery
   has 303 suites (295 Material, four general, four TTS), preserving all 46
   legacy suites. Existing inventory/runner controls pass 4/4, exit 0, in
