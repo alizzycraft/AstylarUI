@@ -88,19 +88,23 @@ be imported as accepted evidence.
 ## Validated reuse
 
 For the six retained progress/compact-input/keyboard/applied-theme/selection/
-tooltip assertions and both original fixed-width assertions, run
+tooltip assertions and all original fixed-width, flex, host-request and
+box-sizing assertions, run
 `node scripts/check-historical-component-proofs.mjs`.
 It preserves the original test bodies and receipts. Exact Git sorter bytes and
 preserved component bytes are authenticated before complete source conservation
 reverses only the two launch-path additions and the existing read-only diagnostic
 blocks. Unexpected source drift fails; writes are prohibited. This historical
 preload is not applicable to current capture or canonical production commands.
-The fixed-width suite additionally uses the existing authenticated border-source
-transition. All nine original source receipts and all original 600-owner and
-negative-control assertions remain checked by that suite. The launcher runs the
-two suites separately so the retained-test name selection cannot omit fixed-width
-tests; either failure makes the launcher fail. No installed source or report is
-changed by this read-only boundary.
+The button suites additionally use the existing authenticated border-source
+transition. Box-sizing uses the existing exact historical capture-runner
+restoration; browser-launch changes are not treated as provenance-only changes
+or evidence of equivalent current rendering. Original source receipts, complete
+600-owner populations, geometry gaps and negative-control assertions remain
+checked by the original suites. The launcher runs retained and button suites
+separately so the retained-test name selection cannot omit button tests; either
+failure makes the launcher fail. No installed source or report is changed by
+this read-only boundary.
 
 For the retained public cursor, range drag/paint/travel and vertical-alignment
 evidence, run `node scripts/check-historical-public-proofs.mjs`. It runs all five

@@ -2,6 +2,26 @@
 
 ## Current resumption ledger — October 4
 
+- The related retained button proofs now share the existing historical launcher:
+  original flex, host-request and box-sizing suites are included with fixed-width
+  and the six retained component assertions. The expanded command
+  `node scripts/check-historical-component-proofs.mjs` passes **14/14**, terminal
+  exit 0, no skips (2,818 ms retained; 40,379 ms button suites). All original test
+  bodies, source receipts, 600-owner populations, geometry gaps and corruption
+  controls remain intact. Flex and host-request each conserve 27 groups / 1,800
+  observations; box-sizing conserves all nine groups and its measured/gap split.
+  This closes historical applicability gaps, not current output acceptance.
+
+  Preflight flex passed 2/2 in 8,874 ms. The initial host/box batch passed 3/4 in
+  12,243 ms: box stopped solely at historical runner `c3cabcf…` versus current
+  `33c5a4b3…`. The launcher now uses existing `readGapSurveySource` restoration
+  for that exact runner receipt, separately from border/component restoration.
+  Source-mutated runner and component both reject (2/2). Launch changes affect
+  fresh rendering: replaying this historical source is not an assertion that
+  today's browser configuration is equivalent. No report was rewritten, no
+  fixture changed, and no new audit framework was added. The standalone launcher
+  remains outside the live grid/capture graph; those runs are not restarted.
+
 - Retained fixed-width gate 76 is replayable through the existing historical
   component launcher, without modifying original test bodies or repinning reports.
   The only stale receipts are the border module (`3dbcf33f…` to `a809c257…`) and

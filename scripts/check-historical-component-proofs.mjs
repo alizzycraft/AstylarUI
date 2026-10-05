@@ -11,11 +11,14 @@ import { readGapSurveySource } from '../tests/material-parity/gap-survey-source-
 
 const main = process.argv[1] && pathToFileURL(path.resolve(process.argv[1])).href === import.meta.url;
 if (main) {
-  assert.equal(process.argv.length, 2, 'Run the retained component and fixed-width assertions without extra filters');
+  assert.equal(process.argv.length, 2, 'Run the retained component and button-authoring assertions without extra filters');
   const commands = [['--test',
     '--test-name-pattern=retained (progress paint|compact empty|keyboard profiles|applied-theme popup|selection states|tooltip textures)',
     'tests/material-parity/input-equivalence-audit.spec.mjs'],
-    ['--test', 'tests/material-parity/button-fixed-width-evidence.spec.mjs']];
+    ['--test', '--test-concurrency=1', 'tests/material-parity/button-fixed-width-evidence.spec.mjs',
+      'tests/material-parity/button-flex-input-evidence.spec.mjs',
+      'tests/material-parity/button-host-request-evidence.spec.mjs',
+      'tests/material-parity/button-box-sizing-input-evidence.spec.mjs']];
   for (const args of commands) {
     const result = spawnSync(process.execPath, args, {
       env: { ...process.env, NODE_OPTIONS: `${process.env.NODE_OPTIONS ?? ''} --import=${import.meta.url}`.trim() },
@@ -55,6 +58,14 @@ if (main) {
   const historicalBorder = readGapSurveySource(border[0], { current: file => read(file, 'utf8') });
   assert.equal(hash(historicalBorder), border[0].sha256, 'Unreviewed fixed-width border source drift');
   originals.set(path.resolve(border[0].file), Buffer.from(historicalBorder));
+  const boxes = JSON.parse(read('docs/material-button-box-sizing-input-survey.json'));
+  const runner = boxes.sourceFingerprints.filter(s => s.file === 'tests/material-parity/run-material-parity.mjs');
+  assert.equal(runner.length, 1);
+  // Historical source receipt only. Launch configuration changes affect fresh
+  // rendering and are not assumed equivalent by this read-only replay.
+  const historicalRunner = readGapSurveySource(runner[0], { current: file => read(file, 'utf8') });
+  assert.equal(hash(historicalRunner), runner[0].sha256, 'Unreviewed box-sizing capture source drift');
+  originals.set(path.resolve(runner[0].file), Buffer.from(historicalRunner));
   fs.readFileSync = (file, ...args) => {
     if (typeof file === 'string' && originals.has(path.resolve(file))) {
       const bytes = originals.get(path.resolve(file));
