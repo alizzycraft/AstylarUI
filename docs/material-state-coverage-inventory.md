@@ -95,6 +95,22 @@ evidence, including source applicability and explicit remaining uncertainty.
 
 ### Applicable-obligation reconciliation — October 5
 
+Tooltip raster scope is now explicit in the existing owning replay: hovered
+light desktop 1440×1000 DPR1 and light/contrast/custom mobile 390×844 DPR2.
+All four unregistered crops fail the existing local SSIM gate. One-device-pixel
+phase registration passes that gate for the three DPR2 crops, but light desktop
+DPR1 remains failing (0.711848 versus the existing 0.80 threshold). Registered
+sharpness diagnostics meet their targets in all four; they are not an alternate
+acceptance gate and do not erase the DPR1 failure. The test now asserts exact
+profile/viewport membership and both passing/failing registered outcomes, keeping
+the original ten receipts, texture hashes and pixel-derived metric comparisons.
+Historical replay passes 1/1 (2,248.583 ms). Evidence:
+`tooltip-layout-texture-boundary-5fe51fb.log` and its `-replay.log` under
+`artifacts/material-parity`. This closes scope ambiguity, not current tooltip
+rendering acceptance. Dark/mobile's separate frozen phase proof, other desktop/
+tablet profiles, held/focus/touch/scroll states and equal-input full sharpness
+remain separate obligations; do not infer them from these four hovered crops.
+
 Current equal-input text applicability is now checked independently of historical
 tooltip replay. The existing public package-root proof ran on Chrome 154.0.8037.58,
 Angular 20.3.31 / Babylon 8.56.2 / AstylarUI 0.2.0, comparing the installed complete

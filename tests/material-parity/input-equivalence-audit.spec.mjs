@@ -2156,6 +2156,13 @@ test('retained tooltip textures separate popup placement from raster phase', asy
   assert.equal(digest(replayRaw), '939b20537845092d102f6ebead14a9e4bd63dc92cea8fc245824df53527f6f12');
   const replay = replayRaw.toString().trim().split(/\r?\n/).map(line => JSON.parse(line));
   const terminal = records.at(-1); assert.equal(terminal.cases, 4);
+  assert.deepEqual(records.slice(0, -1).map(row => [row.profile, row.viewport.id,
+    row.viewport.width, row.viewport.height, row.viewport.deviceScaleFactor]), [
+    ['light', 'desktop', 1440, 1000, 1],
+    ['light', 'mobile', 390, 844, 2],
+    ['contrast', 'mobile', 390, 844, 2],
+    ['custom', 'mobile', 390, 844, 2],
+  ]);
   assert.equal(terminal.pinned.length, 10);
   for (const receipt of terminal.pinned) assert.equal(digest(readFileSync(receipt.file)), receipt.sha256);
   const textureHashes = [];
@@ -2193,7 +2200,9 @@ test('retained tooltip textures separate popup placement from raster phase', asy
     assert.equal(JSON.stringify(unregistered), JSON.stringify(row.metrics.unregistered));
     assert.equal(JSON.stringify(registered), JSON.stringify(row.metrics.phaseRegistered));
     assert.equal(unregistered.matches, false);
-    if (row.viewport.deviceScaleFactor === 1) assert.equal(registered.matches, false);
+    assert.equal(registered.matches, row.viewport.deviceScaleFactor === 2);
+    // Sharpness diagnostics do not substitute for the existing SSIM gate.
+    assert.equal(registered.sharpness.meetsTarget, true);
   }
   assert.equal(textureHashes.length, 3); assert.equal(new Set(textureHashes).size, 1);
   assert.equal(replay.at(-1).acceptance, false);

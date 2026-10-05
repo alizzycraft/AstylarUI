@@ -2,6 +2,17 @@
 
 ## Current resumption ledger — October 5
 
+- Tooltip retained-raster applicability now names exact coverage instead of a
+  generic sharpness claim: light desktop DPR1 and light/contrast/custom mobile
+  DPR2 hovered crops. All unregistered SSIM checks fail; phase-registered DPR2
+  checks pass, DPR1 remains 0.711848 below the unchanged 0.80 local gate.
+  Registered sharpness diagnostics pass but are not substitute acceptance.
+  Existing owning assertions now enforce exact four-case membership and these
+  distinct outcomes; all original receipts/pixel comparisons remain. Historical
+  replay passes 1/1 in 2,248.583 ms; no recapture or renderer change. This closes
+  profile/metric scope ambiguity, not full tooltip inspection. Current canonical
+  proof fingerprints still need the pending coherent publication batch.
+
 - Shared text-paint applicability question is answered by the existing public
   equal-input origin/DPR proof, not another Material capture. Current installed
   canvas-paint/baseline methods match current source transpilation; all 2,515
