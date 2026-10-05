@@ -2,6 +2,22 @@
 
 ## Current resumption ledger — October 5
 
+- Pending proof batch integration now passes through the complete existing
+  historical component launcher, not only individually filtered assertions:
+  `node scripts/check-historical-component-proofs.mjs`, exit 0, 18/18 tests
+  across four child commands (8 retained component, 8 button-authoring, 1 full
+  box-sizing source-binding and 1 synthetic negative-control test), no skips.
+  Log: `artifacts/material-parity/component-proof-integration-20261005.log`.
+  Full binding retains 2,311 captures / 600 observations, including 492 geometry
+  gaps and false input/render equivalence flags. The eight source and fifteen
+  receipt mutation controls still reject upgraded or detached claims; successful
+  `button-box-sizing-binding-control-Wu3Ezf` scratch is absent after cleanup.
+  Both exact standalone registration/conservation tests also pass 2/2
+  (972.741 ms). This closes combined historical replay applicability for the
+  recent test batch; canonical export reconciliation and current browser/full
+  audit gates remain separate. Do not repeat this unchanged launcher before a
+  relevant proof/dependency change.
+
 - Tooltip retained-raster applicability now names exact coverage instead of a
   generic sharpness claim: light desktop DPR1 and light/contrast/custom mobile
   DPR2 hovered crops. All unregistered SSIM checks fail; phase-registered DPR2
