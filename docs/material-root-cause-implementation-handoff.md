@@ -2,6 +2,16 @@
 
 ## Current resumption ledger — October 5
 
+- Producer transition question resolved: `4de3203e` extracted the existing scalar
+  pipeline without changing its body. The existing historical conservation test
+  now verifies exact six parameters, return, one call site and byte-identical
+  ordered statements against authenticated producer `116d8fab…`, then reverses
+  only that extraction before the original whole-source equality. Bounded
+  execution of the existing assertion block passes, including prior registration
+  hashes; an altered helper condition is rejected by statement equality. Syntax
+  and diff checks pass. This supersedes the stale-transition failure below, not
+  the pending full integration/export or complete case-obligation closure.
+
 - Canonical reconciliation preflight found a specific stale historical producer
   transition before expensive aggregation. Existing whole-source conservation
   now accounts explicitly for the ninth leading tooltip registration and pins

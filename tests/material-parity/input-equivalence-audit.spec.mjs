@@ -2516,6 +2516,26 @@ test('records source fingerprints and actual visual acceptance fields', () => {
     'scripts/diagnose-material-root-initial-receipt.mjs',
     'tests/material-parity/case-index-assertion-migration.mjs'];
   let liveSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8').replace(/\r\n/g, '\n');
+  // Reverse only the exact scalar-stage extraction; conserve the original body.
+  const extractionAst = ts.createSourceFile('extraction.mjs', liveSource, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const extracted = extractionAst.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === 'replayMaterialScalarReviewStages');
+  assert.equal(extracted.length, 1);
+  const helper = extracted[0];
+  assert.deepEqual(helper.parameters.map(p => p.name.text), ['overlaySurfaceDiscrepancies', 'cases',
+    'elementInventory', 'retainedTypography', 'controlTypography', 'ownerInitialStyleBinding']);
+  assert.equal(helper.body.statements.at(-1).getText(extractionAst), 'return discrepancies;');
+  const originalStart = currentSource.indexOf('  const modalDiscrepancies =');
+  const originalEnd = currentSource.indexOf('  const classifications =', originalStart);
+  assert.ok(originalStart > 0 && originalEnd > originalStart);
+  const extractedBody = liveSource.slice(liveSource.indexOf('\n', helper.body.getStart(extractionAst)) + 1,
+    liveSource.lastIndexOf('\n', helper.body.statements.at(-1).getStart(extractionAst)) + 1);
+  assert.equal(extractedBody, currentSource.slice(originalStart, originalEnd),
+    'every scalar-stage statement and its order are conserved by extraction');
+  const call = '  const discrepancies = replayMaterialScalarReviewStages(overlaySurfaceDiscrepancies, cases,\n' +
+    '    elementInventory, retainedTypography, controlTypography, ownerInitialStyleBinding);\n';
+  assert.equal(liveSource.split(call).length, 2);
+  liveSource = liveSource.slice(0, helper.getStart(extractionAst)) + liveSource.slice(helper.end + 2);
+  liveSource = liveSource.replace(call, extractedBody);
   const registrationAst = ts.createSourceFile('registration.mjs', liveSource, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   const registrationInventory = registrationAst.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory');
   const standalone = registrationInventory.body.statements.find(ts.isReturnStatement).expression.elements.filter(n =>
