@@ -2,6 +2,22 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 vertical/paint raw receipt gap is now closed by exact originals,
+  not guessed encoding: five changed raw source files are still present under
+  `D:/dev/github/AstylarUI-material`. Every original byte hash matches its saved
+  receipt and every LF-normalized complete file equals the current integration
+  source (renderer, element creation/material, browser defaults, Babylon camera).
+  The report-generation Git endpoints also match current normalized contents;
+  uniform CRLF reconstruction was insufficient because originals have mixed
+  endings. An isolated read-only replay uses only these authenticated raw source
+  buffers plus the previously verified historical dependency installation.
+  Unchanged validators then deep-equal both complete saved vertical and paint
+  receipts (exit 0, 6,523 ms), with all observation/source/package guards active.
+  No saved receipt, source or package is rewritten. Current-runtime acceptance
+  and durable legacy-suite read-boundary integration remain separate; do not
+  rerun the identical provenance search or treat the earlier failed guesses as
+  evidence of semantic source drift.
+
 - October 5 shared historical dependency replay advances four public proofs
   without repinning: unchanged validators execute through an isolated read-only
   exact relative/absolute showcase dependency-prefix adapter. Range drag passes
