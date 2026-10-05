@@ -2,6 +2,19 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 component-overlay caret proof is independently current: its original
+  focused assertion passes 1/1 (5,684 ms), replaying 13 groups / 378 observations,
+  retaining 59 scalar-rule gaps and rejecting altered candidate caret authoring.
+  The pending grid revision now invokes the existing complete caret/position
+  validator against the exact selected original cases and fresh full-tree
+  inventory before restoring any component-review metadata. Every restored row
+  requires a unique full scalar match and complete raw-evidence equality. Only
+  then do owner-caret and unrelated-row conservation run. The initial preflight
+  exposed a nonexistent private normalizer export; it was corrected to the
+  existing authenticated `bindPreciseAuditNormalization` without changing core.
+  Full grid session 41035 is live; the spec remains uncommitted pending its result.
+  Do not claim success from the separate 13-group proof or restart this live run.
+
 - October 5 recovery and historical font-payload assertion repairs are integrated:
   their original suites pass 6/6, no skips (16,777 ms). Recovery authenticates
   the one actual current reader receipt, restores its complete historical source
