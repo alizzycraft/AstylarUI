@@ -2,6 +2,24 @@
 
 ## Current resumption ledger — October 4
 
+- Retained fixed-width gate 76 is replayable through the existing historical
+  component launcher, without modifying original test bodies or repinning reports.
+  The only stale receipts are the border module (`3dbcf33f…` to `a809c257…`) and
+  component diagnostics (`b7957cd9…` to `b493a355…`); existing authenticated source
+  restorations cover both. The launcher now runs its original six assertions and
+  the entire two-test fixed-width suite separately, retaining all original checks
+  of nine source receipts, 600 owners / 480 cases / seven families, nine authored
+  width groups, 52 numerically matching core observations and negative controls.
+  `node scripts/check-historical-component-proofs.mjs` finishes **8/8 passing**,
+  terminal exit 0 (2,396 ms plus 10,843 ms), no skips or writes. The isolated
+  applicability preflight also passed 2/2 in 10,019 ms. Historical authoring proof
+  is conserved; direct default receipt checks remain historical, not current
+  browser acceptance. The launcher is standalone and absent from the live
+  producer inventory; no grid/capture dependency changed. Grid session 35583 and
+  Material capture 21768 remain live. Full general-parity build is deferred until
+  resources are available (about 2.5 GiB free RAM at inspection); do not start
+  another resource-heavy build merely to overlap these jobs.
+
 - The grid owner/followup conflict is now localized to **expansion-primary /
   appearance**, `static:expansion@light/desktop`. Read-only source/population
   inspection over the retained 110-case scratch capture finds 2,697 historical

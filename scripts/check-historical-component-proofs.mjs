@@ -7,18 +7,23 @@ import { createHash } from 'node:crypto';
 import { syncBuiltinESMExports } from 'node:module';
 import { pathToFileURL } from 'node:url';
 import { restoreAstylarDiagnostics } from '../tests/material-parity/alignment-survey-conservation.mjs';
+import { readGapSurveySource } from '../tests/material-parity/gap-survey-source-replay.mjs';
 
 const main = process.argv[1] && pathToFileURL(path.resolve(process.argv[1])).href === import.meta.url;
 if (main) {
-  assert.equal(process.argv.length, 2, 'Run all six original retained assertions without extra filters');
-  const result = spawnSync(process.execPath, ['--test',
+  assert.equal(process.argv.length, 2, 'Run the retained component and fixed-width assertions without extra filters');
+  const commands = [['--test',
     '--test-name-pattern=retained (progress paint|compact empty|keyboard profiles|applied-theme popup|selection states|tooltip textures)',
-    'tests/material-parity/input-equivalence-audit.spec.mjs'], {
-    env: { ...process.env, NODE_OPTIONS: `${process.env.NODE_OPTIONS ?? ''} --import=${import.meta.url}`.trim() },
-    stdio: 'inherit',
-  });
-  if (result.error) throw result.error;
-  process.exitCode = result.status ?? 1;
+    'tests/material-parity/input-equivalence-audit.spec.mjs'],
+    ['--test', 'tests/material-parity/button-fixed-width-evidence.spec.mjs']];
+  for (const args of commands) {
+    const result = spawnSync(process.execPath, args, {
+      env: { ...process.env, NODE_OPTIONS: `${process.env.NODE_OPTIONS ?? ''} --import=${import.meta.url}`.trim() },
+      stdio: 'inherit',
+    });
+    if (result.error) throw result.error;
+    if (result.status !== 0) { process.exitCode = result.status ?? 1; break; }
+  }
 } else {
   const read = fs.readFileSync.bind(fs);
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -44,6 +49,12 @@ if (main) {
   assert.equal(restoreAstylarDiagnostics(read(component, 'utf8')), lf(originalComponent),
     'Unreviewed component source drift');
   const originals = new Map([[path.resolve(sorter), originalSorter], [path.resolve(component), originalComponent]]);
+  const widths = JSON.parse(read('docs/material-button-fixed-width-audit.json'));
+  const border = widths.sourceFingerprints.filter(s => s.file === 'tests/material-parity/border-initial-input-evidence.mjs');
+  assert.equal(border.length, 1);
+  const historicalBorder = readGapSurveySource(border[0], { current: file => read(file, 'utf8') });
+  assert.equal(hash(historicalBorder), border[0].sha256, 'Unreviewed fixed-width border source drift');
+  originals.set(path.resolve(border[0].file), Buffer.from(historicalBorder));
   fs.readFileSync = (file, ...args) => {
     if (typeof file === 'string' && originals.has(path.resolve(file))) {
       const bytes = originals.get(path.resolve(file));
