@@ -183,6 +183,18 @@ not live-process status):
    with formatter equality or launch a concurrent heavy collector. Next, finish
    the live cold check, then use the existing subset-aware source-binding path
    for these 108 rows, retaining its receipt and negative-control requirements.
+   A subsequent bounded read-only prerequisite check authenticates all seven
+   saved source-report hashes, the plan and full original capture. The existing
+   `projectReviewedSourceBatchAuditInputs` binds them to the 110-case diagnostic:
+   all 108 groups / 318 observations match every classification, raw scalar,
+   occurrence, ordered-case, reviewed-case and state field. Three mutations
+   (tree metadata, forged owner ID, reversed case order) are rejected. Removing
+   an entire case is intentionally allowed by the subset contract and reports
+   incomplete coverage; an initial negative-control expectation that removal
+   must throw failed, and was corrected after reading that actual contract.
+   The corrected inline check exits 0 in 5.205 seconds with Node heap bounded
+   to 640 MiB. It performs no fresh source collectors and claims no bound
+   collector status, so it does not close the 108-row independent replay gap.
 
    Canonical push with command-local post buffering succeeds; remote then
    advances through `8fb22120` to `783c2b6c`. Independent cold canonical check
