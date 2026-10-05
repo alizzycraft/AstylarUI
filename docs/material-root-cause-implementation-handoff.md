@@ -2,6 +2,17 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 existing color-transition collector now accepts explicit case
+  membership and an authenticated historical revision. Its default full-capture
+  receipt remains unchanged; selected occurrences retain their complete case
+  arrays, and missing/duplicate requested cases are rejected. The original
+  precision suite plus the subset control passes 6/6 (9,756 ms). This is a
+  bounded reuse prerequisite for grid gate 1120, not proof of classification
+  continuity: the next integration must conserve complete owner/case membership
+  and unrelated classification metadata separately. No canonical, renderer or
+  fixture inputs changed. Material session 21768 is confirmed live and advancing
+  through autocomplete interaction profiles; final acceptance is still pending.
+
 - October 5 grid membership boundary is explicit: production scalar rows cap
   their example `cases` at twelve (`input-equivalence-audit.mjs`, scalar
   aggregation), while the existing color-transition collector preserves every

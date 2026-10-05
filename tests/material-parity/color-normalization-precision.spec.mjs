@@ -86,3 +86,21 @@ test('canonical color population preserves split classifications and rejects unr
   assert.throws(() => verifyCanonicalColorPopulationTransition(previous, current,
     { findings: [...transition.findings, transition.findings[0]] }));
 });
+
+test('explicit color-transition subsets retain every selected occurrence and reject missing or duplicate cases', () => {
+  const full = JSON.parse(readFileSync('docs/material-color-normalization-transition.json'));
+  const caseIds = [full.findings[0].cases[0]];
+  const subset = collectColorNormalizationTransition({ caseIds,
+    previousRevision: '364f46a309319201317919b6a23dd1aadd08f405' });
+  const expected = full.findings.flatMap(row => {
+    const cases = row.cases.filter(id => caseIds.includes(id));
+    return cases.length ? [{ ...row, cases, occurrences: cases.length }] : [];
+  });
+  assert.deepEqual(subset.findings, expected);
+  assert.equal(subset.counts.cases, 1);
+  assert.equal(subset.previous.sha256, full.previous.sha256);
+  assert.equal(subset.current.sha256, full.current.sha256);
+  assert.equal(subset.priorClassificationsRevalidated, false);
+  assert.throws(() => collectColorNormalizationTransition({ caseIds: [...caseIds, ...caseIds] }), /duplicated/);
+  assert.throws(() => collectColorNormalizationTransition({ caseIds: ['static:missing@light/desktop'] }), /missing/);
+});

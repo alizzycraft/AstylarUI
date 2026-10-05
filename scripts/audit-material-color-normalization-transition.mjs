@@ -72,8 +72,15 @@ export function verifyCanonicalColorPopulationTransition(previousRows, currentRo
     inputEquivalent: false, renderingEquivalent: false };
 }
 
-export function collectColorNormalizationTransition() {
-  const previous = bind(execFileSync('git', ['show', `${revision}:${moduleFile}`], { encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 }));
+export function collectColorNormalizationTransition({ caseIds, previousRevision = revision } = {}) {
+  assert.match(previousRevision, /^[a-f0-9]{40}$/);
+  const requested = caseIds === undefined ? null : new Set(caseIds);
+  if (requested) {
+    assert.ok(Array.isArray(caseIds) && requested.size > 0 && requested.size === caseIds.length,
+      'requested case membership is empty or duplicated');
+    assert.ok(caseIds.every(id => typeof id === 'string'));
+  }
+  const previous = bind(execFileSync('git', ['show', `${previousRevision}:${moduleFile}`], { encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 }));
   assert.equal(previous.sha256, '8929720cf30769ac3148458bf954402466f6f296c0d764c3123cd797f1e9300e');
   const current = bind(readFileSync(moduleFile, 'utf8'));
   assert.notEqual(current.sha256, previous.sha256);
@@ -86,6 +93,7 @@ export function collectColorNormalizationTransition() {
   for (const [kind, entries] of [['static', original.results], ['interaction', original.interactions]]) {
     for (const entry of entries) {
       const caseId = `${kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`;
+      if (requested && !requested.has(caseId)) continue;
       assert.ok(!cases.has(caseId)); cases.add(caseId);
       for (const input of entry.styleInputs ?? []) {
         owners++;
@@ -118,9 +126,10 @@ export function collectColorNormalizationTransition() {
     }
   }
   assert.equal(nonColorChanges, 0, 'normalization correction changed non-color evidence');
+  if (requested) assert.deepEqual([...cases].sort(), [...requested].sort(), 'requested original case is missing');
   return { schemaVersion: 1, kind: 'material-color-normalization-scalar-transition',
     capture: { file: captureFile, sha256: captureHash },
-    previous: { module: moduleFile, revision, functions: names, sha256: previous.sha256 },
+    previous: { module: moduleFile, revision: previousRevision, functions: names, sha256: previous.sha256 },
     current: { module: moduleFile, functions: names, sha256: current.sha256 },
     counts: { cases: cases.size, owners, nonColorChanges, stageChanges, outcomeCounts, groups: groups.size },
     findings: [...groups.values()].map(group => ({ ...group, occurrences: group.cases.length })),
