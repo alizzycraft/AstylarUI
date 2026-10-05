@@ -2,10 +2,16 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 
 const hash = text => createHash('sha256').update(text).digest('hex');
+const standaloneCoverageProof = "    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\\('retained standalone visibility disabled and selection cohorts preserve exact receipts and failures'/,\n" +
+  "      'retained standalone visibility, disabled activation and popup selection evidence', 'Authenticates all 73 dependency/screenshot receipts across six snackbar desktop/mobile profiles, four tablet themes, five disabled fields and three popup-input selections. Exact visibility/action boundaries, unequal disabled suffix state and both original picker geometry failures remain asserted. Historical replay only; not current rendering acceptance, all-state paint, complete ownership or case inspection closure.'),\n";
 // Reverse only the exact extraction of the unchanged production scalar stages.
 // Whole-module equality remains mandatory before any older transition runs.
 export function restoreScalarReviewExtraction(source) {
-  const current = source.toString().replaceAll('\r\n', '\n');
+  let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes(standaloneCoverageProof)) {
+    assert.equal(current.split(standaloneCoverageProof).length, 2, 'repeated standalone coverage registration');
+    current = current.replace(standaloneCoverageProof, '');
+  }
   if (!current.includes('export function replayMaterialScalarReviewStages(')) return current;
   const header = 'export function replayMaterialScalarReviewStages(overlaySurfaceDiscrepancies, cases,\n  elementInventory, retainedTypography, controlTypography, ownerInitialStyleBinding) {\n';
   const end = '  return discrepancies;\n}\n\n';
@@ -63,6 +69,10 @@ export function restoreStackingProducer(source) {
   if (restored.includes(applicabilityRegistration)) {
     assert.equal(restored.split(applicabilityRegistration).length, 2);
     restored = restored.replace(applicabilityRegistration, '');
+  }
+  if (restored.includes(standaloneCoverageProof)) {
+    assert.equal(restored.split(standaloneCoverageProof).length, 2, 'repeated standalone coverage registration');
+    restored = restored.replace(standaloneCoverageProof, '');
   }
   // Seven registered standalone proofs add discovery only. Authenticate their
   // entire exact block before reversal; the complete historical hash below

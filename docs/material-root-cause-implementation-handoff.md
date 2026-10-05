@@ -114,6 +114,23 @@ current boundary for exact cohorts. Next register these through the existing
 proof infrastructure in one coherent batch, not recapture unchanged cases or
 infer case inspection completion from their presence.
 
+Standalone proof integration is now implemented: one existing-suite replay covers
+all four cohorts, authenticates their 73 receipts, checks exact state/action
+observations, and retains both picker-selection geometry failures. Focused replay
+passes 1/1 (38.360 ms test body). The historical component launcher includes it;
+current capture/production never uses that preload. The producer adds one bounded
+proof entry without changing source classifications or raw observations. An exact
+registration reversal before scalar-extraction authentication preserves the
+original whole-source hash; all 30 original producer-transition tests pass
+(25.667 s), and the added proof-drift/duplicate/unrelated-change control passes
+1/1. Initial placement of the reversal only at the older stacking boundary was
+rejected by the earlier extraction guard; moving the exact additive reversal to
+that earliest boundary resolves it without repinning any historical receipt.
+The canonical publication/index at `8dc0bd2a` predates this source addition.
+Reconcile it with other remaining integrations at the next justified milestone,
+not by repeating unchanged browser captures. Full case inspection and remaining
+paint/profile/ownership obligations stay open.
+
 Read-only general-gate diagnosis: `tests/parity/run-parity.mjs` retains one
 browser context per viewport and closes each successful capture page. At the
 readiness wait in `captureMode`, failure propagates without preserving the page's

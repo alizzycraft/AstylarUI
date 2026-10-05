@@ -34,6 +34,23 @@ const readFileSync = (file, encoding) => {
   return source.replace(registration, '');
 };
 
+test('standalone coverage registration preserves original extraction hash and rejects proof drift', () => {
+  const current = readOriginalSource('tests/material-parity/input-equivalence-audit.mjs', 'utf8');
+  const restored = restoreScalarReviewExtraction(current);
+  assert.ok(!restored.includes('retained standalone visibility disabled and selection cohorts'));
+  for (const phrase of ['retained standalone visibility disabled and selection cohorts',
+    'Authenticates all 73 dependency/screenshot receipts', 'both original picker geometry failures remain asserted']) {
+    assert.equal(current.split(phrase).length, 2);
+    assert.throws(() => restoreScalarReviewExtraction(current.replace(phrase, 'unreviewed proof drift')));
+  }
+  const start = current.indexOf("    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\\('retained standalone visibility");
+  const end = current.indexOf("    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\\('retained progress paint", start);
+  assert.ok(start >= 0 && end > start);
+  const block = current.slice(start, end);
+  assert.throws(() => restoreScalarReviewExtraction(current.replace(block, block.repeat(2))));
+  assert.throws(() => restoreScalarReviewExtraction(current + '\n// unrelated source drift'));
+});
+
 test('registered standalone proof batch conserves the entire preceding producer and rejects changed proofs', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';
   const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');

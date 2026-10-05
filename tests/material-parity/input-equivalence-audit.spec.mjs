@@ -2240,6 +2240,82 @@ test('retained Tab, popup-state and email-edit boundaries preserve exact action 
   assert.ok(!emailCandidate.events.some(event => event.event === 'beforeinput' || event.event === 'input'));
 });
 
+test('retained standalone visibility disabled and selection cohorts preserve exact receipts and failures', () => {
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  const readRecords = (name, sha256, expectedReceipts) => {
+    const raw = readFileSync(`artifacts/material-parity/${name}.log`);
+    assert.equal(digest(raw), sha256);
+    const rows = raw.toString().trim().split(/\r?\n/).map(line => JSON.parse(line));
+    const receipts = new Map();
+    const inspect = value => {
+      if (!value || typeof value !== 'object') return;
+      if (typeof value.file === 'string' && typeof value.sha256 === 'string') {
+        if (receipts.has(value.file)) assert.equal(receipts.get(value.file), value.sha256);
+        receipts.set(value.file, value.sha256);
+      }
+      Object.values(value).forEach(inspect);
+    };
+    rows.forEach(inspect);
+    assert.equal(receipts.size, expectedReceipts);
+    for (const [file, expected] of receipts) assert.equal(digest(readFileSync(file)), expected, file);
+    return rows;
+  };
+  for (const [name, sha256, count, receipts] of [
+    ['snackbar-missing-profiles-59566c1', '1675044d647234fe966d4e5ed6f25249b0108b7f810a29fe9173e16429864ac0', 6, 18],
+    ['snackbar-tablet-visibility-ab77890', '862af07264606dcb87f78c59dc8dd183c04d65f4b8574bfe61fcaab484ebce36', 4, 14],
+  ]) {
+    const rows = readRecords(name, sha256, receipts), cases = rows.filter(row => row.observations);
+    assert.equal(cases.length, count);
+    assert.equal(new Set(cases.map(row => `${row.profile}/${row.viewportId}`)).size, count);
+    for (const row of cases) for (const mode of ['reference', 'astylar']) {
+      const result = row.observations[mode];
+      assert.deepEqual(result.errors, []);
+      assert.ok(Math.abs(result.opened.box.height - 48) < .00001);
+      assert.ok(result.raster.changed > 0);
+      assert.equal(result.actionFocus, mode === 'reference' ? 'UNDO' : 'snack-bar-dismiss');
+      assert.equal(result.closed.popupCount, 0);
+      assert.equal(result.closed.focus, mode === 'reference' ? 'BODY' : 'snack-bar-primary');
+    }
+    assert.equal(rows.at(-1).inputEquivalent, false);
+    assert.equal(rows.at(-1).renderingEquivalent, false);
+  }
+  const disabled = readRecords('disabled-field-activation-fde2b69',
+    'dcb6505e1b25c76f1f28d5707ea2f473c06b3e21c24c7a177742b3276cd0b7c5', 8);
+  const fields = disabled.filter(row => row.samples);
+  assert.equal(fields.length, 10);
+  for (const row of fields) {
+    assert.deepEqual(row.errors, []);
+    for (const sample of row.samples) {
+      assert.equal(sample.disabled, true);
+      assert.equal(sample.value, row.samples[0].value);
+    }
+    if (['datepicker', 'timepicker'].includes(row.family)) {
+      for (const sample of row.samples) {
+        assert.equal(sample.buttons.length, 1);
+        assert.equal(sample.buttons[0].disabled, row.mode === 'reference');
+      }
+      for (const label of ['enter', 'icon-click'])
+        assert.equal(row.samples.find(sample => sample.label === label).open, row.mode === 'astylar');
+    }
+  }
+  const selection = readRecords('popup-input-selection-3a47c43',
+    '101a663943c986f916f33cce1b3a0e494811d233ef052b5222a68690314f9721', 33);
+  assert.deepEqual(selection.filter(row => row.observations).map(row => row.family),
+    ['autocomplete', 'datepicker', 'timepicker']);
+  for (const row of selection.filter(row => row.observations)) for (const mode of ['reference', 'astylar']) {
+    const samples = row.observations[mode];
+    assert.equal(samples.length, 4);
+    for (const sample of samples) assert.equal(sample.value, 'Atlas');
+    assert.deepEqual(samples.find(sample => sample.label === 'forward').selection, [0, 3]);
+    assert.deepEqual(samples.find(sample => sample.label === 'backward').selection, [2, 5]);
+  }
+  assert.deepEqual(selection.filter(row => row.diagnosticFailure).map(row => row.diagnosticFailure.family),
+    ['datepicker', 'timepicker']);
+  assert.equal(selection.at(-1).diagnosticFailures, 2);
+  assert.equal(selection.at(-1).inputEquivalent, false);
+  assert.equal(selection.at(-1).renderingEquivalent, false);
+});
+
 test('recent source diagnostics conserve predecessor findings and reject altered receipts or conclusions', () => {
   const audit = buildMaterialInputAudit(parityReport({}, {}));
   const previous = execFileSync('git', ['show', 'bd79e4b:tests/material-parity/input-equivalence-policy.mjs'],

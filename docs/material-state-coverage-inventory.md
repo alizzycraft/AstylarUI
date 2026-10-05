@@ -41,9 +41,14 @@ the component differs by additive read-only camera/depth diagnostics (`c479097f`
 These restorations establish historical source applicability only. They neither
 rerender current code nor establish all-state paint or full inspection, and must
 not preload current capture/production. No unchanged browser rerun is justified
-by these explained receipts. Next integrate these bounded cohorts through the
-existing proof inventory and original evidence checks, preserving their scope
-and failures rather than creating another report or claiming new output passes.
+by these explained receipts. These cohorts now have one bounded producer proof
+registration backed by an existing-suite replay of all 73 receipts and exact
+observations, including both selection geometry failures. Focused replay passes;
+all 30 original producer-transition tests and added proof-drift controls pass.
+This supersedes the table's registration-absent status at the source level only:
+the published canonical/index snapshot still predates this addition. Publication
+reconciliation remains pending at the next coherent integration milestone.
+No current-output pass or full-case inspection closure follows.
 
 Configured capture coverage is 436 static plus 1,875 interaction cases across
 36 families. The latest complete output run is `current-full-20261005`, with
