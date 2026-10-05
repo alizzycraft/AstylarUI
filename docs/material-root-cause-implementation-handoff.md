@@ -2,6 +2,16 @@
 
 ## Current resumption ledger — October 5
 
+- Tooltip paired-input question answered for the exact 18 configured hover/
+  held cases: authenticated full-report/checkpoint equality and all 180 case
+  files preserve paired popup text and output passes, but retain unequal
+  block/flex, static/relative, centered/left text, wrapping and width/overflow
+  requests. See the current inventory. This matches existing source findings
+  `fixture-tooltip-text-alignment-omission` and tooltip wrapping classification;
+  do not reopen their historical diagnosis or call these output passes equal-
+  input acceptance. Next map remaining composition/width/overflow obligations
+  to existing findings and prove their scope, rather than recapture this cohort.
+
 - Mapped runtime applicability batch: the one generated surface component's
   two signal inputs, two outputs, required canvas query, selector, standalone
   flag, inline template and styles now match current authored source through

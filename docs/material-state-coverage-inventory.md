@@ -106,6 +106,20 @@ evidence, including source applicability and explicit remaining uncertainty.
 
 ### Applicable-obligation reconciliation — October 5
 
+Current tooltip hover/held popup-input membership is now checked across all 18
+configured cases (four themes × desktop DPR1/2, plus light comparison pane).
+Streaming full-report SHA `ab42dbec…`, exact checkpoint key/result equality and
+180 captured-file hashes authenticate this cohort. Each has one paired popup
+with the same text and output acceptance true. All reference surfaces are
+static/block, centered text, normal wrapping, hidden overflow, min-width40px /
+max-width200px; candidate surfaces are relative/flex, retained text-align left,
+nowrap, with overflow/min/max-width requests absent. Absence is not an invented
+computed default. Current authored rule at `astylar.component.ts:811` retains
+the existing text-alignment omission and wrapping findings; this cohort mapping
+extends their applicability, not a new renderer-causality claim. Paired pixels
+do not certify equal inputs; composition/width/overflow effects and complete
+state/ownership obligations remain open for these 18 partially inspected cases.
+
 Current-source applicability for the captured build's mapped runtime now has
 one bounded existing-suite check: 88 modules, 80 class bodies/inheritance,
 98 functions, 53 variables, 373 required runtime imports, 281 accounted compiler/
