@@ -2,6 +2,23 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 ancestor reader integration now passes all five original tests
+  without a preload (2,903 ms). The sole special source boundary reuses
+  `recoverOriginalOverlayRunnerSource` and authenticates the original raw
+  runner receipt; all other sources still require exact bytes. All 48 records,
+  96 ancestor samples, runtime assets, coverage and original corruption controls
+  remain checked. The preceding isolated replay also passed 5/5 (2,941 ms).
+  No capture or receipt changed; updated reader fingerprints require batched
+  reconciliation before canonical acceptance.
+  Grid session 7353 is terminal, 0/1 (568,070 ms), retaining
+  `artifacts/material-parity/owner-grid-integration-BpdqTQ`. The corrected
+  pending-row equality now exposes a real separate-overlay classification delta:
+  `bottom-sheet-copy` changes from unresolved to
+  `reviewed-overlay-caret-local-observation-boundary`. Do not exempt it in the
+  owner-caret helper. Next independently reconstruct/authenticate that separate
+  review before applying the owner-caret delta comparison; keep complete raw
+  scalars, membership and unrelated-row conservation intact. No unchanged rerun.
+
 - October 5 overlay-font single-source payload claim is proven at its actual
   historical endpoints: `7cd5cb7` to
   `4650791a7208b841dd29f1ced015f98234949623`. Complete source equality permits

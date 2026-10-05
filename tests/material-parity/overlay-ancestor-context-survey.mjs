@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, realpathSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
+import { recoverOriginalOverlayRunnerSource } from './original-overlay-runner-source.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 export function collectOverlayAncestorContextSurvey(reportFile, { root = process.cwd(), readBytes = readFileSync } = {}) {
@@ -17,7 +18,10 @@ export function collectOverlayAncestorContextSurvey(reportFile, { root = process
   };
   const hashed = (item, source = false) => {
     assert.match(item?.sha256 ?? '', /^[a-f0-9]{64}$/);
-    const bytes = read(item.file, source); assert.equal(hash(bytes), item.sha256, `Changed evidence: ${item.file}`); return bytes;
+    const bytes = read(item.file, source);
+    if (source && item.file === 'tests/material-parity/run-material-parity.mjs')
+      return recoverOriginalOverlayRunnerSource(item, bytes).bytes;
+    assert.equal(hash(bytes), item.sha256, `Changed evidence: ${item.file}`); return bytes;
   };
   const bytes = read(reportFile), raw = JSON.parse(bytes);
   assert.equal(raw.schemaVersion, 1);
