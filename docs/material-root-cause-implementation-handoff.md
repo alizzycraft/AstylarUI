@@ -40,6 +40,24 @@ The successful cold check predates these source edits; do not describe the
 canonical source fingerprints as current after this correction. No heavy audit
 or build process remains live from the sessions recorded above.
 
+Source-batch reconstruction is now integrated into the existing
+`independentlyReconstructBeforeReviewedInputs` boundary. It independently
+validates the actual subset binding before restoring exactly the six metadata
+fields; complete raw evidence, unresolved historical precedence and unrelated
+changes remain enforced. Full-group receipts are not treated as subset-row
+digests. Results report `sourceBatchChanges` separately, retaining earlier
+review-count assertions. An initial mutation test caught a self-consistent
+reviewed-case deletion; explicit occurrence-count and ordered-prefix checks
+now reject it. Five focused conservation tests pass (1.970 seconds), including
+six new mutations, the existing twenty mutations, unrelated-change retention
+and rejection of unauthenticated source-batch evidence at the public entry.
+Independent fresh collection plus source validation and actual reconstruction
+passes in 78.920 seconds: 108 groups / 318 observations and all raw rows conserved.
+The original grid final digest assertion is unmodified and not rerun unchanged:
+the other 1,133 individually replayed transitions still need integration into
+this historical boundary before that whole-population gate can close. Source
+fingerprint reconciliation remains pending for the coherent integration batch.
+
 1. Resolve retained grid metadata conservation without exempting categories.
    Session 51039 / Node 16224 runs one current builder and the existing full
    validator over the authenticated 110-case failure input. Its JSON-to-JSON

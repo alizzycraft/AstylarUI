@@ -7,6 +7,8 @@ import { followupInputAttributions } from './followup-input-proposal-transition.
 import { validateAlignmentFontAuditInputs, validateAlignmentFontClassifications, alignmentFontAttributions } from './alignment-font-audit-source-binding.mjs';
 import { validateTextAlignAuditInputs, validateTextAlignClassifications, textAlignAttributions } from './text-align-audit-source-binding.mjs';
 import { validateLtrAlignmentAuditInputs, validateLtrAlignmentClassifications, ltrAlignmentAttribution } from './ltr-alignment-audit-source-binding.mjs';
+import { validateReviewedSourceBatchAuditInputs, validateReviewedSourceBatchClassifications,
+  reviewedSourceBatchAttributions } from './reviewed-source-batch-audit-source-binding.mjs';
 
 const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
 const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
@@ -23,6 +25,14 @@ export function reconstructBeforeReviewedInputMetadata(previous, current, eviden
 
 export function reconstructBeforeFollowupInputMetadata(previous, current, evidence) {
   return reconstructMetadata(previous, current, evidence, followupInputAttributions, validateFollowupInputClassifications);
+}
+
+export function reconstructBeforeReviewedSourceBatchMetadata(previous, current, evidence) {
+  for (const row of current.filter(r => reviewedSourceBatchAttributions.includes(r.attribution))) {
+    assert.equal(row.reviewedCases.length, row.occurrences, 'source-batch reviewed membership count changed');
+    assert.deepEqual(row.cases, row.reviewedCases.slice(0, 12), 'source-batch ordered case prefix changed');
+  }
+  return reconstructMetadata(previous, current, evidence, reviewedSourceBatchAttributions, validateReviewedSourceBatchClassifications);
 }
 
 function reconstructMetadata(previous, current, evidence, attributions, validate) {
@@ -69,6 +79,15 @@ export function independentlyReconstructBeforeReviewedInputs(audit, previous, op
     const restored = reconstructBeforeFollowupInputMetadata(previous.discrepancies, current, audit.followupInputs);
     current = restored.rows; followupChanges = restored.changes;
   }
+  let sourceBatchChanges;
+  if (audit.reviewedSourceBatchInputs !== undefined || current.some(row => reviewedSourceBatchAttributions.includes(row.attribution))) {
+    // Full-group receipts are not subset-row digests. Authenticate the actual
+    // source projection and ordered subset before restoring any metadata.
+    assert.deepEqual(validateReviewedSourceBatchAuditInputs(audit.reviewedSourceBatchInputs,
+      { ...options, requireComplete: false }), []);
+    const restored = reconstructBeforeReviewedSourceBatchMetadata(previous.discrepancies, current, audit.reviewedSourceBatchInputs);
+    current = restored.rows; sourceBatchChanges = restored.changes;
+  }
   // The fresh replay validates all twelve source proofs and exact original
   // subset membership, not just flags, counts or attribution names in a report.
   assert.deepEqual(validateReviewedInputAuditInputs(audit.reviewedInputs,
@@ -77,5 +96,6 @@ export function independentlyReconstructBeforeReviewedInputs(audit, previous, op
   // Existing callers keep their original 134-set counts and complete-row checks.
   // The separately authenticated follow-up population is reported independently.
   return { ...result, ...(followupChanges === undefined ? {} : { followupChanges }),
+    ...(sourceBatchChanges === undefined ? {} : { sourceBatchChanges }),
     ...(alignmentChanges.length ? { alignmentChanges } : {}) };
 }

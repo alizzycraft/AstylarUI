@@ -3,9 +3,45 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { reconstructBeforeReviewedInputMetadata, independentlyReconstructBeforeReviewedInputs } from './later-reviewed-input-conservation.mjs';
+import { reconstructBeforeReviewedInputMetadata, independentlyReconstructBeforeReviewedInputs,
+  reconstructBeforeReviewedSourceBatchMetadata } from './later-reviewed-input-conservation.mjs';
+import { reviewedSourceBatchAttributions } from './reviewed-source-batch-audit-source-binding.mjs';
 
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
+
+test('source-batch subset reconstruction preserves complete raw rows and unrelated mutations', () => {
+  const file = 'artifacts/material-parity/owner-grid-integration-vjGiTG/unrelated-row-differences.json';
+  const bytes = readFileSync(file);
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), '8c368166d0c8c752957112356516429cd912b8cc01aaeda33affe0c3b427321e');
+  const pairs = JSON.parse(bytes).differences.filter(p => reviewedSourceBatchAttributions.includes(p.current.attribution));
+  assert.equal(pairs.length, 108);
+  const previous = pairs.map(p => p.previous), current = pairs.map(p => p.current);
+  // Pure reconstruction fixture only; the public entry point independently
+  // replays sources before it can use this projection.
+  const evidence = { binding: { status: 'bound' }, groups: current.map(row => ({ ...row,
+    originalCompleteRowSha256: row.reviewEvidence.originalCompleteRowSha256 })),
+    coverage: { suppliedObservations: current.reduce((n, r) => n + r.occurrences, 0) } };
+  const before = digest({ previous, current, evidence });
+  const restored = reconstructBeforeReviewedSourceBatchMetadata(previous, current, evidence);
+  assert.deepEqual(restored.rows, previous); assert.equal(restored.changes.length, 108);
+  assert.equal(restored.changes.reduce((n, r) => n + r.occurrences, 0), 318);
+  assert.equal(digest({ previous, current, evidence }), before);
+  const unrelated = { family: 'other', element: 'other', property: 'width', reference: '1px',
+    astylar: '2px', occurrences: 1, cases: ['other'], states: ['static'], attribution: 'unresolved' };
+  const changed = { ...unrelated, justification: 'unexplained mutation' };
+  const retained = reconstructBeforeReviewedSourceBatchMetadata([...previous, unrelated], [...current, changed], evidence);
+  assert.deepEqual(retained.rows.at(-1), changed); assert.notDeepEqual(retained.rows, [...previous, unrelated]);
+  for (const mutate of [
+    x => x.current.pop(), x => { x.current[0].reference = 'forged'; },
+    x => { x.current[0].extraRawField = true; x.evidence.groups[0].extraRawField = true; },
+    x => { x.previous[0].attribution = 'already-reviewed'; },
+    x => { x.current[0].reviewedCases.pop(); },
+    x => { x.evidence.binding.status = 'unbound'; },
+  ]) {
+    const altered = structuredClone({ previous, current, evidence }); mutate(altered);
+    assert.throws(() => reconstructBeforeReviewedSourceBatchMetadata(altered.previous, altered.current, altered.evidence));
+  }
+});
 function fixture() {
   const binding = JSON.parse(readFileSync('docs/material-reviewed-input-proposal-binding.json'));
   const transition = JSON.parse(readFileSync('docs/material-reviewed-input-transition-dry-run.json'));
@@ -68,6 +104,12 @@ test('historical entry point rejects a self-consistent but unauthenticated sourc
   const f = fixture();
   assert.throws(() => independentlyReconstructBeforeReviewedInputs(
     { discrepancies: f.current, reviewedInputs: f.evidence }, { discrepancies: f.previous }));
+});
+
+test('historical entry point independently rejects unauthenticated source-batch evidence', () => {
+  assert.throws(() => independentlyReconstructBeforeReviewedInputs({ discrepancies: [],
+    reviewedSourceBatchInputs: { binding: { status: 'bound' }, groups: [], coverage: { suppliedObservations: 0 } } },
+  { discrepancies: [] }), /reviewed source batch replay failed/);
 });
 
 test('historical reconstruction independently authenticates every reviewed source before restoring metadata', () => {
