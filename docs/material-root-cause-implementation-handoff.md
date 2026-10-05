@@ -102,6 +102,18 @@ from the total finding count. Highest-impact remaining obligations are shared
 overlay/text paint and profile applicability, keyboard state/focus boundaries,
 and live resource ownership; the incomplete general gate remains separate.
 
+Standalone reconciliation now answers four membership questions: snackbar six
+extra desktop/mobile profiles and four tablet themes, five disabled fields, and
+three dark/mobile popup-input selections have no explicit producer proof entries.
+Their original logs match retained hashes; the existing historical component
+boundary authenticates all 18/14/8/33 dependency and screenshot receipts after
+exact original helper/component restoration. Direct current-file checks reject
+the known diagnostic-only source transitions; no current-rendering acceptance
+is claimed. Original selection geometry failures remain. See the inventory's
+current boundary for exact cohorts. Next register these through the existing
+proof infrastructure in one coherent batch, not recapture unchanged cases or
+infer case inspection completion from their presence.
+
 Read-only general-gate diagnosis: `tests/parity/run-parity.mjs` retains one
 browser context per viewport and closes each successful capture page. At the
 readiness wait in `captureMode`, failure propagates without preserving the page's

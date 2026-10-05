@@ -20,6 +20,31 @@ popup-input selection and disabled-field activation evidence below must still
 have exact membership and current applicability reconciled; their inclusion is
 not inferred from a 145-finding total.
 
+Standalone membership reconciliation: the producer's existing proof inventory
+does not register the four specific cohorts below. Their retained log hashes
+match this chronology. Direct current-file receipt checks reject the changed
+sort helper in all four and changed showcase diagnostic source in the latter
+two. The existing `check-historical-component-proofs.mjs` read-only boundary
+authenticates the original helper SHA `7f1af071…` and component SHA `2c2979ad…`
+through exact whole-source restoration, not repinning. Under that boundary,
+all recorded dependencies and screenshot receipts authenticate:
+
+| Standalone cohort | Paired cases | Receipts authenticated | Remaining status |
+| --- | ---: | ---: | --- |
+| Snackbar missing desktop/mobile profiles (`snackbar-missing-profiles-59566c1.log`) | 6 | 18 | Historical visibility/action proof; explicit producer registration absent. |
+| Snackbar tablet themes (`snackbar-tablet-visibility-ab77890.log`) | 4 | 14 | Historical visibility/action proof; explicit producer registration absent. |
+| Disabled five-field activation (`disabled-field-activation-fde2b69.log`) | 5 | 8 | Historical state-propagation proof; explicit producer registration absent. |
+| Dark/mobile popup-input selection (`popup-input-selection-3a47c43.log`) | 3 | 33 | Historical selection proof with two retained geometry failures; explicit producer registration absent. |
+
+The current helper differs by the isolated browser-root override (`64a58a6d`);
+the component differs by additive read-only camera/depth diagnostics (`c479097f`).
+These restorations establish historical source applicability only. They neither
+rerender current code nor establish all-state paint or full inspection, and must
+not preload current capture/production. No unchanged browser rerun is justified
+by these explained receipts. Next integrate these bounded cohorts through the
+existing proof inventory and original evidence checks, preserving their scope
+and failures rather than creating another report or claiming new output passes.
+
 Configured capture coverage is 436 static plus 1,875 interaction cases across
 36 families. The latest complete output run is `current-full-20261005`, with
 436 static passes and 1,870 interaction passes / five failures. The canonical
