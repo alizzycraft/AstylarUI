@@ -2,6 +2,38 @@
 
 ## Current resumption ledger — October 4
 
+- Disabled-ink original coverage is current and passes without an adapter or code
+  change: `node --test tests/material-parity/disabled-button-ink.spec.mjs
+  tests/material-parity/disabled-ink-module-receipts.spec.mjs` finishes **4/4**,
+  exit 0 in **15,563 ms**, no skips. It replays all four groups / 60 precise
+  unequal foreground observations and retains state/declaration/source and
+  whole-module/receipt corruption controls. The earlier gate-79 receipt failure
+  is stale; do not rerun this unchanged or conflate its passing audit proof with
+  equal foreground authoring or final raster parity.
+
+- Range default-box gate 1292 now has a precisely reduced provenance gap.
+  Its original four-test suite with the existing historical public preload
+  finishes **3/4** in 147 ms; the source-receipt assertion stops at
+  `style-defaults.service.ts` because that path was not part of the preload.
+  Read-only inspection recovers **eight** exact raw historical receipts from
+  `../AstylarUI-material`: browser defaults, style defaults, style service,
+  dimension service, creation service, capability catalog, HTML/CSS guidance,
+  and showcase spec configuration. Each retained file matches its original
+  SHA-256, and each entire LF-normalized source equals today's source. These are
+  demonstrated encoding-only changes, not seven unverified semantic changes.
+  This supersedes the older seven-source uncertainty recorded below.
+
+  The sole unrecovered receipt is installed AstylarUI `package.json`, expected
+  `4e1038f17f7d51879a3e513db3ddf4b92a3521369645e7378affe6038f71441d`.
+  Current/prior/retained installations, two retained inspection/text tarballs,
+  integration/Material showcase and TTS tarballs, and all 68 recorded root
+  package revisions (raw/LF/CRLF) do not reproduce it. No dependency receipt is
+  waived or substituted; this gate remains incomplete. Next obtain the exact
+  original installed metadata or document that unavailable provenance boundary
+  explicitly, relying separately on the already fresh, source-authenticated
+  six-case failing browser reproduction for current defect evidence. Do not
+  repeat the same package search or rerun unchanged historical failure.
+
 - The related retained button proofs now share the existing historical launcher:
   original flex, host-request and box-sizing suites are included with fixed-width
   and the six retained component assertions. The expanded command
