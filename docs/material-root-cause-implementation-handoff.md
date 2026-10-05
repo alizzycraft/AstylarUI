@@ -2,6 +2,16 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 retained component replay is now a durable command:
+  `node scripts/check-historical-component-proofs.mjs` passes all six original
+  assertions, no skips (2,076 ms). Its narrow preload uses the exact guards
+  established in the isolated proof and existing diagnostic restoration helper;
+  it does not change test bodies, receipts, installed dependencies, or files.
+  Separate subprocess read mutations of each current source are rejected at
+  the expected complete-conservation assertion. These checks do not mutate the
+  live grid or capture graph. Historical applicability is reproducible, while
+  final canonical reconciliation and current full runtime gates remain pending.
+
 - October 5 six retained component assertions now execute and pass 6/6 with
   no skips (2,023 ms), using an isolated read-only Node preload. The preload
   authenticates exact sorter `a6217c5` raw SHA `7f1af071…`, reverses exactly one
