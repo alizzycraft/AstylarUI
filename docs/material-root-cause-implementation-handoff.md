@@ -2,6 +2,19 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 recovery fingerprint gap is independently explained, not repinned:
+  fresh `collectOverlayAlignmentRecovery` output differs at exactly one ordered
+  source descriptor, `original-overlay-context-survey.mjs`. Its actual current
+  normalized hash is checked, then the existing
+  `restoreOriginalOverlayContextReader(..., { original: true })` authenticates
+  the complete restored historical reader against the saved receipt. Replacing
+  only that validated descriptor in an in-memory comparison yields complete
+  deep equality with the saved recovery report: 59 observations, 91 verified
+  cases and 200 owners (read-only check, exit 0, 5,933 ms). No file is rewritten.
+  Next incorporate this exact transition into the original integration assertion
+  with effective drift controls; do not alter its observations or repin its hash.
+  Grid session 7353 was polled and remains live, so shared readers stay unchanged.
+
 - October 5 related overlay batch is current, not inferred from the old log:
   ancestor/recovery/font-payload suites finish 5/11 passing (7,375 ms).
   Recovery's full replay differs only at `sourceFingerprints`; all other complete
