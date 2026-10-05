@@ -2,6 +2,17 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 prepared-composition gate 1262 now validates its actual historical
+  endpoint: all three frozen pre/post receipts and the complete package manifest
+  authenticate against original Git revision `681cf12a3ff8ef6ba8b3288249a1221e79801dcb`.
+  The original suite passes 3/3 (1,850 ms), retaining all thirteen synthetic
+  mutation controls, 125 groups / 6,871 observations, 8,339 rows and every false
+  non-integration/equivalence claim. No historical report or receipt changed;
+  the incorrect comparison with today's manifest is replaced by exact original
+  byte authentication. This does not replay the decoded 2-GB payload or prove
+  current canonical classifications. Grid session 92400 and Material session
+  21768 remain live; their results and coherent current integration are pending.
+
 - October 5 the exact grid color/source join is now executable regression
   protection inside the existing precision suite, not only a one-off check.
   It independently selects the historical 36/74 population, replays root source

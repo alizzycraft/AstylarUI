@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { inspectPreparedComposition } from '../../scripts/audit-prepared-alignment-composition.mjs';
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 
@@ -57,7 +58,13 @@ test('full-payload prepared composition retains all rows, all three batches and 
   assert.equal(r.canonicalRows, 8339); assert.equal(r.unchangedCompleteRows, 8214);
   assert.equal(r.originalUnresolved, 1960); assert.equal(r.projectedUnresolved, 1835);
   assert.deepEqual(r.canonicalBefore, r.canonicalAfter);
-  assert.deepEqual(r.canonical, JSON.parse(readFileSync('docs/material-input-equivalence-audit.json')));
+  // This retained dry run predates later canonical integrations. Authenticate
+  // its original endpoint; comparing it with today's manifest misstates scope.
+  const revision = '681cf12a3ff8ef6ba8b3288249a1221e79801dcb';
+  const original = file => execFileSync('git', ['show', `${revision}:${file}`], { maxBuffer: 80 * 1024 * 1024 });
+  assert.deepEqual(r.canonical, JSON.parse(original('docs/material-input-equivalence-audit.json')));
+  for (const receipt of r.canonicalBefore)
+    assert.equal(createHash('sha256').update(original(receipt.file)).digest('hex'), receipt.sha256, receipt.file);
   for (const flag of ['canonicalFilesChanged', 'mainBuilderIntegrated', 'inputEquivalent', 'renderingEquivalent']) assert.equal(r[flag], false);
   assert.equal(new Set(r.changes.map(c => c.previousCompleteRowSha256)).size, 125);
   assert.equal(r.changes.reduce((n, c) => n + c.occurrences, 0), 6871);
