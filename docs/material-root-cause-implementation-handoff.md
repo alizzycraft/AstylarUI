@@ -2,6 +2,21 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 related overlay batch is current, not inferred from the old log:
+  ancestor/recovery/font-payload suites finish 5/11 passing (7,375 ms).
+  Recovery's full replay differs only at `sourceFingerprints`; all other complete
+  top-level data is equal, as a separate read-only recursive comparison confirms.
+  Four ancestor assertions still stop at runner raw SHA `e01ef9dc…` versus
+  `b2477a12…`. The existing `recoverOriginalOverlayRunnerSource` authenticates
+  the exact required bytes, and a narrow explicit read adapter lets the unchanged
+  ancestor collector replay all 48 cases / 48 observation records (1,788 ms).
+  No historical receipt or capture was changed. Next integrate that existing
+  recovery boundary with the ancestor suite's original corruption controls after
+  the live grid graph settles. Separately authenticate recovery's changed source
+  list, and bind the font-payload single-change test to its actual historical
+  endpoint rather than today's multiply changed canonical snapshot. Do not rerun
+  the unchanged failing batch or repin its expected hashes.
+
 - October 5 old full-harness gate 1048 is revalidated against current code:
   the exact overlay-font snapshot assertion passes without edits or adapters
   (541 ms), and the entire original overlay-context suite passes 10/10 with
