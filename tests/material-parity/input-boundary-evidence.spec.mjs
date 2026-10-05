@@ -37,16 +37,36 @@ test('captured runtime class bodies match current repository compilation without
     visit(ast);
     const result = new Map();
     for (const node of classes) {
-      assert.equal(result.has(node.name.text), false, 'Duplicate class identity.');
+      assert.equal(result.has(`class:${node.name.text}`), false, 'Duplicate class identity.');
       const members = node.members.filter(member => !generated.has(member.name?.getText(ast)));
-      const text = `class Proof extends Object {${members.map(member => member.getText(ast)).join('\n')}}`;
-      result.set(node.name.text, (await transform(text, {
+      const heritage = (node.heritageClauses ?? []).map(clause => clause.getText(ast)).join(' ');
+      const text = `class Proof ${heritage} {${members.map(member => member.getText(ast)).join('\n')}}`;
+      result.set(`class:${node.name.text}`, (await transform(text, {
         loader: 'js', legalComments: 'none', minifyWhitespace: true,
       })).code);
+    }
+    for (const statement of ast.statements) {
+      if (ts.isFunctionDeclaration(statement) && statement.name) {
+        result.set(`function:${statement.name.text}`, (await transform(statement.getText(ast), {
+          loader: 'js', legalComments: 'none', minifyWhitespace: true,
+        })).code);
+      }
+      if (ts.isVariableStatement(statement)) for (const declaration of statement.declarationList.declarations) {
+        const name = declaration.name.getText(ast);
+        if (['__decorate', '__metadata', '__param'].includes(name)) continue;
+        if (declaration.initializer && ts.isClassExpression(declaration.initializer)) continue;
+        const kind = statement.declarationList.flags & ts.NodeFlags.Const ? 'const'
+          : statement.declarationList.flags & ts.NodeFlags.Let ? 'let' : 'var';
+        result.set(`variable:${name}`, (await transform(`${kind} ${declaration.getText(ast)};`, {
+          loader: 'js', legalComments: 'none', minifyWhitespace: true,
+        })).code);
+      }
     }
     return result;
   };
   let classCount = 0;
+  let functionCount = 0;
+  let variableCount = 0;
   for (const module of modules) {
     const sourceFile = path.join('src', module.slice('node_modules/astylarui/dist/lib/'.length)
       .replace(/\.js$/, '.ts'));
@@ -57,9 +77,13 @@ test('captured runtime class bodies match current repository compilation without
     const sourceClasses = await extract(compiled);
     assert.deepEqual(await extract(readFileSync(path.join(consumer, module), 'utf8')),
       sourceClasses, sourceFile);
-    classCount += sourceClasses.size;
+    classCount += [...sourceClasses.keys()].filter(key => key.startsWith('class:')).length;
+    functionCount += [...sourceClasses.keys()].filter(key => key.startsWith('function:')).length;
+    variableCount += [...sourceClasses.keys()].filter(key => key.startsWith('variable:')).length;
   }
   assert.equal(classCount, 80, 'Class scope changed; do not infer whole-module provenance.');
+  assert.equal(functionCount, 98, 'Function scope changed; reconcile coverage.');
+  assert.equal(variableCount, 53, 'Variable scope changed; reconcile coverage.');
 });
 
 test('public input lifecycle isolates caret material retention without Material plugins', async t => {

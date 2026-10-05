@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 5
 
+- Runtime/source proof expanded within the same existing-suite assertion:
+  all 80 classes now retain their actual inheritance clauses instead of a
+  synthetic base, and all 98 module-level functions plus 53 variable declarations
+  match current compilation, including declaration kind and initializer.
+  Generated `__decorate`, `__metadata`, `__param` helpers are the only omitted
+  helper declarations; class expressions are inspected through the class path.
+  Focused check passes 1/1, terminal exit 0 (3,936.265 ms before adding exact
+  function/variable count assertions). Imports, module side effects, export
+  wiring and Angular metadata remain unverified; do not call this whole-module
+  provenance. Preliminary scanner differences were class-declaration versus
+  class-expression representation, not implementation drift.
+
 - Current-source class-body applicability now has a durable existing-suite
   assertion: `node --test --test-name-pattern="captured runtime class bodies"
   tests/material-parity/input-boundary-evidence.spec.mjs`, terminal exit 0,
