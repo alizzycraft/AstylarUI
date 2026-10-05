@@ -110,6 +110,7 @@ test('captured runtime class bodies match current repository compilation without
   let metadataUseCount = 0;
   let exportCount = 0;
   let decoratorCount = 0;
+  let dependencyCount = 0;
   for (const module of modules) {
     const sourceFile = path.join('src', module.slice('node_modules/astylarui/dist/lib/'.length)
       .replace(/\.js$/, '.ts'));
@@ -176,6 +177,47 @@ test('captured runtime class bodies match current repository compilation without
       assert.ok(installedDecorators.has(node.name.text), `${sourceFile}: missing authored decorator metadata`);
       assert.equal(await canonicalDecorator(installedDecorators.get(node.name.text)),
         await canonicalDecorator(expected), `${sourceFile}: authored decorator requests`);
+      for (const member of node.members)
+        assert.equal(ts.getDecorators(member)?.length ?? 0, 0, `${sourceFile}: new property decorator requires coverage`);
+      const installedClass = installedAst.statements.find(statement => ts.isClassDeclaration(statement)
+        && statement.name?.text === node.name.text);
+      const factory = installedClass.members.find(member => member.name?.getText(installedAst) === 'ɵfac');
+      const factoryProperties = new Map(factory.initializer.arguments[0].properties
+        .map(property => [property.name.getText(installedAst), property.initializer]));
+      const dependencies = factoryProperties.get('deps');
+      assert.ok(ts.isArrayLiteralExpression(dependencies), `${sourceFile}: unsupported dependency representation`);
+      const parameters = node.members.find(ts.isConstructorDeclaration)?.parameters ?? [];
+      assert.equal(dependencies.elements.length, parameters.length, `${sourceFile}: constructor dependency count`);
+      for (const [index, parameter] of parameters.entries()) {
+        const requested = { token: parameter.type?.getText(authored) };
+        for (const decorator of ts.getDecorators(parameter) ?? []) {
+          assert.ok(ts.isCallExpression(decorator.expression), `${sourceFile}: dependency decorator representation`);
+          const name = decorator.expression.expression.getText(authored);
+          if (name === 'Inject') requested.token = decorator.expression.arguments[0].getText(authored);
+          else if (name === 'Optional') requested.optional = true;
+          else assert.fail(`${sourceFile}: uncovered dependency decorator ${name}`);
+        }
+        const actual = {};
+        for (const property of dependencies.elements[index].properties) {
+          const key = property.name.getText(installedAst);
+          if (key === 'token') {
+            const token = property.initializer;
+            if (ts.isPropertyAccessExpression(token)) {
+              const namespace = token.expression.getText(installedAst);
+              const binding = [...installedProjection.imports].find(value => value.endsWith(`|namespace|${namespace}`));
+              assert.ok(binding, `${sourceFile}: unresolved DI namespace`);
+              const from = binding.split('|')[0];
+              assert.ok(authoredBindings.has(`${from}|${token.name.text}|${requested.token}`), `${sourceFile}: DI module identity`);
+              actual.token = token.name.text;
+            } else actual.token = token.getText(installedAst);
+          } else {
+            assert.equal(property.initializer.kind, ts.SyntaxKind.TrueKeyword, `${sourceFile}: dependency flag representation`);
+            actual[key] = true;
+          }
+        }
+        assert.deepEqual(actual, requested, `${sourceFile}: dependency ${index}`);
+        dependencyCount++;
+      }
     }
     assert.equal(installedDecorators.size, authoredDecoratorCount, `${sourceFile}: extra decorator metadata`);
     const inspectNamespaceUse = node => {
@@ -215,6 +257,7 @@ test('captured runtime class bodies match current repository compilation without
   assert.equal(metadataUseCount, 644, 'Generated namespace metadata use scope changed.');
   assert.equal(exportCount, 130, 'Mapped export scope changed; reconcile coverage.');
   assert.equal(decoratorCount, 60, 'Authored decorator scope changed; reconcile coverage.');
+  assert.equal(dependencyCount, 113, 'Constructor dependency scope changed; reconcile coverage.');
 });
 
 test('public input lifecycle isolates caret material retention without Material plugins', async t => {

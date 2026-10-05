@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 5
 
+- Constructor factory requests reconcile for all 60 decorated classes / 113
+  parameters through the existing source-binding assertion. Dependency token
+  namespace aliases are resolved to authored module/import identities, counts
+  and flag objects match exactly, including two `Optional()` requests and
+  `Inject(PLATFORM_ID)`. The apparent `Object` versus `PLATFORM_ID` discrepancy
+  is the explicit injection decorator, not drift. No authored property
+  decorators exist in this scope; new ones fail the current coverage assertion.
+  Focused check passes 1/1, terminal exit 0 (5,190.866 ms). This closes authored
+  constructor/property request accounting, not verification of generated linked
+  factory/template execution, signal-generated component metadata or whole-audit
+  acceptance. Canonical owning-suite fingerprint integration remains queued.
+
 - Authored class-decorator requests now match installed class metadata for all
   60 decorated classes, with exact per-module class membership. The existing
   source-binding assertion compares decorator identity/arguments, including
