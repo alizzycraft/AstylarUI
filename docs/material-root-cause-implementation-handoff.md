@@ -2,6 +2,19 @@
 
 ## Current resumption ledger — October 5
 
+- Same existing runtime/source assertion now checks all 373 source runtime
+  import bindings against installed bindings and exact ordered equality of all
+  four non-Angular module expression effects. It passes 1/1, terminal exit 0,
+  4,258.882 ms total. Import comparison uses module/imported/local identities,
+  not textual punctuation, so the earlier trailing-comma difference is not
+  drift. Installed modules have 281 additional bindings (including Angular
+  namespace and constructor DI imports); they remain explicitly unaccounted
+  rather than silently accepted by the source-binding subset check. Generated
+  decorator assignments and class-metadata calls remain outside the effect
+  claim. Next reconcile those extras, exports and Angular metadata. Full
+  current-code applicability and canonical fingerprint reconciliation remain
+  pending; no case closure or rendering acceptance is inferred.
+
 - Runtime/source proof expanded within the same existing-suite assertion:
   all 80 classes now retain their actual inheritance clauses instead of a
   synthetic base, and all 98 module-level functions plus 53 variable declarations

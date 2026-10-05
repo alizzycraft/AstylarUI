@@ -36,6 +36,7 @@ test('captured runtime class bodies match current repository compilation without
     };
     visit(ast);
     const result = new Map();
+    const imports = new Set();
     for (const node of classes) {
       assert.equal(result.has(`class:${node.name.text}`), false, 'Duplicate class identity.');
       const members = node.members.filter(member => !generated.has(member.name?.getText(ast)));
@@ -46,6 +47,27 @@ test('captured runtime class bodies match current repository compilation without
       })).code);
     }
     for (const statement of ast.statements) {
+      if (ts.isImportDeclaration(statement)) {
+        const module = statement.moduleSpecifier.text;
+        const clause = statement.importClause;
+        if (!clause) imports.add(`${module}|side-effect`);
+        if (clause?.name) imports.add(`${module}|default|${clause.name.text}`);
+        const bindings = clause?.namedBindings;
+        if (bindings && ts.isNamespaceImport(bindings)) imports.add(`${module}|namespace|${bindings.name.text}`);
+        if (bindings && ts.isNamedImports(bindings)) for (const element of bindings.elements)
+          imports.add(`${module}|${element.propertyName?.text ?? element.name.text}|${element.name.text}`);
+      }
+      if (ts.isExpressionStatement(statement)) {
+        const expression = statement.expression;
+        const decorator = ts.isBinaryExpression(expression) && ts.isCallExpression(expression.right)
+          && expression.right.expression.getText(ast) === '__decorate';
+        const metadata = ts.isCallExpression(expression) && ts.isPropertyAccessExpression(expression.expression)
+          && expression.expression.name.text === 'ɵɵngDeclareClassMetadata';
+        if (!decorator && !metadata) result.set(`effect:${[...result.keys()].filter(key => key.startsWith('effect:')).length}`,
+          (await transform(statement.getText(ast), {
+            loader: 'js', legalComments: 'none', minifyWhitespace: true,
+          })).code);
+      }
       if (ts.isFunctionDeclaration(statement) && statement.name) {
         result.set(`function:${statement.name.text}`, (await transform(statement.getText(ast), {
           loader: 'js', legalComments: 'none', minifyWhitespace: true,
@@ -62,11 +84,13 @@ test('captured runtime class bodies match current repository compilation without
         })).code);
       }
     }
-    return result;
+    return { declarations: result, imports };
   };
   let classCount = 0;
   let functionCount = 0;
   let variableCount = 0;
+  let importCount = 0;
+  let effectCount = 0;
   for (const module of modules) {
     const sourceFile = path.join('src', module.slice('node_modules/astylarui/dist/lib/'.length)
       .replace(/\.js$/, '.ts'));
@@ -74,9 +98,14 @@ test('captured runtime class bodies match current repository compilation without
       compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022,
         experimentalDecorators: true },
     }).outputText;
-    const sourceClasses = await extract(compiled);
-    assert.deepEqual(await extract(readFileSync(path.join(consumer, module), 'utf8')),
-      sourceClasses, sourceFile);
+    const sourceProjection = await extract(compiled);
+    const installedProjection = await extract(readFileSync(path.join(consumer, module), 'utf8'));
+    const sourceClasses = sourceProjection.declarations;
+    assert.deepEqual(installedProjection.declarations, sourceClasses, sourceFile);
+    for (const binding of sourceProjection.imports)
+      assert.ok(installedProjection.imports.has(binding), `${sourceFile}: missing runtime import ${binding}`);
+    importCount += sourceProjection.imports.size;
+    effectCount += [...sourceClasses.keys()].filter(key => key.startsWith('effect:')).length;
     classCount += [...sourceClasses.keys()].filter(key => key.startsWith('class:')).length;
     functionCount += [...sourceClasses.keys()].filter(key => key.startsWith('function:')).length;
     variableCount += [...sourceClasses.keys()].filter(key => key.startsWith('variable:')).length;
@@ -84,6 +113,8 @@ test('captured runtime class bodies match current repository compilation without
   assert.equal(classCount, 80, 'Class scope changed; do not infer whole-module provenance.');
   assert.equal(functionCount, 98, 'Function scope changed; reconcile coverage.');
   assert.equal(variableCount, 53, 'Variable scope changed; reconcile coverage.');
+  assert.equal(importCount, 373, 'Runtime import scope changed; reconcile coverage.');
+  assert.equal(effectCount, 4, 'Module effect scope changed; reconcile coverage.');
 });
 
 test('public input lifecycle isolates caret material retention without Material plugins', async t => {
