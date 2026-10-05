@@ -2,6 +2,17 @@
 
 ## Current resumption ledger — October 5
 
+- Coverage reconciliation now maps six bounded family/state obligations to the
+  existing authenticated Tab/popup/email and standalone proofs. Their combined
+  focused replay passes 2/2, no skips, in 1,302.618 ms, authenticating 103 receipts.
+  The inventory explicitly separates answered normal/error opening, disabled
+  activation, pre-type selection, email routing, snackbar visibility and popup
+  selection questions from remaining paint/profile/lifecycle obligations. No
+  new capture or framework, current-output pass, or full-case closure is claimed.
+  Next reconcile the unresolved shared overlay/text paint applicability against
+  retained exact profile/state evidence; do not repeat these settled action
+  checks without a relevant dependency change or contradictory observation.
+
 - Verified replay increment: `4de3203e`, pushed to
   `codex/material-audit-alignment-integration`. Existing producer-transition
   suite passes 30/30; complete conservation suite passes 8/8. Exact whole-source

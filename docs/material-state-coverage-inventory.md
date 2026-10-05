@@ -93,6 +93,32 @@ evidence, including source applicability and explicit remaining uncertainty.
 
 ## Retained evidence chronology
 
+### Applicable-obligation reconciliation — October 5
+
+The following bounded checks supersede broad pending wording in the family
+table below. They close investigation questions, not complete case inspection
+or current rendering acceptance. Existing historical replay verifies the original
+log hashes and all 103 dependency/screenshot receipts across these two tests;
+the combined focused check passes 2/2 with no skips (1,302.618 ms).
+
+| Family / exact retained scope | Question answered | Still open |
+| --- | --- | --- |
+| Form-field, light desktop DPR1, normal/error | Pre-type selection diverges during semantic synchronization: initial focus selection [0,5] becomes [0,0] in candidate. Error-specific disablement is not the cause. | Other profiles, pointer selection, equal-input paint and isolated public editing proof. |
+| Input/email, retained native-edit route | Candidate managed keyboard insertion produces `Zteam@example.com` instead of native replacement `Z`; candidate prevents default through `KeyboardInputHandler.handleTextInput` and emits no native beforeinput/input. Null email endpoints do not establish a selection-setter cause. | Isolated public cause proof, other profiles and selection/foreground paint. |
+| Timepicker, light desktop DPR1, normal/error | Native Tab stays closed; candidate Tab opens. At the subsequent icon-click boundary native opens, candidate closes. Opening-state mismatch is not exclusive to error state. | Remaining key sequences, other profiles, full paint/scrollbar interaction and resource ownership. |
+| Five input families, light desktop DPR1, disabled | All disabled text values stay unchanged. Native date/time suffix buttons are disabled; candidate suffix buttons omit disabled authoring and open on Enter/click. This is a state-propagation authoring divergence, not failure of declared-disabled text controls. | Other profiles, disabled paint, complete focus contract and lifecycle. |
+| Snackbar, six extra desktop/mobile profile cases plus four tablet-theme cases | Both sides have visible 48px-high panels and working dismissal; focus restoration differs and input/render equivalence remains false. These historical cases contradict a universal missing-panel claim, not every reported symptom. | Exact fade/local paint, remaining state applicability, resources and current-code acceptance. |
+| Autocomplete/date/time popup inputs, retained dark/mobile selection cohort | Forward [0,3] and backward [2,5] selections on `Atlas` agree; both original picker geometry failures remain. | Equal-input selection paint, remaining profiles/states and geometry cause scope. |
+
+Evidence: `tab-selection-error-boundary-69cd82b7-verified.log`,
+`field-popup-state-boundaries-19dfafe2.log`,
+`email-native-edit-routing-d8807345.log`, and the four standalone cohort logs
+named in the current boundary above, all under `artifacts/material-parity`.
+Owning assertions are the existing `retained Tab, popup-state and email-edit`
+and `retained standalone visibility disabled and selection` tests in
+`tests/material-parity/input-equivalence-audit.spec.mjs`.
+No complete-case status is upgraded by these bounded obligation closures.
+
 Entries below preserve the evidence boundary when each investigation was recorded.
 Use the current boundary above for publication status; retain the original logs,
 failures and limitations. Family/state obligations later in this document still
