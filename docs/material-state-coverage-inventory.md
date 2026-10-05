@@ -106,6 +106,19 @@ evidence, including source applicability and explicit remaining uncertainty.
 
 ### Applicable-obligation reconciliation — October 5
 
+Tooltip live ownership has a bounded current-build counterexample rather than
+only a missing measurement: ordinary dark/mobile390×844 DPR2, three actual
+hover/leave cycles. Both sides open one tooltip and remove it on leave. Candidate
+tracked materials stay13/13/13 while live materials grow14/15/16; unbound
+`tooltip-primary-hover-material` identities accumulate. Final surface disposal
+clears sampled meshes/materials/textures. Existing-suite diagnostic passes while
+explicitly preserving failed live plateau, not claiming cleanup acceptance.
+Log: `tooltip-live-ownership-cycles-verified-20261005.log` (1/1, exit0,
+7,844.240ms). The test binds browser files to current-full checkpoint explicitly;
+an earlier default historical-checkpoint mismatch stopped before browser launch
+and is separately retained. Other profiles, timers, late async, multi-surface
+isolation and GPU retention remain; this is not proof of user-visible lag cause.
+
 Resource acceptance scope is explicit from authenticated current full-report
 streaming and current source: all 1,875 interactions report resourcesStable,
 but 1,857 have one snapshot and only18 have multiple snapshots. All50 tooltip

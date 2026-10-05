@@ -2,6 +2,19 @@
 
 ## Current resumption ledger — October 5
 
+- Tooltip live-material ownership question answered by a bounded existing-
+  harness diagnostic: ordinary dark/mobile DPR2 actual hover/leave three times,
+  native/candidate popup removal succeeds, tracked materials13/13/13 but live
+  materials14/15/16 with accumulating unbound hover identities. Final disposal
+  clears sampled resources. The existing public pseudo-state allocation proof
+  supplies the independently reduced core cause; this adds tooltip applicability,
+  not a fresh universal lifecycle diagnosis. Test `ordinary tooltip repeated
+  hover` passes1/1 while retaining growth as a counterexample; verified log is
+  in inventory. Explicit per-probe checkpoint option preserves every existing
+  helper default and binds this new probe to the current full build. Historical
+  default mismatch is retained, not bypassed or overwritten. New owning-suite
+  fingerprints join the pending coherent canonical integration batch.
+
 - Tooltip ownership applicability gap located at the measurement boundary:
   authenticated full report has50/50 tooltip interactions with one resource
   snapshot, while the stable-count comparison runs only with multiple snapshots.

@@ -2230,10 +2230,78 @@ test('comparison iframe overlays expose parent control focus scope', async t => 
   });
 });
 
-async function withFrozenShowcase(run, launchOptions = {}) {
+test('ordinary tooltip repeated hover and leave exposes live ownership separately from tracked counts', async t => {
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    const results = {};
+    for (const mode of ['reference', 'astylar']) {
+      const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
+      const errors = [];
+      page.on('pageerror', error => errors.push(String(error)));
+      try {
+        await page.goto(`${baseUrl}/${mode}/tooltip?profile=dark`);
+        await page.locator('.frame').waitFor();
+        if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+        const selector = mode === 'reference' ? '.mat-mdc-tooltip-surface' : '[data-astylar-id="tooltip-popup"]';
+        const settle = async () => {
+          if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+          await page.evaluate(async () => { await document.fonts.ready;
+            await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))); });
+        };
+        await settle();
+        const point = await page.evaluate(mode => {
+          if (mode === 'reference') {
+            const box = document.getElementById('tooltip-primary').getBoundingClientRect();
+            return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+          }
+          const box = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['tooltip-primary'], false).elements['tooltip-primary'].borderBox;
+          const canvas = document.querySelector('canvas').getBoundingClientRect();
+          return { x: canvas.x + box.left + box.width / 2, y: canvas.y + box.top + box.height / 2 };
+        }, mode);
+        const cycles = [];
+        for (let cycle = 0; cycle < 3; cycle++) {
+          await page.mouse.move(point.x, point.y);
+          await page.locator(selector).waitFor({ state: 'visible' });
+          await settle();
+          assert.equal(await page.locator(selector).count(), 1);
+          await page.mouse.move(10, 10);
+          await page.locator(selector).waitFor({ state: 'detached' });
+          await settle();
+          cycles.push(await page.evaluate(mode => {
+            if (mode === 'reference') return { popupCount: document.querySelectorAll('.mat-mdc-tooltip-surface').length };
+            const surface = window.ng.getComponent(document.querySelector('app-astylar-showcase')).surface;
+            const scene = surface.scene;
+            return { popupCount: document.querySelectorAll('[data-astylar-id="tooltip-popup"]').length,
+              tracked: surface.diagnostics.resources,
+              live: { meshes: scene.meshes.length, materials: scene.materials.length, textures: scene.textures.length },
+              unbound: scene.materials.filter(material => !scene.meshes.some(mesh => mesh.material === material))
+                .map(material => ({ name: material.name, uniqueId: material.uniqueId })) };
+          }, mode));
+        }
+        let disposal = null;
+        if (mode === 'astylar') disposal = await page.evaluate(() => {
+          const surface = window.ng.getComponent(document.querySelector('app-astylar-showcase')).surface;
+          const scene = surface.scene;
+          surface.dispose();
+          return { disposed: surface.disposed, meshes: scene.meshes.length,
+            materials: scene.materials.length, textures: scene.textures.length };
+        });
+        assert.deepEqual(errors, []);
+        assert.ok(cycles.every(cycle => cycle.popupCount === 0));
+        if (disposal) assert.deepEqual(disposal, { disposed: true, meshes: 0, materials: 0, textures: 0 });
+        results[mode] = { cycles, disposal };
+      } finally { await page.close(); }
+    }
+    t.diagnostic(JSON.stringify({ scope: 'ordinary dark mobile DPR2 three hover/leave cycles; not lifecycle acceptance', results }));
+    assert.deepEqual(results.astylar.cycles.map(cycle => cycle.tracked.materials), [13, 13, 13]);
+    assert.deepEqual(results.astylar.cycles.map(cycle => cycle.live.materials), [14, 15, 16],
+      'Retain the live-material growth counterexample; this is not cleanup acceptance.');
+  }, {}, { checkpointFile: 'artifacts/material-parity/current-full-20261005/checkpoint/manifest.json' });
+});
+
+async function withFrozenShowcase(run, launchOptions = {}, evidence = {}) {
   const browserRoot = path.resolve(process.env.ASTYLAR_MATERIAL_SHOWCASE_BROWSER_ROOT ??
     'examples/material-showcase/dist/material-showcase/browser');
-  const checkpointFile = process.env.ASTYLAR_MATERIAL_SHOWCASE_CHECKPOINT ??
+  const checkpointFile = evidence.checkpointFile ?? process.env.ASTYLAR_MATERIAL_SHOWCASE_CHECKPOINT ??
     'artifacts/material-parity/caret-visible-checkpoint-154/checkpoint/manifest.json';
   const checkpoint = JSON.parse(readFileSync(checkpointFile));
   assert.deepEqual(fingerprintDirectory(browserRoot), checkpoint.provenance.browserFiles);
