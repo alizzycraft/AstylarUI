@@ -46,8 +46,15 @@ not live-process status):
    `b3024ece2b69b5385326f0dbd66d435f698fd5f08f66d73ec8ea393bb53f0559`.
    Compact import and verification pass: 8,483 scalar records, 145 source
    findings, 39,904 control records, 389,202 occurrences, zero unresolved
-   scalar groups; compact shards remain 72,712,604 bytes. Independent canonical
-   check, historical grid reconciliation and remaining acceptance stay pending.
+   scalar groups; compact shards remain 72,712,604 bytes. Independent cold
+   canonical check session 62091 now passes, exit 0 in 2,398.370 seconds
+   (39.97 minutes), with complete canonical byte and Markdown comparison.
+   Validation finishes at 2,255.093 seconds; dependency verification rechecks
+   all 1,205 files / 89,154,859 bytes with zero invalidations, two collectors,
+   ten memory hits and no disk hits. Coverage and all finding counts are
+   unchanged; input equivalence remains false. Historical grid reconciliation
+   and remaining acceptance stay pending. The retained exact check log is
+   `artifacts/material-parity/canonical-independent-check-20261005.log`.
 
    The exported fingerprint includes the pending grid diagnostic source. Its
    scoped diff has been reviewed, syntax and whitespace checks pass, and three
