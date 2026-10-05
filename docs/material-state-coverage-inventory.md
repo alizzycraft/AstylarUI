@@ -98,6 +98,21 @@ Use the current boundary above for publication status; retain the original logs,
 failures and limitations. Family/state obligations later in this document still
 require consolidation with these newer bounded proofs.
 
+Normal/error selection obligation reconciliation: for form-field at light desktop
+DPR1, the existing eight-page Tab boundary evidence already locates the first
+divergence in semantic synchronization: native/candidate focusin initially see
+[0,5], then candidate `applyControlState` writes [0,0] in both validity states.
+The earlier “inspect selection before typing” task below is closed for these
+two form-field states, not for other profiles or selection paint. Email endpoints
+remain null; its independently observed managed-keyboard insertion route is not
+misclassified as a selection setter defect. The existing Tab/popup/email replay
+now authenticates all 10/11/9 nested dependency receipts as well as original logs
+and action assertions, using only the existing historical source boundary.
+Focused historical replay passes; direct current-source receipt replay rejects
+the explained source transitions and is retained at
+`artifacts/material-parity/tab-popup-email-current-receipt-rejection-20261005.log`.
+This strengthens historical applicability, not current output acceptance.
+
 Error-state coverage now samples five light/desktop DPR1 input families. All
 inputs are enabled, expose aria-invalid=true and accept typing. Native Tab/type
 replaces existing form-field/email values with `Z`; candidate inserts at the

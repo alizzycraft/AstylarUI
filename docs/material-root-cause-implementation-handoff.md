@@ -112,6 +112,22 @@ obligations and supplemental relevant states; 100% started and 0% certified
 closure must not be represented as an overall audit-completion percentage.
 No new census framework, capture or canonical rebuild was needed for this join.
 
+Normal/error field selection reconciliation closes the existing light/desktop
+DPR1 form-field pre-type-selection question using retained exact boundaries:
+native/candidate focusin initially see [0,5], then candidate semantic state
+synchronization writes [0,0] in both normal/error states. Error-specific editing
+disablement and projection are not the observed first divergence. Email remains
+a separate managed-edit-route result with unobservable native endpoints. The
+existing Tab/popup/email replay now verifies all 30 nested dependency receipts
+and retains every original action assertion. Historical replay passes 1/1
+(23.077 ms body); current raw-source replay correctly exits 1 on changed receipts,
+retained in `tab-popup-email-current-receipt-rejection-20261005.log`.
+The historical component launcher includes this original replay. No new capture,
+renderer correction, source-finding count change or broader inspection closure.
+Other profiles, paint and isolated public editing reproduction remain required;
+canonical test-source reconciliation stays batched with the pending standalone
+registration rather than triggering another full export for this validation edit.
+
 Standalone reconciliation now answers four membership questions: snackbar six
 extra desktop/mobile profiles and four tablet themes, five disabled fields, and
 three dark/mobile popup-input selections have no explicit producer proof entries.

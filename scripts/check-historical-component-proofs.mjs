@@ -13,7 +13,7 @@ const main = process.argv[1] && pathToFileURL(path.resolve(process.argv[1])).hre
 if (main) {
   assert.equal(process.argv.length, 2, 'Run the retained component and button-authoring assertions without extra filters');
   const commands = [['--test',
-    '--test-name-pattern=retained (progress paint|compact empty|keyboard profiles|applied-theme popup|selection states|tooltip textures|standalone visibility)',
+    '--test-name-pattern=retained (progress paint|compact empty|keyboard profiles|applied-theme popup|selection states|tooltip textures|standalone visibility|Tab, popup-state)',
     'tests/material-parity/input-equivalence-audit.spec.mjs'],
     ['--test', '--test-concurrency=1', 'tests/material-parity/button-fixed-width-evidence.spec.mjs',
       'tests/material-parity/button-flex-input-evidence.spec.mjs',

@@ -2201,13 +2201,26 @@ test('retained tooltip textures separate popup placement from raster phase', asy
 
 test('retained Tab, popup-state and email-edit boundaries preserve exact action evidence', () => {
   const digest = bytes => createHash('sha256').update(bytes).digest('hex');
-  const readRecords = (file, sha256) => {
+  const readRecords = (file, sha256, expectedReceipts) => {
     const raw = readFileSync(file);
     assert.equal(digest(raw), sha256);
-    return raw.toString().trim().split(/\r?\n/).filter(Boolean).map(line => JSON.parse(line));
+    const rows = raw.toString().trim().split(/\r?\n/).filter(Boolean).map(line => JSON.parse(line));
+    const receipts = new Map();
+    const inspect = value => {
+      if (!value || typeof value !== 'object') return;
+      if (typeof value.file === 'string' && typeof value.sha256 === 'string') {
+        if (receipts.has(value.file)) assert.equal(receipts.get(value.file), value.sha256);
+        receipts.set(value.file, value.sha256);
+      }
+      Object.values(value).forEach(inspect);
+    };
+    rows.forEach(inspect);
+    assert.equal(receipts.size, expectedReceipts);
+    for (const [source, expected] of receipts) assert.equal(digest(readFileSync(source)), expected, source);
+    return rows;
   };
   const tab = readRecords('artifacts/material-parity/tab-selection-error-boundary-69cd82b7-verified.log',
-    'b000d7f5cdc9c7c27ebea1a4ef6526ed31ab401966df1d73947fdfc59ae8d95b');
+    'b000d7f5cdc9c7c27ebea1a4ef6526ed31ab401966df1d73947fdfc59ae8d95b', 10);
   const tabCases = tab.filter(row => row.samples);
   assert.equal(tabCases.length, 8);
   for (const condition of ['normal', 'error']) {
@@ -2219,7 +2232,7 @@ test('retained Tab, popup-state and email-edit boundaries preserve exact action 
     assert.ok(focused.tabEvidence.writes.some(write => write.stack.includes('AstylarSemanticBridge.applyControlState')));
   }
   const popup = readRecords('artifacts/material-parity/field-popup-state-boundaries-19dfafe2.log',
-    '6cf5b08bd1b0110ca1e4611bd563309ab0d2d06dae49c6f752624184553171cd');
+    '6cf5b08bd1b0110ca1e4611bd563309ab0d2d06dae49c6f752624184553171cd', 11);
   const popupCases = popup.filter(row => row.samples);
   assert.equal(popupCases.length, 18);
   for (const condition of ['normal', 'error']) {
@@ -2231,7 +2244,7 @@ test('retained Tab, popup-state and email-edit boundaries preserve exact action 
     assert.equal(candidate.samples.find(sample => sample.label === 'icon-click').open, false);
   }
   const email = readRecords('artifacts/material-parity/email-native-edit-routing-d8807345.log',
-    '19af8fced1859dde5d31f4d8514132078c677c9bcec170c99cafbd0159aae332');
+    '19af8fced1859dde5d31f4d8514132078c677c9bcec170c99cafbd0159aae332', 9);
   const emailCandidate = email.find(row => row.mode === 'astylar').samples.find(sample => sample.label === 'type');
   const emailNative = email.find(row => row.mode === 'reference').samples.find(sample => sample.label === 'type');
   assert.equal(emailNative.value, 'Z');
