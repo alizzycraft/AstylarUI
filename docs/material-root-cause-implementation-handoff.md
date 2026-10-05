@@ -2,6 +2,16 @@
 
 ## Current resumption ledger — October 5
 
+- Required-state applicability now has an explicit36-family partition in the
+  existing inventory, derived from reference controls, configured declarations
+  and prior family evidence. A read-only membership check matches all36 names
+  exactly, with no duplicates/omissions. It distinguishes editable fields from
+  selection controls, passive fixtures from child-button activation, leaf-tree
+  navigation from absent expansion, and modal scope from tooltip/snackbar
+  lifetime. This closes category applicability accounting, not per-case evidence
+  or all-state inspection. Next join family gaps to exact existing proofs/cases;
+  prioritize slider and popup input/paint/ownership, not hypothetical variants.
+
 - Supplemental denominator question answered: six selected reports contain151
   top-level rows over six families; nine retained versions contain389 rows but
   include superseded captures. Nested boundaries/overlap prevent adding151 to

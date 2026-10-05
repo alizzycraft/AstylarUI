@@ -939,6 +939,36 @@ source-derived applicability review before it can be closed as inapplicable.
 
 ## Priority and ownership of the remaining checks
 
+### Required-state applicability map (October 5)
+
+This partitions all36 configured families by the current reference controls,
+not by candidate capabilities. Source: reference.component.ts inline template,
+benchmark.config.mjs declarations and the reviewed family table above. Entries
+are inspection obligations, not passing results or a new Cartesian test matrix.
+All groups retain authored/resolved input, structure, history, semantics, CSS-space
+layout/paint and applicable theme/responsive/DPR evidence obligations.
+
+| Families | Applicable state obligations / explicit boundary |
+| --- | --- |
+| sidenav, grid-list, divider, badge, icon, list, table, progress-bar, progress-spinner | Passive content/layout/paint. No authored interactive descendants; keyboard activation and editing are inapplicable. Sidenav is fixed open side-mode, not a modal drawer. Progress examples are determinate, not indeterminate. Existing family evidence justifies these boundaries; generic configured focus/activate labels cannot create controls. |
+| core, toolbar, card, button | Real focus and keyboard/pointer activation, hover/held/cursor/event/focus paint of the actual button (toolbar/card child, not container). Disabled applies where reference authors it; no editing or popup selection. |
+| chips, checkbox, radio, slide-toggle, button-toggle, tabs, stepper, sort | Focus/keyboard and pointer transitions, selected/unselected or sort-direction states, hover/held/cursor and state paint. Disabled where authored. Tabs/stepper also inspect revealed content/visibility; selection here is control state, not text selection. |
+| form-field, input, autocomplete, datepicker, timepicker | Editable focus/empty caret, edits, blur, disabled/error, selection where the native input type permits it. Email endpoints may be null and must not be invented. Popup fields also need opening triggers, option/day navigation/commit, open hover/held, scrolling where overflow exists, Escape/outside dismissal and repeat lifecycle. Date/time opening behavior remains independently specified. |
+| select | Trigger focus/keyboard, selected option, disabled, open option navigation/commit/reopen, hover/held, dismissal and repeat lifecycle; not free text editing merely because candidate uses an input. |
+| slider | Both thumb owners, full reference value domain and constraints, keyboard steps, pointer drag/travel, hover/held/focus paint, disabled, responsive geometry and repeat lifecycle. Do not equate text selection with range value selection. |
+| paginator | Page-size and page-navigation focus/keyboard/pointer boundaries, first/last-page unavailable actions, selected size/range text and their paint. No free text editing; inspect the actual size popup where present. |
+| tree | Leaf-node keyboard focus/navigation and paint; no authored child nodes/toggles, so expansion is inapplicable in this fixture, not unsupported globally. |
+| expansion | Header focus/keyboard/pointer expand/collapse, hover/held/cursor, disabled and revealed content/arrow paint; not a modal overlay. |
+| menu, bottom-sheet, dialog | Trigger and item/action focus/keyboard/pointer, open/hover/held, dismissal/reopen, restoration, focus scope/surface isolation, clipping/placement and repeated ownership/disposal. Menu disabled only where authored; do not invent disabled dialog content. |
+| snack-bar, tooltip | Trigger/action boundaries, opening/visibility, local paint/placement, dismissal and repeated ownership. Snackbar includes lifetime/reopen/UNDO; tooltip includes ordinary versus benchmark hover/held/leave and keyboard focus. Neither becomes a modal focus trap. |
+
+The grouping accounts for36 unique family names, but does not certify full
+inspection. Per-family rows still identify missing keys, profiles, paint and
+ownership evidence. Next resolve those against existing exact case/proof IDs;
+mark failure as inspected when its applicable evidence and classification are
+complete. Do not require hypothetical component variants absent from the
+reference, or omit reference behavior absent from the candidate.
+
 New shared lifecycle evidence changes the next decisive check: real-pointer
 snackbar cycles in light desktop DPR1 and dark mobile DPR2 keep tracked materials
 at13 while live materials grow17/19/21, with retained hover/focus/active materials
