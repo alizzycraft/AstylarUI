@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 recovery and historical font-payload assertion repairs are integrated:
+  their original suites pass 6/6, no skips (16,777 ms). Recovery authenticates
+  the one actual current reader receipt, restores its complete historical source
+  through the existing guard, and still compares the entire conserved report
+  hash. All other descriptors and observations remain exact; original recovery
+  corruption and no-write assertions remain intact. The font test now reads the
+  pinned corrected Git endpoint, preserving the original single-source verifier,
+  1,993,322,418-byte comparison and chunk-boundary/duplicate/other-change controls.
+  Historical manifests remain unchanged. This closes gates 1062 and 1078 at
+  their legitimate historical scope, not today's canonical/runtime acceptance.
+  Together with the ancestor reader's 5/5, the earlier six failing assertions
+  are now resolved without repinning evidence. Next address the independent
+  grid pending/component-review delta and batch consumed source reconciliation.
+
 - October 5 ancestor reader integration now passes all five original tests
   without a preload (2,903 ms). The sole special source boundary reuses
   `recoverOriginalOverlayRunnerSource` and authenticates the original raw

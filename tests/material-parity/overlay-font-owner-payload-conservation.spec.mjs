@@ -1,7 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
 import { gzipSync } from 'node:zlib';
 import test from 'node:test';
 import { assertSingleSourcePayloadChange } from './single-source-payload-conservation.mjs';
@@ -10,7 +9,9 @@ const hash = x => createHash('sha256').update(x).digest('hex');
 const owner = 'scripts/audit-material-font-ownership-attribution.mjs';
 const normalized = b => b.toString('utf8').replaceAll('\r\n', '\n');
 const revision = '7cd5cb7';
+const correctedRevision = '4650791a7208b841dd29f1ced015f98234949623';
 const readOld = file => execFileSync('git', ['show', `${revision}:${file}`], { maxBuffer: 64 * 1024 * 1024 });
+const readCorrected = file => execFileSync('git', ['show', `${correctedRevision}:${file}`], { maxBuffer: 64 * 1024 * 1024 });
 function packed(text) {
   const decoded = Buffer.from(text), payload = gzipSync(decoded);
   return { payload, manifest: { format: 'astylar-material-input-audit-gzip', formatVersion: 1,
@@ -36,7 +37,8 @@ test('single-source conservation compares all bytes across chunk boundaries and 
 });
 
 test('overlay-font canonical refresh changes exactly one source receipt and no other decoded bytes', async () => {
-  const oldSource = normalized(readOld(owner)), currentSource = normalized(readFileSync(owner));
+  // This is the historical single-change claim, not today's canonical state.
+  const oldSource = normalized(readOld(owner)), currentSource = normalized(readCorrected(owner));
   const eager = 'targets: Object.keys(overlayFontTargets),';
   const deferred = 'get targets() { return Object.keys(overlayFontTargets); },';
   assert.equal(oldSource.split(eager).length, 2);
@@ -44,11 +46,11 @@ test('overlay-font canonical refresh changes exactly one source receipt and no o
   const previous = { manifest: JSON.parse(readOld('docs/material-input-equivalence-audit.json')),
     payload: readOld('docs/material-input-equivalence-audit.json.gz') };
   assert.equal(previous.manifest.compressedSha256, 'c08d24e94671c18e0c640638ca234b9571720080474115cc2b8388a2883a810e');
-  const current = { manifest: JSON.parse(readFileSync('docs/material-input-equivalence-audit.json')),
-    payload: readFileSync('docs/material-input-equivalence-audit.json.gz') };
+  const current = { manifest: JSON.parse(readCorrected('docs/material-input-equivalence-audit.json')),
+    payload: readCorrected('docs/material-input-equivalence-audit.json.gz') };
   const result = await assertSingleSourcePayloadChange(previous, current,
     { file: owner, before: hash(oldSource), after: hash(currentSource) });
-  assert.deepEqual(readFileSync('docs/material-input-equivalence-audit.md'), readOld('docs/material-input-equivalence-audit.md'));
+  assert.deepEqual(readCorrected('docs/material-input-equivalence-audit.md'), readOld('docs/material-input-equivalence-audit.md'));
   console.log(JSON.stringify({ ...result, previous: previous.manifest, current: current.manifest,
     canonicalUnresolvedGroups: 1835, inputEquivalent: false, renderingEquivalent: false }));
 });

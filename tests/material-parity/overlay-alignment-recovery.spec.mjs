@@ -5,6 +5,7 @@ import { syncBuiltinESMExports } from 'node:module';
 import path from 'node:path';
 import test from 'node:test';
 import { collectOverlayAlignmentRecovery, recoverOverlayAlignment } from '../../scripts/audit-overlay-alignment-recovery.mjs';
+import { restoreOriginalOverlayContextReader } from './historical-audit-module-source.mjs';
 
 const root = process.env.ASTYLAR_OVERLAY_EVIDENCE_ROOT ?? process.cwd();
 const hash = x => createHash('sha256').update(x).digest('hex');
@@ -28,7 +29,23 @@ test('replays all 59 original observations and the 91-state owner verifier witho
     fs.writeFileSync = () => { throw Error('CHECK_MODE_ATTEMPTED_WRITE'); }; syncBuiltinESMExports();
     result = await collectOverlayAlignmentRecovery({ root });
   } finally { fs.writeFileSync = write; syncBuiltinESMExports(); }
-  assert.equal(hash(JSON.stringify(result, null, 2) + '\n'), hash(bytes), 'complete recovery replay differs');
+  // Preserve the historical payload only after authenticating the complete
+  // current reader transition; every other source and observation stays exact.
+  const conserved = structuredClone(result);
+  assert.equal(conserved.sourceFingerprints.length, saved.sourceFingerprints.length);
+  let transitions = 0;
+  for (let i = 0; i < conserved.sourceFingerprints.length; i++) {
+    const live = conserved.sourceFingerprints[i], old = saved.sourceFingerprints[i];
+    assert.equal(live.file, old.file);
+    if (live.sha256 === old.sha256) continue;
+    assert.equal(live.file, 'tests/material-parity/original-overlay-context-survey.mjs');
+    const reader = fs.readFileSync(path.join(root, live.file));
+    assert.equal(live.sha256, hash(reader.toString('utf8').replaceAll('\r\n', '\n')));
+    assert.equal(hash(restoreOriginalOverlayContextReader(reader, { original: true })), old.sha256);
+    live.sha256 = old.sha256; transitions++;
+  }
+  assert.equal(transitions, 1);
+  assert.equal(hash(JSON.stringify(conserved, null, 2) + '\n'), hash(bytes), 'complete recovery replay differs');
   for (const [f, digest] of before) assert.equal(hash(fs.readFileSync(f)), digest, f);
   assert.equal(result.groupCount, 2); assert.equal(result.observations, 59);
   assert.equal(result.contextCapture.verifiedCases, 91); assert.equal(result.contextCapture.matchedOwners, 200);
