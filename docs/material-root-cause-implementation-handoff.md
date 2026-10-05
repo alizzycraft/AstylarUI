@@ -2,6 +2,29 @@
 
 ## Current resumption ledger — October 5
 
+- The follow-on fresh-versus-retained comparison has a demonstrated
+  representation trap. Existing production `collectStyleDiscrepancies`, driven
+  by the authenticated owner-initial evidence and the same isolated evidence
+  boundary used by its existing precedence test, reproduces all 75 retained
+  owner-initial rows completely in JSON representation. Live rows include the
+  own key `astylar: undefined`; saving the diagnostic as JSON omitted that key.
+  Consequently `isDeepStrictEqual(liveRow, parsedSavedRow)` rejects all 75 even
+  though every field value, metadata value and serialized complete row matches.
+  Reapplying all four subsequent appearance review stages changes zero of these
+  rows. The direct classifier also reproduces classification, attribution,
+  justification, owner and first evidence for all 75. Read-only collection
+  replays exit 0 in 7.35 / 8.05 seconds. Across the retained 1,241 differences,
+  898 candidate scalar keys are absent in JSON; nested omission effects for the
+  remaining groups have not yet been measured. Therefore the earlier 274/967
+  live-versus-JSON comparison is not a trustworthy count of semantic drift.
+  This does NOT invalidate or waive the original 1,241-row grid integration
+  failure: that assertion hashes JSON on both sides already. Next compare fresh
+  and retained results at the same documented representation boundary, keeping
+  omission meaningful and never synthesizing a computed candidate default.
+  Existing appearance rejection, panel-header precedence and font-weight
+  fallback tests pass 3/3, zero skips, 17,436 ms. No producer, fixture, renderer
+  or original assertion changed in this investigation.
+
 - Bounded replay of the retained grid-failure owner-initial subset answers one
   metadata-applicability question without rebuilding the canonical audit.
   `bindOwnerInitialStyleSource` returns `bound` for both relative and absolute
