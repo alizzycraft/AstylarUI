@@ -432,7 +432,7 @@ test('slider keyboard stepping exposes the authored range-constraint boundary', 
   });
 });
 
-test('slider pointer-down ownership is measured at both visual thumb centers', async () => {
+test('slider pointer-down ownership is measured at both visual thumb centers', async t => {
   await withFrozenShowcase(async (browser, baseUrl) => {
     const observations = {};
     for (const thumb of ['start', 'end']) {
@@ -488,10 +488,14 @@ test('slider pointer-down ownership is measured at both visual thumb centers', a
         await page.mouse.up();
         if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
         await snapshot('up');
-        observations[thumb][mode] = { drag, steps, errors };
+      observations[thumb][mode] = { drag, steps, errors };
         await page.close();
       }
     }
+    t.diagnostic(JSON.stringify({ scope: 'default 30/65 light desktop DPR1 four held pointer moves; not continuous-motion acceptance',
+      traces: Object.fromEntries(Object.entries(observations).map(([thumb, sides]) => [thumb,
+        Object.fromEntries(Object.entries(sides).map(([side, data]) => [side, {
+          drag: data.drag, steps: data.steps.map(step => ({ boundary: step.boundary, values: step.values, state: step.state })) }]))])) }));
     assert.equal(browser.version(), '154.0.8037.58');
     for (const [thumb, owner, fixedIndex, expectedFinal] of [
       ['start', 'slider-start', 1, ['40', '65']],

@@ -126,6 +126,19 @@ evidence, including source applicability and explicit remaining uncertainty.
 
 ### Applicable-obligation reconciliation — October 5
 
+Slider default-domain final success is now separated from intermediate travel:
+the existing pointer-ownership test retains all assertions and emits its already-
+collected trace. Current-full checkpoint light desktop DPR1, initial30/65, four
+held moves: start reference30/35/35/40 versus candidate33/35/38/40; end reference
+70/70/75/75 versus candidate68/70/73/75. Final40/65 and30/75 match, owners remain
+correct, and both application stores commit on release. Existing min/max/step
+finding supplies unequal step5 versus step1 authoring; these values are not a
+new equal-input coordinate defect or proof of continuous visual motion. Test1/1
+exit0,11,016.638ms; log slider-default-travel-current-20261005.log. Current source
+fingerprint changes only through additive trace diagnostics; canonical integration
+remains pending. Visual thumb positions/pixels at held boundaries are still needed
+to assess smoothness; final values and input-event counts cannot close that gap.
+
 Slider full-domain ownership applicability is now observed on the current-full
 checkpoint, not only inferred from retained source: existing test `slider cross-
 midpoint visual thumbs reveal fixed-half hit ownership` passes1/1 (9,360.244ms)

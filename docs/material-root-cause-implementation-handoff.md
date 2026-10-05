@@ -2,6 +2,15 @@
 
 ## Current resumption ledger — October 5
 
+- Default slider travel question answered at value boundaries, not visual motion:
+  current-full frozen test1/1exit0,11,016.638ms. Four held moves retain correct
+  owner/final values but intermediate candidate33/35/38/40 and68/70/73/75 differ
+  from native30/35/35/40 and70/70/75/75. Both stores commit only on release.
+  Additive existing-test trace preserves original assertions; no new test layer.
+  Known unequal step inputs explain value quantization. Remaining smoothness
+  question needs held visual-thumb geometry/paint, not another final-value replay.
+  Keep this scope distinct from proven cross-midpoint wrong-owner failure.
+
 - Slider full-domain hit-owner finding has current-build runtime applicability:
   existing cross-midpoint test, exact current-full manifest, light desktop DPR1,
   two scenarios,1/1 terminalexit0 (9,360.244ms). Visible start60/end80 targets end
