@@ -2,6 +2,25 @@
 
 ## Current resumption ledger — October 4
 
+- Grid session 35583 is terminal: **0/1 passing**, exit 1 in **774,077 ms**
+  (body 770,308 ms). Evidence remains at
+  `artifacts/material-parity/owner-grid-integration-quUtXV/report.json`.
+  Historical owner dependency binding cleared the previously localized expansion
+  attribution conflict: the source validators, caret/position restoration,
+  owner/followup precedence reconstruction and earlier assertions now pass.
+  The next failure is final complete unrelated-row conservation, actual digest
+  `49174c94…` versus historical `bdeb5643…`, at spec line 196. The scalar
+  population/count assertions pass, but complete metadata/evidence conservation
+  does not. Do not interpret the earlier checks as full integration acceptance,
+  weaken the whole-row assertion, or rerun this unchanged 13-minute test.
+  Next localize the remaining changed rows through existing owner/source-review
+  evidence; if another integration run is necessary, preserve exact row deltas
+  at this failure boundary rather than retaining only a digest and input capture.
+  That is a demonstrated diagnostic gap, not justification for another audit
+  framework. The pending spec remains uncommitted. Its graph is no longer live;
+  layout/surface source integration can proceed, and the fresh general build
+  should be scheduled when current memory permits. Material capture remains live.
+
 - Disabled-ink original coverage is current and passes without an adapter or code
   change: `node --test tests/material-parity/disabled-button-ink.spec.mjs
   tests/material-parity/disabled-ink-module-receipts.spec.mjs` finishes **4/4**,
