@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 bounded reuse-boundary check: owner-initial source validation
+  rereads its capture, rebuilds the full tree inventory and recollects evidence
+  on each invocation; the selected integration invokes the full validator eight
+  times. These paths use direct `node:fs` reads, not the two cached position
+  collectors. The existing cache's actual dependency-graph guard rejects
+  `owner-initial-style-attribution.mjs` as an untracked reader before executing
+  a synthetic collector (asserted exit 0, 321 ms; no evidence/cache published).
+  This proves why simply enabling persistent reuse here is unsafe, not which
+  replay dominates runtime. Do not weaken the guard or memoize mutated reports.
+  Any future optimization must authenticate the replay's actual data/code reads
+  and retain independent comparisons for all negative controls. Avoid another
+  unchanged expensive integration merely to establish this already observed
+  boundary; grid population/source applicability reconciliation remains next.
+
 - October 5 owner-initial integration reuse experiment is terminal: session
   82675 passes the complete selected original integration body and all seven
   mutation controls (1/1, exit 0, 3,024,726 ms). Its existing evidence-session
