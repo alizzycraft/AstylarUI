@@ -2,6 +2,17 @@
 
 ## Current resumption ledger — October 5
 
+- Export applicability closes in the same existing-suite proof: exact sorted
+  module/imported/exported identities match all 130 mapped exports, including
+  local declaration exports and re-export clauses. Focused Node test passes
+  1/1 (4,778.825 ms total); its TAP records success independently of the
+  subsequent search command's no-match exit. Full Angular metadata generation
+  remains unverified. Resource preflight reports 964,020 KiB free physical
+  memory; no full compiler/build was launched. Continue bounded metadata or
+  remaining case-obligation checks, not repeat settled runtime/export checks.
+  This is implementation/import/export applicability, not all-state rendering
+  acceptance; owning-suite canonical fingerprint integration is still pending.
+
 - Extra installed imports are now explicitly accounted for in the same
   existing-suite source-binding check: 110 exactly match authored named import
   identities; 171 are compiler namespace aliases to Angular core or an authored

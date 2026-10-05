@@ -37,6 +37,7 @@ test('captured runtime class bodies match current repository compilation without
     visit(ast);
     const result = new Map();
     const imports = new Set();
+    const exports = [];
     for (const node of classes) {
       assert.equal(result.has(`class:${node.name.text}`), false, 'Duplicate class identity.');
       const members = node.members.filter(member => !generated.has(member.name?.getText(ast)));
@@ -47,6 +48,19 @@ test('captured runtime class bodies match current repository compilation without
       })).code);
     }
     for (const statement of ast.statements) {
+      if (ts.isExportDeclaration(statement)) {
+        if (statement.exportClause && ts.isNamedExports(statement.exportClause))
+          for (const element of statement.exportClause.elements)
+            exports.push(`${statement.moduleSpecifier?.text ?? 'local'}|${element.propertyName?.text ?? element.name.text}|${element.name.text}`);
+        else exports.push(`star|${statement.moduleSpecifier?.text}`);
+      }
+      if (statement.modifiers?.some(modifier => modifier.kind === ts.SyntaxKind.ExportKeyword)) {
+        if (ts.isVariableStatement(statement)) for (const declaration of statement.declarationList.declarations) {
+          const name = declaration.name.getText(ast);
+          exports.push(`local|${name}|${name}`);
+        }
+        else if (statement.name) exports.push(`local|${statement.name.text}|${statement.name.text}`);
+      }
       if (ts.isImportDeclaration(statement)) {
         const module = statement.moduleSpecifier.text;
         const clause = statement.importClause;
@@ -84,7 +98,7 @@ test('captured runtime class bodies match current repository compilation without
         })).code);
       }
     }
-    return { declarations: result, imports };
+    return { declarations: result, imports, exports: exports.sort() };
   };
   let classCount = 0;
   let functionCount = 0;
@@ -94,6 +108,7 @@ test('captured runtime class bodies match current repository compilation without
   let authoredExtraCount = 0;
   let namespaceExtraCount = 0;
   let metadataUseCount = 0;
+  let exportCount = 0;
   for (const module of modules) {
     const sourceFile = path.join('src', module.slice('node_modules/astylarui/dist/lib/'.length)
       .replace(/\.js$/, '.ts'));
@@ -106,6 +121,8 @@ test('captured runtime class bodies match current repository compilation without
     const installedProjection = await extract(readFileSync(path.join(consumer, module), 'utf8'));
     const sourceClasses = sourceProjection.declarations;
     assert.deepEqual(installedProjection.declarations, sourceClasses, sourceFile);
+    assert.deepEqual(installedProjection.exports, sourceProjection.exports, `${sourceFile}: export wiring`);
+    exportCount += sourceProjection.exports.length;
     for (const binding of sourceProjection.imports)
       assert.ok(installedProjection.imports.has(binding), `${sourceFile}: missing runtime import ${binding}`);
     const authored = ts.createSourceFile(sourceFile, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
@@ -166,6 +183,7 @@ test('captured runtime class bodies match current repository compilation without
   assert.equal(authoredExtraCount, 110, 'Authored DI import scope changed.');
   assert.equal(namespaceExtraCount, 171, 'Generated namespace scope changed.');
   assert.equal(metadataUseCount, 644, 'Generated namespace metadata use scope changed.');
+  assert.equal(exportCount, 130, 'Mapped export scope changed; reconcile coverage.');
 });
 
 test('public input lifecycle isolates caret material retention without Material plugins', async t => {
