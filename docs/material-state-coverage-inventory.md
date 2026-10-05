@@ -106,6 +106,20 @@ evidence, including source applicability and explicit remaining uncertainty.
 
 ### Applicable-obligation reconciliation — October 5
 
+Resource acceptance scope is explicit from authenticated current full-report
+streaming and current source: all 1,875 interactions report resourcesStable,
+but 1,857 have one snapshot and only18 have multiple snapshots. All50 tooltip
+interactions have one snapshot. `run-material-parity.mjs` compares counts only
+when two snapshots exist and reads `surface.resources`, whose owner
+`AstylarSceneResources.snapshot` intersects tracked sets with live scene arrays;
+it does not count every live object. Thus tooltip results establish idle session /
+zero pending plugin work at one boundary, not repeated cleanup or absence of
+unowned live allocations. Existing public/overlay counterexamples already show
+live-material growth despite tracked plateaus. Preserve gate results and
+thresholds; ownership inspection requires distinct live-object/adoption and
+disposal evidence. No universal tooltip leak or user-visible lag cause is
+inferred from this measurement gap.
+
 Tooltip composition/constraint classification membership is now reconciled:
 11 authenticated compact canonical groups each have `reviewedCases` exactly
 equal to the 18 configured hover/held IDs (198 occurrences, no missing/extra IDs).

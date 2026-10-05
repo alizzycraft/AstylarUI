@@ -2,6 +2,16 @@
 
 ## Current resumption ledger — October 5
 
+- Tooltip ownership applicability gap located at the measurement boundary:
+  authenticated full report has50/50 tooltip interactions with one resource
+  snapshot, while the stable-count comparison runs only with multiple snapshots.
+  Whole matrix:1,857 single /18 multiple, all1,875 reported stable. Counts are
+  tracked-owner intersections, not all live Babylon resources. Existing live-
+  material counterexamples prevent using these passes as complete lifecycle
+  inspection. Next reuse independently bound live/adoption/disposal proofs and
+  identify missing tooltip cycles; do not change thresholds or assert a leak
+  solely from insufficient measurement. See inventory for exact source boundary.
+
 - Tooltip composition/width/overflow mapping is settled for the exact current
   cohort: authenticated compact query verifies 11 existing canonical authoring
   groups × 18 exact hover/held IDs =198 occurrences. No added finding or
