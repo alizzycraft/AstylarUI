@@ -28,7 +28,8 @@ import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings
 import { proveSnackbarSurfaceRequests, collectOverlaySurfaceReview, applyOverlaySurfaceRows,
   overlaySurfacePredecessor } from './overlay-surface-review.mjs';
 import { collectOverlaySurfaceAuditInputs, applyOverlaySurfaceAuditRows, restoreTooltipStackingProofAddition,
-  validateOverlaySurfaceAuditInputs, validateOverlaySurfaceAuditClassifications } from './overlay-surface-audit-source-binding.mjs';
+  validateOverlaySurfaceAuditInputs, validateOverlaySurfaceAuditClassifications,
+  verifyOverlaySurfaceReviewSnapshot } from './overlay-surface-audit-source-binding.mjs';
 import { collectFullTreeInventory, collectControlTypographyEvidence,
   collectRetainedTypographyEvidence } from './input-equivalence-audit.mjs';
 
@@ -1183,7 +1184,7 @@ test('nine dialog scalar groups reuse original typography proofs with matching o
 });
 
 test('overlay surface proposal replays 13 complete predecessors and preserves unrelated rows', async () => {
-  const review = await collectOverlaySurfaceReview();
+  const review = verifyOverlaySurfaceReviewSnapshot(await collectOverlaySurfaceReview());
   assert.deepEqual(review, JSON.parse(readFileSync('docs/material-overlay-surface-review.json')));
   const directory = 'artifacts/material-parity/working-audit', rows = [];
   for (const group of review.groups) {
@@ -1230,6 +1231,34 @@ test('overlay surface proposal replays 13 complete predecessors and preserves un
   ]) {
     const changed = structuredClone(originals); mutate(changed[1]);
     assert.throws(() => proveSnackbarSurfaceRequests(...changed));
+  }
+});
+
+test('overlay surface snapshot rejects payload, receipt, ordered membership and unrelated source drift', () => {
+  const original = JSON.parse(readFileSync('docs/material-overlay-surface-review.json'));
+  const live = structuredClone(original);
+  const hash = text => createHash('sha256').update(text).digest('hex');
+  const readSource = file => readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  for (const source of live.sources) source.sha256 = hash(readSource(source.file));
+  assert.deepEqual(verifyOverlaySurfaceReviewSnapshot(live), original);
+  for (const mutate of [
+    r => { r.groups[0].reviewedCases.pop(); },
+    r => { r.groups[0].reviewEvidence.observations[0].case += '/forged'; },
+    r => { r.groups[0].justification += ' changed'; },
+    r => { r.groups[0].reference = 'changed'; },
+    r => { r.sources.reverse(); },
+    r => { r.sources.pop(); },
+    r => { r.sources[0].sha256 = 'forged'; },
+    r => { r.counts.observations--; },
+  ]) {
+    const changed = structuredClone(live); mutate(changed);
+    assert.throws(() => verifyOverlaySurfaceReviewSnapshot(changed));
+  }
+  for (const target of live.sources) {
+    const readChanged = file => readSource(file) + (file === target.file ? '\n// unrelated\n' : '');
+    const changed = structuredClone(live);
+    changed.sources.find(s => s.file === target.file).sha256 = hash(readChanged(target.file));
+    assert.throws(() => verifyOverlaySurfaceReviewSnapshot(changed, { readSource: readChanged }), target.file);
   }
 });
 

@@ -2,6 +2,22 @@
 
 ## Current resumption ledger — October 5
 
+- Overlay-surface gate 910 is now integrated through the existing source binding.
+  `verifyOverlaySurfaceReviewSnapshot` authenticates every actual live source
+  receipt, restores only the two previously proved source transitions, and
+  requires complete deep equality with the pinned historical proposal. The
+  original predecessor/mapping/membership/raw-row restoration and corruption
+  assertions remain intact. Command `node --test --test-name-pattern='overlay
+  surface proposal|overlay surface snapshot'
+  tests/material-parity/modal-position-inspection.spec.mjs` passes 2/2, no skips,
+  in 74,195 ms: all 13 groups / 344 observations and 15 new payload, receipt,
+  ordered-membership and unrelated-source controls. No captured or durable
+  evidence, classification, renderer or fixture changed. This closes historical
+  proposal applicability, not current output acceptance. Updated consumed proof
+  fingerprints belong in the coherent canonical reconciliation batch. Next
+  localize grid drift with exact complete row deltas; retain its failing
+  whole-row assertion, and do not rerun the unchanged failed graph.
+
 - Layout-request gate 854 now authenticates its three diagnostic receipt
   transitions instead of repinning historical evidence. Complete fresh alignment,
   flex and badge-whitespace reports match current saved reports; reversing only
@@ -14,8 +30,8 @@
   renderer changed. Current hashes and historical applicability remain explicit
   and separate. Consumed source/proof fingerprints require the planned coherent
   export reconciliation; this is not current canonical or rendering acceptance.
-  Next close the independently demonstrated overlay-surface receipt transition
-  and localize exact remaining grid row drift before another grid integration.
+  Overlay-surface applicability is now closed above. Localize exact remaining
+  grid row drift before another grid integration.
 
 - Grid session 35583 is terminal: **0/1 passing**, exit 1 in **774,077 ms**
   (body 770,308 ms). Evidence remains at

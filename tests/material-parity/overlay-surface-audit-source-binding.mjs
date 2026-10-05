@@ -7,6 +7,7 @@ import { collectTooltipPositionComposition } from './tooltip-position-compositio
 import { proveSnackbarSurfaceRequests, proveTooltipSizingRequests, applyOverlaySurfaceRows,
   snackbarSurfaceValues } from './overlay-surface-review.mjs';
 import { restoreAstylarDiagnostics } from './alignment-survey-conservation.mjs';
+import { isDeepStrictEqual } from 'node:util';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 export function restoreTooltipStackingProofAddition(source) {
@@ -28,6 +29,28 @@ const readBound = receipt => {
   const bytes = readFileSync(receipt.file); assert.equal(hash(bytes), receipt.sha256);
   return JSON.parse(bytes);
 };
+
+// Current source receipts remain current. Only return the historical snapshot
+// after complete live payload equality and authenticated source restoration.
+export function verifyOverlaySurfaceReviewSnapshot(live, { readSource = file => readFileSync(file, 'utf8') } = {}) {
+  const historical = readBound(reviewSource), restored = structuredClone(live);
+  assert.deepEqual(restored.sources.map(s => s.file), historical.sources.map(s => s.file));
+  for (let index = 0; index < restored.sources.length; index++) {
+    const source = restored.sources[index], original = historical.sources[index];
+    let text = readSource(source.file).replaceAll('\r\n', '\n');
+    assert.equal(hash(text), source.sha256, 'live overlay receipt must match actual source');
+    if (source.sha256 === original.sha256) continue;
+    if (source.file === 'tests/material-parity/tooltip-position-composition.mjs')
+      text = restoreTooltipStackingProofAddition(text);
+    else if (source.file === 'examples/material-showcase/src/app/astylar.component.ts')
+      text = restoreAstylarDiagnostics(text);
+    else assert.fail('unreviewed overlay source transition');
+    assert.equal(hash(text), original.sha256, 'complete overlay source conservation failed');
+    source.sha256 = original.sha256;
+  }
+  assert.ok(isDeepStrictEqual(restored, historical), 'complete overlay review changed beyond authenticated receipts');
+  return historical;
+}
 
 function prepare(report) {
   assert.equal(bindOwnerCaretCaptureSubset(report, readBound(capture)).coverage.complete, true);
