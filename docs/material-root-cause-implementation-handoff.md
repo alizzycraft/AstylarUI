@@ -141,23 +141,30 @@ Reconcile it with other remaining integrations at the next justified milestone,
 not by repeating unchanged browser captures. Full case inspection and remaining
 paint/profile/ownership obligations stay open.
 
-Read-only general-gate diagnosis: `tests/parity/run-parity.mjs` retains one
+General-gate diagnosis and instrumentation: `tests/parity/run-parity.mjs` retains one
 browser context per viewport and closes each successful capture page. At the
 readiness wait in `captureMode`, failure propagates without preserving the page's
 collected `pageErrors` or current `__ASTYLAR_PARITY_REPORT__` readiness state.
 The retained 98-fixture partial run therefore cannot distinguish a page/runtime
-failure from long-run resource/settlement pressure. After the live source snapshot
-is released, consider a bounded failure diagnostic at that existing boundary,
-keeping the same timeout, failure propagation and full acceptance matrix. This
+failure from long-run resource/settlement pressure. A bounded failure diagnostic
+now exists at that boundary, keeping the same timeout, failure propagation and
+full acceptance matrix. On readiness failure it retains page errors and available
+report/document state at `<screenshotPath>.readiness-failure.json`; diagnostic
+evaluation is limited to 1,000 ms, and evaluation/write failures cannot mask the
+original error. The existing fixture-manifest suite passes 3/3 in 1.720 s,
+including published-state, rejected evaluation, hung evaluation and write-failure
+controls. Exact removal of only this diagnostic block and the isolated output-path
+addition reproduces the unchanged original whole-runner SHA. Successful capture
+and acceptance code are otherwise unchanged. This
 identifies a specific evidence gap; it does not confirm a renderer or resource
 leak, authorize one, or justify another unchanged heavyweight build attempt.
 The existing `fixture-manifest.spec.mjs` owns whole-source capture/acceptance
-conservation; its isolated-artifact assertion passes 1/1 on the current runner
-(158.043 ms). Any readiness diagnostic must preserve that original SHA through
-an exact authenticated reversal of the diagnostic-only block, not repin it.
+conservation and still preserves the original SHA; no historical receipt is repinned.
 The existing responsive capture catch already retains latest report/page errors;
-the initial `captureMode` wait lacks that evidence. This narrows the required
-instrumentation boundary without changing timeouts or claiming a runtime cause.
+the initial `captureMode` wait now retains that evidence. Next use this boundary
+in the justified full general gate once the served-build readiness/provenance
+preflight succeeds; do not repeat the failed heavyweight build hypotheses.
+Current browser-gate acceptance remains incomplete; no runtime cause is claimed.
 
 ## Retained evidence and chronology
 

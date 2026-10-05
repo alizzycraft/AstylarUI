@@ -278,11 +278,33 @@ async function captureMode(context, url, selector, screenshotPath, semanticIds =
   const pageErrors = [];
   page.on('pageerror', (error) => pageErrors.push(error.message));
   await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30_000 });
-  await page.waitForFunction(
-    () => window.__ASTYLAR_PARITY_REPORT__?.ready === true,
-    undefined,
-    { timeout: 30_000 }
-  );
+  try {
+    await page.waitForFunction(
+      () => window.__ASTYLAR_PARITY_REPORT__?.ready === true,
+      undefined,
+      { timeout: 30_000 }
+    );
+  } catch (error) {
+    let diagnosticTimer;
+    const failure = { url, selector, pageErrors, error: String(error), readiness: null };
+    try {
+      failure.readiness = await Promise.race([
+        page.evaluate(() => ({ report: window.__ASTYLAR_PARITY_REPORT__ ?? null,
+          documentReadyState: document.readyState, href: window.location.href })),
+        new Promise((_, reject) => { diagnosticTimer = setTimeout(() => reject(new Error('readiness diagnostic timed out')), 1_000); }),
+      ]);
+    } catch (diagnosticError) {
+      failure.diagnosticError = String(diagnosticError);
+    } finally {
+      clearTimeout(diagnosticTimer);
+    }
+    try {
+      await writeFile(`${screenshotPath}.readiness-failure.json`, JSON.stringify(failure, null, 2));
+    } catch (writeError) {
+      console.error('Unable to retain readiness failure evidence:', String(writeError));
+    }
+    throw error;
+  }
   const report = await page.evaluate(() => window.__ASTYLAR_PARITY_REPORT__);
   const semantics = await captureSemanticSnapshots(
     page,
