@@ -1,5 +1,17 @@
 # Layout-request authoring attribution proposal
 
+October 5 applicability integration: all three current source reviews freshly
+replay. Their only historical payload changes are the component diagnostic
+receipt, authenticated against exact Git originals and complete source
+restoration through the existing `restoreAstylarDiagnostics` boundary. The
+collector reports current and historical report hashes separately; check mode
+preserves the complete frozen proposal comparison without rewriting it.
+`node --test tests/material-parity/layout-request-attribution.spec.mjs` passes
+4/4, no skips, in 86,524 ms on the final replay, including eight groups / 492 observations,
+8,331 complete unrelated rows, all 21 original rejection controls and 18 new
+source/payload/receipt/replay mutation controls. This closes historical
+applicability, not current canonical promotion or rendering acceptance.
+
 [The machine proposal](material-layout-request-attribution-plan.json) binds three
 previously verified source reviews to eight exact unresolved rows in the
 authenticated `67db724` canonical payload. It freshly replays each complete

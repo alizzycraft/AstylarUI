@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import test from 'node:test';
-import { planLayoutRequestAttribution } from '../../scripts/audit-material-layout-request-attribution.mjs';
+import { planLayoutRequestAttribution, verifyLayoutAlignmentTransition } from '../../scripts/audit-material-layout-request-attribution.mjs';
 import { bindHistoricalAuditNormalization } from './audit-normalization-contracts.mjs';
 
 const digest = x => createHash('sha256').update(JSON.stringify(x)).digest('hex');
@@ -73,4 +73,36 @@ test('complete layout request proposal authenticates its original sources and fr
     'scripts/audit-material-layout-request-attribution.mjs', '--check'], { encoding: 'utf8', maxBuffer: 1024 * 1024 }));
   assert.equal(result.groups, 8); assert.equal(result.observations, 492);
   assert.equal(result.otherCompleteRows, 8331); assert.equal(result.canonicalFilesChanged, false);
+  assert.equal(result.sourceTransitions.length, 3);
+  for (const transition of result.sourceTransitions) {
+    assert.equal(transition.completePayloadConserved, true);
+    assert.equal(transition.completeSourceConserved, true);
+    assert.notEqual(transition.currentSha256, transition.historicalSha256);
+  }
+});
+
+test('layout diagnostic transitions reject unrelated source, payload, receipt and replay drift', () => {
+  const sourceFile = 'examples/material-showcase/src/app/astylar.component.ts';
+  const currentSource = readFileSync(sourceFile, 'utf8').replaceAll('\r\n', '\n');
+  for (const [kind, revision] of [['alignment', '9042c8aa'], ['flex', '7a4067bf'], ['whitespace', 'b366c707']]) {
+    const historical = JSON.parse(execFileSync('git', ['show', `${revision}:${files[kind]}`]));
+    const historicalSource = execFileSync('git', ['show', `${revision}:${sourceFile}`],
+      { encoding: 'utf8', maxBuffer: 2 * 1024 * 1024 }).replaceAll('\r\n', '\n');
+    const current = originals[kind];
+    const verify = (a = current, b = historical, fresh = current, text = currentSource, old = historicalSource) =>
+      verifyLayoutAlignmentTransition(a, b, fresh, text, old, kind);
+    assert.equal(verify().completePayloadConserved, true);
+    assert.throws(() => verify(current, historical, current, currentSource + '\n// unrelated\n'));
+    assert.throws(() => verify(current, historical, current, currentSource, historicalSource + '\n'));
+    const changed = structuredClone(current); changed.findings[0].case += '/forged';
+    assert.throws(() => verify(changed, historical, changed));
+    assert.throws(() => verify(current, historical, changed));
+    const oldChanged = structuredClone(historical); oldChanged.findings.pop();
+    assert.throws(() => verify(current, oldChanged));
+    const receiptChanged = structuredClone(current);
+    if (kind === 'alignment') receiptChanged.history.currentSha256 = historical.history.currentSha256;
+    else if (kind === 'flex') receiptChanged.source.sha256 = historical.source.sha256;
+    else receiptChanged.currentSource.sha256 = historical.currentSource.sha256;
+    assert.throws(() => verify(receiptChanged, historical, receiptChanged));
+  }
 });

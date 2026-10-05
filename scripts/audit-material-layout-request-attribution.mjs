@@ -10,6 +10,7 @@ import { collectContentFlexRequests } from './audit-material-content-flex-reques
 import { collectBadgeWhitespace } from './audit-material-badge-whitespace.mjs';
 import { bindHistoricalAuditNormalization } from '../tests/material-parity/audit-normalization-contracts.mjs';
 import { readCaretConservationRows } from '../tests/material-parity/owner-caret-canonical-conservation.mjs';
+import { restoreAstylarDiagnostics } from '../tests/material-parity/alignment-survey-conservation.mjs';
 
 const hash = x => createHash('sha256').update(x).digest('hex');
 const digest = x => hash(JSON.stringify(x));
@@ -80,11 +81,51 @@ export function planLayoutRequestAttribution(sources, rows, normalize) {
     canonicalFilesChanged: false, inputEquivalent: false, renderingEquivalent: false };
 }
 
+// Authenticate the entire old report and source, not merely its finding counts.
+export function verifyLayoutAlignmentTransition(current, historical, fresh, currentSource, historicalSource, kind = 'alignment') {
+  assert.ok(Object.hasOwn(definitions, kind));
+  assert.equal(hash(JSON.stringify(historical, null, 2) + '\n'), definitions[kind][1]);
+  same(current, fresh, 'complete current alignment proof must freshly replay');
+  const receipt = report => kind === 'alignment' ? report.history.currentSha256
+    : kind === 'flex' ? report.source.sha256 : report.currentSource.sha256;
+  assert.equal(hash(currentSource), receipt(current));
+  assert.equal(hash(historicalSource), receipt(historical));
+  assert.equal(restoreAstylarDiagnostics(currentSource), historicalSource,
+    'complete alignment source must conserve everything except authenticated diagnostics');
+  const restored = structuredClone(current);
+  if (kind === 'alignment') restored.history.currentSha256 = receipt(historical);
+  else if (kind === 'flex') restored.source.sha256 = receipt(historical);
+  else restored.currentSource.sha256 = receipt(historical);
+  same(restored, historical, 'complete alignment report changed beyond diagnostic source receipt');
+  return { file: definitions[kind][0], historicalSha256: definitions[kind][1],
+    currentSha256: hash(JSON.stringify(current, null, 2) + '\n'),
+    completePayloadConserved: true, completeSourceConserved: true };
+}
+
 export async function collectLayoutRequestAttribution() {
-  const sources = {}, proofs = {};
+  const sources = {}, proofs = {}, sourceTransitions = [];
   for (const [kind, [file, sha256, collect]] of Object.entries(definitions)) {
-    const bytes = readFileSync(file, 'utf8').replaceAll('\r\n', '\n'); assert.equal(hash(bytes), sha256);
-    sources[kind] = collect(); same(sources[kind], JSON.parse(bytes), 'complete original source proof must freshly replay');
+    const bytes = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+    const fresh = collect();
+    if (hash(bytes) !== sha256) {
+      const originalRevision = kind === 'alignment' ? '9042c8aa92aa0db1a56e0d846e0bc4e5ac8b4ff6'
+        : kind === 'flex' ? '7a4067bf' : 'b366c707';
+      const originalBytes = execFileSync('git', ['show', `${originalRevision}:${file}`],
+        { encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 }).replaceAll('\r\n', '\n');
+      assert.equal(hash(originalBytes), sha256);
+      const original = JSON.parse(originalBytes), current = JSON.parse(bytes);
+      const sourceFile = kind === 'alignment' ? original.history.file
+        : kind === 'flex' ? original.source.file : original.currentSource.file;
+      const historicalSource = execFileSync('git', ['show', `${originalRevision}:${sourceFile}`],
+        { encoding: 'utf8', maxBuffer: 2 * 1024 * 1024 }).replaceAll('\r\n', '\n');
+      sourceTransitions.push(verifyLayoutAlignmentTransition(current, original, fresh,
+        readFileSync(sourceFile, 'utf8').replaceAll('\r\n', '\n'), historicalSource, kind));
+      sources[kind] = original;
+    } else {
+      assert.equal(hash(bytes), sha256);
+      same(fresh, JSON.parse(bytes), 'complete original source proof must freshly replay');
+      sources[kind] = fresh;
+    }
     proofs[kind] = { file, sha256 };
   }
   const productionNormalization = JSON.parse(readFileSync('docs/material-font-ownership-attribution-plan.json')).productionNormalization;
@@ -95,7 +136,7 @@ export async function collectLayoutRequestAttribution() {
   const plan = planLayoutRequestAttribution(sources, rows, normalize);
   assert.equal(plan.proposedGroups, 8); assert.equal(plan.proposedObservations, 492);
   return { schemaVersion: 1, kind: 'source-replayed-layout-request-attribution-proposal',
-    proofs, sourceProofsReplayed: true, productionNormalization, canonicalRevision: revision, canonicalPayload: manifest,
+    proofs, sourceTransitions, sourceProofsReplayed: true, productionNormalization, canonicalRevision: revision, canonicalPayload: manifest,
     scope: 'Historical proposal only. Unequal authoring is not a demonstrated core defect, visual effect or necessary compensation. Current canonical integration remains separate.', ...plan };
 }
 
@@ -103,8 +144,14 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
   assert.ok(process.argv.length === 2 || process.argv.length === 3 && process.argv[2] === '--check');
   const report = await collectLayoutRequestAttribution(), output = JSON.stringify(report, null, 2) + '\n';
   const file = 'docs/material-layout-request-attribution-plan.json';
-  if (process.argv[2] === '--check') assert.equal(hash(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')), hash(output));
+  if (process.argv[2] === '--check') {
+    const saved = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+    const payload = structuredClone(report);
+    if (!Object.hasOwn(JSON.parse(saved), 'sourceTransitions')) delete payload.sourceTransitions;
+    assert.equal(hash(saved), hash(JSON.stringify(payload, null, 2) + '\n'));
+  }
   else writeFileSync(file, output);
   console.log(JSON.stringify({ groups: report.proposedGroups, observations: report.proposedObservations,
-    otherCompleteRows: report.otherCompleteRows, sha256: hash(output), canonicalFilesChanged: false }));
+    otherCompleteRows: report.otherCompleteRows, sha256: hash(output),
+    sourceTransitions: report.sourceTransitions, canonicalFilesChanged: false }));
 }

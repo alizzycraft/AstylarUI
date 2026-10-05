@@ -1,6 +1,21 @@
 # Material audit: evidence-led implementation priorities
 
-## Current resumption ledger — October 4
+## Current resumption ledger — October 5
+
+- Layout-request gate 854 now authenticates its three diagnostic receipt
+  transitions instead of repinning historical evidence. Complete fresh alignment,
+  flex and badge-whitespace reports match current saved reports; reversing only
+  the authenticated component diagnostic receipt restores each entire Git
+  original. Full source restoration rejects unrelated changes. The original
+  write-prohibited frozen proposal replay passes all eight groups / 492 property
+  observations and 8,331 unrelated complete rows. The focused suite passes 4/4
+  in 86,524 ms on the final replay, including the original 21 rejection controls and 18 additional
+  transition controls. No durable report, canonical classification, fixture or
+  renderer changed. Current hashes and historical applicability remain explicit
+  and separate. Consumed source/proof fingerprints require the planned coherent
+  export reconciliation; this is not current canonical or rendering acceptance.
+  Next close the independently demonstrated overlay-surface receipt transition
+  and localize exact remaining grid row drift before another grid integration.
 
 - Grid session 35583 is terminal: **0/1 passing**, exit 1 in **774,077 ms**
   (body 770,308 ms). Evidence remains at
