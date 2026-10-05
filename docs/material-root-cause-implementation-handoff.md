@@ -2,6 +2,14 @@
 
 ## Current resumption ledger — October 5
 
+- Tooltip desktop/comparison hover/held measurement gap resolved without a
+  capture: full-report SHA and exact configured IDs authenticate all 18 rows.
+  Existing output checks pass18/18 at local0.70 (minimum0.814284), but this does
+  not authenticate PNG recomputation, current sources or equivalent paint input.
+  The inventory separates these popup crops from retained glyph-phase diagnostics.
+  Next inspect stored crop pixels and source applicability; do not regenerate
+  these already-present measurements or upgrade case closure from their passes.
+
 - Tooltip coverage denominator clarified from current benchmark and retained
   supplemental report: 12 configured static / 50 interaction cases versus 30
   supplemental light-desktop action boundaries. The latter covers both DPRs,

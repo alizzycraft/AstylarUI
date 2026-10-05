@@ -106,6 +106,18 @@ evidence, including source applicability and explicit remaining uncertainty.
 
 ### Applicable-obligation reconciliation — October 5
 
+Configured tooltip hover/held measurements are not missing: streaming the
+existing `current-full-20261005/latest-report.json` authenticates SHA-256
+`ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62`
+and proves exact ordered membership of all 18 configured hover/held IDs. All
+18 report one popup-focused raster and output acceptance; the unchanged local
+threshold is 0.70, minimum recorded SSIM 0.814284, with recorded sharpness targets
+met. This is authenticated report/membership inspection, not PNG recomputation,
+current-source applicability or equal-input paint acceptance. Full-popup crops
+and the separate 0.80 glyph diagnostic have different scope. Remaining work is
+stored-pixel/source applicability and input equivalence, not recapture to obtain
+already-present desktop/comparison measurements.
+
 Tooltip configured/supplemental applicability is now explicit. The maintained
 benchmark has 12 static cases and 50 interactions: focus/hover/held/activate/
 activate-leave/open at desktop DPR1/2 for all four themes, plus light comparison
