@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 grid membership boundary is explicit: production scalar rows cap
+  their example `cases` at twelve (`input-equivalence-audit.mjs`, scalar
+  aggregation), while the existing color-transition collector preserves every
+  affected original case. Therefore equality of grid test scalar tuples or
+  population totals cannot independently prove complete case membership.
+  Reconciliation must join full original owner/case observations, retain the
+  authenticated historical/current normalization contracts, and separately
+  preserve classification metadata. Do not promote capped example arrays to
+  exhaustive evidence or replace the original unrelated-row assertion with
+  counts alone. This read-only source check narrows the required proof; gate
+  1120 remains open and no canonical/renderer/fixture changes were made.
+
 - October 5 bounded reuse-boundary check: owner-initial source validation
   rereads its capture, rebuilds the full tree inventory and recollects evidence
   on each invocation; the selected integration invokes the full validator eight
