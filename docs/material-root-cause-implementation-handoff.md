@@ -2,6 +2,17 @@
 
 ## Current resumption ledger — October 5
 
+- Authored class-decorator requests now match installed class metadata for all
+  60 decorated classes, with exact per-module class membership. The existing
+  source-binding assertion compares decorator identity/arguments, including
+  surface template/styles. Empty call argument arrays are omitted as Angular
+  metadata does; esbuild syntax canonicalization reconciles equivalent static
+  template/string literals. Initial differences were these representations,
+  not authored content drift. Focused check passes 1/1, terminal exit 0,
+  5,249.554 ms total. Factory DI generation, property metadata and generated
+  linked component instructions remain outside this claim. No full compiler
+  build or capture was needed; complete audit gates are still pending.
+
 - Export applicability closes in the same existing-suite proof: exact sorted
   module/imported/exported identities match all 130 mapped exports, including
   local declaration exports and re-export clauses. Focused Node test passes

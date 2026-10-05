@@ -109,6 +109,7 @@ test('captured runtime class bodies match current repository compilation without
   let namespaceExtraCount = 0;
   let metadataUseCount = 0;
   let exportCount = 0;
+  let decoratorCount = 0;
   for (const module of modules) {
     const sourceFile = path.join('src', module.slice('node_modules/astylarui/dist/lib/'.length)
       .replace(/\.js$/, '.ts'));
@@ -148,6 +149,35 @@ test('captured runtime class bodies match current repository compilation without
     }
     const installedAst = ts.createSourceFile('installed.js', readFileSync(path.join(consumer, module), 'utf8'),
       ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    const installedDecorators = new Map();
+    for (const statement of installedAst.statements) if (ts.isExpressionStatement(statement)
+      && ts.isCallExpression(statement.expression) && ts.isPropertyAccessExpression(statement.expression.expression)
+      && statement.expression.expression.name.text === 'ɵɵngDeclareClassMetadata') {
+      const properties = new Map(statement.expression.arguments[0].properties
+        .map(property => [property.name.getText(installedAst), property.initializer]));
+      installedDecorators.set(properties.get('type').getText(installedAst), properties.get('decorators').getText(installedAst));
+    }
+    const canonicalDecorator = async expression => (await transform(ts.transpileModule(`const proof=${expression};`, {
+      compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 },
+    }).outputText, { loader: 'js', legalComments: 'none', minifyWhitespace: true, minifySyntax: true })).code;
+    let authoredDecoratorCount = 0;
+    for (const node of authored.statements.filter(ts.isClassDeclaration)) {
+      const decorators = ts.getDecorators(node);
+      if (!decorators?.length) continue;
+      authoredDecoratorCount++;
+      decoratorCount++;
+      const expected = `[${decorators.map(decorator => {
+        const expression = decorator.expression;
+        return ts.isCallExpression(expression)
+          ? `{type:${expression.expression.getText(authored)}${expression.arguments.length
+            ? `,args:[${expression.arguments.map(argument => argument.getText(authored)).join(',')}]` : ''}}`
+          : `{type:${expression.getText(authored)}}`;
+      }).join(',')}]`;
+      assert.ok(installedDecorators.has(node.name.text), `${sourceFile}: missing authored decorator metadata`);
+      assert.equal(await canonicalDecorator(installedDecorators.get(node.name.text)),
+        await canonicalDecorator(expected), `${sourceFile}: authored decorator requests`);
+    }
+    assert.equal(installedDecorators.size, authoredDecoratorCount, `${sourceFile}: extra decorator metadata`);
     const inspectNamespaceUse = node => {
       if (ts.isIdentifier(node) && namespaceNames.has(node.text)) {
         let owner = node;
@@ -184,6 +214,7 @@ test('captured runtime class bodies match current repository compilation without
   assert.equal(namespaceExtraCount, 171, 'Generated namespace scope changed.');
   assert.equal(metadataUseCount, 644, 'Generated namespace metadata use scope changed.');
   assert.equal(exportCount, 130, 'Mapped export scope changed; reconcile coverage.');
+  assert.equal(decoratorCount, 60, 'Authored decorator scope changed; reconcile coverage.');
 });
 
 test('public input lifecycle isolates caret material retention without Material plugins', async t => {
