@@ -26,7 +26,16 @@ not live-process status):
    reports validator errors; that process status is not an acceptance result.
 2. Reconcile changed consumed source fingerprints in one coherent canonical
    batch, using the complete named current-ancestry baseline and independent
-   cold validation. Historical applicability proofs are not current rendering
+   cold validation. Full baseline export is now session 25586 / Node 26564,
+   started with `ASTYLAR_AUDIT_COLD=1`, `ASTYLAR_AUDIT_PROGRESS=1` and
+   `node scripts/export-material-input-audit-current-ancestry.mjs`.
+   The named launcher preflight confirms all five required paths. Output is
+   retained at `artifacts/material-parity/canonical-reconciliation-20261005.log`.
+   The existing exporter checks complete validation and session dependencies
+   before publishing; no partial flag or error filtering is used. The handle
+   and owned child are confirmed live. Do not mutate consumed sources, start
+   another memory-heavy job or describe startup as acceptance. Historical
+   applicability proofs are not current rendering
    acceptance. The original grid integration still fails; its pending spec
    changes are not committed or described as passing.
 3. Complete remaining enforced output coverage. Material's full current run
