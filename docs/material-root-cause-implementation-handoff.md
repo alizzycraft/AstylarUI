@@ -2,6 +2,21 @@
 
 ## Current resumption ledger — October 5
 
+- Current full-output provenance question narrowed by read-only comparison:
+  the checkpoint manifest's complete 10-file harness graph matches current
+  `fingerprintModuleGraph`; its installed dependency-lock digest matches; all
+  1,887 browser files match the current showcase browser directory exactly,
+  with zero changed, added or missing members (terminal exit 0). Recorded Chrome
+  154.0.8037.58 / Node v22.22.3 launch preserves native scrollbars. Thus the
+  2,306 passes / five failures remain applicable to this unchanged stored build
+  and capture harness, not automatically to current source. The manifest binds
+  compiled browser bytes, not their complete source-to-build derivation. Next
+  reconcile build/source receipts before requesting any affected recapture.
+  The retained `tooltip-configured-pixel-replay-20261005.log` also reproduces
+  all 18 configured hover/held metrics exactly from 36 stored PNGs, preserving
+  per-file SHA-256 receipts. This closes stored metric reproduction, not
+  equivalent-input acceptance or complete case inspection.
+
 - Tooltip desktop/comparison hover/held measurement gap resolved without a
   capture: full-report SHA and exact configured IDs authenticate all 18 rows.
   Existing output checks pass18/18 at local0.70 (minimum0.814284), but this does

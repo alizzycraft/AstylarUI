@@ -106,6 +106,16 @@ evidence, including source applicability and explicit remaining uncertainty.
 
 ### Applicable-obligation reconciliation — October 5
 
+Retained full-run applicability is now bounded more precisely: all 10 harness
+module fingerprints, the installed dependency-lock digest, and all 1,887 browser
+file fingerprints match current disk contents, with no added/missing/changed
+browser members. This authenticates the unchanged captured build/harness, not
+its derivation from current source. Current-source rendering acceptance still
+requires source-to-build reconciliation. The existing tooltip pixel replay log
+recomputes all 18 configured hover/held metrics exactly from 36 stored PNGs and
+records their hashes; stored-pixel reproduction is no longer a missing check.
+Neither result upgrades full case inspection or equal-input paint acceptance.
+
 Configured tooltip hover/held measurements are not missing: streaming the
 existing `current-full-20261005/latest-report.json` authenticates SHA-256
 `ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62`
