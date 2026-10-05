@@ -2,6 +2,28 @@
 
 ## Current resumption ledger — October 5
 
+- Dark/mobile tooltip phase obligation reconciled against the existing owning
+  test and retained `tooltip-texture-phase-4da8cba-final.log` (SHA-256
+  `9822729df4598330d142bad3dff8063ff27ddbecfcf861679df482ef290cd5ac`).
+  Frozen ordinary 390×844 DPR2 hovered state has correct popup/text-plane origins
+  but one-device-pixel ink phase; unregistered SSIM 0.735369 fails, diagnostic
+  registration 0.999993 passes. No rerun or universal blur/position conclusion.
+  This separates the dark profile from the four other retained crops; other
+  profiles and intermediate paint states remain. The current equal-input public
+  text proof separately establishes current-method applicability, not current
+  Material acceptance. Both initial push attempts returned HTTP 408, and remote
+  remains `c24c2727`; try scoped HTTP/1.1 buffered transport for the large package.
+
+- Publication `c350653d` has a refreshed, authenticated compact index: import
+  and verify both exit 0, retaining 8,483 groups / 145 findings / 39,904 control
+  rows / 389,202 occurrences, zero unattributed groups and 72,712,604 compact
+  bytes. This is not complete inspection or current rendering acceptance.
+  Initial push failed HTTP 408; read-only remote verification still showed
+  `c24c2727`. A retry is running; do not claim pushed until remote confirmation.
+  Next reconcile remaining overlay/text-paint profile and state obligations
+  using the authenticated index and existing proofs, without recapture of
+  settled populations.
+
 - Recent proof-batch publication is now independently verified. Export session
   10813 and independent cold check session 29372 both completed with exit 0.
   Logs: `artifacts/material-parity/canonical-proof-batch-20261005.log` and

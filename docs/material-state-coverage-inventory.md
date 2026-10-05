@@ -7,9 +7,11 @@ with exit 0. The current canonical compressed digest is `db0ba9f…`, supersedin
 the `cc1c6b3f…` publication below. Both logs are named in the current resumption
 ledger. This publication integrates the standalone proof registration and owning
 test fingerprints without changing the 2,311 cases or 145 source findings.
-Compact-index refresh remains pending; the census below is explicitly the
-previous authenticated index's evidence until that refresh is verified. No
-complete-case closure or current rendering acceptance is inferred.
+Compact-index import and verification both pass for this publication: 8,483
+groups, 145 findings, 39,904 control rows, 389,202 occurrences and zero
+unattributed scalar groups; compact shards total 72,712,604 bytes. The census
+below records its original authenticated join, not newly certified case closure.
+No complete-case closure or current rendering acceptance is inferred.
 
 The canonical snapshot published in `8dc0bd2a` contains 145 source findings,
 8,483 scalar groups and 389,202 scalar occurrences. Complete export and independent
@@ -103,6 +105,19 @@ evidence, including source applicability and explicit remaining uncertainty.
 ## Retained evidence chronology
 
 ### Applicable-obligation reconciliation — October 5
+
+The separate frozen dark/mobile hovered-tooltip proof is now mapped explicitly:
+390×844 DPR2, Chrome154, ordinary mode (not benchmark hover suppression).
+Its original log SHA-256 is
+`9822729df4598330d142bad3dff8063ff27ddbecfcf861679df482ef290cd5ac`.
+The existing owning test and retained observations establish equal crop origins,
+8px trigger gap, centered 24px-high panels and the correctly inset projected
+text plane. Candidate opaque ink is one device pixel left; unregistered SSIM
+0.735369 fails, diagnostic phase registration reaches 0.999993 at offset (1,0).
+This accounts for the previously separate dark/mobile phase obligation without
+recapture. It is historical diagnostic scope, not current output acceptance,
+equal tooltip authoring, all-state sharpness or permission to shift the popup.
+Other desktop/tablet profiles and held/focus/touch/scroll paint remain open.
 
 Tooltip raster scope is now explicit in the existing owning replay: hovered
 light desktop 1440×1000 DPR1 and light/contrast/custom mobile 390×844 DPR2.
