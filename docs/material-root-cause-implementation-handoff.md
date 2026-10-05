@@ -45,9 +45,9 @@
   handle. If successful, use the production server for the unfiltered general
   gate, with no diagnostic fixture filter. Grid session 84262 remains live.
 
-- Grid localization is now running as session 84262 (parent Node 22824,
-  child 23828), with the pending integration spec still uncommitted. Its
-  previously demonstrated failure-only evidence gap is corrected in place:
+- Grid localization session 84262 is terminal: 0/1, exit 1 in 668,740 ms
+  (body 665,076 ms). The pending integration spec remains uncommitted. Its
+  failure-only evidence gap is now closed in actual execution:
   `unrelated-row-differences.json` records full previous/current row pairs,
   indices, changed fields and ordered population digests before the original
   conservation assertion fails. This uses existing scratch retention, writes
@@ -55,12 +55,22 @@
   A read-only execution of the actual source block passes three synthetic
   cases (equal rows, metadata drift, reordered rows), checking complete retained
   rows and continued assertion failure. Syntax and scoped diff checks pass.
-  No semantic integration result is claimed yet. Await this exact handle; do
-  not edit its consumed graph or restart on an observation timeout. When it
-  finishes, inspect the preserved row deltas before choosing a correction.
-  Material session 21768 remains live, at the final comparison/mobile
-  interactions. Free RAM is about 2.0 GiB; defer the full fresh general build
-  until resources are available. No new full export is justified by this ledger.
+  Actual failure evidence is retained at
+  `artifacts/material-parity/owner-grid-integration-vjGiTG/unrelated-row-differences.json`,
+  28,673,263 bytes, SHA-256
+  `8c368166d0c8c752957112356516429cd912b8cc01aaeda33affe0c3b427321e`.
+  It localizes 1,241 changed rows among 6,091 unrelated rows. Every historical
+  attribution is unresolved; complete raw fields are independently deeply equal.
+  All differences are within the six classification metadata fields. This is
+  later-review lineage drift, not scalar drift, but is not accepted merely from
+  attribution names. A read-only single-current-builder replay is running as
+  session 70790 to authenticate exact current delta rows and apply the entire
+  existing `validateMaterialInputAudit(..., { requireComplete: false })` rather
+  than the old integration's three-category error filter. Await this handle;
+  do not repeat the eleven-minute triple build. The original complete-row
+  assertion still fails and must remain. Material session 21768 is terminal as
+  recorded above; root build 65207 is live. No canonical export is justified
+  before the outstanding lineage and fingerprint reconciliation.
 
 - Overlay-surface gate 910 is now integrated through the existing source binding.
   `verifyOverlaySurfaceReviewSnapshot` authenticates every actual live source
