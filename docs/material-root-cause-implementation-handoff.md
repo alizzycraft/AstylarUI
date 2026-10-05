@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 owner-initial integration reuse experiment is terminal: session
+  82675 passes the complete selected original integration body and all seven
+  mutation controls (1/1, exit 0, 3,024,726 ms). Its existing evidence-session
+  metrics report zero collectors, memory/disk hits, tracked files and bytes;
+  the measured session duration is 3,021,077 ms. The wrapper therefore does not
+  reach the supported cached collectors on this selected population and is
+  removed rather than committed as an optimization. All original assertions
+  remain unchanged. The earlier 2,334,294-ms result is retained; these runs are
+  not controlled performance comparisons because browser capture is concurrent.
+  Do not repeat this unchanged integration solely to measure speed. Next trace
+  the actually invoked uncached builder/validator paths before selecting any
+  further reuse boundary. No renderer, fixture, classification or canonical
+  package changes; complete Material session 21768 remains live.
+
 - October 5 grid gate 1120 is narrowed without rerunning its expensive builders:
   the existing normalization binder authenticates all seven normalization
   functions at its exact predecessor `364f46a3` (historical digest `8929720c…`)
