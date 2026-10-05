@@ -2,6 +2,23 @@
 
 ## Current resumption ledger — October 5
 
+- Grid localization is now running as session 84262 (parent Node 22824,
+  child 23828), with the pending integration spec still uncommitted. Its
+  previously demonstrated failure-only evidence gap is corrected in place:
+  `unrelated-row-differences.json` records full previous/current row pairs,
+  indices, changed fields and ordered population digests before the original
+  conservation assertion fails. This uses existing scratch retention, writes
+  nothing for equal rows, and does not exempt any category or change acceptance.
+  A read-only execution of the actual source block passes three synthetic
+  cases (equal rows, metadata drift, reordered rows), checking complete retained
+  rows and continued assertion failure. Syntax and scoped diff checks pass.
+  No semantic integration result is claimed yet. Await this exact handle; do
+  not edit its consumed graph or restart on an observation timeout. When it
+  finishes, inspect the preserved row deltas before choosing a correction.
+  Material session 21768 remains live, at the final comparison/mobile
+  interactions. Free RAM is about 2.0 GiB; defer the full fresh general build
+  until resources are available. No new full export is justified by this ledger.
+
 - Overlay-surface gate 910 is now integrated through the existing source binding.
   `verifyOverlaySurfaceReviewSnapshot` authenticates every actual live source
   receipt, restores only the two previously proved source transitions, and
