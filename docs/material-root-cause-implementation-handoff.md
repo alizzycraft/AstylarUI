@@ -115,17 +115,24 @@ not live-process status):
    other 1,133 rows. Reuse the existing subset-aware source-batch validator and
    preserve complete raw rows while reconciling metadata stage-by-stage.
 
-   Read-only stage reconciliation now proves exact replay for 259 of the 1,241
+   Read-only stage reconciliation now proves exact replay for 549 of the 1,241
    changed rows, against the retained previous rows and all 110 captured cases:
    typography observation 45/45 complete JSON matches; box-sizing 47/47;
    grid/height 81/81; custom-owner boundary 86/86. Original tree inventory has
    zero errors; the existing validators for the latter three stages report
    zero errors. The last batch takes 3.162 seconds without a full builder.
+   Next batch: prepared input 118/118, followup 94/94, cursor 16/16 and pointer
+   19/19 complete JSON matches, all existing validators empty, 43.968 seconds.
+   Modal batch: bottom-sheet action layout 10/10, panel flow 4/4, constraints
+   8/8, dialog constraints 6/6, action box 6/6 and text flow 9/9; all exact
+   complete JSON matches and existing validators empty, 1.019 seconds. No
+   selected bottom-sheet panel-paint row exists; that empty invocation is not
+   counted as coverage. These populations are disjoint by final attribution.
    All 108 source-batch rows also match the pinned plan's actual formatter in
    all five metadata fields, but that formatter check is not source replay.
    No original test assertion, producer, normalization or source receipt is
    changed. These scoped replays do not close whole-population conservation;
-   982 rows remain outside this newly replayed population (including the 108
+   692 rows remain outside this newly replayed population (including the 108
    source-batch rows needing their independent source-bound transition).
 
    Canonical push with command-local post buffering succeeds; remote then
