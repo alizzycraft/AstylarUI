@@ -111,6 +111,7 @@ test('captured runtime class bodies match current repository compilation without
   let exportCount = 0;
   let decoratorCount = 0;
   let dependencyCount = 0;
+  let componentCount = 0;
   for (const module of modules) {
     const sourceFile = path.join('src', module.slice('node_modules/astylarui/dist/lib/'.length)
       .replace(/\.js$/, '.ts'));
@@ -182,6 +183,51 @@ test('captured runtime class bodies match current repository compilation without
       const installedClass = installedAst.statements.find(statement => ts.isClassDeclaration(statement)
         && statement.name?.text === node.name.text);
       const factory = installedClass.members.find(member => member.name?.getText(installedAst) === 'ɵfac');
+      const component = installedClass.members.find(member => member.name?.getText(installedAst) === 'ɵcmp');
+      if (component) {
+        componentCount++;
+        const literal = expression => {
+          if (ts.isStringLiteral(expression) || ts.isNoSubstitutionTemplateLiteral(expression)) return expression.text;
+          if (expression.kind === ts.SyntaxKind.TrueKeyword) return true;
+          if (expression.kind === ts.SyntaxKind.FalseKeyword) return false;
+          if (expression.kind === ts.SyntaxKind.NullKeyword) return null;
+          if (ts.isArrayLiteralExpression(expression)) return expression.elements.map(literal);
+          if (ts.isObjectLiteralExpression(expression)) return Object.fromEntries(expression.properties
+            .map(property => [property.name.text, literal(property.initializer)]));
+          assert.fail(`${sourceFile}: nonliteral component metadata requires coverage`);
+        };
+        const componentProperties = new Map(component.initializer.arguments[0].properties
+          .map(property => [property.name.getText(installedAst), property.initializer]));
+        const expectedInputs = {};
+        const expectedOutputs = {};
+        const expectedQueries = [];
+        for (const member of node.members) if (ts.isPropertyDeclaration(member)
+          && member.initializer && ts.isCallExpression(member.initializer)) {
+          const call = member.initializer;
+          const name = member.name.getText(authored);
+          const callee = call.expression.getText(authored);
+          if (callee === 'input' || callee === 'input.required') expectedInputs[name] = {
+            classPropertyName: name, publicName: name, isSignal: true,
+            isRequired: callee === 'input.required', transformFunction: null,
+          };
+          else if (callee === 'output') expectedOutputs[name] = name;
+          else if (callee === 'viewChild.required') expectedQueries.push({
+            propertyName: name, first: true, predicate: [literal(call.arguments[0])],
+            descendants: true, isSignal: true,
+          });
+        }
+        assert.deepEqual(literal(componentProperties.get('inputs')), expectedInputs, `${sourceFile}: signal inputs`);
+        assert.deepEqual(literal(componentProperties.get('outputs')), expectedOutputs, `${sourceFile}: signal outputs`);
+        assert.deepEqual(literal(componentProperties.get('viewQueries')), expectedQueries, `${sourceFile}: signal queries`);
+        const decorator = decorators.find(value => ts.isCallExpression(value.expression)
+          && value.expression.expression.getText(authored) === 'Component');
+        const request = literal(decorator.expression.arguments[0]);
+        assert.equal(literal(componentProperties.get('selector')), request.selector);
+        assert.equal(literal(componentProperties.get('isStandalone')), request.standalone);
+        assert.equal(literal(componentProperties.get('template')), request.template);
+        assert.deepEqual(literal(componentProperties.get('styles')), request.styles);
+        assert.equal(literal(componentProperties.get('isInline')), true);
+      }
       const factoryProperties = new Map(factory.initializer.arguments[0].properties
         .map(property => [property.name.getText(installedAst), property.initializer]));
       const dependencies = factoryProperties.get('deps');
@@ -258,6 +304,7 @@ test('captured runtime class bodies match current repository compilation without
   assert.equal(exportCount, 130, 'Mapped export scope changed; reconcile coverage.');
   assert.equal(decoratorCount, 60, 'Authored decorator scope changed; reconcile coverage.');
   assert.equal(dependencyCount, 113, 'Constructor dependency scope changed; reconcile coverage.');
+  assert.equal(componentCount, 1, 'Generated component scope changed; reconcile coverage.');
 });
 
 test('public input lifecycle isolates caret material retention without Material plugins', async t => {

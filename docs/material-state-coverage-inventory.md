@@ -106,6 +106,17 @@ evidence, including source applicability and explicit remaining uncertainty.
 
 ### Applicable-obligation reconciliation — October 5
 
+Current-source applicability for the captured build's mapped runtime now has
+one bounded existing-suite check: 88 modules, 80 class bodies/inheritance,
+98 functions, 53 variables, 373 required runtime imports, 281 accounted compiler/
+authored extras, four module effects, 130 exports, 60 decorator requests,
+113 constructor dependencies and the surface's signal/template/style metadata.
+It passes; actual showcase-linker replay also matches all 88 captured modules.
+This excludes a stale mapped implementation as the explanation for those
+retained results, not every external dependency/asset or compiler behavior.
+No configured case receives full-obligation closure solely from this binding.
+The new owning-suite fingerprint awaits coherent canonical integration.
+
 Retained full-run applicability is now bounded more precisely: all 10 harness
 module fingerprints, the installed dependency-lock digest, and all 1,887 browser
 file fingerprints match current disk contents, with no added/missing/changed

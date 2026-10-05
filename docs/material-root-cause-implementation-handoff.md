@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 5
 
+- Mapped runtime applicability batch: the one generated surface component's
+  two signal inputs, two outputs, required canvas query, selector, standalone
+  flag, inline template and styles now match current authored source through
+  literal AST comparison (no production evaluation). The same existing-suite
+  check passes 1/1, terminal exit 0 (5,193.571 ms). Together with the 88/88
+  actual-linker replay, this removes the specific source/body/import/export/
+  decorator/DI/signal mismatch hypotheses for the mapped runtime. It is not a
+  fresh full-build derivation, verification of generated instruction correctness,
+  complete external asset/dependency provenance or rendering acceptance.
+  Return to per-case input/paint/state/ownership closure; retain these explicit
+  applicability boundaries rather than require repeated unchanged recapture.
+  Owning-suite fingerprint reconciliation is pending for the next proof-batch
+  integration; complete browser/harness gates and publication remain pending.
+
 - Constructor factory requests reconcile for all 60 decorated classes / 113
   parameters through the existing source-binding assertion. Dependency token
   namespace aliases are resolved to authored module/import identities, counts
