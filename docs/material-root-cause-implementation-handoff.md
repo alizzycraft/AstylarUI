@@ -2,6 +2,19 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 owner-caret delta scope is repaired: pending means not reviewed by
+  the owner-caret classifier, not necessarily globally unresolved. The pure
+  helper now rejects owner-caret promotion and requires complete prior/current
+  row equality; separate component classifications remain the outer integration's
+  responsibility. Its existing three tests plus a separate-review conservation
+  regression pass 4/4 (1,230 ms), retaining all 18 original negative mutations
+  and adding five effective pending metadata/membership mutations. This does
+  not authenticate a separate review merely from its attribution string.
+  The historical builder imports relocated current dependencies, so its output
+  is not a wholly historical transitive snapshot. Full grid integration must
+  still complete its independent reviewed-input reconstruction and unrelated-row
+  conservation before this test can be accepted.
+
 - October 5 sorter receipt provenance is located: scanning all 37 file revisions
   finds exact `7f1af071…` bytes at `a6217c5173f956ab57dba74013e14dd89b61245f`
   (153,018 bytes, raw Git and LF identical). The complete diff to the subsequent

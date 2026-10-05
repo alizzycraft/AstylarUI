@@ -44,7 +44,11 @@ export function assertCaretClassificationDelta(previous, current, expected) {
       r.property === pending.property && r.reference === pending.reference && r.astylar === undefined);
     const a = matches(previous), b = matches(current);
     assert.equal(a.length, 1); assert.equal(b.length, 1);
-    assert.equal(b[0].attribution, 'unresolved'); assert.deepEqual(b[0], a[0], 'pending caret row changed');
+    // Pending at this owner-review boundary can already carry a separate
+    // component review. Preserve that whole row; do not promote it here.
+    // The outer integration still authenticates unrelated classifications.
+    assert.ok(!Object.values(ownerCaretAttributions).includes(b[0].attribution));
+    assert.deepEqual(b[0], a[0], 'pending caret row changed');
     for (const k of ['occurrences', 'cases', 'states']) assert.deepEqual(b[0][k], pending[k]);
   }
   return signatures;

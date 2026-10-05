@@ -48,6 +48,25 @@ test('later caret delta rejects lost membership changed raw fields and unreviewe
   assert.equal(mutations.length, 18);
 });
 
+test('owner-pending caret preserves an existing separate component review without accepting changes', () => {
+  const f = fixture();
+  const existing = { attribution: 'reviewed-overlay-caret-local-observation-boundary',
+    justification: 'separate observation boundary', reviewEvidence: { inputEquivalent: false } };
+  Object.assign(f.previous[1], structuredClone(existing));
+  Object.assign(f.current[1], structuredClone(existing));
+  assert.equal(check(f).size, 1);
+  for (const mutate of [
+    row => { row.justification = 'changed'; },
+    row => { row.reviewEvidence.inputEquivalent = true; },
+    row => { row.attribution = 'unresolved'; },
+    row => { row.cases = ['other']; },
+    row => { row.extra.retained = false; },
+  ]) {
+    const changed = structuredClone(f); mutate(changed.current[1]);
+    assert.throws(() => check(changed));
+  }
+});
+
 test('historical caret wrapper cannot accept rows without authenticated captured-source replay', () => {
   const f = fixture();
   for (const evidence of [undefined, { binding: { status: 'unbound' } }, { binding: { status: 'bound' }, plannedCoverage: f.expected }])
