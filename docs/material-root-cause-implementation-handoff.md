@@ -115,7 +115,7 @@ not live-process status):
    other 1,133 rows. Reuse the existing subset-aware source-batch validator and
    preserve complete raw rows while reconciling metadata stage-by-stage.
 
-   Read-only stage reconciliation now proves exact replay for 549 of the 1,241
+   Read-only stage reconciliation now proves exact JSON replay for 728 of the 1,241
    changed rows, against the retained previous rows and all 110 captured cases:
    typography observation 45/45 complete JSON matches; box-sizing 47/47;
    grid/height 81/81; custom-owner boundary 86/86. Original tree inventory has
@@ -128,11 +128,25 @@ not live-process status):
    complete JSON matches and existing validators empty, 1.019 seconds. No
    selected bottom-sheet panel-paint row exists; that empty invocation is not
    counted as coverage. These populations are disjoint by final attribution.
+   Further batch: remaining typography 29/29, dialog offsets 20/20,
+   bottom-sheet offsets 12/12 and visible-button overflow 24/24; existing
+   validators empty, 4.096 seconds. Width reviews add 32 rows (9 fixed, 17
+   omitted, 3 composition, 3 maximum); display/spacing adds 52 and stacking
+   adds 10. All 94 complete JSON rows match independent stage replay. All 14
+   stage validators pass on live replay and reject a forged reference value.
+   Persisted-row validators still fail for six display/spacing stages: expansion
+   formatting 4 rows, tooltip shrink 2, dialog action spacing 13, choice spacing
+   5, stepper spacing 5 and list spacing 3. Their 32 rows have identical complete
+   JSON replay, but deep equality rejects omitted nested undefined keys (for
+   example candidateData, candidateLabel, candidateText and identity). No
+   validator is changed or failure filtered: 696 of these 728 rows also pass
+   the existing validators directly in persisted representation. The remaining
+   32 prove serialized conservation only and retain this representation issue.
    All 108 source-batch rows also match the pinned plan's actual formatter in
    all five metadata fields, but that formatter check is not source replay.
    No original test assertion, producer, normalization or source receipt is
    changed. These scoped replays do not close whole-population conservation;
-   692 rows remain outside this newly replayed population (including the 108
+   513 rows remain outside this newly replayed population (including the 108
    source-batch rows needing their independent source-bound transition).
 
    Canonical push with command-local post buffering succeeds; remote then
