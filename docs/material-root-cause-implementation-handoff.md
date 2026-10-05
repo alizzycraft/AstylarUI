@@ -2,6 +2,16 @@
 
 ## Current resumption ledger — October 5
 
+- Post-repair collector verification is terminal exit0: existing alignment-font,
+  text-align, LTR-alignment and reviewed-input source-binding suites pass21/21,
+  204,932.822ms. Original ancestry/source proof replay, exact membership,
+  incomplete-subset handling and mutation controls remain enforced. Their
+  positive populations are72/49/4/134 groups respectively, totaling259, matching
+  the failed export's unattributed population count; complete canonical closure
+  is still unproven until reconciliation. No fixture/renderer or threshold
+  changes. Next run one coherent canonical export with fixed inputs, then an
+  independent cold check and compact import only on validated success.
+
 - Reconciliation failure localized and alignment conservation restored: current
   producer differs from4de3203e only by standalone and tooltip proof registrations.
   `restoreScalarReviewExtraction` already reversed the former but rejected the
