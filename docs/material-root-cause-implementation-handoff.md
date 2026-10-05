@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 source-transition preflight now passes: the complete current sorter
+  source equals its `64a58a6d^` predecessor after reversing only the explicit
+  browser-build-root environment override. The predecessor's raw Git SHA is
+  `6b7df92b…`, not the retained `7f1af071…` receipt, so that receipt's exact
+  provenance remains open; full-source equality alone does not authenticate it.
+  Separately, the preserved showcase component authenticates to `2c2979ad…`;
+  the existing `restoreAstylarDiagnostics` reverses only its two exact read-only
+  blocks and restores complete LF-normalized original contents. The read-only
+  Node preflight exits 0 (1,507 ms). Next bind the sorter receipt to its original
+  bytes before integrating the six retained observation checks; do not repin it.
+  Both existing processes were independently confirmed live and polled:
+  grid session 48691 and Material session 21768 (now slide-toggle interactions).
+  No consumed source, capture input, or renderer was changed.
+
 - October 5 retained component-proof block is revalidated with the seven exact
   original named assertions, not a full harness rerun: 1/7 passes in 5,229 ms.
   Gate 490's current source-fingerprint/visual-fields assertion passes. All six
