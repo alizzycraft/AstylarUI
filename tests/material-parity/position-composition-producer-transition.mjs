@@ -2,6 +2,25 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 
 const hash = text => createHash('sha256').update(text).digest('hex');
+// Reverse only the exact extraction of the unchanged production scalar stages.
+// Whole-module equality remains mandatory before any older transition runs.
+export function restoreScalarReviewExtraction(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  if (!current.includes('export function replayMaterialScalarReviewStages(')) return current;
+  const header = 'export function replayMaterialScalarReviewStages(overlaySurfaceDiscrepancies, cases,\n  elementInventory, retainedTypography, controlTypography, ownerInitialStyleBinding) {\n';
+  const end = '  return discrepancies;\n}\n\n';
+  assert.equal(current.split(header).length, 2);
+  const start = current.indexOf(header), finish = current.indexOf(end, start);
+  assert.ok(finish > start);
+  const body = current.slice(start + header.length, finish);
+  const call = '  const discrepancies = replayMaterialScalarReviewStages(overlaySurfaceDiscrepancies, cases,\n    elementInventory, retainedTypography, controlTypography, ownerInitialStyleBinding);\n';
+  let restored = current.slice(0, start) + current.slice(finish + end.length);
+  assert.equal(restored.split(call).length, 2);
+  restored = restored.replace(call, body);
+  assert.equal(hash(restored), 'd6b8c67483d7e49eb9f6d6bedc765f58de0326b606b04a9dbd72b414c7e2a708',
+    'scalar extraction changed production source beyond the exact function move');
+  return restored;
+}
 export const borderEvidenceBaseline = '2cec29224f374d8d2e379d4f8486f3a8a8e078aa';
 // These complete snapshots contain the reviewed heading, toggle-side and mapped
 // border additions. This is not permission to ignore arbitrary module changes.
@@ -34,8 +53,17 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
     completeSnapshotsAuthenticated: true, selectorSourceConserved: true };
 }
 export function restoreStackingProducer(source) {
-  const current = source.toString().replaceAll('\r\n', '\n');
+  const current = restoreScalarReviewExtraction(source);
   let restored = current;
+  // This later append-only registration is already reversed by the mapped
+  // border transition. Direct earlier-stage callers need the same exact
+  // reversal before their unchanged complete predecessor digest is checked.
+  const applicabilityRegistration = "    'scripts/diagnose-material-root-initial-receipt.mjs',\n" +
+    "    'tests/material-parity/case-index-assertion-migration.mjs',\n";
+  if (restored.includes(applicabilityRegistration)) {
+    assert.equal(restored.split(applicabilityRegistration).length, 2);
+    restored = restored.replace(applicabilityRegistration, '');
+  }
   // Seven registered standalone proofs add discovery only. Authenticate their
   // entire exact block before reversal; the complete historical hash below
   // still owns all prior logic, classifications and inventory entries.
@@ -799,7 +827,7 @@ export function restoreMappedButtonResetProducer(source) {
 }
 
 export function restoreMappedBorderInitialProducer(source) {
-  const current = source.toString().replaceAll('\r\n', '\n');
+  const current = restoreScalarReviewExtraction(source);
   const applicabilityRegistration = "    'scripts/diagnose-material-root-initial-receipt.mjs',\n" +
     "    'tests/material-parity/case-index-assertion-migration.mjs',\n";
   const hasApplicabilityRegistration = current.includes(applicabilityRegistration);
@@ -972,7 +1000,7 @@ export function restoreAppearancePrecedence(source) {
 }
 
 export function restorePositionProducer(source, { followupOnly = false } = {}) {
-  const current = source.toString().replaceAll('\r\n', '\n');
+  const current = restoreScalarReviewExtraction(source);
   let restored = (current.includes("if (property !== 'appearance' && classification.attribution === 'unresolved')") ||
     current.includes("!['appearance', 'color'].includes(property)") ||
     current.includes("!['appearance', 'color', 'fontWeight'].includes(property)"))

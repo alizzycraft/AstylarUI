@@ -221,6 +221,93 @@ export function parseMaterialInputAuditArguments(args, root = process.cwd()) {
   };
 }
 
+export function replayMaterialScalarReviewStages(overlaySurfaceDiscrepancies, cases,
+  elementInventory, retainedTypography, controlTypography, ownerInitialStyleBinding) {
+  const modalDiscrepancies = ownerInitialStyleBinding.status === 'bound'
+    ? applyBottomSheetScalarTypography(applyDialogScalarTypography(applyDialogActionBox(applyDialogPanelConstraints(applyBottomSheetPanelConstraints(applyBottomSheetPanelFlow(applyBottomSheetPanelPaint(applyBottomSheetActionLayout(applyBottomSheetContrastCorners(overlaySurfaceDiscrepancies, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, retainedTypography, controlTypography, canonicalStyle), cases, elementInventory, canonicalStyle)
+    : overlaySurfaceDiscrepancies;
+  const authoredTypographyDiscrepancies = ownerInitialStyleBinding.status === 'bound'
+    ? applyVisibleButtonOverflow(applyButtonAuthoredTypography(applyTabScalarTypography(modalDiscrepancies, cases, elementInventory, controlTypography, canonicalStyle), cases, elementInventory, controlTypography, canonicalStyle), cases, elementInventory, canonicalStyle)
+    : modalDiscrepancies;
+  const beforeNormalLineBoxScalars = ownerInitialStyleBinding.status === 'bound'
+    ? applyTabControlStage(applyDialogTextFlow(authoredTypographyDiscrepancies, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
+    : authoredTypographyDiscrepancies;
+  const wrappingDiscrepancies = ownerInitialStyleBinding.status === 'bound'
+    ? applyWrappingReviews(beforeNormalLineBoxScalars, cases, elementInventory, canonicalStyle)
+    : beforeNormalLineBoxScalars;
+  const beforeRetainedFontScalars = ownerInitialStyleBinding.status === 'bound'
+    ? applyNormalLineBoxScalar(wrappingDiscrepancies, cases, elementInventory, controlTypography)
+    : wrappingDiscrepancies;
+  const beforeSidenavBackgroundScalars = ownerInitialStyleBinding.status === 'bound'
+    ? applyRetainedFontScalar(beforeRetainedFontScalars, cases, elementInventory, retainedTypography, canonicalStyle)
+    : beforeRetainedFontScalars;
+  const beforeMappedBorderInitials = ownerInitialStyleBinding.status === 'bound'
+    ? applySidenavBackgroundScalar(beforeSidenavBackgroundScalars, cases, elementInventory, canonicalStyle)
+    : beforeSidenavBackgroundScalars;
+  const beforeMappedButtonResets = ownerInitialStyleBinding.status === 'bound'
+    ? applyMappedBorderInitial(beforeMappedBorderInitials, cases, elementInventory, canonicalStyle)
+    : beforeMappedBorderInitials;
+  const beforeCardBorderTokens = ownerInitialStyleBinding.status === 'bound'
+    ? applyMappedButtonBorderReset(beforeMappedButtonResets, cases, elementInventory, canonicalStyle)
+    : beforeMappedButtonResets;
+  const beforeModalPositionRequests = ownerInitialStyleBinding.status === 'bound'
+    ? applyCardBorderToken(beforeCardBorderTokens, cases, elementInventory, canonicalStyle)
+    : beforeCardBorderTokens;
+  const beforeControlPositionRequests = ownerInitialStyleBinding.status === 'bound'
+    ? applyBottomSheetPositionRequests(applyDialogPositionRequests(beforeModalPositionRequests, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
+    : beforeModalPositionRequests;
+  const beforeWidthOverflowRequests = ownerInitialStyleBinding.status === 'bound'
+    ? applyButtonOffsetObservations(applyChipPositionRequests(beforeControlPositionRequests, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
+    : beforeControlPositionRequests;
+  const beforeSnackbarOverflowRequests = ownerInitialStyleBinding.status === 'bound'
+    ? applyOverlayOverflowRequests(applyExplicitWidthCompositions(applyOmittedWidthObservations(applyControlWidthRequests(beforeWidthOverflowRequests, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
+    : beforeWidthOverflowRequests;
+  const beforeTypographyReviews = ownerInitialStyleBinding.status === 'bound'
+    ? applyMappedVisibleOverflow(applyControlClippingRequests(applySnackbarPositionRequests(beforeSnackbarOverflowRequests, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
+    : beforeSnackbarOverflowRequests;
+  const beforeBoxSizingReviews = ownerInitialStyleBinding.status === 'bound'
+    ? applyTypographyReviews(beforeTypographyReviews, cases, elementInventory, retainedTypography, canonicalStyle)
+    : beforeTypographyReviews;
+  const beforeGridHeightReviews = ownerInitialStyleBinding.status === 'bound'
+    ? applyBoxSizingReviews(beforeBoxSizingReviews, cases, elementInventory, canonicalStyle)
+    : beforeBoxSizingReviews;
+  const beforePaintReviews = ownerInitialStyleBinding.status === 'bound'
+    ? applyGridHeightReviews(beforeGridHeightReviews, cases, elementInventory, canonicalStyle)
+    : beforeGridHeightReviews;
+  const beforeComponentColorReviews = ownerInitialStyleBinding.status === 'bound'
+    ? applyPaintReviews(beforePaintReviews, cases, elementInventory, retainedTypography, canonicalStyle, collectPaintReviewSources())
+    : beforePaintReviews;
+  const beforeComponentInteractionReviews = ownerInitialStyleBinding.status === 'bound'
+    ? applyComponentColorReviews(beforeComponentColorReviews, cases, elementInventory, retainedTypography, canonicalStyle)
+    : beforeComponentColorReviews;
+  const beforeCaretPositionReviews = ownerInitialStyleBinding.status === 'bound'
+    ? applyComponentPointerReviews(applyExplicitComponentCursors(beforeComponentInteractionReviews, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
+    : beforeComponentInteractionReviews;
+  const beforeOwnerBoundaryReviews = ownerInitialStyleBinding.status === 'bound'
+    ? applyCaretPositionReviews(beforeCaretPositionReviews, cases, elementInventory, canonicalStyle)
+    : beforeCaretPositionReviews;
+  const beforePreparedInputReviews = ownerInitialStyleBinding.status === 'bound'
+    ? applyOwnerBoundaryReviews(beforeOwnerBoundaryReviews, cases, elementInventory, canonicalStyle)
+    : beforeOwnerBoundaryReviews;
+  const beforePreparedInputFollowups = ownerInitialStyleBinding.status === 'bound'
+    ? applyPreparedInputReviews(beforePreparedInputReviews, cases, elementInventory, canonicalStyle)
+    : beforePreparedInputReviews;
+  const beforeStackingReviews = ownerInitialStyleBinding.status === 'bound'
+    ? applyPreparedInputFollowups(beforePreparedInputFollowups, cases, elementInventory, canonicalStyle)
+    : beforePreparedInputFollowups;
+  const beforeFullRadiusReviews = ownerInitialStyleBinding.status === 'bound'
+    ? applyStackingReviews(beforeStackingReviews, cases, elementInventory, canonicalStyle)
+    : beforeStackingReviews;
+  const beforeOwnerOmissionReviews = ownerInitialStyleBinding.status === 'bound'
+    ? applyFullRadiusActionReview(beforeFullRadiusReviews, cases, elementInventory, canonicalStyle)
+    : beforeFullRadiusReviews;
+  const discrepancies = ownerInitialStyleBinding.status === 'bound'
+    ? [applyOwnerMaximumWidths, applyOmittedOwnerPaintRequests, applyBadgeMarginReviews, applySliderMarginReviews, applyListSpacingReviews, applyHeadingVisibleOverflow, applyTabPanelOverflowBoundary, applyTableVisibleOverflow, applyControlOverflowOwnerBoundaries, applyRangeVisibleOverflow, applyFocusShadowSubstitutions, applyCardShadowSyntax, applyMappedNonwidgetAppearance, applyRangeAppearanceInitial, applyAppearanceOwnerBoundaries, applySheetActionAppearance, applyTooltipWordBreakReview, applyStepperSpacingReviews, applyChipSpacingReviews, applyChoiceSpacingReviews, applyToolbarSpacingReviews, applyDialogActionSpacingReviews, applyDialogPanelGapReview, applyOverlayFlowReviews, applyPanelVisibilityOwnership, applyTooltipShrinkReviews, applyExpansionTreeFormattingReviews, applyRemainingBorderReviews, applyFinalOwnerStyleReviews]
+      .reduce((rows, apply) => apply(rows, cases, elementInventory, canonicalStyle), beforeOwnerOmissionReviews)
+    : beforeOwnerOmissionReviews;
+  return discrepancies;
+}
+
 export function buildMaterialInputAudit(parityReport, options = {}) {
   const root = options.root ?? process.cwd();
   const cases = [
@@ -323,88 +410,8 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const chipPaintDiscrepancies = applyChipPaintAuditRows(positionFollowupDiscrepancies, chipPaintAuditInputs);
   const overlaySurfaceAuditInputs = collectOverlaySurfaceAuditInputs(parityReport, { root, parityPath: options.parityPath });
   const overlaySurfaceDiscrepancies = applyOverlaySurfaceAuditRows(chipPaintDiscrepancies, overlaySurfaceAuditInputs);
-  const modalDiscrepancies = ownerInitialStyleBinding.status === 'bound'
-    ? applyBottomSheetScalarTypography(applyDialogScalarTypography(applyDialogActionBox(applyDialogPanelConstraints(applyBottomSheetPanelConstraints(applyBottomSheetPanelFlow(applyBottomSheetPanelPaint(applyBottomSheetActionLayout(applyBottomSheetContrastCorners(overlaySurfaceDiscrepancies, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, retainedTypography, controlTypography, canonicalStyle), cases, elementInventory, canonicalStyle)
-    : overlaySurfaceDiscrepancies;
-  const authoredTypographyDiscrepancies = ownerInitialStyleBinding.status === 'bound'
-    ? applyVisibleButtonOverflow(applyButtonAuthoredTypography(applyTabScalarTypography(modalDiscrepancies, cases, elementInventory, controlTypography, canonicalStyle), cases, elementInventory, controlTypography, canonicalStyle), cases, elementInventory, canonicalStyle)
-    : modalDiscrepancies;
-  const beforeNormalLineBoxScalars = ownerInitialStyleBinding.status === 'bound'
-    ? applyTabControlStage(applyDialogTextFlow(authoredTypographyDiscrepancies, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
-    : authoredTypographyDiscrepancies;
-  const wrappingDiscrepancies = ownerInitialStyleBinding.status === 'bound'
-    ? applyWrappingReviews(beforeNormalLineBoxScalars, cases, elementInventory, canonicalStyle)
-    : beforeNormalLineBoxScalars;
-  const beforeRetainedFontScalars = ownerInitialStyleBinding.status === 'bound'
-    ? applyNormalLineBoxScalar(wrappingDiscrepancies, cases, elementInventory, controlTypography)
-    : wrappingDiscrepancies;
-  const beforeSidenavBackgroundScalars = ownerInitialStyleBinding.status === 'bound'
-    ? applyRetainedFontScalar(beforeRetainedFontScalars, cases, elementInventory, retainedTypography, canonicalStyle)
-    : beforeRetainedFontScalars;
-  const beforeMappedBorderInitials = ownerInitialStyleBinding.status === 'bound'
-    ? applySidenavBackgroundScalar(beforeSidenavBackgroundScalars, cases, elementInventory, canonicalStyle)
-    : beforeSidenavBackgroundScalars;
-  const beforeMappedButtonResets = ownerInitialStyleBinding.status === 'bound'
-    ? applyMappedBorderInitial(beforeMappedBorderInitials, cases, elementInventory, canonicalStyle)
-    : beforeMappedBorderInitials;
-  const beforeCardBorderTokens = ownerInitialStyleBinding.status === 'bound'
-    ? applyMappedButtonBorderReset(beforeMappedButtonResets, cases, elementInventory, canonicalStyle)
-    : beforeMappedButtonResets;
-  const beforeModalPositionRequests = ownerInitialStyleBinding.status === 'bound'
-    ? applyCardBorderToken(beforeCardBorderTokens, cases, elementInventory, canonicalStyle)
-    : beforeCardBorderTokens;
-  const beforeControlPositionRequests = ownerInitialStyleBinding.status === 'bound'
-    ? applyBottomSheetPositionRequests(applyDialogPositionRequests(beforeModalPositionRequests, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
-    : beforeModalPositionRequests;
-  const beforeWidthOverflowRequests = ownerInitialStyleBinding.status === 'bound'
-    ? applyButtonOffsetObservations(applyChipPositionRequests(beforeControlPositionRequests, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
-    : beforeControlPositionRequests;
-  const beforeSnackbarOverflowRequests = ownerInitialStyleBinding.status === 'bound'
-    ? applyOverlayOverflowRequests(applyExplicitWidthCompositions(applyOmittedWidthObservations(applyControlWidthRequests(beforeWidthOverflowRequests, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
-    : beforeWidthOverflowRequests;
-  const beforeTypographyReviews = ownerInitialStyleBinding.status === 'bound'
-    ? applyMappedVisibleOverflow(applyControlClippingRequests(applySnackbarPositionRequests(beforeSnackbarOverflowRequests, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
-    : beforeSnackbarOverflowRequests;
-  const beforeBoxSizingReviews = ownerInitialStyleBinding.status === 'bound'
-    ? applyTypographyReviews(beforeTypographyReviews, cases, elementInventory, retainedTypography, canonicalStyle)
-    : beforeTypographyReviews;
-  const beforeGridHeightReviews = ownerInitialStyleBinding.status === 'bound'
-    ? applyBoxSizingReviews(beforeBoxSizingReviews, cases, elementInventory, canonicalStyle)
-    : beforeBoxSizingReviews;
-  const beforePaintReviews = ownerInitialStyleBinding.status === 'bound'
-    ? applyGridHeightReviews(beforeGridHeightReviews, cases, elementInventory, canonicalStyle)
-    : beforeGridHeightReviews;
-  const beforeComponentColorReviews = ownerInitialStyleBinding.status === 'bound'
-    ? applyPaintReviews(beforePaintReviews, cases, elementInventory, retainedTypography, canonicalStyle, collectPaintReviewSources())
-    : beforePaintReviews;
-  const beforeComponentInteractionReviews = ownerInitialStyleBinding.status === 'bound'
-    ? applyComponentColorReviews(beforeComponentColorReviews, cases, elementInventory, retainedTypography, canonicalStyle)
-    : beforeComponentColorReviews;
-  const beforeCaretPositionReviews = ownerInitialStyleBinding.status === 'bound'
-    ? applyComponentPointerReviews(applyExplicitComponentCursors(beforeComponentInteractionReviews, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
-    : beforeComponentInteractionReviews;
-  const beforeOwnerBoundaryReviews = ownerInitialStyleBinding.status === 'bound'
-    ? applyCaretPositionReviews(beforeCaretPositionReviews, cases, elementInventory, canonicalStyle)
-    : beforeCaretPositionReviews;
-  const beforePreparedInputReviews = ownerInitialStyleBinding.status === 'bound'
-    ? applyOwnerBoundaryReviews(beforeOwnerBoundaryReviews, cases, elementInventory, canonicalStyle)
-    : beforeOwnerBoundaryReviews;
-  const beforePreparedInputFollowups = ownerInitialStyleBinding.status === 'bound'
-    ? applyPreparedInputReviews(beforePreparedInputReviews, cases, elementInventory, canonicalStyle)
-    : beforePreparedInputReviews;
-  const beforeStackingReviews = ownerInitialStyleBinding.status === 'bound'
-    ? applyPreparedInputFollowups(beforePreparedInputFollowups, cases, elementInventory, canonicalStyle)
-    : beforePreparedInputFollowups;
-  const beforeFullRadiusReviews = ownerInitialStyleBinding.status === 'bound'
-    ? applyStackingReviews(beforeStackingReviews, cases, elementInventory, canonicalStyle)
-    : beforeStackingReviews;
-  const beforeOwnerOmissionReviews = ownerInitialStyleBinding.status === 'bound'
-    ? applyFullRadiusActionReview(beforeFullRadiusReviews, cases, elementInventory, canonicalStyle)
-    : beforeFullRadiusReviews;
-  const discrepancies = ownerInitialStyleBinding.status === 'bound'
-    ? [applyOwnerMaximumWidths, applyOmittedOwnerPaintRequests, applyBadgeMarginReviews, applySliderMarginReviews, applyListSpacingReviews, applyHeadingVisibleOverflow, applyTabPanelOverflowBoundary, applyTableVisibleOverflow, applyControlOverflowOwnerBoundaries, applyRangeVisibleOverflow, applyFocusShadowSubstitutions, applyCardShadowSyntax, applyMappedNonwidgetAppearance, applyRangeAppearanceInitial, applyAppearanceOwnerBoundaries, applySheetActionAppearance, applyTooltipWordBreakReview, applyStepperSpacingReviews, applyChipSpacingReviews, applyChoiceSpacingReviews, applyToolbarSpacingReviews, applyDialogActionSpacingReviews, applyDialogPanelGapReview, applyOverlayFlowReviews, applyPanelVisibilityOwnership, applyTooltipShrinkReviews, applyExpansionTreeFormattingReviews, applyRemainingBorderReviews, applyFinalOwnerStyleReviews]
-      .reduce((rows, apply) => apply(rows, cases, elementInventory, canonicalStyle), beforeOwnerOmissionReviews)
-    : beforeOwnerOmissionReviews;
+  const discrepancies = replayMaterialScalarReviewStages(overlaySurfaceDiscrepancies, cases,
+    elementInventory, retainedTypography, controlTypography, ownerInitialStyleBinding);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);

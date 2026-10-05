@@ -4,10 +4,41 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { reconstructBeforeReviewedInputMetadata, independentlyReconstructBeforeReviewedInputs,
-  reconstructBeforeReviewedSourceBatchMetadata } from './later-reviewed-input-conservation.mjs';
+  reconstructBeforeReviewedSourceBatchMetadata, independentlyReconstructLaterScalarReviews } from './later-reviewed-input-conservation.mjs';
+import { bindOwnerInitialStyleSource } from './owner-initial-style-attribution.mjs';
+import { restoreScalarReviewExtraction } from './position-composition-producer-transition.mjs';
 import { reviewedSourceBatchAttributions } from './reviewed-source-batch-audit-source-binding.mjs';
 
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
+
+test('scalar stage extraction preserves complete production source and rejects drift', () => {
+  const current = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8');
+  const previous = execFileSync('git', ['show', '81b4fffb:tests/material-parity/input-equivalence-audit.mjs'],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreScalarReviewExtraction(current), previous);
+  assert.throws(() => restoreScalarReviewExtraction(current.replace('  return discrepancies;', '  return [];')));
+  assert.throws(() => restoreScalarReviewExtraction(current + '\n// unrelated change\n'));
+});
+
+test('production scalar replay authenticates and restores all retained later reviews', () => {
+  const file = 'artifacts/material-parity/owner-grid-integration-vjGiTG/report.json';
+  const capture = readFileSync(file);
+  assert.equal(createHash('sha256').update(capture).digest('hex'), '35622f289c9a8576679702c77be4b9bceb4a58f8a402be88f3639ffc0af15b37');
+  const bytes = readFileSync('artifacts/material-parity/owner-grid-integration-vjGiTG/unrelated-row-differences.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), '8c368166d0c8c752957112356516429cd912b8cc01aaeda33affe0c3b427321e');
+  const pairs = JSON.parse(bytes).differences.filter(p => !reviewedSourceBatchAttributions.includes(p.current.attribution));
+  assert.equal(pairs.length, 1133);
+  const previous = { discrepancies: pairs.map(p => p.previous) };
+  const audit = { discrepancies: pairs.map(p => p.current),
+    ownerInitialStyleBinding: bindOwnerInitialStyleSource(JSON.parse(capture), { root: process.cwd(), parityPath: file }) };
+  const before = digest({ audit, previous });
+  const restored = independentlyReconstructLaterScalarReviews(audit, previous);
+  assert.deepEqual(restored.rows, previous.discrepancies);
+  assert.equal(restored.changes.length, 1133);
+  assert.equal(digest({ audit, previous }), before, 'source reconstruction mutated supplied evidence');
+  assert.throws(() => independentlyReconstructLaterScalarReviews({ ...audit,
+    ownerInitialStyleBinding: { ...audit.ownerInitialStyleBinding, status: 'unbound' } }, previous));
+});
 
 test('source-batch subset reconstruction preserves complete raw rows and unrelated mutations', () => {
   const file = 'artifacts/material-parity/owner-grid-integration-vjGiTG/unrelated-row-differences.json';

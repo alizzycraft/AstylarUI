@@ -9,6 +9,12 @@ import { validateTextAlignAuditInputs, validateTextAlignClassifications, textAli
 import { validateLtrAlignmentAuditInputs, validateLtrAlignmentClassifications, ltrAlignmentAttribution } from './ltr-alignment-audit-source-binding.mjs';
 import { validateReviewedSourceBatchAuditInputs, validateReviewedSourceBatchClassifications,
   reviewedSourceBatchAttributions } from './reviewed-source-batch-audit-source-binding.mjs';
+import { collectFullTreeInventory, collectControlTypographyEvidence, collectRetainedTypographyEvidence,
+  collectStyleDiscrepancies, replayMaterialScalarReviewStages } from './input-equivalence-audit.mjs';
+import { readOwnerInitialStyleSource, collectOwnerInitialStyleEvidence, validateOwnerInitialStyleSource,
+  ownerInitialStyleAttribution } from './owner-initial-style-attribution.mjs';
+import { collectOriginStageEvidence, validateOriginStageEvidence, originStageAttribution } from './origin-stage-inventory-evidence.mjs';
+import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 
 const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
 const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
@@ -57,6 +63,58 @@ function reconstructMetadata(previous, current, evidence, attributions, validate
   return { rows, changes };
 }
 
+// Replay the production sequence against independently read original trees,
+// not a category exemption or the row's own claimed previous metadata.
+export function independentlyReconstructLaterScalarReviews(audit, previous, current = audit.discrepancies, options = {}) {
+  assert.equal(audit.ownerInitialStyleBinding?.status, 'bound');
+  const original = readOwnerInitialStyleSource(audit.ownerInitialStyleBinding, options);
+  const cases = [...original.results.map(e => ({ ...e, kind: 'static' })),
+    ...original.interactions.map(e => ({ ...e, kind: 'interaction' }))];
+  const inventory = collectFullTreeInventory(cases, options), normalize = bindPreciseAuditNormalization();
+  assert.deepEqual(inventory.errors, []);
+  const owner = collectOwnerInitialStyleEvidence(original, inventory);
+  assert.deepEqual(validateOwnerInitialStyleSource(audit.ownerInitialStyleBinding, owner, options), []);
+  const origin = collectOriginStageEvidence(cases, inventory, normalize, { reviewedDisjointMotion: true });
+  // Only these two initial observation classifiers are being reconstructed.
+  // Other earlier input proofs remain owned by the original caller's gates.
+  const initial = collectStyleDiscrepancies(cases, origin, { comparisons: [], differences: [] },
+    ...Array.from({ length: 19 }, () => []), { observations: [] }, { observations: [] }, { observations: [] }, [], owner);
+  assert.deepEqual(validateOriginStageEvidence(origin, inventory, initial, normalize, { reviewedDisjointMotion: true }), []);
+  const sourceRows = new Map(initial.map(r => [signature(r), r]));
+  const before = new Map(previous.discrepancies.map(r => [signature(r), r]));
+  assert.equal(before.size, previous.discrepancies.length, 'ambiguous historical scalar membership');
+  const supplied = new Map(current.map(r => [signature(r), r]));
+  assert.equal(supplied.size, current.length, 'duplicate current scalar membership');
+  const candidates = current.filter(row => {
+    const prior = before.get(signature(row));
+    return prior?.attribution === 'unresolved' && JSON.stringify(row) !== JSON.stringify(prior);
+  });
+  const seeds = candidates.map(row => {
+    const prior = before.get(signature(row)), source = sourceRows.get(signature(row));
+    assert.ok(source, 'later review lacks original scalar observation');
+    assert.equal(JSON.stringify(raw(prior)), JSON.stringify(raw(source)), 'historical raw evidence differs from captured source');
+    if ([originStageAttribution, ownerInitialStyleAttribution].includes(row.attribution)) {
+      assert.equal(source.attribution, row.attribution, 'initial observation stage is not independently proved');
+      return source;
+    }
+    return prior;
+  });
+  const control = collectControlTypographyEvidence(cases, inventory);
+  const retained = collectRetainedTypographyEvidence(cases, inventory, control);
+  const replay = replayMaterialScalarReviewStages(seeds, cases, inventory, retained, control, audit.ownerInitialStyleBinding);
+  const restored = new Map(), changes = [];
+  for (const expected of replay) {
+    const key = signature(expected), prior = before.get(key), actual = supplied.get(key);
+    if (JSON.stringify(expected) === JSON.stringify(prior)) continue; // Unproved changes remain detectable.
+    assert.equal(JSON.stringify(actual), JSON.stringify(expected), 'later scalar metadata does not match production source replay');
+    assert.equal(JSON.stringify(raw(actual)), JSON.stringify(raw(prior)), 'later scalar review changed complete raw evidence');
+    restored.set(key, prior);
+    changes.push({ family: actual.family, element: actual.element, property: actual.property,
+      occurrences: actual.occurrences, attribution: actual.attribution });
+  }
+  return { rows: current.map(row => restored.get(signature(row)) ?? row), changes };
+}
+
 export function independentlyReconstructBeforeReviewedInputs(audit, previous, options = {}) {
   let current = audit.discrepancies, followupChanges;
   const alignmentChanges = [];
@@ -93,9 +151,12 @@ export function independentlyReconstructBeforeReviewedInputs(audit, previous, op
   assert.deepEqual(validateReviewedInputAuditInputs(audit.reviewedInputs,
     { ...options, requireComplete: false }), []);
   const result = reconstructBeforeReviewedInputMetadata(previous.discrepancies, current, audit.reviewedInputs);
+  const scalar = audit.ownerInitialStyleBinding?.status === 'bound'
+    ? independentlyReconstructLaterScalarReviews(audit, previous, result.rows, options) : undefined;
   // Existing callers keep their original 134-set counts and complete-row checks.
   // The separately authenticated follow-up population is reported independently.
-  return { ...result, ...(followupChanges === undefined ? {} : { followupChanges }),
+  return { ...result, ...(scalar === undefined ? {} : { rows: scalar.rows, scalarReviewChanges: scalar.changes }),
+    ...(followupChanges === undefined ? {} : { followupChanges }),
     ...(sourceBatchChanges === undefined ? {} : { sourceBatchChanges }),
     ...(alignmentChanges.length ? { alignmentChanges } : {}) };
 }

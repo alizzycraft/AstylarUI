@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { readFileSync } from 'node:fs';
+import { readFileSync as readOriginalSource } from 'node:fs';
+import { restoreScalarReviewExtraction } from './position-composition-producer-transition.mjs';
 import { execFileSync } from 'node:child_process';
 import { restorePositionProducer, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer, restoreRetainedFontScalarProducer, restoreSidenavBackgroundScalarProducer, restoreToggleSideColorProducer, restoreMappedBorderInitialProducer } from './position-composition-producer-transition.mjs';
 import { restoreMappedButtonResetProducer, restoreInteractiveWeightProducer, restoreModalPositionProducer } from './position-composition-producer-transition.mjs';
@@ -19,6 +20,19 @@ import { restoreCaretPositionProducer } from './position-composition-producer-tr
 import { restoreOwnerBoundaryProducer } from './position-composition-producer-transition.mjs';
 import { restorePreparedInputProducer } from './position-composition-producer-transition.mjs';
 import { restorePreparedInputFollowupProducer, restoreStackingProducer } from './position-composition-producer-transition.mjs';
+
+// These original transition assertions operate on the pre-extraction producer.
+// Authenticate the complete original source first; no test body or historical
+// receipt is changed, and extraction drift is rejected rather than ignored.
+const readFileSync = (file, encoding) => {
+  const original = readOriginalSource(file, encoding);
+  if (file !== 'tests/material-parity/input-equivalence-audit.mjs') return original;
+  const source = restoreScalarReviewExtraction(original);
+  const registration = "    'scripts/diagnose-material-root-initial-receipt.mjs',\n" +
+    "    'tests/material-parity/case-index-assertion-migration.mjs',\n";
+  assert.equal(source.split(registration).length, 2);
+  return source.replace(registration, '');
+};
 
 test('registered standalone proof batch conserves the entire preceding producer and rejects changed proofs', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';

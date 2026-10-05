@@ -5,6 +5,59 @@
 Current next-action summary (older entries below are chronological evidence,
 not live-process status):
 
+October 5 continuation: the shared production scalar sequence now independently
+reconstructs all 1,133 retained non-source-batch reviewed rows, with exact complete
+historical-row equality (fresh diagnostic and persistent test). The existing
+conservation suite runs 7 tests: 6 pass, including the new authenticated replay;
+the full reviewed-source entry test rejects `disabled-ink` source conservation
+after the production sequence extraction. This is an open source-transition
+integration gap, not a waived failure. Next: authenticate an exact whole-source
+reversal of that extraction at the existing source conservation boundary, then
+rerun the failed owning test and original grid integration assertion. No renderer,
+fixture or acceptance threshold changed. These edits remain uncommitted pending
+that verification; canonical fingerprint reconciliation follows the coherent batch.
+
+Follow-up: the existing producer transition now reverses the scalar function
+extraction only after proving whole-module SHA-256 equality with `81b4fffb`.
+The persistent focused test passes and rejects both changed scalar-body text
+and unrelated external source edits. Scoped diff checking passes. The previously
+failed reviewed-source authentication test completed successfully in session
+17529: 1/1 passes in 106.955 seconds. Together with the earlier six passing
+conservation checks and the new extraction test, the bounded source replay checks
+are green. Original grid integration remains pending. No source receipt was repinned.
+
+The original unmodified grid integration run (heap 1536 MiB, session 57619) is
+terminal, exit 1; failure evidence is retained in
+`artifacts/material-parity/owner-grid-integration-WBi70r`. It failed inside the
+new scalar replay, which attempted to re-review an already source-authenticated
+field-host row through a historical box-sizing omission rule. The integration
+boundary now supplies only remaining exact row signatures after the unchanged
+original grid/box, field-host, gap and caret proofs. The original complete final
+digest assertion and expected counts remain unchanged; its rerun is pending.
+The wider
+`position-composition-producer-transition.spec.mjs` suite is terminal: 8/30 pass,
+22 fail, exposing older inline-source assumptions and missing extraction reversal
+at the earliest stacking boundary. Keep their original historical comparisons
+and negative controls; use the exact authenticated extraction transition before
+those comparisons, not new receipts or exemptions. Do not change consumed sources
+mid-grid replay. A bounded source comparison also identified two later inventory
+registrations (122 bytes) at the first remaining divergence, not classifier
+drift. Their existing exact reversal now applies at the earliest stacking
+boundary. The original transition tests authenticate the complete pre-extraction
+source and reverse only those registrations before their original assertions;
+other collector sources are read unchanged. Pending priorities remain complete historical integration,
+canonical consumed-source fingerprint reconciliation, the missing default-range
+dependency receipt, and the resource-blocked full general browser gate. Current
+Material/TTS failing output evidence remains separate from input equivalence.
+
+Integrated focused verification: the full existing producer-transition suite
+passes 30/30 (session 78504), and the complete conservation suite passes 8/8
+(session 9929). Both use the original historical source receipts and negative
+controls; complete production-source equality and all 1,133 retained scalar
+restorations pass. Scoped diff checking passes. Commit this verified replay
+increment separately; the grid membership-boundary adjustment remains pending
+its owning integration rerun, not accepted by these focused results.
+
 Latest closure: independent cold canonical check passes at `b073faa6` before
 the instrumentation correction below. Fresh existing source-batch collection
 against the exact 110-case diagnostic (`35622f289c9a8576679702c77be4b9bceb4a58f8a402be88f3639ffc0af15b37`)
