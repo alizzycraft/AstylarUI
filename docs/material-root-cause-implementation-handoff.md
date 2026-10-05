@@ -2,6 +2,19 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 exact grid-subset root attribution is independently joined: reuse
+  of the authenticated transition collector at `364f46a3` selects exactly 36
+  static and 74 interaction cases. Fresh `prepareRootBackgroundClassifications`
+  replays all 2,311 original root observations; every exposed subset scalar
+  joins by family, element, property, both precise values and complete case
+  membership. All 36 exposed groups / 110 observations match their independent
+  application-plugin-authoring classification and false renderer-cause claim.
+  Seven additional unequal-color groups change values. The read-only asserted
+  Node check exits 0 without a new capture/report. This closes attribution of
+  the newly exposed subset, not unrelated-row classification continuity or
+  grid gate 1120. Integrate that exact source projection alongside the existing
+  population verifier; retain whole-row assertions for unaffected evidence.
+
 - October 5 existing color-transition collector now accepts explicit case
   membership and an authenticated historical revision. Its default full-capture
   receipt remains unchanged; selected occurrences retain their complete case
