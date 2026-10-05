@@ -106,6 +106,22 @@ evidence, including source applicability and explicit remaining uncertainty.
 
 ### Applicable-obligation reconciliation — October 5
 
+Tooltip composition/constraint classification membership is now reconciled:
+11 authenticated compact canonical groups each have `reviewedCases` exactly
+equal to the 18 configured hover/held IDs (198 occurrences, no missing/extra IDs).
+Properties: display, flexShrink, minWidth, maxWidth, overflowWrap, overflowX/Y,
+position, textAlign, whiteSpace and zIndex. Existing attributions are display
+request substitution, tooltip shrink/stacking composition substitution, tooltip
+sizing constraint omission, wrapping inputs, overlay overflow omission, position
+follow-up and tooltip text alignment omission; all are application/plugin
+authoring defects. Representative group IDs: minWidth `75a42f3e…`, maxWidth
+`fe2d6303…`, overflowX `b2957361…`, display `b0189d30…`, position `d4eb6aa1…`.
+This closes classification membership, not independent current used-value/core
+support or final paint. Candidate raw textAlign remains omitted in the scalar
+finding while retained text paint records left; do not conflate these stages.
+The remaining task is applicable-obligation closure and evidence scope, not
+reclassifying these already-reviewed input differences or changing fixtures.
+
 Current tooltip hover/held popup-input membership is now checked across all 18
 configured cases (four themes × desktop DPR1/2, plus light comparison pane).
 Streaming full-report SHA `ab42dbec…`, exact checkpoint key/result equality and

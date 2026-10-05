@@ -2,6 +2,14 @@
 
 ## Current resumption ledger — October 5
 
+- Tooltip composition/width/overflow mapping is settled for the exact current
+  cohort: authenticated compact query verifies 11 existing canonical authoring
+  groups × 18 exact hover/held IDs =198 occurrences. No added finding or
+  classification change is needed. See inventory for properties/IDs and stage
+  distinctions. Remaining questions are independent equal-input/core-support
+  applicability and complete paint/state/ownership obligations. Do not reopen
+  settled wrapping, alignment, sizing or flow-composition authoring diagnosis.
+
 - Tooltip paired-input question answered for the exact 18 configured hover/
   held cases: authenticated full-report/checkpoint equality and all 180 case
   files preserve paired popup text and output passes, but retain unequal
