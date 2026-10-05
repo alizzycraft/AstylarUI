@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 cursor historical replay now reaches and passes the substantive
+  original guards: an isolated read-only Node process redirects only the exact
+  showcase `node_modules/` prefix to preserved `node_modules.audit-prior-junction/`.
+  `validateCursorEvidence` and `assertHistoricalCursorReceipt` remain unchanged;
+  all captured dependency/script/bundle/screenshot hashes and package/source
+  method projections execute. Exit 0: 2,519 historical dependency reads,
+  36 cases, 180 boundaries, 72 screenshots and 148 differences; complete receipt
+  comparison passes. Writes are prohibited and no installation is switched.
+  This validates the old cursor evidence, not current runtime applicability or
+  public range/vertical proofs. Next reuse the same explicit isolated read
+  boundary for those original validators, retaining their separate guards.
+
 - October 5 prepared-composition gate 1262 now validates its actual historical
   endpoint: all three frozen pre/post receipts and the complete package manifest
   authenticate against original Git revision `681cf12a3ff8ef6ba8b3288249a1221e79801dcb`.
