@@ -56,6 +56,16 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+The range-default original installed package metadata is required provenance,
+not disposable scratch. Its exact bytes are retained at
+`artifacts/material-parity/retained-evidence/range-default-package-source/package.json`
+and preserved portably in `docs/evidence/material-range-default-package.json.b64`.
+Both decode/read to the original SHA-256
+`4e1038f17f7d51879a3e513db3ddf4b92a3521369645e7378affe6038f71441d`;
+do not normalize its mixed line endings or overwrite it with current metadata.
+The historical launcher uses the checked-in encoding, so replay does not depend
+on the continued availability of npm's cache or a dangling cache reference.
+
 - Keep one current complete output run, separately from the pinned input-audit
   baseline and unique supplemental/root-cause evidence that findings require.
 - Do not repoint an old finding at newer evidence without proving that its

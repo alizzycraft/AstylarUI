@@ -2,61 +2,64 @@
 
 ## Current resumption ledger — October 5
 
-Current next-action summary (older entries below are chronological evidence,
-not live-process status):
+- Verified replay increment: `4de3203e`, pushed to
+  `codex/material-audit-alignment-integration`. Existing producer-transition
+  suite passes 30/30; complete conservation suite passes 8/8. Exact whole-source
+  restoration and all 1,133 retained later scalar rows are proved. Earlier
+  source-batch replay authenticates 108 groups / 318 observations independently.
+- Live owning gate: session 63530, the grid integration rerun with Node heap
+  1536 MiB. Observe that handle before any restart or consumed-source edits.
+  The exact remaining-membership adjustment in the grid spec is not yet committed
+  or accepted. Original grid/box, field-host, gap and caret proofs, complete final
+  row digest, counts and negative controls remain in place.
+- Previous grid run 57619 is terminal, exit 1. Preserve
+  `artifacts/material-parity/owner-grid-integration-WBi70r`. The replay tried
+  to re-review an already separately authenticated field-host row through an
+  inapplicable historical box-sizing omission rule; the current boundary excludes
+  only exact memberships proved by those original checks, not named categories.
+- Wider transition failures are closed: exact whole-source reversal authenticates
+  the production scalar extraction against `81b4fffb`; two later inventory
+  registrations (122 bytes) also required their existing reversal at the earliest
+  stacking boundary. Historical receipts and original test assertions stay intact.
+- Canonical reconciliation is pending: bounded metadata has 541 source fingerprints,
+  with 14 changed (seven modules and seven owning specs). Compressed receipt is
+  still `42d11fb89f777b0955d4e59658832a469cd969102f08c328ea4d82d281772d41`.
+  The independent cold check at `b073faa6` predates these edits. After the grid
+  gate closes, use the existing complete current-ancestry launcher and independent
+  check; do not manually repin metadata or recapture unchanged browser inputs.
+- Closed dependency gap: the exact 6,349-byte range-default installed package
+  metadata was recovered from an authenticated project npm-cache tarball. Its
+  original SHA-256 is preserved in
+  `docs/evidence/material-range-default-package.json.b64`; the installation and
+  original receipt were not replaced. The existing historical public launcher
+  passes all six original suites, 29/29 tests in 55.798 seconds, including all
+  18 range source/runtime fingerprints and both fresh failing public runs.
+  Corrupted retained metadata is rejected before replay. Recovery used cache key
+  `pacote:tarball:file:astylarui.tgz`, authenticated tarball integrity
+  `sha512-zyQfmRAUm/LeC8iW2rfcNatlV0Te8eT6aH7v19bMGvgs0JOptmjS+pMNZJIb2WVmXu2M4Ti4TQPH7eGWu74lpA==`.
+  This supersedes the unavailable-receipt boundary in the older chronology;
+  historical replay is not current rendering acceptance or a renderer fix.
+- Other remaining gaps: the incomplete full general browser gate and canonical
+  reconciliation after grid integration. Current full Material and TTS failing output evidence
+  is retained separately; historical output passes do not establish current input
+  equivalence. No renderer fixes, fixture compensation or threshold changes are
+  authorized. The goal remains incomplete.
 
-October 5 continuation: the shared production scalar sequence now independently
-reconstructs all 1,133 retained non-source-batch reviewed rows, with exact complete
-historical-row equality (fresh diagnostic and persistent test). The existing
-conservation suite runs 7 tests: 6 pass, including the new authenticated replay;
-the full reviewed-source entry test rejects `disabled-ink` source conservation
-after the production sequence extraction. This is an open source-transition
-integration gap, not a waived failure. Next: authenticate an exact whole-source
-reversal of that extraction at the existing source conservation boundary, then
-rerun the failed owning test and original grid integration assertion. No renderer,
-fixture or acceptance threshold changed. These edits remain uncommitted pending
-that verification; canonical fingerprint reconciliation follows the coherent batch.
+Read-only general-gate diagnosis: `tests/parity/run-parity.mjs` retains one
+browser context per viewport and closes each successful capture page. At the
+readiness wait in `captureMode`, failure propagates without preserving the page's
+collected `pageErrors` or current `__ASTYLAR_PARITY_REPORT__` readiness state.
+The retained 98-fixture partial run therefore cannot distinguish a page/runtime
+failure from long-run resource/settlement pressure. After the live source snapshot
+is released, consider a bounded failure diagnostic at that existing boundary,
+keeping the same timeout, failure propagation and full acceptance matrix. This
+identifies a specific evidence gap; it does not confirm a renderer or resource
+leak, authorize one, or justify another unchanged heavyweight build attempt.
 
-Follow-up: the existing producer transition now reverses the scalar function
-extraction only after proving whole-module SHA-256 equality with `81b4fffb`.
-The persistent focused test passes and rejects both changed scalar-body text
-and unrelated external source edits. Scoped diff checking passes. The previously
-failed reviewed-source authentication test completed successfully in session
-17529: 1/1 passes in 106.955 seconds. Together with the earlier six passing
-conservation checks and the new extraction test, the bounded source replay checks
-are green. Original grid integration remains pending. No source receipt was repinned.
+## Retained evidence and chronology
 
-The original unmodified grid integration run (heap 1536 MiB, session 57619) is
-terminal, exit 1; failure evidence is retained in
-`artifacts/material-parity/owner-grid-integration-WBi70r`. It failed inside the
-new scalar replay, which attempted to re-review an already source-authenticated
-field-host row through a historical box-sizing omission rule. The integration
-boundary now supplies only remaining exact row signatures after the unchanged
-original grid/box, field-host, gap and caret proofs. The original complete final
-digest assertion and expected counts remain unchanged; its rerun is pending.
-The wider
-`position-composition-producer-transition.spec.mjs` suite is terminal: 8/30 pass,
-22 fail, exposing older inline-source assumptions and missing extraction reversal
-at the earliest stacking boundary. Keep their original historical comparisons
-and negative controls; use the exact authenticated extraction transition before
-those comparisons, not new receipts or exemptions. Do not change consumed sources
-mid-grid replay. A bounded source comparison also identified two later inventory
-registrations (122 bytes) at the first remaining divergence, not classifier
-drift. Their existing exact reversal now applies at the earliest stacking
-boundary. The original transition tests authenticate the complete pre-extraction
-source and reverse only those registrations before their original assertions;
-other collector sources are read unchanged. Pending priorities remain complete historical integration,
-canonical consumed-source fingerprint reconciliation, the missing default-range
-dependency receipt, and the resource-blocked full general browser gate. Current
-Material/TTS failing output evidence remains separate from input equivalence.
-
-Integrated focused verification: the full existing producer-transition suite
-passes 30/30 (session 78504), and the complete conservation suite passes 8/8
-(session 9929). Both use the original historical source receipts and negative
-controls; complete production-source equality and all 1,133 retained scalar
-restorations pass. Scoped diff checking passes. Commit this verified replay
-increment separately; the grid membership-boundary adjustment remains pending
-its owning integration rerun, not accepted by these focused results.
+Older entries below are evidence history, not current process status. The ledger
+above owns the next action and current acceptance status.
 
 Latest closure: independent cold canonical check passes at `b073faa6` before
 the instrumentation correction below. Fresh existing source-batch collection

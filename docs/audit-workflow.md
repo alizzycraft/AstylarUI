@@ -115,7 +115,7 @@ without the historical preload so their synthetic scratch can be created and
 cleaned through `withAuditScratch`. Neither original test body is modified.
 
 For the retained public cursor, range drag/paint/travel and vertical-alignment
-evidence, run `node scripts/check-historical-public-proofs.mjs`. It runs all five
+evidence, run `node scripts/check-historical-public-proofs.mjs`. It runs all six
 original suites and their nested check commands with writes prohibited. The
 explicit historical dependency read boundary leaves the current installation
 unchanged; original validators still authenticate every captured dependency.
@@ -124,6 +124,17 @@ after exact SHA-256 authentication and complete LF-normalized equality with
 current sources. Missing originals or semantic source drift fail replay. This
 proves historical evidence conservation, not current browser acceptance. Do not
 use its preload for current capture or canonical production commands.
+
+The sixth suite is the original range default-box proof, including all 18 source
+and installed-runtime fingerprints. Its exact original 6,349-byte package metadata
+was recovered from an integrity-authenticated project tarball in npm's cache.
+`docs/evidence/material-range-default-package.json.b64` preserves its mixed line
+endings byte-for-byte; decoding must match the original SHA-256
+`4e1038f17f7d51879a3e513db3ddf4b92a3521369645e7378affe6038f71441d`.
+The preload authenticates the range proof's eight raw-source encoding restorations
+against preserved originals and complete current LF-normalized source equality. Neither
+the installed package nor the original dependency receipt is replaced. This is
+historical replay only; the fresh range diagnostic remains honestly failing.
 
 Composition and followup position reviews share an evidence session: collect once,
 validate against immutable results, and rehash all actually read inputs at session
