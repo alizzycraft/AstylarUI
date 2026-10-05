@@ -2,6 +2,21 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 six retained component assertions now execute and pass 6/6 with
+  no skips (2,023 ms), using an isolated read-only Node preload. The preload
+  authenticates exact sorter `a6217c5` raw SHA `7f1af071…`, reverses exactly one
+  checkpoint-path override and one browser-root override, and requires complete
+  normalized equality. The component's exact original `2c2979ad…` is restored
+  only through the existing two-block diagnostic conservation helper. Reads of
+  those two explicit source paths alone receive authenticated originals; all
+  other reads and original receipt/observation assertions remain unchanged,
+  and synchronous writes throw. Progress, compact input, keyboard, applied-theme
+  popup, selection and tooltip assertions all clear their substantive checks.
+  This closes the historical applicability question, not current browser
+  acceptance or durable integration of the replay boundary. Next reuse these
+  exact guards in the retained-proof execution path with drift controls after
+  the live grid graph is settled; do not rewrite original receipt hashes.
+
 - October 5 owner-caret delta scope is repaired: pending means not reviewed by
   the owner-caret classifier, not necessarily globally unresolved. The pure
   helper now rejects owner-caret promotion and requires complete prior/current
