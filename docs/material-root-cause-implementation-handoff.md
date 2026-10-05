@@ -2,6 +2,33 @@
 
 ## Current resumption ledger — October 5
 
+- Current October calendar evidence corroborates the existing
+  `fixture-calendar-month-marker-table-grid-substitution` finding; this is not
+  a new renderer diagnosis. In `current-full-20261005/interactions/datepicker/
+  contrast/desktop-dpr1/open`, reference input-tree SHA-256
+  `af20570aa3de7e0b1a5ea23d31485630017b3420a2edd2f98943ddadb624a5ca`
+  records a month-label `td` with `colspan="4"` sharing the first date row with
+  three date cells. Candidate input-tree SHA-256
+  `a285f3ba27c0a9201d72aaf230a772e8e2ac8968c908aef0faceaf6eb9946c9a`
+  records the unconditional month marker resolved to `gridColumn: '1 / -1'`,
+  followed by four blank spans. Current authoring is at component lines 627
+  and 1060–1063. Installed Material's calendar-body template conditionally
+  creates a separate label row only when the first-row offset is below its
+  month-view `labelMinRequiredCells` value of 3. Thus October exposes the
+  already-classified structural substitution: the candidate requests an extra
+  row. The paired PNGs show the corresponding date-row displacement. This
+  establishes non-equivalent inputs before layout, not proof that grid support
+  or selection-ring rendering is correct, nor sole attribution of every failing
+  raster metric. Preserve the existing finding and implementation order; do not
+  patch the fixture to conceal missing table/grid support.
+- Validation session 70790 is no longer observable: its handle returns
+  `Unknown process id`, and PID 8516 is absent. Its terminal validation result
+  was not recovered, so the previously observed 274 matching / 967 unmatched
+  retained metadata rows remain unvalidated. Do not claim success or restart
+  the expensive build merely because output was lost. Next inspect retained
+  mismatch evidence and original reconstruction boundaries with a bounded
+  field-level comparison before deciding which validation scope is needed.
+
 - Root production build 65207 is terminal and cancelled, not accepted. The
   exact owned ng process 13524 and its esbuild child 1712 were revalidated by
   command line and parent ID, then stopped because the child held 4,480,466,944
