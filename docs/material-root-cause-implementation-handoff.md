@@ -195,6 +195,24 @@ not live-process status):
    The corrected inline check exits 0 in 5.205 seconds with Node heap bounded
    to 640 MiB. It performs no fresh source collectors and claims no bound
    collector status, so it does not close the 108-row independent replay gap.
+   The persisted/live discrepancy is now individually traced across all 44 rows
+   in ten actual review stages. Current source replay yields exactly the saved
+   JSON for each stage, live validators pass, and persisted validators fail.
+   Recursive comparison finds only 325 missing own properties whose live value
+   is `undefined`: expansion 13, tooltip shrink 12, dialog action spacing 208,
+   choice spacing 6, stepper spacing 15, list spacing 12, final owner style 3,
+   slider margin 22, control overflow ownership 22, tooltip word-break 12.
+   Examples include optional identity/content fields, composition, mediaMaxWidth,
+   rangeContext and familyContext. No meaningful scalar or ordering difference
+   remains after native JSON round-trip; the inline ten-stage proof exits 0 in
+   2.674 seconds. This establishes a shared validator representation-boundary
+   defect, not renderer equivalence. Existing streaming codec tests independently
+   pass 7/7 (`node --test tests/material-parity/input-audit-report-stream.spec.mjs`,
+   0.587 seconds), including native undefined omission and rejection of changed
+   values/order. Next correct the affected validators' persisted JSON boundary
+   with round-trip and mutation coverage in their existing tests, after the cold
+   session finishes. Do not alter original receipts, raw findings or the separate
+   grid whole-row conservation assertion. No consumed source is edited now.
 
    Canonical push with command-local post buffering succeeds; remote then
    advances through `8fb22120` to `783c2b6c`. Independent cold canonical check
