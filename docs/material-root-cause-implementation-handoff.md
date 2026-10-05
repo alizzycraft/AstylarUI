@@ -2,6 +2,19 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 old full-harness gate 1048 is revalidated against current code:
+  the exact overlay-font snapshot assertion passes without edits or adapters
+  (541 ms), and the entire original overlay-context suite passes 10/10 with
+  no skips (44,573 ms). Command:
+  `node --test tests/material-parity/original-overlay-context-survey.spec.mjs`.
+  Coverage includes all 91 states, 200 original owner proofs and 17,654 root
+  properties, plus source/mapping conservation, runtime/ancestry corruption,
+  boundary escapes and receipt-laundering rejection. Its current guards already
+  account for the authenticated transitions; the historical missing-exception
+  result must not be presented as a current failure. This does not close the
+  separate overlay-ancestor/recovery/font-payload integration failures or prove
+  current visual acceptance. Grid session 7353 remains live; no consumed edits.
+
 - October 5 retained component replay is now a durable command:
   `node scripts/check-historical-component-proofs.mjs` passes all six original
   assertions, no skips (2,076 ms). Its narrow preload uses the exact guards
