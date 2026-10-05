@@ -2,6 +2,19 @@
 
 ## Current resumption ledger — October 5
 
+- October 6 canonical tooltip/slider batch is terminal **exit1**, not pending:
+  `canonical-tooltip-slider-batch-20261006.log`. Validation rejects independent
+  original-source binding for alignmentFontInputs, textAlignInputs,
+  ltrAlignmentInputs and reviewed input attributions;259 resolved-style
+  differences remain unattributed. Evidence-session dependency verification
+  completed:1 collector,10 memory hits,1 disk hit,0 invalidations,1205 files,
+  89,154,859 bytes; elapsed3,240,850ms. The exporter did not publish this invalid
+  batch. Next isolate the exact changed dependency at the existing source-binding
+  validators; distinguish legitimate historical conservation from semantic drift.
+  Do not repin receipts, waive classification checks or repeat the full export
+  before a focused decisive check resolves these errors. This supersedes the
+  pending reconciliation statements below, not the prior validated canonical.
+
 - Slider held-geometry question answered: current checkpoint candidate projected
   centers move at all four default-domain held boundaries with stationary peer,
   despite unchanged application store until release. Existing test adds only
