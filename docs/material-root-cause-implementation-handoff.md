@@ -158,14 +158,31 @@ not live-process status):
    Border/radius adds 83 exact rows (39 mapped initial, 8 mapped button reset,
    8 card token, 28 full-radius), empty validators, 2.433 seconds. The raw
    captured cases, prior rows and all current raw fields remain unchanged.
-   Across the 1,011 serialized matches, 972 also pass existing persisted-row
-   validators; 39 retain the explicit persisted/live representation discrepancy.
+   Subsequent read-only replays add 122 exact serialized matches: 36 ordinary
+   review rows (31 persisted-validator passes, five persisted/live discrepancies)
+   and 86 origin/owner-initial rows (11 origin declaration, 75 owner initial).
+   The latter use the actual production style-discrepancy collector and actual
+   source-binding/origin validators, with no source errors; session 56266 exits
+   0 in 19.163 seconds. The ordinary batch completes in 2.094 seconds. These
+   are previously executed proof results, not fresh browser acceptance.
+   Across the 1,133 serialized matches, 1,089 pass the applicable validators;
+   44 retain the explicit persisted/live representation discrepancy.
    All 108 source-batch rows also match the pinned plan's actual formatter in
    all five metadata fields, but that formatter check is not source replay.
    No original test assertion, producer, normalization or source receipt is
    changed. These scoped replays do not close whole-population conservation;
-   230 rows remain outside this newly replayed population (including the 108
-   source-batch rows needing their independent source-bound transition).
+   Only 108 source-batch rows remain outside this newly replayed population,
+   needing their independent source-bound transition. Whole-population
+   conservation and the original grid integration assertion remain open.
+   October 5 continuation confirms session 62091 and its exact Node 21612
+   command are still live. The canonical streaming codec performs serialization
+   and complete comparison, not selective section retrieval; the existing
+   field-host reader hardcodes a historical revision and different sections.
+   Neither is evidence that the needed source-batch section has been extracted
+   or its dependencies independently authenticated. Do not replace source replay
+   with formatter equality or launch a concurrent heavy collector. Next, finish
+   the live cold check, then use the existing subset-aware source-binding path
+   for these 108 rows, retaining its receipt and negative-control requirements.
 
    Canonical push with command-local post buffering succeeds; remote then
    advances through `8fb22120` to `783c2b6c`. Independent cold canonical check
