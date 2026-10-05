@@ -2,6 +2,31 @@
 
 ## Current resumption ledger — October 5
 
+Current next-action summary (older entries below are chronological evidence,
+not live-process status):
+
+1. Resolve retained grid metadata conservation without exempting categories.
+   Session 51039 / Node 16224 runs one current builder and the existing full
+   validator over the authenticated 110-case failure input. Its JSON-to-JSON
+   comparison avoids the demonstrated live-object omission artifact. Bounded
+   output is durably captured in
+   `artifacts/material-parity/owner-grid-integration-vjGiTG/current-json-replay.log`;
+   no canonical package is written. PID and session are confirmed live after
+   dispatch. Await this handle; do not restart on an observation timeout.
+2. Reconcile changed consumed source fingerprints in one coherent canonical
+   batch, using the complete named current-ancestry baseline and independent
+   cold validation. Historical applicability proofs are not current rendering
+   acceptance. The original grid integration still fails; its pending spec
+   changes are not committed or described as passing.
+3. Complete remaining enforced output coverage. Material's full current run
+   is complete with five retained calendar failures; TTS's complete run retains
+   its failures. The general gate still lacks a complete current run because
+   its production build was cancelled under measured memory pressure. Do not
+   run another memory-heavy build concurrently with this validator or use
+   partial build output. Renderer fixes and fixture compensation remain out
+   of scope. Canonical classification completeness and provenance, not screenshot
+   similarity, determine input-audit acceptance.
+
 - The follow-on fresh-versus-retained comparison has a demonstrated
   representation trap. Existing production `collectStyleDiscrepancies`, driven
   by the authenticated owner-initial evidence and the same isolated evidence
