@@ -2,6 +2,21 @@
 
 ## Current resumption ledger — October 5
 
+- Source-map applicability check (read-only, terminal exit 0): all 17 mapped
+  showcase `src/` files match their embedded `sourcesContent` byte-for-byte.
+  All 88 mapped installed AstylarUI modules exist. Direct comparison differs
+  because maps embed formatted/linked output; after applying the installed
+  `@angular/compiler-cli/linker/babel` through Babel with configFile/babelrc
+  disabled and canonicalizing both sides through esbuild (legalComments none,
+  minifyWhitespace true), 87/88 modules match completely. The only remaining
+  difference is `astylar-surface.component.js` generated canvas template:
+  embedded `domElementStart` versus reproduced `elementStart`. Do not erase
+  this difference or label all installed runtime/source applicability proven.
+  Next establish the originating Angular linker/configuration and complete
+  installed-module-to-repository-source binding; no build or capture rerun yet.
+  Preliminary whitespace/token comparisons were insufficient (template scanner
+  context and Angular-generated fields) and are not accepted drift evidence.
+
 - Current full-output provenance question narrowed by read-only comparison:
   the checkpoint manifest's complete 10-file harness graph matches current
   `fingerprintModuleGraph`; its installed dependency-lock digest matches; all
