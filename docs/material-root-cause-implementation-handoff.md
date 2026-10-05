@@ -65,8 +65,9 @@ not live-process status):
    The existing exporter checks complete validation and session dependencies
    before publishing; no partial flag or error filtering is used. Historical
    applicability proofs are not current rendering
-   acceptance. The original grid integration still fails; its pending spec
-   changes are not committed or described as passing.
+   acceptance. The original grid integration still fails. Verified diagnostic
+   instrumentation is committed in `507b23dc`; canonical reconciliation is
+   committed in `8fb22120`. Neither commit declares that historical test passing.
 3. Complete remaining enforced output coverage. Material's full current run
    is complete with five retained calendar failures; TTS's complete run retains
    its failures. The general gate still lacks a complete current run because
@@ -75,6 +76,32 @@ not live-process status):
    partial build output. Renderer fixes and fixture compensation remain out
    of scope. Canonical classification completeness and provenance, not screenshot
    similarity, determine input-audit acceptance.
+
+   October 5 resumption: push sessions 99832 and 42021 terminate with HTTP 408;
+   the remote remained at `62aa8a1e`. Publishing the small diagnostic increment
+   separately succeeds: `507b23dc` is now pushed. Canonical push session 65754
+   uses command-local HTTP/1.1 and a 128 MiB post buffer; its outcome is pending.
+   Root build session 29082 starts with command-local `GOGC=50`,
+   `GOMAXPROCS=2`, `NG_BUILD_MAX_WORKERS=1` and Node heap 2048 MiB. Its decisive
+   question is whether more frequent Go GC permits the identical build to finish
+   without the previous memory pressure. It fails that resource hypothesis:
+   esbuild PID 27896 reaches 5,063,933,952 resident / 7,072,161,792 private bytes,
+   with 404,228 KiB physical memory free. Exact parent 13440 and both command
+   lines are revalidated before stopping only those build processes. Session
+   29082 is terminal exit -1; free memory recovers to 6,378,580 KiB. No accepted
+   build or usable production output is claimed. This is runtime-only tuning,
+   not a source/CSS-scope change. No heavy canonical check runs concurrently.
+   Output: `artifacts/parity-root-build-gc50-20261005.log`.
+
+   Grid reconciliation next decisive boundary: the authenticated retained
+   1,241-row failure spans 160 attribution categories. Of 108 rows carrying
+   `reviewEvidence.originalCompleteRowSha256`, only two match the complete
+   historical `previous` row hash; 106 do not, including all 83 owner-motion
+   rows. Therefore their later review receipts cannot simply stand in for this
+   earlier historical endpoint. Next inspect the existing reviewed-source batch
+   transition's exact predecessor and reconcile the intervening metadata stages.
+   Receipt correspondence is not independent classification validation, and no
+   category exemption or original assertion change follows from this check.
 
 - The follow-on fresh-versus-retained comparison has a demonstrated
   representation trap. Existing production `collectStyleDiscrepancies`, driven
