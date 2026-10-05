@@ -2,6 +2,15 @@
 
 ## Current resumption ledger — October 5
 
+- Supplemental denominator question answered: six selected reports contain151
+  top-level rows over six families; nine retained versions contain389 rows but
+  include superseded captures. Nested boundaries/overlap prevent adding151 to
+  the configured2311 denominator. Validators certify declared cohorts, not all
+  relevant states of36 families. Exact path/count/profile reconciliation is in
+  the existing inventory. Next complete family/state applicability and evidence
+  obligations there; do not recapture settled cohorts or count historical
+  versions as distinct coverage. Canonical batch reconciliation remains pending.
+
 - Producer transition question resolved: `4de3203e` extracted the existing scalar
   pipeline without changing its body. The existing historical conservation test
   now verifies exact six parameters, return, one call site and byte-identical

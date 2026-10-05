@@ -69,6 +69,26 @@ not this current output run or input equivalence.
 
 ### Recorded configured-case inspection census
 
+Supplemental denominator reconciliation (October 5): the selected producer
+paths are calendar-close-audit (4 top-level rows), overlay-breakpoint-audit (3),
+picker-commit-audit (6), slider-domain-audit (4), paginator-navigation-audit-v3
+(104), and tooltip-state-audit-v2 (30): 151 rows across six families. These are
+not 151 additional fully inspected cases: rows can contain multiple action
+boundaries and overlap configured cases. Nine retained report directories total
+389 rows only because paginator v1/v2 and tooltip v1 are also preserved; those
+historical versions must not be summed as new coverage. Selected paths are
+explicit in input-equivalence-audit.mjs and the calendar/paginator/tooltip
+evidence collectors. Tooltip v2 bytes authenticate to `1a554bf3…`; it declares
+light desktop1440x1000, DPR1/2, three cohorts and five action boundaries, not all
+themes/responsive states. The shared supplemental validator authenticates
+provenance and supplied rows; specialized validators enforce their declared
+cohorts, not an exhaustive relevant-state domain for all36 families. This read-
+only metadata/source reconciliation does not revalidate every capture receipt
+or claim current rendering. Missing information is an exhaustive applicability
+mapping from every family to required states/profiles and exact evidence/remaining
+obligations. The existing family table is the place to complete it; no new
+framework or inflated whole-audit percentage is warranted.
+
 An authenticated join now checks every configured case ID, not just family
 totals: `verifyFindings` authenticates the existing index/shards, then
 `queryFindings` supplies scalar rows whose `reviewedCases` union equals the
