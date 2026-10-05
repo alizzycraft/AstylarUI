@@ -30,17 +30,31 @@
   the production scalar extraction against `81b4fffb`; two later inventory
   registrations (122 bytes) also required their existing reversal at the earliest
   stacking boundary. Historical receipts and original test assertions stay intact.
-- Canonical reconciliation is pending: bounded metadata has 541 source fingerprints,
-  with 14 changed (seven modules and seven owning specs). Compressed receipt is
-  still `42d11fb89f777b0955d4e59658832a469cd969102f08c328ea4d82d281772d41`.
-  The independent cold check at `b073faa6` predates these edits. After the grid
-  gate closes, use the existing complete current-ancestry launcher and independent
-  check; do not manually repin metadata or recapture unchanged browser inputs.
+- Canonical reconciliation is closed: bounded metadata has 541 source fingerprints;
+  the 14 changed fingerprints (seven modules and seven owning specs) were
+  reconciled through the complete export and independent cold check below.
+  The older independent check at `b073faa6` predates those edits and is historical.
+  No manual metadata repinning or unchanged browser-input recapture was used.
   Result-recovery preflight: the launcher's `--dry-run` succeeds with all five
   retained paths supplied; D: has 3,553,333,248 free bytes after grid completion.
   This checks invocation completeness only, not input authentication or canonical
-  acceptance. Next commit the verified integration, then run complete export and
-  independent cold check through that launcher with durable logs.
+  acceptance. Verified integration is committed/pushed as `7cd26e9b`. Complete
+  cold export session 62677 completed, exit 0, in 2,487,443.752 ms; durable log:
+  `artifacts/material-parity/canonical-reconciliation-after-grid-20261005.log`.
+  All 436 static / 1,875 interaction cases, 8,483 groups / 389,202 occurrences
+  and 145 source findings remain. The session reverified 1,205 files / 89,154,859
+  bytes with zero invalidations. Markdown is unchanged; only the compressed
+  payload and its manifest changed. New compressed SHA-256:
+  `cc1c6b3fc953b342155d9d0282e4257e3aa45bf0231a61630a69ea39b16d96ca`;
+  decoded SHA-256: `264c1ea2c5dcc821b8a3f158ad389341e4b96632b634b1c86482e9d0b8fe75d4`.
+  Independent cold check session 95568 is terminal, exit 0, in
+  2,541,545.793 ms, through the same complete launcher; log
+  `artifacts/material-parity/canonical-independent-after-grid-20261005.log`.
+  Complete byte/order comparison and Markdown equality pass. The check reverified
+  the same 1,205 files / 89,154,859 bytes with zero invalidations. Source/export
+  reconciliation is closed for this snapshot; inspection accounting and remaining
+  acceptance gates are not. Publish this coherent receipt increment and refresh
+  the compact working index once before using it for membership reconciliation.
 - Closed dependency gap: the exact 6,349-byte range-default installed package
   metadata was recovered from an authenticated project npm-cache tarball. Its
   original SHA-256 is preserved in
@@ -53,11 +67,36 @@
   `sha512-zyQfmRAUm/LeC8iW2rfcNatlV0Te8eT6aH7v19bMGvgs0JOptmjS+pMNZJIb2WVmXu2M4Ti4TQPH7eGWu74lpA==`.
   This supersedes the unavailable-receipt boundary in the older chronology;
   historical replay is not current rendering acceptance or a renderer fix.
-- Other remaining gaps: the incomplete full general browser gate and canonical
-  reconciliation after grid integration. Current full Material and TTS failing output evidence
+- Other remaining gaps: inspection accounting and the incomplete full general
+  browser gate. Current full Material and TTS failing output evidence
   is retained separately; historical output passes do not establish current input
   equivalence. No renderer fixes, fixture compensation or threshold changes are
   authorized. The goal remains incomplete.
+
+Inspection accounting gap identified in the progress snapshot: the configured
+36-family matrix is completely captured (436 static / 1,875 interaction cases),
+but this is not a complete inspection census. The existing family/state checklist
+retains pending typography/paint, keyboard, disabled/error, profile applicability
+and lifecycle obligations. It does not provide mutually exclusive per-case
+fully-inspected / partial / untouched / blocked statuses. Do not derive an audit
+completion percentage from capture counts, output passes or scalar attribution
+counts. After independent canonical reconciliation, consolidate applicability
+and evidence closure in the existing checklist rather than create another audit
+framework or rerun settled captures. A documented rendering failure counts as
+inspected when its applicable audit obligations are addressed; it need not be
+fixed during this audit. Preserve uncertain and uninspected obligations explicitly.
+
+Read-only inventory reconciliation identifies a concrete accounting obstacle:
+its opening chronology still calls
+139 findings published and the 145-finding export pending, while the current
+ledger records the completed 145-finding export. These are historical evidence
+boundaries, not new unresolved source investigations. The independent check is
+now complete. Reconcile those statements and standalone-registration
+claims against the completed export's exact memberships before assigning case
+inspection statuses. Reuse existing receipts; do not infer inclusion merely
+from the total finding count. Highest-impact remaining obligations are shared
+overlay/text paint and profile applicability, keyboard state/focus boundaries,
+and live resource ownership; the incomplete general gate remains separate.
 
 Read-only general-gate diagnosis: `tests/parity/run-parity.mjs` retains one
 browser context per viewport and closes each successful capture page. At the
