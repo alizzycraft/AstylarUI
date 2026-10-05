@@ -126,6 +126,23 @@ evidence, including source applicability and explicit remaining uncertainty.
 
 ### Applicable-obligation reconciliation — October 5
 
+Slider release-only visual-update hypothesis is rejected for the two default
+light desktop DPR1 drags: actual candidate child-mesh centers projected into CSS
+pixels move on every held sample, while stores still hold30/65. Start centers
+289/310.600/325/346.600/361 and end541/562.600/577/598.600/613; the peer remains
+stationary. Existing test now asserts monotonic per-move centers and stationary
+peer, preserving all prior assertions. Read-only projection follows the existing
+benchmark measurement boundary; no layout calculation or input is changed.
+Complete terminal log slider-held-geometry-complete-20261005.log, test1/1exit0,
+8,698.044ms. The preceding asserted log was truncated by output selection and
+is not the terminal-completion receipt. Reference
+thumb DOM centers are mid-transition at immediate RAF samples, including after
+release; these are timing observations, not settled geometry/raster acceptance.
+Remaining smoothness question requires temporal/local paint evidence with native
+animation state accounted for. Initial instrumentation's wrong component selector
+failed before candidate measurements and is retained in
+slider-held-geometry-current-20261005.log; corrected verified log is separate.
+
 Slider default-domain final success is now separated from intermediate travel:
 the existing pointer-ownership test retains all assertions and emits its already-
 collected trace. Current-full checkpoint light desktop DPR1, initial30/65, four

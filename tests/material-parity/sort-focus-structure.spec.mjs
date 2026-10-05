@@ -467,8 +467,25 @@ test('slider pointer-down ownership is measured at both visual thumb centers', a
           const state = mode === 'reference'
             ? window.ng.getComponent(document.querySelector('app-reference')).store.state()
             : window.__ASTYLAR_MATERIAL_BENCHMARK__.state();
+          const thumbCenters = mode === 'reference'
+            ? [...document.querySelectorAll('mat-slider mat-slider-visual-thumb')].map(node => {
+              const box = node.getBoundingClientRect(); return box.x + box.width / 2;
+            }) : (() => {
+              const surface = window.ng.getComponent(document.querySelector('app-astylar-showcase')).surface;
+              const scene = surface.scene, engine = scene.getEngine(), canvas = engine.getRenderingCanvas();
+              const bounds = canvas.getBoundingClientRect(), transform = scene.getTransformMatrix();
+              const viewport = scene.activeCamera.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight());
+              return ['start', 'end'].map(name => {
+                const mesh = scene.meshes.find(mesh => mesh.name.endsWith(`-${name}-thumb`));
+                mesh.computeWorldMatrix(true);
+                const center = mesh.getAbsolutePosition();
+                return bounds.x + center.constructor.Project(center, transform.constructor.IdentityReadOnly,
+                  transform, viewport).x * bounds.width / engine.getRenderWidth();
+              });
+            })();
           return {
             boundary,
+            thumbCenters,
             values: ['slider-start', 'slider-primary'].map(id => mode === 'reference'
               ? document.querySelector(`#${id}`)?.value : document.querySelector(`[data-astylar-id="${id}"]`)?.value),
             state: [state.sliderStart, state.sliderValue],
@@ -495,7 +512,8 @@ test('slider pointer-down ownership is measured at both visual thumb centers', a
     t.diagnostic(JSON.stringify({ scope: 'default 30/65 light desktop DPR1 four held pointer moves; not continuous-motion acceptance',
       traces: Object.fromEntries(Object.entries(observations).map(([thumb, sides]) => [thumb,
         Object.fromEntries(Object.entries(sides).map(([side, data]) => [side, {
-          drag: data.drag, steps: data.steps.map(step => ({ boundary: step.boundary, values: step.values, state: step.state })) }]))])) }));
+          drag: data.drag, steps: data.steps.map(step => ({ boundary: step.boundary, values: step.values,
+            state: step.state, thumbCenters: step.thumbCenters })) }]))])) }));
     assert.equal(browser.version(), '154.0.8037.58');
     for (const [thumb, owner, fixedIndex, expectedFinal] of [
       ['start', 'slider-start', 1, ['40', '65']],
@@ -514,6 +532,13 @@ test('slider pointer-down ownership is measured at both visual thumb centers', a
       assert.deepEqual(reference.steps.at(-1).values, expectedFinal);
       assert.deepEqual(candidate.steps.at(-1).values, expectedFinal);
       assert.deepEqual(candidate.steps.at(-1).state, expectedFinal.map(Number));
+      const movingIndex = 1 - fixedIndex;
+      const heldCenters = candidate.steps.slice(1, 6).map(step => step.thumbCenters[movingIndex]);
+      assert.ok(heldCenters.every((center, index) => Number.isFinite(center) &&
+        (index === 0 || center > heldCenters[index - 1])),
+      `${thumb} projected thumb moves at every sampled held boundary, not only release`);
+      assert.ok(candidate.steps.every(step => step.thumbCenters[fixedIndex] === candidate.steps[0].thumbCenters[fixedIndex]),
+        `${thumb} peer projected thumb stays stationary`);
       assert.ok(candidate.steps.every(step => step.values[fixedIndex] === candidate.steps[0].values[fixedIndex]),
         `${thumb} drag must not change the other thumb`);
       assert.deepEqual(candidate.steps[1].events.filter(event => event.type === 'pointerdown')

@@ -2,6 +2,15 @@
 
 ## Current resumption ledger — October 5
 
+- Slider held-geometry question answered: current checkpoint candidate projected
+  centers move at all four default-domain held boundaries with stationary peer,
+  despite unchanged application store until release. Existing test adds only
+  read-only observations and monotonic/peer assertions;1/1exit0. Release-only
+  visuals are not the cause in this scope. Native immediate samples are mid-
+  animation, so do not treat them as settled comparison pixels. Evidence and
+  initial instrumentation failure retained in inventory. Next assess temporal
+  paint/native animation only if needed; no repeat final-value or ownership probe.
+
 - Default slider travel question answered at value boundaries, not visual motion:
   current-full frozen test1/1exit0,11,016.638ms. Four held moves retain correct
   owner/final values but intermediate candidate33/35/38/40 and68/70/73/75 differ
