@@ -19,6 +19,21 @@
   pending grid conservation, and the proven layout/surface receipt transitions
   before the coherent canonical export; final browser gates remain independent.
 
+  Followup separates source authentication from semantic applicability: all four
+  directly used collector/classifier functions are unchanged, but complete AST
+  comparison finds four changed historical declarations, including the shared
+  `ordinaryTypes` heading extension. Therefore the existing source-replay guard
+  alone is insufficient to waive the normalization producer's byte-equality
+  assertion. A read-only original/current collector replay over all 84 retained
+  cases now proves complete population equality at both historical and precise
+  normalization: 64 border-initial and 120 button-reset proofs in each mode.
+  All inventory completeness checks pass; all 40 groups / 368 observations remain
+  represented. Execution exits 0 in 4,979 ms. Next preserve this population
+  comparison at the existing integration boundary, alongside authenticated
+  sources and original classification replay, rather than assuming unchanged
+  direct functions imply unchanged transitive behavior. No live dependency was
+  edited; grid and Material browser sessions remain live.
+
 - October 5 surface proposal gate 910 remains a current original-assertion
   failure (37,215 ms), but its exact data conservation is independently proven:
   fresh `collectOverlaySurfaceReview` has 13 groups / 344 observations and
