@@ -2,6 +2,23 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 border-normalization gate 52 has a demonstrated source-applicability
+  gap, not a newly demonstrated border-rendering failure. The original four-test
+  suite finishes 3/4 passing in 7,354 ms; its population replay stops at the
+  classifier receipt (`a809c257…` current versus `3dbcf33f…` historical).
+  A read-only check now proves that the existing `readGapSurveySource` boundary
+  authenticates the reviewed transition and restores the **entire** source to
+  `4650791a7208b841dd29f1ced015f98234949623`, not merely selected functions.
+  An unrelated appended export is rejected. The check exits 0; no receipt,
+  report, classifier, fixture or renderer was changed. This shared boundary is
+  preferable to a new replay framework. Next integrate it into the existing
+  border-normalization producer after live grid session 41035 terminates, then
+  run the original 40-group / 368-observation replay and corruption controls.
+  Complete historical source conservation alone does not prove that current
+  classifications or rendering are equivalent. Prioritize this shared binding,
+  pending grid conservation, and the proven layout/surface receipt transitions
+  before the coherent canonical export; final browser gates remain independent.
+
 - October 5 surface proposal gate 910 remains a current original-assertion
   failure (37,215 ms), but its exact data conservation is independently proven:
   fresh `collectOverlaySurfaceReview` has 13 groups / 344 observations and
