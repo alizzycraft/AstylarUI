@@ -2,6 +2,23 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 shared historical dependency replay advances four public proofs
+  without repinning: unchanged validators execute through an isolated read-only
+  exact relative/absolute showcase dependency-prefix adapter. Range drag passes
+  32 cases; vertical alignment passes 64; paint passes 8; travel passes 32.
+  Each authenticates 2,515 original dependency receipts (vertical reads one
+  additional installed placement source). Travel's complete saved JSON matches.
+  Drag's validator returns a projection, not the full audit wrapper, so direct
+  whole-wrapper equality is not its contract. Vertical's sole full-receipt delta
+  is `placement.sourceSha256`; paint's four deltas are source receipts for
+  element creation/material, browser defaults and Babylon camera. No observation
+  delta appears in either complete receipt. Attempts to authenticate those raw
+  hashes against capture provenance's Git commit (including exact LF/CRLF forms)
+  fail for renderer/element-creation; do not call these line-ending-only changes
+  or waive them. Next identify the report-generation source endpoint separately
+  from the browser capture endpoint. These validator successes do not close the
+  saved-receipt suites or prove current runtime behavior; no writes/recapture.
+
 - October 5 cursor historical replay now reaches and passes the substantive
   original guards: an isolated read-only Node process redirects only the exact
   showcase `node_modules/` prefix to preserved `node_modules.audit-prior-junction/`.
