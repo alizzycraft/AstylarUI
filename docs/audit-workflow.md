@@ -106,6 +106,14 @@ separately so the retained-test name selection cannot omit button tests; either
 failure makes the launcher fail. No installed source or report is changed by
 this read-only boundary.
 
+The launcher also covers the complete button box-sizing source-binding assertion.
+Its retained test-source receipt is restored only after reversing the exact
+scratch-cleanup migration and proving whole-source equality with the authenticated
+Git original. The original positive assertion runs read-only; the original
+eight source / 15 receipt negative controls run separately against current code
+without the historical preload so their synthetic scratch can be created and
+cleaned through `withAuditScratch`. Neither original test body is modified.
+
 For the retained public cursor, range drag/paint/travel and vertical-alignment
 evidence, run `node scripts/check-historical-public-proofs.mjs`. It runs all five
 original suites and their nested check commands with writes prohibited. The

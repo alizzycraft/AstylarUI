@@ -18,10 +18,18 @@ if (main) {
     ['--test', '--test-concurrency=1', 'tests/material-parity/button-fixed-width-evidence.spec.mjs',
       'tests/material-parity/button-flex-input-evidence.spec.mjs',
       'tests/material-parity/button-host-request-evidence.spec.mjs',
-      'tests/material-parity/button-box-sizing-input-evidence.spec.mjs']];
+      'tests/material-parity/button-box-sizing-input-evidence.spec.mjs'],
+    ['--test', '--test-name-pattern=button box sizing binds all original trees',
+      'tests/material-parity/button-box-sizing-source-binding.spec.mjs'],
+    ['--test', '--test-name-pattern=button box sizing source binding rejects',
+      'tests/material-parity/button-box-sizing-source-binding.spec.mjs']];
   for (const args of commands) {
+    // The original negative controls create only synthetic scratch. Run those
+    // against current code without the historical read-only preload.
+    const currentScratchControls = args.includes('--test-name-pattern=button box sizing source binding rejects');
     const result = spawnSync(process.execPath, args, {
-      env: { ...process.env, NODE_OPTIONS: `${process.env.NODE_OPTIONS ?? ''} --import=${import.meta.url}`.trim() },
+      env: currentScratchControls ? process.env
+        : { ...process.env, NODE_OPTIONS: `${process.env.NODE_OPTIONS ?? ''} --import=${import.meta.url}`.trim() },
       stdio: 'inherit',
     });
     if (result.error) throw result.error;
@@ -66,6 +74,29 @@ if (main) {
   const historicalRunner = readGapSurveySource(runner[0], { current: file => read(file, 'utf8') });
   assert.equal(hash(historicalRunner), runner[0].sha256, 'Unreviewed box-sizing capture source drift');
   originals.set(path.resolve(runner[0].file), Buffer.from(historicalRunner));
+  const binding = JSON.parse(read('docs/material-button-box-sizing-source-binding.json'));
+  const bindingSpec = 'tests/material-parity/button-box-sizing-source-binding.spec.mjs';
+  const specReceipt = binding.sourceFingerprints.filter(s => s.file === bindingSpec);
+  assert.equal(specReceipt.length, 1);
+  const originalSpec = execFileSync('git', ['show', `93f53449:${bindingSpec}`], { maxBuffer: 1_000_000 });
+  assert.equal(hash(lf(originalSpec)), specReceipt[0].sha256);
+  let restoredSpec = lf(read(bindingSpec));
+  for (const [added, prior] of [
+    ["import { withAuditScratch } from './audit-scratch.mjs';\n", ''],
+    ["import { readFileSync, writeFileSync } from 'node:fs';",
+      "import { readFileSync, writeFileSync, mkdtempSync } from 'node:fs';"],
+    ["() => withAuditScratch('button-box-sizing-binding-control-', directory => {", '() => {'],
+    ["  const parityPath = path.join(directory, 'capture.json');",
+      "  const directory = mkdtempSync(path.join('artifacts/material-parity', 'button-box-sizing-binding-control-'));\n  const parityPath = path.join(directory, 'capture.json');"],
+    ['temporaryDiagnosticCapture: parityPath', 'retainedDiagnosticCapture: parityPath'],
+  ]) {
+    assert.equal(restoredSpec.split(added).length, 2, 'Exact scratch migration must occur once');
+    restoredSpec = restoredSpec.replace(added, prior);
+  }
+  assert.ok(restoredSpec.endsWith('}));\n'));
+  restoredSpec = restoredSpec.slice(0, -5) + '});\n';
+  assert.equal(restoredSpec, lf(originalSpec), 'Unreviewed binding test source drift');
+  originals.set(path.resolve(bindingSpec), Buffer.from(restoredSpec));
   fs.readFileSync = (file, ...args) => {
     if (typeof file === 'string' && originals.has(path.resolve(file))) {
       const bytes = originals.get(path.resolve(file));

@@ -2,6 +2,21 @@
 
 ## Current resumption ledger — October 5
 
+- Button box-sizing source-binding gate 70 is replayable through the existing
+  historical component launcher. Read-only investigation proves complete
+  original test-source equality after reversing only the scratch-cleanup
+  migration, and entire current binding evidence equals the retained snapshot:
+  2,311 captures, 600 owners, nine groups, 108 measured cases, 492 geometry gaps.
+  Existing border applicability supplies the other stale source receipt.
+  `node scripts/check-historical-component-proofs.mjs` now passes 16/16, no
+  skips, terminal exit 0: six retained (2,349 ms), eight button-authoring
+  (30,900 ms), the original full binding assertion (47,308 ms), and its original
+  current scratch controls (2,777 ms). The latter retain eight source and
+  15 receipt mutations; successful scratch is removed. Two additional read-only
+  launcher probes reject changed assertion content and changed migration tokens.
+  No original test, durable evidence or receipt was edited. This closes
+  historical applicability, not current layout equivalence or browser acceptance.
+
 - The fresh unfiltered enforced Material run (session 21768) is terminal,
   exit 1. Report `artifacts/material-parity/current-full-20261005/latest-report.json`
   is 127,722,972 bytes, SHA-256
