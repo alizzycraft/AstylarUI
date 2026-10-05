@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 durable public historical replay is verified: the small
+  `node scripts/check-historical-public-proofs.mjs` launcher executes all five
+  original cursor/range/vertical suites, serially, with the authenticated raw
+  source/dependency read boundary inherited by nested command checks. No test
+  body, mutation control, saved receipt or installed path changes. All 25 tests
+  pass (31,176 ms); the preceding isolated prototype also passes 25/25
+  (32,070 ms). Historical gates 1263/1269/1270/1273/1277/1281 are conserved,
+  not promoted to current-runtime acceptance. The launcher rejects arguments,
+  semantic source drift and absent exact originals, and prohibits writes.
+  The revised grid session 48691 remains live after session 92400 exposed a
+  real test-scope mistake: partial root evidence intentionally rejects incomplete
+  original coverage. Failed scratch `owner-grid-integration-4sni7r` is retained;
+  revised assertions preserve the invalid binding and whole unresolved rows.
+
 - October 5 vertical/paint raw receipt gap is now closed by exact originals,
   not guessed encoding: five changed raw source files are still present under
   `D:/dev/github/AstylarUI-material`. Every original byte hash matches its saved

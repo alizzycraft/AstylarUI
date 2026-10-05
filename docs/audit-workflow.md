@@ -87,6 +87,17 @@ be imported as accepted evidence.
 
 ## Validated reuse
 
+For the retained public cursor, range drag/paint/travel and vertical-alignment
+evidence, run `node scripts/check-historical-public-proofs.mjs`. It runs all five
+original suites and their nested check commands with writes prohibited. The
+explicit historical dependency read boundary leaves the current installation
+unchanged; original validators still authenticate every captured dependency.
+Five historical raw source receipts use preserved Material-worktree bytes only
+after exact SHA-256 authentication and complete LF-normalized equality with
+current sources. Missing originals or semantic source drift fail replay. This
+proves historical evidence conservation, not current browser acceptance. Do not
+use its preload for current capture or canonical production commands.
+
 Composition and followup position reviews share an evidence session: collect once,
 validate against immutable results, and rehash all actually read inputs at session
 completion before publishing reusable evidence. The followup batch additionally
