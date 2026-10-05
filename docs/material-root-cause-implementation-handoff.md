@@ -102,6 +102,16 @@ from the total finding count. Highest-impact remaining obligations are shared
 overlay/text paint and profile applicability, keyboard state/focus boundaries,
 and live resource ownership; the incomplete general gate remains separate.
 
+Configured-case census is now explicit in the existing inventory. The authenticated
+compact index's complete scalar `reviewedCases` union equals the 2,311 configured
+case IDs exactly, with no omitted/extra IDs. Conservative recorded statuses:
+0 complete obligation closures, 2,311 partial, 0 untouched, 0 assigned blockers.
+This is published-snapshot inspection evidence, not current-source output or
+whole-audit acceptance. The remaining gap is mapping/closing applicable
+obligations and supplemental relevant states; 100% started and 0% certified
+closure must not be represented as an overall audit-completion percentage.
+No new census framework, capture or canonical rebuild was needed for this join.
+
 Standalone reconciliation now answers four membership questions: snackbar six
 extra desktop/mobile profiles and four tablet themes, five disabled fields, and
 three dark/mobile popup-input selections have no explicit producer proof entries.

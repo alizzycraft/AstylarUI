@@ -56,9 +56,35 @@ Configured capture coverage is 436 static plus 1,875 interaction cases across
 input baseline's `visualParityGreen` describes its pinned historical capture,
 not this current output run or input equivalence.
 
-Inspection accounting remains incomplete: the existing family table records
-reviewed and pending obligations, not mutually exclusive per-case full/partial/
-untouched/blocked statuses. Do not assign a case full inspection solely because
+### Recorded configured-case inspection census
+
+An authenticated join now checks every configured case ID, not just family
+totals: `verifyFindings` authenticates the existing index/shards, then
+`queryFindings` supplies scalar rows whose `reviewedCases` union equals the
+existing `coverage.caseInventory.static` plus `.interaction` set exactly.
+Both sets contain 2,311 unique IDs with no omitted or extra members. This is
+the published `cc1c6b3f…` snapshot; it does not turn historical rendering into
+current-code acceptance. The family table's static/interaction counts sum to
+the same set.
+
+| Recorded inspection status | Configured cases | Evidence boundary |
+| --- | ---: | --- |
+| Fully inspected / obligation closure certified | 0 | No case has an explicit complete applicable-obligation closure record. |
+| Partially inspected | 2,311 | Each exact ID has scalar-review evidence; complete obligation closure remains unverified. |
+| Untouched | 0 | Exact scalar-review membership covers every configured ID. |
+| Blocked | 0 | No configured case is assigned a blocker; available obligation checks remain. |
+
+These are conservative **recorded statuses**, not a claim that nothing beyond
+scalar inspection has been done. They resolve the configured-case accounting
+gap without upgrading any case from family-level evidence. Documented rendering
+failures are included in partial inspection; fixing a failure is not required
+for later full inspection closure. Configured inspection started: 100%; recorded
+full closure: 0%. Neither percentage is whole-audit completion: supplemental
+relevant-state applicability and per-case remaining obligations still need
+reconciliation. No broader denominator or completion estimate is asserted.
+
+The existing family table records reviewed and pending obligations. Do not
+assign a case full inspection solely because
 its screenshot passed, its scalar differences were attributed, or its family has
 a source finding. Conversely, a rendering failure need not be fixed to finish
 its inspection. Case-level completion requires mapping applicable input,
