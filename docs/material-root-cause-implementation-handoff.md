@@ -2,6 +2,22 @@
 
 ## Current resumption ledger — October 5
 
+- Bounded replay of the retained grid-failure owner-initial subset answers one
+  metadata-applicability question without rebuilding the canonical audit.
+  `bindOwnerInitialStyleSource` returns `bound` for both relative and absolute
+  forms of the same retained `owner-grid-integration-vjGiTG/report.json` path;
+  path spelling does not explain this group's prior fresh-build mismatch.
+  `collectFullTreeInventory` reports zero errors for all 110 retained cases.
+  Replaying the existing `collectOwnerInitialStyleEvidence` and comparing whole
+  proof objects against the failure diagnostic matches all 75
+  `reviewed-owner-initial-style-observation-stage` records exactly (zero missing
+  or changed proof fields). Read-only Node execution exits 0 in 7.44 seconds.
+  This validates those retained proof objects against current collection, not
+  their full row classifications, the other 159 attribution groups, or the full
+  canonical validator. Next trace the production classification/application
+  sequence for the first unmatched appearance row, using this authenticated
+  observation rather than another complete builder run.
+
 - Current October calendar evidence corroborates the existing
   `fixture-calendar-month-marker-table-grid-substitution` finding; this is not
   a new renderer diagnosis. In `current-full-20261005/interactions/datepicker/
