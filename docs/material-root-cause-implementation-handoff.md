@@ -2,6 +2,15 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 the exact grid color/source join is now executable regression
+  protection inside the existing precision suite, not only a one-off check.
+  It independently selects the historical 36/74 population, replays root source
+  proofs and requires every exposed case and its non-renderer authoring
+  classification. The complete suite passes 7/7 (31,873 ms); default full-capture
+  conservation and missing/duplicate subset controls remain intact. Grid gate
+  1120 still needs unrelated complete-row classification conservation. No new
+  report framework, capture, canonical export or renderer/fixture edits.
+
 - October 5 exact grid-subset root attribution is independently joined: reuse
   of the authenticated transition collector at `364f46a3` selects exactly 36
   static and 74 interaction cases. Fresh `prepareRootBackgroundClassifications`

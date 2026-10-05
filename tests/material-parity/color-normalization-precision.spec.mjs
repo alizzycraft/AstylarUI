@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import ts from 'typescript';
 import { collectColorNormalizationTransition, verifyCanonicalColorPopulationTransition } from '../../scripts/audit-material-color-normalization-transition.mjs';
+import { prepareRootBackgroundClassifications } from './root-background-classification-preparation.mjs';
 
 const file = 'tests/material-parity/input-equivalence-audit.mjs';
 const source = readFileSync(file, 'utf8');
@@ -103,4 +104,37 @@ test('explicit color-transition subsets retain every selected occurrence and rej
   assert.equal(subset.priorClassificationsRevalidated, false);
   assert.throws(() => collectColorNormalizationTransition({ caseIds: [...caseIds, ...caseIds] }), /duplicated/);
   assert.throws(() => collectColorNormalizationTransition({ caseIds: ['static:missing@light/desktop'] }), /missing/);
+});
+
+test('grid historical subset exposes only exact source-replayed root authoring observations', () => {
+  const original = JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));
+  const selected = new Set(), seen = new Set();
+  const results = original.results.filter(e => {
+    if (e.profile !== 'light' || e.viewport.id !== 'desktop' || selected.has(e.family)) return false;
+    selected.add(e.family); return true;
+  });
+  const interactions = original.interactions.filter(e => {
+    if (!['chips', 'slider', 'datepicker', 'timepicker', 'tooltip', 'dialog', 'bottom-sheet'].includes(e.family) ||
+      !['hover', 'held', 'focus', 'activate', 'activate-leave'].includes(e.state)) return false;
+    const key = JSON.stringify([e.family, e.state, e.viewport.id]);
+    if (seen.has(key)) return false; seen.add(key); return true;
+  });
+  const key = (kind, e) => `${kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
+  const caseIds = [...results.map(e => key('static', e)), ...interactions.map(e => key('interaction', e))];
+  assert.equal(results.length, 36); assert.equal(interactions.length, 74);
+  const transition = collectColorNormalizationTransition({ caseIds,
+    previousRevision: '364f46a309319201317919b6a23dd1aadd08f405' });
+  const roots = prepareRootBackgroundClassifications(original);
+  const exposed = transition.findings.filter(row => row.outcome === 'newly-visible-difference');
+  assert.equal(exposed.length, 36);
+  assert.equal(exposed.reduce((n, row) => n + row.occurrences, 0), 110);
+  for (const row of exposed) {
+    const members = roots.observations.filter(o => o.family === row.family && o.element === row.element &&
+      o.property === row.property && o.reference === row.after.reference &&
+      o.astylar === row.after.candidate && caseIds.includes(o.case));
+    assert.deepEqual(members.map(o => o.case).sort(), [...row.cases].sort(), 'complete original membership');
+    assert.ok(members.every(o => o.classification.classification === 'application-plugin-authoring-defect' &&
+      o.classification.reviewEvidence.rendererCauseProven === false));
+  }
+  assert.equal(transition.findings.filter(row => row.outcome === 'changed-difference-values').length, 7);
 });
