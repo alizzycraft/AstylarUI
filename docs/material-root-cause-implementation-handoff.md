@@ -2,6 +2,23 @@
 
 ## Current resumption ledger — October 5
 
+- Exact tooltip presence reconciliation: authenticated compact row `8d1fdbe6…`
+  covers all four themes × desktop DPR1/2 benchmark-open cases. Original
+  candidate-only popup input has no native counterpart; collector guards bind
+  full original trees and effective/normal/interaction styles. This closes the
+  eight-case state-presence question negatively, not paint or complete inspection.
+  Paired ordinary-hover proofs cannot replace these unequal benchmark states.
+  Next reconcile the remaining paired profile/state paint obligations rather
+  than rerun this settled presence attribution.
+- Publication transport diagnostic is terminal, exit 1: command-local
+  no-delta/no-compression HTTP/1.1 upload prepares 62.74 MiB at reported
+  112.52 MiB/s but still returns HTTP 408. Retain
+  `artifacts/material-parity/publication-push-transport-20261005.log`.
+  SSH host-key verification fails and was not bypassed. Remote remains
+  `c24c2727`; verified publication and coverage commits remain local. This is
+  an unresolved transport condition, not proof of audit invalidity or a reason
+  to regenerate evidence. No further identical upload retry is justified.
+
 - Dark/mobile tooltip phase obligation reconciled against the existing owning
   test and retained `tooltip-texture-phase-4da8cba-final.log` (SHA-256
   `9822729df4598330d142bad3dff8063ff27ddbecfcf861679df482ef290cd5ac`).

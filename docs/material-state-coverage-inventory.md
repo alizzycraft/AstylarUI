@@ -106,6 +106,19 @@ evidence, including source applicability and explicit remaining uncertainty.
 
 ### Applicable-obligation reconciliation — October 5
 
+Tooltip desktop benchmark `open` state is a separate eight-case obligation:
+light/dark/contrast/custom × desktop DPR1/2. Current authenticated compact row
+`8d1fdbe60c443c9e22bff5e40db229b958f2ebab586bde22cce48ff85ed6b017`
+binds all eight reviewed IDs to candidate-only popup presence. The owning
+`tooltip-unpaired-style-evidence.mjs` requires original capture/tree hashes,
+the empty reference owner and exact effective/normal/interaction candidate
+stages. This answers presence/state-authoring equivalence negatively, not merely
+an unknown computed-style default. Paint comparison is unavailable at these
+unequal states; ordinary paired-hover crops above must not be substituted as
+their acceptance evidence. State-authoring correction and subsequent paired
+capture belong to implementation/retesting, not this audit. These cases remain
+partially inspected until other applicable obligations are closed.
+
 The separate frozen dark/mobile hovered-tooltip proof is now mapped explicitly:
 390×844 DPR2, Chrome154, ordinary mode (not benchmark hover suppression).
 Its original log SHA-256 is
