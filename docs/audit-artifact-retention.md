@@ -3,8 +3,12 @@
 ## Current versus historical evidence
 
 The latest completed full Material output run is
-`artifacts/material-parity/enforced-full-2b6cddc`. Keep it independent of archived
-evidence. Passing output parity does not establish input equivalence.
+`artifacts/material-parity/current-full-20261005`: all 436 static cases pass,
+but five of 1,875 interaction cases fail. Retain this current failure evidence
+independently of the pinned historical input baseline. The previously passing
+`artifacts/material-parity/enforced-full-2b6cddc` remains historical evidence;
+do not delete it without checking its consumers. Passing output parity does not
+establish input equivalence.
 
 Older captures referenced by findings are historical evidence, not alternative
 current results. In particular, `current-ancestry-audit/latest-report.json` is

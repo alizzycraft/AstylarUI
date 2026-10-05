@@ -2,6 +2,34 @@
 
 ## Current resumption ledger — October 5
 
+- The fresh unfiltered enforced Material run (session 21768) is terminal,
+  exit 1. Report `artifacts/material-parity/current-full-20261005/latest-report.json`
+  is 127,722,972 bytes, SHA-256
+  `ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62`.
+  All 436/436 static cases pass (minimum SSIM 0.965295787, median 0.996381623,
+  maximum edge error 0.983765px); static acceptance is true. Interactions are
+  complete at 1,875, with 1,870 passing and five failing, minimum SSIM
+  0.948652649, median 0.997462952, focused rasters 876/880. Interaction acceptance
+  is false. All failures are datepicker: contrast / desktop-dpr1 / activate,
+  activate-leave, open-hover-content and open have focused similarities
+  0.858005–0.859963, below 0.86. Their sharpness edge alignment is approximately
+  0.447–0.448. Light / desktop-short-dpr1 / activate fails the whole-frame
+  0.95 SSIM threshold at 0.948653, although its focused SSIM passes at 0.882722.
+  All five recorded overlay-placement, event, focus, cursor, state-paint,
+  interaction-state and resource checks pass. The entire run has zero runtime
+  error cases and zero unstable interaction-resource cases. This narrows current
+  observable failures, not their first input/renderer cause. Do not infer core
+  causality, repoint historical input findings to this new output, change
+  thresholds or recapture unchanged cases. Keep full current failures separately
+  from the pinned input baseline. Next compare these exact failing rendering
+  inputs with the existing grid/typography evidence after grid localization.
+
+  Released capture resources allowed a fresh root production build to start as
+  session 65207, `npm run build`, NG_BUILD_MAX_WORKERS=1, GOMAXPROCS=2 and
+  NODE_OPTIONS=--max-old-space-size=2048. Its result is pending; await the exact
+  handle. If successful, use the production server for the unfiltered general
+  gate, with no diagnostic fixture filter. Grid session 84262 remains live.
+
 - Grid localization is now running as session 84262 (parent Node 22824,
   child 23828), with the pending integration spec still uncommitted. Its
   previously demonstrated failure-only evidence gap is corrected in place:
