@@ -2,6 +2,21 @@
 
 ## Current resumption ledger — October 4
 
+- October 5 retained component-proof block is revalidated with the seven exact
+  original named assertions, not a full harness rerun: 1/7 passes in 5,229 ms.
+  Gate 490's current source-fingerprint/visual-fields assertion passes. All six
+  retained progress/compact/keyboard/applied-theme/selection/tooltip assertions
+  stop at `sort-focus-structure.spec.mjs` raw SHA `6104d03b…` versus `7f1af071…`,
+  before their substantive replay. Complete LF/CRLF forms do not reproduce the
+  old sorter receipt. Receipt census also identifies changed showcase component
+  bytes (`71e2d41f…` versus `2c2979ad…`); its preserved Material-worktree raw
+  original is exact, but normalized contents differ (`b493a355…` versus
+  `b7957cd9…`). Do not apply the public-proof encoding adapter to these changes.
+  Next authenticate the sorter/diagnostic-only showcase source transition with
+  existing AST/read-adapter conservation, retaining all six observation checks.
+  The revised grid session 48691 remains live; current Material session 21768
+  has advanced into slider interaction states. No production/capture input edit.
+
 - October 5 durable public historical replay is verified: the small
   `node scripts/check-historical-public-proofs.mjs` launcher executes all five
   original cursor/range/vertical suites, serially, with the authenticated raw
