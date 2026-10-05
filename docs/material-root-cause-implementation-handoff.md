@@ -2,6 +2,25 @@
 
 ## Current resumption ledger — October 5
 
+- Recent proof-batch publication is now independently verified. Export session
+  10813 and independent cold check session 29372 both completed with exit 0.
+  Logs: `artifacts/material-parity/canonical-proof-batch-20261005.log` and
+  `artifacts/material-parity/canonical-proof-batch-independent-20261005.log`.
+  Independent check took 2,437,761.030 ms, reverified 1,205 files / 89,154,859
+  bytes, executed two collectors with ten memory hits and no disk hits or
+  invalidations, and confirmed complete canonical/Markdown equality. Export
+  elapsed time was 16,404,013.495 ms; this includes an unexplained observation
+  delay and must not be presented as pure computation time. The package retains
+  436 static / 1,875 interaction cases, 8,483 groups / 389,202 occurrences and
+  145 source findings, with input equivalence false. Compressed SHA-256 is
+  `db0ba9f5591713e98b2a3e6328aab91d196ee57f923700745616ae5ff902008c`;
+  decoded SHA-256 is
+  `c69f82b0012c7412dd411f2ce21f0ab6e3245ba7fc45f535ce6a6bf9b6763813`.
+  This integrates the standalone coverage proof and current owning-test
+  fingerprints; it does not close case inspection or current rendering gates.
+  Next refresh/authenticate the compact index once, then continue the remaining
+  overlay/text-paint applicability and per-case obligation reconciliation.
+
 - Pending proof batch integration now passes through the complete existing
   historical component launcher, not only individually filtered assertions:
   `node scripts/check-historical-component-proofs.mjs`, exit 0, 18/18 tests

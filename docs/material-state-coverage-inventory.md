@@ -2,6 +2,15 @@
 
 ## Current evidence boundary — October 5
 
+The subsequent proof-batch export and independent cold check both completed
+with exit 0. The current canonical compressed digest is `db0ba9f…`, superseding
+the `cc1c6b3f…` publication below. Both logs are named in the current resumption
+ledger. This publication integrates the standalone proof registration and owning
+test fingerprints without changing the 2,311 cases or 145 source findings.
+Compact-index refresh remains pending; the census below is explicitly the
+previous authenticated index's evidence until that refresh is verified. No
+complete-case closure or current rendering acceptance is inferred.
+
 The canonical snapshot published in `8dc0bd2a` contains 145 source findings,
 8,483 scalar groups and 389,202 scalar occurrences. Complete export and independent
 cold check both pass; the compact index is imported and verified against compressed
