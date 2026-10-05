@@ -2,6 +2,17 @@
 
 ## Current resumption ledger — October 5
 
+- Full-harness preflight corrects the stale 302-file scope: current discovery
+  has 303 suites (295 Material, four general, four TTS), preserving all 46
+  legacy suites. Existing inventory/runner controls pass 4/4, exit 0, in
+  613.558 ms, including future nested discovery, filter rejection and failure
+  propagation. This is inventory verification, not execution of all 303 suites.
+  Available physical memory was 1,116,472 KiB on the final preflight; sequential
+  full-audit replay can require multiple GiB. Full harness was not launched under
+  that pressure, and unrelated Node/Chrome processes were not stopped. Recheck
+  resource headroom before this pending gate; continue lightweight obligation
+  reconciliation meanwhile. No browser acceptance or denominator reduction.
+
 - Exact tooltip presence reconciliation: authenticated compact row `8d1fdbe6…`
   covers all four themes × desktop DPR1/2 benchmark-open cases. Original
   candidate-only popup input has no native counterpart; collector guards bind
