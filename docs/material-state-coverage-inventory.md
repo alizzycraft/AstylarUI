@@ -65,10 +65,19 @@ border-to-background replacement,absolute insets and root flow/height inputs.
 History and source separation are recorded in
 docs/material-flow-position-substitutions.md: absolute authoring existed in
 2f440115; later calibration did not introduce it. Do not rediscover that cause
-or call all divider discrepancies world-coordinate errors. Remaining closure:
-bind the reduction's runtime applicability,ordered paragraph/root structure and
-local border/text paint obligations to exact current cases. Orientation and
-activation applicability above are closed only at their stated boundaries.
+or call all divider discrepancies world-coordinate errors. Ordered-content
+structure is now checked on all24 current-full cases/48 authenticated trees:
+each root has paragraph/separator/paragraph in that order,five descendants,
+and one span per paragraph carrying Above/Below. Native mat-divider versus
+candidate authored div is preserved,not normalized into equal paint/layout.
+This closes the ordered-content question without recapture or instrumentation;
+no extra wrapper or missing paragraph is observed in this population. Evidence:
+divider-ordered-structure-current-20261006.log,SHA256
+a0f43713e36fb264da1355ec9c36a434f82dff5e765b5f653fb306f62ed63bfb.
+The full report authenticates as ab42dbec…; the log retains each case and both
+tree receipts. Remaining closure: reduction runtime applicability and local
+border/text paint obligations. Orientation and activation applicability above
+are closed only at their stated boundaries; no whole case is promoted.
 
 October6 caret/track canonical integration supersedes the earlier package
 statements below: export and independent cold check both exit0,compressed SHA
