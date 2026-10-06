@@ -2,6 +2,15 @@
 
 ## Current evidence boundary — October 5
 
+October6 paired empty-caret visibility update: all five editable families now
+have current-full checkpoint-bound light desktop DPR1/2 initial/hide captures,
+six timed boundaries per pair. Combined replay authenticates240 PNGs plus
+runtime/tree/source receipts and localized candidate blink strokes,1/1exit0.
+This replaces the hidden-native-caret coverage gap for this cohort only; older
+rasters remain honestly historical. Reports/logs use
+visible-caret-{family}-desktop-dpr{1|2}-20261006. Equal caret paint, other desktop
+themes,tablet and disabled/error coverage are not certified by visibility.
+
 October6 scrollbar track-action coverage: the existing dark/mobile DPR2 paired
 wheel/drag harness now observes one below-thumb held track press. Native scroll
 advances; candidate stays0 and targets underlying option3. The existing public

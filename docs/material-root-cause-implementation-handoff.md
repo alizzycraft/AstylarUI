@@ -2,6 +2,21 @@
 
 ## Current resumption ledger — October 5
 
+- Light-desktop paired empty-caret visibility gap now covered for all five
+  editable families at DPR1/2, current-full frozen checkpoint. Nine missing
+  populations use the same parameterized producer, alongside the prior email
+  DPR1 population; no historical capture overwritten. Six real Tab/delete
+  timed boundaries per pair,240 initial/hide PNGs total. Native on samples
+  expose19 pixels at DPR1/76 at DPR2; candidate screenshots require independent
+  localized blink comparisons (native screenshot hide does not hide WebGL).
+  Existing-suite replay authenticates runtime,trees,sources and all rasters,
+  checks empty/focused/type and contiguous exact candidate ink strokes in each
+  population;1/1exit0,1741.766ms. Reports follow
+  visible-caret-{family}-desktop-dpr{1|2}-20261006/latest-report.json, each with
+  adjacent terminal capture log. This closes paired visibility only for light
+  desktop; equal ink/width/position/sharpness and tablet/disabled/error coverage
+  remain. Do not recapture this cohort for the same absence question.
+
 - Missing paired desktop email caret boundary captured using the existing
   visible-caret producer with explicit family/DPR options (defaults retained).
   Current-full checkpoint,light1440×900 DPR1,real Tab/delete,six125ms initial/

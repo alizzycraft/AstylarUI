@@ -697,8 +697,9 @@ test('current paired caret-visible capture binds its pixels to unequal caret aut
   assert.equal(candidateInput.resolvedStyle.color, '#1d1b20');
 });
 
-test('desktop email empty caret preserves native visibility and candidate blink evidence', () => {
-  const file = 'artifacts/material-parity/visible-caret-input-desktop-dpr1-20261006/latest-report.json';
+test('desktop five-family empty caret preserves native visibility and candidate blink evidence', () => {
+  for (const family of ['form-field','input','autocomplete','datepicker','timepicker']) for (const dpr of [1,2]) {
+  const file = `artifacts/material-parity/visible-caret-${family}-desktop-dpr${dpr}-20261006/latest-report.json`;
   const capture = JSON.parse(readFileSync(file));
   const manifest = JSON.parse(readFileSync(capture.capture.checkpointManifest.file));
   assert.deepEqual(validateSupplementalCapture(capture, { reportFile: file,
@@ -707,12 +708,12 @@ test('desktop email empty caret preserves native visibility and candidate blink 
   assert.equal(capture.results.length, 6);
   const images = [];
   for (const row of capture.results) {
-    assert.equal(row.family, 'input'); assert.equal(row.profile, 'light');
-    assert.deepEqual(row.viewport, { width: 1440, height: 900, deviceScaleFactor: 1 });
+    assert.equal(row.family, family); assert.equal(row.profile, 'light');
+    assert.deepEqual(row.viewport, { width: 1440, height: 900, deviceScaleFactor: dpr });
     for (const mode of ['reference', 'astylar']) {
       assert.equal(row[mode].observation.control.value, '');
       assert.equal(row[mode].observation.control.focused, true);
-      assert.equal(row[mode].observation.control.type, 'email');
+      assert.equal(row[mode].observation.control.type, family === 'input' ? 'email' : 'text');
       for (const image of [row[mode].screenshot, row[mode].hiddenCaretControl])
         assert.equal(hash(readFileSync(image.file)), image.sha256);
       assert.equal(row[mode].screenshot.caret, 'initial');
@@ -722,17 +723,18 @@ test('desktop email empty caret preserves native visibility and candidate blink 
   }
   assert.ok(capture.results.some(row => row.reference.nativeCaretPixelDelta.changedPixels > 0));
   let stroke = false;
-  for (const on of images) for (const off of images) for (let x = 0; x < 24; x++) {
+  for (const on of images) for (const off of images) for (let x = 0; x < 24*dpr; x++) {
     let run = 0;
     for (let y = 0; y < on.height; y++) {
       const i = (y * on.width + x) * 4;
       const foreground = on.data[i] === 29 && on.data[i+1] === 27 && on.data[i+2] === 32;
       const changed = on.data[i] !== off.data[i] || on.data[i+1] !== off.data[i+1] || on.data[i+2] !== off.data[i+2];
       run = foreground && changed ? run + 1 : 0;
-      if (run >= 10) stroke = true;
+      if (run >= 10*dpr) stroke = true;
     }
   }
   assert.equal(stroke, true, 'candidate has a localized contiguous blinking caret, not just label animation');
+  }
 });
 
 test('dark mobile empty inputs expose caret pixels without changing retained producers', async t => {
