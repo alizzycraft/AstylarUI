@@ -2,6 +2,21 @@
 
 ## Current resumption ledger — October 6
 
+- Exact-typography backing control answers a causal subquestion: at identical
+  global CSS origins/native baselines, switching opaque canvas to transparent
+  ink composited onto the same gray changes964 pixels at DPR1 (native opaque
+  difference0). Candidate differs1114 from opaque and1020 from transparent:
+  transparent backing alone is not sufficient to reproduce candidate paint.
+  DPR2 diagnostic counts: native opaque1359/transparent2745,candidate opaque2964/
+  transparent2372,backing difference2332; no DPR2 native/control equivalence claim.
+  Existing reduction now asserts the DPR1 backing effect and remaining candidate
+  residual, alongside equal controls/current owner bindings. Verified1/1exit0,
+  21932.8493ms; divider-equal-typography-backing-verified-20261006.log SHA256
+  9ab2da6bba2293d8ce543f21a77a14f986918898da7b7437a93472daa73f25ec.
+  Initial control log is retained separately. No authored fixture or renderer
+  changed. Next isolate local texture-origin/baseline phase and composition;
+  this control proves a backing effect,not its share of the rendered defect.
+
 - Downstream text applicability check is now executable in the existing public
   typography reduction: complete method slices for line positions, texture
   creation, renderer text-mesh creation/placement and Babylon text-mesh/material

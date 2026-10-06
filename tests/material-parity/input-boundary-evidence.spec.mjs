@@ -114,12 +114,37 @@ test('public divider typography reduction observes equal paragraph span inputs a
           await page.goto(`http://127.0.0.1:${server.address().port}/?mode=${mode}`);
           await page.waitForFunction(() => !!window.dividerTextReduction);
           const data = await page.evaluate(() => { const {site,baselines,control,errors}=window.dividerTextReduction;return {site,baselines,control,errors}; });
+          // Diagnostic backing intervention only: preserve the same global CSS
+          // origins/baselines, then composite transparent ink onto the same gray.
+          const transparentControl = await page.evaluate(() => {
+            const { baselines } = window.dividerTextReduction;
+            const ink = document.createElement('canvas');
+            ink.width = 200 * devicePixelRatio; ink.height = 180 * devicePixelRatio;
+            const pen = ink.getContext('2d', { alpha: true });
+            pen.scale(devicePixelRatio, devicePixelRatio);
+            pen.font = 'normal 400 14.4px AuditRoboto'; pen.fillStyle = '#1d1b20';
+            baselines.forEach((y, i) => pen.fillText(i % 2 ? 'Below' : 'Above', 20 + i * .25, y));
+            const result = document.createElement('canvas');
+            result.width = ink.width; result.height = ink.height;
+            const ctx = result.getContext('2d', { alpha: false });
+            ctx.fillStyle = '#f0f0f0'; ctx.fillRect(0, 0, result.width, result.height);
+            ctx.drawImage(ink, 0, 0);
+            return Array.from(ctx.getImageData(0, 0, result.width, result.height).data);
+          });
           const image = PNG.sync.read(await page.screenshot());
           assert.deepEqual([...image.data.subarray(0, 4)], [240, 240, 240, 255], 'untouched root background must match the control');
           let different = 0;
           for (let i = 0; i < image.data.length; i += 4)
             if ([0,1,2,3].some(c => image.data[i+c] !== data.control[i+c])) different++;
           pair[mode] = { site: data.site, baselines: data.baselines, opaqueControlSha256: hash(Buffer.from(data.control)), differingPixels: different };
+          let transparentDifference = 0, backingDifference = 0;
+          for (let i = 0; i < image.data.length; i += 4) {
+            if ([0,1,2,3].some(c => image.data[i+c] !== transparentControl[i+c])) transparentDifference++;
+            if ([0,1,2,3].some(c => data.control[i+c] !== transparentControl[i+c])) backingDifference++;
+          }
+          pair[mode].transparentControlSha256 = hash(Buffer.from(transparentControl));
+          pair[mode].transparentControlDifferences = transparentDifference;
+          pair[mode].opaqueVersusTransparentDifferences = backingDifference;
           assert.deepEqual(errors, []); assert.deepEqual(data.errors, []);
           assert.equal(await page.evaluate(() => window.dividerTextReduction.dispose()), true);
         } finally { await page.close(); }
@@ -127,9 +152,13 @@ test('public divider typography reduction observes equal paragraph span inputs a
       assert.deepEqual(pair.reference.site, pair.astylar.site);
       assert.deepEqual(pair.reference.baselines, pair.astylar.baselines);
       assert.equal(pair.reference.opaqueControlSha256, pair.astylar.opaqueControlSha256);
+      assert.equal(pair.reference.transparentControlSha256, pair.astylar.transparentControlSha256);
+      assert.equal(pair.reference.opaqueVersusTransparentDifferences, pair.astylar.opaqueVersusTransparentDifferences);
       if (dpr === 1) {
         assert.equal(pair.reference.differingPixels, 0, 'opaque baseline control matches native DPR1 paragraph/span paint');
         assert.ok(pair.astylar.differingPixels > 0, 'retain the equal-input candidate paint counterexample');
+        assert.ok(pair.reference.opaqueVersusTransparentDifferences > 0, 'backing alone changes paint at identical origins');
+        assert.ok(pair.astylar.transparentControlDifferences > 0, 'transparent global backing alone does not reproduce candidate paint');
       }
       results.push({ dpr, ...pair });
     }
