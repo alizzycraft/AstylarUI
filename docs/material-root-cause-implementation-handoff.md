@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 6
 
+- Passive content question answered for330 non-divider cases: authenticated full
+  report plus660 reference/candidate tree receipts preserve each family-root's
+  extracted ordered text sequence across sidenav62/grid-list52/badge52/icon20/
+  list52/table52/progress-bar20/progress-spinner20. No extracted text loss/order
+  divergence; native wrapper/node counts remain unequal. Empty graphical
+  sequences are not icon/path or progress geometry proof. Read-only check exit0,
+  log passive-ordered-content-20261006.log,SHA256
+  0ba242d2dbc5ed2391e5f2380cd782f3d82ca7548513c6e0e4edf625c323621d.
+  This closes a specific content gap,not wrapper equivalence,semantics,paint or
+  complete cases. Next map preserved wrapper differences to existing ownership/
+  compensation findings rather than resurveying text or scalar classifications.
+
 - Divider current-runtime applicability answered: unchanged public equal-input
   paragraph/separator/paragraph reduction fails at DPR1/2 on Chrome154.0.8037.58,
   zero page errors. Separator bottom383 versus82,below top399 versus98,

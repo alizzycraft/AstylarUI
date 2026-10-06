@@ -2,6 +2,18 @@
 
 ## Current evidence boundary — October 6
 
+Passive ordered-content boundary now covers the330 configured cases outside
+divider:sidenav62,grid-list52,badge52,icon20,list52,table52,progress-bar20,
+progress-spinner20. Full current-full report and660 read tree receipts authenticate;
+each family-root subtree preserves its extracted ordered text sequence. No missing
+or reordered text is observed by this check. Native/candidate node counts and
+root keys remain distinct evidence; wrappers,generated paths,layout/paint and
+semantics are not equated. Empty graphical sequences do not establish icon or
+progress geometry. Log:passive-ordered-content-20261006.log,SHA256
+0ba242d2dbc5ed2391e5f2380cd782f3d82ca7548513c6e0e4edf625c323621d.
+Together with the prior24 divider trees,this covers extracted content sequence
+across354 passive cases,not complete structure obligations or full-case closure.
+
 Divider equal-input reduction now reproduces on the installed public package
 through the unchanged input-equivalence-proof.spec.ts case,with exact divider
 filter at DPR1/2. Both invocations exit1 with the same four301 CSS-pixel geometry
