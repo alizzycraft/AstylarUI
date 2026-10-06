@@ -2,6 +2,21 @@
 
 ## Current evidence boundary — October 6
 
+Divider local separator paint is now observed across all24 retained current-full
+cases using the existing focused-raster comparator,without recapture or altered
+inputs. The diagnostic log contains48 PNG receipts; independent read-only replay
+authenticates every image. Local SSIM ranges0.463324268553294–0.9130355704940788;
+18 diagnostic sharpness targets fail. These strips are not configured acceptance
+targets,and native border versus candidate background inputs remain unequal:
+neither default comparator matches nor diagnostic failures certify equal-input
+core paint. Text glyph paint and reduction runtime applicability remain open.
+Log:divider-local-strip-diagnostic-verified-20261006.log,SHA256
+a0e026c523f22aa73be89e886d44702fd48c8a5642a7a835ac07994d2dfcead2.
+The initial divider-local-strip-diagnostic-20261006.log remains failed evidence:
+its5px crop was smaller than the existing SSIM window. The corrected diagnostic
+uses8 CSS pixels of context above/below the separator; thresholds/window are
+unchanged. No configured case is promoted to complete inspection.
+
 October6 shared popup input boundary: retained40 selected select indicators and
 24 desktop open-hover-content cases have authenticated input-stage replay;
 real held-option probes cover the three families at light desktop DPR1. Native

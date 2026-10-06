@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 6
 
+- Divider local-paint question: retained separator geometry locates a bounded
+  raster strip on every24 current-full cases. Existing comparator observes SSIM
+  0.463324268553294–0.9130355704940788 and18 diagnostic sharpness failures.
+  Independent read-only receipt replay exits0 for all48 PNGs and24 rows; log
+  divider-local-strip-diagnostic-verified-20261006.log,SHA256
+  a0e026c523f22aa73be89e886d44702fd48c8a5642a7a835ac07994d2dfcead2.
+  PNG hashes were first recorded for this diagnostic,not original capture receipts.
+  Unequal native border/candidate background inputs prohibit a core-paint claim;
+  this diagnostic crop is not a configured acceptance target. Initial5px-high
+  crop failed the unchanged SSIM window (retained initial diagnostic log); using
+  8 CSS pixels context above/below supplies a valid crop without metric changes.
+  Remaining: text glyph paint and current applicability of the equal-input empty
+  block reduction. No full-case closure or output-gate result is added.
+
 - Popup theme question, retained current-full evidence: light/dark desktop DPR1
   select/open reference and candidate input-tree receipts authenticate. Native
   frame on-surface changes RGB(29,27,32) to RGB(230,225,229), but native option
