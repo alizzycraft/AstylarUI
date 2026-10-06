@@ -2,6 +2,10 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 
 const hash = text => createHash('sha256').update(text).digest('hex');
+const currentCaretTrackProofs = "    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\\('desktop five-family empty caret preserves native visibility and candidate blink evidence'/,\n" +
+  "      'current light desktop five-family empty-caret visibility and ink boundary', 'Authenticates ten current-checkpoint populations at DPR1/2, sixty real Tab/delete timed boundaries and240 initial/hide rasters. Localized candidate blink strokes and native visible carets are present; captured authoring/normal/interaction/effective stages preserve omitted candidate caretColor versus native primary ink. This is bounded visibility/input attribution, not equal stroke geometry, sharpness, other themes/states or whole-case closure.'),\n" +
+  "    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\\('public equal-input overflow isolates scrollbar gutter before projection'/,\n" +
+  "      'public equal-input scrollbar track interaction diagnostic counterexample', 'Identical overflow auto/scroll boxes at DPR1/2 expose positive native held track scrolling versus zero candidate offsets. Complete installed/current scrollbar creation agrees; the core paints non-pickable indicators. The paired Material track observation independently targets underlying options. This is a missing core interaction capability, not a plugin offset or world-coordinate cause; local raster, other platforms and all-profile acceptance remain open.'),\n";
 const tooltipOwnershipProof = "    proof(root, 'tests/material-parity/sort-focus-structure.spec.mjs', /test\\('ordinary tooltip repeated hover and leave exposes live ownership separately from tracked counts'/,\n" +
   "      'ordinary dark mobile tooltip live-material retention diagnostic counterexample', 'Current-full checkpoint-bound dark/mobile390x844 DPR2 actual hover/leave cycles open one paired tooltip and remove it each time. Tracked materials remain13/13/13 while live materials grow14/15/16 with accumulating unbound hover identities; final disposal clears sampled resources. The independently reduced public pointer-state proof supplies the core allocation cause. This retains a failed live plateau, not lifecycle acceptance, all-profile cleanup, GPU retention or user-visible lag attribution.'),\n";
 const standaloneCoverageProof = "    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\\('retained standalone visibility disabled and selection cohorts preserve exact receipts and failures'/,\n" +
@@ -10,6 +14,10 @@ const standaloneCoverageProof = "    proof(root, 'tests/material-parity/input-eq
 // Whole-module equality remains mandatory before any older transition runs.
 export function restoreScalarReviewExtraction(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes(currentCaretTrackProofs)) {
+    assert.equal(current.split(currentCaretTrackProofs).length, 2, 'repeated current caret/track registration');
+    current = current.replace(currentCaretTrackProofs, '');
+  }
   if (current.includes(tooltipOwnershipProof)) {
     assert.equal(current.split(tooltipOwnershipProof).length, 2, 'repeated tooltip ownership registration');
     current = current.replace(tooltipOwnershipProof, '');

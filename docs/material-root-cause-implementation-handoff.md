@@ -2,6 +2,17 @@
 
 ## Current resumption ledger — October 5
 
+- Machine-readable proof inventory now registers the current ten-population
+  caret boundary and independent public track-interaction counterexample,
+  without adding another survey/report framework. All127 pointers resolve;
+  both new populations have unique registrations. Existing complete historical
+  producer conservation reverses only the exact added registration block before
+  its unchanged original hashes; behavior/import/wrapper mutation controls stay
+  enforced. Workflow+alignment conservation8/8exit0,16783.732ms. This is source
+  registration, not publication in the existing401b79a1 canonical package.
+  Changed source/proof fingerprints still require coherent canonical export,
+  independent check and compact refresh at the next justified milestone.
+
 - Visible-caret historical producer receipt reconciled through the existing
   gap-survey source reader, not repinned: focused original check initially
   rejects only scripts/audit-material-visible-caret.mjs (old766dce9d/current

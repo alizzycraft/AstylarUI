@@ -18,7 +18,9 @@ test('all canonical proof pointers resolve after focused/integration test moves'
   const proofs = inspect(readFileSync);
   // Original 107 plus sixteen public/popup proofs, the retained standalone
   // cohort registration, and the ordinary tooltip ownership counterexample.
-  assert.equal(proofs.length, 125);
+  assert.equal(proofs.length, 127);
+  assert.equal(proofs.filter(p => p.status === 'current light desktop five-family empty-caret visibility and ink boundary').length, 1);
+  assert.equal(proofs.filter(p => p.status === 'public equal-input scrollbar track interaction diagnostic counterexample').length, 1);
   assert.equal(proofs.filter(p => p.status ===
     'ordinary dark mobile tooltip live-material retention diagnostic counterexample').length, 1);
   assert.ok(proofs.every(p => Number.isInteger(p.line) && p.line > 0 && p.status !== 'missing'));
