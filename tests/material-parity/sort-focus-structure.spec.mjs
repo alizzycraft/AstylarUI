@@ -2523,20 +2523,33 @@ test('retained select indicator inputs preserve pseudo-checkbox versus plugin pa
     claim: 'Unequal captured indicator authoring and resolved inputs; not an equal-input core paint reproduction.' }));
 });
 
-test('select popup token ancestry separates global fallback from frame theme overrides', async t => {
+test('popup token ancestry separates global fallback from frame theme overrides', async t => {
+  const bytes = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const rows = JSON.parse(bytes).interactions.filter(row =>
+    ['select', 'autocomplete', 'timepicker'].includes(row.family) && row.state === 'open');
+  assert.equal(rows.length, 24);
   await withFrozenShowcase(async (browser, baseUrl) => {
     const observations = [];
-    for (const profile of ['light', 'dark']) {
-      const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 });
+    for (const row of rows) {
+      const { family, profile, viewport } = row;
+      const retainedBytes = readFileSync(row.inputTrees.reference.file);
+      assert.equal(createHash('sha256').update(retainedBytes).digest('hex'), row.inputTrees.reference.sha256);
+      const retained = JSON.parse(retainedBytes);
+      const frame = retained.nodes.find(node => node.key === 'frame');
+      const option = retained.nodes.find(node => node.type === 'mat-option');
+      const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height },
+        deviceScaleFactor: viewport.deviceScaleFactor });
       const errors = [];
       page.on('pageerror', error => errors.push(String(error)));
-      await page.goto(`${baseUrl}/reference/select?benchmark=1&profile=${profile}`);
-      await page.locator('#select-control').click();
+      await page.goto(`${baseUrl}/reference/${family}?benchmark=1&profile=${profile}`);
+      await page.locator(`#${family}-control`).click();
       await page.locator('mat-option').first().waitFor();
       const observation = await page.evaluate(() => {
         const option = document.querySelector('mat-option');
         const selected = document.querySelector('mat-option[aria-selected="true"]');
-        const label = selected.querySelector('.mdc-list-item__primary-text');
+        const label = selected?.querySelector('.mdc-list-item__primary-text');
         const properties = ['--mat-sys-on-surface', '--mat-sys-on-secondary-container',
           '--mat-sys-secondary-container', '--mat-option-label-text-color',
           '--mat-option-selected-state-label-text-color', '--mat-option-selected-state-layer-color'];
@@ -2545,8 +2558,8 @@ test('select popup token ancestry separates global fallback from frame theme ove
         for (let el = option; el; el = el.parentElement)
           ancestors.push({ tag: el.tagName, class: el.className, tokens: tokens(el) });
         return { ancestors, frame: tokens(document.querySelector('.frame')),
-          base: getComputedStyle(option).color, selectedInk: getComputedStyle(label).color,
-          selectedBackground: getComputedStyle(selected).backgroundColor };
+          base: getComputedStyle(option).color, selectedInk: label ? getComputedStyle(label).color : null,
+          selectedBackground: selected ? getComputedStyle(selected).backgroundColor : null };
       });
       assert.ok(observation.ancestors.some(x => x.class === 'cdk-overlay-container'));
       assert.ok(!observation.ancestors.some(x => String(x.class).split(' ').includes('frame')));
@@ -2557,17 +2570,18 @@ test('select popup token ancestry separates global fallback from frame theme ove
       assert.equal(root.tokens['--mat-option-label-text-color'], '');
       assert.equal(root.tokens['--mat-option-selected-state-label-text-color'], '');
       assert.equal(root.tokens['--mat-option-selected-state-layer-color'], '');
-      assert.equal(observation.base, 'rgb(29, 27, 30)');
-      assert.equal(observation.selectedInk, 'rgb(75, 67, 87)');
-      assert.equal(observation.selectedBackground, 'rgb(234, 222, 247)');
-      assert.equal(observation.frame['--mat-sys-on-surface'], profile === 'dark' ? '#e6e1e5' : '#1d1b20');
+      assert.equal(observation.base, retained.styles[option.style].color);
+      assert.equal(observation.selectedInk, family === 'select' ? 'rgb(75, 67, 87)' : null);
+      assert.equal(observation.selectedBackground, family === 'select' ? 'rgb(234, 222, 247)' : null);
+      assert.equal(observation.frame['--mat-sys-on-surface'], frame.inline['--mat-sys-on-surface'].value);
       assert.deepEqual(errors, []);
-      observations.push({ profile, ...observation });
+      observations.push({ family, profile, viewport, receipt: row.inputTrees.reference, ...observation });
       await page.close();
     }
-    assert.deepEqual(observations[0].ancestors.at(-1).tokens, observations[1].ancestors.at(-1).tokens);
+    for (const observation of observations)
+      assert.deepEqual(observation.ancestors.at(-1).tokens, observations[0].ancestors.at(-1).tokens);
     t.diagnostic(JSON.stringify({ browser: browser.version(), observations,
-      claim: 'Original reference popup ancestry and fallback provenance only; no candidate paint or all-profile acceptance.' }));
+      claim: 'Original reference popup ancestry and fallback provenance for24 configured desktop open cases; no candidate paint,mobile/tablet or full-case acceptance.' }));
   }, {}, { checkpointFile: 'artifacts/material-parity/current-full-20261005/checkpoint/manifest.json' });
 });
 

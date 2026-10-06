@@ -68,7 +68,21 @@
   disabled) and popup-option-held-inputs-verified-20261006.log (settlement guard)
   remain; no failed run is described as passing. Other profiles/DPRs,held local
   pixels and animation/lifetime remain open.
-  Next: other popup-family token provenance and exact remaining paint obligations;
+  Expanded original-browser ancestry probe now covers all24 configured desktop
+  open cases:select/autocomplete/timepicker,four profiles,DPR1/2. Full report and
+  each reference-tree receipt authenticate; each observed frame override/base ink
+  agrees with its retained row. Every actual option ancestry reaches BODY/HTML,
+  excludes frame,and carries identical global system token values with absent
+  component option-color overrides. No cross-family inheritance conjecture is
+  needed for this cohort. Selected native select leaf/background stay separately
+  asserted; other families have no selected native option. Probe1/1exit0,
+  27118.7981ms,Chrome154.0.8037.58,whole served checkpoint fingerprint matched.
+  Log:popup-token-ancestry-desktop-20261006.log,SHA256
+  3372b06f8dcc42b074088777c8ebcad38ab2875cfc97e3e697dae9d54f83506d.
+  This supersedes the earlier two-select-profile scope,not its retained receipt.
+  Tablet/mobile token ancestry,candidate equivalent paint and lifetime are open.
+  Next: register the coherent popup proof batch through the existing producer
+  inventory,then reconcile exact remaining paint/profile obligations;
   geometry/local raster equivalence still needs equivalent inputs. Standalone
   ancestry/indicator/hover/held proofs are not yet registered in the canonical package;
   reconcile the owning-suite fingerprint at the next coherent integration batch,

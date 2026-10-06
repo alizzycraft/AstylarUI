@@ -2,6 +2,18 @@
 
 ## Current evidence boundary — October 5
 
+October6 shared popup input boundary: retained40 selected select indicators and
+24 desktop open-hover-content cases have authenticated input-stage replay;
+real held-option probes cover the three families at light desktop DPR1. Native
+token ancestry is now observed for all24 configured desktop open cases across
+select/autocomplete/timepicker,four profiles,DPR1/2 against the full current-full
+checkpoint. Option tokens inherit from global HTML,not frame overrides. Unequal
+plugin indicator geometry/literal ink and opaque hover/active backgrounds remain
+authoring differences,not equal-input core paint proofs. Exact receipts/logs and
+limits are in the current handoff. Tablet/mobile,matched-time local rasters,
+lifetime and full case closure remain pending; standalone proof registration/
+canonical suite-fingerprint integration is the next coherent batch.
+
 October6 caret/track canonical integration supersedes the earlier package
 statements below: export and independent cold check both exit0,compressed SHA
 4845e414926218b5ada5d389b9a259f45369fb830f0f865b3a1af73ca4a8bf27.
