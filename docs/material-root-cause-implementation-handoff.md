@@ -2,6 +2,21 @@
 
 ## Current resumption ledger — October 6
 
+- Local-origin phase control now separates a second mechanism in the same public
+  reduction. Transparent text at local x0/baseline14 in120x24 CSS canvases,
+  nearest composition at unchanged20..20.75 fractional origins, differs from
+  global transparent painting by806 pixels DPR1/1428 DPR2. Global baselines
+  remain34/66.25/98.5/130.75. Native differs1044/2936 from this local control;
+  candidate804/2566. Thus backing and origin rebasing each affect pixels, but
+  neither this model nor their combination reproduces candidate paint exactly.
+  This is a diagnostic model,not measured candidate texture placement or a
+  phase-offset correction. Equal controls and owner bindings pass1/1exit0,
+  40180.1022ms; divider-equal-typography-local-phase-20261006.log SHA256
+  1170fff9f982edb0f5b8146f61acf5bda2b0d713b7bac75d20a36e6452d7272a.
+  Next observe actual reduction texture paint inputs,local baseline and projected
+  bounds to compare with this control; no further speculative phase search.
+  No canonical fixture,renderer,threshold or full-case status changed.
+
 - Exact-typography backing control answers a causal subquestion: at identical
   global CSS origins/native baselines, switching opaque canvas to transparent
   ink composited onto the same gray changes964 pixels at DPR1 (native opaque

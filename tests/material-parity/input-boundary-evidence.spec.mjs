@@ -132,6 +132,26 @@ test('public divider typography reduction observes equal paragraph span inputs a
             return Array.from(ctx.getImageData(0, 0, result.width, result.height).data);
           });
           const image = PNG.sync.read(await page.screenshot());
+          const localControl = await page.evaluate(() => {
+            const { baselines } = window.dividerTextReduction;
+            const result = document.createElement('canvas');
+            result.width = 200 * devicePixelRatio; result.height = 180 * devicePixelRatio;
+            const composite = result.getContext('2d', { alpha: false });
+            composite.fillStyle = '#f0f0f0'; composite.fillRect(0, 0, result.width, result.height);
+            composite.imageSmoothingEnabled = false;
+            const rows = baselines.map((baseline, i) => {
+              const left = 20 + i * .25, top = 20 + i * 32 + i * .25;
+              const ink = document.createElement('canvas');
+              ink.width = 120 * devicePixelRatio; ink.height = 24 * devicePixelRatio;
+              const pen = ink.getContext('2d', { alpha: true });
+              pen.scale(devicePixelRatio, devicePixelRatio);
+              pen.font = 'normal 400 14.4px AuditRoboto'; pen.fillStyle = '#1d1b20';
+              pen.fillText(i % 2 ? 'Below' : 'Above', 0, baseline - top);
+              composite.drawImage(ink, left * devicePixelRatio, top * devicePixelRatio);
+              return { left, top, baseline, localBaseline: baseline - top };
+            });
+            return { rows, pixels: Array.from(composite.getImageData(0, 0, result.width, result.height).data) };
+          });
           assert.deepEqual([...image.data.subarray(0, 4)], [240, 240, 240, 255], 'untouched root background must match the control');
           let different = 0;
           for (let i = 0; i < image.data.length; i += 4)
@@ -145,6 +165,13 @@ test('public divider typography reduction observes equal paragraph span inputs a
           pair[mode].transparentControlSha256 = hash(Buffer.from(transparentControl));
           pair[mode].transparentControlDifferences = transparentDifference;
           pair[mode].opaqueVersusTransparentDifferences = backingDifference;
+          let localDifference = 0, originDifference = 0;
+          for (let i = 0; i < image.data.length; i += 4) {
+            if ([0,1,2,3].some(c => image.data[i+c] !== localControl.pixels[i+c])) localDifference++;
+            if ([0,1,2,3].some(c => transparentControl[i+c] !== localControl.pixels[i+c])) originDifference++;
+          }
+          pair[mode].localControl = { rows: localControl.rows, sha256: hash(Buffer.from(localControl.pixels)),
+            screenshotDifferences: localDifference, globalTransparentDifferences: originDifference };
           assert.deepEqual(errors, []); assert.deepEqual(data.errors, []);
           assert.equal(await page.evaluate(() => window.dividerTextReduction.dispose()), true);
         } finally { await page.close(); }
@@ -153,6 +180,8 @@ test('public divider typography reduction observes equal paragraph span inputs a
       assert.deepEqual(pair.reference.baselines, pair.astylar.baselines);
       assert.equal(pair.reference.opaqueControlSha256, pair.astylar.opaqueControlSha256);
       assert.equal(pair.reference.transparentControlSha256, pair.astylar.transparentControlSha256);
+      assert.deepEqual(pair.reference.localControl.rows, pair.astylar.localControl.rows);
+      assert.equal(pair.reference.localControl.sha256, pair.astylar.localControl.sha256);
       assert.equal(pair.reference.opaqueVersusTransparentDifferences, pair.astylar.opaqueVersusTransparentDifferences);
       if (dpr === 1) {
         assert.equal(pair.reference.differingPixels, 0, 'opaque baseline control matches native DPR1 paragraph/span paint');
