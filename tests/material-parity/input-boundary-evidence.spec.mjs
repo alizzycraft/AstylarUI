@@ -271,6 +271,35 @@ test('public divider typography reduction observes equal paragraph span inputs a
           assert.equal(originResiduals.reduce((sum, row) => sum + row.differingPixels, 0), mappedDifference);
           if (mode === 'astylar') {
             assert.equal(data.runtimeText.length, 4);
+            const samplingModels = [];
+            for (const origin of ['measured', 'authored']) {
+              const prediction = new Uint8Array(image.data.length);
+              for (let p = 0; p < prediction.length; p += 4) prediction.set([240,240,240,255], p);
+              for (const texture of data.runtimeText) {
+                const index = Number(texture.id.split('-').at(-1));
+                const left = origin === 'measured' ? texture.bounds.left : 20 + index * .25;
+                const top = origin === 'measured' ? texture.bounds.top : 20 + index * 32 + index * .25;
+                const { width, height } = texture.logicalSize;
+                for (let y = 0; y < image.height; y++) for (let x = 0; x < image.width; x++) {
+                  const u = ((x + .5) / dpr - left) / width, v = ((y + .5) / dpr - top) / height;
+                  if (u < 0 || u >= 1 || v < 0 || v >= 1) continue;
+                  const texel = (Math.floor(v * texture.backingSize.height) * texture.backingSize.width +
+                    Math.floor(u * texture.backingSize.width)) * 4;
+                  const alpha = texture.pixels[texel + 3] / 255, pixel = (y * image.width + x) * 4;
+                  for (let c = 0; c < 3; c++) prediction[pixel + c] = Math.round(texture.pixels[texel + c] * alpha + 240 * (1 - alpha));
+                }
+              }
+              let different = 0, greaterThanTwo = 0, maximum = 0;
+              for (let p = 0; p < prediction.length; p += 4) {
+                const magnitude = Math.max(...[0,1,2,3].map(c => Math.abs(prediction[p+c] - image.data[p+c])));
+                if (magnitude) different++;
+                if (magnitude > 2) greaterThanTwo++;
+                maximum = Math.max(maximum, magnitude);
+              }
+              samplingModels.push({ origin, differingPixels: different, greaterThanTwo, maximumChannelDifference: maximum,
+                predictionSha256: hash(prediction) });
+            }
+            pair[mode].samplingModels = samplingModels;
             for (let i = 0; i < 4; i++) {
               const observed = data.runtimeText.find(row => row.id === `text-${i}`), expected = mappedControl.rows[i];
               assert.deepEqual(observed.logicalSize, { width: expected.width, height: expected.height });

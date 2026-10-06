@@ -2,6 +2,23 @@
 
 ## Current resumption ledger — October 6
 
+- Pixel-center nearest-texel model using actual RGBA/logical/backing sizes reduces
+  candidate residual versus Canvas2D mapping481→57 pixels DPR1 and1512→306 DPR2.
+  Measured versus exact authored origins have identical residual counts; DPR2
+  prediction hashes are identical. DPR1 max62/61 with13 differences>2; DPR2
+  max213 with172>2. Thus tiny projected-origin drift does not explain the major
+  residual,while sample ownership explains much of the model discrepancy.
+  Remaining MSAA/nearest-tie/upload/transfer behavior is not causally resolved.
+  Focused1/1exit0,37648.7695ms; log
+  divider-equal-typography-texel-ownership-20261006.log SHA256
+  36e89d3f2d83a1aed798b81a413a92dd21cdb771c68b96901e961cffc94226f9.
+  Bounded classification: equal-input HTML/candidate paint counterexample;
+  backing/local origin/integer-to-fractional mapping affect rendering; canvas
+  texture bytes/baseline match; post-canvas sampling/rasterization remains
+  suspected,not a general confirmed defect. Integrate the proof and applicability
+  into the existing divider obligation record,then prioritize broader missing
+  case evidence. Do not substitute Canvas2D model agreement for HTML acceptance.
+
 - Per-origin residual now isolates a half-device-pixel tie boundary. DPR1 rows
   at20/20.25/20.5/20.75 have57/73/289/62 differing pixels; only20.5 has262
   differences>2,max213,others max1. DPR2 rows have131/625/131/625 differences;
