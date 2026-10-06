@@ -2,6 +2,19 @@
 
 ## Current resumption ledger — October 6
 
+- October7 progress applicability clarified using existing records only:
+  reference.component.ts lines92/93 authors determinate value64 for both families;
+  candidate lines906/907 request matching mode/progress. Authenticated existing
+  progress-configured-input-membership-20261006.log SHA
+  d64d73bea9a8e7d6ad2640bea3bc6a59c072ae9465f1aa3ca8577c5111fb6684
+  contains40 family rows,only static/inspect,all determinate0.64. The extra JSON
+  summary row is not another case. Configured passive declarations add no value
+  transitions. Other values/indeterminate modes are therefore inapplicable to
+  these authored comparisons,not missing inspection or a claim of global support.
+  Inventory removes that accidental hypothetical blocker while retaining all
+  configured viewport/DPR paint,geometry,semantic and lifetime obligations.
+  No full-case promotion,producer mutation,reference edit or acceptance change.
+
 - October7 Icon full-image crop registration closes the remaining retained
   static crop-origin uncertainty: original cropPng extracted unchanged from
   the receipt-matching runner reconstructs all24 saved RGBA crops exactly from
