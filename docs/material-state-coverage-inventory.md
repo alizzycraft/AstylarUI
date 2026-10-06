@@ -2,6 +2,14 @@
 
 ## Current evidence boundary — October 6
 
+Passive batch definition/proof checks pass3/3 and historical source-binding
+replays pass4/4. Logs:passive-definition-proof-validation-20261006.log and
+passive-batch-source-bindings-selected-20261006.log. All145 predecessor
+definitions remain exact; both additions pass receipt/conclusion negative
+controls. Producer147/135 still awaits canonical export, independent cold
+verification and compact reconciliation; accepted145/131 is not promoted.
+No configured case closure or current output acceptance is added.
+
 Passive inventory registration now135 proofs (accepted131),source definitions147
 (accepted145). Exact four-entry source restoration and predecessor inventory
 conservation pass2/2 with four altered-entry rejections. Logs:

@@ -2415,26 +2415,36 @@ test('recent source diagnostics conserve predecessor findings and reject altered
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const priorDefinitions = new Function(previous.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
   assert.equal(priorDefinitions.length, 135);
-  assert.equal(audit.sourceFindings.length, 145);
+  assert.equal(audit.sourceFindings.length, 147);
+  const legacyFindings = audit.sourceFindings.slice(2);
+  const conservedPolicy = execFileSync('git', ['show', 'aee5b612:tests/material-parity/input-equivalence-policy.mjs'],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  const conservedDefinitions = new Function(conservedPolicy.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
+  assert.equal(legacyFindings.length, 145);
+  assert.deepEqual(legacyFindings.map(({ locations, detected, ...definition }) => definition), conservedDefinitions);
+  assert.deepEqual(audit.sourceFindings.slice(0, 2).map(entry => entry.id), [
+    'core-public-semantic-subset-omits-accessibility-only-hiding',
+    'fixture-list-content-wrappers-and-row-sizing-substituted',
+  ]);
   const precedingPolicy = execFileSync('git', ['show', 'a6217c5:tests/material-parity/input-equivalence-policy.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const precedingDefinitions = new Function(precedingPolicy.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
   assert.equal(precedingDefinitions.length, 138);
-  for (const [index, { locations, detected, ...definition }] of audit.sourceFindings.slice(0, 138).entries())
+  for (const [index, { locations, detected, ...definition }] of legacyFindings.slice(0, 138).entries())
     assert.equal(JSON.stringify(definition), JSON.stringify(precedingDefinitions[index]), precedingDefinitions[index].id);
-  assert.equal(audit.sourceFindings[138].id, 'core-pointer-state-material-allocation-escapes-render-owner');
-  assert.equal(audit.sourceFindings[139].id, 'plugin-linear-progress-right-origin-and-track-input-mismatch');
-  for (const [index, { locations, detected, ...definition }] of audit.sourceFindings.slice(3, 138).entries())
+  assert.equal(legacyFindings[138].id, 'core-pointer-state-material-allocation-escapes-render-owner');
+  assert.equal(legacyFindings[139].id, 'plugin-linear-progress-right-origin-and-track-input-mismatch');
+  for (const [index, { locations, detected, ...definition }] of legacyFindings.slice(3, 138).entries())
     assert.equal(JSON.stringify(definition), JSON.stringify(priorDefinitions[index]), priorDefinitions[index].id);
   assert.ok(audit.sourceFindings.every(entry => entry.detected));
   const expected = ['core-scroll-client-area-does-not-reserve-native-gutter',
     'core-caret-focus-allocation-escapes-render-owner', 'core-text-transparent-backing-and-local-raster-phase'];
-  assert.deepEqual(audit.sourceFindings.slice(0, 3).map(entry => entry.id), expected);
+  assert.deepEqual(legacyFindings.slice(0, 3).map(entry => entry.id), expected);
   const validation = () => validateMaterialInputAudit(audit, { requireComplete: false });
   // This deliberately partial synthetic capture has no paired root-style receipt.
   // Keep that unrelated failure explicit rather than treating this as full acceptance.
   assert.deepEqual(validation(), ['1 cases lack paired root style evidence']);
-  for (const finding of [...audit.sourceFindings.slice(0, 3), ...audit.sourceFindings.slice(138)]) {
+  for (const finding of [...audit.sourceFindings.slice(0, 2), ...legacyFindings.slice(0, 3), ...legacyFindings.slice(138)]) {
     assert.ok(finding.observation.element && finding.observation.states.length && finding.owner && finding.focusedProof);
     for (const receipt of finding.evidence) {
       assert.equal(createHash('sha256').update(readFileSync(receipt.file)).digest('hex'), receipt.sha256);
@@ -2450,9 +2460,9 @@ test('recent source diagnostics conserve predecessor findings and reject altered
     assert.ok(validation().some(error => error.includes(finding.id) && /differs from policy/.test(error)));
     Object.assign(finding, structuredClone(original));
   }
-  assert.equal(audit.sourceFindings[0].classification, 'confirmed-core-renderer-defect');
-  assert.equal(audit.sourceFindings[1].classification, 'confirmed-core-renderer-defect');
-  assert.equal(audit.sourceFindings[2].classification, 'suspected-core-renderer-defect');
+  assert.equal(legacyFindings[0].classification, 'confirmed-core-renderer-defect');
+  assert.equal(legacyFindings[1].classification, 'confirmed-core-renderer-defect');
+  assert.equal(legacyFindings[2].classification, 'suspected-core-renderer-defect');
   assert.equal(audit.summary.inputEquivalent, false);
 });
 

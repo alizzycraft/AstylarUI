@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 6
 
+- Passive batch integration checks finished: four historical source-binding
+  assertions pass4/4 (320764.0323ms), passive-batch-source-bindings-selected-
+  20261006.log. Three definition/proof checks pass3/3 (39085.7212ms),
+  passive-definition-proof-validation-20261006.log. Existing145 definitions
+  are conserved exactly; new2 findings receive the same receipt/conclusion
+  mutation checks. The hiding observation now names its exact target elements.
+  No renderer/fixture/threshold changes or full-case promotion. Next one
+  canonical147-finding/135-proof export, independent cold verification and
+  compact reconciliation; accepted145/131 generation remains historical until
+  those complete. Remaining coverage priority is exact applicable-obligation
+  closure, especially paint/semantics/ownership not proved by target gates.
+
 - Passive proof registration135 versus accepted131: four list/progress/semantic-
   subset/actual-AX entries added to existing inventory. Exact2075-byte block
   SHA1501bf00ae18fbc613480e741055025374d1fc5280b30e160d777de6d09fd7d6
