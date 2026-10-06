@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 6
 
+- Divider residual versus existing text-phase proof: original public-text-backing-
+  phase-a9591d1-final.log authenticates SHA a82e6f9540ac774e4f5c784622153e933ba1002d54c827823a79aeec37f7b27c.
+  Its public reduction requests12px Roboto/16px line-height,.4px tracking,
+  light ink on#323033 at four80..80.75px origins,DPR1/2. Divider contrast
+  requests14.4px/normal line-height/normal tracking with paragraph/inline
+  composition. Existing proof establishes a related bounded mechanism,not
+  this exact residual's cause. Do not rerun it unchanged or generalize its
+  opaque-backing intervention to divider acceptance. Basic font mismatch is
+  rejected; backing/phase,kerning and composition remain competing explanations.
+  Next decisive runtime check must reproduce these actual inputs through the
+  existing public reduction,after canonical consumed-source freeze ends.
+
 - Divider retained text-paint gap narrowed without recapture: current-full report
   SHA ab42dbec authenticates24 cases/48 ink-centroid observations,all matching,
   but zero configured focused rasters. Existing native-bounds alignment crops
