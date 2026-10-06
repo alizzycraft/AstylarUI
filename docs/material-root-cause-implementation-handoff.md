@@ -2,6 +2,17 @@
 
 ## Current resumption ledger — October 6
 
+- Divider retained runtime proof now reproducible in existing input-boundary
+  suite: exact responsive AX16-member and desktop ownership8-member cohorts,
+  original log SHA receipts,current helper-source SHA,checkpoint/browser and
+  observed semantic/resource assertions replay. Focused name-filtered test
+  passes1/1,1379.0202ms;divider-retained-runtime-proof-20261006.log. Original
+  tests unchanged. This is retained checkpoint evidence,not recapture/current
+  working-tree rendering acceptance or all-case closure. Source/proof inventory
+  registration and consumed-source fingerprint reconciliation now belong to
+  next coherent divider batch; do not export merely for this assertion edit.
+  Accepted147/135 package70dc9ec1 push completed (GitHub large-file warning only).
+
 - Passive canonical batch accepted after export93842 and independent cold
   check92981 both exit0,then compact import/verify13284 exit0. Package SHA256
   fd341baa78ab8ffaf93e94d138c6654d45ff54566242fc4412e8f1c73ea41caf.

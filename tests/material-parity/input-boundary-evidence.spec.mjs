@@ -19,6 +19,57 @@ const bytes = readFileSync(file);
 assert.equal(hash(bytes), '39df94e0eb87480d3824927a41a9950d1d275f7c97ab97a571c449efdc6da7d7');
 const report = JSON.parse(bytes);
 
+test('retained divider responsive accessibility and replacement ownership preserve exact bounded observations', () => {
+  const load = (name, receipt) => {
+    const bytes = readFileSync(`artifacts/material-parity/${name}`);
+    assert.equal(hash(bytes), receipt);
+    const evidence = JSON.parse(bytes);
+    assert.equal(evidence.helperSourceSha256,
+      hash(readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')));
+    assert.equal(evidence.checkpoint, 'artifacts/material-parity/current-full-20261005/checkpoint/manifest.json');
+    assert.equal(evidence.browser, '154.0.8037.58');
+    return evidence;
+  };
+  const ax = load('divider-responsive-ax-20261006.log',
+    '0504ec4a2381b9c67a1b931fce33bbb98cba7c6fc43fd2807a87e22cd104f1eb');
+  const expected = ['light', 'dark', 'contrast', 'custom'].flatMap(profile =>
+    ['tablet', 'mobile'].flatMap(viewport => ['reference', 'astylar'].map(mode => `${profile}:${viewport}:${mode}`)));
+  assert.deepEqual(ax.rows.map(r => `${r.profile}:${r.viewport}:${r.mode}`).sort(), expected.sort());
+  for (const row of ax.rows) {
+    assert.equal(row.dpr, 1);
+    assert.deepEqual([row.width, row.height], row.viewport === 'tablet' ? [768, 1024] : [390, 844]);
+    assert.deepEqual(row.errors, []);
+    assert.equal(row.target.ignored, false);
+    assert.equal(row.target.role.value, 'separator');
+    assert.equal(row.target.name.value, '');
+    assert.equal(row.target.properties.find(p => p.name === 'orientation').value.value, 'horizontal');
+    assert.deepEqual(row.target.childIds, []);
+  }
+  const ownership = load('divider-update-disposal-20261006.log',
+    '5260c2abddc5b4d3d0a3ee87bcaca765b8e969841e31df5e9ee1851367c26b51');
+  assert.deepEqual(ownership.rows.map(r => `${r.profile}:${r.dpr}`).sort(),
+    ['light', 'dark', 'contrast', 'custom'].flatMap(profile => [1, 2].map(dpr => `${profile}:${dpr}`)).sort());
+  for (const row of ownership.rows) {
+    assert.deepEqual(row.errors, []);
+    assert.equal(row.updates.length, 3);
+    for (const sample of [row.before, ...row.updates]) {
+      assert.deepEqual(sample.live, { meshes: 17, materials: 16, textures: 4 });
+      assert.deepEqual(sample.tracked, sample.live);
+      assert.equal(sample.cache.size, 4);
+      assert.equal(sample.loadedTextures, 4);
+      assert.deepEqual(sample.unboundMaterials, []);
+      assert.equal(sample.session.status, 'idle');
+      assert.deepEqual(sample.session.pendingReasons, []);
+    }
+    for (const key of ['surfaceDisposed', 'sceneDisposed', 'engineDisposed']) assert.equal(row.after[key], true);
+    for (const key of ['meshes', 'materials', 'textures', 'cacheSize', 'loadedTextures']) assert.equal(row.after[key], 0);
+    assert.deepEqual(row.after.tracked, { meshes: 0, materials: 0, textures: 0 });
+    assert.deepEqual(row.after.plugins, { owners: 0, resources: 0, cleanups: 0, pending: 0 });
+  }
+  // Receipt replay conserves these observed cohorts; it is not a new browser run,
+  // mobile lifecycle, late-async/remount proof or complete accessibility acceptance.
+});
+
 test('current list wrapper inputs retain clipping and row-height divergence for all configured cases', () => {
   const fullBytes = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
   assert.equal(hash(fullBytes), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
