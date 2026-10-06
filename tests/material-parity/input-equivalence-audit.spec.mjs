@@ -1898,8 +1898,28 @@ test('recent public and popup proofs join existing inventories without changing 
   }
 });
 
+async function conservedPrePassiveDefinitions() {
+  const { sourceAuditDefinitions: current } = await import('./input-equivalence-policy.mjs');
+  const previous = execFileSync('git', ['show', 'aee5b612:tests/material-parity/input-equivalence-policy.mjs'],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  const predecessor = new Function(previous.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
+  assert.equal(current.length, 147); assert.equal(predecessor.length, 145);
+  assert.deepEqual(current.slice(0, 2).map(entry => entry.id), [
+    'core-public-semantic-subset-omits-accessibility-only-hiding',
+    'fixture-list-content-wrappers-and-row-sizing-substituted']);
+  assert.deepEqual(current.slice(2), predecessor, 'complete pre-passive source definitions must remain conserved');
+  const historical = structuredClone(current.slice(2));
+  const pointer = historical.find(entry => entry.id === 'core-pointer-state-material-allocation-escapes-render-owner');
+  assert.equal(pointer.evidence.length, 3);
+  assert.deepEqual(pointer.evidence[2], {
+    file: 'artifacts/material-parity/tooltip-live-ownership-cycles-verified-20261005.log',
+    sha256: 'caface4e738b983984d97660263a44c9d116e0b78b94df203e9b96e4d4b5f8fc' });
+  pointer.evidence = pointer.evidence.slice(0, 2);
+  return historical;
+}
+
 test('retained progress paint binds plugin geometry and unequal track inputs', async () => {
-  const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');
+  const sourceAuditDefinitions = await conservedPrePassiveDefinitions();
   const finding = sourceAuditDefinitions.find(entry => entry.id === 'plugin-linear-progress-right-origin-and-track-input-mismatch');
   const digest = bytes => createHash('sha256').update(bytes).digest('hex');
   const raw = readFileSync(finding.evidence[0].file);
@@ -1956,7 +1976,7 @@ test('retained progress paint binds plugin geometry and unequal track inputs', a
 });
 
 test('retained compact empty and filled inputs bind authored inset before projection', async () => {
-  const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');
+  const sourceAuditDefinitions = await conservedPrePassiveDefinitions();
   const finding = sourceAuditDefinitions.find(entry => entry.id === 'fixture-compact-input-inset-conditioned-on-nonempty-value');
   const digest = bytes => createHash('sha256').update(bytes).digest('hex');
   const raw = readFileSync(finding.evidence[0].file);
@@ -2000,7 +2020,7 @@ test('retained compact empty and filled inputs bind authored inset before projec
 });
 
 test('retained keyboard profiles replay original assertions and bind the Escape-only handler', async () => {
-  const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');
+  const sourceAuditDefinitions = await conservedPrePassiveDefinitions();
   const finding = sourceAuditDefinitions.find(entry => entry.id === 'fixture-composite-keyboard-handler-omits-activation-and-navigation');
   const digest = bytes => createHash('sha256').update(bytes).digest('hex');
   const source = readFileSync('tests/material-parity/sort-focus-structure.spec.mjs', 'utf8');
@@ -2064,7 +2084,7 @@ test('retained keyboard profiles replay original assertions and bind the Escape-
 });
 
 test('retained empty caret rasters preserve visibility and unequal ink inputs', async () => {
-  const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');
+  const sourceAuditDefinitions = await conservedPrePassiveDefinitions();
   const { PNG } = await import('pngjs');
   const finding = sourceAuditDefinitions.find(entry => entry.id === 'fixture-text-input-primary-caret-color-omitted');
   const digest = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -2127,7 +2147,7 @@ test('retained empty caret rasters preserve visibility and unequal ink inputs', 
 });
 
 test('retained applied-theme popup focus states preserve action boundaries', async () => {
-  const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');
+  const sourceAuditDefinitions = await conservedPrePassiveDefinitions();
   const finding = sourceAuditDefinitions.find(entry => entry.id === 'fixture-tooltip-timepicker-focus-popup-state-mismatch');
   const digest = bytes => createHash('sha256').update(bytes).digest('hex');
   const themes = {};
@@ -2198,7 +2218,7 @@ test('retained applied-theme popup focus states preserve action boundaries', asy
 });
 
 test('retained selection states preserve palettes and original geometry failures', async () => {
-  const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');
+  const sourceAuditDefinitions = await conservedPrePassiveDefinitions();
   const finding = sourceAuditDefinitions.find(entry => entry.id === 'core-selection-contrast-palette-differs-from-native-default');
   const digest = bytes => createHash('sha256').update(bytes).digest('hex');
   const observations = [];

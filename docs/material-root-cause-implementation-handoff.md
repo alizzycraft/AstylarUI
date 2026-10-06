@@ -2,6 +2,23 @@
 
 ## Current resumption ledger — October 6
 
+- October7 historical-definition reconciliation: authenticate all147 current
+  definitions against the complete145-entry pre-passive Git predecessor, then
+  reverse only the two known additions and the exact third pointer-ownership
+  evidence append for retained historical assertions. Current canonical evidence
+  keeps all three receipts; original retained assertions remain unchanged.
+  Focused historical-preload command selecting progress/compact/keyboard/
+  applied-theme/selection passes5/5,2445.948ms. Complete launcher trial in
+  passive-definition-evidence-replay-20261007.log passes7/8,3047.4339ms; button
+  suites are not reached. Remaining Tab/popup/email test rejects raw source
+  receipt for tests/material-parity/input-boundary-evidence.spec.mjs:
+  expected b6eff6c1419e114ba6f177dbde7c941bbf8ceeefa00165dcdbe9c4babc826f3b,
+  actual de260e2fbee31686bccd940582e1503fc378881d2c94e6e35b66b67877cbc141.
+  Next establish exact historical source and semantic change boundaries before
+  any read projection; changed bytes are not waived as harmless. Wider missing
+  case-obligation closure remains the priority after this bounded reconciliation.
+  No browser rerun, current-render acceptance or137-proof publication follows.
+
 - Historical component preload source gate repaired only for exact sorter SHA
   dca535342db0162b59da58f3a979d51eea305b27b09cb7760e1a869f629647e7:
  26 original tests remain,24 bodies unchanged,two changed bodies preserve every
