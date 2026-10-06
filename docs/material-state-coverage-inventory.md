@@ -51,6 +51,25 @@ The whole compact index,all shards and canonical generation were authenticated;
 source findings stored globally must still be considered,not inferred absent
 from family-shard queries. No case closure or current render pass is added.
 
+Divider closure routing: existing global finding
+`core-empty-block-retains-parent-content-height` is retained separately from
+`fixture-divider-replaces-paragraph-flow-with-coordinates`. The authenticated
+canonical finding identifies an equal-input1px bordered empty block measured
+as302px in the candidate,with301px downstream displacement; provisional parent
+content height is retained in CSS-space dimension/block-flow calculation,not
+introduced by final Babylon conversion. This is an existing demonstrated cause,
+not a new current-browser reproduction. Canonical compact locator:
+global/8f319972c40d5ca485dfd48ae4fe03df6317a31bdb0b1533ecf3645fe07da018
+in generation4845e414. The25 divider scalar authoring groups separately bind
+border-to-background replacement,absolute insets and root flow/height inputs.
+History and source separation are recorded in
+docs/material-flow-position-substitutions.md: absolute authoring existed in
+2f440115; later calibration did not introduce it. Do not rediscover that cause
+or call all divider discrepancies world-coordinate errors. Remaining closure:
+bind the reduction's runtime applicability,ordered paragraph/root structure and
+local border/text paint obligations to exact current cases. Orientation and
+activation applicability above are closed only at their stated boundaries.
+
 October6 caret/track canonical integration supersedes the earlier package
 statements below: export and independent cold check both exit0,compressed SHA
 4845e414926218b5ada5d389b9a259f45369fb830f0f865b3a1af73ca4a8bf27.
