@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 6
 
+- October7 popup option local vertical paint inspected:retained pixels plus
+  matched frozen bounds yield32 paired/64 ink measurements with existing metric,
+  text-only184px ROI excludes right selection icon. Verified log SHA
+  fb760d6031ad5f9c0a9d85a0558f0a3c9103e550aada809824b7bf2160fadd4a,
+  popup-option-ink-center-verified-20261007.log,exit0. Light/dark residual about
+  one device pixel,custom0.98CSSpx;contrast relative residual<0.015CSSpx despite
+  larger absolute row shifts. Native20px line-height/0.096px tracking differs
+  from retained candidate normal/0px at16px font,so no equal-input core cause
+  inferred. Initial missing metric box fields produced failed diagnostic,retained.
+  Inventory records bounded observations,source receipt and outstanding shape/
+  horizontal/sharpness/hover/state applicability. Next inspect shared scrollbar
+  capture/state boundary or use an existing equal-input20px text proof to separate
+  typography authoring from residual paint;do not shift candidate labels.
+
 - October7 select/autocomplete missing bounds inspected across16 exact desktop
   configurations using authenticated existing helper/runner functions and matched
   route/theme/context/benchmark phases. Log popup-matched-bounds-20261007.log

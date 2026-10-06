@@ -248,6 +248,28 @@ acceptance or full-case closure. The first probe's browser-object assertion fail
 its corrected version omitted interaction/theme/context/phase setup and is only
 diagnostic. Both popup-missing-bounds logs remain retained,not accepted scope.
 
+October7 option glyph-center diagnostic now inspects both options in all16
+select/autocomplete configurations using retained full PNGs and separately
+matched row bounds:32 paired measurements/64 ink observations. Existing
+measureTextInkCenter uses a184CSSpx text region beginning16px inside each row,
+excluding select's right checkmark;no image translations or metric changes.
+Every source-tree and PNG receipt is retained in the diagnostic. Log
+popup-option-ink-center-verified-20261007.log SHA256
+fb760d6031ad5f9c0a9d85a0558f0a3c9103e550aada809824b7bf2160fadd4a,exit0;
+metric source SHA5ab9750a7f99c51e01171d1d0afa6e5279c11d168e587584396962a79d4b2622.
+Maximum relative center error1.001403CSSpx. Light/dark candidate glyph centers
+are about1CSSpx lower atDPR1 and0.5CSSpx atDPR2 (one device pixel);custom about
+0.98CSSpx lower. Contrast relative errors stay below0.015CSSpx:its absolute
+autocomplete3px/select10px movement comes predominantly from option-row placement.
+Native glyph ink is not mathematically centered merely because its label box is.
+Captured native labels use16px Roboto/20px line-height/0.096px tracking;candidate
+label retained text uses16px Roboto fallback/normal line-height/0px tracking and
+different ink. Thus observed residual is not an equal-input core diagnosis.
+Initial diagnostic omitted right/bottom box fields required by the existing
+metric and failed before measuring ink;that log remains separate failure evidence.
+This is local vertical-placement inspection,not horizontal/shape/sharpness,
+transient hover paint,current repository applicability or full case closure.
+
 Exact native control applicability is now bound across354 configured cases in
 the nine passive families,not just inferred from a representative template:
 sidenav62,grid-list52,divider24,badge52,icon20,list52,table52,progress-bar20,
