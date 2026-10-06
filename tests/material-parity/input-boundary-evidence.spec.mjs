@@ -42,6 +42,28 @@ test('public divider typography reduction observes equal paragraph span inputs a
     assert.equal(method, extract(compiledCanvas), `${start} installed/current source drift`);
     ownerBindings.push({ method: start, normalizedSha256: hash(method) });
   }
+  const downstreamSources = [];
+  for (const [relative, start, end] of [
+    ['text/multi-line-text-renderer.service', 'calculateLinePositions', 'handleWhiteSpace'],
+    ['text/text-rendering.service', 'renderTextToTexture', 'updateTextTexture'],
+    ['dom/renderer.service', 'createTextMesh', 'resolveAnonymousFlexTextAlignment'],
+    ['babylon-mesh.service', 'createTextMesh', 'createMaterial']
+  ]) {
+    const sourcePath = `src/app/services/${relative}.ts`;
+    const installedPath = path.join(consumer, `node_modules/astylarui/dist/lib/app/services/${relative}.js`);
+    const source = readFileSync(sourcePath, 'utf8'), installed = readFileSync(installedPath, 'utf8');
+    const compiled = ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
+    const extract = text => {
+      const from = text.indexOf(`    ${start}(`), to = text.indexOf(`    ${end}(`);
+      assert.ok(from >= 0 && to > from, `missing ${relative} complete method boundaries`);
+      return text.slice(from, to).replace(/\s+/g, ' ').trim();
+    };
+    const methods = extract(installed);
+    assert.ok(methods.length > 300);
+    assert.equal(methods, extract(compiled), `${relative} downstream installed/current drift`);
+    ownerBindings.push({ owner: relative, from: start, until: end, normalizedSha256: hash(methods) });
+    downstreamSources.push({ sourcePath, installedPath, source, installed });
+  }
   const font = readFileSync(path.join(consumer, 'node_modules/@fontsource/roboto/files/roboto-latin-400-normal.woff2'));
   const built = await createRequire(path.join(consumer, 'package.json'))('esbuild').build({
     stdin: { resolveDir: consumer, sourcefile: 'divider-text-reduction.mjs', contents: `
@@ -114,6 +136,10 @@ test('public divider typography reduction observes equal paragraph span inputs a
     for (const input of inputs) assert.equal(hash(readFileSync(input.file)), input.sha256);
     assert.equal(readFileSync(canvasPath, 'utf8'), installedCanvas);
     assert.equal(readFileSync('src/app/services/text/text-canvas-renderer.service.ts', 'utf8'), canvasSource);
+    for (const receipt of downstreamSources) {
+      assert.equal(readFileSync(receipt.sourcePath, 'utf8'), receipt.source);
+      assert.equal(readFileSync(receipt.installedPath, 'utf8'), receipt.installed);
+    }
     t.diagnostic(JSON.stringify({ browser: browser.version(), results, inputs, ownerBindings, fontSha256: hash(font), acceptance: false,
       scope: 'Equal14.4px normal paragraph/span typography at four fractional origins,DPR1/2; opaque baseline control,not full divider flow or causal intervention on renderer backing.' }));
   } finally { await browser?.close(); await new Promise(resolve => server.close(resolve)); }

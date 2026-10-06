@@ -2,6 +2,22 @@
 
 ## Current resumption ledger — October 6
 
+- Downstream text applicability check is now executable in the existing public
+  typography reduction: complete method slices for line positions, texture
+  creation, renderer text-mesh creation/placement and Babylon text-mesh/material
+  creation match current-source transpilation, alongside the two earlier canvas/
+  baseline owners. Source and installed files remain unchanged through the run.
+  Focused test1/1exit0,14603.0575ms; DPR1 native0/candidate1114 and DPR2
+  native1359/candidate2964 control differences are unchanged. Existing diagnostic
+  records six normalized owner hashes. Log
+  divider-equal-typography-downstream-bound-20261006.log SHA256
+  815fdae8db49203805dbb4b18dc73ffcd0415804955288870c496873f01bddfd.
+  Stale versions of these bounded owners are rejected; full style/layout call
+  graph applicability is not implied. Next investigate paint backing/composition
+  versus baseline/phase using observed runtime inputs, not more unchanged source
+  replays. Coherent registration/export reconciliation remains pending; no full
+  case closure or rendering acceptance follows.
+
 - Equal-typography reduction now authenticates complete installed canvas-paint
   and CSS alphabetic-baseline method slices against current-source ES2022
   transpilation, with explicit boundary/size checks and unchanged-source checks
