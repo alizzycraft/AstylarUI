@@ -2,6 +2,20 @@
 
 ## Current evidence boundary — October 6
 
+List wrapper-layout question is answered across52 configured cases/104 labels:
+native mdc-list-item__content grows with flex:1,clips overflow and applies nowrap/
+ellipsis; candidate label/item/list ancestry omits that wrapper. Native/candidate
+row heights are48/56px (52 labels),24/40px (26),40/48px (26). Unequal inputs
+precede projection. Generic flex-center rows and16px label margin were present
+in initial2f440115,not newly introduced by a recent fix. This is application
+composition/input substitution,not equal-input core layout failure. Root-only
+scalar overflow classifications do not justify omitted descendant clipping.
+Focused existing-suite assertion passes1/1,log list-wrapper-focused-20261006.log;
+tree/ancestry evidence list-wrapper-layout-inputs-20261006.log,SHA256
+37a6756edd30de888c92a918927cc9349ab22f96824559c19467d0d1269bda24.
+New standalone assertion is not yet producer-registered; source fingerprint
+reconciliation belongs to the next coherent integration batch. No case closure.
+
 Passive wrapper membership is now exact for330 non-divider cases: one captured
 type/path/class shape pair per family across every retained configured case.
 Authenticated ordered-content receipts are rechecked,not assumed. Sidenav7/4,

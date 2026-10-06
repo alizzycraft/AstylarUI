@@ -19,6 +19,50 @@ const bytes = readFileSync(file);
 assert.equal(hash(bytes), '39df94e0eb87480d3824927a41a9950d1d275f7c97ab97a571c449efdc6da7d7');
 const report = JSON.parse(bytes);
 
+test('current list wrapper inputs retain clipping and row-height divergence for all configured cases', () => {
+  const fullBytes = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
+  assert.equal(hash(fullBytes), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const full = JSON.parse(fullBytes);
+  const cases = [...full.results, ...full.interactions].filter(row => row.family === 'list');
+  assert.equal(cases.length, 52);
+  const heights = {};
+  for (const row of cases) {
+    const trees = Object.fromEntries(['reference', 'astylar'].map(side => {
+      const receipt = row.inputTrees[side], raw = readFileSync(receipt.file);
+      assert.equal(hash(raw), receipt.sha256);
+      return [side, JSON.parse(raw)];
+    }));
+    for (const id of ['list-inbox-label', 'list-archive-label']) {
+      const chains = {};
+      for (const side of ['reference', 'astylar']) {
+        const tree = trees[side], byKey = new Map(tree.nodes.map(node => [node.key, node]));
+        let node = tree.nodes.find(node => (node.attributes?.id ?? node.authored?.id) === id);
+        assert.ok(node, id);
+        chains[side] = [];
+        while (node && (node.attributes?.id ?? node.authored?.id) !== 'list-root') {
+          chains[side].push(node);
+          node = byKey.get(node.parent);
+        }
+        assert.ok(node, 'Complete root ancestry is required');
+      }
+      const content = chains.reference.find(node => node.attributes?.class?.split(' ').includes('mdc-list-item__content'));
+      assert.ok(content, 'Native content wrapper is not optional evidence');
+      const style = trees.reference.styles[content.style];
+      assert.equal(style.flexGrow, '1');
+      assert.equal(style.whiteSpace, 'nowrap');
+      assert.equal(style.textOverflow, 'ellipsis');
+      assert.equal(style.overflowX, 'hidden');
+      assert.equal(chains.astylar.length, 3, 'Candidate flattened label/item/list ancestry');
+      const nativeItem = chains.reference.find(node => node.type === 'mat-list-item');
+      const candidateItem = chains.astylar.find(node => node.authored?.class === 'list-item');
+      assert.ok(nativeItem && candidateItem);
+      const pair = `${trees.reference.styles[nativeItem.style].height}/${candidateItem.resolvedStyle.height}`;
+      heights[pair] = (heights[pair] ?? 0) + 1;
+    }
+  }
+  assert.deepEqual(heights, { '48px/56px': 52, '24px/40px': 26, '40px/48px': 26 });
+});
+
 test('captured runtime class bodies match current repository compilation without Angular metadata', async () => {
   const { transform } = await import('esbuild');
   const consumer = 'examples/material-showcase';

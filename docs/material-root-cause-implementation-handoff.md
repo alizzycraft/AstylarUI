@@ -2,6 +2,22 @@
 
 ## Current resumption ledger — October 6
 
+- List omitted-wrapper question: wrappers are not layout-neutral. All52 retained
+  cases/104 labels authenticate native growing/clipping/nowrap/ellipsis content
+  versus flattened candidate ancestry. Row heights48/56px,24/40px,40/48px are
+  unequal authored/resolved inputs,not world-coordinate or equal-input core
+  failures. Initial2f440115 contains the same generic list flex rows,center
+  alignment,density56/40/48 constants and16px label margin. Exact source owners:
+  astylar.component.ts:705-707,854. Root scalar observation classifications cannot
+  certify descendant composition. Existing input-boundary suite gains one exact
+  cohort assertion; focused test passes1/1 (list-wrapper-focused-20261006.log).
+  Evidence list-wrapper-layout-inputs-20261006.log,SHA256
+  37a6756edd30de888c92a918927cc9349ab22f96824559c19467d0d1269bda24.
+  Producer registration/fingerprint reconciliation pending next coherent batch;
+  do not repeatedly export after this standalone evidence edit. Long-text clipping
+  runtime and complete paint are not proved. Next shared question: plugin progress
+  geometry/paint inputs,then integrate new proofs and exact obligations together.
+
 - Passive wrapper population question: all330 non-divider case receipts replay
   to one type/path/class shape pair per family. Native/candidate counts:
   sidenav7/4,grid-list7/6,badge4/4,icon4/2,list12/6,table11/12,bar8/2,spinner16/2.
