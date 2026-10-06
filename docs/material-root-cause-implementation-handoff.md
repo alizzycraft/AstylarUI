@@ -1,6 +1,29 @@
 # Material audit: evidence-led implementation priorities
 
-## Current resumption ledger — October 5
+## Current resumption ledger — October 6
+
+- Scope unchanged:36 families,436 static+1875 interaction configured cases;
+  exact membership inspected partially, complete applicable-obligation closure
+  still pending. Rendering failures count as inspected, not as audit blockers.
+- Caret/track batch export completed exit0 in55106. Package compressed SHA
+  `4845e414926218b5ada5d389b9a259f45369fb830f0f865b3a1af73ca4a8bf27`,
+  decoded SHA `f765e78733d80068f1e0ff48b26a601ce2483f4cfae557ed5a2002f914cb4849`;
+  8483 groups/389202 occurrences/145 findings,inputEquivalent=false.
+  Evidence:artifacts/material-parity/canonical-caret-track-batch-20261006.log.
+- Independent cold check is live in7674; retain
+  artifacts/material-parity/canonical-caret-track-independent-20261006.log.
+  Do not restart on an observation timeout. Canonical changes are uncommitted
+  pending this check. Compact index still belongs to401b79a1 and must not be
+  queried as the new package; refresh/verify after independent success.
+- Publication recovered and verified through2bf73b0d using per-command OpenSSL,
+  with certificate verification enabled. No persistent Git/SSH changes.
+- Next:finish independent canonical check,refresh/verify compact index,commit/
+  push the coherent package; then shared popup/scrollbar paint,text-selection/
+  remaining caret states,overlay focus/lifetime and exact per-case obligation
+  closure. Final complete enforced browser/release gates remain mandatory.
+  No renderer fixes,fixture compensation,threshold or acceptance changes.
+
+### Retained evidence chronology — October 5–6
 
 - Publication transport recovered October6: the single per-command OpenSSL
   attempt (`git -c http.sslBackend=openssl -c http.version=HTTP/1.1
