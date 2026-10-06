@@ -56,6 +56,17 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October 6 disk-exhaustion recovery: two existing top-level logs were NTFS
+compressed in place, without deletion, path changes or content substitution:
+`audit-harness-5028979e.log` (SHA256
+`38ee7c9d8c5085d9b4b740602f12df0b23089ca3cbc59c37f8e3567f2c053c2c`)
+and `full-audit-harness-834258e.log` (SHA256
+`2558acd41287a0d8d1bf087839eef58970fa15a9b556d7f0fbe50fa115253fa2`).
+Both hashes matched before/after. Their116,900,879 logical bytes now occupy
+36,388,864 bytes; observed D: free space rose from3,047,424 to83,079,168 bytes.
+This is a small operational recovery, not sufficient headroom for full capture
+or canonical publication. No original or failure evidence was removed.
+
 The range-default original installed package metadata is required provenance,
 not disposable scratch. Its exact bytes are retained at
 `artifacts/material-parity/retained-evidence/range-default-package-source/package.json`
