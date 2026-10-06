@@ -3,6 +3,7 @@ import test from 'node:test';
 import { existsSync, readFileSync } from 'node:fs';
 import { createServer } from 'node:http';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 import { chromium } from 'playwright-core';
 import { PNG } from 'pngjs';
 import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-metrics.mjs';
@@ -2354,6 +2355,61 @@ test('ordinary tooltip repeated hover and leave exposes live ownership separatel
     assert.deepEqual(results.astylar.cycles.map(cycle => cycle.live.materials), [14, 15, 16],
       'Retain the live-material growth counterexample; this is not cleanup acceptance.');
   }, {}, { checkpointFile: 'artifacts/material-parity/current-full-20261005/checkpoint/manifest.json' });
+});
+
+test('retained select indicator inputs preserve pseudo-checkbox versus plugin paint differences', t => {
+  const reportFile = 'artifacts/material-parity/current-full-20261005/latest-report.json';
+  const reportBytes = readFileSync(reportFile);
+  assert.equal(createHash('sha256').update(reportBytes).digest('hex'),
+    'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const report = JSON.parse(reportBytes);
+  const load = receipt => {
+    const bytes = readFileSync(receipt.file);
+    assert.equal(createHash('sha256').update(bytes).digest('hex'), receipt.sha256);
+    return JSON.parse(bytes);
+  };
+  const observations = [];
+  for (const row of [...report.results, ...report.interactions].filter(row => row.family === 'select')) {
+    const candidate = load(row.inputTrees.astylar);
+    const checks = candidate.nodes.filter(node => node.authored?.id === 'select-check');
+    if (!checks.length) continue;
+    assert.equal(checks.length, 1);
+    const check = checks[0];
+    assert.equal(candidate.nodes.find(node => node.key === check.parent).authored.ariaSelected, true);
+    const reference = load(row.inputTrees.reference);
+    const marks = reference.nodes.filter(node => node.type === 'mat-pseudo-checkbox');
+    assert.equal(marks.length, 1);
+    const mark = marks[0];
+    assert.equal(reference.nodes.find(node => node.key === mark.parent).attributes['aria-selected'], 'true');
+    assert.equal(mark.attributes.appearance, 'minimal');
+    const after = mark.pseudoElements.filter(pseudo => pseudo.pseudo === '::after');
+    assert.equal(after.length, 1);
+    assert.equal(after[0].generated, true);
+    const host = reference.styles[mark.style], paint = reference.styles[after[0].style];
+    assert.equal(host.width, '18px');
+    assert.equal(host.height, '18px');
+    assert.equal(host.position, 'relative');
+    assert.equal(host.marginLeft, '16px');
+    assert.equal(paint.width, '14px');
+    assert.equal(paint.height, '6px');
+    assert.equal(paint.borderBottomWidth, '2px');
+    assert.equal(paint.borderBottomColor, 'rgb(75, 67, 87)');
+    assert.equal(paint.transform, 'matrix(0.707107, -0.707107, 0.707107, 0.707107, 0, 0)');
+    assert.equal(check.authored.type, 'showcase.material:check-mark');
+    assert.deepEqual(check.authored.data, { 'indicator-color': '#49454f', 'stroke-width': 1.8 });
+    assert.equal(check.resolvedStyle.width, '16px');
+    assert.equal(check.resolvedStyle.height, '16px');
+    assert.equal(check.resolvedStyle.position, 'absolute');
+    assert.equal(check.resolvedStyle.top, '14px');
+    assert.equal(check.resolvedStyle.right, '16px');
+    observations.push({ profile: row.profile, viewport: row.viewport, state: row.state,
+      reference: row.inputTrees.reference, candidate: row.inputTrees.astylar });
+  }
+  assert.equal(observations.length, 40);
+  assert.deepEqual([...new Set(observations.map(row => row.state))].sort(),
+    ['activate', 'activate-leave', 'open', 'open-commit-reopen', 'open-hover-content']);
+  t.diagnostic(JSON.stringify({ observations,
+    claim: 'Unequal captured indicator authoring and resolved inputs; not an equal-input core paint reproduction.' }));
 });
 
 test('select popup token ancestry separates global fallback from frame theme overrides', async t => {

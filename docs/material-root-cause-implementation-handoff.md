@@ -21,8 +21,25 @@
   Test1/1exit0,5111.2091ms,Chrome154.0.8037.58,complete served-file fingerprint
   matched current-full checkpoint before launch. Log:select-popup-token-ancestry-
   20261006.log,SHA256 58286d9aa8b271e75e704da42b8fa8c5b7ee445a13118b4b05e7cb5b018eaed6.
-  Next: counterpart candidate token/state-paint ownership and pseudo-checkbox
-  inputs; other popup families/profiles are not certified by this select proof.
+  Selected indicator input question now answered across all40 current-full select
+  rows containing a visible check (activate,activate-leave,open,open-commit-reopen,
+  open-hover-content). Full report SHA and every read tree receipt authenticate;
+  each side's unique indicator belongs to its selected option. Native minimal
+  pseudo-checkbox is18x18px,relative,in-flow margin-left16px,with generated ::after
+  14x6px,2px bottom border RGB(75,67,87),rotated -45deg. Candidate is an absolute
+  16x16px showcase.material:check-mark at top14px/right16px with authored literal
+  #49454f and stroke-width1.8. The existing plugin renders that request as a tube
+  using final coordinate conversion (material-showcase.plugin.ts:258–273).
+  These unequal inputs precede projection and do not prove an equal-input core
+  paint defect. Existing option composition authoring classification applies;
+  do not compensate with a new offset or sampled color. Replay1/1exit0,1801.5478ms,
+  select-indicator-inputs-20261006.log,SHA256
+  623263cfdbaec17bc5d20d4212b56691ef54fcb174cb3d7b13cf81e36adc1a33.
+  Next: shared option state-layer inputs and other popup-family token provenance;
+  geometry/local raster equivalence still needs equivalent inputs. Standalone
+  ancestry/indicator proofs are not yet registered in the canonical package;
+  reconcile the owning-suite fingerprint at the next coherent integration batch,
+  not a metadata-only export. No case is promoted to complete inspection.
   Evidence: current-full-20261005/interactions/select/{light,dark}/desktop-dpr1/
   open/{reference,astylar}-input-tree.json, hashes from the full report. This is
   receipt/metadata inspection plus the bounded ancestry probe,not full-case closure.
