@@ -2,6 +2,14 @@
 
 ## Current evidence boundary — October 5
 
+October6 caret/track canonical integration supersedes the earlier package
+statements below: export and independent cold check both exit0,compressed SHA
+4845e414926218b5ada5d389b9a259f45369fb830f0f865b3a1af73ca4a8bf27.
+Compact import/verification both pass;127 focused proof registrations,unchanged
+2311 configured cases,8483 groups,145 findings and zero unresolved attribution.
+This integrates bounded caret/track evidence,not full-case closure or current
+rendering acceptance. Exact logs and remaining obligations are in the handoff.
+
 October6 overlay focus applicability: unchanged existing modal-Tab and parent-
 selector tests pass2/2 against current-full-20261005's complete served-file
 fingerprint (97201.7353ms,exit0). Dark/mobile DPR2 dialog focus remains contained;

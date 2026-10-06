@@ -10,15 +10,17 @@
   decoded SHA `f765e78733d80068f1e0ff48b26a601ce2483f4cfae557ed5a2002f914cb4849`;
   8483 groups/389202 occurrences/145 findings,inputEquivalent=false.
   Evidence:artifacts/material-parity/canonical-caret-track-batch-20261006.log.
-- Independent cold check is live in7674; retain
+- Independent cold check completed exit0 in7674,4170741.9844ms; retain
   artifacts/material-parity/canonical-caret-track-independent-20261006.log.
-  Do not restart on an observation timeout. Canonical changes are uncommitted
-  pending this check. Compact index still belongs to401b79a1 and must not be
-  queried as the new package; refresh/verify after independent success.
+  Two collectors,ten memory hits,no disk hits/invalidations; all1205 consumed
+  files/89154859 bytes reverified. Compact import and verification both exit0
+  for4845e414,72712604 shard bytes,8483 groups/145 findings/39904 controls/
+  389202 occurrences/zero unresolved. Logs:caret-track-compact-import-20261006.log
+  and caret-track-compact-verify-20261006.log. Neither acceptance nor input
+  equivalence follows from package validation.
 - Publication recovered and verified through2bf73b0d using per-command OpenSSL,
   with certificate verification enabled. No persistent Git/SSH changes.
-- Next:finish independent canonical check,refresh/verify compact index,commit/
-  push the coherent package; then shared popup/scrollbar paint,text-selection/
+- Next:publish the verified coherent package; then shared popup/scrollbar paint,text-selection/
   remaining caret states,overlay focus/lifetime and exact per-case obligation
   closure. Final complete enforced browser/release gates remain mandatory.
   No renderer fixes,fixture compensation,threshold or acceptance changes.
