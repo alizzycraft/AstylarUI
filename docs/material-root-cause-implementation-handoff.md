@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 5
 
+- October 6 tooltip/slider reconciliation is now independently validated:
+  repaired export and independent cold check both terminate exit0. Logs:
+  `canonical-tooltip-slider-repaired-20261006.log` and
+  `canonical-tooltip-slider-repaired-independent-20261006.log`. Cold verification
+  authenticates1205 files/89,154,859 bytes,2 collectors,10 memory hits,0 disk
+  hits,0 invalidations. Canonical compressed SHA401b79a13fc256c6bcac5401df07beef47ff362828923f6a53db2f906a34c2d2;
+  decoded SHA5cb1830215b2237b76229ae306a0efac6748b5029fac1696de1fb36cf01a7830.
+  Compact import and verification both exit0:8483 groups,145 findings,39904
+  controls,389202 occurrences,0 unresolved groups. This supersedes pending
+  canonical statements below, not remaining case-obligation/current-rendering
+  gaps. Input equivalence remains false. Next prioritize shared popup input/
+  local paint and scrollbar obligations, then caret/selection, modal lifetime
+  and keyboard state closure using existing evidence; final gates and push remain.
+
 - Post-repair collector verification is terminal exit0: existing alignment-font,
   text-align, LTR-alignment and reviewed-input source-binding suites pass21/21,
   204,932.822ms. Original ancestry/source proof replay, exact membership,

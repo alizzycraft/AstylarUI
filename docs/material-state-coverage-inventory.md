@@ -2,6 +2,14 @@
 
 ## Current evidence boundary — October 5
 
+October 6 reconciliation supersedes the publication hashes below: repaired
+export and independent cold check both exit0, compressed SHA `401b79a1…`,
+decoded SHA `5cb18302…`. Compact import/verification both pass with unchanged
+8483 groups/145 findings/39904 controls/389202 occurrences and0 unresolved
+groups. Exact hashes and logs are in the current handoff ledger. This integrates
+the tooltip/slider proof batch; it does not certify complete-case closure or
+current rendering acceptance. The census and outstanding obligations remain.
+
 The subsequent proof-batch export and independent cold check both completed
 with exit 0. The current canonical compressed digest is `db0ba9f…`, superseding
 the `cc1c6b3f…` publication below. Both logs are named in the current resumption
