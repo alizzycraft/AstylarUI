@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 5
 
+- Visible-caret historical producer receipt reconciled through the existing
+  gap-survey source reader, not repinned: focused original check initially
+  rejects only scripts/audit-material-visible-caret.mjs (old766dce9d/current
+ 436d6e88). Reader admits exactly those complete source hashes and retrieves
+  authenticated original bytes from2df42ad9; all other drift fails. An actual
+  Tab→Enter mutation is rejected. Original historical six-boundary tree/raster/
+  runtime assertions and new ten-population current replay both pass2/2,
+ 2110.639ms. Read override applies only to the historical producer receipt;
+  current captures retain current source receipts. This authenticates historical
+  capture, not unchanged rendering across the source transition. Other changed
+  owning-suite fingerprints still await coherent canonical reconciliation.
+
 - Desktop caret first-divergence mapping now covers all60 captured boundaries
   (five families×two DPRs×six samples), without another capture. Native computed
   caretColor isrgb(103,80,164); candidate authored .field-control and :focus

@@ -11,6 +11,7 @@ import { PNG } from 'pngjs';
 import { fingerprintDirectory } from './run-checkpoint.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { propertyGroups } from './input-equivalence-policy.mjs';
+import { readGapSurveySource } from './gap-survey-source-replay.mjs';
 
 const file = 'artifacts/material-parity/input-boundaries-keypress-559f95c/latest-report.json';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -656,9 +657,17 @@ test('current paired caret-visible capture binds its pixels to unequal caret aut
   assert.deepEqual(manifest.provenance.browserFiles, historicalManifest.provenance.browserFiles);
   assert.equal(manifest.provenance.installedDependencies, historicalManifest.provenance.installedDependencies);
   assert.equal(manifest.provenance.browserFiles.length, 1887);
+  const producer = current.capture.sources.find(item => item.file === 'scripts/audit-material-visible-caret.mjs');
+  assert.ok(producer);
+  assert.throws(() => readGapSurveySource(producer, {
+    current: file => readFileSync(file, 'utf8').replace("await page.keyboard.press('Tab')", "await page.keyboard.press('Enter')"),
+  }), /Unreviewed visible-caret producer drift/);
   assert.deepEqual(validateSupplementalCapture(current, { reportFile: currentFile,
     expectedProvenance: manifest.provenance, script: 'scripts/audit-material-visible-caret.mjs',
-    styleProperties: Object.values(propertyGroups).flat() }), { status: 'checkpoint-bound', errors: [] });
+    styleProperties: Object.values(propertyGroups).flat(),
+    readBytes: file => path.resolve(file) === path.resolve(producer.file)
+      ? Buffer.from(readGapSurveySource(producer)) : readFileSync(file),
+  }), { status: 'checkpoint-bound', errors: [] });
   assert.deepEqual(current.results.map(row => row.state), Array.from({ length: 6 }, (_, i) => `focused-empty-${i}`));
   for (const row of current.results) for (const mode of ['reference', 'astylar']) {
     const side = row[mode];

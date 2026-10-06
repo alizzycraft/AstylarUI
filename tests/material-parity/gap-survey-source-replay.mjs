@@ -77,6 +77,14 @@ export function readGapSurveySource(descriptor, readers = {}) {
     ['show', `${revision}:${file}`], { encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 }));
   let source = descriptor.file === moduleFile
     ? readHistorical(gapSurveyNormalizationRevision, descriptor.file) : readCurrent(descriptor.file);
+  if (descriptor.file === 'scripts/audit-material-visible-caret.mjs' && hash(source) !== descriptor.sha256) {
+    // Historical receipt only: exact reviewed optional family/DPR collection
+    // and empty/focus/type guards. Never use old bytes for fresh capture.
+    assert.equal(descriptor.sha256, '766dce9d901e9ec9ef893b872d8914b542422dd37e566015b9affd71ea385002');
+    assert.equal(hash(source), '436d6e880c48734903e770122b14d04e3f467ab1c676d758eecd0a2fe3f93318',
+      'Unreviewed visible-caret producer drift');
+    source = readHistorical('2df42ad9', descriptor.file);
+  }
   if (descriptor.file === 'tests/material-parity/run-material-parity.mjs' && hash(source) !== descriptor.sha256) {
     source = restoreGapCaptureDiagnostics(source);
   }
