@@ -2357,6 +2357,71 @@ test('ordinary tooltip repeated hover and leave exposes live ownership separatel
   }, {}, { checkpointFile: 'artifacts/material-parity/current-full-20261005/checkpoint/manifest.json' });
 });
 
+test('held popup option boundaries capture active paint inputs before commit', async t => {
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    const observations = [];
+    for (const family of ['select', 'autocomplete', 'timepicker']) {
+      for (const mode of ['reference', 'astylar']) {
+        const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 });
+        const errors = [];
+        page.on('pageerror', error => errors.push(String(error)));
+        await page.goto(`${baseUrl}/${mode}/${family}?benchmark=1&profile=light`);
+        await page.locator('.frame').waitFor();
+        const point = async id => mode === 'reference'
+          ? page.locator(id === `${family}-control` ? `#${id}` : 'mat-option').first().evaluate(el => {
+            const box = el.getBoundingClientRect(); return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+          }) : page.evaluate(id => {
+            const box = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([id], false).elements[id].borderBox;
+            const canvas = document.querySelector('canvas').getBoundingClientRect();
+            return { x: canvas.x + box.left + box.width / 2, y: canvas.y + box.top + box.height / 2 };
+          }, id);
+        if (mode === 'astylar') {
+          await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+          await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+        }
+        const opener = await point(`${family}-control`);
+        await page.mouse.click(opener.x, opener.y);
+        const firstId = family === 'select' ? 'select-option-solo' : family === 'autocomplete'
+          ? 'autocomplete-option-cape-town' : 'timepicker-option-0';
+        await page.locator(mode === 'reference' ? 'mat-option' : `[data-astylar-id="${firstId}"]`).first().waitFor();
+        if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+        const target = await point(firstId);
+        await page.mouse.move(target.x, target.y);
+        await page.mouse.down();
+        await page.waitForTimeout(125);
+        if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+        const held = await page.evaluate(({ mode, firstId }) => {
+          if (mode === 'astylar') {
+            const api = window.__ASTYLAR_MATERIAL_BENCHMARK__, tree = api.measure([firstId], true).inputTree;
+            const option = tree.nodes.find(node => node.authored?.id === firstId);
+            return { count: tree.nodes.filter(node => node.authored?.role === 'option').length,
+              background: option.resolvedStyle.background, selected: option.authored.ariaSelected,
+              events: api.events().filter(event => event.targetId === firstId) };
+          }
+          const option = document.querySelector('mat-option');
+          return { count: document.querySelectorAll('mat-option').length,
+            active: option.matches(':active'), background: getComputedStyle(option).backgroundColor,
+            selected: option.getAttribute('aria-selected'),
+            ripples: [...option.querySelectorAll('.mat-ripple-element')].map(el => {
+              const style = getComputedStyle(el);
+              return { background: style.backgroundColor, opacity: style.opacity,
+                width: style.width, height: style.height, transform: style.transform };
+            }) };
+        }, { mode, firstId });
+        assert.equal(held.count, family === 'timepicker' ? 48 : 2);
+        if (mode === 'reference') assert.equal(held.active, true);
+        else assert.ok(held.events.some(event => event.type === 'pointerdown'), 'actual option must own the held pointer');
+        observations.push({ family, mode, target, held });
+        await page.mouse.up();
+        assert.deepEqual(errors, []);
+        await page.close();
+      }
+    }
+    t.diagnostic(JSON.stringify({ browser: browser.version(), observations,
+      claim: 'Actual held-option inputs after125ms plus candidate settlement before release,light desktop DPR1 only; not matched-time local-raster equivalence or ripple animation parity.' }));
+  }, {}, { checkpointFile: 'artifacts/material-parity/current-full-20261005/checkpoint/manifest.json' });
+});
+
 test('retained popup hover inputs distinguish token alpha layers from opaque substitutions', t => {
   const bytes = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'),

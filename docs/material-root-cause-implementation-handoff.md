@@ -49,9 +49,28 @@
   selected-state intent rather than replacing either with screenshot RGB.
   Replay1/1exit0,1875.9508ms,popup-hover-inputs-20261006.log,SHA256
   99c3294e5b59e89b55d6534cf1b094498ee2b4f722c19252cc131111060f2b04.
-  Next: held-option/ripple state evidence and other popup-family token provenance;
+  Held-option boundary gap now has current-checkpoint light desktop DPR1 evidence
+  for all three popup families,reference/candidate. Standard runner held presses
+  the opener and returns before open-hover-content handling; it cannot supply
+  this boundary. New existing-helper probe holds actual first option,authenticates
+  complete served files,and samples before release after125ms plus candidate
+  settlement. All2/2/48 option domains remain open; native :active and candidate
+  pointerdown target ownership are asserted. Native select/autocomplete retain
+  alpha.08,timepicker alpha.12,plus one separately sampled alpha.1 ripple;
+  candidate held option resolves opaque #d8d2d8. Current activateRipple whitelist
+  (astylar.component.ts:377) excludes all option IDs,consistent with previously
+  recorded flattened option composition. Candidate live ripple allocations are
+  not separately measured here. Native ripple geometry is transient; these are
+  not matched-time raster/animation results. Test1/1exit0,14292.0424ms,log
+  popup-option-held-inputs-settled-20261006.log,SHA256
+  5582ff861443f11b47f04394ff6ea01f7368c15d7a0d91d0ee3ed524becbaf05.
+  Original failed logs popup-option-held-inputs-20261006.log (authored capture
+  disabled) and popup-option-held-inputs-verified-20261006.log (settlement guard)
+  remain; no failed run is described as passing. Other profiles/DPRs,held local
+  pixels and animation/lifetime remain open.
+  Next: other popup-family token provenance and exact remaining paint obligations;
   geometry/local raster equivalence still needs equivalent inputs. Standalone
-  ancestry/indicator/hover proofs are not yet registered in the canonical package;
+  ancestry/indicator/hover/held proofs are not yet registered in the canonical package;
   reconcile the owning-suite fingerprint at the next coherent integration batch,
   not a metadata-only export. No case is promoted to complete inspection.
   Evidence: current-full-20261005/interactions/select/{light,dark}/desktop-dpr1/
