@@ -113,18 +113,22 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
   return { historicalSha256: hash(before), currentSha256: hash(after),
     completeSnapshotsAuthenticated: true, selectorSourceConserved: true };
 }
-export function restoreStackingProducer(source) {
-  const current = restoreScalarReviewExtraction(source);
-  let restored = current;
+export function restoreApplicabilityRegistration(source) {
+  let restored = source.toString().replaceAll('\r\n', '\n');
   // This later append-only registration is already reversed by the mapped
   // border transition. Direct earlier-stage callers need the same exact
   // reversal before their unchanged complete predecessor digest is checked.
   const applicabilityRegistration = "    'scripts/diagnose-material-root-initial-receipt.mjs',\n" +
     "    'tests/material-parity/case-index-assertion-migration.mjs',\n";
-  if (restored.includes(applicabilityRegistration)) {
-    assert.equal(restored.split(applicabilityRegistration).length, 2);
+  if (restored.includes("    'scripts/diagnose-material-root-initial-receipt.mjs',")) {
+    assert.equal(restored.split(applicabilityRegistration).length, 2, 'exact applicability registration changed');
     restored = restored.replace(applicabilityRegistration, '');
   }
+  return restored;
+}
+export function restoreStackingProducer(source) {
+  const current = restoreScalarReviewExtraction(source);
+  let restored = restoreApplicabilityRegistration(current);
   if (restored.includes(standaloneCoverageProof)) {
     assert.equal(restored.split(standaloneCoverageProof).length, 2, 'repeated standalone coverage registration');
     restored = restored.replace(standaloneCoverageProof, '');

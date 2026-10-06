@@ -1815,10 +1815,20 @@ test('popup proof batch adds four registrations without changing predecessor inv
   }
 });
 
-test('recent public and popup proofs join existing inventories without changing predecessor entries', () => {
+test('recent public and popup proofs join existing inventories without changing predecessor entries', async () => {
+  const { restoreScalarReviewExtraction, restoreApplicabilityRegistration } = await import('./position-composition-producer-transition.mjs');
   const files = ['tests/material-parity/input-boundary-evidence.spec.mjs',
     'tests/material-parity/sort-focus-structure.spec.mjs'];
-  const source = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8').replace(/\r\n/g, '\n');
+  const rawSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8');
+  const source = restoreApplicabilityRegistration(restoreScalarReviewExtraction(rawSource));
+  const registrationCommit = execFileSync('git', ['show', 'fc961f2f:tests/material-parity/input-equivalence-audit.mjs'],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  const beforeRegistration = execFileSync('git', ['show', 'fc961f2f^:tests/material-parity/input-equivalence-audit.mjs'],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  assert.equal(restoreApplicabilityRegistration(registrationCommit), beforeRegistration.replaceAll('\r\n', '\n'));
+  assert.throws(() => restoreApplicabilityRegistration(rawSource.replace(
+    "    'tests/material-parity/case-index-assertion-migration.mjs',", "    'changed-registration.mjs',")),
+    /exact applicability registration changed/);
   const predecessor = execFileSync('git', ['show', '449586c:tests/material-parity/input-equivalence-audit.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const inventories = text => {

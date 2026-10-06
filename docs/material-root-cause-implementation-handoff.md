@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 6
 
+- Identified historical inventory reconciliation failure resolved: reuse the
+  existing exact two-entry applicability reversal as shared helper,then apply
+  it after scalar/proof restoration in the original recent-public/popup test.
+  Complete source equality across fc961f2f versus its parent proves the original
+  registration addition; altered second-entry negative control rejects. Original
+  537/539 fingerprint counts,proof ordering/counts and receipt assertions remain
+  unchanged. Divider/passive/popup/recent-public conservation now4/4exit0,
+  9922.3423ms; divider-paint-source-final-20261006.log. Prior two failing logs
+  remain retained. This resolves that exact boundary,not every historical suite,
+  all source receipts or accepted137-proof publication. Next broader evidence
+  applicability/obligation closure; full canonical gates still require space.
+
 - Broader registration reconciliation now has a precise failing boundary:
   divider/passive/popup conservation pass3/3; historical recent-public/popup
   inventory assertion fails on current later additions (combined run3/4).
