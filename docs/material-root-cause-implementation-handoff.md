@@ -22,6 +22,15 @@
   remaining caret states,overlay focus/lifetime and exact per-case obligation
   closure. Final complete enforced browser/release gates remain mandatory.
   No renderer fixes,fixture compensation,threshold or acceptance changes.
+- Current-build overlay focus applicability checked October6: the two existing
+  modal-Tab/parent-selector tests pass2/2,exit0,97201.7353ms against the complete
+  current-full-20261005 browser fingerprint. Dialog stays within Cancel/Save;
+  bottom-sheet still escapes its role-only DIV after two options. All six
+  comparison overlay combinations allow real parent-selector click/keyboard
+  navigation. Evidence:overlay-focus-scope-current-20261006.log, SHA256
+  304a10c2a0bec98cfc9d493b5f8542aeaabb9e099fe8718f65f5820dfb268b70.
+  This closes historical-versus-current applicability for these bounded focus
+  observations, not full modality, restoration, paint or resource lifetime.
 
 ### Retained evidence chronology — October 5–6
 

@@ -2,6 +2,16 @@
 
 ## Current evidence boundary — October 5
 
+October6 overlay focus applicability: unchanged existing modal-Tab and parent-
+selector tests pass2/2 against current-full-20261005's complete served-file
+fingerprint (97201.7353ms,exit0). Dark/mobile DPR2 dialog focus remains contained;
+bottom-sheet role-only DIV still lets focus escape. Light desktop DPR1 parent
+selector remains reachable in all six reference/candidate/both overlay modes.
+Log:overlay-focus-scope-current-20261006.log; exact digest is in the current
+handoff. Historical conclusions are now observed on this current checkpoint
+for these cohorts only. Full paint, restoration and lifetime remain open;
+no configured case is promoted to complete inspection.
+
 October6 paired empty-caret visibility update: all five editable families now
 have current-full checkpoint-bound light desktop DPR1/2 initial/hide captures,
 six timed boundaries per pair. Combined replay authenticates240 PNGs plus
