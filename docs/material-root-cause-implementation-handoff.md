@@ -2,6 +2,26 @@
 
 ## Current resumption ledger — October 6
 
+- Divider retained text-paint gap narrowed without recapture: current-full report
+  SHA ab42dbec authenticates24 cases/48 ink-centroid observations,all matching,
+  but zero configured focused rasters. Existing native-bounds alignment crops
+  (4 CSS-pixel context) provide48 pairs/96 PNGs. Unchanged local comparator
+  gives40 diagnostic SSIM passes,8 failures,range0.7298902713–0.9985308891;
+  sharpness diagnostic passes48/48. All8 failures are contrast DPR1 above/below
+  text in static desktop/tablet/comparison and interaction desktop-dpr1.
+  Independent replay verifies96 hashes and exact48 metric objects. Log:
+  divider-retained-text-raster-diagnostic-20261006.log,SHA256
+  2fe6c3409840861b93d552ee1fa1acffaa3b7ff1d827fb609224dc2108b21852.
+  Authenticated candidate tree receipts retain equivalent family,size,weight,
+  style,line-height requests for all48 texts; contrast14.4px on both.
+  divider-retained-text-font-boundary-20261006.log rejects basic font-request
+  mismatch; omitted leaf scalar typography is not absent inherited typography.
+  These are diagnostics,not configured acceptance targets or a new core cause.
+  Absolute paragraph compensation remains independently classified. Next relate
+  the contrast/DPR1 residual to existing bounded backing/phase evidence without
+  corrective offsets or inferring a global font/paint failure. Export93842 is
+  live; these ledger files are not producer-consumed dependencies.
+
 - Passive batch integration checks finished: four historical source-binding
   assertions pass4/4 (320764.0323ms), passive-batch-source-bindings-selected-
   20261006.log. Three definition/proof checks pass3/3 (39085.7212ms),
