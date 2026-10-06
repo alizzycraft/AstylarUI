@@ -2,6 +2,22 @@
 
 ## Current resumption ledger — October 6
 
+- October7 Icon full-image crop registration closes the remaining retained
+  static crop-origin uncertainty: original cropPng extracted unchanged from
+  the receipt-matching runner reconstructs all24 saved RGBA crops exactly from
+  full reference/candidate PNGs,12 cases across all profiles/desktop/tablet/mobile
+  at DPR1/2. Log icon-full-image-crop-registration-20261007.log SHA
+  b399d7416fe3c4a1aad09782548ab034302e869b5d485f85c2f5c069772b11b7,
+  exit0; full/crop hashes, bounds and scale recorded. Combined with exact metric
+  replay, wrong saved region does not explain the four mobile sharpness failures.
+  Unequal SVG/raster/currentColor inputs remain first divergence; this check
+  neither diagnoses equal-input core sampling nor changes diagnostic thresholds.
+  No additional static recapture is needed for registration. Interaction-local
+  DPR paint, broader AX, equal-input loading/alpha, ownership and current-source
+  output applicability remain; no whole-case closure. Next prioritize shared
+  editable/overlay obligations and publication reconciliation,not another Icon
+  crop or metric replay.
+
 - October7 Icon coverage reconciled without new capture or producer changes:
   original asset proof replays1/1 across20 retained owners, including changed
   asset/path/size negative controls. Log icon-asset-applicability-20261007.log,
@@ -18,7 +34,7 @@
   77f1a7da82a21876578c0a1b4137f1683e0331fdfd0aba89a2375792c32377ba.
   Existing SVG-to-PNG input substitution and light desktop AX hiding findings
   already answer representation/naming in their bounded populations. Family row
-  now distinguishes those inspected failures from remaining crop registration,
+  now distinguishes those inspected failures from then-remaining crop registration,
   broader AX, equal-input loading/alpha, paint/lifetime and current applicability.
   No case promoted to full closure; no current rendering acceptance inferred.
   These ledger documents are absent from producer references/fingerprint inputs;
