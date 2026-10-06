@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 6
 
+- Passive source registration batch begun: producer definitions145 to147 adds
+  core-public-semantic-subset-omits-accessibility-only-hiding (documented support
+  limitation) and fixture-list-content-wrappers-and-row-sizing-substituted
+  (application authoring). Independent read-only comparison with aee5b612 proves
+  all145 prior definitions byte-value conserved; both source patterns match and
+  all3 evidence receipts authenticate. Exit0,
+  passive-source-definition-conservation-20261006.log. Accepted canonical remains
+ 145 findings,generation856e0908;147 is producer registration only. Next add four
+  standalone proof registrations through existing inventory and reconcile exact
+  historical source-transition guards before one justified canonical integration.
+  No core/fixture edits or final acceptance promotion.
+
 - Badge/icon actual AX alternative resolved in current-checkpoint light desktop
   DPR1: native targets ignored with ariaHiddenElement; candidate count exposes
   StaticText4 and icon exposes image/Favorite. Existing frozen helper verifies

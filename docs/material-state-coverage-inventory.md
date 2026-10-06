@@ -2,6 +2,14 @@
 
 ## Current evidence boundary — October 6
 
+Producer source definitions now147 (accepted canonical145): two additive findings
+register the observed accessibility-only hiding support gap and list composition/
+row-size substitution. Focused conservation verifies all145 predecessor entries,
+both source patterns and3 retained evidence receipts. Log:
+passive-source-definition-conservation-20261006.log,exit0. Proof inventory and
+source-transition integration remain pending; do not call registration publication
+or count new findings as case closure. Accepted generation856e0908 is unchanged.
+
 Actual badge/icon hiding now observed at current-full checkpoint light desktop
 1440x1000 DPR1,Chrome154.0.8037.58,whole served fingerprint authenticated by
 existing helper. Native badge count and icon host have ignored AX nodes with
