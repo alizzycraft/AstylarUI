@@ -21,6 +21,27 @@ const report = JSON.parse(bytes);
 
 test('public divider typography reduction observes equal paragraph span inputs and opaque backing control', async t => {
   const consumer = path.resolve('examples/material-showcase');
+  // Bind the paint/baseline owner, not the entire installed rendering pipeline.
+  const canvasPath = path.join(consumer, 'node_modules/astylarui/dist/lib/app/services/text/text-canvas-renderer.service.js');
+  const installedCanvas = readFileSync(canvasPath, 'utf8');
+  const canvasSource = readFileSync('src/app/services/text/text-canvas-renderer.service.ts', 'utf8');
+  const compiledCanvas = ts.transpileModule(canvasSource,
+    { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
+  const ownerBindings = [];
+  for (const [start, end, minimum] of [
+    ['createStyledCanvas', 'calculateLayoutMetrics', 1000],
+    ['calculateCssLineBoxAlphabeticBaseline', 'applyTextTransform', 300]
+  ]) {
+    const extract = source => {
+      const from = source.indexOf(`    ${start}(`), to = source.indexOf(`    ${end}(`);
+      assert.ok(from >= 0 && to > from, `missing complete ${start} method boundary`);
+      return source.slice(from, to).replace(/\s+/g, ' ').trim();
+    };
+    const method = extract(installedCanvas);
+    assert.ok(method.length > minimum);
+    assert.equal(method, extract(compiledCanvas), `${start} installed/current source drift`);
+    ownerBindings.push({ method: start, normalizedSha256: hash(method) });
+  }
   const font = readFileSync(path.join(consumer, 'node_modules/@fontsource/roboto/files/roboto-latin-400-normal.woff2'));
   const built = await createRequire(path.join(consumer, 'package.json'))('esbuild').build({
     stdin: { resolveDir: consumer, sourcefile: 'divider-text-reduction.mjs', contents: `
@@ -91,7 +112,9 @@ test('public divider typography reduction observes equal paragraph span inputs a
       results.push({ dpr, ...pair });
     }
     for (const input of inputs) assert.equal(hash(readFileSync(input.file)), input.sha256);
-    t.diagnostic(JSON.stringify({ browser: browser.version(), results, inputs, fontSha256: hash(font), acceptance: false,
+    assert.equal(readFileSync(canvasPath, 'utf8'), installedCanvas);
+    assert.equal(readFileSync('src/app/services/text/text-canvas-renderer.service.ts', 'utf8'), canvasSource);
+    t.diagnostic(JSON.stringify({ browser: browser.version(), results, inputs, ownerBindings, fontSha256: hash(font), acceptance: false,
       scope: 'Equal14.4px normal paragraph/span typography at four fractional origins,DPR1/2; opaque baseline control,not full divider flow or causal intervention on renderer backing.' }));
   } finally { await browser?.close(); await new Promise(resolve => server.close(resolve)); }
 });

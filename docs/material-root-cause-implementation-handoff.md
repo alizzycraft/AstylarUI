@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 6
 
+- Equal-typography reduction now authenticates complete installed canvas-paint
+  and CSS alphabetic-baseline method slices against current-source ES2022
+  transpilation, with explicit boundary/size checks and unchanged-source checks
+  after the browser run. Focused reproduction exits0; retained owner-bound log
+  divider-equal-typography-owner-bound-20261006.log SHA256
+  8bf55d3c6aa13365574d1b2001917c5b4393886f4af50b98a7a18ba38794cc1b.
+  This rejects stale installation of these two owners, not the entire positioning/
+  projection pipeline. Their normalized hashes are included in the existing test
+  diagnostic. Remaining decisive work: bind those downstream owners and separate
+  backing/composition from baseline/phase without fixture compensation. No case
+  closure, causal diagnosis or canonical acceptance is promoted by this check.
+
 - Equal14.4px Roboto/normal line-height/tracking paragraph/span reduction now
   reproduces a DPR1 paint difference without fixture offsets:four shared CSS
   fractional origins,identical authored site,loaded font and measured native
