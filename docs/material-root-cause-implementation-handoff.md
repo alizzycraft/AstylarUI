@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 5
 
+- Publication transport recovered October6: the single per-command OpenSSL
+  attempt (`git -c http.sslBackend=openssl -c http.version=HTTP/1.1
+  -c http.postBuffer=104857600 push origin HEAD:refs/heads/codex/material-audit-alignment-integration`)
+  terminates exit0. Independent OpenSSL ls-remote matches local commit
+  5c9e4b8ff3b860048827079d86bf1071f6633193 exactly. Retain
+  artifacts/material-parity/publication-openssl-20261006.log; GitHub accepts the
+  package with its recommended50MiB large-file warning. Prior curl failures
+  remain failure evidence, but publication through this commit is no longer
+  blocked. Certificate verification stayed enabled; no persistent Git/SSH
+  configuration changed. The caret/track canonical export remains a separate
+  live validation task in55106, not implied successful by publication.
+
 - Divider orientation omission classified at the authored-intent boundary:
   WAI-ARIA1.2 https://www.w3.org/TR/wai-aria-1.2/#separator defines implicit
   horizontal orientation for role separator. The authenticated24 pairs' native
