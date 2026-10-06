@@ -96,6 +96,24 @@
   0239cd2fbcdfb1b5670cdcd3005962165c751d5ec05fa105a5d19bc097a0bad4.
   Next: canonical reconciliation of this verified coherent producer batch,then
   exact remaining paint/profile obligations;
+  Export is live in57121,canonical-popup-batch-20261006.log; independent check
+  and compact refresh must wait for successful terminal export. Consumed sources
+  remain unchanged while it runs.
+  Independent read-only paint-gate scope check authenticates current-full report
+  and raw-byte harness receipts (runner e01ef9dc…,focused metrics c8483996…).
+  All24 popup hover rows have only statePaint.matches=true: compareStatePaint
+  measures toolbar states/button activate-leave,otherwise returns that default.
+  All24 configured SSIM crop gates pass,but diagnostic sharpness fails5select/
+  4autocomplete/4timepicker crops. focused-raster-metrics.mjs:33–42 explicitly
+  keeps sharpness/color/edge values diagnostic. Green default statePaint and SSIM
+  therefore cannot close equivalent option-paint/sharpness obligations. Do not
+  promote diagnostics to a new gate or attribute their failures to core blur
+  while rendering inputs differ. Verified metadata check exit0,log
+  popup-paint-gate-scope-verified-20261006.log,SHA256
+  fa3212ff85b32dc733fc626cb1d154a85e11d36b5ab5a2a1bba69420bd688618.
+  Initial popup-paint-gate-scope-20261006.log rejects LF-normalized source against
+  a raw-byte capture receipt; exact raw bytes authenticate without repinning.
+  No browser rerun,producer/harness edit,threshold change or case closure.
   geometry/local raster equivalence still needs equivalent inputs. Standalone
   ancestry/indicator/hover/held proofs are registered in producer source but not yet in the canonical package;
   reconcile the owning-suite fingerprint at the next coherent integration batch,

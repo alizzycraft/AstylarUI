@@ -14,6 +14,15 @@ limits are in the current handoff. Tablet/mobile,matched-time local rasters,
 lifetime and full case closure remain pending; standalone proof registration/
 canonical suite-fingerprint integration is the next coherent batch.
 
+Popup paint-gate scope is now explicit for all24 desktop hover-content rows:
+statePaint.matches=true is the comparator's unmeasured default for these families,
+not option-color comparison. All24 configured focused-raster SSIM gates pass;
+13 separate diagnostic sharpness targets fail (select5,autocomplete4,timepicker4).
+This does not redefine output acceptance or prove blur causality with unequal
+inputs. Original report and both harness sources authenticate by exact raw-byte
+receipts. Evidence:popup-paint-gate-scope-verified-20261006.log; current handoff
+records digest and the remaining local-paint obligation.
+
 October6 caret/track canonical integration supersedes the earlier package
 statements below: export and independent cold check both exit0,compressed SHA
 4845e414926218b5ada5d389b9a259f45369fb830f0f865b3a1af73ca4a8bf27.
