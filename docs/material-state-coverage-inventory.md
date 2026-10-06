@@ -224,6 +224,30 @@ replay does not authenticate current rendering or change thresholds. Initial
 one-off schema assumptions (viewport string and universal popup bounds) failed;
 the corrected replay exited0 with48 crops/24 metrics/32 absent side bounds.
 
+October7 missing bounds now separately observed for all16 select/autocomplete
+desktop hover-content configurations:32 popup sides/64 option boxes,real pointer
+open/first-option hover,Chrome154.0.8037.58. Existing frozen-showcase helper and
+five extracted existing runner functions authenticate to dca53534/e01ef9dc;
+served files match the full checkpoint before and after. Interaction route,
+theme command,color scheme,reduced motion and start/settled phases match the
+configured run;all32 primary boxes agree with retained geometry within0.05CSSpx.
+Log popup-matched-bounds-20261007.log SHA256
+d50667c3937889fac51c7758a3ceb1059b0b90a0dcba7d1b9c2bfa006306ee3a,exit0.
+Widths agree720px in all16 pairs. Light/dark popup y differs0.001862px,height
+agrees112px. Custom y differs1.016235px,height agrees112px. Contrast autocomplete
+y differs11.013123px,height102vs112;select y differs10.013123px,height104vs112.
+Captured candidate declarations explain the used offsets/sizes:contrast popup
+tops47/46px versus native36px anchor offset;heights102/104px versus112px;custom
+top49px versus48px. Autocomplete's contrast padding0 also moves its first option
+to the panel top instead of native8px inset. First divergence is unequal fixture
+authoring,not demonstrated equal-input coordinate conversion. Native label boxes
+are centered in all32 option boxes;candidate glyph ink remains unmeasured.
+This closes the standalone bounds-observation gap for these16 configurations,
+not old report placement gates,retrospective pixel registration,current-source
+acceptance or full-case closure. The first probe's browser-object assertion failed;
+its corrected version omitted interaction/theme/context/phase setup and is only
+diagnostic. Both popup-missing-bounds logs remain retained,not accepted scope.
+
 Exact native control applicability is now bound across354 configured cases in
 the nine passive families,not just inferred from a representative template:
 sidenav62,grid-list52,divider24,badge52,icon20,list52,table52,progress-bar20,

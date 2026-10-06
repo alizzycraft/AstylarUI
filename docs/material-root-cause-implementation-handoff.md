@@ -2,6 +2,23 @@
 
 ## Current resumption ledger — October 6
 
+- October7 select/autocomplete missing bounds inspected across16 exact desktop
+  configurations using authenticated existing helper/runner functions and matched
+  route/theme/context/benchmark phases. Log popup-matched-bounds-20261007.log
+  SHAd50667c3937889fac51c7758a3ceb1059b0b90a0dcba7d1b9c2bfa006306ee3a,
+  exit0;32 popup sides/64 option boxes,primary geometry agrees within0.05CSSpx,
+  served-file fingerprint unchanged at completion. Widths all720px;contrast
+  autocomplete11.013px lower/10px shorter,select10.013px lower/8px shorter;
+  custom1.016px lower. Retained candidate top/height/padding overrides explain
+  used geometry versus native anchors:unequal authoring,not equal-input core
+  projection evidence. Native label boxes centered;candidate glyph ink still
+  requires local raster inspection. Full numbers/boundaries in existing inventory.
+  Initial browser-schema failure and unmatched-setup trial retained separately;
+  neither is promoted by its provisional verified filename. No source/fixture
+  changes,new framework,canonical publication or whole-case closure. Next use
+  these bounds with retained pixels only after checking local registration;
+  prioritize candidate option-text paint and remaining scrollbar state evidence.
+
 - October7 wider popup paint coverage question answered by existing-image replay:
   all24 select/autocomplete/timepicker desktop hover-content rows reproduce48
   saved crop RGBA arrays and24 complete focused metric objects exactly; no capture
