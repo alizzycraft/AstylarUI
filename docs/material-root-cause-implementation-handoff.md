@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 6
 
+- Popup theme question, retained current-full evidence: light/dark desktop DPR1
+  select/open reference and candidate input-tree receipts authenticate. Native
+  frame on-surface changes RGB(29,27,32) to RGB(230,225,229), but native option
+  base ink remains RGB(29,27,30), selected primary-text RGB(75,67,87), and selected
+  background RGB(234,222,247) in both profiles. This rejects inferring popup dark
+  inheritance from frame tokens; it does not establish actual ancestor token
+  provenance or candidate paint equivalence. Reference source puts overrides on
+  main.frame; global Material theme is authored on html in styles.scss. Existing
+  overlay-captured-root-context sensitivity proof warns that captured null parents
+  are traversal boundaries, not actual DOM ancestry. Next decisive check: original
+  overlay ancestor/custom-property provenance, before any core paint diagnosis.
+  Evidence: current-full-20261005/interactions/select/{light,dark}/desktop-dpr1/
+  open/{reference,astylar}-input-tree.json, hashes from the full report. This is
+  read-only receipt/metadata inspection, not a browser rerun or full-case closure.
 - Scope unchanged:36 families,436 static+1875 interaction configured cases;
   exact membership inspected partially, complete applicable-obligation closure
   still pending. Rendering failures count as inspected, not as audit blockers.
