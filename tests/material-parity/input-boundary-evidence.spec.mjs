@@ -697,6 +697,44 @@ test('current paired caret-visible capture binds its pixels to unequal caret aut
   assert.equal(candidateInput.resolvedStyle.color, '#1d1b20');
 });
 
+test('desktop email empty caret preserves native visibility and candidate blink evidence', () => {
+  const file = 'artifacts/material-parity/visible-caret-input-desktop-dpr1-20261006/latest-report.json';
+  const capture = JSON.parse(readFileSync(file));
+  const manifest = JSON.parse(readFileSync(capture.capture.checkpointManifest.file));
+  assert.deepEqual(validateSupplementalCapture(capture, { reportFile: file,
+    expectedProvenance: manifest.provenance, script: 'scripts/audit-material-visible-caret.mjs',
+    styleProperties: Object.values(propertyGroups).flat() }), { status: 'checkpoint-bound', errors: [] });
+  assert.equal(capture.results.length, 6);
+  const images = [];
+  for (const row of capture.results) {
+    assert.equal(row.family, 'input'); assert.equal(row.profile, 'light');
+    assert.deepEqual(row.viewport, { width: 1440, height: 900, deviceScaleFactor: 1 });
+    for (const mode of ['reference', 'astylar']) {
+      assert.equal(row[mode].observation.control.value, '');
+      assert.equal(row[mode].observation.control.focused, true);
+      assert.equal(row[mode].observation.control.type, 'email');
+      for (const image of [row[mode].screenshot, row[mode].hiddenCaretControl])
+        assert.equal(hash(readFileSync(image.file)), image.sha256);
+      assert.equal(row[mode].screenshot.caret, 'initial');
+      assert.equal(row[mode].hiddenCaretControl.caret, 'hide');
+    }
+    images.push(PNG.sync.read(readFileSync(row.astylar.screenshot.file)));
+  }
+  assert.ok(capture.results.some(row => row.reference.nativeCaretPixelDelta.changedPixels > 0));
+  let stroke = false;
+  for (const on of images) for (const off of images) for (let x = 0; x < 24; x++) {
+    let run = 0;
+    for (let y = 0; y < on.height; y++) {
+      const i = (y * on.width + x) * 4;
+      const foreground = on.data[i] === 29 && on.data[i+1] === 27 && on.data[i+2] === 32;
+      const changed = on.data[i] !== off.data[i] || on.data[i+1] !== off.data[i+1] || on.data[i+2] !== off.data[i+2];
+      run = foreground && changed ? run + 1 : 0;
+      if (run >= 10) stroke = true;
+    }
+  }
+  assert.equal(stroke, true, 'candidate has a localized contiguous blinking caret, not just label animation');
+});
+
 test('dark mobile empty inputs expose caret pixels without changing retained producers', async t => {
   const browserRoot = path.resolve('examples/material-showcase/dist/material-showcase/browser');
   const checkpoint = JSON.parse(readFileSync('artifacts/material-parity/caret-visible-checkpoint-154/checkpoint/manifest.json'));

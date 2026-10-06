@@ -13,7 +13,18 @@ import { openSupplementalCapture, parseSupplementalCaptureArguments } from '../t
 // This is a new, narrow capture. The Chrome 153 producer and its historical
 // source-bound evidence must remain unchanged because its default screenshots
 // suppressed the browser-native caret.
-const args = process.argv.slice(2);
+const suppliedArgs = process.argv.slice(2);
+const selected = {};
+const args = suppliedArgs.filter(arg => {
+  const match = /^--(family|dpr)=(.*)$/.exec(arg);
+  if (!match) return true;
+  assert.equal(selected[match[1]], undefined, 'Repeated visible-caret population option.');
+  selected[match[1]] = match[2];
+  return false;
+});
+const family = selected.family ?? 'form-field', dpr = Number(selected.dpr ?? 1);
+assert.ok(['form-field','input','autocomplete','datepicker','timepicker'].includes(family));
+assert.ok([1,2].includes(dpr));
 assert.equal(args.length, 2, 'Supply --checkpoint and a new --output directory.');
 const browserRoot = path.resolve('examples/material-showcase/dist/material-showcase/browser');
 const checkpointArg = args.find(arg => arg.startsWith('--checkpoint='));
@@ -44,10 +55,10 @@ try {
     script: 'scripts/audit-material-visible-caret.mjs', styleProperties: properties });
   const results = new Map();
   for (const mode of ['reference', 'astylar']) {
-    const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+    const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: dpr });
     const finishRuntime = evidence.observe(page), samples = [];
     try {
-      await page.goto(`${options.baseUrl}/${mode}/form-field?benchmark=1&profile=light&interaction=audit-visible-caret`);
+      await page.goto(`${options.baseUrl}/${mode}/${family}?benchmark=1&profile=light&interaction=audit-visible-caret`);
       await page.locator('.frame').waitFor();
       if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
       await page.keyboard.press('Tab');
@@ -58,7 +69,10 @@ try {
         if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
         await page.evaluate(async () => { await document.fonts.ready;
           await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))); });
-        const observation = await observe(page, mode);
+        const observation = await observe(page, mode, family);
+        assert.equal(observation.control.value, '');
+        assert.equal(observation.control.focused, true);
+        assert.equal(observation.control.type, family === 'input' ? 'email' : 'text');
         assert.deepEqual(observation.control.value, '', `${mode} was not empty`);
         assert.equal(observation.control.focused, true, `${mode} lost focus`);
         const tree = mode === 'reference'
@@ -70,7 +84,7 @@ try {
           width: Math.min(1440, box.x + box.width + 16) - Math.max(0, box.x - 16),
           height: Math.min(900, box.y + box.height + 16) - Math.max(0, box.y - 16) };
         assert.ok(clip.width > 0 && clip.height > 0);
-        const stem = `${evidence.directory}/form-field-${mode}-empty-${index}`;
+        const stem = `${evidence.directory}/${family}-${mode}-empty-${index}`;
         const treeBytes = Buffer.from(JSON.stringify(tree));
         const visible = await page.screenshot({ clip, caret: 'initial' });
         const hidden = await page.screenshot({ clip, caret: 'hide' });
@@ -79,8 +93,8 @@ try {
         writeFileSync(`${stem}-visible.png`, visible, { flag: 'wx' });
         writeFileSync(`${stem}-hidden.png`, hidden, { flag: 'wx' });
         const state = `focused-empty-${index}`;
-        if (!results.has(state)) results.set(state, { family: 'form-field', profile: 'light',
-          viewport: { width: 1440, height: 900, deviceScaleFactor: 1 }, state,
+        if (!results.has(state)) results.set(state, { family, profile: 'light',
+          viewport: { width: 1440, height: 900, deviceScaleFactor: dpr }, state,
           action: index ? 'wait 125ms' : 'real Tab, Control+A, Backspace' });
         const row = { observation, inputTree: { file: `${stem}-input-tree.json`, sha256: hash(treeBytes) },
           screenshot: { file: `${stem}-visible.png`, sha256: hash(visible), clip, caret: 'initial' },
@@ -97,7 +111,7 @@ try {
   assert.ok(rows.some(row => row.reference.nativeCaretPixelDelta.changedPixels > 0),
     'Reference caret never appeared in the visible-caret samples.');
   const report = { schemaVersion: 1, browser: browser.version(), capture: evidence.capture,
-    results: rows, scope: 'Form-field light desktop DPR1, real Tab/delete and six 125ms focused-empty samples. Both screenshot caret modes retained. Diagnostic only.',
+    results: rows, scope: `${family} light desktop DPR${dpr}, real Tab/delete and six 125ms focused-empty samples. Both screenshot caret modes retained. Diagnostic only.`,
     inputEquivalent: false, renderingEquivalent: false };
   writeFileSync(`${evidence.directory}/latest-report.json`, JSON.stringify(report, null, 2) + '\n', { flag: 'wx' });
   console.log(JSON.stringify({ browser: report.browser, states: rows.length,
@@ -122,9 +136,9 @@ function pixelDelta(visibleBytes, hiddenBytes) {
   return { changedPixels, bounds: changedPixels ? { minX, minY, maxX, maxY } : null };
 }
 
-async function observe(page, mode) {
-  return page.evaluate(mode => {
-    const id = 'form-field-control';
+async function observe(page, mode, family) {
+  return page.evaluate(({mode, family}) => {
+    const id = `${family}-control`;
     const node = mode === 'reference' ? document.getElementById(id)
       : document.querySelector(`[data-astylar-id="${id}"]`);
     assertNode(node);
@@ -146,5 +160,5 @@ async function observe(page, mode) {
       selectionEnd: input.selectionEnd ?? null,
       caretMesh: mesh ? { enabled: mesh.isEnabled(), visible: mesh.isVisible } : null } };
     function assertNode(value) { if (!value) throw Error(`Missing ${id} control`); }
-  }, mode);
+  }, {mode, family});
 }

@@ -2,6 +2,26 @@
 
 ## Current resumption ledger — October 5
 
+- Missing paired desktop email caret boundary captured using the existing
+  visible-caret producer with explicit family/DPR options (defaults retained).
+  Current-full checkpoint,light1440×900 DPR1,real Tab/delete,six125ms initial/
+  hide samples: native pixel deltas19/19/0/0/0/19; candidate screenshot caret
+  option does not hide its WebGL caret, so localized inter-sample stroke replay
+  separately confirms contiguous candidate blink pixels. Runtime/tree/source/
+  raster receipts authenticate through the existing supplemental validator;
+  new owning-suite assertion1/1exit0,967.010ms. Retain
+  visible-caret-input-desktop-dpr1-20261006/latest-report.json and adjacent log.
+  This closes paired visibility for one missing desktop population, not ink,
+  geometry equality, all five desktop families/DPRs or all-state paint. Historical
+  producer source receipts must be reconciled explicitly after this parameter
+  addition; old captures were not overwritten or relabeled current.
+
+- Smaller first-unpublished-commit push also terminates exit1 with curl55
+  connection reset. publication-first-canonical-20261006.log retained;
+  ls-remote stillc24c2727e3fc91ef1ddf8aa7410571d25490c14b. Misleading
+  Everything up-to-date is not publication success. Do not repeat the same
+  HTTPS upload; transport/publication remains separate from audit investigation.
+
 - Public equal-input track interaction reduction confirms the core support gap
   independently of Material popup authorship: existing gutter test now drives
   below-thumb right-edge presses on identical260×128 overflow boxes with400px
