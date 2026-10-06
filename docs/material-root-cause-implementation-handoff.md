@@ -114,6 +114,19 @@
   Initial popup-paint-gate-scope-20261006.log rejects LF-normalized source against
   a raw-byte capture receipt; exact raw bytes authenticate without repinning.
   No browser rerun,producer/harness edit,threshold change or case closure.
+  Broader current-full statePaint census:32 rows have explicit measured payloads
+  (24toolbar,8button);1843 return the unmeasured default. This is that comparator's
+  scope,not1843 missing applicable obligations or absence of other raster gates.
+  Native control applicability now binds all354 configured cases in the existing
+  nine passive families:62sidenav,52grid-list,24divider,52badge,20icon,52list,
+  52table,20progress-bar,20progress-spinner. Full report and every reference tree
+  authenticate; no interactive descendants/sequential targets appear. Preserve
+  generated progressbar tabindex=-1 as nonsequential semantics,not a button.
+  Keyboard activation/editing can be marked inapplicable for these exact cases;
+  layout/paint/semantics/history remain. Checked read-only log exit0:
+  passive-native-control-applicability-20261006.log,SHA256
+  18eafba165d913e5f120adbdc6f2bffcf1c035bb04ce1a8f2ae76973b89430eb.
+  No configured case is promoted to fully inspected or passing input equivalence.
   geometry/local raster equivalence still needs equivalent inputs. Standalone
   ancestry/indicator/hover/held proofs are registered in producer source but not yet in the canonical package;
   reconcile the owning-suite fingerprint at the next coherent integration batch,

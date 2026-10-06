@@ -23,6 +23,16 @@ inputs. Original report and both harness sources authenticate by exact raw-byte
 receipts. Evidence:popup-paint-gate-scope-verified-20261006.log; current handoff
 records digest and the remaining local-paint obligation.
 
+Exact native control applicability is now bound across354 configured cases in
+the nine passive families,not just inferred from a representative template:
+sidenav62,grid-list52,divider24,badge52,icon20,list52,table52,progress-bar20,
+progress-spinner20. Every reference tree authenticates; no authored input/button/
+select/textarea,href anchor,editable node,interactive role or nonnegative tabindex
+appears. Generated progressbar tabindex=-1 is not a sequential target or activation
+control. This closes keyboard-activation/editing applicability for these exact
+cases,not layout/paint/semantics/history or complete inspection. Evidence:
+passive-native-control-applicability-20261006.log; digest in current handoff.
+
 October6 caret/track canonical integration supersedes the earlier package
 statements below: export and independent cold check both exit0,compressed SHA
 4845e414926218b5ada5d389b9a259f45369fb830f0f865b3a1af73ca4a8bf27.
