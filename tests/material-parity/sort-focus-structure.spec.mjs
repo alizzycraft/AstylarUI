@@ -2356,6 +2356,54 @@ test('ordinary tooltip repeated hover and leave exposes live ownership separatel
   }, {}, { checkpointFile: 'artifacts/material-parity/current-full-20261005/checkpoint/manifest.json' });
 });
 
+test('select popup token ancestry separates global fallback from frame theme overrides', async t => {
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    const observations = [];
+    for (const profile of ['light', 'dark']) {
+      const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 });
+      const errors = [];
+      page.on('pageerror', error => errors.push(String(error)));
+      await page.goto(`${baseUrl}/reference/select?benchmark=1&profile=${profile}`);
+      await page.locator('#select-control').click();
+      await page.locator('mat-option').first().waitFor();
+      const observation = await page.evaluate(() => {
+        const option = document.querySelector('mat-option');
+        const selected = document.querySelector('mat-option[aria-selected="true"]');
+        const label = selected.querySelector('.mdc-list-item__primary-text');
+        const properties = ['--mat-sys-on-surface', '--mat-sys-on-secondary-container',
+          '--mat-sys-secondary-container', '--mat-option-label-text-color',
+          '--mat-option-selected-state-label-text-color', '--mat-option-selected-state-layer-color'];
+        const tokens = el => Object.fromEntries(properties.map(key => [key, getComputedStyle(el).getPropertyValue(key).trim()]));
+        const ancestors = [];
+        for (let el = option; el; el = el.parentElement)
+          ancestors.push({ tag: el.tagName, class: el.className, tokens: tokens(el) });
+        return { ancestors, frame: tokens(document.querySelector('.frame')),
+          base: getComputedStyle(option).color, selectedInk: getComputedStyle(label).color,
+          selectedBackground: getComputedStyle(selected).backgroundColor };
+      });
+      assert.ok(observation.ancestors.some(x => x.class === 'cdk-overlay-container'));
+      assert.ok(!observation.ancestors.some(x => String(x.class).split(' ').includes('frame')));
+      const root = observation.ancestors.at(-1);
+      assert.equal(root.tag, 'HTML');
+      for (const ancestor of observation.ancestors)
+        assert.deepEqual(ancestor.tokens, root.tokens, 'popup ancestry must retain global tokens without frame overrides');
+      assert.equal(root.tokens['--mat-option-label-text-color'], '');
+      assert.equal(root.tokens['--mat-option-selected-state-label-text-color'], '');
+      assert.equal(root.tokens['--mat-option-selected-state-layer-color'], '');
+      assert.equal(observation.base, 'rgb(29, 27, 30)');
+      assert.equal(observation.selectedInk, 'rgb(75, 67, 87)');
+      assert.equal(observation.selectedBackground, 'rgb(234, 222, 247)');
+      assert.equal(observation.frame['--mat-sys-on-surface'], profile === 'dark' ? '#e6e1e5' : '#1d1b20');
+      assert.deepEqual(errors, []);
+      observations.push({ profile, ...observation });
+      await page.close();
+    }
+    assert.deepEqual(observations[0].ancestors.at(-1).tokens, observations[1].ancestors.at(-1).tokens);
+    t.diagnostic(JSON.stringify({ browser: browser.version(), observations,
+      claim: 'Original reference popup ancestry and fallback provenance only; no candidate paint or all-profile acceptance.' }));
+  }, {}, { checkpointFile: 'artifacts/material-parity/current-full-20261005/checkpoint/manifest.json' });
+});
+
 async function withFrozenShowcase(run, launchOptions = {}, evidence = {}) {
   const browserRoot = path.resolve(process.env.ASTYLAR_MATERIAL_SHOWCASE_BROWSER_ROOT ??
     'examples/material-showcase/dist/material-showcase/browser');

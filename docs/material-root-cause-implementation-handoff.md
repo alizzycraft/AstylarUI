@@ -11,11 +11,21 @@
   provenance or candidate paint equivalence. Reference source puts overrides on
   main.frame; global Material theme is authored on html in styles.scss. Existing
   overlay-captured-root-context sensitivity proof warns that captured null parents
-  are traversal boundaries, not actual DOM ancestry. Next decisive check: original
-  overlay ancestor/custom-property provenance, before any core paint diagnosis.
+  are traversal boundaries, not actual DOM ancestry. The focused original-browser
+  ancestry check now answers that gap for light/dark desktop DPR1 select/open:
+  actual MAT-OPTION ancestry reaches overlay container, BODY and HTML, never
+  frame. All six sampled token values match HTML throughout that ancestry;
+  component option overrides are absent and system tokens remain global
+  light-dark() expressions. Matched retained rules therefore use their global
+  fallback, not main.frame's on-surface override. No core paint diagnosis follows.
+  Test1/1exit0,5111.2091ms,Chrome154.0.8037.58,complete served-file fingerprint
+  matched current-full checkpoint before launch. Log:select-popup-token-ancestry-
+  20261006.log,SHA256 58286d9aa8b271e75e704da42b8fa8c5b7ee445a13118b4b05e7cb5b018eaed6.
+  Next: counterpart candidate token/state-paint ownership and pseudo-checkbox
+  inputs; other popup families/profiles are not certified by this select proof.
   Evidence: current-full-20261005/interactions/select/{light,dark}/desktop-dpr1/
   open/{reference,astylar}-input-tree.json, hashes from the full report. This is
-  read-only receipt/metadata inspection, not a browser rerun or full-case closure.
+  receipt/metadata inspection plus the bounded ancestry probe,not full-case closure.
 - Scope unchanged:36 families,436 static+1875 interaction configured cases;
   exact membership inspected partially, complete applicable-obligation closure
   still pending. Rendering failures count as inspected, not as audit blockers.
@@ -32,9 +42,9 @@
   389202 occurrences/zero unresolved. Logs:caret-track-compact-import-20261006.log
   and caret-track-compact-verify-20261006.log. Neither acceptance nor input
   equivalence follows from package validation.
-- Publication recovered and verified through2bf73b0d using per-command OpenSSL,
+- Publication recovered and verified through3bf34d55 using per-command OpenSSL,
   with certificate verification enabled. No persistent Git/SSH changes.
-- Next:publish the verified coherent package; then shared popup/scrollbar paint,text-selection/
+- Next:shared popup/scrollbar paint,text-selection/
   remaining caret states,overlay focus/lifetime and exact per-case obligation
   closure. Final complete enforced browser/release gates remain mandatory.
   No renderer fixes,fixture compensation,threshold or acceptance changes.
