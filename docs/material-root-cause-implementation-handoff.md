@@ -2,6 +2,21 @@
 
 ## Current resumption ledger — October 6
 
+- Whole-residual distribution falsifies small-channel-rounding as a sufficient
+  explanation; initial twelve samples were unrepresentative. DPR1 mapped-control
+  residual481:218 pixels magnitude1,1 magnitude2,262 greater than2; DPR2 residual
+  1512:392 magnitude1,12 magnitude2,1108 greater than2. Maximum RGB difference213
+  on both; alpha differences0. Histogram totals are asserted to conserve every
+  differing pixel; signed channel distribution retained. Focused1/1exit0,
+  42327.8144ms; divider-equal-typography-residual-distribution-20261006.log SHA256
+  446943c5ba991cd7487dcb46c091fbd139b4bb591f57af73de1fa3cc45c11be6.
+  Identical texture RGBA/baselines still hold. Do not pursue a tone/gamma tweak
+  based on the first samples: next decisive check is per-origin texel ownership/
+  coverage at the measured fractional backing-to-plane mapping, distinguishing
+  Canvas2D composition from GPU nearest rasterization. Keep this residual as
+  suspected post-canvas sampling/composition,not a confirmed root cause. Broader
+  per-case obligation closure and coherent proof integration remain required.
+
 - Actual post-canvas transfer settings now recorded per text mesh: gammaSpace
   true,textureHasAlpha true,level1,materialAlpha1,alphaMode2,transparencyMode2,
   alpha from diffuse,emissive same texture/useEmissiveAsIllumination true,lighting

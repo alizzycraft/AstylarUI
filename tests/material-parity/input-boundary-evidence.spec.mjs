@@ -236,7 +236,18 @@ test('public divider typography reduction observes equal paragraph span inputs a
             screenshotDifferences: localDifference, globalTransparentDifferences: originDifference };
           let mappedDifference = 0, mappingDifference = 0;
           const mappedDifferenceSamples = [];
+          const residualHistogram = {}, signedChannelHistogram = {};
+          let maximumChannelDifference = 0, alphaDifferences = 0;
           for (let i = 0; i < image.data.length; i += 4) {
+            const deltas = [0,1,2,3].map(c => image.data[i+c] - mappedControl.pixels[i+c]);
+            const magnitude = Math.max(...deltas.map(Math.abs));
+            maximumChannelDifference = Math.max(maximumChannelDifference, magnitude);
+            if (deltas[3]) alphaDifferences++;
+            if (magnitude) {
+              residualHistogram[magnitude] = (residualHistogram[magnitude] ?? 0) + 1;
+              for (const delta of deltas.slice(0, 3))
+                signedChannelHistogram[delta] = (signedChannelHistogram[delta] ?? 0) + 1;
+            }
             if ([0,1,2,3].some(c => image.data[i+c] !== mappedControl.pixels[i+c])) {
               mappedDifference++;
               if (mappedDifferenceSamples.length < 12) mappedDifferenceSamples.push({
@@ -246,7 +257,9 @@ test('public divider typography reduction observes equal paragraph span inputs a
             if ([0,1,2,3].some(c => localControl.pixels[i+c] !== mappedControl.pixels[i+c])) mappingDifference++;
           }
           pair[mode].mappedControl = { rows: mappedControl.rows, sha256: hash(Buffer.from(mappedControl.pixels)),
-            screenshotDifferences: mappedDifference, unmappedLocalDifferences: mappingDifference, samples: mappedDifferenceSamples };
+            screenshotDifferences: mappedDifference, unmappedLocalDifferences: mappingDifference, samples: mappedDifferenceSamples,
+            residualHistogram, signedChannelHistogram, maximumChannelDifference, alphaDifferences };
+          assert.equal(Object.values(residualHistogram).reduce((sum, count) => sum + count, 0), mappedDifference);
           if (mode === 'astylar') {
             assert.equal(data.runtimeText.length, 4);
             for (let i = 0; i < 4; i++) {
