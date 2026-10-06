@@ -2,6 +2,23 @@
 
 ## Current evidence boundary — October 6
 
+Passive wrapper membership is now exact for330 non-divider cases: one captured
+type/path/class shape pair per family across every retained configured case.
+Authenticated ordered-content receipts are rechecked,not assumed. Sidenav7/4,
+grid-list7/6,badge4/4,icon4/2,list12/6,table11/12,progress-bar8/2 and spinner16/2
+are native/candidate subtree node counts. Table preserves table/head/body rows
+but replaces native tfoot with two authored div rules; icon replaces svg/path
+with img. Existing fixture-table-borders-detached-from-cells,
+fixture-sidenav-positioned-flow-replaced and fixture-icon-svg-replaced-by-fixed-raster
+remain the owning authoring findings,not new core defects. Badge matching tag
+shape does not equate sizing/token inputs. List drops Material content/primary-
+text/focus-indicator wrappers; progress replaces DOM/SVG by plugin nodes: full
+style/semantic/paint equivalence remains unproven. Log:
+passive-wrapper-membership-20261006.log,SHA256
+dc4a8a84ca67324b512b370f42e9c32763a38ac887fb95b70e90be4c80fc47a1.
+No normalization or whole-case promotion follows. This closes structural
+population membership,not justification of every wrapper difference.
+
 Passive ordered-content boundary now covers the330 configured cases outside
 divider:sidenav62,grid-list52,badge52,icon20,list52,table52,progress-bar20,
 progress-spinner20. Full current-full report and660 read tree receipts authenticate;

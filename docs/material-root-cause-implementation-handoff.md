@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 6
 
+- Passive wrapper population question: all330 non-divider case receipts replay
+  to one type/path/class shape pair per family. Native/candidate counts:
+  sidenav7/4,grid-list7/6,badge4/4,icon4/2,list12/6,table11/12,bar8/2,spinner16/2.
+  Log passive-wrapper-membership-20261006.log,SHA256
+  dc4a8a84ca67324b512b370f42e9c32763a38ac887fb95b70e90be4c80fc47a1.
+  Existing table detached-rule,sidenav positioned-flow and icon fixed-raster
+  findings own those substitutions. Do not create duplicate findings or infer
+  isolated-theme issues. List content/primary-text/focus wrappers are omitted;
+  progress DOM/SVG becomes plugin nodes. These need explicit layout/semantics/
+  paint ownership justification. Badge's equal tag shape does not equate token
+  or measured-width inputs. Population membership is closed; wrapper equivalence
+  remains open. Next prioritize shared list text-wrapper layout and plugin-owned
+  progress paint using existing classifications/reductions,not another inventory.
+
 - Passive content question answered for330 non-divider cases: authenticated full
   report plus660 reference/candidate tree receipts preserve each family-root's
   extracted ordered text sequence across sidenav62/grid-list52/badge52/icon20/
