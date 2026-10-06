@@ -2,6 +2,21 @@
 
 ## Current resumption ledger — October 5
 
+- October6 post-caret/track reconciliation prerequisite completed on e151bdf6:
+  `node --test tests/material-parity/gap-survey-source-replay.spec.mjs
+  tests/material-parity/alignment-font-audit-source-binding.spec.mjs
+  tests/material-parity/text-align-audit-source-binding.spec.mjs
+  tests/material-parity/ltr-alignment-audit-source-binding.spec.mjs
+  tests/material-parity/reviewed-input-audit-source-binding.spec.mjs`
+  terminates exit0,29/29,165788.559ms. Existing complete historical source,
+  classifier/membership conservation and changed-source rejection checks pass
+  with the new producer registrations and caret historical-reader boundary.
+  No browser capture, renderer/fixture change or canonical export occurred.
+  This answers whether this batch invalidates those existing source bindings;
+  it does not promote historical rendering to current acceptance. Next perform
+  one coherent canonical export/independent check/compact refresh for the pending
+  source registrations; case-level closure and final browser gates remain open.
+
 - Current desktop caret footprint applicability is measured from the same240
   rasters, not another browser run. All ten populations retain native1/2 device
   columns at DPR1/2 versus candidate2/4 contiguous exact-ink blink columns,
