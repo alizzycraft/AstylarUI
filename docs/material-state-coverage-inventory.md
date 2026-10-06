@@ -38,6 +38,19 @@ control. This closes keyboard-activation/editing applicability for these exact
 cases,not layout/paint/semantics/history or complete inspection. Evidence:
 passive-native-control-applicability-20261006.log; digest in current handoff.
 
+Passive scalar boundary: authenticated compact generation4845e414 contains1697
+classified scalar groups across these nine families,with reviewed-case union
+counts62/52/24/52/20/52/52/20/20 respectively and no unresolved attribution.
+This rules out missing scalar classifications as their immediate coverage gap;
+it does not establish full input equivalence or close non-scalar obligations.
+Next join existing classifications/proofs to exact applicable structure,history,
+semantics and paint obligations rather than repeating scalar surveys. Read-only
+evidence:passive-compact-obligation-boundary-20261006.log,SHA256
+c9ff497e89422a5d8a11b031ef37d310deedcbdda20eae308b91e017cdd71905.
+The whole compact index,all shards and canonical generation were authenticated;
+source findings stored globally must still be considered,not inferred absent
+from family-shard queries. No case closure or current render pass is added.
+
 October6 caret/track canonical integration supersedes the earlier package
 statements below: export and independent cold check both exit0,compressed SHA
 4845e414926218b5ada5d389b9a259f45369fb830f0f865b3a1af73ca4a8bf27.
