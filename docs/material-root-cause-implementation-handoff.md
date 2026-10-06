@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 5
 
+- October6 divider semantic coverage question answered without recapture:
+  current-full-20261005 report SHA ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62
+  and all48 divider input-tree receipts authenticate. All24 configured rows
+  record matching separator role/name; native trees explicitly carry horizontal
+  aria-orientation, candidate authored nodes omit it. Existing run-material-parity
+  semantic measurement (around line1381) omits orientation, so its green matches
+  prove only the recorded fields. Inventory now separates that answered basic
+  semantic obligation from orientation/default semantics, input/style and paint
+  gaps. No case promoted to complete inspection; no new framework or capture.
+  Documentation is not referenced by exporter scripts/tests; consumed sources
+  stay unchanged while canonical-caret-track-batch-20261006 validates in55106.
+
 - October6 post-caret/track reconciliation prerequisite completed on e151bdf6:
   `node --test tests/material-parity/gap-survey-source-replay.spec.mjs
   tests/material-parity/alignment-font-audit-source-binding.spec.mjs
