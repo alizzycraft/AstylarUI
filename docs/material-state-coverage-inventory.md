@@ -208,6 +208,22 @@ inputs. Original report and both harness sources authenticate by exact raw-byte
 receipts. Evidence:popup-paint-gate-scope-verified-20261006.log; current handoff
 records digest and the remaining local-paint obligation.
 
+October7 retained-crop scope replay: all48 saved crops reconstruct byte-for-byte
+from their full reference/candidate PNGs using recorded primary boxes and the
+configured8px/130px/270px padding; all24 focused metric objects reproduce exactly.
+Pinned full-report SHA ab42dbec remains unchanged. All16 timepicker popup sides
+have recorded overlay boxes wholly inside these crops (coverage1.0). Select and
+autocomplete's16 rows instead record overlayPlacement={matches:true} without
+either popup box:32 side bounds are absent. All24 rows have empty textAlignment
+arrays. Therefore available whole-crop pixels/SSIM are not measured option text
+alignment, and the unmeasured select/autocomplete placement default is not popup
+coverage evidence. Reuse timepicker's complete visible-panel pixels for bounded
+local inspection; recover select/autocomplete popup bounds from existing evidence
+or add only the missing measurement before certifying coverage. This read-only
+replay does not authenticate current rendering or change thresholds. Initial
+one-off schema assumptions (viewport string and universal popup bounds) failed;
+the corrected replay exited0 with48 crops/24 metrics/32 absent side bounds.
+
 Exact native control applicability is now bound across354 configured cases in
 the nine passive families,not just inferred from a representative template:
 sidenav62,grid-list52,divider24,badge52,icon20,list52,table52,progress-bar20,

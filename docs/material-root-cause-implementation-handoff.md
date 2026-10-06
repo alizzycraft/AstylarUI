@@ -2,6 +2,17 @@
 
 ## Current resumption ledger — October 6
 
+- October7 wider popup paint coverage question answered by existing-image replay:
+  all24 select/autocomplete/timepicker desktop hover-content rows reproduce48
+  saved crop RGBA arrays and24 complete focused metric objects exactly; no capture
+  required for this check. Timepicker's16 measured sides have full panel coverage.
+  Select/autocomplete16 rows expose32 missing popup side bounds, despite placement
+  matches=true; all24 rows have zero option-text alignment targets. See existing
+  inventory popup paint section for exact scope/report hash. Next use timepicker
+  pixels for local option inspection and recover other popup bounds before claiming
+  coverage. These missing observables,not another unchanged scalar survey,are the
+  decisive remaining boundary. No current-render or full-case acceptance follows.
+
 - October7 action-source historical reconciliation complete for the reviewed
   exact snapshot: read-only preload authenticates original0a0b5d6 raw bytes
   and current de260e2f snapshot,checks33/41 statement membership and31 unchanged
