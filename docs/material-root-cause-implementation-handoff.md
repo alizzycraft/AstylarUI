@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 6
 
+- Divider responsive actual-AX gap answered at current-full checkpoint:16 paired
+  observations across four profiles/tablet768x1024/mobile390x844/DPR1 expose
+  unignored separator,empty name,horizontal orientation,no children on both
+  sides,zero page errors. Unchanged frozen helper authenticates served files;
+  independent replay verifies helper hash,16 unique memberships and assertions.
+  Log divider-responsive-ax-20261006.log,SHA256
+  0504ec4a2381b9c67a1b931fce33bbb98cba7c6fc43fd2807a87e22cd104f1eb.
+  Thus omitted candidate orientation is not a responsive/profile AX divergence
+  in this cohort. Desktop non-light profiles,DPR2 and complete relationships
+  remain separate; no broad accessibility or case closure. Register alongside
+  bounded divider AX/lifecycle evidence after cold-check92981 finishes.
+
 - Passive canonical export93842 finished exit0:147 source findings,436 static/
   1875 interaction cases,8483 unique differences/389202 occurrences preserved;
   inputEquivalent remains false. Log canonical-passive-export-20261006.log.
