@@ -2,6 +2,21 @@
 
 ## Current resumption ledger — October 5
 
+- Public equal-input track interaction reduction confirms the core support gap
+  independently of Material popup authorship: existing gutter test now drives
+  below-thumb right-edge presses on identical260×128 overflow boxes with400px
+  content, overflow auto/scroll at DPR1/2. Native held offsets82/83/27/27 are
+  positive; candidate offsets remain0 in all four. Hidden-overflow controls are
+  unchanged. Package-root imports only,2515 dependency receipts reverified;
+  complete installed createScrollbar method matches current transpiled source,
+  alongside existing createContainer equality. The non-pickable track belongs
+  to core paint/interaction, not plugin geometry or world projection. This is
+  a demonstrated equal-input missing capability; no native timing distance is
+  promised. Retain public-scroll-track-20261006.log,1/1exit0,13280.375ms.
+  Geometry/state proof is not scrollbar raster, cross-platform acceptance or
+  full popup inspection. Canonical source-fingerprint reconciliation remains
+  deferred to the next coherent batch; no renderer/fixture correction made.
+
 - Real scrollbar track boundary now observed on current-full frozen checkpoint:
   existing paired wheel/drag test adds a below-thumb held press/release only.
   Chrome154 dark/mobile390×844 DPR2 native scrollTop becomes336, candidate0;

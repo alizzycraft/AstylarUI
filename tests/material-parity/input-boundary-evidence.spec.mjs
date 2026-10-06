@@ -1155,6 +1155,16 @@ test('public equal-input overflow isolates scrollbar gutter before projection', 
     return source.slice(start, end).replace(/\s+/g, ' ').trim();
   };
   assert.equal(method(installed), method(compiled), 'installed client-area calculation matches current source');
+  const paintAdapterPath = path.join('examples/material-showcase/node_modules/astylarui/dist/lib/app/services', 'babylon-scroll-paint-adapter.js');
+  const installedPaintAdapter = readFileSync(paintAdapterPath, 'utf8');
+  const compiledPaintAdapter = ts.transpileModule(readFileSync('src/app/services/babylon-scroll-paint-adapter.ts', 'utf8'),
+    { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
+  const scrollbarCreation = source => {
+    const start = source.indexOf('    createScrollbar('), end = source.indexOf('    positionScrollbarThumb(', start);
+    assert.ok(start > 0 && end > start);
+    return source.slice(start, end).replace(/\s+/g, ' ').trim();
+  };
+  assert.equal(scrollbarCreation(installedPaintAdapter), scrollbarCreation(compiledPaintAdapter));
   const consumer = path.resolve('examples/material-showcase');
   const built = await createRequire(path.join(consumer, 'package.json'))('esbuild').build({
     stdin: { resolveDir: consumer, sourcefile: 'equal-input-scroll-gutter.mjs', contents: `
@@ -1207,6 +1217,15 @@ test('public equal-input overflow isolates scrollbar gutter before projection', 
           await page.goto('http://127.0.0.1:'+server.address().port+'/?mode='+mode+'&overflow='+overflow);
           await page.waitForFunction(()=>!!window.gutterAudit);await page.evaluate(()=>window.gutterAudit.settle());
           pair[mode]=await page.evaluate(()=>window.gutterAudit.snapshot());
+          if (overflow !== 'hidden') {
+            // Identical CSS outer box; use its below-thumb right-edge track.
+            await page.mouse.move(274, 115);
+            await page.mouse.down();
+            await page.waitForTimeout(100);
+            await page.evaluate(()=>window.gutterAudit.settle());
+            pair[mode].trackHeld=await page.evaluate(()=>window.gutterAudit.snapshot().scroll);
+            await page.mouse.up();
+          }
           assert.deepEqual(errors,[]);assert.deepEqual(pair[mode].errors,[]);
           assert.equal(await page.evaluate(()=>window.gutterAudit.dispose()),true);
         }finally{await page.close();}
@@ -1223,13 +1242,17 @@ test('public equal-input overflow isolates scrollbar gutter before projection', 
       }else{
         assert.equal(pair.astylar.scroll.clientWidth,260);
         assert.equal(pair.astylar.scroll.clientHeight,128);
+        assert.ok(pair.reference.trackHeld.scrollTop > 0, 'public native track press scrolls');
+        assert.equal(pair.astylar.trackHeld.scrollTop,0, 'public candidate track press does not scroll');
       }
       results.push({overflow,dpr,native:pair.reference.scroll,candidate:pair.astylar.scroll,
+        trackHeld:overflow==='hidden'?null:{native:pair.reference.trackHeld.scrollTop,candidate:pair.astylar.trackHeld.scrollTop},
         candidateScrollContainerPresent:pair.astylar.scroll!==undefined});
     }
     for(const input of inputs)assert.equal(hash(readFileSync(input.file)),input.sha256);
     t.diagnostic(JSON.stringify({browser:browser.version(),packages,launchEvidence,results,
       installedScrollRuntimeSha256:hash(installed),bundleSha256:hash(built.outputFiles[0].contents),
+      installedScrollPaintAdapterSha256:hash(installedPaintAdapter),
       dependencyReceiptSha256:hash(JSON.stringify(inputs)),dependencyCount:inputs.length,
       classification:'equal-input core scrollbar client-area divergence',acceptance:false,
       limitation:'geometry diagnostic only; scrollbar raster, wheel and cross-platform gutter metrics are not accepted by this proof'}));
