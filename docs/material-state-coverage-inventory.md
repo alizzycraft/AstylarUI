@@ -2,6 +2,18 @@
 
 ## Current evidence boundary — October 5
 
+October6 scrollbar track-action coverage: the existing dark/mobile DPR2 paired
+wheel/drag harness now observes one below-thumb held track press. Native scroll
+advances; candidate stays0 and targets underlying option3. The existing public
+equal-input gutter reduction independently confirms positive native / zero
+candidate scrolling for overflow auto and scroll at DPR1/2. Complete installed
+scrollbar creation matches current source. This answers the core-versus-popup-
+authoring question for missing track input; it does not close local scrollbar
+paint, other platforms/profiles or the entire timepicker case. Retained logs:
+timepicker-track-click-current-20261006.log and public-scroll-track-20261006.log.
+The canonical package below predates these additive observations; integrate
+their owning-suite fingerprints at the next coherent milestone, not immediately.
+
 October 6 reconciliation supersedes the publication hashes below: repaired
 export and independent cold check both exit0, compressed SHA `401b79a1…`,
 decoded SHA `5cb18302…`. Compact import/verification both pass with unchanged
