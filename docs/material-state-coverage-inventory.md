@@ -2,6 +2,15 @@
 
 ## Current evidence boundary — October 6
 
+Divider current-checkpoint repeated updates/disposal now measured for all8 desktop
+profile/DPR1/2 combinations: 32 idle snapshots live=tracked17/16/4,cache4,no
+unbound materials;8 disposals clear resources/cache/plugins and dispose surface,
+scene,engine. Receipt replay authenticates unchanged frozen-helper source and
+exact membership/results. Log divider-update-disposal-20261006.log,SHA256
+5260c2abddc5b4d3d0a3ee87bcaca765b8e969841e31df5e9ee1851367c26b51.
+Mobile/tablet,late async/remount remain open; no full-case closure or canonical
+registration claimed. This extends single-snapshot ownership evidence only.
+
 Passive batch definition/proof checks pass3/3 and historical source-binding
 replays pass4/4. Logs:passive-definition-proof-validation-20261006.log and
 passive-batch-source-bindings-selected-20261006.log. All145 predecessor

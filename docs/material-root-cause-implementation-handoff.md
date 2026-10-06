@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 6
 
+- Divider repeated-update/disposal gap narrowed: retained current-checkpoint
+  Chrome154 desktop probe covers four profiles at DPR1/2, three identical public
+  updates each. All32 snapshots retain live=tracked17 meshes/16 materials/4
+  textures, text cache4, zero unbound materials and idle session; all8 public
+  disposals clear scene/cache/loaded textures/tracked/plugin counts and dispose
+  surface,scene,engine. Independent replay verifies eight unique memberships,
+  exact snapshots/disposals and unchanged frozen-helper source SHA. Log:
+  divider-update-disposal-20261006.log,SHA256
+  5260c2abddc5b4d3d0a3ee87bcaca765b8e969841e31df5e9ee1851367c26b51.
+  This answers whether ordinary divider replacement itself accumulates resources
+  in this population: no observed growth. It does not cover mobile/tablet,
+  late async,remount or full ownership acceptance. Register with bounded AX
+  evidence after canonical source freeze; no renderer or fixture changes.
+
 - Divider actual semantic boundary answered for current-full light desktop DPR1:
   unchanged frozen-browser helper authenticates entire served checkpoint before
   launch; Chrome154.0.8037.58 partial AX shows unignored separator/empty name/
