@@ -2,6 +2,15 @@
 
 ## Current evidence boundary — October 6
 
+Passive147-finding/135-proof canonical batch now independently accepted:
+export93842,cold check92981,compact import/verify13284 all exit0. Package SHA256
+fd341baa78ab8ffaf93e94d138c6654d45ff54566242fc4412e8f1c73ea41caf;
+2311 cases/8483 groups/39904 controls/389202 occurrences conserved,zero unresolved
+scalar attributions,inputEquivalent false. Logs canonical-passive-independent-
+20261006.log,passive-compact-import-20261006.log,passive-compact-verify-20261006.log.
+This supersedes pending publication below; no case inspection/output pass is
+promoted. Bounded divider standalone evidence still awaits coherent registration.
+
 Divider current-checkpoint repeated updates/disposal now measured for all8 desktop
 profile/DPR1/2 combinations: 32 idle snapshots live=tracked17/16/4,cache4,no
 unbound materials;8 disposals clear resources/cache/plugins and dispose surface,

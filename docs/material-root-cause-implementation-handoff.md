@@ -2,6 +2,21 @@
 
 ## Current resumption ledger — October 6
 
+- Passive canonical batch accepted after export93842 and independent cold
+  check92981 both exit0,then compact import/verify13284 exit0. Package SHA256
+  fd341baa78ab8ffaf93e94d138c6654d45ff54566242fc4412e8f1c73ea41caf.
+  All436 static/1875 interaction cases,8483 groups,39904 control records and
+  389202 occurrences remain;147 findings/135 registered proofs,zero unresolved
+  scalar attributions. InputEquivalent remains false. Logs:
+  canonical-passive-independent-20261006.log,passive-compact-import-20261006.log,
+  passive-compact-verify-20261006.log. Cold session executed2 collectors,10 memory
+  hits,0 disk hits,0 invalidations,1205 files/89154859 bytes rehashed,elapsed
+  2691186.0589ms before final package comparison. This supersedes provisional
+  147/135 and accepted145/131 status below,not current-code output acceptance
+  or complete-case closure. Source freeze for this batch is released; next
+  integrate bounded divider AX/lifecycle evidence and exact-input paint proof
+  in a coherent batch,then continue applicable-obligation closure.
+
 - Divider responsive actual-AX gap answered at current-full checkpoint:16 paired
   observations across four profiles/tablet768x1024/mobile390x844/DPR1 expose
   unignored separator,empty name,horizontal orientation,no children on both
