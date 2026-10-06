@@ -2,6 +2,23 @@
 
 ## Current resumption ledger — October 6
 
+- Divider current-runtime applicability answered: unchanged public equal-input
+  paragraph/separator/paragraph reduction fails at DPR1/2 on Chrome154.0.8037.58,
+  zero page errors. Separator bottom383 versus82,below top399 versus98,
+  below bottom419 versus118,parent bottom464 versus163: all301 CSS-pixel deltas.
+  Existing runner checks104 fresh/dist/installed emitted files; independent
+  read-only replay authenticates2517 bundle inputs,104 source pairs,runner/bundle.
+  Both retained dirs:artifacts/material-parity/divider-current-reduction-20261006-
+  dpr1 and -dpr2; logs use the same stem plus.log. Both result SHA256
+  ac5f8a39462f15abe5a9e05542b6d497ac416e37da30a079b4e9afadeee9aca2;
+  provenance SHA256 f57e29e26ae8ab8a61bb5835af2de248d9c331b7df557f3d75184f774969629c.
+  Both browser commands exit1 honestly; receipt verification exits0. Exact
+  ASTYLAR_AUDIT_SPEC_FILTER is paragraph flow places a divider without absolute
+  text or separator offsets. Existing runner adds only that reduction path with
+  exact-filter guard; test bodies/fixtures/thresholds remain unchanged. This
+  resolves stale-runtime versus still-reproducing alternatives for the geometry
+  defect,not all profile paint or live re-instrumentation of dimension internals.
+
 - Popup integration finished: export57121, independent cold check81901 and
   compact import/verification20593 all exit0. Canonical SHA256/generation
   856e0908aae21bb9511d512cc642265e000fca52517fa884dfb2218f90494e70;

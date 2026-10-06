@@ -2,6 +2,17 @@
 
 ## Current evidence boundary — October 6
 
+Divider equal-input reduction now reproduces on the installed public package
+through the unchanged input-equivalence-proof.spec.ts case,with exact divider
+filter at DPR1/2. Both invocations exit1 with the same four301 CSS-pixel geometry
+failures and zero page errors,Chrome154.0.8037.58. Runner authenticates104 emitted
+files against fresh build/dist/installed package; independent receipt replay
+authenticates all2517 bundle inputs,source pairs,runner and bundle. Evidence:
+artifacts/material-parity/divider-current-reduction-20261006-dpr1 and -dpr2.
+This closes current runtime reproduction of the historical empty-block failure,
+not text paint,all-profile behavior or whole-case closure. Runner's new whitelist
+entry requires the exact divider filter; canonical inputs and assertions unchanged.
+
 Popup canonical integration is now accepted as evidence conservation only:
 export57121, independent cold check81901 and compact import/verify20593 all
 finished exit0. Canonical compressed SHA256/generation:

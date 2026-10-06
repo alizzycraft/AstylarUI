@@ -14,7 +14,13 @@ const root = process.cwd();
 const output = path.resolve(process.argv[2] ?? '');
 const dpr = Number(process.argv[3] ?? 1);
 const spec = process.argv[5] ?? 'src/parity/overlay-layout-stage.audit.spec.ts';
-assert.ok(['src/parity/overlay-layout-stage.audit.spec.ts', 'src/parity/rounded-radius.audit.spec.ts'].includes(spec));
+const materialReduction = 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts';
+assert.ok(['src/parity/overlay-layout-stage.audit.spec.ts', 'src/parity/rounded-radius.audit.spec.ts', materialReduction].includes(spec));
+if (spec === materialReduction) {
+  assert.equal(process.env.ASTYLAR_AUDIT_SPEC_FILTER,
+    'paragraph flow places a divider without absolute text or separator offsets',
+    'Material reduction execution requires the exact audited divider filter');
+}
 assert.ok(dpr === 1 || dpr === 2, 'DPR must be 1 or 2');
 assert.ok(process.argv[2] && !existsSync(output), 'Supply a new evidence directory');
 const consumer = createRequire(path.join(root, 'examples/material-showcase/package.json'));
