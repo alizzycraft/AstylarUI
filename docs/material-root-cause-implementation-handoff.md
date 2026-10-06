@@ -81,10 +81,23 @@
   3372b06f8dcc42b074088777c8ebcad38ab2875cfc97e3e697dae9d54f83506d.
   This supersedes the earlier two-select-profile scope,not its retained receipt.
   Tablet/mobile token ancestry,candidate equivalent paint and lifetime are open.
-  Next: register the coherent popup proof batch through the existing producer
-  inventory,then reconcile exact remaining paint/profile obligations;
+  Popup batch registration now adds exactly four existing-suite proofs; the
+  predecessor inventory/fingerprint list is conserved. Combined focused batch
+  passes4/4exit0,42081.5283ms (popup-proof-batch-20261006.log,SHA256
+  f9992081fbf9904e29441de245506a687741c378be6781081c4b218e7e81b986).
+  Initial source-binding batch passes25/29,retaining four reconstruction failures
+  in popup-batch-source-bindings-20261006.log. First divergence is the old exact
+  scalar-extraction reversal rejecting the new four-entry registration block,
+  not classifier drift. Existing reversal now authenticates that entire block
+  SHA322af3e5… before removing it; unchanged complete-module hash remains required.
+  Registration/conservation test passes1/1 with four altered-entry rejection
+  controls,3171.127ms. Affected original source-binding assertions pass4/4exit0,
+  154122.4753ms,popup-batch-source-bindings-conserved-20261006.log,SHA256
+  0239cd2fbcdfb1b5670cdcd3005962165c751d5ec05fa105a5d19bc097a0bad4.
+  Next: canonical reconciliation of this verified coherent producer batch,then
+  exact remaining paint/profile obligations;
   geometry/local raster equivalence still needs equivalent inputs. Standalone
-  ancestry/indicator/hover/held proofs are not yet registered in the canonical package;
+  ancestry/indicator/hover/held proofs are registered in producer source but not yet in the canonical package;
   reconcile the owning-suite fingerprint at the next coherent integration batch,
   not a metadata-only export. No case is promoted to complete inspection.
   Evidence: current-full-20261005/interactions/select/{light,dark}/desktop-dpr1/

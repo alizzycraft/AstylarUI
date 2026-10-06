@@ -14,6 +14,17 @@ const standaloneCoverageProof = "    proof(root, 'tests/material-parity/input-eq
 // Whole-module equality remains mandatory before any older transition runs.
 export function restoreScalarReviewExtraction(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes("/test\\('popup token ancestry separates global fallback from frame theme overrides'/")) {
+    const header = 'function focusedProofInventory(root) {\n  return [\n';
+    assert.equal(current.split(header).length, 2, 'popup registration requires unique existing inventory');
+    const start = current.indexOf(header) + header.length;
+    const end = current.indexOf(currentCaretTrackProofs, start);
+    assert.ok(end > start, 'popup registrations must precede the unchanged caret/track block');
+    assert.equal(hash(current.slice(start, end)),
+      '322af3e50175e2339d3ab0ff18b120b3078107ab892f6bad61f9c003b07e5c4b',
+      'popup registration changed beyond the exact four-entry addition');
+    current = current.slice(0, start) + current.slice(end);
+  }
   if (current.includes(currentCaretTrackProofs)) {
     assert.equal(current.split(currentCaretTrackProofs).length, 2, 'repeated current caret/track registration');
     current = current.replace(currentCaretTrackProofs, '');

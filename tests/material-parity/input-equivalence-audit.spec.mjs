@@ -1727,6 +1727,47 @@ test('matching text and descendant IDs do not waive a different framework host t
   assert.equal(buildMaterialInputAudit(report).structureEvidence[0].classification, 'legitimate-public-api-structure');
 });
 
+test('popup proof batch adds four registrations without changing predecessor inventory', async () => {
+  const { restoreScalarReviewExtraction } = await import('./position-composition-producer-transition.mjs');
+  const inventory = text => {
+    const ast = ts.createSourceFile('inventory.mjs', text, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    const functions = ['sourceFingerprints', 'focusedProofInventory', 'proof'].map(name => {
+      const node = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+      assert.ok(node, name); return node.getText(ast);
+    });
+    return new Function('readFileSync', 'path', 'createHash', functions.join('\n') +
+      '\nreturn { fingerprints: sourceFingerprints(process.cwd()), proofs: focusedProofInventory(process.cwd()) };')
+      (readFileSync, path, createHash);
+  };
+  const prior = inventory(execFileSync('git', ['show', '01ec604d:tests/material-parity/input-equivalence-audit.mjs'],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }));
+  const current = inventory(readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8'));
+  const currentSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8');
+  const priorSource = execFileSync('git', ['show', '01ec604d:tests/material-parity/input-equivalence-audit.mjs'],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  assert.equal(restoreScalarReviewExtraction(currentSource), restoreScalarReviewExtraction(priorSource));
+  for (const fragment of ['configured desktop popup token ancestry boundary',
+    'selected option indicator unequal-input boundary',
+    'desktop popup hover token alpha versus opaque input boundary',
+    'light desktop actual held-option input boundary']) {
+    assert.throws(() => restoreScalarReviewExtraction(currentSource.replace(fragment, fragment + ' changed')),
+      /exact four-entry addition/);
+  }
+  assert.deepEqual(current.fingerprints, prior.fingerprints);
+  assert.equal(current.proofs.length, prior.proofs.length + 4);
+  assert.deepEqual(current.proofs.slice(4), prior.proofs);
+  const names = ['popup token ancestry separates global fallback from frame theme overrides',
+    'retained select indicator inputs preserve pseudo-checkbox versus plugin paint differences',
+    'retained popup hover inputs distinguish token alpha layers from opaque substitutions',
+    'held popup option boundaries capture active paint inputs before commit'];
+  for (const [index, entry] of current.proofs.slice(0, 4).entries()) {
+    assert.equal(entry.file, 'tests/material-parity/sort-focus-structure.spec.mjs');
+    assert.notEqual(entry.status, 'missing');
+    assert.match(entry.description, /not/);
+    assert.ok(readFileSync(entry.file, 'utf8').split(/\r?\n/)[entry.line - 1].includes(names[index]));
+  }
+});
+
 test('recent public and popup proofs join existing inventories without changing predecessor entries', () => {
   const files = ['tests/material-parity/input-boundary-evidence.spec.mjs',
     'tests/material-parity/sort-focus-structure.spec.mjs'];
