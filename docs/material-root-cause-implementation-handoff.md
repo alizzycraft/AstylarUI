@@ -2,6 +2,17 @@
 
 ## Current resumption ledger — October 6
 
+- Passive canonical export93842 finished exit0:147 source findings,436 static/
+  1875 interaction cases,8483 unique differences/389202 occurrences preserved;
+  inputEquivalent remains false. Log canonical-passive-export-20261006.log.
+  Evidence-session elapsed4027818.0835ms,1205 files/89154859 bytes read and
+  independently rehashed,1 collector/10 memory hits/1 disk hit/0 invalidations.
+  Independent cold check now runs as session92981 using the same named complete
+  baseline launcher --check and ASTYLAR_AUDIT_COLD=1; log
+  canonical-passive-independent-20261006.log. New package is provisional until
+  that terminal result and compact import/verification; keep consumed inputs
+  frozen. Prior accepted145/131 snapshot remains the accepted evidence boundary.
+
 - Divider repeated-update/disposal gap narrowed: retained current-checkpoint
   Chrome154 desktop probe covers four profiles at DPR1/2, three identical public
   updates each. All32 snapshots retain live=tracked17 meshes/16 materials/4
