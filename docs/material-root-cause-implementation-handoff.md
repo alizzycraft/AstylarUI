@@ -2,6 +2,21 @@
 
 ## Current resumption ledger — October 6
 
+- Actual texture RGBA now agrees byte-for-byte with diagnostic local canvases:
+  all four text owners at DPR1/2 report0 differing pixels before composition.
+  Raw arrays stay internal; existing diagnostic retains texture SHA receipts and
+  comparison counts. Test now asserts each zero alongside live dimensions and
+  sampling mode. Verified1/1exit0,42395.3644ms;
+  divider-equal-typography-texture-verified-20261006.log SHA256
+  e1d5ec5534a812e64c1a268ce7c858b06d5c68acc21f4e2238a1a5b781764f9d.
+  Initial texture observation retained separately. This locates the residual
+  candidate-versus-mapped-control481/1512 pixels after canvas paint, not in font
+  rasterization or local baseline. Upload/sampling/rasterization/composition
+  remain competing causes. Current matched text material uses alpha blending,
+  diffuse+emissive texture and useEmissiveAsIllumination; inspect actual material/
+  engine color/alpha settings and texel transfer before an intervention. No core
+  fix,fixture compensation,threshold change or complete-case closure is claimed.
+
 - Measured backing-to-logical mapping control narrows the remaining residual:
   transparent local canvases now use observed ceil(width*DPR) backing41/40 or
   81/79,height18*DPR,nearest composition into fractional widths40.1062/39.1429.

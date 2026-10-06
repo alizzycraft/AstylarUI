@@ -104,6 +104,7 @@ test('public divider typography reduction observes equal paragraph span inputs a
         const corners=mesh.getBoundingInfo().boundingBox.vectorsWorld.map(v=>Vector3.Project(v,Matrix.Identity(),scene.getTransformMatrix(),viewport));
         return {id:mesh.metadata.elementId,logicalSize:texture?.metadata?.astylarLogicalTextSize,
           backingSize:texture?.getSize(),samplingMode:texture?.samplingMode,
+          pixels:Array.from(texture.getContext().getImageData(0,0,texture.getSize().width,texture.getSize().height).data),
           bounds:{left:Math.min(...corners.map(v=>v.x))/devicePixelRatio,top:Math.min(...corners.map(v=>v.y))/devicePixelRatio,
             right:Math.max(...corners.map(v=>v.x))/devicePixelRatio,bottom:Math.max(...corners.map(v=>v.y))/devicePixelRatio}};
       })??[];
@@ -189,9 +190,17 @@ test('public divider typography reduction observes equal paragraph span inputs a
               pen.scale(devicePixelRatio, devicePixelRatio);
               pen.font = 'normal 400 14.4px AuditRoboto'; pen.fillStyle = '#1d1b20';
               pen.fillText(i % 2 ? 'Below' : 'Above', 0, baseline - top);
+              const actual = window.dividerTextReduction.runtimeText.find(row => row.id === 'text-' + i);
+              const modeled = pen.getImageData(0, 0, ink.width, ink.height).data;
+              let actualTextureDifferences = actual ? 0 : null;
+              if (actual) {
+                if (actual.pixels.length !== modeled.length) throw new Error('actual/model texture size drift');
+                for (let p = 0; p < modeled.length; p += 4)
+                  if ([0,1,2,3].some(c => actual.pixels[p+c] !== modeled[p+c])) actualTextureDifferences++;
+              }
               composite.drawImage(ink, 0, 0, ink.width, ink.height,
                 left * devicePixelRatio, top * devicePixelRatio, width * devicePixelRatio, height * devicePixelRatio);
-              return { width, height, backingWidth: ink.width, backingHeight: ink.height };
+              return { width, height, backingWidth: ink.width, backingHeight: ink.height, actualTextureDifferences };
             });
             return { rows, pixels: Array.from(composite.getImageData(0, 0, result.width, result.height).data) };
           });
@@ -201,7 +210,7 @@ test('public divider typography reduction observes equal paragraph span inputs a
             if ([0,1,2,3].some(c => image.data[i+c] !== data.control[i+c])) different++;
           pair[mode] = { site: data.site, baselines: data.baselines, opaqueControlSha256: hash(Buffer.from(data.control)), differingPixels: different };
           pair[mode].paintCalls = data.paintCalls;
-          pair[mode].runtimeText = data.runtimeText;
+          pair[mode].runtimeText = data.runtimeText.map(({pixels, ...row}) => ({...row, pixelsSha256: hash(Buffer.from(pixels))}));
           let transparentDifference = 0, backingDifference = 0;
           for (let i = 0; i < image.data.length; i += 4) {
             if ([0,1,2,3].some(c => image.data[i+c] !== transparentControl[i+c])) transparentDifference++;
@@ -231,6 +240,7 @@ test('public divider typography reduction observes equal paragraph span inputs a
               assert.deepEqual(observed.logicalSize, { width: expected.width, height: expected.height });
               assert.deepEqual(observed.backingSize, { width: expected.backingWidth, height: expected.backingHeight });
               assert.equal(observed.samplingMode, 1);
+              assert.equal(expected.actualTextureDifferences, 0, 'actual texture RGBA agrees with the modeled canvas before composition');
             }
           }
           assert.deepEqual(errors, []); assert.deepEqual(data.errors, []);
