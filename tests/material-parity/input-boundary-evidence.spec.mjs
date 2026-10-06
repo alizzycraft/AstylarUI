@@ -96,6 +96,30 @@ test('configured progress inputs preserve determinate state and original SVG att
   assert.deepEqual(counts, { 'progress-bar': 20, 'progress-spinner': 20 });
 });
 
+test('passive descendant semantics retain accessibility hiding omissions independently of visible target gates', () => {
+  const raw = readFileSync('artifacts/material-parity/passive-descendant-semantics-20261006.log');
+  assert.equal(hash(raw), 'aa5932cda3140e3f15fa661316c9da38a7e8b274fe6dce24eccb63602233147d');
+  const records = raw.toString().trim().split(/\r?\n/).map(JSON.parse);
+  const summary = records.at(-1);
+  assert.equal(summary.summary.cases, 354);
+  assert.equal(summary.summary.idReferences, 0);
+  assert.deepEqual(summary.summary.hiddenByFamily, {
+    'sidenav/reference': 124, 'badge/reference': 52, 'icon/reference': 20,
+    'progress-bar/reference': 60, 'progress-spinner/reference': 40,
+  });
+  for (const receipt of summary.sources) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  const type = readFileSync('src/app/types/dom-element.ts', 'utf8');
+  const bridge = readFileSync('src/lib/astylar-semantic-bridge.ts', 'utf8');
+  assert.equal(/ariaHidden\s*\??\s*:/.test(type), false);
+  assert.equal(/element\.ariaHidden/.test(bridge), false);
+  assert.ok(bridge.includes('if (child.hidden) continue;'), 'Visual hidden is not accessibility-only hiding');
+  const icon = records.find(row => row.family === 'icon');
+  const native = icon.sides.reference.find(node => node.type === 'mat-icon');
+  assert.equal(native.attrs['aria-label'], 'Favorite');
+  assert.equal(native.attrs['aria-hidden'], 'true');
+  assert.equal(icon.sides.astylar.some(node => node.attrs.ariaHidden !== undefined), false);
+});
+
 test('captured runtime class bodies match current repository compilation without Angular metadata', async () => {
   const { transform } = await import('esbuild');
   const consumer = 'examples/material-showcase';

@@ -2,6 +2,21 @@
 
 ## Current evidence boundary — October 6
 
+Passive descendant semantic inputs now cover354 authenticated subtrees per side.
+No authored IDREF relationships are present. Native aria-hidden occurrences:
+sidenav124,badge52,icon20,bar60,spinner40; candidate has none. In particular
+mat-icon role=img/aria-label=Favorite also has aria-hidden=true,which the target
+helper ignores. Native badge count is likewise hidden. Public DOMElement lacks
+ariaHidden and semantic bridge lacks per-element accessibility-only hiding;
+hidden excludes rendered/semantic children and is not an equivalent workaround.
+Classify this as a demonstrated public support gap plus unequal comparison inputs,
+not a verified browser AX symptom or final projection bug. Progress plugin child
+meshes are not authored DOM nodes,so absent aria-hidden there is not alone a fault.
+Log passive-descendant-semantics-20261006.log,SHA256
+aa5932cda3140e3f15fa661316c9da38a7e8b274fe6dce24eccb63602233147d.
+Existing-suite list/progress/semantic batch passes3/3. Generated bridge/AX behavior
+remains open; standalone proof registration belongs to next coherent batch.
+
 Passive configured semantics now inspected across354 cases/864 target records:
 every row has nonempty measured expected/actual observations,both targets exist,
 and all serialized properties match.490 records include roles;374 omit role on

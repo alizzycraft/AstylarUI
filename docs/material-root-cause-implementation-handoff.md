@@ -2,6 +2,22 @@
 
 ## Current resumption ledger — October 6
 
+- Descendant semantic-input gap:354 per-side subtrees contain no authored IDREF
+  relations. Native aria-hidden counts124 sidenav/52 badge/20 icon/60 bar/40
+  spinner,candidate0. Native icon is explicitly hidden despite Favorite/img
+  attributes; the current name/role comparator ignores aria-hidden. Badge4 is
+  also hidden. DOMElement's supported subset lacks ariaHidden; bridge applyAttributes
+  lacks element.ariaHidden. hidden skips rendering/semantic children,not an
+  accessibility-only substitute. This is public support/input evidence,not an
+  observed AX-tree result; progress plugin child meshes need no separate DOM
+  hiding by implication. Owners:src/app/types/dom-element.ts:70 onward and
+  src/lib/astylar-semantic-bridge.ts:418 onward; fixture icon/badge authoring.
+  Log passive-descendant-semantics-20261006.log,SHA256
+  aa5932cda3140e3f15fa661316c9da38a7e8b274fe6dce24eccb63602233147d.
+  Receipt-bound assertion joins existing suite; three focused batch tests pass
+  (passive-input-semantic-batch-20261006.log). Next obtain actual bridge/AX evidence
+  only for demonstrated hidden badge/icon gap,and integrate this bounded batch.
+
 - Passive semantic-gate question answered: all354 configured cases contain
   nonempty measured target observations;864 expected/actual records agree and
   exist.490 include role,374 omit it on both sides. Exact full report and runner
