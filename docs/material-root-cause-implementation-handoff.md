@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 5
 
+- Current desktop caret footprint applicability is measured from the same240
+  rasters, not another browser run. All ten populations retain native1/2 device
+  columns at DPR1/2 versus candidate2/4 contiguous exact-ink blink columns,
+  i.e.1 versus2 CSS-pixel footprints. Candidate local crop columns15–16/30–33
+  versus native16/32–33 preserve the insertion-edge discrepancy. Exact candidate
+  ink runs are18/38 rows; partial-alpha edge pixels are not inferred as absent,
+  so these runs are not a claim about full plane height or sharpness. Existing
+  combined replay now checks column counts/locations and runs,1/1exit0,
+ 2024.513ms. Unequal-color Material captures establish applicability/observation,
+  not a new equal-input cause: retain the independently reduced equal-color
+  core CSS stroke-width/centering proof. No fixture offset or world-space patch.
+
 - Machine-readable proof inventory now registers the current ten-population
   caret boundary and independent public track-interaction counterexample,
   without adding another survey/report framework. All127 pointers resolve;

@@ -750,17 +750,29 @@ test('desktop five-family empty caret preserves native visibility and candidate 
   }
   assert.ok(capture.results.some(row => row.reference.nativeCaretPixelDelta.changedPixels > 0));
   let stroke = false;
-  for (const on of images) for (const off of images) for (let x = 0; x < 24*dpr; x++) {
+  let widestColumns = [];
+  for (const on of images) for (const off of images) {
+  const columns = [];
+  for (let x = 0; x < 24*dpr; x++) {
     let run = 0;
+    let longest = 0;
     for (let y = 0; y < on.height; y++) {
       const i = (y * on.width + x) * 4;
       const foreground = on.data[i] === 29 && on.data[i+1] === 27 && on.data[i+2] === 32;
       const changed = on.data[i] !== off.data[i] || on.data[i+1] !== off.data[i+1] || on.data[i+2] !== off.data[i+2];
       run = foreground && changed ? run + 1 : 0;
+      longest = Math.max(longest, run);
       if (run >= 10*dpr) stroke = true;
     }
+    if (longest >= 10*dpr) columns.push({x, longest});
+  }
+  if (columns.length > widestColumns.length) widestColumns = columns;
   }
   assert.equal(stroke, true, 'candidate has a localized contiguous blinking caret, not just label animation');
+  const nativeOn = capture.results.find(row => row.reference.nativeCaretPixelDelta.changedPixels > 0).reference.nativeCaretPixelDelta;
+  assert.equal(nativeOn.bounds.maxX-nativeOn.bounds.minX+1, dpr);
+  assert.deepEqual(widestColumns.map(column => column.x), Array.from({length:2*dpr},(_,i)=>15*dpr+i));
+  assert.ok(widestColumns.every(column => column.longest === (dpr === 1 ? 18 : 38)));
   }
 });
 
