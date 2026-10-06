@@ -63,6 +63,39 @@ test('current list wrapper inputs retain clipping and row-height divergence for 
   assert.deepEqual(heights, { '48px/56px': 52, '24px/40px': 26, '40px/48px': 26 });
 });
 
+test('configured progress inputs preserve determinate state and original SVG attributes across forty cases', () => {
+  const raw = readFileSync('artifacts/material-parity/progress-configured-input-membership-20261006.log');
+  assert.equal(hash(raw), 'd64d73bea9a8e7d6ad2640bea3bc6a59c072ae9465f1aa3ca8577c5111fb6684');
+  const rows = raw.toString().trim().split(/\r?\n/).map(JSON.parse).filter(row => row.family);
+  assert.equal(rows.length, 40);
+  const counts = {};
+  for (const row of rows) {
+    const trees = Object.fromEntries(['reference', 'astylar'].map(side => {
+      const receipt = row.receipts[side].receipt, bytes = readFileSync(receipt.file);
+      assert.equal(hash(bytes), receipt.sha256);
+      return [side, JSON.parse(bytes)];
+    }));
+    const native = trees.reference.nodes.find(node => node.attributes?.id === `${row.family}-primary`);
+    const candidate = trees.astylar.nodes.find(node => node.authored?.id === `${row.family}-primary`);
+    assert.equal(native.attributes.value, '64');
+    assert.equal(native.attributes.mode, 'determinate');
+    assert.equal(candidate.authored.data.progress, .64);
+    assert.equal(candidate.authored.data.mode, 'determinate');
+    if (row.family === 'progress-spinner') {
+      const circle = trees.reference.nodes.find(node => node.attributes?.class === 'mdc-circular-progress__determinate-circle');
+      assert.equal(circle.attributes.r, '45');
+      assert.equal(circle.attributes.style, row.detail.circle.style);
+      assert.equal(candidate.authored.data['stroke-width'], 10);
+    } else {
+      assert.equal(row.family, 'progress-bar');
+      const indicator = trees.reference.nodes.find(node => node.attributes?.class?.split(' ').includes('mdc-linear-progress__primary-bar'));
+      assert.equal(indicator.attributes.style, 'transform: scaleX(0.64);');
+    }
+    counts[row.family] = (counts[row.family] ?? 0) + 1;
+  }
+  assert.deepEqual(counts, { 'progress-bar': 20, 'progress-spinner': 20 });
+});
+
 test('captured runtime class bodies match current repository compilation without Angular metadata', async () => {
   const { transform } = await import('esbuild');
   const consumer = 'examples/material-showcase';

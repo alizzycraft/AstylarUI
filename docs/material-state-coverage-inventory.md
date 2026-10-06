@@ -2,6 +2,21 @@
 
 ## Current evidence boundary — October 6
 
+Progress configured input membership is now bound across40 cases/80 authenticated
+trees (20 bar,20 spinner): both sides determinate64,including ariaValueNow.
+All native bars request scaleX(.64); all native determinate circles retain r45,
+dash282.743px/offset101.788px/stroke10%,candidate stroke-width10. Native ancestor
+transforms and each candidate data/size request remain recorded,not normalized.
+Existing plugin-linear-progress-right-origin-and-track-input-mismatch and
+plugin-circular-progress-start-angle findings already demonstrate divergence;
+no value-state mismatch is found in this exact population. Used plugin geometry,
+cap/raster equivalence,other values/modes and lifetime remain separate. Log:
+progress-configured-input-membership-20261006.log,SHA256
+d64d73bea9a8e7d6ad2640bea3bc6a59c072ae9465f1aa3ca8577c5111fb6684.
+Existing-suite list/progress input batch passes2/2 (passive-layout-input-batch-
+20261006.log). These standalone assertions await coherent producer integration;
+the prior canonical package remains accepted for its own source checkpoint.
+
 List wrapper-layout question is answered across52 configured cases/104 labels:
 native mdc-list-item__content grows with flex:1,clips overflow and applies nowrap/
 ellipsis; candidate label/item/list ancestry omits that wrapper. Native/candidate

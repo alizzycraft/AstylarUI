@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 6
 
+- Progress membership closes state-mismatch alternative for all40 configured
+  cases: 80 trees authenticate determinate64; native bar scaleX(.64),spinner r45/
+  dash282.743/offset101.788/stroke10%,candidate stroke10 are preserved. Ancestor
+  transforms,data and size requests stay raw in progress-configured-input-
+  membership-20261006.log,SHA256
+  d64d73bea9a8e7d6ad2640bea3bc6a59c072ae9465f1aa3ca8577c5111fb6684.
+  Existing mobile paint/origin/start-angle proofs already own the first plugin
+  divergence; no duplicate capture or core-coordinate diagnosis follows. Existing
+  suite adds a receipt-bound forty-case assertion; combined list/progress batch
+  passes2/2,passive-layout-input-batch-20261006.log. Registration/current source
+  fingerprint integration remains a batch obligation. Other values/modes,used
+  geometry/caps,complete raster and lifetime remain open. Next join passive
+  semantic evidence to exact obligations,then integrate standalone proof batch.
+
 - List omitted-wrapper question: wrappers are not layout-neutral. All52 retained
   cases/104 labels authenticate native growing/clipping/nowrap/ellipsis content
   versus flattened candidate ancestry. Row heights48/56px,24/40px,40/48px are
