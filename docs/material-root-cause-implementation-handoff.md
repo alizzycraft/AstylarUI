@@ -2,6 +2,21 @@
 
 ## Current resumption ledger — October 6
 
+- Divider actual semantic boundary answered for current-full light desktop DPR1:
+  unchanged frozen-browser helper authenticates entire served checkpoint before
+  launch; Chrome154.0.8037.58 partial AX shows unignored separator/empty name/
+  horizontal orientation/no children on both targets,zero page errors. Receipt
+  replay validates helper-source hash and exact target assertions; log
+  divider-actual-ax-20261006.log,SHA256
+  b5e5b2778f8dc7fc2ade31463312af46e2043a8d45d73bded90923b6e922fc7c.
+  This closes the sampled default-orientation runtime alternative,not all
+  profiles/relationships or full-case closure. Existing public consumer already
+  exercises paragraph text,repeated updates,delayed plugin cancellation,two-
+  surface disposal/remount and owned-resource cleanup; final consumer gate can
+  reuse that shared coverage. It does not measure divider live-versus-tracked
+  text-resource plateau. Next register bounded AX evidence only after ongoing
+  canonical source freeze ends; no new browser/capture framework was added.
+
 - Divider residual versus existing text-phase proof: original public-text-backing-
   phase-a9591d1-final.log authenticates SHA a82e6f9540ac774e4f5c784622153e933ba1002d54c827823a79aeec37f7b27c.
   Its public reduction requests12px Roboto/16px line-height,.4px tracking,
