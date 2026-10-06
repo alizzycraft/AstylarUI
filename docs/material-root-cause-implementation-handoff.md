@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 6
 
+- Maintained historical component launcher currently fails before retained test
+  execution: preload's exact checkpoint-selection restoration lacks the newer
+  evidence.checkpointFile override in withFrozenShowcase. Terminal log
+  post-divider-historical-component-replay-20261006.log,exit1; no retained cohort
+  or button suites are claimed passing. Read-only TS-AST comparison against its
+  authenticated a6217c5 sorter baseline finds26 original tests,32 current,zero
+  missing;24 original bodies unchanged after whitespace normalization,two changed:
+  slider pointer-down ownership and dark-mobile timepicker wheel/scrollbar paint.
+  Thus updating the checkpoint string alone cannot justify whole-source equality.
+  Next inspect those two changes and the exact added six-test/helper/import
+  boundaries,using authenticated historical bytes without repinning captures.
+  Registration conservation4/4 remains valid; broader historical replay remains
+  explicitly failing. Full export/capture still requires additional disk headroom.
+
 - Identified historical inventory reconciliation failure resolved: reuse the
   existing exact two-entry applicability reversal as shared helper,then apply
   it after scalar/proof restoration in the original recent-public/popup test.
