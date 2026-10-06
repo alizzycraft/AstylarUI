@@ -2,6 +2,22 @@
 
 ## Current resumption ledger — October 6
 
+- Actual reduction runtime paint/placement now measured, not inferred from the
+  diagnostic model. Read-only fillText interception (restored before controls)
+  records cached Above/Below paint at x0/y14,14.4px AuditRoboto with fallback
+  family, DPR transforms1/2. Four final-boundary projected texture bounds retain
+  authored left20/20.25/20.5/20.75 within0.000001px and exact top20/52.25/84.5/
+  116.75; native baselines equal top+14. This rejects baseline/origin displacement
+  in this reduction. Logical text widths40.1062/39.1429,height18 versus backing
+  widths41/40 atDPR1 and81/79 atDPR2,nearest sampling1: integer backing maps onto
+  fractional logical width,unlike the unscaled120x24 local control. Horizontal
+  resampling is now a specific competing explanation for its remaining residual,
+  not a confirmed cause. Focused1/1exit0,40203.1403ms; log
+  divider-equal-typography-runtime-origin-20261006.log SHA256
+  17fb16bf9d6bae0abf5256483ccf8a4c68aefb6de1af29057753e13c29b17608.
+  Next reproduce measured backing-to-logical mapping in the diagnostic control;
+  preserve authored dimensions and avoid renderer correction. No case closure.
+
 - Local-origin phase control now separates a second mechanism in the same public
   reduction. Transparent text at local x0/baseline14 in120x24 CSS canvases,
   nearest composition at unchanged20..20.75 fractional origins, differs from

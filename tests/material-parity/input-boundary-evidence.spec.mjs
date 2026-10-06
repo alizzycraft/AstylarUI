@@ -71,9 +71,17 @@ test('public divider typography reduction observes equal paragraph span inputs a
       import {provideZonelessChangeDetection} from '@angular/core';
       import {createApplication} from '@angular/platform-browser';
       import {Astylar} from 'astylarui';
+      import {Vector3,Matrix} from '@babylonjs/core/Maths/math.vector';
       const mode=new URLSearchParams(location.search).get('mode');
       const font=new FontFace('AuditRoboto','url(/font.woff2)',{weight:'400'});
       await font.load();document.fonts.add(font);
+      const paintCalls=[];
+      const originalFillText=CanvasRenderingContext2D.prototype.fillText;
+      CanvasRenderingContext2D.prototype.fillText=function(text,x,y,...rest){
+        paintCalls.push({text,x,y,font:this.font,canvasWidth:this.canvas.width,canvasHeight:this.canvas.height,
+          cssWidth:this.canvas.style.width,cssHeight:this.canvas.style.height,transform:Array.from([this.getTransform().a,this.getTransform().d,this.getTransform().e,this.getTransform().f])});
+        return originalFillText.call(this,text,x,y,...rest);
+      };
       const origins=[20,20.25,20.5,20.75];
       const site={root:{children:[{type:'div',id:'proof-root',children:origins.map((left,i)=>({type:'p',id:'row-'+i,children:[{type:'span',id:'text-'+i,textContent:i%2?'Below':'Above'}]}))}]},
         styles:[{selector:'#proof-root',width:'200px',height:'180px',padding:'0',margin:'0',borderWidth:'0',background:'#f0f0f0'},
@@ -88,10 +96,21 @@ test('public divider typography reduction observes equal paragraph span inputs a
         for(const row of site.root.children[0].children){const p=document.createElement('p');p.id=row.id;const span=document.createElement('span');span.id=row.children[0].id;span.textContent=row.children[0].textContent;p.append(span);host.append(p);}
       }else{app=await createApplication({providers:[provideZonelessChangeDetection()]});surface=app.injector.get(Astylar).mount(host,site,{diagnostics:{logLevel:'silent'}});}
       await surface?.whenSettled();await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+      CanvasRenderingContext2D.prototype.fillText=originalFillText;
+      const runtimeText=surface?.scene.meshes.filter(m=>m.metadata?.isTextMesh).map(mesh=>{
+        const scene=surface.scene,engine=scene.getEngine(),texture=mesh.material?.diffuseTexture;
+        mesh.computeWorldMatrix(true);
+        const viewport=scene.activeCamera.viewport.toGlobal(engine.getRenderWidth(),engine.getRenderHeight());
+        const corners=mesh.getBoundingInfo().boundingBox.vectorsWorld.map(v=>Vector3.Project(v,Matrix.Identity(),scene.getTransformMatrix(),viewport));
+        return {id:mesh.metadata.elementId,logicalSize:texture?.metadata?.astylarLogicalTextSize,
+          backingSize:texture?.getSize(),samplingMode:texture?.samplingMode,
+          bounds:{left:Math.min(...corners.map(v=>v.x))/devicePixelRatio,top:Math.min(...corners.map(v=>v.y))/devicePixelRatio,
+            right:Math.max(...corners.map(v=>v.x))/devicePixelRatio,bottom:Math.max(...corners.map(v=>v.y))/devicePixelRatio}};
+      })??[];
       const control=document.createElement('canvas');control.width=200*devicePixelRatio;control.height=180*devicePixelRatio;
       const ctx=control.getContext('2d',{alpha:false});ctx.fillStyle='#f0f0f0';ctx.fillRect(0,0,control.width,control.height);ctx.scale(devicePixelRatio,devicePixelRatio);ctx.font='normal 400 14.4px AuditRoboto';ctx.fillStyle='#1d1b20';
       const baselines=origins.map((left,i)=>{const p=document.createElement('p');p.style.cssText='position:absolute;visibility:hidden;font:normal 400 14.4px AuditRoboto;line-height:normal;letter-spacing:normal;padding:0;margin:0;border:0';p.style.left=left+'px';p.style.top=(20+i*32+left-20)+'px';p.textContent=i%2?'Below':'Above';const marker=document.createElement('span');marker.style.cssText='display:inline-block;width:0;height:0;vertical-align:baseline';p.append(marker);document.body.append(p);const y=marker.getBoundingClientRect().top;p.remove();ctx.fillText(i%2?'Below':'Above',left,y);return y;});
-      window.dividerTextReduction={site,baselines,control:Array.from(ctx.getImageData(0,0,control.width,control.height).data),errors:surface?.diagnostics.messages.filter(m=>m.severity==='error')??[],dispose(){surface?.dispose();app?.destroy();return surface?.disposed??true;}};
+      window.dividerTextReduction={site,baselines,paintCalls,runtimeText,control:Array.from(ctx.getImageData(0,0,control.width,control.height).data),errors:surface?.diagnostics.messages.filter(m=>m.severity==='error')??[],dispose(){surface?.dispose();app?.destroy();return surface?.disposed??true;}};
     ` }, bundle: true, write: false, format: 'esm', platform: 'browser', target: 'es2022', metafile: true });
   const inputs = Object.keys(built.metafile.inputs).filter(f => !f.endsWith('divider-text-reduction.mjs'))
     .map(file => ({ file, sha256: hash(readFileSync(file)) }));
@@ -113,7 +132,7 @@ test('public divider typography reduction observes equal paragraph span inputs a
         try {
           await page.goto(`http://127.0.0.1:${server.address().port}/?mode=${mode}`);
           await page.waitForFunction(() => !!window.dividerTextReduction);
-          const data = await page.evaluate(() => { const {site,baselines,control,errors}=window.dividerTextReduction;return {site,baselines,control,errors}; });
+          const data = await page.evaluate(() => { const {site,baselines,control,errors,paintCalls,runtimeText}=window.dividerTextReduction;return {site,baselines,control,errors,paintCalls,runtimeText}; });
           // Diagnostic backing intervention only: preserve the same global CSS
           // origins/baselines, then composite transparent ink onto the same gray.
           const transparentControl = await page.evaluate(() => {
@@ -157,6 +176,8 @@ test('public divider typography reduction observes equal paragraph span inputs a
           for (let i = 0; i < image.data.length; i += 4)
             if ([0,1,2,3].some(c => image.data[i+c] !== data.control[i+c])) different++;
           pair[mode] = { site: data.site, baselines: data.baselines, opaqueControlSha256: hash(Buffer.from(data.control)), differingPixels: different };
+          pair[mode].paintCalls = data.paintCalls;
+          pair[mode].runtimeText = data.runtimeText;
           let transparentDifference = 0, backingDifference = 0;
           for (let i = 0; i < image.data.length; i += 4) {
             if ([0,1,2,3].some(c => image.data[i+c] !== transparentControl[i+c])) transparentDifference++;
