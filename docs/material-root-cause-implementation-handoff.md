@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 6
 
+- Popup integration finished: export57121, independent cold check81901 and
+  compact import/verification20593 all exit0. Canonical SHA256/generation
+  856e0908aae21bb9511d512cc642265e000fca52517fa884dfb2218f90494e70;
+  compact index e1539d2995e7435e9c5644beee88e272c5ef7078a448710550561eba187968a9.
+  Four registered proofs bring inventory127 to131; conserved counts8483 groups,
+  145 findings,39904 controls,389202 occurrences,zero unresolved attribution.
+  Logs:canonical-popup-independent-20261006.log,popup-compact-import-20261006.log,
+  popup-compact-verify-20261006.log. This closes producer/index reconciliation,
+  not rendering acceptance. Next: exact case/obligation closure mapping and
+  divider reduction current-runtime applicability; preserve remaining profile,
+  paint,lifetime and final-gate gaps rather than reopening settled input causes.
+
 - Divider local-paint question: retained separator geometry locates a bounded
   raster strip on every24 current-full cases. Existing comparator observes SSIM
   0.463324268553294–0.9130355704940788 and18 diagnostic sharpness failures.
@@ -110,9 +122,14 @@
   0239cd2fbcdfb1b5670cdcd3005962165c751d5ec05fa105a5d19bc097a0bad4.
   Next: canonical reconciliation of this verified coherent producer batch,then
   exact remaining paint/profile obligations;
-  Export is live in57121,canonical-popup-batch-20261006.log; independent check
-  and compact refresh must wait for successful terminal export. Consumed sources
-  remain unchanged while it runs.
+  Export57121 finished exit0 (canonical-popup-batch-20261006.log). Independent
+  cold check81901 also finished exit0,3333678.736ms; log
+  canonical-popup-independent-20261006.log. It conserves436 static/1875
+  interaction cases,8483 groups,389202 occurrences and145 findings;
+  inputEquivalent remains false. Compact import/verification is live in20593
+  (popup-compact-import-20261006.log/popup-compact-verify-20261006.log).
+  Until that terminal verification succeeds,the prior compact generation is not
+  applicable to the newly exported canonical bytes. No whole-case closure follows.
   Independent read-only paint-gate scope check authenticates current-full report
   and raw-byte harness receipts (runner e01ef9dc…,focused metrics c8483996…).
   All24 popup hover rows have only statePaint.matches=true: compareStatePaint

@@ -2,6 +2,17 @@
 
 ## Current evidence boundary — October 6
 
+Popup canonical integration is now accepted as evidence conservation only:
+export57121, independent cold check81901 and compact import/verify20593 all
+finished exit0. Canonical compressed SHA256/generation:
+856e0908aae21bb9511d512cc642265e000fca52517fa884dfb2218f90494e70.
+Compact index SHA256:e1539d2995e7435e9c5644beee88e272c5ef7078a448710550561eba187968a9.
+Counts remain8483 groups,145 findings,39904 controls,389202 occurrences,
+zero unresolved scalar attribution; focused proof inventory is131. Logs:
+canonical-popup-independent-20261006.log,popup-compact-import-20261006.log,
+popup-compact-verify-20261006.log. Historical generation references below retain
+their original scope. No new output acceptance or complete-case closure follows.
+
 Divider local separator paint is now observed across all24 retained current-full
 cases using the existing focused-raster comparator,without recapture or altered
 inputs. The diagnostic log contains48 PNG receipts; independent read-only replay
@@ -29,9 +40,11 @@ limits are in the current handoff. Tablet/mobile,matched-time local rasters,
 lifetime and full case closure remain pending. Four standalone popup proofs are
 now registered in the producer; the combined focused batch passes4/4, and the
 four affected historical source-binding assertions pass after exact source
-conservation. Canonical integration is running, not accepted: export57121 must
-finish successfully before independent verification and compact-index refresh.
-The accepted package remains the caret/track generation4845e414 below. Do not
+conservation. Export57121 and independent cold check81901 both finished exit0.
+The independent check conserved436 static/1875 interaction cases,8483 groups,
+389202 occurrences and145 findings; inputEquivalent remains false. Compact
+import/verification20593 subsequently finished exit0; see accepted generation above.
+The caret/track generation4845e414 below remains historical evidence. Do not
 repeat registration or count source registration as canonical acceptance.
 
 Popup paint-gate scope is now explicit for all24 desktop hover-content rows:
