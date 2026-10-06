@@ -237,6 +237,8 @@ test('public divider typography reduction observes equal paragraph span inputs a
           let mappedDifference = 0, mappingDifference = 0;
           const mappedDifferenceSamples = [];
           const residualHistogram = {}, signedChannelHistogram = {};
+          const originResiduals = localControl.rows.map(row => ({ left: row.left, top: row.top,
+            differingPixels: 0, greaterThanTwo: 0, maximumChannelDifference: 0 }));
           let maximumChannelDifference = 0, alphaDifferences = 0;
           for (let i = 0; i < image.data.length; i += 4) {
             const deltas = [0,1,2,3].map(c => image.data[i+c] - mappedControl.pixels[i+c]);
@@ -244,6 +246,12 @@ test('public divider typography reduction observes equal paragraph span inputs a
             maximumChannelDifference = Math.max(maximumChannelDifference, magnitude);
             if (deltas[3]) alphaDifferences++;
             if (magnitude) {
+              const cssY = Math.floor(i / 4 / image.width) / dpr;
+              const owner = originResiduals.find(row => cssY >= row.top - 1 && cssY < row.top + 25);
+              assert.ok(owner, 'residual must belong to a declared text row');
+              owner.differingPixels++;
+              if (magnitude > 2) owner.greaterThanTwo++;
+              owner.maximumChannelDifference = Math.max(owner.maximumChannelDifference, magnitude);
               residualHistogram[magnitude] = (residualHistogram[magnitude] ?? 0) + 1;
               for (const delta of deltas.slice(0, 3))
                 signedChannelHistogram[delta] = (signedChannelHistogram[delta] ?? 0) + 1;
@@ -258,8 +266,9 @@ test('public divider typography reduction observes equal paragraph span inputs a
           }
           pair[mode].mappedControl = { rows: mappedControl.rows, sha256: hash(Buffer.from(mappedControl.pixels)),
             screenshotDifferences: mappedDifference, unmappedLocalDifferences: mappingDifference, samples: mappedDifferenceSamples,
-            residualHistogram, signedChannelHistogram, maximumChannelDifference, alphaDifferences };
+            residualHistogram, signedChannelHistogram, maximumChannelDifference, alphaDifferences, originResiduals };
           assert.equal(Object.values(residualHistogram).reduce((sum, count) => sum + count, 0), mappedDifference);
+          assert.equal(originResiduals.reduce((sum, row) => sum + row.differingPixels, 0), mappedDifference);
           if (mode === 'astylar') {
             assert.equal(data.runtimeText.length, 4);
             for (let i = 0; i < 4; i++) {

@@ -2,6 +2,22 @@
 
 ## Current resumption ledger — October 6
 
+- Per-origin residual now isolates a half-device-pixel tie boundary. DPR1 rows
+  at20/20.25/20.5/20.75 have57/73/289/62 differing pixels; only20.5 has262
+  differences>2,max213,others max1. DPR2 rows have131/625/131/625 differences;
+  only20.25 and20.75 (half-device origins) have554 each>2,max213,others max1.
+  Row totals conserve the whole residual; identical texture RGBA and projected
+  origin/baseline assertions remain intact. This rejects broad color-transfer
+  error for the large residual and identifies Canvas2D-versus-WebGL nearest
+  sampling/rasterization at exact half-pixel ties as the specific next question.
+  It does not itself prove a core defect: Canvas2D model truth is not native
+  HTML text truth. Focused1/1exit0,42859.9756ms; log
+  divider-equal-typography-origin-residual-20261006.log SHA256
+  4d6b129b6e27c53b4ee8977b1ed672adb97cf16c4bbeaa42e160b61a595181e3.
+  Next inspect a single texel row/tie boundary,then integrate this bounded paint
+  finding and return to full family obligation closure; do not chase generic
+  gamma adjustments or add authored snapping/offset compensation.
+
 - Whole-residual distribution falsifies small-channel-rounding as a sufficient
   explanation; initial twelve samples were unrepresentative. DPR1 mapped-control
   residual481:218 pixels magnitude1,1 magnitude2,262 greater than2; DPR2 residual
