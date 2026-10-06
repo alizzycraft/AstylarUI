@@ -2,6 +2,23 @@
 
 ## Current resumption ledger — October 6
 
+- Divider contrast desktop actual paint substrate now observed at DPR1/2:
+  above/below text textures are transparent (DPR1 clear487/451,partial235/252;
+  DPR2 clear2107/2005,partial568/572),samplingMode1. Logical widths40.1062/
+  39.1429 versus native spans40.109375/39.15625; native14.4px Roboto/normal
+  line-height/tracking unchanged. Projected CSS top192.450623/240.231873 at
+  DPR1 and191.950623/240.231873 atDPR2 versus native range191.9375/239.71875.
+  Authored Above DPR2 minus.5px compensation explains differing requested
+  origins; texture-top/range-top is not itself an ink-baseline comparison.
+  This rejects opaque-backing-at-runtime as an explanation; transparent backing,
+  fractional phase and composition remain competing causes,not diagnosed core
+  failure. Existing helper authenticates served checkpoint;4-row receipt replay
+  checks helper SHA,IDs,alpha conservation,left origins and zero errors.
+  Log divider-text-backing-runtime-20261006.log,SHA256
+  1b2315eb17ff6e5b2480174ece5fcb658caf5dfb3566d2d7dca3b26eacc54472.
+  Next exact14.4px paragraph/span reduction must separate backing and phase
+  without copying fixture offsets or changing canonical input.
+
 - Divider bounded runtime proof registered additively: producer136 proofs versus
   accepted135;147 source findings unchanged. Existing transition mechanism
   reverses only the exact one-entry addition,then retains every prior passive/
