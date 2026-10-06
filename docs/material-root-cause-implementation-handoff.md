@@ -34,6 +34,17 @@
 
 ### Retained evidence chronology — October 5–6
 
+- October6 current-full selection-paint applicability: existing dark/mobile
+  DPR2 form-field real-key test passes1/1,exit0,12630.7985ms with whole served-
+  file authentication. Forward0–3 and backward2–5 endpoints/directions agree;
+  collapsed5–5 removes highlights and changed pixels. Actual native blue/white
+  versus candidate light-blue/black palette difference persists. Evidence:
+  selection-paint-current-20261006.log, SHA256
+  a437f747823fe8757c26c8f588ccadff8821732735e44652442d43d7a6e6a22a.
+  This closes current-checkpoint applicability of the retained bounded paint
+  observation, not equal-input selection paint, End-on-selection, pointer
+  selection, other families/profiles or text sharpness.
+
 - October6 current-full overlay-cycle applicability: unchanged existing dark/
   mobile DPR2 menu,bottom-sheet,dialog three-open/Escape test passes1/1,exit0,
   39521.8198ms after whole served-file fingerprint authentication. Controls

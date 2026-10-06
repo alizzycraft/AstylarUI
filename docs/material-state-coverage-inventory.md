@@ -21,6 +21,13 @@ Evidence:overlay-dismissal-cycles-current-20261006.log,39521.8198ms,exit0;
 digest in handoff. This closes current applicability of these observations only,
 not late async,GPU retention,other profiles or complete case obligations.
 
+October6 selection-paint applicability: unchanged existing dark/mobile DPR2
+form-field real-key test passes1/1 on the full current checkpoint,12630.7985ms,
+exit0. Endpoints/direction and collapsed-highlight removal agree; native
+blue/white versus candidate light-blue/black pixels remain unequal. Log:
+selection-paint-current-20261006.log; digest in handoff. Other families/profiles,
+pointer selection,End-on-selection,equal-input paint and sharpness remain open.
+
 October6 paired empty-caret visibility update: all five editable families now
 have current-full checkpoint-bound light desktop DPR1/2 initial/hide captures,
 six timed boundaries per pair. Combined replay authenticates240 PNGs plus
