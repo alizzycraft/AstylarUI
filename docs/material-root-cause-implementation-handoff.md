@@ -2,6 +2,21 @@
 
 ## Current resumption ledger — October 6
 
+- Actual post-canvas transfer settings now recorded per text mesh: gammaSpace
+  true,textureHasAlpha true,level1,materialAlpha1,alphaMode2,transparencyMode2,
+  alpha from diffuse,emissive same texture/useEmissiveAsIllumination true,lighting
+  disabled. Image processing enabled but exposure1/contrast1/toneMapping false;
+  framebuffer antialias/alpha/premultipliedAlpha true. Twelve bounded differing
+  pixel samples per side/DPR are retained in the existing diagnostic. Candidate
+  samples show small1–2 channel differences from mapped control,consistent with
+  transfer/blend rounding,not sufficient to establish the whole residual or its
+  cause. Focused1/1exit0,37656.6499ms; log
+  divider-equal-typography-transfer-20261006.log SHA256
+  83e631f1c94c60d334d6cde26bf291666749277fb216d4c059f051417dac70cf.
+  Next calculate whole-residual magnitude/distribution and use a bounded transfer
+  intervention only if it distinguishes rounding from edge sampling. No global
+  tone/exposure adjustment is observed; no renderer/fixture changes or closure.
+
 - Actual texture RGBA now agrees byte-for-byte with diagnostic local canvases:
   all four text owners at DPR1/2 report0 differing pixels before composition.
   Raw arrays stay internal; existing diagnostic retains texture SHA receipts and

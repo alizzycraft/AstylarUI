@@ -104,6 +104,14 @@ test('public divider typography reduction observes equal paragraph span inputs a
         const corners=mesh.getBoundingInfo().boundingBox.vectorsWorld.map(v=>Vector3.Project(v,Matrix.Identity(),scene.getTransformMatrix(),viewport));
         return {id:mesh.metadata.elementId,logicalSize:texture?.metadata?.astylarLogicalTextSize,
           backingSize:texture?.getSize(),samplingMode:texture?.samplingMode,
+          transfer:{textureGammaSpace:texture.gammaSpace,textureHasAlpha:texture.hasAlpha,textureLevel:texture.level,
+            materialAlpha:mesh.material.alpha,alphaMode:mesh.material.alphaMode,transparencyMode:mesh.material.transparencyMode,
+            useAlphaFromDiffuseTexture:mesh.material.useAlphaFromDiffuseTexture,
+            useEmissiveAsIllumination:mesh.material.useEmissiveAsIllumination,disableLighting:mesh.material.disableLighting,
+            emissiveIsDiffuse:mesh.material.emissiveTexture===texture,
+            imageProcessing:{enabled:scene.imageProcessingConfiguration.isEnabled,exposure:scene.imageProcessingConfiguration.exposure,
+              contrast:scene.imageProcessingConfiguration.contrast,toneMappingEnabled:scene.imageProcessingConfiguration.toneMappingEnabled},
+            framebuffer:engine._gl?.getContextAttributes()},
           pixels:Array.from(texture.getContext().getImageData(0,0,texture.getSize().width,texture.getSize().height).data),
           bounds:{left:Math.min(...corners.map(v=>v.x))/devicePixelRatio,top:Math.min(...corners.map(v=>v.y))/devicePixelRatio,
             right:Math.max(...corners.map(v=>v.x))/devicePixelRatio,bottom:Math.max(...corners.map(v=>v.y))/devicePixelRatio}};
@@ -227,12 +235,18 @@ test('public divider typography reduction observes equal paragraph span inputs a
           pair[mode].localControl = { rows: localControl.rows, sha256: hash(Buffer.from(localControl.pixels)),
             screenshotDifferences: localDifference, globalTransparentDifferences: originDifference };
           let mappedDifference = 0, mappingDifference = 0;
+          const mappedDifferenceSamples = [];
           for (let i = 0; i < image.data.length; i += 4) {
-            if ([0,1,2,3].some(c => image.data[i+c] !== mappedControl.pixels[i+c])) mappedDifference++;
+            if ([0,1,2,3].some(c => image.data[i+c] !== mappedControl.pixels[i+c])) {
+              mappedDifference++;
+              if (mappedDifferenceSamples.length < 12) mappedDifferenceSamples.push({
+                x: (i / 4) % image.width, y: Math.floor(i / 4 / image.width),
+                actual: Array.from(image.data.subarray(i, i + 4)), control: mappedControl.pixels.slice(i, i + 4) });
+            }
             if ([0,1,2,3].some(c => localControl.pixels[i+c] !== mappedControl.pixels[i+c])) mappingDifference++;
           }
           pair[mode].mappedControl = { rows: mappedControl.rows, sha256: hash(Buffer.from(mappedControl.pixels)),
-            screenshotDifferences: mappedDifference, unmappedLocalDifferences: mappingDifference };
+            screenshotDifferences: mappedDifference, unmappedLocalDifferences: mappingDifference, samples: mappedDifferenceSamples };
           if (mode === 'astylar') {
             assert.equal(data.runtimeText.length, 4);
             for (let i = 0; i < 4; i++) {
