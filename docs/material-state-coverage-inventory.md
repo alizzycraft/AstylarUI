@@ -1188,6 +1188,26 @@ logs; see current handoff for report hash and metrics. This closes launch
 applicability for those wheel cases only. Aggregate acceptance is false; exact
 scrollbar paint/track behavior, mobile profiles and full input mapping remain open.
 
+October7 current-full-20261005 retained wheel-paint inspection covers all8
+configured open-scroll rows,not just the earlier single dark/mobile probe:
+each final native/candidate offset is144,each candidate diagnostic container has
+clientHeight256/scrollHeight2312,while matched open row starts0 with the same
+container dimensions and primary geometry. Open-scroll still omits overlay boxes
+and thumb geometry;its single resource snapshot is not a lifecycle plateau.
+Existing native-neutral and candidateRGB139/135/141 center-column pixel rules
+inspect paired retained open/open-scroll PNGs:32 thumb observations across8
+cases show visible movement on both sides. Native13CSSpx all profiles;candidate
+light/dark14pxDPR1 or13.5pxDPR2,contrast13px,custom16px. Every PNG and input-tree
+receipt is retained in timepicker-retained-thumb-motion-20261007.log,SHA256
+c50c76be517b794071bae466d98957a6719d3edf76223cc088c67546cd58db2c,exit0.
+Native arrow rows are excluded;candidate exact-color center run avoids option
+text. This answers visible wheel-driven thumb movement for this captured cohort,
+not same-session animation,exact shape/track mapping,drag/input ownership or
+equal-input scrollbar acceptance. Different native arrow-track and candidate
+no-arrow geometry remain separate from motion;do not diagnose a coordinate
+defect from13vs16 without actual current thumb bounds/paint ownership. Retained
+full-report SHAab42dbec and all8 existing acceptance flags remain unchanged.
+
 October1 independent current-ancestry cold `--check` from `f6a6d0d` passes
 in2,508,067.0026ms (41.80minutes), with1,205 files/89,154,859 bytes reverified
 and0 invalidations. The canonical comparison succeeds without publication;

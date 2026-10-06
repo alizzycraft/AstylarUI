@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 6
 
+- October7 timepicker wheel-visible-thumb coverage extended by retained pixels:
+  all8 desktop profiles/DPR cases have native/candidate final144px offsets;
+  matched open rows start0 with same candidate256/2312 client/content heights
+  and primary geometry.32 thumb runs visibly move:native13CSSpx,candidate13–16.
+  Log timepicker-retained-thumb-motion-20261007.log SHA
+  c50c76be517b794071bae466d98957a6719d3edf76223cc088c67546cd58db2c,exit0.
+  No browser recapture/source change;all PNG/tree hashes preserved in log.
+  Rules reuse existing platform-neutral native run excluding arrows and exact
+  candidate thumb RGB. Different shape/track and separate-case timing prevent
+  full paint or mapping acceptance. Open-scroll lacks overlay/thumb geometry;
+  single snapshots still do not prove lifecycle stability. Next prioritize
+  remaining state/profile obligation joins and current applicability,not repeat
+  settled wheel/drag causality or create another scalar survey.
+
 - October7 popup option local vertical paint inspected:retained pixels plus
   matched frozen bounds yield32 paired/64 ink measurements with existing metric,
   text-only184px ROI excludes right selection icon. Verified log SHA
