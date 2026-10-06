@@ -9437,6 +9437,14 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('current list wrapper inputs retain clipping and row-height divergence for all configured cases'/,
+      'configured list wrapper layout input boundary', 'Authenticates52 current-full cases/104 label ancestries. Native growing clipped nowrap/ellipsis wrappers and row heights differ from candidate flattened flex rows. This is unequal composition input,not equal-input core layout,full paint or long-text runtime acceptance.'),
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('configured progress inputs preserve determinate state and original SVG attributes across forty cases'/,
+      'configured progress state and geometry input membership', 'Authenticates40 configured cases/80 trees retaining determinate64,bar scaleX(.64),native circle attributes and candidate stroke10. This binds existing plugin findings to their input population,not final used geometry,cap/raster,lifetime or other-value equivalence.'),
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('passive descendant semantics retain accessibility hiding omissions independently of visible target gates'/,
+      'passive descendant semantic hiding support boundary', 'Authenticates354 per-side subtrees and public type/bridge sources. Native ARIA hiding is absent from candidate inputs and unsupported as an accessibility-only property. Visual hidden is not a substitute; this is not generated AX acceptance or justification of every descendant.'),
+    proof(root, 'tests/material-parity/sort-focus-structure.spec.mjs', /test\('current badge and icon accessibility nodes expose hiding differences omitted by target semantics'/,
+      'current badge icon actual accessibility exposure boundary', 'Full served checkpoint-bound light desktop DPR1 CDP nodes show native ariaHiddenElement exclusion versus candidate exposed StaticText4/image Favorite. This demonstrates the target-gate blind spot,not all-profile accessibility or equal-input rendering acceptance.'),
     proof(root, 'tests/material-parity/sort-focus-structure.spec.mjs', /test\('popup token ancestry separates global fallback from frame theme overrides'/,
       'configured desktop popup token ancestry boundary', 'Authenticates the complete current-full served build and24 retained reference trees across select/autocomplete/timepicker,four profiles,DPR1/2. Actual option ancestry excludes frame and reaches BODY/HTML with global tokens and absent component overrides; frame/base ink agrees with retained rows. This is native token provenance, not candidate paint equivalence,mobile/tablet or complete-case acceptance.'),
     proof(root, 'tests/material-parity/sort-focus-structure.spec.mjs', /test\('retained select indicator inputs preserve pseudo-checkbox versus plugin paint differences'/,

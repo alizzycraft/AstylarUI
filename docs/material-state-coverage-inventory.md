@@ -2,6 +2,14 @@
 
 ## Current evidence boundary — October 6
 
+Passive inventory registration now135 proofs (accepted131),source definitions147
+(accepted145). Exact four-entry source restoration and predecessor inventory
+conservation pass2/2 with four altered-entry rejections. Logs:
+passive-proof-conservation-20261006.log and earlier passive-registration-transition-
+20261006.log. Historical projection removes only the authenticated new block;
+no previous assertion or producer behavior is waived. Broader source-binding
+verification/canonical export/index refresh are still pending coherent integration.
+
 Producer source definitions now147 (accepted canonical145): two additive findings
 register the observed accessibility-only hiding support gap and list composition/
 row-size substitution. Focused conservation verifies all145 predecessor entries,

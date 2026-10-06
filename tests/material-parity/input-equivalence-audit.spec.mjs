@@ -1727,9 +1727,39 @@ test('matching text and descendant IDs do not waive a different framework host t
   assert.equal(buildMaterialInputAudit(report).structureEvidence[0].classification, 'legitimate-public-api-structure');
 });
 
-test('popup proof batch adds four registrations without changing predecessor inventory', async () => {
-  const { restoreScalarReviewExtraction } = await import('./position-composition-producer-transition.mjs');
+test('passive proof registration conserves complete predecessor production source and inventory', async () => {
+  const { restorePassiveProofRegistration } = await import('./position-composition-producer-transition.mjs');
+  const source = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8');
+  const prior = execFileSync('git', ['show', 'ce988cee:tests/material-parity/input-equivalence-audit.mjs'],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  assert.equal(restorePassiveProofRegistration(source), prior.replaceAll('\r\n', '\n'));
   const inventory = text => {
+    const ast = ts.createSourceFile('inventory.mjs', text, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    const functions = ['sourceFingerprints', 'focusedProofInventory', 'proof'].map(name => {
+      const node = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+      assert.ok(node, name); return node.getText(ast);
+    });
+    return new Function('readFileSync', 'path', 'createHash', functions.join('\n') +
+      '\nreturn { fingerprints: sourceFingerprints(process.cwd()), proofs: focusedProofInventory(process.cwd()) };')
+      (readFileSync, path, createHash);
+  };
+  const before = inventory(prior), after = inventory(source);
+  assert.equal(before.proofs.length, 131);
+  assert.equal(after.proofs.length, 135);
+  assert.deepEqual(after.proofs.slice(4), before.proofs);
+  assert.deepEqual(after.fingerprints, before.fingerprints);
+  for (const entry of after.proofs.slice(0, 4)) {
+    assert.notEqual(entry.status, 'missing');
+    assert.match(entry.description, /not/);
+    assert.throws(() => restorePassiveProofRegistration(source.replace(entry.status, entry.status + ' changed')),
+      /exact four-entry addition/);
+  }
+});
+
+test('popup proof batch adds four registrations without changing predecessor inventory', async () => {
+  const { restoreScalarReviewExtraction, restorePassiveProofRegistration } = await import('./position-composition-producer-transition.mjs');
+  const inventory = text => {
+    text = restorePassiveProofRegistration(text);
     const ast = ts.createSourceFile('inventory.mjs', text, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
     const functions = ['sourceFingerprints', 'focusedProofInventory', 'proof'].map(name => {
       const node = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name);

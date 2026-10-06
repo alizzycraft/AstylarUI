@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 6
 
+- Passive proof registration135 versus accepted131: four list/progress/semantic-
+  subset/actual-AX entries added to existing inventory. Exact2075-byte block
+  SHA1501bf00ae18fbc613480e741055025374d1fc5280b30e160d777de6d09fd7d6
+  is authenticated before historical projection; complete predecessor production
+  source equals ce988cee after reversal. All131 previous proof records and
+  fingerprint-list behavior conserved; four changed-entry negative controls reject.
+  Existing popup predecessor test remains intact after the same authenticated
+  passive-only projection. Focused conservation passes2/2,
+  passive-proof-conservation-20261006.log. Next broader affected source-binding
+  replay and definition/proof checks before one canonical147/135 integration.
+  Accepted canonical856e0908 remains145 findings/131 proofs; no closure promotion.
+
 - Passive source registration batch begun: producer definitions145 to147 adds
   core-public-semantic-subset-omits-accessibility-only-hiding (documented support
   limitation) and fixture-list-content-wrappers-and-row-sizing-substituted

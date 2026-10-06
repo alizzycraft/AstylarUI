@@ -12,8 +12,22 @@ const standaloneCoverageProof = "    proof(root, 'tests/material-parity/input-eq
   "      'retained standalone visibility, disabled activation and popup selection evidence', 'Authenticates all 73 dependency/screenshot receipts across six snackbar desktop/mobile profiles, four tablet themes, five disabled fields and three popup-input selections. Exact visibility/action boundaries, unequal disabled suffix state and both original picker geometry failures remain asserted. Historical replay only; not current rendering acceptance, all-state paint, complete ownership or case inspection closure.'),\n";
 // Reverse only the exact extraction of the unchanged production scalar stages.
 // Whole-module equality remains mandatory before any older transition runs.
-export function restoreScalarReviewExtraction(source) {
+export function restorePassiveProofRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (!current.includes("/test\\('current list wrapper inputs retain clipping and row-height divergence for all configured cases'/")) return current;
+  const header = 'function focusedProofInventory(root) {\n  return [\n';
+  assert.equal(current.split(header).length, 2, 'passive registration requires unique existing inventory');
+  const start = current.indexOf(header) + header.length;
+  const end = current.indexOf("    proof(root, 'tests/material-parity/sort-focus-structure.spec.mjs', /test\\('popup token ancestry", start);
+  assert.ok(end > start, 'passive proofs must precede unchanged popup registration');
+  assert.equal(hash(current.slice(start, end)),
+    '1501bf00ae18fbc613480e741055025374d1fc5280b30e160d777de6d09fd7d6',
+    'passive registration changed beyond the exact four-entry addition');
+  return current.slice(0, start) + current.slice(end);
+}
+
+export function restoreScalarReviewExtraction(source) {
+  let current = restorePassiveProofRegistration(source);
   if (current.includes("/test\\('popup token ancestry separates global fallback from frame theme overrides'/")) {
     const header = 'function focusedProofInventory(root) {\n  return [\n';
     assert.equal(current.split(header).length, 2, 'popup registration requires unique existing inventory');
