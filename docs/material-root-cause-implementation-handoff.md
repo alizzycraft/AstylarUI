@@ -2,6 +2,19 @@
 
 ## Current resumption ledger — October 6
 
+- Passive semantic-gate question answered: all354 configured cases contain
+  nonempty measured target observations;864 expected/actual records agree and
+  exist.490 include role,374 omit it on both sides. Exact full report and runner
+  SHA authenticate; log passive-configured-semantics-20261006.log,SHA256
+  db1519b8f15207ba85ab8350c0e56dd9a5f8284ab5848a47777f870061aa68b0.
+  This is configured DOM/proxy attribute coverage,not complete accessibility.
+  run-material-parity.mjs:1444 semanticName is a limited aria-label/alt/labels/
+  enclosing-label/textContent helper;1675 comparator tests selected attributes.
+  It does not execute the browser accessible-name algorithm or inspect every
+  descendant/relationship. Preserve prior divider orientation justification.
+  Next inspect missing descendant/relationship applicability rather than recapture
+  the864 already-matching records. Full passive closure remains unproven.
+
 - Progress membership closes state-mismatch alternative for all40 configured
   cases: 80 trees authenticate determinate64; native bar scaleX(.64),spinner r45/
   dash282.743/offset101.788/stroke10%,candidate stroke10 are preserved. Ancestor

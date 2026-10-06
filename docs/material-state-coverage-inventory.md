@@ -2,6 +2,19 @@
 
 ## Current evidence boundary — October 6
 
+Passive configured semantics now inspected across354 cases/864 target records:
+every row has nonempty measured expected/actual observations,both targets exist,
+and all serialized properties match.490 records include roles;374 omit role on
+both sides,not inferred implicit-role acceptance. Full report and current runner
+raw hashes authenticate. This closes configured DOM/proxy assertion inspection,
+not complete semantic equivalence. Collector semanticName uses aria-label/alt,
+native labels/enclosing label/textContent,not the full accessible-name algorithm
+or browser AX tree. Configured target/exclusion lists also leave descendant,
+relationship and orientation obligations separate. Log:
+passive-configured-semantics-20261006.log,SHA256
+db1519b8f15207ba85ab8350c0e56dd9a5f8284ab5848a47777f870061aa68b0.
+No empty/default gate inference or complete-case promotion follows.
+
 Progress configured input membership is now bound across40 cases/80 authenticated
 trees (20 bar,20 spinner): both sides determinate64,including ariaValueNow.
 All native bars request scaleX(.64); all native determinate circles retain r45,
