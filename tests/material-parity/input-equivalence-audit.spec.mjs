@@ -1727,9 +1727,23 @@ test('matching text and descendant IDs do not waive a different framework host t
   assert.equal(buildMaterialInputAudit(report).structureEvidence[0].classification, 'legitimate-public-api-structure');
 });
 
-test('passive proof registration conserves complete predecessor production source and inventory', async () => {
-  const { restorePassiveProofRegistration } = await import('./position-composition-producer-transition.mjs');
+test('divider runtime registration preserves complete predecessor source and rejects altered entry', async () => {
+  const { restoreDividerProofRegistration } = await import('./position-composition-producer-transition.mjs');
   const source = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8');
+  const prior = execFileSync('git', ['show', 'eb31d331:tests/material-parity/input-equivalence-audit.mjs'],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  assert.equal(restoreDividerProofRegistration(source), prior.replaceAll('\r\n', '\n'));
+  for (const fragment of ['retained divider responsive AX and desktop replacement ownership boundary',
+    'Authenticates16 tablet/mobile DPR1 separator AX observations',
+    'Retained checkpoint replay,not current rendering']) {
+    assert.throws(() => restoreDividerProofRegistration(source.replace(fragment, fragment + ' changed')),
+      /exact one-entry addition/);
+  }
+});
+
+test('passive proof registration conserves complete predecessor production source and inventory', async () => {
+  const { restorePassiveProofRegistration, restoreDividerProofRegistration } = await import('./position-composition-producer-transition.mjs');
+  const source = restoreDividerProofRegistration(readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8'));
   const prior = execFileSync('git', ['show', 'ce988cee:tests/material-parity/input-equivalence-audit.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   assert.equal(restorePassiveProofRegistration(source), prior.replaceAll('\r\n', '\n'));

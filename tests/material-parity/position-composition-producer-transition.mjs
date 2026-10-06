@@ -2,6 +2,15 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 
 const hash = text => createHash('sha256').update(text).digest('hex');
+const dividerRuntimeProof = "    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\\('retained divider responsive accessibility and replacement ownership preserve exact bounded observations'/,\n" +
+  "      'retained divider responsive AX and desktop replacement ownership boundary', 'Authenticates16 tablet/mobile DPR1 separator AX observations and8 desktop profile/DPR1/2 replacement/disposal cohorts. Orientation agrees; three updates retain live=tracked resources and disposal clears sampled ownership. Retained checkpoint replay,not current rendering,late async,remount or complete-case acceptance.'),\n";
+export function restoreDividerProofRegistration(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  if (!current.includes("/test\\('retained divider responsive accessibility")) return current;
+  assert.equal(current.split(dividerRuntimeProof).length, 2,
+    'divider registration changed beyond the exact one-entry addition');
+  return current.replace(dividerRuntimeProof, '');
+}
 const currentCaretTrackProofs = "    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\\('desktop five-family empty caret preserves native visibility and candidate blink evidence'/,\n" +
   "      'current light desktop five-family empty-caret visibility and ink boundary', 'Authenticates ten current-checkpoint populations at DPR1/2, sixty real Tab/delete timed boundaries and240 initial/hide rasters. Localized candidate blink strokes and native visible carets are present; captured authoring/normal/interaction/effective stages preserve omitted candidate caretColor versus native primary ink. This is bounded visibility/input attribution, not equal stroke geometry, sharpness, other themes/states or whole-case closure.'),\n" +
   "    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\\('public equal-input overflow isolates scrollbar gutter before projection'/,\n" +
@@ -13,7 +22,7 @@ const standaloneCoverageProof = "    proof(root, 'tests/material-parity/input-eq
 // Reverse only the exact extraction of the unchanged production scalar stages.
 // Whole-module equality remains mandatory before any older transition runs.
 export function restorePassiveProofRegistration(source) {
-  let current = source.toString().replaceAll('\r\n', '\n');
+  let current = restoreDividerProofRegistration(source);
   if (!current.includes("/test\\('current list wrapper inputs retain clipping and row-height divergence for all configured cases'/")) return current;
   const header = 'function focusedProofInventory(root) {\n  return [\n';
   assert.equal(current.split(header).length, 2, 'passive registration requires unique existing inventory');

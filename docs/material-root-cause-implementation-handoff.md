@@ -2,6 +2,16 @@
 
 ## Current resumption ledger — October 6
 
+- Divider bounded runtime proof registered additively: producer136 proofs versus
+  accepted135;147 source findings unchanged. Existing transition mechanism
+  reverses only the exact one-entry addition,then retains every prior passive/
+  popup restoration. Complete producer equals eb31d331 after reversal;three
+  altered entry controls reject. New and three original conservation assertions
+  pass4/4,divider-registration-conservation-20261006.log. Original predecessor
+  assertions are preserved after authenticated divider-only projection. No new
+  report framework or full export. Broader source-binding reconciliation and
+  next coherent publication remain pending; accepted70dc9ec1 is not promoted.
+
 - Divider retained runtime proof now reproducible in existing input-boundary
   suite: exact responsive AX16-member and desktop ownership8-member cohorts,
   original log SHA receipts,current helper-source SHA,checkpoint/browser and
