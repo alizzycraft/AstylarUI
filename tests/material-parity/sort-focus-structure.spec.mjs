@@ -2585,6 +2585,62 @@ test('popup token ancestry separates global fallback from frame theme overrides'
   }, {}, { checkpointFile: 'artifacts/material-parity/current-full-20261005/checkpoint/manifest.json' });
 });
 
+test('current badge and icon accessibility nodes expose hiding differences omitted by target semantics', async t => {
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    const observations = [];
+    for (const family of ['badge', 'icon']) for (const mode of ['reference', 'astylar']) {
+      const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 });
+      const errors = [];
+      page.on('pageerror', error => errors.push(String(error)));
+      await page.goto(`${baseUrl}/${mode}/${family}?benchmark=1&profile=light`);
+      await page.locator('.frame').waitFor();
+      if (mode === 'astylar') {
+        await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+        await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+      }
+      const selector = mode === 'reference'
+        ? family === 'badge' ? '#badge-primary .mat-badge-content' : '#icon-primary'
+        : `[data-astylar-id="${family === 'badge' ? 'badge-count' : 'icon-primary'}"]`;
+      await page.locator(selector).waitFor({ state: 'attached' });
+      const dom = await page.locator(selector).evaluate(node => ({
+        tag: node.tagName, role: node.getAttribute('role'), label: node.getAttribute('aria-label'),
+        hidden: node.getAttribute('aria-hidden'), text: node.textContent,
+      }));
+      const cdp = await page.context().newCDPSession(page);
+      const { root } = await cdp.send('DOM.getDocument');
+      const { nodeId } = await cdp.send('DOM.querySelector', { nodeId: root.nodeId, selector });
+      assert.ok(nodeId);
+      const { nodes } = await cdp.send('Accessibility.getPartialAXTree', { nodeId, fetchRelatives: true });
+      observations.push({ family, mode, dom, nodes });
+      const target = nodes[0];
+      assert.ok(target);
+      const hiddenReasons = (target.ignoredReasons ?? []).filter(reason => /ariaHidden/i.test(reason.name));
+      if (mode === 'reference') {
+        assert.equal(dom.hidden, 'true');
+        assert.equal(target.ignored, true);
+        assert.ok(hiddenReasons.length > 0, 'Native target is ignored specifically through ARIA hiding');
+      } else {
+        assert.equal(dom.hidden, null);
+        assert.equal(hiddenReasons.length, 0);
+        if (family === 'icon') {
+          assert.equal(target.ignored, false);
+          assert.equal(target.role.value, 'image');
+          assert.equal(target.name.value, 'Favorite');
+        } else {
+          assert.equal(target.ignored, false);
+          assert.ok(nodes.some(node => !node.ignored && node.role?.value === 'StaticText' && node.name?.value === '4'),
+            'Candidate badge exposes count text that native aria-hidden suppresses');
+        }
+      }
+      assert.deepEqual(errors, []);
+      await cdp.detach();
+      await page.close();
+    }
+    t.diagnostic(JSON.stringify({ browser: browser.version(), observations,
+      scope: 'Current checkpoint light desktop DPR1,ARIA hiding and actual partial AX nodes; not all-profile accessibility acceptance.' }));
+  }, {}, { checkpointFile: 'artifacts/material-parity/current-full-20261005/checkpoint/manifest.json' });
+});
+
 async function withFrozenShowcase(run, launchOptions = {}, evidence = {}) {
   const browserRoot = path.resolve(process.env.ASTYLAR_MATERIAL_SHOWCASE_BROWSER_ROOT ??
     'examples/material-showcase/dist/material-showcase/browser');

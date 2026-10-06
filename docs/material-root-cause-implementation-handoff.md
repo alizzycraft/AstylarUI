@@ -2,6 +2,21 @@
 
 ## Current resumption ledger — October 6
 
+- Badge/icon actual AX alternative resolved in current-checkpoint light desktop
+  DPR1: native targets ignored with ariaHiddenElement; candidate count exposes
+  StaticText4 and icon exposes image/Favorite. Existing frozen helper verifies
+  whole served checkpoint before original/candidate pages. Chrome154.0.8037.58,
+  no page errors. Existing-suite CDP partial-AX assertion passes1/1,7991.7356ms;
+  passive-badge-icon-ax-verified-20261006.log SHA256
+  be9aab6af9e9033e6d81efaee354bdb1aa5b4b237d4074edacda499f241a2516.
+  Initial observation log passive-badge-icon-ax-20261006.log retained SHA256
+  fb3d487cf78125852482a88e18a46cfd7e4e71c64cd047881aab353b6e0e7412.
+  Final assertion explicitly checks exposed badge text. Thus configured target
+  name/role matching masks a real exposure difference,not implicit bridge hiding.
+  Other profiles/relationships not inferred. Next register standalone list/
+  progress/hiding/AX proofs and this support finding in one conserved producer
+  batch; do not fix renderer or use hidden as an accessibility-only workaround.
+
 - Descendant semantic-input gap:354 per-side subtrees contain no authored IDREF
   relations. Native aria-hidden counts124 sidenav/52 badge/20 icon/60 bar/40
   spinner,candidate0. Native icon is explicitly hidden despite Favorite/img

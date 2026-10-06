@@ -2,6 +2,19 @@
 
 ## Current evidence boundary — October 6
 
+Actual badge/icon hiding now observed at current-full checkpoint light desktop
+1440x1000 DPR1,Chrome154.0.8037.58,whole served fingerprint authenticated by
+existing helper. Native badge count and icon host have ignored AX nodes with
+ariaHiddenElement reason. Candidate count is nonignored generic with exposed
+StaticText4; candidate icon is nonignored image named Favorite. Zero page errors.
+Existing semantic target matches therefore do not establish equivalent exposure.
+Focused browser assertion passes1/1,7991.7356ms; log
+passive-badge-icon-ax-verified-20261006.log,SHA256
+be9aab6af9e9033e6d81efaee354bdb1aa5b4b237d4074edacda499f241a2516.
+First observation log retained separately. Other configurations and complete AX
+relations remain unobserved. No fixture workaround or core implementation follows;
+the public support gap and unequal authoring are separate from equal-input rendering.
+
 Passive descendant semantic inputs now cover354 authenticated subtrees per side.
 No authored IDREF relationships are present. Native aria-hidden occurrences:
 sidenav124,badge52,icon20,bar60,spinner40; candidate has none. In particular
