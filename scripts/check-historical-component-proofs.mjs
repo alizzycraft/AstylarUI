@@ -93,6 +93,31 @@ if (main) {
   assert.equal(restoreAstylarDiagnostics(read(component, 'utf8')), lf(originalComponent),
     'Unreviewed component source drift');
   const originals = new Map([[path.resolve(sorter), originalSorter], [path.resolve(component), originalComponent]]);
+  // Exact reviewed snapshot only. Preserve the historical raw receipt rather
+  // than pretending later validation/track probes are the original capture.
+  const boundary = 'tests/material-parity/input-boundary-evidence.spec.mjs';
+  const originalBoundary = execFileSync('git', ['show', `0a0b5d6be8f1cabe6b6852e17d01145437de7c69:${boundary}`],
+    { maxBuffer: 4_000_000 });
+  assert.equal(hash(originalBoundary), 'b6eff6c1419e114ba6f177dbde7c941bbf8ceeefa00165dcdbe9c4babc826f3b');
+  const currentBoundary = read(boundary);
+  assert.equal(hash(currentBoundary), 'de260e2fbee31686bccd940582e1503fc378881d2c94e6e35b66b67877cbc141',
+    'Unreviewed input-boundary snapshot drift');
+  const statements = bytes => {
+    const ast = ts.createSourceFile(boundary, lf(bytes), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    return new Map(ast.statements.map(node => [ts.isExpressionStatement(node) &&
+      ts.isCallExpression(node.expression) && node.expression.expression.getText(ast) === 'test'
+      ? node.expression.arguments[0].text : node.getText(ast).slice(0, 90), node.getText(ast)]));
+  };
+  const oldBoundary = statements(originalBoundary), newBoundary = statements(currentBoundary);
+  assert.equal(oldBoundary.size, 33); assert.equal(newBoundary.size, 41);
+  const changedBoundary = new Set([
+    'current paired caret-visible capture binds its pixels to unequal caret authoring',
+    'public equal-input overflow isolates scrollbar gutter before projection']);
+  for (const [name, text] of oldBoundary) {
+    assert.ok(newBoundary.has(name), `missing original boundary statement ${name}`);
+    if (!changedBoundary.has(name)) assert.equal(newBoundary.get(name), text);
+  }
+  originals.set(path.resolve(boundary), originalBoundary);
   const widths = JSON.parse(read('docs/material-button-fixed-width-audit.json'));
   const border = widths.sourceFingerprints.filter(s => s.file === 'tests/material-parity/border-initial-input-evidence.mjs');
   assert.equal(border.length, 1);

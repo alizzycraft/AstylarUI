@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 6
 
+- October7 action-source historical reconciliation complete for the reviewed
+  exact snapshot: read-only preload authenticates original0a0b5d6 raw bytes
+  and current de260e2f snapshot,checks33/41 statement membership and31 unchanged
+  originals,then serves original bytes only to historical receipt validators.
+  Unexpected snapshot changes fail; installed/current files remain untouched.
+  Complete check-historical-component-proofs.mjs terminates exit0:
+  retained8/8,button suites8/8,box-sizing binding1/1,negative controls1/1.
+  Evidence:action-source-historical-replay-20261007.log. Prior failed replay logs
+  remain retained. This closes that historical launcher applicability gap,not
+  current browser parity,all audit harness checks or137-proof publication.
+  Next return to exact per-family/case applicable-obligation closure,prioritizing
+  shared popup/scrollbar paint and editable selection evidence gaps; preserve
+  the accepted135-proof package until coherent publication has sufficient space.
+
 - October7 remaining action-source receipt located exactly in Git0a0b5d6be8f1cabe6b6852e17d01145437de7c69:
   input-boundary-evidence.spec.mjs SHA b6eff6c1419e114ba6f177dbde7c941bbf8ceeefa00165dcdbe9c4babc826f3b.
   Read-only TypeScript statement comparison:33 original/41 current statements;
