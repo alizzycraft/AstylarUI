@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 6
 
+- Bounded equal-input typography proof now registered through existing inventory:
+  producer137 proofs versus accepted135,source findings147 unchanged. Existing
+  divider restoration reverses only the exact paint entry before runtime entry;
+  complete predecessor equality remains mandatory. Original runtime mutation
+  checks retained plus three paint-entry mutation controls; runtime/passive
+  conservation tests pass2/2,3603.0988ms in
+  divider-paint-registration-conservation-20261006.log. Registration describes
+  observed equal-input paint failure and suspected post-canvas cause,not GPU
+  diagnosis or case closure. Next reconcile affected source receipts and broader
+  family obligations before a coherent full publication. D: headroom remains
+  insufficient for full capture/export; do not overwrite accepted135-proof evidence.
+
 - Pixel-center nearest-texel model using actual RGBA/logical/backing sizes reduces
   candidate residual versus Canvas2D mapping481→57 pixels DPR1 and1512→306 DPR2.
   Measured versus exact authored origins have identical residual counts; DPR2

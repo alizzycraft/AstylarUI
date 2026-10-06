@@ -9437,6 +9437,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('public divider typography reduction observes equal paragraph span inputs and opaque backing control'/,
+      'equal-input divider typography paint boundary', 'Public14.4px normal paragraph/span reduction retains a paint counterexample at DPR1/2. Six bounded owners match current source; actual texture RGBA and baselines agree with controls. Backing and sampling models isolate post-canvas uncertainty,not full divider flow,confirmed GPU cause or case acceptance.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('retained divider responsive accessibility and replacement ownership preserve exact bounded observations'/,
       'retained divider responsive AX and desktop replacement ownership boundary', 'Authenticates16 tablet/mobile DPR1 separator AX observations and8 desktop profile/DPR1/2 replacement/disposal cohorts. Orientation agrees; three updates retain live=tracked resources and disposal clears sampled ownership. Retained checkpoint replay,not current rendering,late async,remount or complete-case acceptance.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('current list wrapper inputs retain clipping and row-height divergence for all configured cases'/,

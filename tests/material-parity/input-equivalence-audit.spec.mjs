@@ -1735,7 +1735,10 @@ test('divider runtime registration preserves complete predecessor source and rej
   assert.equal(restoreDividerProofRegistration(source), prior.replaceAll('\r\n', '\n'));
   for (const fragment of ['retained divider responsive AX and desktop replacement ownership boundary',
     'Authenticates16 tablet/mobile DPR1 separator AX observations',
-    'Retained checkpoint replay,not current rendering']) {
+    'Retained checkpoint replay,not current rendering',
+    'equal-input divider typography paint boundary',
+    'Public14.4px normal paragraph/span reduction',
+    'not full divider flow,confirmed GPU cause']) {
     assert.throws(() => restoreDividerProofRegistration(source.replace(fragment, fragment + ' changed')),
       /exact one-entry addition/);
   }
