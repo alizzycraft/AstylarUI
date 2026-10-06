@@ -2,6 +2,30 @@
 
 ## Current resumption ledger — October 6
 
+- October7 Icon coverage reconciled without new capture or producer changes:
+  original asset proof replays1/1 across20 retained owners, including changed
+  asset/path/size negative controls. Log icon-asset-applicability-20261007.log,
+  SHA01faadfb6753a26b347d4542ff55aa3113cb1ea2574ff0361131f6865f9f315a.
+  Existing current-full report SHAab42dbec confirms12 static icon-local targets
+  versus8 inspect rows without raster targets. All12 complete metric objects
+  replay exactly from24 saved crops; log icon-stored-raster-replay-20261007.log,
+  SHA5c2407b1197fac1170e7d7edb7d9aea16ddfaf2b23e063e7b739c3681c442753.
+  Static SSIM passes12/12 (range0.8452139–0.9977126), diagnostic sharpness8/12:
+  mobile fails in all four profiles. This is not contradictory acceptance:
+  focused-raster matches is configured SSIM only; sharpness remains diagnostic.
+  Config/metric/runner hashes match the report's exact harness receipts.
+  The broader extraction icon-retained-paint-coverage-20261007.log has SHA
+  77f1a7da82a21876578c0a1b4137f1683e0331fdfd0aba89a2375792c32377ba.
+  Existing SVG-to-PNG input substitution and light desktop AX hiding findings
+  already answer representation/naming in their bounded populations. Family row
+  now distinguishes those inspected failures from remaining crop registration,
+  broader AX, equal-input loading/alpha, paint/lifetime and current applicability.
+  No case promoted to full closure; no current rendering acceptance inferred.
+  These ledger documents are absent from producer references/fingerprint inputs;
+  the live export's consumed inputs remain unchanged. Next validate publication
+  after terminal export, then address explicit missing obligations, not repeat
+  asset/gate-scope or stored-metric checks.
+
 - October7 timepicker wheel-visible-thumb coverage extended by retained pixels:
   all8 desktop profiles/DPR cases have native/candidate final144px offsets;
   matched open rows start0 with same candidate256/2312 client/content heights

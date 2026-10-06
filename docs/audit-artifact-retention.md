@@ -56,6 +56,16 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October7 publication-headroom recovery: the closed current-full-20261005
+`latest-report.json` was transparently NTFS-compressed in place. SHA256 before
+and after was identical:
+`ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62`.
+Its127,722,972 logical bytes occupy39,755,776 physical bytes; observed D: free
+space rose from38,273,024 to125,976,576 bytes. No content, paths, references,
+original/failure evidence or current/historical status changed. This is not
+scratch deletion or proof of sufficient space for a new full capture. The
+subsequent read-only Icon report replay authenticated the same report hash.
+
 October 6 disk-exhaustion recovery: two existing top-level logs were NTFS
 compressed in place, without deletion, path changes or content substitution:
 `audit-harness-5028979e.log` (SHA256
