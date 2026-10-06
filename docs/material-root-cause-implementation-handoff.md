@@ -2,6 +2,22 @@
 
 ## Current resumption ledger — October 6
 
+- October7 remaining action-source receipt located exactly in Git0a0b5d6be8f1cabe6b6852e17d01145437de7c69:
+  input-boundary-evidence.spec.mjs SHA b6eff6c1419e114ba6f177dbde7c941bbf8ceeefa00165dcdbe9c4babc826f3b.
+  Read-only TypeScript statement comparison:33 original/41 current statements;
+ 31 originals are byte-identical after CRLF normalization,none missing. Eight
+ additions comprise one import and seven tests. Two changed originals are the
+ caret-visible authoring and public scrollbar-gutter proofs. Gutter preserves
+ all20 original assertions and adds installed scrollbar-owner/held-track checks.
+ Caret preserves23/24 original assertion texts; the remaining validation adds
+ readBytes routing through authenticated readGapSurveySource for its producer,
+ plus a changed-key negative control. Original expected checkpoint result is
+ unchanged, but this is a validation-path change,not mere extra test coverage.
+ Next authenticate the exact changed blocks using existing source-restoration
+ mechanisms before historical preload; do not claim equivalent current capture
+ behavior from old assertion conservation. No new capture or source substitution
+ was performed for this read-only investigation.
+
 - October7 historical-definition reconciliation: authenticate all147 current
   definitions against the complete145-entry pre-passive Git predecessor, then
   reverse only the two known additions and the exact third pointer-ownership
