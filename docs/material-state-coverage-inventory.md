@@ -262,7 +262,7 @@ this supersedes the earlier runtime/text-paint pending statement,not its evidenc
 | Separator local paint |48 original full PNGs supply24 bounded strip diagnostics; unequal border/background inputs retained,18 diagnostic sharpness failures. | No equal-input border-paint diagnosis or full clipping/antialiasing inspection follows. |
 | Activation/editing/focus applicability | Passive paragraphs/separator contain no controls; paired Tab/structure inspection and current reference justify inapplicability. | No hypothetical clickable divider states required. |
 | Semantics |24 configured separator target observations match; omitted horizontal orientation justified by default semantics. | Complete browser accessibility exposure/relationships are not certified by target attributes. |
-| Ownership/disposal | Passive control absence is established,not resource-lifetime equivalence. | Exact applicable allocation/disposal and late-work evidence still needs reconciliation. |
+| Ownership/disposal | All8 configured inspect rows have exactly one live,undisposed snapshot: idle revision3,no pending reasons,17 tracked meshes/16 materials/4 textures. Full report SHA ab42dbec authenticates. Existing runner resource comparison at453 cannot establish a plateau from one snapshot. | No repeated allocation/disposal or late-completion evidence exists in these rows. Passive control absence does not make text/cache/surface lifetime inapplicable; reuse only source-applicable public lifetime proofs or measure this boundary through existing helper. |
 
 No complete divider case closure is certified. Prioritize the exact-input local
 text-paint residual and missing semantic/ownership applicability evidence rather
