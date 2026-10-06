@@ -6,6 +6,7 @@ import { execFileSync, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { syncBuiltinESMExports } from 'node:module';
 import { pathToFileURL } from 'node:url';
+import ts from 'typescript';
 import { restoreAstylarDiagnostics } from '../tests/material-parity/alignment-survey-conservation.mjs';
 import { readGapSurveySource } from '../tests/material-parity/gap-survey-source-replay.mjs';
 
@@ -44,6 +45,37 @@ if (main) {
     `a6217c5173f956ab57dba74013e14dd89b61245f:${sorter}`], { maxBuffer: 4_000_000 });
   assert.equal(hash(originalSorter), '7f1af071e1204192337c22774d4b76889992bfc9631c136ed33f744f6101ce83');
   let currentSorter = lf(read(sorter));
+  // Exact reviewed later snapshot: replay historical bytes, never execute newer
+  // launch/state tests as though they were equivalent historical evidence.
+  if (hash(read(sorter)) === 'dca535342db0162b59da58f3a979d51eea305b27b09cb7760e1a869f629647e7') {
+    const tests = text => {
+      const ast = ts.createSourceFile('sorter.mjs', text, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+      return new Map(ast.statements.filter(node => ts.isExpressionStatement(node) &&
+        ts.isCallExpression(node.expression) && node.expression.expression.getText(ast) === 'test')
+        .map(node => [node.expression.arguments[0].text, { node, ast }]));
+    };
+    const before = tests(lf(originalSorter)), after = tests(currentSorter);
+    assert.equal(before.size, 26); assert.equal(after.size, 32);
+    const changed = new Set(['slider pointer-down ownership is measured at both visual thumb centers',
+      'dark mobile timepicker wheel separates scroll state from scrollbar paint']);
+    const assertions = ({ node, ast }) => {
+      const calls = [];
+      const visit = current => {
+        if (ts.isCallExpression(current) && current.expression.getText(ast).startsWith('assert.'))
+          calls.push(current.getText(ast).replace(/\s+/g, ' '));
+        ts.forEachChild(current, visit);
+      };
+      visit(node); return calls;
+    };
+    for (const [name, entry] of before) {
+      assert.ok(after.has(name), `missing historical test ${name}`);
+      if (!changed.has(name)) assert.equal(after.get(name).node.getText(after.get(name).ast).replace(/\s+/g, ' '),
+        entry.node.getText(entry.ast).replace(/\s+/g, ' '));
+      else for (const call of assertions(entry)) assert.ok(assertions(after.get(name)).includes(call),
+        `removed historical assertion in ${name}`);
+    }
+    currentSorter = lf(originalSorter);
+  } else {
   for (const [added, prior] of [
     ["  const browserRoot = path.resolve(process.env.ASTYLAR_MATERIAL_SHOWCASE_BROWSER_ROOT ??\n    'examples/material-showcase/dist/material-showcase/browser');",
       "  const browserRoot = path.resolve('examples/material-showcase/dist/material-showcase/browser');"],
@@ -52,6 +84,7 @@ if (main) {
   ]) {
     assert.equal(currentSorter.split(added).length, 2, 'Exact launch addition must occur once');
     currentSorter = currentSorter.replace(added, prior);
+  }
   }
   assert.equal(currentSorter, lf(originalSorter), 'Unreviewed sorter source drift');
   const component = 'examples/material-showcase/src/app/astylar.component.ts';

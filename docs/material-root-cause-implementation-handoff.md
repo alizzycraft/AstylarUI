@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 6
 
+- Historical component preload source gate repaired only for exact sorter SHA
+  dca535342db0162b59da58f3a979d51eea305b27b09cb7760e1a869f629647e7:
+ 26 original tests remain,24 bodies unchanged,two changed bodies preserve every
+ original assertion (slider15→17,timepicker29→32). Authenticated original bytes
+ are used only for historical read-only replay; newer browser tests/helper are
+ not declared current equivalents. Existing older snapshot path remains strict.
+ Launcher now reaches retained assertions:2/8 pass,6 fail,2672.3238ms; terminal
+ post-divider-historical-component-verified-20261006.log is a failed run despite
+ its provisional filename. First failure is later147 source definitions versus
+ historical expected definitions,including semantic-hiding/list additions; prior
+ startup failure remains separately retained. Button suites were not reached.
+ Next inspect and authenticate the exact additive source-definition projection
+ through existing predecessor mechanisms; do not alter original expected data.
+
 - Maintained historical component launcher currently fails before retained test
   execution: preload's exact checkpoint-selection restoration lacks the newer
   evidence.checkpointFile override in withFrozenShowcase. Terminal log
