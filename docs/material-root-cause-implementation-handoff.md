@@ -2,6 +2,25 @@
 
 ## Current resumption ledger — October 6
 
+- Equal14.4px Roboto/normal line-height/tracking paragraph/span reduction now
+  reproduces a DPR1 paint difference without fixture offsets:four shared CSS
+  fractional origins,identical authored site,loaded font and measured native
+  baselines. Explicit equivalent content wrapper makes untouched backgrounds
+  RGB240/240/240 on both; opaque canvas baseline control matches native DPR1
+  exactly0 differing pixels,candidate1114. DPR2 native1359/candidate2964 differ
+  from control,so opaque-canvas equivalence must not be generalized to DPR2.
+  Test asserts the DPR1 counterexample,not rendering acceptance;1/1exit0,
+  14385.0918ms. Log divider-equal-typography-final-20261006.log,SHA256
+  c06dadeded10dc55bbdbc7eabed7b2692b4162931954a0b46a5adf65088adb06;
+  all bundled installed-package dependency reads rehashed before publication.
+  Initial failed baseline probe was canvas fallback DOM (zero layout);corrected
+  hidden measurement probe uses document BODY. Initial surface-root background
+  was root-service red fallback;shared explicit content wrapper isolates it.
+  Preserve initial/verified/root-bound/wrapper-bound logs as failed/confounded
+  diagnostics. No canonical fixture or core changed. Installed/current owning
+  methods applicability and backing-versus-baseline/phase intervention remain
+  required before causal/current-code claims;register with next coherent batch.
+
 - Divider contrast desktop actual paint substrate now observed at DPR1/2:
   above/below text textures are transparent (DPR1 clear487/451,partial235/252;
   DPR2 clear2107/2005,partial568/572),samplingMode1. Logical widths40.1062/

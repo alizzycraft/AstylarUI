@@ -19,6 +19,83 @@ const bytes = readFileSync(file);
 assert.equal(hash(bytes), '39df94e0eb87480d3824927a41a9950d1d275f7c97ab97a571c449efdc6da7d7');
 const report = JSON.parse(bytes);
 
+test('public divider typography reduction observes equal paragraph span inputs and opaque backing control', async t => {
+  const consumer = path.resolve('examples/material-showcase');
+  const font = readFileSync(path.join(consumer, 'node_modules/@fontsource/roboto/files/roboto-latin-400-normal.woff2'));
+  const built = await createRequire(path.join(consumer, 'package.json'))('esbuild').build({
+    stdin: { resolveDir: consumer, sourcefile: 'divider-text-reduction.mjs', contents: `
+      import '@angular/compiler';
+      import {provideZonelessChangeDetection} from '@angular/core';
+      import {createApplication} from '@angular/platform-browser';
+      import {Astylar} from 'astylarui';
+      const mode=new URLSearchParams(location.search).get('mode');
+      const font=new FontFace('AuditRoboto','url(/font.woff2)',{weight:'400'});
+      await font.load();document.fonts.add(font);
+      const origins=[20,20.25,20.5,20.75];
+      const site={root:{children:[{type:'div',id:'proof-root',children:origins.map((left,i)=>({type:'p',id:'row-'+i,children:[{type:'span',id:'text-'+i,textContent:i%2?'Below':'Above'}]}))}]},
+        styles:[{selector:'#proof-root',width:'200px',height:'180px',padding:'0',margin:'0',borderWidth:'0',background:'#f0f0f0'},
+        {selector:'*',fontFamily:'AuditRoboto',fontSize:'14.4px',fontWeight:'400',fontStyle:'normal',lineHeight:'normal',letterSpacing:'normal',color:'#1d1b20'},
+        ...origins.map((left,i)=>({selector:'#row-'+i,position:'absolute',left:left+'px',top:(20+i*32+left-20)+'px',width:'120px',height:'24px',padding:'0',margin:'0',borderWidth:'0'}))]};
+      document.body.style.cssText='margin:0;background:#f0f0f0';
+      const host=document.createElement(mode==='reference'?'div':'canvas');host.style.cssText='position:relative;display:block;width:200px;height:180px;background:#f0f0f0';document.body.append(host);
+      let app,surface;
+      if(mode==='reference'){
+        host.id='proof-root';
+        const css=document.createElement('style');css.textContent=site.styles.map(({selector,...v})=>selector+'{'+Object.entries(v).map(([k,x])=>k.replace(/[A-Z]/g,c=>'-'+c.toLowerCase())+':'+x).join(';')+'}').join('');document.head.append(css);
+        for(const row of site.root.children[0].children){const p=document.createElement('p');p.id=row.id;const span=document.createElement('span');span.id=row.children[0].id;span.textContent=row.children[0].textContent;p.append(span);host.append(p);}
+      }else{app=await createApplication({providers:[provideZonelessChangeDetection()]});surface=app.injector.get(Astylar).mount(host,site,{diagnostics:{logLevel:'silent'}});}
+      await surface?.whenSettled();await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+      const control=document.createElement('canvas');control.width=200*devicePixelRatio;control.height=180*devicePixelRatio;
+      const ctx=control.getContext('2d',{alpha:false});ctx.fillStyle='#f0f0f0';ctx.fillRect(0,0,control.width,control.height);ctx.scale(devicePixelRatio,devicePixelRatio);ctx.font='normal 400 14.4px AuditRoboto';ctx.fillStyle='#1d1b20';
+      const baselines=origins.map((left,i)=>{const p=document.createElement('p');p.style.cssText='position:absolute;visibility:hidden;font:normal 400 14.4px AuditRoboto;line-height:normal;letter-spacing:normal;padding:0;margin:0;border:0';p.style.left=left+'px';p.style.top=(20+i*32+left-20)+'px';p.textContent=i%2?'Below':'Above';const marker=document.createElement('span');marker.style.cssText='display:inline-block;width:0;height:0;vertical-align:baseline';p.append(marker);document.body.append(p);const y=marker.getBoundingClientRect().top;p.remove();ctx.fillText(i%2?'Below':'Above',left,y);return y;});
+      window.dividerTextReduction={site,baselines,control:Array.from(ctx.getImageData(0,0,control.width,control.height).data),errors:surface?.diagnostics.messages.filter(m=>m.severity==='error')??[],dispose(){surface?.dispose();app?.destroy();return surface?.disposed??true;}};
+    ` }, bundle: true, write: false, format: 'esm', platform: 'browser', target: 'es2022', metafile: true });
+  const inputs = Object.keys(built.metafile.inputs).filter(f => !f.endsWith('divider-text-reduction.mjs'))
+    .map(file => ({ file, sha256: hash(readFileSync(file)) }));
+  assert.ok(inputs.some(i => i.file.includes('node_modules/astylarui/')));
+  const server = createServer((req, res) => {
+    const script = req.url.startsWith('/audit.js'), isFont = req.url.startsWith('/font.woff2');
+    res.setHeader('content-type', script ? 'text/javascript' : isFont ? 'font/woff2' : 'text/html');
+    res.end(script ? built.outputFiles[0].contents : isFont ? font : '<!doctype html><script type="module" src="/audit.js"></script>');
+  });
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  let browser; const results = [];
+  try {
+    browser = await chromium.launch({ channel: 'chrome', headless: true });
+    for (const dpr of [1, 2]) {
+      const pair = {};
+      for (const mode of ['reference', 'astylar']) {
+        const page = await browser.newPage({ viewport: { width: 200, height: 180 }, deviceScaleFactor: dpr });
+        const errors = []; page.on('pageerror', e => errors.push(String(e)));
+        try {
+          await page.goto(`http://127.0.0.1:${server.address().port}/?mode=${mode}`);
+          await page.waitForFunction(() => !!window.dividerTextReduction);
+          const data = await page.evaluate(() => { const {site,baselines,control,errors}=window.dividerTextReduction;return {site,baselines,control,errors}; });
+          const image = PNG.sync.read(await page.screenshot());
+          assert.deepEqual([...image.data.subarray(0, 4)], [240, 240, 240, 255], 'untouched root background must match the control');
+          let different = 0;
+          for (let i = 0; i < image.data.length; i += 4)
+            if ([0,1,2,3].some(c => image.data[i+c] !== data.control[i+c])) different++;
+          pair[mode] = { site: data.site, baselines: data.baselines, opaqueControlSha256: hash(Buffer.from(data.control)), differingPixels: different };
+          assert.deepEqual(errors, []); assert.deepEqual(data.errors, []);
+          assert.equal(await page.evaluate(() => window.dividerTextReduction.dispose()), true);
+        } finally { await page.close(); }
+      }
+      assert.deepEqual(pair.reference.site, pair.astylar.site);
+      assert.deepEqual(pair.reference.baselines, pair.astylar.baselines);
+      assert.equal(pair.reference.opaqueControlSha256, pair.astylar.opaqueControlSha256);
+      if (dpr === 1) {
+        assert.equal(pair.reference.differingPixels, 0, 'opaque baseline control matches native DPR1 paragraph/span paint');
+        assert.ok(pair.astylar.differingPixels > 0, 'retain the equal-input candidate paint counterexample');
+      }
+      results.push({ dpr, ...pair });
+    }
+    for (const input of inputs) assert.equal(hash(readFileSync(input.file)), input.sha256);
+    t.diagnostic(JSON.stringify({ browser: browser.version(), results, inputs, fontSha256: hash(font), acceptance: false,
+      scope: 'Equal14.4px normal paragraph/span typography at four fractional origins,DPR1/2; opaque baseline control,not full divider flow or causal intervention on renderer backing.' }));
+  } finally { await browser?.close(); await new Promise(resolve => server.close(resolve)); }
+});
+
 test('retained divider responsive accessibility and replacement ownership preserve exact bounded observations', () => {
   const load = (name, receipt) => {
     const bytes = readFileSync(`artifacts/material-parity/${name}`);
