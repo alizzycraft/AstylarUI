@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 5
 
+- Desktop caret first-divergence mapping now covers all60 captured boundaries
+  (five families×two DPRs×six samples), without another capture. Native computed
+  caretColor isrgb(103,80,164); candidate authored .field-control and :focus
+  rules omit caretColor and request#1d1b20 ink. Effective,normal,interaction
+  input stages retain this omission/ink; captured input ancestry supplies no
+  caretColor. Existing combined replay now asserts these exact trees/stages,
+ 1/1exit0,1875.805ms. This strengthens the existing primary-caret-color omission
+  finding for this current checkpoint cohort, not a fresh core color defect.
+  The independently demonstrated equal-color core stroke-width/centering gap
+  remains separate; unmatched-input paint cannot prove it anew. No candidate
+  palette/offset compensation or reference change. Next reconcile additive
+  producer receipts before a coherent canonical batch; remaining selection/
+  geometry/sharpness states are not closed by this ink attribution.
+
 - Light-desktop paired empty-caret visibility gap now covered for all five
   editable families at DPR1/2, current-full frozen checkpoint. Nine missing
   populations use the same parameterized producer, alongside the prior email

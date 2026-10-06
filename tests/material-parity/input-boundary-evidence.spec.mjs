@@ -719,6 +719,24 @@ test('desktop five-family empty caret preserves native visibility and candidate 
       assert.equal(row[mode].screenshot.caret, 'initial');
       assert.equal(row[mode].hiddenCaretControl.caret, 'hide');
     }
+    const referenceTree = JSON.parse(readFileSync(row.reference.inputTree.file));
+    const candidateTree = JSON.parse(readFileSync(row.astylar.inputTree.file));
+    const id = `${family}-control`;
+    const referenceInput = referenceTree.nodes.find(node => node.attributes?.id === id);
+    const candidateInput = candidateTree.nodes.find(node => node.authored?.id === id);
+    assert.equal(referenceTree.styles[referenceInput.style].caretColor, 'rgb(103, 80, 164)');
+    for (const stage of ['resolvedStyle','normalResolvedStyle','interactionResolvedStyle']) {
+      assert.equal(candidateInput[stage].caretColor, undefined);
+      assert.equal(candidateInput[stage].color, '#1d1b20');
+    }
+    for (const selector of ['.field-control','.field-control:focus']) {
+      const rule = candidateTree.rules.find(rule => rule.selector === selector);
+      assert.ok(rule); assert.equal(rule.caretColor, undefined);
+      assert.equal(rule.color, '#1d1b20');
+    }
+    const byKey = new Map(candidateTree.nodes.map(node => [node.key,node]));
+    for (let node = candidateInput; node; node = byKey.get(node.parent))
+      assert.equal(node.resolvedStyle?.caretColor, undefined, 'no inherited caret color in captured ancestry');
     images.push(PNG.sync.read(readFileSync(row.astylar.screenshot.file)));
   }
   assert.ok(capture.results.some(row => row.reference.nativeCaretPixelDelta.changedPixels > 0));
