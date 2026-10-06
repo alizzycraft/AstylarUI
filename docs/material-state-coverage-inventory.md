@@ -248,9 +248,25 @@ no extra wrapper or missing paragraph is observed in this population. Evidence:
 divider-ordered-structure-current-20261006.log,SHA256
 a0f43713e36fb264da1355ec9c36a434f82dff5e765b5f653fb306f62ed63bfb.
 The full report authenticates as ab42dbec…; the log retains each case and both
-tree receipts. Remaining closure: reduction runtime applicability and local
-border/text paint obligations. Orientation and activation applicability above
-are closed only at their stated boundaries; no whole case is promoted.
+tree receipts. Current bounded obligation join for those exact24 cases follows;
+this supersedes the earlier runtime/text-paint pending statement,not its evidence.
+
+| Divider obligation | Evidence / inspected outcome | Remaining boundary |
+| --- | --- | --- |
+| Exact configured membership | 16 static +8 inspect IDs retained in divider-retained-text-paint-boundary-20261006.log; full report SHA ab42dbec and existing canonical membership join. | Supplemental equal-input reduction is not another configured case. |
+| Ordered content and wrappers | All24 paired trees preserve paragraph/separator/paragraph and Above/Below; divider-ordered-structure-current-20261006.log. | Native mat-divider and candidate div still require separate layout/paint intent. |
+| Authored flow/history classification | Existing fixture-divider-replaces-paragraph-flow-with-coordinates and25 scalar authoring groups; initial2f440115 already contains absolute composition. | Classified difference is not equivalent paragraph flow; other input obligations cannot be inferred from this finding. |
+| Equal-input core cause/current applicability | Unchanged public paragraph/separator reduction fails at DPR1/2 with301px downstream deltas; divider-current-reduction-20261006-dpr1/dpr2 logs and validated package receipts. | This cause is inspected despite failure; not all profile glyph/border rendering. |
+| Text presence/vertical raster centroid |48 measured comparisons across24 cases pass; zero configured focused rasters. | Centroid does not prove clipping, horizontal fidelity or glyph paint. |
+| Local text-paint diagnostic |96 stored alignment crops authenticate;48 metric replays exact,40 SSIM diagnostic passes/8 contrast-DPR1 failures,48 sharpness diagnostic passes. divider-retained-text-raster-diagnostic-20261006.log SHA2fe6c3409840861b93d552ee1fa1acffaa3b7ff1d827fb609224dc2108b21852. | Not configured acceptance. Equivalent retained basic font requests reject size/family mismatch; phase/backing/composition residual remains unassigned. Existing12px/.4px public proof is not this14.4px/normal-tracking reproduction. |
+| Separator local paint |48 original full PNGs supply24 bounded strip diagnostics; unequal border/background inputs retained,18 diagnostic sharpness failures. | No equal-input border-paint diagnosis or full clipping/antialiasing inspection follows. |
+| Activation/editing/focus applicability | Passive paragraphs/separator contain no controls; paired Tab/structure inspection and current reference justify inapplicability. | No hypothetical clickable divider states required. |
+| Semantics |24 configured separator target observations match; omitted horizontal orientation justified by default semantics. | Complete browser accessibility exposure/relationships are not certified by target attributes. |
+| Ownership/disposal | Passive control absence is established,not resource-lifetime equivalence. | Exact applicable allocation/disposal and late-work evidence still needs reconciliation. |
+
+No complete divider case closure is certified. Prioritize the exact-input local
+text-paint residual and missing semantic/ownership applicability evidence rather
+than rechecking ordered text, basic font requests or the301px reproduction.
 
 October6 caret/track canonical integration supersedes the earlier package
 statements below: export and independent cold check both exit0,compressed SHA
