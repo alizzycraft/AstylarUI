@@ -2033,12 +2033,13 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
           const scroll = measured.diagnostics.surface.scrolling.containers['timepicker-options'];
           const surface = window.ng.getComponent(document.querySelector('app-astylar-showcase')).surface;
           const thumb = surface.scene.getMeshByName('astylar-scrollbar-thumb-timepicker-options');
+          const track = surface.scene.getMeshByName('astylar-scrollbar-track-timepicker-options');
           const style = measured.inputTree.nodes.find(node => node.authored?.id === 'timepicker-options').resolvedStyle;
           return { box: box('timepicker-options'), ...scroll, firstOption: box('timepicker-option-0'),
             lastOption: box('timepicker-option-47'), optionCount: document.querySelectorAll('[data-astylar-id^="timepicker-option-"][role="option"]').length,
             padding: { top: style.paddingTop ?? null, bottom: style.paddingBottom ?? null, shorthand: style.padding ?? null },
             scrollbar: thumb ? { visible: thumb.isVisible && thumb.isEnabled(), pickable: thumb.isPickable, localY: thumb.position.y,
-              diffuse: thumb.material?.diffuseColor?.toHexString() } : null };
+              diffuse: thumb.material?.diffuseColor?.toHexString(), trackPickable: track?.isPickable } : null };
         }, mode);
         await settle(); const before = await sample();
         const beforePixels = PNG.sync.read(await page.screenshot({ caret: 'hide' }));
@@ -2125,8 +2126,29 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
           ? { open: !!document.querySelector('.mat-timepicker-panel'), value: document.querySelector('#timepicker-control').value }
           : { open: window.__ASTYLAR_MATERIAL_BENCHMARK__.state().open,
             events: window.__ASTYLAR_MATERIAL_BENCHMARK__.events().filter(event => ['pointerdown', 'pointerup', 'click'].includes(event.type)) }, mode);
+        // A below-thumb track press is distinct from wheel and thumb dragging.
+        // Observe held state before release can commit an underlying option.
+        await page.mouse.move(before.box.x + before.box.width / 2, before.box.y + before.box.height / 2);
+        await page.mouse.wheel(0, -10000);
+        await page.waitForFunction(mode => mode === 'reference'
+          ? document.querySelector('.mat-timepicker-panel').scrollTop === 0
+          : window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([], false).diagnostics.surface.scrolling.containers['timepicker-options'].scrollTop === 0, mode);
+        await settle();
+        const trackPoint = { x: dragPoint.x, y: before.box.y + before.box.height * .75 };
+        await page.mouse.move(trackPoint.x, trackPoint.y);
+        await page.mouse.down();
+        await page.waitForTimeout(250);
+        await settle();
+        const trackHeld = await sample();
+        await page.mouse.up();
+        await settle();
+        const trackRelease = await page.evaluate(mode => mode === 'reference'
+          ? { open: !!document.querySelector('.mat-timepicker-panel'), value: document.querySelector('#timepicker-control').value }
+          : { open: window.__ASTYLAR_MATERIAL_BENCHMARK__.state().open,
+            events: window.__ASTYLAR_MATERIAL_BENCHMARK__.events().filter(event => ['pointerdown', 'pointerup', 'click'].includes(event.type)).slice(-3) }, mode);
         observations[mode] = { before, after, end, scrollbarStripChanged,
           drag: { point: dragPoint, nativeThumbRun, steps: dragSteps, release },
+          track: { point: trackPoint, held: trackHeld, release: trackRelease },
           candidateThumbPixels: mode === 'astylar' ? { before: thumbPixels(beforePixels), after: thumbPixels(afterPixels) } : null, errors };
       } finally { await page.close(); }
     }
@@ -2173,6 +2195,13 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
     assert.deepEqual(observations.astylar.drag.steps.map(step => step.scrollTop), [0, 0, 0],
       'candidate painted thumb currently has no pointer scrolling behavior');
     assert.equal(observations.astylar.before.scrollbar.pickable, false);
+    assert.equal(observations.astylar.before.scrollbar.trackPickable, false);
+    assert.ok(observations.reference.track.held.scrollTop > 0, 'native below-thumb track press scrolls');
+    assert.equal(observations.astylar.track.held.scrollTop, 0, 'candidate track press does not scroll');
+    t.diagnostic(JSON.stringify({ scrollbarTrackObservation: {
+      reference: observations.reference.track, candidate: observations.astylar.track,
+      acceptance: false,
+    } }));
     assert.deepEqual(observations.astylar.drag.release.events.slice(-2).map(event => [event.type, event.targetId]),
       [['pointerdown', 'timepicker-option-0'], ['pointerup', 'timepicker-option-1']]);
     assert.equal(observations.reference.drag.release.open, true);

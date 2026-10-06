@@ -2,6 +2,21 @@
 
 ## Current resumption ledger — October 5
 
+- Real scrollbar track boundary now observed on current-full frozen checkpoint:
+  existing paired wheel/drag test adds a below-thumb held press/release only.
+  Chrome154 dark/mobile390×844 DPR2 native scrollTop becomes336, candidate0;
+  candidate pointerdown/up/click target underlying timepicker-option-3, both
+  popups remain open. Candidate live track and thumb are non-pickable. This
+  confirms missing track interaction in this cohort, not a misplaced indicator
+  or world-coordinate cause; native held-repeat distance is timing-dependent,
+  so the assertion checks positive movement rather than hard-coding336.
+  Test1/1exit0,9847.106ms; retain timepicker-track-click-current-20261006.log.
+  Initial attempt failed checkpoint authentication before browser actions;
+  timepicker-track-click-20261006.log is failure evidence, not rendering failure.
+  Existing checkpoint override binds the corrected run without weakening hashes.
+  Track action in other profiles/local paint and equal-input popup mapping remain.
+  Owning-suite fingerprint changed; canonical integration awaits a coherent batch.
+
 - Scrollbar coverage question narrowed without recapture: retained desktop wheel
   report SHA77aa387b313e776bf45858464760b0edf564ab74757a47cf47e71fcf293a3ebf
   reauthenticates. Its8 passes cover four themes×desktop DPR1/2 wheel144, not
