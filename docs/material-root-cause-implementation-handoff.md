@@ -2,6 +2,22 @@
 
 ## Current resumption ledger — October 6
 
+- Broader registration reconciliation now has a precise failing boundary:
+  divider/passive/popup conservation pass3/3; historical recent-public/popup
+  inventory assertion fails on current later additions (combined run3/4).
+  Trial using existing restoreScalarReviewExtraction removes reviewed proof
+  additions but still exposes two later source registrations:
+  scripts/diagnose-material-root-initial-receipt.mjs and
+  tests/material-parity/case-index-assertion-migration.mjs. Existing
+  restoreStackingProducer already authenticates their exact append-only block,
+  but also reverses older proof batches not wanted by this test. Trial test edit
+  was reverted; original counts/assertions remain unchanged. Failure logs:
+  divider-paint-source-reconciliation-20261006.log and
+  divider-paint-source-reconciled-20261006.log. Next reuse the exact applicability
+  registration reversal at the appropriate historical boundary,prove complete
+  intended predecessor equality,then rerun these four checks. Do not claim all
+  source fingerprints reconciled or publish137-proof package from3/4 results.
+
 - Bounded equal-input typography proof now registered through existing inventory:
   producer137 proofs versus accepted135,source findings147 unchanged. Existing
   divider restoration reverses only the exact paint entry before runtime entry;
