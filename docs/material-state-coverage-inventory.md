@@ -12,6 +12,15 @@ handoff. Historical conclusions are now observed on this current checkpoint
 for these cohorts only. Full paint, restoration and lifetime remain open;
 no configured case is promoted to complete inspection.
 
+October6 dismissal/lifetime applicability: the existing three-cycle dark/mobile
+DPR2 menu/sheet/dialog test passes1/1 against the same complete current-full
+checkpoint. Semantic removal and tracked plateau coexist with live material
+growth (menu19/20/21,sheet18/19/20,dialog17/20/23); dialog still restores BODY,
+not the opener. Sampled final disposal clears scene/cache/plugin/observer counts.
+Evidence:overlay-dismissal-cycles-current-20261006.log,39521.8198ms,exit0;
+digest in handoff. This closes current applicability of these observations only,
+not late async,GPU retention,other profiles or complete case obligations.
+
 October6 paired empty-caret visibility update: all five editable families now
 have current-full checkpoint-bound light desktop DPR1/2 initial/hide captures,
 six timed boundaries per pair. Combined replay authenticates240 PNGs plus

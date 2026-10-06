@@ -34,6 +34,18 @@
 
 ### Retained evidence chronology — October 5–6
 
+- October6 current-full overlay-cycle applicability: unchanged existing dark/
+  mobile DPR2 menu,bottom-sheet,dialog three-open/Escape test passes1/1,exit0,
+  39521.8198ms after whole served-file fingerprint authentication. Controls
+  disappear after dismissal; candidate dialog returns to BODY rather than the
+  reference opener. Tracked resources plateau while live materials remain
+  menu19/20/21,sheet18/19/20,dialog17/20/23; final surface disposal clears sampled
+  scene/cache/plugin/observer counts. Evidence:overlay-dismissal-cycles-current-
+  20261006.log, SHA256
+  7e2e041fd3b9aab0a7dd98771abfb576292c36893085b50683b9d98dc6db4685.
+  Existing historical counterexamples now apply to this current checkpoint,
+  not universal GPU/late-async lifetime acceptance or user-visible lag causality.
+
 - Publication transport recovered October6: the single per-command OpenSSL
   attempt (`git -c http.sslBackend=openssl -c http.version=HTTP/1.1
   -c http.postBuffer=104857600 push origin HEAD:refs/heads/codex/material-audit-alignment-integration`)
