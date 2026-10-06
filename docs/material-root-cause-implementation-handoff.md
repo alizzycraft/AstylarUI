@@ -2,6 +2,17 @@
 
 ## Current resumption ledger — October 5
 
+- Divider orientation omission classified at the authored-intent boundary:
+  WAI-ARIA1.2 https://www.w3.org/TR/wai-aria-1.2/#separator defines implicit
+  horizontal orientation for role separator. The authenticated24 pairs' native
+  explicit horizontal attribute and omitted candidate property therefore encode
+  equivalent orientation intent, not a defect requiring fixture compensation.
+  src/lib/astylar-semantic-bridge.ts:475–476 already maps explicit ariaOrientation.
+  This answers the specification/default question without a new capture or test
+  layer; harness measurement/comparison around1381/1675 still omit orientation,
+  so actual accessibility-API mapping is not claimed captured. Full divider
+  style/paint and case closure remain pending. No renderer/reference change.
+
 - October6 divider semantic coverage question answered without recapture:
   current-full-20261005 report SHA ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62
   and all48 divider input-tree receipts authenticate. All24 configured rows
