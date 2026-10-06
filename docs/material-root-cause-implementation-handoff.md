@@ -2,6 +2,22 @@
 
 ## Current resumption ledger — October 6
 
+- Measured backing-to-logical mapping control narrows the remaining residual:
+  transparent local canvases now use observed ceil(width*DPR) backing41/40 or
+  81/79,height18*DPR,nearest composition into fractional widths40.1062/39.1429.
+  Every dimension and samplingMode1 is checked against all four live textures.
+  Versus unscaled local control,mapping changes645 pixels DPR1/2250 DPR2;
+  candidate differences decrease804→481 and2566→1512. Native differs1072/3071
+  from mapped control. This confirms mapping affects the diagnostic rendering,
+  not that it accounts for a quantifiable share of the WebGL defect:481/1512
+  pixels remain and Canvas2D/WebGL sampling/composition are distinct paths.
+  Focused1/1exit0,40358.4178ms; log
+  divider-equal-typography-mapped-control-20261006.log SHA256
+  c3b611cc10a246b50e844b45ba9f710698aec886247700cee8aaa2810171b175.
+  Next compare actual texture RGBA with diagnostic local canvases before further
+  composition interventions; do not invent corrective widths or phase offsets.
+  No renderer/fixture/criteria changes; canonical proof registration remains pending.
+
 - Actual reduction runtime paint/placement now measured, not inferred from the
   diagnostic model. Read-only fillText interception (restored before controls)
   records cached Above/Below paint at x0/y14,14.4px AuditRoboto with fallback
