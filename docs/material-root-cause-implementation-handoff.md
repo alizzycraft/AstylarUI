@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 5
 
+- Scrollbar coverage question narrowed without recapture: retained desktop wheel
+  report SHA77aa387b313e776bf45858464760b0edf564ab74757a47cf47e71fcf293a3ebf
+  reauthenticates. Its8 passes cover four themes×desktop DPR1/2 wheel144, not
+  thumb/track input. Ordinary applied-theme proof covers8 desktop/mobile pairs
+  and32 strips; retained dark/mobile drag records211/421/632 native versus0/0/0
+  candidate. Current `babylon-scroll-paint-adapter.ts:66–67` makes both track
+  and thumb non-pickable: source-level evidence against assuming wheel success
+  implies interactive scrollbar support. It is not a new current-runtime track
+  click proof. Compatibility excludes thumb dragging/native arrows; exact track
+  click behavior and local paint remain uninspected. Next reuse the existing
+  wheel/drag harness to observe one real track-click boundary and its actual
+  event owner; do not repeat settled wheel/profile captures or infer a world-
+  coordinate cause. No case is promoted to full closure by this reconciliation.
+
 - October 6 tooltip/slider reconciliation is now independently validated:
   repaired export and independent cold check both terminate exit0. Logs:
   `canonical-tooltip-slider-repaired-20261006.log` and
