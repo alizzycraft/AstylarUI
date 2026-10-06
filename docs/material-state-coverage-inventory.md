@@ -38,6 +38,17 @@ control. This closes keyboard-activation/editing applicability for these exact
 cases,not layout/paint/semantics/history or complete inspection. Evidence:
 passive-native-control-applicability-20261006.log; digest in current handoff.
 
+Candidate authored-control applicability also covers the same354 cases and
+authenticates every candidate tree: no introduced button/input/select/textarea,
+href anchor,interactive role,nonnegative tabindex or contenteditable appears.
+The collector retains all authored fields; public DOMElement uses lowercase
+tabindex/contenteditable. Initial diagnostic used camelCase and is not accepted
+for those fields. Corrected check exit0,log
+passive-candidate-control-applicability-verified-20261006.log,SHA256
+f3560ad8511f91e440c6f151d3001cf7cfa8cd4d964c1e3998478f389903e293.
+This closes introduced authored-control inspection,not generated semantic bridge
+targets or complete case semantics/paint. No browser rerun or case promotion.
+
 Passive scalar boundary: authenticated compact generation4845e414 contains1697
 classified scalar groups across these nine families,with reviewed-case union
 counts62/52/24/52/20/52/52/20/20 respectively and no unresolved attribution.
