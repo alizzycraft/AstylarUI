@@ -35,9 +35,23 @@
   do not compensate with a new offset or sampled color. Replay1/1exit0,1801.5478ms,
   select-indicator-inputs-20261006.log,SHA256
   623263cfdbaec17bc5d20d4212b56691ef54fcb174cb3d7b13cf81e36adc1a33.
-  Next: shared option state-layer inputs and other popup-family token provenance;
+  Shared option hover-input question answered for all24 current-full desktop
+  open-hover-content rows (three families,four profiles,DPR1/2). Full report and
+  read tree receipts authenticate; ordered domains contain2/2/48 native and
+  candidate options. Native first-option matched hover rule uses component token
+  fallback to color-mix(on-surface,hover opacity,transparent). Select/autocomplete
+  compute alpha.08; timepicker also matches active/focus rule and computes alpha.12.
+  Candidate each supplies opaque #e5dfe5 in its authored hover rule and resolved
+  style. Native timepicker first option remains unselected; candidate marks it
+  selected, preserving the already documented state mismatch. This is input/state
+  divergence before core paint,not an equal-input alpha defect or proof of final
+  composited pixels. Preserve original token,transparency and independent active/
+  selected-state intent rather than replacing either with screenshot RGB.
+  Replay1/1exit0,1875.9508ms,popup-hover-inputs-20261006.log,SHA256
+  99c3294e5b59e89b55d6534cf1b094498ee2b4f722c19252cc131111060f2b04.
+  Next: held-option/ripple state evidence and other popup-family token provenance;
   geometry/local raster equivalence still needs equivalent inputs. Standalone
-  ancestry/indicator proofs are not yet registered in the canonical package;
+  ancestry/indicator/hover proofs are not yet registered in the canonical package;
   reconcile the owning-suite fingerprint at the next coherent integration batch,
   not a metadata-only export. No case is promoted to complete inspection.
   Evidence: current-full-20261005/interactions/select/{light,dark}/desktop-dpr1/

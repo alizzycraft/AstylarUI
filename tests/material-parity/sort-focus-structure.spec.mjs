@@ -2357,6 +2357,52 @@ test('ordinary tooltip repeated hover and leave exposes live ownership separatel
   }, {}, { checkpointFile: 'artifacts/material-parity/current-full-20261005/checkpoint/manifest.json' });
 });
 
+test('retained popup hover inputs distinguish token alpha layers from opaque substitutions', t => {
+  const bytes = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const report = JSON.parse(bytes), observations = [];
+  const load = receipt => {
+    const bytes = readFileSync(receipt.file);
+    assert.equal(createHash('sha256').update(bytes).digest('hex'), receipt.sha256);
+    return JSON.parse(bytes);
+  };
+  for (const family of ['select', 'autocomplete', 'timepicker']) {
+    const rows = report.interactions.filter(row => row.family === family && row.state === 'open-hover-content');
+    assert.equal(rows.length, 8);
+    for (const row of rows) {
+      const reference = load(row.inputTrees.reference), candidate = load(row.inputTrees.astylar);
+      const options = reference.nodes.filter(node => node.type === 'mat-option');
+      const custom = candidate.nodes.filter(node => node.authored?.role === 'option');
+      assert.equal(options.length, family === 'timepicker' ? 48 : 2);
+      assert.equal(custom.length, options.length);
+      const first = options[0], target = custom[0];
+      const hover = first.rules.map(index => reference.rules[index]).filter(rule =>
+        rule.selector === '.mat-mdc-option:hover:not(.mdc-list-item--disabled)');
+      assert.equal(hover.length, 1);
+      assert.equal(hover[0].declarations['background-color'].value,
+        'var(--mat-option-hover-state-layer-color, color-mix(in srgb, var(--mat-sys-on-surface) calc(var(--mat-sys-hover-state-layer-opacity) * 100%), transparent))');
+      const focused = first.rules.map(index => reference.rules[index]).some(rule =>
+        rule.selector === '.mat-mdc-option:focus.mdc-list-item, .mat-mdc-option.mat-mdc-option-active.mdc-list-item');
+      assert.equal(focused, family === 'timepicker');
+      assert.equal(reference.styles[first.style].backgroundColor,
+        `color(srgb 0.113725 0.105882 0.117647 / ${focused ? '0.12' : '0.08'})`);
+      assert.equal(first.attributes['aria-selected'], 'false');
+      assert.equal(target.authored.ariaSelected, family === 'timepicker');
+      assert.equal(target.resolvedStyle.background, '#e5dfe5');
+      assert.equal(candidate.rules.filter(rule => rule.selector ===
+        (family === 'timepicker' ? '.picker-option:hover' : '.select-option:hover') && rule.background === '#e5dfe5').length, 1);
+      observations.push({ family, profile: row.profile, viewport: row.viewport,
+        referenceBackground: reference.styles[first.style].backgroundColor,
+        candidateBackground: target.resolvedStyle.background, focused,
+        reference: row.inputTrees.reference, candidate: row.inputTrees.astylar });
+    }
+  }
+  assert.equal(observations.length, 24);
+  t.diagnostic(JSON.stringify({ observations,
+    claim: 'Matched hover/active rules and unequal authored alpha versus opaque paint; no composited raster or held-click parity inferred.' }));
+});
+
 test('retained select indicator inputs preserve pseudo-checkbox versus plugin paint differences', t => {
   const reportFile = 'artifacts/material-parity/current-full-20261005/latest-report.json';
   const reportBytes = readFileSync(reportFile);
