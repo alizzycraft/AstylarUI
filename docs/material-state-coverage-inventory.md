@@ -1,6 +1,6 @@
 # Material comparison/state coverage inventory
 
-## Current evidence boundary — October 5
+## Current evidence boundary — October 6
 
 October6 shared popup input boundary: retained40 selected select indicators and
 24 desktop open-hover-content cases have authenticated input-stage replay;
@@ -11,8 +11,13 @@ checkpoint. Option tokens inherit from global HTML,not frame overrides. Unequal
 plugin indicator geometry/literal ink and opaque hover/active backgrounds remain
 authoring differences,not equal-input core paint proofs. Exact receipts/logs and
 limits are in the current handoff. Tablet/mobile,matched-time local rasters,
-lifetime and full case closure remain pending; standalone proof registration/
-canonical suite-fingerprint integration is the next coherent batch.
+lifetime and full case closure remain pending. Four standalone popup proofs are
+now registered in the producer; the combined focused batch passes4/4, and the
+four affected historical source-binding assertions pass after exact source
+conservation. Canonical integration is running, not accepted: export57121 must
+finish successfully before independent verification and compact-index refresh.
+The accepted package remains the caret/track generation4845e414 below. Do not
+repeat registration or count source registration as canonical acceptance.
 
 Popup paint-gate scope is now explicit for all24 desktop hover-content rows:
 statePaint.matches=true is the comparator's unmeasured default for these families,
