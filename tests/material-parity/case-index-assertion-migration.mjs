@@ -14,6 +14,34 @@ const tests = ast => ast.statements.filter(n => ts.isExpressionStatement(n) && t
 // Authenticate the independently enumerated 39-file extension, then restore
 // only its five membership/count expressions and diagnostic before comparing the whole suite.
 export function restoreInventoryAssertion(source) {
+  source = source.toString().replaceAll('\r\n', '\n');
+  if (source.includes('const actualSourceFingerprints = audit.sourceFingerprints;')) {
+    const liveAst = parse(source);
+    const target = tests(liveAst).filter(n => n.expression.arguments[0]?.text === 'records source fingerprints and actual visual acceptance fields');
+    assert.equal(target.length, 1);
+    const statements = [...target[0].expression.arguments[1].body.statements];
+    for (const [start, end, count, digest, replacement] of [
+      ['const actualSourceFingerprints', 'audit.sourceFingerprints =', 6,
+        '4e00b92d28e9fb66b59c3f573bb80cf4c9815ff3e8245da31b9a5f09c2fa1de5', ''],
+      ['const { restoreScalarReviewExtraction }', 'assert.equal(restoreScalarReviewExtraction', 5,
+        'c1c2da2784ede40b12dee531ae406ecdb0828aa9f67e453d0d19e81e8a7ef0c4',
+        "let liveSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8').replace(/\\r\\n/g, '\\n');"],
+    ]) {
+      const first = statements.findIndex(n => n.getText(liveAst).startsWith(start));
+      const last = statements.findIndex(n => n.getText(liveAst).startsWith(end));
+      assert.equal(last - first + 1, count, 'exact current inventory extension coverage');
+      const block = statements.slice(first, last + 1);
+      assert.equal(createHash('sha256').update(block.map(n =>
+        printer.printNode(ts.EmitHint.Unspecified, n, liveAst)).join('\n')).digest('hex'), digest,
+        'current542 inventory projection changed');
+      const text = liveAst.text.slice(block[0].getStart(liveAst), block.at(-1).end);
+      assert.equal(source.split(text).length, 2);
+      source = source.replace(text, replacement);
+    }
+    const header = "test('records source fingerprints and actual visual acceptance fields', async () => {";
+    assert.equal(source.split(header).length, 2);
+    source = source.replace(header, header.replace('async ', ''));
+  }
   const ast = parse(source);
   const targets = tests(ast).filter(n => n.expression.arguments[0]?.text === 'records source fingerprints and actual visual acceptance fields');
   assert.equal(targets.length, 1);

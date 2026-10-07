@@ -76,6 +76,10 @@ test('root initial applicability authenticates every receipt and rejects unrelat
 });
 test('migration proof rejects unrelated assertion changes, missing checks and wrong index identity', () => {
   for (const changed of [
+    current.replace('actualSourceFingerprints.length, 542', 'actualSourceFingerprints.length, 541'),
+    current.replace('actualSourceFingerprints.slice(0, -1)', 'actualSourceFingerprints.slice(0, -2)'),
+    current.replace("const svgSource = 'tests/material-parity/icon-asset-input.spec.mjs'", "const svgSource = 'tests/material-parity/unreviewed.spec.mjs'"),
+    current.replace('e0deae3e16d9c5414383fc5e45ce071aa44193f48ee8d4908337712aff53dde4', '0'.repeat(64)),
     current.replace('registered.length, 148', 'registered.length, 147'),
     current.replace('assert.equal(index.sourceFingerprints.length, 11)', 'assert.equal(index.sourceFingerprints.length, 10)'),
     current.replace("assertHistoricalCaseIndexSources('docs/material-container-caret-audit.json', index);", ''),

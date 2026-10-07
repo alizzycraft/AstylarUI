@@ -2,6 +2,28 @@
 
 ## Current evidence boundary — October 7
 
+The current542-source integration assertion now passes1/1 in5301.44ms:
+source-inventory-542-integration-20261007.log,
+SHAd73a41c11f4cab579ae713a93492f01c7e4ea7926e5a0a7ab4883b42e95906a7.
+It authenticates unique542 membership and the sole appended SVG proof's current
+fingerprint, then runs every original541 membership assertion on an explicitly
+historical local projection. Complete current producer restoration equals the
+authenticated5df737c5 assertion boundary before all original extraction/body and
+predecessor checks run; no current source drift is waived. Existing whole-suite
+conservation authenticates both exact additive blocks and retains the complete
+original suite. New negative controls reject changed542 count, dropped prior
+entry, substituted SVG path and forged historical hash. All3 conservation tests
+pass in78188.9408ms: source-inventory-542-conservation-retry-20261007.log,
+SHA12dd9c7659f321ddb9be5e097a7711162501561d875accbc6fb91a22169bee43.
+The earlier failed printing-normalization attempt remains retained. These are
+synthetic source/inventory checks,not real-browser acceptance or full-case
+closure. This supersedes541-to542 pending notes below. Next batch standalone
+focus/cap/lifecycle evidence into existing canonical mechanisms before a justified
+canonical milestone; reconcile applicable case obligations and final gates.
+Publication of838601d3 failed HTTP408; read-only remote verification still shows
+ea68c8298e72f88d55e2905c427b37d7c128862e. No push success is inferred from Git's
+misleading trailing Everything-up-to-date message. No renderer/fixture changes.
+
 Root-initial policy conservation is now reconciled. The exact current148
 definition declaration conserves all145 checkpoint bodies and order, with only
 the two passive findings and final SVG finding added. The145 checkpoint also

@@ -2517,7 +2517,7 @@ test('recent source diagnostics conserve predecessor findings and reject altered
   assert.equal(audit.summary.inputEquivalent, false);
 });
 
-test('records source fingerprints and actual visual acceptance fields', () => {
+test('records source fingerprints and actual visual acceptance fields', async () => {
   const additions = [
     ...['reviewed-source-batch-audit-source-binding.mjs', 'reviewed-source-batch-audit-source-binding.spec.mjs',
       'reviewed-source-batch-pipeline.spec.mjs', 'reviewed-source-batch-observation-binding.mjs',
@@ -2575,6 +2575,14 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   ];
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
+  // Authenticate the current extension before replaying the historical541 assertions.
+  const actualSourceFingerprints = audit.sourceFingerprints;
+  assert.equal(actualSourceFingerprints.length, 542);
+  assert.equal(new Set(actualSourceFingerprints.map(entry => entry.file)).size, 542);
+  const svgSource = 'tests/material-parity/icon-asset-input.spec.mjs';
+  assert.deepEqual(actualSourceFingerprints.at(-1), { file: svgSource,
+    sha256: createHash('sha256').update(readFileSync(svgSource, 'utf8').replaceAll('\r\n', '\n')).digest('hex') });
+  audit.sourceFingerprints = actualSourceFingerprints.slice(0, -1); // Historical projection only, not current acceptance.
   assert.equal(audit.coverage.visualParityGreen, true);
   assert.equal(audit.sourceFingerprints.length, 541);
   assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 541);
@@ -2647,7 +2655,14 @@ test('records source fingerprints and actual visual acceptance fields', () => {
     'tests/material-parity/sort-focus-structure.spec.mjs',
     'scripts/diagnose-material-root-initial-receipt.mjs',
     'tests/material-parity/case-index-assertion-migration.mjs'];
-  let liveSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8').replace(/\r\n/g, '\n');
+  const { restoreScalarReviewExtraction } = await import('./position-composition-producer-transition.mjs');
+  const rawLiveSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8').replace(/\r\n/g, '\n');
+  let liveSource = execFileSync('git', ['show', '5df737c5:tests/material-parity/input-equivalence-audit.mjs'],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n');
+  assert.equal(createHash('sha256').update(liveSource).digest('hex'),
+    'e0deae3e16d9c5414383fc5e45ce071aa44193f48ee8d4908337712aff53dde4');
+  assert.equal(restoreScalarReviewExtraction(rawLiveSource), restoreScalarReviewExtraction(liveSource),
+    'complete current producer conserves the historical assertion source after exact late extensions');
   // Reverse only the exact scalar-stage extraction; conserve the original body.
   const extractionAst = ts.createSourceFile('extraction.mjs', liveSource, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   const extracted = extractionAst.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === 'replayMaterialScalarReviewStages');
