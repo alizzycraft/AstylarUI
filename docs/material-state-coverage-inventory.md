@@ -2,6 +2,23 @@
 
 ## Current evidence boundary — October 7
 
+Icon exact case-to-obligation join now accounts for all20 configured IDs and
+16 physical cohorts for two bounded obligations: paired accessibility exposure
+observations and three equivalent updates/final disposal. Authenticated report
+and four existing logs supply the join; no missing/extra cohort,all paired AX
+modes present,all lifecycle snapshots live=tracked and sampled final owners
+disposed. Log icon-case-obligation-join-20261007-retry.log SHA256
+1bcab2aec1654311852a6e9c1766f162e1ce8434aff943ecb018f9337645967f
+records each exact static/inspect case ID and evidence mapping. Initial join
+missed the first AX cohort because that retained log nests observations; retry
+uses its original test-declared light desktop DPR1 context,not a new capture.
+Failed join remains retained. This closes the membership gap for those two
+obligations only. All20 output gates passed in the retained capture,but all20
+remain partially inspected: full input/style/history/paint closure,current
+validity of every owner,complete applicable AX relations,source replacement,
+remount and peer isolation are not certified by this join. Late completion is
+bounded to the two separately recorded cohorts. No full family closure claimed.
+
 Icon disposal caller applicability is now checked through the whole owning
 chain,not just the image service. Current transpiled createScene,session
 addCleanup/dispose and public surface-handle dispose match installed and served
