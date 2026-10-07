@@ -2,6 +2,34 @@
 
 ## Current resumption ledger — October 6
 
+- October7 SVG failure narrowed by decisive controls,not a fixture workaround.
+  Dimensioned150x150 SVG (same path/viewBox) and a150x150 native PNG raster of
+  the original both preserve transparent corners at24/48CSSpx,DPR1/2 in native
+  and public Astylar rendering. Eight retained control images,2515 dependency
+  receipts,zero errors and all disposals independently assert. Log
+  icon-svg-alpha-controls-20261007.log SHA256
+  764a2dfba3828497e65b13bae2fad600fb091aba12f8e40f910ef74c0c0d1231.
+  Texture readback now calibrates alphaRange0..255 in both controls,versus
+  original SVG's all-zero readback. Thus general image alpha/material paint is
+  not supported as the failure cause in this reduction.
+  Native direct WebGL2 upload isolates the platform boundary: original SVG
+  decodes to150x150 but texImage2D returns INVALID_VALUE1281,framebuffer status
+  INCOMPLETE_ATTACHMENT36054 and readPixels INVALID_FRAMEBUFFER_OPERATION1286.
+  Dimensioned SVG,PNG and original SVG with Image.width/height assigned from
+  its decoded natural size all upload with error0,complete framebuffer36053
+  and alphaRange0..255. Four cases independently assert; log
+  icon-svg-native-upload-boundary-20261007.log SHA256
+  d08a6efff4c16dcd148ba1b4f5430bcfdb2eccbda8da5fcfe62c95648edb3aac.
+  The latter control leaves SVG asset bytes unchanged. Installed Babylon
+  LoadImage returns HTMLImageElement and thinEngine contains direct texImage2D
+  upload; actual Astylar call-route/error instrumentation remains the smallest
+  next check before assigning a fully confirmed adapter diagnosis. Do not
+  add dimensions to the canonical SVG or retain PNG substitution as a fix:
+  core asset-to-GPU adaptation must honor browser-decodable authored inputs.
+  Inline currentColor semantics remain a separate input/support question.
+  No producer,core,reference or acceptance changes; this advances the suspected
+  loading boundary,not whole-case closure or canonical registration.
+
 - October7 original icon SVG transparency reduction now reproduces a public
   package counterexample at DPR1/2 and24/48CSSpx. Same external favorite.svg,
   contain sizing,transparent image background and gray host on both sides:

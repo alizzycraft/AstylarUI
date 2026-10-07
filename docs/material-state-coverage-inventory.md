@@ -2,6 +2,18 @@
 
 ## Current evidence boundary — October 6
 
+October7 Icon loading controls narrow the original-SVG black rectangle: matched
+dimensioned SVG and native PNG preserve alpha in all eight paired DPR1/2
+captures (24/48CSSpx),while original SVG native direct WebGL upload returns
+INVALID_VALUE and incomplete framebuffer. Assigning decoded dimensions to
+the native Image object makes upload succeed without changing SVG bytes.
+Logs icon-svg-alpha-controls-20261007.log SHA764a2dfba3828497e65b13bae2fad600fb091aba12f8e40f910ef74c0c0d1231
+and icon-svg-native-upload-boundary-20261007.log SHAd08a6efff4c16dcd148ba1b4f5430bcfdb2eccbda8da5fcfe62c95648edb3aac.
+General alpha blending is ruled out for these controls; actual renderer upload
+route/error still needs binding before a confirmed adapter-cause claim. This
+is diagnosis of the historical substitution motivation,not permission to add
+dimensions to the canonical SVG or declare icon input parity/full closure.
+
 October7 Icon original external SVG reduction observes black candidate image
 rectangles versus transparent native corners at24/48CSSpx andDPR1/2,despite
 successful image/texture loading. Log icon-original-svg-boundary-20261007.log
