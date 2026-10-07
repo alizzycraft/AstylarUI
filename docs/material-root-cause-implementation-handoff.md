@@ -2,6 +2,24 @@
 
 ## Current resumption ledger — October 6
 
+- October7 configured progress-bar child paint inspected from all20 retained
+  current-full cases (12 static/eight inspect),40 full PNGs. Report SHAab42dbec
+  and original screenshot runner receipt authenticate; PNG hashes and primary
+  bounds are recorded in progress-retained-track-extent-20261007.log SHA256
+  e8cb61e13b2840bcbe89ff5a8cffd12ab9df9e624dc4bfd5a04828ec752c1c8a.
+  Independent parsed assertions cover all40 images: native10% fill/90% empty,
+  candidate10% empty/90% fill,across every configured profile/viewport/DPR.
+  Native unfilled center RGB232/224/235; candidate231/224/236 or dark73/69/79.
+  Exact foreground runs near the primary box are4CSSpx native and3/3.5/4px
+  candidate. These exact-color runs exclude antialiased edge pixels; they are
+  not a subpixel geometric-height measurement or evidence of missing coverage.
+  This closes the remaining configured retained track/fill visibility and
+  direction question,extending the existing mobile plugin-input finding rather
+  than reopening its cause. It does not prove equal-input paint,live plugin
+  dimensions,cap/edge equivalence,current-code applicability or lifetime.
+  Next inspect remaining cap/edge and resource obligations,not primary-height
+  or repeat fill-direction capture. No capture,fixture or producer change.
+
 - October7 progress-bar requested/used height boundary answered across20 exact
   retained cases: parent requests62px border-box,28px padding,1px border,column
   flex; sole child requests8px/flexShrink1. All20 authenticated candidate trees

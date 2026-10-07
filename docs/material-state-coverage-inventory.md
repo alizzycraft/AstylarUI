@@ -2,6 +2,18 @@
 
 ## Current evidence boundary — October 6
 
+October7 all20 configured progress-bar retained screenshots now expose actual
+track/fill pixels,not merely primary mesh bounds. Forty PNG hashes and exact
+10%/50%/90% vertical foreground runs are retained in
+progress-retained-track-extent-20261007.log SHA256
+e8cb61e13b2840bcbe89ff5a8cffd12ab9df9e624dc4bfd5a04828ec752c1c8a.
+Parsed assertions confirm left-origin native/right-origin candidate fill in
+every profile and configured viewport/DPR,plus the existing unequal track RGB.
+Exact foreground-color runs are4CSSpx native,3/3.5/4 candidate; antialiased edge
+pixels are excluded,so these are not geometric height/edge-parity acceptance.
+Configured retained fill visibility/direction is inspected. Equal-input cap/
+edge paint,live plugin context and lifetime remain; no complete-case promotion.
+
 Passive147-finding/135-proof canonical batch now independently accepted:
 export93842,cold check92981,compact import/verify13284 all exit0. Package SHA256
 fd341baa78ab8ffaf93e94d138c6654d45ff54566242fc4412e8f1c73ea41caf;
