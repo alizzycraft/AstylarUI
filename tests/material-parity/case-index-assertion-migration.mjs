@@ -29,11 +29,18 @@ export function restoreInventoryAssertion(source) {
   if (extensionStart !== -1) {
     const extensionEnd = statements.findIndex(n => n.getText(ast).startsWith(
       'assert.deepEqual(audit.sourceFingerprints.map(e => e.file), [...expectedFiles'));
-    assert.equal(extensionEnd - extensionStart + 1, 39, 'inventory extension statement coverage changed');
+    const extensionLength = extensionEnd - extensionStart + 1;
+    const extensionDigests = new Map([
+      [39, 'a5bc184397351d9d942bab054b55e928a6b015f2ad1c114d5057ce8d6da4b438'],
+      // The later snapshot adds exact scalar-function extraction and standalone
+      // proof conservation checks; it does not remove predecessor membership.
+      [65, '1d5b498cf73039a3507d4232cdd40ac6647d4d357aea2f56ac0ccb636ed499ca'],
+    ]);
+    assert.ok(extensionDigests.has(extensionLength), 'inventory extension statement coverage changed');
     const extension = statements.slice(extensionStart, extensionEnd + 1);
     assert.equal(createHash('sha256').update(extension.map(n =>
       printer.printNode(ts.EmitHint.Unspecified, n, ast)).join('\n')).digest('hex'),
-    'a5bc184397351d9d942bab054b55e928a6b015f2ad1c114d5057ce8d6da4b438',
+    extensionDigests.get(extensionLength),
     'authenticated 424-to-541 inventory extension changed');
     // This block retains both pinned producer hashes, ordered prior membership,
     // exact launch/recent registrations and the eight added proof registrations.
@@ -125,6 +132,20 @@ const baselineFiles = declaration.initializer.elements.map(n => n.text);`);
 // The entire reconstructed suite, not just selected membership tests, must match.
 export function verifyCaseIndexAssertionMigration(previous, current) {
   current = current.toString();
+  if (current.includes('await conservedPrePassiveDefinitions()')) {
+    const definitionAst = parse(current);
+    const helpers = definitionAst.statements.filter(n => ts.isFunctionDeclaration(n)
+      && n.name?.text === 'conservedPrePassiveDefinitions');
+    assert.equal(helpers.length, 1, 'missing or repeated exact definition conservation helper');
+    assert.equal(createHash('sha256').update(printer.printNode(ts.EmitHint.Unspecified,
+      helpers[0], definitionAst)).digest('hex'),
+    'f1eca963fbcd8807c6f33387f258919ba2b030d270af55fb2cf78c0ac2a32667',
+    'definition conservation helper changed');
+    // Its six callers belong to the additive focused tests removed below.
+    // Complete predecessor equality still rejects a call in an original test.
+    current = definitionAst.text.slice(0, helpers[0].getStart(definitionAst)) +
+      definitionAst.text.slice(helpers[0].end);
+  }
   const mappingImport = "  const { restoreMappingReadAdapterSource } = await import('./audit-evidence-session.mjs');\n";
   const mappingRead = ".update(source.file === 'tests/material-parity/generated-node-mapping-evidence.mjs'\n      ? restoreMappingReadAdapterSource(source, readFileSync(source.file))\n      : readFileSync(source.file, 'utf8').replace(/\\r\\n/g, '\\n'))";
   current = current.replaceAll('\r\n', '\n');

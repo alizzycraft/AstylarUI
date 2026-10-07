@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import test from 'node:test';
 import { verifyCaseIndexAssertionMigration } from './case-index-assertion-migration.mjs';
+import { restoreScalarReviewExtraction } from './position-composition-producer-transition.mjs';
 import { verifyRootInitialSourceApplicability } from '../../scripts/diagnose-material-root-initial-receipt.mjs';
 const file = 'tests/material-parity/input-equivalence-audit.spec.mjs';
 const previous = execFileSync('git', ['show', `6833850:${file}`], { maxBuffer: 8 * 1024 * 1024 });
@@ -12,7 +13,13 @@ test('entire legacy suite conserves statements outside nine receipt checks and t
   const producerFile = 'tests/material-parity/input-equivalence-audit.mjs';
   const registration = "    'scripts/diagnose-material-root-initial-receipt.mjs',\n" +
     "    'tests/material-parity/case-index-assertion-migration.mjs',\n";
-  const producer = readFileSync(producerFile, 'utf8').replaceAll('\r\n', '\n');
+  const rawProducer = readFileSync(producerFile, 'utf8').replaceAll('\r\n', '\n');
+  // Reuse the exact late-proof/extraction transition before applying the
+  // unchanged complete predecessor assertion; do not waive new source drift.
+  const producer = restoreScalarReviewExtraction(rawProducer);
+  assert.throws(() => restoreScalarReviewExtraction(rawProducer.replace(
+    'original SVG GPU upload adaptation boundary', 'unreviewed SVG conclusion')));
+  assert.throws(() => restoreScalarReviewExtraction(rawProducer + '\nconst unrelatedProducerChange = true;\n'));
   const predecessor = execFileSync('git', ['show', `c3e0be17:${producerFile}`],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n');
   assert.equal(producer.split(registration).length, 2, 'exact two dependency registrations');
@@ -34,6 +41,9 @@ test('entire legacy suite conserves statements outside nine receipt checks and t
     'mapped button reset classification preserves full membership and rejects forged rows',
     'mapped border integration rejects classifications without authenticated original cases',
     'border initial-color heading owners retain conservative declaration and provenance checks',
+    'divider runtime registration preserves complete predecessor source and rejects altered entry',
+    'passive proof registration conserves complete predecessor production source and inventory',
+    'popup proof batch adds four registrations without changing predecessor inventory',
     'recent public and popup proofs join existing inventories without changing predecessor entries',
     'retained progress paint binds plugin geometry and unequal track inputs',
     'retained compact empty and filled inputs bind authored inset before projection',
@@ -43,6 +53,7 @@ test('entire legacy suite conserves statements outside nine receipt checks and t
     'retained selection states preserve palettes and original geometry failures',
     'retained tooltip textures separate popup placement from raster phase',
     'retained Tab, popup-state and email-edit boundaries preserve exact action evidence',
+    'retained standalone visibility disabled and selection cohorts preserve exact receipts and failures',
     'recent source diagnostics conserve predecessor findings and reject altered receipts or conclusions',
     'descendant color ancestry rejects broken links and intervening requests without claiming owner equivalence',
   ]);
@@ -65,6 +76,7 @@ test('root initial applicability authenticates every receipt and rejects unrelat
 });
 test('migration proof rejects unrelated assertion changes, missing checks and wrong index identity', () => {
   for (const changed of [
+    current.replace('registered.length, 148', 'registered.length, 147'),
     current.replace('assert.equal(index.sourceFingerprints.length, 11)', 'assert.equal(index.sourceFingerprints.length, 10)'),
     current.replace("assertHistoricalCaseIndexSources('docs/material-container-caret-audit.json', index);", ''),
     current.replace("assertHistoricalCaseIndexSources('docs/material-container-caret-audit.json', index)", "assertHistoricalCaseIndexSources('docs/material-root-height-audit.json', index)"),

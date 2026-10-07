@@ -2,6 +2,34 @@
 
 ## Current evidence boundary — October 7
 
+October7 inventory reconciliation isolates separate stale boundaries instead of
+changing541 to542 alone. AST enumeration proves all541 paths from17ba0e2b remain
+ordered and the sole542nd path is icon-asset-input.spec.mjs; log
+source-inventory-542-membership-20261007.log
+SHA1ae88e1faa374054ed3474658575a4311676f25e7a696d44f3702e69d6e9d8d9.
+Existing whole-suite conservation first fails its raw producer predecessor
+assumption (current-inventory-conservation-gap-20261007.log
+SHAb656a02dcbd25843b3eec329bb3f568affcb915a68d231b43f2c0802f51fb750).
+Reuse of restoreScalarReviewExtraction proves exact complete predecessor equality
+after its bounded registrations,without deleting the old assertion. The suite
+restoration now authenticates both original39-statement and later65-statement
+extensions plus the exact additive definition helper; complete original-suite
+equality remains enforced. Added controls reject unrelated producer code,
+changed SVG conclusions and a mutated definition count. Existing exact isolated-
+test inventory now includes four previously added tests. Focused original-suite
+conservation and mutation checks pass2/2,16717.6994ms; log
+inventory-suite-conservation-focused-20261007.log
+SHAecc877104b298f88203528d6229d72437cc255545e04a965726783e7d847a21a.
+Broad earlier runs remain failed evidence,not passing integration; final failure
+log inventory-conservation-current-restoration-20261007-final.log
+SHAb977357db7b6b9ca2a2d522cdf60ab29f197c56a04fb96054815f04b43ebc283
+exposes a distinct root-initial policy projection pinned to145 definitions versus
+current148. Next reconcile that exact policy extension and actual542-member
+integration assertion. The541 assertion itself remains unchanged. This consumed
+source-migration module changed after the accepted SVG canonical generation;
+do not treat that package as rebuilt against these later bytes. Batch remaining
+reconciliation before another canonical milestone. No renderer/fixture change.
+
 October7 SVG canonical reconciliation is complete: independent cold --check
 session28366 reached terminal exit0 in3846103.7126ms. It revalidated1205 evidence
 files/89154859 bytes with zero invalidations and compared the complete rebuilt
