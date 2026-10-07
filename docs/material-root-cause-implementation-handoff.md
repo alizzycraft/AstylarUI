@@ -2,6 +2,27 @@
 
 ## Current resumption ledger — October 6
 
+- October7 progress-bar requested/used height boundary answered across20 exact
+  retained cases: parent requests62px border-box,28px padding,1px border,column
+  flex; sole child requests8px/flexShrink1. All20 authenticated candidate trees
+  preserve these inputs and report primary mesh height4px,matching native4px.
+  Available parent content height is62-56-2=4. Chrome154.0.8037.58 native CSS
+  control with those exact size/flex inputs yields root62/child4; auto-height
+  counter-control yields root66/child8. Thus CSS shrink explains the requested8
+  versus measured4 boundary; it is not alone evidence of a renderer height bug.
+  Existing fixed reference-height authoring creates that budget,so equal painted
+  size must not be mistaken for equal size inputs. Log
+  progress-fixed-parent-height-verified-20261007.log SHA
+  eb563dd0cfb6c75c6edb79d588308f04acda6a5c9038bc2b1c22e1953758c114;
+  parsed20 memberships and both asserted native controls,exit0. Initial launch
+  tried unavailable playwright rather than installed playwright-core; no browser
+  or findings were produced and no dependency was installed. No source changes.
+  This proves primary mesh measurement/CSS mechanism,not actual plugin track
+  child pixels,live plugin dimensions,complete equal-input renderer acceptance
+  or ownership. No progress-bar local raster target exists in those20 report
+  rows. Next reuse retained track pixels and reconcile input/paint ownership;
+  do not repeat primary-height or invent other progress values/modes.
+
 - October7 exact five-failure calendar internal-input join: ten current-full
   tree receipts authenticate to report SHAab42dbec. Every failed case shows OCT,
   native month-label td colspan4/line-height0 inside the first week (four td
