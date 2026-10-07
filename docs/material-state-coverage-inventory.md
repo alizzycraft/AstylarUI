@@ -2,6 +2,24 @@
 
 ## Current evidence boundary — October 6
 
+October7 bounded spinner endpoint geometry control rejects the hypothesis that
+Mesh.CAP_ALL implies round/spherical SVG caps. Installed Babylon8.15.1
+tubeBuilder caps collapse an endpoint ring to the path center; an actual
+NullEngine CreateTube control using the authenticated plugin's41-point .64 arc,
+radius45,stroke10,tessellation12,CAP_ALL verifies both rings lie in their chord-
+normal endpoint planes (maximum errors5.46e-8/1.54e-8) and collapsed vertices
+have zero distance from endpoint centers. Caps are flat,consistent in shape
+class with the measured native butt request,not proof of exact SVG equivalence.
+Segmentation rotates endpoint planes2.88 degrees from exact circle tangents;
+centerline sagitta is0.05683695 CSSpx. Those are geometric approximation facts,
+not measured browser paint errors or a new core projection defect. Evidence:
+spinner-cap-geometry-control-20261007.log,
+SHAabbf5fa495bfdecb4cde00f965cbdb99aa36ff97c3c73601d7fdec2d4ca07c1d,
+exit0. Plugin source SHAdee2c10af7f3116bc6a476d63182ac182e5717b90f5333a327b77213e0b9107e
+is authenticated before the control. Next quantify retained endpoint/edge ink
+against these inputs if material; do not register a round-cap mismatch or
+promote NullEngine geometry to browser rendering acceptance.
+
 October7 spinner native cap/join input gap is closed for all16 physical cohorts
 representing20 configured cases. The unchanged withFrozenShowcase helper
 (sort-focus-structure source SHA65d7256f859a0839cdf6364d8f3d4e2b81bdb32978c42e0afeaa27f2622e14ce)
