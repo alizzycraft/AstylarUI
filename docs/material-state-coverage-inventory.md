@@ -2,6 +2,26 @@
 
 ## Current evidence boundary — October 6
 
+October7 captured installed-runtime applicability now accounts for88/88
+Astylar JavaScript modules without dropping Angular definitions. Whole-module
+linker replay matches87/88; current-full-installed-linker-applicability-
+20261007.log SHA f1ccfbee69f38ed9469853d7e7bc39ea1f6af3818eb2ad5fc41635e8d362bb6e.
+Root compiler-cli20.0.6 differs from showcase20.3.31. The sole unmatched surface
+module differs at linked canvas domElementStart versus elementStart; using the
+actual showcase linker resolves it exactly,retaining complete template/styles
+and factory metadata. Remaining-only log
+current-full-surface-showcase-linker-applicability-20261007-retry.log
+SHA5fa3b1339cff67a4a4c4595d24fd824219533131f9c8dd91ba367c532a85b31e;
+linked/captured code SHAac8cb30df866d2e199a8ed1be1f3ef17c8dc3c320a3d9d9664f6496b7f16f0c6.
+Initial remaining-only command had a duplicate local declaration and failed
+before linkage; original log retained,not accepted evidence. This closes the
+captured→current installed-module boundary,not installed→current TypeScript,
+full dependency graph,all CSS/assets/clock state or current browser acceptance.
+All17 local authored sources also match exactly as recorded below. Reuse this
+bounded evidence; do not repeat29/88 formatting diagnostics or infer59 changes.
+Canonical export session55627 reached validate-audit at2946359ms,still live;
+no publication/independent acceptance claimed.
+
 October7 remaining source-map mismatch first divergence is now identified:
 captured flex-layout body agrees until static Angular factory metadata;
 checkpoint has linkedɵfac/function andɵprov/defineInjectable while installed
