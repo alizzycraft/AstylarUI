@@ -2,6 +2,19 @@
 
 ## Current evidence boundary — October 7
 
+Extended configured keyboard proof is now registered: producer150 findings/142
+proofs,accepted canonical remains150/141 pending the next coherent export batch.
+One exact reversible registration restores complete1190d1c2 producer bytes;
+altered registration text is rejected. The two older141-proof assertions still
+run unchanged against that authenticated predecessor through exact read adapters;
+existing suite migration restores only those declarations and conserves all
+original assertions. Focused3/3 passes6600.8805ms (extended-keyboard-registration-
+focused-20261007-final.log); complete conservation/source/mutation suite3/3 passes
+65696.4223ms (extended-keyboard-registration-integration-20261007.log).
+No browser recapture,renderer/fixture edits or canonical rebuild. Remaining batch:
+retained AX/applicability/source-binding and divider-trace evidence; then coherent
+integration/export and full case-obligation closure,not additional keyboard replay.
+
 Extended keyboard replay now passes the existing complete legacy-suite
 conservation and mutation suite3/3,63480.4103ms:
 extended-keyboard-suite-conservation-20261007-retry.log. Initial failure is

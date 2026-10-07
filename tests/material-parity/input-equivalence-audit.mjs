@@ -9438,6 +9438,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('retained extended keyboard cohorts replay original runtime tails and source preambles'/,
+      'retained extended configured keyboard assertion boundary', 'Replays original runtime assertion blocks and source preambles for128 exact family/focus contexts across eight retained batches. Pins logs,original callbacks,served build,report/checkpoint and bounded current source dependencies. Preserves observed activation,navigation,range and modality failures. Not collection-time error callbacks,current paint,lifecycle or complete-case acceptance.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('configured enabled keyboard evidence joins forty exact focus contexts without changing original assertions'/,
       'retained configured enabled keyboard routing authoring boundary', 'Joins40 exact configured focus contexts for checkbox,radio,chips,slide-toggle and expansion across four desktop profiles at DPR1/2. Replays original assertion callbacks over retained real Tab/Space/Arrow/Enter observations; candidate keydowns arrive but native activation/navigation transitions are omitted. Authenticates complete frozen build,report,helper and current mapped application source. Extends fixture-composite-keyboard-handler-omits-activation-and-navigation evidence without replacing its original receipts. Not focus paint,all keys,disabled states,lifetime or complete-case acceptance.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('retained disabled composite focus binds exact current authoring and radio-only Tab divergence'/,

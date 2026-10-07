@@ -15,6 +15,13 @@ const tests = ast => ast.statements.filter(n => ts.isExpressionStatement(n) && t
 // only its five membership/count expressions and diagnostic before comparing the whole suite.
 export function restoreInventoryAssertion(source) {
   source = source.toString().replaceAll('\r\n', '\n');
+  for (const name of ['producer', 'current']) {
+    const adapter = `  const ${name} = (await import('./position-composition-producer-transition.mjs')).restoreExtendedKeyboardRegistration(readFileSync(producerFile, 'utf8'));`;
+    if (source.includes(adapter)) {
+      assert.equal(source.split(adapter).length, 2, 'unique exact extended keyboard read adapter');
+      source = source.replace(adapter, `  const ${name} = readFileSync(producerFile, 'utf8').replaceAll('\\r\\n', '\\n');`);
+    }
+  }
   if (source.includes('const actualSourceFingerprints = audit.sourceFingerprints;')) {
     const liveAst = parse(source);
     const target = tests(liveAst).filter(n => n.expression.arguments[0]?.text === 'records source fingerprints and actual visual acceptance fields');

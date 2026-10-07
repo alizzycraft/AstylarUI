@@ -38,6 +38,17 @@ const browserDefaults = {
 };
 
 test('retained extended keyboard cohorts replay original runtime tails and source preambles', async () => {
+  const { restoreExtendedKeyboardRegistration } = await import('./position-composition-producer-transition.mjs');
+  const producerFile = 'tests/material-parity/input-equivalence-audit.mjs';
+  const producerSource = readFileSync(producerFile, 'utf8');
+  const producerPrevious = execFileSync('git', ['show', `1190d1c2:${producerFile}`],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreExtendedKeyboardRegistration(producerSource), producerPrevious);
+  assert.throws(() => restoreExtendedKeyboardRegistration(producerSource.replace(
+    'retained extended configured keyboard assertion boundary', 'unreviewed acceptance')));
+  const producerAst = ts.createSourceFile(producerFile, producerSource, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  assert.equal(producerAst.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory')
+    .body.statements[0].expression.elements.length, 142);
   const digest = value => createHash('sha256').update(value).digest('hex');
   const pinned = (file, hash) => {
     const bytes = readFileSync(file); assert.equal(digest(bytes), hash, file); return bytes;
@@ -185,7 +196,7 @@ test('configured enabled keyboard evidence joins forty exact focus contexts with
     && map.sourcesContent[i]?.includes('import {') ? [map.sourcesContent[i]] : []);
   assert.deepEqual(mapped, [application]);
   const producerFile = 'tests/material-parity/input-equivalence-audit.mjs';
-  const producer = readFileSync(producerFile, 'utf8').replaceAll('\r\n', '\n');
+  const producer = (await import('./position-composition-producer-transition.mjs')).restoreExtendedKeyboardRegistration(readFileSync(producerFile, 'utf8'));
   const predecessor = execFileSync('git', ['show', `1b9ecc01:${producerFile}`], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n');
   const producerAst = ts.createSourceFile(producerFile, producer, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   const entries = producerAst.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory')
@@ -222,7 +233,7 @@ test('disabled radio registration preserves the complete finding and producer pr
   assert.equal(finding.classification, 'application-plugin-authoring-defect');
   assert.equal([...readFileSync(finding.file, 'utf8').matchAll(new RegExp(finding.pattern, 'g'))].length, 1);
   const producerFile = 'tests/material-parity/input-equivalence-audit.mjs';
-  const current = readFileSync(producerFile, 'utf8').replaceAll('\r\n', '\n');
+  const current = (await import('./position-composition-producer-transition.mjs')).restoreExtendedKeyboardRegistration(readFileSync(producerFile, 'utf8'));
   const predecessor = execFileSync('git', ['show', `20a79a2d:${producerFile}`], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n');
   const ast = ts.createSourceFile(producerFile, current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   const fn = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory');
