@@ -824,7 +824,7 @@ means dark390x844 DPR2 only. Final disposal does not excuse growth before it.
 
 | Families / cohort | Repeated-operation evidence | Disposal evidence | Remaining boundary |
 | --- | --- | --- | --- |
-| Icon /16 configured runtime cohorts | Three equivalent updates; desktop live=tracked12/11/4,cache2,no orphan material. Desktop: `icon-update-disposal-20261007.log`; tablet/mobile: `icon-responsive-update-disposal-20261007.log`. | All16 clear scene/engine/cache/plugin owners. | Late async,remount,multi-surface,current-source validity; no complete case acceptance. |
+| Icon /16 configured runtime cohorts | Three equivalent updates; desktop live=tracked12/11/4,cache2,no orphan material. Desktop: `icon-update-disposal-20261007.log`; tablet/mobile: `icon-responsive-update-disposal-20261007.log`. Exact20-case mapping: `icon-case-obligation-join-20261007-retry.log`. | All16 clear sampled scene/engine/cache/plugin owners. Native late PNG completion after pending disposal is additionally inspected in light desktop DPR1 and dark mobile DPR2; relevant image/caller methods match current,installed and captured source. | Other late-work/race contexts,source replacement,remount,peer isolation and current validity of remaining owners remain open; no complete case acceptance. |
 | Divider /8 desktop | Three equivalent updates; live=tracked17/16/4,cache4. `divider-update-disposal-20261006.log`. | All8 sampled owners clear. | Same broader lifetime boundaries. |
 | Menu,bottom-sheet,dialog /mobile | Three open/Escape cycles. Tracked plateau but live materials grow19/20/21,18/19/20,17/20/23 respectively. `overlay-dismissal-cycles-current-20261006.log`. | Scene/cache/plugin/observer samples clear. | Other profiles/states,late async,remount,isolation; no plateau acceptance. |
 | Autocomplete,timepicker /mobile | Three input-click/Escape cycles; materials19/20/21 and26/27/28,cursor orphans1/2/3. `field-popup-cycles-current-20261007.log`. | Both clear scene/engine/cache/plugin samples. | Other profiles/states,late async,remount,isolation; no plateau acceptance. |
@@ -841,7 +841,9 @@ a fix or relabeling diagnostic counterexamples as cleanup passes.
 October7 responsive Icon lifecycle extension executes only the eight remaining
 tablet/mobile cohorts; existing desktop observations are not recaptured.
 The20 configured cases name16 unique physical profile/viewport/DPR combinations;
-four static desktop cases share inspect desktop dimensions. The existing test
+four static desktop cases share inspect desktop dimensions. The exact case-to-
+cohort join above additionally maps every ID to retained lifecycle and paired AX
+evidence without upgrading full closure. The existing test
 derives and checks this membership from the authenticated report; its default
 scope includes all16,while ASTYLAR_AUDIT_LIFECYCLE_RESPONSIVE=1 selects the
 remaining8 for this focused diagnostic. Test1/1 passes19328.4103ms; log SHA256
