@@ -2,6 +2,22 @@
 
 ## Current evidence boundary — October 7
 
+Determinate progress plugin-specific late-work applicability is now reviewed,
+not an indefinitely pending hypothetical. Authenticated current plugin source
+and40 membership rows all use mode=determinate. Both render methods and local
+base color/number/material/root/ownChild methods are synchronous; inspected
+branches bypass animate(),which is the plugin's observer-scheduling path.
+Read-only AST/source assertions pass; log
+progress-plugin-late-work-applicability-20261007-retry.log SHA256
+faed36250df159f6076fb3f66c083416578038b3c5cd291ffb807df845f5b96d.
+This closes only plugin-specific deferred animation/completion applicability
+for these literal determinate cases. Imported renderer/resource behavior,
+parent text/font async settlement and whole-surface late completion are not
+proved by absence of local scheduling syntax; those remain separate. Other
+progress modes are not authored and are not added to this audit. Initial shell-
+quoting syntax failure remains retained; corrected assertion uses unchanged
+source and recorded method hashes. No renderer,fixture or producer edit.
+
 Divider remaining responsive/comparison-width update/disposal gap closes:
 12 uncovered physical cohorts (four profiles × tablet/mobile/comparison widths)
 pass terminal exit0,48 initial/update snapshots and12 complete sampled disposals.
