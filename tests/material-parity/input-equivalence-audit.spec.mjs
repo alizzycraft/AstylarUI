@@ -1899,7 +1899,10 @@ test('recent public and popup proofs join existing inventories without changing 
 });
 
 async function conservedPrePassiveDefinitions() {
-  const { sourceAuditDefinitions: registered } = await import('./input-equivalence-policy.mjs');
+  const { sourceAuditDefinitions: currentRegistered } = await import('./input-equivalence-policy.mjs');
+  assert.equal(currentRegistered.length, 149);
+  assert.equal(currentRegistered.at(-1).id, 'fixture-progress-host-focusability-input-omitted');
+  const registered = currentRegistered.slice(0, -1);
   assert.equal(registered.length, 148);
   assert.equal(registered.at(-1).id, 'core-svg-dimensionless-image-upload-not-adapted');
   const current = registered.slice(0, -1); // Preserve the exact historical population, not current acceptance.
@@ -2465,9 +2468,11 @@ test('recent source diagnostics conserve predecessor findings and reject altered
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const priorDefinitions = new Function(previous.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
   assert.equal(priorDefinitions.length, 135);
-  assert.equal(audit.sourceFindings.length, 148);
-  assert.equal(audit.sourceFindings.at(-1).id, 'core-svg-dimensionless-image-upload-not-adapted');
-  const legacyFindings = audit.sourceFindings.slice(2, -1);
+  assert.equal(audit.sourceFindings.length, 149);
+  assert.equal(audit.sourceFindings.at(-1).id, 'fixture-progress-host-focusability-input-omitted');
+  assert.equal(audit.sourceFindings.slice(0, -1).length, 148);
+  assert.equal(audit.sourceFindings.at(-2).id, 'core-svg-dimensionless-image-upload-not-adapted');
+  const legacyFindings = audit.sourceFindings.slice(2, -2);
   const conservedPolicy = execFileSync('git', ['show', 'aee5b612:tests/material-parity/input-equivalence-policy.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const conservedDefinitions = new Function(conservedPolicy.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
@@ -2495,7 +2500,7 @@ test('recent source diagnostics conserve predecessor findings and reject altered
   // This deliberately partial synthetic capture has no paired root-style receipt.
   // Keep that unrelated failure explicit rather than treating this as full acceptance.
   assert.deepEqual(validation(), ['1 cases lack paired root style evidence']);
-  for (const finding of [...audit.sourceFindings.slice(0, 2), ...legacyFindings.slice(0, 3), ...legacyFindings.slice(138)]) {
+  for (const finding of [...audit.sourceFindings.slice(0, 2), ...legacyFindings.slice(0, 3), ...legacyFindings.slice(138), audit.sourceFindings.at(-1)]) {
     assert.ok(finding.observation.element && finding.observation.states.length && finding.owner && finding.focusedProof);
     for (const receipt of finding.evidence) {
       assert.equal(createHash('sha256').update(readFileSync(receipt.file)).digest('hex'), receipt.sha256);

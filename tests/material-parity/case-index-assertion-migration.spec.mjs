@@ -66,6 +66,11 @@ test('entire legacy suite conserves statements outside nine receipt checks and t
 test('root initial applicability authenticates every receipt and rejects unrelated source mutations', () => {
   const saved = JSON.parse(readFileSync('docs/material-root-initial-style-audit.json'));
   assert.equal(verifyRootInitialSourceApplicability(saved).testProjection.allOtherStatementsConserved, true);
+  assert.throws(() => verifyRootInitialSourceApplicability(saved, { readSource: file => {
+    const bytes = readFileSync(file);
+    return file === 'tests/material-parity/input-equivalence-policy.mjs'
+      ? Buffer.from(bytes.toString().replace('fixture-progress-host-focusability-input-omitted', 'unreviewed-progress-equivalence')) : bytes;
+  } }));
   for (const descriptor of saved.sourceFingerprints) {
     const forged = structuredClone(saved);
     forged.sourceFingerprints.find(s => s.file === descriptor.file).sha256 = '0'.repeat(64);
@@ -78,6 +83,8 @@ test('root initial applicability authenticates every receipt and rejects unrelat
 });
 test('migration proof rejects unrelated assertion changes, missing checks and wrong index identity', () => {
   for (const changed of [
+    current.replace('currentRegistered.length, 149', 'currentRegistered.length, 148'),
+    current.replace('const registered = currentRegistered.slice(0, -1)', 'const registered = currentRegistered.slice(0, -2)'),
     current.replace('actualSourceFingerprints.length, 542', 'actualSourceFingerprints.length, 541'),
     current.replace('actualSourceFingerprints.slice(0, -1)', 'actualSourceFingerprints.slice(0, -2)'),
     current.replace("const svgSource = 'tests/material-parity/icon-asset-input.spec.mjs'", "const svgSource = 'tests/material-parity/unreviewed.spec.mjs'"),

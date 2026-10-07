@@ -2,6 +2,27 @@
 
 ## Current evidence boundary — October 7
 
+Current pending policy now has149 definitions: new
+fixture-progress-host-focusability-input-omitted classifies the measured32-cohort
+failure as application semantic authoring,not core focus or coordinate failure.
+All148 prior definitions and every other policy statement are preserved by
+complete predecessor SHAf3aee82479768601bc520cbf754540815d7704d496989cd8b5c614bd4646cdbd.
+The finding binds membership/AX/focus receipts and the registered progress proof;
+two actual candidate source locations are detected. Source-diagnostics integration
+and retained progress replay pass2/2 in4934.9877ms:
+progress-focus-classification-integration-20261007.log,
+SHA31426714116b1f857a80ed983104539537ea02f321ab433ce9cb042df5e53692.
+Complete root policy/suite conservation and mutation controls pass3/3 in59866.0504ms:
+progress-focus-policy-conservation-20261007.log,
+SHA0894302405c956684aa2a62e60112a07a1e90413197a3208b1163398ca4ca82e.
+Historical145/148 assertions still run through explicit authenticated projections;
+current149 assertions and malformed-finding controls are additional,not waivers.
+The frozen canonical still has148 findings/138 proofs; pending producer has149/139.
+No export,recapture,core or fixture change. Focus-input classification pending
+notes below are superseded; focus paint,AX relationships,remount/isolation,
+remaining state/profile obligations,final canonical/browser gates and publication
+remain. Do not repeatedly export solely to update these status records.
+
 Progress standalone evidence is now registered as one bounded focused proof
 without recapturing or changing findings/fixtures. Current producer has139
 proof registrations,148 definitions and unchanged542 source paths; the frozen

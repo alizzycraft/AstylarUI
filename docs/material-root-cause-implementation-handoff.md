@@ -2,6 +2,19 @@
 
 ## Current resumption ledger — October 6
 
+- October7 progress focusability is now classified by
+  `fixture-progress-host-focusability-input-omitted` in the pending149-definition
+  policy. All32 configured physical cohorts retain matching role/value/range
+  semantics but native tabindex=-1/programmatic focus versus candidate omission
+  and BODY remaining active. Candidate source906–907 omits a supported public
+  input; semantic bridge429 transfers explicit tabindex. Later implementation
+  should restore equivalent host intent at the application boundary,not patch
+  core focus or graphics offsets. Sequential Tab/keyboard activation are not
+  implied by negative tabindex. Evidence and passing conservation receipts are
+  in the current state-coverage inventory. Focus paint,full AX relationships,
+  remount/isolation and current final acceptance remain open. The frozen
+  canonical is still148 findings/138 proofs; do not claim149/139 exported yet.
+
 - October7 configured Icon AX exposure gap closes:15 new physical cohorts,
   30 paired CDP observations,all native ariaHidden exclusions versus candidate
   exposed image/Favorite. Combined with retained light desktop DPR1,all16

@@ -167,7 +167,7 @@ export function verifyCaseIndexAssertionMigration(previous, current) {
     assert.equal(helpers.length, 1, 'missing or repeated exact definition conservation helper');
     assert.equal(createHash('sha256').update(printer.printNode(ts.EmitHint.Unspecified,
       helpers[0], definitionAst)).digest('hex'),
-    'f1eca963fbcd8807c6f33387f258919ba2b030d270af55fb2cf78c0ac2a32667',
+    '76bbdaa4e7473e48301df37eb2996c4d1c3f961e7347a32ced9ed39904155fed',
     'definition conservation helper changed');
     // Its six callers belong to the additive focused tests removed below.
     // Complete predecessor equality still rejects a call in an original test.

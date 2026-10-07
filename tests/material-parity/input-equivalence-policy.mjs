@@ -1617,6 +1617,25 @@ export const sourceAuditDefinitions = Object.freeze([
       stage: 'decoded HTMLImageElement to GPU texture upload; before general alpha material paint' },
     justification: 'Matched public-package external SVG inputs at24/48CSSpx andDPR1/2 reproduce black candidate rectangles. Actual runtime HTMLImageElement texImage2D returns1281 through Babylon _prepareWebGLTexture while textures report ready and diagnostics stay empty. Dimensioned SVG and native PNG controls upload and retain alpha; assigning decoded dimensions to the native Image object also makes upload succeed without changing SVG bytes. Complete core loading/alpha methods match current source. This establishes a bounded GPU-boundary adaptation/error-reporting defect,not a general alpha,layout,currentColor or all-SVG claim. Inline SVG remains a separately documented support limitation; the Material fixed-PNG substitution remains unequal authoring. Do not add canonical SVG dimensions or replace vector inputs as a workaround; preserve CSS intrinsic sizing independently of upload adaptation.',
   }),
+  Object.freeze({
+    id: 'fixture-progress-host-focusability-input-omitted',
+    introducedBy: 'current configured source and retained Chrome154 cohort evidence; historical first-bad revision not established',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`if \(family === 'progress-(?:bar|spinner)'\) return \[\{[^\n]*role: 'progressbar'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase progress host semantic input authoring',
+    focusedProof: 'tests/material-parity/input-boundary-evidence.spec.mjs: retained progress focus caps and update disposal preserve complete configured cohort evidence',
+    evidence: [
+      { file: 'artifacts/material-parity/progress-configured-input-membership-20261006.log', sha256: 'd64d73bea9a8e7d6ad2640bea3bc6a59c072ae9465f1aa3ca8577c5111fb6684' },
+      { file: 'artifacts/material-parity/progress-actual-ax-cohorts-20261007.log', sha256: '88c9b67f0d0dc8267bf7b51d77839e15df74e5a118d3414b6db868813f323d31' },
+      { file: 'artifacts/material-parity/progress-programmatic-focus-20261007.log', sha256: 'f896402a1d31e9e14fb6e4382854a140c51f146f1323835e48669fe1ca5176f9' },
+    ],
+    observation: { component: 'progress-bar/progress-spinner', element: 'progress-bar-primary/progress-spinner-primary',
+      states: ['determinate64', 'programmatic focus'], profiles: ['light', 'dark', 'contrast', 'custom'], dpr: [1, 2],
+      property: 'host tabindex and programmatic focusability', reference: { tabindex: -1, focusable: true, focusMovesToHost: true },
+      astylar: { tabindex: null, focusable: null, focusMovesToHost: false }, stage: 'authored semantic host input before bridge projection' },
+    justification: 'All40 configured cases join32 unique physical cohorts. Both sides expose role progressbar,value64,range0-100,empty name/value text and no AX children, but native hosts have tabindex=-1 and focusable=true while candidate entries omit tabindex. Actual focus() moves BODY to the native host and leaves BODY active on every candidate cohort. Current candidate source bytes and semantic bridge bytes authenticate in the registered replay; the bridge explicitly transfers element.tabindex. The first divergence is unequal authored host intent,not missing core focus support or a world-space issue. Restore the reference-equivalent semantic input at the application boundary in later implementation; do not offset graphics or change role to conceal it. Negative tabindex permits programmatic focus but does not imply sequential Tab or keyboard activation. Focus paint,complete AX relationships,remount/isolation and fresh final rendering acceptance remain separate obligations.',
+  }),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({
