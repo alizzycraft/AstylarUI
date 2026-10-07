@@ -2,6 +2,26 @@
 
 ## Current evidence boundary — October 7
 
+Icon actual PNG late-completion after pending surface disposal is now inspected
+in light desktop DPR1 and dark mobile DPR2. Native HTMLImageElement.src assignment
+is held for the exact authored embedded PNG only; original bytes are released
+after disposing the pending surface. Two assignments are captured with actual
+stacks: Babylon AbstractEngine.LoadImage/ImageResourceService.getTexture,and
+semantic bridge native img with icon-primary/alt Favorite. They are distinct
+owners,not evidence of duplicate renderer uploads. Both native loads complete
+24x24 after disposal in both cohorts. Scene/engine remain disposed,live and loaded
+texture counts are zero,plugin ownership/pending/cleanup counts zero,session
+disposed/pendingReasons empty,and no page errors. Terminal exit0; log
+icon-late-completion-disposal-20261007-retry.log SHA256
+bd09718acded4675293285f43eeec477aefa2de41e15fe4c136dfe3931e6a8c0.
+Whole served checkpoint and original asset/helper bytes authenticate; no fixture
+or renderer edit. Initial one-assignment assertion fails honestly and is retained;
+retry identifies both callers before release instead of ignoring the extra.
+This is bounded browser disposal/completion evidence,not every profile,race timing,
+source replacement,remount,isolation or complete Icon acceptance. It supplements
+the existing synthetic stale-source unit test without claiming that test proved
+browser cancellation. Standalone registration follows the frozen canonical check.
+
 Determinate progress plugin-specific late-work applicability is now reviewed,
 not an indefinitely pending hypothetical. Authenticated current plugin source
 and40 membership rows all use mode=determinate. Both render methods and local
