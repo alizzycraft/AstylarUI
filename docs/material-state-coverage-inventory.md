@@ -2,6 +2,20 @@
 
 ## Current evidence boundary — October 7
 
+Icon pending-disposal evidence now has bounded current-source applicability:
+all11 ImageResourceService method bodies in current TypeScript transpilation
+match installed JavaScript. Nine lifetime/load/guard/subscription methods also
+match the served mapped module exactly after whitespace normalization. The
+served chunk and map hashes match the authenticated checkpoint referenced by
+the existing browser capture. Log icon-image-lifetime-method-applicability-20261007.log
+records source/installed/chunk/map hashes and exact method scope. This closes
+the older-implementation explanation for those methods,not all downstream
+Babylon behavior,whole module equality,all image races or full Icon closure.
+Earlier class-declaration-only extraction and whole mapped-module equality
+checks fail and remain retained: decorator transpilation uses a class expression;
+served formatting and optional single-arrow-parameter parentheses prevent byte
+equality. No source or fixture changed; no browser recapture or canonical export.
+
 Icon actual PNG late-completion after pending surface disposal is now inspected
 in light desktop DPR1 and dark mobile DPR2. Native HTMLImageElement.src assignment
 is held for the exact authored embedded PNG only; original bytes are released
