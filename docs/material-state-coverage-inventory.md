@@ -2,6 +2,16 @@
 
 ## Current evidence boundary — October 7
 
+Extended keyboard replay now passes the existing complete legacy-suite
+conservation and mutation suite3/3,63480.4103ms:
+extended-keyboard-suite-conservation-20261007-retry.log. Initial failure is
+retained in extended-keyboard-suite-conservation-20261007.log; whole predecessor
+comparison passed before the explicit additive-test title list rejected the one
+new test. Only that title was appended; original statements,receipt assertions,
+source applicability and negative controls remain enforced. No producer registration
+or canonical regeneration yet. Next register the retained128-context proof with
+an exact reversible producer addition and preserve141-proof predecessor checks.
+
 Standalone keyboard replay now closes the assertion-integration question for
 all8 retained batches,128 exact family/focus-context joins. The additive test
 `retained extended keyboard cohorts replay original runtime tails and source preambles`

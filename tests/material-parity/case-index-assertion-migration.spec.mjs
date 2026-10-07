@@ -33,6 +33,7 @@ test('entire legacy suite conserves statements outside nine receipt checks and t
   assert.equal(result.mappingReadAdapterAuthenticated, true);
   assert.equal(result.captureDiagnosticsProjectionAuthenticated, true);
   assert.deepEqual(result.addedIsolatedTests, [
+    'retained extended keyboard cohorts replay original runtime tails and source preambles',
     'configured enabled keyboard evidence joins forty exact focus contexts without changing original assertions',
     'disabled radio registration preserves the complete finding and producer predecessors',
     'retained disabled composite focus binds exact current authoring and radio-only Tab divergence',
