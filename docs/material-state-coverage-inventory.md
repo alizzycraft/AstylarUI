@@ -21,6 +21,17 @@ whole-arc direction/extent inspection,not cap equivalence or equal-input core
 cause. Existing unequal plugin-angle finding remains; no fixture change.
 Next: reuse these receipts in the existing progress proof after canonical
 session55627 ends; cap/edge paint and ownership remain distinct obligations.
+Source-model decisive check authenticates all40 raster receipts and the current
+plugin SHAdee2c10af7f3116bc6a476d63182ac182e5717b90f5333a327b77213e0b9107e:
+native CSS270→140.4 clockwise versus authored candidate322→91.6
+counterclockwise agrees with every measured endpoint within2degree bins.
+The unequal CSS inputs suffice; a new projection reversal is not required to
+explain this population. Complete retained-runtime binding and antialiased
+caps are not proved by this model. Corrected check exits0:
+spinner-css-angle-model-20261007-retry.log
+SHAbfd982f8d77365d2d182f17cb5baebd92629bc2d0a65e96f7ada5d9448ddd2ca.
+Initial checker had an extra closing-parenthesis regex and failed before pixel
+verification; spinner-css-angle-model-20261007.log retained,not accepted proof.
 
 October7 coherent SVG canonical export is running through the unchanged named
 current-ancestry launcher (all five retained evidence paths present). Session
