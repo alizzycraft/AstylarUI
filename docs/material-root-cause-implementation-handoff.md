@@ -1441,8 +1441,14 @@
   1,887 browser files match the current showcase browser directory exactly,
   with zero changed, added or missing members (terminal exit 0). Recorded Chrome
   154.0.8037.58 / Node v22.22.3 launch preserves native scrollbars. Thus the
-  2,306 passes / five failures remain applicable to this unchanged stored build
-  and capture harness, not automatically to current source. The manifest binds
+  2,306 passes / five failures remain evidence for this stored build/harness
+  under the captured date,theme,viewport and action inputs,not a new render on
+  a later date or automatically current source. Calendar/time inputs are not
+  established by byte conservation: reference provideNativeDateAdapter().today
+  returns new Date() (installed core.mjs142–144),and candidate calendar helpers
+  likewise use the live clock. Datepicker active/today markers therefore need
+  captured-date/context validation even when served files are identical.
+  The manifest binds
   compiled browser bytes, not their complete source-to-build derivation. Next
   reconcile build/source receipts before requesting any affected recapture.
   The retained `tooltip-configured-pixel-replay-20261005.log` also reproduces
