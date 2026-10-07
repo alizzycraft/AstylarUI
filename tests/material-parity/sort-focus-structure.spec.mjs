@@ -2327,6 +2327,69 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
   }, materialBrowserLaunchOptions());
 });
 
+test('retained scrollbar thumb masks distinguish native corners from plain indicator paint', t => {
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  const pixelBytes = readFileSync('artifacts/material-parity/timepicker-retained-thumb-motion-20261007.log');
+  assert.equal(digest(pixelBytes), 'c50c76be517b794071bae466d98957a6719d3edf76223cc088c67546cd58db2c');
+  const rows = pixelBytes.toString().trim().split(/\r?\n/).map(JSON.parse).slice(0, -1);
+  const boundsBytes = readFileSync('artifacts/material-parity/timepicker-configured-css-pixel-join-20261008.log');
+  assert.equal(digest(boundsBytes), 'c314c6900bf3846e20ee69299cb5a5c9bdf47e14544f4c5839a2db9ddb40fcd9');
+  const diagnostic = boundsBytes.toString().split(/\r?\n/).filter(line => line.startsWith('# {"configuredScrollbarCssBounds"'));
+  assert.equal(diagnostic.length, 1);
+  // Node's TAP formatter escapes hashes; undo only that formatting escape.
+  const bounds = JSON.parse(diagnostic[0].slice(2).replaceAll('\\#', '#')).configuredScrollbarCssBounds;
+  assert.equal(rows.length, 8); assert.equal(bounds.length, 8);
+  const masks = [];
+  for (const row of rows) {
+    const matched = bounds.filter(bound => bound.profile === row.profile && bound.viewport.id === row.viewport.id);
+    assert.equal(matched.length, 1);
+    const dpr = row.viewport.deviceScaleFactor;
+    for (const side of ['reference', 'astylar']) for (const state of ['before', 'after']) {
+      const receipt = row[side][state], bytes = readFileSync(receipt.file);
+      assert.equal(digest(bytes), receipt.sha256);
+      const png = PNG.sync.read(bytes);
+      const widths = [], xs = [];
+      // The authenticated center run supplies only the thumb's visible Y band;
+      // search its local gutter, excluding native arrows and option text.
+      for (let y = receipt.thumb.firstY; y <= receipt.thumb.lastY; y++) {
+        let width = 0;
+        for (let x = receipt.sampleX - 7 * dpr; x <= receipt.sampleX + 7 * dpr; x++) {
+          assert.ok(x >= 0 && x < png.width && y >= 0 && y < png.height);
+          const i = (y * png.width + x) * 4;
+          const rgb = [...png.data.subarray(i, i + 3)];
+          const matches = side === 'reference'
+            ? Math.max(...rgb) - Math.min(...rgb) <= 2 && rgb[0] >= 95 && rgb[0] <= 235
+            : receipt.thumb.rgb.every((value, channel) => rgb[channel] === value);
+          if (matches) { width++; xs.push(x); }
+        }
+        assert.ok(width > 0); widths.push(width);
+      }
+      const peakWidth = Math.max(...widths);
+      if (side === 'astylar') {
+        assert.equal(peakWidth, 8 * dpr);
+        assert.ok(widths.every(width => width === peakWidth), 'visible indicator has straight full-width rows, not rounded native corners');
+        assert.ok(Math.abs(Math.min(...xs) / dpr - row.astylar.panel.x - matched[0].thumbBox.x) < 1,
+          'indicator left edge agrees with retained CSS bound within pixel sampling');
+      } else {
+        assert.equal(peakWidth, 9 * dpr);
+        assert.equal(widths[0], dpr === 1 ? 5 : 8);
+        assert.equal(widths.at(-1), widths[0]);
+        assert.equal(widths.filter(width => width < peakWidth).length, dpr === 1 ? 4 : 10);
+      }
+      masks.push({ profile: row.profile, viewport: row.viewport.id, side, state,
+        receipt: { file: receipt.file, sha256: receipt.sha256 },
+        x: Math.min(...xs), width: Math.max(...xs) - Math.min(...xs) + 1,
+        firstRowWidth: widths[0], lastRowWidth: widths.at(-1), peakWidth,
+        nonFullRows: widths.filter(width => width < peakWidth).length,
+        rows: widths.length, requestedCandidateWidth: matched[0].thumbBox.width,
+        scope: 'existing native-neutral/candidate-exact-color visible mask; fringe and occluded pixels are not reconstructed' });
+    }
+  }
+  assert.equal(masks.length, 32);
+  t.diagnostic(JSON.stringify({ retainedScrollbarThumbMasks: masks, acceptance: false,
+    scope: 'authenticated local thumb color masks only; not complete track paint, pixel-equivalent colors or current rendering acceptance' }));
+});
+
 test('comparison iframe overlays expose parent control focus scope', async t => {
   await withFrozenShowcase(async (browser, baseUrl) => {
     assert.equal(browser.version(), '154.0.8037.58');

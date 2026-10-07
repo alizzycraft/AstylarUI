@@ -24,6 +24,25 @@ No renderer,fixture,threshold or captured evidence changes.
 
 ### October 8 remaining scrollbar paint boundary
 
+Retained thumb shape is now inspected across all8 configured desktop cohorts,
+before/after wheel,32 authenticated PNG masks. Reusing the existing native-neutral
+and candidate exact-color pixel rules shows native9CSSpx width with rounded
+corner rows (DPR1 peak9/ends5/four narrower rows;DPR2 peak18/ends8/ten narrower
+rows). Candidate visible masks are8CSSpx wide with every sampled row full-width;
+their left edge agrees with retained CSS thumb x within1CSSpx. This matches the
+complete source-bound plain-plane paint,not the native rounded indicator.
+Classification: documented core native-scrollbar paint limitation,not equal
+rendering or a demonstrated horizontal projection defect. Antialiased fringe,
+occluded portions,track/arrow paint and exact initial occlusion ownership remain
+separate. The owning offline test runs without browser recapture;1/1 passes
+3187.6562ms. Log `timepicker-retained-thumb-masks-20261008-asserted.log`,SHA256
+b52bd4ac2371ce255b7f0321ac4bb7703548026b6f56025373f851ad53178d5e.
+Initial exact-native-color detection had empty rows because native edge shades
+vary; failed log retained. Corrected measurement reuses the already established
+neutral-gray rule rather than treating shade variation as missing geometry.
+Next: track/arrow paint and initial occlusion ownership,not another thumb-shape
+or bounds replay. Final parity criteria and case closure remain unchanged.
+
 All8 configured desktop theme/DPR scrollbar bounds now join the original exact
 open-scroll membership,authenticated candidate trees and retained scroll states.
 The frozen build reproduces each complete resolved popup style; all request
