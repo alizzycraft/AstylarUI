@@ -2,6 +2,20 @@
 
 ## Current evidence boundary — October 7
 
+Complete module-binding evidence now has an additive retained replay test in
+input-equivalence-audit.spec.mjs: `retained bridge and CSS boundary modules bind
+complete captured installed and current emit bytes`. It pins both original logs,
+config/source/map/installed/local hashes and TypeScript version,then independently
+transpiles all3 whole modules in memory and checks exact captured bytes plus only
+the recorded omitted source-map comment. Focused1/1 passes1457.2992ms;
+module-binding-replay-20261007.log. Existing whole legacy-suite conservation1/1
+passes (module-binding-suite-conservation-20261007.log),with one explicitly
+enumerated additive test and no old assertions removed. Full mutation suite is
+deferred to coherent batch integration,not reported rerun. Registration pending;
+producer remains150/142,accepted canonical150/141. No source build writes,
+renderer/fixture changes or applicability claim for other renderer owners.
+Next integrate retained table/list actual AX observations without recapture.
+
 Extended configured keyboard proof is now registered: producer150 findings/142
 proofs,accepted canonical remains150/141 pending the next coherent export batch.
 One exact reversible registration restores complete1190d1c2 producer bytes;

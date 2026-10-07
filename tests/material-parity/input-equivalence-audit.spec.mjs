@@ -37,6 +37,46 @@ const browserDefaults = {
   fontStyle: 'normal', transform: 'none', pointerEvents: 'auto',
 };
 
+test('retained bridge and CSS boundary modules bind complete captured installed and current emit bytes', () => {
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  const pinned = (file, hash) => {
+    const bytes = readFileSync(file); assert.equal(digest(bytes), hash, file); return bytes.toString();
+  };
+  const bridge = JSON.parse(pinned('artifacts/material-parity/semantic-bridge-current-source-binding-20261007.log',
+    '1987f616f92f3b5e32211be7cee81e41539a98cc398f4bab8ab4ea2acf925f97'));
+  const css = pinned('artifacts/material-parity/css-boundary-current-source-binding-20261007.log',
+    '87837a2eda141f9c569fffee5c7b10392c4638d0422584bfff2b6f1b6be43cd8').trim().split(/\r?\n/).map(JSON.parse);
+  assert.equal(bridge.complete, true); assert.equal(bridge.acceptance, false);
+  assert.equal(css.at(-1).complete, true); assert.equal(css.at(-1).modules, 2);
+  assert.equal(css[0].acceptance, false); assert.equal(css.at(-1).acceptance, false);
+  assert.equal(ts.version, bridge.typescript); assert.equal(ts.version, css[0].typescript);
+  assert.equal(css[0].configSha256, bridge.config.sha256);
+  assert.equal(css[0].mapSha256, bridge.map.sha256);
+  const config = JSON.parse(pinned(bridge.config.file, bridge.config.sha256));
+  const converted = ts.convertCompilerOptionsFromJson(config.compilerOptions, path.dirname(path.resolve(bridge.config.file)));
+  assert.deepEqual(converted.errors, []);
+  const map = JSON.parse(pinned(bridge.map.file, bridge.map.sha256));
+  const modules = [bridge, ...css.slice(1, -1)];
+  assert.deepEqual(modules.map(row => path.basename(row.source.file)).sort(),
+    ['astylar-semantic-bridge.ts', 'css-layout-geometry.ts', 'css-render-boundary.ts']);
+  for (const row of modules) {
+    const input = pinned(row.source.file, row.source.sha256);
+    const installed = pinned(row.installed.file, row.installed.sha256);
+    assert.equal(pinned(row.local.file, row.local.sha256), installed);
+    const emitted = ts.transpileModule(input, { compilerOptions: converted.options,
+      fileName: path.resolve(row.source.file), reportDiagnostics: true });
+    assert.deepEqual(emitted.diagnostics, []); assert.deepEqual(row.diagnostics, []);
+    assert.equal(emitted.outputText, installed); assert.equal(digest(emitted.outputText), row.freshEmitSha256);
+    const matches = map.sources.flatMap((file, i) => file.endsWith('/' + path.basename(row.installed.file))
+      ? [map.sourcesContent[i]] : []);
+    assert.equal(matches.length, 1);
+    assert.equal(digest(matches[0]), row.map?.capturedSha256 ?? row.capturedSha256);
+    assert.equal(matches[0] + row.exactOmittedComment, installed);
+  }
+  // Exact module equality proves applicability, not coordinate correctness,
+  // complete pipeline validity, typechecking, or current rendering acceptance.
+});
+
 test('retained extended keyboard cohorts replay original runtime tails and source preambles', async () => {
   const { restoreExtendedKeyboardRegistration } = await import('./position-composition-producer-transition.mjs');
   const producerFile = 'tests/material-parity/input-equivalence-audit.mjs';
