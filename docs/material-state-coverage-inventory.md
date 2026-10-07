@@ -1,6 +1,26 @@
 # Material comparison/state coverage inventory
 
-## Current evidence boundary — October 7
+## Current evidence boundary — October 8
+
+Publication reconciliation is complete for the coherent150-finding/146-proof
+batch at frozen HEAD48df0287. Export and independent cold check both exit0;
+the independent check reauthenticates1205 inputs/89154859 bytes with zero
+invalidations and completes in3378181.5746ms. Compact import and whole-index
+verification exit0. Canonical generation3074b9bf…/indexe3e8075f… supersedes
+the150/141 accepted boundary and running-process notes below.
+Logs: retained-batch-canonical-export-20261007.log,
+retained-batch-canonical-independent-20261008.log (SHA256
+94d98883bafda0f800aade91700d818ab4e80f40c778f6de2d360cab2676e87e),
+retained-batch-index-import-20261008.log (SHA256
+62942d4c9b21dae0a5718deeabe478b85f1efb1d25927c8044b78ebd0d120f3d),
+retained-batch-index-verify-20261008.log (SHA256
+c3f79404e7550673231dc2a290ccf7c1dcf1e96fcbce2a1aee3ecc61739ed91d).
+All436 static/1875 interaction cases,8483 groups/389202 occurrences and39904
+controls remain; unresolved scalar attribution0,inputEquivalent=false.
+This publication authenticates retained evidence,not whole-case closure or
+current rendering acceptance. Next: shared overlay/scrollbar paint and input
+caret/selection paint,then exact applicable-obligation/current-validity closure.
+No renderer,fixture,threshold or captured evidence changes.
 
 Four retained module/AX/state/trace proofs are now registered as one exact batch.
 Producer inventory150 findings/146 proofs preserves the entire predecessor;
@@ -3023,10 +3043,11 @@ retain old snackbar timers across a switch to Menu, in the bounded DPR1 probe.
    core placement, clipping, dismissal, focus containment and resource cleanup.
    Reuse the authenticated light keyboard captures before adding only missing
    profile/DPR/intermediate states.
-4. Keyboard-operable selection controls: the current light desktop key probes
+4. Keyboard-operable selection controls: the configured desktop key probes
    classify sort, checkbox, radio, chips, slide-toggle, button-toggle, tabs,
    stepper, expansion, slider and select at their first state/focus divergence.
-   Other keys, profiles, focus paint and complete input mapping remain. The
+   All8 configured focus contexts per family are now inspected through retained
+   keyboard registration; other keys,focus paint and complete input mapping remain. The
    candidate callback receives composite keys; its Escape-only handler does
    not implement the reference components' activation/navigation. Slider has
    a distinct authored range/step versus store-normalization conflict, not a

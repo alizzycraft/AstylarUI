@@ -2,6 +2,16 @@
 
 ## Current resumption ledger — October 7
 
+- October8 publication supersedes the150/141 and running-check notes below:
+  coherent150 findings/146 proofs exported and independently cold-checked at
+  frozen48df0287,exit0;1205 inputs reauthenticated,zero invalidations. Compact
+  import and whole-index verification exit0,generation3074b9bf…/indexe3e8075f….
+  Exact logs/hashes are in the current coverage ledger.436/1875 cases and
+  8483 groups/389202 occurrences remain,inputEquivalent=false. No whole-case
+  inspection closure is inferred. Next unresolved priorities: overlay/scrollbar
+  paint,input caret/selection paint and exact case-obligation/current-validity
+  accounting; preserve original final gates and failure evidence.
+
 - Latest publication boundary: frozen150/141 canonical cold check now exits0,
   with1205 input receipts reauthenticated and zero invalidations. Compact import
   and whole-index verification also exit0; generation a02593c0…/index6e804812….
