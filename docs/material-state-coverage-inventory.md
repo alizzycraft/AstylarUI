@@ -2,6 +2,32 @@
 
 ## Current evidence boundary — October 7
 
+Progress default-material trigger is now observed,not merely hypothesized:
+progress-default-material-allocation-20261007.log SHA256
+d8148aff2c8bb4862a455251c5a2da0a58feefd421ab66e88482ab4cd8eefc87
+captures both light desktop DPR1 families during settlement,before snapshots.
+RootService.createRootBodyElement creates a material while root-body remains
+unmaterialed; BabylonMeshService.createMaterial sets disableLighting,whose
+StandardMaterial dirty scan calls SubMesh.getMaterial and Scene.defaultMaterial.
+The getter lazily allocates the unbound default. An independent getter-only
+control preserves static DefaultMaterialFactory identity and confirms this
+same stack in both families; terminal exit0,log
+progress-default-getter-control-20261007.log SHA256
+0ce90a9c638d500b4270c098e71ccf26fe966cb491f870569929bcd2fbd5a085.
+Both diagnostic mounts are live=tracked,stable on the measured update,and
+sampled disposal clears resources. The first trace's factory wrapper is not
+the cause of the observed mechanism. This supersedes the allocation-trigger
+unknown below,not the earlier remount equality failure. Original surfaces
+have a cached defaultMaterial reference despite no live default in the prior
+recorded material list; its exact disposal/cache history remains untraced.
+Current source locates assignment after createMaterial (root.service.ts81),
+disableLighting (babylon-mesh.service.ts1265),and full-replace clearMaterials
+in astylar-scene-resources.ts. These current sources are navigation evidence,
+not independently established installed/current method equivalence for this
+new claim. Next inspect the cached default's live/disposed state and generation
+history before attributing original-versus-remount counts or changing assertions.
+No growing leak,user-lag attribution,renderer fix or full-case closure claimed.
+
 Progress remount mount-options explanation is ruled out in the measured bar
 light desktop DPR1 cohort: progress-remount-matched-options-20261007.log SHA256
 cbd78835d0b36bd718079b12bca59cffbf74ed415697084b1f169a2559a208bc.
