@@ -10,6 +10,39 @@ import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 
+test('inline SVG support boundary remains distinct from external image currentColor', () => {
+  const file = 'src/lib/astylar-core-capabilities.ts';
+  const tree = ts.createSourceFile(file, readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, true);
+  const declarations = tree.statements.filter(ts.isVariableStatement)
+    .flatMap(statement => statement.declarationList.declarations);
+  const declaration = one(declarations.filter(d => d.name.getText(tree) === 'ASTYLAR_CORE_ELEMENT_TYPES'));
+  assert.ok(ts.isCallExpression(declaration.initializer));
+  const argument = declaration.initializer.arguments[0];
+  const array = ts.isSatisfiesExpression(argument) ? argument.expression : argument;
+  assert.ok(ts.isArrayLiteralExpression(array));
+  assert.ok(array.elements.every(ts.isStringLiteral));
+  const names = array.elements.map(element => element.text);
+  assert.ok(names.includes('img'));
+  assert.equal(names.includes('svg'), false);
+  assert.equal(names.includes('path'), false);
+  const catalog = JSON.parse(readFileSync('docs/compatibility/capabilities.json'));
+  const boundary = one(catalog.unsupported.elements.filter(entry => entry.names.includes('svg')));
+  assert.equal(boundary.classification, 'unsupported');
+  assert.equal(boundary.pluginCanSupply, true);
+  assert.match(readFileSync('src/lib/astylar-core-plugin.ts', 'utf8'),
+    /elements: ASTYLAR_CORE_ELEMENT_TYPES\.map/);
+  const bytes = readFileSync('artifacts/material-parity/icon-original-svg-boundary-20261007.log');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    '141359f90bfa4f1d859dc0815625e6754474a36a57f25e818b5a8e019b43d811');
+  const references = bytes.toString().split(/\r?\n/).filter(l => l.startsWith('{'))
+    .map(JSON.parse).filter(row => row.mode === 'reference');
+  assert.deepEqual(references.map(row => row.dpr), [1, 2]);
+  for (const row of references) {
+    assert.ok(row.data.images.every(image => image.color === 'rgb(255, 0, 255)'));
+    assert.ok(row.samples.every(sample => sample.heartCenter.join(',') === '0,0,0,255'));
+  }
+});
+
 test('retained original SVG upload failure binds public runtime and matched alpha controls', () => {
   const digest = bytes => createHash('sha256').update(bytes).digest('hex');
   const load = (name, expected) => {

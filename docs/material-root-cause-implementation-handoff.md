@@ -2,6 +2,23 @@
 
 ## Current resumption ledger — October 6
 
+- October7 Icon inline/currentColor support boundary classified,not left as a
+  hypothetical propagation bug. ASTYLAR_CORE_ELEMENT_TYPES registers img but
+  neither svg nor path; core plugin derives registrations from that list.
+  capabilities.json unsupported.elements explicitly lists svg,and html-css.md
+  documents SVG as unsupported as a native subsystem. Existing external-image
+  browser control computes magenta CSScolor yet paints black currentColor SVG:
+  external image and inline SVG do not share inherited paint context. This is
+  a documented support limitation plus unequal inline/vector versus raster
+  authoring,independent of the confirmed GPU upload defect. No catalog change
+  or endorsement of PNG substitution follows. Existing Icon suite passes3/3,
+  9225.8752ms; log icon-svg-support-boundary-20261007.log SHA256
+  e5ef0bac61f3068294eb7ed5958b90b05ee0c7c5df57504ab5ed0cf22172238e.
+  Handoff must preserve/implement the inline SVG paint contract explicitly;
+  merely restoring the external SVG URL would not restore reference inputs.
+  Remaining Icon audit gaps are broader AX,inspect-state local paint and
+  ownership/current-validity joins,not re-proving this support classification.
+
 - October7 SVG diagnosis now has a checked-in retained regression assertion
   in the existing icon-asset-input.spec.mjs suite,not another test framework.
   Both original20-owner substitution proof and new runtime/alpha-control proof
