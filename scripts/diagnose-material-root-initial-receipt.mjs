@@ -64,7 +64,45 @@ const testProjection = sourcesOnly ? { currentSuiteConservationProven: false, mi
 const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
 const oldPolicy = execFileSync('git', ['show', `${baseline}:${policyFile}`], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
 assert.equal(hash(oldPolicy.replaceAll('\r\n', '\n')), saved.sourceFingerprints.find(s => s.file === policyFile).sha256);
-const policyBefore = parse(oldPolicy), policyAfter = parse(readSource(policyFile).toString());
+// Preserve the original 132-to-145 projection. Authenticate the later exact
+// 145-to-148 extension first rather than repinning the historical receipt.
+const stagePolicy = execFileSync('git', ['show', `aee5b612:${policyFile}`],
+  { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+assert.equal(hash(stagePolicy.replaceAll('\r\n', '\n')),
+  '31da603b0edb345c1a0db556d39814b796131cc588b7b9d94628b4e25d2d7024');
+const stageAst = parse(stagePolicy), liveAst = parse(readSource(policyFile).toString());
+assert.equal(liveAst.statements.length, stageAst.statements.length);
+let laterDefinitions;
+for (let i = 0; i < stageAst.statements.length; i++) {
+  const before = stageAst.statements[i], after = liveAst.statements[i];
+  if (before.getText(stageAst) === after.getText(liveAst)) continue;
+  assert.ok(ts.isVariableStatement(before) && ts.isVariableStatement(after));
+  assert.equal(before.declarationList.declarations[0].name.text, 'sourceAuditDefinitions');
+  assert.equal(after.declarationList.declarations[0].name.text, 'sourceAuditDefinitions');
+  assert.equal(hash(after.getText(liveAst)),
+    'd3fa95deb59c1bd2009564f2d10a2c2e1e2fc2b334c3b5d76c7bf289aa2c2a0a',
+    'later policy extension changed');
+  const elements = n => n.declarationList.declarations[0].initializer.arguments[0].elements;
+  const priorDefinitions = elements(before);
+  laterDefinitions = elements(after);
+  assert.deepEqual([priorDefinitions.length, laterDefinitions.length], [145, 148]);
+  const id = n => n.arguments[0].properties.find(p => p.name?.text === 'id').initializer.text;
+  assert.deepEqual(laterDefinitions.slice(0, 2).map(id), [
+    'core-public-semantic-subset-omits-accessibility-only-hiding',
+    'fixture-list-content-wrappers-and-row-sizing-substituted']);
+  assert.equal(id(laterDefinitions.at(-1)), 'core-svg-dimensionless-image-upload-not-adapted');
+  assert.equal(new Set(laterDefinitions.map(id)).size, 148);
+  assert.deepEqual(laterDefinitions.slice(2, -1).map(n => n.getText(liveAst)),
+    priorDefinitions.map(n => n.getText(stageAst)), 'all 145 prior definition bodies and order remain');
+}
+assert.equal(laterDefinitions?.length, 148, 'the explicit later policy extension is required');
+// The checkpoint also adds one exact evidence receipt to an existing finding.
+// Project only that addition away for the original 132-to-145 assertion.
+const tooltipReceipt = ",\n      { file: 'artifacts/material-parity/tooltip-live-ownership-cycles-verified-20261005.log', sha256: 'caface4e738b983984d97660263a44c9d116e0b78b94df203e9b96e4d4b5f8fc' }";
+assert.equal(stagePolicy.split(tooltipReceipt).length, 2);
+assert.equal(hash(readSource('artifacts/material-parity/tooltip-live-ownership-cycles-verified-20261005.log')),
+  'caface4e738b983984d97660263a44c9d116e0b78b94df203e9b96e4d4b5f8fc');
+const policyBefore = parse(oldPolicy), policyAfter = parse(stagePolicy.replace(tooltipReceipt, ''));
 assert.equal(policyBefore.statements.length, policyAfter.statements.length);
 let oldDefinitions, newDefinitions;
 for (let i = 0; i < policyBefore.statements.length; i++) {
@@ -126,7 +164,7 @@ if (sourcesOnly) {
   console.log(JSON.stringify({ kind: 'root-initial-style-source-applicability-diagnostic', baseline,
     unchangedInventoryFunctions: selectedFunctions, unchangedReferenceContextDeclaration: true,
     producerProjection, intermediateSuiteChangedStatements: changedTestStatements, testProjection,
-    policyProjection: { originalDefinitions: 132, currentDefinitions: 145, allOriginalDefinitionsConserved: true,
+    policyProjection: { originalDefinitions: 132, historicalProjectedDefinitions: 145, currentDefinitions: 148, allOriginalDefinitionsConserved: true,
       addedClassification: 'documented-limitation', allOtherPolicyStatementsConserved: true },
     borderSelectorTransitionAuthenticated: true, historicalReceiptsRewritten: false,
     caseReplayExecuted: false, canonicalClassificationVerified: false, renderingEquivalent: false, evidenceFilesWritten: false }));
@@ -158,7 +196,7 @@ const insertion = `
     changedTestStatements: ${JSON.stringify(changedTestStatements)},
     producerProjection: ${JSON.stringify(producerProjection)},
     testProjection: ${JSON.stringify(testProjection)},
-    policyProjection: { originalDefinitions: 132, currentDefinitions: 145, allOriginalDefinitionsConserved: true,
+    policyProjection: { originalDefinitions: 132, historicalProjectedDefinitions: 145, currentDefinitions: 148, allOriginalDefinitionsConserved: true,
       addedClassification: 'documented-limitation', allOtherPolicyStatementsConserved: true },
     cases: entries.length, properties: Object.keys(rootInitialStyleValues).length,
     observations: proofs.length, groups: durable.groups.length,

@@ -2,6 +2,25 @@
 
 ## Current evidence boundary — October 7
 
+Root-initial policy conservation is now reconciled. The exact current148
+definition declaration conserves all145 checkpoint bodies and order, with only
+the two passive findings and final SVG finding added. The145 checkpoint also
+contains one exact later tooltip ownership receipt; its bytes authenticate before
+projecting that addition away for the unchanged original132-to145 assertion.
+No historical hash, definition body or original assertion was repinned. Full
+case-index migration checks pass3/3 in69437.9174ms, including forged receipts
+and unrelated source mutation controls. Log:
+root-policy-tooltip-receipt-reconciliation-20261007.log,
+SHA540782759944038197c8277c31879ad0f38bc05b6ea5d04247a90bc96cf7b5d7.
+Final sources-only CLI check exits0 and accurately distinguishes145 historical
+projected from148 current definitions; log
+root-policy-reconciled-source-applicability-20261007.log,
+SHA8f6f806b1317aba66577420144a6f4ba208623c3b78dcae4aaa4b90a12ddd8c8.
+Earlier failed logs remain retained. This supersedes the policy-gap next action
+below only: the actual541-to542 integration assertion, standalone evidence
+registration, current-code acceptance and publication remain pending. This
+consumed script change is not covered by the earlier frozen canonical generation.
+
 October7 inventory reconciliation isolates separate stale boundaries instead of
 changing541 to542 alone. AST enumeration proves all541 paths from17ba0e2b remain
 ordered and the sole542nd path is icon-asset-input.spec.mjs; log
