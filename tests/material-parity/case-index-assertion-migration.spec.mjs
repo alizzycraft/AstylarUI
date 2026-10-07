@@ -33,6 +33,7 @@ test('entire legacy suite conserves statements outside nine receipt checks and t
   assert.equal(result.mappingReadAdapterAuthenticated, true);
   assert.equal(result.captureDiagnosticsProjectionAuthenticated, true);
   assert.deepEqual(result.addedIsolatedTests, [
+    'retained table and list AX cohorts preserve bounded equality and structural differences',
     'retained bridge and CSS boundary modules bind complete captured installed and current emit bytes',
     'retained extended keyboard cohorts replay original runtime tails and source preambles',
     'configured enabled keyboard evidence joins forty exact focus contexts without changing original assertions',

@@ -2,6 +2,22 @@
 
 ## Current evidence boundary — October 7
 
+Retained table/list AX has an additive replay test: `retained table and list AX
+cohorts preserve bounded equality and structural differences`. Exact original
+log hashes,report/checkpoint,full served build and current application-source
+receipts authenticate. All16 configured physical cohorts/32 observations per
+family match the original report cohort union. Table nine-element role/name/
+ignored/internal parent-child properties agree; list Inbox/Archive/no-list-role
+exposure agrees while7-versus5 generic wrappers and2-versus0 ignored nodes stay
+asserted as differences. Missing,duplicate and forged role/text controls fail.
+Combined AX/module replay2/2 passes3321.7642ms: passive-ax-module-replay-20261007.log.
+Whole legacy-suite conservation1/1 passes: passive-ax-suite-conservation-20261007.log.
+Header associations/AT behavior,list wrapper equivalence,paint and whole-case
+closure remain open. New test is explicitly enumerated; no prior assertions
+changed. No recapture; producer150/142 and accepted canonical150/141 unchanged.
+Next complete retained applicability/divider-trace batch before registering and
+running coherent integration; do not repeat these resolved AX property checks.
+
 Complete module-binding evidence now has an additive retained replay test in
 input-equivalence-audit.spec.mjs: `retained bridge and CSS boundary modules bind
 complete captured installed and current emit bytes`. It pins both original logs,

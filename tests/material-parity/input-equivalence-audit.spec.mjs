@@ -37,6 +37,74 @@ const browserDefaults = {
   fontStyle: 'normal', transform: 'none', pointerEvents: 'auto',
 };
 
+test('retained table and list AX cohorts preserve bounded equality and structural differences', async () => {
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  const pinned = (file, hash) => {
+    const bytes = readFileSync(file); assert.equal(digest(bytes), hash, file); return bytes.toString();
+  };
+  const report = JSON.parse(pinned('artifacts/material-parity/current-full-20261005/latest-report.json',
+    'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62'));
+  const checkpoint = JSON.parse(pinned('artifacts/material-parity/current-full-20261005/checkpoint/manifest.json',
+    '7ae2cba1739353661a0c84e28ef70819157311cc824fd00ae94ced29fadeb352'));
+  const { fingerprintDirectory } = await import('./run-checkpoint.mjs');
+  assert.deepEqual(fingerprintDirectory('examples/material-showcase/dist/material-showcase/browser'), checkpoint.provenance.browserFiles);
+  pinned('tests/material-parity/sort-focus-structure.spec.mjs', '65d7256f859a0839cdf6364d8f3d4e2b81bdb32978c42e0afeaa27f2622e14ce');
+  pinned('examples/material-showcase/src/app/astylar.component.ts', '71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd');
+  pinned('examples/material-showcase/src/app/reference.component.ts', 'debe55bc492d0fa1e48a9c7f09e1b668d435a2260588710207ab878b23c1d4aa');
+  const key = row => JSON.stringify([row.profile, row.viewport.width, row.viewport.height, row.viewport.deviceScaleFactor]);
+  for (const [family, name, hash] of [
+    ['table', 'table-child-ax-cohorts', 'a53981184b33cbd4b55119623d6502121f14d0586b02d9005fcd9eeccc81c949'],
+    ['list', 'list-ax-cohorts', '98b2c152497cb4bae46833d0d46a61b7a16fa5f24177cf96652280c805034f04'],
+  ]) {
+    const rows = pinned(`artifacts/material-parity/${name}-20261007.log`, hash).trim().split(/\r?\n/).map(JSON.parse);
+    assert.equal(rows[1].browser, '154.0.8037.58');
+    assert.equal(rows.at(-1).complete, true); assert.equal(rows.at(-1).acceptance, false);
+    assert.equal(rows.at(-1).cohorts, 16); assert.equal(rows.at(-1).observations, 32);
+    const observations = rows.filter(row => row.viewport);
+    const expected = [...new Set([...report.results, ...report.interactions].filter(row => row.family === family).map(key))].sort();
+    assert.equal(expected.length, 16);
+    const verify = observed => {
+      assert.equal(observed.length, 32);
+      for (const mode of ['reference', 'astylar']) {
+        const keys = observed.filter(row => row.mode === mode).map(key).sort();
+        assert.equal(new Set(keys).size, 16); assert.deepEqual(keys, expected);
+      }
+      for (const cohort of expected) {
+        const pair = ['reference', 'astylar'].map(mode => observed.find(row => row.mode === mode && key(row) === cohort));
+        if (family === 'table') {
+          const normalized = pair.map(row => {
+            assert.equal(row.observations.length, 9);
+            const ids = row.observations.map(item => item.ax.nodeId);
+            return row.observations.map(item => ({ tag: item.domTag, role: item.ax.role.value,
+              name: item.ax.name.value, ignored: item.ax.ignored,
+              parent: ids.indexOf(item.ax.parentId), children: (item.ax.childIds ?? []).filter(id => ids.includes(id)).map(id => ids.indexOf(id)) }));
+          });
+          assert.deepEqual(normalized[0], normalized[1]);
+          assert.deepEqual(normalized[0].map(item => item.role), ['table', 'rowgroup', 'row', 'columnheader', 'rowgroup', 'row', 'cell', 'row', 'cell']);
+          assert.ok(normalized[0].every(item => item.ignored === false));
+        } else {
+          for (const [index, row] of pair.entries()) {
+            assert.deepEqual(row.subtree.filter(n => !n.ignored && n.role.value === 'StaticText').map(n => n.name.value), ['Inbox', 'Archive']);
+            assert.ok(!row.subtree.some(n => !n.ignored && ['list', 'listitem', 'listbox', 'option'].includes(n.role.value)));
+            assert.equal(row.subtree.filter(n => !n.ignored && n.role.value === 'generic').length, index === 0 ? 7 : 5);
+            assert.equal(row.subtree.filter(n => n.ignored).length, index === 0 ? 2 : 0);
+          }
+        }
+      }
+    };
+    verify(observations);
+    assert.throws(() => verify(observations.slice(1)));
+    const duplicate = structuredClone(observations); duplicate[1] = structuredClone(duplicate[0]);
+    assert.throws(() => verify(duplicate));
+    const changed = structuredClone(observations);
+    if (family === 'table') changed[0].observations[0].ax.role.value = 'generic';
+    else changed[0].subtree.find(n => n.role.value === 'StaticText').name.value = 'forged';
+    assert.throws(() => verify(changed));
+  }
+  // Table header association/AT behavior and list wrapper equivalence remain
+  // open. Neither observed AX property set proves layout, paint or full parity.
+});
+
 test('retained bridge and CSS boundary modules bind complete captured installed and current emit bytes', () => {
   const digest = bytes => createHash('sha256').update(bytes).digest('hex');
   const pinned = (file, hash) => {
