@@ -2,6 +2,22 @@
 
 ## Current evidence boundary — October 7
 
+Icon disposal caller applicability is now checked through the whole owning
+chain,not just the image service. Current transpiled createScene,session
+addCleanup/dispose and public surface-handle dispose match installed and served
+mapped methods using identical existing consumer esbuild syntax/whitespace
+normalization. Served chunk/map hashes authenticate against the capture's
+checkpoint. Log icon-disposal-caller-applicability-20261007-retry.log records
+all source/module/method hashes. Public disposal calls scene.dispose; its
+registered disposal callback invokes session.dispose,whose owned callbacks
+unsubscribe the image listener and invoke imageResources.disposeScene(scene).
+The latter deletes the entry map,so isCurrent rejects stale entries. This is
+a source-grounded explanation consistent with retained native loads completing
+after disposal without resource revival; the capture did not directly observe
+which internal completion guard executed. Initial full-method textual comparison
+fails and remains retained; normalized equality is not whole-module byte equality.
+No browser recapture,renderer/fixture change or complete Icon closure claimed.
+
 Icon pending-disposal evidence now has bounded current-source applicability:
 all11 ImageResourceService method bodies in current TypeScript transpilation
 match installed JavaScript. Nine lifetime/load/guard/subscription methods also
