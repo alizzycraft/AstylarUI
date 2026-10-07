@@ -2,6 +2,24 @@
 
 ## Current evidence boundary — October 7
 
+Retained reference-only progress focus-paint probe is now inspected without
+recapture: progress-reference-focus-paint-20261007.log SHA256
+d2a134f8e6134d9a99f1d7f25bec67c63f2ba9baed1ea1f85adc3c81f677f94f.
+Its32 unique family/profile/viewport cohorts contain64 embedded PNGs; all
+embedded byte hashes verify and captured errors are empty. All16 progress-bar
+cohorts have identical before/after PNG bytes and no computed-style changes.
+All16 progress-spinner cohorts have changed pixels and exactly outline-color,
+outline-style and outline-width computed-style changes following focus().
+This answers the remaining bounded reference-side focus-paint question: focus
+has a visible effect for the spinner, not the bar, in these captured cohorts.
+It does not prove that outline explains every changed pixel, quantify candidate
+missing paint, establish matched-input parity, or close AX/remount/isolation
+and complete configured-case obligations. Candidate focusability omission is
+already separately classified; no candidate tabindex intervention was made.
+The existing canonical export process7988 is verified live and has reached
+validate-audit; its terminal result and independent cold check remain pending.
+No consumed source, fixture, renderer or acceptance criterion changed.
+
 Publication is partially restored without rewriting history: a fast-forward push
 of existing17ba0e2b succeeds and read-only ls-remote confirms
 17ba0e2b9683a89d8282f392122ba6a281d6a087. GitHub accepts the59.92MB canonical
