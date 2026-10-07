@@ -2,6 +2,19 @@
 
 ## Current evidence boundary — October 7
 
+Radio ArrowLeft/ArrowRight routing is now inspected in all8 configured enabled
+focus cohorts (four profiles × desktop DPR1/2 at1440x1000). Authenticated frozen
+helper/report/full served checkpoint; original radio test assertions unchanged,
+only diagnostic context and observation emission vary. Native focus/selection
+routes team→solo→team; candidate remains team despite both delivered application
+keydown events in every cohort. No page errors; terminal exit0. Log
+radio-configured-keyboard-cohorts-20261007.log SHA256
+b37926dfdb29d300f4f41c2f9e131abbc02915e764c280124a061e63e04c00a2.
+This closes profile/DPR applicability for that enabled arrow-routing discrepancy,
+not Space,disabled controls,focus/ripple paint,event ordering,mobile navigation
+or complete radio closure. No renderer/fixture changes or canonical rebuild;
+standalone proof awaits coherent evidence integration.
+
 Chips,slide-toggle and expansion enabled keyboard-boundary observations now
 cover all24 configured focus contexts:four profiles × desktop DPR1/2 × three
 families. Full served checkpoint/report and original helper/callback authenticate.
