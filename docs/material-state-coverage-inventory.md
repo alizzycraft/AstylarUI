@@ -20,6 +20,18 @@ The existing canonical export process7988 is verified live and has reached
 validate-audit; its terminal result and independent cold check remain pending.
 No consumed source, fixture, renderer or acceptance criterion changed.
 
+Focus-paint cohort applicability now joins all40 configured progress membership
+rows to these32 physical observations by family/profile/width/height/DPR,with
+zero missing or extra keys. The membership log authenticates to SHA256
+d64d73bea9a8e7d6ad2640bea3bc6a59c072ae9465f1aa3ca8577c5111fb6684.
+The first read-only join failed by treating its one summary row as a cohort;
+the corrected join requires viewport-bearing observations,matching the existing
+cohort convention. No evidence row was deleted. This supersedes the family
+table's pending reference-focus-paint question only; candidate paint,edge/cap
+equivalence,remount/isolation and complete case closure remain pending. The
+focusability finding is already classified in current149-definition policy;
+its canonical export/verification is still pending,not an unclassified cause.
+
 Publication is partially restored without rewriting history: a fast-forward push
 of existing17ba0e2b succeeds and read-only ls-remote confirms
 17ba0e2b9683a89d8282f392122ba6a281d6a087. GitHub accepts the59.92MB canonical
