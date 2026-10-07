@@ -2,6 +2,23 @@
 
 ## Current evidence boundary — October 7
 
+Disabled checkbox/radio/switch real-key boundary now inspected in light desktop
+DPR1 and dark mobile DPR2 (six family/runtime contexts),using the existing
+interaction=disabled adapter and authenticated frozen full checkpoint. Native
+controls all skip Tab; candidate checkbox and switch also skip with tabindex=-1.
+Candidate selected radio remains Tab-focusable in both contexts: aria-disabled
+true but radio-team tabindex0. All controls keep disabled=true/selected=true
+under Tab/Space/ArrowLeft; no page errors. Log disabled-composite-keyboard-20261007.log
+retains actual attributes,focused identity,steps and events; terminal exit0.
+Current candidate radio declarations935–937 derive tabindex only from selection,
+unlike checkbox927/switch965's disabled-aware -1. First visible divergence is
+that authored focus contract,not missing key delivery or proof that core must
+make every aria-disabled element unfocusable. Native Material disabled inputs
+provide the reference contract for this example. Other profiles,programmatic
+focus,pointer blocking,Space on enabled radio and disabled paint remain open.
+No renderer/fixture fix or all-case closure; candidate focus discrepancy is
+inspected failing evidence. Standalone registration remains a coherent-batch task.
+
 Radio ArrowLeft/ArrowRight routing is now inspected in all8 configured enabled
 focus cohorts (four profiles × desktop DPR1/2 at1440x1000). Authenticated frozen
 helper/report/full served checkpoint; original radio test assertions unchanged,
