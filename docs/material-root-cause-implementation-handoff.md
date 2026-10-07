@@ -2,6 +2,23 @@
 
 ## Current resumption ledger — October 6
 
+- October7 SVG diagnosis now has a checked-in retained regression assertion
+  in the existing icon-asset-input.spec.mjs suite,not another test framework.
+  Both original20-owner substitution proof and new runtime/alpha-control proof
+  pass2/2,4775.4515ms. Log icon-svg-retained-regression-20261007.log SHA256
+  c7650598e647a97886bd5551d03089efff37ec47f6fbb4d591160dde706ae3e1.
+  The new assertion rehashes two2515-input bundles,ten captured PNGs,the original
+  SVG and complete source/installed owner methods; verifies actual1281 upload
+  errors,identical uninstrumented failure pixels,successful matched controls
+  and native assigned-dimension upload; altered-success negative control fails.
+  Producer sourceFingerprints/focusedProofInventory do not read this suite;
+  sourceAuditFindings records its existing proof description but reads only
+  definition.file. Thus this addition does not mutate live cold-session inputs.
+  Canonical finding/proof registration still belongs to the next coherent batch.
+  Icon family row now marks loading cause inspected instead of repeatedly
+  requesting that same proof. Remaining inline-currentColor support,AX,retained
+  inspect-state local paint and lifetime/current-validity gaps are not closed.
+
 - October7 original SVG root-cause route is now runtime-bound. Observational
   texImage2D hook at DPR1/2 records exactly one HTMLImageElement upload per
   surface,150x150 natural/element dimensions,and INVALID_VALUE1281. Stack
