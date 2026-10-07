@@ -2,6 +2,26 @@
 
 ## Current evidence boundary — October 7
 
+Progress remount/peer diagnostic now has one actual light desktop DPR1 bar
+cohort,not the intended four-cohort completion. Retry log
+progress-remount-peer-20261007-retry.log SHA256
+3cf862699572bfd310af7c7c0df409c762a003fd231ff682039466fd1f0b40c0.
+The unchanged full helper source and served checkpoint authenticate. Identical
+authored documents and IDs mounted through the public service API retain a
+stable peer through original disposal,same-canvas remount,remount update and
+disposal,and a subsequent peer update. All sampled disposed surfaces clear
+live/tracked resources and plugin ownership; no page errors are recorded.
+The original has14/14/2 meshes/materials/textures; both diagnostic mounts have
+14/15/2,with live=tracked and no observed growth. The equality assertion fails
+honestly and stops before spinner/DPR2. Diagnostic mounts used silent options
+instead of the showcase's full options,so document equality alone is not full
+mount-input equality. Do not label the extra material a leak or remount defect.
+Next match mount options and inspect material identities before attribution;
+semantic/input isolation and other cohorts remain unproved. The first failed
+log is retained separately: function-body hash was incorrectly compared with
+the whole-helper-file receipt,which still matches exactly. No consumed source
+or comparison input changed; the existing canonical export is verified live.
+
 Retained reference-only progress focus-paint probe is now inspected without
 recapture: progress-reference-focus-paint-20261007.log SHA256
 d2a134f8e6134d9a99f1d7f25bec67c63f2ba9baed1ea1f85adc3c81f677f94f.
