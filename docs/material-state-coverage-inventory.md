@@ -2,6 +2,22 @@
 
 ## Current evidence boundary — October 6
 
+October7 original CSS authoring applicability now accounts for11 sources across
+four authenticated CSS maps: eight global SCSS/Roboto/Material-theme inputs
+match current bytes exactly; three component map contents exactly match their
+unique @Component styles literals. They are extracted CSS,not wholeTS files.
+Global/initial diagnostic log current-full-stylesheet-source-applicability-
+20261007.log SHA9e3e4a03c9091a542f52f5e039f4fdf0a583e83b19cb3bd2aa3f0bbc23b97b0d
+retains its invalid all-whole-file assertion; only the eight matching original
+sources are accepted observations. Correct decorator-scoped inline proof exits0:
+current-full-inline-style-applicability-20261007-retry.log
+SHA2be0dd23df60d1c23f10f333cf030a7bade992c767eed69ccb85b0d249e57205.
+Initial literal checker also encountered SiteData styles,so its failure is
+retained,not accepted; corrected checker requires unique Component ownership.
+This closes original mapped CSS input identity,not compiled stylesheet-toolchain
+or font/image binary applicability,all dependencies,current calendar clock or
+final enforced rendering. No recapture or CSS/fixture modification occurred.
+
 October7 installed→current TypeScript boundary reuses the existing88-module
 runtime compilation proof (unchanged test source SHAde260e2fbee31686bccd940582e1503fc378881d2c94e6e35b66b67877cbc141),
 not a new projection/test layer. Focused original assertion passes1/1,
