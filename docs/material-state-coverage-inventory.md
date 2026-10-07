@@ -2,6 +2,23 @@
 
 ## Current evidence boundary — October 6
 
+October7 spinner native cap/join input gap is closed for all16 physical cohorts
+representing20 configured cases. The unchanged withFrozenShowcase helper
+(sort-focus-structure source SHA65d7256f859a0839cdf6364d8f3d4e2b81bdb32978c42e0afeaa27f2622e14ce)
+authenticates the entire served build against the current-full checkpoint;
+the report SHAab42dbec is checked before exact cohort selection. Chrome
+154.0.8037.58 reference-only computed-style measurements consistently request
+strokeLinecap=butt,strokeLinejoin=miter,strokeMiterlimit=4, with radius45,
+stroke-width10%,dasharray282.743px and dashoffset101.788px; zero page errors.
+These properties were absent from retained input-tree style records. Evidence:
+spinner-native-cap-inputs-20261007.log,
+SHAd0a61b4207f1497fb6fdfebc0ea7f6cdac2c56a80c462158b71a1112fcb0edee,
+exit0,16 observations. This is a frozen-build input supplement,not a new full
+capture or cap-paint acceptance. Next compare actual plugin endpoint geometry
+with these native requests; Mesh.CAP_ALL alone is not proof of a cap mismatch.
+Existing angular authoring attribution and ordinary lifecycle results remain
+settled; exact case-obligation closure and remaining lifecycle/paint work stay open.
+
 October7 progress ownership probe reuses the unchanged frozen-build helper and
 Icon equivalent-update/disposal callback,parameterized only by family/route/
 diagnostic label. Both progress families stop at their first light desktop DPR1
