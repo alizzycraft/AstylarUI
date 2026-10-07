@@ -37,6 +37,53 @@ const browserDefaults = {
   fontStyle: 'normal', transform: 'none', pointerEvents: 'auto',
 };
 
+test('retained disabled composite focus binds exact current authoring and radio-only Tab divergence', () => {
+  const digest = value => createHash('sha256').update(value).digest('hex');
+  const readPinned = (file, sha256) => {
+    const bytes = readFileSync(file);
+    assert.equal(digest(bytes), sha256, file);
+    return bytes.toString('utf8');
+  };
+  const receipt = readPinned('artifacts/material-parity/disabled-radio-source-applicability-20261007-retry.log',
+    '3559a0a9640ac38b9cd26476ea52b165a4dae718c0f04d77742dde3dcccb25f1')
+    .trim().split(/\r?\n/).map(JSON.parse);
+  assert.equal(receipt.length, 3);
+  for (const entry of receipt.slice(0, 2)) {
+    const map = JSON.parse(readPinned(`examples/material-showcase/dist/material-showcase/browser/${entry.map}`, entry.mapSha256));
+    const source = readPinned(`examples/material-showcase/src/app/${entry.source}`, entry.sourceSha256);
+    const matches = map.sources.flatMap((name, index) => name.endsWith(`/${entry.source}`)
+      && map.sourcesContent[index]?.includes('import {') ? [map.sourcesContent[index]] : []);
+    assert.deepEqual(matches, [source]);
+  }
+  const rows = readPinned('artifacts/material-parity/disabled-composite-keyboard-20261007.log',
+    'f84ac81c83ee22865d21ef844cf61c153c5ec5d1c916f22108bacc64b13a7f11')
+    .trim().split(/\r?\n/).map(JSON.parse).filter(row => row.family);
+  assert.equal(rows.length, 6);
+  assert.deepEqual(rows.map(row => `${row.family}:${row.cohort.profile}:${row.cohort.dpr}`).sort(),
+    ['checkbox:dark:2', 'checkbox:light:1', 'radio:dark:2', 'radio:light:1', 'slide-toggle:dark:2', 'slide-toggle:light:1'].sort());
+  for (const row of rows) {
+    assert.deepEqual(row.cohort.viewport, row.cohort.profile === 'light'
+      ? { width: 1440, height: 1000 } : { width: 390, height: 844 });
+    for (const side of ['reference', 'astylar']) {
+      const observation = row.observations[side];
+      assert.deepEqual(observation.errors, []);
+      assert.equal(observation.steps.length, 3);
+      for (const step of observation.steps) {
+        assert.equal(step.disabled, true); assert.equal(step.selected, true);
+        assert.equal(step.inside, side === 'astylar' && row.family === 'radio');
+        if (side === 'reference') assert.ok(step.targets.every(target => target.disabled === true));
+        else {
+          assert.ok(step.targets.every(target => target.disabled === 'true'));
+          assert.deepEqual(step.targets.map(target => target.tabindex), row.family === 'radio' ? [-1, 0] : [-1]);
+          if (row.family === 'radio') assert.equal(step.activeId, 'radio-team');
+        }
+      }
+    }
+  }
+  assert.equal(receipt.at(-1).authenticatedContexts, 6);
+  assert.equal(receipt.at(-1).result, 'pass');
+});
+
 test('browser pseudo outline does not consume host content width like a host border', async () => {
   const { chromium } = await import('playwright-core');
   const { captureBrowserInputTree } = await import('./input-tree-evidence.mjs');

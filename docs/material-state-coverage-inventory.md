@@ -2,6 +2,18 @@
 
 ## Current evidence boundary — October 7
 
+Existing input-equivalence suite now protects the retained disabled composite
+focus/source boundary: exact six family/profile/DPR/viewport memberships,three
+action boundaries each,disabled/selected invariance,native disabled inputs,
+candidate tabindex values,radio-team focus and both full mapped/current sources.
+Focused test passes1/1 in2467.157ms; disabled-composite-focus-retained-test-20261007.log.
+Removing only that new test restores complete predecessor source after LF
+normalization; disabled-composite-focus-conservation-20261007.log exits0. No
+original assertion changed. This is standalone regression protection,not policy
+registration or canonical integration. Next register the bounded authoring finding
+and proof inventory together,conserving the149-definition predecessor. Current
+canonical remains149/139; do not export merely to include this ledger note.
+
 Disabled radio focus evidence now has exact current authored-source applicability:
 the full reference.component.ts and astylar.component.ts source-map contents match
 current files byte-for-byte (SHA256 debe55bc… and71e2d41f…). The retained six-context
