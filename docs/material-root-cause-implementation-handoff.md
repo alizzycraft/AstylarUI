@@ -2,6 +2,22 @@
 
 ## Current resumption ledger — October 6
 
+- October7 retained Icon inspect-state local paint now measured without
+  recapture: all8 configured rows/four profiles at desktop DPR1/2,16 full PNG
+  receipts,report SHAab42dbec and runner SHAe01ef9dc authenticated. Exact existing
+  cropPng function and native geometry produce8px-padded common local crops;
+  existing focused comparator supplies diagnostic metrics only. All four DPR2
+  rows miss default sharpness diagnostics while all DPR1 rows meet them;
+  SSIM range approximately0.84235–0.99771. These interaction rows configure
+  zero local targets: diagnostic matches at the static0.8 threshold are NOT
+  added acceptance gates or input-equivalence passes. Log
+  icon-inspect-local-paint-20261007.log SHAa253a8331dfffa856f1f886451487cb6a4a394a56837054fdb7a4eb448b6b1d7.
+  This closes retained inspect local-pixel absence,not current-code validity,
+  full AX/lifetime or equal-input raster causality. Next authenticate this
+  replay in the existing Icon suite and reconcile the family checklist.
+  Canonical commit17ba0e2b is local: two HTTP408 push attempts failed; remote
+  remains ea68c829 by ls-remote. Do not describe publication as pushed.
+
 - October7 divider canonical compact reconciliation completes: import and
   independent index verification exit0;8483 groups,147 findings,39904 controls,
   389202 occurrences,zero unresolved scalar attributions preserved. Current
