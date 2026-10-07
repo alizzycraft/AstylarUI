@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
 import { PNG } from 'pngjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
@@ -10,6 +11,25 @@ import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { evaluateFocusedRaster } from './focused-raster-metrics.mjs';
 
 const one = values => { assert.equal(values.length, 1); return values[0]; };
+
+test('SVG upload cause registration conserves all predecessor source findings', () => {
+  const priorSource = execFileSync('git', ['show', '91b730a9:tests/material-parity/input-equivalence-policy.mjs'],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  const prior = Function(priorSource.replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
+  assert.equal(prior.length, 147);
+  assert.equal(sourceAuditDefinitions.length, 148);
+  assert.deepEqual(sourceAuditDefinitions.slice(0, -1), prior);
+  const finding = sourceAuditDefinitions.at(-1);
+  assert.equal(finding.id, 'core-svg-dimensionless-image-upload-not-adapted');
+  assert.equal(finding.classification, 'confirmed-core-renderer-defect');
+  assert.equal([...readFileSync(finding.file, 'utf8').matchAll(new RegExp(finding.pattern, 'g'))].length, 1);
+  assert.equal(finding.evidence.length, 4);
+  for (const receipt of finding.evidence)
+    assert.equal(createHash('sha256').update(readFileSync(receipt.file)).digest('hex'), receipt.sha256);
+  assert.deepEqual(finding.observation.dpr, [1, 2]);
+  assert.match(finding.justification, /not a general alpha/);
+  assert.match(finding.justification, /separately documented support limitation/);
+});
 
 test('retained Icon inspect pixels expose DPR sharpness without adding acceptance gates', () => {
   const digest = bytes => createHash('sha256').update(bytes).digest('hex');

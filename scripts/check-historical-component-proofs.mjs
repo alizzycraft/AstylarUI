@@ -47,7 +47,11 @@ if (main) {
   let currentSorter = lf(read(sorter));
   // Exact reviewed later snapshot: replay historical bytes, never execute newer
   // launch/state tests as though they were equivalent historical evidence.
-  if (hash(read(sorter)) === 'dca535342db0162b59da58f3a979d51eea305b27b09cb7760e1a869f629647e7') {
+  const reviewedSorterCounts = new Map([
+    ['dca535342db0162b59da58f3a979d51eea305b27b09cb7760e1a869f629647e7', 32],
+    ['65d7256f859a0839cdf6364d8f3d4e2b81bdb32978c42e0afeaa27f2622e14ce', 34],
+  ]);
+  if (reviewedSorterCounts.has(hash(read(sorter)))) {
     const tests = text => {
       const ast = ts.createSourceFile('sorter.mjs', text, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
       return new Map(ast.statements.filter(node => ts.isExpressionStatement(node) &&
@@ -55,7 +59,7 @@ if (main) {
         .map(node => [node.expression.arguments[0].text, { node, ast }]));
     };
     const before = tests(lf(originalSorter)), after = tests(currentSorter);
-    assert.equal(before.size, 26); assert.equal(after.size, 32);
+    assert.equal(before.size, 26); assert.equal(after.size, reviewedSorterCounts.get(hash(read(sorter))));
     const changed = new Set(['slider pointer-down ownership is measured at both visual thumb centers',
       'dark mobile timepicker wheel separates scroll state from scrollbar paint']);
     const assertions = ({ node, ast }) => {

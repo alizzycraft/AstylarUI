@@ -1899,7 +1899,10 @@ test('recent public and popup proofs join existing inventories without changing 
 });
 
 async function conservedPrePassiveDefinitions() {
-  const { sourceAuditDefinitions: current } = await import('./input-equivalence-policy.mjs');
+  const { sourceAuditDefinitions: registered } = await import('./input-equivalence-policy.mjs');
+  assert.equal(registered.length, 148);
+  assert.equal(registered.at(-1).id, 'core-svg-dimensionless-image-upload-not-adapted');
+  const current = registered.slice(0, -1); // Preserve the exact historical population, not current acceptance.
   const previous = execFileSync('git', ['show', 'aee5b612:tests/material-parity/input-equivalence-policy.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const predecessor = new Function(previous.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
@@ -2462,8 +2465,9 @@ test('recent source diagnostics conserve predecessor findings and reject altered
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const priorDefinitions = new Function(previous.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
   assert.equal(priorDefinitions.length, 135);
-  assert.equal(audit.sourceFindings.length, 147);
-  const legacyFindings = audit.sourceFindings.slice(2);
+  assert.equal(audit.sourceFindings.length, 148);
+  assert.equal(audit.sourceFindings.at(-1).id, 'core-svg-dimensionless-image-upload-not-adapted');
+  const legacyFindings = audit.sourceFindings.slice(2, -1);
   const conservedPolicy = execFileSync('git', ['show', 'aee5b612:tests/material-parity/input-equivalence-policy.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const conservedDefinitions = new Function(conservedPolicy.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();

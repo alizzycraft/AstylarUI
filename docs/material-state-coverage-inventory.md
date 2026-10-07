@@ -2,6 +2,25 @@
 
 ## Current evidence boundary — October 6
 
+October7 SVG upload cause is now registered as the producer's148th source
+definition, preserving all147 predecessor definitions exactly. Icon focused
+suite passes5/5; icon-svg-definition-registration-20261007.log SHA256
+782344bfd439f0c0bb6955bddb88bc2754be9514e7d789b2d44de6c19536270d.
+Historical component replay initially rejected the newer sorter snapshot; the
+read-only launcher now pins its exact65d7256f hash and verifies all26 original
+test bodies/assertions before replaying authenticated historical bytes. No
+receipt,original assertion or current-rendering claim is relaxed. Complete
+launcher exits0:8 retained checks,8 button-authoring checks,1 source binding,
+and1 negative-control check (8 source/15 receipt mutations). Log
+svg-historical-component-replay-reviewed-20261007.log SHA256
+86cc66827ff863337c62475c63ce926a61238b2846067b2d0436be09043806d8.
+Accepted canonical/index remains147 findings/137 proofs; new SVG focused-proof
+registration,source fingerprints and coherent export/cold verification remain
+pending. Complete configured-case closure remains unchanged. Priority next:
+finish that bounded integration,then join remaining case obligations without
+recapturing settled evidence. Shared paint/lifetime and calendar input-state
+gaps remain higher impact than unrelated metadata expansion.
+
 October7 Icon actual accessibility exposure now inspected across all16
 configured physical profile/viewport/DPR cohorts: existing light desktop DPR1
 evidence plus15 previously unmeasured cohorts/30 paired CDP observations.

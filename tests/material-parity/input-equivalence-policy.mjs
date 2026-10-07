@@ -1595,6 +1595,28 @@ export const sourceAuditDefinitions = Object.freeze([
       stage: 'core contrast-based palette choice; geometry remains separately attributed' },
     justification: 'Retained real-key mobile observations agree on [5,5], [0,3], [5,5], [2,5] endpoints but expose different native/candidate highlight palettes. Seven dependencies per capture include the current core highlight source. Its fixed dark palette and contrast-based choice explain candidate ink policy, not a coordinate error. Existing contrast/custom .01px geometry assertions fail and remain retained; custom inset mismatch is separately application-owned. Classification stays suspected pending the native-platform selection compatibility decision and isolated equal-input paint acceptance; accessibility-driven palette selection may require an explicit documented difference. Observed palette summaries are not retained crop-byte sharpness proof. Other families, native email endpoint limits and full selection/editing behavior remain open. Do not compensate fixture background or weaken geometry thresholds.',
   }),
+  Object.freeze({
+    id: 'core-svg-dimensionless-image-upload-not-adapted',
+    introducedBy: 'current public-package Chrome154 reduction; historical first-bad revision not established',
+    file: 'src/app/services/dom/elements/image-resource.service.ts',
+    pattern: String.raw`const texture = new Texture\(`,
+    classification: 'confirmed-core-renderer-defect',
+    owner: 'core decoded image GPU-upload adaptation and image readiness/error reporting',
+    focusedProof: 'tests/material-parity/icon-asset-input.spec.mjs: retained original SVG upload failure binds public runtime and matched alpha controls',
+    evidence: [
+      { file: 'artifacts/material-parity/icon-svg-runtime-upload-20261007.log', sha256: '9cba551e122dc41ca7cb01fe80d201ba18799e26f8c628d7f1b22cd34ffd9f53' },
+      { file: 'artifacts/material-parity/icon-svg-alpha-controls-20261007.log', sha256: '764a2dfba3828497e65b13bae2fad600fb091aba12f8e40f910ef74c0c0d1231' },
+      { file: 'artifacts/material-parity/icon-svg-native-upload-boundary-20261007.log', sha256: 'd08a6efff4c16dcd148ba1b4f5430bcfdb2eccbda8da5fcfe62c95648edb3aac' },
+      { file: 'artifacts/material-parity/icon-svg-owner-binding-20261007.log', sha256: '3fad20ad2f518a13036ebd10a3d6197ca9bd4faa53235039ec3d4121e9b17ba2' },
+    ],
+    observation: { component: 'plugin-free public external SVG image', element: 'original favorite.svg image',
+      dpr: [1, 2], states: ['settled 24px and48px image', 'surface disposal'],
+      property: 'GPU image upload and transparent corners',
+      reference: 'native decoded SVG retains transparent corners',
+      astylar: 'texImage2D INVALID_VALUE1281,ready callbacks,empty texture and black image rectangles',
+      stage: 'decoded HTMLImageElement to GPU texture upload; before general alpha material paint' },
+    justification: 'Matched public-package external SVG inputs at24/48CSSpx andDPR1/2 reproduce black candidate rectangles. Actual runtime HTMLImageElement texImage2D returns1281 through Babylon _prepareWebGLTexture while textures report ready and diagnostics stay empty. Dimensioned SVG and native PNG controls upload and retain alpha; assigning decoded dimensions to the native Image object also makes upload succeed without changing SVG bytes. Complete core loading/alpha methods match current source. This establishes a bounded GPU-boundary adaptation/error-reporting defect,not a general alpha,layout,currentColor or all-SVG claim. Inline SVG remains a separately documented support limitation; the Material fixed-PNG substitution remains unequal authoring. Do not add canonical SVG dimensions or replace vector inputs as a workaround; preserve CSS intrinsic sizing independently of upload adaptation.',
+  }),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({
