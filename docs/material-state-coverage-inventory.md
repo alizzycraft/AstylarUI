@@ -2,6 +2,18 @@
 
 ## Current evidence boundary — October 6
 
+October7 emitted binary applicability closes a specific remaining reuse gap:
+all54 captured Roboto WOFF/WOFF2 files match both their authenticated checkpoint
+hashes and current installed @fontsource/roboto bytes; the sole external image,
+icons/favorite.svg, matches captured and current public-source bytes too.
+Evidence: current-full-font-binary-applicability-20261007.log,
+SHAf5fb30e5bae08f0cfe13296a5cb7adb67b68ecccfb006a8e204f413ec2c6a3ef,
+exit0; checkpoint manifest SHA7ae2cba1739353661a0c84e28ef70819157311cc824fd00ae94ced29fadeb352.
+This establishes binary input identity,not font selection/readiness,compiled CSS
+or whole dependency-toolchain applicability,current clock state or rendering
+acceptance. Next complete exact case/obligation joins and the pending SVG export
+acceptance; do not repeat these settled byte comparisons without relevant drift.
+
 October7 original CSS authoring applicability now accounts for11 sources across
 four authenticated CSS maps: eight global SCSS/Roboto/Material-theme inputs
 match current bytes exactly; three component map contents exactly match their
