@@ -2,6 +2,18 @@
 
 ## Current evidence boundary — October 6
 
+October7 full-run scrollbar launch applicability is now verified,not pending:
+authenticated October5 report/checkpoint provenance agrees in full; all10
+transitive harness source fingerprints match current code,requested Chrome
+launch policy matches exactly,and installed Playwright1.62.1 launch bundle
+matches its recorded SHA. Effective nativeScrollbarsHidden=false applies to
+the complete436 static/1875 interaction capture. Existing launch/restart/final
+inspection assertions retain that policy. Evidence:
+current-full-scrollbar-launch-applicability-20261007.log
+SHA7663c546009c4198878792ce81a36185323aaaf0ac7dbb8f8eb86005d27ac78c,exit0.
+This supersedes older launch-applicability pending notes,not scrollbar shape,
+track clicks,all-profile dragging or current equal-input paint acceptance.
+
 October7 SVG export reached terminal exit0 (session55627),148 source findings,
 138 focused proofs and unchanged436/1875 configured coverage; inputEquivalent
 remains false. Export log canonical-svg-export-20261007.log
@@ -1812,8 +1824,10 @@ whole-audit acceptance is inferred; new canonical classification remains pending
 Ordinary comparison iframe replacement does not
 retain old snackbar timers across a switch to Menu, in the bounded DPR1 probe.
 
-1. Shared remaining coverage: native scrollbar capture applicability and
+1. Shared remaining coverage: scrollbar shape/track input and paint mapping and
    overlay input/paint mapping, including unresolved profiles and state boundaries.
+   Full October5 visible-native-scrollbar launch applicability is verified above;
+   do not repeat that settled source/driver/provenance check without drift.
    Do not repeat the settled wheel/drag or keyboard authoring proofs without
    changed dependencies or contradictory evidence. Native scrollbar hiding is
    an instrumentation issue; non-interactive candidate indicators are a separate
