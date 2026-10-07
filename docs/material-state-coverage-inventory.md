@@ -2,6 +2,32 @@
 
 ## Current evidence boundary — October 6
 
+October7 actual progress accessibility semantics now cover all32 physical
+cohorts representing40 configured cases,64 paired browser observations. Frozen
+served-build authentication and exact current-full report SHAab42dbec precede
+collection with the unchanged helper. Chrome154 exposes both hosts as unignored
+progressbar,empty name,value64,range0–100,empty value text and no AX children;
+however all32 reference hosts author tabindex=-1 and expose focusable=true,
+where all32 candidate hosts omit tabindex and omit that AX property. Initial
+all-property equality fails honestly; do not summarize these as equal semantics.
+Raw evidence progress-actual-ax-cohorts-20261007.log
+SHA88c9b67f0d0dc8267bf7b51d77839e15df74e5a118d3414b6db868813f323d31,
+exit0 validates its stated role/value/range assertions only. Independent bounded
+join progress-actual-ax-cohort-join-20261007.log
+SHA722132e7301e9e8be3051959b7fe1f305d99c7c981453b4696b7a44bdc4fdfb6,
+exit0 checks all32 paired cohorts and preserves acceptance=false. The original
+full-property counterexample is retained in progress-actual-ax-property-equality-
+20261007.log (exit1). Material's component host declaration supplies tabindex=-1;
+candidate authored entries at astylar.component.ts:906–907 omit it. Core semantic
+bridge explicitly transfers element.tabindex (astylar-semantic-bridge.ts:429),
+and interaction-runtime.ts:1160 retains tabindex=-1 as focusable while1182
+excludes it from sequential Tab order. Classify first divergence as omitted
+application input,not demonstrated missing-core focus support. Keyboard
+activation/editing remain inapplicable to these passive examples,not programmatic
+focus or focus paint. Next account for this discrepancy in the existing canonical
+mechanism after cold-check completion and close the relevant focus obligation;
+no fixture/renderer edits or whole-case acceptance follow.
+
 October7 bounded spinner endpoint geometry control rejects the hypothesis that
 Mesh.CAP_ALL implies round/spherical SVG caps. Installed Babylon8.15.1
 tubeBuilder caps collapse an endpoint ring to the path center; an actual
