@@ -2,6 +2,21 @@
 
 ## Current evidence boundary — October 7
 
+Current historical-component launcher replay now fails before running retained
+assertions: historical-component-final-replay-20261007.log reports exact
+input-boundary receipt drift,de260e2f… to d07df06e…. This supersedes any claim
+that the earlier successful launcher run applies unchanged to current tests.
+Read-only AST comparison authenticates the predecessor at cc78f5f2^ and proves
+all41 prior statements unchanged/in order; the sole42nd statement is the named
+retained-progress focus/caps/update-disposal proof. Diagnostic log
+historical-boundary-progress-delta-20261007-retry.log records full source and
+added-statement hashes. Initial append-position assumption fails and is retained;
+the proof was inserted,not appended. No original assertion is relaxed or removed.
+After the live frozen canonical check,extend the existing launcher's exact
+reviewed snapshot/conservation boundary for this addition and rerun the complete
+launcher. Historical observations remain retained,but current launcher acceptance
+is pending. Do not update its hash alone or describe this failed replay as passing.
+
 Icon exact case-to-obligation join now accounts for all20 configured IDs and
 16 physical cohorts for two bounded obligations: paired accessibility exposure
 observations and three equivalent updates/final disposal. Authenticated report
