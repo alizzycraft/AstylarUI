@@ -14,8 +14,16 @@ cleanup. Later cohorts were not inspected because original assertions throw.
 Source trace: MaterialRendererBase.root assigns an owned transparent material;
 core ElementCreationService then calls applyElementMaterial,whose explicit
 transparent/background branch replaces mesh.material without releasing that
-owned original. Core/plugin material ownership needs a bounded binding check
-before choosing the classification; source consistency is not live causal proof.
+owned original. October7 remaining-only live binding confirms root uses core
+primary-material alpha0 while the distinct plugin primary-transparent alpha.001
+is unused by every mesh. Classify the bounded observation as redundant plugin/
+core background allocation,not a proven disposal leak or increasing orphan
+growth. Root-helper allocation and core post-plugin background styling own the
+interaction; do not infer a fix by bypassing core style resolution. Binding log
+progress-root-material-binding-20261007.log
+SHA5acae2550a1d9056bb3853bfe631f7e082dfbecfc1bac1160fc8b1540790611e,
+exit0,two light desktop DPR1 cases,zero page errors,original frozen helper SHA
+65d7256f859a0839cdf6364d8f3d4e2b81bdb32978c42e0afeaa27f2622e14ce.
 Determinate40-case inputs do not enter plugin animation branches; child meshes/
 materials have generation ownership. Remaining lifecycle cohorts and full case
 closure stay open. Evidence: progress-update-disposal-20261007-retry.log
