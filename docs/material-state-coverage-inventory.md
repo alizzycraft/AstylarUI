@@ -2,6 +2,23 @@
 
 ## Current evidence boundary — October 6
 
+October7 remaining source-map mismatch first divergence is now identified:
+captured flex-layout body agrees until static Angular factory metadata;
+checkpoint has linkedɵfac/function andɵprov/defineInjectable while installed
+package has partialɵɵngDeclareFactory/ɵɵngDeclareInjectable. Non-tree-shaking
+esbuild formatting of complete88 modules still matches29/88 and rejects8
+changed-code controls; log current-full-installed-compiler-applicability-
+20261007-retry.log SHA18f3b67385976b9313f376c311ebdc8b787502e8b04c0d180786679384cb1add.
+This redirects the missing applicability check to explicit Angular linkage,
+not arbitrary parenthesis stripping or59 assumed renderer changes. Prior
+structure-only diagnostic is not a complete semantic equality proof (field
+roles/operators/template raw text require preservation). Do not remove Angular
+definitions to claim whole-module equality. Next authenticate linker/version
+and compare linked installed modules through the existing build transformation,
+without recapture or promoting current TypeScript applicability. Initial
+compiler check failed on shell backtick escaping before comparison; its log
+is retained failure evidence,not an accepted observation.
+
 October7 captured-code applicability boundary refined without a build:912
 JavaScript source maps authenticate against current-full checkpoint manifest
 SHA7ae2cba1739353661a0c84e28ef70819157311cc824fd00ae94ced29fadeb352.
