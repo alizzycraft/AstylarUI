@@ -2,6 +2,29 @@
 
 ## Current evidence boundary — October 7
 
+Same-generation progress remount/peer resource check now passes all four planned
+light desktop cohorts (bar/spinner,DPR1/2),terminal exit0. Log
+progress-remount-same-generation-20261007.log SHA256
+6e1f1228142ac5f38a18c72665babe0cd29c9bca6210e05f8237f9dd9e1986aa.
+Seven boundaries per cohort preserve peer material identities/counts through
+original disposal,remount/update/disposal,and subsequent peer update. Fresh and
+remounted revision1 counts match exactly:14/15/2 bar,12/13/2 spinner,live=tracked.
+All sampled disposed surfaces clear live/tracked/plugin resources; zero page
+errors. Earlier different-generation equality failure remains retained,not waived.
+This closes bounded light-desktop resource survival/remount,not semantic isolation,
+other profiles,paint,cached-disposed-default safety or complete configured cases.
+
+The149-finding canonical export session24832 is now terminal exit0 after
+2735124.0896ms. Evidence session authenticates1205 files/89154859 bytes with
+zero invalidations. Saved compressed generation is
+a9e92562d1cfd5f9f462f00cfd7bd969c65375ed2a3878ffe8691b029f26b092,
+62837107 bytes; decoded2418b079c42d040f06a7cffddfa495b760d53badc8e7cff47c2f8264c0f1d38e,
+2222854462 bytes. Coverage remains436/1875,8483 differences/389202 occurrences,
+inputEquivalent=false. Independent cold --check launched through the same complete
+named current-ancestry launcher; terminal verification,compact index refresh and
+publication remain pending. New standalone focus-paint/remount logs are not
+implicitly registered in this generation. Consumed producer sources stay frozen.
+
 Progress extra-default count discrepancy is now explained by lifecycle generation,
 not mount options or growing remount leakage. Public removal/restoration control
 passes for both light desktop DPR1 families; log
