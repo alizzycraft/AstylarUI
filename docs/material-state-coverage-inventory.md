@@ -2,6 +2,20 @@
 
 ## Current evidence boundary — October 7
 
+State-label applicability now has an additive retained replay test,`retained
+disabled labels and selected snapshots preserve actual authored state coverage`.
+All40 disabled rows/80 original trees and16 selected rows/32 trees authenticate
+against exact log/report hashes and case identities. Disabled attribute/authored
+boolean census remains zero for the five recorded families; tabs/stepper selected
+owners remain exactly[true,false] on both sides. No cases removed or support/
+transition acceptance inferred. Focused1/1 passes(state-applicability-replay-
+20261007.log); whole legacy-suite conservation1/1 passes(state-applicability-
+suite-conservation-20261007.log). Existing current-source/runtime evidence stays
+separate; this test authenticates actual retained state trees,not new activation,
+paint or full-case closure. Producer150/142,accepted canonical150/141 unchanged.
+Next retained divider trace,then register this coherent evidence batch and run
+integration checks; no repeated disabled/selected census or browser recapture.
+
 Retained table/list AX has an additive replay test: `retained table and list AX
 cohorts preserve bounded equality and structural differences`. Exact original
 log hashes,report/checkpoint,full served build and current application-source

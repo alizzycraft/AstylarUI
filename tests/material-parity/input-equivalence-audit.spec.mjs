@@ -37,6 +37,53 @@ const browserDefaults = {
   fontStyle: 'normal', transform: 'none', pointerEvents: 'auto',
 };
 
+test('retained disabled labels and selected snapshots preserve actual authored state coverage', () => {
+  const pinned = (file, hash) => {
+    const bytes = readFileSync(file); assert.equal(createHash('sha256').update(bytes).digest('hex'), hash, file);
+    return JSON.parse(bytes);
+  };
+  const report = pinned('artifacts/material-parity/current-full-20261005/latest-report.json',
+    'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const logs = [
+    ['disabled', 'disabled-label-applicability', 'fbb9104b11b23cd4c71cbf074c03f04ad2971c4672fb55366bf302d1a52f9dd0', ['chips', 'button-toggle', 'menu', 'tabs', 'stepper'], 40],
+    ['selected', 'selected-snapshot-applicability', '17f645d17ce2969bfb80fb566ec90935ab2f3a6707dfc0e956e7d19343fe0031', ['tabs', 'stepper'], 16],
+  ];
+  const key = row => [row.family, row.profile, typeof row.viewport === 'string' ? row.viewport : row.viewport.id].join('/');
+  for (const [state, name, hash, families, count] of logs) {
+    const bytes = readFileSync(`artifacts/material-parity/${name}-20261007.log`);
+    assert.equal(createHash('sha256').update(bytes).digest('hex'), hash);
+    const rows = bytes.toString().trim().split(/\r?\n/).map(JSON.parse);
+    assert.equal(rows.at(-1).complete, true); assert.equal(rows.at(-1).acceptance, false);
+    assert.equal(rows.at(-1).cases, count);
+    const cases = rows.filter(row => row.family);
+    const expected = report.interactions.filter(row => families.includes(row.family) && row.state === state).map(key).sort();
+    assert.equal(cases.length, count); assert.equal(new Set(cases.map(key)).size, count);
+    assert.deepEqual(cases.map(key).sort(), expected);
+    for (const row of cases) {
+      assert.equal(state === 'disabled' ? row.storeDisabled : row.storeSelected, true);
+      for (const side of ['reference', 'astylar']) {
+        const saved = (row.observations ?? row.observed)[side];
+        const tree = pinned(saved.receipt.file, saved.receipt.sha256);
+        assert.deepEqual(tree.errors, []);
+        if (state === 'disabled') {
+          const disabled = tree.nodes.filter(node => side === 'reference'
+            ? Object.hasOwn(node.attributes ?? {}, 'disabled') || node.attributes?.['aria-disabled'] === 'true'
+            : node.authored?.disabled === true || node.authored?.ariaDisabled === true);
+          assert.equal(disabled.length, 0); assert.equal(saved.trueDisabledNodes, 0);
+          assert.equal(tree.nodes.length, saved.nodes);
+        } else {
+          const selected = tree.nodes.filter(node => side === 'reference'
+            ? Object.hasOwn(node.attributes ?? {}, 'aria-selected') : node.authored?.ariaSelected !== undefined)
+            .map(node => side === 'reference' ? node.attributes['aria-selected'] === 'true' : node.authored.ariaSelected);
+          assert.deepEqual(selected, [true, false]); assert.deepEqual(selected, saved.values);
+        }
+      }
+    }
+  }
+  // Keep every configured case. Labels/snapshots are not disabled-support or
+  // selection-transition evidence, and do not certify runtime or paint parity.
+});
+
 test('retained table and list AX cohorts preserve bounded equality and structural differences', async () => {
   const digest = bytes => createHash('sha256').update(bytes).digest('hex');
   const pinned = (file, hash) => {
