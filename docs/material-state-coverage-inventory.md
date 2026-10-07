@@ -10,7 +10,19 @@ material persists. Four snapshots retain identical live=tracked counts (bar
 14/14/2; spinner12/12/2),zero pending plugin work and the same unused material
 identity; final scene/engine/cache/plugin disposal clears all sampled ownership.
 This is redundant live material evidence,not growing leakage or failed final
-cleanup. Later cohorts were not inspected because original assertions throw.
+cleanup. Initial probe stopped because original assertions throw. Remaining-only
+collection now inspects the other30 cohorts,catching/recording that exact original
+assertion before continuing; it remains exit1 with120 recorded failures and zero
+unexpected failures. Combined exact report membership joins all32 physical
+cohorts represented by40 configured cases,128 initial/update snapshots. Every
+cohort retains the same one unused material,stable live=tracked resources and
+clears sampled final ownership. Evidence: progress-remaining-update-disposal-
+20261007.log SHA9c5751074266de90a09050dd8b313c925b98bbdf94874e3cb99c01a901cbc8ff;
+independent bounded join progress-update-disposal-cohort-join-20261007.log
+SHAb2809f34237be7496136e6a381c8d185d4949ba1f70e4dbb4e9be5987e305795,
+exit0 validates counterexamples,not zero-unused-material acceptance. No original
+test/helper/assertion was changed on disk. Changed-value replacement,late async,
+remount,isolation and whole-case closure are not proved by equivalent updates.
 Source trace: MaterialRendererBase.root assigns an owned transparent material;
 core ElementCreationService then calls applyElementMaterial,whose explicit
 transparent/background branch replaces mesh.material without releasing that
@@ -25,8 +37,9 @@ SHA5acae2550a1d9056bb3853bfe631f7e082dfbecfc1bac1160fc8b1540790611e,
 exit0,two light desktop DPR1 cases,zero page errors,original frozen helper SHA
 65d7256f859a0839cdf6364d8f3d4e2b81bdb32978c42e0afeaa27f2622e14ce.
 Determinate40-case inputs do not enter plugin animation branches; child meshes/
-materials have generation ownership. Remaining lifecycle cohorts and full case
-closure stay open. Evidence: progress-update-disposal-20261007-retry.log
+materials have generation ownership. Ordinary equivalent-update/disposal cohort
+coverage is closed; remaining lifecycle obligations and full case closure stay
+open. Evidence: progress-update-disposal-20261007-retry.log
 SHAe6a3ca134633265655100f3c214812343a47ceaa459d2e96d38e222fbf66143d,
 exit1 (real assertion counterexamples,not a passing suite). Initial shell parse
 failure retained in progress-update-disposal-20261007.log
