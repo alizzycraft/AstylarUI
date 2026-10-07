@@ -2,6 +2,27 @@
 
 ## Current evidence boundary — October 7
 
+Progress extra-default count discrepancy is now explained by lifecycle generation,
+not mount options or growing remount leakage. Public removal/restoration control
+passes for both light desktop DPR1 families; log
+progress-default-cache-lifecycle-20261007.log SHA256
+374f6278b9db9b87967bf515ed16dc9d18e4fd246ef0de96c924f8209dc507bc.
+Original showcase is revision2 with no live default; fresh diagnostic mount is
+revision1 with one live default. Replacing the peer with an empty diagnostic
+document fires the exact default material's disposal callback once,and restoring
+the original document yields the same14/14/2 bar or12/12/2 spinner counts as
+the original. Live=tracked at each recorded boundary; final disposal clears all.
+The cached default reference retains the same uniqueId after its observed disposal
+and remains absent from scene.materials. This closes the earlier count-mismatch
+attribution question: the original equality compared different generation histories.
+Do not delete its failed evidence or relabel fresh-mount counts as equal. Allocation
+and disposal causes are observed; safety of later fallback use of the cached disposed
+object remains a separate core-lifetime question,not proved harmless or broken.
+Remount/peer survival remains bounded to the earlier single cohort; remaining
+profile/DPRs,semantic isolation and complete case obligations remain pending.
+Control documents are diagnostic-only; no canonical fixture or renderer changed.
+The same canonical export is verified live,now encoding after evidence validation.
+
 Progress default-material trigger is now observed,not merely hypothesized:
 progress-default-material-allocation-20261007.log SHA256
 d8148aff2c8bb4862a455251c5a2da0a58feefd421ab66e88482ab4cd8eefc87
