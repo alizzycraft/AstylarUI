@@ -2587,13 +2587,31 @@ test('popup token ancestry separates global fallback from frame theme overrides'
 });
 
 test('current badge and icon accessibility nodes expose hiding differences omitted by target semantics', async t => {
+  const reportBytes = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
+  assert.equal(createHash('sha256').update(reportBytes).digest('hex'),
+    'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const report = JSON.parse(reportBytes);
+  const iconRows = [...report.results, ...report.interactions].filter(row => row.family === 'icon');
+  assert.equal(iconRows.length, 20);
+  const icons = [...new Map(iconRows.map(row => [
+    `${row.profile}/${row.viewport.width}/${row.viewport.height}/${row.viewport.deviceScaleFactor}`,
+    { family: 'icon', profile: row.profile, viewport: row.viewport },
+  ])).values()];
+  assert.equal(icons.length, 16);
+  const remainingOnly = process.env.ASTYLAR_AUDIT_AX_REMAINING === '1';
+  const cohorts = remainingOnly ? icons.filter(row => !(row.profile === 'light' &&
+    row.viewport.width === 1440 && row.viewport.deviceScaleFactor === 1)) : [
+    { family: 'badge', profile: 'light', viewport: { width: 1440, height: 1000, deviceScaleFactor: 1 } }, ...icons,
+  ];
+  assert.equal(cohorts.length, remainingOnly ? 15 : 17);
   await withFrozenShowcase(async (browser, baseUrl) => {
     const observations = [];
-    for (const family of ['badge', 'icon']) for (const mode of ['reference', 'astylar']) {
-      const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 });
+    for (const { family, profile, viewport } of cohorts) for (const mode of ['reference', 'astylar']) {
+      const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height },
+        deviceScaleFactor: viewport.deviceScaleFactor });
       const errors = [];
       page.on('pageerror', error => errors.push(String(error)));
-      await page.goto(`${baseUrl}/${mode}/${family}?benchmark=1&profile=light`);
+      await page.goto(`${baseUrl}/${mode}/${family}?benchmark=1&profile=${profile}`);
       await page.locator('.frame').waitFor();
       if (mode === 'astylar') {
         await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
@@ -2612,7 +2630,9 @@ test('current badge and icon accessibility nodes expose hiding differences omitt
       const { nodeId } = await cdp.send('DOM.querySelector', { nodeId: root.nodeId, selector });
       assert.ok(nodeId);
       const { nodes } = await cdp.send('Accessibility.getPartialAXTree', { nodeId, fetchRelatives: true });
-      observations.push({ family, mode, dom, nodes });
+      const observation = { family, profile, viewport, mode, dom, nodes };
+      observations.push(observation);
+      t.diagnostic(JSON.stringify(observation));
       const target = nodes[0];
       assert.ok(target);
       const hiddenReasons = (target.ignoredReasons ?? []).filter(reason => /ariaHidden/i.test(reason.name));
@@ -2637,8 +2657,10 @@ test('current badge and icon accessibility nodes expose hiding differences omitt
       await cdp.detach();
       await page.close();
     }
-    t.diagnostic(JSON.stringify({ browser: browser.version(), observations,
-      scope: 'Current checkpoint light desktop DPR1,ARIA hiding and actual partial AX nodes; not all-profile accessibility acceptance.' }));
+    assert.equal(observations.length, cohorts.length * 2);
+    t.diagnostic(JSON.stringify({ browser: browser.version(), configuredIconCases: iconRows.length,
+      uniqueIconRuntimeCohorts: icons.length, executedCohorts: cohorts.length,
+      scope: 'Checkpoint-bound configured Icon profile/viewport/DPR hiding and partial AX exposure; not complete AX relationships or current-source acceptance.' }));
   }, {}, { checkpointFile: 'artifacts/material-parity/current-full-20261005/checkpoint/manifest.json' });
 });
 

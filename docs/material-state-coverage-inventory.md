@@ -2,6 +2,20 @@
 
 ## Current evidence boundary — October 6
 
+October7 Icon actual accessibility exposure now inspected across all16
+configured physical profile/viewport/DPR cohorts: existing light desktop DPR1
+evidence plus15 previously unmeasured cohorts/30 paired CDP observations.
+Every native target is ignored specifically for ARIA hiding; every candidate
+target is exposed image named Favorite,with absent aria-hidden. Existing test
+extends its unchanged discrepancy assertions and authenticates the current-full
+served checkpoint; focused remaining-only invocation passes1/1,39476.5678ms.
+Log icon-remaining-ax-20261007.log SHA256
+3613ac867242858953e2d4a31342b319e0d2c504ce15590682718354979d8612.
+This supersedes pending broader Icon profile AX-exposure statements,not complete
+AX relationships,current-source applicability or full-case closure. Original
+badge light-desktop assertion remains in the default test. Default scope retains
+all17 cohorts; ASTYLAR_AUDIT_AX_REMAINING=1 avoids repeating settled observations.
+
 ### Joined supplemental lifecycle coverage — October 7
 
 These are bounded inspected obligations, including demonstrated failures, not

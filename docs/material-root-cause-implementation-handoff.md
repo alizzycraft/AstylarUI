@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 6
 
+- October7 configured Icon AX exposure gap closes:15 new physical cohorts,
+  30 paired CDP observations,all native ariaHidden exclusions versus candidate
+  exposed image/Favorite. Combined with retained light desktop DPR1,all16
+  configured physical profile/viewport/DPR cohorts have this bounded inspection.
+  Existing accessibility test expands unchanged assertions and retains original
+  badge coverage by default; remaining-only invocation1/1 passes39476.5678ms.
+  Log icon-remaining-ax-20261007.log SHA256
+  3613ac867242858953e2d4a31342b319e0d2c504ce15590682718354979d8612.
+  Full current-full served checkpoint authenticated; no fixture/core/gate change.
+  This is a documented discrepancy,not semantic parity. Remaining Icon work:
+  current-source validity,complete relevant AX relations,late async/remount/
+  isolation and canonical root-cause/proof registration. Do not repeat the
+  resolved configured exposure or responsive update/disposal observations.
+
 - October7 remaining Icon tablet/mobile update/disposal cohorts now measured:
   eight new cases/four profiles,three equivalent public updates each,stable
   live/tracked counts and all8 disposal resource/cache/plugin assertions pass.
