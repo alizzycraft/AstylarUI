@@ -2,6 +2,25 @@
 
 ## Current evidence boundary — October 7
 
+Progress remount mount-options explanation is ruled out in the measured bar
+light desktop DPR1 cohort: progress-remount-matched-options-20261007.log SHA256
+cbd78835d0b36bd718079b12bca59cffbf74ed415697084b1f169a2559a208bc.
+Both diagnostic mounts receive the exact unchanged showcase options object
+(clearColor/events),yet retain15 materials versus the original14. Recorded
+material identity isolates the extra as unbound Babylon `default material`,
+separate from the already known unbound progress-bar-primary-transparent root.
+Live=tracked,peer counts stay stable through both disposals and peer update,
+and sampled final disposal clears all live resources/plugin ownership. No
+page errors. Equality still fails and stops before remaining cohorts; this is
+not a passing four-cohort proof or a growing leak. Installed Babylon scene.js
+defaultMaterial lazily allocates via DefaultMaterialFactory; subMesh.js
+getMaterial() falls back to it when no mesh material is assigned. Those code
+paths explain a possible allocation mechanism,not the actual triggering call.
+Next capture that factory's allocation stack/time in the same diagnostic to
+distinguish transient unmaterialed rendering from inspection-side allocation;
+do not filter the resource or repin the original equality assertion.
+No fixture,core or consumed producer source was changed.
+
 Progress remount/peer diagnostic now has one actual light desktop DPR1 bar
 cohort,not the intended four-cohort completion. Retry log
 progress-remount-peer-20261007-retry.log SHA256
