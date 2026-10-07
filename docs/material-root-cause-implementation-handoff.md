@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 6
 
+- October7 divider canonical independent check is terminal exit0 (session81289),
+  not still waiting. Existing complete current-ancestry launcher with cold
+  evidence completes in3300760.6912ms;1205 files/89154859 bytes reverified,
+  zero invalidations. Log canonical-divider-independent-20261007.log SHA256
+  0141c57870fd8b963b64c9ccd7f6778c67f3ca373c44e5702b5631ffa5721de5.
+  Manifest compressed SHA256 dbc913670b25e241212923b43c01d39c391796ec8e18e1243b293b6b1b999e1b;
+  all2311 configured cases,8483 groups,389202 occurrences and147 source findings
+  remain,inputEquivalent false. This closes independent canonical verification
+  only; compact import/verification and scoped canonical publication remain.
+  Accepted compact generation is still the preceding147-finding/135-proof
+  snapshot. No case closure or current-code rendering acceptance is promoted.
+  D: free space observed88498176 bytes: compact generation plus Git payload
+  publication requires headroom recovery before attempting both writes.
+
 - October7 Icon inline/currentColor support boundary classified,not left as a
   hypothetical propagation bug. ASTYLAR_CORE_ELEMENT_TYPES registers img but
   neither svg nor path; core plugin derives registrations from that list.
