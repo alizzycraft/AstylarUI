@@ -1988,6 +1988,27 @@ test('dark mobile real-key selections distinguish direction state from highlight
 });
 
 test('dark mobile timepicker wheel separates scroll state from scrollbar paint', async t => {
+  const configFile = 'tsconfig.lib.json';
+  const converted = ts.convertCompilerOptionsFromJson(JSON.parse(readFileSync(configFile)).compilerOptions, path.dirname(path.resolve(configFile)));
+  assert.deepEqual(converted.errors, []);
+  const mapFile = 'examples/material-showcase/dist/material-showcase/browser/chunk-3JXWRYJY.js.map';
+  const capturedMap = JSON.parse(readFileSync(mapFile));
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  const modules = ['lib/astylar-scroll-runtime', 'app/services/babylon-scroll-paint-adapter'].map(relative => {
+    const sourceFile = `src/${relative}.ts`, installedFile = `examples/material-showcase/node_modules/astylarui/dist/lib/${relative}.js`;
+    const input = readFileSync(sourceFile, 'utf8'), installed = readFileSync(installedFile, 'utf8');
+    const emitted = ts.transpileModule(input, { compilerOptions: converted.options, fileName: path.resolve(sourceFile), reportDiagnostics: true });
+    assert.deepEqual(emitted.diagnostics, []);
+    assert.equal(emitted.outputText, installed, `${relative}: complete current emit matches installed module`);
+    const matches = capturedMap.sources.flatMap((file, i) => file.endsWith(`/${relative}.js`) ? [capturedMap.sourcesContent[i]] : []);
+    assert.equal(matches.length, 1);
+    const omitted = `//# sourceMappingURL=${path.basename(relative)}.js.map`;
+    assert.equal(matches[0] + omitted, installed, `${relative}: complete captured module matches installed bytes`);
+    return { sourceFile, sourceSha256: digest(input), installedFile, installedSha256: digest(installed), capturedSha256: digest(matches[0]) };
+  });
+  t.diagnostic(JSON.stringify({ scrollbarModuleApplicability: { modules, mapFile, mapSha256: digest(readFileSync(mapFile)),
+    configSha256: digest(readFileSync(configFile)), typescript: ts.version, acceptance: false,
+    scope: 'complete geometry and paint module equality only; not callers, full pipeline or rendering acceptance' } }));
   await withFrozenShowcase(async (browser, baseUrl) => {
     assert.equal(browser.version(), '154.0.8037.58');
     const launch = await inspectMaterialBrowserLaunch(browser, materialBrowserLaunchOptions());

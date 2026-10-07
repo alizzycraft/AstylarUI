@@ -24,6 +24,22 @@ No renderer,fixture,threshold or captured evidence changes.
 
 ### October 8 remaining scrollbar paint boundary
 
+Complete scrollbar geometry/paint module applicability is now checked in the
+same owning diagnostic: current TypeScript5.8.3 emit equals installed bytes;
+captured chunk-3JXWRYJY map content equals installed bytes after restoring only
+the exact omitted source-map comment. No whitespace/semantic normalization.
+Geometry sourceSHA2c7f0667…/installedeea5e26c…/captured5b3b178c…;
+paint sourceSHAcb1c9de7…/installedd3f65386…/captured7fbbd232….
+MapSHAdba48404… and configSHA8ab96d7f… authenticate the emit context.
+Focused1/1 passes13787.1115ms; log
+`timepicker-css-scrollbar-applicability-20261008-exact.log`,SHA256
+4b72b2446ee3047367f64d72629e3e297aef5ccd4cc6f9f7ae22dac54c0fd5db.
+An initial binding assertion appended an extra newline to the omitted comment;
+it failed before browser actions and remains retained separately. Exact comment
+restoration resolves that instrumentation error without altering captured bytes.
+This rules out stale geometry/paint module bytes for the observed cohort,not
+stale callers,other owning stages,all-profile bounds or whole rendering parity.
+
 Focused retained-build observation now supplies actual CSS bounds for dark/mobile
 DPR2: track{x248,y0,w12,h256},thumb{x250,y0,w8,h28.346020761245676},
 travel227.65397923875432. Offset144 gives local CSS thumb y15.944636678200692;
@@ -34,8 +50,8 @@ in12952.9546ms with Chrome154 and the authenticated1887-file October5 checkpoint
 Log: `timepicker-css-scrollbar-bounds-20261008-asserted.log`. The first attempt
 rejected the default caret checkpoint before browser actions; failed log retained
 as `timepicker-css-scrollbar-bounds-20261008.log`. This is frozen-build evidence,
-not current-code or all-eight-case certification. Remaining: captured/current
-owning-method applicability,other seven bounds and full edge/corner/clip mapping.
+not current-code or all-eight-case certification. Remaining: caller/other-stage
+applicability,other seven bounds and full edge/corner/clip mapping.
 The additive diagnostic changes the owning-suite fingerprint; canonical source
 integration is pending the next coherent batch,not a reason for immediate export.
 
