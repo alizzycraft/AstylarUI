@@ -56,6 +56,17 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October7 canonical publication headroom: eight closed docs JSON evidence files
+larger than10MB were transparently NTFS-compressed, with individual SHA256
+equality checked before/after: owner-grid-initial-survey,owner-initial-motion-
+review,vertical-align-population,container-font-stages,transform-origin-stage-
+survey,container-font-family-stages,owner-caret-attribution,text-align-ancestry
+(all material-prefixed). D: free increased from approximately88MB to183566336
+bytes. New divider compact generation JSONL shards were likewise compressed;
+the existing whole-index verifier passed before and after, authenticating every
+shard against its unchanged receipt. Free after import/compression91348992 bytes.
+No evidence was deleted, repointed or changed; old generations remain retained.
+
 October7 publication-headroom recovery: the closed current-full-20261005
 `latest-report.json` was transparently NTFS-compressed in place. SHA256 before
 and after was identical:

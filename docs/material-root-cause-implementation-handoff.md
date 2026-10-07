@@ -2,6 +2,17 @@
 
 ## Current resumption ledger — October 6
 
+- October7 divider canonical compact reconciliation completes: import and
+  independent index verification exit0;8483 groups,147 findings,39904 controls,
+  389202 occurrences,zero unresolved scalar attributions preserved. Current
+  compact pointer now names dbc913670b25e241212923b43c01d39c391796ec8e18e1243b293b6b1b999e1b,
+  matching the independently checked canonical manifest. Import log
+  divider-compact-import-20261007.log SHA525db9489192c39e2790920788491c70bff6165bd2a3ddfed63007c8c78a1a7b;
+  verify log divider-compact-verify-20261007.log SHA2b51e437a9f20278c53fbe8dc046fff4ebcb57cb4aab21b322ed021f379223e3.
+  This supersedes the pending compact statements below. The two bounded
+  divider proofs are integrated; standalone Icon GPU-upload evidence is not
+  yet registered by this producer. No full inspection/input-parity acceptance.
+
 - October7 divider canonical independent check is terminal exit0 (session81289),
   not still waiting. Existing complete current-ancestry launcher with cold
   evidence completes in3300760.6912ms;1205 files/89154859 bytes reverified,
