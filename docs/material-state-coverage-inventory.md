@@ -2,6 +2,20 @@
 
 ## Current evidence boundary — October 7
 
+Disabled radio focus evidence now has exact current authored-source applicability:
+the full reference.component.ts and astylar.component.ts source-map contents match
+current files byte-for-byte (SHA256 debe55bc… and71e2d41f…). The retained six-context
+log rehashes to f84ac81c…; all eighteen action boundaries per side preserve
+disabled/selected state and the radio-only candidate focus discrepancy. Read-only
+check exits0; disabled-radio-source-applicability-20261007-retry.log records full
+source/map hashes and assertions. Initial extraction selected Angular's inline
+style virtual source rather than the TypeScript module and failed; that is not
+source drift or a passing applicability check. Retry selects actual import-bearing
+TS modules. This closes stale authoring as an explanation,not full current renderer
+validity or all disabled contexts. Next integrate this authoring discrepancy and
+the configured keyboard evidence through existing policy/proof mechanisms in one
+coherent batch; no new capture or canonical rebuild is needed for this note.
+
 Disabled checkbox/radio/switch real-key boundary now inspected in light desktop
 DPR1 and dark mobile DPR2 (six family/runtime contexts),using the existing
 interaction=disabled adapter and authenticated frozen full checkpoint. Native
