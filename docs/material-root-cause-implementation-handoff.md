@@ -2,7 +2,7 @@
 
 ## Current resumption ledger — October 7
 
-- Source policy/proof inventory now150/140; accepted canonical/index remains
+- Source policy/proof inventory now150/141; accepted canonical/index remains
   149/139 until the next coherent export. Added disabled-radio sequential-focus
   authoring finding retains two exact radio contexts plus checkbox/switch negative
   controls and full current/frozen source equality. Native disabled radios skip
@@ -12,6 +12,13 @@
   historical component launcher completes with original receipts/assertions intact.
   See current coverage ledger for logs. Programmatic focus,pointer blocking,
   other disabled contexts and paint remain separate; no full radio closure.
+  Enabled keyboard evidence now joins40 exact configured focus contexts for
+  checkbox/radio/chips/slide-toggle/expansion to the existing keyboard-authoring
+  finding without replacing original receipts. Full frozen build/current mapped
+  source and unchanged assertion callbacks authenticate; focused4/4 and complete
+  migration/negative controls3/3 pass. These are transition/applicability closures,
+  not focus paint or whole-case acceptance. Next reconcile the frozen batch's
+  canonical export/check/index before further consumed-source edits.
 
 - Accepted canonical generation:149 source findings/139 focused proofs,
   independently cold-verified with terminal exit0 and zero evidence invalidations.

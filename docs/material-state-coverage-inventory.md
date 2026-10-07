@@ -2,6 +2,24 @@
 
 ## Current evidence boundary — October 7
 
+Configured enabled keyboard evidence is now joined to all40 exact focus-context
+IDs for checkbox,radio,chips,slide-toggle and expansion (four profiles,desktop
+DPR1/2),through the existing keyboard-authoring finding and a registered proof.
+Original callback hashes/assertions replay unchanged; full1887-file served build,
+report/checkpoint/helper and exact current mapped application source authenticate.
+Initial checkbox replay failed because its diagnostic records two boundaries,
+where the original callback expects final fields. Retry projects actual final
+fields/events and separately checks initial focus/selection; no assertion removed.
+Combined focused checks pass4/4,8640.5189ms; configured-keyboard-registration-20261007.log.
+Complete predecessor/mutation suite passes3/3,71219.5734ms;
+configured-keyboard-migration-20261007.log. Source policy150/proof inventory141;
+accepted canonical/index149/139 remain distinct until the next coherent export.
+This closes configured context membership and enabled transition applicability,
+not focus paint,other keys,disabled states,lifetime or whole-case inspection.
+Next freeze this keyboard batch for export/check/index reconciliation,then return
+to remaining source-derived state/paint/ownership obligations without recapture
+of these forty contexts. No renderer,fixture,threshold or reference change.
+
 Disabled radio focus discrepancy is now registered as
 fixture-disabled-radio-tabindex-ignores-disabled-state (application/plugin
 authoring defect). Source policy150/proof inventory140 preserve complete149/139

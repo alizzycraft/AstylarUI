@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 
 const hash = text => createHash('sha256').update(text).digest('hex');
+const configuredKeyboardProof = "    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\\('configured enabled keyboard evidence joins forty exact focus contexts without changing original assertions'/,\n" +
+  "      'retained configured enabled keyboard routing authoring boundary', 'Joins40 exact configured focus contexts for checkbox,radio,chips,slide-toggle and expansion across four desktop profiles at DPR1/2. Replays original assertion callbacks over retained real Tab/Space/Arrow/Enter observations; candidate keydowns arrive but native activation/navigation transitions are omitted. Authenticates complete frozen build,report,helper and current mapped application source. Extends fixture-composite-keyboard-handler-omits-activation-and-navigation evidence without replacing its original receipts. Not focus paint,all keys,disabled states,lifetime or complete-case acceptance.'),\n";
 const disabledRadioProof = "    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\\('retained disabled composite focus binds exact current authoring and radio-only Tab divergence'/,\n" +
   "      'retained disabled radio focus authoring boundary', 'Authenticates six checkbox/radio/switch contexts at light desktop DPR1 and dark mobile DPR2 with exact full current/frozen authored sources. Native disabled inputs skip Tab; candidate selected radio authors tabindex0 and receives focus,while checkbox/switch disabled-aware negative controls skip. State remains disabled/selected under Tab/Space/ArrowLeft. This is unequal authored focus intent,not blanket core aria-disabled suppression,all profiles,paint or full case acceptance.'),\n";
 const progressCohortProof = "    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\\('retained progress focus caps and update disposal preserve complete configured cohort evidence'/,\n" +
@@ -10,6 +12,10 @@ const svgProof = "    proof(root, 'tests/material-parity/icon-asset-input.spec.m
   "      'original SVG GPU upload adaptation boundary', 'Matched public external SVG at24/48CSSpx DPR1/2 fails actual image texImage2D with1281 while ready and diagnostics remain misleading. Dimensioned SVG/PNG controls preserve alpha; decoded native image dimensions isolate upload adaptation without changing SVG bytes. Complete bounded loading/alpha owners match current source; not inline SVG support,currentColor inheritance,all-SVG or full Icon acceptance.'),\n";
 export function restoreSvgProofRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes("/test\\('configured enabled keyboard evidence joins")) {
+    assert.equal(current.split(configuredKeyboardProof).length, 2, 'configured keyboard proof must be an exact one-entry addition');
+    current = current.replace(configuredKeyboardProof, '');
+  }
   if (current.includes("/test\\('retained disabled composite focus binds")) {
     assert.equal(current.split(disabledRadioProof).length, 2, 'disabled radio proof must be an exact one-entry addition');
     current = current.replace(disabledRadioProof, '');

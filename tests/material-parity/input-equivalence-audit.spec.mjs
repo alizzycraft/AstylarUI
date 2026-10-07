@@ -37,6 +37,103 @@ const browserDefaults = {
   fontStyle: 'normal', transform: 'none', pointerEvents: 'auto',
 };
 
+test('configured enabled keyboard evidence joins forty exact focus contexts without changing original assertions', async () => {
+  const digest = value => createHash('sha256').update(value).digest('hex');
+  const readPinned = (file, sha256) => {
+    const bytes = readFileSync(file); assert.equal(digest(bytes), sha256, file); return bytes;
+  };
+  const reportSha = 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62';
+  const checkpointSha = '7ae2cba1739353661a0c84e28ef70819157311cc824fd00ae94ced29fadeb352';
+  const helperSha = '65d7256f859a0839cdf6364d8f3d4e2b81bdb32978c42e0afeaa27f2622e14ce';
+  const report = JSON.parse(readPinned('artifacts/material-parity/current-full-20261005/latest-report.json', reportSha));
+  const checkpoint = JSON.parse(readPinned('artifacts/material-parity/current-full-20261005/checkpoint/manifest.json', checkpointSha));
+  const source = readPinned('tests/material-parity/sort-focus-structure.spec.mjs', helperSha).toString();
+  const { fingerprintDirectory, materialCaseKey } = await import('./run-checkpoint.mjs');
+  assert.deepEqual(fingerprintDirectory('examples/material-showcase/dist/material-showcase/browser'), checkpoint.provenance.browserFiles);
+  const ast = ts.createSourceFile('keyboard.spec.mjs', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const originalAssertions = (prefix, callbackSha) => {
+    const calls = ast.statements.filter(n => ts.isExpressionStatement(n) && ts.isCallExpression(n.expression)
+      && n.expression.arguments[0]?.text?.startsWith(prefix));
+    assert.equal(calls.length, 1);
+    const callback = calls[0].expression.arguments[1];
+    assert.equal(digest(callback.getText(ast)), callbackSha);
+    const body = callback.body.statements[0].expression.expression.arguments[0].body;
+    const start = body.statements.findIndex(n => n.getText(ast).startsWith('assert.equal(browser.version()'));
+    assert.ok(start >= 0);
+    return Function('assert', 'observations', 'browser', body.statements.slice(start).map(n => n.getText(ast)).join('\n'));
+  };
+  const families = ['checkbox', 'radio', 'chips', 'slide-toggle', 'expansion'];
+  const expected = report.interactions.filter(row => families.includes(row.family) && row.state === 'focus')
+    .map(row => materialCaseKey('interaction', row)).sort();
+  assert.equal(expected.length, 40); assert.equal(new Set(expected).size, 40);
+  const observed = [];
+  for (const [name, sha, prefix, originalSha] of [
+    ['checkbox', '9fb29baf50ee27759c826afa7c96f0361b0cc799f678e10823fe400c53dc2f68', 'checkbox real Tab',
+      'd42698938cc724c6449af00221a0800f3cf9533726ce093f0e1b4cf567649dcb'],
+    ['radio', 'b37926dfdb29d300f4f41c2f9e131abbc02915e764c280124a061e63e04c00a2', 'radio real Tab',
+      '98d666dd21a54fd82b348af9d125822c96ea0232257b4c0bfadba518b78605af'],
+    ['composite', '882520cd1db88aa6638a08ae2d2d7e3c2e3f95cd9b71492ba4ae33241f243d91', 'composite controls expose',
+      '8140788192c3cbee5f9f642b49cbeaebc965ea61229bb8c5044400b4c2b1bcc0'],
+  ]) {
+    const rows = readPinned(`artifacts/material-parity/${name}-configured-keyboard-cohorts-20261007.log`, sha)
+      .toString().trim().split(/\r?\n/).map(JSON.parse);
+    assert.equal(rows.length, 10);
+    const header = rows[0], terminal = rows.at(-1);
+    assert.equal(header.helperSha256, helperSha); assert.equal(header.reportSha256, reportSha);
+    assert.equal(header.checkpointSha256, checkpointSha);
+    if (name !== 'checkbox') assert.equal(header.originalCallbackSha256, originalSha);
+    assert.equal(terminal.complete, true); assert.equal(terminal.acceptance, false);
+    assert.equal(name === 'checkbox' ? terminal.configuredCohorts : terminal.cohorts, 8);
+    const replay = originalAssertions(prefix, originalSha);
+    for (const row of rows.slice(1, -1)) {
+      const observations = name === 'checkbox' ? row.observed : row.observations;
+      // The checkbox diagnostic retains both action boundaries; the original
+      // assertion callback owns the final boundary only. Project actual final
+      // fields and events without inventing observations or dropping its checks.
+      let replayObservations = observations;
+      if (name === 'checkbox') {
+        replayObservations = {};
+        for (const side of ['reference', 'astylar']) {
+          assert.equal(observations[side].steps.length, 2);
+          assert.equal(observations[side].steps[0].focused, true);
+          assert.equal(observations[side].steps[0].selected, true);
+          replayObservations[side] = { ...observations[side].steps[1],
+            appEvents: observations[side].events, errors: observations[side].errors };
+        }
+      }
+      replay(assert, replayObservations, { version: () => '154.0.8037.58' });
+      for (const family of name === 'composite' ? ['chips', 'slide-toggle', 'expansion'] : [name])
+        observed.push(materialCaseKey('interaction', { family, profile: row.profile, viewport: row.viewport, state: 'focus' }));
+    }
+  }
+  assert.equal(new Set(observed).size, 40); assert.deepEqual(observed.sort(), expected);
+  const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');
+  const finding = sourceAuditDefinitions.find(row => row.id === 'fixture-composite-keyboard-handler-omits-activation-and-navigation');
+  assert.equal(finding.classification, 'application-plugin-authoring-defect');
+  const application = readPinned(finding.file, '71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd').toString();
+  assert.match(application, new RegExp(finding.pattern));
+  const map = JSON.parse(readPinned('examples/material-showcase/dist/material-showcase/browser/chunk-JPEJK334.js.map',
+    '47654b641610e1d56e02948b17fab41aff25e9c6aedc6f83b70a26b6f349ce9e'));
+  const mapped = map.sources.flatMap((file, i) => file.endsWith('/astylar.component.ts')
+    && map.sourcesContent[i]?.includes('import {') ? [map.sourcesContent[i]] : []);
+  assert.deepEqual(mapped, [application]);
+  const producerFile = 'tests/material-parity/input-equivalence-audit.mjs';
+  const producer = readFileSync(producerFile, 'utf8').replaceAll('\r\n', '\n');
+  const predecessor = execFileSync('git', ['show', `1b9ecc01:${producerFile}`], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n');
+  const producerAst = ts.createSourceFile(producerFile, producer, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const entries = producerAst.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory')
+    .body.statements[0].expression.elements;
+  assert.equal(entries.length, 141);
+  const added = entries.filter(n => n.getText(producerAst).includes('retained configured enabled keyboard routing authoring boundary'));
+  assert.equal(added.length, 1);
+  const start = producer.lastIndexOf('\n', added[0].getStart(producerAst)) + 1;
+  const end = producer.indexOf('\n', added[0].end) + 1;
+  assert.equal(producer.slice(0, start) + producer.slice(end), predecessor);
+  const { restoreScalarReviewExtraction } = await import('./position-composition-producer-transition.mjs');
+  assert.equal(restoreScalarReviewExtraction(producer), restoreScalarReviewExtraction(predecessor));
+  assert.throws(() => restoreScalarReviewExtraction(producer.replace('retained configured enabled keyboard routing authoring boundary', 'unreviewed keyboard acceptance')));
+});
+
 test('disabled radio registration preserves the complete finding and producer predecessors', async () => {
   const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');
   const file = 'tests/material-parity/input-equivalence-policy.mjs';
@@ -62,12 +159,13 @@ test('disabled radio registration preserves the complete finding and producer pr
   const predecessor = execFileSync('git', ['show', `20a79a2d:${producerFile}`], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n');
   const ast = ts.createSourceFile(producerFile, current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   const fn = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory');
-  assert.equal(fn.body.statements[0].expression.elements.length, 140);
-  const additions = fn.body.statements[0].expression.elements.filter(n => n.getText(ast).includes('retained disabled radio focus authoring boundary'));
-  assert.equal(additions.length, 1);
+  assert.equal(fn.body.statements[0].expression.elements.length, 141);
+  const additions = fn.body.statements[0].expression.elements.filter(n => ['retained disabled radio focus authoring boundary',
+    'retained configured enabled keyboard routing authoring boundary'].some(name => n.getText(ast).includes(name)));
+  assert.equal(additions.length, 2);
   const addition = additions[0];
   const start = current.lastIndexOf('\n', addition.getStart(ast)) + 1;
-  const end = current.indexOf('\n', addition.end) + 1;
+  const end = current.indexOf('\n', additions.at(-1).end) + 1;
   assert.equal(current.slice(0, start) + current.slice(end), predecessor);
   const { restoreScalarReviewExtraction } = await import('./position-composition-producer-transition.mjs');
   assert.equal(restoreScalarReviewExtraction(current), restoreScalarReviewExtraction(predecessor));
