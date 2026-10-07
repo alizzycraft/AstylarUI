@@ -2,6 +2,22 @@
 
 ## Current evidence boundary — October 7
 
+Chips,slide-toggle and expansion enabled keyboard-boundary observations now
+cover all24 configured focus contexts:four profiles × desktop DPR1/2 × three
+families. Full served checkpoint/report and original helper/callback authenticate.
+The existing composite test's assertions remain unchanged; diagnostic invocation
+changes only viewport/DPR/profile and emits observations. Tab focus agrees;
+Space reaches every candidate handler but native chips/switch change selection
+while candidates do not. Native expansion aria-expanded toggles false→true→false
+under Space/Enter; candidate remains false despite both delivered keydowns.
+Every original event-count/state/kind/error assertion passes,terminal exit0.
+Log composite-configured-keyboard-cohorts-20261007.log SHA256
+882520cd1db88aa6638a08ae2d2d7e3c2e3f95cd9b71492ba4ae33241f243d91.
+This closes other-profile/DPR applicability for these enabled transitions,
+not focus/ripple/arrow paint,disabled states,all keys or full case closure.
+No source,fixture or renderer change; standalone evidence awaits coherent
+registration rather than another immediate canonical rebuild.
+
 Checkbox real keyboard activation coverage now includes all8 configured focus
 cohorts (four profiles × desktop DPR1/2 at1440x1000),not only the earlier light
 900px-height reduction. Original frozen helper/full current-full checkpoint and
