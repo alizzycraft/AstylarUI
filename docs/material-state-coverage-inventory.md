@@ -2,6 +2,18 @@
 
 ## Current evidence boundary — October 6
 
+October7 SVG export reached terminal exit0 (session55627),148 source findings,
+138 focused proofs and unchanged436/1875 configured coverage; inputEquivalent
+remains false. Export log canonical-svg-export-20261007.log
+SHA22b667ccbf05c706f55f472da8f366e3b957571ff07d5ca2b1f399c7389507a4;
+5261203.9878ms,1205 evidence files/89154859 bytes,zero invalidations.
+Generated compressed package SHAdfd8cd42de514899fbf8c87cf3debf7f4ed000be17305e219ae907e396f1afee,
+62835888 bytes; decoded SHA4a20469deaa4b97ea1f405c30afa56e9220fd038839a7ccc0fc907702dfb10d9,
+2222850212 bytes. Independent cold --check is now live (session28366,
+producerPID26940),canonical-svg-independent-20261007.log; do not restart it.
+Generated files are not yet independently accepted or committed. Compact index
+still binds the preceding147/137 generation; reconcile only after cold success.
+
 October7 emitted binary applicability closes a specific remaining reuse gap:
 all54 captured Roboto WOFF/WOFF2 files match both their authenticated checkpoint
 hashes and current installed @fontsource/roboto bytes; the sole external image,
