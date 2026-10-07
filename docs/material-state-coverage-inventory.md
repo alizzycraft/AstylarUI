@@ -2,6 +2,300 @@
 
 ## Current evidence boundary — October 7
 
+Frozen keyboard canonical publication is now independently verified and indexed.
+Session79417 terminates exit0; cold check reauthenticates1205 actual inputs,
+89,154,859 bytes,zero invalidations,elapsed3226870.6656ms. Log
+keyboard-batch-canonical-independent-20261007.log SHA256
+fb6f82bedf5f4d4a564065a0dc296941d326c3b867bf2579dcb0561f37b29e65.
+Import and whole-index verification both exit0: logs
+keyboard-batch-index-import-20261007.log SHA62942d4c9b21dae0a5718deeabe478b85f1efb1d25927c8044b78ebd0d120f3d
+and keyboard-batch-index-verify-20261007.log SHAc3f79404e7550673231dc2a290ccf7c1dcf1e96fcbce2a1aee3ecc61739ed91d.
+Accepted canonical generation a02593c0c92d43b2964731a1dcf382d5ce093a8cd86774eb7cc5606467e7e936,
+index6e804812ac6b3476e4dd2745b5c437e1e20c560bb8dad64723f473bf8c307fcf,
+retains150 findings/141 proofs,436 static/1875 interaction cases,8483 groups,
+389202 occurrences,39904 controls,zero unresolved scalar groups; inputEquivalent=false.
+This supersedes the earlier running/stale-index status below,not historical
+receipts or whole-case acceptance. Later standalone keyboard/AX/source-binding
+and divider-trace evidence remains outside this generation. Next integrate that
+coherent evidence batch through existing registrations and continue applicable
+case-obligation closure; final enforced browser gates and handoff remain open.
+
+CSS geometry/projection helper applicability now has the same complete-module
+binding as the semantic bridge. `css-boundary-current-source-binding-20261007.log`
+exits0,SHA87837a2eda141f9c569fffee5c7b10392c4638d0422584bfff2b6f1b6be43cd8.
+For css-layout-geometry and css-render-boundary,the captured JS plus its exact
+omitted trailing source-map comment equals installed/local JS and fresh in-memory
+current TypeScript emit under existing config,with zero transpile diagnostics.
+Current source SHAs7ac98d4b…/fda7d7cd…; complete emitted module SHAs
+e38ca348…/b671f104… are retained with map/config receipts. No source rewriting,
+metadata normalization or build writes. This rules out stale complete helper
+module bytes for the served checkpoint,not stale callers,camera adapters or
+other layout/paint owners. It does not prove coordinate correctness or upgrade
+any rendering result; preserve existing CSS-space findings and root-cause gaps.
+Standalone registration remains outside frozen150/141; no renderer/fixture change.
+
+Complete semantic-bridge current-source applicability now authenticates,not just
+the application templates or a few methods. Log
+`semantic-bridge-current-source-binding-20261007.log` exits0,SHA256
+1987f616f92f3b5e32211be7cee81e41539a98cc398f4bab8ab4ea2acf925f97.
+Captured source-map module SHA590d49a2… plus exactly the omitted trailing
+//# sourceMappingURL=astylar-semantic-bridge.js.map comment equals the complete
+installed and local compiled module SHA7c892095…. Fresh in-memory current
+src/lib/astylar-semantic-bridge.ts emit under existing tsconfig.lib.json and
+TypeScript5.8.3 equals those same bytes,with zero transpile diagnostics. Source
+SHA1a0011d3…,config SHA8ab96d7f…,browser chunk map SHAdba48404… are retained.
+No broad whitespace normalization,source replacement or build writes occurred.
+This validates the full bridge module used by recent table/list AX observations;
+it is not a typecheck,complete pipeline binding or current-code parity count.
+Other mapped package modules exhibit Angular-linker/formatting/generated-metadata
+differences; raw byte inequality alone does not diagnose stale behavior. Do not
+borrow this bridge equality for their layout/paint/resource owners. Standalone
+registration remains outside frozen150/141; no source/fixture changes.
+
+Table child accessibility role/relationship question is now resolved in all16
+configured physical cohorts (four profiles,desktop/tablet/mobile DPR1 plus
+desktop DPR2),using the unchanged authenticated frozen-showcase helper. Log
+`table-child-ax-cohorts-20261007.log` exits0; SHA256
+a53981184b33cbd4b55119623d6502121f14d0586b02d9005fcd9eeccc81c949.
+Chrome154.0.8037.58; full1887-file build fingerprint matches the Oct5 checkpoint.
+All32 CDP observations contain nine actual native table elements; role,name,
+ignored=false and in-table parent/child relationships agree in all16 pairs
+(288 element observations). Read-only validation passes; complete mapped/current
+reference and candidate application sources compare equal. Helper body SHA603ac9ca…,
+proof-file SHA65d7256f… and report SHAab42dbec… remain authenticated. Native
+explicit roles versus candidate native tags are equivalent for these observed AX
+properties; do not author duplicate roles just to match input serialization.
+Header scope=col versus omission is not independently proved equivalent for all
+header associations or assistive-technology behavior by this CDP result. List AX
+exposure remains open; no list conclusion is borrowed from table. This closes
+one table semantic obligation across its16 runtime cohorts,not all52 case paint,
+history,input mapping or complete current-core acceptance. No renderer/fixture
+changes; standalone registration awaits the frozen150/141 publication boundary.
+
+Passive list/table structure now joins all104 retained configured cases to208
+authenticated input trees. `passive-list-table-structure-20261007.log` exits0;
+SHA2561faed3a1fdb64f3231175d6b74b211044fb0dd1a23275168a973ff25b76d2516.
+Report SHAab42dbec… authenticates. Every table has the same nine native/authored
+tag hierarchy table/thead/tr/th/tbody/tr/td/tr/td,with equal parent relationships
+and Name/Atlas/Northstar content. Native explicit roles are table,rowgroup,row,
+columnheader,rowgroup,row,cell,row,cell; candidate authors these native tags
+without explicit roles and adds header scope=col where native has no scope
+attribute. Source986–991 preserves that hierarchy; semantic bridge365–371 and
+668–672 creates native tags except area/canvas. This is a candidate equivalent
+representation to investigate,not demonstrated full AX equivalence: the summary
+gate checks table host/name,not all child relationships or header associations.
+Next compare actual browser accessibility trees before classifying implicit-role
+and scope differences; do not add redundant roles solely to match serialization.
+Every list preserves Inbox/Archive label order and has no explicit list/listitem/
+listbox/option roles on either side. Material mat-list/mat-list-item versus
+candidate div/span wrappers remain distinct inputs; absence of explicit roles
+does not prove equivalent accessibility exposure,layout or paint. This closes
+the retained authored hierarchy/content census,not full semantic acceptance or
+current rendering. All52 cases per family remain in scope; no source/fixture
+changes. Standalone registration is outside frozen150/141.
+
+Tabs/stepper configured selected-state coverage is now explicitly a snapshot,
+not a transition. `selected-snapshot-applicability-20261007.log` exits0; SHA256
+17f645d17ce2969bfb80fb566ec90935ab2f3a6707dfc0e956e7d19343fe0031.
+All16 selected rows (two families,four profiles,desktop DPR1/2) retain
+store.selected=true and exactly two aria-selected owners [true,false] on both
+sides; all32 input-tree hashes and the complete report SHAab42dbec… authenticate.
+Reference template88–89 has no selectedIndex/store binding; candidate974–975
+derives selection from store.selected. Runner532 returns without an action for
+selected. Thus these captures inspect the initial first item and cannot prove
+second-item selection,reverse transitions or store/internal-state equivalence.
+Selection remains applicable,not waived: the separate configured keyboard
+trace inspects second-item Enter selection in all8 contexts and documents the
+authoring gap. Pointer transitions,content visibility and state/focus paint
+still need their own evidence joins. No case removal,source/fixture change or
+whole-case acceptance; this standalone reconciliation is outside frozen150/141.
+
+Disabled-label applicability is now reconciled for chips/button-toggle/menu/
+tabs/stepper. `disabled-label-applicability-20261007.log` exits0; SHA256
+fbb9104b11b23cd4c71cbf074c03f04ad2971c4672fb55366bf302d1a52f9dd0.
+All40 configured disabled rows (five families,four profiles,desktop DPR1/2)
+retain store.disabled=true but no native disabled attribute/aria-disabled=true
+or candidate authored disabled/ariaDisabled=true anywhere in their80 authenticated
+input trees. Report SHAab42dbec… and both current complete application-source
+hashes debe55bc…/71e2d41f… authenticate. Reference template lines69,86–89 has
+no disabled bindings for these controls; candidate builders likewise omit them
+(button-toggle/chips explicitly expose ariaDisabled=false). The candidate click
+guard at224 only lists checkbox/radio/switch,not these five families. Thus
+disabled-control behavior is not authored here; the configured state label is
+not proof that a disabled control was exercised. Retain all40 cases and their
+input/paint/history obligations,without inventing additional disabled-control
+tests or interpreting their passes as disabled support. This source/tree check
+does not exercise disabled-store activation or establish current runtime/paint
+parity. No threshold,reference,case inventory or source was changed. Standalone
+registration remains outside the frozen150/141 canonical batch.
+
+Divider post-canvas residual tracing now separates edge coverage from texel-row
+selection without reopening settled font/layout/color questions. Retained log
+`divider-texel-boundary-trace-20261007.log` terminates with original assertions
+passed and acceptance=false; SHA256
+524252f69ddafdba911ce7c3996822eb672786f6e9261d45aafbbc297186e54d.
+Read-only replay reauthenticates all2515 actual input hashes. At DPR1 both
+authored/measured-origin models have57 residuals,13 greater than2; all13 lie in
+the half-device-pixel plane-edge band,none unowned. Three text-2 samples agree
+within1 channel with half nearest-texel color plus background; this does not
+explain every text-3 sample. At DPR2 both models have306 residuals,172 greater
+than2; all172 are interior,none unowned. Six bounded samples at fractional
+texelY=9 exactly match the same-x preceding row,not the model's row9. Assertions
+for counts,edge membership and these sample relationships pass read-only.
+Original four-origin DPR1/2 public-package inputs/assertions remain unchanged;
+only bounded diagnostic tracing was added in memory. Six bound methods do not
+certify the complete current renderer. Competing explanations remain GPU
+coverage/texel choice versus an inadequate CPU sampling model; neither model is
+browser truth. Next isolate that sampling boundary causally before assigning a
+core defect. No authored snapping,fixture compensation or renderer fix. This
+standalone evidence is outside the frozen150/141 canonical batch.
+
+Modal Tab containment now covers all8 configured desktop focus contexts
+(four profiles,DPR1/2),16 exact dialog/bottom-sheet family/context IDs,176 samples
+per side. Original source/error/eleven-boundary focus assertions are unchanged:
+dialog Cancel/Save containment agrees; candidate dialog marks aria-modal and
+inerts its trigger. Native sheet cycles Share/Copy link inside; candidate DIV
+role=dialog keeps opener focus initially and reaches BODY after its two items,
+without aria-modal or inert trigger. Log modal-configured-keyboard-cohorts-
+20261007.log exits0; SHA256
+b2e0b89df181a5189fda3140a79c779586b93a4f5cc641dec4d6944094b2d984.
+Original callback SHA25611d63b51…; full frozen build,exact context membership and
+both complete mapped/current application sources authenticate. Current runtime
+source10a7d573… remains unchanged with the original modal-predicate assertion;
+this is not complete captured-to-current core method equivalence. Surface-local
+parent containment,restoration,geometry/paint and actual live ownership remain
+separate. Reconcile family rows' historical sampled-count plateau language with
+the already retained live-growth counterexamples; do not repeat their inspection
+or call these focus cycles resource acceptance. Standalone registration awaits
+frozen150/141 independent check/index; no renderer/fixture change.
+
+Frozen keyboard batch export now terminates successfully (exit0),150 source
+findings/141 registered proofs,436 static/1875 interaction cases,8483 groups/
+389202 occurrences; inputEquivalent=false. Log keyboard-batch-canonical-export-
+20261007.log SHA256f9e4b9d692ac6ef91dcf6f5a4ccf0f3e59adfffe21ced169ece3fbdb430ee44c;
+elapsed10753507.1169ms. Evidence session authenticates1205 files/89154859 bytes
+with zero invalidations. New on-disk compressed generation a02593c0… (62838301
+bytes),decoded SHA52006a04… (2222858952 bytes). Independent cold named-baseline
+--check is now running in keyboard-batch-canonical-independent-20261007.log;
+no terminal verification result yet. Accepted predecessor remains149/139,index
+generation a9e92562…; that index is stale against the new on-disk package and
+must not be queried/imported as accepted150/141 until independent check passes.
+Keep consumed source/HEAD frozen at06446ebc through check/index reconciliation.
+Later tree/sort/selection/editable-popup/select/slider/paginator standalone
+context evidence is not registered in this frozen export. No current-output or
+whole-audit acceptance follows.
+
+Paginator keyboard/page/boundary-focus now covers all8 configured desktop focus
+contexts (four profiles,DPR1/2). Original fifteen-boundary assertions pass:
+equal page indices/range text0→1→0→9; no authored page-size select. Native
+disabledInteractive/aria-disabled retains Previous/Next focus at boundary;
+candidate native disabled moves focus to BODY. Exact original disabled/tabindex
+assertions hold; no page errors. Log paginator-configured-keyboard-cohorts-
+20261007.log exits0; SHA256
+86d2b373c65f15df920e212563ea3c3799fc3851c5c42a114edc818ef641622d.
+Original callback SHA256e7ece199…; exact contexts/full served build,both complete
+mapped/current application sources and unchanged inspected Material source
+authenticate. This extends the known unequal focus-input contract,not a core
+focus defect. Naming/live-region/icon/focus paint and full input mapping remain;
+standalone registration awaits frozen150/141 check/index completion.
+
+Slider keyboard constraints/value reconciliation now cover all8 configured desktop
+focus contexts (four profiles,DPR1/2). Original Tab/three Right/Tab/three Left
+assertions remain unchanged: native peer limits and step5 produce30→35→40→45
+and65→60→55→50; candidate fixed0–50/50–100 and step1 emit31/32/33 and64/63/62,
+while store rounding/reconciliation delays visible state until35/60. Original
+focus,value,input/change event assertions pass; no page errors. Log slider-
+configured-keyboard-cohorts-20261007.log exits0 with eight observations and
+terminal complete=true; SHA256
+018ef179645fceaca584d2e79ca6e99d5698f7eff1a1c53e571bc96922092a0c.
+Original callback SHA25621c11710…; exact configured membership,full frozen build
+and both complete current/mapped application sources authenticate. This closes
+keyboard context applicability,not pointer hit ownership,drag smoothness/travel,
+disabled behavior or paint. Standalone registration awaits frozen150/141
+export/check/index; no renderer/fixture or whole-case acceptance change.
+
+Select keyboard opening/navigation/commit and pointer-open keyboard routing now
+cover all8 configured desktop focus contexts (four profiles,DPR1/2). Original
+eleven-boundary assertions remain unchanged: Material Enter opens,ArrowUp selects
+active Solo,and Enter commits; candidate receives all keys but stays closed/Team.
+After equivalent reset and pointer-open,candidate options match native text/state
+but ArrowUp/Enter leave Team/open unchanged. Escape removes options and retains
+focus. No page errors. Log select-configured-keyboard-cohorts-20261007.log exits0;
+SHA256 c928475b1e311c3740c78d18f8f5d8b3d3b1f0783810c842e5bb974e47c8e9d9.
+Original callback SHA256334373bf…; full frozen build,exact configured context
+membership and complete current/mapped application-source equality authenticate.
+This extends the existing authoring diagnosis,not a native OS-popup limitation
+or core delivery defect. Other keys,disabled/error,focus/popup paint and repeated
+resource ownership remain. Standalone registration awaits the frozen150/141
+export/check/index; no renderer/fixture or whole-case acceptance change.
+
+Editable-popup real-key transitions now cover all8 configured desktop focus
+contexts (four profiles,DPR1/2),24 exact autocomplete/timepicker/datepicker
+family/context IDs. Original callback assertions remain unchanged. Autocomplete
+Tab opens both; only native ArrowDown/Enter activates and commits Cape Town.
+Timepicker native Tab stays closed and ArrowDown opens; candidate Tab already
+opens,ArrowDown leaves option0 active,and Enter does not commit. Escape removes
+candidate options. Datepicker Tab stays closed on both in every cohort; this
+does not change or test its pointer/Alt+Down behavior. No page errors; option
+text populations and original selected-state assertions also pass. Log editable-
+popup-configured-keyboard-cohorts-20261007.log exits0 with terminal complete=true;
+SHA256 c4ef715b176983c9ac70f4429174b2261f025ce9b00d8910bfff97de9e9e887b.
+Original callback SHA256ebb90f43…; full served build,exact context membership and
+both complete current/mapped application sources authenticate. Real Tab is not
+the harness's clicked timepicker focus action. Other editing/navigation keys,
+pointer triggers,disabled/error,paint/scrolling and lifecycle remain separate.
+Register this standalone proof after the frozen150/141 export/check/index closes.
+
+Button-toggle/tabs/stepper selection routing now covers all8 configured desktop
+focus contexts (four profiles,DPR1/2 at1440x1000),24 exact family/context IDs.
+Original Tab/ArrowLeft/Enter/ArrowRight assertions are unchanged. Native
+button-toggle selects Grid→List→Grid; native tabs/stepper move focus to the
+second item,select it on Enter,and return focus without reverting selection.
+Candidate focus/selection remains initial despite three delivered keydowns in
+each family/cohort. No page errors. Log selection-configured-keyboard-cohorts-
+20261007.log exits0 with eight observation rows and terminal complete=true;
+SHA256 b847251ebb28ef35b917e63b6872fd5fdfb4db83d7e9234e237280f73d58c383.
+Original callback SHA256af264fd3…; frozen helper/full served build,exact configured
+membership and both complete current/mapped application sources authenticate.
+This extends the existing Escape-only-handler authoring finding,not a core
+key-delivery diagnosis. Panel/content visibility,focus/edge/hover paint,disabled
+behavior and full input mapping remain; no whole-case closure. Register the
+standalone evidence only after the frozen150/141 export/check/index boundary.
+
+Sort keyboard activation now covers all8 configured desktop focus contexts
+(four profiles,DPR1/2 at1440x1000). Original Tab/Enter/Space/Enter assertions
+remain unchanged: native aria-sort none→ascending→descending→ascending and
+store direction asc→asc→desc→asc; candidate aria-sort stays omitted and store
+direction remains asc despite all three delivered keydowns. Both sides retain
+focus and emit no synthetic click. No page errors. Log sort-configured-keyboard-
+cohorts-20261007.log exits0 with eight observations and terminal complete=true;
+SHA256 bf65224f4943984f8eb566ee0394884d468390a3f0eb02e5849c132d5605d48c.
+Original callback SHA256137ae856…; existing frozen helper authenticates the
+full1887-file build. Exact configured membership and both complete mapped/current
+application source equalities recheck pass. This extends the existing keyboard
+authoring diagnosis,not a core delivery defect or complete sort acceptance.
+Focus paint,other event boundaries and full input mapping remain. Standalone
+proof registration is deferred until the frozen150/141 export/check/index closes.
+No renderer,fixture,threshold or reference changes.
+
+Tree navigation and native-button controls now cover all8 configured desktop
+focus contexts (four profiles,DPR1/2 at1440x1000),32 exact family/context IDs
+for tree/core/toolbar/card. Existing tree/button callback assertions are unchanged;
+only context/profile and observation emission vary. Native tree focus follows
+0→1→2→0→2 under Tab/ArrowDown/ArrowDown/Home/End; candidate remains0 despite
+four delivered application keydowns in every cohort. Core/toolbar/card native
+buttons retain equal focus and Enter/Space activation in all8 contexts. No page
+errors. Frozen helper authenticates all1887 served files; both complete mapped
+application sources equal current bytes. Log tree-button-configured-keyboard-
+cohorts-20261007.log exits0,ten JSON lines,terminal complete=true; SHA256
+92ebadea90cf4edd9859f18b10a6e5cd1fcedd3ed605cc493f31259c2401d295.
+Original callback SHA25660f771a2…; full report/checkpoint hashes remain ab42dbec…/
+7ae2cba1…. Exact configured membership and current source equality recheck pass.
+This closes keyboard context applicability,not focus paint,other keys,disabled
+behavior,full input mapping or whole-case inspection. Standalone evidence is
+not registered in the frozen150/141 producer; defer integration until its
+active export/check/index boundary closes. No renderer/fixture change.
+
 Configured enabled keyboard evidence is now joined to all40 exact focus-context
 IDs for checkbox,radio,chips,slide-toggle and expansion (four profiles,desktop
 DPR1/2),through the existing keyboard-authoring finding and a registered proof.
@@ -2510,42 +2804,42 @@ source-derived applicability review before it can be closed as inapplicable.
 
 | Family | Cases | Extra configured states | Reviewed evidence and next state gap |
 | --- | ---: | --- | --- |
-| Core | 12 / 40 | — | Chrome 154 light desktop DPR 1 real Tab/Enter/Space focuses `core-primary` and delivers two activations on both sides. Exact event ordering, focus/ripple paint and other profiles remain pending. |
-| Toolbar | 12 / 40 | — | Real Tab/Enter/Space focuses and activates child button `toolbar-action` on both sides; the toolbar itself has no activation. Exact event ordering, child focus paint and input/style equality remain. |
+| Core | 12 / 40 | — | Real Tab/Enter/Space focuses `core-primary` and delivers two activations on both sides in all8 configured desktop focus contexts (four profiles,DPR1/2); tree-button-configured-keyboard-cohorts-20261007.log. Original focus/key/click-order assertions pass with exact context membership/current mapped source. Focus/ripple paint,other event boundaries and full input/style equality remain; no whole-case closure. |
+| Toolbar | 12 / 40 | — | Real Tab/Enter/Space focuses and activates child button `toolbar-action` on both sides in all8 configured desktop focus contexts; the toolbar itself has no activation. Original focus/key/click-order assertions and exact context/current-source checks pass in tree-button-configured-keyboard-cohorts-20261007.log. Child focus paint,other event boundaries and input/style equality remain. |
 | Sidenav | 12 / 50 | open, M | Initially open side-mode panel, static text, no toggle or focusable content. Paired Tab finds no controls; real panel click/Escape leaves HTML open and neither unchanged panel accepts `focus()`. Material's inherited Escape listener has no focus-origin path in this authored example. Modal containment, toggle activation and real-key drawer dismissal are inapplicable here, not general sidenav limitations. Layout/style/semantics across profiles remain. |
 | Grid-list | 12 / 40 | — | Two static text tiles, no authored interactive descendants; paired Tab finds none. Tile keyboard activation is inapplicable. Grid layout/style/semantic correspondence remains. |
 | Divider | 16 / 8 | passive inspect | Static separator between two text paragraphs; paired Tab finds no controls. Keyboard activation is inapplicable. October6 read-only replay of current-full-20261005 authenticates the report SHA ab42dbec… and all48 input-tree receipts: all24 rows record matching separator role/name. Native explicit horizontal aria-orientation versus omitted candidate orientation is an equivalent authored representation under the WAI-ARIA 1.2 separator default (https://www.w3.org/TR/wai-aria-1.2/#separator). Core semantic bridge supports explicit ariaOrientation at lines475–476; no missing-core-support or compensation claim follows. Harness semantics omit orientation: this specification/input justification is not a captured accessibility-API orientation result or complete-case closure. Full input/style correspondence and paint obligations remain. |
 | Badge | 12 / 40 | — | Static Notifications text/count with no control; paired Tab finds none. Focus/activate actions are inapplicable to this authored example. Badge placement, generated content and semantic/style correspondence remain. |
-| Card | 12 / 40 | — | Real Tab/Enter/Space focuses and activates child button `card-open` on both sides; the card body is passive. Exact event ordering, focus paint and full input mapping remain. |
-| Chips | 12 / 64 | alternate activation, disabled, selected | Chrome 154 light desktop DPR 1 real Tab/Space proof: Material chip 0 changes selected, while role-only candidate receives keydown but stays selected. Focus paint, other keys/profiles and full input mapping remain. |
-| Icon | 12 / 8 | passive inspect | Keyboard activation/editing are inapplicable. All20 retained owners classify currentColor SVG replaced by fixed24px theme PNGs. Dimensionless external SVG upload defect is confirmed at24/48CSSpx DPR1/2; inline SVG support and external currentColor inheritance remain separate. All12 static metric objects replay and24 crops reconstruct; all8 inspect rows now have local raster diagnostics (16 authenticated PNGs),with four DPR2 sharpness failures and four DPR1 passes,not new acceptance gates. Actual ARIA hiding discrepancy and three-update/disposal observations cover all16 configured physical cohorts; failures count inspected. See October7 joined evidence above. Remaining: exact20 case-ID obligation join,full AX relationships where applicable,late async/remount/surface isolation and source/state applicability. Producer148 findings/138 proofs pending canonical verification. No full-case or input-equivalence acceptance. |
-| List | 12 / 40 | — | Plain `mat-list`/text rows, not a nav or selection list; paired Tab finds no controls. List-item keyboard activation is inapplicable. Structure/semantics/style correspondence remains. |
-| Table | 12 / 40 | — | Plain header/data cells without sort headers or controls; paired Tab finds none. Keyboard activation is inapplicable; sort remains a separate comparison. Table layout/style/semantics remain. |
-| Sort | 12 / 48 | activate-twice | Two pointer activations captured. Current Chrome 154 light desktop DPR 1 real Tab/Enter/Space proof finds an authored keyboard activation gap: both sides focus and receive keys, but only Material changes direction. Focus paint, other profiles/DPRs and complete sort input mapping remain. |
-| Paginator | 12 / 40 | — | Chrome 154 light desktop DPR 1 Tab/Enter/Shift+Tab/Space and nine Enter activations produce equal page indices/range labels 0→1→0→9. Page-size selection is inapplicable: no options authored, only size 10 text. Boundary focus differs: Material disabledInteractive/aria-disabled retains the focused Previous/Next button; candidate native disabled loses focus to BODY. Input-contract difference, not demonstrated core focus defect. Naming/live-region/icon/focus paint and other profiles remain. |
-| Tree | 12 / 40 | — | Three leaf nodes, no children/toggle: expansion is inapplicable. Real Tab/ArrowDown/ArrowDown/Home/End gives HTML focus 0→1→2→0→2; candidate stays at 0 despite four delivered application keydowns. Candidate authors fixed tabindex 0/-1 and no tree navigation handler: interaction-authoring gap, not proven key-delivery defect. Role/style/focus paint and other profiles remain pending. |
+| Card | 12 / 40 | — | Real Tab/Enter/Space focuses and activates child button `card-open` on both sides in all8 configured desktop focus contexts; the card body is passive. Original focus/key/click-order assertions and exact context/current-source checks pass in tree-button-configured-keyboard-cohorts-20261007.log. Focus paint,other event boundaries and full input mapping remain. |
+| Chips | 12 / 64 | alternate activation, disabled, selected | Real Tab/Space evidence covers all8 configured desktop focus contexts (four profiles,DPR1/2): Material chip0 changes selected,while the role-only candidate receives keydown but stays selected. Exact context membership,current mapped source and original assertions validate in configured-keyboard-registration-20261007.log. Focus paint,other keys,disabled behavior and full input mapping remain; no complete case closure. |
+| Icon | 12 / 8 | passive inspect | Keyboard activation/editing are inapplicable. All20 retained owners classify currentColor SVG replaced by fixed24px theme PNGs. Dimensionless external SVG upload defect is confirmed at24/48CSSpx DPR1/2; inline SVG support and external currentColor inheritance remain separate. All12 static metric objects replay and24 crops reconstruct; all8 inspect rows have local raster diagnostics (16 authenticated PNGs),with four DPR2 sharpness failures and four DPR1 passes,not new acceptance gates. Actual ARIA hiding discrepancy and three-update/disposal observations join all20 exact case IDs through16 physical cohorts; icon-case-obligation-join-20261007-retry.log. Late PNG completion after pending disposal is inspected in light desktop DPR1/dark mobile DPR2; relevant image/caller methods match current,installed and captured source. Remaining: full applicable AX relationships,other late-work/race contexts,source replacement,remount/peer isolation and current validity of remaining owners. Canonical149/139 is independently verified; newer standalone evidence and source150/141 remain distinct pending integration. No full-case or input-equivalence acceptance. |
+| List | 12 / 40 | — | Plain mat-list/text rows,not a nav or selection list; paired Tab finds no controls. Keyboard activation is inapplicable. All52 retained trees preserve Inbox/Archive order with no explicit list roles. Actual CDP subtree inspection now covers all16 physical cohorts (four profiles,desktop/tablet/mobile DPR1,desktop DPR2): both expose StaticText Inbox/Archive with no list/listitem/listbox/option roles. Native has7 visible generic wrappers plus2 ignored nodes; candidate has5 generic wrappers and no ignored nodes,consistently across16 pairs. This is bounded equal text/role exposure,not identical accessibility structure or full equivalence. Log list-ax-cohorts-20261007.log exits0,SHA98b2c152497cb4bae46833d0d46a61b7a16fa5f24177cf96652280c805034f04; unchanged helper authenticates1887-file checkpoint,Chrome154.0.8037.58,and both complete mapped/current application sources compare equal. Wrapper correspondence,layout/style/paint,history and full source/case closure remain. Standalone registration awaits frozen150/141 publication; no renderer/fixture changes. |
+| Table | 12 / 40 | — | Plain header/data cells without sort headers or controls; paired Tab finds none. Keyboard activation is inapplicable; sort remains separate. All52 retained trees preserve the nine table/rowgroup/row/cell hierarchy and Name/Atlas/Northstar content. Actual CDP roles,names,ignored state and in-table relationships agree in all16 physical cohorts (table-child-ax-cohorts-20261007.log),despite explicit native roles versus candidate native tags. Header associations/assistive-technology behavior,layout/style/paint,history and complete case/input closure remain. |
+| Sort | 12 / 48 | activate-twice | Two pointer activations captured. Real Tab/Enter/Space/Enter proof covers all8 configured desktop focus contexts (four profiles,DPR1/2): both sides focus and receive keys,but only Material changes direction. Original assertions and exact context/current mapped-source checks pass in sort-configured-keyboard-cohorts-20261007.log. Missing candidate keyboard activation/aria-sort is an authored input gap,not proved core delivery failure. Focus paint,other event boundaries and complete sort input mapping remain. |
+| Paginator | 12 / 40 | — | Tab/Enter/Shift+Tab/Space and nine Enter activations produce equal page indices/range labels0→1→0→9 in all8 configured desktop focus contexts (four profiles,DPR1/2). Original source/state/range/focus/disabled assertions,exact contexts and current sources authenticate in paginator-configured-keyboard-cohorts-20261007.log. Page-size selection is inapplicable:no options authored,only size10 text. Material disabledInteractive/aria-disabled retains Previous/Next focus; candidate native disabled loses focus to BODY. Unequal input contract,not demonstrated core focus defect. Naming/live-region/icon/focus paint and full input mapping remain. |
+| Tree | 12 / 40 | — | Three leaf nodes, no children/toggle: expansion is inapplicable. Real Tab/ArrowDown/ArrowDown/Home/End gives HTML focus 0→1→2→0→2; candidate stays at0 despite four delivered application keydowns in all8 configured desktop focus contexts. Existing assertions,exact context membership and full current mapped application sources authenticate in tree-button-configured-keyboard-cohorts-20261007.log. Candidate authors fixed tabindex0/-1 and no tree navigation handler: interaction-authoring gap,not proven key-delivery defect; native-button controls activate in every cohort. Role/style/focus paint,other keys and full case closure remain pending. |
 | Form-field | 12 / 64 | edit-empty-blur, disabled, error | Light desktop DPR 1/2 input boundaries and Chrome 154 DPR 1 caret-visible proof exist. Dark/mobile 390×844 DPR 2 empty-caret proof isolates caretColor omission; equal-color shipped-method reduction isolates 1px native / 2px core CSS width and edge centering before projection. Dark/mobile real-key forward/backward selections have equal endpoints/direction when End starts collapsed; actual blue/white native versus light-blue/black candidate pixels match the documented contrast-aware paint limitation, and collapse removes highlights. Existing End-on-selection defect remains. Full equal-input WebGL paint, pointer selection, other profiles and selection line-box/sharpness coverage remain. |
 | Input | 12 / 64 | edit-empty-blur, disabled, error | Light desktop DPR 1/2 input boundaries exist. Dark/mobile DPR 2 six-sample empty-caret proof matches form-field's authoring/footprint discrepancy. Native email selection endpoints remain null on both semantic inputs; no indices invented. Shared shipped-method reduction isolates core caret width/centering independent of color; full equal-input WebGL paint, other profiles and selection paint remain. |
-| Autocomplete | 12 / 98 | commit/reopen, hover content, outside/canvas dismissal, disabled, error, open, M | Chrome 154 light desktop DPR 1 real Tab opens both lists; Material ArrowDown activates Cape Town and Enter writes it/closes, while candidate receives keys but retains empty value/open popup. Escape removes candidate options and preserves focus. Other navigation/edit keys, caret/selection paint, dark/responsive states and resource cleanup remain. |
-| Checkbox | 12 / 56 | disabled, selected | Pointer, hover and selected states captured. Current Chrome 154 light desktop DPR 1 real Tab/Space proof finds native HTML `input:checkbox` versus candidate `div role=checkbox`: both focus and candidate receives keydown, but only HTML toggles. Focus-ring paint, event order, and other profiles/DPRs remain. |
-| Radio | 12 / 56 | disabled, selected | Pointer/selected states captured. Current Chrome 154 light desktop DPR 1 Tab/ArrowLeft/ArrowRight proof finds Material native radio focus/selection follows team → solo → team; candidate role-only `div` receives both keys but remains on team. Focus paint, Space, event ordering and other profiles/DPRs remain. |
-| Select | 12 / 82 | commit/reopen, hover content, disabled, selected, open, M | Chrome 154 light desktop DPR 1 real Tab/Enter/ArrowUp proof: Material custom `mat-select` opens, changes active option Team → Solo and commits Solo; candidate readonly input receives all keys but stays closed/Team. Pointer-open candidate likewise ignores ArrowUp/Enter; Escape removes its options and retains trigger focus. Material option DOM is inspectable; the former native-popup limitation did not apply here. Other keys/profiles, focus/popup paint and repeated resource cleanup remain. |
-| Slider | 12 / 66 | drag-start/end, disabled, comparison-pane drags | Chrome 154 light desktop DPR 1 Tab/Arrow proof: reference uses 0–100/step 5 and peer limits; candidate uses fixed 0–50/50–100/step 1 while the store rounds to 5, producing delayed jumps. Paired pointer proof: default 30/65 thumb centers target correctly; at 60/80 the visible start thumb hits `slider-primary`, and at 20/40 the visible end thumb hits `slider-start`, because half-width hit owners disagree with full-domain visuals. Other states/profiles, general travel geometry, capture cleanup and local paint remain. |
-| Slide-toggle | 12 / 56 | disabled, selected | Chrome 154 light desktop DPR 1 real Tab/Space proof: Material switch changes checked, while role-only candidate receives keydown but stays checked. Focus/hover, inactive minus paint, other profiles remain. |
-| Datepicker | 12 / 99 | secondary view, hover content, outside/canvas dismissal, disabled, error, open, short viewport, M | Chrome 154 light desktop DPR 1: Tab stays closed on both; Alt+Down opens only Material. Pointer-open Material focuses the calendar and Home/Right moves active day 1 → 2; candidate keeps icon focus. Candidate receives Next/day-1 clicks but month/value/open state stay unchanged; Material advances, writes the date and closes. Secondary year/month navigation, disabled/dark/responsive states, local caret/calendar paint and resource cleanup remain. |
-| Timepicker | 12 / 98 | wheel scroll, hover content, outside/canvas dismissal, disabled, error, open, M | Chrome 154 light desktop DPR 1 real Tab leaves Material closed but candidate opens; Material ArrowDown opens and Enter writes 12:00 AM/closes, while candidate receives keys but stays empty/open. Candidate always marks option 0 selected; empty Material input has none selected. Escape removes candidate options; closed Material Escape clears its committed value. Datepicker Tab negative control stays closed on both. Dark/mobile DPR2 pointer opening, wheel144, final-option reachability and thumb pixels verified; 20/40/60px native thumb drag gives scrollTop211/421/632, candidate0/0/0 with underlying option events: documented core dragging limitation. Shared full-runner launch policy now preserves native scrollbars with effective receipts; filtered dark desktop DPR2 open-scroll case passes, not aggregate acceptance. Other keys/profiles, track clicks, complete paint and resource cleanup remain. |
+| Autocomplete | 12 / 98 | commit/reopen, hover content, outside/canvas dismissal, disabled, error, open, M | Real Tab opens both lists in all8 configured desktop focus contexts; Material ArrowDown activates Cape Town and Enter writes it/closes,while candidate receives keys but retains empty value/open popup. Escape removes candidate options and preserves focus. Original assertions,exact contexts/current mapped sources authenticate in editable-popup-configured-keyboard-cohorts-20261007.log. Other navigation/edit keys,caret/selection paint,disabled/error,mobile pointer boundaries and resource cleanup remain. |
+| Checkbox | 12 / 56 | disabled, selected | Pointer,hover and selected states captured. Enabled real Tab/Space evidence covers all8 configured desktop focus contexts: native HTML `input:checkbox` and candidate `div role=checkbox` focus and receive keys,but only HTML toggles. Disabled light desktop DPR1/dark mobile DPR2 controls both skip Tab and retain state under Tab/Space/ArrowLeft. Logs configured-keyboard-registration-20261007.log and disabled-composite-keyboard-20261007.log. Focus-ring paint,event order,other keys and other disabled contexts remain; no complete case closure. |
+| Radio | 12 / 56 | disabled, selected | Pointer/selected states captured. Enabled real Tab/ArrowLeft/ArrowRight evidence covers all8 configured desktop focus contexts: Material native focus/selection follows team→solo→team; candidate role-only `div` receives both keys but remains on team. Disabled light desktop DPR1/dark mobile DPR2 native radios skip Tab,while selected candidate radio-team remains focusable because authored tabindex ignores disabled state; registered authoring finding,not blanket core aria-disabled suppression. Logs configured-keyboard-registration-20261007.log and disabled-composite-keyboard-20261007.log. Focus paint,Space,event ordering,other disabled contexts and pointer blocking remain; no complete case closure. |
+| Select | 12 / 82 | commit/reopen, hover content, disabled, selected, open, M | Real keyboard and pointer-open keyboard proof covers all8 configured desktop focus contexts (four profiles,DPR1/2): Material custom mat-select opens,changes active option Team→Solo and commits Solo; candidate readonly input receives keys but stays closed/Team. Pointer-open candidate ignores ArrowUp/Enter; Escape removes options and retains trigger focus. Original assertions,exact contexts/current sources authenticate in select-configured-keyboard-cohorts-20261007.log. Material option DOM is inspectable; native OS-popup limitation does not apply here. Other keys,disabled/error,focus/popup paint and repeated resource cleanup remain. |
+| Slider | 12 / 66 | drag-start/end, disabled, comparison-pane drags | Tab/Arrow proof covers all8 configured desktop focus contexts: native step5/peer limits contrast with candidate fixed0–50/50–100/step1 and store rounding to5,producing delayed jumps. Original focus/value/input/change assertions,exact contexts/current mapped sources authenticate in slider-configured-keyboard-cohorts-20261007.log. Separate paired pointer proof: default30/65 centers target correctly; at60/80 visible start hits slider-primary,and at20/40 visible end hits slider-start because half-width hit owners disagree with full-domain visuals. Other pointer/disabled states and contexts,general travel geometry,capture cleanup and local paint remain. |
+| Slide-toggle | 12 / 56 | disabled, selected | Enabled real Tab/Space evidence covers all8 configured desktop focus contexts: Material switch changes checked,while role-only candidate receives keydown but stays checked. Disabled light desktop DPR1/dark mobile DPR2 controls both skip Tab and retain state under Tab/Space/ArrowLeft. Logs configured-keyboard-registration-20261007.log and disabled-composite-keyboard-20261007.log. Focus/hover and inactive minus paint,other keys/disabled contexts and whole-case input mapping remain. |
+| Datepicker | 12 / 99 | secondary view, hover content, outside/canvas dismissal, disabled, error, open, short viewport, M | Real Tab stays closed on both in all8 configured desktop focus contexts; unchanged assertions/exact contexts/current sources authenticate in editable-popup-configured-keyboard-cohorts-20261007.log. Separate light desktop DPR1 proof: Alt+Down opens only Material; pointer-open Material focuses calendar and Home/Right moves active day1→2,candidate keeps icon focus. Candidate receives Next/day1 clicks but month/value/open remain unchanged; Material advances,writes date and closes. Other-profile calendar navigation,secondary year/month,disabled/error,responsive pointer states,local caret/calendar paint and resource cleanup remain. |
+| Timepicker | 12 / 98 | wheel scroll, hover content, outside/canvas dismissal, disabled, error, open, M | Real Tab leaves Material closed but candidate opens in all8 configured desktop focus contexts; Material ArrowDown opens and Enter writes12:00 AM/closes,candidate receives keys but stays empty/open. Candidate marks option0 selected; empty Material has none selected. Escape removes candidate options; closed Material Escape clears committed value. Original assertions/exact contexts/current mapped sources authenticate in editable-popup-configured-keyboard-cohorts-20261007.log; datepicker Tab stays closed on both. This is not pointer-click opening. Dark/mobile DPR2 pointer opening,wheel144,final-option reachability and thumb pixels verified;20/40/60px native thumb drag gives scrollTop211/421/632,candidate0/0/0 with underlying option events: documented core dragging limitation. Full-runner policy preserves native scrollbars with receipts; filtered dark desktop DPR2 open-scroll passes,not aggregate acceptance. Other keys,disabled/error,track clicks,complete paint and resource cleanup remain. |
 | Button | 12 / 48 | disabled | Chrome154 light desktop DPR1 real Tab/Enter/Space and reverse Tab focus Primary → Secondary → BODY → Secondary, skipping the disabled native BUTTON on both sides. Each enabled button activates twice. Candidate typed click dispatch matches reference activation counts at every boundary, but candidate semantic DOM emits no click; keydown/keyup target/key sequences agree. Exact cross-transport event ordering, focus/ripple paint, other profiles and full input mapping remain. |
-| Button-toggle | 12 / 56 | disabled, selected | Chrome 154 light desktop DPR 1 Tab/ArrowLeft/Enter/ArrowRight proof: Material focus and selection move Grid → List → Grid; candidate receives keys but stays on Grid. Edge/hover paint and other profiles remain. |
-| Menu | 12 / 82 | hover content, outside/canvas dismissal, disabled, open, M | Retained light 900×700 DPR 1 ArrowDown/Escape capture exists. Dark/mobile DPR 2 open/Escape: HTML focuses Rename, candidate remains on trigger; both restore trigger/remove controls. Post-dismissal counts plateau (12 meshes/14 materials/5 textures); all textures are owned text-cache entries and public disposal clears sampled runtime resources, cache, plugin ownership and observers. Dark Arrow/navigation, paint, retained-material ownership and multi-surface/late-async lifetime remain. |
-| Tabs | 12 / 58 | disabled, selected, M | Chrome 154 light desktop DPR 1 Tab/ArrowLeft/Enter/ArrowRight proof: Material Arrow moves focus to Activity, Enter selects it, Arrow returns focus; candidate receives keys but stays on Overview. Panel paint/visibility and other profiles remain. |
-| Stepper | 12 / 56 | disabled, selected | Chrome 154 light desktop DPR 1 Tab/ArrowLeft/Enter/ArrowRight proof: Material Arrow moves focus to Review, Enter selects it, Arrow returns focus; candidate receives keys but stays on Details. Content visibility and other profiles remain. |
-| Expansion | 12 / 56 | disabled, open | Chrome 154 light desktop DPR 1 Tab/Space/Enter proof: Material header toggles `aria-expanded` false → true → false internally; role-only candidate receives both keys but stays false. Focus/arrow paint and other profiles remain. |
-| Bottom-sheet | 12 / 51 | open, comparison-pane, M | Retained light 900×700 DPR 1 Tab/Escape capture exists. Dark/mobile DPR 2 open/Escape restores triggers/removes controls. HTML traps Share/Copy link, candidate escapes after its two options; role-only authoring omits focus-scope contract. Post-dismissal counts plateau (12/14/5); all textures are text-cache owned and public disposal clears sampled runtime/cache/plugin/observer counts. Surface-local modality, outside-trigger backward Tab, paint, retained-material ownership and multi-surface/late-async lifetime remain. |
-| Dialog | 12 / 66 | hover content, outside dismissal, open, M | Retained light 900×700 DPR 1 Tab/Escape capture exists. Dark/mobile DPR 2 open/Escape: both focus Cancel; HTML restores trigger, candidate ends at BODY. Tab/Shift+Tab stays inside Cancel/Save on both; candidate modal contract makes trigger inert. Post-dismissal counts plateau (12/13/7); all textures are text-cache owned and public disposal clears sampled runtime/cache/plugin/observer counts. Surface-local scope, panel paint, retained-material ownership and multi-surface/late-async lifetime remain. |
+| Button-toggle | 12 / 56 | disabled, selected | Tab/ArrowLeft/Enter/ArrowRight proof covers all8 configured desktop focus contexts (four profiles,DPR1/2): Material focus and selection move Grid→List→Grid; candidate receives keys but stays on Grid. Original assertions,exact context membership and current mapped sources authenticate in selection-configured-keyboard-cohorts-20261007.log. Edge/hover/focus paint,disabled behavior and full input mapping remain. |
+| Menu | 12 / 82 | hover content, outside/canvas dismissal, disabled, open, M | Retained light 900×700 DPR 1 ArrowDown/Escape capture exists. Dark/mobile DPR 2 open/Escape: HTML focuses Rename, candidate remains on trigger; both restore trigger/remove controls. Historical tracked counts12/14/5 are not live plateau acceptance: overlay-dismissal-cycles-current-20261006.log records live materials19/20/21 despite tracked plateau. Public disposal clears sampled runtime/cache/plugin/observer counts,not element-lifetime leakage. Dark Arrow/navigation,paint,retained-material ownership and multi-surface/late-async lifetime remain. |
+| Tabs | 12 / 58 | disabled, selected, M | Tab/ArrowLeft/Enter/ArrowRight proof covers all8 configured desktop focus contexts: Material Arrow moves focus to Activity,Enter selects it,Arrow returns focus; candidate receives keys but stays on Overview. Original assertions,exact context membership and current mapped sources authenticate in selection-configured-keyboard-cohorts-20261007.log. Panel paint/visibility,focus paint,disabled behavior and full input mapping remain. |
+| Stepper | 12 / 56 | disabled, selected | Tab/ArrowLeft/Enter/ArrowRight proof covers all8 configured desktop focus contexts: Material Arrow moves focus to Review,Enter selects it,Arrow returns focus; candidate receives keys but stays on Details. Original assertions,exact context membership and current mapped sources authenticate in selection-configured-keyboard-cohorts-20261007.log. Content visibility,focus paint,disabled behavior and full input mapping remain. |
+| Expansion | 12 / 56 | disabled, open | Real Tab/Space/Enter evidence covers all8 configured desktop focus contexts: Material header toggles `aria-expanded` false→true→false internally; role-only candidate receives both keys but stays false. Store.open alone is not native expansion state. Exact membership,current mapped source and unchanged original assertions validate in configured-keyboard-registration-20261007.log. Focus/arrow paint,disabled behavior,other keys and complete input/state mapping remain. |
+| Bottom-sheet | 12 / 51 | open, comparison-pane, M | Tab/Shift+Tab containment covers all8 configured desktop focus contexts; modal-configured-keyboard-cohorts-20261007.log authenticates original assertions/exact contexts/current application sources. HTML traps Share/Copy link; candidate role-only DIV starts on opener and escapes after two items,omitting modal/inert contract. Separate dark/mobile DPR2 open/Escape restores trigger/removes controls. Historical sampled counts12/14/5 are not live plateau acceptance: overlay-dismissal-cycles-current-20261006.log records live materials18/19/20 despite tracked plateau. Public disposal clears sampled runtime/cache/plugin/observer counts,not element-lifetime leakage. Surface-local modality,parent focus scope,restoration contexts,paint and multi-surface/late-async lifetime remain. |
+| Dialog | 12 / 66 | hover content, outside dismissal, open, M | Tab/Shift+Tab Cancel/Save containment agrees in all8 configured desktop focus contexts; candidate modal contract makes trigger inert. Original assertions/exact contexts/current application sources authenticate in modal-configured-keyboard-cohorts-20261007.log. Separate dark/mobile DPR2 open/Escape: both focus Cancel; HTML restores trigger,candidate ends at BODY. Historical sampled counts12/13/7 are not live plateau acceptance: overlay-dismissal-cycles-current-20261006.log records live materials17/20/23 despite tracked plateau. Public disposal clears sampled runtime/cache/plugin/observer counts,not element-lifetime leakage. Surface-local parent scope,restoration contexts,panel paint and multi-surface/late-async lifetime remain. |
 | Snack-bar | 12 / 59 | activate-twice, open, auto-dismiss, comparison-pane | Chrome 154 dark/mobile DPR2 Tab/Enter opens both at y=788/height=48 with local foreground/background pixels; UNDO dismisses both. Width/palette differ at authored input (native374px vs fixed344px); candidate restores trigger, native ends at BODY. Four real-target timer probes in light desktop DPR1 and dark mobile DPR2 preserve a reopened snackbar past the original expiry, expire it on the new lifetime, and dismiss a third opening through UNDO. Exact fade/local paint, other profiles, repeated resources and late disposal remain. Retain snackbar-reopen-expiry-5918ea7-verified.log; see handoff for the rejected hidden-proxy targeting diagnostic. |
 | Tooltip | 12 / 50 | open, comparison-pane hover/held | Retained light desktop DPR 1/2 real Tab capture proves opening-state authoring differs. Chrome 154 ordinary non-benchmark dark/mobile DPR 2 likewise opens only HTML on Tab; pointer hover opens both, centered 8px below each trigger, 24px high, with actual common background/foreground pixels; leave removes both. Unequal connected-overlay/relative-flow composition remains despite this geometry. Local sharpness, touch/scroll/fallback and other profiles remain. |
-| Progress-bar | 12 / 8 | passive inspect | Determinate64/100 role/value semantics agree in all16 physical AX cohorts; host focusability does not: native tabindex=-1 focuses, candidate omission leaves BODY active. Programmatic focus is inspected/failing; keyboard activation,indeterminate phase and other values are not authored. All20 retained screenshots authenticate native left-fill versus candidate right-fill and unequal track RGB through40 PNG receipts. All20 primary heights are4px despite requested8px: fixed62px column-flex parent leaves4px; native shrink/auto-height controls agree. All16 physical cohorts have three equivalent updates and final disposal: stable live=tracked counts,one unused owned plugin root material,complete sampled disposal. Exact20-case cohort membership joins through the report; not full obligation closure. Evidence: progress-retained-track-extent-20261007.log,progress-update-disposal-cohort-join-20261007.log,progress-actual-ax-cohorts-20261007.log and progress-programmatic-focus-20261007.log. Remaining: equal-input track/cap/edge and focus paint,canonical focus-input classification,remount/isolation and final source/state acceptance. Changed-value replacement is inapplicable to literal64. |
-| Progress-spinner | 12 / 8 | passive inspect | Determinate64/100 role/value semantics agree in all16 physical AX cohorts; host focusability does not: native tabindex=-1 focuses, candidate omission leaves BODY active. Programmatic focus is inspected/failing; keyboard activation,indeterminate phase and other values are not authored. All20 angular rasters authenticate native270→140.4 clockwise versus authored candidate322→91.6 counterclockwise within2degree bins; unequal CSS angle inputs explain the population without a new projection reversal. Native caps are butt in all16 cohorts; actual tube caps are flat,with2.88degree endpoint segmentation approximation,not proven browser cap-paint failure. All16 physical cohorts have three equivalent updates and sampled disposal,stable counts and one unused owned plugin root material. Evidence: spinner-css-angle-model-20261007-retry.log,spinner-native-cap-inputs-20261007.log,spinner-cap-geometry-control-20261007.log,progress-update-disposal-cohort-join-20261007.log,progress-actual-ax-cohorts-20261007.log and progress-programmatic-focus-20261007.log. Remaining: antialiased cap/edge and focus paint,canonical focus-input classification,remount/isolation and full case/source/state acceptance; no input parity. Changed-value replacement is inapplicable to literal64. |
+| Progress-bar | 12 / 8 | passive inspect | Determinate64/100 role/value semantics agree in all16 physical AX cohorts; host focusability does not: native tabindex=-1 focuses,candidate omission leaves BODY active. Focus-input omission is classified in accepted canonical149/139; programmatic focus is inspected/failing. Keyboard activation,indeterminate phase and other values are not authored. All20 retained screenshots authenticate native left-fill versus candidate right-fill and unequal track RGB through40 PNG receipts. All20 primary heights are4px despite requested8px: fixed62px column-flex parent leaves4px; native shrink/auto-height controls agree. All16 physical cohorts have three equivalent updates/final disposal: stable live=tracked counts,one unused owned plugin root material,complete sampled disposal. Exact20-case membership joins through the report. Reference focus paint is inspected in all16 cohorts with unchanged before/after PNGs; bounded same-generation remount/peer resource survival passes light desktop DPR1/2,not semantic isolation. Evidence: progress-retained-track-extent-20261007.log,progress-update-disposal-cohort-join-20261007.log,progress-actual-ax-cohorts-20261007.log,progress-programmatic-focus-20261007.log,progress-reference-focus-paint-20261007.log and progress-remount-same-generation-20261007.log. Remaining: equal-input track/cap/edge and candidate focus paint,other remount/isolation contexts,cached-disposed-default safety and final source/state acceptance. Changed-value replacement is inapplicable to literal64; no complete case closure. |
+| Progress-spinner | 12 / 8 | passive inspect | Determinate64/100 role/value semantics agree in all16 physical AX cohorts; host focusability does not: native tabindex=-1 focuses,candidate omission leaves BODY active. Focus-input omission is classified in accepted canonical149/139; programmatic focus is inspected/failing. Keyboard activation,indeterminate phase and other values are not authored. All20 retained angular rasters authenticate native270→140.4 clockwise versus authored candidate322→91.6 counterclockwise within2degree bins; unequal CSS angle inputs explain that population without a new projection reversal. Native caps are butt in all16 cohorts; actual tube caps are flat,with2.88degree endpoint segmentation approximation,not proven browser cap-paint failure. All16 physical cohorts have three equivalent updates/sampled disposal,stable counts and one unused owned plugin root material. Reference focus paint is inspected in all16 cohorts with changed pixels and outline properties; this does not attribute every changed pixel. Bounded same-generation remount/peer resource survival passes light desktop DPR1/2,not semantic isolation. Evidence: spinner-css-angle-model-20261007-retry.log,spinner-native-cap-inputs-20261007.log,spinner-cap-geometry-control-20261007.log,progress-update-disposal-cohort-join-20261007.log,progress-actual-ax-cohorts-20261007.log,progress-programmatic-focus-20261007.log,progress-reference-focus-paint-20261007.log and progress-remount-same-generation-20261007.log. Remaining: antialiased cap/edge and candidate focus paint,other remount/isolation contexts,cached-disposed-default safety and full case/source/state acceptance; no input parity. Changed-value replacement is inapplicable to literal64. |
 
 ## Priority and ownership of the remaining checks
 

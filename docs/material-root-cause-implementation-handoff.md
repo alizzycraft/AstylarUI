@@ -2,6 +2,25 @@
 
 ## Current resumption ledger — October 7
 
+- Latest publication boundary: frozen150/141 canonical cold check now exits0,
+  with1205 input receipts reauthenticated and zero invalidations. Compact import
+  and whole-index verification also exit0; generation a02593c0…/index6e804812….
+  This supersedes the running/stale-index notes below. Coverage436/1875,
+  differences8483/389202 and inputEquivalent=false remain unchanged. Exact logs
+  and hashes are at the top of the coverage inventory. Later standalone evidence
+  is not implicitly registered; integrate it as a coherent batch,then continue
+  full applicable-obligation closure and final gates. No renderer/fixture fix.
+
+- Frozen150/141 keyboard batch export now exits0; all436/1875 cases and
+  8483 groups/389202 occurrences remain,inputEquivalent=false. On-disk package
+  generation a02593c0… replaces predecessor bytes,but independent cold --check
+  is still running (keyboard-batch-canonical-independent-20261007.log). Do not
+  call it accepted or use the now-stale a9e92562… index as current. Next obtain
+  terminal independent verification,then import/verify the complete index and
+  commit/push publication. Keep consumed source/HEAD06446ebc frozen. Later
+  standalone keyboard context extensions remain outside this export; see the
+  current coverage ledger for exact scope/receipts,not whole-case closure.
+
 - Source policy/proof inventory now150/141; accepted canonical/index remains
   149/139 until the next coherent export. Added disabled-radio sequential-focus
   authoring finding retains two exact radio contexts plus checkbox/switch negative
