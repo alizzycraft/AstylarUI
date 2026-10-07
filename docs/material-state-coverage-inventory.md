@@ -2,6 +2,22 @@
 
 ## Current evidence boundary — October 6
 
+October7 timepicker thumb-motion interpretation is narrowed by a decisive edge
+control: authenticate all32 retained PNG receipts and the full report,then use
+the same eight reported256/2312/144 client/scroll/offset values. The CSS runtime
+formula predicts15.9446366782px travel. Trailing exact-color boundaries move
+15–16px,within one device pixel of that model in every cohort; leading boundaries
+alone move13–16px and differ from trailing movement by0–3px. Therefore the
+earlier leading-run measurements are visible ink movement,not rigid mesh travel
+or evidence of theme-dependent projection. Current/captured runtime uses28px
+minimum thumb and full client-height track; platform-native arrows/styling and
+owned non-pickable indicators remain distinct documented boundaries. Top ink
+loss could involve clipping/compositing/measurement; no cause is confirmed.
+Evidence: timepicker-thumb-edge-model-20261007.log
+SHA19c8cd5974560e61be0158049d161a32706a62bfd5bd0daf23ea97c16b338aad,
+exit0. Next inspect top-edge paint ownership rather than repeat wheel travel;
+exact shape/track input equivalence and real track-click coverage remain open.
+
 October7 full-run scrollbar launch applicability is now verified,not pending:
 authenticated October5 report/checkpoint provenance agrees in full; all10
 transitive harness source fingerprints match current code,requested Chrome
