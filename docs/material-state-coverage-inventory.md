@@ -2,6 +2,24 @@
 
 ## Current evidence boundary — October 7
 
+Standalone keyboard replay now closes the assertion-integration question for
+all8 retained batches,128 exact family/focus-context joins. The additive test
+`retained extended keyboard cohorts replay original runtime tails and source preambles`
+in input-equivalence-audit.spec.mjs pins all8 logs,original callback hashes,
+full served build/report/checkpoint,current application source and paginator/modal
+source dependencies. It replays unchanged assertion blocks and complete outer
+source preambles; modal begins after observation collection,not at its earlier
+browser-version assertion. Focused1/1 passes4466.9097ms; log
+extended-keyboard-replay-20261007.log SHA256
+68235ba586a6fbf55b34d24a37374f6473e91e17aeeb82c31ac1bfd7dab7fb08.
+Read-only AST removal of this one added test restores complete70ae8e90 test-file
+bytes after LF normalization. No existing assertions changed. This proves retained
+runtime/source assertion replay,not collection-time error callbacks,current paint,
+lifecycle or whole-case acceptance. Registration is still pending in existing
+producer mechanisms; accepted150/141 package predates this additive test-source
+change and must not be described as validating it. No renderer/fixture changes.
+Canonical publication70ae8e90 is pushed successfully to the integration branch.
+
 Frozen keyboard canonical publication is now independently verified and indexed.
 Session79417 terminates exit0; cold check reauthenticates1205 actual inputs,
 89,154,859 bytes,zero invalidations,elapsed3226870.6656ms. Log

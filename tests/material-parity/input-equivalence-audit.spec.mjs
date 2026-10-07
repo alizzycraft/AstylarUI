@@ -37,6 +37,73 @@ const browserDefaults = {
   fontStyle: 'normal', transform: 'none', pointerEvents: 'auto',
 };
 
+test('retained extended keyboard cohorts replay original runtime tails and source preambles', async () => {
+  const digest = value => createHash('sha256').update(value).digest('hex');
+  const pinned = (file, hash) => {
+    const bytes = readFileSync(file); assert.equal(digest(bytes), hash, file); return bytes;
+  };
+  const source = pinned('tests/material-parity/sort-focus-structure.spec.mjs',
+    '65d7256f859a0839cdf6364d8f3d4e2b81bdb32978c42e0afeaa27f2622e14ce').toString();
+  const ast = ts.createSourceFile('keyboard-original.mjs', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const report = JSON.parse(pinned('artifacts/material-parity/current-full-20261005/latest-report.json',
+    'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62'));
+  const checkpoint = JSON.parse(pinned('artifacts/material-parity/current-full-20261005/checkpoint/manifest.json',
+    '7ae2cba1739353661a0c84e28ef70819157311cc824fd00ae94ced29fadeb352'));
+  const { fingerprintDirectory, materialCaseKey } = await import('./run-checkpoint.mjs');
+  assert.deepEqual(fingerprintDirectory('examples/material-showcase/dist/material-showcase/browser'), checkpoint.provenance.browserFiles);
+  pinned('examples/material-showcase/src/app/astylar.component.ts',
+    '71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd');
+  const batches = [
+    ['tree-button', '92ebadea90cf4edd9859f18b10a6e5cd1fcedd3ed605cc493f31259c2401d295', ['tree', 'core', 'toolbar', 'card']],
+    ['sort', 'bf65224f4943984f8eb566ee0394884d468390a3f0eb02e5849c132d5605d48c', ['sort']],
+    ['selection', 'b847251ebb28ef35b917e63b6872fd5fdfb4db83d7e9234e237280f73d58c383', ['button-toggle', 'tabs', 'stepper']],
+    ['editable-popup', 'c4ef715b176983c9ac70f4429174b2261f025ce9b00d8910bfff97de9e9e887b', ['autocomplete', 'timepicker', 'datepicker']],
+    ['select', 'c928475b1e311c3740c78d18f8f5d8b3d3b1f0783810c842e5bb974e47c8e9d9', ['select']],
+    ['slider', '018ef179645fceaca584d2e79ca6e99d5698f7eff1a1c53e571bc96922092a0c', ['slider']],
+    ['paginator', '86d2b373c65f15df920e212563ea3c3799fc3851c5c42a114edc818ef641622d', ['paginator']],
+    ['modal', 'b2e0b89df181a5189fda3140a79c779586b93a4f5cc641dec4d6944094b2d984', ['dialog', 'bottom-sheet']],
+  ];
+  for (const [name, hash, families] of batches) {
+    const rows = pinned(`artifacts/material-parity/${name}-configured-keyboard-cohorts-20261007.log`, hash)
+      .toString().trim().split(/\r?\n/).map(JSON.parse);
+    assert.equal(rows.length, 10); assert.equal(rows.at(-1).complete, true);
+    assert.equal(rows.at(-1).acceptance, false);
+    assert.equal(rows[0].helperSha256, digest(source));
+    assert.equal(rows[0].reportSha256, 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+    assert.equal(rows[0].checkpointSha256, '7ae2cba1739353661a0c84e28ef70819157311cc824fd00ae94ced29fadeb352');
+    const calls = ast.statements.filter(n => ts.isExpressionStatement(n) && ts.isCallExpression(n.expression)
+      && n.expression.arguments[1] && digest(n.expression.arguments[1].getText(ast)) === rows[0].originalCallbackSha256);
+    assert.equal(calls.length, 1);
+    const callback = calls[0].expression.arguments[1];
+    const outer = callback.body.statements;
+    const invocation = outer.findIndex(n => n.getText(ast).startsWith('await withFrozenShowcase'));
+    assert.ok(invocation >= 0);
+    // Preserve every original source assertion before the browser invocation.
+    if (name === 'paginator') pinned('node_modules/@angular/material/fesm2022/paginator.mjs', rows[0].materialSourceSha256);
+    if (name === 'modal') pinned('src/lib/astylar-interaction-runtime.ts', rows[0].currentRuntimeSourceSha256);
+    Function('assert', 'readFileSync', outer.slice(0, invocation).map(n => n.getText(ast)).join('\n'))(assert, readFileSync);
+    const body = outer[invocation].expression.expression.arguments[0].body;
+    const marker = name === 'modal' ? 't.diagnostic(JSON.stringify(observations))' : 'assert.equal(browser.version()';
+    const start = body.statements.findIndex(n => n.getText(ast).startsWith(marker));
+    assert.ok(start >= 0);
+    const tail = body.statements.slice(start + (name === 'modal' ? 1 : 0)).map(n => n.getText(ast)).join('\n');
+    const replay = Function('assert', 'observations', 'browser', tail);
+    const observed = [];
+    for (const row of rows.slice(1, -1)) {
+      replay(assert, row.observations, { version: () => '154.0.8037.58' });
+      for (const family of families) observed.push(materialCaseKey('interaction', { family,
+        profile: row.profile, viewport: row.viewport, state: 'focus' }));
+    }
+    const expected = report.interactions.filter(row => families.includes(row.family) && row.state === 'focus')
+      .map(row => materialCaseKey('interaction', row));
+    assert.equal(observed.length, families.length * 8);
+    assert.equal(new Set(observed).size, observed.length);
+    assert.deepEqual(observed.sort(), expected.sort());
+  }
+  // This replays retained assertions, not browser collection/error callbacks,
+  // current paint, lifecycle acceptance, or complete case closure.
+});
+
 test('configured enabled keyboard evidence joins forty exact focus contexts without changing original assertions', async () => {
   const digest = value => createHash('sha256').update(value).digest('hex');
   const readPinned = (file, sha256) => {
