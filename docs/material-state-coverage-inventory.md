@@ -2,6 +2,27 @@
 
 ## Current evidence boundary — October 6
 
+October7 captured-code applicability boundary refined without a build:912
+JavaScript source maps authenticate against current-full checkpoint manifest
+SHA7ae2cba1739353661a0c84e28ef70819157311cc824fd00ae94ced29fadeb352.
+All2280 embedded source observations are present with no conflicting duplicates;
+all17 local application sources exactly match current bytes,including reference,
+candidate fixture and Material plugin. This strengthens spinner source-model
+binding to captured authoring. First bounded log
+current-full-source-map-applicability-20261007.log
+SHA7ee0d43c6fda9629f0b2bc743f86450b68b997ce40b0b2989f1df0206ecc66f7.
+Direct dependency text matching is unsuitable: normalized match21/2280 includes
+all17 local files; dependency differences include esbuild indentation/newlines.
+Whole installed-Astylar AST-printer comparison matches29/88 modules but printer
+preserves original multiline conditional formatting (sample flex-layout ternary),
+so59 mismatches are NOT59 demonstrated semantic changes. Diagnostic log
+current-full-installed-ast-applicability-20261007.log
+SHAabb5ff2dca0264232bbc70a1b14ed2d2d18457d45de021fd00dfb28e7b043888.
+Next inspect complete parsed executable structure,not remove arbitrary text or
+assume mismatch/pass from printer formatting. Source-map identity does not
+cover current TypeScript transpilation,all assets/styles,calendar clock context
+or final browser acceptance. Current-code case pass/retest counts stay unproven.
+
 October7 spinner retained angular coverage now measures all20 configured cases
 (12 static/8 inspect),40 full-image SHA receipts,using authenticated report
 ab42dbec and each side's own primary bounds/DPR. Exact dominant foreground
