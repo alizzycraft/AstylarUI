@@ -2,6 +2,21 @@
 
 ## Current evidence boundary — October 7
 
+Retained divider texel trace now has an additive replay assertion: `retained
+divider texel trace preserves edge and interior residual uncertainty`. Original
+trace/proof/callback hashes and all2515 recorded input receipts authenticate.
+Both measured/authored models retain57/13 residual counts atDPR1 (all13 edge)
+and306/172 atDPR2 (all172 interior),zero unowned residuals. Every sampled
+neighbor error independently recomputes from actual/composed RGB; sampledDPR2
+fractionalY=9 and previous-row same-X error0 remain asserted. Forged unowned
+residual is rejected. Focused1/1 passes(divider-trace-replay-20261007.log);
+whole legacy-suite conservation1/1 passes(divider-trace-suite-conservation-
+20261007.log). This is bounded model evidence,not confirmed GPU sampling cause,
+browser truth,full current pipeline or whole-case acceptance. No snapping or
+fixture compensation. Next register the four retained module/AX/applicability/
+trace proofs as one coherent batch,run integration,then justify canonical export.
+Producer150/142 and accepted canonical150/141 remain distinct.
+
 State-label applicability now has an additive retained replay test,`retained
 disabled labels and selected snapshots preserve actual authored state coverage`.
 All40 disabled rows/80 original trees and16 selected rows/32 trees authenticate

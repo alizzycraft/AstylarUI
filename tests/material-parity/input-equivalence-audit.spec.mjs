@@ -37,6 +37,50 @@ const browserDefaults = {
   fontStyle: 'normal', transform: 'none', pointerEvents: 'auto',
 };
 
+test('retained divider texel trace preserves edge and interior residual uncertainty', () => {
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  const bytes = readFileSync('artifacts/material-parity/divider-texel-boundary-trace-20261007.log');
+  assert.equal(digest(bytes), '524252f69ddafdba911ce7c3996822eb672786f6e9261d45aafbbc297186e54d');
+  const [header, body, terminal] = bytes.toString().trim().split(/\r?\n/).map(JSON.parse);
+  assert.equal(header.acceptance, false); assert.equal(body.acceptance, false);
+  assert.deepEqual(terminal, { complete: true, originalAssertionsPassed: true, acceptance: false });
+  assert.equal(body.browser, '154.0.8037.58');
+  assert.equal(body.inputs.length, 2515);
+  for (const receipt of body.inputs) assert.equal(digest(readFileSync(receipt.file)), receipt.sha256, receipt.file);
+  const original = readFileSync('tests/material-parity/input-boundary-evidence.spec.mjs');
+  assert.equal(digest(original), header.proofFileSha256);
+  const ast = ts.createSourceFile('original.mjs', original.toString(), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const callbacks = ast.statements.filter(n => ts.isExpressionStatement(n) && ts.isCallExpression(n.expression)
+    && n.expression.arguments[1] && digest(n.expression.arguments[1].getText(ast)) === header.originalCallbackSha256);
+  assert.equal(callbacks.length, 1);
+  assert.deepEqual(body.results.map(row => row.dpr), [1, 2]);
+  const verify = result => {
+    assert.deepEqual(result.astylar.samplingModels.map(model => model.origin), ['measured', 'authored']);
+    for (const model of result.astylar.samplingModels) {
+      assert.equal(model.unownedResidual, 0);
+      assert.equal(model.differingPixels, result.dpr === 1 ? 57 : 306);
+      assert.equal(model.greaterThanTwo, result.dpr === 1 ? 13 : 172);
+      const owners = Object.values(model.texelTrace);
+      assert.equal(owners.reduce((sum, owner) => sum + owner.count, 0), model.greaterThanTwo);
+      assert.equal(owners.reduce((sum, owner) => sum + owner.edgeBand, 0), result.dpr === 1 ? 13 : 0);
+      for (const owner of owners) for (const sample of owner.samples) {
+        assert.equal(sample.neighbors.length, 9);
+        for (const neighbor of sample.neighbors) assert.equal(neighbor.error,
+          Math.max(...neighbor.composed.map((channel, i) => Math.abs(channel - sample.actual[i]))));
+        if (result.dpr === 2) {
+          assert.equal(sample.fractionalTexel[1], 9);
+          assert.equal(sample.neighbors.find(n => n.dx === 0 && n.dy === -1).error, 0);
+        }
+      }
+    }
+  };
+  body.results.forEach(verify);
+  const forged = structuredClone(body.results[1]); forged.astylar.samplingModels[0].unownedResidual = 1;
+  assert.throws(() => verify(forged));
+  // This is bounded CPU-model residual evidence, not a confirmed GPU cause,
+  // browser sampling truth, renderer acceptance, or permission to snap layout.
+});
+
 test('retained disabled labels and selected snapshots preserve actual authored state coverage', () => {
   const pinned = (file, hash) => {
     const bytes = readFileSync(file); assert.equal(createHash('sha256').update(bytes).digest('hex'), hash, file);
