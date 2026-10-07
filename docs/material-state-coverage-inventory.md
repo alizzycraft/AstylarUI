@@ -2,6 +2,18 @@
 
 ## Current evidence boundary — October 6
 
+October7 Icon repeated desktop update/disposal obligation now observed for
+all8 configured profile/DPR1/2 combinations through the existing checkpoint-
+bound browser helper. Three equivalent public surface.update calls per case
+retain live=tracked meshes12/materials11/textures4,cache2 and no unbound
+materials; all8 final disposals clear scene/engine resources,cache and plugin
+owners. Existing focused test passes1/1,18761.4294ms. Log
+icon-update-disposal-20261007.log SHA256
+18229d6c75d784e13b6014d040277a3313976798136dd9bb948b04d0e376f098.
+The original inspect resourcesStable flags used one snapshot each and did not
+establish a repeated plateau. This new proof closes that bounded gap,not late
+async,remount,multi-surface isolation,mobile/tablet or current-source acceptance.
+
 October7 Icon retained inspect-state local paint gap is closed for the eight
 configured desktop profile/DPR rows,not full case acceptance. Existing Icon
 suite now passes4/4,8803.9161ms,authenticating full report,runner,metric source,

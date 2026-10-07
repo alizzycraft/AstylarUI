@@ -2641,6 +2641,72 @@ test('current badge and icon accessibility nodes expose hiding differences omitt
   }, {}, { checkpointFile: 'artifacts/material-parity/current-full-20261005/checkpoint/manifest.json' });
 });
 
+test('Icon checkpoint equivalent updates retain live resources and final disposal', async t => {
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    const observations = [];
+    for (const profile of ['light', 'dark', 'contrast', 'custom']) for (const dpr of [1, 2]) {
+      const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: dpr });
+      const errors = [];
+      page.on('pageerror', error => errors.push(String(error)));
+      try {
+        await page.goto(`${baseUrl}/astylar/icon?benchmark=1&profile=${profile}`);
+        await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+        await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+        const observation = await page.evaluate(async () => {
+          const component = window.ng.getComponent(document.querySelector('app-astylar-showcase'));
+          const surface = component.surface, scene = surface.scene, engine = scene.getEngine();
+          const text = surface.host.inspection.textRenderingService;
+          const snapshot = () => ({
+            tracked: surface.diagnostics.resources,
+            live: { meshes: scene.meshes.length, materials: scene.materials.length, textures: scene.textures.length },
+            cache: text.getCacheStats().size, loaded: engine.getLoadedTexturesCache().length,
+            unbound: scene.materials.filter(material => !scene.meshes.some(mesh => mesh.material === material))
+              .map(material => ({ name: material.name, uniqueId: material.uniqueId })),
+            session: surface.diagnostics.session, plugins: surface.diagnostics.pluginResources,
+          });
+          const snapshots = [snapshot()];
+          for (let update = 0; update < 3; update++) {
+            await surface.update(component.siteData());
+            await surface.whenSettled();
+            await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+            snapshots.push(snapshot());
+          }
+          surface.dispose();
+          await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+          return { snapshots, disposal: { surface: surface.disposed, scene: scene.isDisposed, engine: engine.isDisposed,
+            live: { meshes: scene.meshes.length, materials: scene.materials.length, textures: scene.textures.length },
+            cache: text.getCacheStats().size, loaded: engine.getLoadedTexturesCache().length,
+            plugins: surface.diagnostics.pluginResources } };
+        });
+        observations.push({ profile, dpr, errors, ...observation });
+        t.diagnostic(JSON.stringify({ profile, dpr, errors, ...observation }));
+        assert.deepEqual(errors, []);
+        assert.equal(observation.snapshots.length, 4);
+        for (const snapshot of observation.snapshots) {
+          assert.equal(snapshot.session.status, 'idle');
+          assert.equal(snapshot.plugins.pending, 0);
+          assert.deepEqual(snapshot.live, observation.snapshots[0].live);
+          assert.deepEqual(snapshot.tracked, observation.snapshots[0].tracked);
+          assert.equal(snapshot.cache, observation.snapshots[0].cache);
+          assert.equal(snapshot.loaded, observation.snapshots[0].loaded);
+          assert.deepEqual(snapshot.unbound, []);
+          assert.deepEqual(snapshot.live, snapshot.tracked);
+        }
+        assert.deepEqual(observation.disposal.live, { meshes: 0, materials: 0, textures: 0 });
+        assert.equal(observation.disposal.surface, true);
+        assert.equal(observation.disposal.scene, true);
+        assert.equal(observation.disposal.engine, true);
+        assert.equal(observation.disposal.cache, 0);
+        assert.equal(observation.disposal.loaded, 0);
+        assert.deepEqual(observation.disposal.plugins, { owners: 0, resources: 0, cleanups: 0, pending: 0 });
+      } finally { await page.close(); }
+    }
+    assert.equal(observations.length, 8);
+    t.diagnostic(JSON.stringify({ browser: browser.version(),
+      scope: 'Checkpoint-bound Icon desktop profiles/DPR1/2 equivalent updates/disposal,not late async,remount or complete-case acceptance' }));
+  }, {}, { checkpointFile: 'artifacts/material-parity/current-full-20261005/checkpoint/manifest.json' });
+});
+
 async function withFrozenShowcase(run, launchOptions = {}, evidence = {}) {
   const browserRoot = path.resolve(process.env.ASTYLAR_MATERIAL_SHOWCASE_BROWSER_ROOT ??
     'examples/material-showcase/dist/material-showcase/browser');

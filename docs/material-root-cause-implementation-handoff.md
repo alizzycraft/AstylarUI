@@ -2,6 +2,19 @@
 
 ## Current resumption ledger — October 6
 
+- October7 Icon lifecycle question answered by8 checkpoint-bound desktop
+  profile/DPR1/2 browser cohorts,not the single-snapshot resourcesStable flag.
+  Initial plus three equivalent public updates retain live=tracked12/11/4,
+  cache2,no unbound materials; all8 disposals clear live resources,texture
+  cache,plugin owners and dispose surface/scene/engine. Focused test1/1 passes
+  in18761.4294ms,zero page errors. Log icon-update-disposal-20261007.log SHA256
+  18229d6c75d784e13b6014d040277a3313976798136dd9bb948b04d0e376f098.
+  Late async,remount,multi-surface isolation and responsive lifetime remain.
+  Existing sort-focus suite gained only this new test; frozen helper is
+  unchanged. This file is a canonical consumed source,so fingerprint refresh
+  belongs in the next coherent registered-proof batch,not an immediate export.
+  The third pending push attempt ended HTTP408; publication remains local.
+
 - October7 Icon inspect paint replay is now protected by the existing suite:
   4/4 tests pass,8803.9161ms,no skips/cancellations/TODOs. New assertion validates
   all8 case memberships,16 PNG receipts,report/runner/metric hashes,existing
