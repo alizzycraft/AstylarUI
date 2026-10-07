@@ -2,6 +2,25 @@
 
 ## Current evidence boundary — October 7
 
+Checkbox real keyboard activation coverage now includes all8 configured focus
+cohorts (four profiles × desktop DPR1/2 at1440x1000),not only the earlier light
+900px-height reduction. Original frozen helper/full current-full checkpoint and
+report authenticate. Tab focuses both controls; Space reaches candidate keydown
+once but leaves selected=true,while native changes true→false in every cohort.
+No page errors. Terminal exit0; log checkbox-configured-keyboard-cohorts-20261007.log
+records both action boundaries,events,source/build receipts and each exact
+configured context. This closes the other-profile/DPR applicability question
+for enabled keyboard activation,not disabled/selected-state transitions,focus
+paint,event ordering,all relevant keys or complete checkbox closure. No fixture
+or renderer edits; standalone evidence is not implicitly in the149 package.
+
+Canonical publication through afebfbc1 succeeds,terminal exit0; read-only remote
+verification confirms afebfbc1b13fd9b4e105ed3e25861d32ed143196 on
+codex/material-audit-alignment-integration. Log canonical-progress-publication-20261007.log
+retains GitHub's59.92MB/50MB recommended-size warning; no hard-limit failure,
+force push,history rewrite or persistent transport-setting change. Later handoff
+and this evidence note require the small follow-up push,not a repeat full upload.
+
 The149-finding/139-focused-proof canonical generation is independently verified
 and compact-indexed. Cold current-ancestry --check terminal exit0,elapsed
 2651295.3033ms; log progress-focus-canonical-independent-20261007.log SHA256
