@@ -2,6 +2,30 @@
 
 ## Current evidence boundary — October 6
 
+October7 progress ownership probe reuses the unchanged frozen-build helper and
+Icon equivalent-update/disposal callback,parameterized only by family/route/
+diagnostic label. Both progress families stop at their first light desktop DPR1
+cohort on the original no-unbound-material assertion: one primary-transparent
+material persists. Four snapshots retain identical live=tracked counts (bar
+14/14/2; spinner12/12/2),zero pending plugin work and the same unused material
+identity; final scene/engine/cache/plugin disposal clears all sampled ownership.
+This is redundant live material evidence,not growing leakage or failed final
+cleanup. Later cohorts were not inspected because original assertions throw.
+Source trace: MaterialRendererBase.root assigns an owned transparent material;
+core ElementCreationService then calls applyElementMaterial,whose explicit
+transparent/background branch replaces mesh.material without releasing that
+owned original. Core/plugin material ownership needs a bounded binding check
+before choosing the classification; source consistency is not live causal proof.
+Determinate40-case inputs do not enter plugin animation branches; child meshes/
+materials have generation ownership. Remaining lifecycle cohorts and full case
+closure stay open. Evidence: progress-update-disposal-20261007-retry.log
+SHAe6a3ca134633265655100f3c214812343a47ceaa459d2e96d38e222fbf66143d,
+exit1 (real assertion counterexamples,not a passing suite). Initial shell parse
+failure retained in progress-update-disposal-20261007.log
+SHA246e40fea5e31dbd79282ed7361db504c56e15b1e79d8efd01d2e02d37691c50.
+No source/test/fixture changes or new validation layer; integrate focused proof
+only after the live canonical cold-check boundary.
+
 October7 scrollbar top-ink cause is now demonstrated for all8 retained wheel
 cohorts: sibling timepicker-active-line has z61 versus popup z60,height2px.
 Light/dark line and popup both start56px; contrast line starts37px versus popup
