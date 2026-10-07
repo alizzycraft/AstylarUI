@@ -2,6 +2,25 @@
 
 ## Current evidence boundary — October 7
 
+Divider remaining responsive/comparison-width update/disposal gap closes:
+12 uncovered physical cohorts (four profiles × tablet/mobile/comparison widths)
+pass terminal exit0,48 initial/update snapshots and12 complete sampled disposals.
+Log divider-remaining-update-disposal-20261007.log SHA256
+518513e37a67de7f5651672a7deaf764afcc415da3cf4898c2537a0137885c0a.
+Retained current-full report authenticates ab42dbec… and derives24 configured
+cases/20 unique physical cohorts; the unchanged frozen helper authenticates
+the complete served build. Existing8 desktop cohorts are not recaptured,their
+log rehashes to5260c2abddc5b4d3d0a3ee87bcaca765b8e969841e31df5e9ee1851367c26b51.
+New cohorts retain live=tracked counts,cache/loaded-texture plateau,no unbound
+materials,idle session and no plugin pending work. All sampled disposals clear
+scene/cache/loaded-texture/plugin counts and dispose surface/scene/engine;
+zero page errors. Together the retained and new cohorts account for all20
+configured physical runtimes for this bounded obligation. This supersedes
+desktop-only update/disposal coverage below,not full-case closure,paint parity,
+late async,remount or simultaneous-surface isolation. New standalone proof is
+not implicitly registered in the frozen canonical generation; batch integration
+after independent cold verification remains separate. No renderer/fixture edit.
+
 Progress paint-input chronology is now traced separately from current raster
 causality. Read-only Git assertions pass; progress-paint-input-history-20261007.log
 SHA256 ba5d67d9dae369092b6699654a293a6d51ac3085d94f9d287ab90c11046bc6eb.
