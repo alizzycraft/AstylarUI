@@ -37,6 +37,43 @@ const browserDefaults = {
   fontStyle: 'normal', transform: 'none', pointerEvents: 'auto',
 };
 
+test('disabled radio registration preserves the complete finding and producer predecessors', async () => {
+  const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');
+  const file = 'tests/material-parity/input-equivalence-policy.mjs';
+  const previous = execFileSync('git', ['show', `20a79a2d:${file}`], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  const prior = Function(previous.replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
+  assert.equal(prior.length, 149); assert.equal(sourceAuditDefinitions.length, 150);
+  assert.deepEqual(sourceAuditDefinitions.slice(0, -1), prior);
+  const policySource = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const policyAst = ts.createSourceFile(file, policySource, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const policyEntries = policyAst.statements.find(n => ts.isVariableStatement(n)
+    && n.declarationList.declarations[0].name?.text === 'sourceAuditDefinitions')
+    .declarationList.declarations[0].initializer.arguments[0].elements;
+  const lastEntry = policyEntries.at(-1);
+  const policyStart = policySource.lastIndexOf('\n', lastEntry.getStart(policyAst)) + 1;
+  const policyEnd = policySource.indexOf('\n', lastEntry.end) + 1;
+  assert.equal(policySource.slice(0, policyStart) + policySource.slice(policyEnd), previous.replaceAll('\r\n', '\n'));
+  const finding = sourceAuditDefinitions.at(-1);
+  assert.equal(finding.id, 'fixture-disabled-radio-tabindex-ignores-disabled-state');
+  assert.equal(finding.classification, 'application-plugin-authoring-defect');
+  assert.equal([...readFileSync(finding.file, 'utf8').matchAll(new RegExp(finding.pattern, 'g'))].length, 1);
+  const producerFile = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(producerFile, 'utf8').replaceAll('\r\n', '\n');
+  const predecessor = execFileSync('git', ['show', `20a79a2d:${producerFile}`], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n');
+  const ast = ts.createSourceFile(producerFile, current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const fn = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory');
+  assert.equal(fn.body.statements[0].expression.elements.length, 140);
+  const additions = fn.body.statements[0].expression.elements.filter(n => n.getText(ast).includes('retained disabled radio focus authoring boundary'));
+  assert.equal(additions.length, 1);
+  const addition = additions[0];
+  const start = current.lastIndexOf('\n', addition.getStart(ast)) + 1;
+  const end = current.indexOf('\n', addition.end) + 1;
+  assert.equal(current.slice(0, start) + current.slice(end), predecessor);
+  const { restoreScalarReviewExtraction } = await import('./position-composition-producer-transition.mjs');
+  assert.equal(restoreScalarReviewExtraction(current), restoreScalarReviewExtraction(predecessor));
+  assert.throws(() => restoreScalarReviewExtraction(current.replace('retained disabled radio focus authoring boundary', 'unreviewed disabled acceptance')));
+});
+
 test('retained disabled composite focus binds exact current authoring and radio-only Tab divergence', () => {
   const digest = value => createHash('sha256').update(value).digest('hex');
   const readPinned = (file, sha256) => {
@@ -1947,9 +1984,10 @@ test('recent public and popup proofs join existing inventories without changing 
 
 async function conservedPrePassiveDefinitions() {
   const { sourceAuditDefinitions: currentRegistered } = await import('./input-equivalence-policy.mjs');
-  assert.equal(currentRegistered.length, 149);
-  assert.equal(currentRegistered.at(-1).id, 'fixture-progress-host-focusability-input-omitted');
-  const registered = currentRegistered.slice(0, -1);
+  assert.equal(currentRegistered.length, 150);
+  assert.equal(currentRegistered.at(-1).id, 'fixture-disabled-radio-tabindex-ignores-disabled-state');
+  assert.equal(currentRegistered.at(-2).id, 'fixture-progress-host-focusability-input-omitted');
+  const registered = currentRegistered.slice(0, -2);
   assert.equal(registered.length, 148);
   assert.equal(registered.at(-1).id, 'core-svg-dimensionless-image-upload-not-adapted');
   const current = registered.slice(0, -1); // Preserve the exact historical population, not current acceptance.
@@ -2515,11 +2553,12 @@ test('recent source diagnostics conserve predecessor findings and reject altered
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const priorDefinitions = new Function(previous.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
   assert.equal(priorDefinitions.length, 135);
-  assert.equal(audit.sourceFindings.length, 149);
-  assert.equal(audit.sourceFindings.at(-1).id, 'fixture-progress-host-focusability-input-omitted');
-  assert.equal(audit.sourceFindings.slice(0, -1).length, 148);
-  assert.equal(audit.sourceFindings.at(-2).id, 'core-svg-dimensionless-image-upload-not-adapted');
-  const legacyFindings = audit.sourceFindings.slice(2, -2);
+  assert.equal(audit.sourceFindings.length, 150);
+  assert.equal(audit.sourceFindings.at(-1).id, 'fixture-disabled-radio-tabindex-ignores-disabled-state');
+  assert.equal(audit.sourceFindings.at(-2).id, 'fixture-progress-host-focusability-input-omitted');
+  assert.equal(audit.sourceFindings.slice(0, -2).length, 148);
+  assert.equal(audit.sourceFindings.at(-3).id, 'core-svg-dimensionless-image-upload-not-adapted');
+  const legacyFindings = audit.sourceFindings.slice(2, -3);
   const conservedPolicy = execFileSync('git', ['show', 'aee5b612:tests/material-parity/input-equivalence-policy.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const conservedDefinitions = new Function(conservedPolicy.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
@@ -2547,7 +2586,7 @@ test('recent source diagnostics conserve predecessor findings and reject altered
   // This deliberately partial synthetic capture has no paired root-style receipt.
   // Keep that unrelated failure explicit rather than treating this as full acceptance.
   assert.deepEqual(validation(), ['1 cases lack paired root style evidence']);
-  for (const finding of [...audit.sourceFindings.slice(0, 2), ...legacyFindings.slice(0, 3), ...legacyFindings.slice(138), audit.sourceFindings.at(-1)]) {
+  for (const finding of [...audit.sourceFindings.slice(0, 2), ...legacyFindings.slice(0, 3), ...legacyFindings.slice(138), ...audit.sourceFindings.slice(-2)]) {
     assert.ok(finding.observation.element && finding.observation.states.length && finding.owner && finding.focusedProof);
     for (const receipt of finding.evidence) {
       assert.equal(createHash('sha256').update(readFileSync(receipt.file)).digest('hex'), receipt.sha256);

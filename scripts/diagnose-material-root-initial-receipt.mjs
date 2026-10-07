@@ -70,7 +70,19 @@ const stagePolicy = execFileSync('git', ['show', `aee5b612:${policyFile}`],
   { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
 assert.equal(hash(stagePolicy.replaceAll('\r\n', '\n')),
   '31da603b0edb345c1a0db556d39814b796131cc588b7b9d94628b4e25d2d7024');
-const livePolicy = readSource(policyFile).toString().replaceAll('\r\n', '\n');
+let livePolicy = readSource(policyFile).toString().replaceAll('\r\n', '\n');
+const disabledAst = parse(livePolicy);
+const disabledDefinitions = disabledAst.statements.find(n => ts.isVariableStatement(n)
+  && n.declarationList.declarations[0].name.text === 'sourceAuditDefinitions')
+  .declarationList.declarations[0].initializer.arguments[0].elements;
+assert.equal(disabledDefinitions.length, 150);
+const disabledDefinition = disabledDefinitions.at(-1);
+assert.equal(hash(disabledDefinition.getText(disabledAst)),
+  '7626e81967618fd12be6b2c0b78f490b8b95742be323cc58587c22ab94fa3e11',
+  'exact disabled radio focus finding changed');
+const disabledStart = livePolicy.lastIndexOf('\n', disabledDefinition.getStart(disabledAst)) + 1;
+const disabledEnd = livePolicy.indexOf('\n', disabledDefinition.end) + 1;
+livePolicy = livePolicy.slice(0, disabledStart) + livePolicy.slice(disabledEnd);
 const focusAst = parse(livePolicy);
 const focusDefinitions = focusAst.statements.find(n => ts.isVariableStatement(n)
   && n.declarationList.declarations[0].name.text === 'sourceAuditDefinitions')
@@ -179,7 +191,7 @@ if (sourcesOnly) {
   console.log(JSON.stringify({ kind: 'root-initial-style-source-applicability-diagnostic', baseline,
     unchangedInventoryFunctions: selectedFunctions, unchangedReferenceContextDeclaration: true,
     producerProjection, intermediateSuiteChangedStatements: changedTestStatements, testProjection,
-    policyProjection: { originalDefinitions: 132, historicalProjectedDefinitions: 145, preFocusDefinitions: 148, currentDefinitions: 149, allOriginalDefinitionsConserved: true,
+    policyProjection: { originalDefinitions: 132, historicalProjectedDefinitions: 145, preFocusDefinitions: 148, preDisabledRadioDefinitions: 149, currentDefinitions: 150, allOriginalDefinitionsConserved: true,
       addedClassification: 'documented-limitation', allOtherPolicyStatementsConserved: true },
     borderSelectorTransitionAuthenticated: true, historicalReceiptsRewritten: false,
     caseReplayExecuted: false, canonicalClassificationVerified: false, renderingEquivalent: false, evidenceFilesWritten: false }));
@@ -211,7 +223,7 @@ const insertion = `
     changedTestStatements: ${JSON.stringify(changedTestStatements)},
     producerProjection: ${JSON.stringify(producerProjection)},
     testProjection: ${JSON.stringify(testProjection)},
-    policyProjection: { originalDefinitions: 132, historicalProjectedDefinitions: 145, preFocusDefinitions: 148, currentDefinitions: 149, allOriginalDefinitionsConserved: true,
+    policyProjection: { originalDefinitions: 132, historicalProjectedDefinitions: 145, preFocusDefinitions: 148, preDisabledRadioDefinitions: 149, currentDefinitions: 150, allOriginalDefinitionsConserved: true,
       addedClassification: 'documented-limitation', allOtherPolicyStatementsConserved: true },
     cases: entries.length, properties: Object.keys(rootInitialStyleValues).length,
     observations: proofs.length, groups: durable.groups.length,

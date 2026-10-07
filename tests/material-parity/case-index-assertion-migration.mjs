@@ -159,7 +159,18 @@ const baselineFiles = declaration.initializer.elements.map(n => n.text);`);
 // Restore only the nine exact receipt checks and remove their one new import.
 // The entire reconstructed suite, not just selected membership tests, must match.
 export function verifyCaseIndexAssertionMigration(previous, current) {
-  current = current.toString();
+  current = current.toString().replaceAll('\r\n', '\n');
+  if (current.includes('assert.equal(currentRegistered.length, 150);')) {
+    const extended = "  assert.equal(currentRegistered.length, 150);\n" +
+      "  assert.equal(currentRegistered.at(-1).id, 'fixture-disabled-radio-tabindex-ignores-disabled-state');\n" +
+      "  assert.equal(currentRegistered.at(-2).id, 'fixture-progress-host-focusability-input-omitted');\n" +
+      "  const registered = currentRegistered.slice(0, -2);";
+    const predecessor = "  assert.equal(currentRegistered.length, 149);\n" +
+      "  assert.equal(currentRegistered.at(-1).id, 'fixture-progress-host-focusability-input-omitted');\n" +
+      "  const registered = currentRegistered.slice(0, -1);";
+    assert.equal(current.split(extended).length, 2, 'exact disabled-radio tail conservation boundary changed');
+    current = current.replace(extended, predecessor);
+  }
   if (current.includes('await conservedPrePassiveDefinitions()')) {
     const definitionAst = parse(current);
     const helpers = definitionAst.statements.filter(n => ts.isFunctionDeclaration(n)

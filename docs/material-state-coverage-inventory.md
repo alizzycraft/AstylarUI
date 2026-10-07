@@ -2,6 +2,24 @@
 
 ## Current evidence boundary — October 7
 
+Disabled radio focus discrepancy is now registered as
+fixture-disabled-radio-tabindex-ignores-disabled-state (application/plugin
+authoring defect). Source policy150/proof inventory140 preserve complete149/139
+predecessor files except the exact added entries; canonical package/index still
+149/139 pending a coherent export milestone. Final focused registration/source/
+receipt/mutation checks pass3/3,5886.406ms; log
+disabled-radio-registration-final-20261007.log. Existing migration suite passes
+3/3 including source/receipt negative controls,69544.8383ms; final complete-suite
+conservation replay passes1/1,2894.7509ms. Logs disabled-radio-migration-20261007.log
+and disabled-radio-final-suite-conservation-20261007.log. Historical component
+launcher exits0:8 retained,8 button-authoring,1 source-binding and1 negative-control
+checks; disabled-radio-historical-component-20261007.log. Direct retained replay
+fails historical sorter receipts as expected; preserve its failed log,do not
+repin receipts or call it current acceptance. Successful negative-control scratch
+S5FZ2E is absent after established cleanup. No renderer/fixture/capture change or
+full-case closure. Next join configured enabled-keyboard cohort logs to the
+existing keyboard finding/proof,then reconcile export fingerprints as one batch.
+
 Existing input-equivalence suite now protects the retained disabled composite
 focus/source boundary: exact six family/profile/DPR/viewport memberships,three
 action boundaries each,disabled/selected invariance,native disabled inputs,

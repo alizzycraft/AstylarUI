@@ -33,6 +33,8 @@ test('entire legacy suite conserves statements outside nine receipt checks and t
   assert.equal(result.mappingReadAdapterAuthenticated, true);
   assert.equal(result.captureDiagnosticsProjectionAuthenticated, true);
   assert.deepEqual(result.addedIsolatedTests, [
+    'disabled radio registration preserves the complete finding and producer predecessors',
+    'retained disabled composite focus binds exact current authoring and radio-only Tab divergence',
     'outline token divider extension requires zero-width currentColor other sides and rejects forged coverage',
     'mapped border initial proof covers original aliases without erasing scalar rule gaps',
     'mapped card border token preserves shorthand and proves omitted style and color',
@@ -83,8 +85,8 @@ test('root initial applicability authenticates every receipt and rejects unrelat
 });
 test('migration proof rejects unrelated assertion changes, missing checks and wrong index identity', () => {
   for (const changed of [
-    current.replace('currentRegistered.length, 149', 'currentRegistered.length, 148'),
-    current.replace('const registered = currentRegistered.slice(0, -1)', 'const registered = currentRegistered.slice(0, -2)'),
+    current.replace('currentRegistered.length, 150', 'currentRegistered.length, 149'),
+    current.replace('const registered = currentRegistered.slice(0, -2)', 'const registered = currentRegistered.slice(0, -3)'),
     current.replace('actualSourceFingerprints.length, 542', 'actualSourceFingerprints.length, 541'),
     current.replace('actualSourceFingerprints.slice(0, -1)', 'actualSourceFingerprints.slice(0, -2)'),
     current.replace("const svgSource = 'tests/material-parity/icon-asset-input.spec.mjs'", "const svgSource = 'tests/material-parity/unreviewed.spec.mjs'"),

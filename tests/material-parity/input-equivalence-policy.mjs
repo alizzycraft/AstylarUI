@@ -1636,6 +1636,26 @@ export const sourceAuditDefinitions = Object.freeze([
       astylar: { tabindex: null, focusable: null, focusMovesToHost: false }, stage: 'authored semantic host input before bridge projection' },
     justification: 'All40 configured cases join32 unique physical cohorts. Both sides expose role progressbar,value64,range0-100,empty name/value text and no AX children, but native hosts have tabindex=-1 and focusable=true while candidate entries omit tabindex. Actual focus() moves BODY to the native host and leaves BODY active on every candidate cohort. Current candidate source bytes and semantic bridge bytes authenticate in the registered replay; the bridge explicitly transfers element.tabindex. The first divergence is unequal authored host intent,not missing core focus support or a world-space issue. Restore the reference-equivalent semantic input at the application boundary in later implementation; do not offset graphics or change role to conceal it. Negative tabindex permits programmatic focus but does not imply sequential Tab or keyboard activation. Focus paint,complete AX relationships,remount/isolation and fresh final rendering acceptance remain separate obligations.',
   }),
+  Object.freeze({
+    id: 'fixture-disabled-radio-tabindex-ignores-disabled-state',
+    introducedBy: 'current authored source and retained Chrome154 disabled keyboard evidence; historical first-bad revision not established',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`id: 'radio-team', class: 'radio-option', role: 'radio', tabindex: state\.selected \? 0 : -1`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase radio disabled-state semantic input authoring',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: retained disabled composite focus binds exact current authoring and radio-only Tab divergence',
+    evidence: [
+      { file: 'artifacts/material-parity/disabled-composite-keyboard-20261007.log', sha256: 'f84ac81c83ee22865d21ef844cf61c153c5ec5d1c916f22108bacc64b13a7f11' },
+      { file: 'artifacts/material-parity/disabled-radio-source-applicability-20261007-retry.log', sha256: '3559a0a9640ac38b9cd26476ea52b165a4dae718c0f04d77742dde3dcccb25f1' },
+    ],
+    observation: { component: 'radio', element: 'radio-team', states: ['disabled selected', 'real Tab', 'Space', 'ArrowLeft'],
+      contexts: [{ profile: 'light', viewport: { width: 1440, height: 1000 }, dpr: 1 },
+        { profile: 'dark', viewport: { width: 390, height: 844 }, dpr: 2 }],
+      property: 'disabled sequential focus contract', reference: 'disabled native radios skip Tab',
+      astylar: 'aria-disabled=true with selected radio tabindex=0 receives Tab focus',
+      stage: 'authored semantic tabindex before core bridge projection' },
+    justification: 'Both full authored component sources exactly match the frozen served source-map contents. In the two retained radio contexts, real Tab focuses radio-team despite aria-disabled=true; native disabled inputs skip Tab. Both sides retain disabled=true and selected=true through Tab/Space/ArrowLeft. Checkbox and slide-toggle negative controls skip Tab in the same contexts and author disabled-aware tabindex=-1. Candidate radio declarations derive tabindex only from selection. This is an unequal authored focus contract,not evidence that core must suppress focus on every aria-disabled widget or a coordinate defect. Later implementation must restore reference-equivalent disabled focus intent at the authoring boundary. Programmatic focus,pointer blocking,enabled activation,other profiles and disabled paint remain separate obligations; no six-context result certifies full radio acceptance.',
+  }),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({

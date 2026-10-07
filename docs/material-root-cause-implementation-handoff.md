@@ -2,6 +2,17 @@
 
 ## Current resumption ledger — October 7
 
+- Source policy/proof inventory now150/140; accepted canonical/index remains
+  149/139 until the next coherent export. Added disabled-radio sequential-focus
+  authoring finding retains two exact radio contexts plus checkbox/switch negative
+  controls and full current/frozen source equality. Native disabled radios skip
+  Tab; selected candidate radio authors tabindex0 independently of disabled state.
+  Later implementation belongs at reference-equivalent authoring,not a core rule
+  making every aria-disabled widget unfocusable. Focused3/3 and migration3/3 pass;
+  historical component launcher completes with original receipts/assertions intact.
+  See current coverage ledger for logs. Programmatic focus,pointer blocking,
+  other disabled contexts and paint remain separate; no full radio closure.
+
 - Accepted canonical generation:149 source findings/139 focused proofs,
   independently cold-verified with terminal exit0 and zero evidence invalidations.
   Compact import/whole-index verification pass; compressed generation a9e92562…,
