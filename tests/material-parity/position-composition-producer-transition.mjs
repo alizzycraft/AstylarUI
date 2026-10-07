@@ -2,12 +2,22 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 
 const hash = text => createHash('sha256').update(text).digest('hex');
+const svgProof = "    proof(root, 'tests/material-parity/icon-asset-input.spec.mjs', /test\\('retained original SVG upload failure binds public runtime and matched alpha controls'/,\n" +
+  "      'original SVG GPU upload adaptation boundary', 'Matched public external SVG at24/48CSSpx DPR1/2 fails actual image texImage2D with1281 while ready and diagnostics remain misleading. Dimensioned SVG/PNG controls preserve alpha; decoded native image dimensions isolate upload adaptation without changing SVG bytes. Complete bounded loading/alpha owners match current source; not inline SVG support,currentColor inheritance,all-SVG or full Icon acceptance.'),\n";
+export function restoreSvgProofRegistration(source) {
+  let current = source.toString().replaceAll('\r\n', '\n');
+  if (!current.includes("/test\\('retained original SVG upload failure")) return current;
+  assert.equal(current.split(svgProof).length, 2, 'SVG registration changed beyond the exact one-entry addition');
+  const receipt = "    'tests/material-parity/icon-asset-input.spec.mjs',\n";
+  assert.equal(current.split(receipt).length, 2, 'SVG source receipt must occur exactly once');
+  return current.replace(svgProof, '').replace(receipt, '');
+}
 const dividerPaintProof = "    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\\('public divider typography reduction observes equal paragraph span inputs and opaque backing control'/,\n" +
   "      'equal-input divider typography paint boundary', 'Public14.4px normal paragraph/span reduction retains a paint counterexample at DPR1/2. Six bounded owners match current source; actual texture RGBA and baselines agree with controls. Backing and sampling models isolate post-canvas uncertainty,not full divider flow,confirmed GPU cause or case acceptance.'),\n";
 const dividerRuntimeProof = "    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\\('retained divider responsive accessibility and replacement ownership preserve exact bounded observations'/,\n" +
   "      'retained divider responsive AX and desktop replacement ownership boundary', 'Authenticates16 tablet/mobile DPR1 separator AX observations and8 desktop profile/DPR1/2 replacement/disposal cohorts. Orientation agrees; three updates retain live=tracked resources and disposal clears sampled ownership. Retained checkpoint replay,not current rendering,late async,remount or complete-case acceptance.'),\n";
 export function restoreDividerProofRegistration(source) {
-  let current = source.toString().replaceAll('\r\n', '\n');
+  let current = restoreSvgProofRegistration(source);
   if (current.includes("/test\\('public divider typography reduction")) {
     assert.equal(current.split(dividerPaintProof).length, 2,
       'divider paint registration changed beyond the exact one-entry addition');

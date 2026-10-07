@@ -9430,6 +9430,7 @@ function sourceFingerprints(root) {
     'tests/material-parity/sort-focus-structure.spec.mjs',
     'scripts/diagnose-material-root-initial-receipt.mjs',
     'tests/material-parity/case-index-assertion-migration.mjs',
+    'tests/material-parity/icon-asset-input.spec.mjs',
   ];
   return files.map((file) => ({ file, sha256: createHash('sha256')
     .update(readFileSync(path.resolve(root, file), 'utf8').replace(/\r\n/g, '\n')).digest('hex') }));
@@ -9437,6 +9438,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/icon-asset-input.spec.mjs', /test\('retained original SVG upload failure binds public runtime and matched alpha controls'/,
+      'original SVG GPU upload adaptation boundary', 'Matched public external SVG at24/48CSSpx DPR1/2 fails actual image texImage2D with1281 while ready and diagnostics remain misleading. Dimensioned SVG/PNG controls preserve alpha; decoded native image dimensions isolate upload adaptation without changing SVG bytes. Complete bounded loading/alpha owners match current source; not inline SVG support,currentColor inheritance,all-SVG or full Icon acceptance.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('public divider typography reduction observes equal paragraph span inputs and opaque backing control'/,
       'equal-input divider typography paint boundary', 'Public14.4px normal paragraph/span reduction retains a paint counterexample at DPR1/2. Six bounded owners match current source; actual texture RGBA and baselines agree with controls. Backing and sampling models isolate post-canvas uncertainty,not full divider flow,confirmed GPU cause or case acceptance.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('retained divider responsive accessibility and replacement ownership preserve exact bounded observations'/,

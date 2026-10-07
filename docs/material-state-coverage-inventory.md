@@ -2,6 +2,19 @@
 
 ## Current evidence boundary — October 6
 
+October7 producer now includes the bounded SVG focused proof and its source
+fingerprint (138 proofs/148 definitions prepared,accepted137/147 unchanged).
+Existing Icon test authenticates the complete009c9634 predecessor producer
+after reversing only the exact proof/receipt addition,and rejects three changed
+scope claims. Suite5/5 passes49150.4337ms; log svg-proof-registration-20261007.log
+SHAbc86b2b8da9f4179c76c09d6f644fcc0ed321498a393f50f31c1318b2b0bec76.
+Existing divider/passive/popup registration integration checks pass3/3,
+7119.7988ms; svg-predecessor-proof-integration-20261007.log
+SHA8f3fb1b7419a97280464e38fe9512108e5a767796fddcfa293ee590e0faec41c.
+Canonical export/cold verification remains pending; no input-equivalence or
+case-closure promotion. Push session98406 terminalHTTP408; remote publication
+unverified. Do not infer success from Git's trailing Everything up-to-date.
+
 October7 SVG upload cause is now registered as the producer's148th source
 definition, preserving all147 predecessor definitions exactly. Icon focused
 suite passes5/5; icon-svg-definition-registration-20261007.log SHA256

@@ -9,6 +9,7 @@ import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { evaluateFocusedRaster } from './focused-raster-metrics.mjs';
+import { restoreSvgProofRegistration } from './position-composition-producer-transition.mjs';
 
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 
@@ -29,6 +30,15 @@ test('SVG upload cause registration conserves all predecessor source findings', 
   assert.deepEqual(finding.observation.dpr, [1, 2]);
   assert.match(finding.justification, /not a general alpha/);
   assert.match(finding.justification, /separately documented support limitation/);
+  const producerFile = 'tests/material-parity/input-equivalence-audit.mjs';
+  const producer = readFileSync(producerFile, 'utf8');
+  const priorProducer = execFileSync('git', ['show', '009c9634:' + producerFile],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  assert.equal(restoreSvgProofRegistration(producer), priorProducer.replaceAll('\r\n', '\n'));
+  for (const fragment of ['original SVG GPU upload adaptation boundary',
+    'decoded native image dimensions isolate upload adaptation', 'not inline SVG support,currentColor inheritance'])
+    assert.throws(() => restoreSvgProofRegistration(producer.replace(fragment, fragment + ' altered')),
+      /exact one-entry addition/);
 });
 
 test('retained Icon inspect pixels expose DPR sharpness without adding acceptance gates', () => {
