@@ -2,6 +2,26 @@
 
 ## Current evidence boundary — October 6
 
+October7 spinner retained angular coverage now measures all20 configured cases
+(12 static/8 inspect),40 full-image SHA receipts,using authenticated report
+ab42dbec and each side's own primary bounds/DPR. Exact dominant foreground
+pixels occupy native angular bins270..359 plus0..139/140 (one DPR variant misses
+bin0); candidate approximately91/92..321/322 with one isolated bin179 gap.
+Angles use CSS-screen axes (right0,down90). This independently exposes rotated
+arc paint despite matching outer geometry,across every configured cohort,not
+just earlier mobile point samples. First extraction retained24 static rows then
+failed on an incorrect interaction path; immutable failure log
+spinner-retained-angular-extent-20261007.log
+SHA537c7fe7343aa2a7a571f03859b0d8fb9b5fc40310a78f777bb4ec5dc2790891.
+Remaining-only interaction extraction exits0,16 rows:
+spinner-retained-interaction-angular-extent-20261007.log
+SHAacef106ef3a26f73f66b72afa381a73479aa202e8789d6bf6a3c2b0264528db4.
+Dominant exact-color pixels exclude antialiased cap edges; this is configured
+whole-arc direction/extent inspection,not cap equivalence or equal-input core
+cause. Existing unequal plugin-angle finding remains; no fixture change.
+Next: reuse these receipts in the existing progress proof after canonical
+session55627 ends; cap/edge paint and ownership remain distinct obligations.
+
 October7 coherent SVG canonical export is running through the unchanged named
 current-ancestry launcher (all five retained evidence paths present). Session
 55627,producerPID29468 observed live at13:25 local; log
