@@ -2688,10 +2688,25 @@ test('retained resource flags distinguish settlement from comparative lifecycle 
 });
 
 test('Icon checkpoint equivalent updates retain live resources and final disposal', async t => {
+  const reportBytes = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
+  assert.equal(createHash('sha256').update(reportBytes).digest('hex'),
+    'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const report = JSON.parse(reportBytes);
+  const configured = [...report.results, ...report.interactions].filter(row => row.family === 'icon');
+  assert.equal(configured.length, 20);
+  const cohorts = [...new Map(configured.map(row => [
+    `${row.profile}/${row.viewport.width}/${row.viewport.height}/${row.viewport.deviceScaleFactor}`,
+    { profile: row.profile, viewport: row.viewport },
+  ])).values()];
+  assert.equal(cohorts.length, 16, 'four static desktop cases share the inspect desktop runtime cohorts');
+  const responsiveOnly = process.env.ASTYLAR_AUDIT_LIFECYCLE_RESPONSIVE === '1';
+  const selected = responsiveOnly ? cohorts.filter(row => row.viewport.width !== 1440) : cohorts;
+  assert.equal(selected.length, responsiveOnly ? 8 : 16);
   await withFrozenShowcase(async (browser, baseUrl) => {
     const observations = [];
-    for (const profile of ['light', 'dark', 'contrast', 'custom']) for (const dpr of [1, 2]) {
-      const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: dpr });
+    for (const { profile, viewport } of selected) {
+      const dpr = viewport.deviceScaleFactor;
+      const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height }, deviceScaleFactor: dpr });
       const errors = [];
       page.on('pageerror', error => errors.push(String(error)));
       try {
@@ -2724,8 +2739,8 @@ test('Icon checkpoint equivalent updates retain live resources and final disposa
             cache: text.getCacheStats().size, loaded: engine.getLoadedTexturesCache().length,
             plugins: surface.diagnostics.pluginResources } };
         });
-        observations.push({ profile, dpr, errors, ...observation });
-        t.diagnostic(JSON.stringify({ profile, dpr, errors, ...observation }));
+        observations.push({ profile, viewport, dpr, errors, ...observation });
+        t.diagnostic(JSON.stringify({ profile, viewport, dpr, errors, ...observation }));
         assert.deepEqual(errors, []);
         assert.equal(observation.snapshots.length, 4);
         for (const snapshot of observation.snapshots) {
@@ -2747,9 +2762,10 @@ test('Icon checkpoint equivalent updates retain live resources and final disposa
         assert.deepEqual(observation.disposal.plugins, { owners: 0, resources: 0, cleanups: 0, pending: 0 });
       } finally { await page.close(); }
     }
-    assert.equal(observations.length, 8);
+    assert.equal(observations.length, selected.length);
     t.diagnostic(JSON.stringify({ browser: browser.version(),
-      scope: 'Checkpoint-bound Icon desktop profiles/DPR1/2 equivalent updates/disposal,not late async,remount or complete-case acceptance' }));
+      configuredCases: configured.length, uniqueRuntimeCohorts: cohorts.length, executedCohorts: selected.length,
+      scope: 'Checkpoint-bound Icon configured runtime cohorts equivalent updates/disposal,not late async,remount or complete-case acceptance' }));
   }, {}, { checkpointFile: 'artifacts/material-parity/current-full-20261005/checkpoint/manifest.json' });
 });
 

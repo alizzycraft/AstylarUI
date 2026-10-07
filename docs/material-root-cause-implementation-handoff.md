@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 6
 
+- October7 remaining Icon tablet/mobile update/disposal cohorts now measured:
+  eight new cases/four profiles,three equivalent public updates each,stable
+  live/tracked counts and all8 disposal resource/cache/plugin assertions pass.
+  Existing test1/1 passes19328.4103ms with current-full served fingerprint;
+  log icon-responsive-update-disposal-20261007.log SHA256
+  22b822f1921a10a843c8cd9cb1c3f8ff52636fd12c8dee832638cb3f722e954a.
+  Default test derives all16 unique physical cohorts from20 configured cases;
+  this focused invocation selected only the remaining8,respecting retained
+  desktop evidence. Checklist now closes the bounded responsive operation/
+  disposal gap. Late async,remount,multi-surface,current-source validity and
+  whole-case closure remain; no fixture,renderer or gate changed.
+
 - October7 supplemental lifecycle join now names8 families' bounded desktop/
   mobile operations and disposal separately in the existing state checklist.
   Field-popup old served checkpoint differs from current-full; unchanged

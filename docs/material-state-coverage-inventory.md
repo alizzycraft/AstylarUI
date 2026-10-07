@@ -11,7 +11,7 @@ means dark390x844 DPR2 only. Final disposal does not excuse growth before it.
 
 | Families / cohort | Repeated-operation evidence | Disposal evidence | Remaining boundary |
 | --- | --- | --- | --- |
-| Icon /8 desktop | Three equivalent updates; live=tracked12/11/4,cache2,no orphan material. `icon-update-disposal-20261007.log`. | All8 clear scene/engine/cache/plugin owners. | Responsive,late async,remount,multi-surface,current-source validity. |
+| Icon /16 configured runtime cohorts | Three equivalent updates; desktop live=tracked12/11/4,cache2,no orphan material. Desktop: `icon-update-disposal-20261007.log`; tablet/mobile: `icon-responsive-update-disposal-20261007.log`. | All16 clear scene/engine/cache/plugin owners. | Late async,remount,multi-surface,current-source validity; no complete case acceptance. |
 | Divider /8 desktop | Three equivalent updates; live=tracked17/16/4,cache4. `divider-update-disposal-20261006.log`. | All8 sampled owners clear. | Same broader lifetime boundaries. |
 | Menu,bottom-sheet,dialog /mobile | Three open/Escape cycles. Tracked plateau but live materials grow19/20/21,18/19/20,17/20/23 respectively. `overlay-dismissal-cycles-current-20261006.log`. | Scene/cache/plugin/observer samples clear. | Other profiles/states,late async,remount,isolation; no plateau acceptance. |
 | Autocomplete,timepicker /mobile | Three input-click/Escape cycles; materials19/20/21 and26/27/28,cursor orphans1/2/3. `field-popup-cycles-current-20261007.log`. | Both clear scene/engine/cache/plugin samples. | Other profiles/states,late async,remount,isolation; no plateau acceptance. |
@@ -24,6 +24,17 @@ focused test passes1/1,20282.7764ms; log SHA256
 40c4d4ac90c9696ccc258038c686cdf48aca923c207b64bec6cc50960a347cc0.
 This closes that two-family checkpoint applicability gap without implementing
 a fix or relabeling diagnostic counterexamples as cleanup passes.
+
+October7 responsive Icon lifecycle extension executes only the eight remaining
+tablet/mobile cohorts; existing desktop observations are not recaptured.
+The20 configured cases name16 unique physical profile/viewport/DPR combinations;
+four static desktop cases share inspect desktop dimensions. The existing test
+derives and checks this membership from the authenticated report; its default
+scope includes all16,while ASTYLAR_AUDIT_LIFECYCLE_RESPONSIVE=1 selects the
+remaining8 for this focused diagnostic. Test1/1 passes19328.4103ms; log SHA256
+22b822f1921a10a843c8cd9cb1c3f8ff52636fd12c8dee832638cb3f722e954a.
+Physical cohort coverage is not a new full-obligation closure or current-code
+claim; captured source/state applicability and broader lifetime remain separate.
 
 October7 shared retained lifecycle-gate scope is now explicit:1875 interaction
 rows contain1857 single snapshots and18 three-snapshot cases. All18 are light/
