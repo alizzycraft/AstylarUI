@@ -2036,10 +2036,16 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
           const surface = window.ng.getComponent(document.querySelector('app-astylar-showcase')).surface;
           const thumb = surface.scene.getMeshByName('astylar-scrollbar-thumb-timepicker-options');
           const track = surface.scene.getMeshByName('astylar-scrollbar-track-timepicker-options');
+          // Read retained CSS geometry; never derive layout from world-space meshes.
+          const retained = surface.host.scrolling.get(surface.scene).containers.get('timepicker-options').verticalScrollbar;
+          const cssScrollbar = { trackBox: { ...retained.trackBox }, thumbBox: { ...retained.thumbBox },
+            travel: retained.travel, containerSize: { ...retained.containerSize },
+            currentThumbY: retained.trackBox.y + retained.travel * scroll.scrollTop / (scroll.scrollHeight - scroll.clientHeight) };
           const style = measured.inputTree.nodes.find(node => node.authored?.id === 'timepicker-options').resolvedStyle;
           return { box: box('timepicker-options'), ...scroll, firstOption: box('timepicker-option-0'),
             lastOption: box('timepicker-option-47'), optionCount: document.querySelectorAll('[data-astylar-id^="timepicker-option-"][role="option"]').length,
             padding: { top: style.paddingTop ?? null, bottom: style.paddingBottom ?? null, shorthand: style.padding ?? null },
+            cssScrollbar,
             scrollbar: thumb ? { visible: thumb.isVisible && thumb.isEnabled(), pickable: thumb.isPickable, localY: thumb.position.y,
               diffuse: thumb.material?.diffuseColor?.toHexString(), trackPickable: track?.isPickable } : null };
         }, mode);
@@ -2177,6 +2183,13 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
     assert.ok(thumb.after.firstY > thumb.before.firstY);
     assert.equal(observations.astylar.before.scrollbar.visible, true);
     assert.equal(observations.astylar.after.scrollbar.visible, true);
+    const cssThumb = observations.astylar.before.cssScrollbar;
+    assert.deepEqual(cssThumb.trackBox, { x: 248, y: 0, width: 12, height: 256 });
+    assert.equal(cssThumb.thumbBox.x, 250);
+    assert.equal(cssThumb.thumbBox.width, 8);
+    assert.ok(Math.abs(cssThumb.thumbBox.height - 256 * 256 / 2312) < 1e-9);
+    assert.ok(Math.abs(observations.astylar.after.cssScrollbar.currentThumbY - 15.944636678200692) < 1e-9);
+    assert.ok(Math.abs(observations.astylar.end.cssScrollbar.currentThumbY - cssThumb.travel) < 1e-9);
     // Native platform scrollbars reserve a gutter; current core indicators
     // paint inside an unreduced client area. Observe the first divergence
     // before attributing option width differences to popup fixture styles.

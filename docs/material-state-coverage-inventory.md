@@ -24,6 +24,21 @@ No renderer,fixture,threshold or captured evidence changes.
 
 ### October 8 remaining scrollbar paint boundary
 
+Focused retained-build observation now supplies actual CSS bounds for dark/mobile
+DPR2: track{x248,y0,w12,h256},thumb{x250,y0,w8,h28.346020761245676},
+travel227.65397923875432. Offset144 gives local CSS thumb y15.944636678200692;
+maximum offset2056 reaches the travel endpoint. Existing owning browser test now
+reads the retained runtime boxes directly without world-to-CSS layout inference
+and asserts those bounds. All prior wheel/drag/track assertions remain;1/1 passes
+in12952.9546ms with Chrome154 and the authenticated1887-file October5 checkpoint.
+Log: `timepicker-css-scrollbar-bounds-20261008-asserted.log`. The first attempt
+rejected the default caret checkpoint before browser actions; failed log retained
+as `timepicker-css-scrollbar-bounds-20261008.log`. This is frozen-build evidence,
+not current-code or all-eight-case certification. Remaining: captured/current
+owning-method applicability,other seven bounds and full edge/corner/clip mapping.
+The additive diagnostic changes the owning-suite fingerprint; canonical source
+integration is pending the next coherent batch,not a reason for immediate export.
+
 The next question is exact shape/track correspondence, not wheel motion or
 track activation (both already inspected). Current source separates CSS geometry
 in `src/lib/astylar-scroll-runtime.ts:416` from final Babylon paint in
