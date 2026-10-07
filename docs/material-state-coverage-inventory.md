@@ -22,6 +22,29 @@ current rendering acceptance. Next: shared overlay/scrollbar paint and input
 caret/selection paint,then exact applicable-obligation/current-validity closure.
 No renderer,fixture,threshold or captured evidence changes.
 
+### October 8 remaining scrollbar paint boundary
+
+The next question is exact shape/track correspondence, not wheel motion or
+track activation (both already inspected). Current source separates CSS geometry
+in `src/lib/astylar-scroll-runtime.ts:416` from final Babylon paint in
+`src/app/services/babylon-scroll-paint-adapter.ts:40`. Geometry requests a track
+of min(12,clientLength), a thumb width max(8,thickness-4), and a minimum28px
+thumb length; travel uses the full client length, without native arrow areas.
+The adapter creates plain planes with fixed track#f1eff1/thumb#8b878d colors,
+not rounded platform-native thumbs. Compatibility explicitly excludes native
+arrow buttons and scrollbar styling. This is source-level ownership evidence,
+not proof that these exact bytes produced every retained capture.
+
+Competing explanations for the retained center-column shape/motion residual are
+different requested track/thumb geometry, clipping/raster sampling, or projection.
+The32 retained center-column observations prove movement but cannot recover full
+thumb width/corners or actual pre-projection bounds. Next decisive check: join
+the existing captured scrollbar-owner/source receipts and CSS track/thumb bounds
+to those exact eight cases before comparing local rasters. If bounds are absent,
+record that precise gap and use the existing scrollbar diagnostic to observe
+them; do not infer a projection defect from the13–16px pixel-run differences.
+No new capture, test framework, renderer fix or case-closure upgrade follows.
+
 Four retained module/AX/state/trace proofs are now registered as one exact batch.
 Producer inventory150 findings/146 proofs preserves the entire predecessor;
 the exact four-entry SHA df99e9ee… is independently authenticated before removal
