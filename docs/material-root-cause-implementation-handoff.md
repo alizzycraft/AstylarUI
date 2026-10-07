@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 6
 
+- October7 Icon inspect paint replay is now protected by the existing suite:
+  4/4 tests pass,8803.9161ms,no skips/cancellations/TODOs. New assertion validates
+  all8 case memberships,16 PNG receipts,report/runner/metric hashes,existing
+  exact crop function,reference geometry and complete diagnostic metric objects.
+  Log icon-inspect-retained-regression-20261007.log SHA256
+  948a90f518c4e374f84a3cbf46b8981527dc29d053419f68dcbdeb721018d16c.
+  All four DPR2 local sharpness counterexamples remain visible; no configured
+  gate,canonical fixture or renderer changed. Checklist now closes the retained
+  inspect local-pixel gap while preserving AX,lifetime/current-validity and
+  pending canonical root-cause registration. Source-fingerprint export is not
+  needed for this standalone suite until the producer registers its new proof.
+
 - October7 retained Icon inspect-state local paint now measured without
   recapture: all8 configured rows/four profiles at desktop DPR1/2,16 full PNG
   receipts,report SHAab42dbec and runner SHAe01ef9dc authenticated. Exact existing

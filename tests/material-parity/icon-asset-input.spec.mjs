@@ -7,8 +7,57 @@ import { PNG } from 'pngjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
+import { evaluateFocusedRaster } from './focused-raster-metrics.mjs';
 
 const one = values => { assert.equal(values.length, 1); return values[0]; };
+
+test('retained Icon inspect pixels expose DPR sharpness without adding acceptance gates', () => {
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  const raw = readFileSync('artifacts/material-parity/icon-inspect-local-paint-20261007.log');
+  assert.equal(digest(raw), 'a253a8331dfffa856f1f886451487cb6a4a394a56837054fdb7a4eb448b6b1d7');
+  const [receipt, ...observed] = raw.toString().trim().split(/\r?\n/).map(JSON.parse);
+  const reportBytes = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
+  assert.equal(digest(reportBytes), receipt.reportSha256);
+  const runner = readFileSync('tests/material-parity/run-material-parity.mjs');
+  assert.equal(digest(runner), receipt.runnerSha256);
+  const metricBytes = readFileSync('tests/material-parity/focused-raster-metrics.mjs');
+  assert.equal(digest(metricBytes), 'c84839968d5ba77534a0af4d56f31f187cd941e607a8418959a1b0771f92e1e0');
+  const ast = ts.createSourceFile('runner.mjs', runner.toString(), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const declaration = one(ast.statements.filter(s => ts.isFunctionDeclaration(s) && s.name?.text === 'cropPng'));
+  const crop = Function('PNG', `${declaration.getText(ast)};return cropPng;`)(PNG);
+  const cases = JSON.parse(reportBytes).interactions.filter(row => row.family === 'icon');
+  assert.equal(cases.length, 8);
+  assert.equal(observed.length, 8);
+  assert.equal(new Set(cases.map(row => `${row.profile}/${row.viewport.id}`)).size, 8);
+  for (const row of cases) {
+    const recorded = one(observed.filter(r => r.profile === row.profile && r.viewport === row.viewport.id));
+    assert.equal(row.state, 'inspect');
+    assert.deepEqual(row.focusedRasters, []);
+    assert.equal(recorded.configuredLocalTargets, 0);
+    const directory = `artifacts/material-parity/current-full-20261005/interactions/icon/${row.profile}/${row.viewport.id}/inspect`;
+    const referenceBytes = readFileSync(`${directory}/reference.png`);
+    const candidateBytes = readFileSync(`${directory}/astylar.png`);
+    assert.equal(digest(referenceBytes), recorded.referenceSha256);
+    assert.equal(digest(candidateBytes), recorded.astylarSha256);
+    const reference = PNG.sync.read(referenceBytes), candidate = PNG.sync.read(candidateBytes);
+    const scale = row.viewport.deviceScaleFactor;
+    assert.equal(reference.width, row.viewport.width * scale);
+    assert.equal(candidate.width, reference.width);
+    assert.equal(candidate.height, reference.height);
+    const box = one(row.geometry.elements.filter(element => element.id === 'icon-primary')).expected;
+    const bounds = {
+      left: Math.max(0, Math.floor((box.left - 8) * scale)),
+      top: Math.max(0, Math.floor((box.top - 8) * scale)),
+      right: Math.min(reference.width, Math.ceil((box.right + 8) * scale)),
+      bottom: Math.min(reference.height, Math.ceil((box.bottom + 8) * scale)),
+    };
+    assert.deepEqual(bounds, recorded.bounds);
+    const metrics = evaluateFocusedRaster(crop(reference, bounds), crop(candidate, bounds), { minimumSsim: 0.8 });
+    assert.deepEqual(metrics, recorded.diagnostic);
+    assert.equal(metrics.sharpness.meetsTarget, scale === 1);
+    assert.equal(metrics.matches, true); // Diagnostic static threshold, not an interaction acceptance gate.
+  }
+});
 
 test('inline SVG support boundary remains distinct from external image currentColor', () => {
   const file = 'src/lib/astylar-core-capabilities.ts';

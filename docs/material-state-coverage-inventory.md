@@ -2,6 +2,19 @@
 
 ## Current evidence boundary — October 6
 
+October7 Icon retained inspect-state local paint gap is closed for the eight
+configured desktop profile/DPR rows,not full case acceptance. Existing Icon
+suite now passes4/4,8803.9161ms,authenticating full report,runner,metric source,
+16 PNGs and exact original crop/comparator replay. Four DPR2 crops miss default
+sharpness diagnostics; four DPR1 crops meet them. These rows have zero
+configured local acceptance targets: static0.8 diagnostic matches are not
+interaction passes or equivalent-input proof. Log
+icon-inspect-retained-regression-20261007.log SHA256
+948a90f518c4e374f84a3cbf46b8981527dc29d053419f68dcbdeb721018d16c.
+This supersedes the Icon family row's pending inspect-local-paint statement.
+Remaining Icon obligations: broader AX,current-code validity,resource lifetime
+and canonical registration of the independently established SVG upload cause.
+
 October7 Icon original SVG upload cause is runtime-bound atDPR1/2: actual
 Babylon HTMLImageElement texImage2D returns INVALID_VALUE1281 through
 _prepareWebGLTexture; ready callbacks/positive size still produce no diagnostic.
