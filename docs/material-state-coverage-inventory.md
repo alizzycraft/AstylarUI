@@ -483,6 +483,20 @@ Configured capture coverage is 436 static plus 1,875 interaction cases across
 input baseline's `visualParityGreen` describes its pinned historical capture,
 not this current output run or input equivalence.
 
+October7 failure-placement review distinguishes measured gates from defaults:
+four of the five failed datepicker cases contain paired296x354 popup boxes,
+withinCanvas=true. Contrast desktop DPR1 activate/open/open-hover-content have
+native/candidate y213.546875/213.559997558593 (0.013123CSSpx); light short-DPR1
+activate has y230 on both. Contrast activate-leave instead has only
+overlayPlacement={matches:true},with no paired boxes; it is not measured
+placement acceptance. All ten failing-case input-tree receipts authenticate;
+native content and candidate popup request296x354 in all five. This rules out
+gross outer placement/size as the explanation for four measured failures,not
+internal paint divergence or activate-leave positioning. Next compare internal
+grid/typography/ring inputs using these exact failures,without another capture
+or copying the already recorded gate breakdown. Report SHAab42dbec and exact
+case IDs/results are in the current handoff; no current-code parity claim.
+
 ### Recorded configured-case inspection census
 
 Supplemental denominator reconciliation (October 5): the selected producer

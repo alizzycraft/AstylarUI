@@ -2,6 +2,23 @@
 
 ## Current resumption ledger — October 6
 
+- October7 current-full five-failure outer-placement alternative narrowed by
+  existing report SHAab42dbec and ten authenticated failing-case tree receipts.
+  Four have real paired popup bounds296x354,withinCanvas=true: contrast desktop
+  DPR1 activate/open/open-hover-content y213.546875 versus213.559997558593;
+  light desktop-short-DPR1 activate y230 on both. Their primary-relative offsets
+  are36CSSpx (contrast) and48.921875/48.919998CSSpx (short native/candidate).
+  Contrast activate-leave has only matches=true,no bounds; do not infer measured
+  placement from that default or from neighboring captures. All five native
+  content/candidate popup style widths/heights agree296/354. Static/native versus
+  absolute/candidate composition still differs,so equal panel boxes do not
+  establish equal inputs. The existing October5 exact gate breakdown remains
+  authoritative; no duplicate report/test/capture was created. Gross outer panel
+  displacement is not supported as cause of the four measured failures. Next
+  inspect their internal grid/typography/ring inputs and stored pixels; resolve
+  activate-leave's missing observable separately. No thresholds,fixtures,producer
+  inputs or whole-case acceptance changed.
+
 - October7 progress applicability clarified using existing records only:
   reference.component.ts lines92/93 authors determinate value64 for both families;
   candidate lines906/907 request matching mode/progress. Authenticated existing
