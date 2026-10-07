@@ -2,6 +2,24 @@
 
 ## Current evidence boundary — October 7
 
+Publication is partially restored without rewriting history: a fast-forward push
+of existing17ba0e2b succeeds and read-only ls-remote confirms
+17ba0e2b9683a89d8282f392122ba6a281d6a087. GitHub accepts the59.92MB canonical
+blob with its50MB recommendation warning. The next existing boundary17ceb69f
+reaches GitHub but is rejected Internal Server Error,request
+F725:4A8A3:1A7E0C:221BD6:6AC65FC2 at2026-10-07T15:07:35Z; remote remains17ba.
+This is distinct from earlier HTTP408 disconnects; neither trailing tool wording
+nor upload completion proves ref acceptance. A read-only bounded-memory thin-pack
+estimate from ea68 to e956 reports98121712 bytes in10226ms; it is not an exact
+network payload or proof of the timeout cause. No pack was saved or history
+rewritten. Publication after17ba remains pending.
+The149/139 canonical export is live in session24832,parent17668/child7988,
+using the named complete current-ancestry launcher. Do not restart based on the
+unchanged build-audit progress line. Independent cold verification and compact
+import/verification follow terminal success; current-code browser acceptance and
+case-obligation closure remain separate. This ledger is not a consumed producer
+source; frozen consumed sources are unchanged.
+
 Current pending policy now has149 definitions: new
 fixture-progress-host-focusability-input-omitted classifies the measured32-cohort
 failure as application semantic authoring,not core focus or coordinate failure.
