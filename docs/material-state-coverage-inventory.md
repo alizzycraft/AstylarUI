@@ -497,6 +497,15 @@ grid/typography/ring inputs using these exact failures,without another capture
 or copying the already recorded gate breakdown. Report SHAab42dbec and exact
 case IDs/results are in the current handoff; no current-code parity claim.
 
+The five exact failing trees all expose October's conditional first-week label:
+native td colspan4,line-height0 shares a four-cell row with three day cells;
+candidate requests a full-span40px month marker plus four leading blank cells
+in fixed40px grid rows. This binds the existing month-marker structural and
+typography substitution findings to this failing population; it does not
+quantify their contribution to the raster failures or prove a core span bug.
+Calendar current-validity checks must include captured date/context as well as
+source hashes: current-day/month/year and ring helpers read the live clock.
+
 ### Recorded configured-case inspection census
 
 Supplemental denominator reconciliation (October 5): the selected producer

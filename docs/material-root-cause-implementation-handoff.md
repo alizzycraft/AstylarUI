@@ -2,6 +2,25 @@
 
 ## Current resumption ledger — October 6
 
+- October7 exact five-failure calendar internal-input join: ten current-full
+  tree receipts authenticate to report SHAab42dbec. Every failed case shows OCT,
+  native month-label td colspan4/line-height0 inside the first week (four td
+  children: label plus three day cells),while candidate authors span month marker
+  gridColumn1/-1,height40px,then four leading blanks in repeat(7,40px) rows.
+  This is the existing fixture-calendar-month-marker-table-grid-substitution
+  and typography finding manifested in the failing October population,not a new
+  core span diagnosis. Unlike the older SEP offset2 evidence,October offset4
+  exposes the conditional label-row input difference. Outer bounds can agree
+  while internal authored layout differs. This demonstrates first input
+  divergence,not a quantified causal attribution of all five pixel failures.
+  Existing equal-input full-span core proof remains settled; no fixture rewrite.
+  Applicability also depends on clock inputs: materialCurrentDay/Month/Year and
+  selected-row/column helpers read new Date(),so unchanged file fingerprints
+  alone do not establish current calendar content/ring state. Preserve captured
+  month/day and action state in any current-validity join. Next inspect local
+  internal raster/placement with the captured October context,not today's date
+  or another outer-offset adjustment. No new report/framework or capture.
+
 - October7 current-full five-failure outer-placement alternative narrowed by
   existing report SHAab42dbec and ten authenticated failing-case tree receipts.
   Four have real paired popup bounds296x354,withinCanvas=true: contrast desktop
