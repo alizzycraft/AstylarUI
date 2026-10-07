@@ -2,6 +2,23 @@
 
 ## Current evidence boundary — October 7
 
+Progress focusability omission historical boundary is now established for HEAD
+ancestry:103 file-changing revisions retain one exact pair of unchanged progress
+host declarations,all omitting tabindex. Earliest showcase commit is
+2f440115740ff76fa9e55b3f4a11568207b2af5a (August23),candidate source SHA256
+6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24.
+Both reference controls are also introduced in that commit. Retained read-only
+history assertion log progress-focus-authoring-history-20261007-retry.log SHA256
+132be9d28513c930351481ac9f5212ef61c26e1d0288f881a5af768652f28a7d.
+This identifies original host-input omission,not a subsequent parity workaround
+removing focusability. It does not establish historical renderer tabindex support,
+motives of unrelated styling changes,or other branch histories. Initial failed
+query also matched a progress style ternary; corrected exact if-declaration
+selection checks both hosts separately and preserves that failed log. This
+closes the first-bad-authoring-revision uncertainty for this specific finding.
+Independent cold canonical check session69870 remains live; consumed sources
+are still frozen and new standalone history evidence is not implicitly canonical.
+
 Same-generation progress remount/peer resource check now passes all four planned
 light desktop cohorts (bar/spinner,DPR1/2),terminal exit0. Log
 progress-remount-same-generation-20261007.log SHA256
