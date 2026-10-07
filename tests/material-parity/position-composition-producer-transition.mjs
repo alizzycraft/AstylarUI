@@ -5,7 +5,17 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 const extendedKeyboardProof = "    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\\('retained extended keyboard cohorts replay original runtime tails and source preambles'/,\n" +
   "      'retained extended configured keyboard assertion boundary', 'Replays original runtime assertion blocks and source preambles for128 exact family/focus contexts across eight retained batches. Pins logs,original callbacks,served build,report/checkpoint and bounded current source dependencies. Preserves observed activation,navigation,range and modality failures. Not collection-time error callbacks,current paint,lifecycle or complete-case acceptance.'),\n";
 export function restoreExtendedKeyboardRegistration(source) {
-  const current = source.toString().replaceAll('\r\n', '\n');
+  let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes("/test\\('retained divider texel trace preserves")) {
+    const header = 'function focusedProofInventory(root) {\n  return [\n';
+    assert.equal(current.split(header).length, 2);
+    const start = current.indexOf(header) + header.length;
+    const end = current.indexOf(extendedKeyboardProof, start);
+    assert.ok(end > start);
+    assert.equal(hash(current.slice(start, end)), 'df99e9ee72a72cb9628c2b584d6e905808fdd41b6d6cb3991e235a57f20c935a',
+      'exact four-entry retained evidence batch');
+    current = current.slice(0, start) + current.slice(end);
+  }
   if (!current.includes("/test\\('retained extended keyboard cohorts")) return current;
   assert.equal(current.split(extendedKeyboardProof).length, 2, 'exact extended keyboard registration');
   return current.replace(extendedKeyboardProof, '');

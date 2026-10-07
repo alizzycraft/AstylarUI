@@ -2,6 +2,21 @@
 
 ## Current evidence boundary — October 7
 
+Four retained module/AX/state/trace proofs are now registered as one exact batch.
+Producer inventory150 findings/146 proofs preserves the entire predecessor;
+the exact four-entry SHA df99e9ee… is independently authenticated before removal
+along with the earlier keyboard registration. Existing141-proof predecessor
+assertions and complete legacy-suite/source/mutation controls remain intact.
+Focused7/7 passes9574.3178ms (retained-batch-registration-focused-20261007.log);
+integration3/3 passes67729.5502ms (retained-batch-registration-integration-20261007.log).
+All four altered registration descriptions are rejected. Scope and original
+failure evidence are unchanged; no renderer/fixture/build/capture changes.
+Accepted canonical/index remain150/141 until coherent export,independent cold
+check and compact import/verification. This registration milestone justifies
+that publication gate,not repeated browser collection or whole-case acceptance.
+After publication,prioritize remaining full case-obligation joins and current
+pipeline applicability instead of replaying these now-integrated questions.
+
 Retained divider texel trace now has an additive replay assertion: `retained
 divider texel trace preserves edge and interior residual uncertainty`. Original
 trace/proof/callback hashes and all2515 recorded input receipts authenticate.
