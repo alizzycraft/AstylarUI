@@ -2,6 +2,24 @@
 
 ## Current evidence boundary — October 6
 
+October7 scrollbar top-ink cause is now demonstrated for all8 retained wheel
+cohorts: sibling timepicker-active-line has z61 versus popup z60,height2px.
+Light/dark line and popup both start56px; contrast line starts37px versus popup
+36px; custom line ends48px where popup starts48px. Authenticated PNG columns
+show exact active-line RGB over gray thumb at the predicted2px/3px/0px boundary,
+within one device pixel. Contrast retains a tiny gray run above the line before
+the detector selects the longer lower run. This explains theme-dependent leading
+ink measurements as authored overdraw plus run selection,not clipping or a new
+coordinate/scroll-travel defect. Source: astylar.component.ts:604–605; captured
+input trees conserve each same-parent top/height/zIndex declaration. Evidence:
+timepicker-thumb-top-overdraw-20261007.log
+SHA5cdcdd95795479cb754557abf56b1705c67d53ae6f2bf4b4004f9f454261f9cb,
+exit0. Earlier top-loss uncertainty below is superseded for this cohort only.
+No fixture correction is authorized; integrate with existing popup authoring
+findings after cold-check completion. Remaining scrollbar shape/platform track
+mapping and real track-click behavior are distinct obligations,not reopened
+wheel movement. No full case or equal-input renderer acceptance follows.
+
 October7 timepicker thumb-motion interpretation is narrowed by a decisive edge
 control: authenticate all32 retained PNG receipts and the full report,then use
 the same eight reported256/2312/144 client/scroll/offset values. The CSS runtime
