@@ -2,6 +2,22 @@
 
 ## Current evidence boundary — October 7
 
+The149-finding/139-focused-proof canonical generation is independently verified
+and compact-indexed. Cold current-ancestry --check terminal exit0,elapsed
+2651295.3033ms; log progress-focus-canonical-independent-20261007.log SHA256
+18f12f579fcc27acbc2067af9e66c3db1fba7024b1572f53afc8a59e9a5e5940.
+All1205 evidence files/89154859 bytes revalidate with zero invalidations.
+Canonical compressed SHA a9e92562d1cfd5f9f462f00cfd7bd969c65375ed2a3878ffe8691b029f26b092
+retains436 static/1875 interaction cases,8483 differences/389202 occurrences,
+inputEquivalent=false. Compact import and whole-index verify both exit0;
+logs progress-focus-compact-import-20261007.log and
+progress-focus-compact-verify-20261007.log. Index SHA
+5d66b03ca0ed27f1fe5c306c507906a0bcfea5ea421b03d964c17c94051e2bbc;
+149 source findings/39904 controls/zero unresolved scalar groups. This resolves
+the stale compact index and pending canonical verification,not full obligation
+closure,current browser acceptance or publication. New standalone Icon/focus-
+paint/remount/history evidence is not implicitly incorporated in this package.
+
 Historical component launcher reconciliation is complete: the existing launcher
 now accepts the exact d07df06e snapshot only after authenticating the prior
 de260e2f bytes and removing the one named,hash-checked progress proof to restore
