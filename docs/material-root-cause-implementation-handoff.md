@@ -1,9 +1,19 @@
 # Material audit: evidence-led implementation priorities
 
-## Current resumption ledger — October 6
+## Current resumption ledger — October 7
+
+- Accepted canonical generation:149 source findings/139 focused proofs,
+  independently cold-verified with terminal exit0 and zero evidence invalidations.
+  Compact import/whole-index verification pass; compressed generation a9e92562…,
+  index5d66b03c…. Retains436 static/1875 interaction cases,inputEquivalent=false.
+  See state-coverage inventory and progress-focus-canonical-independent-20261007.log.
+  New standalone focus-paint,remount,history and Icon late-completion/source/case
+  joins are separately inspected,not implicitly added to this canonical package.
+  All configured cases remain partially inspected; final gates/publication and
+  complete applicable-obligation joins are not certified by canonical validation.
 
 - October7 progress focusability is now classified by
-  `fixture-progress-host-focusability-input-omitted` in the pending149-definition
+  `fixture-progress-host-focusability-input-omitted` in the accepted149-definition
   policy. All32 configured physical cohorts retain matching role/value/range
   semantics but native tabindex=-1/programmatic focus versus candidate omission
   and BODY remaining active. Candidate source906–907 omits a supported public
@@ -12,8 +22,12 @@
   core focus or graphics offsets. Sequential Tab/keyboard activation are not
   implied by negative tabindex. Evidence and passing conservation receipts are
   in the current state-coverage inventory. Focus paint,full AX relationships,
-  remount/isolation and current final acceptance remain open. The frozen
-  canonical is still148 findings/138 proofs; do not claim149/139 exported yet.
+  complete remount/isolation and current final acceptance remain open. Bounded
+  light desktop DPR1/2 resource remount/isolation and reference focus paint now
+  have standalone evidence in the coverage inventory; do not recapture them
+  merely because this handoff previously marked them pending. Canonical149/139
+  is now exported,independently verified and compact-indexed,not fully accepted
+  against every audit obligation.
 
 - October7 configured Icon AX exposure gap closes:15 new physical cohorts,
   30 paired CDP observations,all native ariaHidden exclusions versus candidate
