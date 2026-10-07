@@ -2,6 +2,26 @@
 
 ## Current evidence boundary — October 7
 
+October7 SVG canonical reconciliation is complete: independent cold --check
+session28366 reached terminal exit0 in3846103.7126ms. It revalidated1205 evidence
+files/89154859 bytes with zero invalidations and compared the complete rebuilt
+audit against the saved package. Log canonical-svg-independent-20261007.log
+SHAc6cf369a3c4f849c96989abaccece2e1ceac353c76d7234c35bcb1cab3aedb0b.
+Accepted compressed generation dfd8cd42de514899fbf8c87cf3debf7f4ed000be17305e219ae907e396f1afee
+(62835888 bytes),decoded4a20469deaa4b97ea1f405c30afa56e9220fd038839a7ccc0fc907702dfb10d9
+(2222850212 bytes). Compact import and whole-index verification both finish
+exit0 in session16398; current pointer matches that generation. Import log
+svg-compact-import-20261007.log SHAbacd8922f88f0b564883e1ed7557a7f23cd42c554317da434b32c571ab596435;
+verification svg-compact-verify-20261007.log
+SHAd26ef04858aa5d9220de2c841d278c562d010d1a2e16ae65ce41881a0b936e9f.
+Counts remain436 static/1875 interaction,8483 scalar groups,39904 controls,
+389202 occurrences,zero unresolved scalar groups;148 source findings/138 focused
+proofs,inputEquivalent=false. This supersedes earlier live-check/prior-index
+notes,not current-code browser acceptance or whole-case closure. Recent standalone
+progress focus/cap/lifecycle observations are not added to this frozen producer
+generation merely by recording them here. Existing full-suite541-versus542
+source-inventory reconciliation and publication remain separate pending work.
+
 October7 remaining-state reconciliation removes a contradictory hypothetical
 gap: changed progress value/buffer/indeterminate replacement is not authored by
 either comparison. The existing40-case determinate64 membership log rehashes
