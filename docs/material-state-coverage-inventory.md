@@ -2,6 +2,18 @@
 
 ## Current evidence boundary — October 6
 
+October7 shared retained lifecycle-gate scope is now explicit:1875 interaction
+rows contain1857 single snapshots and18 three-snapshot cases. All18 are light/
+dark mobile-dpr2 open-dismiss across sidenav,autocomplete,select,datepicker,
+timepicker,menu,tabs,bottom-sheet,dialog. Single-snapshot resourcesStable true
+establishes idle/pending status,not comparative lifecycle stability. Exact
+runner expression replay accepts inflated counts in one snapshot and rejects
+two differing snapshots; no gate changed. Existing focused check1/1 passes
+2622.4872ms; log resource-flag-coverage-20261007-retry.log SHA256
+67d7a750ff3fa20076ea06215cb86d22a1c9f302ae32bb7a525d10dbdf079e95.
+This is a scope gap,not1857 demonstrated leaks. Supplemental update/disposal
+proofs must be joined separately before declaring an ownership obligation closed.
+
 October7 Icon repeated desktop update/disposal obligation now observed for
 all8 configured profile/DPR1/2 combinations through the existing checkpoint-
 bound browser helper. Three equivalent public surface.update calls per case

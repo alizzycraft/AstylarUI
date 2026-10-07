@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 6
 
+- October7 shared resource gate inspection answers why retained passing flags
+  cannot close most lifecycle obligations:1857/1875 rows have one snapshot;
+  only18 mobile light/dark open-dismiss rows have three. Authenticated report
+  and exact runner expression replay pass1/1,2622.4872ms with synthetic
+  single-count inflation/two-count drift controls. Log
+  resource-flag-coverage-20261007-retry.log SHA256
+  67d7a750ff3fa20076ea06215cb86d22a1c9f302ae32bb7a525d10dbdf079e95.
+  Initial failed test lacked the TypeScript import; failure log retained and
+  corrected retry is separate. No renderer or harness acceptance changed.
+  Next join existing supplemental lifecycle cohorts to applicable cases;
+  prioritize actual gaps,not repeat already proved Icon/divider updates.
+  Remote remains ea68c829 by read-only check; verified local commits remain
+  unpublished after repeated HTTP408. Do not restart canonical generation.
+
 - October7 Icon lifecycle question answered by8 checkpoint-bound desktop
   profile/DPR1/2 browser cohorts,not the single-snapshot resourcesStable flag.
   Initial plus three equivalent public updates retain live=tracked12/11/4,

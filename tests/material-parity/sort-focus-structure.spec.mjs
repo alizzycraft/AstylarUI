@@ -6,6 +6,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { chromium } from 'playwright-core';
 import { PNG } from 'pngjs';
+import ts from 'typescript';
 import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-metrics.mjs';
 import { cropRgba } from '../parity/sharpness-metrics.mjs';
 import { evaluateFocusedRaster } from './focused-raster-metrics.mjs';
@@ -2639,6 +2640,51 @@ test('current badge and icon accessibility nodes expose hiding differences omitt
     t.diagnostic(JSON.stringify({ browser: browser.version(), observations,
       scope: 'Current checkpoint light desktop DPR1,ARIA hiding and actual partial AX nodes; not all-profile accessibility acceptance.' }));
   }, {}, { checkpointFile: 'artifacts/material-parity/current-full-20261005/checkpoint/manifest.json' });
+});
+
+test('retained resource flags distinguish settlement from comparative lifecycle coverage', t => {
+  const raw = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
+  assert.equal(createHash('sha256').update(raw).digest('hex'),
+    'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const rows = JSON.parse(raw).interactions;
+  assert.equal(rows.length, 1875);
+  const runner = readFileSync('tests/material-parity/run-material-parity.mjs');
+  assert.equal(createHash('sha256').update(runner).digest('hex'),
+    'e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0');
+  const ast = ts.createSourceFile('runner.mjs', runner.toString(), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const declarations = [], functions = [];
+  const visit = node => {
+    if (ts.isVariableDeclaration(node) && node.name.getText(ast) === 'resourcesStable') declarations.push(node);
+    if (ts.isFunctionDeclaration(node) && node.name?.text === 'resourceCounts') functions.push(node);
+    ts.forEachChild(node, visit);
+  };
+  visit(ast);
+  assert.equal(declarations.length, 1); assert.equal(functions.length, 1);
+  const counts = Function(`${functions[0].getText(ast)};return resourceCounts;`)();
+  const stable = Function('resourceSnapshots', 'resourceCounts', `return ${declarations[0].initializer.getText(ast)};`);
+  const histogram = {}, comparative = [];
+  for (const row of rows) {
+    const n = row.resourceSnapshots.length;
+    histogram[n] = (histogram[n] ?? 0) + 1;
+    assert.equal(stable(row.resourceSnapshots, counts), row.resourcesStable);
+    if (n > 1) {
+      comparative.push(`${row.family}/${row.profile}/${row.viewport.id}/${row.state}`);
+      assert.equal(row.state, 'open-dismiss');
+      assert.equal(row.viewport.id, 'mobile-dpr2');
+      assert.ok(['light', 'dark'].includes(row.profile));
+    }
+  }
+  assert.deepEqual(histogram, { 1: 1857, 3: 18 });
+  assert.equal(new Set(comparative).size, 18);
+  const sample = structuredClone(rows[0].resourceSnapshots[0]);
+  assert.equal(stable([sample], counts), true);
+  const changed = structuredClone(sample);
+  changed.surface.resources.materials += 100;
+  assert.equal(stable([changed], counts), true, 'one snapshot cannot establish comparative stability');
+  assert.equal(stable([sample, changed], counts), false, 'actual comparative count drift must fail');
+  assert.equal(stable([], counts), true, 'empty synthetic population exposes logical scope,not a captured case');
+  t.diagnostic(JSON.stringify({ histogram, comparative,
+    scope: 'Retained harness measurement scope only; supplemental lifecycle proofs remain separate and no gates are weakened' }));
 });
 
 test('Icon checkpoint equivalent updates retain live resources and final disposal', async t => {
