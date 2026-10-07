@@ -2,6 +2,18 @@
 
 ## Current evidence boundary — October 7
 
+Historical component launcher reconciliation is complete: the existing launcher
+now accepts the exact d07df06e snapshot only after authenticating the prior
+de260e2f bytes and removing the one named,hash-checked progress proof to restore
+the complete predecessor source exactly. All original historical receipt and
+assertion checks remain. Complete launcher terminal exit0:8 retained checks,
+8 button-authoring checks,1 source-binding check and1 negative-control check.
+Log historical-component-reviewed-progress-20261007.log retains the results.
+This supersedes the replay failure below,not historical/current rendering
+boundaries or final acceptance. The launcher is absent from the canonical
+producer inventory/import graph; no consumed frozen source was edited and no
+export/browser capture restarted. Initial failed replay and delta checks remain.
+
 Current historical-component launcher replay now fails before running retained
 assertions: historical-component-final-replay-20261007.log reports exact
 input-boundary receipt drift,de260e2f… to d07df06e…. This supersedes any claim

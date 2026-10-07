@@ -104,15 +104,35 @@ if (main) {
     { maxBuffer: 4_000_000 });
   assert.equal(hash(originalBoundary), 'b6eff6c1419e114ba6f177dbde7c941bbf8ceeefa00165dcdbe9c4babc826f3b');
   const currentBoundary = read(boundary);
-  assert.equal(hash(currentBoundary), 'de260e2fbee31686bccd940582e1503fc378881d2c94e6e35b66b67877cbc141',
+  const priorBoundaryHash = 'de260e2fbee31686bccd940582e1503fc378881d2c94e6e35b66b67877cbc141';
+  const progressBoundaryHash = 'd07df06e4ee6996f9fc06b778fc0b429620f1e0526813f33f8c52e6d083c27c0';
+  assert.ok([priorBoundaryHash, progressBoundaryHash].includes(hash(currentBoundary)),
     'Unreviewed input-boundary snapshot drift');
+  let reviewedBoundary = currentBoundary;
+  if (hash(currentBoundary) === progressBoundaryHash) {
+    const predecessor = execFileSync('git', ['show', `cc78f5f2^:${boundary}`], { maxBuffer: 4_000_000 });
+    assert.equal(hash(predecessor), priorBoundaryHash);
+    const text = lf(currentBoundary);
+    const ast = ts.createSourceFile(boundary, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    assert.equal(ast.parseDiagnostics.length, 0);
+    const additions = ast.statements.filter(node => ts.isExpressionStatement(node) &&
+      ts.isCallExpression(node.expression) && node.expression.expression.getText(ast) === 'test' &&
+      node.expression.arguments[0].text ===
+        'retained progress focus caps and update disposal preserve complete configured cohort evidence');
+    assert.equal(additions.length, 1);
+    assert.equal(hash(additions[0].getText(ast)),
+      'c825bf72c375b65c39dfa570c55b3371fc6d7b8e4cf9a16a6a92e942b9a82e2c');
+    const restored = text.slice(0, additions[0].getFullStart()) + text.slice(additions[0].end);
+    assert.equal(restored, lf(predecessor), 'Progress addition must conserve the complete predecessor source');
+    reviewedBoundary = predecessor;
+  }
   const statements = bytes => {
     const ast = ts.createSourceFile(boundary, lf(bytes), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
     return new Map(ast.statements.map(node => [ts.isExpressionStatement(node) &&
       ts.isCallExpression(node.expression) && node.expression.expression.getText(ast) === 'test'
       ? node.expression.arguments[0].text : node.getText(ast).slice(0, 90), node.getText(ast)]));
   };
-  const oldBoundary = statements(originalBoundary), newBoundary = statements(currentBoundary);
+  const oldBoundary = statements(originalBoundary), newBoundary = statements(reviewedBoundary);
   assert.equal(oldBoundary.size, 33); assert.equal(newBoundary.size, 41);
   const changedBoundary = new Set([
     'current paired caret-visible capture binds its pixels to unequal caret authoring',
