@@ -2,6 +2,24 @@
 
 ## Current evidence boundary — October 7
 
+Progress paint-input chronology is now traced separately from current raster
+causality. Read-only Git assertions pass; progress-paint-input-history-20261007.log
+SHA256 ba5d67d9dae369092b6699654a293a6d51ac3085d94f9d287ab90c11046bc6eb.
+Positive bar-center width*(1-amount)/2 is present in initial2f440115. The
+September8 CSS-boundary migration e4ca3db4 preserves that sign as
+widthCss*(1-amount)/2 through toRenderPoint. Spinner +52degree start offset
+first appears in August25 parity-tightening7159b1d5; its parent lacks the offset.
+The CSS-boundary migration preserves the offset and negative angular sweep;
+current plugin source authenticates to dee2c10af7f3116bc6a476d63182ac182e5717b90f5333a327b77213e0b9107e.
+Current CSS start=-38degrees,sweep=-230.4degrees at .64 agrees with the already
+retained current angular-input diagnosis. This identifies a historical added
+paint offset and legacy mathematical inputs surviving conversion; it does not
+prove their original motivation,historical output or prior world-projection
+applicability. Do not call the initial bar sign a historically rendered defect
+or the spinner offset a confirmed intentional concealment from Git titles alone.
+Current authoring mismatch remains the established first divergence. No source
+or fixture edit; independent cold verification still uses its frozen producer.
+
 Progress focusability omission historical boundary is now established for HEAD
 ancestry:103 file-changing revisions retain one exact pair of unchanged progress
 host declarations,all omitting tabindex. Earliest showcase commit is
