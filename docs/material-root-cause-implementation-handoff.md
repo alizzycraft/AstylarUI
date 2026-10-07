@@ -2,6 +2,34 @@
 
 ## Current resumption ledger — October 6
 
+- October7 original icon SVG transparency reduction now reproduces a public
+  package counterexample at DPR1/2 and24/48CSSpx. Same external favorite.svg,
+  contain sizing,transparent image background and gray host on both sides:
+  native corners show RGB240/240/240; candidate renders black rectangles.
+  Both native images decode to150x150 and all candidate textures report ready;
+  zero page errors/diagnostics and all four surface disposals succeed. Retained
+  log icon-original-svg-boundary-20261007.log SHA256
+  141359f90bfa4f1d859dc0815625e6754474a36a57f25e818b5a8e019b43d811
+  authenticates2515 bundle inputs,SVG bytes and four raster receipts. These are
+  equal external-image inputs,not equivalence to the canonical inline SVG.
+  Native external SVG remains black despite CSScolor magenta: currentColor
+  inheritance is a separate inline-versus-external authoring boundary.
+  Transfer observation log icon-original-svg-transfer-20261007.log SHA256
+  e1fad1f5cceca992e7b60d7102cdb9be4efb9add3c2011df63b7028efba39d11
+  reports cloned texture hasAlpha/useAlpha true and transparent root alpha0;
+  texture readPixels nevertheless returns zero-alpha throughout. Do not infer
+  uploaded alpha loss from this uncalibrated readback. Both runs' four raster
+  hashes independently agree,so observation instrumentation changed no pixels.
+  Complete getTexture loading method and image-material alpha setup match
+  current compiled source: icon-svg-owner-binding-20261007.log SHA256
+  3fad20ad2f518a13036ebd10a3d6197ca9bd4faa53235039ec3d4121e9b17ba2.
+  This establishes an installed public rendering failure and bounded owner
+  applicability,not a confirmed decoder/shader cause or full pipeline binding.
+  Next use a matched PNG alpha control and explicit-SVG-dimension control to
+  separate SVG decoding/upload from general image transparency/material paint;
+  calibrate readback before using it causally. Original probe and failures remain
+  retained; use fresh paths for further controls. No fixture/core changes.
+
 - October7 configured progress-bar child paint inspected from all20 retained
   current-full cases (12 static/eight inspect),40 full PNGs. Report SHAab42dbec
   and original screenshot runner receipt authenticate; PNG hashes and primary

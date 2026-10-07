@@ -2,6 +2,18 @@
 
 ## Current evidence boundary — October 6
 
+October7 Icon original external SVG reduction observes black candidate image
+rectangles versus transparent native corners at24/48CSSpx andDPR1/2,despite
+successful image/texture loading. Log icon-original-svg-boundary-20261007.log
+SHA141359f90bfa4f1d859dc0815625e6754474a36a57f25e818b5a8e019b43d811;
+complete loading/alpha-setup methods match current source (owner-binding log
+SHA3fad20ad2f518a13036ebd10a3d6197ca9bd4faa53235039ec3d4121e9b17ba2).
+The historical alpha motivation is therefore a real unresolved rendering
+question,not an invented implementation obligation. Decoder/upload versus
+general image material cause remains unproven; next matched PNG and explicit
+SVG-dimension controls. Inline currentColor versus external-image inheritance
+is separately unequal authoring. No canonical case or whole-core acceptance.
+
 October7 all20 configured progress-bar retained screenshots now expose actual
 track/fill pixels,not merely primary mesh bounds. Forty PNG hashes and exact
 10%/50%/90% vertical foreground runs are retained in
