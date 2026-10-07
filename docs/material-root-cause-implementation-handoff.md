@@ -2,6 +2,34 @@
 
 ## Current resumption ledger — October 6
 
+- October7 original SVG root-cause route is now runtime-bound. Observational
+  texImage2D hook at DPR1/2 records exactly one HTMLImageElement upload per
+  surface,150x150 natural/element dimensions,and INVALID_VALUE1281. Stack
+  names Image.loadHandler -> onload -> _createTextureBase ->
+  _Engine._prepareWebGLTexture -> texImage2D. Both screenshots exactly match
+  the original uninstrumented failure SHA values; consuming the GL error flag
+  did not change pixels. Texture reports ready despite failed upload and no
+  public diagnostic. Log icon-svg-runtime-upload-20261007.log SHA256
+  9cba551e122dc41ca7cb01fe80d201ba18799e26f8c628d7f1b22cd34ffd9f53;
+  original reduction source,2515 installed bundle dependencies and asset bytes
+  are fingerprinted/rechecked; both disposals succeed. Prior complete loading/
+  alpha-setup source bindings and native upload controls remain authoritative.
+  This confirms the public image renderer's asset-to-GPU adaptation defect in
+  this installed/current-owner boundary,not a coordinate/grid/material-palette
+  cause. Proposed finding core-svg-dimensionless-image-upload-not-adapted belongs
+  beside the existing fixture-icon-svg-replaced-by-fixed-raster authoring finding.
+  Register a focused retained counterexample assertion through the existing
+  input-boundary/source-finding inventory after the live cold session finishes;
+  standalone runtime evidence is not yet canonical registration.
+  Implementation handoff: preserve original SVG bytes and browser intrinsic/
+  CSS layout semantics; adapt decoded image state at the GPU upload boundary
+  and reject/report failed upload rather than accepting only positive size/
+  ready callbacks. Native assigning decoded Image dimensions before upload is
+  a successful mechanism control,not an implemented fix or universal SVG policy.
+  Prove currentColor,alpha,DPR sampling and asset replacement/disposal separately
+  before removing the PNG compensation. Do not move this work into the plugin
+  or mutate the canonical SVG. No renderer or fixture changed in this audit.
+
 - October7 SVG failure narrowed by decisive controls,not a fixture workaround.
   Dimensioned150x150 SVG (same path/viewBox) and a150x150 native PNG raster of
   the original both preserve transparent corners at24/48CSSpx,DPR1/2 in native

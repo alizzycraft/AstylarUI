@@ -2,6 +2,18 @@
 
 ## Current evidence boundary — October 6
 
+October7 Icon original SVG upload cause is runtime-bound atDPR1/2: actual
+Babylon HTMLImageElement texImage2D returns INVALID_VALUE1281 through
+_prepareWebGLTexture; ready callbacks/positive size still produce no diagnostic.
+Observed failure PNGs exactly match the earlier uninstrumented captures.
+Log icon-svg-runtime-upload-20261007.log SHA256
+9cba551e122dc41ca7cb01fe80d201ba18799e26f8c628d7f1b22cd34ffd9f53.
+The historical fixed-PNG authoring substitution therefore has a reproduced
+underlying asset-upload adapter defect,not merely a speculative alpha issue.
+Canonical source-finding/focused-assertion registration awaits the live cold
+session boundary. Inline currentColor,remaining responsive paint/AX and lifetime
+remain separate obligations; no full-case acceptance or renderer fix follows.
+
 October7 Icon loading controls narrow the original-SVG black rectangle: matched
 dimensioned SVG and native PNG preserve alpha in all eight paired DPR1/2
 captures (24/48CSSpx),while original SVG native direct WebGL upload returns
