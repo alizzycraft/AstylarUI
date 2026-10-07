@@ -2,10 +2,16 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 
 const hash = text => createHash('sha256').update(text).digest('hex');
+const progressCohortProof = "    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\\('retained progress focus caps and update disposal preserve complete configured cohort evidence'/,\n" +
+  "      'configured progress focus cap and lifecycle evidence boundary', 'Authenticates40 configured cases joined to32 physical cohorts. All native hosts have tabindex=-1 and programmatic focus; candidate omits it and leaves BODY active despite supported core tabindex projection. Native spinner caps are butt; installed tubes have flat segmented caps,not spherical extensions. Three equivalent updates retain one unused owned root material per cohort without growth; sampled disposal clears resources. Preserves input/focus failure and redundant allocation,not fresh browser acceptance,equal cap paint,remount,isolation or complete-case closure.'),\n";
 const svgProof = "    proof(root, 'tests/material-parity/icon-asset-input.spec.mjs', /test\\('retained original SVG upload failure binds public runtime and matched alpha controls'/,\n" +
   "      'original SVG GPU upload adaptation boundary', 'Matched public external SVG at24/48CSSpx DPR1/2 fails actual image texImage2D with1281 while ready and diagnostics remain misleading. Dimensioned SVG/PNG controls preserve alpha; decoded native image dimensions isolate upload adaptation without changing SVG bytes. Complete bounded loading/alpha owners match current source; not inline SVG support,currentColor inheritance,all-SVG or full Icon acceptance.'),\n";
 export function restoreSvgProofRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes("/test\\('retained progress focus caps and update disposal")) {
+    assert.equal(current.split(progressCohortProof).length, 2, 'progress cohort proof must be an exact one-entry addition');
+    current = current.replace(progressCohortProof, '');
+  }
   if (!current.includes("/test\\('retained original SVG upload failure")) return current;
   assert.equal(current.split(svgProof).length, 2, 'SVG registration changed beyond the exact one-entry addition');
   const receipt = "    'tests/material-parity/icon-asset-input.spec.mjs',\n";

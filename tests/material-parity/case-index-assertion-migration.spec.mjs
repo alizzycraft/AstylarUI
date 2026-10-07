@@ -19,6 +19,8 @@ test('entire legacy suite conserves statements outside nine receipt checks and t
   const producer = restoreScalarReviewExtraction(rawProducer);
   assert.throws(() => restoreScalarReviewExtraction(rawProducer.replace(
     'original SVG GPU upload adaptation boundary', 'unreviewed SVG conclusion')));
+  assert.throws(() => restoreScalarReviewExtraction(rawProducer.replace(
+    'configured progress focus cap and lifecycle evidence boundary', 'unreviewed progress acceptance')));
   assert.throws(() => restoreScalarReviewExtraction(rawProducer + '\nconst unrelatedProducerChange = true;\n'));
   const predecessor = execFileSync('git', ['show', `c3e0be17:${producerFile}`],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n');

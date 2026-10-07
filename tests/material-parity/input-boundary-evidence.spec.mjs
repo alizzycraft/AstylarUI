@@ -391,6 +391,100 @@ test('retained divider responsive accessibility and replacement ownership preser
   // mobile lifecycle, late-async/remount proof or complete accessibility acceptance.
 });
 
+test('retained progress focus caps and update disposal preserve complete configured cohort evidence', () => {
+  const load = (name, receipt) => {
+    const raw = readFileSync(`artifacts/material-parity/${name}`);
+    assert.equal(hash(raw), receipt, name);
+    return raw.toString().trim().split(/\r?\n/).filter(line => line.startsWith('{')).map(JSON.parse);
+  };
+  assert.equal(hash(readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')),
+    '65d7256f859a0839cdf6364d8f3d4e2b81bdb32978c42e0afeaa27f2622e14ce');
+  assert.equal(hash(readFileSync('artifacts/material-parity/current-full-20261005/checkpoint/manifest.json')),
+    '7ae2cba1739353661a0c84e28ef70819157311cc824fd00ae94ced29fadeb352');
+  assert.equal(hash(readFileSync('examples/material-showcase/src/app/astylar.component.ts')),
+    '71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd');
+  assert.equal(hash(readFileSync('src/lib/astylar-semantic-bridge.ts')),
+    '1a0011d3530701d9a74dc37b9f5a14d0fed0742dfd8793c39f8628e06b6a5725');
+  assert.match(readFileSync('src/lib/astylar-semantic-bridge.ts', 'utf8'),
+    /if \(element\.tabindex !== undefined\) node\.tabIndex = element\.tabindex;/);
+  const membership = load('progress-configured-input-membership-20261006.log',
+    'd64d73bea9a8e7d6ad2640bea3bc6a59c072ae9465f1aa3ca8577c5111fb6684').filter(r => r.family);
+  assert.equal(membership.length, 40);
+  const key = r => `${r.family}:${r.profile}:${r.viewport.width}:${r.viewport.height}:${r.viewport.deviceScaleFactor}`;
+  const expected = [...new Set(membership.map(key))].sort();
+  assert.equal(expected.length, 32);
+  const ax = load('progress-actual-ax-cohorts-20261007.log',
+    '88c9b67f0d0dc8267bf7b51d77839e15df74e5a118d3414b6db868813f323d31').filter(r => r.family);
+  const focus = load('progress-programmatic-focus-20261007.log',
+    'f896402a1d31e9e14fb6e4382854a140c51f146f1323835e48669fe1ca5176f9').filter(r => r.family);
+  for (const rows of [ax, focus]) {
+    assert.equal(rows.length, 64);
+    for (const mode of ['reference', 'astylar']) assert.deepEqual(rows.filter(r => r.mode === mode).map(key).sort(), expected);
+    for (const row of rows) assert.deepEqual(row.errors, []);
+  }
+  for (const row of ax) {
+    assert.equal(row.target.ignored, false);
+    assert.equal(row.target.role.value, 'progressbar');
+    assert.equal(row.target.name.value, '');
+    assert.equal(row.target.value.value, 64);
+    assert.deepEqual(row.target.childIds, []);
+    const properties = Object.fromEntries(row.target.properties.map(p => [p.name, p.value.value]));
+    assert.deepEqual(properties, row.mode === 'reference'
+      ? { focusable: true, valuemin: 0, valuemax: 100, valuetext: '' }
+      : { valuemin: 0, valuemax: 100, valuetext: '' });
+    assert.equal(row.dom.tabindex, row.mode === 'reference' ? '-1' : null);
+  }
+  for (const row of focus) {
+    assert.deepEqual(row.actual.before, { focused: false, tag: 'BODY' });
+    assert.deepEqual(row.actual.after, row.mode === 'astylar' ? { focused: false, tag: 'BODY' }
+      : { focused: true, tag: row.family === 'progress-bar' ? 'MAT-PROGRESS-BAR' : 'MAT-PROGRESS-SPINNER' });
+    assert.equal(row.actual.tabindex, row.mode === 'reference' ? '-1' : null);
+  }
+  const caps = load('spinner-native-cap-inputs-20261007.log',
+    'd0a61b4207f1497fb6fdfebc0ea7f6cdac2c56a80c462158b71a1112fcb0edee').filter(r => r.profile);
+  assert.deepEqual(caps.map(r => key({ ...r, family: 'progress-spinner' })).sort(), expected.filter(k => k.startsWith('progress-spinner:')));
+  for (const row of caps) {
+    assert.deepEqual(row.errors, []);
+    assert.equal(row.actual.attributes.r, '45');
+    assert.equal(row.actual.styles.strokeLinecap, 'butt');
+    assert.equal(row.actual.styles.strokeLinejoin, 'miter');
+    assert.equal(row.actual.styles.strokeMiterlimit, '4');
+  }
+  const geometry = load('spinner-cap-geometry-control-20261007.log',
+    'abbf5fa495bfdecb4cde00f965cbdb99aa36ff97c3c73601d7fdec2d4ca07c1d')[0];
+  assert.equal(hash(readFileSync('examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts')),
+    geometry.sourceSha);
+  assert.equal(geometry.pointCount, 41);
+  assert.equal(geometry.capShape, 'flat endpoint disk,not spherical extension');
+  assert.equal(geometry.chordVersusCircleTangentDegrees, 2.88);
+  for (const cap of geometry.capPlanes) {
+    assert.equal(cap.ringVertices, 12); assert.equal(cap.maxCollapsedDistance, 0);
+    assert.ok(cap.maxPlaneError < 1e-7);
+  }
+  const ownership = [...load('progress-update-disposal-20261007-retry.log',
+    'e6a3ca134633265655100f3c214812343a47ceaa459d2e96d38e222fbf66143d'),
+  ...load('progress-remaining-update-disposal-20261007.log',
+    '9c5751074266de90a09050dd8b313c925b98bbdf94874e3cb99c01a901cbc8ff')]
+    .filter(r => r.diagnostic?.viewport);
+  assert.equal(ownership.length, 32);
+  assert.deepEqual(ownership.map(r => key({ family: r.family, ...r.diagnostic })).sort(), expected);
+  for (const { family, diagnostic: d } of ownership) {
+    assert.deepEqual(d.errors, []); assert.equal(d.snapshots.length, 4);
+    const initial = d.snapshots[0];
+    for (const sample of d.snapshots) {
+      assert.deepEqual(sample.live, initial.live); assert.deepEqual(sample.tracked, sample.live);
+      assert.deepEqual(sample.unbound, initial.unbound); assert.equal(sample.unbound.length, 1);
+      assert.equal(sample.unbound[0].name, `${family}-primary-transparent`);
+      assert.equal(sample.session.status, 'idle'); assert.deepEqual(sample.session.pendingReasons, []);
+    }
+    assert.deepEqual(d.disposal, { surface: true, scene: true, engine: true,
+      live: { meshes: 0, materials: 0, textures: 0 }, cache: 0, loaded: 0,
+      plugins: { owners: 0, resources: 0, cleanups: 0, pending: 0 } });
+  }
+  // Preserve the focus/input failure and redundant owned allocation. Receipt
+  // replay is not a fresh browser run, equal cap paint, remount or final parity.
+});
+
 test('current list wrapper inputs retain clipping and row-height divergence for all configured cases', () => {
   const fullBytes = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
   assert.equal(hash(fullBytes), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');

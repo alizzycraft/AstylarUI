@@ -2,6 +2,33 @@
 
 ## Current evidence boundary — October 7
 
+Progress standalone evidence is now registered as one bounded focused proof
+without recapturing or changing findings/fixtures. Current producer has139
+proof registrations,148 definitions and unchanged542 source paths; the frozen
+accepted canonical remains138 proofs until the coherent integration milestone.
+The replay authenticates membership40 cases,exact32 physical cohort keys and
+64 paired AX/focus observations,16 native cap cohorts,the flat tube control,
+and128 initial/update snapshots with32 complete sampled disposals. It rehashes
+the captured helper/checkpoint and current candidate/semantic bridge/plugin
+sources. Every native host focuses with tabindex=-1; every candidate omission
+leaves BODY active. Core tabindex support is present. One unused owned root
+material remains per cohort without ordinary-update growth; these counterexamples
+are explicitly asserted,not converted into zero-unused-material acceptance.
+Final replay passes1/1: progress-cohort-final-replay-20261007.log,
+SHA592789106d33f547e8ec8c8a7491f5fb5a258d7b1c1b282c795f532c3c7b9121.
+Current source-inventory plus replay pass2/2:
+progress-proof-inventory-replay-20261007.log,
+SHA8757a4f6bc364e7a1b75cd02cd61b930182a3d9dc70503af25ca4cfe0cb5ffcc.
+Complete predecessor conservation and mutation controls pass2/2:
+progress-proof-registration-conservation-20261007.log,
+SHA98cee9a43a3c2a40ab1f1ae73625a486b21f685f3f6f8333994a619dc82ecd54.
+Failed first replay remains retained: two diagnostic summary rows are not physical
+cohorts and are excluded only by requiring a viewport-bearing observation.
+Focus-input canonical finding classification,other pending standalone integration,
+equal cap/edge paint,remount/isolation and full case closure remain. Neither
+receipt replay nor registered prose proves fresh browser acceptance. No core or
+comparison input changed; no full export is justified solely by this increment.
+
 The current542-source integration assertion now passes1/1 in5301.44ms:
 source-inventory-542-integration-20261007.log,
 SHAd73a41c11f4cab579ae713a93492f01c7e4ea7926e5a0a7ab4883b42e95906a7.
