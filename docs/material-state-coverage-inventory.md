@@ -2,6 +2,21 @@
 
 ## Current evidence boundary — October 6
 
+October7 installed→current TypeScript boundary reuses the existing88-module
+runtime compilation proof (unchanged test source SHAde260e2fbee31686bccd940582e1503fc378881d2c94e6e35b66b67877cbc141),
+not a new projection/test layer. Focused original assertion passes1/1,
+10135.2525ms (total12092.1749ms); current-full-typescript-applicability-
+20261007.log SHA6bc0923ae25ec14748a5bb0aff47382e02929a8afebd3b9a88257da171f7d5e6.
+It conserves80 class bodies,98 functions,53 variables,373 runtime imports,
+4 module effects,130 exports and separately checks60 authored decorators,
+113 constructor dependencies,one component and generated-only namespace use.
+Combined with authenticated captured→installed linkage below,this closes the
+bounded88 mapped Astylar runtime/source applicability chain. Installed maps
+have paths but no embedded original TS; no missing content is synthesized.
+This is not a full rebuilt browser result or all repository sources: remaining
+styles/assets,other dependencies,clock-sensitive calendar state and final
+enforced gates still prevent promotion to current complete parity passes.
+
 October7 captured installed-runtime applicability now accounts for88/88
 Astylar JavaScript modules without dropping Angular definitions. Whole-module
 linker replay matches87/88; current-full-installed-linker-applicability-
