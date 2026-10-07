@@ -2,6 +2,21 @@
 
 ## Current resumption ledger — October 6
 
+- October7 supplemental lifecycle join now names8 families' bounded desktop/
+  mobile operations and disposal separately in the existing state checklist.
+  Field-popup old served checkpoint differs from current-full; unchanged
+  focused test rerun with ASTYLAR_MATERIAL_SHOWCASE_CHECKPOINT pointing at the
+  full October5 checkpoint passes1/1,20282.7764ms. Whole served fingerprint
+  authenticated. Autocomplete/timepicker cursor material growth19/20/21 and
+  26/27/28 persists,with1/2/3 retained identities; whole disposal clears sampled
+  resources. Log field-popup-cycles-current-20261007.log SHA256
+  40c4d4ac90c9696ccc258038c686cdf48aca923c207b64bec6cc50960a347cc0.
+  This closes actual applicability for that bounded failure,not ownership
+  acceptance. Existing Icon/divider,modal and tooltip proofs are joined without
+  recapture; their profile/disposal limitations remain visible. No new audit
+  framework,renderer or fixture change. Next prioritize uncovered cohort/state
+  obligations rather than rerun these settled diagnostic cycles.
+
 - October7 shared resource gate inspection answers why retained passing flags
   cannot close most lifecycle obligations:1857/1875 rows have one snapshot;
   only18 mobile light/dark open-dismiss rows have three. Authenticated report

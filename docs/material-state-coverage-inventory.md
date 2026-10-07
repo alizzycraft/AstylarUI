@@ -2,6 +2,29 @@
 
 ## Current evidence boundary — October 6
 
+### Joined supplemental lifecycle coverage — October 7
+
+These are bounded inspected obligations, including demonstrated failures, not
+whole-case closure or current-source acceptance. Do not infer them from the
+single-snapshot flags. Desktop below means four profiles at DPR1/2; mobile
+means dark390x844 DPR2 only. Final disposal does not excuse growth before it.
+
+| Families / cohort | Repeated-operation evidence | Disposal evidence | Remaining boundary |
+| --- | --- | --- | --- |
+| Icon /8 desktop | Three equivalent updates; live=tracked12/11/4,cache2,no orphan material. `icon-update-disposal-20261007.log`. | All8 clear scene/engine/cache/plugin owners. | Responsive,late async,remount,multi-surface,current-source validity. |
+| Divider /8 desktop | Three equivalent updates; live=tracked17/16/4,cache4. `divider-update-disposal-20261006.log`. | All8 sampled owners clear. | Same broader lifetime boundaries. |
+| Menu,bottom-sheet,dialog /mobile | Three open/Escape cycles. Tracked plateau but live materials grow19/20/21,18/19/20,17/20/23 respectively. `overlay-dismissal-cycles-current-20261006.log`. | Scene/cache/plugin/observer samples clear. | Other profiles/states,late async,remount,isolation; no plateau acceptance. |
+| Autocomplete,timepicker /mobile | Three input-click/Escape cycles; materials19/20/21 and26/27/28,cursor orphans1/2/3. `field-popup-cycles-current-20261007.log`. | Both clear scene/engine/cache/plugin samples. | Other profiles/states,late async,remount,isolation; no plateau acceptance. |
+| Tooltip /ordinary mobile | Three hover/leave cycles; tracked materials13/13/13 versus live14/15/16. `tooltip-live-ownership-cycles-verified-20261005.log`. | Sampled scene meshes/materials/textures clear. | Other profiles/states,cache/observers,late async,remount,isolation; no plateau acceptance. |
+
+The field-popup proof above newly authenticates the current-full-20261005
+served checkpoint. Its older caret-visible checkpoint has different browser
+file fingerprints and must not be silently promoted. Existing unchanged
+focused test passes1/1,20282.7764ms; log SHA256
+40c4d4ac90c9696ccc258038c686cdf48aca923c207b64bec6cc50960a347cc0.
+This closes that two-family checkpoint applicability gap without implementing
+a fix or relabeling diagnostic counterexamples as cleanup passes.
+
 October7 shared retained lifecycle-gate scope is now explicit:1875 interaction
 rows contain1857 single snapshots and18 three-snapshot cases. All18 are light/
 dark mobile-dpr2 open-dismiss across sidenav,autocomplete,select,datepicker,
