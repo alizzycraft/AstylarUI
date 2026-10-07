@@ -24,6 +24,27 @@ No renderer,fixture,threshold or captured evidence changes.
 
 ### October 8 remaining scrollbar paint boundary
 
+All8 configured desktop theme/DPR scrollbar bounds now join the original exact
+open-scroll membership,authenticated candidate trees and retained scroll states.
+The frozen build reproduces each complete resolved popup style; all request
+track{x708,y0,w12,h256},thumb{x710,y0,w8,h28.346020761245676},
+travel227.65397923875432 and predicted144px-scroll movement15.94463667820069.
+All32 prior PNG receipts are rehashed through the preserved thumb-motion log.
+Scrolled exact-color center-column tops differ from predicted CSS tops by
+-.0246px(light/dark),-.0046/.4954px(contrast),.1954/.6954px(custom).
+Initial visible tops instead start1.9200/2.4200px below CSS bounds(light/dark),
+3.4400/2.9400px(contrast),.6400/.1400px(custom). Thus the13–16px visible-run
+movement is not evidence of different requested geometry or theme-dependent
+projection scale: it includes differing initial visible portions and pixel
+sampling. Full edge/corner/clip causality remains separate; this center-column
+join does not establish full scrollbar paint parity or same-session animation.
+Existing owning test retains all prior assertions and adds these joins;1/1
+passes40071.4003ms. Log `timepicker-configured-css-pixel-join-20261008.log`,
+SHA256c314c6900bf3846e20ee69299cb5a5c9bdf47e14544f4c5839a2db9ddb40fcd9.
+No screenshots or canonical fixtures rewritten. Next: full retained thumb
+edge/corner/clip mapping and caller/other-stage applicability,not another bounds
+or wheel/drag replay. Owning-suite source integration remains a batched milestone.
+
 Complete scrollbar geometry/paint module applicability is now checked in the
 same owning diagnostic: current TypeScript5.8.3 emit equals installed bytes;
 captured chunk-3JXWRYJY map content equals installed bytes after restoring only
@@ -50,8 +71,9 @@ in12952.9546ms with Chrome154 and the authenticated1887-file October5 checkpoint
 Log: `timepicker-css-scrollbar-bounds-20261008-asserted.log`. The first attempt
 rejected the default caret checkpoint before browser actions; failed log retained
 as `timepicker-css-scrollbar-bounds-20261008.log`. This is frozen-build evidence,
-not current-code or all-eight-case certification. Remaining: caller/other-stage
-applicability,other seven bounds and full edge/corner/clip mapping.
+not current-code or whole-case certification. The all-eight CSS-bound join above
+supersedes its remaining-profile gap; caller/other-stage applicability and full
+edge/corner/clip mapping remain.
 The additive diagnostic changes the owning-suite fingerprint; canonical source
 integration is pending the next coherent batch,not a reason for immediate export.
 

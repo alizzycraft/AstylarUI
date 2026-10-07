@@ -2254,6 +2254,76 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
     for (const mode of ['reference', 'astylar']) for (const step of observations[mode].drag.steps) {
       assert.ok(Math.abs(observations[mode].before.firstOption.y - step.firstOption.y - step.scrollTop) < .01);
     }
+    // Close the missing configured CSS-bound population without recapturing PNGs
+    // or repeating drag/track proofs. Existing full-run rows own the membership.
+    const reportFile = 'artifacts/material-parity/current-full-20261005/latest-report.json';
+    const reportBytes = readFileSync(reportFile);
+    assert.equal(digest(reportBytes), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+    const rows = JSON.parse(reportBytes).interactions.filter(row => row.family === 'timepicker' && row.state === 'open-scroll');
+    assert.equal(rows.length, 8);
+    assert.deepEqual(rows.map(row => `${row.profile}/${row.viewport.id}`).sort(),
+      ['contrast', 'custom', 'dark', 'light'].flatMap(profile => [1, 2].map(dpr => `${profile}/desktop-dpr${dpr}`)).sort());
+    const pixelsFile = 'artifacts/material-parity/timepicker-retained-thumb-motion-20261007.log';
+    const pixelBytes = readFileSync(pixelsFile);
+    assert.equal(digest(pixelBytes), 'c50c76be517b794071bae466d98957a6719d3edf76223cc088c67546cd58db2c');
+    const pixelRows = pixelBytes.toString().trim().split(/\r?\n/).map(JSON.parse);
+    assert.equal(pixelRows.length, 9);
+    const bounds = [];
+    for (const row of rows) {
+      const inputBytes = readFileSync(row.inputTrees.astylar.file);
+      assert.equal(digest(inputBytes), row.inputTrees.astylar.sha256);
+      const retainedStyle = JSON.parse(inputBytes).nodes.find(node => node.authored?.id === 'timepicker-options').resolvedStyle;
+      const page = await browser.newPage({ viewport: { width: row.viewport.width, height: row.viewport.height }, deviceScaleFactor: row.viewport.deviceScaleFactor });
+      try {
+        await page.goto(`${baseUrl}/astylar/timepicker?benchmark=1&profile=${row.profile}`);
+        await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+        await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+        const point = await page.evaluate(() => {
+          const box = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['timepicker-control'], false).elements['timepicker-control'].borderBox;
+          const canvas = document.querySelector('canvas').getBoundingClientRect();
+          return { x: canvas.x + box.left + box.width / 2, y: canvas.y + box.top + box.height / 2 };
+        });
+        await page.mouse.click(point.x, point.y);
+        await page.locator('[data-astylar-id="timepicker-options"]').waitFor({ state: 'visible' });
+        await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+        const sampled = await page.evaluate(() => {
+          const component = window.ng.getComponent(document.querySelector('app-astylar-showcase'));
+          const surface = component.surface;
+          const container = surface.host.scrolling.get(surface.scene).containers.get('timepicker-options');
+          const visual = container.verticalScrollbar;
+          const measured = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['timepicker-options']);
+          return { state: surface.diagnostics.scrolling.containers['timepicker-options'],
+            style: measured.inputTree.nodes.find(node => node.authored?.id === 'timepicker-options').resolvedStyle,
+            trackBox: { ...visual.trackBox }, thumbBox: { ...visual.thumbBox }, travel: visual.travel };
+        });
+        assert.equal(sampled.state.scrollTop, 0);
+        assert.deepEqual(sampled.style, retainedStyle);
+        const capturedState = row.resourceSnapshots[0].surface.scrolling.containers['timepicker-options'];
+        assert.deepEqual({ ...sampled.state, scrollTop: 144 }, capturedState);
+        assert.deepEqual(sampled.trackBox, { x: capturedState.clientWidth - 12, y: 0, width: 12, height: 256 });
+        assert.equal(sampled.thumbBox.width, 8);
+        assert.ok(Math.abs(sampled.thumbBox.height - 256 * 256 / capturedState.scrollHeight) < 1e-9);
+        const predicted144CssTravel = sampled.travel * 144 / (capturedState.scrollHeight - capturedState.clientHeight);
+        const pixelMatches = pixelRows.slice(0, -1).filter(pixel => pixel.profile === row.profile && pixel.viewport.id === row.viewport.id);
+        assert.equal(pixelMatches.length, 1);
+        const pixel = pixelMatches[0];
+        for (const side of ['reference', 'astylar']) for (const state of ['before', 'after']) {
+          const receipt = pixel[side][state];
+          assert.equal(digest(readFileSync(receipt.file)), receipt.sha256);
+        }
+        const dpr = row.viewport.deviceScaleFactor;
+        const initialVisibleTopOffset = pixel.astylar.before.thumb.firstY / dpr - pixel.astylar.panel.y;
+        const scrolledVisibleTopOffset = pixel.astylar.after.thumb.firstY / dpr - pixel.astylar.panel.y - predicted144CssTravel;
+        assert.ok(Math.abs(scrolledVisibleTopOffset) < 1, 'scrolled exact-color top lies within one CSS pixel of retained CSS bounds');
+        assert.ok(initialVisibleTopOffset >= 0 && initialVisibleTopOffset < 4);
+        assert.equal(initialVisibleTopOffset > 1, row.profile !== 'custom');
+        bounds.push({ profile: row.profile, viewport: row.viewport, inputReceipt: row.inputTrees.astylar,
+          ...sampled, predicted144CssTravel, initialVisibleTopOffset, scrolledVisibleTopOffset,
+          retainedPixelTravel: pixel.astylar.movementCssPx });
+      } finally { await page.close(); }
+    }
+    t.diagnostic(JSON.stringify({ configuredScrollbarCssBounds: bounds, acceptance: false,
+      scope: 'eight frozen configured cohort CSS geometry/style joins and authenticated retained center-column bounds; visible-run travel is not full-shape or current pipeline acceptance' }));
   }, materialBrowserLaunchOptions());
 });
 
