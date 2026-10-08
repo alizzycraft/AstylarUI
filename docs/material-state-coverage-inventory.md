@@ -46,6 +46,26 @@ No acceptance, renderer or fixture changes; all2311 cases remain partial.
 
 ### Autocomplete option local ink — retained endpoint observation
 
+Held-option raster gap now has a bounded dark desktopDPR2 diagnostic for select,
+autocomplete,timepicker. New standalone scripts/audit-material-held-option-raster.mjs
+extends the exact authenticated original held-input callback/helper with the
+existing authenticated theme command/wait functions,real125ms hold,actual pointer
+ownership and six full PNGs. No input CSS,clock or ripple-phase injection.
+Native select/autocomplete8percent background+10percent ripple samples RGB205,200,204;
+timepicker12percent focus+10percent ripple197,192,197. All candidate held styles
+are opaque#d8d2d8 and all five interior samples per family read216,210,216.
+Reference first options are unselected;candidate timepicker option0 is selected.
+Held inputs and paint therefore differ before any equal-input core diagnosis.
+Elapsed brackets are explicit:native reads134–146ms,candidate364–1445ms after
+pointerdown; this is NOT matched-time ripple-animation parity or performance
+attribution. Existing native/candidate option-count,event and zero-error assertions
+remain. Log held-option-dark-dpr2-raster-20261008.log SHA6cc4e83a… exits0.
+Independent held-option-dark-dpr2-independent-20261008.log rehashes all6 PNGs,
+recomputes all30 samples,validates source/action receipts,and confirms all1887
+served browser files unchanged after capture;exit0. Keep original PNGs under
+held-option-dark-dpr2-20261008. Other profiles/DPR,edges,animation timing and
+whole-case closure remain;standalone proof integration awaits frozen export.
+
 Retained hover background question now has a bounded pixel answer: all16
 autocomplete/select first-option desktop profile/DPR cohorts show native dominant
 RGB225,219,224 versus candidate229,223,229; zero exact matches. This is not merely
