@@ -21,10 +21,15 @@ native canvas auto/normal/none probes. Existing office-AV kerning evidence is no
 this text's cause. Final world-bound projection,used only as read-only observation,
 preserves all eight selected CSS segment widths within0.0001px and heights exactly.
 Forward CSS interval28–46.671875;backward43.1171875–63.5703125. Collapse removes
-owners. Exact-color masks remain narrower than native selection pixels; canvas
-advance is not native input edge geometry,and solid masks exclude blended edges.
-Next investigate native selection snapping versus final pixel/glyph coverage;
-do not repeat the settled crop,offset,kerning or dimension-projection checks.
+owners. Edge-row control now observes candidate backward right pixelRGB127/143/171
+(DPR1) and180/184/203(DPR2),compatible within1channel unit with half/quarter
+highlight coverage over232/224/235; native corresponding pixel is solid46/97/205.
+Forward textarea edge includes the authored caret color208/188/255; removed
+baseline carets also enter changed-pixel counts. Thus exact-color/changed masks
+alone cannot establish narrower geometry. This is not a GPU sampling diagnosis.
+Next pair actual native/candidate caret paint (native-only screenshot hiding
+remains a confounder),native selection snapping and glyph edge coverage; do not
+repeat the settled crop,offset,kerning or dimension-projection checks.
 
 Evidence: selection-projected-css-boundary-20261008.log (session21694 exit0,
 1/1,17019.258ms),SHA d63b49e513523ba434af7d7aeeb254cb621a03b9ac8ab1b947f74ecca1686cd8;
@@ -33,6 +38,12 @@ cohorts/eight projected segments,collapse,state and2515-dependency receipts.
 Chrome154.0.8037.58,bundleebfedf3d…,dependency receipt8c965e69… before/after.
 Original source SHA d07df06e4ee6996f9fc06b778fc0b429620f1e0526813f33f8c52e6d083c27c0;
 invocationb617cdad80ff1ac1423aaa87ff5eeb15c798364134412f5efa96f08599939abc.
+selection-fractional-edge-row-20261008.log (session52573 exit0,1/1,
+28212.1866ms),SHA314f61b4551c2b65f33f19c00837a18384f6c9b07610a21c4e7b9fbe9349d22c,
+retains RGBA before/after rows atCSSy42,x26–66 without authored/assertion changes.
+selection-fractional-edge-join-20261008.log authenticates that exact hash,eight
+rows/four physical contexts,states,native solid edges,candidate blend values and
+forward caret-color pixels. No screenshot,metric or diagnostic tolerance changed.
 Prior controls remain retained: selection-css-advance-boundary-20261008.log
 (1/1,15114.3343ms),selection-fullsurface-crop-control-20261008.log (1/1,
 26977.6916ms),selection-fullsurface-owner-boundary-20261008.log (exit0),and
