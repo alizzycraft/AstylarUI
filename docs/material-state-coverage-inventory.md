@@ -6,6 +6,28 @@ Current priority: finish exact case-obligation/current-validity joins,with share
 overlay/scrollbar paint and editable-text paint ahead of isolated passive layout.
 The existing36-family applicability map remains authoritative; no new inventory.
 
+Selection crop hypothesis is now answered without changing authored inputs:
+the existing public reduction,unchanged assertions/helper,uses full390x140 crops
+only. Session29959 exits0,1/1,26977.6916ms; four input/textarea DPR1/2 pairs.
+Candidate solid selection is24CSSpx high in every pair; single-line input starts
+at CSSy39,textarea at40,for authored top40. The old y40–64 crop therefore removes
+one CSSpx of input highlight. Native auto-outline still occludes its top/bottom
+rows (visible22CSSpx); separate outline-free native control showed24CSSpx.
+Horizontal/glyph and native-outline differences remain,not geometry acceptance.
+Log selection-fullsurface-crop-control-20261008.log SHA
+403ae7888b2227b9774b7bed24809b6e2c0ab78912583beffde00915ff7d64ba;
+original source d07df06e…;invocationf9d343416008639330f4f75226e1e00782e023dd30694eb2684c338b79860141.
+Chrome154.0.8037.58,bundle857563db…,all2515 dependencies rehashed before/after.
+Current emit and pinned installed manager agree for complete updateTextDisplay
+and resolveSingleLineTextYCss. Executing the latter with symmetric/zero insets
+returns-1CSSpx; updateTextDisplay applies it to the single-line parent before
+projection,while selection inherits that parent. Thus this observed y difference
+has an owning pre-projection correction,not evidence of global world-space scale.
+Owning log selection-fullsurface-owner-boundary-20261008.log SHA
+e619ddbbf219742324b73f3885a55831b190e5929caf4c284a5fe8500c9fd964.
+No renderer/fixture/source change. This closes the bounded crop/offset attribution
+question,not glyph sharpness,Material unequal typography or whole-case closure.
+
 Independent selection confound control (no consumed-source edits): existing public
 empty-caret test was extracted with its unchanged rasterDifference helper; both
 sides received outline:none and full390x140 selection crops. Original source SHA
