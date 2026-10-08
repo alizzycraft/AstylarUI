@@ -2,6 +2,33 @@
 
 ## Current evidence boundary — October 9
 
+### Editable control/calendar description applicability — exact407-case join
+
+Read-only retained current-full census verifies814 original trees,error arrays
+empty,and exact configured IDs for input76/autocomplete110/datepicker111/
+timepicker110. Sorted newline case-ID SHA256
+b6f4f4432968e7d6d044a3df54b6a276c5ed4086622b8ecc5d609ebbc43507b5.
+editable-control-description-input-census-20261009.log SHA256
+0191ada7dc1cafc26f98dc650b4283bd7a36e2841553b51db5f0d811182fd4cb.
+All407 reference/candidate primary editable controls omit description references;
+there is no authored helper-description obligation on those controls in these
+captured states. This does not accept their other roles,names,error announcements,
+popup relationships or broader semantics,nor generalize the form-field omission.
+
+Calendar subcontrols are different:41 reference trees have one described period
+button with its target captured; candidate trees have no authored description
+references. Exact states activate9(includes comparison pane),activate-leave8,
+open-secondary8,open-hover-content8,open8. These join existing
+fixture-calendar-accessibility-labels-omitted and period-composition classifications,
+not a new core defect or duplicate source finding. That existing source omission
+is already observed before core semantic mapping. Live AX description exposure,
+live-period announcements and hidden range-label behavior remain distinct; date
+dependent retained paint is still historical. No new capture or invented helper
+nodes. The native primary input's lack of description cannot waive its popup
+period-button relationship,and programmatic-focus output cannot certify real
+keyboard behavior. Canonical cold session81279 is live at check-canonical after
+independent1205-file/89154859-byte evidence-session verification with0 invalidations.
+
 ### Shared description-input gap — all76 form-field cases inspected
 
 Retained current-full-20261005 census authenticates report SHAab42dbec… and all152
