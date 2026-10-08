@@ -2,6 +2,28 @@
 
 ## Current evidence boundary — October 9
 
+### Coherent field/themed-tooltip AX source integration verified
+
+Both existing description findings now retain original evidence and include the
+authenticated64 field/12 explicitly themed tooltip AX observations. New scope
+fields separate actual initial hint/error descriptions from live announcements,
+and ordinary light/dark tooltip descriptions from original requested-dark but
+default-light paint/lifecycle observations. No new finding or case closure.
+Producer fingerprints now include the owning field/tooltip probe. Complete
+producer/policy predecessor guards authenticate exact new hashes and conserve
+the same153-finding predecessor; unknown changes still fail.
+
+Four existing description/predecessor checks pass4/4,6184.8783ms. Full existing
+producer-transition suite passes32/32,37310.7867ms,exit0. Launcher --dry-run
+confirms all five required retained input paths. D:free236986368bytes at
+preflight. The next justified milestone is corrected canonical export using
+scripts/export-material-input-audit-current-ancestry.mjs, followed by independent
+cold --check and only then compact import/verification. Planned unique log:
+artifacts/material-parity/description-batch-canonical-corrected-export-20261009.log.
+Neither dry-run nor focused checks accept the generated package. Accepted index
+remains153/eb90958e until the complete milestone succeeds. Original overclaimed
+155 export/log is preserved; no renderer,fixture or threshold was changed.
+
 ### Verified AX cohorts now replay in the existing owning assertions
 
 The existing field/tooltip description tests now authenticate the retained64

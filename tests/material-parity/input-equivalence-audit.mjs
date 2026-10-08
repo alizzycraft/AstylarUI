@@ -8889,6 +8889,7 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'scripts/audit-material-field-description.mjs',
     'scripts/audit-material-tooltip-description.mjs',
     'tests/material-parity/modal-position-inspection.mjs',
     'tests/material-parity/modal-position-inspection.spec.mjs',

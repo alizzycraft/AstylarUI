@@ -42,6 +42,13 @@ const fieldPopupSource = "    'scripts/audit-material-configured-field-popup-bou
 // and its predecessor before the older registration reversals inspect the prefix.
 export function restoreDescriptionProofRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  const fieldDescriptionSource = "    'scripts/audit-material-field-description.mjs',\n";
+  if (current.includes(fieldDescriptionSource)) {
+    assert.equal(hash(current), '8cabfd116a251c8e0e10874cd35c25cb51af9155d19d511e6483403cf500cb68',
+      'exact verified AX dependency integration snapshot');
+    assert.equal(current.split(fieldDescriptionSource).length, 2);
+    current = current.replace(fieldDescriptionSource, '');
+  }
   if (!current.includes('configured field hint-description input boundary')) {
     assert.ok(!current.includes("    'scripts/audit-material-tooltip-description.mjs',"), 'missing description proof with retained capture dependency');
     return current;
@@ -70,7 +77,8 @@ export function restoreDescriptionPolicyRegistration(source) {
     return current;
   }
   assert.ok(['912cdb7a85d345e0ed29270fccc35b98fba1f3c51dc9d02121eb3b8a693f3951',
-    'ffddc3e82543924cded6d033661d6be4936cdb72609febadc589fae720354336'].includes(hash(current)),
+    'ffddc3e82543924cded6d033661d6be4936cdb72609febadc589fae720354336',
+    '17f0045fd88d82cb5b807615e463b29bd8599712b6528887876f76ead86183af'].includes(hash(current)),
     'exact original or theme-scope-corrected description registration snapshot');
   const ast = ts.createSourceFile('policy.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   assert.equal(ast.parseDiagnostics.length, 0);

@@ -133,6 +133,12 @@ function descriptionAuthoringSource() {
 test('configured field hint descriptions preserve sixty-eight omissions and eight error controls', () => {
   const finding = sourceAuditDefinitions.find(row => row.id === 'fixture-form-field-hint-description-association-omitted');
   assert.equal(finding.classification, 'application-plugin-authoring-defect');
+  assert.equal(finding.actualAx, undefined); // AX scope belongs to the observation, not a new finding.
+  assert.equal(finding.observation.actualAx.observations, 64);
+  assert.equal(finding.observation.actualAx.contexts, 16);
+  assert.deepEqual(finding.observation.actualAx.states, ['hint', 'error']);
+  assert.equal(finding.evidence[1].file, 'artifacts/material-parity/field-description-cohorts-20261009.log');
+  assert.equal(finding.evidence[1].sha256, '51def316df13aae88491126e9003f3d3f934ca2fe971572353ad7cbe26ceee93');
   const source = descriptionAuthoringSource(); assert.match(source, new RegExp(finding.pattern));
   const census = JSON.parse(descriptionEvidenceBytes(finding.evidence[0].file, finding.evidence[0].sha256));
   const rows = descriptionConfiguredTrees('form-field'); assert.equal(rows.length, 76);
@@ -168,6 +174,10 @@ test('configured field hint descriptions preserve sixty-eight omissions and eigh
 test('configured tooltip descriptions preserve closed input omissions and actual AX open controls', () => {
   const finding = sourceAuditDefinitions.find(row => row.id === 'fixture-tooltip-persistent-description-association-conditioned-on-popup');
   assert.equal(finding.classification, 'application-plugin-authoring-defect');
+  assert.deepEqual(finding.observation.themeVerifiedAx.contexts, ['light desktop DPR1', 'dark mobile DPR2']);
+  assert.equal(finding.observation.themeVerifiedAx.observations, 12);
+  assert.equal(finding.evidence[1].file, 'artifacts/material-parity/tooltip-description-theme-verified-20261009.log');
+  assert.equal(finding.evidence[1].sha256, 'ca977ea5a951fdd8300f65c733464b20915de8b9275bc3ed9289300b96e02626');
   // The original ordinary-mode URL requested dark but did not activate it.
   // Preserve those observations without treating requested labels as theme proof.
   assert.deepEqual(finding.observation.physicalContexts,
