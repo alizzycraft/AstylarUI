@@ -2,6 +2,44 @@
 
 ## Current evidence boundary — October 9
 
+### Description classification integration decision — existing owners versus missing findings
+
+Read-only compact query authenticates the accepted eb90958e generation and its
+global source shard before inspecting all153 source definitions. The matching
+described-by findings are field-error (ordinal70), calendar period composition
+(81) and calendar accessibility labels (83); step editable description (67) is
+different content, not a shared helper-description owner. Direct current policy
+inspection confirms field-error is explicitly invalid/error composition, not
+non-error hint association. No current source finding classifies the tooltip's
+closed-state persistent help association. Thus merely attaching the newer logs
+to a tooltip focus-opening finding would conflate two independent obligations.
+
+The next coherent registration batch has a finite description-input population:
+
+| Population | Cases | Registration decision |
+| --- | ---: | --- |
+| Form-field error description | 8 | Reuse fixture-field-error-subscript-substitution; add exact applicability/evidence without duplicating its cause. |
+| Form-field non-error hint description | 68 | Register the independently demonstrated missing hint association, alongside the existing subscript owner; do not claim the error-only pattern detects it. |
+| Tooltip closed-state help description | 36 | Register persistent-description authoring omission separately from focus-opening/position/paint findings; actual AX evidence remains bounded to light desktopDPR1 and dark mobileDPR2. |
+| Calendar period description | 41 | Reuse period-composition/accessibility-label findings; no new generic core relationship diagnosis. |
+
+These153 configured cases are disjoint by family/state.49 already have the
+relevant source classification;104 require missing hint/persistent-help coverage.
+This is applicability accounting, not153 complete inspections,104 new causes,
+or current rendering acceptance. The407 editable primary controls with no
+helper-description intent on either side remain separately inapplicable for
+this specific association; their calendar subcontrols are not waived.
+
+Evidence stays the original form-field-description-input-census-20261009.log
+(SHA53e126e1…), editable-control-description-input-census-20261009.log
+(0191ada7…), tooltip-description-physical-20261009.log (be63952f…), and exact
+62-case tooltip join above/below. Competing core relationship failure is not
+supported: supplied tooltip open description maps successfully; first divergence
+is authored association absence before projection. Role/name-only acceptance is
+a separate instrumentation coverage gap. No new capture, output threshold,
+fixture, renderer, canonical package or whole-case closure changed. Pending
+producer/spec fingerprint refresh remains batched with these registrations.
+
 ### Historical retained-proof boundary repaired — no observation assertions waived
 
 conservedPrePassiveDefinitions now admits the accepted153 registrations only
