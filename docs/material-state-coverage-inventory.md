@@ -2,6 +2,18 @@
 
 ## Current evidence boundary — October 8
 
+Antialias option-policy finding is registered in the existing source policy as
+core-engine-antialias-option-overridden-by-hardcoded-argument. Focused proof
+public antialias option evidence binds original core arguments and Babylon
+override authenticates six public context observations,complete current/installed
+createScene methods and original Babylon source,then executes the original
+constructor expression/option assignment. Explicit false is overwritten bytrue;
+retained contexts have four samples. Log antialias-option-retained-proof-20261008.log
+passes. No renderer change or attribution of all glyph fringes/performance.
+Together with modal,progress and selected-caret registrations,this closes the
+identified standalone proof registration batch. Canonical integration/conservation
+is next; published151/155 remains unchanged,not current batch acceptance.
+
 Frozen field-popup publication reconciliation is complete: export and independent
 cold check terminate successfully; cold check elapsed3723929.0989ms. Compact
 import and whole-index verification also terminate exit0. Retained logs are

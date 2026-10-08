@@ -9448,6 +9448,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('public antialias option evidence binds original core arguments and Babylon override'/,
+      'public antialias option core constructor boundary', 'Authenticates six retained package-root DPR1/2 contexts and complete current/installed createScene methods. Executes original Engine arguments and installed Babylon options assignment: hardcoded true overrides omitted/false request. Actual contexts remain four-sample antialiased. Not causal text-edge intervention,performance attribution or whole-runtime/case acceptance.'),
     proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('selected caret blink owner conserves shipped methods and exposes selection-blind visibility'/,
       'selected caret core visibility owner boundary', 'Authenticates current and installed complete cursor owners, compares emitted complete methods and executes original blink/visibility methods with forward,backward,collapsed,blur and stop controls. Selected ranges remain visible and toggle at530ms just like collapsed ranges. Corroborating actual public/Material rasters remain separate. Not full caller/lifetime validity or whole-case acceptance.'),
     proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('actual Material selected caret epochs preserve actions and temporal paint failure'/,

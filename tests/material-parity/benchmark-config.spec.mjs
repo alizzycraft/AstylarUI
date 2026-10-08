@@ -11,6 +11,50 @@ import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs
 import { propertyGroups, sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { materialAbsoluteTextAlignmentTargets, materialAdditionalMeasurementTargets, materialComparisonViewport, materialFamilies, materialFocusedRasterTargets, materialGeometryExcludedTargets, materialInteractionCases, materialInteractionFocusedRasterTargets, materialInteractionTextAlignmentTargets, materialInteractionViewports, materialLeftAlignedTextTargets, materialMobileFlowCases, materialMobileFlowFamilies, materialProfiles, materialSemanticExcludedTargets, materialStaticCases, materialSupplementalStaticCases, materialTextAlignmentTargets, materialTextAlignmentToleranceOverrides, materialTextAuditTargets, materialTextlessFamilies, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets, materialViewports } from './benchmark.config.mjs';
 
+test('public antialias option evidence binds original core arguments and Babylon override', () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const bytes = readFileSync('artifacts/material-parity/selection-public-context-antialias-20261008.log');
+  assert.equal(hash(bytes), '2e4e9b530e172f2664b2434e9058976f4c077304face727980825facd7b68b35');
+  const report = JSON.parse(bytes);
+  assert.equal(report.status, 'pass'); assert.equal(report.results.length, 6);
+  const ownerBytes = readFileSync('artifacts/material-parity/selection-antialias-option-owner-20261008.log');
+  assert.equal(hash(ownerBytes), '197a51ba808542baa7a5417094cd1c784669e2332773d5d86b6602836b6e39b3');
+  const owner = JSON.parse(ownerBytes);
+  for (const receipt of owner.sources) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  assert.equal(hash(readFileSync(report.sourceFile)), report.sourceSha256);
+  assert.equal(hash(readFileSync(report.installedFile)), report.installedSha256);
+  const find = (text, kind, predicate) => {
+    const tree = ts.createSourceFile('owner', text, ts.ScriptTarget.Latest, true, kind), matches = [];
+    const visit = node => { if (predicate(node, tree)) matches.push(node); ts.forEachChild(node, visit); };
+    visit(tree); assert.equal(matches.length, 1); return { tree, node: matches[0] };
+  };
+  const method = text => find(text, ts.ScriptKind.TS, node => ts.isMethodDeclaration(node) && node.name.getText() === 'createScene');
+  const current = method(readFileSync(report.sourceFile, 'utf8'));
+  const installed = method(readFileSync(report.installedFile, 'utf8'));
+  const emit = value => transformSync(`class Owner {${value.node.getText(value.tree)}}`, { loader: 'ts', target: 'es2022' }).code.replace(/\s+/g, '');
+  assert.equal(emit(current), emit(installed));
+  const engine = find(current.node.getText(current.tree), ts.ScriptKind.TS,
+    node => ts.isNewExpression(node) && node.expression.getText() === 'Engine');
+  const assignment = find(readFileSync(owner.sources[2].file, 'utf8'), ts.ScriptKind.JS,
+    node => ts.isBinaryExpression(node) && node.getText().replace(/\s+/g, '') === 'options.antialias=antialias??options.antialias');
+  const keys = new Set();
+  for (const row of report.results) {
+    keys.add(`${row.dpr}/${row.requestedAntialias}`);
+    const options = row.requestedAntialias === 'omitted' ? undefined : { antialias: row.requestedAntialias };
+    const args = new Function('Engine', 'canvas', 'options', `return ${engine.node.getText(engine.tree)};`)(
+      function (...args) { return args; }, {}, options);
+    assert.equal(args[1], true); assert.equal(args[2].antialias, options?.antialias ?? false);
+    new Function('options', 'antialias', assignment.node.getText(assignment.tree))(args[2], args[1]);
+    assert.equal(args[2].antialias, true);
+    assert.equal(row.rasterization.attributes.antialias, true);
+    assert.equal(row.rasterization.samples, 4); assert.equal(row.rasterization.sampleBuffers, 1);
+    assert.equal(row.rasterization.renderWidth, 390 * row.dpr);
+    assert.equal(row.rasterization.renderHeight, 140 * row.dpr);
+  }
+  for (const dpr of [1, 2]) for (const option of ['omitted', false, true]) assert.ok(keys.has(`${dpr}/${option}`));
+  // Option-policy defect only; not attribution of all text-edge pixels or performance.
+});
+
 test('selected caret blink owner conserves shipped methods and exposes selection-blind visibility', () => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
   const sourceFile = 'src/app/services/dom/input/text-cursor.renderer.ts';
