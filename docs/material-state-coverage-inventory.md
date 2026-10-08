@@ -2,6 +2,39 @@
 
 ## Current evidence boundary — October 9
 
+### Ordinary tooltip description confirmed with actual theme setup
+
+The existing standalone description probe now has an explicit --ordinary-tooltip
+mode,leaving frozen tooltip producer/script/spec untouched. It calls the existing
+FrameSync showcase:theme command with reference theme tokens,requires accepted
+command and actual frame dark class/surface RGB,and keeps benchmark mode absent.
+Physical pointer coordinates come from native DOM/candidate CSS measurement;
+no measurements feed layout. Independent closed/hover/leave page cohorts include
+real hover before leave. Two contexts(light desktopDPR1,dark mobileDPR2) × three
+states × both sides yield12 actual CDP button descriptions: native help remains
+Create a project; candidate is null/open/null. All names remain Hover for help.
+
+node scripts/audit-material-field-description.mjs --ordinary-tooltip
+--output=artifacts/material-parity/tooltip-description-theme-verified-20261009
+exits0; original log SHA256
+ca977ea5a951fdd8300f65c733464b20915de8b9275bc3ed9289300b96e02626.
+Independent12-row replay checks unique context/state/side membership,expected
+description values,actual theme flags,zero runtime errors,verified terminal and
+all script/helper/application/core/config/theme/FrameSync/protocol/checkpoint
+receipts against current files. Script SHA45cb0bb7…; node --check passes.
+Full1887-file served fingerprint matched existing checkpoint before launch;
+existing runtime observer authenticated assets. No native/candidate input styles
+were changed; theme command applies the intended reference profile,not compensation.
+
+This supplies the missing properly themed AX evidence while preserving original
+requested-dark/default-light log. It does not retrofit old paint/scroll/resource
+observations into dark-theme acceptance. Frozen155 canonical definition still
+references the old log; update that existing finding/proof evidence after export
+terminal status and preserve complete predecessor checks. Previous field-probe
+version is preserved at Git58678793 for its64 original receipt-bound observations.
+Other tooltip contexts,ordinary/benchmark differences,paint,lifetime and complete
+case closure remain pending; no full audit or renderer acceptance follows.
+
 ### Shared ordinary-mode theme setup gap bounded to three retained tests
 
 Complete TypeScript AST navigation inspection of sort-focus-structure.spec.mjs

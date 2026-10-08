@@ -16,6 +16,12 @@ const checkpoint = 'artifacts/material-parity/current-full-20261005/checkpoint';
 const manifest = JSON.parse(readFileSync(`${checkpoint}/manifest.json`));
 assert.deepEqual(fingerprintDirectory(root), manifest.provenance.browserFiles);
 const allContexts = process.argv.includes('--all-contexts');
+const ordinaryTooltip = process.argv.includes('--ordinary-tooltip');
+assert.ok(!ordinaryTooltip || !allContexts, 'Ordinary tooltip scope is the two explicitly declared contexts.');
+const family = ordinaryTooltip ? 'tooltip' : 'form-field';
+const states = ordinaryTooltip ? ['closed', 'hover', 'leave'] : ['hint', 'error'];
+const darkTheme = { mode: 'dark', primary: '#d0bcff', tertiary: '#efb8c8', surface: '#1c1b1f',
+  error: '#f2b8b5', density: 0, cornerScale: 1, typographyScale: 1 };
 const contexts = allContexts ? materialProfiles.flatMap(profile => [
   ...materialViewports, { id: 'desktop-dpr2', width: 1440, height: 1000, deviceScaleFactor: 2 },
 ].map(({ id, width, height, deviceScaleFactor }) => ({ profile, viewportId: id,
@@ -41,16 +47,21 @@ let browser;
 try {
   browser = await chromium.launch(materialBrowserLaunchOptions());
   const options = parseSupplementalCaptureArguments([
-    `--base-url=${baseUrl}`, `--checkpoint=${checkpoint}`, ...process.argv.slice(2).filter(arg => arg !== '--all-contexts'),
+    `--base-url=${baseUrl}`, `--checkpoint=${checkpoint}`, ...process.argv.slice(2).filter(arg => !['--all-contexts', '--ordinary-tooltip'].includes(arg)),
   ]);
   const evidence = openSupplementalCapture({ options, browser,
     script: 'scripts/audit-material-field-description.mjs', styleProperties: [] });
-  for (const context of contexts) for (const state of ['hint', 'error']) for (const side of ['reference', 'astylar']) {
+  for (const context of contexts) for (const state of states) for (const side of ['reference', 'astylar']) {
     const page = await browser.newPage(context);
     const finish = evidence.observe(page);
     try {
-      await page.goto(`${baseUrl}/${side}/form-field?benchmark=1&profile=${context.profile}${state === 'error' ? '&interaction=error' : ''}`);
+      await page.goto(`${baseUrl}/${side}/${family}?${ordinaryTooltip ? '' : 'benchmark=1&'}profile=${context.profile}${state === 'error' ? '&interaction=error' : ''}`);
       await page.locator('.frame').waitFor();
+      if (ordinaryTooltip) {
+        await page.waitForFunction(() => !!window.__MATERIAL_SHOWCASE_COMMAND__);
+        assert.equal(await page.evaluate(theme => window.__MATERIAL_SHOWCASE_COMMAND__({ type: 'showcase:theme', theme }),
+          context.profile === 'dark' ? darkTheme : { ...darkTheme, mode: 'light', primary: '#6750a4', tertiary: '#7d5260', surface: '#fffbfe', error: '#b3261e' }), true);
+      }
       if (side === 'astylar') {
         await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
         await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
@@ -60,14 +71,28 @@ try {
       }));
       assert.equal(theme.dark, context.profile === 'dark');
       assert.equal(theme.background, surfaceRgb[context.profile]);
-      const selector = side === 'reference' ? '#form-field-control' : '[data-astylar-id="form-field-control"]';
+      const target = ordinaryTooltip ? 'tooltip-primary' : 'form-field-control';
+      const selector = side === 'reference' ? `#${target}` : `[data-astylar-id="${target}"]`;
       await page.locator(selector).waitFor({ state: 'attached' });
+      if (ordinaryTooltip && state !== 'closed') {
+        const point = await page.evaluate(side => {
+          if (side === 'reference') { const b = document.getElementById('tooltip-primary').getBoundingClientRect();
+            return { x: b.x + b.width / 2, y: b.y + b.height / 2 }; }
+          const b = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['tooltip-primary'], false).elements['tooltip-primary'].borderBox;
+          const canvas = document.querySelector('canvas').getBoundingClientRect();
+          return { x: canvas.x + b.left + b.width / 2, y: canvas.y + b.top + b.height / 2 };
+        }, side);
+        await page.mouse.move(point.x, point.y);
+        await page.waitForTimeout(250);
+        if (state === 'leave') { await page.mouse.move(1, 1); await page.waitForTimeout(250); }
+        if (side === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+      }
       const session = await page.context().newCDPSession(page);
       const { root: document } = await session.send('DOM.getDocument');
       const { nodeId } = await session.send('DOM.querySelector', { nodeId: document.nodeId, selector });
       assert.ok(nodeId);
       const { nodes } = await session.send('Accessibility.getPartialAXTree', { nodeId, fetchRelatives: false });
-      const ax = nodes.find(node => node.role?.value === 'textbox');
+      const ax = nodes.find(node => node.role?.value === (ordinaryTooltip ? 'button' : 'textbox'));
       assert.ok(ax && !ax.ignored);
       const dom = await page.locator(selector).evaluate(node => ({
         describedBy: node.getAttribute('aria-describedby'),
@@ -79,16 +104,19 @@ try {
         describedByProperty: ax.properties?.find(property => property.name === 'describedby') ?? null };
       const runtime = await finish();
       console.log(JSON.stringify({ context, state, side, theme, observation, runtime }));
-      assert.equal(observation.name, 'Project name');
-      assert.equal(observation.description, side === 'reference'
-        ? state === 'error' ? 'Project name is required' : 'Public label' : null);
+      assert.equal(observation.name, ordinaryTooltip ? 'Hover for help' : 'Project name');
+      assert.equal(observation.description, ordinaryTooltip
+        ? side === 'reference' || state === 'hover' ? 'Create a project' : null
+        : side === 'reference' ? state === 'error' ? 'Project name is required' : 'Public label' : null);
     } finally { await page.close(); }
   }
   console.log(JSON.stringify({ terminal: 'verified', browser: browser.version(), capture: evidence.capture,
-    sourceReceipts: ['examples/material-showcase/src/app/astylar.component.ts', 'src/lib/astylar-semantic-bridge.ts']
+    sourceReceipts: ['examples/material-showcase/src/app/astylar.component.ts', 'src/lib/astylar-semantic-bridge.ts',
+      'tests/material-parity/benchmark.config.mjs', 'examples/material-showcase/src/app/theme.ts',
+      'examples/material-showcase/src/app/frame-sync.ts', 'examples/material-showcase/src/app/frame-protocol.ts']
       .map(file => ({ file, sha256: hash(readFileSync(file)) })),
-    contexts: contexts.length, states: ['hint', 'error'],
-    scope: 'Hint/error descriptions in explicitly listed physical/theme contexts; no other action-state, live-announcement or assistive-technology acceptance.' }));
+    contexts: contexts.length, family, states,
+    scope: 'Descriptions in explicitly listed physical/theme/state contexts; no other action-state, live-announcement or assistive-technology acceptance.' }));
 } finally {
   if (browser) await browser.close();
   await new Promise(resolve => server.close(resolve));
