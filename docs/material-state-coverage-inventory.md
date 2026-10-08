@@ -2,6 +2,28 @@
 
 ## Current evidence boundary — October 8
 
+Cached default real-WebGL control is now inspected,not a confirmed paint defect.
+scripts/audit-disposed-default-webgl.mjs executes original core resource owner
+with installed Babylon8.56.2 in Chrome154 atDPR1/2. Three identical scene inputs
+per DPR use live default,disposed cached default,and fresh default after disposal.
+Disposed cache remains outside live material list,but is ready and paints the
+same RGBA as both controls,with no page/render errors. Six authenticated raw
+rasters contain10 colors (not blank clears). Measurement-only second run retains
+raw bytes; complete scene-source/dependency-receipt equality with the first run
+and exact original raster hashes pass in
+progress-disposed-default-webgl-raster-join-20261008.log. Original browser log
+progress-disposed-default-webgl-control-corrected-20261008.log and raw-raster log
+progress-disposed-default-webgl-raster-control-20261008.log both terminal exit0.
+Initial wrapper export-stripping failure is separately retained in
+progress-disposed-default-webgl-control-20261008.log. Babylon debugging guidance
+informed actual readiness/paint and disposal controls; runtime was not upgraded.
+Conclusion: disposed-cache reuse is observed,but this bounded fallback render
+does not fail. Do not classify reuse alone as a renderer defect or change cleanup
+from this probe. Public mount/Material-map and broader repeated/context lifecycle
+applicability remain; no complete-case promotion. Standalone script is not consumed
+by the currently frozen export. Next close exact existing Material applicability,
+not repeat this substrate raster control absent relevant changes.
+
 Cached-disposed-default lifetime question is narrowed without reopening settled
 allocation/count attribution. Original AstylarSceneResources class executed with
 installed Babylon8.56.2 NullEngine: adopt lazy scene.defaultMaterial,replace with
