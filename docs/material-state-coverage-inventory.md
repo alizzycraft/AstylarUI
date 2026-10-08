@@ -2,6 +2,24 @@
 
 ## Current evidence boundary — October 8
 
+Cached-disposed-default lifetime question is narrowed without reopening settled
+allocation/count attribution. Original AstylarSceneResources class executed with
+installed Babylon8.56.2 NullEngine: adopt lazy scene.defaultMaterial,replace with
+empty render,then create unmaterialed box. Disposal callback fires once; scene
+has zero live/tracked materials,but scene.defaultMaterial and SubMesh.getMaterial
+both return the identical disposed cached object. Log
+progress-disposed-default-fallback-owner-20261008.log SHA256
+b18df3faa588357868f3a41ed577046f6b2ceb16a89e992b0ed94bed519a169e.
+Current core source1221cedd… and installed complete replace/adopt/clearMaterials/
+isLive methods agree (progress-disposed-default-owner-applicability-20261008.log,
+exit0). This demonstrates cache fallback reuse,not harmlessness or real WebGL
+paint/readiness failure. Captured Material-map applicability and a real public
+surface fallback/render control remain required before classifying a visible
+defect. No core/fixture change or publication input changed; standalone diagnostic
+is not silently part of frozen canonical batch. Next decisive check: real WebGL
+fallback readiness/paint versus a fresh live material under matched lifecycle,
+with original disposal and generation ownership traced; do not repeat count probes.
+
 Standalone batch canonical milestone has started once from frozen85be694a
 producer inputs: session46464,launcherPID26136,workerPID11456,log
 standalone-batch-canonical-export-20261008.log. Latest authoritative process
