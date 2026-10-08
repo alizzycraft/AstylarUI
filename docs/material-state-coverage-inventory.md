@@ -2,6 +2,36 @@
 
 ## Current evidence boundary — October 8
 
+### Current-output dependency applicability — Babylon population closed
+
+Question: do raw captured/installed Babylon source differences indicate runtime
+drift, or build formatting? Complete modules were compared with identical esbuild
+formatting (legalComments none, minifyWhitespace true, treeShaking false, esnext).
+All1,925 unique mapped Babylon modules match; three engine modules were checked
+first, then only the remaining1,922. No executable statement or literal is removed
+to obtain equality. The independent exact validation authenticates the checkpoint
+manifest and all912 maps, reconstructs complete membership, checks captured-source
+and current-installed hashes for every module, and rejects three executable-source
+mutation controls. Log current-full-babylon-source-exact-validation-20261008.log
+terminates PASS. Original logs:
+current-full-babylon-engine-source-applicability-20261008.log SHA256
+439722e9aea733b0b4900857325f4061500638fa6db31568554fd9c331d39255;
+current-full-babylon-remaining-source-applicability-20261008.log SHA256
+bf5d26c3612240c823b691696952fdddd9c10759673413835b2c480573677126.
+This closes the mapped Babylon dependency boundary only, not complete current-code
+or rendering acceptance. Reuse already settled88 Astylar installed/current modules,
+17 application sources,11 mapped style sources and55 font/icon binary identities;
+do not reopen them from older chronology's pending statements. Remaining priorities:
+other mapped dependency applicability and compiled-style derivation, clock/context
+validity, then exact case-to-obligation closure and remaining paint/lifetime states.
+No new capture, renderer/fixture change, canonical registration or case promotion.
+
+Export observation at this checkpoint: same worker1384 is live, CPU1375.58s, and
+the repaired export log has reached validate-audit after1218389.7949ms. This is
+verified progress of the existing process, not terminal validation or publication.
+Keep consumed inputs frozen; successful export still requires independent cold
+check and compact import/verification before acceptance. All2,311 cases stay partial.
+
 ### Standalone canonical export — terminal rejection and next reconciliation
 
 The standalone-batch-canonical-export-20261008.log is terminal validation-failed
