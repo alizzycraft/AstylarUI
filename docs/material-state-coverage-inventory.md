@@ -6,60 +6,41 @@ Current priority: finish exact case-obligation/current-validity joins,with share
 overlay/scrollbar paint and editable-text paint ahead of isolated passive layout.
 The existing36-family applicability map remains authoritative; no new inventory.
 
-Atlas horizontal-advance hypothesis is narrowed: original public input/textarea
-declarations/assertions stay unchanged; measurement-only snapshots add native
-computed font/canvas probes and candidate CSS character advances. Session28160
-exits0,1/1,15114.3343ms,all four DPR1/2 pairs. Candidate cumulative At/Atl/Atlas
-widths15.1171875/18.671875/35.5703125CSSpx equal native canvas measurements under
-each auto/normal/none kerning mode. Native computed font is16px/24px Arial,
-tracking normal,text-rendering/kerning auto. Thus the existing office-AV kerning
-finding is not this text's demonstrated cause. Canvas measurements are not native
-input selection-edge measurements; final projection/pixel coverage and native
-selection snapping/glyph paint remain. No width calibration or parity acceptance.
-Log selection-css-advance-boundary-20261008.log SHA
-6ae207677ab1379ac1ebebfa69f9790871703c7122b50e6bf688cf880d58b5b1;
-originald07df06e…,invocationc60f897da74a513de7305fe7b34487091282c7f5f22840f0d9519ec80afe5cb9.
-Chrome154.0.8037.58,bundle1b041275…,same2515 dependency receipt8c965e69…
-authenticated before/after. Next join read-only projected mesh bounds to CSS
-segments and exact pixel masks; do not repeat this kerning probe unchanged.
+Selection current boundary (public Atlas input/textarea,DPR1/2): original authored
+inputs and assertions remain unchanged in the successful measurement controls.
+All four contexts preserve24CSSpx projected and solid-mask height. Input y39
+versus textarea y40 is traced to the owning pre-projection single-line-1CSSpx
+correction: complete updateTextDisplay/resolveSingleLineTextYCss match current
+emit and pinned installation. The old y40–64 crop removed one input highlight px.
+Native auto-outline still occludes two rows; the separately failed outline:none
+control observed native24px but candidate rejects that CSS property. Do not relax
+diagnostics or call that rejected control paired acceptance.
 
-Selection crop hypothesis is now answered without changing authored inputs:
-the existing public reduction,unchanged assertions/helper,uses full390x140 crops
-only. Session29959 exits0,1/1,26977.6916ms; four input/textarea DPR1/2 pairs.
-Candidate solid selection is24CSSpx high in every pair; single-line input starts
-at CSSy39,textarea at40,for authored top40. The old y40–64 crop therefore removes
-one CSSpx of input highlight. Native auto-outline still occludes its top/bottom
-rows (visible22CSSpx); separate outline-free native control showed24CSSpx.
-Horizontal/glyph and native-outline differences remain,not geometry acceptance.
-Log selection-fullsurface-crop-control-20261008.log SHA
-403ae7888b2227b9774b7bed24809b6e2c0ab78912583beffde00915ff7d64ba;
-original source d07df06e…;invocationf9d343416008639330f4f75226e1e00782e023dd30694eb2684c338b79860141.
-Chrome154.0.8037.58,bundle857563db…,all2515 dependencies rehashed before/after.
-Current emit and pinned installed manager agree for complete updateTextDisplay
-and resolveSingleLineTextYCss. Executing the latter with symmetric/zero insets
-returns-1CSSpx; updateTextDisplay applies it to the single-line parent before
-projection,while selection inherits that parent. Thus this observed y difference
-has an owning pre-projection correction,not evidence of global world-space scale.
-Owning log selection-fullsurface-owner-boundary-20261008.log SHA
-e619ddbbf219742324b73f3885a55831b190e5929caf4c284a5fe8500c9fd964.
-No renderer/fixture/source change. This closes the bounded crop/offset attribution
-question,not glyph sharpness,Material unequal typography or whole-case closure.
+Candidate CSS At/Atl/Atlas advances15.1171875/18.671875/35.5703125 agree with
+native canvas auto/normal/none probes. Existing office-AV kerning evidence is not
+this text's cause. Final world-bound projection,used only as read-only observation,
+preserves all eight selected CSS segment widths within0.0001px and heights exactly.
+Forward CSS interval28–46.671875;backward43.1171875–63.5703125. Collapse removes
+owners. Exact-color masks remain narrower than native selection pixels; canvas
+advance is not native input edge geometry,and solid masks exclude blended edges.
+Next investigate native selection snapping versus final pixel/glyph coverage;
+do not repeat the settled crop,offset,kerning or dimension-projection checks.
 
-Independent selection confound control (no consumed-source edits): existing public
-empty-caret test was extracted with its unchanged rasterDifference helper; both
-sides received outline:none and full390x140 selection crops. Original source SHA
-d07df06e4ee6996f9fc06b778fc0b429620f1e0526813f33f8c52e6d083c27c0;
-generated invocation SHA1bdcfa6fd5852270221d1cd7e0b713a626918d2950bfaced05eaccfa70ec36ab.
-Session89665 ended exit1,52475.0955ms: public candidate rejects outline as an
-unsupported-style-property; original empty-diagnostic assertion correctly fails.
-Native input DPR1 outline-free solid selection spans y40–63,forward x28–46,
-backward x43–63. No paired geometry/parity diagnosis follows from this partial run.
-Log selection-outline-crop-control-validated-20261008.log SHA
-c971fb3824d114beaceeda428b16d0a5c88790a0921861867a90910c6101ce6c.
-Earlier missing-helper and truncated-TAP-source recovery failures are separately
-retained. Do not relax diagnostics or repeat this unsupported control unchanged.
-Next isolate selection segments through the owning CSS-metric path or a supported
-shared control; native outline/crop confounds and complete glyph paint remain open.
+Evidence: selection-projected-css-boundary-20261008.log (session21694 exit0,
+1/1,17019.258ms),SHA d63b49e513523ba434af7d7aeeb254cb621a03b9ac8ab1b947f74ecca1686cd8;
+selection-projected-css-join-20261008.log pins that hash and asserts exact four
+cohorts/eight projected segments,collapse,state and2515-dependency receipts.
+Chrome154.0.8037.58,bundleebfedf3d…,dependency receipt8c965e69… before/after.
+Original source SHA d07df06e4ee6996f9fc06b778fc0b429620f1e0526813f33f8c52e6d083c27c0;
+invocationb617cdad80ff1ac1423aaa87ff5eeb15c798364134412f5efa96f08599939abc.
+Prior controls remain retained: selection-css-advance-boundary-20261008.log
+(1/1,15114.3343ms),selection-fullsurface-crop-control-20261008.log (1/1,
+26977.6916ms),selection-fullsurface-owner-boundary-20261008.log (exit0),and
+selection-outline-crop-control-validated-20261008.log (exit1,52475.0955ms),plus
+earlier missing-helper/truncated-TAP-source failures. No renderer/fixture/consumed
+source changes,global projection certification,glyph sharpness,Material unequal
+typography attribution or whole-case closure. These standalone controls remain
+outside the frozen canonical batch until explicit integration.
 
 The eighty-endpoint field-popup observation is now registered in the producer's
 source/proof inventory (155 proofs; all151 findings unchanged). Exact registration
