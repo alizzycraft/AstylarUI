@@ -2,6 +2,37 @@
 
 ## Current evidence boundary — October 8
 
+### Exact configured popup-geometry observation census — October 8
+
+Authenticated October5 report and captured/current runner/config hashes join685
+exact configured IDs across nine overlay families,including applicable mobile
+flows. Execute the original comparator's expectedVisible expression unchanged:
+
+| Family | Configured interaction cases | Paired popup boxes | Default-only comparator |
+| --- | ---: | ---: | ---: |
+| Autocomplete |98|0|98|
+| Select |82|0|82|
+| Datepicker |99|33|66|
+| Timepicker |98|32|66|
+| Menu |82|0|82|
+| Bottom-sheet |51|25|26|
+| Dialog |66|32|34|
+| Snack-bar |59|34|25|
+| Tooltip |50|18|32|
+| Total |685|174|511|
+
+Every measured entry has finite paired x/y/width/height; every other entry is
+exactly {matches:true}. The262 autocomplete/select/menu cases' separate geometry
+elements contain only root/primary,not popup boxes. This confirms measurement
+scope,not262 failures: applicable popup geometry needs supplemental evidence
+joins. Closed/dismissed and mobile-flow default entries likewise must not be
+summed as missing proofs. All exact measured IDs remain in the existing test log.
+Focused1/1 passes1715.4014ms in configured-overlay-placement-census-geometry-20261008.log.
+Next prioritize retained select/autocomplete popup evidence and menu breakpoint/
+keyboard observations against exact configured contexts,then add only genuinely
+missing boxes. No capture,threshold,renderer,fixture or canonical changes; all
+whole-case closure statuses remain partial.
+
 ### Disposed settlement rejection propagation — October 8
 
 Smallest decisive followup executes the complete captured AstylarRenderSession

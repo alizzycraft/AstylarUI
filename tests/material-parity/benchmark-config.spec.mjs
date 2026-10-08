@@ -149,6 +149,51 @@ test('configured snackbar lifetime census preserves timed and intentionally pers
   // Closed final state is not an open-state timing/paint or whole-case equivalence proof.
 });
 
+test('configured overlay placement census distinguishes measured boxes from comparator defaults', t => {
+  const bytes = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const report = JSON.parse(bytes);
+  for (const file of ['tests/material-parity/run-material-parity.mjs', 'tests/material-parity/benchmark.config.mjs']) {
+    assert.equal(createHash('sha256').update(readFileSync(file)).digest('hex'), report.captureProvenance.harnessFiles.find(r => r.file === file).sha256);
+  }
+  const runner = readFileSync('tests/material-parity/run-material-parity.mjs', 'utf8');
+  const ast = ts.createSourceFile('runner.mjs', runner, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const comparator = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'compareOverlayPlacement');
+  assert.ok(comparator);
+  const declarations = comparator.body.statements.filter(ts.isVariableStatement).flatMap(s => [...s.declarationList.declarations]);
+  const predicate = declarations.find(n => n.name.getText(ast) === 'expectedVisible');
+  assert.ok(predicate?.initializer);
+  const expectsMeasurement = new Function('family', 'state', `return (${predicate.initializer.getText(ast)});`);
+  const expected = { autocomplete: [98, 0], select: [82, 0], datepicker: [99, 33], timepicker: [98, 32],
+    menu: [82, 0], 'bottom-sheet': [51, 25], dialog: [66, 32], 'snack-bar': [59, 34], tooltip: [50, 18] };
+  const configured = [...materialInteractionCases, ...materialMobileFlowCases].filter(r => Object.hasOwn(expected, r.family));
+  const rows = report.interactions.filter(r => Object.hasOwn(expected, r.family));
+  assert.equal(rows.length, 685);
+  assert.deepEqual(rows.map(r => materialCaseKey('interaction', r)).sort(), configured.map(r => materialCaseKey('interaction', r)).sort());
+  let measured = 0;
+  for (const [family, [total, count]] of Object.entries(expected)) {
+    const cohort = rows.filter(r => r.family === family);
+    assert.equal(cohort.length, total);
+    const measuredRows = cohort.filter(r => expectsMeasurement(family, r.state));
+    assert.equal(measuredRows.length, count); measured += count;
+    if (['autocomplete', 'select', 'menu'].includes(family)) {
+      assert.ok(cohort.every(r => r.geometry.elements.every(e => [`${family}-root`, `${family}-primary`].includes(e.id))));
+    }
+    for (const row of cohort) {
+      const p = row.overlayPlacement;
+      if (!expectsMeasurement(family, row.state)) assert.deepEqual(p, { matches: true });
+      else for (const side of ['reference', 'astylar']) {
+        assert.ok(p.targetId);
+        assert.ok(['x', 'y', 'width', 'height'].every(k => Number.isFinite(p[side]?.[k])));
+      }
+    }
+    t.diagnostic(JSON.stringify({ family, configured: total, pairedPopupBoxes: count, defaultOnly: total - count,
+      measuredCaseIds: measuredRows.map(r => materialCaseKey('interaction', r)),
+      scope: 'Historical comparator observation coverage; defaults are not placement acceptance or missing-evidence counts' }));
+  }
+  assert.equal(measured, 174);
+});
+
 test('snackbar captured timer methods reject late settlement and queued expiry after destruction', async t => {
   const capture = JSON.parse(readFileSync('artifacts/material-parity/snackbar-lifetime-bound-current-20261008/latest-report.json'));
   const manifest = JSON.parse(readFileSync(capture.capture.checkpointManifest.file));
