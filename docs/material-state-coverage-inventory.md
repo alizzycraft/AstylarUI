@@ -17,11 +17,23 @@ demonstrates the rejected-promise path,not an observed browser unhandled rejecti
 or proof of Angular destruction order. Keep the distinct pending runtime question
 explicit; iframe replacement cannot answer same-document teardown.
 Focused1/1 passes875.414ms in snackbar-disposed-settlement-propagation-20261008.log.
+Route applicability join authenticates complete comparison.component.ts and
+app.routes.ts against served maps. Family selection changes iframe src to
+/astylar/<family>?v=<nonce>; it is document replacement,not Angular route
+destruction in that document. Distinct compare/astylar routes exist,so same-
+document teardown remains applicable but needs its own runtime action. The
+existing iframe-switch probe must not close it. Coherent configuration batch
+passes7/7,14371.59ms in snackbar-lifecycle-applicability-config-batch-20261008.log.
 No implementation/fixture/criteria changes and no browser recapture. Existing
 core live-material findings are separate; generation guards do not prove resource
-cleanup or rejection safety. Next actual same-document disposal/error observation
-must use the owned public/runtime boundary,not a swallowed rejection or synthetic
-surface claiming full acceptance. Canonical150/150 remains unchanged.
+cleanup or rejection safety. Missing runtime measurement is exact same-document
+route destruction while settlement is pending,with unhandled-rejection and
+surface/resource observations; not a swallowed rejection or synthetic surface
+claiming full acceptance. Do not repeat the source reduction or iframe switch.
+Canonical150/150 remains unchanged; standalone snackbar proofs await coherent
+registration. Next coverage work should join remaining overlay/profile obligations
+and current evidence,while retaining this precise teardown gap for targeted runtime
+verification. No complete case is promoted by this partial applicability join.
 
 ### Snackbar late timer source boundary — October 8
 

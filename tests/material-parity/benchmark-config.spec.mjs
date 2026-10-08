@@ -218,8 +218,24 @@ test('snackbar captured timer methods reject late settlement and queued expiry a
   const startRejected = assert.rejects(rejectedStart, /disposed before settling/);
   destroyed(); session.dispose(); await Promise.all([invalidationRejected, startRejected]);
   assert.equal(pending.size, 0); assert.equal(patches, 0);
+  for (const [mapName, sourceName] of [['chunk-625ZTKCG.js.map', 'comparison.component.ts'], ['main.js.map', 'app.routes.ts']]) {
+    const bytes = readFileSync(`examples/material-showcase/dist/material-showcase/browser/${mapName}`);
+    assert.equal(createHash('sha256').update(bytes).digest('hex'), manifest.provenance.browserFiles.find(f => f.file === mapName).sha256);
+    const parsed = JSON.parse(bytes), sourceIndex = parsed.sources.indexOf(`src/app/${sourceName}`);
+    assert.ok(sourceIndex >= 0);
+    const captured = parsed.sourcesContent[sourceIndex];
+    assert.equal(captured.replace(/\r\n/g, '\n'), readFileSync(`examples/material-showcase/src/app/${sourceName}`, 'utf8').replace(/\r\n/g, '\n'));
+    if (sourceName === 'comparison.component.ts') {
+      assert.ok(captured.includes('<iframe #frame title="AstylarUI implementation" [src]="astylarUrl()"'));
+      assert.ok(captured.includes('bypassSecurityTrustResourceUrl(`/astylar/${this.store.family()}?v=${this.nonce()}`)'));
+    } else {
+      assert.ok(captured.includes("path: 'compare', loadComponent:"));
+      assert.ok(captured.includes("path: 'astylar/:family', loadComponent:"));
+    }
+  }
   t.diagnostic(JSON.stringify({ methods: names, lateSettlementSchedulesExpiry: false, queuedExpiryPatchesAfterDestroy: false,
     disposedSettlementRejectsStart: true,
+    ordinaryFamilySwitch: 'iframe document replacement; not same-document route teardown',
     scope: 'Exact captured/current application methods and complete current/installed/captured render-session class with controlled scheduler; disposal rejection propagates from uncaught async start, not observed Angular/browser unhandled rejection or all lifecycle acceptance' }));
 });
 
