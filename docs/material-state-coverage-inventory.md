@@ -2,6 +2,24 @@
 
 ## Current evidence boundary — October 8
 
+### Snackbar lifetime current-source applicability — October 8
+
+Question: could changed application lifetime callbacks invalidate the retained
+real-target reopen/expiry observation? Complete LF-normalized Git5918ea7/current
+comparison shows reference.component.ts and showcase.store.ts byte-equal; the
+candidate component differs only by two read-only audit snapshot additions
+(`paintDepth` and camera diagnostics). The complete diff contains no timer,
+generation,open/dismiss,settlement or event-routing change. Thus application
+callback drift is not the reason to recapture this bounded lifetime question.
+Evidence remains `snackbar-reopen-expiry-5918ea7-verified.log`,including the
+original light desktop1440x900 DPR1/dark mobile390x844 DPR2 real-target actions.
+This comparison binds current authoring to the investigation Git revision,not
+every served dependency or complete current rendering; do not promote all59
+configured interaction cases. Next authenticate the retained helper/captured
+runtime ownership chain before closing source applicability; fade/local paint,
+other profiles and late disposal remain separate obligations. No new capture,
+renderer change or compensation. Publication c78d4704 is now pushed.
+
 ### Configured input paint canonical publication — October 8
 
 The registered batch is now independently accepted:150 proofs/150 findings.
