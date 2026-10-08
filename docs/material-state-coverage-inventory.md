@@ -38,10 +38,21 @@ not just the comparator default. This is a fresh bounds-only retained observatio
 not retrospective registration of original screenshots or full current-code
 acceptance. Do not transfer it to focus/activate/open,tablet/mobile flows or Menu.
 Focused exact-join1/1 passes2055.4402ms in
-configured-popup-supplemental-exact-join-20261008.log. Next join retained menu
-breakpoint/keyboard observations and current owner applicability before deciding
-which boxes actually need capture. No capture,threshold,renderer,fixture or
-canonical changes; all whole-case closure statuses remain partial.
+configured-popup-supplemental-exact-join-20261008.log. Menu followup corrects the
+suggested breakpoint source: overlay-breakpoint-audit contains only three
+bottom-sheet rows,no Menu. Exact byte hashes authenticate this scope and the
+settled historical overlay keyboard report (SHA2d46a54a…): its eight Menu rows
+are light900x700 DPR1 Chrome153 with semantic membership/key traces,not visual
+popup boxes. None matches a configured Menu viewport. Thus neither source can
+close the current82-case Menu placement gap; this is a bounded source review,
+not a claim all other evidence is absent. Initial new schema assertion omitted
+candidate state metadata; preserve configured-menu-retained-scope-20261008.log.
+Corrected focused1/1 passes1924.726ms in
+configured-menu-retained-scope-corrected-20261008.log. Next identify retained
+current-checkpoint Menu bounds/action observations or capture only the missing
+configured open-state geometry using existing provenance infrastructure. No
+capture,threshold,renderer,fixture or canonical changes; all whole-case closure
+statuses remain partial.
 
 ### Disposed settlement rejection propagation — October 8
 

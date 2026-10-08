@@ -218,6 +218,23 @@ test('configured overlay placement census distinguishes measured boxes from comp
     families: ['autocomplete', 'select'], profiles: ['light', 'dark', 'contrast', 'custom'],
     viewports: ['desktop-dpr1', 'desktop-dpr2'],
     scope: 'Exact context and input-receipt join to bounds-only supplemental observation; not original screenshot registration, complete current-code applicability or other action boundaries' }));
+  const breakpointBytes = readFileSync('artifacts/material-parity/overlay-breakpoint-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(breakpointBytes).digest('hex'), '5d086be9ab7b6622e06cb80c0b87d5f671e564347770f50fcb1406ca58be6de7');
+  const breakpoint = JSON.parse(breakpointBytes);
+  assert.equal(breakpoint.results.length, 3);
+  assert.ok(breakpoint.results.every(r => r.family === 'bottom-sheet'));
+  const keyboardBytes = readFileSync('artifacts/material-parity/overlay-keyboard-4d782df-settled/result.json');
+  assert.equal(createHash('sha256').update(keyboardBytes).digest('hex'), '2d46a54a48316404db90f1227e5d3901c43e6aa230180719697d25958914bb90');
+  const keyboard = JSON.parse(keyboardBytes), menu = keyboard.cases.filter(r => r.family === 'menu');
+  assert.equal(menu.length, 8);
+  assert.deepEqual(keyboard.viewport, { width: 900, height: 700, dpr: 1 });
+  assert.ok(rows.filter(r => r.family === 'menu').every(r => r.viewport.width !== keyboard.viewport.width ||
+    r.viewport.height !== keyboard.viewport.height || r.viewport.deviceScaleFactor !== keyboard.viewport.dpr));
+  assert.ok(keyboard.limitations.includes('Overlay presence is semantic DOM membership, not a visual/raster visibility assertion.'));
+  assert.ok(menu.every(r => ['family,instrumented,mode,sequence,trace', 'family,instrumented,mode,sequence,state,trace']
+    .includes(Object.keys(r).sort().join(','))));
+  t.diagnostic(JSON.stringify({ menuRetainedKeyboardRows: 8, exactConfiguredViewportMatches: 0,
+    breakpointMenuRows: 0, scope: 'These two historical sources do not close configured menu popup geometry; not a search proving all other evidence absent' }));
 });
 
 test('snackbar captured timer methods reject late settlement and queued expiry after destruction', async t => {
