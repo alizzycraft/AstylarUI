@@ -41,6 +41,19 @@ test('configured input focus evidence records exact controls without replacing r
       assert.equal(row.action, row.sample ? 'wait 125ms' : 'original configured focus action');
       for (const side of ['reference', 'astylar']) {
         const observation = row[side].observation, control = observation.control;
+        const tree = JSON.parse(readFileSync(row[side].inputTree.file));
+        const id = `${c.family}-control`;
+        const input = tree.nodes.find(node => side === 'reference' ? node.attributes?.id === id : node.authored?.id === id);
+        assert.ok(input, 'Exact observed input must own the retained style evidence');
+        if (side === 'reference') {
+          const colors = { light: 'rgb(103, 80, 164)', dark: 'rgb(208, 188, 255)', contrast: 'rgb(0, 0, 0)', custom: 'rgb(0, 106, 106)' };
+          assert.equal(tree.styles[input.style].caretColor, colors[c.profile]);
+          assert.ok(input.rules.map(index => tree.rules[index]).some(rule =>
+            rule.declarations?.['caret-color']?.value === 'var(--mat-form-field-filled-caret-color, var(--mat-sys-primary))'));
+        } else {
+          assert.equal(input.resolvedStyle.caretColor, undefined, 'Preserve omitted candidate caret intent, not an assumed equivalent default');
+          assert.equal(input.resolvedStyle.color, '#1d1b20');
+        }
         assert.equal(control.type, c.family === 'input' ? 'email' : 'text');
         assert.equal(control.value, c.family === 'form-field' ? 'Atlas' : c.family === 'input' ? 'team@example.com' : '');
         assert.equal(typeof control.focused, 'boolean');

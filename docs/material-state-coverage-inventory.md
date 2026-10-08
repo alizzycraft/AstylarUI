@@ -4,6 +4,27 @@
 
 ### Exact configured input-focus observation — October 8
 
+Caret intent is now joined to each exact observed input in all240 paired trees,
+not inferred from its parent or from screenshot colors. Reference rules retain
+`var(--mat-form-field-filled-caret-color, var(--mat-sys-primary))`; computed
+light/dark/contrast/custom colors are respectively rgb103/80/164,208/188/255,
+0/0/0,0/106/106. Candidate resolved caretColor is omitted in all240 observations
+and foreground remains#1d1b20. Thus these captures have unequal authored caret
+color intent; do not label their color difference an equal-input renderer bug.
+The existing independent `shipped caret geometry fixes width before projection
+independently of caret color` proof in input-boundary-evidence.spec.mjs remains
+the owning reduction for the2CSSpx width policy,not a new attribution from unequal
+Material colors. Current owning source is text-selection.service.ts createTextCursor/
+updateTextCursorColor/projectCursorX; full current-to-captured pipeline acceptance
+is not established merely by locating those methods. Existing configuration proof
+now asserts exact input ownership,token/computed colors and raw candidate omission
+for every sample. Complete suite passes3/3,9452.0937ms in
+`configured-input-focus-caret-intent-proof-20261008.log`;40-context bounded summary
+is `configured-input-focus-caret-intent-20261008.log`. No new capture or renderer
+change. Remaining input paint obligations include selection-state colors/geometry,
+vertical fringe and applicable current owning-source joins; blink and this intent
+question are settled for the declared40 contexts and must not be recaptured.
+
 Retained local pixels now expose a temporal caret-shaped change in all40
 contexts on both sides. Existing configuration proof authenticates all960 PNGs
 and compares all12 retained initial/hide frames per side in the input-left
