@@ -2,6 +2,31 @@
 
 ## Current evidence boundary — October 8
 
+### Autocomplete option local ink — retained endpoint observation
+
+Existing field-popup-bounds-recovered-20261008 report SHA4e458230… now supplies
+local vertical-ink observations for48 autocomplete endpoints/96 option pairs,
+four profiles and desktopDPR1/2. Existing supplemental validator passes; every
+read PNG/tree receipt authenticates. Existing measureTextInkCenter metric
+(SHA5ab9750a…) is reused with full row width and its unchanged middle70percent
+vertical window. Log autocomplete-retained-option-ink-centers-20261008.log
+terminates exit0. No new capture,acceptance threshold or comparison input change.
+Relative ink-center errors: light/dark0.241–1.001CSSpx,custom0.669–0.987,
+contrast0.010–0.141. This is bounded ink-centroid evidence,not DOM line-box
+centering,sharpness,whole-row clipping or equal-input renderer acceptance.
+
+Exact input-tree join covers all96 labels: native specifies Roboto16px/400,
+lineHeight20px,letterSpacing0.096px; candidate nearest authored/resolved ancestry
+specifies Roboto/Arial fallback and16px but omits weight,lineHeight,letterSpacing.
+Missing declarations stay missing,not assumed effective defaults. Native selected
+ink also changes while candidate retains literal#1d1b20. Corrected input join log
+autocomplete-option-ink-input-join-corrected-20261008.log terminates exit0; initial
+failure on a root without resolvedStyle remains retained. Unequal intent precedes
+projection; this does not quantify which difference causes each raster residual.
+Remaining: effective font/default/line-box attribution and matched intermediate
+hover/held paint,other families/responsive contexts,complete case/current validity.
+No whole-case promotion or frozen canonical producer modification follows.
+
 ### Scroll caller applicability — bounded closure
 
 The complete createScene method now joins current TypeScript emit, installed
