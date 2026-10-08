@@ -39,6 +39,65 @@ function descriptionEvidenceBytes(file, sha256) {
   return bytes;
 }
 
+// Reuse the actual AX logs without treating them as input-tree captures or
+// retroactively upgrading the original requested-dark/default-light evidence.
+function verifiedDescriptionCohorts(file, sha256, contexts, states, family) {
+  const log = descriptionEvidenceBytes(file, sha256).toString().trim().split('\n').map(JSON.parse);
+  const terminal = log.pop();
+  assert.equal(terminal.terminal, 'verified');
+  assert.equal(terminal.browser, '154.0.8037.58');
+  assert.equal(terminal.contexts, contexts.length); assert.deepEqual(terminal.states, states);
+  const manifest = JSON.parse(descriptionEvidenceBytes(terminal.capture.checkpointManifest.file,
+    terminal.capture.checkpointManifest.sha256));
+  assert.deepEqual(fingerprintDirectory(path.resolve('examples/material-showcase/dist/material-showcase/browser')),
+    manifest.provenance.browserFiles);
+  for (const receipt of [...terminal.capture.sources, ...terminal.sourceReceipts]) {
+    if (family === 'form-field' && receipt.file === 'scripts/audit-material-field-description.mjs') {
+      // The probe acquired a separate tooltip mode after this field capture.
+      // Authenticate its actual producer, not replacement current script bytes.
+      const original = execFileSync('git', ['show', `58678793:${receipt.file}`]);
+      assert.equal(createHash('sha256').update(original).digest('hex'), receipt.sha256);
+    } else descriptionEvidenceBytes(receipt.file, receipt.sha256);
+  }
+  descriptionEvidenceBytes('tests/material-parity/benchmark.config.mjs',
+    'a55e95abe098be26d6a99e3faab22a951ae140143fece8701726a23624b98535');
+  descriptionEvidenceBytes('examples/material-showcase/src/app/theme.ts',
+    '60a0737e357b6cf03f19256212f26f27d6a54d6153e9ee3a433246a37a39c609');
+  const key = (context, state, side) => JSON.stringify([context.profile, context.viewport.width,
+    context.viewport.height, context.deviceScaleFactor, state, side]);
+  const expected = contexts.flatMap(context => states.flatMap(state => ['reference', 'astylar']
+    .map(side => key(context, state, side))));
+  assert.equal(new Set(expected).size, expected.length);
+  assert.deepEqual(log.map(row => key(row.context, row.state, row.side)).sort(), expected.sort());
+  const backgrounds = { light: 'rgb(255, 251, 254)', dark: 'rgb(28, 27, 31)',
+    contrast: 'rgb(255, 255, 255)', custom: 'rgb(244, 251, 250)' };
+  const assets = new Map(manifest.provenance.browserFiles.map(row => [row.file, row.sha256]));
+  for (const row of log) {
+    assert.deepEqual(row.theme, { dark: row.context.profile === 'dark', background: backgrounds[row.context.profile] });
+    assert.deepEqual(row.runtime.errors, []);
+    assert.equal(new Set(row.runtime.assets.map(asset => asset.file)).size, row.runtime.assets.length);
+    assert.ok(row.runtime.assets.length > 0);
+    for (const asset of row.runtime.assets) assert.equal(asset.sha256, assets.get(asset.file));
+    for (const type of ['document', 'script', 'stylesheet', 'font'])
+      assert.ok(row.runtime.assets.some(asset => asset.type === type));
+    const observation = row.observation;
+    assert.equal(observation.role, family === 'tooltip' ? 'button' : 'textbox');
+    assert.equal(observation.name, family === 'tooltip' ? 'Hover for help' : 'Project name');
+    const described = row.side === 'reference' || (family === 'tooltip' && row.state === 'hover');
+    const text = family === 'tooltip' ? 'Create a project' :
+      row.state === 'error' ? 'Project name is required' : 'Public label';
+    assert.equal(observation.description, described ? text : null);
+    if (described) {
+      assert.ok(observation.dom.describedBy);
+      assert.deepEqual(observation.dom.descriptions, [{ id: observation.dom.describedBy, text }]);
+      assert.equal(observation.describedByProperty.value.value, observation.dom.describedBy);
+    } else {
+      assert.equal(observation.dom.describedBy, null); assert.deepEqual(observation.dom.descriptions, []);
+      assert.equal(observation.describedByProperty, null);
+    }
+  }
+}
+
 function descriptionConfiguredTrees(family) {
   const report = JSON.parse(descriptionEvidenceBytes('artifacts/material-parity/current-full-20261005/latest-report.json',
     'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62'));
@@ -97,7 +156,13 @@ test('configured field hint descriptions preserve sixty-eight omissions and eigh
   assert.equal(rows.filter(({ kind, row }) => kind === 'static' || row.state !== 'error').length, finding.observation.configuredCases);
   assert.equal(rows.filter(({ row }) => row.state === 'error').length, 8);
   assert.ok(sourceAuditDefinitions.some(row => row.id === 'fixture-field-error-subscript-substitution'));
-  // Authored/tree relationship omission only. Actual field AX exposure is not inferred.
+  verifiedDescriptionCohorts('artifacts/material-parity/field-description-cohorts-20261009.log',
+    '51def316df13aae88491126e9003f3d3f934ca2fe971572353ad7cbe26ceee93',
+    materialProfiles.flatMap(profile => [...materialViewports,
+      { width: 1440, height: 1000, deviceScaleFactor: 2 }].map(viewport => ({ profile,
+      viewport: { width: viewport.width, height: viewport.height }, deviceScaleFactor: viewport.deviceScaleFactor }))),
+    ['hint', 'error'], 'form-field');
+  // AX scope is these initial hint/error cohorts, not editing/live announcements.
 });
 
 test('configured tooltip descriptions preserve closed input omissions and actual AX open controls', () => {
@@ -163,6 +228,11 @@ test('configured tooltip descriptions preserve closed input omissions and actual
   }
   assert.deepEqual(contexts.sort(), ['light/1440x1000/1/reference', 'light/1440x1000/1/astylar',
     'dark/390x844/2/reference', 'dark/390x844/2/astylar'].sort());
+  verifiedDescriptionCohorts('artifacts/material-parity/tooltip-description-theme-verified-20261009.log',
+    'ca977ea5a951fdd8300f65c733464b20915de8b9275bc3ed9289300b96e02626',
+    [{ profile: 'light', viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 },
+      { profile: 'dark', viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 }],
+    ['closed', 'hover', 'leave'], 'tooltip');
   const bridge = descriptionEvidenceBytes('src/lib/astylar-semantic-bridge.ts',
     '1a0011d3530701d9a74dc37b9f5a14d0fed0742dfd8793c39f8628e06b6a5725').toString();
   assert.match(bridge, /if \(element\.ariaDescribedby\) \{\s*node\.setAttribute\('aria-describedby', this\.nativeIdRefs\(element\.ariaDescribedby\)\)/);

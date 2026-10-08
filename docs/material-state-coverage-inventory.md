@@ -2,6 +2,31 @@
 
 ## Current evidence boundary — October 9
 
+### Verified AX cohorts now replay in the existing owning assertions
+
+The existing field/tooltip description tests now authenticate the retained64
+field observations (16 profile/viewport/DPR contexts × hint/error × both sides)
+and12 explicitly themed ordinary tooltip observations (two contexts × three
+states × both sides). Exact Cartesian membership, actual theme/background,
+AX role/name/description, resolvable IDREF targets, runtime errors and served
+asset hashes are checked. Existing checkpoint/source receipts are authenticated;
+the field probe's historical bytes are read from58678793 and matched to its
+original receipt, not silently replaced with the later tooltip-enabled script.
+Independent configuration/theme receipts remain explicit.
+
+Original configured76 field/62 tooltip tree joins and original requested-dark
+but default-light tooltip evidence remain checked. Four selected existing tests
+pass4/4, exit0,5848.9551ms. Command: node --test --test-name-pattern="description
+registration|configured field hint descriptions|configured tooltip descriptions|
+standalone proof batch conserves" tests/material-parity/benchmark-config.spec.mjs.
+No capture,renderer,fixture,threshold or new test layer was introduced.
+
+This closes maintained replay of these actual AX cohorts,not full accessibility,
+case closure or canonical acceptance. Next attach the same receipts to the two
+existing source findings and producer dependency inventory, preserve complete
+predecessor guards, then perform one coherent corrected export/cold check.
+Accepted compact index remains153/eb90958e; the155 export remains unaccepted.
+
 ### Original export terminal; canonical tooltip scope corrected in source
 
 Original session45371 exits0,worker29800 is terminal. Export completed at
