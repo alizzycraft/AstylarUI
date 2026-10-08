@@ -2,6 +2,50 @@
 
 ## Current evidence boundary — October 8
 
+### Configured input-focus / empty-caret applicability — October 8
+
+The first paint-evidence join now accounts for all40 configured focus cases
+(five input families,four profiles,desktopDPR1/2),authenticating80 exact input
+trees against October5 reportSHAab42dbec…. All16 form-field/email focus cases
+retain native/candidate values Atlas/team@example.com; the other24 retain empty
+values. Thus the ten light1440x900 empty-caret populations cannot wholesale
+close the configured1440x1000 focus-state paint obligations. Ten supplemental
+reports pass the existing checkpoint/runtime/source/tree/raster validator; all60
+timed samples are empty and focused. Four corresponding light form-field/email
+populations differ in value; six light popup-field populations share empty values.
+All ten differ in height and action: supplemental first boundary is real Tab,
+Control+A,Backspace followed by five125ms waits; configured timepicker uses a
+focus-producing click,other inputs programmatic first-focusable-descendant focus.
+No exact state/viewport/action paint join is established. This is a scope boundary,
+not proof that the100px height difference changes the caret or requires new full
+capture. Existing width/color/edge classifications remain valid for their declared
+populations; do not repeat them or inflate ten populations into40 paint closures.
+
+The configured runner's focusedIdentity collapses the active descendant to
+family-primary on both sides. All40 reported identities therefore match at that
+host granularity; the report does not record the exact focused input identity or
+selection endpoints at these boundaries. Supplemental observations explicitly
+record the input-focused flag,value,type and selection endpoints (email nulls
+remain null). Parent focus equality is not additional proof of identical control
+focus/selection or visible caret. Existing source paths are run-material-parity.mjs
+performInteraction:537–560 and focusedIdentity:789–797; current whole runner and
+config equal captured receipts. No focus defect is inferred from this measurement
+boundary,and datepicker/timepicker opening behavior stays independently specified.
+
+Log `configured-caret-focus-evidence-join-20261008-asserted.log`,SHA256
+7bdccadd244dff432785eed4e3ed54955629c3564ae9c9e685d0e49bcbf2f207,
+retains all40 exact case IDs,80 tree receipts,control value/type/style requests,
+ten supplemental joins and60-sample chronology; receipt/count/applicability check
+exits0. Initial diagnostic assumed all samples repeated the first action; the
+original failed log remains `configured-caret-focus-evidence-join-20261008.log`.
+Corrected chronology follows original capture data,not a relaxed state requirement.
+Next use the existing supplemental capture infrastructure for the missing exact
+configured control-focus/selection/local-paint observations,starting with the shared
+input subsystem and preserving nonempty versus empty states and independent picker
+opening actions. Do not recapture the resolved900px populations or describe these
+40 obligations as blocked. Whole-case closure remains0; canonical publication
+reconciliation is still pending150/148 source versus150/146 accepted evidence.
+
 ### Exact configured paint-observability join — October 8
 
 The required-state family map already exists below; the remaining inventory gap
