@@ -12,6 +12,8 @@ import { cropRgba } from '../parity/sharpness-metrics.mjs';
 import { evaluateFocusedRaster } from './focused-raster-metrics.mjs';
 import { collectSortFocusStructure, inspectSortTrees } from '../../scripts/audit-material-sort-focus-structure.mjs';
 import { fingerprintDirectory, materialBrowserLaunchOptions, inspectMaterialBrowserLaunch } from './run-checkpoint.mjs';
+import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
+import { propertyGroups } from './input-equivalence-policy.mjs';
 
 test('sort focus structure replays all authenticated source trees without equating paint substitutes', () => {
   const report = collectSortFocusStructure();
@@ -2325,6 +2327,65 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
     t.diagnostic(JSON.stringify({ configuredScrollbarCssBounds: bounds, acceptance: false,
       scope: 'eight frozen configured cohort CSS geometry/style joins and authenticated retained center-column bounds; visible-run travel is not full-shape or current pipeline acceptance' }));
   }, materialBrowserLaunchOptions());
+});
+
+test('retained five-family caret edges use equal integer crop origins', t => {
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  const placements = [];
+  for (const family of ['form-field','input','autocomplete','datepicker','timepicker']) for (const dpr of [1,2]) {
+    const file = `artifacts/material-parity/visible-caret-${family}-desktop-dpr${dpr}-20261006/latest-report.json`;
+    const bytes = readFileSync(file), capture = JSON.parse(bytes);
+    const manifest = JSON.parse(readFileSync(capture.capture.checkpointManifest.file));
+    assert.deepEqual(validateSupplementalCapture(capture, { reportFile: file, expectedProvenance: manifest.provenance,
+      script: 'scripts/audit-material-visible-caret.mjs', styleProperties: Object.values(propertyGroups).flat() }),
+    { status: 'checkpoint-bound', errors: [] });
+    const images = capture.results.map(row => {
+      assert.equal(row.family,family); assert.equal(row.profile,'light');
+      assert.deepEqual(row.viewport,{width:1440,height:900,deviceScaleFactor:dpr});
+      for (const mode of ['reference','astylar']) {
+        assert.equal(row[mode].screenshot.clip.x, 65); assert.equal(row[mode].observation.box.x, 81);
+        assert.equal(row[mode].observation.control.value, ''); assert.equal(row[mode].observation.control.focused, true);
+        assert.equal(digest(readFileSync(row[mode].screenshot.file)), row[mode].screenshot.sha256);
+      }
+      return PNG.sync.read(readFileSync(row.astylar.screenshot.file));
+    });
+    let widest = [];
+    for (const on of images) for (const off of images) {
+      const columns = [];
+      for (let x = 0; x < 24*dpr; x++) {
+        let run = 0, longest = 0, start = null;
+        for (let y = 0; y < on.height; y++) {
+          const i = (y * on.width + x) * 4;
+          const ink = on.data[i] === 29 && on.data[i+1] === 27 && on.data[i+2] === 32;
+          const changed = [0,1,2].some(channel => on.data[i+channel] !== off.data[i+channel]);
+          run = ink && changed ? run + 1 : 0;
+          if (run > longest) { longest = run; start = y-run+1; }
+        }
+        if (longest >= 10*dpr) columns.push({ x, longest, start });
+      }
+      if (columns.length > widest.length) widest = columns;
+    }
+    assert.deepEqual(widest.map(column => column.x), Array.from({length:2*dpr},(_,i)=>15*dpr+i));
+    const native = capture.results.find(row => row.reference.nativeCaretPixelDelta.changedPixels > 0).reference;
+    assert.equal(digest(readFileSync(native.hiddenCaretControl.file)),native.hiddenCaretControl.sha256);
+    const nativeOn=PNG.sync.read(readFileSync(native.screenshot.file)),nativeOff=PNG.sync.read(readFileSync(native.hiddenCaretControl.file));
+    let minX=Infinity,maxX=-Infinity;
+    for(let y=0;y<nativeOn.height;y++)for(let x=0;x<nativeOn.width;x++){
+      const i=(y*nativeOn.width+x)*4;
+      if([0,1,2].some(channel=>nativeOn.data[i+channel]!==nativeOff.data[i+channel])){minX=Math.min(minX,x);maxX=Math.max(maxX,x);}
+    }
+    assert.equal(minX,native.nativeCaretPixelDelta.bounds.minX);assert.equal(maxX,native.nativeCaretPixelDelta.bounds.maxX);
+    assert.equal(native.nativeCaretPixelDelta.bounds.minX, 16*dpr);
+    const nativeLeft = native.screenshot.clip.x + native.nativeCaretPixelDelta.bounds.minX/dpr;
+    const candidateLeft = 65 + widest[0].x/dpr;
+    assert.equal(nativeLeft, 81); assert.equal(candidateLeft, 80); assert.equal(candidateLeft-nativeLeft, -1);
+    placements.push({ family, dpr, report: { file, sha256:digest(bytes) }, nativeLeft, candidateLeft,
+      nativeCropRows:[native.nativeCaretPixelDelta.bounds.minY,native.nativeCaretPixelDelta.bounds.maxY],
+      candidateContiguousRows:widest.map(column => [column.start,column.start+column.longest-1]) });
+  }
+  assert.equal(placements.length,10);
+  t.diagnostic(JSON.stringify({ caretPaintPlacement:placements, acceptance:false,
+    scope:'retained light1440x900 empty-focus horizontal edges; unequal color/picker width remain; vertical fringe and current pipeline not certified' }));
 });
 
 test('retained scrollbar thumb masks distinguish native corners from plain indicator paint', t => {

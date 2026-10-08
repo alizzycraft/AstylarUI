@@ -24,6 +24,22 @@ No renderer,fixture,threshold or captured evidence changes.
 
 ### October 8 editable paint obligation reconciliation
 
+Proof-source reconciliation closes a demonstrated historical-receipt failure:
+the prior caret-only addition changed the entire input-boundary proof-file hash,
+so the unchanged retained divider trace rejected it before its owning callback.
+Failed log `caret-proof-source-reconciliation-rejection-20261008.log` retained.
+Caret-placement assertions are now in the existing sort/focus audit test module;
+input-boundary-evidence.spec.mjs is restored exactly to pinnedSHAd07df06e…,
+without relaxing its original receipt or divider assertions. Divider replay
+passes1/1,1929.5219ms (`caret-proof-source-reconciled-20261008.log`). Relocated
+caret test revalidates all10 supplemental populations and recomputes native
+left-edge pixels from authenticated initial/hide PNGs,not only report metadata;
+1/1 passes2432.2962ms (`caret-paint-edge-proof-relocation-20261008-asserted.log`).
+This preserves the new horizontal-placement finding and all original proofs
+without another historical source adapter. Only the additive sort/focus suite
+and its proof registrations remain pending coherent canonical integration;
+input-boundary raw receipt drift is resolved,not a changed captured behavior.
+
 Horizontal paint placement now replays from the same10 retained populations:
 both screenshot crop x origins65 and input left edges81 are exact integers;
 native caret starts81,candidate starts80,atDPR1/2 for every family. Thus the
