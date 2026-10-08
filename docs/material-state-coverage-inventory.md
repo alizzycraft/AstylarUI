@@ -37,7 +37,13 @@ original owner with selectionActive=true preserves visible/toggling caret at530m
 First divergence is core focus/timer visibility ignoring noncollapsed selection,
 not fixture typography or projection. Pending source classification/proof integration
 must follow the frozen canonical batch; published151 findings remain unchanged.
-Next native selection snapping/glyph edge coverage and exact Material applicability;
+The three complete caret visibility methods now also match the authenticated
+captured Material source map, not only the installed public reduction. Read-only
+join selection-caret-material-owner-applicability-20261008.log exits0; source
+a38f6c7b…, installation e2b66c82…, map dba48404… and captured owner175d360f….
+This closes stale owning-method code as an explanation at this boundary. It does
+not establish actual Material selected-caret paint or every caller's state.
+Next native selection snapping/glyph edge coverage and exact Material action/paint applicability;
 do not repeat the settled crop,offset,kerning,projection or selected-caret question.
 
 Evidence: selection-projected-css-boundary-20261008.log (session21694 exit0,
