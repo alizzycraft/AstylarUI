@@ -2,6 +2,16 @@
 
 ## Current resumption ledger — October 7
 
+- October8 frozen Menu canonical batch now passes independent cold --check
+  (exit0,3313695.7602ms),compact import and whole-index verification. Accepted
+  package contains151 findings/154 registered proofs; current index generation
+  0ed2f027b7434c82b444ec91f0304b8e0f0cb55e2c3a5c078ad903a242e52203.
+  All2311 cases remain partial,inputEquivalent=false. Later standalone Menu
+  mobile/root/collision/focus and tabs/stepper panel diagnostics are not silently
+  included. See the coverage ledger's current boundary for exact receipts;
+  historical150/150 and pending-status entries below are superseded only for
+  this batch. Full case closure and final browser/harness gates remain open.
+
 - October8 Menu keyboard supplements now cover all eight desktop profile/DPR
   contexts: ArrowUp/Home/End stay on candidate trigger versus native item
   navigation; Tab leaves candidate open versus native dismissal. Matched-item

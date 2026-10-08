@@ -2,6 +2,28 @@
 
 ## Current evidence boundary — October 8
 
+Canonical Menu publication boundary is independently validated: original cold
+session39373 finished exit0,elapsed3313695.7602ms. Two collectors,ten memory
+hits,no disk hits/invalidations;1205 files/89154859 bytes were reauthenticated.
+menu-canonical-independent-cold-20261008.log SHA256
+11db390de838257263d3df21c0f80d1de0dc42c6f329146c8c402e3e40ff0a78.
+The frozen151-finding/154-proof package passed canonical comparison; coverage
+remains436 static/1875 interaction,8483 groups/389202 occurrences,inputEquivalent=false.
+Import exits0 (menu-canonical-compact-import-20261008.log),72720360 shard bytes;
+whole-index verification exits0 (menu-canonical-compact-verify-20261008.log),
+39904 controls,zero unresolved. Current generation is now
+0ed2f027b7434c82b444ec91f0304b8e0f0cb55e2c3a5c078ad903a242e52203,
+index SHA3ee255a50555120466a5668eafdbccab20473727d43c6a21ddce454354255cea.
+Current queries may use this verified generation; prior62c0d373 stays historical.
+Current84 shards and historical401b79a1…84 shards were compressed in place,
+all hashes preserved and complete generation verifiers passed; current pointer
+verifier passes again after compression. D: free104824832 bytes before commit.
+Later standalone mobile/root/collision/focus/panel observations remain outside
+this frozen batch. This closes canonical/source reconciliation for that batch,
+not rendering parity,whole-case closure or final browser/harness gates. Next
+integrate applicable standalone evidence coherently and complete case-obligation
+joins; do not re-export unchanged producer for these ledger changes.
+
 Selected-panel presence question is now separated from name-only evidence.
 Existing current-full report SHAab42dbec… replay authenticates32 tabs/stepper
 activate/activate-leave endpoint metrics; native/candidate panel inkPixels are

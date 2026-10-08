@@ -56,6 +56,21 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October8 publication headroom was recovered without deleting original evidence:
+nine closed docs JSON records and closed Menu diagnostic JSON files were
+transparently NTFS-compressed with individual before/after SHA256 equality.
+One exact228653-byte regenerable EvidenceSession cache envelope was evicted;
+no capture was removed. Five historical working-index generations (62c0d373,
+3074b9bf,a02593c0,12a3cc97,31cb7dad) then had84 shards each compressed and
+their complete packages/indexes verified by existing verifyFindings. After
+successful cold canonical check/import,current0ed2f027 and historical401b79a1
+were similarly compressed/verified. Current pointer whole-index verification
+also passed after compression. Full generation IDs,commands/results and
+headroom measurements are in material-state-coverage-inventory.md. All paths,
+decoded bytes,hashes and original/failure evidence remain unchanged; this is
+storage conservation,not whole-audit acceptance or permission to overwrite
+archived aliases. Recheck free space before each publication/capture.
+
 October7 canonical publication headroom: eight closed docs JSON evidence files
 larger than10MB were transparently NTFS-compressed, with individual SHA256
 equality checked before/after: owner-grid-initial-survey,owner-initial-motion-
