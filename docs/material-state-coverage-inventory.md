@@ -2,6 +2,26 @@
 
 ## Current evidence boundary — October 8
 
+### Standalone canonical export — terminal rejection and next reconciliation
+
+The standalone-batch-canonical-export-20261008.log is terminal validation-failed
+after2884635.7544ms, not a live export or accepted153-finding package. Its259
+unattributed rows and four invalid source bindings do not supersede the accepted
+874d48d7 field-popup package. No new export/capture is justified yet.
+Read-only direct replay of the four existing collectors against the original
+current-ancestry report isolates alignmentFontInputs,textAlignInputs and
+ltrAlignmentInputs to the same position-composition-producer-transition guard:
+exact four-entry Menu registration expects32d3f01f1b8b9a643cb33e26ec3cb4ea492dd118169a5b43f41701e2cbaa4733,
+but reads d07d9b01c7bdf52ebf0b8f8359c7578c941e6bc45568d7a7631ccd71d783c706.
+The reviewedInputs replay independently rejects disabled-ink source conservation.
+All four return invalid/zero observations; this is not newly demonstrated render
+failure or permission to repin historical receipts. Git comparison874d48d7→85be694a
+shows five proof registrations prepended ahead of the Menu block and three source
+inventory additions. Next authenticate/reverse exactly those additive registrations
+through the existing historical transition, conserve the full predecessor, and
+separately trace the disabled-ink guard before another coherent canonical attempt.
+No acceptance, renderer or fixture changes; all2311 cases remain partial.
+
 ### Autocomplete option local ink — retained endpoint observation
 
 Existing field-popup-bounds-recovered-20261008 report SHA4e458230… now supplies
