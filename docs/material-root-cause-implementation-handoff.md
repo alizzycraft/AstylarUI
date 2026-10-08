@@ -2,6 +2,26 @@
 
 ## Current resumption ledger — October 7
 
+- October8 modal restoration attribution is now bounded by matched lifecycle
+  controls. All8 configured desktop profile/DPR dialog Escape contexts end on
+  candidate BODY versus native trigger; both sheets restore in all8. Candidate
+  focus request is rejected while modal remains active; nested reconciliation
+  removes modal/invoker before core Escape default runs. Package-root default
+  dismissal and update-before-focus restore. Native node removal with the same
+  request-before-removal ordering also ends on BODY. Therefore the earlier
+  dialog.close contrast is NOT an equal-input core counterexample: close retains
+  the native dialog and performs restoration,while candidate removes its node.
+  Classify the Material difference as application lifecycle/event-authoring
+  mismatch. Future alignment must preserve the reference close/restoration
+  contract and eligibility ordering,not insert arbitrary delays or change core
+  restoration on every removal. Five complete close/dispatch/focus methods match
+  current emit,installation and authenticated captured runtime. Public reduction
+  is scripts/audit-modal-reentrant-close.mjs; exact logs/hashes,failed controls,
+  native opening-focus observations and scope joins are in the coverage ledger's
+  consolidated modal section. Proof integration follows the frozen canonical
+  check. Other modal paint/dismissal/late-async/current-validity obligations remain;
+  no renderer implementation or whole-case acceptance is claimed.
+
 - October8 public antialias option defect: omitted/false/true requests atDPR1/2
   all create actual four-sample antialiased contexts. Current/installed complete
   createScene methods match; core passes hard-codedtrue as Engine's second

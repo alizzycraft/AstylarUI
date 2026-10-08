@@ -6,180 +6,73 @@ Current priority: finish exact case-obligation/current-validity joins,with share
 overlay/scrollbar paint and editable-text paint ahead of isolated passive layout.
 The existing36-family applicability map remains authoritative; no new inventory.
 
-Correction to the modal compatibility counterexample below: native dialog.close
-retains a closed dialog,whereas candidate site(false) removes its node. These
-are unequal lifecycle inputs; the earlier contrast does not prove a core defect.
-Matched native node-removal control now gives BODY after a rejected pre-removal
-trigger-focus request atDPR1/2,exactly like Astylar. Native default dismissal and
-explicit focus after removal restore trigger. Six removal observations pass,
-session46517 terminal exit0; modal-native-node-removal-control-20261008.log.
-The previous twelve-side control remains intact; its complete candidate
-application source equals this run,and exact policy/DPR focus outcomes join.
-Thus initial application request rejection and reentrant modal/invoker erasure
-remain valid observations,but general renderer-removal incompatibility is NOT
-demonstrated. Material uses restoreFocus:true on its close API while candidate
-removes authored dialog and requests focus before removal. Classify this bounded
-restoration difference as lifecycle/event-authoring mismatch,not a missing core
-restoration rule. Do not "fix" the renderer to restore on all removals merely to
-match Material's different close operation. Future input alignment must preserve
-equivalent close/restoration intent and eligibility ordering,not add arbitrary
-fixture delays. This resolves the immediate ownership question; broader modal
-paint/other dismissal/current-validity and late-async obligations remain open.
+### Modal scope and restoration — current conclusion
 
-Public modal close-order reduction now separates caller timing from missing
-removal restoration. scripts/audit-modal-reentrant-close.mjs uses package-root
-Astylar only,and paired native dialog.showModal/close with matching content,
-modal intent and focus/update order (no raster/layout equivalence claim).
-AtDPR1/2,core-owned Escape and update-before-focus both restore trigger. The
-Material-order control (request trigger focus while modal,then apply closed
-document inside the same Escape handler) rejects the request and ends on BODY.
-Native rejects the same pre-close request but dialog.close restores trigger.
-Twelve paired-side/order observations pass their explicit failing-behavior
-assertions,empty diagnostics/page errors,2515 dependency before/after receipts.
-modal-public-native-close-order-paired-20261008.log terminal session89501 exit0,
-SHA256d5c508bdd631371cffc779f82201e33da763dd46eff51c3dbf27d977188e2cca.
-This is a public behavioral compatibility counterexample for modal removal
-restoration,not grounds to bypass modal eligibility or compensate fixture timing.
-The first reduction's update-before-focus did not reproduce Material; preserve
-modal-public-reentrant-close-corrected-20261008.log and the initial syntax-error
-modal-public-reentrant-close-20261008.log. The faithful ordering control is
-modal-public-close-order-control-20261008.log; native control adds the missing
-reference behavior. Original core trace still locates invoker erasure in
-setSiteData before Escape default. Next bind these complete removal/dispatch
-owners to current emit/captured runtime and register the standalone focused
-proof coherently after the live canonical batch; no canonical fixture/core fix.
+Classification: the configured dialog Escape-restoration failure is a demonstrated
+lifecycle/event-authoring mismatch, not a confirmed core removal defect. Material
+uses restoreFocus:true with its close API; candidate removes its authored dialog
+and requests trigger focus before rendered modality is removed. Native node
+removal under the same focus/update ordering also leaves BODY focused. The earlier
+native dialog.close contrast retained the node and was NOT equivalent input.
 
-Core Escape-default nonexecution is now traced at light desktop DPR1/2.
-modal-core-close-order-trace-20261008.log session30385 terminal exit0 preserves
-original method/dispatcher calls through forwarding instrumentation. Before
-Escape dispatch,modal=dialog-overlay,invoker=dialog-primary,focus=dialog-cancel.
-The application restoration request fails while modal is active. A nested
-setSiteData then removes modal and clears invoker before dispatcher.dispatch
-keydown returns; defaultPrevented=false. dismissActiveModal is never called,
-and final semantic focus is BODY. Both exact DPR traces pass event-order,
-invoker/removal/nonexecution/final-state checks. This explains why the later
-default did not rescue the earlier rejected request in the observed sequence:
-the runtime checks current modal after dispatch,and reentrant reconciliation
-has already erased its restoration owner. It is not renderer coordinate/paint
-failure. General core responsibility versus caller-owned programmatic close
-still requires an equivalent public-API reproduction and explicit close/update
-contract review; do not prescribe a fixture timer or weaken modal eligibility.
-Next preserve the event-dispatch/reconciliation sequence in a public reduction,
-then classify ownership and integrate the coherent modal evidence batch after
-the frozen canonical check. Existing32 configured endpoints need no recapture.
+Coverage completed:
+- All four profiles × desktop1440×1000 DPR1/2 × bottom-sheet/dialog:32 side
+  observations /16 paired contexts. Escape removes every popup with no page errors.
+  Sheet restores trigger on both sides; native dialog restores trigger while
+  candidate ends on BODY in all8 contexts. No restored-focus paint certification.
+- Actual candidate light desktop DPR1/2 trace: focus(trigger) is rejected while
+  dialog-overlay remains modal. During keydown dispatch, nested setSiteData removes
+  modal and clears invoker before dispatch returns; defaultPrevented=false and
+  dismissActiveModal never runs. This explains the missing rescue in that sequence.
+- Package-root reduction: default core dismissal and update-before-focus restore
+  trigger atDPR1/2. Request-before-removal ends on BODY; matched native removal
+  agrees. Native close restores despite its rejected pre-close request but is a
+  different lifecycle operation. Original candidate source conserved across controls,
+  2515 dependencies authenticated before/after, diagnostics/page errors empty.
+- Existing six settled light1440×900 DPR1 comparison-host configurations
+  (sheet/dialog × candidate/reference/both) allow parent selection and both iframe
+  route changes. Complete comparison/reference/astylar/store caller sources equal
+  authenticated October5 maps. This is iframe containment, not component teardown.
+- Six opening-time dialog traces at the same host size, without selector keys:
+  reference-only early click gets parent SELECT focus then reference BUTTON focus
+ 105ms later; settled reference and candidate-only controls retain parent focus.
+  Both-open ordering consumes part of the opening interval; no universal timing claim.
+  Original captured native callbacks defer trapping until animation completion
+  (and CDK afterNextRender); exact prior both-dialog causality remains unproved.
+- Existing same-document public isolation DPR1/2 proof remains valid at its bounded
+  peer/outside-selector/disposal boundary. Four complete isolation owners and five
+  close/dispatch/focus owners match current emit, installed consumer and captured
+  Material map. Map dba48404… /manifest7ae2cba1…; no whole-runtime acceptance.
 
-Dialog restoration first failed request is now observed in actual light desktop
-DPR1 execution. modal-escape-focus-request-trace-20261008.log exits0 using the
-unchanged frozen helper; a measurement-only surface.focus wrapper forwards the
-same arguments/this and preserves the original return. Dialog close request
-focus(dialog-primary) returns false while public interaction snapshot still has
-modalDialogId=dialog-overlay and focusedElementId=dialog-cancel; neither logical
-nor semantic trigger focus is established. Later Cancel focusout leaves BODY.
-Sheet request focus(bottom-sheet-primary) returns true and ends on trigger.
-Exact paired request/modal/final-state assertions pass. This rejects the
-accepted-then-cleared explanation for that explicit application request,not every
-core restoration path. focusElement's modal eligibility guard forbids outside
-targets while a modal is active; the caller patches open:false then immediately
-requests focus before rendered modality is removed. That is a demonstrated
-application timing mismatch at this boundary,not evidence the guard should be
-bypassed. Why core dismissActiveModal/invoker restoration does not rescue this
-sequence still needs tracing through key dispatch and reconciliation ordering.
-Do not add fixture delays or change renderer behavior under audit scope.
+Evidence (all successful traces terminal exit0; preserve earlier attempts):
+| Boundary | Retained evidence |
+| --- | --- |
+| Configured Escape endpoints | modal-configured-escape-restoration-20261008.log; SHA6a8342fe… |
+| Rejected request | modal-escape-focus-request-trace-20261008.log; SHA6631f15c… |
+| Reentrant close ordering | modal-core-close-order-trace-20261008.log; SHA95297e50… |
+| Public default/update-order controls | scripts/audit-modal-reentrant-close.mjs; modal-public-close-order-control-20261008.log |
+| Native close contrast, not equivalent removal | modal-public-native-close-order-paired-20261008.log; SHAd5c508bd… |
+| Matched native removal | modal-native-node-removal-control-20261008.log; SHA58f6ab88… |
+| Close owner applicability | modal-close-owner-applicability-20261008.log |
+| Settled parent reuse | modal-comparison-parent-scope-reuse-20261008.log; original overlay-focus-scope-current-20261006.log SHA304a10c2… |
+| Opening focus events | modal-opening-parent-focus-trace-20261008.log; SHA42930392… |
+| Native delayed-focus owner | modal-reference-delayed-focus-owner-corrected-20261008.log |
+| Public isolation reuse | modal-isolation-material-owner-applicability-corrected-20261008.log; original public-modal-isolation-durable-9c39ad3-verified.log SHAb4206af9… |
 
-Configured desktop Escape restoration is now observed across all four profiles
-and DPR1/2 for bottom-sheet/dialog:32 side observations,16 paired contexts.
-modal-configured-escape-restoration-20261008.log session1540 terminal exit0
-uses unchanged AST-extracted frozen helper4a386f10… with authenticated October5
-browser fingerprint. Real trigger click,animation/two-rAF settlement,Escape and
-settlement preserve original inputs. All popups disappear,all candidate open
-states become false,and no page errors occur. Bottom-sheet returns to trigger
-on both sides in all8 contexts; native dialog returns to trigger in all8 while
-candidate dialog ends on BODY in all8. Exact cohort/result/terminal assertions
-pass,not parity acceptance. This closes the previously mobile-only behavior's
-configured desktop applicability gap,not restored focus paint or other dismissal
-paths. Candidate close callback already calls surface.focus(family-primary),
-and core dismissActiveModal also requests invoker restoration when eligible.
-Therefore do not classify this as a missing restoration declaration from the
-endpoint alone. Next trace accepted/rejected focus requests through close,
-logical focus and semantic reconciliation ordering to locate the first loss;
-reuse current/captured source joins rather than retesting these32 endpoints.
+Failed instrumentation remains: modal-public-reentrant-close-20261008.log (syntax),
+modal-reference-delayed-focus-owner-20261008.log (incorrect whole-module identity;
+Angular-generated templates/formatting differ, only complete owner methods matched),
+modal-isolation-material-owner-applicability-20261008.log (TAP escaping).
+The first successful update-before-focus reduction did not reproduce Material;
+modal-public-reentrant-close-corrected-20261008.log remains retained.
 
-Transient focus now has a real paired event trace,not only callback inference.
-modal-opening-parent-focus-trace-20261008.log SHA256
-42930392df5a7813d738f46fa7957457772448443401a0ecf3b19a4d200c8480,
-session91320 terminal exit0,records six dialog cohorts at1440×900 DPR1:
-reference/candidate/both × immediate/settled parent click. Original frozen helper
-is AST-extracted unchanged from source4a386f10…,with October5 fingerprint check.
-No fixture input changes,selector navigation keys or screenshots. Reference-only
-immediate case has running opening animations,parent SELECT focus then reference
-BUTTON focus105ms later; parent focus is lost. Its settled control retains focus.
-Both candidate-only cases and both-open samples retain parent focus after400ms.
-Six exact cohort/source/terminal/event-order assertions pass read-only. Thus the
-sampled focus loss occurs in the native opening interval without key routing,
-consistent with the separately authenticated deferred native focus callbacks.
-This does not identify an exact browser call stack,certify every timing window,
-or prove the original both-dialog failure's cause. Both-open action ordering
-can consume the reference opening interval; retain that limitation. Pending
-work is configured applicability/restoration,local paint and late async; do not
-repeat this settled scope probe or assign this native event to Astylar core.
-
-Transient modal focus investigation now identifies an actual native deferred
-focus boundary,not an assumed Astylar-only defect. Reference openDialog supplies
-restoreFocus:true without overriding delayFocusTrap; authenticated captured
-Material default is true. Complete _captureInitialFocus/_openAnimationDone
-methods equal installed Material after formatting normalization. Executing the
-original captured callbacks with controlled trapFocus records no initial call
-and one animation-completion call for true; false records the one call initially.
-modal-reference-delayed-focus-owner-corrected-20261008.log passes,with map hash
-67e956a6… and checkpoint7ae2cba1…. Installed module afc1343c… and captured module
-00a9d69d… are not whole-module identical (Angular compilation/template generation
-and formatting); the initial strict whole-module assertion failed and remains
-in modal-reference-delayed-focus-owner-20261008.log. Do not present that as core
-failure or silently assert whole-module equality. CDK _trapFocus schedules actual
-focus afterNextRender,so animation completion alone is not the focus event.
-Next smallest browser check must record focus events in both iframe realms and
-the parent around a real pre-settlement parent click,without select-navigation
-keys; compare with the already settled control. This separates delayed frame
-focus reclamation from platform-popup key routing. Current controlled source
-result does not identify the frame responsible for the old transient observation,
-prove candidate scheduling harmless,or close that runtime obligation.
-
-Settled comparison-parent scope is inspected at its existing six-case boundary,
-not a pending recapture. Reuse validates overlay-focus-scope-current-20261006.log
-SHA256304a10c2a0bec98cfc9d493b5f8542aeaabb9e099fe8718f65f5820dfb268b70:
-bottom-sheet/dialog × candidate/reference/both-open all permit real parent select
-focus and keyboard change to core,both iframe routes updated,zero page errors.
-Complete current comparison/reference/astylar/store source bytes equal the
-authenticated October5 maps after line-ending normalization. Successful read-only
-join: modal-comparison-parent-scope-reuse-20261008.log. Candidate sheet remains
-role-only/nonmodal; dialog records dialog-overlay modal. This closes stale caller
-inputs as an explanation for this settled observation,not full runtime/current
-rendering acceptance. Historical family-table parent-scope pending labels are
-superseded only at light1440×900 DPR1,six modes after animation/two-rAF settlement.
-Transient opening focus remains distinct: the original unsettled both-dialog
-probe lost parent focus. Next decisive question is whether actual delayed focus
-ownership overwrites a parent action before settlement,versus platform select
-popup key routing; inspect existing opening/autofocus callbacks before another
-browser action. Same-document teardown/late async,restoration and local paint
-also remain; iframe source replacement cannot establish component teardown.
-
-Modal isolation owning-code applicability is now joined without recapturing the
-settled public test. Retained public-modal-isolation-durable-9c39ad3-verified.log
-SHA256 b4206af9ae761991270681857e40ef3be0f46f27c3f2e72ff9199a33fa151876
-contains the passing DPR1/2 same-document peer/outside-selector/disposal proof.
-Its original source and installed hashes still match. Complete applyModalInertnessFor,
-semanticEventElementId,moveFocus and isAllowedByModal methods also equal the
-authenticated October5 Material source map dba48404… (manifest7ae2cba1…).
-modal-isolation-material-owner-applicability-corrected-20261008.log records the
-successful four-method join. The first parser attempt failed on TAP backslash
-escaping; retain modal-isolation-material-owner-applicability-20261008.log as
-instrumentation failure,not a renderer result. Thus stale code in these owners
-does not explain the bounded isolation discrepancy. This is not a new Material
-caller-state or whole-case pass. Bottom-sheet role-only DIV versus modal dialog
-authoring remains a separate input mismatch; configured parent focus/transient
-opening applicability,restoration,paint and late-async work remain to reconcile.
-Next reuse existing comparison-pane scope evidence and join its exact caller
-inputs/contexts; do not repeat the public two-surface capture.
+Next: integrate this coherent attribution/proof batch after the frozen canonical
+check; then remaining modal local paint, other dismissal paths, late async and
+exact case/current-validity closure. No fixture timers, modal-guard bypass or core
+restoration-on-every-removal fix is justified. No whole case is promoted.
+Historical family-row parent/restoration pending labels are superseded only within
+the exact contexts above; broader states remain open. Do not recapture settled
+focus questions without relevant changes or contradictory evidence.
 
 Progress programmatic-focus paint gap is closed at the bounded40-case/32-cohort
 boundary. Candidate-only capture reuses the unchanged frozen-showcase helper,
