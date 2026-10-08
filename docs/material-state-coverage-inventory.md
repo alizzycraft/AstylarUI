@@ -4,6 +4,23 @@
 
 ### Exact configured input-focus observation — October 8
 
+Bounded caret owner applicability is now demonstrated for complete methods
+createTextCursor,updateTextCursorColor,projectCursorX,calculateCursorPosition:
+current TypeScript emit,installed consumer JS and captured source-map module
+agree after JavaScript formatting only (no identifier substitution or body
+removal). The exact map hash is authenticated against the original checkpoint.
+Existing owning shipped-method reduction and40-context pixel evidence remain
+distinct: this closes the specific stale-owning-method alternative,not equality
+of the entire input pipeline or proof of every caller. Whole-module byte equality
+was checked and does not hold across Angular linking/formatting; no broad
+module-equivalence claim replaces that failure. Source/installed/map SHA receipts
+and all four method names are emitted by the existing configuration test in
+`configured-input-focus-owner-applicability-20261008-asserted.log`; full suite
+passes3/3. The preliminary log is retained separately as
+`configured-input-focus-owner-applicability-20261008.log`. No build,new capture,
+renderer or fixture changes. Next shared input obligation is applicable
+selection-state paint/endpoint evidence,not another caret-visibility check.
+
 Caret intent is now joined to each exact observed input in all240 paired trees,
 not inferred from its parent or from screenshot colors. Reference rules retain
 `var(--mat-form-field-filled-caret-color, var(--mat-sys-primary))`; computed

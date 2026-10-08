@@ -4,6 +4,7 @@ import test from 'node:test';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
+import { transformSync } from 'esbuild';
 import { PNG } from 'pngjs';
 import { materialCaseKey } from './run-checkpoint.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
@@ -18,6 +19,31 @@ test('configured input focus evidence records exact controls without replacing r
     script: 'scripts/audit-material-configured-input-focus.mjs', styleProperties: Object.values(propertyGroups).flat() }),
   { status: 'checkpoint-bound', errors: [] });
   const hash = b => createHash('sha256').update(b).digest('hex');
+  const ownerSourceFile = 'src/app/services/text/text-selection.service.ts';
+  const ownerInstalledFile = 'examples/material-showcase/node_modules/astylarui/dist/lib/app/services/text/text-selection.service.js';
+  const mapFile = 'examples/material-showcase/dist/material-showcase/browser/chunk-3JXWRYJY.js.map';
+  const ownerSource = readFileSync(ownerSourceFile), ownerInstalled = readFileSync(ownerInstalledFile);
+  const compiled = ts.transpileModule(ownerSource.toString(), { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 } }).outputText;
+  const mapBytes = readFileSync(mapFile), map = JSON.parse(mapBytes);
+  assert.equal(hash(mapBytes), manifest.provenance.browserFiles.find(item => item.file === path.basename(mapFile)).sha256);
+  const captured = map.sources.flatMap((file, index) => file.endsWith('/app/services/text/text-selection.service.js') ? [map.sourcesContent[index]] : []);
+  assert.equal(captured.length, 1);
+  const method = (code, name) => {
+    const parsed = ts.createSourceFile('caret-owner.js', code, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    assert.deepEqual(parsed.parseDiagnostics, []);
+    const matches = [];
+    const visit = node => { if (ts.isMethodDeclaration(node) && node.name.getText(parsed) === name) matches.push(node.getText(parsed)); ts.forEachChild(node, visit); };
+    visit(parsed); assert.equal(matches.length, 1);
+    return transformSync(`class Owner {${matches[0]}}`, { loader: 'js', target: 'es2022', legalComments: 'none', minifyWhitespace: true }).code;
+  };
+  const ownerMethods = ['createTextCursor', 'updateTextCursorColor', 'projectCursorX', 'calculateCursorPosition'];
+  for (const name of ownerMethods) {
+    assert.equal(method(compiled, name), method(ownerInstalled.toString(), name), `${name}: current/installed divergence`);
+    assert.equal(method(captured[0], name), method(ownerInstalled.toString(), name), `${name}: captured/installed divergence`);
+  }
+  t.diagnostic(JSON.stringify({ caretOwnerApplicability: { ownerSourceFile, sourceSha256: hash(ownerSource),
+    ownerInstalledFile, installedSha256: hash(ownerInstalled), mapFile, mapSha256: hash(mapBytes), methods: ownerMethods,
+    scope: 'Four complete methods only; formatting normalization, not full module/pipeline or rendering acceptance' } }));
   const runner = readFileSync(capture.actionSource.file);
   assert.equal(hash(runner), capture.actionSource.sha256);
   assert.equal(hash(runner), manifest.provenance.harnessFiles.find(r => r.file === capture.actionSource.file).sha256);
