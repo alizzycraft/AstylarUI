@@ -2,6 +2,38 @@
 
 ## Current evidence boundary — October 9
 
+### Shared ordinary-mode theme setup gap bounded to three retained tests
+
+Complete TypeScript AST navigation inspection of sort-focus-structure.spec.mjs
+finds three test bodies navigating requested profile=dark without benchmark=1
+and without an explicit theme command: ordinary dark mobile tooltip separates
+keyboard opening from pointer paint (line1546),dark mobile timepicker wheel
+separates scroll state from scrollbar paint (1992),and ordinary tooltip repeated
+hover and leave exposes live ownership separately from tracked counts (2570).
+This bounds the newly discovered source setup defect rather than assuming every
+dark cohort is invalid. The actual AX cohort helper paths using benchmark=1
+are distinct. Initial whole-body string filtering incorrectly excluded the
+timepicker test because unrelated benchmark=1 text exists in its body; checking
+each AST goto argument recovers exactly three,with full-body no-theme-command
+assertions preserved. No evidence is rewritten.
+
+FrameSync already exposes __MATERIAL_SHOWCASE_COMMAND__ and showcase:theme via
+the existing normalized store/protocol (frame-sync.ts:11-28). The owning harness
+correction is explicit theme setup through that command plus actual frame-theme
+verification while retaining ordinary mode. Blindly adding benchmark=1 would
+alter tooltip hover opening because candidate benchmark mode suppresses hover
+unless interaction=hover/held (astylar.component.ts:97),changing the behavior
+under investigation. No application/theme parser or plugin fix is authorized.
+
+Existing physical measurements/actions/resources remain recorded observations
+in default-light contexts; do not label them demonstrated dark paint/keyboard/
+lifetime coverage. Core allocation reductions and source-binding findings are
+separate evidence,not invalidated wholesale by this theme label. Frozen producer
+currently includes dark wording for two tooltip proofs; correct precise claims
+after original export completes,conserve original test/assertion evidence and
+recapture only affected themed obligations when needed. No full-matrix restart,
+renderer/fixture compensation or acceptance promotion from this inspection.
+
 ### Tooltip canonical theme claim requires correction before final acceptance
 
 Read-only source/proof inspection resolves whether the discovered missing
