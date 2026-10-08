@@ -2,45 +2,33 @@
 
 ## Current evidence boundary — October 8
 
-Cached default real-WebGL control is now inspected,not a confirmed paint defect.
-scripts/audit-disposed-default-webgl.mjs executes original core resource owner
-with installed Babylon8.56.2 in Chrome154 atDPR1/2. Three identical scene inputs
-per DPR use live default,disposed cached default,and fresh default after disposal.
-Disposed cache remains outside live material list,but is ready and paints the
-same RGBA as both controls,with no page/render errors. Six authenticated raw
-rasters contain10 colors (not blank clears). Measurement-only second run retains
-raw bytes; complete scene-source/dependency-receipt equality with the first run
-and exact original raster hashes pass in
-progress-disposed-default-webgl-raster-join-20261008.log. Original browser log
-progress-disposed-default-webgl-control-corrected-20261008.log and raw-raster log
-progress-disposed-default-webgl-raster-control-20261008.log both terminal exit0.
-Initial wrapper export-stripping failure is separately retained in
-progress-disposed-default-webgl-control-20261008.log. Babylon debugging guidance
-informed actual readiness/paint and disposal controls; runtime was not upgraded.
-Conclusion: disposed-cache reuse is observed,but this bounded fallback render
-does not fail. Do not classify reuse alone as a renderer defect or change cleanup
-from this probe. Public mount/Material-map and broader repeated/context lifecycle
-applicability remain; no complete-case promotion. Standalone script is not consumed
-by the currently frozen export. Next close exact existing Material applicability,
-not repeat this substrate raster control absent relevant changes.
+### Cached default material — bounded current conclusion
 
-Cached-disposed-default lifetime question is narrowed without reopening settled
-allocation/count attribution. Original AstylarSceneResources class executed with
-installed Babylon8.56.2 NullEngine: adopt lazy scene.defaultMaterial,replace with
-empty render,then create unmaterialed box. Disposal callback fires once; scene
-has zero live/tracked materials,but scene.defaultMaterial and SubMesh.getMaterial
-both return the identical disposed cached object. Log
-progress-disposed-default-fallback-owner-20261008.log SHA256
-b18df3faa588357868f3a41ed577046f6b2ceb16a89e992b0ed94bed519a169e.
-Current core source1221cedd… and installed complete replace/adopt/clearMaterials/
-isLive methods agree (progress-disposed-default-owner-applicability-20261008.log,
-exit0). This demonstrates cache fallback reuse,not harmlessness or real WebGL
-paint/readiness failure. Captured Material-map applicability and a real public
-surface fallback/render control remain required before classifying a visible
-defect. No core/fixture change or publication input changed; standalone diagnostic
-is not silently part of frozen canonical batch. Next decisive check: real WebGL
-fallback readiness/paint versus a fresh live material under matched lifecycle,
-with original disposal and generation ownership traced; do not repeat count probes.
+Core cleanup disposes the cached default; Babylon later returns the same object
+outside scene.materials. This is observed cache reuse,not a demonstrated paint
+defect. Original-owner NullEngine log progress-disposed-default-fallback-owner-
+20261008.log (SHAb18df3fa…) and prior Material lifecycle log (SHA374f6278…)
+retain the generation/disposal observations. Installed/current four complete
+replace/adopt/clearMaterials/isLive methods match the authenticated Material map;
+captured whole module differs only by the exact trailing sourceMappingURL comment.
+Join progress-disposed-default-material-owner-map-join-corrected-20261008.log
+passes; map dba48404…,manifest7ae2cba1…,source1221cedd…,installed870aa732….
+
+Real-WebGL substrate control scripts/audit-disposed-default-webgl.mjs uses the
+same original owner with Babylon8.56.2/Chrome154,DPR1/2: live,disposed-cache and
+fresh-after-disposal defaults are ready and produce identical nonblank rasters,
+with no page/render errors. Six retained raw rasters authenticate,contain10 colors
+and conserve the first run's scene source/dependency receipt. Evidence logs:
+progress-disposed-default-webgl-control-corrected-20261008.log,
+progress-disposed-default-webgl-raster-control-20261008.log and
+progress-disposed-default-webgl-raster-join-20261008.log (all terminal exit0).
+Preserve failed export-wrapper and initial map-comment assertions in their
+unsuffixed logs. Babylon debugging guidance informed the controls; no upgrade.
+
+Remaining: public mount action/paint applicability and broader repeated/context
+lifecycle,not stale cleanup owner or this settled substrate raster control.
+Do not change cleanup or classify a visible defect from cache reuse alone.
+No renderer/fixture edit,whole-case promotion or frozen-export input change.
 
 Standalone batch canonical milestone has started once from frozen85be694a
 producer inputs: session46464,launcherPID26136,workerPID11456,log
