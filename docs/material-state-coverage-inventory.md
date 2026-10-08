@@ -4,6 +4,22 @@
 
 ### Configured Menu bounds gap — October 8
 
+Current action-owner reduction executes three complete authenticated served/
+current application methods with controlled store/surface: handleClick,
+handleKeydown,dismissPopupForOutsideTarget. Rename/Delete clicks leave open=true
+and schedule no state patch; ArrowDown/ArrowUp/Home/End/Tab/Enter/Space yield no
+application patch or focus request. Escape alone closes and requests trigger
+focusVisible restoration. Focused configured-menu-application-action-owner-
+20261008.log passes1/1. This is a concrete application handler contract gap,
+not proof that core never handles these keys or a browser delivery test.
+The authenticated historical900x700DPR1 keyboard trace separately records
+native Rename→Delete on ArrowDown and Tab dismissal versus candidate trigger
+focus retention/Tab traversal; its different runtime/viewport must not become
+current configured-case closure. Next targeted runtime must distinguish core
+default activation/navigation from these absent application actions,including
+actual item click dismissal and held item paint. Do not repeat source-handler
+no-op reduction. No renderer/fixture changes or full-case promotion.
+
 Hovered-item retained paint question now has decisive pixels in all eight
 supplemental contexts: a5-CSSpx interior square away from text/borders/corners
 is uniformly RGBA225,219,224,255 on both hovered first items; inactive second

@@ -510,6 +510,30 @@ test('configured menu bounds authenticate exact runner actions and eight context
   t.diagnostic(JSON.stringify({ layoutOwner: relative, methods: boundMethods,
     conclusion: 'Absolute popup retains supplied parent; complete bound dimension method calculates offsets from parent border inset, not ariaControls trigger lookup',
     limitation: 'Owning method applicability and parent routing only; not execution of complete layout/projection or global connected-overlay API absence' }));
+  const applicationAst = ts.createSourceFile('application.ts', captured[0], ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+  const applicationClass = applicationAst.statements.find(n => ts.isClassDeclaration(n) && n.name?.text === 'AstylarShowcaseComponent');
+  assert.ok(applicationClass);
+  const handlers = ['handleClick', 'handleKeydown', 'dismissPopupForOutsideTarget'].map(name => {
+    const nodes = applicationClass.members.filter(n => ts.isMethodDeclaration(n) && n.name.getText(applicationAst) === name);
+    assert.equal(nodes.length, 1); return nodes[0].getText(applicationAst);
+  });
+  const handlerCode = ts.transpileModule(`class HandlerOwner {${handlers.join('\n')}}`, { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
+  const HandlerOwner = new Function(`${handlerCode};return HandlerOwner;`)();
+  let state = { open: true, disabled: false }, focusCalls = [], patches = [];
+  const handlerOwner = new HandlerOwner();
+  Object.assign(handlerOwner, { benchmarkMode: false, family: () => 'menu',
+    store: { state: () => state, patchState: patch => { patches.push(patch); state = { ...state, ...patch }; } },
+    surface: { focus: (...args) => focusCalls.push(args) }, status: { set: () => {} } });
+  for (const key of ['ArrowDown', 'ArrowUp', 'Home', 'End', 'Tab', 'Enter', ' ']) handlerOwner.handleKeydown('menu-rename', { key });
+  assert.deepEqual(patches, []); assert.deepEqual(focusCalls, []);
+  for (const id of ['menu-rename', 'menu-delete']) handlerOwner.handleClick(id, { targetId: id });
+  assert.equal(state.open, true); assert.deepEqual(patches, []);
+  handlerOwner.handleKeydown('menu-rename', { key: 'Escape' });
+  assert.deepEqual(patches, [{ open: false }]);
+  assert.deepEqual(focusCalls, [['menu-primary', { focusVisible: true }]]);
+  t.diagnostic(JSON.stringify({ applicationHandlers: ['handleClick', 'handleKeydown', 'dismissPopupForOutsideTarget'],
+    menuItemClickCloses: false, navigationKeysHandledByApplication: false, escapeClosesAndRestores: true,
+    scope: 'Complete authenticated current/served application handlers with controlled store/surface; not browser/core keyboard delivery or historical trace current applicability' }));
   assert.equal(report.inputEquivalent, false); assert.equal(report.renderingEquivalent, false);
   t.diagnostic(JSON.stringify({ observations, acceptance: false,
     scope: 'Eight configured menu open-hover-content bounds observations only; not equal input, current whole-pipeline validity or remaining menu actions' }));
