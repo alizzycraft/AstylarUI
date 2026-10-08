@@ -4,6 +4,35 @@
 
 ### Selection paint ownership and evidence applicability — October 8
 
+The next decisive selection check cannot be answered by the retained profile
+logs' pixels: authenticated light/contrast/custom diagnostics retain four
+real-key boundaries (typed,forward,end-collapsed,backward) with endpoints,
+input boxes and changed/common-color summaries only. Neither their seven
+dependency receipts nor those state objects contain PNG receipts or local
+highlight/glyph bounds. Exact bounded receipt/schema inspection is retained in
+`selection-retained-pixel-receipt-scope-20261008.log`. Input-box agreement is
+not selection-mesh/glyph geometry. Contrast/custom original input-box failures
+remain failures and must not be explained away by the palette policy.
+
+Direct original assertion replay fails its pinned historical sorter receipt
+(current4a386f10… versus original7f1af071…); failure is preserved in
+`selection-retained-applicability-20261008.log`. Reusing the already-reviewed
+read-only component historical preload conserves the original assertion and
+source receipts: focused replay passes1/1 in
+`selection-retained-historical-replay-20261008.log`. This authenticates original
+endpoint/palette/geometry-failure evidence,not current rendering acceptance.
+No new source transition or weaker receipt was introduced.
+
+The precise missing observation is retained local initial/selection/collapsed
+PNG evidence with exact endpoint/direction/action and CSS highlight/glyph bounds
+at these native-selected states. Add only that measurement through existing
+supplemental capture infrastructure; start from form-field's already-proven
+four-boundary key sequence and preserve the collapse-before-End distinction.
+Do not rerun endpoint/palette summaries alone: they cannot resolve the missing
+geometry or glyph-raster question. Extend other families/actions only after
+source/input applicability joins,not by treating these four profiles as all
+selection coverage. This is an evidence limitation,not an assigned blocker.
+
 Selection is an applicable supplemental input obligation,not an explicit
 selection-forward/backward entry in the configured benchmark matrix. Retained
 input-boundaries-keypress-559f95c records20 such rows across five families,
