@@ -2,6 +2,49 @@
 
 ## Current evidence boundary — October 8
 
+### Exact configured paint-observability join — October 8
+
+The required-state family map already exists below; the remaining inventory gap
+is exact obligation/evidence/current-validity joins,not rediscovering families.
+A read-only census authenticates the October5 reportSHAab42dbec… and proves exact
+configured membership (436 static,1857 ordinary interaction,18 mobile-flow IDs).
+Current configSHAa55e95ab… and runnerSHAe01ef9dc… equal their captured receipts.
+Every ordinary configured raster-target/state/viewport predicate agrees with
+recorded target presence; no missing-target placeholder is counted as measured.
+120 static and880 interaction cases contain finite target-local raster metrics;
+316 static and995 interaction cases have no focused raster. Thus1000/2311 have
+that particular observation,1311 do not. This is not inspection coverage or a
+missing-evidence count: other geometry,text,state-paint and supplemental proofs
+may cover relevant obligations,and passive/generic labels are not real actions.
+Log `configured-paint-observability-20261008.log`,SHA256
+457aa9e78a62ef95cb2ada20dab942c66cfcba66aa7d9109a15a0acf1bbd45ca,
+retains all36 family counts,unmeasured state labels and exact measured case IDs.
+
+| Priority family | Configured interaction cases | Target-local rasters | Relevant remaining evidence join |
+| --- | ---: | ---: | --- |
+| form-field / input | 64 each | 8 each | Only edit-empty-blur has this gate; focused-empty caret/selection need owning supplemental paint evidence and exact viewport applicability. |
+| slider | 66 | 16 | Hover/held crops do not close drag/focus/disabled paint; reuse existing range proofs before any recapture. |
+| bottom-sheet | 51 | 1 | Only light compact-pane activate is cropped; correlate open/reopen/other contexts with existing panel/ownership proofs. |
+| snack-bar | 59 | 0 | Whole-run passes cannot replace local visibility/paint/timer proofs; join the retained real-target evidence. |
+| dialog | 66 | 16 | Open/open-hover-content crops are not focus/action/restoration paint acceptance. |
+| tooltip | 50 | 18 | Hover/held raster evidence differs from focus and benchmark-open presence obligations. |
+| checkbox / radio | 56 each | 0 each | Text alignment does not by itself inspect circular indicator/ripple/focus paint. |
+
+A second exact-ID join records343 cases whose focused SSIM gate passes while
+its diagnostic sharpness target does not;342 also pass aggregate output criteria.
+The current metricSHA c8483996… equals the captured module receipt,and its
+existing acceptance rule is SSIM-only. These are not343 new release failures or
+demonstrated blurry text. Competing causes remain unequal authored/state paint,
+sampling/raster fidelity and diagnostic calibration; owning evidence must resolve
+them without changing thresholds. Log
+`configured-paint-sharpness-boundary-20261008.log`,SHA256
+fcd3aae7c1c67f4e1963510fa5448c09287838ffd37eb3713be926c42735e812,
+preserves exact IDs,targets,phase offsets and diagnostic values. Both receipt/
+membership/predicate/count checks exit0; no images or canonical sources changed.
+Next resolve the first shared input-focus and overlay paint obligations against
+existing exact evidence IDs,not repeat this census or infer completeness from
+SSIM. All2311 cases remain partial; publication stays150/146 versus producer148.
+
 Paint-proof source registration is verified: producer adds two bounded retained
 caret/scrollbar proofs (148 total); published acceptance remains150 findings/146
 proofs. Exact whole-producer comparison against96be6b7c confirms only these two
