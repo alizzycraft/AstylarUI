@@ -43,14 +43,29 @@ join selection-caret-material-owner-applicability-20261008.log exits0; source
 a38f6c7b…, installation e2b66c82…, map dba48404… and captured owner175d360f….
 This closes stale owning-method code as an explanation at this boundary. It does
 not establish actual Material selected-caret paint or every caller's state.
-Existing Material local-pixel records do preserve eight selected pairs across
-four mobile DPR2 profiles, focused noncollapsed endpoints and visible highlight
-owners. The hash/PNG-verified read-only selection-material-caret-observation-
-boundary-20261008.log exits0. All screenshots declare caret:hide and candidate
-observations omit cursor visibility, so they cannot establish actual temporal
-selected-caret parity. Do not recapture endpoint/highlight geometry; the missing
-measurement is actual caret epochs at these same trusted action boundaries.
-Next native selection snapping/glyph edge coverage and exact Material action/paint applicability;
+Material action/paint applicability is now observed for form-field, four profiles,
+mobile390x844 DPR2 at the same trusted typed/forward/end-collapsed/backward keys.
+Measurement-only in-memory invocation keeps original script159c17f3… unchanged;
+invocation89dfd7a5… records six125ms actual-caret epochs per boundary and readonly
+cursor state. Existing supplemental validator authenticates original sources,
+checkpoint assets/runtime and paired trees; separate checks hash192 epoch PNGs,
+assert all unchanged focus/value/endpoints and exact16 state/profile rows.
+Report selection-material-actual-caret-20261008/latest-report.json SHA256
+b5d48440a777884b18c9f410ecc7956173642e916bd5f27c8af4e3f95b9117ce,
+capture session8302 exit0; validation and paint-bounds logs exit0.
+All eight native selected cohorts are byte-identical across six epochs with no
+tall caret-color run; all eight candidate selected cohorts visibly blink with
+three visible/three absent retained states. Both sides'16 collapsed cohorts have
+positive/negative paint controls. Candidate selected solid run19CSSpx; full
+on/off difference19.5CSSpx high and2–2.5CSSpx wide,including fringe. Initial
+paint-join assertion incorrectly inferred38-device-pixel full height from the
+solid run and failed on39; retain that failed log,not a renderer acceptance gate.
+Paired light-forward PNG inspection corroborates actual caret over selected text.
+This binds the existing core visibility cause to this Material cohort,not every
+field or equal Material typography/color. Old caret:hide records remain intact;
+selection-material-caret-observation-boundary-20261008.log explains why they
+could not answer this question. No fixture/renderer or frozen producer changes.
+Next native selection snapping/glyph edge coverage and remaining field applicability;
 do not repeat the settled crop,offset,kerning,projection or selected-caret question.
 
 Evidence: selection-projected-css-boundary-20261008.log (session21694 exit0,

@@ -14,8 +14,13 @@
   or alter highlight width. Retain collapsed/blur/disposal and actual-paint controls.
   See selection-actual-caret-epochs-20261008.log,selection-actual-caret-join-
   20261008.log and selection-caret-visibility-owner-20261008.log; exact receipts
-  in the coverage ledger. This is bounded public evidence,not all Material input
-  applicability or whole-case closure; canonical source/proof integration remains
+  in the coverage ledger. Actual-caret temporal capture now corroborates this
+  behavior in form-field across four mobile DPR2 profiles: all eight selected
+  native cohorts stay visually stable,all eight candidate cohorts blink; collapsed
+  controls blink on both sides. Report selection-material-actual-caret-20261008
+  and its validation/paint-bounds logs preserve exact actions and192 epoch PNGs.
+  This is bounded public/Material evidence,not all Material input applicability
+  or whole-case closure; canonical source/proof integration remains
   pending until the frozen field-popup export/check completes. No renderer fix.
 
 - October8 frozen Menu canonical batch now passes independent cold --check
