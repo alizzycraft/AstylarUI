@@ -46,6 +46,17 @@ Exact union/independent160-texture assertions/post-run asset checks pass in
 field-option-paint-inputs-exact-census-20261008.log; no repeated completed contexts.
 This demonstrates unequal pre-projection typography for these exact endpoints,
 not a universal core placement error or the residual's causal decomposition.
+Select local ink is now observed across32 endpoints/64 option pairs using the
+same metric and authenticated supplemental report/PNG/tree receipts. The first128
+CSSpx contain the short labels (native widths<64) and exclude trailing selected
+markers,whose retained ownership/position is asserted. Middle70percent vertical
+window remains unchanged. Log select-retained-option-ink-centers-20261008.log
+terminates exit0. Relative errors:light/dark0.496–0.998CSSpx,custom0.982–0.984,
+contrast0.013–0.015. Thus the uniform19/20px line-box input difference does not
+by itself quantify the profile-dependent raster residual; phase/baseline/paint
+contributions remain unisolated. Diagnostic crop is not full-row clipping proof.
+Together these observations cover local ink centroids for all80 retained endpoints,
+not equal-input typography or a justified fixture offset.
 Remaining: causal contribution to measured ink and matched intermediate
 hover/held paint,other families/responsive contexts,complete case/current validity.
 New standalone script/evidence await coherent proof integration; no whole-case
