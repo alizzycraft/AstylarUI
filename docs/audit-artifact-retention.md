@@ -56,6 +56,17 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October9 independent-check/import headroom: three closed historical working-index
+generations4880964fc1018a1fd6409f7c7af2ddaa5fc21a82e45dab3a0cc5fce5a6019156,
+4ddf218eb8caa20408c06a300568e7a8a17dcc2bbe5ebbc0527030846127776d and
+5998d72bd0310ff4ddd8d3a44954fa5ade6655abb506f2bb85baa4935c3792d0 had84
+JSONL shards each transparently compressed. Every252 before/after SHA256 agrees;
+existing verifyFindings passes before/after for each complete index (historical
+134findings,unresolved286/1408/715 respectively,not current counts). Observed
+D:free15196160→202432512bytes; volume change is not claimed solely attributable
+to compression while another process runs. Current pointer,canonical data,
+capture bytes,paths and acceptance remain unchanged. No evidence deleted.
+
 October8 standalone canonical headroom recovery: five closed historical indexes
 a9e92562d1cfd5f9f462f00cfd7bd969c65375ed2a3878ffe8691b029f26b092,
 dfd8cd42de514899fbf8c87cf3debf7f4ed000be17305e219ae907e396f1afee,

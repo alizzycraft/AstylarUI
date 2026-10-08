@@ -1,6 +1,21 @@
 # Material comparison/state coverage inventory
 
-## Current evidence boundary — October 8
+## Current evidence boundary — October 9
+
+### Independent cold check — live; import headroom recovered without deletion
+
+Current process inspection confirms launcher19088 and worker3332 remain alive;
+workerCPU2749.125s increases while the existing log's last milestone remains
+validate-audit. No terminal acceptance and no restart inferred from sparse logs.
+The producer graph remains frozen. D:free fell to15196160bytes before import;
+three closed historical working-index generations were transparently compressed,
+all252 shard SHA256 values agree before/after,and existing verifyFindings passes
+twice per complete index. Observed free202432512bytes after completion. Exact
+generation IDs/counts and limitations are in audit-artifact-retention.md.
+No pointer/package/evidence content changes,no new canonical run or deletion.
+Next terminal-success action remains exact package/count/hash acceptance,compact
+import/whole verification,then coherent source/proof reconciliation. New tooltip
+standalone findings remain separately authenticated,not silently canonical.
 
 ### October9 tooltip accessible description — authored closed-state omission
 
