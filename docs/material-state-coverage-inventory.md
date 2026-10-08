@@ -2,6 +2,25 @@
 
 ## Current evidence boundary — October 8
 
+Publication-space question answered from the existing importer: it writes a
+complete62841035-byte package copy plus compact shards (prior snapshot72718731
+bytes),not shards alone.67080192 free bytes was insufficient. Five closed
+working-audit generations'84 JSONL shards each were NTFS-compressed in place:
+62c0d3738fe1a31059b578c7c3e496c7b9c4fc89087f596552f590d5a94dd645,
+3074b9bf90dd8a659ad545be3290388826ceb06412bac855cde6cf9415761bec,
+a02593c0c92d43b2964731a1dcf382d5ce093a8cd86774eb7cc5606467e7e936,
+12a3cc97f936cadeee398e021b98b8ddd72c63560671e206fb005431a45b9d64,
+31cb7dad66cd5b2e1df55a954c4fe635fcf750622ae78defac05c9963a40ce1a.
+All420 file hashes matched before/after; every compact command exited0.
+Existing verifyFindings authenticated each complete generation/package/index:
+8483 discrepancies,39904 controls,389202 occurrences,zero unresolved; first
+three retain150 findings,last two145. No pointer was repointed,no generation
+deleted,and this is historical conservation,not current canonical acceptance.
+D: free now221773824 bytes,providing bounded import/package headroom; recheck
+before publication. Cold worker3096 remains live,CPU550.9375 seconds at the
+check; no terminal cold result. Next is the same pending validation/import,
+not another export or survey. Original scope and all final gates remain open.
+
 Resumption verification: independent cold session39373 remains live, with launcher
 PID27952 and actual worker PID3096; worker CPU advanced430.96875→463.03125 seconds.
 No terminal result is claimed and no duplicate run was started. Pending priorities
