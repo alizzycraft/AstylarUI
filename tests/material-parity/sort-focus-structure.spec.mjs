@@ -2339,7 +2339,11 @@ test('retained scrollbar thumb masks distinguish native corners from plain indic
   // Node's TAP formatter escapes hashes; undo only that formatting escape.
   const bounds = JSON.parse(diagnostic[0].slice(2).replaceAll('\\#', '#')).configuredScrollbarCssBounds;
   assert.equal(rows.length, 8); assert.equal(bounds.length, 8);
-  const masks = [];
+  const overdrawBytes = readFileSync('artifacts/material-parity/timepicker-thumb-top-overdraw-20261007.log');
+  assert.equal(digest(overdrawBytes), '5cdcdd95795479cb754557abf56b1705c67d53ae6f2bf4b4004f9f454261f9cb');
+  const overdrawRows = overdrawBytes.toString().trim().split(/\r?\n/).map(JSON.parse);
+  assert.equal(overdrawRows.length, 8);
+  const masks = [], tracks = [];
   for (const row of rows) {
     const matched = bounds.filter(bound => bound.profile === row.profile && bound.viewport.id === row.viewport.id);
     assert.equal(matched.length, 1);
@@ -2348,6 +2352,49 @@ test('retained scrollbar thumb masks distinguish native corners from plain indic
       const receipt = row[side][state], bytes = readFileSync(receipt.file);
       assert.equal(digest(bytes), receipt.sha256);
       const png = PNG.sync.read(bytes);
+      const panel = row[side].panel;
+      if (side === 'astylar' && state === 'before') {
+        const matches = overdrawRows.filter(item => item.profile === row.profile && item.viewport === row.viewport.id);
+        assert.equal(matches.length, 1);
+        const overdraw = matches[0];
+        const treeBytes = readFileSync(path.join(path.dirname(receipt.file), 'astylar-input-tree.json'));
+        assert.equal(digest(treeBytes), overdraw.inputTreeSha256);
+        const nodes = JSON.parse(treeBytes).nodes;
+        const line = nodes.find(node => node.authored?.id === 'timepicker-active-line');
+        const popup = nodes.find(node => node.authored?.id === 'timepicker-options');
+        assert.equal(line.parent, popup.parent);
+        assert.equal(line.resolvedStyle.top, overdraw.lineTop);
+        assert.equal(line.resolvedStyle.height, overdraw.lineHeight);
+        assert.equal(line.resolvedStyle.zIndex, '61');
+        assert.equal(popup.resolvedStyle.zIndex, '60');
+        assert.equal(popup.resolvedStyle.top, overdraw.popupTop);
+        assert.equal(Math.max(0, parseFloat(overdraw.lineTop) + parseFloat(overdraw.lineHeight) - parseFloat(overdraw.popupTop)), overdraw.overlapCss);
+        for (const sample of overdraw.prefix) {
+          const i = (sample.y * png.width + receipt.sampleX) * 4;
+          assert.deepEqual([...png.data.subarray(i, i + 3)], sample.rgb);
+        }
+      }
+      const trackRows = [100, 180].map(offset => {
+        const y = Math.floor((panel.y + offset) * dpr), colors = [];
+        for (let x = Math.floor((panel.x + panel.width - 15) * dpr); x < Math.floor((panel.x + panel.width) * dpr); x++) {
+          const i = (y * png.width + x) * 4;
+          colors.push([...png.data.subarray(i, i + 3)]);
+        }
+        return { offset, y, colors };
+      });
+      for (const strip of trackRows) assert.deepEqual(strip.colors, side === 'reference'
+        ? Array.from({ length: 15 * dpr }, () => [252, 252, 252])
+        : [...Array.from({ length: 3 * dpr }, () => [242, 236, 241]),
+          ...Array.from({ length: 12 * dpr }, () => [241, 239, 241])]);
+      let bottomArrowPixels = 0;
+      for (let y = Math.ceil((panel.y + panel.height - 14) * dpr); y < Math.floor((panel.y + panel.height - 2) * dpr); y++) {
+        for (let x = Math.ceil((panel.x + panel.width - 12) * dpr); x < Math.floor((panel.x + panel.width - 3) * dpr); x++) {
+          const i = (y * png.width + x) * 4, rgb = [...png.data.subarray(i, i + 3)];
+          if (Math.max(...rgb) - Math.min(...rgb) <= 2 && rgb[0] >= 95 && rgb[0] <= 235) bottomArrowPixels++;
+        }
+      }
+      assert.equal(bottomArrowPixels > 0, side === 'reference');
+      tracks.push({ profile: row.profile, viewport: row.viewport.id, side, state, trackRows, bottomArrowPixels });
       const widths = [], xs = [];
       // The authenticated center run supplies only the thumb's visible Y band;
       // search its local gutter, excluding native arrows and option text.
@@ -2388,6 +2435,8 @@ test('retained scrollbar thumb masks distinguish native corners from plain indic
   assert.equal(masks.length, 32);
   t.diagnostic(JSON.stringify({ retainedScrollbarThumbMasks: masks, acceptance: false,
     scope: 'authenticated local thumb color masks only; not complete track paint, pixel-equivalent colors or current rendering acceptance' }));
+  t.diagnostic(JSON.stringify({ retainedScrollbarTrackRows: tracks, acceptance: false,
+    scope: 'two retained interior rows plus bottom-arrow band and existing authored-overdraw receipt replay; not complete fringe, platform or current rendering acceptance' }));
 });
 
 test('comparison iframe overlays expose parent control focus scope', async t => {

@@ -24,6 +24,28 @@ No renderer,fixture,threshold or captured evidence changes.
 
 ### October 8 remaining scrollbar paint boundary
 
+Configured desktop track/arrow paint is now inspected in the same32 retained
+PNGs: at100/180CSSpx below each panel top,native tracks are15CSSpx of
+RGB252/252/252;candidate strips are3px popupRGB242/236/241 plus12px
+trackRGB241/239/241. Native bottom-arrow bands contain neutral glyph pixels;
+candidate bands contain none,before/after scroll in all8 cohorts. Geometry and
+fixed candidate RGB bind to the complete current/installed/captured paint module.
+These are documented native-track/arrow paint limitations,not a projection cause.
+
+Initial overdraw was already settled on October7 and must not be reopened:
+timepicker-active-line shares the popup parent,z61 above z60,height2px,
+overlapping2px(light/dark),3px(contrast),0px(custom). The offline owning test
+now replays that original SHA5cdcdd95… receipt against all8 exact open trees
+and sampled PNG prefixes. This supersedes the newer "initial occlusion remains"
+notes below; it adds regression protection,not a new cause or investigation.
+Focused1/1 passes3694.6557ms in `timepicker-retained-track-overdraw-20261008.log`.
+No browser recapture,renderer fix or fixture change. Remaining scrollbar paint
+scope: unsampled antialiased fringe/other action boundaries/platforms and
+applicable non-desktop/input-owner joins; no whole-timepicker closure. Next
+prioritize remaining shared overlay/input paint obligations rather than repeat
+the closed configured thumb/track/overdraw questions. Canonical integration of
+the additive owning-suite proof remains pending the next coherent batch.
+
 Retained thumb shape is now inspected across all8 configured desktop cohorts,
 before/after wheel,32 authenticated PNG masks. Reusing the existing native-neutral
 and candidate exact-color pixel rules shows native9CSSpx width with rounded
