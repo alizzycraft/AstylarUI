@@ -4,6 +4,29 @@
 
 ### Configured Menu bounds gap — October 8
 
+Matched item keyboard-focus paint now has exact retained input evidence across
+all eight desktop profile/DPR contexts. In menu-item-keys-20261008's
+typeahead-ready boundary both active labels are Delete; native item class is
+cdk-keyboard-focused and computed background is
+color(srgb 0.113725 0.105882 0.117647 / 0.12). Its matching authored rule uses
+--mat-menu-item-focus-state-layer-color with --mat-sys-focus-state-layer-opacity.
+Candidate menu-delete interactionResolvedStyle.background is transparent in
+every context. Current/served complete application source equality authenticates
+the absence of a Menu item focus rule: item hover8% and active12% declarations
+are present but cannot represent keyboard-focus intent. First divergence is
+application state-layer authoring,not equal-input renderer focus paint. Later
+implementation must author the reference focus contract through shared styling,
+not tune a screenshot background or substitute hover/active for focus.
+Existing generic validator authenticates eight paired trees/runtime assets,
+and16 retained PNG hashes recheck. Diagnostic exits0 in
+menu-item-focus-inputs-20261008.log; original report SHA1d1e7a95… remains unchanged.
+Preparatory traversal differs (native ArrowDown/candidate Tab),as already
+disclosed; this is matched-focus input inspection,not identical event-sequence
+acceptance. Full edge/glyph/ripple/animation comparisons remain separate. No
+new capture or source/proof registration while the export is frozen. Export
+PID25480 is live and has advanced to validate-audit at1050514.7333ms; no
+terminal export or independent-check result is claimed.
+
 External-root question now has a bounded mobile observation, not a collision
 claim: menu-mobile-root-context-20261008/latest-report.json SHA256
 a0db5c71af6ca2114bf03ccf706eca8f2c9d4de626eb0e43dc026b56c1dea1e8.
