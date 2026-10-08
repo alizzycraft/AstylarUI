@@ -121,6 +121,16 @@ entries in the historical family rows below are superseded by this exact join;
 track/cap/edge,other lifetime/isolation and full current-validity closure remain.
 Standalone registration follows the frozen canonical check; no source/fixture fix.
 
+This progress boundary now has a registered retained assertion in
+benchmark-config.spec.mjs: progress focus paint preserves forty configured cases
+and paired raster failure evidence. It authenticates both original logs,all
+membership input-tree receipts,checkpoint,current complete helper method and128
+PNG payloads; independently recomputes changed-pixel counts and verifies exact
+32-cohort coverage on each side. Focusability mismatch remains explicit.
+Focused replay log: progress-focus-paint-retained-proof-20261008.log. This source
+registration awaits the next coherent canonical batch,not another browser run;
+published151/155 remains unchanged. Full current-runtime and case closure remain.
+
 Selection current boundary (public Atlas input/textarea,DPR1/2): original authored
 inputs and assertions remain unchanged in the successful measurement controls.
 All four contexts preserve24CSSpx projected and solid-mask height. Input y39

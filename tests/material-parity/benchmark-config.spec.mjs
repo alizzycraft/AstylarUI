@@ -11,6 +11,70 @@ import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs
 import { propertyGroups } from './input-equivalence-policy.mjs';
 import { materialAbsoluteTextAlignmentTargets, materialAdditionalMeasurementTargets, materialComparisonViewport, materialFamilies, materialFocusedRasterTargets, materialGeometryExcludedTargets, materialInteractionCases, materialInteractionFocusedRasterTargets, materialInteractionTextAlignmentTargets, materialInteractionViewports, materialLeftAlignedTextTargets, materialMobileFlowCases, materialMobileFlowFamilies, materialProfiles, materialSemanticExcludedTargets, materialStaticCases, materialSupplementalStaticCases, materialTextAlignmentTargets, materialTextAlignmentToleranceOverrides, materialTextAuditTargets, materialTextlessFamilies, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets, materialViewports } from './benchmark.config.mjs';
 
+test('progress focus paint preserves forty configured cases and paired raster failure evidence', () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const read = (name, sha) => {
+    const bytes = readFileSync(`artifacts/material-parity/${name}`);
+    assert.equal(hash(bytes), sha);
+    return bytes.toString('utf8').trim().split(/\r?\n/).map(line => JSON.parse(line));
+  };
+  const candidate = read('progress-candidate-focus-paint-20261008.log',
+    '5b498a2d6489924785a02968fd627acfa1ed5704b4b6437d3bca0172c1afc2af');
+  const native = read('progress-reference-focus-paint-20261007.log',
+    'd2a134f8e6134d9a99f1d7f25bec67c63f2ba9baed1ea1f85adc3c81f677f94f');
+  const membership = read('progress-configured-input-membership-20261006.log',
+    'd64d73bea9a8e7d6ad2640bea3bc6a59c072ae9465f1aa3ca8577c5111fb6684').slice(0, -1);
+  const key = row => [row.family, row.profile, row.viewport.width, row.viewport.height, row.viewport.deviceScaleFactor].join('/');
+  const expected = new Set(membership.map(key));
+  assert.equal(membership.length, 40); assert.equal(expected.size, 32);
+  for (const row of membership) for (const side of ['reference', 'astylar']) {
+    const receipt = row.receipts[side].receipt;
+    assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  }
+  const helperSource = ts.createSourceFile('helper.mjs', readFileSync(candidate[0].helperSource, 'utf8'),
+    ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const helpers = helperSource.statements.filter(statement => ts.isFunctionDeclaration(statement) &&
+    statement.name?.text === 'withFrozenShowcase');
+  assert.equal(helpers.length, 1);
+  assert.equal(hash(helpers[0].getText(helperSource)), candidate[0].helperMethodSha256);
+  const checkpoint = readFileSync(candidate[0].checkpointFile);
+  assert.equal(hash(checkpoint), candidate[0].checkpointSha256);
+  assert.equal(candidate[0].checkpointSha256, native[0].checkpointSha256);
+  assert.equal(candidate.at(-1).status, 'pass');
+  for (const records of [candidate, native]) {
+    assert.equal(records[0].configuredCases, 40); assert.equal(records[0].physicalCohorts, 32);
+    const seen = new Set();
+    for (const row of records.slice(1, -1)) {
+      assert.ok(expected.has(key(row))); assert.ok(!seen.has(key(row))); seen.add(key(row));
+      assert.deepEqual(row.errors, []);
+      const images = ['before', 'after'].map(state => {
+        const receipt = row.rasters[state];
+        const bytes = Buffer.from(receipt.sameBytesAsBefore ? row.rasters.before.base64 : receipt.base64, 'base64');
+        assert.equal(hash(bytes), receipt.sha256);
+        const png = PNG.sync.read(bytes);
+        assert.equal(png.width, Math.round(row.clip.width * row.viewport.deviceScaleFactor));
+        assert.equal(png.height, Math.round(row.clip.height * row.viewport.deviceScaleFactor));
+        return png;
+      });
+      let changed = 0;
+      for (let i = 0; i < images[0].data.length; i += 4)
+        if ([0, 1, 2, 3].some(channel => images[0].data[i + channel] !== images[1].data[i + channel])) changed++;
+      assert.equal(changed, row.changedPixels);
+      if (records === candidate) {
+        assert.equal(row.before.tabindex, null); assert.equal(row.after.tabindex, null);
+        assert.equal(row.after.activeTag, 'BODY'); assert.equal(row.after.focused, false);
+        assert.equal(changed, 0); assert.ok(row.runtimeAssetsAuthenticated > 0);
+      } else {
+        assert.equal(row.before.attributes.tabindex, '-1'); assert.equal(row.after.focused, true);
+        assert.equal(row.after.focusVisible, true);
+        assert.equal(changed > 0, row.family === 'progress-spinner');
+      }
+    }
+    assert.deepEqual([...seen].sort(), [...expected].sort());
+  }
+  // Unequal host focusability is retained; no tabindex injection or equal-input paint claim.
+});
+
 test('modal restoration attribution preserves matched removal and unequal close controls', () => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
   const read = (name, sha) => {
