@@ -6,6 +6,27 @@ Current priority: finish exact case-obligation/current-validity joins,with share
 overlay/scrollbar paint and editable-text paint ahead of isolated passive layout.
 The existing36-family applicability map remains authoritative; no new inventory.
 
+Transient modal focus investigation now identifies an actual native deferred
+focus boundary,not an assumed Astylar-only defect. Reference openDialog supplies
+restoreFocus:true without overriding delayFocusTrap; authenticated captured
+Material default is true. Complete _captureInitialFocus/_openAnimationDone
+methods equal installed Material after formatting normalization. Executing the
+original captured callbacks with controlled trapFocus records no initial call
+and one animation-completion call for true; false records the one call initially.
+modal-reference-delayed-focus-owner-corrected-20261008.log passes,with map hash
+67e956a6… and checkpoint7ae2cba1…. Installed module afc1343c… and captured module
+00a9d69d… are not whole-module identical (Angular compilation/template generation
+and formatting); the initial strict whole-module assertion failed and remains
+in modal-reference-delayed-focus-owner-20261008.log. Do not present that as core
+failure or silently assert whole-module equality. CDK _trapFocus schedules actual
+focus afterNextRender,so animation completion alone is not the focus event.
+Next smallest browser check must record focus events in both iframe realms and
+the parent around a real pre-settlement parent click,without select-navigation
+keys; compare with the already settled control. This separates delayed frame
+focus reclamation from platform-popup key routing. Current controlled source
+result does not identify the frame responsible for the old transient observation,
+prove candidate scheduling harmless,or close that runtime obligation.
+
 Settled comparison-parent scope is inspected at its existing six-case boundary,
 not a pending recapture. Reuse validates overlay-focus-scope-current-20261006.log
 SHA256304a10c2a0bec98cfc9d493b5f8542aeaabb9e099fe8718f65f5820dfb268b70:
