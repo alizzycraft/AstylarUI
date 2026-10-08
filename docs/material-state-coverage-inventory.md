@@ -6,6 +6,25 @@ Current priority: finish exact case-obligation/current-validity joins,with share
 overlay/scrollbar paint and editable-text paint ahead of isolated passive layout.
 The existing36-family applicability map remains authoritative; no new inventory.
 
+Core Escape-default nonexecution is now traced at light desktop DPR1/2.
+modal-core-close-order-trace-20261008.log session30385 terminal exit0 preserves
+original method/dispatcher calls through forwarding instrumentation. Before
+Escape dispatch,modal=dialog-overlay,invoker=dialog-primary,focus=dialog-cancel.
+The application restoration request fails while modal is active. A nested
+setSiteData then removes modal and clears invoker before dispatcher.dispatch
+keydown returns; defaultPrevented=false. dismissActiveModal is never called,
+and final semantic focus is BODY. Both exact DPR traces pass event-order,
+invoker/removal/nonexecution/final-state checks. This explains why the later
+default did not rescue the earlier rejected request in the observed sequence:
+the runtime checks current modal after dispatch,and reentrant reconciliation
+has already erased its restoration owner. It is not renderer coordinate/paint
+failure. General core responsibility versus caller-owned programmatic close
+still requires an equivalent public-API reproduction and explicit close/update
+contract review; do not prescribe a fixture timer or weaken modal eligibility.
+Next preserve the event-dispatch/reconciliation sequence in a public reduction,
+then classify ownership and integrate the coherent modal evidence batch after
+the frozen canonical check. Existing32 configured endpoints need no recapture.
+
 Dialog restoration first failed request is now observed in actual light desktop
 DPR1 execution. modal-escape-focus-request-trace-20261008.log exits0 using the
 unchanged frozen helper; a measurement-only surface.focus wrapper forwards the
