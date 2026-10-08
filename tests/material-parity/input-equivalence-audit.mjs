@@ -9448,6 +9448,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('selected caret blink owner conserves shipped methods and exposes selection-blind visibility'/,
+      'selected caret core visibility owner boundary', 'Authenticates current and installed complete cursor owners, compares emitted complete methods and executes original blink/visibility methods with forward,backward,collapsed,blur and stop controls. Selected ranges remain visible and toggle at530ms just like collapsed ranges. Corroborating actual public/Material rasters remain separate. Not full caller/lifetime validity or whole-case acceptance.'),
     proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('actual Material selected caret epochs preserve actions and temporal paint failure'/,
       'actual Material selected caret temporal failure boundary', 'Authenticates original supplemental report, checkpoint/runtime/input-tree receipts, unchanged action source and192 actual-caret epoch PNGs across four profiles at mobile DPR2. Focus,value,forward/backward/collapsed endpoints remain unchanged. Native selected epochs are stable; candidate selected epochs blink with19.5CSSpx full difference height and2/2.5px width. Both collapsed controls blink. This is bounded temporal failure corroboration,not equivalent Material typography,all-input applicability,fresh whole-runtime or whole-case closure.'),
     proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('progress focus paint preserves forty configured cases and paired raster failure evidence'/,

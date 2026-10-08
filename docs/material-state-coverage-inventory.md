@@ -131,6 +131,17 @@ Focused replay log: progress-focus-paint-retained-proof-20261008.log. This sourc
 registration awaits the next coherent canonical batch,not another browser run;
 published151/155 remains unchanged. Full current-runtime and case closure remain.
 
+Core selected-caret visibility attribution is now registered in the existing
+source-finding policy as core-selected-caret-blink-ignores-noncollapsed-selection.
+Its focused owner assertion authenticates complete current/installed source and
+evidence receipts,compares three emitted complete methods and executes original
+forward/backward/collapsed,blur and stop controls. Selection-blind visibility and
+530ms toggling remain reproduced. First two instrumentation attempts failed on
+comments/quote/whitespace formatting and remain retained; the corrected verified
+log selection-caret-owner-retained-proof-verified-20261008.log passes1/1 in834.6803ms.
+This source/proof registration awaits coherent canonical integration; no renderer
+change or all-caller/lifetime acceptance. Published151/155 remains unchanged.
+
 Actual Material selected-caret temporal evidence now has a registered focused
 assertion in benchmark-config.spec.mjs: actual Material selected caret epochs
 preserve actions and temporal paint failure. It authenticates the original

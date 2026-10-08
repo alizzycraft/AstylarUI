@@ -8,8 +8,64 @@ import { transformSync } from 'esbuild';
 import { PNG } from 'pngjs';
 import { materialCaseKey } from './run-checkpoint.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
-import { propertyGroups } from './input-equivalence-policy.mjs';
+import { propertyGroups, sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { materialAbsoluteTextAlignmentTargets, materialAdditionalMeasurementTargets, materialComparisonViewport, materialFamilies, materialFocusedRasterTargets, materialGeometryExcludedTargets, materialInteractionCases, materialInteractionFocusedRasterTargets, materialInteractionTextAlignmentTargets, materialInteractionViewports, materialLeftAlignedTextTargets, materialMobileFlowCases, materialMobileFlowFamilies, materialProfiles, materialSemanticExcludedTargets, materialStaticCases, materialSupplementalStaticCases, materialTextAlignmentTargets, materialTextAlignmentToleranceOverrides, materialTextAuditTargets, materialTextlessFamilies, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets, materialViewports } from './benchmark.config.mjs';
+
+test('selected caret blink owner conserves shipped methods and exposes selection-blind visibility', () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const sourceFile = 'src/app/services/dom/input/text-cursor.renderer.ts';
+  const installedFile = 'examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/input/text-cursor.renderer.js';
+  const source = readFileSync(sourceFile), installed = readFileSync(installedFile);
+  const finding = sourceAuditDefinitions.filter(entry => entry.id === 'core-selected-caret-blink-ignores-noncollapsed-selection');
+  assert.equal(finding.length, 1); assert.equal(finding[0].classification, 'confirmed-core-renderer-defect');
+  assert.equal(finding[0].file, sourceFile); assert.match(source.toString(), new RegExp(finding[0].pattern));
+  for (const receipt of finding[0].evidence) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  assert.equal(hash(source), 'a38f6c7bd0bd0f5ced73e62d929ab8eb3159833d2e39e61d1fee7373e8d77ca3');
+  assert.equal(hash(installed), 'e2b66c82a3e7b2373272576729f22c066836cdaaa446b3f513799af32de4b45d');
+  const methods = ['startBlinking', 'stopBlinking', 'updateCursorVisibility'];
+  const extract = (text, kind) => {
+    const tree = ts.createSourceFile('owner', text, ts.ScriptTarget.Latest, true, kind);
+    const owners = tree.statements.filter(statement => ts.isClassDeclaration(statement) && statement.name?.text === 'TextCursorRenderer');
+    assert.equal(owners.length, 1);
+    return { tree, owner: owners[0], method: name => {
+      const found = owners[0].members.filter(member => ts.isMethodDeclaration(member) && member.name.getText(tree) === name);
+      assert.equal(found.length, 1); return found[0].getText(tree);
+    } };
+  };
+  const current = extract(source.toString(), ts.ScriptKind.TS);
+  const shipped = extract(installed.toString(), ts.ScriptKind.JS);
+  for (const name of methods) {
+    const emitted = transformSync(`class Owner {${current.method(name)}}`, { loader: 'ts', target: 'es2022' }).code;
+    const installedEmitted = transformSync(`class Owner {${shipped.method(name)}}`, { loader: 'js', target: 'es2022' }).code;
+    assert.equal(emitted.replace(/\s+/g, ''), installedEmitted.replace(/\s+/g, ''));
+  }
+  const fields = ['blinkIntervals', 'BLINK_INTERVAL_MS'].map(name => {
+    const found = current.owner.members.filter(member => ts.isPropertyDeclaration(member) && member.name.getText(current.tree) === name);
+    assert.equal(found.length, 1); return found[0].getText(current.tree);
+  });
+  const code = transformSync(`class Owner {${[...fields, ...methods.map(current.method)].join('\n')}}`,
+    { loader: 'ts', target: 'es2022' }).code;
+  let callback, intervalMs; const cleared = [];
+  const Owner = new Function('window', `${code}; return Owner;`)({
+    setInterval(fn, ms) { callback = fn; intervalMs = ms; return 7; },
+    clearInterval(id) { cleared.push(id); }
+  });
+  for (const [start, end] of [[0, 3], [2, 5], [5, 5]]) {
+    const owner = new Owner();
+    const input = { element: { id: 'input' }, focused: true, selectionStart: start, selectionEnd: end,
+      selectionActive: start !== end, cursorMesh: { isVisible: false }, cursorState: { visible: false } };
+    owner.startBlinking(input);
+    assert.equal(intervalMs, 530); assert.equal(input.cursorMesh.isVisible, true);
+    callback(); assert.equal(input.cursorMesh.isVisible, false);
+    callback(); assert.equal(input.cursorMesh.isVisible, true);
+    owner.updateCursorVisibility(input, true); assert.equal(input.cursorMesh.isVisible, true);
+    input.focused = false; owner.updateCursorVisibility(input, true); assert.equal(input.cursorMesh.isVisible, false);
+    owner.stopBlinking(input); assert.equal(input.cursorMesh.isVisible, false);
+    assert.equal(owner.blinkIntervals.size, 0);
+  }
+  assert.deepEqual(cleared, [7, 7, 7]);
+  // Records the existing defect; actual public/Material raster evidence is separate.
+});
 
 test('actual Material selected caret epochs preserve actions and temporal paint failure', () => {
   const file = 'artifacts/material-parity/selection-material-actual-caret-20261008/latest-report.json';
