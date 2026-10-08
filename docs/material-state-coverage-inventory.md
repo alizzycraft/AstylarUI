@@ -6,6 +6,22 @@ Current priority: finish exact case-obligation/current-validity joins,with share
 overlay/scrollbar paint and editable-text paint ahead of isolated passive layout.
 The existing36-family applicability map remains authoritative; no new inventory.
 
+Independent selection confound control (no consumed-source edits): existing public
+empty-caret test was extracted with its unchanged rasterDifference helper; both
+sides received outline:none and full390x140 selection crops. Original source SHA
+d07df06e4ee6996f9fc06b778fc0b429620f1e0526813f33f8c52e6d083c27c0;
+generated invocation SHA1bdcfa6fd5852270221d1cd7e0b713a626918d2950bfaced05eaccfa70ec36ab.
+Session89665 ended exit1,52475.0955ms: public candidate rejects outline as an
+unsupported-style-property; original empty-diagnostic assertion correctly fails.
+Native input DPR1 outline-free solid selection spans y40–63,forward x28–46,
+backward x43–63. No paired geometry/parity diagnosis follows from this partial run.
+Log selection-outline-crop-control-validated-20261008.log SHA
+c971fb3824d114beaceeda428b16d0a5c88790a0921861867a90910c6101ce6c.
+Earlier missing-helper and truncated-TAP-source recovery failures are separately
+retained. Do not relax diagnostics or repeat this unsupported control unchanged.
+Next isolate selection segments through the owning CSS-metric path or a supported
+shared control; native outline/crop confounds and complete glyph paint remain open.
+
 The eighty-endpoint field-popup observation is now registered in the producer's
 source/proof inventory (155 proofs; all151 findings unchanged). Exact registration
 conservation and five predecessor integration checks pass6/6,12140.1587ms;
