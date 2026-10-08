@@ -2,6 +2,24 @@
 
 ## Current evidence boundary — October 8
 
+Frozen field-popup publication reconciliation is complete: export and independent
+cold check terminate successfully; cold check elapsed3723929.0989ms. Compact
+import and whole-index verification also terminate exit0. Retained logs are
+field-popup-canonical-export-20261008.log,
+field-popup-canonical-independent-cold-20261008.log,
+field-popup-canonical-compact-import-20261008.log and
+field-popup-canonical-index-verify-20261008.log under artifacts/material-parity.
+Current package/index generation is
+e004d08df676fd23fe1f42d51ac63dd5b5f5e498b1e32f315c8ee54d8b3120a2;
+decoded SHA256 d465e6d50a31ee651b513b35fb4725e9b185461b516bf07f75a0cc683cbac292.
+The frozen55558304 producer batch has151 findings/155 proofs/550 dependencies;
+verified index preserves8483 differences,39904 controls,389202 occurrences and
+zero unresolved scalar groups. InputEquivalent remains false and all2311 cases
+remain partial. Later standalone modal,selection,antialias and progress evidence
+is not silently included. Next integrate those coherent proofs through existing
+mechanisms,then exact case/obligation/current-validity closure; no recapture of
+settled questions or another unchanged-producer export is justified.
+
 Current priority: finish exact case-obligation/current-validity joins,with shared
 overlay/scrollbar paint and editable-text paint ahead of isolated passive layout.
 The existing36-family applicability map remains authoritative; no new inventory.
