@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 7
 
+- October8 Menu keyboard supplements now cover all eight desktop profile/DPR
+  contexts: ArrowUp/Home/End stay on candidate trigger versus native item
+  navigation; Tab leaves candidate open versus native dismissal. Matched-item
+  real traversal removes activation ambiguity: trusted Enter/Space on Rename
+  dismiss native but leave candidate open; trusted r on Delete followed by
+  >=500ms real wait moves native focus to Rename but leaves candidate Delete.
+  Captured CDK default debounce is200ms. Input/action-owner gaps are corroborated
+  without direct state mutation; do not infer equal-input renderer failure.
+  Reports menu-keyboard-remainder-20261008 and menu-item-keys-20261008 preserve
+  preconditions,trees,PNG and runtime receipts. Mobile/root/collision/full paint
+  and lifecycle still require their own joins; whole-case closure remains0.
+
 - Current Menu action/paint supplement: authenticated light1440x1000DPR1
   runtime confirms native Rename release closes/restores trigger,candidate
   remains open; after verified outside reset/native reopen,reference focuses

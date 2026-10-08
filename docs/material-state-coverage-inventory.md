@@ -4,6 +4,38 @@
 
 ### Configured Menu bounds gap — October 8
 
+Matched-item ambiguity closes with menu-item-keys-20261008: all eight desktop
+contexts reach Rename on both sides through real traversal (candidate Tab,
+native opening focus), verify open state, then send Enter or Space. Trusted
+keydown receipts target Rename; native closes/restores menu-primary, candidate
+stays open/focused on menu-rename. From matched Delete focus, trusted r is
+delivered to Delete on both. Immediate sample retains Delete; after at least
+500ms real elapsed time native focuses Rename, candidate remains Delete.
+Captured checkpoint-authenticated CDK list-key-manager withTypeAhead default
+is200ms. Thus absent item-dismiss/typeahead behavior is not explained by the
+previous wrong-focus activation or premature timing sample. Together with the
+authenticated current application handler no-ops this corroborates an interaction
+authoring contract gap,not an equal-input renderer diagnosis or missing key
+delivery. Different preparatory traversal is disclosed,not normalized away;
+no direct state/focus mutation or proxy click. Producer reuses original checkpoint
+preflight,runner theme/settlement helpers and supplemental validation.112PNG/
+112trees and16 runtime receipts are retained. Remaining Menu obligations include
+mobile flows,full paint/focus/ripple,root/collision contexts and lifecycle; do
+not repeat the settled desktop keys without drift. Canonical150/150 is unchanged
+because this standalone evidence is not yet a registered producer dependency.
+Verification: focused receipt/precondition assertion passes1/1,606.4508ms;
+the completed outcome assertions pass in the existing configuration integration
+suite13/13,20923.6133ms (menu-item-keys-config-integration-20261008.log).
+Capture menu-item-keys-capture-20261008.log exits0. Required original/failure
+evidence is retained; no successful temporary scratch or full rerun was created.
+Publication reconciliation is explicitly pending: producer proof() records test
+line numbers. Complete TypeScript-AST statement hashes match accepted c78d4704
+for input-focus29d5a9c… and selection52493868…, but their locations moved from
+14/165 to769/920. No body change is hidden; accepted150/150 is frozen historical
+publication,not proof that current regenerated metadata would be byte-identical.
+Integrate standalone Menu findings and this location drift in the next coherent
+canonical batch,not an export after every added test. Final gates remain open.
+
 Current missing-key probe menu-keyboard-remainder-20261008 now records eight
 desktop profile/DPR contexts,16 unchanged pages and11 boundaries per page.
 Every navigation/Tab/Enter/Space sequence has independently verified real

@@ -526,6 +526,58 @@ test('menu keyboard remainder authenticates eight contexts without promoting une
   t.diagnostic('Eight desktop contexts: ArrowUp/Home/End and Tab observed; item activation/typeahead timing/mobile/full paint remain unclosed');
 });
 
+test('matched menu item keys bind real focus activation and delayed typeahead across eight contexts', t => {
+  const file = 'artifacts/material-parity/menu-item-keys-20261008/latest-report.json';
+  const report = JSON.parse(readFileSync(file)), manifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
+  const mapName = 'chunk-I6KBSG37.js.map', mapBytes = readFileSync(`examples/material-showcase/dist/material-showcase/browser/${mapName}`);
+  assert.equal(createHash('sha256').update(mapBytes).digest('hex'), manifest.provenance.browserFiles.find(f => f.file === mapName).sha256);
+  const map = JSON.parse(mapBytes), manager = map.sourcesContent[map.sources.indexOf('node_modules/@angular/cdk/fesm2022/list-key-manager-C7tp3RbG.mjs')];
+  assert.ok(manager.includes('withTypeAhead(debounceInterval = 200)'));
+  const cohorts = materialInteractionCases.filter(c => c.family === 'menu' && c.state === 'open-hover-content');
+  assert.equal(cohorts.length, 8); assert.equal(report.results.length, 16);
+  const key = c => JSON.stringify([c.profile, c.viewport]);
+  const expectedStates = ['enter-item-ready', 'enter-item', 'space-item-ready', 'space-item', 'typeahead-ready', 'typeahead-immediate', 'typeahead-delayed'];
+  const pairs = [], files = new Set();
+  for (const cohort of cohorts) {
+    const rows = report.results.filter(r => key(r) === key(cohort));
+    assert.deepEqual(rows.map(r => r.mode), ['reference', 'astylar']);
+    for (const row of rows) {
+      assert.deepEqual(row.boundaries.map(b => b.state), expectedStates);
+      const states = Object.fromEntries(row.boundaries.map(b => [b.state, b.observation]));
+      for (const state of ['enter-item-ready', 'space-item-ready']) {
+        assert.equal(states[state].open, true); assert.equal(states[state].active.text, 'Rename');
+      }
+      assert.equal(states['typeahead-ready'].open, true); assert.equal(states['typeahead-ready'].active.text, 'Delete');
+      for (const [state, keyName] of [['enter-item', 'Enter'], ['space-item', ' ']]) {
+        const event = states[state].keyEvents.at(-1);
+        assert.equal(event.key, keyName); assert.equal(event.trusted, true); assert.equal(event.text, 'Rename');
+        assert.equal(states[state].open, row.mode === 'astylar');
+        if (row.mode === 'reference') assert.equal(states[state].active.id, 'menu-primary');
+        else assert.equal(states[state].active.astylarId, 'menu-rename');
+      }
+      const typed = states['typeahead-immediate'].keyEvents.at(-1);
+      assert.equal(typed.key, 'r'); assert.equal(typed.trusted, true); assert.equal(typed.text, 'Delete');
+      assert.ok(row.boundaries.at(-1).elapsedAfterImmediateMs >= 500);
+      assert.equal(states['typeahead-immediate'].open, true);
+      assert.equal(states['typeahead-immediate'].active.text, 'Delete');
+      assert.equal(states['typeahead-delayed'].open, true);
+      assert.equal(states['typeahead-delayed'].active.text, row.mode === 'reference' ? 'Rename' : 'Delete');
+      for (const boundary of row.boundaries) for (const receipt of [boundary.inputTree, boundary.screenshot]) {
+        assert.ok(!files.has(receipt.file)); files.add(receipt.file);
+        assert.equal(createHash('sha256').update(readFileSync(receipt.file)).digest('hex'), receipt.sha256);
+      }
+    }
+    for (let index = 0; index < expectedStates.length; index++) pairs.push({
+      reference: { runtime: rows[0].runtime, inputTree: rows[0].boundaries[index].inputTree },
+      astylar: { runtime: rows[1].runtime, inputTree: rows[1].boundaries[index].inputTree },
+    });
+  }
+  assert.equal(files.size, 224);
+  assert.deepEqual(validateSupplementalCapture({ ...report, results: pairs }, { reportFile: file, expectedProvenance: manifest.provenance,
+    script: 'scripts/audit-material-menu-item-keys.mjs', styleProperties: Object.values(propertyGroups).flat() }), { status: 'checkpoint-bound', errors: [] });
+  assert.equal(report.inputEquivalent, false);
+});
+
 test('configured menu bounds authenticate exact runner actions and eight context receipts', t => {
   const file = 'artifacts/material-parity/configured-menu-bounds-final-20261008/latest-report.json';
   const report = JSON.parse(readFileSync(file));
