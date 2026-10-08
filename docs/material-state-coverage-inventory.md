@@ -4,6 +4,32 @@
 
 ### Configured Menu bounds gap — October 8
 
+Collision-response question now has decisive unchanged-component diagnostic
+evidence,not a new configured case. menu-collision-boundary-20261008/latest-report.json
+SHA256c5fce741a7eb00a4e72af366137a66dbf24635fda49e3a9346c4fa2b2f7bd882
+uses light/dark390x280DPR2,derived from configured mobile contexts with only
+viewport height changed. Real trigger center is asserted reachable; real click
+opens and Escape closes. Native trigger top181.078125,bottom221.078125;
+112px menu cannot fit below,so popup y69.078125,height112 ends exactly at
+trigger top. Candidate stays at y222.080001831054,height112,extending54.08000183105537
+CSSpx beyond viewport; resolved absolute top69px remains unchanged. Visually
+inspected candidate PNG shows Rename and cuts off Delete. Thus native above
+fallback is observed,not inferred merely from CDK source or {matches:true}.
+The known unequal trigger-anchor versus fixed-top intent remains the first
+divergence; this is not equal-input core positioning failure or proof that the
+public API lacks a capable anchor path. Later fix must preserve the shared
+CSS-space anchor/fallback relationship,not special-case short viewport offsets.
+Existing generic validator authenticates six paired trees/runtime receipts,
+all12 PNG hashes and780x560 dimensions; capture-time extra collector receipt
+also matches. Capture/validation exit0 in menu-collision-boundary-capture-
+20261008.log and menu-collision-boundary-validation-20261008.log. Producer's
+console summary retains inherited external-root scope text; authoritative
+report.scope explicitly declares short-height diagnostic (do not treat that
+console label as configured coverage). Neither ordinary-case82 nor overall2311
+denominator changes. All prior captures remain immutable. Next Menu work is
+durable bounded-proof integration after export and complete local paint/
+typography/interaction applicability,not another collision recapture.
+
 Ancestor collector receipt gap is corrected in immutable v2 producer/capture,
 not by rewriting v1: menu-mobile-root-context-v2-20261008/latest-report.json
 SHA2561a96c6753996e5048f6533f1c35812aae96a91368b42da4f3f0e37461558defa.
