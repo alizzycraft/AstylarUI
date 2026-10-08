@@ -4,6 +4,25 @@
 
 ### Configured Menu bounds gap — October 8
 
+Retained mobile Menu boundary is now precisely joined without recapture:
+current-full-20261005 has exactly light/dark390x844DPR2 open-dismiss rows.
+Full report SHAab42dbec… and current runner/checkpoint receipt authenticate;
+all four final trees rehash,have no errors,no menu subtree,and closed trigger
+aria-expanded on both sides. Events retain three trigger pointerdown/up/click
+triples; focus ends on menu-primary. Three candidate tracked samples each retain
+12meshes/14materials/5textures. Existing runner explicitly settles then sends
+Escape each cycle; it collects final measurements only after all three cycles.
+interactionState and overlayPlacement are only {matches:true},not measured
+open-state/geometry acceptance. No intermediate open trees/rasters or live scene
+allocation plateau is supplied by those fields. Diagnostic assertions exit0
+in menu-retained-mobile-boundary-20261008.log. This closes final-closed/tracked
+observation accounting for these two historical rows,not current mobile actions,
+open visibility/placement,paint or lifetime. Next missing decisive evidence is
+current mobile open/close boundary observations with live-vs-tracked resources,
+not repeating the retained final state or borrowing desktop keyboard acceptance.
+Frozen canonical export0abe78a0 remains active at session82668/PID25480;
+no registered producer inputs were changed by this read-only join/ledger entry.
+
 Canonical preparation now registers four existing Menu assertions: anchor/input
 owner,bounded remaining pointer/action contexts,missing navigation keys,and
 matched-item activation/timed typeahead. Seven source dependencies append after
