@@ -2,6 +2,34 @@
 
 ## Current resumption ledger — October 7
 
+- October8 current publication is150 findings/150 accepted registered proofs,
+  superseding the146/141 counts below. Export,cold replay and compact-index
+  verification are recorded in material-state-coverage-inventory.md under
+  Configured input paint canonical publication. All2311 configured cases remain
+  partial; zero unresolved scalar attribution is not equal-input acceptance.
+  Later standalone snackbar/Menu evidence is not implicitly canonical.
+
+- Menu anchor investigation now identifies an application input-contract
+  mismatch in eight exact configured open-hover-content contexts (four profiles,
+  desktop1440x1000 DPR1/2). Authenticated captured Material defaults and complete
+  _setPosition method connect start/bottom→start/top with offset0 and four
+  fallbacks. Candidate sibling div authors top69/54/58px and height112/111/110px;
+  native measured height112px,trigger-bottom gap0 versus candidate1/2px.
+  Full current application/reference source equals served source maps.
+  Existing overlay-surface-review's13 groups/344 observations cover snackbar
+  and tooltip,not Menu; do not borrow their closure or causes. CSS positioning
+  documentation covers containing blocks/offsets,not acceptance of this
+  trigger-relative fallback relationship. No claim of global API absence.
+  General correction must preserve the reference relationship through shared
+  CSS-space layout/overlay ownership,not tune the fixed tops. Required remaining
+  proof: equivalent anchor inputs and owning capability path,external root/
+  containing-block context where relevant,collision fallback and other Menu
+  actions/profiles. Existing source/runtime findings remain separate.
+  Combined configuration suite passes9/9,14747.9325ms in
+  artifacts/material-parity/configured-menu-integrated-config-20261008.log;
+  focused source/geometry receipts are linked in the current coverage ledger.
+  No fixture/core/reference/criteria changes; final full gates remain pending.
+
 - October8 publication supersedes the150/141 and running-check notes below:
   coherent150 findings/146 proofs exported and independently cold-checked at
   frozen48df0287,exit0;1205 inputs reauthenticated,zero invalidations. Compact

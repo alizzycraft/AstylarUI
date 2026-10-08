@@ -4,6 +4,18 @@
 
 ### Configured Menu bounds gap — October 8
 
+Integration/capability join: the retained material-overlay-surface-review.json
+population is13 groups/344 observations,only snackbar/tooltip; it supplies no
+Menu anchor equivalence. docs/compatibility/html-css.md positioning section
+documents offsets/containing blocks,not this connected-edge/fallback contract.
+This bounded record review cannot prove global API absence. Handoff now records
+the precise missing relationship and supersedes stale canonical counts with
+150/150. Combined existing benchmark-config.spec.mjs passes9/9,14747.9325ms
+in configured-menu-integrated-config-20261008.log. No canonical recalc is
+justified: standalone Menu proof is not yet a producer inventory dependency.
+Next resolve owning equivalent-anchor capability and remaining exact Menu
+action/root-context obligations; do not repeat the settled fixed-input question.
+
 Anchor ownership followup authenticates served reference map chunk-7SL66K3U,
 complete current reference.component.ts equality,and captured Material menu
 module. Execute its complete default-options factory and _setPosition method
