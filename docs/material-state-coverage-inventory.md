@@ -2,6 +2,19 @@
 
 ## Current evidence boundary — October 8
 
+Standalone batch canonical milestone has started once from frozen85be694a
+producer inputs: session46464,launcherPID26136,workerPID11456,log
+standalone-batch-canonical-export-20261008.log. Latest authoritative process
+snapshot confirms both processes live; log reaches build-audit. No terminal
+result or canonical acceptance yet. Keep producer/proof inputs unchanged and
+poll this session,not another export. Expected153 source findings/160 proofs;
+source dependencies add the two scripts and cursor owner to the accepted550.
+Independent cold check and compact import/whole verification follow terminal
+successful generation. The dry-run path check passed; it is not evidence validation.
+Five closed historical working indexes were losslessly compressed/verified
+before launch (420 hashes unchanged,D:free207405056); exact generation IDs are
+in audit-artifact-retention.md. No original/failure evidence was removed.
+
 Standalone batch predecessor conservation now passes against accepted874d48d7.
 Existing benchmark assertion verifies complete producer equality after removing
 exactly five proof entries and three dependencies,plus complete policy equality

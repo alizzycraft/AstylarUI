@@ -56,6 +56,17 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October8 standalone canonical headroom recovery: five closed historical indexes
+a9e92562d1cfd5f9f462f00cfd7bd969c65375ed2a3878ffe8691b029f26b092,
+dfd8cd42de514899fbf8c87cf3debf7f4ed000be17305e219ae907e396f1afee,
+fd341baa78ab8ffaf93e94d138c6654d45ff54566242fc4412e8f1c73ea41caf,
+4845e414926218b5ada5d389b9a259f45369fb830f0f865b3a1af73ca4a8bf27 and
+db0ba9f5591713e98b2a3e6328aab91d196ee57f923700745616ae5ff902008c
+each had84 JSONL shards transparently compressed. All420 individual hashes
+matched before/after; existing verifyFindings passed for each complete index
+before/after (historical149/148/147/145/145 finding counts,not current counts).
+D:free207405056 bytes after recovery. No evidence bytes,pointers or paths changed.
+
 October8 standalone batch headroom: current closed working-index generation
 e004d08df676fd23fe1f42d51ac63dd5b5f5e498b1e32f315c8ee54d8b3120a2
 had84 JSONL shards transparently NTFS-compressed. Every SHA256 matched before/
