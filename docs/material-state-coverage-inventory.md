@@ -2,6 +2,34 @@
 
 ## Current evidence boundary — October 9
 
+### Shared description-input gap — all76 form-field cases inspected
+
+Retained current-full-20261005 census authenticates report SHAab42dbec… and all152
+original paired tree receipts for76 form-field cases; exact IDs equal unchanged
+configuration(sorted newline case-ID SHA256
+688da9506a5a66803d4a282ce66c1df3552203560958ef190976934bcb519c58).
+Native describedby targets resolve inside captured trees: Public label in68
+non-error cases(12static,8each focus/hover/held/activate/activate-leave/
+edit-empty-blur/disabled),Project name is required in8 error cases. Candidate
+authored control omits ariaDescribedby in all76 despite rendering hint/error text.
+Log form-field-description-input-census-20261009.log SHA256
+53e126e1144df19f385adbe97d50fddeb58d997a0a88097430973d27bacb96bb.
+
+Current authoring control917 and hint/error918–919 show the first divergence
+before core projection. Existing fixture-field-error-subscript-substitution
+classification already owns the8 error cases; extend its applicability rather
+than duplicate it. The68 hint states expose an additional description-input
+omission in the same composition owner. Core semantic bridge435–436 and
+nativeIdRefs663–665 support supplied ID references; the tooltip open AX control
+demonstrates successful mapping,not full input accessibility acceptance here.
+Classification: application authoring omission plus role/name-only gate coverage
+gap. No new core relationship defect or AT/live AX result is inferred from trees.
+Historical compact snapshot e004d08d… was queried explicitly with authenticated
+index/shards; it is not called the newly exported or current accepted package.
+Next join this missing hint relationship into the existing classification batch
+after frozen canonical check,with actual AX inspection only where needed to
+resolve semantics. No recapture,fixture adjustment or whole-case closure.
+
 ### Independent cold check — live; import headroom recovered without deletion
 
 Current process inspection confirms launcher19088 and worker3332 remain alive;
