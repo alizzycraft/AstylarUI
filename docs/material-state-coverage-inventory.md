@@ -63,8 +63,19 @@ remain. Log held-option-dark-dpr2-raster-20261008.log SHA6cc4e83a… exits0.
 Independent held-option-dark-dpr2-independent-20261008.log rehashes all6 PNGs,
 recomputes all30 samples,validates source/action receipts,and confirms all1887
 served browser files unchanged after capture;exit0. Keep original PNGs under
-held-option-dark-dpr2-20261008. Other profiles/DPR,edges,animation timing and
-whole-case closure remain;standalone proof integration awaits frozen export.
+held-option-dark-dpr2-20261008. The same diagnostic now covers the seven missing
+desktop profile/DPR cohorts without repeating darkDPR2. Explicit profile/DPR
+parameters change only declared context/theme/sample scale,not inputs to hide a
+failure. Independent exact-cohort validation authenticates24 family pairs/48
+PNGs, recomputes240 interior pixel samples and checks all1887 served files after
+capture. No duplicate/missing/extra cohort; original six screenshots are reused.
+Every profile/DPR shows the same recorded native/candidate fill difference and
+timepicker's unequal initial selection. Remaining-cohort log SHA256
+4dd95f59a1997c0005910ff56ead9eaad8837762d86bddce0075cd4a8b9e54b1;
+held-option-exact-cohort-validation-20261008.log exits0. This closes the bounded
+desktop held-fill observation population,not matched-time animation,ripple edges,
+mobile/focus/keyboard paint or whole-case acceptance. Exact elapsed brackets are
+retained per screenshot. Canonical proof integration awaits frozen export.
 
 Retained hover background question now has a bounded pixel answer: all16
 autocomplete/select first-option desktop profile/DPR cohorts show native dominant

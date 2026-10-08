@@ -11,6 +11,10 @@ import { fingerprintDirectory, materialBrowserLaunchOptions } from '../tests/mat
 // Diagnostic extension of the existing held-input protocol, not a replacement
 // acceptance test. No fixture, CSS, render state or ripple clock is injected.
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+assert.ok(process.argv.length === 2 || process.argv.length === 4);
+const profile = process.argv.length === 2 ? 'dark' : process.argv[2].replace(/^--profile=/, '');
+const dpr = process.argv.length === 2 ? 2 : Number(process.argv[3].replace(/^--dpr=/, ''));
+assert.ok(['light', 'dark', 'contrast', 'custom'].includes(profile) && [1, 2].includes(dpr));
 const file = 'tests/material-parity/sort-focus-structure.spec.mjs';
 const bytes = readFileSync(file);
 assert.equal(hash(bytes), '4a386f107cee16cb120910717a42b6ee9b40c724f02860b68a60ce29d4784f30');
@@ -36,11 +40,11 @@ const replaceOnce = (before, after) => {
   assert.equal(source.split(before).length, 2, `unique diagnostic extension: ${before}`);
   source = source.replace(before, after);
 };
-replaceOnce('deviceScaleFactor: 1', "deviceScaleFactor: 2, colorScheme: 'dark', reducedMotion: 'reduce'");
-replaceOnce('benchmark=1&profile=light', 'benchmark=1&profile=dark');
+replaceOnce('deviceScaleFactor: 1', `deviceScaleFactor: ${dpr}, colorScheme: '${profile === 'dark' ? 'dark' : 'light'}', reducedMotion: 'reduce'`);
+replaceOnce('benchmark=1&profile=light', `benchmark=1&profile=${profile}`);
 replaceOnce("await page.locator('.frame').waitFor();", `await page.locator('.frame').waitFor();
-        await actions.sendShowcaseCommand(page, { type: 'showcase:theme', theme: actions.profileTheme('dark') });
-        await actions.waitForThemeApplied(page, actions.profileTheme('dark'));`);
+        await actions.sendShowcaseCommand(page, { type: 'showcase:theme', theme: actions.profileTheme('${profile}') });
+        await actions.waitForThemeApplied(page, actions.profileTheme('${profile}'));`);
 replaceOnce('await page.mouse.down();', 'const heldStart = performance.now();\n        await page.mouse.down();');
 replaceOnce('observations.push({ family, mode, target, held });', `
         const measuredAtMs = performance.now() - heldStart;
@@ -50,7 +54,7 @@ replaceOnce('observations.push({ family, mode, target, held });', `
         const captureEndMs = performance.now() - heldStart;
         const png = PNG.sync.read(pixels), sampleRgb = [];
         for (const dx of [-100, -20, 0, 20, 100]) {
-          const x = Math.round((target.x + dx) * 2), y = Math.round(target.y * 2);
+          const x = Math.round((target.x + dx) * ${dpr}), y = Math.round(target.y * ${dpr});
           assert.ok(x >= 0 && y >= 0 && x < png.width && y < png.height);
           const i = (y * png.width + x) * 4;
           sampleRgb.push({ dxCss: dx, rgb: [...png.data.subarray(i, i + 3)] });
@@ -59,13 +63,14 @@ replaceOnce('observations.push({ family, mode, target, held });', `
           screenshot: { file: screenshotFile, sha256: hash(pixels) }, sampleRgb });`);
 replaceOnce('}, {}, { checkpointFile:', '}, materialBrowserLaunchOptions(), { checkpointFile:');
 replaceOnce("light desktop DPR1 only; not matched-time local-raster equivalence or ripple animation parity.",
-  "dark desktop DPR2 diagnostic with real held raster and elapsed brackets; not matched-time ripple animation, equal inputs or full-case parity.");
-const output = path.resolve('artifacts/material-parity/held-option-dark-dpr2-20261008');
+  `${profile} desktop DPR${dpr} diagnostic with real held raster and elapsed brackets; not matched-time ripple animation, equal inputs or full-case parity.`);
+const output = path.resolve(`artifacts/material-parity/held-option-${profile}-dpr${dpr}-20261008`);
 assert.ok(!existsSync(output), 'new diagnostic directory required; never overwrite retained captures');
 mkdirSync(output);
 const execute = new Function('withFrozenShowcase', 'assert', 'path', 'PNG', 'hash', 'output', 'materialBrowserLaunchOptions', 'actions',
   `return (${source});`)(frozen, assert, path, PNG, hash, output, materialBrowserLaunchOptions, actions);
-console.log(JSON.stringify({ sourceFile: file, sourceSha256: hash(bytes), helperSha256: hash(helper),
+console.log(JSON.stringify({ profile, dpr, scriptSha256: hash(readFileSync('scripts/audit-material-held-option-raster.mjs')),
+  sourceFile: file, sourceSha256: hash(bytes), helperSha256: hash(helper),
   runnerSha256: hash(runner), actionBodiesSha256: hash(actionSource), originalCallbackSha256: hash(callback.getText(ast)),
   diagnosticCallbackSha256: hash(source), output, acceptance: false }));
 await execute({ diagnostic: text => console.log(text) });
