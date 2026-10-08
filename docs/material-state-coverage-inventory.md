@@ -2,6 +2,28 @@
 
 ## Current evidence boundary — October 8
 
+### Compiled component styles — exact current derivation
+
+The three remaining application styles now reproduce their complete captured
+Angular-scoped strings. `node scripts/check-material-component-style-derivation.cjs`
+exits0: Astylar366 bytes SHA b4dd34f118f696f01ec0f61900519cd55f4a0c76947f147546aeca0b6acd1d87;
+Comparison2242 bytes SHA ca5dc074802db63232d066a7c72b941c02e9f68cdd9204ba25a5472636b0eaeb;
+Reference2177 bytes SHA de6e763e285f49ee56cabd5f919e160bf969883e6b632ae465019b5c14243e68.
+All three have zero warnings. The read-only check authenticates CSS maps and
+containing JavaScript against the existing current-full checkpoint, extracts only
+the Component decorator's authored styles, uses the installed original component
+bundler and Angular encapsulateStyle, and compares complete strings without
+normalization or omitted source-map comments. No build/capture is overwritten.
+An initial Windows ESM path invocation failed before comparison; the corrected
+invocation uses pathToFileURL. An initially overbroad styles-property extraction
+also failed before comparison; decorator-scoped extraction resolves the ambiguity
+without modifying authored input. Existing inline-style source hashes agree.
+This closes the three compiled/shimmed style boundaries noted below, not runtime
+clock/context validity, current rendering acceptance or whole-case obligations.
+Next prioritize runtime/clock validity and exact case-obligation closure, then
+the remaining shared state/paint/lifetime questions. Pending canonical producer
+inputs remain frozen; this standalone check is not silently registered there.
+
 ### Compiled global stylesheet — exact current derivation
 
 Question: does authored-style identity extend to the retained global compiled CSS?
