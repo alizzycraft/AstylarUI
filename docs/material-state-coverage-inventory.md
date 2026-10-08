@@ -2,6 +2,27 @@
 
 ## Current evidence boundary — October 8
 
+### Configured snackbar timer boundary join — October 8
+
+The exact configured census contains59 snackbar interaction cases: one timed
+auto-dismiss (light,desktop-dpr1,1440x1000,DPR1) and58 intentionally persistent
+benchmark states. Both application callbacks preserve this distinction. The
+authenticated October5 full report contains exactly that timed case,passing
+after dismissal with candidate open=false,no runtime errors and both popup
+geometry targets explicitly missing. Both input-tree receipts authenticate.
+This is closed-final-state evidence,not measured open-state paint or timing.
+The newer ordinary lifetime replacement uses1440x900/390x844 contexts,so it
+must not be counted as the exact configured timed case or all59-case closure.
+Existing configuration test now enforces this join and non-overlap. Initial
+assertion failure (wrong materialCaseKey call signature) remains preserved in
+snackbar-configured-lifetime-census-20261008.log; corrected focused check1/1
+passes in6244.0359ms. Full configuration suite6/6 passes in24205.0131ms:
+snackbar-configured-lifetime-config-suite-20261008.log. No new browser capture,
+renderer/fixture change or canonical export. Remaining: open-state local paint,
+fade boundaries and resource/late-disposal obligations; exact whole-case
+closure remains unverified. Canonical150/150 remains the accepted batch,
+with this standalone join awaiting coherent registration rather than re-export.
+
 ### Authenticated snackbar lifetime replacement — October 8
 
 The missing-provenance question below is closed for a new bounded observation,

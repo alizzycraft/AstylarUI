@@ -68,6 +68,41 @@ test('snackbar lifetime replacement binds real actions and all seven boundaries 
   assert.equal(raw.inputEquivalent, false); assert.equal(raw.renderingEquivalent, false);
 });
 
+test('configured snackbar lifetime census preserves timed and intentionally persistent boundaries', () => {
+  const rows = materialInteractionCases.filter(r => r.family === 'snack-bar');
+  assert.equal(rows.length, 59);
+  const timed = rows.filter(r => r.state === 'auto-dismiss');
+  assert.deepEqual(timed, [{ family: 'snack-bar', profile: 'light', viewport: {
+    id: 'desktop-dpr1', width: 1440, height: 1000, deviceScaleFactor: 1 }, state: 'auto-dismiss' }]);
+  assert.equal(rows.filter(r => r.state !== 'auto-dismiss').length, 58);
+  const reference = readFileSync('examples/material-showcase/src/app/reference.component.ts', 'utf8');
+  const candidate = readFileSync('examples/material-showcase/src/app/astylar.component.ts', 'utf8');
+  assert.ok(reference.includes("const shouldMeasureLifetime = !this.benchmarkMode || this.benchmarkInteraction === 'auto-dismiss';"));
+  assert.ok(candidate.includes("if (this.benchmarkMode && this.benchmarkInteraction !== 'auto-dismiss') return;"));
+  const replacement = JSON.parse(readFileSync('artifacts/material-parity/snackbar-lifetime-bound-current-20261008/latest-report.json'));
+  assert.ok(replacement.results.every(r => !timed.some(c => c.profile === r.profile &&
+    c.viewport.width === r.viewport.width && c.viewport.height === r.viewport.height &&
+    c.viewport.deviceScaleFactor === r.viewport.deviceScaleFactor)));
+  const bytes = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const report = JSON.parse(bytes);
+  const observed = report.interactions.filter(r => r.family === 'snack-bar' && r.state === 'auto-dismiss');
+  assert.equal(observed.length, 1);
+  const row = observed[0];
+  assert.equal(materialCaseKey('interaction', row), materialCaseKey('interaction', timed[0]));
+  assert.equal(row.meetsAcceptance, true); assert.equal(row.astylarState.open, false);
+  assert.deepEqual(row.runtimeErrors, []);
+  const absent = row.geometry.elements.filter(e => ['snack-bar-overlay', 'snack-bar-surface'].includes(e.id));
+  assert.equal(absent.length, 2);
+  assert.ok(absent.every(e => e.missing));
+  for (const side of ['reference', 'astylar']) {
+    const receipt = row.inputTrees[side], treeBytes = readFileSync(receipt.file);
+    assert.equal(createHash('sha256').update(treeBytes).digest('hex'), receipt.sha256);
+    assert.deepEqual(JSON.parse(treeBytes).errors, []);
+  }
+  // Closed final state is not an open-state timing/paint or whole-case equivalence proof.
+});
+
 test('configured input focus evidence records exact controls without replacing reference actions', t => {
   const file = 'artifacts/material-parity/configured-input-focus-20261008/latest-report.json';
   const capture = JSON.parse(readFileSync(file));
