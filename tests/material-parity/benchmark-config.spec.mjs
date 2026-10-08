@@ -189,8 +189,38 @@ test('snackbar captured timer methods reject late settlement and queued expiry a
   const expiry = [...pending.values()]; assert.equal(expiry.length, 1); assert.equal(expiry[0].delay, 5000);
   destroyed(); expiry[0].fn();
   assert.equal(pending.size, 0); assert.equal(patches, 0);
+  const sessionMapName = 'chunk-3JXWRYJY.js.map';
+  const sessionMapBytes = readFileSync(`examples/material-showcase/dist/material-showcase/browser/${sessionMapName}`);
+  assert.equal(createHash('sha256').update(sessionMapBytes).digest('hex'), manifest.provenance.browserFiles.find(f => f.file === sessionMapName).sha256);
+  const sessionMap = JSON.parse(sessionMapBytes);
+  const sessionIndex = sessionMap.sources.indexOf('node_modules/astylarui/dist/lib/lib/astylar-render-session.js');
+  assert.ok(sessionIndex >= 0);
+  const sessionClass = code => {
+    const parsed = ts.createSourceFile('session.ts', code, ts.ScriptTarget.Latest, true);
+    const classes = parsed.statements.filter(ts.isClassDeclaration).filter(c => c.name?.text === 'AstylarRenderSession');
+    assert.equal(classes.length, 1); return classes[0].getText(parsed).replace(/^export /, '');
+  };
+  const capturedClass = sessionClass(sessionMap.sourcesContent[sessionIndex]);
+  const currentClass = ts.transpileModule(sessionClass(readFileSync('src/lib/astylar-render-session.ts', 'utf8')),
+    { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
+  const formatted = code => transformSync(code, { target: 'es2022', minifyWhitespace: true, legalComments: 'none' }).code;
+  assert.equal(formatted(currentClass), formatted(capturedClass));
+  assert.equal(formatted(sessionClass(readFileSync('examples/material-showcase/node_modules/astylarui/dist/lib/lib/astylar-render-session.js', 'utf8'))), formatted(capturedClass));
+  const Session = new Function(`${capturedClass};return AstylarRenderSession;`)();
+  const session = new Session({}, {}, () => undefined, { requestFrame: () => 1, cancelFrame: () => undefined });
+  const invalidation = session.invalidate('initial');
+  const invalidationRejected = assert.rejects(invalidation, /disposed before settling/);
+  const rejectingOwner = new Owner();
+  Object.assign(rejectingOwner, { snackbarDismissGeneration: 0, benchmarkMode: false, store: owner.store, zone: owner.zone });
+  const rejectedStart = rejectingOwner.startSnackbarDismissTimerAfterSettled(session, 0);
+  const zero = [...pending.entries()]; assert.equal(zero.length, 1); assert.equal(zero[0][1].delay, 0);
+  pending.delete(zero[0][0]); zero[0][1].fn(); await Promise.resolve();
+  const startRejected = assert.rejects(rejectedStart, /disposed before settling/);
+  destroyed(); session.dispose(); await Promise.all([invalidationRejected, startRejected]);
+  assert.equal(pending.size, 0); assert.equal(patches, 0);
   t.diagnostic(JSON.stringify({ methods: names, lateSettlementSchedulesExpiry: false, queuedExpiryPatchesAfterDestroy: false,
-    scope: 'Exact captured/current application methods with controlled scheduler; not Angular runtime destruction, rejected settlement, core resource disposal or all lifecycle acceptance' }));
+    disposedSettlementRejectsStart: true,
+    scope: 'Exact captured/current application methods and complete current/installed/captured render-session class with controlled scheduler; disposal rejection propagates from uncaught async start, not observed Angular/browser unhandled rejection or all lifecycle acceptance' }));
 });
 
 test('configured input focus evidence records exact controls without replacing reference actions', t => {

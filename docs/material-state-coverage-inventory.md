@@ -2,6 +2,27 @@
 
 ## Current evidence boundary — October 8
 
+### Disposed settlement rejection propagation — October 8
+
+Smallest decisive followup executes the complete captured AstylarRenderSession
+class,after whole-class formatting-only equality with current TypeScript emit
+and installed consumer JS. The served source-map hash authenticates. Pending
+whenSettled rejects on dispose (also covered by the existing owning unit spec);
+feeding that actual class to the captured snackbar async start propagates the
+disposal rejection even after DestroyRef advances generation. No5s callback or
+state patch occurs. Successful-settlement/queued-expiry checks remain intact.
+First failure boundary is application error handling: restart uses void on the
+async promise and neither caller nor start catches settlement failure. This
+demonstrates the rejected-promise path,not an observed browser unhandled rejection
+or proof of Angular destruction order. Keep the distinct pending runtime question
+explicit; iframe replacement cannot answer same-document teardown.
+Focused1/1 passes875.414ms in snackbar-disposed-settlement-propagation-20261008.log.
+No implementation/fixture/criteria changes and no browser recapture. Existing
+core live-material findings are separate; generation guards do not prove resource
+cleanup or rejection safety. Next actual same-document disposal/error observation
+must use the owned public/runtime boundary,not a swallowed rejection or synthetic
+surface claiming full acceptance. Canonical150/150 remains unchanged.
+
 ### Snackbar late timer source boundary — October 8
 
 Do not repeat tracked-versus-live probes: the existing17/19/21 live-material
