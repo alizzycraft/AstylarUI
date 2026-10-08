@@ -2,6 +2,30 @@
 
 ## Current evidence boundary — October 8
 
+### Tooltip touch applicability — responsive viewport is not mobile input
+
+The checkpoint-matching runner/config omit isMobile,hasTouch and userAgent;
+configured mobile cases therefore establish responsive rendering,not Android/iOS
+long-press behavior. The18 mobile-flow interactions must not be presented as
+trusted mobile-touch coverage. MatTooltip._platformSupportsMouseEvents selects
+the touch listener branch only when Platform.IOS or ANDROID. That branch authors
+500ms long-press show and1500ms touchend/touchcancel hide,whereas the candidate
+application's tooltip pointerenter/leave callbacks patch open immediately and
+contain no long-press/release-lifetime policy. This is a demonstrated authored
+interaction-contract gap,not an equal-input core event-delivery defect.
+
+Exact read-only AST/source check passes: runner e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0,
+config a55e95abe098be26d6a99e3faab22a951ae140143fece8701726a23624b98535,
+installed tooltip owner75d4207bc0b6e97105c0ff88f80c5017e4df00af13f92b5bdaa19a80bcb81a2a,
+application71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd.
+The two runner/config receipts equal the full capture; application and mapped
+Material dependency applicability were independently established above. No actual
+touch timing result is claimed. Next decisive check is a separate trusted-touch
+probe with explicitly identified Android/iOS context,pre/post500ms observations,
+touch release/cancel and1500ms lifetime,plus short-tap control. Keep this separate
+from configured desktop-UA mobile cases; do not mutate fixtures or infer parity
+from synthetic events. Cold-check worker3332 remains live and its inputs frozen.
+
 ### Configured tooltip popup text inputs — exact18-case join
 
 The configured hover/held paint cohort now has an exact input-owner join across
