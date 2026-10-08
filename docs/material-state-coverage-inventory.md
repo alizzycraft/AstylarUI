@@ -2,6 +2,29 @@
 
 ## Current evidence boundary — October 8
 
+### Snackbar opening-phase first divergence — October 8
+
+Authenticated third-open trees in both retained contexts bind the native
+container to its active150ms _mat-snack-bar-enter rule (forwards fill).
+Computed opacity is0.441763/light and0.53555/dark-request mobile,with scale
+matrices0.888353/0.90711. Candidate surface resolved opacity is1,no transform,
+no animation properties or snackbar animation rules. Current component source
+is already bound to served map contents by this same test. Therefore the first
+demonstrated divergence is unequal animation inputs,not an equivalent-input
+projection/animation failure. CSS animation/transitions/keyframes are explicitly
+unsupported in docs/compatibility/html-css.md:189 and373. Keep that support
+limitation visible; immediate state authoring cannot establish rendering parity
+for Material's enter transition. No offset,wait-based acceptance relaxation,
+reference change or custom candidate animation was introduced.
+Both tree hashes and exact owner/rule links are now enforced in the existing
+replacement proof. Focused1/1 passes1503.1446ms (snackbar-opening-input-phase-20261008.log);
+coherent configuration batch6/6 passes14795.9675ms
+(snackbar-input-paint-config-batch-20261008.log). This answers the observed
+opening-phase mismatch,not exact progress through every transition frame or
+exit disposal. Next prioritize repeated live-resource/late-disposal evidence
+and remaining case-level applicability joins,without repeating settled bottom
+placement/timer checks. Canonical150/150 and whole-case partial counts unchanged.
+
 ### Retained snackbar solid placement observation — October 8
 
 Question: can the authenticated lifetime replacement resolve invisible/below-screen

@@ -53,6 +53,34 @@ test('snackbar lifetime replacement binds real actions and all seven boundaries 
       else assert.deepEqual(observations.at(-1).events.filter(e => e.type === 'click').map(e => e.targetId),
         ['snack-bar-primary', 'snack-bar-primary', 'snack-bar-primary', 'snack-bar-dismiss']);
       for (const row of rows) {
+        if (row.state === 'third-open') {
+          const receipt = row[side].inputTree, bytes = readFileSync(receipt.file);
+          assert.equal(createHash('sha256').update(bytes).digest('hex'), receipt.sha256);
+          const tree = JSON.parse(bytes);
+          assert.deepEqual(tree.errors, []);
+          const nodes = tree.nodes.filter(n => side === 'reference'
+            ? n.attributes?.class?.includes('mat-mdc-snack-bar-container')
+            : n.authored?.id === 'snack-bar-surface');
+          assert.equal(nodes.length, 1);
+          const node = nodes[0];
+          if (side === 'reference') {
+            const style = tree.styles[node.style];
+            assert.ok(Number(style.opacity) > 0 && Number(style.opacity) < 1);
+            assert.match(style.transform, /^matrix\(/);
+            const enter = node.rules.map(i => tree.rules[i]).filter(r =>
+              r.declarations?.['animation-name']?.value === '_mat-snack-bar-enter');
+            assert.equal(enter.length, 1);
+            assert.equal(enter[0].declarations['animation-duration'].value, '150ms');
+            assert.equal(enter[0].declarations['animation-fill-mode'].value, 'forwards');
+          } else {
+            assert.equal(Number(node.resolvedStyle.opacity), 1);
+            assert.equal(node.resolvedStyle.transform, undefined);
+            assert.ok(Object.keys(node.resolvedStyle).every(k => !k.toLowerCase().startsWith('animation')));
+            assert.ok(tree.rules.filter(r => JSON.stringify(r).includes('snack')).every(r =>
+              !JSON.stringify(r).includes('animation')));
+          }
+          // Unequal opening inputs and sampled phase, not an equivalent-input animation defect.
+        }
         const screenshot = row[side].screenshot;
         assert.ok(!files.has(screenshot.file)); files.add(screenshot.file);
         assert.equal(path.dirname(screenshot.file), path.dirname(file));
