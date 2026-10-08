@@ -43,6 +43,13 @@ join selection-caret-material-owner-applicability-20261008.log exits0; source
 a38f6c7b…, installation e2b66c82…, map dba48404… and captured owner175d360f….
 This closes stale owning-method code as an explanation at this boundary. It does
 not establish actual Material selected-caret paint or every caller's state.
+Existing Material local-pixel records do preserve eight selected pairs across
+four mobile DPR2 profiles, focused noncollapsed endpoints and visible highlight
+owners. The hash/PNG-verified read-only selection-material-caret-observation-
+boundary-20261008.log exits0. All screenshots declare caret:hide and candidate
+observations omit cursor visibility, so they cannot establish actual temporal
+selected-caret parity. Do not recapture endpoint/highlight geometry; the missing
+measurement is actual caret epochs at these same trusted action boundaries.
 Next native selection snapping/glyph edge coverage and exact Material action/paint applicability;
 do not repeat the settled crop,offset,kerning,projection or selected-caret question.
 
