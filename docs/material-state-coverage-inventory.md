@@ -2,6 +2,28 @@
 
 ## Current evidence boundary — October 8
 
+Tabs/stepper pointer endpoint gap is narrowed without recapture. Competing
+explanations were missing second-item application action versus unjoined retained
+activation evidence. Current source supplies tab-activity/step-review click
+handlers that patch selected=false; retained runner targets the second native
+tab/step header and corresponding candidate ID. Read-only report replay pins
+current-full-20261005 SHAab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62
+and authenticates64 trees for exactly32 cases (two families,four profiles,
+desktop DPR1/2,activate/activate-leave). Every case records candidate selected=false
+and native/candidate tab aria-selected owners[false,true]; selected content text
+or accessible name is present. Diagnostic exits0 in
+tabs-stepper-pointer-endpoints-20261008.log,SHA256
+2e66afed027076f2251ae7b0be750ef5b29fb58501a422a1a97ac8c139bb7ab5.
+Separate exact-context set equality passes. This closes the retained second-item
+pointer endpoint observation gap,not reverse transition,visible panel content,
+glyph/indicator/state paint,current runtime or full case closure. In particular
+candidate tab-panel name presence is not a WebGL visibility assertion. Earlier
+selected snapshots remain initial-only; keyboard discrepancies are independent.
+No new disabled census was run after finding its existing40-case proof. Next
+join applicable reverse/content/paint evidence rather than repeating this endpoint
+capture. This standalone receipt is outside the frozen canonical batch. Cold
+worker3096 CPU950.390625 seconds; same validation session remains pending.
+
 Publication-space question answered from the existing importer: it writes a
 complete62841035-byte package copy plus compact shards (prior snapshot72718731
 bytes),not shards alone.67080192 free bytes was insufficient. Five closed
