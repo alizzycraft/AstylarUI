@@ -2,6 +2,38 @@
 
 ## Current evidence boundary — October 8
 
+### Exact configured input-focus observation — October 8
+
+The pending capture now closes the exact-control observation gap for all40
+configured focus contexts: five input families,four profiles,desktopDPR1/2 at
+1440x1000,six timed samples each (240 paired rows). Report
+`configured-input-focus-20261008/latest-report.json` records actual DOM input
+identity,focus,value,type,selection endpoints and candidate retained control
+state,with local initial/hide-caret PNGs and input trees. All480 side observations
+are focused; all240 pairs agree on type,value,focus and selection endpoints.
+Email endpoints/direction remain null on both sides. Atlas/team@example.com
+remain nonempty; popup inputs remain empty. This does not replace the distinct
+900px empty-caret evidence or infer equal paint from equal control state.
+
+The producer replays the exact original runner focus/theme bodies,authenticates
+the frozen1887-file browser build and runner receipt,and uses the configured
+viewport/action without editing values,selections,styles or renderer state.
+Existing supplemental validation passes checkpoint/runtime/source/tree binding;
+the focused test independently checks exact40-case membership,all240 sample
+boundaries,current config/runner receipts and all960 PNG hashes/dimensions.
+`configured-input-focus-validation-20261008.log` passes1/1 (6490.7645ms);
+complete existing configuration suite passes3/3 (6598.5517ms) in
+`configured-input-focus-config-suite-20261008.log`. Capture log:
+`configured-input-focus-capture-20261008.log`.
+
+Remaining question is local caret paint at these exact configured boundaries,
+including blink/sampling visibility versus genuine paint divergence. Reuse these
+retained PNGs before any new capture; preserve nonempty/empty and independent
+picker-action distinctions. Whole-case closure remains0; canonical producer
+registration/publication remains148/146 proofs and150 findings. No renderer,
+fixture,reference or acceptance changes. The earlier scope join below remains
+valid history; its missing exact-control observation is now supplied here.
+
 ### Configured input-focus / empty-caret applicability — October 8
 
 The first paint-evidence join now accounts for all40 configured focus cases

@@ -2,7 +2,65 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
+import ts from 'typescript';
+import { PNG } from 'pngjs';
+import { materialCaseKey } from './run-checkpoint.mjs';
+import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
+import { propertyGroups } from './input-equivalence-policy.mjs';
 import { materialAbsoluteTextAlignmentTargets, materialAdditionalMeasurementTargets, materialComparisonViewport, materialFamilies, materialFocusedRasterTargets, materialGeometryExcludedTargets, materialInteractionCases, materialInteractionFocusedRasterTargets, materialInteractionTextAlignmentTargets, materialInteractionViewports, materialLeftAlignedTextTargets, materialMobileFlowCases, materialMobileFlowFamilies, materialProfiles, materialSemanticExcludedTargets, materialStaticCases, materialSupplementalStaticCases, materialTextAlignmentTargets, materialTextAlignmentToleranceOverrides, materialTextAuditTargets, materialTextlessFamilies, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets, materialViewports } from './benchmark.config.mjs';
+
+test('configured input focus evidence records exact controls without replacing reference actions', () => {
+  const file = 'artifacts/material-parity/configured-input-focus-20261008/latest-report.json';
+  const capture = JSON.parse(readFileSync(file));
+  const manifest = JSON.parse(readFileSync(capture.capture.checkpointManifest.file));
+  assert.deepEqual(validateSupplementalCapture(capture, { reportFile: file, expectedProvenance: manifest.provenance,
+    script: 'scripts/audit-material-configured-input-focus.mjs', styleProperties: Object.values(propertyGroups).flat() }),
+  { status: 'checkpoint-bound', errors: [] });
+  const hash = b => createHash('sha256').update(b).digest('hex');
+  const runner = readFileSync(capture.actionSource.file);
+  assert.equal(hash(runner), capture.actionSource.sha256);
+  assert.equal(hash(runner), manifest.provenance.harnessFiles.find(r => r.file === capture.actionSource.file).sha256);
+  const configFile = 'tests/material-parity/benchmark.config.mjs';
+  assert.equal(hash(readFileSync(configFile)), manifest.provenance.harnessFiles.find(r => r.file === configFile).sha256);
+  const ast = ts.createSourceFile('runner.mjs', runner.toString(), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const fn = name => ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+  const block = fn('performInteraction').body.statements.find(n => ts.isIfStatement(n) && n.expression.getText(ast) === "state === 'focus'");
+  assert.equal(hash(block.thenStatement.getText(ast).slice(1, -1)), capture.actionSource.focusBodySha256);
+  assert.equal(hash(fn('profileTheme').body.getText(ast)), capture.actionSource.themeBodySha256);
+  const families = ['form-field', 'input', 'autocomplete', 'datepicker', 'timepicker'];
+  const cases = materialInteractionCases.filter(c => families.includes(c.family) && c.state === 'focus');
+  assert.equal(cases.length, 40); assert.equal(capture.results.length, 240);
+  assert.deepEqual([...new Set(capture.results.map(r => r.caseId))].sort(), cases.map(c => materialCaseKey('interaction', c)).sort());
+  for (const c of cases) {
+    const rows = capture.results.filter(r => r.caseId === materialCaseKey('interaction', c));
+    assert.deepEqual(rows.map(r => r.sample), [0, 1, 2, 3, 4, 5]);
+    for (const row of rows) {
+      assert.equal(row.family, c.family); assert.equal(row.profile, c.profile); assert.deepEqual(row.viewport, c.viewport);
+      assert.equal(row.action, row.sample ? 'wait 125ms' : 'original configured focus action');
+      for (const side of ['reference', 'astylar']) {
+        const observation = row[side].observation, control = observation.control;
+        assert.equal(control.type, c.family === 'input' ? 'email' : 'text');
+        assert.equal(control.value, c.family === 'form-field' ? 'Atlas' : c.family === 'input' ? 'team@example.com' : '');
+        assert.equal(typeof control.focused, 'boolean');
+        if (side === 'reference') assert.equal(control.id, `${c.family}-control`);
+        else assert.equal(control.astylarId, `${c.family}-control`);
+        if (c.family === 'input') {
+          assert.equal(control.selectionStart, null); assert.equal(control.selectionEnd, null); assert.equal(control.selectionDirection, null);
+        }
+        assert.equal(row[side].screenshot.caret, 'initial'); assert.equal(row[side].hiddenCaretControl.caret, 'hide');
+        for (const image of [row[side].screenshot, row[side].hiddenCaretControl]) {
+          const bytes = readFileSync(image.file); assert.equal(hash(bytes), image.sha256);
+          const png = PNG.sync.read(bytes);
+          assert.equal(png.width, Math.round(image.clip.width * c.viewport.deviceScaleFactor));
+          assert.equal(png.height, Math.round(image.clip.height * c.viewport.deviceScaleFactor));
+        }
+      }
+    }
+  }
+  // This authenticates observation coverage, not focus equality or paint acceptance.
+  assert.equal(capture.inputEquivalent, false); assert.equal(capture.renderingEquivalent, false);
+});
 
 test('covers every installed Angular Material component entry point', () => {
   const packageJson = JSON.parse(readFileSync(path.resolve('node_modules/@angular/material/package.json'), 'utf8'));
