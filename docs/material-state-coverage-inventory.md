@@ -27,6 +27,17 @@ its published producer boundary; current source/export reconciliation is pending
 the next coherent integration. Next join retained open bounds for these exact80
 IDs or identify missing observations before scheduling a bounded capture.
 Current capture-harness applicability is now protected by the same assertion:
+The80 remaining open endpoints now have a bounded layout-input applicability
+join to their same-family/profile/desktop-DPR open-hover-content baseline. All160
+side comparisons preserve presence and exact values of position,top,left,right,
+width,height,padding,margin,boxSizing,borderRadius; original and baseline tree
+receipts authenticate. The existing census assertion passes1/1,2983.5633ms.
+Thus the recorded contrast/custom popup-anchor and sizing input differences
+also apply to these endpoint owners; state-specific differences in these ten
+properties are excluded. This is not whole-style/ancestor/content equality or
+used-geometry transfer: the80 bounds observations stay pending. Retained native
+styles are computed,candidate styles resolved; their different stage meanings
+remain explicit. No fresh measurement or renderer/fixture change occurred.
 all10 captureProvenance.harnessFiles exist and byte-match current sources,
 including benchmark configuration,runner and input-tree collector. Focused1/1
 passes2561.7705ms. This excludes capture-harness drift,not renderer/build/font/

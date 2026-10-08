@@ -241,6 +241,9 @@ test('configured overlay placement census distinguishes measured boxes from comp
   // Separate absent endpoint panels from open panels with unmeasured bounds.
   // Input trees record structure/styles, not used popup geometry.
   const endpointCounts = {};
+  let layoutRequestJoins = 0;
+  const popupLayoutProperties = ['position', 'top', 'left', 'right', 'width', 'height',
+    'padding', 'margin', 'boxSizing', 'borderRadius'];
   assert.equal(report.captureProvenance.harnessFiles.length, 10);
   for (const receipt of report.captureProvenance.harnessFiles) {
     assert.equal(createHash('sha256').update(readFileSync(receipt.file)).digest('hex'), receipt.sha256,
@@ -263,6 +266,23 @@ test('configured overlay placement census distinguishes measured boxes from comp
           ? node.attributes?.class?.split(/\s+/).includes(family === 'select' ? 'mat-mdc-select-panel' : 'mat-mdc-autocomplete-panel')
           : node.authored?.id === (family === 'select' ? 'select-options' : 'field-options'));
         assert.equal(panels.length, expectedOpen ? 1 : 0, `${family}/${row.state}/${side} endpoint panel`);
+        if (expectedOpen && row.state !== 'open-hover-content') {
+          const baseline = cohort.find(other => other.state === 'open-hover-content' &&
+            other.profile === row.profile && other.viewport.id === row.viewport.id);
+          assert.ok(baseline);
+          const baselineReceipt = baseline.inputTrees[side], baselineBytes = readFileSync(baselineReceipt.file);
+          assert.equal(createHash('sha256').update(baselineBytes).digest('hex'), baselineReceipt.sha256);
+          const baselineTree = JSON.parse(baselineBytes);
+          const baselinePanel = baselineTree.nodes.find(node => node.key === panels[0].key);
+          assert.ok(baselinePanel);
+          const style = side === 'reference' ? tree.styles[panels[0].style] : panels[0].resolvedStyle;
+          const baselineStyle = side === 'reference' ? baselineTree.styles[baselinePanel.style] : baselinePanel.resolvedStyle;
+          for (const property of popupLayoutProperties) {
+            assert.equal(Object.hasOwn(style, property), Object.hasOwn(baselineStyle, property));
+            assert.equal(style[property], baselineStyle[property], `${family}/${row.state}/${side}/${property}`);
+          }
+          layoutRequestJoins++;
+        }
       }
       assert.equal(row.astylarState.open, expectedOpen);
       if (expectedOpen) open++; else closed++;
@@ -273,6 +293,7 @@ test('configured overlay placement census distinguishes measured boxes from comp
     autocomplete: { open: 56, closed: 42, supplementalBounds: 8, remainingOpenBounds: 48 },
     select: { open: 40, closed: 42, supplementalBounds: 8, remainingOpenBounds: 32 },
   });
+  assert.equal(layoutRequestJoins, 160);
   t.diagnostic(JSON.stringify({ endpointCounts,
     scope: 'Exact retained endpoint structure only; 84 closed endpoints do not require popup boxes at that endpoint. Mobile intermediate opens and 80 unjoined open bounds remain; no used-geometry or current-code acceptance.' }));
   t.diagnostic(JSON.stringify({ retainedPopupContexts: 16, configuredBoundary: 'open-hover-content',
