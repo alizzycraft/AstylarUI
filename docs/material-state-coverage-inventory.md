@@ -4,6 +4,21 @@
 
 ### Current-output dependency applicability — Babylon population closed
 
+Remaining mapped dependency census now has exact membership rather than guessed
+subtraction:2,280 unique JavaScript sources comprise1,925 Babylon,88 Astylar,
+17 application,129 Angular/CDK/Material,113 RxJS,five compare-versions,and one
+each round-polygon,tslib,zone.js. Authenticated manifest/all912 maps have complete
+source content and no conflicting duplicate. The same complete-module formatting
+check closes all118 RxJS/compare-versions modules with zero mismatches. Independent
+read-only log validation checks118 unique rows,113/5 exact package membership,
+equal formatted hashes and all current-installed raw hashes. Log
+current-full-plain-dependency-applicability-20261008.log SHA256
+622e3451d5a2d74d35b6f36b2184a19c15c947ace7f2932c6aa1b78a042c1bc2
+terminates PASS. Next remaining dependency boundary is129 Angular modules plus
+three other plain modules; Angular linker transformations require their own
+complete-module derivation,not arbitrary normalization. This does not establish
+source-to-build CSS derivation,clock validity or complete case acceptance.
+
 Question: do raw captured/installed Babylon source differences indicate runtime
 drift, or build formatting? Complete modules were compared with identical esbuild
 formatting (legalComments none, minifyWhitespace true, treeShaking false, esnext).
