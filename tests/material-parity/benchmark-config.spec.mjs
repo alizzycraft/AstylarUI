@@ -11,6 +11,60 @@ import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs
 import { propertyGroups } from './input-equivalence-policy.mjs';
 import { materialAbsoluteTextAlignmentTargets, materialAdditionalMeasurementTargets, materialComparisonViewport, materialFamilies, materialFocusedRasterTargets, materialGeometryExcludedTargets, materialInteractionCases, materialInteractionFocusedRasterTargets, materialInteractionTextAlignmentTargets, materialInteractionViewports, materialLeftAlignedTextTargets, materialMobileFlowCases, materialMobileFlowFamilies, materialProfiles, materialSemanticExcludedTargets, materialStaticCases, materialSupplementalStaticCases, materialTextAlignmentTargets, materialTextAlignmentToleranceOverrides, materialTextAuditTargets, materialTextlessFamilies, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets, materialViewports } from './benchmark.config.mjs';
 
+test('modal restoration attribution preserves matched removal and unequal close controls', () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const read = (name, sha) => {
+    const bytes = readFileSync(`artifacts/material-parity/${name}`);
+    assert.equal(hash(bytes), sha);
+    return bytes.toString('utf8').trim().split(/\r?\n/).map(line => JSON.parse(line));
+  };
+  const paired = read('modal-public-native-close-order-paired-20261008.log',
+    'd5c508bdd631371cffc779f82201e33da763dd46eff51c3dbf27d977188e2cca');
+  const removal = read('modal-native-node-removal-control-20261008.log',
+    '58f6ab88c674e2318372c71a3fd1e247ffc8643b11fbd44c132b00dd287be6eb');
+  const source = ts.createSourceFile('repro.mjs', readFileSync('scripts/audit-modal-reentrant-close.mjs', 'utf8'),
+    ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const literal = name => {
+    const declarations = source.statements.filter(ts.isVariableStatement)
+      .flatMap(statement => [...statement.declarationList.declarations])
+      .filter(declaration => declaration.name.getText(source) === name);
+    assert.equal(declarations.length, 1);
+    assert.ok(ts.isNoSubstitutionTemplateLiteral(declarations[0].initializer));
+    return declarations[0].initializer.text;
+  };
+  for (const records of [paired, removal]) {
+    const receipt = records.at(-1);
+    assert.equal(receipt.status, 'complete');
+    assert.equal(receipt.observations, records.length - 1);
+    assert.equal(receipt.applicationSource.replace(/\r\n/g, '\n'), literal('applicationSource'));
+    assert.equal(receipt.dependencyCount, 2515);
+    assert.equal(receipt.dependencyReceipt, '0d7db9c3ef706c49a949336f149623bf4a6f7c16ea9b834a5da3ff3a1ad5440e');
+    assert.equal(receipt.bundleSha256, '81b89cb31e3b4c17fcb3a455c8dcdbf21ed9aa327733fe4e58a02aa5ad6ee544');
+    assert.equal(receipt.browser, '154.0.8037.58');
+  }
+  assert.equal(removal.at(-1).nativeSource.replace(/\r\n/g, '\n'), literal('nativeSource'));
+  assert.match(paired.at(-1).nativeSource, /modal\.close\(\)/);
+  assert.match(removal.at(-1).nativeSource, /if\(removeNode\) modal\.remove\(\);else modal\.close\(\)/);
+  const rows = [...paired.slice(0, -1), ...removal.slice(0, -1)];
+  assert.equal(rows.length, 18);
+  const keys = new Set();
+  for (const row of rows) {
+    const key = `${row.side}/${row.dpr}/${row.policy}`;
+    assert.ok(!keys.has(key)); keys.add(key);
+    assert.deepEqual(row.errors, []);
+    assert.deepEqual(row.opened.diagnostics, []); assert.deepEqual(row.closed.diagnostics, []);
+    assert.equal(row.opened.modal, true); assert.equal(row.opened.focus, 'action');
+    assert.equal(row.closed.modal, false);
+    assert.equal(row.closed.focus, row.side !== 'native' && row.policy === 'request-before-update' ? 'BODY' : 'trigger');
+    if (row.policy !== 'default') assert.equal(row.closed.calls.find(call => typeof call === 'object').restorationAccepted,
+      row.policy === 'update');
+  }
+  for (const side of ['astylar', 'native', 'native-remove']) for (const dpr of [1, 2])
+    for (const policy of ['default', 'update', 'request-before-update']) assert.ok(keys.has(`${side}/${dpr}/${policy}`));
+  // Original terminal dependency receipts, not a fresh whole-runtime applicability claim.
+  // Native close retains its node; removal is the matched candidate lifecycle control.
+});
+
 test('snackbar lifetime replacement binds real actions and all seven boundaries to served assets', () => {
   const file = 'artifacts/material-parity/snackbar-lifetime-bound-current-20261008/latest-report.json';
   const raw = JSON.parse(readFileSync(file));

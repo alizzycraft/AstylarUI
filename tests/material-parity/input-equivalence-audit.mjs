@@ -9432,6 +9432,7 @@ function sourceFingerprints(root) {
     'tests/material-parity/case-index-assertion-migration.mjs',
     'tests/material-parity/icon-asset-input.spec.mjs',
     'scripts/audit-material-configured-field-popup-bounds.mjs',
+    'scripts/audit-modal-reentrant-close.mjs',
     'scripts/audit-material-configured-menu-bounds.mjs',
     'scripts/audit-material-menu-actions.mjs',
     'scripts/audit-material-menu-actions-reset.mjs',
@@ -9446,6 +9447,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('modal restoration attribution preserves matched removal and unequal close controls'/,
+      'retained modal close versus removal attribution boundary', 'Authenticates twelve paired public/native-close observations and six matched native-removal controls at DPR1/2, exact original logs, application-source conservation and terminal dependency receipts. Default and update-before-focus restore; request-before-removal leaves BODY on candidate and matched native removal, while native close restores under a different lifecycle operation. Protects the authoring/lifecycle attribution from an unequal-input core-defect claim. Not fresh whole-runtime validity, equivalent paint, all dismissal paths or whole-case closure.'),
     proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('remaining configured field popup bounds preserve exact actions and all eighty endpoints'/,
       'configured field popup bounds and input applicability boundary', 'Authenticates eighty exact remaining autocomplete/select open endpoints, original runner actions, served assets,160 PNG/tree pairs and finite CSS anchor/popup/option bounds. Anchors and bounded popup layout inputs join to the original cases; native shorthand omissions remain explicit with matching recorded longhands. Preserves contrast/custom unequal anchor and size inputs. Not retrospective original pixel registration,current renderer equivalence,full paint,ancestor/lifetime or whole-case closure.'),
     proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('configured menu bounds authenticate exact runner actions and eight context receipts'/,

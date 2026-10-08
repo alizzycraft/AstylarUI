@@ -26,6 +26,17 @@ The existing36-family applicability map remains authoritative; no new inventory.
 
 ### Modal scope and restoration — current conclusion
 
+Retained modal attribution now has a registered focused assertion in
+benchmark-config.spec.mjs: modal restoration attribution preserves matched
+removal and unequal close controls. Exact immutable JSONL log hashes,18 unique
+side/DPR/order controls,original application-source equality,current native
+removal source and terminal2515-dependency receipts are checked. Focused replay
+passes1/1 in657.9274ms (modal-restoration-retained-attribution-proof-20261008.log).
+The existing producer proof/source inventories register this assertion and public
+reduction script for the next coherent batch; published151/155 remains unchanged.
+This is historical evidence conservation with source-bound control intent,not
+new full runtime applicability. No new capture or renderer/fixture edit.
+
 Classification: the configured dialog Escape-restoration failure is a demonstrated
 lifecycle/event-authoring mismatch, not a confirmed core removal defect. Material
 uses restoreFocus:true with its close API; candidate removes its authored dialog
