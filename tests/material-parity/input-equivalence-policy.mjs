@@ -1656,6 +1656,42 @@ export const sourceAuditDefinitions = Object.freeze([
       stage: 'authored semantic tabindex before core bridge projection' },
     justification: 'Both full authored component sources exactly match the frozen served source-map contents. In the two retained radio contexts, real Tab focuses radio-team despite aria-disabled=true; native disabled inputs skip Tab. Both sides retain disabled=true and selected=true through Tab/Space/ArrowLeft. Checkbox and slide-toggle negative controls skip Tab in the same contexts and author disabled-aware tabindex=-1. Candidate radio declarations derive tabindex only from selection. This is an unequal authored focus contract,not evidence that core must suppress focus on every aria-disabled widget or a coordinate defect. Later implementation must restore reference-equivalent disabled focus intent at the authoring boundary. Programmatic focus,pointer blocking,enabled activation,other profiles and disabled paint remain separate obligations; no six-context result certifies full radio acceptance.',
   }),
+  Object.freeze({
+    id: 'fixture-menu-item-dismissal-focus-navigation-and-typeahead-omitted',
+    introducedBy: 'current menu actions and Escape-only handler; historical first-bad revision not established',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`private handleKeydown\(id: string, event: AstylarEvent\): void \{\s*if \(event\.key !== 'Escape' \|\| !this\.store\.state\(\)\.open\) return;`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase menu semantic activation, opening focus, composite navigation and dismissal contract',
+    focusedProof: 'tests/material-parity/benchmark-config.spec.mjs: matched menu item keys bind real focus activation and delayed typeahead across eight contexts',
+    evidence: [
+  {
+    "file": "artifacts/material-parity/menu-actions-reset-20261008/latest-report.json",
+    "sha256": "6b93af93ca14dedca2e1b64c37d2b1ffac6e203ea37d8265c681b6ffc0acd828"
+  },
+  {
+    "file": "artifacts/material-parity/menu-actions-remaining-20261008/latest-report.json",
+    "sha256": "f41bcce117e913caaf956b43848b8b2eedeafd3d4c6792a1da23b0bbb8e33811"
+  },
+  {
+    "file": "artifacts/material-parity/menu-keyboard-remainder-20261008/latest-report.json",
+    "sha256": "07f9faa186bbb1e8fa585d7dcc3f30f003f816537ab5a8888bd8cd1310256700"
+  },
+  {
+    "file": "artifacts/material-parity/menu-item-keys-20261008/latest-report.json",
+    "sha256": "1d1e7a95abaded574e1fce4bb46ae315bc3e36c935331469407c54f77cf68cba"
+  }
+],
+    observation: { component: 'menu', element: 'menu-primary/menu-rename/menu-delete',
+      profiles: ['light', 'dark', 'contrast', 'custom'], dpr: [1, 2],
+      viewport: { width: 1440, height: 1000 },
+      states: ['pointer item release', 'opening focus', 'ArrowDown/ArrowUp/Home/End', 'Tab dismissal', 'matched-item Enter/Space', 'delayed r typeahead', 'outside reset', 'Escape'],
+      property: 'menu focus and item activation/dismissal state transitions',
+      reference: 'opening Rename focus, item navigation, item activation and Tab dismissal; delayed label typeahead',
+      astylar: 'opening trigger focus, missing navigation and item dismissal, Tab traverses open items, delayed typeahead retains Delete',
+      stage: 'unequal application event/state-routing contract before equivalent renderer attribution' },
+    justification: 'Checkpoint-bound real pointer and trusted key captures cover eight desktop profile/DPR contexts. Verified outside resets and open preconditions exclude stale state; matched Rename focus excludes trigger activation, and matched Delete focus plus >=500ms real wait exceeds the authenticated CDK200ms default debounce. Native item pointer release/Enter/Space dismisses and restores the trigger while candidate stays open; native navigation/typeahead moves between items and Tab dismisses while candidate does not. Current complete application source and captured handler reductions agree; no direct state mutation, proxy click or tuned layout input was used. Escape and outside reset close both, retained as negative controls. Different preparatory real traversal to reach the same item is disclosed, not normalized away. This extends the interaction-authoring diagnosis to Menu without expanding the older nine-family finding. Restore the reference-equivalent semantic contract through shared supported owners in later implementation; missing supported functionality must remain a core/public-API issue, not a competing plugin system. No mobile, full paint/ripple, collision/root context, lifecycle, historical first-bad or whole-case acceptance claim follows.',
+  }),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({

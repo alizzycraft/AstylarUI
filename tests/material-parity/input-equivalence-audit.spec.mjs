@@ -2938,22 +2938,32 @@ test('retained standalone visibility disabled and selection cohorts preserve exa
 
 test('recent source diagnostics conserve predecessor findings and reject altered receipts or conclusions', () => {
   const audit = buildMaterialInputAudit(parityReport({}, {}));
+  assert.equal(audit.sourceFindings.length, 151);
+  const predecessorFindings = audit.sourceFindings.slice(0, 150), menuFinding = audit.sourceFindings.at(-1);
+  assert.equal(menuFinding.id, 'fixture-menu-item-dismissal-focus-navigation-and-typeahead-omitted');
+  const acceptedPolicy = execFileSync('git', ['show', 'de9bc7ea:tests/material-parity/input-equivalence-policy.mjs'],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  const acceptedDefinitions = new Function(acceptedPolicy.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
+  assert.deepEqual(predecessorFindings.map(({ locations, detected, ...definition }) => definition), acceptedDefinitions);
+  assert.ok(menuFinding.detected);
+  assert.deepEqual(menuFinding.observation.profiles, ['light', 'dark', 'contrast', 'custom']);
+  assert.deepEqual(menuFinding.observation.dpr, [1, 2]);
   const previous = execFileSync('git', ['show', 'bd79e4b:tests/material-parity/input-equivalence-policy.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const priorDefinitions = new Function(previous.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
   assert.equal(priorDefinitions.length, 135);
-  assert.equal(audit.sourceFindings.length, 150);
-  assert.equal(audit.sourceFindings.at(-1).id, 'fixture-disabled-radio-tabindex-ignores-disabled-state');
-  assert.equal(audit.sourceFindings.at(-2).id, 'fixture-progress-host-focusability-input-omitted');
-  assert.equal(audit.sourceFindings.slice(0, -2).length, 148);
-  assert.equal(audit.sourceFindings.at(-3).id, 'core-svg-dimensionless-image-upload-not-adapted');
-  const legacyFindings = audit.sourceFindings.slice(2, -3);
+  assert.equal(predecessorFindings.length, 150);
+  assert.equal(predecessorFindings.at(-1).id, 'fixture-disabled-radio-tabindex-ignores-disabled-state');
+  assert.equal(predecessorFindings.at(-2).id, 'fixture-progress-host-focusability-input-omitted');
+  assert.equal(predecessorFindings.slice(0, -2).length, 148);
+  assert.equal(predecessorFindings.at(-3).id, 'core-svg-dimensionless-image-upload-not-adapted');
+  const legacyFindings = predecessorFindings.slice(2, -3);
   const conservedPolicy = execFileSync('git', ['show', 'aee5b612:tests/material-parity/input-equivalence-policy.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const conservedDefinitions = new Function(conservedPolicy.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
   assert.equal(legacyFindings.length, 145);
   assert.deepEqual(legacyFindings.map(({ locations, detected, ...definition }) => definition), conservedDefinitions);
-  assert.deepEqual(audit.sourceFindings.slice(0, 2).map(entry => entry.id), [
+  assert.deepEqual(predecessorFindings.slice(0, 2).map(entry => entry.id), [
     'core-public-semantic-subset-omits-accessibility-only-hiding',
     'fixture-list-content-wrappers-and-row-sizing-substituted',
   ]);
@@ -2967,7 +2977,7 @@ test('recent source diagnostics conserve predecessor findings and reject altered
   assert.equal(legacyFindings[139].id, 'plugin-linear-progress-right-origin-and-track-input-mismatch');
   for (const [index, { locations, detected, ...definition }] of legacyFindings.slice(3, 138).entries())
     assert.equal(JSON.stringify(definition), JSON.stringify(priorDefinitions[index]), priorDefinitions[index].id);
-  assert.ok(audit.sourceFindings.every(entry => entry.detected));
+  assert.ok(predecessorFindings.every(entry => entry.detected));
   const expected = ['core-scroll-client-area-does-not-reserve-native-gutter',
     'core-caret-focus-allocation-escapes-render-owner', 'core-text-transparent-backing-and-local-raster-phase'];
   assert.deepEqual(legacyFindings.slice(0, 3).map(entry => entry.id), expected);
@@ -2975,7 +2985,7 @@ test('recent source diagnostics conserve predecessor findings and reject altered
   // This deliberately partial synthetic capture has no paired root-style receipt.
   // Keep that unrelated failure explicit rather than treating this as full acceptance.
   assert.deepEqual(validation(), ['1 cases lack paired root style evidence']);
-  for (const finding of [...audit.sourceFindings.slice(0, 2), ...legacyFindings.slice(0, 3), ...legacyFindings.slice(138), ...audit.sourceFindings.slice(-2)]) {
+  for (const finding of [...predecessorFindings.slice(0, 2), ...legacyFindings.slice(0, 3), ...legacyFindings.slice(138), ...predecessorFindings.slice(-2), menuFinding]) {
     assert.ok(finding.observation.element && finding.observation.states.length && finding.owner && finding.focusedProof);
     for (const receipt of finding.evidence) {
       assert.equal(createHash('sha256').update(readFileSync(receipt.file)).digest('hex'), receipt.sha256);

@@ -4,6 +4,29 @@
 
 ### Configured Menu bounds gap — October 8
 
+Menu action diagnosis now enters existing sourceAuditDefinitions as
+fixture-menu-item-dismissal-focus-navigation-and-typeahead-omitted,classified
+application-plugin-authoring-defect. It pins four immutable reports spanning
+pointer release,verified reset/navigation and matched-item/timed typeahead across
+all eight desktop physical contexts. Observation preserves exact family,targets,
+profiles,DPR,viewport,states,reference/candidate outcomes and pre-rendering owner.
+Existing source-diagnostic test conserves all150 predecessor definitions exactly
+against de9bc7ea and retains every prior receipt/classification/conclusion
+negative control,extending those controls to the new finding. Focused check
+passes1/1,5481.2676ms in menu-source-finding-registration-corrected-20261008.log.
+Initial test-string escaping failure is retained in
+menu-source-finding-registration-20261008.log; no failed evidence is deleted.
+Producer now has151 findings; accepted canonical remains frozen150/150.
+Next register the existing Menu focused assertions and producer dependencies
+through the existing inventory/conservation mechanism,then reconcile relocated
+proof lines and export/check a coherent batch. This preparation does not imply
+published classification,current whole-case acceptance or permission to fix
+the fixture. Mobile/root/collision/paint/lifecycle remain separate gaps.
+Coherent policy/runtime/source integration passes4/4,7291.6516ms in
+menu-source-registration-integration-20261008.log,including full current/captured
+application handler binding and all matched-item report receipts. No new browser
+capture,canonical export or whole-case promotion was performed for registration.
+
 Matched-item ambiguity closes with menu-item-keys-20261008: all eight desktop
 contexts reach Rename on both sides through real traversal (candidate Tab,
 native opening focus), verify open state, then send Enter or Space. Trusted
