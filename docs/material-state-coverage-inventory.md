@@ -16,11 +16,24 @@ bd96d5b922f8244dfafa4fea74fbd54027d03d10663e7dfc8645db73c212d19a,
 terminal process exit0 but semantic result MISMATCH. Independent count/hash join
 checks all132 unique rows/current installed files and74 matching/58 unmatched
 formatted hashes. Do not describe that exit0 as a successful population proof.
-Next reproduce the actual build transform for only those58: the installed
-javascript-transformer-worker.js explicitly uses sourceMapping=false and skips
-linking core,unlike this preliminary direct Babel replay. Harness build command
-is development; no JIT-mode substitution is justified without originating options.
-This closes74 bounded module derivations,not complete runtime/current parity.
+Actual installed build-worker replay now checks only those58 with sourcemap=false,
+thirdPartySourcemaps=false,advancedOptimizations=false,jit=false. It matches the two
+core signal/core modules exactly: build worker skips linking core,where preliminary
+Babel replay reprinted it. Remaining56 still differ in generated module metadata.
+Corrected log current-full-angular-build-worker-applicability-corrected-20261008.log
+SHA256 eb9e84cdae1cfdbd923afa1c0afe8d6b289f3e15471c224eab9d2a15c6ef5de3
+exits0 with semantic MISMATCH. Independent join checks58 unique current-file hashes
+and exact2/56 matching/unmatched counts. Worker SHA dcbf335541e55cde5303f0673994c4e685b52fb1c16c075265ebe5804bcfda3d.
+Initial worker invocation failed decoding Piscina's transfer wrapper before any
+module result; preserve current-full-angular-build-worker-applicability-20261008.log.
+Correction extracts Piscina.valueSymbol without changing worker/output sources.
+Linker owner chunk-BPDNYZBC.js SHA46558f61bfe59c47e07dc639a5ae6f8e9ba331d743a52a5efdb547b79732d1a2
+ties NgModule inline selector scope to linkerJitMode. Captured inline scopes versus
+replay omitted scopes therefore require originating build-option applicability,
+not arbitrary metadata deletion or assumed JIT mode. Harness requests development;
+retained manifest has no explicit JIT option. Next locate originating option evidence
+before deciding whether these56 are transformed equivalents or build/source drift.
+Combined bounded matches now76/132; no complete runtime/current parity acceptance.
 
 Remaining mapped dependency census now has exact membership rather than guessed
 subtraction:2,280 unique JavaScript sources comprise1,925 Babylon,88 Astylar,
