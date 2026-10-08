@@ -2,6 +2,35 @@
 
 ## Current evidence boundary — October 9
 
+### Tooltip canonical theme claim requires correction before final acceptance
+
+Read-only source/proof inspection resolves whether the discovered missing
+benchmark URL merely affected field diagnostics. It also affects the frozen
+tooltip persistent-description finding: observation.physicalContexts explicitly
+claims dark mobile DPR2,while its capture script navigates /tooltip?profile=
+without benchmark=1. ShowcaseStore initializes theme=light and applies profile
+only when benchmark=1; neither comparison component overrides profile separately.
+The focused proof compares row.context.profile labels,but does not assert actual
+frame theme. Hence requested profile is being mistaken for observed theme.
+
+The existing12 AX observations remain actual two-viewport/DPR observations with
+default-light theme;62 configured input IDs/124 receipts and36 conditional closed
+omissions remain independent,unchanged evidence. The first divergence in authored
+description association remains supported. This is an instrumentation scope
+overclaim,not a new projection or core IDREF diagnosis. A source assertion checks
+the capture URL,store default/profile guard,canonical context claim and proof's
+label source. Initial diagnostic string quoting failed its own source-search
+assertion; corrected literal search passes without changing evidence/assertions.
+
+Before final acceptance,correct this finding's context claim and the focused
+proof at their existing boundary,or add a properly theme-verified supplemental
+probe without discarding the original. Cold equality alone cannot prove a theme
+which the original script never selected. The current frozen155 export may
+validate internally but is not final acceptance of this claim. Do not mutate
+its consumed policy/script/spec while original session45371 runs; reconcile this
+specific correction afterward,with complete predecessor conservation intact.
+No new capture,classification waiver,renderer/fixture change or full-case closure.
+
 ### Hint/error description scope completed across configured physical cohorts
 
 One bounded run of the same field probe answers profile/responsive dependence:
