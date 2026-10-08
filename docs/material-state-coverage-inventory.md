@@ -4,6 +4,30 @@
 
 ### Current-output dependency applicability — Babylon population closed
 
+The remaining56 Angular derivations now match completely under the actual derived
+development transform. createCompilerPluginOptions sets includeTestMetadata to
+!optimizationOptions.scripts; compiler-plugin passes jit||includeTestMetadata.
+Development optimization=false therefore requests transformer jit=true even with
+application AOT. Executing these original owners and the installed worker preserves
+all module metadata; no arbitrary JIT substitution or scope stripping. Authenticated
+runner requests development. Source receipts:angular.json b3f9cc12f51cbf366176d92efc74c722cc459d5bd0edeb635be9f74c72c05106,
+compiler-plugin-options.js caa727cbdcb2825577318d4d12fabf28709b4a08576543a610f59c2d61f65989,
+compiler-plugin.js 685a737964ba363c8b004e38ed7eff81647ffc3d45209ccb947aaa0987683677.
+Log current-full-angular-development-jit-applicability-20261008.log SHA256
+294d2e7af70603678e6c15b8a6922bcf309cf504f7250a31342c3ac4df5be8ee
+terminates PASS56/56,using only the previously unmatched modules and five exact
+checkpoint-authenticated maps. Independent union checks all132 unique module IDs,
+all current-installed hashes and129 Angular/three other plain members,zero missing
+or duplicate. Prior74 matches plus worker's two core matches are reused,not rerun.
+The earlier omitted-scope question below is superseded by this demonstrated
+development-option derivation; historical failed comparisons remain retained.
+Together with settled Babylon/RxJS/Astylar/application boundaries,the complete
+2,280 mapped JavaScript source population is accounted for. This is mapped-source
+applicability,not a fresh build or whole current-code rendering acceptance.
+Next prioritize compiled-style derivation and clock/context validity,then exact
+case-obligation closure and remaining state/paint/lifetime questions. No renderer,
+fixture,threshold,canonical-producer or configured-case status changed.
+
 Angular derivation check now inspects the remaining132 modules:129 Angular and
 three plain dependencies. Actual showcase compiler-cli20.3.31 linker replay with
 linkerJitMode=false,complete module formatting and no metadata stripping matches
