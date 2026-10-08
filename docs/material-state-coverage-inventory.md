@@ -2,6 +2,39 @@
 
 ## Current evidence boundary — October 8
 
+### October9 tooltip accessible description — authored closed-state omission
+
+Exact62-case read-only tree census authenticates the current-full report and124
+tree receipts. Native aria-describedby exists62/62; candidate ariaDescribedby
+exists only26/62(18hover/held,8benchmark-open),and is absent36/36 closed cases.
+Native hidden description targets are outside all62 captured visible trees;
+do not infer dangling references from their omission. Existing role/name semantic
+gates all match but never compare accessible description,so cannot accept this
+relationship. Actual browser AX observations now supply the missing boundary.
+
+tooltip-description-physical-20261009.log SHA256
+be63952fe78a6041d1bdf29e7518003ddc86d9b8428279cf81a47a9bf89d437f
+records12 actual CDP button observations in light desktopDPR1/dark mobileDPR2:
+native description Create a project persists closed/hover/leave; candidate is
+null/Create a project/null. Both names stay Hover for help and roles button.
+All519/520 runtime assets per side authenticate against the current1887-file
+checkpoint,zero runtime errors; producer/checkpoint/source hashes independently
+verify. Producer scripts/audit-material-tooltip-description.mjs SHA256
+deb994b90ecd5ea625b910e7cd831469c5329d87954235085c8f626af947aaa1.
+
+First divergence is authored input: current tooltipTree at1077 makes the
+relationship conditional on state.open and removes the description node closed.
+Material _syncAriaDescription separately registers persistent help. Current core
+semantic bridge435–436 maps supplied ariaDescribedby and the successful open AX
+description controls that mapping. Classification: application authoring omission,
+with semantic-gate coverage gap; not demonstrated core relationship failure.
+No AT/all-profile AX acceptance. Preserve initial tooltip-description-20261009.log
+failure: locator.hover on the semantic proxy was intercepted by canvas and timed
+out. Retry uses actual rendered CSS-space trigger center,not forced DOM dispatch.
+No fixture/core/producer-inventory changes; canonical registration remains batched
+after the live cold check. Description input census is inspected across62 IDs;
+actual AX result is bounded to the two observed physical contexts.
+
 ### Tooltip configured-case obligation join — 62 cases, not 62 closures
 
 Read-only retained-evidence census authenticates current-full-20261005 report
