@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October8 field-popup proof integration headroom: session47542 completed exit0.
+Eight closed historical working-index generations (064777d7,0a30ca89,0a6c0f6d,
+3ec576a3,4059599c,42d11fb8,4601de6a,462dddc7) each had84 JSONL shards
+transparently compressed,with every SHA256 unchanged and complete existing
+verifyFindings checks before/after. No pointer or evidence bytes changed.
+Free space308789248 bytes after completion; recheck before canonical publication.
+
 The recovered field-popup-bounds-recovered-20261008 capture completed exit0 and
 passed the existing supplemental validator and exact80-case focused receipt/input
 join. Keep its160 PNGs/160 trees and16462330-byte report,SHA256

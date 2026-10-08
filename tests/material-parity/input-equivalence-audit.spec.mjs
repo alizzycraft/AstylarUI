@@ -238,6 +238,23 @@ test('retained bridge and CSS boundary modules bind complete captured installed 
   // complete pipeline validity, typechecking, or current rendering acceptance.
 });
 
+test('field popup observation registration preserves complete predecessor producer', async () => {
+  const { restoreFieldPopupProofRegistration } = await import('./position-composition-producer-transition.mjs');
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8');
+  const previous = execFileSync('git', ['show', `dd5a2a8f:${file}`],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreFieldPopupProofRegistration(current), previous);
+  for (const fragment of ['configured field popup bounds and input applicability boundary',
+    'native shorthand omissions remain explicit', 'Not retrospective original pixel registration',
+    "    'scripts/audit-material-configured-field-popup-bounds.mjs',"]) {
+    assert.throws(() => restoreFieldPopupProofRegistration(current.replace(fragment, fragment + ' altered')));
+  }
+  const parsed = ts.createSourceFile(file, current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const inventory = parsed.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory');
+  assert.equal(inventory.body.statements[0].expression.elements.length, 155);
+});
+
 test('retained extended keyboard cohorts replay original runtime tails and source preambles', async () => {
   const { restoreExtendedKeyboardRegistration } = await import('./position-composition-producer-transition.mjs');
   const producerFile = 'tests/material-parity/input-equivalence-audit.mjs';
@@ -260,7 +277,7 @@ test('retained extended keyboard cohorts replay original runtime tails and sourc
     "    'scripts/audit-material-menu-item-keys.mjs',", "    'scripts/unreviewed-menu-dependency.mjs',")));
   const producerAst = ts.createSourceFile(producerFile, producerSource, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   assert.equal(producerAst.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory')
-    .body.statements[0].expression.elements.length, 154);
+    .body.statements[0].expression.elements.length, 155);
   const digest = value => createHash('sha256').update(value).digest('hex');
   const pinned = (file, hash) => {
     const bytes = readFileSync(file); assert.equal(digest(bytes), hash, file); return bytes;

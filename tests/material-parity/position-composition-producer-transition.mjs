@@ -36,8 +36,18 @@ export function readRetainedSortFocusSource(current = readFileSync('tests/materi
 }
 const extendedKeyboardProof = "    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\\('retained extended keyboard cohorts replay original runtime tails and source preambles'/,\n" +
   "      'retained extended configured keyboard assertion boundary', 'Replays original runtime assertion blocks and source preambles for128 exact family/focus contexts across eight retained batches. Pins logs,original callbacks,served build,report/checkpoint and bounded current source dependencies. Preserves observed activation,navigation,range and modality failures. Not collection-time error callbacks,current paint,lifecycle or complete-case acceptance.'),\n";
-export function restoreExtendedKeyboardRegistration(source) {
+const fieldPopupProof = "    proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\\('remaining configured field popup bounds preserve exact actions and all eighty endpoints'/,\n      'configured field popup bounds and input applicability boundary', 'Authenticates eighty exact remaining autocomplete/select open endpoints, original runner actions, served assets,160 PNG/tree pairs and finite CSS anchor/popup/option bounds. Anchors and bounded popup layout inputs join to the original cases; native shorthand omissions remain explicit with matching recorded longhands. Preserves contrast/custom unequal anchor and size inputs. Not retrospective original pixel registration,current renderer equivalence,full paint,ancestor/lifetime or whole-case closure.'),\n";
+const fieldPopupSource = "    'scripts/audit-material-configured-field-popup-bounds.mjs',\n";
+// Reverse only this exact registration; never substitute evidence for current rendering.
+export function restoreFieldPopupProofRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (!current.includes("/test\\('remaining configured field popup bounds")) return current;
+  assert.equal(current.split(fieldPopupProof).length, 2, 'exact field-popup observation proof registration');
+  assert.equal(current.split(fieldPopupSource).length, 2, 'exact field-popup capture source registration');
+  return current.replace(fieldPopupProof, '').replace(fieldPopupSource, '');
+}
+export function restoreExtendedKeyboardRegistration(source) {
+  let current = restoreFieldPopupProofRegistration(source);
   if (current.includes('configured Menu anchor and input-owner evidence boundary')) {
     const header = 'function focusedProofInventory(root) {\n  return [\n';
     assert.equal(current.split(header).length, 2);

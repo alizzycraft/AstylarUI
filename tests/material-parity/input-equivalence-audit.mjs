@@ -9431,6 +9431,7 @@ function sourceFingerprints(root) {
     'scripts/diagnose-material-root-initial-receipt.mjs',
     'tests/material-parity/case-index-assertion-migration.mjs',
     'tests/material-parity/icon-asset-input.spec.mjs',
+    'scripts/audit-material-configured-field-popup-bounds.mjs',
     'scripts/audit-material-configured-menu-bounds.mjs',
     'scripts/audit-material-menu-actions.mjs',
     'scripts/audit-material-menu-actions-reset.mjs',
@@ -9445,6 +9446,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('remaining configured field popup bounds preserve exact actions and all eighty endpoints'/,
+      'configured field popup bounds and input applicability boundary', 'Authenticates eighty exact remaining autocomplete/select open endpoints, original runner actions, served assets,160 PNG/tree pairs and finite CSS anchor/popup/option bounds. Anchors and bounded popup layout inputs join to the original cases; native shorthand omissions remain explicit with matching recorded longhands. Preserves contrast/custom unequal anchor and size inputs. Not retrospective original pixel registration,current renderer equivalence,full paint,ancestor/lifetime or whole-case closure.'),
     proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('configured menu bounds authenticate exact runner actions and eight context receipts'/,
       'configured Menu anchor and input-owner evidence boundary', 'Authenticates eight exact desktop profile/DPR popup/trigger/item bounds, current/captured full application source and complete reference/core anchoring methods. Native connected-edge relationship differs from candidate fixed CSS offsets/heights. Preserves unequal inputs and hover interior/held ripple distinctions; not equivalent anchors,collision fallback,full paint or Menu closure.'),
     proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('remaining menu action cohorts retain matched context coverage without repeating light DPR1'/,
