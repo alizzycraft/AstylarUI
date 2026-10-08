@@ -56,6 +56,15 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October9 accepted standalone canonical import: new closed generation
+eb90958ea9de87ed6c4c32d7ffc5b30c4d3251ce696d90782673b36047504382 had84
+JSONL shards transparently compressed after successful independent cold check
+and import. All84 before/after SHA256 values agree; whole-index verify passes
+before/after with153 source findings,8483 scalar groups,39904 controls,389202
+occurrences,0 unresolved. Pointer/index bytes unchanged by compression. Observed
+free99581952bytes afterward; recheck before publication. Original/failure captures
+and previous index generations remain retained; no acceptance criteria changed.
+
 October9 independent-check/import headroom: three closed historical working-index
 generations4880964fc1018a1fd6409f7c7af2ddaa5fc21a82e45dab3a0cc5fce5a6019156,
 4ddf218eb8caa20408c06a300568e7a8a17dcc2bbe5ebbc0527030846127776d and

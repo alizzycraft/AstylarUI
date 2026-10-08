@@ -2,6 +2,37 @@
 
 ## Current evidence boundary — October 9
 
+### Standalone canonical batch — independently accepted and compact index restored
+
+Original cold session81279 is terminal exit0,2639165.8545ms; log
+standalone-batch-independent-cold-check-20261008.log SHA256
+69b6ad2cb7f857ab9947b7e72d2c324f464d054bffe3f25e4f220a1aa49a3f48.
+Independent validation/decoded-value comparison succeeds after1205 dependency
+files/89154859bytes reverified,0 invalidations,2 collectors,10 memory hits,0 disk
+hits. This supersedes earlier live/pending producer-status entries,not their
+historical observations. The frozen producer inputs were not changed during it.
+
+Accepted gzip62843030bytes SHA256
+eb90958ea9de87ed6c4c32d7ffc5b30c4d3251ce696d90782673b36047504382;
+decoded2222878430bytes SHA256
+eb38ec1fbfea539f5460268a8d4fc7e605cc76f40a6758705f61ab1e73022df3.
+Existing import completes exit0; whole-index verify passes before/after transparent
+compression of all84 new JSONL shards with individual before/after hash equality.
+Current compact index SHA256
+4213377c173ce37e8a5a08e232e87b02a63991df368a9368836353a94c975594.
+Counts153 source findings,8483 scalar groups,39904 control differences,389202
+occurrences,0 unresolved scalar attributions,inputEquivalent=false. Compact
+logical bytes72722393. No whole-case closure/output acceptance follows.
+
+This batch integrates the previously registered antialias-option and selected-
+caret owner findings plus their five bounded proofs. Recent tooltip touch,
+ownership,keyboard/description and form-field/calendar census evidence remains
+separate pending coherent registration; it is not silently included in153.
+Next reconcile the stale150-definition historical replay boundary against the
+accepted153 population without dropping assertions,then integrate missing
+standalone classifications and finish exact per-case obligation/validity mapping
+before the unchanged final enforced gates. Unrelated generation JSON is unstaged.
+
 ### Editable control/calendar description applicability — exact407-case join
 
 Read-only retained current-full census verifies814 original trees,error arrays
