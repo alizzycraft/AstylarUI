@@ -2392,8 +2392,18 @@ test('recent public and popup proofs join existing inventories without changing 
   }
 });
 
-async function conservedPrePassiveDefinitions() {
-  const { sourceAuditDefinitions: currentRegistered } = await import('./input-equivalence-policy.mjs');
+async function conservedPrePassiveDefinitions(registeredInput) {
+  const latestRegistered = registeredInput ?? (await import('./input-equivalence-policy.mjs')).sourceAuditDefinitions;
+  assert.equal(latestRegistered.length, 153);
+  // Reverse only the three separately accepted later registrations. The full
+  // historical population and predecessor equality below remain authoritative.
+  const laterIds = [
+    'core-engine-antialias-option-overridden-by-hardcoded-argument',
+    'core-selected-caret-blink-ignores-noncollapsed-selection',
+    'fixture-menu-item-dismissal-focus-navigation-and-typeahead-omitted',
+  ];
+  for (const id of laterIds) assert.equal(latestRegistered.filter(entry => entry.id === id).length, 1);
+  const currentRegistered = latestRegistered.filter(entry => !laterIds.includes(entry.id));
   assert.equal(currentRegistered.length, 150);
   assert.equal(currentRegistered.at(-1).id, 'fixture-disabled-radio-tabindex-ignores-disabled-state');
   assert.equal(currentRegistered.at(-2).id, 'fixture-progress-host-focusability-input-omitted');
@@ -2418,6 +2428,21 @@ async function conservedPrePassiveDefinitions() {
   pointer.evidence = pointer.evidence.slice(0, 2);
   return historical;
 }
+
+test('pre-passive replay reverses only named later registrations and rejects predecessor drift', async () => {
+  const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');
+  assert.equal((await conservedPrePassiveDefinitions()).length, 145);
+  for (const mutate of [
+    entries => entries.pop(),
+    entries => entries.push({ id: 'unreviewed-registration' }),
+    entries => { entries.find(entry => entry.id === 'core-engine-antialias-option-overridden-by-hardcoded-argument').id = 'unknown-core-registration'; },
+    entries => { entries.find(entry => entry.id === 'fixture-menu-item-dismissal-focus-navigation-and-typeahead-omitted').id = 'core-selected-caret-blink-ignores-noncollapsed-selection'; },
+    entries => { entries.find(entry => entry.id === 'core-scroll-client-area-does-not-reserve-native-gutter').justification += ' changed'; },
+  ]) {
+    const changed = structuredClone(sourceAuditDefinitions); mutate(changed);
+    await assert.rejects(() => conservedPrePassiveDefinitions(changed));
+  }
+});
 
 test('retained progress paint binds plugin geometry and unequal track inputs', async () => {
   const sourceAuditDefinitions = await conservedPrePassiveDefinitions();

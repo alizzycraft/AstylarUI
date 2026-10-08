@@ -2,6 +2,30 @@
 
 ## Current evidence boundary — October 9
 
+### Historical retained-proof boundary repaired — no observation assertions waived
+
+conservedPrePassiveDefinitions now admits the accepted153 registrations only
+after requiring exactly one of each known later antialias,selected-caret and
+menu-action ID,and reversing only those three. Original150/148/147/145 counts,
+last-ID checks,full predecessor deep equality and pointer evidence conservation
+remain unchanged. Original caller observation assertions are untouched.
+Five negative controls reject missing/extra registration,unknown/duplicate named
+addition and changed predecessor justification. This repairs the earlier153!=150
+wrapper failure; it does not make current rendering pass or bless later inputs.
+
+Existing historical read-only preload runs both reconciliation/applied-theme
+checks2/2(1938.1277ms),then all8 retained progress,compact input,keyboard,
+popup-focus,selection,tooltip texture,Tab/email and standalone visibility callers
+8/8(2617.9486ms). Logs pre-passive-replay-reconciliation-20261009.log SHA256
+769abbd60869fc12382ac5b2e48b7e98f402315e35ff5c7ac5210877ed303689
+and pre-passive-retained-callers-20261009.log SHA256
+2f691ab77c26726b1214a2c509ef3dacc0c876d2ba61e3f4a8fba9270cae878a.
+Changed proof file SHA256 a36c3e4c41c5363ba16653b8032b71895f608df38e36ed2dcf2f2b15a0c7b1f8.
+It is consumed by sourceFingerprints,so accepted0f43396e package remains the
+preceding snapshot,not a fresh current-source acceptance after this edit.
+Batch its fingerprint refresh with pending standalone integration; no expensive
+unchanged browser capture or canonical regeneration for this isolated repair.
+
 ### Standalone canonical batch — independently accepted and compact index restored
 
 Original cold session81279 is terminal exit0,2639165.8545ms; log
