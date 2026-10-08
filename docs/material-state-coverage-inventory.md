@@ -2,6 +2,28 @@
 
 ## Current evidence boundary — October 8
 
+### Compiled global stylesheet — exact current derivation
+
+Question: does authored-style identity extend to the retained global compiled CSS?
+Actual Angular createGlobalStylesBundleOptions/createStylesheetBundleOptions with
+current development configuration,browser-target derivation,Sass/resource plugins
+and global virtual wrapper produces the complete49,786-byte styles.css exactly:
+SHA f60b013aac0fe6ba0d6fcb9ada30fbabcea82b5d92473d0ad0a4be9808a1e1bb.
+All54 emitted font bytes also match checkpoint receipts; zero warnings. Compilation
+is memory-only(write=false,cache disabled); no showcase build/capture overwritten.
+Log current-full-global-style-wrapper-derivation-20261008.log SHA256
+7f623e0ef302d6fd5d21417fad84136793f051e1eb4add24c4f206bbae8d0054
+terminates PASS. Independent log/current CSS/owner hash check passes. Original
+global-styles.js owner16b29a0ecbfa092ea36203058d941b606779a80111d34219e9829481b03b55c8;
+derived target-list hash a08cc76f832e39e7e7d1fc097fdcec87d6b46958941708eaa53dda2e969c0e21.
+Initial lower-level direct-entry comparison differs only at the terminal36-byte
+virtual-wrapper comment and is preserved in current-full-global-style-derivation-
+20261008.log. No comment/string removal was used to obtain the successful result;
+replaying the original wrapper yields whole-byte equality. This closes global
+compiled-style derivation,not three component compiled/shimmed style boundaries,
+clock-sensitive state,rendering acceptance or case-obligation closure. Next inspect
+those three exact component style outputs using existing source/map receipts.
+
 ### Current-output dependency applicability — Babylon population closed
 
 The remaining56 Angular derivations now match completely under the actual derived
