@@ -241,6 +241,11 @@ test('configured overlay placement census distinguishes measured boxes from comp
   // Separate absent endpoint panels from open panels with unmeasured bounds.
   // Input trees record structure/styles, not used popup geometry.
   const endpointCounts = {};
+  assert.equal(report.captureProvenance.harnessFiles.length, 10);
+  for (const receipt of report.captureProvenance.harnessFiles) {
+    assert.equal(createHash('sha256').update(readFileSync(receipt.file)).digest('hex'), receipt.sha256,
+      `Retained endpoint capture harness changed: ${receipt.file}`);
+  }
   for (const family of ['autocomplete', 'select']) {
     const cohort = rows.filter(row => row.family === family);
     const openStates = family === 'autocomplete'

@@ -26,6 +26,18 @@ benchmark-config.spec is a canonical source dependency: b4947eff remains valid f
 its published producer boundary; current source/export reconciliation is pending
 the next coherent integration. Next join retained open bounds for these exact80
 IDs or identify missing observations before scheduling a bounded capture.
+Current capture-harness applicability is now protected by the same assertion:
+all10 captureProvenance.harnessFiles exist and byte-match current sources,
+including benchmark configuration,runner and input-tree collector. Focused1/1
+passes2561.7705ms. This excludes capture-harness drift,not renderer/build/font/
+environment drift. The examined picker-commit report contains six datepicker/
+timepicker rows,no autocomplete/select. Dark/mobile popup-input-selection is
+editing/selection evidence at another viewport/action boundary,not these desktop
+popup bounds. These sources cannot close the80 endpoint geometry joins; this
+bounded search does not prove no other retained bounds exist. Next inspect the
+existing matched-bounds producer/receipts and retained checkpoint observation
+surfaces before choosing any new bounded capture. Do not infer geometry from
+identical style-tree receipts: those trees omit used popup rectangles.
 
 One concrete regression-protection gap is now closed in the existing
 reference-root-ancestor-context.spec.mjs suite. The retained Menu ancestor/collision
