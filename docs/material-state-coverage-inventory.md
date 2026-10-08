@@ -2,6 +2,26 @@
 
 ## Current evidence boundary — October 8
 
+Resumption verification: independent cold session39373 remains live, with launcher
+PID27952 and actual worker PID3096; worker CPU advanced430.96875→463.03125 seconds.
+No terminal result is claimed and no duplicate run was started. Pending priorities
+remain canonical/source reconciliation, exact case-obligation/current-validity
+closure, then remaining shared paint and lifetime questions; settled Menu input
+and collision diagnoses are not reopened. The preceding snapshot turn was a
+status-only turn, not investigation progress; this turn verified the live wait
+and recovered publication headroom without altering evidence bytes.
+
+Nine closed docs JSON records (control-font-style-reset,field-host-layout-inputs,
+overlay-caret-context-survey,owner-caret-input-survey,owner-initial-style-mappings,
+owner-initial-style-survey,range-font-reset,text-align-canonical-plan,
+vertical-align-canonical-plan; all material-prefixed) were NTFS-compressed in
+place. Every compact exit was0 and every SHA256 matched before/after. No captured
+input, source, reference, active output or original path was rewritten/deleted.
+D: available bytes increased28459008→67080192. This remains marginal headroom,
+not proof that a new compact generation or publication can safely fit; check
+requirements before import. Retention-document synchronization awaits the frozen
+validation boundary. Canonical generated files remain uncommitted pending check.
+
 ### Configured Menu bounds gap — October 8
 
 Frozen0abe78a0 Menu canonical export is now terminal exit0 (session82668),
