@@ -46,6 +46,19 @@ No acceptance, renderer or fixture changes; all2311 cases remain partial.
 
 ### Autocomplete option local ink — retained endpoint observation
 
+Retained hover background question now has a bounded pixel answer: all16
+autocomplete/select first-option desktop profile/DPR cohorts show native dominant
+RGB225,219,224 versus candidate229,223,229; zero exact matches. This is not merely
+a different serialized alpha/literal input with coincident observed local fill.
+The existing32-pair ink diagnostic (SHAfb760d60…) and metric source authenticate,
+and all32 distinct original PNG receipts rehash. No capture,translation,threshold
+or canonical input change. Read-only join log popup-hover-retained-background-
+join-20261008.log exits0,SHA07124e6174c4238e0ab7bc3dfdf1fc7fc31e09a50d02e9cc53a90e8893bc682b.
+This observes dominant interior fill only; original separately matched row-bound
+registration limitations remain. Known token-alpha versus opaque authoring precedes
+rendering,not an equal-input core compositing diagnosis. Held ripple timing,
+edges,other families/mobile and full case/current validity remain unclosed.
+
 Existing field-popup-bounds-recovered-20261008 report SHA4e458230… now supplies
 local vertical-ink observations for48 autocomplete endpoints/96 option pairs,
 four profiles and desktopDPR1/2. Existing supplemental validator passes; every
