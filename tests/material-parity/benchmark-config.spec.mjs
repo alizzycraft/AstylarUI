@@ -60,6 +60,24 @@ test('snackbar lifetime replacement binds real actions and all seven boundaries 
         assert.equal(createHash('sha256').update(bytes).digest('hex'), screenshot.sha256);
         assert.equal(pixels.width, viewport.width * viewport.deviceScaleFactor);
         assert.equal(pixels.height, viewport.height * viewport.deviceScaleFactor);
+        if (row.state === 'after-original-expiry') {
+          // Bottom-band exact solid-color bounds: visibility, not glyph/fade equivalence.
+          const color = side === 'reference' ? [50, 48, 51] : [50, 47, 53];
+          const dpr = viewport.deviceScaleFactor;
+          let left = pixels.width, top = pixels.height, right = -1, bottom = -1, count = 0;
+          for (let y = pixels.height - 160 * dpr; y < pixels.height; y++) for (let x = 0; x < pixels.width; x++) {
+            const i = (y * pixels.width + x) * 4;
+            if (color.every((v, j) => pixels.data[i + j] === v)) {
+              left = Math.min(left, x); top = Math.min(top, y);
+              right = Math.max(right, x); bottom = Math.max(bottom, y); count++;
+            }
+          }
+          const width = profile === 'dark' && side === 'reference' ? 374 : 344;
+          assert.ok(count > width * 40 * dpr * dpr);
+          assert.deepEqual({ left: left / dpr, top: top / dpr, width: (right - left + 1) / dpr,
+            height: (bottom - top + 1) / dpr, bottomGap: (pixels.height - bottom - 1) / dpr },
+          { left: (viewport.width - width) / 2, top: viewport.height - 56, width, height: 48, bottomGap: 8 });
+        }
       }
     }
   }

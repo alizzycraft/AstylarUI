@@ -2,6 +2,25 @@
 
 ## Current evidence boundary — October 8
 
+### Retained snackbar solid placement observation — October 8
+
+Question: can the authenticated lifetime replacement resolve invisible/below-screen
+placement without another capture? At after-original-expiry, exact solid-color
+pixels in the bottom160CSSpx band occupy light/native and candidate x548,y844,
+344x48 with8px bottom gap; dark-request mobile native x8,y788,374x48 and candidate
+x23,y788,344x48,also8px gap. Existing test authenticates PNG hashes and now checks
+these bounds and substantial solid area. Focused1/1 passes,1432.4418ms in
+snackbar-retained-bottom-paint-20261008.log. These captured contexts visibly
+render on screen; no downward displacement is needed to explain them. Mobile
+width differs,consistent with retained input mismatch; colors also differ
+(native50,48,51 versus candidate50,47,53). This is not equal-input paint acceptance
+or a universal rejection of historical placement failures. Immediate third-open
+native PNG lacks settled background color while candidate has it: two RAFs do
+not synchronize fade phase. Preserve that boundary,not a settled comparison.
+Bottom-band restriction avoids same-color header pixels. Remaining glyph/local
+paint and actual transition/resource ownership still need their own evidence.
+No capture,renderer,fixture or criteria changes; canonical remains150/150.
+
 ### Configured snackbar timer boundary join — October 8
 
 The exact configured census contains59 snackbar interaction cases: one timed
