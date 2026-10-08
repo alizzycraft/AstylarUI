@@ -2,6 +2,32 @@
 
 ## Current evidence boundary — October 8
 
+### Runtime date applicability — retained open-calendar paint is historical
+
+Question: can exact source/style derivation promote October5 datepicker rasters
+to current-date output? No. All eight configured desktop open states (four
+profiles,DPR1/2) have authenticated native tree today markers on5 and OCT2026;
+their authenticated candidate ring styles are top186px/left50px. Current date
+observation was2026-10-08T21:22:10.178Z,local day8,Africa/Johannesburg. The
+unchanged application materialCurrentDay/month/year helpers use live Date;
+NativeDateAdapter.today likewise returns new Date. The complete capture runner
+matches checkpoint SHA e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0;
+its two context factories set viewport,DPR,colorScheme,reducedMotion but neither
+timezone nor a fixed clock,and it contains no clock/addInitScript installation.
+Each of the16 input-tree files was rehashed against its original report receipt.
+Evidence is current-full-20261005/interactions/datepicker/{light,dark,contrast,custom}/
+{desktop-dpr1,desktop-dpr2}/open/{reference,astylar}-input-tree.json,not a new capture.
+
+This rules out source equality as sufficient current-date raster applicability;
+it does not prove any renderer defect or invalidate historical classifications
+whose proofs are independent of today's cell. Competing source drift was already
+bounded by exact application/map/style derivation. Date-sensitive paint must be
+retested at the final current matrix,or reused only with an explicit historical
+date boundary. Do not infer all99 datepicker cases fail or extend this eight-case
+observation to timepicker's static option content. Other temporal boundaries
+(ripple/blink/dismissal) and full case obligations remain separate. No clock,
+fixture,renderer,canonical producer or acceptance threshold was changed.
+
 ### Compiled component styles — exact current derivation
 
 The three remaining application styles now reproduce their complete captured
