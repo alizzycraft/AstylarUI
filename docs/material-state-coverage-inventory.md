@@ -6,6 +6,24 @@ Current priority: finish exact case-obligation/current-validity joins,with share
 overlay/scrollbar paint and editable-text paint ahead of isolated passive layout.
 The existing36-family applicability map remains authoritative; no new inventory.
 
+Progress programmatic-focus paint gap is closed at the bounded40-case/32-cohort
+boundary. Candidate-only capture reuses the unchanged frozen-showcase helper,
+authenticates all served assets against the October5 manifest and records local
+before/after PNGs. Session61867 exits0; progress-candidate-focus-paint-20261008.log
+SHA2565b498a2d6489924785a02968fd627acfa1ed5704b4b6437d3bca0172c1afc2af.
+Paired join authenticates128 PNGs and all exact configured cohort IDs,with original
+native logSHA d2a134f8… already recorded below. Native helper snapshot65d7256f…
+is recovered from Git91b730a9; complete withFrozenShowcase body equals current
+4a386f10… (added tests do not alter this helper). All16 native progress-bar hosts
+focus without paint change; all16 native spinner hosts focus with local changes.
+Every candidate host remains BODY-focused,tabindex absent,with zero changed pixels.
+This inspects the rendering failure caused by the existing authored focusability
+omission; do not invent candidate focus via tabindex injection or call it parity.
+progress-paired-focus-paint-join-20261008.log exits0. Candidate focus-paint pending
+entries in the historical family rows below are superseded by this exact join;
+track/cap/edge,other lifetime/isolation and full current-validity closure remain.
+Standalone registration follows the frozen canonical check; no source/fixture fix.
+
 Selection current boundary (public Atlas input/textarea,DPR1/2): original authored
 inputs and assertions remain unchanged in the successful measurement controls.
 All four contexts preserve24CSSpx projected and solid-mask height. Input y39
