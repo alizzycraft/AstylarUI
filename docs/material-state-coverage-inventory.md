@@ -30,9 +30,17 @@ methods match current emit/installed/captured syntax trees with every leaf token
 preserved. Parser source6c30ccdc…,installed55274b6b…,mapdba48404…;
 log autocomplete-retained-font-owner-join-20261008.log passes. Normal line height
 uses browser fontBoundingBoxAscent+Descent,not an assumed universal multiplier.
-Remaining: captured numeric parsed lineHeight/line metrics and causal contribution
-to the measured ink residual; inspect that value rather than repeat source defaults.
-Also matched intermediate
+Numeric focus boundary now closes at8 configured profile/DPR contexts: unchanged
+original runner actions and withFrozenShowcase authenticate the October5 assets;
+read-only live texture inputs give lineHeight1.1875,fontSize16,19CSSpx logical
+texture/owner height for both labels in every context. Native retained label style
+requests20px. Page errors empty; no repaint or changed input. Measurement log
+autocomplete-focus-numeric-linebox-20261008.log and independent16-texture census
+autocomplete-focus-numeric-linebox-join-20261008.log both terminate exit0.
+This demonstrates unequal pre-projection line-box inputs at these focus endpoints,
+not a universal core placement error or the residual's exact causal decomposition.
+Remaining: other retained action boundaries and causal contribution to measured ink;
+also matched intermediate
 hover/held paint,other families/responsive contexts,complete case/current validity.
 No whole-case promotion or frozen canonical producer modification follows.
 
