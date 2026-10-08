@@ -46,8 +46,8 @@ test('configured input focus evidence records exact controls without replacing r
     scope: 'Four complete methods only; formatting normalization, not full module/pipeline or rendering acceptance' } }));
   const selectionOwners = [];
   for (const [relative, names] of [
-    ['app/services/dom/input/text-input.manager', ['setupSelectionSync', 'applyControllerState']],
-    ['app/services/dom/interaction/text-highlight-mesh.factory', ['applySelection', 'syncHighlightMeshes', 'createHighlightRecord', 'createHighlightMaterial', 'createForegroundMaterial']]
+    ['app/services/dom/input/text-input.manager', ['setupSelectionSync', 'applyControllerState', 'parseTextStyle']],
+    ['app/services/dom/interaction/text-highlight-mesh.factory', ['applySelection', 'computeSegments', 'resolveCaretPosition', 'syncHighlightMeshes', 'createHighlightRecord', 'createHighlightMaterial', 'createForegroundMaterial']]
   ]) {
     const sourceFile = `src/${relative}.ts`, installedFile = `examples/material-showcase/node_modules/astylarui/dist/lib/${relative}.js`;
     const source = readFileSync(sourceFile), installed = readFileSync(installedFile);
@@ -58,10 +58,23 @@ test('configured input focus evidence records exact controls without replacing r
       assert.equal(method(emitted, name), method(installed.toString(), name), `${relative}/${name}: current/installed divergence`);
       assert.equal(method(matches[0], name), method(installed.toString(), name), `${relative}/${name}: captured/installed divergence`);
     }
+    if (relative.endsWith('text-input.manager')) {
+      const Parser = new Function(`return ${method(matches[0], 'parseTextStyle')}`)();
+      const parser = new Parser();
+      // These retained inputs use pixel lengths only. Stub only the size parser,
+      // not the complete owning style-to-text conversion under investigation.
+      parser.parseSize = value => value === undefined ? undefined : parseFloat(value);
+      const candidate = parser.parseTextStyle({ fontSize: '16px', fontFamily: 'Roboto, Arial, sans-serif' });
+      const explicit = parser.parseTextStyle({ fontSize: '16px', lineHeight: '24px', letterSpacing: '0.496px', fontFamily: 'Roboto' });
+      assert.equal(candidate.fontSize*candidate.lineHeight,19.2); assert.equal(candidate.letterSpacing,0);
+      assert.equal(explicit.fontSize*explicit.lineHeight,24); assert.equal(explicit.letterSpacing,0.496);
+      t.diagnostic(JSON.stringify({ inputSelectionMetricIntent:{candidate:{lineHeightCss:19.2,trackingCss:0},explicit:{lineHeightCss:24,trackingCss:0.496}},
+        scope:'Complete captured parseTextStyle with pixel-size parser boundary; not actual live metrics, full pipeline or final raster causality' }));
+    }
     selectionOwners.push({ sourceFile, sourceSha256: hash(source), installedFile, installedSha256: hash(installed), methods: names });
   }
   t.diagnostic(JSON.stringify({ selectionOwnerApplicability: selectionOwners,
-    scope: 'Seven complete controller-sync/highlight methods; not all selection actions, palette functions, caller or full rendering acceptance' }));
+    scope: 'Ten complete style/controller-sync/highlight methods; not all selection actions, palette functions, caller or full rendering acceptance' }));
   const runner = readFileSync(capture.actionSource.file);
   assert.equal(hash(runner), capture.actionSource.sha256);
   assert.equal(hash(runner), manifest.provenance.harnessFiles.find(r => r.file === capture.actionSource.file).sha256);

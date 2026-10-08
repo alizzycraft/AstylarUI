@@ -4,6 +4,30 @@
 
 ### Selection paint ownership and evidence applicability — October 8
 
+Selection metric-intent trace now reaches the first pre-projection divergence:
+the complete captured TextInputManager.parseTextStyle converts omitted candidate
+line-height to1.2 and omitted tracking to0; explicit24px/.496px native-intent
+values convert to1.5/.496 at16px font. Executing that exact captured method with
+a bounded pixel-size parser produces19.2CSSpx versus24CSSpx line-height inputs.
+This is an owning conversion proof,not a live metric read or complete attribution
+of the18.5/19px solid raster height. Highlight computeSegments consumes CSS line
+metrics and viewport clipping before projection; widths use CSS caret positions.
+Complete parseTextStyle,computeSegments and resolveCaretPosition methods now
+join the previously verified seven,agreeing across current emit,installed and
+checkpoint-authenticated captured module. Existing configuration suite4/4 passes,
+10779.7314ms in `selection-metric-intent-boundary-20261008.log`,with exact source
+receipts and conversion diagnostic. No recapture or implementation change.
+
+Global projection scale is not needed to explain unequal line-height/tracking
+inputs; it is not ruled out everywhere or declared correct by this proof.
+Remaining glyph/raster residual attribution requires live CSS metrics and the
+owning equivalent-input reduction,not new fixture offsets. Keep the already
+recorded core font-list/normal-line-height findings separate rather than assigning
+all Material width/height differences to them. Existing1px single-line text-y
+calibration is another core paint policy,not justification for per-fixture moves;
+its causal contribution here remains unmeasured. Next join/reuse equivalent-input
+selection/typography evidence before any additional action capture.
+
 Local selected-state pixels now distinguish palette from geometry for all8
 forward/backward profile pairs. Authenticated exact-color masks yield native
 24CSSpx high solid highlight,forward21px wide/backward22px wide at x0/17px
