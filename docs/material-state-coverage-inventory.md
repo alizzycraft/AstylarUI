@@ -30,19 +30,26 @@ methods match current emit/installed/captured syntax trees with every leaf token
 preserved. Parser source6c30ccdc…,installed55274b6b…,mapdba48404…;
 log autocomplete-retained-font-owner-join-20261008.log passes. Normal line height
 uses browser fontBoundingBoxAscent+Descent,not an assumed universal multiplier.
-Numeric focus boundary now closes at8 configured profile/DPR contexts: unchanged
-original runner actions and withFrozenShowcase authenticate the October5 assets;
-read-only live texture inputs give lineHeight1.1875,fontSize16,19CSSpx logical
-texture/owner height for both labels in every context. Native retained label style
-requests20px. Page errors empty; no repaint or changed input. Measurement log
-autocomplete-focus-numeric-linebox-20261008.log and independent16-texture census
-autocomplete-focus-numeric-linebox-join-20261008.log both terminate exit0.
-This demonstrates unequal pre-projection line-box inputs at these focus endpoints,
-not a universal core placement error or the residual's exact causal decomposition.
-Remaining: other retained action boundaries and causal contribution to measured ink;
-also matched intermediate
+Numeric endpoint scope now covers all80 recorded field-popup cases:48 autocomplete,
+32 select,four profiles/desktopDPR1/2. Read-only160 live texture inputs and owner
+metadata give lineHeight1.1875,fontSize16,19CSSpx height,0px tracking throughout.
+Native retained labels request20px/0.096px (select's64-label input join also passes).
+Original runner actions/unchanged frozen-host helper are authenticated; assets
+match the1887-file October5 checkpoint after measurement. No page errors,repaint,
+new screenshots or changed inputs. scripts/audit-material-field-option-paint-inputs.mjs
+fills only this missing numeric-input gap and derives label ownership from trees.
+Evidence: original8 focus contexts,40 completed autocomplete rows in
+field-option-paint-inputs-remaining-20261008.log,and corrected select-only32-case
+run field-option-paint-inputs-select-corrected-20261008.log. Initial batch failed
+on a guessed select label ID; preserve that failure,not a successful72-case claim.
+Exact union/independent160-texture assertions/post-run asset checks pass in
+field-option-paint-inputs-exact-census-20261008.log; no repeated completed contexts.
+This demonstrates unequal pre-projection typography for these exact endpoints,
+not a universal core placement error or the residual's causal decomposition.
+Remaining: causal contribution to measured ink and matched intermediate
 hover/held paint,other families/responsive contexts,complete case/current validity.
-No whole-case promotion or frozen canonical producer modification follows.
+New standalone script/evidence await coherent proof integration; no whole-case
+promotion or frozen canonical producer modification follows.
 
 ### Scroll caller applicability — bounded closure
 
