@@ -4,6 +4,24 @@
 
 ### Current-output dependency applicability — Babylon population closed
 
+Angular derivation check now inspects the remaining132 modules:129 Angular and
+three plain dependencies. Actual showcase compiler-cli20.3.31 linker replay with
+linkerJitMode=false,complete module formatting and no metadata stripping matches
+71 Angular modules plus round-polygon,tslib,zone.js. The58 unmatched Angular
+modules remain unresolved,not drift or acceptance. Most first mismatches are
+generated defineNgModule scope metadata; core signal/core modules show expression
+parenthesis differences. Existing log preserves every first mismatch and complete
+hashes:current-full-angular-dependency-applicability-20261008.log SHA256
+bd96d5b922f8244dfafa4fea74fbd54027d03d10663e7dfc8645db73c212d19a,
+terminal process exit0 but semantic result MISMATCH. Independent count/hash join
+checks all132 unique rows/current installed files and74 matching/58 unmatched
+formatted hashes. Do not describe that exit0 as a successful population proof.
+Next reproduce the actual build transform for only those58: the installed
+javascript-transformer-worker.js explicitly uses sourceMapping=false and skips
+linking core,unlike this preliminary direct Babel replay. Harness build command
+is development; no JIT-mode substitution is justified without originating options.
+This closes74 bounded module derivations,not complete runtime/current parity.
+
 Remaining mapped dependency census now has exact membership rather than guessed
 subtraction:2,280 unique JavaScript sources comprise1,925 Babylon,88 Astylar,
 17 application,129 Angular/CDK/Material,113 RxJS,five compare-versions,and one
