@@ -1758,7 +1758,7 @@ export const sourceAuditDefinitions = Object.freeze([
       sha256: 'be63952fe78a6041d1bdf29e7518003ddc86d9b8428279cf81a47a9bf89d437f' }],
     observation: { component: 'tooltip', element: 'tooltip-primary', property: 'persistent accessible description',
       configuredCases: 62, closedInputOmissions: 36, openInputControls: 26,
-      physicalContexts: ['light desktop DPR1', 'dark mobile DPR2'], states: ['closed', 'hover', 'leave'],
+      physicalContexts: ['light desktop DPR1', 'default-light mobile DPR2 (requested dark)'], states: ['closed', 'hover', 'leave'],
       reference: 'Create a project description persists independently of visible popup',
       astylar: 'description is null/Create a project/null across closed/hover/leave',
       stage: 'conditional authored relationship before core ID-reference projection' },

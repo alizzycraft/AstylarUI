@@ -69,8 +69,9 @@ export function restoreDescriptionPolicyRegistration(source) {
     assert.ok(!current.includes("id: 'fixture-tooltip-persistent-description-association-conditioned-on-popup'"), 'missing named hint registration');
     return current;
   }
-  assert.equal(hash(current), '912cdb7a85d345e0ed29270fccc35b98fba1f3c51dc9d02121eb3b8a693f3951',
-    'exact two-finding description registration snapshot');
+  assert.ok(['912cdb7a85d345e0ed29270fccc35b98fba1f3c51dc9d02121eb3b8a693f3951',
+    'ffddc3e82543924cded6d033661d6be4936cdb72609febadc589fae720354336'].includes(hash(current)),
+    'exact original or theme-scope-corrected description registration snapshot');
   const ast = ts.createSourceFile('policy.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   assert.equal(ast.parseDiagnostics.length, 0);
   const entries = ast.statements.filter(ts.isVariableStatement).flatMap(n => [...n.declarationList.declarations])

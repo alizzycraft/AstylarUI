@@ -103,6 +103,16 @@ test('configured field hint descriptions preserve sixty-eight omissions and eigh
 test('configured tooltip descriptions preserve closed input omissions and actual AX open controls', () => {
   const finding = sourceAuditDefinitions.find(row => row.id === 'fixture-tooltip-persistent-description-association-conditioned-on-popup');
   assert.equal(finding.classification, 'application-plugin-authoring-defect');
+  // The original ordinary-mode URL requested dark but did not activate it.
+  // Preserve those observations without treating requested labels as theme proof.
+  assert.deepEqual(finding.observation.physicalContexts,
+    ['light desktop DPR1', 'default-light mobile DPR2 (requested dark)']);
+  const captureSource = readFileSync('scripts/audit-material-tooltip-description.mjs', 'utf8');
+  assert.ok(captureSource.includes('/tooltip?profile='));
+  assert.ok(!captureSource.includes('/tooltip?benchmark=1'));
+  const storeSource = readFileSync('examples/material-showcase/src/app/showcase.store.ts', 'utf8');
+  assert.match(storeSource, /readonly theme = signal<MaterialThemeConfig>\(MATERIAL_THEME_PROFILES.light\)/);
+  assert.match(storeSource, /parameters.get\('benchmark'\) === '1' && profile/);
   const source = descriptionAuthoringSource(); assert.match(source, new RegExp(finding.pattern));
   const rows = descriptionConfiguredTrees('tooltip'); assert.equal(rows.length, 62);
   let closed = 0, open = 0;

@@ -2,6 +2,40 @@
 
 ## Current evidence boundary — October 9
 
+### Original export terminal; canonical tooltip scope corrected in source
+
+Original session45371 exits0,worker29800 is terminal. Export completed at
+2660590.7799ms with436 static/1875 interaction cases,8483 groups,389202
+occurrences,155 source findings,inputEquivalent=false. Evidence session reverified
+1205 files/89154859 bytes,zero invalidations,one collector/10 memory hits/one disk
+hit. Original log SHA256
+8e9dff17dd9b69b4cac3ab267d6808a98bae3a171da99844947b8d00e33c1431.
+Published gzip62844635 bytes SHAa9cb5060e9fdd93736527516f7fa4fe1cd4e9edcb04aab608c4f9ca97e227995;
+decoded2222884887 bytes SHA006e37696e3b8ac9306ef8230b46afa715f02c4ede1432b6ffab70f760f0cb05.
+This internally validated export is not independently accepted: the identified
+tooltip theme claim was still overbroad in its frozen source.
+
+After terminal status,the existing policy now explicitly calls original mobile
+AX observations default-light mobile DPR2(requested dark). Existing focused
+proof asserts that scope and the original ordinary URL/store theme guard,keeping
+all62 case/124 tree and12 original AX observation assertions. No missing dark
+coverage is silently waived: properly themed standalone ca977ea5… evidence above
+awaits integration. The complete policy predecessor reader accepts exactly the
+original912cdb7a… or correctedffddc3e8… full-source hash; both strip only the two
+named additions and prove the same complete153 predecessor hash6d60a7f4….
+Unknown drift and every existing negative control remain rejected.
+
+Focused description/predecessor checks pass4/4(5709.8315ms); complete existing
+producer-transition suite passes32/32(35524.4668ms). Commands are the original
+four-name benchmark-config selection and node --test
+tests/material-parity/position-composition-producer-transition.spec.mjs.
+Generated package now predates corrected policy/spec; accepted working index
+remains153/eb90958e. Defer cold comparison until the coherent corrected AX
+integration/export rather than spending a cold run accepting known-overclaimed
+metadata. Original log/evidence remain retained; no threshold,scope or final gate
+removed. Next integrate existing verified themed tooltip and field observations,
+then one corrected milestone export/independent cold check and exact case closure.
+
 ### Ordinary tooltip description confirmed with actual theme setup
 
 The existing standalone description probe now has an explicit --ordinary-tooltip
