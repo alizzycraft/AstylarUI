@@ -2,6 +2,22 @@
 
 ## Current resumption ledger — October 7
 
+- October8 standalone public selected-caret finding: equal authored Atlas input/
+  textarea atDPR1/2,actual screenshot caret policy on both sides,six125ms epochs,
+  real forward/backward/collapsed states. Native selected caret absent48/48;
+  candidate selected caret visible23/48,with collapsed positive controls on both.
+  Complete shipped/current TextCursorRenderer startBlinking/stopBlinking/
+  updateCursorVisibility agree; original530ms owner ignores selectionActive and
+  toggles a noncollapsed caret. Core visibility policy is the first divergence,
+  before paint/projection. Future implementation must reconcile selection-aware
+  focus/blink visibility at the core owner,not hide candidate cursors in fixtures
+  or alter highlight width. Retain collapsed/blur/disposal and actual-paint controls.
+  See selection-actual-caret-epochs-20261008.log,selection-actual-caret-join-
+  20261008.log and selection-caret-visibility-owner-20261008.log; exact receipts
+  in the coverage ledger. This is bounded public evidence,not all Material input
+  applicability or whole-case closure; canonical source/proof integration remains
+  pending until the frozen field-popup export/check completes. No renderer fix.
+
 - October8 frozen Menu canonical batch now passes independent cold --check
   (exit0,3313695.7602ms),compact import and whole-index verification. Accepted
   package contains151 findings/154 registered proofs; current index generation

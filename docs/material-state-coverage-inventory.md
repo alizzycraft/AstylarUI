@@ -27,9 +27,18 @@ highlight coverage over232/224/235; native corresponding pixel is solid46/97/205
 Forward textarea edge includes the authored caret color208/188/255; removed
 baseline carets also enter changed-pixel counts. Thus exact-color/changed masks
 alone cannot establish narrower geometry. This is not a GPU sampling diagnosis.
-Next pair actual native/candidate caret paint (native-only screenshot hiding
-remains a confounder),native selection snapping and glyph edge coverage; do not
-repeat the settled crop,offset,kerning or dimension-projection checks.
+Actual-caret control removes native-only screenshot hiding and validates unchanged
+selection/focus across six125ms epochs at each state. All48 native selected epochs
+have no caret-color pixels; candidate has23 positive/25 absent selected epochs.
+All eight collapsed cohorts provide positive caret controls. This is real bounded
+selected-caret overdraw,not merely screenshot hiding. Complete current/installed
+startBlinking/stopBlinking/updateCursorVisibility methods match; executing the
+original owner with selectionActive=true preserves visible/toggling caret at530ms.
+First divergence is core focus/timer visibility ignoring noncollapsed selection,
+not fixture typography or projection. Pending source classification/proof integration
+must follow the frozen canonical batch; published151 findings remain unchanged.
+Next native selection snapping/glyph edge coverage and exact Material applicability;
+do not repeat the settled crop,offset,kerning,projection or selected-caret question.
 
 Evidence: selection-projected-css-boundary-20261008.log (session21694 exit0,
 1/1,17019.258ms),SHA d63b49e513523ba434af7d7aeeb254cb621a03b9ac8ab1b947f74ecca1686cd8;
@@ -44,6 +53,12 @@ retains RGBA before/after rows atCSSy42,x26–66 without authored/assertion chan
 selection-fractional-edge-join-20261008.log authenticates that exact hash,eight
 rows/four physical contexts,states,native solid edges,candidate blend values and
 forward caret-color pixels. No screenshot,metric or diagnostic tolerance changed.
+selection-actual-caret-epochs-20261008.log (session20819 exit0,1/1,39415.9748ms),
+SHAea1fe8f274f58d121101ac68cc5d062a718fab7dc3b3bd6a78921a80840dc163;
+selection-actual-caret-join-20261008.log authenticates cohorts/epochs/positive
+controls and unchanged2515 dependency receipt. selection-caret-visibility-owner-
+20261008.log (exit0),SHA86680a3ef66f41624966903bae42ca49a6b5186894d53afcb475a91dc6a57cf4,
+binds complete current/installed owning methods and original callback behavior.
 Prior controls remain retained: selection-css-advance-boundary-20261008.log
 (1/1,15114.3343ms),selection-fullsurface-crop-control-20261008.log (1/1,
 26977.6916ms),selection-fullsurface-owner-boundary-20261008.log (exit0),and
