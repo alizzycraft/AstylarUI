@@ -2,6 +2,27 @@
 
 ## Current evidence boundary — October 8
 
+Selected-panel presence question is now separated from name-only evidence.
+Existing current-full report SHAab42dbec… replay authenticates32 tabs/stepper
+activate/activate-leave endpoint metrics; native/candidate panel inkPixels are
+positive in every context. Four sampled light/desktop-DPR1 alignment crops were
+hashed and visually inspected: both tabs show Activity content,both stepper
+show Review changes. Read-only diagnostic exits0 in
+tabs-stepper-panel-ink-20261008.log,SHA256
+0aa829af657757a222ef2fb6ef7019f2aabf79f98c71e8e4b2e4401580a2746b.
+This rules out an entirely absent selected-panel text in those two sampled
+rasters; positive ink alone does not prove every other crop's text/readability.
+Current tab plugin source338–389 independently reveals its private canvas text,
+2x texture sizing,fontSize*.328125 baseline plus baseline-offset and320ms
+animation. This is already classified reviewed-plugin-tab-panel-text-substitution,
+not a newly discovered renderer cause or equal-input typography acceptance.
+Existing stepper inactive-panel structural omission stays independent of the
+visible selected content. Remaining: exact native/candidate input/render-owner
+mapping,reverse transitions,other-profile visibility/glyph and state paint,
+source/runtime applicability and lifetime; no full-case upgrade. No fixture,
+renderer,registered producer or frozen proof changed. Same cold session39373
+poll returns live; no terminal publication acceptance yet.
+
 Tabs/stepper pointer endpoint gap is narrowed without recapture. Competing
 explanations were missing second-item application action versus unjoined retained
 activation evidence. Current source supplies tab-activity/step-review click
