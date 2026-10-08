@@ -23,7 +23,16 @@ ink also changes while candidate retains literal#1d1b20. Corrected input join lo
 autocomplete-option-ink-input-join-corrected-20261008.log terminates exit0; initial
 failure on a root without resolvedStyle remains retained. Unequal intent precedes
 projection; this does not quantify which difference causes each raster residual.
-Remaining: effective font/default/line-box attribution and matched intermediate
+Retained registry metadata now closes effective style inspection for these96
+labels:16px,normal weight,normal lineHeight,0px tracking,Roboto/Arial fallback.
+Complete inspectResolvedStyles,parseTextProperties and resolveNormalLineHeight
+methods match current emit/installed/captured syntax trees with every leaf token
+preserved. Parser source6c30ccdc…,installed55274b6b…,mapdba48404…;
+log autocomplete-retained-font-owner-join-20261008.log passes. Normal line height
+uses browser fontBoundingBoxAscent+Descent,not an assumed universal multiplier.
+Remaining: captured numeric parsed lineHeight/line metrics and causal contribution
+to the measured ink residual; inspect that value rather than repeat source defaults.
+Also matched intermediate
 hover/held paint,other families/responsive contexts,complete case/current validity.
 No whole-case promotion or frozen canonical producer modification follows.
 
