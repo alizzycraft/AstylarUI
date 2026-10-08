@@ -47,7 +47,8 @@ await settle();window.repro={settle,snapshot,dispose(){surface.dispose();app.des
 const consumer = path.resolve('examples/material-showcase');
 const nativeSource = `
 document.body.style.cssText='margin:0';
-const policy=new URL(location.href).searchParams.get('policy'),calls=[];
+const params=new URL(location.href).searchParams,
+  policy=params.get('policy'),removeNode=params.get('side')==='native-remove',calls=[];
 const trigger=document.createElement('button');trigger.id='trigger';trigger.textContent='Open';
 trigger.style.cssText='position:absolute;left:20px;top:20px;width:120px;height:40px;padding:0;border-width:0;background:#eeeeee;font:14px Arial';
 const modal=document.createElement('dialog');modal.id='modal';
@@ -58,10 +59,11 @@ modal.append(action);document.body.append(trigger,modal);
 trigger.onclick=()=>{calls.push('trigger.click');modal.showModal();};
 action.onkeydown=e=>{if(e.key==='Escape'){calls.push('action.Escape');if(policy!=='default'){
   if(policy==='request-before-update'){trigger.focus();calls.push({restorationAccepted:document.activeElement===trigger});}
-  modal.close();if(policy==='update'){trigger.focus();calls.push({restorationAccepted:document.activeElement===trigger});}
+  if(removeNode) modal.remove();else modal.close();
+  if(policy==='update'){trigger.focus();calls.push({restorationAccepted:document.activeElement===trigger});}
 }}};
 window.repro={settle:()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))),
-snapshot:()=>({focus:document.activeElement.id||document.activeElement.tagName,modal:modal.open,calls:[...calls],diagnostics:[]}),
+snapshot:()=>({focus:document.activeElement.id||document.activeElement.tagName,modal:modal.isConnected&&modal.open,calls:[...calls],diagnostics:[]}),
 dispose(){trigger.remove();modal.remove();}};
 `;
 const hash = value => createHash('sha256').update(value).digest('hex');
@@ -83,7 +85,8 @@ let browser;
 const observations = [];
 try {
   browser = await chromium.launch({ channel: 'chrome', headless: true });
-  for (const side of ['astylar', 'native']) for (const dpr of [1, 2]) for (const policy of ['default', 'update', 'request-before-update']) {
+  const sides = process.argv.includes('--native-removal') ? ['native-remove'] : ['astylar', 'native', 'native-remove'];
+  for (const side of sides) for (const dpr of [1, 2]) for (const policy of ['default', 'update', 'request-before-update']) {
     const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: dpr });
     try {
       const errors = []; page.on('pageerror', error => errors.push(String(error)));
@@ -100,7 +103,7 @@ try {
       assert.deepEqual(errors, []);
       assert.deepEqual(opened.diagnostics, []); assert.deepEqual(closed.diagnostics, []);
       assert.equal(closed.modal, false);
-      assert.equal(closed.focus, side === 'astylar' && policy === 'request-before-update' ? 'BODY' : 'trigger');
+      assert.equal(closed.focus, side !== 'native' && policy === 'request-before-update' ? 'BODY' : 'trigger');
       if (policy !== 'default') assert.equal(closed.calls.find(call => typeof call === 'object').restorationAccepted,
         policy === 'update');
       await page.evaluate(() => window.repro.dispose());

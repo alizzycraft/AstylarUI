@@ -6,6 +6,26 @@ Current priority: finish exact case-obligation/current-validity joins,with share
 overlay/scrollbar paint and editable-text paint ahead of isolated passive layout.
 The existing36-family applicability map remains authoritative; no new inventory.
 
+Correction to the modal compatibility counterexample below: native dialog.close
+retains a closed dialog,whereas candidate site(false) removes its node. These
+are unequal lifecycle inputs; the earlier contrast does not prove a core defect.
+Matched native node-removal control now gives BODY after a rejected pre-removal
+trigger-focus request atDPR1/2,exactly like Astylar. Native default dismissal and
+explicit focus after removal restore trigger. Six removal observations pass,
+session46517 terminal exit0; modal-native-node-removal-control-20261008.log.
+The previous twelve-side control remains intact; its complete candidate
+application source equals this run,and exact policy/DPR focus outcomes join.
+Thus initial application request rejection and reentrant modal/invoker erasure
+remain valid observations,but general renderer-removal incompatibility is NOT
+demonstrated. Material uses restoreFocus:true on its close API while candidate
+removes authored dialog and requests focus before removal. Classify this bounded
+restoration difference as lifecycle/event-authoring mismatch,not a missing core
+restoration rule. Do not "fix" the renderer to restore on all removals merely to
+match Material's different close operation. Future input alignment must preserve
+equivalent close/restoration intent and eligibility ordering,not add arbitrary
+fixture delays. This resolves the immediate ownership question; broader modal
+paint/other dismissal/current-validity and late-async obligations remain open.
+
 Public modal close-order reduction now separates caller timing from missing
 removal restoration. scripts/audit-modal-reentrant-close.mjs uses package-root
 Astylar only,and paired native dialog.showModal/close with matching content,
