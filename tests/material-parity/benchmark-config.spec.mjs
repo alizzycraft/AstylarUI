@@ -373,6 +373,34 @@ test('menu action capture preserves item-click discrepancy and rejected navigati
   assert.equal(candidate['item-clicked'].active.astylarId, 'menu-rename');
   assert.equal(native.reopened.open, true); assert.equal(candidate.reopened.open, false);
   assert.equal(candidate['arrow-down'].open, false); // Navigation precondition failed; not an open-menu keyboard proof.
+  const resetFile = 'artifacts/material-parity/menu-actions-reset-20261008/latest-report.json';
+  const reset = JSON.parse(readFileSync(resetFile));
+  assert.deepEqual(reset.results.map(r => r.mode), ['reference', 'astylar']);
+  const resetPair = { ...reset, results: reset.results[0].boundaries.map((_, index) => ({
+    reference: { runtime: reset.results[0].runtime, inputTree: reset.results[0].boundaries[index].inputTree },
+    astylar: { runtime: reset.results[1].runtime, inputTree: reset.results[1].boundaries[index].inputTree },
+  })) };
+  assert.deepEqual(validateSupplementalCapture(resetPair, { reportFile: resetFile, expectedProvenance: manifest.provenance,
+    script: 'scripts/audit-material-menu-actions-reset.mjs', styleProperties: Object.values(propertyGroups).flat() }), { status: 'checkpoint-bound', errors: [] });
+  for (const row of reset.results) {
+    assert.deepEqual(row.viewport, { width: 1440, height: 1000, deviceScaleFactor: 1 });
+    assert.deepEqual(row.boundaries.map(b => b.state), ['opened', 'item-held', 'item-clicked', 'reset-outside', 'reopened', 'arrow-down', 'escape']);
+    for (const boundary of row.boundaries) for (const receipt of [boundary.inputTree, boundary.screenshot]) {
+      assert.equal(createHash('sha256').update(readFileSync(receipt.file)).digest('hex'), receipt.sha256);
+    }
+    const states = Object.fromEntries(row.boundaries.map(b => [b.state, b.observation]));
+    assert.equal(states['reset-outside'].open, false); assert.equal(states.reopened.open, true);
+    assert.equal(states['arrow-down'].open, true); assert.equal(states.escape.open, false);
+    if (row.mode === 'reference') {
+      assert.equal(states.reopened.active.text, 'Rename'); assert.equal(states['arrow-down'].active.text, 'Delete');
+      assert.equal(states['item-clicked'].open, false);
+    } else {
+      assert.equal(states.reopened.active.astylarId, 'menu-primary');
+      assert.equal(states['arrow-down'].active.astylarId, 'menu-primary');
+      assert.equal(states['item-clicked'].open, true);
+      assert.ok(states['arrow-down'].events.some(e => e.type === 'keydown' && e.targetId === 'menu-primary'));
+    }
+  }
 });
 
 test('configured menu bounds authenticate exact runner actions and eight context receipts', t => {

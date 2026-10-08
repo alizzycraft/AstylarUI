@@ -4,6 +4,23 @@
 
 ### Configured Menu bounds gap — October 8
 
+Navigation precondition gap closes with menu-actions-reset-20261008 capture:
+real outside click verifies both closed,then trigger verifies both reopened
+before ArrowDown. Same light1440x1000 DPR1 current checkpoint: native focuses
+Rename on open and Delete on ArrowDown; candidate remains menu-primary,with
+recorded keydown event targeting that trigger. Escape now closes both and
+restores trigger. Rename pointer release repeats native closed/candidate open.
+No direct state mutation or semantic-proxy click is used. Existing validator
+authenticates page-runtime and all14 boundary trees via paired projection;
+14PNG receipts rehash. menu-actions-reset-validation-20261008.log passes1/1.
+Original rejected-navigation report/producer remain immutable. New producer
+differs only by real reset plus checked preconditions/source label; no fixture
+behavior changes. This closes current runtime uncertainty for this physical
+cohort,not all profiles/DPR,complete keyboard menu behavior or equal-input
+paint acceptance. Next inspect retained item-held local paint and route the
+observed application activation/focus/navigation gaps into the implementation
+handoff; do not recapture this settled click/ArrowDown/Escape sequence.
+
 Bounded runtime action gap now has current-checkpoint evidence in
 menu-actions-current-final-20261008/latest-report.json: light1440x1000 DPR1,
 two unchanged pages,real pointer opening/item hold/release. Native Rename click
