@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October8 standalone batch headroom: current closed working-index generation
+e004d08df676fd23fe1f42d51ac63dd5b5f5e498b1e32f315c8ee54d8b3120a2
+had84 JSONL shards transparently NTFS-compressed. Every SHA256 matched before/
+after and existing whole-index verification passed twice (151 findings,8483
+differences,39904 controls,389202 occurrences,zero unresolved scalar groups).
+D:free rose1380352→36769792 bytes. No pointer,decoded bytes or evidence changed;
+additional safe headroom is required before canonical publication.
+
 October8 field-popup proof integration headroom: session47542 completed exit0.
 Eight closed historical working-index generations (064777d7,0a30ca89,0a6c0f6d,
 3ec576a3,4059599c,42d11fb8,4601de6a,462dddc7) each had84 JSONL shards

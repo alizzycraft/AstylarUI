@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
 import { transformSync } from 'esbuild';
 import { PNG } from 'pngjs';
@@ -10,6 +11,39 @@ import { materialCaseKey } from './run-checkpoint.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { propertyGroups, sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { materialAbsoluteTextAlignmentTargets, materialAdditionalMeasurementTargets, materialComparisonViewport, materialFamilies, materialFocusedRasterTargets, materialGeometryExcludedTargets, materialInteractionCases, materialInteractionFocusedRasterTargets, materialInteractionTextAlignmentTargets, materialInteractionViewports, materialLeftAlignedTextTargets, materialMobileFlowCases, materialMobileFlowFamilies, materialProfiles, materialSemanticExcludedTargets, materialStaticCases, materialSupplementalStaticCases, materialTextAlignmentTargets, materialTextAlignmentToleranceOverrides, materialTextAuditTargets, materialTextlessFamilies, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets, materialViewports } from './benchmark.config.mjs';
+
+test('standalone proof batch conserves complete accepted predecessor producer and policy', () => {
+  const prior = file => execFileSync('git', ['show', `874d48d7:${file}`],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replace(/\r\n/g, '\n');
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
+  const tree = ts.createSourceFile(file, current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const inventory = tree.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory');
+  const elements = inventory.body.statements[0].expression.elements;
+  assert.equal(elements.length, 160);
+  const names = ['public antialias option core constructor boundary', 'selected caret core visibility owner boundary',
+    'actual Material selected caret temporal failure boundary', 'configured progress focus paint failure evidence boundary',
+    'retained modal close versus removal attribution boundary'];
+  names.forEach((name, index) => assert.equal(elements[index].arguments[3].text, name));
+  let restored = current.slice(0, elements[0].getFullStart()) + current.slice(elements[5].getFullStart());
+  for (const added of ['scripts/audit-modal-reentrant-close.mjs', 'scripts/audit-material-selection-pixels.mjs',
+    'src/app/services/dom/input/text-cursor.renderer.ts']) {
+    const line = `    '${added}',\n`; assert.equal(restored.split(line).length, 2); restored = restored.replace(line, '');
+  }
+  assert.equal(restored, prior(file)); // All collectors/classifiers/coverage and155 predecessor proofs preserved.
+  const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
+  const policy = readFileSync(policyFile, 'utf8').replace(/\r\n/g, '\n');
+  const policyTree = ts.createSourceFile(policyFile, policy, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const declaration = policyTree.statements.filter(ts.isVariableStatement)
+    .flatMap(n => [...n.declarationList.declarations]).find(n => n.name.getText(policyTree) === 'sourceAuditDefinitions');
+  const findings = declaration.initializer.arguments[0].elements;
+  const ids = ['core-engine-antialias-option-overridden-by-hardcoded-argument', 'core-selected-caret-blink-ignores-noncollapsed-selection'];
+  const first = findings.findIndex(n => n.arguments[0].properties.find(p => p.name.getText(policyTree) === 'id')?.initializer.text === ids[0]);
+  assert.ok(first >= 0);
+  assert.equal(findings[first + 1].arguments[0].properties.find(p => p.name.getText(policyTree) === 'id').initializer.text, ids[1]);
+  assert.equal(policy.slice(0, findings[first].getFullStart()) + policy.slice(findings[first + 2].getFullStart()), prior(policyFile));
+  assert.equal(sourceAuditDefinitions.length, 153);
+});
 
 test('public antialias option evidence binds original core arguments and Babylon override', () => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');

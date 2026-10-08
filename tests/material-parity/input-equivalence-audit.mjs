@@ -9434,6 +9434,7 @@ function sourceFingerprints(root) {
     'scripts/audit-material-configured-field-popup-bounds.mjs',
     'scripts/audit-modal-reentrant-close.mjs',
     'scripts/audit-material-selection-pixels.mjs',
+    'src/app/services/dom/input/text-cursor.renderer.ts',
     'scripts/audit-material-configured-menu-bounds.mjs',
     'scripts/audit-material-menu-actions.mjs',
     'scripts/audit-material-menu-actions-reset.mjs',

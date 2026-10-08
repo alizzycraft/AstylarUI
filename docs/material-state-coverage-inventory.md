@@ -2,6 +2,23 @@
 
 ## Current evidence boundary — October 8
 
+Standalone batch predecessor conservation now passes against accepted874d48d7.
+Existing benchmark assertion verifies complete producer equality after removing
+exactly five proof entries and three dependencies,plus complete policy equality
+after removing exactly two source findings. Current registration153 findings/160
+proofs; published151/155 remains unchanged. Added cursor-owner source is explicitly
+fingerprinted alongside the two diagnostic scripts. Log
+standalone-proof-batch-conservation-20261008.log is terminal exit0. This conserves
+existing collection/classification/case logic,not full canonical validation.
+Next milestone requires headroom recovery,then canonical export/independent check
+and compact verification; do not change producer inputs during those processes.
+
+Publication headroom check found D:free1380352 bytes. The closed current index
+e004d08d… had all84 JSONL shards transparently compressed,individual SHA256
+unchanged,existing whole-index verifier passing before/after. Free36769792 bytes
+afterward; no evidence/pointer changed or deleted. Still insufficient for safe
+canonical publication. Retention mechanism only; preserve original/failure logs.
+
 Antialias option-policy finding is registered in the existing source policy as
 core-engine-antialias-option-overridden-by-hardcoded-argument. Focused proof
 public antialias option evidence binds original core arguments and Babylon
