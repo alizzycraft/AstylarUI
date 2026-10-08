@@ -71,8 +71,37 @@ not a new core defect. Combined observations cover8/8 desktop physical contexts
 at their declared historical/current checkpoints,not unqualified current paint,
 full input equivalence or whole-case closure. No canonical IDs or fixtures added.
 
-Priority: join shared trigger input/history/semantics/paint evidence and overlay fallback,
-scroll and lifetime applicability. Do not recapture settled hover/held text or
+Overlay applicability join: existing tooltip-boundary-depth-c479097f-fresh/
+latest-report.json SHA25679573fb4c070970f11f97b1eab90b08b340680aedd8b64df662b3f44ec3fa3e7
+has exactly the same1887 browser-file receipts as current-full-20261005;
+fingerprintDirectory independently matches all1887 current served files. The
+existing short-viewport,depth and public-placement source assertions pass3/3
+in1668.3352ms without recapture. This binds retained900x240/1000DPR1/2 light
+ordinary observations to the current captured runtime,not other viewport/profile
+paint acceptance. Native short-viewport fallback goes above,candidate local-flow
+popup stays below by80CSSpx and extends past240. The final paint receipt has
+enabled/visible candidate meshZ249.848 beyond short cameraZ207.84609690826528;
+normal-height cameraZ866.0254037844387 preserves paint. Existing shared camera/
+depth core diagnosis remains separate from unequal placement authoring.
+
+Wheel observations are inspected but NOT an isolated dismissal-handler proof:
+native scrollHeight286/scrollY46 versus candidate240/0 changes the stimulus;
+native hides and candidate stays authored open. Exact source-contract check
+confirms Material20.0.5 uses connected origin/fallback,viewport margin and
+scrollable ancestors; current public plugin contexts expose no equivalent
+connected-placement primitive,while SelectManager's direction/placement methods
+remain private. Installed Material owner SHA75d4207bc0b6e97105c0ff88f80c5017e4df00af13f92b5bdaa19a80bcb81a2a.
+Do not implement a competing plugin positioning system or compensate with flow
+offsets. Historical calibration/composition classification is already recorded
+in material-tooltip-position-ancestry-inspection.md; no new root class is added.
+Residual: isolated matched scrolling stimulus if asserting dismissal delivery,
+other edge/resize cases and full current paint,not the settled nominal/fallback
+or camera-boundary questions. Initial sourceFiles lookup failed because this
+checkpoint uses served/harness/dependency receipts; the corrected complete
+browserFiles equality is the actual applicability evidence,not assumed source data.
+
+Priority: join shared trigger input/history/semantics/paint evidence and bounded
+remaining scroll/lifetime applicability. Do not recapture settled hover/held text or
 local metrics. Full-case closure remains0; final acceptance is unchanged.
 Independent canonical cold check worker3332 remains live (observed CPU1735.52s)
 and producer inputs remain frozen pending terminal acceptance.
