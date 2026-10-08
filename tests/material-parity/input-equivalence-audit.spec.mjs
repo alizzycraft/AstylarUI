@@ -250,11 +250,13 @@ test('retained extended keyboard cohorts replay original runtime tails and sourc
   for (const name of ['retained divider sampling residual boundary', 'retained configured state applicability boundary',
     'retained passive AX cohort boundary', 'retained complete bridge and CSS module applicability boundary',
     'retained five-family caret horizontal paint-edge boundary',
+    'exact configured input focus and temporal caret paint boundary',
+    'retained local selection pixels and unequal typography boundary',
     'retained configured scrollbar thumb track and overdraw paint boundary'])
     assert.throws(() => restoreExtendedKeyboardRegistration(producerSource.replace(name, 'unreviewed acceptance')));
   const producerAst = ts.createSourceFile(producerFile, producerSource, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   assert.equal(producerAst.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory')
-    .body.statements[0].expression.elements.length, 148);
+    .body.statements[0].expression.elements.length, 150);
   const digest = value => createHash('sha256').update(value).digest('hex');
   const pinned = (file, hash) => {
     const bytes = readFileSync(file); assert.equal(digest(bytes), hash, file); return bytes;

@@ -38,6 +38,16 @@ const extendedKeyboardProof = "    proof(root, 'tests/material-parity/input-equi
   "      'retained extended configured keyboard assertion boundary', 'Replays original runtime assertion blocks and source preambles for128 exact family/focus contexts across eight retained batches. Pins logs,original callbacks,served build,report/checkpoint and bounded current source dependencies. Preserves observed activation,navigation,range and modality failures. Not collection-time error callbacks,current paint,lifecycle or complete-case acceptance.'),\n";
 export function restoreExtendedKeyboardRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes('/test\\(\'configured input focus evidence')) {
+    const header = 'function focusedProofInventory(root) {\n  return [\n';
+    assert.equal(current.split(header).length, 2);
+    const start = current.indexOf(header)+header.length;
+    const end = current.indexOf("    proof(root, 'tests/material-parity/sort-focus-structure.spec.mjs'", start);
+    assert.ok(end > start);
+    assert.equal(hash(current.slice(start,end)), '16b54740814c8d03a8a02eabf48fd0886ba1928b5852a1374e3a7bea04579160',
+      'exact configured focus and local selection two-proof registration');
+    current = current.slice(0,start)+current.slice(end);
+  }
   if (current.includes("/test\\('retained five-family caret edges")) {
     const header = 'function focusedProofInventory(root) {\n  return [\n';
     assert.equal(current.split(header).length, 2);

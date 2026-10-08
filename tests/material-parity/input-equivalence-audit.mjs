@@ -9438,6 +9438,10 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('configured input focus evidence records exact controls without replacing reference actions'/,
+      'exact configured input focus and temporal caret paint boundary', 'Authenticates40 configured focus contexts and240 paired samples,original focus/theme actions,control identities/values/email-null endpoints,960 PNGs,unequal caret-color intent and temporal horizontal edges. Bounded current/installed/captured owning methods agree. Not full input equivalence,vertical fringe causality or whole-case acceptance.'),
+    proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('selection local pixels retain exact native key boundaries and paint receipts'/,
+      'retained local selection pixels and unequal typography boundary', 'Authenticates16 paired form-field mobile DPR2 states across four profiles,32 local PNGs,exact forward/collapsed/backward endpoints and directions,highlight owner visibility and solid-color bounds. Preserves unequal line-height/tracking and palette intent. Not isolated equal-input geometry,glyph sharpness or all-family/state acceptance.'),
     proof(root, 'tests/material-parity/sort-focus-structure.spec.mjs', /test\('retained five-family caret edges use equal integer crop origins'/,
       'retained five-family caret horizontal paint-edge boundary', 'Authenticates ten light desktop1440x900 DPR1/2 supplemental populations and original rasters. Recomputes native edges and candidate blinking masks with equal integer crop origins; native1px versus candidate2px strokes start1CSSpx apart. Not configured1440x1000 closure,vertical fringe causality,current full rendering or permission for fixture offsets.'),
     proof(root, 'tests/material-parity/sort-focus-structure.spec.mjs', /test\('retained scrollbar thumb masks distinguish native corners from plain indicator paint'/,

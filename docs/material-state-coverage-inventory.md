@@ -2,6 +2,25 @@
 
 ## Current evidence boundary — October 8
 
+### Configured input paint proof registration — October 8
+
+The exact configured focus/temporal-caret and local selection-pixel proofs are
+now registered in the existing producer inventory:150 proofs,150 findings.
+Accepted canonical remains146 proofs/150 findings until coherent export/cold
+validation/index reconciliation. Registration does not promote whole cases,
+replace original scalar populations or certify current rendering. Existing
+transition strips only the exact two-entry block (SHA16b54740…) and then proves
+whole original producer equality to1190d1c2,conserving earlier148-proof additions
+and every predecessor assertion. Altered new proof descriptions are rejected.
+Source-conservation callback passes; configuration focused suite4/4,11751.4687ms
+(`configured-input-paint-registration-focused-20261008.log`); transition/migration
+integration32/32,30828.1685ms (`configured-input-paint-registration-integration-20261008.log`).
+Original owning equal-input selection reduction is reused with its explicit
+native-outline/crop confounders,not repeated as isolated geometry acceptance.
+Next reconcile canonical publication at justified resource headroom,then exact
+remaining obligation/current-validity joins. No renderer,fixture,reference or
+criteria changes and no full browser recapture in this registration increment.
+
 ### Selection paint ownership and evidence applicability — October 8
 
 Selection metric-intent trace now reaches the first pre-projection divergence:
