@@ -2,6 +2,35 @@
 
 ## Current evidence boundary — October 8
 
+### Configured Menu bounds gap — October 8
+
+The missing configured Menu open-hover-content geometry now has a validated
+checkpoint-bound capture: configured-menu-bounds-final-20261008/latest-report.json.
+Eight exact IDs cover four profiles at desktop1440x1000 DPR1/2. The producer
+extracts unchanged runner action functions and authenticates their complete body
+hashes plus the actual cursor-helper dependency. Existing supplemental validation
+checks served assets/provenance; the focused assertion joins exact configured IDs,
+rehashes16 PNG and16 tree receipts, checks empty tree errors, finite positive
+trigger/popup/two-item boxes and the native first-item hover boundary.
+configured-menu-bounds-validation-20261008.log passes1/1. This is observation
+coverage, not input/rendering equivalence or full current-pipeline acceptance.
+
+Paired popup x/width agree within numeric projection noise. Candidate top is
+approximately1.002 CSSpx lower in light/dark and2.013/2.016px lower in
+contrast/custom; heights are112/112,112/111 and112/110 respectively. Competing
+explanations remain unequal trigger/popup style inputs versus used-layout or
+anchor calculation divergence. Next use these retained trees to compare trigger
+bottom-to-popup top and popup padding/item inputs before any renderer attribution.
+Do not transfer these eight observations to the other74 configured Menu contexts.
+All whole-case closure counts remain unchanged; canonical150/150 is unchanged.
+
+Two failed instrumentation attempts remain retained: initial variable shadowing
+in configured-menu-bounds-capture-20261008.log (producer preserved in f486d48d),
+then missing extracted helper/wrong action signature in
+configured-menu-bounds-capture-corrected-20261008.log. Corrected producer uses
+the real dependency and original performInteraction(page,mode,case) signature.
+No fixture, renderer, reference, threshold or acceptance changes.
+
 ### Exact configured popup-geometry observation census — October 8
 
 Authenticated October5 report and captured/current runner/config hashes join685

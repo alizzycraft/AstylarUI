@@ -327,6 +327,57 @@ test('snackbar captured timer methods reject late settlement and queued expiry a
     scope: 'Exact captured/current application methods and complete current/installed/captured render-session class with controlled scheduler; disposal rejection propagates from uncaught async start, not observed Angular/browser unhandled rejection or all lifecycle acceptance' }));
 });
 
+test('configured menu bounds authenticate exact runner actions and eight context receipts', t => {
+  const file = 'artifacts/material-parity/configured-menu-bounds-final-20261008/latest-report.json';
+  const report = JSON.parse(readFileSync(file));
+  const manifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
+  assert.deepEqual(validateSupplementalCapture(report, { reportFile: file, expectedProvenance: manifest.provenance,
+    script: 'scripts/audit-material-configured-menu-bounds.mjs', styleProperties: Object.values(propertyGroups).flat() }),
+  { status: 'checkpoint-bound', errors: [] });
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const action = report.actionSource, runner = readFileSync(action.file);
+  assert.equal(hash(runner), action.sha256);
+  assert.equal(action.sha256, manifest.provenance.harnessFiles.find(f => f.file === action.file).sha256);
+  const names = ['profileTheme', 'sendShowcaseCommand', 'waitForThemeApplied', 'settleInteraction', 'popupHoverBox', 'interactionTargetBox', 'performInteraction'];
+  assert.deepEqual(action.functionNames, names);
+  const ast = ts.createSourceFile(action.file, runner.toString(), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const bodies = names.map(name => {
+    const nodes = ast.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+    assert.equal(nodes.length, 1); return nodes[0].getText(ast);
+  });
+  assert.equal(hash(bodies.join('\n')), action.functionBodiesSha256);
+  const dependency = action.cursorDependency;
+  assert.equal(hash(readFileSync(dependency.file)), dependency.sha256);
+  assert.equal(dependency.sha256, manifest.provenance.harnessFiles.find(f => f.file === dependency.file).sha256);
+  const expected = materialInteractionCases.filter(c => c.family === 'menu' && c.state === 'open-hover-content').map(c => materialCaseKey('interaction', c));
+  assert.equal(expected.length, 8);
+  assert.deepEqual(report.results.map(r => r.caseId).sort(), expected.sort());
+  const receipts = new Set(), observations = [];
+  for (const row of report.results) {
+    assert.equal(row.caseId, materialCaseKey('interaction', row));
+    for (const side of ['reference', 'astylar']) {
+      const result = row[side];
+      for (const receipt of [result.screenshot, result.inputTree]) {
+        assert.ok(!receipts.has(receipt.file)); receipts.add(receipt.file);
+        assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+      }
+      assert.deepEqual(JSON.parse(readFileSync(result.inputTree.file)).errors, []);
+      assert.equal(result.observation.options.length, 2);
+      for (const box of [result.observation.primary, result.observation.popup, ...result.observation.options.map(o => o.box)]) {
+        for (const key of ['x', 'y', 'width', 'height']) assert.ok(Number.isFinite(box[key]));
+        assert.ok(box.width > 0 && box.height > 0);
+      }
+    }
+    assert.deepEqual(row.reference.observation.options.map(o => o.text), ['Rename', 'Delete']);
+    assert.deepEqual(row.reference.observation.options.map(o => o.hover), [true, false]);
+    observations.push({ caseId: row.caseId, reference: row.reference.observation, astylar: row.astylar.observation });
+  }
+  assert.equal(receipts.size, 32);
+  assert.equal(report.inputEquivalent, false); assert.equal(report.renderingEquivalent, false);
+  t.diagnostic(JSON.stringify({ observations, acceptance: false,
+    scope: 'Eight configured menu open-hover-content bounds observations only; not equal input, current whole-pipeline validity or remaining menu actions' }));
+});
+
 test('configured input focus evidence records exact controls without replacing reference actions', t => {
   const file = 'artifacts/material-parity/configured-input-focus-20261008/latest-report.json';
   const capture = JSON.parse(readFileSync(file));

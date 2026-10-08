@@ -6,6 +6,7 @@ import path from 'node:path';
 import ts from 'typescript';
 import { chromium } from 'playwright-core';
 import { materialInteractionCases } from '../tests/material-parity/benchmark.config.mjs';
+import { interactionLayerCursorProbe } from '../tests/material-parity/cursor-metrics.mjs';
 import { captureBrowserInputTree } from '../tests/material-parity/input-tree-evidence.mjs';
 import { propertyGroups } from '../tests/material-parity/input-equivalence-policy.mjs';
 import { fingerprintDirectory, materialBrowserLaunchOptions, materialCaseKey } from '../tests/material-parity/run-checkpoint.mjs';
@@ -21,12 +22,14 @@ const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const runnerFile = 'tests/material-parity/run-material-parity.mjs', runner = readFileSync(runnerFile);
 assert.equal(hash(runner), manifest.provenance.harnessFiles.find(f => f.file === runnerFile).sha256);
 const ast = ts.createSourceFile(runnerFile, runner.toString(), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
-const names = ['profileTheme', 'sendShowcaseCommand', 'waitForThemeApplied', 'settleInteraction', 'popupHoverBox', 'performInteraction'];
+const cursorFile = 'tests/material-parity/cursor-metrics.mjs';
+assert.equal(hash(readFileSync(cursorFile)), manifest.provenance.harnessFiles.find(f => f.file === cursorFile).sha256);
+const names = ['profileTheme', 'sendShowcaseCommand', 'waitForThemeApplied', 'settleInteraction', 'popupHoverBox', 'interactionTargetBox', 'performInteraction'];
 const functions = names.map(name => {
   const matches = ast.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
   assert.equal(matches.length, 1); return matches[0].getText(ast);
 });
-const actions = new Function('assert', `${functions.join('\n')};return {${names.join(',')}};`)(assert);
+const actions = new Function('assert', 'interactionLayerCursorProbe', `${functions.join('\n')};return {${names.join(',')}};`)(assert, interactionLayerCursorProbe);
 const cases = materialInteractionCases.filter(c => c.family === 'menu' && c.state === 'open-hover-content');
 assert.equal(cases.length, 8);
 const server = createServer((req, res) => {
@@ -68,20 +71,20 @@ try {
           }, id);
         };
         const primary = await cssBox('menu-primary'); assert.ok(primary);
-        await actions.performInteraction(page, mode, 'menu', c.state, primary.x + primary.width / 2, primary.y + primary.height / 2);
+        await actions.performInteraction(page, mode, c);
         await actions.sendShowcaseCommand(page, { type: 'showcase:benchmark', phase: 'settled' });
         await actions.settleInteraction(page, mode);
         const popup = mode === 'reference' ? await page.locator('.mat-mdc-menu-panel').boundingBox() : await cssBox('menu-popup');
-        const options = mode === 'reference' ? await page.locator('.mat-mdc-menu-panel button').evaluateAll(nodes => nodes.map(n => {
+        const optionRows = mode === 'reference' ? await page.locator('.mat-mdc-menu-panel button').evaluateAll(nodes => nodes.map(n => {
           const b = n.getBoundingClientRect(); return { text: n.textContent.trim(), box: { x: b.x, y: b.y, width: b.width, height: b.height }, hover: n.matches(':hover') };
         })) : await Promise.all(['menu-rename', 'menu-delete'].map(async id => ({ id, box: await cssBox(id) })));
         const tree = mode === 'reference' ? await page.evaluate(captureBrowserInputTree, { styleProperties: properties })
           : await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([]).inputTree);
-        assert.ok(popup); assert.equal(options.length, 2); assert.deepEqual(tree.errors, []);
+        assert.ok(popup); assert.equal(optionRows.length, 2); assert.deepEqual(tree.errors, []);
         const stem = `${evidence.directory}/${c.profile}-${c.viewport.id}-${mode}`;
         const pixels = await page.screenshot({ animations: 'disabled', caret: 'hide' }), treeBytes = Buffer.from(JSON.stringify(tree));
         writeFileSync(`${stem}.png`, pixels, { flag: 'wx' }); writeFileSync(`${stem}.json`, treeBytes, { flag: 'wx' });
-        row[mode] = { observation: { primary: await cssBox('menu-primary'), popup, options },
+        row[mode] = { observation: { primary: await cssBox('menu-primary'), popup, options: optionRows },
           screenshot: { file: `${stem}.png`, sha256: hash(pixels) }, inputTree: { file: `${stem}.json`, sha256: hash(treeBytes) }, runtime: await finishRuntime() };
         await page.close();
       }
@@ -89,7 +92,8 @@ try {
     results.push(row); console.log(JSON.stringify({ caseId: row.caseId, reference: row.reference.observation.popup, astylar: row.astylar.observation.popup }));
   }
   writeFileSync(`${evidence.directory}/latest-report.json`, JSON.stringify({ schemaVersion: 1, browser: browser.version(), generatedAt: new Date().toISOString(),
-    capture: evidence.capture, actionSource: { file: runnerFile, sha256: hash(runner), functionNames: names, functionBodiesSha256: hash(functions.join('\n')) }, results,
+    capture: evidence.capture, actionSource: { file: runnerFile, sha256: hash(runner), functionNames: names, functionBodiesSha256: hash(functions.join('\n')),
+      cursorDependency: { file: cursorFile, sha256: hash(readFileSync(cursorFile)) } }, results,
     scope: 'Eight exact configured desktop menu open-hover-content contexts; CSS popup/anchor/item boxes, input trees and rasters. Not retrospective original screenshot registration or full equivalence.',
     inputEquivalent: false, renderingEquivalent: false }, null, 2) + '\n', { flag: 'wx' });
 } finally { if (browser) await browser.close(); await new Promise(resolve => server.close(resolve)); }
