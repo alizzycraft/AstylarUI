@@ -238,6 +238,38 @@ test('configured overlay placement census distinguishes measured boxes from comp
     }
   }
   assert.equal(joined.size, 16);
+  // Separate absent endpoint panels from open panels with unmeasured bounds.
+  // Input trees record structure/styles, not used popup geometry.
+  const endpointCounts = {};
+  for (const family of ['autocomplete', 'select']) {
+    const cohort = rows.filter(row => row.family === family);
+    const openStates = family === 'autocomplete'
+      ? ['focus', 'held', 'activate', 'activate-leave', 'open-commit-reopen', 'open-hover-content', 'open']
+      : ['activate', 'activate-leave', 'open-commit-reopen', 'open-hover-content', 'open'];
+    let open = 0, closed = 0;
+    for (const row of cohort) {
+      const expectedOpen = openStates.includes(row.state);
+      for (const side of ['reference', 'astylar']) {
+        const receipt = row.inputTrees[side], treeBytes = readFileSync(receipt.file);
+        assert.equal(createHash('sha256').update(treeBytes).digest('hex'), receipt.sha256);
+        const tree = JSON.parse(treeBytes);
+        assert.deepEqual(tree.errors, []);
+        const panels = tree.nodes.filter(node => side === 'reference'
+          ? node.attributes?.class?.split(/\s+/).includes(family === 'select' ? 'mat-mdc-select-panel' : 'mat-mdc-autocomplete-panel')
+          : node.authored?.id === (family === 'select' ? 'select-options' : 'field-options'));
+        assert.equal(panels.length, expectedOpen ? 1 : 0, `${family}/${row.state}/${side} endpoint panel`);
+      }
+      assert.equal(row.astylarState.open, expectedOpen);
+      if (expectedOpen) open++; else closed++;
+    }
+    endpointCounts[family] = { open, closed, supplementalBounds: 8, remainingOpenBounds: open - 8 };
+  }
+  assert.deepEqual(endpointCounts, {
+    autocomplete: { open: 56, closed: 42, supplementalBounds: 8, remainingOpenBounds: 48 },
+    select: { open: 40, closed: 42, supplementalBounds: 8, remainingOpenBounds: 32 },
+  });
+  t.diagnostic(JSON.stringify({ endpointCounts,
+    scope: 'Exact retained endpoint structure only; 84 closed endpoints do not require popup boxes at that endpoint. Mobile intermediate opens and 80 unjoined open bounds remain; no used-geometry or current-code acceptance.' }));
   t.diagnostic(JSON.stringify({ retainedPopupContexts: 16, configuredBoundary: 'open-hover-content',
     families: ['autocomplete', 'select'], profiles: ['light', 'dark', 'contrast', 'custom'],
     viewports: ['desktop-dpr1', 'desktop-dpr2'],

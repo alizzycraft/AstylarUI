@@ -8,6 +8,25 @@ layout checks. The snapshot-only turn was no investigation progress. The existin
 36-family applicability map below remains authoritative; do not create a second
 inventory or repeat settled captures.
 
+Autocomplete/select endpoint placement applicability is now exact: the existing
+configured overlay census authenticates360 retained tree receipts across180
+configured cases. Autocomplete has56 paired open endpoints/42 paired absent;
+select40 open/42 absent. The already authenticated supplemental bounds join
+covers8 open-hover-content endpoints per family. Thus80 open endpoints remain
+without that bounds join (48 autocomplete/32 select),not all180 defaults. The84
+absent endpoints require no popup geometry at that endpoint; this does not waive
+their intermediate opening/dismissal/lifetime obligations. Trees provide panel
+structure/styles,not used bounds or pixel visibility. The initially diagnostic
+autocomplete lookup used the wrong candidate ID; final assertion uses the
+captured field-options owner and passes both sides at every exact configured ID.
+`node --test --test-name-pattern="configured overlay placement census" tests/material-parity/benchmark-config.spec.mjs`
+passes1/1,2809.3408ms total. No recapture or original receipt changed. This extends
+the existing census,not another report/framework or full-case closure. The modified
+benchmark-config.spec is a canonical source dependency: b4947eff remains valid for
+its published producer boundary; current source/export reconciliation is pending
+the next coherent integration. Next join retained open bounds for these exact80
+IDs or identify missing observations before scheduling a bounded capture.
+
 One concrete regression-protection gap is now closed in the existing
 reference-root-ancestor-context.spec.mjs suite. The retained Menu ancestor/collision
 test authenticates both immutable report hashes, all24 screenshot/tree receipts,
