@@ -434,6 +434,32 @@ test('configured menu bounds authenticate exact runner actions and eight context
   t.diagnostic(JSON.stringify({ referenceAnchorPositions: positions,
     ownership: 'Captured Material trigger strategy relates trigger bottom to overlay top with zero offset and fallbacks; candidate uses sibling div fixed CSS top. ariaControls records semantics, not proof of layout anchoring.',
     limitation: 'Non-submenu default branch only; no fallback collision runtime or proposed new API acceptance' }));
+  const coreMapFile = 'examples/material-showcase/dist/material-showcase/browser/chunk-3JXWRYJY.js.map';
+  const coreMapBytes = readFileSync(coreMapFile), coreMap = JSON.parse(coreMapBytes);
+  assert.equal(hash(coreMapBytes), manifest.provenance.browserFiles.find(f => f.file === path.basename(coreMapFile)).sha256);
+  const relative = 'app/services/dom/elements/element-dimension.service';
+  const current = readFileSync(`src/${relative}.ts`, 'utf8');
+  const emitted = ts.transpileModule(current, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 } }).outputText;
+  const installed = readFileSync(`examples/material-showcase/node_modules/astylarui/dist/lib/${relative}.js`, 'utf8');
+  const served = coreMap.sources.flatMap((name, i) => name.endsWith(`/${relative}.js`) ? [coreMap.sourcesContent[i]] : []);
+  assert.equal(served.length, 1);
+  const coreMethod = (code, name) => {
+    const parsed = ts.createSourceFile('owner.js', code, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS), found = [];
+    const visit = node => { if (ts.isMethodDeclaration(node) && node.name.getText(parsed) === name) found.push(node.getText(parsed)); ts.forEachChild(node, visit); };
+    visit(parsed); assert.equal(found.length, 1);
+    return transformSync(`class Owner {${found[0]}}`, { loader: 'js', target: 'es2022', legalComments: 'none', minifyWhitespace: true }).code;
+  };
+  const boundMethods = ['resolveLayoutParent', 'calculateDimensions', 'parsePositionLength'];
+  for (const name of boundMethods) {
+    assert.equal(coreMethod(emitted, name), coreMethod(installed, name));
+    assert.equal(coreMethod(served[0], name), coreMethod(installed, name));
+  }
+  const LayoutOwner = new Function(`${coreMethod(served[0], 'resolveLayoutParent')};return Owner;`)();
+  const parent = { name: 'menu-root' }, root = { name: 'root-body' };
+  assert.equal(new LayoutOwner().resolveLayoutParent({ context: { elements: new Map([['root-body', root]]) } }, { position: 'absolute' }, parent), parent);
+  t.diagnostic(JSON.stringify({ layoutOwner: relative, methods: boundMethods,
+    conclusion: 'Absolute popup retains supplied parent; complete bound dimension method calculates offsets from parent border inset, not ariaControls trigger lookup',
+    limitation: 'Owning method applicability and parent routing only; not execution of complete layout/projection or global connected-overlay API absence' }));
   assert.equal(report.inputEquivalent, false); assert.equal(report.renderingEquivalent, false);
   t.diagnostic(JSON.stringify({ observations, acceptance: false,
     scope: 'Eight configured menu open-hover-content bounds observations only; not equal input, current whole-pipeline validity or remaining menu actions' }));

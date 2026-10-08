@@ -4,6 +4,22 @@
 
 ### Configured Menu bounds gap — October 8
 
+Containing-owner applicability closes source drift for three complete core
+methods: ElementDimensionService.resolveLayoutParent,calculateDimensions and
+parsePositionLength. Current TypeScript emit,installed consumer and authenticated
+served chunk-3JXWRYJY agree after formatting-only normalization. Execute actual
+served resolveLayoutParent: absolute retains supplied menu-root parent; fixed
+viewport routing is a distinct branch. Inspected complete dimension method uses
+parent-border origin inset plus parsed CSS top,not a semantic ariaControls lookup.
+Existing owning unit positions an absolute child from the padding-box edge
+(element-dimension.service.spec.ts:597); this increment does not rerun or promote
+that unit as browser proof. Focused configured-menu-containing-owner-20261008.log
+passes1/1. Conclusion remains unequal application anchoring,not proven equal-input
+core projection error or global API absence. Do not repeat method/source drift.
+Remaining decisive capability evidence is a public equivalent connected-edge
+representation with fallback behavior,plus external context/other action joins;
+full pipeline execution is not certified by these three method receipts.
+
 Integration/capability join: the retained material-overlay-surface-review.json
 population is13 groups/344 observations,only snackbar/tooltip; it supplies no
 Menu anchor equivalence. docs/compatibility/html-css.md positioning section
