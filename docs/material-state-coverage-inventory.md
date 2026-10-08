@@ -42,7 +42,8 @@ Existing tooltip-keyboard-813f658-v2 proof separately supplies light desktopDPR2
 (and overlapping light desktopDPR1). Its original real-Tab and programmatic-focus
 assertions pass2/2 in2776.3105ms,authenticating their original receipts/core sources.
 Thus retained real-keyboard observations cover5/8 configured desktop physical
-contexts; only dark/contrast/custom desktopDPR2 lack that exact runtime observation.
+contexts; the three missing dark/contrast/custom desktopDPR2 observations are
+now supplied by the bounded capture below,without repeating the five older ones.
 Responsive observations are supplemental and do not add configured focus IDs.
 These are bounded historical behavior/source proofs,not full current paint acceptance.
 
@@ -53,9 +54,24 @@ The direct bounded replay above verifies the original tooltip assertions without
 claiming that failed wrapper passed. Reconcile its population contract in the next
 coherent integration batch after independent canonical cold acceptance.
 
-Priority: inspect only the three genuinely missing desktopDPR2 keyboard-origin
-contexts,using the existing supplemental provenance/action observation contract.
-Then join shared trigger input/history/semantics/paint evidence and overlay fallback,
+Three-context capture tooltip-keyboard-remaining-20261008/latest-report.json
+SHA256 4f7c5e7b177cbbc5a5b522af2fc56fb79b86d097ec0c58254c0e57f9bf7f9a62
+uses Chrome154.0.8037.58 and the unchanged1887-file current-full checkpoint.
+Producer scripts/audit-material-tooltip-keyboard-remaining.mjs SHA256
+87748ae43d34757c5d9bcedadb98dd41ac14d3ad5147996c5a2f83f6eb1f231c
+reuses existing supplemental provenance/tree capture,real Tab and250ms sampling.
+All three initial states have no popup; trusted Tab reaches tooltip-primary on
+both sides,native opens and candidate remains closed; Tab away removes native
+popup and both triggers lose focus. Independent validator returns checkpoint-bound;
+exact9 paired actions,18 tree receipts and18 PNG receipts verify. This answers
+the missing runtime-focus-delivery question in all three contexts. Candidate
+state=false and absent authored popup rule out misplaced existing popup as the
+explanation. Existing application opening-state omission remains the attribution,
+not a new core defect. Combined observations cover8/8 desktop physical contexts
+at their declared historical/current checkpoints,not unqualified current paint,
+full input equivalence or whole-case closure. No canonical IDs or fixtures added.
+
+Priority: join shared trigger input/history/semantics/paint evidence and overlay fallback,
 scroll and lifetime applicability. Do not recapture settled hover/held text or
 local metrics. Full-case closure remains0; final acceptance is unchanged.
 Independent canonical cold check worker3332 remains live (observed CPU1735.52s)
