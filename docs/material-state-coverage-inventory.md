@@ -4,6 +4,25 @@
 
 ### Configured Menu bounds gap — October 8
 
+Known Menu typography findings are now joined to eight current-checkpoint
+matched-focus contexts without inventing another cause. Authenticated compact
+generation62c0d373… supplies128 existing token/tracking rows; retained
+menu-item-keys-20261008 typeahead-ready trees expose16 labels: native direct
+familyRoboto and tracking0.096px; candidate local family/tracking omitted,
+parent explicitly requestsRoboto,Arial,sans-serif and14px. Local omission is
+not zero font size or a renderer inheritance failure. Diagnostic exits0 in
+menu-label-font-current-applicability-20261008.log. Existing direct-token and
+competing/contradictory-evidence tests pass2/2,1999.5597ms in
+menu-label-font-existing-focused-20261008.log; original assertion bodies and
+producer remain unchanged. This extends the existing reviewed-menu-label-font-
+input/reviewed-omitted-component-text-metric applicability to this matched-focus
+boundary; it does not certify retained current core-text values,physical font
+selection,glyph shaping or edge/raster parity. Do not start a new typography
+cause/capture until equivalent intent or contradictory evidence warrants it.
+Next retain full remaining paint obligations and finish pending coherent proof
+registration/canonical validation; no source-fingerprint mutation while export
+is live. Current accepted index remains150/150,not the unpublished151/154 batch.
+
 Menu checklist applicability is now reconciled against actual disabled inputs:
 all eight current-full cases labelled disabled retain menu-primary
 expected.disabled=false/actual.disabled=false; all16 tree receipts authenticate
