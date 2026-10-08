@@ -2,6 +2,30 @@
 
 ## Current evidence boundary — October 9
 
+### Bounded exact membership recovered from original divider receipts
+
+The capped divider-above/alignContent group3655f82a… (canonical ordinal3142,
+complete-row SHA d949ceeb…) has no hidden reviewedCases in its authenticated
+original row: loadFindingEvidence confirms the omission is in the producer,
+not compact serialization. Original current-ancestry report SHA256
+b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a
+contains all24 exact divider rows. Each row independently records normal versus
+stretch for that element/property; all48 input-tree receipt hashes authenticate.
+Their unique IDs recover16 static (including four comparison panes) and8 inspect
+cases. First12 equal the stored sample exactly; the other12 are recovered from
+actual rows,not inferred from family/profile multiplication.
+
+Initial diagnostic ID construction used viewport object rather than viewport.id,
+collapsing IDs; the uniqueness assertion rejected8 instead of24. Correcting the
+diagnostic to the existing ID convention yields24 unique IDs and preserves the
+original occurrence/sample assertions. No evidence or source was modified.
+This demonstrates a viable existing-receipt recovery path for sampled groups;
+it does not classify normal/stretch as equivalent or close divider inspection.
+The original contextual-alignment justification and pending layout/paint/history/
+ownership obligations remain. Next apply owning context checks before joining
+classification to every recovered member. Original export session45371 was
+polled and remains running; no replacement worker or accepted155 package.
+
 ### Case-membership gap isolated — producer sampling, not compact-index loss
 
 Read-only authenticated compact queries of accepted eb90958e across all36
