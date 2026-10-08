@@ -38,6 +38,18 @@ const extendedKeyboardProof = "    proof(root, 'tests/material-parity/input-equi
   "      'retained extended configured keyboard assertion boundary', 'Replays original runtime assertion blocks and source preambles for128 exact family/focus contexts across eight retained batches. Pins logs,original callbacks,served build,report/checkpoint and bounded current source dependencies. Preserves observed activation,navigation,range and modality failures. Not collection-time error callbacks,current paint,lifecycle or complete-case acceptance.'),\n";
 export function restoreExtendedKeyboardRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes('configured Menu anchor and input-owner evidence boundary')) {
+    const header = 'function focusedProofInventory(root) {\n  return [\n';
+    assert.equal(current.split(header).length, 2);
+    const start = current.indexOf(header) + header.length;
+    const end = current.indexOf("    proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\\('configured input focus", start);
+    assert.ok(end > start);
+    assert.equal(hash(current.slice(start, end)), '32d3f01f1b8b9a643cb33e26ec3cb4ea492dd118169a5b43f41701e2cbaa4733',
+      'exact four-entry Menu evidence registration; no altered acceptance');
+    const files = "    'scripts/audit-material-configured-menu-bounds.mjs',\n    'scripts/audit-material-menu-actions.mjs',\n    'scripts/audit-material-menu-actions-reset.mjs',\n    'scripts/audit-material-menu-actions-remaining.mjs',\n    'scripts/audit-material-menu-keyboard-remainder.mjs',\n    'scripts/audit-material-menu-item-keys.mjs',\n    'tests/material-parity/benchmark-config.spec.mjs',\n";
+    assert.equal(current.split(files).length, 2, 'exact seven Menu source dependencies');
+    current = (current.slice(0, start) + current.slice(end)).replace(files, '');
+  }
   if (current.includes('/test\\(\'configured input focus evidence')) {
     const header = 'function focusedProofInventory(root) {\n  return [\n';
     assert.equal(current.split(header).length, 2);

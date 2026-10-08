@@ -248,15 +248,19 @@ test('retained extended keyboard cohorts replay original runtime tails and sourc
   assert.throws(() => restoreExtendedKeyboardRegistration(producerSource.replace(
     'retained extended configured keyboard assertion boundary', 'unreviewed acceptance')));
   for (const name of ['retained divider sampling residual boundary', 'retained configured state applicability boundary',
+    'configured Menu anchor and input-owner evidence boundary', 'remaining desktop Menu item action evidence boundary',
+    'desktop Menu missing navigation key evidence boundary', 'matched Menu item activation and delayed typeahead evidence boundary',
     'retained passive AX cohort boundary', 'retained complete bridge and CSS module applicability boundary',
     'retained five-family caret horizontal paint-edge boundary',
     'exact configured input focus and temporal caret paint boundary',
     'retained local selection pixels and unequal typography boundary',
     'retained configured scrollbar thumb track and overdraw paint boundary'])
     assert.throws(() => restoreExtendedKeyboardRegistration(producerSource.replace(name, 'unreviewed acceptance')));
+  assert.throws(() => restoreExtendedKeyboardRegistration(producerSource.replace(
+    "    'scripts/audit-material-menu-item-keys.mjs',", "    'scripts/unreviewed-menu-dependency.mjs',")));
   const producerAst = ts.createSourceFile(producerFile, producerSource, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   assert.equal(producerAst.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory')
-    .body.statements[0].expression.elements.length, 150);
+    .body.statements[0].expression.elements.length, 154);
   const digest = value => createHash('sha256').update(value).digest('hex');
   const pinned = (file, hash) => {
     const bytes = readFileSync(file); assert.equal(digest(bytes), hash, file); return bytes;
@@ -3066,7 +3070,19 @@ test('records source fingerprints and actual visual acceptance fields', async ()
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   // Authenticate the current extension before replaying the historical541 assertions.
-  const actualSourceFingerprints = audit.sourceFingerprints;
+  const menuFiles = ['scripts/audit-material-configured-menu-bounds.mjs', 'scripts/audit-material-menu-actions.mjs',
+    'scripts/audit-material-menu-actions-reset.mjs', 'scripts/audit-material-menu-actions-remaining.mjs',
+    'scripts/audit-material-menu-keyboard-remainder.mjs', 'scripts/audit-material-menu-item-keys.mjs',
+    'tests/material-parity/benchmark-config.spec.mjs'];
+  assert.equal(audit.sourceFingerprints.length, 549);
+  assert.deepEqual(audit.sourceFingerprints.slice(-7), menuFiles.map(file => ({ file,
+    sha256: createHash('sha256').update(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')).digest('hex') })));
+  const actualSourceFingerprints = audit.sourceFingerprints.slice(0, -7);
+  const menuProofs = audit.focusedProofs.slice(0, 4);
+  assert.deepEqual(menuProofs.map(p => p.status), ['configured Menu anchor and input-owner evidence boundary',
+    'remaining desktop Menu item action evidence boundary', 'desktop Menu missing navigation key evidence boundary',
+    'matched Menu item activation and delayed typeahead evidence boundary']);
+  assert.ok(menuProofs.every(p => p.file === 'tests/material-parity/benchmark-config.spec.mjs' && p.line > 0));
   assert.equal(actualSourceFingerprints.length, 542);
   assert.equal(new Set(actualSourceFingerprints.map(entry => entry.file)).size, 542);
   const svgSource = 'tests/material-parity/icon-asset-input.spec.mjs';

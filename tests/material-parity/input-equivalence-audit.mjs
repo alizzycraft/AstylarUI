@@ -9431,6 +9431,13 @@ function sourceFingerprints(root) {
     'scripts/diagnose-material-root-initial-receipt.mjs',
     'tests/material-parity/case-index-assertion-migration.mjs',
     'tests/material-parity/icon-asset-input.spec.mjs',
+    'scripts/audit-material-configured-menu-bounds.mjs',
+    'scripts/audit-material-menu-actions.mjs',
+    'scripts/audit-material-menu-actions-reset.mjs',
+    'scripts/audit-material-menu-actions-remaining.mjs',
+    'scripts/audit-material-menu-keyboard-remainder.mjs',
+    'scripts/audit-material-menu-item-keys.mjs',
+    'tests/material-parity/benchmark-config.spec.mjs',
   ];
   return files.map((file) => ({ file, sha256: createHash('sha256')
     .update(readFileSync(path.resolve(root, file), 'utf8').replace(/\r\n/g, '\n')).digest('hex') }));
@@ -9438,6 +9445,14 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('configured menu bounds authenticate exact runner actions and eight context receipts'/,
+      'configured Menu anchor and input-owner evidence boundary', 'Authenticates eight exact desktop profile/DPR popup/trigger/item bounds, current/captured full application source and complete reference/core anchoring methods. Native connected-edge relationship differs from candidate fixed CSS offsets/heights. Preserves unequal inputs and hover interior/held ripple distinctions; not equivalent anchors,collision fallback,full paint or Menu closure.'),
+    proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('remaining menu action cohorts retain matched context coverage without repeating light DPR1'/,
+      'remaining desktop Menu item action evidence boundary', 'Authenticates seven remaining desktop physical contexts and verified real reset/reopen before ArrowDown/Escape. Item release leaves candidate open, opening/navigation focus stays on trigger; native closes/navigates. Combine separately retained light DPR1 without recapture; not other keys,mobile or whole-case acceptance.'),
+    proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('menu keyboard remainder authenticates eight contexts without promoting unequal focus activation'/,
+      'desktop Menu missing navigation key evidence boundary', 'Authenticates eight desktop physical contexts with independent reset/open preconditions. Native ArrowUp/Home/End navigates items and Tab dismisses; candidate keeps trigger and tabs into open items. Explicitly rejects unequal-focus Enter/Space as item activation and immediate r as timed typeahead; not mobile or full paint.'),
+    proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('matched menu item keys bind real focus activation and delayed typeahead across eight contexts'/,
+      'matched Menu item activation and delayed typeahead evidence boundary', 'Authenticates matched Rename focus trusted Enter/Space and matched Delete focus trusted r across eight desktop contexts; actual wait exceeds captured200ms debounce. Native dismisses/types ahead while candidate remains open/on Delete. Different preparatory traversal is disclosed. Not equal input rendering,mobile,full keys,paint,lifecycle or whole-case closure.'),
     proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('configured input focus evidence records exact controls without replacing reference actions'/,
       'exact configured input focus and temporal caret paint boundary', 'Authenticates40 configured focus contexts and240 paired samples,original focus/theme actions,control identities/values/email-null endpoints,960 PNGs,unequal caret-color intent and temporal horizontal edges. Bounded current/installed/captured owning methods agree. Not full input equivalence,vertical fringe causality or whole-case acceptance.'),
     proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('selection local pixels retain exact native key boundaries and paint receipts'/,

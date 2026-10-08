@@ -4,6 +4,26 @@
 
 ### Configured Menu bounds gap — October 8
 
+Canonical preparation now registers four existing Menu assertions: anchor/input
+owner,bounded remaining pointer/action contexts,missing navigation keys,and
+matched-item activation/timed typeahead. Seven source dependencies append after
+all542 predecessor entries: six immutable capture producers and the existing
+benchmark-config.spec.mjs. Current inventory is549 sources/154 proofs/151 source
+findings; accepted publication still150/150. Existing transition helper removes
+only the SHA-authenticated four-proof block and exact seven-path block before
+replaying every original conservation assertion. Two conservation checks pass
+in9217.3559ms (menu-proof-registration-conservation-20261008.log); prior source,
+scalar-stage,receipt and proof assertions remain intact. Added negative controls
+reject changed Menu claim text or source path. No new framework or replay layer,
+no threshold/reference/fixture/core changes,and no complete-case promotion.
+Next run coherent existing policy/runtime/conservation integration,freeze its
+producer commit,then one canonical export and independent check for this batch.
+Coherent integration exits0,6/6 in16992.7784ms
+(menu-canonical-registration-integration-20261008.log),covering current Menu
+source/runtime receipts,full predecessor source/proof conservation and policy
+receipt/conclusion rejection. Publication is not claimed until full export and
+independent validation finish; final browser gates remain separate.
+
 Menu action diagnosis now enters existing sourceAuditDefinitions as
 fixture-menu-item-dismissal-focus-navigation-and-typeahead-omitted,classified
 application-plugin-authoring-defect. It pins four immutable reports spanning
