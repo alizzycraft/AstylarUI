@@ -65,7 +65,27 @@ This binds the existing core visibility cause to this Material cohort,not every
 field or equal Material typography/color. Old caret:hide records remain intact;
 selection-material-caret-observation-boundary-20261008.log explains why they
 could not answer this question. No fixture/renderer or frozen producer changes.
-Next native selection snapping/glyph edge coverage and remaining field applicability;
+Quarter-origin edge sweep now records32 side contexts (input/textarea,DPR1/2,
+equal origins20/20.25/20.5/20.75) and64 selected row segments. Original actions,
+assertions and2515 dependency receipts remain checked; naturally cursor-off
+candidate screenshots contain no caret color at the sampled row. Corrected
+sweep session53088 passes1/1,117707.4457ms; log SHA256
+41173b82f5ac488efbe0d47be111b0574b13cb01736535ab41622dbb83519b94,
+invocationaa8d1b12…; summary and receipt logs preserve exact rowRGBA/cohorts.
+Native fill edges are solid,with left bounds stepping at0.5CSSpx origin and
+right bounds unchanged over this sweep (forward46/93 device px atDPR1/2).
+Candidate edges vary through quarter-coverage colors while solid interiors move.
+Both control types reproduce this distinction. Thus smaller exact-color masks
+are not proof of narrower CSS geometry; native edge behavior is not reproduced
+by assuming a universal floor/ceil rule on the projected CSS interval.
+Native internal scroll/origin metrics versus selection raster quantization are
+still competing explanations; observe those missing native metrics before
+assigning a snapping algorithm or proposing a renderer correction. Glyph edges
+remain separate. Initial launcher failed before browser due to rewriting embedded
+browser imports; failed integrity query expected an inputs array instead of the
+existing final dependency receipt. Both logs remain; corrected launcher preserves
+public package imports and original before/after dependency assertions.
+Next native internal origin/scroll metrics,glyph edge coverage and remaining field applicability;
 do not repeat the settled crop,offset,kerning,projection or selected-caret question.
 
 Evidence: selection-projected-css-boundary-20261008.log (session21694 exit0,
