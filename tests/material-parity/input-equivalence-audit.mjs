@@ -9433,6 +9433,7 @@ function sourceFingerprints(root) {
     'tests/material-parity/icon-asset-input.spec.mjs',
     'scripts/audit-material-configured-field-popup-bounds.mjs',
     'scripts/audit-modal-reentrant-close.mjs',
+    'scripts/audit-material-selection-pixels.mjs',
     'scripts/audit-material-configured-menu-bounds.mjs',
     'scripts/audit-material-menu-actions.mjs',
     'scripts/audit-material-menu-actions-reset.mjs',
@@ -9447,6 +9448,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('actual Material selected caret epochs preserve actions and temporal paint failure'/,
+      'actual Material selected caret temporal failure boundary', 'Authenticates original supplemental report, checkpoint/runtime/input-tree receipts, unchanged action source and192 actual-caret epoch PNGs across four profiles at mobile DPR2. Focus,value,forward/backward/collapsed endpoints remain unchanged. Native selected epochs are stable; candidate selected epochs blink with19.5CSSpx full difference height and2/2.5px width. Both collapsed controls blink. This is bounded temporal failure corroboration,not equivalent Material typography,all-input applicability,fresh whole-runtime or whole-case closure.'),
     proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('progress focus paint preserves forty configured cases and paired raster failure evidence'/,
       'configured progress focus paint failure evidence boundary', 'Authenticates forty configured memberships, original input trees, thirty-two paired physical cohorts,128 local PNGs and exact changed-pixel counts. Candidate tabindex omission leaves BODY focused with no paint change; native hosts tabindex=-1 focus, with spinner paint changes and unchanged bar paint. Current frozen-showcase helper matches its captured method receipt. Preserves unequal focusability inputs; not full runtime validity,equal-input paint,track/cap edges,lifecycle or whole-case closure.'),
     proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('modal restoration attribution preserves matched removal and unequal close controls'/,

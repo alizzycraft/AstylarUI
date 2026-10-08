@@ -11,6 +11,63 @@ import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs
 import { propertyGroups } from './input-equivalence-policy.mjs';
 import { materialAbsoluteTextAlignmentTargets, materialAdditionalMeasurementTargets, materialComparisonViewport, materialFamilies, materialFocusedRasterTargets, materialGeometryExcludedTargets, materialInteractionCases, materialInteractionFocusedRasterTargets, materialInteractionTextAlignmentTargets, materialInteractionViewports, materialLeftAlignedTextTargets, materialMobileFlowCases, materialMobileFlowFamilies, materialProfiles, materialSemanticExcludedTargets, materialStaticCases, materialSupplementalStaticCases, materialTextAlignmentTargets, materialTextAlignmentToleranceOverrides, materialTextAuditTargets, materialTextlessFamilies, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets, materialViewports } from './benchmark.config.mjs';
 
+test('actual Material selected caret epochs preserve actions and temporal paint failure', () => {
+  const file = 'artifacts/material-parity/selection-material-actual-caret-20261008/latest-report.json';
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const bytes = readFileSync(file);
+  assert.equal(hash(bytes), 'b5d48440a777884b18c9f410ecc7956173642e916bd5f27c8af4e3f95b9117ce');
+  const report = JSON.parse(bytes);
+  const manifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
+  assert.deepEqual(validateSupplementalCapture(report, { reportFile: file, expectedProvenance: manifest.provenance,
+    script: 'scripts/audit-material-selection-pixels.mjs', styleProperties: Object.values(propertyGroups).flat() }),
+  { status: 'checkpoint-bound', errors: [] });
+  assert.equal(hash(readFileSync(report.actionSource.file)), report.actionSource.sha256);
+  assert.equal(report.inputEquivalent, false); assert.equal(report.renderingEquivalent, false);
+  assert.equal(report.results.length, 16);
+  const keys = new Set(); let epochs = 0;
+  const selection = { typed: [5, 5, 'forward'], forward: [0, 3, 'forward'],
+    'end-collapsed': [5, 5, 'forward'], backward: [2, 5, 'backward'] };
+  for (const row of report.results) {
+    assert.equal(row.family, 'form-field');
+    assert.deepEqual(row.viewport, { width: 390, height: 844, deviceScaleFactor: 2 });
+    const key = `${row.profile}/${row.state}`; assert.ok(!keys.has(key)); keys.add(key);
+    for (const side of ['reference', 'astylar']) {
+      const samples = row[side].caretEpochs;
+      assert.equal(samples.length, 6);
+      const pictures = [];
+      for (const [index, sample] of samples.entries()) {
+        assert.equal(sample.epoch, index); assert.equal(sample.waitMs, 125);
+        assert.deepEqual(sample.observation.control, { value: 'Atlas', focused: true,
+          selectionStart: selection[row.state][0], selectionEnd: selection[row.state][1], selectionDirection: selection[row.state][2] });
+        assert.equal(sample.screenshot.caret, 'initial');
+        const pngBytes = readFileSync(sample.screenshot.file);
+        assert.equal(hash(pngBytes), sample.screenshot.sha256);
+        pictures.push(PNG.sync.read(pngBytes)); epochs++;
+      }
+      const unique = new Set(samples.map(sample => sample.screenshot.sha256));
+      if (['forward', 'backward'].includes(row.state)) {
+        assert.equal(unique.size, side === 'reference' ? 1 : 2);
+        if (side === 'astylar') {
+          assert.equal(samples.filter(sample => sample.observation.caretMesh.visible).length, 3);
+          const visible = pictures[samples.findIndex(sample => sample.observation.caretMesh.visible)];
+          const hidden = pictures[samples.findIndex(sample => !sample.observation.caretMesh.visible)];
+          let minY = Infinity, maxY = -Infinity, minX = Infinity, maxX = -Infinity;
+          for (let i = 0; i < visible.data.length; i += 4) if ([0, 1, 2, 3].some(c => visible.data[i + c] !== hidden.data[i + c])) {
+            const x = (i / 4) % visible.width, y = Math.floor(i / 4 / visible.width);
+            minY = Math.min(minY, y); maxY = Math.max(maxY, y); minX = Math.min(minX, x); maxX = Math.max(maxX, x);
+          }
+          assert.equal((maxY - minY + 1) / 2, 19.5);
+          assert.equal((maxX - minX + 1) / 2, row.state === 'forward' ? 2.5 : 2);
+        }
+      } else assert.equal(unique.size, 2); // Collapsed positive/negative blink controls on both sides.
+    }
+  }
+  for (const profile of ['light', 'dark', 'contrast', 'custom']) for (const state of Object.keys(selection))
+    assert.ok(keys.has(`${profile}/${state}`));
+  assert.equal(epochs, 192);
+  // Bounded temporal observation, not equal Material typography or all-input/core closure.
+});
+
 test('progress focus paint preserves forty configured cases and paired raster failure evidence', () => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
   const read = (name, sha) => {

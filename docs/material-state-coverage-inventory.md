@@ -131,6 +131,19 @@ Focused replay log: progress-focus-paint-retained-proof-20261008.log. This sourc
 registration awaits the next coherent canonical batch,not another browser run;
 published151/155 remains unchanged. Full current-runtime and case closure remain.
 
+Actual Material selected-caret temporal evidence now has a registered focused
+assertion in benchmark-config.spec.mjs: actual Material selected caret epochs
+preserve actions and temporal paint failure. It authenticates the original
+report/checkpoint/runtime/tree receipts,unchanged action source and192 PNGs;
+checks all16 profile/state rows and unchanged focus/value/selection endpoints;
+recomputes selected visible/hidden difference bounds19.5CSSpx high and2/2.5px
+wide,with collapsed blink controls on both sides. Focused replay passes1/1
+in1473.0259ms (selection-material-actual-caret-retained-proof-20261008.log).
+Proof and original measurement script are registered for the next coherent batch;
+published151/155 is unchanged. This closes retained-evidence integration,not
+equal Material typography,all-input applicability or whole-case/current-runtime
+closure. The separate public core owner proof remains explicitly required.
+
 Selection current boundary (public Atlas input/textarea,DPR1/2): original authored
 inputs and assertions remain unchanged in the successful measurement controls.
 All four contexts preserve24CSSpx projected and solid-mask height. Input y39
