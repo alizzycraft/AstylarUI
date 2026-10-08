@@ -6,6 +6,29 @@ Current priority: finish exact case-obligation/current-validity joins,with share
 overlay/scrollbar paint and editable-text paint ahead of isolated passive layout.
 The existing36-family applicability map remains authoritative; no new inventory.
 
+Public modal close-order reduction now separates caller timing from missing
+removal restoration. scripts/audit-modal-reentrant-close.mjs uses package-root
+Astylar only,and paired native dialog.showModal/close with matching content,
+modal intent and focus/update order (no raster/layout equivalence claim).
+AtDPR1/2,core-owned Escape and update-before-focus both restore trigger. The
+Material-order control (request trigger focus while modal,then apply closed
+document inside the same Escape handler) rejects the request and ends on BODY.
+Native rejects the same pre-close request but dialog.close restores trigger.
+Twelve paired-side/order observations pass their explicit failing-behavior
+assertions,empty diagnostics/page errors,2515 dependency before/after receipts.
+modal-public-native-close-order-paired-20261008.log terminal session89501 exit0,
+SHA256d5c508bdd631371cffc779f82201e33da763dd46eff51c3dbf27d977188e2cca.
+This is a public behavioral compatibility counterexample for modal removal
+restoration,not grounds to bypass modal eligibility or compensate fixture timing.
+The first reduction's update-before-focus did not reproduce Material; preserve
+modal-public-reentrant-close-corrected-20261008.log and the initial syntax-error
+modal-public-reentrant-close-20261008.log. The faithful ordering control is
+modal-public-close-order-control-20261008.log; native control adds the missing
+reference behavior. Original core trace still locates invoker erasure in
+setSiteData before Escape default. Next bind these complete removal/dispatch
+owners to current emit/captured runtime and register the standalone focused
+proof coherently after the live canonical batch; no canonical fixture/core fix.
+
 Core Escape-default nonexecution is now traced at light desktop DPR1/2.
 modal-core-close-order-trace-20261008.log session30385 terminal exit0 preserves
 original method/dispatcher calls through forwarding instrumentation. Before
