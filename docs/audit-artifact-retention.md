@@ -56,6 +56,28 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October9 description-batch publication headroom: eight closed historical
+working-index generations below each had84 JSONL shards transparently compressed.
+Existing verifyFindings passed before/after for every complete index; all672
+individual before/after SHA256 values agree and index bytes are unchanged.
+Current eb90958e pointer/package was excluded; no capture, source evidence,
+failure log or historical path was deleted or repointed. Observed D:free
+38080512→307998720bytes. This enables the coherent description-batch export,
+not new browser capture or audit acceptance. Generation IDs:
+
+- 5c64ce52b07ac3e27e5405d66fede10c937adc3bb02dee8434bc3d126f08454c
+- 65c72350ed907939fbbbdae030f4aebcb7e83f1039de66fb4b3cb2c747a30c56
+- 6f0a4c1c3c214695abe87bb185f6c6c392acd5fa6452d2315891854f85cc9de9
+- 6ffdc6e1dfc319c44235aa149d837c6558c8d7d7b60f8d2e827a884337d823fe
+- 77595d08eb0f857cf058eb072074a433702f11e022dac2f1bfb666375d923752
+- 7793336da954e94fd2f03ff48a92a1d3a174f545532f631baf00df805b80216e
+- 78ed94a2e6c8ff322a344cfdd583f3aa65a94cf94d3c2f944b1de0c0a6807161
+- 7ee36a2c3716d39b0194e5c1e2dead7ef5ae3786f8724dd70814a38e37d6cc69
+
+Their source finding/unresolved counts respectively remain historical
+145/0,134/1507,134/180,138/0,134/1224,132/1654,133/1595,132/1668.
+All retain8483 scalar groups,39904 controls and389202 occurrences.
+
 October9 accepted standalone canonical import: new closed generation
 eb90958ea9de87ed6c4c32d7ffc5b30c4d3251ce696d90782673b36047504382 had84
 JSONL shards transparently compressed after successful independent cold check

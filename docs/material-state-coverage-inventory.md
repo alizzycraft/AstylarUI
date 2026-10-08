@@ -2,6 +2,30 @@
 
 ## Current evidence boundary — October 9
 
+### Description-batch canonical reconciliation launched — not yet accepted
+
+Verified closed historical index compression restores publication headroom:
+eight complete indexes pass existing verification before/after and all672
+individual shard hashes are unchanged. D:free38080512→307998720bytes;
+exact generation IDs are in audit-artifact-retention.md. No data deleted.
+Named current-ancestry export dry-run verifies all five invocation paths.
+
+Original session45371 runs node scripts/export-material-input-audit-current-ancestry.mjs
+with ASTYLAR_AUDIT_PROGRESS=1; launcher18580/worker29800 are confirmed live.
+Log artifacts/material-parity/description-batch-canonical-export-20261009.log
+has read-reference and build-audit milestones, no validation or terminal result.
+Producer inputs are frozen at69830e49 while this session runs; ledger/retention
+prose is outside sourceFingerprints and does not alter evidence inputs.
+Do not restart from sparse progress or treat the preflight as acceptance.
+
+Next: verify this same session's terminal status. On success, independently
+check the newly exported decoded value cold through the same five-path launcher,
+then accept exact hashes/counts and import/verify the compact index. On failure,
+retain the original log and resolve its specific owning boundary before retry.
+Accepted package remains153 findings/eb90958e;155 source registrations are
+not yet independently canonical. No current-browser or whole-case promotion;
+remaining case/obligation/current-validity mapping and final gates stay open.
+
 ### Description findings registered in source — canonical refresh remains pending
 
 The two missing findings are now explicit source definitions:
