@@ -30,6 +30,18 @@ all binding=bound. The disabled-ink rejection was downstream of the same missing
 registration reversal,not changed classifier behavior. This closes all four
 identified source-binding failures; it does not prove full canonical validation
 or explain every remaining scalar until the coherent export/check succeeds.
+The full existing producer-transition suite now passes32/32,zero skips/failures,
+35003.7134ms. Log standalone-transition-reconciled-20261008.log SHA256
+06fdaf157c7a8491fd1c7224d4b4b03f7376ac53348ff18e9a65bd17454adb45.
+At525fb5fc one repaired-batch canonical export was launched with all five baseline
+paths via the named launcher,after confirming no duplicate producer process and
+D:free163115008 bytes. Session77303,launcher20288/worker1384 are verified live
+(workerCPU43.75s); log standalone-batch-reconciled-canonical-export-20261008.log.
+This process status applies to this checkpoint only; poll the same handle/process
+before claiming later liveness. Consumed source/evidence must stay frozen until
+terminal status. On success perform independent cold --check,then compact import/
+verification and publication with fresh disk-headroom check. No accepted153-finding
+package or current rendering acceptance is claimed while this export is pending.
 No acceptance, renderer or fixture changes; all2311 cases remain partial.
 
 ### Autocomplete option local ink — retained endpoint observation
