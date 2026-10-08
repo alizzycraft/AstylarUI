@@ -4,6 +4,24 @@
 
 ### Configured Menu bounds gap — October 8
 
+Ancestor collector receipt gap is corrected in immutable v2 producer/capture,
+not by rewriting v1: menu-mobile-root-context-v2-20261008/latest-report.json
+SHA2561a96c6753996e5048f6533f1c35812aae96a91368b42da4f3f0e37461558defa.
+ancestorSource records file and raw SHA before browser capture,then producer
+requires the same bytes after all four pages. Existing supplemental validation
+authenticates six paired trees and served assets; twelve PNG hashes/dimensions
+also pass, and altered collector digest is rejected. Capture and diagnostic
+exit0 (menu-mobile-root-context-v2-capture-20261008.log and
+menu-mobile-root-context-v2-validation-20261008.log). Both exact configured
+mobile contexts again observe overlay ancestry div→body→html with no external
+transform/filter/perspective/contain and zoom1. This closes the specifically
+identified capture-time extra-collector receipt gap. V1 remains original
+limited-provenance evidence,not scratch or an additional inspected population.
+Registration of this standalone receipt/semantic assertion awaits the frozen
+export boundary; no registered producer/test inputs were edited. Collision,
+desktop ancestry and full paint remain separate obligations. Do not recapture
+these mobile ancestors without relevant source/environment drift.
+
 Focus-feedback history question closes at the explicit-authoring boundary:
 all103 file revisions in current branch ancestry (oldest2f440115740ff76fa9e55b3f4a11568207b2af5a)
 contain no exact #menu-rename/#menu-delete focus or focus-visible selector.
