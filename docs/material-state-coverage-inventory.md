@@ -4,6 +4,22 @@
 
 ### Configured Menu bounds gap — October 8
 
+Focus-feedback history question closes at the explicit-authoring boundary:
+all103 file revisions in current branch ancestry (oldest2f440115740ff76fa9e55b3f4a11568207b2af5a)
+contain no exact #menu-rename/#menu-delete focus or focus-visible selector.
+Git f566f807,0d67d46c,d347a23a explicitly contain item hover and active rules,
+but no item focus rule; their changes introduce/update feedback colors while
+leaving this input absent. Read-only diagnostic exits0 in
+menu-item-focus-history-20261008.log; ordered revision/source receipt digest
+e83bb78ee9974fdad2dc899b4088d896f0f6fc1fe5bf2e15dbba99dddfa1b695.
+Combined with current matched-focus transparent resolution,this supports a
+persistent application focus-input omission,not a later removal of an explicit
+working item-focus rule. Do not infer generic inherited focus behavior,other
+branches,historical browser focus rendering or an original core defect from
+the selector history. Later fix owner remains reference-equivalent Menu item
+state-layer authoring through shared core styles. No historical runtime rerun,
+new capture,threshold change or frozen producer edit was needed.
+
 Matched item keyboard-focus paint now has exact retained input evidence across
 all eight desktop profile/DPR contexts. In menu-item-keys-20261008's
 typeahead-ready boundary both active labels are Delete; native item class is
