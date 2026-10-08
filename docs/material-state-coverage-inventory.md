@@ -6,6 +6,24 @@ Current priority: finish exact case-obligation/current-validity joins,with share
 overlay/scrollbar paint and editable-text paint ahead of isolated passive layout.
 The existing36-family applicability map remains authoritative; no new inventory.
 
+Modal isolation owning-code applicability is now joined without recapturing the
+settled public test. Retained public-modal-isolation-durable-9c39ad3-verified.log
+SHA256 b4206af9ae761991270681857e40ef3be0f46f27c3f2e72ff9199a33fa151876
+contains the passing DPR1/2 same-document peer/outside-selector/disposal proof.
+Its original source and installed hashes still match. Complete applyModalInertnessFor,
+semanticEventElementId,moveFocus and isAllowedByModal methods also equal the
+authenticated October5 Material source map dba48404… (manifest7ae2cba1…).
+modal-isolation-material-owner-applicability-corrected-20261008.log records the
+successful four-method join. The first parser attempt failed on TAP backslash
+escaping; retain modal-isolation-material-owner-applicability-20261008.log as
+instrumentation failure,not a renderer result. Thus stale code in these owners
+does not explain the bounded isolation discrepancy. This is not a new Material
+caller-state or whole-case pass. Bottom-sheet role-only DIV versus modal dialog
+authoring remains a separate input mismatch; configured parent focus/transient
+opening applicability,restoration,paint and late-async work remain to reconcile.
+Next reuse existing comparison-pane scope evidence and join its exact caller
+inputs/contexts; do not repeat the public two-surface capture.
+
 Progress programmatic-focus paint gap is closed at the bounded40-case/32-cohort
 boundary. Candidate-only capture reuses the unchanged frozen-showcase helper,
 authenticates all served assets against the October5 manifest and records local
