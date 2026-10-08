@@ -2,6 +2,36 @@
 
 ## Current evidence boundary — October 8
 
+### Trusted tooltip touch — reference long-press opens,candidate remains closed
+
+The separate dark390x844DPR2 Android-emulated Chrome154 probe now answers the
+long-press runtime question. Trusted CDP touch events hit unchanged checkpoint
+assets. Short-held112.5/104.3ms and short-ended709/706.1ms both stay closed.
+Long-held early100.7/101.1ms both stay closed; after a further600.6/601.3ms,
+native opens and candidate remains closed. Native also opens before cancellation;
+both are closed at late release/cancel observations. Native release-early already
+shows closed,so the nominal1500ms default is NOT asserted as demonstrated behavior;
+other body/focus/dismissal paths remain competing explanations for early hide.
+
+Independent target control confirms candidate pointerdown reaches tooltip-primary
+and focus reaches the same trigger,with open=false after700ms and519 authenticated
+runtime assets(SHA ordered asset list2c6c1f40468c1d161605ce5c13da7d1b5fdb33ed7e7b04b76a63dafd9a684590).
+No pointerenter is logged in that control. Thus wrong hit coordinates do not explain
+this bounded absence; the application has no long-press opening action. This is
+an authored interaction omission,not a demonstrated equal-input core touch defect.
+
+Report tooltip-trusted-touch-20261008/latest-report.json SHA256
+7949f5618b27fd71f0523db844428ecc8f3c9b52e9bf7414e23e0712eeb40332.
+Original supplemental validator returns checkpoint-bound for all4 paired action
+records/8 trees; all8 screenshot hashes and trusted-touch flags independently
+verify. Producer scripts/audit-material-tooltip-touch.mjs SHA256
+50628b4edf89d4fb33c9b0bc810f806a8a4e1ed72a378048bd5adaec9c162bb3.
+No fake clock,synthetic DOM dispatch,fixture mutation or canonical-case addition.
+This is Android emulation,not physical-device/iOS/all-profile paint acceptance.
+Next retain the early-release uncertainty and inspect shared scroll/ownership
+obligations; do not repeat this opening/target question. Standalone registration
+awaits coherent integration after the frozen cold check; case closure remains0.
+
 ### Tooltip touch applicability — responsive viewport is not mobile input
 
 The checkpoint-matching runner/config omit isMobile,hasTouch and userAgent;
