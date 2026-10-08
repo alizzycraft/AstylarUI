@@ -37,16 +37,21 @@ try {
   for (const context of [
     { profile: 'light', viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 },
     { profile: 'dark', viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 },
-  ]) for (const side of ['reference', 'astylar']) {
+  ]) for (const state of ['hint', 'error']) for (const side of ['reference', 'astylar']) {
     const page = await browser.newPage(context);
     const finish = evidence.observe(page);
     try {
-      await page.goto(`${baseUrl}/${side}/form-field?profile=${context.profile}`);
+      await page.goto(`${baseUrl}/${side}/form-field?benchmark=1&profile=${context.profile}${state === 'error' ? '&interaction=error' : ''}`);
       await page.locator('.frame').waitFor();
       if (side === 'astylar') {
         await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
         await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
       }
+      const theme = await page.locator('.frame').evaluate(node => ({
+        dark: node.classList.contains('dark'), background: getComputedStyle(node).backgroundColor,
+      }));
+      assert.equal(theme.dark, context.profile === 'dark');
+      assert.equal(theme.background, context.profile === 'dark' ? 'rgb(28, 27, 31)' : 'rgb(255, 251, 254)');
       const selector = side === 'reference' ? '#form-field-control' : '[data-astylar-id="form-field-control"]';
       await page.locator(selector).waitFor({ state: 'attached' });
       const session = await page.context().newCDPSession(page);
@@ -65,15 +70,16 @@ try {
         role: ax.role.value, name: ax.name?.value,
         describedByProperty: ax.properties?.find(property => property.name === 'describedby') ?? null };
       const runtime = await finish();
-      console.log(JSON.stringify({ context, side, observation, runtime }));
+      console.log(JSON.stringify({ context, state, side, theme, observation, runtime }));
       assert.equal(observation.name, 'Project name');
-      assert.equal(observation.description, side === 'reference' ? 'Public label' : null);
+      assert.equal(observation.description, side === 'reference'
+        ? state === 'error' ? 'Project name is required' : 'Public label' : null);
     } finally { await page.close(); }
   }
   console.log(JSON.stringify({ terminal: 'verified', browser: browser.version(), capture: evidence.capture,
     sourceReceipts: ['examples/material-showcase/src/app/astylar.component.ts', 'src/lib/astylar-semantic-bridge.ts']
       .map(file => ({ file, sha256: hash(readFileSync(file)) })),
-    scope: 'Non-error hint description in two physical contexts; no error-state, all-profile or assistive-technology acceptance.' }));
+    scope: 'Hint/error descriptions in two physically and theme-verified contexts; no live-announcement, all-profile or assistive-technology acceptance.' }));
 } finally {
   if (browser) await browser.close();
   await new Promise(resolve => server.close(resolve));

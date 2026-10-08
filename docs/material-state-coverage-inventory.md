@@ -2,6 +2,43 @@
 
 ## Current evidence boundary — October 9
 
+### Hint/error actual AX verified; previous requested-dark attribution corrected
+
+Inspecting ShowcaseStore reveals profile/error initialization requires benchmark=1
+(showcase.store.ts:45-54). The preceding field probe omitted it. Its requested
+dark/mobile context was physically mobile/DPR2,but did not prove dark theme;
+the earlier dark-theme wording is superseded here. Preserve the original log
+and original probe bytes at Git dcdf512a (SHA bec8004c…) as historical evidence,
+not current theme acceptance. The tooltip-description probe has the same URL
+pattern; its requested-dark theme attribution also remains unverified. Frozen
+producer inputs stay unchanged; no tooltip source edit or recapture during export.
+
+The existing field probe now requests benchmark=1 and interaction=error only
+for the error cohort. It verifies actual frame dark class and computed surface
+RGB on both sides,then measures CDP textbox descriptions. Eight observations
+cover hint/error × reference/candidate × light desktopDPR1/dark mobileDPR2.
+Native hint exposes Public label; native error replaces it with Project name is
+required. Candidate exposes no description in either state; all names remain
+Project name. This demonstrates actual error-description omission as well as
+hint omission,not live-announcement behavior or failure of supplied core IDREFs.
+
+First theme guard attempted shared --primary,which neither side guarantees;
+it rejected empty versus #6750a4. Keep field-description-hint-error-20261009.log
+and its failed directory. The corrected class/surface guard uses an independent
+new directory. node scripts/audit-material-field-description.mjs
+--output=artifacts/material-parity/field-description-hint-error-verified-20261009
+exits0; log SHA25696d926082ad516850afdb564124a33f7263055e3dc889d928bcb49deb6780d5b.
+Eight rows plus verified terminal receipt; current script SHA3131e4af…,all
+helper/source/checkpoint hashes independently replayed and match. Each reference
+runtime authenticates518 assets,candidate519,zero errors;1887-file checkpoint
+fingerprint unchanged. No error observations replaced or hidden.
+
+Existing source findings own these two authored omissions; this strengthens
+bounded actual-AX evidence only. Other physical cohorts,live announcements and
+complete field obligations remain. New probe is outside the frozen155 producer
+inventory; integrate after export/cold check. Original session45371 remains live;
+its log advanced to validate-audit at991480.9908ms,not terminal acceptance.
+
 ### Form-field hint omission reaches actual accessibility API
 
 The unresolved question was whether missing candidate ariaDescribedby merely
