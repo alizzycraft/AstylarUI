@@ -149,6 +149,97 @@ test('configured snackbar lifetime census preserves timed and intentionally pers
   // Closed final state is not an open-state timing/paint or whole-case equivalence proof.
 });
 
+test('remaining configured field popup bounds preserve exact actions and all eighty endpoints', () => {
+  const file = 'artifacts/material-parity/field-popup-bounds-recovered-20261008/latest-report.json';
+  const reportBytes = readFileSync(file);
+  assert.equal(createHash('sha256').update(reportBytes).digest('hex'), '4e4582308f9f76be4f663992e0e94ecf6c5bd6d7a1be1523bcb3c25a6d4b754d');
+  const report = JSON.parse(reportBytes);
+  const manifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
+  assert.deepEqual(validateSupplementalCapture(report, { reportFile: file,
+    expectedProvenance: manifest.provenance,
+    script: 'scripts/audit-material-configured-field-popup-bounds.mjs',
+    styleProperties: Object.values(propertyGroups).flat() }), { status: 'checkpoint-bound', errors: [] });
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const action = report.actionSource, runner = readFileSync(action.file);
+  assert.equal(hash(runner), action.sha256);
+  assert.equal(action.sha256, manifest.provenance.harnessFiles.find(r => r.file === action.file).sha256);
+  const ast = ts.createSourceFile(action.file, runner.toString(), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  assert.deepEqual(action.functionNames, ['profileTheme', 'sendShowcaseCommand', 'waitForThemeApplied',
+    'settleInteraction', 'popupHoverBox', 'popupOptionBox', 'interactionTargetBox', 'performInteraction']);
+  assert.equal(hash(action.functionNames.map(name => {
+    const matches = ast.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+    assert.equal(matches.length, 1); return matches[0].getText(ast);
+  }).join('\n')), action.functionBodiesSha256);
+  assert.equal(hash(readFileSync(action.cursorDependency.file)), action.cursorDependency.sha256);
+  const states = { autocomplete: ['focus', 'held', 'activate', 'activate-leave', 'open-commit-reopen', 'open'],
+    select: ['activate', 'activate-leave', 'open-commit-reopen', 'open'] };
+  const expected = materialInteractionCases.filter(c => states[c.family]?.includes(c.state));
+  assert.equal(expected.length, 80);
+  assert.equal(report.results.length, 80);
+  assert.deepEqual(report.results.map(r => r.caseId).sort(), expected.map(c => materialCaseKey('interaction', c)).sort());
+  const screenshots = new Set();
+  const originalBytes = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
+  assert.equal(hash(originalBytes), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const originals = new Map(JSON.parse(originalBytes).interactions.map(row => [materialCaseKey('interaction', row), row]));
+  const layoutProperties = ['position', 'top', 'left', 'right', 'width', 'height', 'padding', 'margin', 'boxSizing', 'borderRadius'];
+  for (const row of report.results) {
+    assert.equal(row.caseId, materialCaseKey('interaction', row));
+    const original = originals.get(row.caseId); assert.ok(original);
+    const anchor = original.geometry.elements.find(e => e.id === `${row.family}-primary`);
+    assert.ok(anchor && !anchor.missing);
+    for (const side of ['reference', 'astylar']) {
+      const evidence = row[side], receipt = evidence.screenshot;
+      assert.ok(!screenshots.has(receipt.file)); screenshots.add(receipt.file);
+      const bytes = readFileSync(receipt.file);
+      assert.equal(hash(bytes), receipt.sha256);
+      const image = PNG.sync.read(bytes);
+      assert.deepEqual([image.width, image.height],
+        [row.viewport.width * row.viewport.deviceScaleFactor, row.viewport.height * row.viewport.deviceScaleFactor]);
+      for (const box of [evidence.observation.primary, evidence.observation.popup,
+        ...evidence.observation.options.map(option => option.box)]) {
+        assert.ok(['x', 'y', 'width', 'height'].every(k => Number.isFinite(box?.[k])));
+        assert.ok(box.width > 0 && box.height > 0);
+      }
+      const capturedAnchor = evidence.observation.primary;
+      const retainedAnchor = side === 'reference' ? anchor.expected : anchor.actual;
+      for (const [captured, retained] of [['x', 'left'], ['y', 'top'], ['width', 'width'], ['height', 'height']]) {
+        assert.ok(Math.abs(capturedAnchor[captured] - retainedAnchor[retained]) < .05);
+      }
+      const oldReceipt = original.inputTrees[side], oldBytes = readFileSync(oldReceipt.file);
+      assert.equal(hash(oldBytes), oldReceipt.sha256);
+      const trees = [JSON.parse(oldBytes), JSON.parse(readFileSync(evidence.inputTree.file))];
+      const styles = trees.map(tree => {
+        const panel = tree.nodes.find(node => side === 'reference'
+          ? node.attributes?.class?.split(/\s+/).includes(row.family === 'select' ? 'mat-mdc-select-panel' : 'mat-mdc-autocomplete-panel')
+          : node.authored?.id === (row.family === 'select' ? 'select-options' : 'field-options'));
+        assert.ok(panel);
+        return side === 'reference' ? tree.styles[panel.style] : panel.resolvedStyle;
+      });
+      for (const property of layoutProperties) {
+        if (side === 'reference' && ['padding', 'margin'].includes(property)) {
+          // Supplemental declared properties omit these shorthands, but retain
+          // all four computed longhands. Preserve the omission, do not invent it.
+          assert.equal(Object.hasOwn(styles[0], property), true);
+          assert.equal(Object.hasOwn(styles[1], property), false);
+          assert.equal(report.capture.styleProperties.includes(property), false);
+          for (const edge of ['Top', 'Right', 'Bottom', 'Left']) {
+            assert.equal(Object.hasOwn(styles[0], property + edge), true);
+            assert.equal(Object.hasOwn(styles[1], property + edge), true);
+            assert.equal(styles[0][property + edge], styles[1][property + edge]);
+          }
+          continue;
+        }
+        assert.equal(Object.hasOwn(styles[0], property), Object.hasOwn(styles[1], property));
+        assert.equal(styles[0][property], styles[1][property]);
+      }
+    }
+  }
+  assert.equal(screenshots.size, 160);
+  assert.equal(report.inputEquivalent, false);
+  assert.equal(report.renderingEquivalent, false);
+  // Receipt and observation completeness, not acceptance of measured differences.
+});
+
 test('configured overlay placement census distinguishes measured boxes from comparator defaults', t => {
   const bytes = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');

@@ -2,53 +2,52 @@
 
 ## Current evidence boundary — October 8
 
-Current next action: complete exact case-obligation/current-validity joins, with
-shared overlay/scrollbar paint and editable-text paint ahead of isolated passive
-layout checks. The snapshot-only turn was no investigation progress. The existing
-36-family applicability map below remains authoritative; do not create a second
-inventory or repeat settled captures.
+Current priority: finish exact case-obligation/current-validity joins,with shared
+overlay/scrollbar paint and editable-text paint ahead of isolated passive layout.
+The existing36-family applicability map remains authoritative; no new inventory.
 
-Autocomplete/select endpoint placement applicability is now exact: the existing
-configured overlay census authenticates360 retained tree receipts across180
-configured cases. Autocomplete has56 paired open endpoints/42 paired absent;
-select40 open/42 absent. The already authenticated supplemental bounds join
-covers8 open-hover-content endpoints per family. Thus80 open endpoints remain
-without that bounds join (48 autocomplete/32 select),not all180 defaults. The84
-absent endpoints require no popup geometry at that endpoint; this does not waive
-their intermediate opening/dismissal/lifetime obligations. Trees provide panel
-structure/styles,not used bounds or pixel visibility. The initially diagnostic
-autocomplete lookup used the wrong candidate ID; final assertion uses the
-captured field-options owner and passes both sides at every exact configured ID.
-`node --test --test-name-pattern="configured overlay placement census" tests/material-parity/benchmark-config.spec.mjs`
-passes1/1,2809.3408ms total. No recapture or original receipt changed. This extends
-the existing census,not another report/framework or full-case closure. The modified
-benchmark-config.spec is a canonical source dependency: b4947eff remains valid for
-its published producer boundary; current source/export reconciliation is pending
-the next coherent integration. Next join retained open bounds for these exact80
-IDs or identify missing observations before scheduling a bounded capture.
-Current capture-harness applicability is now protected by the same assertion:
-The80 remaining open endpoints now have a bounded layout-input applicability
-join to their same-family/profile/desktop-DPR open-hover-content baseline. All160
-side comparisons preserve presence and exact values of position,top,left,right,
-width,height,padding,margin,boxSizing,borderRadius; original and baseline tree
-receipts authenticate. The existing census assertion passes1/1,2983.5633ms.
-Thus the recorded contrast/custom popup-anchor and sizing input differences
-also apply to these endpoint owners; state-specific differences in these ten
-properties are excluded. This is not whole-style/ancestor/content equality or
-used-geometry transfer: the80 bounds observations stay pending. Retained native
-styles are computed,candidate styles resolved; their different stage meanings
-remain explicit. No fresh measurement or renderer/fixture change occurred.
-all10 captureProvenance.harnessFiles exist and byte-match current sources,
-including benchmark configuration,runner and input-tree collector. Focused1/1
-passes2561.7705ms. This excludes capture-harness drift,not renderer/build/font/
-environment drift. The examined picker-commit report contains six datepicker/
-timepicker rows,no autocomplete/select. Dark/mobile popup-input-selection is
-editing/selection evidence at another viewport/action boundary,not these desktop
-popup bounds. These sources cannot close the80 endpoint geometry joins; this
-bounded search does not prove no other retained bounds exist. Next inspect the
-existing matched-bounds producer/receipts and retained checkpoint observation
-surfaces before choosing any new bounded capture. Do not infer geometry from
-identical style-tree receipts: those trees omit used popup rectangles.
+Autocomplete/select endpoint geometry observation gap is closed at the bounded
+supplemental boundary. Session16040 finished exit0. Report:
+artifacts/material-parity/field-popup-bounds-recovered-20261008/latest-report.json,
+16462330 bytes,SHA2564e4582308f9f76be4f663992e0e94ecf6c5bd6d7a1be1523bcb3c25a6d4b754d.
+Exactly80 configured IDs (48 autocomplete/32 select),four profiles,desktop DPR1/2;
+authenticated served assets/original runner actions,160 PNGs/160 trees,finite
+CSS popup/anchor/option boxes. Existing supplemental validator and focused assertion
+pass1/1,20600.7211ms. Original anchors agree within0.05CSSpx; ten popup layout
+properties join to the original endpoint inputs. Native fresh captures omit
+padding/margin shorthands explicitly; all eight captured computed longhands match.
+Initial assertion failure is retained; no missing shorthand is invented/normalized.
+Final hash-pinned/new-plus-existing census replay passes2/2,41141.022ms; retained
+Menu ancestor regression passes1/1,1487.5808ms. Closed fresh report was NTFS-
+compressed in place after validation,with identical SHA256; no evidence repointed.
+
+Together with prior16 open-hover-content bounds,this accounts for all96 configured
+open endpoints of these two families. The other84 endpoints have paired absent
+panels; their intermediate opening/lifetime obligations remain separate. Legacy
+report defaults are unchanged,not retroactively measured. This does not establish
+full style/ancestor/content equivalence,current renderer applicability,local paint
+acceptance or whole-case closure. Existing input-equivalence=false stays unchanged.
+Every fresh pair is720px wide. Light/dark y error0.0018615723CSSpx,height equal;
+custom y error1.0162353516CSSpx,height equal; contrast autocomplete y11.0131225586,
+height-10px and select y10.0131225586,height-8px. These extend existing unequal
+popup-anchor/size authoring findings,not a new equivalent-input core diagnosis.
+
+Failure provenance: session28854 lacked extracted popupOptionBox; session49644
+completed80 captures then ENOSPC left a zero-byte report. Both failure directories
+and notes remain retained. Two closed historical index generations02f8a47b…/
+04ec615b… had84 shards each compressed,all168 hashes unchanged and both whole
+verifyFindings passes. Free82620416 bytes before retry; no original evidence deleted.
+The original40MB estimate omitted report/runtime serialization and browser peak.
+
+Current capture-harness applicability: all10 original harness receipts byte-match
+current sources,including runner/config/collector. The new producer leaves them
+unchanged and reuses existing provenance infrastructure; no fixture/renderer/gate
+change. Canonical b4947eff remains valid at its published producer boundary;
+new standalone producer/proof integration and changed test-source reconciliation
+remain pending a coherent batch. Next: integrate this bounded observation through
+existing source/proof mechanisms,then close remaining state-paint/ancestor/ownership
+obligations rather than recapturing these settled bounds.
+
 
 One concrete regression-protection gap is now closed in the existing
 reference-root-ancestor-context.spec.mjs suite. The retained Menu ancestor/collision

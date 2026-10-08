@@ -56,6 +56,27 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+The recovered field-popup-bounds-recovered-20261008 capture completed exit0 and
+passed the existing supplemental validator and exact80-case focused receipt/input
+join. Keep its160 PNGs/160 trees and16462330-byte report,SHA256
+4e4582308f9f76be4f663992e0e94ecf6c5bd6d7a1be1523bcb3c25a6d4b754d.
+The closed report was compressed in place to8232960 physical bytes; before/after
+SHA256 matches. Original failure directories remain separately retained. This is
+bounded geometry evidence,not complete rendering/current-code acceptance.
+
+October8 bounded field-popup capture publication failed with ENOSPC after all80
+paired captures. Preserve field-popup-bounds-complete-20261008 (320 PNG/tree
+files,zero-byte incomplete report,failure.txt); it is failure evidence,not a
+validated complete capture. Earlier field-popup-bounds-20261008 records the
+missing popupOptionBox producer-dependency failure. Do not delete either merely
+because a retry exists. Historical working-index generations02f8a47b90b39a9b43afd79d59ec3ee68a336b05f651f658dde67735e1d4b420
+and04ec615b0e97cdc75f44b817efca421d24a79cb04d7bc1f2f22969b99a4c4240
+were transparently compressed in place (84 shards each),all168 SHA256 hashes
+unchanged. Existing verifyFindings passed for both complete packages/indexes;
+their134 source findings and unresolved1420/787 are historical,not current counts.
+No pointer,evidence bytes,paths or acceptance status changed. Free space rose
+16265216→82620416 bytes; successful retry used a new directory,not an overwrite.
+
 October8 publication headroom was recovered without deleting original evidence:
 nine closed docs JSON records and closed Menu diagnostic JSON files were
 transparently NTFS-compressed with individual before/after SHA256 equality.
