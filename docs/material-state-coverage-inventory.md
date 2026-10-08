@@ -2,6 +2,28 @@
 
 ## Current evidence boundary — October 8
 
+Current next action: complete exact case-obligation/current-validity joins, with
+shared overlay/scrollbar paint and editable-text paint ahead of isolated passive
+layout checks. The snapshot-only turn was no investigation progress. The existing
+36-family applicability map below remains authoritative; do not create a second
+inventory or repeat settled captures.
+
+One concrete regression-protection gap is now closed in the existing
+reference-root-ancestor-context.spec.mjs suite. The retained Menu ancestor/collision
+test authenticates both immutable report hashes, all24 screenshot/tree receipts,
+image dimensions, four exact profile/side cohorts per report, open/Escape endpoints,
+ancestor identity/parent chains and computed transform/filter/perspective/contain/
+zoom context. It preserves native upward collision fallback versus unchanged
+candidate placement and54.080CSSpx bottom overflow. Command:
+`node --test --test-name-pattern="retained Menu ancestor" tests/material-parity/reference-root-ancestor-context.spec.mjs`
+passes1/1,1251.2404ms total. No browser capture,fixture,renderer,threshold or
+original evidence changed. This is historical bounded observation protection,
+not current rendering acceptance,complete runtime provenance validation or a
+whole-case closure upgrade. Existing capture-validation receipts remain required.
+The canonical b4947eff batch stays independently verified at its published
+boundary; new test-source applicability must be reconciled at the next consumed
+source integration,not silently claimed covered by that earlier cold check.
+
 Canonical Menu publication boundary is independently validated: original cold
 session39373 finished exit0,elapsed3313695.7602ms. Two collectors,ten memory
 hits,no disk hits/invalidations;1205 files/89154859 bytes were reauthenticated.

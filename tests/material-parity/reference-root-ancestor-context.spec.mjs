@@ -1,8 +1,75 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { PNG } from 'pngjs';
 import { chromium } from 'playwright-core';
 import { captureBrowserInputTree } from './input-tree-evidence.mjs';
 import { captureReferenceRootAncestorContext } from './reference-root-ancestor-context.mjs';
+
+test('retained Menu ancestor and collision observations preserve exact receipts and bounded placement failure', () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const runs = [
+    ['menu-mobile-root-context-v2-20261008', '1a96c6753996e5048f6533f1c35812aae96a91368b42da4f3f0e37461558defa', 844],
+    ['menu-collision-boundary-20261008', 'c5fce741a7eb00a4e72af366137a66dbf24635fda49e3a9346c4fa2b2f7bd882', 280],
+  ];
+  const popups = new Map();
+  for (const [directory, expectedHash, height] of runs) {
+    const bytes = readFileSync(`artifacts/material-parity/${directory}/latest-report.json`);
+    assert.equal(hash(bytes), expectedHash);
+    const report = JSON.parse(bytes);
+    assert.equal(report.ancestorSource.file, 'tests/material-parity/reference-root-ancestor-context.mjs');
+    assert.equal(hash(readFileSync(report.ancestorSource.file)), report.ancestorSource.sha256);
+    assert.deepEqual(report.results.map(row => `${row.profile}/${row.mode}`).sort(),
+      ['dark/astylar', 'dark/reference', 'light/astylar', 'light/reference']);
+    for (const row of report.results) {
+      assert.equal(row.family, 'menu');
+      assert.deepEqual([row.viewport.width, row.viewport.height, row.viewport.deviceScaleFactor], [390, height, 2]);
+      assert.deepEqual(row.boundaries.map(b => b.state), ['initial-closed', 'open-1', 'closed-1']);
+      assert.deepEqual(row.boundaries.map(b => b.observation.open), [false, true, false]);
+      for (const boundary of row.boundaries) {
+        for (const receipt of [boundary.screenshot, boundary.inputTree]) {
+          assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+        }
+        const image = PNG.sync.read(readFileSync(boundary.screenshot.file));
+        assert.deepEqual([image.width, image.height], [780, height * 2]);
+        assert.deepEqual(JSON.parse(readFileSync(boundary.inputTree.file)).errors, []);
+        if (row.mode !== 'reference') continue;
+        const context = boundary.ancestorContext;
+        assert.deepEqual(context.errors, []);
+        assert.deepEqual(context.documentScroll, { x: 0, y: 0 });
+        for (const root of context.roots) {
+          const chain = root.ancestry.map(key => context.nodes.find(n => n.key === key));
+          assert.ok(chain.every(Boolean));
+          assert.equal(root.node, chain[0].key);
+          for (let index = 0; index < chain.length; index++) {
+            assert.equal(chain[index].parent, chain[index + 1]?.key ?? null);
+          }
+          if (root.captureKey.startsWith('overlay:')) {
+            assert.deepEqual(chain.map(n => n.type), ['div', 'body', 'html']);
+            for (const node of chain) {
+              for (const property of ['transform', 'filter', 'perspective', 'contain']) {
+                assert.equal(node.computed[property], 'none');
+              }
+              assert.equal(node.computed.zoom, '1');
+            }
+          }
+        }
+      }
+      popups.set(`${height}/${row.profile}/${row.mode}`, row.boundaries[1].observation.popup);
+    }
+  }
+  for (const profile of ['light', 'dark']) {
+    const normal = popups.get(`844/${profile}/reference`);
+    const short = popups.get(`280/${profile}/reference`);
+    assert.equal(normal.y - short.y, 152, 'native collision fallback changes placement');
+    assert.ok(short.y >= 0 && short.y + short.height <= 280);
+    const candidate = popups.get(`280/${profile}/astylar`);
+    assert.deepEqual(candidate, popups.get(`844/${profile}/astylar`), 'candidate placement remains fixed');
+    assert.ok(Math.abs(candidate.y + candidate.height - 280 - 54.08000183105537) < 0.001);
+  }
+  // Historical observations of unequal anchor inputs, not current rendering acceptance.
+});
 
 for (const deviceScaleFactor of [1, 2]) {
   test(`supplemental ancestry preserves attachment, source and computed context without DOM writes at DPR ${deviceScaleFactor}`, async () => {
