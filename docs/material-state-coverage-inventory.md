@@ -2,6 +2,42 @@
 
 ## Current evidence boundary — October 8
 
+### Configured tooltip hover/held local paint — complete retained replay
+
+The exact current-full report SHA ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62
+and checkpoint-matching focused-raster metric/config now support all18 configured
+hover/held local comparisons:16 desktop(four profiles,DPR1/2),two light comparison
+pane. Replaying each stored popup crop with the unchanged evaluator reproduces
+every complete recorded metric object exactly. Desktop32-PNG ordered receipt-list
+SHA f7044adaecf747807af54408971f5174e8ab40d654429ec0908279665db17bed.
+All18 existing SSIM gates and sharpness diagnostics pass. Unregistered diagnostic
+uses maximumPhaseOffset0 without changing acceptance:desktop12/16 pass at the
+existing0.70 threshold,range0.6057392580940858–0.8907740110987606;
+contrast/custom DPR2 hover/held are the four diagnostic failures. Comparison pane
+both raw0.8560009494174973. Existing allowed phase is(1,0),except contrast DPR2
+(1,1) and custom DPR2(1,-1). No offset correction is authorized by this diagnostic.
+
+This closes the retained configured hover/held local-metric replay obligation,
+not equal-input paint, calibrated full sharpness, temporal phase cause,other
+focus/open/touch/scroll states or current rendering acceptance. Initial expected16
+assertion rejected the unfiltered18 population before raster comparison; explicit
+desktop membership gives16 and the two comparison cases were separately replayed.
+No screenshots,metric,threshold,renderer,fixture or canonical producer changed.
+Next use the existing public text-phase cause evidence with exact input-owner
+joins rather than repeat these configured local metrics.
+
+### Standalone canonical export — terminal success, cold acceptance pending
+
+Repaired export session77303 is terminal exit0,elapsed2911122.824ms. Log
+standalone-batch-reconciled-canonical-export-20261008.log records validation,
+1205 dependency files/89154859 bytes with0 invalidations,publication and completion.
+Produced153 source findings,8483 scalar groups,389202 occurrences,inputEquivalent
+false; all2311 case closures remain partial. Independent named-launcher cold
+--check started against the same frozen producer inputs; retained output is
+standalone-batch-independent-cold-check-20261008.log. Do not promote publication
+to independent acceptance or import the changed package before that terminal
+check. Current compact pointer remains the previously accepted snapshot meanwhile.
+
 ### Runtime date applicability — retained open-calendar paint is historical
 
 Question: can exact source/style derivation promote October5 datepicker rasters
