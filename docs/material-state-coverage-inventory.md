@@ -6,6 +6,23 @@ Current priority: finish exact case-obligation/current-validity joins,with share
 overlay/scrollbar paint and editable-text paint ahead of isolated passive layout.
 The existing36-family applicability map remains authoritative; no new inventory.
 
+Atlas horizontal-advance hypothesis is narrowed: original public input/textarea
+declarations/assertions stay unchanged; measurement-only snapshots add native
+computed font/canvas probes and candidate CSS character advances. Session28160
+exits0,1/1,15114.3343ms,all four DPR1/2 pairs. Candidate cumulative At/Atl/Atlas
+widths15.1171875/18.671875/35.5703125CSSpx equal native canvas measurements under
+each auto/normal/none kerning mode. Native computed font is16px/24px Arial,
+tracking normal,text-rendering/kerning auto. Thus the existing office-AV kerning
+finding is not this text's demonstrated cause. Canvas measurements are not native
+input selection-edge measurements; final projection/pixel coverage and native
+selection snapping/glyph paint remain. No width calibration or parity acceptance.
+Log selection-css-advance-boundary-20261008.log SHA
+6ae207677ab1379ac1ebebfa69f9790871703c7122b50e6bf688cf880d58b5b1;
+originald07df06e…,invocationc60f897da74a513de7305fe7b34487091282c7f5f22840f0d9519ec80afe5cb9.
+Chrome154.0.8037.58,bundle1b041275…,same2515 dependency receipt8c965e69…
+authenticated before/after. Next join read-only projected mesh bounds to CSS
+segments and exact pixel masks; do not repeat this kerning probe unchanged.
+
 Selection crop hypothesis is now answered without changing authored inputs:
 the existing public reduction,unchanged assertions/helper,uses full390x140 crops
 only. Session29959 exits0,1/1,26977.6916ms; four input/textarea DPR1/2 pairs.
