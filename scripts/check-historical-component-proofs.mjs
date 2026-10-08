@@ -50,6 +50,7 @@ if (main) {
   const reviewedSorterCounts = new Map([
     ['dca535342db0162b59da58f3a979d51eea305b27b09cb7760e1a869f629647e7', 32],
     ['65d7256f859a0839cdf6364d8f3d4e2b81bdb32978c42e0afeaa27f2622e14ce', 34],
+    ['4a386f107cee16cb120910717a42b6ee9b40c724f02860b68a60ce29d4784f30', 36],
   ]);
   if (reviewedSorterCounts.has(hash(read(sorter)))) {
     const tests = text => {

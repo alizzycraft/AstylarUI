@@ -2,6 +2,30 @@
 
 ## Current evidence boundary — October 8
 
+Paint-proof source registration is verified: producer adds two bounded retained
+caret/scrollbar proofs (148 total); published acceptance remains150 findings/146
+proofs. Exact whole-producer comparison against96be6b7c confirms only these two
+registrations changed. Both owning offline paint tests pass2/2,5244.8564ms in
+`retained-paint-registration-focused-20261008.log`. The initial keyboard raw-source
+rejection remains in `retained-paint-registration-conservation-20261008.log`.
+Existing transition infrastructure now authenticates exact current sorter4a386f10…
+and Git original65d7256f…,conserves every predecessor statement except the augmented
+scrollbar callback,and retains every original assertion in that callback. Original
+raw receipts remain unchanged. Keyboard/AX replay passes3/3,8682.8045ms in
+`retained-paint-registration-reconciled-20261008.log`; source drift controls pass1/1
+in `retained-paint-registration-source-controls-20261008.log`. Original transition/
+migration checks pass34/34,105875.2487ms; post-reconciliation complete legacy-suite
+conservation passes3/3,95100.9795ms (`retained-paint-registration-migration-20261008.log`
+and `retained-paint-registration-suite-conservation-20261008.log`). Existing complete
+historical component/button launcher exits0 in
+`retained-paint-registration-historical-launcher-20261008.log`. Historical replay
+does not certify current rendering. No renderer/fixture changes,new captures or
+whole-case closure. Canonical export/check/index reconciliation remains the next
+publication milestone; preflight has only825736KiB free physical RAM and1090011136
+bytes D: free,so no multi-GiB rebuild launched under this pressure. Continue exact
+case-obligation/current-validity closure with retained evidence in the meantime;
+all original final gates remain required.
+
 Publication reconciliation is complete for the coherent150-finding/146-proof
 batch at frozen HEAD48df0287. Export and independent cold check both exit0;
 the independent check reauthenticates1205 inputs/89154859 bytes with zero

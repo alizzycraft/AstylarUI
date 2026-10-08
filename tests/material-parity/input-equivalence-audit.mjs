@@ -9438,6 +9438,10 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/sort-focus-structure.spec.mjs', /test\('retained five-family caret edges use equal integer crop origins'/,
+      'retained five-family caret horizontal paint-edge boundary', 'Authenticates ten light desktop1440x900 DPR1/2 supplemental populations and original rasters. Recomputes native edges and candidate blinking masks with equal integer crop origins; native1px versus candidate2px strokes start1CSSpx apart. Not configured1440x1000 closure,vertical fringe causality,current full rendering or permission for fixture offsets.'),
+    proof(root, 'tests/material-parity/sort-focus-structure.spec.mjs', /test\('retained scrollbar thumb masks distinguish native corners from plain indicator paint'/,
+      'retained configured scrollbar thumb track and overdraw paint boundary', 'Authenticates32 retained PNGs across eight configured desktop theme/DPR cohorts before/after wheel. Native rounded9px thumb,15px track and arrow glyphs differ from candidate plain8px thumb,12px fixed-color track and absent arrows. Replays original active-line overdraw ownership. Not equal paint,projection defect,unsampled fringe,other platforms or full timepicker closure.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('retained divider texel trace preserves edge and interior residual uncertainty'/,
       'retained divider sampling residual boundary', 'Authenticates2515 input receipts and original proof/callback. Retains DPR1 edge and DPR2 interior residuals with independently recomputed neighbor errors. CPU sampling model uncertainty remains; not confirmed GPU cause,current pipeline or full-case acceptance.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('retained disabled labels and selected snapshots preserve actual authored state coverage'/,

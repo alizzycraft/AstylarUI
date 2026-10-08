@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync as readOriginalSource } from 'node:fs';
-import { restoreScalarReviewExtraction } from './position-composition-producer-transition.mjs';
+import { restoreScalarReviewExtraction, readRetainedSortFocusSource } from './position-composition-producer-transition.mjs';
 import { execFileSync } from 'node:child_process';
 import { restorePositionProducer, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer, restoreRetainedFontScalarProducer, restoreSidenavBackgroundScalarProducer, restoreToggleSideColorProducer, restoreMappedBorderInitialProducer } from './position-composition-producer-transition.mjs';
 import { restoreMappedButtonResetProducer, restoreInteractiveWeightProducer, restoreModalPositionProducer } from './position-composition-producer-transition.mjs';
@@ -20,6 +20,17 @@ import { restoreCaretPositionProducer } from './position-composition-producer-tr
 import { restoreOwnerBoundaryProducer } from './position-composition-producer-transition.mjs';
 import { restorePreparedInputProducer } from './position-composition-producer-transition.mjs';
 import { restorePreparedInputFollowupProducer, restoreStackingProducer } from './position-composition-producer-transition.mjs';
+
+test('retained sorter paint additions conserve original statements and reject source drift', () => {
+  const current = readOriginalSource('tests/material-parity/sort-focus-structure.spec.mjs');
+  const original = execFileSync('git', ['show', '72b28c0e:tests/material-parity/sort-focus-structure.spec.mjs'], { maxBuffer: 4_000_000 });
+  assert.deepEqual(readRetainedSortFocusSource(current), original);
+  for (const replacement of [
+    current.toString().replace('assert.ok(thumb.after.firstY > thumb.before.firstY);', ''),
+    current.toString().replace('retained five-family caret edges use equal integer crop origins', 'unreviewed acceptance'),
+    current.toString() + '\nconst unrelatedChange = true;\n',
+  ]) assert.throws(() => readRetainedSortFocusSource(Buffer.from(replacement)));
+});
 
 // These original transition assertions operate on the pre-extraction producer.
 // Authenticate the complete original source first; no test body or historical

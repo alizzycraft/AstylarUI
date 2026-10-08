@@ -129,9 +129,11 @@ test('retained disabled labels and selected snapshots preserve actual authored s
 });
 
 test('retained table and list AX cohorts preserve bounded equality and structural differences', async () => {
+  const { readRetainedSortFocusSource } = await import('./position-composition-producer-transition.mjs');
   const digest = bytes => createHash('sha256').update(bytes).digest('hex');
   const pinned = (file, hash) => {
-    const bytes = readFileSync(file); assert.equal(digest(bytes), hash, file); return bytes.toString();
+    const bytes = file === 'tests/material-parity/sort-focus-structure.spec.mjs' ? readRetainedSortFocusSource() : readFileSync(file);
+    assert.equal(digest(bytes), hash, file); return bytes.toString();
   };
   const report = JSON.parse(pinned('artifacts/material-parity/current-full-20261005/latest-report.json',
     'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62'));
@@ -246,17 +248,21 @@ test('retained extended keyboard cohorts replay original runtime tails and sourc
   assert.throws(() => restoreExtendedKeyboardRegistration(producerSource.replace(
     'retained extended configured keyboard assertion boundary', 'unreviewed acceptance')));
   for (const name of ['retained divider sampling residual boundary', 'retained configured state applicability boundary',
-    'retained passive AX cohort boundary', 'retained complete bridge and CSS module applicability boundary'])
+    'retained passive AX cohort boundary', 'retained complete bridge and CSS module applicability boundary',
+    'retained five-family caret horizontal paint-edge boundary',
+    'retained configured scrollbar thumb track and overdraw paint boundary'])
     assert.throws(() => restoreExtendedKeyboardRegistration(producerSource.replace(name, 'unreviewed acceptance')));
   const producerAst = ts.createSourceFile(producerFile, producerSource, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   assert.equal(producerAst.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory')
-    .body.statements[0].expression.elements.length, 146);
+    .body.statements[0].expression.elements.length, 148);
   const digest = value => createHash('sha256').update(value).digest('hex');
   const pinned = (file, hash) => {
     const bytes = readFileSync(file); assert.equal(digest(bytes), hash, file); return bytes;
   };
-  const source = pinned('tests/material-parity/sort-focus-structure.spec.mjs',
-    '65d7256f859a0839cdf6364d8f3d4e2b81bdb32978c42e0afeaa27f2622e14ce').toString();
+  const { readRetainedSortFocusSource } = await import('./position-composition-producer-transition.mjs');
+  const sourceBytes = readRetainedSortFocusSource();
+  assert.equal(digest(sourceBytes), '65d7256f859a0839cdf6364d8f3d4e2b81bdb32978c42e0afeaa27f2622e14ce');
+  const source = sourceBytes.toString();
   const ast = ts.createSourceFile('keyboard-original.mjs', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   const report = JSON.parse(pinned('artifacts/material-parity/current-full-20261005/latest-report.json',
     'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62'));
@@ -318,6 +324,7 @@ test('retained extended keyboard cohorts replay original runtime tails and sourc
 });
 
 test('configured enabled keyboard evidence joins forty exact focus contexts without changing original assertions', async () => {
+  const { readRetainedSortFocusSource } = await import('./position-composition-producer-transition.mjs');
   const digest = value => createHash('sha256').update(value).digest('hex');
   const readPinned = (file, sha256) => {
     const bytes = readFileSync(file); assert.equal(digest(bytes), sha256, file); return bytes;
@@ -327,7 +334,9 @@ test('configured enabled keyboard evidence joins forty exact focus contexts with
   const helperSha = '65d7256f859a0839cdf6364d8f3d4e2b81bdb32978c42e0afeaa27f2622e14ce';
   const report = JSON.parse(readPinned('artifacts/material-parity/current-full-20261005/latest-report.json', reportSha));
   const checkpoint = JSON.parse(readPinned('artifacts/material-parity/current-full-20261005/checkpoint/manifest.json', checkpointSha));
-  const source = readPinned('tests/material-parity/sort-focus-structure.spec.mjs', helperSha).toString();
+  const sourceBytes = readRetainedSortFocusSource();
+  assert.equal(digest(sourceBytes), helperSha);
+  const source = sourceBytes.toString();
   const { fingerprintDirectory, materialCaseKey } = await import('./run-checkpoint.mjs');
   assert.deepEqual(fingerprintDirectory('examples/material-showcase/dist/material-showcase/browser'), checkpoint.provenance.browserFiles);
   const ast = ts.createSourceFile('keyboard.spec.mjs', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);

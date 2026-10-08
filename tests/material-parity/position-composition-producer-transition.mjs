@@ -1,11 +1,53 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import ts from 'typescript';
 
 const hash = text => createHash('sha256').update(text).digest('hex');
+// Historical replay only. Never use this reader for current capture or rendering acceptance.
+export function readRetainedSortFocusSource(current = readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')) {
+  assert.equal(hash(current), '4a386f107cee16cb120910717a42b6ee9b40c724f02860b68a60ce29d4784f30', 'exact reviewed paint-proof snapshot');
+  const original = execFileSync('git', ['show', '72b28c0e:tests/material-parity/sort-focus-structure.spec.mjs'], { maxBuffer: 4_000_000 });
+  assert.equal(hash(original), '65d7256f859a0839cdf6364d8f3d4e2b81bdb32978c42e0afeaa27f2622e14ce');
+  const statements = bytes => {
+    const ast = ts.createSourceFile('sorter.mjs', bytes.toString().replaceAll('\r\n', '\n'), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    assert.equal(ast.parseDiagnostics.length, 0);
+    return new Map(ast.statements.map(node => [ts.isExpressionStatement(node) && ts.isCallExpression(node.expression)
+      && node.expression.expression.getText(ast) === 'test' ? node.expression.arguments[0].text : node.getText(ast).slice(0, 90), { node, ast }]));
+  };
+  const before = statements(original), after = statements(current);
+  assert.equal(before.size, 49); assert.equal(after.size, 53);
+  for (const [name, entry] of before) {
+    assert.ok(after.has(name), `missing predecessor statement ${name}`);
+    if (name !== 'dark mobile timepicker wheel separates scroll state from scrollbar paint')
+      assert.equal(after.get(name).node.getText(after.get(name).ast), entry.node.getText(entry.ast));
+    else {
+      const assertions = ({ node, ast }) => {
+        const calls = [];
+        const visit = n => { if (ts.isCallExpression(n) && n.expression.getText(ast).startsWith('assert.')) calls.push(n.getText(ast)); ts.forEachChild(n, visit); };
+        visit(node); return calls;
+      };
+      const currentAssertions = assertions(after.get(name));
+      for (const call of assertions(entry)) assert.ok(currentAssertions.includes(call), `missing original scrollbar assertion ${call}`);
+    }
+  }
+  return original;
+}
 const extendedKeyboardProof = "    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\\('retained extended keyboard cohorts replay original runtime tails and source preambles'/,\n" +
   "      'retained extended configured keyboard assertion boundary', 'Replays original runtime assertion blocks and source preambles for128 exact family/focus contexts across eight retained batches. Pins logs,original callbacks,served build,report/checkpoint and bounded current source dependencies. Preserves observed activation,navigation,range and modality failures. Not collection-time error callbacks,current paint,lifecycle or complete-case acceptance.'),\n";
 export function restoreExtendedKeyboardRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes("/test\\('retained five-family caret edges")) {
+    const header = 'function focusedProofInventory(root) {\n  return [\n';
+    assert.equal(current.split(header).length, 2);
+    const start = current.indexOf(header) + header.length;
+    const end = current.indexOf("    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test", start);
+    assert.ok(end > start);
+    assert.equal(hash(current.slice(start, end)), 'd2216914e84eeb6ddcee63b9333b2e729fc3c0b19919aa2b6ae8ee98b88e0c6a',
+      'exact two-entry retained caret and scrollbar paint batch');
+    current = current.slice(0, start) + current.slice(end);
+  }
   if (current.includes("/test\\('retained divider texel trace preserves")) {
     const header = 'function focusedProofInventory(root) {\n  return [\n';
     assert.equal(current.split(header).length, 2);
