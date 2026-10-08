@@ -10,7 +10,7 @@ import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs
 import { propertyGroups } from './input-equivalence-policy.mjs';
 import { materialAbsoluteTextAlignmentTargets, materialAdditionalMeasurementTargets, materialComparisonViewport, materialFamilies, materialFocusedRasterTargets, materialGeometryExcludedTargets, materialInteractionCases, materialInteractionFocusedRasterTargets, materialInteractionTextAlignmentTargets, materialInteractionViewports, materialLeftAlignedTextTargets, materialMobileFlowCases, materialMobileFlowFamilies, materialProfiles, materialSemanticExcludedTargets, materialStaticCases, materialSupplementalStaticCases, materialTextAlignmentTargets, materialTextAlignmentToleranceOverrides, materialTextAuditTargets, materialTextlessFamilies, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets, materialViewports } from './benchmark.config.mjs';
 
-test('configured input focus evidence records exact controls without replacing reference actions', () => {
+test('configured input focus evidence records exact controls without replacing reference actions', t => {
   const file = 'artifacts/material-parity/configured-input-focus-20261008/latest-report.json';
   const capture = JSON.parse(readFileSync(file));
   const manifest = JSON.parse(readFileSync(capture.capture.checkpointManifest.file));
@@ -32,6 +32,7 @@ test('configured input focus evidence records exact controls without replacing r
   const cases = materialInteractionCases.filter(c => families.includes(c.family) && c.state === 'focus');
   assert.equal(cases.length, 40); assert.equal(capture.results.length, 240);
   assert.deepEqual([...new Set(capture.results.map(r => r.caseId))].sort(), cases.map(c => materialCaseKey('interaction', c)).sort());
+  const paintObservations = [];
   for (const c of cases) {
     const rows = capture.results.filter(r => r.caseId === materialCaseKey('interaction', c));
     assert.deepEqual(rows.map(r => r.sample), [0, 1, 2, 3, 4, 5]);
@@ -57,7 +58,36 @@ test('configured input focus evidence records exact controls without replacing r
         }
       }
     }
+    const paint = { caseId: materialCaseKey('interaction', c) };
+    for (const side of ['reference', 'astylar']) {
+      // Browser caret:hide does not freeze the Babylon canvas blink. Use all
+      // retained temporal pairs, not a zero same-sample delta as absence proof.
+      const images = rows.flatMap(row => [row[side].screenshot, row[side].hiddenCaretControl])
+        .map(image => PNG.sync.read(readFileSync(image.file)));
+      const dpr = c.viewport.deviceScaleFactor, columns = [];
+      for (let x = 12*dpr; x < 20*dpr; x++) {
+        let longest = 0;
+        for (const a of images) for (const b of images) {
+          let run = 0;
+          for (let y = 0; y < a.height; y++) {
+            const i = (y*a.width+x)*4;
+            run = [0,1,2,3].some(k => a.data[i+k] !== b.data[i+k]) ? run+1 : 0;
+            longest = Math.max(longest, run);
+          }
+        }
+        if (longest >= 10*dpr) columns.push({ x, longest });
+      }
+      const start = (side === 'reference' ? 16 : 15)*dpr;
+      const width = (side === 'reference' ? 1 : 2)*dpr;
+      assert.deepEqual(columns.map(column => column.x), Array.from({ length: width }, (_, i) => start+i));
+      paint[side] = { columns, cssWidth: width/dpr,
+        leftRelativeToInput: rows[0][side].screenshot.clip.x+start/dpr-rows[0][side].observation.box.x };
+      assert.equal(paint[side].leftRelativeToInput, side === 'reference' ? 0 : -1);
+    }
+    paintObservations.push(paint);
   }
+  t.diagnostic(JSON.stringify({ configuredFocusTemporalPaint: paintObservations, acceptance: false,
+    scope: '40 configured contexts; temporal edge observations, not equal caret intent, vertical fringe causality or current pipeline acceptance' }));
   // This authenticates observation coverage, not focus equality or paint acceptance.
   assert.equal(capture.inputEquivalent, false); assert.equal(capture.renderingEquivalent, false);
 });

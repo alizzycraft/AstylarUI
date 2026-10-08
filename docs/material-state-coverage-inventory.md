@@ -4,6 +4,26 @@
 
 ### Exact configured input-focus observation — October 8
 
+Retained local pixels now expose a temporal caret-shaped change in all40
+contexts on both sides. Existing configuration proof authenticates all960 PNGs
+and compares all12 retained initial/hide frames per side in the input-left
+12–20CSSpx crop band. Continuous changed runs of at least10CSSpx occupy native
+16*dpr through17*dpr-1 and candidate15*dpr through17*dpr-1: observed1CSSpx versus
+2CSSpx widths,left edge0 versus-1CSSpx relative to each actual input. This
+extends the retained horizontal paint observation to the exact configured
+profiles/actions/nonempty and empty values,not merely the900px light cohorts.
+It is not equal caret-color intent,vertical fringe causality or whole-case parity.
+Candidate same-sample initial/hide pairs sometimes have zero delta despite
+temporal changes: screenshot caret mode does not synchronize the independently
+blinking canvas caret. Thus zero paired delta is not absence evidence here.
+The stored pre-screenshot mesh visibility is likewise not a raster-time snapshot.
+All40 temporal edge assertions and the complete configuration suite pass3/3,
+11432.9576ms (`configured-input-focus-temporal-proof-20261008.log`); raw bounded
+diagnostics are `configured-input-focus-pixel-deltas-20261008.log` and
+`configured-input-focus-temporal-edges-20261008.log`. No new capture occurred.
+Next join applicable authored caret intent/current owning source to these
+observations; do not repeat blink visibility or infer vertical raster causality.
+
 The pending capture now closes the exact-control observation gap for all40
 configured focus contexts: five input families,four profiles,desktopDPR1/2 at
 1440x1000,six timed samples each (240 paired rows). Report
