@@ -4,6 +4,32 @@
 
 ### Selection paint ownership and evidence applicability — October 8
 
+Local selected-state pixels now distinguish palette from geometry for all8
+forward/backward profile pairs. Authenticated exact-color masks yield native
+24CSSpx high solid highlight,forward21px wide/backward22px wide at x0/17px
+relative to input. Candidate solid highlight is18.5CSSpx high light/dark,19px
+contrast/custom,forward19px/backward20.5px wide at x0/15.5px. These are solid
+pixel masks,not full antialiased mesh bounds or sharpness acceptance. Input
+origin differences remain visible (custom candidate y-1.9818725586px),not
+normalized away. Native blue#2e61cd versus candidate#173F6B(light/contrast/custom)
+or#9AD5FF(dark) confirms the separate palette policy observation.
+
+Each exact paired input tree retains native16px font,24px line-height,.496px
+tracking versus candidate16px font with omitted line-height/tracking. Thus
+shorter/narrower highlight observations are not an equivalent-input core geometry
+proof; the first demonstrated divergence is unequal typography intent. Do not
+patch offsets,height,tracking or fixture color to make this cohort pass. Owning
+equal-input reduction remains required to isolate any residual highlight/glyph
+defect. Existing configuration test now authenticates each tree and PNG,asserts
+these raw input distinctions and solid mask bounds,and emits exact CSS-relative
+measurements. Complete suite4/4 passes in
+`selection-local-solid-paint-proof-20261008.log`; bounded diagnostics are
+`selection-solid-pixel-bounds-20261008.log` and
+`selection-local-typography-intent-20261008.log`. No browser recapture occurred.
+Next resolve glyph paint/metrics with owning equivalent-input evidence,not
+repeat endpoint,palette or these solid-bound measurements. Canonical registration
+and exact whole-case closure remain separate pending obligations.
+
 Missing local selection pixels are now retained and checkpoint-bound in
 `selection-local-pixels-20261008-receipt-corrected/latest-report.json`:16 paired
 form-field states (four profiles,mobile390x844,DPR2),32 local PNGs plus paired

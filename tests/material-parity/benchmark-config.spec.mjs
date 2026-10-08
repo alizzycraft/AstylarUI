@@ -158,6 +158,7 @@ test('selection local pixels retain exact native key boundaries and paint receip
   const hash = b => createHash('sha256').update(b).digest('hex');
   assert.equal(hash(readFileSync(report.actionSource.file)),report.actionSource.sha256);
   const expected = [[5,5,'forward'],[0,3,'forward'],[5,5,'forward'],[2,5,'backward']];
+  const solidPaint = [];
   assert.equal(report.results.length, 16);
   for (const profile of ['light','dark','contrast','custom']) {
     const rows = report.results.filter(r => r.profile === profile);
@@ -171,6 +172,28 @@ test('selection local pixels retain exact native key boundaries and paint receip
         const receipt = row[side].screenshot, bytes = readFileSync(receipt.file);
         assert.equal(hash(bytes),receipt.sha256); const png = PNG.sync.read(bytes);
         assert.equal(png.width,Math.round(receipt.clip.width*2)); assert.equal(png.height,Math.round(receipt.clip.height*2));
+        const tree = JSON.parse(readFileSync(row[side].inputTree.file));
+        const node = tree.nodes.find(n => side === 'reference' ? n.attributes?.id === 'form-field-control' : n.authored?.id === 'form-field-control');
+        assert.ok(node);
+        const style = side === 'reference' ? tree.styles[node.style] : node.resolvedStyle;
+        assert.equal(style.fontSize,'16px');
+        if (side === 'reference') { assert.equal(style.lineHeight,'24px'); assert.equal(style.letterSpacing,'0.496px'); }
+        else { assert.equal(style.lineHeight,undefined); assert.equal(style.letterSpacing,undefined); }
+        if (index === 1 || index === 3) {
+          const hex = side === 'reference' ? '#2e61cd' : row.astylar.observation.highlights.find(h => h.visible && h.material).material;
+          const rgb = [1,3,5].map(k => parseInt(hex.slice(k,k+2),16));
+          let count=0,left=Infinity,top=Infinity,right=-1,bottom=-1;
+          for(let y=0;y<png.height;y++)for(let x=0;x<png.width;x++) {
+            const i=(y*png.width+x)*4;
+            if(rgb.every((color,k)=>png.data[i+k]===color)) { count++; left=Math.min(left,x);top=Math.min(top,y);right=Math.max(right,x);bottom=Math.max(bottom,y); }
+          }
+          assert.ok(count>0);
+          const expectedX = side === 'reference' ? (index===1?[16,57]:[50,93]) : (index===1?[16,53]:[47,87]);
+          assert.deepEqual([left,right],expectedX);
+          assert.equal((bottom-top+1)/2,side==='reference'?24:['light','dark'].includes(profile)?18.5:19);
+          solidPaint.push({ profile,state:row.state,side,hex,count,deviceBounds:[left,top,right,bottom],
+            cssRelativeToInput:[receipt.clip.x+left/2-row[side].observation.box.x,receipt.clip.y+top/2-row[side].observation.box.y,(right-left+1)/2,(bottom-top+1)/2] });
+        }
       }
       const visible = row.astylar.observation.highlights.filter(h => h.visible);
       assert.equal(visible.length > 0, index === 1 || index === 3);
@@ -178,6 +201,8 @@ test('selection local pixels retain exact native key boundaries and paint receip
   }
   assert.equal(report.inputEquivalent,false); assert.equal(report.renderingEquivalent,false);
   t.diagnostic('32 local PNGs and paired control/tree/runtime receipts authenticated; raw rendered world bounds are diagnostic only, not CSS layout inputs or geometry acceptance');
+  t.diagnostic(JSON.stringify({ selectionSolidPaint:solidPaint,acceptance:false,
+    scope:'Exact-color pixel masks with unequal line-height/tracking inputs; not full AA bounds, glyph sharpness, isolated geometry causality or parity acceptance' }));
 });
 
 test('covers every installed Angular Material component entry point', () => {
