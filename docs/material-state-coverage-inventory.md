@@ -4,6 +4,23 @@
 
 ### Configured Menu bounds gap — October 8
 
+Exact82-case retained state-observation join closes a bookkeeping ambiguity:
+ten ordinary states each have8 contexts; mobile open-dismiss adds2. Only
+open-dismiss-outside/open-dismiss-canvas have explicit paired presence checks
+(16 cases,both false);66 interactionState results are exactly default
+{matches:true}. Eight hover cases measure pointer cursor on the trigger;
+ten paired focus observations cover focus8 plus mobile open-dismiss2.
+All82 focused rasters target menu-primary,not popup items; recorded runtime
+errors are empty. Exact case IDs remain in existing focused diagnostic log
+configured-menu-state-observation-join-20261008.log (1/1 pass). This reuses
+authenticated October5 report/current runner/config receipts; it is historical
+observation accounting,not current whole-case acceptance or proof of held
+intermediate-state fidelity. Existing keyboard/lifecycle evidence must be joined
+separately at its own viewport/source boundaries. Do not repeat this census.
+Next missing observations concern popup item cursor/held/paint,actual commit and
+keyboard navigation,plus applicable root context; trigger rasters/default passes
+cannot substitute. The eight supplemental bounds observations remain distinct.
+
 Containing-owner applicability closes source drift for three complete core
 methods: ElementDimensionService.resolveLayoutParent,calculateDimensions and
 parsePositionLength. Current TypeScript emit,installed consumer and authenticated

@@ -192,6 +192,30 @@ test('configured overlay placement census distinguishes measured boxes from comp
       scope: 'Historical comparator observation coverage; defaults are not placement acceptance or missing-evidence counts' }));
   }
   assert.equal(measured, 174);
+  const menuRows = rows.filter(r => r.family === 'menu');
+  const menuStates = { focus: 8, hover: 8, held: 8, activate: 8, 'activate-leave': 8,
+    'open-hover-content': 8, 'open-dismiss-outside': 8, 'open-dismiss-canvas': 8,
+    disabled: 8, open: 8, 'open-dismiss': 2 };
+  assert.deepEqual(Object.fromEntries(Object.keys(menuStates).map(state => [state, menuRows.filter(r => r.state === state).length])), menuStates);
+  const stateObservations = menuRows.filter(r => ['open-dismiss-outside', 'open-dismiss-canvas'].includes(r.state));
+  assert.equal(stateObservations.length, 16);
+  for (const row of stateObservations) assert.deepEqual(row.interactionState, { reference: false, astylar: false, matches: true });
+  for (const row of menuRows.filter(r => !stateObservations.includes(r))) assert.deepEqual(row.interactionState, { matches: true });
+  const cursorObservations = menuRows.filter(r => r.cursor.reference !== undefined && r.cursor.astylar !== undefined);
+  assert.equal(cursorObservations.length, 8);
+  assert.ok(cursorObservations.every(r => r.state === 'hover' && r.cursor.reference === 'pointer' && r.cursor.astylar === 'pointer'));
+  const focusObservations = menuRows.filter(r => r.focus.reference !== undefined && r.focus.astylar !== undefined);
+  assert.equal(focusObservations.length, 10);
+  assert.ok(focusObservations.every(r => ['focus', 'open-dismiss'].includes(r.state)));
+  assert.ok(menuRows.every(r => r.focusedRasters.length === 1 && r.focusedRasters[0].id === 'menu-primary'));
+  assert.ok(menuRows.every(r => r.runtimeErrors.length === 0));
+  t.diagnostic(JSON.stringify({ configuredMenuStateCounts: menuStates,
+    observedDismissalCaseIds: stateObservations.map(r => materialCaseKey('interaction', r)),
+    cursorCaseIds: cursorObservations.map(r => materialCaseKey('interaction', r)),
+    focusCaseIds: focusObservations.map(r => materialCaseKey('interaction', r)),
+    localRasterTarget: 'menu-primary only; not popup items',
+    defaultStateComparators: 66,
+    scope: 'Exact historical observation accounting, not full input equivalence, held-boundary fidelity or current whole-case closure' }));
   const retainedBytes = readFileSync('artifacts/material-parity/popup-matched-bounds-20261007.log');
   assert.equal(createHash('sha256').update(retainedBytes).digest('hex'), 'd50667c3937889fac51c7758a3ceb1059b0b90a0dcba7d1b9c2bfa006306ee3a');
   const retained = retainedBytes.toString().trim().split(/\r?\n/).map(line => JSON.parse(line));
