@@ -6,6 +6,24 @@ Current priority: finish exact case-obligation/current-validity joins,with share
 overlay/scrollbar paint and editable-text paint ahead of isolated passive layout.
 The existing36-family applicability map remains authoritative; no new inventory.
 
+Dialog restoration first failed request is now observed in actual light desktop
+DPR1 execution. modal-escape-focus-request-trace-20261008.log exits0 using the
+unchanged frozen helper; a measurement-only surface.focus wrapper forwards the
+same arguments/this and preserves the original return. Dialog close request
+focus(dialog-primary) returns false while public interaction snapshot still has
+modalDialogId=dialog-overlay and focusedElementId=dialog-cancel; neither logical
+nor semantic trigger focus is established. Later Cancel focusout leaves BODY.
+Sheet request focus(bottom-sheet-primary) returns true and ends on trigger.
+Exact paired request/modal/final-state assertions pass. This rejects the
+accepted-then-cleared explanation for that explicit application request,not every
+core restoration path. focusElement's modal eligibility guard forbids outside
+targets while a modal is active; the caller patches open:false then immediately
+requests focus before rendered modality is removed. That is a demonstrated
+application timing mismatch at this boundary,not evidence the guard should be
+bypassed. Why core dismissActiveModal/invoker restoration does not rescue this
+sequence still needs tracing through key dispatch and reconciliation ordering.
+Do not add fixture delays or change renderer behavior under audit scope.
+
 Configured desktop Escape restoration is now observed across all four profiles
 and DPR1/2 for bottom-sheet/dialog:32 side observations,16 paired contexts.
 modal-configured-escape-restoration-20261008.log session1540 terminal exit0
