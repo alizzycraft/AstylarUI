@@ -2,6 +2,27 @@
 
 ## Current evidence boundary — October 9
 
+### Mobile timepicker scrollbar theme applicability correction
+
+The family checklist's older "Dark/mobile DPR2" wheel/thumb-drag wording below
+must be read as default-light mobile DPR2 with dark requested, not verified dark
+paint coverage. Read-only AST inspection of the existing owning test finds two
+distinct navigation paths: ordinary /timepicker?profile=dark for paired mobile
+actions, and benchmark=1&profile=${row.profile} for the separate candidate desktop
+CSS-bound joins. The complete test contains no showcase:theme command. Default
+store theme/benchmark-only profile application is already proved above. Thus
+mobile wheel144/reachability/drag observations remain useful, but their dark-theme
+label does not prove actual dark scrollbar paint. The benchmark desktop joins
+must not be invalidated by conflating those different URLs.
+
+An initial read-only guard expected only one goto in the whole test and failed;
+exact AST enumeration exposed the independent benchmark desktop path. No capture
+or source was changed. Outstanding specific obligation: actual themed mobile
+scrollbar paint/action applicability, using explicit ordinary-mode theme setup
+and actual frame verification when this owning harness is next corrected. Do not
+repeat the settled desktop shape/track/overdraw checks. Export session26438 was
+polled and remains live in build-audit; producer dependencies remain frozen.
+
 ### Coherent field/themed-tooltip AX source integration verified
 
 Both existing description findings now retain original evidence and include the
