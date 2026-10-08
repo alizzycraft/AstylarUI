@@ -2,6 +2,32 @@
 
 ## Current evidence boundary — October 8
 
+### Authenticated snackbar lifetime replacement — October 8
+
+The missing-provenance question below is closed for a new bounded observation,
+not retroactively repaired in the original log. Existing supplemental capture
+validation authenticates `snackbar-lifetime-bound-current-20261008/latest-report.json`:
+14 paired boundary rows,28 screenshot/tree pairs,served document/script/style/font
+receipts and exact October5 checkpoint. Complete source-map contents for current
+candidate/reference/store agree after LF normalization; map bytes authenticate.
+Real clicks in light desktop1440x900 DPR1 and dark mobile390x844 DPR2 reopen before
+the5s deadline,remain visible past the first deadline,expire past the new one,
+and dismiss a third opening with UNDO. Trusted DOM clicks and candidate delivered
+target IDs are asserted. Immediate native reopen records2 containers versus
+candidate1; later boundary returns1 on both. Preserve this transient observation;
+it is not settled-count equivalence or precise fade timing. Source-bound focused
+check1/1,1291.9426ms (`snackbar-lifetime-bound-source-validation-20261008.log`);
+full existing config suite5/5,12105.3822ms (`snackbar-lifetime-bound-config-suite-20261008.log`).
+Original failed caret-checkpoint preflight is retained in
+`snackbar-lifetime-bound-capture-20261008.log`: three build files differ from the
+older checkpoint. Current-full checkpoint matches all1,887 files; no receipt was
+rewritten. Capture log: `snackbar-lifetime-bound-current-capture-20261008.log`.
+New proof is standalone,not yet registered in canonical150/150; defer export to
+a coherent batch. Neither configured-case totals nor full closure changes.
+Next join applicable timer contexts to configured obligations and inspect remaining
+fade/local paint,other profiles,repeat resources/late disposal. No renderer or
+fixture compensation; original and failure evidence remain immutable.
+
 ### Snackbar lifetime current-source applicability — October 8
 
 Recovery: Git5918ea7's sort-focus-structure.spec.mjs suffix beginning

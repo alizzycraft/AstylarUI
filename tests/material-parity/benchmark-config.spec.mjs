@@ -11,6 +11,63 @@ import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs
 import { propertyGroups } from './input-equivalence-policy.mjs';
 import { materialAbsoluteTextAlignmentTargets, materialAdditionalMeasurementTargets, materialComparisonViewport, materialFamilies, materialFocusedRasterTargets, materialGeometryExcludedTargets, materialInteractionCases, materialInteractionFocusedRasterTargets, materialInteractionTextAlignmentTargets, materialInteractionViewports, materialLeftAlignedTextTargets, materialMobileFlowCases, materialMobileFlowFamilies, materialProfiles, materialSemanticExcludedTargets, materialStaticCases, materialSupplementalStaticCases, materialTextAlignmentTargets, materialTextAlignmentToleranceOverrides, materialTextAuditTargets, materialTextlessFamilies, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets, materialViewports } from './benchmark.config.mjs';
 
+test('snackbar lifetime replacement binds real actions and all seven boundaries to served assets', () => {
+  const file = 'artifacts/material-parity/snackbar-lifetime-bound-current-20261008/latest-report.json';
+  const raw = JSON.parse(readFileSync(file));
+  const manifest = JSON.parse(readFileSync(raw.capture.checkpointManifest.file));
+  const options = { reportFile: file, expectedProvenance: manifest.provenance,
+    script: 'scripts/audit-material-snackbar-lifetime.mjs', styleProperties: Object.values(propertyGroups).flat() };
+  assert.deepEqual(validateSupplementalCapture(raw, options), { status: 'checkpoint-bound', errors: [] });
+  const build = 'examples/material-showcase/dist/material-showcase/browser';
+  for (const [name, mapName] of [['astylar.component.ts', 'chunk-JPEJK334.js.map'],
+    ['reference.component.ts', 'chunk-7SL66K3U.js.map'], ['showcase.store.ts', 'chunk-YSOHGT2J.js.map']]) {
+    const bytes = readFileSync(`${build}/${mapName}`);
+    assert.equal(createHash('sha256').update(bytes).digest('hex'), manifest.provenance.browserFiles.find(f => f.file === mapName).sha256);
+    const map = JSON.parse(bytes);
+    const sources = map.sources.flatMap((p, i) => p === `src/app/${name}` ? [map.sourcesContent[i]] : []);
+    assert.equal(sources.length, 1);
+    assert.equal(sources[0].replace(/\r\n/g, '\n'), readFileSync(`examples/material-showcase/src/app/${name}`, 'utf8').replace(/\r\n/g, '\n'));
+  }
+  const changed = structuredClone(raw);
+  changed.results[0].reference.runtime.assets[0].sha256 = '0'.repeat(64);
+  assert.equal(validateSupplementalCapture(changed, options).status, 'invalid');
+  assert.equal(raw.results.length, 14);
+  const states = ['closed', 'first-open', 'reopened', 'after-original-expiry', 'new-expired', 'third-open', 'action-dismissed'];
+  const files = new Set();
+  for (const profile of ['light', 'dark']) {
+    const rows = raw.results.filter(r => r.profile === profile);
+    assert.deepEqual(rows.map(r => r.state), states);
+    assert.ok(rows.every(r => r.family === 'snack-bar'));
+    const viewport = profile === 'light' ? { width: 1440, height: 900, deviceScaleFactor: 1 } : { width: 390, height: 844, deviceScaleFactor: 2 };
+    assert.ok(rows.every(r => JSON.stringify(r.viewport) === JSON.stringify(viewport)));
+    for (const side of ['reference', 'astylar']) {
+      const observations = rows.map(r => r[side].observation);
+      assert.deepEqual(observations.map(o => o.popupCount), side === 'reference' ? [0, 1, 2, 1, 0, 1, 0] : [0, 1, 1, 1, 0, 1, 0]);
+      assert.deepEqual(observations.map(o => o.clicks.length), [0, 1, 2, 2, 2, 3, 4]);
+      const clicks = observations.at(-1).clicks;
+      assert.ok(clicks.every(c => c.trusted));
+      assert.ok(observations[3].now - clicks[0].now > 5000);
+      assert.ok(observations[3].now - clicks[1].now < 5000);
+      assert.ok(observations[4].now - clicks[1].now > 5000);
+      if (side === 'reference') assert.deepEqual(clicks.slice(0, 3).map(c => c.id), Array(3).fill('snack-bar-primary'));
+      else assert.deepEqual(observations.at(-1).events.filter(e => e.type === 'click').map(e => e.targetId),
+        ['snack-bar-primary', 'snack-bar-primary', 'snack-bar-primary', 'snack-bar-dismiss']);
+      for (const row of rows) {
+        const screenshot = row[side].screenshot;
+        assert.ok(!files.has(screenshot.file)); files.add(screenshot.file);
+        assert.equal(path.dirname(screenshot.file), path.dirname(file));
+        const bytes = readFileSync(screenshot.file), pixels = PNG.sync.read(bytes);
+        assert.equal(createHash('sha256').update(bytes).digest('hex'), screenshot.sha256);
+        assert.equal(pixels.width, viewport.width * viewport.deviceScaleFactor);
+        assert.equal(pixels.height, viewport.height * viewport.deviceScaleFactor);
+      }
+    }
+  }
+  assert.equal(files.size, 28);
+  // This is lifetime/provenance evidence, not equal input, fade or glyph-paint acceptance.
+  assert.equal(raw.inputEquivalent, false); assert.equal(raw.renderingEquivalent, false);
+});
+
 test('configured input focus evidence records exact controls without replacing reference actions', t => {
   const file = 'artifacts/material-parity/configured-input-focus-20261008/latest-report.json';
   const capture = JSON.parse(readFileSync(file));
