@@ -4,6 +4,22 @@
 
 ### Configured Menu bounds gap — October 8
 
+Anchor ownership followup authenticates served reference map chunk-7SL66K3U,
+complete current reference.component.ts equality,and captured Material menu
+module. Execute its complete default-options factory and _setPosition method
+unchanged for the non-submenu branch: after/below/non-overlap yields first
+connection start/bottom→start/top with offsetY0 and four fallback positions.
+This matches the retained native trigger-bottom gap0. Candidate structure is
+ordinary sibling button/div and a fixed CSS top; ariaControls is a semantic
+relation,not a layout anchor. First input-contract divergence is application
+anchor authoring/ownership,not demonstrated Babylon projection error. Focused
+proof configured-menu-anchor-owner-final-20261008.log passes1/1. Runtime
+fallback/collision behavior and equal-input core/public-API capability remain
+unverified; do not infer global absence of an anchor API from a source search.
+Next join the existing shared overlay ownership/capability findings to this
+precise relationship,then finish remaining action/profile obligations. No
+renderer/fixture changes,recapture,canonical export or whole-case promotion.
+
 Retained input followup answers the immediate anchor question for these eight
 contexts: native popup top minus trigger bottom is0; candidate is1 CSSpx in
 light/dark and2 in contrast/custom (numeric tolerance1e-7 only). Candidate

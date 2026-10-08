@@ -405,6 +405,35 @@ test('configured menu bounds authenticate exact runner actions and eight context
   }
   t.diagnostic(JSON.stringify({ anchorInputs, classification: 'Unequal fixed candidate placement/height inputs; not an isolated equal-input renderer defect',
     sourceApplicability: 'Complete current application source equals authenticated served source; core pipeline applicability remains separate' }));
+  const referenceMapFile = 'examples/material-showcase/dist/material-showcase/browser/chunk-7SL66K3U.js.map';
+  const referenceMapBytes = readFileSync(referenceMapFile), referenceMap = JSON.parse(referenceMapBytes);
+  assert.equal(hash(referenceMapBytes), manifest.provenance.browserFiles.find(f => f.file === path.basename(referenceMapFile)).sha256);
+  const materialSource = referenceMap.sources.flatMap((name, i) => name === 'node_modules/@angular/material/fesm2022/menu.mjs' ? [referenceMap.sourcesContent[i]] : []);
+  assert.equal(materialSource.length, 1);
+  const parsedMaterial = ts.createSourceFile('menu.js', materialSource[0], ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const methods = [];
+  const visit = node => { if (ts.isMethodDeclaration(node) && node.name.getText(parsedMaterial) === '_setPosition') methods.push(node.getText(parsedMaterial)); ts.forEachChild(node, visit); };
+  visit(parsedMaterial); assert.equal(methods.length, 1);
+  const Owner = new Function(`return class Owner {${methods[0]}}`)();
+  const owner = new Owner(); owner.triggersSubmenu = () => false;
+  let positions;
+  const factories = parsedMaterial.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === 'MAT_MENU_DEFAULT_OPTIONS_FACTORY');
+  assert.equal(factories.length, 1);
+  const defaults = new Function(`${factories[0].getText(parsedMaterial)};return MAT_MENU_DEFAULT_OPTIONS_FACTORY();`)();
+  assert.deepEqual(defaults, { overlapTrigger: false, xPosition: 'after', yPosition: 'below', backdropClass: 'cdk-overlay-transparent-backdrop' });
+  owner._setPosition(defaults, { withPositions: value => { positions = value; } });
+  assert.equal(positions.length, 4);
+  assert.deepEqual(positions[0], { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top', offsetY: 0 });
+  const referenceSources = referenceMap.sources.flatMap((name, i) => name === 'src/app/reference.component.ts' ? [referenceMap.sourcesContent[i]] : []);
+  assert.equal(referenceSources.length, 1);
+  assert.equal(referenceSources[0].replace(/\r\n/g, '\n'), readFileSync('examples/material-showcase/src/app/reference.component.ts', 'utf8').replace(/\r\n/g, '\n'));
+  assert.ok(referenceSources[0].includes('[matMenuTriggerFor]="menu"'));
+  assert.ok(captured[0].includes("if (family === 'menu') return [{ type: 'button', id: 'menu-primary'"));
+  const candidateTrigger = JSON.parse(readFileSync(report.results[0].astylar.inputTree.file)).nodes.find(n => n.authored?.id === 'menu-primary');
+  assert.equal(candidateTrigger.authored.ariaControls, 'menu-popup');
+  t.diagnostic(JSON.stringify({ referenceAnchorPositions: positions,
+    ownership: 'Captured Material trigger strategy relates trigger bottom to overlay top with zero offset and fallbacks; candidate uses sibling div fixed CSS top. ariaControls records semantics, not proof of layout anchoring.',
+    limitation: 'Non-submenu default branch only; no fallback collision runtime or proposed new API acceptance' }));
   assert.equal(report.inputEquivalent, false); assert.equal(report.renderingEquivalent, false);
   t.diagnostic(JSON.stringify({ observations, acceptance: false,
     scope: 'Eight configured menu open-hover-content bounds observations only; not equal input, current whole-pipeline validity or remaining menu actions' }));
