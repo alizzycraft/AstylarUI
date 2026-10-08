@@ -479,6 +479,53 @@ test('remaining menu action cohorts retain matched context coverage without repe
     scope: 'Seven supplemental physical context joins plus separately retained light DPR1; not the same action as configured open-hover-content or complete Menu closure' }));
 });
 
+test('menu keyboard remainder authenticates eight contexts without promoting unequal focus activation', t => {
+  const file = 'artifacts/material-parity/menu-keyboard-remainder-20261008/latest-report.json';
+  const report = JSON.parse(readFileSync(file)), manifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
+  const cohorts = materialInteractionCases.filter(c => c.family === 'menu' && c.state === 'open-hover-content');
+  assert.equal(cohorts.length, 8); assert.equal(report.results.length, 16);
+  const key = c => JSON.stringify([c.profile, c.viewport]);
+  const expectedStates = ['navigation-open', 'navigation-ArrowUp', 'navigation-Home', 'navigation-End', 'navigation-r',
+    'tab-open', 'tab', 'enter-open', 'enter', 'space-open', 'space'];
+  const pairs = [], files = new Set();
+  for (const cohort of cohorts) {
+    const rows = report.results.filter(r => key(r) === key(cohort));
+    assert.deepEqual(rows.map(r => r.mode), ['reference', 'astylar']);
+    for (const row of rows) {
+      assert.deepEqual(row.boundaries.map(b => b.state), expectedStates);
+      const states = Object.fromEntries(row.boundaries.map(b => [b.state, b.observation]));
+      for (const state of ['navigation-open', 'tab-open', 'enter-open', 'space-open']) {
+        assert.equal(states[state].open, true);
+        if (row.mode === 'reference') assert.equal(states[state].active.text, 'Rename');
+        else assert.equal(states[state].active.astylarId, 'menu-primary');
+      }
+      for (const [state, nativeText] of [['navigation-ArrowUp', 'Delete'], ['navigation-Home', 'Rename'], ['navigation-End', 'Delete']]) {
+        assert.equal(states[state].open, true);
+        if (row.mode === 'reference') assert.equal(states[state].active.text, nativeText);
+        else assert.equal(states[state].active.astylarId, 'menu-primary');
+      }
+      assert.equal(states.tab.open, row.mode === 'astylar');
+      if (row.mode === 'astylar') assert.equal(states.tab.active.astylarId, 'menu-rename');
+      assert.equal(states.enter.open, false); assert.equal(states.space.open, false);
+      // Enter/Space start on different controls; equal dismissal is not equal item activation.
+      // The r snapshot is immediate after generic settlement, not a timed typeahead acceptance.
+      for (const boundary of row.boundaries) for (const receipt of [boundary.inputTree, boundary.screenshot]) {
+        assert.ok(!files.has(receipt.file)); files.add(receipt.file);
+        assert.equal(createHash('sha256').update(readFileSync(receipt.file)).digest('hex'), receipt.sha256);
+      }
+    }
+    for (let index = 0; index < expectedStates.length; index++) pairs.push({
+      reference: { runtime: rows[0].runtime, inputTree: rows[0].boundaries[index].inputTree },
+      astylar: { runtime: rows[1].runtime, inputTree: rows[1].boundaries[index].inputTree },
+    });
+  }
+  assert.equal(files.size, 352);
+  assert.deepEqual(validateSupplementalCapture({ ...report, results: pairs }, { reportFile: file, expectedProvenance: manifest.provenance,
+    script: 'scripts/audit-material-menu-keyboard-remainder.mjs', styleProperties: Object.values(propertyGroups).flat() }), { status: 'checkpoint-bound', errors: [] });
+  assert.equal(report.inputEquivalent, false);
+  t.diagnostic('Eight desktop contexts: ArrowUp/Home/End and Tab observed; item activation/typeahead timing/mobile/full paint remain unclosed');
+});
+
 test('configured menu bounds authenticate exact runner actions and eight context receipts', t => {
   const file = 'artifacts/material-parity/configured-menu-bounds-final-20261008/latest-report.json';
   const report = JSON.parse(readFileSync(file));

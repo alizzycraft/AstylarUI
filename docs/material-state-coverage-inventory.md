@@ -4,6 +4,31 @@
 
 ### Configured Menu bounds gap — October 8
 
+Current missing-key probe menu-keyboard-remainder-20261008 now records eight
+desktop profile/DPR contexts,16 unchanged pages and11 boundaries per page.
+Every navigation/Tab/Enter/Space sequence has independently verified real
+outside reset and open preconditions. Native ArrowUp/Home/End focuses
+Delete/Rename/Delete; candidate remains on menu-primary in every context.
+Native Tab dismisses; candidate remains open and focuses menu-rename. Thus
+these missing-key runtime questions now corroborate the source-level application
+navigation contract gap rather than a hidden working core default.
+Enter/Space closes both, but native starts on Rename while candidate starts on
+the trigger: do not certify item activation from that result. Immediate r
+sample retains native Delete; generic settlement does not establish typeahead
+debounce completion. Those two questions require matched item-focus and explicit
+timing evidence. Existing supplemental validation authenticates the bounded
+observation and rehashes176PNG+176trees; focused assertion passes1/1,911.5289ms
+in menu-keyboard-remainder-validation-20261008.log. No full Menu closure, mobile acceptance,
+equal-input paint or canonical registration is implied. Prior producer remains
+immutable; new producer changes only missing-key sequences and cohort scope.
+Coherent existing configuration suite passes12/12,21805.154ms in
+menu-keyboard-remainder-config-integration-20261008.log. Capture exits0;
+source-fingerprint preflight matches the frozen October5 build/runner and
+existing validator binds its runtime/assets. Canonical150/150 stays unchanged:
+this standalone producer is not yet a canonical inventory dependency. Next
+probe must reach the same item by real focus traversal before Enter/Space and
+allow the reference typeahead timer to finish; do not rerun the settled keys.
+
 Keyboard remainder is now narrowed by the authenticated historical report's
 actual keydown inventory, not sequence names: its eight Menu rows contain only
 ArrowDown/Escape or Tab/Tab/Tab/Shift+Tab/Escape, with instrumented/uninstrumented
