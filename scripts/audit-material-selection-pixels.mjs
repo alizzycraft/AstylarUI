@@ -33,7 +33,7 @@ try {
   const properties = Object.values(propertyGroups).flat();
   const evidence = openSupplementalCapture({ options, browser, script: 'scripts/audit-material-selection-pixels.mjs', styleProperties: properties });
   const actionFile = 'tests/material-parity/sort-focus-structure.spec.mjs';
-  evidence.capture.sources.push({ file: actionFile, sha256: hash(readFileSync(actionFile)) });
+  const actionSource = { file: actionFile, sha256: hash(readFileSync(actionFile)) };
   const results = [];
   for (const profile of ['light', 'dark', 'contrast', 'custom']) {
     const viewport = { width: 390, height: 844, deviceScaleFactor: 2 };
@@ -79,6 +79,6 @@ try {
     }
     results.push(...rows); console.log(JSON.stringify({ profile, states: rows.map(r => ({ state: r.state, reference: r.reference.observation.control, astylar: r.astylar.observation.control })) }));
   }
-  writeFileSync(`${evidence.directory}/latest-report.json`, JSON.stringify({ schemaVersion: 1, browser: browser.version(), generatedAt: new Date().toISOString(), capture: evidence.capture, results,
+  writeFileSync(`${evidence.directory}/latest-report.json`, JSON.stringify({ schemaVersion: 1, browser: browser.version(), generatedAt: new Date().toISOString(), capture: evidence.capture, actionSource, results,
     scope: 'Form-field mobile DPR2, four profiles, retained real-key four-boundary selection sequence; local pixels and read-only paint bounds, not parity acceptance', inputEquivalent: false, renderingEquivalent: false }, null, 2)+'\n', { flag: 'wx' });
 } finally { if (browser) await browser.close(); await new Promise(resolve => server.close(resolve)); }

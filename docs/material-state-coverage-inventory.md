@@ -4,6 +4,29 @@
 
 ### Selection paint ownership and evidence applicability — October 8
 
+Missing local selection pixels are now retained and checkpoint-bound in
+`selection-local-pixels-20261008-receipt-corrected/latest-report.json`:16 paired
+form-field states (four profiles,mobile390x844,DPR2),32 local PNGs plus paired
+input trees/runtime receipts. Native key sequence is the existing Tab,Control+A,
+Atlas,Home/three Shift+Right,ArrowRight/End,three Shift+Left sequence; no endpoint
+injection or styling changes. Actual control value/focus/endpoints/direction
+agree at all16 boundaries:5/5forward,0/3forward,5/5forward,2/5backward. Visible
+candidate highlight owners exist only in forward/backward states. Existing
+supplemental validator and exact cohort/action/control/PNG hash/dimension checks
+pass; complete configuration suite4/4,10368.9734ms in
+`selection-local-pixels-validation-20261008-receipt-corrected.log`.
+
+The original rejected capture remains immutable and exact failed producer is
+preserved at commit2ea169da. Correction leaves the helper's three-source contract
+unchanged and authenticates the auxiliary original action-test source as separate
+report metadata. No validator relaxation or edited old report. Raw candidate
+world bounds are read-only paint observations,not CSS layout inputs; they do not
+by themselves establish CSS highlight bounds or geometry acceptance. Next derive
+local solid-color/glyph bounds from these authenticated PNGs and account for
+unequal field inputs before attributing residual geometry/sharpness. Do not
+recapture this cohort or repeat endpoint/palette summaries. This closes missing
+pixel retention for this declared cohort only,not every family/state or parity.
+
 Missing selection-pixel capture attempted in `selection-local-pixels-20261008`:
 all16 paired action boundaries complete,but supplemental validation rejects an
 extra action-source entry inserted into its intentionally closed three-source

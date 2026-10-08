@@ -149,6 +149,37 @@ test('configured input focus evidence records exact controls without replacing r
   assert.equal(capture.inputEquivalent, false); assert.equal(capture.renderingEquivalent, false);
 });
 
+test('selection local pixels retain exact native key boundaries and paint receipts', t => {
+  const file = 'artifacts/material-parity/selection-local-pixels-20261008-receipt-corrected/latest-report.json';
+  const report = JSON.parse(readFileSync(file)), manifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
+  assert.deepEqual(validateSupplementalCapture(report, { reportFile: file, expectedProvenance: manifest.provenance,
+    script: 'scripts/audit-material-selection-pixels.mjs', styleProperties: Object.values(propertyGroups).flat() }),
+  { status: 'checkpoint-bound', errors: [] });
+  const hash = b => createHash('sha256').update(b).digest('hex');
+  assert.equal(hash(readFileSync(report.actionSource.file)),report.actionSource.sha256);
+  const expected = [[5,5,'forward'],[0,3,'forward'],[5,5,'forward'],[2,5,'backward']];
+  assert.equal(report.results.length, 16);
+  for (const profile of ['light','dark','contrast','custom']) {
+    const rows = report.results.filter(r => r.profile === profile);
+    assert.deepEqual(rows.map(r => r.state), ['typed','forward','end-collapsed','backward']);
+    for (const [index, row] of rows.entries()) {
+      assert.equal(row.family, 'form-field'); assert.deepEqual(row.viewport, { width:390,height:844,deviceScaleFactor:2 });
+      for (const side of ['reference','astylar']) {
+        const control = row[side].observation.control;
+        assert.equal(control.value,'Atlas'); assert.equal(control.focused,true);
+        assert.deepEqual([control.selectionStart,control.selectionEnd,control.selectionDirection],expected[index]);
+        const receipt = row[side].screenshot, bytes = readFileSync(receipt.file);
+        assert.equal(hash(bytes),receipt.sha256); const png = PNG.sync.read(bytes);
+        assert.equal(png.width,Math.round(receipt.clip.width*2)); assert.equal(png.height,Math.round(receipt.clip.height*2));
+      }
+      const visible = row.astylar.observation.highlights.filter(h => h.visible);
+      assert.equal(visible.length > 0, index === 1 || index === 3);
+    }
+  }
+  assert.equal(report.inputEquivalent,false); assert.equal(report.renderingEquivalent,false);
+  t.diagnostic('32 local PNGs and paired control/tree/runtime receipts authenticated; raw rendered world bounds are diagnostic only, not CSS layout inputs or geometry acceptance');
+});
+
 test('covers every installed Angular Material component entry point', () => {
   const packageJson = JSON.parse(readFileSync(path.resolve('node_modules/@angular/material/package.json'), 'utf8'));
   const installed = Object.keys(packageJson.exports)
