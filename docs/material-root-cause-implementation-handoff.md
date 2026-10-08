@@ -2,6 +2,18 @@
 
 ## Current resumption ledger — October 7
 
+- October8 public antialias option defect: omitted/false/true requests atDPR1/2
+  all create actual four-sample antialiased contexts. Current/installed complete
+  createScene methods match; core passes hard-codedtrue as Engine's second
+  argument and installed Babylon overwrites the false options value from it.
+  Public browser and original assignment proofs are selection-public-context-
+  antialias-20261008.log and selection-antialias-option-owner-20261008.log.
+  Future implementation must honor the public option at core engine construction
+  with default/false/true context tests,not compensate through fixture styles.
+  Sampling attribution to every selection fringe and Material performance remain
+  unproved. This standalone finding awaits integration after the frozen check;
+  no renderer change or whole-case acceptance is claimed.
+
 - October8 standalone public selected-caret finding: equal authored Atlas input/
   textarea atDPR1/2,actual screenshot caret policy on both sides,six125ms epochs,
   real forward/backward/collapsed states. Native selected caret absent48/48;

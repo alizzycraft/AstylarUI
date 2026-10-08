@@ -93,7 +93,24 @@ edges remain separate. Initial launcher failed before browser due to rewriting e
 browser imports; failed integrity query expected an inputs array instead of the
 existing final dependency receipt. Both logs remain; corrected launcher preserves
 public package imports and original before/after dependency assertions.
-Next selection paint quantization,glyph edge coverage and remaining field applicability;
+Public context inspection now confirms a separate core option-policy defect:
+omitted/false/true antialias atDPR1/2 all yield context antialias:true,SAMPLES4,
+SAMPLE_BUFFERS1; render sizes390x140/780x280 preserve exact DPR. Public package
+mount uses unchanged authored inputs; diagnostics empty,2515 bundled dependencies
+rehash before/after. selection-public-context-antialias-20261008.log session66684
+exit0,SHA2562e4e9b530e172f2664b2434e9058976f4c077304face727980825facd7b68b35.
+Complete current/installed Astylar.createScene methods agree (sourcee72cfb8e…,
+installed6ad4f51c…). Original Engine second argument istrue while options false
+is correctly formed; installed Babylon constructor/assignment overwrites it
+from that argument. Source-extracted original assignment reproduces all three
+states in selection-antialias-option-owner-20261008.log,exit0,with source hashes.
+First option divergence is core engine construction,not fixture style or plugin
+coordinates. Highlight material itself remains opaque; context sampling is real,
+not inferred solely from fringe RGB. This does not prove MSAA is the sole cause
+of native selection quantization,or authorize disabling it as a fixture workaround.
+Register this owning finding after the frozen canonical check,then investigate
+remaining edge/glyph questions without altering CSS geometry or reference truth.
+Next remaining selection paint quantization,glyph edge coverage and field applicability;
 do not repeat the settled crop,offset,kerning,projection or selected-caret question.
 
 Evidence: selection-projected-css-boundary-20261008.log (session21694 exit0,
