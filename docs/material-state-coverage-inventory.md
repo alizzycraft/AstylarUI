@@ -6,6 +6,25 @@ Current priority: finish exact case-obligation/current-validity joins,with share
 overlay/scrollbar paint and editable-text paint ahead of isolated passive layout.
 The existing36-family applicability map remains authoritative; no new inventory.
 
+Settled comparison-parent scope is inspected at its existing six-case boundary,
+not a pending recapture. Reuse validates overlay-focus-scope-current-20261006.log
+SHA256304a10c2a0bec98cfc9d493b5f8542aeaabb9e099fe8718f65f5820dfb268b70:
+bottom-sheet/dialog × candidate/reference/both-open all permit real parent select
+focus and keyboard change to core,both iframe routes updated,zero page errors.
+Complete current comparison/reference/astylar/store source bytes equal the
+authenticated October5 maps after line-ending normalization. Successful read-only
+join: modal-comparison-parent-scope-reuse-20261008.log. Candidate sheet remains
+role-only/nonmodal; dialog records dialog-overlay modal. This closes stale caller
+inputs as an explanation for this settled observation,not full runtime/current
+rendering acceptance. Historical family-table parent-scope pending labels are
+superseded only at light1440×900 DPR1,six modes after animation/two-rAF settlement.
+Transient opening focus remains distinct: the original unsettled both-dialog
+probe lost parent focus. Next decisive question is whether actual delayed focus
+ownership overwrites a parent action before settlement,versus platform select
+popup key routing; inspect existing opening/autofocus callbacks before another
+browser action. Same-document teardown/late async,restoration and local paint
+also remain; iframe source replacement cannot establish component teardown.
+
 Modal isolation owning-code applicability is now joined without recapturing the
 settled public test. Retained public-modal-isolation-durable-9c39ad3-verified.log
 SHA256 b4206af9ae761991270681857e40ef3be0f46f27c3f2e72ff9199a33fa151876
