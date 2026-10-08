@@ -2,6 +2,43 @@
 
 ## Current evidence boundary — October 9
 
+### Description findings registered in source — canonical refresh remains pending
+
+The two missing findings are now explicit source definitions:
+fixture-form-field-hint-description-association-omitted and
+fixture-tooltip-persistent-description-association-conditioned-on-popup.
+Their original evidence is reused without new captures. Current scan detects
+exactly one location each (hint918, tooltip1077); source population155 and
+focused proof inventory162. All153 preceding definitions remain deeply equal.
+Complete producer/policy reversals conserve the accepted predecessors, not
+just their counts. Existing field-error/calendar owners are not reclassified.
+
+Focused description/canonical-predecessor checks pass4/4 in5105.3497ms:
+all76 form-field cases/152 original receipts (68hint omissions plus8 error
+controls), all62 tooltip cases/124 receipts (36closed omissions plus26 open
+controls), and12 actual AX observations in the original two physical contexts.
+Original runtime assets, checkpoint, current full mapped application source,
+capture dependencies and semantic bridge are authenticated. The first attempt
+caught a missing-registration negative-control guard; repaired guard rejects
+the renamed registration rather than treating it as an older source snapshot.
+The actual evidence assertions passed on both attempts and were not relaxed.
+
+Historical pre-passive replay reverses only five explicit later IDs; original
+150/148/147/145 populations and complete predecessor assertions are unchanged.
+Reconciliation plus all8 retained callers pass9/9 in2466.0038ms. Complete
+existing producer-transition suite passes32/32 in35598.9741ms. Commands:
+node --test --test-name-pattern='description registration|configured field hint descriptions|configured tooltip descriptions|standalone proof batch' tests/material-parity/benchmark-config.spec.mjs;
+node --import ./scripts/check-historical-component-proofs.mjs --test --test-name-pattern='pre-passive replay|retained (progress paint|compact empty|keyboard profiles|applied-theme popup|selection states|tooltip textures|standalone visibility|Tab, popup-state)' tests/material-parity/input-equivalence-audit.spec.mjs;
+node --test tests/material-parity/position-composition-producer-transition.spec.mjs.
+
+Accepted package/index remain153 at eb90958e, not155 or current fingerprint
+acceptance. Producer LF SHA c6c48c0e… and policy LF SHA912cdb7a… now differ;
+batch canonical export/cold comparison still required at a coherent milestone
+with sufficient headroom (D:free39170048bytes at check, insufficient for the
+previous63MB gzip publication alone). Do not recapture unchanged browser inputs.
+Field actual AX/live error semantics and broad lifetime/paint obligations remain;
+no case closes and all2311 stay partial. No renderer/fixture changes.
+
 ### Description classification integration decision — existing owners versus missing findings
 
 Read-only compact query authenticates the accepted eb90958e generation and its
@@ -10,7 +47,7 @@ described-by findings are field-error (ordinal70), calendar period composition
 (81) and calendar accessibility labels (83); step editable description (67) is
 different content, not a shared helper-description owner. Direct current policy
 inspection confirms field-error is explicitly invalid/error composition, not
-non-error hint association. No current source finding classifies the tooltip's
+non-error hint association. No accepted153 source finding classifies the tooltip's
 closed-state persistent help association. Thus merely attaching the newer logs
 to a tooltip focus-opening finding would conflate two independent obligations.
 

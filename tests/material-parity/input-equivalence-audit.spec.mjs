@@ -2394,13 +2394,15 @@ test('recent public and popup proofs join existing inventories without changing 
 
 async function conservedPrePassiveDefinitions(registeredInput) {
   const latestRegistered = registeredInput ?? (await import('./input-equivalence-policy.mjs')).sourceAuditDefinitions;
-  assert.equal(latestRegistered.length, 153);
-  // Reverse only the three separately accepted later registrations. The full
+  assert.equal(latestRegistered.length, 155);
+  // Reverse only the five explicitly registered later findings. The full
   // historical population and predecessor equality below remain authoritative.
   const laterIds = [
     'core-engine-antialias-option-overridden-by-hardcoded-argument',
     'core-selected-caret-blink-ignores-noncollapsed-selection',
     'fixture-menu-item-dismissal-focus-navigation-and-typeahead-omitted',
+    'fixture-form-field-hint-description-association-omitted',
+    'fixture-tooltip-persistent-description-association-conditioned-on-popup',
   ];
   for (const id of laterIds) assert.equal(latestRegistered.filter(entry => entry.id === id).length, 1);
   const currentRegistered = latestRegistered.filter(entry => !laterIds.includes(entry.id));

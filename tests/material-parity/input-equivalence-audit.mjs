@@ -8889,6 +8889,7 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'scripts/audit-material-tooltip-description.mjs',
     'tests/material-parity/modal-position-inspection.mjs',
     'tests/material-parity/modal-position-inspection.spec.mjs',
     'src/parity/rounded-radius.audit.spec.ts',
@@ -9449,6 +9450,10 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('configured field hint descriptions preserve sixty-eight omissions and eight error controls'/,
+      'configured field hint-description input boundary', 'Authenticates all76 configured cases and152 original tree receipts. Resolves reference Public label in68 non-error states while candidate renders the hint but omits its input association; eight error cases retain their prior owner. Current complete authoring source and supplied bridge mapping distinguish input omission from a core relationship failure. Not actual field AX,live announcements,paint or whole-case acceptance.'),
+    proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('configured tooltip descriptions preserve closed input omissions and actual AX open controls'/,
+      'configured tooltip persistent-description input and actual AX boundary', 'Authenticates62 configured IDs and124 original trees with36 closed omissions and26 open association controls. Preserves12 actual CDP observations in two declared physical contexts,checkpoint/runtime/source receipts and persistent native versus popup-conditional candidate descriptions. Successful candidate open mapping rules out blanket core ID-reference failure. Not all-profile AX,assistive technology,placement,paint,lifetime or whole-case acceptance.'),
     proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('public antialias option evidence binds original core arguments and Babylon override'/,
       'public antialias option core constructor boundary', 'Authenticates six retained package-root DPR1/2 contexts and complete current/installed createScene methods. Executes original Engine arguments and installed Babylon options assignment: hardcoded true overrides omitted/false request. Actual contexts remain four-sample antialiased. Not causal text-edge intervention,performance attribution or whole-runtime/case acceptance.'),
     proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('selected caret blink owner conserves shipped methods and exposes selection-blind visibility'/,

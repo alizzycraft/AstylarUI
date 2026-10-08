@@ -7,17 +7,164 @@ import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
 import { transformSync } from 'esbuild';
 import { PNG } from 'pngjs';
-import { materialCaseKey } from './run-checkpoint.mjs';
+import { materialCaseKey, fingerprintDirectory } from './run-checkpoint.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
-import { restoreStandaloneProofBatch, restoreExtendedKeyboardRegistration } from './position-composition-producer-transition.mjs';
+import { restoreDescriptionProofRegistration, restoreDescriptionPolicyRegistration, restoreStandaloneProofBatch, restoreExtendedKeyboardRegistration } from './position-composition-producer-transition.mjs';
 import { propertyGroups, sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { materialAbsoluteTextAlignmentTargets, materialAdditionalMeasurementTargets, materialComparisonViewport, materialFamilies, materialFocusedRasterTargets, materialGeometryExcludedTargets, materialInteractionCases, materialInteractionFocusedRasterTargets, materialInteractionTextAlignmentTargets, materialInteractionViewports, materialLeftAlignedTextTargets, materialMobileFlowCases, materialMobileFlowFamilies, materialProfiles, materialSemanticExcludedTargets, materialStaticCases, materialSupplementalStaticCases, materialTextAlignmentTargets, materialTextAlignmentToleranceOverrides, materialTextAuditTargets, materialTextlessFamilies, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets, materialViewports } from './benchmark.config.mjs';
+
+test('description registration conserves complete producer and source-definition predecessors', () => {
+  const prior = file => execFileSync('git', ['show', `5b3dfd70:${file}`],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n');
+  const producerFile = 'tests/material-parity/input-equivalence-audit.mjs';
+  const producer = readFileSync(producerFile, 'utf8');
+  assert.equal(restoreDescriptionProofRegistration(producer), prior(producerFile));
+  const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
+  const policy = readFileSync(policyFile, 'utf8');
+  assert.equal(restoreDescriptionPolicyRegistration(policy), prior(policyFile));
+  const before = new Function(prior(policyFile).replace(/^export const /gm, 'const ') + '; return sourceAuditDefinitions;')();
+  assert.equal(before.length, 153); assert.equal(sourceAuditDefinitions.length, 155);
+  assert.deepEqual(sourceAuditDefinitions.slice(0, -2), before);
+  for (const changed of [producer.replace('sourceFindings,', 'sourceFindings: [],'),
+    producer.replace('configured field hint-description input boundary', 'unreviewed description acceptance'),
+    producer.replace('scripts/audit-material-tooltip-description.mjs', 'scripts/other.mjs')])
+    assert.throws(() => restoreDescriptionProofRegistration(changed));
+  for (const changed of [policy.replace('fixture-form-field-hint-description-association-omitted', 'unknown-hint-finding'),
+    policy.replace('Original', 'Rewritten')]) assert.throws(() => restoreDescriptionPolicyRegistration(changed));
+});
+
+function descriptionEvidenceBytes(file, sha256) {
+  const bytes = readFileSync(file);
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), sha256, file);
+  return bytes;
+}
+
+function descriptionConfiguredTrees(family) {
+  const report = JSON.parse(descriptionEvidenceBytes('artifacts/material-parity/current-full-20261005/latest-report.json',
+    'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62'));
+  const expected = [...materialStaticCases.filter(row => row.family === family).map(row => materialCaseKey('static', row)),
+    ...materialInteractionCases.filter(row => row.family === family).map(row => materialCaseKey('interaction', row)),
+    ...materialMobileFlowCases.filter(row => row.family === family).map(row => materialCaseKey('interaction', row))];
+  const rows = [...report.results.filter(row => row.family === family).map(row => ({ kind: 'static', row })),
+    ...report.interactions.filter(row => row.family === family).map(row => ({ kind: 'interaction', row }))];
+  assert.equal(new Set(expected).size, expected.length);
+  assert.deepEqual(rows.map(({ kind, row }) => materialCaseKey(kind, row)).sort(), expected.sort());
+  return rows.map(({ kind, row }) => {
+    const trees = Object.fromEntries(['reference', 'astylar'].map(side => {
+      const receipt = row.inputTrees[side];
+      const tree = JSON.parse(descriptionEvidenceBytes(receipt.file, receipt.sha256));
+      assert.deepEqual(tree.errors, []);
+      assert.equal(new Set(tree.nodes.map(node => node.key)).size, tree.nodes.length);
+      return [side, tree];
+    }));
+    return { kind, row, ...trees };
+  });
+}
+
+function descriptionAuthoringSource() {
+  const file = 'examples/material-showcase/src/app/astylar.component.ts';
+  const source = descriptionEvidenceBytes(file, '71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd').toString();
+  const map = JSON.parse(descriptionEvidenceBytes('examples/material-showcase/dist/material-showcase/browser/chunk-JPEJK334.js.map',
+    '47654b641610e1d56e02948b17fab41aff25e9c6aedc6f83b70a26b6f349ce9e'));
+  assert.deepEqual(map.sources.flatMap((name, i) => name.endsWith('/astylar.component.ts')
+    && map.sourcesContent[i]?.includes('import {') ? [map.sourcesContent[i]] : []), [source]);
+  return source;
+}
+
+test('configured field hint descriptions preserve sixty-eight omissions and eight error controls', () => {
+  const finding = sourceAuditDefinitions.find(row => row.id === 'fixture-form-field-hint-description-association-omitted');
+  assert.equal(finding.classification, 'application-plugin-authoring-defect');
+  const source = descriptionAuthoringSource(); assert.match(source, new RegExp(finding.pattern));
+  const census = JSON.parse(descriptionEvidenceBytes(finding.evidence[0].file, finding.evidence[0].sha256));
+  const rows = descriptionConfiguredTrees('form-field'); assert.equal(rows.length, 76);
+  const unique = (tree, predicate) => { const nodes = tree.nodes.filter(predicate); assert.equal(nodes.length, 1); return nodes[0]; };
+  const groups = {};
+  for (const { kind, row, reference, astylar } of rows) {
+    const state = kind === 'static' ? 'static' : row.state;
+    const native = unique(reference, node => node.attributes?.id === 'form-field-control');
+    const candidate = unique(astylar, node => node.authored?.id === 'form-field-control');
+    const ids = native.attributes['aria-describedby'].split(/\s+/).filter(Boolean); assert.equal(ids.length, 1);
+    const error = state === 'error';
+    const expectedText = error ? 'Project name is required' : 'Public label';
+    const target = unique(reference, node => node.attributes?.id === ids[0]); assert.equal(target.ownText, expectedText);
+    const candidateTarget = unique(astylar, node => node.authored?.id === (error ? 'form-field-error' : 'form-field-hint'));
+    assert.equal(candidateTarget.authored.textContent, expectedText);
+    assert.equal(candidate.authored.ariaDescribedby, undefined);
+    const group = groups[state] ??= { cases: 0, nativeDescribed: 0, candidateDescribed: 0, descriptions: [expectedText] };
+    group.cases++; group.nativeDescribed++;
+  }
+  assert.deepEqual({ family: 'form-field', cases: 76, verifiedTreeReceipts: 152, groups }, census);
+  assert.equal(rows.filter(({ kind, row }) => kind === 'static' || row.state !== 'error').length, finding.observation.configuredCases);
+  assert.equal(rows.filter(({ row }) => row.state === 'error').length, 8);
+  assert.ok(sourceAuditDefinitions.some(row => row.id === 'fixture-field-error-subscript-substitution'));
+  // Authored/tree relationship omission only. Actual field AX exposure is not inferred.
+});
+
+test('configured tooltip descriptions preserve closed input omissions and actual AX open controls', () => {
+  const finding = sourceAuditDefinitions.find(row => row.id === 'fixture-tooltip-persistent-description-association-conditioned-on-popup');
+  assert.equal(finding.classification, 'application-plugin-authoring-defect');
+  const source = descriptionAuthoringSource(); assert.match(source, new RegExp(finding.pattern));
+  const rows = descriptionConfiguredTrees('tooltip'); assert.equal(rows.length, 62);
+  let closed = 0, open = 0;
+  for (const { reference, astylar } of rows) {
+    const native = reference.nodes.filter(node => node.attributes?.id === 'tooltip-primary');
+    const candidate = astylar.nodes.filter(node => node.authored?.id === 'tooltip-primary');
+    assert.equal(native.length, 1); assert.equal(candidate.length, 1);
+    assert.ok(native[0].attributes['aria-describedby']);
+    const popups = astylar.nodes.filter(node => node.authored?.id === 'tooltip-popup');
+    if (popups.length) {
+      assert.equal(popups.length, 1); assert.equal(popups[0].authored.textContent, 'Create a project');
+      assert.equal(candidate[0].authored.ariaDescribedby, 'tooltip-popup'); open++;
+    } else { assert.equal(candidate[0].authored.ariaDescribedby, undefined); closed++; }
+  }
+  assert.deepEqual([closed, open], [finding.observation.closedInputOmissions, finding.observation.openInputControls]);
+  const log = descriptionEvidenceBytes(finding.evidence[0].file, finding.evidence[0].sha256).toString().trim().split('\n').map(JSON.parse);
+  assert.equal(log.length, 5); const terminal = log.at(-1);
+  assert.equal(terminal.terminal, 'verified'); assert.equal(terminal.browser, '154.0.8037.58');
+  const manifest = JSON.parse(descriptionEvidenceBytes(terminal.capture.checkpointManifest.file, terminal.capture.checkpointManifest.sha256));
+  assert.deepEqual(fingerprintDirectory(path.resolve('examples/material-showcase/dist/material-showcase/browser')), manifest.provenance.browserFiles);
+  assert.deepEqual(terminal.capture.styleProperties, Object.values(propertyGroups).flat());
+  assert.deepEqual(terminal.capture.sources.map(r => r.file).sort(), ['scripts/audit-material-tooltip-description.mjs',
+    'tests/material-parity/supplemental-capture-evidence.mjs', 'tests/material-parity/input-tree-evidence.mjs'].sort());
+  for (const receipt of [...terminal.capture.sources, ...terminal.sourceReceipts]) descriptionEvidenceBytes(receipt.file, receipt.sha256);
+  const assets = new Map(manifest.provenance.browserFiles.map(r => [r.file, r.sha256]));
+  const contexts = [];
+  for (const row of log.slice(0, -1)) {
+    contexts.push(`${row.context.profile}/${row.context.viewport.width}x${row.context.viewport.height}/${row.context.deviceScaleFactor}/${row.side}`);
+    assert.deepEqual(row.runtime.errors, []);
+    assert.equal(row.runtime.assets.length, row.side === 'reference' ? 519 : 520);
+    assert.equal(new Set(row.runtime.assets.map(r => r.file)).size, row.runtime.assets.length);
+    for (const receipt of row.runtime.assets) assert.equal(receipt.sha256, assets.get(receipt.file));
+    for (const type of ['document', 'script', 'stylesheet', 'font']) assert.ok(row.runtime.assets.some(r => r.type === type));
+    assert.deepEqual(row.observations.map(r => r.state), ['closed', 'hover', 'leave']);
+    for (const observation of row.observations) {
+      assert.equal(observation.name, 'Hover for help'); assert.equal(observation.role, 'button');
+      const described = row.side === 'reference' || observation.state === 'hover';
+      assert.equal(observation.description, described ? 'Create a project' : null);
+      if (described) {
+        assert.ok(observation.dom.describedBy);
+        assert.deepEqual(observation.dom.descriptions, [{ id: observation.dom.describedBy, text: 'Create a project' }]);
+        assert.equal(observation.describedByProperty.value.value, observation.dom.describedBy);
+      } else {
+        assert.equal(observation.dom.describedBy, null); assert.deepEqual(observation.dom.descriptions, []);
+        assert.equal(observation.describedByProperty, null);
+      }
+    }
+  }
+  assert.deepEqual(contexts.sort(), ['light/1440x1000/1/reference', 'light/1440x1000/1/astylar',
+    'dark/390x844/2/reference', 'dark/390x844/2/astylar'].sort());
+  const bridge = descriptionEvidenceBytes('src/lib/astylar-semantic-bridge.ts',
+    '1a0011d3530701d9a74dc37b9f5a14d0fed0742dfd8793c39f8628e06b6a5725').toString();
+  assert.match(bridge, /if \(element\.ariaDescribedby\) \{\s*node\.setAttribute\('aria-describedby', this\.nativeIdRefs\(element\.ariaDescribedby\)\)/);
+  // The log is actual AX evidence, not a supplemental tree-report schema. Do not
+  // fabricate inputTree receipts or claim validateSupplementalCapture accepted it.
+});
 
 test('standalone proof batch conserves complete accepted predecessor producer and policy', () => {
   const prior = file => execFileSync('git', ['show', `874d48d7:${file}`],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replace(/\r\n/g, '\n');
   const file = 'tests/material-parity/input-equivalence-audit.mjs';
-  const current = readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
+  const current = restoreDescriptionProofRegistration(readFileSync(file, 'utf8'));
   const tree = ts.createSourceFile(file, current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   const inventory = tree.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory');
   const elements = inventory.body.statements[0].expression.elements;
@@ -39,7 +186,7 @@ test('standalone proof batch conserves complete accepted predecessor producer an
     current.replace('scripts/audit-modal-reentrant-close.mjs', 'scripts/other.mjs')])
     assert.throws(() => restoreStandaloneProofBatch(changed));
   const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
-  const policy = readFileSync(policyFile, 'utf8').replace(/\r\n/g, '\n');
+  const policy = restoreDescriptionPolicyRegistration(readFileSync(policyFile, 'utf8'));
   const policyTree = ts.createSourceFile(policyFile, policy, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   const declaration = policyTree.statements.filter(ts.isVariableStatement)
     .flatMap(n => [...n.declarationList.declarations]).find(n => n.name.getText(policyTree) === 'sourceAuditDefinitions');
@@ -49,7 +196,7 @@ test('standalone proof batch conserves complete accepted predecessor producer an
   assert.ok(first >= 0);
   assert.equal(findings[first + 1].arguments[0].properties.find(p => p.name.getText(policyTree) === 'id').initializer.text, ids[1]);
   assert.equal(policy.slice(0, findings[first].getFullStart()) + policy.slice(findings[first + 2].getFullStart()), prior(policyFile));
-  assert.equal(sourceAuditDefinitions.length, 153);
+  assert.equal(sourceAuditDefinitions.length - 2, 153);
 });
 
 test('public antialias option evidence binds original core arguments and Babylon override', () => {

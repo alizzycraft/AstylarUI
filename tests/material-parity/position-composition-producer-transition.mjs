@@ -40,8 +40,52 @@ const fieldPopupProof = "    proof(root, 'tests/material-parity/benchmark-config
 const fieldPopupSource = "    'scripts/audit-material-configured-field-popup-bounds.mjs',\n";
 // Historical source conservation only: authenticate the complete additive batch
 // and its predecessor before the older registration reversals inspect the prefix.
-export function restoreStandaloneProofBatch(source) {
+export function restoreDescriptionProofRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (!current.includes('configured field hint-description input boundary')) {
+    assert.ok(!current.includes("    'scripts/audit-material-tooltip-description.mjs',"), 'missing description proof with retained capture dependency');
+    return current;
+  }
+  assert.equal(hash(current), 'c6c48c0e62066230d9978865aac3dd5a96dd07c9b2c61557dc073dd9206b7e02',
+    'exact two-proof description registration snapshot');
+  const ast = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  assert.equal(ast.parseDiagnostics.length, 0);
+  const entries = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory')
+    .body.statements[0].expression.elements;
+  assert.equal(entries.length, 162);
+  assert.deepEqual(entries.slice(0, 2).map(n => n.arguments[3].text),
+    ['configured field hint-description input boundary', 'configured tooltip persistent-description input and actual AX boundary']);
+  current = current.slice(0, entries[0].getFullStart()) + current.slice(entries[2].getFullStart());
+  const line = "    'scripts/audit-material-tooltip-description.mjs',\n";
+  assert.equal(current.split(line).length, 2); current = current.replace(line, '');
+  assert.equal(hash(current), 'f6614004ec5a22921aff26da51a9e0504208004c58270827005b3aaaeb9e8724',
+    'complete153-finding producer preserved after exact description additions');
+  return current;
+}
+
+export function restoreDescriptionPolicyRegistration(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  if (!current.includes("id: 'fixture-form-field-hint-description-association-omitted'")) {
+    assert.ok(!current.includes("id: 'fixture-tooltip-persistent-description-association-conditioned-on-popup'"), 'missing named hint registration');
+    return current;
+  }
+  assert.equal(hash(current), '912cdb7a85d345e0ed29270fccc35b98fba1f3c51dc9d02121eb3b8a693f3951',
+    'exact two-finding description registration snapshot');
+  const ast = ts.createSourceFile('policy.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  assert.equal(ast.parseDiagnostics.length, 0);
+  const entries = ast.statements.filter(ts.isVariableStatement).flatMap(n => [...n.declarationList.declarations])
+    .find(n => n.name.getText(ast) === 'sourceAuditDefinitions').initializer.arguments[0].elements;
+  assert.equal(entries.length, 155);
+  assert.deepEqual(entries.slice(-2).map(n => n.arguments[0].properties.find(p => p.name.getText(ast) === 'id').initializer.text),
+    ['fixture-form-field-hint-description-association-omitted', 'fixture-tooltip-persistent-description-association-conditioned-on-popup']);
+  const restored = current.slice(0, entries[153].getFullStart()) + current.slice(entries[154].end + 1);
+  assert.equal(hash(restored), '6d60a7f454e8eeaf7ed068bcbfe93f37bcb0cba3f97a5c8a1c816cbd32fc045a',
+    'complete153 predecessor definitions conserved, not replaced or reclassified');
+  return restored;
+}
+
+export function restoreStandaloneProofBatch(source) {
+  let current = restoreDescriptionProofRegistration(source);
   if (!current.includes('public antialias option core constructor boundary')) return current;
   assert.equal(hash(current), 'f6614004ec5a22921aff26da51a9e0504208004c58270827005b3aaaeb9e8724',
     'exact complete standalone registration snapshot');
