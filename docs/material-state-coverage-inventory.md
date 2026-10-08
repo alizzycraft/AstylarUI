@@ -4,6 +4,34 @@
 
 ### Configured Menu bounds gap — October 8
 
+Mobile open-interval gap now has retained current-checkpoint evidence in
+menu-mobile-boundaries-20261008/latest-report.json (SHA256
+35e5b19d756ceca5971722adeff7f6f25527558f93eb6a05c836b7ed4c866b7a).
+Two configured light/dark390x844DPR2 contexts, four pages, seven boundaries
+each: real trigger pointer opens and real Escape closes on all three cycles.
+The existing supplemental validator authenticates manifest, immutable producer,
+served assets and all28 trees through a shape-only paired projection; all28 PNG
+hashes and780x1688 dimensions authenticate. Read-only diagnostic exits0 in
+menu-mobile-boundaries-validation-20261008.log. Candidate open screenshot was
+visually inspected: both items are visible, not merely an open-state flag.
+CSS popup boxes are112x112 on both; native y221.078125 versus candidate
+y222.080001831054, repeating all three cycles in both profiles. This extends
+the bounded anchor observation, not equivalent-input positioning acceptance.
+
+Competing cleanup explanations were genuine plateau versus tracked counts
+concealing live allocations. Closed candidate tracked materials remain14/14/14,
+but actual scene materials grow19/20/21 in both contexts. Thus tracked plateau
+does not establish cleanup. Material identities/names are retained at each
+boundary; allocation owner/cause, material reachability and eventual surface
+disposal remain separate investigations. This is not a proven memory leak or
+proof that Menu itself allocates the extras. Next reuse these identities with
+the already retained shared interaction-material diagnosis/control, rather than
+recapturing settled mobile opening/Escape. Full paint, collision/root contexts,
+other mobile actions and whole-case closure remain open. Standalone producer
+is not added to the frozen canonical dependency inventory during export.
+Export PID25480 remains authoritatively live; observed CPU advanced from306s
+to829.875s, not a terminal result. No renderer/fixture/reference/gate changed.
+
 Retained mobile Menu boundary is now precisely joined without recapture:
 current-full-20261005 has exactly light/dark390x844DPR2 open-dismiss rows.
 Full report SHAab42dbec… and current runner/checkpoint receipt authenticate;
