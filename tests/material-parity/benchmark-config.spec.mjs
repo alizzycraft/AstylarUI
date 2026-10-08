@@ -394,6 +394,32 @@ test('configured menu bounds authenticate exact runner actions and eight context
     }
     assert.deepEqual(row.reference.observation.options.map(o => o.text), ['Rename', 'Delete']);
     assert.deepEqual(row.reference.observation.options.map(o => o.hover), [true, false]);
+    const candidateTree = JSON.parse(readFileSync(row.astylar.inputTree.file));
+    const hovered = candidateTree.nodes.find(n => n.authored?.id === 'menu-rename');
+    const inactive = candidateTree.nodes.find(n => n.authored?.id === 'menu-delete');
+    assert.equal(hovered.normalResolvedStyle.background, 'transparent');
+    assert.equal(hovered.interactionResolvedStyle.background, '#e1dbe0');
+    assert.equal(inactive.interactionResolvedStyle.background, 'transparent');
+    for (const side of ['reference', 'astylar']) {
+      const png = PNG.sync.read(readFileSync(row[side].screenshot.file));
+      const scale = row.viewport.deviceScaleFactor;
+      assert.equal(png.width, row.viewport.width * scale);
+      const expectedColors = [[225, 219, 224, 255], [242, 236, 241, 255]];
+      row[side].observation.options.forEach((option, index) => {
+        // Five CSS-pixel square away from text, borders and corners; not a glyph/edge acceptance metric.
+        const x = Math.round((option.box.x + option.box.width - 10) * scale);
+        const y = Math.round((option.box.y + 24) * scale);
+        for (let dy = -2 * scale; dy <= 2 * scale; dy++) for (let dx = -2 * scale; dx <= 2 * scale; dx++) {
+          const offset = ((y + dy) * png.width + x + dx) * 4;
+          assert.deepEqual([...png.data.subarray(offset, offset + 4)], expectedColors[index]);
+        }
+      });
+    }
+    const referenceTree = JSON.parse(readFileSync(row.reference.inputTree.file));
+    const nativeLabel = referenceTree.nodes.find(n => n.type === 'span' && n.ownText === 'Rename');
+    const candidateLabel = candidateTree.nodes.find(n => n.authored?.id === 'menu-rename-label');
+    assert.equal(referenceTree.styles[nativeLabel.style].letterSpacing, '0.096px');
+    assert.equal(candidateLabel.resolvedStyle.letterSpacing, undefined);
     observations.push({ caseId: row.caseId, reference: row.reference.observation, astylar: row.astylar.observation });
   }
   assert.equal(receipts.size, 32);

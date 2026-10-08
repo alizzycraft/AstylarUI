@@ -4,6 +4,21 @@
 
 ### Configured Menu bounds gap — October 8
 
+Hovered-item retained paint question now has decisive pixels in all eight
+supplemental contexts: a5-CSSpx interior square away from text/borders/corners
+is uniformly RGBA225,219,224,255 on both hovered first items; inactive second
+items are242,236,241,255. Candidate normal background is transparent,interaction
+background#e1dbe0; second item's interaction background stays transparent.
+Thus missing hover feedback is not observed in this exact current-checkpoint
+open-hover-content cohort. Source/tree/PNG receipts are authenticated by the
+existing test; configured-menu-hover-solid-paint-20261008.log passes1/1.
+This does not certify glyph/edge alignment,cursor hit behavior,held click paint,
+other state/profile/viewport or full input equivalence. Native Rename label
+letterSpacing is0.096px; candidate label omits it. Preserve this unequal input
+before any text-raster renderer attribution. No new capture/report/framework,
+fixture changes or thresholds. Next join item commit/keyboard/held boundaries,
+not repeat the settled solid hover interior observation.
+
 Exact82-case retained state-observation join closes a bookkeeping ambiguity:
 ten ordinary states each have8 contexts; mobile open-dismiss adds2. Only
 open-dismiss-outside/open-dismiss-canvas have explicit paired presence checks
