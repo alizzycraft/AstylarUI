@@ -2,6 +2,27 @@
 
 ## Current evidence boundary — October 8
 
+### Configured input paint canonical publication — October 8
+
+The registered batch is now independently accepted:150 proofs/150 findings.
+Export and independent cold check both exit0; the latter authenticates1,205
+files/89,154,859 bytes with zero invalidations (2 collectors,10 memory hits,
+0 disk hits). Logs: `configured-input-paint-canonical-export-20261008.log` and
+`configured-input-paint-canonical-independent-20261008.log`. Compact import and
+whole-index verification exit0 (`configured-input-paint-index-import-20261008.log`,
+`configured-input-paint-index-verify-20261008.log`), preserving8,483 groups,
+389,202 occurrences,39,904 control records and zero unresolved scalar attribution.
+Package SHA25662c0d3738fe1a31059b578c7c3e496c7b9c4fc89087f596552f590d5a94dd645;
+decoded SHA256de6774b09cf17d06cddcb3b53c1b6b8e5cc6d3f64b59f0e92df5ff1c9073d1d5.
+Original complete migration/conservation suite also passes3/3,65306.6636ms
+(`configured-input-paint-complete-suite-conservation-20261008.log`).
+This supersedes the pending publication below,not historical runtime boundaries:
+436 static/1,875 interaction cases remain partial and inputEquivalent=false.
+No renderer/fixture/reference/criteria changes or new browser capture occurred.
+Next prioritize exact per-case applicable-obligation/current-source joins,then
+uncovered shared overlay action/profile paint and ownership; preserve isolated
+equal-input typography/selection residuals separately from unequal fixture inputs.
+
 ### Configured input paint proof registration — October 8
 
 The exact configured focus/temporal-caret and local selection-pixel proofs are
