@@ -2,6 +2,25 @@
 
 ## Current evidence boundary — October 8
 
+### Scroll caller applicability — bounded closure
+
+The complete createScene method now joins current TypeScript emit, installed
+consumer and captured Material map. Current/installed method bytes agree exactly
+(SHA7d32e5a9…); captured formatting differs. Identical esbuild formatting followed
+by complete recursive syntax-kind/leaf-token comparison agrees, including literal
+text and all executable nodes (AST SHA51b49d90…). No statements are substituted.
+Source e72cfb8e…, installed6ad4f51c…, mapdba48404… authenticate the owners.
+Log scroll-runtime-caller-applicability-structural-verified-20261008.log passes.
+This closes stale constructor/callback/reconcile/dispose wiring within createScene,
+not other callers, full runtime validity, non-desktop paint or whole-case closure.
+Earlier formatting/token/printer attempts failed on representation or scanner
+handling; their captured failure logs remain. The initial raw comparison's stderr
+was returned by the command rather than stored in its empty stdout log.
+Next use existing exact action/paint evidence for remaining shared overlay/input
+obligations; do not repeat settled desktop scrollbar shape/track/overdraw checks.
+Frozen canonical producer inputs remain untouched; export worker11456 was verified
+live before this independent check. No renderer or comparison fixture change.
+
 ### Cached default material — bounded current conclusion
 
 Core cleanup disposes the cached default; Babylon later returns the same object
