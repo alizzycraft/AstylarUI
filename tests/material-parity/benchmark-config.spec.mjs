@@ -149,6 +149,50 @@ test('configured snackbar lifetime census preserves timed and intentionally pers
   // Closed final state is not an open-state timing/paint or whole-case equivalence proof.
 });
 
+test('snackbar captured timer methods reject late settlement and queued expiry after destruction', async t => {
+  const capture = JSON.parse(readFileSync('artifacts/material-parity/snackbar-lifetime-bound-current-20261008/latest-report.json'));
+  const manifest = JSON.parse(readFileSync(capture.capture.checkpointManifest.file));
+  const mapName = 'chunk-JPEJK334.js.map', mapBytes = readFileSync(`examples/material-showcase/dist/material-showcase/browser/${mapName}`);
+  assert.equal(createHash('sha256').update(mapBytes).digest('hex'), manifest.provenance.browserFiles.find(f => f.file === mapName).sha256);
+  const map = JSON.parse(mapBytes), index = map.sources.indexOf('src/app/astylar.component.ts');
+  assert.ok(index >= 0);
+  const source = map.sourcesContent[index];
+  assert.equal(source.replace(/\r\n/g, '\n'), readFileSync('examples/material-showcase/src/app/astylar.component.ts', 'utf8').replace(/\r\n/g, '\n'));
+  const ast = ts.createSourceFile('component.ts', source, ts.ScriptTarget.Latest, true);
+  const declarations = ast.statements.filter(ts.isClassDeclaration).filter(c => c.name?.text === 'AstylarShowcaseComponent');
+  assert.equal(declarations.length, 1);
+  const names = ['restartSnackbarDismissTimer', 'startSnackbarDismissTimerAfterSettled', 'startSnackbarDismissTimer', 'clearSnackbarDismissTimer'];
+  const selected = declarations[0].members.filter(m => ts.isConstructorDeclaration(m) || names.includes(m.name?.getText(ast)));
+  assert.equal(selected.length, 5);
+  const emitted = ts.transpileModule(`class TimerOwner { destroyRef = destroyRef; ${selected.map(m => m.getText(ast)).join('\n')} }`,
+    { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
+  const pending = new Map(); let next = 0, destroyed, patches = 0;
+  const Owner = new Function('destroyRef', 'setTimeout', 'clearTimeout', 'window', `${emitted};return TimerOwner;`)(
+    { onDestroy(fn) { destroyed = fn; } }, (fn, delay) => { const id = ++next; pending.set(id, { fn, delay }); return id; },
+    id => pending.delete(id), undefined);
+  const owner = new Owner();
+  Object.assign(owner, { snackbarDismissGeneration: 0, benchmarkMode: false,
+    store: { state: () => ({ open: true }), patchState() { patches++; } }, zone: { run: fn => fn() } });
+  let resolveSettlement;
+  const surface = { whenSettled: () => new Promise(resolve => { resolveSettlement = resolve; }) };
+  const late = owner.startSnackbarDismissTimerAfterSettled(surface, owner.snackbarDismissGeneration);
+  const deferred = [...pending.entries()]; assert.equal(deferred.length, 1); assert.equal(deferred[0][1].delay, 0);
+  pending.delete(deferred[0][0]); deferred[0][1].fn(); await Promise.resolve();
+  assert.equal(typeof resolveSettlement, 'function');
+  destroyed(); resolveSettlement(); await late;
+  assert.equal(pending.size, 0); assert.equal(patches, 0);
+  // Also execute an already-queued callback after clearTimeout, not just cancel its handle.
+  const scheduledOwner = new Owner();
+  Object.assign(scheduledOwner, { snackbarDismissGeneration: 0, benchmarkMode: false,
+    store: owner.store, zone: owner.zone });
+  scheduledOwner.restartSnackbarDismissTimer();
+  const expiry = [...pending.values()]; assert.equal(expiry.length, 1); assert.equal(expiry[0].delay, 5000);
+  destroyed(); expiry[0].fn();
+  assert.equal(pending.size, 0); assert.equal(patches, 0);
+  t.diagnostic(JSON.stringify({ methods: names, lateSettlementSchedulesExpiry: false, queuedExpiryPatchesAfterDestroy: false,
+    scope: 'Exact captured/current application methods with controlled scheduler; not Angular runtime destruction, rejected settlement, core resource disposal or all lifecycle acceptance' }));
+});
+
 test('configured input focus evidence records exact controls without replacing reference actions', t => {
   const file = 'artifacts/material-parity/configured-input-focus-20261008/latest-report.json';
   const capture = JSON.parse(readFileSync(file));

@@ -2,6 +2,28 @@
 
 ## Current evidence boundary — October 8
 
+### Snackbar late timer source boundary — October 8
+
+Do not repeat tracked-versus-live probes: the existing17/19/21 live-material
+counterexample and plugin-free allocation reduction already answer that question.
+Distinct pending question: can application timer work resume after same-document
+component destruction? Existing configuration test now authenticates the served
+component map and complete current source,extracts the original constructor and
+four complete timer methods,and executes them with a controlled scheduler.
+DestroyRef callback advances generation while whenSettled is pending; subsequent
+successful settlement schedules no5s expiry. A separate owner schedules expiry,
+then destruction cancels its handle; executing the captured already-queued callback
+still patches no state. This closes those source-level successful-settlement/
+queued-expiry alternatives,not actual Angular teardown,rejected settlement or
+core resource lifetime. No fake-clock browser observation is claimed.
+Initial class-name extraction assertion failure remains in
+snackbar-late-timer-source-reduction-20261008.log. Corrected/final focused1/1
+passes618.362ms in snackbar-late-timer-source-final-20261008.log. Existing source
+methods/fixtures/renderer remain unchanged; standalone proof awaits coherent
+registration,not unchanged canonical re-export. Next inspect whenSettled's
+disposal/rejection contract and join actual same-document destruction evidence;
+live-resource counterexamples remain failures. Whole-case closure unchanged.
+
 ### Snackbar opening-phase first divergence — October 8
 
 Authenticated third-open trees in both retained contexts bind the native
