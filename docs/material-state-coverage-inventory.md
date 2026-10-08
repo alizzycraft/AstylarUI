@@ -2,6 +2,38 @@
 
 ## Current evidence boundary — October 9
 
+### Shared inline alignment applicability joined across six families
+
+The same bounded normal/stretch question now has exact retained membership for
+10 scalar groups,576 owner observations and348 unique configured cases,through
+696 authenticated original input-tree receipts (errors=[] on both sides):
+divider-above/below24 each,badge-label52,checkbox-label68,radio-solo/team-label68
+each,slide-toggle-label68,step-details/review-text and stepper-content68 each.
+Original report SHA remains b07ef154…; every group's original occurrence count
+equals its recovered list length and original12-case sample equals the first12
+actual IDs. All owners have inline display on both sides and actual tree nodes
+with no direct child element nodes,not merely empty measured-descendant lists.
+This extends the preceding property-inapplicability conclusion without expanding
+it to6362 other normal/stretch owner observations in different contexts.
+
+Strict initial node lookup rejected68 stepper-content reference observations:
+the native reference uses data-parity-id instead of id. Existing reference
+template line89 explicitly authors both step contents with that measurement
+attribute. The revised read-only check admits that established attribute and
+requires ownText equal to the selected referenceStructure.text,then requires
+exactly one node and no child elements. Thus hidden/alternate content is not
+silently treated as the current selected owner. Original assertions on hashes,
+group occurrence counts and samples remain; all576 owner checks pass.
+
+No new report/framework,capture,source or classification change. This is a
+shared applicable-property boundary supported by original structures,not348
+complete inspections or current-rendering passes. Integrate the bounded
+justification at the existing owning classification boundary after the frozen
+export; other state/paint/semantics/history/lifetime obligations stay pending.
+Original session45371 was polled live; worker29800 CPU1214.19s. Do not restart
+from unchanged progress logs or claim155 canonical acceptance before terminal
+success plus independent cold verification.
+
 ### Divider inline-leaf alignContent applicability resolved, not global normalization
 
 For the exact24-member divider-above group recovered below, competing explanations
