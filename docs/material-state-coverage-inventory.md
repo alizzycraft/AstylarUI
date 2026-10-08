@@ -78,14 +78,22 @@ Candidate edges vary through quarter-coverage colors while solid interiors move.
 Both control types reproduce this distinction. Thus smaller exact-color masks
 are not proof of narrower CSS geometry; native edge behavior is not reproduced
 by assuming a universal floor/ceil rule on the projected CSS interval.
-Native internal scroll/origin metrics versus selection raster quantization are
-still competing explanations; observe those missing native metrics before
-assigning a snapping algorithm or proposing a renderer correction. Glyph edges
-remain separate. Initial launcher failed before browser due to rewriting embedded
+Native origin/scroll followup reuses the exact original native DOM/style branch,
+not a hand-authored alternative. Chrome154 input/textarea,DPR1/2,four origins,
+real forward/backward keys give32 observations: rect.x equals authored fractional
+origin,scrollLeft/scrollTop0 throughout,font16px/24px Arial and unchanged canvas
+At/Atl/Atlas advances15.1171875/18.671875/35.5703125. Thus hidden scrolling or
+rounded control-box placement does not explain the bounded native edge sweep.
+Log selection-native-origin-scroll-20261008.log exits0,SHA256
+686ada6ce675c81d381ddd614d17302103730500e8e29e2fa022bf3ad26efd82;
+AST-extracted native setup eba58ad4…,original source d07df06e… stays pinned.
+Selection paint quantization remains to trace; do not assign a universal native
+snapping algorithm or change renderer geometry from these measurements. Glyph
+edges remain separate. Initial launcher failed before browser due to rewriting embedded
 browser imports; failed integrity query expected an inputs array instead of the
 existing final dependency receipt. Both logs remain; corrected launcher preserves
 public package imports and original before/after dependency assertions.
-Next native internal origin/scroll metrics,glyph edge coverage and remaining field applicability;
+Next selection paint quantization,glyph edge coverage and remaining field applicability;
 do not repeat the settled crop,offset,kerning,projection or selected-caret question.
 
 Evidence: selection-projected-css-boundary-20261008.log (session21694 exit0,
@@ -123,10 +131,13 @@ precommit repeat passes6/6,12844.8245ms. Integration55558304 is pushed.
 This is source integration,not canonical acceptance: the next coherent milestone
 is export plus independent canonical validation and compact-index publication.
 The published b4947eff boundary remains154 proofs until that milestone completes.
-Export is running in session51872,worker11672,with the complete named five-input
-baseline and progress enabled; log field-popup-canonical-export-20261008.log.
-Worker CPU62.83s and same live handle were verified after dispatch. No terminal
-export/canonical acceptance is claimed; freeze consumed sources until completion.
+Export session51872 now ends exit0,10541170.2006ms,with complete named five-input
+baseline; log field-popup-canonical-export-20261008.log. It verifies1205 evidence
+reads/89154859 bytes,one collector/ten memory hits/one disk hit/zero invalidations.
+Generated manifest compressedSHA e004d08d…,62841224 bytes; decodedSHA d465e6d5…,
+2222870728 bytes. Independent cold --check session76397 is confirmed live,
+log field-popup-canonical-independent-cold-20261008.log. Canonical acceptance and
+compact publication remain pending; freeze consumed sources until check completes.
 Storage-recovery session47542 ended exit0: eight closed historical generations
 had84 shards each compressed with before/after SHA256 equality and full existing
 verifyFindings checks. Free space308789248 bytes at completion; no evidence deleted.
