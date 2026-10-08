@@ -49,6 +49,7 @@ try {
       await page.locator('.frame').waitFor({ state: 'visible' });
       await helpers.sendShowcaseCommand(page, { type: 'showcase:theme', theme: helpers.profileTheme('light') });
       await helpers.waitForThemeApplied(page, helpers.profileTheme('light'));
+      if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
       await helpers.settleInteraction(page, mode);
       const box = async id => mode === 'reference' ? page.locator(id === 'menu-primary' ? '#menu-primary' : '.mat-mdc-menu-panel button').first().boundingBox()
         : page.evaluate(id => { const b = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([id], false).elements[id]?.borderBox;

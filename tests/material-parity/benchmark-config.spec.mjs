@@ -351,6 +351,30 @@ test('snackbar captured timer methods reject late settlement and queued expiry a
     scope: 'Exact captured/current application methods and complete current/installed/captured render-session class with controlled scheduler; disposal rejection propagates from uncaught async start, not observed Angular/browser unhandled rejection or all lifecycle acceptance' }));
 });
 
+test('menu action capture preserves item-click discrepancy and rejected navigation precondition', () => {
+  const file = 'artifacts/material-parity/menu-actions-current-final-20261008/latest-report.json';
+  const report = JSON.parse(readFileSync(file)), manifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
+  const runtimePair = { ...report, results: report.results[0].boundaries.map((_, index) => ({
+    reference: { runtime: report.results[0].runtime, inputTree: report.results[0].boundaries[index].inputTree },
+    astylar: { runtime: report.results[1].runtime, inputTree: report.results[1].boundaries[index].inputTree },
+  })) };
+  assert.deepEqual(validateSupplementalCapture(runtimePair, { reportFile: file, expectedProvenance: manifest.provenance,
+    script: 'scripts/audit-material-menu-actions.mjs', styleProperties: Object.values(propertyGroups).flat() }), { status: 'checkpoint-bound', errors: [] });
+  assert.deepEqual(report.results.map(r => r.mode), ['reference', 'astylar']);
+  for (const row of report.results) {
+    assert.deepEqual(row.viewport, { width: 1440, height: 1000, deviceScaleFactor: 1 });
+    assert.deepEqual(row.boundaries.map(b => b.state), ['opened', 'item-held', 'item-clicked', 'reopened', 'arrow-down', 'escape']);
+    for (const boundary of row.boundaries) for (const receipt of [boundary.inputTree, boundary.screenshot]) {
+      assert.equal(createHash('sha256').update(readFileSync(receipt.file)).digest('hex'), receipt.sha256);
+    }
+  }
+  const [native, candidate] = report.results.map(r => Object.fromEntries(r.boundaries.map(b => [b.state, b.observation])));
+  assert.equal(native['item-clicked'].open, false); assert.equal(candidate['item-clicked'].open, true);
+  assert.equal(candidate['item-clicked'].active.astylarId, 'menu-rename');
+  assert.equal(native.reopened.open, true); assert.equal(candidate.reopened.open, false);
+  assert.equal(candidate['arrow-down'].open, false); // Navigation precondition failed; not an open-menu keyboard proof.
+});
+
 test('configured menu bounds authenticate exact runner actions and eight context receipts', t => {
   const file = 'artifacts/material-parity/configured-menu-bounds-final-20261008/latest-report.json';
   const report = JSON.parse(readFileSync(file));

@@ -4,6 +4,24 @@
 
 ### Configured Menu bounds gap — October 8
 
+Bounded runtime action gap now has current-checkpoint evidence in
+menu-actions-current-final-20261008/latest-report.json: light1440x1000 DPR1,
+two unchanged pages,real pointer opening/item hold/release. Native Rename click
+closes and restores trigger; candidate receives item focus but remains open.
+This corroborates the current application handler gap. Subsequent Escape did
+not reset candidate; next trigger click closed it,so its labelled reopened/
+ArrowDown segment is NOT an open-menu navigation proof. Preserve this failed
+action precondition,do not count it as keyboard coverage. Next probe must verify
+closed state after a real outside dismissal before reopening/navigation.
+Existing supplemental validator authenticates page-runtime receipts and each
+paired boundary tree through a shape-only projection of the mode-grouped report;
+all12 PNG/tree pairs rehash. Focused menu-actions-current-validation-final-
+20261008.log passes1/1. Prior validator shape assumptions failed in retained
+validation and validation-corrected logs; none is erased. Producer theme-name
+and readiness failures are retained in current/corrected capture logs and Git
+a9730b43/ed95c7d9. No fixture/core changes; navigation/held local-paint acceptance
+remains pending,and no full case is promoted.
+
 Current action-owner reduction executes three complete authenticated served/
 current application methods with controlled store/surface: handleClick,
 handleKeydown,dismissPopupForOutsideTarget. Rename/Delete clicks leave open=true
