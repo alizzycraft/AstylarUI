@@ -4,6 +4,18 @@
 
 ### Snackbar lifetime current-source applicability — October 8
 
+Provenance followup: the retained verified log authenticates to recorded SHA256
+7b61a0dc4d68c73e1a84e3745653baaceb823d72e36e11cde016a8add10ec07d.
+Its final object contains only browser,results,helperSha256,elapsedMs,scope and
+acceptance: no checkpoint,served-file or installed-dependency receipt. Exact
+SHA search of2,596 .mjs files under scripts,tests/material-parity and retained
+artifacts finds no helper matching93681b73fe8625c6e24078515fce5c1b8bca30c4c7d2e9530dbf8fb1f40d90b6.
+This is a bounded missing-provenance result,not proof the helper is absent from
+every archive/Git revision. Do not infer captured runtime from unchanged timer
+source. Preserve the historical observation; next recover the original helper
+and its checkpoint binding,or use the existing authenticated capture mechanism
+for a narrowly scoped replacement if recovery cannot establish that binding.
+
 Question: could changed application lifetime callbacks invalidate the retained
 real-target reopen/expiry observation? Complete LF-normalized Git5918ea7/current
 comparison shows reference.component.ts and showcase.store.ts byte-equal; the
