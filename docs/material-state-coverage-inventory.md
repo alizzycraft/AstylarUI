@@ -4,6 +4,16 @@
 
 ### Selection paint ownership and evidence applicability — October 8
 
+Missing selection-pixel capture attempted in `selection-local-pixels-20261008`:
+all16 paired action boundaries complete,but supplemental validation rejects an
+extra action-source entry inserted into its intentionally closed three-source
+inventory. This is a producer/instrumentation error,not rendering evidence or
+a reason to loosen the validator. Failure remains in
+`selection-local-pixels-validation-20261008.log`. Preserve the exact failed
+producer revision before moving that auxiliary action receipt to separate
+report metadata and recapturing only this small local cohort. Do not alter the
+failed report or call its provenance accepted.
+
 The next decisive selection check cannot be answered by the retained profile
 logs' pixels: authenticated light/contrast/custom diagnostics retain four
 real-key boundaries (typed,forward,end-collapsed,backward) with endpoints,
