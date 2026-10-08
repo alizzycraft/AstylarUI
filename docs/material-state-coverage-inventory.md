@@ -6,6 +6,24 @@ Current priority: finish exact case-obligation/current-validity joins,with share
 overlay/scrollbar paint and editable-text paint ahead of isolated passive layout.
 The existing36-family applicability map remains authoritative; no new inventory.
 
+Configured desktop Escape restoration is now observed across all four profiles
+and DPR1/2 for bottom-sheet/dialog:32 side observations,16 paired contexts.
+modal-configured-escape-restoration-20261008.log session1540 terminal exit0
+uses unchanged AST-extracted frozen helper4a386f10… with authenticated October5
+browser fingerprint. Real trigger click,animation/two-rAF settlement,Escape and
+settlement preserve original inputs. All popups disappear,all candidate open
+states become false,and no page errors occur. Bottom-sheet returns to trigger
+on both sides in all8 contexts; native dialog returns to trigger in all8 while
+candidate dialog ends on BODY in all8. Exact cohort/result/terminal assertions
+pass,not parity acceptance. This closes the previously mobile-only behavior's
+configured desktop applicability gap,not restored focus paint or other dismissal
+paths. Candidate close callback already calls surface.focus(family-primary),
+and core dismissActiveModal also requests invoker restoration when eligible.
+Therefore do not classify this as a missing restoration declaration from the
+endpoint alone. Next trace accepted/rejected focus requests through close,
+logical focus and semantic reconciliation ordering to locate the first loss;
+reuse current/captured source joins rather than retesting these32 endpoints.
+
 Transient focus now has a real paired event trace,not only callback inference.
 modal-opening-parent-focus-trace-20261008.log SHA256
 42930392df5a7813d738f46fa7957457772448443401a0ecf3b19a4d200c8480,
