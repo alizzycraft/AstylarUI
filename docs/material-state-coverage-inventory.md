@@ -2,6 +2,42 @@
 
 ## Current evidence boundary — October 8
 
+### Tooltip configured-case obligation join — 62 cases, not 62 closures
+
+Read-only retained-evidence census authenticates current-full-20261005 report
+SHA256 ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62,
+matches every tooltip ID against the existing static/interaction/mobile-flow
+configuration, and verifies all124 original input-tree receipts with no tree
+errors. Sorted IDs use family/profile/viewport.id/state-or-static joined by
+newlines; SHA256 1d42701ada5720fdec1d801faca5fb50e374d939023c5634b5f266bc0ec789a6.
+Native popup visibility additionally requires a mat-mdc-tooltip-show ancestor;
+candidate popup presence uses authored tooltip-popup. No capture or producer
+input changed.
+
+| Configured cohort | Cases | Visible native / candidate popups | Inspected obligation and remaining boundary |
+| --- | ---: | ---: | --- |
+| Static | 12 | 0 / 0 | Popup-local paint is inapplicable in this captured state; trigger inputs, paint, semantics and historical correspondence still require complete joins. |
+| Programmatic focus | 8 | 0 / 0 | Runner lines537–559 call HTMLElement.focus(), not Tab. Closed-popup output does not inspect keyboard-origin opening; real-keyboard evidence must be mapped separately. |
+| Hover | 9 | 9 / 9 | Existing exact18 hover/held input and local-raster joins cover this cohort, including one comparison-pane case; unequal input composition remains classified, not accepted. |
+| Held | 9 | 9 / 9 | Same exact18 join; temporal/ripple interpretation and calibrated paint limitations remain separate. |
+| Activate | 8 | 0 / 0 | Captured popup absence inspected; popup-local paint inapplicable here, not missing. Trigger/event/focus obligations remain. |
+| Activate-leave | 8 | 0 / 0 | Same absence boundary; does not alone establish repeated lifetime cleanup. |
+| Benchmark open | 8 | 0 / 8 | Existing unpaired benchmark-opening authoring discrepancy inspected. Paired popup paint is unavailable because native popup is absent; not an equal-input renderer counterexample. |
+
+Totals:36 no-popup pairs,18 paired visible popups,8 candidate-only popups;
+12static+50interaction=62,with no configured tooltip mobile-flow additions.
+All16 physical hover-cycle cohorts separately inspect failing live-material
+plateaus; they are lifecycle evidence,not extra configured IDs. Trusted Android
+long-press evidence is likewise supplemental,not responsive-case touch acceptance.
+
+Priority: first map existing ordinary real-Tab evidence to exact profile/DPR
+contexts and identify only genuinely missing keyboard-origin contexts. Then
+join shared trigger input/history/semantics/paint evidence and overlay fallback,
+scroll and lifetime applicability. Do not recapture settled hover/held text or
+local metrics. Full-case closure remains0; final acceptance is unchanged.
+Independent canonical cold check worker3332 remains live (observed CPU1735.52s)
+and producer inputs remain frozen pending terminal acceptance.
+
 ### Tooltip repeated ownership — all16 physical cohorts inspected,failing plateau
 
 The existing ordinary dark/mobile proof is reused unchanged(SHA caface4e738b983984d97660263a44c9d116e0b78b94df203e9b96e4d4b5f8fc).
