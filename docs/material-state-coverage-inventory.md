@@ -4,6 +4,20 @@
 
 ### Snackbar lifetime current-source applicability — October 8
 
+Recovery: Git5918ea7's sort-focus-structure.spec.mjs suffix beginning
+`async function withFrozenShowcase(` is exactly1,434 bytes and hashes to the
+recorded93681b73… helper. It is a function fragment,not a standalone .mjs file;
+the bounded whole-file search below therefore did not locate it. The recovered
+helper fixes browserRoot to the showcase browser build and checks its complete
+fingerprint against caret-visible-checkpoint-154/checkpoint/manifest.json before
+serving files. Current helper additionally permits explicit root/checkpoint
+selection; do not silently substitute its7c9d1f52… bytes. This recovers exact
+helper behavior without executing/recreating the original probe. Missing log
+receipt for the manifest bytes and complete lifetime probe source remain:
+named-path preflight alone cannot prove which checkpoint bytes were used then.
+Next check retained checkpoint/source history for that binding before deciding
+whether an authenticated replacement is necessary. No broad current acceptance.
+
 Provenance followup: the retained verified log authenticates to recorded SHA256
 7b61a0dc4d68c73e1a84e3745653baaceb823d72e36e11cde016a8add10ec07d.
 Its final object contains only browser,results,helperSha256,elapsedMs,scope and
