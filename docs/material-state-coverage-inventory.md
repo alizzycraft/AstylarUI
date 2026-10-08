@@ -4,6 +4,30 @@
 
 ### Configured Menu bounds gap — October 8
 
+External-root question now has a bounded mobile observation, not a collision
+claim: menu-mobile-root-context-20261008/latest-report.json SHA256
+a0db5c71af6ca2114bf03ccf706eca8f2c9d4de626eb0e43dc026b56c1dea1e8.
+Existing read-only ancestor collector observes actual reference overlay ancestry
+div→body→html in both configured light/dark390x844DPR2 open states; transform,
+filter,perspective,contain are none and zoom1 throughout that chain. Thus these
+external ancestor triggers are not observed in the bounded mobile case; do not
+infer all desktop contexts or historical ancestry. The existing generic validator
+authenticates six paired trees/page-runtime receipts and all12 PNG hashes.
+Capture exits0; validation exits0 in menu-mobile-root-context-validation-20261008.log.
+Collector source has complete LF-normalized equality with pre-capture174e551d,
+current raw SHA78f59c1467ac81674eef9b889acb5c831e9ede86d1402f9fd4cb17c77b033000.
+Limitation: this extra collector is not in capture.sources or checkpoint harness
+receipts; its hash is post-capture validation, not a capture-envelope dependency.
+Preserve that boundary before future canonical registration; do not silently
+promote the observation to fully registered provenance. No old capture changed.
+Configured Menu has no short-height/collision-specific case; the existing
+desktop-short case is datepicker only. Native fallback source is inspected,
+but no forced Menu collision is measured. The distinct general anchor/fallback
+contract remains in the implementation handoff; avoid inventing a historical
+collision pass from ordinary mobile opening. Remaining priorities: resolve
+collector provenance for registration, complete Menu local paint/focus/ripple,
+and applicable collision behavior. Producer/export inputs remain frozen.
+
 Mobile material subtype is now narrowed without another browser run. In both
 light/dark captures, closed-cycle surviving menu-primary-hover-focus-active-
 material identities are[84],[84,195],[84,195,303]; previous identities persist
