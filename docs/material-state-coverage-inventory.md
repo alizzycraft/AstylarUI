@@ -6,6 +6,25 @@ Current priority: finish exact case-obligation/current-validity joins,with share
 overlay/scrollbar paint and editable-text paint ahead of isolated passive layout.
 The existing36-family applicability map remains authoritative; no new inventory.
 
+Transient focus now has a real paired event trace,not only callback inference.
+modal-opening-parent-focus-trace-20261008.log SHA256
+42930392df5a7813d738f46fa7957457772448443401a0ecf3b19a4d200c8480,
+session91320 terminal exit0,records six dialog cohorts at1440×900 DPR1:
+reference/candidate/both × immediate/settled parent click. Original frozen helper
+is AST-extracted unchanged from source4a386f10…,with October5 fingerprint check.
+No fixture input changes,selector navigation keys or screenshots. Reference-only
+immediate case has running opening animations,parent SELECT focus then reference
+BUTTON focus105ms later; parent focus is lost. Its settled control retains focus.
+Both candidate-only cases and both-open samples retain parent focus after400ms.
+Six exact cohort/source/terminal/event-order assertions pass read-only. Thus the
+sampled focus loss occurs in the native opening interval without key routing,
+consistent with the separately authenticated deferred native focus callbacks.
+This does not identify an exact browser call stack,certify every timing window,
+or prove the original both-dialog failure's cause. Both-open action ordering
+can consume the reference opening interval; retain that limitation. Pending
+work is configured applicability/restoration,local paint and late async; do not
+repeat this settled scope probe or assign this native event to Astylar core.
+
 Transient modal focus investigation now identifies an actual native deferred
 focus boundary,not an assumed Astylar-only defect. Reference openDialog supplies
 restoreFocus:true without overriding delayFocusTrap; authenticated captured
