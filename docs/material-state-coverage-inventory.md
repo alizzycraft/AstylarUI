@@ -2,6 +2,36 @@
 
 ## Current evidence boundary — October 9
 
+### Case-membership gap isolated — producer sampling, not compact-index loss
+
+Read-only authenticated compact queries of accepted eb90958e across all36
+families inspect all8483 scalar groups.5524 preserve reviewedCases with list
+length exactly equal to occurrences; their unique union equals all2311 configured
+static/interaction IDs,with zero missing/extra members.249 other groups have
+uncapped small case lists.2710 groups have occurrences greater than their capped
+cases list,covering159639 occurrences; their samples cannot establish exact
+case-to-difference membership. For example autocomplete alignContent/alignItems
+each has110 occurrences but only12 sample IDs across14 named states.
+
+scripts/audit-findings-store.mjs explicitly preserves reviewedCases when present.
+The owning collectStyleDiscrepancies producer only creates complete membership
+for named attribution sets,then caps generic cases at12. Thus the complete-ID
+inspection-started census is reproducible in the latest accepted snapshot;
+the compact importer is not dropping existing full membership. Conversely,
+neither that union nor sampled generic groups certifies complete obligations.
+This rejects index-loss as the explanation for missing closure accounting.
+
+Verification used existing queryFindings with the authenticated current pointer,
+asserted every complete list length against occurrences,and deep-compared its
+sorted union with coverage.caseInventory.static/interaction. No capture, report,
+producer, fixture, renderer or acceptance threshold changed. Next: recover exact
+applicability for the capped groups from original per-case input trees at the
+owning existing review boundary; do not infer membership by multiplying themes
+or unioning sample IDs. Keep broader state/paint/history/lifetime closure separate.
+While this read-only check ran,original worker29800 remained live (CPU768.80 to
+824.67s),with no terminal export receipt. Frozen155 registration remains pending
+canonical export and independent cold verification; accepted package stays153.
+
 ### Description history answered — baseline omissions, not later layout compensations
 
 Read-only Git/TypeScript AST inspection resolves the remaining authored-origin
