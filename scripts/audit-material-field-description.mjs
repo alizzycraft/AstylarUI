@@ -6,6 +6,7 @@ import path from 'node:path';
 import { chromium } from 'playwright-core';
 import { fingerprintDirectory, materialBrowserLaunchOptions } from '../tests/material-parity/run-checkpoint.mjs';
 import { openSupplementalCapture, parseSupplementalCaptureArguments } from '../tests/material-parity/supplemental-capture-evidence.mjs';
+import { materialProfiles, materialViewports } from '../tests/material-parity/benchmark.config.mjs';
 
 // Close the actual-AX hint-description gap, using the existing runtime receipt
 // observer. This is not an input-tree report or an all-profile acceptance gate.
@@ -14,6 +15,16 @@ const root = path.resolve('examples/material-showcase/dist/material-showcase/bro
 const checkpoint = 'artifacts/material-parity/current-full-20261005/checkpoint';
 const manifest = JSON.parse(readFileSync(`${checkpoint}/manifest.json`));
 assert.deepEqual(fingerprintDirectory(root), manifest.provenance.browserFiles);
+const allContexts = process.argv.includes('--all-contexts');
+const contexts = allContexts ? materialProfiles.flatMap(profile => [
+  ...materialViewports, { id: 'desktop-dpr2', width: 1440, height: 1000, deviceScaleFactor: 2 },
+].map(({ id, width, height, deviceScaleFactor }) => ({ profile, viewportId: id,
+  viewport: { width, height }, deviceScaleFactor }))) : [
+  { profile: 'light', viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 },
+  { profile: 'dark', viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 },
+];
+const surfaceRgb = { light: 'rgb(255, 251, 254)', dark: 'rgb(28, 27, 31)',
+  contrast: 'rgb(255, 255, 255)', custom: 'rgb(244, 251, 250)' };
 const server = createServer((request, response) => {
   const name = decodeURIComponent(new URL(request.url, 'http://127.0.0.1').pathname);
   const candidate = path.resolve(root, name.replace(/^\/+/, ''));
@@ -30,14 +41,11 @@ let browser;
 try {
   browser = await chromium.launch(materialBrowserLaunchOptions());
   const options = parseSupplementalCaptureArguments([
-    `--base-url=${baseUrl}`, `--checkpoint=${checkpoint}`, ...process.argv.slice(2),
+    `--base-url=${baseUrl}`, `--checkpoint=${checkpoint}`, ...process.argv.slice(2).filter(arg => arg !== '--all-contexts'),
   ]);
   const evidence = openSupplementalCapture({ options, browser,
     script: 'scripts/audit-material-field-description.mjs', styleProperties: [] });
-  for (const context of [
-    { profile: 'light', viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 },
-    { profile: 'dark', viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 },
-  ]) for (const state of ['hint', 'error']) for (const side of ['reference', 'astylar']) {
+  for (const context of contexts) for (const state of ['hint', 'error']) for (const side of ['reference', 'astylar']) {
     const page = await browser.newPage(context);
     const finish = evidence.observe(page);
     try {
@@ -51,7 +59,7 @@ try {
         dark: node.classList.contains('dark'), background: getComputedStyle(node).backgroundColor,
       }));
       assert.equal(theme.dark, context.profile === 'dark');
-      assert.equal(theme.background, context.profile === 'dark' ? 'rgb(28, 27, 31)' : 'rgb(255, 251, 254)');
+      assert.equal(theme.background, surfaceRgb[context.profile]);
       const selector = side === 'reference' ? '#form-field-control' : '[data-astylar-id="form-field-control"]';
       await page.locator(selector).waitFor({ state: 'attached' });
       const session = await page.context().newCDPSession(page);
@@ -79,7 +87,8 @@ try {
   console.log(JSON.stringify({ terminal: 'verified', browser: browser.version(), capture: evidence.capture,
     sourceReceipts: ['examples/material-showcase/src/app/astylar.component.ts', 'src/lib/astylar-semantic-bridge.ts']
       .map(file => ({ file, sha256: hash(readFileSync(file)) })),
-    scope: 'Hint/error descriptions in two physically and theme-verified contexts; no live-announcement, all-profile or assistive-technology acceptance.' }));
+    contexts: contexts.length, states: ['hint', 'error'],
+    scope: 'Hint/error descriptions in explicitly listed physical/theme contexts; no other action-state, live-announcement or assistive-technology acceptance.' }));
 } finally {
   if (browser) await browser.close();
   await new Promise(resolve => server.close(resolve));

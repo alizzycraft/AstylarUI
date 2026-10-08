@@ -2,6 +2,38 @@
 
 ## Current evidence boundary — October 9
 
+### Hint/error description scope completed across configured physical cohorts
+
+One bounded run of the same field probe answers profile/responsive dependence:
+64 actual CDP observations cover16 exact physical contexts × hint/error × both
+sides. Contexts are four configured profiles × desktop1440x1000 DPR1,
+tablet768x1024 DPR1,mobile390x844 DPR2,desktop1440x1000 DPR2. All actual theme
+class/surface guards pass. Every native hint description is Public label; every
+native error description is Project name is required; every candidate description
+is null. Role/name remain textbox/Project name. Thus these authored description
+omissions are observed in all configured physical cohorts,not only two samples.
+
+node scripts/audit-material-field-description.mjs --all-contexts
+--output=artifacts/material-parity/field-description-cohorts-20261009 exits0.
+Log SHA25651def316df13aae88491126e9003f3d3f934ca2fe971572353ad7cbe26ceee93;
+64 rows plus verified terminal. Independent replay requires exact64-member
+profile/viewport/state/side Cartesian membership,all expected descriptions,
+zero runtime errors,every served asset hash against original checkpoint,and all
+script/helper/application/core/checkpoint receipts against current files.
+Script SHAef6a0625…; configuration SHA256
+a55e95abe098be26d6a99e3faab22a951ae140143fece8701726a23624b98535;
+theme-source SHA25660a0737e357b6cf03f19256212f26f27d6a54d6153e9ee3a433246a37a39c609.
+Configuration/theme are independently recorded scope dependencies,not claimed
+automatic transitive receipts in the existing helper. Preceding probe bytes
+remain reproducible at Git daea38a8; original logs are not overwritten.
+
+This closes hint/error actual-description profile applicability at the captured
+initial-state boundary. It is not live-announcement,disabled/focus/edit transition
+or assistive-technology acceptance,and does not promote76 configured cases to
+fully inspected. Existing68 hint/eight error input findings remain distinct from
+this64-observation physical cohort. Canonical registration of standalone evidence,
+exact other-obligation joins and final gates remain; frozen155 export untouched.
+
 ### Hint/error actual AX verified; previous requested-dark attribution corrected
 
 Inspecting ShowcaseStore reveals profile/error initialization requires benchmark=1
