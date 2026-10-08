@@ -30,9 +30,32 @@ All16 physical hover-cycle cohorts separately inspect failing live-material
 plateaus; they are lifecycle evidence,not extra configured IDs. Trusted Android
 long-press evidence is likewise supplemental,not responsive-case touch acceptance.
 
-Priority: first map existing ordinary real-Tab evidence to exact profile/DPR
-contexts and identify only genuinely missing keyboard-origin contexts. Then
-join shared trigger input/history/semantics/paint evidence and overlay fallback,
+Keyboard coverage join: existing tooltip-profile-paint-0a0b5d6-applied.log
+(SHA256 bc159c1992d928af4ab62df5618f3e81de67d0311d316bb879377dc44df9288f)
+contains exactly four profiles at desktop1440x1000DPR1,tablet768x1024DPR1,
+mobile390x844DPR2. All12 paired real-Tab observations focus tooltip-primary;
+native opens and candidate stays closed. Read-only historical preload verifies
+all10 pinned dependencies and24 embedded PNG receipts. Direct current-byte
+verification rejects the changed sorter receipt; the established preload proves
+conservation rather than substituting current execution for historical execution.
+Existing tooltip-keyboard-813f658-v2 proof separately supplies light desktopDPR2
+(and overlapping light desktopDPR1). Its original real-Tab and programmatic-focus
+assertions pass2/2 in2776.3105ms,authenticating their original receipts/core sources.
+Thus retained real-keyboard observations cover5/8 configured desktop physical
+contexts; only dark/contrast/custom desktopDPR2 lack that exact runtime observation.
+Responsive observations are supplemental and do not add configured focus IDs.
+These are bounded historical behavior/source proofs,not full current paint acceptance.
+
+The broader original applied-theme test currently stops before its observations
+at conservedPrePassiveDefinitions:153 findings versus expected150. Retain this
+integration failure; do not weaken its count or edit frozen producer inputs.
+The direct bounded replay above verifies the original tooltip assertions without
+claiming that failed wrapper passed. Reconcile its population contract in the next
+coherent integration batch after independent canonical cold acceptance.
+
+Priority: inspect only the three genuinely missing desktopDPR2 keyboard-origin
+contexts,using the existing supplemental provenance/action observation contract.
+Then join shared trigger input/history/semantics/paint evidence and overlay fallback,
 scroll and lifetime applicability. Do not recapture settled hover/held text or
 local metrics. Full-case closure remains0; final acceptance is unchanged.
 Independent canonical cold check worker3332 remains live (observed CPU1735.52s)
