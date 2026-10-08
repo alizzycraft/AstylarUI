@@ -4,6 +4,23 @@
 
 ### Configured Menu bounds gap — October 8
 
+Remaining desktop action-cohort gap closes with menu-actions-remaining-20261008:
+seven physical contexts derived from configured Menu profiles/DPRs,excluding
+settled lightDPR1. Each has paired seven-boundary real pointer/keyboard sequence
+with verified outside reset/reopen. All repeat native item-click closure versus
+candidate open,native Rename→Delete ArrowDown versus candidate trigger retained;
+Escape closes both. Existing validator authenticates49 paired boundary trees
+and14 page runtime receipts;98PNG/98tree files rehash. Focused
+menu-actions-remaining-validation-20261008.log passes1/1. Coherent existing
+configuration suite passes11/11,15806.7754ms in
+menu-action-cohort-config-integration-20261008.log. Combined with retained
+lightDPR1,this sequence has current-checkpoint runtime observations across all
+eight desktop physical contexts. These are supplemental action sequences,not
+retroactive configured open-hover-content action acceptance or82-case closure.
+No lightDPR1 recapture,fixture/core/criteria changes or canonical export.
+Next retain broader keys/mobile/root-context and complete local-paint obligations
+separately; do not repeat this settled desktop item-click/ArrowDown/Escape cohort.
+
 Retained item-held paint now distinguishes missing feedback from unequal
 composition: native first item requests8% hover plus a generated10% ripple
 at opacity1; candidate resolves flat#d8d3d8 and has only a label child,no item

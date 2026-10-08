@@ -424,6 +424,47 @@ test('menu action capture preserves item-click discrepancy and rejected navigati
   }
 });
 
+test('remaining menu action cohorts retain matched context coverage without repeating light DPR1', t => {
+  const file = 'artifacts/material-parity/menu-actions-remaining-20261008/latest-report.json';
+  const report = JSON.parse(readFileSync(file)), manifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
+  assert.equal(report.results.length, 14);
+  const cohorts = materialInteractionCases.filter(c => c.family === 'menu' && c.state === 'open-hover-content' && !(c.profile === 'light' && c.viewport.deviceScaleFactor === 1));
+  const key = c => JSON.stringify([c.profile, c.viewport]);
+  assert.equal(cohorts.length, 7);
+  const pairs = [];
+  const files = new Set();
+  for (const cohort of cohorts) {
+    const rows = report.results.filter(r => key(r) === key(cohort));
+    assert.deepEqual(rows.map(r => r.mode), ['reference', 'astylar']);
+    for (const row of rows) {
+      assert.deepEqual(row.boundaries.map(b => b.state), ['opened', 'item-held', 'item-clicked', 'reset-outside', 'reopened', 'arrow-down', 'escape']);
+      const states = Object.fromEntries(row.boundaries.map(b => [b.state, b.observation]));
+      assert.equal(states.opened.open, true); assert.equal(states['reset-outside'].open, false);
+      assert.equal(states.reopened.open, true); assert.equal(states['arrow-down'].open, true); assert.equal(states.escape.open, false);
+      assert.equal(states['item-clicked'].open, row.mode === 'astylar');
+      if (row.mode === 'reference') {
+        assert.equal(states.reopened.active.text, 'Rename'); assert.equal(states['arrow-down'].active.text, 'Delete');
+      } else {
+        assert.equal(states.reopened.active.astylarId, 'menu-primary'); assert.equal(states['arrow-down'].active.astylarId, 'menu-primary');
+      }
+      for (const boundary of row.boundaries) for (const receipt of [boundary.inputTree, boundary.screenshot]) {
+        assert.ok(!files.has(receipt.file)); files.add(receipt.file);
+        assert.equal(createHash('sha256').update(readFileSync(receipt.file)).digest('hex'), receipt.sha256);
+      }
+    }
+    for (let index = 0; index < 7; index++) pairs.push({
+      reference: { runtime: rows[0].runtime, inputTree: rows[0].boundaries[index].inputTree },
+      astylar: { runtime: rows[1].runtime, inputTree: rows[1].boundaries[index].inputTree },
+    });
+  }
+  assert.equal(files.size, 196);
+  assert.deepEqual(validateSupplementalCapture({ ...report, results: pairs }, { reportFile: file, expectedProvenance: manifest.provenance,
+    script: 'scripts/audit-material-menu-actions-remaining.mjs', styleProperties: Object.values(propertyGroups).flat() }), { status: 'checkpoint-bound', errors: [] });
+  assert.equal(report.inputEquivalent, false);
+  t.diagnostic(JSON.stringify({ remainingPhysicalContexts: cohorts.map(key), boundariesPerSide: 7,
+    scope: 'Seven supplemental physical context joins plus separately retained light DPR1; not the same action as configured open-hover-content or complete Menu closure' }));
+});
+
 test('configured menu bounds authenticate exact runner actions and eight context receipts', t => {
   const file = 'artifacts/material-parity/configured-menu-bounds-final-20261008/latest-report.json';
   const report = JSON.parse(readFileSync(file));
