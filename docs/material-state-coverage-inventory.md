@@ -2,6 +2,34 @@
 
 ## Current evidence boundary — October 8
 
+### Configured tooltip popup text inputs — exact18-case join
+
+The configured hover/held paint cohort now has an exact input-owner join across
+all18 cases/36 original tree receipts. Report SHA ab42dbec… authenticated first;
+each tree hash then matches its report receipt. Ordered tree-receipt-list SHA
+3f4201ea2b62f77adea24d3007d17aa94793d53e17240738a83347ffec927602.
+Exactly one native tooltip surface and one candidate tooltip-popup exist per
+case. All18 have identical Create a project content,12px/400/normal font,
+16px line-height,0.4px tracking,0px word spacing,4px vertical/8px horizontal
+padding and equivalent foreground245/239/244,background50/48/51. Native family
+is Roboto;candidate retained family adds Arial/sans-serif fallbacks. This is
+matching primary font intent,not evidence of fallback rendering in these glyphs.
+
+All18 share the same remaining input mismatch: native centered text,normal
+wrapping,maxWidth200px,overflow hidden versus candidate retained left text,
+nowrap,omitted maxWidth/overflow. Candidate flex centering a shrink-wrapped
+text plane is a distinct composition; similar geometry cannot certify that
+contract as equivalent. The retained row is short/single-line,so these differences
+alone do not demonstrate the causal magnitude of its local raster residual.
+Do not infer a font-size/line-height/tracking mismatch here or transfer the
+field-option19px/20px result to tooltip. Existing public equal-input phase/paint
+proof remains its own core counterexample; this Material cohort is not an
+unqualified equal-input core proof. Wrapping/input classifications and positioning
+history already exist; this adds exact configured paint-cohort applicability,
+not a new cause or duplicate classification. Next inspect missing applicable
+focus/touch/scroll/ownership boundaries without repeating this input/raster join.
+No fixture,renderer,threshold,canonical producer or case-closure status changed.
+
 ### Configured tooltip hover/held local paint — complete retained replay
 
 The exact current-full report SHA ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62
