@@ -8,10 +8,15 @@ The existing36-family applicability map remains authoritative; no new inventory.
 
 The eighty-endpoint field-popup observation is now registered in the producer's
 source/proof inventory (155 proofs; all151 findings unchanged). Exact registration
-conservation and five predecessor integration checks pass6/6,12140.1587ms.
+conservation and five predecessor integration checks pass6/6,12140.1587ms;
+precommit repeat passes6/6,12844.8245ms. Integration55558304 is pushed.
 This is source integration,not canonical acceptance: the next coherent milestone
 is export plus independent canonical validation and compact-index publication.
 The published b4947eff boundary remains154 proofs until that milestone completes.
+Export is running in session51872,worker11672,with the complete named five-input
+baseline and progress enabled; log field-popup-canonical-export-20261008.log.
+Worker CPU62.83s and same live handle were verified after dispatch. No terminal
+export/canonical acceptance is claimed; freeze consumed sources until completion.
 Storage-recovery session47542 ended exit0: eight closed historical generations
 had84 shards each compressed with before/after SHA256 equality and full existing
 verifyFindings checks. Free space308789248 bytes at completion; no evidence deleted.
