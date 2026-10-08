@@ -44,6 +44,24 @@ test('configured input focus evidence records exact controls without replacing r
   t.diagnostic(JSON.stringify({ caretOwnerApplicability: { ownerSourceFile, sourceSha256: hash(ownerSource),
     ownerInstalledFile, installedSha256: hash(ownerInstalled), mapFile, mapSha256: hash(mapBytes), methods: ownerMethods,
     scope: 'Four complete methods only; formatting normalization, not full module/pipeline or rendering acceptance' } }));
+  const selectionOwners = [];
+  for (const [relative, names] of [
+    ['app/services/dom/input/text-input.manager', ['setupSelectionSync', 'applyControllerState']],
+    ['app/services/dom/interaction/text-highlight-mesh.factory', ['applySelection', 'syncHighlightMeshes', 'createHighlightRecord', 'createHighlightMaterial', 'createForegroundMaterial']]
+  ]) {
+    const sourceFile = `src/${relative}.ts`, installedFile = `examples/material-showcase/node_modules/astylarui/dist/lib/${relative}.js`;
+    const source = readFileSync(sourceFile), installed = readFileSync(installedFile);
+    const emitted = ts.transpileModule(source.toString(), { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 } }).outputText;
+    const matches = map.sources.flatMap((file, index) => file.endsWith(`/${relative}.js`) ? [map.sourcesContent[index]] : []);
+    assert.equal(matches.length, 1);
+    for (const name of names) {
+      assert.equal(method(emitted, name), method(installed.toString(), name), `${relative}/${name}: current/installed divergence`);
+      assert.equal(method(matches[0], name), method(installed.toString(), name), `${relative}/${name}: captured/installed divergence`);
+    }
+    selectionOwners.push({ sourceFile, sourceSha256: hash(source), installedFile, installedSha256: hash(installed), methods: names });
+  }
+  t.diagnostic(JSON.stringify({ selectionOwnerApplicability: selectionOwners,
+    scope: 'Seven complete controller-sync/highlight methods; not all selection actions, palette functions, caller or full rendering acceptance' }));
   const runner = readFileSync(capture.actionSource.file);
   assert.equal(hash(runner), capture.actionSource.sha256);
   assert.equal(hash(runner), manifest.provenance.harnessFiles.find(r => r.file === capture.actionSource.file).sha256);

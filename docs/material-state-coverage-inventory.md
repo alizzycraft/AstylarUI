@@ -2,6 +2,40 @@
 
 ## Current evidence boundary — October 8
 
+### Selection paint ownership and evidence applicability — October 8
+
+Selection is an applicable supplemental input obligation,not an explicit
+selection-forward/backward entry in the configured benchmark matrix. Retained
+input-boundaries-keypress-559f95c records20 such rows across five families,
+light1440x900,DPR1/2,Chrome153; these are not20 additional configured cases or
+current Chrome154 acceptance. Existing retained light/contrast/custom palette
+diagnostics and October6 dark/mobile DPR2 form-field probe already answer their
+bounded state/palette questions; do not recapture them. Historical End-on-selection
+mismatch and email-null observability remain separate from the dark probe's
+deliberately collapsed-before-End backward-selection action.
+
+Actual input selection follows TextInputManager.setupSelectionSync/
+applyControllerState and the shared TextHighlightMeshFactory controller
+subscription/applySelection/syncHighlightMeshes paint path. The older translucent
+TextSelectionService.createSelectionMeshForRange is not the owner of the observed
+opaque#9AD5FF selection in that probe. Seven complete methods (two manager,five
+factory: applySelection,syncHighlightMeshes,createHighlightRecord,
+createHighlightMaterial,createForegroundMaterial) now agree across current emit,
+installed consumer and checkpoint-authenticated captured source map. Existing
+configuration proof emits exact source/installed SHA receipts and method names;
+complete suite passes3/3,11414.619ms in `selection-owner-applicability-20261008.log`.
+This closes stale code for those seven methods only; palette helper functions,
+all caller/state paths and full rendering acceptance are not inferred. Original
+native blue/white versus contrast-policy candidate light-blue/black remains an
+explicit compatibility decision,not a fixture styling permission.
+
+Next selection evidence gap is exact action/profile/viewport applicability and
+local glyph/highlight raster geometry (including pointer selection),reusing
+existing palette diagnostics before adding only missing observations. Source
+fingerprint/publication remains150 findings,148 producer proofs/146 accepted;
+this standalone proof is not silently included in canonical acceptance. No new
+capture,renderer/reference/fixture edits or changed criteria.
+
 ### Exact configured input-focus observation — October 8
 
 Bounded caret owner applicability is now demonstrated for complete methods
