@@ -4,6 +4,23 @@
 
 ### Configured Menu bounds gap — October 8
 
+Keyboard remainder is now narrowed by the authenticated historical report's
+actual keydown inventory, not sequence names: its eight Menu rows contain only
+ArrowDown/Escape or Tab/Tab/Tab/Shift+Tab/Escape, with instrumented/uninstrumented
+pairs. Every settled boundary is open; first Tab dismisses native but leaves
+candidate open, and final Escape closes both. Existing assertion now checks
+these exact events and outcomes. This does not establish current Tab behavior:
+900x700DPR1 matches no configured context. Current eight desktop contexts cover
+ArrowDown/Escape only. Missing current runtime observations remain Tab dismissal,
+ArrowUp, Home/End, keyboard item activation and typeahead, plus mobile flows.
+Source-handler no-ops are not substitutes for those runtime boundaries. Next
+decisive probe should cover the missing keys with verified open preconditions,
+not repeat settled current ArrowDown/Escape or historical traces.
+Verification: existing configured overlay placement census passes1/1,
+1477.3692ms (node --test --test-name-pattern='configured overlay placement census'
+tests/material-parity/benchmark-config.spec.mjs). No capture, canonical export,
+fixture/core change or whole-case promotion is justified by this bounded join.
+
 Remaining desktop action-cohort gap closes with menu-actions-remaining-20261008:
 seven physical contexts derived from configured Menu profiles/DPRs,excluding
 settled lightDPR1. Each has paired seven-boundary real pointer/keyboard sequence

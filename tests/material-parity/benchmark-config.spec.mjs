@@ -251,6 +251,20 @@ test('configured overlay placement census distinguishes measured boxes from comp
   assert.equal(createHash('sha256').update(keyboardBytes).digest('hex'), '2d46a54a48316404db90f1227e5d3901c43e6aa230180719697d25958914bb90');
   const keyboard = JSON.parse(keyboardBytes), menu = keyboard.cases.filter(r => r.family === 'menu');
   assert.equal(menu.length, 8);
+  assert.deepEqual([...new Set(menu.map(r => r.sequence))].sort(), ['arrow-escape', 'tab-cycle']);
+  for (const row of menu) {
+    assert.deepEqual(row.trace.filter(e => e.event === 'keydown').map(e => e.key),
+      row.sequence === 'arrow-escape' ? ['ArrowDown', 'Escape'] : ['Tab', 'Tab', 'Tab', 'Shift', 'Tab', 'Escape']);
+    const boundary = label => row.trace.find(e => e.event === 'boundary' && e.label === label);
+    assert.equal(boundary('settled').overlayPresent, true);
+    if (row.sequence === 'tab-cycle') {
+      assert.equal(boundary('key-0-Tab').overlayPresent, row.mode === 'astylar');
+      assert.equal(boundary('key-4-Escape').overlayPresent, false);
+    } else {
+      assert.equal(boundary('key-0-ArrowDown').active.text, row.mode === 'reference' ? 'Delete' : 'Open menu');
+      assert.equal(boundary('key-1-Escape').overlayPresent, false);
+    }
+  }
   assert.deepEqual(keyboard.viewport, { width: 900, height: 700, dpr: 1 });
   assert.ok(rows.filter(r => r.family === 'menu').every(r => r.viewport.width !== keyboard.viewport.width ||
     r.viewport.height !== keyboard.viewport.height || r.viewport.deviceScaleFactor !== keyboard.viewport.dpr));
