@@ -24,6 +24,23 @@ No renderer,fixture,threshold or captured evidence changes.
 
 ### October 8 editable paint obligation reconciliation
 
+Horizontal paint placement now replays from the same10 retained populations:
+both screenshot crop x origins65 and input left edges81 are exact integers;
+native caret starts81,candidate starts80,atDPR1/2 for every family. Thus the
+-1CSSpx leading-edge difference is not a mismatched crop origin. The existing
+core equal-color reduction's2px centered insertion-plane finding is consistent
+with this population; no new fixture offset or renderer correction is authorized.
+Candidate contiguous crop rows19–36 vs native19–37 atDPR1,and37–74 vs38–75
+atDPR2 are recorded separately. Fractional vertical crop origins and exact-ink
+versus antialiased fringe prevent converting that observation into certified
+vertical layout/sharpness causality. Original proof assertions remain intact.
+Focused1/1 passes2861.3038ms; `desktop-caret-paint-edge-20261008.log`,SHA256
+8a82ae6d4579d0b21bbc4790a3988d68aab3d2a758c61e5bdb76c7069cbff925.
+Owning proof-file fingerprint changes join the pending coherent integration
+batch; frozen receipt applicability is not silently upgraded to full current
+canonical acceptance. Remaining placement scope is vertical/fringe and other
+contexts,not rechecking these horizontal integer-origin edges.
+
 The existing five-family desktop caret proof already inspects thickness and
 color,not only absence. Receipt-validated replay passes1/1,3393.5913ms:
 `desktop-caret-obligation-reconciliation-20261008.log`,SHA256

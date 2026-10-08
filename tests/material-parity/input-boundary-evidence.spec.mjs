@@ -1273,7 +1273,8 @@ test('current paired caret-visible capture binds its pixels to unequal caret aut
   assert.equal(candidateInput.resolvedStyle.color, '#1d1b20');
 });
 
-test('desktop five-family empty caret preserves native visibility and candidate blink evidence', () => {
+test('desktop five-family empty caret preserves native visibility and candidate blink evidence', t => {
+  const placements = [];
   for (const family of ['form-field','input','autocomplete','datepicker','timepicker']) for (const dpr of [1,2]) {
   const file = `artifacts/material-parity/visible-caret-${family}-desktop-dpr${dpr}-20261006/latest-report.json`;
   const capture = JSON.parse(readFileSync(file));
@@ -1323,15 +1324,16 @@ test('desktop five-family empty caret preserves native visibility and candidate 
   for (let x = 0; x < 24*dpr; x++) {
     let run = 0;
     let longest = 0;
+    let longestStartY = null;
     for (let y = 0; y < on.height; y++) {
       const i = (y * on.width + x) * 4;
       const foreground = on.data[i] === 29 && on.data[i+1] === 27 && on.data[i+2] === 32;
       const changed = on.data[i] !== off.data[i] || on.data[i+1] !== off.data[i+1] || on.data[i+2] !== off.data[i+2];
       run = foreground && changed ? run + 1 : 0;
-      longest = Math.max(longest, run);
+      if (run > longest) { longest = run; longestStartY = y - run + 1; }
       if (run >= 10*dpr) stroke = true;
     }
-    if (longest >= 10*dpr) columns.push({x, longest});
+    if (longest >= 10*dpr) columns.push({x, longest, longestStartY});
   }
   if (columns.length > widestColumns.length) widestColumns = columns;
   }
@@ -1340,7 +1342,25 @@ test('desktop five-family empty caret preserves native visibility and candidate 
   assert.equal(nativeOn.bounds.maxX-nativeOn.bounds.minX+1, dpr);
   assert.deepEqual(widestColumns.map(column => column.x), Array.from({length:2*dpr},(_,i)=>15*dpr+i));
   assert.ok(widestColumns.every(column => column.longest === (dpr === 1 ? 18 : 38)));
+  const nativeSample = capture.results.find(row => row.reference.nativeCaretPixelDelta.changedPixels > 0);
+  for (const row of capture.results) {
+    assert.equal(row.reference.screenshot.clip.x, row.astylar.screenshot.clip.x);
+    for (const mode of ['reference','astylar']) {
+      assert.equal(row[mode].screenshot.clip.x, 65);
+      assert.equal(row[mode].observation.box.x, 81);
+    }
   }
+  const nativeLeft = nativeSample.reference.screenshot.clip.x + nativeOn.bounds.minX / dpr;
+  const candidateLeft = nativeSample.astylar.screenshot.clip.x + widestColumns[0].x / dpr;
+  assert.equal(nativeLeft, 81);
+  assert.equal(candidateLeft, 80);
+  assert.equal(candidateLeft - nativeLeft, -1, 'same integer crop origin exposes a real left-edge difference,not mismatched crops');
+  placements.push({ family, dpr, report: { file, sha256: hash(readFileSync(file)) }, nativeLeft, candidateLeft,
+    nativeCropRows: [nativeOn.bounds.minY, nativeOn.bounds.maxY],
+    candidateContiguousRows: widestColumns.map(column => [column.longestStartY, column.longestStartY + column.longest - 1]),
+    scope: 'light1440x900 empty-focused retained paint edges; unequal caret-color and picker input width remain; vertical fractional crop/fringe not certified' });
+  }
+  t.diagnostic(JSON.stringify({ caretPaintPlacement: placements, acceptance: false }));
 });
 
 test('dark mobile empty inputs expose caret pixels without changing retained producers', async t => {
