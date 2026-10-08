@@ -4,6 +4,33 @@
 
 ### Configured Menu bounds gap — October 8
 
+Frozen0abe78a0 Menu canonical export is now terminal exit0 (session82668),
+151 findings/154 registered proofs,inputEquivalent=false. Evidence session
+authenticates1205 files/89154859 bytes,zero invalidations; one collector,
+ten memory hits,one disk hit; elapsed2612842.3705ms. On-disk package is now
+62841035 compressed bytes,SHA0ed2f027b7434c82b444ec91f0304b8e0f0cb55e2c3a5c078ad903a242e52203;
+2222869919 decoded bytes,SHA072d58485f0fb78a05125685cb8f815325dba6b10d3232fa00b43f513c8aebf4.
+menu-canonical-export-20261008.log records actual terminal export summary.
+Independent ASTYLAR_AUDIT_COLD=1 named-launcher --check is now live at
+session39373/PID27952; menu-canonical-independent-cold-20261008.log.
+Publication is not accepted until that check and whole-index verification pass.
+The prior62c0d373… working index is stale after this export; do not query it
+as current. Later standalone mobile/root/collision/focus diagnostics remain
+outside this frozen batch. Keep producer dependencies unchanged during check.
+
+Encoding exhausted D: headroom (61KB then0). Existing full-audit-base/latest
+JSON were already compressed; attempted compact returned ERR with unchanged
+hashes,not successful recovery. After validating the exact regenerable cache
+target,one228653-byte EvidenceSession envelope was evicted (rebuildable,not
+original evidence).457 JSON files across seven closed Menu diagnostic directories
+were transparently compressed; all before/after SHA256 hashes matched. Free
+29274112 bytes after recovery. No captured evidence,paths,findings or reference
+links were deleted; v1/failed evidence stays retained. This is sufficient for
+the read-only cold check/log,not a full capture or new compact generation.
+Recover further verified headroom before import/push publication. No active
+output or source was compressed/removed. Current typography applicability and
+focused2/2 proof were committed independently at a4df1a8f before export ended.
+
 Known Menu typography findings are now joined to eight current-checkpoint
 matched-focus contexts without inventing another cause. Authenticated compact
 generation62c0d373… supplies128 existing token/tracking rows; retained
