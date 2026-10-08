@@ -20,6 +20,16 @@ shows five proof registrations prepended ahead of the Menu block and three sourc
 inventory additions. Next authenticate/reverse exactly those additive registrations
 through the existing historical transition, conserve the full predecessor, and
 separately trace the disabled-ink guard before another coherent canonical attempt.
+Focused reconciliation now reverses only the authenticated complete standalone
+snapshot f6614004… to accepted predecessor61313972… before existing historical
+registration reversals. Both whole-source digests remain mandatory; source,
+proof-description and dependency mutations are rejected by the existing standalone
+batch test (1/1 pass,1413.0014ms). Direct original four-collector replay terminates
+exit0: alignment/font4016,text alignment2677,LTR178,reviewed3325 observations,
+all binding=bound. The disabled-ink rejection was downstream of the same missing
+registration reversal,not changed classifier behavior. This closes all four
+identified source-binding failures; it does not prove full canonical validation
+or explain every remaining scalar until the coherent export/check succeeds.
 No acceptance, renderer or fixture changes; all2311 cases remain partial.
 
 ### Autocomplete option local ink — retained endpoint observation

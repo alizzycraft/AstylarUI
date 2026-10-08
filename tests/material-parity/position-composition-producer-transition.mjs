@@ -38,9 +38,35 @@ const extendedKeyboardProof = "    proof(root, 'tests/material-parity/input-equi
   "      'retained extended configured keyboard assertion boundary', 'Replays original runtime assertion blocks and source preambles for128 exact family/focus contexts across eight retained batches. Pins logs,original callbacks,served build,report/checkpoint and bounded current source dependencies. Preserves observed activation,navigation,range and modality failures. Not collection-time error callbacks,current paint,lifecycle or complete-case acceptance.'),\n";
 const fieldPopupProof = "    proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\\('remaining configured field popup bounds preserve exact actions and all eighty endpoints'/,\n      'configured field popup bounds and input applicability boundary', 'Authenticates eighty exact remaining autocomplete/select open endpoints, original runner actions, served assets,160 PNG/tree pairs and finite CSS anchor/popup/option bounds. Anchors and bounded popup layout inputs join to the original cases; native shorthand omissions remain explicit with matching recorded longhands. Preserves contrast/custom unequal anchor and size inputs. Not retrospective original pixel registration,current renderer equivalence,full paint,ancestor/lifetime or whole-case closure.'),\n";
 const fieldPopupSource = "    'scripts/audit-material-configured-field-popup-bounds.mjs',\n";
+// Historical source conservation only: authenticate the complete additive batch
+// and its predecessor before the older registration reversals inspect the prefix.
+export function restoreStandaloneProofBatch(source) {
+  let current = source.toString().replaceAll('\r\n', '\n');
+  if (!current.includes('public antialias option core constructor boundary')) return current;
+  assert.equal(hash(current), 'f6614004ec5a22921aff26da51a9e0504208004c58270827005b3aaaeb9e8724',
+    'exact complete standalone registration snapshot');
+  const ast = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  assert.equal(ast.parseDiagnostics.length, 0);
+  const inventory = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory');
+  const entries = inventory.body.statements[0].expression.elements;
+  assert.equal(entries.length, 160);
+  const names = ['public antialias option core constructor boundary', 'selected caret core visibility owner boundary',
+    'actual Material selected caret temporal failure boundary', 'configured progress focus paint failure evidence boundary',
+    'retained modal close versus removal attribution boundary'];
+  names.forEach((name, i) => assert.equal(entries[i].arguments[3].text, name));
+  current = current.slice(0, entries[0].getFullStart()) + current.slice(entries[5].getFullStart());
+  for (const file of ['scripts/audit-modal-reentrant-close.mjs', 'scripts/audit-material-selection-pixels.mjs',
+    'src/app/services/dom/input/text-cursor.renderer.ts']) {
+    const line = `    '${file}',\n`;
+    assert.equal(current.split(line).length, 2); current = current.replace(line, '');
+  }
+  assert.equal(hash(current), '61313972459b55cee6f966d936c45931874582fd7287b48893ce42ba191458bd',
+    'complete accepted predecessor conserved after exact standalone additions');
+  return current;
+}
 // Reverse only this exact registration; never substitute evidence for current rendering.
 export function restoreFieldPopupProofRegistration(source) {
-  let current = source.toString().replaceAll('\r\n', '\n');
+  let current = restoreStandaloneProofBatch(source);
   if (!current.includes("/test\\('remaining configured field popup bounds")) return current;
   assert.equal(current.split(fieldPopupProof).length, 2, 'exact field-popup observation proof registration');
   assert.equal(current.split(fieldPopupSource).length, 2, 'exact field-popup capture source registration');

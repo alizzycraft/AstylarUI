@@ -9,6 +9,7 @@ import { transformSync } from 'esbuild';
 import { PNG } from 'pngjs';
 import { materialCaseKey } from './run-checkpoint.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
+import { restoreStandaloneProofBatch, restoreExtendedKeyboardRegistration } from './position-composition-producer-transition.mjs';
 import { propertyGroups, sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { materialAbsoluteTextAlignmentTargets, materialAdditionalMeasurementTargets, materialComparisonViewport, materialFamilies, materialFocusedRasterTargets, materialGeometryExcludedTargets, materialInteractionCases, materialInteractionFocusedRasterTargets, materialInteractionTextAlignmentTargets, materialInteractionViewports, materialLeftAlignedTextTargets, materialMobileFlowCases, materialMobileFlowFamilies, materialProfiles, materialSemanticExcludedTargets, materialStaticCases, materialSupplementalStaticCases, materialTextAlignmentTargets, materialTextAlignmentToleranceOverrides, materialTextAuditTargets, materialTextlessFamilies, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets, materialViewports } from './benchmark.config.mjs';
 
@@ -31,6 +32,12 @@ test('standalone proof batch conserves complete accepted predecessor producer an
     const line = `    '${added}',\n`; assert.equal(restored.split(line).length, 2); restored = restored.replace(line, '');
   }
   assert.equal(restored, prior(file)); // All collectors/classifiers/coverage and155 predecessor proofs preserved.
+  assert.equal(restoreStandaloneProofBatch(current), restored);
+  assert.doesNotThrow(() => restoreExtendedKeyboardRegistration(current));
+  for (const changed of [current.replace('sourceFindings,', 'sourceFindings: [],'),
+    current.replace('Authenticates six retained', 'Authenticates seven retained'),
+    current.replace('scripts/audit-modal-reentrant-close.mjs', 'scripts/other.mjs')])
+    assert.throws(() => restoreStandaloneProofBatch(changed));
   const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
   const policy = readFileSync(policyFile, 'utf8').replace(/\r\n/g, '\n');
   const policyTree = ts.createSourceFile(policyFile, policy, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
