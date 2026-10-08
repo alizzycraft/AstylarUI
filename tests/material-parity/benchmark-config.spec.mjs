@@ -373,6 +373,38 @@ test('configured menu bounds authenticate exact runner actions and eight context
     observations.push({ caseId: row.caseId, reference: row.reference.observation, astylar: row.astylar.observation });
   }
   assert.equal(receipts.size, 32);
+  const mapFile = 'examples/material-showcase/dist/material-showcase/browser/chunk-JPEJK334.js.map';
+  const mapBytes = readFileSync(mapFile), map = JSON.parse(mapBytes);
+  assert.equal(hash(mapBytes), manifest.provenance.browserFiles.find(f => f.file === path.basename(mapFile)).sha256);
+  const captured = map.sources.flatMap((name, i) => name === 'src/app/astylar.component.ts' ? [map.sourcesContent[i]] : []);
+  assert.equal(captured.length, 1);
+  assert.equal(captured[0].replace(/\r\n/g, '\n'), readFileSync('examples/material-showcase/src/app/astylar.component.ts', 'utf8').replace(/\r\n/g, '\n'));
+  const anchorInputs = [];
+  for (const row of report.results) {
+    const native = JSON.parse(readFileSync(row.reference.inputTree.file));
+    const candidate = JSON.parse(readFileSync(row.astylar.inputTree.file));
+    const popup = candidate.nodes.find(n => n.authored?.id === 'menu-popup');
+    const rule = candidate.rules.filter(r => r.selector === '#menu-popup');
+    assert.equal(rule.length, 1);
+    const top = row.profile === 'contrast' ? 54 : row.profile === 'custom' ? 58 : 69;
+    const height = row.profile === 'contrast' ? 111 : row.profile === 'custom' ? 110 : 112;
+    assert.equal(rule[0].top, `${top}px`); assert.equal(rule[0].height, `${height}px`);
+    assert.equal(popup.resolvedStyle.top, rule[0].top); assert.equal(popup.resolvedStyle.height, rule[0].height);
+    const panel = native.nodes.find(n => (n.attributes?.class || '').split(' ').includes('mat-mdc-menu-panel'));
+    assert.equal(native.styles[panel.style].height, '112px');
+    const gaps = {};
+    for (const side of ['reference', 'astylar']) {
+      const { primary, popup: box } = row[side].observation;
+      gaps[side] = box.y - primary.y - primary.height;
+    }
+    assert.ok(Math.abs(gaps.reference) < 1e-7);
+    assert.ok(Math.abs(gaps.astylar - (row.profile === 'contrast' || row.profile === 'custom' ? 2 : 1)) < 1e-7);
+    assert.ok(Math.abs(row.astylar.observation.popup.height - height) < 1e-7);
+    anchorInputs.push({ caseId: row.caseId, gaps, candidateAuthoredTop: rule[0].top,
+      candidateAuthoredHeight: rule[0].height, referenceUsedHeight: native.styles[panel.style].height });
+  }
+  t.diagnostic(JSON.stringify({ anchorInputs, classification: 'Unequal fixed candidate placement/height inputs; not an isolated equal-input renderer defect',
+    sourceApplicability: 'Complete current application source equals authenticated served source; core pipeline applicability remains separate' }));
   assert.equal(report.inputEquivalent, false); assert.equal(report.renderingEquivalent, false);
   t.diagnostic(JSON.stringify({ observations, acceptance: false,
     scope: 'Eight configured menu open-hover-content bounds observations only; not equal input, current whole-pipeline validity or remaining menu actions' }));

@@ -4,6 +4,27 @@
 
 ### Configured Menu bounds gap — October 8
 
+Retained input followup answers the immediate anchor question for these eight
+contexts: native popup top minus trigger bottom is0; candidate is1 CSSpx in
+light/dark and2 in contrast/custom (numeric tolerance1e-7 only). Candidate
+authored rule and resolved style both retain fixed top69/54/58px and
+height112/111/110px; measured candidate heights agree with those requests.
+Native used panel height is112px in every context. Thus different placement
+intent and explicit height inputs precede any equal-input renderer attribution.
+Complete current astylar.component.ts equals authenticated served source in
+chunk-JPEJK334.js.map; this is application-source applicability,not whole-core
+pipeline applicability. The same existing focused assertion passes1/1 in
+769.1229ms: configured-menu-anchor-inputs-20261008.log. No recapture/export.
+
+History inspection: c7d2ab70 changes popup left33→28 while retaining these
+top/height formulas; 994da86b changes width111→112 and shadow/item styling,
+again retaining formulas (git show each commit for astylar.component.ts).
+These are historical fixture adjustments,not proof of the original cause or
+that a core fix established equivalent anchoring. Do not replace fixed tops
+with another tuned value. Next inspect the reference anchor configuration and
+the candidate containing-block/anchor ownership before prescribing the general
+equivalent-input representation; all other Menu obligations remain pending.
+
 The missing configured Menu open-hover-content geometry now has a validated
 checkpoint-bound capture: configured-menu-bounds-final-20261008/latest-report.json.
 Eight exact IDs cover four profiles at desktop1440x1000 DPR1/2. The producer
