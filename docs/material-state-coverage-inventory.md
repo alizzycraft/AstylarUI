@@ -22,6 +22,26 @@ current rendering acceptance. Next: shared overlay/scrollbar paint and input
 caret/selection paint,then exact applicable-obligation/current-validity closure.
 No renderer,fixture,threshold or captured evidence changes.
 
+### October 8 editable paint obligation reconciliation
+
+The existing five-family desktop caret proof already inspects thickness and
+color,not only absence. Receipt-validated replay passes1/1,3393.5913ms:
+`desktop-caret-obligation-reconciliation-20261008.log`,SHA256
+cd97c2bd97de4d9657b347ee1e4b2b8ee2508b42719b0fcee21d8c6c23794c9f.
+All10 supplemental light1440x900 DPR1/2 populations (form-field,input,email
+type;autocomplete,datepicker,timepicker) retain six empty-focused action samples.
+Native stroke bounds are1CSSpx wide; candidate localized blinking strokes are
+2CSSpx wide,18px high atDPR1 and19px atDPR2. Reference requests primary
+caretColorRGB103/80/164;candidate ancestry omits caretColor and requests
+foreground#1d1b20. Thus color intent and observed width are inspected/failing,
+not still-undetermined absence or proof of equal paint. The separate existing
+equal-color shipped-method reduction owns core-width attribution; these unequal
+Material captures do not independently prove that cause.
+Remaining: exact placement/edge/sharpness,other themes/tablet/disabled/error,
+selection boundaries and complete source/current-validity/case joins. Supplemental
+1440x900 contexts must not silently become configured1440x1000 case closure.
+No new capture,producer/test layer or canonical rebuild was needed.
+
 ### October 8 remaining scrollbar paint boundary
 
 Configured desktop track/arrow paint is now inspected in the same32 retained
@@ -3152,10 +3172,12 @@ retain old snackbar timers across a switch to Menu, in the bounded DPR1 probe.
    an instrumentation issue; non-interactive candidate indicators are a separate
    documented core limitation. Final enforced capture must distinguish them.
 2. Text inputs: same authored caret/selection intent, focused-empty and
-   forward/backward selection paint at real action boundaries. The existing
-   light capture used Playwright's default hidden native caret; the Chrome 154
-   form-field proof isolates that harness gap and an unequal caret-color
-   request. Do not infer the other four families or dark/mobile from it.
+   forward/backward selection paint at real action boundaries. Original full-run
+   light rasters hide native carets; the separate Chrome154 light1440x900
+   five-family DPR1/2 supplemental proof now covers visibility,unequal caret-color
+   intent and observed1px/2px widths. Do not repeat that absence/width question.
+   Placement/sharpness,other contexts and exact configured-case joins remain;
+   existing dark/mobile/form-field selection findings have their own scope.
 3. Shared overlays and focus: distinguish authored open-state differences from
    core placement, clipping, dismissal, focus containment and resource cleanup.
    Reuse the authenticated light keyboard captures before adding only missing
