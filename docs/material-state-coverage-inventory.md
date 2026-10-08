@@ -4,6 +4,30 @@
 
 ### Configured Menu bounds gap — October 8
 
+Mobile material subtype is now narrowed without another browser run. In both
+light/dark captures, closed-cycle surviving menu-primary-hover-focus-active-
+material identities are[84],[84,195],[84,195,303]; previous identities persist
+while one new identity appears per cycle. No menu-popup/menu-rename/menu-delete
+named material survives any closed boundary. This rules out those named popup/
+item materials as the accumulating subtype, not all possible unnamed owners.
+Checkpoint-authenticated chunk-3JXWRYJY.js.map SHA256dba484044ca0dea965d8ef4b12635673f0f055d7711099d2f6476ca490988ec4
+supplies six complete owning methods: applyElementPseudoState,
+setButtonLabelPseudoMaterial,resource replace,setupMouseEvents,
+applyElementMaterial,createMaterial. All equal current-source transpilation
+under the existing esbuild formatting-only comparison; no method statements
+are omitted. Diagnostic exits0 in menu-mobile-material-owner-join-corrected-
+20261008.log,with six statement digests. Initial whitespace-only comparison
+rejected syntactic formatting and is preserved in
+menu-mobile-material-owner-join-20261008.log; it is not semantic drift.
+Thus this bounded mobile evidence is applicable to the already registered
+core-pointer-state-material-allocation-escapes-render-owner diagnosis, whose
+plugin-free removal/no-interaction control proves the general adoption gap.
+Do not claim this capture independently proves allocation stacks,mesh binding,
+GPU retention or eventual disposal: it records names/identities and counts.
+No new cause definition or duplicate capture is needed. Next remaining Menu
+questions are complete local paint/focus/ripple and collision/containing-owner
+applicability,not repeated opening/Escape or generic resource census.
+
 Mobile open-interval gap now has retained current-checkpoint evidence in
 menu-mobile-boundaries-20261008/latest-report.json (SHA256
 35e5b19d756ceca5971722adeff7f6f25527558f93eb6a05c836b7ed4c866b7a).
