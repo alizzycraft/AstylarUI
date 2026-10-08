@@ -2,6 +2,28 @@
 
 ## Current evidence boundary — October 9
 
+### Additional canonical ordinary-tooltip theme wording requires correction
+
+Read-only review of the frozen producer identifies two remaining overbroad proof
+descriptions: "ordinary dark mobile tooltip live-material retention diagnostic
+counterexample" (input-equivalence-audit.mjs:9529) and "dark mobile tooltip
+keyboard-authoring and local texture-phase diagnostic" (:9545). Their owning
+ordinary-mode tests are two of the three already AST-verified requested-dark
+without actual theme setup paths. These physical observations remain retained
+default-light mobile DPR2 evidence; they do not demonstrate dark paint/lifetime.
+The properly themed new12 AX observations establish accessible descriptions
+only and cannot upgrade these different raster/resource/keyboard observations.
+
+Consequently the live corrected-description export26438 must not be imported
+or described as independently accepted merely if it exits0. After terminal,
+correct these two exact proof scope strings at the existing inventory boundary,
+preserve original observations/test bodies and full predecessor guards, and
+reconcile once before independent cold acceptance. No need to recapture or
+repeat the settled default-light actions to correct their labels. Actual dark
+paint/lifecycle remains an explicit missing cohort. Previously accepted package
+bytes remain historically authenticated, not current dark-coverage certification.
+This is evidence-scope correction, not a renderer defect or changed criterion.
+
 ### Mobile timepicker scrollbar theme applicability correction
 
 The family checklist's older "Dark/mobile DPR2" wheel/thumb-drag wording below
