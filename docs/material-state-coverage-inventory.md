@@ -2,6 +2,38 @@
 
 ## Current evidence boundary — October 9
 
+### Form-field hint omission reaches actual accessibility API
+
+The unresolved question was whether missing candidate ariaDescribedby merely
+differs in authored input while the semantic bridge supplies the hint anyway,
+or whether it removes the browser's accessible description. New bounded probe
+scripts/audit-material-field-description.mjs reuses the existing checkpoint,
+browser launch and runtime receipt observer without changing fixtures or any
+frozen producer dependency. Non-error light desktop1440x1000 DPR1 and dark
+mobile390x844 DPR2 expose four actual CDP textbox observations: both names are
+Project name; native description is Public label with resolved form-field-hint
+IDREF; candidate description/IDREF are null. This confirms the missing authored
+association has an actual AX consequence in both contexts,not a core bridge
+failure when an association is supplied or an all-profile claim.
+
+Command node scripts/audit-material-field-description.mjs
+--output=artifacts/material-parity/field-description-physical-20261009 exits0.
+Original log field-description-physical-20261009.log SHA256
+2226179ed04860dc56b6f22b5fec5e09ac2c35e64da05370ddbd6aeccb84fa80
+has four rows plus verified terminal receipt,Chrome154.0.8037.58. Entire1887-file
+served build fingerprint matches existing checkpoint; runtime asset counts
+518/519/518/519 authenticate through existing observer with zero runtime errors.
+Independent log replay checks four expected descriptions and hashes all captured
+script/helper/source/checkpoint receipts against current files. Script SHA
+bec8004c…,current application71e2d41f…,semantic bridge1a0011d3… agree.
+
+This closes the actual non-error hint AX gap only for two contexts. Existing68
+configured hint-input omissions remain separately evidenced; error-state actual
+description/live announcements,other physical cohorts and assistive-technology
+behavior are not waived. The new standalone probe is not registered in frozen
+155 canonical production; integrate its existing finding evidence at a later
+coherent boundary. No current full-case/rendering acceptance or renderer fix.
+
 ### Shared inline alignment applicability joined across six families
 
 The same bounded normal/stretch question now has exact retained membership for
