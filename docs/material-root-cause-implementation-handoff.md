@@ -2,6 +2,20 @@
 
 ## Current resumption ledger — October 7
 
+- Current Menu action/paint supplement: authenticated light1440x1000DPR1
+  runtime confirms native Rename release closes/restores trigger,candidate
+  remains open; after verified outside reset/native reopen,reference focuses
+  Rename then Delete on ArrowDown,candidate keeps trigger. Escape closes both.
+  Complete current/served application handlers separately show no item-close
+  or navigation action; browser delivery is now observed for this cohort.
+  Held feedback exists,but native8%hover+10%ripple differs from candidate flat
+  active paint/label-only structure. See coverage ledger and
+  menu-actions-reset-20261008/latest-report.json plus
+  menu-item-held-paint-inputs-20261008.log. Implement semantic action/navigation
+  and reference state-layer composition through shared owners; do not tune
+  colors/coordinates or infer equal-input renderer defects. Broader contexts,
+  complete keys/typeahead and animation fidelity remain separate obligations.
+
 - October8 current publication is150 findings/150 accepted registered proofs,
   superseding the146/141 counts below. Export,cold replay and compact-index
   verification are recorded in material-state-coverage-inventory.md under

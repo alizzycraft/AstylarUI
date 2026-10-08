@@ -400,6 +400,27 @@ test('menu action capture preserves item-click discrepancy and rejected navigati
       assert.equal(states['item-clicked'].open, true);
       assert.ok(states['arrow-down'].events.some(e => e.type === 'keydown' && e.targetId === 'menu-primary'));
     }
+    const held = row.boundaries.find(b => b.state === 'item-held');
+    const heldTree = JSON.parse(readFileSync(held.inputTree.file));
+    if (row.mode === 'reference') {
+      const ripple = heldTree.nodes.filter(n => (n.attributes?.class || '').split(' ').includes('mat-ripple-element'));
+      assert.equal(ripple.length, 1);
+      assert.equal(heldTree.styles[ripple[0].style].backgroundColor, 'color(srgb 0.113725 0.105882 0.117647 / 0.1)');
+      assert.equal(heldTree.styles[ripple[0].style].opacity, '1');
+      const item = heldTree.nodes.find(n => n.key === 'overlay:0/1/0/0/0/0');
+      assert.equal(heldTree.styles[item.style].backgroundColor, 'color(srgb 0.113725 0.105882 0.117647 / 0.08)');
+    } else {
+      const item = heldTree.nodes.find(n => n.authored?.id === 'menu-rename');
+      assert.equal(item.interactionResolvedStyle.background, '#d8d3d8');
+      assert.equal(heldTree.nodes.filter(n => n.parent === item.key).length, 1); // Label only; no authored ripple layer.
+    }
+    const png = PNG.sync.read(readFileSync(held.screenshot.file));
+    const point = { x: 167, y: row.mode === 'reference' ? 253 : 254 };
+    const expectedColor = row.mode === 'reference' ? [205, 200, 204, 255] : [216, 211, 216, 255];
+    for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) {
+      const offset = ((point.y + dy) * png.width + point.x + dx) * 4;
+      assert.deepEqual([...png.data.subarray(offset, offset + 4)], expectedColor);
+    }
   }
 });
 

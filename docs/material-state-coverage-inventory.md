@@ -4,6 +4,21 @@
 
 ### Configured Menu bounds gap — October 8
 
+Retained item-held paint now distinguishes missing feedback from unequal
+composition: native first item requests8% hover plus a generated10% ripple
+at opacity1; candidate resolves flat#d8d3d8 and has only a label child,no item
+ripple node. Explicit5px screenshot sample at native(167,253)/candidate(167,254)
+is205,200,204 versus216,211,216 (RGBA alpha255); this is bounded interior
+evidence,not full edge/glyph/animation acceptance or independent anchor proof.
+Existing12/14-boundary PNG/tree receipts authenticate; focused
+menu-item-held-paint-inputs-20261008.log passes1/1. First divergence is authored
+state-layer/ripple composition. Preserve animation-support limitations and
+route general supported paint/ownership requirements,not another tuned color.
+Handoff now includes click dismissal,opening focus,ArrowDown and held-paint
+input differences with the exact single-context runtime boundary. Next move
+to remaining context/action applicability joins; these questions are settled
+for the observed cohort and should not be recaptured without drift.
+
 Navigation precondition gap closes with menu-actions-reset-20261008 capture:
 real outside click verifies both closed,then trigger verifies both reopened
 before ArrowDown. Same light1440x1000 DPR1 current checkpoint: native focuses
