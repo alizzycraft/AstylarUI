@@ -2,6 +2,35 @@
 
 ## Current evidence boundary — October 9
 
+### Divider inline-leaf alignContent applicability resolved, not global normalization
+
+For the exact24-member divider-above group recovered below, competing explanations
+were an effective alignment request versus an inactive computed/default field.
+All24 original rows assert both display=inline,type=span,text=Above,no reference
+descendants and no candidate direct children; candidate authored declarations=[]
+in every row. CSS Box Alignment Level3 section5.1 applies align-content to block,
+flex and grid containers,not ordinary inline leaf boxes:
+https://www.w3.org/TR/2026/WD-css-align-3-20261008/#align-content-property.
+These inputs therefore establish property inapplicability for this exact leaf
+population,not normal/stretch equivalence in an active layout context.
+
+Current core FlexService.isFlexContainer accepts only flex/inline-flex
+(src/app/services/dom/elements/flex.service.ts:40-48); FlexLayoutService's
+applyAlignContent returns unchanged lines for nowrap or at most one line
+(flex-layout.service.ts:72-80). These are current source checks,not a claim of
+whole historical/current implementation byte equality. The retained leaf has
+no child elements to distribute. No evidence supports a candidate-only authored
+alignment compensation or active flex-line divergence for this one property.
+
+Existing24-row assertion passed without recapture; original48 receipt hashes
+were authenticated in the preceding check. Keep original scalar values and
+classification intact during frozen export. Record this as bounded applicability
+justification to integrate at the existing classification boundary after the
+batch; do not globally equate normal and stretch,discard other scalar groups,
+or promote24 full cases. Other divider layout/paint/semantics/history/ownership
+obligations remain. Worker29800 was independently observed live at1097.94 CPU
+seconds; original log still has no terminal export result.
+
 ### Bounded exact membership recovered from original divider receipts
 
 The capped divider-above/alignContent group3655f82a… (canonical ordinal3142,
