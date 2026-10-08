@@ -192,6 +192,32 @@ test('configured overlay placement census distinguishes measured boxes from comp
       scope: 'Historical comparator observation coverage; defaults are not placement acceptance or missing-evidence counts' }));
   }
   assert.equal(measured, 174);
+  const retainedBytes = readFileSync('artifacts/material-parity/popup-matched-bounds-20261007.log');
+  assert.equal(createHash('sha256').update(retainedBytes).digest('hex'), 'd50667c3937889fac51c7758a3ceb1059b0b90a0dcba7d1b9c2bfa006306ee3a');
+  const retained = retainedBytes.toString().trim().split(/\r?\n/).map(line => JSON.parse(line));
+  const metadata = retained.pop();
+  assert.equal(metadata.reportSha256, createHash('sha256').update(bytes).digest('hex'));
+  assert.equal(metadata.runnerSha256, createHash('sha256').update(runner).digest('hex'));
+  assert.equal(metadata.acceptance, false); assert.equal(metadata.observations, 16);
+  assert.equal(retained.length, 16);
+  const joined = new Set();
+  for (const observation of retained) {
+    const key = materialCaseKey('interaction', { ...observation, state: 'open-hover-content' });
+    const matches = rows.filter(r => materialCaseKey('interaction', r) === key);
+    assert.equal(matches.length, 1); assert.ok(!joined.has(key)); joined.add(key);
+    assert.ok(['autocomplete', 'select'].includes(observation.family));
+    for (const side of ['reference', 'astylar']) {
+      assert.deepEqual(observation.receipts[side], matches[0].inputTrees[side]);
+      const receipt = observation.receipts[side];
+      assert.equal(createHash('sha256').update(readFileSync(receipt.file)).digest('hex'), receipt.sha256);
+      assert.ok(['x', 'y', 'width', 'height'].every(k => Number.isFinite(observation[side].popup[k])));
+    }
+  }
+  assert.equal(joined.size, 16);
+  t.diagnostic(JSON.stringify({ retainedPopupContexts: 16, configuredBoundary: 'open-hover-content',
+    families: ['autocomplete', 'select'], profiles: ['light', 'dark', 'contrast', 'custom'],
+    viewports: ['desktop-dpr1', 'desktop-dpr2'],
+    scope: 'Exact context and input-receipt join to bounds-only supplemental observation; not original screenshot registration, complete current-code applicability or other action boundaries' }));
 });
 
 test('snackbar captured timer methods reject late settlement and queued expiry after destruction', async t => {

@@ -28,10 +28,20 @@ scope,not262 failures: applicable popup geometry needs supplemental evidence
 joins. Closed/dismissed and mobile-flow default entries likewise must not be
 summed as missing proofs. All exact measured IDs remain in the existing test log.
 Focused1/1 passes1715.4014ms in configured-overlay-placement-census-geometry-20261008.log.
-Next prioritize retained select/autocomplete popup evidence and menu breakpoint/
-keyboard observations against exact configured contexts,then add only genuinely
-missing boxes. No capture,threshold,renderer,fixture or canonical changes; all
-whole-case closure statuses remain partial.
+Supplemental exact join now reuses immutable popup-matched-bounds-20261007.log
+(SHAd50667c3937889fac51c7758a3ceb1059b0b90a0dcba7d1b9c2bfa006306ee3a).
+Its16 rows match16 unique configured open-hover-content IDs: autocomplete/select,
+four profiles,desktop1440x1000 DPR1/2. Every paired tree receipt equals the full
+report receipt and rehashes; metadata binds the same report/runner and retains
+acceptance=false. Thus those16 contexts have supplemental finite popup boxes,
+not just the comparator default. This is a fresh bounds-only retained observation,
+not retrospective registration of original screenshots or full current-code
+acceptance. Do not transfer it to focus/activate/open,tablet/mobile flows or Menu.
+Focused exact-join1/1 passes2055.4402ms in
+configured-popup-supplemental-exact-join-20261008.log. Next join retained menu
+breakpoint/keyboard observations and current owner applicability before deciding
+which boxes actually need capture. No capture,threshold,renderer,fixture or
+canonical changes; all whole-case closure statuses remain partial.
 
 ### Disposed settlement rejection propagation — October 8
 
