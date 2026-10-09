@@ -2,6 +2,26 @@
 
 ## Current evidence boundary — October 9
 
+### Scope-corrected canonical independently accepted and compact import verified
+
+Independent cold session5183 terminates exit0 at3030328.9911ms. The same five-path
+launcher validates the audit, rechecks1205 files/89154859bytes with zero
+invalidations (two collectors,10 memory hits,zero disk hits), and confirms exact
+canonical equality. Cold log description-batch-scope-verified-cold-check-20261009.log
+SHA2561cbd4b1ba65556a5b197b9f1b83898683f879ed8755b50e87ae8ebff66e18d51.
+Accepted gzip57734896…/decoded a02ed396… now supersedes153/eb90958e for compact
+working queries; the historical package remains retained. Existing import exits0
+with155 source findings,8483 groups,39904 controls,389202 occurrences,zero
+unresolved scalar groups and72725068 compact bytes. Existing whole-index verify
+also exits0 with those counts. No unexplained input difference is normalized
+away: inputEquivalent=false, and all2311 cases remain partial.
+
+This closes the description-batch source/export reconciliation milestone only.
+No renderer, fixture, threshold or criterion changed. Final browser/harness gates,
+exact case/current-validity closure and missing actual-theme applicability remain.
+Next capture only the demonstrated divider theme/context evidence gap through
+existing provenance/CDP mechanisms; do not rerun settled raw receipt assertions.
+
 ### Divider original caller recovery exhausted in retained source history
 
 Read-only `git log --all -S 'divider-responsive-ax-20261006.log' -- scripts
