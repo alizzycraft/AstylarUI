@@ -861,13 +861,25 @@ test('public divider typography reduction observes equal paragraph span inputs a
             const flipped=new Uint8Array(pixels.length), stride=row.backingSize.width*4;
             for(let y=0;y<row.backingSize.height;y++)flipped.set(pixels.slice(y*stride,(y+1)*stride),
               (row.backingSize.height-1-y)*stride);
-            let directDifferences=0,flippedDifferences=0;
+            let directDifferences=0,flippedDifferences=0,maximumRawChannelDifference=0,
+              alphaDifferences=0,maximumAlphaDifference=0,maximumCompositedDifference=0;
             for(let p=0;p<pixels.length;p+=4) {
               if([0,1,2,3].some(c=>gpuPixels[p+c]!==pixels[p+c]))directDifferences++;
               if([0,1,2,3].some(c=>gpuPixels[p+c]!==flipped[p+c]))flippedDifferences++;
+              maximumRawChannelDifference=Math.max(maximumRawChannelDifference,
+                ...[0,1,2,3].map(c=>Math.abs(gpuPixels[p+c]-flipped[p+c])));
+              const alphaDelta=Math.abs(gpuPixels[p+3]-flipped[p+3]);
+              if(alphaDelta)alphaDifferences++;
+              maximumAlphaDifference=Math.max(maximumAlphaDifference,alphaDelta);
+              for(let c=0;c<3;c++) {
+                const composite=(bytes)=>Math.round(bytes[p+c]*bytes[p+3]/255+240*(1-bytes[p+3]/255));
+                maximumCompositedDifference=Math.max(maximumCompositedDifference,
+                  Math.abs(composite(gpuPixels)-composite(flipped)));
+              }
             }
             return {...row,pixelsSha256:hash(Buffer.from(pixels)),gpuPixelsSha256:hash(Buffer.from(gpuPixels)),
-              gpuReadback:{directDifferences,flippedDifferences}};
+              gpuReadback:{directDifferences,flippedDifferences,maximumRawChannelDifference,
+                alphaDifferences,maximumAlphaDifference,maximumCompositedDifference}};
           });
           let transparentDifference = 0, backingDifference = 0;
           for (let i = 0; i < image.data.length; i += 4) {
@@ -921,8 +933,8 @@ test('public divider typography reduction observes equal paragraph span inputs a
           assert.equal(originResiduals.reduce((sum, row) => sum + row.differingPixels, 0), mappedDifference);
           if (mode !== 'reference') {
             assert.equal(data.runtimeText.length, 4);
-            const samplingModels = [];
-            for (const origin of ['measured', 'authored']) {
+            const samplingModels = [], gpuSamplingModels = [];
+            for (const pixelSource of ['canvas','gpu-readback']) for (const origin of ['measured', 'authored']) {
               const prediction = new Uint8Array(image.data.length);
               for (let p = 0; p < prediction.length; p += 4) prediction.set([240,240,240,255], p);
               for (const texture of data.runtimeText) {
@@ -935,8 +947,13 @@ test('public divider typography reduction observes equal paragraph span inputs a
                   if (u < 0 || u >= 1 || v < 0 || v >= 1) continue;
                   const texel = (Math.floor(v * texture.backingSize.height) * texture.backingSize.width +
                     Math.floor(u * texture.backingSize.width)) * 4;
-                  const alpha = texture.pixels[texel + 3] / 255, pixel = (y * image.width + x) * 4;
-                  for (let c = 0; c < 3; c++) prediction[pixel + c] = Math.round(texture.pixels[texel + c] * alpha + 240 * (1 - alpha));
+                  // readPixels rows are bottom-up; normalize only this diagnostic model.
+                  const sourceTexel=pixelSource==='canvas'?texel:
+                    ((texture.backingSize.height-1-Math.floor(v*texture.backingSize.height))*texture.backingSize.width+
+                      Math.floor(u*texture.backingSize.width))*4;
+                  const bytes=pixelSource==='canvas'?texture.pixels:texture.gpuPixels;
+                  const alpha = bytes[sourceTexel + 3] / 255, pixel = (y * image.width + x) * 4;
+                  for (let c = 0; c < 3; c++) prediction[pixel + c] = Math.round(bytes[sourceTexel + c] * alpha + 240 * (1 - alpha));
                 }
               }
               let different = 0, greaterThanTwo = 0, maximum = 0;
@@ -946,10 +963,11 @@ test('public divider typography reduction observes equal paragraph span inputs a
                 if (magnitude > 2) greaterThanTwo++;
                 maximum = Math.max(maximum, magnitude);
               }
-              samplingModels.push({ origin, differingPixels: different, greaterThanTwo, maximumChannelDifference: maximum,
+              (pixelSource==='canvas'?samplingModels:gpuSamplingModels).push({ origin, differingPixels: different, greaterThanTwo, maximumChannelDifference: maximum,
                 predictionSha256: hash(prediction) });
             }
             pair[mode].samplingModels = samplingModels;
+            pair[mode].gpuSamplingModels = gpuSamplingModels;
             for (let i = 0; i < 4; i++) {
               const observed = data.runtimeText.find(row => row.id === `text-${i}`), expected = mappedControl.rows[i];
               assert.deepEqual(observed.logicalSize, { width: expected.width, height: expected.height });

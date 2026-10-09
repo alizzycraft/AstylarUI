@@ -2,6 +2,35 @@
 
 ## Current evidence boundary — October 9
 
+### GPU upload magnitude does not explain the large DPR2 sampling residual
+
+Specific unresolved question from the preceding intervention: are the observed
+canvas/GPU differences large enough to explain the172 DPR2 errors above2 channels?
+Existing public typography probe now quantifies raw,alpha and gray240-composited
+transfer differences and runs the same nearest model with actual GPU readback.
+Readback rows are reversed only in this diagnostic model; authored inputs and
+renderer geometry,materials,textures and standard reference capture are unchanged.
+
+All eight text observations per context pair have maximum raw/composited channel
+difference1,zero alpha differences. With GPU bytes,DPR1 normal residuals57→23
+but13 above2 remain; no-MSAA authored-origin model34→0 and matches every pixel.
+Measured-origin no-MSAA retains3/max123,confirming float-origin interpretation
+matters. DPR2 standard306→178 and no-MSAA304→176; both retain172 above2/max213.
+Thus observed upload/readback quantization explains small residuals,not the large
+DPR2 interior discrepancy. This narrows the remaining boundary to UV/texel
+selection or model/raster precision; it does not prove which is responsible or
+establish equivalent native text paint. Next inspect actual UV interpolation at
+the retained fractional-row boundaries rather than repeat upload or MSAA tests.
+
+Chrome154.0.8037.58,DPR1/2,six pages,2515 dependency receipts and six owning-method
+bindings. Focused1/1 passes52238.41ms,total53636.6712ms; acceptance=false retained.
+Log artifacts/material-parity/divider-text-gpu-transfer-magnitude-20261009.log
+SHAad82010d62612ba2c1b20db1b54adfb7c83dc34c17cea7bfd19ccbb16873d307.
+Syntax and exact-path diff checks pass. No scratch capture,renderer/fixture change,
+threshold change or case closure. Existing177-proof producer and acceptedb28e8926
+canonical remain unchanged; current-suite fingerprint and standalone extension
+still require coherent reconciliation before publication/current full acceptance.
+
 ### Text sampling intervention separates MSAA from the DPR2 interior residual
 
 Remaining paint question: do the bounded57/306 CPU-model residuals originate in
