@@ -2,6 +2,30 @@
 
 ## Current evidence boundary — October 9
 
+### Divider registration canonical publication verified
+
+The coherent export and independent cold check both completed with exit0.
+Canonical package SHA256 is
+`b28e89262ba726c31ecd12ca8b81e5094fb4c6ba862e55356f6cd3c71ed1b3d6`;
+decoded SHA256 is
+`68684920b2d93096d25b4a97193d6a24bc8f05f31b0cf592202c162c795528e0`.
+The cold check authenticated1,205 files/89,154,859 bytes with two collectors,
+ten memory hits,zero disk hits and zero invalidations; terminal elapsed
+3,237,007.7199ms. Original logs remain at
+`artifacts/material-parity/divider-cohort-integration-export-20261009.log`
+(SHA256 dacdf8b46f241ba7be1a10dac49e407db0c587d49187a18eaa7c51ed2a2b00ad)
+and `artifacts/material-parity/divider-cohort-integration-cold-check-20261009.log`
+(SHA256 0b4baf60002381bbcce647525dee4c637200d861e74d02ae4fc6d9f3870c3e9d).
+Compact import and whole-index verification both exit0:8,483 scalar groups,
+155 source findings,39,904 controls,389,202 occurrences,zero unresolved scalar
+attributions. Index SHA2561fa67793b11c4fa7499d27e3b98ebb637482ace9d68b581e9451ef21de3bb7e6.
+All436 static/1,875 interaction cases remain; input equivalence remains false.
+This supersedes publication-pending wording below only for this registration
+batch,not its explicit accessibility/paint/lifetime limitations or case closure.
+Next:complete exact case input/paint/history/ownership and current-validity joins,
+prioritizing shared overlay/scrollbar/text boundaries before final full gates.
+No renderer,fixture,reference or acceptance criteria changed.
+
 ### Divider bounded proofs now registered for canonical consumption
 
 The existing producer previously fingerprinted the shared probe but referenced
