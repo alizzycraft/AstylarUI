@@ -2,6 +2,40 @@
 
 ## Current evidence boundary — October 9
 
+### Divider closure gaps reconciled against later evidence,not historical pending text
+
+The older bounded obligation table below is chronological,not the current pending
+queue. Current exact scope remains24 configured cases/20 physical contexts.
+Failures and bounded uncertainties count as inspected outcomes; none is silently
+promoted to parity. The following supersedes stale missing-cohort statements.
+
+| Obligation | Current inspected boundary | Precise remaining question |
+| --- | --- | --- |
+| Membership,structure,history and authored layout/paint | All24 paired trees; complete node sequence,paragraph/separator order and classified absolute/border-to-background substitutions. Existing equal-input empty-block reduction demonstrates the302px/301px core used-height failure. | Join all applicable owner/style evidence to each exact case; do not reprove the settled empty-block cause or historical absolute authoring. |
+| Wrapping/width inputs | Current parser and width inheritance traced;20 fresh font-loaded registry contexts join all24 cases/48 corresponding owner records. Single literal words stay single-line under bounded width controls. | Fresh JIT dimensions do not recover historical paint-time texture constraints or certify complete AOT line boxes. |
+| Separator semantics | Actual-theme40 side observations/20 contexts cover all24 configured cases,including comparison panes; role/name/orientation/no children and description relations inspected. | Ancestor AX is only captured in the historical light desktop DPR1 pair. Duplicate main originates in current host/document authoring; broader live ancestor relationships are not captured. Do not recapture already covered separator targets. |
+| Replacement/disposal | Exact20 physical-context membership joins all24 cases; sampled replacement counts and final disposal inspected. | Initial/later font timing,remount and peer-surface lifetime remain distinct; sampled final cleanup is not all lifetime acceptance. Leaf image/media/plugin-animation races are inapplicable to this authored divider. |
+| Local text/separator paint | Retained crops/strips and equal-input public reductions preserve diagnosed input mismatch,failed diagnostics and bounded post-canvas sampling uncertainty. | Full clipping/antialiased-edge attribution and exact-case paint/source applicability are not certified by centroids or coarse screenshot passes. |
+| Current applicability and final gates | Library linker/wiring and mapped application source boundaries are now explicit; original styles/fonts derivation is separately retained. New proofs are registered,not canonically published. | Diagnostic source drift,missing historical runtime font-timing receipts and final current enforced rendering remain explicit. No full-case closure is claimed. |
+
+Specific font-source question answered by current owning code: src/lib/astylar.ts
+466–496 snapshots initial fontSet.ready,awaits it before initial render,attaches
+loadingdone and invalidates through the owned session. Handler exits after
+disposal and its rejection callback suppresses disposed-session reporting.
+Cleanup at813–815 removes the same listener. Current/installed/captured library
+applicability above covers this unchanged owner,apart from the unrelated inspector.
+Thus missing font listener/disposal guard is not the observed source explanation.
+This is source evidence,not execution of a delayed-font browser scenario.
+
+Existing owning test src/lib/astylar-isolation.spec.ts:206 already declares
+initial settlement,later revision/texture replacement and listener cleanup checks;
+it was inspected but not executed here. The previous memory-cancelled Angular
+build is not converted into a pass. Capture runner312/751 awaits fonts.ready;
+showcase waitForSettled also waits the surface across RAFs. These waits do not
+constitute retained per-face loading/timing receipts for the original raster.
+Next choose a missing paint/lifetime boundary from this current table,not a stale
+cohort gap. No new audit framework,recapture,renderer change or acceptance change.
+
 ### Applicability proof batch registered; canonical publication still pending
 
 Existing focusedProofInventory now registers the four newer date-clock,
