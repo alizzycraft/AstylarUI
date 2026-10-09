@@ -141,6 +141,52 @@ test('packed layout inspection browser proofs authenticate the complete current 
   assert.deepEqual(ts.getPreEmitDiagnostics(program), []);
 });
 
+test('checkpoint application source census confines drift to the documented serializer diagnostic', () => {
+  const raw = readFileSync('artifacts/material-parity/current-full-20261005/checkpoint/manifest.json');
+  assert.equal(hash(raw), '7ae2cba1739353661a0c84e28ef70819157311cc824fd00ae94ced29fadeb352');
+  const manifest = JSON.parse(raw);
+  const captured = new Map();
+  const contributingMaps = [];
+  for (const receipt of manifest.provenance.browserFiles.filter(row => row.file.endsWith('.js.map'))) {
+    const bytes = readFileSync(path.join('examples/material-showcase/dist/material-showcase/browser', receipt.file));
+    assert.equal(hash(bytes), receipt.sha256, receipt.file);
+    const map = JSON.parse(bytes);
+    let contributes = false;
+    for (const [index, file] of map.sources.entries()) {
+      if (!file.startsWith('src/')) continue;
+      contributes = true;
+      const content = map.sourcesContent[index];
+      assert.equal(typeof content, 'string');
+      if (captured.has(file)) assert.equal(hash(captured.get(file)), hash(content), file);
+      captured.set(file, content);
+    }
+    if (contributes) contributingMaps.push(receipt.file);
+  }
+  assert.deepEqual(contributingMaps, ['chunk-625ZTKCG.js.map', 'chunk-7SL66K3U.js.map',
+    'chunk-DV4XS33V.js.map', 'chunk-JPEJK334.js.map', 'chunk-YSOHGT2J.js.map', 'main.js.map']);
+  assert.deepEqual([...captured.keys()].sort(), ['src/app/app.config.ts', 'src/app/app.html',
+    'src/app/app.routes.ts', 'src/app/app.ts', 'src/app/astylar.component.ts',
+    'src/app/catalog.ts', 'src/app/comparison.component.ts', 'src/app/frame-protocol.ts',
+    'src/app/frame-sync.ts', 'src/app/material-assets.ts', 'src/app/material-input-evidence.ts',
+    'src/app/material-plugin/material-ripple.controller.ts',
+    'src/app/material-plugin/material-showcase.plugin.ts', 'src/app/reference.component.ts',
+    'src/app/showcase.store.ts', 'src/app/theme.ts', 'src/main.ts'].sort());
+  const lf = text => text.replace(/\r\n/g, '\n');
+  let equal = 0;
+  for (const [file, content] of captured) {
+    const current = readFileSync(path.join('examples/material-showcase', file), 'utf8');
+    if (file === 'src/app/material-input-evidence.ts') {
+      assert.equal(hash(content), 'de0efefd73f69cbd62d2fc902c43c0fb48db59a07ee718b6baa92936fe56d357');
+      assert.equal(hash(lf(current)), '521940b6dd4f97776bf17b2315bc4e726dc152c3cdb4aceb759603408db3e614');
+    } else {
+      assert.equal(hash(lf(current)), hash(lf(content)), file);
+      equal++;
+    }
+  }
+  assert.equal(equal, 16);
+  // JS source-map scope only; not external CSS/assets or current browser acceptance.
+});
+
 test('current Material serializer preserves detached layout observations without filling missing owners', () => {
   const file = 'examples/material-showcase/src/app/material-input-evidence.ts';
   const source = readFileSync(file, 'utf8');

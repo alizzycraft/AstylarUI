@@ -2,6 +2,38 @@
 
 ## Current evidence boundary — October 9
 
+### Checkpoint application JS-source census closes host/plugin/theme drift question
+
+Existing input-boundary suite now authenticates current-full-20261005 checkpoint
+manifestSHA7ae2cba1739353661a0c84e28ef70819157311cc824fd00ae94ced29fadeb352,
+every declared .js.map receipt,and the exact17 unique application source inventory
+from six contributing maps. Complete LF-normalized current/captured source agrees
+for16: comparison/reference/Astylar host components,frame protocol/sync,assets
+declarations,ripple controller,Material plugin,catalog,theme,store,routes,config,
+app TS/HTML and main. Only material-input-evidence.ts differs; both exact hashes
+and the preceding authenticated diagnostic-only transition remain explicit.
+Focused1/1 passes906.8624ms,terminal2493.0886ms. Duplicate source identities must
+have identical raw bytes; no case/component names are filtered from the inventory.
+
+Initial unrestricted map-directory census rejected duplicate astylar.component.ts
+content and is not accepted evidence: it mixed source representations outside
+the checkpoint JS-map population. Initial component/pre-diagnostic comparison
+also failed; its captured raw source contains mixed line endings and already
+includes camera/depth diagnostics. Normalizing both whole sources proves current
+host content unchanged,not a source rollback or removal of diagnostic code.
+The read-only c479097f commit diff describes that older additive change but its
+parent is not the current-full captured component. Retain this distinction.
+
+This answers application JS-source drift only. Source maps are declarations of
+captured inputs,not proof that every declared file executes or every runtime
+setting is unchanged. External/global CSS,asset bytes,font loading,served-bundle
+receipts,driver/launch/runtime and date-dependent states remain separate validity
+obligations. Canonical publication remains the prior accepted generation with
+newer standalone proofs pending integration; no configured case has full closure.
+Next reconcile those environment/paint dependencies against existing receipts,
+then map reusable evidence and remaining obligations to exact cases. Do not
+repeat the settled16-source equality census without changed dependencies.
+
 ### Complete captured library modules reproduce through the consumer Angular linker
 
 The preceding59 unequal installed/captured module projections are now explained
