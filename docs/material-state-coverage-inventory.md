@@ -2,6 +2,27 @@
 
 ## Current evidence boundary — October 9
 
+### Divider AX closure gap narrowed without recapture
+
+The consolidated semantics row below was stale: it omitted the registered
+responsive separator AX evidence. Exact log hash0504ec4a… and the unchanged
+owning assertion body establish eight tablet/mobile DPR1 contexts (four profiles,
+two sides:16 observations), not16 physical contexts. The older light desktop
+DPR1 pair is separately authenticated by b5e5b277…. Against the existing16-context
+profile/viewport/DPR applicability set, seven desktop contexts remain without
+this actual AX observation: dark/contrast/custom DPR1 and all four profiles DPR2.
+This narrows the evidence join, not full semantic or case closure.
+
+Direct current input-boundary-evidence replay fails its raw helper receipt:
+capture dca535342… versus current4a386f107…. No receipt was rewritten or bypassed
+as current acceptance. Git aee5b612c86d48c57db1218995decffd3784d867 supplies exact
+dca535342… historical helper bytes. Read-only execution of the original existing
+assertion callback with that one historical read passes every original AX and
+eight desktop ownership assertion; it is historical evidence conservation only.
+No new test/report/capture or producer input changed while export68478 runs.
+Next join actual theme/source applicability and missing desktop AX evidence at
+the owning boundary; retain the direct receipt failure as a current replay gap.
+
 ### Ordinary-tooltip scope corrected; known-invalid export cancelled
 
 Read-only process verification identified launcher30060 and its exact owning
@@ -5107,7 +5128,7 @@ this supersedes the earlier runtime/text-paint pending statement,not its evidenc
 | Local text-paint diagnostic |96 stored alignment crops authenticate;48 metric replays exact,40 SSIM diagnostic passes/8 contrast-DPR1 failures,48 sharpness diagnostic passes. divider-retained-text-raster-diagnostic-20261006.log SHA2fe6c3409840861b93d552ee1fa1acffaa3b7ff1d827fb609224dc2108b21852. Exact14.4px/normal paragraph/span public reduction now exposes unequal paint with equivalent inputs; six bounded owning methods match current source, actual texture RGBA matches modeled canvas at both DPRs, baselines/origins agree. Backing and integer-to-fractional texture mapping affect output; large Canvas2D-model residual is restricted to half-device origins. Actual pixel-center model leaves57/306 differences DPR1/2. Final bounded log divider-equal-typography-texel-ownership-20261006.log SHA36e89d3f2d83a1aed798b81a413a92dd21cdb771c68b96901e961cffc94226f9; preceding controls/hashes in the current handoff. | Not configured acceptance or diagnosis of all48 retained crops. Suspected post-canvas sampling/rasterization/transfer remains explicit; Canvas2D model is not native HTML truth. The older12px/.4px proof remains separate. New paint proof awaits coherent inventory registration/source reconciliation; no authored compensation is justified. |
 | Separator local paint |48 original full PNGs supply24 bounded strip diagnostics; unequal border/background inputs retained,18 diagnostic sharpness failures. | No equal-input border-paint diagnosis or full clipping/antialiasing inspection follows. |
 | Activation/editing/focus applicability | Passive paragraphs/separator contain no controls; paired Tab/structure inspection and current reference justify inapplicability. | No hypothetical clickable divider states required. |
-| Semantics |24 configured separator target observations match; omitted horizontal orientation justified by default semantics. Current-checkpoint light desktop DPR1 actual partial AX exposes unignored separator/empty name/horizontal orientation/no children identically; divider-actual-ax-20261006.log SHAb5e5b2778f8dc7fc2ade31463312af46e2043a8d45d73bded90923b6e922fc7c. | Other profile AX applicability and complete accessibility relationships remain; this is not all-case semantic certification. Existing frozen helper was reused unchanged and authenticated served files before launch. Standalone proof registration remains a later coherent batch. |
+| Semantics |24 configured separator target observations match; omitted horizontal orientation justified by default semantics. Actual partial AX agrees in the light desktop DPR1 pair (divider-actual-ax-20261006.log,b5e5b277…) and eight tablet/mobile DPR1 contexts across four profiles (divider-responsive-ax-20261006.log,0504ec4a…;16 observations). Responsive proof is registered; historical original assertions replay with exact captured helper bytes. | Actual AX observations remain missing for three other desktop DPR1 profiles and all four desktop DPR2 profiles; complete accessibility relationships, actual-theme/current-source applicability and current replay remain distinct. Direct current proof fails helper receipt dca535342… versus4a386f107…; do not waive it or describe historical replay as current certification. |
 | Ownership/disposal | Original8 configured inspect rows contain one snapshot only,not plateau evidence. Separate current-checkpoint desktop four-profile/DPR1/2 public-update probe now measures32 idle snapshots across three updates: live=tracked17/16/4,cache4,no unbound materials;8 disposals clear scene/cache/plugins and dispose surface/scene/engine. divider-update-disposal-20261006.log SHA5260c2abddc5b4d3d0a3ee87bcaca765b8e969841e31df5e9ee1851367c26b51; unchanged helper source and exact results replay verified. | Ordinary replacement/disposal inspected for these8 configurations,not mobile/tablet,late completion,remount or complete surface-lifetime acceptance. Original single-snapshot gate remains insufficient; standalone proof registration awaits the frozen canonical batch. |
 
 No complete divider case closure is certified. The bounded equal-input paint
