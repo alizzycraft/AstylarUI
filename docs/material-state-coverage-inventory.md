@@ -2,6 +2,52 @@
 
 ## Current evidence boundary — October 9
 
+### Sampler evidence registration and historical suite conservation reconciled
+
+Existing public divider proof description now distinguishes the demonstrated
+native paint failure from the resolved no-MSAA CPU-model residual. Five immutable
+trace/MSAA/upload/UV/sampler logs join the existing source-fingerprint inventory;
+proof count remains177. Producer LF-SHA
+91b43e2052c8b7dc17feafac044c86dfa03bb1008c837a4c0aab1da07f28e7bb.
+Existing restoration reverses only this one exact description/five paths,proves
+complete preceding971846ca snapshot,and preserves earlier full-source reversals.
+No policy,finding classification,case membership or acceptance threshold changed.
+
+Original October7 texel trace now reads its actual complete Git source96be6b7c
+with originald07df06e file andad1905a8 callback hashes unchanged,rather than
+pretending the extended current callback generated that trace. Every original
+assertion/2515 dependency receipts remains checked. The same existing replay
+also authenticates the new exact-sampler log,its2515 receipts,both DPR outcomes,
+equal authored sites,shader hashes,untouched native failures and a forged-result
+rejection. Focused1/1 passes3599.5194ms,total7115.5692ms in
+divider-sampler-historical-trace-reconciliation-20261009.log
+SHA6c0d5874765b3ad4767458290caadf2aa285fee35ff850976e206997526576e8.
+Producer/predecessor/policy1/1 passes3074.4108ms,total3577.1562ms in
+divider-sampler-producer-conservation-20261009.log
+SHAb15560fab2f8756921012b798d781d6b9c874a59563f66f7370c2363d2fe526f.
+
+Coherent legacy checks exposed older unreconciled five-finding helper,seven-path
+Menu extension and Git-pinned extraction read boundaries. Existing migration
+mechanism now authenticates these exact extensions before comparing every
+original statement; it does not replace the original suite hash. Root-style
+replay similarly uses existing description-policy conservation,removes only
+three named153→150 entries,proves complete150-policy hashf062d9e8,then runs the
+original150/149/148/145/132 conservation. Current155 findings stay intact.
+Complete existing migration suite3/3 passes82523.4145ms,including original root
+receipt mutation checks and added helper/Menu count rejection controls.
+Log divider-sampler-root-and-legacy-conservation-20261009.log under
+artifacts/material-parity SHAe59a4c5df9bb77dc85cbc4c9c4ea0f2b7815715fb9a4ef3c1e3d1e11315ed579.
+Earlier failed integration logs remain retained;
+they are not renderer failures or passing full gates. Separate existing
+pre-passive population/mutation test1/1 passes399.7621ms,total2432.272ms.
+
+Named five-path export dry run passes; full export was not launched with observed
+freephysical795104KiB/D:free1982382080bytes. This is not collector validation.
+Accepted canonicalb28e8926 and compact pointer remain unchanged. Publication,
+independent cold verification,compact import and final full gates remain pending.
+All2311 cases stay partial. Next choose exact-case obligation closure or coherent
+publication when resources permit; do not repeat the settled sampler investigation.
+
 ### Actual texture-sampler addresses close the bounded DPR2 model residual question
 
 Question: do the172 large no-MSAA DPR2 CPU-model residuals demonstrate an

@@ -9,6 +9,25 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 // conservation. This does not substitute old bytes in current production.
 export function restoreLayoutDiagnosticRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if(current.includes('GPU-validated address texture reconstructs untouched no-MSAA paint exactly')) {
+    assert.equal(hash(current),'91b43e2052c8b7dc17feafac044c86dfa03bb1008c837a4c0aab1da07f28e7bb',
+      'exact complete sampler-attribution registration snapshot');
+    const updated='Public14.4px normal paragraph/span reduction retains native paint counterexamples at DPR1/2. Six bounded owners and2515 dependencies authenticate; GPU upload changes channels by at most1 with equal alpha. Standard/no-MSAA captures preserve inputs. GPU-validated address texture reconstructs untouched no-MSAA paint exactly at both DPRs:172 large DPR2 CPU-model residuals are not an additional demonstrated GPU defect. Historical trace remains separately authenticated. Not full divider flow,standard-MSAA reconstruction,native parity or case acceptance.';
+    const previous='Public14.4px normal paragraph/span reduction retains a paint counterexample at DPR1/2. Six bounded owners match current source; actual texture RGBA and baselines agree with controls. Backing and sampling models isolate post-canvas uncertainty,not full divider flow,confirmed GPU cause or case acceptance.';
+    assert.equal(current.split(updated).length,2);current=current.replace(updated,previous);
+    for(const file of [
+      'artifacts/material-parity/divider-texel-boundary-trace-20261007.log',
+      'artifacts/material-parity/divider-text-msaa-gpu-readback-complete-20261009.log',
+      'artifacts/material-parity/divider-text-gpu-transfer-magnitude-20261009.log',
+      'artifacts/material-parity/divider-text-gpu-uv-boundary-20261009.log',
+      'artifacts/material-parity/divider-text-shader-address-reconstruction-20261009.log',
+    ]) {
+      const line=`    '${file}',\n`;
+      assert.equal(current.split(line).length,2);current=current.replace(line,'');
+    }
+    assert.equal(hash(current),'971846cae1d9cb16b1936dc432d7218cad9f29ac0bcc4c5f5d2dca599a2a4f89',
+      'complete preceding registration and historical uncertainty conserved');
+  }
   if (current.includes('public delayed font lifetime remount and peer boundary')) {
     assert.equal(hash(current),'971846cae1d9cb16b1936dc432d7218cad9f29ac0bcc4c5f5d2dca599a2a4f89',
       'exact complete lifetime and applicability registration snapshot');

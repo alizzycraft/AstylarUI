@@ -29,10 +29,13 @@ test('layout diagnostic registration preserves complete predecessor and unchange
     readFileSync, path, createHash);
   assert.equal(proofs.length, 177); assert.ok(proofs.every(row => row.status !== 'missing'));
   assert.ok(fingerprints.some(row => row.file.endsWith('divider-fresh-retained-layout-20261009.jsonl')));
+  assert.ok(fingerprints.some(row => row.file.endsWith('divider-text-shader-address-reconstruction-20261009.log')));
   for (const changed of [current.replace('sourceFindings,', 'sourceFindings: [],'),
     current.replace('Authenticates20 fresh JIT component contexts', 'Authenticates21 fresh JIT component contexts'),
     current.replace('Not historical texture dimensions', 'Historical texture dimensions'),
-    current.replace('divider-host-context-receipted-20261009.log', 'unknown-host.log')])
+    current.replace('divider-host-context-receipted-20261009.log', 'unknown-host.log'),
+    current.replace('not an additional demonstrated GPU defect', 'confirmed GPU defect'),
+    current.replace('divider-text-shader-address-reconstruction-20261009.log', 'unknown-sampler.log')])
     assert.throws(() => restoreLayoutDiagnosticRegistration(changed));
 });
 

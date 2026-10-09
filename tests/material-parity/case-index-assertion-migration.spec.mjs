@@ -37,6 +37,7 @@ test('entire legacy suite conserves statements outside nine receipt checks and t
     'retained disabled labels and selected snapshots preserve actual authored state coverage',
     'retained table and list AX cohorts preserve bounded equality and structural differences',
     'retained bridge and CSS boundary modules bind complete captured installed and current emit bytes',
+    'field popup observation registration preserves complete predecessor producer',
     'retained extended keyboard cohorts replay original runtime tails and source preambles',
     'configured enabled keyboard evidence joins forty exact focus contexts without changing original assertions',
     'disabled radio registration preserves the complete finding and producer predecessors',
@@ -55,6 +56,7 @@ test('entire legacy suite conserves statements outside nine receipt checks and t
     'passive proof registration conserves complete predecessor production source and inventory',
     'popup proof batch adds four registrations without changing predecessor inventory',
     'recent public and popup proofs join existing inventories without changing predecessor entries',
+    'pre-passive replay reverses only named later registrations and rejects predecessor drift',
     'retained progress paint binds plugin geometry and unequal track inputs',
     'retained compact empty and filled inputs bind authored inset before projection',
     'retained keyboard profiles replay original assertions and bind the Escape-only handler',
@@ -91,6 +93,8 @@ test('root initial applicability authenticates every receipt and rejects unrelat
 });
 test('migration proof rejects unrelated assertion changes, missing checks and wrong index identity', () => {
   for (const changed of [
+    current.replace('assert.equal(latestRegistered.length, 155)', 'assert.equal(latestRegistered.length, 154)'),
+    current.replace('audit.sourceFingerprints.length, 549', 'audit.sourceFingerprints.length, 548'),
     current.replace('currentRegistered.length, 150', 'currentRegistered.length, 149'),
     current.replace('const registered = currentRegistered.slice(0, -2)', 'const registered = currentRegistered.slice(0, -3)'),
     current.replace('actualSourceFingerprints.length, 542', 'actualSourceFingerprints.length, 541'),

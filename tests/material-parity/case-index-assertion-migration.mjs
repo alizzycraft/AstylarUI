@@ -22,6 +22,21 @@ export function restoreInventoryAssertion(source) {
       source = source.replace(adapter, `  const ${name} = readFileSync(producerFile, 'utf8').replaceAll('\\r\\n', '\\n');`);
     }
   }
+  if(source.includes('const actualSourceFingerprints = audit.sourceFingerprints.slice(0, -7);')) {
+    const menuAst=parse(source);
+    const target=tests(menuAst).find(n=>n.expression.arguments[0]?.text===
+      'records source fingerprints and actual visual acceptance fields');
+    const statements=[...target.expression.arguments[1].body.statements];
+    const first=statements.findIndex(n=>n.getText(menuAst).startsWith('const menuFiles'));
+    const last=statements.findIndex(n=>n.getText(menuAst).startsWith('assert.equal(actualSourceFingerprints.length'));
+    assert.equal(last-first,7);
+    const block=statements.slice(first,last);
+    assert.equal(createHash('sha256').update(block.map(n=>printer.printNode(ts.EmitHint.Unspecified,n,menuAst))
+      .join('\n')).digest('hex'),'218618ecc18afb594c65006bab05ef2face0e38d47a78d467ec6e10e16b226a4',
+      'exact seven-path Menu inventory extension changed');
+    source=source.slice(0,block[0].getStart(menuAst))+'const actualSourceFingerprints = audit.sourceFingerprints;'+
+      source.slice(block.at(-1).end);
+  }
   if (source.includes('const actualSourceFingerprints = audit.sourceFingerprints;')) {
     const liveAst = parse(source);
     const target = tests(liveAst).filter(n => n.expression.arguments[0]?.text === 'records source fingerprints and actual visual acceptance fields');
@@ -70,6 +85,9 @@ export function restoreInventoryAssertion(source) {
       // The later snapshot adds exact scalar-function extraction and standalone
       // proof conservation checks; it does not remove predecessor membership.
       [65, '1d5b498cf73039a3507d4232cdd40ac6647d4d357aea2f56ac0ccb636ed499ca'],
+      // The later source read uses the authenticated Git extraction snapshot
+      // and complete current-source conservation; no original checks removed.
+      [69, '8248ac8f6c094bcadda52bf30af1390790623cb2c6df895b522bc130828eb9de'],
     ]);
     assert.ok(extensionDigests.has(extensionLength), 'inventory extension statement coverage changed');
     const extension = statements.slice(extensionStart, extensionEnd + 1);
@@ -183,8 +201,19 @@ export function verifyCaseIndexAssertionMigration(previous, current) {
     const helpers = definitionAst.statements.filter(n => ts.isFunctionDeclaration(n)
       && n.name?.text === 'conservedPrePassiveDefinitions');
     assert.equal(helpers.length, 1, 'missing or repeated exact definition conservation helper');
-    assert.equal(createHash('sha256').update(printer.printNode(ts.EmitHint.Unspecified,
-      helpers[0], definitionAst)).digest('hex'),
+    let helper=printer.printNode(ts.EmitHint.Unspecified,helpers[0],definitionAst);
+    if(helper.includes('const latestRegistered')) {
+      assert.equal(createHash('sha256').update(helper).digest('hex'),
+        '5e4d01df6485bca44da88331bbc313c9348869251752d930ef6a89842cce8c54',
+        'exact five-later-finding helper snapshot changed');
+      // Reverse only the authenticated first five statements/parameter added
+      // for later registrations; retain the original complete helper assertion.
+      const restored=parse("async function conservedPrePassiveDefinitions() {\n"+
+        "const { sourceAuditDefinitions: currentRegistered } = await import('./input-equivalence-policy.mjs');\n"+
+        helpers[0].body.statements.slice(5).map(n=>n.getText(definitionAst)).join('\n')+"\n}");
+      helper=printer.printNode(ts.EmitHint.Unspecified,restored.statements[0],restored);
+    }
+    assert.equal(createHash('sha256').update(helper).digest('hex'),
     '76bbdaa4e7473e48301df37eb2996c4d1c3f961e7347a32ced9ed39904155fed',
     'definition conservation helper changed');
     // Its six callers belong to the additive focused tests removed below.

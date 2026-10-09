@@ -8,6 +8,7 @@ import ts from 'typescript';
 import { verifyCaseIndexAssertionMigration } from '../tests/material-parity/case-index-assertion-migration.mjs';
 import { verifyOverlayMappingAuditProjection } from '../tests/material-parity/historical-audit-module-source.mjs';
 import { readGapSurveySource } from '../tests/material-parity/gap-survey-source-replay.mjs';
+import { restoreDescriptionPolicyRegistration } from '../tests/material-parity/position-composition-producer-transition.mjs';
 
 // Authenticate source applicability without replacing historical receipts.
 // The CLI additionally replays the original complete root index and report tests.
@@ -71,6 +72,24 @@ const stagePolicy = execFileSync('git', ['show', `aee5b612:${policyFile}`],
 assert.equal(hash(stagePolicy.replaceAll('\r\n', '\n')),
   '31da603b0edb345c1a0db556d39814b796131cc588b7b9d94628b4e25d2d7024');
 let livePolicy = readSource(policyFile).toString().replaceAll('\r\n', '\n');
+livePolicy=restoreDescriptionPolicyRegistration(livePolicy);
+if(livePolicy.includes("id: 'fixture-menu-item-dismissal-focus-navigation-and-typeahead-omitted'")) {
+  assert.equal(hash(livePolicy),'6d60a7f454e8eeaf7ed068bcbfe93f37bcb0cba3f97a5c8a1c816cbd32fc045a');
+  const laterAst=parse(livePolicy);
+  const entries=laterAst.statements.find(n=>ts.isVariableStatement(n)&&
+    n.declarationList.declarations[0].name.text==='sourceAuditDefinitions')
+    .declarationList.declarations[0].initializer.arguments[0].elements;
+  assert.equal(entries.length,153);
+  const ids=['core-engine-antialias-option-overridden-by-hardcoded-argument',
+    'core-selected-caret-blink-ignores-noncollapsed-selection',
+    'fixture-menu-item-dismissal-focus-navigation-and-typeahead-omitted'];
+  const additions=entries.filter(n=>ids.includes(n.arguments[0].properties.find(p=>p.name.text==='id').initializer.text));
+  assert.deepEqual(additions.map(n=>entries.indexOf(n)),[144,145,152]);
+  for(const node of additions.sort((a,b)=>b.getStart(laterAst)-a.getStart(laterAst)))
+    livePolicy=livePolicy.slice(0,node.getFullStart())+livePolicy.slice(node.end+1);
+  assert.equal(hash(livePolicy),'f062d9e82524cbdf0b1a7c1de44c9ca6508f2c2209477ad18f1f97791d8a6f5d',
+    'complete150 predecessor policy conserved before original root-style replay');
+}
 const disabledAst = parse(livePolicy);
 const disabledDefinitions = disabledAst.statements.find(n => ts.isVariableStatement(n)
   && n.declarationList.declarations[0].name.text === 'sourceAuditDefinitions')

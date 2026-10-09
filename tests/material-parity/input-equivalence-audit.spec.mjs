@@ -47,7 +47,10 @@ test('retained divider texel trace preserves edge and interior residual uncertai
   assert.equal(body.browser, '154.0.8037.58');
   assert.equal(body.inputs.length, 2515);
   for (const receipt of body.inputs) assert.equal(digest(readFileSync(receipt.file)), receipt.sha256, receipt.file);
-  const original = readFileSync('tests/material-parity/input-boundary-evidence.spec.mjs');
+  // Authenticate the complete source that produced this historical trace.
+  // New diagnostic extensions are not substituted for its original callback.
+  const original = execFileSync('git', ['show',
+    '96be6b7cd91cb4f9f31f1ef3bea723f7024060d3:tests/material-parity/input-boundary-evidence.spec.mjs'], { maxBuffer: 4_000_000 });
   assert.equal(digest(original), header.proofFileSha256);
   const ast = ts.createSourceFile('original.mjs', original.toString(), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   const callbacks = ast.statements.filter(n => ts.isExpressionStatement(n) && ts.isCallExpression(n.expression)
@@ -77,6 +80,36 @@ test('retained divider texel trace preserves edge and interior residual uncertai
   body.results.forEach(verify);
   const forged = structuredClone(body.results[1]); forged.astylar.samplingModels[0].unownedResidual = 1;
   assert.throws(() => verify(forged));
+  // New sampler evidence resolves only the post-upload no-MSAA model question;
+  // keep the original trace, native paint counterexample and acceptance false.
+  const samplerBytes = readFileSync('artifacts/material-parity/divider-text-shader-address-reconstruction-20261009.log');
+  assert.equal(digest(samplerBytes),'8a0f9f9b404b550d25ea91d81d67ee2f137ebf26e26dfc4401d9146f0b4fabdf');
+  const lines=samplerBytes.toString().split(/\r?\n/);
+  assert.ok(lines.includes('# pass 1'));assert.ok(lines.includes('# fail 0'));
+  const sampler=JSON.parse(lines.find(line=>line.startsWith('# {')).slice(2).replace(/\\#/g,'#'));
+  assert.equal(sampler.acceptance,false);assert.equal(sampler.browser,body.browser);
+  assert.equal(sampler.inputs.length,2515);
+  for(const receipt of sampler.inputs)assert.equal(digest(readFileSync(receipt.file)),receipt.sha256,receipt.file);
+  assert.deepEqual(sampler.results.map(row=>row.dpr),[1,2]);
+  const verifySampler=row=>{
+    const diagnostic=row['astylar-no-msaa'].shaderSamplerDiagnostic;
+    assert.equal(diagnostic.observedPixels,row.dpr===1?2862:11448);
+    assert.equal(diagnostic.outsideProjectedBounds,row.dpr===1?58:158);
+    assert.equal(diagnostic.outOfRangeFloors,0);
+    assert.equal(diagnostic.differingPixels,0);assert.equal(diagnostic.greaterThanTwo,0);
+    assert.equal(diagnostic.maximumChannelDifference,0);
+    assert.equal(row.astylar.differingPixels,row.dpr===1?1114:2964);
+    assert.equal(row['astylar-no-msaa'].gpuSamplingModels[1].greaterThanTwo,row.dpr===1?0:172);
+    assert.deepEqual(row.reference.site,row.astylar.site);
+    assert.deepEqual(row.astylar.site,row['astylar-no-msaa'].site);
+    assert.equal(diagnostic.shaders.length,1);
+    assert.equal(diagnostic.shaders[0].vertexSha256,'38544fd7c0cd73e1d0406ccf8de8ff2df7866f9f618f359f892c3f10bdf6fc57');
+    assert.equal(diagnostic.shaders[0].fragmentSha256,'1a4fd676a35172891b9d6d1a0a4229a05b83ccb3fba4468b2c7409411d06ce8b');
+  };
+  sampler.results.forEach(verifySampler);
+  const forgedSampler=structuredClone(sampler.results[1]);
+  forgedSampler['astylar-no-msaa'].shaderSamplerDiagnostic.differingPixels=1;
+  assert.throws(()=>verifySampler(forgedSampler));
   // This is bounded CPU-model residual evidence, not a confirmed GPU cause,
   // browser sampling truth, renderer acceptance, or permission to snap layout.
 });
