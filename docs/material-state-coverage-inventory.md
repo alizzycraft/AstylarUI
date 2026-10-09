@@ -2,6 +2,24 @@
 
 ## Current evidence boundary — October 9
 
+### Divider clipping gap isolated to outer-host evidence
+
+Competing explanations were explicit separator clipping,ancestor clipping,or
+missing observations. Read-only current-full report replay authenticates SHA256
+ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62 and all48
+tree receipts for24 cases. Every reference separator→demo→frame chain records
+overflowX/Y visible and clipPath none. Candidate separator→section→page chains
+omit these interaction-stage fields; existing initial-overflow classification
+supports only ordinary mapped owner requests,not ancestor or host behavior.
+Candidate synthetic root has no interaction style in these trees. Reference
+trees begin at frame and omit outer document/iframe ancestors. Therefore these
+records do not show explicit clipping on the captured reference chain,but do
+not prove no clipping at the host boundary or candidate runtime. No core
+clipping defect or equivalence is inferred from absence. The smallest remaining
+check is capture-time outer-host/ancestor clipping applicability in the existing
+capture infrastructure,not another separator scalar/default or AX replay.
+Keep current-runtime and local edge-paint acceptance separate.
+
 ### Divider painted-side input membership is complete,not missing inspection
 
 Specific closure question:does the separator border/background classification
