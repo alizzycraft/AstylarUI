@@ -241,6 +241,17 @@ test('divider retained wrapping ancestry distinguishes requests from missing lay
     const rawTree = readFileSync(receipt.file);
     assert.equal(hash(rawTree), receipt.sha256);
     const tree = JSON.parse(rawTree);
+    // This passive fixture has no media/control/plugin-rendered leaf to which
+    // an image/media load or Material renderer-animation race could belong.
+    const types = tree.nodes.map(node => side === 'reference' ? node.type : node.authored?.type);
+    assert.deepEqual(types, side === 'reference'
+      ? ['main', 'p', 'h1', 'section', 'p', 'span', 'mat-divider', 'p', 'span']
+      : [undefined, 'main', 'p', 'h1', 'section', 'p', 'span', 'div', 'p', 'span']);
+    for (const node of tree.nodes) {
+      const input = side === 'reference' ? node.attributes : node.authored;
+      for (const key of ['src', 'srcset', 'href', 'poster', 'autoplay', 'controls'])
+        assert.equal(input?.[key], undefined);
+    }
     for (const id of ['divider-above', 'divider-below']) {
       let node = tree.nodes.find(n => (n.authored?.id ?? n.attributes?.id) === id);
       assert.ok(node, id);

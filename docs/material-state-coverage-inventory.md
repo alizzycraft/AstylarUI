@@ -2,6 +2,26 @@
 
 ## Current evidence boundary — October 9
 
+### Divider leaf-specific lifecycle applicability bounded across exact cases
+
+The existing retained ancestry assertion now also checks the complete node-type
+sequence and media-source attributes in all48 authenticated trees/24 configured
+cases. Reference has main,p,h1,section,p,span,mat-divider,p,span; candidate has
+the inventory root followed by main,p,h1,section,p,span,div,p,span. Neither authors
+src/srcset/href/poster/autoplay/controls. Focused1/1 passes2427.9982ms. This is
+whole retained-tree evidence for absence of image/media/control/plugin-rendered
+leaves,not a claim that no shared font/background/surface async work exists.
+
+Current Material plugin contributions are namespaced showcase.material elements
+and properties; none of these retained divider tags selects a Material custom
+renderer. Therefore image/media-leaf loading and Material custom-renderer animation
+completion races are inapplicable to this exact authored divider example. Do not
+invent such leaves or repeat image-disposal probes as divider coverage. Core
+font/text work,update/disposal,remount and peer-surface isolation remain applicable
+with their existing bounded evidence/gaps. This narrows an applicability boundary,
+not the audit scope; configured cases remain partially inspected. Canonical
+dependency integration,current validity and final gates remain pending.
+
 ### Actual-dark mobile timepicker scroll applicability closed by owning test
 
 Corrected only ordinary-mode theme instrumentation in the existing mobile
