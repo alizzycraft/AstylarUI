@@ -2,6 +2,39 @@
 
 ## Current evidence boundary — October 9
 
+### Datepicker retained clock-sensitive population reconciled without recapture
+
+CSS/font applicability was already closed by October7/8 source,compiled-output
+and binary proofs below; no unchanged compilation/font-byte check was repeated.
+The next unresolved question was exact calendar-content membership,not whether
+unchanged live-Date helpers somehow make historical paint current.
+
+Existing input-boundary suite authenticates the complete ab42dbec report and all
+222 input-tree receipts for111 unique datepicker cases (12 static/99 interaction).
+Native mat-calendar presence and candidate datepicker-month presence agree in
+every case. Candidate month/year grids are mutually exclusive and exactly match
+that open population:33 month/day,8 year-view,70 closed final-tree observations.
+Exact open states are activate9 (includes short viewport),activate-leave8,
+open-secondary8,open-hover-content8,open8. Closed states are initial12;focus,
+hover,held,outside dismissal,canvas dismissal,disabled,error each8;mobile
+open-dismiss2. Focused1/1 passes1828.633ms,terminal3264.8764ms.
+
+This maps calendar-clock applicability to exact retained identities and receipt
+files,not just the earlier eight open-state samples. Month/day content uses live
+day/month/year; year-view range/selected year uses live year. Therefore these41
+open-content observations require an explicit historical clock boundary or
+current-state verification before raster reuse; eight year-view cases must not
+be called stale merely because today's day changed. The70 closed final trees
+do not contain that calendar content but are not certified current: dismissal
+actions can traverse date-sensitive intermediate states,other runtime/style/
+paint obligations remain,and no generic absence-of-timers claim is made.
+No claim that all111 cases fail or all70 closed cases pass follows.
+
+Next join this temporal boundary with existing per-case action receipts and
+remaining paint/state/lifetime obligations; retain exact historical failures.
+Canonical integration/current validity/final gates remain pending. No clock,
+renderer,fixture,threshold or configured scope changed; no full-case closure.
+
 ### Checkpoint application JS-source census closes host/plugin/theme drift question
 
 Existing input-boundary suite now authenticates current-full-20261005 checkpoint

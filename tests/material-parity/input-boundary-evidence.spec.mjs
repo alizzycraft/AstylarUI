@@ -141,6 +141,49 @@ test('packed layout inspection browser proofs authenticate the complete current 
   assert.deepEqual(ts.getPreEmitDiagnostics(program), []);
 });
 
+test('retained datepicker clock applicability distinguishes calendar content from closed final states', () => {
+  const raw = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
+  assert.equal(hash(raw), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const retained = JSON.parse(raw);
+  const cases = [...retained.results.map(row => ({ ...row, kind: 'static' })),
+    ...retained.interactions.map(row => ({ ...row, kind: 'interaction' }))]
+    .filter(row => row.family === 'datepicker');
+  assert.equal(cases.length, 111);
+  const identities = new Set(), groups = {}, views = { month: 0, years: 0, closed: 0 };
+  for (const row of cases) {
+    const identity = JSON.stringify([row.kind, row.family, row.profile, row.viewport, row.state ?? null]);
+    assert.equal(identities.has(identity), false);
+    identities.add(identity);
+    const trees = {};
+    for (const side of ['reference', 'astylar']) {
+      const receipt = row.inputTrees[side], bytes = readFileSync(receipt.file);
+      assert.equal(hash(bytes), receipt.sha256);
+      trees[side] = JSON.parse(bytes);
+    }
+    const nativeOpen = trees.reference.nodes.some(node => node.type === 'mat-calendar');
+    const candidateOpen = trees.astylar.nodes.some(node => node.authored?.id === 'datepicker-month');
+    assert.equal(nativeOpen, candidateOpen, identity);
+    const month = trees.astylar.nodes.some(node => node.authored?.id === 'datepicker-grid');
+    const years = trees.astylar.nodes.some(node => node.authored?.id === 'datepicker-year-grid');
+    assert.equal(Number(month) + Number(years), Number(candidateOpen), identity);
+    views[month ? 'month' : years ? 'years' : 'closed']++;
+    const group = `${row.kind}/${row.state ?? 'initial'}/${candidateOpen}`;
+    groups[group] = (groups[group] ?? 0) + 1;
+  }
+  assert.deepEqual(views, { month: 33, years: 8, closed: 70 });
+  assert.deepEqual(groups, {
+    'static/initial/false': 12, 'interaction/focus/false': 8,
+    'interaction/hover/false': 8, 'interaction/held/false': 8,
+    'interaction/activate/true': 9, 'interaction/activate-leave/true': 8,
+    'interaction/open-secondary/true': 8, 'interaction/open-hover-content/true': 8,
+    'interaction/open-dismiss-outside/false': 8, 'interaction/open-dismiss-canvas/false': 8,
+    'interaction/disabled/false': 8, 'interaction/error/false': 8,
+    'interaction/open/true': 8, 'interaction/open-dismiss/false': 2,
+  });
+  // Final closed trees do not prove intermediate dismissal/action states are
+  // clock independent, nor certify current output or absence of other timers.
+});
+
 test('checkpoint application source census confines drift to the documented serializer diagnostic', () => {
   const raw = readFileSync('artifacts/material-parity/current-full-20261005/checkpoint/manifest.json');
   assert.equal(hash(raw), '7ae2cba1739353661a0c84e28ef70819157311cc824fd00ae94ced29fadeb352');
