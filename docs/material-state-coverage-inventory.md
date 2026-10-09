@@ -2,6 +2,23 @@
 
 ## Current evidence boundary — October 9
 
+### Existing divider texture sizes cannot replace layout-width observations
+
+Bounded search of retained divider font/paint/runtime diagnostics finds texture
+backing sizes in divider-text-backing-runtime-20261006.log,not owner layout
+constraints. Its declared scope is contrast desktop DPR1/2: Above logical texture
+width40.1062 and Below39.1429,with integer backing widths41/40 at DPR1 and81/79
+at DPR2. These are output texture dimensions,not retained element width minus
+padding. They cannot establish availableWidth or cover24 configured cases.
+The font-boundary log contains retained style padding only; paint-boundary and
+runtime-proof logs do not supply the missing owner dimensions. No historical
+diagnostic is promoted to current evidence or replayed without its receipts.
+Next instrumentation route is the existing benchmark measure API exposed at
+astylar.component.ts:200 and consumed by the existing divider description probe;
+inspect its measurement contract before adding a opt-in owner-width observation.
+This changes the approach from another retained default/texture replay to the
+specific missing layout input. Existing texture/raster findings remain settled.
+
 ### Divider retained wrapping constraints have a precise observation gap
 
 Authenticated current-full report ab42dbec and all48 tree receipts across24
