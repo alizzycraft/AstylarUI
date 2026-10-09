@@ -2,6 +2,24 @@
 
 ## Current evidence boundary — October 9
 
+### Narrowed browser build remains resource-limited; compiler verification separated
+
+Revalidated live session9332 and owned Angular30244/esbuild18764 before action.
+The narrowed ts-config run still reached build stage only: observed esbuild private
+memory6,122,852,352 bytes and Windows free physical215,496KiB/free virtual1,532,732KiB.
+Stopped only those owned processes for measured pressure. Session9332 terminates
+with wrapper exit0 and no assertions; this is cancelled verification,not a pass.
+Thus selecting one test root did not prevent large bundler memory growth; do not
+repeat this configuration or claim the root count was the demonstrated cause.
+Existing Angular compiler command node node_modules/@angular/compiler-cli/bundles/
+src/bin/ngc.js -p tsconfig.lib.json --noEmit now terminates exit0 with no diagnostics.
+This verifies current library compilation/types without emission,not emitted
+declarations,packed consumer,Material application or Angular runtime assertions.
+Next identify the missing browser runtime route without repeating the memory-heavy
+test bundle. No emitted package,fixture,
+canonical evidence or acceptance change. Broader obligation/current-validity joins
+and final unfiltered gates remain open; prior source-level proofs stay bounded.
+
 ### Material serializer preserves optional registry layout observations
 
 The existing material-input-evidence collector now copies optional retainedLayout
