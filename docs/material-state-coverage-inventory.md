@@ -2,6 +2,24 @@
 
 ## Current evidence boundary — October 9
 
+### Divider retained typography membership and owner scope resolved
+
+Verified compact generation b28e8926 contains144 retainedTypography differences
+for divider. Exact configured-ID join shows six groups of24,not144 independent
+separator-text defects:Above/Below textAlign48 rows; eyebrow/title textAlign48
+rows; eyebrow/title color48 rows. All six groups match the complete16-static/
+8-inspect configured ID set with no duplicates or missing cases. Alignment
+rows retain reviewed-horizontal-start-alignment equivalent-representation
+attribution; heading colors retain reviewed-heading-mask harness attribution.
+Initial diagnostic assumed only Above/Below owners and rejected the actual
+heading rows; grouping by actual element/property corrected the diagnostic,
+not the evidence. This closes exact membership/owner scope for these144
+existing differences,not absent font/color properties,complete paragraph
+inputs,current runtime or glyph raster acceptance. No new classification or
+canonical export; existing detailed backing/phase findings stay settled.
+Next examine remaining complete owner inputs rather than counting shared
+heading differences as missing separator-specific inspection.
+
 ### Divider canvas-edge truncation is not supported by retained extents
 
 Specific question:would the observed canvas overflow clip truncate the retained
