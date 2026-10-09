@@ -142,7 +142,21 @@ test('packed layout inspection browser proofs authenticate the complete current 
 });
 
 test('current Material serializer preserves detached layout observations without filling missing owners', () => {
-  const source = readFileSync('examples/material-showcase/src/app/material-input-evidence.ts', 'utf8');
+  const file = 'examples/material-showcase/src/app/material-input-evidence.ts';
+  const source = readFileSync(file, 'utf8');
+  const rawMap = readFileSync('examples/material-showcase/dist/material-showcase/browser/chunk-JPEJK334.js.map');
+  assert.equal(hash(rawMap), '47654b641610e1d56e02948b17fab41aff25e9c6aedc6f83b70a26b6f349ce9e');
+  const map = JSON.parse(rawMap);
+  const capturedIndex = map.sources.indexOf('src/app/material-input-evidence.ts');
+  assert.ok(capturedIndex >= 0);
+  const captured = map.sourcesContent[capturedIndex];
+  assert.equal(hash(captured), 'de0efefd73f69cbd62d2fc902c43c0fb48db59a07ee718b6baa92936fe56d357');
+  const lf = text => text.replace(/\r\n/g, '\n');
+  assert.equal(captured, lf(execFileSync('git', ['show', `aabeb128^:${file}`], { encoding: 'utf8' })));
+  assert.equal(hash(lf(source)), '521940b6dd4f97776bf17b2315bc4e726dc152c3cdb4aceb759603408db3e614');
+  assert.equal(lf(source), lf(execFileSync('git', ['show', `aabeb128:${file}`], { encoding: 'utf8' })));
+  // Whole-source transition is authenticated, not historical source substitution.
+  // Execute the actual current serializer and retain all omission/cloning assertions.
   const compiled = ts.transpileModule(source, { compilerOptions: {
     target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS,
   } }).outputText;

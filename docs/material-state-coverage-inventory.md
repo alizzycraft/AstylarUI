@@ -2,6 +2,32 @@
 
 ## Current evidence boundary — October 9
 
+### Serializer capture transition authenticated; Angular linking remains distinct
+
+Existing current serializer omission/cloning test now authenticates the complete
+captured application map47654b641610e1d56e02948b17fab41aff25e9c6aedc6f83b70a26b6f349ce9e.
+Captured material-input-evidence.ts SHAde0efefd73f69cbd62d2fc902c43c0fb48db59a07ee718b6baa92936fe56d357
+equals the complete pre-diagnostic Git source at aabeb128^. Current LF-normalized
+sourceSHA521940b6dd4f97776bf17b2315bc4e726dc152c3cdb4aceb759603408db3e614
+equals the complete diagnostic commit aabeb128. Its diff adds only the optional
+retainedLayout type and detached copies at core snapshot/tree serialization.
+No other serializer source drift is observed. All existing assertions execute
+actual current code,not the historical serializer: detached numeric dimensions,
+unchanged missing width/owners,and independently cloned padding. Focused1/1
+passes160.9582ms,terminal1526.6919ms. This proves the exact source transition
+and bounded current serializer behavior,not fresh application/AOT output.
+
+Read-only complete installed/captured JS projection census found59 unequal
+modules among88 under whitespace-only esbuild projection. First inspected
+flex-layout difference is Angular linking: installed ngDeclareFactory/ngDeclareInjectable
+become captured executable factory/defineInjectable. This is not demonstrated
+renderer-body drift; the preceding member census explicitly excludes generated
+Angular fields. Do not turn the equal member result into whole-module provenance.
+Remaining precise question: validate linked metadata/factory semantics against
+installed declarations across all mapped modules,or obtain fresh capture/runtime
+receipts at the complete required boundary. No acceptance policy,fixture,core
+algorithm,canonical publication or configured-case closure changed.
+
 ### Runtime wiring/metadata question answered without accepting diagnostic drift
 
 Bounded execution of the original whole-runtime assertion callback now reaches
