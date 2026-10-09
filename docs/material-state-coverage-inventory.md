@@ -2,6 +2,38 @@
 
 ## Current evidence boundary — October 9
 
+### Complete captured library modules reproduce through the consumer Angular linker
+
+The preceding59 unequal installed/captured module projections are now explained
+by executable linker replay,not hand-normalized generated fields. The existing
+member census invokes showcase-resolved @angular/compiler-cli20.3.31 linker and
+@babel/core7.29.7 against each complete installed module. AOT linker mode,
+sourceMapping=false,and Babel config/browserslist/input-map discovery disabled;
+esbuild removes comments/whitespace only. All88 complete outputs equal their
+authenticated captured sources,including generated factories,metadata,imports,
+exports,functions and module effects. No member or metadata is excluded from
+this captured-versus-installed equality. Static-metadata literal mutation remains
+observable. Original1583 equal current/installed members and the exact inspector
+hash discrepancy assertions remain. Focused1/1 passes8062.2282ms,terminal9306.1282ms.
+
+Initial replay with root-workspace Angular20.0.6 matched87/88,not acceptance:
+surface component captured domElementStart versus replay elementStart differs.
+Consumer-specific resolution removes that mismatch without changing source or
+normalizing instruction names. This demonstrates why toolchain ownership matters;
+neither compiler version is assumed to substitute for the other. Existing map
+dba48404 receipt authenticates the complete88-module population. Together with
+the separately retained current-versus-installed original callback execution,
+no additional library source difference is observed within these boundaries.
+The inspection diagnostic remains actual current drift and original equality
+still fails; no frozen build is promoted to current rendering acceptance.
+
+This closes the linked library-module question stated below. Remaining capture
+applicability includes application/host/plugin/theme sources and harness/runtime
+environment receipts,clock-dependent calendar state,and final browser validity.
+Serializer transition is separately authenticated below. Canonical integration,
+exact obligation closure and final gates remain pending; no full configured case
+is certified by this library-only proof. Do not repeat unchanged linker replay.
+
 ### Serializer capture transition authenticated; Angular linking remains distinct
 
 Existing current serializer omission/cloning test now authenticates the complete

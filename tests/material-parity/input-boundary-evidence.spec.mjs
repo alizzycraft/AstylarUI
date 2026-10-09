@@ -1127,6 +1127,18 @@ test('passive descendant semantics retain accessibility hiding omissions indepen
 
 test('current runtime member drift is confined to the retained layout diagnostic owner', async () => {
   const { transformSync } = await import('esbuild');
+  const { pathToFileURL } = await import('node:url');
+  // Use the consumer toolchain: the root workspace compiler is a different version.
+  const consumerRequire = createRequire(path.resolve('examples/material-showcase/package.json'));
+  const { transformAsync } = consumerRequire('@babel/core');
+  const { default: linker } = await import(pathToFileURL(consumerRequire.resolve('@angular/compiler-cli/linker/babel')));
+  assert.equal(consumerRequire('@angular/compiler-cli/package.json').version, '20.3.31');
+  assert.equal(consumerRequire('@babel/core/package.json').version, '7.29.7');
+  const wholeModule = code => transformSync(code, {
+    loader: 'js', legalComments: 'none', minifyWhitespace: true,
+  }).code;
+  assert.notEqual(wholeModule('class Guard { static metadata = { value: 1 }; }'),
+    wholeModule('class Guard { static metadata = { value: 2 }; }'));
   const rawMap = readFileSync('examples/material-showcase/dist/material-showcase/browser/chunk-3JXWRYJY.js.map');
   assert.equal(hash(rawMap), 'dba484044ca0dea965d8ef4b12635673f0f055d7711099d2f6476ca490988ec4');
   const map = JSON.parse(rawMap), modules = map.sources.filter(file => file.startsWith('node_modules/astylarui/'));
@@ -1155,10 +1167,22 @@ test('current runtime member drift is confined to the retained layout diagnostic
   assert.equal(project('class Guard { get value(){return 1;} set value(v){} }').size, 2);
   assert.notDeepEqual(project('class Guard { value(){return 1;} }'), project('class Guard { value(){return 2;} }'));
   let equalMembers = 0;
+  let linkedModules = 0;
   const differences = [];
   for (const module of modules) {
     const file = `src/${module.slice('node_modules/astylarui/dist/lib/'.length).replace(/\.js$/, '.ts')}`;
-    const installed = project(readFileSync(`examples/material-showcase/${module}`, 'utf8'));
+    const installedSource = readFileSync(`examples/material-showcase/${module}`, 'utf8');
+    const linked = installedSource.includes('ɵɵngDeclare')
+      ? (await transformAsync(installedSource, {
+        filename: path.resolve('examples/material-showcase', module),
+        configFile: false, babelrc: false, browserslistConfigFile: false,
+        inputSourceMap: false, sourceMaps: false,
+        plugins: [[linker, { linkerJitMode: false, sourceMapping: false }]],
+      })).code : installedSource;
+    assert.equal(wholeModule(map.sourcesContent[map.sources.indexOf(module)]),
+      wholeModule(linked), `${module}: complete linked capture/installed drift`);
+    linkedModules++;
+    const installed = project(installedSource);
     assert.deepEqual(project(map.sourcesContent[map.sources.indexOf(module)]), installed, `${module}: capture/installed member drift`);
     const current = project(ts.transpileModule(readFileSync(file, 'utf8'), { compilerOptions: {
       target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022, experimentalDecorators: true,
@@ -1170,12 +1194,14 @@ test('current runtime member drift is confined to the retained layout diagnostic
     }
   }
   assert.equal(equalMembers, 1583);
+  assert.equal(linkedModules, 88);
   assert.deepEqual(differences, [{ file: 'src/lib/astylar.ts',
     key: 'AstylarRenderer:MethodDeclaration:inspectCurrentDocumentStyles',
     current: '2949e37e0ec074e81855e4835170c5165ba0b497cec902f70ad406f0cff95160',
     installed: 'effd5c129a1c70cb9343a8d5c863b92169b6c7316f25e8c0120df575a8cb3147' }]);
   // Explicit discrepancy, not normalization or whole-module/runtime acceptance.
-  // Module functions, imports/exports and Angular metadata remain separately owned.
+  // Complete captured/installed linking is checked above; current-source wiring
+  // and metadata remain separately owned by the original callback diagnostic.
 });
 
 test('captured runtime class bodies match current repository compilation without Angular metadata', async () => {
