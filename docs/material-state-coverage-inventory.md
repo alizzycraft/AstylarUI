@@ -2,6 +2,24 @@
 
 ## Current evidence boundary — October 9
 
+### Divider canvas-edge truncation is not supported by retained extents
+
+Specific question:would the observed canvas overflow clip truncate the retained
+separator boxes? Exact24-case geometry from authenticated current-full report
+ab42dbec joins the receipted20-context host observations. All canvases start at
+CSS(0,0); every candidate separator is inside its canvas,with minimum margins
+left65,top224.345001,right65,bottom575.774994 CSSpx. No box crosses a canvas
+edge. Existing host proof now preserves report hash,all24 joins and positive
+margins; passes1/1,2809.3252ms. Thus canvas boundary truncation is not supported
+for these retained separator extents; it cannot explain their interior strip
+diagnostic failures without additional evidence. This is historical geometry
+joined to later same-checkpoint host observations,not fresh same-frame candidate
+geometry,internal scene clip-plane inspection or local edge-paint equivalence.
+Keep the documented border/background authoring substitution and paint residuals
+as separate explanations. Do not broaden passive-divider obligations into
+hypothetical out-of-canvas content. Next prioritize unaccounted local paint/input
+and current-validity joins rather than another unchanged host capture.
+
 ### Divider outer-host receipt and comparison membership gaps closed
 
 Existing opt-in probe now records the reference ancestor collector hash before

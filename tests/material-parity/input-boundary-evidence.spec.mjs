@@ -127,6 +127,23 @@ test('divider host clipping observations preserve bounded DOM ancestry', () => {
     receipted.push(...observations);
   }
   assert.equal(new Set(receipted.map(r => `${r.context.profile}:${r.context.viewportId}:${r.side}`)).size, 40);
+  const fullBytes = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
+  assert.equal(hash(fullBytes), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const full = JSON.parse(fullBytes), capturedCases = [...full.results, ...full.interactions].filter(r => r.family === 'divider');
+  assert.equal(capturedCases.length, 24);
+  for (const entry of capturedCases) {
+    const host = receipted.find(r => r.side === 'astylar' && r.context.profile === entry.profile &&
+      r.context.viewport.width === entry.viewport.width && r.context.viewport.height === entry.viewport.height &&
+      r.context.deviceScaleFactor === entry.viewport.deviceScaleFactor);
+    assert.ok(host);
+    const canvas = host.hostContext.nodes[0].viewportRect;
+    assert.equal(canvas.x, 0); assert.equal(canvas.y, 0);
+    const element = entry.geometry.elements.find(r => r.id === 'divider-primary');
+    assert.equal(element.missing, false);
+    const box = element.actual;
+    assert.ok(box.left >= 65 && box.top > 224);
+    assert.ok(canvas.width - box.right >= 65 && canvas.height - box.bottom > 575);
+  }
   for (const configured of [...materialStaticCases, ...materialInteractionCases].filter(r => r.family === 'divider'))
     for (const side of ['reference', 'astylar']) assert.ok(receipted.some(r => r.side === side &&
       r.context.profile === configured.profile && r.context.viewport.width === configured.viewport.width &&
