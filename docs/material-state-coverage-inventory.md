@@ -2,6 +2,37 @@
 
 ## Current evidence boundary — October 9
 
+### Exact inverted-UV nearest-boundary hypothesis rejected
+
+Competing remaining explanations were a simple inverted-V floor-boundary rule
+versus actual shader/raster interpolation precision. Existing public probe now
+records each text plane's projected vertices,UVs,indices and texture matrix.
+Top V=1,bottom V=0; texture matrix is identity in its UV axes and invertY=true.
+Standard/no-MSAA sampling inputs agree. Core createTextMesh uses CreatePlane;
+installed planeBuilder supplies these UVs and DynamicTexture update(true) uploads
+with vertical inversion. These are inspected projection-boundary observations,
+not alternative authored layout or a second plugin coordinate convention.
+
+Separate diagnostic model samples raw GPU rows with floor((1-v)*height),instead
+of flooring top-down first and reversing the resulting row. It worsens DPR2
+residuals178/172 above2 to964/908 in standard rendering; no-MSAA176/172 likewise
+becomes964/908. DPR1 no-MSAA authored0 becomes250/235. Therefore a universal
+inverted-V exact-boundary tie rule is not an adequate explanation. Original
+canvas and GPU-normalized models remain intact; no reference or failure masked.
+The CPU calculation is not recorded shader interpolation. Next obtain actual
+shader varying/texel selection in a separate diagnostic render or explicitly
+bound raster precision; do not repeat the rejected global rounding model.
+
+Chrome154.0.8037.58,DPR1/2,six pages,2515 receipts and six owning bindings.
+Focused1/1 passes52360.9671ms,total53842.5972ms; this validates the observations,
+not parity or the rejected model. Complete log
+artifacts/material-parity/divider-text-gpu-uv-boundary-20261009.log
+SHAcb36530e76f2bff7c0950af78337ab3edd3021e979a7699948229b8d9f73f570.
+Syntax/exact-path diff checks pass; no renderer/fixture/threshold changes or
+scratch capture. Standalone proof/canonical fingerprint reconciliation remains
+pending with177 registered producer proofs and acceptedb28e8926 unchanged.
+All2311 cases remain partial; this bounded uncertainty does not redefine closure.
+
 ### GPU upload magnitude does not explain the large DPR2 sampling residual
 
 Specific unresolved question from the preceding intervention: are the observed

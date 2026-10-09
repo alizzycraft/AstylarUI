@@ -737,8 +737,18 @@ test('public divider typography reduction observes equal paragraph span inputs a
         mesh.computeWorldMatrix(true);
         const viewport=scene.activeCamera.viewport.toGlobal(engine.getRenderWidth(),engine.getRenderHeight());
         const corners=mesh.getBoundingInfo().boundingBox.vectorsWorld.map(v=>Vector3.Project(v,Matrix.Identity(),scene.getTransformMatrix(),viewport));
+        const positions=mesh.getVerticesData('position'),uvs=mesh.getVerticesData('uv');
+        const projectedVertices=[];
+        for(let i=0;i<positions.length;i+=3){
+          const point=Vector3.Project(new Vector3(positions[i],positions[i+1],positions[i+2]),
+            mesh.getWorldMatrix(),scene.getTransformMatrix(),viewport);
+          projectedVertices.push({x:point.x/devicePixelRatio,y:point.y/devicePixelRatio,
+            u:uvs[i/3*2],v:uvs[i/3*2+1]});
+        }
         return {id:mesh.metadata.elementId,logicalSize:texture?.metadata?.astylarLogicalTextSize,
           backingSize:texture?.getSize(),samplingMode:texture?.samplingMode,
+          samplingInputs:{projectedVertices,indices:Array.from(mesh.getIndices()),
+            textureMatrix:Array.from(texture.getTextureMatrix().m),invertY:texture.invertY},
           transfer:{textureGammaSpace:texture.gammaSpace,textureHasAlpha:texture.hasAlpha,textureLevel:texture.level,
             materialAlpha:mesh.material.alpha,alphaMode:mesh.material.alphaMode,transparencyMode:mesh.material.transparencyMode,
             useAlphaFromDiffuseTexture:mesh.material.useAlphaFromDiffuseTexture,
@@ -933,8 +943,8 @@ test('public divider typography reduction observes equal paragraph span inputs a
           assert.equal(originResiduals.reduce((sum, row) => sum + row.differingPixels, 0), mappedDifference);
           if (mode !== 'reference') {
             assert.equal(data.runtimeText.length, 4);
-            const samplingModels = [], gpuSamplingModels = [];
-            for (const pixelSource of ['canvas','gpu-readback']) for (const origin of ['measured', 'authored']) {
+            const samplingModels = [], gpuSamplingModels = [], gpuUvModels = [];
+            for (const pixelSource of ['canvas','gpu-readback','gpu-uv']) for (const origin of ['measured', 'authored']) {
               const prediction = new Uint8Array(image.data.length);
               for (let p = 0; p < prediction.length; p += 4) prediction.set([240,240,240,255], p);
               for (const texture of data.runtimeText) {
@@ -948,7 +958,9 @@ test('public divider typography reduction observes equal paragraph span inputs a
                   const texel = (Math.floor(v * texture.backingSize.height) * texture.backingSize.width +
                     Math.floor(u * texture.backingSize.width)) * 4;
                   // readPixels rows are bottom-up; normalize only this diagnostic model.
-                  const sourceTexel=pixelSource==='canvas'?texel:
+                  const sourceTexel=pixelSource==='canvas'?texel:pixelSource==='gpu-uv'?
+                    (Math.min(texture.backingSize.height-1,Math.floor((1-v)*texture.backingSize.height))*texture.backingSize.width+
+                      Math.floor(u*texture.backingSize.width))*4:
                     ((texture.backingSize.height-1-Math.floor(v*texture.backingSize.height))*texture.backingSize.width+
                       Math.floor(u*texture.backingSize.width))*4;
                   const bytes=pixelSource==='canvas'?texture.pixels:texture.gpuPixels;
@@ -963,11 +975,12 @@ test('public divider typography reduction observes equal paragraph span inputs a
                 if (magnitude > 2) greaterThanTwo++;
                 maximum = Math.max(maximum, magnitude);
               }
-              (pixelSource==='canvas'?samplingModels:gpuSamplingModels).push({ origin, differingPixels: different, greaterThanTwo, maximumChannelDifference: maximum,
+              (pixelSource==='canvas'?samplingModels:pixelSource==='gpu-readback'?gpuSamplingModels:gpuUvModels).push({ origin, differingPixels: different, greaterThanTwo, maximumChannelDifference: maximum,
                 predictionSha256: hash(prediction) });
             }
             pair[mode].samplingModels = samplingModels;
             pair[mode].gpuSamplingModels = gpuSamplingModels;
+            pair[mode].gpuUvModels = gpuUvModels;
             for (let i = 0; i < 4; i++) {
               const observed = data.runtimeText.find(row => row.id === `text-${i}`), expected = mappedControl.rows[i];
               assert.deepEqual(observed.logicalSize, { width: expected.width, height: expected.height });
