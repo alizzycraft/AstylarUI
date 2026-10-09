@@ -2,6 +2,43 @@
 
 ## Current evidence boundary — October 9
 
+### Pending-font remount/peer boundary inspected; coherent batch registration updated
+
+Competing lifecycle explanations: retired font listeners may rebuild disposed
+owners,or remount may disturb a live peer; alternatively loadingdone invalidates
+only the remaining live owners. The existing public font probe now adds one
+pending-remount/peer cohort,retaining all three prior controls. Held loading:
+first disposed owner stays revision1 with zero resources; remounted owner is
+revision0/unsettled; peer's complete snapshot is unchanged. Release: remount
+settles revision1,peer advances1→2 with replacement texture,retired snapshot
+stays exact. Both scenes are independent despite equal authored IDs. Final
+cleanup explicitly checks zero tracked AND live scene meshes/materials/textures
+for every current,peer and retired owner. This rejects stale-owner resurrection
+and peer mutation on disposal in this bounded real-font execution,not all lifetime
+or repeated-remount plateau acceptance. No renderer/fixture changes.
+
+Chrome154.0.8037.58 DPR1; focused1/1 passes6788.7178ms,total8136.9703ms.
+Log artifacts/material-parity/font-remount-peer-live-resources-20261009.log
+SHA9a61af6b983d6a49496dcbd0388e238c259fc4b8ba85aa95a1fdfe59388d84f4
+preserves all four cohorts,authored source,font/bundle hashes and actual dependency
+receipt. Current font owner applicability reuses the preceding unchanged complete
+runtime census; no core inputs changed. Historical Material font timing remains
+unrecoverable from this new probe and exact-case paint validity remains separate.
+
+The font-lifetime and passive exact-membership proofs and their two complete logs
+are now registered in the existing producer:177 locators present,LF-SHA
+971846cae1d9cb16b1936dc432d7218cad9f29ac0bcc4c5f5d2dca599a2a4f89.
+Existing historical conservation reverses only these two entries/two paths,
+authenticates complete preceding3a1b224d snapshot,then retains the earlier exact
+transitions. Complete predecessor/unchanged-policy test1/1 passes3162.2947ms,
+terminal3704.0346ms; original mutation controls intact. Named five-path launcher
+dry run passes,not collector validation or publication. Accepted canonicalb28e8926
+unchanged; coherent export,cold verification and compact import still pending.
+No full export was launched under observed freephysical1007640KiB versus the
+prior cancelled worker1.65GB working set. All2311 whole-case statuses remain
+partial. Next address exact-case paint/other applicable obligation closure; do
+not repeat the now settled font disposal/remount/peer question without drift.
+
 ### Passive-state obligations now join exact configured membership
 
 Unresolved coverage question: can the passive-family activation/editing exclusions

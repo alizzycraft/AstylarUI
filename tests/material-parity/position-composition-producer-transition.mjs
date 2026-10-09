@@ -9,6 +9,27 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 // conservation. This does not substitute old bytes in current production.
 export function restoreLayoutDiagnosticRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes('public delayed font lifetime remount and peer boundary')) {
+    assert.equal(hash(current),'971846cae1d9cb16b1936dc432d7218cad9f29ac0bcc4c5f5d2dca599a2a4f89',
+      'exact complete lifetime and applicability registration snapshot');
+    const ast=ts.createSourceFile('producer.mjs',current,ts.ScriptTarget.Latest,true,ts.ScriptKind.JS);
+    assert.equal(ast.parseDiagnostics.length,0);
+    const entries=ast.statements.find(n=>ts.isFunctionDeclaration(n)&&n.name?.text==='focusedProofInventory')
+      .body.statements[0].expression.elements;
+    assert.equal(entries.length,177);
+    assert.deepEqual(entries.slice(0,2).map(n=>n.arguments[3].text),[
+      'public delayed font lifetime remount and peer boundary',
+      'passive exact configured state applicability boundary',
+    ]);
+    current=current.slice(0,entries[0].getFullStart())+current.slice(entries[2].getFullStart());
+    for(const file of ['artifacts/material-parity/font-remount-peer-live-resources-20261009.log',
+      'artifacts/material-parity/passive-obligation-batch-complete-20261009.log']) {
+      const line=`    '${file}',\n`;
+      assert.equal(current.split(line).length,2);current=current.replace(line,'');
+    }
+    assert.equal(hash(current),'3a1b224d915b88094329b09523e30dc1cf3a20c3c6193dac1e31f989f6ccaafb',
+      'complete preceding applicability registration conserved');
+  }
   if (current.includes('datepicker exact retained clock-content applicability boundary')) {
     assert.equal(hash(current), '3a1b224d915b88094329b09523e30dc1cf3a20c3c6193dac1e31f989f6ccaafb',
       'exact complete applicability registration snapshot');

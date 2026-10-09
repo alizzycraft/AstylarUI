@@ -8889,6 +8889,8 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'artifacts/material-parity/font-remount-peer-live-resources-20261009.log',
+    'artifacts/material-parity/passive-obligation-batch-complete-20261009.log',
     'artifacts/material-parity/current-full-20261005/checkpoint/manifest.json',
     'artifacts/material-parity/current-full-20261005/latest-report.json',
     'examples/material-showcase/dist/material-showcase/browser/chunk-3JXWRYJY.js.map',
@@ -9476,6 +9478,10 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('public delayed font load settles initial render and invalidates only live owners'/,
+      'public delayed font lifetime remount and peer boundary', 'Real held Roboto FontFaceSet response through installed public mount: initial wait,later revision and texture replacement,disposed late release,pending remount and independent live peer. Records actual dependencies and live/tracked cleanup. DPR1 only; not historical font timing,repeated-remount plateau,current full application paint or complete-case acceptance.'),
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('passive state applicability joins exact cases without discarding progress focusability'/,
+      'passive exact configured state applicability boundary', 'Authenticates354 exact static,interaction and mobile-flow cases with708 tree receipts across nine passive families. Captured activation/editing exclusions preserve all40 native negative-tabindex progress focus obligations. Existing complete progress focus evidence replays through authenticated historical source conservation. Not unrecorded callbacks,live focus,current rendering or whole-case closure.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('retained datepicker clock applicability distinguishes calendar content from closed final states'/,
       'datepicker exact retained clock-content applicability boundary', 'Authenticates111 unique configured datepicker cases and222 tree receipts:33 month/day,8 year-view,70 closed final states. Both sides agree on calendar presence. Closed final observations do not certify intermediate dismissal states or current paint; open year-view content is not declared stale merely because the day changed.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('checkpoint application source census confines drift to the documented serializer diagnostic'/,
