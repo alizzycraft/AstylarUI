@@ -42,6 +42,22 @@ const fieldPopupSource = "    'scripts/audit-material-configured-field-popup-bou
 // and its predecessor before the older registration reversals inspect the prefix.
 export function restoreDescriptionProofRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes('divider exact configured separator AX boundary')) {
+    const entries = "    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\\('divider actual-theme AX cohorts preserve exact contexts and runtime receipts'/,\n" +
+      "      'divider exact configured separator AX boundary', 'Authenticates40 paired-side observations in20 actual-theme physical contexts,joining all24 configured divider cases. Separator role,empty name,horizontal orientation and no AX children agree. Exact historical/current probe receipts remain distinct. Not complete accessibility,paint,lifetime,current rendering or whole-case closure.'),\n" +
+      "    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\\('divider retained update disposal observations join all configured physical contexts'/,\n" +
+      "      'divider exact retained ownership membership boundary', 'Authenticates the original desktop and remaining replacement/disposal logs and joins20 physical contexts to24 configured cases. Replays48 remaining update samples and12 disposals; original desktop assertions remain separately owned. Not actual-theme ownership provenance,late work,remount,peer isolation,current lifetime or whole-case acceptance.'),\n";
+    assert.equal(current.split(entries).length, 2, 'exact two-entry divider evidence addition');
+    current = current.replace(entries, '');
+    for (const file of ['divider-theme-verified-ax-20261009.log', 'divider-comparison-theme-ax-20261009.log',
+      'divider-update-disposal-20261006.log', 'divider-remaining-update-disposal-20261007.log']) {
+      const line = `    'artifacts/material-parity/${file}',\n`;
+      assert.equal(current.split(line).length, 2, 'one exact divider log dependency');
+      current = current.replace(line, '');
+    }
+    assert.equal(hash(current), 'a80f88e04560a2dae06d142c75afdb4f7e9dd3cedf1c5f3ff05a3d9880690b18',
+      'complete producer before divider evidence registration preserved');
+  }
   if (current.includes('ordinary default-light mobile tooltip live-material retention diagnostic counterexample (requested dark)')) {
     assert.equal(hash(current), 'a80f88e04560a2dae06d142c75afdb4f7e9dd3cedf1c5f3ff05a3d9880690b18',
       'exact ordinary-tooltip actual-theme scope correction snapshot');

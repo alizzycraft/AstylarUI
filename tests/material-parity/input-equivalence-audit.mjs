@@ -8889,6 +8889,10 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'artifacts/material-parity/divider-theme-verified-ax-20261009.log',
+    'artifacts/material-parity/divider-comparison-theme-ax-20261009.log',
+    'artifacts/material-parity/divider-update-disposal-20261006.log',
+    'artifacts/material-parity/divider-remaining-update-disposal-20261007.log',
     'scripts/audit-material-field-description.mjs',
     'scripts/audit-material-tooltip-description.mjs',
     'tests/material-parity/modal-position-inspection.mjs',
@@ -9451,6 +9455,10 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('divider actual-theme AX cohorts preserve exact contexts and runtime receipts'/,
+      'divider exact configured separator AX boundary', 'Authenticates40 paired-side observations in20 actual-theme physical contexts,joining all24 configured divider cases. Separator role,empty name,horizontal orientation and no AX children agree. Exact historical/current probe receipts remain distinct. Not complete accessibility,paint,lifetime,current rendering or whole-case closure.'),
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('divider retained update disposal observations join all configured physical contexts'/,
+      'divider exact retained ownership membership boundary', 'Authenticates the original desktop and remaining replacement/disposal logs and joins20 physical contexts to24 configured cases. Replays48 remaining update samples and12 disposals; original desktop assertions remain separately owned. Not actual-theme ownership provenance,late work,remount,peer isolation,current lifetime or whole-case acceptance.'),
     proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('configured field hint descriptions preserve sixty-eight omissions and eight error controls'/,
       'configured field hint-description input boundary', 'Authenticates all76 configured cases and152 original tree receipts. Resolves reference Public label in68 non-error states while candidate renders the hint but omits its input association; eight error cases retain their prior owner. Current complete authoring source and supplied bridge mapping distinguish input omission from a core relationship failure. Not actual field AX,live announcements,paint or whole-case acceptance.'),
     proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('configured tooltip descriptions preserve closed input omissions and actual AX open controls'/,

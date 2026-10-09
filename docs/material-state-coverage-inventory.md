@@ -2,6 +2,25 @@
 
 ## Current evidence boundary — October 9
 
+### Divider bounded proofs now registered for canonical consumption
+
+The existing producer previously fingerprinted the shared probe but referenced
+only the older divider AX/desktop ownership proof. Two new existing owning tests
+are now registered: exact actual-theme separator AX membership (24 cases/20
+physical contexts/40 side observations) and retained update/disposal membership
+(24 cases/20 physical contexts). Four original logs are explicit source
+dependencies. This is bounded evidence registration,not a new finding,paint
+acceptance or complete accessibility/lifetime closure. Exact addition reversal
+proves the entire pre-registration producer SHAa80f88e0… remains unchanged;
+negative controls reject changed observations,log dependencies and acceptance
+wording. Existing four description/producer-predecessor checks pass4/4,
+6456.5786ms; both divider checks pass2/2,1512.2391ms,exit0. Original evidence and
+classification policy remain unchanged. Accepted canonical57734896… now requires
+a coherent milestone export/independent check/import before these registrations
+can be described as published. Next run that integration milestone,then complete
+per-case input/paint/history/ownership and current-validity joins. No browser
+recapture is justified merely by this source inventory change.
+
 ### Description replay authenticates the actual pre-divider producer
 
 Focused registration/field/tooltip/standalone-predecessor checks initially pass

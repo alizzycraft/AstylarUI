@@ -22,6 +22,8 @@ test('description registration conserves complete producer and source-definition
   assert.ok(producer.includes('default-light mobile tooltip keyboard-authoring and local texture-phase diagnostic (requested dark)'));
   assert.ok(producer.includes('not actual dark-theme coverage, lifecycle acceptance'));
   assert.ok(producer.includes('diagnostic registration is not acceptance or actual dark-theme coverage.'));
+  assert.ok(producer.includes('divider exact configured separator AX boundary'));
+  assert.ok(producer.includes('divider exact retained ownership membership boundary'));
   assert.equal(restoreDescriptionProofRegistration(producer), prior(producerFile));
   const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
   const policy = readFileSync(policyFile, 'utf8');
@@ -33,7 +35,10 @@ test('description registration conserves complete producer and source-definition
     producer.replace('configured field hint-description input boundary', 'unreviewed description acceptance'),
     producer.replace('scripts/audit-material-tooltip-description.mjs', 'scripts/other.mjs'),
     producer.replace('not actual dark-theme coverage, lifecycle acceptance', 'dark lifecycle acceptance'),
-    producer.replace('diagnostic registration is not acceptance or actual dark-theme coverage.', 'diagnostic registration proves dark-theme acceptance.')])
+    producer.replace('diagnostic registration is not acceptance or actual dark-theme coverage.', 'diagnostic registration proves dark-theme acceptance.'),
+    producer.replace('Authenticates40 paired-side observations', 'Authenticates41 paired-side observations'),
+    producer.replace('divider-theme-verified-ax-20261009.log', 'unreviewed-divider.log'),
+    producer.replace('Not complete accessibility,paint,lifetime,current rendering', 'Complete accessibility,paint,lifetime,current rendering')])
     assert.throws(() => restoreDescriptionProofRegistration(changed));
   for (const changed of [policy.replace('fixture-form-field-hint-description-association-omitted', 'unknown-hint-finding'),
     policy.replace('Original', 'Rewritten')]) assert.throws(() => restoreDescriptionPolicyRegistration(changed));
