@@ -1453,6 +1453,68 @@ test('captured runtime class bodies match current repository compilation without
   assert.equal(componentCount, 1, 'Generated component scope changed; reconcile coverage.');
 });
 
+test('runtime wiring and metadata retain original assertions beyond authenticated diagnostic drift', async () => {
+  const { transformSync } = await import('esbuild');
+  // Diagnostic only: the original whole-runtime equality test above must still fail.
+  // Execute its actual callback, not a copied or reduced metadata assertion body.
+  const sourceFile = 'tests/material-parity/input-boundary-evidence.spec.mjs';
+  const source = readFileSync(sourceFile, 'utf8');
+  const ast = ts.createSourceFile(sourceFile, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const name = 'captured runtime class bodies match current repository compilation without Angular metadata';
+  const calls = ast.statements.filter(node => ts.isExpressionStatement(node)
+    && ts.isCallExpression(node.expression) && node.expression.arguments[0]?.text === name);
+  assert.equal(calls.length, 1);
+  const members = code => {
+    const parsed = ts.createSourceFile('proof.js', code, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    assert.equal(parsed.parseDiagnostics.length, 0);
+    const declaration = parsed.statements.find(ts.isClassDeclaration);
+    assert.ok(declaration);
+    const heritage = (declaration.heritageClauses ?? []).map(node => node.getText(parsed)).join(' ');
+    const result = new Map();
+    for (const member of declaration.members) {
+      const key = `${ts.SyntaxKind[member.kind]}:${member.name?.getText(parsed) ?? 'constructor'}`;
+      assert.equal(result.has(key), false);
+      result.set(key, transformSync(`class Proof ${heritage} {${member.getText(parsed)}}`, {
+        loader: 'js', legalComments: 'none', minifyWhitespace: true,
+      }).code);
+    }
+    return result;
+  };
+  let diagnosticDifferences = 0;
+  const compare = (actual, expected, message) => {
+    if (message !== path.join('src', 'lib', 'astylar.ts'))
+      return assert.deepEqual(actual, expected, message);
+    assert.ok(actual instanceof Map && expected instanceof Map);
+    assert.deepEqual([...actual.keys()], [...expected.keys()]);
+    for (const [key, value] of actual) {
+      if (key !== 'class:AstylarRenderer') {
+        assert.equal(value, expected.get(key), key);
+        continue;
+      }
+      const installed = members(value);
+      const current = members(expected.get(key));
+      assert.deepEqual([...installed.keys()], [...current.keys()]);
+      for (const [member, body] of installed) {
+        if (member !== 'MethodDeclaration:inspectCurrentDocumentStyles')
+          assert.equal(body, current.get(member), member);
+        else {
+          assert.equal(hash(body), 'effd5c129a1c70cb9343a8d5c863b92169b6c7316f25e8c0120df575a8cb3147');
+          assert.equal(hash(current.get(member)), '2949e37e0ec074e81855e4835170c5165ba0b497cec902f70ad406f0cff95160');
+          diagnosticDifferences++;
+        }
+      }
+    }
+  };
+  // Unexpected declarations and unrelated wiring must not be exempted.
+  assert.throws(() => compare(new Map([['function:unexpected', 'a']]),
+    new Map([['function:unexpected', 'b']]), path.join('src', 'lib', 'astylar.ts')));
+  assert.throws(() => compare(['changed'], ['original'], 'runtime export wiring'));
+  const callback = calls[0].expression.arguments[1].getText(ast);
+  const execute = new Function('assert', 'readFileSync', 'path', 'ts', `return (${callback})();`);
+  await execute({ ...assert, deepEqual: compare }, readFileSync, path, ts);
+  assert.equal(diagnosticDifferences, 1);
+});
+
 test('public input lifecycle isolates caret material retention without Material plugins', async t => {
   const consumer = path.resolve('examples/material-showcase');
   const methods = [

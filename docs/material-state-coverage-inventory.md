@@ -2,6 +2,32 @@
 
 ## Current evidence boundary — October 9
 
+### Runtime wiring/metadata question answered without accepting diagnostic drift
+
+Bounded execution of the original whole-runtime assertion callback now reaches
+all later checks instead of stopping at the known inspection-method difference.
+Only src/lib/astylar.ts declaration comparison has a diagnostic interceptor:
+all declaration/member identities and other bodies remain exact; both inspector
+projections must match the two hashes recorded below. No installed/captured
+method is substituted into current code. The original equality test is unchanged
+and remains an explicitly failing current-runtime acceptance boundary.
+
+Existing input-boundary-evidence.spec.mjs retains this execution as
+`runtime wiring and metadata retain original assertions beyond authenticated diagnostic drift`.
+Focused1/1 passes3321.6417ms (terminal4699.856ms),including rejection controls for
+unexpected declaration bodies and unrelated export wiring. The original callback
+checks all88 mapped modules:80 classes,98 functions,53 variables,4 effects,
+373 runtime imports,130 exports,60 authored decorators,113 constructor
+dependencies,one component,and compiler namespace/metadata constraints. All
+remaining assertions pass. Thus no further current-versus-installed difference
+is observed within that original projection; the separate preceding census
+authenticates captured-versus-installed class members,not all captured module
+wiring/metadata. Neither proof certifies the application serializer,complete
+capture pipeline,or current browser output. No new whole-case closure or canonical
+integration is claimed. Next close those separate capture/source applicability
+boundaries before deciding which historical observations need fresh execution;
+do not repeat the now answered current-versus-installed wiring question unchanged.
+
 ### Current runtime applicability has one explicit diagnostic-member mismatch
 
 Original whole-runtime source/installed/captured assertion was executed after
