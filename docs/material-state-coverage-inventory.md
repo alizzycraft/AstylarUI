@@ -2,6 +2,49 @@
 
 ## Current evidence boundary — October 9
 
+### Real delayed-font execution answers the source-only lifecycle question
+
+Specific unresolved question: does a native delayed FontFaceSet batch leave the
+public surface stale, or does the existing owned invalidation rebuild it? A second
+control asks whether release after disposal resurrects work. Existing input-boundary
+browser infrastructure now runs three DPR1 cohorts with an intercepted real Roboto
+font response, public package-root mount, unchanged authored text/style and observed
+session/resource/texture identities. No fixture, renderer or font owner is changed.
+
+Chrome154.0.8037.58: initial held loading remains revision0/rendering/unsettled;
+release settles revision1 with one texture. Later held loading remains revision1;
+release advances to2, replaces texture11 with21 and removes the old texture from
+the scene. Disposal during later loading leaves revision1/disposed and zero meshes,
+materials/textures after native loadingdone. No page errors or diagnostics occur.
+This rejects missing initial font wait, missing later font invalidation and late
+resource resurrection for these three public cohorts. It does not certify paint,
+multiple-font batching, remount, all profiles or the historical raster's font timing.
+Material count4→3 during live reflow is recorded, not asserted as a stable plateau.
+
+Existing complete runtime-member/consumer-linker applicability proof ran alongside
+the browser probe:2/2 pass,16406.4109ms terminal. Font probe6587.5102ms; runtime
+proof8278.5159ms. Log `artifacts/material-parity/font-lifetime-public-20261009.log`,
+SHA13a14bcac5de156f95384bc7ef8c3f3028543e9cab3ced333023e776b33952ef,
+records complete authored source, font hash, bundle hash, actual dependency receipt
+and all samples. Command: node --test --test-name-pattern="public delayed font load|current runtime member drift is confined" tests/material-parity/input-boundary-evidence.spec.mjs.
+Current owner applicability remains bounded by the unchanged font-owning runtime
+and the explicitly different inspection diagnostic; this is not a fresh current
+Angular unit-suite run or whole-capture acceptance.
+
+Initial probe failures are instrumentation, not core findings: using value instead
+of p.textContent produced no text texture (assertion failure10953.3679ms), then the
+disposed control incorrectly called whenSettled on a disposed public handle and
+received the documented surface-disposed error (4288.1624ms). Both were corrected
+at the probe boundary, without weakening the live or disposed resource assertions.
+No historical evidence was replaced and no persistent capture/scratch was created.
+
+Standalone proof remains unregistered in canonical focusedProofInventory175;
+the changed suite fingerprint must be reconciled with the pending batch before
+publication. Accepted canonical b28e8926 remains unchanged. All2311 cases remain
+partial. Next reconcile exact-case applicable obligations/paint boundaries rather
+than repeating this settled three-cohort font result. Historical paint-time font
+receipts remain absent; the new execution cannot retroactively supply them.
+
 ### Divider closure gaps reconciled against later evidence,not historical pending text
 
 The older bounded obligation table below is chronological,not the current pending

@@ -3034,6 +3034,99 @@ test('public button pointer states diagnose materials outside render ownership',
 
 });
 
+test('public delayed font load settles initial render and invalidates only live owners', async t => {
+  const consumer = path.resolve('examples/material-showcase');
+  const fontFile = path.join(consumer, 'node_modules/@fontsource/roboto/files/roboto-latin-400-normal.woff2');
+  const fontBytes = readFileSync(fontFile);
+  const applicationSource = `
+import '@angular/compiler';
+import {provideZonelessChangeDetection} from '@angular/core';
+import {createApplication} from '@angular/platform-browser';
+import {Astylar} from 'astylarui';
+const app=await createApplication({providers:[provideZonelessChangeDetection()]});
+let surface, fontPromise, initialSettled=false, beforeTextures=[];
+const events=[];
+document.fonts.addEventListener('loadingdone',()=>events.push('loadingdone'));
+const snapshot=()=>({revision:surface?.diagnostics.session?.revision,status:surface?.diagnostics.session?.status,
+ disposed:surface?.disposed,resources:surface?.diagnostics.resources,messages:surface?.diagnostics.messages,
+ initialSettled,fontStatus:document.fonts.status,events:[...events],
+ textureIds:surface?.scene.textures.map(t=>t.uniqueId),
+ oldTexturesRemaining:beforeTextures.filter(t=>surface.scene.textures.includes(t)).length});
+const startFont=()=>{const face=new FontFace('AuditDelayed','url(/delayed.woff2)');document.fonts.add(face);
+ fontPromise=document.fonts.load('16px AuditDelayed','Above');return snapshot();};
+window.fontAudit={snapshot,startFont,async mount(initial){
+ if(initial)startFont();
+ const canvas=document.createElement('canvas');canvas.style.cssText='width:390px;height:180px';document.body.append(canvas);
+ surface=app.injector.get(Astylar).mount(canvas,{root:{children:[{type:'p',id:'text',textContent:'Above'}]},
+ styles:[{selector:'#text',fontFamily:'AuditDelayed,Arial',fontSize:'16px',margin:'0',padding:'0'}]},
+ {diagnostics:{logLevel:'silent'}});
+ surface.whenSettled().then(()=>initialSettled=true);return snapshot();},
+ async settle(){await fontPromise;await document.fonts.ready;if(!surface.disposed)await surface.whenSettled();
+ await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));if(!surface.disposed)await surface.whenSettled();return snapshot();},
+ remember(){beforeTextures=[...surface.scene.textures];return snapshot();},
+ dispose(){surface.dispose();return snapshot();},destroy(){surface.dispose();app.destroy();}};
+`;
+  const built = await createRequire(path.join(consumer, 'package.json'))('esbuild').build({
+    absWorkingDir: process.cwd(), stdin: {resolveDir: consumer, sourcefile: 'public-font-lifetime.mjs', contents: applicationSource},
+    bundle: true, write: false, metafile: true, format: 'esm', platform: 'browser', target: 'es2022'});
+  const inputs = Object.keys(built.metafile.inputs).filter(file => existsSync(path.resolve(file)))
+    .sort().map(file => ({file, sha256: hash(readFileSync(path.resolve(file)))}));
+  assert.ok(!inputs.some(input => /^src[\\/]/.test(input.file)));
+  const server = createServer((req,res) => { const script=req.url==='/audit.js';
+    res.setHeader('content-type',script?'text/javascript':'text/html');
+    res.end(script?built.outputFiles[0].contents:'<!doctype html><script type="module" src="/audit.js"></script>'); });
+  await new Promise(resolve => server.listen(0,'127.0.0.1',resolve));
+  let browser;
+  const results=[];
+  try {
+    browser=await chromium.launch({channel:'chrome',headless:true});
+    for(const cohort of ['initial','later','disposed-later']) {
+      const page=await browser.newPage({viewport:{width:800,height:600}});
+      let release;
+      const held=new Promise(resolve=>release=resolve), errors=[];
+      page.on('pageerror',error=>errors.push(String(error)));
+      await page.route('**/delayed.woff2',async route=>{await held;await route.fulfill({body:fontBytes,contentType:'font/woff2'});});
+      try {
+        await page.goto('http://127.0.0.1:'+server.address().port);
+        await page.waitForFunction(()=>!!window.fontAudit);
+        await page.evaluate(initial=>window.fontAudit.mount(initial),cohort==='initial');
+        if(cohort!=='initial') {
+          await page.evaluate(()=>window.fontAudit.settle());
+          await page.evaluate(()=>window.fontAudit.remember());
+          await page.evaluate(()=>window.fontAudit.startFont());
+        }
+        await page.waitForFunction(()=>document.fonts.status==='loading');
+        const heldState=await page.evaluate(()=>window.fontAudit.snapshot());
+        assert.equal(heldState.revision,cohort==='initial'?0:1);
+        if(cohort==='initial') assert.equal(heldState.initialSettled,false);
+        const disposed=cohort==='disposed-later'?await page.evaluate(()=>window.fontAudit.dispose()):null;
+        release();
+        const settled=await page.evaluate(()=>window.fontAudit.settle());
+        assert.ok(settled.events.includes('loadingdone'));
+        assert.deepEqual(settled.messages,[]);
+        if(disposed) {
+          assert.equal(settled.disposed,true);
+          assert.equal(settled.revision,disposed.revision);
+          assert.deepEqual(settled.resources,{meshes:0,materials:0,textures:0});
+          assert.deepEqual(settled.textureIds,[]);
+        } else {
+          assert.equal(settled.revision,cohort==='initial'?1:2);
+          assert.equal(settled.initialSettled,true);
+          if(cohort==='later') {assert.ok(heldState.textureIds.length>0);assert.equal(settled.oldTexturesRemaining,0);}
+        }
+        assert.deepEqual(errors,[]);
+        results.push({cohort,heldState,disposed,settled});
+        await page.evaluate(()=>window.fontAudit.destroy());
+      } finally {release();await page.close();}
+    }
+    for(const input of inputs) assert.equal(hash(readFileSync(path.resolve(input.file))),input.sha256);
+    assert.equal(hash(readFileSync(fontFile)),hash(fontBytes));
+    t.diagnostic(JSON.stringify({browser:browser.version(),applicationSource,fontFile,fontSha256:hash(fontBytes),
+      bundleSha256:hash(built.outputFiles[0].contents),dependencyCount:inputs.length,dependencyReceipt:hash(JSON.stringify(inputs)),results,
+      scope:'Installed public real-browser font lifecycle, DPR1; current owner source applicability requires the existing library census. Not historical font timing, all Material cases, raster parity or current Angular unit-suite acceptance.'}));
+  } finally {if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}
+});
+
 test('public same-document surfaces isolate modal focus and independent disposal', async t => {
   const consumer = path.resolve('examples/material-showcase');
   const methods = [
