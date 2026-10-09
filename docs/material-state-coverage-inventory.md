@@ -2,6 +2,28 @@
 
 ## Current evidence boundary — October 9
 
+### Divider separator AX joins all24 configured cases
+
+Existing probe --divider --comparison-only closes only the four missing609×844
+DPR1 profile contexts; capture exits0 with8 paired-side observations. New log
+divider-comparison-theme-ax-20261009.log SHA256
+b461888f7be8f49c0eb7b337f5bc32a20a0604d7369add569f14fcc6036e78b8.
+Applied frame themes/backgrounds,benchmark URLs,horizontal separator role/empty
+name/no children and runtime receipts agree. The existing cohort assertion joins
+the two captures'40 observations to every24 configured divider case by exact
+profile,width,height,DPR. Historical c990a806 probe bytes authenticate original
+8181151c… capture receipt; new comparison receipt authenticates current probe.
+Other source/checkpoint/runtime receipts remain independently checked. Focused
+test passes1/1,1327.5352ms,exit0; syntax/diff checks pass.
+
+This closes the actual-theme separator-role/orientation/context membership gap,
+not complete accessibility relationships,paint or whole-case inspection. Older
+unknown-theme responsive observations remain retained without upgraded claims.
+New probe/proof still awaits coherent canonical dependency integration; no full
+export is justified solely by this ledger update. Next investigate remaining
+divider AX relationships/source applicability and paint/lifetime obligations
+using existing evidence,not recapturing these now-complete separator cohorts.
+
 ### Divider AX physical-to-configured join exposes four comparison cases
 
 Exact configured membership from benchmark.config joins the new32 AX observations

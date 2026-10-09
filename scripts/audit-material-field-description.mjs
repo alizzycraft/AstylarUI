@@ -6,7 +6,7 @@ import path from 'node:path';
 import { chromium } from 'playwright-core';
 import { fingerprintDirectory, materialBrowserLaunchOptions } from '../tests/material-parity/run-checkpoint.mjs';
 import { openSupplementalCapture, parseSupplementalCaptureArguments } from '../tests/material-parity/supplemental-capture-evidence.mjs';
-import { materialProfiles, materialViewports } from '../tests/material-parity/benchmark.config.mjs';
+import { materialProfiles, materialViewports, materialComparisonViewport } from '../tests/material-parity/benchmark.config.mjs';
 
 // Close the actual-AX hint-description gap, using the existing runtime receipt
 // observer. This is not an input-tree report or an all-profile acceptance gate.
@@ -18,13 +18,17 @@ assert.deepEqual(fingerprintDirectory(root), manifest.provenance.browserFiles);
 const allContexts = process.argv.includes('--all-contexts');
 const ordinaryTooltip = process.argv.includes('--ordinary-tooltip');
 const divider = process.argv.includes('--divider');
+const comparisonOnly = process.argv.includes('--comparison-only');
+assert.ok(!comparisonOnly || divider && !allContexts, 'Comparison-only is a separate bounded divider cohort.');
 assert.ok(!divider || !ordinaryTooltip, 'Divider and ordinary tooltip are separate capture scopes.');
 assert.ok(!ordinaryTooltip || !allContexts, 'Ordinary tooltip scope is the two explicitly declared contexts.');
 const family = divider ? 'divider' : ordinaryTooltip ? 'tooltip' : 'form-field';
 const states = divider ? ['inspect'] : ordinaryTooltip ? ['closed', 'hover', 'leave'] : ['hint', 'error'];
 const darkTheme = { mode: 'dark', primary: '#d0bcff', tertiary: '#efb8c8', surface: '#1c1b1f',
   error: '#f2b8b5', density: 0, cornerScale: 1, typographyScale: 1 };
-const contexts = allContexts ? materialProfiles.flatMap(profile => [
+const contexts = comparisonOnly ? materialProfiles.map(profile => ({ profile, viewportId: materialComparisonViewport.id,
+  viewport: { width: materialComparisonViewport.width, height: materialComparisonViewport.height },
+  deviceScaleFactor: materialComparisonViewport.deviceScaleFactor })) : allContexts ? materialProfiles.flatMap(profile => [
   ...materialViewports, { id: 'desktop-dpr2', width: 1440, height: 1000, deviceScaleFactor: 2 },
 ].map(({ id, width, height, deviceScaleFactor }) => ({ profile, viewportId: id,
   viewport: { width, height }, deviceScaleFactor }))) : [
@@ -49,7 +53,7 @@ let browser;
 try {
   browser = await chromium.launch(materialBrowserLaunchOptions());
   const options = parseSupplementalCaptureArguments([
-    `--base-url=${baseUrl}`, `--checkpoint=${checkpoint}`, ...process.argv.slice(2).filter(arg => !['--all-contexts', '--ordinary-tooltip', '--divider'].includes(arg)),
+    `--base-url=${baseUrl}`, `--checkpoint=${checkpoint}`, ...process.argv.slice(2).filter(arg => !['--all-contexts', '--ordinary-tooltip', '--divider', '--comparison-only'].includes(arg)),
   ]);
   const evidence = openSupplementalCapture({ options, browser,
     script: 'scripts/audit-material-field-description.mjs', styleProperties: [] });

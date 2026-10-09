@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { createRequire } from 'node:module';
@@ -30,26 +31,45 @@ test('divider actual-theme AX cohorts preserve exact contexts and runtime receip
   assert.equal(terminal.family, 'divider');
   assert.deepEqual(terminal.states, ['inspect']);
   for (const receipt of [...terminal.capture.sources, ...terminal.sourceReceipts,
-    terminal.capture.checkpointManifest]) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+    terminal.capture.checkpointManifest]) {
+    const source = receipt.file === 'scripts/audit-material-field-description.mjs'
+      ? execFileSync('git', ['show', `c990a806:${receipt.file}`]) : readFileSync(receipt.file);
+    assert.equal(hash(source), receipt.sha256);
+  }
   const manifest = JSON.parse(readFileSync(terminal.capture.checkpointManifest.file));
   assert.equal(terminal.browser, manifest.provenance.browser);
   const expected = ['light', 'dark', 'contrast', 'custom'].flatMap(profile =>
     ['desktop', 'tablet', 'mobile', 'desktop-dpr2'].flatMap(viewport =>
       ['reference', 'astylar'].map(side => `${profile}:${viewport}:${side}`)));
   assert.deepEqual(records.map(r => `${r.context.profile}:${r.context.viewportId}:${r.side}`).sort(), expected.sort());
+  const comparisonBytes = readFileSync('artifacts/material-parity/divider-comparison-theme-ax-20261009.log');
+  assert.equal(hash(comparisonBytes), 'b461888f7be8f49c0eb7b337f5bc32a20a0604d7369add569f14fcc6036e78b8');
+  const comparison = comparisonBytes.toString().trim().split(/\r?\n/).map(JSON.parse);
+  const comparisonTerminal = comparison.pop();
+  assert.equal(comparisonTerminal.terminal, 'verified');
+  assert.equal(comparisonTerminal.contexts, 4);
+  assert.equal(comparisonTerminal.family, 'divider');
+  assert.deepEqual(comparisonTerminal.states, ['inspect']);
+  assert.equal(comparisonTerminal.browser, terminal.browser);
+  assert.deepEqual(comparisonTerminal.capture.checkpointManifest, terminal.capture.checkpointManifest);
+  for (const receipt of [...comparisonTerminal.capture.sources, ...comparisonTerminal.sourceReceipts])
+    assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  assert.deepEqual(comparison.map(r => `${r.context.profile}:${r.context.viewportId}:${r.side}`).sort(),
+    ['light', 'dark', 'contrast', 'custom'].flatMap(profile => ['reference', 'astylar'].map(side => `${profile}:comparison:${side}`)).sort());
+  records.push(...comparison);
   const configured = [...materialStaticCases, ...materialInteractionCases].filter(r => r.family === 'divider');
   assert.equal(configured.length, 24);
   const covered = configured.filter(r => records.some(observed => observed.side === 'reference' &&
     observed.context.profile === r.profile && observed.context.viewport.width === r.viewport.width &&
     observed.context.viewport.height === r.viewport.height && observed.context.deviceScaleFactor === r.viewport.deviceScaleFactor));
-  assert.equal(covered.length, 20);
+  assert.equal(covered.length, 24);
   assert.deepEqual(configured.filter(r => !covered.includes(r)).map(r => `${r.profile}:${r.viewport.id}`).sort(),
-    ['contrast:comparison', 'custom:comparison', 'dark:comparison', 'light:comparison']);
+    []);
   const rgb = { light: 'rgb(255, 251, 254)', dark: 'rgb(28, 27, 31)',
     contrast: 'rgb(255, 255, 255)', custom: 'rgb(244, 251, 250)' };
   for (const row of records) {
     const dimensions = { desktop: [1440, 1000, 1], tablet: [768, 1024, 1],
-      mobile: [390, 844, 2], 'desktop-dpr2': [1440, 1000, 2] };
+      mobile: [390, 844, 2], 'desktop-dpr2': [1440, 1000, 2], comparison: [609, 844, 1] };
     assert.deepEqual([row.context.viewport.width, row.context.viewport.height, row.context.deviceScaleFactor], dimensions[row.context.viewportId]);
     assert.equal(row.state, 'inspect');
     const url = new URL(row.url);
