@@ -2,6 +2,34 @@
 
 ## Current evidence boundary — October 10
 
+### Original applied-theme wrapper and retained component batch conserved
+
+The next exact input-boundary snapshot is now reconciled in the existing
+historical preload. Complete current fileSHAcfd2f64ec26ffa1108a421d14fea8ba86c707aa3a285ee2dd482913a9e91a801
+has60 statements versus42 in authenticated Git96be6b7c originalSHA d07df06e…:
+40 original statements match exactly,two named divider/progress owners have
+later diagnostic extensions,and18 statements are additions. The current whole
+snapshot is pinned before selecting the original Git bytes; existing exact
+progress-addition reversal and33→41 original boundary checks then run unchanged.
+This is historical source conservation,not an assertion that diagnostic changes
+generated old evidence or that current rendering is accepted. An in-memory
+opaque-backing-title mutation is rejected as unreviewed drift without file writes.
+
+Original applied-theme wrapper now passes1/1 in176.0798ms,total2065.6694ms:
+tooltip-applied-theme-boundary-conserved-20261010.log
+SHA cf8c75dd17a782462d1ddd9bbeae54f8f70a150de17a4b0dc71c09f24f9a7445.
+Coherent existing retained component batch passes8/8,total2941.0602ms,covering
+progress,compact inputs,keyboard,applied theme,selection,tooltip phase,Tab/edit
+and standalone visibility/disabled/selection receipts. Log
+retained-component-boundary-batch-20261010.log
+SHA d2e2a89890dedf9d6111a2f808172273f43b313c9be5c32009e8ce09c73707f0.
+Earlier wrapper failures remain retained; their unresolved wrapper status is
+superseded,not their historical observations. No browser,canonical export,
+renderer or fixture change. Syntax and exact-path diff checks pass. Publication,
+remaining exact-case obligations,current validity and final full gates remain;
+all2311 cases remain partial. Next return to those obligations,not further replay
+layers or repetition of these eight settled component questions.
+
 ### Applied-theme historical wrapper: sorter extension conserved, next boundary explicit
 
 Specific question: does the old150-versus153 applied-theme wrapper failure remain

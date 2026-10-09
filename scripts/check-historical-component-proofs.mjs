@@ -110,13 +110,41 @@ if (main) {
   const currentBoundary = read(boundary);
   const priorBoundaryHash = 'de260e2fbee31686bccd940582e1503fc378881d2c94e6e35b66b67877cbc141';
   const progressBoundaryHash = 'd07df06e4ee6996f9fc06b778fc0b429620f1e0526813f33f8c52e6d083c27c0';
-  assert.ok([priorBoundaryHash, progressBoundaryHash].includes(hash(currentBoundary)),
+  const diagnosticBoundaryHash = 'cfd2f64ec26ffa1108a421d14fea8ba86c707aa3a285ee2dd482913a9e91a801';
+  assert.ok([priorBoundaryHash, progressBoundaryHash, diagnosticBoundaryHash].includes(hash(currentBoundary)),
     'Unreviewed input-boundary snapshot drift');
   let reviewedBoundary = currentBoundary;
-  if (hash(currentBoundary) === progressBoundaryHash) {
+  if (hash(currentBoundary) === diagnosticBoundaryHash) {
+    const originalProgress = execFileSync('git', ['show', `96be6b7c:${boundary}`], { maxBuffer: 4_000_000 });
+    assert.equal(hash(originalProgress), progressBoundaryHash);
+    const keyed = bytes => {
+      const ast = ts.createSourceFile(boundary, lf(bytes), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+      assert.equal(ast.parseDiagnostics.length, 0);
+      const entries = ast.statements.map(node => [ts.isExpressionStatement(node) &&
+        ts.isCallExpression(node.expression) && node.expression.expression.getText(ast) === 'test'
+        ? node.expression.arguments[0].text : node.getText(ast).slice(0, 90), node.getText(ast)]);
+      const result = new Map(entries); assert.equal(result.size, entries.length);
+      return result;
+    };
+    const before = keyed(originalProgress), after = keyed(currentBoundary);
+    assert.equal(before.size, 42); assert.equal(after.size, 60);
+    const extended = new Set([
+      'public divider typography reduction observes equal paragraph span inputs and opaque backing control',
+      'retained progress focus caps and update disposal preserve complete configured cohort evidence']);
+    for (const [name, statement] of before) {
+      assert.ok(after.has(name), `missing original progress statement ${name}`);
+      if (!extended.has(name)) assert.equal(after.get(name), statement);
+      else assert.notEqual(after.get(name), statement);
+    }
+    // Later sampler/lifetime diagnostics are deliberately not executed as the
+    // historical capture. Whole current bytes are pinned;40 original statements
+    // are exact and two named extensions restore the authenticated Git original.
+    reviewedBoundary = originalProgress;
+  }
+  if (hash(reviewedBoundary) === progressBoundaryHash) {
     const predecessor = execFileSync('git', ['show', `cc78f5f2^:${boundary}`], { maxBuffer: 4_000_000 });
     assert.equal(hash(predecessor), priorBoundaryHash);
-    const text = lf(currentBoundary);
+    const text = lf(reviewedBoundary);
     const ast = ts.createSourceFile(boundary, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
     assert.equal(ast.parseDiagnostics.length, 0);
     const additions = ast.statements.filter(node => ts.isExpressionStatement(node) &&
