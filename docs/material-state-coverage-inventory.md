@@ -2,6 +2,26 @@
 
 ## Current evidence boundary — October 9
 
+### Ordinary divider text uses inherited CSS-width constraints, not input-control defaults
+
+Read-only current source trace resolves the next boundary: renderer.service.ts
+handles ordinary text through getInheritedTextStyle, recursively selecting parent
+whiteSpace and wordWrap before merging the owner's rule. Its inherited-property
+list does not include overflowWrap or wordBreak. Available text width is retained
+CSS width minus left/right padding (undefined only for non-positive width);
+that same constraint reaches rendering and measurement. This is not a separate
+world-space wrapping calculation or the editable-control pipeline. Together with
+the existing executable parser proof, this identifies the current omitted-default
+and inheritance path without claiming installed/captured runtime equivalence.
+Competing explanations remain a harmless normal default for these single-word
+labels versus an applicable unsupported wrapping request or constrained width.
+The retained sample's parent width alone cannot decide the latter: the ordinary
+span's retained CSS dimensions and all24 exact ancestry/rule requests still need
+joining. Do not infer available width from separator geometry or screenshot ink.
+Next use the existing retained owner evidence to establish that constraint; if
+it was not captured, record the precise missing observation instead of another
+default replay. No renderer, fixture, classification or acceptance change.
+
 ### Ordinary text wrapping omission reaches an explicit parser default
 
 Current ordinary renderer at renderer.service.ts:253–276 calls
