@@ -42,6 +42,24 @@ const fieldPopupSource = "    'scripts/audit-material-configured-field-popup-bou
 // and its predecessor before the older registration reversals inspect the prefix.
 export function restoreDescriptionProofRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes('ordinary default-light mobile tooltip live-material retention diagnostic counterexample (requested dark)')) {
+    assert.equal(hash(current), 'a80f88e04560a2dae06d142c75afdb4f7e9dd3cedf1c5f3ff05a3d9880690b18',
+      'exact ordinary-tooltip actual-theme scope correction snapshot');
+    const reversals = [
+      ['ordinary default-light mobile tooltip live-material retention diagnostic counterexample (requested dark)', 'ordinary dark mobile tooltip live-material retention diagnostic counterexample'],
+      ['Current-full checkpoint-bound default-light/mobile390x844 DPR2 (requested dark, without actual dark theme setup) hover/leave cycles', 'Current-full checkpoint-bound dark/mobile390x844 DPR2 actual hover/leave cycles'],
+      ['not actual dark-theme coverage, lifecycle acceptance', 'not lifecycle acceptance'],
+      ['default-light mobile tooltip keyboard-authoring and local texture-phase diagnostic (requested dark)', 'dark mobile tooltip keyboard-authoring and local texture-phase diagnostic'],
+      ['This retained default-light mobile DPR2 state (requested dark, without actual dark theme setup) centers', 'This retained state centers'],
+      ['diagnostic registration is not acceptance or actual dark-theme coverage.', 'diagnostic registration is not acceptance.'],
+    ];
+    for (const [corrected, original] of reversals) {
+      assert.equal(current.split(corrected).length, 2, 'one exact scope correction occurrence');
+      current = current.replace(corrected, original);
+    }
+    assert.equal(hash(current), '8cabfd116a251c8e0e10874cd35c25cb51af9155d19d511e6483403cf500cb68',
+      'complete producer before two ordinary-tooltip scope corrections preserved');
+  }
   const fieldDescriptionSource = "    'scripts/audit-material-field-description.mjs',\n";
   if (current.includes(fieldDescriptionSource)) {
     assert.equal(hash(current), '8cabfd116a251c8e0e10874cd35c25cb51af9155d19d511e6483403cf500cb68',

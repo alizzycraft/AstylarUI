@@ -18,6 +18,10 @@ test('description registration conserves complete producer and source-definition
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n');
   const producerFile = 'tests/material-parity/input-equivalence-audit.mjs';
   const producer = readFileSync(producerFile, 'utf8');
+  assert.ok(producer.includes('ordinary default-light mobile tooltip live-material retention diagnostic counterexample (requested dark)'));
+  assert.ok(producer.includes('default-light mobile tooltip keyboard-authoring and local texture-phase diagnostic (requested dark)'));
+  assert.ok(producer.includes('not actual dark-theme coverage, lifecycle acceptance'));
+  assert.ok(producer.includes('diagnostic registration is not acceptance or actual dark-theme coverage.'));
   assert.equal(restoreDescriptionProofRegistration(producer), prior(producerFile));
   const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
   const policy = readFileSync(policyFile, 'utf8');
@@ -27,7 +31,9 @@ test('description registration conserves complete producer and source-definition
   assert.deepEqual(sourceAuditDefinitions.slice(0, -2), before);
   for (const changed of [producer.replace('sourceFindings,', 'sourceFindings: [],'),
     producer.replace('configured field hint-description input boundary', 'unreviewed description acceptance'),
-    producer.replace('scripts/audit-material-tooltip-description.mjs', 'scripts/other.mjs')])
+    producer.replace('scripts/audit-material-tooltip-description.mjs', 'scripts/other.mjs'),
+    producer.replace('not actual dark-theme coverage, lifecycle acceptance', 'dark lifecycle acceptance'),
+    producer.replace('diagnostic registration is not acceptance or actual dark-theme coverage.', 'diagnostic registration proves dark-theme acceptance.')])
     assert.throws(() => restoreDescriptionProofRegistration(changed));
   for (const changed of [policy.replace('fixture-form-field-hint-description-association-omitted', 'unknown-hint-finding'),
     policy.replace('Original', 'Rewritten')]) assert.throws(() => restoreDescriptionPolicyRegistration(changed));

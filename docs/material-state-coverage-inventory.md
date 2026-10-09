@@ -2,6 +2,28 @@
 
 ## Current evidence boundary — October 9
 
+### Ordinary-tooltip scope corrected; known-invalid export cancelled
+
+Read-only process verification identified launcher30060 and its exact owning
+current-ancestry export worker18352. The worker was deliberately stopped because
+two frozen tooltip proof descriptions overclaimed actual dark-theme coverage,
+not because of an observation timeout. Both handles are now absent. Preserve
+description-batch-canonical-corrected-export-20261009.log as cancelled/incomplete
+evidence; its last recorded stage is validate-audit, not publication acceptance.
+
+The two existing proof labels/descriptions now explicitly identify default-light
+mobile DPR2 with dark requested. Original observations, counts, owning test bodies
+and evidence paths are unchanged. Exact whole-source hash guards reverse only six
+wording substitutions and prove the complete pre-correction producer before the
+existing153-finding predecessor checks. Unknown drift and renewed dark-acceptance
+claims fail the existing negative controls. Four existing focused checks pass4/4,
+6701.1912ms,exit0; full producer-transition integration passes32/32,
+36983.7845ms,exit0. Diff check passes. D:free226103296bytes at preflight.
+No renderer, fixture, threshold, case closure or acceptance criterion changed.
+Next commit/push the coherent correction, then one replacement
+export and independent cold check before import. Actual dark paint/lifecycle
+coverage and exact case-obligation/current-validity closure remain open.
+
 ### Additional canonical ordinary-tooltip theme wording requires correction
 
 Read-only review of the frozen producer identifies two remaining overbroad proof
