@@ -359,8 +359,12 @@ test('divider host clipping observations preserve bounded DOM ancestry', () => {
     assert.equal(end.contexts, contexts);
     assert.equal(observations.length, contexts * 2);
     assert.ok(end.capture.sources.some(r => r.file === 'tests/material-parity/reference-root-ancestor-context.mjs'));
-    for (const receipt of [...end.capture.sources, ...end.sourceReceipts, end.capture.checkpointManifest])
-      assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+    for (const receipt of [...end.capture.sources, ...end.sourceReceipts, end.capture.checkpointManifest]) {
+      // Authenticate the capture-time probe, not today's extended diagnostic.
+      const source = receipt.file === 'scripts/audit-material-field-description.mjs'
+        ? execFileSync('git', ['show', `3cbae5d1:${receipt.file}`]) : readFileSync(receipt.file);
+      assert.equal(hash(source), receipt.sha256);
+    }
     assert.deepEqual(end.capture.checkpointManifest, terminal.capture.checkpointManifest);
     assert.equal(end.browser, terminal.browser);
     receipted.push(...observations);

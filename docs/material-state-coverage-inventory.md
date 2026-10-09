@@ -2,6 +2,27 @@
 
 ## Current evidence boundary — October 9
 
+### Retained-layout diagnostic batch registered; canonical reconciliation pending
+
+Seven existing input-boundary proofs and twelve consumed evidence/source paths
+are now registered in the producer (171 focused entries, previously164). This
+is additive evidence registration, not new classification or acceptance policy.
+The host-clipping replay initially failed because its receipted capture read
+today's extended probe. It now reads Git3cbae5d1 probe bytes and authenticates
+the unchanged capture SHA1f8d49b865cb0a7a292e2d6e6620bf8b4b63794a870ffa36b25818eec5a7d155.
+The original unreceipted capture still authenticates its distinct ed6a0083 bytes;
+no receipt is replaced and neither historical capture becomes current execution.
+
+Focused input-boundary selection passes7/7,13315.3643ms; layout registration,
+description predecessor and standalone predecessor checks pass3/3,3259.7734ms.
+Exact reversal conserves the complete accepted predecessor producer; four drift
+controls reject altered classification/scope/dependency bytes. Policy is unchanged.
+No renderer,fixture or configured case closure changes. Canonical b28e8926 remains
+the previous accepted publication until this coherent batch exports and passes
+independent cold verification. Next perform that milestone, then finish exact
+case obligations/current-validity joins, prioritizing shared overlays,scrollbars
+and text paint. Do not repeat the settled width/default/parser investigations.
+
 ### Divider wrapping-width question answered with fresh registry evidence
 
 Existing description probe's opt-in --divider-layout now mounts the unchanged

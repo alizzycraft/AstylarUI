@@ -9,9 +9,32 @@ import { transformSync } from 'esbuild';
 import { PNG } from 'pngjs';
 import { materialCaseKey, fingerprintDirectory } from './run-checkpoint.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
-import { restoreDescriptionProofRegistration, restoreDescriptionPolicyRegistration, restoreStandaloneProofBatch, restoreExtendedKeyboardRegistration } from './position-composition-producer-transition.mjs';
+import { restoreLayoutDiagnosticRegistration, restoreDescriptionProofRegistration, restoreDescriptionPolicyRegistration, restoreStandaloneProofBatch, restoreExtendedKeyboardRegistration } from './position-composition-producer-transition.mjs';
 import { propertyGroups, sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { materialAbsoluteTextAlignmentTargets, materialAdditionalMeasurementTargets, materialComparisonViewport, materialFamilies, materialFocusedRasterTargets, materialGeometryExcludedTargets, materialInteractionCases, materialInteractionFocusedRasterTargets, materialInteractionTextAlignmentTargets, materialInteractionViewports, materialLeftAlignedTextTargets, materialMobileFlowCases, materialMobileFlowFamilies, materialProfiles, materialSemanticExcludedTargets, materialStaticCases, materialSupplementalStaticCases, materialTextAlignmentTargets, materialTextAlignmentToleranceOverrides, materialTextAuditTargets, materialTextlessFamilies, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets, materialViewports } from './benchmark.config.mjs';
+
+test('layout diagnostic registration preserves complete predecessor and unchanged acceptance policy', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8');
+  const prior = execFileSync('git', ['show', `ad7133cd:${file}`], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreLayoutDiagnosticRegistration(current), prior);
+  const policy = 'tests/material-parity/input-equivalence-policy.mjs';
+  assert.equal(readFileSync(policy, 'utf8').replaceAll('\r\n', '\n'),
+    execFileSync('git', ['show', `ad7133cd:${policy}`], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n'));
+  const ast = ts.createSourceFile(file, current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const functions = ['sourceFingerprints', 'focusedProofInventory', 'proof'].map(name =>
+    ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name).getText(ast));
+  const { fingerprints, proofs } = new Function('readFileSync', 'path', 'createHash', functions.join('\n') +
+    ';return {fingerprints:sourceFingerprints(process.cwd()),proofs:focusedProofInventory(process.cwd())};')(
+    readFileSync, path, createHash);
+  assert.equal(proofs.length, 171); assert.ok(proofs.every(row => row.status !== 'missing'));
+  assert.ok(fingerprints.some(row => row.file.endsWith('divider-fresh-retained-layout-20261009.jsonl')));
+  for (const changed of [current.replace('sourceFindings,', 'sourceFindings: [],'),
+    current.replace('Authenticates20 fresh JIT component contexts', 'Authenticates21 fresh JIT component contexts'),
+    current.replace('Not historical texture dimensions', 'Historical texture dimensions'),
+    current.replace('divider-host-context-receipted-20261009.log', 'unknown-host.log')])
+    assert.throws(() => restoreLayoutDiagnosticRegistration(changed));
+});
 
 test('description registration conserves complete producer and source-definition predecessors', () => {
   const prior = file => execFileSync('git', ['show', `5b3dfd70:${file}`],

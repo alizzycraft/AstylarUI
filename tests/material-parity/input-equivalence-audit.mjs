@@ -8889,6 +8889,18 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'artifacts/material-parity/divider-fresh-retained-layout-20261009.jsonl',
+    'artifacts/material-parity/divider-host-context-20261009.log',
+    'artifacts/material-parity/divider-host-context-receipted-20261009.log',
+    'artifacts/material-parity/divider-host-comparison-receipted-20261009.log',
+    'artifacts/material-parity/layout-inspection-package-zoned-20261009-dpr1/result.json',
+    'artifacts/material-parity/layout-inspection-package-zoned-20261009-dpr1/provenance.json',
+    'artifacts/material-parity/layout-inspection-package-zoned-20261009-dpr2/result.json',
+    'artifacts/material-parity/layout-inspection-package-zoned-20261009-dpr2/provenance.json',
+    'tests/material-parity/reference-root-ancestor-context.mjs',
+    'examples/angular-consumer/src/app/style-inspection.browser.spec.ts',
+    'src/lib/astylar-style-inspection.spec.ts',
+    'src/app/services/text/multi-line-text-renderer.service.ts',
     'artifacts/material-parity/divider-theme-verified-ax-20261009.log',
     'artifacts/material-parity/divider-comparison-theme-ax-20261009.log',
     'artifacts/material-parity/divider-update-disposal-20261006.log',
@@ -9455,6 +9467,20 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('fresh divider layout observations join all exact cases and bound single-word wrapping'/,
+      'divider fresh retained CSS width and scoped wrapping boundary', 'Authenticates20 fresh JIT component contexts,explicitly loaded fonts,served assets and actual source dependencies. Joins all24 configured cases and48 unchanged owner inputs while adding current positive registry dimensions and zero padding. Executes actual normal parser/wrapping with bounded sensitivity controls. Not historical texture dimensions,AOT/full application paint,line-box equivalence or whole-case acceptance; first-segment break-word limitation remains separate.'),
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('packed layout inspection browser proofs authenticate the complete current consumer suite'/,
+      'packed retained-layout diagnostic runtime and declaration boundary', 'Authenticates the complete two-test consumer inspection suite at DPR1/2,104 emitted/source receipts,2742 bundle inputs,current runner and packed archive. Hidden omission,dimensions,padding,mutation detachment and existing state/isolation assertions pass; packed declarations type-check. Not full consumer build/SSR,unfiltered core units,Material rendering or case acceptance.'),
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('current Material serializer preserves detached layout observations without filling missing owners'/,
+      'Material retained-layout serialization source boundary', 'Executes the current collector and serializer with detached numeric registry observations. Missing/legacy owners stay absent; mutations cannot contaminate the next tree. Synthetic source-level control,not actual layout capture or historical width inference.'),
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('current inspection method detaches registry dimensions and omits ambiguous owners'/,
+      'core retained-layout inspection owner source boundary', 'Executes the current owning method with inert unrelated stages. Unique rendered owners read the dimension registry; missing/duplicate owners omit it; mutations detach and updated registry values refresh. A projected-bound control throws if invoked. Source-level proof,not browser lifecycle,paint-time texture inputs or complete core-suite acceptance.'),
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('divider retained wrapping ancestry distinguishes requests from missing layout dimensions'/,
+      'divider exact retained wrapping ancestry observation gap', 'Authenticates48 original trees across24 cases and both owner ancestor paths:192 reference visits carry normal wrapping/clip requests,240 candidate visits omit those fields,and48 owners lack layout dimensions. Preserves the historical observation gap rather than filling defaults; the fresh width proof remains separately scoped.'),
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('divider host clipping observations preserve bounded DOM ancestry'/,
+      'divider outer DOM clipping and canvas extent boundary', 'Authenticates original and receipted host observations,collector bytes and exact24-case joins across20 physical contexts. Outer ancestors expose visible overflow/no clip-path; canvas has its own clip. Retained separator extents lie inside the canvas. Not internal scene clipping,actual paint visibility,whole-case acceptance or retroactive provenance for the original unreceipted collector.'),
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('ordinary text parser preserves omitted wrapping defaults without assuming word-break support'/,
+      'ordinary text parser default and sensitivity source boundary', 'Executes the actual current parser:omitted and explicit normal wrapping/clip match;pre,break-word and ellipsis remain distinct. No wordBreak output or overflowWrap support is inferred. Source-level parser proof,not installed call-path,ancestry,layout or raster acceptance.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('divider actual-theme AX cohorts preserve exact contexts and runtime receipts'/,
       'divider exact configured separator AX boundary', 'Authenticates40 paired-side observations in20 actual-theme physical contexts,joining all24 configured divider cases. Separator role,empty name,horizontal orientation and no AX children agree. Exact historical/current probe receipts remain distinct. Not complete accessibility,paint,lifetime,current rendering or whole-case closure.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('divider retained update disposal observations join all configured physical contexts'/,

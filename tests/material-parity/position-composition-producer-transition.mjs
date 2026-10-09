@@ -5,6 +5,48 @@ import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
 
 const hash = text => createHash('sha256').update(text).digest('hex');
+// Reverse only the exact diagnostic inventory addition for historical
+// conservation. This does not substitute old bytes in current production.
+export function restoreLayoutDiagnosticRegistration(source) {
+  let current = source.toString().replaceAll('\r\n', '\n');
+  if (!current.includes('divider fresh retained CSS width and scoped wrapping boundary')) return current;
+  assert.equal(hash(current), 'ca019b9ec763bdfd457aeb22e80bb00524f90ffbd404d154a61d1b0100efc903',
+    'exact complete layout diagnostic registration snapshot');
+  const ast = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  assert.equal(ast.parseDiagnostics.length, 0);
+  const entries = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory')
+    .body.statements[0].expression.elements;
+  assert.equal(entries.length, 171);
+  assert.deepEqual(entries.slice(0, 7).map(n => n.arguments[3].text), [
+    'divider fresh retained CSS width and scoped wrapping boundary',
+    'packed retained-layout diagnostic runtime and declaration boundary',
+    'Material retained-layout serialization source boundary',
+    'core retained-layout inspection owner source boundary',
+    'divider exact retained wrapping ancestry observation gap',
+    'divider outer DOM clipping and canvas extent boundary',
+    'ordinary text parser default and sensitivity source boundary',
+  ]);
+  current = current.slice(0, entries[0].getFullStart()) + current.slice(entries[7].getFullStart());
+  for (const file of [
+    'artifacts/material-parity/divider-fresh-retained-layout-20261009.jsonl',
+    'artifacts/material-parity/divider-host-context-20261009.log',
+    'artifacts/material-parity/divider-host-context-receipted-20261009.log',
+    'artifacts/material-parity/divider-host-comparison-receipted-20261009.log',
+    'artifacts/material-parity/layout-inspection-package-zoned-20261009-dpr1/result.json',
+    'artifacts/material-parity/layout-inspection-package-zoned-20261009-dpr1/provenance.json',
+    'artifacts/material-parity/layout-inspection-package-zoned-20261009-dpr2/result.json',
+    'artifacts/material-parity/layout-inspection-package-zoned-20261009-dpr2/provenance.json',
+    'tests/material-parity/reference-root-ancestor-context.mjs',
+    'examples/angular-consumer/src/app/style-inspection.browser.spec.ts',
+    'src/lib/astylar-style-inspection.spec.ts',
+    'src/app/services/text/multi-line-text-renderer.service.ts',
+  ]) {
+    const line = `    '${file}',\n`; assert.equal(current.split(line).length, 2); current = current.replace(line, '');
+  }
+  assert.equal(hash(current), 'adc06115a237d04a32c233323a3815d1822e783fff0ecf45e830efe53faa5b4d',
+    'complete accepted predecessor producer conserved');
+  return current;
+}
 // Historical replay only. Never use this reader for current capture or rendering acceptance.
 export function readRetainedSortFocusSource(current = readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')) {
   assert.equal(hash(current), '4a386f107cee16cb120910717a42b6ee9b40c724f02860b68a60ce29d4784f30', 'exact reviewed paint-proof snapshot');
@@ -41,7 +83,7 @@ const fieldPopupSource = "    'scripts/audit-material-configured-field-popup-bou
 // Historical source conservation only: authenticate the complete additive batch
 // and its predecessor before the older registration reversals inspect the prefix.
 export function restoreDescriptionProofRegistration(source) {
-  let current = source.toString().replaceAll('\r\n', '\n');
+  let current = restoreLayoutDiagnosticRegistration(source);
   if (current.includes('divider exact configured separator AX boundary')) {
     const entries = "    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\\('divider actual-theme AX cohorts preserve exact contexts and runtime receipts'/,\n" +
       "      'divider exact configured separator AX boundary', 'Authenticates40 paired-side observations in20 actual-theme physical contexts,joining all24 configured divider cases. Separator role,empty name,horizontal orientation and no AX children agree. Exact historical/current probe receipts remain distinct. Not complete accessibility,paint,lifetime,current rendering or whole-case closure.'),\n" +
