@@ -27,6 +27,16 @@ astylar-semantic-bridge.ts:668 preserves main rather than inventing a landmark.
 Reference.component.ts:55 has the single authored frame main. This is a shared
 application-host/semantic-document composition mismatch,not demonstrated core
 misclassification. Do not change the bridge to suppress correctly authored main.
+The same existing proof now parses current Angular metadata and the factory AST:
+the host main directly contains the surface; the sole unconditional factory
+return has one root main#page. It executes the actual transpiled bridge tag method
+and preserves main/section/div. Focused1/1 passes1961.6624ms. This makes the
+authoring cause profile/family-independent at current source level,not a claim
+that all36 families or their current browser AX relationships were captured.
+No competing core landmark insertion is observed at this tag-mapping boundary;
+complete host/bridge reconciliation and assistive-technology behavior remain
+separate obligations. The future correction belongs to application host versus
+rendered-document semantic composition,not fixture-specific bridge suppression.
 No fixture or renderer changed. Next verify ancestor relationships with explicit
 capture-time source/theme receipts in missing contexts,then map the failure to
 exact case obligations. These strengthened assertions remain standalone pending

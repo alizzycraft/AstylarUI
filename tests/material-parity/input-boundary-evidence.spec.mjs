@@ -359,6 +359,34 @@ test('divider actual-theme AX cohorts preserve exact contexts and runtime receip
     assert.equal(url.searchParams.get('profile'), 'light');
     assert.equal(url.searchParams.get('benchmark'), '1');
   }
+  // Current source ownership, separate from historical runtime applicability.
+  const application = ts.createSourceFile('astylar.component.ts',
+    readFileSync('examples/material-showcase/src/app/astylar.component.ts', 'utf8'),
+    ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+  const component = application.statements.find(node => ts.isClassDeclaration(node) &&
+    node.name?.text === 'AstylarShowcaseComponent');
+  const property = (object, name) => object.properties.find(node => ts.isPropertyAssignment(node) &&
+    node.name.getText(application).replace(/['"]/g, '') === name)?.initializer;
+  const metadata = ts.getDecorators(component).find(node => node.expression.expression?.getText(application) === 'Component')
+    .expression.arguments[0];
+  assert.match(property(metadata, 'template').text,
+    /<main\s[^>]*class="frame"[^>]*>\s*<astylar-surface\b[^>]*\/>\s*<\/main>/);
+  const build = component.members.find(node => node.name?.getText(application) === 'buildSiteData');
+  const returns = build.body.statements.filter(ts.isReturnStatement);
+  assert.equal(returns.length, 1, 'unconditional document root return');
+  const children = property(property(returns[0].expression, 'root'), 'children');
+  assert.ok(ts.isArrayLiteralExpression(children));
+  assert.equal(children.elements.length, 1);
+  assert.equal(property(children.elements[0], 'type').text, 'main');
+  assert.equal(property(children.elements[0], 'id').text, 'page');
+  const bridge = ts.createSourceFile('bridge.ts', readFileSync('src/lib/astylar-semantic-bridge.ts', 'utf8'),
+    ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+  const bridgeClass = bridge.statements.find(node => ts.isClassDeclaration(node) && node.name?.text === 'AstylarSemanticBridge');
+  const tagMethod = bridgeClass.members.find(node => node.name?.getText(bridge) === 'semanticTagName');
+  const compiled = ts.transpileModule(`class TagOwner { ${tagMethod.getText(bridge)} }`,
+    { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
+  const owner = new Function(`${compiled}; return new TagOwner();`)();
+  for (const tag of ['main', 'section', 'div']) assert.equal(owner.semanticTagName(tag), tag);
 });
 
 test('divider host clipping observations preserve bounded DOM ancestry', () => {
