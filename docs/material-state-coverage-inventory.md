@@ -2,6 +2,29 @@
 
 ## Current evidence boundary — October 9
 
+### Divider actual-theme separator AX gap now captured
+
+Existing field-description probe gains bounded --divider mode, reusing the
+authenticated checkpoint/runtime observer and CDP path rather than a new audit
+framework. Sequential --divider --all-contexts capture exits0:32 paired-side
+observations across four profiles × desktop/tablet/mobile DPR1 and desktop DPR2.
+Every actual frame background/dark flag is checked, URLs record benchmark=1 and
+requested profile, and separator role/empty name/horizontal orientation/no AX
+children agree. Log divider-theme-verified-ax-20261009.log SHA256
+32c55ffb2c1bede46dfefa45e24fa96dcdcab52ee9ac251d0d06bb0333f76347.
+Existing input-boundary suite's exact cohort/source/runtime-receipt assertion
+passes1/1,1507.9039ms,exit0. Capture Chrome154.0.8037.58 authenticates the same
+1887-file October5 checkpoint; this is bounded AX,not paint or whole-runtime
+acceptance. Old responsive observations remain separately retained and their
+original theme setup is still unknown. No whole case closes.
+
+Remote now confirms e13ecbcd after the HTTP/1.1 push retry. The new probe/proof
+source change is standalone evidence pending coherent canonical dependency
+integration; accepted package57734896 remains the prior snapshot,not automatically
+current-producer equality. Do not export after this metadata increment alone.
+Next join exact divider case obligations/current validity and remaining AX
+relationships,paint and ownership evidence; no renderer/fixture change.
+
 ### Scope-corrected canonical independently accepted and compact import verified
 
 Independent cold session5183 terminates exit0 at3030328.9911ms. The same five-path

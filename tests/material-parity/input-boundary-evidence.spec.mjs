@@ -19,6 +19,45 @@ const bytes = readFileSync(file);
 assert.equal(hash(bytes), '39df94e0eb87480d3824927a41a9950d1d275f7c97ab97a571c449efdc6da7d7');
 const report = JSON.parse(bytes);
 
+test('divider actual-theme AX cohorts preserve exact contexts and runtime receipts', () => {
+  const raw = readFileSync('artifacts/material-parity/divider-theme-verified-ax-20261009.log');
+  assert.equal(hash(raw), '32c55ffb2c1bede46dfefa45e24fa96dcdcab52ee9ac251d0d06bb0333f76347');
+  const records = raw.toString().trim().split(/\r?\n/).map(JSON.parse);
+  const terminal = records.pop();
+  assert.equal(terminal.terminal, 'verified');
+  assert.equal(terminal.contexts, 16);
+  assert.equal(terminal.family, 'divider');
+  assert.deepEqual(terminal.states, ['inspect']);
+  for (const receipt of [...terminal.capture.sources, ...terminal.sourceReceipts,
+    terminal.capture.checkpointManifest]) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  const manifest = JSON.parse(readFileSync(terminal.capture.checkpointManifest.file));
+  assert.equal(terminal.browser, manifest.provenance.browser);
+  const expected = ['light', 'dark', 'contrast', 'custom'].flatMap(profile =>
+    ['desktop', 'tablet', 'mobile', 'desktop-dpr2'].flatMap(viewport =>
+      ['reference', 'astylar'].map(side => `${profile}:${viewport}:${side}`)));
+  assert.deepEqual(records.map(r => `${r.context.profile}:${r.context.viewportId}:${r.side}`).sort(), expected.sort());
+  const rgb = { light: 'rgb(255, 251, 254)', dark: 'rgb(28, 27, 31)',
+    contrast: 'rgb(255, 255, 255)', custom: 'rgb(244, 251, 250)' };
+  for (const row of records) {
+    assert.equal(row.state, 'inspect');
+    const url = new URL(row.url);
+    assert.equal(url.pathname, `/${row.side}/divider`);
+    assert.equal(url.searchParams.get('benchmark'), '1');
+    assert.equal(url.searchParams.get('profile'), row.context.profile);
+    assert.deepEqual(row.theme, { dark: row.context.profile === 'dark', background: rgb[row.context.profile] });
+    assert.equal(row.observation.role, 'separator');
+    assert.equal(row.observation.name, '');
+    assert.equal(row.observation.orientation, 'horizontal');
+    assert.deepEqual(row.observation.childIds, []);
+    assert.deepEqual(row.runtime.errors, []);
+    for (const asset of row.runtime.assets) {
+      const expectedAsset = manifest.provenance.browserFiles.find(file => file.path === asset.file || file.file === asset.file);
+      assert.ok(expectedAsset, asset.file);
+      assert.equal(asset.sha256, expectedAsset.sha256);
+    }
+  }
+});
+
 test('public divider typography reduction observes equal paragraph span inputs and opaque backing control', async t => {
   const consumer = path.resolve('examples/material-showcase');
   // Bind the paint/baseline owner, not the entire installed rendering pipeline.

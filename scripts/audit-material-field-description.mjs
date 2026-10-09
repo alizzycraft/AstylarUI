@@ -17,9 +17,11 @@ const manifest = JSON.parse(readFileSync(`${checkpoint}/manifest.json`));
 assert.deepEqual(fingerprintDirectory(root), manifest.provenance.browserFiles);
 const allContexts = process.argv.includes('--all-contexts');
 const ordinaryTooltip = process.argv.includes('--ordinary-tooltip');
+const divider = process.argv.includes('--divider');
+assert.ok(!divider || !ordinaryTooltip, 'Divider and ordinary tooltip are separate capture scopes.');
 assert.ok(!ordinaryTooltip || !allContexts, 'Ordinary tooltip scope is the two explicitly declared contexts.');
-const family = ordinaryTooltip ? 'tooltip' : 'form-field';
-const states = ordinaryTooltip ? ['closed', 'hover', 'leave'] : ['hint', 'error'];
+const family = divider ? 'divider' : ordinaryTooltip ? 'tooltip' : 'form-field';
+const states = divider ? ['inspect'] : ordinaryTooltip ? ['closed', 'hover', 'leave'] : ['hint', 'error'];
 const darkTheme = { mode: 'dark', primary: '#d0bcff', tertiary: '#efb8c8', surface: '#1c1b1f',
   error: '#f2b8b5', density: 0, cornerScale: 1, typographyScale: 1 };
 const contexts = allContexts ? materialProfiles.flatMap(profile => [
@@ -47,7 +49,7 @@ let browser;
 try {
   browser = await chromium.launch(materialBrowserLaunchOptions());
   const options = parseSupplementalCaptureArguments([
-    `--base-url=${baseUrl}`, `--checkpoint=${checkpoint}`, ...process.argv.slice(2).filter(arg => !['--all-contexts', '--ordinary-tooltip'].includes(arg)),
+    `--base-url=${baseUrl}`, `--checkpoint=${checkpoint}`, ...process.argv.slice(2).filter(arg => !['--all-contexts', '--ordinary-tooltip', '--divider'].includes(arg)),
   ]);
   const evidence = openSupplementalCapture({ options, browser,
     script: 'scripts/audit-material-field-description.mjs', styleProperties: [] });
@@ -71,7 +73,7 @@ try {
       }));
       assert.equal(theme.dark, context.profile === 'dark');
       assert.equal(theme.background, surfaceRgb[context.profile]);
-      const target = ordinaryTooltip ? 'tooltip-primary' : 'form-field-control';
+      const target = divider ? 'divider-primary' : ordinaryTooltip ? 'tooltip-primary' : 'form-field-control';
       const selector = side === 'reference' ? `#${target}` : `[data-astylar-id="${target}"]`;
       await page.locator(selector).waitFor({ state: 'attached' });
       if (ordinaryTooltip && state !== 'closed') {
@@ -92,7 +94,7 @@ try {
       const { nodeId } = await session.send('DOM.querySelector', { nodeId: document.nodeId, selector });
       assert.ok(nodeId);
       const { nodes } = await session.send('Accessibility.getPartialAXTree', { nodeId, fetchRelatives: false });
-      const ax = nodes.find(node => node.role?.value === (ordinaryTooltip ? 'button' : 'textbox'));
+      const ax = nodes.find(node => node.role?.value === (divider ? 'separator' : ordinaryTooltip ? 'button' : 'textbox'));
       assert.ok(ax && !ax.ignored);
       const dom = await page.locator(selector).evaluate(node => ({
         describedBy: node.getAttribute('aria-describedby'),
@@ -101,11 +103,17 @@ try {
       }));
       const observation = { description: ax.description?.value ?? null, dom,
         role: ax.role.value, name: ax.name?.value,
+        ...(divider ? { orientation: ax.properties?.find(property => property.name === 'orientation')?.value?.value ?? null,
+          childIds: ax.childIds ?? [] } : {}),
         describedByProperty: ax.properties?.find(property => property.name === 'describedby') ?? null };
       const runtime = await finish();
-      console.log(JSON.stringify({ context, state, side, theme, observation, runtime }));
-      assert.equal(observation.name, ordinaryTooltip ? 'Hover for help' : 'Project name');
-      assert.equal(observation.description, ordinaryTooltip
+      console.log(JSON.stringify({ context, state, side, url: page.url(), theme, observation, runtime }));
+      assert.equal(observation.name, divider ? '' : ordinaryTooltip ? 'Hover for help' : 'Project name');
+      if (divider) {
+        assert.equal(observation.orientation, 'horizontal');
+        assert.deepEqual(observation.childIds, []);
+      }
+      assert.equal(observation.description, divider ? null : ordinaryTooltip
         ? side === 'reference' || state === 'hover' ? 'Create a project' : null
         : side === 'reference' ? state === 'error' ? 'Project name is required' : 'Public label' : null);
     } finally { await page.close(); }
@@ -116,7 +124,8 @@ try {
       'examples/material-showcase/src/app/frame-sync.ts', 'examples/material-showcase/src/app/frame-protocol.ts']
       .map(file => ({ file, sha256: hash(readFileSync(file)) })),
     contexts: contexts.length, family, states,
-    scope: 'Descriptions in explicitly listed physical/theme/state contexts; no other action-state, live-announcement or assistive-technology acceptance.' }));
+    scope: divider ? 'Separator AX in explicitly verified theme/physical contexts; not paint, lifecycle or complete accessibility acceptance.'
+      : 'Descriptions in explicitly listed physical/theme/state contexts; no other action-state, live-announcement or assistive-technology acceptance.' }));
 } finally {
   if (browser) await browser.close();
   await new Promise(resolve => server.close(resolve));
