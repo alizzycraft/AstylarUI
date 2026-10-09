@@ -2,6 +2,35 @@ import { TestBed } from '@angular/core/testing';
 import { Astylar, type AstylarResolvedStyleSnapshot, type SiteData } from 'astylarui';
 
 describe('packed style inspection API', () => {
+  it('detaches retained CSS dimensions without deriving them from projected bounds', async () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 360; canvas.height = 180;
+    document.body.append(canvas);
+    const surface = TestBed.inject(Astylar).mount(canvas, {
+      root: { children: [
+        { id: 'observed', type: 'div', textContent: 'Width' },
+        { id: 'unrendered', type: 'div', textContent: 'Hidden' },
+      ] },
+      styles: [
+        { selector: '#observed', width: '200px', height: '50px', padding: '3px 5px' },
+        { selector: '#unrendered', display: 'none' },
+      ],
+    }, { diagnostics: { logLevel: 'silent' } });
+    try {
+      await surface.whenSettled();
+      const before = surface.diagnostics.resources;
+      const layout = surface.inspectResolvedStyles().elements.find(e => e.id === 'observed')!.retainedLayout!;
+      expect(layout.source).toBe('core-dimension-registry');
+      expect(layout.width).toBe(200);
+      expect(layout.height).toBe(50);
+      expect(layout.padding).toEqual({ top: 3, right: 5, bottom: 3, left: 5 });
+      expect(surface.inspectResolvedStyles().elements.find(e => e.id === 'unrendered')!.retainedLayout).toBeUndefined();
+      (layout.padding as { left: number }).left = 999;
+      expect(surface.inspectResolvedStyles().elements.find(e => e.id === 'observed')!.retainedLayout!.padding.left).toBe(5);
+      expect(surface.diagnostics.resources).toEqual(before);
+    } finally { surface.dispose(); canvas.remove(); }
+  }, 30000);
+
   it('inspects hidden inputs and state through isolated package-root surfaces', async () => {
     const makeCanvas = () => {
       const canvas = document.createElement('canvas');

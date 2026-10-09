@@ -15,7 +15,11 @@ const output = path.resolve(process.argv[2] ?? '');
 const dpr = Number(process.argv[3] ?? 1);
 const spec = process.argv[5] ?? 'src/parity/overlay-layout-stage.audit.spec.ts';
 const materialReduction = 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts';
-assert.ok(['src/parity/overlay-layout-stage.audit.spec.ts', 'src/parity/rounded-radius.audit.spec.ts', materialReduction].includes(spec));
+const inspectionConsumer = 'examples/angular-consumer/src/app/style-inspection.browser.spec.ts';
+assert.ok(['src/parity/overlay-layout-stage.audit.spec.ts', 'src/parity/rounded-radius.audit.spec.ts', materialReduction, inspectionConsumer].includes(spec));
+const packedRoot = process.argv[6] ? path.resolve(process.argv[6]) : null;
+assert.ok(!packedRoot || spec === inspectionConsumer, 'Explicit packed root is bounded to the public inspection suite');
+if (spec === inspectionConsumer) assert.equal(process.env.ASTYLAR_AUDIT_SPEC_FILTER ?? '', '', 'Run the complete public inspection suite');
 if (spec === materialReduction) {
   assert.equal(process.env.ASTYLAR_AUDIT_SPEC_FILTER,
     'paragraph flow places a divider without absolute text or separator offsets',
@@ -26,7 +30,8 @@ assert.ok(process.argv[2] && !existsSync(output), 'Supply a new evidence directo
 const consumer = createRequire(path.join(root, 'examples/material-showcase/package.json'));
 const local = createRequire(import.meta.url);
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
-const packageRoot = path.dirname(consumer.resolve('astylarui'));
+const packageResolver = packedRoot ? createRequire(path.join(packedRoot, 'package.json')) : consumer;
+const packageRoot = path.dirname(packageResolver.resolve('astylarui'));
 const freshBuild = path.resolve(process.argv[4] ?? 'artifacts/material-parity/overlay-source-build-bb5a07c');
 const compiledReceipts = readdirSync(freshBuild, { recursive: true }).filter(file => file.endsWith('.js')).sort().map(file => {
   const fresh = readFileSync(path.join(freshBuild, file));
@@ -43,7 +48,8 @@ const aliases = new Map([
   ['../app/services/dom/elements/flex.service', path.join(packageRoot, '../app/services/dom/elements/flex.service.js')],
 ]);
 const built = await consumer('esbuild').build({ absWorkingDir: root,
-  stdin: { contents: `import '@angular/compiler';
+  stdin: { contents: `${spec === inspectionConsumer ? "import 'zone.js'; import 'zone.js/testing';" : ''}
+    import '@angular/compiler';
     import {getTestBed} from '@angular/core/testing';
     import {BrowserTestingModule,platformBrowserTesting} from '@angular/platform-browser/testing';
     getTestBed().initTestEnvironment(BrowserTestingModule,platformBrowserTesting());
@@ -52,8 +58,9 @@ const built = await consumer('esbuild').build({ absWorkingDir: root,
     jasmine.getEnv().addReporter({specDone:r=>results.push({description:r.fullName,status:r.status,failures:r.failedExpectations.map(e=>e.message)}),jasmineDone:r=>window.auditDone={status:r.overallStatus,results}});
     jasmine.getEnv().configure({random:false, specFilter: spec => spec.getFullName().includes(${JSON.stringify(process.env.ASTYLAR_AUDIT_SPEC_FILTER ?? '')})}); jasmine.getEnv().execute();`, resolveDir: root },
   bundle: true, write: false, format: 'esm', platform: 'browser', target: 'es2022', metafile: true,
+  ...(packedRoot ? { nodePaths: [path.join(root, 'examples/material-showcase/node_modules')] } : {}),
   plugins: [{ name: 'installed-audit-package', setup(build) {
-    build.onResolve({ filter: /^astylarui$/ }, () => ({ path: consumer.resolve('astylarui') }));
+    build.onResolve({ filter: /^astylarui$/ }, () => ({ path: packageResolver.resolve('astylarui') }));
     build.onResolve({ filter: /^\.\.\/(lib\/(index|astylar)|app\/services\/(css-layout-geometry|dom\/elements\/flex.service))$/ }, args => ({ path: aliases.get(args.path) }));
     build.onResolve({ filter: /^(@angular\/|@babylonjs\/core)/ }, args => ({ path: consumer.resolve(args.path) }));
   } }],
@@ -72,11 +79,11 @@ const assets = new Map([
 const html = '<!doctype html><html><body><script src="/jasmine.js"></script><script src="/jasmine-html.js"></script><script src="/boot0.js"></script><script type="module" src="/audit.js"></script></body></html>';
 const provenance = { commit: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
   specFilter: process.env.ASTYLAR_AUDIT_SPEC_FILTER ?? '',
-  freshBuild, compiledReceipts,
+  freshBuild, compiledReceipts, packedRoot,
   runnerSha256: hash(readFileSync('scripts/audit-overlay-layout-stage.mjs')),
   htmlSha256: hash(html), runtimeAssets: [...assets].map(([url, bytes]) => ({ url, sha256: hash(bytes) })),
   packages: Object.fromEntries(['@angular/core', '@babylonjs/core', 'astylarui', 'esbuild'].map(name => [name,
-    JSON.parse(readFileSync(`examples/material-showcase/node_modules/${name}/package.json`)).version])),
+    JSON.parse(readFileSync(name === 'astylarui' && packedRoot ? path.join(packedRoot, 'package.json') : `examples/material-showcase/node_modules/${name}/package.json`)).version])),
   bundleSha256: hash(bundle), inputs: Object.keys(built.metafile.inputs).filter(f => f !== '<stdin>').sort().map(file => ({ file, sha256: hash(readFileSync(file)) })) };
 writeFileSync(path.join(output, 'provenance.json'), JSON.stringify(provenance, null, 2));
 const server = createServer((req, res) => { res.setHeader('content-type', req.url === '/audit-roboto.woff2' ? 'font/woff2' : assets.has(req.url) ? 'text/javascript' : 'text/html'); res.end(assets.get(req.url) ?? html); });
@@ -174,5 +181,6 @@ try {
   const result = await page.evaluate(() => window.auditDone);
   writeFileSync(path.join(output, 'result.json'), JSON.stringify({ browser: browser.version(), result, observations, screenshots, errors }, null, 2));
   console.log(JSON.stringify({ output, result, observations: observations.length, errors }));
+  if (spec === inspectionConsumer) assert.equal(result.results.length, 2, 'Both public inspection tests must execute');
   process.exitCode = errors.length || result.status !== 'passed' ? 1 : 0;
 } finally { await browser?.close(); await new Promise(resolve => server.close(resolve)); }

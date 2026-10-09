@@ -21,6 +21,51 @@ const bytes = readFileSync(file);
 assert.equal(hash(bytes), '39df94e0eb87480d3824927a41a9950d1d275f7c97ab97a571c449efdc6da7d7');
 const report = JSON.parse(bytes);
 
+test('packed layout inspection browser proofs authenticate the complete current consumer suite', () => {
+  const packageRoot = 'artifacts/material-parity/layout-inspection-package-TKjpCE/package';
+  assert.equal(hash(readFileSync(`${packageRoot}/../astylarui-0.2.0.tgz`)),
+    '38a3c6fc2bf56641459d76a376ccb6bffbe7cce4dd5fefae22c8ea776d885227');
+  const resultHash = '58fbdf2c406ce871e135ac43c53719096eec7fd2d470ca608b8eca8b38656d92';
+  const provenanceHashes = [
+    '44fd95ae6b54309453ac88c2f0b9b5b6a1c17ef19adca5ce997a66f00373a8aa',
+    'f83444ecbb998487a2e5ac2e2a9ee1197f224005a1a5b50287c240fa3cab743e',
+  ];
+  for (const dpr of [1, 2]) {
+    const dir = `artifacts/material-parity/layout-inspection-package-zoned-20261009-dpr${dpr}`;
+    const raw = readFileSync(`${dir}/result.json`), proof = JSON.parse(raw);
+    assert.equal(hash(raw), resultHash);
+    assert.equal(proof.browser, '154.0.8037.58');
+    assert.equal(proof.result.status, 'passed');
+    assert.equal(proof.result.results.length, 2);
+    assert.ok(proof.result.results.every(row => row.status === 'passed' && row.failures.length === 0));
+    assert.deepEqual(proof.errors, []);
+    const provenanceRaw = readFileSync(`${dir}/provenance.json`);
+    assert.equal(hash(provenanceRaw), provenanceHashes[dpr - 1]);
+    const provenance = JSON.parse(provenanceRaw);
+    assert.equal(provenance.specFilter, '');
+    assert.equal(provenance.runnerSha256, hash(readFileSync('scripts/audit-overlay-layout-stage.mjs')));
+    assert.equal(provenance.bundleSha256, hash(readFileSync(`${dir}/audit.js`)));
+    assert.equal(provenance.compiledReceipts.length, 104);
+    for (const receipt of provenance.compiledReceipts) {
+      assert.equal(hash(readFileSync(receipt.source)), receipt.sourceSha256);
+      for (const root of ['dist/lib', `${packageRoot}/dist/lib`])
+        assert.equal(hash(readFileSync(path.join(root, receipt.file))), receipt.emittedSha256);
+    }
+    assert.equal(provenance.inputs.length, 2742);
+    assert.ok(!provenance.inputs.some(row => /^src[\\/]/.test(row.file)), 'Consumer must not bundle renderer source imports');
+    for (const receipt of provenance.inputs) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  }
+  const config = ts.readConfigFile('examples/angular-consumer/tsconfig.spec.json', ts.sys.readFile);
+  assert.equal(config.error, undefined);
+  const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, path.resolve('examples/angular-consumer'));
+  assert.deepEqual(parsed.errors, []);
+  const program = ts.createProgram(['examples/angular-consumer/src/app/style-inspection.browser.spec.ts'], {
+    ...parsed.options, noEmit: true, baseUrl: process.cwd(),
+    paths: { astylarui: [path.resolve(packageRoot, 'dist/lib/lib/index.d.ts')] },
+  });
+  assert.deepEqual(ts.getPreEmitDiagnostics(program), []);
+});
+
 test('current Material serializer preserves detached layout observations without filling missing owners', () => {
   const source = readFileSync('examples/material-showcase/src/app/material-input-evidence.ts', 'utf8');
   const compiled = ts.transpileModule(source, { compilerOptions: {

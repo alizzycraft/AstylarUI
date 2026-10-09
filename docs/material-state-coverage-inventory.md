@@ -2,6 +2,38 @@
 
 ## Current evidence boundary — October 9
 
+### Packed inspection runtime closes the diagnostic verification gap, not divider widths
+
+Library build npm run build:lib terminates exit0 and emits retainedLayout in the
+public declaration and owning runtime. Existing browser Jasmine runner now accepts
+the complete existing package-root style-inspection consumer suite and an explicit
+packed root,without replacing the historical Material installation. Its normal
+consumer Zone.js/testing polyfills are supplied for that suite only. Initial
+unpolyfilled run fails both tests during NG0908 setup before any assertions;
+layout-inspection-package-20261009-dpr1 and package scratch TKjpCE remain failure
+evidence. No assertions were weakened. Fresh package compiled JS receipts match
+the current emitted library byte-for-byte. Chrome154.0.8037.58 DPR1/2 both run
+the complete two-test suite:2/2 pass each,no page errors. Observed200x50 dimensions,
+3/5 padding,hidden-owner omission,mutation detachment,unchanged resource counts
+and existing state/hidden-input/isolation assertions all pass. Current full consumer
+inspection suite also type-checks against the packed root declaration with zero
+diagnostics. Results/provenance are layout-inspection-package-zoned-20261009-dpr1
+and -dpr2 under artifacts/material-parity. Existing input-boundary suite now
+authenticates both complete results,all104 emitted/source receipts and2742 actual
+bundle inputs (no renderer-source import),current runner,bundle,and packed archive;
+focused1/1 pass7828.2983ms. Both result hashes are58fbdf2c406ce871e135ac43c53719096eec7fd2d470ca608b8eca8b38656d92;
+provenance hashes44fd95ae6b54309453ac88c2f0b9b5b6a1c17ef19adca5ce997a66f00373a8aa
+and f83444ecbb998487a2e5ac2e2a9ee1197f224005a1a5b50287c240fa3cab743e.
+Archive38a3c6fc2bf56641459d76a376ccb6bffbe7cce4dd5fefae22c8ea776d885227
+is preserved with the initial setup failure,not deleted as successful scratch.
+This is focused packed browser evidence,
+not the full consumer:check build/SSR gate or a pass for the cancelled core suite.
+Next obtain actual divider owner width/padding in a dependency-authenticated fresh
+runtime; current registry observations do not retroactively describe older textures.
+Canonical b28e8926 remains historical to these new source/runner fingerprints;
+coherent source/proof integration and final full gates remain pending. No renderer
+algorithm or fixture compensation is changed; no configured case closes here.
+
 ### Narrowed browser build remains resource-limited; compiler verification separated
 
 Revalidated live session9332 and owned Angular30244/esbuild18764 before action.
