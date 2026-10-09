@@ -2,6 +2,24 @@
 
 ## Current evidence boundary — October 9
 
+### Existing benchmark measure is projected output, not the missing text constraint
+
+Inspected astylar.component.ts:1112–1171 before extending the probe. Its borderBox
+comes from mesh bounding-box vectorsWorld projected through the scene transform,
+then scaled by canvas CSS/render dimensions. It does not read the ordinary text
+renderer’s retained dimensions. Therefore this API cannot close availableWidth
+input equivalence,even though its result uses CSS-pixel units. No new observation
+was added using that unsuitable proxy. AstylarResolvedStyleSnapshot in
+src/lib/astylar-surface.ts explicitly supplies declarations,not used layout
+boxes; retainedText supplies style only. Actual width/height/padding are held by
+BabylonElementManagerService.getElementDimensions,which renderer.service.ts uses
+before rendering. The decisive instrumentation must expose a detached read-only
+snapshot from that owning registry,with surface/owner identity and settlement,
+not reconstruct dimensions from projected mesh or texture sizes. Next inspect
+the existing core style-inspection owner at src/lib/astylar.ts:898 and its tests
+to select the smallest diagnostic extension; this is audit instrumentation,
+not authorization to change layout or a declaration of current equivalence.
+
 ### Existing divider texture sizes cannot replace layout-width observations
 
 Bounded search of retained divider font/paint/runtime diagnostics finds texture
