@@ -2,6 +2,32 @@
 
 ## Current evidence boundary — October 10
 
+### Applied-theme historical wrapper: sorter extension conserved, next boundary explicit
+
+Specific question: does the old150-versus153 applied-theme wrapper failure remain
+after the existing population reconciliation? A bounded run of the original
+`retained applied-theme popup focus states preserve action boundaries` assertion
+with the established historical preload never reaches that assertion. First it
+rejects the later committed sorter snapshot as an absent old launch addition.
+Working/current Git sorter bytes match exactly,SHAd2b35a773912a2b58ecbc744577378edac16cff2b09a281e8c3e28ae9439c03b,
+36 tests. Existing preload now recognizes that exact snapshot and successfully
+compares all26 original tests,complete unchanged bodies and original assertions
+in its two reviewed extension owners before selecting original historical bytes.
+No original receipt,assertion or current capture input was replaced.
+
+The next guard then correctly rejects later input-boundary source drift before
+target execution. Log tooltip-applied-theme-wrapper-conserved-20261010.log,
+SHA8efae77017b97b981eafb4fd463d41aee5f91e2872e65d76de5913c88bd59f05,
+records0 passes/1 infrastructure failure; initial launch-boundary failure remains
+in tooltip-applied-theme-wrapper-reconciliation-20261010.log. This is not a new
+tooltip rendering failure,nor proof the population wrapper now passes. Next
+reconcile the exact current input-boundary extension against its original Git
+snapshot through the existing conservation mechanism,then retry this one target.
+Do not recapture tooltip states or weaken the snapshot check. Compact tooltip
+query remains available(929 scalar records); it is not929 case failures.
+Canonical publication remains pending with freephysical792308KiB; no exporter
+was launched. All2311 case closures and final gates remain pending.
+
 ### Exact scrollbar paint-state obligation join
 
 Read-only receipt join authenticates original thumb-motion logSHA

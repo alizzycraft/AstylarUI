@@ -51,6 +51,9 @@ if (main) {
     ['dca535342db0162b59da58f3a979d51eea305b27b09cb7760e1a869f629647e7', 32],
     ['65d7256f859a0839cdf6364d8f3d4e2b81bdb32978c42e0afeaa27f2622e14ce', 34],
     ['4a386f107cee16cb120910717a42b6ee9b40c724f02860b68a60ce29d4784f30', 36],
+    // Committed2bb82ee6 adds bounded scrollbar observations to the same36 tests.
+    // Original bodies/assertions are still conserved below before historical replay.
+    ['d2b35a773912a2b58ecbc744577378edac16cff2b09a281e8c3e28ae9439c03b', 36],
   ]);
   if (reviewedSorterCounts.has(hash(read(sorter)))) {
     const tests = text => {
