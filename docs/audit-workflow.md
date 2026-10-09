@@ -64,6 +64,12 @@ touched. Do not imply every legacy test or collector is now cheap/cached.
 These remain separate expensive milestone commands. Documentation-only work does
 not justify recapture. Renderer, fixture or capture-environment changes invalidate
 affected rendering evidence and still require the applicable final gates.
+The complete unfiltered audit harness is `node scripts/run-material-audit-harness.mjs`.
+It explicitly enables `ASTYLAR_AUDIT_RECEIPT_COMPARE=1` for its child so the two
+existing opt-in receipt-conservation assertions cannot silently skip final
+acceptance. Focused Node commands retain their original opt-in behavior. The
+October4 full-run skips are historical omissions,not passing or inapplicable
+evidence; those original assertions still require execution at the final gate.
 The exporter now reports validation errors before package comparison or publication;
 an invalid audit cannot overwrite the checked-in canonical package. A stale-package
 error alone does not establish that the new audit passed validation.

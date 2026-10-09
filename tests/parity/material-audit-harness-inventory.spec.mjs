@@ -35,7 +35,8 @@ test('discovery includes future nested tests, runs real children and refuses los
       mkdirSync(path.join(root, directory), { recursive: true });
     const legacy = 'tests/parity/old.spec.mjs';
     writeFileSync(path.join(root, legacy), '');
-    writeFileSync(path.join(root, 'tests/material-parity/nested/new.spec.mjs'), '');
+    writeFileSync(path.join(root, 'tests/material-parity/nested/new.spec.mjs'),
+      "if (process.env.ASTYLAR_AUDIT_RECEIPT_COMPARE !== '1') throw new Error('receipt acceptance skipped');");
     writeFileSync(path.join(root, 'tests/material-parity/not-a-test.mjs'), '');
     const packageFile = path.join(root, 'package.json');
     writeFileSync(packageFile, JSON.stringify({ scripts: { 'parity:harness:check': 'node --test ' + legacy } }));
@@ -67,6 +68,7 @@ test('runner forwards the complete inventory and preserves child failures', asyn
     const result = await runMaterialAuditHarness(plan, { spawnProcess: (executable, args, options) => {
       assert.equal(executable, process.execPath); assert.deepEqual(args, plan.nodeArguments);
       const expectedEnv = { ...process.env }; delete expectedEnv.NODE_TEST_CONTEXT;
+      expectedEnv.ASTYLAR_AUDIT_RECEIPT_COMPARE = '1';
       assert.deepEqual(options, { cwd: plan.cwd, stdio: 'inherit', env: expectedEnv });
       const child = new EventEmitter(); queueMicrotask(() => child.emit('exit', code, null)); return child;
     } });

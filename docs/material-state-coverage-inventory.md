@@ -2,6 +2,35 @@
 
 ## Current evidence boundary — October 10
 
+### Full-harness skipped receipt obligations identified and enabled
+
+Historical full-harness tests30/31 are the two original audit-section-digests
+receipt/source-conservation assertions,not inapplicable rendering cases. Both
+explicitly skip unless ASTYLAR_AUDIT_RECEIPT_COMPARE=1. Complete harness runner
+previously copied the environment without enabling that prerequisite. It now
+sets the child flag to1 while preserving complete suite discovery,sequential
+execution,original assertion bodies and child failure propagation. Focused
+commands retain their existing inexpensive defaults; no threshold or original
+acceptance requirement changed. This prevents another nominally complete run
+from silently omitting these two obligations; it does not claim they passed.
+
+Existing harness tests now require the flag in an actual synthetic child and
+verify the exact spawned environment. All4 pass with default environment in
+539.7479ms and again with inherited flag0 in478.7811ms,proving complete-run
+opt-out cannot silently bypass receipt checks. Logs:
+full-harness-receipt-opt-in-20261010.log SHA
+4b37c1eafa6ea5251bf3d051f963ffa165746cf8281fc9131ffc687a7a244c84;
+full-harness-receipt-opt-out-rejected-20261010.log SHA
+eb5679eda48dbc9246e76e9cf0d5cb2c70cadcc5a9cee08187ec047b7ca1753b.
+Syntax/exact-path diff checks pass. Synthetic scratch is removed by existing
+scoped test cleanup; original full-harness failure log remains retained.
+The two original large receipt assertions themselves and complete harness remain
+unexecuted in this increment; no browser/canonical publication launched with
+freephysical681540KiB. Remaining exact-case coverage,publication/current-validity
+and final full gates stay open; all2311 cases remain partial. Next choose an
+unresolved coverage obligation or execute publication/full gates with sufficient
+headroom,not repeat runner controls as rendering proof.
+
 ### Original applied-theme wrapper and retained component batch conserved
 
 The next exact input-boundary snapshot is now reconciled in the existing

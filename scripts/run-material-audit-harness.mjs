@@ -33,6 +33,9 @@ export function runMaterialAuditHarness(plan, { stdio = 'inherit', spawnProcess 
     // A nested Node test otherwise skips every child file and exits 0. This is
     // a separate runner, not a continuation of the invoking test's IPC context.
     const env = { ...process.env }; delete env.NODE_TEST_CONTEXT;
+    // Complete acceptance must execute the two opt-in receipt-conservation
+    // assertions. Focused invocations keep their existing inexpensive defaults.
+    env.ASTYLAR_AUDIT_RECEIPT_COMPARE = '1';
     const child = spawnProcess(process.execPath, plan.nodeArguments, { cwd: plan.cwd, stdio, env });
     child.once('error', reject);
     child.once('exit', (code, signal) => {
