@@ -2,6 +2,22 @@
 
 ## Current evidence boundary — October 9
 
+### Divider painted-side input membership is complete,not missing inspection
+
+Specific closure question:does the separator border/background classification
+cover only sampled cases,or every configured case? Read-only query of verified
+compact generation b28e8926 returns all24 exact reviewedCases for each of
+borderTopColor (6daac046…),borderTopStyle (aed165d9…) and borderTopWidth
+(d89ef266…). Each has24 occurrences and an application-plugin-authoring-defect
+classification: native token-colored solid1px top border versus candidate
+1px background strip with zero/none borders. This rejects a missing-case join
+for these three painted-side input obligations; it is not rendering equivalence
+or a new core border-paint diagnosis. Existing local-strip failures remain
+inspected diagnostic evidence under unequal inputs. Do not recapture these
+unchanged inputs to rediscover this substitution. Remaining separator work is
+clipping/edge applicability and current-runtime validity,with equal-input core
+paint uncertainty distinct from the already diagnosed empty-block flow failure.
+
 ### Divider registration canonical publication verified
 
 The coherent export and independent cold check both completed with exit0.
