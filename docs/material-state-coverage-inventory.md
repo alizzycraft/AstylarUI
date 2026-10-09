@@ -2,6 +2,47 @@
 
 ## Current evidence boundary — October 9
 
+### Passive-state obligations now join exact configured membership
+
+Unresolved coverage question: can the passive-family activation/editing exclusions
+be applied to every retained case,or only inferred from the family labels? The
+existing input-boundary suite now authenticates the complete report and708 tree
+receipts for354 cases,joining configured static,interaction and mobile-flow
+membership exactly. Counts: sidenav62,grid-list52,divider24,badge52,icon20,list52,
+table52,progress-bar20,progress-spinner20. Captured authoring contains no native
+activation/editing descendants or nonnegative tabindex. All40 native progress
+owners retain tabindex=-1,determinate mode/value64; candidate tabindex is omitted.
+Thus programmatic focus remains applicable and unequal,not excluded as passive.
+The existing complete progress focus/AX/update-disposal evidence is replayed
+alongside this membership proof; no new browser capture is needed for that question.
+
+Focused coherent batch4/4 passes3776.4001ms,including determinate/SVG inputs and
+passive descendant accessibility omissions. Log passive-obligation-batch-complete-
+20261009.log SHA6c58d60f5cd6eda0b5c1c20c2d7a343b366cd039fe89436820fd91e1c35a3a4d
+under artifacts/material-parity. New membership test includes rejection controls
+for button,tabindex0,editable content and inline activation authoring. These controls
+do not prove absence of unrecorded runtime callbacks,live focus or current paint.
+
+Initial exact-membership check failed1182.7241ms because the probe omitted the
+separate two sidenav mobile-flow declarations and misstated the arithmetic total.
+Failure retained in passive-state-exact-membership-20261009.log
+SHA7b7c3a880f161fe722f5a2c8b240b3c2041d3bdfcf173238095d5c1f57e5ada9.
+Corrected membership is354,not454,with708,not908 receipts. Initial coherent batch
+was3pass/1fail: older progress proof still expected original sort-focus source hash
+after the separately documented mobile-theme instrumentation. Retained failure
+passive-obligation-batch-20261009.log
+SHA4af5b18ec4369d29e40105e2ca01d5070d7b6e6a75ddc9ca4e44a15d7da1ca79.
+The existing authenticated readRetainedSortFocusSource now conserves its complete
+original source/hash/assertions; no expected hash is upgraded or current capture
+substituted. This is historical conservation only.
+
+This closes exact captured-authoring applicability for activation/editing in these
+nine families,not whole-case inspection. General paint,history,semantics,lifecycle
+and current validity remain distinct. Canonical175-proof producer registration and
+suite-fingerprint reconciliation still pending; accepted b28e8926 unchanged. Next
+map remaining applicable evidence by exact case,without repeating this census or
+already covered progress focus cohorts. All2311 whole-case statuses remain partial.
+
 ### Real delayed-font execution answers the source-only lifecycle question
 
 Specific unresolved question: does a native delayed FontFaceSet batch leave the
@@ -7291,7 +7332,7 @@ layout/paint and applicable theme/responsive/DPR evidence obligations.
 
 | Families | Applicable state obligations / explicit boundary |
 | --- | --- |
-| sidenav, grid-list, divider, badge, icon, list, table, progress-bar, progress-spinner | Passive content/layout/paint. No authored interactive descendants; keyboard activation and editing are inapplicable. Sidenav is fixed open side-mode, not a modal drawer. Progress examples are determinate, not indeterminate. Existing family evidence justifies these boundaries; generic configured focus/activate labels cannot create controls. |
+| sidenav, grid-list, divider, badge, icon, list, table, progress-bar, progress-spinner | Passive content/layout/paint. October9 exact membership/708 receipts cover354 cases,including two sidenav mobile flows: no captured activation/editing descendants. Sidenav is fixed open side-mode, not a modal drawer. Progress examples are determinate, not indeterminate; all40 native progress owners have tabindex=-1,so programmatic focus remains applicable and candidate omission remains a finding. Generic configured focus/activate labels cannot create controls; this exclusion is not live callback,paint or lifetime acceptance. |
 | core, toolbar, card, button | Real focus and keyboard/pointer activation, hover/held/cursor/event/focus paint of the actual button (toolbar/card child, not container). Disabled applies where reference authors it; no editing or popup selection. |
 | chips, checkbox, radio, slide-toggle, button-toggle, tabs, stepper, sort | Focus/keyboard and pointer transitions, selected/unselected or sort-direction states, hover/held/cursor and state paint. Disabled where authored. Tabs/stepper also inspect revealed content/visibility; selection here is control state, not text selection. |
 | form-field, input, autocomplete, datepicker, timepicker | Editable focus/empty caret, edits, blur, disabled/error, selection where the native input type permits it. Email endpoints may be null and must not be invented. Popup fields also need opening triggers, option/day navigation/commit, open hover/held, scrolling where overflow exists, Escape/outside dismissal and repeat lifecycle. Date/time opening behavior remains independently specified. |

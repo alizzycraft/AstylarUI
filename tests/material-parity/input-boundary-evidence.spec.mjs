@@ -13,7 +13,7 @@ import { fingerprintDirectory } from './run-checkpoint.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { propertyGroups } from './input-equivalence-policy.mjs';
 import { readGapSurveySource } from './gap-survey-source-replay.mjs';
-import { materialStaticCases, materialInteractionCases } from './benchmark.config.mjs';
+import { materialStaticCases, materialInteractionCases, materialMobileFlowCases } from './benchmark.config.mjs';
 
 const file = 'artifacts/material-parity/input-boundaries-keypress-559f95c/latest-report.json';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -1019,13 +1019,16 @@ test('retained divider responsive accessibility and replacement ownership preser
   // mobile lifecycle, late-async/remount proof or complete accessibility acceptance.
 });
 
-test('retained progress focus caps and update disposal preserve complete configured cohort evidence', () => {
+test('retained progress focus caps and update disposal preserve complete configured cohort evidence', async () => {
   const load = (name, receipt) => {
     const raw = readFileSync(`artifacts/material-parity/${name}`);
     assert.equal(hash(raw), receipt, name);
     return raw.toString().trim().split(/\r?\n/).filter(line => line.startsWith('{')).map(JSON.parse);
   };
-  assert.equal(hash(readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')),
+  const {readRetainedSortFocusSource}=await import('./position-composition-producer-transition.mjs');
+  // Authenticate complete current drift and preserve every original assertion;
+  // this existing reader is historical conservation,not current capture reuse.
+  assert.equal(hash(readRetainedSortFocusSource()),
     '65d7256f859a0839cdf6364d8f3d4e2b81bdb32978c42e0afeaa27f2622e14ce');
   assert.equal(hash(readFileSync('artifacts/material-parity/current-full-20261005/checkpoint/manifest.json')),
     '7ae2cba1739353661a0c84e28ef70819157311cc824fd00ae94ced29fadeb352');
@@ -1188,6 +1191,61 @@ test('configured progress inputs preserve determinate state and original SVG att
     counts[row.family] = (counts[row.family] ?? 0) + 1;
   }
   assert.deepEqual(counts, { 'progress-bar': 20, 'progress-spinner': 20 });
+});
+
+test('passive state applicability joins exact cases without discarding progress focusability', t => {
+  const families = new Map([['sidenav',62],['grid-list',52],['divider',24],['badge',52],
+    ['icon',20],['list',52],['table',52],['progress-bar',20],['progress-spinner',20]]);
+  const raw = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
+  assert.equal(hash(raw),'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const captured = JSON.parse(raw);
+  const identity = (row,kind) => [kind,row.family,row.profile,row.viewport.id,row.state??'static'].join('/');
+  const configured = [...materialStaticCases.map(row=>({...row,kind:'static'})),
+    ...[...materialInteractionCases,...materialMobileFlowCases].map(row=>({...row,kind:'interaction'}))].filter(row=>families.has(row.family));
+  const cases = [...captured.results.map(row=>({...row,kind:'static'})),
+    ...captured.interactions.map(row=>({...row,kind:'interaction'}))].filter(row=>families.has(row.family));
+  const expected=configured.map(row=>identity(row,row.kind)).sort();
+  assert.equal(new Set(expected).size,354);
+  assert.deepEqual(cases.map(row=>identity(row,row.kind)).sort(),expected);
+  // This is a captured-authoring applicability classifier,not a live event probe.
+  const inspect = (type,attrs) => {
+    assert.ok(!['button','input','select','textarea','summary','dialog'].includes(type));
+    assert.ok(!(type==='a' && (attrs.href!==undefined || attrs.tabIndex!==undefined || attrs.tabindex!==undefined)));
+    assert.ok(!Object.keys(attrs).some(key=>/^on[a-z]/i.test(key)));
+    assert.ok(![attrs.contenteditable,attrs.contentEditable].some(value=>value!==undefined && value!==false && value!=='false'));
+    const tab=attrs.tabindex??attrs.tabIndex;
+    if(tab!==undefined)assert.equal(String(tab),'-1');
+    return tab!==undefined;
+  };
+  const counts={}, focusable=[];
+  for(const row of cases) {
+    const caseId=identity(row,row.kind);
+    counts[row.family]=(counts[row.family]??0)+1;
+    for(const side of ['reference','astylar']) {
+      const receipt=row.inputTrees[side], bytes=readFileSync(receipt.file);
+      assert.equal(hash(bytes),receipt.sha256,caseId+'/'+side);
+      const tree=JSON.parse(bytes);
+      for(const node of tree.nodes) {
+        const attrs=side==='reference'?node.attributes:node.authored??{};
+        const type=side==='reference'?node.type:attrs.type;
+        if(inspect(type,attrs)) {
+          assert.equal(side,'reference');
+          assert.ok(['progress-bar','progress-spinner'].includes(row.family));
+          assert.equal(attrs.id,row.family+'-primary');
+          assert.equal(attrs.mode,'determinate');assert.equal(attrs.value,'64');
+          focusable.push({case:caseId,side,type,tabindex:attrs.tabindex});
+        }
+      }
+    }
+  }
+  assert.deepEqual(counts,Object.fromEntries(families));
+  assert.equal(focusable.length,40);
+  assert.throws(()=>inspect('button',{}));
+  assert.throws(()=>inspect('div',{tabindex:'0'}));
+  assert.throws(()=>inspect('div',{contenteditable:'true'}));
+  assert.throws(()=>inspect('div',{onclick:'activate()'}));
+  t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,
+    scope:'Exact configured retained authoring: no activation/editing descendants. Forty native negative-tabindex progress owners keep a programmatic-focus obligation; no live focus, unrecorded callback, paint, lifecycle, source-currentness or full-case closure is inferred.'}));
 });
 
 test('passive descendant semantics retain accessibility hiding omissions independently of visible target gates', () => {
