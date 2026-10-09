@@ -13,9 +13,16 @@ Measured esbuild9056 private memory6,168,629,248 bytes; Windows free physical
 1,028,600KiB/free virtual1,155,060KiB. Stopped only audit-owned Angular24468 and
 esbuild9056 for resource pressure; session terminal exit1 with no test results.
 This is a cancelled verification,not a passing test or diagnostic acceptance.
-Do not restart solely for a timeout or touch other applications. Next inspect
-the installed Karma options for bounded worker/source-map configuration before
-another owning test; retain pending source and the original cancellation facts.
+Do not restart solely for a timeout or touch other applications. A second run
+used the installed supported source-map=false option and NG_BUILD_MAX_WORKERS=1
+in a temporary process environment,with the same include/assertions. Session8841
+again reached only build stage: esbuild21712 private memory5,841,514,496 bytes,
+Windows free physical924,700KiB/free virtual1,918,588KiB. Stopped only Angular21344
+and esbuild21712 for memory pressure; wrapper exit0 after termination contains no
+test results and is NOT a pass. Both cancellation records remain. These controls
+did not bound peak build memory sufficiently. Next inspect the compilation/bundle
+input boundary or use the existing narrowly scoped owner-proof infrastructure;
+do not launch this configuration a third time. Pending diagnostic stays uncommitted.
 Canonical b28e8926 and historical capture remain unchanged; source/proof/export
 reconciliation and fresh diagnostic capture are still pending.
 
