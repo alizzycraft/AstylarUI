@@ -2,6 +2,29 @@
 
 ## Current evidence boundary — October 9
 
+### Export memory boundary measured without repeating collection
+
+Read-only Node22.22.3 --expose-gc probe imports the existing producer,reads and
+authenticates the complete117465211-byte current-ancestry baseline
+(SHA b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a),
+parses all436 static/1875 interaction records,then releases it. Exit0. RSS/heapUsed
+bytes: start29442048/4758576; producer import151326720/76752936; retained parsed
+baseline571232256/409123288; released221929472/156518664. These scoped process
+measurements are not whole-export peak requirements or an audit verification.
+They bound import/parse cost below the cancelled worker's observed1.65GB working
+set; collection/construction remains the unmeasured growth stage. Existing output
+streaming does not stream input collection: run-material-input-audit.mjs keeps
+the parsed baseline and complete constructed audit. EvidenceSession additionally
+retains authenticated read snapshots and memoized collector values until finish;
+no size attribution or cache change is inferred from source inspection alone.
+
+No low-memory full-collection switch was found in the existing CLI. Next use its
+existing ASTYLAR_AUDIT_PROGRESS telemetry at a resource-safe integration attempt,
+or a bounded collector allocation measurement before redesigning infrastructure.
+Do not lower coverage/validation or replace the full gate with compact queries.
+Historical divider flow/paint authoring is already settled in the obligation
+table and material-flow-position-substitutions.md; it was not reinvestigated.
+
 ### Retained-layout diagnostic batch registered; canonical reconciliation pending
 
 Registration commit2a4186c2 is pushed. Complete five-path launcher dry run passes.
