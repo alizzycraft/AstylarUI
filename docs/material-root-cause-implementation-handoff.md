@@ -1,5 +1,40 @@
 # Material audit: evidence-led implementation priorities
 
+## Current implementation boundary — October 9
+
+This summary supersedes older publication counts and open sampler hypotheses
+below; chronological evidence remains retained. The coverage inventory is the
+current inspection ledger, not this historical implementation trail.
+
+- Accepted canonical remains `b28e8926…`, with155 source findings and
+  inputEquivalent=false. Current producer registers177 focused proofs; the
+  latest coherent source batch is committed as5ec142fe but its publication,
+  independent cold check and compact import remain pending. Neither source
+  registration nor historical suite conservation is current browser acceptance.
+- Divider sampler attribution is resolved narrowly: actual GPU texture addresses
+  reconstruct the untouched no-MSAA candidate screenshot with0 differing pixels
+  at both DPR1 andDPR2. The previous172 large DPR2 CPU-model residuals do not
+  demonstrate an additional GPU sampling defect. Do not recommend core UV,
+  rounding or offset changes from those rejected models, and do not compensate
+  through authored fixture styles. Native/opaque-control paint differences
+  remain1114 pixels atDPR1 and2964 atDPR2; canvas/backing text fidelity and the
+  standard-MSAA boundary are not thereby accepted or completely attributed.
+  Evidence: `../artifacts/material-parity/divider-text-shader-address-reconstruction-20261009.log`,
+  SHA2568a0f9f9b404b550d25ea91d81d67ee2f137ebf26e26dfc4401d9146f0b4fabdf.
+- Existing complete legacy/root conservation suite passes3/3, preserving original
+  populations and policy after exact historical reversals. Evidence:
+  `../artifacts/material-parity/divider-sampler-root-and-legacy-conservation-20261009.log`,
+  SHA256e59a4c5df9bb77dc85cbc4c9c4ea0f2b7815715fb9a4ef3c1e3d1e11315ed579.
+  These are audit-integration checks, not renderer fixes or full parity gates.
+- Remaining audit priority: shared overlay/scrollbar input and paint obligations,
+  exact-case keyboard/caret/selection and lifecycle joins, then unresolved passive
+  family obligations. Reuse settled sampling, font-lifetime and passive authored
+  applicability evidence; only changed dependencies or contradictory evidence
+  warrant reopening those questions. Coherent canonical publication is the next
+  integration milestone when resource headroom permits. All2311 cases remain
+  partial until complete applicable-obligation closure is recorded; diagnosed
+  failures can close inspection without being fixed. Final full gates remain.
+
 ## Current resumption ledger — October 7
 
 - October8 modal restoration attribution is now bounded by matched lifecycle

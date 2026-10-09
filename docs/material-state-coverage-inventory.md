@@ -2,6 +2,23 @@
 
 ## Current evidence boundary — October 9
 
+### Implementation handoff reconciled with settled sampler evidence
+
+The implementation handoff now explicitly supersedes its older publication
+counts and open sampler hypotheses. Verified original sampler and complete
+legacy/root conservation log hashes against the values below; no new capture
+or investigation was run. Actual-address reconstruction rules out treating the
+172 CPU-model residuals as a demonstrated extra GPU sampling defect, while the
+native paint failure and standard-MSAA uncertainty remain. The handoff prohibits
+UV/offset fixes based on rejected models and keeps equivalent fixture authoring.
+Acceptedb28e8926/publication boundary,155 findings,177 source proofs and all2311
+partial cases remain unchanged. Next: exact-case shared overlay/scrollbar and
+state/lifecycle obligation closure or coherent publication with safe resources;
+do not repeat the settled sampler question. This closes a deliverable consistency
+gap only, not a case or final gate. Exact-path diff check is the proportional
+verification for this prose-only reconciliation; prior focused proof logs are
+retained unchanged and final enforced gates remain required.
+
 ### Sampler evidence registration and historical suite conservation reconciled
 
 Existing public divider proof description now distinguishes the demonstrated
