@@ -2,6 +2,29 @@
 
 ## Current evidence boundary — October 10
 
+### First formerly skipped receipt assertion executed; second comparison live
+
+Explicit opt-in execution of original `source-conservation report hash transition
+is explained by one normalization receipt` passes1/1 in25783.449ms,total
+25999.3313ms,zero skips. Actual live source fingerprints independently authenticate;
+all non-receipt historical evidence remains equal,and the original one-receipt
+transition hashes remain unchanged. Log source-conservation-opt-in-20261010.log
+SHA dd8a00fee5ceea72bcef8309ee4c5e73c8fdda17da908715c30a42841f290e45.
+This closes historical full-harness test31's skipped execution obligation for
+this source state,not current rendering or final complete-harness acceptance.
+
+Original companion `published current-ancestry receipt leaves reconcile with
+the authenticated predecessor` is running separately with flag1,session59869,
+Node parent30444/worker18968. Latest authoritative poll confirms worker live,
+CPU95.70s,working set229441536bytes; output is TAP preamble only. Log
+published-receipt-leaves-opt-in-20261010.log is active,not terminal or hash-pinned.
+Do not restart on an observation timeout; resume the same handle and authenticate
+terminal output before claiming a result. This streams original Git compressed
+payloads through existing leaf comparison,not a canonical export or recapture.
+All original package hashes,leaf counts and99-change assertions remain unchanged.
+No new source/test layer,renderer/fixture change or successful scratch created.
+Complete canonical/current-validity/case-closure and final gates remain pending.
+
 ### Full-harness skipped receipt obligations identified and enabled
 
 Historical full-harness tests30/31 are the two original audit-section-digests
