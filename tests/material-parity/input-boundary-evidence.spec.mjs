@@ -21,6 +21,34 @@ const bytes = readFileSync(file);
 assert.equal(hash(bytes), '39df94e0eb87480d3824927a41a9950d1d275f7c97ab97a571c449efdc6da7d7');
 const report = JSON.parse(bytes);
 
+test('current Material serializer preserves detached layout observations without filling missing owners', () => {
+  const source = readFileSync('examples/material-showcase/src/app/material-input-evidence.ts', 'utf8');
+  const compiled = ts.transpileModule(source, { compilerOptions: {
+    target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS,
+  } }).outputText;
+  const exports = {};
+  new Function('exports', compiled)(exports);
+  const layout = { source: 'core-dimension-registry', width: 40.1062, height: 18,
+    padding: { top: 0, right: 0, bottom: 0, left: 0 } };
+  const snapshot = { revision: 7, elements: [
+    { path: 'root/0', id: 'observed', type: 'span', normal: {}, effective: {}, retainedLayout: layout },
+    { path: 'root/1', id: 'missing', type: 'span', normal: {}, effective: {} },
+  ] };
+  const styles = exports.collectMaterialCoreResolvedStyles(snapshot);
+  const root = { children: [{ id: 'observed', type: 'span' }, { id: 'missing', type: 'span' }] };
+  const tree = exports.collectAuthoredInputTree(root, [], styles.effective, styles);
+  assert.deepEqual(tree.nodes[1].retainedLayout, layout);
+  assert.equal(typeof tree.nodes[1].retainedLayout.width, 'number');
+  assert.equal(tree.nodes[1].resolvedStyle.width, undefined);
+  assert.equal(Object.hasOwn(tree.nodes[2], 'retainedLayout'), false);
+  layout.padding.left = 99;
+  assert.equal(tree.nodes[1].retainedLayout.padding.left, 0);
+  tree.nodes[1].retainedLayout.padding.left = 88;
+  assert.equal(exports.collectAuthoredInputTree(root, [], styles.effective, styles).nodes[1].retainedLayout.padding.left, 0);
+  const legacy = exports.collectMaterialResolvedStyles([]);
+  assert.ok(exports.collectAuthoredInputTree(root, [], legacy.effective, legacy).nodes.every(n => !Object.hasOwn(n, 'retainedLayout')));
+});
+
 test('current inspection method detaches registry dimensions and omits ambiguous owners', () => {
   const source = readFileSync('src/lib/astylar.ts', 'utf8');
   const ast = ts.createSourceFile('astylar.ts', source, ts.ScriptTarget.Latest, true);

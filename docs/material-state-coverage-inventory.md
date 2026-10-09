@@ -2,6 +2,24 @@
 
 ## Current evidence boundary — October 9
 
+### Material serializer preserves optional registry layout observations
+
+The existing material-input-evidence collector now copies optional retainedLayout
+through its core by-path map and authored input tree,with structuredClone at both
+boundaries. Numeric dimensions/padding stay separate from string declarations and
+projected geometry; legacy/missing observations stay absent. Existing input-boundary
+suite executes the current serializer and current owning inspection method:
+2/2 pass1861.0949ms total,including mutation isolation and omission controls.
+No historical tree is edited or assigned inferred dimensions. This closes the
+known serialization-loss point at source level,not actual divider width evidence.
+Live Angular session9332 remains in build stage. The application imports the
+public diagnostic type,so declaration/library/packed-consumer verification with
+the new type is explicitly pending; transpiled serializer execution is not a
+type/build claim. Next finish that live run and prepare a dependency-authenticated
+runtime supporting the new observation before capture. Accepted canonical b28e8926
+does not yet register these standalone proofs/new source fingerprints; integrate
+as a coherent instrumentation batch,not metadata-only export.
+
 ### Current registry snapshot logic has focused source-level proof; runtime remains pending
 
 Existing core inspection now optionally returns detached retainedLayout values

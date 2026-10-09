@@ -3,6 +3,7 @@ import type { AstylarResolvedStyleSnapshot } from 'astylarui';
 interface CoreNodeStyles {
   normal: Record<string, unknown>;
   effective: Record<string, unknown>;
+  retainedLayout?: AstylarResolvedStyleSnapshot['elements'][number]['retainedLayout'];
   retainedText?: AstylarResolvedStyleSnapshot['elements'][number]['retainedText'];
   paintedControlText?: AstylarResolvedStyleSnapshot['elements'][number]['paintedControlText'];
 }
@@ -23,6 +24,7 @@ export function collectMaterialCoreResolvedStyles(snapshot: AstylarResolvedStyle
   const byPath = new Map<string, CoreNodeStyles>();
   for (const entry of snapshot.elements) {
     const styles: CoreNodeStyles = { normal: { ...entry.normal }, effective: { ...entry.effective },
+      ...(entry.retainedLayout ? { retainedLayout: structuredClone(entry.retainedLayout) } : {}),
       ...(entry.retainedText ? { retainedText: { source: entry.retainedText.source, style: { ...entry.retainedText.style } } } : {}),
       ...(entry.paintedControlText ? { paintedControlText: structuredClone(entry.paintedControlText) } : {}) };
     byPath.set(entry.path, styles);
@@ -78,6 +80,9 @@ export function collectAuthoredInputTree(root: object, rules: readonly object[],
     nodes.push({ key, parent, authored,
       resolvedStyle: materialStyleSnapshot(inspected?.effective ?? (id ? resolved.get(id) : undefined)),
       normalResolvedStyle: materialStyleSnapshot(inspected?.normal ?? (id ? provenance?.normal.get(id) : undefined)),
+      // Registry observations remain numeric and distinct from authored styles
+      // and projected geometry. Missing observations must stay missing.
+      ...(inspected?.retainedLayout ? { retainedLayout: structuredClone(inspected.retainedLayout) } : {}),
       ...(inspected?.retainedText ? { retainedText: { source: inspected.retainedText.source,
         style: materialStyleSnapshot(inspected.retainedText.style) } } : {}),
       // Preserve parsed units and nested effects verbatim. This is actual
