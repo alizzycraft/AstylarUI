@@ -21,6 +21,37 @@ const bytes = readFileSync(file);
 assert.equal(hash(bytes), '39df94e0eb87480d3824927a41a9950d1d275f7c97ab97a571c449efdc6da7d7');
 const report = JSON.parse(bytes);
 
+test('divider retained wrapping ancestry distinguishes requests from missing layout dimensions', () => {
+  const raw = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
+  assert.equal(hash(raw), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const retained = JSON.parse(raw);
+  const cases = [...retained.results, ...retained.interactions].filter(r => r.family === 'divider');
+  assert.equal(cases.length, 24);
+  const visits = { reference: 0, astylar: 0 };
+  for (const row of cases) for (const side of ['reference', 'astylar']) {
+    const receipt = row.inputTrees[side];
+    const rawTree = readFileSync(receipt.file);
+    assert.equal(hash(rawTree), receipt.sha256);
+    const tree = JSON.parse(rawTree);
+    for (const id of ['divider-above', 'divider-below']) {
+      let node = tree.nodes.find(n => (n.authored?.id ?? n.attributes?.id) === id);
+      assert.ok(node, id);
+      if (side === 'astylar') assert.deepEqual(Object.keys(node).filter(k => /dimension|bounds|geometry/i.test(k)), []);
+      while (node) {
+        visits[side]++;
+        const style = side === 'reference' ? tree.styles[node.style] : (node.interactionResolvedStyle ?? {});
+        for (const key of ['whiteSpace', 'overflowWrap', 'wordBreak', 'textOverflow', 'wordWrap']) {
+          const expected = side === 'reference' && key !== 'wordWrap'
+            ? (key === 'textOverflow' ? 'clip' : 'normal') : undefined;
+          assert.equal(style[key], expected);
+        }
+        node = tree.nodes.find(n => n.key === node.parent);
+      }
+    }
+  }
+  assert.deepEqual(visits, { reference: 192, astylar: 240 });
+});
+
 test('divider actual-theme AX cohorts preserve exact contexts and runtime receipts', () => {
   const raw = readFileSync('artifacts/material-parity/divider-theme-verified-ax-20261009.log');
   assert.equal(hash(raw), '32c55ffb2c1bede46dfefa45e24fa96dcdcab52ee9ac251d0d06bb0333f76347');

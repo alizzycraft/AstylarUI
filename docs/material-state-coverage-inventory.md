@@ -2,6 +2,25 @@
 
 ## Current evidence boundary — October 9
 
+### Divider retained wrapping constraints have a precise observation gap
+
+Authenticated current-full report ab42dbec and all48 tree receipts across24
+cases. Both text-owner ancestor paths yield192 reference node visits with
+whiteSpace/overflowWrap/wordBreak normal and textOverflow clip;240 candidate
+visits omit all four plus wordWrap. None of48 candidate text-owner nodes has
+a dimension/bounds/geometry field. Thus these trees establish requests and
+missing observations,not the retained availableWidth passed to text rendering.
+Existing input-boundary suite now preserves that exact census and absence;
+focused1/1 passes,2428.7108ms total. Initial diagnostic used a nonexistent
+interactionResults report key; corrected to the actual interactions array,
+without modifying evidence. Do not infer span width from parent/separator
+width or replay normal defaults again. Next locate already retained text-layout
+measurements with authenticated owner/context joins; if unavailable, the smallest
+additional observation is owner CSS dimensions/padding and resulting available
+width through the existing divider probe,not a whole browser matrix. This proof
+is standalone outside accepted b28e8926; batch integration remains pending.
+No renderer/fixture change or full-case/current-rendering acceptance follows.
+
 ### Ordinary divider text uses inherited CSS-width constraints, not input-control defaults
 
 Read-only current source trace resolves the next boundary: renderer.service.ts
