@@ -58,10 +58,12 @@ function verifiedDescriptionCohorts(file, sha256, contexts, states, family) {
   assert.deepEqual(fingerprintDirectory(path.resolve('examples/material-showcase/dist/material-showcase/browser')),
     manifest.provenance.browserFiles);
   for (const receipt of [...terminal.capture.sources, ...terminal.sourceReceipts]) {
-    if (family === 'form-field' && receipt.file === 'scripts/audit-material-field-description.mjs') {
-      // The probe acquired a separate tooltip mode after this field capture.
-      // Authenticate its actual producer, not replacement current script bytes.
-      const original = execFileSync('git', ['show', `58678793:${receipt.file}`]);
+    if (receipt.file === 'scripts/audit-material-field-description.mjs') {
+      // Field capture predates tooltip mode; themed tooltip capture predates
+      // divider mode. Authenticate each actual producer, not today's probe.
+      // This preserves historical AX observations, not current-mode acceptance.
+      const commit = family === 'form-field' ? '58678793' : '8b095913';
+      const original = execFileSync('git', ['show', `${commit}:${receipt.file}`]);
       assert.equal(createHash('sha256').update(original).digest('hex'), receipt.sha256);
     } else descriptionEvidenceBytes(receipt.file, receipt.sha256);
   }

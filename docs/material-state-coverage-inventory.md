@@ -2,6 +2,22 @@
 
 ## Current evidence boundary — October 9
 
+### Description replay authenticates the actual pre-divider producer
+
+Focused registration/field/tooltip/standalone-predecessor checks initially pass
+3/4: themed tooltip AX replay rejects current probe SHA70a4037f… against its
+captured45cb0bb7… receipt. Exact Git8b095913 probe bytes hash to the original
+receipt. The existing description replay now authenticates that historical
+producer, just as field cohorts authenticate58678793; all four checks pass,
+6032.8646ms,exit0. Original logs,receipt hashes,observation assertions and
+current checks for other sources remain unchanged. This answers the receipt
+failure,not whether today's tooltip mode has identical behavior. No new browser
+capture or renderer/fixture change; no whole-case closure or current acceptance.
+Remaining priorities: integrate divider standalone evidence into the canonical
+dependency batch,complete exact case input/paint/history/ownership joins,and
+establish current validity before final gates. Do not repeat description AX
+captures solely because the shared probe gained a separate mode.
+
 ### Divider retained ownership observations have exact physical membership
 
 Specific question:does the recorded20-cohort replacement/disposal statement
