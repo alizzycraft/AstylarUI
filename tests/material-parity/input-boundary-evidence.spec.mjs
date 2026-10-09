@@ -748,7 +748,8 @@ test('public divider typography reduction observes equal paragraph span inputs a
         return {id:mesh.metadata.elementId,logicalSize:texture?.metadata?.astylarLogicalTextSize,
           backingSize:texture?.getSize(),samplingMode:texture?.samplingMode,
           samplingInputs:{projectedVertices,indices:Array.from(mesh.getIndices()),
-            textureMatrix:Array.from(texture.getTextureMatrix().m),invertY:texture.invertY},
+            textureMatrix:Array.from(texture.getTextureMatrix().m),invertY:texture.invertY,
+            wrapU:texture.wrapU,wrapV:texture.wrapV},
           transfer:{textureGammaSpace:texture.gammaSpace,textureHasAlpha:texture.hasAlpha,textureLevel:texture.level,
             materialAlpha:mesh.material.alpha,alphaMode:mesh.material.alphaMode,transparencyMode:mesh.material.transparencyMode,
             useAlphaFromDiffuseTexture:mesh.material.useAlphaFromDiffuseTexture,
@@ -766,7 +767,50 @@ test('public divider typography reduction observes equal paragraph span inputs a
       const control=document.createElement('canvas');control.width=200*devicePixelRatio;control.height=180*devicePixelRatio;
       const ctx=control.getContext('2d',{alpha:false});ctx.fillStyle='#f0f0f0';ctx.fillRect(0,0,control.width,control.height);ctx.scale(devicePixelRatio,devicePixelRatio);ctx.font='normal 400 14.4px AuditRoboto';ctx.fillStyle='#1d1b20';
       const baselines=origins.map((left,i)=>{const p=document.createElement('p');p.style.cssText='position:absolute;visibility:hidden;font:normal 400 14.4px AuditRoboto;line-height:normal;letter-spacing:normal;padding:0;margin:0;border:0';p.style.left=left+'px';p.style.top=(20+i*32+left-20)+'px';p.textContent=i%2?'Below':'Above';const marker=document.createElement('span');marker.style.cssText='display:inline-block;width:0;height:0;vertical-align:baseline';p.append(marker);document.body.append(p);const y=marker.getBoundingClientRect().top;p.remove();ctx.fillText(i%2?'Below':'Above',left,y);return y;});
-      window.dividerTextReduction={site,baselines,paintCalls,runtimeText,control:Array.from(ctx.getImageData(0,0,control.width,control.height).data),errors:surface?.diagnostics.messages.filter(m=>m.severity==='error')??[],dispose(){surface?.dispose();app?.destroy();return surface?.disposed??true;}};
+      window.dividerTextReduction={site,baselines,paintCalls,runtimeText,control:Array.from(ctx.getImageData(0,0,control.width,control.height).data),errors:surface?.diagnostics.messages.filter(m=>m.severity==='error')??[],
+        async encodeUvFloors(kind='floor'){
+          // Separate post-capture shader diagnostic. Preserve original vertex
+          // code, geometry and UV interpolation; bypass final color transfer.
+          for(const mesh of surface.scene.meshes)if(!mesh.metadata?.isTextMesh)mesh.isVisible=false;
+          if(kind==='sampler'){
+            const gl=surface.scene.getEngine()._gl,previous=gl.getParameter(gl.TEXTURE_BINDING_2D);
+            const flip=gl.getParameter(gl.UNPACK_FLIP_Y_WEBGL);
+            gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,false);
+            for(const texture of new Set(surface.scene.meshes.filter(m=>m.metadata?.isTextMesh)
+              .map(m=>m.material.diffuseTexture))){
+              const {width,height}=texture.getSize(),bytes=new Uint8Array(width*height*4);
+              for(let y=0;y<height;y++)for(let x=0;x<width;x++)bytes.set([x+1,y+1,127,255],(y*width+x)*4);
+              gl.bindTexture(gl.TEXTURE_2D,texture.getInternalTexture()._hardwareTexture.underlyingResource);
+              gl.texSubImage2D(gl.TEXTURE_2D,0,0,0,width,height,gl.RGBA,gl.UNSIGNED_BYTE,bytes);
+              const readback=await texture.readPixels();
+              if(readback.length!==bytes.length||bytes.some((value,i)=>value!==readback[i]))
+                throw new Error('encoded texture addresses disagree with GPU readback');
+            }
+            gl.bindTexture(gl.TEXTURE_2D,previous);
+            gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,flip);
+            if(gl.getError()!==gl.NO_ERROR)throw new Error('encoded address texture upload failed');
+          }
+          const effects=[...new Set(surface.scene.meshes.filter(m=>m.metadata?.isTextMesh)
+            .flatMap(m=>m.subMeshes.map(s=>s.effect)))];
+          const receipts=[];
+          for(const effect of effects){
+            const gl=surface.scene.getEngine()._gl;
+            const attached=gl.getAttachedShaders(effect._pipelineContext.program);
+            const vertex=gl.getShaderSource(attached.find(s=>gl.getShaderParameter(s,gl.SHADER_TYPE)===gl.VERTEX_SHADER));
+            const fragment=gl.getShaderSource(attached.find(s=>gl.getShaderParameter(s,gl.SHADER_TYPE)===gl.FRAGMENT_SHADER));
+            const assignment=/(gl_FragColor|glFragColor)\\s*=\\s*color\\s*;/g;
+            const matches=[...fragment.matchAll(assignment)];
+            if(matches.length!==1)throw new Error('expected one final color assignment,got '+matches.length);
+            const sample=fragment.match(/baseColor\\s*=\\s*(texture(?:2D)?\\(diffuseSampler,\\s*vDiffuseUV\\s*\\+\\s*uvOffset\\));/);
+            if(!sample)throw new Error('missing original diffuse sample expression');
+            const diagnostic=fragment.replace(assignment,(_,output)=>output+'='+
+              (kind==='sampler'?sample[1]:'vec4((floor(vDiffuseUV*vec2(textureSize(diffuseSampler,0)))+vec2(1.0))/255.0,127.0/255.0,1.0)')+';');
+            await new Promise((resolve,reject)=>effect._rebuildProgram(vertex,diagnostic,resolve,reject));
+            receipts.push({vertex,fragment,diagnostic});
+          }
+          surface.scene.render();await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+          return receipts;
+        },dispose(){surface?.dispose();app?.destroy();return surface?.disposed??true;}};
     ` }, bundle: true, write: false, format: 'esm', platform: 'browser', target: 'es2022', metafile: true });
   const inputs = Object.keys(built.metafile.inputs).filter(f => !f.endsWith('divider-text-reduction.mjs'))
     .map(file => ({ file, sha256: hash(readFileSync(file)) }));
@@ -990,6 +1034,51 @@ test('public divider typography reduction observes equal paragraph span inputs a
             }
           }
           assert.deepEqual(errors, []); assert.deepEqual(data.errors, []);
+          if(mode==='astylar-no-msaa') {
+            const shaders=await page.evaluate(()=>window.dividerTextReduction.encodeUvFloors('sampler'));
+            const encoded=PNG.sync.read(await page.screenshot());
+            const prediction=new Uint8Array(image.data.length);
+            for(let p=0;p<prediction.length;p+=4)prediction.set([240,240,240,255],p);
+            let observedPixels=0,outsideProjectedBounds=0,outOfRangeFloors=0;
+            for(let y=0;y<image.height;y++)for(let x=0;x<image.width;x++){
+              const pixel=(y*image.width+x)*4;
+              if(encoded.data[pixel+2]!==127)continue;
+              // The isolated planes have disjoint vertical bands. Match owner
+              // without treating CPU projected edge rounding as raster truth;
+              // count all edge disagreements explicitly below.
+              const candidates=data.runtimeText.filter(t=>(y+.5)/dpr>=t.bounds.top-1&&
+                (y+.5)/dpr<t.bounds.bottom+1);
+              assert.equal(candidates.length,1);
+              const texture=candidates[0];
+              if((x+.5)/dpr<texture.bounds.left||(x+.5)/dpr>=texture.bounds.right||
+                (y+.5)/dpr<texture.bounds.top||(y+.5)/dpr>=texture.bounds.bottom)outsideProjectedBounds++;
+              assert.ok(texture,'encoded UV pixel must belong to a recorded plane: '+JSON.stringify({x,y,
+                rgba:Array.from(encoded.data.slice(pixel,pixel+4)),bounds:data.runtimeText.map(t=>t.bounds)}));
+              let column=encoded.data[pixel]-1,row=encoded.data[pixel+1]-1;
+              if(column<0||column>=texture.backingSize.width||row<0||row>=texture.backingSize.height){
+                outOfRangeFloors++;
+                assert.equal(texture.samplingInputs.wrapU,0);assert.equal(texture.samplingInputs.wrapV,0);
+                column=Math.max(0,Math.min(texture.backingSize.width-1,column));
+                row=Math.max(0,Math.min(texture.backingSize.height-1,row));
+              }
+              const texel=(row*texture.backingSize.width+column)*4,alpha=texture.gpuPixels[texel+3]/255;
+              for(let c=0;c<3;c++)prediction[pixel+c]=Math.round(texture.gpuPixels[texel+c]*alpha+240*(1-alpha));
+              observedPixels++;
+            }
+            let different=0,greaterThanTwo=0,maximum=0;
+            for(let p=0;p<prediction.length;p+=4){
+              const delta=Math.max(...[0,1,2,3].map(c=>Math.abs(prediction[p+c]-image.data[p+c])));
+              if(delta)different++;if(delta>2)greaterThanTwo++;maximum=Math.max(maximum,delta);
+            }
+            assert.ok(observedPixels>0);
+            assert.equal(different,0,'GPU-validated sampler addresses reconstruct the untouched no-MSAA capture');
+            pair[mode].shaderSamplerDiagnostic={observedPixels,outsideProjectedBounds,outOfRangeFloors,
+              differingPixels:different,greaterThanTwo,
+              maximumChannelDifference:maximum,encodedSha256:hash(encoded.data),predictionSha256:hash(prediction),
+              shaders:shaders.map(s=>({vertexSha256:hash(s.vertex),fragmentSha256:hash(s.fragment),
+                diagnosticSha256:hash(s.diagnostic)}))};
+            assert.deepEqual(errors,[]);
+          }
           assert.equal(await page.evaluate(() => window.dividerTextReduction.dispose()), true);
         } finally { await page.close(); }
       }

@@ -2,6 +2,59 @@
 
 ## Current evidence boundary — October 9
 
+### Actual texture-sampler addresses close the bounded DPR2 model residual question
+
+Question: do the172 large no-MSAA DPR2 CPU-model residuals demonstrate an
+additional post-upload rendering defect,or does the CPU model misrepresent GPU
+sampling? Existing equal-input public typography probe now captures ordinary
+reference/candidate images FIRST,then performs a separate post-capture diagnostic.
+Compiled attached WebGL vertex shader stays unchanged. Fragment final output
+exposes the original diffuse texture sample expression,with an address-coded
+texture replacing ink solely for diagnosis. Every encoded RGBA texel is checked
+against GPU readPixels before interpreting its sampled row/column. Upload flip
+state and binding are restored. Non-text meshes are hidden only for diagnosis;
+no core,fixture or authored CSS/layout changes.
+
+Observed sampler addresses reconstruct the untouched no-MSAA image exactly at
+DPR1 AND DPR2:0 differing pixels/max0. Thus the172 large DPR2 residuals of the
+CPU pixel-center nearest model are model mismatch,not evidence of an additional
+GPU sampling defect in this bounded execution. This is not native-text parity:
+ordinary candidate/opaque-control differences1114 DPR1/2964 DPR2 remain,as do
+previous canvas/backing paint differences and standard-MSAA boundaries. Do not
+fix core UVs or offsets on the basis of the rejected CPU models. The narrow
+post-upload no-MSAA residual attribution is settled; next reconcile this outcome
+and historical/current suite fingerprints in the existing coherent proof batch,
+then return to exact-case input/paint obligation closure. No whole-case closes.
+
+Diagnostic plane coverage2862/11448 pixels atDPR1/2;58/158 lie outside strict
+CPU-projected bounds at pixel centers. Owner assignment uses disjoint vertical
+bands and counts these edge disagreements explicitly,not a parity tolerance.
+No decoded addresses are out of range. Earlier explicit shader floor(UV*size)
+reconstructs DPR1 exactly but retains760/712 above2 DPR2 residuals: shader
+arithmetic itself is not the hardware nearest-sampler address rule. Actual sampler
+readback,not a new rounding guess,is the decisive control.
+
+Final focused1/1 passes48156.9661ms,total49459.711ms,Chrome154.0.8037.58,
+six pages,DPR1/2,2515 dependency receipts,six owning-method bindings.
+Log artifacts/material-parity/divider-text-shader-address-reconstruction-20261009.log
+SHA8a0f9f9b404b550d25ea91d81d67ee2f137ebf26e26dfc4401d9146f0b4fabdf.
+Previous independently validated-address observation is retained in
+divider-text-shader-address-validated-20261009.log
+SHAd213185e4ff41b8b26a1ba727e7ca511e9762fd1229b1559beede5638d34f39e.
+Both diagnostic reconstructions are exact; final source additionally enforces it.
+
+Retained instrumentation attempts are NOT renderer failures or parity passes:
+divider-text-shader-uv-floor-20261009.log records missing raw shader preamble;
+compiled/centers/isolated variants record CPU projected-edge owner-match failure.
+The isolated trace pins x20.5 versus projected left20.5000005859375. The initial
+shared-effect hypothesis was not established and hiding non-text meshes did not
+resolve this edge failure. Owner-bands floor diagnostic completes but rejects its
+sampling model; first address-sampler log lacked GPU-address validation and had
+reversed row labels. Required originals/failures remain at their existing paths.
+Syntax/exact-path diff checks pass,no scratch retained. Canonical177-proof source
+registration and acceptedb28e8926 still await coherent reconciliation; this new
+standalone evidence is not silently published,current full acceptance or completion.
+
 ### Exact inverted-UV nearest-boundary hypothesis rejected
 
 Competing remaining explanations were a simple inverted-V floor-boundary rule
