@@ -2,6 +2,33 @@
 
 ## Current evidence boundary — October 9
 
+### Scope-corrected description export terminal; independent cold check next
+
+Session68478 exits0; launcher31980/worker7016 are terminal. Complete export
+records436 static/1875 interaction cases,8483 scalar groups,389202 occurrences,
+155 source findings,inputEquivalent=false. Build reaches validate-audit at
+1020423.4902ms; complete publication at25626842.726ms includes extended observed
+wall delays,not CPU-time attribution. Evidence session rechecks1205 files/
+89154859bytes,zero invalidations,one collector/10 memory hits/one disk hit.
+Retain description-batch-scope-verified-export-20261009.log, SHA256
+e5b76f0ad6f04f2ab99fed890faedb168e607c8d84cc30bbc8fa139aedb1188a.
+
+Published gzip62845182bytes independently hashes to manifest
+57734896c155c2d1823a3b5da9e8acbfa6013deba3ef8f7aa4bd21267f2ffb78;
+manifest declares decoded2222886355bytes/SHA256
+a02ed396fe512d0fc7067f562340c9abd08fd20ce8fac7c9491e5174f268f10c.
+Decoded/current-producer equivalence remains the independent cold --check gate,
+not inferred from exit0 or the compressed receipt. Accepted compact index stays
+153/eb90958e until that gate and subsequent import/verification succeed. All2311
+cases remain partial; no final browser/harness/input-equivalence acceptance.
+
+Named launcher --dry-run confirms all five original input paths. Preflight D:free
+3125846016bytes,free physical memory5645288KiB. Next launch the same named
+launcher --check with ASTYLAR_AUDIT_COLD=1 and ASTYLAR_AUDIT_PROGRESS=1, retaining
+unique description-batch-scope-verified-cold-check-20261009.log. Do not change
+consumed producer/capture/proof inputs while it runs; divider setup findings
+remain standalone ledger evidence rather than silently added canonical claims.
+
 ### Divider responsive AX theme applicability remains unproven
 
 Smallest decisive retained-record check authenticates responsive log0504ec4a…
