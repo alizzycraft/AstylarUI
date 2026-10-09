@@ -4,6 +4,18 @@
 
 ### Retained-layout diagnostic batch registered; canonical reconciliation pending
 
+Registration commit2a4186c2 is pushed. Complete five-path launcher dry run passes.
+Export session83883 was launched once with preserved output at
+artifacts/material-parity/layout-diagnostic-registration-export-20261009.log.
+Owned launcher17240/worker9628 were verified live; worker working set reached
+1,653,972,992 bytes while Windows free physical memory fell to73,888KiB
+(free virtual7,928,108KiB). Stopped only the verified worker for memory pressure;
+session terminates exit-1 with no completed publication. Empty log is retained
+as this attempt's output,not successful evidence. Do not repeat unchanged under
+the same pressure or claim canonical verification. Current b28e8926 remains
+accepted; next obtain sufficient resource headroom or identify a bounded
+memory-safe execution route before canonical integration.
+
 Seven existing input-boundary proofs and twelve consumed evidence/source paths
 are now registered in the producer (171 focused entries, previously164). This
 is additive evidence registration, not new classification or acceptance policy.
