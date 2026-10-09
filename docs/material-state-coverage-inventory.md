@@ -2,6 +2,26 @@
 
 ## Current evidence boundary — October 9
 
+### Ordinary text wrapping omission reaches an explicit parser default
+
+Current ordinary renderer at renderer.service.ts:253–276 calls
+TextRenderingService.parseElementTextStyle and renderTextToTexture with the
+ordinary text style. The latter at text-rendering.service.ts:487–513 prioritizes
+an already-parsed TextElement style,then supplied rule,then element/default.
+TextStyleParserService initializes whiteSpace=normal,wordWrap=normal and
+textOverflow=clip; it parses authored alternatives rather than always dropping
+them. Existing input-boundary suite now executes the actual transpiled current
+parser:omitted and explicit normal/normal/clip objects agree,pre/break-word/
+ellipsis sensitivity controls remain distinct. Focused1/1 passes1447.8431ms.
+This resolves the current parser-default question,not complete installed/captured
+call-path or ancestor inheritance applicability. The parser has no wordBreak
+output and does not read overflowWrap; wordWrap must not silently be declared
+equivalent to all browser wrapping properties. Literal Above/Below words contain
+no collapsible whitespace,but available-width/line-break applicability still
+requires exact owner evidence. Next check retained parent requests and width
+constraints before closing those specific obligations. No renderer/fixture fix,
+normalization or canonical classification change.
+
 ### Divider complete retained text inputs expose four omitted observations
 
 Read-only authenticated current-full replay checks all48 tree receipts and both

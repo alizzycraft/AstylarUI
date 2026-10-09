@@ -206,6 +206,33 @@ test('divider retained update disposal observations join all configured physical
   // late completion, remount, peer isolation or current lifetime acceptance.
 });
 
+test('ordinary text parser preserves omitted wrapping defaults without assuming word-break support', () => {
+  const source = readFileSync('src/app/services/text/text-style-parser.service.ts', 'utf8');
+  const compiled = ts.transpileModule(source, { compilerOptions: {
+    target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS, experimentalDecorators: true,
+  } }).outputText;
+  const exports = {};
+  new Function('require', 'exports', compiled)(name => {
+    assert.equal(name, '@angular/core');
+    return { Injectable: () => target => target };
+  }, exports);
+  const parser = new exports.TextStyleParserService();
+  const omitted = parser.parseTextProperties({ selector: '#ordinary-span', fontSize: '16px', lineHeight: '20px' });
+  assert.equal(omitted.whiteSpace, 'normal');
+  assert.equal(omitted.wordWrap, 'normal');
+  assert.equal(omitted.textOverflow, 'clip');
+  const explicit = parser.parseTextProperties({ selector: '#ordinary-span', fontSize: '16px', lineHeight: '20px',
+    whiteSpace: 'normal', wordWrap: 'normal', textOverflow: 'clip' });
+  assert.deepEqual(omitted, explicit);
+  const changed = parser.parseTextProperties({ selector: '#ordinary-span', fontSize: '16px', lineHeight: '20px',
+    whiteSpace: 'pre', wordWrap: 'break-word', textOverflow: 'ellipsis' });
+  assert.equal(changed.whiteSpace, 'pre');
+  assert.equal(changed.wordWrap, 'break-word');
+  assert.equal(changed.textOverflow, 'ellipsis');
+  assert.equal(Object.hasOwn(omitted, 'wordBreak'), false);
+  // Current parser execution only,not installed-runtime or inherited-style proof.
+});
+
 test('public divider typography reduction observes equal paragraph span inputs and opaque backing control', async t => {
   const consumer = path.resolve('examples/material-showcase');
   // Bind the paint/baseline owner, not the entire installed rendering pipeline.
