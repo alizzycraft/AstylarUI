@@ -60,6 +60,11 @@ try {
   ]);
   const evidence = openSupplementalCapture({ options, browser,
     script: 'scripts/audit-material-field-description.mjs', styleProperties: [] });
+  const ancestorReceipt = dividerHostContext ? {
+    file: 'tests/material-parity/reference-root-ancestor-context.mjs',
+    sha256: hash(readFileSync('tests/material-parity/reference-root-ancestor-context.mjs')),
+  } : null;
+  if (ancestorReceipt) evidence.capture.sources.push(ancestorReceipt);
   for (const context of contexts) for (const state of states) for (const side of ['reference', 'astylar']) {
     const page = await browser.newPage(context);
     const finish = evidence.observe(page);
@@ -142,6 +147,8 @@ try {
         : side === 'reference' ? state === 'error' ? 'Project name is required' : 'Public label' : null);
     } finally { await page.close(); }
   }
+  if (ancestorReceipt) assert.equal(hash(readFileSync(ancestorReceipt.file)), ancestorReceipt.sha256,
+    'Ancestor collector changed during capture.');
   console.log(JSON.stringify({ terminal: 'verified', browser: browser.version(), capture: evidence.capture,
     sourceReceipts: ['examples/material-showcase/src/app/astylar.component.ts', 'src/lib/astylar-semantic-bridge.ts',
       'tests/material-parity/benchmark.config.mjs', 'examples/material-showcase/src/app/theme.ts',

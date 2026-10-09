@@ -101,10 +101,37 @@ test('divider host clipping observations preserve bounded DOM ancestry', () => {
   assert.equal(terminal.contexts, 16);
   assert.equal(rows.length, 32);
   assert.equal(new Set(rows.map(r => `${r.context.profile}:${r.context.viewportId}:${r.side}`)).size, 32);
-  for (const receipt of [...terminal.capture.sources, ...terminal.sourceReceipts, terminal.capture.checkpointManifest])
-    assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  for (const receipt of [...terminal.capture.sources, ...terminal.sourceReceipts, terminal.capture.checkpointManifest]) {
+    const source = receipt.file === 'scripts/audit-material-field-description.mjs'
+      ? execFileSync('git', ['show', `ed6a0083:${receipt.file}`]) : readFileSync(receipt.file);
+    assert.equal(hash(source), receipt.sha256);
+  }
   const manifest = JSON.parse(readFileSync(terminal.capture.checkpointManifest.file));
   assert.equal(terminal.browser, manifest.provenance.browser);
+  const receipted = [];
+  for (const [file, digest, contexts] of [
+    ['divider-host-context-receipted-20261009.log', '5becf18d24ace0bcffcf61dd0a8cc01c504c91a7bdf6e45dccc4c8fbec8bd53a', 16],
+    ['divider-host-comparison-receipted-20261009.log', 'b2b8329a2c4ee27d55959c3a01498b5d338aa2980aaa80648901049372b9d9cf', 4],
+  ]) {
+    const raw = readFileSync(`artifacts/material-parity/${file}`);
+    assert.equal(hash(raw), digest);
+    const observations = raw.toString().trim().split(/\r?\n/).map(JSON.parse), end = observations.pop();
+    assert.equal(end.terminal, 'verified');
+    assert.equal(end.contexts, contexts);
+    assert.equal(observations.length, contexts * 2);
+    assert.ok(end.capture.sources.some(r => r.file === 'tests/material-parity/reference-root-ancestor-context.mjs'));
+    for (const receipt of [...end.capture.sources, ...end.sourceReceipts, end.capture.checkpointManifest])
+      assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+    assert.deepEqual(end.capture.checkpointManifest, terminal.capture.checkpointManifest);
+    assert.equal(end.browser, terminal.browser);
+    receipted.push(...observations);
+  }
+  assert.equal(new Set(receipted.map(r => `${r.context.profile}:${r.context.viewportId}:${r.side}`)).size, 40);
+  for (const configured of [...materialStaticCases, ...materialInteractionCases].filter(r => r.family === 'divider'))
+    for (const side of ['reference', 'astylar']) assert.ok(receipted.some(r => r.side === side &&
+      r.context.profile === configured.profile && r.context.viewport.width === configured.viewport.width &&
+      r.context.viewport.height === configured.viewport.height && r.context.deviceScaleFactor === configured.viewport.deviceScaleFactor));
+  rows.push(...receipted);
   for (const row of rows) {
     assert.deepEqual(row.runtime.errors, []);
     for (const asset of row.runtime.assets)

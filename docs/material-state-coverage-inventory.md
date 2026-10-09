@@ -2,6 +2,27 @@
 
 ## Current evidence boundary — October 9
 
+### Divider outer-host receipt and comparison membership gaps closed
+
+Existing opt-in probe now records the reference ancestor collector hash before
+capture and rechecks it before terminal publication. Both new captures exit0:
+`divider-host-context-receipted-20261009.log` SHA256
+5becf18d24ace0bcffcf61dd0a8cc01c504c91a7bdf6e45dccc4c8fbec8bd53a and
+`divider-host-comparison-receipted-20261009.log` SHA256
+b2b8329a2c4ee27d55959c3a01498b5d338aa2980aaa80648901049372b9d9cf
+(both under artifacts/material-parity). Existing host replay authenticates
+collector/direct-source/checkpoint/runtime receipts and joins40 observations
+in20 physical contexts to both sides of all24 configured cases; passes1/1,
+1513.5996ms. Original unreceipted log remains preserved and is authenticated
+with its exact ed6a0083 producer,not retroactively repaired. New chains preserve
+the same outcome:visible overflow outside the candidate canvas,clip on canvas,
+no clip-path or containment clipping. This closes the missing DOM host
+observations/provenance/membership,not candidate internal clipping,paint-edge
+acceptance,parent comparison-page iframe ancestry or current whole-runtime
+equivalence. Standalone proof remains outside accepted canonical b28e8926;
+batch registration later,no metadata-only full export. Next distinguish actual
+divider extent inside the canvas from hypothetical clipping before new paint work.
+
 ### Divider outer DOM clipping observed in sixteen physical contexts
 
 Opt-in existing divider probe host-context capture exits0:32 side observations
