@@ -2022,6 +2022,17 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
         const errors = []; page.on('pageerror', error => errors.push(String(error)));
         await page.goto(`${baseUrl}/${mode}/timepicker?profile=dark`);
         await page.locator('.frame').waitFor();
+        // Ordinary mode does not apply the profile query; verify the real theme.
+        await page.waitForFunction(() => !!window.__MATERIAL_SHOWCASE_COMMAND__);
+        assert.equal(await page.evaluate(() => window.__MATERIAL_SHOWCASE_COMMAND__({
+          type: 'showcase:theme', theme: { mode: 'dark', primary: '#d0bcff', tertiary: '#efb8c8',
+            surface: '#1c1b1f', error: '#f2b8b5', density: 0, cornerScale: 1, typographyScale: 1 },
+        })), true);
+        const actualTheme = await page.locator('.frame').evaluate(node => ({
+          dark: node.classList.contains('dark'), background: getComputedStyle(node).backgroundColor,
+        }));
+        assert.deepEqual(actualTheme, { dark: true, background: 'rgb(28, 27, 31)' });
+        t.diagnostic(JSON.stringify({ mobileScrollbarTheme: { mode, actualTheme, viewport: [390, 844, 2] } }));
         if (mode === 'astylar') {
           await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
           await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());

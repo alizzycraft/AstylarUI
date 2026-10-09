@@ -2,6 +2,38 @@
 
 ## Current evidence boundary — October 9
 
+### Actual-dark mobile timepicker scroll applicability closed by owning test
+
+Corrected only ordinary-mode theme instrumentation in the existing mobile
+timepicker test: apply showcase:theme and assert both frame.dark and computed
+rgb(28,27,31) before opening. Complete existing wheel/reachability/pixel/drag/
+track/gutter assertions and the independent eight configured desktop joins remain.
+Using current-full-20261005 checkpoint,Chrome154.0.8037.58,390x844 DPR2,the
+unmodified assertions pass1/1 in53886.6745ms. Both side theme diagnostics verify
+actual dark. Log timepicker-actual-dark-mobile-20261009.log has26275 bytes,SHA
+4163dc1ca0931dbf55ea0133af4a271e3d3c3f2c2f56876d1983bf3799c3f0c1.
+Owning test bytes before/after authenticate d2b35a773912a2b58ecbc744577378edac16cff2b09a281e8c3e28ae9439c03b.
+Complete source/installed/captured geometry and paint modules still agree; the
+helper authenticates all served checkpoint files. No renderer or fixture change.
+
+Actual-dark findings remain failures: native thumb drag211/421/632 versus
+candidate0/0/0; candidate thumb/track non-pickable and underlying option events.
+Native track press scrolls,candidate does not. Native gutter15px/options245px
+versus candidate gutter0/options260px; wheel144 and final-option reachability
+work on both. This supersedes the earlier requested-dark/default-light scope
+for these newly executed assertions only,not the original capture provenance.
+Screenshots are sampled in memory by the original test; the log does not retain
+PNG bytes and cannot support new antialiased-edge or full local raster claims.
+
+Historical replay reverses only the exact theme insertion after authenticating
+the complete new source,then checks the original4a386f10 snapshot and original
+65d7256f predecessor assertions. Existing40-context keyboard conservation passes
+1/1,5067.7432ms; two theme/assertion mutation controls reject. This is historical
+conservation,not a replacement of capture receipts or current capture input.
+Canonical integration remains pending as a coherent batch. Remaining: other
+mobile profiles/action paint,full owner/current-pipeline applicability and exact
+case obligation closure. Do not repeat the closed actual-dark wheel/drag question.
+
 ### Divider description relations inspected; historical ancestor discrepancy retained
 
 Extended the existing authenticated actual-theme AX assertion,without recapture:

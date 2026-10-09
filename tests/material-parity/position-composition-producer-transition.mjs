@@ -49,6 +49,24 @@ export function restoreLayoutDiagnosticRegistration(source) {
 }
 // Historical replay only. Never use this reader for current capture or rendering acceptance.
 export function readRetainedSortFocusSource(current = readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')) {
+  if (current.toString().includes('Ordinary mode does not apply the profile query; verify the real theme.')) {
+    assert.equal(hash(current), 'd2b35a773912a2b58ecbc744577378edac16cff2b09a281e8c3e28ae9439c03b',
+      'exact explicit mobile scrollbar theme snapshot');
+    const insertion = `        // Ordinary mode does not apply the profile query; verify the real theme.
+        await page.waitForFunction(() => !!window.__MATERIAL_SHOWCASE_COMMAND__);
+        assert.equal(await page.evaluate(() => window.__MATERIAL_SHOWCASE_COMMAND__({
+          type: 'showcase:theme', theme: { mode: 'dark', primary: '#d0bcff', tertiary: '#efb8c8',
+            surface: '#1c1b1f', error: '#f2b8b5', density: 0, cornerScale: 1, typographyScale: 1 },
+        })), true);
+        const actualTheme = await page.locator('.frame').evaluate(node => ({
+          dark: node.classList.contains('dark'), background: getComputedStyle(node).backgroundColor,
+        }));
+        assert.deepEqual(actualTheme, { dark: true, background: 'rgb(28, 27, 31)' });
+        t.diagnostic(JSON.stringify({ mobileScrollbarTheme: { mode, actualTheme, viewport: [390, 844, 2] } }));
+`;
+    assert.equal(current.toString().split(insertion).length, 2);
+    current = Buffer.from(current.toString().replace(insertion, ''));
+  }
   assert.equal(hash(current), '4a386f107cee16cb120910717a42b6ee9b40c724f02860b68a60ce29d4784f30', 'exact reviewed paint-proof snapshot');
   const original = execFileSync('git', ['show', '72b28c0e:tests/material-parity/sort-focus-structure.spec.mjs'], { maxBuffer: 4_000_000 });
   assert.equal(hash(original), '65d7256f859a0839cdf6364d8f3d4e2b81bdb32978c42e0afeaa27f2622e14ce');

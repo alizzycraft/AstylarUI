@@ -348,6 +348,12 @@ test('retained extended keyboard cohorts replay original runtime tails and sourc
 
 test('configured enabled keyboard evidence joins forty exact focus contexts without changing original assertions', async () => {
   const { readRetainedSortFocusSource } = await import('./position-composition-producer-transition.mjs');
+  const currentSorter = readFileSync('tests/material-parity/sort-focus-structure.spec.mjs', 'utf8');
+  for (const altered of [currentSorter.replace('rgb(28, 27, 31)', 'rgb(255, 251, 254)'),
+    currentSorter.replace('candidate painted thumb currently has no pointer scrolling behavior', 'candidate thumb passes')]) {
+    assert.notEqual(altered, currentSorter);
+    assert.throws(() => readRetainedSortFocusSource(Buffer.from(altered)));
+  }
   const digest = value => createHash('sha256').update(value).digest('hex');
   const readPinned = (file, sha256) => {
     const bytes = readFileSync(file); assert.equal(digest(bytes), sha256, file); return bytes;
