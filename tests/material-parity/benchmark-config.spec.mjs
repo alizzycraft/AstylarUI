@@ -27,7 +27,7 @@ test('layout diagnostic registration preserves complete predecessor and unchange
   const { fingerprints, proofs } = new Function('readFileSync', 'path', 'createHash', functions.join('\n') +
     ';return {fingerprints:sourceFingerprints(process.cwd()),proofs:focusedProofInventory(process.cwd())};')(
     readFileSync, path, createHash);
-  assert.equal(proofs.length, 171); assert.ok(proofs.every(row => row.status !== 'missing'));
+  assert.equal(proofs.length, 175); assert.ok(proofs.every(row => row.status !== 'missing'));
   assert.ok(fingerprints.some(row => row.file.endsWith('divider-fresh-retained-layout-20261009.jsonl')));
   for (const changed of [current.replace('sourceFindings,', 'sourceFindings: [],'),
     current.replace('Authenticates20 fresh JIT component contexts', 'Authenticates21 fresh JIT component contexts'),

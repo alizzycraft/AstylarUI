@@ -9,6 +9,37 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 // conservation. This does not substitute old bytes in current production.
 export function restoreLayoutDiagnosticRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes('datepicker exact retained clock-content applicability boundary')) {
+    assert.equal(hash(current), '3a1b224d915b88094329b09523e30dc1cf3a20c3c6193dac1e31f989f6ccaafb',
+      'exact complete applicability registration snapshot');
+    const ast = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    assert.equal(ast.parseDiagnostics.length, 0);
+    const entries = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory')
+      .body.statements[0].expression.elements;
+    assert.equal(entries.length, 175);
+    assert.deepEqual(entries.slice(0, 4).map(n => n.arguments[3].text), [
+      'datepicker exact retained clock-content applicability boundary',
+      'checkpoint complete mapped application source applicability boundary',
+      'complete linked library capture and explicit current diagnostic drift boundary',
+      'current library wiring metadata diagnostic applicability boundary',
+    ]);
+    current = current.slice(0, entries[0].getFullStart()) + current.slice(entries[4].getFullStart());
+    for (const file of [
+      'artifacts/material-parity/current-full-20261005/checkpoint/manifest.json',
+      'artifacts/material-parity/current-full-20261005/latest-report.json',
+      'examples/material-showcase/dist/material-showcase/browser/chunk-3JXWRYJY.js.map',
+      'examples/material-showcase/dist/material-showcase/browser/chunk-625ZTKCG.js.map',
+      'examples/material-showcase/dist/material-showcase/browser/chunk-7SL66K3U.js.map',
+      'examples/material-showcase/dist/material-showcase/browser/chunk-DV4XS33V.js.map',
+      'examples/material-showcase/dist/material-showcase/browser/chunk-JPEJK334.js.map',
+      'examples/material-showcase/dist/material-showcase/browser/chunk-YSOHGT2J.js.map',
+      'examples/material-showcase/dist/material-showcase/browser/main.js.map',
+    ]) {
+      const line = `    '${file}',\n`;
+      assert.equal(current.split(line).length, 2);
+      current = current.replace(line, '');
+    }
+  }
   if (!current.includes('divider fresh retained CSS width and scoped wrapping boundary')) return current;
   assert.equal(hash(current), 'ca019b9ec763bdfd457aeb22e80bb00524f90ffbd404d154a61d1b0100efc903',
     'exact complete layout diagnostic registration snapshot');

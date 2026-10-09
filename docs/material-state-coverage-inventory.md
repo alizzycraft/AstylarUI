@@ -2,6 +2,33 @@
 
 ## Current evidence boundary — October 9
 
+### Applicability proof batch registered; canonical publication still pending
+
+Existing focusedProofInventory now registers the four newer date-clock,
+application-source,linked-library and current-wiring proofs. Nine exact retained
+checkpoint/report/map paths enter the existing source-fingerprint inventory;
+current producer LF-SHA3a1b224d915b88094329b09523e30dc1cf3a20c3c6193dac1e31f989f6ccaafb.
+Proof count175,all locators present. Existing historical conservation reverses
+only these exact four entries/nine paths,authenticates the prior ca019b9e
+snapshot,then performs the original seven-entry diagnostic reversal. Complete
+predecessor and unchanged policy check passes1/1,2726.9486ms; original mutation
+controls remain. This is explicit registration,not normalization of findings.
+
+Coherent focused batch executes all four registered proofs plus the strengthened
+serializer proof:5/5 pass,terminal14126.3114ms. Complete five-path launcher dry run
+also passes. No canonical export was launched or accepted here. Previously
+accepted b28e8926 remains canonical; publication,independent cold verification
+and compact import remain pending. Current observed free physical RAM was
+1,318,460KiB,versus prior full-worker1.65GB working set/resource cancellation;
+this does not establish safe headroom for another unchanged full attempt.
+
+Next perform resource-safe coherent export/check at a justified milestone,
+without dropping paths or reducing validation. Meanwhile exact-case applicable
+obligation closure and remaining shared paint/state/lifetime questions are still
+available. Do not rebuild merely to refresh ledger text or repeat settled source
+derivations. All2311 cases remain partially inspected; no renderer/fixture,
+classification policy,threshold or whole-case acceptance changed.
+
 ### Datepicker retained clock-sensitive population reconciled without recapture
 
 CSS/font applicability was already closed by October7/8 source,compiled-output

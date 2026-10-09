@@ -8889,6 +8889,15 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'artifacts/material-parity/current-full-20261005/checkpoint/manifest.json',
+    'artifacts/material-parity/current-full-20261005/latest-report.json',
+    'examples/material-showcase/dist/material-showcase/browser/chunk-3JXWRYJY.js.map',
+    'examples/material-showcase/dist/material-showcase/browser/chunk-625ZTKCG.js.map',
+    'examples/material-showcase/dist/material-showcase/browser/chunk-7SL66K3U.js.map',
+    'examples/material-showcase/dist/material-showcase/browser/chunk-DV4XS33V.js.map',
+    'examples/material-showcase/dist/material-showcase/browser/chunk-JPEJK334.js.map',
+    'examples/material-showcase/dist/material-showcase/browser/chunk-YSOHGT2J.js.map',
+    'examples/material-showcase/dist/material-showcase/browser/main.js.map',
     'artifacts/material-parity/divider-fresh-retained-layout-20261009.jsonl',
     'artifacts/material-parity/divider-host-context-20261009.log',
     'artifacts/material-parity/divider-host-context-receipted-20261009.log',
@@ -9467,6 +9476,14 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('retained datepicker clock applicability distinguishes calendar content from closed final states'/,
+      'datepicker exact retained clock-content applicability boundary', 'Authenticates111 unique configured datepicker cases and222 tree receipts:33 month/day,8 year-view,70 closed final states. Both sides agree on calendar presence. Closed final observations do not certify intermediate dismissal states or current paint; open year-view content is not declared stale merely because the day changed.'),
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('checkpoint application source census confines drift to the documented serializer diagnostic'/,
+      'checkpoint complete mapped application source applicability boundary', 'Authenticates checkpoint and complete17-source JS-map inventory across six maps. Sixteen whole LF-normalized current sources agree,including host,reference,plugin,theme,state and routes; only the separately authenticated serializer diagnostic differs. Not CSS/assets,execution reachability,clock validity,current browser rendering or whole-case closure.'),
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('current runtime member drift is confined to the retained layout diagnostic owner'/,
+      'complete linked library capture and explicit current diagnostic drift boundary', 'Consumer-resolved Angular linker reproduces all88 complete captured installed modules without excluding metadata,factories,imports,exports or effects. Current emit matches1583 members with only authenticated inspection-method drift. Root versus consumer compiler versions remain distinct. Not current complete rendering acceptance.'),
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('runtime wiring and metadata retain original assertions beyond authenticated diagnostic drift'/,
+      'current library wiring metadata diagnostic applicability boundary', 'Executes the actual original88-module assertion callback beyond the known inspector difference,authenticating both method hashes and requiring all other declarations,wiring,decorators,component requests and DI checks unchanged. Original equality test remains failing; no captured method substitutes for current code. Not full pipeline or browser acceptance.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('fresh divider layout observations join all exact cases and bound single-word wrapping'/,
       'divider fresh retained CSS width and scoped wrapping boundary', 'Authenticates20 fresh JIT component contexts,explicitly loaded fonts,served assets and actual source dependencies. Joins all24 configured cases and48 unchanged owner inputs while adding current positive registry dimensions and zero padding. Executes actual normal parser/wrapping with bounded sensitivity controls. Not historical texture dimensions,AOT/full application paint,line-box equivalence or whole-case acceptance; first-segment break-word limitation remains separate.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('packed layout inspection browser proofs authenticate the complete current consumer suite'/,
