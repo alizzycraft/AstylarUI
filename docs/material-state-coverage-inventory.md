@@ -2,6 +2,30 @@
 
 ## Current evidence boundary — October 9
 
+### Divider responsive AX theme applicability remains unproven
+
+Smallest decisive retained-record check authenticates responsive log0504ec4a…
+and its exact Git aee5b612 helper dca535342…. Top-level fields are only browser,
+checkpoint,helperSourceSha256,scope,rows; row fields are profile,viewport,width,
+height,dpr,mode,target,errors. There is no recorded URL, theme command, frame class
+or background observation. The captured withFrozenShowcase helper verifies served
+build fingerprints and launches the server/browser, but delegates navigation to
+an external callback not retained in that helper. No separate probe source was
+found among current scripts/tests for this log. Thus neither correctly applied
+themes nor default-light fallback is demonstrated by the retained profile labels.
+Store source applies URL profiles only with benchmark=1; without the caller's
+actual URL/setup, that rule cannot decide which path this capture took.
+
+The previous nine/seven context accounting is labelled observation membership,
+not nine actual-theme-certified contexts. Original separator AX observations and
+historical assertion replay remain valid as recorded; do not promote them to
+four-profile rendering acceptance or declare the seven unlabeled desktop contexts
+the only applicability gap. Next recover authenticated original caller/setup if
+available, otherwise collect only the missing actual-theme applicability through
+the owning capture mechanism with explicit URL/theme/state receipts. Do not
+rewrite old logs or infer a renderer discrepancy from missing instrumentation.
+Export68478 inputs remain frozen; this ledger-only correction adds no capture.
+
 ### Divider AX closure gap narrowed without recapture
 
 The consolidated semantics row below was stale: it omitted the registered
