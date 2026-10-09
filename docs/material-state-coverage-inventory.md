@@ -2,6 +2,26 @@
 
 ## Current evidence boundary — October 9
 
+### Divider complete retained text inputs expose four omitted observations
+
+Read-only authenticated current-full replay checks all48 tree receipts and both
+Above/Below owners in all24 cases,not only difference rows. All48 retained core
+text styles match the reference font stack,normal font style/line height,zero
+word spacing,no decoration/transform; sizes match16px in24 owners,14.4px in12,
+18.4px in12. Weight is400 versus normal; tracking normal versus0px; ink is
+RGB(29,27,32)/#1d1b20 in36 owners and RGB(230,225,229)/#e6e1e5 in12.
+These value representations do not establish shared line boxes or pixel paint.
+Reference whiteSpace/overflowWrap/wordBreak/textOverflow are normal/normal/
+normal/clip; all four are absent from each candidate retainedText.style.
+Therefore absence from the difference index is not complete input evidence.
+Do not fill these missing observations with assumed defaults. Existing policy
+only permits initial clip for textOverflow; inherited wrapping requires actual
+authoring/ancestry and responsible text-style conversion evidence. Next trace
+the ordinary span conversion/default boundary (not TextInputManager,which owns
+editable controls) to determine applicability to the literal Above/Below words.
+This narrows the remaining question; no new rendering defect or equivalence
+classification and no full export/capture follows from this census alone.
+
 ### Divider retained typography membership and owner scope resolved
 
 Verified compact generation b28e8926 contains144 retainedTypography differences
