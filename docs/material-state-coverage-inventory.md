@@ -2,6 +2,25 @@
 
 ## Current evidence boundary — October 9
 
+### Divider original caller recovery exhausted in retained source history
+
+Read-only `git log --all -S 'divider-responsive-ax-20261006.log' -- scripts
+tests/material-parity` identifies only eb31d3311019a8f2d51798b26624c2802e7ca0db.
+That commit adds the receipt-replay assertion and handoff prose, not the capture
+caller. Current scripts/tests likewise contain consumers, not its navigation
+producer. The retained divider-retained-runtime-proof-20261006.log is TAP replay
+output only; it supplies no missing URL/theme setup. This bounded search cannot
+recover original caller provenance, and does not prove the capture used the
+wrong theme. Do not repeat the same receipt replay or substitute later lifecycle
+profile labels as proof of this earlier accessibility capture's theme.
+
+Next decisive action is an owning, explicit-theme AX capture for the missing
+applicability/context join, after the independent cold check frees resources;
+preserve the original observations separately. Cold-check session5183 is verified
+live with launcher1368/worker32532; worker CPU rises354.109375→394.671875 seconds
+during these read-only checks. No frozen producer, proof or capture input changed.
+No whole case closes and no current rendering acceptance is inferred.
+
 ### Scope-corrected description export terminal; independent cold check next
 
 Session68478 exits0; launcher31980/worker7016 are terminal. Complete export
