@@ -323,12 +323,41 @@ test('divider actual-theme AX cohorts preserve exact contexts and runtime receip
     assert.equal(row.observation.name, '');
     assert.equal(row.observation.orientation, 'horizontal');
     assert.deepEqual(row.observation.childIds, []);
+    assert.equal(row.observation.description, null);
+    assert.deepEqual(row.observation.dom, { describedBy: null, descriptions: [] });
+    assert.equal(row.observation.describedByProperty, null);
     assert.deepEqual(row.runtime.errors, []);
     for (const asset of row.runtime.assets) {
       const expectedAsset = manifest.provenance.browserFiles.find(file => file.path === asset.file || file.file === asset.file);
       assert.ok(expectedAsset, asset.file);
       assert.equal(asset.sha256, expectedAsset.sha256);
     }
+  }
+  // Separate historical relative-tree observation: this receipt does not supply
+  // the missing capture caller, actual-theme proof, or current-runtime validity.
+  const relativeBytes = readFileSync('artifacts/material-parity/divider-actual-ax-20261006.log');
+  assert.equal(hash(relativeBytes), 'b5e5b2778f8dc7fc2ade31463312af46e2043a8d45d73bded90923b6e922fc7c');
+  const relatives = JSON.parse(relativeBytes);
+  assert.equal(relatives.browser, '154.0.8037.58');
+  assert.equal(relatives.checkpoint, 'artifacts/material-parity/current-full-20261005/checkpoint/manifest.json');
+  assert.deepEqual(relatives.rows.map(row => row.mode), ['reference', 'astylar']);
+  for (const row of relatives.rows) {
+    const nodes = row.nodes, index = new Map(nodes.map(node => [node.nodeId, node]));
+    assert.equal(index.size, nodes.length);
+    assert.equal(nodes[0].role.value, 'separator');
+    for (const node of nodes.filter(node => node.parentId)) {
+      const parent = index.get(node.parentId);
+      assert.ok(parent);
+      assert.ok(parent.childIds.includes(node.nodeId));
+    }
+    assert.deepEqual(nodes.slice(0, 3).map(node => [node.role.value, node.name?.value, node.ignored]),
+      [['separator', '', false], ['region', 'divider showcase', false], ['main', '', false]]);
+    assert.equal(nodes.filter(node => !node.ignored && node.role.value === 'main').length,
+      row.mode === 'reference' ? 1 : 2);
+    const url = new URL(nodes.at(-1).properties.find(property => property.name === 'url').value.value);
+    assert.equal(url.pathname, `/${row.mode}/divider`);
+    assert.equal(url.searchParams.get('profile'), 'light');
+    assert.equal(url.searchParams.get('benchmark'), '1');
   }
 });
 

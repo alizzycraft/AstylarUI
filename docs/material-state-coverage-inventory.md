@@ -2,6 +2,36 @@
 
 ## Current evidence boundary — October 9
 
+### Divider description relations inspected; historical ancestor discrepancy retained
+
+Extended the existing authenticated actual-theme AX assertion,without recapture:
+all40 side observations across20 physical contexts (all24 configured case joins)
+have description=null,DOM describedBy=null/descriptions=[],and no describedBy AX
+property. The existing separator role/name/orientation/no-child assertions and
+all original receipts remain. Focused test passes1/1,1753.4873ms. This closes the
+retained description-relation question,not every accessibility relationship.
+That capture used fetchRelatives=false,so it cannot prove ancestor correspondence.
+
+Existing divider-actual-ax-20261006.log does retain ancestor nodes in one historical
+light/desktop/DPR1 cohort (SHA b5e5b2778f8dc7fc2ade31463312af46e2043a8d45d73bded90923b6e922fc7c).
+The same existing test now authenticates its bytes and both URL profiles,unique
+node identities and parent/child backlinks. Separator→region(divider showcase)→main
+agrees,but reference exposes one main landmark,candidate two,with additional
+nonignored generic ancestors. This is an inspected historical structural failure,
+not equal accessibility trees. Original helper hash/caller provenance is not
+recovered by the file hash; no actual-theme or current-runtime claim follows.
+
+Current authored source corroborates the origin: astylar.component.ts:26 wraps
+the surface in main.frame while :463 authors main#page; semanticTagName at
+astylar-semantic-bridge.ts:668 preserves main rather than inventing a landmark.
+Reference.component.ts:55 has the single authored frame main. This is a shared
+application-host/semantic-document composition mismatch,not demonstrated core
+misclassification. Do not change the bridge to suppress correctly authored main.
+No fixture or renderer changed. Next verify ancestor relationships with explicit
+capture-time source/theme receipts in missing contexts,then map the failure to
+exact case obligations. These strengthened assertions remain standalone pending
+canonical dependency reconciliation; no new whole-case closure is claimed.
+
 ### Export memory boundary measured without repeating collection
 
 Read-only Node22.22.3 --expose-gc probe imports the existing producer,reads and
