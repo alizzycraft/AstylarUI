@@ -2,6 +2,21 @@
 
 ## Current evidence boundary — October 9
 
+### Focused inspection compilation scope is bounded without filtering assertions
+
+Executed installed Karma findTests: the include selects exactly the owning
+astylar-style-inspection.spec.ts. Parsed default tsconfig.spec.json has360 roots,
+including69 unrelated specs. New tsconfig.style-inspection-audit.json inherits
+the same compiler options,selects that one root and keeps imported dependencies
+normal. Existing input-boundary suite verifies exact option equality and actual
+runner entry selection; focused1/1 passes,3707.8584ms total. This closes the
+compilation-scope mismatch,not the cause of peak memory or browser correctness.
+Third run uses this changed ts-config plus one worker/source-map=false; session9332
+is live in build stage. Diagnostic source remains uncommitted/unverified. Do not
+claim a pass from this guard or replace final unfiltered unit/browser gates.
+Config/guard are a coherent enabling increment; canonical integration remains
+pending rather than exporting metadata alone.
+
 ### Retained-layout diagnostic verification cancelled for measured memory pressure
 
 Pending uncommitted diagnostic extends existing core inspection with detached

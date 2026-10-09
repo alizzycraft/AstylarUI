@@ -21,6 +21,28 @@ const bytes = readFileSync(file);
 assert.equal(hash(bytes), '39df94e0eb87480d3824927a41a9950d1d275f7c97ab97a571c449efdc6da7d7');
 const report = JSON.parse(bytes);
 
+test('focused style inspection config preserves compiler options and the complete owning suite', async () => {
+  const parse = file => {
+    const config = ts.readConfigFile(file, ts.sys.readFile);
+    assert.equal(config.error, undefined);
+    const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, process.cwd());
+    assert.deepEqual(parsed.errors, []);
+    return parsed;
+  };
+  const broad = parse('tsconfig.spec.json');
+  const focused = parse('tsconfig.style-inspection-audit.json');
+  assert.deepEqual(focused.options, broad.options);
+  const owner = path.resolve('src/lib/astylar-style-inspection.spec.ts');
+  assert.deepEqual(focused.fileNames.map(f => path.resolve(f)), [owner]);
+  assert.ok(broad.fileNames.length > focused.fileNames.length);
+  const require = createRequire(import.meta.url);
+  const { findTests } = require('../../node_modules/@angular/build/src/builders/karma/find-tests.js');
+  const entries = await findTests(['src/lib/astylar-style-inspection.spec.ts'], [], process.cwd(), path.resolve('src'));
+  assert.deepEqual(entries.map(f => path.resolve(f)), [owner]);
+  // The runner executes the entire existing suite. This config is not the
+  // final full-unit gate and does not filter individual assertions.
+});
+
 test('divider retained wrapping ancestry distinguishes requests from missing layout dimensions', () => {
   const raw = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
   assert.equal(hash(raw), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
