@@ -2,6 +2,49 @@
 
 ## Current evidence boundary — October 9
 
+### Text sampling intervention separates MSAA from the DPR2 interior residual
+
+Remaining paint question: do the bounded57/306 CPU-model residuals originate in
+multisampling,or in upload/UV sampling/model assumptions? Existing public equal
+paragraph/span probe now adds a separate WebGL-context antialias=false diagnostic,
+not a public-option workaround or fixture change. Actual sample counts4→0 and
+antialias true→false are observed. Authored site,baselines,logical/backing sizes,
+projected bounds,sampling mode,material transfer and texture byte hashes remain
+exact across the normal and diagnostic candidate. Normal renderer capture remains
+unchanged and its equal-input native paint counterexample is preserved.
+
+DPR1 authored-origin pixel-center model: normal57 differences/13 above2 channels,
+maximum61; no-MSAA34 differences/0 above2,maximum1. Measured-origin no-MSAA instead
+has37/3,maximum123,so float-bound interpretation remains material to the model.
+DPR2 normal306/172,maximum213; no-MSAA304/172,maximum213. Thus MSAA contributes
+to the DPR1 edge residual but does not explain the172 large DPR2 interior errors.
+This does not make the CPU model browser truth or establish parity: opaque-control
+candidate differences remain1114→1104 DPR1 and2964→2964 DPR2.
+
+GPU texture readPixels now distinguishes actual upload from canvas context data.
+Direct readback differs346/282 pixels for Above/Below DPR1 and1120/1002 DPR2;
+reversing readback row order reduces these to13/21 and41/54. These remaining upload/
+readback channel differences are observed,not yet attributed or quantified by
+maximum channel/alpha. Both context variants have identical GPU hashes. Therefore
+canvas bytes must not be described as exact GPU-upload bytes; UV/sampler precision,
+upload transfer and model-boundary choices remain competing explanations for the
+interior residual. Next inspect the retained upload mismatch magnitude/alpha or
+actual UV boundary before assigning the whole DPR2 discrepancy to sampling.
+
+Chrome154.0.8037.58; final focused1/1 passes46414.9048ms,total47680.5974ms.
+Evidence artifacts/material-parity/divider-text-msaa-gpu-readback-complete-20261009.log
+SHAfc177bf764e34fbfdf9eea57e3cfc31b0c7781a82b89a6abc3719e1aab0e213e
+contains all six pages,2515 dependency receipts and complete owning-method bindings.
+Earlier MSAA-only accepted focused run52243.543ms is retained separately in
+divider-text-msaa-intervention-20261009.log
+SHA2d8d965405e29b9e084558b19ac8846c13044b14ac7cfce2b609f8fccf3e87f0.
+Initial GPU-readback logging attempt used Select-Object -First7,closed the pipe and
+caused Node EPIPE after the test's ok line; its seven-line log is not terminal
+acceptance. Complete rerun keeps the full log and filters display only. No failed
+or original evidence replaced. Standalone extension/current suite fingerprint
+awaits coherent canonical reconciliation;177-proof producer/acceptedb28e8926
+unchanged. No renderer,Babylon package,fixture,threshold or full-case closure changed.
+
 ### Pending-font remount/peer boundary inspected; coherent batch registration updated
 
 Competing lifecycle explanations: retired font listeners may rebuild disposed

@@ -701,6 +701,13 @@ test('public divider typography reduction observes equal paragraph span inputs a
       import {Astylar} from 'astylarui';
       import {Vector3,Matrix} from '@babylonjs/core/Maths/math.vector';
       const mode=new URLSearchParams(location.search).get('mode');
+      const disableMsaa=new URLSearchParams(location.search).has('disable-msaa');
+      // Diagnostic context intervention only; never change the public fixture
+      // or treat this intercepted context as the ordinary renderer result.
+      const originalGetContext=HTMLCanvasElement.prototype.getContext;
+      if(disableMsaa)HTMLCanvasElement.prototype.getContext=function(kind,options,...rest){
+        return originalGetContext.call(this,kind,/webgl/.test(kind)?{...options,antialias:false}:options,...rest);
+      };
       const font=new FontFace('AuditRoboto','url(/font.woff2)',{weight:'400'});
       await font.load();document.fonts.add(font);
       const paintCalls=[];
@@ -725,7 +732,7 @@ test('public divider typography reduction observes equal paragraph span inputs a
       }else{app=await createApplication({providers:[provideZonelessChangeDetection()]});surface=app.injector.get(Astylar).mount(host,site,{diagnostics:{logLevel:'silent'}});}
       await surface?.whenSettled();await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
       CanvasRenderingContext2D.prototype.fillText=originalFillText;
-      const runtimeText=surface?.scene.meshes.filter(m=>m.metadata?.isTextMesh).map(mesh=>{
+      const runtimeText=surface?await Promise.all(surface.scene.meshes.filter(m=>m.metadata?.isTextMesh).map(async mesh=>{
         const scene=surface.scene,engine=scene.getEngine(),texture=mesh.material?.diffuseTexture;
         mesh.computeWorldMatrix(true);
         const viewport=scene.activeCamera.viewport.toGlobal(engine.getRenderWidth(),engine.getRenderHeight());
@@ -739,11 +746,13 @@ test('public divider typography reduction observes equal paragraph span inputs a
             emissiveIsDiffuse:mesh.material.emissiveTexture===texture,
             imageProcessing:{enabled:scene.imageProcessingConfiguration.isEnabled,exposure:scene.imageProcessingConfiguration.exposure,
               contrast:scene.imageProcessingConfiguration.contrast,toneMappingEnabled:scene.imageProcessingConfiguration.toneMappingEnabled},
-            framebuffer:engine._gl?.getContextAttributes()},
+            framebuffer:engine._gl?.getContextAttributes(),
+            samples:engine._gl?.getParameter(engine._gl.SAMPLES)},
           pixels:Array.from(texture.getContext().getImageData(0,0,texture.getSize().width,texture.getSize().height).data),
+          gpuPixels:Array.from(await texture.readPixels()),
           bounds:{left:Math.min(...corners.map(v=>v.x))/devicePixelRatio,top:Math.min(...corners.map(v=>v.y))/devicePixelRatio,
             right:Math.max(...corners.map(v=>v.x))/devicePixelRatio,bottom:Math.max(...corners.map(v=>v.y))/devicePixelRatio}};
-      })??[];
+      })):[];
       const control=document.createElement('canvas');control.width=200*devicePixelRatio;control.height=180*devicePixelRatio;
       const ctx=control.getContext('2d',{alpha:false});ctx.fillStyle='#f0f0f0';ctx.fillRect(0,0,control.width,control.height);ctx.scale(devicePixelRatio,devicePixelRatio);ctx.font='normal 400 14.4px AuditRoboto';ctx.fillStyle='#1d1b20';
       const baselines=origins.map((left,i)=>{const p=document.createElement('p');p.style.cssText='position:absolute;visibility:hidden;font:normal 400 14.4px AuditRoboto;line-height:normal;letter-spacing:normal;padding:0;margin:0;border:0';p.style.left=left+'px';p.style.top=(20+i*32+left-20)+'px';p.textContent=i%2?'Below':'Above';const marker=document.createElement('span');marker.style.cssText='display:inline-block;width:0;height:0;vertical-align:baseline';p.append(marker);document.body.append(p);const y=marker.getBoundingClientRect().top;p.remove();ctx.fillText(i%2?'Below':'Above',left,y);return y;});
@@ -763,11 +772,12 @@ test('public divider typography reduction observes equal paragraph span inputs a
     browser = await chromium.launch({ channel: 'chrome', headless: true });
     for (const dpr of [1, 2]) {
       const pair = {};
-      for (const mode of ['reference', 'astylar']) {
+      for (const mode of ['reference', 'astylar', 'astylar-no-msaa']) {
         const page = await browser.newPage({ viewport: { width: 200, height: 180 }, deviceScaleFactor: dpr });
         const errors = []; page.on('pageerror', e => errors.push(String(e)));
         try {
-          await page.goto(`http://127.0.0.1:${server.address().port}/?mode=${mode}`);
+          const query=mode==='astylar-no-msaa'?'mode=astylar&disable-msaa=1':`mode=${mode}`;
+          await page.goto(`http://127.0.0.1:${server.address().port}/?${query}`);
           await page.waitForFunction(() => !!window.dividerTextReduction);
           const data = await page.evaluate(() => { const {site,baselines,control,errors,paintCalls,runtimeText}=window.dividerTextReduction;return {site,baselines,control,errors,paintCalls,runtimeText}; });
           // Diagnostic backing intervention only: preserve the same global CSS
@@ -846,7 +856,19 @@ test('public divider typography reduction observes equal paragraph span inputs a
             if ([0,1,2,3].some(c => image.data[i+c] !== data.control[i+c])) different++;
           pair[mode] = { site: data.site, baselines: data.baselines, opaqueControlSha256: hash(Buffer.from(data.control)), differingPixels: different };
           pair[mode].paintCalls = data.paintCalls;
-          pair[mode].runtimeText = data.runtimeText.map(({pixels, ...row}) => ({...row, pixelsSha256: hash(Buffer.from(pixels))}));
+          pair[mode].runtimeText = data.runtimeText.map(({pixels,gpuPixels,...row}) => {
+            assert.equal(gpuPixels.length,pixels.length,'GPU RGBA readback dimensions must match the canvas');
+            const flipped=new Uint8Array(pixels.length), stride=row.backingSize.width*4;
+            for(let y=0;y<row.backingSize.height;y++)flipped.set(pixels.slice(y*stride,(y+1)*stride),
+              (row.backingSize.height-1-y)*stride);
+            let directDifferences=0,flippedDifferences=0;
+            for(let p=0;p<pixels.length;p+=4) {
+              if([0,1,2,3].some(c=>gpuPixels[p+c]!==pixels[p+c]))directDifferences++;
+              if([0,1,2,3].some(c=>gpuPixels[p+c]!==flipped[p+c]))flippedDifferences++;
+            }
+            return {...row,pixelsSha256:hash(Buffer.from(pixels)),gpuPixelsSha256:hash(Buffer.from(gpuPixels)),
+              gpuReadback:{directDifferences,flippedDifferences}};
+          });
           let transparentDifference = 0, backingDifference = 0;
           for (let i = 0; i < image.data.length; i += 4) {
             if ([0,1,2,3].some(c => image.data[i+c] !== transparentControl[i+c])) transparentDifference++;
@@ -897,7 +919,7 @@ test('public divider typography reduction observes equal paragraph span inputs a
             residualHistogram, signedChannelHistogram, maximumChannelDifference, alphaDifferences, originResiduals };
           assert.equal(Object.values(residualHistogram).reduce((sum, count) => sum + count, 0), mappedDifference);
           assert.equal(originResiduals.reduce((sum, row) => sum + row.differingPixels, 0), mappedDifference);
-          if (mode === 'astylar') {
+          if (mode !== 'reference') {
             assert.equal(data.runtimeText.length, 4);
             const samplingModels = [];
             for (const origin of ['measured', 'authored']) {
@@ -948,6 +970,20 @@ test('public divider typography reduction observes equal paragraph span inputs a
       assert.equal(pair.reference.localControl.sha256, pair.astylar.localControl.sha256);
       assert.equal(pair.reference.mappedControl.sha256, pair.astylar.mappedControl.sha256);
       assert.equal(pair.reference.opaqueVersusTransparentDifferences, pair.astylar.opaqueVersusTransparentDifferences);
+      assert.deepEqual(pair.astylar.site,pair['astylar-no-msaa'].site);
+      assert.deepEqual(pair.astylar.baselines,pair['astylar-no-msaa'].baselines);
+      const withoutContext=rows=>rows.map(row=>{
+        const {framebuffer,samples,...transfer}=row.transfer;
+        return {...row,transfer};
+      });
+      assert.deepEqual(withoutContext(pair.astylar.runtimeText),withoutContext(pair['astylar-no-msaa'].runtimeText),
+        'context intervention must preserve texture bytes,logical/backing dimensions,geometry and material transfer');
+      for(const row of pair.astylar.runtimeText) {
+        assert.equal(row.transfer.framebuffer.antialias,true);assert.ok(row.transfer.samples>0);
+      }
+      for(const row of pair['astylar-no-msaa'].runtimeText) {
+        assert.equal(row.transfer.framebuffer.antialias,false);assert.equal(row.transfer.samples,0);
+      }
       if (dpr === 1) {
         assert.equal(pair.reference.differingPixels, 0, 'opaque baseline control matches native DPR1 paragraph/span paint');
         assert.ok(pair.astylar.differingPixels > 0, 'retain the equal-input candidate paint counterexample');
@@ -964,7 +1000,7 @@ test('public divider typography reduction observes equal paragraph span inputs a
       assert.equal(readFileSync(receipt.installedPath, 'utf8'), receipt.installed);
     }
     t.diagnostic(JSON.stringify({ browser: browser.version(), results, inputs, ownerBindings, fontSha256: hash(font), acceptance: false,
-      scope: 'Equal14.4px normal paragraph/span typography at four fractional origins,DPR1/2; opaque baseline control,not full divider flow or causal intervention on renderer backing.' }));
+      scope: 'Equal14.4px normal paragraph/span typography at four fractional origins,DPR1/2; separate no-MSAA context intervention preserves texture,geometry and material inputs. Not full divider flow,production no-MSAA acceptance or causal intervention on renderer backing.' }));
   } finally { await browser?.close(); await new Promise(resolve => server.close(resolve)); }
 });
 
