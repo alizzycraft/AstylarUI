@@ -12,6 +12,7 @@ import { fingerprintDirectory } from './run-checkpoint.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { propertyGroups } from './input-equivalence-policy.mjs';
 import { readGapSurveySource } from './gap-survey-source-replay.mjs';
+import { materialStaticCases, materialInteractionCases } from './benchmark.config.mjs';
 
 const file = 'artifacts/material-parity/input-boundaries-keypress-559f95c/latest-report.json';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -36,9 +37,20 @@ test('divider actual-theme AX cohorts preserve exact contexts and runtime receip
     ['desktop', 'tablet', 'mobile', 'desktop-dpr2'].flatMap(viewport =>
       ['reference', 'astylar'].map(side => `${profile}:${viewport}:${side}`)));
   assert.deepEqual(records.map(r => `${r.context.profile}:${r.context.viewportId}:${r.side}`).sort(), expected.sort());
+  const configured = [...materialStaticCases, ...materialInteractionCases].filter(r => r.family === 'divider');
+  assert.equal(configured.length, 24);
+  const covered = configured.filter(r => records.some(observed => observed.side === 'reference' &&
+    observed.context.profile === r.profile && observed.context.viewport.width === r.viewport.width &&
+    observed.context.viewport.height === r.viewport.height && observed.context.deviceScaleFactor === r.viewport.deviceScaleFactor));
+  assert.equal(covered.length, 20);
+  assert.deepEqual(configured.filter(r => !covered.includes(r)).map(r => `${r.profile}:${r.viewport.id}`).sort(),
+    ['contrast:comparison', 'custom:comparison', 'dark:comparison', 'light:comparison']);
   const rgb = { light: 'rgb(255, 251, 254)', dark: 'rgb(28, 27, 31)',
     contrast: 'rgb(255, 255, 255)', custom: 'rgb(244, 251, 250)' };
   for (const row of records) {
+    const dimensions = { desktop: [1440, 1000, 1], tablet: [768, 1024, 1],
+      mobile: [390, 844, 2], 'desktop-dpr2': [1440, 1000, 2] };
+    assert.deepEqual([row.context.viewport.width, row.context.viewport.height, row.context.deviceScaleFactor], dimensions[row.context.viewportId]);
     assert.equal(row.state, 'inspect');
     const url = new URL(row.url);
     assert.equal(url.pathname, `/${row.side}/divider`);

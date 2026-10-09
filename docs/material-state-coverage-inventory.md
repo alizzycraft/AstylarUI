@@ -2,12 +2,26 @@
 
 ## Current evidence boundary — October 9
 
+### Divider AX physical-to-configured join exposes four comparison cases
+
+Exact configured membership from benchmark.config joins the new32 AX observations
+by profile,width,height,DPR:20 of24 divider cases have this bounded semantic
+observation (12 ordinary static +8 desktop inspect). Four609×844 DPR1 comparison
+static cases,one per profile,do not. They require the missing capture,not an
+assumption that nearby mobile/tablet widths are equivalent. Exact dimension
+assertion initially fails because the prior ledger called mobile DPR1; captured
+and configured mobile are both390×844 DPR2. Correct the ledger label only; original
+log/observations are unchanged. The eight old responsive AX contexts remain their
+separate DPR1 historical scope. No complete semantic/paint/case closure follows.
+Next collect only these four comparison contexts with explicit theme receipts,
+then join other outstanding obligations. No repeat of the16 completed cohorts.
+
 ### Divider actual-theme separator AX gap now captured
 
 Existing field-description probe gains bounded --divider mode, reusing the
 authenticated checkpoint/runtime observer and CDP path rather than a new audit
 framework. Sequential --divider --all-contexts capture exits0:32 paired-side
-observations across four profiles × desktop/tablet/mobile DPR1 and desktop DPR2.
+observations across four profiles × desktop/tablet DPR1 and mobile/desktop DPR2.
 Every actual frame background/dark flag is checked, URLs record benchmark=1 and
 requested profile, and separator role/empty name/horizontal orientation/no AX
 children agree. Log divider-theme-verified-ax-20261009.log SHA256
