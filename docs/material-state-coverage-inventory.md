@@ -2,6 +2,31 @@
 
 ## Current evidence boundary — October 10
 
+### Both original skipped receipt assertions now executed without skips
+
+Companion session59869 is terminal exit0: original `published current-ancestry
+receipt leaves reconcile with the authenticated predecessor` passes1/1 in
+208525.6452ms,total208724.6455ms. Log
+published-receipt-leaves-opt-in-20261010.log SHA
+16ef2623d8f0b8952a3665016c1ab4a0bcbd7e2c25a3c48f678b5357ef9aa152.
+Both Git payloads authenticate compressed and streamed decoded hashes/lengths.
+Original receipt sections preserve263567 controlLineBoxes,590705 ownerCaretInputs,
+343859 reviewedSourceBatchInputs and3684597 controlTypography leaves. Exactly99
+changed leaves fall into the original five expected receipt-transition groups
+(48,1,1,1,48),not rendering/input differences silently normalized away.
+
+Together with the preceding source-conservation1/1 result,this supersedes the
+October4 full-harness tests30/31 skipped-execution gap. It does not change that
+historical harness's recorded119 failures/two skips or constitute a new complete
+harness result. Final complete runner now enables both original assertions;
+their historical-payload scope is explicit. No worker remains owned by this
+comparison,no source/assertion/reference changes or successful scratch. Checked
+producer inventory does not directly list the changed historical preload or
+complete runner,so these successful verification records are not assumed
+silently integrated into the pending canonical177-proof batch. Next resume
+exact-case obligation closure and justified canonical publication; current
+rendering acceptance and all2311 whole-case closures remain pending.
+
 ### First formerly skipped receipt assertion executed; second comparison live
 
 Explicit opt-in execution of original `source-conservation report hash transition
