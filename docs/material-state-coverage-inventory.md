@@ -2,6 +2,27 @@
 
 ## Current evidence boundary — October 9
 
+### Current registry snapshot logic has focused source-level proof; runtime remains pending
+
+Existing core inspection now optionally returns detached retainedLayout values
+from its own element dimension registry,using the rendered mesh name and unique
+authored owner. It does not compute dimensions from projection. Public diagnostic
+type explicitly distinguishes current registry state from inputs of an older
+retained texture. Existing input-boundary suite executes the actual current
+AstylarRenderer.inspectCurrentDocumentStyles method body with inert unrelated
+stages: cloned padding cannot mutate the registry,changed width refreshes the next
+snapshot,missing/duplicate owners omit dimensions,and a throwing projected-bound
+control is never invoked. Focused1/1 passes1297.2935ms total. Initial AST selection
+incorrectly chose the public Astylar facade; failed before execution and was
+corrected to the actual owning AstylarRenderer,not a changed assertion.
+Existing Angular inspection suite also adds real surface/hidden/resource checks;
+session9332 is still building and is NOT passing evidence. Source-level diagnostic
+proof permits a bounded instrumentation commit,not package/browser acceptance.
+Next complete this live test,then preserve values in the existing serializer and
+obtain fresh owner/context receipts. Library/declaration/consumer and final full
+gates remain required. Historical captures/canonical b28e8926 are unchanged;
+new source fingerprints and standalone proof registration remain pending.
+
 ### Focused inspection compilation scope is bounded without filtering assertions
 
 Executed installed Karma findTests: the include selects exactly the owning

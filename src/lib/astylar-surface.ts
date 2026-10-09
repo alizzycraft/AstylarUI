@@ -48,6 +48,16 @@ export interface AstylarResolvedStyleSnapshot {
     readonly type: string;
     readonly normal: Readonly<StyleRule>;
     readonly effective: Readonly<StyleRule>;
+    /** Detached current core CSS dimensions, not projected mesh bounds.
+     * Absent for unrendered or ambiguous owners. Does not certify that a
+     * retained text texture was repainted using this current layout.
+     */
+    readonly retainedLayout?: {
+      readonly source: 'core-dimension-registry';
+      readonly width: number;
+      readonly height: number;
+      readonly padding: Readonly<{ top: number; right: number; bottom: number; left: number }>;
+    };
     /** Last style retained by the core text registry, before projection.
      * Separate from cascade/pseudo declarations; not a guarantee of current
      * pseudo-state paint. Absent when no authored-ID text entry is retained.

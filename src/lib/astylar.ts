@@ -922,6 +922,10 @@ class AstylarRenderer {
         (id) => authoredById.get(id));
       const retainedTextStyle = element.id
         ? this.textInteractionRegistry.getByElementId(element.id)?.style : undefined;
+      const layoutMesh = element.id && authoredById.get(element.id) === element
+        ? this.elementManager.elementsMap.get(element.id) : undefined;
+      const retainedDimensions = layoutMesh
+        ? this.elementManager.getElementDimensions(layoutMesh.name) : undefined;
       const input = element.id ? this.inputElementService.getInputElement(element.id) as Button | undefined : undefined;
       const labelMaterial = input?.labelMesh?.material;
       const labelTexture = labelMaterial instanceof StandardMaterial ? labelMaterial.diffuseTexture : undefined;
@@ -930,6 +934,9 @@ class AstylarRenderer {
       if (styles) elements.push({ path, id: element.id, type: element.type,
         normal: structuredClone(styles.normal),
         effective: structuredClone(mergeInteractionStyles(styles)),
+        ...(retainedDimensions ? { retainedLayout: {
+          source: 'core-dimension-registry' as const, ...structuredClone(retainedDimensions),
+        } } : {}),
         ...(retainedTextStyle ? { retainedText: {
           source: 'core-text-registry' as const, style: structuredClone(retainedTextStyle),
         } } : {}),

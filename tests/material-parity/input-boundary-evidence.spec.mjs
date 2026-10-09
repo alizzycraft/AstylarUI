@@ -21,6 +21,44 @@ const bytes = readFileSync(file);
 assert.equal(hash(bytes), '39df94e0eb87480d3824927a41a9950d1d275f7c97ab97a571c449efdc6da7d7');
 const report = JSON.parse(bytes);
 
+test('current inspection method detaches registry dimensions and omits ambiguous owners', () => {
+  const source = readFileSync('src/lib/astylar.ts', 'utf8');
+  const ast = ts.createSourceFile('astylar.ts', source, ts.ScriptTarget.Latest, true);
+  const owner = ast.statements.find(n => ts.isClassDeclaration(n) && n.name?.text === 'AstylarRenderer');
+  const method = owner.members.find(n => n.name?.getText(ast) === 'inspectCurrentDocumentStyles');
+  assert.ok(method);
+  const compiled = ts.transpileModule(`class Probe { ${method.getText(ast).replace(/^private\s+/, '')} }\nexport { Probe };`,
+    { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS } }).outputText;
+  const exports = {};
+  // Other inspection stages are inert controls; this executes the actual
+  // current method body, not an independently rewritten dimension algorithm.
+  new Function('exports', 'StandardMaterial', 'Texture', 'mergeInteractionStyles', compiled)(
+    exports, class {}, class {}, styles => styles.normal);
+  const probe = new exports.Probe();
+  const dimensions = { width: 200, height: 50, padding: { top: 3, right: 5, bottom: 3, left: 5 } };
+  let reads = 0;
+  const mesh = { name: 'registry-owner', getBoundingInfo() { throw new Error('Projection is not a layout input'); } };
+  probe.elementManager = { elementsMap: new Map([['observed', mesh], ['duplicate', mesh]]),
+    getElementDimensions(id) { reads++; assert.equal(id, mesh.name); return dimensions; } };
+  probe.getElementInteractionStyles = () => ({ normal: {} });
+  probe.textInteractionRegistry = { getByElementId: () => undefined };
+  probe.inputElementService = { getInputElement: () => undefined };
+  const session = { snapshot: { revision: 7 }, siteData: { root: { children: [
+    { id: 'observed', type: 'span' }, { id: 'hidden', type: 'span' },
+    { id: 'duplicate', type: 'span' }, { id: 'duplicate', type: 'span' },
+  ] } } };
+  const result = probe.inspectCurrentDocumentStyles(session);
+  assert.equal(reads, 1);
+  assert.deepEqual(result.elements[0].retainedLayout, { source: 'core-dimension-registry', ...dimensions });
+  assert.ok(result.elements.slice(1).every(n => !Object.hasOwn(n, 'retainedLayout')));
+  result.elements[0].retainedLayout.padding.left = 999;
+  assert.equal(dimensions.padding.left, 5);
+  assert.equal(probe.inspectCurrentDocumentStyles(session).elements[0].retainedLayout.padding.left, 5);
+  dimensions.width = 175;
+  assert.equal(probe.inspectCurrentDocumentStyles(session).elements[0].retainedLayout.width, 175);
+  assert.equal(result.elements[0].retainedLayout.width, 200);
+});
+
 test('focused style inspection config preserves compiler options and the complete owning suite', async () => {
   const parse = file => {
     const config = ts.readConfigFile(file, ts.sys.readFile);
