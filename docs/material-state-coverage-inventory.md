@@ -1,5 +1,40 @@
 # Material comparison/state coverage inventory
 
+## Current evidence boundary — October 10
+
+### Exact scrollbar paint-state obligation join
+
+Read-only receipt join authenticates original thumb-motion logSHA
+c50c76be517b794071bae466d98957a6719d3edf76223cc088c67546cd58db2c
+and all32 referenced PNG hashes. Unique paths resolve to16 configured states:
+`timepicker/{light,dark,contrast,custom}/{desktop-dpr1,desktop-dpr2}/{open,open-scroll}`.
+This is16 state cases,not eight cases or32 cases; eight physical cohorts each
+provide two action boundaries and paired native/candidate images. Existing
+owning proof `retained scrollbar thumb masks distinguish native corners from
+plain indicator paint` inspects these exact rasters and original input-tree
+overdraw receipts. Complete source registration already contains
+`retained configured scrollbar thumb track and overdraw paint boundary`.
+
+For these16 states,visible thumb shape,width,interior track rows,bottom-arrow
+presence and candidate active-line initial overdraw are inspected with documented
+failures/authoring attribution,not pending new observations. Native9px rounded
+thumb/15px track/arrows versus candidate8px plain thumb/12px fixed-color track/
+no arrows remain unequal paint; this does not demonstrate a projection defect.
+Earlier chronological requests to inspect these same bounds/corners/track/overdraw
+are superseded. Remaining paint obligations are unsampled antialiased/occluded
+pixels,other applicable action boundaries and non-desktop contexts; input-owner,
+keyboard and lifetime joins remain distinct. No whole case closes and no current
+rendering pass follows from these retained October5 images.
+
+Verification reused immutable records without browser or canonical rebuild:
+32/32 PNG hashes match,16 unique paths,no new report layer or scratch. Original
+track-overdraw owning logSHAf4ac30f56136587e9a04619e390d5108fd70a9f67b19b78aeedda8cc9397aaf3
+and thumb-mask logSHAb52bd4ac2371ce255b7f0321ac4bb7703548026b6f56025373f851ad53178d5e
+also match. Source/export reconciliation remains pending; observed freephysical
+1403168KiB was below the previously cancelled worker's1.65GB working set,so no
+export was launched. Next prioritize unjoined overlay/state obligations rather
+than repeating this bounded scrollbar question. All2311 cases remain partial.
+
 ## Current evidence boundary — October 9
 
 ### Implementation handoff reconciled with settled sampler evidence
