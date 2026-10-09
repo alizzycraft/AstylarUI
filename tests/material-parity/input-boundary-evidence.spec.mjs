@@ -90,6 +90,44 @@ test('divider actual-theme AX cohorts preserve exact contexts and runtime receip
   }
 });
 
+test('divider retained update disposal observations join all configured physical contexts', () => {
+  const read = (file, sha) => { const raw = readFileSync(`artifacts/material-parity/${file}`);
+    assert.equal(hash(raw), sha); return raw.toString(); };
+  const desktop = JSON.parse(read('divider-update-disposal-20261006.log',
+    '5260c2abddc5b4d3d0a3ee87bcaca765b8e969841e31df5e9ee1851367c26b51'));
+  const remaining = read('divider-remaining-update-disposal-20261007.log',
+    '518513e37a67de7f5651672a7deaf764afcc415da3cf4898c2537a0137885c0a').trim().split(/\r?\n/).map(JSON.parse);
+  const head = remaining.shift(), tail = remaining.pop();
+  assert.equal(head.configuredCases, 24);
+  assert.equal(head.physicalCohorts, 20);
+  assert.equal(tail.completedCohorts, 12);
+  assert.equal(hash(readFileSync('artifacts/material-parity/current-full-20261005/checkpoint/manifest.json')), head.checkpointSha256);
+  const configurations = [...materialStaticCases, ...materialInteractionCases].filter(r => r.family === 'divider');
+  const key = (profile, width, height, dpr) => `${profile}:${width}:${height}:${dpr}`;
+  const observed = [ ...desktop.rows.map(r => key(r.profile, 1440, 1000, r.dpr)),
+    ...remaining.map(r => key(r.profile, r.viewport.width, r.viewport.height, r.viewport.deviceScaleFactor)) ];
+  const expected = [...new Set(configurations.map(r => key(r.profile, r.viewport.width, r.viewport.height, r.viewport.deviceScaleFactor)))];
+  assert.equal(observed.length, 20);
+  assert.deepEqual(observed.sort(), expected.sort());
+  for (const row of remaining) {
+    assert.deepEqual(row.errors, []);
+    assert.equal(row.snapshots.length, 4);
+    for (const sample of row.snapshots) {
+      assert.deepEqual(sample.live, { meshes: 17, materials: 16, textures: 4 });
+      assert.deepEqual(sample.tracked, sample.live);
+      assert.equal(sample.cache, 4); assert.equal(sample.loaded, 4);
+      assert.deepEqual(sample.unbound, []); assert.equal(sample.status, 'idle');
+      assert.equal(sample.plugins.pending, 0);
+    }
+    assert.deepEqual(row.disposal, { surface: true, scene: true, engine: true,
+      live: { meshes: 0, materials: 0, textures: 0 }, cache: 0, loaded: 0,
+      plugins: { owners: 0, resources: 0, cleanups: 0, pending: 0 } });
+  }
+  // Original desktop sample assertions remain owned by the separate retained
+  // divider runtime test. This join does not upgrade theme/caller provenance,
+  // late completion, remount, peer isolation or current lifetime acceptance.
+});
+
 test('public divider typography reduction observes equal paragraph span inputs and opaque backing control', async t => {
   const consumer = path.resolve('examples/material-showcase');
   // Bind the paint/baseline owner, not the entire installed rendering pipeline.

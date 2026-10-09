@@ -2,6 +2,27 @@
 
 ## Current evidence boundary — October 9
 
+### Divider retained ownership observations have exact physical membership
+
+Specific question:does the recorded20-cohort replacement/disposal statement
+actually join every configured divider context,or only nearby widths? Existing
+input-boundary suite now authenticates desktop log5260c2ab… and remaining log
+518513e3…,derives24 cases/20 unique profile,width,height,DPR keys directly from
+the existing configuration,and proves exact membership with no duplicates or
+missing comparison widths. Twelve remaining rows replay48 sampled initial/update
+observations:live=tracked17/16/4,cache/loaded4,no unbound materials,idle/no pending
+plugin work,and12 sampled disposals clear resources and dispose surface/scene/
+engine. Existing separate desktop assertions retain their original ownership.
+Focused join passes1/1,1221.3968ms,exit0; no browser recapture.
+
+This closes membership/replay of those retained bounded observations,not actual
+theme/caller applicability,current lifetime acceptance,late work,remount or peer
+isolation. New actual-theme AX evidence cannot retroactively certify a different
+ownership capture. The older desktop-only obligation row is superseded for
+observation membership only. Full cases remain partial; canonical integration
+is still pending. Next prioritize the remaining per-case input/paint joins and
+source applicability rather than repeating these unchanged ownership counts.
+
 ### Divider separator AX joins all24 configured cases
 
 Existing probe --divider --comparison-only closes only the four missing609×844
