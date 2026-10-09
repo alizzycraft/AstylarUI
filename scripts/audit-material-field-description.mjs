@@ -1,8 +1,9 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { createServer } from 'node:http';
 import path from 'node:path';
+import { createRequire } from 'node:module';
 import { chromium } from 'playwright-core';
 import { fingerprintDirectory, materialBrowserLaunchOptions } from '../tests/material-parity/run-checkpoint.mjs';
 import { openSupplementalCapture, parseSupplementalCaptureArguments } from '../tests/material-parity/supplemental-capture-evidence.mjs';
@@ -12,6 +13,10 @@ import { captureReferenceRootAncestorContext } from '../tests/material-parity/re
 // Close the actual-AX hint-description gap, using the existing runtime receipt
 // observer. This is not an input-tree report or an all-profile acceptance gate.
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+if (process.argv.includes('--divider-layout')) {
+  await inspectFreshDividerLayout();
+  process.exit(0);
+}
 const root = path.resolve('examples/material-showcase/dist/material-showcase/browser');
 const checkpoint = 'artifacts/material-parity/current-full-20261005/checkpoint';
 const manifest = JSON.parse(readFileSync(`${checkpoint}/manifest.json`));
@@ -160,4 +165,102 @@ try {
 } finally {
   if (browser) await browser.close();
   await new Promise(resolve => server.close(resolve));
+}
+
+async function inspectFreshDividerLayout() {
+  const argument = process.argv.find(arg => arg.startsWith('--package-root='));
+  assert.ok(argument, 'Fresh divider layout requires an explicit packed library');
+  const outputArgument = process.argv.find(arg => arg.startsWith('--layout-output='));
+  assert.ok(outputArgument, 'Supply a new retained layout evidence file');
+  const output = path.resolve(outputArgument.slice('--layout-output='.length));
+  assert.ok(!existsSync(output), 'Do not overwrite retained evidence');
+  const packedRoot = path.resolve(argument.slice('--package-root='.length));
+  const consumer = createRequire(path.resolve('examples/material-showcase/package.json'));
+  const packed = createRequire(path.join(packedRoot, 'package.json'));
+  const entry = packed.resolve('astylarui');
+  const applicationSource = `
+    import 'zone.js'; import '@angular/compiler';
+    import {createComponent,provideZoneChangeDetection} from '@angular/core';
+    import {createApplication} from '@angular/platform-browser';
+    import {ActivatedRoute,convertToParamMap} from '@angular/router';
+    import {AstylarShowcaseComponent} from './examples/material-showcase/src/app/astylar.component';
+    import {provideMaterialShowcasePlugin} from './examples/material-showcase/src/app/material-plugin/material-showcase.plugin';
+    await Promise.all([400,500,700].map(weight=>document.fonts.load(weight+' 16px Roboto')));
+    await document.fonts.ready;
+    const app=await createApplication({providers:[provideZoneChangeDetection({eventCoalescing:true}),
+      {provide:ActivatedRoute,useValue:{snapshot:{paramMap:convertToParamMap({family:'divider'})}}},
+      provideMaterialShowcasePlugin({benchmarkMode:true})]});
+    const host=document.createElement('app-astylar-showcase');document.body.append(host);
+    const component=createComponent(AstylarShowcaseComponent,{environmentInjector:app.injector,hostElement:host});
+    app.attachView(component.hostView);component.changeDetectorRef.detectChanges();
+    window.dividerLayout={dispose(){app.detachView(component.hostView);component.destroy();app.destroy();host.remove();}};
+  `;
+  const built = await consumer('esbuild').build({ absWorkingDir: process.cwd(),
+    stdin: { contents: applicationSource, resolveDir: process.cwd(), sourcefile: 'fresh-divider-layout.mjs' },
+    bundle: true, write: false, metafile: true, format: 'esm', platform: 'browser', target: 'es2022',
+    nodePaths: [path.resolve('examples/material-showcase/node_modules')],
+    plugins: [{ name: 'fresh-public-library', setup(build) {
+      build.onResolve({ filter: /^astylarui$/ }, () => ({ path: entry }));
+      build.onResolve({ filter: /^(@angular\/|@babylonjs\/core)/ }, args => ({ path: consumer.resolve(args.path) }));
+    } }],
+  });
+  const sources = Object.keys(built.metafile.inputs).filter(file => existsSync(file)).sort()
+    .map(file => ({ file, sha256: hash(readFileSync(file)) }));
+  assert.ok(!sources.some(row => /^src[\\/]/.test(row.file)), 'No core source imports in the application');
+  assert.ok(sources.some(row => path.resolve(row.file) === entry));
+  const assets = new Map([['/fresh.js', built.outputFiles[0].contents]]);
+  const faces = [400, 500, 700].map(weight => {
+    const url = `/roboto-${weight}.woff2`;
+    assets.set(url, readFileSync(`examples/material-showcase/node_modules/@fontsource/roboto/files/roboto-latin-${weight}-normal.woff2`));
+    return `@font-face{font-family:Roboto;font-style:normal;font-weight:${weight};src:url('${url}') format('woff2')}`;
+  }).join('');
+  const html = `<!doctype html><style>${faces}html,body{height:100%;margin:0}body{font-family:Roboto,Arial,sans-serif}</style><script type="module" src="/fresh.js"></script>`;
+  const server = createServer((req, res) => {
+    res.setHeader('content-type', req.url.endsWith('.woff2') ? 'font/woff2' : assets.has(req.url) ? 'text/javascript' : 'text/html');
+    res.end(assets.get(req.url) ?? html);
+  });
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  let browser;
+  const observations = [];
+  try {
+    browser = await chromium.launch(materialBrowserLaunchOptions());
+    const contexts = materialProfiles.flatMap(profile => [...materialViewports,
+      { id: 'desktop-dpr2', width: 1440, height: 1000, deviceScaleFactor: 2 }, materialComparisonViewport]
+      .map(viewport => ({ profile, viewport })));
+    for (const context of contexts) {
+      const page = await browser.newPage({ viewport: { width: context.viewport.width, height: context.viewport.height },
+        deviceScaleFactor: context.viewport.deviceScaleFactor });
+      const errors = [], responses = [];
+      page.on('pageerror', error => errors.push(String(error)));
+      page.on('response', response => responses.push(response.body().then(bytes => ({
+        path: new URL(response.url()).pathname, sha256: hash(bytes) }))));
+      try {
+        await page.goto(`http://127.0.0.1:${server.address().port}/?benchmark=1&profile=${context.profile}`);
+        await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__ && !!window.dividerLayout);
+        await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+        const measure = await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['divider-above','divider-below']));
+        const owners = measure.inputTree.nodes.filter(node => ['divider-above','divider-below'].includes(node.authored?.id));
+        assert.equal(owners.length, 2);
+        for (const owner of owners) assert.equal(owner.retainedLayout?.source, 'core-dimension-registry');
+        const runtime = await Promise.all(responses);
+        assert.ok(runtime.some(row => row.path === '/fresh.js' && row.sha256 === hash(built.outputFiles[0].contents)));
+        assert.deepEqual(errors, []);
+        const fonts = await page.evaluate(() => [...document.fonts].map(face => ({ family: face.family, weight: face.weight, status: face.status })));
+        assert.ok([400,500,700].every(weight => fonts.some(face => face.family === 'Roboto' && face.weight === String(weight) && face.status === 'loaded')));
+        observations.push({ context, owners, runtime, fonts });
+        console.log(JSON.stringify({ context, widths: owners.map(owner => owner.retainedLayout.width) }));
+        await page.evaluate(() => window.dividerLayout.dispose());
+      } finally { await page.close(); }
+    }
+    for (const receipt of sources) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+    const terminal = { terminal: 'verified', browser: browser.version(), contexts: observations.length,
+      sourceReceipts: sources, scriptSha256: hash(readFileSync('scripts/audit-material-field-description.mjs')),
+      packedRoot, applicationSource, htmlSha256: hash(html), bundleSha256: hash(built.outputFiles[0].contents),
+      scope: 'Current full divider authoring in a bounded JIT component host; retained CSS dimensions only,not historical texture inputs or full application/parity acceptance.' };
+    writeFileSync(output, [...observations, terminal].map(record => JSON.stringify(record)).join('\n')+'\n');
+    console.log(JSON.stringify({ terminal: terminal.terminal, contexts: observations.length, output, sha256: hash(readFileSync(output)) }));
+  } catch (error) {
+    writeFileSync(output, [...observations, { terminal: 'failed', error: String(error) }].map(record => JSON.stringify(record)).join('\n')+'\n');
+    throw error;
+  } finally { await browser?.close(); await new Promise(resolve => server.close(resolve)); }
 }

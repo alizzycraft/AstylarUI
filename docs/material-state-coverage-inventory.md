@@ -2,6 +2,42 @@
 
 ## Current evidence boundary — October 9
 
+### Divider wrapping-width question answered with fresh registry evidence
+
+Existing description probe's opt-in --divider-layout now mounts the unchanged
+current AstylarShowcaseComponent in a bounded JIT host against the verified fresh
+packed library. No comparison rules/structure or core algorithm are changed.
+Initial stdout-only exploration reached20 contexts but called fonts.ready before
+requesting faces; do not use it as settled-font acceptance. The retained capture
+explicitly loads400/500/700 Roboto before mounting and verifies loaded statuses.
+divider-fresh-retained-layout-20261009.jsonl hasSHA256
+3d71c0c9e2e6b825baa7f9c671977b2ab37845c2c99a37775fc51e11b889387e,
+20 physical contexts,40 owner observations,Chrome154.0.8037.58. Served bundle and
+HTML receipts authenticate; every actual bundle dependency is rehashed at completion.
+All24 exact configured cases join those contexts; all48 corresponding retained
+owner records are byte-value equivalent after removing only new retainedLayout.
+Padding is0 on every side and widths/heights are positive. Above/Below widths:
+light/dark44.5625/43.4921875,contrast40.10621643066406/39.14292907714844,
+custom51.24684143066406/50.01597595214844,consistent across each profile's5 contexts.
+These are current registry observations,not retroactively measured historical
+texture inputs or proof of complete AOT application/paint/line-box equivalence.
+
+The current actual parser and multi-line owner execute in the existing
+input-boundary suite. Normal wrapping preserves each literal single word at its
+observed positive width and at1/1000px sensitivity bounds; a two-word control wraps.
+Thus omitted normal wrapping fields do not expose a width-dependent line-break
+difference for these specific Above/Below owners. This is scoped technical
+equivalence,not global overflowWrap/wordBreak support or missing-field normalization.
+An initial break-word single-word sensitivity assertion failed: the first segment
+never enters wrapNormal's overflow branch. Preserve that separate source limitation;
+multi-word break-word control splits the subsequent segment. It is not authored
+by divider and has not received a paired public CSS support reduction.
+Five focused diagnostic/parser/serializer/owner/receipt checks pass5/5,9140.3112ms.
+Next move to remaining divider paint/line-box/current-validity obligations and
+coherent instrumentation source/proof integration. Do not recapture this width or
+repeat parser defaults without contradictory evidence. Canonical b28e8926 remains
+unreconciled to new source/proofs; no whole-case closure or final gate is claimed.
+
 ### Packed inspection runtime closes the diagnostic verification gap, not divider widths
 
 Library build npm run build:lib terminates exit0 and emits retainedLayout in the

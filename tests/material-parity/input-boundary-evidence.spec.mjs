@@ -21,6 +21,81 @@ const bytes = readFileSync(file);
 assert.equal(hash(bytes), '39df94e0eb87480d3824927a41a9950d1d275f7c97ab97a571c449efdc6da7d7');
 const report = JSON.parse(bytes);
 
+test('fresh divider layout observations join all exact cases and bound single-word wrapping', () => {
+  const raw = readFileSync('artifacts/material-parity/divider-fresh-retained-layout-20261009.jsonl');
+  assert.equal(hash(raw), '3d71c0c9e2e6b825baa7f9c671977b2ab37845c2c99a37775fc51e11b889387e');
+  const observations = raw.toString().trim().split(/\r?\n/).map(JSON.parse);
+  const terminal = observations.pop();
+  assert.equal(terminal.terminal, 'verified');
+  assert.equal(terminal.contexts, 20); assert.equal(observations.length, 20);
+  assert.equal(terminal.browser, '154.0.8037.58');
+  assert.equal(terminal.scriptSha256, hash(readFileSync('scripts/audit-material-field-description.mjs')));
+  for (const receipt of terminal.sourceReceipts) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  assert.ok(!terminal.sourceReceipts.some(row => /^src[\\/]/.test(row.file)));
+  assert.ok(terminal.sourceReceipts.some(row => row.file.replaceAll('\\', '/') === 'examples/material-showcase/src/app/astylar.component.ts'));
+  const retainedBytes = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
+  assert.equal(hash(retainedBytes), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const retained = JSON.parse(retainedBytes);
+  const cases = [...retained.results, ...retained.interactions].filter(row => row.family === 'divider');
+  assert.equal(cases.length, 24);
+  const ids = ['divider-above', 'divider-below'];
+  for (const observation of observations) {
+    assert.ok([400, 500, 700].every(weight => observation.fonts.some(face => face.family === 'Roboto' && face.weight === String(weight) && face.status === 'loaded')));
+    assert.ok(observation.runtime.some(row => row.path === '/fresh.js' && row.sha256 === terminal.bundleSha256));
+    assert.ok(observation.runtime.some(row => row.path === '/' && row.sha256 === terminal.htmlSha256));
+    assert.deepEqual(observation.owners.map(row => row.authored.id), ids);
+    for (const owner of observation.owners) {
+      assert.equal(owner.retainedLayout.source, 'core-dimension-registry');
+      assert.ok(owner.retainedLayout.width > 0 && owner.retainedLayout.height > 0);
+      assert.deepEqual(owner.retainedLayout.padding, { top: 0, right: 0, bottom: 0, left: 0 });
+    }
+  }
+  let joined = 0;
+  for (const row of cases) {
+    const matched = observations.filter(o => o.context.profile === row.profile &&
+      o.context.viewport.width === row.viewport.width && o.context.viewport.height === row.viewport.height &&
+      o.context.viewport.deviceScaleFactor === row.viewport.deviceScaleFactor);
+    assert.equal(matched.length, 1);
+    const treeBytes = readFileSync(row.inputTrees.astylar.file);
+    assert.equal(hash(treeBytes), row.inputTrees.astylar.sha256);
+    const tree = JSON.parse(treeBytes);
+    for (const fresh of matched[0].owners) {
+      const old = tree.nodes.find(node => node.authored?.id === fresh.authored.id);
+      const { retainedLayout, ...withoutNewDiagnostic } = fresh;
+      assert.deepEqual(withoutNewDiagnostic, old, `${row.id}/${fresh.authored.id}: current owner inputs changed`);
+      joined++;
+    }
+  }
+  assert.equal(joined, 48);
+  const document = { createElement: () => ({ getContext: () => ({ measureText: text => ({ width: text.length * 8 }) }) }) };
+  const load = file => {
+    const exports = {};
+    const compiled = ts.transpileModule(readFileSync(file, 'utf8'), { compilerOptions: {
+      target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS, experimentalDecorators: true,
+    } }).outputText;
+    new Function('require', 'exports', 'document', 'window', compiled)(name => {
+      assert.equal(name, '@angular/core'); return { Injectable: () => target => target };
+    }, exports, document, { devicePixelRatio: 1 });
+    return exports;
+  };
+  const parser = new (load('src/app/services/text/text-style-parser.service.ts').TextStyleParserService)();
+  const wrapping = new (load('src/app/services/text/multi-line-text-renderer.service.ts').MultiLineTextRendererService)();
+  for (const observation of observations) for (const owner of observation.owners) {
+    const style = parser.parseTextProperties({ selector: 'span', ...owner.retainedText.style });
+    assert.equal(style.whiteSpace, 'normal'); assert.equal(style.wordWrap, 'normal');
+    assert.equal(style.textOverflow, 'clip');
+    for (const width of [1, owner.retainedLayout.width, 1000])
+      assert.deepEqual(wrapping.wrapText(owner.authored.textContent, width, style).map(line => line.text), [owner.authored.textContent]);
+    // Source limitation: first segment never enters the overflow branch.
+    // Preserve that observation; it is not authored in these divider owners.
+    assert.equal(wrapping.wrapText(owner.authored.textContent, 1, { ...style, wordWrap: 'break-word' }).length, 1);
+    assert.ok(wrapping.wrapText('Above Below', 1, { ...style, wordWrap: 'break-word' }).length > 2);
+    assert.equal(wrapping.wrapText('Above Below', 1, style).length, 2);
+  }
+  // Real owner widths and inputs are observed; the synthetic measure control
+  // only tests the owning line-break algorithm,not raster or browser metrics.
+});
+
 test('packed layout inspection browser proofs authenticate the complete current consumer suite', () => {
   const packageRoot = 'artifacts/material-parity/layout-inspection-package-TKjpCE/package';
   assert.equal(hash(readFileSync(`${packageRoot}/../astylarui-0.2.0.tgz`)),
