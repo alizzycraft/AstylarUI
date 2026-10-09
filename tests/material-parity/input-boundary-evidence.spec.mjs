@@ -1111,6 +1111,59 @@ test('passive descendant semantics retain accessibility hiding omissions indepen
   assert.equal(icon.sides.astylar.some(node => node.attrs.ariaHidden !== undefined), false);
 });
 
+test('current runtime member drift is confined to the retained layout diagnostic owner', async () => {
+  const { transformSync } = await import('esbuild');
+  const rawMap = readFileSync('examples/material-showcase/dist/material-showcase/browser/chunk-3JXWRYJY.js.map');
+  assert.equal(hash(rawMap), 'dba484044ca0dea965d8ef4b12635673f0f055d7711099d2f6476ca490988ec4');
+  const map = JSON.parse(rawMap), modules = map.sources.filter(file => file.startsWith('node_modules/astylarui/'));
+  assert.equal(modules.length, 88);
+  const generated = new Set(['ɵfac', 'ɵprov', 'ɵcmp', 'ɵdir', 'ɵmod', 'ɵinj']);
+  const project = code => {
+    const ast = ts.createSourceFile('member.js', code, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    assert.equal(ast.parseDiagnostics.length, 0);
+    const result = new Map();
+    const visit = node => {
+      if ((ts.isClassDeclaration(node) || ts.isClassExpression(node)) && node.name) {
+        const heritage = (node.heritageClauses ?? []).map(clause => clause.getText(ast)).join(' ');
+        for (const member of node.members) {
+          const name = member.name?.getText(ast) ?? 'constructor';
+          if (generated.has(name)) continue;
+          const key = `${node.name.text}:${ts.SyntaxKind[member.kind]}:${name}`;
+          assert.equal(result.has(key), false);
+          result.set(key, transformSync(`class Proof ${heritage} {${member.getText(ast)}}`,
+            { loader: 'js', legalComments: 'none', minifyWhitespace: true }).code);
+        }
+      }
+      ts.forEachChild(node, visit);
+    };
+    visit(ast); return result;
+  };
+  assert.equal(project('class Guard { get value(){return 1;} set value(v){} }').size, 2);
+  assert.notDeepEqual(project('class Guard { value(){return 1;} }'), project('class Guard { value(){return 2;} }'));
+  let equalMembers = 0;
+  const differences = [];
+  for (const module of modules) {
+    const file = `src/${module.slice('node_modules/astylarui/dist/lib/'.length).replace(/\.js$/, '.ts')}`;
+    const installed = project(readFileSync(`examples/material-showcase/${module}`, 'utf8'));
+    assert.deepEqual(project(map.sourcesContent[map.sources.indexOf(module)]), installed, `${module}: capture/installed member drift`);
+    const current = project(ts.transpileModule(readFileSync(file, 'utf8'), { compilerOptions: {
+      target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022, experimentalDecorators: true,
+    } }).outputText);
+    assert.deepEqual([...current.keys()].sort(), [...installed.keys()].sort(), `${file}: member inventory drift`);
+    for (const [key, value] of current) {
+      if (value === installed.get(key)) equalMembers++;
+      else differences.push({ file, key, current: hash(value), installed: hash(installed.get(key)) });
+    }
+  }
+  assert.equal(equalMembers, 1583);
+  assert.deepEqual(differences, [{ file: 'src/lib/astylar.ts',
+    key: 'AstylarRenderer:MethodDeclaration:inspectCurrentDocumentStyles',
+    current: '2949e37e0ec074e81855e4835170c5165ba0b497cec902f70ad406f0cff95160',
+    installed: 'effd5c129a1c70cb9343a8d5c863b92169b6c7316f25e8c0120df575a8cb3147' }]);
+  // Explicit discrepancy, not normalization or whole-module/runtime acceptance.
+  // Module functions, imports/exports and Angular metadata remain separately owned.
+});
+
 test('captured runtime class bodies match current repository compilation without Angular metadata', async () => {
   const { transform } = await import('esbuild');
   const consumer = 'examples/material-showcase';

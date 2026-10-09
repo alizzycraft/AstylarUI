@@ -2,6 +2,36 @@
 
 ## Current evidence boundary — October 9
 
+### Current runtime applicability has one explicit diagnostic-member mismatch
+
+Original whole-runtime source/installed/captured assertion was executed after
+the layout diagnostic addition and correctly fails at src/lib/astylar.ts,
+4511.8698ms assertion/5686.466ms terminal exit1. Preserve
+runtime-applicability-after-layout-diagnostic-20261009.log,
+SHA95a29b74df9a5e269ea4d58ba092e915b3acbc6c2503ed75797df67ce47f04f8.
+Its original equality assertion remains unchanged; this is not current acceptance.
+
+Focused member census now authenticates the captured mapSHA dba484044ca0dea965d8ef4b12635673f0f055d7711099d2f6476ca490988ec4
+and all88 mapped module member inventories. Captured/installed members agree;
+current emit matches1583 members with no additions/removals. The sole difference
+is AstylarRenderer.inspectCurrentDocumentStyles:current projectionSHA
+2949e37e0ec074e81855e4835170c5165ba0b497cec902f70ad406f0cff95160,
+installed effd5c129a1c70cb9343a8d5c863b92169b6c7316f25e8c0120df575a8cb3147.
+The existing source-level owner test separately verifies its detached registry
+read,not projected bounds. No observed layout/paint/scroll/lifecycle class member
+changed in this census. Focused1/1 passes7432.1398ms,including getter/setter identity
+and literal-change controls. Initial exploratory duplicate accessor key failed;
+the assertion now includes syntax kind and never collapses getter/setter bodies.
+
+Scope is class members only,excluding precisely the original six generated
+Angular members. Top-level functions/variables,import/export wiring,Angular
+metadata,application serializer and fresh-browser execution remain separately
+owned. Do not infer full module or whole-pipeline equality from this result.
+No old member replaces current code or capture receipts; the mismatch remains
+explicit. New proof is standalone pending canonical inventory reconciliation.
+Next finish complete current applicability or fresh-package capture before final
+browser gates; do not rerun the unchanged original equality expecting it to pass.
+
 ### Divider leaf-specific lifecycle applicability bounded across exact cases
 
 The existing retained ancestry assertion now also checks the complete node-type
