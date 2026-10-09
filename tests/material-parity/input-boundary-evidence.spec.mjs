@@ -52,8 +52,11 @@ test('divider actual-theme AX cohorts preserve exact contexts and runtime receip
   assert.deepEqual(comparisonTerminal.states, ['inspect']);
   assert.equal(comparisonTerminal.browser, terminal.browser);
   assert.deepEqual(comparisonTerminal.capture.checkpointManifest, terminal.capture.checkpointManifest);
-  for (const receipt of [...comparisonTerminal.capture.sources, ...comparisonTerminal.sourceReceipts])
-    assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  for (const receipt of [...comparisonTerminal.capture.sources, ...comparisonTerminal.sourceReceipts]) {
+    const source = receipt.file === 'scripts/audit-material-field-description.mjs'
+      ? execFileSync('git', ['show', `a73933c9:${receipt.file}`]) : readFileSync(receipt.file);
+    assert.equal(hash(source), receipt.sha256);
+  }
   assert.deepEqual(comparison.map(r => `${r.context.profile}:${r.context.viewportId}:${r.side}`).sort(),
     ['light', 'dark', 'contrast', 'custom'].flatMap(profile => ['reference', 'astylar'].map(side => `${profile}:comparison:${side}`)).sort());
   records.push(...comparison);
@@ -88,6 +91,37 @@ test('divider actual-theme AX cohorts preserve exact contexts and runtime receip
       assert.equal(asset.sha256, expectedAsset.sha256);
     }
   }
+});
+
+test('divider host clipping observations preserve bounded DOM ancestry', () => {
+  const raw = readFileSync('artifacts/material-parity/divider-host-context-20261009.log');
+  assert.equal(hash(raw), 'd48d4be9e49da9b044beac91d02d50c7cf98edcfee6f16a87cf0a4d1586d6af2');
+  const rows = raw.toString().trim().split(/\r?\n/).map(JSON.parse), terminal = rows.pop();
+  assert.equal(terminal.terminal, 'verified');
+  assert.equal(terminal.contexts, 16);
+  assert.equal(rows.length, 32);
+  assert.equal(new Set(rows.map(r => `${r.context.profile}:${r.context.viewportId}:${r.side}`)).size, 32);
+  for (const receipt of [...terminal.capture.sources, ...terminal.sourceReceipts, terminal.capture.checkpointManifest])
+    assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  const manifest = JSON.parse(readFileSync(terminal.capture.checkpointManifest.file));
+  assert.equal(terminal.browser, manifest.provenance.browser);
+  for (const row of rows) {
+    assert.deepEqual(row.runtime.errors, []);
+    for (const asset of row.runtime.assets)
+      assert.equal(asset.sha256, manifest.provenance.browserFiles.find(f => (f.path ?? f.file) === asset.file)?.sha256);
+    const chain = row.hostContext.nodes;
+    assert.equal(chain.at(-1).type, 'html');
+    assert.equal(chain[0].type, row.side === 'reference' ? 'main' : 'canvas');
+    for (const node of chain) {
+      const overflow = row.side === 'astylar' && node.type === 'canvas' ? 'clip' : 'visible';
+      assert.equal(node.computed['overflow-x'], overflow);
+      assert.equal(node.computed['overflow-y'], overflow);
+      assert.equal(node.computed['clip-path'], 'none');
+      assert.equal(node.computed.contain, 'none');
+    }
+  }
+  // Captured DOM observations,not internal scene clipping or reference collector
+  // capture-time dependency authentication (not included in this original receipt).
 });
 
 test('divider retained update disposal observations join all configured physical contexts', () => {

@@ -2,6 +2,27 @@
 
 ## Current evidence boundary — October 9
 
+### Divider outer DOM clipping observed in sixteen physical contexts
+
+Opt-in existing divider probe host-context capture exits0:32 side observations
+across four profiles×desktop/tablet/mobile/desktop-DPR2. Log
+`artifacts/material-parity/divider-host-context-20261009.log` SHA256
+d48d4be9e49da9b044beac91d02d50c7cf98edcfee6f16a87cf0a4d1586d6af2.
+Reference frame→html and candidate canvas-parent→html ancestors record visible
+overflow,clip-path none,contain none; candidate canvas itself records clip on
+both axes. Thus outer DOM ancestor clipping is not observed in these contexts;
+canvas extent/internal scene clipping and actual edge visibility remain distinct.
+Existing AX and new bounded host replay pass2/2,1806.0144ms. Historical comparison
+AX script receipt now authenticates exact Gita73933c9 bytes,not the extended
+current probe; original assertions and logs unchanged. New runtime assets,
+checkpoint and directly recorded sources authenticate. Reference ancestor
+collector was imported but not added to capture-time dependency receipts; its
+current SHA78f59c14… alone cannot retroactively close that provenance gap.
+Four comparison-width contexts are also absent. No full-case/current-runtime
+or paint acceptance; no canonical export warranted for this standalone proof.
+Next close exact collector receipt/comparison applicability through this existing
+probe before using host observations as complete clipping inspection.
+
 ### Divider clipping gap isolated to outer-host evidence
 
 Competing explanations were explicit separator clipping,ancestor clipping,or

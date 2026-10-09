@@ -7,6 +7,7 @@ import { chromium } from 'playwright-core';
 import { fingerprintDirectory, materialBrowserLaunchOptions } from '../tests/material-parity/run-checkpoint.mjs';
 import { openSupplementalCapture, parseSupplementalCaptureArguments } from '../tests/material-parity/supplemental-capture-evidence.mjs';
 import { materialProfiles, materialViewports, materialComparisonViewport } from '../tests/material-parity/benchmark.config.mjs';
+import { captureReferenceRootAncestorContext } from '../tests/material-parity/reference-root-ancestor-context.mjs';
 
 // Close the actual-AX hint-description gap, using the existing runtime receipt
 // observer. This is not an input-tree report or an all-profile acceptance gate.
@@ -18,6 +19,8 @@ assert.deepEqual(fingerprintDirectory(root), manifest.provenance.browserFiles);
 const allContexts = process.argv.includes('--all-contexts');
 const ordinaryTooltip = process.argv.includes('--ordinary-tooltip');
 const divider = process.argv.includes('--divider');
+const dividerHostContext = process.argv.includes('--divider-host-context');
+assert.ok(!dividerHostContext || divider, 'Host context is a separate opt-in divider observation.');
 const comparisonOnly = process.argv.includes('--comparison-only');
 assert.ok(!comparisonOnly || divider && !allContexts, 'Comparison-only is a separate bounded divider cohort.');
 assert.ok(!divider || !ordinaryTooltip, 'Divider and ordinary tooltip are separate capture scopes.');
@@ -53,7 +56,7 @@ let browser;
 try {
   browser = await chromium.launch(materialBrowserLaunchOptions());
   const options = parseSupplementalCaptureArguments([
-    `--base-url=${baseUrl}`, `--checkpoint=${checkpoint}`, ...process.argv.slice(2).filter(arg => !['--all-contexts', '--ordinary-tooltip', '--divider', '--comparison-only'].includes(arg)),
+    `--base-url=${baseUrl}`, `--checkpoint=${checkpoint}`, ...process.argv.slice(2).filter(arg => !['--all-contexts', '--ordinary-tooltip', '--divider', '--comparison-only', '--divider-host-context'].includes(arg)),
   ]);
   const evidence = openSupplementalCapture({ options, browser,
     script: 'scripts/audit-material-field-description.mjs', styleProperties: [] });
@@ -110,8 +113,25 @@ try {
         ...(divider ? { orientation: ax.properties?.find(property => property.name === 'orientation')?.value?.value ?? null,
           childIds: ax.childIds ?? [] } : {}),
         describedByProperty: ax.properties?.find(property => property.name === 'describedby') ?? null };
+      const hostContext = !dividerHostContext ? undefined : side === 'reference'
+        ? await page.evaluate(captureReferenceRootAncestorContext)
+        : await page.evaluate(() => {
+          const canvas = document.querySelector('canvas'), nodes = [];
+          if (!canvas) throw new Error('Candidate rendering canvas is missing');
+          for (let node = canvas; node; node = node.parentElement) {
+            const style = getComputedStyle(node);
+            nodes.push({ type: node.tagName.toLowerCase(), id: node.id,
+              computed: Object.fromEntries(['overflow-x', 'overflow-y', 'clip-path', 'contain', 'transform']
+                .map(property => [property, style.getPropertyValue(property)])),
+              viewportRect: node.getBoundingClientRect().toJSON() });
+          }
+          return { kind: 'candidate-dom-canvas-host-chain', nodes,
+            limitation: 'DOM canvas host ancestry only; not internal scene clipping or rendered edge acceptance.' };
+        });
+      if (hostContext?.errors) assert.deepEqual(hostContext.errors, []);
       const runtime = await finish();
-      console.log(JSON.stringify({ context, state, side, url: page.url(), theme, observation, runtime }));
+      console.log(JSON.stringify({ context, state, side, url: page.url(), theme, observation, runtime,
+        ...(dividerHostContext ? { hostContext } : {}) }));
       assert.equal(observation.name, divider ? '' : ordinaryTooltip ? 'Hover for help' : 'Project name');
       if (divider) {
         assert.equal(observation.orientation, 'horizontal');
