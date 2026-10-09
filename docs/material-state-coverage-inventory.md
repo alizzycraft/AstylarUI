@@ -2,6 +2,23 @@
 
 ## Current evidence boundary — October 9
 
+### Retained-layout diagnostic verification cancelled for measured memory pressure
+
+Pending uncommitted diagnostic extends existing core inspection with detached
+dimension-registry width/height/padding and an owning inspection test. No layout
+algorithm or canonical fixture changes. Command npm test -- --watch=false
+--browsers=ChromeHeadless --include=src/lib/astylar-style-inspection.spec.ts
+session51940 remained live in build stage from14:16:59 to after14:29 local.
+Measured esbuild9056 private memory6,168,629,248 bytes; Windows free physical
+1,028,600KiB/free virtual1,155,060KiB. Stopped only audit-owned Angular24468 and
+esbuild9056 for resource pressure; session terminal exit1 with no test results.
+This is a cancelled verification,not a passing test or diagnostic acceptance.
+Do not restart solely for a timeout or touch other applications. Next inspect
+the installed Karma options for bounded worker/source-map configuration before
+another owning test; retain pending source and the original cancellation facts.
+Canonical b28e8926 and historical capture remain unchanged; source/proof/export
+reconciliation and fresh diagnostic capture are still pending.
+
 ### Existing benchmark measure is projected output, not the missing text constraint
 
 Inspected astylar.component.ts:1112–1171 before extending the probe. Its borderBox
