@@ -2,6 +2,41 @@
 
 ## Current evidence boundary — October 10
 
+### Tooltip wheel dismissal: retained events distinguish unequal stimulus
+
+Question: does the short-viewport wheel contrast isolate missing application
+handling or a core event-delivery defect? Reused existing boundary report
+tooltip-boundary-depth-c479097f-fresh/latest-report.json; SHA256 remains
+79573fb4c070970f11f97b1eab90b08b340680aedd8b64df662b3f44ec3fa3e7.
+No browser capture or fixture change was needed for this event-record check.
+At900x1000,DPR1/2,both sides record trusted wheel events,scrollY0,and remain
+open. At900x240,DPR1/2,native scrollY46 moves the trigger from top181.078125
+to135.078125,bottom175.078125; stationary pointer clientY201.078125 is outside
+it. Native records pointerout from the trigger SPAN and pointerover on the root;
+candidate remains scrollY0 with no pointerout and stays open. Recorded wheel
+deltaY is100 atDPR1 and50 atDPR2 on both sides,not an assumed100CSSpx stimulus.
+
+Installed Material owner module-CWxMD37a.mjs SHA256 remains
+75d4207bc0b6e97105c0ff88f80c5017e4df00af13f92b5bdaa19a80bcb81a2a:
+lines27-32 request reposition scrolling,362-366 hide clipped overlays,
+630-638 register mouseleave/wheel,and662-676 hit-test the stationary pointer
+on wheel before hiding when it no longer intersects the trigger. Current
+astylar.component.ts SHA25671e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd
+opens/closes on pointerenter/pointerleave at97/108,without an authored tooltip
+scroll/wheel handler. Source contract inequality is observed; its independent
+behavioral contribution is not isolated by unequal scroll extents.
+
+Conclusion: reject wheel-alone dismissal and this capture as an equal-input
+core wheel-delivery counterexample. Retained events support scroll-induced
+pointer exit as a competing explanation. They do not record mouseleave,scroll,
+or native hide-call provenance,so they cannot distinguish the final native
+handler from connected clipping or wheel hit testing. Next decisive check:
+matched diagnostic scroll extents/trigger geometry on both sides,stationary
+pointer,with existing capture instrumentation recording scroll and boundary
+events; keep diagnostics separate from canonical fixture inputs. Do not add
+plugin offsets or competing placement logic. All2311 cases remain partial;
+this closes one attribution uncertainty,not matched-scroll behavior or parity.
+
 ### Coherent177-proof publication independently checked and compact index verified
 
 Fresh independent cold-check session98381 finished exit0; workers2112/11964
