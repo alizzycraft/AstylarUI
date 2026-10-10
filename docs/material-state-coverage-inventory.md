@@ -2,6 +2,34 @@
 
 ## Current evidence boundary — October 10
 
+### Icon alignment/flex context: root display diverges before layout
+
+Specific context question answered from authenticated current-ancestry baseline,
+not a new browser capture: all20 exact configured Icon IDs/40 trees show native
+section icon-root display:block under a block parent, versus candidate display:flex,
+flex-direction:column under a block parent. Both roots nowrap; both icon-primary
+owners inline-block. Root/icon flex longhands match0/1/auto, with native shorthand
+0 1 auto. Thus native icon is not a flex item; candidate icon is. The placement
+contexts are not equivalent before alignment/flex layout begins. Do not label
+normal/stretch or normal/flex-start equivalent from their scalar values, and do
+not blame the renderer for this root authoring difference. Root's own flex item
+properties have non-flex parents on both sides; child's parent-context divergence
+must remain explicit even though its numeric flex longhands match.
+
+Existing icon-asset suite authenticates reportb07ef154... and every tree receipt,
+compares20 exact configured IDs, asserts parent/display/direction/wrap/longhands
+and rejects altered root display on each side. Combined context/census checks
+pass2/2,2319.8033ms process. Current candidate source atastylar.component.ts:480
+still authors generic demo-root column flex; native reference.component.ts:106
+demo CSS does not declare flex. This bounded source observation is not complete
+current rendering applicability. The original historical input trees remain
+immutable; canonical13-group pending metadata is not silently rewritten.
+Next integrate this root-context attribution through existing review mechanism
+at a coherent milestone; effective cursor and used-width context are still open,
+as are full current validity/history/paint/ownership obligations. No case closure,
+renderer fix,fixture rewrite or normalization. Shared694-group queue is unchanged
+in the accepted package until reviewed metadata is published.
+
 ### Closure readiness: classification labels do not discharge context obligations
 
 Dependency-validated compact queries of accepted179 snapshot43afb3c3 resolve a

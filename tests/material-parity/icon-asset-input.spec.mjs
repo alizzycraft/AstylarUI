@@ -11,6 +11,7 @@ import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { evaluateFocusedRaster } from './focused-raster-metrics.mjs';
 import { restoreSvgProofRegistration } from './position-composition-producer-transition.mjs';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
+import { materialStaticCases, materialInteractionCases } from './benchmark.config.mjs';
 
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 
@@ -34,6 +35,45 @@ test('Icon closure retains explicitly unproven context obligations despite zero 
   }
   // This is a closure-readiness blocker list, not a new source finding,
   // failing-case census, rendering result or waiver of the required checks.
+});
+
+test('all configured Icon owners retain block versus flex parent-context divergence', () => {
+  const raw = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  assert.equal(digest(raw), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(raw), key = row => `${row.kind}:${row.family}@${row.profile}/${row.viewport.id}${row.state ? '/' + row.state : ''}`;
+  const rows = [...capture.results.map(row => ({ ...row, kind: 'static' })), ...capture.interactions.map(row => ({ ...row, kind: 'interaction' }))].filter(row => row.family === 'icon');
+  const configured = [...materialStaticCases.map(row => ({ ...row, kind: 'static' })), ...materialInteractionCases.map(row => ({ ...row, kind: 'interaction' }))].filter(row => row.family === 'icon');
+  assert.equal(rows.length, 20); assert.deepEqual(rows.map(key).sort(), configured.map(key).sort());
+  function inspect(tree, side) {
+    const attrs = node => side === 'reference' ? node.attributes : node.authored;
+    const style = node => side === 'reference' ? tree.styles[node.style] : node.resolvedStyle;
+    const root = one(tree.nodes.filter(node => attrs(node)?.id === 'icon-root'));
+    const icon = one(tree.nodes.filter(node => attrs(node)?.id === 'icon-primary'));
+    const parent = one(tree.nodes.filter(node => node.key === root.parent));
+    assert.equal(icon.parent, root.key); assert.equal(style(parent).display, 'block');
+    assert.equal(style(root).display, side === 'reference' ? 'block' : 'flex');
+    assert.equal(style(root).flexDirection, side === 'reference' ? 'row' : 'column');
+    assert.equal(style(root).flexWrap, 'nowrap'); assert.equal(style(icon).display, 'inline-block');
+    for (const owner of [root, icon]) {
+      const values = style(owner);
+      assert.deepEqual([values.flexGrow, values.flexShrink, values.flexBasis], ['0', '1', 'auto']);
+      if (side === 'reference') assert.equal(values.flex, '0 1 auto');
+      assert.equal(values.alignItems, side === 'reference' ? 'normal' : 'stretch');
+      assert.equal(values.alignContent, side === 'reference' ? 'normal' : 'stretch');
+      assert.equal(values.justifyContent, side === 'reference' ? 'normal' : 'flex-start');
+    }
+  }
+  for (const row of rows) for (const side of ['reference', 'astylar']) {
+    const receipt = row.inputTrees[side], bytes = readFileSync(receipt.file); assert.equal(digest(bytes), receipt.sha256);
+    const tree = JSON.parse(bytes); inspect(tree, side);
+    const changed = structuredClone(tree), root = changed.nodes.find(node => (node.attributes?.id ?? node.authored?.id) === 'icon-root');
+    if (side === 'reference') changed.styles[root.style].display = 'flex'; else root.resolvedStyle.display = 'block';
+    assert.throws(() => inspect(changed, side));
+  }
+  // Matching flex longhands do not make the icon placement equivalent:
+  // the native icon is not a flex item; the candidate is. Root authoring
+  // diverges before layout. No claim about current rendered CSS support.
 });
 
 test('SVG upload cause registration conserves all predecessor source findings', () => {
