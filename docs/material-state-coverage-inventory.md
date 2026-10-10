@@ -4,6 +4,18 @@
 
 ### Coherent185 export terminal success; independent cold acceptance pending
 
+Read-only canonical Markdown review preserves every prior .spec-linked proof
+description after removing only source-line-number shifts:170 prior entries,
+176 generated entries,zero removed/changed descriptions,six intended additions
+(Icon pending remount,public cancellation,Icon full-row conservation,applied-theme
+cursor,live theme replacement and snackbar held-startup disposal). These linked
+description counts are not the full179/185 proof inventory. Classification totals
+change only by four extra authoring and four extra equivalent Icon groups;
+parity-harness groups decrease4104→4096. Current whole LF-normalized producer SHA
+still9e13d95562757add0c8768a10efb7d59d6502974b67924dcb593a8e411871e6f.
+This bounded review is not full binary conservation or cold acceptance; existing
+independent session96538 remains live and must complete before import/publication.
+
 Existing export43344 completes exit0 at2961776.0018ms. Validation and evidence
 session verification finish before encoding/publication; session reports one
 collector,ten memory hits,one disk hit,zero invalidations,1205 files and89154859
