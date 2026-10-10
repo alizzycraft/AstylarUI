@@ -2,6 +2,25 @@
 
 ## Current evidence boundary — October 10
 
+### Nineteen sampled flex owners reuse existing generated/open-state mappings
+
+The nineteen direct-ID misses above resolve in the first exact case named by
+each compact finding: existing resolveOriginAliasPair returns mapped for17,
+mapped-with-scalar-rule-gap for bottom-sheet-overlay and snack-bar-overlay.
+Badge,paginator,slider,tab panel,stepper content use existing generated/parity
+ownership proofs; bottom-sheet uses exact list order; dialog uses full structure;
+snackbar/tooltip use generated-owner proofs. All selected case trees authenticate
+against original reportb07ef154. Initial styleInputs lookup incorrectly used
+element rather than the existing id field and returned no entries; corrected
+lookup allows full frozen89-property,structure,three candidate-stage and authored
+rule checks in the existing alias mapper. The two scalar-rule gaps are preserved,
+not treated as fully mapped or a new core failure. No new mapping framework or
+capture is needed for these owners. This establishes existing mapping availability
+for the sampled cited cases,not all occurrence membership,flex equivalence or
+whole-case closure. Next join exact group populations with these same mappings
+after185 publication. Export43344/worker29160 remains live(CPU709.62s sample),
+and no producer/test/capture inputs changed during this read-only check.
+
 ### Non-root flex queue: existing diagnoses versus missing sampled owners
 
 Read-only accepted179 query identifies81 non-root explicit-unproven flex groups.
