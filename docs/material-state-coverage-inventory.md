@@ -2,6 +2,23 @@
 
 ## Current evidence boundary — October 11
 
+Switch owner review is integrated through the existing cursor scalar pipeline
+and independent original-row replay. Complete185 row preserves68 memberships,
+all raw values,original-row hash and omitted attribution. Exact role/ancestry,
+disabled state,ordered native requests and all candidate style stages distinguish
+60 matching enabled control cursors from8 disabled input differences. Missing
+case,changed role/state/request/omission and forged physical-hover claims reject.
+Focused check passes1/1; complete cursor suite passes4/4,99329.7314ms,log
+switch-cursor-owner-integration-reconciled-20261011.log. Initial20-versus19
+historical-population failure remains in switch-cursor-owner-integration-20261011.log;
+explicit disjoint1-group/68-observation accounting preserves original19/763 checks.
+This is historical input/owner attribution,not actual hover or suppression proof.
+Source proof registration for the new switch assertion and coherent canonical
+reconciliation remain pending; accepted185 package is unchanged. Next complete
+that existing registration boundary at the shared-context batch milestone,then
+resolve remaining owner contexts and exact per-case obligation closure. No renderer
+or fixture edit; all2311 cases still partial and final current-code gates remain.
+
 Switch full-population role join resolves the remaining host-versus-control
 question without recapture: original reportb07ef154 and all136 original tree
 SHA receipts authenticate68 cases. Each native host contains exactly one

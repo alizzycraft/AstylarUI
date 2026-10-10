@@ -8,6 +8,48 @@ import { bindPreciseAuditNormalization } from './audit-normalization-contracts.m
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { applyExplicitComponentCursors, proveExplicitComponentCursor, validateComponentCursorReviews } from './component-cursor-request-review.mjs';
 
+test('switch cursor owner review conserves the mixed enabled and disabled population', async () => {
+  const snapshot = { generation: '90c59d984b2a021384f07da008395cfd6dbea59497f27190d0554b4a763767a3',
+    indexSha256: '3a8a22a1dae2fd7dab79fd6fac7334b649ab71a6171198dbd658e424ab4800f2' };
+  const compact = queryFindings('artifacts/material-parity/working-audit', 'slide-toggle', snapshot)
+    .filter(r => r.evidence.section === 'discrepancies' && r.property === 'cursor' && !r.attribution && r.element === 'slide-toggle-primary');
+  assert.equal(compact.length, 1);
+  const rows = await loadFindingEvidence('artifacts/material-parity/working-audit', 'slide-toggle', compact.map(r => r.id), snapshot);
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(bytes), cases = [...capture.results.map(c => ({ ...c, kind:'static' })),
+    ...capture.interactions.map(c => ({ ...c, kind:'interaction' }))].filter(c => c.family === 'slide-toggle');
+  assert.equal(cases.length, 68);
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  const original = structuredClone(rows), applied = applyExplicitComponentCursors(rows, cases, inventory, normalize);
+  assert.deepEqual(rows, original); assert.equal(applied.length, 1);
+  const row = applied[0], observations = row.reviewEvidence.observations;
+  assert.equal(row.classification, 'parity-harness-defect'); assert.equal(row.reviewedCases.length, 68);
+  assert.equal(observations.filter(p => p.disabledInputDifference).length, 8);
+  assert.equal(observations.filter(p => !p.disabledInputDifference && p.nativeControlCursor === p.candidateCursor).length, 60);
+  assert.ok(observations.every(p => p.actualHoverCursorVerified === false && !p.candidatePointerEventsPresent));
+  const restored = structuredClone(row), prior = restored.reviewEvidence.priorMetadata;
+  assert.equal(row.reviewEvidence.originalRowSha256, createHash('sha256').update(JSON.stringify(rows[0])).digest('hex'));
+  assert.equal(Object.hasOwn(prior, 'attribution'), false);
+  for (const key of ['classification','attribution','justification','recommendedOwner','reviewEvidence','reviewedCases']) delete restored[key];
+  Object.assign(restored, prior); assert.deepEqual(restored, rows[0]);
+  assert.deepEqual(validateComponentCursorReviews(applied, rows, cases, inventory, normalize), []);
+  const entry = cases.find(c => c.state === 'disabled');
+  const trees = modalInventoryTrees(inventory, `interaction:slide-toggle@${entry.profile}/${entry.viewport.id}/disabled`);
+  for (const mutate of [
+    ([r]) => { r.nodes.find(n => n.type === 'button' && n.attributes?.role === 'switch').attributes.role = 'button'; },
+    ([,a]) => { a.nodes.find(n => n.authored?.id === 'slide-toggle-primary').authored.ariaDisabled = false; },
+    ([,a]) => { a.nodes.find(n => n.authored?.id === 'slide-toggle-primary').normalResolvedStyle.pointerEvents = 'none'; },
+    ([,a]) => { a.rules.find(r => r.selector === '#slide-toggle-primary').cursor = 'default'; },
+  ]) {
+    const changed = structuredClone(trees); mutate(changed);
+    assert.throws(() => proveExplicitComponentCursor(entry, ...changed, 'slide-toggle-primary'));
+  }
+  assert.throws(() => applyExplicitComponentCursors(rows, cases.filter(c => c !== entry), inventory, normalize));
+  const forged = structuredClone(applied); forged[0].reviewEvidence.observations[0].actualHoverCursorVerified = true;
+  assert.equal(validateComponentCursorReviews(forged, rows, cases, inventory, normalize).length, 1);
+});
+
 test('expansion cursor owner review conserves panel and disabled-title populations without rewriting raw values', async () => {
   const snapshot = { generation: '90c59d984b2a021384f07da008395cfd6dbea59497f27190d0554b4a763767a3',
     indexSha256: '3a8a22a1dae2fd7dab79fd6fac7334b649ab71a6171198dbd658e424ab4800f2' };
@@ -127,7 +169,11 @@ test('all 19 unresolved cursor groups bind 763 observations without claiming Mat
     ['slider-primary', 'slider-start'].includes(r.element) && !Object.hasOwn(r, 'attribution'));
   assert.equal(additionalRangeRows.length, 2);
   assert.equal(additionalRangeRows.reduce((sum, row) => sum + row.occurrences, 0), 16);
-  const rows = allRows.filter(row => !additionalRangeRows.includes(row));
+  const additionalSwitchRows = allRows.filter(r => r.family === 'slide-toggle' && r.property === 'cursor' &&
+    r.element === 'slide-toggle-primary' && !Object.hasOwn(r, 'attribution'));
+  assert.equal(additionalSwitchRows.length, 1);
+  assert.equal(additionalSwitchRows[0].occurrences, 68);
+  const rows = allRows.filter(row => !additionalRangeRows.includes(row) && !additionalSwitchRows.includes(row));
   const reviewed = applyExplicitComponentCursors(rows, cases, inventory, normalize);
   const changed = reviewed.filter((r, i) => r !== rows[i]);
   assert.equal(changed.length, 19); assert.equal(changed.reduce((sum, r) => sum + r.occurrences, 0), 763);

@@ -16,6 +16,7 @@ export function isComponentCursorReviewRow(row) {
     'reviewed-choice-label-cursor-ancestry-substitution',
     'reviewed-disabled-range-cursor-request',
     'reviewed-expansion-panel-header-cursor-owner', 'reviewed-expansion-disabled-title-cursor-ancestry',
+    'reviewed-switch-host-control-cursor-owner',
   ].includes(row.attribution);
 }
 
@@ -31,6 +32,7 @@ export function validateComponentCursorReviews(rows, originalRows, cases, invent
 }
 
 const definitions = [
+  { family: 'slide-toggle', element: 'slide-toggle-primary', switchOwner: true },
   ...['expansion-primary', 'expansion-title'].map(element => ({ family: 'expansion', element, expansionOwner: true })),
   ...['slider-primary', 'slider-start'].map(element => ({ family: 'slider', element,
     nativeType: 'input', candidateType: 'input', selector: '.range-layer', disabledRange: true,
@@ -80,6 +82,7 @@ export function collectCursorDefaultPolicyEvidence() {
 export function proveExplicitComponentCursor(entry, reference, candidate, element, defaultEvidence) {
   const definition = one(definitions.filter(d => d.family === entry.family && d.element === element));
   if (definition.expansionOwner) return proveExpansionCursorOwner(entry, reference, candidate, element);
+  if (definition.switchOwner) return proveSwitchCursorOwner(entry, reference, candidate);
   if (definition.defaultPolicy) {
     assert.equal(defaultEvidence?.reportSha256, '4773eb64cb37931bfb53e2c3852b7b439eac366e2da51aaf2eb22f0c7133b9a8');
     assert.equal(defaultEvidence.classification, 'intentional-documented-limitation');
@@ -186,6 +189,54 @@ export function proveExplicitComponentCursor(entry, reference, candidate, elemen
     limitation: 'Original authored request and owner-stage discrepancy only. Disabled hit suppression, inherited label behavior, plugin mesh cursor and actual canvas hover remain separate questions.' };
 }
 
+export function proveSwitchCursorOwner(entry, reference, candidate) {
+  assert.equal(entry.family, 'slide-toggle');
+  const input = one(entry.styleInputs.filter(i => i.id === 'slide-toggle-primary'));
+  const host = one(reference.nodes.filter(n => n.attributes?.id === input.id));
+  const descendant = node => {
+    const seen = new Set();
+    for (let key = node.parent; key !== null; key = one(reference.nodes.filter(n => n.key === key)).parent) {
+      assert.ok(!seen.has(key)); seen.add(key);
+      if (key === host.key) return true;
+    }
+    return false;
+  };
+  const native = one(reference.nodes.filter(n => n.type === 'button' && n.attributes?.role === 'switch' && descendant(n)));
+  const owner = one(candidate.nodes.filter(n => n.authored?.id === input.id));
+  assert.equal(host.type, 'mat-slide-toggle'); assert.equal(owner.authored.type, 'div');
+  assert.equal(owner.authored.role, 'switch');
+  for (const [property, value] of Object.entries(input.reference)) assert.equal(reference.styles[host.style][property], value);
+  assert.equal(input.reference.cursor, 'auto');
+  const disabled = Object.hasOwn(native.attributes, 'disabled');
+  assert.equal(owner.authored.ariaDisabled, disabled);
+  assert.equal(owner.authored.tabindex, disabled ? -1 : 0);
+  assert.ok(!Object.keys(native.inline ?? {}).some(relevant));
+  const nativeRequests = native.rules.map(i => reference.rules[i]).filter(r => r.active && Object.keys(r.declarations).some(relevant));
+  assert.deepEqual(nativeRequests.map(r => ({ selector: r.selector, declarations:
+    Object.fromEntries(Object.entries(r.declarations).filter(([key]) => relevant(key))) })), [
+    { selector: '.mdc-switch', declarations: { cursor: { value: 'pointer', important: false } } },
+    ...(disabled ? [{ selector: '.mdc-switch.mdc-switch--disabled', declarations: { cursor: { value: 'default', important: false } } }] : []),
+  ]);
+  const nativeStyle = reference.styles[native.style];
+  assert.equal(nativeStyle.cursor, disabled ? 'default' : 'pointer');
+  assert.equal(nativeStyle.pointerEvents, disabled ? 'none' : 'auto');
+  assert.ok(!Object.keys(owner.authored.style ?? {}).some(relevant));
+  assert.equal(owner.authored.attributes?.style, undefined);
+  const requests = candidate.rules.filter(r => rootInitialSelectorCanApply(r.selector, owner.authored) && Object.keys(r).some(relevant));
+  assert.equal(requests.length, 1); assert.equal(requests[0].selector, '#slide-toggle-primary');
+  assert.equal(requests[0].cursor, 'pointer'); assert.equal(requests[0].all, undefined);
+  for (const [stage, field] of [['resolvedStyle','astylar'],['normalResolvedStyle','astylarNormalResolvedStyle'],['interactionResolvedStyle','astylarInteractionResolvedStyle']]) {
+    assert.deepEqual(owner[stage], input[field]); assert.equal(owner[stage].cursor, 'pointer');
+    assert.equal(Object.hasOwn(owner[stage], 'pointerEvents'), false);
+  }
+  return { referenceNode: host.key, referenceControl: native.key, astylarNode: owner.key,
+    disabled, nativeHostCursor: 'auto', nativeControlCursor: nativeStyle.cursor,
+    nativePointerEvents: nativeStyle.pointerEvents, candidateCursor: 'pointer', candidatePointerEventsPresent: false,
+    nativeRequests, candidateRequests: requests, disabledInputDifference: disabled,
+    inputEquivalent: false, renderingEquivalent: false, actualHoverCursorVerified: false,
+    limitation: 'Retained host/control ownership and authored disabled-state inputs only; physical hover and hit suppression remain unverified.' };
+}
+
 export function proveExpansionCursorOwner(entry, reference, candidate, element) {
   assert.equal(entry.family, 'expansion');
   assert.ok(['expansion-primary', 'expansion-title'].includes(element));
@@ -230,15 +281,17 @@ export function applyExplicitComponentCursors(rows, cases, inventory, normalize)
     family: d.family, element: d.element, properties: ['cursor'],
     ...(d.disabledRange ? { acceptsRow: row => !Object.hasOwn(row, 'attribution') &&
       row.classification === 'parity-harness-defect' && row.reference === 'auto' && row.astylar === 'pointer' } : {}),
-    ...(d.expansionOwner ? { acceptsRow: row => !Object.hasOwn(row, 'attribution') &&
+    ...(d.expansionOwner || d.switchOwner ? { acceptsRow: row => !Object.hasOwn(row, 'attribution') &&
       row.classification === 'parity-harness-defect' && row.reference === 'auto' && row.astylar === 'pointer' } : {}),
-    classification: d.expansionOwner && d.element === 'expansion-primary' ? 'parity-harness-defect'
+    classification: d.switchOwner || d.expansionOwner && d.element === 'expansion-primary' ? 'parity-harness-defect'
       : d.defaultPolicy ? 'intentional-documented-limitation' : 'application-plugin-authoring-defect',
-    attribution: d.expansionOwner ? d.element === 'expansion-primary' ? 'reviewed-expansion-panel-header-cursor-owner' : 'reviewed-expansion-disabled-title-cursor-ancestry'
+    attribution: d.switchOwner ? 'reviewed-switch-host-control-cursor-owner' : d.expansionOwner ? d.element === 'expansion-primary' ? 'reviewed-expansion-panel-header-cursor-owner' : 'reviewed-expansion-disabled-title-cursor-ancestry'
       : d.disabledRange ? 'reviewed-disabled-range-cursor-request' : d.inheritedLabel ? 'reviewed-choice-label-cursor-ancestry-substitution' : d.defaultPolicy ? 'reviewed-dialog-button-cursor-default-policy' : d.family === 'slider' ? 'reviewed-slider-host-cursor-omission' : d.nativeSelector
       ? 'reviewed-disabled-component-cursor-substitution' : 'reviewed-button-cursor-request-substitution',
     owner: d.defaultPolicy ? 'core button cursor defaults; incomplete browser UA baseline policy' : 'Material comparison authored cursor requests and component-owner mapping',
-    justification: d.expansionOwner
+    justification: d.switchOwner
+      ? 'The raw native ID measures the slide-toggle host rather than its switch button. Sixty enabled button cursors match the candidate role owner; eight disabled native buttons request default and pointer-events none while the candidate retains pointer and omits pointerEvents. Preserve raw host values and the separate disabled authoring difference; no physical cursor or hit suppression is accepted.'
+      : d.expansionOwner
       ? d.element === 'expansion-primary'
         ? 'The original native ID measures the panel while the candidate ID measures its replacement header. Role-correct enabled header cursors match; eight disabled headers retain native auto versus candidate unconditional pointer. Preserve the raw panel/header values and that separate authoring defect; role correspondence is not structural equivalence or actual hovered-canvas verification.'
         : 'The eight disabled native titles have no local cursor request and inherit auto through the native header. Candidate titles have no local request and inherit pointer from the unconditional expansion-trigger rule. This is unequal disabled header authoring,not a separate title inheritance algorithm failure or actual physical cursor proof.'
