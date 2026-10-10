@@ -10,8 +10,31 @@ import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { evaluateFocusedRaster } from './focused-raster-metrics.mjs';
 import { restoreSvgProofRegistration } from './position-composition-producer-transition.mjs';
+import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 
 const one = values => { assert.equal(values.length, 1); return values[0]; };
+
+test('Icon closure retains explicitly unproven context obligations despite zero unresolved attribution', () => {
+  const canonical = JSON.parse(readFileSync('docs/material-input-equivalence-audit.json'));
+  const pointer = JSON.parse(readFileSync('artifacts/material-parity/working-audit/current.json'));
+  assert.equal(pointer.generation, canonical.compressedSha256);
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'icon');
+  assert.equal(rows.length, 212);
+  const pending = rows.filter(row => row.classification === 'parity-harness-defect' && !row.attribution);
+  const counts = pending.reduce((counts,row) => { counts[row.property] = (counts[row.property] ?? 0) + 1; return counts; }, {});
+  assert.deepEqual(counts, { alignContent: 2, alignItems: 2, cursor: 2, flex: 2, justifyContent: 2, width: 3 });
+  assert.equal(pending.length, 13);
+  assert.equal(pending.reduce((sum,row) => sum + row.occurrences, 0), 220);
+  for (const row of pending) {
+    assert.equal(row.evidence.section, 'discrepancies');
+    assert.equal(row.evidence.sourceSha256, canonical.uncompressedSha256);
+    assert.notEqual(row.attribution, 'unresolved');
+    assert.match(row.justification, /not a proven|cannot establish equivalence|has not been safely expanded|must compare equivalent authored expressions/);
+    assert.deepEqual(row.states, row.property === 'width' && row.occurrences === 4 ? ['static'] : ['static', 'inspect']);
+  }
+  // This is a closure-readiness blocker list, not a new source finding,
+  // failing-case census, rendering result or waiver of the required checks.
+});
 
 test('SVG upload cause registration conserves all predecessor source findings', () => {
   const priorSource = execFileSync('git', ['show', '91b730a9:tests/material-parity/input-equivalence-policy.mjs'],

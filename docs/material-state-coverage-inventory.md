@@ -2,6 +2,40 @@
 
 ## Current evidence boundary — October 10
 
+### Closure readiness: classification labels do not discharge context obligations
+
+Dependency-validated compact queries of accepted179 snapshot43afb3c3 resolve a
+specific census gap without capture/export: Icon has212 compact rows (110 harness,
+8 limitations,79 equivalent,15 authoring). Thirteen harness groups have no
+review attribution and explicitly say their context remains unproven: icon-root
+and icon-primary alignContent/alignItems/justifyContent,flex,cursor (10 groups),
+plus three icon-root used-width groups. They account for220 scalar occurrences,
+not220 cases. Desktop width includes static/inspect; tablet/mobile width groups
+are static-only. Initial focused assertion wrongly expected inspect in those two
+groups and failed; corrected exact applicability passes1/1,1146.3797ms process.
+Existing icon-asset suite now authenticates current canonical/index ancestry and
+the exact blocker population, preserving the pending explanations rather than
+calling every classified row inspected. No classification or threshold changed.
+
+Same bounded explanatory-text query across all36 family shards finds694 groups,
+33229 occurrences, with no attribution and explicit unproven-context language
+(not a proven / cannot establish equivalence / has not been safely expanded /
+must compare equivalent authored expressions). Largest group populations:
+slider49,dialog31,bottom-sheet30,stepper29,divider28. This is a lower-bound
+closure-readiness queue,not a complete obligation inventory or failing-case census;
+other uncertainty phrasing/source/history/paint/lifetime obligations are separate.
+Zero unresolved attribution in the canonical package never discharged these.
+
+Priority now: reconcile shared alignment/flex context,then effective hit cursor
+and authoritative used-size context, starting with exact Icon owners and reusing
+existing trees/resolved-style evidence. Competing explanations are inactive CSS
+properties on non-flex/grid boxes, observation-stage mismatch, versus material
+layout/input divergence. Determine display,parent context,longhands and used-size
+ownership before changing classifications; do not normalize scalar differences
+away. Icon AX IDREF applicability and pending cancellation are settled; do not
+repeat those probes. All2311 whole-case statuses remain partial. Source181 versus
+published179 plus standalone additions remain pending coherent integration.
+
 ### Minimal public cancellation confirms core reporting boundary
 
 Remaining question resolved without Material/image/font holds or custom frame
