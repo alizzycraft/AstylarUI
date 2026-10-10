@@ -8,6 +8,72 @@ import { proveChoiceLabelStacking } from './choice-label-stacking-substitution.m
 import { proveRadioPositionSubstitution } from './radio-position-substitution.mjs';
 import { proveToolbarPositionInspection } from './toolbar-position-inspection.mjs';
 import { inspectOwnerGapInput } from './owner-gap-input-evidence.mjs';
+import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { queryFindings } from '../../scripts/audit-findings-store.mjs';
+
+// A bounded proposal through the existing review store, not canonical mutation.
+// No persistent cache: queryFindings performs its own authenticated direct reads.
+export function collectIconContextReview() {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const canonical = JSON.parse(readFileSync('docs/material-input-equivalence-audit.json'));
+  const pointer = JSON.parse(readFileSync('artifacts/material-parity/working-audit/current.json'));
+  assert.equal(pointer.generation, canonical.compressedSha256);
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'icon');
+  const file = 'artifacts/material-parity/current-ancestry-audit/latest-report.json', raw = readFileSync(file);
+  assert.equal(hash(raw), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(raw), one = values => { assert.equal(values.length, 1); return values[0]; };
+  const cases = [...capture.results.map(row => ({ ...row, kind: 'static' })), ...capture.interactions.map(row => ({ ...row, kind: 'interaction' }))].filter(row => row.family === 'icon');
+  assert.equal(cases.length, 20);
+  const sources = [{ file, sha256: hash(raw) }, ...['tests/material-parity/display-request-review.mjs','docs/material-input-equivalence-audit.json'].map(file=>({file,sha256:hash(readFileSync(file))}))];
+  const observations = cases.map(entry => {
+    const trees = ['reference','astylar'].map(side => { const receipt = entry.inputTrees[side], bytes = readFileSync(receipt.file); assert.equal(hash(bytes), receipt.sha256); sources.push(receipt); return JSON.parse(bytes); });
+    const [r,a] = trees, rn = id => one(r.nodes.filter(node => node.attributes?.id === id)), an = id => one(a.nodes.filter(node => node.authored?.id === id));
+    const rr = rn('icon-root'), ar = an('icon-root'), ri = rn('icon-primary'), ai = an('icon-primary');
+    const rs = r.styles[rr.style], as = ar.resolvedStyle;
+    assert.equal(r.styles[one(r.nodes.filter(node => node.key === rr.parent)).style].display, 'block');
+    assert.equal(one(a.nodes.filter(node => node.key === ar.parent)).resolvedStyle.display, 'block');
+    assert.equal(rs.display, 'block'); assert.equal(as.display, 'flex'); assert.equal(as.flexDirection, 'column');
+    assert.equal(rs.flexWrap, 'nowrap'); assert.equal(as.flexWrap, 'nowrap');
+    assert.equal(ri.parent, rr.key); assert.equal(ai.parent, ar.key);
+    for (const style of [rs,as,r.styles[ri.style],ai.resolvedStyle]) assert.deepEqual([style.flexGrow,style.flexShrink,style.flexBasis], ['0','1','auto']);
+    assert.equal(rs.boxSizing, 'content-box'); assert.equal(rs.maxWidth, '720px');
+    assert.deepEqual([rs.paddingLeft,rs.paddingRight,rs.borderLeftWidth,rs.borderRightWidth], ['28px','28px','1px','1px']);
+    assert.equal(as.boxSizing, 'border-box'); assert.equal(as.width, '100%'); assert.equal(as.maxWidth, '778px');
+    assert.equal(as.padding, '28px'); assert.equal(as.borderWidth, '1px');
+    const parent = r.styles[one(r.nodes.filter(node => node.key === rr.parent)).style];
+    assert.equal(parent.boxSizing, 'border-box'); assert.equal(parseFloat(parent.width), entry.viewport.width);
+    assert.deepEqual([parent.paddingLeft,parent.paddingRight,parent.borderLeftWidth,parent.borderRightWidth], ['36px','36px','0px','0px']);
+    assert.equal(parseFloat(rs.width)+58, Math.min(entry.viewport.width-72,778));
+    const maxRule = one(rr.rules.map(index=>r.rules[index]).filter(rule=>rule.declarations['max-width']?.value==='720px'));
+    assert.equal(maxRule.declarations.width, undefined);
+    return { case: `${entry.kind}:icon@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`, entry, trees,
+      owners: { 'icon-root': [rr,ar], 'icon-primary': [ri,ai] } };
+  });
+  const groups = rows.filter(row => !row.attribution && row.classification === 'parity-harness-defect' &&
+    (row.element === 'icon-root' && ['alignContent','alignItems','justifyContent','flex','width'].includes(row.property) || row.element === 'icon-primary' && row.property === 'flex')).map(row => {
+    const matched = observations.filter(observation => {
+      const [r,a] = observation.owners[row.element];
+      return observation.trees[0].styles[r.style][row.property] === row.reference && a.resolvedStyle[row.property] === row.astylar;
+    });
+    assert.equal(matched.length, row.occurrences); assert.deepEqual(matched.map(observation=>observation.case).slice(0,12), row.cases);
+    const equivalent = row.property === 'width' || row.element === 'icon-root' && row.property === 'flex';
+    return { ...row, classification: equivalent ? 'equivalent-representation' : 'application-plugin-authoring-defect',
+      attribution: 'reviewed-icon-parent-context-and-width-intent', reviewedCases: matched.map(observation=>observation.case),
+      justification: row.property === 'width' ? 'Scoped authored width intent: native content-box auto/max720 plus56px padding/2px border corresponds to candidate100% border-box/max778 in the retained block-parent contexts. Current candidate used-size/projection equivalence is not established.' : equivalent ? 'Root flex shorthand expands to the captured matching0/1/auto longhands; both roots have non-flex block parents. This inactive item property does not erase root display authoring divergence.' : 'Native root is block; candidate root is column flex, so candidate icon is a flex item and native icon is not. Preserve alignment/flex scalar values: input placement context diverges before layout. No equal-input renderer diagnosis follows.',
+      recommendedOwner: equivalent ? 'audit measurement-stage/representation contract; retain separate root display finding' : 'showcase demo-root display authoring; test core with equal contexts',
+      reviewEvidence: { originalCompleteRowSha256: row.evidence.completeRowSha256, sourceSha256: row.evidence.sourceSha256,
+        inputEquivalent: false, renderingEquivalent: false, rendererCauseProven: false,
+        observations: matched.map(observation=>({ case:observation.case, referenceNode:observation.owners[row.element][0].key, candidateNode:observation.owners[row.element][1].key, nativeRootDisplay:'block',candidateRootDisplay:'flex',candidateIconIsFlexItem:true,nativeIconIsFlexItem:false })) } };
+  });
+  assert.equal(groups.length, 8); assert.equal(groups.reduce((sum,row)=>sum+row.occurrences,0),120);
+  return { schemaVersion:1,kind:'icon-context-review',sources,groups,canonicalAttributionChanged:false };
+}
+
+export function validateIconContextReview(review) {
+  try { assert.deepEqual(review, collectIconContextReview()); return []; }
+  catch (error) { return [`Icon context proposal does not replay from retained inputs: ${error.message}`]; }
+}
 
 export function proveExpansionTreeFormatting(entry, reference, candidate) {
   const expansion = entry.family === 'expansion';

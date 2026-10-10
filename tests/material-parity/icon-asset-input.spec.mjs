@@ -14,6 +14,7 @@ import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { materialStaticCases, materialInteractionCases, materialProfiles, materialViewports } from './benchmark.config.mjs';
 import { fingerprintDirectory } from './run-checkpoint.mjs';
 import { effectiveBrowserCursor } from './cursor-metrics.mjs';
+import { collectIconContextReview, validateIconContextReview } from './display-request-review.mjs';
 
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 
@@ -158,6 +159,29 @@ test('Icon and blank-root effective cursors agree in verified applied-theme poin
   for (const mutate of [row => { row.results.pop(); }, row => { row.results.find(result => result.profile === 'dark').theme.mode = 'light'; },
     row => { row.results[0].targets[0].textAtPoint = true; }, row => { row.results[1].targets[0].hitCursor = 'pointer'; }]) {
     const changed = structuredClone(record); mutate(changed); assert.throws(() => inspect(changed));
+  }
+});
+
+test('Icon context proposal changes only eight reviewed metadata groups and preserves scalar evidence', () => {
+  const review = collectIconContextReview(), rows = queryFindings('artifacts/material-parity/working-audit', 'icon');
+  const metadata = new Set(['classification','attribution','justification','recommendedOwner','reviewedCases','reviewEvidence']);
+  const unchanged = row => Object.fromEntries(Object.entries(row).filter(([key])=>!metadata.has(key)));
+  assert.equal(review.canonicalAttributionChanged, false); assert.equal(review.groups.length, 8);
+  assert.equal(review.groups.reduce((sum,row)=>sum+row.occurrences,0),120);
+  for (const receipt of review.sources) assert.equal(createHash('sha256').update(readFileSync(receipt.file)).digest('hex'), receipt.sha256);
+  for (const group of review.groups) {
+    const prior = one(rows.filter(row=>row.id===group.id));
+    assert.deepEqual(unchanged(group), unchanged(prior));
+    assert.equal(group.reviewEvidence.originalCompleteRowSha256, prior.evidence.completeRowSha256);
+    assert.equal(group.reviewedCases.length, prior.occurrences);
+    assert.equal(group.reviewEvidence.renderingEquivalent, false); assert.equal(group.reviewEvidence.rendererCauseProven, false);
+    assert.equal(group.classification, group.property==='width'||group.element==='icon-root'&&group.property==='flex'?'equivalent-representation':'application-plugin-authoring-defect');
+  }
+  assert.equal(rows.filter(row=>row.classification==='parity-harness-defect'&&!row.attribution).length,13);
+  // Original pending population stays canonical until full integration passes.
+  assert.deepEqual(validateIconContextReview(review), []);
+  for (const mutate of [row=>{row.groups[0].reference='forged-value';},row=>{row.groups[0].reviewEvidence.renderingEquivalent=true;}]) {
+    const changed=structuredClone(review);mutate(changed);assert.equal(validateIconContextReview(changed).length,1);
   }
 });
 

@@ -2,6 +2,37 @@
 
 ## Current evidence boundary — October 10
 
+### Icon context/width review staged through existing proposal mechanism
+
+Existing display-request-review module now collects and independently replays a
+bounded proposal from authenticated compact179 rows and original20-case/40-tree
+contexts. Exactly8 groups/120 observations: three root alignment groups and icon
+flex item context retain authoring divergence; root flex shorthand is equivalent
+as an inactive item property under block parents; three root widths preserve
+scoped content/border-box intent. Original scalar values,omissions,counts,order,
+source row hashes and all unrelated metadata remain unchanged. Proposal explicitly
+keeps inputEquivalent/renderingEquivalent/rendererCauseProven false: whole-owner
+equivalence does not follow from the two limited representation conclusions.
+
+Proposal7cbb37a80fcd592520010826c2833693a170981d21a4f4b6ecf40d56845b8340
+is stored under working-audit/proposals by the existing saveReviewProposal API,
+status proposal-not-canonical. Sources include collector/current canonical manifest,
+baseline report and40tree receipts. No persistent cache is claimed: query store
+authenticates its own direct reads,which are not EvidenceSession-tracked collectors.
+Focused context/census/width/cursor/proposal run passes5/5,6888.9009ms; subsequent
+tightened original-input replay plus forged-value/false-rendering-equivalence
+controls passes1/1,6035.6135ms. Current canonical still contains13 pending Icon
+groups; proposal does not mark them integrated or close a case. Two cursor groups
+are not reclassified from the new capture because historical exact pointer-state
+applicability is not established; three icon-container alignment groups remain
+separate from root display/flex-item context.
+
+Next wire the validated proposal through existing canonical review/conservation
+path together with standalone proof/source fingerprint registration,then one
+coherent export/cold check/import. Producer181/published179 boundary remains;
+display-review dependency bytes changed,so old source fingerprints are historical,
+not current validation. No renderer/fixture/acceptance change and no full gate run.
+
 ### Icon cursor context: verified applied-theme settled pointer points agree
 
 Retained inspect cursor:{matches:true} has no sampled point/cursor fields and
