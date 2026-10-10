@@ -2,6 +2,34 @@
 
 ## Current evidence boundary — October 10
 
+### Coherent export finished; independent cold check interrupted before validation
+
+The named five-path cold exporter has finished; session40114 and its workers
+34224/9864 are absent. Its closed stdout log
+coherent-177-proof-export-20261010.log SHA
+f64308c572ed1dff8e95c76dd014178e0271c990b6f6287b55a9c4b51de02d27
+records436/436 static and1875/1875 interaction cases,8483 differences,
+389202 occurrences,155 findings and inputEquivalent=false. Evidence-session
+metrics:2 collectors,10 memory hits,0 disk hits,1205 files,89154859 bytes read
+and independently verified,2877311.7412ms. Published gzip is62848983 bytes,
+SHAecad53d33858464f53a71d858f2954509d14003ed77e55771fb53b85008c9be1;
+decoded2222899444 bytes,SHA6fd27613d0a436403215e9ebf4caf0881e94133f2b70daac76205ed24e180a0d.
+These new working bytes are not yet accepted or committed canonical evidence.
+
+Independent cold-check session22346 is now missing,with no matching audit
+process. Its log coherent-177-proof-independent-cold-check-20261010.log
+SHA45fa320eea0112a2fa13fe97eaa4e845545cffe0c2d2b1f322fb19d19f91a55c
+contains only read-reference/build-audit progress,no terminal validation result.
+An interrupted observation preceded disappearance; exact termination cause and
+exit status are unknown. Preserve this incomplete log; do not describe it as a
+passing check or restart merely because an observation timed out. Current
+producer SHA91b43e2052c8b7dc17feafac044c86dfa03bb1008c837a4c0aab1da07f28e7bb,
+HEADde8603b2 and exported manifest are unchanged. At14:45+02:00 physical
+headroom2699864KiB,virtual24265820KiB,D:free1880219648bytes support a fresh
+independent check now that the old process is authoritatively absent. Use a new
+log,not another export; only after success import/verify compact evidence and
+commit/push publication. All2311 cases remain partial; final gates remain open.
+
 ### Both original skipped receipt assertions now executed without skips
 
 Companion session59869 is terminal exit0: original `published current-ancestry
