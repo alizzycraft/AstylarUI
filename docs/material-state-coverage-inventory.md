@@ -4,6 +4,20 @@
 
 ### Pending cursor queue is not a uniform auto/default measurement difference
 
+First-cited-case followup authenticates original reportb07ef154 and twenty tree
+receipts for the ten auto/pointer groups. Each owner maps uniquely by retained
+ID on both sides. Native button-toggle hosts and expansion-primary compute auto
+while direct children compute pointer; the corresponding candidate host requests
+pointer. Therefore host scalars alone cannot establish the cursor at the actual
+interactive hit region. First cited slider-primary/start and expansion-title
+records are disabled states, requiring disabled applicability rather than a
+generic enabled-control claim. Other sampled owners retain auto on direct native
+children; deeper hit targets remain uninspected by this bounded check. Existing
+public cursor source proof distinguishes type defaults, owned-text preference
+and explicit requests, but explicitly does not establish every Material cause.
+This is representative context only,not full508-occurrence or live cursor proof.
+Next reuse disabled/owner mapping evidence before fresh physical cursor checks.
+
 Read-only compact queries authenticate accepted179 index8d777259 and all selected
 family shards. The existing explicit-unproven-context filter reproduces94 cursor
 groups/5294 occurrences:84 groups/4786 occurrences are native auto versus candidate
