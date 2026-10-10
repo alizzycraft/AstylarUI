@@ -4,6 +4,21 @@
 
 ### Nineteen flex owners: exact750-occurrence join reuses existing mappings
 
+Participation followup authenticates all750 same matched records: own positioning,
+display and flex longhands have one context per group. Badge52 is absolute on both
+sides; bottom-sheet/snackbar overlays59 are native absolute/candidate fixed,so
+neither side's owner participates as a normal flex item. Candidate position is
+omitted for15 groups/621 occurrences and is not rewritten to static. Actual current
+FlexService.classifyFlexChild AST-extracted method gives flow for undefined,empty,
+static and relative styles; positioned for absolute/fixed; hidden for display:none
+even when absolute. Seven controls pass against source37668d34. This identifies
+current source treatment of omission,not historical/current browser layout proof.
+Dialog actions,panel,title shrink and copy grow mismatches already have reviewed
+action-box,panel-constraint,text-flow and content-flex omission attributions;
+tooltip popup shrink already has reviewed composition attribution. Reuse these
+causes rather than expanding default shorthand into false equality. Remaining
+context distinctions and59 scalar-rule gaps remain explicit; no metadata changed.
+
 The nineteen direct-ID misses above resolve in the first exact case named by
 each compact finding: existing resolveOriginAliasPair returns mapped for17,
 mapped-with-scalar-rule-gap for bottom-sheet-overlay and snack-bar-overlay.
