@@ -4,6 +4,22 @@
 
 ### Non-root alignment queue partitioned by own formatting context
 
+Full paired membership followup now reproduces all177 group counts and first12
+case lists across10300 occurrences:8749 direct-ID observations and1551 using
+existing mapped aliases,zero unresolved mappings. Every native scalar matches
+its selected node and complete candidate scalar style matches resolved node;
+all tree receipts authenticate. Actual producer normalization is reused,not a
+new default rule. Twenty-eight groups have multiple contexts when immediate-child
+counts are included(149 single-context groups). Representative followups distinguish
+the cause: core52 includes12 initial,32 ripple-wrapper and8 held-ripple-element
+variants,while own inline-flex→block,row/nowrap context stays fixed. Added ripple
+children are absolute,not extra flex items. Timepicker110 retains native inline-flex
+column with two relative wrappers versus candidate block with absolute children;
+label/error/popup children vary by state,not the owning display/axis contract.
+These do not justify accepting unequal input structures or calling each variation
+a new core layout failure. Other multi-context groups still need scoped semantic
+applicability,not a blanket child-count assumption. No metadata changed.
+
 Read-only accepted179 query finds177 pending non-root alignment groups across70
 unique owners. First exact cited-case trees authenticate; direct IDs or existing
 full alias mapping select owners. Own display pairs: inline-flex→block15,
