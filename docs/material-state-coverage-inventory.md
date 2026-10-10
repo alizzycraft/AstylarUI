@@ -2,6 +2,20 @@
 
 ## Current evidence boundary — October 11
 
+Existing capability-cited box-model proofs do not decide omission semantics:
+src/parity/fixtures/box-model-basic.fixture.ts explicitly requests content-box on
+both sides (native important declaration/candidate boxSizing); border-box-basic
+explicitly requests border-box on both. They remain legitimate explicit-value
+proofs but cannot verify the documented content-box initial/default value. The
+dimension unit suite's content-box padding assertion is likewise explicitly
+authored. This closes the evidence-reuse question: an omission-versus-explicit
+control is a specific demonstrated missing public-runtime boundary,not grounds
+to rerun those unchanged explicit fixtures or alter canonical comparisons. Next
+use the existing public consumer/capture infrastructure with a separate diagnostic
+variant,matching width/padding/border and comparing omitted,explicit content-box,
+and explicit border-box inputs; authenticate installed dependencies before
+claiming current source applicability. No new audit framework is warranted.
+
 Default-resolution source check narrows the contract discrepancy: executing the
 unchanged browser-defaults.ts export objects through TypeScript transpilation
 confirms main/div/section all omit boxSizing (3/3 assertions). StyleDefaultsService
