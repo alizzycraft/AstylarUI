@@ -4,6 +4,17 @@
 
 ### Non-root width queue separates existing fill intent from other ownership
 
+Integration-path check authenticates accepted179 index8d777259 and the tabs
+shard: exactly two tab-label width groups,70 occurrences each,retain
+parity-harness-defect with attribution omitted (not unresolved). Existing
+applyModalBoxReview selects only attribution=unresolved; applyTabControlStage
+also limits properties to height,boxSizing,flexShrink. Therefore merely adding
+width to that property list would silently leave both groups untouched. After
+cold publication, use an explicit conserved-row review for these exact140
+observations, preserving omitted metadata and raw values; retain the original
+three-property owner proof unchanged. This resolves an integration-selection
+question,not current rendering or whole-case closure. No producer inputs changed.
+
 Tab width followup authenticates original reportb07ef154 and140 tree receipts
 for all70 retained cases,calling existing proveTabControlStage for both owners.
 The raw native IDs are text labels58.25px/47.625px versus candidate controls50%,
