@@ -2,6 +2,35 @@
 
 ## Current evidence boundary — October 10
 
+### Icon used-width groups: authored box conversion resolved, current used size separate
+
+Competing explanations resolved narrowly: retained native root used-width720/
+638/260px is content-box; candidate100%/max778px is border-box. All20 exact
+configured trees have native max720,padding28each side,border1each side and an
+auto-width demo rule; parent border-box width equals viewport,padding36each side,
+border0. Candidate border-box max778 is exactly720+56+2,not a tuned raster offset.
+For these inputs, min(viewport-72,778) gives778/696/318 border widths. Native
+computed content widths plus58 agree in all20 cases; all12 static expected geometry
+widths agree too. Interaction records lack that static geometry shape; none was
+invented or substituted. Candidate root size conversion preserves this bounded
+authored intent, while root display:block versus column-flex remains unequal.
+
+Existing icon-asset suite authenticates the original report/40 trees, verifies
+native matched width rule lacks explicit width, and rejects converting max778
+back to720 without the box adjustment. Context/census/width focused checks pass
+3/3,3608.283ms process. Git blame traces candidate root's entire declaration to
+2f4401157 (August23 original showcase introduction),not a later parity fix;
+that history observation alone does not prove all its properties legitimate.
+No scalar value or missing field was normalized and no thresholds changed.
+
+This answers equivalent authored width-expression interpretation for the three
+root-width groups,not authoritative current candidate CSS-space used dimensions,
+projection correctness,all responsive box-model semantics or whole-case closure.
+Existing published width groups still carry pending harness metadata until the
+coherent review batch; preserve original inputs/receipts. Next effective cursor
+context,then integrate scoped context/width attributions and current-applicability
+dispositions. Do not recapture these retained inputs to repeat this arithmetic.
+
 ### Icon alignment/flex context: root display diverges before layout
 
 Specific context question answered from authenticated current-ancestry baseline,

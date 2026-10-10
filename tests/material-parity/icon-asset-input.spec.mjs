@@ -76,6 +76,49 @@ test('all configured Icon owners retain block versus flex parent-context diverge
   // diverges before layout. No claim about current rendered CSS support.
 });
 
+test('Icon root width expressions preserve content-box to border-box intent across configured cases', () => {
+  const raw = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  assert.equal(digest(raw), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(raw);
+  const rows = [...capture.results.map(row => ({ ...row, kind: 'static' })), ...capture.interactions.map(row => ({ ...row, kind: 'interaction' }))].filter(row => row.family === 'icon');
+  assert.equal(rows.length, 20);
+  function inspect(reference, candidate, viewport) {
+    const native = one(reference.nodes.filter(node => node.attributes?.id === 'icon-root'));
+    const converted = one(candidate.nodes.filter(node => node.authored?.id === 'icon-root'));
+    const parent = one(reference.nodes.filter(node => node.key === native.parent));
+    const outer = reference.styles[parent.style], nativeStyle = reference.styles[native.style], convertedStyle = converted.resolvedStyle;
+    assert.equal(outer.boxSizing, 'border-box'); assert.equal(parseFloat(outer.width), viewport.width);
+    assert.equal(outer.paddingLeft, '36px'); assert.equal(outer.paddingRight, '36px');
+    assert.equal(outer.borderLeftWidth, '0px'); assert.equal(outer.borderRightWidth, '0px');
+    assert.equal(nativeStyle.boxSizing, 'content-box'); assert.equal(nativeStyle.maxWidth, '720px');
+    assert.equal(nativeStyle.paddingLeft, '28px'); assert.equal(nativeStyle.paddingRight, '28px');
+    assert.equal(nativeStyle.borderLeftWidth, '1px'); assert.equal(nativeStyle.borderRightWidth, '1px');
+    const demoRules = native.rules.map(index => reference.rules[index]).filter(rule => rule.declarations['max-width']?.value === '720px');
+    assert.equal(demoRules.length, 1); assert.equal(demoRules[0].declarations.width, undefined);
+    assert.equal(convertedStyle.boxSizing, 'border-box'); assert.equal(convertedStyle.width, '100%');
+    assert.equal(convertedStyle.padding, '28px'); assert.equal(convertedStyle.borderWidth, '1px');
+    const extra = 28 * 2 + 1 * 2, available = viewport.width - 36 * 2;
+    assert.equal(convertedStyle.maxWidth, `${720 + extra}px`);
+    const expectedBorderWidth = Math.min(available, 720 + extra);
+    assert.equal(parseFloat(nativeStyle.width) + extra, expectedBorderWidth);
+    return expectedBorderWidth;
+  }
+  const widths = new Set();
+  for (const row of rows) {
+    const pair = ['reference','astylar'].map(side => {
+      const receipt = row.inputTrees[side], bytes = readFileSync(receipt.file); assert.equal(digest(bytes), receipt.sha256); return JSON.parse(bytes);
+    });
+    const width = inspect(...pair, row.viewport); widths.add(width);
+    if (row.kind === 'static') assert.equal(one(row.geometry.elements.filter(element => element.id === 'icon-root')).expected.width, width);
+    const changed = structuredClone(pair); changed[1].nodes.find(node => node.authored?.id === 'icon-root').resolvedStyle.maxWidth = '720px';
+    assert.throws(() => inspect(...changed, row.viewport));
+  }
+  assert.deepEqual([...widths].sort((a,b)=>a-b), [318,696,778]);
+  // This proves the scoped authored size conversion, not authoritative current
+  // candidate used dimensions, projection correctness or all box-model support.
+});
+
 test('SVG upload cause registration conserves all predecessor source findings', () => {
   const priorSource = execFileSync('git', ['show', '91b730a9:tests/material-parity/input-equivalence-policy.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
