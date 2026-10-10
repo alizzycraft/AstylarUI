@@ -2,6 +2,28 @@
 
 ## Current evidence boundary — October 10
 
+### Coherent181-proof source registration; accepted package remains179
+
+Existing producer now registers the live Icon queued-replacement observation and
+the deliberately failed same-document snackbar startup diagnostic. Six new
+script/report/checkpoint fingerprints preserve their exact scope. No new case,
+source-finding definition,fixture or acceptance policy:2311 cases,155 definitions.
+Complete producer SHA9ca4ac5ebfba5733217abcaeb435230482599dadc0b09cf30e68b71d33448162
+reverses only the exact two proofs/six paths to179 SHAebd9aa2d9b34ea2dfc1eab2edc80d32c4bb02e563068d99fdfda369177d6b61c,
+then runs all previous conservation checks. Existing layout/description tests
+pass2/2; snackbar failed-evidence reader passes1/1; Icon queued-replacement reader
+passes1/1 with receipts,assets and negative controls. Registration includes the
+runtime-validator failure honestly,not as accepted browser capture.
+
+Independent canonical179 remains compressed89030a75.../decoded43afb3c3...;
+no export or new browser capture was run for this registration. Current source
+proof inventory differs from published package; future coherent export/cold
+check/import must reconcile it. New unit-loader configuration is diagnostic-only,
+not evidence that standard styled/full gates pass. All cases remain partially
+inspected. Next reconcile exact Icon lifetime applicability against the retained
+replacement/disposal evidence and missing remount/peer contexts; avoid repeating
+the held-native-load ordering now demonstrated to serialize.
+
 ### Current image guard unit execution; diagnostic build pressure isolated
 
 Original ImageResourceService spec executes3/3 successfully in Chrome Headless154,

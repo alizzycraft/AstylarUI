@@ -9,6 +9,33 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 // conservation. This does not substitute old bytes in current production.
 export function restoreLayoutDiagnosticRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes('Icon pending native load serializes live authored theme replacement')) {
+    assert.equal(hash(current), '9ca4ac5ebfba5733217abcaeb435230482599dadc0b09cf30e68b71d33448162',
+      'exact complete live replacement and failed teardown registration snapshot');
+    const ast = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    assert.equal(ast.parseDiagnostics.length, 0);
+    const entries = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory')
+      .body.statements[0].expression.elements;
+    assert.equal(entries.length, 181);
+    assert.deepEqual(entries.slice(0, 2).map(n => n.arguments[3].text), [
+      'Icon pending native load serializes live authored theme replacement',
+      'snackbar same-document held startup preserves failed Angular disposal evidence',
+    ]);
+    current = current.slice(0, entries[0].getFullStart()) + current.slice(entries[2].getFullStart());
+    for (const file of [
+      'scripts/audit-material-icon-live-replacement.mjs',
+      'scripts/audit-material-snackbar-teardown.mjs',
+      'artifacts/material-parity/icon-live-replacement-queued-20261010/latest-report.json',
+      'artifacts/material-parity/icon-live-replacement-queued-20261010-checkpoint/checkpoint/manifest.json',
+      'artifacts/material-parity/snackbar-same-document-teardown-failure-bound-20261010/failure-observations.json',
+      'artifacts/material-parity/snackbar-same-document-teardown-failure-bound-20261010-checkpoint/checkpoint/manifest.json',
+    ]) {
+      const line = `    '${file}',\n`;
+      assert.equal(current.split(line).length, 2); current = current.replace(line, '');
+    }
+    assert.equal(hash(current), 'ebd9aa2d9b34ea2dfc1eab2edc80d32c4bb02e563068d99fdfda369177d6b61c',
+      'complete preceding179-proof producer conserved');
+  }
   if (current.includes('Icon exact configured direct-name hiding and IDREF applicability boundary')) {
     assert.equal(hash(current), 'ebd9aa2d9b34ea2dfc1eab2edc80d32c4bb02e563068d99fdfda369177d6b61c',
       'exact complete Icon applicability registration snapshot');

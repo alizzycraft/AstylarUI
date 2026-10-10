@@ -8889,6 +8889,12 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'scripts/audit-material-icon-live-replacement.mjs',
+    'scripts/audit-material-snackbar-teardown.mjs',
+    'artifacts/material-parity/icon-live-replacement-queued-20261010/latest-report.json',
+    'artifacts/material-parity/icon-live-replacement-queued-20261010-checkpoint/checkpoint/manifest.json',
+    'artifacts/material-parity/snackbar-same-document-teardown-failure-bound-20261010/failure-observations.json',
+    'artifacts/material-parity/snackbar-same-document-teardown-failure-bound-20261010-checkpoint/checkpoint/manifest.json',
     'artifacts/material-parity/icon-relationship-applicability-20261010.log',
     'artifacts/material-parity/icon-relationship-and-host-scroll-20261010.log',
     'artifacts/material-parity/public-host-scroll-proof-registration-20261010.log',
@@ -9498,6 +9504,10 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('Icon live theme replacement queues behind pending native texture rather than retiring it first'/,
+      'Icon pending native load serializes live authored theme replacement', 'Light desktop DPR1 holds one original Babylon PNG setter while the semantic image loads normally. Real same-origin theme message queues update behind revision0 rendering; release completes24x24 and the same live surface settles with ready dark textures and no old-source scene textures. Authenticates current probe/checkpoint/runtime assets and four negative controls. Does not exercise native completion after retirement,other cohorts,equal-input SVG paint or whole-case closure.'),
+    proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('snackbar same-document held startup retains Angular disposal error as failed evidence'/,
+      'snackbar same-document held startup preserves failed Angular disposal evidence', 'Real trigger click and same-document Angular teardown retain document identity. Ordinary startup has zero runtime errors; one startup-only scheduling hold released after teardown emits two Angular disposal console errors and zero global unhandled rejections. Existing runtime validator fails honestly; focused reader authenticates failure receipts and four negative controls. Not accepted capture,natural race frequency,other profiles,live plateau or whole-case closure.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('configured Icon relationships are direct names and hiding with no authored IDREF obligations'/,
       'Icon exact configured direct-name hiding and IDREF applicability boundary', 'All20 configured IDs authenticate40 trees with direct names,unequal hiding and no authored IDREF inputs. Existing32 AX observations join all16 physical cohorts:native ariaHiddenElement versus exposed candidate Favorite image. Fabricated relationships are rejected on every side/tree. Not current complete AX,assistive technology,paint,image races or whole-case closure.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('public host scroll isolates stale hover without Material handlers or unequal inputs'/,
