@@ -2,6 +2,23 @@
 
 ## Current evidence boundary — October 10
 
+### Icon complete-row metadata application verified before canonical wiring
+
+The existing evidence reader now supports an ordered array of finding IDs in one
+authenticated compressed-payload stream, while retaining the scalar-ID interface.
+This avoids eight independent reads of the2.2GB original report. Existing store
+assertion covers cross-section ordering, missing/empty/duplicate requests and
+original corruption checks. Initial added assertion incorrectly searched compact
+IDs by authored source-proof ID; corrected to the existing evidence.section mapping.
+The complete store assertion passes. Icon owning suite retrieves all eight exact
+original rows from immutable179; metadata application authenticates every complete
+JSON row hash before changing only six review metadata fields. All original inputs,
+omissions and unrelated row identity are conserved; altered input, missing row and
+duplicate original are rejected. Focused full-row test passes1/1,16766.8891ms.
+Application function is not yet wired into canonical replay: producer source/proof
+registration and exact predecessor conservation must be reconciled as one batch.
+No canonical rows, renderer, fixtures, thresholds or whole-case statuses changed.
+
 ### Icon review replay now pins immutable original rows
 
 Resolved integration hazard: collecting the staged review from current.json and

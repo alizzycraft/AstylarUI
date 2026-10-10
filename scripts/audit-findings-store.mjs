@@ -134,27 +134,35 @@ export function saveReviewProposal(destination, review) {
 }
 export async function loadFindingEvidence(destination, family, id, snapshot) {
   const pointer = snapshot ?? JSON.parse(fs.readFileSync(path.join(destination, 'current.json')));
-  const finding = queryFindings(destination, family, pointer).find(row => row.id === id); assert.ok(finding, 'Unknown finding');
+  const ids = Array.isArray(id) ? id : [id];
+  assert.ok(ids.length > 0); assert.equal(new Set(ids).size, ids.length);
+  const rows = queryFindings(destination, family, pointer);
+  const findings = ids.map(id => { const row = rows.find(row => row.id === id); assert.ok(row, 'Unknown finding'); return row; });
   const generation = path.join(destination, pointer.generation), index = JSON.parse(fs.readFileSync(path.join(generation, 'index.json')));
   assert.equal(index.manifest.payload, 'material-input-equivalence-audit.json.gz');
   const payload = path.join(generation, index.manifest.payload);
   assert.equal(hash(fs.readFileSync(payload)), index.manifest.compressedSha256);
-  const [section, nested] = finding.evidence.section.split('.');
-  const parser = new Parser(); let found;
+  const parser = new Parser(), found = new Map();
   parser.onValue = function(value) {
     const top = this.stack[1]?.key ?? (this.stack.length === 1 ? this.key : undefined);
-    const target = top === section && (!nested || this.stack[2]?.key === nested);
-    if (target && this.stack.length === (nested ? 3 : 2)) {
-      if (this.key === finding.evidence.ordinal) found = value;
+    const candidates = findings.filter(finding => {
+      const [section, nested] = finding.evidence.section.split('.');
+      return top === section && (!nested || this.stack[2]?.key === nested) && this.stack.length === (nested ? 3 : 2);
+    });
+    if (candidates.length) {
+      for (const finding of candidates) if (this.key === finding.evidence.ordinal) found.set(finding.id, value);
       delete this.value[this.key];
-    } else if (this.value && !target) delete this.value[this.key];
+    } else if (this.value && !findings.some(finding => top === finding.evidence.section.split('.')[0])) delete this.value[this.key];
   };
   const input = fs.createReadStream(payload), stream = input.pipe(createGunzip());
-  try { for await (const chunk of stream) { parser.write(chunk); if (found !== undefined) break; } }
+  try { for await (const chunk of stream) { parser.write(chunk); if (found.size === findings.length) break; } }
   finally { stream.destroy(); input.destroy(); }
-  assert.ok(found !== undefined, 'Evidence row missing');
-  assert.equal(digest(found), finding.evidence.completeRowSha256, 'Evidence row differs from compact finding');
-  return found;
+  for (const finding of findings) {
+    assert.ok(found.has(finding.id), 'Evidence row missing');
+    assert.equal(digest(found.get(finding.id)), finding.evidence.completeRowSha256, 'Evidence row differs from compact finding');
+  }
+  const values = ids.map(id => found.get(id));
+  return Array.isArray(id) ? values : values[0];
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   const [mode, argument, option, id] = process.argv.slice(2), destination = 'artifacts/material-parity/working-audit';

@@ -10,11 +10,11 @@ import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { evaluateFocusedRaster } from './focused-raster-metrics.mjs';
 import { restoreSvgProofRegistration } from './position-composition-producer-transition.mjs';
-import { queryFindings } from '../../scripts/audit-findings-store.mjs';
+import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
 import { materialStaticCases, materialInteractionCases, materialProfiles, materialViewports } from './benchmark.config.mjs';
 import { fingerprintDirectory } from './run-checkpoint.mjs';
 import { effectiveBrowserCursor } from './cursor-metrics.mjs';
-import { collectIconContextReview, validateIconContextReview, iconContextBaseline } from './display-request-review.mjs';
+import { collectIconContextReview, validateIconContextReview, iconContextBaseline, applyIconContextReviews } from './display-request-review.mjs';
 
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 
@@ -183,6 +183,22 @@ test('Icon context proposal changes only eight reviewed metadata groups and pres
   for (const mutate of [row=>{row.groups[0].reference='forged-value';},row=>{row.groups[0].reviewEvidence.renderingEquivalent=true;}]) {
     const changed=structuredClone(review);mutate(changed);assert.equal(validateIconContextReview(changed).length,1);
   }
+});
+
+test('Icon review conserves complete original rows and rejects input drift', async () => {
+  const review = collectIconContextReview();
+  const original = await loadFindingEvidence('artifacts/material-parity/working-audit', 'icon', review.groups.map(row => row.id), iconContextBaseline);
+  const unrelated = { family: 'unrelated', reference: 'preserve-me' };
+  const updated = applyIconContextReviews([...original, unrelated]);
+  assert.equal(updated.at(-1), unrelated);
+  const metadata = new Set(['classification','attribution','justification','recommendedOwner','reviewedCases','reviewEvidence']);
+  const inputs = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
+  original.forEach((row, index) => assert.deepEqual(inputs(updated[index]), inputs(row)));
+  assert.equal(updated.filter(row => row.attribution === 'reviewed-icon-parent-context-and-width-intent').length, 8);
+  const forged = structuredClone(original); forged[0].reference = 'forged';
+  assert.throws(() => applyIconContextReviews(forged));
+  assert.throws(() => applyIconContextReviews(original.slice(1)));
+  assert.throws(() => applyIconContextReviews([...original, original[0]]));
 });
 
 test('SVG upload cause registration conserves all predecessor source findings', () => {

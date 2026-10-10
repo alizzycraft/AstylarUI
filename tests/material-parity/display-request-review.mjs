@@ -80,6 +80,22 @@ export function validateIconContextReview(review) {
   catch (error) { return [`Icon context proposal does not replay from retained inputs: ${error.message}`]; }
 }
 
+export function applyIconContextReviews(rows) {
+  const review = collectIconContextReview(), seen = new Set();
+  const hash = row => createHash('sha256').update(JSON.stringify(row)).digest('hex');
+  const result = rows.map(row => {
+    const group = review.groups.find(group => group.family === row.family && group.element === row.element &&
+      group.property === row.property && group.reference === row.reference && group.astylar === row.astylar);
+    if (!group) return row;
+    assert.ok(!seen.has(group.id), 'Duplicate Icon original row'); seen.add(group.id);
+    assert.equal(hash(row), group.reviewEvidence.originalCompleteRowSha256, 'Icon complete original row drift');
+    const metadata = Object.fromEntries(['classification','attribution','justification','recommendedOwner','reviewedCases','reviewEvidence'].map(key => [key, group[key]]));
+    return { ...row, ...metadata };
+  });
+  assert.equal(seen.size, review.groups.length, 'Missing Icon original rows');
+  return result;
+}
+
 export function proveExpansionTreeFormatting(entry, reference, candidate) {
   const expansion = entry.family === 'expansion';
   assert.ok(expansion || entry.family === 'tree');

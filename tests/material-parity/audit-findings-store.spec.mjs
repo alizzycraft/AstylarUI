@@ -29,6 +29,11 @@ test('compact findings preserve counts, missing values and evidence links; corru
     assert.equal(Object.hasOwn(finding, 'reviewEvidence'), false); assert.deepEqual(finding.cases, row.cases);
     assert.equal(finding.evidence.sourceSha256, encoded.manifest.uncompressedSha256);
     assert.deepEqual(await loadFindingEvidence(destination, 'slider', finding.id), row);
+    const source = records.find(record => record.evidence.section === 'sourceFindings');
+    assert.deepEqual(await loadFindingEvidence(destination, 'slider', [source.id, finding.id]), [audit.sourceFindings[0], row]);
+    await assert.rejects(loadFindingEvidence(destination, 'slider', []));
+    await assert.rejects(loadFindingEvidence(destination, 'slider', [finding.id, finding.id]));
+    await assert.rejects(loadFindingEvidence(destination, 'slider', ['unknown']));
     const generation = path.join(destination, encoded.manifest.compressedSha256);
     const index = verifyFindings(generation); assert.ok(index.sections.includes('otherEvidence'));
     assert.deepEqual(fs.readFileSync(path.join(generation, encoded.manifest.payload)), encoded.payload);
