@@ -2,6 +2,36 @@
 
 ## Current evidence boundary — October 10
 
+### Minimal public cancellation confirms core reporting boundary
+
+Remaining question resolved without Material/image/font holds or custom frame
+scheduling: public package-root Astylar.mount on an empty100x100 canvas, followed
+by immediate surface.dispose, rejects whenSettled and emits render-failed / Initial
+render failed / disposed before settling. Revision remains0, proving initial
+render never completed. Settled-start control resolves, reaches revision1 and
+then disposes with no console error. Both final tracked/live resource triples
+are zero, sessions disposed, cleanup registrations0; no pageerror events.
+Chrome154.0.8037.99 DPR1 real browser public reduction is retained at
+public-initial-cancellation-20261010/failure-observations.json SHA256
+887682d6ac5b4e9291186d5b8d97407872b4173364d72fa7a9f206999005323d.
+Reader authenticates2515 actual bundle dependencies, script, bundle/HTML and
+served response hashes, the two controls and four negative observations.
+Combined remount/public/source checks pass3/3,2735.8384ms. The reproduction's
+diagnostic assertions pass while runtime acceptance remains explicitly failed;
+no existing runtime validator is relaxed. Initial virtual-stdin fingerprint
+ENOENT occurred before browser/output creation and is separately recorded in
+public-initial-cancellation-virtual-entry-failure-20261010.txt.
+
+Together with actual-source execution below, this confirms the core initial
+reporter's conflation of normal cancellation with rendering failure. Preserve
+session disposal rejection; investigate/fix classification at the reporter in
+the later implementation phase, not the image service or Material fixture.
+Minimal public verification is no longer pending. No claims about all initial
+async paths, stable repeated-remount plateau, paint or complete Icon closure.
+Next return to exact-case applicable obligations/current-validity disposition;
+do not rerun these settled controls. Producer181/published179 plus standalone
+remount/public additions still require a coherent registration/publication batch.
+
 ### Pending Icon load across actual Angular remount: owners stable, runtime failure retained
 
 Current-source causal check now executes the unchanged session implementation,

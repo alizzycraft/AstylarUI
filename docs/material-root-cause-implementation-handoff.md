@@ -2,6 +2,19 @@
 
 ## October10 pending Icon remount — cancellation reporting boundary
 
+Minimal public verification now confirms this boundary independently of Material,
+images and font-load intervention: package-root Astylar.mount with empty content,
+immediate dispose, yields revision0 cancellation rejection and the same error
+diagnostic. Settled control reaches revision1 and disposes without console errors;
+both final tracked/live resources are zero. Retained failure record:
+`../artifacts/material-parity/public-initial-cancellation-20261010/failure-observations.json`,
+SHA256887682d6ac5b4e9291186d5b8d97407872b4173364d72fa7a9f206999005323d.
+Existing focused suite authenticates2515 dependencies, served artifacts and
+control observations; combined public/source/remount checks pass3/3. This resolves
+the minimal-public verification request below, not wider lifetime acceptance.
+Later fix should distinguish expected initial cancellation at its reporting owner
+while preserving disposal rejection and genuine errors. No fixture compensation.
+
 Retained actual Angular destruction/remount diagnostic releases the old native
 PNG after a distinct replacement settles. Retired sampled resources stay zero;
 replacement sampled resources/texture identities stay unchanged, but original

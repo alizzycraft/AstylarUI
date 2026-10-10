@@ -69,6 +69,39 @@ test('Icon pending image Angular remount preserves sampled owners but fails runt
   }
 });
 
+test('minimal public mount cancellation reports failure without Material or image dependencies', () => {
+  const directory = 'artifacts/material-parity/public-initial-cancellation-20261010';
+  const raw = readFileSync(`${directory}/failure-observations.json`);
+  assert.equal(hash(raw), '887682d6ac5b4e9291186d5b8d97407872b4173364d72fa7a9f206999005323d');
+  const record = JSON.parse(raw), provenance = record.provenance;
+  for (const receipt of [provenance.script, ...provenance.bundleInputs]) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  assert.equal(hash(readFileSync(`${directory}/audit.js`)), provenance.bundleSha256);
+  assert.equal(hash(readFileSync(`${directory}/index.html`)), provenance.htmlSha256);
+  function inspect(row) {
+    assert.deepEqual(row.results.map(result => result.mode), ['immediate', 'settled']);
+    for (const result of row.results) {
+      assert.equal(result.before.status, 'scheduled'); assert.equal(result.before.revision, 0);
+      assert.deepEqual(result.before.pendingReasons, ['initial']);
+      assert.equal(result.disposed, true); assert.equal(result.session.status, 'disposed');
+      assert.equal(result.session.cleanupRegistrations, 0); assert.deepEqual(result.session.pendingReasons, []);
+      assert.deepEqual(result.resources, { meshes: 0, materials: 0, textures: 0 });
+      assert.deepEqual(result.live, result.resources); assert.deepEqual(result.pageErrors, []);
+      assert(result.assets.some(asset => asset.type === 'script' && asset.sha256 === provenance.bundleSha256));
+      assert(result.assets.some(asset => asset.type === 'document' && asset.sha256 === provenance.htmlSha256));
+      if (result.mode === 'immediate') {
+        assert.equal(result.session.revision, 0); assert.equal(result.settlement.status, 'rejected');
+        assert.match(result.settlement.message, /disposed before settling/);
+        assert.equal(result.errors.length, 1); assert.match(result.errors[0], /Initial render failed.*disposed before settling/);
+      } else { assert.equal(result.session.revision, 1); assert.equal(result.settlement.status, 'resolved'); assert.deepEqual(result.errors, []); }
+    }
+  }
+  inspect(record);
+  for (const mutate of [row => { row.results[0].errors = []; }, row => { row.results[0].session.revision = 1; },
+    row => { row.results[1].settlement.status = 'rejected'; }, row => { row.results[0].live.textures = 1; }]) {
+    const changed = structuredClone(record); mutate(changed); assert.throws(() => inspect(changed));
+  }
+});
+
 test('current initial-render reporter classifies expected session cancellation like a genuine reflow failure', async () => {
   const compiled = ts.transpileModule(readFileSync('src/lib/astylar-render-session.ts', 'utf8'), {
     compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS },
