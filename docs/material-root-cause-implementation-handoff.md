@@ -1,5 +1,24 @@
 # Material audit: evidence-led implementation priorities
 
+## October 10 bounded addition — external host scroll hover invalidation
+
+Public equal-input reduction removes Material and tooltip handlers: identical
+`cursorInput('button-hover')`,same601px host scroll extent,and four DPR/host-offset
+contexts show candidate hover/cursor remaining on the target after40px external
+scroll until a1px pointer movement emits pointerleave. Native hover clears on
+scroll. This confirms a core gap in the tested public AstylarUI0.2.0 package,
+not a tooltip-specific dismissal requirement. Owner: core interaction/host
+hover invalidation; keep hit testing in CSS space and observer/listener lifetime
+surface-owned. Do not repair with tooltip wheel handlers or popup offsets.
+
+Evidence: `../artifacts/material-parity/public-host-scroll-hover-20261010/latest-report.json`,
+SHA256298097b2f44505a5d998fbb9b18832dd86a7c93dc08a47b910f33bdfa439b58c;
+producer `../scripts/audit-public-host-scroll-hover.mjs`. Independent receipt,
+equal-input,geometry,cursor/event and24 PNG-hash assertions pass. See current
+coverage ledger for exact package/source limits. Canonical batch registration,
+ancestor scroll/resize and disposal applicability remain pending; this does not
+close a configured case or authorize fixing the renderer during this audit.
+
 ## Current publication boundary — October 10
 
 The coherent177-proof canonical publication is independently cold-checked

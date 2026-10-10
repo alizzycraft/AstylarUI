@@ -2,6 +2,48 @@
 
 ## Current evidence boundary — October 10
 
+### Public equal-input reduction confirms external-scroll hover invalidation gap
+
+The Material host-scroll result is now reduced without Material or tooltip
+handlers. scripts/audit-public-host-scroll-hover.mjs bundles the existing
+cursor-defaults.mjs public package-root mount and native CSS translator unchanged;
+both sides receive exactly cursorInput('button-hover'). Same absolute1px host
+spacer at top600 gives601px document extent. Command
+`node scripts/audit-public-host-scroll-hover.mjs artifacts/material-parity/public-host-scroll-hover-20261010`
+finishes exit0 (capture integrity,not parity). Preserve report SHA256
+298097b2f44505a5d998fbb9b18832dd86a7c93dc08a47b910f33bdfa439b58c,
+its24 PNGs,bundle,index.html and top-level .log. Provenance records2517 bundle
+input hashes,Chrome154.0.8037.99,native-scrollbar launch,AstylarUI0.2.0,
+Angular20.3.31,Babylon8.56.2 and esbuild0.28.1. Installed interaction module
+SHA256896ba0fffa14862af211716001b1a3e6ad728bbd55a75b6adee85d95ec369770
+is the tested public runtime; do not substitute whole-source/current-library
+equivalence for that exact receipt.
+
+All4 contexts (DPR1/2,host origin0,0 or64,40) show native cursor sequence
+pointer→default→default versus candidate pointer→pointer→default after hover,
+window.scrollTo(0,40),and a1px real pointer recheck. Candidate diagnostics retain
+hoveredElementId='target' after host scroll,then clear it; target pointerleave
+is absent after scroll and present after recheck. Both stage boxes move40CSSpx,
+scrollY matches0→40→40,and the pointer remains inside the canvas but outside
+the target after scrolling. No private renderer state is changed. Supported
+:hover catalog entry and docs/compatibility/html-css.md hover contract apply.
+
+Independent Node reader authenticates producer/all2517 bundle inputs,bundle,
+HTML and24 PNG hashes; checks all12 paired states,exact equal SiteData,601px
+extent,40px displacement,cursor/hover sequence and pointerleave control. All
+assertions pass. This confirms a core external-host-scroll hover invalidation
+defect in the tested package: failure precedes application pointerleave handling
+and reproduces without popup/application state. Current source owner remains
+AstylarInteractionRuntime/host interaction lifecycle; internal scroll consumption
+already repicks,while external motion lacks equivalent reevaluation. General
+fix should preserve CSS-space hit testing and owned listener cleanup,not add a
+tooltip/plugin dismissal patch. Audit does not authorize implementation.
+
+Next batch-register the bounded proof/classification through the existing audit
+inventory. Ancestor-scroll,resize,detached/disposed surfaces and broader runtime
+applicability remain unproven. This diagnostic adds no configured cases or whole
+case closure; canonical177-proof package remains unchanged pending integration.
+
 ### Matched external host scroll reproduces stale candidate hover twice
 
 Decisive check completed,not just planned: new bounded producer
