@@ -2,6 +2,39 @@
 
 ## Current evidence boundary — October 10
 
+### Icon cursor context: verified applied-theme settled pointer points agree
+
+Retained inspect cursor:{matches:true} has no sampled point/cursor fields and
+cannot close effective-cursor inspection. Bounded existing-capture-infrastructure
+probe now covers icon-primary center and blank root top-padding midpoint in all16
+configured physical contexts (four applied profiles,desktop/tablet/mobile plus
+desktop DPR2),32 side rows/64 point samples. Native hits section/path with owner
+and hit cursor:auto; candidate hits canvas with default. No selectable text Range
+rectangle touches any point. Existing effectiveBrowserCursor therefore resolves
+both to default at those points. This is CSS effective-cursor evidence,not an OS
+cursor screenshot,held/click behavior,all canvas hit targets or whole-case closure.
+
+Original wrong-reference-hook timeout remains aticon-effective-cursor-20261010
+with failure.txt/checkpoint. First completed icon-effective-cursor-native-20261010
+omits benchmark=1 and uses ordinary light despite profile labels; profile-scope.txt
+explicitly forbids treating it as applied-theme coverage. Final themed run uses
+benchmark=1 and directly asserts complete live store.theme on both sides against
+named profile. Correct original files are not overwritten; failed/misscoped
+records remain retained. New report icon-effective-cursor-themed-20261010/latest-report.json
+SHA256c42ca16d0160bb60a3cc692a44f57feded71e324c6c37d14df2e0c8ba3ee4293.
+Chrome154.0.8037.99; all32 runtime validators pass with0 errors. Existing icon-asset
+suite authenticates script/helper/checkpoint/current served-directory and every
+observed asset, exact cohort/target/theme/hit/cursor membership, plus four negative
+controls. Context/census/width/cursor checks pass4/4,4642.0389ms process.
+
+This resolves the two Icon cursor-context questions for scoped settled pointer
+points; accepted canonical13-group pending explanations still require coherent
+metadata integration. Source181 versus published179 and standalone context,
+width,cursor/cancellation additions remain explicit. Next batch their scoped
+attributions through existing review/producer mechanisms,then current-validity
+and whole-case obligations; do not recapture these settled samples merely to
+repeat cursor:auto/default comparison. No renderer/fixture/threshold changes.
+
 ### Icon used-width groups: authored box conversion resolved, current used size separate
 
 Competing explanations resolved narrowly: retained native root used-width720/

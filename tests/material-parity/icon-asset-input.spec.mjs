@@ -11,7 +11,9 @@ import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { evaluateFocusedRaster } from './focused-raster-metrics.mjs';
 import { restoreSvgProofRegistration } from './position-composition-producer-transition.mjs';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
-import { materialStaticCases, materialInteractionCases } from './benchmark.config.mjs';
+import { materialStaticCases, materialInteractionCases, materialProfiles, materialViewports } from './benchmark.config.mjs';
+import { fingerprintDirectory } from './run-checkpoint.mjs';
+import { effectiveBrowserCursor } from './cursor-metrics.mjs';
 
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 
@@ -117,6 +119,46 @@ test('Icon root width expressions preserve content-box to border-box intent acro
   assert.deepEqual([...widths].sort((a,b)=>a-b), [318,696,778]);
   // This proves the scoped authored size conversion, not authoritative current
   // candidate used dimensions, projection correctness or all box-model support.
+});
+
+test('Icon and blank-root effective cursors agree in verified applied-theme pointer cohorts', () => {
+  const raw = readFileSync('artifacts/material-parity/icon-effective-cursor-themed-20261010/latest-report.json');
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  assert.equal(digest(raw), 'c42ca16d0160bb60a3cc692a44f57feded71e324c6c37d14df2e0c8ba3ee4293');
+  const record = JSON.parse(raw);
+  for (const receipt of [record.capture.checkpointManifest, ...record.capture.sources]) assert.equal(digest(readFileSync(receipt.file)), receipt.sha256);
+  const manifest = JSON.parse(readFileSync(record.capture.checkpointManifest.file));
+  assert.deepEqual(fingerprintDirectory('examples/material-showcase/dist/material-showcase/browser'), manifest.provenance.browserFiles);
+  const assets = new Map(manifest.provenance.browserFiles.map(receipt => [receipt.file, receipt.sha256]));
+  const exports = {};
+  new Function('exports', ts.transpileModule(readFileSync('examples/material-showcase/src/app/theme.ts','utf8'), {
+    compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS },
+  }).outputText)(exports);
+  const viewports = [...materialViewports, { ...materialViewports[0], id: 'desktop-dpr2', deviceScaleFactor: 2 }];
+  function inspect(row) {
+    const expected = materialProfiles.flatMap(profile => viewports.flatMap(viewport => ['reference','astylar'].map(side => `${profile}/${viewport.id}/${side}`)));
+    assert.deepEqual(row.results.map(result => `${result.profile}/${result.viewport.id}/${result.side}`).sort(), expected.sort());
+    for (const result of row.results) {
+      assert.deepEqual(result.viewport, one(viewports.filter(viewport => viewport.id === result.viewport.id)));
+      assert.deepEqual(result.theme, exports.MATERIAL_THEME_PROFILES[result.profile]);
+      assert.deepEqual(result.runtime.errors, []); assert(result.runtime.assets.length > 0);
+      for (const asset of result.runtime.assets) assert.equal(asset.sha256, assets.get(asset.file));
+      assert.deepEqual(result.targets.map(target => target.id), ['icon-root','icon-primary']);
+      for (const target of result.targets) {
+        assert.equal(target.textAtPoint, false);
+        assert.equal(target.hitType, result.side === 'astylar' ? 'canvas' : target.id === 'icon-root' ? 'section' : 'path');
+        assert.equal(target.hitCursor, result.side === 'reference' ? 'auto' : 'default');
+        assert.equal(target.ownerCursor, target.hitCursor);
+        assert.equal(target.effectiveCursor, effectiveBrowserCursor(target.hitCursor, target.textAtPoint));
+        assert.equal(target.effectiveCursor, 'default');
+      }
+    }
+  }
+  inspect(record);
+  for (const mutate of [row => { row.results.pop(); }, row => { row.results.find(result => result.profile === 'dark').theme.mode = 'light'; },
+    row => { row.results[0].targets[0].textAtPoint = true; }, row => { row.results[1].targets[0].hitCursor = 'pointer'; }]) {
+    const changed = structuredClone(record); mutate(changed); assert.throws(() => inspect(changed));
+  }
 });
 
 test('SVG upload cause registration conserves all predecessor source findings', () => {
