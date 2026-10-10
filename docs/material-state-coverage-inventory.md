@@ -2,6 +2,24 @@
 
 ## Current evidence boundary — October 10
 
+### Icon metadata review wired into canonical replay; publication still pending
+
+The final bound scalar-review stage now applies the eight authenticated Icon
+context groups. Canonical validation reconstructs original metadata and key order,
+authenticates complete original row hashes, and compares the entire reviewed rows
+against replay. Prior metadata and original key order are retained in reviewEvidence;
+input values and omissions remain unchanged. Missing groups, duplicates, modified
+input and forged review metadata fail. Focused original-row/application/validator
+test passes1/1,20030.2459ms. Exact producer conservation reverses only the import,
+final application and validator call, proving whole normalized source equality
+with preceding181 producer9ca4ac5e; the existing earlier transitions and unchanged
+acceptance policy check pass1/1,3547.1286ms. Current producer normalized SHA
+9a3f1e78d0872f33f86ea7323cdaee0f873b03a022df280b46b4ead4689c5987.
+No export or browser gate was run. Published179 package remains unchanged;
+focused proof/source registration for remount/public cancellation/context/cursor
+and coherent export/cold verification/import remain next. This is audit metadata
+integration, not renderer or fixture modification, case closure or parity acceptance.
+
 ### Icon complete-row metadata application verified before canonical wiring
 
 The existing evidence reader now supports an ordered array of finding IDs in one

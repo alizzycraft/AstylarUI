@@ -90,10 +90,26 @@ export function applyIconContextReviews(rows) {
     assert.ok(!seen.has(group.id), 'Duplicate Icon original row'); seen.add(group.id);
     assert.equal(hash(row), group.reviewEvidence.originalCompleteRowSha256, 'Icon complete original row drift');
     const metadata = Object.fromEntries(['classification','attribution','justification','recommendedOwner','reviewedCases','reviewEvidence'].map(key => [key, group[key]]));
+    metadata.reviewEvidence = { ...metadata.reviewEvidence, originalKeyOrder: Object.keys(row),
+      priorMetadata: Object.fromEntries(Object.entries(row).filter(([key]) => Object.hasOwn(metadata, key))) };
     return { ...row, ...metadata };
   });
   assert.equal(seen.size, review.groups.length, 'Missing Icon original rows');
   return result;
+}
+
+export function validateIconContextRows(rows) {
+  try {
+    const selected = rows.filter(row => row.attribution === 'reviewed-icon-parent-context-and-width-intent');
+    const original = selected.map(row => {
+      const restored = { ...row };
+      for (const key of ['classification','attribution','justification','recommendedOwner','reviewedCases','reviewEvidence']) delete restored[key];
+      Object.assign(restored, row.reviewEvidence.priorMetadata);
+      return Object.fromEntries(row.reviewEvidence.originalKeyOrder.map(key => [key, restored[key]]));
+    });
+    assert.deepEqual(selected, applyIconContextReviews(original));
+    return [];
+  } catch (error) { return [`Icon context metadata lacks complete original evidence: ${error.message}`]; }
 }
 
 export function proveExpansionTreeFormatting(entry, reference, candidate) {

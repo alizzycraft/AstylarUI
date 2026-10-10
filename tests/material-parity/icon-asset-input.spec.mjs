@@ -14,7 +14,7 @@ import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings
 import { materialStaticCases, materialInteractionCases, materialProfiles, materialViewports } from './benchmark.config.mjs';
 import { fingerprintDirectory } from './run-checkpoint.mjs';
 import { effectiveBrowserCursor } from './cursor-metrics.mjs';
-import { collectIconContextReview, validateIconContextReview, iconContextBaseline, applyIconContextReviews } from './display-request-review.mjs';
+import { collectIconContextReview, validateIconContextReview, iconContextBaseline, applyIconContextReviews, validateIconContextRows } from './display-request-review.mjs';
 
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 
@@ -195,6 +195,9 @@ test('Icon review conserves complete original rows and rejects input drift', asy
   const inputs = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
   original.forEach((row, index) => assert.deepEqual(inputs(updated[index]), inputs(row)));
   assert.equal(updated.filter(row => row.attribution === 'reviewed-icon-parent-context-and-width-intent').length, 8);
+  assert.deepEqual(validateIconContextRows(updated), []);
+  const badMetadata = structuredClone(updated); badMetadata[0].justification = 'forged';
+  assert.equal(validateIconContextRows(badMetadata).length, 1);
   const forged = structuredClone(original); forged[0].reference = 'forged';
   assert.throws(() => applyIconContextReviews(forged));
   assert.throws(() => applyIconContextReviews(original.slice(1)));

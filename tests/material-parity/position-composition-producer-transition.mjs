@@ -9,6 +9,18 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 // conservation. This does not substitute old bytes in current production.
 export function restoreLayoutDiagnosticRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes("import { applyIconContextReviews, validateIconContextRows } from './display-request-review.mjs';")) {
+    assert.equal(hash(current), '9a3f1e78d0872f33f86ea7323cdaee0f873b03a022df280b46b4ead4689c5987',
+      'exact complete Icon context metadata replay integration snapshot');
+    const addition = "import { applyIconContextReviews, validateIconContextRows } from './display-request-review.mjs';\n";
+    assert.equal(current.split(addition).length, 2); current = current.replace(addition, '');
+    const replay = "  return ownerInitialStyleBinding.status === 'bound' ? applyIconContextReviews(discrepancies) : discrepancies;";
+    assert.equal(current.split(replay).length, 2); current = current.replace(replay, '  return discrepancies;');
+    const validation = '      errors.push(...validateIconContextRows(report.discrepancies));\n';
+    assert.equal(current.split(validation).length, 2); current = current.replace(validation, '');
+    assert.equal(hash(current), '9ca4ac5ebfba5733217abcaeb435230482599dadc0b09cf30e68b71d33448162',
+      'complete preceding181-proof producer conserved');
+  }
   if (current.includes('Icon pending native load serializes live authored theme replacement')) {
     assert.equal(hash(current), '9ca4ac5ebfba5733217abcaeb435230482599dadc0b09cf30e68b71d33448162',
       'exact complete live replacement and failed teardown registration snapshot');

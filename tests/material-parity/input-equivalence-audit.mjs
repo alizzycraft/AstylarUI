@@ -5,6 +5,7 @@ import { applyOwnerMaximumWidths, validateOwnerMaximumWidths } from './control-w
 import { applyBadgeMarginReviews, validateBadgeMarginReviews } from './authored-anchor-review.mjs';
 import { applySliderMarginReviews, validateSliderMarginReviews } from './slider-position-request-review.mjs';
 import { applyListSpacingReviews, validateListSpacingReviews } from './display-request-review.mjs';
+import { applyIconContextReviews, validateIconContextRows } from './display-request-review.mjs';
 import { applyHeadingVisibleOverflow, validateHeadingVisibleOverflow, applyTabPanelOverflowBoundary, validateTabPanelOverflowBoundary } from './control-overflow-observation.mjs';
 import { applyTableVisibleOverflow, validateTableVisibleOverflow, applyControlOverflowOwnerBoundaries, validateControlOverflowOwnerBoundaries, applyRangeVisibleOverflow, validateRangeVisibleOverflow } from './control-overflow-observation.mjs';
 import { applyFocusShadowSubstitutions, validateFocusShadowSubstitutions, applyCardShadowSyntax, validateCardShadowSyntax } from './control-state-paint-review.mjs';
@@ -305,7 +306,7 @@ export function replayMaterialScalarReviewStages(overlaySurfaceDiscrepancies, ca
     ? [applyOwnerMaximumWidths, applyOmittedOwnerPaintRequests, applyBadgeMarginReviews, applySliderMarginReviews, applyListSpacingReviews, applyHeadingVisibleOverflow, applyTabPanelOverflowBoundary, applyTableVisibleOverflow, applyControlOverflowOwnerBoundaries, applyRangeVisibleOverflow, applyFocusShadowSubstitutions, applyCardShadowSyntax, applyMappedNonwidgetAppearance, applyRangeAppearanceInitial, applyAppearanceOwnerBoundaries, applySheetActionAppearance, applyTooltipWordBreakReview, applyStepperSpacingReviews, applyChipSpacingReviews, applyChoiceSpacingReviews, applyToolbarSpacingReviews, applyDialogActionSpacingReviews, applyDialogPanelGapReview, applyOverlayFlowReviews, applyPanelVisibilityOwnership, applyTooltipShrinkReviews, applyExpansionTreeFormattingReviews, applyRemainingBorderReviews, applyFinalOwnerStyleReviews]
       .reduce((rows, apply) => apply(rows, cases, elementInventory, canonicalStyle), beforeOwnerOmissionReviews)
     : beforeOwnerOmissionReviews;
-  return discrepancies;
+  return ownerInitialStyleBinding.status === 'bound' ? applyIconContextReviews(discrepancies) : discrepancies;
 }
 
 export function buildMaterialInputAudit(parityReport, options = {}) {
@@ -769,6 +770,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
       errors.push(...validateExpansionTreeFormattingReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
       errors.push(...validateRemainingBorderReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
       errors.push(...validateFinalOwnerStyleReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
+      errors.push(...validateIconContextRows(report.discrepancies));
       errors.push(...validateComponentColorReviews(report.discrepancies, replayedRows, cases, report.elementInventory,
         collectRetainedTypographyEvidence(cases.filter(e => ['sort', 'sidenav'].includes(e.family)), report.elementInventory), canonicalStyle));
       errors.push(...validatePaintReviews(report.discrepancies, replayedRows, cases, report.elementInventory,
