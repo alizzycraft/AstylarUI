@@ -9,6 +9,18 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 // conservation. This does not substitute old bytes in current production.
 export function restoreLayoutDiagnosticRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes('expansion exact panel/header and disabled title cursor boundary')) {
+    assert.equal(hash(current), '9a7a7513ff6ac5b9f4a1dbbbf198903e97d712ba0d046610150d7c175579ee9c',
+      'exact complete expansion cursor proof registration');
+    const ast = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    assert.equal(ast.parseDiagnostics.length, 0);
+    const entries = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory').body.statements[0].expression.elements;
+    assert.equal(entries.length, 190);
+    assert.equal(entries[0].arguments[3].text, 'expansion exact panel/header and disabled title cursor boundary');
+    current = current.slice(0, entries[0].getFullStart()) + current.slice(entries[1].getFullStart());
+    assert.equal(hash(current), '4a1a7648e1fddb45c8f9f4b1c24e75faa8cd631a2ccbd71df576a07a778c6d16',
+      'complete189-proof disabled-range producer conserved');
+  }
   if (current.includes('disabled range exact cursor request and row conservation boundary')) {
     assert.equal(hash(current), '4a1a7648e1fddb45c8f9f4b1c24e75faa8cd631a2ccbd71df576a07a778c6d16',
       'exact complete disabled-range cursor proof registration');

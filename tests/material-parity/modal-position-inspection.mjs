@@ -28,6 +28,7 @@ export function modalInventoryTrees(inventory, key) {
         assert.equal(inventory.rules[index].side, side); return inventory.rules[index].value;
       }),
       nodes: variant.nodes.map(n => side === 'reference' ? n : { ...n,
+        ...(n.retainedText ? { retainedText: { ...n.retainedText, style: style(n.retainedText.style) } } : {}),
         resolvedStyle: n.style === undefined ? undefined : style(n.style),
         normalResolvedStyle: n.normalStyle === undefined ? undefined : style(n.normalStyle),
         interactionResolvedStyle: n.interactionStyle === undefined ? undefined : style(n.interactionStyle) }) };

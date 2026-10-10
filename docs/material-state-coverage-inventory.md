@@ -2,6 +2,21 @@
 
 ## Current evidence boundary — October 11
 
+Expansion cursor integration conserves both complete185 rows:68 panel/header
+observations and8 disabled-title observations. Existing role mapping distinguishes
+60 matching enabled header cursor inputs from8 unequal disabled inputs; disabled
+title has no local cursor request and inherits the candidate header pointer.
+Raw panel/header comparison remains a harness ownership difference,not a core
+cursor finding. Indexed retainedText.style is now de-pooled by the existing tree
+adapter; every original retained-text value across all68 cases is checked exactly.
+Combined component cursor/tab suite passes9/9,67563.6711ms,retained log
+expansion-cursor-adapter-integration-20261011.log. Registration and complete
+producer-predecessor conservation pass2/2,5606.2025ms;190 focused proofs.
+No renderer or fixture change; physical hover/emitted cursor remain unverified.
+Canonical185 remains the accepted publication,not current source acceptance.
+Next review switch owner/disabled cursor applicability,then reconcile the coherent
+source batch and per-case obligation closure. All2311 case statuses remain partial.
+
 Disabled range cursor integration closes two retained attribution gaps(16 exact
 owner observations). Existing component cursor review now authenticates both
 disabled input owners,ordered native pointer→auto declarations and candidate

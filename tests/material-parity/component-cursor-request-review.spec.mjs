@@ -8,6 +8,60 @@ import { bindPreciseAuditNormalization } from './audit-normalization-contracts.m
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { applyExplicitComponentCursors, proveExplicitComponentCursor, validateComponentCursorReviews } from './component-cursor-request-review.mjs';
 
+test('expansion cursor owner review conserves panel and disabled-title populations without rewriting raw values', async () => {
+  const snapshot = { generation: '90c59d984b2a021384f07da008395cfd6dbea59497f27190d0554b4a763767a3',
+    indexSha256: '3a8a22a1dae2fd7dab79fd6fac7334b649ab71a6171198dbd658e424ab4800f2' };
+  const compact = queryFindings('artifacts/material-parity/working-audit', 'expansion', snapshot)
+    .filter(r => r.evidence.section === 'discrepancies' && r.property === 'cursor' && !r.attribution &&
+      ['expansion-primary','expansion-title'].includes(r.element));
+  assert.equal(compact.length, 2);
+  const rows = await loadFindingEvidence('artifacts/material-parity/working-audit', 'expansion', compact.map(r => r.id), snapshot);
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(bytes), cases = [...capture.results.map(c => ({ ...c, kind:'static' })),
+    ...capture.interactions.map(c => ({ ...c, kind:'interaction' }))].filter(c => c.family === 'expansion');
+  assert.equal(cases.length, 68);
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  for (const entry of cases) {
+    const key = `${entry.kind}:expansion@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`;
+    const adapted = modalInventoryTrees(inventory, key)[1], original = JSON.parse(readFileSync(entry.inputTrees.astylar.file));
+    for (const node of original.nodes.filter(n => n.retainedText))
+      assert.deepEqual(adapted.nodes.find(n => n.key === node.key).retainedText, node.retainedText);
+  }
+  const original = structuredClone(rows), applied = applyExplicitComponentCursors(rows, cases, inventory, normalize);
+  assert.deepEqual(rows, original);
+  const primary = applied.find(r => r.element === 'expansion-primary'), title = applied.find(r => r.element === 'expansion-title');
+  assert.equal(primary.reviewedCases.length, 68); assert.equal(title.reviewedCases.length, 8);
+  assert.equal(primary.classification, 'parity-harness-defect'); assert.equal(title.classification, 'application-plugin-authoring-defect');
+  assert.equal(primary.reviewEvidence.observations.filter(p => p.mapping.headerCursor.unequal).length, 8);
+  assert.equal(primary.reviewEvidence.observations.filter(p => !p.mapping.headerCursor.unequal).length, 60);
+  for (let i = 0; i < rows.length; i++) {
+    const restored = structuredClone(applied[i]), prior = restored.reviewEvidence.priorMetadata;
+    assert.equal(restored.reviewEvidence.originalRowSha256, createHash('sha256').update(JSON.stringify(rows[i])).digest('hex'));
+    assert.equal(Object.hasOwn(prior, 'attribution'), false);
+    for (const key of ['classification','attribution','justification','recommendedOwner','reviewEvidence','reviewedCases']) delete restored[key];
+    Object.assign(restored, prior); assert.deepEqual(restored, rows[i]);
+  }
+  assert.ok(title.reviewEvidence.observations.every(p => p.mapping.state.disabled && p.actualHoverCursorVerified === false &&
+    p.titleAncestry.referenceParentCursor === 'auto' && p.titleAncestry.candidateParentCursor === 'pointer'));
+  assert.deepEqual(validateComponentCursorReviews(applied, rows, cases, inventory, normalize), []);
+  const entry = cases.find(c => c.state === 'disabled');
+  const trees = modalInventoryTrees(inventory, `interaction:expansion@${entry.profile}/${entry.viewport.id}/disabled`);
+  for (const mutate of [
+    ([r]) => { r.nodes.find(n => n.type === 'mat-expansion-panel-header').attributes.role = 'panel'; },
+    ([,a]) => { a.nodes.find(n => n.authored?.id === 'expansion-primary').authored.ariaDisabled = false; },
+    ([,a]) => { a.rules.find(r => r.selector === '.expansion-trigger').cursor = 'auto'; },
+    ([,a]) => { a.nodes.find(n => n.authored?.id === 'expansion-title').normalResolvedStyle.cursor = 'auto'; },
+    ([,a]) => { a.rules.push({ selector: '.expansion-title', cursor: 'pointer' }); },
+  ]) {
+    const changed = structuredClone(trees); mutate(changed);
+    assert.throws(() => proveExplicitComponentCursor(entry, ...changed, 'expansion-title'));
+  }
+  assert.throws(() => applyExplicitComponentCursors(rows, cases.filter(c => c !== entry), inventory, normalize));
+  const forged = structuredClone(applied); forged[0].reviewEvidence.observations[0].mapping.rendererCauseProven = true;
+  assert.equal(validateComponentCursorReviews(forged, rows, cases, inventory, normalize).length, 1);
+});
+
 test('disabled range cursor review conserves sixteen original owner observations without claiming hit suppression', async () => {
   const snapshot = { generation: '90c59d984b2a021384f07da008395cfd6dbea59497f27190d0554b4a763767a3',
     indexSha256: '3a8a22a1dae2fd7dab79fd6fac7334b649ab71a6171198dbd658e424ab4800f2' };

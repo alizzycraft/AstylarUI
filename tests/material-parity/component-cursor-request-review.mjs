@@ -5,6 +5,7 @@ import { applyModalBoxReview } from './modal-position-inspection.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { validateCursorEvidence } from './public-cursor-defaults-evidence.mjs';
+import { inspectExpansionOwnerMapping } from '../../scripts/audit-material-expansion-owner-mapping.mjs';
 
 const one = items => { assert.equal(items.length, 1); return items[0]; };
 const relevant = key => ['cursor', 'all'].includes(key.replaceAll('-', '').toLowerCase());
@@ -14,6 +15,7 @@ export function isComponentCursorReviewRow(row) {
     'reviewed-button-cursor-request-substitution', 'reviewed-dialog-button-cursor-default-policy',
     'reviewed-choice-label-cursor-ancestry-substitution',
     'reviewed-disabled-range-cursor-request',
+    'reviewed-expansion-panel-header-cursor-owner', 'reviewed-expansion-disabled-title-cursor-ancestry',
   ].includes(row.attribution);
 }
 
@@ -29,6 +31,7 @@ export function validateComponentCursorReviews(rows, originalRows, cases, invent
 }
 
 const definitions = [
+  ...['expansion-primary', 'expansion-title'].map(element => ({ family: 'expansion', element, expansionOwner: true })),
   ...['slider-primary', 'slider-start'].map(element => ({ family: 'slider', element,
     nativeType: 'input', candidateType: 'input', selector: '.range-layer', disabledRange: true,
     nativeSelector: '.mat-mdc-slider.mdc-slider--disabled .mdc-slider__input' })),
@@ -76,6 +79,7 @@ export function collectCursorDefaultPolicyEvidence() {
 // distinct from explicit disabled requests. Neither proves a hovered cursor.
 export function proveExplicitComponentCursor(entry, reference, candidate, element, defaultEvidence) {
   const definition = one(definitions.filter(d => d.family === entry.family && d.element === element));
+  if (definition.expansionOwner) return proveExpansionCursorOwner(entry, reference, candidate, element);
   if (definition.defaultPolicy) {
     assert.equal(defaultEvidence?.reportSha256, '4773eb64cb37931bfb53e2c3852b7b439eac366e2da51aaf2eb22f0c7133b9a8');
     assert.equal(defaultEvidence.classification, 'intentional-documented-limitation');
@@ -182,6 +186,43 @@ export function proveExplicitComponentCursor(entry, reference, candidate, elemen
     limitation: 'Original authored request and owner-stage discrepancy only. Disabled hit suppression, inherited label behavior, plugin mesh cursor and actual canvas hover remain separate questions.' };
 }
 
+export function proveExpansionCursorOwner(entry, reference, candidate, element) {
+  assert.equal(entry.family, 'expansion');
+  assert.ok(['expansion-primary', 'expansion-title'].includes(element));
+  const primary = one(entry.styleInputs.filter(i => i.id === 'expansion-primary'));
+  const title = one(entry.styleInputs.filter(i => i.id === 'expansion-title'));
+  const mapping = inspectExpansionOwnerMapping(primary, title, reference, candidate);
+  const input = element === 'expansion-primary' ? primary : title;
+  const native = one(reference.nodes.filter(n => (n.attributes?.['data-parity-id'] ?? n.attributes?.id) === element));
+  const owner = one(candidate.nodes.filter(n => n.authored?.id === element));
+  for (const [property, value] of Object.entries(input.reference)) assert.equal(reference.styles[native.style][property], value);
+  assert.equal(input.reference.cursor, 'auto');
+  for (const [stage, field] of [['resolvedStyle','astylar'],['normalResolvedStyle','astylarNormalResolvedStyle'],['interactionResolvedStyle','astylarInteractionResolvedStyle']]) {
+    assert.deepEqual(owner[stage], input[field]); assert.equal(owner[stage].cursor, 'pointer');
+  }
+  let titleAncestry;
+  if (element === 'expansion-title') {
+    assert.equal(mapping.state.disabled, true);
+    const referenceParent = one(reference.nodes.filter(n => n.key === native.parent));
+    const candidateParent = one(candidate.nodes.filter(n => n.key === owner.parent));
+    assert.equal(referenceParent.type, 'span'); assert.equal(candidateParent.authored.id, 'expansion-primary');
+    assert.equal(reference.styles[referenceParent.style].cursor, 'auto');
+    assert.equal(mapping.headerCursor.reference, 'auto');
+    assert.ok(!Object.keys(native.inline ?? {}).some(relevant));
+    assert.deepEqual(native.rules.map(i => reference.rules[i]).filter(r => r.active && Object.keys(r.declarations).some(relevant)), []);
+    assert.ok(!Object.keys(owner.authored.style ?? {}).some(relevant));
+    assert.equal(owner.authored.attributes?.style, undefined);
+    assert.deepEqual(candidate.rules.filter(r => rootInitialSelectorCanApply(r.selector, owner.authored) && Object.keys(r).some(relevant)), []);
+    for (const stage of ['resolvedStyle','normalResolvedStyle','interactionResolvedStyle']) assert.equal(candidateParent[stage].cursor, 'pointer');
+    titleAncestry = { referenceParent: referenceParent.key, candidateParent: candidateParent.key,
+      referenceParentCursor: 'auto', candidateParentCursor: 'pointer', titleLocalCursorRequests: [] };
+  }
+  return { referenceNode: native.key, astylarNode: owner.key, nativeCursor: input.reference.cursor,
+    candidateCursor: owner.normalResolvedStyle.cursor, mapping, ...(titleAncestry ? { titleAncestry } : {}),
+    inputEquivalent: false, renderingEquivalent: false, actualHoverCursorVerified: false,
+    limitation: 'Retained panel/header role and disabled ancestry evidence; no physical hit target, emitted cursor or current rendering acceptance.' };
+}
+
 export function applyExplicitComponentCursors(rows, cases, inventory, normalize) {
   const defaultEvidence = rows.some(r => r.family === 'dialog' && ['dialog-cancel', 'dialog-save'].includes(r.element) &&
     r.property === 'cursor' && r.attribution === 'unresolved') ? collectCursorDefaultPolicyEvidence() : undefined;
@@ -189,11 +230,19 @@ export function applyExplicitComponentCursors(rows, cases, inventory, normalize)
     family: d.family, element: d.element, properties: ['cursor'],
     ...(d.disabledRange ? { acceptsRow: row => !Object.hasOwn(row, 'attribution') &&
       row.classification === 'parity-harness-defect' && row.reference === 'auto' && row.astylar === 'pointer' } : {}),
-    classification: d.defaultPolicy ? 'intentional-documented-limitation' : 'application-plugin-authoring-defect',
-    attribution: d.disabledRange ? 'reviewed-disabled-range-cursor-request' : d.inheritedLabel ? 'reviewed-choice-label-cursor-ancestry-substitution' : d.defaultPolicy ? 'reviewed-dialog-button-cursor-default-policy' : d.family === 'slider' ? 'reviewed-slider-host-cursor-omission' : d.nativeSelector
+    ...(d.expansionOwner ? { acceptsRow: row => !Object.hasOwn(row, 'attribution') &&
+      row.classification === 'parity-harness-defect' && row.reference === 'auto' && row.astylar === 'pointer' } : {}),
+    classification: d.expansionOwner && d.element === 'expansion-primary' ? 'parity-harness-defect'
+      : d.defaultPolicy ? 'intentional-documented-limitation' : 'application-plugin-authoring-defect',
+    attribution: d.expansionOwner ? d.element === 'expansion-primary' ? 'reviewed-expansion-panel-header-cursor-owner' : 'reviewed-expansion-disabled-title-cursor-ancestry'
+      : d.disabledRange ? 'reviewed-disabled-range-cursor-request' : d.inheritedLabel ? 'reviewed-choice-label-cursor-ancestry-substitution' : d.defaultPolicy ? 'reviewed-dialog-button-cursor-default-policy' : d.family === 'slider' ? 'reviewed-slider-host-cursor-omission' : d.nativeSelector
       ? 'reviewed-disabled-component-cursor-substitution' : 'reviewed-button-cursor-request-substitution',
     owner: d.defaultPolicy ? 'core button cursor defaults; incomplete browser UA baseline policy' : 'Material comparison authored cursor requests and component-owner mapping',
-    justification: d.disabledRange
+    justification: d.expansionOwner
+      ? d.element === 'expansion-primary'
+        ? 'The original native ID measures the panel while the candidate ID measures its replacement header. Role-correct enabled header cursors match; eight disabled headers retain native auto versus candidate unconditional pointer. Preserve the raw panel/header values and that separate authoring defect; role correspondence is not structural equivalence or actual hovered-canvas verification.'
+        : 'The eight disabled native titles have no local cursor request and inherit auto through the native header. Candidate titles have no local request and inherit pointer from the unconditional expansion-trigger rule. This is unequal disabled header authoring,not a separate title inheritance algorithm failure or actual physical cursor proof.'
+      : d.disabledRange
       ? 'Both mapped range inputs are explicitly disabled. The native active disabled selector overrides pointer with auto; candidate range-layer still requests pointer in every captured style stage. Preserve native pointer-events auto and candidate omission without inventing a suppression rule. This is unequal disabled-state authoring, not physical hit suppression, emitted canvas cursor or a core defect.'
       : d.inheritedLabel
       ? 'The measured native span sits under a label computing default; the candidate span sits under a div explicitly requesting pointer, retained by both parent and span in all three stages. Native disabled declarations and complete ancestry remain recorded. The inherited cursor inputs and structure differ before a core comparison; no faulty inheritance algorithm or actual hovered-canvas cursor is inferred.'
