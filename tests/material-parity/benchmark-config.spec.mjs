@@ -28,11 +28,12 @@ test('layout diagnostic registration preserves complete predecessor and unchange
   const { fingerprints, proofs } = new Function('readFileSync', 'path', 'createHash', functions.join('\n') +
     ';return {fingerprints:sourceFingerprints(process.cwd()),proofs:focusedProofInventory(process.cwd())};')(
     readFileSync, path, createHash);
-  assert.equal(proofs.length, 188); assert.ok(proofs.every(row => row.status !== 'missing'));
-  assert.equal(proofs[0].status, 'retained antialias and selection source applicability conservation');
-  assert.equal(proofs[1].status, 'tab retained width owner and unequal sizing input boundary');
-  assert.equal(proofs[2].status, 'tab width complete-row ownership review conservation');
-  const priorProofs = proofs.slice(3);
+  assert.equal(proofs.length, 189); assert.ok(proofs.every(row => row.status !== 'missing'));
+  assert.equal(proofs[0].status, 'disabled range exact cursor request and row conservation boundary');
+  assert.equal(proofs[1].status, 'retained antialias and selection source applicability conservation');
+  assert.equal(proofs[2].status, 'tab retained width owner and unequal sizing input boundary');
+  assert.equal(proofs[3].status, 'tab width complete-row ownership review conservation');
+  const priorProofs = proofs.slice(4);
   assert.equal(priorProofs[0].status, 'Icon pending Angular remount owner isolation with retained runtime failure');
   assert.equal(priorProofs[1].status, 'public initial cancellation confirms core diagnostic classification gap');
   assert.equal(priorProofs[2].status, 'Icon complete-row context and width review conservation');

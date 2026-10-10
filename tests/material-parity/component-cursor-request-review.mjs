@@ -13,6 +13,7 @@ export function isComponentCursorReviewRow(row) {
     'reviewed-slider-host-cursor-omission', 'reviewed-disabled-component-cursor-substitution',
     'reviewed-button-cursor-request-substitution', 'reviewed-dialog-button-cursor-default-policy',
     'reviewed-choice-label-cursor-ancestry-substitution',
+    'reviewed-disabled-range-cursor-request',
   ].includes(row.attribution);
 }
 
@@ -28,6 +29,9 @@ export function validateComponentCursorReviews(rows, originalRows, cases, invent
 }
 
 const definitions = [
+  ...['slider-primary', 'slider-start'].map(element => ({ family: 'slider', element,
+    nativeType: 'input', candidateType: 'input', selector: '.range-layer', disabledRange: true,
+    nativeSelector: '.mat-mdc-slider.mdc-slider--disabled .mdc-slider__input' })),
   { family: 'button', element: 'button-disabled', nativeType: 'button', candidateType: 'button', selector: '.material-button', nativeSelector: '.mdc-button:disabled' },
   { family: 'checkbox', element: 'checkbox-primary', nativeType: 'mat-checkbox', candidateType: 'div', selector: '#checkbox-primary', nativeSelector: '.mdc-checkbox--disabled' },
   { family: 'slider', element: 'slider-visual', nativeType: 'mat-slider', candidateType: 'showcase.material:range-visual', nativeSelector: '.mat-mdc-slider' },
@@ -88,13 +92,27 @@ export function proveExplicitComponentCursor(entry, reference, candidate, elemen
   const owner = one(candidate.nodes.filter(n => n.authored?.id === element));
   assert.equal(native.type, definition.nativeType); assert.equal(owner.authored.type, definition.candidateType);
   for (const [property, value] of Object.entries(input.reference)) assert.equal(reference.styles[native.style][property], value);
-  const slider = entry.family === 'slider', expectedReference = slider ? 'pointer' : 'default';
+  const slider = entry.family === 'slider', expectedReference = definition.disabledRange ? 'auto' : slider ? 'pointer' : 'default';
+  if (definition.disabledRange) {
+    assert.equal(native.attributes.type, 'range'); assert.equal(Object.hasOwn(native.attributes, 'disabled'), true);
+    assert.equal(owner.authored.inputType, 'range'); assert.equal(owner.authored.disabled, true);
+    const parent = one(reference.nodes.filter(n => n.key === native.parent));
+    assert.ok(parent.attributes.class.split(/\s+/).includes('mdc-slider--disabled'));
+    assert.equal(reference.styles[native.style].pointerEvents, 'auto');
+    for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle'])
+      assert.equal(Object.hasOwn(owner[stage], 'pointerEvents'), false);
+  }
   assert.equal(input.reference.cursor, expectedReference);
   assert.ok(!Object.keys(native.inline ?? {}).some(relevant));
   const nativeRequests = native.rules.map(i => reference.rules[i]).filter(r => r.active && Object.keys(r.declarations).some(relevant));
   if (definition.nativeSelector) assert.ok(nativeRequests.some(r => r.selector === definition.nativeSelector));
   else assert.deepEqual(nativeRequests, []);
-  for (const rule of nativeRequests) {
+  if (definition.disabledRange) assert.deepEqual(nativeRequests.map(rule => ({ selector: rule.selector, declarations:
+    Object.fromEntries(Object.entries(rule.declarations).filter(([key]) => relevant(key))) })), [
+    { selector: '.mdc-slider__input', declarations: { cursor: { value: 'pointer', important: false } } },
+    { selector: definition.nativeSelector, declarations: { cursor: { value: 'auto', important: false } } },
+  ]);
+  else for (const rule of nativeRequests) {
     assert.ok(!Object.hasOwn(rule.declarations, 'all'));
     assert.equal(rule.declarations.cursor?.value, expectedReference);
     assert.equal(rule.declarations.cursor?.important, false);
@@ -137,7 +155,7 @@ export function proveExplicitComponentCursor(entry, reference, candidate, elemen
     assert.ok(!Object.keys(node.authored.style ?? {}).some(relevant));
     assert.equal(node.authored.attributes?.style, undefined);
     const requests = candidate.rules.filter(r => rootInitialSelectorCanApply(r.selector, node.authored) && Object.keys(r).some(relevant));
-    const requestOwner = definition.inheritedLabel ? path.length === 1 : node === owner && !slider && !definition.defaultPolicy;
+    const requestOwner = definition.inheritedLabel ? path.length === 1 : node === owner && (!slider || definition.disabledRange) && !definition.defaultPolicy;
     if (requestOwner) {
       assert.equal(requests.length, 1); assert.equal(requests[0].selector, definition.selector);
       assert.equal(requests[0].cursor, 'pointer'); assert.equal(requests[0].all, undefined);
@@ -150,13 +168,15 @@ export function proveExplicitComponentCursor(entry, reference, candidate, elemen
     path.push({ node: node.key, authored: node.authored, requests });
   }
   for (const [stage, field] of [['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'], ['interactionResolvedStyle', 'astylarInteractionResolvedStyle']]) {
-    assert.deepEqual(owner[stage], input[field]); assert.equal(owner[stage].cursor, slider ? 'default' : 'pointer');
+    assert.deepEqual(owner[stage], input[field]); assert.equal(owner[stage].cursor, slider && !definition.disabledRange ? 'default' : 'pointer');
   }
   return { referenceNode: native.key, astylarNode: owner.key, mapping,
     nativeRequests, nativePath, nativeAuthorCursorOmitted: !definition.nativeSelector,
     inheritedLabel: definition.inheritedLabel ?? false,
     candidatePath: path, nativeCursor: expectedReference,
     candidateCursor: owner.normalResolvedStyle.cursor,
+    ...(definition.disabledRange ? { disabledRange: true, nativeDisabled: true, candidateDisabled: true,
+      nativePointerEvents: reference.styles[native.style].pointerEvents, candidatePointerEventsPresent: false } : {}),
     ...(definition.defaultPolicy ? { defaultPolicyEvidence: defaultEvidence } : {}),
     inputEquivalent: false, renderingEquivalent: false, actualHoverCursorVerified: false,
     limitation: 'Original authored request and owner-stage discrepancy only. Disabled hit suppression, inherited label behavior, plugin mesh cursor and actual canvas hover remain separate questions.' };
@@ -167,11 +187,15 @@ export function applyExplicitComponentCursors(rows, cases, inventory, normalize)
     r.property === 'cursor' && r.attribution === 'unresolved') ? collectCursorDefaultPolicyEvidence() : undefined;
   return definitions.reduce((result, d) => applyModalBoxReview(result, cases, inventory, normalize, {
     family: d.family, element: d.element, properties: ['cursor'],
+    ...(d.disabledRange ? { acceptsRow: row => !Object.hasOwn(row, 'attribution') &&
+      row.classification === 'parity-harness-defect' && row.reference === 'auto' && row.astylar === 'pointer' } : {}),
     classification: d.defaultPolicy ? 'intentional-documented-limitation' : 'application-plugin-authoring-defect',
-    attribution: d.inheritedLabel ? 'reviewed-choice-label-cursor-ancestry-substitution' : d.defaultPolicy ? 'reviewed-dialog-button-cursor-default-policy' : d.family === 'slider' ? 'reviewed-slider-host-cursor-omission' : d.nativeSelector
+    attribution: d.disabledRange ? 'reviewed-disabled-range-cursor-request' : d.inheritedLabel ? 'reviewed-choice-label-cursor-ancestry-substitution' : d.defaultPolicy ? 'reviewed-dialog-button-cursor-default-policy' : d.family === 'slider' ? 'reviewed-slider-host-cursor-omission' : d.nativeSelector
       ? 'reviewed-disabled-component-cursor-substitution' : 'reviewed-button-cursor-request-substitution',
     owner: d.defaultPolicy ? 'core button cursor defaults; incomplete browser UA baseline policy' : 'Material comparison authored cursor requests and component-owner mapping',
-    justification: d.inheritedLabel
+    justification: d.disabledRange
+      ? 'Both mapped range inputs are explicitly disabled. The native active disabled selector overrides pointer with auto; candidate range-layer still requests pointer in every captured style stage. Preserve native pointer-events auto and candidate omission without inventing a suppression rule. This is unequal disabled-state authoring, not physical hit suppression, emitted canvas cursor or a core defect.'
+      : d.inheritedLabel
       ? 'The measured native span sits under a label computing default; the candidate span sits under a div explicitly requesting pointer, retained by both parent and span in all three stages. Native disabled declarations and complete ancestry remain recorded. The inherited cursor inputs and structure differ before a core comparison; no faulty inheritance algorithm or actual hovered-canvas cursor is inferred.'
       : d.defaultPolicy
       ? 'Both mapped dialog actions omit cursor authoring through their captured ancestries; native button default differs from candidate pointer in all three stages. The fresh public equal-input button reduction and matching package/source default methods reproduce this documented incomplete-UA-default boundary. This is not equal rendering, not a fixture offset remedy, and not proof of the historical Material hovered-canvas cursor.'

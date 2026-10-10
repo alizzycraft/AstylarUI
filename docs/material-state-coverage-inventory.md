@@ -2,6 +2,24 @@
 
 ## Current evidence boundary — October 11
 
+Disabled range cursor integration closes two retained attribution gaps(16 exact
+owner observations). Existing component cursor review now authenticates both
+disabled input owners,ordered native pointer→auto declarations and candidate
+.range-layer pointer across all three stages. Both complete185 rows restore
+every raw field and omitted metadata; state/rule/membership/claimed-hover
+mutation controls reject. Native pointer-events auto and candidate omission stay
+distinct; physical hit suppression/emitted cursor remain unverified. Historical
+19-group/763-observation test is kept disjoint from these two groups/16 observations
+with explicit membership counts,not a changed19-count acceptance assertion.
+Initial21-versus19 failure retained in disabled-range-cursor-review-20261011.log;
+reconciled complete suite passes2/2,53785.4988ms,log
+disabled-range-cursor-review-reconciled-20261011.log SHA256
+70e20b85b5aedea363cb60677c894af7ae69b4b889df3a27a69ed25a7d07550f.
+Producer registration/conservation checks pass2/2;189 focused proofs. No canonical
+export or renderer/fixture change. Next integrate remaining switch/expansion
+owner contexts using existing evidence,then reconcile the coherent source batch.
+Canonical185 and all2311 partial-case statuses remain unchanged.
+
 Three retained receipt failures now have a bounded applicability replay,not a
 raw-hash waiver. Exact Git39b3e0fd predecessor authenticates coree72cfb8e; removing
 only seven read-only inspectCurrentDocumentStyles lines from current5742ba6c

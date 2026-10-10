@@ -9518,6 +9518,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/component-cursor-request-review.spec.mjs', /test\('disabled range cursor review conserves sixteen original owner observations without claiming hit suppression'/,
+      'disabled range exact cursor request and row conservation boundary', 'Both complete original185 range-input rows conserve16 disabled observations. Native active disabled selector overrides pointer with auto; candidate range-layer retains pointer in all three stages. Exact original-row hashes,metadata omission restoration and state/rule/membership controls reject drift. Physical hit suppression and emitted canvas cursors remain unverified.'),
     proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('retained antialias and selection receipts replay after exact diagnostic and theme conservation'/,
       'retained antialias and selection source applicability conservation', 'Replays three unchanged original receipt assertions only after exact seven-line read-only core inspector and reviewed sorter theme insertion conservation. Original raw receipt failures remain visible. This authenticates historical applicability and preserved assertions,not current browser rendering or acceptance.'),
     proof(root, 'tests/material-parity/tab-position-substitution.spec.mjs', /test\('all 140 tab width observations retain owner mismatch and unequal control sizing requests'/,
