@@ -2,6 +2,24 @@
 
 ## Current evidence boundary — October 10
 
+### Coherent179-proof source batch ready for canonical publication
+
+Icon exact-case relationship applicability joins the external-scroll core proof
+through the existing producer inventory:179 focused proofs,unchanged155 source
+finding definitions and436 static/1875 interaction cases. Six new immutable
+receipt fingerprints preserve both AX logs and executed focused controls. The
+whole179-proof producer reverses exactly to178 SHA2c0b0a1e77417f0ca53aee5893a7e891226dfe77b88b09ffb50cef666378057c,
+then to177 SHA91b43e2052c8b7dc17feafac044c86dfa03bb1008c837a4c0aab1da07f28e7bb,
+before earlier conservation checks. Existing layout/description conservation
+tests pass2/2; coherent-179-proof-conservation-20261010.log retains the result.
+Acceptance policy and canonical fixtures are unchanged. Named current-ancestry
+launcher dry-run checks all five required retained baseline paths. This is not
+collector validation. Resource preflight observes5813088KiB free physical
+memory and1310818304 free D:bytes,no other audit export process. One coherent
+export is justified now; independent cold validation and compact import/verify
+must follow success. Accepted package remains177-proof ecad53 until those pass.
+No case closure or current full-browser acceptance follows from registration.
+
 ### Icon direct-name/hiding and IDREF applicability inspected for all20 cases
 
 Specific remaining question answered from existing records: do these Icon

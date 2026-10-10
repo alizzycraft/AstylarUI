@@ -9,6 +9,30 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 // conservation. This does not substitute old bytes in current production.
 export function restoreLayoutDiagnosticRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes('Icon exact configured direct-name hiding and IDREF applicability boundary')) {
+    assert.equal(hash(current), 'ebd9aa2d9b34ea2dfc1eab2edc80d32c4bb02e563068d99fdfda369177d6b61c',
+      'exact complete Icon applicability registration snapshot');
+    const ast = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    assert.equal(ast.parseDiagnostics.length, 0);
+    const entries = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory')
+      .body.statements[0].expression.elements;
+    assert.equal(entries.length, 179);
+    assert.equal(entries[0].arguments[3].text, 'Icon exact configured direct-name hiding and IDREF applicability boundary');
+    current = current.slice(0, entries[0].getFullStart()) + current.slice(entries[1].getFullStart());
+    for (const file of [
+      'artifacts/material-parity/icon-relationship-applicability-20261010.log',
+      'artifacts/material-parity/icon-relationship-and-host-scroll-20261010.log',
+      'artifacts/material-parity/public-host-scroll-proof-registration-20261010.log',
+      'artifacts/material-parity/public-host-scroll-predecessor-conservation-retry-20261010.log',
+      'artifacts/material-parity/passive-badge-icon-ax-verified-20261006.log',
+      'artifacts/material-parity/icon-remaining-ax-20261007.log',
+    ]) {
+      const line = `    '${file}',\n`;
+      assert.equal(current.split(line).length, 2); current = current.replace(line, '');
+    }
+    assert.equal(hash(current), '2c0b0a1e77417f0ca53aee5893a7e891226dfe77b88b09ffb50cef666378057c',
+      'complete preceding178-proof producer conserved');
+  }
   if (current.includes('public equal-input external host scroll hover invalidation core defect')) {
     assert.equal(hash(current), '2c0b0a1e77417f0ca53aee5893a7e891226dfe77b88b09ffb50cef666378057c',
       'exact complete external host scroll registration snapshot');

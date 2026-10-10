@@ -8889,6 +8889,12 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'artifacts/material-parity/icon-relationship-applicability-20261010.log',
+    'artifacts/material-parity/icon-relationship-and-host-scroll-20261010.log',
+    'artifacts/material-parity/public-host-scroll-proof-registration-20261010.log',
+    'artifacts/material-parity/public-host-scroll-predecessor-conservation-retry-20261010.log',
+    'artifacts/material-parity/passive-badge-icon-ax-verified-20261006.log',
+    'artifacts/material-parity/icon-remaining-ax-20261007.log',
     'scripts/audit-public-host-scroll-hover.mjs',
     'scripts/audit-material-tooltip-host-scroll.mjs',
     'examples/material-showcase/audit/cursor-defaults.mjs',
@@ -9492,6 +9498,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('configured Icon relationships are direct names and hiding with no authored IDREF obligations'/,
+      'Icon exact configured direct-name hiding and IDREF applicability boundary', 'All20 configured IDs authenticate40 trees with direct names,unequal hiding and no authored IDREF inputs. Existing32 AX observations join all16 physical cohorts:native ariaHiddenElement versus exposed candidate Favorite image. Fabricated relationships are rejected on every side/tree. Not current complete AX,assistive technology,paint,image races or whole-case closure.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('public host scroll isolates stale hover without Material handlers or unequal inputs'/,
       'public equal-input external host scroll hover invalidation core defect', 'Four DPR1/2 and host-origin controls through the installed AstylarUI0.2.0 package retain identical cursorInput and40px external scrolling: native hover clears,candidate retains target hover until1px pointer recheck. Authenticates2517 bundle dependencies,12 paired boundaries,24 PNG hashes and seven negative controls. Two separately checkpoint-bound Material diagnostics repeat100px stale hover at both DPRs. Not current whole-library equivalence,internal scrolling,ancestor scroll,resize,lifetime,all-profile paint or configured-case closure.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('public delayed font load settles initial render and invalidates only live owners'/,

@@ -27,8 +27,9 @@ test('layout diagnostic registration preserves complete predecessor and unchange
   const { fingerprints, proofs } = new Function('readFileSync', 'path', 'createHash', functions.join('\n') +
     ';return {fingerprints:sourceFingerprints(process.cwd()),proofs:focusedProofInventory(process.cwd())};')(
     readFileSync, path, createHash);
-  assert.equal(proofs.length, 178); assert.ok(proofs.every(row => row.status !== 'missing'));
-  assert.equal(proofs[0].status, 'public equal-input external host scroll hover invalidation core defect');
+  assert.equal(proofs.length, 179); assert.ok(proofs.every(row => row.status !== 'missing'));
+  assert.equal(proofs[0].status, 'Icon exact configured direct-name hiding and IDREF applicability boundary');
+  assert.equal(proofs[1].status, 'public equal-input external host scroll hover invalidation core defect');
   assert.ok(fingerprints.some(row => row.file.endsWith('public-host-scroll-hover-20261010/latest-report.json')));
   assert.ok(fingerprints.some(row => row.file.endsWith('divider-fresh-retained-layout-20261009.jsonl')));
   assert.ok(fingerprints.some(row => row.file.endsWith('divider-text-shader-address-reconstruction-20261009.log')));
@@ -39,6 +40,7 @@ test('layout diagnostic registration preserves complete predecessor and unchange
     current.replace('not an additional demonstrated GPU defect', 'confirmed GPU defect'),
     current.replace('divider-text-shader-address-reconstruction-20261009.log', 'unknown-sampler.log'),
     current.replace('Authenticates2517 bundle dependencies', 'Authenticates2518 bundle dependencies'),
+    current.replace('All20 configured IDs authenticate40 trees', 'All21 configured IDs authenticate40 trees'),
     current.replace('Not current whole-library equivalence', 'Current whole-library equivalence')])
     assert.throws(() => restoreLayoutDiagnosticRegistration(changed));
 });
