@@ -2,6 +2,45 @@
 
 ## Current evidence boundary — October 10
 
+### Current image guard unit execution; diagnostic build pressure isolated
+
+Original ImageResourceService spec executes3/3 successfully in Chrome Headless154,
+exit0, using unchanged source/spec and native installed Babylon modules. Includes
+the synthetic retain(new.svg)/recordLoaded(old.svg) guard test: dispose once,
+no notification or natural metadata from the retired entry. This is current unit
+execution, not a native completion-after-retirement browser sequence.
+Root test installation is Angular build20.0.5/Babylon8.15.1/Karma6.4.4,
+distinct from showcase browser Babylon8.56.2; do not merge their runtime claims.
+Service source SHA17151142417e6b9fecf28938b0aadca8074054f2d7a136330040987895320ace;
+spec SHAbfee62213d8507753831e25ef96b2e0ead19a678ac3827d0c60d64aa8e6872d9.
+Browser
+ordering evidence above already shows the held successful PNG load completes
+before the queued authored replacement can render. No general race-safety claim.
+
+Exact command uses --configuration=audit-service --watch=false
+--browsers=ChromeHeadless --include=src/app/services/dom/elements/image-resource.service.spec.ts
+--external-dependencies=@babylonjs/core --karma-config=karma.overlay-audit.cjs.
+The named test-only configuration omits global application styles solely for
+non-DOM/non-paint service assertions; default test styles and application/build/
+parity inputs stay unchanged. Do not use it for styled or rendered acceptance.
+Build12.501s;3 tests0.006s; terminal TOTAL:3 SUCCESS. The retained unit-result
+text records the command/output boundary; no full matrix acceptance follows.
+
+Default build and native-module-only retry were deliberately cancelled after
+verified worker memory reached5028921344 and5441773568 bytes, with556044 and
+398084KiB physical memory free. Their exact commands/terminal cancellations are
+retained in icon-image-unit-default-build-cancelled-20261010.txt and
+icon-image-unit-native-build-cancelled-20261010.txt. Changing external loading
+alone did not resolve pressure; excluding the application stylesheet let the
+same service bundle finish15.301s, then exposed invalid Karma factory-array
+registration before any assertion. Correcting it to an injected factory function
+produced the passing run. Original loader bytes are retained at
+icon-unit-original-native-loader-20261010.cjs, SHA84b8f85409307b81c7507be0d010788e56000fa3acd4a3aaf3e10d9eecc5b7e7.
+Stylesheet pipeline is isolated as the build-pressure factor; precise Tailwind
+scan inputs/causality are not measured. Do not claim application render slowdown
+or production optimization from this diagnostic. Standard final gates remain.
+No renderer/fixture/test-assertion changes; accepted179 package unchanged.
+
 ### Icon pending-load replacement is serialized in the live authored path
 
 Specific question: can the actual light-to-dark theme update retire an old PNG

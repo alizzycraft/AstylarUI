@@ -93,6 +93,20 @@ be imported as accepted evidence.
 
 ## Validated reuse
 
+For the original **synthetic ImageResourceService unit assertions only**, the
+test-only `audit-service` configuration avoids compiling the application's
+Tailwind stylesheet and the existing native-module Karma loader avoids bundling
+Babylon. Use:
+
+```powershell
+node node_modules/@angular/cli/bin/ng.js test --configuration=audit-service --watch=false --browsers=ChromeHeadless --include=src/app/services/dom/elements/image-resource.service.spec.ts --external-dependencies=@babylonjs/core --karma-config=karma.overlay-audit.cjs
+```
+
+All three original assertions run. This is not a styled/DOM/WebGL parity gate,
+standard full-unit acceptance, or native image-race proof. Default styles and all
+standard final commands remain unchanged. Two memory-pressure cancellations and
+the original loader-registration failure are retained in the coverage ledger.
+
 For the six retained progress/compact-input/keyboard/applied-theme/selection/
 tooltip assertions and all original fixed-width, flex, host-request and
 box-sizing assertions, run

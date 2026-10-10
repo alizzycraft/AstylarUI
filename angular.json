@@ -91,6 +91,11 @@
             "styles": [
               "src/styles.css"
             ]
+          },
+          "configurations": {
+            "audit-service": {
+              "styles": []
+            }
           }
         }
       }

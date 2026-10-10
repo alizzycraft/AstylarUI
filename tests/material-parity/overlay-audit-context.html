@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script type="importmap">{"imports":{"@babylonjs/core":"/overlay-babylon/index.js","@babylonjs/core/":"/overlay-babylon/"}}</script>
+</head><body>
+  <script src="context.js"></script>
+  <script>
+    %CLIENT_CONFIG%
+    window.__karma__.setupContext(window);
+    %MAPPINGS%
+  </script>
+  %SCRIPTS%
+  <script type="module">window.__karma__.loaded();</script>
+  <script nomodule>window.__karma__.loaded();</script>
+</body></html>
