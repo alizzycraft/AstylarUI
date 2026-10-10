@@ -4,6 +4,21 @@
 
 ### Pending cursor queue is not a uniform auto/default measurement difference
 
+Full paired followup now reproduces all ten group counts and first12 case lists,
+508 occurrences total, with authenticated original trees and matching host
+cursor values. Group populations:chips76each,checkbox60,slider thumbs8each,
+slide-toggle68,button-toggle68each,expansion-primary68,title8. Native pointer
+descendants exist in468 observations. The remaining40 are named disabled states:
+slider thumbs16,slide-toggle8,expansion-primary8,title8. Slider native input
+disabled attribute and candidate authored disabled=true agree in all16; other
+host omissions do not prove descendants are enabled or disabled. Chips and
+button-toggle still contain pointer descendants in their named disabled states;
+state names alone must not substitute for actual control applicability. This
+closes retained membership/descendant-cursor context for these508 occurrences,
+not geometric hit coverage,effective cursor parity,current validity or whole-case
+closure. Next reuse existing disabled and actual owner proofs for those40, then
+physical hit-region evidence only where the existing records leave uncertainty.
+
 First-cited-case followup authenticates original reportb07ef154 and twenty tree
 receipts for the ten auto/pointer groups. Each owner maps uniquely by retained
 ID on both sides. Native button-toggle hosts and expansion-primary compute auto
