@@ -2,6 +2,29 @@
 
 ## Current evidence boundary — October 10
 
+### Non-root flex queue: existing diagnoses versus missing sampled owners
+
+Read-only accepted179 query identifies81 non-root explicit-unproven flex groups.
+Authenticated light/desktop static trees locate62 corresponding direct IDs;19
+IDs are absent from that closed/static sample (badge/generated labels and overlay
+owners),not evidence of missing support. Parent-display sample partitions62 into
+block→flex42,flex→flex9,block→grid2,block→block4,inline→inline1,
+inline-block→block2,inline-flex→flex2. This is a representative mapping probe,
+not exact-case membership closure or a whole-group classification.
+
+Six sampled longhand mismatches already have canonical explanations. Toolbar
+action/title shrink1→0 belong to reviewed-toolbar-spacing-composition-substitution;
+tab activity/overview shrink1→0 to reviewed-tab-control-stage(label versus control
+measurement); expansion title grow1→0/basis0→auto to reviewed-component-content-
+flex-request-omitted; tooltip trigger shrink1→0 to reviewed-tooltip-shrink-
+composition-substitution(block versus column-flex parent ownership). Do not reopen
+settled longhand causes as six new renderer defects. The shorthand queue needs
+exact contextual reuse of those existing proofs,not scalar-only default expansion.
+Other matching longhands do not erase different parent roles. Next use existing
+open-state/generated-node maps for19 absent sampled owners and exact occurrence
+membership before applying metadata. No capture,producer or test changes while
+export43344 runs; worker29160 remains live(CPU540.98s at inspection).
+
 ### Shared root flex context inspected across all configured cases
 
 Read-only authenticated original reportb07ef154/4622-tree check covers all2311
