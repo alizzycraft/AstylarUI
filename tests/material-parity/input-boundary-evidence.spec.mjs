@@ -22,6 +22,65 @@ const bytes = readFileSync(file);
 assert.equal(hash(bytes), '39df94e0eb87480d3824927a41a9950d1d275f7c97ab97a571c449efdc6da7d7');
 const report = JSON.parse(bytes);
 
+test('configured Icon relationships are direct names and hiding with no authored IDREF obligations', t => {
+  const raw = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
+  assert.equal(hash(raw), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const capture = JSON.parse(raw), identity = row => [row.kind, row.family, row.profile, row.viewport.id, row.state ?? 'static'].join('/');
+  const rows = [...capture.results.map(row => ({ ...row, kind: 'static' })), ...capture.interactions.map(row => ({ ...row, kind: 'interaction' }))].filter(row => row.family === 'icon');
+  const configured = [...materialStaticCases.map(row => ({ ...row, kind: 'static' })), ...materialInteractionCases.map(row => ({ ...row, kind: 'interaction' }))].filter(row => row.family === 'icon');
+  assert.equal(rows.length, 20); assert.deepEqual(rows.map(identity).sort(), configured.map(identity).sort());
+  const forbidden = new Set(['aria-labelledby', 'aria-describedby', 'aria-controls', 'aria-owns', 'aria-activedescendant', 'aria-flowto', 'aria-details', 'aria-errormessage', 'headers', 'for', 'list', 'form',
+    'ariaLabelledby', 'ariaDescribedby', 'ariaControls', 'ariaOwns', 'ariaActivedescendant', 'ariaFlowto', 'ariaDetails', 'ariaErrormessage', 'htmlFor']);
+  function inspectTree(tree, side) {
+    assert.deepEqual(tree.errors, []);
+    assert.equal(tree.nodes.length, side === 'reference' ? 7 : 6);
+    const attrs = node => side === 'reference' ? node.attributes : node.authored ?? {};
+    for (const node of tree.nodes) {
+      assert.ok(!Object.keys(attrs(node)).some(key => forbidden.has(key)), 'new relationship must be inspected rather than silently excluded');
+      assert.ok(!['label', 'input', 'button', 'select', 'textarea', 'dialog'].includes(node.type ?? node.authored?.type));
+    }
+    const owners = tree.nodes.filter(node => attrs(node).id === 'icon-primary'); assert.equal(owners.length, 1);
+    const owner = attrs(owners[0]);
+    if (side === 'reference') { assert.equal(owner['aria-label'], 'Favorite'); assert.equal(owner['aria-hidden'], 'true'); assert.equal(owner.role, 'img'); }
+    else { assert.equal(owner.alt, 'Favorite'); assert.equal(owner.ariaHidden, undefined); assert.equal(owner.type, 'img'); }
+    const roots = tree.nodes.filter(node => attrs(node).id === 'icon-root'); assert.equal(roots.length, 1);
+    assert.equal(attrs(roots[0])[side === 'reference' ? 'aria-label' : 'ariaLabel'], 'icon showcase');
+  }
+  let trees = 0;
+  for (const row of rows) for (const side of ['reference', 'astylar']) {
+    const receipt = row.inputTrees[side], raw = readFileSync(receipt.file); assert.equal(hash(raw), receipt.sha256);
+    const tree = JSON.parse(raw); inspectTree(tree, side); trees++;
+    const changed = structuredClone(tree);
+    if (side === 'reference') changed.nodes[0].attributes['aria-describedby'] = 'new-help';
+    else changed.nodes[0].authored = { ...changed.nodes[0].authored, ariaDescribedby: 'new-help' };
+    assert.throws(() => inspectTree(changed, side));
+  }
+  const observations = [];
+  for (const [file, expected] of [
+    ['passive-badge-icon-ax-verified-20261006.log', 'be9aab6af9e9033e6d81efaee354bdb1aa5b4b237d4074edacda499f241a2516'],
+    ['icon-remaining-ax-20261007.log', '3613ac867242858953e2d4a31342b319e0d2c504ce15590682718354979d8612'],
+  ]) {
+    const raw = readFileSync(`artifacts/material-parity/${file}`); assert.equal(hash(raw), expected);
+    for (const line of raw.toString().split(/\r?\n/).filter(line => line.startsWith('# {'))) {
+      const value = JSON.parse(line.slice(2).replace(/\\#/g, '#'));
+      for (const observation of value.observations ?? [value]) if (observation.family === 'icon')
+        observations.push({ ...observation, profile: observation.profile ?? 'light', viewport: observation.viewport ?? { width: 1440, height: 1000, deviceScaleFactor: 1 } });
+    }
+  }
+  assert.equal(observations.length, 32);
+  const cohort = row => [row.profile, row.viewport.width, row.viewport.height, row.viewport.deviceScaleFactor].join('/');
+  assert.deepEqual([...new Set(observations.map(cohort))].sort(), [...new Set(rows.map(cohort))].sort());
+  for (const key of new Set(observations.map(cohort))) {
+    const pair = observations.filter(row => cohort(row) === key); assert.equal(pair.length, 2);
+    const reference = pair.find(row => row.mode === 'reference').nodes[0];
+    const astylar = pair.find(row => row.mode === 'astylar').nodes[0];
+    assert.equal(reference.ignored, true);
+    assert.ok(reference.ignoredReasons.some(reason => reason.name === 'ariaHiddenElement' && reason.value.value === true));
+    assert.equal(astylar.ignored, false); assert.equal(astylar.role.value, 'image'); assert.equal(astylar.name.value, 'Favorite');
+  }
+  t.diagnostic(JSON.stringify({ cases: 20, authenticatedTrees: trees, axCohorts: 16, axObservations: 32, authoredIdRefs: 0, classification: 'existing accessibility-only hiding support gap; direct-name intent differs from hidden graphic', scope: 'retained exact Icon names/hiding and IDREF applicability only; not current full AX,assistive technology,paint or case closure' }));
+});
+
 test('public host scroll isolates stale hover without Material handlers or unequal inputs', () => {
   const root = 'artifacts/material-parity/public-host-scroll-hover-20261010';
   const raw = readFileSync(`${root}/latest-report.json`);

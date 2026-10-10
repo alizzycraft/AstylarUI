@@ -2,6 +2,33 @@
 
 ## Current evidence boundary — October 10
 
+### Icon direct-name/hiding and IDREF applicability inspected for all20 cases
+
+Specific remaining question answered from existing records: do these Icon
+fixtures have uninspected ID-based naming/control relationships? No. Existing
+input-boundary suite now authenticates all40 trees for the exact12 static/8
+inspect configured IDs; each preserves direct icon-root 'icon showcase' naming,
+native role=img/aria-label=Favorite/aria-hidden=true and candidate img alt=Favorite.
+All captured trees lack authored labelledby/describedby/controls/owns/active-
+descendant/flowto/details/error/header/label/form/list IDREF inputs. Synthetic
+addition of a relationship is rejected on every side/tree,not silently excluded.
+Existing two AX logs authenticate32 side observations in all16 physical cohorts:
+native ignored because ariaHiddenElement,candidate exposed image named Favorite.
+Thus direct naming/hiding is inspected and failing through the already classified
+accessibility-only hiding support gap; absent authored IDREF variants impose no
+new fixture obligation. This is not current all-AX or assistive-technology proof.
+
+Command `node --test --test-name-pattern="configured Icon relationships" tests/material-parity/input-boundary-evidence.spec.mjs`
+passes1/1 in2933.46ms. Log icon-relationship-applicability-20261010.log SHA256
+b10a4049b94bbb84e00a18030cdf6ac637580abbecda1944fb68cfe6a6477ac2.
+Combined Icon/public-host-scroll focused replay passes2/2,recorded in
+icon-relationship-and-host-scroll-20261010.log. No new browser capture or report
+was created; only existing receipts were inspected. This closes the retained
+direct-name/hiding/IDREF applicability question for20 cases,not full case closure.
+Remaining full input/style/history/paint,current owner validity and bounded
+image race/remount/peer ownership evidence are unchanged. Standalone new proof
+awaits coherent batch registration; producer remains178 versus published177.
+
 ### External-scroll proof registered without changing predecessor scope
 
 Existing input-boundary-evidence.spec.mjs now authenticates the public reduction
