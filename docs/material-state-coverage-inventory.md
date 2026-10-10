@@ -2,6 +2,23 @@
 
 ## Current evidence boundary — October 11
 
+Missing interaction root geometry is resolved by existing later evidence,not
+new capture. October5 reportab42dbec authenticates all2311 exact original case
+IDs and contains root geometry for436 static plus1875 interaction cases. Native
+content-box width+padding+borders matches recorded native border width in every
+case; candidate/native maximum width difference4.1382008930668235e-11px,zero
+diagnostic differences above0.02px. Full join exits0,3333.164ms. This supplements
+originalb07ef154 (which still lacks interaction geometry); do not replace or
+repoint that immutable input baseline. Current capture runner raw SHAe01ef9dc
+matches the October5 receipt exactly; its existing geometry field is explicitly
+diagnostic and not part of interaction acceptance. Report records1887 browser
+files,10 harness receipts and installed fingerprintffcc9a25; matching the runner
+alone does not authenticate the entire current runtime or rendering acceptance.
+Thus a new1875-state capture is not needed merely to recover retained root widths.
+Current-source validity,other geometry axes and whole-case obligations remain;
+reuse these measured state boxes at their existing evidence boundary. No producer,
+fixture or capture changed; coherent191 export remains live and frozen.
+
 Retained root used-width evidence is now scoped exactly instead of inferred from
 all2311 root-style observations. Authenticated original reportb07ef154 has root
 geometry for all436 static cases and none of1875 interaction cases. Every static
