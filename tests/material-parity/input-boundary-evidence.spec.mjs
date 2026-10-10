@@ -14,12 +14,91 @@ import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs
 import { propertyGroups } from './input-equivalence-policy.mjs';
 import { readGapSurveySource } from './gap-survey-source-replay.mjs';
 import { materialStaticCases, materialInteractionCases, materialMobileFlowCases } from './benchmark.config.mjs';
+import { cursorInput } from '../../examples/material-showcase/audit/cursor-default-input.mjs';
 
 const file = 'artifacts/material-parity/input-boundaries-keypress-559f95c/latest-report.json';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const bytes = readFileSync(file);
 assert.equal(hash(bytes), '39df94e0eb87480d3824927a41a9950d1d275f7c97ab97a571c449efdc6da7d7');
 const report = JSON.parse(bytes);
+
+test('public host scroll isolates stale hover without Material handlers or unequal inputs', () => {
+  const root = 'artifacts/material-parity/public-host-scroll-hover-20261010';
+  const raw = readFileSync(`${root}/latest-report.json`);
+  assert.equal(hash(raw), '298097b2f44505a5d998fbb9b18832dd86a7c93dc08a47b910f33bdfa439b58c');
+  const captured = JSON.parse(raw);
+  for (const item of [captured.provenance.script, ...captured.provenance.bundleInputs])
+    assert.equal(hash(readFileSync(item.file)), item.sha256, `changed dependency: ${item.file}`);
+  assert.equal(captured.provenance.bundleInputs.length, 2517);
+  assert.equal(hash(readFileSync(`${root}/audit.js`)), captured.provenance.bundleSha256);
+  assert.equal(hash(readFileSync(`${root}/index.html`)), captured.provenance.htmlSha256);
+  assert.ok(readFileSync('examples/material-showcase/audit/cursor-defaults.mjs', 'utf8').includes("import { Astylar } from 'astylarui'"));
+  assert.equal(captured.provenance.browser, '154.0.8037.99');
+  assert.equal(captured.provenance.launch.effective.nativeScrollbarsHidden, false);
+  for (const entry of captured.results) for (const stage of entry.stages) for (const side of ['reference', 'astylar'])
+    assert.equal(hash(readFileSync(`${root}/${stage[side].screenshot.file}`)), stage[side].screenshot.sha256);
+
+  function inspect(value) {
+    assert.deepEqual(value.errors, []);
+    assert.equal(value.results.length, 4);
+    assert.deepEqual(value.results.map(e => `${e.dpr}/${e.translated}`).sort(), ['1/false', '1/true', '2/false', '2/true']);
+    for (const entry of value.results) {
+      assert.deepEqual(entry.stages.map(s => s.name), ['hover', 'host-scroll', 'pointer-recheck']);
+      assert.deepEqual(entry.stages.map(s => s.reference.target.cursor), ['pointer', 'default', 'default']);
+      assert.deepEqual(entry.stages.map(s => s.astylar.canvasCursor), ['pointer', 'pointer', 'default']);
+      assert.deepEqual(entry.stages.map(s => s.astylar.diagnostics.interaction.hoveredElementId ?? null), ['target', 'target', null]);
+      for (const stage of entry.stages) {
+        assert.deepEqual(stage.reference.site, stage.astylar.site);
+        assert.deepEqual(stage.reference.site, cursorInput('button-hover'));
+        for (const side of ['reference', 'astylar']) {
+          const sample = stage[side];
+          assert.equal(sample.name, 'button-hover');
+          assert.equal(sample.scrollHeight, 601);
+          assert.equal(sample.scrollY, stage.name === 'hover' ? 0 : 40);
+        }
+      }
+      for (const side of ['reference', 'astylar'])
+        assert.equal(entry.stages[0][side].surfaceBox.y - entry.stages[1][side].surfaceBox.y, 40);
+      const after = entry.stages[1], point = after.astylar.point;
+      assert.ok(point.y > after.reference.target.box.y + after.reference.target.box.height);
+      assert.ok(point.y > after.astylar.surfaceBox.y && point.y < after.astylar.surfaceBox.y + after.astylar.surfaceBox.height);
+      assert.equal(after.astylar.publicEvents.filter(e => e.type === 'pointerleave' && e.targetId === 'target').length, 0);
+      assert.ok(entry.stages[2].astylar.publicEvents.some(e => e.type === 'pointerleave' && e.targetId === 'target'));
+    }
+  }
+  inspect(captured);
+  for (const mutate of [
+    r => r.results.pop(),
+    r => { r.results[0].stages[1].astylar.scrollY = 0; },
+    r => { r.results[0].stages[1].astylar.site.styles[0].top = '33px'; },
+    r => { for (const side of ['reference', 'astylar']) r.results[0].stages[1][side].site.styles[0].top = '33px'; },
+    r => { r.results[0].stages[1].astylar.canvasCursor = 'default'; },
+    r => { r.results[0].stages[2].astylar.publicEvents = []; },
+    r => { r.results[0].stages[1].astylar.surfaceBox.y += 1; },
+  ]) { const changed = structuredClone(captured); mutate(changed); assert.throws(() => inspect(changed)); }
+
+  // Application-scale controls are separate diagnostics, not extra configured IDs.
+  for (const [stem, expected] of [
+    ['tooltip-host-scroll-20261010', 'aaee6c2078f1f41b1392022973166a821d35a6313357eb853c5afb75c470f110'],
+    ['tooltip-host-scroll-repeat-20261010', '37191e21ec3345f8628582d7214a04bdff64b3813c9a787701ae125580027f38'],
+  ]) {
+    const file = `artifacts/material-parity/${stem}/latest-report.json`, raw = readFileSync(file);
+    assert.equal(hash(raw), expected);
+    const supplement = JSON.parse(raw), manifest = JSON.parse(readFileSync(supplement.capture.checkpointManifest.file));
+    assert.deepEqual(validateSupplementalCapture(supplement, { reportFile: file, expectedProvenance: manifest.provenance,
+      script: 'scripts/audit-material-tooltip-host-scroll.mjs', styleProperties: Object.values(propertyGroups).flat() }), { status: 'checkpoint-bound', errors: [] });
+    assert.equal(supplement.results.length, 6);
+    for (const dpr of [1, 2]) {
+      const states = supplement.results.filter(e => e.deviceScaleFactor === dpr);
+      assert.deepEqual(states.map(e => [e.reference.shown, e.astylar.shown]), [[true, true], [false, true], [false, false]]);
+      for (const side of ['reference', 'astylar']) {
+        assert.equal(states[1][side].scrollHeight, 1401); assert.equal(states[1][side].scrollY, 100);
+        assert.ok(Math.abs(states[0][side].triggerBox.y - states[1][side].triggerBox.y - 100) < .01);
+        for (const state of states) assert.equal(hash(readFileSync(state[side].screenshot.file)), state[side].screenshot.sha256);
+      }
+    }
+  }
+});
 
 test('fresh divider layout observations join all exact cases and bound single-word wrapping', () => {
   const raw = readFileSync('artifacts/material-parity/divider-fresh-retained-layout-20261009.jsonl');

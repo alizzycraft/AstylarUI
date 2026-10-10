@@ -2,6 +2,33 @@
 
 ## Current evidence boundary — October 10
 
+### External-scroll proof registered without changing predecessor scope
+
+Existing input-boundary-evidence.spec.mjs now authenticates the public reduction
+and both repeated Material diagnostics,including2517 dependencies,all36 retained
+PNG hashes,exact input/scroll/event/cursor boundaries and seven negative controls.
+Focused command `node --test --test-name-pattern="public host scroll isolates" tests/material-parity/input-boundary-evidence.spec.mjs`
+passes1/1 in2258.8691ms on initial run; tightened equal-both-input control also
+passes. Latest log public-host-scroll-proof-registration-20261010.log SHA256
+d9c0b2c4bd3d291ed4b64714020e76a0d46630238372badd814b99e7162081a6.
+
+Producer adds exactly one bounded core-defect proof and nine source/evidence
+fingerprints:178 source proofs,unchanged155 finding definitions and2311 cases.
+Historical conservation reverses only this exact registration,then checks the
+entire preceding177-proof producer SHA91b43e2052c8b7dc17feafac044c86dfa03bb1008c837a4c0aab1da07f28e7bb
+before replaying earlier conservation. Existing layout/description registration
+tests pass2/2 in4065.0167ms; log
+public-host-scroll-predecessor-conservation-retry-20261010.log SHA256
+4e9f5fd01c182a1aad23ad6da207973cf8ddbad5f5ae37cebef550d9ac85f013.
+Initial conservation failed solely
+at its explicit177 count after the new proof; retained failure log remains.
+The assertion now requires178 and the exact added proof,not fewer original proofs.
+Producer/helper syntax and exact-path diff checks pass. Acceptance policy,
+canonical fixtures and renderer remain unchanged. Accepted canonical package is
+still the independently checked177-proof ecad53 generation;178-proof source
+registration is not publication,current full parity or whole-case closure.
+Batch export/cold check/import and final full gates remain required.
+
 ### Public equal-input reduction confirms external-scroll hover invalidation gap
 
 The Material host-scroll result is now reduced without Material or tooltip

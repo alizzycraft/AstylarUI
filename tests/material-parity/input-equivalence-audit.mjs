@@ -8889,6 +8889,15 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'scripts/audit-public-host-scroll-hover.mjs',
+    'scripts/audit-material-tooltip-host-scroll.mjs',
+    'examples/material-showcase/audit/cursor-defaults.mjs',
+    'examples/material-showcase/audit/cursor-default-input.mjs',
+    'artifacts/material-parity/public-host-scroll-hover-20261010/latest-report.json',
+    'artifacts/material-parity/tooltip-host-scroll-20261010/latest-report.json',
+    'artifacts/material-parity/tooltip-host-scroll-repeat-20261010/latest-report.json',
+    'artifacts/material-parity/tooltip-host-scroll-20261010-checkpoint/checkpoint/manifest.json',
+    'artifacts/material-parity/tooltip-host-scroll-repeat-20261010-checkpoint/checkpoint/manifest.json',
     'artifacts/material-parity/font-remount-peer-live-resources-20261009.log',
     'artifacts/material-parity/passive-obligation-batch-complete-20261009.log',
     'artifacts/material-parity/divider-texel-boundary-trace-20261007.log',
@@ -9483,6 +9492,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('public host scroll isolates stale hover without Material handlers or unequal inputs'/,
+      'public equal-input external host scroll hover invalidation core defect', 'Four DPR1/2 and host-origin controls through the installed AstylarUI0.2.0 package retain identical cursorInput and40px external scrolling: native hover clears,candidate retains target hover until1px pointer recheck. Authenticates2517 bundle dependencies,12 paired boundaries,24 PNG hashes and seven negative controls. Two separately checkpoint-bound Material diagnostics repeat100px stale hover at both DPRs. Not current whole-library equivalence,internal scrolling,ancestor scroll,resize,lifetime,all-profile paint or configured-case closure.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('public delayed font load settles initial render and invalidates only live owners'/,
       'public delayed font lifetime remount and peer boundary', 'Real held Roboto FontFaceSet response through installed public mount: initial wait,later revision and texture replacement,disposed late release,pending remount and independent live peer. Records actual dependencies and live/tracked cleanup. DPR1 only; not historical font timing,repeated-remount plateau,current full application paint or complete-case acceptance.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('passive state applicability joins exact cases without discarding progress focusability'/,

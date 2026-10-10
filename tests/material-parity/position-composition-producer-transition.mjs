@@ -9,6 +9,33 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 // conservation. This does not substitute old bytes in current production.
 export function restoreLayoutDiagnosticRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes('public equal-input external host scroll hover invalidation core defect')) {
+    assert.equal(hash(current), '2c0b0a1e77417f0ca53aee5893a7e891226dfe77b88b09ffb50cef666378057c',
+      'exact complete external host scroll registration snapshot');
+    const ast = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    assert.equal(ast.parseDiagnostics.length, 0);
+    const entries = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory')
+      .body.statements[0].expression.elements;
+    assert.equal(entries.length, 178);
+    assert.equal(entries[0].arguments[3].text, 'public equal-input external host scroll hover invalidation core defect');
+    current = current.slice(0, entries[0].getFullStart()) + current.slice(entries[1].getFullStart());
+    for (const file of [
+      'scripts/audit-public-host-scroll-hover.mjs',
+      'scripts/audit-material-tooltip-host-scroll.mjs',
+      'examples/material-showcase/audit/cursor-defaults.mjs',
+      'examples/material-showcase/audit/cursor-default-input.mjs',
+      'artifacts/material-parity/public-host-scroll-hover-20261010/latest-report.json',
+      'artifacts/material-parity/tooltip-host-scroll-20261010/latest-report.json',
+      'artifacts/material-parity/tooltip-host-scroll-repeat-20261010/latest-report.json',
+      'artifacts/material-parity/tooltip-host-scroll-20261010-checkpoint/checkpoint/manifest.json',
+      'artifacts/material-parity/tooltip-host-scroll-repeat-20261010-checkpoint/checkpoint/manifest.json',
+    ]) {
+      const line = `    '${file}',\n`;
+      assert.equal(current.split(line).length, 2); current = current.replace(line, '');
+    }
+    assert.equal(hash(current), '91b43e2052c8b7dc17feafac044c86dfa03bb1008c837a4c0aab1da07f28e7bb',
+      'complete preceding177-proof producer conserved');
+  }
   if(current.includes('GPU-validated address texture reconstructs untouched no-MSAA paint exactly')) {
     assert.equal(hash(current),'91b43e2052c8b7dc17feafac044c86dfa03bb1008c837a4c0aab1da07f28e7bb',
       'exact complete sampler-attribution registration snapshot');
