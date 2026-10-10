@@ -2,6 +2,46 @@
 
 ## Current evidence boundary — October 10
 
+### Matched external host scroll reproduces stale candidate hover twice
+
+Decisive check completed,not just planned: new bounded producer
+scripts/audit-material-tooltip-host-scroll.mjs reuses existing checkpoint,
+launch,fingerprint,input-tree and supplemental-validation infrastructure. It
+adds the identical absolute1px spacer at top1400 to both diagnostic host DOMs;
+canonical examples and their internal styles are unchanged. This closes the
+specific unequal-scroll-stimulus gap,not complete internal input equivalence.
+Fresh Chrome154.0.8037.99/native-scrollbar launch receipts retain all1887 served
+asset hashes equal to the original checkpoint before and after each capture.
+
+Both invocations finish exit0 with validated evidence:
+`node scripts/audit-material-tooltip-host-scroll.mjs artifacts/material-parity/tooltip-host-scroll-20261010`
+and the same command with output tooltip-host-scroll-repeat-20261010.
+Reports' SHA256 values respectively are
+aaee6c2078f1f41b1392022973166a821d35a6313357eb853c5afb75c470f110 and
+37191e21ec3345f8628582d7214a04bdff64b3813c9a787701ae125580027f38.
+Corresponding top-level .log files retain all action results. Independent Node
+reader invokes existing validateSupplementalCapture against each fresh manifest,
+checks all6 states/report and all12 PNG hashes/report,and verifies matched
+scrollHeight1401,scrollY100,100px trigger displacement,and pointer outside the
+post-scroll trigger. Both readers pass. Candidate host-scroll DPR1 PNG was
+visually inspected: bubble remains painted above the stationary pointer.
+
+At900x1000 light DPR1/2,in both runs,hover opens both; window.scrollTo(0,100)
+closes native but leaves candidate open; a real1px pointer move closes candidate.
+Native trigger top181.078125 becomes81.078125; candidate181.0799865723 becomes
+81.0799865723. Candidate events retain only initial pointerenter/move after host
+scroll,then emit tooltip-primary pointerleave upon pointer-recheck. Thus unequal
+scroll extents no longer explain this diagnostic contrast,and the existing
+candidate pointerleave handler works when delivered. This is a reproducible
+external-scroll hover-invalidation gap,suspected shared core interaction/host
+ownership rather than a demonstrated need for tooltip-specific offsets or
+wheel-dismissal application code. Do not conflate it with internal wheel repick.
+Remaining: public-API minimal equal-input control to isolate the core boundary,
+ancestor-scroll/resize applicability,other profiles and full paint/lifetime.
+Keep both captures as unique repeated failure evidence,not disposable passing
+scratch. Standalone proof is not yet registered in canonical177-proof inventory;
+batch integration remains required. No configured case closure or renderer fix.
+
 ### Tooltip matched-scroll check: separate internal and external scroll paths
 
 Follow-up source trace answers whether candidate hover is universally ignored
