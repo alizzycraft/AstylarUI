@@ -2,6 +2,31 @@
 
 ## Current evidence boundary — October 10
 
+### Icon source-replacement applicability confirmed; synthetic proof not browser evidence
+
+Remaining-question triage: is source replacement actually authored,or merely
+a hypothetical image-engine test? comparison.component.ts applyTheme sends
+showcase:theme; frame-sync.ts applies it to store.setTheme in the live document.
+Icon src selects DARK versus LIGHT embedded PNG from theme.mode. Thus actual
+theme changes can replace its source; repeated identical updates and final
+disposal cannot close this obligation. Current raw source hashes respectively
+8f3fc898ca99e57e04bf02a31a3929fea7ee82626277fde2b2b5977309905e58,
+155f267d1158fe2837aecd8befd65b5de923435ec2609b5f313071910952fb65,
+71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd.
+
+Existing image-resource.service.spec.ts explicitly tests retain(new.svg) then
+recordLoaded(old.svg) with synthetic scene/texture entries: old dispose once,
+no listener event,no old metadata. Its raw SHA256 is
+bfee62213d8507753831e25ef96b2e0ead19a678ac3827d0c60d64aa8e6872d9.
+This source inspection does not claim a new unit execution or native browser
+load proof. The retained late-disposal browser test removes the whole surface,
+not just old source while preserving a live new source. Competing explanations:
+correct live-source retention versus stale completion reviving old ownership.
+Smallest next check uses the existing host theme command and native image hold,
+keeps the surface live,loads the replacement,then releases old completion and
+observes paint/resource ownership. Preserve unequal SVG/PNG authoring diagnosis;
+do not reinterpret this as equal-input paint or omit other closure obligations.
+
 ### Snackbar same-document teardown: controlled Angular error observed
 
 Question left by the October8 source reduction: does pending snackbar startup
