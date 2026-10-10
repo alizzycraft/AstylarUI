@@ -2,6 +2,43 @@
 
 ## Current evidence boundary — October 10
 
+### Shared sizing queue narrowed read-only while185 export runs
+
+Existing export session43344/worker29160 remains live; sampled worker CPU advances
+50.56→84.12→119.41→173.03→263.12→322.09 seconds,not a terminal result.
+No producer/capture/test input changes during this run. Compact accepted179 query
+partitions694 explicit-unproven-context groups: width187,flex117,alignContent103,
+cursor94,justifyContent92,alignItems90,left7,height4. These are groups,not cases
+or a complete obligation denominator. Width contains112 root groups across36
+families versus75 other-owner groups; native values720/638/260/479 versus100%.
+
+Read-only checks authenticate original reportb07ef154 and all4622 input-tree
+receipts across436 static plus1875 interaction cases. Every root shares native
+content-box max720,padding28each,border1each,auto width rule; candidate border-box
+width100%,max778,padding28,border1. Parent border-box viewport width,padding36each,
+zero borders gives min(viewport-72,778); native used content width+58 matches in
+all2311 cases,including divider comparison panes. This extends scoped authored
+root-width intent beyond Icon; it does not establish current candidate used size,
+projection or owner-wide equivalence. No scalar classification changed yet.
+
+Separate authenticated524-case check across sidenav,grid-list,card,list,table,
+sort,paginator,tree,tabs,progress-bar finds primary owner directly under root on
+both sides,native width equal to root content width,candidate100%,and zero horizontal
+padding/borders on both. Missing candidate boxSizing remains missing; zero edges
+make this particular width intent independent of that omitted value. No defaults
+or current used dimensions were invented. Toolbar,slider,stepper,expansion and
+overlay owners remain separate because their sampled padding/parents/anchors
+differ. Next preserve these population checks in the existing owning assertions
+after publication rather than recapture or create a new report layer.
+
+Actual-source AST-extracted method controls additionally verify current
+FlexService.isFlexContainer(inline-block)=false and renderer anonymous-flex text
+alignment(inline-block)={},with flex/inline-flex positive controls. Source hashes
+37668d3443e104b9bfa8896c7e9ff65f48a00625138bc8d46a3cb9e6ba82d55f
+and9052cd71e5e5eb5504e2b124b3b2655fcb3f1b406835a9dcd11fc4ec53b5d961.
+This is source execution,not browser/full Icon alignment closure. Publication,
+current validity,whole-case obligations and final gates remain pending.
+
 ### Coherent185-proof source batch ready for canonical publication
 
 Registered four scoped proofs: failed-runtime Icon Angular remount ownership,
