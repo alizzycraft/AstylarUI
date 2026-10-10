@@ -2,6 +2,26 @@
 
 ## Current evidence boundary — October 10
 
+### Non-root alignment queue partitioned by own formatting context
+
+Read-only accepted179 query finds177 pending non-root alignment groups across70
+unique owners. First exact cited-case trees authenticate; direct IDs or existing
+full alias mapping select owners. Own display pairs: inline-flex→block15,
+block→inline1,block→flex13,block→grid1,inline→inline11,block→block14,
+flex→flex3,inline-block→inline-block1,table→table1,inline-block→flex1,
+inline→block2,inline-block→block2,flex→inline1,flex→block4. Thus32 owners
+are non-flex/grid on both sides;38 have active or divergent formatting models.
+This is a representative exact-owner partition,not complete group membership
+or proof that all alignment properties are inactive. In particular block/table
+alignment semantics,own children and measurement ownership must not be inferred
+from parent display or successful pixels. Icon native mat-icon contains an SVG
+child while candidate is a childless img; own inline-block display agrees but
+does not erase the previously documented SVG/bitmap input difference.
+Next reuse existing owner/provenance proofs and join full populations for scoped
+alignment review; do not normalize normal/stretch across different containers.
+Export43344 advanced to validate-audit at1214693.8543ms,not terminal acceptance;
+all producer/test inputs remain fixed. Final gates and2311 partial statuses stand.
+
 ### Entire pending flex queue now has exact retained context membership
 
 Read-only remaining direct-ID join reproduces98 groups/6188 occurrences,including
