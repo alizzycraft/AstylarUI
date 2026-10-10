@@ -4,6 +4,21 @@
 
 ### Pending cursor queue is not a uniform auto/default measurement difference
 
+Existing owner-proof reuse resolves the expansion header part of the disabled
+queue without a new renderer hypothesis:inspectExpansionOwnerMapping compares
+the native header rather than panel,checks role/aria-disabled/tabindex and the
+enabled-only pointer declaration versus unconditional candidate trigger pointer.
+Original focused role-correspondence assertion passes1/1(323.5896ms body,
+2638.4368ms total),retaining all68 states and eight disabled header authoring
+differences. This explains those eight expansion-primary observations at the
+role-correct input boundary,not actual hovered cursor or all title inheritance.
+The existing slider-disabled proof establishes matching disabled input controls
+and omitted visual opacity propagation,but explicitly excludes pointer behavior;
+it cannot certify the16 thumb cursor observations. Slide-toggle's existing label
+cursor ancestry proof likewise does not certify the disabled switch hit owner.
+Remaining disabled cursor work is actual thumb/switch hit ownership and title
+inheritance applicability; do not re-investigate the settled header authoring.
+
 Full paired followup now reproduces all ten group counts and first12 case lists,
 508 occurrences total, with authenticated original trees and matching host
 cursor values. Group populations:chips76each,checkbox60,slider thumbs8each,
