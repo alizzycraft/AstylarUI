@@ -22,6 +22,38 @@ const bytes = readFileSync(file);
 assert.equal(hash(bytes), '39df94e0eb87480d3824927a41a9950d1d275f7c97ab97a571c449efdc6da7d7');
 const report = JSON.parse(bytes);
 
+test('Icon live theme replacement queues behind pending native texture rather than retiring it first', () => {
+  const raw = readFileSync('artifacts/material-parity/icon-live-replacement-queued-20261010/latest-report.json');
+  assert.equal(hash(raw), '8041e452348889e80c8819365d9135fe265f9962c788374c2f8c0a0582d25048');
+  const record = JSON.parse(raw);
+  for (const receipt of [record.capture.checkpointManifest, ...record.capture.sources]) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  const manifest = JSON.parse(readFileSync(record.capture.checkpointManifest.file));
+  assert.deepEqual(fingerprintDirectory('examples/material-showcase/dist/material-showcase/browser'), manifest.provenance.browserFiles);
+  const assets = new Map(manifest.provenance.browserFiles.map(receipt => [receipt.file, receipt.sha256]));
+  assert(record.runtime.assets.length > 0);
+  for (const asset of record.runtime.assets) assert.equal(asset.sha256, assets.get(asset.file));
+  function inspect(row) {
+    assert.equal(row.before.held, 1);
+    assert.equal(row.queued.sameSurface, true); assert.equal(row.queued.disposed, false);
+    assert.equal(row.queued.source, row.before.source);
+    assert.equal(row.queued.session.status, 'rendering'); assert(row.queued.session.pendingReasons.includes('update'));
+    assert(row.queued.textures.some(texture => texture.name === row.before.source && !texture.ready));
+    assert.deepEqual(row.observations.completions, [{ width: 24, height: 24 }]);
+    assert.equal(row.after.sameSurface, true); assert.equal(row.after.disposed, false);
+    assert.equal(row.after.session.status, 'idle'); assert.deepEqual(row.after.session.pendingReasons, []);
+    assert.notEqual(row.after.source, row.before.source);
+    assert(!row.after.textures.some(texture => texture.name === row.before.source));
+    const current = row.after.textures.filter(texture => texture.name === row.after.source);
+    assert.equal(current.length, 2); assert(current.every(texture => texture.ready));
+    assert.deepEqual(row.runtime.errors, []);
+  }
+  inspect(record);
+  for (const mutate of [row => { row.queued.source = row.after.source; }, row => { row.after.sameSurface = false; },
+    row => { row.after.textures.push({ name: row.before.source, ready: true }); }, row => { row.observations.completions = []; }]) {
+    const changed = structuredClone(record); mutate(changed); assert.throws(() => inspect(changed));
+  }
+});
+
 test('configured Icon relationships are direct names and hiding with no authored IDREF obligations', t => {
   const raw = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
   assert.equal(hash(raw), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');

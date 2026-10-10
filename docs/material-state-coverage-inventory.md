@@ -2,6 +2,39 @@
 
 ## Current evidence boundary — October 10
 
+### Icon pending-load replacement is serialized in the live authored path
+
+Specific question: can the actual light-to-dark theme update retire an old PNG
+before its native texture load completes? Bounded Chrome154 desktop1440x900 DPR1
+diagnostic holds only Babylon's original PNG setter (not the semantic image),
+then delivers the real same-origin showcase:theme message. Store mode becomes
+dark but session remains revision0/rendering with pending font/update; semantic
+source and both unready scene image textures remain the old source. Releasing
+the one held native request completes24x24; the same undisposed surface reaches
+revision3/idle, dark source and two ready replacement textures, with no old-source
+textures in the sampled scene. Runtime observer reports zero errors.
+
+Evidence: icon-live-replacement-queued-20261010/latest-report.json SHA256
+8041e452348889e80c8819365d9135fe265f9962c788374c2f8c0a0582d25048,
+with checkpoint/source receipts and unchanged served-directory fingerprints.
+Existing input-boundary suite authenticates these receipts and observations;
+focused assertion passes1/1, including four negative controls. Initial benchmark
+readiness timeout was circular: mounted event waits for settlement. The observed
+retry records two held setters but benchmark=false. Surface-signal retry still
+timed out awaiting replacement; texture-only retry records actual dark store and
+queued update while old source remains. All failure directories/checkpoints stay.
+
+This answers reachability for the proposed held-native-load sequence, not stale
+completion after retirement: render waits scene.whenReadyAsync and session
+queues updates while rendering. Source inspection is corroboration, not whole
+current-runtime equivalence. Do not repeat the impossible ordering or infer
+general image-race safety. Remaining: determine whether any authored callback
+can remain pending after scene readiness/retirement, other replacement/remount
+contexts, full case obligations and current validity. Unequal native SVG versus
+candidate PNG authoring remains. No renderer/fixture changes or case closure.
+New standalone proof awaits coherent producer registration; accepted179 package
+and all2311 partially inspected statuses remain unchanged.
+
 ### Icon source-replacement applicability confirmed; synthetic proof not browser evidence
 
 Remaining-question triage: is source replacement actually authored,or merely
