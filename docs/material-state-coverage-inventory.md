@@ -2,6 +2,26 @@
 
 ## Current evidence boundary — October 10
 
+### Entire pending flex queue now has exact retained context membership
+
+Read-only remaining direct-ID join reproduces98 groups/6188 occurrences,including
+all36 roots and62 non-root owners. Actual producer normalizers select matching
+original styleInputs; every paired tree receipt authenticates,all native scalar
+fields equal the captured node,and complete candidate scalar style equals its
+resolved node. Every original occurrence count and first12 case list agrees.
+All98 groups have one captured parent-display/own-position/display/longhand
+context across their complete populations. Together with19 aliases/750 above,
+all117 pending flex groups/6938 occurrences have exact retained context membership.
+This closes that particular inventory gap,not shorthand classification,current
+rendering or whole-case inspection. Six direct-owner longhand mismatches remain
+the already diagnosed toolbar action/title,two tab labels,expansion title and
+tooltip trigger; no new cause is inferred. Root flex inactivity and different
+child-parent roles remain separate conclusions. Existing mappings preserve59
+overlay scalar-rule gaps. Next extend existing context assertions and conserved
+metadata after185 publication,without repeating this membership investigation.
+Export43344 remains live(worker29160 CPU1267.25s sample); all producer/test inputs
+remain fixed. Original acceptance and final browser/harness gates remain open.
+
 ### Nineteen flex owners: exact750-occurrence join reuses existing mappings
 
 Participation followup authenticates all750 same matched records: own positioning,
