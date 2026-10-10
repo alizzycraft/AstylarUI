@@ -2,6 +2,31 @@
 
 ## Current evidence boundary — October 10
 
+### Tooltip matched-scroll check: separate internal and external scroll paths
+
+Follow-up source trace answers whether candidate hover is universally ignored
+on wheel: no. Current src/lib/astylar-interaction-runtime.ts SHA256
+10a7d573ae5f8da3db51675327720f6fb70d2c3547da35e69f48e21e092e35b7
+registers canvas wheel at217; handleWheel958-989 prevents default and repicks/
+updates hover when scrollTextControl or internal scrollFrom consumes movement.
+That conditional path does not prove stationary-pointer reevaluation after an
+external document scroll. Constructor listeners214-219 are keydown,keyup,wheel;
+the inspected interaction runtime has no document/window scroll listener.
+Thus a matched external-scroll diagnostic must not be interpreted as a test of
+the internal-container wheel hover path,or vice versa. No runtime defect is
+confirmed from this source-only distinction.
+
+Capture preflight now observes installed Chrome154.0.8037.99 versus retained
+154.0.8037.58. Existing supplemental helper correctly requires exact equality;
+do not bypass it or relabel the original checkpoint. No capture was started.
+Next use a fresh checkpoint through existing checkpoint/provenance APIs,
+authenticate unchanged served assets,and record matched external scroll extents,
+trigger bounds,stationary pointer and scroll/boundary events on both sides.
+Keep this explicit diagnostic host variant separate from canonical authoring.
+Internal scroll needs its own applicable comparison if the external result
+exposes a gap. This is an environment transition and mechanism distinction,
+not a blocker,case closure or current full rendering acceptance.
+
 ### Tooltip wheel dismissal: retained events distinguish unequal stimulus
 
 Question: does the short-viewport wheel contrast isolate missing application
