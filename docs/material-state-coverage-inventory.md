@@ -2,6 +2,31 @@
 
 ## Current evidence boundary — October 10
 
+### Shared root flex context inspected across all configured cases
+
+Read-only authenticated original reportb07ef154/4622-tree check covers all2311
+configured cases with zero exceptions: both root parents are block; native roots
+are block,candidate roots column-flex; native root flex shorthand0 1 auto expands
+to matching0/1/auto longhands on both sides. Thus root flex-item properties are
+inactive under both parents,without erasing different child-formatting contexts.
+Compact accepted179 census has117 pending flex groups,including36 root groups.
+The root alignment queue has108 groups/6933 occurrences across36 families:
+normal/stretch alignContent and alignItems,normal/flex-start justifyContent.
+These scalar pairs cannot establish equal root input contexts or a renderer
+cause. Whether each child actually participates in flow remains a separate
+applicability question; no blanket output-divergence claim is made.
+
+Current generic candidate root declaration atastylar.component.ts480 still
+authors column-flex; native demo rule has no flex declaration. Git blame traces
+the complete candidate declaration to2f4401157(August23 original showcase),not a
+later compensating fix. That provenance explains origin,not legitimacy/equivalence
+of every property. No scalar or metadata changed. Existing export43344 remains
+live(worker29160 CPU411.36s at inspection); producer/test inputs remain fixed.
+After publication,extend the existing context/width assertion with exact shared
+populations and negative controls,then integrate scoped metadata as one coherent
+batch. Current CSS used-size,child-flow applicability,full-case closure and final
+gates remain open. Do not repeat these retained root observations as new captures.
+
 ### Shared sizing queue narrowed read-only while185 export runs
 
 Existing export session43344/worker29160 remains live; sampled worker CPU advances
