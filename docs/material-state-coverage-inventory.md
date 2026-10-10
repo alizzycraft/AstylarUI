@@ -2,6 +2,24 @@
 
 ## Current evidence boundary — October 11
 
+### Non-root width queue separates existing fill intent from other ownership
+
+Accepted179 compact query authenticates immutable index8d777259 and family shards,
+reproducing75 explicit-unproven non-root width groups across27 owners/1316
+occurrences. Thirty groups/524 occurrences belong to the ten primary parent-fill
+families already checked October10(sidenav,grid-list,card,list,table,sort,paginator,
+tree,tabs,progress-bar); reuse that retained population proof,not recapture.
+Remaining45 groups/792 occurrences have other owners. Slider thumb widths account
+for14 groups/156 occurrences and visual extent4 groups/78; tab label widths are
+two groups/140. Existing reviewed-tab-control-stage already distinguishes nested
+native text labels from candidate half-width controls; raw47.625/58.25px versus50%
+is not a new equal-owner layout defect. Toolbar padding,stepper inset,expansion
+panel/header mapping,divider auto width and overlay containing blocks need their
+respective existing proofs,not the zero-edge fill explanation. This is compact
+membership partition only,not complete width equivalence or current used-size
+acceptance. Next join scoped original box/owner proofs for those45 groups after
+publication; no producer/test/capture changes during independent cold check96538.
+
 ### Coherent185 export terminal success; independent cold acceptance pending
 
 Read-only canonical Markdown review preserves every prior .spec-linked proof
