@@ -2,7 +2,7 @@
 
 ## Current evidence boundary — October 10
 
-### Nineteen sampled flex owners reuse existing generated/open-state mappings
+### Nineteen flex owners: exact750-occurrence join reuses existing mappings
 
 The nineteen direct-ID misses above resolve in the first exact case named by
 each compact finding: existing resolveOriginAliasPair returns mapped for17,
@@ -15,11 +15,19 @@ element rather than the existing id field and returned no entries; corrected
 lookup allows full frozen89-property,structure,three candidate-stage and authored
 rule checks in the existing alias mapper. The two scalar-rule gaps are preserved,
 not treated as fully mapped or a new core failure. No new mapping framework or
-capture is needed for these owners. This establishes existing mapping availability
-for the sampled cited cases,not all occurrence membership,flex equivalence or
-whole-case closure. Next join exact group populations with these same mappings
-after185 publication. Export43344/worker29160 remains live(CPU709.62s sample),
-and no producer/test/capture inputs changed during this read-only check.
+capture is needed for these owners. Subsequent read-only full join uses the actual
+producer's AST-extracted normalizeValue/normalizeColor/formatNumber functions to
+match original shorthand values,not a new normalization rule. All19 group counts
+and first12 case lists exactly reproduce750 occurrences; every matching tree
+receipt authenticates. Existing mapper returns691 mapped plus59 scalar-rule-gap
+observations(25 bottom-sheet overlays,34 snackbar overlays),zero unresolved maps.
+Parent pairs stay constant per group across its matched population. Initial join
+failed on an absent style side; corrected paired matching preserves absence and
+does not fabricate defaults. This closes exact mapping/membership for these19
+groups,not flex equivalence,current rendering or whole-case closure. Next inspect
+own positioning/participation as well as parent display before assigning item
+semantics; absolute/fixed children are not ordinary flex items. Export43344 remains
+live; no producer/test/capture inputs changed during these read-only checks.
 
 ### Non-root flex queue: existing diagnoses versus missing sampled owners
 
