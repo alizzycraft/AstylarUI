@@ -2,6 +2,22 @@
 
 ## Current evidence boundary — October 11
 
+Public default-contract lookup answers the next shared sizing question without
+capture or producer changes: docs/compatibility/capabilities.json sizing entry
+explicitly documents boxSizing:content-box as the default; the synchronized
+developer-skill capabilities entry says the same. ElementDimensionService's
+calculateDimensions instead explicitly preserves historical border-box sizing
+when boxSizing is omitted. Thus the parent omission cannot be justified as an
+already documented border-box default. This is a demonstrated documentation/
+source contract discrepancy, not yet a package-root runtime defect proof or
+authorization to change fixtures/defaults. Competing remaining explanations are
+public style resolution supplying content-box before this method, versus the
+legacy branch reaching public rendering unchanged. Next inspect that resolution
+path and existing package-boundary sizing evidence; only add a minimal public
+probe if those records cannot decide it. Native explicit parent border-box must
+remain represented in any subsequent equivalence assessment. The 191-proof
+export worker33848 remains live; inputs stay frozen and all2311 cases stay partial.
+
 Shared root-width input review exposes a parent-default boundary that matched
 geometry alone cannot settle. Originalb07ef154 and all4622 tree SHA receipts
 authenticate2311 pairs: native block parent explicitly requests border-box via
