@@ -9518,6 +9518,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/component-cursor-request-review.spec.mjs', /test\('switch cursor owner review conserves the mixed enabled and disabled population'/,
+      'switch complete-row cursor owner and disabled-input conservation', 'Complete185 host row conserves68 observations and all raw omissions. Sixty enabled native role controls match candidate pointer inputs; eight disabled native controls request default and pointer-events none against candidate pointer and omitted pointerEvents. Role/state/request/membership and forged-hover controls reject. This is historical owner/input attribution,not physical hover,hit suppression,current rendering or whole-case closure.'),
     proof(root, 'tests/material-parity/component-cursor-request-review.spec.mjs', /test\('expansion cursor owner review conserves panel and disabled-title populations without rewriting raw values'/,
       'expansion exact panel/header and disabled title cursor boundary', 'Both complete185 cursor rows conserve68 panel/header and8 disabled-title observations. Existing role proof distinguishes60 matching enabled headers from8 unequal disabled header inputs; title inherits the latter without a local request. Indexed retained-text adaptation matches every original capture value. Mutation and full-row controls reject drift; no emitted cursor,current paint or renderer causality acceptance.'),
     proof(root, 'tests/material-parity/component-cursor-request-review.spec.mjs', /test\('disabled range cursor review conserves sixteen original owner observations without claiming hit suppression'/,

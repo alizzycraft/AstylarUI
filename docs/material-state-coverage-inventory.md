@@ -2,6 +2,18 @@
 
 ## Current evidence boundary — October 11
 
+Coherent shared-context source batch now registers191 focused proofs,including
+the switch full-row assertion. Existing complete-producer reversal authenticates
+current8dc6bba3 and restores exact190 then189 through published185; source policy
+and descriptions remain conserved. Registration/description/predecessor checks
+pass3/3,11441.3382ms. Prior complete cursor suite4/4 and expansion/tab9/9 remain
+their recorded scopes. Next run the existing complete retained-baseline exporter
+once for this batch,then independent cold check and compact import/verification.
+No full current rendering acceptance follows from that historical baseline.
+Accepted185 remains immutable in its working-index generation and checked-in
+package until export succeeds. D:free2742714368bytes at preflight; no active
+export process was found. All2311 partial cases and final gates remain unchanged.
+
 Switch owner review is integrated through the existing cursor scalar pipeline
 and independent original-row replay. Complete185 row preserves68 memberships,
 all raw values,original-row hash and omitted attribution. Exact role/ancestry,

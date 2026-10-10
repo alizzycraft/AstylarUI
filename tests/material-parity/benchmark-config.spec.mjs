@@ -28,13 +28,14 @@ test('layout diagnostic registration preserves complete predecessor and unchange
   const { fingerprints, proofs } = new Function('readFileSync', 'path', 'createHash', functions.join('\n') +
     ';return {fingerprints:sourceFingerprints(process.cwd()),proofs:focusedProofInventory(process.cwd())};')(
     readFileSync, path, createHash);
-  assert.equal(proofs.length, 190); assert.ok(proofs.every(row => row.status !== 'missing'));
-  assert.equal(proofs[0].status, 'expansion exact panel/header and disabled title cursor boundary');
-  assert.equal(proofs[1].status, 'disabled range exact cursor request and row conservation boundary');
-  assert.equal(proofs[2].status, 'retained antialias and selection source applicability conservation');
-  assert.equal(proofs[3].status, 'tab retained width owner and unequal sizing input boundary');
-  assert.equal(proofs[4].status, 'tab width complete-row ownership review conservation');
-  const priorProofs = proofs.slice(5);
+  assert.equal(proofs.length, 191); assert.ok(proofs.every(row => row.status !== 'missing'));
+  assert.equal(proofs[0].status, 'switch complete-row cursor owner and disabled-input conservation');
+  assert.equal(proofs[1].status, 'expansion exact panel/header and disabled title cursor boundary');
+  assert.equal(proofs[2].status, 'disabled range exact cursor request and row conservation boundary');
+  assert.equal(proofs[3].status, 'retained antialias and selection source applicability conservation');
+  assert.equal(proofs[4].status, 'tab retained width owner and unequal sizing input boundary');
+  assert.equal(proofs[5].status, 'tab width complete-row ownership review conservation');
+  const priorProofs = proofs.slice(6);
   assert.equal(priorProofs[0].status, 'Icon pending Angular remount owner isolation with retained runtime failure');
   assert.equal(priorProofs[1].status, 'public initial cancellation confirms core diagnostic classification gap');
   assert.equal(priorProofs[2].status, 'Icon complete-row context and width review conservation');

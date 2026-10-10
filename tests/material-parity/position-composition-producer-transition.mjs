@@ -9,6 +9,18 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 // conservation. This does not substitute old bytes in current production.
 export function restoreLayoutDiagnosticRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes('switch complete-row cursor owner and disabled-input conservation')) {
+    assert.equal(hash(current), '8dc6bba394f72a36ba60afaac4ce9082f8cddaac781520c375bcc6056772893b',
+      'exact complete switch cursor proof registration');
+    const ast = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    assert.equal(ast.parseDiagnostics.length, 0);
+    const entries = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory').body.statements[0].expression.elements;
+    assert.equal(entries.length, 191);
+    assert.equal(entries[0].arguments[3].text, 'switch complete-row cursor owner and disabled-input conservation');
+    current = current.slice(0, entries[0].getFullStart()) + current.slice(entries[1].getFullStart());
+    assert.equal(hash(current), '9a7a7513ff6ac5b9f4a1dbbbf198903e97d712ba0d046610150d7c175579ee9c',
+      'complete190-proof expansion producer conserved');
+  }
   if (current.includes('expansion exact panel/header and disabled title cursor boundary')) {
     assert.equal(hash(current), '9a7a7513ff6ac5b9f4a1dbbbf198903e97d712ba0d046610150d7c175579ee9c',
       'exact complete expansion cursor proof registration');
