@@ -1,5 +1,18 @@
 # Material audit: evidence-led implementation priorities
 
+## Current publication boundary — independently verified179 proofs
+
+October10 coherent179-proof export and independent cold --check both complete
+exit0; existing compact import/whole-index verification pass. Accepted compressed
+generation is89030a75f63d832a344b3be8ba8d33bf7def3b78fb4a222ebacb5fac71d27194;
+decoded SHA25643afb3c3af64f6e84fd8c3d0207c1d2e4e42d1640582017185c53acf21b1f49d.
+See coverage ledger and coherent-179-proof-independent-cold-check-20261010.log
+for receipts. This integrates external-host-scroll core evidence and Icon
+relationship applicability without changing155 finding definitions or2311 cases.
+All cases remain partial; inputEquivalent=false. Publication validates evidence
+integration,not current rendering acceptance or permission to implement fixes.
+Existing root-cause priorities and final acceptance gates remain unchanged.
+
 ## October 10 bounded addition — external host scroll hover invalidation
 
 Public equal-input reduction removes Material and tooltip handlers: identical

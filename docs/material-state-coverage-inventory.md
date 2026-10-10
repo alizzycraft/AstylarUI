@@ -2,6 +2,29 @@
 
 ## Current evidence boundary — October 10
 
+### Coherent179-proof publication independently verified
+
+Export completed exit0; log coherent-179-proof-export-20261010.log SHA256
+150c5d4da2a368692e7a3efda890822a72c1e688f589bc2b43d5322bcd0c3618.
+Independent cold --check completed exit0; log
+coherent-179-proof-independent-cold-check-20261010.log SHA256
+50617dc9cdeca88ecc7a3f8e1e35423306371c40383f8f7e102a46502aaad0b0.
+Both evidence sessions report2 collectors,10 memory hits,0 disk hits,
+0 invalidations,1205 files and89154859 read/verification bytes. Export elapsed
+9770499.4149ms; cold check9340761.3429ms,including a long observed wait during
+canonical comparison. These elapsed times are not CPU-time measurements.
+
+Canonical compressed SHA25689030a75f63d832a344b3be8ba8d33bf7def3b78fb4a222ebacb5fac71d27194
+(62849389 bytes); decoded SHA25643afb3c3af64f6e84fd8c3d0207c1d2e4e42d1640582017185c53acf21b1f49d
+(2222903077 bytes). Existing compact import and whole-index verify pass:
+8483 scalar groups,155 findings,39904 controls,389202 occurrences,0 unresolved;
+compact bytes72725068. This supersedes the pending177/178/179 publication
+boundaries below,not their historical evidence. inputEquivalent remains false.
+All436 static/1875 interaction cases remain partially inspected. No renderer,
+fixture,acceptance policy,current full-browser acceptance or whole-case closure
+changed. Next prioritize exact-case applicable-obligation closure using retained
+evidence,then current-validity dispositions and the unchanged final full gates.
+
 ### Coherent179-proof source batch ready for canonical publication
 
 Icon exact-case relationship applicability joins the external-scroll core proof
