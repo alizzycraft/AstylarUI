@@ -82,6 +82,53 @@ export function proveTabControlStage(r, a, id) {
     inputEquivalent: false, rendererCauseProven: false, renderingEquivalent: false };
 }
 
+// Width is deliberately separate from the three matching control fields above.
+// Correcting the measured owner exposes unequal sizing requests, not equality.
+export function proveTabWidthInputs(r, a, id) {
+  const owners = proveTabControlStage(r, a, id);
+  const label = one(r.nodes.filter(n => n.key === owners.referenceLabel));
+  const control = one(r.nodes.filter(n => n.key === owners.referenceControl));
+  const candidate = one(a.nodes.filter(n => n.key === owners.candidateControl));
+  const native = r.styles[control.style];
+  assert.equal(r.styles[label.style].width, id === 'tab-overview' ? '58.25px' : '47.625px');
+  assert.equal(native.minWidth, '90px');
+  assert.equal(native.flexGrow, '1');
+  assert.equal(native.flexBasis, 'auto');
+  assert.match(native.width, /^\d+(?:\.\d+)?px$/);
+  const affects = key => ['width', 'min-width', 'max-width', 'flex', 'flex-grow', 'flex-shrink', 'flex-basis', 'all'].includes(key);
+  const requests = control.rules.map(i => r.rules[i]).filter(rule => rule.active)
+    .flatMap(rule => Object.entries(rule.declarations).filter(([key]) => affects(key))
+      .map(([key, value]) => ({ selector: rule.selector, key, value: value.value })));
+  assert.deepEqual(requests, [
+    { selector: '.mdc-tab', key: 'min-width', value: '90px' },
+    { selector: '.mdc-tab', key: 'flex-grow', value: '1' },
+    { selector: '.mdc-tab', key: 'flex-shrink', value: '0' },
+    { selector: '.mdc-tab', key: 'flex-basis', value: 'auto' },
+    { selector: '.mat-mdc-tab.mdc-tab', key: 'flex-grow', value: '0' },
+    { selector: '.mat-mdc-tab-group.mat-mdc-tab-group-stretch-tabs > .mat-mdc-tab-header .mat-mdc-tab', key: 'flex-grow', value: '1' },
+  ]);
+  assert.equal(candidate.authored.class, 'tab');
+  assert.equal(candidate.authored.style, undefined);
+  const candidateRule = one(a.rules.filter(rule => rule.selector === '.tab'));
+  assert.equal(candidateRule.width, '50%');
+  assert.equal(candidateRule.flexShrink, '0');
+  const fields = ['width', 'minWidth', 'maxWidth', 'flexGrow', 'flexShrink', 'flexBasis'];
+  const candidateStages = Object.fromEntries(['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle']
+    .map(stage => [stage, Object.fromEntries(fields.filter(key => Object.hasOwn(candidate[stage], key))
+      .map(key => [key, candidate[stage][key]]))]));
+  for (const stage of Object.values(candidateStages)) assert.deepEqual(stage,
+    { width: '50%', flexGrow: '0', flexShrink: '0', flexBasis: 'auto' });
+  return { element: id, referenceLabel: label.key, referenceControl: control.key,
+    candidateControl: candidate.key, ancestry: owners.ancestry,
+    labelWidth: r.styles[label.style].width, controlWidth: native.width,
+    referenceRequests: requests, candidateWidthRequest: candidateRule.width, candidateStages,
+    measurementClassification: 'parity-harness-defect',
+    sizingClassification: 'application-plugin-authoring-defect',
+    firstDivergence: 'native auto-basis flex growth versus candidate explicit percentage width before layout',
+    inputEquivalent: false, rendererCauseProven: false, renderingEquivalent: false,
+    limitation: 'Retained owner requests and style stages; no candidate used-width or current raster inference.' };
+}
+
 export function collectTabPositionSubstitution() {
   const file = 'docs/material-position-input-population.json', bytes = readFileSync(file);
   assert.equal(hash(bytes), '71ed7689534232fe8c167532455abbf9510e89ae69b4c918d9dc7f40d3d346ff');

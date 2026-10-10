@@ -2,6 +2,21 @@
 
 ## Current evidence boundary — October 11
 
+Tab-width semantic regression now closes the missing focused proof boundary:
+proveTabWidthInputs in the existing tab-position producer checks all140 retained
+owners across70 authenticated cases. Native label widths58.25/47.625px remain
+separate from role=tab controls; active native sizing declarations retain90px
+minimum/auto basis/final grow1,versus candidate50%/grow0/shrink0 at all three
+stages,with absent min/max width preserved. Sixteen mutation controls reject
+changed stages,label measurement,rule width,inline authoring and native growth.
+Original three-property owner review remains unchanged. Complete existing suite
+passes5/5 in21836.8187ms; focused width check passes1/1. This proves retained
+measurement mismatch plus unequal control sizing inputs,not current used widths
+or renderer causality. Canonical185 is unchanged; next integrate these exact two
+rows through a conserved-row selector that accepts their omitted attribution,
+then verify the coherent batch. Producer dependency changed; fresh canonical
+reconciliation is required at that batch milestone,not retroactive185 acceptance.
+
 Publication verification update: coherent185 independent cold check96538 completes
 exit0. Log coherent-185-proof-independent-cold-check-20261010.log SHA256
 09edcdb1b95fb1172a73f0b908155c89a2836e6e4a80ea42793cd86ee614f3c7.

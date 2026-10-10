@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { createHash } from 'node:crypto';
-import { collectTabPositionSubstitution, proveTabPositionSubstitution, proveTabControlStage } from '../../scripts/audit-material-tab-position-substitution.mjs';
+import { collectTabPositionSubstitution, proveTabPositionSubstitution, proveTabControlStage, proveTabWidthInputs } from '../../scripts/audit-material-tab-position-substitution.mjs';
 import { applyTabControlStage, validateTabControlStage, applyDialogTextFlow, validateDialogTextFlow } from './modal-position-inspection.mjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
@@ -104,6 +104,40 @@ test('all 140 tab labels compare a different box while three control stages agre
     assert.throws(() => proveTabControlStage(...trees, 'tab-overview'));
   }
 });
+test('all 140 tab width observations retain owner mismatch and unequal control sizing requests', () => {
+  const observations = collectTabPositionSubstitution().observations;
+  let count = 0, first;
+  for (const observation of observations) {
+    const trees = ['reference', 'astylar'].map(side => JSON.parse(readFileSync(observation.inputTrees[side].file)));
+    first ??= trees;
+    for (const id of ['tab-overview', 'tab-activity']) {
+      const proof = proveTabWidthInputs(...trees, id);
+      assert.equal(proof.measurementClassification, 'parity-harness-defect');
+      assert.equal(proof.sizingClassification, 'application-plugin-authoring-defect');
+      assert.equal(proof.inputEquivalent, false);
+      assert.equal(proof.rendererCauseProven, false);
+      count++;
+    }
+  }
+  assert.equal(count, 140);
+  const candidate = a => a.nodes.find(n => n.authored?.id === 'tab-overview');
+  for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle']) {
+    for (const [property, value] of [['width', 'auto'], ['flexGrow', '1'], ['flexBasis', '50%'], ['minWidth', '90px']]) {
+      const trees = structuredClone(first); candidate(trees[1])[stage][property] = value;
+      assert.throws(() => proveTabWidthInputs(...trees, 'tab-overview'));
+    }
+  }
+  for (const mutate of [
+    ([r]) => { r.styles[r.nodes.find(n => n.attributes?.id === 'tab-overview').style].width = '50%'; },
+    ([, a]) => { a.rules.find(r => r.selector === '.tab').width = 'auto'; },
+    ([, a]) => { candidate(a).authored.style = { width: '50%' }; },
+    ([r]) => { r.rules.find(r => r.selector === '.mdc-tab').declarations['flex-grow'].value = '0'; },
+  ]) {
+    const trees = structuredClone(first); mutate(trees);
+    assert.throws(() => proveTabWidthInputs(...trees, 'tab-overview'));
+  }
+});
+
 test('all 70 tab cases retain the border-to-positioned-strip substitution', () => {
   assert.deepEqual(collectTabPositionSubstitution(), JSON.parse(readFileSync('docs/material-tab-position-substitution.json')));
 });
