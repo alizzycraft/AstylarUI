@@ -1,5 +1,25 @@
 # Material audit: evidence-led implementation priorities
 
+## October10 pending Icon remount — cancellation reporting boundary
+
+Retained actual Angular destruction/remount diagnostic releases the old native
+PNG after a distinct replacement settles. Retired sampled resources stay zero;
+replacement sampled resources/texture identities stay unchanged, but original
+runtime validation fails on Initial render failed / disposed before settling.
+See coverage ledger's pending Icon remount entry and
+`../artifacts/material-parity/icon-pending-remount-failure-bound-20261010/failure-observations.json`.
+
+Current-source execution of the unchanged session plus AST-extracted initial
+catch/reporting method distinguishes zero-reflow cancellation from an actual
+reflow exception: both produce render-failed severity:error through the initial
+catch. Session disposal rejection is the existing explicitly tested contract;
+the owning classification boundary is AstylarRenderer's initial-render reporter
+(`src/lib/astylar.ts`), not image ownership or the snackbar application caller.
+Before implementation, verify the minimal public mounting/cancellation policy;
+preserve genuine reflow errors and disposal rejection. Do not suppress all errors,
+relax the runtime gate or claim general image-race safety from these samples.
+Focused retained-browser/source checks pass2/2. No renderer change authorized.
+
 ## Current publication boundary — independently verified179 proofs
 
 October10 coherent179-proof export and independent cold --check both complete

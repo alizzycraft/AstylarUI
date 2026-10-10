@@ -4,6 +4,21 @@
 
 ### Pending Icon load across actual Angular remount: owners stable, runtime failure retained
 
+Current-source causal check now executes the unchanged session implementation,
+the AST-extracted initial invalidate statement and actual reportRenderFailure
+method, using an inert scene/manual frame scheduler (not WebGL/public mounting).
+Disposal before its frame runs cancels once, performs zero reflows and rejects
+settlement with disposed-before-settling; the initial catch emits render-failed
+severity:error. A separate actual reflow exception performs one reflow and emits
+the same code/severity/message with its distinct error value. Thus the first
+classification divergence is the renderer's unconditional initial rejection
+reporter, not unexpected session rejection or resource revival. Existing original
+session spec explicitly requires disposal rejection; source inspection is not a
+claim that its Jasmine suite was rerun. Combined retained-browser/source-focused
+checks pass2/2,2209.7203ms process. Do not change disposal settlement to resolve
+as a workaround. Remaining public-minimal cancellation-policy verification and
+broader lifetime applicability still stand; no complete case closes.
+
 Question: does completing the retired image load revive disposed ownership or
 mutate a replacement surface after same-document Angular destruction/remount?
 Competing explanation is cancellation reporting without resource revival.

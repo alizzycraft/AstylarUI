@@ -69,6 +69,47 @@ test('Icon pending image Angular remount preserves sampled owners but fails runt
   }
 });
 
+test('current initial-render reporter classifies expected session cancellation like a genuine reflow failure', async () => {
+  const compiled = ts.transpileModule(readFileSync('src/lib/astylar-render-session.ts', 'utf8'), {
+    compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS },
+  }).outputText;
+  const sessionExports = {};
+  new Function('exports', compiled)(sessionExports);
+  const source = readFileSync('src/lib/astylar.ts', 'utf8');
+  const ast = ts.createSourceFile('astylar.ts', source, ts.ScriptTarget.Latest, true);
+  const renderer = ast.statements.find(node => ts.isClassDeclaration(node) && node.name?.text === 'AstylarRenderer');
+  const reporting = renderer.members.find(node => node.name?.getText(ast) === 'reportRenderFailure');
+  const initial = [];
+  function visit(node) {
+    if (ts.isExpressionStatement(node) && node.getText(ast).startsWith("void session.invalidate('initial').catch")) initial.push(node);
+    ts.forEachChild(node, visit);
+  }
+  visit(renderer); assert.equal(initial.length, 1);
+  const probeSource = ts.transpileModule(`class Probe { ${reporting.getText(ast).replace(/^private\s+/, '')} start(session) { ${initial[0].getText(ast)} } } export { Probe };`, {
+    compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS },
+  }).outputText;
+  const probeExports = {};
+  new Function('exports', 'AstylarDiagnosticError', probeSource)(probeExports, class extends Error {});
+  for (const mode of ['dispose-pending', 'reflow-failure']) {
+    let frame, cancelled = 0, reflows = 0;
+    const events = [], probe = new probeExports.Probe();
+    probe.diagnostics = { report: event => events.push(event) };
+    const session = new sessionExports.AstylarRenderSession({}, { root: { children: [] }, styles: [] }, () => {
+      reflows++; throw new Error('controlled actual reflow failure');
+    }, { requestFrame: callback => { frame = callback; return 1; }, cancelFrame: () => { cancelled++; } });
+    probe.start(session);
+    if (mode === 'dispose-pending') session.dispose(); else frame();
+    await new Promise(resolve => setImmediate(resolve));
+    assert.equal(events.length, 1);
+    assert.deepEqual(events[0], { code: 'render-failed', severity: 'error', message: 'Initial render failed.',
+      value: mode === 'dispose-pending' ? 'Astylar render session was disposed before settling.' : 'controlled actual reflow failure' });
+    assert.equal(reflows, mode === 'dispose-pending' ? 0 : 1);
+    assert.equal(cancelled, mode === 'dispose-pending' ? 1 : 0);
+    assert.equal(session.snapshot.status, mode === 'dispose-pending' ? 'disposed' : 'idle');
+    session.dispose();
+  }
+});
+
 test('Icon live theme replacement queues behind pending native texture rather than retiring it first', () => {
   const raw = readFileSync('artifacts/material-parity/icon-live-replacement-queued-20261010/latest-report.json');
   assert.equal(hash(raw), '8041e452348889e80c8819365d9135fe265f9962c788374c2f8c0a0582d25048');
