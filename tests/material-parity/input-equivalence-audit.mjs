@@ -9518,6 +9518,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('retained antialias and selection receipts replay after exact diagnostic and theme conservation'/,
+      'retained antialias and selection source applicability conservation', 'Replays three unchanged original receipt assertions only after exact seven-line read-only core inspector and reviewed sorter theme insertion conservation. Original raw receipt failures remain visible. This authenticates historical applicability and preserved assertions,not current browser rendering or acceptance.'),
     proof(root, 'tests/material-parity/tab-position-substitution.spec.mjs', /test\('all 140 tab width observations retain owner mismatch and unequal control sizing requests'/,
       'tab retained width owner and unequal sizing input boundary', 'All140 retained owners across70 cases distinguish native nested labels from controls. Native auto-basis growth and90px minimum differ from candidate50% width and zero growth across all three stages; mutation controls reject altered requests. Not candidate used widths,current rendering or core causality.'),
     proof(root, 'tests/material-parity/tab-position-substitution.spec.mjs', /test\('tab width integration conserves both complete rows including omitted attribution'/,

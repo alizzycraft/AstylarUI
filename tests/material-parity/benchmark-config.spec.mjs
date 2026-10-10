@@ -7,6 +7,7 @@ import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
 import { transformSync } from 'esbuild';
 import { PNG } from 'pngjs';
+import { readRetainedSortFocusSource } from './position-composition-producer-transition.mjs';
 import { materialCaseKey, fingerprintDirectory } from './run-checkpoint.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { restoreLayoutDiagnosticRegistration, restoreDescriptionProofRegistration, restoreDescriptionPolicyRegistration, restoreStandaloneProofBatch, restoreExtendedKeyboardRegistration } from './position-composition-producer-transition.mjs';
@@ -27,10 +28,11 @@ test('layout diagnostic registration preserves complete predecessor and unchange
   const { fingerprints, proofs } = new Function('readFileSync', 'path', 'createHash', functions.join('\n') +
     ';return {fingerprints:sourceFingerprints(process.cwd()),proofs:focusedProofInventory(process.cwd())};')(
     readFileSync, path, createHash);
-  assert.equal(proofs.length, 187); assert.ok(proofs.every(row => row.status !== 'missing'));
-  assert.equal(proofs[0].status, 'tab retained width owner and unequal sizing input boundary');
-  assert.equal(proofs[1].status, 'tab width complete-row ownership review conservation');
-  const priorProofs = proofs.slice(2);
+  assert.equal(proofs.length, 188); assert.ok(proofs.every(row => row.status !== 'missing'));
+  assert.equal(proofs[0].status, 'retained antialias and selection source applicability conservation');
+  assert.equal(proofs[1].status, 'tab retained width owner and unequal sizing input boundary');
+  assert.equal(proofs[2].status, 'tab width complete-row ownership review conservation');
+  const priorProofs = proofs.slice(3);
   assert.equal(priorProofs[0].status, 'Icon pending Angular remount owner isolation with retained runtime failure');
   assert.equal(priorProofs[1].status, 'public initial cancellation confirms core diagnostic classification gap');
   assert.equal(priorProofs[2].status, 'Icon complete-row context and width review conservation');
@@ -344,6 +346,67 @@ test('standalone proof batch conserves complete accepted predecessor producer an
   assert.equal(findings[first + 1].arguments[0].properties.find(p => p.name.getText(policyTree) === 'id').initializer.text, ids[1]);
   assert.equal(policy.slice(0, findings[first].getFullStart()) + policy.slice(findings[first + 2].getFullStart()), prior(policyFile));
   assert.equal(sourceAuditDefinitions.length - 2, 153);
+});
+
+test('retained antialias and selection receipts replay after exact diagnostic and theme conservation', async t => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const coreFile = 'src/lib/astylar.ts', sorterFile = 'tests/material-parity/sort-focus-structure.spec.mjs';
+  const currentCore = readFileSync(coreFile);
+  const originalCore = execFileSync('git', ['show', `39b3e0fd^:${coreFile}`], { maxBuffer: 4_000_000 });
+  assert.equal(hash(currentCore), '5742ba6c19debd5c18ad7d407f1a10e14271cbcd38bf99889d4b4e2474f17451');
+  assert.equal(hash(originalCore), 'e72cfb8e8e1d91c5a4de9002de3ae98f76f1ed26112251b47fde3b77b13f1094');
+  const blocks = [
+    '      const layoutMesh = element.id && authoredById.get(element.id) === element\n' +
+      '        ? this.elementManager.elementsMap.get(element.id) : undefined;\n' +
+      '      const retainedDimensions = layoutMesh\n' +
+      '        ? this.elementManager.getElementDimensions(layoutMesh.name) : undefined;\n',
+    '        ...(retainedDimensions ? { retainedLayout: {\n' +
+      "          source: 'core-dimension-registry' as const, ...structuredClone(retainedDimensions),\n" +
+      '        } } : {}),\n',
+  ];
+  const restoreCore = bytes => {
+    let source = bytes.toString();
+    assert.equal(hash(bytes), hash(currentCore));
+    for (const block of blocks) { assert.equal(source.split(block).length, 2); source = source.replace(block, ''); }
+    assert.equal(source, originalCore.toString());
+    return Buffer.from(source);
+  };
+  assert.deepEqual(restoreCore(currentCore), originalCore);
+  assert.throws(() => restoreCore(Buffer.from(currentCore.toString().replace('getElementDimensions(layoutMesh.name)', 'getElementDimensions("forged")'))));
+  const currentSorter = readFileSync(sorterFile);
+  // Existing exact restoration authenticates the complete theme insertion,
+  // every preceding statement and the original assertions before replay.
+  readRetainedSortFocusSource(currentSorter);
+  const originalSorter = execFileSync('git', ['show', `2bb82ee6^:${sorterFile}`], { maxBuffer: 4_000_000 });
+  assert.equal(hash(originalSorter), '4a386f107cee16cb120910717a42b6ee9b40c724f02860b68a60ce29d4784f30');
+  assert.throws(() => readRetainedSortFocusSource(Buffer.from(currentSorter.toString() + '\nconst forged = true;\n')));
+  const names = [
+    'public antialias option evidence binds original core arguments and Babylon override',
+    'actual Material selected caret epochs preserve actions and temporal paint failure',
+    'selection local pixels retain exact native key boundaries and paint receipts',
+  ];
+  const ast = ts.createSourceFile('benchmark.mjs', readFileSync('tests/material-parity/benchmark-config.spec.mjs', 'utf8'),
+    ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  assert.equal(ast.parseDiagnostics.length, 0);
+  const reads = { core: 0, sorter: 0 };
+  const retainedRead = (file, encoding) => {
+    const normalized = path.normalize(file.toString());
+    const bytes = normalized === path.normalize(coreFile) ? (reads.core++, originalCore)
+      : normalized === path.normalize(sorterFile) ? (reads.sorter++, originalSorter) : readFileSync(file);
+    return encoding ? bytes.toString(encoding) : bytes;
+  };
+  for (const name of names) {
+    const matches = ast.statements.filter(n => ts.isExpressionStatement(n) && ts.isCallExpression(n.expression)
+      && n.expression.expression.getText(ast) === 'test' && n.expression.arguments[0].text === name);
+    assert.equal(matches.length, 1);
+    const callback = matches[0].expression.arguments[1].getText(ast);
+    const run = new Function('assert', 'readFileSync', 'createHash', 'ts', 'transformSync', 'validateSupplementalCapture',
+      'propertyGroups', 'PNG', 'path', `return (${callback});`)(assert, retainedRead, createHash, ts, transformSync,
+        validateSupplementalCapture, propertyGroups, PNG, path);
+    await run({ diagnostic() {} });
+  }
+  assert.ok(reads.core > 0); assert.equal(reads.sorter, 2);
+  t.diagnostic('Three original receipt assertions replay unchanged; exact current source deltas are diagnostic/theme-only. Historical applicability, not current browser rendering acceptance. Original direct receipt failures remain visible.');
 });
 
 test('public antialias option evidence binds original core arguments and Babylon override', () => {

@@ -9,6 +9,18 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 // conservation. This does not substitute old bytes in current production.
 export function restoreLayoutDiagnosticRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes('retained antialias and selection source applicability conservation')) {
+    assert.equal(hash(current), 'e6cf659bcf004349fdfffdd95bbaf01b9ca2463f1f3b42ba08b923cb8b46df3a',
+      'exact complete retained antialias/selection applicability registration');
+    const ast = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    assert.equal(ast.parseDiagnostics.length, 0);
+    const entries = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory').body.statements[0].expression.elements;
+    assert.equal(entries.length, 188);
+    assert.equal(entries[0].arguments[3].text, 'retained antialias and selection source applicability conservation');
+    current = current.slice(0, entries[0].getFullStart()) + current.slice(entries[1].getFullStart());
+    assert.equal(hash(current), '071e118818b8dad848047d6ddbfd1286b0241e3da05bd883225b570b0d9e0318',
+      'complete187-proof tab-width integration predecessor conserved');
+  }
   if (current.includes('tab width complete-row ownership review conservation')) {
     assert.equal(hash(current), '071e118818b8dad848047d6ddbfd1286b0241e3da05bd883225b570b0d9e0318',
       'exact complete tab-width ownership integration producer');

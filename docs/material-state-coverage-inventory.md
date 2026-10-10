@@ -2,6 +2,25 @@
 
 ## Current evidence boundary — October 11
 
+Three retained receipt failures now have a bounded applicability replay,not a
+raw-hash waiver. Exact Git39b3e0fd predecessor authenticates coree72cfb8e; removing
+only seven read-only inspectCurrentDocumentStyles lines from current5742ba6c
+restores the complete original source. Existing readRetainedSortFocusSource
+authenticates currentd2b35a77 and the exact dark scrollbar theme insertion;
+Git2bb82ee6 predecessor authenticates captured4a386f10. The three original
+antialias/selected-caret/local-selection callbacks execute unchanged with those
+authenticated historical reads; capture reports,PNG/input receipts and all
+assertions remain intact. No installed/source file is overwritten. Original
+direct checks still fail honestly; this is historical applicability,not current
+browser acceptance. Existing sorter conservation passes1/1; combined receipt/
+registration/description checks pass3/3 in8829.062ms. Retained log
+antialias-selection-receipt-conservation-20261011.log SHA256
+febc15475cac47597e1287b32fe981534dc56996559ad8e6c6ef8704b1fb3df4.
+Focused proof inventory is188; exact complete producer reversal conserves187
+then published185. Canonical185 remains unchanged. Next continue shared-context
+review integration; do not repeat the settled source-drift question or infer
+whole-case closure from this replay. Final current browser/harness gates remain.
+
 Tab-width row integration is wired into the existing scalar replay and independent
 validator. Exact selector accepts only the two tab-control width rows with omitted
 attribution and parity-harness classification; all other modal reviews retain their
