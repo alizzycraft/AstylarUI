@@ -4,6 +4,22 @@
 
 ### Pending cursor queue is not a uniform auto/default measurement difference
 
+Eight disabled expansion title/header pairs now authenticate original report
+b07ef154 and sixteen trees, reusing inspectExpansionOwnerMapping for complete
+role/path/state correspondence. Every pair has identical cursor context: native
+title/header auto with no local inline/active cursor declarations; candidate
+title has no matching cursor rule/inline request but pointer in all three stages,
+while its parent trigger explicitly requests pointer in .expansion-trigger.
+Thus these eight title observations share the already known disabled header
+authoring/ancestry boundary rather than a separate title-level cursor request.
+This does not establish emitted cursor,core inheritance correctness in general,
+or current rendering. Two initial generic-ancestry probes failed on missing style
+records at frame/ancestor boundaries; the decisive check uses the exact verified
+title/header owners and preserves omissions instead of synthesizing defaults.
+No failed probe produced an accepted report. Remaining disabled input-context
+work is the16 slider-thumb and eight switch observations,with physical hit-point
+acceptance still separate for all affected owners.
+
 Existing owner-proof reuse resolves the expansion header part of the disabled
 queue without a new renderer hypothesis:inspectExpansionOwnerMapping compares
 the native header rather than panel,checks role/aria-disabled/tabindex and the
