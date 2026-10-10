@@ -2,6 +2,19 @@
 
 ## Current evidence boundary — October 11
 
+Publication verification update: coherent185 independent cold check96538 completes
+exit0. Log coherent-185-proof-independent-cold-check-20261010.log SHA256
+09edcdb1b95fb1172a73f0b908155c89a2836e6e4a80ea42793cd86ee614f3c7.
+Evidence session verifies1205 files/89154859 bytes,zero invalidations,two collectors,
+ten memory hits and zero disk hits. Existing compact import42489 and whole-index
+verify both pass for generation90c59d984b2a021384f07da008395cfd6dbea59497f27190d0554b4a763767a3:
+8483 discrepancies,155 source findings,39904 controls,389202 occurrences,
+zero unresolved scalar attribution groups; compactBytes72730383. Original179
+generation remains immutable. These receipts supersede the pending process
+descriptions below,not their historical observations. All2311 cases remain partial;
+inputEquivalent=false and final browser/harness gates remain open. Next integrate
+the scoped shared-context reviews and reconcile per-case applicable obligations.
+
 Coverage interpretation: current buildCoverage in input-equivalence-audit.mjs
 derives complete only from configured static/interaction membership, root input
 presence and duplicate absence. Its return includes exact caseInventory, but no

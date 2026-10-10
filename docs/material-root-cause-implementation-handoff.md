@@ -1,5 +1,14 @@
 # Material audit: evidence-led implementation priorities
 
+October11 publication update: coherent185 independent cold check completes exit0;
+existing compact import and whole-index verification pass. Accepted generation
+90c59d984b2a021384f07da008395cfd6dbea59497f27190d0554b4a763767a3 retains
+8483 difference groups,389202 occurrences and155 findings. See current coverage
+ledger for exact cold-log receipt. Original179 remains the immutable predecessor.
+This supersedes the179 current-publication boundary below,not its historical
+receipts. Input equivalence remains false; all2311 cases remain partial. Shared
+context review integration,case obligation closure and final gates remain open.
+
 ## October10 pending Icon remount — cancellation reporting boundary
 
 Minimal public verification now confirms this boundary independently of Material,
