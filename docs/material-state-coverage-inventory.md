@@ -2,6 +2,29 @@
 
 ## Current evidence boundary — October 11
 
+Closure queue now has an exact configured-case join,not a first12-ID estimate.
+Accepted185 index3a8a22a1 and every selected family shard authenticate686 rows
+with omitted attribution and the existing explicit-unproven-context wording.
+Original reportb07ef154 plus existing precise normalization reconstruct each
+row's complete membership; occurrence count,unique keys and original first12
+IDs agree for every row. Queue:33109 observations,all2311 configured cases
+(436 static/1875 interaction). Property groups:width184,flex115,alignContent102,
+cursor94,justifyContent91,alignItems89,left7,height4. This is one lower-bound
+uncertainty queue,not a complete obligation denominator or failing-case census.
+Initial assertion of historical694 count failed686; authenticated179→185 query
+proves exactly8 removed Icon rows/120 observations and no other queue change.
+These are already accepted Icon reviews,not new progress to count again.
+Pending191 metadata has not been substituted into this185 census. Next discharge
+shared width/flex/alignment applicability by existing owner proofs,then physical
+cursor gaps; exact whole-case obligation/current-validity closure remains open.
+
+Coherent191 export is live:session76398,launcher25908,worker33848,log
+coherent-191-proof-export-20261011.log. Worker CPU progresses38.05→74.70→159.78
+seconds; no terminal result. Producer/test/capture inputs stay frozen. Ledger
+is not referenced by producer/test/scripts and this status update changes no
+evidence dependency. Await same process; independent cold --check and compact
+import/verification follow only after terminal validation/export success.
+
 Coherent shared-context source batch now registers191 focused proofs,including
 the switch full-row assertion. Existing complete-producer reversal authenticates
 current8dc6bba3 and restores exact190 then189 through published185; source policy
