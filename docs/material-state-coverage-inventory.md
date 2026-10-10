@@ -2,6 +2,26 @@
 
 ## Current evidence boundary — October 11
 
+Shared root-width input review exposes a parent-default boundary that matched
+geometry alone cannot settle. Originalb07ef154 and all4622 tree SHA receipts
+authenticate2311 pairs: native block parent explicitly requests border-box via
+.frame[_ngcontent-ng-c2921559503]; candidate main width100%/padding36px omits
+boxSizing in all three local stages. Current ElementDimensionService source
+SHA24d3c910ec0f054f0ec2de1808420f3e6571708a13348eea0887d040c9aa3d30
+explicitly preserves historical border-box sizing unless content-box is requested.
+AST-extracted unchanged calculateDimensions with isolated padding/text/parent
+controls passes9 cases:viewport390/768/1440,omission and explicit border-box yield
+viewport width,explicit content-box yields viewport+72. Source probe exits0,
+1607.5574ms; this is not package-root/browser/installed-runtime verification.
+Thus root720→778 box conversion and retained matching widths remain valid scoped
+observations,but general width-input equivalence also depends on the parent's
+legacy omission contract. Do not silently fill candidate boxSizing or upgrade
+all root width rows. Next establish the applicable public default contract and
+minimal package-boundary evidence; any later default-policy correction must keep
+the native explicit parent request represented,not retune root dimensions. No
+core defect is newly certified from this source control. Export inputs remain
+frozen; shared context/current validity and complete-case obligations stay open.
+
 Missing interaction root geometry is resolved by existing later evidence,not
 new capture. October5 reportab42dbec authenticates all2311 exact original case
 IDs and contains root geometry for436 static plus1875 interaction cases. Native
