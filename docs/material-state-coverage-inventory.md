@@ -2,6 +2,37 @@
 
 ## Current evidence boundary — October 10
 
+### Snackbar same-document teardown: controlled Angular error observed
+
+Question left by the October8 source reduction: does pending snackbar startup
+produce an observable browser error after same-document teardown? New bounded
+scripts/audit-material-snackbar-teardown.mjs reuses checkpoint/runtime observers,
+unchanged served assets and real trigger clicks. Ordinary settled-start control
+and diagnostic startup-only zero-delay hold navigate through Angular popstate
+to /reference/button. Document tokens remain identical; Astylar component is
+removed. The held callback is released only afterward,with exactly1 interception.
+Ordinary control has0 runtime errors. Held control emits surface-disposed and
+Angular ERROR AstylarDiagnosticError at AstylarSurfaceHandle.whenSettled from
+the captured snackbar startup. Both record0 global unhandledrejection events;
+do not mislabel the observed Angular console path as a global rejection event.
+
+Existing runtime validator correctly fails; exit1 is retained,not accepted
+capture/parity. failure-observations.json under
+snackbar-same-document-teardown-failure-bound-20261010 has SHA256
+b269e7d28b68c5dc07cfa9f1d5a7958b497e2da74c90d475cd152bce57b5e0ec;
+top-level log SHA256f2b9bfbc039e1df4376832c51954ae7331fe1928eb74db9287d5ef1096b0ef2d.
+Reader authenticates script/helper/collector/checkpoint receipts and action/error
+boundaries. Initial wrong-selector timeout,short-stack missed interception and
+validator-thrown stack run remain separate failed evidence. No validator relaxed.
+This corroborates application async-start error handling: after zero-delay wait,
+startup calls disposed surface without checking invalidated generation/catching
+failure. Core disposal rejection is expected. Natural race frequency,other
+profiles,live resource plateau and whole-case closure remain unproved. Standalone
+proof awaits coherent integration; accepted179 package is unchanged. Existing
+benchmark-config focused assertion passes1/1 in591.4118ms,including four
+negative controls; snackbar-same-document-teardown-proof-20261010.log retains
+the result. Syntax and scoped diff checks pass. No fixes.
+
 ### Coherent179-proof publication independently verified
 
 Export completed exit0; log coherent-179-proof-export-20261010.log SHA256

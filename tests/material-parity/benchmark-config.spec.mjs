@@ -1112,6 +1112,40 @@ test('snackbar captured timer methods reject late settlement and queued expiry a
     scope: 'Exact captured/current application methods and complete current/installed/captured render-session class with controlled scheduler; disposal rejection propagates from uncaught async start, not observed Angular/browser unhandled rejection or all lifecycle acceptance' }));
 });
 
+test('snackbar same-document held startup retains Angular disposal error as failed evidence', () => {
+  const file = 'artifacts/material-parity/snackbar-same-document-teardown-failure-bound-20261010/failure-observations.json';
+  const bytes = readFileSync(file), report = JSON.parse(bytes);
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b269e7d28b68c5dc07cfa9f1d5a7958b497e2da74c90d475cd152bce57b5e0ec');
+  for (const receipt of [...report.capture.sources, report.capture.checkpointManifest]) {
+    assert.equal(createHash('sha256').update(readFileSync(receipt.file)).digest('hex'), receipt.sha256);
+  }
+  const check = rows => {
+    assert.equal(report.status, 'failed-runtime-validation');
+    assert.equal(rows.length, 2);
+    assert.deepEqual(rows.map(r => r.held), [false, true]);
+    for (const row of rows) {
+      assert.equal(row.documentTokenBefore, row.documentTokenAfter);
+      assert.equal(row.finalPath, '/reference/button');
+      assert.equal(row.componentDestroyed, true);
+      assert.ok(row.activation.some(e => e.targetId === 'snack-bar-primary'));
+      assert.deepEqual(row.rejections, [], 'Angular console error is not a global unhandledrejection observation');
+    }
+    assert.equal(rows[0].intercepted, 0);
+    assert.deepEqual(rows[0].runtime.errors, []);
+    assert.equal(rows[1].intercepted, 1);
+    assert.equal(rows[1].runtimeValidation.status, 'failed');
+    assert.equal(rows[1].runtimeValidation.errors.length, 2);
+    assert.ok(rows[1].runtimeValidation.errors[0].includes('[Astylar:surface-disposed]'));
+    assert.ok(rows[1].runtimeValidation.errors[1].includes('ERROR AstylarDiagnosticError'));
+    assert.ok(rows[1].runtimeValidation.errors[1].includes('AstylarSurfaceHandle.whenSettled'));
+  };
+  check(report.results);
+  for (const mutate of [r => r[1].intercepted = 0, r => r[1].documentTokenAfter = 'replacement',
+    r => r[1].runtimeValidation.errors = [], r => r[0].runtime.errors.push('error')]) {
+    const altered = structuredClone(report.results); mutate(altered); assert.throws(() => check(altered));
+  }
+});
+
 test('menu action capture preserves item-click discrepancy and rejected navigation precondition', () => {
   const file = 'artifacts/material-parity/menu-actions-current-final-20261008/latest-report.json';
   const report = JSON.parse(readFileSync(file)), manifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
