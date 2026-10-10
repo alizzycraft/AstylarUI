@@ -22,6 +22,53 @@ const bytes = readFileSync(file);
 assert.equal(hash(bytes), '39df94e0eb87480d3824927a41a9950d1d275f7c97ab97a571c449efdc6da7d7');
 const report = JSON.parse(bytes);
 
+test('Icon pending image Angular remount preserves sampled owners but fails runtime disposal validation', () => {
+  const raw = readFileSync('artifacts/material-parity/icon-pending-remount-failure-bound-20261010/failure-observations.json');
+  assert.equal(hash(raw), '2dbbcbf1baafc2ace9104fdac481be7e4ace436b4ddbdda8c8acd821b1f5c2db');
+  const record = JSON.parse(raw);
+  for (const receipt of [record.capture.checkpointManifest, ...record.capture.sources]) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  const manifest = JSON.parse(readFileSync(record.capture.checkpointManifest.file));
+  assert.deepEqual(fingerprintDirectory('examples/material-showcase/dist/material-showcase/browser'), manifest.provenance.browserFiles);
+  const sourceMap = JSON.parse(readFileSync('examples/material-showcase/dist/material-showcase/browser/chunk-3JXWRYJY.js.map'));
+  const index = sourceMap.sources.indexOf('node_modules/astylarui/dist/lib/lib/astylar.js');
+  assert(index >= 0);
+  const initialFailure = /void session\.invalidate\('initial'\)\.catch\(\(?error\)? => \{\s*this\.reportRenderFailure\('Initial render failed\.', error\);\s*\}\);/;
+  assert(initialFailure.test(sourceMap.sourcesContent[index]));
+  assert(initialFailure.test(readFileSync('src/lib/astylar.ts', 'utf8').replace('(error)', 'error')));
+  function inspect(row) {
+    assert.equal(row.initial.theme, 'light'); assert.equal(row.initial.session.status, 'rendering');
+    assert.equal(row.observation.intercepted, 1);
+    assert.deepEqual(row.observation.completions, [{ width: 24, height: 24 }]);
+    for (const snapshot of [row.beforeRelease, row.afterRelease]) {
+      assert.equal(snapshot.token, row.initial.token);
+      assert(snapshot.distinctSurface && snapshot.distinctScene);
+      assert.equal(snapshot.retired.disposed, true);
+      assert.equal(snapshot.retired.session.status, 'disposed');
+      assert.equal(snapshot.retired.session.cleanupRegistrations, 0);
+      assert.deepEqual(snapshot.retired.session.pendingReasons, []);
+      assert.deepEqual(snapshot.retired.live, { meshes: 0, materials: 0, textures: 0 });
+      assert.deepEqual(snapshot.retired.tracked, snapshot.retired.live);
+      assert.deepEqual(snapshot.retired.textureIds, []);
+      assert.equal(snapshot.current.disposed, false); assert.equal(snapshot.current.session.status, 'idle');
+      assert.deepEqual(snapshot.current.session.pendingReasons, []);
+      assert.deepEqual(snapshot.current.live, { meshes: 12, materials: 11, textures: 4 });
+      assert.deepEqual(snapshot.current.tracked, snapshot.current.live);
+    }
+    assert.deepEqual(row.afterRelease.current, row.beforeRelease.current);
+    assert.equal(row.afterRelease.source, row.beforeRelease.source);
+    assert.equal(row.runtimeValidation.status, 'failed');
+    assert.equal(row.runtimeValidation.errors.length, 1);
+    assert.match(row.runtimeValidation.errors[0], /\[Astylar:render-failed\] Initial render failed.*disposed before settling/);
+    assert.match(row.runtimeValidation.message, /Supplemental runtime validation failed/);
+  }
+  inspect(record);
+  for (const mutate of [row => { row.afterRelease.token = 'different-document'; },
+    row => { row.afterRelease.retired.live.textures = 1; }, row => { row.afterRelease.current.textureIds.push(999); },
+    row => { row.runtimeValidation.status = 'passed'; }, row => { row.observation.completions = []; }]) {
+    const changed = structuredClone(record); mutate(changed); assert.throws(() => inspect(changed));
+  }
+});
+
 test('Icon live theme replacement queues behind pending native texture rather than retiring it first', () => {
   const raw = readFileSync('artifacts/material-parity/icon-live-replacement-queued-20261010/latest-report.json');
   assert.equal(hash(raw), '8041e452348889e80c8819365d9135fe265f9962c788374c2f8c0a0582d25048');

@@ -2,6 +2,41 @@
 
 ## Current evidence boundary — October 10
 
+### Pending Icon load across actual Angular remount: owners stable, runtime failure retained
+
+Question: does completing the retired image load revive disposed ownership or
+mutate a replacement surface after same-document Angular destruction/remount?
+Competing explanation is cancellation reporting without resource revival.
+Retained light/desktop1440x900 DPR1 Chrome154 diagnostic holds only the first
+Babylon PNG assignment, destroys its Angular component through popstate, mounts
+a distinct scene/surface, then releases the old native load. Document token stays
+identical; one interception completes24x24. Both samples show retired session
+disposed, zero cleanup registrations/tracked/live resources and no texture IDs.
+Replacement remains idle with12 meshes/11 materials/4 textures and identical
+texture IDs before/after release. This supports sampled remount isolation only,
+not all callbacks, paint, simultaneous peers, other cohorts or full race safety.
+
+Original runtime validator rejects one console diagnostic: render-failed,
+Initial render failed, render session disposed before settling. Failed evidence
+is preserved at icon-pending-remount-failure-bound-20261010/failure-observations.json,
+SHA2562dbbcbf1baafc2ace9104fdac481be7e4ace436b4ddbdda8c8acd821b1f5c2db.
+The preceding icon-pending-remount-20261010 attempt also remains retained.
+Existing input-boundary suite authenticates report/script/helper/checkpoint
+receipts and current complete served-directory hashes, checks ownership/token/
+completion/error boundaries and rejects five forged observations. Focused test
+passes1/1 (911.6081ms assertion;2265.3887ms process). That pass validates failed
+evidence; it does not make the browser capture accepted.
+
+Hash-bound served source map's Astylar initial invalidate catch and current
+src/lib/astylar.ts both unconditionally report Initial render failed. This is
+consistent with the observed disposal diagnostic and identifies a core reporting
+candidate, not yet a minimal public cancellation-policy proof. Do not merge it
+with snackbar's application startup-after-disposal caller. Next resolve that
+policy/source boundary without repeating the established remount ownership
+sequence, then reconcile exact Icon remaining obligations/current validity.
+No renderer/fixture changes or case closure. New standalone proof is not yet
+registered: producer181/published179 reconciliation remains explicit.
+
 ### Coherent181-proof source registration; accepted package remains179
 
 Existing producer now registers the live Icon queued-replacement observation and
