@@ -9,6 +9,34 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 // conservation. This does not substitute old bytes in current production.
 export function restoreLayoutDiagnosticRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes('Icon pending Angular remount owner isolation with retained runtime failure')) {
+    assert.equal(hash(current), '9e13d95562757add0c8768a10efb7d59d6502974b67924dcb593a8e411871e6f',
+      'exact complete Icon context and cancellation proof batch');
+    const ast = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    assert.equal(ast.parseDiagnostics.length, 0);
+    const entries = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory').body.statements[0].expression.elements;
+    assert.equal(entries.length, 185);
+    assert.deepEqual(entries.slice(0,4).map(n => n.arguments[3].text), [
+      'Icon pending Angular remount owner isolation with retained runtime failure',
+      'public initial cancellation confirms core diagnostic classification gap',
+      'Icon complete-row context and width review conservation',
+      'Icon applied-theme effective cursor point applicability',
+    ]);
+    current = current.slice(0, entries[0].getFullStart()) + current.slice(entries[4].getFullStart());
+    for (const file of [
+      'scripts/audit-material-icon-pending-remount.mjs',
+      'scripts/audit-public-initial-cancellation.mjs',
+      'scripts/audit-material-icon-cursor.mjs',
+      'artifacts/material-parity/icon-pending-remount-failure-bound-20261010/failure-observations.json',
+      'artifacts/material-parity/public-initial-cancellation-20261010/failure-observations.json',
+      'artifacts/material-parity/icon-effective-cursor-themed-20261010/latest-report.json',
+      'artifacts/material-parity/working-audit/89030a75f63d832a344b3be8ba8d33bf7def3b78fb4a222ebacb5fac71d27194/index.json',
+    ]) {
+      const line = `    '${file}',\n`; assert.equal(current.split(line).length, 2); current = current.replace(line, '');
+    }
+    assert.equal(hash(current), '9a3f1e78d0872f33f86ea7323cdaee0f873b03a022df280b46b4ead4689c5987',
+      'complete preceding Icon replay integration producer conserved');
+  }
   if (current.includes("import { applyIconContextReviews, validateIconContextRows } from './display-request-review.mjs';")) {
     assert.equal(hash(current), '9a3f1e78d0872f33f86ea7323cdaee0f873b03a022df280b46b4ead4689c5987',
       'exact complete Icon context metadata replay integration snapshot');

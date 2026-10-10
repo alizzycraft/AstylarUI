@@ -2,6 +2,23 @@
 
 ## Current evidence boundary — October 10
 
+### Coherent185-proof source batch ready for canonical publication
+
+Registered four scoped proofs: failed-runtime Icon Angular remount ownership,
+minimal public cancellation classification, full-original-row Icon context/width
+metadata conservation, and verified applied-theme effective cursor points. Seven
+new source/report/immutable-index paths join existing fingerprints. No source
+finding definitions or acceptance criteria changed:155 definitions,2311 cases.
+Exact complete producer SHA9e13d95562757add0c8768a10efb7d59d6502974b67924dcb593a8e411871e6f
+reverses only four entries/seven paths to preceding replay integration9a3f1e78,
+then all older complete-source conservation checks. Registration/unchanged-policy
+assertion passes1/1,3681.3739ms; remount/public/source-reporter checks3/3,
+4652.4535ms; cursor/full-row validation checks2/2,20783.7158ms. Existing five-path
+launcher dry run passes. Observed D:free817156096 bytes before these read-only
+checks; recheck before publication. Published179 package remains authoritative
+until export validation,independent cold check and import finish. Full case closure
+and browser/harness final gates remain open; no renderer/fixture changes.
+
 ### Icon metadata review wired into canonical replay; publication still pending
 
 The final bound scalar-review stage now applies the eight authenticated Icon

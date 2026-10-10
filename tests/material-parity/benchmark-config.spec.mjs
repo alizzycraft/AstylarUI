@@ -27,11 +27,15 @@ test('layout diagnostic registration preserves complete predecessor and unchange
   const { fingerprints, proofs } = new Function('readFileSync', 'path', 'createHash', functions.join('\n') +
     ';return {fingerprints:sourceFingerprints(process.cwd()),proofs:focusedProofInventory(process.cwd())};')(
     readFileSync, path, createHash);
-  assert.equal(proofs.length, 181); assert.ok(proofs.every(row => row.status !== 'missing'));
-  assert.equal(proofs[0].status, 'Icon pending native load serializes live authored theme replacement');
-  assert.equal(proofs[1].status, 'snackbar same-document held startup preserves failed Angular disposal evidence');
-  assert.equal(proofs[2].status, 'Icon exact configured direct-name hiding and IDREF applicability boundary');
-  assert.equal(proofs[3].status, 'public equal-input external host scroll hover invalidation core defect');
+  assert.equal(proofs.length, 185); assert.ok(proofs.every(row => row.status !== 'missing'));
+  assert.equal(proofs[0].status, 'Icon pending Angular remount owner isolation with retained runtime failure');
+  assert.equal(proofs[1].status, 'public initial cancellation confirms core diagnostic classification gap');
+  assert.equal(proofs[2].status, 'Icon complete-row context and width review conservation');
+  assert.equal(proofs[3].status, 'Icon applied-theme effective cursor point applicability');
+  assert.equal(proofs[4].status, 'Icon pending native load serializes live authored theme replacement');
+  assert.equal(proofs[5].status, 'snackbar same-document held startup preserves failed Angular disposal evidence');
+  assert.equal(proofs[6].status, 'Icon exact configured direct-name hiding and IDREF applicability boundary');
+  assert.equal(proofs[7].status, 'public equal-input external host scroll hover invalidation core defect');
   assert.ok(fingerprints.some(row => row.file.endsWith('public-host-scroll-hover-20261010/latest-report.json')));
   assert.ok(fingerprints.some(row => row.file.endsWith('divider-fresh-retained-layout-20261009.jsonl')));
   assert.ok(fingerprints.some(row => row.file.endsWith('divider-text-shader-address-reconstruction-20261009.log')));

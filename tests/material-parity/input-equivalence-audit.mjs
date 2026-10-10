@@ -8891,6 +8891,13 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'scripts/audit-material-icon-pending-remount.mjs',
+    'scripts/audit-public-initial-cancellation.mjs',
+    'scripts/audit-material-icon-cursor.mjs',
+    'artifacts/material-parity/icon-pending-remount-failure-bound-20261010/failure-observations.json',
+    'artifacts/material-parity/public-initial-cancellation-20261010/failure-observations.json',
+    'artifacts/material-parity/icon-effective-cursor-themed-20261010/latest-report.json',
+    'artifacts/material-parity/working-audit/89030a75f63d832a344b3be8ba8d33bf7def3b78fb4a222ebacb5fac71d27194/index.json',
     'scripts/audit-material-icon-live-replacement.mjs',
     'scripts/audit-material-snackbar-teardown.mjs',
     'artifacts/material-parity/icon-live-replacement-queued-20261010/latest-report.json',
@@ -9506,6 +9513,14 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('Icon pending image Angular remount preserves sampled owners but fails runtime disposal validation'/,
+      'Icon pending Angular remount owner isolation with retained runtime failure', 'Held native texture completes after same-document Angular teardown and replacement. Retired resources remain zero and sampled replacement ownership is unchanged; original runtime validation fails on initial cancellation diagnostic. Authenticated receipts and negative controls; not accepted runtime,all callbacks,repeated plateau or whole-case closure.'),
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('minimal public mount cancellation reports failure without Material or image dependencies'/,
+      'public initial cancellation confirms core diagnostic classification gap', 'Minimal installed package-root mount/dispose reproduces failed initial-render diagnostic at revision0 without Material,image,font holds or custom scheduling. Settled-start control reaches revision1 without errors; both dispose resources to zero. Focused source test executes actual session and initial reporter with genuine-error control. Runtime failure remains failed evidence; not a renderer fix or all async-path coverage.'),
+    proof(root, 'tests/material-parity/icon-asset-input.spec.mjs', /test\('Icon review conserves complete original rows and rejects input drift'/,
+      'Icon complete-row context and width review conservation', 'Eight original179 scalar groups and120 occurrences retain every input and omission under metadata-only replay. Root block versus column-flex placement differs before layout; inactive root flex and scoped content/border-box widths are justified separately. Exact full-row hashes and forged-input,missing,duplicate and metadata controls authenticate replay; not current used-size,projection or whole-owner equivalence.'),
+    proof(root, 'tests/material-parity/icon-asset-input.spec.mjs', /test\('Icon and blank-root effective cursors agree in verified applied-theme pointer cohorts'/,
+      'Icon applied-theme effective cursor point applicability', 'All16 physical profile/viewport/DPR cohorts authenticate32 side rows and64 icon-center/blank-root point samples. Native auto without selectable text resolves to default like candidate canvas; full applied themes and runtime receipts are checked. Not OS cursor pixels,held click,all hit targets or historical exact-state applicability.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('Icon live theme replacement queues behind pending native texture rather than retiring it first'/,
       'Icon pending native load serializes live authored theme replacement', 'Light desktop DPR1 holds one original Babylon PNG setter while the semantic image loads normally. Real same-origin theme message queues update behind revision0 rendering; release completes24x24 and the same live surface settles with ready dark textures and no old-source scene textures. Authenticates current probe/checkpoint/runtime assets and four negative controls. Does not exercise native completion after retirement,other cohorts,equal-input SVG paint or whole-case closure.'),
     proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('snackbar same-document held startup retains Angular disposal error as failed evidence'/,
