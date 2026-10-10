@@ -2,6 +2,17 @@
 
 ## Current evidence boundary — October 11
 
+Coverage interpretation: current buildCoverage in input-equivalence-audit.mjs
+derives complete only from configured static/interaction membership, root input
+presence and duplicate absence. Its return includes exact caseInventory, but no
+per-case applicable-obligation/inspection-closure/current-validity disposition.
+The accepted179 compact metadata preserves that same limited scope. Thus the
+complete=true flag cannot certify inspection or supply an obligation completion
+percentage. Reuse these exact2311 IDs and the required-state applicability map
+below when reconciling closure; do not construct another case matrix or infer
+closure from reviewedCases property memberships. Failures may close inspection
+once their applicable evidence/classification is complete. All2311 remain partial.
+
 ### Non-root width queue separates existing fill intent from other ownership
 
 Integration-path check authenticates accepted179 index8d777259 and the tabs
