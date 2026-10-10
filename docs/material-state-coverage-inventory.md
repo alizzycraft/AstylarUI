@@ -4,6 +4,23 @@
 
 ### Pending cursor queue is not a uniform auto/default measurement difference
 
+Remaining disabled input-context join authenticates original reportb07ef154 and
+all32 trees for16 cases(24 owner observations),with one stable context per family.
+All16 slider-thumb inputs are disabled on both sides. Native active disabled
+selector .mat-mdc-slider.mdc-slider--disabled .mdc-slider__input overrides pointer
+to auto; candidate .range-layer retains explicit pointer in normal,interaction
+and resolved stages. Native pointerEvents=auto; candidate local pointerEvents
+is omitted,not silently filled. All eight native switch buttons are disabled,
+with .mdc-switch.mdc-switch--disabled requesting cursor:default and
+pointer-events:none. Candidate role owner has ariaDisabled=true,tabindex=-1,
+unconditional #slide-toggle-primary cursor:pointer in all three stages and no
+matching local pointerEvents request. Thus the authoring/owner contracts diverge
+before hit testing; ariaDisabled/tabindex alone are not equivalent pointer-input
+requests. No emitted canvas cursor,disabled event suppression or core pick defect
+is proven. The read-only join completes exit0. Next integrate these exact cursor
+and suppression observations through existing owner review mechanisms after185
+publication; evaluate physical hit behavior separately,not through fixture edits.
+
 Eight disabled expansion title/header pairs now authenticate original report
 b07ef154 and sixteen trees, reusing inspectExpansionOwnerMapping for complete
 role/path/state correspondence. Every pair has identical cursor context: native
