@@ -4,6 +4,23 @@
 
 ### Non-root width queue separates existing fill intent from other ownership
 
+Tab width followup authenticates original reportb07ef154 and140 tree receipts
+for all70 retained cases,calling existing proveTabControlStage for both owners.
+The raw native IDs are text labels58.25px/47.625px versus candidate controls50%,
+so owner mapping explains that comparison but not sizing-contract equivalence.
+Role-correct native widths are365.312/354.688 at720px,324.312/313.688 at638px,
+135.312/124.688 at260px; each row has two tab controls. Native active declarations
+retain min-width90px,flex-shrink0,flex-basis:auto and final stretch flex-grow1.
+Candidate exact .tab rule requests width50%,flexShrink0,with no local grow request;
+all three stages resolve grow0,basisauto,boxSizingborder-box. All140 owners have
+class tab,not picker-popup/material-button; unrelated complex-selector hits from
+the conservative helper are excluded by actual owner classes,not claimed active.
+Thus native auto-basis growth and candidate equal-percentage widths are different
+inputs before layout. This is not proof of current candidate used widths or a
+core distribution defect. Existing stage proof intentionally covers only height,
+boxSizing and shrink; width needs explicit extension of its owning review/tests
+after cold publication,not a blanket extension of its earlier equality claim.
+
 Accepted179 compact query authenticates immutable index8d777259 and family shards,
 reproducing75 explicit-unproven non-root width groups across27 owners/1316
 occurrences. Thirty groups/524 occurrences belong to the ten primary parent-fill
