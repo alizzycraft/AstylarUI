@@ -2,6 +2,22 @@
 
 ## Current evidence boundary — October 11
 
+Retained root used-width evidence is now scoped exactly instead of inferred from
+all2311 root-style observations. Authenticated original reportb07ef154 has root
+geometry for all436 static cases and none of1875 interaction cases. Every static
+native root is content-box; its computed width+horizontal padding+borders matches
+the recorded native border-box width within0.02px in the diagnostic assertion.
+Observed candidate/native maximum differences:width4.1382008930668235e-11px,
+left2.071942617476452e-11px,right2.0691004465334117e-11px;zero static widths exceed
+0.02px. This arithmetic/retained-projection join completes exit0,1913.9943ms;
+the diagnostic0.02px bound is not a new acceptance threshold. Interaction rows
+have no geometry or diagnostics field; style declarations and whole screenshots
+cannot supply those missing root measurements. Existing authored box conversion
+still stands; this does not certify current used-size,input equivalence,vertical
+flow,paint or1875 interaction widths. Next use the existing configured capture
+boundary for missing state geometry when current gates are justified,not another
+static recapture or percentage normalization. Export source/captures stay frozen.
+
 Closure queue now has an exact configured-case join,not a first12-ID estimate.
 Accepted185 index3a8a22a1 and every selected family shard authenticate686 rows
 with omitted attribution and the existing explicit-unproven-context wording.
