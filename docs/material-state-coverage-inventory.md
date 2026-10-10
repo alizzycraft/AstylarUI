@@ -2,6 +2,23 @@
 
 ## Current evidence boundary — October 11
 
+Switch full-population role join resolves the remaining host-versus-control
+question without recapture: original reportb07ef154 and all136 original tree
+SHA receipts authenticate68 cases. Each native host contains exactly one
+role=switch button; its disabled attribute matches candidate ariaDisabled.
+All60 enabled native buttons request/compute pointer;8 disabled buttons have
+ordered .mdc-switch pointer then .mdc-switch.mdc-switch--disabled default,
+with pointerEvents none. Native host cursor is auto in every case. Candidate
+role owner requests pointer in all three stages and omits pointerEvents in all68.
+Thus the raw host comparison is not an enabled-control cursor failure; the8
+disabled control inputs genuinely differ before hit testing. The read-only
+join completes exit0 in2033.9923ms and checks full population,not just samples.
+No physical hovered cursor or disabled hit suppression is established. Next
+integrate this exact mixed-population owner proof using existing cursor review
+and independent raw-row conservation; do not label the entire68-case row either
+equivalent or a core defect. Accepted canonical185/source190 and all2311 partial
+statuses remain unchanged. Final case obligation/current-validity gates stay open.
+
 Expansion cursor integration conserves both complete185 rows:68 panel/header
 observations and8 disabled-title observations. Existing role mapping distinguishes
 60 matching enabled header cursor inputs from8 unequal disabled inputs; disabled
