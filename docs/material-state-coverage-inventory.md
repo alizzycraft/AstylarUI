@@ -2,6 +2,27 @@
 
 ## Current evidence boundary — October 10
 
+### Coherent177-proof publication independently checked and compact index verified
+
+Fresh independent cold-check session98381 finished exit0; workers2112/11964
+are absent. Log coherent-177-proof-independent-cold-check-retry-20261010.log
+SHA3e8c86933f66265f99835b214b62616154a0676570f47c1a217efa3170a64e9c
+records complete validation,evidence re-verification and canonical comparison,
+complete at2818582.0398ms. Its cold session used2 collectors,10 memory hits,
+zero disk hits/invalidations,and authenticated1205 files/89154859 bytes again.
+The prior interrupted check remains preserved and is not counted as passing.
+
+Canonical compressed SHAecad53d33858464f53a71d858f2954509d14003ed77e55771fb53b85008c9be1
+and decoded SHA6fd27613d0a436403215e9ebf4caf0881e94133f2b70daac76205ed24e180a0d
+are now independently checked. Existing compact import and verify both finish
+exit0:8483 groups,155 source findings,39904 controls,389202 occurrences,
+zero unresolved scalar attributions; new compact shards72725068bytes.
+This supersedes the pending177-proof publication boundary below,not historical
+browser validity or case closure. Full436/1875 inventory and inputEquivalent=false
+remain. Next prioritize exact-case overlay/scrollbar paint,keyboard/caret/selection
+and lifecycle joins; do not reopen settled sampler/font/passive questions.
+All2311 cases remain partial and final complete harness/browser gates remain open.
+
 ### Coherent export finished; independent cold check interrupted before validation
 
 The named five-path cold exporter has finished; session40114 and its workers

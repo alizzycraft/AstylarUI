@@ -1,5 +1,20 @@
 # Material audit: evidence-led implementation priorities
 
+## Current publication boundary — October 10
+
+The coherent177-proof canonical publication is independently cold-checked
+(exit0,2818582.0398ms) and compact import/verify pass. Compressed SHA
+ecad53d33858464f53a71d858f2954509d14003ed77e55771fb53b85008c9be1,
+decoded SHA6fd27613d0a436403215e9ebf4caf0881e94133f2b70daac76205ed24e180a0d.
+Log: `../artifacts/material-parity/coherent-177-proof-independent-cold-check-retry-20261010.log`,
+SHA3e8c86933f66265f99835b214b62616154a0676570f47c1a217efa3170a64e9c.
+All2311 configured cases,155 findings,8483 scalar groups,39904 controls and
+389202 occurrences remain; zero unresolved scalar attribution is not input
+equivalence (still false),current browser acceptance or full inspection closure.
+This supersedes only the older pending-publication counts below. All2311 cases
+remain partial; exact-case obligation closure,current validity and final gates
+remain required. Implementation recommendations and equal-input contract stand.
+
 ## Current implementation boundary — October 9
 
 This summary supersedes older publication counts and open sampler hypotheses
