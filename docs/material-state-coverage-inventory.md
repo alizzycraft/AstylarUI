@@ -2,6 +2,28 @@
 
 ## Current evidence boundary — October 11
 
+Tab-width row integration is wired into the existing scalar replay and independent
+validator. Exact selector accepts only the two tab-control width rows with omitted
+attribution and parity-harness classification; all other modal reviews retain their
+unresolved-only selector. Existing loader authenticates both complete185 rows;
+prior-row hashes,all raw fields and omitted metadata restore exactly. Missing/
+duplicate cases and forged values/prior metadata/causality evidence reject. Tab
+suite passes6/6 in the combined run; focused integration passes1/1. Source inventory
+registers both proofs(187 total). Exact producer reversal conserves the entire
+published185 producer; registration/description conservation passes2/2.
+No canonical package regenerated yet;185 remains accepted historical publication.
+
+Wider benchmark run is not green:22/25 pass,three retained receipt checks fail.
+Log tab-width-integration-benchmark-20261011.log SHA256
+ea6c0392020d42dcc6f32191043ab0b4b7d088e476aae84309389ac56cca06a2.
+Antialias receipt expects src/lib/astylar.ts e72cfb8e but current bytes5742ba6c;
+two selection checks expect sort-focus-structure.spec.mjs4a386f10 but current
+d2b35a77. These files were not changed by tab integration. Preserve originals and
+validate the exact source differences/applicability before treating those proofs
+as current; do not refresh expected hashes or waive failures. Next coherent batch
+must reconcile these source boundaries plus shared-context metadata before full
+canonical/browser acceptance. All2311 case closures remain open.
+
 Tab-width semantic regression now closes the missing focused proof boundary:
 proveTabWidthInputs in the existing tab-position producer checks all140 retained
 owners across70 authenticated cases. Native label widths58.25/47.625px remain

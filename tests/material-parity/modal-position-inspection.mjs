@@ -5,7 +5,7 @@ import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
-import { proveTabControlStage } from '../../scripts/audit-material-tab-position-substitution.mjs';
+import { proveTabControlStage, proveTabWidthInputs } from '../../scripts/audit-material-tab-position-substitution.mjs';
 const hash = b => createHash('sha256').update(b).digest('hex');
 const ids = ['bottom-sheet-copy', 'bottom-sheet-dismiss', 'bottom-sheet-panel', 'dialog-actions',
   'dialog-cancel', 'dialog-copy', 'dialog-panel', 'dialog-save', 'dialog-title'];
@@ -653,7 +653,8 @@ export function applyModalBoxReview(rows, cases, inventory, canonicalStyle, defi
   const properties = new Set(definition.properties);
   const proofs = new Map();
   return rows.map(row => {
-    if (row.family !== (definition.family ?? 'dialog') || row.element !== definition.element || row.attribution !== 'unresolved' || !properties.has(row.property)) return row;
+    if (row.family !== (definition.family ?? 'dialog') || row.element !== definition.element ||
+      !(definition.acceptsRow ? definition.acceptsRow(row) : row.attribution === 'unresolved') || !properties.has(row.property)) return row;
     const matching = cases.filter(c => c.family === row.family).flatMap(c => (c.styleInputs ?? [])
       .filter(i => i.id === row.element && canonicalStyle(i.reference ?? {})[row.property] === row.reference &&
         canonicalStyle(i.astylar ?? {})[row.property] === row.astylar)
@@ -705,6 +706,29 @@ export function validateTabControlStage(rows, originalRows, cases, inventory, ca
     assert.equal(JSON.stringify(select(rows)), JSON.stringify(select(applyTabControlStage(originalRows, cases, inventory, canonicalStyle))));
     return [];
   } catch (error) { return [`tab control-stage review does not replay from original owners: ${error.message}`]; }
+}
+
+export function applyTabWidthOwners(rows, cases, inventory, canonicalStyle) {
+  return ['tab-overview', 'tab-activity'].reduce((values, element) => applyModalBoxReview(values,
+    cases, inventory, canonicalStyle, {
+      family: 'tabs', element, properties: ['width'],
+      acceptsRow: row => !Object.hasOwn(row, 'attribution') && row.classification === 'parity-harness-defect',
+      prove: (entry, r, a) => {
+        const proof = proveTabWidthInputs(r, a, element);
+        return { ...proof, referenceNode: proof.referenceLabel, astylarNode: proof.candidateControl };
+      },
+      classification: 'parity-harness-defect', attribution: 'reviewed-tab-width-owner-inputs',
+      owner: 'comparison measurement owner mapping and separate tab sizing authoring',
+      justification: 'The original width measurement compares a native nested text label with a candidate tab control. Preserve both raw widths. Role-correct native controls retain auto-basis flex growth while candidate controls request 50% width with no growth; this separate authoring mismatch is not input equivalence, candidate used-width verification, renderer causality or rendering parity.',
+    }), rows);
+}
+
+export function validateTabWidthOwners(rows, originalRows, cases, inventory, canonicalStyle) {
+  try {
+    const select = values => values.filter(row => row.attribution === 'reviewed-tab-width-owner-inputs');
+    assert.equal(JSON.stringify(select(rows)), JSON.stringify(select(applyTabWidthOwners(originalRows, cases, inventory, canonicalStyle))));
+    return [];
+  } catch (error) { return [`tab width-owner review does not replay from original rows and owners: ${error.message}`]; }
 }
 
 export function applyDialogTextFlow(rows, cases, inventory, canonicalStyle) {

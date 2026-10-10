@@ -6,7 +6,8 @@ import { collectTabPositionSubstitution, proveTabPositionSubstitution, proveTabC
 import { applyTabControlStage, validateTabControlStage, applyDialogTextFlow, validateDialogTextFlow } from './modal-position-inspection.mjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
-import { queryFindings } from '../../scripts/audit-findings-store.mjs';
+import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
+import { applyTabWidthOwners, validateTabWidthOwners } from './modal-position-inspection.mjs';
 import { inputDifferenceClassifications } from './input-equivalence-policy.mjs';
 
 test('tab stage review preserves raw findings and does not classify typography or unrelated rows', () => {
@@ -136,6 +137,52 @@ test('all 140 tab width observations retain owner mismatch and unequal control s
     const trees = structuredClone(first); mutate(trees);
     assert.throws(() => proveTabWidthInputs(...trees, 'tab-overview'));
   }
+});
+
+test('tab width integration conserves both complete rows including omitted attribution', async () => {
+  const snapshot = { generation: '90c59d984b2a021384f07da008395cfd6dbea59497f27190d0554b4a763767a3',
+    indexSha256: '3a8a22a1dae2fd7dab79fd6fac7334b649ab71a6171198dbd658e424ab4800f2' };
+  const compact = queryFindings('artifacts/material-parity/working-audit', 'tabs', snapshot)
+    .filter(row => row.evidence.section === 'discrepancies' && ['tab-overview', 'tab-activity'].includes(row.element) && row.property === 'width');
+  assert.equal(compact.length, 2);
+  const loaded = await loadFindingEvidence('artifacts/material-parity/working-audit', 'tabs', compact.map(row => row.id), snapshot);
+  const rows = loaded;
+  for (const row of rows) {
+    assert.equal(Object.hasOwn(row, 'attribution'), false);
+    assert.equal(row.occurrences, 70);
+  }
+  const source = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(source).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(source);
+  const cases = [...capture.results.map(c => ({ ...c, kind: 'static' })), ...capture.interactions.map(c => ({ ...c, kind: 'interaction' }))]
+    .filter(c => c.family === 'tabs');
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  const original = structuredClone(rows), applied = applyTabWidthOwners(rows, cases, inventory, normalize);
+  assert.deepEqual(rows, original);
+  assert.equal(applied.filter(r => r.attribution === 'reviewed-tab-width-owner-inputs').length, 2);
+  const metadata = ['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases'];
+  for (let i = 0; i < rows.length; i++) {
+    const row = applied[i], restored = structuredClone(row);
+    assert.equal(row.reviewEvidence.originalRowSha256, createHash('sha256').update(JSON.stringify(rows[i])).digest('hex'));
+    assert.equal(row.reviewEvidence.observations.length, 70);
+    assert.equal(Object.hasOwn(row.reviewEvidence.priorMetadata, 'attribution'), false);
+    const prior = row.reviewEvidence.priorMetadata;
+    for (const key of metadata) delete restored[key];
+    Object.assign(restored, prior);
+    assert.deepEqual(restored, rows[i]);
+  }
+  assert.deepEqual(validateTabWidthOwners(applied, rows, cases, inventory, normalize), []);
+  for (const mutate of [
+    rows => rows.pop(),
+    rows => { rows[0].reference = 'forged'; },
+    rows => { rows[0].reviewEvidence.priorMetadata.attribution = 'unresolved'; },
+    rows => { rows[0].reviewEvidence.observations[0].rendererCauseProven = true; },
+  ]) {
+    const changed = structuredClone(applied); mutate(changed);
+    assert.equal(validateTabWidthOwners(changed, original, cases, inventory, normalize).length, 1);
+  }
+  assert.throws(() => applyTabWidthOwners(rows, cases.slice(1), inventory, normalize));
+  assert.throws(() => applyTabWidthOwners(rows, [...cases, cases[0]], inventory, normalize));
 });
 
 test('all 70 tab cases retain the border-to-positioned-strip substitution', () => {

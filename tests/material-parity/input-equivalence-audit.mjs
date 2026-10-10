@@ -222,6 +222,8 @@ export function parseMaterialInputAuditArguments(args, root = process.cwd()) {
   };
 }
 
+import { applyTabWidthOwners, validateTabWidthOwners } from './modal-position-inspection.mjs';
+
 export function replayMaterialScalarReviewStages(overlaySurfaceDiscrepancies, cases,
   elementInventory, retainedTypography, controlTypography, ownerInitialStyleBinding) {
   const modalDiscrepancies = ownerInitialStyleBinding.status === 'bound'
@@ -231,7 +233,7 @@ export function replayMaterialScalarReviewStages(overlaySurfaceDiscrepancies, ca
     ? applyVisibleButtonOverflow(applyButtonAuthoredTypography(applyTabScalarTypography(modalDiscrepancies, cases, elementInventory, controlTypography, canonicalStyle), cases, elementInventory, controlTypography, canonicalStyle), cases, elementInventory, canonicalStyle)
     : modalDiscrepancies;
   const beforeNormalLineBoxScalars = ownerInitialStyleBinding.status === 'bound'
-    ? applyTabControlStage(applyDialogTextFlow(authoredTypographyDiscrepancies, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
+    ? applyTabWidthOwners(applyTabControlStage(applyDialogTextFlow(authoredTypographyDiscrepancies, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
     : authoredTypographyDiscrepancies;
   const wrappingDiscrepancies = ownerInitialStyleBinding.status === 'bound'
     ? applyWrappingReviews(beforeNormalLineBoxScalars, cases, elementInventory, canonicalStyle)
@@ -812,6 +814,8 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
       errors.push(...validateDialogTextFlow(report.discrepancies, replayedRows, cases,
         report.elementInventory, canonicalStyle));
       errors.push(...validateTabControlStage(report.discrepancies, replayedRows, cases,
+        report.elementInventory, canonicalStyle));
+      errors.push(...validateTabWidthOwners(report.discrepancies, replayedRows, cases,
         report.elementInventory, canonicalStyle));
       errors.push(...validateDialogScalarTypography(report.discrepancies, replayedRows, cases,
         report.elementInventory, report.retainedTypography, report.controlTypography, canonicalStyle));
@@ -8988,6 +8992,7 @@ function sourceFingerprints(root) {
     'tests/material-parity/position-followup-review-integration.spec.mjs',
     'tests/material-parity/tooltip-position-composition.mjs',
     'scripts/audit-material-tab-position-substitution.mjs',
+    'tests/material-parity/tab-position-substitution.spec.mjs',
     'scripts/audit-material-stepper-position-substitution.mjs',
     'tests/material-parity/radio-position-substitution.mjs',
     'tests/material-parity/static-position-observation.mjs',
@@ -9513,6 +9518,10 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/tab-position-substitution.spec.mjs', /test\('all 140 tab width observations retain owner mismatch and unequal control sizing requests'/,
+      'tab retained width owner and unequal sizing input boundary', 'All140 retained owners across70 cases distinguish native nested labels from controls. Native auto-basis growth and90px minimum differ from candidate50% width and zero growth across all three stages; mutation controls reject altered requests. Not candidate used widths,current rendering or core causality.'),
+    proof(root, 'tests/material-parity/tab-position-substitution.spec.mjs', /test\('tab width integration conserves both complete rows including omitted attribution'/,
+      'tab width complete-row ownership review conservation', 'Both original185 width rows and140 occurrences authenticate through existing compact evidence retrieval. Independent replay preserves every raw field and omitted attribution,with exact prior-row hashes and metadata restoration. Forged values,evidence,missing membership and duplicate cases fail; no equivalence or renderer waiver.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('Icon pending image Angular remount preserves sampled owners but fails runtime disposal validation'/,
       'Icon pending Angular remount owner isolation with retained runtime failure', 'Held native texture completes after same-document Angular teardown and replacement. Retired resources remain zero and sampled replacement ownership is unchanged; original runtime validation fails on initial cancellation diagnostic. Authenticated receipts and negative controls; not accepted runtime,all callbacks,repeated plateau or whole-case closure.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('minimal public mount cancellation reports failure without Material or image dependencies'/,

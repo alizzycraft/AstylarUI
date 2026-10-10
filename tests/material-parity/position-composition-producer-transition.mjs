@@ -9,6 +9,31 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 // conservation. This does not substitute old bytes in current production.
 export function restoreLayoutDiagnosticRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes('tab width complete-row ownership review conservation')) {
+    assert.equal(hash(current), '071e118818b8dad848047d6ddbfd1286b0241e3da05bd883225b570b0d9e0318',
+      'exact complete tab-width ownership integration producer');
+    const ast = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    assert.equal(ast.parseDiagnostics.length, 0);
+    const entries = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory').body.statements[0].expression.elements;
+    assert.equal(entries.length, 187);
+    assert.deepEqual(entries.slice(0, 2).map(n => n.arguments[3].text), [
+      'tab retained width owner and unequal sizing input boundary',
+      'tab width complete-row ownership review conservation',
+    ]);
+    current = current.slice(0, entries[0].getFullStart()) + current.slice(entries[2].getFullStart());
+    for (const addition of [
+      "import { applyTabWidthOwners, validateTabWidthOwners } from './modal-position-inspection.mjs';\n\n",
+      "    'tests/material-parity/tab-position-substitution.spec.mjs',\n",
+      '      errors.push(...validateTabWidthOwners(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n',
+    ]) {
+      assert.equal(current.split(addition).length, 2); current = current.replace(addition, '');
+    }
+    const added = '    ? applyTabWidthOwners(applyTabControlStage(applyDialogTextFlow(authoredTypographyDiscrepancies, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)';
+    const original = '    ? applyTabControlStage(applyDialogTextFlow(authoredTypographyDiscrepancies, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)';
+    assert.equal(current.split(added).length, 2); current = current.replace(added, original);
+    assert.equal(hash(current), '9e13d95562757add0c8768a10efb7d59d6502974b67924dcb593a8e411871e6f',
+      'complete published185 producer conserved before tab-width integration');
+  }
   if (current.includes('Icon pending Angular remount owner isolation with retained runtime failure')) {
     assert.equal(hash(current), '9e13d95562757add0c8768a10efb7d59d6502974b67924dcb593a8e411871e6f',
       'exact complete Icon context and cancellation proof batch');
