@@ -2,6 +2,21 @@
 
 ## Current evidence boundary — October 11
 
+Default-resolution source check narrows the contract discrepancy: executing the
+unchanged browser-defaults.ts export objects through TypeScript transpilation
+confirms main/div/section all omit boxSizing (3/3 assertions). StyleDefaultsService
+merges those global/type objects; StyleService.findStyleForElement starts from
+those defaults and merges author origins. ElementCreationService passes that
+resolved style to calculateDimensions after inline/pseudo overrides, without
+supplying a boxSizing initial value. The source search finds no other non-test
+boxSizing assignment in src/app. For the retained parent whose author stages
+omit the property, there is no demonstrated source-level default injection to
+explain away the documented content-box versus legacy border-box disagreement.
+This proves the default-object/source path,not installed-package execution.
+Next reuse the existing package-root box-model fixture/proof to establish whether
+the omission branch reaches public rendering; preserve the explicit native
+parent border-box request and do not infer equal inputs from matching widths.
+
 Public default-contract lookup answers the next shared sizing question without
 capture or producer changes: docs/compatibility/capabilities.json sizing entry
 explicitly documents boxSizing:content-box as the default; the synchronized
