@@ -14,18 +14,23 @@ import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 
 // A bounded proposal through the existing review store, not canonical mutation.
 // No persistent cache: queryFindings performs its own authenticated direct reads.
+export const iconContextBaseline = Object.freeze({
+  generation: '89030a75f63d832a344b3be8ba8d33bf7def3b78fb4a222ebacb5fac71d27194',
+  indexSha256: '8d77725901ede263719fbff6dbf4cef6df17195e0bece98e0f6819edb56ce9ae',
+});
 export function collectIconContextReview() {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
-  const canonical = JSON.parse(readFileSync('docs/material-input-equivalence-audit.json'));
-  const pointer = JSON.parse(readFileSync('artifacts/material-parity/working-audit/current.json'));
-  assert.equal(pointer.generation, canonical.compressedSha256);
-  const rows = queryFindings('artifacts/material-parity/working-audit', 'icon');
+  // Publishing reviewed metadata must not replace the original rows we replay.
+  const indexFile = `artifacts/material-parity/working-audit/${iconContextBaseline.generation}/index.json`;
+  const indexBytes = readFileSync(indexFile);
+  assert.equal(hash(indexBytes), iconContextBaseline.indexSha256);
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'icon', iconContextBaseline);
   const file = 'artifacts/material-parity/current-ancestry-audit/latest-report.json', raw = readFileSync(file);
   assert.equal(hash(raw), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
   const capture = JSON.parse(raw), one = values => { assert.equal(values.length, 1); return values[0]; };
   const cases = [...capture.results.map(row => ({ ...row, kind: 'static' })), ...capture.interactions.map(row => ({ ...row, kind: 'interaction' }))].filter(row => row.family === 'icon');
   assert.equal(cases.length, 20);
-  const sources = [{ file, sha256: hash(raw) }, ...['tests/material-parity/display-request-review.mjs','docs/material-input-equivalence-audit.json'].map(file=>({file,sha256:hash(readFileSync(file))}))];
+  const sources = [{ file, sha256: hash(raw) }, { file: indexFile, sha256: hash(indexBytes) }, ...['tests/material-parity/display-request-review.mjs'].map(file=>({file,sha256:hash(readFileSync(file))}))];
   const observations = cases.map(entry => {
     const trees = ['reference','astylar'].map(side => { const receipt = entry.inputTrees[side], bytes = readFileSync(receipt.file); assert.equal(hash(bytes), receipt.sha256); sources.push(receipt); return JSON.parse(bytes); });
     const [r,a] = trees, rn = id => one(r.nodes.filter(node => node.attributes?.id === id)), an = id => one(a.nodes.filter(node => node.authored?.id === id));

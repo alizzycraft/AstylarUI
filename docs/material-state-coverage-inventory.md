@@ -2,6 +2,23 @@
 
 ## Current evidence boundary — October 10
 
+### Icon review replay now pins immutable original rows
+
+Resolved integration hazard: collecting the staged review from current.json and
+the current canonical manifest would lose its original pending rows after
+publication. The existing collector and its conservation assertion now explicitly
+pin accepted179 generation89030a75f63d832a344b3be8ba8d33bf7def3b78fb4a222ebacb5fac71d27194
+and index SHA8d77725901ede263719fbff6dbf4cef6df17195e0bece98e0f6819edb56ce9ae.
+Existing queryFindings authenticates the index and family shards; original20-case
+report/40-tree checks remain unchanged. No historical row or current pointer is
+modified. The source receipt now records that immutable index rather than the
+moving canonical manifest. Initial check failed ENOENT because an extra generations
+path segment was used; corrected to the existing store layout, focused proposal
+assertion passes1/1,6222.5058ms, including original-value and false-equivalence
+negative controls. Canonical integration/publication remains pending; no case
+closure, renderer/fixture change or final gate claim. Next apply reviewed metadata
+with exact full-original-row conservation and register the coherent evidence batch.
+
 ### Icon context/width review staged through existing proposal mechanism
 
 Existing display-request-review module now collects and independently replays a
