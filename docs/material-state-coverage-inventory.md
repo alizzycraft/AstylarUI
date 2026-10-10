@@ -2,6 +2,26 @@
 
 ## Current evidence boundary — October 11
 
+### Coherent185 export terminal success; independent cold acceptance pending
+
+Existing export43344 completes exit0 at2961776.0018ms. Validation and evidence
+session verification finish before encoding/publication; session reports one
+collector,ten memory hits,one disk hit,zero invalidations,1205 files and89154859
+verified bytes. Log coherent-185-proof-export-20261010.log SHA256
+c3cfe30194d4235b55a5ebf3814376706bd3b574cf77ecc76362bc9bcf5a5323.
+Generated compressed package90c59d984b2a021384f07da008395cfd6dbea59497f27190d0554b4a763767a3
+is62859105 bytes; decodedb9a01e401ccd1d2b002f88ce0751d9d81064b7194a8fe8dcc9cf3bc2a0a7bf68
+is2222947084 bytes. Coverage436/1875,8483 groups,389202 occurrences and155
+findings remain unchanged; inputEquivalent=false. This is not yet independently
+accepted or imported. Existing --check launcher started with ASTYLAR_AUDIT_COLD=1
+and ASTYLAR_AUDIT_PROGRESS=1; session96538,launcher25636,worker14120,log
+coherent-185-proof-independent-cold-check-20261010.log. Producer/test/capture
+inputs remain frozen. After terminal cold success,import/verify existing compact
+store,review coherent canonical diff and commit/push publication. All2311 cases
+remain partial; final browser/harness gates stay open. D:free3019436032 bytes
+before cold launch; recheck before import. Immutable accepted179 remains the
+historical replay baseline,not silently replaced by generated185 evidence.
+
 ### Pending cursor queue is not a uniform auto/default measurement difference
 
 Remaining disabled input-context join authenticates original reportb07ef154 and
