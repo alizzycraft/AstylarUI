@@ -1,5 +1,23 @@
 # Material comparison/state coverage inventory
 
+## Current evidence boundary — October 11
+
+### Pending cursor queue is not a uniform auto/default measurement difference
+
+Read-only compact queries authenticate accepted179 index8d777259 and all selected
+family shards. The existing explicit-unproven-context filter reproduces94 cursor
+groups/5294 occurrences:84 groups/4786 occurrences are native auto versus candidate
+default;10 groups/508 occurrences are native auto versus candidate pointer.
+The latter owners are chip-0/1,checkbox-primary,slider-primary/start,
+slide-toggle-primary,button-toggle-one/two,expansion-primary/title. Thus the
+competing uniform auto/default explanation is ruled out for this queue; no
+effective-cursor equivalence or new renderer diagnosis is established by scalars.
+Next join exact native hit regions/text-range applicability and candidate hit
+ownership, reusing existing cursor proofs. Icon's applied-theme point proof is
+not a blanket authorization to normalize other owners. No inputs, classification,
+case closure or acceptance criteria changed. Existing185 export43344/worker29160
+remains live in validation; source/test/capture inputs are frozen until terminal.
+
 ## Current evidence boundary — October 10
 
 ### Non-root alignment queue partitioned by own formatting context
