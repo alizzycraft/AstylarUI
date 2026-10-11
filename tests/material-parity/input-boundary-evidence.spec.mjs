@@ -16,6 +16,7 @@ import { readGapSurveySource } from './gap-survey-source-replay.mjs';
 import { verifyRetainedMaterialBrowserFiles } from './historical-audit-module-source.mjs';
 import { materialStaticCases, materialInteractionCases, materialMobileFlowCases } from './benchmark.config.mjs';
 import { cursorInput } from '../../examples/material-showcase/audit/cursor-default-input.mjs';
+import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 
 const file = 'artifacts/material-parity/input-boundaries-keypress-559f95c/latest-report.json';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -55,6 +56,18 @@ test('retained timepicker option text owners distinguish wrapper line boxes from
     }
   }
   assert.equal(owners, 384); // Unequal text ownership/requests, not measured glyph placement or current paint.
+  const canonical = JSON.parse(readFileSync('docs/material-input-equivalence-audit.json'));
+  const pointer = JSON.parse(readFileSync('artifacts/material-parity/working-audit/current.json'));
+  assert.equal(pointer.generation, canonical.compressedSha256);
+  const metrics = queryFindings('artifacts/material-parity/working-audit', 'timepicker')
+    .filter(row => row.property === 'lineHeight' && /^timepicker-option-/.test(row.element));
+  assert.equal(metrics.length, 2304);
+  for (const row of metrics) {
+    assert.equal(row.classification, 'application-plugin-authoring-defect');
+    assert.equal(row.attribution, 'reviewed-omitted-component-text-metric');
+    assert.equal(row.evidence.sourceSha256, canonical.uncompressedSha256);
+  }
+  // Published historical attribution is not current glyph-position acceptance.
 });
 test('semantic descendant replacement focus evidence retains exact current case and source applicability', async () => {
   const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');

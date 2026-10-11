@@ -1,5 +1,23 @@
 # Material comparison/state coverage inventory
 
+## Timepicker option metric classification join — October 12
+
+Existing compact query authenticates the current canonical pointer,index and
+timepicker shards:2304 option lineHeight rows already classify as application-
+plugin-authoring-defect,attribution reviewed-omitted-component-text-metric.
+Their decoded source receipts match the published canonical hash. The existing
+option boundary test now guards this join alongside historical authoring and
+384 October5 option pairs;1/1 passes1583.5856ms (3068.4838ms process).
+An initial assertion used nonexistent decodedSha256 instead of the manifest's
+uncompressedSha256 and failed; corrected field passes without changing evidence.
+This answers whether the omission is unclassified:it is already attributed.
+Do not create a duplicate finding or repeat the omission survey. It does not
+prove current glyph placement,normal-line-height equivalence or wrapper neutrality.
+Next resolve the remaining option local paint applicability using existing
+retained/captured owner evidence; no new centering reduction is justified solely
+by this unequal-input screenshot. Source fingerprint/proof registration joins
+the pending coherent mobile batch; whole-case closures and final gates remain.
+
 ## Timepicker option history boundary — October 12
 
 The existing option-text assertion now checks exact Git history alongside the
