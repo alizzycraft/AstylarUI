@@ -2,6 +2,21 @@
 
 ## Current evidence boundary — October 11
 
+Divider font/remount applicability question is now bounded without recapture.
+Existing complete runtime-member/linker census passes1/1 (11546.005ms test,
+12851.2536ms terminal),authenticating88 captured/installed linked modules and1583
+unchanged current members; only the explicit retained-layout inspector differs.
+Log divider-font-runtime-applicability-20261011.log SHA256
+ac608c3b87c832afb95a7c7ffe6f2d092c83c0e639a7db7cac5b4444ea3ee758.
+Existing real-font logs retain exact13a14bca/9a61af6b hashes. Their shared font
+owner therefore remains applicable: initial wait,later invalidation,disposed-owner
+non-resurrection and one pending remount/live-peer boundary already execute.
+These are shared-source DPR1 reductions,not24 configured divider lifetime runs,
+all-profile paint,original font timing or repeated-remount plateau acceptance.
+Do not repeat them as missing execution. Exact24-case update/disposal membership
+remains separate. Next remaining local paint/source applicability and explicit
+disposition of uncaptured lifetime/AT boundaries; no full-case promotion.
+
 Coherent194 publication is independently verified. Five-path export and cold
 check both completed exit0; cold elapsed2837282.2993ms,2 collectors,10 memory
 hits,0 disk hits,0 invalidations,1205 files/89158075 bytes reverified. Cold log
@@ -3534,7 +3549,7 @@ promoted to parity. The following supersedes stale missing-cohort statements.
 | Membership,structure,history and authored layout/paint | All24 paired trees; complete node sequence,paragraph/separator order and classified absolute/border-to-background substitutions. Existing equal-input empty-block reduction demonstrates the302px/301px core used-height failure. October11 published193 join covers304 scalar groups/5424 occurrences and144 typography rows across all24 exact cases; observed proposal memberships preserve unchanged complete-row hashes. | Scalar/typography classification incidence is complete,not complete style/paint or current-source acceptance. Join remaining paint/source obligations; do not reprove settled authoring,empty-block cause or outer-host clipping membership. |
 | Wrapping/width inputs | Current parser and width inheritance traced;20 fresh font-loaded registry contexts join all24 cases/48 corresponding owner records. Single literal words stay single-line under bounded width controls. | Fresh JIT dimensions do not recover historical paint-time texture constraints or certify complete AOT line boxes. |
 | Separator semantics | Actual-theme40 side observations/20 contexts cover all24 configured cases,including comparison panes; role/name/orientation/no children and description relations inspected. October11 current40-side ancestor captures also cover all24 cases: links intact,one native main versus two candidate mains,classified application document authoring. Original light-only ancestor evidence is preserved separately. | Actual assistive-technology interaction is not captured; ancestor relationships and duplicate-main ownership are no longer missing. Do not recapture already covered targets/ancestors without changed inputs or contradictory evidence. |
-| Replacement/disposal | Exact20 physical-context membership joins all24 cases; sampled replacement counts and final disposal inspected. | Initial/later font timing,remount and peer-surface lifetime remain distinct; sampled final cleanup is not all lifetime acceptance. Leaf image/media/plugin-animation races are inapplicable to this authored divider. |
+| Replacement/disposal | Exact20 physical-context membership joins all24 cases; sampled replacement counts and final disposal inspected. Existing real-font DPR1 reductions execute initial wait,later invalidation,disposal during loading and one pending remount/live-peer boundary. October11 complete runtime census authenticates unchanged owning members; original logs13a14bca/9a61af6b retain their scope. | Historical font timing remains unavailable; shared-source reductions do not certify all24 configured lifetime executions,all profiles or repeated-remount plateau. Sampled final cleanup is not all lifetime acceptance. Leaf image/media/plugin-animation races are inapplicable to this authored divider. |
 | Local text/separator paint | Retained crops/strips and equal-input public reductions preserve diagnosed input mismatch,failed diagnostics and bounded post-canvas sampling uncertainty. | Full clipping/antialiased-edge attribution and exact-case paint/source applicability are not certified by centroids or coarse screenshot passes. |
 | Current applicability and final gates | Library linker/wiring and mapped application source boundaries are now explicit; original styles/fonts derivation is separately retained. New proofs are registered,not canonically published. | Diagnostic source drift,missing historical runtime font-timing receipts and final current enforced rendering remain explicit. No full-case closure is claimed. |
 
