@@ -2,6 +2,29 @@
 
 ## Current evidence boundary — October 11
 
+Divider ancestor accessibility capture gap is now closed: existing probe's opt-in
+--divider-relatives records actual CDP parent/child nodes in16 standard plus4
+comparison physical contexts,40 sides covering all24 configured cases. Explicit
+--checkpoint selects the exact current October11 served build; default historical
+checkpoint and full fingerprint/browser/runtime guards remain unchanged. No asset
+or source mismatch is normalized away. Chrome154.0.8037.99 captures both exit0.
+All chains begin separator→region(divider showcase)→main,terminate RootWebArea,
+and conserve parent/child links. Native exposes one main,candidate two in every
+context. Existing current-source outer <main> and unconditional inner main/page
+plus tag-mapping assertions assign this to application document authoring,not
+core semantic tag substitution. No screen-reader interaction equivalence follows.
+Logs divider-ancestor-ax-current-20261011.log SHA256
+c5e5138afd3061697cccde34a2467739786d93705638ba0f5e5725c40e4b3c5a;
+divider-ancestor-ax-comparison-current-20261011.log SHA256
+9ebbd9981229138817a4603ff16ecd2bd805b5a7440f1aff483a673f20d433b7.
+Existing AX assertion extended,not replaced:1/1,3321.2542ms; receipt-join log
+divider-ancestor-ax-receipt-join-20261011.log SHA256
+1ffe366c30e8cef43d9a86e508340d45932cb320ca3575e0565e975a15a2676e.
+Probe syntax/scoped diff checks pass; producer registers both logs and expanded
+existing proof description. Canonical193 remains predecessor pending coherent
+source/export reconciliation. No renderer/fixture change or case promotion.
+Next remaining paint/font/remount obligations,not separator/ancestor recapture.
+
 Divider exact classification membership is now joined against published193,
 not inferred from the12-example cases lists. Existing queryFindings/verifyFindings
 authenticate the current package/index/shards; original proposal58711556 digest
@@ -3470,7 +3493,7 @@ promoted to parity. The following supersedes stale missing-cohort statements.
 | --- | --- | --- |
 | Membership,structure,history and authored layout/paint | All24 paired trees; complete node sequence,paragraph/separator order and classified absolute/border-to-background substitutions. Existing equal-input empty-block reduction demonstrates the302px/301px core used-height failure. October11 published193 join covers304 scalar groups/5424 occurrences and144 typography rows across all24 exact cases; observed proposal memberships preserve unchanged complete-row hashes. | Scalar/typography classification incidence is complete,not complete style/paint or current-source acceptance. Join remaining paint/source obligations; do not reprove settled authoring,empty-block cause or outer-host clipping membership. |
 | Wrapping/width inputs | Current parser and width inheritance traced;20 fresh font-loaded registry contexts join all24 cases/48 corresponding owner records. Single literal words stay single-line under bounded width controls. | Fresh JIT dimensions do not recover historical paint-time texture constraints or certify complete AOT line boxes. |
-| Separator semantics | Actual-theme40 side observations/20 contexts cover all24 configured cases,including comparison panes; role/name/orientation/no children and description relations inspected. | Ancestor AX is only captured in the historical light desktop DPR1 pair. Duplicate main originates in current host/document authoring; broader live ancestor relationships are not captured. Do not recapture already covered separator targets. |
+| Separator semantics | Actual-theme40 side observations/20 contexts cover all24 configured cases,including comparison panes; role/name/orientation/no children and description relations inspected. October11 current40-side ancestor captures also cover all24 cases: links intact,one native main versus two candidate mains,classified application document authoring. Original light-only ancestor evidence is preserved separately. | Actual assistive-technology interaction is not captured; ancestor relationships and duplicate-main ownership are no longer missing. Do not recapture already covered targets/ancestors without changed inputs or contradictory evidence. |
 | Replacement/disposal | Exact20 physical-context membership joins all24 cases; sampled replacement counts and final disposal inspected. | Initial/later font timing,remount and peer-surface lifetime remain distinct; sampled final cleanup is not all lifetime acceptance. Leaf image/media/plugin-animation races are inapplicable to this authored divider. |
 | Local text/separator paint | Retained crops/strips and equal-input public reductions preserve diagnosed input mismatch,failed diagnostics and bounded post-canvas sampling uncertainty. | Full clipping/antialiased-edge attribution and exact-case paint/source applicability are not certified by centroids or coarse screenshot passes. |
 | Current applicability and final gates | Library linker/wiring and mapped application source boundaries are now explicit; original styles/fonts derivation is separately retained. New proofs are registered,not canonically published. | Diagnostic source drift,missing historical runtime font-timing receipts and final current enforced rendering remain explicit. No full-case closure is claimed. |

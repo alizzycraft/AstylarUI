@@ -884,6 +884,52 @@ test('divider actual-theme AX cohorts preserve exact contexts and runtime receip
     { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
   const owner = new Function(`${compiled}; return new TagOwner();`)();
   for (const tag of ['main', 'section', 'div']) assert.equal(owner.semanticTagName(tag), tag);
+  // Current ancestor observations extend,not replace,the historical target and
+  // light-only relative-tree evidence above. Duplicate main is authored here.
+  const current = [];
+  for (const [file, digest, contexts] of [
+    ['divider-ancestor-ax-current-20261011.log', 'c5e5138afd3061697cccde34a2467739786d93705638ba0f5e5725c40e4b3c5a', 16],
+    ['divider-ancestor-ax-comparison-current-20261011.log', '9ebbd9981229138817a4603ff16ecd2bd805b5a7440f1aff483a673f20d433b7', 4],
+  ]) {
+    const raw = readFileSync(`artifacts/material-parity/${file}`); assert.equal(hash(raw), digest);
+    const rows = raw.toString().trim().split(/\r?\n/).map(JSON.parse), end = rows.pop();
+    assert.equal(end.terminal, 'verified'); assert.equal(end.contexts, contexts);
+    assert.equal(end.axRelativesRecorded, true); assert.equal(rows.length, contexts * 2);
+    for (const receipt of [...end.capture.sources, ...end.sourceReceipts, end.capture.checkpointManifest])
+      assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+    assert.equal(end.capture.checkpointManifest.file,
+      'artifacts/material-parity/selection-pointer-directions-20261011/checkpoint/manifest.json');
+    const checkpoint = JSON.parse(readFileSync(end.capture.checkpointManifest.file));
+    assert.equal(end.browser, checkpoint.provenance.browser);
+    assert.deepEqual(fingerprintDirectory('examples/material-showcase/dist/material-showcase/browser'), checkpoint.provenance.browserFiles);
+    for (const row of rows) {
+      assert.deepEqual(row.runtime.errors, []);
+      assert.deepEqual(row.theme, { dark: row.context.profile === 'dark', background: rgb[row.context.profile] });
+      for (const asset of row.runtime.assets) assert.equal(asset.sha256,
+        checkpoint.provenance.browserFiles.find(file => (file.path ?? file.file) === asset.file)?.sha256);
+      const nodes = row.axRelatives, index = new Map(nodes.map(node => [node.nodeId, node]));
+      assert.equal(index.size, nodes.length);
+      assert.deepEqual(nodes.slice(0, 3).map(node => [node.role.value, node.name?.value, node.ignored]),
+        [['separator', '', false], ['region', 'divider showcase', false], ['main', '', false]]);
+      for (const node of nodes.filter(node => node.parentId)) {
+        const parent = index.get(node.parentId); assert.ok(parent);
+        assert.ok(parent.childIds.includes(node.nodeId));
+      }
+      assert.equal(nodes.filter(node => !node.ignored && node.role.value === 'main').length,
+        row.side === 'reference' ? 1 : 2);
+      assert.equal(nodes.at(-1).role.value, 'RootWebArea');
+      const url = new URL(nodes.at(-1).properties.find(property => property.name === 'url').value.value);
+      assert.equal(url.pathname, `/${row.side}/divider`);
+      assert.equal(url.searchParams.get('profile'), row.context.profile);
+      assert.equal(url.searchParams.get('benchmark'), '1');
+    }
+    current.push(...rows);
+  }
+  assert.equal(new Set(current.map(r => `${r.context.profile}:${r.context.viewportId}:${r.side}`)).size, 40);
+  for (const entry of configured) for (const side of ['reference', 'astylar'])
+    assert.ok(current.some(row => row.side === side && row.context.profile === entry.profile &&
+      row.context.viewport.width === entry.viewport.width && row.context.viewport.height === entry.viewport.height &&
+      row.context.deviceScaleFactor === entry.viewport.deviceScaleFactor));
 });
 
 test('divider host clipping observations preserve bounded DOM ancestry', () => {

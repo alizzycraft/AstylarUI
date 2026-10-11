@@ -18,7 +18,8 @@ if (process.argv.includes('--divider-layout')) {
   process.exit(0);
 }
 const root = path.resolve('examples/material-showcase/dist/material-showcase/browser');
-const checkpoint = 'artifacts/material-parity/current-full-20261005/checkpoint';
+const checkpointArgument = process.argv.find(arg => arg.startsWith('--checkpoint='));
+const checkpoint = checkpointArgument?.slice('--checkpoint='.length) ?? 'artifacts/material-parity/current-full-20261005/checkpoint';
 const manifest = JSON.parse(readFileSync(`${checkpoint}/manifest.json`));
 assert.deepEqual(fingerprintDirectory(root), manifest.provenance.browserFiles);
 const allContexts = process.argv.includes('--all-contexts');
@@ -26,6 +27,8 @@ const ordinaryTooltip = process.argv.includes('--ordinary-tooltip');
 const divider = process.argv.includes('--divider');
 const dividerHostContext = process.argv.includes('--divider-host-context');
 assert.ok(!dividerHostContext || divider, 'Host context is a separate opt-in divider observation.');
+const dividerRelatives = process.argv.includes('--divider-relatives');
+assert.ok(!dividerRelatives || divider, 'AX relatives are a separate opt-in divider observation.');
 const comparisonOnly = process.argv.includes('--comparison-only');
 assert.ok(!comparisonOnly || divider && !allContexts, 'Comparison-only is a separate bounded divider cohort.');
 assert.ok(!divider || !ordinaryTooltip, 'Divider and ordinary tooltip are separate capture scopes.');
@@ -61,7 +64,7 @@ let browser;
 try {
   browser = await chromium.launch(materialBrowserLaunchOptions());
   const options = parseSupplementalCaptureArguments([
-    `--base-url=${baseUrl}`, `--checkpoint=${checkpoint}`, ...process.argv.slice(2).filter(arg => !['--all-contexts', '--ordinary-tooltip', '--divider', '--comparison-only', '--divider-host-context'].includes(arg)),
+    `--base-url=${baseUrl}`, `--checkpoint=${checkpoint}`, ...process.argv.slice(2).filter(arg => !arg.startsWith('--checkpoint=') && !['--all-contexts', '--ordinary-tooltip', '--divider', '--comparison-only', '--divider-host-context', '--divider-relatives'].includes(arg)),
   ]);
   const evidence = openSupplementalCapture({ options, browser,
     script: 'scripts/audit-material-field-description.mjs', styleProperties: [] });
@@ -110,7 +113,7 @@ try {
       const { root: document } = await session.send('DOM.getDocument');
       const { nodeId } = await session.send('DOM.querySelector', { nodeId: document.nodeId, selector });
       assert.ok(nodeId);
-      const { nodes } = await session.send('Accessibility.getPartialAXTree', { nodeId, fetchRelatives: false });
+      const { nodes } = await session.send('Accessibility.getPartialAXTree', { nodeId, fetchRelatives: dividerRelatives });
       const ax = nodes.find(node => node.role?.value === (divider ? 'separator' : ordinaryTooltip ? 'button' : 'textbox'));
       assert.ok(ax && !ax.ignored);
       const dom = await page.locator(selector).evaluate(node => ({
@@ -141,6 +144,7 @@ try {
       if (hostContext?.errors) assert.deepEqual(hostContext.errors, []);
       const runtime = await finish();
       console.log(JSON.stringify({ context, state, side, url: page.url(), theme, observation, runtime,
+        ...(dividerRelatives ? { axRelatives: nodes } : {}),
         ...(dividerHostContext ? { hostContext } : {}) }));
       assert.equal(observation.name, divider ? '' : ordinaryTooltip ? 'Hover for help' : 'Project name');
       if (divider) {
@@ -159,7 +163,7 @@ try {
       'tests/material-parity/benchmark.config.mjs', 'examples/material-showcase/src/app/theme.ts',
       'examples/material-showcase/src/app/frame-sync.ts', 'examples/material-showcase/src/app/frame-protocol.ts']
       .map(file => ({ file, sha256: hash(readFileSync(file)) })),
-    contexts: contexts.length, family, states,
+    contexts: contexts.length, family, states, ...(dividerRelatives ? { axRelativesRecorded: true } : {}),
     scope: divider ? 'Separator AX in explicitly verified theme/physical contexts; not paint, lifecycle or complete accessibility acceptance.'
       : 'Descriptions in explicitly listed physical/theme/state contexts; no other action-state, live-announcement or assistive-technology acceptance.' }));
 } finally {

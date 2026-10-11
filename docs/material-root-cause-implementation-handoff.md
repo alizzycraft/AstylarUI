@@ -1,5 +1,13 @@
 # Material audit: evidence-led implementation priorities
 
+October11 divider current ancestor AX now covers all20 physical contexts/24
+configured cases. Parent links are intact; all40 side observations expose one
+native main versus two candidate mains. Existing outer/inner main authoring and
+core tag mapping classify the extra landmark at the application boundary,not
+renderer tag substitution. Existing AX assertion passes1/1 with exact current
+checkpoint/assets/source receipts. See ledger for logs/limits; no AT interaction
+or whole-case acceptance. Two logs/proof metadata await coherent publication.
+
 October11 divider exact membership is complete for all304 scalar groups and144
 typography rows across24 configured cases. Original observed membership proposal
 authenticates unchanged rows in published193; no missing classification or case.
