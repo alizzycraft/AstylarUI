@@ -2,6 +2,28 @@
 
 ## Current evidence boundary — October 11
 
+Focused cursor export-receipt diagnosis now narrows the required reconciliation.
+Read the retained public-cursor-defaults-4cf733e provenance and hash every2517
+bundle input against the installed package:2516 match; only lib/lib/astylar.js
+differs (original6ad4f51c,currenta18630bd). The existing
+node_modules.audit-prior-junction copy hashes exactly to the original receipt.
+Evaluate existing cursorSourceProof against both current and retained packages:
+all four owning projections agree (browser defaults,type defaults,pointer
+updateCursor/resolvePreferredMesh,and text registry register); all eight cursor/
+text-owner controls retain their asserted outcomes. No capture bytes changed.
+
+A read-only TypeScript AST comparison keyed by class plus method finds57 methods
+in each astylar.js,none removed,and only
+AstylarRenderer.inspectCurrentDocumentStyles changed. Initial unqualified method
+comparison rejected duplicate mount names; the class-qualified comparison avoids
+that ambiguity. This identifies inspector-only method drift,not complete-file
+equivalence: imports,class fields and other top-level declarations still need
+exact reconciliation. Next extend the existing historical evidence boundary to
+authenticate original dependencies separately from current applicability,with
+an exact bounded inspector restoration and rejection controls. Do not globally
+preload historical files into canonical production or replace original receipts.
+No fresh browser parity,canonical publication or case closure is claimed.
+
 Coherent state-proof export retry now terminates exit1 (session29358; PID13056
 missing),not a wait/timeout. Retain coherent-state-proof-export-retry-20261011.log
 SHA256f51eb12f5440146386b20b63025820fff7092986deaa3740fef0e7707e4de17e.
