@@ -2,6 +2,39 @@
 
 ## Current evidence boundary — October 11
 
+Coherent inspector-reconciled export is live in session15135,launcher31944 and
+worker24800 (authoritative process checks),log
+coherent-state-proof-export-inspector-reconciled-20261011.log. Last observed
+phase build-audit; no terminal outcome/publication is inferred. Dependencies
+remain frozen while it runs. Ledger is not a producer input; this independent
+retained-tree investigation changes no consumed files or captured evidence.
+
+Grid-list wrapper ownership gap is now inspected for all52 retained configured
+cases,104 authenticated trees and104 tile owners from October5 reportab42dbec.
+Every native tile requests position:absolute and overflowX/Y:hidden; its one
+mat-grid-tile-content child requests absolute top/right/bottom/left0px and flex
+center alignment. Every candidate tile requests relative flex centering and
+omits overflow/overflowX/overflowY; the candidate has an explicit span label
+instead of the native wrapper's anonymous text. Do not fill missing candidate
+fields with assumed visible values or infer actual clipping failure from them.
+One complete shape population covers all52: native two percentage-calc tiles
+(50%-0.5px widths,second left50%+0.5px) versus candidate1fr1fr/gap0. The gutter/
+container mechanism is already classified; this check closes the separately
+pending wrapper/clipping-input ownership question,not that settled finding.
+
+Current source still authors these candidate rules at astylar.component.ts
+lines683–685 (rawSHA71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd).
+Installed Material grid-list.mjs owns the native clipping/inset-wrapper rules
+(rawSHA3704310010568e5fa25518e881356d6b5a0ab3ba9170bbe8d93ce023dc4d271b).
+Git -S for the tile selector identifies initial showcase2f440115,not a recent
+renderer fix. Classification: application-authoring layout/clipping substitution;
+equivalent short-label screenshots cannot justify it. This is retained input
+evidence plus current authoring-source observation,not current browser acceptance
+or a long-content variant absent from the reference. Exact output effect,local
+paint,remaining style/history obligations and whole-case closure stay open.
+Next bind this bounded claim to the existing owning wrapper assertion after the
+coherent export's frozen-input interval; no new report/framework is needed.
+
 Cursor collector reconciliation is now verified at the existing boundary.
 Complete installed astylar.js diff contains only two retained-layout inspector
 additions. restoreCursorInspectorCaptureSource pins currenta18630bd,removes each
