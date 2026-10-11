@@ -2,6 +2,37 @@
 
 ## Current evidence boundary — October 11
 
+Source-map inventory failure is broader than the first missing filename.
+sourceFingerprints hard-codes seven historical map paths under mutable current
+dist. Authenticate October5 checkpoint browserFiles receipts against retained
+.audit-historical-build-1275fa1d/dist/authenticated-replay/browser: six of seven
+original maps match exactly,including missing current chunk-3JXWRYJY.js.map
+(dba48404). The second missing original is chunk-JPEJK334.js.map,expected
+47654b641610e1d56e02948b17fab41aff25e9c6aedc6f83b70a26b6f349ce9e.
+It is absent from current,authenticated-replay and logical-path-replay locations.
+Exact-content search checks2728 maps across the remaining historical-replay and
+Material-worktree dist with no matching digest; primary/second worktree dist
+adds zero maps. Existing compaction manifest has no filename/hash entry for it.
+No source inventory path was rewritten and no missing receipt was waived.
+
+Current corresponding component map is chunk-PCHQTLJM.js.map
+(55fedcbf88e93c3e0ca413d6458495aeb36087e947314dd4f0671358af8727b8),with
+sources material-assets,ripple controller,material-input-evidence and Astylar
+component. Complete current bytes and in-memory line-ending/content-normalized
+variants do not match original47654b64. Never substitute it as historical
+capture bytes or claim a guessed normalization recovered the original.
+Root infrastructure issue: historical dependency inventory points into a
+replaceable build output instead of immutable retained evidence. Rebuilding
+current inspector legitimately removed/replaced two named chunk maps.
+
+Next recover exact original component-map bytes from an authenticated preserved
+build/cache or reproducible original build,requiring the captured digest before
+reuse. Then bind all seven historical maps to explicit retained locations and
+preserve separate current-source applicability checks. Missing original-map
+bytes block canonical publication,not every remaining audit investigation.
+Do not rerun the expensive exporter,copy old output over current dist,or silently
+remove this source receipt. Other full-tree/state/paint/closure work remains.
+
 Inspector-reconciled export is terminal exit1 (session15135; launcher31944 and
 worker24800 missing),not a timeout. Log SHA256
 f7b8947fb96c9232974d9ec4ff2c7c795760f5c5def9fd747672c5f25b5b620a.
