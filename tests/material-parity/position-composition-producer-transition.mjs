@@ -366,6 +366,23 @@ export function restoreLayoutDiagnosticRegistration(source) {
 }
 // Historical replay only. Never use this reader for current capture or rendering acceptance.
 export function readRetainedSortFocusSource(current = readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')) {
+  if (current.toString().includes('ASTYLAR_AUDIT_MOBILE_TIMEPICKER_LIFECYCLE')) {
+    assert.equal(hash(current), '965b919bf0cfefe4f51413e3bf2bee0f65bc37d0c151da3709b281017a02a08c');
+    let text = current.toString();
+    const block = text.match(/          \/\/ audit-light-lifecycle-start\n[\s\S]*?          \/\/ audit-light-lifecycle-end\n/g);
+    assert.equal(block?.length, 1); text = text.replace(block[0], '');
+    for (const [added, prior] of [
+      ["  const currentLightLifecycle = process.env.ASTYLAR_AUDIT_MOBILE_TIMEPICKER_LIFECYCLE === 'light';\n", ''],
+      ["currentLightLifecycle ? '154.0.8037.99' : '154.0.8037.58'", "'154.0.8037.58'"],
+      ["currentLightLifecycle ? ['timepicker'] : ['autocomplete', 'timepicker']", "['autocomplete', 'timepicker']"],
+      ["${currentLightLifecycle ? 'light' : 'dark'}", 'dark'],
+      ['            if (currentLightLifecycle) await attachActualAx(opened);\n', ''],
+      ['            if (currentLightLifecycle) await attachActualAx(cycles.at(-1).closed);\n', ''],
+      ['assert.equal(failedPlateaus.length, currentLightLifecycle ? 2 : 4);', 'assert.equal(failedPlateaus.length, 4);'],
+    ]) { assert.equal(text.split(added).length, 2); text = text.replace(added, prior); }
+    current = Buffer.from(text);
+    assert.equal(hash(current), '978056ab0cc3004b2f6c789f58cd1253b4fe2b51df70641c2acde30476d2c080');
+  }
   if (current.toString().includes("const lightPaint = process.env.ASTYLAR_AUDIT_RETAIN_MOBILE_TIMEPICKER_PAINT === 'light';")) {
     assert.equal(hash(current), '978056ab0cc3004b2f6c789f58cd1253b4fe2b51df70641c2acde30476d2c080');
     let text = current.toString();

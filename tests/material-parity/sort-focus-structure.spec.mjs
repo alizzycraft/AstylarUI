@@ -1378,18 +1378,44 @@ test('dark mobile overlay cycles retain focus and semantic cleanup boundaries', 
 });
 
 test('dark mobile field popup cycles diagnose retained cursor materials', async t => {
+  const currentLightLifecycle = process.env.ASTYLAR_AUDIT_MOBILE_TIMEPICKER_LIFECYCLE === 'light';
   await withFrozenShowcase(async (browser, baseUrl) => {
-    assert.equal(browser.version(), '154.0.8037.58');
+    assert.equal(browser.version(), currentLightLifecycle ? '154.0.8037.99' : '154.0.8037.58');
     const failedPlateaus = [];
-    for (const family of ['autocomplete', 'timepicker']) {
+    for (const family of currentLightLifecycle ? ['timepicker'] : ['autocomplete', 'timepicker']) {
       const observations = {};
       for (const mode of ['reference', 'astylar']) {
         const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
         const errors = []; page.on('pageerror', error => errors.push(String(error)));
         try {
-          await page.goto(`${baseUrl}/${mode}/${family}?benchmark=1&profile=dark`);
+          await page.goto(`${baseUrl}/${mode}/${family}?benchmark=1&profile=${currentLightLifecycle ? 'light' : 'dark'}`);
           await page.locator('.frame').waitFor();
           if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+          // audit-light-lifecycle-start
+          let axSession;
+          if (currentLightLifecycle) {
+            assert.deepEqual(await page.locator('.frame').evaluate(node => ({ dark: node.classList.contains('dark'),
+              background: getComputedStyle(node).backgroundColor })), { dark: false, background: 'rgb(255, 251, 254)' });
+            axSession = await page.context().newCDPSession(page);
+            await page.evaluate(() => {
+              window.__mobileLifecycleEvents = [];
+              for (const type of ['focusin', 'focusout', 'pointerdown', 'pointerup', 'click', 'keydown', 'keyup', 'input', 'change'])
+                document.addEventListener(type, event => window.__mobileLifecycleEvents.push({ type,
+                  key: event.key ?? null, id: event.target?.getAttribute?.('data-astylar-id') || event.target?.id || event.target?.tagName }), true);
+            });
+            t.diagnostic(JSON.stringify({ currentLightLifecycleReceipts: { mode,
+              sourceSha256: createHash('sha256').update(readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')).digest('hex'),
+              checkpointFile: process.env.ASTYLAR_MATERIAL_SHOWCASE_CHECKPOINT,
+              checkpointSha256: createHash('sha256').update(readFileSync(process.env.ASTYLAR_MATERIAL_SHOWCASE_CHECKPOINT)).digest('hex'),
+              viewport: [390, 844, 2], acceptance: false } }));
+          }
+          const attachActualAx = async boundary => {
+            if (!currentLightLifecycle) return;
+            boundary.actualAx = (await axSession.send('Accessibility.getFullAXTree')).nodes
+              .filter(node => !node.ignored && ['combobox', 'listbox', 'option', 'button'].includes(node.role?.value));
+            boundary.events = await page.evaluate(() => [...window.__mobileLifecycleEvents]);
+          };
+          // audit-light-lifecycle-end
           const settle = async () => {
             if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
             await page.evaluate(async () => { await document.fonts.ready;
@@ -1432,8 +1458,10 @@ test('dark mobile field popup cycles diagnose retained cursor materials', async 
               : `[data-astylar-id="${family === 'autocomplete' ? 'field-options' : 'timepicker-options'}"]`;
             await page.locator(selector).waitFor({ state: 'visible' }); await settle();
             const opened = await snapshot();
+            if (currentLightLifecycle) await attachActualAx(opened);
             await page.keyboard.press('Escape'); await page.locator(selector).waitFor({ state: 'detached' }); await settle();
             cycles.push({ opened, closed: await snapshot() });
+            if (currentLightLifecycle) await attachActualAx(cycles.at(-1).closed);
           }
           const disposal = mode === 'astylar' ? await page.evaluate(async () => {
             const surface = window.ng.getComponent(document.querySelector('app-astylar-showcase')).surface;
@@ -1478,7 +1506,7 @@ test('dark mobile field popup cycles diagnose retained cursor materials', async 
     }
     // Audit classification proof, not an acceptance gate. The original failed
     // plateau runs are retained; this assertion requires the counterexample.
-    assert.equal(failedPlateaus.length, 4);
+    assert.equal(failedPlateaus.length, currentLightLifecycle ? 2 : 4);
     assert.throws(() => assert.deepEqual(failedPlateaus, [], 'field popup resources must plateau after dismissal'),
       /field popup resources must plateau/);
     t.diagnostic(JSON.stringify({ resourcePlateauAccepted: false, classification: 'retained unbound cursor materials',

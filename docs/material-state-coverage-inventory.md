@@ -2,6 +2,39 @@
 
 ## Current evidence boundary — October 11
 
+Current light/mobile timepicker lifecycle/action boundaries now inspected through
+existing field-popup cycle test,not a new framework. Opt-in
+ASTYLAR_AUDIT_MOBILE_TIMEPICKER_LIFECYCLE=light plus current selection-pointer
+checkpoint2aac425d selects only missing timepicker context,exact Chrome154.0.8037.99,
+390x844 DPR2 and verifies actual light frame rgb(255,251,254). Original default
+two-family dark path and all failure assertions remain; opt-in expects two
+failed timepicker plateaus instead of four across autocomplete/timepicker.
+Pass1/1,10641.7ms; timepicker-light-mobile-lifecycle-current-20261011.log SHA256
+7319fc167568bb64812ebe7bbe788954c1999c63b9abb7f021205cf182e95ded.
+CurrentLightLifecycleReceipts pin source965b919b and checkpoint per side;
+actual CDP Accessibility.getFullAXTree nodes and native DOM event histories are
+recorded at all six open/closed boundaries. Legacy test title/final limitation
+caption describes original dark proof; explicit opt-in receipts/verified frame
+identify this distinct light capture. Independent receipt/AX/event replay passes.
+Each side opens48 exposed AX options,closes to0 option/listbox nodes,retains
+focused combobox name Meeting time and expanded=false,value empty. Three
+Escape down/up pairs target timepicker-control; sampled key/input/change arrays
+agree without input/change events. This is not complete pointer/focus event parity.
+Candidate AX hasPopup=dialog versus native listbox; candidate empty-open selects
+12:00 AM,native none. Current exact mapped component71e2d41f explicitly requests
+ariaHaspopup:'dialog' and ariaSelected:index===0 (lines1031/1052); classify as
+authoring semantic/state differences,not renderer coercion or equivalent input.
+Live materials26/27/28,cursor orphan1/2/3 identities persist; other closed sampled
+resources plateau and final disposal clears scene/engine/cache/plugin samples.
+Existing plugin-free caret owner proof remains the root cause,not newly reopened.
+Whole sorter965b919b restores exact978056ab then all original source receipts;
+focused mutation suite1/1,831.3ms,log mobile-light-lifecycle-source-conservation-
+20261011.log SHA25630b5f43821af4e8893886ffa012cc5c5ae735726ff35039e354431c2a95d4d75.
+This closes missing light three-cycle/focus/AX/sampled-live evidence,not dark
+current browser applicability,all AX relationships,late async/isolation or full
+case parity. Next join these classifications with exact case/finding IDs and
+current source/proof inventory; canonical/export and final gates stay open.
+
 Mobile timepicker checklist reuses previously inspected dark dismissal/lifetime
 boundaries rather than treating every endpoint as missing. Exact retained
 field-popup-cycles-current-20261007.log40c4d4ac authenticates three dark/mobile
@@ -43,8 +76,8 @@ state=open-dismiss. Both remain partially inspected,inputEquivalent=false.
 | Pointer opening and on-screen outer geometry | Current light/dark paired open captures,260x256 at65,237.08. | Focus-trigger opening and real-key behavior in these exact mobile contexts; do not import desktop results wholesale. |
 | Open-panel paint | Eight retained open/wheel PNGs; dark lower-corner unequal authoring classified. | Full local option text,selection/hover/held,clip and shadow input-equivalence classification; capture existence is not completion. |
 | Wheel state and client geometry | Both current themes0→144; native245px/candidate260px client width. | Dark drag/track inspected failures are dark-only; light pointer scrollbar behavior and complete mobile input/paint owner join remain. |
-| Three Escape cycles and final dismissal | Original October5 closed endpoints plus authenticated October7 dark/mobile three-cycle focus/options/expanded observations. | Current applicability and light/mobile action boundaries,events/AX; new opening captures do not exercise dismissal. |
-| Lifetime/ownership and isolation | Dark/mobile live26/27/28 and cursor orphan1/2/3 failure inspected; plugin-free caret ownership reduction already identifies allocation/disposal divergence. | Light/mobile cycles,current receipts,late disposal and applicable surface isolation; sampled whole-surface cleanup is not element-lifetime acceptance. |
+| Three Escape cycles and final dismissal | Historical dark three-cycle focus/options observations plus current light three-cycle actual AX/options/focus/Escape events; authored popup-kind and empty-selected-state mismatches classified. | Dark current applicability/AX,full applicable event/relationship inspection; new opening captures alone do not exercise dismissal. |
+| Lifetime/ownership and isolation | Dark historical and light current live26/27/28,cursor orphan1/2/3 inspected failures; plugin-free caret ownership reduction identifies allocation/disposal divergence. | Dark current receipts,late disposal and applicable surface isolation; sampled whole-surface cleanup is not element-lifetime acceptance. |
 
 No obligations counted as closed solely from historical output flags. Next
 decisive investigation is current mobile Escape/reopen/focus/event boundaries
