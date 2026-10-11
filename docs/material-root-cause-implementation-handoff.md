@@ -1,5 +1,18 @@
 # Material audit: evidence-led implementation priorities
 
+October12 publication committed and pushed as5c308388 on
+codex/material-audit-alignment-integration; remote and local heads agree.
+Current compact source finding ordinal155 contains the box-sizing default
+diagnosis; the accepted185 integration-pending statement below is historical,
+not an outstanding export gap. Existing loadFindingEvidence authenticates the
+original row against canonical compressed/row hashes,exit0: original ID
+core-box-sizing-omission-violates-content-box-default,confirmed-core-renderer-defect.
+Do not rerun the public browser reduction. Current mobile timepicker focus/
+lifecycle coverage remains asymmetric: light has six current AX/event boundaries;
+dark retains historical cycles but lacks equivalent current AX/event receipts.
+Next use the existing field-popup cycle diagnostic for that missing dark context,
+preserving historical failure assertions and requiring actual dark theme evidence.
+
 October12 bounded divider publication now passes named export,independent cold
 canonical check,compact import and whole-index verification,all exit0.194 proofs/
 626 source paths preserve157 findings,8483 groups,39904 controls and389202
@@ -19964,8 +19977,9 @@ contract failure,not a final-projection defect or universal sizing diagnosis.
 History: fb1553ff (August15 web-parity harness) added explicit content-box support
 and explicitly preserved the preexisting border-box omission behavior. Do not
 describe that commit as a demonstrated recent Material compensation. Authenticated
-accepted185 compact source inventory contains155 findings and none covers this
-default discrepancy; new canonical integration is pending,not already published.
+accepted185 compact source inventory contained155 findings and none covered this
+default discrepancy. That was the historical boundary; current coherent194 has
+157 findings and includes the default diagnosis at source finding ordinal155.
 
 Later implementation order: establish the general initial-value rule in core
 style/default and sizing ownership; retain explicit border-box behavior; exercise
