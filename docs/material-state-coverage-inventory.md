@@ -2,6 +2,31 @@
 
 ## Current evidence boundary — October 11
 
+Opposite-item pointer transition gap is now inspected for radio,button-toggle,
+tabs and stepper in all eight configured desktop contexts each (four profiles,
+DPR1/2). Competing explanations were missing pointer selection handling versus
+the old capture merely clicking an already-selected item. Existing runner's
+opt-in diagnostic replay keeps the original activation,then real-clicks the
+first item and returns to the second. All32 paired sequences observe actual
+control states [false,true]→[true,false]→[false,true]. Native radio observations
+read live input.checked; other controls read explicit child ARIA state,with
+missing state rejected rather than defaulted. This closes this bounded pointer
+state question; it does not overturn the independently failing keyboard paths.
+
+Evidence: selection-pointer-directions-20261011/latest-report.json, SHA256
+f1497dbd6bb360d25ae62466c4ef1b5d95631f7265af8da3b2969774e0b690a0,
+mode diagnostic-selection-replay. All32 checkpoint records and their artifacts
+authenticate through existing openMaterialCheckpoint.load; all96 stage pairs
+match expected states. Each boundary retains paired input trees/screenshots and
+candidate events. Existing workflow tests pass5/5,1472.0984ms; diff-check passes.
+No fixture/core changes. Diagnostic mode rejects --enforce; unchanged acceptance
+thresholds and standard actions remain. Replay resource snapshots precede these
+extra actions,so do not claim lifetime plateau. State agreement alone is not
+equal-input,local-paint,event-order or whole-case acceptance. Current source/
+proof fingerprint reconciliation remains pending for a coherent canonical batch.
+Next bind these exact boundaries to applicable input/local-paint obligations,
+without repeating settled pointer state or keyboard authoring investigations.
+
 Independent activate-state applicability is now inspected for64 configured
 selection-family cases,eight contexts each. Extend the same existing retained
 state assertion (no new layer/report): all128 original paired tree receipts

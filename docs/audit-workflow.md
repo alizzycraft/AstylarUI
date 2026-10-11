@@ -79,6 +79,13 @@ package legitimately invalidates old installed-file receipts. `--enforce` still
 runs the complete benchmark-config suite, and the full audit harness remains
 unfiltered. No historical assertion or fingerprint is waived or rewritten;
 capture success does not imply that retained evidence remains current.
+For the demonstrated missing opposite-item pointer boundaries, use
+`ASTYLAR_MATERIAL_SELECTION_REPLAY=1` with interaction-only activate cases for
+radio,button-toggle,tabs,stepper. It retains actual paired control state,input
+trees and screenshots after the standard action,opposite-item click and return.
+This is diagnostic-only and rejects --enforce; use a new run directory. It does
+not prove equal inputs,local paint,complete event ordering or resource plateau
+(the standard resource samples precede the additional actions).
 The complete unfiltered audit harness is `node scripts/run-material-audit-harness.mjs`.
 It explicitly enables `ASTYLAR_AUDIT_RECEIPT_COMPARE=1` for its child so the two
 existing opt-in receipt-conservation assertions cannot silently skip final

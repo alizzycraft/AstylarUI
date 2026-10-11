@@ -39,6 +39,8 @@ const staticOnly = process.argv.includes('--static-only');
 const interactionOnly = process.argv.includes('--interaction-only');
 const textAudit = process.env['ASTYLAR_MATERIAL_TEXT_AUDIT'] === '1';
 const settlementTrace = process.env['ASTYLAR_MATERIAL_SETTLEMENT_TRACE'] === '1';
+const selectionReplay = process.env['ASTYLAR_MATERIAL_SELECTION_REPLAY'] === '1';
+assert.ok(!selectionReplay || (interactionOnly && !enforce), 'Selection replay is diagnostic interaction-only evidence, never enforced acceptance.');
 const browserRestartInterval = Number(process.env['ASTYLAR_MATERIAL_BROWSER_RESTART_INTERVAL'] ?? 200);
 const materialStyleInputProperties = Object.freeze([
   'position', 'display', 'visibility', 'boxSizing',
@@ -72,6 +74,9 @@ const interactionCases = staticOnly ? [] : materialInteractionCases.filter(({ fa
 const mobileFlowCases = staticOnly ? [] : materialMobileFlowCases.filter(({ family, profile }) =>
   familyFilter.has(family) && profileFilter.has(profile) &&
   (interactionStateFilter.size === 0 || interactionStateFilter.has('open-dismiss')));
+if (selectionReplay) assert.ok(interactionCases.length > 0 && mobileFlowCases.length === 0 &&
+  interactionCases.every(c => ['radio', 'button-toggle', 'tabs', 'stepper'].includes(c.family) && c.state === 'activate'),
+  'Selection replay requires exact activate cases for radio/button-toggle/tabs/stepper.');
 let browser;
 let server;
 let browserLaunchEvidence;
@@ -90,7 +95,7 @@ try {
     browserFiles: fingerprintDirectory(browserRoot),
     harnessFiles: fingerprintModuleGraph(root, 'tests/material-parity/run-material-parity.mjs'),
     installedDependencies: createHash('sha256').update(readFileSync(path.join(root, 'node_modules/.package-lock.json'))).digest('hex'),
-    cases, interactionCases, mobileFlowCases, enforce, textAudit, settlementTrace, browserRestartInterval,
+    cases, interactionCases, mobileFlowCases, enforce, textAudit, settlementTrace, selectionReplay, browserRestartInterval,
   } });
   const results = [];
   for (const [index, benchmarkCase] of cases.entries()) {
@@ -124,7 +129,7 @@ try {
   const report = {
     schemaVersion: 1,
     generatedAt: new Date().toISOString(),
-    mode: enforce ? 'enforced' : 'report-only',
+    mode: selectionReplay ? 'diagnostic-selection-replay' : enforce ? 'enforced' : 'report-only',
     browser: { name: 'Chromium', version: await browser.version() },
     captureProvenance: checkpoint.provenance,
     thresholds: materialThresholds,
@@ -374,6 +379,8 @@ async function captureInteractionCase(benchmarkCase) {
       resourceSnapshots.push(await astylar.page.evaluate((ids) =>
         window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(ids, false).diagnostics, benchmarkMeasurementIds(family)));
     }
+    const selectionTransitions = selectionReplay
+      ? await captureSelectionTransitions(reference.page, astylar.page, family, directory) : undefined;
     const ids = benchmarkMeasurementIds(family);
     const referenceMeasurement = await measureReference(reference.page, ids);
     const astylarMeasurement = await measureAstylarInputs(astylar.page, ids);
@@ -472,6 +479,7 @@ async function captureInteractionCase(benchmarkCase) {
       inputTrees: persistInputTrees(directory, referenceMeasurement.inputTree, astylarMeasurement.inputTree),
       focus: { reference: referenceFocus, astylar: astylarFocus, matches: focusMatches },
       runtimeErrors, resourceSnapshots, resourcesStable, astylarState,
+      ...(selectionReplay ? { diagnosticAction: 'opposite-item-and-return', selectionTransitions } : {}),
       ...(settlementTrace ? { settlementTrace: await astylar.page.evaluate(() => window.__MATERIAL_SETTLEMENT_TRACE__.finish()) } : {}),
       meetsAcceptance: screenshotSimilarity >= materialThresholds.resultSsim &&
         textAlignment.every((result) => result.matches) &&
@@ -820,6 +828,62 @@ function compareEvents(reference, candidate, family, state) {
   const expected = contractEvents(relevant(reference));
   const actual = contractEvents(relevant(candidate));
   return { matches: JSON.stringify(expected) === JSON.stringify(actual), reference: expected, astylar: actual };
+}
+
+async function captureSelectionTransitions(referencePage, astylarPage, family, directory) {
+  const targets = {
+    radio: { native: '#radio-primary mat-radio-button', candidate: ['radio-solo', 'radio-team'] },
+    'button-toggle': { native: '#button-toggle-primary mat-button-toggle', candidate: ['button-toggle-one', 'button-toggle-two'] },
+    tabs: { native: '#tabs-primary .mat-mdc-tab', candidate: ['tab-overview', 'tab-activity'] },
+    stepper: { native: '#stepper-primary .mat-step-header', candidate: ['step-details', 'step-review'] },
+  }[family];
+  const stages = [];
+  const observe = async (page, mode) => page.evaluate(({ family, mode, ids }) => {
+    const candidate = mode === 'astylar';
+    const elements = candidate ? ids.map(id => document.querySelector(`[data-astylar-id="${id}"]`))
+      : [...document.querySelectorAll(family === 'radio' ? '#radio-primary input[type="radio"]'
+        : family === 'button-toggle' ? '#button-toggle-primary [role="radio"]'
+          : family === 'tabs' ? '#tabs-primary .mat-mdc-tab' : '#stepper-primary .mat-step-header')];
+    if (elements.length !== 2 || elements.some(e => !e)) throw new Error('Missing actual selection owners.');
+    const values = elements.map(element => {
+      if (!candidate && family === 'radio') return element.checked;
+      const raw = element.getAttribute(family === 'tabs' || family === 'stepper' ? 'aria-selected' : 'aria-checked');
+      if (raw !== 'true' && raw !== 'false') throw new Error('Missing selection state; do not default it.');
+      return raw === 'true';
+    });
+    return { values, time: performance.now(), ...(candidate ? {
+      state: window.__ASTYLAR_MATERIAL_BENCHMARK__.state(),
+      events: window.__ASTYLAR_MATERIAL_BENCHMARK__.events(),
+    } : {}) };
+  }, { family, mode, ids: targets.candidate });
+  const record = async (stage, points) => {
+    const output = path.join(directory, 'selection-transitions', stage);
+    mkdirSync(output, { recursive: true });
+    const [reference, astylar] = await Promise.all([observe(referencePage, 'reference'), observe(astylarPage, 'astylar')]);
+    const [nativeInputs, candidateInputs] = await Promise.all([
+      measureReference(referencePage, [`${family}-primary`]), measureAstylarInputs(astylarPage, targets.candidate),
+    ]);
+    await Promise.all([referencePage.screenshot({ path: path.join(output, 'reference.png'), animations: 'disabled' }),
+      astylarPage.screenshot({ path: path.join(output, 'astylar.png'), animations: 'disabled' })]);
+    stages.push({ stage, points, reference, astylar,
+      inputTrees: persistInputTrees(output, nativeInputs.inputTree, candidateInputs.inputTree),
+      matches: JSON.stringify(reference.values) === JSON.stringify(astylar.values) });
+  };
+  await record('after-default-activation');
+  for (const [index, stage] of [[0, 'opposite-item'], [1, 'return-item']]) {
+    const native = await referencePage.locator(targets.native).nth(index).boundingBox();
+    const measured = await astylarPage.evaluate(id => window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([id], false), targets.candidate[index]);
+    const local = measured.elements[targets.candidate[index]]?.borderBox;
+    const canvas = await astylarPage.locator('canvas').boundingBox();
+    assert.ok(native && local && canvas, 'Missing real pointer target geometry.');
+    const points = { reference: { x: native.x + native.width / 2, y: native.y + native.height / 2 },
+      astylar: { x: canvas.x + local.left + local.width / 2, y: canvas.y + local.top + local.height / 2 } };
+    await Promise.all([referencePage.mouse.click(points.reference.x, points.reference.y),
+      astylarPage.mouse.click(points.astylar.x, points.astylar.y)]);
+    await Promise.all([settleInteraction(referencePage, 'reference'), settleInteraction(astylarPage, 'astylar')]);
+    await record(stage, points);
+  }
+  return { stages, diagnosticOnly: true, limitation: 'Fresh paired real-pointer boundaries; state agreement does not certify equal inputs, local paint, complete event ordering or historical action timing.' };
 }
 
 async function installSettlementTrace(page) {

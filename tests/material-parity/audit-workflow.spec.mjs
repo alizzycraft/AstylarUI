@@ -6,6 +6,34 @@ import vm from 'node:vm';
 import ts from 'typescript';
 import { auditSuites, selectAuditTests } from '../../scripts/run-audit-tests.mjs';
 
+test('selection replay preserves real pointer sequence and rejects missing selection state', async () => {
+  const source = readFileSync('tests/material-parity/run-material-parity.mjs', 'utf8');
+  const ast = ts.createSourceFile('runner', source, ts.ScriptTarget.Latest, true);
+  const declaration = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'captureSelectionTransitions');
+  assert.ok(declaration);
+  const page = (missing = false) => {
+    let selected = 1;
+    const element = index => ({ getAttribute: () => missing ? null : String(selected === index) });
+    const benchmark = { state: () => ({ selected: selected === 1 }), events: () => [],
+      measure: ids => ({ elements: Object.fromEntries(ids.map(id => [id, { borderBox: { left: id.endsWith('one') ? 0 : 30, top: 0, width: 20, height: 20 } }])) }) };
+    return { evaluate: (fn, args) => vm.runInNewContext(`(${fn.toString()})(args)`, {
+      args, performance: { now: () => 1 }, window: { __ASTYLAR_MATERIAL_BENCHMARK__: benchmark },
+      document: { querySelector: selector => element(selector.includes('one') ? 0 : 1), querySelectorAll: () => [element(0), element(1)] } }),
+      locator: () => ({ nth: index => ({ boundingBox: async () => ({ x: index * 30, y: 0, width: 20, height: 20 }) }),
+        boundingBox: async () => ({ x: 0, y: 0 }) }),
+      mouse: { click: async x => { selected = x < 30 ? 0 : 1; } }, screenshot: async () => {} };
+  };
+  const context = { assert, path, mkdirSync: () => {}, measureReference: async () => ({ inputTree: {} }),
+    measureAstylarInputs: async () => ({ inputTree: {} }), persistInputTrees: () => ({}), settleInteraction: async () => {} };
+  const replay = vm.runInNewContext(declaration.getText(ast) + ';captureSelectionTransitions', context);
+  const result = await replay(page(), page(), 'button-toggle', 'diagnostic');
+  assert.deepEqual(JSON.parse(JSON.stringify(result.stages.map(s => s.astylar.values))), [[false, true], [true, false], [false, true]]);
+  assert.ok(result.stages.every(s => s.matches)); assert.equal(result.diagnosticOnly, true);
+  await assert.rejects(replay(page(true), page(), 'button-toggle', 'diagnostic'), /Missing selection state/);
+  assert.match(source, /Selection replay is diagnostic interaction-only evidence, never enforced acceptance/);
+  assert.match(source, /mode: selectionReplay \? 'diagnostic-selection-replay'/);
+});
+
 test('optional settlement trace preserves public calls and restores wrappers without changing acceptance', async () => {
   const file = 'tests/material-parity/run-material-parity.mjs', source = readFileSync(file, 'utf8');
   const ast = ts.createSourceFile(file, source, ts.ScriptTarget.Latest, true);
