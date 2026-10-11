@@ -2,6 +2,15 @@
 
 ## Current dark-mobile timepicker boundary — October 12
 
+Closed AX relationship question is now inspected at all six paired endpoints:
+one combobox remains,expanded=false,controls/activedescendant AX properties absent,
+and no exposed listbox/options. Existing assertion passes1/1,431.6115ms
+(1668.7506ms terminal),without recapture. Do not infer DOM attribute removal from
+AX absence: current authored ariaControls persists while the popup target is
+conditional; semantic reconcile writes native ID references. This is bounded
+resolved AX cleanup,not proof of DOM IDREF cleanup,AT behavior or core retirement.
+That distinction prevents incorrectly reopening an alleged AX stale-target bug.
+
 Existing semantic-focus applicability assertion now replays exact dark capture:
 two log source/checkpoint receipts authenticate; all three openings on both sides
 resolve controls to the sole exposed listbox and activedescendant to12:00 AM via

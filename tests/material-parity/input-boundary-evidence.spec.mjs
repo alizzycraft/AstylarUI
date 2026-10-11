@@ -137,6 +137,12 @@ test('semantic descendant replacement focus evidence retains exact current case 
         if (name === 'activedescendant') assert.equal(target[0].name.value, '12:00 AM');
       }
       assert.equal(cycle.closed.actualAx.filter(node => ['option', 'listbox'].includes(node.role.value)).length, 0);
+      const closedInput = cycle.closed.actualAx.filter(node => node.role.value === 'combobox');
+      assert.equal(closedInput.length, 1);
+      assert.equal(closedInput[0].properties.find(row => row.name === 'expanded').value.value, false);
+      assert.deepEqual(closedInput[0].properties.filter(row => ['controls', 'activedescendant'].includes(row.name)), []);
+      // AX absence is not proof that the DOM attribute is absent: authored
+      // ariaControls persists while its conditionally rendered target is gone.
     }
     const events = dark[side].cycles.at(-1).closed.events;
     assert.equal(events.length, side === 'reference' ? 29 : 47);
