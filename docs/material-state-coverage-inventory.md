@@ -2,6 +2,26 @@
 
 ## Current evidence boundary — October 11
 
+Slider pending-left question is now inspected against the retained population:
+all78 configured slider cases/156 authenticated tree receipts retain native end
+input inline left:auto/right:-21px,while candidate #slider-primary authors
+left:50%/width:50%,with right omitted in normal,effective and interaction styles.
+The seven used-left groups have counts36/4/4/8/8/16/2 (78 total),not seven new
+cases. Native MatSliderRangeThumb._updateWidthInactive derives width from the
+peer midpoint/domain and anchors the right input with left:auto; active width
+also depends on the peer-constrained domain. Existing candidate fixed-half rule
+already exists at ce8f3f1c. Therefore these observations expose unequal authored
+anchoring/hit-region composition,not a proven equivalent percent-to-pixel alias
+or equal-input core left-position failure. This extends the existing fixed-half
+authoring investigation,not the padding/boxSizing proof's explicitly narrower
+scope. Read-only assertions authenticate baseline b07ef154 and all trees,exact
+inline declarations,candidate matching author rule,three resolved stages and78
+unique IDs (exit0). No producer/source dependency changed during192 export;
+canonical row integration remains pending. Does not diagnose swapped-thumb,
+jerky travel,black-ring paint or close a whole case. Next integrate this bounded
+anchoring disposition through existing owner evidence after the frozen export,
+preserving public range defects and all raw observations.
+
 Coherent192 source batch registers the public default proof and its report/four
 PNG/script fingerprints. Producer SHA492f10e0 restores exactly191 SHA8dc6bba3
 after removing only the added proof and six fingerprint paths,then all prior
