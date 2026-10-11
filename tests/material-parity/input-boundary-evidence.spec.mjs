@@ -1819,7 +1819,7 @@ test('configured progress inputs preserve determinate state and original SVG att
   assert.deepEqual(counts, { 'progress-bar': 20, 'progress-spinner': 20 });
 });
 
-test('passive state applicability joins exact cases without discarding progress focusability', t => {
+test('passive state applicability joins exact cases without discarding progress focusability', async t => {
   const families = new Map([['sidenav',62],['grid-list',52],['divider',24],['badge',52],
     ['icon',20],['list',52],['table',52],['progress-bar',20],['progress-spinner',20]]);
   const raw = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
@@ -1844,9 +1844,22 @@ test('passive state applicability joins exact cases without discarding progress 
     return tab!==undefined;
   };
   const counts={}, focusable=[];
+  const runnerAst = ts.createSourceFile('runner.mjs', readFileSync('tests/material-parity/run-material-parity.mjs', 'utf8'),
+    ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const cursorFunctions = runnerAst.statements.filter(node => ts.isFunctionDeclaration(node)
+    && node.name?.text === 'compareInteractionCursor');
+  assert.equal(cursorFunctions.length, 1);
+  const compareCursor = new Function(`return ${cursorFunctions[0].getText(runnerAst)};`)();
   for(const row of cases) {
     const caseId=identity(row,row.kind);
     counts[row.family]=(counts[row.family]??0)+1;
+    if (row.family === 'divider' && row.kind === 'interaction') {
+      assert.equal(row.state, 'inspect');
+      assert.deepEqual(row.cursor, { matches: true });
+      // Deliberately absent pages prove this is the unmeasured early return,
+      // not effective cursor evidence or a browser observation.
+      assert.deepEqual(await compareCursor(undefined, undefined, 'divider', 'inspect'), { matches: true });
+    }
     for(const side of ['reference','astylar']) {
       const receipt=row.inputTrees[side], bytes=readFileSync(receipt.file);
       assert.equal(hash(bytes),receipt.sha256,caseId+'/'+side);

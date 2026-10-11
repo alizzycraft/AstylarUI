@@ -2,6 +2,21 @@
 
 ## Current evidence boundary — October 11
 
+Divider effective-cursor gap is now demonstrably unmeasured,not a reported
+cursor failure/pass. All8 configured inspect rows contain only{matches:true}.
+Current compareInteractionCursor returns that object before touching either
+page whenever state!='hover'. Existing passive-applicability assertion now
+executes the actual AST-extracted function with undefined pages at inspect and
+checks all8 records,while retaining354-case/708-tree authoring validation.
+Focused1/1 passes2389.5649ms (3600.9554ms terminal). Four auto/default scalar
+groups therefore still need actual same-point hit/text observations; passive
+activation inapplicability does not make cursor behavior inapplicable. Existing
+Icon/root effective-cursor capture cannot cover divider text owners and must not
+be generalized. Next adapt existing supplemental cursor capture machinery for
+divider root/above/separator/below points,with actual applied themes and exact
+configured contexts; retain text-hit and empty-box results separately. No change
+to configured actions,defaults,thresholds or canonical classifications.
+
 Divider eight used-width groups now join authoritative retained CSS geometry.
 Across24 cases,48 root/separator paired widths differ by at most the exact
 recorded floating residue1.1823431123048067e-11 CSSpx. Every native computed width
