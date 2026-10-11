@@ -1,5 +1,23 @@
 # Material comparison/state coverage inventory
 
+## Held-option historical source conservation — October 12
+
+Current sorter source77d91396b65770eabca429907096a2e4e5702f5924c41f5dca572acb807143d6
+now restores only the reviewed held-option diagnostic test to exact Git459af4b8,
+whose full source hashc0f202dc is authenticated before all existing predecessor
+transformations. Every byte outside that uniquely delimited test remains equal.
+Existing conservation assertion passes1/1,519.2067ms (1078.025ms process),
+including current-mode selector and label-center assertion mutation rejection.
+No original test receipt or captured source hash is repinned. A replay retained
+the previously missing durable current box-observation log:
+artifacts/material-parity/held-option-boxes-current-20261012.log,SHA256
+a73907487618b85b1a2d198c617406eddf49ffa3ded80909e7e4ed1c8b4e3e02,
+1/1 passes18040.7076ms (19139.9149ms process). Its row/label observations reproduce
+the prior boundary; this replay preserves evidence rather than closing additional
+paint obligations. Registration/publication remains pending with the coherent
+mobile/option batch. Next obtain actual bound candidate text paint and local pixels;
+historical conservation alone is not current rendering acceptance.
+
 ## Current held option box boundary — October 12
 
 Existing held-popup diagnostic now measures native option/primary-label/DOM Range

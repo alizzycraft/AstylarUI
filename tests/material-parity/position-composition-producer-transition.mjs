@@ -445,6 +445,22 @@ export function restoreLayoutDiagnosticRegistration(source) {
 }
 // Historical replay only. Never use this reader for current capture or rendering acceptance.
 export function readRetainedSortFocusSource(current = readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')) {
+  if (current.toString().includes('const currentOptionBoxes =')) {
+    assert.equal(hash(current), '77d91396b65770eabca429907096a2e4e5702f5924c41f5dca572acb807143d6');
+    const prior = execFileSync('git', ['show', '459af4b8:tests/material-parity/sort-focus-structure.spec.mjs'], { maxBuffer: 4_000_000 });
+    assert.equal(hash(prior), 'c0f202dc5ad91d396dc3ada3b9a6b6dd21b8498923135e13397a033b9ecf504d');
+    const start = "test('held popup option boundaries capture active paint inputs before commit'";
+    const end = "test('retained popup hover inputs distinguish token alpha layers from opaque substitutions'";
+    const text = current.toString(), old = prior.toString();
+    for (const source of [text, old]) {
+      assert.equal(source.split(start).length, 2); assert.equal(source.split(end).length, 2);
+    }
+    // Only the reviewed diagnostic test changes; every other byte must equal its
+    // exact predecessor before the existing historical restoration chain runs.
+    current = Buffer.from(text.slice(0, text.indexOf(start)) +
+      old.slice(old.indexOf(start), old.indexOf(end)) + text.slice(text.indexOf(end)));
+    assert.deepEqual(current, prior);
+  }
   if (current.toString().includes('const lightScroll =')) {
     assert.equal(hash(current), 'c0f202dc5ad91d396dc3ada3b9a6b6dd21b8498923135e13397a033b9ecf504d');
     let text = current.toString();
