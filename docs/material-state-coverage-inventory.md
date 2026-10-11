@@ -22,7 +22,27 @@ reference ancestors or changing fixture height. Preserve four raw groups and
 known authoring/paint/lifetime findings; no whole-case closure. Initial compact
 ancestry printer hit a synthetic root without resolvedStyle; optional printing
 was corrected without default synthesis,then all59 declaration/membership
-assertions completed exit0. Export dependencies remain frozen.
+assertions completed exit0. Follow-up read-only baseline geometry join observes
+viewport-sized candidate overlay boxes in all59 states and maximum paired panel
+edge difference2.660272e-11CSSpx; these are projected output,not authoritative
+preprojection used dimensions. October5 reportab42dbec separately retains the
+same59 viewport-height observations. Its served chunk-3JXWRYJY.js authenticates
+SHAf366533b against that report,not the September capture (which has no such
+chunk receipt). Complete resolveLayoutParent and calculateDimensions match
+current source under identical esbuild ES2022 emission/whitespace formatting:
+method SHAff9b5e0b/99d380ea. Unique dimension-owning createElement calls the
+resolver then supplies layoutParent to calculateDimensions. Installed/source
+complete methods also match; three resolver controls verify fixed→root,
+absolute→parent and missing-root fallback. Strict text/token attempts exposed
+quote/template/formatting differences,not established semantic drift; initial
+unqualified createElement selection correctly rejected two owners. Final
+specific-owner/method/capture/59-state assertions exit0. Thus a98px-parent-sized
+overlay is not observed in either retained cohort; no fixture height correction
+is justified. Remaining gap is authoritative captured CSS used dimensions and
+full owner equivalence,not missing native ancestor survey or current source
+fixed-parent routing. Preserve raw height expressions and historic/current
+boundaries; broader overlay paint,lifetime and closure obligations stay open.
+Export dependencies remain frozen.
 
 Slider pending-left question is now inspected against the retained population:
 all78 configured slider cases/156 authenticated tree receipts retain native end
