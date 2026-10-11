@@ -2,6 +2,19 @@
 
 ## Current evidence boundary — October 11
 
+Coherent192 export is terminal exit0; log
+`coherent-192-proof-export-20261011.log` SHA256
+b3fabce3e720300d12f5da496e4dff73b40a0765726205b64eb8b7dc8765a744.
+Generated package SHA256
+66eaf2d9c31a40190a63101d397fa1d3f3ed3a9207d33966ab5c7f95479ba362
+retains436 static/1875 interaction cases,8483 groups,389202 occurrences and
+156 findings; inputEquivalent remains false. Independent named-launcher cold
+`--check` is running (session89118,worker20956), with log
+`coherent-192-proof-independent-cold-check-20261011.log`. Dependencies remain
+frozen. Accepted185/compact index is not replaced until cold success and existing
+import/verify; generated canonical files are not yet accepted publication.
+All2311 case closures and final browser/harness gates remain open.
+
 Remaining height-context census is bound to59 exact configured open states:
 bottom-sheet25/snackbar34,118 original tree receipts authenticated to b07ef154.
 All four compact groups (24/1/32/2 occurrences) compare native viewport-used
