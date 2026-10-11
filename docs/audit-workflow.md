@@ -64,6 +64,14 @@ touched. Do not imply every legacy test or collector is now cheap/cached.
 These remain separate expensive milestone commands. Documentation-only work does
 not justify recapture. Renderer, fixture or capture-environment changes invalidate
 affected rendering evidence and still require the applicable final gates.
+For an unresolved interaction settlement boundary, the existing runner supports
+`ASTYLAR_MATERIAL_SETTLEMENT_TRACE=1` with the existing exact family/profile/state/
+interaction-viewport filters. It retains bounded public-method and frame-session
+observations in the case report and fingerprints the option in capture provenance.
+It changes no actions,waits or acceptance checks. Wrappers restore original methods
+and preserve promise identity; observation can affect timing and does not capture
+every internal invalidation. Use a new run directory and preserve original failures;
+an instrumented pass cannot replace a historical failure or prove its exact cause.
 Fresh report-mode Material captures run the existing installed-component catalog
 and enforced-matrix configuration assertions only. Historical evidence replay
 belongs to audit verification, not fresh capture preflight: installing a current

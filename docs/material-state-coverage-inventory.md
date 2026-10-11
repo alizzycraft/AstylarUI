@@ -2,6 +2,29 @@
 
 ## Current evidence boundary — October 11
 
+Exact-state instrumented settlement replay completes exit0 in
+bottom-sheet-settlement-trace-20261011/latest-report.json,SHA256
+84668a6b572916136d0a1d31a52d1eeeebce88f803de2a3c5f43d56da0ea59fa.
+Existing runner captures only bottom-sheet/light/desktop-dpr2/open with unchanged
+actions/acceptance. Optional trace is provenance-bound; wrappers preserve promise
+identity/receiver/arguments and restore originals,frame observation is bounded.
+Focused existing workflow test passes1/1 (81.5016ms); syntax/diff checks pass.
+Read-only receipt assertions authenticate paired trees and identical served-file
+population/dependency lock to the59-state capture. Trace observes open state patch,
+an idle revision3 whenSettled resolving before the Angular surface update,then
+update-triggered rendering with pending font invalidation. Second pass reaches
+revision4/rendering/meshes9,then update/settlement resolve at revision5/idle/
+meshes18. Captured resource snapshot is idle and this case passes output gates.
+This demonstrates an actual font-triggered extra pass matching the prior failure's
+revision/mesh signature,not proof of that historical execution's trigger. All
+observed settlement resolutions are idle; no premature core-resolution evidence
+or resource accumulation is established. Instrumentation can alter timing and
+does not intercept every internal invalidation. Preserve both captures; do not
+replace prior failure or certify full parity. This answers which additional pass
+can produce the signature; exact historical scheduling remains unknown. Next
+prioritize exact case-obligation/current-validity closure rather than repeatedly
+recapturing this nondeterministic single snapshot without new decisive evidence.
+
 Settlement failure source review identifies a sampling boundary,not a runtime
 cause: runner settleInteraction awaits benchmark.waitForSettled,then fonts.ready
 and two requestAnimationFrame callbacks without a final settlement await before

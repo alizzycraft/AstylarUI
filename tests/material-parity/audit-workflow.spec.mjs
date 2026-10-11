@@ -6,6 +6,37 @@ import vm from 'node:vm';
 import ts from 'typescript';
 import { auditSuites, selectAuditTests } from '../../scripts/run-audit-tests.mjs';
 
+test('optional settlement trace preserves public calls and restores wrappers without changing acceptance', async () => {
+  const file = 'tests/material-parity/run-material-parity.mjs', source = readFileSync(file, 'utf8');
+  const ast = ts.createSourceFile(file, source, ts.ScriptTarget.Latest, true);
+  const declaration = ast.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === 'installSettlementTrace');
+  assert.equal(declaration.length, 1);
+  const promise = Promise.resolve('settled'), calls = [];
+  const surface = { diagnostics: { session: { status: 'idle', revision: 1 } },
+    update(...args) { calls.push({ receiver: this, args }); return promise; },
+    whenSettled() { return promise; }, focus() { return true; } };
+  const store = { patchState(...args) { calls.push({ receiver: this, args }); } };
+  const originalUpdate = surface.update, originalPatch = store.patchState;
+  const window = { ng: { getComponent: () => ({ surface, store }) } };
+  let cancelled;
+  const context = { window, document: { querySelector: () => ({}) }, performance: { now: () => 1 },
+    requestAnimationFrame: () => 42, cancelAnimationFrame: id => { cancelled = id; } };
+  context.page = { evaluate: fn => vm.runInNewContext(`(${fn.toString()})()`, context) };
+  await vm.runInNewContext(declaration[0].getText(ast) + ';installSettlementTrace(page)', context);
+  assert.equal(surface.update('input'), promise);
+  assert.equal(surface.focus('target'), true);
+  store.patchState({ open: true });
+  await promise;
+  const trace = window.__MATERIAL_SETTLEMENT_TRACE__.finish();
+  assert.equal(surface.update, originalUpdate); assert.equal(store.patchState, originalPatch);
+  assert.equal(cancelled, 42); assert.equal(calls[0].receiver, surface); assert.equal(calls[1].receiver, store);
+  assert.ok(trace.records.some(row => row.event === 'update-resolved'));
+  assert.equal(trace.observerMayAffectTiming, true);
+  const capture = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'captureInteractionCase').getText(ast);
+  const acceptance = capture.slice(capture.indexOf('meetsAcceptance:'));
+  assert.doesNotMatch(acceptance, /settlementTrace/);
+});
+
 test('diagnostic capture preflight separates retained replay while enforced validation stays unfiltered', () => {
   const file = 'tests/material-parity/run-material-parity.mjs';
   const ast = ts.createSourceFile(file, readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, true);

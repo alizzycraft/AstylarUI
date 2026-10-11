@@ -38,6 +38,7 @@ const interactionStateFilter = new Set((process.env['ASTYLAR_MATERIAL_INTERACTIO
 const staticOnly = process.argv.includes('--static-only');
 const interactionOnly = process.argv.includes('--interaction-only');
 const textAudit = process.env['ASTYLAR_MATERIAL_TEXT_AUDIT'] === '1';
+const settlementTrace = process.env['ASTYLAR_MATERIAL_SETTLEMENT_TRACE'] === '1';
 const browserRestartInterval = Number(process.env['ASTYLAR_MATERIAL_BROWSER_RESTART_INTERVAL'] ?? 200);
 const materialStyleInputProperties = Object.freeze([
   'position', 'display', 'visibility', 'boxSizing',
@@ -89,7 +90,7 @@ try {
     browserFiles: fingerprintDirectory(browserRoot),
     harnessFiles: fingerprintModuleGraph(root, 'tests/material-parity/run-material-parity.mjs'),
     installedDependencies: createHash('sha256').update(readFileSync(path.join(root, 'node_modules/.package-lock.json'))).digest('hex'),
-    cases, interactionCases, mobileFlowCases, enforce, textAudit, browserRestartInterval,
+    cases, interactionCases, mobileFlowCases, enforce, textAudit, settlementTrace, browserRestartInterval,
   } });
   const results = [];
   for (const [index, benchmarkCase] of cases.entries()) {
@@ -344,6 +345,7 @@ async function captureInteractionCase(benchmarkCase) {
   const reference = await openInteractionPage(context, 'reference', benchmarkCase);
   const astylar = await openInteractionPage(context, 'astylar', benchmarkCase);
   try {
+    if (settlementTrace) await installSettlementTrace(astylar.page);
     const cycles = state === 'open-dismiss' ? 3 : 1;
     const resourceSnapshots = [];
     let heldReleases = [];
@@ -470,6 +472,7 @@ async function captureInteractionCase(benchmarkCase) {
       inputTrees: persistInputTrees(directory, referenceMeasurement.inputTree, astylarMeasurement.inputTree),
       focus: { reference: referenceFocus, astylar: astylarFocus, matches: focusMatches },
       runtimeErrors, resourceSnapshots, resourcesStable, astylarState,
+      ...(settlementTrace ? { settlementTrace: await astylar.page.evaluate(() => window.__MATERIAL_SETTLEMENT_TRACE__.finish()) } : {}),
       meetsAcceptance: screenshotSimilarity >= materialThresholds.resultSsim &&
         textAlignment.every((result) => result.matches) &&
         focusedRasters.every((result) => result.matches) &&
@@ -817,6 +820,54 @@ function compareEvents(reference, candidate, family, state) {
   const expected = contractEvents(relevant(reference));
   const actual = contractEvents(relevant(candidate));
   return { matches: JSON.stringify(expected) === JSON.stringify(actual), reference: expected, astylar: actual };
+}
+
+async function installSettlementTrace(page) {
+  await page.evaluate(() => {
+    const component = window.ng?.getComponent(document.querySelector('app-astylar-showcase'));
+    const surface = component?.surface;
+    if (!surface) throw new Error('Settlement trace requires the mounted public surface.');
+    const records = [], restore = [];
+    let frame, stopped = false, frames = 0, previous;
+    const record = (event, extra = {}) => {
+      if (stopped || records.length >= 1000) return;
+      const diagnostics = surface.diagnostics;
+      records.push({ event, time: performance.now(), session: diagnostics.session,
+        resources: diagnostics.resources, interaction: diagnostics.interaction, ...extra });
+    };
+    for (const name of ['update', 'whenSettled', 'focus', 'invalidate']) {
+      if (typeof surface[name] !== 'function') continue;
+      const original = surface[name];
+      surface[name] = function (...args) {
+        record(`${name}-call`, { reason: name === 'invalidate' ? args[0] : undefined });
+        const result = original.apply(this, args);
+        if (result?.then) result.then(() => record(`${name}-resolved`), error => record(`${name}-rejected`, { error: String(error) }));
+        else record(`${name}-returned`);
+        return result;
+      };
+      restore.push(() => { surface[name] = original; });
+    }
+    const originalPatch = component.store.patchState;
+    component.store.patchState = function (...args) {
+      record('state-patch', { patch: args[0] });
+      return originalPatch.apply(this, args);
+    };
+    restore.push(() => { component.store.patchState = originalPatch; });
+    const observe = () => {
+      const session = surface.diagnostics.session;
+      const signature = JSON.stringify(session);
+      if (signature !== previous) { record('frame-session-change'); previous = signature; }
+      if (!stopped && ++frames < 240) frame = requestAnimationFrame(observe);
+    };
+    record('installed');
+    frame = requestAnimationFrame(observe);
+    window.__MATERIAL_SETTLEMENT_TRACE__ = { finish: () => {
+      record('finished'); stopped = true; cancelAnimationFrame(frame);
+      for (const cleanup of restore) cleanup();
+      return { records, frames, limit: 1000, observerMayAffectTiming: true,
+        limitation: 'Public method wrappers and frame snapshots do not intercept every internal invalidation; this is a fresh instrumented run, not the historical failing execution.' };
+    } };
+  });
 }
 
 async function compareInteractionCursor(referencePage, astylarPage, family, state) {
