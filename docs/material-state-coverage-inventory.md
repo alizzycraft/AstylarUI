@@ -2,6 +2,25 @@
 
 ## Current evidence boundary — October 11
 
+Original full served-build bytes are now all authenticated,without replacing
+current dist. Existing isolated check-source-map-reconstruction.mjs --code-recovery
+(helper raw SHA2566d3aef6c5bc27188aa66128831e6398d03bfaad7fb803f71d6ac8b45b3d9f9c2)
+proposes531 unique chunk mappings by authenticated original-map source membership;
+membership alone does not claim content equivalence. Simultaneous filename
+replacement plus bounded recipe-marker/generated node_modules comment reversal
+produces exact original component JS e9b44703e281947d6af365b4d10615857623fc066678e88bb9e9330201b1e7d9
+and main JS9e076a6c804a5aef53304eb2e24de3e2e4f2fd5e9bd6877137e9c0d2d9ca34ce.
+Both final hashes authenticate before exclusive creation under retained-evidence/
+component-code-recovery-20261011; existing output directory is rejected.
+Independent read-only full1887-asset verification uses authenticated-replay for
+1884 files,recovered map47654b64 and these two recovered code files:1887/1887,
+zero missing,exit0 in1.65s. Original checkpoint receipts remain unchanged.
+This closes missing served-build-byte recovery,not current rendering validity.
+Next owning validators should authenticate this explicit retained source set and
+separately prove current applicability; missing raw runnere01ef9dc remains its
+own evidence gap. Keep required recovered bytes/helper recipe until reference
+closure; do not rerun original whole-current-directory comparisons unchanged.
+
 Two-code recovery check rejects a map-only reconstruction assumption. Existing
 component-map recovery build imports fresh dependency chunk names (e.g.
 TWLLVWH5 versus original3JXWRYJY); deleting only recipe marker and renaming the
