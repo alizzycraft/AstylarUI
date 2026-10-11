@@ -526,7 +526,7 @@ test('checkpoint application source census confines drift to the documented seri
 test('current Material serializer preserves detached layout observations without filling missing owners', () => {
   const file = 'examples/material-showcase/src/app/material-input-evidence.ts';
   const source = readFileSync(file, 'utf8');
-  const rawMap = readFileSync('examples/material-showcase/dist/material-showcase/browser/chunk-JPEJK334.js.map');
+  const rawMap = readFileSync('artifacts/material-parity/retained-evidence/component-map-recovery-20261011/chunk-JPEJK334.js.map');
   assert.equal(hash(rawMap), '47654b641610e1d56e02948b17fab41aff25e9c6aedc6f83b70a26b6f349ce9e');
   const map = JSON.parse(rawMap);
   const capturedIndex = map.sources.indexOf('src/app/material-input-evidence.ts');

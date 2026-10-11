@@ -2,6 +2,22 @@
 
 ## Current evidence boundary — October 11
 
+Serializer owning reader migration passes independently: existing current
+Material serializer assertion reads retained component map47654b64,conserves
+captured source de0efefd against exact Gitaabeb128^ and current521940b6 plus
+original detached/missing-owner assertions. Pass1/1,1435.6ms; log serializer-
+retained-map-reconciliation-20261011.log SHA2563a993284d81bffb1dee9d1c7fab582f5bbca4a101a10f2582b4f2c8be27fec99.
+No serializer implementation,capture bytes or receipt changed. Companion runtime
+member validator diagnostic with original core mapdba48404 reaches line1778,
+complete linked captured/installed astylar.js mismatch before its known
+current-source member census. Failed mixed log serializer-runtime-map-
+reconciliation-20261011.log SHA256d39036fa578a457accf17a78c65db1cfea9f036018d298a9e8b50601e38ac79a.
+That path-only runtime edit is reversed; next apply the already-reviewed exact
+installed-inspector conservation helper at this owning historical boundary,
+preserving linker/metadata and every other module/member assertion. Do not
+repeat this failed comparison unchanged or infer new rendering regression.
+Current applicability/case closures and final gates remain separate obligations.
+
 Icon pending-image remount validator now authenticates historical1887-asset
 build through existing retained helper and reads original core mapdba48404
 explicitly. Record/checkpoint/source receipts and sampled ownership assertions
