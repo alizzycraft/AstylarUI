@@ -2,6 +2,24 @@
 
 ## Current evidence boundary — October 11
 
+Downstream map reuse needs more than path relocation. A bounded five-path
+diagnostic edit in benchmark-config.spec.mjs points only at the authenticated
+retained maps,leaving hash/source assertions unchanged. Existing configured
+field-hint and input-focus tests then run8.77s and fail0/2 at separate boundaries,
+not ENOENT: field-hint verifiedDescriptionCohorts compares the whole current
+served directory against the historical capture (two changed chunk pairs plus
+main/index bytes); input-focus authenticates its captured runner e01ef9dc but
+current raw runner is584cdfc8. Before that failure,the four caret and ten
+selection owning-method comparisons across current/emitted/installed/captured
+sources pass. Map dba48404 remains authenticated. Exact focus actionSource is
+tests/material-parity/run-material-parity.mjs,not the input serializer;
+focusBody622d9fc7/themeBody6e8166a5 are separately recorded by the capture.
+The diagnostic path-only edit was reversed exactly; no test weakening or
+incomplete migration is retained. Next prove the exact captured/current runner
+transition and separate immutable build authentication from current-source
+applicability through existing helpers. Do not rerun these same assertions
+without that reconciliation or treat historical bytes as current rendering.
+
 Expansion followup replay now conserves its exact intermediate runner,not the
 older gap baseline. Existing restoreGapCaptureDiagnostics accepts only the
 explicit33c5a4b3 target in addition to its unchanged defaultc3cabcf target;
