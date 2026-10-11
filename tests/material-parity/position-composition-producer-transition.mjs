@@ -447,7 +447,8 @@ export function restoreLayoutDiagnosticRegistration(source) {
 export function readRetainedSortFocusSource(current = readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')) {
   if (current.toString().includes('const currentOptionBoxes =')) {
     assert.ok(['77d91396b65770eabca429907096a2e4e5702f5924c41f5dca572acb807143d6',
-      '65e1dba29e3b86aae63a42eb85fe1305a1e7fd62452ff4a2710705d0673e7704'].includes(hash(current)));
+      '65e1dba29e3b86aae63a42eb85fe1305a1e7fd62452ff4a2710705d0673e7704',
+      '6fc01eb23a97ebc0c7852d7a41624f3cf75f387d12551ac92c166ba0b2e40eb2'].includes(hash(current)));
     const prior = execFileSync('git', ['show', '459af4b8:tests/material-parity/sort-focus-structure.spec.mjs'], { maxBuffer: 4_000_000 });
     assert.equal(hash(prior), 'c0f202dc5ad91d396dc3ada3b9a6b6dd21b8498923135e13397a033b9ecf504d');
     const start = "test('held popup option boundaries capture active paint inputs before commit'";

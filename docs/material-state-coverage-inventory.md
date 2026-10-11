@@ -1,5 +1,28 @@
 # Material comparison/state coverage inventory
 
+## Current timepicker text-plane placement — October 12
+
+Read-only final mesh projection now closes the missing placement observation for
+the same light desktop DPR1 first held option. Candidate row top245.07998657226562,
+height48; bound text plane top259.5799865722656,bottom278.5799865722656,height19,
+centerOffsetY=0. Texture alpha ink occupies rows3..14,476 nonzero-alpha pixels.
+Native20px label wrapper centers exactly; native19px DOM Range starts259.078125.
+Thus candidate plane is centered,not bottom-aligned,in this exact current state;
+the half-pixel difference between native Range and candidate plane does not prove
+ink displacement or a transform bug. Different authored line boxes,tracking and
+selection still prevent an equivalent-input raster conclusion. Do not generalize
+to September screenshots,other options,DPR/themes or final framebuffer sharpness.
+Existing diagnostic1/1 passes21323.0868ms (22539.8285ms process),Chrome154.0.8037.99,
+same authenticated current checkpoint. Log held-option-plane-ink-current-20261012.log
+SHA25615fd7d58990e651746980e295d705218eed4acb0a3a304bf591d5b8239de8658;
+sorter source6fc01eb23a97ebc0c7852d7a41624f3cf75f387d12551ac92c166ba0b2e40eb2.
+Historical whole-source conservation1/1 passes588.9961ms (1198.0711ms process);
+all previously authenticated diagnostic versions remain separate. No layout
+calculation uses world space; final projection is observation only. Next compare
+actual paired local framebuffer ink or move to other unclosed obligations if
+unequal input prevents a causal claim; do not repeat the settled plane-center
+question. Coherent publication and all whole-case closures remain pending.
+
 ## Current timepicker bound text metric — October 12
 
 Existing held diagnostic now inspects only textures currently bound to meshes

@@ -2775,7 +2775,24 @@ test('held popup option boundaries capture active paint inputs before commit', a
               .flatMap(mesh => [...new Set(mesh.material?.getActiveTextures() ?? [])].flatMap(texture => {
                 const inputs = text.inspectTexturePaintInputs(texture);
                 if (!inputs?.text) return [];
+                const scene = surface.scene, engine = scene.getEngine(), canvas = engine.getRenderingCanvas();
+                const viewport = scene.activeCamera.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight());
+                mesh.computeWorldMatrix(true);
+                const points = mesh.getBoundingInfo().boundingBox.vectorsWorld.map(point =>
+                  point.constructor.Project(point, scene.getTransformMatrix().constructor.Identity(), scene.getTransformMatrix(), viewport));
+                const scaleY = canvas.clientHeight / engine.getRenderHeight();
+                const top = Math.min(...points.map(point => point.y)) * scaleY;
+                const bottom = Math.max(...points.map(point => point.y)) * scaleY;
+                const row = measurement.elements[firstId].borderBox;
+                const size = texture.getSize(), pixels = texture.getContext().getImageData(0, 0, size.width, size.height).data;
+                let minInkY = Infinity, maxInkY = -Infinity, inkPixels = 0;
+                for (let y = 0; y < size.height; y++) for (let x = 0; x < size.width; x++) {
+                  if (pixels[(y * size.width + x) * 4 + 3] > 0) { minInkY = Math.min(minInkY, y); maxInkY = Math.max(maxInkY, y); inkPixels++; }
+                }
                 return [{ mesh: mesh.name, text: inputs.text, style: inputs.style,
+                  projectedTextBox: { top, bottom, height: bottom - top },
+                  centerOffsetY: (top + bottom) / 2 - row.top - row.height / 2,
+                  textureInk: { minInkY, maxInkY, inkPixels },
                   logicalSize: texture.metadata?.astylarLogicalTextSize ?? null,
                   textureSize: texture.getSize() }];
               }));
