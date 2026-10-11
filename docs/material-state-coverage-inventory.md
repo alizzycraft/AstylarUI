@@ -2,6 +2,18 @@
 
 ## Current evidence boundary — October 11
 
+The same public box-sizing diagnostic now supports read-only --verify replay.
+Command: node scripts/audit-public-box-sizing-default.mjs --verify
+artifacts/material-parity/public-box-sizing-default-20261011. Exit0 authenticates
+all captured bundle dependency and PNG hashes,exact paired author inputs,all
+three resolved omission/explicit controls,both DPRs and authored-color pixel
+extents. Candidate omission140x50 versus native166x76 reproduces at both DPRs;
+explicit controls agree. Unequal candidate author input and missing DPR negative
+controls both reject(2/2). No recapture or additional test layer; original capture
+script receipt remains historical and is not relabeled as the modified verifier.
+This bounded replay is not aggregate parity or whole-case closure. Finding
+integration stays queued behind the live frozen191 export.
+
 Public omission diagnostic now demonstrates the legacy-default discrepancy in
 Chrome154 WebGL at DPR1/2 via package-root Astylar.mount,without Material plugins.
 scripts/audit-public-box-sizing-default.mjs reuses esbuild/consumer and browser
