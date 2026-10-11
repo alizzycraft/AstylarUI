@@ -240,7 +240,48 @@ test('retained disabled labels and selected snapshots preserve actual authored s
       }
     }
   }
-  // These snapshots do not certify runtime or paint parity.
+  // Fresh diagnostic boundaries fill the previously unobserved opposite-item
+  // pointer path without relabeling historical no-op captures as transitions.
+  const replay = pinned('artifacts/material-parity/selection-pointer-directions-20261011/latest-report.json',
+    'f1497dbd6bb360d25ae62466c4ef1b5d95631f7265af8da3b2969774e0b690a0');
+  assert.equal(replay.mode, 'diagnostic-selection-replay');
+  const replayFamilies = ['radio', 'button-toggle', 'tabs', 'stepper'];
+  const expectedReplay = report.interactions.filter(row => replayFamilies.includes(row.family) && row.state === 'activate');
+  assert.equal(replay.interactions.length, 32);
+  assert.deepEqual(replay.interactions.map(key).sort(), expectedReplay.map(key).sort());
+  for (const row of replay.interactions) {
+    assert.equal(row.selectionTransitions.diagnosticOnly, true);
+    assert.deepEqual(row.selectionTransitions.stages.map(stage => stage.stage),
+      ['after-default-activation', 'opposite-item', 'return-item']);
+    for (const [index, stage] of row.selectionTransitions.stages.entries()) {
+      const expected = index === 1 ? [true, false] : [false, true];
+      assert.deepEqual(stage.reference.values, expected); assert.deepEqual(stage.astylar.values, expected);
+      assert.equal(stage.matches, true);
+      const native = pinned(stage.inputTrees.reference.file, stage.inputTrees.reference.sha256);
+      const candidate = pinned(stage.inputTrees.astylar.file, stage.inputTrees.astylar.sha256);
+      assert.deepEqual(native.errors, []); assert.deepEqual(candidate.errors, []);
+      if (index > 0) for (const point of Object.values(stage.points)) {
+        assert.ok(Number.isFinite(point.x)); assert.ok(Number.isFinite(point.y));
+      }
+      if (row.family === 'button-toggle') {
+        const selectedNative = native.nodes.find(node => node.type === 'mat-button-toggle' &&
+          node.attributes.class.split(/\s+/).includes('mat-button-toggle-checked'));
+        const selectedCandidate = candidate.nodes.find(node => node.authored?.role === 'radio' && node.authored.ariaChecked);
+        assert.ok(selectedNative); assert.ok(selectedCandidate);
+        assert.equal(native.styles[selectedNative.style].backgroundColor, 'rgb(234, 222, 247)');
+        assert.equal(selectedCandidate.normalResolvedStyle.background, '#eadef7');
+        assert.equal(selectedCandidate.interactionResolvedStyle.background, '#ddd2ea');
+        const layer = native.nodes.find(node => node.parent === selectedNative.key &&
+          node.attributes?.class === 'mat-button-toggle-focus-overlay');
+        assert.ok(layer);
+        assert.equal(native.styles[layer.style].opacity, '0.08');
+        assert.ok(['rgb(29, 27, 32)', 'rgb(230, 225, 229)'].includes(native.styles[layer.style].backgroundColor));
+        // Equal base color does not equate native generated state paint with
+        // candidate replacement of the entire option background.
+      }
+    }
+  }
+  // These snapshots do not certify complete runtime or paint parity.
 });
 
 test('retained table and list AX cohorts preserve bounded equality and structural differences', async () => {

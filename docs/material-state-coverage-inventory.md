@@ -2,6 +2,29 @@
 
 ## Current evidence boundary — October 11
 
+Retained pointer boundary proof is now integrated into the existing configured
+state-applicability assertion and producer proof description (no new test layer).
+All32 exact activate IDs join the historical configured inventory;96 boundary
+pairs/192 trees authenticate against replay reportf1497dbd. Actual native and
+candidate control states match at each boundary. Original168 retained-case/
+336-tree assertions are preserved. Focused test passes1/1; canonical export and
+independent full verification are not yet rerun,so canonical192 still describes
+the historical56-case scope until the coherent reconciliation milestone.
+
+Specific paint question answered for all24 button-toggle boundary observations:
+selected base background agrees (native rgb(234,222,247),candidate normal
+#eadef7),so an unequal base palette is not the explanation here. Native retains
+that base and a separate mat-button-toggle-focus-overlay at opacity0.08,using
+on-surface rgb(29,27,32) in light/contrast/custom and rgb(230,225,229) in dark.
+Candidate instead replaces the option background with #ddd2ea in every profile;
+astylar.component.ts lines520–521 blend the base with fixed #4b4357,not the native
+state-layer color/owner. Complete boundary trees preserve both compositions.
+This is an application-authoring input difference,not a demonstrated core blend
+failure or equal-paint claim. Local calibrated pixels,held animation,clipping and
+other state owners remain independent obligations. No styles/fixtures changed.
+Next reconcile this bounded producer metadata with the other pending canonical
+updates in one coherent batch; retain raw/failure evidence and avoid recapture.
+
 Opposite-item pointer transition gap is now inspected for radio,button-toggle,
 tabs and stepper in all eight configured desktop contexts each (four profiles,
 DPR1/2). Competing explanations were missing pointer selection handling versus
