@@ -2,6 +2,21 @@
 
 ## Current evidence boundary — October 11
 
+Bounded public box-sizing default failure is now a source-policy definition,
+core-box-sizing-omission-violates-content-box-default (156 definitions; canonical
+accepted185 still155). Its exact report receipt80902a40,public control population,
+first-stage cause,legacy history and separate Material parent author omission
+remain explicit. Existing benchmark-config test verifies receipt/source detection,
+read-only pixel replay and two altered-policy rejection controls. Exact whole
+policy restoration removes only this appended definition and matches original155
+SHA17f0045f,then existing153 predecessor; no prior classifications replaced.
+New finding plus original layout/description/standalone registration assertions
+pass4/4,13606.619ms. Focused proof inventory remains191 until this test's explicit
+registration; do not count it as published. Next register through the same existing
+inventory/conservation boundary and perform one coherent export retry,then cold
+verification/import. Original191 export failure and14/15 integration failure
+remain retained; all2311 case closures and final gates stay open.
+
 Retained-style integration8293 finishes exit1:14/15 pass,one legacy badge
 test lookup fails at wrapping-input-populations.spec.mjs:462. Contrary to intended
 negative name filtering,the production wrapping test also ran and passed its

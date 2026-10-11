@@ -1776,6 +1776,23 @@ export const sourceAuditDefinitions = Object.freeze([
       stage: 'conditional authored relationship before core ID-reference projection' },
     justification: 'Exact62 configured IDs and124 original tree receipts preserve native described-by in every state versus candidate association only in26 popup-present states and absence in36 closed states. Original visible trees exclude native hidden description targets; their omission alone is not a dangling-reference diagnosis. Twelve actual CDP observations in two checkpoint-bound physical contexts establish persistent native Create a project help versus candidate null/open/null, with matching button name/role. Successful candidate open association is a positive control for supplied core ID-reference mapping. Current application source conditions both relationship and description node on popup visibility, the first divergence before projection. This is distinct from tooltip focus-opening, connected placement, blur and lifecycle findings. Restore equivalent persistent help intent in later implementation through shared supported owners; no all-profile AX, assistive-technology, current paint or whole-case acceptance follows.',
   }),
+  Object.freeze({
+    id: 'core-box-sizing-omission-violates-content-box-default',
+    introducedBy: 'fb1553ff adds explicit content-box support while preserving the preexisting border-box omission behavior; not demonstrated as a recent Material compensation',
+    file: 'src/app/services/dom/elements/element-dimension.service.ts',
+    pattern: String.raw`if \(style\?\.boxSizing === 'content-box'\)`,
+    classification: 'confirmed-core-renderer-defect',
+    owner: 'core CSS initial-value resolution and declared box dimension calculation',
+    focusedProof: 'scripts/audit-public-box-sizing-default.mjs --verify artifacts/material-parity/public-box-sizing-default-20261011',
+    evidence: [{ file: 'artifacts/material-parity/public-box-sizing-default-20261011/latest-report.json', sha256: '80902a405169922298f4b7edfc6b59b3b3cee4d07e552b2be95f1db011aac215' }],
+    observation: { component: 'public div reduction', element: 'box0', states: ['fresh mount'],
+      contexts: [{ viewport: { width: 400, height: 400 }, dpr: 1 }, { viewport: { width: 400, height: 400 }, dpr: 2 }],
+      property: 'boxSizing initial value and painted border-box extent',
+      reference: 'omitted and explicit content-box:166x76; explicit border-box:140x50',
+      astylar: 'omitted:140x50; explicit content-box:166x76; explicit border-box:140x50',
+      stage: 'omitted initial value reaches CSS-space sizing before final projection' },
+    justification: 'The capability manifests document content-box as default, but global/type defaults omit boxSizing and calculateDimensions adds padding/border outside declared dimensions only for explicit content-box. Package-root WebGL reduction with identical width140/height50/padding10/border3 inputs exposes the omission difference at DPR1/2; exact authored-color pixels and native boxes agree for both explicit controls. Installed sizing/default/style-resolution methods match current source. The retained verifier authenticates dependency/PNG receipts, paired inputs and missing-DPR/altered-input rejection controls. This is a bounded core default-contract defect, not a projection-scale diagnosis or whole-Material acceptance. Native Material parent explicit border-box versus candidate omission remains a separate unequal author request. Correct the general default rule before reassessing inputs; do not retune fixture dimensions to preserve legacy pixels.',
+  }),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({

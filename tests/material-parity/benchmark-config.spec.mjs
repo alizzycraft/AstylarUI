@@ -12,7 +12,27 @@ import { materialCaseKey, fingerprintDirectory } from './run-checkpoint.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { restoreLayoutDiagnosticRegistration, restoreDescriptionProofRegistration, restoreDescriptionPolicyRegistration, restoreStandaloneProofBatch, restoreExtendedKeyboardRegistration } from './position-composition-producer-transition.mjs';
 import { propertyGroups, sourceAuditDefinitions } from './input-equivalence-policy.mjs';
+import { restoreSizingDefaultPolicyRegistration } from './position-composition-producer-transition.mjs';
 import { materialAbsoluteTextAlignmentTargets, materialAdditionalMeasurementTargets, materialComparisonViewport, materialFamilies, materialFocusedRasterTargets, materialGeometryExcludedTargets, materialInteractionCases, materialInteractionFocusedRasterTargets, materialInteractionTextAlignmentTargets, materialInteractionViewports, materialLeftAlignedTextTargets, materialMobileFlowCases, materialMobileFlowFamilies, materialProfiles, materialSemanticExcludedTargets, materialStaticCases, materialSupplementalStaticCases, materialTextAlignmentTargets, materialTextAlignmentToleranceOverrides, materialTextAuditTargets, materialTextlessFamilies, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets, materialViewports } from './benchmark.config.mjs';
+
+test('public omitted box sizing finding preserves explicit controls and complete prior policy', () => {
+  const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
+  const source = readFileSync(policyFile, 'utf8');
+  const prior = execFileSync('git', ['show', `1d2181a3:${policyFile}`], { encoding: 'utf8' }).replaceAll('\r\n', '\n');
+  assert.equal(restoreSizingDefaultPolicyRegistration(source), prior);
+  assert.equal(sourceAuditDefinitions.length, 156);
+  const finding = sourceAuditDefinitions.find(n => n.id === 'core-box-sizing-omission-violates-content-box-default');
+  assert.equal(finding.classification, 'confirmed-core-renderer-defect');
+  assert.ok(new RegExp(finding.pattern).test(readFileSync(finding.file, 'utf8')));
+  for (const receipt of finding.evidence)
+    assert.equal(createHash('sha256').update(readFileSync(receipt.file)).digest('hex'), receipt.sha256);
+  const replay = execFileSync(process.execPath, ['scripts/audit-public-box-sizing-default.mjs', '--verify',
+    'artifacts/material-parity/public-box-sizing-default-20261011'], { encoding: 'utf8' });
+  assert.ok(replay.includes('negative controls: 2/2 rejected'));
+  for (const changed of [source.replace('confirmed-core-renderer-defect', 'equivalent-representation'),
+    source.replace('omitted:140x50', 'omitted:166x76')])
+    assert.throws(() => restoreSizingDefaultPolicyRegistration(changed));
+});
 
 test('layout diagnostic registration preserves complete predecessor and unchanged acceptance policy', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';
@@ -20,7 +40,7 @@ test('layout diagnostic registration preserves complete predecessor and unchange
   const prior = execFileSync('git', ['show', `ad7133cd:${file}`], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n');
   assert.equal(restoreLayoutDiagnosticRegistration(current), prior);
   const policy = 'tests/material-parity/input-equivalence-policy.mjs';
-  assert.equal(readFileSync(policy, 'utf8').replaceAll('\r\n', '\n'),
+  assert.equal(restoreSizingDefaultPolicyRegistration(readFileSync(policy, 'utf8')),
     execFileSync('git', ['show', `ad7133cd:${policy}`], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n'));
   const ast = ts.createSourceFile(file, current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   const functions = ['sourceFingerprints', 'focusedProofInventory', 'proof'].map(name =>
@@ -78,8 +98,9 @@ test('description registration conserves complete producer and source-definition
   const policy = readFileSync(policyFile, 'utf8');
   assert.equal(restoreDescriptionPolicyRegistration(policy), prior(policyFile));
   const before = new Function(prior(policyFile).replace(/^export const /gm, 'const ') + '; return sourceAuditDefinitions;')();
-  assert.equal(before.length, 153); assert.equal(sourceAuditDefinitions.length, 155);
-  assert.deepEqual(sourceAuditDefinitions.slice(0, -2), before);
+  const predecessorDefinitions = sourceAuditDefinitions.filter(n => n.id !== 'core-box-sizing-omission-violates-content-box-default');
+  assert.equal(before.length, 153); assert.equal(predecessorDefinitions.length, 155);
+  assert.deepEqual(predecessorDefinitions.slice(0, -2), before);
   for (const changed of [producer.replace('sourceFindings,', 'sourceFindings: [],'),
     producer.replace('configured field hint-description input boundary', 'unreviewed description acceptance'),
     producer.replace('scripts/audit-material-tooltip-description.mjs', 'scripts/other.mjs'),
@@ -348,7 +369,7 @@ test('standalone proof batch conserves complete accepted predecessor producer an
   assert.ok(first >= 0);
   assert.equal(findings[first + 1].arguments[0].properties.find(p => p.name.getText(policyTree) === 'id').initializer.text, ids[1]);
   assert.equal(policy.slice(0, findings[first].getFullStart()) + policy.slice(findings[first + 2].getFullStart()), prior(policyFile));
-  assert.equal(sourceAuditDefinitions.length - 2, 153);
+  assert.equal(sourceAuditDefinitions.filter(n => n.id !== 'core-box-sizing-omission-violates-content-box-default').length - 2, 153);
 });
 
 test('retained antialias and selection receipts replay after exact diagnostic and theme conservation', async t => {

@@ -426,8 +426,24 @@ export function restoreDescriptionProofRegistration(source) {
   return current;
 }
 
-export function restoreDescriptionPolicyRegistration(source) {
+export function restoreSizingDefaultPolicyRegistration(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
+  if (!current.includes("id: 'core-box-sizing-omission-violates-content-box-default'")) return current;
+  assert.equal(hash(current), '297c0378e8ac44f7f73aa2d71876c9a9a001a86ab2b92cac16869e9670d0bb77');
+  const ast = ts.createSourceFile('policy.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  assert.equal(ast.parseDiagnostics.length, 0);
+  const entries = ast.statements.filter(ts.isVariableStatement).flatMap(n => [...n.declarationList.declarations])
+    .find(n => n.name.getText(ast) === 'sourceAuditDefinitions').initializer.arguments[0].elements;
+  assert.equal(entries.length, 156);
+  assert.equal(entries[155].arguments[0].properties.find(p => p.name.getText(ast) === 'id').initializer.text,
+    'core-box-sizing-omission-violates-content-box-default');
+  const restored = current.slice(0, entries[155].getFullStart()) + current.slice(entries[155].end + 1);
+  assert.equal(hash(restored), '17f0045fd88d82cb5b807615e463b29bd8599712b6528887876f76ead86183af');
+  return restored;
+}
+
+export function restoreDescriptionPolicyRegistration(source) {
+  const current = restoreSizingDefaultPolicyRegistration(source);
   if (!current.includes("id: 'fixture-form-field-hint-description-association-omitted'")) {
     assert.ok(!current.includes("id: 'fixture-tooltip-persistent-description-association-conditioned-on-popup'"), 'missing named hint registration');
     return current;
