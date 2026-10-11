@@ -2,6 +2,22 @@
 
 ## Current evidence boundary — October 11
 
+Divider public paint-owner applicability now has an exact six-owner join.
+Read-only transpilation/extraction authenticates original texel-ownership log
+36e89d3f and requires both current source and installed methods to equal its six
+normalized owner hashes: canvas creation,alphabetic baseline,line positions,
+texture upload,DOM text mesh and Babylon text mesh. All six agree. This preserves
+the existing equivalent14.4px/normal paragraph/span counterexample at four origins
+and DPR1/2; it does not extend that reduction to24 configured divider cases or
+prove a full renderer pipeline identity. No browser rerun or core change.
+The precise remaining attribution gap is that configured crops do not retain
+their per-owner texture RGBA,projected UV/shader addresses or internal clip/edge
+samples. The public reduction has those observations but different composition.
+Neither crop membership nor unchanged owner methods bridges that missing
+case-specific observation. Next inspect whether original configured capture
+artifacts contain any such diagnostic fields before planning a targeted capture;
+do not repeat the six-owner comparison or the settled CPU-sampler hypotheses.
+
 Divider diagnostic measurement applicability is now bounded: read-only current
 evaluateFocusedRaster replay reproduces all48 retained text metric objects
 exactly,including phase,sharpness,color/edge diagnostics and matches. Current
