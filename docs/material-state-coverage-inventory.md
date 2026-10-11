@@ -2,6 +2,34 @@
 
 ## Current evidence boundary — October 11
 
+Coherent state-proof export exposed and now isolates a historical replay failure:
+gap composition/membership collectors reject current runner082d6d7b against their
+pre-diagnostic4ed6abe8 stage. Existing restoreGapCaptureDiagnostics recognized
+only the earlier native-scrollbar transition33c5a4b. New optional settlement/
+selection diagnostics and report-only preflight had no exact restoration path.
+This is a historical source-applicability failure,not new rendering evidence.
+The failed export log is retained: coherent-state-proof-export-20261011.log,
+SHA256e0a5307f8919d5013ab70271a7c5f70f27880ab288a0c46ef1c862d7027bc933.
+After two collector failures,the exact live producerPID18876 was deliberately
+stopped to avoid doomed aggregation; session22135 terminated exit-1. This was
+not an observation timeout or a successful export. Canonical manifest still
+has generation66eaf2d9/decoded431a119f; no publication is inferred.
+
+Extend the existing replay only: pin the complete current082d6d7b source,remove
+the reviewed AST/literal diagnostic additions,reverse the exact preflight change,
+and require full-string equality to authenticated Git6abebf22 source33c5a4b.
+The prior launch/paint-diagnostic restoration and original capture digest remain
+mandatory. Added mutation controls reject changed selection/trace/preflight code.
+This admits historical replay only,not current capture/launch equivalence.
+Regenerate the seven existing derived gap records with their original producers;
+the eight-test conservation suite passes8/8,9683.3397ms,including all27784
+original style-stage observations and the unchanged finding-data assertion.
+Only two derived receipt fields differ from HEAD (scalar runner receipt and
+membership scalar-report receipt); no original finding/count/threshold changes.
+Next retry the coherent exporter once after this verified repair,then perform
+independent cold verification and compact import. Whole-case closure and final
+unfiltered harness/browser gates remain pending; do not reuse the failed run.
+
 Retained pointer boundary proof is now integrated into the existing configured
 state-applicability assertion and producer proof description (no new test layer).
 All32 exact activate IDs join the historical configured inventory;96 boundary

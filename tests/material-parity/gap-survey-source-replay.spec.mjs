@@ -26,6 +26,9 @@ test('capture diagnostic additions preserve historical gap source and reject oth
   assert.equal(readGapSurveySource(descriptor, { current: () => beforeLaunch }), before,
     'both reviewed launch stages restore only the retained historical producer');
   for (const changed of [current + '\n// unreviewed',
+    current.replace('ASTYLAR_MATERIAL_SELECTION_REPLAY', 'CHANGED_SELECTION_REPLAY'),
+    current.replace('ASTYLAR_MATERIAL_SETTLEMENT_TRACE', 'CHANGED_SETTLEMENT_TRACE'),
+    current.replace('const validationArgs =', 'const alteredValidationArgs ='),
     current.replace('materialBrowserLaunchOptions(process.env', 'differentLaunchOptions(process.env'),
     current.replace('browserLaunch: browserLaunchEvidence', 'browserLaunch: changedEvidence'),
     current.replace('Material browser restart changed launch evidence.', 'Unreviewed launch restoration.'),

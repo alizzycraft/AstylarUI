@@ -17,6 +17,49 @@ const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
 // restores the original capture; never reuse this receipt for a fresh capture.
 export function restoreGapCaptureDiagnostics(source) {
   let current = source.replaceAll('\r\n', '\n');
+  if (current.includes('const selectionReplay =')) {
+    // Historical replay only: reverse the reviewed opt-in diagnostics and the
+    // report-only preflight split. Neither fresh-capture behavior nor its launch
+    // provenance is claimed equivalent to the historical runner.
+    assert.equal(hash(current), '082d6d7b3e0b0e5c1789f3d2ceff8862e3244de5319cc941e79c53fa634d6502');
+    const original = execFileSync('git', ['show', '6abebf22:tests/material-parity/run-material-parity.mjs'],
+      { encoding: 'utf8', maxBuffer: 2 * 1024 * 1024 }).replaceAll('\r\n', '\n');
+    assert.equal(hash(original), '33c5a4b31a5140bb19e524eaa9fba5bbbb877b45a38f6f0be5722fbe09113f6a');
+    const parse = text => {
+      const ast = ts.createSourceFile('runner.mjs', text, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+      assert.equal(ast.parseDiagnostics.length, 0); return ast;
+    };
+    const ast = parse(current), old = parse(original);
+    const replaceOnce = (before, after = '') => {
+      assert.equal(current.split(before).length, 2, 'exact diagnostic restoration must match once');
+      current = current.replace(before, after);
+    };
+    for (const statement of ast.statements.filter(n =>
+      ts.isVariableStatement(n) && /^(const settlementTrace|const selectionReplay)/.test(n.getText(ast)) ||
+      ts.isExpressionStatement(n) && n.getText(ast).startsWith('assert.ok(!selectionReplay') ||
+      ts.isIfStatement(n) && n.expression.getText(ast) === 'selectionReplay')) {
+      replaceOnce(statement.getText(ast) + '\n');
+    }
+    for (const name of ['captureSelectionTransitions', 'installSettlementTrace']) {
+      const nodes = ast.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+      assert.equal(nodes.length, 1); replaceOnce(nodes[0].getText(ast) + '\n\n');
+    }
+    const getFunction = (tree, name) => {
+      const nodes = tree.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+      assert.equal(nodes.length, 1); return nodes[0].getText(tree);
+    };
+    replaceOnce(getFunction(ast, 'validateConfiguration'), getFunction(old, 'validateConfiguration'));
+    replaceOnce('enforce, textAudit, settlementTrace, selectionReplay, browserRestartInterval',
+      'enforce, textAudit, browserRestartInterval');
+    replaceOnce("mode: selectionReplay ? 'diagnostic-selection-replay' : enforce ? 'enforced' : 'report-only'",
+      "mode: enforce ? 'enforced' : 'report-only'");
+    replaceOnce('    if (settlementTrace) await installSettlementTrace(astylar.page);\n');
+    replaceOnce('    const selectionTransitions = selectionReplay\n' +
+      '      ? await captureSelectionTransitions(reference.page, astylar.page, family, directory) : undefined;\n');
+    replaceOnce("      ...(selectionReplay ? { diagnosticAction: 'opposite-item-and-return', selectionTransitions } : {}),\n");
+    replaceOnce('      ...(settlementTrace ? { settlementTrace: await astylar.page.evaluate(() => window.__MATERIAL_SETTLEMENT_TRACE__.finish()) } : {}),\n');
+    assert.equal(current, original, 'entire pre-diagnostic runner must be conserved');
+  }
   // Only for authenticating the retained capture's producer. Native scrollbar
   // launch changes affect fresh capture and must not be called provenance-only
   // rendering changes. Restore this exact audited instrumentation transition,
