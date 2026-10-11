@@ -2,6 +2,30 @@
 
 ## Current evidence boundary — October 11
 
+Independent activate-state applicability is now inspected for64 configured
+selection-family cases,eight contexts each. Extend the same existing retained
+state assertion (no new layer/report): all128 original paired tree receipts
+authenticate and actual end states agree. Chips end[false,true],checkbox/switch
+checked=false,tabs/stepper selection=[false,true]:40 changed-control snapshots.
+Select's8 cases open both panels while value remainsTeam. Radio/toggle's16 cases
+retain[false,true]; current interactionTargetBox explicitly targets radio-team/
+second Material radio and button-toggle-two/second Material toggle,which are
+already selected under default selected=true. This is not evidence of a failed
+selection change,or coverage of the alternative item. Existing real-keyboard
+cohorts separately expose native team→solo→team/Grid→List→Grid against candidate
+unchanged state in all8 focus contexts; preserve that independent authoring
+diagnosis and pointer-transition uncertainty. Report interactionState={matches:true}
+for these cases is the comparator's default return,not measured transition data.
+Do not count it as state proof. Existing semantic owner may be only the group;
+paired option/day/control trees remain necessary for actual child state.
+Focused test passes1/1,1720.5389ms; original40 disabled/64 selected assertions
+remain. Total168 bounded applicability cases/336 receipts,not168 fully closed
+audit cases or current-code acceptance. Historical default/target observations
+do not reconstruct unrecorded action timing. Source fingerprint/proof-description
+integration remains pending for the coherent batch. Next prioritize missing
+opposite-item pointer transitions and reverse tab/step transitions against
+existing supplemental evidence; do not recapture already settled snapshots.
+
 Selected-snapshot applicability closes for the remaining48 configured cases:
 chips,checkbox,radio,select,slide-toggle and button-toggle each have eight
 profile/DPR contexts. Extend the existing retained disabled/selected assertion,

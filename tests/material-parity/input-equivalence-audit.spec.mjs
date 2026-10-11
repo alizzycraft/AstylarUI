@@ -198,7 +198,49 @@ test('retained disabled labels and selected snapshots preserve actual authored s
     }
   }
   // Keep every configured case. Labels/snapshots are not disabled-support or
-  // selection-transition evidence, and do not certify runtime or paint parity.
+  // selection-transition evidence. Inspect the independent activate population:
+  // radio/toggle target the already selected second item; select opens a panel.
+  const activated = report.interactions.filter(row => [...families, 'tabs', 'stepper'].includes(row.family) && row.state === 'activate');
+  assert.equal(activated.length, 64);
+  for (const row of activated) {
+    const reference = pinned(row.inputTrees.reference.file, row.inputTrees.reference.sha256);
+    const candidate = pinned(row.inputTrees.astylar.file, row.inputTrees.astylar.sha256);
+    assert.deepEqual(reference.errors, []); assert.deepEqual(candidate.errors, []);
+    if (row.family === 'chips') {
+      assert.deepEqual(reference.nodes.filter(n => n.attributes?.role === 'option')
+        .map(n => n.attributes['aria-selected']), ['false', 'true']);
+      assert.deepEqual(candidate.nodes.filter(n => n.authored?.role === 'option')
+        .map(n => n.authored.ariaSelected), [false, true]);
+      assert.deepEqual(row.astylarState.chipSelections, [false, true]);
+    } else if (row.family === 'radio') {
+      assert.deepEqual(reference.nodes.filter(n => n.type === 'mat-radio-button')
+        .map(n => n.attributes.class.split(/\s+/).includes('mat-mdc-radio-checked')), [false, true]);
+      assert.deepEqual(candidate.nodes.filter(n => n.authored?.role === 'radio')
+        .map(n => n.authored.ariaChecked), [false, true]);
+      assert.equal(row.astylarState.selected, true);
+    } else if (row.family === 'button-toggle') {
+      assert.deepEqual(reference.nodes.filter(n => n.attributes?.role === 'radio')
+        .map(n => n.attributes['aria-checked']), ['false', 'true']);
+      assert.deepEqual(candidate.nodes.filter(n => n.authored?.role === 'radio')
+        .map(n => n.authored.ariaChecked), [false, true]);
+      assert.equal(row.astylarState.selected, true);
+    } else if (row.family === 'tabs' || row.family === 'stepper') {
+      assert.deepEqual(reference.nodes.filter(n => Object.hasOwn(n.attributes ?? {}, 'aria-selected'))
+        .map(n => n.attributes['aria-selected']), ['false', 'true']);
+      assert.deepEqual(candidate.nodes.filter(n => n.authored?.ariaSelected !== undefined)
+        .map(n => n.authored.ariaSelected), [false, true]);
+    } else {
+      const semantics = row.semantics.find(n => n.id === `${row.family}-primary`);
+      assert.ok(semantics);
+      if (row.family === 'select') {
+        assert.equal(semantics.expected.value, 'Team'); assert.equal(semantics.actual.value, 'Team');
+        assert.equal(semantics.expected.expanded, true); assert.equal(semantics.actual.expanded, true);
+      } else {
+        assert.equal(semantics.expected.checked, false); assert.equal(semantics.actual.checked, false);
+      }
+    }
+  }
+  // These snapshots do not certify runtime or paint parity.
 });
 
 test('retained table and list AX cohorts preserve bounded equality and structural differences', async () => {
