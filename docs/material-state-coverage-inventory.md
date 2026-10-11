@@ -2,6 +2,21 @@
 
 ## Current evidence boundary — October 11
 
+Two-code recovery check rejects a map-only reconstruction assumption. Existing
+component-map recovery build imports fresh dependency chunk names (e.g.
+TWLLVWH5 versus original3JXWRYJY); deleting only recipe marker and renaming the
+component yieldsf9b56262/532d88c7,not original component/main hashes. Read-only
+dependency mapping uses only hash-authenticated original maps plus recovered
+component map and unique sources/content signatures. Root ../ source-path
+normalization expands mapping4→530 unique chunk pairs; renamed code still hashes
+859aa7ee/d697eb15,not e9b44703/9e076a6c. Thus exact source-map recovery does not
+prove complete emitted JS recovery; dependency names and generated source-path
+comments need independently bounded reconstruction. No recovered code saved,
+served build overwritten or original receipt substituted. Next inspect remaining
+generated-code path/comment/import differences within existing recovery helper,
+requiring final whole-file original digests before retention. No build/capture
+retry is justified by these failed candidate hashes alone.
+
 Whole-build receipt gap now has exact asset membership. Read-only actual
 fingerprintDirectory against October5 checkpoint: current1887/original1887,
 1880 identical; changed compare/index.html,index.csr.html,main.js; missing old
