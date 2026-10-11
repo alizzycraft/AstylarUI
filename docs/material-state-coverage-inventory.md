@@ -2,6 +2,26 @@
 
 ## Current evidence boundary — October 11
 
+Semantic focus finding current-source applicability is now bound to served code.
+Current checkpoint2aac425d includes exact chunk-XOU37TRR.js.map hash
+8692027f86a8d2d5571de110d92ad3fdda97ea35da86adc10f1522a5134a686d.
+Mapped complete semantic module590d49a2a4d5e205c10cf18a1e2e45a3f768079afad86f5ea330f7c6136088e8
+equals complete installed module7c892095300b0eb8f03a9f38ce421143579a5d90e687e3e80a045b48be8f5aee
+except the exact appended sourceMappingURL comment. Initial strict whole-module
+comparison failed only on that suffix; subsequent exact suffix equality succeeds,
+not a broad normalization. Current TS1a0011d3530701d9a74dc37b9f5a14d0fed0742dfd8793c39f8628e06b6a5725
+transpilation matches mapped/installed complete reconcile,reconcileElement and
+syncFocus methods (whitespace-only AST method normalization). Method hashes:
+887a2ef81179d21a5735ccdbbd015dcac80a0c94fabd0208df78109d0e0b784e,
+4cf5e665e64ad3b5956c246f7e73b1317c27e23936f0d9d2ef446ad48853c8ba,
+546ed54d69302cf69e5bcca8e1083e895f81b559fb1e60eec010fd8c0237f77e.
+This closes current/served owning-method applicability,not all emitted renderer
+methods or historical first-bad-revision attribution. Keep the runtime trace's
+descendant-first focus loss and root replacement distinction. Next integrate the
+new bounded finding through existing source definitions/focused proof registry,
+with exact light/mobile membership; no duplicate framework or canonical pass claim.
+Pending full publication and unavailable original runner receipt remain separate.
+
 Current light/mobile timepicker focus-event first divergence is runtime-bound.
 Existing lifecycle opt-in now captures bounded replaceChildren/focus provenance;
 wrappers preserve receiver,args,return and exceptions, affect only diagnostic
