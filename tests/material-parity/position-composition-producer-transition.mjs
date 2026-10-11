@@ -9,6 +9,26 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 // conservation. This does not substitute old bytes in current production.
 export function restoreLayoutDiagnosticRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes('public omitted box sizing default defect and exact policy conservation')) {
+    assert.equal(hash(current), '492f10e09ad974a898f7f67c55d668b41b757556da3c8db234e598ef9af28377');
+    const ast = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    assert.equal(ast.parseDiagnostics.length, 0);
+    const entries = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory')
+      .body.statements[0].expression.elements;
+    assert.equal(entries.length, 192);
+    assert.equal(entries[0].arguments[3].text, 'public omitted box sizing default defect and exact policy conservation');
+    current = current.slice(0, entries[0].getFullStart()) + current.slice(entries[1].getFullStart());
+    for (const file of ['scripts/audit-public-box-sizing-default.mjs',
+      'artifacts/material-parity/public-box-sizing-default-20261011/latest-report.json',
+      'artifacts/material-parity/public-box-sizing-default-20261011/dpr1-reference.png',
+      'artifacts/material-parity/public-box-sizing-default-20261011/dpr1-astylar.png',
+      'artifacts/material-parity/public-box-sizing-default-20261011/dpr2-reference.png',
+      'artifacts/material-parity/public-box-sizing-default-20261011/dpr2-astylar.png']) {
+      const line = `    '${file}',\n`; assert.equal(current.split(line).length, 2);
+      current = current.replace(line, '');
+    }
+    assert.equal(hash(current), '8dc6bba394f72a36ba60afaac4ce9082f8cddaac781520c375bcc6056772893b');
+  }
   if (current.includes('switch complete-row cursor owner and disabled-input conservation')) {
     assert.equal(hash(current), '8dc6bba394f72a36ba60afaac4ce9082f8cddaac781520c375bcc6056772893b',
       'exact complete switch cursor proof registration');

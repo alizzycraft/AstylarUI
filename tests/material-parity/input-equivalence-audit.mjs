@@ -8914,6 +8914,12 @@ function sourceFingerprints(root) {
     'artifacts/material-parity/public-host-scroll-predecessor-conservation-retry-20261010.log',
     'artifacts/material-parity/passive-badge-icon-ax-verified-20261006.log',
     'artifacts/material-parity/icon-remaining-ax-20261007.log',
+    'scripts/audit-public-box-sizing-default.mjs',
+    'artifacts/material-parity/public-box-sizing-default-20261011/latest-report.json',
+    'artifacts/material-parity/public-box-sizing-default-20261011/dpr1-reference.png',
+    'artifacts/material-parity/public-box-sizing-default-20261011/dpr1-astylar.png',
+    'artifacts/material-parity/public-box-sizing-default-20261011/dpr2-reference.png',
+    'artifacts/material-parity/public-box-sizing-default-20261011/dpr2-astylar.png',
     'scripts/audit-public-host-scroll-hover.mjs',
     'scripts/audit-material-tooltip-host-scroll.mjs',
     'examples/material-showcase/audit/cursor-defaults.mjs',
@@ -9518,6 +9524,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('public omitted box sizing finding preserves explicit controls and complete prior policy'/,
+      'public omitted box sizing default defect and exact policy conservation', 'Retained package-root DPR1/2 WebGL evidence authenticates identical inputs, dependency and PNG receipts, native geometry and authored-color pixel bounds. Omitted sizing yields native166x76 versus candidate140x50; explicit content-box and border-box controls agree. Changed-input,missing-DPR and policy mutations reject. Exact156-to155 policy restoration preserves every predecessor definition. This is bounded core initial-value failure,not projection-scale or whole-Material acceptance; explicit native parent request remains a separate authoring difference.'),
     proof(root, 'tests/material-parity/component-cursor-request-review.spec.mjs', /test\('switch cursor owner review conserves the mixed enabled and disabled population'/,
       'switch complete-row cursor owner and disabled-input conservation', 'Complete185 host row conserves68 observations and all raw omissions. Sixty enabled native role controls match candidate pointer inputs; eight disabled native controls request default and pointer-events none against candidate pointer and omitted pointerEvents. Role/state/request/membership and forged-hover controls reject. This is historical owner/input attribution,not physical hover,hit suppression,current rendering or whole-case closure.'),
     proof(root, 'tests/material-parity/component-cursor-request-review.spec.mjs', /test\('expansion cursor owner review conserves panel and disabled-title populations without rewriting raw values'/,

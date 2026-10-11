@@ -2,6 +2,17 @@
 
 ## Current evidence boundary — October 11
 
+Coherent192 source batch registers the public default proof and its report/four
+PNG/script fingerprints. Producer SHA492f10e0 restores exactly191 SHA8dc6bba3
+after removing only the added proof and six fingerprint paths,then all prior
+conservation transitions. Policy156 separately restores original155. Existing
+new/layout/description/standalone checks pass4/4,12054.2323ms; all192 proof entries
+are present. Named exporter dry-run verifies all five retained-baseline inputs.
+Accepted185 stays unchanged until successful export,cold check and compact import.
+One coherent retry follows this verified batch; inputs must stay frozen. Historical
+14/15 integration and repaired500-observation pass are preserved,not relabeled
+fresh15/15. Final full harness/current browser/case closure gates remain open.
+
 Bounded public box-sizing default failure is now a source-policy definition,
 core-box-sizing-omission-violates-content-box-default (156 definitions; canonical
 accepted185 still155). Its exact report receipt80902a40,public control population,
