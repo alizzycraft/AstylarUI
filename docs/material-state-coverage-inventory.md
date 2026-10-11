@@ -2,6 +2,24 @@
 
 ## Current evidence boundary — October 11
 
+Historical map migration must also cover downstream validators,not only the
+canonical sourceFingerprints inventory. Read-only consumer search identifies
+actual reads in benchmark-config,input-boundary,input-equivalence and sort-focus
+owning suites; source-transition literals are historical expectations,not reads
+to migrate indiscriminately. Smallest executable counterexample:
+node --test --test-name-pattern='^configured field hint descriptions'
+tests/material-parity/benchmark-config.spec.mjs terminates exit1 before evidence
+review. descriptionAuthoringSource reads the absent current-dist
+chunk-JPEJK334.js.map although exact original47654b64 is now retained.
+Failure log historical-map-consumer-preflight-20261011.log SHA256
+4e74c71c6c8c5a13ea141eb91af57898446e34ab626d76752161fb706b4e3208.
+This demonstrates a second historical-location defect,not a description/input
+regression or evidence that recovered bytes are invalid. Preserve the original
+hash assertion and current-component applicability checks. After export input
+freeze ends,migrate the owning readers explicitly and conserve original test
+source transitions; do not copy maps over served dist or preload them globally.
+Final full harness remains required and is not presently accepted.
+
 Non-desktop timepicker scrollbar evidence gap is now exact,not an unspecified
 responsive remainder. Read-only hash-pinned October5 reportab42dbec contains98
 timepicker interactions; only two are non-desktop: light and dark mobile-dpr2
