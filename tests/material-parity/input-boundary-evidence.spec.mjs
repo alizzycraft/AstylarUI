@@ -9,7 +9,7 @@ import test from 'node:test';
 import ts from 'typescript';
 import { chromium } from 'playwright-core';
 import { PNG } from 'pngjs';
-import { fingerprintDirectory } from './run-checkpoint.mjs';
+import { fingerprintDirectory, materialCaseKey } from './run-checkpoint.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { propertyGroups } from './input-equivalence-policy.mjs';
 import { readGapSurveySource } from './gap-survey-source-replay.mjs';
@@ -19,6 +19,61 @@ import { cursorInput } from '../../examples/material-showcase/audit/cursor-defau
 
 const file = 'artifacts/material-parity/input-boundaries-keypress-559f95c/latest-report.json';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+test('semantic descendant replacement focus evidence retains exact current case and source applicability', async () => {
+  const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');
+  const predecessor = execFileSync('git', ['show', '137f874f:tests/material-parity/input-equivalence-policy.mjs']);
+  const prior = await import('data:text/javascript;base64,' + predecessor.toString('base64'));
+  assert.deepEqual(sourceAuditDefinitions.slice(0, -1), prior.sourceAuditDefinitions);
+  const finding = sourceAuditDefinitions.at(-1);
+  assert.equal(finding.id, 'core-semantic-descendant-replacement-loses-retained-focus');
+  assert.match(readFileSync(finding.file, 'utf8'), new RegExp(finding.pattern));
+  const receipt = finding.evidence[0], bytes = readFileSync(receipt.file);
+  assert.equal(hash(bytes), receipt.sha256);
+  const diagnostics = bytes.toString().split(/\r?\n/).filter(line => line.startsWith('# {'))
+    .map(line => JSON.parse(line.slice(2).replaceAll(String.fromCharCode(92) + '#', '#')));
+  const receipts = diagnostics.filter(row => row.currentLightLifecycleReceipts).map(row => row.currentLightLifecycleReceipts);
+  assert.equal(receipts.length, 2);
+  for (const receipt of receipts) {
+    assert.equal(hash(readFileSync(receipt.checkpointFile)), receipt.checkpointSha256);
+    assert.deepEqual(receipt.viewport, [390, 844, 2]);
+    assert.equal(receipt.acceptance, false);
+  }
+  assert.equal(materialMobileFlowCases.filter(row => materialCaseKey('interaction', row) === materialCaseKey('interaction', finding.observation.case)).length, 1);
+  const observations = diagnostics.find(row => row.family === 'timepicker').observations;
+  let previous = [];
+  for (const cycle of observations.astylar.cycles) for (const state of ['opened', 'closed']) {
+    const all = cycle[state].focusProvenance;
+    assert.deepEqual(all.slice(0, previous.length), previous);
+    const delta = all.slice(previous.length); previous = all;
+    const index = delta.findIndex(row => row.kind === 'replace-before' && row.focused);
+    assert.ok(index >= 0); assert.match(delta[index].stack, /AstylarSemanticBridge.reconcileElement/);
+    assert.deepEqual(delta[index + 1], { kind: 'focusout', operation: 'replaceChildren' });
+    assert.equal(delta[index + 2].focused, false); assert.equal(delta[index + 2].connected, true);
+    assert.ok(delta.slice(index + 3).some(row => row.kind === 'focus-call' && /AstylarSemanticBridge.syncFocus/.test(row.stack)));
+    assert.equal(cycle[state].inputFocused, true);
+  }
+  assert.equal(previous.length, 58);
+  assert.deepEqual(observations.reference.cycles.at(-1).closed.focusProvenance, []);
+  const mapBytes = readFileSync('examples/material-showcase/dist/material-showcase/browser/chunk-XOU37TRR.js.map');
+  assert.equal(hash(mapBytes), '8692027f86a8d2d5571de110d92ad3fdda97ea35da86adc10f1522a5134a686d');
+  const map = JSON.parse(mapBytes), module = 'node_modules/astylarui/dist/lib/lib/astylar-semantic-bridge.js';
+  const mapped = map.sourcesContent[map.sources.indexOf(module)];
+  const installed = readFileSync('examples/material-showcase/' + module, 'utf8');
+  assert.equal(installed, mapped + '//# sourceMappingURL=astylar-semantic-bridge.js.map');
+  const compiled = ts.transpileModule(readFileSync(finding.file, 'utf8'),
+    { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 } }).outputText;
+  const method = (code, name) => {
+    const ast = ts.createSourceFile('semantic.js', code, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS), matches = [];
+    assert.equal(ast.parseDiagnostics.length, 0);
+    const visit = node => { if (ts.isMethodDeclaration(node) && node.name.getText(ast) === name)
+      matches.push(node.getText(ast).replace(/\s+/g, ' ').trim()); ts.forEachChild(node, visit); };
+    visit(ast); assert.equal(matches.length, 1); return matches[0];
+  };
+  for (const name of ['reconcile', 'reconcileElement', 'syncFocus']) {
+    assert.equal(method(mapped, name), method(installed, name));
+    assert.equal(method(installed, name), method(compiled, name));
+  }
+});
 const bytes = readFileSync(file);
 assert.equal(hash(bytes), '39df94e0eb87480d3824927a41a9950d1d275f7c97ab97a571c449efdc6da7d7');
 const report = JSON.parse(bytes);

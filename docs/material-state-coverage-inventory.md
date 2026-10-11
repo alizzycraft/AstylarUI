@@ -2,6 +2,26 @@
 
 ## Current evidence boundary — October 11
 
+Semantic focus defect is now integrated into existing machine-readable source
+definitions/proof registry, not a duplicate report framework. New stable ID
+core-semantic-descendant-replacement-loses-retained-focus carries exact light
+mobile open-dismiss case, six action boundaries, immutable log55c6babc and core
+owner. Focused retained-source test passes1/1,1627.1ms; source definitions prior156
+are conserved byte-equivalent as objects against137f874f, exact existing case key
+matches once, all action provenance prefixes and58 records verify, complete served/
+installed/current owning methods agree. Log semantic-focus-finding-source-verified-
+20261011.log SHA25625f4a8747b437f7fccdbe3474fbb3c7cf8135d3bdd0b5914f69030d5dc19bf3e.
+Initial membership assertion incorrectly compared serialized raw config with a
+kind-bearing case object and failed; preserved semantic-focus-finding-integration-
+20261011.log. Corrected test uses existing materialCaseKey, not relaxed membership.
+Intermediate verified log is retained separately. Existing published canonical
+generation66eaf2d9 remains156 findings/192 proofs; current source prepares157/193,
+not accepted publication. Coherent integration/export must reconcile historical
+source guards and all original findings, rather than merely raising counts.
+No fixture/core changes; public plugin-free focus reduction and remaining state/
+paint/ownership closure remain. Next address coherent publication applicability
+and exact outstanding case obligations, keeping this bounded confirmed cause.
+
 Semantic focus finding current-source applicability is now bound to served code.
 Current checkpoint2aac425d includes exact chunk-XOU37TRR.js.map hash
 8692027f86a8d2d5571de110d92ad3fdda97ea35da86adc10f1522a5134a686d.

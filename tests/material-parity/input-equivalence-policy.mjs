@@ -1793,6 +1793,23 @@ export const sourceAuditDefinitions = Object.freeze([
       stage: 'omitted initial value reaches CSS-space sizing before final projection' },
     justification: 'The capability manifests document content-box as default, but global/type defaults omit boxSizing and calculateDimensions adds padding/border outside declared dimensions only for explicit content-box. Package-root WebGL reduction with identical width140/height50/padding10/border3 inputs exposes the omission difference at DPR1/2; exact authored-color pixels and native boxes agree for both explicit controls. Installed sizing/default/style-resolution methods match current source. The retained verifier authenticates dependency/PNG receipts, paired inputs and missing-DPR/altered-input rejection controls. This is a bounded core default-contract defect, not a projection-scale diagnosis or whole-Material acceptance. Native Material parent explicit border-box versus candidate omission remains a separate unequal author request. Correct the general default rule before reassessing inputs; do not retune fixture dimensions to preserve legacy pixels.',
   }),
+  Object.freeze({
+    id: 'core-semantic-descendant-replacement-loses-retained-focus',
+    introducedBy: 'current light mobile runtime provenance; first-bad revision not established',
+    file: 'src/lib/astylar-semantic-bridge.ts',
+    pattern: String.raw`if \(childrenChanged\) node\.replaceChildren\(\.\.\.childNodes\);`,
+    classification: 'confirmed-core-renderer-defect',
+    owner: 'core semantic descendant reconciliation and retained focus continuity',
+    focusedProof: 'tests/material-parity/input-boundary-evidence.spec.mjs: semantic descendant replacement focus evidence retains exact current case and source applicability',
+    evidence: [{ file: 'artifacts/material-parity/timepicker-focus-provenance-20261011.log', sha256: '55c6babc6e23292c9cf05983fb78c22daf312ff841d60966dfb55b5ff74fe6ae' }],
+    observation: { component: 'timepicker', element: 'timepicker-control',
+      case: { kind: 'interaction', family: 'timepicker', profile: 'light', viewport: { id: 'mobile-dpr2', width: 390, height: 844, deviceScaleFactor: 2 }, state: 'open-dismiss' },
+      states: ['opened', 'Escape-closed'], cycles: 3,
+      property: 'retained semantic input focus event continuity', reference: 'Escape keydown/keyup without focus transitions',
+      astylar: 'focusout inside descendant replaceChildren, then focusin through syncFocus',
+      stage: 'semantic reconciliation before focus restoration' },
+    justification: 'Six current light mobile DPR2 opening/closed boundaries locate the first blur synchronously inside semantic reconcileElement.replaceChildren; the input remains connected. Root replacement occurs later with focus already lost, and syncFocus restores it. Exact served/current owning methods agree. State callbacks trigger reflow but do not directly cause the observed blur. Preserve focused descendants through changed child lists rather than suppressing events or patching application focus. This is a bounded confirmed core focus continuity defect, distinct from caret material lifetime. Other profiles, real Tab/selection continuity, public plugin-free reduction, historical first-bad revision and whole-case parity remain unproven.',
+  }),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({
