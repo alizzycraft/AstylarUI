@@ -1,5 +1,19 @@
 # Material comparison/state coverage inventory
 
+## Coherent195 policy preflight repair — October 12
+
+Existing policy/producer preflight standalone batch passes; description negative
+control fails because an older claim substring no longer exists and replacement
+does nothing. Current divider claim mutation restores the intended rejection;
+assert.notEqual now requires every mutation to change actual source. Original
+whole predecessor/policy equality assertions remain. Focused repair1/1 passes
+4955.3839ms (6500.1708ms process). Keep initial coherent195-policy-preflight-
+20261012.log and coherent195-description-mutation-repair-20261012.log; initial
+combined command is1-pass/1-fail,not accepted. Previously completed source/passive/
+popup checks and this exact repair now answer known registration guard gaps.
+Next named complete current-ancestry export,then independent cold check/import/
+verify. No renderer,input,classification,scope or acceptance changes.
+
 ## Coherent195 integration preflight — October 12
 
 Three existing conservation checks ran against the registered batch. Source-map

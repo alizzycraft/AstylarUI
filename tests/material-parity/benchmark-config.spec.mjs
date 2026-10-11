@@ -111,8 +111,10 @@ test('description registration conserves complete producer and source-definition
     producer.replace('diagnostic registration is not acceptance or actual dark-theme coverage.', 'diagnostic registration proves dark-theme acceptance.'),
     producer.replace('Authenticates40 historical paired-side separator observations', 'Authenticates41 historical paired-side separator observations'),
     producer.replace('divider-theme-verified-ax-20261009.log', 'unreviewed-divider.log'),
-    producer.replace('Not assistive-technology interaction,paint,lifetime', 'Complete assistive-technology interaction,paint,lifetime')])
+    producer.replace('Not all-point hit coverage,held/click,assistive-technology interaction,paint,lifetime', 'Complete all-point hit coverage,held/click,assistive-technology interaction,paint,lifetime')]) {
+    assert.notEqual(changed, producer, 'negative control must actually mutate current producer');
     assert.throws(() => restoreDescriptionProofRegistration(changed));
+  }
   for (const changed of [policy.replace('fixture-form-field-hint-description-association-omitted', 'unknown-hint-finding'),
     policy.replace('Original', 'Rewritten')]) assert.throws(() => restoreDescriptionPolicyRegistration(changed));
 });
