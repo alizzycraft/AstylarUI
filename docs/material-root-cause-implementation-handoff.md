@@ -1,5 +1,14 @@
 # Material audit: evidence-led implementation priorities
 
+October11 coherent193 publication: correct current-ancestry export and independent
+cold comparison both exit0; existing compact import/whole-index verify also pass.
+Generation ac7920d5 retains8483 groups,157 source findings,39904 controls and
+389202 occurrences. Exact package/log receipts are in the current coverage ledger.
+This supersedes192 publication, not historical evidence. Zero unresolved scalar
+groups does not establish equal inputs or whole-case closure: all2311 cases remain
+partial. Next prioritize exact obligation/currentness joins and the shared semantic
+focus public reduction; original runner receipt and final full gates remain open.
+
 October11 light/mobile timepicker focus-event trace confirms a separate core
 semantic reconciliation boundary: descendant reconcileElement.replaceChildren
 blurs the retained focused input before root replacement. It stays connected;
@@ -7,9 +16,9 @@ syncFocus restores focus, producing extra focusout/focusin at all six captured
 open/closed boundaries. See current coverage ledger and retained
 timepicker-focus-provenance-20261011.log55c6babc. Preserve focus across changed
 semantic child lists, not merely an unchanged root list; do not suppress events
-or compensate in the Material callback. Current/served complete-method binding,
-machine-readable integration and general public reduction remain pending. This
-is distinct from the already confirmed caret-material lifetime defect.
+or compensate in the Material callback. Current/served complete-method binding
+and machine-readable integration are verified; general public reduction remains
+pending. This is distinct from the already confirmed caret-material lifetime defect.
 
 October11 current dark/mobile timepicker panel review: authenticated opening
 rasters distinguish unequal lower-corner requests from core scrolling behavior.

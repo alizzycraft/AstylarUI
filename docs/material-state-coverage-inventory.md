@@ -2,6 +2,29 @@
 
 ## Current evidence boundary — October 11
 
+Coherent193 publication now passes independent cold verification and compact
+import/whole-index verification. The correct current-ancestry launcher export
+completed exit0; coherent-193-current-ancestry-export-20261011.log SHA256
+9ae5e2fd2d3a9620cbcc7d55cae5a1d3b5a32f143674007b3a36e2a368acee61.
+Independent cold check completed exit0 in2883277.9928ms; log
+coherent-193-independent-cold-check-20261011.log SHA256
+38fa749af31272d5f14ecbfe8242f9dc91e36e1dba567a3504d9ca787b46c6b3.
+It executes2 collectors,10 memory hits,0 disk hits,0 invalidations and rechecks
+1205 files/89158075 bytes. Accepted compressed generation
+ac7920d50ef3be51a724a91a6690a1028a5fd9e7a4aaaf4d51e63e802d2c1cf2
+has decoded SHA256
+6fbad4931dbed54c3ab6afb7d8cbebce767306cc306d9d9655018b33398adcf8.
+Existing import/verify both exit0:8483 groups,157 source findings,39904 controls,
+389202 occurrences,0 unresolved scalar groups; compact shards72748535 bytes.
+Import log coherent-193-compact-import-20261011.log SHA256
+1c23f372f970cd21ca706306dfb46bc9bb68506ab20ac856871272094d602d64;
+verify log coherent-193-compact-verify-20261011.log SHA256
+c57c74e79493789b7cd4be6073b68fd04f66b618db00dd02e76732a584834508.
+This supersedes192 as current publication, not its retained evidence or failures.
+All2311 cases remain partial and inputEquivalent=false. Next reconcile exact
+case obligations/current applicability and the semantic-focus public reduction;
+unavailable original runner receipt and final unfiltered/enforced gates remain.
+
 The coherent193 export failed before publication because it invoked the general
 exporter without the retained current-ancestry arguments. Preserved failure log:
 coherent-193-proof-export-20261011.log, SHA256
