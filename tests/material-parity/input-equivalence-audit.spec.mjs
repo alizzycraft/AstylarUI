@@ -2506,7 +2506,7 @@ test('popup proof batch adds four registrations without changing predecessor inv
     'desktop popup hover token alpha versus opaque input boundary',
     'light desktop actual held-option input boundary']) {
     assert.throws(() => restoreScalarReviewExtraction(currentSource.replace(fragment, fragment + ' changed')),
-      /exact four-entry addition/);
+      /exact four-entry addition|exact retained source-map producer plus bounded option evidence/);
   }
   assert.deepEqual(current.fingerprints, prior.fingerprints);
   assert.equal(current.proofs.length, prior.proofs.length + 4);

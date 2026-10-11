@@ -1,5 +1,21 @@
 # Material comparison/state coverage inventory
 
+## Coherent195 integration preflight — October 12
+
+Three existing conservation checks ran against the registered batch. Source-map
+and passive registration pass; historical popup proof mutation test initially
+fails only because the new authenticated whole-source guard rejects the mutation
+before its older four-entry guard. Original inventory/equality assertions remain;
+the expected rejection now explicitly accepts either owning boundary,not arbitrary
+errors. Focused popup replay passes1/1,12381.0798ms (14117.7151ms process).
+Retain initial2-pass/1-fail coherent195-option-registration-preflight-20261012.log
+and passing coherent195-option-popup-preflight-repair-20261012.log. This closes
+that demonstrated preflight expectation mismatch,not all integration tests.
+No export started; D:free254386176bytes at preflight. Canonical remains194/626,
+producer195/632; remaining policy/producer integration applicability and coherent
+export/cold/import must still run before claiming publication. Do not report the
+initial combined command as passing or restart settled option browser probes.
+
 ## Option evidence coherent registration — October 12
 
 Existing producer now registers the retained option input/history/classification
