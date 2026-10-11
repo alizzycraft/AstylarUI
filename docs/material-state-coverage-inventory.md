@@ -2,6 +2,27 @@
 
 ## Current evidence boundary — October 11
 
+Focus-event investigation identifies a concrete shared reconciliation mechanism.
+Current semantic bridge reconcile unconditionally executes root.replaceChildren
+(src/lib/astylar-semantic-bridge.ts:149), even when returned semantic nodes retain
+identity. Existing core createScene then restores focused text state. A bounded
+read-only Chrome154.0.8037.99 native-DOM reduction (playwright-core, headless)
+uses <main><input id=test value=Atlas></main>: initial focus/no mutation produces
+no events; root.replaceChildren(input) preserves node identity but loses focus
+and emits focusout; input.focus() restores focus and emits focusin. This proves
+the browser operation's mechanism, not its exclusive runtime contribution to
+the timepicker log. The application callback and semantic-reconcile call path
+remain competing execution explanations until directly correlated.
+Preflight of existing installSettlementTrace shows only surface update/settle/
+focus/invalidate wrappers, state patch and frame-session snapshots: no DOM focus
+event/node identity/replaceChildren attribution. Running it unchanged cannot
+decisively distinguish this path. Next extend the existing lifecycle diagnostic
+with bounded semantic-node mutation/focus provenance (separate instrumentation,
+no renderer fix), then bind served source and actual action events. Do not rerun
+the generic trace merely for another endpoint. An initial reduction invocation
+used unavailable playwright package and exited before launching; corrected
+playwright-core invocation succeeded. No dependencies, fixtures or core changed.
+
 Light/mobile timepicker full captured DOM event sequence is now inspected,
 not just its filtered Escape/input/change subset. Read-only replay authenticates
 log7319fc16 and verifies every boundary history retains the exact prior prefix
