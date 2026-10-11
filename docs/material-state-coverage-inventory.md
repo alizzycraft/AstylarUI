@@ -2,6 +2,29 @@
 
 ## Current evidence boundary — October 11
 
+Divider effective cursor is now measured across20 physical contexts covering
+all24 configured cases:40 side observations,160 root/above/separator/below points.
+Existing description/AX probe adds only opt-in --divider-cursors; default actions,
+reference inputs and configured gates are unchanged. Chrome154.0.8037.99 captures
+standard16 plus comparison4 contexts against exact October11 served checkpoint.
+Native auto resolves text on both paragraph targets and default on empty root/
+separator; candidate canvas updates to text/default respectively in every context.
+Native actual hit IDs/text-range/user-select evidence and candidate canvas hit/
+computed cursor are retained separately; semantic text ranges are not substituted
+for candidate visual hit testing. All160 sampled effective cursors agree.
+Logs divider-effective-cursor-20261011.log SHA256
+87e9166432c3083ac2984867be8d5c8383e1686909bf4c2397194fe7a1849ffb and
+divider-effective-cursor-comparison-20261011.log SHA256
+023512d6248ef3b974e5c10f4e2e72d6e2955e3f9812f457d62e1f0546cf2781.
+Existing AX/context assertion extends to cursor receipts/membership/runtime/theme/
+metric-source observations; focused1/1 passes3641.4408ms (4931.176ms terminal).
+Original pre-cursor probe receipt is authenticated from exact Git61f3ea32 bytes,
+not rewritten to current source. Original inspect cursor defaults remain unmeasured.
+This closes four contextual scalar cursor questions at these points,not all-point
+hit coverage,OS cursor pixels,held/click or complete rendering acceptance. Coherent
+producer proof description/source-path registration and canonical integration of
+this bounded batch remain pending; no unchanged broad capture/export warranted.
+
 Divider effective-cursor gap is now demonstrably unmeasured,not a reported
 cursor failure/pass. All8 configured inspect rows contain only{matches:true}.
 Current compareInteractionCursor returns that object before touching either

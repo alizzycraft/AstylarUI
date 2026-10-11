@@ -926,8 +926,12 @@ test('divider actual-theme AX cohorts preserve exact contexts and runtime receip
     const rows = raw.toString().trim().split(/\r?\n/).map(JSON.parse), end = rows.pop();
     assert.equal(end.terminal, 'verified'); assert.equal(end.contexts, contexts);
     assert.equal(end.axRelativesRecorded, true); assert.equal(rows.length, contexts * 2);
-    for (const receipt of [...end.capture.sources, ...end.sourceReceipts, end.capture.checkpointManifest])
-      assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+    for (const receipt of [...end.capture.sources, ...end.sourceReceipts, end.capture.checkpointManifest]) {
+      // Preserve the original pre-cursor probe bytes, not a changed receipt.
+      const bytes = receipt.file === 'scripts/audit-material-field-description.mjs'
+        ? execFileSync('git', ['show', `61f3ea32:${receipt.file}`]) : readFileSync(receipt.file);
+      assert.equal(hash(bytes), receipt.sha256);
+    }
     assert.equal(end.capture.checkpointManifest.file,
       'artifacts/material-parity/selection-pointer-directions-20261011/checkpoint/manifest.json');
     const checkpoint = JSON.parse(readFileSync(end.capture.checkpointManifest.file));
@@ -961,6 +965,43 @@ test('divider actual-theme AX cohorts preserve exact contexts and runtime receip
     assert.ok(current.some(row => row.side === side && row.context.profile === entry.profile &&
       row.context.viewport.width === entry.viewport.width && row.context.viewport.height === entry.viewport.height &&
       row.context.deviceScaleFactor === entry.viewport.deviceScaleFactor));
+  const cursorRows = [];
+  for (const [file, digest, contexts] of [
+    ['divider-effective-cursor-20261011.log', '87e9166432c3083ac2984867be8d5c8383e1686909bf4c2397194fe7a1849ffb', 16],
+    ['divider-effective-cursor-comparison-20261011.log', '023512d6248ef3b974e5c10f4e2e72d6e2955e3f9812f457d62e1f0546cf2781', 4],
+  ]) {
+    const bytes = readFileSync(`artifacts/material-parity/${file}`); assert.equal(hash(bytes), digest);
+    const rows = bytes.toString().trim().split(/\r?\n/).map(JSON.parse), end = rows.pop();
+    assert.equal(end.terminal, 'verified'); assert.equal(end.contexts, contexts);
+    assert.equal(end.cursorPointsRecorded, true); assert.equal(rows.length, contexts * 2);
+    for (const receipt of [...end.capture.sources, ...end.sourceReceipts, end.capture.checkpointManifest,
+      end.cursorMetricReceipt]) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+    const checkpoint = JSON.parse(readFileSync(end.capture.checkpointManifest.file));
+    assert.equal(end.browser, checkpoint.provenance.browser);
+    assert.deepEqual(fingerprintDirectory('examples/material-showcase/dist/material-showcase/browser'), checkpoint.provenance.browserFiles);
+    for (const row of rows) {
+      assert.deepEqual(row.runtime.errors, []);
+      assert.deepEqual(row.theme, { dark: row.context.profile === 'dark', background: rgb[row.context.profile] });
+      for (const asset of row.runtime.assets) assert.equal(asset.sha256,
+        checkpoint.provenance.browserFiles.find(file => (file.path ?? file.file) === asset.file)?.sha256);
+      assert.deepEqual(row.cursorPoints.map(point => point.id),
+        ['divider-root', 'divider-above', 'divider-primary', 'divider-below']);
+      for (const point of row.cursorPoints) {
+        const text = ['divider-above', 'divider-below'].includes(point.id);
+        assert.ok(Number.isFinite(point.point.x) && Number.isFinite(point.point.y));
+        assert.equal(point.effectiveCursor, text ? 'text' : 'default');
+        assert.equal(point.authoredCursor, row.side === 'reference' ? 'auto' : text ? 'text' : 'default');
+        assert.equal(point.hasSelectableTextAtPoint, row.side === 'reference' && text);
+        if (row.side === 'astylar') assert.equal(point.hitType, 'canvas');
+        else assert.equal(point.hitId, point.id);
+      }
+    }
+    cursorRows.push(...rows);
+  }
+  assert.deepEqual(cursorRows.map(r => `${r.context.profile}:${r.context.viewportId}:${r.side}`).sort(),
+    current.map(r => `${r.context.profile}:${r.context.viewportId}:${r.side}`).sort());
+  // Same-point effective CSS cursors only, not OS pixels, held/click behavior,
+  // source-equivalent paint or retroactive measurement of original inspect rows.
 });
 
 test('divider host clipping observations preserve bounded DOM ancestry', () => {

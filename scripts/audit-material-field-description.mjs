@@ -9,6 +9,7 @@ import { fingerprintDirectory, materialBrowserLaunchOptions } from '../tests/mat
 import { openSupplementalCapture, parseSupplementalCaptureArguments } from '../tests/material-parity/supplemental-capture-evidence.mjs';
 import { materialProfiles, materialViewports, materialComparisonViewport } from '../tests/material-parity/benchmark.config.mjs';
 import { captureReferenceRootAncestorContext } from '../tests/material-parity/reference-root-ancestor-context.mjs';
+import { effectiveBrowserCursor } from '../tests/material-parity/cursor-metrics.mjs';
 
 // Close the actual-AX hint-description gap, using the existing runtime receipt
 // observer. This is not an input-tree report or an all-profile acceptance gate.
@@ -29,6 +30,8 @@ const dividerHostContext = process.argv.includes('--divider-host-context');
 assert.ok(!dividerHostContext || divider, 'Host context is a separate opt-in divider observation.');
 const dividerRelatives = process.argv.includes('--divider-relatives');
 assert.ok(!dividerRelatives || divider, 'AX relatives are a separate opt-in divider observation.');
+const dividerCursors = process.argv.includes('--divider-cursors');
+assert.ok(!dividerCursors || divider, 'Cursor points are a separate opt-in divider observation.');
 const comparisonOnly = process.argv.includes('--comparison-only');
 assert.ok(!comparisonOnly || divider && !allContexts, 'Comparison-only is a separate bounded divider cohort.');
 assert.ok(!divider || !ordinaryTooltip, 'Divider and ordinary tooltip are separate capture scopes.');
@@ -64,7 +67,7 @@ let browser;
 try {
   browser = await chromium.launch(materialBrowserLaunchOptions());
   const options = parseSupplementalCaptureArguments([
-    `--base-url=${baseUrl}`, `--checkpoint=${checkpoint}`, ...process.argv.slice(2).filter(arg => !arg.startsWith('--checkpoint=') && !['--all-contexts', '--ordinary-tooltip', '--divider', '--comparison-only', '--divider-host-context', '--divider-relatives'].includes(arg)),
+    `--base-url=${baseUrl}`, `--checkpoint=${checkpoint}`, ...process.argv.slice(2).filter(arg => !arg.startsWith('--checkpoint=') && !['--all-contexts', '--ordinary-tooltip', '--divider', '--comparison-only', '--divider-host-context', '--divider-relatives', '--divider-cursors'].includes(arg)),
   ]);
   const evidence = openSupplementalCapture({ options, browser,
     script: 'scripts/audit-material-field-description.mjs', styleProperties: [] });
@@ -93,6 +96,34 @@ try {
       }));
       assert.equal(theme.dark, context.profile === 'dark');
       assert.equal(theme.background, surfaceRgb[context.profile]);
+      const cursorPoints = [];
+      if (dividerCursors) for (const id of ['divider-root', 'divider-above', 'divider-primary', 'divider-below']) {
+        const point = await page.evaluate(({ side, id }) => {
+          const canvas = side === 'astylar' ? document.querySelector('canvas').getBoundingClientRect() : { x: 0, y: 0 };
+          const box = side === 'astylar'
+            ? window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([id], false).elements[id].borderBox
+            : document.getElementById(id).getBoundingClientRect();
+          return { x: canvas.x + box.left + box.width / 2,
+            y: canvas.y + box.top + (id === 'divider-root' ? 12 : box.height / 2) };
+        }, { side, id });
+        await page.mouse.move(point.x, point.y);
+        if (side === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+        const hit = await page.evaluate(point => {
+          const element = document.elementFromPoint(point.x, point.y);
+          if (!element) throw new Error('Cursor hit target missing');
+          const caret = document.caretPositionFromPoint?.(point.x, point.y);
+          const node = caret?.offsetNode;
+          const range = node?.nodeType === Node.TEXT_NODE ? document.createRange() : null;
+          range?.selectNodeContents(node);
+          const hasSelectableTextAtPoint = !!node?.textContent?.trim() && !!range &&
+            [...range.getClientRects()].some(rect => point.x >= rect.left && point.x <= rect.right &&
+              point.y >= rect.top && point.y <= rect.bottom) && getComputedStyle(node.parentElement).userSelect !== 'none';
+          return { hitType: element.tagName.toLowerCase(), hitId: element.id,
+            authoredCursor: getComputedStyle(element).cursor, hasSelectableTextAtPoint };
+        }, point);
+        cursorPoints.push({ id, point, ...hit,
+          effectiveCursor: effectiveBrowserCursor(hit.authoredCursor, hit.hasSelectableTextAtPoint) });
+      }
       const target = divider ? 'divider-primary' : ordinaryTooltip ? 'tooltip-primary' : 'form-field-control';
       const selector = side === 'reference' ? `#${target}` : `[data-astylar-id="${target}"]`;
       await page.locator(selector).waitFor({ state: 'attached' });
@@ -144,6 +175,7 @@ try {
       if (hostContext?.errors) assert.deepEqual(hostContext.errors, []);
       const runtime = await finish();
       console.log(JSON.stringify({ context, state, side, url: page.url(), theme, observation, runtime,
+        ...(dividerCursors ? { cursorPoints } : {}),
         ...(dividerRelatives ? { axRelatives: nodes } : {}),
         ...(dividerHostContext ? { hostContext } : {}) }));
       assert.equal(observation.name, divider ? '' : ordinaryTooltip ? 'Hover for help' : 'Project name');
@@ -164,6 +196,8 @@ try {
       'examples/material-showcase/src/app/frame-sync.ts', 'examples/material-showcase/src/app/frame-protocol.ts']
       .map(file => ({ file, sha256: hash(readFileSync(file)) })),
     contexts: contexts.length, family, states, ...(dividerRelatives ? { axRelativesRecorded: true } : {}),
+    ...(dividerCursors ? { cursorPointsRecorded: true, cursorMetricReceipt: {
+      file: 'tests/material-parity/cursor-metrics.mjs', sha256: hash(readFileSync('tests/material-parity/cursor-metrics.mjs')) } } : {}),
     scope: divider ? 'Separator AX in explicitly verified theme/physical contexts; not paint, lifecycle or complete accessibility acceptance.'
       : 'Descriptions in explicitly listed physical/theme/state contexts; no other action-state, live-announcement or assistive-technology acceptance.' }));
 } finally {

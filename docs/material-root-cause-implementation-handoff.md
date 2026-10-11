@@ -1,5 +1,13 @@
 # Material audit: evidence-led implementation priorities
 
+October11 divider cursor gap now measured through the existing opt-in probe:
+20 physical contexts/24 configured cases,160 points; paragraph text cursors and
+empty root/separator defaults agree. Existing AX/context test preserves original
+receipts and verifies new captures1/1. See current ledger for exact log hashes,
+context/runtime provenance and limits. Original inspect defaults are not retroactively
+measured. Recent divider flex/width/ownership guards and cursor proof await coherent
+producer registration/integration; canonical194 remains the published predecessor.
+
 October11 divider shared font-owner applicability revalidated through the existing
 complete runtime census:1/1,88 linked modules,1583 unchanged members,only explicit
 inspector drift. Retained real-font/remount logs remain exact. Initial/later load,
