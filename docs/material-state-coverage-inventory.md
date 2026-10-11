@@ -2,6 +2,21 @@
 
 ## Current evidence boundary — October 11
 
+Shared parent authoring/history obligation now has a separate classification:
+native .frame explicitly requests border-box; candidate #page omits boxSizing.
+Previously authenticated2311-pair/4622-tree population supplies full membership;
+current source and original showcase commit2f440115(August23) both retain this
+same explicit-versus-omitted request difference. Classify it as application
+authoring/input translation defect,distinct from the new equal-omission public
+core default failure. It is not shown to be a later compensation. Thus this
+shared parent-request/history question is inspected for all2311 configured cases,
+but machine-readable canonical integration and other obligations remain pending;
+no whole case closes. Existing Icon context proof checks native parent geometry
+and root720→778 arithmetic,not candidate parent default equivalence. Preserve
+its historical observation and add this applicability qualification rather than
+erase its raw evidence or turn matching widths into equal inputs. No current
+fixture change or producer edit; final current-code and whole-case gates stand.
+
 Box-sizing finding duplication/history review is complete. Existing authenticated
 compact query reads every sourceFindings family shard:155 source entries,none
 covers boxSizing/default sizing. Initial shared-family query returned no rows
