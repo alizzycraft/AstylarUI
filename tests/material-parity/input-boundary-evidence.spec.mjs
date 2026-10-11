@@ -1811,8 +1811,9 @@ test('current runtime member drift is confined to the retained layout diagnostic
 test('captured runtime class bodies match current repository compilation without Angular metadata', async () => {
   const { transform } = await import('esbuild');
   const consumer = 'examples/material-showcase';
-  const map = JSON.parse(readFileSync(path.join(consumer,
-    'dist/material-showcase/browser/chunk-3JXWRYJY.js.map'), 'utf8'));
+  const mapBytes = readFileSync('artifacts/material-parity/retained-evidence/component-map-recovery-20261011/chunk-3JXWRYJY.js.map');
+  assert.equal(hash(mapBytes), 'dba484044ca0dea965d8ef4b12635673f0f055d7711099d2f6476ca490988ec4');
+  const map = JSON.parse(mapBytes);
   const modules = map.sources.filter(file => file.startsWith('node_modules/astylarui/'));
   assert.equal(modules.length, 88, 'Mapped runtime scope changed; reconcile coverage explicitly.');
   const generated = new Set(['ɵfac', 'ɵprov', 'ɵcmp', 'ɵdir', 'ɵmod', 'ɵinj']);

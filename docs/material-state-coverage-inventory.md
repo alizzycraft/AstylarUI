@@ -2,6 +2,19 @@
 
 ## Current evidence boundary — October 11
 
+Adjacent class-body validator is now reconciled independently: original core
+map dba48404 is read from its authenticated retained location and whole-map hash
+asserted before selecting all88 modules. Unlike historical linked/member replay,
+this check compares current repository compilation with current installed code;
+no inspector restoration is needed or applied. All original declaration,import,
+export,Angular metadata/decorator and dependency assertions remain unchanged.
+Focused check passes1/1,4361.8ms total; log runtime-class-current-compilation-
+reconciliation-20261011.log SHA256739ddb7a8907e5e506962fb0619c85784526d3f56c6ad82c0bbb88969b8c2731.
+This closes the adjacent missing-map read boundary,not browser rendering or
+case closure. Remaining raw-runner provenance and map readers stay separate;
+next reconcile the mobile timepicker diagnostic's retained source boundary,
+then obtain only its missing open-panel paint evidence. Final gates remain open.
+
 Runtime-member owning validator now binds original core mapdba48404 and applies
 existing restoreCursorInspectorCaptureSource only to installed lib/astylar.js
 for historical linked/member comparison. Complete current installed and exact
