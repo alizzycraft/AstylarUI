@@ -2,6 +2,32 @@
 
 ## Current evidence boundary — October 11
 
+Cursor collector reconciliation is now verified at the existing boundary.
+Complete installed astylar.js diff contains only two retained-layout inspector
+additions. restoreCursorInspectorCaptureSource pins currenta18630bd,removes each
+exact addition once,and requires complete restored source hash6ad4f51c. This
+binds imports,fields and all other methods,not just sampled cursor projections.
+validateCursorEvidence admits only that exact file/original receipt transition;
+every other bundle input retains exact hash equality. Current owning cursor
+source/package proof remains mandatory. No global historical preload is used
+by canonical production,and capture/provenance/package files are unchanged.
+
+Focused existing source-proof assertion passes1/1 (1421.6223ms),including four
+mutations of inspector values,dimension lookup,class name and imports; original
+source passed to the restoration is rejected too. An unknown inspector hash
+cannot silently skip these controls. Direct existing
+collectCursorDefaultPolicyEvidence now passes for report4773eb64,four original
+button-omitted observations and unchanged intentional-documented-limitation.
+This resolves the demonstrated exporter cursor receipt failure,not current
+browser acceptance. Full older public-cursor-defaults-audit-v2 suite directly
+against current dependencies remains honestly failing at historical Angular
+common.mjs (5pass/2fail); use its existing historical launcher. All six original
+historical public suites pass29/29 in62311.9781ms through that read-only launcher,
+including nested check commands and original corruption controls. Original raw
+source receipts and finding data remain conserved. Next coherent export may
+proceed once,then independent cold check/compact import after successful export;
+case closure and final unfiltered browser/harness gates remain unchanged.
+
 Focused cursor export-receipt diagnosis now narrows the required reconciliation.
 Read the retained public-cursor-defaults-4cf733e provenance and hash every2517
 bundle input against the installed package:2516 match; only lib/lib/astylar.js

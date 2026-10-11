@@ -14,6 +14,9 @@ const defaultsFile = 'src/app/config/browser-defaults.ts';
 const registryFile = 'src/app/services/dom/interaction/text-interaction-registry.service.ts';
 const typeDefaultsFile = 'src/app/services/dom/style-defaults.service.ts';
 const installed = file => installedRoot + file.slice(4).replace(/\.ts$/, '.js');
+const rendererFile = installedRoot + 'lib/astylar.js';
+const inspectorCaptureHash = '6ad4f51ca47a9e1956a66b6e724105a66aaff582c53b0b30374fb6051723f5f8';
+const inspectorCurrentHash = 'a18630bdc31067ac75907e41f9031865fa192edc164ebf93edacb8b836b09abd';
 const compile = source => ts.transpileModule(source, { compilerOptions: {
   target: ts.ScriptTarget.ES2022, removeComments: true,
 } }).outputText;
@@ -41,6 +44,31 @@ export function cursorDefaultsProjection(source) {
       }
   assert.equal(found.size, names.length);
   return compile(names.map(n => `const ${n} = ${found.get(n)};`).join('\n'));
+}
+
+// Authenticate historical bundle inputs without replacing today's installation.
+// Only this exact read-only inspector addition may be reversed. Whole-file hashes
+// bind imports, fields and every other method too; owning cursor methods are
+// independently bound to current source/package by cursorSourceProof below.
+// This is capture conservation, not equivalent current browser rendering.
+export function restoreCursorInspectorCaptureSource(source) {
+  assert.equal(hash(source), inspectorCurrentHash, 'unreviewed installed inspector source');
+  for (const addition of [
+    `            const layoutMesh = element.id && authoredById.get(element.id) === element
+                ? this.elementManager.elementsMap.get(element.id) : undefined;
+            const retainedDimensions = layoutMesh
+                ? this.elementManager.getElementDimensions(layoutMesh.name) : undefined;
+`,
+    `                    ...(retainedDimensions ? { retainedLayout: {
+                            source: 'core-dimension-registry', ...structuredClone(retainedDimensions),
+                        } } : {}),
+`,
+  ]) {
+    assert.equal(source.split(addition).length, 2, 'inspector addition must occur exactly once');
+    source = source.replace(addition, '');
+  }
+  assert.equal(hash(source), inspectorCaptureHash, 'restored complete installed capture source differs');
+  return source;
 }
 
 // Evaluate unchanged, package-matched methods independently. These are audit
@@ -94,7 +122,13 @@ export function validateCursorEvidence(report, readArtifact = file => readFileSy
   assert.equal(hash(readArtifact('audit.js')), provenance.bundleSha256);
   for (const file of [defaultsFile, pointerFile, registryFile, typeDefaultsFile])
     assert.ok(provenance.bundleInputs.some(i => i.file === installed(file)));
-  for (const input of provenance.bundleInputs) assert.equal(hash(readFileSync(input.file)), input.sha256, input.file);
+  for (const input of provenance.bundleInputs) {
+    const bytes = readFileSync(input.file);
+    if (hash(bytes) === input.sha256) continue;
+    assert.equal(input.file, rendererFile, input.file);
+    assert.equal(input.sha256, inspectorCaptureHash, 'unreviewed historical inspector receipt');
+    assert.equal(hash(restoreCursorInspectorCaptureSource(bytes.toString('utf8'))), input.sha256);
+  }
   const observations = [];
   for (const e of report.results) {
     for (const side of ['reference', 'astylar']) {

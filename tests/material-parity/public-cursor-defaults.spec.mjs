@@ -5,8 +5,10 @@ import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
 import { inspectCursorDefaults } from '../../scripts/audit-public-cursor-defaults.mjs';
 import { cursorCases, cursorInput } from '../../examples/material-showcase/audit/cursor-default-input.mjs';
-import { cursorArtifactRoot, cursorSourceProof, validateCursorEvidence } from './public-cursor-defaults-evidence.mjs';
+import { cursorArtifactRoot, cursorSourceProof, validateCursorEvidence,
+  restoreCursorInspectorCaptureSource } from './public-cursor-defaults-evidence.mjs';
 import { assertHistoricalCursorReceipt } from './historical-cursor-receipt-assertion.mjs';
+import { createHash } from 'node:crypto';
 const report = JSON.parse(readFileSync(`${cursorArtifactRoot}/latest-report.json`));
 const file = 'docs/material-public-cursor-defaults-audit.json';
 
@@ -83,6 +85,30 @@ test('source proof rejects changed package formulas and evaluates text-owner sel
       return text;
     }));
     assert.equal(changed, true);
+  }
+  const inspector = read('examples/material-showcase/node_modules/astylarui/dist/lib/lib/astylar.js');
+  // A historical launcher supplies the original package. Current reconciliation
+  // is checked here only against the reviewed current file, never generalized.
+  const inspectorHash = createHash('sha256').update(inspector).digest('hex');
+  assert.ok([
+    'a18630bdc31067ac75907e41f9031865fa192edc164ebf93edacb8b836b09abd',
+    '6ad4f51ca47a9e1956a66b6e724105a66aaff582c53b0b30374fb6051723f5f8',
+  ].includes(inspectorHash), 'unreviewed inspector cannot bypass restoration controls');
+  if (inspectorHash === 'a18630bdc31067ac75907e41f9031865fa192edc164ebf93edacb8b836b09abd') {
+    const original = restoreCursorInspectorCaptureSource(inspector);
+    assert.equal(createHash('sha256').update(original).digest('hex'),
+      '6ad4f51ca47a9e1956a66b6e724105a66aaff582c53b0b30374fb6051723f5f8');
+    for (const [before, after] of [
+      ['core-dimension-registry', 'changed-dimension-registry'],
+      ['getElementDimensions(layoutMesh.name)', 'getElementDimensions(element.id)'],
+      ['class AstylarRenderer', 'class ChangedRenderer'],
+      ['import ', '/* changed import */ import '],
+    ]) {
+      const altered = inspector.replace(before, after);
+      assert.notEqual(altered, inspector);
+      assert.throws(() => restoreCursorInspectorCaptureSource(altered), /unreviewed installed inspector source/);
+    }
+    assert.throws(() => restoreCursorInspectorCaptureSource(original), /unreviewed installed inspector source/);
   }
 });
 

@@ -167,6 +167,14 @@ current sources. Missing originals or semantic source drift fail replay. This
 proves historical evidence conservation, not current browser acceptance. Do not
 use its preload for current capture or canonical production commands.
 
+The canonical cursor collector separately supports the exact October11 installed
+inspector transition through `restoreCursorInspectorCaptureSource`: current and
+restored whole-file hashes authenticate removal of only the two read-only
+retained-layout additions. All other captured dependencies still require exact
+receipts and owning cursor source/package proofs remain current. This does not
+use the historical preload,replace captured bytes,or establish current browser
+parity. Unreviewed source changes fail and require a new applicability review.
+
 The sixth suite is the original range default-box proof, including all 18 source
 and installed-runtime fingerprints. Its exact original 6,349-byte package metadata
 was recovered from an integrity-authenticated project tarball in npm's cache.
