@@ -2,6 +2,29 @@
 
 ## Current evidence boundary — October 11
 
+Read-only structural coverage census closes a denominator ambiguity while the
+coherent export runs. Authenticate original current-ancestry reportb07ef154,
+AST-extract the actual caseKey/collectStructureEvidence helpers,and replay all
+2311 configured cases without building the full audit. Exactly159 signatures
+cover6946 mapped observations:71 legitimate-public-api-structure,49 harness
+boundary classifications and39 application-authoring classifications. The88
+non-legitimate signatures agree with canonical192 summary,not88 failing cases.
+Every configured case contributes mapped structure observations. For each
+signature,reconstructed membership count and unique case IDs equal occurrences;
+the stored sample is exactly the first eight. Sampling omits5674 observation
+memberships from those lists,so sample union cannot establish full review.
+Collector function SHA2562ec5c3df5f8d5ef61057a4363b9902d7d89a1e14ed73b581eda3afaea5550b33.
+
+This verifies recorded tag/text/mapped-descendant membership only. The collector
+explicitly excludes acceptance of anonymous wrappers,generated content,layout
+and paint; same mapped fields are not full-tree equivalence. Existing full-tree
+mapping/style proofs remain required for those owners. No new capture,report,
+canonical change or closure count. Next join these159 populations to the existing
+full-tree mapping obligations rather than treating sampled cases or generic
+host-type classifications as complete structural inspection. The source export
+retry remains separately live; this ledger is not a producer input (no reference
+in tests/scripts),and its evidence inputs remain unchanged.
+
 Coherent state-proof export exposed and now isolates a historical replay failure:
 gap composition/membership collectors reject current runner082d6d7b against their
 pre-diagnostic4ed6abe8 stage. Existing restoreGapCaptureDiagnostics recognized
