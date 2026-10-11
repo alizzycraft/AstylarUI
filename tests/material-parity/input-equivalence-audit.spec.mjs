@@ -157,6 +157,46 @@ test('retained disabled labels and selected snapshots preserve actual authored s
       }
     }
   }
+  // Remaining selected-state families: inspect actual controls, not only the
+  // store flag or a group/container semantic owner. This is a retained snapshot
+  // census, not proof of a selection transition or current-code paint.
+  const families = ['chips', 'checkbox', 'radio', 'select', 'slide-toggle', 'button-toggle'];
+  const remaining = report.interactions.filter(row => families.includes(row.family) && row.state === 'selected');
+  assert.equal(remaining.length, 48);
+  assert.equal(new Set(remaining.map(row => `${row.family}/${row.profile}/${row.viewport.id}`)).size, 48);
+  for (const row of remaining) {
+    assert.equal(row.astylarState.selected, true);
+    const reference = pinned(row.inputTrees.reference.file, row.inputTrees.reference.sha256);
+    const candidate = pinned(row.inputTrees.astylar.file, row.inputTrees.astylar.sha256);
+    assert.deepEqual(reference.errors, []); assert.deepEqual(candidate.errors, []);
+    if (row.family === 'chips') {
+      assert.deepEqual(reference.nodes.filter(n => n.attributes?.role === 'option')
+        .map(n => n.attributes['aria-selected']), ['true', 'true']);
+      assert.deepEqual(candidate.nodes.filter(n => n.authored?.role === 'option')
+        .map(n => n.authored.ariaSelected), [true, true]);
+    } else if (row.family === 'radio') {
+      // Native input.checked is not serialized in these trees. Keep that limit
+      // explicit: inspect the Material host's captured checked-state class.
+      const hosts = reference.nodes.filter(n => n.type === 'mat-radio-button');
+      assert.deepEqual(hosts.map(n => n.attributes.value), ['solo', 'team']);
+      assert.deepEqual(hosts.map(n => n.attributes.class.split(/\s+/).includes('mat-mdc-radio-checked')), [false, true]);
+      assert.deepEqual(candidate.nodes.filter(n => n.authored?.role === 'radio')
+        .map(n => n.authored.ariaChecked), [false, true]);
+    } else if (row.family === 'button-toggle') {
+      assert.deepEqual(reference.nodes.filter(n => n.attributes?.role === 'radio')
+        .map(n => n.attributes['aria-checked']), ['false', 'true']);
+      assert.deepEqual(candidate.nodes.filter(n => n.authored?.role === 'radio')
+        .map(n => n.authored.ariaChecked), [false, true]);
+    } else {
+      const semantics = row.semantics.find(n => n.id === `${row.family}-primary`);
+      assert.ok(semantics);
+      if (row.family === 'select') {
+        assert.equal(semantics.expected.value, 'Team'); assert.equal(semantics.actual.value, 'Team');
+      } else {
+        assert.equal(semantics.expected.checked, true); assert.equal(semantics.actual.checked, true);
+      }
+    }
+  }
   // Keep every configured case. Labels/snapshots are not disabled-support or
   // selection-transition evidence, and do not certify runtime or paint parity.
 });

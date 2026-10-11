@@ -2,6 +2,27 @@
 
 ## Current evidence boundary — October 11
 
+Selected-snapshot applicability closes for the remaining48 configured cases:
+chips,checkbox,radio,select,slide-toggle and button-toggle each have eight
+profile/DPR contexts. Extend the existing retained disabled/selected assertion,
+preserving its original40 disabled/16 selected checks. All96 additional original
+tree receipts authenticate to October5 reportab42dbec; chips option aria-selected
+is[true,true],checkbox/switch paired semantics checked=true,select value=Team,
+toggle radio states=[false,true]. Radio native hosts have solo/team values and
+checked-class states=[false,true]; the tree does not serialize live input.checked,
+so do not claim that stronger observation. Candidate radio states match.
+Focused existing test passes1/1,1346.4574ms; diff-check passes. This is now104
+exact applicability cases/208 tree receipts including prior scope,with64 selected
+snapshots across all eight selectable families. Current store default is selected
+true,and runner performInteraction returns without action for selected: these
+cases are actual selected snapshots,not demonstrations of selection transitions.
+Transitions retain their existing activate/keyboard/supplemental obligations.
+No cases removed,fixture behavior changed or parity gate relaxed. Canonical192
+proof description still records historical56-case scope; stronger test/fingerprint
+integration remains pending for the next coherent metadata publication. Whole-case
+closure/current rendering and final gates remain open. Next bind the independent
+transition obligations,not repeat this selected-state census.
+
 Complete scalar-to-case incidence join now authenticates the192 compact snapshot
 and noncanonical membership proposal58711556:5539 reviewed populations plus2944
 reconstructed observed populations account for all8483 groups/389202 occurrences.
