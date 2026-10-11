@@ -2,6 +2,30 @@
 
 ## Current evidence boundary — October 11
 
+Non-desktop timepicker scrollbar evidence gap is now exact,not an unspecified
+responsive remainder. Read-only hash-pinned October5 reportab42dbec contains98
+timepicker interactions; only two are non-desktop: light and dark mobile-dpr2
+open-dismiss (390x844,DPR2). Authenticate all four final tree receipts:
+native84f2c2b9/b389428a,candidatef1262420/21a34de8. Both candidate trees omit
+timepicker-options; both native trees omit mat-timepicker-panel/option owners
+and retain only an empty overlay container. These closed endpoints cannot supply
+the missing open-scrollbar paint/input-owner observation. No geometry,paint or
+current rendering acceptance follows from their passing final output flags.
+
+Competing explanations were overlooked retained open-popup evidence versus a
+capture-boundary gap. Exact configured membership and endpoint inspection prove
+the latter for these two rows. Reuse the settled eight desktop thumb/track/
+overdraw findings and existing separate dark/mobile wheel diagnostic; do not
+repeat them. Next join any preserved opening-boundary diagnostic to these exact
+mobile contexts,or capture only missing light-mobile/open-boundary paint through
+the existing diagnostic after current-source applicability is established.
+Other platforms/fringe/actions stay explicit obligations; no whole-case closure.
+
+Retained-map coherent export session92270 is verified live (launcher28876,
+worker5964); build-audit phase remains in its existing log. This independent
+ledger-only endpoint investigation changes no consumed producer/evidence files.
+No timeout,terminal success or new canonical publication is inferred.
+
 Historical source-map location migration is now implemented in production
 sourceFingerprints: all seven paths explicitly name retained-evidence/
 component-map-recovery-20261011,not mutable dist. Existing source-transition
