@@ -2,6 +2,28 @@
 
 ## Current evidence boundary — October 11
 
+Mobile timepicker checklist reuses previously inspected dark dismissal/lifetime
+boundaries rather than treating every endpoint as missing. Exact retained
+field-popup-cycles-current-20261007.log40c4d4ac authenticates three dark/mobile
+390x844 DPR2 cycles: both48 options open,Escape removes panel/options,empty
+value and focused timepicker-control remain,aria-expanded false. Candidate live
+materials26/27/28,unbound cursorMaterial_timepicker-control identities1/2/3;
+whole-surface disposal clears sampled scene/engine/cache/plugin resources.
+Independent read-only replay checks these exact observations and all page errors.
+These are inspected historical failures,not plateau passes or a new current
+capture. Remaining absence is light/mobile cycles and current applicability/
+event/actual-AX boundaries,not wholly uninspected dark Escape behavior.
+The existing plugin-free public input lifecycle proof already attributes caret
+orphan ownership: post-render handleFocus/createTextCursor allocates outside
+resource replace adoption; releaseInputMesh→disposeInputElement→disposeTextInput
+→disposeCursor removes mesh without separate material. See handoff caret
+ownership first divergence; do not reopen this settled cause or collapse it
+into generic tooltip/popup positioning. Current source still has separate
+StandardMaterial allocation and mesh-only disposal,but that source observation
+alone is not new browser applicability. Next capture missing light/mobile cycles
+through existing owning lifecycle test and independently check current method/
+served receipts; preserve original dark failures and release gates.
+
 Exact mobile timepicker obligation join is now recorded below. Existing
 materialCaseKey and materialMobileFlowCases each match one original October5
 row for light/dark; all four closed-endpoint tree hashes and eight supplemental
@@ -21,8 +43,8 @@ state=open-dismiss. Both remain partially inspected,inputEquivalent=false.
 | Pointer opening and on-screen outer geometry | Current light/dark paired open captures,260x256 at65,237.08. | Focus-trigger opening and real-key behavior in these exact mobile contexts; do not import desktop results wholesale. |
 | Open-panel paint | Eight retained open/wheel PNGs; dark lower-corner unequal authoring classified. | Full local option text,selection/hover/held,clip and shadow input-equivalence classification; capture existence is not completion. |
 | Wheel state and client geometry | Both current themes0→144; native245px/candidate260px client width. | Dark drag/track inspected failures are dark-only; light pointer scrollbar behavior and complete mobile input/paint owner join remain. |
-| Three Escape cycles and final dismissal | Original October5 closed endpoint trees contain no panel and output flags pass. | Current action-boundary focus restoration,events/AX and intermediate close/reopen observations; new opening captures do not exercise this obligation. |
-| Lifetime/ownership and isolation | Historical sampled resource flags retained,not stable live/GPU lifetime proof. | Current repeated live resources,late disposal and applicable surface isolation; shared core orphan finding cannot certify these exact cases. |
+| Three Escape cycles and final dismissal | Original October5 closed endpoints plus authenticated October7 dark/mobile three-cycle focus/options/expanded observations. | Current applicability and light/mobile action boundaries,events/AX; new opening captures do not exercise dismissal. |
+| Lifetime/ownership and isolation | Dark/mobile live26/27/28 and cursor orphan1/2/3 failure inspected; plugin-free caret ownership reduction already identifies allocation/disposal divergence. | Light/mobile cycles,current receipts,late disposal and applicable surface isolation; sampled whole-surface cleanup is not element-lifetime acceptance. |
 
 No obligations counted as closed solely from historical output flags. Next
 decisive investigation is current mobile Escape/reopen/focus/event boundaries
