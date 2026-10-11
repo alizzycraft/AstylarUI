@@ -738,6 +738,24 @@ test('divider retained wrapping ancestry distinguishes requests from missing lay
       for (const key of ['src', 'srcset', 'href', 'poster', 'autoplay', 'controls'])
         assert.equal(input?.[key], undefined);
     }
+    // Expand the captured shorthand through actual longhands, not guessed
+    // defaults. Different container/position authoring remains a separate issue.
+    for (const id of ['divider-above', 'divider-below', 'divider-primary', 'divider-root']) {
+      const node = tree.nodes.find(n => (n.authored?.id ?? n.attributes?.id) === id);
+      assert.ok(node, id);
+      const style = side === 'reference' ? tree.styles[node.style] : node.normalResolvedStyle;
+      assert.equal(style.flex, side === 'reference' ? '0 1 auto' : undefined);
+      for (const [property, value] of [['flexGrow', '0'], ['flexShrink', '1'], ['flexBasis', 'auto']])
+        assert.equal(style[property], value);
+      if (id === 'divider-root') {
+        assert.equal(style.display, side === 'reference' ? 'block' : 'flex');
+        if (side === 'astylar') {
+          const children = tree.nodes.filter(n => n.parent === node.key);
+          assert.equal(children.length, 3);
+          assert.ok(children.every(n => n.normalResolvedStyle.position === 'absolute'));
+        }
+      } else assert.ok(!['flex', 'inline-flex', 'grid', 'inline-grid'].includes(style.display));
+    }
     for (const id of ['divider-above', 'divider-below']) {
       let node = tree.nodes.find(n => (n.authored?.id ?? n.attributes?.id) === id);
       assert.ok(node, id);

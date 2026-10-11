@@ -2,6 +2,22 @@
 
 ## Current evidence boundary — October 11
 
+Divider flex-shorthand/context question now has captured-input evidence across
+all24 cases/48 trees. Existing wrapping-ancestry test additionally asserts96
+mapped owners: native flex='0 1 auto',candidate shorthand omitted,but both actual
+longhands flexGrow0/flexShrink1/flexBasis auto. Thus the four shorthand groups
+are not unexplained different flex requests; canonical generic harness labels
+remain unchanged pending existing attribution integration. All72 non-root owners
+are non-flex/non-grid containers on both sides. All24 roots remain native block
+versus candidate flex,with all three candidate children absolutely positioned.
+The12 alignment-normal groups therefore cannot be treated as matched flex-layout
+experiments: nine concern non-flex containers and three the already classified
+root formatting-context substitution. This bounds their context,not a general
+normal/stretch equivalence or proof that core ignores irrelevant alignment.
+Focused existing test passes1/1,1248.2493ms (2466.4822ms terminal),preserving prior
+wrapping/absence assertions. Next four effective-cursor and eight used-width
+groups; current rendering/paint and final gates remain separate. No fixture edit.
+
 Divider observed-membership proposal is not130 unclassified findings. Compact
 query authenticates current family shards; proposal review digest58711556 and
 all130 matching section/ordinal/complete-row hashes agree. They already retain
