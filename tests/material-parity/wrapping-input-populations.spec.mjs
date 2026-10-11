@@ -536,7 +536,7 @@ test('chip host normal values do not conceal nested native nowrap labels in 152 
         assert.equal(label[stage].whiteSpace, undefined);
       }
       assert.equal(label.retainedText?.source, 'core-text-registry');
-      assert.equal(inventory.styles[label.retainedText.style].value.whiteSpace, undefined);
+      assert.equal(label.retainedText.style.whiteSpace, undefined);
       assert.equal(label.paintedControlText, undefined);
       const proof = proveChipLabelWrapping(entry, input, r, a, inventory);
       assert.equal(proof.classification, 'application-plugin-authoring-defect');
@@ -547,6 +547,9 @@ test('chip host normal values do not conceal nested native nowrap labels in 152 
   assert.equal(labels, 152);
   const entry = cases[0], input = one(entry.styleInputs.filter(i => i.id === 'chip-0'));
   const [reference, candidate] = modalInventoryTrees(inventory, keyOf(entry));
+  const changedRetained = structuredClone(candidate);
+  changedRetained.nodes.find(n => n.authored?.id === 'chip-0-label').retainedText.style.whiteSpace = 'nowrap';
+  assert.throws(() => proveChipLabelWrapping(entry, input, reference, changedRetained, inventory));
   for (const property of ['whiteSpace', 'text-wrap-mode', 'all']) {
     const altered = structuredClone(candidate);
     altered.rules.push({ selector: '.chip-label', [property]: 'nowrap' });

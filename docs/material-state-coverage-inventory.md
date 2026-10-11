@@ -2,6 +2,18 @@
 
 ## Current evidence boundary — October 11
 
+Coherent191 export76398 is terminal exit1,not live: retained log
+coherent-191-proof-export-20261011.log fails in proveChipLabelWrapping reading
+inventory.styles[label.retainedText.style]. The shared adapter now expands that
+style object; this legacy reader still assumed an index. No canonical files
+changed. Corrected reader joins the exact original case/variant/label,authenticates
+its indexed style side and deep-compares the expanded value before asserting
+omitted whiteSpace. Focused original152-label population passes1/1,including
+existing request/rule controls plus a new changed-retained-style rejection. No
+values/defaults or classifications changed. This is an instrumentation integration
+repair,not a chip renderer fix. Next complete affected coherent integration checks
+before retrying the existing exporter; preserve failure evidence and accepted185.
+
 Shared parent authoring/history obligation now has a separate classification:
 native .frame explicitly requests border-box; candidate #page omits boxSizing.
 Previously authenticated2311-pair/4622-tree population supplies full membership;

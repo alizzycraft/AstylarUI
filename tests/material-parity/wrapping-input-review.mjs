@@ -117,7 +117,12 @@ export function proveChipLabelWrapping(entry, input, reference, candidate, inven
       assert.ok(!Object.keys(applicable).some(wrappingRequest));
   }
   assert.equal(label.retainedText?.source, 'core-text-registry');
-  const retained = inventory.styles[label.retainedText.style];
+  // The tree adapter expands retained styles; authenticate against the original
+  // indexed owner rather than treating a style object as an array index.
+  const capturedCase = one(inventory.cases.filter(c => c.case === keyOf(entry) && c.side === 'astylar'));
+  const capturedLabel = one(inventory.variants[capturedCase.variant].nodes.filter(n => n.key === label.key));
+  const retained = inventory.styles[capturedLabel.retainedText.style];
+  assert.deepEqual(label.retainedText.style, retained.value);
   assert.equal(retained.side, 'astylar'); assert.equal(retained.value.whiteSpace, undefined);
   assert.equal(label.paintedControlText, undefined);
   return { case: keyOf(entry), element: label.authored.id, referenceNode: native.key,
