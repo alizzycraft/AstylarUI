@@ -722,6 +722,7 @@ test('divider retained wrapping ancestry distinguishes requests from missing lay
   const cases = [...retained.results, ...retained.interactions].filter(r => r.family === 'divider');
   assert.equal(cases.length, 24);
   const visits = { reference: 0, astylar: 0 };
+  const retainedWidthErrors = [];
   for (const row of cases) for (const side of ['reference', 'astylar']) {
     const receipt = row.inputTrees[side];
     const rawTree = readFileSync(receipt.file);
@@ -747,6 +748,15 @@ test('divider retained wrapping ancestry distinguishes requests from missing lay
       assert.equal(style.flex, side === 'reference' ? '0 1 auto' : undefined);
       for (const [property, value] of [['flexGrow', '0'], ['flexShrink', '1'], ['flexBasis', 'auto']])
         assert.equal(style[property], value);
+      if (side === 'reference' && ['divider-root', 'divider-primary'].includes(id)) {
+        const measured = row.geometry.elements.find(element => element.id === id);
+        assert.ok(measured && !measured.missing);
+        const extras = ['paddingLeft', 'paddingRight', 'borderLeftWidth', 'borderRightWidth']
+          .reduce((sum, property) => sum + parseFloat(style[property]), 0);
+        assert.equal(measured.expected.width,
+          parseFloat(style.width) + (style.boxSizing === 'content-box' ? extras : 0));
+        retainedWidthErrors.push(Math.abs(measured.expected.width - measured.actual.width));
+      }
       if (id === 'divider-root') {
         assert.equal(style.display, side === 'reference' ? 'block' : 'flex');
         if (side === 'astylar') {
@@ -773,6 +783,9 @@ test('divider retained wrapping ancestry distinguishes requests from missing lay
     }
   }
   assert.deepEqual(visits, { reference: 192, astylar: 240 });
+  assert.equal(retainedWidthErrors.length, 48);
+  // Preserve the exact recorded numerical residue, not a new parity threshold.
+  assert.equal(Math.max(...retainedWidthErrors), 1.1823431123048067e-11);
 });
 
 test('divider actual-theme AX cohorts preserve exact contexts and runtime receipts', () => {

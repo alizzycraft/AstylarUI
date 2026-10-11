@@ -2,6 +2,20 @@
 
 ## Current evidence boundary — October 11
 
+Divider eight used-width groups now join authoritative retained CSS geometry.
+Across24 cases,48 root/separator paired widths differ by at most the exact
+recorded floating residue1.1823431123048067e-11 CSSpx. Every native computed width
+plus actual content-box padding/borders equals its border-box width exactly;
+root adds58px. Thus720/638/260/479px computed content widths versus candidate
+100%/auto expressions are not observed historical used-width failures. Root
+formatting/position/box-sizing and separator border/background substitutions
+remain unequal authoring; matching widths do not justify retaining compensations
+or accepting equivalent layout intent. Existing ancestry test now preserves all48
+box-model joins and exact residue,not a relaxed rendering threshold; focused1/1
+passes1205.4196ms (2469.1804ms terminal). Initial strict double equality exposed
+numeric cancellation and is not a pixel mismatch or reason to alter thresholds.
+Next four effective-cursor contexts; no current-rendering/case promotion.
+
 Divider flex-shorthand/context question now has captured-input evidence across
 all24 cases/48 trees. Existing wrapping-ancestry test additionally asserts96
 mapped owners: native flex='0 1 auto',candidate shorthand omitted,but both actual
