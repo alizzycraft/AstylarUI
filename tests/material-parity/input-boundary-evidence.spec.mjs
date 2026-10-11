@@ -19,6 +19,37 @@ import { cursorInput } from '../../examples/material-showcase/audit/cursor-defau
 
 const file = 'artifacts/material-parity/input-boundaries-keypress-559f95c/latest-report.json';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+test('retained timepicker option text owners distinguish wrapper line boxes from centering requests', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
+  assert.equal(hash(bytes), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const rows = JSON.parse(bytes).interactions.filter(row => row.family === 'timepicker' && row.state === 'open-scroll');
+  assert.equal(rows.length, 8);
+  assert.deepEqual(rows.map(row => `${row.profile}/${row.viewport.id}`).sort(),
+    ['contrast', 'custom', 'dark', 'light'].flatMap(profile => [1, 2].map(dpr => `${profile}/desktop-dpr${dpr}`)).sort());
+  let owners = 0;
+  for (const row of rows) {
+    const pair = Object.fromEntries(['reference', 'astylar'].map(side => {
+      const receipt = row.inputTrees[side], data = readFileSync(receipt.file);
+      assert.equal(hash(data), receipt.sha256); return [side, JSON.parse(data)];
+    }));
+    const options = pair.reference.nodes.filter(node => node.attributes?.role === 'option');
+    assert.equal(options.length, 48);
+    for (const option of options) {
+      const labels = pair.reference.nodes.filter(node => node.parent === option.key && node.attributes?.class === 'mdc-list-item__primary-text');
+      assert.equal(labels.length, 1);
+      const candidates = pair.astylar.nodes.filter(node => node.authored?.role === 'option' && node.authored.textContent === labels[0].ownText);
+      assert.equal(candidates.length, 1);
+      assert.equal(pair.astylar.nodes.filter(node => node.parent === candidates[0].key).length, 0);
+      assert.equal(pair.reference.styles[option.style].alignItems, 'center');
+      assert.equal(pair.reference.styles[labels[0].style].display, 'block');
+      assert.equal(pair.reference.styles[labels[0].style].lineHeight, '20px');
+      assert.equal(candidates[0].resolvedStyle.alignItems, 'center');
+      assert.equal(Object.hasOwn(candidates[0].resolvedStyle, 'lineHeight'), false);
+      owners++;
+    }
+  }
+  assert.equal(owners, 384); // Unequal text ownership/requests, not measured glyph placement or current paint.
+});
 test('semantic descendant replacement focus evidence retains exact current case and source applicability', async () => {
   const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');
   const predecessor = execFileSync('git', ['show', '137f874f:tests/material-parity/input-equivalence-policy.mjs']);

@@ -1,5 +1,22 @@
 # Material comparison/state coverage inventory
 
+## Timepicker option text input boundary — October 12
+
+Specific unresolved question: bottom-aligned option glyphs from wrapper/line-box
+authoring versus equivalent-input core centering. Exact October5 reportab42dbec
+and16 tree receipts authenticate all8 configured open-scroll cases across four
+profiles/DPR1/2,384 option/label pairs. Every native option requests alignItems
+center and contains one block primary-text span with20px line-height; every
+candidate requests alignItems center but owns direct text with no child wrapper
+and no resolved lineHeight field. Missing remains missing,not assumed20px or0.
+Focused existing-file assertion passes1/1,1120.5365ms (2360.6299ms terminal).
+This establishes unequal text ownership/line-box inputs,not glyph-position
+causality,current mobile style equality or permission to offset text. Current
+component lines606/1052 still author centered flex options with direct text.
+Next join this exact boundary with existing wrapper/typography classifications
+and history,then inspect equal-input core behavior only where still unresolved.
+No capture,renderer or fixture change; proof registration belongs in next batch.
+
 ## Current mobile evidence batch registration — October 12
 
 Both dark lifecycle and light scrollbar logs now register through existing
