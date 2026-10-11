@@ -2,6 +2,25 @@
 
 ## Current evidence boundary — October 11
 
+Divider original-artifact paint-observation gap is confirmed,not merely assumed.
+Read-only full recursive schema census covers all24 original case rows and48
+SHA-authenticated input trees. Relevant retained fields are clip/clipPath style
+requests,background-clip declarations,inkPixels counts and numeric texture
+counts; none supplies texture RGBA,UV/shader addresses or internal clip samples.
+All16 static rows' resource meshes/materials/textures are numbers,not owner
+payloads. Candidate nodes retain authored/resolved/interaction/normal styles,
+retainedText,key and parent only. Initial diagnostic wrongly assumed interaction
+rows also had static diagnostics; corrected census treats absence explicitly.
+Therefore original per-case texture/sampling attribution cannot be recovered
+from these records. Do not repeat field searches or imply style clip requests
+are observed clipping. A future live diagnostic can characterize current output,
+not reconstruct historical pixels. Existing public equal-input reduction already
+exposes the shared paint counterexample; configured border/background/typography
+differences remain classified separately,so an unchanged broad recapture is not
+justified solely to attribute every unequal-input raster. Preserve this explicit
+historical uncertainty and move next to remaining divider obligation applicability
+(lifetime/AT) before deciding whether targeted current paint evidence is required.
+
 Divider public paint-owner applicability now has an exact six-owner join.
 Read-only transpilation/extraction authenticates original texel-ownership log
 36e89d3f and requires both current source and installed methods to equal its six
