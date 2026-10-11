@@ -2,6 +2,22 @@
 
 ## Current evidence boundary — October 11
 
+Whole input-focus runner original is not present at the checked source locations.
+Material worktree copy rawb2477a12 normalizes toc3cabcf (older gap baseline),not
+captured e01ef9dc; primary worktree has no runner file. Retained-evidence filename
+inventory exposes no runner-source copy. Checkpoint implementation retains
+hashes/import graph and case records,not harness-source bytes. Git6abebf22 and
+8aa0e2e5 normalized sources and uniform-CRLF versions also do not reproduce the
+captured raw digest. Existing component replay authenticates the older gap
+runner only; it cannot supply this later raw receipt. A diagnostic line-ending
+projection from the Material copy contains330 ambiguous repeated-line endings
+and34–55 missing lines,and no candidate matches e01ef9dc; reject it as recovery.
+No bytes saved,receipt changed or validator bypassed. The precise missing
+evidence is original e01ef9dc whole-runner bytes (or exact digest-authenticated
+reconstruction). Known original focus/theme bodies remain independently valid.
+Route this through existing historical source conservation,not new capture or
+another repeated whole-runner assertion; served-build applicability is separate.
+
 Input-focus runner applicability narrowed decisively: current raw focus body
 SHA256622d9fc795ca81deaf22604ae145479229bb897d579a87c015dff4a3f2254476
 and profileTheme body6e8166a599e25da398928dc04e675a386a43413bc950232321e964cbf16e7013
