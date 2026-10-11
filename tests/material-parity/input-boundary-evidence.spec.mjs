@@ -1723,6 +1723,7 @@ test('passive descendant semantics retain accessibility hiding omissions indepen
 
 test('current runtime member drift is confined to the retained layout diagnostic owner', async () => {
   const { transformSync } = await import('esbuild');
+  const { restoreCursorInspectorCaptureSource } = await import('./public-cursor-defaults-evidence.mjs');
   const { pathToFileURL } = await import('node:url');
   // Use the consumer toolchain: the root workspace compiler is a different version.
   const consumerRequire = createRequire(path.resolve('examples/material-showcase/package.json'));
@@ -1735,7 +1736,7 @@ test('current runtime member drift is confined to the retained layout diagnostic
   }).code;
   assert.notEqual(wholeModule('class Guard { static metadata = { value: 1 }; }'),
     wholeModule('class Guard { static metadata = { value: 2 }; }'));
-  const rawMap = readFileSync('examples/material-showcase/dist/material-showcase/browser/chunk-3JXWRYJY.js.map');
+  const rawMap = readFileSync('artifacts/material-parity/retained-evidence/component-map-recovery-20261011/chunk-3JXWRYJY.js.map');
   assert.equal(hash(rawMap), 'dba484044ca0dea965d8ef4b12635673f0f055d7711099d2f6476ca490988ec4');
   const map = JSON.parse(rawMap), modules = map.sources.filter(file => file.startsWith('node_modules/astylarui/'));
   assert.equal(modules.length, 88);
@@ -1767,7 +1768,14 @@ test('current runtime member drift is confined to the retained layout diagnostic
   const differences = [];
   for (const module of modules) {
     const file = `src/${module.slice('node_modules/astylarui/dist/lib/'.length).replace(/\.js$/, '.ts')}`;
-    const installedSource = readFileSync(`examples/material-showcase/${module}`, 'utf8');
+    const liveInstalledSource = readFileSync(`examples/material-showcase/${module}`, 'utf8');
+    if (module === 'node_modules/astylarui/dist/lib/lib/astylar.js') {
+      assert.throws(() => restoreCursorInspectorCaptureSource(liveInstalledSource + '\n// unrelated'));
+      assert.throws(() => restoreCursorInspectorCaptureSource(
+        liveInstalledSource.replace('inspectCurrentDocumentStyles(', 'alteredInspection(')));
+    }
+    const installedSource = module === 'node_modules/astylarui/dist/lib/lib/astylar.js'
+      ? restoreCursorInspectorCaptureSource(liveInstalledSource) : liveInstalledSource;
     const linked = installedSource.includes('ɵɵngDeclare')
       ? (await transformAsync(installedSource, {
         filename: path.resolve('examples/material-showcase', module),

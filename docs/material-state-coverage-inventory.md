@@ -2,6 +2,22 @@
 
 ## Current evidence boundary — October 11
 
+Runtime-member owning validator now binds original core mapdba48404 and applies
+existing restoreCursorInspectorCaptureSource only to installed lib/astylar.js
+for historical linked/member comparison. Complete current installed and exact
+restored source hashes remain authenticated by that helper; all other87 modules
+are unchanged ordinary reads. Existing linker/Angular metadata equality and
+all88 module/member inventories remain intact,1583 unchanged members and the
+original one inspectCurrentDocumentStyles current/source-versus-historical
+installed difference still asserted. Existing focused assertion passes1/1,
+10547.9ms with appended unrelated source and altered inspector-name rejection.
+Log runtime-inspector-conservation-controls-20261011.log SHA256
+be1c023710d33ccdae7827032cfcc9e6145026aaf161e74c12100f8efa985f11.
+No installed code,captured bytes,original fingerprints or runtime expectation
+changed. This closes demonstrated captured/installed read-boundary mismatch;
+fresh runtime/current rendering acceptance remains separate. Remaining map
+readers,raw runner receipt,case closure and canonical/browser gates stay pending.
+
 Serializer owning reader migration passes independently: existing current
 Material serializer assertion reads retained component map47654b64,conserves
 captured source de0efefd against exact Gitaabeb128^ and current521940b6 plus
