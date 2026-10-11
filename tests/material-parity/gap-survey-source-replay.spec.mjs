@@ -4,7 +4,8 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { isDeepStrictEqual } from 'node:util';
 import test from 'node:test';
-import { readGapSurveySource, bindGapSurveyNormalizer, gapSurveyNormalizationRevision } from './gap-survey-source-replay.mjs';
+import { readGapSurveySource, bindGapSurveyNormalizer, gapSurveyNormalizationRevision,
+  restoreGapCaptureDiagnostics } from './gap-survey-source-replay.mjs';
 import { restoreMappingReadAdapterSource } from './audit-evidence-session.mjs';
 import { borderEvidenceBaseline, verifyBorderEvidenceSourceTransition } from './position-composition-producer-transition.mjs';
 
@@ -18,6 +19,13 @@ test('capture diagnostic additions preserve historical gap source and reject oth
   const descriptor = survey.sourceFingerprints.find(s => s.file === file);
   assert.ok(descriptor);
   const current = readFileSync(file, 'utf8');
+  const intermediate = execFileSync('git', ['show', '6abebf22:' + file],
+    { encoding: 'utf8' }).replaceAll('\r\n', '\n');
+  const target = { targetSha256: sha(intermediate) };
+  assert.equal(restoreGapCaptureDiagnostics(current, target), intermediate);
+  assert.equal(restoreGapCaptureDiagnostics(intermediate, target), intermediate);
+  assert.throws(() => restoreGapCaptureDiagnostics(current, { targetSha256: '0'.repeat(64) }));
+  assert.throws(() => restoreGapCaptureDiagnostics(current + '\n// unrelated', target));
   const before = execFileSync('git', ['show', '9a0bd47^:' + file], { encoding: 'utf8' }).replaceAll('\r\n', '\n');
   assert.equal(readGapSurveySource(descriptor), before);
   assert.equal(readGapSurveySource(descriptor, { current: () => before }), before);

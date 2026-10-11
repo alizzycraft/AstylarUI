@@ -15,7 +15,10 @@ const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
 // Historical gap evidence predates additive interaction paint/box diagnostics.
 // Authenticate both complete sources and prove that removing only those additions
 // restores the original capture; never reuse this receipt for a fresh capture.
-export function restoreGapCaptureDiagnostics(source) {
+export function restoreGapCaptureDiagnostics(source, { targetSha256 } = {}) {
+  assert.ok(targetSha256 === undefined || targetSha256 ===
+    '33c5a4b31a5140bb19e524eaa9fba5bbbb877b45a38f6f0be5722fbe09113f6a',
+    'unsupported historical runner target');
   let current = source.replaceAll('\r\n', '\n');
   if (current.includes('const selectionReplay =')) {
     // Historical replay only: reverse the reviewed opt-in diagnostics and the
@@ -59,6 +62,10 @@ export function restoreGapCaptureDiagnostics(source) {
     replaceOnce("      ...(selectionReplay ? { diagnosticAction: 'opposite-item-and-return', selectionTransitions } : {}),\n");
     replaceOnce('      ...(settlementTrace ? { settlementTrace: await astylar.page.evaluate(() => window.__MATERIAL_SETTLEMENT_TRACE__.finish()) } : {}),\n');
     assert.equal(current, original, 'entire pre-diagnostic runner must be conserved');
+  }
+  if (targetSha256) {
+    assert.equal(hash(current), targetSha256);
+    return current;
   }
   // Only for authenticating the retained capture's producer. Native scrollbar
   // launch changes affect fresh capture and must not be called provenance-only

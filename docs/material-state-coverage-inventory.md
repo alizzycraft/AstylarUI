@@ -2,6 +2,21 @@
 
 ## Current evidence boundary — October 11
 
+Expansion followup replay now conserves its exact intermediate runner,not the
+older gap baseline. Existing restoreGapCaptureDiagnostics accepts only the
+explicit33c5a4b3 target in addition to its unchanged defaultc3cabcf target;
+complete live082d6d7 source and exact Git intermediate are authenticated before
+return. Expansion projects only its historical proof copy's changed receipts
+after full source restoration; every observation and other source must still
+equal the saved proof. Existing followup suite passes4/4 (22246.9ms),including
+all four original proofs/66 groups/2640 observations and mutation rejection.
+Existing gap diagnostic assertion passes1/1 (1571.8ms),checking both targets,
+unsupported target and unrelated mutation rejection. No renderer,fixture,
+captured evidence or original receipt changed. This resolves the demonstrated
+followup conservation failure; canonical acceptance and downstream map-reader
+migration remain pending. Do not infer that the failed export's54 groups are
+closed until production validation completes after the coherent batch.
+
 Retained-map export session92270 is terminal exit1,not a timeout. Its evidence
 session verified1205 files/89158075 bytes; validation failed at2669466.938ms.
 Log coherent-state-proof-export-retained-maps-20261011.log SHA256

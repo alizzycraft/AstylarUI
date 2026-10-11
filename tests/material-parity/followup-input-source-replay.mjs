@@ -109,11 +109,13 @@ export function conserveExpansionOwnerProof(proof, proofBytes) {
     const source = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
     assert.equal(hash(source), current[0].sha256);
     if (current[0].sha256 !== prior[0].sha256) {
-      const restored = file.endsWith('/astylar.component.ts') ? restoreAstylarDiagnostics(source) : restoreGapCaptureDiagnostics(source);
+      const restored = file.endsWith('/astylar.component.ts') ? restoreAstylarDiagnostics(source)
+        : restoreGapCaptureDiagnostics(source, { targetSha256: prior[0].sha256 });
       assert.equal(hash(restored), prior[0].sha256);
-      // A refreshed source-transition receipt intentionally retains the live
-      // diagnostic fingerprint; only the known diagnostic-only delta is
-      // accepted, and the full source hash remains authenticated above.
+      // Only this historical proof copy receives its original receipt after
+      // complete current-source authentication and exact bounded restoration.
+      // Fresh collectors and served capture sources remain unchanged.
+      current[0].sha256 = prior[0].sha256;
     }
   }
   const currentTitle = projected.sourceFingerprints.filter(s => s.file === 'scripts/audit-material-expansion-title-inputs.mjs');
