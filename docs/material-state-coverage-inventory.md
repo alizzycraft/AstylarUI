@@ -2,6 +2,35 @@
 
 ## Current evidence boundary — October 11
 
+Exact mobile timepicker obligation join is now recorded below. Existing
+materialCaseKey and materialMobileFlowCases each match one original October5
+row for light/dark; all four closed-endpoint tree hashes and eight supplemental
+PNG hashes authenticate. Retained component map47654b64 and current map55fedcbf
+both contain exact current TS71e2d41f bytes: unchanged component source,not a
+claim that core/browser/runner or every state is unchanged. Original browser
+153.0.8010.53 closed-endpoint output passes remain historical; supplemental
+154.0.8037.99 opening/wheel observations are not replacements for those actions.
+
+Case IDs use exact existing JSON keys: kind=interaction,family=timepicker,
+profile=light or dark,viewport={id:mobile-dpr2,width:390,height:844,deviceScaleFactor:2},
+state=open-dismiss. Both remain partially inspected,inputEquivalent=false.
+
+| Obligation for these two exact cases | Evidence/disposition | Remaining boundary |
+| --- | --- | --- |
+| Authored component applicability | Complete original/current TS equality71e2d41f; current native panel CSS equality06240327. | Full resolved styles/structure at open state; broader core/caller applicability remains distinct. |
+| Pointer opening and on-screen outer geometry | Current light/dark paired open captures,260x256 at65,237.08. | Focus-trigger opening and real-key behavior in these exact mobile contexts; do not import desktop results wholesale. |
+| Open-panel paint | Eight retained open/wheel PNGs; dark lower-corner unequal authoring classified. | Full local option text,selection/hover/held,clip and shadow input-equivalence classification; capture existence is not completion. |
+| Wheel state and client geometry | Both current themes0→144; native245px/candidate260px client width. | Dark drag/track inspected failures are dark-only; light pointer scrollbar behavior and complete mobile input/paint owner join remain. |
+| Three Escape cycles and final dismissal | Original October5 closed endpoint trees contain no panel and output flags pass. | Current action-boundary focus restoration,events/AX and intermediate close/reopen observations; new opening captures do not exercise this obligation. |
+| Lifetime/ownership and isolation | Historical sampled resource flags retained,not stable live/GPU lifetime proof. | Current repeated live resources,late disposal and applicable surface isolation; shared core orphan finding cannot certify these exact cases. |
+
+No obligations counted as closed solely from historical output flags. Next
+decisive investigation is current mobile Escape/reopen/focus/event boundaries
+for these exact two contexts through existing diagnostic infrastructure,with
+resource observations tied to actual owners. Do not reopen the now-settled
+opening-capture absence or infer a new all-case percentage from this bounded join.
+Canonical source/export reconciliation and final unfiltered gates remain open.
+
 Missing light/mobile opening rasters are retained through existing timepicker
 diagnostic opt-in ASTYLAR_AUDIT_RETAIN_MOBILE_TIMEPICKER_PAINT=light using the same
 current selection-pointer checkpoint2aac425d and Chrome154.0.8037.99. Explicit
