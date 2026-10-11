@@ -1,5 +1,15 @@
 # Material audit: evidence-led implementation priorities
 
+October11 current dark/mobile timepicker panel review: authenticated opening
+rasters distinguish unequal lower-corner requests from core scrolling behavior.
+Native requests shape-token lower radii and a three-layer elevation; candidate
+picker-popup rules omit radius and use a different shadow. Both render shadows.
+Do not diagnose ignored equivalent border radius or repair this with offsets;
+equal-input panel authoring must be established before renderer attribution.
+Native15px versus candidate0 gutter and non-pickable candidate thumb/track remain
+separate core scrolling limitations. See current coverage ledger for exact
+map/source/CSS and local-pixel receipts; full paint and case closure remain open.
+
 October11 current publication: coherent192 independent cold check terminates
 exit0 (log coherent-192-proof-independent-cold-check-20261011.log SHA256
 fbaf5a05e6f533d1716cb07667520ac841d4a65dee3fedb8ab4ccdfec37643af).

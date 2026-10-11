@@ -2,6 +2,31 @@
 
 ## Current evidence boundary — October 11
 
+Current dark/mobile timepicker lower-corner paint now has a bounded input-owner
+classification without recapture. Both current maps authenticate against original
+selection-pointer checkpoint browserFiles: native7SL66K3U map67e956a6 and candidate
+PCHQTLJM map55fedcbf. Candidate mapped complete TS71e2d41f equals current source
+byte-for-byte. Native mapped Angular linked code differs from installed partial
+compilation (direct whole-module equality rejected); AST extraction of complete
+panel stylesheet matches exactly,hash0624032754ac976bc554bed578249d2d63a0ad21939d2793c062e8797318e9e0.
+Native stylesheet requests lower-left/right shape-token radii plus three-layer
+elevation shadow; candidate rules at astylar.component.ts:597/605 omit panel
+radius and request0 2px 6px rgba(0,0,0,0.24). Thus square versus rounded lower
+corners has unequal authoring input,not demonstrated ignored equivalent radius.
+Do not infer exact resolved native token from installed Sass alone. Panel radius
+and shadow differences do not establish a shared coordinate defect.
+Authenticated open PNG local device pixels x130,y982: native24,24,27 versus
+candidate242,236,241; x136,y982 both242,236,241. Native lower corner removes
+surface ink while candidate fills square edge. At x300,y988 native22,21,25 and
+candidate23,22,25 versus frame28,27,31: both paint a shadow,not absent candidate
+shadow. These exact samples are diagnostic evidence,not full shadow equivalence,
+clipping or text sharpness acceptance. Inputs/rasters remain unchanged.
+Question answered: lower-corner appearance follows different panel requests;
+separate core gutter/non-pickable indicator conclusions remain. Next join full
+resolved native/candidate local styles and option paint,then missing light/mobile
+opening evidence. Whole-module linker applicability and per-case/final gates are
+not certified by the stylesheet-only check.
+
 Dark/mobile open timepicker paint is now retained,not only inferred from closed
 endpoints. Existing owning diagnostic opt-in ASTYLAR_AUDIT_RETAIN_MOBILE_TIMEPICKER_PAINT=1
 with ASTYLAR_MATERIAL_SHOWCASE_CHECKPOINT=artifacts/material-parity/selection-pointer-directions-20261011/checkpoint/manifest.json
