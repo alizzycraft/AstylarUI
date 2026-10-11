@@ -2,6 +2,23 @@
 
 ## Current evidence boundary — October 11
 
+Menu exact action applicability is independently established despite pending
+whole-runner receipt. Owning configured-menu-bounds check with diagnostic three
+retained-map path changes fails before maps at line1476: current raw584cdfc8
+versus original e01ef9dc. Path edits reversed exactly; failure log menu-map-reader-
+reconciliation-20261011.log SHA256c94514af6723976a444224045f05e59085f0a91fc4eadd871c32936d42e2e169.
+Direct AST extraction of current seven complete action functions profileTheme,
+sendShowcaseCommand,waitForThemeApplied,settleInteraction,popupHoverBox,
+interactionTargetBox,performInteraction matches report's original combined raw
+digest8cf66d574db9f560efd897fec60d90859270e6035f3282ea5f4b8390a37bc4c7.
+Thus changed action bodies do not explain this validator failure; entire runner
+conservation remains separately unproven. Do not repeat menu validator before
+that shared receipt boundary is resolved. Further line-order reconstruction
+from older preserved Material runner did not match original; no candidate saved.
+Next use this exact seven-function boundary in existing historical evidence
+conservation while retaining whole-source provenance and original negative
+controls; no full rendering or menu action acceptance inferred.
+
 Configured/extended keyboard owning readers now reuse the complete authenticated
 retained1887-file build explicitly,not current-dist equality. Enabled-keyboard
 map read uses original retained47654b64; current component71e2d41f and all
