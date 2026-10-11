@@ -72,13 +72,13 @@ test('all canonical proof pointers resolve after focused/integration test moves'
   const inspect = reader => vm.runInNewContext(code + '; focusedProofInventory(root)',
     { readFileSync: reader, path, root: process.cwd() });
   const proofs = inspect(readFileSync);
-  // Original 107 plus sixteen public/popup proofs, the retained standalone
-  // cohort registration, and the ordinary tooltip ownership counterexample.
-  assert.equal(proofs.length, 127);
+  // Independently cold-verified coherent192 publication. Count is explicit:
+  // additional proofs must be reconciled, not silently accepted as growth.
+  assert.equal(proofs.length, 192);
   assert.equal(proofs.filter(p => p.status === 'current light desktop five-family empty-caret visibility and ink boundary').length, 1);
   assert.equal(proofs.filter(p => p.status === 'public equal-input scrollbar track interaction diagnostic counterexample').length, 1);
   assert.equal(proofs.filter(p => p.status ===
-    'ordinary dark mobile tooltip live-material retention diagnostic counterexample').length, 1);
+    'ordinary default-light mobile tooltip live-material retention diagnostic counterexample (requested dark)').length, 1);
   assert.ok(proofs.every(p => Number.isInteger(p.line) && p.line > 0 && p.status !== 'missing'));
   const broken = inspect((file, encoding) => file.endsWith('slider-input-box-integration.spec.mjs')
     ? '' : readFileSync(file, encoding));

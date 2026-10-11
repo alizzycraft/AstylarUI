@@ -2,6 +2,20 @@
 
 ## Current evidence boundary — October 11
 
+Existing workflow gate reconciliation closes two stale expectations,not audit
+case coverage: unmodified proof-pointer test fails192!=127,then its historical
+tooltip status expectation fails after count reconciliation. Current producer
+has192 resolvable pointers and correctly labels the requested-dark ordinary
+tooltip capture as actual default-light. Update only the explicit expected count
+and that corrected label; retain all line/status checks and the deliberately
+broken slider-file rejection control. Complete existing audit-workflow.spec.mjs
+now passes4/4,1388.0093ms. No proof,status,reference input or acceptance assertion
+is removed. Runner instrumentation changed harness fingerprints after coherent192;
+this metadata/gate repair is not a fresh canonical export or historical receipt
+waiver. Current publication remains192; final full canonical/unfiltered harness
+and enforced browser checks remain open. The next broad gap is exact family/state
+obligation disposition against existing proof IDs and current dependencies.
+
 Exact-state instrumented settlement replay completes exit0 in
 bottom-sheet-settlement-trace-20261011/latest-report.json,SHA256
 84668a6b572916136d0a1d31a52d1eeeebce88f803de2a3c5f43d56da0ea59fa.
