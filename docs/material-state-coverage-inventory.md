@@ -2,6 +2,27 @@
 
 ## Current evidence boundary — October 11
 
+Coherent builder preflight accepts source classification/live-location scan with
+the new finding: existing source-audit test1/1,4643.4ms, log semantic-focus-builder-
+preflight-20261011.log SHA2566b6de4ee57c16521f0cceb588eee2aa20268e0f22ede68a3bef9a1d5548b0873.
+Existing retained-map/full-producer predecessor suite also passes1/1,7047.1ms,
+semantic-focus-builder-map-inventory-20261011.log SHA256
+9e23f437061e6920af6fde63217e77a2b467d080bf3164a57bb499329cc5434b;
+it authenticates actual622-file inventory,seven original retained map receipts
+and unrelated producer mutation rejection. Updated only new guard's descriptive
+error message so original rejection assertion remains meaningful.
+Broader records-source-fingerprints test fails before its historical projection:
+actual622 versus expected549 at input-equivalence-audit.spec.mjs:3318. Preserve
+semantic-focus-builder-fingerprints-20261011.log SHA256
+bc5fe9ba760c515358da1115566e72dadd6c9ee93d41f2e6725dc88c4b1fac48.
+This is stale test inventory reconciliation, not demonstrated lost sources or
+renderer failure; the exact622 current inventory already independently verifies.
+Do not simply raise549 or delete original541/menu-tail assertions. Next explicitly
+authenticate later registration additions and restore the historical projection
+through existing producer conservation. Full export remains unjustified until
+this and other outstanding guard boundaries are reconciled; published canonical
+66eaf2d9 unchanged. No full acceptance implied by the narrow builder pass.
+
 Coherent source-conservation preflight now accepts only the exact semantic focus
 addition, not a blanket new hash. Existing producer transition authenticates
 whole current0f580d4a, removes the one193rd proof by exact AST identity and requires

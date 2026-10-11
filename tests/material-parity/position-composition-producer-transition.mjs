@@ -11,7 +11,8 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 export function restoreRetainedMapLocationRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
   if (current.includes('current light mobile semantic focus continuity diagnostic counterexample')) {
-    assert.equal(hash(current), '0f580d4a3e7f0e8a4b9fd2a7103948aae0e6299e67ea849ff89df0738eb30d7d');
+    assert.equal(hash(current), '0f580d4a3e7f0e8a4b9fd2a7103948aae0e6299e67ea849ff89df0738eb30d7d',
+      'exact retained source-map producer plus semantic focus proof');
     const ast = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
     const entries = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory').body.statements[0].expression.elements;
     const entry = entries.filter(n => n.arguments[3]?.text === 'current light mobile semantic focus continuity diagnostic counterexample');
