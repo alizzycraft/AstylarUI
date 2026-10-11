@@ -2,6 +2,20 @@
 
 ## Current evidence boundary — October 11
 
+Mobile scrollbar diagnostic map reader now points to retained original core map
+dba48404 and authenticates its whole bytes before module applicability checks.
+Existing readRetainedSortFocusSource authenticates complete new21786871 source,
+reverses only this path and added map-hash assertion,and requires exact original
+d2b35a77 before every pre-existing source/assertion conservation check. Focused
+sorter conservation passes1/1,1096.2ms; log mobile-scrollbar-map-focused-
+conservation-20261011.log SHA2569c651f1654a65bc9f8bf8a39212c96a72d8e516d2927390668a2d88b81444399.
+Accidental unfiltered transition-suite invocation was interrupted,exit1,with
+only TAP header in mobile-scrollbar-map-source-conservation-20261011.log;
+it is not a suite pass. No browser diagnostic ran or paint gap closed yet.
+Next extend only this existing owning diagnostic to retain missing open-panel
+rasters with exact state/theme/source receipts; avoid repeating settled drag
+findings unnecessarily. Raw runner receipt,case closures and final gates remain.
+
 Adjacent class-body validator is now reconciled independently: original core
 map dba48404 is read from its authenticated retained location and whole-map hash
 asserted before selecting all88 modules. Unlike historical linked/member replay,

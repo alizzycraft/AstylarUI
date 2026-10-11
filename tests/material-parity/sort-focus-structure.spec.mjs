@@ -1993,9 +1993,10 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
   const configFile = 'tsconfig.lib.json';
   const converted = ts.convertCompilerOptionsFromJson(JSON.parse(readFileSync(configFile)).compilerOptions, path.dirname(path.resolve(configFile)));
   assert.deepEqual(converted.errors, []);
-  const mapFile = 'examples/material-showcase/dist/material-showcase/browser/chunk-3JXWRYJY.js.map';
+  const mapFile = 'artifacts/material-parity/retained-evidence/component-map-recovery-20261011/chunk-3JXWRYJY.js.map';
   const capturedMap = JSON.parse(readFileSync(mapFile));
   const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  assert.equal(digest(readFileSync(mapFile)), 'dba484044ca0dea965d8ef4b12635673f0f055d7711099d2f6476ca490988ec4');
   const modules = ['lib/astylar-scroll-runtime', 'app/services/babylon-scroll-paint-adapter'].map(relative => {
     const sourceFile = `src/${relative}.ts`, installedFile = `examples/material-showcase/node_modules/astylarui/dist/lib/${relative}.js`;
     const input = readFileSync(sourceFile, 'utf8'), installed = readFileSync(installedFile, 'utf8');

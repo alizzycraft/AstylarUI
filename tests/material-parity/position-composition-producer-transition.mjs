@@ -366,6 +366,16 @@ export function restoreLayoutDiagnosticRegistration(source) {
 }
 // Historical replay only. Never use this reader for current capture or rendering acceptance.
 export function readRetainedSortFocusSource(current = readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')) {
+  if (current.toString().includes("const mapFile = 'artifacts/material-parity/retained-evidence/component-map-recovery-20261011/chunk-3JXWRYJY.js.map';")) {
+    assert.equal(hash(current), '21786871d32ce18422d80533f9f1287e62e5d9e0c8d34943172ce8defeb8735c',
+      'exact retained scrollbar map reader snapshot');
+    current = Buffer.from(current.toString()
+      .replace("const mapFile = 'artifacts/material-parity/retained-evidence/component-map-recovery-20261011/chunk-3JXWRYJY.js.map';",
+        "const mapFile = 'examples/material-showcase/dist/material-showcase/browser/chunk-3JXWRYJY.js.map';")
+      .replace("  assert.equal(digest(readFileSync(mapFile)), 'dba484044ca0dea965d8ef4b12635673f0f055d7711099d2f6476ca490988ec4');\n", ''));
+    assert.equal(hash(current), 'd2b35a773912a2b58ecbc744577378edac16cff2b09a281e8c3e28ae9439c03b',
+      'complete predecessor scrollbar source conserved');
+  }
   if (current.toString().includes('Ordinary mode does not apply the profile query; verify the real theme.')) {
     assert.equal(hash(current), 'd2b35a773912a2b58ecbc744577378edac16cff2b09a281e8c3e28ae9439c03b',
       'exact explicit mobile scrollbar theme snapshot');
