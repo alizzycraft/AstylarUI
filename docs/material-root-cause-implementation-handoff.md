@@ -1,5 +1,14 @@
 # Material audit: evidence-led implementation priorities
 
+October12 bounded divider publication now passes named export,independent cold
+canonical check,compact import and whole-index verification,all exit0.194 proofs/
+626 source paths preserve157 findings,8483 groups,39904 controls and389202
+occurrences. Exact receipts/timing are in the current coverage ledger. No case
+closure or equal-input parity acceptance follows; inputEquivalent remains false.
+Publication diff review confirms only three bounded proof descriptions and63 test
+line anchors changed. Commit/push is next,then per-case applicable-obligation
+and current-validity closure; final unfiltered/enforced gates remain open.
+
 October11 bounded divider producer integration passes existing conservation1/1
 and focused divider proofs3/3:194 proof entries,626 source paths;exact accepted194
 predecessor equality is preserved. Existing descriptors now incorporate cursor,

@@ -1,5 +1,36 @@
 # Material comparison/state coverage inventory
 
+## Current publication boundary — October 12
+
+The bounded divider batch is now exported, independently cold-checked, imported
+and whole-index verified; all four commands exit0. Named current-ancestry export
+took3151255.3112ms; independent --check with ASTYLAR_AUDIT_COLD=1 took
+3126175.0097ms. Cold evidence session:2 collectors,10 memory hits,0 disk hits,
+0 invalidations,1205 files and89158075 bytes read/rehashed. Proof population
+remains194 with626 source paths; findings remain157,scalar groups8483,
+controls39904,occurrences389202,unresolved scalar classifications0.
+Input equivalent remains no; all2311 case inspection closures remain open.
+
+Canonical compressed bytes62901578,SHA256
+2fef56445be7d3f44b6010179cebfe9d85c6e881908daeb94cb049ab9b31df6b;
+decoded bytes2224471036,SHA256
+6dfc9578ec9268efc69aabfd69a379191f2bb60df32ebb210a59c9b3498710b5.
+Existing compact import creates that generation,72749010 bytes; pointer index
+SHA256 c7e4eadc4f6c6e8996f70ae56f81a2b2021d84cd3f327d027951672f415f27ed.
+Logs under artifacts/material-parity:coherent-194-divider-context-export-20261011.log
+(39e19ced35f95e72f862908de9b7d76a9a148c0bdc9216b7f00101de5205fd35),
+coherent-194-divider-context-cold-check-20261012.log
+(584468339a718028b2f766ad1ef5125bf51b45408055df082e25f9d7339b6857),
+coherent-194-divider-context-import-20261012.log and
+coherent-194-divider-context-verify-20261012.log. This supersedes the624-path
+publication boundary below,not historical evidence or acceptance criteria.
+Publication diff reviewed: exactly three bounded proof descriptions and63 test
+line anchors change; package hashes match independent cold verification. Commit
+this verified publication,then reconcile exact applicable
+obligation/evidence/currentness joins. Shared paint,focus/interaction and lifecycle
+questions remain prioritized; settled divider probes must not be repeated unchanged.
+Final unfiltered harness/enforced matrix/release gates remain pending.
+
 ## Current integration boundary — October 11
 
 Recent divider evidence is now registered in the existing producer:194 proof
