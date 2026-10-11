@@ -2732,6 +2732,7 @@ test('ordinary tooltip repeated hover and leave exposes live ownership separatel
 });
 
 test('held popup option boundaries capture active paint inputs before commit', async t => {
+  const currentOptionBoxes = process.env.ASTYLAR_AUDIT_CURRENT_OPTION_BOXES === '1';
   await withFrozenShowcase(async (browser, baseUrl) => {
     const observations = [];
     for (const family of ['select', 'autocomplete', 'timepicker']) {
@@ -2766,14 +2767,23 @@ test('held popup option boundaries capture active paint inputs before commit', a
         if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
         const held = await page.evaluate(({ mode, firstId }) => {
           if (mode === 'astylar') {
-            const api = window.__ASTYLAR_MATERIAL_BENCHMARK__, tree = api.measure([firstId], true).inputTree;
+            const api = window.__ASTYLAR_MATERIAL_BENCHMARK__, measurement = api.measure([firstId], true), tree = measurement.inputTree;
             const option = tree.nodes.find(node => node.authored?.id === firstId);
             return { count: tree.nodes.filter(node => node.authored?.role === 'option').length,
               background: option.resolvedStyle.background, selected: option.authored.ariaSelected,
-              events: api.events().filter(event => event.targetId === firstId) };
+              events: api.events().filter(event => event.targetId === firstId),
+              optionBox: measurement.elements[firstId].borderBox,
+              retainedText: option.retainedText ?? null };
           }
           const option = document.querySelector('mat-option');
+          const label = option.querySelector('.mdc-list-item__primary-text');
+          const range = document.createRange(); range.selectNodeContents(label);
+          const rowBox = option.getBoundingClientRect(), labelBox = label.getBoundingClientRect(), glyphBox = range.getBoundingClientRect();
+          const box = rect => ({ left: rect.left, top: rect.top, width: rect.width, height: rect.height });
           return { count: document.querySelectorAll('mat-option').length,
+            optionBox: box(rowBox), labelBox: box(labelBox), textRangeBox: box(glyphBox),
+            textMetrics: { lineHeight: getComputedStyle(label).lineHeight, fontSize: getComputedStyle(label).fontSize },
+            labelCenterOffsetY: labelBox.top + labelBox.height / 2 - rowBox.top - rowBox.height / 2,
             active: option.matches(':active'), background: getComputedStyle(option).backgroundColor,
             selected: option.getAttribute('aria-selected'),
             ripples: [...option.querySelectorAll('.mat-ripple-element')].map(el => {
@@ -2783,6 +2793,11 @@ test('held popup option boundaries capture active paint inputs before commit', a
             }) };
         }, { mode, firstId });
         assert.equal(held.count, family === 'timepicker' ? 48 : 2);
+        assert.ok(held.optionBox.width > 0 && held.optionBox.height > 0);
+        if (mode === 'reference') {
+          assert.ok(held.textRangeBox.width > 0 && held.textRangeBox.height > 0);
+          assert.ok(Math.abs(held.labelCenterOffsetY) < 0.1);
+        } else if (held.retainedText) assert.equal(held.retainedText.source, 'core-text-registry');
         if (mode === 'reference') assert.equal(held.active, true);
         else assert.ok(held.events.some(event => event.type === 'pointerdown'), 'actual option must own the held pointer');
         observations.push({ family, mode, target, held });
@@ -2793,7 +2808,9 @@ test('held popup option boundaries capture active paint inputs before commit', a
     }
     t.diagnostic(JSON.stringify({ browser: browser.version(), observations,
       claim: 'Actual held-option inputs after125ms plus candidate settlement before release,light desktop DPR1 only; not matched-time local-raster equivalence or ripple animation parity.' }));
-  }, {}, { checkpointFile: 'artifacts/material-parity/current-full-20261005/checkpoint/manifest.json' });
+  }, {}, { checkpointFile: currentOptionBoxes
+    ? 'artifacts/material-parity/selection-pointer-directions-20261011/checkpoint/manifest.json'
+    : 'artifacts/material-parity/current-full-20261005/checkpoint/manifest.json' });
 });
 
 test('retained popup hover inputs distinguish token alpha layers from opaque substitutions', t => {

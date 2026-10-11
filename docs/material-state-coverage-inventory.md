@@ -1,5 +1,29 @@
 # Material comparison/state coverage inventory
 
+## Current held option box boundary — October 12
+
+Existing held-popup diagnostic now measures native option/primary-label/DOM Range
+boxes and candidate option boxes/available retained text,without changing styles.
+Explicit ASTYLAR_AUDIT_CURRENT_OPTION_BOXES=1 selects the authenticated existing
+selection-pointer-directions-20261011 checkpoint; historical default remains.
+Chrome154.0.8037.99 light1440x1000 DPR1,select/autocomplete/timepicker first held
+options: native rows720x48 at(65,245.078125),candidate720x48 at
+(65,245.07998657226562). All native20px label boxes center exactly in their rows;
+DOM Range height19px is not an ink bound. Timepicker candidate registry retains
+normal line-height; select/autocomplete option owners have no retainedText entry,
+preserved as null rather than inferred label metrics. Six actual pointer holds
+retain original count/active/event assertions;1/1 passes15293.6141ms
+(16233.884ms process). This rules out gross row-size/position mismatch in this
+bounded current context,not candidate glyph centering or sharpness. Bound texture,
+baseline and paired local pixels remain missing; do not measure semantic DOM text
+as Babylon paint. Native/candidate timepicker selected false/true remains unequal.
+Initial historical invocation correctly rejected changed served-file census;
+the explicit current mode authenticates its own checkpoint without repinning old
+evidence. First current assertion incorrectly required retainedText on all option
+owners; null is now explicit and no metric synthesized. Historical source replay
+adapter must reconcile this exact diagnostic extension in the coherent batch;
+do not describe the modified source as conserved before that guard is updated.
+
 ## Timepicker option local-paint evidence gap — October 12
 
 Exact eight October5 open-scroll report rows have empty textAlignment and
