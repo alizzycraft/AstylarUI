@@ -2,6 +2,23 @@
 
 ## Current evidence boundary — October 11
 
+Canonical caret finding join is authenticated without rebuilding/exporting.
+Existing queryFindings verifies index and global source shard for accepted
+generation66eaf2d9; loadFindingEvidence verifies compressed payload and complete
+sourceFindings ordinal3 row6603407bc9291be12524019938d5cb52e82191ff35c6d69658811868cb3b387b.
+Compact IDcf842c6d788d5ecfaf948ed5f09edadc50e39f347ef423f91d0d2c99d1b4d67e
+maps to canonical core-caret-focus-allocation-escapes-render-owner, confirmed
+core interaction resource adoption/caret lifetime defect. It already references
+the exact public lifecycle test and historical popup reduction; no duplicate
+finding or new diagnosis is needed. The complete row records public lifetime-input
+focus/blur/same-ID update/remove-recreate/disposal atDPR2, not exact configured
+Material case IDs. Thus current proof applicability is established below, while
+case obligation membership and newer light-mobile receipts still require the
+existing coverage/canonical reconciliation. Do not count this global source
+finding as closure of every editable-input case or overwrite historical receipts.
+Next prioritize that membership/publication join and remaining mobile event/paint
+boundaries; unavailable original runner bytes remain a distinct provenance gap.
+
 Current applicability of the existing plugin-free caret lifetime proof is now
 verified, rather than inferred from the historical Material cycles. Unchanged
 focused test passes1/1 in6852.4ms on Chrome154.0.8037.99, Angular20.3.31,
