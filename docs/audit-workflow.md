@@ -64,6 +64,13 @@ touched. Do not imply every legacy test or collector is now cheap/cached.
 These remain separate expensive milestone commands. Documentation-only work does
 not justify recapture. Renderer, fixture or capture-environment changes invalidate
 affected rendering evidence and still require the applicable final gates.
+Fresh report-mode Material captures run the existing installed-component catalog
+and enforced-matrix configuration assertions only. Historical evidence replay
+belongs to audit verification, not fresh capture preflight: installing a current
+package legitimately invalidates old installed-file receipts. `--enforce` still
+runs the complete benchmark-config suite, and the full audit harness remains
+unfiltered. No historical assertion or fingerprint is waived or rewritten;
+capture success does not imply that retained evidence remains current.
 The complete unfiltered audit harness is `node scripts/run-material-audit-harness.mjs`.
 It explicitly enables `ASTYLAR_AUDIT_RECEIPT_COMPARE=1` for its child so the two
 existing opt-in receipt-conservation assertions cannot silently skip final

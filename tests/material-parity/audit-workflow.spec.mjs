@@ -6,6 +6,31 @@ import vm from 'node:vm';
 import ts from 'typescript';
 import { auditSuites, selectAuditTests } from '../../scripts/run-audit-tests.mjs';
 
+test('diagnostic capture preflight separates retained replay while enforced validation stays unfiltered', () => {
+  const file = 'tests/material-parity/run-material-parity.mjs';
+  const ast = ts.createSourceFile(file, readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, true);
+  const declaration = ast.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === 'validateConfiguration');
+  assert.equal(declaration.length, 1);
+  for (const enforce of [false, true]) {
+    let argumentsSeen;
+    const context = { enforce, process, root: process.cwd(), assert,
+      cases: [{}], interactionCases: [], mobileFlowCases: [], browserRestartInterval: 200,
+      spawnSync: (_command, args) => { argumentsSeen = args; return { status: 0 }; } };
+    vm.runInNewContext(declaration[0].getText(ast) + ';validateConfiguration()', context);
+    assert.equal(argumentsSeen.at(-1), 'tests/material-parity/benchmark-config.spec.mjs');
+    assert.equal(argumentsSeen.includes('--test-name-pattern'), !enforce);
+    if (enforce) assert.deepEqual(Array.from(argumentsSeen), ['--test', 'tests/material-parity/benchmark-config.spec.mjs']);
+    else {
+      const pattern = new RegExp(argumentsSeen[2]);
+      assert.ok(pattern.test('covers every installed Angular Material component entry point'));
+      assert.ok(pattern.test('keeps the app catalog and enforced static matrix complete'));
+      assert.ok(!pattern.test('public omitted box sizing finding preserves explicit controls and complete prior policy'));
+    }
+    context.spawnSync = () => ({ status: 1 });
+    assert.throws(() => vm.runInNewContext(declaration[0].getText(ast) + ';validateConfiguration()', context));
+  }
+});
+
 test('all canonical proof pointers resolve after focused/integration test moves', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';
   const ast = ts.createSourceFile(file, readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, true);

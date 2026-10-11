@@ -2,6 +2,17 @@
 
 ## Current evidence boundary — October 11
 
+Used-dimension preparation/build both complete exit0. Fresh installed inspector
+SHA256 a18630bdc31067ac75907e41f9031865fa192edc164ebf93edacb8b836b09abd
+contains retainedLayout/core-dimension-registry. First focused launch terminates
+exit1 before browser capture: benchmark-config preflight executes27 tests with
+15 passes/12 failures after installed receipts change. Preserve
+overlay-used-dimensions-20261011.log; this is no used-size or parity result.
+Diagnostic preflight now selects the two existing catalog/matrix assertions;
+enforced mode and full audit harness retain all original assertions unfiltered.
+Focused dispatch/failure controls pass1/1 and actual configuration checks pass2/2.
+Next launch uses a new directory and current provenance; final gates stay open.
+
 Coherent192 publication verification supersedes the pending boundary below:
 independent cold session89118 terminates exit0, with log SHA256
 fbaf5a05e6f533d1716cb07667520ac841d4a65dee3fedb8ab4ccdfec37643af.

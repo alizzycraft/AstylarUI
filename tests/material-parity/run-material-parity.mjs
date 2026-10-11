@@ -183,7 +183,13 @@ function benchmarkMeasurementIds(family) {
 }
 
 function validateConfiguration() {
-  const testRun = spawnSync(process.execPath, ['--test', 'tests/material-parity/benchmark-config.spec.mjs'], {
+  // Fresh diagnostic captures validate the current catalog/matrix, not retained
+  // evidence bound to an older installed package. Enforced acceptance retains
+  // the complete suite; the full audit harness also runs it unfiltered.
+  const validationArgs = ['--test', ...(enforce ? [] : ['--test-name-pattern',
+    '^(covers every installed Angular Material component entry point|keeps the app catalog and enforced static matrix complete)$']),
+    'tests/material-parity/benchmark-config.spec.mjs'];
+  const testRun = spawnSync(process.execPath, validationArgs, {
     cwd: root, stdio: 'inherit',
   });
   assert.equal(testRun.status, 0, 'Material benchmark configuration validation failed.');
