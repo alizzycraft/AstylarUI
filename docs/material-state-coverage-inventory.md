@@ -2,6 +2,29 @@
 
 ## Current evidence boundary — October 11
 
+Selection-state uncertainty in the new public focus reduction is now bounded.
+Real Home/ArrowRight/two Shift+ArrowRight actions produce1/3 before update on
+both sides. One sibling-add public update preserves1/3,value and node identity
+on both, rejecting a generalized synchronized-selection-loss claim from the
+earlier direct-DOM setSelectionRange samples. Native stays input-focused without
+events; candidate descendant replacement emits focusout and ends CANVAS-focused.
+Current syncFocus keepCanvasFocus policy explicitly chooses canvas for a live
+range; hasLiveTextSelection tests unequal core endpoints. This explains why the
+noncollapsed range does not receive the collapsed-caret focusin restoration;
+it does not justify the preceding descendant-induced blur or certify AT parity.
+Existing focused counterexample assertion1/1,5484.6446ms; log
+public-semantic-focus-keyboard-selection-verified-20261011.log SHA256
+7db45603d4764a63001700012f045a30658be86c5a3a12082129e0ccb7a7b594.
+Initial input-focus preservation assertion fails and is retained in
+public-semantic-focus-keyboard-selection-20261011.log SHA256
+f0d9a56c8537ca5639b2af31d24ae7b4dac32c1fc523b0eb34eb49db4d361d53.
+Same current/installed semantic methods and2515 dependency receipts authenticate;
+Chrome154 mobile DPR2 only. No renderer/fixture change or full-case closure.
+Canonical193 and plugin-free reduction commits now pushed through16d2f688;
+first push HTTP408 was checked against actual remote before a successful retry.
+Next exact configured obligation joins; standalone-proof source integration and
+final gates remain open,not another unchanged semantic-focus reproduction.
+
 Plugin-free public sibling update now independently reproduces semantic focus
 loss. Existing input-boundary suite builds only package-root Astylar/Angular
 imports, authenticates2515 bundled dependency files, and compares complete

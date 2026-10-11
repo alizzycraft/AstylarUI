@@ -2252,7 +2252,7 @@ test('public semantic sibling updates isolate retained focus loss without Materi
       await settle();
       const input=document.querySelector('[data-astylar-id="focus-input"]');
       const referenceParent=document.createElement('div'),reference=document.createElement('input');
-      reference.value='Atlas';referenceParent.append(reference);document.body.append(referenceParent);
+      reference.id='reference-focus-input';reference.value='Atlas';referenceParent.append(reference);document.body.append(referenceParent);
       const events=[],operations=[];
       for(const node of [input,reference]) for(const type of ['focusin','focusout'])
         node.addEventListener(type,()=>events.push({side:node===input?'candidate':'reference',type}));
@@ -2265,15 +2265,18 @@ test('public semantic sibling updates isolate retained focus loss without Materi
           connected:input.isConnected,stack:new Error().stack});
         return result;
       };
-      window.focusAudit={settle,async update(side,extra){
-        const target=side==='candidate'?input:reference;target.focus();target.setSelectionRange(1,3);
+      window.focusAudit={settle,async update(side,extra,prepared=false){
+        const target=side==='candidate'?input:reference;
+        if(!prepared){target.focus();target.setSelectionRange(1,3);}
+        const beforeSelection=[target.selectionStart,target.selectionEnd];
         events.length=0;operations.length=0;
         if(side==='candidate') await surface.update(site(extra));
         else if(extra){const sibling=document.createElement('span');sibling.textContent='Other';referenceParent.append(sibling);}
         else referenceParent.lastElementChild!==reference&&referenceParent.lastElementChild.remove();
-        await settle();return {side,extra,events:[...events],operations:[...operations],
+        await settle();return {side,extra,prepared,beforeSelection,events:[...events],operations:[...operations],
           sameNode:side!=='candidate'||document.querySelector('[data-astylar-id="focus-input"]')===input,
-          focused:document.activeElement===target,value:target.value,selection:[target.selectionStart,target.selectionEnd],
+          focused:document.activeElement===target,activeTag:document.activeElement?.tagName,
+          value:target.value,selection:[target.selectionStart,target.selectionEnd],
           diagnostics:surface.diagnostics.messages};},dispose(){Element.prototype.replaceChildren=original;surface.dispose();app.destroy();}};
     `},bundle:true,write:false,format:'esm',platform:'browser',target:'es2022',metafile:true});
   const inputs = Object.keys(built.metafile.inputs).filter(file => path.basename(file) !== 'public-semantic-focus.mjs')
@@ -2294,10 +2297,18 @@ test('public semantic sibling updates isolate retained focus loss without Materi
     await page.waitForFunction(() => !!window.focusAudit);
     for (const side of ['reference','candidate']) for (const extra of [true,false,true,false])
       samples.push(await page.evaluate(({side,extra}) => window.focusAudit.update(side,extra),{side,extra}));
+    const keyboardSamples=[];
+    for(const side of ['reference','candidate']) {
+      await page.locator(side==='candidate'?'[data-astylar-id="focus-input"]':'#reference-focus-input').focus();
+      await page.keyboard.press('Home');await page.keyboard.press('ArrowRight');
+      await page.keyboard.press('Shift+ArrowRight');await page.keyboard.press('Shift+ArrowRight');
+      await page.evaluate(()=>window.focusAudit.settle());
+      keyboardSamples.push(await page.evaluate(side=>window.focusAudit.update(side,true,true),side));
+    }
     t.diagnostic(JSON.stringify({publicSemanticFocus:{browser:browser.version(),viewport:{width:390,height:844,dpr:2},
       sourceSha256:hash(Buffer.from(source)),installedSha256:hash(Buffer.from(installed)),methods,
       bundleSha256:hash(built.outputFiles[0].contents),dependencyCount:inputs.length,
-      dependencyReceipt:hash(Buffer.from(JSON.stringify(inputs))),samples,errors,parityAccepted:false}}));
+      dependencyReceipt:hash(Buffer.from(JSON.stringify(inputs))),samples,keyboardSamples,errors,parityAccepted:false}}));
     assert.deepEqual(errors,[]);
     for (const sample of samples) {
       assert.equal(sample.sameNode,true);assert.equal(sample.focused,true);assert.equal(sample.value,'Atlas');
@@ -2314,6 +2325,13 @@ test('public semantic sibling updates isolate retained focus loss without Materi
         assert.ok(firstLoss);assert.equal(firstLoss.owner,'focus-parent');assert.equal(firstLoss.connected,true);
         assert.deepEqual(sample.events.map(event=>event.type),['focusout','focusin']);
       }
+    }
+    for(const sample of keyboardSamples) {
+      assert.deepEqual(sample.beforeSelection,[1,3]);
+      assert.equal(sample.sameNode,true);assert.equal(sample.focused,sample.side==='reference');assert.equal(sample.value,'Atlas');
+      assert.deepEqual(sample.selection,[1,3]);
+      assert.deepEqual(sample.events.map(event=>event.type),sample.side==='reference'?[]:['focusout']);
+      if(sample.side==='candidate') assert.equal(sample.activeTag,'CANVAS');
     }
     await page.evaluate(() => window.focusAudit.dispose());
     for(const input of inputs) assert.equal(hash(readFileSync(input.file)),input.sha256);

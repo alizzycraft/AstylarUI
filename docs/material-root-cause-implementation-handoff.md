@@ -1,5 +1,14 @@
 # Material audit: evidence-led implementation priorities
 
+October11 synchronized-selection control: real keyboard selection1/3 survives
+the public sibling update. The direct-DOM reset is not a demonstrated loss of
+synchronized editor selection. Descendant replacement still emits focusout;
+existing keepCanvasFocus policy restores canvas for a noncollapsed range rather
+than semantic input. Native retains input focus without events. Preserve this
+distinction when fixing reconciliation; canvas-focus policy/AT semantics are
+separate inspection obligations,not a reason to accept descendant-induced blur.
+Exact verified/failure log receipts are in the current ledger.
+
 October11 plugin-free semantic focus reduction now confirms the existing cause:
 public mount/update retains the input while sibling add/remove synchronously
 blurs it inside descendant parent.replaceChildren,then restores it. Native DOM
