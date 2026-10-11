@@ -2,6 +2,24 @@
 
 ## Current evidence boundary — October 11
 
+Current applicability of the existing plugin-free caret lifetime proof is now
+verified, rather than inferred from the historical Material cycles. Unchanged
+focused test passes1/1 in6852.4ms on Chrome154.0.8037.99, Angular20.3.31,
+Babylon8.56.2 and public astylarui0.2.0; it authenticates2515 bundled dependency
+inputs and equality of11 owning installed methods with current TS compilation.
+Log: artifacts/material-parity/public-caret-lifetime-current-applicability-20261011.log,
+SHA2565c64640879c7b39c7590e592d6758996a04906f23720168ee1caf0bf7f3384df.
+Read-only diagnostic replay confirms same-ID updates retain one initial orphan,
+while remove/recreate grows orphan caret materials1/2/3. Blur/refocus is the
+stable negative control. Final surface disposal clears sampled meshes/materials/
+textures and page errors are empty; this is not element-lifetime plateau acceptance.
+The established core post-render allocation/adoption and mesh-only caret cleanup
+cause remains applicable without Material plugins. No renderer or fixture change.
+This answers the current minimal-proof applicability question, not all mobile
+event/paint/isolation obligations. Next reconcile these exact proof receipts with
+case/finding membership and pending canonical publication; do not repeat the
+unchanged caret diagnosis. Missing original runner receipt and final gates remain.
+
 Current light/mobile timepicker lifecycle/action boundaries now inspected through
 existing field-popup cycle test,not a new framework. Opt-in
 ASTYLAR_AUDIT_MOBILE_TIMEPICKER_LIFECYCLE=light plus current selection-pointer
