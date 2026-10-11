@@ -1,5 +1,26 @@
 # Material comparison/state coverage inventory
 
+## Current integration boundary — October 11
+
+Recent divider evidence is now registered in the existing producer:194 proof
+entries remain,626 source paths include both effective-cursor logs. Three existing
+descriptors incorporate verified flex/container context,retained used-width joins,
+160 cursor points and eight desktop revision/cache-key guards. No finding
+classification,case population,fixture,renderer or acceptance criterion changed.
+Existing exact producer adapter reverses only these two paths/three descriptors
+and proves complete equality with accepted194 Git87f21586 before the older chain.
+Current normalized producer SHA256
+c599fdb2fd43400c3845b06e8e9a15320bfd9fe0882f60ed6c8e783ef6921eb4.
+Existing conservation test passes1/1,9369.5045ms (10658.5564ms terminal),including
+new cursor/claim/ownership mutation rejection. Existing three divider proof tests
+pass3/3,6500.3743ms terminal. Commands: node --test with exact-name selection in
+input-equivalence-audit.spec.mjs for retained source map migration; in
+input-boundary-evidence.spec.mjs for wrapping ancestry,actual-theme AX and retained
+update/disposal. No browser recapture. Canonical publication remains coherent194
+with624 paths; next justified milestone is named five-path export and independent
+cold verification,then compact import/verification. Observed D:free526876672bytes
+before checks; recheck publication headroom. All2311 cases remain partially inspected.
+
 ## Current evidence boundary — October 11
 
 Divider effective cursor is now measured across20 physical contexts covering

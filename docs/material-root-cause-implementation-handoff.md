@@ -1,5 +1,12 @@
 # Material audit: evidence-led implementation priorities
 
+October11 bounded divider producer integration passes existing conservation1/1
+and focused divider proofs3/3:194 proof entries,626 source paths;exact accepted194
+predecessor equality is preserved. Existing descriptors now incorporate cursor,
+flex/used-width and desktop revision/cache guards without changing findings or
+acceptance. Canonical194/624 remains published; next export/cold/import milestone
+is pending. See current ledger for command,timing,source hash and limitations.
+
 October11 divider cursor gap now measured through the existing opt-in probe:
 20 physical contexts/24 configured cases,160 points; paragraph text cursors and
 empty root/separator defaults agree. Existing AX/context test preserves original

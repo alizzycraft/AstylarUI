@@ -10,6 +10,30 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 // the explicit retained map paths; no captured receipt or current source is replaced.
 export function restoreRetainedMapLocationRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes('divider-effective-cursor-20261011.log')) {
+    assert.equal(hash(current), 'c599fdb2fd43400c3845b06e8e9a15320bfd9fe0882f60ed6c8e783ef6921eb4',
+      'exact retained source-map producer plus bounded divider cursor/context/ownership integration');
+    const predecessor = execFileSync('git', ['show', '87f21586:tests/material-parity/input-equivalence-audit.mjs'],
+      { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n');
+    for (const file of ['divider-effective-cursor-20261011.log', 'divider-effective-cursor-comparison-20261011.log']) {
+      const line = `    'artifacts/material-parity/${file}',\n`;
+      assert.equal(current.split(line).length, 2); current = current.replace(line, '');
+    }
+    const entry = (text, status) => {
+      const tree = ts.createSourceFile('producer.mjs', text, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+      const entries = tree.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory')
+        .body.statements[0].expression.elements;
+      assert.equal(entries.length, 194);
+      const matches = entries.filter(n => n.arguments[3]?.text === status);
+      assert.equal(matches.length, 1); return matches[0].getText(tree);
+    };
+    for (const status of ['divider exact retained wrapping ancestry observation gap',
+      'divider exact configured separator and ancestor AX boundary', 'divider exact retained ownership membership boundary']) {
+      current = current.replace(entry(current, status), entry(predecessor, status));
+    }
+    assert.equal(current, predecessor, 'complete accepted194 producer conserved');
+    assert.equal(hash(current), 'd45409ff5f31c77cf2dda60578930ab22b936ac29cc027f3dee0589c0fdbcccd');
+  }
   if (current.includes('plugin-free public semantic focus continuity and synchronized selection control')) {
     assert.equal(hash(current), 'd45409ff5f31c77cf2dda60578930ab22b936ac29cc027f3dee0589c0fdbcccd',
       'exact retained source-map producer plus public focus and ancestor metadata');
