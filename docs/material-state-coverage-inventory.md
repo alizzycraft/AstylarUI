@@ -2,6 +2,28 @@
 
 ## Current evidence boundary — October 11
 
+Light/mobile timepicker full captured DOM event sequence is now inspected,
+not just its filtered Escape/input/change subset. Read-only replay authenticates
+log7319fc16 and verifies every boundary history retains the exact prior prefix
+before deriving action deltas. Native opening focuses timepicker-control between
+pointerdown/pointerup; candidate pointer events target CANVAS, and focus reaches
+the semantic input after pointerup. Candidate then emits another input focusout/
+focusin pair before each opened boundary. Native Escape deltas are only keydown/
+keyup; candidate each closed boundary additionally emits input focusout/focusin.
+In cycles0/2 this pair occurs between keydown and keyup, in cycle1 after keyup.
+Thus matching focused closed endpoints and matching filtered key sequences do
+not establish event-order parity. Canvas pointer targets are substrate-specific
+DOM observations, not automatically a defect in public semantic dispatch.
+The extra same-control focus transitions remain a material observed discrepancy:
+competing causes are application focus/state callbacks and core text-control
+replacement/restoration. Current handleKeydown patches open=false and requests
+family-primary focus; core createScene restores text-control states during
+replacement. Neither static source alone identifies the runtime cause. Next use
+the existing settlement trace at these exact action boundaries to distinguish
+callbacks from replacement, without changing fixtures or filtering away focus
+events. This is one light390x844 DPR2 case obligation, not dark/all-profile closure.
+Canonical publication/source reconciliation and final gates remain pending.
+
 Canonical caret finding join is authenticated without rebuilding/exporting.
 Existing queryFindings verifies index and global source shard for accepted
 generation66eaf2d9; loadFindingEvidence verifies compressed payload and complete
