@@ -2,6 +2,28 @@
 
 ## Current evidence boundary — October 11
 
+Remaining height-context census is bound to59 exact configured open states:
+bottom-sheet25/snackbar34,118 original tree receipts authenticated to b07ef154.
+All four compact groups (24/1/32/2 occurrences) compare native viewport-used
+height with candidate100%; both owners author height100%,but native mapped
+cdk-global-overlay-wrapper is absolute under fixed cdk-overlay-container,
+whereas candidate owner is itself fixed under a relative98px family root.
+All candidate normal/effective/interaction stages retain fixed/100%/border-box.
+Every59 ID joins the existing91-state reference ancestor survey (capture SHA
+74813a6a); this receipt/membership check is not a fresh full survey replay or
+current browser acceptance. Thus matching height declarations alone cannot
+certify equivalent owner/containing-block semantics or actual used height.
+Current core already has resolveLayoutParent plus an original nested fixed
+overlay unit assertion expecting viewport800.5x600.25,not98px parent height;
+do not infer the short DOM ancestry itself is a core failure. Next decisive
+check is applicability of that actual layout-parent/dimension call path to
+retained installed runtime and existing paired overlay geometry,not recapturing
+reference ancestors or changing fixture height. Preserve four raw groups and
+known authoring/paint/lifetime findings; no whole-case closure. Initial compact
+ancestry printer hit a synthetic root without resolvedStyle; optional printing
+was corrected without default synthesis,then all59 declaration/membership
+assertions completed exit0. Export dependencies remain frozen.
+
 Slider pending-left question is now inspected against the retained population:
 all78 configured slider cases/156 authenticated tree receipts retain native end
 input inline left:auto/right:-21px,while candidate #slider-primary authors
