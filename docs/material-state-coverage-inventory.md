@@ -2,6 +2,20 @@
 
 ## Current evidence boundary — October 11
 
+Input-focus runner applicability narrowed decisively: current raw focus body
+SHA256622d9fc795ca81deaf22604ae145479229bb897d579a87c015dff4a3f2254476
+and profileTheme body6e8166a599e25da398928dc04e675a386a43413bc950232321e964cbf16e7013
+equal both original capture action receipts exactly. AST complete
+performInteraction/profileTheme/resourceCounts equal Git8aa0e2e5 after LF
+normalization. The initial normalized raw-body comparison failed because raw
+historical/current files use mixed line endings; normalized focus778b3d9e is
+not the capture's raw622d9fc7. Current runner raw584cdfc8 normalizes to reviewed
+082d6d7b; captured whole raw remains e01ef9dc and must be independently conserved,
+not replaced with a convenient LF or Git digest. This rules out changed focus
+or theme action bodies as the cause of the demonstrated validator failure.
+Next bind immutable original whole-runner bytes and exact reviewed transition
+while retaining raw action assertions. No whole-pipeline/current rendering claim.
+
 Downstream map reuse needs more than path relocation. A bounded five-path
 diagnostic edit in benchmark-config.spec.mjs points only at the authenticated
 retained maps,leaving hash/source assertions unchanged. Existing configured
