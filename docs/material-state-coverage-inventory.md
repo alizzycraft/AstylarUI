@@ -2,6 +2,44 @@
 
 ## Current evidence boundary — October 11
 
+Inspector-reconciled export is terminal exit1 (session15135; launcher31944 and
+worker24800 missing),not a timeout. Log SHA256
+f7b8947fb96c9232974d9ec4ff2c7c795760f5c5def9fd747672c5f25b5b620a.
+The cursor boundary passed; sourceFingerprints now fails at its hard-coded
+current-dist chunk-3JXWRYJY.js.map path after the October11 build legitimately
+replaced that chunk. Exact historical copies exist under the preserved
+.audit-historical-build-1275fa1d authenticated-replay and logical-path-replay
+builds. This is a source-inventory location failure,not a rendering result or
+authority to restore the old served build over the current one. Canonical
+manifest remains66eaf2d9/decoded431a119f. Next authenticate the original map
+against its captured receipt and bind the existing fingerprint inventory to its
+historical evidence location,keeping current source applicability separate.
+Do not restart the full exporter before that focused reconciliation passes.
+
+The eight radio diagnostic output failures versus historical passes are now
+explained without inferring a new rendering regression. Hash-pin oldab42dbec and
+newf1497dbd; exact family/profile/viewport/state joins authenticate all eight.
+Structured geometry objects are identical in every pair,including label edge
+errors8.28125–17.033203125CSSpx. captureInteractionCase explicitly retains this
+geometry for diagnosis but does not add it to the interaction acceptance gate.
+Historical single activation clicks the already-selected item: both relevant
+event arrays are pointerdown/pointerup/click. Extended diagnostic clicks the
+opposite item and returns: native emits input/change after both selection changes,
+candidate emits only the three pointer sequences. All three actual selection
+boundaries still agree. The event comparator retains input/change for radio,
+so all eight extended diagnostics fail that existing event contract.
+
+Authenticate all16 final tree receipts: candidate choices are authored DIVs with
+role:radio,not native radio inputs. Current candidate handleClick only patches
+selected true/false for radio-team/solo; native template authors MatRadioGroup/
+MatRadioButton and its change binding. This locates the observed event-semantic
+substitution at the application control/state authoring boundary,not a proved
+core native-input delivery defect. No new normalization/exclusion is justified:
+do not extend the comparator's existing checkbox/slider tail exemption to radio
+to obtain a pass. Missing events remain honest failure evidence. This answers
+the apparent contradiction from differing action scope,not complete event/focus/
+paint inspection or current standard-action acceptance. No capture changed.
+
 Current-build validity census now includes the later pointer diagnostic instead
 of retaining the earlier59-case snapshot as today's total. Existing
 fingerprintDirectory authenticates all1887 current served files; installed lock
