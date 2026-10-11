@@ -366,6 +366,34 @@ export function restoreLayoutDiagnosticRegistration(source) {
 }
 // Historical replay only. Never use this reader for current capture or rendering acceptance.
 export function readRetainedSortFocusSource(current = readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')) {
+  if (current.toString().includes('ASTYLAR_AUDIT_RETAIN_MOBILE_TIMEPICKER_PAINT')) {
+    assert.equal(hash(current), '4ca4b2c4f78965a454f396f633c3d7d61488546d096bab1cb1b2984aa73c9d5e');
+    const additions = [
+      `  const retainPaint = process.env.ASTYLAR_AUDIT_RETAIN_MOBILE_TIMEPICKER_PAINT === '1';
+  const paintDirectory = 'artifacts/material-parity/timepicker-open-dark-mobile-paint-20261011';
+  if (retainPaint) (await import('node:fs')).mkdirSync(paintDirectory);
+`,
+      String.raw`        if (retainPaint) t.diagnostic(JSON.stringify({ mobileOpenPaint: { mode, actualTheme, before, after,
+          images: [{ file: ` + '`${paintDirectory}/${mode}-open.png`' + String.raw`, sha256: digest(beforePng) },
+            { file: ` + '`${paintDirectory}/${mode}-wheel.png`' + String.raw`, sha256: digest(afterPng) }],
+          diagnosticSourceSha256: digest(readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')),
+          checkpointFile: process.env.ASTYLAR_MATERIAL_SHOWCASE_CHECKPOINT,
+          checkpointSha256: digest(readFileSync(process.env.ASTYLAR_MATERIAL_SHOWCASE_CHECKPOINT)), acceptance: false } }));
+`,
+    ];
+    let text = current.toString();
+    for (const addition of additions) { assert.equal(text.split(addition).length, 2); text = text.replace(addition, ''); }
+    text = text.replace("retainPaint ? '154.0.8037.99' : '154.0.8037.58'", "'154.0.8037.58'");
+    for (const state of ['before', 'after']) {
+      const phase = state === 'before' ? 'open' : 'wheel';
+      const added = `        const ${state}Png = await page.screenshot({ caret: 'hide', ...(retainPaint ? { path: `
+        + '`${paintDirectory}/${mode}-' + phase + '.png`' + ` } : {}) });\n        const ${state}Pixels = PNG.sync.read(${state}Png);`;
+      assert.equal(text.split(added).length, 2);
+      text = text.replace(added, `        const ${state}Pixels = PNG.sync.read(await page.screenshot({ caret: 'hide' }));`);
+    }
+    current = Buffer.from(text);
+    assert.equal(hash(current), '21786871d32ce18422d80533f9f1287e62e5d9e0c8d34943172ce8defeb8735c');
+  }
   if (current.toString().includes("const mapFile = 'artifacts/material-parity/retained-evidence/component-map-recovery-20261011/chunk-3JXWRYJY.js.map';")) {
     assert.equal(hash(current), '21786871d32ce18422d80533f9f1287e62e5d9e0c8d34943172ce8defeb8735c',
       'exact retained scrollbar map reader snapshot');

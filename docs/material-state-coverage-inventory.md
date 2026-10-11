@@ -2,6 +2,33 @@
 
 ## Current evidence boundary — October 11
 
+Dark/mobile open timepicker paint is now retained,not only inferred from closed
+endpoints. Existing owning diagnostic opt-in ASTYLAR_AUDIT_RETAIN_MOBILE_TIMEPICKER_PAINT=1
+with ASTYLAR_MATERIAL_SHOWCASE_CHECKPOINT=artifacts/material-parity/selection-pointer-directions-20261011/checkpoint/manifest.json
+passes1/1 in39924.9ms on exact Chrome154.0.8037.99,current1887-asset checkpoint,
+390x844 DPR2 and explicitly applied dark frame rgb(28,27,31). Default historical
+Chrome154.0.8037.58 assertion remains; opt-in current capture is distinct.
+Four original-size780x1688 PNGs are exclusively retained under timepicker-open-
+dark-mobile-paint-20261011 (reference/astylar open/wheel). Log same basename.log
+SHA256ab32d46d36f49115c4fd6cabaff9516ffcd3d8b3c6a5421af95a1df83f6d11e0
+records image,state,theme,source4ca4b2c4 and checkpoint2aac425d receipts.
+Independent read verifies all four image hashes/dimensions and source/checkpoint
+hashes (TAP escaped hash signs decoded before JSON parsing),both scroll0→144.
+Visual inspection confirms open panels fully on-screen at x65,y237.08,260x256;
+native rounded/shadowed panel and gutter differ from candidate square panel,
+rectangular indicator and zero gutter. Existing native15px/candidate0 gutter,
+option245/260 widths,non-pickable candidate thumb/track and failed pointer scroll
+assertions all remain. No universal popup-coordinate cause or sharpness acceptance
+is inferred; custom painted caret is not hidden by Playwright caret:'hide'.
+Exact prior whole sorter source21786871 is conserved by existing helper after
+reversing only opt-in retention/version receipt additions; focused mutation suite
+passes1/1,847.1ms (mobile-open-paint-source-conservation-20261011.log SHA256
+2931a59e91f069111002f6f853731bc6039dfba20a631886e2465f8576f1929a).
+This closes absence of retained dark/mobile opening rasters,not complete local
+paint classification,light/mobile capture,full-case parity or canonical acceptance.
+Next classify these local panel/option rasters against equivalent input ownership,
+then close missing light/mobile evidence; source/export reconciliation remains.
+
 Mobile scrollbar diagnostic map reader now points to retained original core map
 dba48404 and authenticates its whole bytes before module applicability checks.
 Existing readRetainedSortFocusSource authenticates complete new21786871 source,

@@ -1990,6 +1990,9 @@ test('dark mobile real-key selections distinguish direction state from highlight
 });
 
 test('dark mobile timepicker wheel separates scroll state from scrollbar paint', async t => {
+  const retainPaint = process.env.ASTYLAR_AUDIT_RETAIN_MOBILE_TIMEPICKER_PAINT === '1';
+  const paintDirectory = 'artifacts/material-parity/timepicker-open-dark-mobile-paint-20261011';
+  if (retainPaint) (await import('node:fs')).mkdirSync(paintDirectory);
   const configFile = 'tsconfig.lib.json';
   const converted = ts.convertCompilerOptionsFromJson(JSON.parse(readFileSync(configFile)).compilerOptions, path.dirname(path.resolve(configFile)));
   assert.deepEqual(converted.errors, []);
@@ -2013,7 +2016,7 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
     configSha256: digest(readFileSync(configFile)), typescript: ts.version, acceptance: false,
     scope: 'complete geometry and paint module equality only; not callers, full pipeline or rendering acceptance' } }));
   await withFrozenShowcase(async (browser, baseUrl) => {
-    assert.equal(browser.version(), '154.0.8037.58');
+    assert.equal(browser.version(), retainPaint ? '154.0.8037.99' : '154.0.8037.58');
     const launch = await inspectMaterialBrowserLaunch(browser, materialBrowserLaunchOptions());
     t.diagnostic(JSON.stringify({ browserLaunch: launch }));
     const observations = {};
@@ -2085,14 +2088,22 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
               diffuse: thumb.material?.diffuseColor?.toHexString(), trackPickable: track?.isPickable } : null };
         }, mode);
         await settle(); const before = await sample();
-        const beforePixels = PNG.sync.read(await page.screenshot({ caret: 'hide' }));
+        const beforePng = await page.screenshot({ caret: 'hide', ...(retainPaint ? { path: `${paintDirectory}/${mode}-open.png` } : {}) });
+        const beforePixels = PNG.sync.read(beforePng);
         await page.mouse.move(before.box.x + before.box.width / 2, before.box.y + before.box.height / 2);
         await page.mouse.wheel(0, 144);
         await page.waitForFunction(mode => mode === 'reference'
           ? document.querySelector('.mat-timepicker-panel').scrollTop > 0
           : window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([], false).diagnostics.surface.scrolling.containers['timepicker-options'].scrollTop > 0, mode);
         await settle(); const after = await sample();
-        const afterPixels = PNG.sync.read(await page.screenshot({ caret: 'hide' }));
+        const afterPng = await page.screenshot({ caret: 'hide', ...(retainPaint ? { path: `${paintDirectory}/${mode}-wheel.png` } : {}) });
+        const afterPixels = PNG.sync.read(afterPng);
+        if (retainPaint) t.diagnostic(JSON.stringify({ mobileOpenPaint: { mode, actualTheme, before, after,
+          images: [{ file: `${paintDirectory}/${mode}-open.png`, sha256: digest(beforePng) },
+            { file: `${paintDirectory}/${mode}-wheel.png`, sha256: digest(afterPng) }],
+          diagnosticSourceSha256: digest(readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')),
+          checkpointFile: process.env.ASTYLAR_MATERIAL_SHOWCASE_CHECKPOINT,
+          checkpointSha256: digest(readFileSync(process.env.ASTYLAR_MATERIAL_SHOWCASE_CHECKPOINT)), acceptance: false } }));
         let scrollbarStripChanged = 0;
         const left = Math.floor((before.box.x + before.box.width - 12) * 2), right = Math.floor((before.box.x + before.box.width) * 2);
         const top = Math.floor(before.box.y * 2), bottom = Math.floor((before.box.y + before.box.height) * 2);
