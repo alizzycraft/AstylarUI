@@ -2,6 +2,32 @@
 
 ## Current evidence boundary — October 11
 
+Exact scalar occurrence-membership gap is now bounded and reconstructed:
+compact192 has5539 groups with complete reviewedCases and2944 without it.
+Collector cases is intentionally capped12 examples; a2311-case union therefore
+does not prove that every finding affecting each case has been mapped. Reuse
+actual AST-extracted canonicalStyle/normalization/caseKey helpers and authenticated
+baseline b07ef154,not guessed CSS defaults. For2936 groups,subtract already exact
+reviewedCases from matching captured element/property/value observations to obtain
+160623 unique occurrences. Remaining8 groups are checkbox/radio/slide-toggle label
+fontWeight400 declaration-versus-retained-stage classifications split explicitly
+between static and interaction; their disjoint states recover272 more occurrences.
+Every group matches its original count,sampled cases and unique IDs; assignments
+are disjoint and conserve the complete residual population. Existing query helper
+authenticates compact pointer/index/family shards. No recapture or full aggregation.
+
+Existing saveReviewProposal retains2944 group mappings/160895 observed occurrences
+in working-audit/proposals/587115568811e6866c981cddee14f5b05f2fd956476fd02301110cf31f7ffdfb.json
+(review SHA256587115568811e6866c981cddee14f5b05f2fd956476fd02301110cf31f7ffdfb).
+Status is proposal-not-canonical; original classifications,canonical publication,
+sample lists and evidence are unchanged. observedCases means captured occurrence
+membership,not reviewed semantics,current output or complete inspection. Preserve
+this working mapping until integrated through existing predecessor checks; do not
+publish guessed reviewedCases or add a competing audit framework. Next use this
+exact join with existing family obligations/proof IDs to distinguish disposition
+gaps from missing captures,then integrate the coherent metadata batch. Whole-case
+closures and final canonical/harness/browser gates remain open.
+
 ### Exact configured-case current-build applicability census
 
 Read-only existing materialCaseKey join verifies436 static+1857 ordinary
