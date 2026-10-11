@@ -433,7 +433,7 @@ test('retained extended keyboard cohorts replay original runtime tails and sourc
     "    'scripts/audit-material-menu-item-keys.mjs',", "    'scripts/unreviewed-menu-dependency.mjs',")));
   const producerAst = ts.createSourceFile(producerFile, producerSource, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   assert.equal(producerAst.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory')
-    .body.statements[0].expression.elements.length, 155);
+    .body.statements[0].expression.elements.length, 192);
   const digest = value => createHash('sha256').update(value).digest('hex');
   const pinned = (file, hash) => {
     const bytes = readFileSync(file); assert.equal(digest(bytes), hash, file); return bytes;
@@ -447,8 +447,10 @@ test('retained extended keyboard cohorts replay original runtime tails and sourc
     'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62'));
   const checkpoint = JSON.parse(pinned('artifacts/material-parity/current-full-20261005/checkpoint/manifest.json',
     '7ae2cba1739353661a0c84e28ef70819157311cc824fd00ae94ced29fadeb352'));
-  const { fingerprintDirectory, materialCaseKey } = await import('./run-checkpoint.mjs');
-  assert.deepEqual(fingerprintDirectory('examples/material-showcase/dist/material-showcase/browser'), checkpoint.provenance.browserFiles);
+  const { materialCaseKey } = await import('./run-checkpoint.mjs');
+  const { verifyRetainedMaterialBrowserFiles } = await import('./historical-audit-module-source.mjs');
+  assert.deepEqual(verifyRetainedMaterialBrowserFiles(checkpoint.provenance.browserFiles),
+    { authenticatedFiles: 1887, currentRenderingAccepted: false });
   pinned('examples/material-showcase/src/app/astylar.component.ts',
     '71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd');
   const batches = [
@@ -522,8 +524,10 @@ test('configured enabled keyboard evidence joins forty exact focus contexts with
   const sourceBytes = readRetainedSortFocusSource();
   assert.equal(digest(sourceBytes), helperSha);
   const source = sourceBytes.toString();
-  const { fingerprintDirectory, materialCaseKey } = await import('./run-checkpoint.mjs');
-  assert.deepEqual(fingerprintDirectory('examples/material-showcase/dist/material-showcase/browser'), checkpoint.provenance.browserFiles);
+  const { materialCaseKey } = await import('./run-checkpoint.mjs');
+  const { verifyRetainedMaterialBrowserFiles } = await import('./historical-audit-module-source.mjs');
+  assert.deepEqual(verifyRetainedMaterialBrowserFiles(checkpoint.provenance.browserFiles),
+    { authenticatedFiles: 1887, currentRenderingAccepted: false });
   const ast = ts.createSourceFile('keyboard.spec.mjs', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   const originalAssertions = (prefix, callbackSha) => {
     const calls = ast.statements.filter(n => ts.isExpressionStatement(n) && ts.isCallExpression(n.expression)
@@ -586,7 +590,7 @@ test('configured enabled keyboard evidence joins forty exact focus contexts with
   assert.equal(finding.classification, 'application-plugin-authoring-defect');
   const application = readPinned(finding.file, '71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd').toString();
   assert.match(application, new RegExp(finding.pattern));
-  const map = JSON.parse(readPinned('examples/material-showcase/dist/material-showcase/browser/chunk-JPEJK334.js.map',
+  const map = JSON.parse(readPinned('artifacts/material-parity/retained-evidence/component-map-recovery-20261011/chunk-JPEJK334.js.map',
     '47654b641610e1d56e02948b17fab41aff25e9c6aedc6f83b70a26b6f349ce9e'));
   const mapped = map.sources.flatMap((file, i) => file.endsWith('/astylar.component.ts')
     && map.sourcesContent[i]?.includes('import {') ? [map.sourcesContent[i]] : []);

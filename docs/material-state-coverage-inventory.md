@@ -2,6 +2,22 @@
 
 ## Current evidence boundary — October 11
 
+Configured/extended keyboard owning readers now reuse the complete authenticated
+retained1887-file build explicitly,not current-dist equality. Enabled-keyboard
+map read uses original retained47654b64; current component71e2d41f and all
+source/receipt/callback assertions remain. Extended check's current inventory
+count155 was stale against authenticated192-entry producer; count now192 while
+complete restoreExtendedKeyboardRegistration equality to original1190d1c2 and
+all original mutation controls remain. Existing two tests pass2/2 in10892.8ms:
+40 enabled focus contexts plus128 extended contexts,original callbacks/tails
+and failures conserved. Log keyboard-complete-retained-build-reconciliation-20261011.log
+SHA256245bfc7a04062de47d0c20c9075a5c5f8eeb560db8e2292f4ec01386df72cc03.
+Earlier mixed-cohort155-count failure stays retained in keyboard-cohorts-retained-
+build-reconciliation-20261011.log SHA256445edf0382fc635d9b943f8f437e150b5e8d5d08fd793e72ba3e87b0d80759c1.
+No runtime assertion,reference truth,source receipt or parity threshold changed.
+This closes these reader failures,not current browser/full-case acceptance;
+other map readers,raw-runner receipt and final gates remain pending.
+
 Field-hint retained build reader is now reconciled in its owning validator.
 Existing historical-audit-module-source exports verifyRetainedMaterialBrowserFiles:
 caller inventory must equal complete original October5 checkpoint,1887 entries;
