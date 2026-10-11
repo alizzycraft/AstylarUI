@@ -1,5 +1,19 @@
 # Material comparison/state coverage inventory
 
+## Current evidence registration — October 12
+
+Dark-mobile timepicker log is now registered in existing sourceFingerprints:
+194 proof entries remain,627 source paths. No classification or case inventory
+changed. Exact normalized producer78eeff94397dfd7898d1566c9cbd485432f2a228525273c8dfada03d7bd46719
+reverses only that path and matches whole Git5badd822 producer c599fdb2,then the
+unchanged accepted predecessor chain. Existing conservation assertion passes1/1,
+8201.4169ms (9529.6439ms terminal),including new mobile-path mutation rejection.
+This integrates registration,not canonical publication: published package remains
+194/626 and current standalone dark evidence remains independently verified.
+Next collect the next coherent obligation batch before export/cold/import;
+do not rerun settled dark-mobile focus/AX or rebuild for this prose edit.
+Full case closure,current enforced matrix and all final gates remain required.
+
 ## Current dark-mobile timepicker boundary — October 12
 
 Closed AX relationship question is now inspected at all six paired endpoints:

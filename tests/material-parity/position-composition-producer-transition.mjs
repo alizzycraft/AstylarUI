@@ -10,6 +10,16 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 // the explicit retained map paths; no captured receipt or current source is replaced.
 export function restoreRetainedMapLocationRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes('timepicker-dark-mobile-lifecycle-current-20261012.log')) {
+    assert.equal(hash(current), '78eeff94397dfd7898d1566c9cbd485432f2a228525273c8dfada03d7bd46719',
+      'exact retained source-map producer plus current dark-mobile timepicker evidence');
+    const line = "    'artifacts/material-parity/timepicker-dark-mobile-lifecycle-current-20261012.log',\n";
+    assert.equal(current.split(line).length, 2); current = current.replace(line, '');
+    const predecessor = execFileSync('git', ['show', '5badd822:tests/material-parity/input-equivalence-audit.mjs'],
+      { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n');
+    assert.equal(current, predecessor, 'complete current dark-mobile registration predecessor conserved');
+    assert.equal(hash(current), 'c599fdb2fd43400c3845b06e8e9a15320bfd9fe0882f60ed6c8e783ef6921eb4');
+  }
   if (current.includes('divider-effective-cursor-20261011.log')) {
     assert.equal(hash(current), 'c599fdb2fd43400c3845b06e8e9a15320bfd9fe0882f60ed6c8e783ef6921eb4',
       'exact retained source-map producer plus bounded divider cursor/context/ownership integration');

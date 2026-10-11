@@ -8895,6 +8895,7 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'artifacts/material-parity/timepicker-dark-mobile-lifecycle-current-20261012.log',
     'scripts/audit-material-icon-pending-remount.mjs',
     'scripts/audit-public-initial-cancellation.mjs',
     'scripts/audit-material-icon-cursor.mjs',
