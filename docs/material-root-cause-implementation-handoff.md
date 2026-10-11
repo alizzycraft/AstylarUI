@@ -1,5 +1,15 @@
 # Material audit: evidence-led implementation priorities
 
+October11 coherent194 export,independent cold check,compact import and complete
+index verification all exit0. Published194 proofs/624 source paths integrate the
+existing public focus reduction and divider ancestor AX evidence;157 findings,
+8483 scalar groups,39904 controls and389202 occurrences remain conserved.
+See current ledger for exact package/log receipts and verification measurements.
+Zero unresolved scalar groups is classification accounting,not full inspection or
+equal-input rendering acceptance. All2311 cases remain partial; no renderer or
+fixture change. Next close exact paint/source and existing font/remount evidence
+applicability before other case obligations and final unfiltered/enforced gates.
+
 October11 coherent194 source/policy conservation passes3/3. Existing historical
 adapter reverses only exact public-focus/ancestor metadata and requires complete
 accepted193 predecessor equality; original receipts and mutation guards survive.

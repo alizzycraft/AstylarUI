@@ -2,6 +2,27 @@
 
 ## Current evidence boundary — October 11
 
+Coherent194 publication is independently verified. Five-path export and cold
+check both completed exit0; cold elapsed2837282.2993ms,2 collectors,10 memory
+hits,0 disk hits,0 invalidations,1205 files/89158075 bytes reverified. Cold log
+coherent-194-independent-cold-check-20261011.log SHA256
+1e97f9b13701c3321bc0b8df50e80c38c0d1110c8750b7c22185bb9518f19a55.
+Compressed generation1e9620342484772f8c0919bbdc3194ff11bdc6b2967011702792128eb8aa9886
+decodes to934cc7dbdd5a6cda48b48468eca712cc93aa227b0e0e964a1989e74810650a92.
+Existing compact import and whole-index verify both exit0:8483 scalar groups,
+157 source findings,39904 controls,389202 occurrences,0 unresolved scalar
+groups,72749010 compact bytes. Import log coherent-194-compact-import-20261011.log
+SHA2562bdafe1db43977fa1dc4c02a67697981aaa7b7796b8584e4f2420635cb9f6165;
+verify log coherent-194-compact-verify-20261011.log SHA256
+c57c74e79493789b7cd4be6073b68fd04f66b618db00dd02e76732a584834508.
+Reviewed Markdown changes are source-line refreshes,expanded existing divider AX
+description and one public semantic-focus proof entry; original scalar populations
+and157 finding definitions remain conserved by the prior focused preflight.
+This supersedes193 publication,not its evidence or historical failures. All2311
+cases remain partial,inputEquivalent=false; final unfiltered/enforced gates remain.
+Next exact divider paint/source and existing font/remount-proof applicability,
+not another unchanged export or separator/focus reproduction.
+
 Coherent194 producer/policy conservation preflight now passes3/3 through existing
 assertions (9365.7546ms). Exact current194-proof/624-path producer is reversed
 only for one public-focus entry,two ancestor log paths and one expanded AX
