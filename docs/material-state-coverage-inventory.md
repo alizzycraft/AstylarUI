@@ -1,5 +1,25 @@
 # Material comparison/state coverage inventory
 
+## Timepicker option local-paint evidence gap — October 12
+
+Exact eight October5 open-scroll report rows have empty textAlignment and
+controlPaintGeometry arrays; their sole focused raster target is timepicker-primary,
+not an option label. All384 authenticated candidate option owners retain
+core-text-registry lineHeight:normal versus native wrapper20px. Existing boundary
+assertion now guards these evidence limits;1/1 passes1648.998ms (3207.9395ms
+process). The runner selects text targets and configured focused-raster targets
+at lines451/455 before comparison; a field-shell raster pass cannot certify
+individual option glyph centering or sharpness. Retained registry style is not
+the final texture/baseline. Existing held-popup diagnostic observes active
+background/ripple inputs,not matched-time glyph raster,so it cannot fill this gap.
+Missing decisive evidence: exact option row and label boxes plus current bound
+text texture/baseline and paired local glyph pixels,with matched authored metrics,
+actual theme,DPR and held/hover state where applicable. Prefer one bounded extension
+of the existing popup diagnostic over rerunning the full matrix; preserve original
+unequal-input observations separately. This is a demonstrated measurement gap,
+not a new renderer diagnosis or permission to change centering inputs. Current
+mobile source registration/publication and all case closures remain pending.
+
 ## Timepicker option metric classification join — October 12
 
 Existing compact query authenticates the current canonical pointer,index and

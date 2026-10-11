@@ -35,6 +35,9 @@ test('retained timepicker option text owners distinguish wrapper line boxes from
     ['contrast', 'custom', 'dark', 'light'].flatMap(profile => [1, 2].map(dpr => `${profile}/desktop-dpr${dpr}`)).sort());
   let owners = 0;
   for (const row of rows) {
+    assert.deepEqual(row.textAlignment, []);
+    assert.deepEqual(row.controlPaintGeometry, []);
+    assert.deepEqual(row.focusedRasters.map(raster => raster.id), ['timepicker-primary']);
     const pair = Object.fromEntries(['reference', 'astylar'].map(side => {
       const receipt = row.inputTrees[side], data = readFileSync(receipt.file);
       assert.equal(hash(data), receipt.sha256); return [side, JSON.parse(data)];
@@ -52,6 +55,8 @@ test('retained timepicker option text owners distinguish wrapper line boxes from
       assert.equal(pair.reference.styles[labels[0].style].lineHeight, '20px');
       assert.equal(candidates[0].resolvedStyle.alignItems, 'center');
       assert.equal(Object.hasOwn(candidates[0].resolvedStyle, 'lineHeight'), false);
+      assert.equal(candidates[0].retainedText.source, 'core-text-registry');
+      assert.equal(candidates[0].retainedText.style.lineHeight, 'normal');
       owners++;
     }
   }
