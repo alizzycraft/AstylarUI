@@ -1,5 +1,17 @@
 # Material audit: evidence-led implementation priorities
 
+October11 current publication: coherent192 independent cold check terminates
+exit0 (log coherent-192-proof-independent-cold-check-20261011.log SHA256
+fbaf5a05e6f533d1716cb07667520ac841d4a65dee3fedb8ab4ccdfec37643af).
+Existing compact import and whole-index verify pass for generation
+66eaf2d9c31a40190a63101d397fa1d3f3ed3a9207d33966ab5c7f95479ba362:
+8483 groups,156 findings,39904 controls and389202 occurrences; zero unresolved
+scalar groups is not complete contextual equivalence. This supersedes185 as
+current publication only. All2311 cases remain partial and inputEquivalent=false.
+Next: close the installed-inspector used-dimension capture gap using the existing
+public collector and prepare/build path,then reconcile exact case obligations
+and current applicability. No renderer/fixture fix; final acceptance gates remain.
+
 October11 publication update: coherent185 independent cold check completes exit0;
 existing compact import and whole-index verification pass. Accepted generation
 90c59d984b2a021384f07da008395cfd6dbea59497f27190d0554b4a763767a3 retains

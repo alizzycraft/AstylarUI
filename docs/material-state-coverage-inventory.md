@@ -2,6 +2,20 @@
 
 ## Current evidence boundary — October 11
 
+Coherent192 publication verification supersedes the pending boundary below:
+independent cold session89118 terminates exit0, with log SHA256
+fbaf5a05e6f533d1716cb07667520ac841d4a65dee3fedb8ab4ccdfec37643af.
+Evidence session authenticates1205 files/89158075 bytes,zero invalidations,
+two collectors,ten memory hits and zero disk hits. Existing compact import75339
+and whole-index verify both terminate exit0 for generation66eaf2d9 (full hash
+below),index SHA256 e978f0bb646cba1a0a40f4e920f4d84ace192b2eda0fea0d658813da5a7b5712:
+8483 groups,156 findings,39904 controls,389202 occurrences,zero unresolved scalar
+groups and72747436 compact bytes. Decoded package SHA256
+431a119fc76766ce1abafbd60d20f0b7ef3d8abcaab0aa0d8a935d596b0a5663.
+This replaces185 as the verified publication,not historical browser acceptance.
+All2311 cases remain partial; missing captured used dimensions,exact case
+obligation/current-validity closure and final full harness/browser gates remain.
+
 Coherent192 export is terminal exit0; log
 `coherent-192-proof-export-20261011.log` SHA256
 b3fabce3e720300d12f5da496e4dff73b40a0765726205b64eb8b7dc8765a744.
