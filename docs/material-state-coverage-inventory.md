@@ -2,6 +2,26 @@
 
 ## Current evidence boundary — October 11
 
+All seven original October5 source maps now coexist under the explicit retained
+component-map-recovery-20261011 directory. Before copying the six preserved maps,
+authenticate every map's raw SHA256 against checkpoint provenance.browserFiles;
+exclusive copies refuse overwriting. The reconstructed seventh retains47654b64.
+No current dist or checkpoint file changed. This removes the recovery recipe
+directories as necessary storage owners of these seven original map bytes.
+
+Smallest source-inventory preflight AST-extracts the actual sourceFingerprints
+function and executes it with a read-only reader mapping only its seven exact
+historical map paths to that retained directory. Result:622 inventory entries,
+7 historical mappings,zero missing files,exit0 (2.6908s). This answers whether
+another missing inventory file would immediately defeat the next exporter;
+it does not assert every collector's source applicability or current rendering.
+Canonical production still has its original paths and was not executed with
+this diagnostic reader. Next migrate those paths explicitly while conserving
+the original producer/source-transition assertions and test receipt controls.
+Current producer LF hash9849afd29f357b88ceba38f2a08270409e99b92b4a8a3baf4ab6aa60a1185312
+also includes the pending pointer-description change; preserve that independent
+transition rather than treating it as part of historical map recovery.
+
 Missing component-map bytes recovered exactly. Isolated recipe build
 component-map-recovery-20261011 completed (32.650s; build log
 component-map-recovery-build-20261011.log),without replacing current served output.
