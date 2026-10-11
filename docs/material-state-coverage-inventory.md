@@ -2,6 +2,32 @@
 
 ## Current evidence boundary — October 11
 
+Current-build validity census now includes the later pointer diagnostic instead
+of retaining the earlier59-case snapshot as today's total. Existing
+fingerprintDirectory authenticates all1887 current served files; installed lock
+matches all three reports. Hash-pin overlay931bc5fb,trace84668a6b and pointer
+f1497dbd reports,and replay every case through existing
+openMaterialCheckpoint.load:92 records authenticate all checkpointed artifacts,
+91 unique exact configured IDs (the trace overlaps one overlay ID),zero extras.
+Unique counts:bottom-sheet25,snack-bar34,radio8,button-toggle8,tabs8,stepper8.
+Current-build capture coverage91/2311=3.937689%;2220 configured cases have no
+current-build output capture. This supersedes only the earlier59/2252 census,
+not inspection closure or whole-audit completion. No evidence was recaptured.
+
+Current fingerprintModuleGraph differs from both overlay and trace at the runner
+only,after selection diagnostics were added; each retains9/10 matching module
+receipts. Pointer diagnostic matches10/10 current harness modules. Keep modes
+separate:overlay58pass/1fail,trace1instrumentedpass on the failed ID,pointer
+24pass/8fail. No combined enforced acceptance count follows. All eight pointer
+output failures are radio desktop activate across four profiles,DPR1/2; they
+retain eventComparison.matches=false and maximum label edge errors8.28125 to
+17.033203125CSSpx,despite matching interaction state/paint/cursor and stable
+standard resource samples. The added pointer boundaries occur after those
+samples,so they are not a resource-plateau proof. No root-cause attribution is
+inferred from these result flags. Complete current enforced matrix and exact
+case-validity dispositions remain required; absent capture does not by itself
+prove a renderer regression or invalidate every retained source investigation.
+
 Coherent inspector-reconciled export is live in session15135,launcher31944 and
 worker24800 (authoritative process checks),log
 coherent-state-proof-export-inspector-reconciled-20261011.log. Last observed
