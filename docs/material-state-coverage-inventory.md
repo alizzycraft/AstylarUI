@@ -1,5 +1,25 @@
 # Material comparison/state coverage inventory
 
+## Option evidence coherent registration — October 12
+
+Existing producer now registers the retained option input/history/classification
+boundary proof and four bounded current held-option logs. Source inventory632
+paths; focused proof inventory gains one entry (195),without changing findings,
+case inventory,criteria or any classification. Exact normalized producer
+80f65b24a533de17ba4fcb3db8e4779f9f97efbc715cf6486ab722b5e2da83b0
+reverses only these four paths and the uniquely delimited proof descriptor to
+whole Git849d81d1/8e392303,then the existing accepted predecessor chain.
+Existing source-map conservation/fingerprint assertion passes1/1,8287.7638ms
+(9725.0217ms process),including new framebuffer-path mutation rejection and
+all632 actual source receipts. Earlier raw current screenshots remain absent;
+the registered descriptor explicitly limits logged ink centroids to observation,
+not independently replayable pixel acceptance. Canonical published package is
+still194 proofs/626 paths; registration is not export/cold/import completion.
+Next coherent integration preflight and publication,then prioritize remaining
+overlay isolation/case-obligation joins. Do not repeat bounded option centering
+without changed dependencies or contradictory evidence. All2311 whole-case
+closures remain open and final gates unchanged.
+
 ## Current held option framebuffer observation — October 12
 
 Existing ink-center metric now observes the first110px label region within each

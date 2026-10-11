@@ -10,6 +10,20 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 // the explicit retained map paths; no captured receipt or current source is replaced.
 export function restoreRetainedMapLocationRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes('held-option-framebuffer-current-20261012.log')) {
+    assert.equal(hash(current), '80f65b24a533de17ba4fcb3db8e4779f9f97efbc715cf6486ab722b5e2da83b0', 'exact retained source-map producer plus bounded option evidence');
+    for (const name of ['boxes', 'bound-text', 'plane-ink', 'framebuffer']) {
+      const line = `    'artifacts/material-parity/held-option-${name}-current-20261012.log',\n`;
+      assert.equal(current.split(line).length, 2); current = current.replace(line, '');
+    }
+    const start = "    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\\('retained timepicker option text owners";
+    const end = "    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\\('public semantic sibling updates";
+    assert.equal(current.split(start).length, 2); assert.equal(current.split(end).length, 2);
+    current = current.slice(0, current.indexOf(start)) + current.slice(current.indexOf(end));
+    assert.equal(hash(current), '8e392303c3c6f94d6710366da3abc734770f404b0668c133a28a40c067460d9b');
+    assert.equal(current, execFileSync('git', ['show', '849d81d1:tests/material-parity/input-equivalence-audit.mjs'],
+      { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n'));
+  }
   if (current.includes('timepicker-light-mobile-scroll-current-20261012.log')) {
     assert.equal(hash(current), '8e392303c3c6f94d6710366da3abc734770f404b0668c133a28a40c067460d9b',
       'exact retained source-map producer plus light-mobile scrollbar evidence');

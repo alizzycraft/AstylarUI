@@ -8896,6 +8896,10 @@ function auditEnvironment(root) {
 function sourceFingerprints(root) {
   const files = [
     'artifacts/material-parity/timepicker-light-mobile-scroll-current-20261012.log',
+    'artifacts/material-parity/held-option-boxes-current-20261012.log',
+    'artifacts/material-parity/held-option-bound-text-current-20261012.log',
+    'artifacts/material-parity/held-option-plane-ink-current-20261012.log',
+    'artifacts/material-parity/held-option-framebuffer-current-20261012.log',
     'artifacts/material-parity/timepicker-dark-mobile-lifecycle-current-20261012.log',
     'scripts/audit-material-icon-pending-remount.mjs',
     'scripts/audit-public-initial-cancellation.mjs',
@@ -9680,6 +9684,8 @@ function focusedProofInventory(root) {
       'public input caret ownership diagnostic counterexample', 'Chrome154 DPR2 public input focus allocates caret resources outside the synchronous render owner; remove/recreate leaves 1/2/3 unbound caret materials. Current methods match installed source, and tracked/live diagnostics locate first divergence at post-render focus. Whole-surface disposal clears scene resources. The test preserves the failed plateau invariant; it is not lifecycle acceptance, GPU retention evidence or attribution of user-visible lag.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('semantic descendant replacement focus evidence retains exact current case and source applicability'/,
       'current light mobile semantic focus continuity diagnostic counterexample', 'Authenticates retained runtime provenance, exact configured timepicker light mobile open-dismiss membership, prior156 source definitions and mapped/installed/current complete semantic methods. Six boundaries locate focusout inside descendant replaceChildren before root replacement; syncFocus restores it. This preserves event continuity failure, not full-case acceptance, other profiles or a plugin-free public reproduction.'),
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('retained timepicker option text owners distinguish wrapper line boxes from centering requests'/,
+      'retained timepicker option input ownership and measurement boundary', 'Eight October5 open-scroll contexts authenticate384 option pairs: native block text wrappers request20px line-height; candidate direct text omits the request and retains normal. Original direct-text authoring predates the later centering adjustment. Published2304 option metric rows already classify the omission as authoring. Field-shell raster passes and empty option alignment arrays do not establish glyph parity; bounded current held diagnostics separately observe centered text planes and roughly1px weighted framebuffer differences under unequal metrics and ripple inputs. Raw current screenshots are not retained,so their logged centroids cannot be independently recomputed. This is not current equal-input paint acceptance or a core centering diagnosis.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('public semantic sibling updates isolate retained focus loss without Material plugins'/,
       'plugin-free public semantic focus continuity and synchronized selection control', 'Package-root sibling add/remove updates authenticate2515 dependencies and complete current/installed semantic methods. Four native updates preserve focus without events; four candidate updates retain input identity but blur inside descendant replaceChildren before restoring focus. Real keyboard selection1/3 survives on both sides; candidate emits focusout and ends on CANVAS under existing selection-focus policy. Direct-DOM reset does not prove loss of synchronized selection. Chrome154 mobile DPR2 only; no other-profile,AT,first-bad revision or full-case acceptance.'),
     proof(root, 'tests/material-parity/sort-focus-structure.spec.mjs', /test\('dark mobile field popup cycles diagnose retained cursor materials'/,
