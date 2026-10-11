@@ -2,6 +2,23 @@
 
 ## Current evidence boundary — October 11
 
+Settlement failure source review identifies a sampling boundary,not a runtime
+cause: runner settleInteraction awaits benchmark.waitForSettled,then fonts.ready
+and two requestAnimationFrame callbacks without a final settlement await before
+resource capture. Core AstylarRenderSession.whenSettled resolves the current idle
+snapshot; performReflow resolves waiters only after rendering=false and pending
+reasons are drained. It does not promise that later external invalidations cannot
+start work. Read-only Node assertions verify this exact runner ordering (exit0).
+Thus the retained rendering-status observation cannot alone establish that the
+core resolved a waiter while rendering. Competing causes remain late application
+update/focus delivery,asset/resize invalidation or another core invalidation;
+the exact triggering reason is not retained in this one-snapshot report. Existing
+overlay-focus-runtime instrumentation already wraps update/whenSettled/focus and
+state patches,but its old package receipts and DPR1/900x700 cohort cannot prove
+this light/desktop-dpr2/open failure. Next decisive evidence is an exact-state
+timestamped update/settlement/invalidation trace,not longer sleeps or acceptance
+changes. Preserve the failed capture; no leak,whole-case or current parity closure.
+
 Used-dimension capture51403 completes exit0 in
 `overlay-used-dimensions-current-20261011/latest-report.json`,SHA256
 931bc5fbec43ae47a6fc14533c906cce87cd0d083f2911e5d8bdb6d12d582d67.
