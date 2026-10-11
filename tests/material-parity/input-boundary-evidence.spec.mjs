@@ -2215,6 +2215,113 @@ test('runtime wiring and metadata retain original assertions beyond authenticate
   assert.equal(diagnosticDifferences, 1);
 });
 
+test('public semantic sibling updates isolate retained focus loss without Material plugins', async t => {
+  const consumer = path.resolve('examples/material-showcase');
+  const sourceFile = 'src/lib/astylar-semantic-bridge.ts';
+  const installedFile = path.join(consumer, 'node_modules/astylarui/dist/lib/lib/astylar-semantic-bridge.js');
+  const source = readFileSync(sourceFile, 'utf8'), installed = readFileSync(installedFile, 'utf8');
+  const compiled = ts.transpileModule(source, {compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022}}).outputText;
+  const methods = ['reconcile', 'reconcileElement', 'syncFocus'].map(name => {
+    const extract = code => {
+      const ast = ts.createSourceFile('semantic.js', code, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS), matches = [];
+      assert.equal(ast.parseDiagnostics.length, 0);
+      const visit = node => {if (ts.isMethodDeclaration(node) && node.name.getText(ast) === name)
+        matches.push(node.getText(ast).replace(/\s+/g, ' ').trim()); ts.forEachChild(node, visit);};
+      visit(ast); assert.equal(matches.length, 1); return matches[0];
+    };
+    assert.equal(extract(installed), extract(compiled), name);
+    return {name, sha256:hash(Buffer.from(extract(compiled)))};
+  });
+  const requireConsumer = createRequire(path.join(consumer, 'package.json'));
+  const built = await requireConsumer('esbuild').build({absWorkingDir:process.cwd(),
+    stdin:{resolveDir:consumer,sourcefile:'public-semantic-focus.mjs',contents:`
+      import '@angular/compiler';
+      import {provideZonelessChangeDetection} from '@angular/core';
+      import {createApplication} from '@angular/platform-browser';
+      import {Astylar} from 'astylarui';
+      document.body.style.cssText='margin:0;padding:0';
+      const canvas=document.createElement('canvas');canvas.style.cssText='width:390px;height:140px';document.body.append(canvas);
+      const app=await createApplication({providers:[provideZonelessChangeDetection()]});
+      const site=extra=>({root:{children:[{type:'div',id:'focus-parent',children:[
+        {type:'input',inputType:'text',id:'focus-input',value:'Atlas',ariaLabel:'focus input'},
+        ...(extra?[{type:'span',id:'focus-sibling',textContent:'Other'}]:[])]}]},styles:[
+        {selector:'#focus-parent',position:'absolute',left:'20px',top:'40px',width:'300px',height:'60px'},
+        {selector:'#focus-input',width:'228px',height:'24px',fontFamily:'Arial',fontSize:'16px'}]});
+      const surface=app.injector.get(Astylar).mount(canvas,site(false),{diagnostics:{logLevel:'silent'}});
+      const settle=async()=>{await document.fonts.ready;await surface.whenSettled();await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));};
+      await settle();
+      const input=document.querySelector('[data-astylar-id="focus-input"]');
+      const referenceParent=document.createElement('div'),reference=document.createElement('input');
+      reference.value='Atlas';referenceParent.append(reference);document.body.append(referenceParent);
+      const events=[],operations=[];
+      for(const node of [input,reference]) for(const type of ['focusin','focusout'])
+        node.addEventListener(type,()=>events.push({side:node===input?'candidate':'reference',type}));
+      const original=Element.prototype.replaceChildren;
+      Element.prototype.replaceChildren=function(...children){
+        if(!this.contains(input)) return original.apply(this,children);
+        const before=document.activeElement===input;
+        const result=original.apply(this,children);
+        operations.push({owner:this.dataset.astylarId??null,before,after:document.activeElement===input,
+          connected:input.isConnected,stack:new Error().stack});
+        return result;
+      };
+      window.focusAudit={settle,async update(side,extra){
+        const target=side==='candidate'?input:reference;target.focus();target.setSelectionRange(1,3);
+        events.length=0;operations.length=0;
+        if(side==='candidate') await surface.update(site(extra));
+        else if(extra){const sibling=document.createElement('span');sibling.textContent='Other';referenceParent.append(sibling);}
+        else referenceParent.lastElementChild!==reference&&referenceParent.lastElementChild.remove();
+        await settle();return {side,extra,events:[...events],operations:[...operations],
+          sameNode:side!=='candidate'||document.querySelector('[data-astylar-id="focus-input"]')===input,
+          focused:document.activeElement===target,value:target.value,selection:[target.selectionStart,target.selectionEnd],
+          diagnostics:surface.diagnostics.messages};},dispose(){Element.prototype.replaceChildren=original;surface.dispose();app.destroy();}};
+    `},bundle:true,write:false,format:'esm',platform:'browser',target:'es2022',metafile:true});
+  const inputs = Object.keys(built.metafile.inputs).filter(file => path.basename(file) !== 'public-semantic-focus.mjs')
+    .map(file => ({file,sha256:hash(readFileSync(file))}));
+  assert.ok(!inputs.some(({file}) => file.includes('material-showcase/src') || file.includes('astylarui/dist/lib/plugins/material')));
+  const server = createServer((request,response) => {
+    const script = new URL(request.url,'http://localhost').pathname === '/audit.js';
+    response.setHeader('content-type',script?'text/javascript':'text/html');
+    response.end(script?built.outputFiles[0].contents:'<!doctype html><script type="module" src="/audit.js"></script>');
+  });
+  await new Promise(resolve => server.listen(0,'127.0.0.1',resolve));
+  let browser; const samples = [], errors = [];
+  try {
+    browser = await chromium.launch({channel:'chrome',headless:true});
+    const page = await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:2});
+    page.on('pageerror',error => errors.push(String(error)));
+    await page.goto('http://127.0.0.1:'+server.address().port+'/');
+    await page.waitForFunction(() => !!window.focusAudit);
+    for (const side of ['reference','candidate']) for (const extra of [true,false,true,false])
+      samples.push(await page.evaluate(({side,extra}) => window.focusAudit.update(side,extra),{side,extra}));
+    t.diagnostic(JSON.stringify({publicSemanticFocus:{browser:browser.version(),viewport:{width:390,height:844,dpr:2},
+      sourceSha256:hash(Buffer.from(source)),installedSha256:hash(Buffer.from(installed)),methods,
+      bundleSha256:hash(built.outputFiles[0].contents),dependencyCount:inputs.length,
+      dependencyReceipt:hash(Buffer.from(JSON.stringify(inputs))),samples,errors,parityAccepted:false}}));
+    assert.deepEqual(errors,[]);
+    for (const sample of samples) {
+      assert.equal(sample.sameNode,true);assert.equal(sample.focused,true);assert.equal(sample.value,'Atlas');
+      assert.deepEqual(sample.diagnostics,[]);
+      if(sample.side==='reference') {
+        assert.deepEqual(sample.selection,[1,3]);assert.deepEqual(sample.events,[]);assert.deepEqual(sample.operations,[]);
+      }
+      else {
+        // Preserve the observed failure, not a selection-parity acceptance claim.
+        // Direct native setSelectionRange does not prove core selection-state synchronization.
+        assert.deepEqual(sample.selection,[0,0]);
+        assert.throws(()=>assert.deepEqual(sample.selection,[1,3]),{code:'ERR_ASSERTION'});
+        const firstLoss=sample.operations.find(operation=>operation.before&&!operation.after);
+        assert.ok(firstLoss);assert.equal(firstLoss.owner,'focus-parent');assert.equal(firstLoss.connected,true);
+        assert.deepEqual(sample.events.map(event=>event.type),['focusout','focusin']);
+      }
+    }
+    await page.evaluate(() => window.focusAudit.dispose());
+    for(const input of inputs) assert.equal(hash(readFileSync(input.file)),input.sha256);
+    assert.equal(hash(readFileSync(sourceFile)),hash(Buffer.from(source)));
+    assert.equal(hash(readFileSync(installedFile)),hash(Buffer.from(installed)));
+  } finally {await browser?.close();await new Promise(resolve => server.close(resolve));}
+});
+
 test('public input lifecycle isolates caret material retention without Material plugins', async t => {
   const consumer = path.resolve('examples/material-showcase');
   const methods = [

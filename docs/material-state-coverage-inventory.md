@@ -2,6 +2,30 @@
 
 ## Current evidence boundary — October 11
 
+Plugin-free public sibling update now independently reproduces semantic focus
+loss. Existing input-boundary suite builds only package-root Astylar/Angular
+imports, authenticates2515 bundled dependency files, and compares complete
+installed/current reconcile,reconcileElement,syncFocus methods. Chrome154.0.8037.99,
+390x844 DPR2: four native sibling add/remove updates preserve focus,Atlas and
+selection1/3 with no focus events. Four public surface.update calls retain the
+same input node/value and end focused, but first loss is synchronously inside
+focus-parent.replaceChildren; node stays connected and focusout/focusin occurs
+each time. No Material plugin or callback participates. This closes the general
+public reduction gap for the existing semantic-focus cause, not all profiles or
+full-case closure. Selection ends0/0 on candidate; direct native setSelectionRange
+does not establish core selection-state synchronization, so its ownership is
+separate uncertainty, not a second confirmed root cause.
+Original preservation assertion failure retained in
+public-semantic-focus-siblings-20261011.log SHA256
+fecc34731e11c0591632f9a4f6ba338717fd8349caf101564203b7b629879a36.
+Explicit counterexample assertions pass1/1,5423.1208ms; verified log
+public-semantic-focus-siblings-verified-20261011.log SHA256
+ddfde701736bb484bef169ebee0d4b562559259431b0386708e45f01b35b0923.
+No renderer/fixture fix or acceptance change. Standalone focused proof is not
+registered in the published193 inventory; source-fingerprint integration remains
+for a coherent batch, not an immediate full re-export. Next exact case obligation
+joins and selection-state synchronization applicability; final gates stay open.
+
 Coherent193 publication now passes independent cold verification and compact
 import/whole-index verification. The correct current-ancestry launcher export
 completed exit0; coherent-193-current-ancestry-export-20261011.log SHA256

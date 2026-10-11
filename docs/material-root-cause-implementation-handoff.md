@@ -1,5 +1,15 @@
 # Material audit: evidence-led implementation priorities
 
+October11 plugin-free semantic focus reduction now confirms the existing cause:
+public mount/update retains the input while sibling add/remove synchronously
+blurs it inside descendant parent.replaceChildren,then restores it. Native DOM
+add/remove preserves focus without events. Four boundaries each side,Chrome154
+mobile DPR2; exact dependency/method/log receipts in the current ledger. The
+observed selection reset is separate uncertainty because direct native selection
+was not proven synchronized to core state. Focus preservation must be solved at
+core reconciliation,not a Material callback. Standalone proof integration and
+other profiles remain; this is not whole-case or final-gate acceptance.
+
 October11 coherent193 publication: correct current-ancestry export and independent
 cold comparison both exit0; existing compact import/whole-index verify also pass.
 Generation ac7920d5 retains8483 groups,157 source findings,39904 controls and
@@ -17,8 +27,8 @@ open/closed boundaries. See current coverage ledger and retained
 timepicker-focus-provenance-20261011.log55c6babc. Preserve focus across changed
 semantic child lists, not merely an unchanged root list; do not suppress events
 or compensate in the Material callback. Current/served complete-method binding
-and machine-readable integration are verified; general public reduction remains
-pending. This is distinct from the already confirmed caret-material lifetime defect.
+and machine-readable integration are verified; plugin-free public sibling reduction
+is now verified above. This is distinct from the caret-material lifetime defect.
 
 October11 current dark/mobile timepicker panel review: authenticated opening
 rasters distinguish unequal lower-corner requests from core scrolling behavior.
