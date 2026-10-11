@@ -2,6 +2,22 @@
 
 ## Current evidence boundary — October 11
 
+The coherent193 export failed before publication because it invoked the general
+exporter without the retained current-ancestry arguments. Preserved failure log:
+coherent-193-proof-export-20261011.log, SHA256
+8117943b364e0f7cce7f7b58ad4ba0963193f6c23bb38730c23a41841d3b3105.
+The assertion at modal-position-inspection.mjs:662 checks
+astylarResolvedStyleEvidenceVersion===2, not a rule count. Read-only argument
+and report inspection finds all50 bottom-sheet action owners missing that field
+in the default artifacts/material-parity/latest-report.json, versus zero missing
+among50 in current-ancestry-audit/latest-report.json. This explains the observed
+assertion without weakening it or attributing a new renderer defect. The existing
+export-material-input-audit-current-ancestry.mjs --dry-run exits0 and supplies
+the intended capture, three line-box reports and supplemental root together.
+Next use that named launcher at the pending integration milestone; successful
+dry-run is path/invocation proof only, not evidence authentication or publication.
+Published192 generation remains unchanged; subsequent validation can still fail.
+
 Stale broad fingerprint assertion is reconciled without replacing its historical
 counts or dropping assertions. Existing test first authenticates all622 live
 paths and independently hashes every file; historical menu-era producer0abe78a0
