@@ -2,6 +2,22 @@
 
 ## Current evidence boundary — October 11
 
+Whole-build receipt gap now has exact asset membership. Read-only actual
+fingerprintDirectory against October5 checkpoint: current1887/original1887,
+1880 identical; changed compare/index.html,index.csr.html,main.js; missing old
+3JXWRYJY and JPEJK334 JS/map pairs; four replacement chunk files are added.
+Preserved authenticated-replay directory matches1884/1887 originals,with only
+JPEJK334.js,JPEJK334.js.map,main.js unmatched. The map47654b64 is independently
+recovered already; thus remaining exact full-build recovery concerns only
+component JS e9b44703 and main JS9e076a6c,not1887 unknown assets. Logical-path-
+replay directory is absent now. No build copied over current dist. Existing
+configured-enabled-keyboard assertion also hits the same whole-build comparison
+atline526 before its map read; diagnostic one-path edit was reversed exactly.
+Do not repeat the field-hint/keyboard assertions until shared build conservation
+is reconciled. Next authenticate/recover these two code artifacts using the
+existing isolated recipe and exact original hashes,then validate the retained
+build separately from current-source applicability. Capture/harness gates remain.
+
 Whole input-focus runner original is not present at the checked source locations.
 Material worktree copy rawb2477a12 normalizes toc3cabcf (older gap baseline),not
 captured e01ef9dc; primary worktree has no runner file. Retained-evidence filename
