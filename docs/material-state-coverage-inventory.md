@@ -2,6 +2,20 @@
 
 ## Current evidence boundary — October 11
 
+Divider observed-membership proposal is not130 unclassified findings. Compact
+query authenticates current family shards; proposal review digest58711556 and
+all130 matching section/ordinal/complete-row hashes agree. They already retain
+34 distinct justifications:76 equivalent-representation,52 harness-defect and2
+root-authoring groups. The two authoring groups are settled block→flex and
+static→relative substitutions. Within52 harness groups,24 own-text typography
+stage observations are separately justified;28 preserve context-dependent
+questions:12 alignment-normal groups,4 flex shorthand,4 effective cursor and8
+used-width/expression groups. Those generic harness labels do not prove their
+contextual semantics or current rendering. Remaining work is targeted contextual
+disposition of those28 against existing retained ancestors/width/cursor evidence,
+not reclassifying all130 or interpreting observedCases as reviewedCases.
+No classifications changed or new report created; canonical194 stays unchanged.
+
 Divider desktop update evidence now guards progress,not resource counts alone.
 The existing exact-context ownership test adds assertions for all8 desktop
 cohorts: initial/update revisions2/3/4/5,exact same four cache keys and every
