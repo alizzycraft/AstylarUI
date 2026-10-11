@@ -1,5 +1,12 @@
 # Material audit: evidence-led implementation priorities
 
+October11 font lifecycle: existing surface-isolation suite now executes9/9 via
+diagnostic native-module loader. Mocked FontFaceSet readiness,later revision/texture
+replacement and listener removal pass on current root source/Babylon8.15.1 WebGL2.
+See current ledger for command/source/log receipts. This closes the unexecuted
+owning-test gap,not retained font timing,real font download,consumer8.56.2 parity,
+styled local paint or whole-case closure. No implementation/config change.
+
 October11 synchronized-selection control: real keyboard selection1/3 survives
 the public sibling update. The direct-DOM reset is not a demonstrated loss of
 synchronized editor selection. Descendant replacement still emits focusout;

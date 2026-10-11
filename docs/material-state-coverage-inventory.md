@@ -2,6 +2,29 @@
 
 ## Current evidence boundary — October 11
 
+Divider/shared font-lifecycle owning test is no longer merely inspected:
+existing src/lib/astylar-isolation.spec.ts nine assertions execute successfully
+through the existing diagnostic native-module loader. Command:
+node node_modules/@angular/cli/bin/ng.js test --configuration=audit-service
+--watch=false --browsers=ChromeHeadless --include=src/lib/astylar-isolation.spec.ts
+--external-dependencies=@babylonjs/core --karma-config=karma.overlay-audit.cjs.
+Terminal exit0,9/9,2.879s browser/16.935s build; log
+surface-font-lifecycle-current-20261011.log SHA256
+98bc491859d6983f624ba0a70fba05b06ce50c9ea454fc11d15007a8cddb5f30.
+Current spec raw SHAe08286eea8ca145e470da18723366a5b9a498a26da0bf42b3c083bb7430fa30b;
+owning Astylar source raw SHA5742ba6c19debd5c18ad7d407f1a10e14271cbcd38bf99889d4b4e2474f17451;
+loader SHA6dee8d2e6539411c43e6f564c48938c55780242522656bee6dc6e1ed20899708.
+Chrome154/Karma6.4.4/Babylon8.15.1 WebGL2; nonfatal util._extend deprecation.
+The existing mocked FontFaceSet test verifies blocked initial revision,ready
+settlement,later loadingdone revision/old-texture replacement and listener removal.
+It does not execute a delayed downloaded font,retroactively supply retained
+per-face timing,or certify styled rasters/consumer Babylon8.56.2 behavior.
+Other original assertions cover bounded two-surface update/disposal and rebuild
+texture ownership. No test/core/config changes were needed. This supersedes only
+the divider table's unexecuted owning-test gap; all24 divider cases remain partial.
+Next exact owner/style/local-paint joins and remaining remount/font-execution/AT
+obligations,not an unchanged rerun of this nine-test suite. Final gates remain.
+
 Selection-state uncertainty in the new public focus reduction is now bounded.
 Real Home/ArrowRight/two Shift+ArrowRight actions produce1/3 before update on
 both sides. One sibling-add public update preserves1/3,value and node identity
