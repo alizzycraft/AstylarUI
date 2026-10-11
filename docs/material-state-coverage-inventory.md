@@ -1,5 +1,30 @@
 # Material comparison/state coverage inventory
 
+## Current held option framebuffer observation — October 12
+
+Existing ink-center metric now observes the first110px label region within each
+held option using actual screenshots; no acceptance threshold changes. Light
+desktop DPR1 reference/candidate row-relative weighted offsets are select
+-0.19646/+0.71619,autocomplete-0.05218/+0.92765,timepicker-0.93217/+0.00179px.
+Candidate timepicker framebuffer ink is approximately centered,consistent with
+its measured centered plane; native/candidate center differences are about1px,
+not a gross bottom-alignment displacement in this state. These are background-
+distance weighted observations,not segmented pure glyph ink: reference ripple,
+selection and opaque candidate fills differ and can affect counts/centroids.
+No equal-input causal claim,sharpness acceptance or historical regression conclusion.
+Screenshot RGBA hashes are recorded; raw screenshots were not retained,so pixel
+metrics cannot be independently recomputed from this log alone. Preserve that
+limitation instead of treating hashes as stored raster evidence. Existing retained
+full-run rasters remain distinct. Focused1/1 passes19726.6547ms (20790.4152ms process),
+log held-option-framebuffer-current-20261012.log SHA256
+da42f3cf0deb29f599b1b67d099ecc60b3d6ab80593d936107f3d063c6088387.
+Exact source3d32fcbf7da10b63f925b0aaebeb31f9c9a74fdf80c87d056eb1c20e7e4524d6
+conserves through existing historical reader;1/1 passes544.0626ms (1131.2329ms).
+This bounded investigation has answered current row,plane,used-height and observed
+ink questions. Move next to pending coherent registration/applicability and overlay
+isolation rather than further unequal-input centering probes. All whole-case
+closures and final gates remain open.
+
 ## Current timepicker text-plane placement — October 12
 
 Read-only final mesh projection now closes the missing placement observation for

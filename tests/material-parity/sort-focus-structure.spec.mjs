@@ -2820,6 +2820,17 @@ test('held popup option boundaries capture active paint inputs before commit', a
             }) };
         }, { mode, firstId });
         assert.equal(held.count, family === 'timepicker' ? 48 : 2);
+        if (currentOptionBoxes) {
+          const image = PNG.sync.read(await page.screenshot({ caret: 'hide' }));
+          const row = held.optionBox;
+          const region = { left: row.left + 12, right: row.left + 122,
+            top: row.top, bottom: row.top + row.height, width: 110, height: row.height };
+          held.framebufferInk = measureTextInkCenter(image, region, 1, { horizontalInsetFraction: 0 });
+          assert.ok(held.framebufferInk?.inkPixels > 0);
+          held.framebufferSha256 = createHash('sha256').update(image.data).digest('hex');
+          // Held ripple/background inputs differ; this is ink observation, not
+          // matched-time sharpness acceptance or an equal-input causal claim.
+        }
         assert.ok(held.optionBox.width > 0 && held.optionBox.height > 0);
         if (mode === 'reference') {
           assert.ok(held.textRangeBox.width > 0 && held.textRangeBox.height > 0);
