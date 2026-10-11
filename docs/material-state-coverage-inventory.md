@@ -2,6 +2,21 @@
 
 ## Current evidence boundary — October 11
 
+Divider diagnostic measurement applicability is now bounded: read-only current
+evaluateFocusedRaster replay reproduces all48 retained text metric objects
+exactly,including phase,sharpness,color/edge diagnostics and matches. Current
+focused-raster-metrics.mjs retains exact c8483996 module digest; execution also
+exercises its currently installed transitive metric dependencies. AST-extracted
+writeAlignmentArtifacts and cropPng equal reviewed Git8aa0e2e5 after CRLF/LF
+normalization. Current whole runner remains584cdfc8,not captured e01ef9dc;
+this is not original whole-runner recovery or authentication of that Git version
+as the captured producer. Thus metric implementation drift does not explain these
+retained48 diagnostic results. Remaining source gap is whole capture provenance
+and actual renderer/current-paint applicability,not repeating metric replay.
+No new capture,acceptance change or full-case promotion. Next use existing
+renderer-runtime census/paint ownership evidence to dispose current applicability
+separately from unresolved internal clipping/sampling attribution.
+
 Divider retained text-paint membership is now explicitly reconciled, without
 recapture. Read-only Node assertion joins the original October5 report's24
 divider kind/profile/viewport/state keys to all48 diagnostic text pairs, exactly
