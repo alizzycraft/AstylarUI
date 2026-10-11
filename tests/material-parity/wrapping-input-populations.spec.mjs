@@ -459,7 +459,7 @@ test('native nowrap ancestry is retained for 500 omitted local candidate observa
         // Badge retained text is a distinct stage, not a control paint value.
         if (element === 'badge-count') {
           assert.equal(ast.retainedText?.source, 'core-text-registry');
-          assert.equal(inventory.styles[ast.retainedText.style].value.whiteSpace, undefined);
+          assert.equal(ast.retainedText.style.whiteSpace, undefined);
         }
       }
       keys.push(keyOf(entry));

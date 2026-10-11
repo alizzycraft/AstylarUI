@@ -2,6 +2,20 @@
 
 ## Current evidence boundary — October 11
 
+Retained-style integration8293 finishes exit1:14/15 pass,one legacy badge
+test lookup fails at wrapping-input-populations.spec.mjs:462. Contrary to intended
+negative name filtering,the production wrapping test also ran and passed its
+8483-raw-row/30-reviewed-group assertions; do not claim it was excluded or pending
+in this run. Log:retained-style-adapter-integration-20261011.log,total236147.7667ms.
+All four cursor checks,chip152-label population and remaining wrapping checks pass.
+Badge assertion now reads the adapter's expanded retained style instead of using
+it as an inventory index; expected whiteSpace omission is unchanged. Focused
+500-observation native-nowrap ancestry check passes1/1,8558.7413ms,exit0. Original
+combined failure remains retained; this repair/replay is not a fresh15/15 result.
+Next reconcile coherent proof registration and integrate the separately verified
+default finding before one justified export retry,avoiding another export solely
+for that queued finding. No canonical publication or whole-case acceptance yet.
+
 Coherent191 export76398 is terminal exit1,not live: retained log
 coherent-191-proof-export-20261011.log fails in proveChipLabelWrapping reading
 inventory.styles[label.retainedText.style]. The shared adapter now expands that
