@@ -2,6 +2,29 @@
 
 ## Current evidence boundary — October 11
 
+Public omission diagnostic now demonstrates the legacy-default discrepancy in
+Chrome154 WebGL at DPR1/2 via package-root Astylar.mount,without Material plugins.
+scripts/audit-public-box-sizing-default.mjs reuses esbuild/consumer and browser
+launch infrastructure; artifacts/material-parity/public-box-sizing-default-20261011
+retains four PNGs,exact identical SiteData/native CSS inputs,bundle dependency
+hashes,resolved public styles and zero page errors. All three boxes request
+width140/height50,padding10,border3. Native omitted and explicit content-box both
+measure166x76; native border-box140x50. Exact authored foreground/background RGB
+bounds independently measure candidate omitted140x50,content-box166x76 and
+border-box140x50 at both DPRs. Thus only omission differs; explicit controls and
+DPR scaling agree. Installed calculateDimensions,getElementTypeDefaults and
+findStyleForElement whole transpiled methods match current source; their installed
+file hashes are0a65a1659a51062ab41cda030c4f030b15bcf5328c85fb1a3597628c05cf190c,
+a11515a342f8fb441f775a16b7ad7480e711934d046084d686c0ef098ae4cafa,
+b0a9baa39da07df8a15cd34d508b3988b88d26d294f0f40f03e0c7e20be4d52e.
+This is bounded demonstrated core default-contract failure,not all-parent or
+whole-Material equivalence/current-package acceptance. Existing public inspection
+in this installation omits dimensions,so pixel bounds—not absent fields—supply
+candidate used extent. Next integrate the bounded finding through existing
+classification mechanisms after the frozen191 export; preserve native explicit
+parent border-box intent and assess its authoring difference separately. No fix,
+fixture compensation or acceptance change; all2311 cases remain partial.
+
 Existing capability-cited box-model proofs do not decide omission semantics:
 src/parity/fixtures/box-model-basic.fixture.ts explicitly requests content-box on
 both sides (native important declaration/candidate boxSizing); border-box-basic
