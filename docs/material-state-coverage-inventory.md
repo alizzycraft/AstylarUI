@@ -2,6 +2,32 @@
 
 ## Current evidence boundary — October 11
 
+Current light/mobile timepicker focus-event first divergence is runtime-bound.
+Existing lifecycle opt-in now captures bounded replaceChildren/focus provenance;
+wrappers preserve receiver,args,return and exceptions, affect only diagnostic
+pages and disappear when pages close. All prior actions/assertions remain.
+Source0c795ff9 reverses only marked probe and boundary field to exact965b919b,
+then the original source chain; mutation/conservation test1/1,866.3ms,
+focus-provenance-conservation-20261011.log SHA256
+2e6ea6a47010fb2639aed8442495dcc6a636835d640abe7eb06f255422b44e2f.
+Focused lifecycle1/1,11148.3ms, timepicker-focus-provenance-20261011.log SHA256
+55c6babc6e23292c9cf05983fb78c22daf312ff841d60966dfb55b5ff74fe6ae,
+same exact current checkpoint2aac425d/Chrome154.0.8037.99/light mobile DPR2.
+Independent replay verifies all six boundary deltas and58 records below300 cap.
+At every opening/dismissal first focused replacement stack is semantic bridge
+reconcileElement (served chunk-XOU37TRR.js:212387), not root reconcile alone.
+focusout occurs synchronously inside replaceChildren; input remains connected
+but loses focus. Later root replacement finds it already unfocused. syncFocus
+(served line212332) subsequently restores focus. Native diagnostic probe has0
+records. This confirms core semantic descendant reconciliation as the observed
+focus-loss owner, not a direct application focus request; application state
+changes trigger reflow but do not justify losing focus on retained descendants.
+Do not fix only root.replaceChildren: changed descendant lists can move the
+focused subtree first. No renderer/fixture change or broad browser/all-profile
+claim. Next bind current/served complete semantic methods, promote this bounded
+cause through existing machine-readable finding/publication infrastructure and
+retain separate caret material lifetime and broader focus/selection obligations.
+
 Focus-event investigation identifies a concrete shared reconciliation mechanism.
 Current semantic bridge reconcile unconditionally executes root.replaceChildren
 (src/lib/astylar-semantic-bridge.ts:149), even when returned semantic nodes retain

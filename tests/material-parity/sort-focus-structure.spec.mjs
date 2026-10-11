@@ -1403,6 +1403,32 @@ test('dark mobile field popup cycles diagnose retained cursor materials', async 
                 document.addEventListener(type, event => window.__mobileLifecycleEvents.push({ type,
                   key: event.key ?? null, id: event.target?.getAttribute?.('data-astylar-id') || event.target?.id || event.target?.tagName }), true);
             });
+            // audit-focus-provenance-start
+            await page.evaluate(() => {
+              const records = window.__mobileFocusProvenance = [];
+              let operation = null;
+              const record = (kind, extra = {}) => { if (records.length < 300) records.push({ kind, operation, ...extra }); };
+              const originalReplace = Element.prototype.replaceChildren;
+              Element.prototype.replaceChildren = function (...nodes) {
+                const input = document.querySelector('[data-astylar-id="timepicker-control"]');
+                if (!input || !this.contains(input)) return originalReplace.apply(this, nodes);
+                const previous = operation; operation = 'replaceChildren';
+                record('replace-before', { focused: document.activeElement === input, stack: new Error().stack });
+                try { return originalReplace.apply(this, nodes); }
+                finally { record('replace-after', { focused: document.activeElement === input, connected: input.isConnected }); operation = previous; }
+              };
+              const originalFocus = HTMLElement.prototype.focus;
+              HTMLElement.prototype.focus = function (...args) {
+                if (this.getAttribute('data-astylar-id') !== 'timepicker-control') return originalFocus.apply(this, args);
+                const previous = operation; operation = 'focus';
+                record('focus-call', { alreadyFocused: document.activeElement === this, stack: new Error().stack });
+                try { return originalFocus.apply(this, args); } finally { operation = previous; }
+              };
+              for (const type of ['focusin', 'focusout']) document.addEventListener(type, event => {
+                if (event.target?.getAttribute?.('data-astylar-id') === 'timepicker-control') record(type);
+              }, true);
+            });
+            // audit-focus-provenance-end
             t.diagnostic(JSON.stringify({ currentLightLifecycleReceipts: { mode,
               sourceSha256: createHash('sha256').update(readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')).digest('hex'),
               checkpointFile: process.env.ASTYLAR_MATERIAL_SHOWCASE_CHECKPOINT,
@@ -1414,6 +1440,7 @@ test('dark mobile field popup cycles diagnose retained cursor materials', async 
             boundary.actualAx = (await axSession.send('Accessibility.getFullAXTree')).nodes
               .filter(node => !node.ignored && ['combobox', 'listbox', 'option', 'button'].includes(node.role?.value));
             boundary.events = await page.evaluate(() => [...window.__mobileLifecycleEvents]);
+            boundary.focusProvenance = await page.evaluate(() => [...window.__mobileFocusProvenance]);
           };
           // audit-light-lifecycle-end
           const settle = async () => {

@@ -366,6 +366,16 @@ export function restoreLayoutDiagnosticRegistration(source) {
 }
 // Historical replay only. Never use this reader for current capture or rendering acceptance.
 export function readRetainedSortFocusSource(current = readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')) {
+  if (current.toString().includes('// audit-focus-provenance-start')) {
+    assert.equal(hash(current), '0c795ff932aba1bec343bb6b0647ecd0e3332c994861441e50ded053cdad8c02');
+    let text = current.toString();
+    const blocks = text.match(/            \/\/ audit-focus-provenance-start\n[\s\S]*?            \/\/ audit-focus-provenance-end\n/g);
+    assert.equal(blocks?.length, 1); text = text.replace(blocks[0], '');
+    const addition = '            boundary.focusProvenance = await page.evaluate(() => [...window.__mobileFocusProvenance]);\n';
+    assert.equal(text.split(addition).length, 2); text = text.replace(addition, '');
+    current = Buffer.from(text);
+    assert.equal(hash(current), '965b919bf0cfefe4f51413e3bf2bee0f65bc37d0c151da3709b281017a02a08c');
+  }
   if (current.toString().includes('ASTYLAR_AUDIT_MOBILE_TIMEPICKER_LIFECYCLE')) {
     assert.equal(hash(current), '965b919bf0cfefe4f51413e3bf2bee0f65bc37d0c151da3709b281017a02a08c');
     let text = current.toString();
