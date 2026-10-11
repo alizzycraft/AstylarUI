@@ -2,6 +2,20 @@
 
 ## Current evidence boundary — October 11
 
+Coherent state-proof export retry now terminates exit1 (session29358; PID13056
+missing),not a wait/timeout. Retain coherent-state-proof-export-retry-20261011.log
+SHA256f51eb12f5440146386b20b63025820fff7092986deaa3740fef0e7707e4de17e.
+The gap restoration failure is resolved; next failure is validateCursorEvidence
+requiring installed astylar.js6ad4f51c while the October11 prepared inspector is
+a18630bd. This is an unreconciled whole-installed-file receipt,not a demonstrated
+cursor regression or authority to replace historical capture bytes. Canonical
+manifest remains66eaf2d9/decoded431a119f; no new package was published.
+Next reconcile this retained public proof's exact original installed dependencies
+and owning cursor methods against current code through the existing historical
+evidence boundary; preserve original receipt and reject unrelated semantic drift.
+Do not repeatedly restart the full exporter before that focused check passes.
+Current-build output validity and the final unfiltered gates remain independent.
+
 Read-only structural coverage census closes a denominator ambiguity while the
 coherent export runs. Authenticate original current-ancestry reportb07ef154,
 AST-extract the actual caseKey/collectStructureEvidence helpers,and replay all
