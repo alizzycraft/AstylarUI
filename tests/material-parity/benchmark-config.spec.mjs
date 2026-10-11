@@ -10,6 +10,7 @@ import { PNG } from 'pngjs';
 import { readRetainedSortFocusSource } from './position-composition-producer-transition.mjs';
 import { materialCaseKey, fingerprintDirectory } from './run-checkpoint.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
+import { verifyRetainedMaterialBrowserFiles } from './historical-audit-module-source.mjs';
 import { restoreLayoutDiagnosticRegistration, restoreDescriptionProofRegistration, restoreDescriptionPolicyRegistration, restoreStandaloneProofBatch, restoreExtendedKeyboardRegistration } from './position-composition-producer-transition.mjs';
 import { propertyGroups, sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { restoreSizingDefaultPolicyRegistration } from './position-composition-producer-transition.mjs';
@@ -131,8 +132,12 @@ function verifiedDescriptionCohorts(file, sha256, contexts, states, family) {
   assert.equal(terminal.contexts, contexts.length); assert.deepEqual(terminal.states, states);
   const manifest = JSON.parse(descriptionEvidenceBytes(terminal.capture.checkpointManifest.file,
     terminal.capture.checkpointManifest.sha256));
-  assert.deepEqual(fingerprintDirectory(path.resolve('examples/material-showcase/dist/material-showcase/browser')),
-    manifest.provenance.browserFiles);
+  assert.deepEqual(verifyRetainedMaterialBrowserFiles(manifest.provenance.browserFiles),
+    { authenticatedFiles: 1887, currentRenderingAccepted: false });
+  assert.throws(() => verifyRetainedMaterialBrowserFiles(manifest.provenance.browserFiles.slice(1)));
+  const changedBrowserFiles = structuredClone(manifest.provenance.browserFiles);
+  changedBrowserFiles[0].sha256 = '0'.repeat(64);
+  assert.throws(() => verifyRetainedMaterialBrowserFiles(changedBrowserFiles));
   for (const receipt of [...terminal.capture.sources, ...terminal.sourceReceipts]) {
     if (receipt.file === 'scripts/audit-material-field-description.mjs') {
       // Field capture predates tooltip mode; themed tooltip capture predates
@@ -207,7 +212,7 @@ function descriptionConfiguredTrees(family) {
 function descriptionAuthoringSource() {
   const file = 'examples/material-showcase/src/app/astylar.component.ts';
   const source = descriptionEvidenceBytes(file, '71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd').toString();
-  const map = JSON.parse(descriptionEvidenceBytes('examples/material-showcase/dist/material-showcase/browser/chunk-JPEJK334.js.map',
+  const map = JSON.parse(descriptionEvidenceBytes('artifacts/material-parity/retained-evidence/component-map-recovery-20261011/chunk-JPEJK334.js.map',
     '47654b641610e1d56e02948b17fab41aff25e9c6aedc6f83b70a26b6f349ce9e'));
   assert.deepEqual(map.sources.flatMap((name, i) => name.endsWith('/astylar.component.ts')
     && map.sourcesContent[i]?.includes('import {') ? [map.sourcesContent[i]] : []), [source]);

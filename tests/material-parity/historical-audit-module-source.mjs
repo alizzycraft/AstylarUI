@@ -17,6 +17,26 @@ import { restoreAstylarDiagnostics } from './alignment-survey-conservation.mjs';
 export const originalOverlayAuditSourceCommit = '65487aeba6a26f9715f302f92b4ee454161a94ef';
 export const originalOverlayAuditSourceFile = 'tests/material-parity/input-equivalence-audit.mjs';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+
+// Historical served bytes only. Current source applicability remains a caller obligation.
+export function verifyRetainedMaterialBrowserFiles(files, { root = process.cwd() } = {}) {
+  const manifest = JSON.parse(readFileSync(path.resolve(root,
+    'artifacts/material-parity/current-full-20261005/checkpoint/manifest.json')));
+  assert.ok(isDeepStrictEqual(files, manifest.provenance.browserFiles),
+    'retained browser files must match the complete original checkpoint');
+  assert.equal(files.length, 1887);
+  for (const receipt of files) {
+    assert.ok(!path.isAbsolute(receipt.file) && !receipt.file.split(/[\\/]/).includes('..'));
+    const location = receipt.file === 'chunk-JPEJK334.js.map'
+      ? 'artifacts/material-parity/retained-evidence/component-map-recovery-20261011/'
+      : ['chunk-JPEJK334.js', 'main.js'].includes(receipt.file)
+        ? 'artifacts/material-parity/retained-evidence/component-code-recovery-20261011/'
+        : 'examples/material-showcase/.audit-historical-build-1275fa1d/dist/authenticated-replay/browser/';
+    assert.equal(hash(readFileSync(path.resolve(root, location, receipt.file))), receipt.sha256,
+      `retained original browser asset ${receipt.file}`);
+  }
+  return { authenticatedFiles: files.length, currentRenderingAccepted: false };
+}
 const mappingAuditRevision = '4dc770a';
 // Mapping implementations remain unchanged. The precise-color instrumentation
 // correction is a separately authenticated semantic change, NOT a claim that

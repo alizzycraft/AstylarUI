@@ -2,6 +2,22 @@
 
 ## Current evidence boundary — October 11
 
+Field-hint retained build reader is now reconciled in its owning validator.
+Existing historical-audit-module-source exports verifyRetainedMaterialBrowserFiles:
+caller inventory must equal complete original October5 checkpoint,1887 entries;
+every actual original byte read uses explicit authenticated replay/recovered paths
+and matches its receipt. Return explicitly says currentRenderingAccepted=false.
+verifiedDescriptionCohorts uses this historical check instead of demanding the
+new served dist equal old capture; current component and probe applicability
+checks remain unchanged. Component map read explicitly uses retained47654b64.
+Existing configured-field-hint assertion passes1/1,3443.3ms,including all76
+configured cases/68 hint omissions/eight error controls and omission/changed
+asset-receipt negative controls. Log field-hint-retained-build-reconciliation-20261011.log
+SHA2561ee8cf20c138a5d11e567b37bb61b6739669f773277c232f0dfca41f9b751508.
+No reference,source receipt,capture bytes or acceptance gate weakened. Other
+owning reader migrations and raw-runner conservation remain pending; do not
+infer full-suite/canonical/current-browser acceptance from this focused pass.
+
 Original full served-build bytes are now all authenticated,without replacing
 current dist. Existing isolated check-source-map-reconstruction.mjs --code-recovery
 (helper raw SHA2566d3aef6c5bc27188aa66128831e6398d03bfaad7fb803f71d6ac8b45b3d9f9c2)
