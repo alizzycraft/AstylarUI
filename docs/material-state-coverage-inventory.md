@@ -2,6 +2,18 @@
 
 ## Current evidence boundary — October 11
 
+Divider desktop update evidence now guards progress,not resource counts alone.
+The existing exact-context ownership test adds assertions for all8 desktop
+cohorts: initial/update revisions2/3/4/5,exact same four cache keys and every
+sampled cache referenceCount=1. Focused original test passes1/1,16.5054ms
+(1313.3572ms terminal),retaining its original20-context membership and responsive
+cleanup assertions. This rules out repeated initial snapshots as the desktop
+update evidence; stable keys are not proof of identical GPU texture objects.
+The12 responsive/comparison cohorts record status/counts but no revisions or
+cache-entry keys,so this stronger claim does not extend to them. No recapture or
+lifetime acceptance. Existing test-source change awaits the next coherent producer
+integration; do not rebuild unchanged canonical data just for this ledger entry.
+
 Divider original-artifact paint-observation gap is confirmed,not merely assumed.
 Read-only full recursive schema census covers all24 original case rows and48
 SHA-authenticated input trees. Relevant retained fields are clip/clipPath style

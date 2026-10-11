@@ -1030,6 +1030,16 @@ test('divider retained update disposal observations join all configured physical
   const expected = [...new Set(configurations.map(r => key(r.profile, r.viewport.width, r.viewport.height, r.viewport.deviceScaleFactor)))];
   assert.equal(observed.length, 20);
   assert.deepEqual(observed.sort(), expected.sort());
+  for (const row of desktop.rows) {
+    const samples = [row.before, ...row.updates];
+    assert.deepEqual(samples.map(sample => sample.session.revision), [2, 3, 4, 5]);
+    const keys = row.before.cache.entries.map(entry => entry.key).sort();
+    assert.equal(keys.length, 4);
+    for (const sample of samples) {
+      assert.deepEqual(sample.cache.entries.map(entry => entry.key).sort(), keys);
+      assert.ok(sample.cache.entries.every(entry => entry.referenceCount === 1));
+    }
+  }
   for (const row of remaining) {
     assert.deepEqual(row.errors, []);
     assert.equal(row.snapshots.length, 4);
