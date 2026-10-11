@@ -2,6 +2,22 @@
 
 ## Current evidence boundary — October 11
 
+Stale broad fingerprint assertion is reconciled without replacing its historical
+counts or dropping assertions. Existing test first authenticates all622 live
+paths and independently hashes every file; historical menu-era producer0abe78a0
+whole raw SHAadea16ba supplies its exact549 ordered paths. Only seven explicit
+original→retained-map aliases are translated, with every historical member
+required present. Original549/menu-tail/542/541 assertions and complete later
+producer conservation remain intact. Four menu proof registrations are selected
+by exact unique status rather than assuming no later proof was prepended; all
+original status/location assertions remain. Focused test passes1/1,10769.8ms;
+fingerprint-menu-era-projection-20261011.log SHA256
+9383b195083f1678d013696b6ac37acfa15446c4d4dd8ad350c47544bc59376f.
+The earlier622-versus549 failure remains preserved. This closes that specific
+integration guard, not canonical export or every downstream historical receipt.
+Next perform the justified coherent integration/export preflight using existing
+commands; unavailable original runner bytes and final gates still remain.
+
 Coherent builder preflight accepts source classification/live-location scan with
 the new finding: existing source-audit test1/1,4643.4ms, log semantic-focus-builder-
 preflight-20261011.log SHA2566b6de4ee57c16521f0cceb588eee2aa20268e0f22ede68a3bef9a1d5548b0873.

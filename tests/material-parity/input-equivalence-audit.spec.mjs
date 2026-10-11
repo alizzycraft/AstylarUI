@@ -3310,6 +3310,33 @@ test('records source fingerprints and actual visual acceptance fields', async ()
   ];
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
+  // Authenticate the full live inventory before projecting the immutable menu-era
+  // assertions below. Only seven exact retained-map path aliases are translated.
+  const menuEraBytes = execFileSync('git', ['show', '0abe78a01ea1f2553e3bbd0a83accfe94cffe5b8:tests/material-parity/input-equivalence-audit.mjs'],
+    { maxBuffer: 4 * 1024 * 1024 });
+  assert.equal(createHash('sha256').update(menuEraBytes).digest('hex'), 'adea16ba0b8ac770a4553544b7d486c1f8f8beeffbfea5be81123ba700d22ed9');
+  const inventoryPaths = source => {
+    const ast = ts.createSourceFile('inventory.mjs', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    const fn = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'sourceFingerprints');
+    const files = fn.body.statements.filter(ts.isVariableStatement).flatMap(n => [...n.declarationList.declarations])
+      .find(n => n.name.getText(ast) === 'files').initializer;
+    assert.ok(files.elements.every(ts.isStringLiteral));
+    return [...new Set(files.elements.map(n => n.text))];
+  };
+  const livePaths = inventoryPaths(readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8'));
+  assert.equal(livePaths.length, 622);
+  assert.deepEqual(audit.sourceFingerprints, livePaths.map(file => ({ file,
+    sha256: createHash('sha256').update(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')).digest('hex') })));
+  const historicalPaths = inventoryPaths(menuEraBytes.toString());
+  assert.equal(historicalPaths.length, 549);
+  const aliases = new Map(['3JXWRYJY', '625ZTKCG', '7SL66K3U', 'DV4XS33V', 'JPEJK334', 'YSOHGT2J', 'main']
+    .map(name => { const file = name === 'main' ? 'main.js.map' : `chunk-${name}.js.map`;
+      return [`examples/material-showcase/dist/material-showcase/browser/${file}`,
+        `artifacts/material-parity/retained-evidence/component-map-recovery-20261011/${file}`]; }));
+  audit.sourceFingerprints = historicalPaths.map(file => {
+    const row = audit.sourceFingerprints.find(row => row.file === (aliases.get(file) ?? file));
+    assert.ok(row, `Missing historical source member ${file}`); return { ...row, file };
+  }); // Historical assertion projection only; full live inventory was checked above.
   // Authenticate the current extension before replaying the historical541 assertions.
   const menuFiles = ['scripts/audit-material-configured-menu-bounds.mjs', 'scripts/audit-material-menu-actions.mjs',
     'scripts/audit-material-menu-actions-reset.mjs', 'scripts/audit-material-menu-actions-remaining.mjs',
@@ -3319,7 +3346,12 @@ test('records source fingerprints and actual visual acceptance fields', async ()
   assert.deepEqual(audit.sourceFingerprints.slice(-7), menuFiles.map(file => ({ file,
     sha256: createHash('sha256').update(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')).digest('hex') })));
   const actualSourceFingerprints = audit.sourceFingerprints.slice(0, -7);
-  const menuProofs = audit.focusedProofs.slice(0, 4);
+  const menuProofs = ['configured Menu anchor and input-owner evidence boundary',
+    'remaining desktop Menu item action evidence boundary', 'desktop Menu missing navigation key evidence boundary',
+    'matched Menu item activation and delayed typeahead evidence boundary'].map(status => {
+      const matches = audit.focusedProofs.filter(proof => proof.status === status);
+      assert.equal(matches.length, 1); return matches[0];
+    });
   assert.deepEqual(menuProofs.map(p => p.status), ['configured Menu anchor and input-owner evidence boundary',
     'remaining desktop Menu item action evidence boundary', 'desktop Menu missing navigation key evidence boundary',
     'matched Menu item activation and delayed typeahead evidence boundary']);
