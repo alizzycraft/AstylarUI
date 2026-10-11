@@ -10,6 +10,15 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 // the explicit retained map paths; no captured receipt or current source is replaced.
 export function restoreRetainedMapLocationRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes('current light mobile semantic focus continuity diagnostic counterexample')) {
+    assert.equal(hash(current), '0f580d4a3e7f0e8a4b9fd2a7103948aae0e6299e67ea849ff89df0738eb30d7d');
+    const ast = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    const entries = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory').body.statements[0].expression.elements;
+    const entry = entries.filter(n => n.arguments[3]?.text === 'current light mobile semantic focus continuity diagnostic counterexample');
+    assert.equal(entries.length, 193); assert.equal(entry.length, 1);
+    current = current.slice(0, entry[0].getFullStart()) + current.slice(entry[0].end + 1);
+    assert.equal(hash(current), '3ec3b9f5d7bf92171b4d4a92400fc4705e07b5ac7a0ba0a9fab4ccf5357cc1e8');
+  }
   const retained = 'artifacts/material-parity/retained-evidence/component-map-recovery-20261011/';
   if (!current.includes(retained)) return current;
   assert.equal(hash(current), '3ec3b9f5d7bf92171b4d4a92400fc4705e07b5ac7a0ba0a9fab4ccf5357cc1e8',
@@ -572,7 +581,18 @@ export function restoreDescriptionProofRegistration(source) {
 }
 
 export function restoreSizingDefaultPolicyRegistration(source) {
-  const current = source.toString().replaceAll('\r\n', '\n');
+  let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes("id: 'core-semantic-descendant-replacement-loses-retained-focus'")) {
+    assert.equal(hash(current), 'e707c0f45c3d95c24f46c7abbd5c97c17d79f7fe96038aafe1f3013147f8f935');
+    const ast = ts.createSourceFile('policy.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    const entries = ast.statements.filter(ts.isVariableStatement).flatMap(n => [...n.declarationList.declarations])
+      .find(n => n.name.getText(ast) === 'sourceAuditDefinitions').initializer.arguments[0].elements;
+    assert.equal(entries.length, 157);
+    assert.equal(entries.at(-1).arguments[0].properties.find(p => p.name.getText(ast) === 'id').initializer.text,
+      'core-semantic-descendant-replacement-loses-retained-focus');
+    current = current.slice(0, entries.at(-1).getFullStart()) + current.slice(entries.at(-1).end + 1);
+    assert.equal(hash(current), '297c0378e8ac44f7f73aa2d71876c9a9a001a86ab2b92cac16869e9670d0bb77');
+  }
   if (!current.includes("id: 'core-box-sizing-omission-violates-content-box-default'")) return current;
   assert.equal(hash(current), '297c0378e8ac44f7f73aa2d71876c9a9a001a86ab2b92cac16869e9670d0bb77');
   const ast = ts.createSourceFile('policy.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);

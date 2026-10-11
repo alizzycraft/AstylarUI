@@ -2,6 +2,23 @@
 
 ## Current evidence boundary — October 11
 
+Coherent source-conservation preflight now accepts only the exact semantic focus
+addition, not a blanket new hash. Existing producer transition authenticates
+whole current0f580d4a, removes the one193rd proof by exact AST identity and requires
+complete prior3ec3b9f5 before all original predecessor transformations. Existing
+policy transition authenticates whole e707c0f4, removes only final157th named
+finding and requires complete prior297c0378 before original sizing/description
+conservation. Three existing focused source suites pass3/3,9459.3ms; retained
+semantic-focus-producer-conservation-20261011.log SHA256
+4427a6a8c4d032708cb62dfcde2bd63b9530fa88087b16c543c45e256135fb07.
+Read-only policy reversal and unrelated appended-source rejection also pass.
+This resolves the demonstrated producer/policy fingerprint boundary introduced
+by the new finding while preserving prior findings/proofs and all original
+checks. It does not publish a canonical generation or close outstanding raw
+runner evidence, broader export failures or rendering gates. Next check coherent
+builder/export applicability at the existing integration milestone, not rerun
+the now-settled semantic focus observation.
+
 Semantic focus defect is now integrated into existing machine-readable source
 definitions/proof registry, not a duplicate report framework. New stable ID
 core-semantic-descendant-replacement-loses-retained-focus carries exact light
