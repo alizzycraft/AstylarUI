@@ -2769,11 +2769,21 @@ test('held popup option boundaries capture active paint inputs before commit', a
           if (mode === 'astylar') {
             const api = window.__ASTYLAR_MATERIAL_BENCHMARK__, measurement = api.measure([firstId], true), tree = measurement.inputTree;
             const option = tree.nodes.find(node => node.authored?.id === firstId);
+            const surface = window.ng.getComponent(document.querySelector('app-astylar-showcase')).surface;
+            const text = surface.host.inspection.textRenderingService;
+            const boundPaint = surface.scene.meshes.filter(mesh => mesh.metadata?.elementId === firstId)
+              .flatMap(mesh => [...new Set(mesh.material?.getActiveTextures() ?? [])].flatMap(texture => {
+                const inputs = text.inspectTexturePaintInputs(texture);
+                if (!inputs?.text) return [];
+                return [{ mesh: mesh.name, text: inputs.text, style: inputs.style,
+                  logicalSize: texture.metadata?.astylarLogicalTextSize ?? null,
+                  textureSize: texture.getSize() }];
+              }));
             return { count: tree.nodes.filter(node => node.authored?.role === 'option').length,
               background: option.resolvedStyle.background, selected: option.authored.ariaSelected,
               events: api.events().filter(event => event.targetId === firstId),
               optionBox: measurement.elements[firstId].borderBox,
-              retainedText: option.retainedText ?? null };
+              retainedText: option.retainedText ?? null, boundPaint };
           }
           const option = document.querySelector('mat-option');
           const label = option.querySelector('.mdc-list-item__primary-text');

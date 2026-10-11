@@ -27,6 +27,7 @@ test('retained sorter paint additions conserve original statements and reject so
   assert.deepEqual(readRetainedSortFocusSource(current), original);
   for (const replacement of [
     current.toString().replace('ASTYLAR_AUDIT_CURRENT_OPTION_BOXES', 'UNREVIEWED_OPTION_BOXES'),
+    current.toString().replace('text.inspectTexturePaintInputs(texture)', 'null'),
     current.toString().replace('Math.abs(held.labelCenterOffsetY) < 0.1', 'true'),
     current.toString().replace('if (lightScroll) return;', 'if (true) return;'),
     current.toString().replace('const lightPaint = lightScroll || ', 'const lightPaint = '),

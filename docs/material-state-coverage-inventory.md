@@ -1,5 +1,28 @@
 # Material comparison/state coverage inventory
 
+## Current timepicker bound text metric — October 12
+
+Existing held diagnostic now inspects only textures currently bound to meshes
+with the option's exact elementId,using existing inspectTexturePaintInputs.
+Current light desktop DPR1 timepicker-option-0 owns one observed text texture
+on timepicker-option-0_text,12:00 AM,fontSize16,lineHeight1.1875,tracking0,
+logical68.2188x19 and physical69x19. Native primary label requests16px/20px;
+its DOM Range height19 is not pixel ink or proof of equivalent line boxes.
+This closes absence of actual candidate used text-height evidence in this context,
+not baseline/centering/sharpness or causal attribution. Select/autocomplete exact
+option owners yield empty boundPaint arrays; their child text owners must be
+traced rather than diagnosing missing rendering. No values or styles changed.
+Current checkpoint census authenticates,Chrome154.0.8037.99;1/1 passes18383.9495ms
+(19490.7858ms process). Log held-option-bound-text-current-20261012.log SHA256
+f561edcd7eaa4dc8ee2c166e69c9d8181a9a4f16b917e759e7ad76e7972a8670.
+Sorter source65e1dba29e3b86aae63a42eb85fe1305a1e7fd62452ff4a2710705d0673e7704
+and prior77d91396 are separately authenticated by the same exact whole-test
+restoration; full historical bytes conserve. Focused conservation1/1 passes
+554.1801ms (1086.056ms process),including paint-inspection mutation rejection.
+Next read final text-plane position and local pixels without translating layout
+in world space or replacing normal with20px. Coherent evidence registration,
+publication and complete case closure remain pending.
+
 ## Held-option historical source conservation — October 12
 
 Current sorter source77d91396b65770eabca429907096a2e4e5702f5924c41f5dca572acb807143d6
