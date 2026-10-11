@@ -108,6 +108,45 @@ test('semantic descendant replacement focus evidence retains exact current case 
   }
   const producer = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8');
   assert.match(producer, /proof\(root, 'tests\/material-parity\/input-boundary-evidence.spec.mjs', \/test\\\('public semantic sibling updates isolate retained focus loss without Material plugins'/);
+  const darkBytes = readFileSync('artifacts/material-parity/timepicker-dark-mobile-lifecycle-current-20261012.log');
+  assert.equal(hash(darkBytes), 'e71f33560f2c7248b0e7c6ededfae8da5df0894784567ecf63ef7b8aab25c930');
+  const darkRows = darkBytes.toString().split(/\r?\n/).filter(line => line.startsWith('# {'))
+    .map(line => JSON.parse(line.slice(2).replaceAll(String.fromCharCode(92) + '#', '#')));
+  const darkReceipts = darkRows.filter(row => row.currentDarkLifecycleReceipts).map(row => row.currentDarkLifecycleReceipts);
+  assert.equal(darkReceipts.length, 2);
+  for (const receipt of darkReceipts) {
+    assert.equal(hash(readFileSync(receipt.checkpointFile)), receipt.checkpointSha256);
+    assert.equal(hash(readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')), receipt.sourceSha256);
+    assert.deepEqual(receipt.viewport, [390, 844, 2]);
+    assert.equal(receipt.acceptance, false);
+  }
+  const dark = darkRows.find(row => row.family === 'timepicker').observations;
+  for (const side of ['reference', 'astylar']) {
+    assert.deepEqual(dark[side].errors, []);
+    for (const cycle of dark[side].cycles) {
+      const nodes = cycle.opened.actualAx;
+      const input = nodes.filter(node => node.role.value === 'combobox');
+      assert.equal(input.length, 1); assert.equal(input[0].name.value, 'Meeting time');
+      const property = name => input[0].properties.find(row => row.name === name)?.value;
+      assert.equal(property('hasPopup').value, side === 'reference' ? 'listbox' : 'dialog');
+      for (const [name, role] of [['controls', 'listbox'], ['activedescendant', 'option']]) {
+        const related = property(name).relatedNodes;
+        assert.equal(related.length, 1);
+        const target = nodes.filter(node => node.backendDOMNodeId === related[0].backendDOMNodeId);
+        assert.equal(target.length, 1); assert.equal(target[0].role.value, role);
+        if (name === 'activedescendant') assert.equal(target[0].name.value, '12:00 AM');
+      }
+      assert.equal(cycle.closed.actualAx.filter(node => ['option', 'listbox'].includes(node.role.value)).length, 0);
+    }
+    const events = dark[side].cycles.at(-1).closed.events;
+    assert.equal(events.length, side === 'reference' ? 29 : 47);
+    assert.deepEqual(events.filter(row => ['keydown', 'keyup'].includes(row.type)).map(row => [row.type, row.key, row.id]),
+      Array.from({ length: 3 }, () => [['keydown', 'Escape', 'timepicker-control'], ['keyup', 'Escape', 'timepicker-control']]).flat());
+    assert.equal(events.filter(row => ['input', 'change'].includes(row.type)).length, 0);
+  }
+  // Canvas pointer targets and semantic focus delivery remain distinct; final
+  // focus equality cannot erase the measured replacement blur or prove events equal.
+  assert.notDeepEqual(dark.reference.cycles.at(-1).closed.events, dark.astylar.cycles.at(-1).closed.events);
 });
 const bytes = readFileSync(file);
 assert.equal(hash(bytes), '39df94e0eb87480d3824927a41a9950d1d275f7c97ab97a571c449efdc6da7d7');

@@ -2,6 +2,20 @@
 
 ## Current dark-mobile timepicker boundary — October 12
 
+Existing semantic-focus applicability assertion now replays exact dark capture:
+two log source/checkpoint receipts authenticate; all three openings on both sides
+resolve controls to the sole exposed listbox and activedescendant to12:00 AM via
+actual backend node IDs. Both close to0 listbox/options. Popup-kind remains native
+listbox/candidate dialog. Complete retained document event sequences have29/47
+entries respectively; three Escape pairs agree and neither emits input/change.
+Pointer targets differ native MAIN/input versus candidate CANVAS; they are not
+normalized away or classified as a universal core pointer-delivery defect.
+Previously verified connected-input replacement blur/restoration explains the
+focus continuity divergence,not all18 extra events. Focused existing assertion
+passes1/1,432.0847ms (1688.1791ms terminal),no recapture. This closes these exact
+open relationship-resolution questions,not AT navigation,all relationships or
+whole-case event/paint acceptance. Consumed proof/log integration remains pending.
+
 Specific gap: current dark Escape/reopen AX,event and live ownership evidence,
 not the already diagnosed caret/focus mechanism. Existing field-popup cycle test
 now accepts explicit dark opt-in alongside light; default historical two-family
