@@ -2,6 +2,29 @@
 
 ## Current evidence boundary — October 11
 
+Missing component-map bytes recovered exactly. Isolated recipe build
+component-map-recovery-20261011 completed (32.650s; build log
+component-map-recovery-build-20261011.log),without replacing current served output.
+Its chunk-J4SXCAOC.js.map contains the four original component sources. Existing
+check-source-map-reconstruction.mjs --component-recovery removes the isolated
+recipe path marker and adjusts generated mapping columns at that same deletion;
+the reconstructed bytes match the October5 checkpoint's original SHA256
+47654b641610e1d56e02948b17fab41aff25e9c6aedc6f83b70a26b6f349ce9e.
+The helper authenticates the checkpoint receipt before exclusive creation and
+refuses an existing output directory. Retained original-equivalent map:
+artifacts/material-parity/retained-evidence/component-map-recovery-20261011/chunk-JPEJK334.js.map.
+This supersedes the missing-bytes conclusion below,not its failed searches or
+original receipt. The earlier component diagnostic/serializer-version mismatch,
+not a guessed line-ending normalization,was necessary for reproducible recovery.
+No original capture,renderer,fixture or current dist was overwritten.
+
+Next authenticate all seven retained maps together and bind sourceFingerprints
+to their explicit immutable evidence locations; current-source applicability
+remains separate. Expensive canonical export is not yet retried. Retain this
+required map and recovery inputs until reference closure; successful build
+scratch cleanup remains pending through the established retention mechanism.
+All2311 case closures and final acceptance gates remain open.
+
 Source-map inventory failure is broader than the first missing filename.
 sourceFingerprints hard-codes seven historical map paths under mutable current
 dist. Authenticate October5 checkpoint browserFiles receipts against retained
