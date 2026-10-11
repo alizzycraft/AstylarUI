@@ -19810,3 +19810,31 @@ validated reuse, then perform independent cold canonical acceptance and the
 unfiltered gates. Current full harness discovery is 302 files (294 Material,
 four general, four TTS), retaining all 46 legacy files. The existing historical
 110/170-file failures must not be described as current full acceptance.
+# October 11 — demonstrated box-sizing initial-value contract failure
+
+Public package-root reduction and retained replay:
+`node scripts/audit-public-box-sizing-default.mjs --verify artifacts/material-parity/public-box-sizing-default-20261011`.
+At DPR1/2, identical omitted width140/height50/padding10/border3 inputs produce
+native166x76 versus candidate140x50 CSS-pixel painted bounds. Explicit
+content-box166x76 and border-box140x50 controls agree. Dependency/PNG receipts,
+paired inputs and two rejection controls authenticate the bounded result.
+The capability manifests document content-box as default; global/type defaults
+omit it, and calculateDimensions adds insets only when explicitly requested.
+Installed owning methods match current source. This establishes a core default
+contract failure,not a final-projection defect or universal sizing diagnosis.
+
+History: fb1553ff (August15 web-parity harness) added explicit content-box support
+and explicitly preserved the preexisting border-box omission behavior. Do not
+describe that commit as a demonstrated recent Material compensation. Authenticated
+accepted185 compact source inventory contains155 findings and none covers this
+default discrepancy; new canonical integration is pending,not already published.
+
+Later implementation order: establish the general initial-value rule in core
+style/default and sizing ownership; retain explicit border-box behavior; exercise
+omission/explicit controls through public rendering and ordinary nested flow,
+percentage sizing and constraints. Separately preserve the Material reference
+parent's explicit border-box author intent: correcting the default must not be
+paired with fixture width/offset retuning to recreate old pixels. Existing
+root720-to778 conversion alone does not settle this parent input difference.
+No renderer or fixture changes are authorized by this audit. Whole-case closure,
+current validity and all original final gates remain required.

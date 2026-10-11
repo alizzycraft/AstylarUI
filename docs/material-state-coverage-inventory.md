@@ -2,6 +2,18 @@
 
 ## Current evidence boundary — October 11
 
+Box-sizing finding duplication/history review is complete. Existing authenticated
+compact query reads every sourceFindings family shard:155 source entries,none
+covers boxSizing/default sizing. Initial shared-family query returned no rows
+and was not treated as evidence of absence; complete shard enumeration supplies
+the conclusion. Git -S locates fb1553ff (August15): it adds explicit content-box
+insets and deliberately preserves preexisting border-box omission. Thus classify
+the new bounded public counterexample as a core initial-value contract failure,
+not a demonstrated recent Material workaround. Existing implementation handoff
+now records general-default correction before input-equivalent parent reassessment,
+explicit controls and nested/percentage/constraint regression obligations. Pending
+canonical integration must wait for191 export; no source policy changed mid-run.
+
 The same public box-sizing diagnostic now supports read-only --verify replay.
 Command: node scripts/audit-public-box-sizing-default.mjs --verify
 artifacts/material-parity/public-box-sizing-default-20261011. Exit0 authenticates
