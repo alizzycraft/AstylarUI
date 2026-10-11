@@ -2,6 +2,20 @@
 
 ## Current evidence boundary — October 11
 
+Semantic public-proof registration gap is now closed in producer source. Existing
+core-semantic-descendant-replacement-loses-retained-focus retains its original
+timepicker observation/receipt and all156 predecessor definitions; one additional
+authenticated keyboard-control log and one existing public-test inventory entry
+replace the stale claim that the plugin-free reduction is unproven. The existing
+source-applicability assertion now checks all ten public boundaries, exact owning
+methods/current files, descendant first blur and preserved synchronized1/3 range.
+Focused receipt replay1/1,1632.8305ms; semantic-public-proof-registration-20261011.log
+SHA25644bf0a00c8883b90cac427f1e10f38f602e16a2eef8a927f0bc3c155c24c20f7.
+Producer syntax/scoped diff checks pass. No browser rerun,new finding,renderer fix,
+case closure or canonical publication. Accepted193 remains published predecessor;
+policy/producer/test source fingerprints need the next coherent integration batch.
+Next exact divider obligation joins; do not repeat the unchanged public focus test.
+
 Divider/shared font-lifecycle owning test is no longer merely inspected:
 existing src/lib/astylar-isolation.spec.ts nine assertions execute successfully
 through the existing diagnostic native-module loader. Command:

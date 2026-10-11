@@ -1,5 +1,12 @@
 # Material audit: evidence-led implementation priorities
 
+October11 public semantic-focus proof is now registered in existing producer
+inventory and the original finding,with its synchronized-selection limitation.
+Original timepicker observation and156 predecessor findings are unchanged;
+focused receipt replay1/1 authenticates current methods and all ten boundaries.
+See ledger for log receipt. Published193 is not re-exported: source reconciliation
+belongs to the next coherent batch; no full-case closure or renderer change.
+
 October11 font lifecycle: existing surface-isolation suite now executes9/9 via
 diagnostic native-module loader. Mocked FontFaceSet readiness,later revision/texture
 replacement and listener removal pass on current root source/Babylon8.15.1 WebGL2.

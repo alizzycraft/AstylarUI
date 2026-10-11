@@ -73,6 +73,41 @@ test('semantic descendant replacement focus evidence retains exact current case 
     assert.equal(method(mapped, name), method(installed, name));
     assert.equal(method(installed, name), method(compiled, name));
   }
+  assert.equal(finding.evidence.length, 2);
+  const publicReceipt = finding.evidence[1], publicBytes = readFileSync(publicReceipt.file);
+  assert.equal(hash(publicBytes), publicReceipt.sha256);
+  const publicRows = publicBytes.toString().split(/\r?\n/).filter(line => line.startsWith('# {'))
+    .map(line => JSON.parse(line.slice(2).replaceAll(String.fromCharCode(92) + '#', '#')));
+  assert.equal(publicRows.length, 1);
+  const reduction = publicRows[0].publicSemanticFocus;
+  assert.equal(reduction.parityAccepted, false);
+  assert.deepEqual(reduction.viewport, { width: 390, height: 844, dpr: 2 });
+  assert.equal(reduction.sourceSha256, hash(readFileSync(finding.file)));
+  assert.equal(reduction.installedSha256, hash(Buffer.from(installed)));
+  assert.equal(reduction.dependencyCount, 2515);
+  assert.deepEqual(reduction.errors, []);
+  for (const entry of reduction.methods) assert.equal(entry.sha256, hash(Buffer.from(method(installed, entry.name))));
+  assert.equal(reduction.samples.length, 8);
+  assert.equal(reduction.keyboardSamples.length, 2);
+  for (const sample of [...reduction.samples, ...reduction.keyboardSamples]) {
+    assert.equal(sample.sameNode, true); assert.equal(sample.value, 'Atlas');
+    if (sample.side === 'reference') assert.deepEqual(sample.events, []);
+    else {
+      const first = sample.operations[0];
+      assert.equal(first.owner, 'focus-parent'); assert.equal(first.before, true);
+      assert.equal(first.after, false); assert.equal(first.connected, true);
+      assert.match(first.stack, /AstylarSemanticBridge.reconcileElement/);
+      assert.equal(sample.events[0].type, 'focusout');
+    }
+  }
+  for (const sample of reduction.keyboardSamples) {
+    assert.equal(sample.prepared, true); assert.deepEqual(sample.beforeSelection, [1, 3]);
+    assert.deepEqual(sample.selection, [1, 3]);
+    assert.equal(sample.focused, sample.side === 'reference');
+    assert.equal(sample.activeTag, sample.side === 'reference' ? 'INPUT' : 'CANVAS');
+  }
+  const producer = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8');
+  assert.match(producer, /proof\(root, 'tests\/material-parity\/input-boundary-evidence.spec.mjs', \/test\\\('public semantic sibling updates isolate retained focus loss without Material plugins'/);
 });
 const bytes = readFileSync(file);
 assert.equal(hash(bytes), '39df94e0eb87480d3824927a41a9950d1d275f7c97ab97a571c449efdc6da7d7');

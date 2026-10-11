@@ -1801,14 +1801,17 @@ export const sourceAuditDefinitions = Object.freeze([
     classification: 'confirmed-core-renderer-defect',
     owner: 'core semantic descendant reconciliation and retained focus continuity',
     focusedProof: 'tests/material-parity/input-boundary-evidence.spec.mjs: semantic descendant replacement focus evidence retains exact current case and source applicability',
-    evidence: [{ file: 'artifacts/material-parity/timepicker-focus-provenance-20261011.log', sha256: '55c6babc6e23292c9cf05983fb78c22daf312ff841d60966dfb55b5ff74fe6ae' }],
+    evidence: [
+      { file: 'artifacts/material-parity/timepicker-focus-provenance-20261011.log', sha256: '55c6babc6e23292c9cf05983fb78c22daf312ff841d60966dfb55b5ff74fe6ae' },
+      { file: 'artifacts/material-parity/public-semantic-focus-keyboard-selection-verified-20261011.log', sha256: '7db45603d4764a63001700012f045a30658be86c5a3a12082129e0ccb7a7b594' },
+    ],
     observation: { component: 'timepicker', element: 'timepicker-control',
       case: { kind: 'interaction', family: 'timepicker', profile: 'light', viewport: { id: 'mobile-dpr2', width: 390, height: 844, deviceScaleFactor: 2 }, state: 'open-dismiss' },
       states: ['opened', 'Escape-closed'], cycles: 3,
       property: 'retained semantic input focus event continuity', reference: 'Escape keydown/keyup without focus transitions',
       astylar: 'focusout inside descendant replaceChildren, then focusin through syncFocus',
       stage: 'semantic reconciliation before focus restoration' },
-    justification: 'Six current light mobile DPR2 opening/closed boundaries locate the first blur synchronously inside semantic reconcileElement.replaceChildren; the input remains connected. Root replacement occurs later with focus already lost, and syncFocus restores it. Exact served/current owning methods agree. State callbacks trigger reflow but do not directly cause the observed blur. Preserve focused descendants through changed child lists rather than suppressing events or patching application focus. This is a bounded confirmed core focus continuity defect, distinct from caret material lifetime. Other profiles, real Tab/selection continuity, public plugin-free reduction, historical first-bad revision and whole-case parity remain unproven.',
+    justification: 'Six current light mobile DPR2 opening/closed boundaries locate the first blur synchronously inside semantic reconcileElement.replaceChildren; the input remains connected. Root replacement occurs later with focus already lost, and syncFocus restores it. Exact served/current owning methods agree. State callbacks trigger reflow but do not directly cause the observed blur. The independent package-root sibling add/remove reduction confirms the same first blur without Material plugins: four native updates preserve focus without events; four candidate updates blur inside descendant replacement and restore focus. A real-keyboard selection control preserves synchronized endpoints1/3 on both sides, while candidate focusout ends on CANVAS under the existing keepCanvasFocus policy. Direct-DOM selection reset is not a demonstrated synchronized-selection-loss defect. Preserve focused descendants through changed child lists rather than suppressing events or patching application focus. This is a bounded confirmed core focus continuity defect, distinct from caret material lifetime. Other profiles, real Tab/assistive-technology continuity, historical first-bad revision and whole-case parity remain unproven.',
   }),
 ]);
 
