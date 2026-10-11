@@ -366,6 +366,31 @@ export function restoreLayoutDiagnosticRegistration(source) {
 }
 // Historical replay only. Never use this reader for current capture or rendering acceptance.
 export function readRetainedSortFocusSource(current = readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')) {
+  if (current.toString().includes("const lightPaint = process.env.ASTYLAR_AUDIT_RETAIN_MOBILE_TIMEPICKER_PAINT === 'light';")) {
+    assert.equal(hash(current), '978056ab0cc3004b2f6c789f58cd1253b4fe2b51df70641c2acde30476d2c080');
+    let text = current.toString();
+    const changes = [
+      ["  const lightPaint = process.env.ASTYLAR_AUDIT_RETAIN_MOBILE_TIMEPICKER_PAINT === 'light';\n", ''],
+      ['const retainPaint = lightPaint || ', 'const retainPaint = '],
+      ["  const paintDirectory = lightPaint ? 'artifacts/material-parity/timepicker-open-light-mobile-paint-20261011'\n    : 'artifacts/material-parity/timepicker-open-dark-mobile-paint-20261011';",
+        "  const paintDirectory = 'artifacts/material-parity/timepicker-open-dark-mobile-paint-20261011';"],
+      ['page.evaluate(lightPaint => window.__MATERIAL_SHOWCASE_COMMAND__({', 'page.evaluate(() => window.__MATERIAL_SHOWCASE_COMMAND__({'],
+      ["theme: lightPaint\n            ? { mode: 'light', primary: '#6750a4', tertiary: '#7d5260', surface: '#fffbfe', error: '#b3261e', density: 0, cornerScale: 1, typographyScale: 1 }\n            : { mode: 'dark'", "theme: { mode: 'dark'"],
+      ['        }), lightPaint), true);', '        })), true);'],
+      ["lightPaint ? { dark: false, background: 'rgb(255, 251, 254)' }\n          : { dark: true, background: 'rgb(28, 27, 31)' }", "{ dark: true, background: 'rgb(28, 27, 31)' }"],
+      [`        if (lightPaint) {
+          assert.equal(before.scrollTop, 0); assert.equal(after.scrollTop, 144);
+          assert.deepEqual(errors, []);
+          observations[mode] = { before, after, errors };
+          continue; // Missing opening paint only; retain original dark drag assertions below.
+        }
+`, ''],
+      ["    if (lightPaint) { t.diagnostic(JSON.stringify({ lightMobileOpeningPaint: observations, acceptance: false })); return; }\n", ''],
+    ];
+    for (const [addition, prior] of changes) { assert.equal(text.split(addition).length, 2); text = text.replace(addition, prior); }
+    current = Buffer.from(text);
+    assert.equal(hash(current), '4ca4b2c4f78965a454f396f633c3d7d61488546d096bab1cb1b2984aa73c9d5e');
+  }
   if (current.toString().includes('ASTYLAR_AUDIT_RETAIN_MOBILE_TIMEPICKER_PAINT')) {
     assert.equal(hash(current), '4ca4b2c4f78965a454f396f633c3d7d61488546d096bab1cb1b2984aa73c9d5e');
     const additions = [

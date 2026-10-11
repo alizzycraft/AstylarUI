@@ -2,6 +2,31 @@
 
 ## Current evidence boundary — October 11
 
+Missing light/mobile opening rasters are retained through existing timepicker
+diagnostic opt-in ASTYLAR_AUDIT_RETAIN_MOBILE_TIMEPICKER_PAINT=light using the same
+current selection-pointer checkpoint2aac425d and Chrome154.0.8037.99. Explicit
+canonical light theme applied/verified dark:false,background rgb(255,251,254).
+Paired390x844 DPR2 open/wheel captures pass1/1 in6280.1ms; log timepicker-open-
+light-mobile-paint-20261011.log SHA2565262d6040111c78bc5424543ad124f298d291c82dbdbaccdbc68baf99b40e4bb.
+Four exclusive780x1688 images in same-named directory authenticate against log
+receipts; independent check verifies each image,checkpoint and source978056ab,
+both themes,scroll0→144,and no page errors. Native panel65,237.078125,260,256;
+candidate65,237.0800018,260,256. Native clientWidth245,candidate260: same outer
+width does not imply equal scroll-client/input box behavior. Candidate opening
+raster visually retains rectangular thumb,square panel edges and painted caret.
+Only missing light opening/wheel state captured; new diagnostic branch does not
+repeat settled dark drag/track or eight desktop CSS population checks. Default
+and dark retention paths keep all original assertions/actions. Existing source
+conservation authenticates complete978056ab,restores exact4ca4b2c4 predecessor
+before prior receipts; mutation suite passes1/1,911.9ms,log mobile-light-paint-
+source-conservation-20261011.log SHA2566b574e1b4213f60d3a7add17ed901cac9fcc3fd6d390c29211d9543d7b5c3452.
+Light/dark non-desktop opening capture absence is closed,not local typography/
+clip/selection equivalence,all relevant actions or the two open-dismiss case
+closures. These explicit diagnostic states cannot replace original closed-endpoint
+receipts. Next reconcile their input/paint obligations to exact configured mobile
+case IDs and extend the existing per-case checklist; stop repeating the capture
+gap now resolved. Raw runner/export and final unfiltered gates remain pending.
+
 Current dark/mobile timepicker lower-corner paint now has a bounded input-owner
 classification without recapture. Both current maps authenticate against original
 selection-pointer checkpoint browserFiles: native7SL66K3U map67e956a6 and candidate

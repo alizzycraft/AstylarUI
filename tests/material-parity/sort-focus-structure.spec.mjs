@@ -1990,8 +1990,10 @@ test('dark mobile real-key selections distinguish direction state from highlight
 });
 
 test('dark mobile timepicker wheel separates scroll state from scrollbar paint', async t => {
-  const retainPaint = process.env.ASTYLAR_AUDIT_RETAIN_MOBILE_TIMEPICKER_PAINT === '1';
-  const paintDirectory = 'artifacts/material-parity/timepicker-open-dark-mobile-paint-20261011';
+  const lightPaint = process.env.ASTYLAR_AUDIT_RETAIN_MOBILE_TIMEPICKER_PAINT === 'light';
+  const retainPaint = lightPaint || process.env.ASTYLAR_AUDIT_RETAIN_MOBILE_TIMEPICKER_PAINT === '1';
+  const paintDirectory = lightPaint ? 'artifacts/material-parity/timepicker-open-light-mobile-paint-20261011'
+    : 'artifacts/material-parity/timepicker-open-dark-mobile-paint-20261011';
   if (retainPaint) (await import('node:fs')).mkdirSync(paintDirectory);
   const configFile = 'tsconfig.lib.json';
   const converted = ts.convertCompilerOptionsFromJson(JSON.parse(readFileSync(configFile)).compilerOptions, path.dirname(path.resolve(configFile)));
@@ -2028,14 +2030,17 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
         await page.locator('.frame').waitFor();
         // Ordinary mode does not apply the profile query; verify the real theme.
         await page.waitForFunction(() => !!window.__MATERIAL_SHOWCASE_COMMAND__);
-        assert.equal(await page.evaluate(() => window.__MATERIAL_SHOWCASE_COMMAND__({
-          type: 'showcase:theme', theme: { mode: 'dark', primary: '#d0bcff', tertiary: '#efb8c8',
+        assert.equal(await page.evaluate(lightPaint => window.__MATERIAL_SHOWCASE_COMMAND__({
+          type: 'showcase:theme', theme: lightPaint
+            ? { mode: 'light', primary: '#6750a4', tertiary: '#7d5260', surface: '#fffbfe', error: '#b3261e', density: 0, cornerScale: 1, typographyScale: 1 }
+            : { mode: 'dark', primary: '#d0bcff', tertiary: '#efb8c8',
             surface: '#1c1b1f', error: '#f2b8b5', density: 0, cornerScale: 1, typographyScale: 1 },
-        })), true);
+        }), lightPaint), true);
         const actualTheme = await page.locator('.frame').evaluate(node => ({
           dark: node.classList.contains('dark'), background: getComputedStyle(node).backgroundColor,
         }));
-        assert.deepEqual(actualTheme, { dark: true, background: 'rgb(28, 27, 31)' });
+        assert.deepEqual(actualTheme, lightPaint ? { dark: false, background: 'rgb(255, 251, 254)' }
+          : { dark: true, background: 'rgb(28, 27, 31)' });
         t.diagnostic(JSON.stringify({ mobileScrollbarTheme: { mode, actualTheme, viewport: [390, 844, 2] } }));
         if (mode === 'astylar') {
           await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
@@ -2104,6 +2109,12 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
           diagnosticSourceSha256: digest(readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')),
           checkpointFile: process.env.ASTYLAR_MATERIAL_SHOWCASE_CHECKPOINT,
           checkpointSha256: digest(readFileSync(process.env.ASTYLAR_MATERIAL_SHOWCASE_CHECKPOINT)), acceptance: false } }));
+        if (lightPaint) {
+          assert.equal(before.scrollTop, 0); assert.equal(after.scrollTop, 144);
+          assert.deepEqual(errors, []);
+          observations[mode] = { before, after, errors };
+          continue; // Missing opening paint only; retain original dark drag assertions below.
+        }
         let scrollbarStripChanged = 0;
         const left = Math.floor((before.box.x + before.box.width - 12) * 2), right = Math.floor((before.box.x + before.box.width) * 2);
         const top = Math.floor(before.box.y * 2), bottom = Math.floor((before.box.y + before.box.height) * 2);
@@ -2206,6 +2217,7 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
           candidateThumbPixels: mode === 'astylar' ? { before: thumbPixels(beforePixels), after: thumbPixels(afterPixels) } : null, errors };
       } finally { await page.close(); }
     }
+    if (lightPaint) { t.diagnostic(JSON.stringify({ lightMobileOpeningPaint: observations, acceptance: false })); return; }
     t.diagnostic(JSON.stringify(observations));
     for (const mode of ['reference', 'astylar']) {
       assert.equal(observations[mode].before.scrollTop, 0);
