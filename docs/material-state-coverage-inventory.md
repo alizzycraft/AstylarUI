@@ -2,6 +2,21 @@
 
 ## Current evidence boundary — October 11
 
+Retained-map export session92270 is terminal exit1,not a timeout. Its evidence
+session verified1205 files/89158075 bytes; validation failed at2669466.938ms.
+Log coherent-state-proof-export-retained-maps-20261011.log SHA256
+79a15395f24f256c4da69353273deeb8ee478e49b5baa634f5947af27c51b04c.
+No successor canonical publication is accepted. Errors: unbound followup input
+attributions and54 unresolved resolved-style groups. Smallest independent check,
+direct replayFollowupInputSourcePlans(),fails in9.7s at
+conserveExpansionOwnerProof line113: actual complete runner hashc3cabcfde7b9a0cd
+versus expected33c5a4b31a5140bb. This identifies an owning followup conservation
+boundary not yet reconciled with the already-reviewed runner diagnostic chain;
+it does not demonstrate54 new rendering regressions. Next inspect and conserve
+that exact transition through existing helpers,then rerun this focused replay
+before any full export. Keep downstream map-reader failure separately pending.
+Export input freeze has ended; original receipts and failure evidence remain.
+
 Historical map migration must also cover downstream validators,not only the
 canonical sourceFingerprints inventory. Read-only consumer search identifies
 actual reads in benchmark-config,input-boundary,input-equivalence and sort-focus
