@@ -2,6 +2,23 @@
 
 ## Current evidence boundary — October 11
 
+Used-dimension capture51403 completes exit0 in
+`overlay-used-dimensions-current-20261011/latest-report.json`,SHA256
+931bc5fbec43ae47a6fc14533c906cce87cd0d083f2911e5d8bdb6d12d582d67.
+Read-only exact configured membership join passes59/59 (bottom-sheet25,
+snackbar34);118 paired input-tree receipts authenticate. Every candidate overlay
+owner retains fixed/height100% and core-dimension-registry used width/height
+equal to its viewport. Thus short98px ancestor sizing is not observed in this
+current cohort; missing captured CSS used-size evidence is closed for these
+owners,not full owner/input equivalence. Existing fingerprint helpers revalidate
+all1887 served files,10 harness files and installed dependency lock receipt;
+Chrome154.0.8037.99. Report-mode output gates pass58/fail1: bottom-sheet/light/
+desktop-dpr2/open has resourcesStable=false,while placement matches (edge error
+1.7735e-11CSSpx),runtime errors empty and event/focus/statePaint/cursor checks
+match. Preserve this resource failure; no aggregate parity or lifecycle closure.
+Next inspect its actual before/after resource observations against existing
+ownership findings,then reconcile exact case obligations/current validity.
+
 Used-dimension preparation/build both complete exit0. Fresh installed inspector
 SHA256 a18630bdc31067ac75907e41f9031865fa192edc164ebf93edacb8b836b09abd
 contains retainedLayout/core-dimension-registry. First focused launch terminates
