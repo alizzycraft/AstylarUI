@@ -1,5 +1,21 @@
 # Material comparison/state coverage inventory
 
+## Timepicker option history boundary — October 12
+
+The existing option-text assertion now checks exact Git history alongside the
+384 retained option pairs. Direct textContent option authoring is present in the
+initial showcase commit2f440115 (August23); it is not a later workaround replacing
+the native primary-text wrapper. Commitf3c8254c (September1, interaction parity)
+later replaces14px vertical padding with0 and adds flex/alignItems:center.
+Focused check passes1/1,1457.864ms (2937.9678ms process),no capture or fixture edit.
+These establish separate initial structural substitution and later centering
+adjustment; they do not prove the adjustment caused the glyph offset or establish
+equivalent line boxes. Existing direct-text centering core controls already pass;
+do not infer a universal centering failure. Next join the omitted line-height and
+wrapper inputs to existing typography classifications before any new core proof.
+Canonical proof/source reconciliation remains pending with the current mobile
+batch; no whole-case closure or acceptance count changes.
+
 ## Timepicker option text input boundary — October 12
 
 Specific unresolved question: bottom-aligned option glyphs from wrapper/line-box

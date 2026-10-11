@@ -20,6 +20,12 @@ import { cursorInput } from '../../examples/material-showcase/audit/cursor-defau
 const file = 'artifacts/material-parity/input-boundaries-keypress-559f95c/latest-report.json';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 test('retained timepicker option text owners distinguish wrapper line boxes from centering requests', () => {
+  const original = execFileSync('git', ['show', '2f440115:examples/material-showcase/src/app/astylar.component.ts'], { encoding: 'utf8' });
+  assert.match(original, /id: `timepicker-option-\$\{index\}`[^\n]*textContent: label/);
+  const centeringChange = execFileSync('git', ['show', 'f3c8254c', '--', 'examples/material-showcase/src/app/astylar.component.ts'], { encoding: 'utf8' });
+  assert.match(centeringChange, /\+[^\n]*selector: '\.timepicker-shell \.picker-option'[^\n]*height: '48px', padding: '0 16px', display: 'flex', alignItems: 'center'/);
+  // Direct option text predates the later centering adjustment; neither history nor
+  // unequal wrapper inputs establish that this adjustment caused the glyph offset.
   const bytes = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
   assert.equal(hash(bytes), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
   const rows = JSON.parse(bytes).interactions.filter(row => row.family === 'timepicker' && row.state === 'open-scroll');
