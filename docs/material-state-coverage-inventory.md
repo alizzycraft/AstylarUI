@@ -42,6 +42,18 @@ is justified. Remaining gap is authoritative captured CSS used dimensions and
 full owner equivalence,not missing native ancestor survey or current source
 fixed-parent routing. Preserve raw height expressions and historic/current
 boundaries; broader overlay paint,lifetime and closure obligations stay open.
+Used-size availability is now checked rather than assumed: both hash-bound
+full captures contain0 retainedLayout fields among these59 candidate owners
+(118 tree receipts checked). Current public inspectCurrentDocumentStyles reads
+getElementDimensions and exposes retainedLayout/source:core-dimension-registry;
+collectMaterialCoreResolvedStyles/collectAuthoredInputTree preserve that field.
+Installed inspector's complete method has neither registry read nor retainedLayout.
+Therefore existing projected geometry cannot fill this missing captured stage;
+new parallel layout calculations or a new inspection API are not needed. After
+the frozen export,close this specific instrumentation/version gap through the
+existing public inspection and collector with source/served-asset provenance,
+then reuse the59 exact IDs and owner evidence. Do not relabel old captures as
+containing used values or infer a renderer sizing defect from absent evidence.
 Export dependencies remain frozen.
 
 Slider pending-left question is now inspected against the retained population:
