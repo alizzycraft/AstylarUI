@@ -10,6 +10,31 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 // the explicit retained map paths; no captured receipt or current source is replaced.
 export function restoreRetainedMapLocationRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes('plugin-free public semantic focus continuity and synchronized selection control')) {
+    assert.equal(hash(current), 'd45409ff5f31c77cf2dda60578930ab22b936ac29cc027f3dee0589c0fdbcccd',
+      'exact retained source-map producer plus public focus and ancestor metadata');
+    const ast = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    const entries = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory').body.statements[0].expression.elements;
+    const added = entries.filter(n => n.arguments[3]?.text === 'plugin-free public semantic focus continuity and synchronized selection control');
+    assert.equal(entries.length, 194); assert.equal(added.length, 1);
+    current = current.slice(0, added[0].getFullStart()) + current.slice(added[0].end + 1);
+    for (const file of ['divider-ancestor-ax-current-20261011.log', 'divider-ancestor-ax-comparison-current-20261011.log']) {
+      const line = `    'artifacts/material-parity/${file}',\n`;
+      assert.equal(current.split(line).length, 2); current = current.replace(line, '');
+    }
+    const predecessor = execFileSync('git', ['show', '1095504a:tests/material-parity/input-equivalence-audit.mjs'],
+      { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n');
+    const entry = (text, status) => {
+      const tree = ts.createSourceFile('producer.mjs', text, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+      const matches = tree.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory')
+        .body.statements[0].expression.elements.filter(n => n.arguments[3]?.text === status);
+      assert.equal(matches.length, 1); return matches[0].getText(tree);
+    };
+    current = current.replace(entry(current, 'divider exact configured separator and ancestor AX boundary'),
+      entry(predecessor, 'divider exact configured separator AX boundary'));
+    assert.equal(current, predecessor, 'complete accepted193 producer conserved');
+    assert.equal(hash(current), '0f580d4a3e7f0e8a4b9fd2a7103948aae0e6299e67ea849ff89df0738eb30d7d');
+  }
   if (current.includes('current light mobile semantic focus continuity diagnostic counterexample')) {
     assert.equal(hash(current), '0f580d4a3e7f0e8a4b9fd2a7103948aae0e6299e67ea849ff89df0738eb30d7d',
       'exact retained source-map producer plus semantic focus proof');
@@ -584,7 +609,9 @@ export function restoreDescriptionProofRegistration(source) {
 export function restoreSizingDefaultPolicyRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
   if (current.includes("id: 'core-semantic-descendant-replacement-loses-retained-focus'")) {
-    assert.equal(hash(current), 'e707c0f45c3d95c24f46c7abbd5c97c17d79f7fe96038aafe1f3013147f8f935');
+    assert.ok(['e707c0f45c3d95c24f46c7abbd5c97c17d79f7fe96038aafe1f3013147f8f935',
+      '2c5d42f1ab26c6fcd19b3fad6eb3566ad3e0d90b8815ae2dd6acffa280aa7ece'].includes(hash(current)),
+      'exact original semantic finding or reviewed public-evidence extension');
     const ast = ts.createSourceFile('policy.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
     const entries = ast.statements.filter(ts.isVariableStatement).flatMap(n => [...n.declarationList.declarations])
       .find(n => n.name.getText(ast) === 'sourceAuditDefinitions').initializer.arguments[0].elements;

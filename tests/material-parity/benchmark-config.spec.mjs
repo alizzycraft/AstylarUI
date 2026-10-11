@@ -93,14 +93,15 @@ test('description registration conserves complete producer and source-definition
   assert.ok(producer.includes('default-light mobile tooltip keyboard-authoring and local texture-phase diagnostic (requested dark)'));
   assert.ok(producer.includes('not actual dark-theme coverage, lifecycle acceptance'));
   assert.ok(producer.includes('diagnostic registration is not acceptance or actual dark-theme coverage.'));
-  assert.ok(producer.includes('divider exact configured separator AX boundary'));
+  assert.ok(producer.includes('divider exact configured separator and ancestor AX boundary'));
   assert.ok(producer.includes('divider exact retained ownership membership boundary'));
   assert.equal(restoreDescriptionProofRegistration(producer), prior(producerFile));
   const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
   const policy = readFileSync(policyFile, 'utf8');
   assert.equal(restoreDescriptionPolicyRegistration(policy), prior(policyFile));
   const before = new Function(prior(policyFile).replace(/^export const /gm, 'const ') + '; return sourceAuditDefinitions;')();
-  const predecessorDefinitions = sourceAuditDefinitions.filter(n => n.id !== 'core-box-sizing-omission-violates-content-box-default');
+  const predecessorDefinitions = sourceAuditDefinitions.filter(n => !['core-box-sizing-omission-violates-content-box-default',
+    'core-semantic-descendant-replacement-loses-retained-focus'].includes(n.id));
   assert.equal(before.length, 153); assert.equal(predecessorDefinitions.length, 155);
   assert.deepEqual(predecessorDefinitions.slice(0, -2), before);
   for (const changed of [producer.replace('sourceFindings,', 'sourceFindings: [],'),
@@ -108,9 +109,9 @@ test('description registration conserves complete producer and source-definition
     producer.replace('scripts/audit-material-tooltip-description.mjs', 'scripts/other.mjs'),
     producer.replace('not actual dark-theme coverage, lifecycle acceptance', 'dark lifecycle acceptance'),
     producer.replace('diagnostic registration is not acceptance or actual dark-theme coverage.', 'diagnostic registration proves dark-theme acceptance.'),
-    producer.replace('Authenticates40 paired-side observations', 'Authenticates41 paired-side observations'),
+    producer.replace('Authenticates40 historical paired-side separator observations', 'Authenticates41 historical paired-side separator observations'),
     producer.replace('divider-theme-verified-ax-20261009.log', 'unreviewed-divider.log'),
-    producer.replace('Not complete accessibility,paint,lifetime,current rendering', 'Complete accessibility,paint,lifetime,current rendering')])
+    producer.replace('Not assistive-technology interaction,paint,lifetime', 'Complete assistive-technology interaction,paint,lifetime')])
     assert.throws(() => restoreDescriptionProofRegistration(changed));
   for (const changed of [policy.replace('fixture-form-field-hint-description-association-omitted', 'unknown-hint-finding'),
     policy.replace('Original', 'Rewritten')]) assert.throws(() => restoreDescriptionPolicyRegistration(changed));
@@ -375,7 +376,8 @@ test('standalone proof batch conserves complete accepted predecessor producer an
   assert.ok(first >= 0);
   assert.equal(findings[first + 1].arguments[0].properties.find(p => p.name.getText(policyTree) === 'id').initializer.text, ids[1]);
   assert.equal(policy.slice(0, findings[first].getFullStart()) + policy.slice(findings[first + 2].getFullStart()), prior(policyFile));
-  assert.equal(sourceAuditDefinitions.filter(n => n.id !== 'core-box-sizing-omission-violates-content-box-default').length - 2, 153);
+  assert.equal(sourceAuditDefinitions.filter(n => !['core-box-sizing-omission-violates-content-box-default',
+    'core-semantic-descendant-replacement-loses-retained-focus'].includes(n.id)).length - 2, 153);
 });
 
 test('retained antialias and selection receipts replay after exact diagnostic and theme conservation', async t => {

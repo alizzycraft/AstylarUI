@@ -2,6 +2,25 @@
 
 ## Current evidence boundary — October 11
 
+Coherent194 producer/policy conservation preflight now passes3/3 through existing
+assertions (9365.7546ms). Exact current194-proof/624-path producer is reversed
+only for one public-focus entry,two ancestor log paths and one expanded AX
+descriptor; complete result equals accepted193 source,then all original historical
+source transitions continue. Original157-finding policy and its exact reviewed
+public-evidence extension both restore the same156/153 predecessors. No captured
+receipt,raw finding,reference input or threshold is changed. Negative controls
+reject changed selection/ancestor claims,evidence paths and unrelated producer drift.
+Initial producer and policy failures remain at coherent-194-producer-preflight-
+20261011.log SHA2569acccbf956f5c8058c75c629416846447d3adb097eaaffb0f96860663724b091
+and coherent-194-policy-preflight-20261011.log SHA256
+fdcb0d6ab857c7c2a95dc1d0c6a06ed14f5c2689288275ddd7bcdbc0e12d0dfe.
+Combined log coherent-194-conservation-focused-20261011.log SHA256
+7f298b564cbc0d05ae2e656f3f8b2d52c827db90fee140efeac1eaacd50ca0f5.
+Complete five-path launcher dry run passes. This resolves the exact metadata/source
+conservation gap,not canonical publication,current rendering or whole-case closure.
+Next one coherent export/independent check,subject to resource headroom; no repeated
+focused proof or browser recapture is warranted for this integration step.
+
 Divider ancestor accessibility capture gap is now closed: existing probe's opt-in
 --divider-relatives records actual CDP parent/child nodes in16 standard plus4
 comparison physical contexts,40 sides covering all24 configured cases. Explicit

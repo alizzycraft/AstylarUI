@@ -1,5 +1,11 @@
 # Material audit: evidence-led implementation priorities
 
+October11 coherent194 source/policy conservation passes3/3. Existing historical
+adapter reverses only exact public-focus/ancestor metadata and requires complete
+accepted193 predecessor equality; original receipts and mutation guards survive.
+See ledger for initial failures and verified log. Five-path dry run passes;
+canonical publication/independent cold verification remain separate milestones.
+
 October11 divider current ancestor AX now covers all20 physical contexts/24
 configured cases. Parent links are intact; all40 side observations expose one
 native main versus two candidate mains. Existing outer/inner main authoring and

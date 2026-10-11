@@ -2413,7 +2413,10 @@ test('retained source map migration preserves captured bytes and exact producer 
   assert.equal(restoreRetainedMapLocationRegistration(source), prior);
   assert.equal(restoreLayoutDiagnosticRegistration(source), restoreLayoutDiagnosticRegistration(prior));
   for (const changed of [source.replace('chunk-JPEJK334.js.map', 'chunk-CHANGED.js.map'),
-    source.replace('Authenticates168 exact', 'Authenticates169 exact'), source + '\n// unrelated drift\n']) {
+    source.replace('Authenticates168 exact', 'Authenticates169 exact'), source + '\n// unrelated drift\n',
+    source.replace('Direct-DOM reset does not prove loss of synchronized selection', 'All selection is lost'),
+    source.replace('divider-ancestor-ax-current-20261011.log', 'unreviewed-ancestor.log'),
+    source.replace('one native main versus two candidate mains', 'one main on both sides')]) {
     assert.throws(() => restoreRetainedMapLocationRegistration(changed), /exact retained source-map/);
   }
   const ast = ts.createSourceFile('inventory.mjs', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
@@ -2421,7 +2424,11 @@ test('retained source map migration preserves captured bytes and exact producer 
   assert.ok(fn);
   const fingerprints = new Function('readFileSync', 'path', 'createHash',
     fn.getText(ast) + '\nreturn sourceFingerprints(process.cwd());')(readFileSync, path, createHash);
-  assert.equal(fingerprints.length, 622);
+  assert.equal(fingerprints.length, 624);
+  assert.deepEqual(fingerprints.filter(row => row.file.includes('divider-ancestor-ax-')).map(row => row.file), [
+    'artifacts/material-parity/divider-ancestor-ax-current-20261011.log',
+    'artifacts/material-parity/divider-ancestor-ax-comparison-current-20261011.log',
+  ]);
   const prefix = 'artifacts/material-parity/retained-evidence/component-map-recovery-20261011/';
   const maps = fingerprints.filter(row => row.file.startsWith(prefix));
   assert.equal(maps.length, 7);
