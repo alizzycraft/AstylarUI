@@ -10,6 +10,16 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 // the explicit retained map paths; no captured receipt or current source is replaced.
 export function restoreRetainedMapLocationRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes('timepicker-light-mobile-scroll-current-20261012.log')) {
+    assert.equal(hash(current), '8e392303c3c6f94d6710366da3abc734770f404b0668c133a28a40c067460d9b',
+      'exact retained source-map producer plus light-mobile scrollbar evidence');
+    const line = "    'artifacts/material-parity/timepicker-light-mobile-scroll-current-20261012.log',\n";
+    assert.equal(current.split(line).length, 2); current = current.replace(line, '');
+    const predecessor = execFileSync('git', ['show', 'c9d0655c:tests/material-parity/input-equivalence-audit.mjs'],
+      { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n');
+    assert.equal(current, predecessor, 'whole accepted dark-mobile registration predecessor conserved');
+    assert.equal(hash(current), '78eeff94397dfd7898d1566c9cbd485432f2a228525273c8dfada03d7bd46719');
+  }
   if (current.includes('timepicker-dark-mobile-lifecycle-current-20261012.log')) {
     assert.equal(hash(current), '78eeff94397dfd7898d1566c9cbd485432f2a228525273c8dfada03d7bd46719',
       'exact retained source-map producer plus current dark-mobile timepicker evidence');

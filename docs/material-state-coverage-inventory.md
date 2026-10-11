@@ -1,5 +1,20 @@
 # Material comparison/state coverage inventory
 
+## Current mobile evidence batch registration — October 12
+
+Both dark lifecycle and light scrollbar logs now register through existing
+sourceFingerprints,194 proofs/628 source paths. Exact producer
+8e392303c3c6f94d6710366da3abc734770f404b0668c133a28a40c067460d9b
+reverses only the light path to whole Gitc9d0655c/78eeff94,then prior dark and
+accepted producer chains. Existing assertion1/1 passes7792.464ms (9224.6515ms
+terminal),including light-path mutation rejection and complete source inventory.
+Canonical package remains194/626; source/log registration is not publication or
+current full rendering acceptance. Two bounded missing mobile questions are now
+answered with failures; do not repeat their captures. Next reconcile local option
+paint/authoring and applicable isolation gaps from existing owner evidence,then
+one coherent export/cold/import milestone with headroom checked. All2311 whole
+case closures and original final gates remain open; classifications unchanged.
+
 ## Current light-mobile scrollbar question — October 12
 
 Existing scrollbar diagnostic adds opt-in ASTYLAR_AUDIT_MOBILE_TIMEPICKER_SCROLL=light,
