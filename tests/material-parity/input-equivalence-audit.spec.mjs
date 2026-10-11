@@ -2400,6 +2400,37 @@ test('divider runtime registration preserves complete predecessor source and rej
   }
 });
 
+test('retained source map migration preserves captured bytes and exact producer predecessor', async () => {
+  const { restoreRetainedMapLocationRegistration, restoreLayoutDiagnosticRegistration } =
+    await import('./position-composition-producer-transition.mjs');
+  const source = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8').replaceAll('\r\n', '\n');
+  const prior = execFileSync('git', ['show', 'ab9408bd:tests/material-parity/input-equivalence-audit.mjs'],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreRetainedMapLocationRegistration(source), prior);
+  assert.equal(restoreLayoutDiagnosticRegistration(source), restoreLayoutDiagnosticRegistration(prior));
+  for (const changed of [source.replace('chunk-JPEJK334.js.map', 'chunk-CHANGED.js.map'),
+    source.replace('Authenticates168 exact', 'Authenticates169 exact'), source + '\n// unrelated drift\n']) {
+    assert.throws(() => restoreRetainedMapLocationRegistration(changed), /exact retained source-map/);
+  }
+  const ast = ts.createSourceFile('inventory.mjs', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const fn = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'sourceFingerprints');
+  assert.ok(fn);
+  const fingerprints = new Function('readFileSync', 'path', 'createHash',
+    fn.getText(ast) + '\nreturn sourceFingerprints(process.cwd());')(readFileSync, path, createHash);
+  assert.equal(fingerprints.length, 622);
+  const prefix = 'artifacts/material-parity/retained-evidence/component-map-recovery-20261011/';
+  const maps = fingerprints.filter(row => row.file.startsWith(prefix));
+  assert.equal(maps.length, 7);
+  const checkpoint = JSON.parse(readFileSync('artifacts/material-parity/current-full-20261005/checkpoint/manifest.json'));
+  for (const row of maps) {
+    const expected = checkpoint.provenance.browserFiles.find(file => file.file === path.basename(row.file));
+    assert.ok(expected);
+    assert.equal(createHash('sha256').update(readFileSync(row.file)).digest('hex'), expected.sha256);
+    assert.equal(row.sha256, expected.sha256);
+  }
+  assert.equal(fingerprints.some(row => /dist\/material-showcase\/browser\/.*\.js\.map$/.test(row.file)), false);
+});
+
 test('passive proof registration conserves complete predecessor production source and inventory', async () => {
   const { restorePassiveProofRegistration, restoreDividerProofRegistration } = await import('./position-composition-producer-transition.mjs');
   const source = restoreDividerProofRegistration(readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8'));

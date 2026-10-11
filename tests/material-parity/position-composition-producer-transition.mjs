@@ -5,10 +5,45 @@ import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
 
 const hash = text => createHash('sha256').update(text).digest('hex');
+// Historical conservation only: reverse the exact storage-location migration,
+// then the independently reviewed pointer-proof description. Production keeps
+// the explicit retained map paths; no captured receipt or current source is replaced.
+export function restoreRetainedMapLocationRegistration(source) {
+  let current = source.toString().replaceAll('\r\n', '\n');
+  const retained = 'artifacts/material-parity/retained-evidence/component-map-recovery-20261011/';
+  if (!current.includes(retained)) return current;
+  assert.equal(hash(current), '3ec3b9f5d7bf92171b4d4a92400fc4705e07b5ac7a0ba0a9fab4ccf5357cc1e8',
+    'exact retained source-map location migration');
+  for (const name of ['chunk-3JXWRYJY.js.map', 'chunk-625ZTKCG.js.map', 'chunk-7SL66K3U.js.map',
+    'chunk-DV4XS33V.js.map', 'chunk-JPEJK334.js.map', 'chunk-YSOHGT2J.js.map', 'main.js.map']) {
+    const from = `'${retained}${name}'`;
+    assert.equal(current.split(from).length, 2);
+    current = current.replace(from, `'examples/material-showcase/dist/material-showcase/browser/${name}'`);
+  }
+  assert.equal(hash(current), '9849afd29f357b88ceba38f2a08270409e99b92b4a8a3baf4ab6aa60a1185312',
+    'complete pre-migration producer conserved');
+  return current;
+}
+
 // Reverse only the exact diagnostic inventory addition for historical
 // conservation. This does not substitute old bytes in current production.
 export function restoreLayoutDiagnosticRegistration(source) {
-  let current = source.toString().replaceAll('\r\n', '\n');
+  let current = restoreRetainedMapLocationRegistration(source);
+  if (hash(current) === '9849afd29f357b88ceba38f2a08270409e99b92b4a8a3baf4ab6aa60a1185312') {
+    const prior = execFileSync('git', ['show', 'ab9408bd^:tests/material-parity/input-equivalence-audit.mjs'],
+      { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n');
+    assert.equal(hash(prior), '492f10e09ad974a898f7f67c55d668b41b757556da3c8db234e598ef9af28377');
+    const entry = text => {
+      const ast = ts.createSourceFile('producer.mjs', text, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+      assert.equal(ast.parseDiagnostics.length, 0);
+      const entries = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory')
+        .body.statements[0].expression.elements;
+      const matches = entries.filter(n => n.arguments[3]?.text === 'retained configured state applicability boundary');
+      assert.equal(matches.length, 1); return matches[0].getText(ast);
+    };
+    current = current.replace(entry(current), entry(prior));
+    assert.equal(hash(current), hash(prior), 'complete pointer-description predecessor conserved');
+  }
   if (current.includes('public omitted box sizing default defect and exact policy conservation')) {
     assert.equal(hash(current), '492f10e09ad974a898f7f67c55d668b41b757556da3c8db234e598ef9af28377');
     const ast = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);

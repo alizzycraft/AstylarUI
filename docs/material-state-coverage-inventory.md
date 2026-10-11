@@ -2,6 +2,26 @@
 
 ## Current evidence boundary — October 11
 
+Historical source-map location migration is now implemented in production
+sourceFingerprints: all seven paths explicitly name retained-evidence/
+component-map-recovery-20261011,not mutable dist. Existing source-transition
+helper reverses only those seven exact entries after pinning complete new
+producer3ec3b9f5 and requires complete predecessor9849afd2. The independently
+reviewed pointer proof-description transition restores its one AST proof entry
+and requires full predecessor492f10e0; no other producer text is substituted.
+Current production retains the new paths and expanded pointer proof description.
+
+Focused existing input-equivalence suite assertion passes1/1,6493.4623ms:
+node --test --test-name-pattern='retained source map migration'
+tests/material-parity/input-equivalence-audit.spec.mjs. It executes actual
+sourceFingerprints with ordinary reads (622 entries),checks all seven raw and
+LF fingerprint hashes against original checkpoint receipts,and confirms no
+mutable browser-map path remains. Wrong filename,pointer-description mutation
+and unrelated appended code reject exact restoration. Original historical
+receipts/capture files remain unchanged. Canonical export/independent cold check
+and compact import are the next coherent integration milestone,not yet accepted;
+full current browser/case-closure gates remain required.
+
 All seven original October5 source maps now coexist under the explicit retained
 component-map-recovery-20261011 directory. Before copying the six preserved maps,
 authenticate every map's raw SHA256 against checkpoint provenance.browserFiles;
