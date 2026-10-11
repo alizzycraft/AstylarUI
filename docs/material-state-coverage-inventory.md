@@ -2,6 +2,19 @@
 
 ## Current evidence boundary — October 11
 
+Icon pending-image remount validator now authenticates historical1887-asset
+build through existing retained helper and reads original core mapdba48404
+explicitly. Record/checkpoint/source receipts and sampled ownership assertions
+remain unchanged; original runtime disposal failure is still required,not
+converted to acceptance. Current core initialFailure reporter pattern remains
+checked separately. Existing assertion passes1/1,1911.7ms; log icon-retained-
+build-reconciliation-20261011.log SHA256a9adca9e0c700cafa1136d480da028c22bad0d4c4b8e79b1ebd0efeb1d743280.
+This closes another mutable evidence-location failure,not current lifecycle or
+whole-case acceptance. Raw runner recovery using exact Git diff hunk ranges on
+authenticated older Material source also fails e01ef9dc (same55269011/9b8394d5
+candidate hashes); do not repeat line-ending recovery unchanged. That distinct
+receipt remains missing. Other owning readers and final gates stay pending.
+
 Menu exact action applicability is independently established despite pending
 whole-runner receipt. Owning configured-menu-bounds check with diagnostic three
 retained-map path changes fails before maps at line1476: current raw584cdfc8

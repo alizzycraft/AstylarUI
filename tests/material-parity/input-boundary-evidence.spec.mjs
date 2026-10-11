@@ -13,6 +13,7 @@ import { fingerprintDirectory } from './run-checkpoint.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { propertyGroups } from './input-equivalence-policy.mjs';
 import { readGapSurveySource } from './gap-survey-source-replay.mjs';
+import { verifyRetainedMaterialBrowserFiles } from './historical-audit-module-source.mjs';
 import { materialStaticCases, materialInteractionCases, materialMobileFlowCases } from './benchmark.config.mjs';
 import { cursorInput } from '../../examples/material-showcase/audit/cursor-default-input.mjs';
 
@@ -28,8 +29,9 @@ test('Icon pending image Angular remount preserves sampled owners but fails runt
   const record = JSON.parse(raw);
   for (const receipt of [record.capture.checkpointManifest, ...record.capture.sources]) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
   const manifest = JSON.parse(readFileSync(record.capture.checkpointManifest.file));
-  assert.deepEqual(fingerprintDirectory('examples/material-showcase/dist/material-showcase/browser'), manifest.provenance.browserFiles);
-  const sourceMap = JSON.parse(readFileSync('examples/material-showcase/dist/material-showcase/browser/chunk-3JXWRYJY.js.map'));
+  assert.deepEqual(verifyRetainedMaterialBrowserFiles(manifest.provenance.browserFiles),
+    { authenticatedFiles: 1887, currentRenderingAccepted: false });
+  const sourceMap = JSON.parse(readFileSync('artifacts/material-parity/retained-evidence/component-map-recovery-20261011/chunk-3JXWRYJY.js.map'));
   const index = sourceMap.sources.indexOf('node_modules/astylarui/dist/lib/lib/astylar.js');
   assert(index >= 0);
   const initialFailure = /void session\.invalidate\('initial'\)\.catch\(\(?error\)? => \{\s*this\.reportRenderFailure\('Initial render failed\.', error\);\s*\}\);/;
