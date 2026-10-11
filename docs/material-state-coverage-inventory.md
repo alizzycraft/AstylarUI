@@ -2,6 +2,19 @@
 
 ## Current evidence boundary — October 11
 
+Divider retained text-paint membership is now explicitly reconciled, without
+recapture. Read-only Node assertion joins the original October5 report's24
+divider kind/profile/viewport/state keys to all48 diagnostic text pairs, exactly
+one divider-above and divider-below per case. All96 stored crop byte lengths
+and SHA256 receipts authenticate; original report hash equals the diagnostic's
+ab42dbec receipt. Existing separator-strip log also contains24 rows spanning
+the same16 static and8 inspect contexts. This closes the text-crop exact-case
+membership question,not current paint applicability,separator-strip receipt
+verification,metric acceptance or whole-case closure. No new report or test
+layer was created. Next check existing paint producer/metric dependencies and
+owning source applicability,then distinguish remaining internal clipping/edge
+attribution from already complete historical crop membership.
+
 Divider font/remount applicability question is now bounded without recapture.
 Existing complete runtime-member/linker census passes1/1 (11546.005ms test,
 12851.2536ms terminal),authenticating88 captured/installed linked modules and1583
