@@ -2,6 +2,32 @@
 
 ## Current evidence boundary — October 11
 
+Complete scalar-to-case incidence join now authenticates the192 compact snapshot
+and noncanonical membership proposal58711556:5539 reviewed populations plus2944
+reconstructed observed populations account for all8483 groups/389202 occurrences.
+Every member is one of the2311 configured IDs,each group count equals its unique
+membership,and all2311 cases have mapped findings (108–448 groups per case).
+Classification occurrence totals:175268 parity-harness,69639 application/plugin
+authoring,128925 equivalent representation,15352 intentional documented limitation,
+18 documented limitation. No group is silently dropped because it fails; scalar
+classifications are not contextual or full-case acceptance. The nine passive
+families contribute exactly354 configured cases to this join,not a new denominator.
+
+Separate typography incidence check initially rejects a blanket configured-case
+assertion:39904 rows include supplemental boundaries. Correct exact census is
+37326 differences spanning all2311 configured IDs plus2578 differences spanning
+154 supplemental IDs: paginator728/104,date picker1644/20,tooltip206/30
+(differences/boundaries). All39904 rows have classification,justification and owner;
+every nonconfigured key is explicitly supplemental. Twenty datepicker boundaries
+are not twenty new configured cases,just as151 supplemental top-level producer rows
+are not154 action boundaries. Existing global compact query separately retains156
+source findings; family-only queries do not include that global shard. This closes
+the scalar/typography denominator and exact incidence ambiguity,not structure,
+event/state applicability,history/source proof validity or current output. Proposal
+remains noncanonical pending coherent integration. Next bind the remaining family
+obligations to these exact case/finding IDs and existing192 focused proof scopes;
+do not infer complete review merely from populated classification fields.
+
 Exact scalar occurrence-membership gap is now bounded and reconstructed:
 compact192 has5539 groups with complete reviewedCases and2944 without it.
 Collector cases is intentionally capped12 examples; a2311-case union therefore
