@@ -1,5 +1,34 @@
 # Material comparison/state coverage inventory
 
+## Current dark-mobile timepicker boundary — October 12
+
+Specific gap: current dark Escape/reopen AX,event and live ownership evidence,
+not the already diagnosed caret/focus mechanism. Existing field-popup cycle test
+now accepts explicit dark opt-in alongside light; default historical two-family
+actions/assertions remain. Actual dark frame rgb(28,27,31) is required on both
+sides. Selection-pointer checkpoint2aac425d served-file census authenticates;
+Chrome154.0.8037.99,390x844 DPR2. Focused1/1 passes,14534.4381ms terminal,
+log artifacts/material-parity/timepicker-dark-mobile-lifecycle-current-20261012.log
+SHA256 e71f33560f2c7248b0e7c6ededfae8da5df0894784567ecf63ef7b8aab25c930.
+Both sides expose48 AX options at all three openings and0 after Escape; input
+focus returns and page errors are empty. Native selects none,candidate12:00 AM.
+Candidate live materials26/27/28 and retained cursor orphans1/2/3 reproduce the
+existing failure; native focus-provenance0,candidate cumulative16/37/58.
+Final sampled scene/engine/cache/plugin disposal clears. This is inspected failure
+evidence,not resource plateau or equal-input acceptance. Capture source SHA256
+5a90ce4f5274f13e16656efd8c52e75e42bc220b470f02526652a5a5cde724f5.
+Independent log/receipt replay exits0: six first-blur boundaries occur inside
+semantic reconcileElement.replaceChildren,connected input survives,syncFocus
+restores it; three Escape down/up pairs per side target timepicker-control with
+no input/change events. Existing whole-source adapter reverses only four exact
+profile/theme/receipt edits to prior0c795ff9,then the unchanged historical chain.
+Direct full equality with Git72b28c0e exits0; dark profile/theme mutations reject.
+Complete transition suite exits0,32/32,no skips,136914.6549ms; this is historical
+source conservation,not rendering acceptance. Two new mutation guards were also
+executed directly after addition and reject profile/theme drift. Consumed test fingerprint integration belongs in a coherent
+batch,not an immediate canonical rebuild. No whole-case closure; local paint,
+late async/isolation and final gates remain open.
+
 ## Current publication boundary — October 12
 
 The bounded divider batch is now exported, independently cold-checked, imported
@@ -704,8 +733,8 @@ state=open-dismiss. Both remain partially inspected,inputEquivalent=false.
 | Pointer opening and on-screen outer geometry | Current light/dark paired open captures,260x256 at65,237.08. | Focus-trigger opening and real-key behavior in these exact mobile contexts; do not import desktop results wholesale. |
 | Open-panel paint | Eight retained open/wheel PNGs; dark lower-corner unequal authoring classified. | Full local option text,selection/hover/held,clip and shadow input-equivalence classification; capture existence is not completion. |
 | Wheel state and client geometry | Both current themes0→144; native245px/candidate260px client width. | Dark drag/track inspected failures are dark-only; light pointer scrollbar behavior and complete mobile input/paint owner join remain. |
-| Three Escape cycles and final dismissal | Historical dark three-cycle focus/options observations plus current light three-cycle actual AX/options/focus/Escape events; authored popup-kind and empty-selected-state mismatches classified. | Dark current applicability/AX,full applicable event/relationship inspection; new opening captures alone do not exercise dismissal. |
-| Lifetime/ownership and isolation | Dark historical and light current live26/27/28,cursor orphan1/2/3 inspected failures; plugin-free caret ownership reduction identifies allocation/disposal divergence. | Dark current receipts,late disposal and applicable surface isolation; sampled whole-surface cleanup is not element-lifetime acceptance. |
+| Three Escape cycles and final dismissal | Current light and dark three-cycle actual AX/options/focus/Escape events; dark October12 log e71f3356 and exact checkpoint/source receipts authenticate six boundaries. Authored popup-kind and empty-selected-state mismatches remain classified. | Full applicable event/relationship inspection; endpoint focus is not continuity acceptance: candidate descendant replacement blurs then restores the connected input. |
+| Lifetime/ownership and isolation | Current light and dark live26/27/28,cursor orphan1/2/3 inspected failures; dark receipts and sampled final disposal authenticate. Plugin-free caret ownership reduction identifies allocation/disposal divergence. | Late disposal and applicable surface isolation; sampled whole-surface cleanup is not element-lifetime acceptance. |
 
 No obligations counted as closed solely from historical output flags. Next
 decisive investigation is current mobile Escape/reopen/focus/event boundaries

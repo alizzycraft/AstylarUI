@@ -1378,7 +1378,9 @@ test('dark mobile overlay cycles retain focus and semantic cleanup boundaries', 
 });
 
 test('dark mobile field popup cycles diagnose retained cursor materials', async t => {
-  const currentLightLifecycle = process.env.ASTYLAR_AUDIT_MOBILE_TIMEPICKER_LIFECYCLE === 'light';
+  const currentLifecycleProfile = process.env.ASTYLAR_AUDIT_MOBILE_TIMEPICKER_LIFECYCLE;
+  assert.ok(currentLifecycleProfile === undefined || ['light', 'dark'].includes(currentLifecycleProfile));
+  const currentLightLifecycle = currentLifecycleProfile !== undefined;
   await withFrozenShowcase(async (browser, baseUrl) => {
     assert.equal(browser.version(), currentLightLifecycle ? '154.0.8037.99' : '154.0.8037.58');
     const failedPlateaus = [];
@@ -1388,14 +1390,16 @@ test('dark mobile field popup cycles diagnose retained cursor materials', async 
         const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
         const errors = []; page.on('pageerror', error => errors.push(String(error)));
         try {
-          await page.goto(`${baseUrl}/${mode}/${family}?benchmark=1&profile=${currentLightLifecycle ? 'light' : 'dark'}`);
+          await page.goto(`${baseUrl}/${mode}/${family}?benchmark=1&profile=${currentLifecycleProfile ?? 'dark'}`);
           await page.locator('.frame').waitFor();
           if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
           // audit-light-lifecycle-start
           let axSession;
           if (currentLightLifecycle) {
             assert.deepEqual(await page.locator('.frame').evaluate(node => ({ dark: node.classList.contains('dark'),
-              background: getComputedStyle(node).backgroundColor })), { dark: false, background: 'rgb(255, 251, 254)' });
+              background: getComputedStyle(node).backgroundColor })), currentLifecycleProfile === 'dark'
+                ? { dark: true, background: 'rgb(28, 27, 31)' }
+                : { dark: false, background: 'rgb(255, 251, 254)' });
             axSession = await page.context().newCDPSession(page);
             await page.evaluate(() => {
               window.__mobileLifecycleEvents = [];
@@ -1429,7 +1433,7 @@ test('dark mobile field popup cycles diagnose retained cursor materials', async 
               }, true);
             });
             // audit-focus-provenance-end
-            t.diagnostic(JSON.stringify({ currentLightLifecycleReceipts: { mode,
+            t.diagnostic(JSON.stringify({ [currentLifecycleProfile === 'dark' ? 'currentDarkLifecycleReceipts' : 'currentLightLifecycleReceipts']: { mode,
               sourceSha256: createHash('sha256').update(readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')).digest('hex'),
               checkpointFile: process.env.ASTYLAR_MATERIAL_SHOWCASE_CHECKPOINT,
               checkpointSha256: createHash('sha256').update(readFileSync(process.env.ASTYLAR_MATERIAL_SHOWCASE_CHECKPOINT)).digest('hex'),

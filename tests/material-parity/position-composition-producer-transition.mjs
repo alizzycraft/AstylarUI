@@ -425,6 +425,22 @@ export function restoreLayoutDiagnosticRegistration(source) {
 }
 // Historical replay only. Never use this reader for current capture or rendering acceptance.
 export function readRetainedSortFocusSource(current = readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')) {
+  if (current.toString().includes('const currentLifecycleProfile =')) {
+    assert.equal(hash(current), '5a90ce4f5274f13e16656efd8c52e75e42bc220b470f02526652a5a5cde724f5');
+    let text = current.toString();
+    const changes = [
+      ["  const currentLifecycleProfile = process.env.ASTYLAR_AUDIT_MOBILE_TIMEPICKER_LIFECYCLE;\n  assert.ok(currentLifecycleProfile === undefined || ['light', 'dark'].includes(currentLifecycleProfile));\n  const currentLightLifecycle = currentLifecycleProfile !== undefined;",
+        "  const currentLightLifecycle = process.env.ASTYLAR_AUDIT_MOBILE_TIMEPICKER_LIFECYCLE === 'light';"],
+      ["${currentLifecycleProfile ?? 'dark'}", "${currentLightLifecycle ? 'light' : 'dark'}"],
+      ["currentLifecycleProfile === 'dark'\n                ? { dark: true, background: 'rgb(28, 27, 31)' }\n                : { dark: false, background: 'rgb(255, 251, 254)' }", "{ dark: false, background: 'rgb(255, 251, 254)' }"],
+      ["[currentLifecycleProfile === 'dark' ? 'currentDarkLifecycleReceipts' : 'currentLightLifecycleReceipts']", 'currentLightLifecycleReceipts'],
+    ];
+    for (const [addition, prior] of changes) {
+      assert.equal(text.split(addition).length, 2); text = text.replace(addition, prior);
+    }
+    current = Buffer.from(text);
+    assert.equal(hash(current), '0c795ff932aba1bec343bb6b0647ecd0e3332c994861441e50ded053cdad8c02');
+  }
   if (current.toString().includes('// audit-focus-provenance-start')) {
     assert.equal(hash(current), '0c795ff932aba1bec343bb6b0647ecd0e3332c994861441e50ded053cdad8c02');
     let text = current.toString();

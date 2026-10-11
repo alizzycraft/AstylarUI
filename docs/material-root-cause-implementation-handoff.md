@@ -7,11 +7,14 @@ diagnosis; the accepted185 integration-pending statement below is historical,
 not an outstanding export gap. Existing loadFindingEvidence authenticates the
 original row against canonical compressed/row hashes,exit0: original ID
 core-box-sizing-omission-violates-content-box-default,confirmed-core-renderer-defect.
-Do not rerun the public browser reduction. Current mobile timepicker focus/
-lifecycle coverage remains asymmetric: light has six current AX/event boundaries;
-dark retains historical cycles but lacks equivalent current AX/event receipts.
-Next use the existing field-popup cycle diagnostic for that missing dark context,
-preserving historical failure assertions and requiring actual dark theme evidence.
+Do not rerun the public browser reduction. October12 dark-mobile timepicker now
+has six current AX/event boundaries through the existing cycle diagnostic,with
+actual dark theme verified. Exact receipts/event replay confirms descendant
+replacement first blur,midnight selection mismatch and cursor orphan growth1/2/3.
+See current coverage ledger for log hash,scope and remaining paint/isolation gaps.
+Historical source conservation32/32 passes; this is not whole-case parity.
+Consumed proof fingerprints and new log membership await coherent integration;
+do not export solely for this handoff edit or repeat the settled mobile captures.
 
 October12 bounded divider publication now passes named export,independent cold
 canonical check,compact import and whole-index verification,all exit0.194 proofs/
