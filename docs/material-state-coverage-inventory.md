@@ -2,6 +2,42 @@
 
 ## Current evidence boundary — October 11
 
+### Exact configured-case current-build applicability census
+
+Read-only existing materialCaseKey join verifies436 static+1857 ordinary
+interaction+18 mobile-flow IDs=2311 unique cases,exactly the October5 complete
+report's result set. The18 mobile flows are included in1875,not additional cases.
+fingerprintDirectory compares current1887 served files with October5:1880 equal,
+three changed (compare/index.html,index.csr.html,main.js),four removed/four added.
+Therefore the old complete matrix is historical,not current-build acceptance.
+Both October11 overlay and trace captures match all1887 current build receipts
+and the current installed-dependency lock. Existing openMaterialCheckpoint.load
+replays every captured case and authenticates every checkpointed artifact:59+1
+records pass,with the trace overlapping one of the59,not a60th case.
+
+| Configured population | Total cases | Unique cases captured on current build | No current-build output capture |
+| --- | ---: | ---: | ---: |
+| bottom-sheet | 63 | 25 | 38 |
+| snack-bar | 71 | 34 | 37 |
+| Other34 families | 2177 | 0 | 2177 |
+| Total | 2311 | 59 | 2252 |
+
+The59 IDs are exactly the existing configured bottom-sheet/snack-bar cases with
+state open,activate,activate-leave or activate-twice (no extra responsive/DPR
+cross-product inferred). Current-build capture coverage is59/2311=2.553%,not
+inspection or audit completion. All cases still have retained inspection evidence.
+October11 overlay harness has9/10 matching current module receipts; only runner
+differs after opt-in tracing. One instrumented case matches10/10 current harness
+receipts. Preserve these separately:58 other cases have regular current-build
+passes; the remaining case has a regular failure and a later instrumented pass.
+Do not sum captures,erase the failure or call this59 current enforced passes.
+No current browser-launch revalidation was performed by this filesystem census.
+Report SHA931bc5f/84668a6b remain as recorded below. This closes the missing exact
+configured-ID/current-build denominator,not obligation closure or all current
+environment validity. Dependency-validated input/source proofs may still be
+reused despite stale output pixels; decide that per proof rather than blindly
+recapturing2252 cases. Final complete enforced matrix remains required.
+
 Existing workflow gate reconciliation closes two stale expectations,not audit
 case coverage: unmodified proof-pointer test fails192!=127,then its historical
 tooltip status expectation fails after count reconciliation. Current producer
