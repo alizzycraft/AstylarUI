@@ -2,6 +2,26 @@
 
 ## Current evidence boundary — October 11
 
+Divider exact classification membership is now joined against published193,
+not inferred from the12-example cases lists. Existing queryFindings/verifyFindings
+authenticate the current package/index/shards; original proposal58711556 digest
+and every reused complete-row hash/ordinal/classification/value population agree.
+All304 scalar groups (174 reviewed memberships,130 observed proposal memberships)
+conserve5424 occurrences:226 scalar records per each of24 configured cases.
+All144 typography rows have exact configured IDs,classification,justification and
+owner; six rows per case. Owner populations: above76/below76/primary74/root78
+scalar groups; above24/below24/eyebrow48/title48 typography rows. No missing case
+or silently unclassified row. Observed occurrence membership is not contextual
+review or source/current-render acceptance; the proposal remains noncanonical.
+Read-only log divider-exact-owner-classification-join-20261011.log SHA256
+241edb200bec189c46baa0ff46130391245ec9501e5626d61532f95eb4b66e1d.
+This closes the scalar/typography case-to-classification join,not full style/paint
+closure. The25 authoring groups are already attributed to absolute border/fill
+substitution and shared root color/shadow/box/flow/fixed-height inputs; do not
+reinvestigate them unchanged. Next exact paint/source applicability and remaining
+ancestor-AX/font/remount obligations; outer-host clipping receipts/comparison
+membership were already closed below. All24 full-case statuses remain partial.
+
 Semantic public-proof registration gap is now closed in producer source. Existing
 core-semantic-descendant-replacement-loses-retained-focus retains its original
 timepicker observation/receipt and all156 predecessor definitions; one additional
@@ -3448,7 +3468,7 @@ promoted to parity. The following supersedes stale missing-cohort statements.
 
 | Obligation | Current inspected boundary | Precise remaining question |
 | --- | --- | --- |
-| Membership,structure,history and authored layout/paint | All24 paired trees; complete node sequence,paragraph/separator order and classified absolute/border-to-background substitutions. Existing equal-input empty-block reduction demonstrates the302px/301px core used-height failure. | Join all applicable owner/style evidence to each exact case; do not reprove the settled empty-block cause or historical absolute authoring. |
+| Membership,structure,history and authored layout/paint | All24 paired trees; complete node sequence,paragraph/separator order and classified absolute/border-to-background substitutions. Existing equal-input empty-block reduction demonstrates the302px/301px core used-height failure. October11 published193 join covers304 scalar groups/5424 occurrences and144 typography rows across all24 exact cases; observed proposal memberships preserve unchanged complete-row hashes. | Scalar/typography classification incidence is complete,not complete style/paint or current-source acceptance. Join remaining paint/source obligations; do not reprove settled authoring,empty-block cause or outer-host clipping membership. |
 | Wrapping/width inputs | Current parser and width inheritance traced;20 fresh font-loaded registry contexts join all24 cases/48 corresponding owner records. Single literal words stay single-line under bounded width controls. | Fresh JIT dimensions do not recover historical paint-time texture constraints or certify complete AOT line boxes. |
 | Separator semantics | Actual-theme40 side observations/20 contexts cover all24 configured cases,including comparison panes; role/name/orientation/no children and description relations inspected. | Ancestor AX is only captured in the historical light desktop DPR1 pair. Duplicate main originates in current host/document authoring; broader live ancestor relationships are not captured. Do not recapture already covered separator targets. |
 | Replacement/disposal | Exact20 physical-context membership joins all24 cases; sampled replacement counts and final disposal inspected. | Initial/later font timing,remount and peer-surface lifetime remain distinct; sampled final cleanup is not all lifetime acceptance. Leaf image/media/plugin-animation races are inapplicable to this authored divider. |

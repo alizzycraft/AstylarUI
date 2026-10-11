@@ -1,5 +1,12 @@
 # Material audit: evidence-led implementation priorities
 
+October11 divider exact membership is complete for all304 scalar groups and144
+typography rows across24 configured cases. Original observed membership proposal
+authenticates unchanged rows in published193; no missing classification or case.
+This closes incidence bookkeeping,not contextual review,current paint/source
+validity or full inspection. Existing25 authoring groups stay settled. See current
+ledger for exact counts/log receipt and remaining paint,AX,font/remount boundaries.
+
 October11 public semantic-focus proof is now registered in existing producer
 inventory and the original finding,with its synchronized-selection limitation.
 Original timepicker observation and156 predecessor findings are unchanged;
