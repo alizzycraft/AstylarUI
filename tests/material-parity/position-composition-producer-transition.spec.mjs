@@ -26,6 +26,8 @@ test('retained sorter paint additions conserve original statements and reject so
   const original = execFileSync('git', ['show', '72b28c0e:tests/material-parity/sort-focus-structure.spec.mjs'], { maxBuffer: 4_000_000 });
   assert.deepEqual(readRetainedSortFocusSource(current), original);
   for (const replacement of [
+    current.toString().replace('if (lightScroll) return;', 'if (true) return;'),
+    current.toString().replace('const lightPaint = lightScroll || ', 'const lightPaint = '),
     current.toString().replace("['light', 'dark'].includes(currentLifecycleProfile)", "['light'].includes(currentLifecycleProfile)"),
     current.toString().replace("? { dark: true, background: 'rgb(28, 27, 31)' }", "? { dark: false, background: 'rgb(28, 27, 31)' }"),
     current.toString().replace('assert.ok(thumb.after.firstY > thumb.before.firstY);', ''),

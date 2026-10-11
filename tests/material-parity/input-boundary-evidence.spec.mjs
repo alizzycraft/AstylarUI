@@ -114,9 +114,12 @@ test('semantic descendant replacement focus evidence retains exact current case 
     .map(line => JSON.parse(line.slice(2).replaceAll(String.fromCharCode(92) + '#', '#')));
   const darkReceipts = darkRows.filter(row => row.currentDarkLifecycleReceipts).map(row => row.currentDarkLifecycleReceipts);
   assert.equal(darkReceipts.length, 2);
+  const capturedSorter = execFileSync('git', ['show', 'd3f27b3a:tests/material-parity/sort-focus-structure.spec.mjs'], { maxBuffer: 4_000_000 });
+  const { readRetainedSortFocusSource } = await import('./position-composition-producer-transition.mjs');
+  assert.deepEqual(readRetainedSortFocusSource(capturedSorter), readRetainedSortFocusSource());
   for (const receipt of darkReceipts) {
     assert.equal(hash(readFileSync(receipt.checkpointFile)), receipt.checkpointSha256);
-    assert.equal(hash(readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')), receipt.sourceSha256);
+    assert.equal(hash(capturedSorter), receipt.sourceSha256);
     assert.deepEqual(receipt.viewport, [390, 844, 2]);
     assert.equal(receipt.acceptance, false);
   }
@@ -153,6 +156,19 @@ test('semantic descendant replacement focus evidence retains exact current case 
   // Canvas pointer targets and semantic focus delivery remain distinct; final
   // focus equality cannot erase the measured replacement blur or prove events equal.
   assert.notDeepEqual(dark.reference.cycles.at(-1).closed.events, dark.astylar.cycles.at(-1).closed.events);
+  const scrollBytes = readFileSync('artifacts/material-parity/timepicker-light-mobile-scroll-current-20261012.log');
+  assert.equal(hash(scrollBytes), '3a106e53497490a1cbabd5b8c9f08bfdbd4c53fe2b5d1ba3d04ad281aa131eef');
+  const scrollRows = scrollBytes.toString().split(/\r?\n/).filter(line => line.startsWith('# {'))
+    .map(line => JSON.parse(line.slice(2).replaceAll(String.fromCharCode(92) + '#', '#')));
+  assert.equal(scrollRows.filter(row => row.mobileScrollbarTheme).length, 2);
+  for (const row of scrollRows.filter(row => row.mobileScrollbarTheme)) {
+    assert.deepEqual(row.mobileScrollbarTheme.actualTheme, { dark: false, background: 'rgb(255, 251, 254)' });
+    assert.deepEqual(row.mobileScrollbarTheme.viewport, [390, 844, 2]);
+  }
+  const drag = scrollRows.find(row => row.scrollbarDragFinding).scrollbarDragFinding;
+  assert.equal(drag.profile, 'light'); assert.equal(drag.acceptance, false);
+  assert.deepEqual(drag.nativeDragScrollTop, [211, 421, 632]);
+  assert.deepEqual(drag.candidateDragScrollTop, [0, 0, 0]);
 });
 const bytes = readFileSync(file);
 assert.equal(hash(bytes), '39df94e0eb87480d3824927a41a9950d1d275f7c97ab97a571c449efdc6da7d7');

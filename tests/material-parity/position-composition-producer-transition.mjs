@@ -435,6 +435,22 @@ export function restoreLayoutDiagnosticRegistration(source) {
 }
 // Historical replay only. Never use this reader for current capture or rendering acceptance.
 export function readRetainedSortFocusSource(current = readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')) {
+  if (current.toString().includes('const lightScroll =')) {
+    assert.equal(hash(current), 'c0f202dc5ad91d396dc3ada3b9a6b6dd21b8498923135e13397a033b9ecf504d');
+    let text = current.toString();
+    for (const [addition, prior] of [
+      ["  const lightScroll = process.env.ASTYLAR_AUDIT_MOBILE_TIMEPICKER_SCROLL === 'light';\n", ''],
+      ['const lightPaint = lightScroll || ', 'const lightPaint = '],
+      ["const retainPaint = !lightScroll && (lightPaint || process.env.ASTYLAR_AUDIT_RETAIN_MOBILE_TIMEPICKER_PAINT === '1');", "const retainPaint = lightPaint || process.env.ASTYLAR_AUDIT_RETAIN_MOBILE_TIMEPICKER_PAINT === '1';"],
+      ["retainPaint || lightScroll ? '154.0.8037.99'", "retainPaint ? '154.0.8037.99'"],
+      ['        if (lightPaint && !lightScroll) {', '        if (lightPaint) {'],
+      ['    if (lightPaint && !lightScroll) { t.diagnostic', '    if (lightPaint) { t.diagnostic'],
+      ["profile: lightScroll ? 'light' : 'dark', viewport: '390x844'", "profile: 'dark', viewport: '390x844'"],
+      ['    if (lightScroll) return; // Missing light-mobile drag/track only; desktop joins already inspected.\n', ''],
+    ]) { assert.equal(text.split(addition).length, 2); text = text.replace(addition, prior); }
+    current = Buffer.from(text);
+    assert.equal(hash(current), '5a90ce4f5274f13e16656efd8c52e75e42bc220b470f02526652a5a5cde724f5');
+  }
   if (current.toString().includes('const currentLifecycleProfile =')) {
     assert.equal(hash(current), '5a90ce4f5274f13e16656efd8c52e75e42bc220b470f02526652a5a5cde724f5');
     let text = current.toString();

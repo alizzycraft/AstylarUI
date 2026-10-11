@@ -2049,8 +2049,9 @@ test('dark mobile real-key selections distinguish direction state from highlight
 });
 
 test('dark mobile timepicker wheel separates scroll state from scrollbar paint', async t => {
-  const lightPaint = process.env.ASTYLAR_AUDIT_RETAIN_MOBILE_TIMEPICKER_PAINT === 'light';
-  const retainPaint = lightPaint || process.env.ASTYLAR_AUDIT_RETAIN_MOBILE_TIMEPICKER_PAINT === '1';
+  const lightScroll = process.env.ASTYLAR_AUDIT_MOBILE_TIMEPICKER_SCROLL === 'light';
+  const lightPaint = lightScroll || process.env.ASTYLAR_AUDIT_RETAIN_MOBILE_TIMEPICKER_PAINT === 'light';
+  const retainPaint = !lightScroll && (lightPaint || process.env.ASTYLAR_AUDIT_RETAIN_MOBILE_TIMEPICKER_PAINT === '1');
   const paintDirectory = lightPaint ? 'artifacts/material-parity/timepicker-open-light-mobile-paint-20261011'
     : 'artifacts/material-parity/timepicker-open-dark-mobile-paint-20261011';
   if (retainPaint) (await import('node:fs')).mkdirSync(paintDirectory);
@@ -2077,7 +2078,7 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
     configSha256: digest(readFileSync(configFile)), typescript: ts.version, acceptance: false,
     scope: 'complete geometry and paint module equality only; not callers, full pipeline or rendering acceptance' } }));
   await withFrozenShowcase(async (browser, baseUrl) => {
-    assert.equal(browser.version(), retainPaint ? '154.0.8037.99' : '154.0.8037.58');
+    assert.equal(browser.version(), retainPaint || lightScroll ? '154.0.8037.99' : '154.0.8037.58');
     const launch = await inspectMaterialBrowserLaunch(browser, materialBrowserLaunchOptions());
     t.diagnostic(JSON.stringify({ browserLaunch: launch }));
     const observations = {};
@@ -2168,7 +2169,7 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
           diagnosticSourceSha256: digest(readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')),
           checkpointFile: process.env.ASTYLAR_MATERIAL_SHOWCASE_CHECKPOINT,
           checkpointSha256: digest(readFileSync(process.env.ASTYLAR_MATERIAL_SHOWCASE_CHECKPOINT)), acceptance: false } }));
-        if (lightPaint) {
+        if (lightPaint && !lightScroll) {
           assert.equal(before.scrollTop, 0); assert.equal(after.scrollTop, 144);
           assert.deepEqual(errors, []);
           observations[mode] = { before, after, errors };
@@ -2276,7 +2277,7 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
           candidateThumbPixels: mode === 'astylar' ? { before: thumbPixels(beforePixels), after: thumbPixels(afterPixels) } : null, errors };
       } finally { await page.close(); }
     }
-    if (lightPaint) { t.diagnostic(JSON.stringify({ lightMobileOpeningPaint: observations, acceptance: false })); return; }
+    if (lightPaint && !lightScroll) { t.diagnostic(JSON.stringify({ lightMobileOpeningPaint: observations, acceptance: false })); return; }
     t.diagnostic(JSON.stringify(observations));
     for (const mode of ['reference', 'astylar']) {
       assert.equal(observations[mode].before.scrollTop, 0);
@@ -2339,7 +2340,7 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
     assert.equal(observations.reference.drag.release.open, true);
     assert.equal(observations.astylar.drag.release.open, true);
     t.diagnostic(JSON.stringify({ scrollbarDragFinding: {
-      family: 'timepicker', profile: 'dark', viewport: '390x844', dpr: 2,
+      family: 'timepicker', profile: lightScroll ? 'light' : 'dark', viewport: '390x844', dpr: 2,
       classification: 'intentional-documented-limitation', owner: 'core scrolling/interaction',
       firstDivergence: 'painted scrollbar thumb is non-pickable; pointer targets underlying options',
       nativeDragScrollTop: observations.reference.drag.steps.map(step => step.scrollTop),
@@ -2350,6 +2351,7 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
     for (const mode of ['reference', 'astylar']) for (const step of observations[mode].drag.steps) {
       assert.ok(Math.abs(observations[mode].before.firstOption.y - step.firstOption.y - step.scrollTop) < .01);
     }
+    if (lightScroll) return; // Missing light-mobile drag/track only; desktop joins already inspected.
     // Close the missing configured CSS-bound population without recapturing PNGs
     // or repeating drag/track proofs. Existing full-run rows own the membership.
     const reportFile = 'artifacts/material-parity/current-full-20261005/latest-report.json';

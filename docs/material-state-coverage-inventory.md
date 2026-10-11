@@ -1,5 +1,29 @@
 # Material comparison/state coverage inventory
 
+## Current light-mobile scrollbar question — October 12
+
+Existing scrollbar diagnostic adds opt-in ASTYLAR_AUDIT_MOBILE_TIMEPICKER_SCROLL=light,
+using actual applied light theme and current selection-pointer checkpoint census.
+Default dark assertions and opening-only retention are unchanged. New mode drives
+only missing light/mobile wheel/end/thumb/track boundaries,not the eight settled
+desktop joins,and creates no duplicate opening PNG set. Focused1/1 exits0,
+10918.3455ms terminal. Evidence:timepicker-light-mobile-scroll-current-20261012.log.
+Native drag211/421/632 versus candidate0/0/0; native track press scrolls,candidate
+stays0 and underlying option pointer events are retained. Wheel0→144 and final
+option reachability work on both. Native gutter15/client245 versus candidate
+gutter0/client260 remains. Log SHA256
+3a106e53497490a1cbabd5b8c9f08bfdbd4c53fe2b5d1ba3d04ad281aa131eef;
+capture source c0f202dc5ad91d396dc3ada3b9a6b6dd21b8498923135e13397a033b9ecf504d.
+This closes missing light pointer-scroll interaction
+inspection with failures,not acceptance. Owning scroll runtime/paint modules match
+complete installed/captured source through the existing assertions. Exact source
+conservation now reverses eight selector/scope edits to5a90ce4f then the original
+whole-source chain; direct Git72b28c0e equality and three mutation guards pass.
+Existing focus assertion authenticates light log/themes/drag and conserved dark
+source receipts,1/1,842.5562ms (2189.6792ms terminal). Next coherent log/source
+registration; no canonical export for this bounded proof edit. No renderer/fixture changes; whole-case local
+paint/isolation and all final gates remain open.
+
 ## Current evidence registration — October 12
 
 Dark-mobile timepicker log is now registered in existing sourceFingerprints:
