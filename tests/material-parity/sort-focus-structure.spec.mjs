@@ -3353,3 +3353,58 @@ async function withFrozenShowcase(run, launchOptions = {}, evidence = {}) {
     await new Promise(resolve => server.close(resolve));
   }
 }
+
+test('retained mobile scrollbar masks inspect light dark open and wheel boundaries', () => {
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  const hashes = {
+    light: '5262d6040111c78bc5424543ad124f298d291c82dbdbaccdbc68baf99b40e4bb',
+    dark: 'ab32d46d36f49115c4fd6cabaff9516ffcd3d8b3c6a5421af95a1df83f6d11e0',
+  };
+  let inspectedImages = 0;
+  for (const theme of ['light', 'dark']) {
+    const bytes = readFileSync(`artifacts/material-parity/timepicker-open-${theme}-mobile-paint-20261011.log`);
+    assert.equal(digest(bytes), hashes[theme]);
+    const records = bytes.toString().split(/\r?\n/).filter(line => line.startsWith('# {'))
+      .map(line => JSON.parse(line.slice(2).replaceAll('\\#', '#')))
+      .filter(row => row.mobileOpenPaint).map(row => row.mobileOpenPaint);
+    assert.deepEqual(records.map(row => row.mode), ['reference', 'astylar']);
+    for (const row of records) {
+      assert.equal(row.acceptance, false);
+      assert.equal(row.images.length, 2);
+      for (const [state, receipt] of row.images.entries()) {
+        assert.ok(receipt.file.endsWith(`${row.mode}-${state ? 'wheel' : 'open'}.png`));
+        const image = readFileSync(receipt.file);
+        assert.equal(digest(image), receipt.sha256);
+        const png = PNG.sync.read(image), box = (state ? row.after : row.before).box;
+        assert.deepEqual([png.width, png.height], [780, 1688]);
+        assert.deepEqual([box.x, box.width, box.height], [65, 260, 256]);
+        const bands = [];
+        // Reuse the desktop neutral-gray/exact-candidate-color masks. This
+        // excludes option text and separates the top arrow from the thumb;
+        // it does not measure antialiased fringe or certify full paint parity.
+        for (let y = Math.ceil((box.y + 2) * 2); y < Math.floor((box.y + 90) * 2); y++) {
+          let width = 0;
+          for (let x = (box.x + box.width - 15) * 2; x < (box.x + box.width) * 2; x++) {
+            const index = (y * png.width + x) * 4, rgb = [...png.data.subarray(index, index + 3)];
+            const matches = row.mode === 'reference'
+              ? Math.max(...rgb) - Math.min(...rgb) <= 2 && rgb[0] >= 95 && rgb[0] <= 235
+              : rgb[0] === 139 && rgb[1] === 135 && rgb[2] === 141;
+            if (matches) width++;
+          }
+          if (!width) continue;
+          if (!bands.length || bands.at(-1).lastY !== y - 1) bands.push({ firstY: y, lastY: y, widths: [] });
+          bands.at(-1).lastY = y; bands.at(-1).widths.push(width);
+        }
+        const summaries = bands.map(band => ({ firstY: band.firstY, lastY: band.lastY,
+          peak: Math.max(...band.widths), ends: [band.widths[0], band.widths.at(-1)],
+          narrowRows: band.widths.filter(width => width < Math.max(...band.widths)).length }));
+        assert.deepEqual(summaries, row.mode === 'reference'
+          ? [{ firstY: 483, lastY: 496, peak: 18, ends: [4, 16], narrowRows: 10 },
+            { firstY: state ? 536 : 510, lastY: state ? 583 : 557, peak: 18, ends: [8, 8], narrowRows: 10 }]
+          : [{ firstY: state ? 506 : 479, lastY: state ? 561 : 529, peak: 16, ends: [16, 16], narrowRows: 0 }]);
+        inspectedImages++;
+      }
+    }
+  }
+  assert.equal(inspectedImages, 8);
+});

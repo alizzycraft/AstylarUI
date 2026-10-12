@@ -1,5 +1,27 @@
 # Material comparison/state coverage inventory
 
+## Retained mobile scrollbar shape boundary — October 13
+
+Question: do the retained light/dark mobile opening/wheel rasters supply missing
+thumb-shape evidence,or is the desktop shape finding being extrapolated? The
+existing sort-focus evidence suite now authenticates both original mobile logs
+(5262d604/ab32d46d) and all eight referenced780x1688 PNGs,then applies the existing
+desktop neutral-gray/native and exact-color/candidate masks at390x844 DPR2.
+Both themes retain a native top-arrow band and rounded9CSSpx thumb (18 physical
+pixels peak,8 at both ends,10 narrower rows). Candidate has only an8CSSpx plain
+indicator (16 physical pixels on every visible row). Wheel moves the native band
+510..557→536..583 and candidate479..529→506..561. These are retained pixel
+measurements,not newly captured browser output or a new projection diagnosis.
+
+Focused command `node --test --test-name-pattern="retained mobile scrollbar masks" tests/material-parity/sort-focus-structure.spec.mjs`
+passes1/1,zero skips,1687.4369ms terminal. No original capture or renderer changed.
+This closes only the previously unmeasured mobile visible-shape boundary for
+these light/dark open/wheel observations. Antialiased fringe,occluded portions,
+other states/profiles/platforms,full local resolved input/paint owner joins and
+current-code acceptance remain open; neither exact mobile case fully closes.
+The standalone owning proof needs exact source-receipt conservation/registration
+before the next justified coherent canonical batch; do not recapture these rasters.
+
 ## Coherent201 cold-verified publication — October 13
 
 Complete-baseline export session55539 exits0; its log
