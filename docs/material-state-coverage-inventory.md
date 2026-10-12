@@ -1,5 +1,28 @@
 # Material comparison/state coverage inventory
 
+## Coherent196 export completed; independent verification pending — October 12
+
+Original session75501 returns exit0. Collector6416 is absent and
+coherent196-held-content-export-20261012.log records complete at3208147.1467ms,
+after validation and evidence-session verification. Coverage remains436 static/
+1875 interaction,8483 scalar groups,389202 occurrences,157 findings and
+inputEquivalent=false. Exported manifest records compressed62912945 bytes,
+SHA256a64a19141df8690267ad786df24818ed2e76617105d6a15171fbd9417fb67ed3;
+decoded2224557448 bytes,SHA256
+4a8b85ba2d33fff0823e061a11401527eec8aeafc07471e8d68b7951e66cee57.
+These are export receipts,not independent acceptance or current rendering.
+
+Named complete-baseline --check with ASTYLAR_AUDIT_COLD=1 now runs in session32487,
+collector32100,coherent196-held-content-cold-check-20261012.log;
+build entered1439.5735ms. Consumed sources remain frozen. Compact import/index
+verification and scoped canonical publication commit follow only terminal
+independent success. Recent standalone sheet/raw-event evidence is not implicitly
+included in this batch. All2311 cases remain partial. Highest-impact remaining
+work is the exact applicable-obligation/evidence/currentness join,then shared
+interaction/event,local state-layer paint and lifetime gaps. Reconcile existing
+track-press receipts before repeating scrollbar investigation; no new capture is
+justified by stale checklist wording. Full audit/browser gates remain outstanding.
+
 ## Bottom-sheet hover-only conditional paint boundary — October 12
 
 The existing sheet diagnostic now has --hover-only and noncapturing --describe
