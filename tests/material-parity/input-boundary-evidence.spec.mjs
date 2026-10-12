@@ -20,6 +20,68 @@ import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 
 const file = 'artifacts/material-parity/input-boundaries-keypress-559f95c/latest-report.json';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+
+test('retained raw checkbox slider boundaries preserve missing events disabled focus and sampled inertia', () => {
+  const logs = [
+    ['raw-control-events-20261012.log', 'd14e9e6965f8a4e9f9419d494545a867c3e1b48f4ba2475ccb11a1ef3097a5ea', 50],
+    ['raw-control-keyboard-events-20261012.log', '8e202f4cc8eaa800d58acd54c8253ce0d947cee82e96651787571c0ebd086bc1', 16],
+    ['raw-disabled-control-keyboard-events-20261012.log', 'abe6ea4404c4698d65da0de64e7b63fe18995d73005cb13830922c6320c0c728', 15],
+    ['raw-disabled-control-pointer-events-20261012.log', 'b227aa5e5bc38d6e0e6ff5c469bab82f4212858432b3dfe67f001771785fd69f', 16],
+    ['disabled-slider-held-centers-20261012.log', '24ddecb803434473e85ba76df0ea6700b608d94c010d363a1ef48a40f08e34d3', 8],
+  ];
+  const configured = new Set([...materialInteractionCases, ...materialMobileFlowCases].map(row => materialCaseKey('interaction', row)));
+  const anchors = new Set(); let records = 0, inertSamples = 0;
+  const tails = side => side.events.filter(event => ['input', 'change'].includes(event.type)).map(event => event.type);
+  for (const [file, sha256, count] of logs) {
+    const bytes = readFileSync(`artifacts/material-parity/${file}`); assert.equal(hash(bytes), sha256);
+    const [receipt, ...rows] = bytes.toString().trim().split(/\r?\n/).map(line => JSON.parse(line));
+    const terminal = rows.pop();
+    assert.equal(receipt.cases, count); assert.equal(terminal.captured, count); assert.equal(rows.length, count);
+    assert.equal(receipt.acceptance, false); assert.equal(terminal.acceptance, false); assert.equal(terminal.result, 'PASS');
+    const local = new Set();
+    for (const row of rows) {
+      const key = materialCaseKey('interaction', row.case);
+      assert.ok(configured.has(key)); assert.ok(!local.has(key)); local.add(key); anchors.add(key); records++;
+      assert.equal(row.acceptance, false); assert.deepEqual(row.errors, []);
+      if (row.case.state === 'disabled') {
+        for (const side of ['reference', 'astylar']) {
+          assert.deepEqual(row.after[side].state, row.before[side].state); assert.deepEqual(tails(row.after[side]), []);
+        }
+        for (const boundary of row.keyboardBoundaries ?? []) for (const side of ['reference', 'astylar']) {
+          assert.equal(boundary[side].focusedOwner, 'BODY'); assert.deepEqual(boundary[side].state, row.before[side].state);
+        }
+        for (const boundary of row.pointerBoundaries ?? []) {
+          assert.equal(boundary.reference.focusedOwner, 'BODY');
+          assert.equal(boundary.astylar.focusedOwner, row.case.family === 'checkbox' ? 'checkbox-primary' : 'CANVAS');
+          if (boundary.dragTraces) for (const side of ['reference', 'astylar']) {
+            assert.equal(boundary.dragTraces[side].length, 9);
+            const centers = boundary.dragTraces[side][0].thumbCenters;
+            for (const sample of boundary.dragTraces[side]) {
+              inertSamples++; assert.equal(sample.sliderStart, 30); assert.equal(sample.sliderValue, 65);
+              assert.deepEqual(sample.thumbCenters, centers);
+            }
+            assert.deepEqual(boundary.releasedCenters[side], centers);
+          }
+        }
+      } else if (row.case.family === 'checkbox') {
+        assert.deepEqual(tails(row.after.reference), ['input', 'change']); assert.deepEqual(tails(row.after.astylar), []);
+        assert.equal(row.after.reference.state.selected, false);
+        assert.equal(row.after.astylar.state.selected, row.keyboardOnly === true);
+        assert.equal(row.after.reference.controls[0].tag, 'INPUT'); assert.equal(row.after.astylar.controls[0].tag, 'DIV');
+      } else if (row.keyboardOnly) {
+        assert.equal(tails(row.after.reference).length, 12); assert.equal(tails(row.after.astylar).length, 12);
+        assert.ok(row.after.reference.controls.every(control => control.step === '5'));
+        assert.ok(row.after.astylar.controls.every(control => control.step === '1'));
+      } else if (['drag-start', 'drag-end'].includes(row.case.state)) {
+        assert.deepEqual(tails(row.after.reference), ['input', 'input', 'change']);
+        assert.deepEqual(tails(row.after.astylar), [...Array(8).fill('input'), 'change']);
+      }
+      // Filtered compared.matches never establishes raw-event parity.
+    }
+  }
+  assert.equal(records, 105); assert.equal(anchors.size, 82); assert.equal(inertSamples, 288);
+});
+
 test('retained timepicker option text owners distinguish wrapper line boxes from centering requests', () => {
   const original = execFileSync('git', ['show', '2f440115:examples/material-showcase/src/app/astylar.component.ts'], { encoding: 'utf8' });
   assert.match(original, /id: `timepicker-option-\$\{index\}`[^\n]*textContent: label/);

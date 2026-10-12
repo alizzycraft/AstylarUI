@@ -1,5 +1,30 @@
 # Material comparison/state coverage inventory
 
+## Raw control boundary proof integration — October 12
+
+The existing input-boundary evidence suite authenticates five retained logs
+d14e9e69/8e202f4c/abe6ea44/b227aa5e/24ddecb8 and verifies105 records against82
+exact configured case anchors. Actual native checkbox input/change tails remain
+absent on the candidate; Space changes native selection but not the role-only
+candidate. Slider step5 versus1 and two versus eight drag input events remain
+unequal. Disabled sequential key boundaries keep BODY focus and stable values;
+pointer activation remains inert but native BODY/candidate checkbox-or-CANVAS
+focus differs. All288 sampled held centers and released centers remain stationary
+within each side,not equal between sides or proof of every-frame inertia.
+
+Focused command: node --test --test-name-pattern="retained raw checkbox slider boundaries"
+tests/material-parity/input-boundary-evidence.spec.mjs. One test passes,
+zero skips/failures,1371.0127ms. Producer inventory registers this historical
+boundary; captured receipts are not promoted to current-rendering acceptance.
+No event comparator,renderer,fixture,capture or acceptance criterion changed.
+
+The pending coherent batch now includes checkbox,slider,sheet,switch and raw
+control proof descriptors; canonical coherent196 is still accepted separately.
+Next validate the combined existing proof inventory/source receipts, then run
+one complete-baseline export/cold/import milestone if that coherent integration
+validates. Do not rerun settled browser observations. Exact applicable-obligation
+and currentness closure for all2311 cases plus final gates remains outstanding.
+
 ## Sheet and switch retained proof integration — October 12
 
 Existing paint-review assertions now authenticate both sheet content logs
