@@ -34,6 +34,18 @@ the held action boundary still needs an owning observation. Existing held-popup
 test covers select/autocomplete/timepicker only,not dialog. No whole-case closure,
 current rendering acceptance or new capture is inferred.
 
+Shared scope check: current benchmark.config materialInteractionCases has eight
+held entries and zero separately named held-content entries for each of
+autocomplete,select,datepicker,timepicker,menu,dialog (48 opener-held cases).
+interactionTargetBox maps them to the input trigger,date/time icon or primary
+opener; performInteraction holds that target before release. An already-open
+popup cannot turn this into a held option/day/action boundary. Existing bounded
+held-option diagnostic covers three families in light desktop DPR1; it does not
+cover datepicker/menu/dialog or certify every theme/DPR. This is a shared audit
+coverage boundary,not evidence that six renderer paths fail. Next reuse that
+existing diagnostic for the missing authored content targets after the live export
+finishes; keep the configured2311 count and original final gates unchanged.
+
 Read-only replay of the retained October5 report authenticates SHA256
 ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62.
 All66 dialog interaction records are accounted for: eight each focus,hover,held,
