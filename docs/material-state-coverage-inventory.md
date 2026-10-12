@@ -27,6 +27,28 @@ existing diagnostic rather than repeating settled hover and option measurements.
 
 ## Dialog local-paint coverage boundary — October 12
 
+The existing held-popup diagnostic now has an opt-in ASTYLAR_AUDIT_HELD_CONTENT
+branch for actual day1,Rename,Cancel content. Original option branch and all
+predecessor bytes are conserved after removing only this added branch. The
+six paired light/desktop DPR1 observations pass1/1 in13675.4666ms
+(14649.0727ms process),held-popup-content-descendant-owner-20261012.log,
+SHA256d4503ce67607805cbdfeaf2d5ad0b1e78de3617c83ef52a1912b451a181ea41a.
+All native button owners match :active. Candidate pointerdown paths contain
+day1,menu-rename via menu-rename-label,and dialog-cancel; this answers actual
+hit correspondence rather than inferring it from opener-held cases. Candidate
+resolved backgrounds are #d8d2d8/#d8d3d8/#efdafc; native button backgrounds are
+transparent/alpha0.08/transparent. These are different paint boundaries: native
+descendant state layers/ripples still need comparison; no raster equality or
+missing active-paint defect is inferred. Browser-file fingerprint assertion uses
+selection-pointer-directions-20261011 checkpoint SHA2aac425d216cdb274ebff0876f2fa365c9ab6e845ed1b1c3b30d9e1bbcaea5c8.
+Test source SHAc259ab363e1145eec008a3d07e20d8edad66bb8988a39d6c952d94354257dcec.
+Initial held-popup-content-owner log retains the wrong native opener selector
+timeout; retry retains the overly narrow button-only event assertion. Neither
+is a renderer failure or accepted pass. Next inspect owning native state-layer
+and candidate matched active inputs before deciding on local paint evidence.
+Canonical195 predates this diagnostic addition; source conservation registration
+is pending,not silently treated as current export applicability. No case closes.
+
 Target replay now answers both hover-owner uncertainties below without recapture.
 All eight retained open-hover-content contexts (light,dark,contrast,custom;
 desktop DPR1/2) end with pointermove targetId=dialog-cancel and include its

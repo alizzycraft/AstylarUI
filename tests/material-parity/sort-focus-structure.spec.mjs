@@ -2735,6 +2735,76 @@ test('held popup option boundaries capture active paint inputs before commit', a
   const currentOptionBoxes = process.env.ASTYLAR_AUDIT_CURRENT_OPTION_BOXES === '1';
   await withFrozenShowcase(async (browser, baseUrl) => {
     const observations = [];
+    if (process.env.ASTYLAR_AUDIT_HELD_CONTENT === '1') {
+      for (const [family, openerId, targetId, nativeOpener, nativeTarget] of [
+        ['datepicker', 'datepicker-icon', 'datepicker-day-1', 'mat-datepicker-toggle button', '.mat-calendar-body-cell'],
+        ['menu', 'menu-primary', 'menu-rename', '#menu-primary', 'button[mat-menu-item]'],
+        ['dialog', 'dialog-primary', 'dialog-cancel', '#dialog-primary', '[data-parity-id="dialog-cancel"]'],
+      ]) for (const mode of ['reference', 'astylar']) {
+        const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 });
+        const errors = []; page.on('pageerror', error => errors.push(String(error)));
+        await page.goto(`${baseUrl}/${mode}/${family}?benchmark=1&profile=light`);
+        await page.locator('.frame').waitFor();
+        const native = selector => page.locator(selector).first();
+        const candidatePoint = id => page.evaluate(id => {
+          const box = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([id], false).elements[id].borderBox;
+          const canvas = document.querySelector('canvas').getBoundingClientRect();
+          return { x: canvas.x + box.left + box.width / 2, y: canvas.y + box.top + box.height / 2 };
+        }, id);
+        if (mode === 'reference') await native(nativeOpener).click();
+        else {
+          await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+          await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+          const point = await candidatePoint(openerId); await page.mouse.click(point.x, point.y);
+        }
+        let target;
+        if (mode === 'reference') {
+          const locator = family === 'datepicker' ? page.locator(nativeTarget).filter({
+            has: page.locator('.mat-calendar-body-cell-content', { hasText: /^\s*1\s*$/ }) }).first() : native(nativeTarget);
+          await locator.waitFor();
+          await page.waitForFunction(() => [...document.getAnimations()].every(animation =>
+            animation.playState !== 'running' || animation.effect?.getTiming().iterations === Infinity));
+          const box = await locator.boundingBox();
+          target = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+        } else {
+          await page.locator(`[data-astylar-id="${targetId}"]`).waitFor();
+          await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+          target = await candidatePoint(targetId);
+        }
+        await page.mouse.move(target.x, target.y); await page.mouse.down(); await page.waitForTimeout(125);
+        if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+        const held = await page.evaluate(({ mode, target, targetId }) => {
+          if (mode === 'reference') {
+            const hit = document.elementFromPoint(target.x, target.y), owner = hit?.closest('button');
+            const style = owner && getComputedStyle(owner);
+            return { hitTag: hit?.tagName, text: owner?.textContent.trim(), active: owner?.matches(':active'),
+              background: style?.backgroundColor, cursor: style?.cursor, box: owner?.getBoundingClientRect().toJSON() };
+          }
+          const api = window.__ASTYLAR_MATERIAL_BENCHMARK__, measurement = api.measure([targetId], true);
+          const owner = measurement.inputTree.nodes.find(node => node.authored?.id === targetId);
+          const events = api.events(), pointer = events.filter(event => event.type === 'pointerdown').at(-1);
+          const pointerOwnerPath = [];
+          let hit = measurement.inputTree.nodes.find(node => node.authored?.id === pointer?.targetId);
+          while (hit) {
+            pointerOwnerPath.push(hit.authored?.id ?? hit.key);
+            hit = measurement.inputTree.nodes.find(node => node.key === hit.parent);
+          }
+          return { box: measurement.elements[targetId].borderBox, authored: owner?.authored,
+            resolvedStyle: owner?.resolvedStyle, rules: measurement.inputTree.rules.filter(rule =>
+              typeof rule.selector === 'string' && rule.selector.includes(':active') &&
+              /datepicker|menu-item|overlay-dismiss|material-button/.test(rule.selector)),
+            events, pointerOwnerPath };
+        }, { mode, target, targetId });
+        observations.push({ family, mode, targetId, target, held });
+        t.diagnostic(JSON.stringify(observations.at(-1)));
+        if (mode === 'reference') assert.equal(held.active, true, 'actual native content owns held pointer');
+        else assert.ok(held.pointerOwnerPath.includes(targetId), 'actual candidate content or its descendant owns held pointer');
+        await page.mouse.up(); assert.deepEqual(errors, []); await page.close();
+      }
+      assert.equal(observations.length, 6);
+      t.diagnostic('Held-content target ownership and requested inputs only; light desktop DPR1, not local raster parity or whole-case closure.');
+      return;
+    }
     for (const family of ['select', 'autocomplete', 'timepicker']) {
       for (const mode of ['reference', 'astylar']) {
         const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 });
