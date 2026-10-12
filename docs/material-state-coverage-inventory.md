@@ -153,6 +153,28 @@ settled geometry,while sheet-focus is a synthetic focus reduction rather than
 paired Material action paint. These named supplements do not discharge the
 missing content-pointer observation; preserve their existing distinct purposes.
 
+Radio diagnostic event failure is now bounded separately from label paint.
+Read-only currentness replay authenticates all1887 served build files and92
+checkpoint records/91 unique cases; overlay/trace each retain runner-only drift,
+selection-pointer replay matches all current harness modules. No global parity
+count is inferred. Pointer report f1497dbd6bb360d25ae62466c4ef1b5d95631f7265af8da3b2969774e0b690a0
+has eight radio contexts; all48 transition-tree receipts authenticate. Every
+candidate stage has zero raw input/change events. Compared native history is
+three pointer triplets with input/change after each actual opposite/return
+selection; candidate is three pointer triplets only. Native trees contain two
+radio inputs,candidate trees two role=radio DIVs. Missing raw events therefore
+precede host-ID event mapping; do not filter radio events to green the gate.
+Current chunk-PCHQTLJM source map matches complete current Astylar component
+after LF normalization (SHA256b493a355679903f988e29f0dafbb95d2d6cce41275302fce5c978ae55f423b9f).
+Its role-only click handlers directly patch selected true/false; first authored
+control/event boundary differs despite matching state transitions. This is an
+application/plugin control-authoring gap,not proof that native input radio
+rendering/event support fails. Equal-input public control reduction is needed
+before any core event diagnosis; label-edge failures remain independently open.
+Inline exact assertions exit0; initial source-binding shell quoting failed and
+was corrected,not counted as evidence. Add this exact raw-event boundary to
+existing selection replay assertions after the consumed source freeze ends.
+
 Target replay now answers both hover-owner uncertainties below without recapture.
 All eight retained open-hover-content contexts (light,dark,contrast,custom;
 desktop DPR1/2) end with pointermove targetId=dialog-cancel and include its
