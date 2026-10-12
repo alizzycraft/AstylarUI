@@ -12,6 +12,83 @@ import { proveModalPositionInspection, proveBottomSheetActionLayout } from './mo
 import { applyControlStatePaintReview, proveControlStatePaint, controlStatePaintAttribution, cardSurfacePaintAttribution, opaqueSurfacePaintAttribution, specialPaintDefinitions, applyDisabledLabelColorReview, applyStepperLabelColorReview } from './control-state-paint-review.mjs';
 import { collectHeldContentPaintInputs, proveHeldContentPaintInputs } from './control-state-paint-review.mjs';
 
+test('retained slider layer inputs and sampled halo pixels preserve unequal paint without core attribution', async () => {
+  const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+  const readLog = (file, expected) => {
+    const bytes = readFileSync(file); assert.equal(sha(bytes), expected);
+    return bytes.toString().trim().split(/\r?\n/).map(line => JSON.parse(line));
+  };
+  const retained = readLog('artifacts/material-parity/slider-retained-state-layer-inputs-20261012.log',
+    '2bb78d0a50dafdbec9252b9afdfa86bb8f6d8d53583464befdab5e230df1fc3f');
+  const receipt = retained.pop();
+  assert.equal(receipt.acceptance, false); assert.equal(receipt.cases, 16);
+  const keys = retained.map(row => `${row.profile}/${row.viewport}/${row.state}`).sort();
+  assert.deepEqual(keys, ['light', 'dark', 'contrast', 'custom'].flatMap(profile =>
+    ['desktop-dpr1', 'desktop-dpr2'].flatMap(viewport => ['hover', 'held'].map(state => `${profile}/${viewport}/${state}`))).sort());
+  for (const row of retained) {
+    assert.equal(row.liveCandidateMaterialAlphaRecorded, false);
+    assert.equal(row.localGate, true); assert.equal(row.sharpnessDiagnostic, false);
+    assert.equal(row.nativeLayers.length, row.state === 'hover' ? 1 : 2);
+    for (const layer of row.nativeLayers) {
+      assert.equal(layer.width, '48px'); assert.equal(layer.height, '48px');
+      assert.equal(layer.opacity, '1');
+      assert.ok(layer.backgroundColor.endsWith(row.state === 'hover' ? '/ 0.05)' : '/ 0.2)'));
+    }
+  }
+  const [source, ...live] = readLog('artifacts/material-parity/slider-live-state-layers-20261012.log',
+    'ecf2ccf514eee587d87199852b05700d4baef4c74c51e8e9efb19e1382338022');
+  const terminal = live.pop();
+  assert.equal(source.acceptance, false); assert.equal(terminal.acceptance, false);
+  assert.equal(terminal.captured, 2); assert.equal(terminal.result, 'PASS');
+  assert.equal(source.actionBodiesSha256, source.observedBodiesSha256);
+  const { PNG } = await import('pngjs');
+  const verify = rows => {
+    assert.deepEqual(rows.map(row => row.case.state), ['hover', 'held']);
+    for (const row of rows) {
+      assert.equal(row.case.family, 'slider'); assert.equal(row.case.profile, 'light');
+      assert.deepEqual(row.case.viewport, { id: 'desktop-dpr1', width: 1440, height: 1000, deviceScaleFactor: 1 });
+      assert.equal(row.acceptance, false); assert.deepEqual(row.errors, []);
+      const native = row.paintBoundary.reference, candidate = row.paintBoundary.astylar;
+      assert.equal(native.layers.length, row.case.state === 'hover' ? 1 : 2);
+      for (const layer of native.layers) {
+        assert.equal(layer.active, row.case.state === 'held');
+        assert.equal(layer.width, 48); assert.equal(layer.height, 48);
+        assert.equal(layer.background, `color(srgb 0.403922 0.313726 0.643137 / ${row.case.state === 'hover' ? '0.05' : '0.2'})`);
+      }
+      assert.deepEqual(candidate.layers.map(layer => [layer.name, layer.alpha]),
+        [['slider-visual-start-state-layer', 0], ['slider-visual-end-state-layer', row.case.state === 'hover' ? 0.08 : 0.12]]);
+      for (const layer of candidate.layers) {
+        assert.equal(layer.visibility, 1); assert.equal(layer.enabled, true); assert.equal(layer.transparencyMode, 2);
+        assert.deepEqual(layer.diffuse, [103 / 255, 80 / 255, 164 / 255]);
+      }
+      for (const side of [native, candidate]) {
+        const bytes = readFileSync(side.screenshot); assert.equal(sha(bytes), side.sha256);
+        const png = PNG.sync.read(bytes); assert.equal(side.samples.length, 4);
+        for (const sample of side.samples) {
+          assert.ok(sample.x >= 0 && sample.x < png.width && sample.y >= 0 && sample.y < png.height);
+          const offset = (sample.y * png.width + sample.x) * 4;
+          assert.deepEqual([...png.data.subarray(offset, offset + 4)], sample.rgba);
+        }
+      }
+      // Only the vertical samples avoid the track. These pixels are observations,
+      // not a model of combined native alpha or proof of renderer compositing.
+      for (const index of [2, 3]) assert.notDeepEqual(native.samples[index].rgba, candidate.samples[index].rgba);
+    }
+  };
+  verify(live);
+  for (const mutate of [
+    rows => rows.pop(),
+    rows => rows[0].acceptance = true,
+    rows => rows[1].paintBoundary.reference.layers.pop(),
+    rows => rows[0].paintBoundary.astylar.layers[1].alpha = 0.05,
+    rows => rows[1].paintBoundary.reference.layers[0].active = false,
+    rows => rows[0].paintBoundary.astylar.samples[2].rgba[0]++,
+    rows => rows[0].paintBoundary.reference.sha256 = '0'.repeat(64),
+  ]) {
+    const altered = structuredClone(live); mutate(altered); assert.throws(() => verify(altered));
+  }
+});
+
 test('retained checkbox state layers preserve exact coverage and unequal authoring without paint acceptance', () => {
   const file = 'artifacts/material-parity/checkbox-retained-state-layer-inputs-20261012.log';
   const bytes = readFileSync(file);

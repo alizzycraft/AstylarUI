@@ -1,5 +1,30 @@
 # Material comparison/state coverage inventory
 
+## Slider retained paint proof integration — October 12
+
+The existing paint-review suite now authenticates retained log2bb78d0a and live
+logecf2ccf5. Exact16 desktop hover/held profile/DPR input contexts remain distinct
+from the two light desktop DPR1 live-alpha/pixel observations. Four original PNG
+hashes and all16 recorded RGBA samples replay exactly. Seven mutations reject
+missing contexts/layers,wrong alpha,inactive press,forged pixel/hash and invented
+acceptance. Native hover.05/two held.2 layers and candidate end.08/.12 remain
+unequal inputs; upper/lower halo differences do not establish combined-alpha
+compositing correctness,black-circle cause,sharpness or whole-case parity.
+
+Focused command: node --test --test-name-pattern="retained slider layer inputs|retained checkbox state layers|retained held content paint"
+tests/material-parity/control-state-paint-review.spec.mjs. Three tests pass,
+zero failures/skips,4275.0632ms. Existing held-content source conservation remains
+green. No new capture,image edit,renderer/fixture or criterion change.
+The producer's existing proof inventory registers this historical boundary;
+canonical coherent196 is unchanged and pending checkbox/slider descriptors await
+one coherent batch export/cold/import. Original source/checkpoint receipts remain
+in the retained logs,not reinterpreted as current-build validation.
+
+Next integrate the retained sheet/switch observations and raw-control boundaries,
+then finish exact applicable-obligation/currentness joins. All2311 complete-case
+closures remain partial; default paint flags are not acceptance or missing-case
+evidence. Do not repeat settled halo captures to manufacture broader coverage.
+
 ## Checkbox retained paint proof integration — October 12
 
 The existing control-state-paint-review suite now authenticates observation log
