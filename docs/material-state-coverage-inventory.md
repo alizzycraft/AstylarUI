@@ -1,5 +1,38 @@
 # Material comparison/state coverage inventory
 
+## Coherent201 cold-verified publication — October 13
+
+Complete-baseline export session55539 exits0; its log
+coherent201-control-batch-export-20261012.log SHA
+7500469f25730dd559be09f8a907cc456f19e746c2985966b64ee352d1edb7bd
+records3227533.8338ms. Independent cold --check session96810 exits0;
+collector33644 is absent. Cold log coherent201-control-batch-cold-check-20261012.log
+SHAe72870f6009cbae3db210d0fbbb16a2907cf3e3875913b6bd5a55db6ebffa7e1
+records16989392.9864ms wall time,including the delayed observation interval;
+do not interpret that elapsed wall time as continuous CPU work. Both collectors
+rehash1205 files/89158075 bytes,with10 memory hits,zero disk hits/invalidations.
+The consumed-source freeze ends after this terminal independent result.
+
+Compact import and whole-index verify session61654 exit0. Generation
+715c57ed82f93b5a71819718a21a9643cdea262d77b71d65ed6d311e3b4002e1
+retains8483 groups,157 findings,39904 controls,389202 occurrences and zero
+unresolved scalar groups; compactBytes72749010. Import log
+coherent201-compact-import-20261013.log SHA
+2bdafe1db43977fa1dc4c02a67697981aaa7b7796b8584e4f2420635cb9f6165;
+verify log coherent201-compact-verify-20261013.log SHA
+c57c74e79493789b7cd4be6073b68fd04f66b618db00dd02e76732a584834508.
+Packed62916643 bytes; decoded2224563164 bytes, SHA
+0b97486e63c608acc11f79daf2de5f9bbf86f666d6dafea1af034fe361b96056.
+
+Read-only whole-Markdown comparison against178a0869 passes after removing exactly
+the five registered control descriptors and normalizing test line anchors only;
+all prior prose is conserved. This accepts the coherent proof-registration batch,
+not rendering parity. Coverage remains436 static/1875 interaction;
+inputEquivalent=false and all2311 complete-case closures remain partial.
+Next reconcile exact applicable case obligations and current evidence using the
+existing family ledger; retain its prioritized scrollbar/overlay paint, text
+placement and ownership gaps. Full audit/browser acceptance gates remain open.
+
 ## Coherent201 control batch preparation — October 12
 
 Combined six focused retained control/held proofs pass without skips in4189.7021ms.
