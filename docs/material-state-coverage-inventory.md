@@ -170,10 +170,27 @@ Its role-only click handlers directly patch selected true/false; first authored
 control/event boundary differs despite matching state transitions. This is an
 application/plugin control-authoring gap,not proof that native input radio
 rendering/event support fails. Equal-input public control reduction is needed
-before any core event diagnosis; label-edge failures remain independently open.
+before any core event diagnosis; diagnostic label-edge discrepancies remain open.
 Inline exact assertions exit0; initial source-binding shell quoting failed and
 was corrected,not counted as evidence. Add this exact raw-event boundary to
 existing selection replay assertions after the consumed source freeze ends.
+Radio horizontal label discrepancy now has an exact eight-context input join.
+All16 final paired trees authenticate; vertical ink checks pass in every context.
+Native first-label offsets are44(light/dark),32(contrast),36(custom) CSSpx:
+20px content-box radio plus symmetric10/4/6px padding plus4px label padding.
+Candidate first-label offset is28px in every context,matching20px ring plus8px
+label margin. Native second-label position equals groupLeft +2*firstOffset +
+nativeSoloWidth; candidate equals groupLeft +73 +28,matching absolute left73px
+on radio-team. Every equation matches the retained measurements exactly. Thus
+the theme-varying native flow and fixed candidate positioning are unequal before
+projection; do not correct symptoms with another candidate-only offset. Native
+labels request .256px tracking while candidate leaf stages omit tracking; label
+width/ink equality requires separate inherited/used-font and paint evidence.
+Interaction geometry is explicitly diagnostic in run-material-parity,excluded
+from its meetsAcceptance condition. The eight radio output failures are event
+gate failures,not eight label-raster gate failures; no focused label rasters are
+present. This classifies the demonstrated horizontal authoring boundary,not all
+label paint or same-input core behavior. Inline exact equation/gate checks exit0.
 
 Target replay now answers both hover-owner uncertainties below without recapture.
 All eight retained open-hover-content contexts (light,dark,contrast,custom;
