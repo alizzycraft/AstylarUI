@@ -1,5 +1,36 @@
 # Material comparison/state coverage inventory
 
+## Bottom-sheet hover-only conditional paint boundary — October 12
+
+The existing sheet diagnostic now has --hover-only and noncapturing --describe
+modes. Default held callback remains exactly SHAa43e5e82e2ef78b19dcf20c0c3f94f522124812a5b4df8c855acc8faced449d0;
+original script bytes authenticate through Git c8695a2f and its retained receipt.
+Only the missing hover-only action is captured; no held recapture or frozen
+producer modification. Initial sheet-content-hover-only-20261012.log retains a
+diagnostic syntax failure before browser launch; corrected retry terminates exit0
+in sheet-content-hover-only-retry-20261012.log, two pairs/four observations,
+SHA256e991ba0f83bd2e1883a7621816991331cae67a01c1214a3c4f33b32add5e0ca0.
+Chrome154.0.8037.99, light1440x1000 DPR1. All1887 served files still match the
+retained checkpoint. Exact action/state/layer and script/default-conservation
+assertions replay exit0; native actions are hovered and not active, candidate
+move-owner paths identify each action, and candidate down history contains only
+the opener. Neither native hover-only action contains a transient ripple.
+
+Native Share remains focused with ::before opacity0.12; Copy link is not focused
+and uses its active hover rule at0.08. Both layers request rgb(29,27,30). Candidate
+Share resolves opaque#e6e1e5 and Copy link transparent. Current component styles
+have an unconditional #bottom-sheet-dismiss fill and a focus rule but no sheet-
+option hover rule (astylar.component.ts:802–804). The pointer reaching Copy link
+without a corresponding authored hover input is the first demonstrated boundary,
+not an equal-input renderer hover defect. Git0d67d46c introduced the unconditional
+Share fill in the August27 overlay/feedback parity change; the existing reviewed-
+sheet-unconditional-focus-fill attribution remains intact. This adds actual
+hover-only applicability rather than reopening its focused-Share evidence.
+Other profiles/DPRs, local composited paint, event/lifetime and whole-case closure
+remain open; integrate the bounded hover/held pair through existing owning
+classification/replay after coherent196 export/cold/import, not another immediate
+canonical rebuild. Existing live collector6416 remains in validation.
+
 ## Paired raw checkbox/slider event boundary — October 12
 
 The former native-listener gap is now measured for all50 relevant configured

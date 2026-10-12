@@ -11,6 +11,8 @@ import { captureBrowserInputTree } from '../tests/material-parity/input-tree-evi
 // Reuse the owning held-content protocol without changing its frozen producer.
 // This closes the missing actual sheet-action boundary, not raster acceptance.
 const hash = value => createHash('sha256').update(value).digest('hex');
+assert.ok(process.argv.slice(2).every(argument => ['--hover-only', '--describe'].includes(argument)));
+const hoverOnly = process.argv.includes('--hover-only');
 const file = 'tests/material-parity/sort-focus-structure.spec.mjs';
 const bytes = readFileSync(file);
 assert.equal(hash(bytes), '1afa971226301b8c6f01e3923099a0889ff1e4924a95da412f974217a85f0583');
@@ -55,6 +57,17 @@ source = source.slice(0, assertionsStart) + `
       t.diagnostic(JSON.stringify({ browser: browser.version(), observations: 4,
         claim: 'Real held Share/Copy link requested paint and owner evidence; light desktop DPR1 only. No hover-only, matched-time raster, equal-input or whole-case acceptance.' }));
 ` + source.slice(assertionsEnd);
+if (hoverOnly) {
+  replaceOnce('await page.mouse.move(target.x, target.y); await page.mouse.down(); await page.waitForTimeout(125);',
+    'await page.mouse.move(target.x, target.y); await page.waitForTimeout(125);');
+  replaceOnce("active: owner?.matches(':active'),", "active: owner?.matches(':active'), hovered: owner?.matches(':hover'),");
+  replaceOnce("events.filter(event => event.type === 'pointerdown').at(-1)",
+    "events.filter(event => event.type === 'pointermove').at(-1)");
+  replaceOnce("assert.equal(held.active, true, 'actual native content owns held pointer');",
+    "{ assert.equal(held.active, false, 'hover-only must not press native content'); assert.equal(held.hovered, true, 'native action is hovered'); }");
+  replaceOnce("'Real held Share/Copy link requested paint and owner evidence; light desktop DPR1 only. No hover-only, matched-time raster, equal-input or whole-case acceptance.'",
+    "'Real hover-only Share/Copy link requested paint and pointer-move owner evidence; light desktop DPR1 only. No held, matched-time raster, equal-input or whole-case acceptance.'");
+}
 const checkpointFile = 'artifacts/material-parity/selection-pointer-directions-20261011/checkpoint/manifest.json';
 assert.equal(hash(readFileSync(checkpointFile)), '2aac425d216cdb274ebff0876f2fa365c9ab6e845ed1b1c3b30d9e1bbcaea5c8');
 const execute = new Function('withFrozenShowcase', 'assert', 'captureBrowserInputTree', 'materialBrowserLaunchOptions',
@@ -62,7 +75,9 @@ const execute = new Function('withFrozenShowcase', 'assert', 'captureBrowserInpu
 console.log(JSON.stringify({ sourceFile: file, sourceSha256: hash(bytes), helperSha256: hash(helper),
   originalCallbackSha256: hash(original), diagnosticCallbackSha256: hash(source),
   scriptSha256: hash(readFileSync('scripts/audit-material-sheet-content-held.mjs')),
-  checkpointFile, checkpointSha256: hash(readFileSync(checkpointFile)), acceptance: false }));
-await execute({ diagnostic: value => console.log(value) });
-assert.equal(hash(readFileSync(file)), hash(bytes), 'source remains frozen');
-console.log(JSON.stringify({ result: 'PASS', pairs: 2, acceptance: false }));
+  checkpointFile, checkpointSha256: hash(readFileSync(checkpointFile)), hoverOnly, acceptance: false }));
+if (!process.argv.includes('--describe')) {
+  await execute({ diagnostic: value => console.log(value) });
+  assert.equal(hash(readFileSync(file)), hash(bytes), 'source remains frozen');
+  console.log(JSON.stringify({ result: 'PASS', pairs: 2, hoverOnly, acceptance: false }));
+}
