@@ -1,5 +1,39 @@
 # Material comparison/state coverage inventory
 
+## Actual paired keyboard raw-event ordering — October 12
+
+The missing native keyboard listener boundary is now observed in16 configured
+desktop profile/DPR contexts (eight checkbox,eight slider). Existing standalone
+raw-control-events script gains --keyboard-only; it reuses current owning native
+openInteractionPage listener and frozen helper,with the prior Tab/Space and
+Tab/three ArrowRight/Tab/three ArrowLeft sequences. It deliberately does not
+invoke the standard configured focus action; these are diagnostic action
+boundaries,not focus-gate passes. Each key is settled and retains paired control/
+state/raw histories. No native empty-placeholder substitution or event filtering.
+
+raw-control-keyboard-events-20261012.log exits0,captured16 in121099.8665ms,
+SHA2568e202f4cc8eaa800d58acd54c8253ce0d947cee82e96651787571c0ebd086bc1.
+Chrome154.0.8037.99,four desktop profiles1440x1000 DPR1/2. Exact ordered16-case
+membership,empty initial histories,all sequences,control steps,terminal script
+receipt and raw tails assert successfully. All1887 served files authenticate via
+the frozen helper after capture; runner/sorter remain unchanged. Original raw
+capture script bytes still authenticate through Git6b0486f0/SHA58e63897;
+the50-case pointer capture is retained,not repeated. Current script receipt is
+13b2bb8d74049c5f709be4fe6fc0c47a7f688ff5cb64cb19b7e6527faaed3363.
+
+All8 checkbox Space histories end native keydown/click/input/change and selected
+false; candidate receives focus/keydown only and remains selected true. The native
+input:checkbox versus candidate DIV role=checkbox boundary binds the existing
+keyboard authoring finding,not a native-widget core event failure. All8 slider
+sequences instead emit six ordered input/change pairs on both sides with correct
+start/end owners: native35/40/45 then60/55/50,candidate31/32/33 then64/63/62.
+Their actual step5 versus step1 requests retain the existing range-constraint
+attribution; event ordering is not absent and no new motion/hit diagnosis follows.
+The diagnostic pre-map `compared` field remains outside standard gate acceptance.
+Other keys,disabled contexts,local temporal paint,lifetime and whole-case closure
+remain open. Integrate these bounded records with the prior raw-event batch only
+after coherent196 cold verification/import; consumed producer sources stay frozen.
+
 ## Scrollbar track inspection reconciled — October 12
 
 Read-only receipt replay authenticates timepicker-light-mobile-scroll-current-

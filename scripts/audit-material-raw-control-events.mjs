@@ -12,6 +12,10 @@ import { fingerprintDirectory, materialBrowserLaunchOptions } from '../tests/mat
 // Observe the missing raw boundary using unchanged configured actions and the
 // runner's unchanged native listener. No comparator or authored state changes.
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+const requested = process.argv.slice(2);
+assert.ok(requested.length <= 1 && requested.every(arg => arg === '--keyboard-only'),
+  'Usage: node scripts/audit-material-raw-control-events.mjs [--keyboard-only]');
+const keyboardOnly = requested.includes('--keyboard-only');
 const sorterFile = 'tests/material-parity/sort-focus-structure.spec.mjs';
 const sorterBytes = readFileSync(sorterFile);
 assert.equal(hash(sorterBytes), '1afa971226301b8c6f01e3923099a0889ff1e4924a95da412f974217a85f0583');
@@ -41,15 +45,15 @@ for (const file of ['tests/material-parity/benchmark.config.mjs', 'tests/materia
   assert.equal(hash(readFileSync(file)), checkpoint.provenance.harnessFiles.find(row => row.file === file)?.sha256, file);
 }
 const cases = materialInteractionCases.filter(row => ['checkbox', 'slider'].includes(row.family)
-  && ['activate', 'activate-leave', 'drag-start', 'drag-end'].includes(row.state));
-assert.equal(cases.length, 50);
-assert.equal(cases.filter(row => row.family === 'checkbox').length, 16);
-assert.equal(cases.filter(row => row.family === 'slider').length, 34);
+  && (keyboardOnly ? row.state === 'focus' : ['activate', 'activate-leave', 'drag-start', 'drag-end'].includes(row.state)));
+assert.equal(cases.length, keyboardOnly ? 16 : 50);
+assert.equal(cases.filter(row => row.family === 'checkbox').length, keyboardOnly ? 8 : 16);
+assert.equal(cases.filter(row => row.family === 'slider').length, keyboardOnly ? 8 : 34);
 const start = performance.now();
 console.log(JSON.stringify({ scriptSha256: hash(readFileSync('scripts/audit-material-raw-control-events.mjs')),
   sorterFile, sorterSha256: hash(sorterBytes), helperSha256: hash(helper), runnerFile,
   runnerSha256: hash(runnerBytes), actionBodiesSha256: hash(bodies), checkpointFile,
-  checkpointSha256: hash(checkpointBytes), cases: 50, acceptance: false }));
+  checkpointSha256: hash(checkpointBytes), cases: cases.length, keyboardOnly, acceptance: false }));
 await frozen(async (browser, baseUrl) => {
   const actions = new Function('assert', 'baseUrl', 'interactionLayerCursorProbe',
     `${bodies}; return { ${names.join(',')} };`)(assert, baseUrl, interactionLayerCursorProbe);
@@ -79,8 +83,23 @@ await frozen(async (browser, baseUrl) => {
       const before = { reference: await snapshot(reference.page, 'reference'), astylar: await snapshot(candidate.page, 'astylar') };
       await actions.setBenchmarkPhase(reference.page, 'start');
       await actions.setBenchmarkPhase(candidate.page, 'start');
-      await Promise.all([actions.performInteraction(reference.page, 'reference', benchmarkCase),
-        actions.performInteraction(candidate.page, 'astylar', benchmarkCase)]);
+      const keyboardBoundaries = [];
+      if (keyboardOnly) {
+        // Retain the established trusted-key sequences, now with actual native
+        // listeners. This diagnoses missing raw ordering, not configured focus
+        // gate acceptance: ordinary focus actions are deliberately not invoked.
+        const keys = family === 'checkbox' ? ['Tab', 'Space']
+          : ['Tab', 'ArrowRight', 'ArrowRight', 'ArrowRight', 'Tab', 'ArrowLeft', 'ArrowLeft', 'ArrowLeft'];
+        for (const key of keys) {
+          await Promise.all([reference.page.keyboard.press(key), candidate.page.keyboard.press(key)]);
+          await Promise.all([actions.settleInteraction(reference.page, 'reference'), actions.settleInteraction(candidate.page, 'astylar')]);
+          keyboardBoundaries.push({ key, reference: await snapshot(reference.page, 'reference'),
+            astylar: await snapshot(candidate.page, 'astylar') });
+        }
+      } else {
+        await Promise.all([actions.performInteraction(reference.page, 'reference', benchmarkCase),
+          actions.performInteraction(candidate.page, 'astylar', benchmarkCase)]);
+      }
       await Promise.all([actions.setBenchmarkPhase(reference.page, 'settled'), actions.setBenchmarkPhase(candidate.page, 'settled')]);
       await Promise.all([actions.settleInteraction(reference.page, 'reference'), actions.settleInteraction(candidate.page, 'astylar')]);
       const after = { reference: await snapshot(reference.page, 'reference'), astylar: await snapshot(candidate.page, 'astylar') };
@@ -92,13 +111,13 @@ await frozen(async (browser, baseUrl) => {
         assert.ok(after[side].controls.every(control => control.tag));
       }
       const compared = actions.compareEvents(after.reference.events, after.astylar.events, family, state);
-      console.log(JSON.stringify({ case: benchmarkCase, before, after, compared, errors: [],
+      console.log(JSON.stringify({ case: benchmarkCase, before, after, compared, keyboardOnly, keyboardBoundaries, errors: [],
         browser: browser.version(), elapsedMs: performance.now() - start, acceptance: false }));
       captured++;
     } finally { await context.close(); }
   }
-  assert.equal(captured, 50);
+  assert.equal(captured, cases.length);
 }, materialBrowserLaunchOptions(), { checkpointFile });
 assert.equal(hash(readFileSync(sorterFile)), hash(sorterBytes));
 assert.equal(hash(readFileSync(runnerFile)), hash(runnerBytes));
-console.log(JSON.stringify({ result: 'PASS', captured: 50, elapsedMs: performance.now() - start, acceptance: false }));
+console.log(JSON.stringify({ result: 'PASS', captured: cases.length, keyboardOnly, elapsedMs: performance.now() - start, acceptance: false }));
