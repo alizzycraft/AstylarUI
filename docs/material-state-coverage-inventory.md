@@ -1,5 +1,30 @@
 # Material comparison/state coverage inventory
 
+## Coherent195 publication verified — October 12
+
+The retained retry terminates exit0 after5261113.886ms. Existing validation and
+evidence-session verification complete before canonical publication:436 static/
+1875 interaction cases,8483 differences,389202 occurrences,157 findings;
+inputEquivalent remains false. Log coherent195-option-batch-export-retry-20261012.log
+preserves the phase receipts. New package compressed62903102bytes SHA256
+3bd7e11732ec0c3248a2afc8d582ba95c4579a88ce94204fd53b08636da45504;
+decoded2224472925bytes SHA256
+803f7465766facc7d8d3310e7ee1ef515a2ca395c131e75f93852e263089b6cd.
+Read-only Markdown diff review strips only test line anchors:zero removed text,
+one added bounded timepicker option descriptor; all other prose is conserved.
+The prepared producer inventory remains195 proofs/632 paths. Independent cold
+named-baseline --check reaches complete at2895023.1593ms in
+coherent195-option-batch-cold-check-20261012.log. Its original session handle is
+now missing and collector13696 is absent; the completed canonical comparison
+receipt is retained rather than restarting the check. Compact import and whole-
+index verification subsequently terminate exit0 in coherent195-option-batch-
+import-20261012.log and coherent195-option-batch-index-verify-20261012.log:
+8483 groups,157 findings,39904 controls,389202 occurrences,0 unresolved;
+72749010 compact bytes. This is evidence integrity,not whole-case closure or
+current equal-input rendering acceptance. Next investigation stays
+the missing actual held calendar-day/menu-item/dialog-action boundary,using the
+existing diagnostic rather than repeating settled hover and option measurements.
+
 ## Dialog local-paint coverage boundary — October 12
 
 Target replay now answers both hover-owner uncertainties below without recapture.
