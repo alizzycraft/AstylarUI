@@ -2,6 +2,18 @@
 
 ## Dialog local-paint coverage boundary — October 12
 
+Target replay now answers the candidate hover uncertainty below without recapture.
+All eight retained open-hover-content contexts (light,dark,contrast,custom;
+desktop DPR1/2) end with pointermove targetId=dialog-cancel and include its
+pointerenter. clientX720.5 lies inside its measured border box; localX38.609375
+lies inside its width. Read-only Node assertions authenticate the report hash,
+exact count and every target/containment condition,exit0. This rules out a wrong
+candidate hover owner for these retained contexts; it does not prove reference
+hover identity (its event list omits pointermove),held action paint or current
+build validity. Do not recapture merely to reconfirm these candidate targets.
+Next inspect retained reference target provenance and any existing held-action
+diagnostics; the missing action-boundary evidence remains distinct from panel SSIM.
+
 Read-only replay of the retained October5 report authenticates SHA256
 ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62.
 All66 dialog interaction records are accounted for: eight each focus,hover,held,
