@@ -103,6 +103,31 @@ held-content-producer-boundary-integration-20261012.log; preceding registration
 preflight passes2/2,4143.4247ms. Canonical195 does not yet contain these rows.
 Next named complete-baseline export/cold check and compact import at this coherent
 batch milestone; keep consumed sources frozen during it. No case closes.
+Registration committed/pushed5fba4ef8. Named dry-run confirms all five baseline
+inputs; complete export is live session75501/collector6416 in
+coherent196-held-content-export-20261012.log,build entered1435.4705ms.
+Observed D:free5870436352bytes before launch. Publication/cold/import remain
+pending; do not restart a live collector or infer a terminal result from quiet logs.
+
+Read-only continuation scope check answers a separate bottom-sheet action gap.
+Exact benchmark-config import/assertions exit0: autocomplete/select/datepicker/
+timepicker/menu/dialog/bottom-sheet each have eight held cases and zero named
+held-content cases; the first six have eight open-hover-content cases, bottom-
+sheet has zero. Runner performInteraction holds interactionTargetBox before
+release; bottom-sheet falls back to its primary opener. Thus these56 held cases
+are not content-held observations. Existing held-option diagnostic covers
+select/autocomplete/timepicker and its added branch day1/Rename/Cancel only.
+The existing reviewed-sheet-unconditional-focus-fill attribution already records
+native .12 focus layer versus unconditional candidate opaque fill; do not reopen
+that authoring conclusion or infer held paint from it. Inspected dismissal-cycle
+diagnostic clicks the opener and samples opened/closed ownership, not a held
+sheet action. This source-scope check does not prove that no other retained
+diagnostic exists. Next search/reuse exact action-boundary receipts, then obtain
+only missing Share hover/held ownership and conditional layer inputs through the
+existing diagnostic after export inputs can be unfrozen. Competing explanations
+are missing action evidence versus evidence under a differently named diagnostic;
+not a new renderer diagnosis. All2311 configured statuses/criteria unchanged.
+Collector6416 reverified live with CPU366.52s; original export remains pending.
 
 Target replay now answers both hover-owner uncertainties below without recapture.
 All eight retained open-hover-content contexts (light,dark,contrast,custom;
