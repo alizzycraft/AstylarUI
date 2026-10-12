@@ -13,10 +13,11 @@ import { fingerprintDirectory, materialBrowserLaunchOptions } from '../tests/mat
 // runner's unchanged native listener. No comparator or authored state changes.
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const requested = process.argv.slice(2);
-assert.ok(requested.length <= 1 && requested.every(arg => ['--keyboard-only', '--disabled-keyboard-only', '--disabled-pointer-only'].includes(arg)),
-  'Usage: node scripts/audit-material-raw-control-events.mjs [--keyboard-only|--disabled-keyboard-only|--disabled-pointer-only]');
+assert.ok(requested.length <= 1 && requested.every(arg => ['--keyboard-only', '--disabled-keyboard-only', '--disabled-pointer-only', '--disabled-slider-motion-only'].includes(arg)),
+  'Usage: node scripts/audit-material-raw-control-events.mjs [--keyboard-only|--disabled-keyboard-only|--disabled-pointer-only|--disabled-slider-motion-only]');
 const disabledKeyboardOnly = requested.includes('--disabled-keyboard-only');
-const disabledPointerOnly = requested.includes('--disabled-pointer-only');
+const sliderMotionOnly = requested.includes('--disabled-slider-motion-only');
+const disabledPointerOnly = requested.includes('--disabled-pointer-only') || sliderMotionOnly;
 const disabledProbe = disabledKeyboardOnly || disabledPointerOnly;
 const keyboardOnly = requested.includes('--keyboard-only') || disabledKeyboardOnly;
 const sorterFile = 'tests/material-parity/sort-focus-structure.spec.mjs';
@@ -39,6 +40,31 @@ const bodies = names.map(name => {
   assert.ok(declaration, name);
   return declaration.getText(runner);
 }).join('\n');
+async function readSliderCenters(page, mode) {
+  return page.evaluate(mode => {
+    if (mode === 'reference') return [...document.querySelectorAll('mat-slider mat-slider-visual-thumb')].map(node => {
+      const box = node.getBoundingClientRect(); return box.x + box.width / 2;
+    });
+    // Same read-only rendered-center projection as the existing held geometry
+    // diagnostic. These are observations, never layout or hit calculations.
+    const surface = window.ng.getComponent(document.querySelector('app-astylar-showcase')).surface;
+    const scene = surface.scene, engine = scene.getEngine(), canvas = engine.getRenderingCanvas();
+    const bounds = canvas.getBoundingClientRect(), transform = scene.getTransformMatrix();
+    const viewport = scene.activeCamera.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight());
+    return ['start', 'end'].map(name => {
+      const mesh = scene.meshes.find(mesh => mesh.name.endsWith(`-${name}-thumb`));
+      if (!mesh) throw new Error(`Missing rendered ${name} thumb`);
+      mesh.computeWorldMatrix(true);
+      const center = mesh.getAbsolutePosition();
+      return bounds.x + center.constructor.Project(center, transform.constructor.IdentityReadOnly,
+        transform, viewport).x * bounds.width / engine.getRenderWidth();
+    });
+  }, mode);
+}
+const observedBodies = sliderMotionOnly
+  ? `${bodies.replace('async function readSliderValues(', 'async function readSliderScalarValues(')}\n${readSliderCenters.toString()}\n`
+    + 'async function readSliderValues(page, mode) { return { ...await readSliderScalarValues(page, mode), thumbCenters: await readSliderCenters(page, mode) }; }'
+  : bodies;
 const checkpointFile = 'artifacts/material-parity/selection-pointer-directions-20261011/checkpoint/manifest.json';
 const checkpointBytes = readFileSync(checkpointFile);
 assert.equal(hash(checkpointBytes), '2aac425d216cdb274ebff0876f2fa365c9ab6e845ed1b1c3b30d9e1bbcaea5c8');
@@ -48,21 +74,22 @@ for (const file of ['tests/material-parity/benchmark.config.mjs', 'tests/materia
   assert.equal(hash(readFileSync(file)), checkpoint.provenance.harnessFiles.find(row => row.file === file)?.sha256, file);
 }
 const cases = materialInteractionCases.filter(row => ['checkbox', 'slider'].includes(row.family)
+  && (!sliderMotionOnly || row.family === 'slider')
   && (disabledProbe ? row.state === 'disabled' : keyboardOnly ? row.state === 'focus'
     : ['activate', 'activate-leave', 'drag-start', 'drag-end'].includes(row.state))
   // Existing disabled-composite evidence already covers this exact context.
   && !(disabledKeyboardOnly && row.family === 'checkbox' && row.profile === 'light' && row.viewport.deviceScaleFactor === 1));
-assert.equal(cases.length, disabledKeyboardOnly ? 15 : disabledPointerOnly ? 16 : keyboardOnly ? 16 : 50);
-assert.equal(cases.filter(row => row.family === 'checkbox').length, disabledKeyboardOnly ? 7 : disabledPointerOnly ? 8 : keyboardOnly ? 8 : 16);
+assert.equal(cases.length, sliderMotionOnly ? 8 : disabledKeyboardOnly ? 15 : disabledPointerOnly ? 16 : keyboardOnly ? 16 : 50);
+assert.equal(cases.filter(row => row.family === 'checkbox').length, sliderMotionOnly ? 0 : disabledKeyboardOnly ? 7 : disabledPointerOnly ? 8 : keyboardOnly ? 8 : 16);
 assert.equal(cases.filter(row => row.family === 'slider').length, disabledProbe || keyboardOnly ? 8 : 34);
 const start = performance.now();
 console.log(JSON.stringify({ scriptSha256: hash(readFileSync('scripts/audit-material-raw-control-events.mjs')),
   sorterFile, sorterSha256: hash(sorterBytes), helperSha256: hash(helper), runnerFile,
-  runnerSha256: hash(runnerBytes), actionBodiesSha256: hash(bodies), checkpointFile,
-  checkpointSha256: hash(checkpointBytes), cases: cases.length, keyboardOnly, disabledKeyboardOnly, disabledPointerOnly, acceptance: false }));
+  runnerSha256: hash(runnerBytes), actionBodiesSha256: hash(bodies), observedBodiesSha256: hash(observedBodies), checkpointFile,
+  checkpointSha256: hash(checkpointBytes), cases: cases.length, keyboardOnly, disabledKeyboardOnly, disabledPointerOnly, sliderMotionOnly, acceptance: false }));
 await frozen(async (browser, baseUrl) => {
   const actions = new Function('assert', 'baseUrl', 'interactionLayerCursorProbe',
-    `${bodies}; return { ${names.join(',')} };`)(assert, baseUrl, interactionLayerCursorProbe);
+    `${observedBodies}; return { ${names.join(',')} };`)(assert, baseUrl, interactionLayerCursorProbe);
   let captured = 0;
   for (const benchmarkCase of cases) {
     const { family, profile, viewport, state } = benchmarkCase;
@@ -105,7 +132,12 @@ await frozen(async (browser, baseUrl) => {
             actions.performInteraction(candidate.page, 'astylar', actionCase)]);
           await Promise.all([actions.settleInteraction(reference.page, 'reference'), actions.settleInteraction(candidate.page, 'astylar')]);
           pointerBoundaries.push({ action, reference: await snapshot(reference.page, 'reference'),
-            astylar: await snapshot(candidate.page, 'astylar') });
+            astylar: await snapshot(candidate.page, 'astylar'),
+            ...(sliderMotionOnly ? { dragTraces: {
+              reference: await reference.page.evaluate(() => window.__MATERIAL_SLIDER_DRAG_TRACE__),
+              astylar: await candidate.page.evaluate(() => window.__MATERIAL_SLIDER_DRAG_TRACE__),
+            }, releasedCenters: { reference: await readSliderCenters(reference.page, 'reference'),
+              astylar: await readSliderCenters(candidate.page, 'astylar') } } : {}) });
         }
       } else if (keyboardOnly) {
         // Retain the established trusted-key sequences, now with actual native
@@ -135,7 +167,7 @@ await frozen(async (browser, baseUrl) => {
       }
       const compared = actions.compareEvents(after.reference.events, after.astylar.events, family, state);
       console.log(JSON.stringify({ case: benchmarkCase, before, after, compared, keyboardOnly, disabledKeyboardOnly,
-        disabledPointerOnly, keyboardBoundaries, pointerBoundaries, errors: [],
+        disabledPointerOnly, sliderMotionOnly, keyboardBoundaries, pointerBoundaries, errors: [],
         browser: browser.version(), elapsedMs: performance.now() - start, acceptance: false }));
       captured++;
     } finally { await context.close(); }
@@ -144,5 +176,5 @@ await frozen(async (browser, baseUrl) => {
 }, materialBrowserLaunchOptions(), { checkpointFile });
 assert.equal(hash(readFileSync(sorterFile)), hash(sorterBytes));
 assert.equal(hash(readFileSync(runnerFile)), hash(runnerBytes));
-console.log(JSON.stringify({ result: 'PASS', captured: cases.length, keyboardOnly, disabledKeyboardOnly, disabledPointerOnly,
+console.log(JSON.stringify({ result: 'PASS', captured: cases.length, keyboardOnly, disabledKeyboardOnly, disabledPointerOnly, sliderMotionOnly,
   elapsedMs: performance.now() - start, acceptance: false }));

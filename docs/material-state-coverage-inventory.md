@@ -1,5 +1,37 @@
 # Material comparison/state coverage inventory
 
+## Disabled slider rendered-center inertia — October 12
+
+The prior disabled pointer probe proves unchanged released values,not visual
+inertia during a drag. Competing explanations were unchanged rendered thumbs
+versus transient motion hidden by event/store observations. Existing owning drag
+procedures already take nine intermediate value samples but do not measure mesh
+positions. The standalone diagnostic adds --disabled-slider-motion-only for the
+eight configured desktop disabled slider contexts,four profiles DPR1/2. It adds
+the established read-only projected-center observation in CSS pixels; no layout,
+hit calculation,renderer,fixture or frozen producer changes. Actions/waits remain
+unchanged; additional observation can affect timing. No checkbox clicks repeated.
+
+disabled-slider-held-centers-20261012.log terminates PASS,captured8,acceptance=false
+in39415.5739ms,Chrome154.0.8037.99,SHA256
+24ddecb803434473e85ba76df0ea6700b608d94c010d363a1ef48a40f08e34d3.
+Read-only replay verifies exact ordered configured membership,16 paired drags,
+288 held samples and32 released center arrays. Both sides retain30/65 values,
+disabled=true,no input/change and zero within-gesture center drift at every
+sample/release. This answers sampled disabled visual inertia,not every frame,
+enabled smoothness,equal initial geometry,local paint or whole-case acceptance.
+Native/candidate initial centers remain unequal authored geometry; no new core
+position defect is inferred. Existing candidate CANVAS versus native BODY focus
+finding remains. Mobile/tablet,other pointer locations,paint and lifetime remain.
+
+Script receipt a38da4b26d1de1472c74bf45dc2c822693776bce5575c10dfe72b509e6efeed9;
+original action bodies9f00eceef7051e65a426cf316086528281a2717a6a71da619d18c08ce04604e1
+remain conserved. Runner/sorter/checkpoint receipts authenticate and the frozen
+helper verifies1887 served files after capture. Prior pointer-capture script
+receipt remains authenticated through Git e007a50c. Integrate this bounded raw
+batch after coherent196 independent cold/import; no canonical rebuild justified
+by this unregistered standalone extension. All2311 case closures remain open.
+
 ## Disabled pointer hit/focus versus activation suppression — October 12
 
 Owning performInteraction returns immediately for disabled/selected/error rows;
