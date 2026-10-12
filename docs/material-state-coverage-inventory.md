@@ -128,6 +128,19 @@ existing diagnostic after export inputs can be unfrozen. Competing explanations
 are missing action evidence versus evidence under a differently named diagnostic;
 not a new renderer diagnosis. All2311 configured statuses/criteria unchanged.
 Collector6416 reverified live with CPU366.52s; original export remains pending.
+The named baseline action population is now receipt-checked rather than inferred
+from filenames: original report SHA256b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a
+contains25 cases with both sheet actions (activate9,activate-leave8,open8).
+All50 exact reference/candidate input-tree receipts rehash successfully. Every
+native tree has two mat-list-item anchors; the first action and its generated
+pseudo owner match focus rules in25/25,hover rules0/25,active rules0/25. Rule
+activity is checked,not merely selector availability. Thus this population
+provides actual native focused-Share input evidence,not held or hover action
+evidence. This rules out reusing these25 action observations as the missing
+boundary; it does not exclude other supplemental diagnostics or prove current
+paint. Existing sheet-action progress logs are canonical scalar exports/errors,
+not content-pointer captures. Next use the existing held-content diagnostic for
+Share after source freeze ends; do not recapture focus just to repeat this result.
 
 Target replay now answers both hover-owner uncertainties below without recapture.
 All eight retained open-hover-content contexts (light,dark,contrast,custom;
