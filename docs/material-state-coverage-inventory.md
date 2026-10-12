@@ -1,5 +1,47 @@
 # Material comparison/state coverage inventory
 
+## Slider hover/held state-layer input boundary — October 12
+
+Question: do retained hover/held paint passes establish equal state-layer inputs,
+or conceal unequal authoring behind a nonmeasuring gate? Existing compact slider
+query authenticates647 rows from the accepted working index; it does not contain
+live plugin material-alpha observations. Read-only October5 report/tree join
+authenticates all16 exact configured hover/held contexts and32 tree receipts.
+compareStatePaint at runner1407 returns {matches:true} for slider without measuring
+paint. All16 local SSIM gates pass while all16 sharpness diagnostics fail; neither
+result demonstrates equal inputs or a confirmed raster defect.
+
+Native trees retain one48x48 hover ripple at theme-primary alpha0.05 in every
+hover context; held trees retain active and focus48x48 ripples,each alpha0.2 and
+opacity1. Candidate visual data requests the same theme primary but component
+pointer callbacks request one plugin layer at0.08 hover/0.12 held (component
+77,86,95,106); plugin updateStateLayer at238–244 applies the requested alpha to
+one selected material and clears the other. These are unequal authored state
+layer intensity/composition inputs before rasterization,not demonstrated core
+alpha/compositing failure. Do not infer combined native alpha,actual candidate
+live alpha,final pixel contribution or historical black-circle causality.
+Git2cb8b198 (September3 range identity/capture fix) introduced these callback
+constants and dynamic plugin state layers. No compensating input edit is made.
+
+slider-retained-state-layer-inputs-20261012.log terminates PASS,cases16,
+acceptance=false,SHA256
+2bb78d0a50dafdbec9252b9afdfa86bb8f6d8d53583464befdab5e230df1fc3f.
+Original reportSHAab42dbec and exact per-tree receipts authenticate; separate
+read-only assertions verify layer counts,dimensions,opacity and alpha strings.
+Current full plugin source equals captured main.js.map after LF normalization,
+sourceSHAdee2c10af7f3116bc6a476d63182ac182e5717b90f5333a327b77213e0b9107e,
+mapSHAc0764b03e6a2e5332dc927a63b2f45396678ceb45abe23378377f343ab622473.
+Current whole component equals served mapped sourceSHAb493a355. This validates
+source applicability,not current-browser pixel acceptance. No recapture occurs.
+
+The retained Astylar tree omits live plugin material alpha; smallest remaining
+paint check is observing actual selected layer material/color/alpha and local
+pixels at the same hover/held action boundary,not repeating value/event probes.
+Register this authoring boundary through existing paint/history review after
+coherent196 cold/import. Full input/history/semantics/lifetime disposition and
+all2311 whole-case closures remain open. Existing public range default/appearance
+findings concern transparent semantic inputs,not these visible plugin layers.
+
 ## Raw-control exact-case obligation join — October 12
 
 Question: do the recent pointer/keyboard/disabled observations cover distinct
