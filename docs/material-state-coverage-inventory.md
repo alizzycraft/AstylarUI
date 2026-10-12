@@ -1,5 +1,27 @@
 # Material comparison/state coverage inventory
 
+## Table header scope and column topology — October 13
+
+Question: does matching table AX role/name conceal missing candidate header-scope
+transport,or do retained actual DOM attributes establish that boundary? The
+existing input-audit suite authenticates reportab42dbec,all104 table trees across
+52 exact configured cases,and original AX loga5398118 across16 physical contexts/
+32 observations. Every candidate header authors scope=col and every actual native
+TH has scope=col. Reference TH omits scope. Both retain Name/Atlas/Northstar in
+three separate single-cell TRs,without headers/colspan/rowspan declarations.
+This rules out missing scope transport for this population. The unequal explicit
+scope versus omission is retained,not normalized into identical input. Original
+AX observations contain no header-to-cell association field; screen-reader/AT
+association behavior remains unknown,not a passing inferred relationship.
+
+Focused command `node --test --test-name-pattern="retained table header scope joins" tests/material-parity/input-equivalence-audit.spec.mjs`
+passes1/1,zero skips,2602.5854ms terminal. Wrong scope and invented headers fail
+the owning assertions. No browser recapture,reference,renderer or fixture changed.
+This closes the declared/actual scope-transport inspection gap,not complete table
+semantics,current rendering or whole-case closure. Full input/history,local paint
+and broader ownership obligations remain. Register this proof with the retained
+mobile mask in the next coherent batch; canonical coherent201 is unchanged.
+
 ## Mobile mask source-receipt conservation — October 13
 
 The appended offline mask test changed the retained sort-focus source receipt;

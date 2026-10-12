@@ -71,6 +71,60 @@ test('retained control proof batch conserves predecessor producer and binds comp
   assert.equal(additions.length, 5); assert.ok(additions.every(row => row.status !== 'missing' && row.line > 0));
 });
 
+test('retained table header scope joins authored input and actual semantic attributes', () => {
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  const pinned = (file, sha256) => {
+    const bytes = readFileSync(file); assert.equal(digest(bytes), sha256, file); return JSON.parse(bytes);
+  };
+  const report = pinned('artifacts/material-parity/current-full-20261005/latest-report.json',
+    'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const cases = [...report.results, ...report.interactions].filter(row => row.family === 'table');
+  assert.equal(cases.length, 52);
+  const context = row => JSON.stringify([row.profile, row.viewport.width, row.viewport.height, row.viewport.deviceScaleFactor]);
+  const contexts = [...new Set(cases.map(context))].sort(); assert.equal(contexts.length, 16);
+  const log = readFileSync('artifacts/material-parity/table-child-ax-cohorts-20261007.log');
+  assert.equal(digest(log), 'a53981184b33cbd4b55119623d6502121f14d0586b02d9005fcd9eeccc81c949');
+  const records = log.toString().trim().split(/\r?\n/).map(JSON.parse);
+  assert.equal(records.at(-1).complete, true); assert.equal(records.at(-1).acceptance, false);
+  const attrs = values => {
+    assert.equal(values.length % 2, 0);
+    const pairs = Array.from({ length: values.length / 2 }, (_, i) => values.slice(i * 2, i * 2 + 2));
+    assert.equal(new Set(pairs.map(([name]) => name)).size, pairs.length);
+    return Object.fromEntries(pairs);
+  };
+  const verifyAttributes = (attributes, header, candidate) => {
+    assert.equal(attributes.scope, header && candidate ? 'col' : undefined);
+    for (const name of ['headers', 'colspan', 'rowspan']) assert.equal(attributes[name], undefined);
+  };
+  for (const side of ['reference', 'astylar']) {
+    const observed = records.filter(row => row.viewport && row.mode === side);
+    assert.equal(observed.length, 16); assert.deepEqual(observed.map(context).sort(), contexts);
+    for (const row of observed) {
+      const cells = row.observations.filter(node => ['TH', 'TD'].includes(node.domTag));
+      assert.deepEqual(cells.map(node => [node.domTag, node.ax.name.value]), [['TH', 'Name'], ['TD', 'Atlas'], ['TD', 'Northstar']]);
+      for (const cell of cells) verifyAttributes(attrs(cell.attributes), cell.domTag === 'TH', side === 'astylar');
+    }
+  }
+  for (const row of cases) for (const side of ['reference', 'astylar']) {
+    const receipt = row.inputTrees[side], tree = pinned(receipt.file, receipt.sha256);
+    const cells = tree.nodes.filter(node => ['th', 'td'].includes(side === 'reference' ? node.type : node.authored?.type));
+    assert.equal(cells.length, 3);
+    for (const [index, cell] of cells.entries()) {
+      const attributes = side === 'reference' ? cell.attributes : cell.authored;
+      verifyAttributes(attributes, index === 0, side === 'astylar');
+      assert.equal(side === 'reference' ? cell.ownText : cell.authored.textContent, ['Name', 'Atlas', 'Northstar'][index]);
+      const parent = tree.nodes.find(node => node.key === cell.parent);
+      assert.equal(side === 'reference' ? parent?.type : parent?.authored?.type, 'tr');
+      const siblings = tree.nodes.filter(node => node.parent === cell.parent);
+      assert.equal(siblings.length, 1, 'each header/data row has exactly one cell');
+    }
+  }
+  assert.throws(() => verifyAttributes({ scope: 'row' }, true, true));
+  assert.throws(() => verifyAttributes({ headers: 'missing-header' }, false, false));
+  // Actual scope transport and the simple column topology are observed. CDP
+  // supplies no header-to-cell association field here; AT behavior is not proved.
+});
+
 test('retained divider texel trace preserves edge and interior residual uncertainty', () => {
   const digest = bytes => createHash('sha256').update(bytes).digest('hex');
   const bytes = readFileSync('artifacts/material-parity/divider-texel-boundary-trace-20261007.log');
