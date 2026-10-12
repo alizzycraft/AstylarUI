@@ -1,5 +1,42 @@
 # Material comparison/state coverage inventory
 
+## Disabled pointer hit/focus versus activation suppression — October 12
+
+Owning performInteraction returns immediately for disabled/selected/error rows;
+their snapshots do not test pointer blocking. Existing standalone raw-event
+diagnostic gains --disabled-pointer-only for all16 configured checkbox/slider
+desktop disabled contexts. It reuses the owning activate and both drag procedures
+on disabled pages without changing authored state. Eight checkbox clicks and
+16 range drag attempts retain24 paired action boundaries,actual focus,control
+properties,state and unfiltered event histories. No renderer/fixture changes.
+
+raw-disabled-control-pointer-events-20261012.log exits0,captured16 in68523.1351ms,
+SHA256b227aa5e5bc38d6e0e6ff5c469bab82f4212858432b3dfe67f001771785fd69f.
+Chrome154.0.8037.99,four desktop profiles1440x1000 DPR1/2. Exact case membership,
+24 boundary assertions,script receipt and runtime checks pass; frozen helper
+rehashes1887 served files after capture. Complete served component source matches
+current after LF normalization,SHA b493a355679903f988e29f0dafbb95d2d6cce41275302fce5c978ae55f423b9f.
+Current script SHA3821d3784b1777ae9a4414c8f7129c31885c893b4d00bb1271cb21e805286ef0;
+prior disabled-keyboard source authenticates through Git76025f76/SHA6b41da8f.
+
+All8 checkbox pairs retain selected=true,disabled=true and emit no input/change.
+Native pointerdown/up/click targets checkbox-root with BODY focused; candidate
+targets checkbox-label and emits focus on checkbox-primary. Existing
+reviewed-disabled-pointer-request-omission proves native inherited pointer-events
+none versus omitted candidate owner/path requests. Actual hit/focus now binds
+that authoring difference: the candidate activation guard at component line224
+preserves state but does not implement equal pointer suppression. Do not infer a
+core requirement to suppress every aria-disabled widget or identical raw target
+serialization. The first unequal authored pointer intent remains the owner.
+
+All8 slider pairs retain30/65 values and stores through both drag attempts with
+native disabled properties true and no input/change. Native focus remains BODY;
+candidate focus becomes CANVAS,not a thumb. This establishes tested value/state
+suppression,not equal focus,per-frame visual inertia,local disabled paint or every
+disabled pointer location. Other families,mobile/tablet,programmatic focus,paint
+and lifetime remain. Existing keyboard findings and whole-case status unchanged;
+integrate the coherent raw-event batch only after coherent196 cold/import.
+
 ## Disabled control sequential keyboard boundary — October 12
 
 Existing disabled-composite evidence already inspects light desktop DPR1 and

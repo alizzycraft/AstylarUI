@@ -13,9 +13,11 @@ import { fingerprintDirectory, materialBrowserLaunchOptions } from '../tests/mat
 // runner's unchanged native listener. No comparator or authored state changes.
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const requested = process.argv.slice(2);
-assert.ok(requested.length <= 1 && requested.every(arg => ['--keyboard-only', '--disabled-keyboard-only'].includes(arg)),
-  'Usage: node scripts/audit-material-raw-control-events.mjs [--keyboard-only|--disabled-keyboard-only]');
+assert.ok(requested.length <= 1 && requested.every(arg => ['--keyboard-only', '--disabled-keyboard-only', '--disabled-pointer-only'].includes(arg)),
+  'Usage: node scripts/audit-material-raw-control-events.mjs [--keyboard-only|--disabled-keyboard-only|--disabled-pointer-only]');
 const disabledKeyboardOnly = requested.includes('--disabled-keyboard-only');
+const disabledPointerOnly = requested.includes('--disabled-pointer-only');
+const disabledProbe = disabledKeyboardOnly || disabledPointerOnly;
 const keyboardOnly = requested.includes('--keyboard-only') || disabledKeyboardOnly;
 const sorterFile = 'tests/material-parity/sort-focus-structure.spec.mjs';
 const sorterBytes = readFileSync(sorterFile);
@@ -46,18 +48,18 @@ for (const file of ['tests/material-parity/benchmark.config.mjs', 'tests/materia
   assert.equal(hash(readFileSync(file)), checkpoint.provenance.harnessFiles.find(row => row.file === file)?.sha256, file);
 }
 const cases = materialInteractionCases.filter(row => ['checkbox', 'slider'].includes(row.family)
-  && (keyboardOnly ? row.state === (disabledKeyboardOnly ? 'disabled' : 'focus')
+  && (disabledProbe ? row.state === 'disabled' : keyboardOnly ? row.state === 'focus'
     : ['activate', 'activate-leave', 'drag-start', 'drag-end'].includes(row.state))
   // Existing disabled-composite evidence already covers this exact context.
   && !(disabledKeyboardOnly && row.family === 'checkbox' && row.profile === 'light' && row.viewport.deviceScaleFactor === 1));
-assert.equal(cases.length, disabledKeyboardOnly ? 15 : keyboardOnly ? 16 : 50);
-assert.equal(cases.filter(row => row.family === 'checkbox').length, disabledKeyboardOnly ? 7 : keyboardOnly ? 8 : 16);
-assert.equal(cases.filter(row => row.family === 'slider').length, keyboardOnly ? 8 : 34);
+assert.equal(cases.length, disabledKeyboardOnly ? 15 : disabledPointerOnly ? 16 : keyboardOnly ? 16 : 50);
+assert.equal(cases.filter(row => row.family === 'checkbox').length, disabledKeyboardOnly ? 7 : disabledPointerOnly ? 8 : keyboardOnly ? 8 : 16);
+assert.equal(cases.filter(row => row.family === 'slider').length, disabledProbe || keyboardOnly ? 8 : 34);
 const start = performance.now();
 console.log(JSON.stringify({ scriptSha256: hash(readFileSync('scripts/audit-material-raw-control-events.mjs')),
   sorterFile, sorterSha256: hash(sorterBytes), helperSha256: hash(helper), runnerFile,
   runnerSha256: hash(runnerBytes), actionBodiesSha256: hash(bodies), checkpointFile,
-  checkpointSha256: hash(checkpointBytes), cases: cases.length, keyboardOnly, disabledKeyboardOnly, acceptance: false }));
+  checkpointSha256: hash(checkpointBytes), cases: cases.length, keyboardOnly, disabledKeyboardOnly, disabledPointerOnly, acceptance: false }));
 await frozen(async (browser, baseUrl) => {
   const actions = new Function('assert', 'baseUrl', 'interactionLayerCursorProbe',
     `${bodies}; return { ${names.join(',')} };`)(assert, baseUrl, interactionLayerCursorProbe);
@@ -92,7 +94,20 @@ await frozen(async (browser, baseUrl) => {
       await actions.setBenchmarkPhase(reference.page, 'start');
       await actions.setBenchmarkPhase(candidate.page, 'start');
       const keyboardBoundaries = [];
-      if (keyboardOnly) {
+      const pointerBoundaries = [];
+      if (disabledPointerOnly) {
+        // The configured disabled action is a no-op. Reuse the owning active
+        // pointer procedures on pages whose initial authored disabled state is
+        // unchanged, rather than treating their static appearance as blocking.
+        for (const action of family === 'checkbox' ? ['activate'] : ['drag-start', 'drag-end']) {
+          const actionCase = { ...benchmarkCase, state: action };
+          await Promise.all([actions.performInteraction(reference.page, 'reference', actionCase),
+            actions.performInteraction(candidate.page, 'astylar', actionCase)]);
+          await Promise.all([actions.settleInteraction(reference.page, 'reference'), actions.settleInteraction(candidate.page, 'astylar')]);
+          pointerBoundaries.push({ action, reference: await snapshot(reference.page, 'reference'),
+            astylar: await snapshot(candidate.page, 'astylar') });
+        }
+      } else if (keyboardOnly) {
         // Retain the established trusted-key sequences, now with actual native
         // listeners. This diagnoses missing raw ordering, not configured focus
         // gate acceptance: ordinary focus actions are deliberately not invoked.
@@ -119,7 +134,8 @@ await frozen(async (browser, baseUrl) => {
         assert.ok(after[side].controls.every(control => control.tag));
       }
       const compared = actions.compareEvents(after.reference.events, after.astylar.events, family, state);
-      console.log(JSON.stringify({ case: benchmarkCase, before, after, compared, keyboardOnly, disabledKeyboardOnly, keyboardBoundaries, errors: [],
+      console.log(JSON.stringify({ case: benchmarkCase, before, after, compared, keyboardOnly, disabledKeyboardOnly,
+        disabledPointerOnly, keyboardBoundaries, pointerBoundaries, errors: [],
         browser: browser.version(), elapsedMs: performance.now() - start, acceptance: false }));
       captured++;
     } finally { await context.close(); }
@@ -128,4 +144,5 @@ await frozen(async (browser, baseUrl) => {
 }, materialBrowserLaunchOptions(), { checkpointFile });
 assert.equal(hash(readFileSync(sorterFile)), hash(sorterBytes));
 assert.equal(hash(readFileSync(runnerFile)), hash(runnerBytes));
-console.log(JSON.stringify({ result: 'PASS', captured: cases.length, keyboardOnly, disabledKeyboardOnly, elapsedMs: performance.now() - start, acceptance: false }));
+console.log(JSON.stringify({ result: 'PASS', captured: cases.length, keyboardOnly, disabledKeyboardOnly, disabledPointerOnly,
+  elapsedMs: performance.now() - start, acceptance: false }));
