@@ -542,7 +542,9 @@ test('configured enabled keyboard evidence joins forty exact focus contexts with
   const { readRetainedSortFocusSource } = await import('./position-composition-producer-transition.mjs');
   const currentSorter = readFileSync('tests/material-parity/sort-focus-structure.spec.mjs', 'utf8');
   for (const altered of [currentSorter.replace('rgb(28, 27, 31)', 'rgb(255, 251, 254)'),
-    currentSorter.replace('candidate painted thumb currently has no pointer scrolling behavior', 'candidate thumb passes')]) {
+    currentSorter.replace('candidate painted thumb currently has no pointer scrolling behavior', 'candidate thumb passes'),
+    currentSorter.replace('assert.equal(inspectedImages, 8)', 'assert.equal(inspectedImages, 7)'),
+    currentSorter + '\n// unreviewed source drift\n']) {
     assert.notEqual(altered, currentSorter);
     assert.throws(() => readRetainedSortFocusSource(Buffer.from(altered)));
   }

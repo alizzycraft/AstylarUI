@@ -1,5 +1,26 @@
 # Material comparison/state coverage inventory
 
+## Mobile mask source-receipt conservation — October 13
+
+The appended offline mask test changed the retained sort-focus source receipt;
+this is test-source drift,not evidence of changed browser rendering. The existing
+historical reader now authenticates complete current bytes9fafec85,removes only
+that final test,and requires byte-for-byte equality with Git526aacde predecessor
+1afa9712 before applying the unchanged earlier restoration chain. Current capture
+commands do not use this historical restoration. Original logs/PNGs and receipts
+remain unchanged. The existing forty-context keyboard proof rejects mutations
+to both old capture assertions and the new mask test,plus appended unknown drift.
+
+Focused command `node --test --test-name-pattern="configured enabled keyboard evidence joins forty" tests/material-parity/input-equivalence-audit.spec.mjs`
+passes1/1,zero skips,7969.8812ms terminal. An earlier invocation's terminal output
+was not retained; its processes30940/13280 were confirmed absent before this
+verified rerun. It is not counted as an additional passing check. Scoped diff
+review and diff-check pass. This closes the immediate historical receipt replay
+gap,not canonical registration or current browser acceptance. Canonical coherent201
+remains unchanged; register the mobile proof with the next coherent evidence batch.
+Remaining priority is the complete applicable-obligation/currentness join and
+unmeasured local paint/state ownership boundaries; no full-case closure is claimed.
+
 ## Retained mobile scrollbar shape boundary — October 13
 
 Question: do the retained light/dark mobile opening/wheel rasters supply missing

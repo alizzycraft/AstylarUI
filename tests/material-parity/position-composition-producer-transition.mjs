@@ -503,6 +503,17 @@ export function restoreLayoutDiagnosticRegistration(source) {
 }
 // Historical replay only. Never use this reader for current capture or rendering acceptance.
 export function readRetainedSortFocusSource(current = readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')) {
+  const mobileMaskTest = "\ntest('retained mobile scrollbar masks inspect light dark open and wheel boundaries', () => {";
+  if (current.toString().includes(mobileMaskTest)) {
+    assert.equal(hash(current), '9fafec85d890122fa1ad2bb2ac712975b7982c603c28f036d534f875aab0effa',
+      'exact reviewed standalone retained mobile scrollbar mask source');
+    const text = current.toString();
+    assert.equal(text.split(mobileMaskTest).length, 2);
+    const prior = execFileSync('git', ['show', '526aacde:tests/material-parity/sort-focus-structure.spec.mjs'], { maxBuffer: 4_000_000 });
+    assert.equal(hash(prior), '1afa971226301b8c6f01e3923099a0889ff1e4924a95da412f974217a85f0583');
+    current = Buffer.from(text.slice(0, text.indexOf(mobileMaskTest)));
+    assert.deepEqual(current, prior, 'complete capture predecessor conserved outside appended offline mask test');
+  }
   if (current.toString().includes('ASTYLAR_AUDIT_HELD_CONTENT')) {
     assert.equal(hash(current), '1afa971226301b8c6f01e3923099a0889ff1e4924a95da412f974217a85f0583',
       'exact reviewed held-content diagnostic source');
