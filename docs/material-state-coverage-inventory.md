@@ -1,5 +1,24 @@
 # Material comparison/state coverage inventory
 
+## Dialog local-paint coverage boundary — October 12
+
+Read-only replay of the retained October5 report authenticates SHA256
+ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62.
+All66 dialog interaction records are accounted for: eight each focus,hover,held,
+activate,activate-leave,open-hover-content,open-dismiss-outside,open; two
+open-dismiss. Only open and open-hover-content carry dialog-panel focused
+rasters (eight each); no record carries a separately targeted Cancel/Save raster.
+Thus historical panel paint is not missing, but it is not action-level held
+paint evidence. Existing runner holds the trigger before release; open-hover
+targets native first dialog button but candidate uses panel-relative -140/-40
+coordinates. Actual candidate hit ownership must be validated before treating
+that state as equivalent action hover. This source observation is not proof of
+a wrong hit or a new renderer defect. Reuse original panel captures; next check
+existing action-boundary evidence for actual targets and held button inputs,
+then capture only the demonstrated missing boundary if needed. Current-build
+applicability and whole-case closure remain separate; no criteria or counts change.
+The coherent195 export retry remains live; its consumed sources are unchanged.
+
 ## Coherent195 policy preflight repair — October 12
 
 Existing policy/producer preflight standalone batch passes; description negative
