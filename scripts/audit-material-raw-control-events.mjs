@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, mkdirSync } from 'node:fs';
 import { createServer } from 'node:http';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import { chromium } from 'playwright-core';
+import { PNG } from 'pngjs';
 import { materialInteractionCases } from '../tests/material-parity/benchmark.config.mjs';
 import { interactionLayerCursorProbe } from '../tests/material-parity/cursor-metrics.mjs';
 import { fingerprintDirectory, materialBrowserLaunchOptions } from '../tests/material-parity/run-checkpoint.mjs';
@@ -13,8 +14,9 @@ import { fingerprintDirectory, materialBrowserLaunchOptions } from '../tests/mat
 // runner's unchanged native listener. No comparator or authored state changes.
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const requested = process.argv.slice(2);
-assert.ok(requested.length <= 1 && requested.every(arg => ['--keyboard-only', '--disabled-keyboard-only', '--disabled-pointer-only', '--disabled-slider-motion-only'].includes(arg)),
-  'Usage: node scripts/audit-material-raw-control-events.mjs [--keyboard-only|--disabled-keyboard-only|--disabled-pointer-only|--disabled-slider-motion-only]');
+assert.ok(requested.length <= 1 && requested.every(arg => ['--keyboard-only', '--disabled-keyboard-only', '--disabled-pointer-only', '--disabled-slider-motion-only', '--slider-state-layer-only'].includes(arg)),
+  'Usage: node scripts/audit-material-raw-control-events.mjs [--keyboard-only|--disabled-keyboard-only|--disabled-pointer-only|--disabled-slider-motion-only|--slider-state-layer-only]');
+const sliderPaintOnly = requested.includes('--slider-state-layer-only');
 const disabledKeyboardOnly = requested.includes('--disabled-keyboard-only');
 const sliderMotionOnly = requested.includes('--disabled-slider-motion-only');
 const disabledPointerOnly = requested.includes('--disabled-pointer-only') || sliderMotionOnly;
@@ -74,19 +76,20 @@ for (const file of ['tests/material-parity/benchmark.config.mjs', 'tests/materia
   assert.equal(hash(readFileSync(file)), checkpoint.provenance.harnessFiles.find(row => row.file === file)?.sha256, file);
 }
 const cases = materialInteractionCases.filter(row => ['checkbox', 'slider'].includes(row.family)
+  && (!sliderPaintOnly || (row.family === 'slider' && row.profile === 'light' && row.viewport.deviceScaleFactor === 1))
   && (!sliderMotionOnly || row.family === 'slider')
-  && (disabledProbe ? row.state === 'disabled' : keyboardOnly ? row.state === 'focus'
+  && (sliderPaintOnly ? ['hover', 'held'].includes(row.state) : disabledProbe ? row.state === 'disabled' : keyboardOnly ? row.state === 'focus'
     : ['activate', 'activate-leave', 'drag-start', 'drag-end'].includes(row.state))
   // Existing disabled-composite evidence already covers this exact context.
   && !(disabledKeyboardOnly && row.family === 'checkbox' && row.profile === 'light' && row.viewport.deviceScaleFactor === 1));
-assert.equal(cases.length, sliderMotionOnly ? 8 : disabledKeyboardOnly ? 15 : disabledPointerOnly ? 16 : keyboardOnly ? 16 : 50);
-assert.equal(cases.filter(row => row.family === 'checkbox').length, sliderMotionOnly ? 0 : disabledKeyboardOnly ? 7 : disabledPointerOnly ? 8 : keyboardOnly ? 8 : 16);
-assert.equal(cases.filter(row => row.family === 'slider').length, disabledProbe || keyboardOnly ? 8 : 34);
+assert.equal(cases.length, sliderPaintOnly ? 2 : sliderMotionOnly ? 8 : disabledKeyboardOnly ? 15 : disabledPointerOnly ? 16 : keyboardOnly ? 16 : 50);
+assert.equal(cases.filter(row => row.family === 'checkbox').length, sliderPaintOnly || sliderMotionOnly ? 0 : disabledKeyboardOnly ? 7 : disabledPointerOnly ? 8 : keyboardOnly ? 8 : 16);
+assert.equal(cases.filter(row => row.family === 'slider').length, sliderPaintOnly ? 2 : disabledProbe || keyboardOnly ? 8 : 34);
 const start = performance.now();
 console.log(JSON.stringify({ scriptSha256: hash(readFileSync('scripts/audit-material-raw-control-events.mjs')),
   sorterFile, sorterSha256: hash(sorterBytes), helperSha256: hash(helper), runnerFile,
   runnerSha256: hash(runnerBytes), actionBodiesSha256: hash(bodies), observedBodiesSha256: hash(observedBodies), checkpointFile,
-  checkpointSha256: hash(checkpointBytes), cases: cases.length, keyboardOnly, disabledKeyboardOnly, disabledPointerOnly, sliderMotionOnly, acceptance: false }));
+  checkpointSha256: hash(checkpointBytes), cases: cases.length, keyboardOnly, disabledKeyboardOnly, disabledPointerOnly, sliderMotionOnly, sliderPaintOnly, acceptance: false }));
 await frozen(async (browser, baseUrl) => {
   const actions = new Function('assert', 'baseUrl', 'interactionLayerCursorProbe',
     `${observedBodies}; return { ${names.join(',')} };`)(assert, baseUrl, interactionLayerCursorProbe);
@@ -157,6 +160,43 @@ await frozen(async (browser, baseUrl) => {
       }
       await Promise.all([actions.setBenchmarkPhase(reference.page, 'settled'), actions.setBenchmarkPhase(candidate.page, 'settled')]);
       await Promise.all([actions.settleInteraction(reference.page, 'reference'), actions.settleInteraction(candidate.page, 'astylar')]);
+      const paintBoundary = {};
+      if (sliderPaintOnly) {
+        const directory = `artifacts/material-parity/slider-live-state-layers-20261012/${state}`;
+        assert.ok(!existsSync(directory), 'Never overwrite a retained paint observation');
+        mkdirSync(directory, { recursive: true });
+        for (const [mode, opened] of [['reference', reference], ['astylar', candidate]]) {
+          const page = opened.page;
+          const layers = await page.evaluate(mode => {
+            if (mode === 'reference') return [...document.querySelectorAll('mat-slider .mat-ripple-element')].map(node => {
+              const style = getComputedStyle(node), box = node.getBoundingClientRect();
+              return { class: node.className, background: style.backgroundColor, opacity: style.opacity,
+                width: box.width, height: box.height, active: node.closest('mat-slider')?.matches(':active') };
+            });
+            const surface = window.ng.getComponent(document.querySelector('app-astylar-showcase')).surface;
+            return surface.scene.meshes.filter(mesh => /-(start|end)-state-layer$/.test(mesh.name)).map(mesh => {
+              const material = mesh.material;
+              return { name: mesh.name, alpha: material?.alpha, diffuse: material?.diffuseColor?.asArray(),
+                emissive: material?.emissiveColor?.asArray(), visibility: mesh.visibility,
+                enabled: mesh.isEnabled(), transparencyMode: material?.transparencyMode };
+            });
+          }, mode);
+          const drag = await actions.sliderDragCoordinates(page, mode, 'end');
+          assert.ok(drag);
+          const screenshot = `${directory}/${mode}.png`;
+          const buffer = await page.screenshot({ path: screenshot });
+          const png = PNG.sync.read(buffer);
+          // These four observations lie outside the 10px thumb and inside the
+          // 24px state disc. They are local color evidence, not raster fidelity.
+          const samples = [[-18, 0], [18, 0], [0, -18], [0, 18]].map(([dx, dy]) => {
+            const x = Math.round(drag.from.x + dx), y = Math.round(drag.from.y + dy);
+            assert.ok(x >= 0 && y >= 0 && x < png.width && y < png.height);
+            const offset = (y * png.width + x) * 4;
+            return { x, y, rgba: [...png.data.subarray(offset, offset + 4)] };
+          });
+          paintBoundary[mode] = { layers, screenshot, sha256: hash(buffer), samples };
+        }
+      }
       const after = { reference: await snapshot(reference.page, 'reference'), astylar: await snapshot(candidate.page, 'astylar') };
       assert.deepEqual(reference.errors, []);
       assert.deepEqual(candidate.errors, []);
@@ -167,7 +207,7 @@ await frozen(async (browser, baseUrl) => {
       }
       const compared = actions.compareEvents(after.reference.events, after.astylar.events, family, state);
       console.log(JSON.stringify({ case: benchmarkCase, before, after, compared, keyboardOnly, disabledKeyboardOnly,
-        disabledPointerOnly, sliderMotionOnly, keyboardBoundaries, pointerBoundaries, errors: [],
+        disabledPointerOnly, sliderMotionOnly, sliderPaintOnly, paintBoundary, keyboardBoundaries, pointerBoundaries, errors: [],
         browser: browser.version(), elapsedMs: performance.now() - start, acceptance: false }));
       captured++;
     } finally { await context.close(); }
@@ -176,5 +216,5 @@ await frozen(async (browser, baseUrl) => {
 }, materialBrowserLaunchOptions(), { checkpointFile });
 assert.equal(hash(readFileSync(sorterFile)), hash(sorterBytes));
 assert.equal(hash(readFileSync(runnerFile)), hash(runnerBytes));
-console.log(JSON.stringify({ result: 'PASS', captured: cases.length, keyboardOnly, disabledKeyboardOnly, disabledPointerOnly, sliderMotionOnly,
+console.log(JSON.stringify({ result: 'PASS', captured: cases.length, keyboardOnly, disabledKeyboardOnly, disabledPointerOnly, sliderMotionOnly, sliderPaintOnly,
   elapsedMs: performance.now() - start, acceptance: false }));

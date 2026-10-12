@@ -1,5 +1,44 @@
 # Material comparison/state coverage inventory
 
+## Slider live state-layer material and local pixels — October 12
+
+The retained16-pair input join lacked actual candidate material alpha. Competing
+explanations: callbacks are ineffective versus authored unequal layers are live
+and visibly contribute. Existing standalone raw diagnostic adds
+--slider-state-layer-only for light desktop DPR1 hover/held end-thumb contexts.
+Owning native listener,performInteraction,theme/settlement and frozen helper are
+reused unchanged; action body SHA9f00ecee equals observed body SHA. Held remains
+pressed during observation. Read-only layer properties and four halo pixel
+locations supplement each side; no renderer/fixture/producer change.
+
+slider-live-state-layers-20261012.log exits0,PASS,captured2 in12064.7407ms,
+Chrome154.0.8037.99,SHA256
+ecf2ccf514eee587d87199852b05700d4baef4c74c51e8e9efb19e1382338022.
+Script receipt f15a6db771475084da33106ad4012048ecac3fdf05e3c3866d2996804d5430b9.
+Four PNGs remain under slider-live-state-layers-20261012/{hover,held}; exact
+per-image SHA receipts are in the log. Read-only assertions authenticate all16
+sampled RGBA values against original PNG bytes,states,empty runtime errors,
+unchanged30/65 values and layer properties. Frozen helper verifies1887 served
+files after capture; historical prior script receipts remain pinned through Git.
+
+Native hover has one48px primary ripple at0.05; held has active and focus48px
+primary ripples at0.2 each,with actual :active=true. Candidate selected end
+material is enabled/visible with theme primary diffuse/emissive,alpha0.08/0.12,
+alpha-blend mode2; start alpha0. At the upper halo sample native hover RGB is
+238/233/244 versus candidate235/228/242; held native195/183/219 versus candidate
+229/221/239. Lower samples agree with their upper counterparts. Horizontal
+samples overlap the track and are retained,not treated as pure halo pixels.
+Thus the source callback is effective and the unequal authored state-layer
+inputs visibly differ in these boundaries. This is not equal-input compositing
+failure,combined-alpha estimation,black-circle attribution or sharpness proof.
+
+This closes live material/local-color observation for the two exact end-thumb
+contexts only. Start thumb,other themes/DPRs,responsive/disabled/focus layers,
+full calibrated edge/raster evidence and lifecycle remain. Do not recapture
+these boundaries to replace already settled values/events. Integrate retained
+input/history plus this actual material evidence through the existing paint
+review after coherent196 cold/import; all2311 whole-case closures remain open.
+
 ## Slider hover/held state-layer input boundary — October 12
 
 Question: do retained hover/held paint passes establish equal state-layer inputs,
