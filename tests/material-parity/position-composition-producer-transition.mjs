@@ -459,6 +459,22 @@ export function restoreLayoutDiagnosticRegistration(source) {
 }
 // Historical replay only. Never use this reader for current capture or rendering acceptance.
 export function readRetainedSortFocusSource(current = readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')) {
+  if (current.toString().includes('ASTYLAR_AUDIT_HELD_CONTENT')) {
+    assert.equal(hash(current), '1afa971226301b8c6f01e3923099a0889ff1e4924a95da412f974217a85f0583',
+      'exact reviewed held-content diagnostic source');
+    const prior = execFileSync('git', ['show', '1540d455:tests/material-parity/sort-focus-structure.spec.mjs'], { maxBuffer: 4_000_000 });
+    assert.equal(hash(prior), '3d32fcbf7da10b63f925b0aaebeb31f9c9a74fdf80c87d056eb1c20e7e4524d6');
+    let text = current.toString();
+    const addition = "import { captureBrowserInputTree } from './input-tree-evidence.mjs';\n";
+    assert.equal(text.split(addition).length, 2); text = text.replace(addition, '');
+    const start = "    if (process.env.ASTYLAR_AUDIT_HELD_CONTENT === '1') {";
+    const end = "    for (const family of ['select', 'autocomplete', 'timepicker']) {";
+    assert.equal(text.split(start).length, 2); assert.equal(text.split(end).length, 2);
+    const first = text.indexOf(start), last = text.indexOf(end, first);
+    assert.ok(last > first);
+    current = Buffer.from(text.slice(0, first) + text.slice(last));
+    assert.deepEqual(current, prior, 'all predecessor bytes conserved outside the opt-in diagnostic');
+  }
   if (current.toString().includes('const currentOptionBoxes =')) {
     assert.ok(['77d91396b65770eabca429907096a2e4e5702f5924c41f5dca572acb807143d6',
       '65e1dba29e3b86aae63a42eb85fe1305a1e7fd62452ff4a2710705d0673e7704',

@@ -26,6 +26,9 @@ test('retained sorter paint additions conserve original statements and reject so
   const original = execFileSync('git', ['show', '72b28c0e:tests/material-parity/sort-focus-structure.spec.mjs'], { maxBuffer: 4_000_000 });
   assert.deepEqual(readRetainedSortFocusSource(current), original);
   for (const replacement of [
+    current.toString().replace('ASTYLAR_AUDIT_HELD_CONTENT', 'UNREVIEWED_HELD_CONTENT'),
+    current.toString().replace("ripple.style.display, 'block'", "ripple.style.display, 'none'"),
+    current.toString().replace('rule.active === false', 'rule.active === true'),
     current.toString().replace('ASTYLAR_AUDIT_CURRENT_OPTION_BOXES', 'UNREVIEWED_OPTION_BOXES'),
     current.toString().replace('text.inspectTexturePaintInputs(texture)', 'null'),
     current.toString().replace('Math.abs(held.labelCenterOffsetY) < 0.1', 'true'),

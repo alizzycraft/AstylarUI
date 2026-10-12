@@ -67,8 +67,23 @@ Source style owners: astylar.component.ts menu active527,calendar active625,
 text-button active650. Next reconcile diagnostic source conservation,then review
 existing state-layer authoring classifications and missing local paint coverage;
 do not repeat these settled hit/layer observations without changed dependencies.
-Canonical195 predates this diagnostic addition; source conservation registration
-is pending,not silently treated as current export applicability. No case closes.
+Canonical195 predates this diagnostic addition. Existing readRetainedSortFocusSource
+now authenticates whole current source1afa9712 and Git predecessor1540d455/
+3d32fcbf,removes only the exact opt-in branch/import,and requires every remaining
+byte equal before the original restoration chain runs. Its existing focused
+test passes1/1,511.2704ms (984.1801ms process),held-content-source-conservation-
+20261012.log; added mode/visibility/condition mutations reject. This conserves
+historical proof applicability,not current rendering or publication completion.
+Broader existing transition suite terminates exit0:32/32 pass,zero failures/
+skips/cancellations,137142.2518ms in held-content-transition-integration-
+20261012.log. This is complete source-transition integration,not final audit gates.
+Compact queries find Cancel background already classified application-plugin-
+authoring-defect/reviewed-control-state-layer-substitution. No day/Rename paint
+rows occur; control-state-paint-review.mjs targets explicitly include dialog-cancel
+but exclude datepicker/menu. Thus zero unresolved indexed rows does not cover
+these newly observed owners. Next extend the owning classification evidence for
+that exact missing population,without reclassifying unrelated rows or recapturing
+settled light/DPR1 layer inputs. No case closes; full export remains a batch gate.
 
 Target replay now answers both hover-owner uncertainties below without recapture.
 All eight retained open-hover-content contexts (light,dark,contrast,custom;
