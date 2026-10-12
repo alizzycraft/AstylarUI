@@ -19,7 +19,7 @@ equals current after LF normalization, SHAb493a355679903f988e29f0dafbb95d2d6cce4
 All16 checkbox cases emit native input then change; candidate raw histories emit
 neither while both selected states become false. Native is input:checkbox;
 candidate remains DIV role=checkbox with the direct selected toggle at current
-astylar.component.ts:241/927. This is a demonstrated authored control/event
+astylar.component.ts:237/927. This is a demonstrated authored control/event
 boundary, not a native-input core event failure. It resolves the previous
 uncertainty about whether the comparator exemption concealed an actual difference.
 All8 slider End cases instead have equal input100/change100 tails; all8 unchanged
