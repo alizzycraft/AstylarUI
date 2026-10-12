@@ -1,5 +1,46 @@
 # Material comparison/state coverage inventory
 
+## Paired raw checkbox/slider event boundary — October 12
+
+The former native-listener gap is now measured for all50 relevant configured
+cases: checkbox activate/activate-leave16; slider activate/activate-leave16 and
+drag-start/drag-end18, including two light comparison-pane drags. Existing
+openInteractionPage native capture, theme/phase/settlement and performInteraction
+bodies are reused unchanged by scripts/audit-material-raw-control-events.mjs;
+the frozen runner/sorter and reference truth are not edited. Whole sources and
+checkpoint receipts authenticate, as do all1887 served files after capture.
+raw-control-events-20261012.log terminates exit0, captured50 in339333.3717ms;
+SHA256d14e9e6965f8a4e9f9419d494545a867c3e1b48f4ba2475ccb11a1ef3097a5ea.
+Chrome154.0.8037.99; four desktop profiles DPR1/2 plus the two configured pane
+drags. Exact50-case ordered membership, script receipt and per-case event/state/
+control assertions replay exit0. The served complete component source still
+equals current after LF normalization, SHAb493a355679903f988e29f0dafbb95d2d6cce41275302fce5c978ae55f423b9f.
+
+All16 checkbox cases emit native input then change; candidate raw histories emit
+neither while both selected states become false. Native is input:checkbox;
+candidate remains DIV role=checkbox with the direct selected toggle at current
+astylar.component.ts:241/927. This is a demonstrated authored control/event
+boundary, not a native-input core event failure. It resolves the previous
+uncertainty about whether the comparator exemption concealed an actual difference.
+All8 slider End cases instead have equal input100/change100 tails; all8 unchanged
+thumb clicks have no input/change on either side. All18 drags have two native
+input values (35/40 or70/75) versus eight candidate intermediate integer values,
+then one change with the same owner/final value. Recorded native step5 versus
+candidate step1 and dynamic peer limits versus fixed halves bind the existing
+authored range finding to actual raw event history; no new hit-owner or motion
+diagnosis is inferred. Narrow comparison-pane intermediate values can differ
+from desktop samples; preserve every raw value rather than rounding them away.
+
+The log's `compared` field invokes compareEvents on raw pre-host-ID-map histories,
+not the complete standard capture pipeline. In particular label-target checkbox
+events are not mapped to primary there; its matches flag must not be reported as
+standard gate acceptance/failure. Raw tails are the decisive evidence. Existing
+thresholds, exemptions and historical results remain unchanged; no50-case full
+output/current-equivalence acceptance follows. Keyboard raw ordering, other
+states and whole-case obligations remain. Integrate this bounded evidence and
+owning replay assertions in the next coherent batch after coherent196 publication;
+do not repeat these50 actions just to replace the pre-map diagnostic field.
+
 ## Bottom-sheet actual held action boundary — October 12
 
 The missing Share/Copy link pointer-content observation is now captured without
