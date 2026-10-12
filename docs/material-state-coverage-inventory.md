@@ -1,5 +1,38 @@
 # Material comparison/state coverage inventory
 
+## Disabled control sequential keyboard boundary — October 12
+
+Existing disabled-composite evidence already inspects light desktop DPR1 and
+dark mobile DPR2 checkbox/radio/switch contexts,so those observations are not
+repeated. The standalone raw-event diagnostic now supports
+--disabled-keyboard-only: eight configured desktop slider disabled contexts and
+seven remaining desktop checkbox contexts. Native owning listener,frozen helper,
+theme and settlement procedures are reused. Snapshots add actual focused owner,
+disabled property/ARIA,tabIndex,state,values and complete raw histories at each
+key boundary. No control,renderer,reference,threshold or frozen producer change.
+
+raw-disabled-control-keyboard-events-20261012.log exits0,captured15 in43909.9157ms,
+SHA256abe6ea4404c4698d65da0de64e7b63fe18995d73005cb13830922c6320c0c728.
+Chrome154.0.8037.99,four desktop profiles1440x1000 DPR1/2. Exact configured
+membership,all78 paired key boundaries,script receipt,no runtime errors and
+post-capture1887 served-file authentication succeed. Current script receipt
+6b41da8fa4d47510fc957a3be8ece0abcd244f4364dd8c8a543752b89cf37a7f;
+Git7b825141 authenticates the prior enabled-capture source13b2bb8d unchanged.
+
+Both sides remain focused on BODY through Tab/Space for checkbox and
+Tab/three ArrowRight/Tab/three ArrowLeft for sliders. Disabled flags stay true,
+selected stays true and range values/state stay30/65. No control focus,click,
+input or change is emitted. Native global listener records BODY keydowns;
+candidate control callbacks have no events,an expected observation-domain
+difference when no control is focused. Disabled range tabIndex remains0 but
+native disabled=true suppresses sequential focus on both sides; do not infer
+focusability from tabIndex alone. Checkbox candidate role owner has tabindex=-1
+and aria-disabled=true. This closes tested disabled sequential focus/key inertness
+only,not programmatic focus,pointer blocking,other keys/responsive profiles,
+disabled paint,lifetime or whole-case acceptance. The enabled authoring failures
+remain. Integrate bounded raw-event evidence after coherent196 cold/import;
+all2311 whole-case statuses and final gates remain unchanged.
+
 ## Actual paired keyboard raw-event ordering — October 12
 
 The missing native keyboard listener boundary is now observed in16 configured

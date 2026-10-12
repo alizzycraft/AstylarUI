@@ -13,9 +13,10 @@ import { fingerprintDirectory, materialBrowserLaunchOptions } from '../tests/mat
 // runner's unchanged native listener. No comparator or authored state changes.
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const requested = process.argv.slice(2);
-assert.ok(requested.length <= 1 && requested.every(arg => arg === '--keyboard-only'),
-  'Usage: node scripts/audit-material-raw-control-events.mjs [--keyboard-only]');
-const keyboardOnly = requested.includes('--keyboard-only');
+assert.ok(requested.length <= 1 && requested.every(arg => ['--keyboard-only', '--disabled-keyboard-only'].includes(arg)),
+  'Usage: node scripts/audit-material-raw-control-events.mjs [--keyboard-only|--disabled-keyboard-only]');
+const disabledKeyboardOnly = requested.includes('--disabled-keyboard-only');
+const keyboardOnly = requested.includes('--keyboard-only') || disabledKeyboardOnly;
 const sorterFile = 'tests/material-parity/sort-focus-structure.spec.mjs';
 const sorterBytes = readFileSync(sorterFile);
 assert.equal(hash(sorterBytes), '1afa971226301b8c6f01e3923099a0889ff1e4924a95da412f974217a85f0583');
@@ -45,15 +46,18 @@ for (const file of ['tests/material-parity/benchmark.config.mjs', 'tests/materia
   assert.equal(hash(readFileSync(file)), checkpoint.provenance.harnessFiles.find(row => row.file === file)?.sha256, file);
 }
 const cases = materialInteractionCases.filter(row => ['checkbox', 'slider'].includes(row.family)
-  && (keyboardOnly ? row.state === 'focus' : ['activate', 'activate-leave', 'drag-start', 'drag-end'].includes(row.state)));
-assert.equal(cases.length, keyboardOnly ? 16 : 50);
-assert.equal(cases.filter(row => row.family === 'checkbox').length, keyboardOnly ? 8 : 16);
+  && (keyboardOnly ? row.state === (disabledKeyboardOnly ? 'disabled' : 'focus')
+    : ['activate', 'activate-leave', 'drag-start', 'drag-end'].includes(row.state))
+  // Existing disabled-composite evidence already covers this exact context.
+  && !(disabledKeyboardOnly && row.family === 'checkbox' && row.profile === 'light' && row.viewport.deviceScaleFactor === 1));
+assert.equal(cases.length, disabledKeyboardOnly ? 15 : keyboardOnly ? 16 : 50);
+assert.equal(cases.filter(row => row.family === 'checkbox').length, disabledKeyboardOnly ? 7 : keyboardOnly ? 8 : 16);
 assert.equal(cases.filter(row => row.family === 'slider').length, keyboardOnly ? 8 : 34);
 const start = performance.now();
 console.log(JSON.stringify({ scriptSha256: hash(readFileSync('scripts/audit-material-raw-control-events.mjs')),
   sorterFile, sorterSha256: hash(sorterBytes), helperSha256: hash(helper), runnerFile,
   runnerSha256: hash(runnerBytes), actionBodiesSha256: hash(bodies), checkpointFile,
-  checkpointSha256: hash(checkpointBytes), cases: cases.length, keyboardOnly, acceptance: false }));
+  checkpointSha256: hash(checkpointBytes), cases: cases.length, keyboardOnly, disabledKeyboardOnly, acceptance: false }));
 await frozen(async (browser, baseUrl) => {
   const actions = new Function('assert', 'baseUrl', 'interactionLayerCursorProbe',
     `${bodies}; return { ${names.join(',')} };`)(assert, baseUrl, interactionLayerCursorProbe);
@@ -70,13 +74,17 @@ await frozen(async (browser, baseUrl) => {
         const current = mode === 'reference'
           ? window.ng.getComponent(document.querySelector('app-reference')).store.state() : api.state();
         const ids = family === 'checkbox' ? ['checkbox-primary-input'] : ['slider-start', 'slider-primary'];
-        return { state: { selected: current.selected, sliderStart: current.sliderStart, sliderValue: current.sliderValue },
+        return { state: { selected: current.selected, sliderStart: current.sliderStart, sliderValue: current.sliderValue,
+            disabled: current.disabled },
+          focusedOwner: document.activeElement?.getAttribute('data-astylar-id') || document.activeElement?.id || document.activeElement?.tagName,
           controls: ids.map(id => {
             const target = mode === 'reference' ? document.getElementById(id)
               : document.querySelector(`[data-astylar-id="${id === 'checkbox-primary-input' ? 'checkbox-primary' : id}"]`);
             return { id: target?.id || target?.getAttribute('data-astylar-id'), tag: target?.tagName,
               role: target?.getAttribute('role'), type: target instanceof HTMLInputElement ? target.type : null,
               value: target?.value, checked: target instanceof HTMLInputElement ? target.checked : target?.getAttribute('aria-checked'),
+              disabled: target instanceof HTMLInputElement ? target.disabled : target?.getAttribute('aria-disabled'),
+              tabindex: target?.tabIndex,
               min: target?.min, max: target?.max, step: target?.step };
           }), events: mode === 'reference' ? window.__MATERIAL_REFERENCE_EVENTS__ : api.events() };
       }, { family, mode });
@@ -111,7 +119,7 @@ await frozen(async (browser, baseUrl) => {
         assert.ok(after[side].controls.every(control => control.tag));
       }
       const compared = actions.compareEvents(after.reference.events, after.astylar.events, family, state);
-      console.log(JSON.stringify({ case: benchmarkCase, before, after, compared, keyboardOnly, keyboardBoundaries, errors: [],
+      console.log(JSON.stringify({ case: benchmarkCase, before, after, compared, keyboardOnly, disabledKeyboardOnly, keyboardBoundaries, errors: [],
         browser: browser.version(), elapsedMs: performance.now() - start, acceptance: false }));
       captured++;
     } finally { await context.close(); }
@@ -120,4 +128,4 @@ await frozen(async (browser, baseUrl) => {
 }, materialBrowserLaunchOptions(), { checkpointFile });
 assert.equal(hash(readFileSync(sorterFile)), hash(sorterBytes));
 assert.equal(hash(readFileSync(runnerFile)), hash(runnerBytes));
-console.log(JSON.stringify({ result: 'PASS', captured: cases.length, keyboardOnly, elapsedMs: performance.now() - start, acceptance: false }));
+console.log(JSON.stringify({ result: 'PASS', captured: cases.length, keyboardOnly, disabledKeyboardOnly, elapsedMs: performance.now() - start, acceptance: false }));
