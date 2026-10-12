@@ -1,5 +1,42 @@
 # Material comparison/state coverage inventory
 
+## Slide-toggle inactive glyph authoring/history — October 12
+
+Question: is the reported bottom-aligned inactive minus still a text-baseline
+case,or has authoring changed before renderer diagnosis? Existing October5
+SHAab42dbec report joins all68 configured slide-toggle cases (12 static/56
+interaction);136 original tree receipts authenticate. Exactly16 activate/
+activate-leave cases contain the candidate inactive minus across four desktop
+profiles,DPR1/2; other52 cases do not author it. This is not new rendering.
+
+All16 native off icons have viewBox0 0 24 24,16px SVG viewport,opacity1 and
+path M20 13H4v-2h16v2z: nominal untransformed CSS ink10.6667×1.3333px with square
+corners. Candidate is an empty span requesting12×2px,radius1px,not a text glyph.
+Its parent requests flex center on both axes. Equivalent serialization need
+not be identical,but these shape dimensions/corners are not equivalent SVG
+rectangle inputs. Authored center requests are not actual painted centering.
+All16 controlPaintGeometry arrays are empty; do not infer ring/ink alignment
+from this missing measurement or the generic statePaint success flag.
+
+Git ae9cdad22 (September4,restore shared control interaction affordances)
+replaced textContent:'−' and relative top:-1.5px/lineHeight14px with the empty
+rounded bar. Current component rules510/tree967 retain that substitution;
+whole LF SHA b493a355 matches current served chunk-PCHQTLJM.js.map source.
+Thus pre-September4 text screenshots cannot diagnose today's primitive without
+an applicability review. This is a demonstrated unequal glyph authoring/history
+boundary,not proof that the original baseline defect or current placement is
+fixed. Do not restore/calibrate the offset or bar under audit scope.
+
+Evidence: slide-toggle-inactive-glyph-inputs-20261012.log,exit0,
+SHAbf9916d0ed9452a5e041bbd7c5a84a7f92b22748e894a488003996affeeb60df.
+Assertions pin report,exact68 membership,136 tree hashes,empty errors,16 native
+paths/viewports/opacity and candidate empty/radius/dimensions/parent centering,
+plus whole current component/served source equality. Log preserves exact case
+IDs and fill inputs. Remaining: actual local ink/corner/centering evidence,
+equal-input shape support,other states/current browser applicability and full
+case obligations. Integrate through existing glyph/paint review after coherent196
+cold/import. All2311 cases remain partial; no gate/input/renderer change.
+
 ## Exact retained state-paint gate coverage — October 12
 
 Question: which configured cases actually record state-paint colors rather than
