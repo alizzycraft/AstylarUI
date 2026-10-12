@@ -10,6 +10,27 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 // the explicit retained map paths; no captured receipt or current source is replaced.
 export function restoreRetainedMapLocationRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes('retained table header scope transport boundary')) {
+    assert.equal(hash(current), '816c6347a2c6327b91c2b1ecb2e93ad2d012cc9c7ca7370f4caaf185af45ccb4',
+      'exact retained table scope and mobile shape proof registration batch');
+    for (const file of [
+      'table-child-ax-cohorts-20261007.log', 'timepicker-open-light-mobile-paint-20261011.log',
+      'timepicker-open-dark-mobile-paint-20261011.log',
+      ...['light', 'dark'].flatMap(theme => ['reference-open', 'reference-wheel', 'astylar-open', 'astylar-wheel']
+        .map(state => `timepicker-open-${theme}-mobile-paint-20261011/${state}.png`)),
+    ]) {
+      const line = `    'artifacts/material-parity/${file}',\n`;
+      assert.equal(current.split(line).length, 2); current = current.replace(line, '');
+    }
+    const start = "    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\\('retained table header scope joins";
+    const end = "    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\\('retained raw checkbox slider boundaries";
+    assert.equal(current.split(start).length, 2); assert.equal(current.split(end).length, 2);
+    current = current.slice(0, current.indexOf(start)) + current.slice(current.indexOf(end));
+    const prior = execFileSync('git', ['show', '526aacde:tests/material-parity/input-equivalence-audit.mjs'],
+      { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+    assert.equal(hash(prior), 'bac2f6295e1a7551a9a0babb22655f210c95ee98aface2b3dc3836a7838b13bb');
+    assert.equal(current, prior, 'complete producer conserved after exact two-proof eleven-path removal');
+  }
   if (current.includes('retained raw checkbox slider event and disabled-boundary evidence')) {
     assert.equal(hash(current), 'bac2f6295e1a7551a9a0babb22655f210c95ee98aface2b3dc3836a7838b13bb',
       'exact retained control proof registration and dependency batch');

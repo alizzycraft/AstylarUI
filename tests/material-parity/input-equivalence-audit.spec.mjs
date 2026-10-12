@@ -45,7 +45,9 @@ test('retained control proof batch conserves predecessor producer and binds comp
   assert.equal(restoreRetainedMapLocationRegistration(current), restoreRetainedMapLocationRegistration(prior));
   for (const fragment of ['retained checkbox state-layer authoring boundary', 'retained slider authored halos and sampled pixel boundary',
     'retained bottom-sheet content state-layer boundary', 'retained inactive switch glyph input and observation boundary',
-    'retained raw checkbox slider event and disabled-boundary evidence', 'checkbox-retained-state-layer-inputs-20261012.log']) {
+    'retained raw checkbox slider event and disabled-boundary evidence', 'checkbox-retained-state-layer-inputs-20261012.log',
+    'retained table header scope transport boundary', 'retained mobile scrollbar visible shape boundary',
+    'timepicker-open-dark-mobile-paint-20261011/astylar-wheel.png']) {
     assert.throws(() => restoreRetainedMapLocationRegistration(current.replace(fragment, `${fragment} changed`)));
   }
   const inventory = source => {
@@ -59,16 +61,16 @@ test('retained control proof batch conserves predecessor producer and binds comp
       (readFileSync, path, createHash);
   };
   const before = inventory(prior), after = inventory(current);
-  assert.equal(before.proofs.length, 196); assert.equal(after.proofs.length, 201);
-  assert.equal(before.fingerprints.length, 634); assert.equal(after.fingerprints.length, 650);
+  assert.equal(before.proofs.length, 196); assert.equal(after.proofs.length, 203);
+  assert.equal(before.fingerprints.length, 634); assert.equal(after.fingerprints.length, 661);
   const oldPaths = new Set(before.fingerprints.map(row => row.file));
   assert.deepEqual(after.fingerprints.filter(row => oldPaths.has(row.file)), before.fingerprints);
-  assert.equal(new Set(after.fingerprints.map(row => row.file)).size, 650);
+  assert.equal(new Set(after.fingerprints.map(row => row.file)).size, 661);
   const oldProofs = new Set(before.proofs.map(row => row.status));
   const normalized = rows => rows.map(({ line, ...row }) => row);
   assert.deepEqual(normalized(after.proofs.filter(row => oldProofs.has(row.status))), normalized(before.proofs));
   const additions = after.proofs.filter(row => !oldProofs.has(row.status));
-  assert.equal(additions.length, 5); assert.ok(additions.every(row => row.status !== 'missing' && row.line > 0));
+  assert.equal(additions.length, 7); assert.ok(additions.every(row => row.status !== 'missing' && row.line > 0));
 });
 
 test('retained table header scope joins authored input and actual semantic attributes', () => {
@@ -2513,9 +2515,16 @@ test('retained source map migration preserves captured bytes and exact producer 
     source.replace('held-option-framebuffer-current-20261012.log', 'unreviewed-framebuffer.log'),
     source.replace('Additional160 actual hover points', 'All hover points'),
     source.replace('same four cache keys with referenceCount1', 'identical GPU textures')]) {
-    assert.throws(() => restoreRetainedMapLocationRegistration(changed), /exact retained source-map/);
+    assert.throws(() => restoreRetainedMapLocationRegistration(changed),
+      /exact retained source-map|exact retained table scope and mobile shape proof registration batch/);
   }
-  const ast = ts.createSourceFile('inventory.mjs', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  // This assertion owns the accepted634-path migration snapshot,not today's
+  // additive inventory. Complete current registration is checked separately.
+  const historicalInventorySource = execFileSync('git', ['show', '5f8f9da5:tests/material-parity/input-equivalence-audit.mjs'],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n');
+  assert.equal(createHash('sha256').update(historicalInventorySource).digest('hex'),
+    '899f2f23b57e75c39cc2e16c2d90a27894a7a716d394c5b82ff81a0b9a272d48');
+  const ast = ts.createSourceFile('inventory.mjs', historicalInventorySource, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   const fn = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'sourceFingerprints');
   assert.ok(fn);
   const fingerprints = new Function('readFileSync', 'path', 'createHash',
@@ -2602,7 +2611,7 @@ test('popup proof batch adds four registrations without changing predecessor inv
     'desktop popup hover token alpha versus opaque input boundary',
     'light desktop actual held-option input boundary']) {
     assert.throws(() => restoreScalarReviewExtraction(currentSource.replace(fragment, fragment + ' changed')),
-      /exact four-entry addition|exact retained source-map producer plus bounded option evidence|exact retained control proof registration and dependency batch/);
+      /exact four-entry addition|exact retained source-map producer plus bounded option evidence|exact retained control proof registration and dependency batch|exact retained table scope and mobile shape proof registration batch/);
   }
   assert.deepEqual(current.fingerprints, prior.fingerprints);
   assert.equal(current.proofs.length, prior.proofs.length + 4);

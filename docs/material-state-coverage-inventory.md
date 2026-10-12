@@ -1,5 +1,30 @@
 # Material comparison/state coverage inventory
 
+## Table scope and mobile shape registration — October 13
+
+The existing producer now registers the two bounded proofs above with eleven
+original dependency paths (three logs,eight mobile PNGs). Source inventory is
+203 proof descriptors/661 unique paths,versus accepted coherent201's201/650.
+Complete predecessor sourcebac2f629 is conserved after removing exactly these
+two descriptors/eleven paths from reviewed producer816c6347. Original descriptors
+remain unchanged apart from line anchors; no scalar classification is changed.
+The current registration assertion preserves the complete older196/634 inventory
+and validates all seven additions since that snapshot,including source-drift
+negative controls. The older map-migration test mistakenly applied its634-path
+historical expectation to today's additive inventory; it now authenticates the
+whole Git5f8f9da5 snapshot899f2f23 for that historical assertion. Current661-path
+inventory and complete current-to-predecessor conservation remain separately
+checked,not waived by historical replay.
+
+Focused registration/table/map/popup checks pass4/4,zero skips,28318.8999ms;
+mobile mask check passes1/1,zero skips,1431.9249ms. Complete command
+`node --test tests/material-parity/position-composition-producer-transition.spec.mjs`
+passes32/32,zero skips,150059.103ms terminal,session57045 exit0. No new captures,
+scratch or renderer changes. Accepted canonical/index coherent201 remains unchanged;
+full publication/cold comparison/import is pending at a justified milestone.
+Case-level obligation/currentness closure and unsampled paint/state ownership
+remain higher-scope gaps; neither registration nor the focused checks closes them.
+
 ## Table header scope and column topology — October 13
 
 Question: does matching table AX role/name conceal missing candidate header-scope

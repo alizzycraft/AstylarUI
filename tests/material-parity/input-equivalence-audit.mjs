@@ -8903,6 +8903,17 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'artifacts/material-parity/table-child-ax-cohorts-20261007.log',
+    'artifacts/material-parity/timepicker-open-light-mobile-paint-20261011.log',
+    'artifacts/material-parity/timepicker-open-dark-mobile-paint-20261011.log',
+    'artifacts/material-parity/timepicker-open-light-mobile-paint-20261011/reference-open.png',
+    'artifacts/material-parity/timepicker-open-light-mobile-paint-20261011/reference-wheel.png',
+    'artifacts/material-parity/timepicker-open-light-mobile-paint-20261011/astylar-open.png',
+    'artifacts/material-parity/timepicker-open-light-mobile-paint-20261011/astylar-wheel.png',
+    'artifacts/material-parity/timepicker-open-dark-mobile-paint-20261011/reference-open.png',
+    'artifacts/material-parity/timepicker-open-dark-mobile-paint-20261011/reference-wheel.png',
+    'artifacts/material-parity/timepicker-open-dark-mobile-paint-20261011/astylar-open.png',
+    'artifacts/material-parity/timepicker-open-dark-mobile-paint-20261011/astylar-wheel.png',
     'artifacts/material-parity/held-popup-content-conditional-paint-20261012.log',
     'artifacts/material-parity/checkbox-retained-state-layer-inputs-20261012.log',
     'artifacts/material-parity/slider-retained-state-layer-inputs-20261012.log',
@@ -9690,6 +9701,10 @@ function focusedProofInventory(root) {
       'desktop popup hover token alpha versus opaque input boundary', 'Authenticates24 retained desktop hover-content rows across three families,four profiles,DPR1/2. Native token/color-mix alpha.08 or active/focus alpha.12 differs from candidate opaque #e5dfe5; option-domain and timepicker selection mismatch remain explicit. This is authored/state input evidence,not equivalent composited pixels,held animation or core alpha causality.'),
     proof(root, 'tests/material-parity/sort-focus-structure.spec.mjs', /test\('held popup option boundaries capture active paint inputs before commit'/,
       'light desktop actual held-option input boundary', 'Full current checkpoint-bound real pointer holds first options before release in three paired families at DPR1. Native :active and candidate target ownership are asserted; logs retain translucent native backgrounds and separate ripple versus opaque candidate active background. Candidate inspection waits for settlement while held. This is not matched-time animation,local raster,all-profile or lifecycle acceptance.'),
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('retained table header scope joins authored input and actual semantic attributes'/,
+      'retained table header scope transport boundary', 'Authenticates104 input trees for52 configured table cases and32 actual DOM/AX observations in16 physical contexts. Candidate explicit column scope reaches native TH; reference scope omission and the simple three single-cell row topology remain recorded. Wrong scope and invented headers fail. Not header association or assistive-technology behavior,current rendering,full input equivalence or whole-case closure.'),
+    proof(root, 'tests/material-parity/sort-focus-structure.spec.mjs', /test\('retained mobile scrollbar masks inspect light dark open and wheel boundaries'/,
+      'retained mobile scrollbar visible shape boundary', 'Authenticates two original light/dark mobile DPR2 logs and eight780x1688 PNGs at open/wheel boundaries. Existing native neutral-gray and candidate exact-color masks retain rounded9CSSpx native thumbs with a separate top arrow versus plain8CSSpx candidate indicators. Not antialiased fringe,occluded paint,other states/platforms,projection causality or current whole-case acceptance.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('retained raw checkbox slider boundaries preserve missing events disabled focus and sampled inertia'/,
       'retained raw checkbox slider event and disabled-boundary evidence', 'Five authenticated logs retain105 records anchored to82 unchanged configured IDs. Actual checkbox native input/change tails are missing from candidate events; keyboard Space changes only native state; slider key step5 versus1 and drag event granularity remain unequal. Disabled controls preserve values but pointer focus differs;288 held center samples remain stationary. Filtered event matches are not raw parity; sampled inertia is not every-frame,enabled smoothness,paint,current build or complete lifecycle acceptance.'),
     proof(root, 'tests/material-parity/control-state-paint-review.spec.mjs', /test\('retained sheet content paint separates hover focus and held layers without opener substitution'/,
