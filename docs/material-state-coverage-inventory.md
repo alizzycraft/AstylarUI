@@ -19,6 +19,21 @@ paint,held-action coverage or current build validity. Do not recapture to reconf
 these targets. Next inspect existing held-action diagnostics; the missing action-
 boundary evidence remains distinct from panel SSIM.
 
+Existing authored-anchor-review.spec.mjs focused interaction capture replay passes
+1/1,20680.5488ms body/22029.4853ms total,without browser recapture. Log
+artifacts/material-parity/dialog-action-corner-reuse-20261012.log. Its retained
+action-boxes-79bd3dd report SHA02576edccf740a7dcf5273ea9193ba73a4b045a8ee7558e705853e7bd458b041
+contains four dialog hover and four open contexts,not held actions. Original
+assertions authenticate build receipts,input-tree hashes,portable authored inputs
+and PNG receipt aggregate. Eight open action observations retain exact widths/
+heights and candidate action top -1px; Save light/contrast DPR1 corner delta2px,
+four Cancel corner observations null because fill/background cannot define an edge.
+Those nulls are not corner parity. This answers whether action-local evidence
+exists: open corner evidence exists and remains reusable as historical evidence;
+the held action boundary still needs an owning observation. Existing held-popup
+test covers select/autocomplete/timepicker only,not dialog. No whole-case closure,
+current rendering acceptance or new capture is inferred.
+
 Read-only replay of the retained October5 report authenticates SHA256
 ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62.
 All66 dialog interaction records are accounted for: eight each focus,hover,held,
