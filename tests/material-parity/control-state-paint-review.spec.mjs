@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { inputDifferenceClassifications } from './input-equivalence-policy.mjs';
 import { collectFullTreeInventory, collectRetainedTypographyEvidence } from './input-equivalence-audit.mjs';
@@ -9,6 +10,43 @@ import { bindPreciseAuditNormalization } from './audit-normalization-contracts.m
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { proveModalPositionInspection, proveBottomSheetActionLayout } from './modal-position-inspection.mjs';
 import { applyControlStatePaintReview, proveControlStatePaint, controlStatePaintAttribution, cardSurfacePaintAttribution, opaqueSurfacePaintAttribution, specialPaintDefinitions, applyDisabledLabelColorReview, applyStepperLabelColorReview } from './control-state-paint-review.mjs';
+import { collectHeldContentPaintInputs, proveHeldContentPaintInputs } from './control-state-paint-review.mjs';
+
+test('retained held content paint classifies missing scalar owners without fabricating case closure', async () => {
+  const moduleFile = 'tests/material-parity/control-state-paint-review.mjs';
+  let current = readFileSync(moduleFile, 'utf8');
+  const addition = "import { execFileSync } from 'node:child_process';\n";
+  assert.equal(current.split(addition).length, 2); current = current.replace(addition, '');
+  const start = '// Supplemental held-content inputs are not rows in the configured scalar map.';
+  const end = 'export function proveSheetActionAppearance';
+  assert.equal(current.split(start).length, 2); assert.equal(current.split(end).length, 2);
+  current = current.slice(0, current.indexOf(start)) + current.slice(current.indexOf(end));
+  assert.equal(current, execFileSync('git', ['show', `81bacd30:${moduleFile}`], { encoding: 'utf8', maxBuffer: 4_000_000 }),
+    'every existing scalar classification and validation byte remains unchanged');
+  const rows = await collectHeldContentPaintInputs();
+  assert.deepEqual(rows.map(row => row.element), ['datepicker-day-1', 'menu-rename', 'dialog-cancel']);
+  for (const row of rows) {
+    assert.equal(row.classification, 'application-plugin-authoring-defect');
+    assert.equal(row.inputEquivalent, false); assert.equal(row.renderingEquivalent, false);
+    assert.equal(row.configuredCaseClosure, false);
+  }
+  const observations = rows.flatMap(row => ['reference', 'astylar'].map(mode => ({ family: row.family,
+    mode, targetId: row.element, held: row[mode] })));
+  assert.equal(proveHeldContentPaintInputs(observations).length, 3);
+  for (const mutate of [
+    values => values.pop(),
+    values => values[0].held.active = false,
+    values => values[1].held.pointerOwnerPath = ['unrelated'],
+    values => values[1].held.resolvedStyle.background = 'transparent',
+    values => values[0].held.statePaint.find(node => node.attributes.class?.includes('mat-calendar-body-cell-content')).style.width = '40px',
+    values => values[2].held.statePaint.find(node => node.attributes.class === 'mat-ripple-element').style.display = 'none',
+    values => values[2].held.statePaint.find(node => node.attributes.class === 'mat-ripple-element').rules
+      .find(rule => rule.conditions.includes('(forced-colors: active)')).active = true,
+  ]) {
+    const altered = structuredClone(observations); mutate(altered);
+    assert.notDeepEqual(altered, observations); assert.throws(() => proveHeldContentPaintInputs(altered));
+  }
+});
 import { collectDisabledLabelColorStages } from '../../scripts/audit-material-disabled-label-color-stages.mjs';
 import { collectPaintReviewSources, applyPaintReviews, validatePaintReviews, isPaintReviewRow } from './control-state-paint-review.mjs';
 import { paintPopulation } from '../../scripts/check-material-position-canonical-conservation.mjs';

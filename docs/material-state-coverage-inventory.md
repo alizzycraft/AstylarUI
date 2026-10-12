@@ -81,9 +81,20 @@ Compact queries find Cancel background already classified application-plugin-
 authoring-defect/reviewed-control-state-layer-substitution. No day/Rename paint
 rows occur; control-state-paint-review.mjs targets explicitly include dialog-cancel
 but exclude datepicker/menu. Thus zero unresolved indexed rows does not cover
-these newly observed owners. Next extend the owning classification evidence for
-that exact missing population,without reclassifying unrelated rows or recapturing
-settled light/DPR1 layer inputs. No case closes; full export remains a batch gate.
+these newly observed owners. Existing control-state-paint-review now exposes
+collectHeldContentPaintInputs/proveHeldContentPaintInputs: three supplemental
+authoring classifications bind the exact log,captured test bytes and checkpoint;
+they do not synthesize configured scalar rows or case closure. Owning suite
+classification/conservation check passes1/1,774.6438ms (2025.6216ms process),
+held-content-paint-classification-conservation-20261012.log. All prior scalar
+classifier/validator bytes equal81bacd30 after removing only the added collector
+block/import. Seven negative controls reject missing observations,wrong hit path,
+altered active state,color,day size,ripple visibility and condition activity.
+Day/Rename scope is light desktopDPR1,not every calendar/menu state; Cancel's
+existing scalar classification is retained separately. No new browser capture.
+Next register this owning proof and exact source/log dependencies in the existing
+producer batch; canonical195 does not yet consume these supplemental rows.
+No case closes; full export remains a batch gate.
 
 Target replay now answers both hover-owner uncertainties below without recapture.
 All eight retained open-hover-content contexts (light,dark,contrast,custom;

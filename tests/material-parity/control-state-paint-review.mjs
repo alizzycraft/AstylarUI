@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { collectButtonPaintAllStates } from '../../scripts/audit-material-button-paint-all-states.mjs';
 import { collectDisabledLabelColorStages } from '../../scripts/audit-material-disabled-label-color-stages.mjs';
 import { applyOverlayTriggerPaintReview, overlayTriggerPaintAttribution } from './overlay-trigger-paint-review.mjs';
@@ -17,6 +18,74 @@ import { proveTabPanelWrapping } from './wrapping-input-review.mjs';
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
+
+// Supplemental held-content inputs are not rows in the configured scalar map.
+// Keep their classification separate; never synthesize configured-case coverage.
+export function proveHeldContentPaintInputs(observations) {
+  assert.equal(observations.length, 6);
+  const definitions = [
+    ['datepicker', 'datepicker-day-1', '#d8d2d8', 'calendar day content/state-layer authoring'],
+    ['menu', 'menu-rename', '#d8d3d8', 'menu item hover/pressed layer and ripple authoring'],
+    ['dialog', 'dialog-cancel', '#efdafc', 'dialog text-button persistent layer and ripple authoring'],
+  ];
+  assert.equal(new Set(observations.map(row => row.family + '/' + row.mode)).size, 6);
+  return definitions.map(([family, element, background, recommendedOwner]) => {
+    const pair = side => one(observations.filter(row => row.family === family && row.mode === side));
+    const reference = pair('reference'), candidate = pair('astylar');
+    assert.equal(reference.targetId, element); assert.equal(candidate.targetId, element);
+    assert.equal(reference.held.active, true);
+    assert.ok(candidate.held.pointerOwnerPath.includes(element));
+    assert.equal(candidate.held.resolvedStyle.background, background);
+    const layers = reference.held.statePaint;
+    assert.ok(layers.length > 1);
+    if (family === 'datepicker') {
+      const child = one(layers.filter(node => node.attributes.class?.includes('mat-calendar-body-cell-content')));
+      assert.equal(child.style.width, '36px'); assert.equal(child.style.height, '36px');
+      assert.equal(child.style.backgroundColor, 'color(srgb 0.113725 0.105882 0.117647 / 0.08)');
+      assert.ok(child.rules.some(rule => rule.active && rule.selector.includes(':hover') && rule.declarations['background-color']));
+      assert.equal(candidate.held.resolvedStyle.width, '40px');
+    } else {
+      const ripple = one(layers.filter(node => node.attributes.class === 'mat-ripple-element'));
+      assert.equal(ripple.style.display, 'block'); assert.equal(ripple.style.visibility, 'visible');
+      assert.ok(ripple.rules.some(rule => rule.active === false && rule.conditions.includes('(forced-colors: active)') &&
+        rule.declarations.display?.value === 'none'));
+      if (family === 'menu') {
+        assert.equal(layers[0].style.backgroundColor, 'color(srgb 0.113725 0.105882 0.117647 / 0.08)');
+        assert.equal(layers[0].style.borderRadius, '0px');
+        assert.equal(ripple.style.backgroundColor, 'color(srgb 0.113725 0.105882 0.117647 / 0.1)');
+      } else {
+        const persistent = one(layers.filter(node => node.attributes.class?.includes('persistent-ripple')));
+        const before = one(persistent.pseudoElements.filter(pseudo => pseudo.pseudo === '::before'));
+        assert.equal(before.style.backgroundColor, 'rgb(125, 0, 250)'); assert.equal(before.style.opacity, '0.12');
+      }
+    }
+    return { family, element, state: 'held-content', classification: 'application-plugin-authoring-defect',
+      recommendedOwner, reference: reference.held, astylar: candidate.held,
+      inputEquivalent: false, renderingEquivalent: false, configuredCaseClosure: false,
+      scope: { profile: 'light', width: 1440, height: 1000, dpr: 1 },
+      justification: 'Actual corresponding held content retains distinct native layer/ripple versus solid candidate paint inputs. This is an authoring boundary, not matched-time composited raster equivalence or an equal-input core defect.' };
+  });
+}
+
+export async function collectHeldContentPaintInputs() {
+  const file = 'artifacts/material-parity/held-popup-content-conditional-paint-20261012.log';
+  const bytes = readFileSync(file), sha256 = createHash('sha256').update(bytes).digest('hex');
+  assert.equal(sha256, 'a96728fde3b226f1d5dd51f6999a3daa0240efdfdac71ebc627c7f7e23ff76c3');
+  const observations = bytes.toString().split(/\r?\n/).filter(line => line.startsWith('# {'))
+    .map(line => JSON.parse(line.slice(2).replace(/\\([\\#])/g, '$1')));
+  const sourceFile = 'tests/material-parity/sort-focus-structure.spec.mjs';
+  const captured = execFileSync('git', ['show', `ee574dd9:${sourceFile}`], { maxBuffer: 4_000_000 });
+  const sourceSha256 = createHash('sha256').update(captured).digest('hex');
+  assert.equal(sourceSha256, '1afa971226301b8c6f01e3923099a0889ff1e4924a95da412f974217a85f0583');
+  const { readRetainedSortFocusSource } = await import('./position-composition-producer-transition.mjs');
+  assert.deepEqual(readRetainedSortFocusSource(captured), readRetainedSortFocusSource());
+  const checkpointFile = 'artifacts/material-parity/selection-pointer-directions-20261011/checkpoint/manifest.json';
+  const checkpointSha256 = createHash('sha256').update(readFileSync(checkpointFile)).digest('hex');
+  assert.equal(checkpointSha256, '2aac425d216cdb274ebff0876f2fa365c9ab6e845ed1b1c3b30d9e1bbcaea5c8');
+  return proveHeldContentPaintInputs(observations).map(row => ({ ...row,
+    evidence: { file, sha256, sourceFile, sourceSha256, checkpointFile, checkpointSha256,
+      binding: 'retained-light-desktop-DPR1-diagnostic-not-current-rendering' } }));
+}
 
 export function proveSheetActionAppearance(entry, r, a, element) {
   const composition = proveBottomSheetActionLayout(entry, r, a, element);
