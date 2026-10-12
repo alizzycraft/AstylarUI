@@ -56,6 +56,22 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October12 zero-space interruption: one regenerable EvidenceSession envelope
+40711e0953a9d8f4e1535e838e76cb325b4e45d9b1280b16de93362b5d1df514.json
+(228653 bytes) was removed after its envelope digest/key and all963 dependency
+paths were checked. No original capture or failure evidence was removed.
+Compression attempts against closed index/log files failed with insufficient
+space; do not claim they recovered headroom. Per-log before/after hashes agreed.
+Subsequent existing whole-index verification exits0 for generation2fef5644:
+8483 scalar groups,157 findings,39904 controls,389202 occurrences,0 unresolved.
+Observed free space later6090838016 bytes is an external volume change,not
+attributed to this tiny eviction. The original export session/process disappeared
+without a retained terminal log and canonical bytes remained unchanged; its
+outcome is unverified,not a pass. A separately logged complete-baseline retry
+uses coherent195-option-batch-export-retry-20261012.log and remains live.
+Retain its result before independent cold comparison/import; do not restart a
+live collector merely because its build phase is quiet. Scope/criteria unchanged.
+
 October9 description-batch publication headroom: eight closed historical
 working-index generations below each had84 JSONL shards transparently compressed.
 Existing verifyFindings passed before/after for every complete index; all672
