@@ -1,5 +1,29 @@
 # Material comparison/state coverage inventory
 
+## Checkbox retained paint proof integration — October 12
+
+The existing control-state-paint-review suite now authenticates observation log
+f1fc60db and checks all32 exact focus/hover/held/selected profile/DPR contexts.
+It preserves focus-fill omission, held onSurface/ripple substitution, compact
+density size differences and display:none generated borders. Eight mutations
+reject altered inputs, missing/duplicate coverage and invented paint acceptance.
+The existing producer proof inventory registers this retained-input boundary;
+no scalar rows, configured states or parity thresholds are added or rewritten.
+
+Focused command: node --test --test-name-pattern="retained checkbox state layers|retained held content paint"
+tests/material-parity/control-state-paint-review.spec.mjs. Both tests pass,
+zero skips/failures,4497.8571ms. The prior held-content classification and source
+conservation assertions also remain green. This integrates executable historical
+observation assertions, not fresh tree validation or current-rendering acceptance.
+Original report/tree authentication and authoring-history receipts remain in the
+checkbox entry below; no claim of equal composited pixels follows.
+
+Canonical remains accepted coherent196; this new descriptor awaits the next
+coherent producer export/cold/import batch with other pending control evidence.
+All2311 complete-case closures remain partial. Next integrate retained slider,
+sheet and switch evidence at existing owners, then complete applicability joins;
+do not recapture unchanged checkbox cases or export for this single descriptor.
+
 ## Coherent196 cold-verified publication — October 12
 
 Independent named complete-baseline cold --check session32487 exits0;

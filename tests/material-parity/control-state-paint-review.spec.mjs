@@ -12,6 +12,72 @@ import { proveModalPositionInspection, proveBottomSheetActionLayout } from './mo
 import { applyControlStatePaintReview, proveControlStatePaint, controlStatePaintAttribution, cardSurfacePaintAttribution, opaqueSurfacePaintAttribution, specialPaintDefinitions, applyDisabledLabelColorReview, applyStepperLabelColorReview } from './control-state-paint-review.mjs';
 import { collectHeldContentPaintInputs, proveHeldContentPaintInputs } from './control-state-paint-review.mjs';
 
+test('retained checkbox state layers preserve exact coverage and unequal authoring without paint acceptance', () => {
+  const file = 'artifacts/material-parity/checkbox-retained-state-layer-inputs-20261012.log';
+  const bytes = readFileSync(file);
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    'f1fc60db2e7ed3c96ad402ffd1ce2cf1ff49963f3d720adce2a6abe23716022c');
+  const observation = JSON.parse(bytes.toString());
+  const verify = value => {
+    assert.equal(value.reportSha, 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+    assert.equal(value.cases, 32); assert.equal(value.authenticatedTrees, 64);
+    assert.equal(value.acceptance, false);
+    const colors = { light: [103, 80, 164], dark: [208, 188, 255], contrast: [0, 0, 0], custom: [0, 106, 106] };
+    const sizes = { light: '40px', dark: '40px', contrast: '28px', custom: '32px' };
+    const keys = [];
+    for (const bucket of value.buckets) {
+      assert.deepEqual(bucket.statePaint, { matches: true }); // Recorded default, not measured paint.
+      assert.deepEqual(bucket.candidate.size, ['40px', '40px']);
+      assert.equal(bucket.candidate.opacity, '1.0');
+      for (const [profile, viewport] of bucket.contexts) {
+        assert.ok(Object.hasOwn(colors, profile));
+        assert.ok(['desktop-dpr1', 'desktop-dpr2'].includes(viewport));
+        assert.ok(['focus', 'hover', 'held', 'selected'].includes(bucket.state));
+        keys.push(`${bucket.state}/${profile}/${viewport}`);
+        assert.deepEqual(bucket.native.size, [sizes[profile], sizes[profile]]);
+        const primary = colors[profile];
+        if (bucket.state === 'focus' || bucket.state === 'hover') {
+          assert.equal(bucket.native.background, `rgb(${primary.join(', ')})`);
+          assert.equal(bucket.native.opacity, bucket.state === 'focus' ? '0.12' : '0.08');
+          assert.equal(bucket.candidate.background, bucket.state === 'focus' ? 'transparent' : `rgba(${primary.join(',')},0.08)`);
+          assert.deepEqual(bucket.ripples, []);
+        } else if (bucket.state === 'held') {
+          const onSurface = profile === 'dark' ? [230, 225, 229] : [29, 27, 32];
+          assert.equal(bucket.native.background, `rgb(${onSurface.join(', ')})`);
+          assert.equal(bucket.native.opacity, '0.12');
+          assert.equal(bucket.candidate.background, `rgba(${primary.join(',')},0.12)`);
+          assert.deepEqual(bucket.ripples, [{ background: bucket.native.background, opacity: '0.1' }]);
+        } else {
+          assert.equal(bucket.native.background, 'rgba(0, 0, 0, 0)');
+          assert.equal(bucket.native.opacity, '0');
+          assert.equal(bucket.candidate.background, 'transparent');
+          assert.deepEqual(bucket.ripples, []);
+        }
+        assert.deepEqual(bucket.generated, ['focus', 'held'].includes(bucket.state)
+          ? [{ display: 'none', background: 'rgba(0, 0, 0, 0)', opacity: '1', border: '3px', color: 'rgba(0, 0, 0, 0)' }] : []);
+      }
+    }
+    const expected = ['focus', 'hover', 'held', 'selected'].flatMap(state => Object.keys(colors)
+      .flatMap(profile => ['desktop-dpr1', 'desktop-dpr2'].map(viewport => `${state}/${profile}/${viewport}`)));
+    assert.equal(new Set(keys).size, 32);
+    assert.deepEqual(keys.sort(), expected.sort());
+  };
+  verify(observation);
+  for (const mutate of [
+    value => value.acceptance = true,
+    value => value.buckets.pop(),
+    value => value.buckets[0].contexts.push(value.buckets[0].contexts[0]),
+    value => value.buckets[0].candidate.background = value.buckets[0].native.background,
+    value => value.buckets[0].generated[0].display = 'block',
+    value => value.buckets.find(bucket => bucket.state === 'held').ripples = [],
+    value => value.buckets.find(bucket => bucket.contexts[0][0] === 'contrast').native.size = ['40px', '40px'],
+    value => value.buckets[0].statePaint.expected = 'measured',
+  ]) {
+    const altered = structuredClone(observation); mutate(altered);
+    assert.throws(() => verify(altered));
+  }
+});
+
 test('retained held content paint classifies missing scalar owners without fabricating case closure', async () => {
   const moduleFile = 'tests/material-parity/control-state-paint-review.mjs';
   let current = readFileSync(moduleFile, 'utf8');
