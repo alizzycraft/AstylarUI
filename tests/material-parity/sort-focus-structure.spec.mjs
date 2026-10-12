@@ -14,6 +14,7 @@ import { collectSortFocusStructure, inspectSortTrees } from '../../scripts/audit
 import { fingerprintDirectory, materialBrowserLaunchOptions, inspectMaterialBrowserLaunch } from './run-checkpoint.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { propertyGroups } from './input-equivalence-policy.mjs';
+import { captureBrowserInputTree } from './input-tree-evidence.mjs';
 
 test('sort focus structure replays all authenticated source trees without equating paint substitutes', () => {
   const report = collectSortFocusStructure();
@@ -2778,6 +2779,7 @@ test('held popup option boundaries capture active paint inputs before commit', a
             const hit = document.elementFromPoint(target.x, target.y), owner = hit?.closest('button');
             const style = owner && getComputedStyle(owner);
             return { hitTag: hit?.tagName, text: owner?.textContent.trim(), active: owner?.matches(':active'),
+              attributes: Object.fromEntries([...owner.attributes].map(attribute => [attribute.name, attribute.value])),
               background: style?.backgroundColor, cursor: style?.cursor, box: owner?.getBoundingClientRect().toJSON() };
           }
           const api = window.__ASTYLAR_MATERIAL_BENCHMARK__, measurement = api.measure([targetId], true);
@@ -2795,6 +2797,22 @@ test('held popup option boundaries capture active paint inputs before commit', a
               /datepicker|menu-item|overlay-dismiss|material-button/.test(rule.selector)),
             events, pointerOwnerPath };
         }, { mode, target, targetId });
+        if (mode === 'reference') {
+          const tree = await page.evaluate(captureBrowserInputTree, { styleProperties:
+            ['backgroundColor', 'opacity', 'borderRadius', 'width', 'height', 'position', 'transform', 'transitionDuration',
+              'display', 'visibility', 'overflow', 'overflowX', 'overflowY'] });
+          assert.deepEqual(tree.errors, []);
+          const owners = tree.nodes.filter(node => node.type === 'button' &&
+            Object.entries(held.attributes).every(([key, value]) => node.attributes[key] === value));
+          const owner = owners.find(node => tree.nodes.filter(child => child.key === node.key || child.key.startsWith(node.key + '/'))
+            .map(child => child.ownText).join('').trim() === held.text);
+          assert.ok(owner, 'held native owner must map to collected input tree');
+          held.statePaint = tree.nodes.filter(node => node.key === owner.key || node.key.startsWith(owner.key + '/'))
+            .map(node => ({ type: node.type, attributes: node.attributes, style: tree.styles[node.style],
+              rules: node.rules.map(index => tree.rules[index]),
+              pseudoElements: node.pseudoElements.map(pseudo => ({ pseudo: pseudo.pseudo, generated: pseudo.generated,
+                style: tree.styles[pseudo.style], rules: pseudo.rules.map(index => tree.rules[index]) })) }));
+        }
         observations.push({ family, mode, targetId, target, held });
         t.diagnostic(JSON.stringify(observations.at(-1)));
         if (mode === 'reference') assert.equal(held.active, true, 'actual native content owns held pointer');
@@ -2802,6 +2820,25 @@ test('held popup option boundaries capture active paint inputs before commit', a
         await page.mouse.up(); assert.deepEqual(errors, []); await page.close();
       }
       assert.equal(observations.length, 6);
+      const nativePaint = family => observations.find(row => row.family === family && row.mode === 'reference').held.statePaint;
+      const dayLayer = nativePaint('datepicker').find(node => node.attributes.class?.includes('mat-calendar-body-cell-content'));
+      assert.equal(dayLayer.style.width, '36px'); assert.equal(dayLayer.style.height, '36px');
+      assert.equal(dayLayer.style.backgroundColor, 'color(srgb 0.113725 0.105882 0.117647 / 0.08)');
+      assert.ok(dayLayer.rules.some(rule => rule.selector.includes(':hover') && rule.declarations['background-color']));
+      const menuLayer = nativePaint('menu')[0];
+      assert.equal(menuLayer.style.backgroundColor, 'color(srgb 0.113725 0.105882 0.117647 / 0.08)');
+      assert.equal(menuLayer.style.borderRadius, '0px');
+      const persistent = nativePaint('dialog').find(node => node.attributes.class?.includes('persistent-ripple'));
+      const persistentBefore = persistent.pseudoElements.find(pseudo => pseudo.pseudo === '::before');
+      assert.equal(persistentBefore.style.backgroundColor, 'rgb(125, 0, 250)');
+      assert.equal(persistentBefore.style.opacity, '0.12');
+      for (const family of ['menu', 'dialog']) {
+        const ripple = nativePaint(family).find(node => node.attributes.class === 'mat-ripple-element');
+        assert.equal(ripple.style.display, 'block'); assert.equal(ripple.style.visibility, 'visible');
+        assert.ok(ripple.rules.some(rule => rule.declarations.display?.value === 'none' &&
+          rule.active === false && rule.conditions.includes('(forced-colors: active)')),
+        'inactive forced-color rule cannot establish hidden transient paint');
+      }
       t.diagnostic('Held-content target ownership and requested inputs only; light desktop DPR1, not local raster parity or whole-case closure.');
       return;
     }

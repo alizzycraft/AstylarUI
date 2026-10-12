@@ -44,8 +44,29 @@ selection-pointer-directions-20261011 checkpoint SHA2aac425d216cdb274ebff0876f2f
 Test source SHAc259ab363e1145eec008a3d07e20d8edad66bb8988a39d6c952d94354257dcec.
 Initial held-popup-content-owner log retains the wrong native opener selector
 timeout; retry retains the overly narrow button-only event assertion. Neither
-is a renderer failure or accepted pass. Next inspect owning native state-layer
-and candidate matched active inputs before deciding on local paint evidence.
+is a renderer failure or accepted pass.
+
+Owning native layers are now captured with the existing captureBrowserInputTree,
+including matched rules,condition activity,pseudo styles,visibility and clipping.
+held-popup-content-conditional-paint-20261012.log passes1/1 in14333.2785ms
+(15272.0188ms process),SHAa96728fde3b226f1d5dd51f6999a3daa0240efdfdac71ebc627c7f7e23ff76c3;
+test source SHA1afa971226301b8c6f01e3923099a0889ff1e4924a95da412f974217a85f0583.
+Day1 native hover layer is36x36/radius999/alpha0.08 on the child,candidate
+active fill is40x40/radius20/opaque#d8d2d8. Rename native button usesalpha0.08/
+radius0 plus a visible alpha0.1 circular transient ripple; candidate fills the
+whole button with opaque#d8d3d8/radius4. Cancel native persistent ::before uses
+rgb(125,0,250)/opacity0.12 plus visible alpha0.12 transient ripple,candidate
+uses solid#efdafc. These different authored paint representations are the first
+demonstrated input boundary; they cannot support an equal-input renderer claim.
+No matched-time composited pixels or every-theme/DPR result is inferred.
+The visible-state-paint log retains the rejected assumption that a matched
+display:none declaration hides ripples: that rule's forced-colors condition is
+inactive; actual computed display isblock/visibilityvisible. Regression asserts
+the condition and computed state rather than treating available rules as used.
+Source style owners: astylar.component.ts menu active527,calendar active625,
+text-button active650. Next reconcile diagnostic source conservation,then review
+existing state-layer authoring classifications and missing local paint coverage;
+do not repeat these settled hit/layer observations without changed dependencies.
 Canonical195 predates this diagnostic addition; source conservation registration
 is pending,not silently treated as current export applicability. No case closes.
 
