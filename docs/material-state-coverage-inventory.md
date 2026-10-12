@@ -207,6 +207,18 @@ unchanged and record this audit observability limitation separately. Next reuse
 raw DOM/public event receipts from existing control diagnostics,or add only the
 missing paired raw boundary before event-obligation closure. Do not add radio to
 this filter or assume ARIA-state agreement proves form-event equivalence.
+Existing configured keyboard evidence answers only one side of that raw-event
+question. Slider log018ef179 and checkbox log9fb29baf50ee27759c826afa7c96f0361b0cc799f678e10823fe400c53dc2f68
+authenticate eight contexts each. Retained helper restores exactly65d7256f;
+owning callback explicitly uses reference appEvents=[] instead of a native
+listener. Thus empty reference arrays are unobserved placeholders,not absence.
+Each slider candidate history contains six input and six change events; checkbox
+candidate histories contain neither (their Space activation already fails).
+Do not reopen value/constraint/keyboard-state findings or claim slider emits no
+events. Neither log establishes paired raw event ordering or pointer parity.
+Exact log/helper and per-context assertions exit0. Next decisive observation
+needs a native DOM listener paired with existing candidate public event capture
+at actual control actions,not another endpoint-only keyboard rerun.
 
 Target replay now answers both hover-owner uncertainties below without recapture.
 All eight retained open-hover-content contexts (light,dark,contrast,custom;
