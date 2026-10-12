@@ -1,5 +1,32 @@
 # Material comparison/state coverage inventory
 
+## Bottom-sheet actual held action boundary — October 12
+
+The missing Share/Copy link pointer-content observation is now captured without
+editing frozen producer inputs. Existing held-content callback/helper are reused
+by scripts/audit-material-sheet-content-held.mjs with exact whole-source hashes;
+only action targets, anchor owner mapping, branch-specific assertions and launch
+options are extended in memory. No fixture, renderer, CSS or ripple clock changes.
+sheet-content-held-20261012.log terminates exit0, two paired actions/four
+observations, SHA256332d5c80f482c9d698aac147634234f69acd0f0b5c0c042904e8b417f88f92fd.
+Chrome154.0.8037.99, light1440x1000 DPR1; all1887 served files match the retained
+selection checkpoint. Current input-tree collector/checkpoint module receipts
+and exact script receipt also replay successfully. This is new bounded browser
+evidence, not retroactive acceptance of earlier Chrome observations.
+
+Native anchors match :active and candidate pointer-owner paths identify each
+intended action. Both pairs agree within0.001CSSpx on480x48 row bounds and their
+positions. Native transparent anchors have generated ::before rgb(29,27,30)
+opacity0.12 with active hover/focus rules, plus visible alpha0.1 transient circular
+ripples; candidate button owners use opaque#ded8dc/radius24px. Exact retained
+layer/state and geometry assertions exit0. This confirms the previously missing
+held-action authored paint divergence; it does not diagnose equal-input core
+paint, matched-time composited pixels or hover-only behavior. It supplements the
+settled focused-Share attribution, not a repetition of that receipt population.
+Hover-only, other contexts, paint/event/lifetime obligations and all2311 whole-
+case closures remain open. Supplemental integration belongs in the next coherent
+batch after coherent196 export/cold/import; its live collector6416 is preserved.
+
 ## Coherent195 publication verified — October 12
 
 The retained retry terminates exit0 after5261113.886ms. Existing validation and
