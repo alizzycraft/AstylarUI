@@ -1,5 +1,40 @@
 # Material comparison/state coverage inventory
 
+## Exact retained state-paint gate coverage — October 12
+
+Question: which configured cases actually record state-paint colors rather than
+an unconditional success flag? Existing October5 report SHAab42dbec joins
+exactly1857 ordinary+18 mobile interaction IDs using materialCaseKey;1875 unique
+IDs,zero omissions/extras,all36 families. No capture or gate was changed.
+
+Only32 rows record expected/astylar color fields:24 toolbar hover/held/activate-
+leave and8 button activate-leave. The other1843 rows record only {matches:true}.
+Current comparator at1407–1418 returns that default outside these branches.
+Toolbar checks against a theme-derived expected blend,not a paired native paint
+layer; button checks the paired recorded interaction background. Neither branch
+is full local edge/ripple/text/animation inspection. The1875-case report's raw
+runner receipt e01ef9dc differs from current584cdfc8; this census authenticates
+retained recorded fields and their current branch correspondence,not exact
+historical runner-byte conservation or current browser acceptance.
+
+Evidence: retained-state-paint-gate-census-20261012.log,exit0,
+SHA882f43bb08f53af8deb25409f7245362d696d594e5cd82bc576334f2f1a13b6f.
+Read-only assertions pin report/current runner,exact config membership,all32
+three-field versus1843 bare-success objects. Log preserves every exact case key
+grouped by family/state. This is a domain-specific inspection map,not1843
+uninspected cases: retained trees,focused rasters and supplemental proofs can
+independently inspect paint. Passive/inapplicable states must not be recaptured
+just because they have the generic flag. Static436 cases are outside this gate.
+
+Prioritize actual interactive layer gaps using existing applicability/family
+ledger: checkbox/slider omissions and substitutions now have bounded input
+evidence; popup content must be separated from opener hover/held. Reuse those
+findings instead of accepting the default flags or rebuilding the matrix.
+Next reconcile other applicable local-paint obligations against existing trees/
+rasters,with explicit currentness; integrate pending source findings only after
+coherent196 cold/import. All2311 case closures remain partial and final gates
+unchanged. No new overall inspection percentage follows from this census.
+
 ## Checkbox retained state-layer inputs — October 12
 
 Question: does retained checkbox state-paint acceptance measure equal local
