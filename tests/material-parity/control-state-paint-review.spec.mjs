@@ -12,6 +12,88 @@ import { proveModalPositionInspection, proveBottomSheetActionLayout } from './mo
 import { applyControlStatePaintReview, proveControlStatePaint, controlStatePaintAttribution, cardSurfacePaintAttribution, opaqueSurfacePaintAttribution, specialPaintDefinitions, applyDisabledLabelColorReview, applyStepperLabelColorReview } from './control-state-paint-review.mjs';
 import { collectHeldContentPaintInputs, proveHeldContentPaintInputs } from './control-state-paint-review.mjs';
 
+test('retained sheet content paint separates hover focus and held layers without opener substitution', () => {
+  const read = (file, expected) => {
+    const bytes = readFileSync(`artifacts/material-parity/${file}`);
+    assert.equal(createHash('sha256').update(bytes).digest('hex'), expected);
+    return bytes.toString().trim().split(/\r?\n/).map(line => JSON.parse(line));
+  };
+  const hover = read('sheet-content-hover-only-retry-20261012.log', 'e991ba0f83bd2e1883a7621816991331cae67a01c1214a3c4f33b32add5e0ca0');
+  const held = read('sheet-content-held-20261012.log', '332d5c80f482c9d698aac147634234f69acd0f0b5c0c042904e8b417f88f92fd');
+  const verify = (rows, pressed) => {
+    assert.equal(rows[0].acceptance, false); assert.equal(rows.at(-1).acceptance, false);
+    assert.equal(rows.at(-1).result, 'PASS');
+    const observations = rows.filter(row => row.family === 'bottom-sheet');
+    assert.deepEqual(observations.map(row => `${row.targetId}/${row.mode}`),
+      ['bottom-sheet-dismiss/reference', 'bottom-sheet-dismiss/astylar', 'bottom-sheet-copy/reference', 'bottom-sheet-copy/astylar']);
+    for (const id of ['bottom-sheet-dismiss', 'bottom-sheet-copy']) {
+      const native = observations.find(row => row.targetId === id && row.mode === 'reference').held;
+      const candidate = observations.find(row => row.targetId === id && row.mode === 'astylar').held;
+      assert.equal(native.active, pressed); assert.ok(candidate.pointerOwnerPath.includes(id));
+      const before = native.statePaint[0].pseudoElements.find(pseudo => pseudo.pseudo === '::before');
+      assert.equal(before.style.backgroundColor, 'rgb(29, 27, 30)');
+      assert.equal(before.style.opacity, pressed || id === 'bottom-sheet-dismiss' ? '0.12' : '0.08');
+      const ripples = native.statePaint.filter(node => node.attributes.class === 'mat-ripple-element');
+      assert.equal(ripples.length, pressed ? 1 : 0);
+      if (pressed) {
+        assert.equal(ripples[0].style.backgroundColor, 'color(srgb 0.113725 0.105882 0.117647 / 0.1)');
+        assert.equal(ripples[0].style.display, 'block'); assert.equal(ripples[0].style.visibility, 'visible');
+      }
+      assert.equal(candidate.resolvedStyle.background, pressed ? '#ded8dc' : id === 'bottom-sheet-dismiss' ? '#e6e1e5' : 'transparent');
+      assert.equal(candidate.resolvedStyle.borderRadius, '24px');
+    }
+  };
+  verify(hover, false); verify(held, true);
+  for (const [original, pressed, mutate] of [
+    [hover, false, rows => rows[1].held.active = true],
+    [hover, false, rows => rows.find(row => row.targetId === 'bottom-sheet-copy' && row.mode === 'astylar').held.resolvedStyle.background = '#ded8dc'],
+    [held, true, rows => rows[1].targetId = 'bottom-sheet-primary'],
+    [held, true, rows => rows[2].held.pointerOwnerPath = []],
+    [held, true, rows => rows[1].held.statePaint = rows[1].held.statePaint.filter(node => node.attributes.class !== 'mat-ripple-element')],
+    [held, true, rows => rows[0].acceptance = true],
+  ]) {
+    const altered = structuredClone(original); mutate(altered); assert.throws(() => verify(altered, pressed));
+  }
+});
+
+test('retained inactive switch glyph preserves unequal primitive and missing pixel signals', () => {
+  const load = (file, expected) => {
+    const bytes = readFileSync(`artifacts/material-parity/${file}`);
+    assert.equal(createHash('sha256').update(bytes).digest('hex'), expected);
+    return bytes.toString().trim().split(/\r?\n/).map(line => JSON.parse(line));
+  };
+  const [inputs] = load('slide-toggle-inactive-glyph-inputs-20261012.log', 'bf9916d0ed9452a5e041bbd7c5a84a7f92b22748e894a488003996affeeb60df');
+  assert.equal(inputs.exactCases, 68); assert.equal(inputs.inactiveCases, 16); assert.equal(inputs.authenticatedTrees, 136);
+  assert.equal(inputs.observations.length, 16);
+  const expected = ['light', 'dark', 'contrast', 'custom'].flatMap(profile => ['desktop-dpr1', 'desktop-dpr2']
+    .flatMap(viewport => ['activate', 'activate-leave'].map(state => `${profile}/${viewport}/${state}`))).sort();
+  assert.deepEqual(inputs.observations.map(row => { const key = JSON.parse(row.case); return `${key.profile}/${key.viewport.id}/${key.state}`; }).sort(), expected);
+  for (const row of inputs.observations) {
+    assert.equal(row.reference.path, 'M20 13H4v-2h16v2z');
+    assert.deepEqual(row.reference.nominalInkCss, [16 * 16 / 24, 2 * 16 / 24]);
+    assert.deepEqual(row.candidate.requestedBox, ['12px', '2px']); assert.equal(row.candidate.radius, '1px');
+    assert.equal(row.candidate.authored.type, 'span'); assert.equal(row.candidate.parentCenterRequested, true);
+    assert.deepEqual(row.controlPaintGeometry, []); // No observed inner-circle center follows.
+  }
+  const pixels = load('slide-toggle-retained-minus-center-bands-observations-20261012.log', '107bb560a50e752b0a9a3bf383499892d1f5be8c9d30dc646b86f7c007c5131e');
+  assert.equal(pixels.length, 8);
+  let missing = 0;
+  for (const row of pixels) {
+    const key = JSON.parse(row.case); assert.equal(key.state, 'activate-leave');
+    assert.equal(row.currentRenderingAccepted, false); assert.equal(row.fullGlyphParity, false);
+    assert.equal(row.methodMissingSignalRetained, true);
+    for (const [side, observation] of Object.entries(row.sides)) for (const band of observation.bands) {
+      if (band.count === 0) {
+        missing++; assert.equal(side, 'reference'); assert.equal(key.viewport.deviceScaleFactor, 1);
+        assert.equal(band.threshold, 0.75); assert.equal(band.center, null); assert.equal(band.offset, null);
+      } else {
+        assert.ok(Number.isFinite(band.offset)); assert.ok(Math.abs(band.offset) < 0.5);
+      }
+    }
+  }
+  assert.equal(missing, 4); // Missing high-threshold native signal is retained, never a pass.
+});
+
 test('retained slider layer inputs and sampled halo pixels preserve unequal paint without core attribution', async () => {
   const sha = bytes => createHash('sha256').update(bytes).digest('hex');
   const readLog = (file, expected) => {

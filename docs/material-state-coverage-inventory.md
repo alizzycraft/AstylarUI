@@ -1,5 +1,31 @@
 # Material comparison/state coverage inventory
 
+## Sheet and switch retained proof integration — October 12
+
+Existing paint-review assertions now authenticate both sheet content logs
+e991ba0f/332d5c80 and switch input/band logs bf9916d0/107bb560. Sheet tests
+separate Share focus,Copy hover and actual held content from opener actions,
+preserve unequal native layers/ripple versus candidate fill/radius, and reject
+six changed-evidence controls. Switch checks preserve16 exact inactive input
+contexts from the68-case census and eight logged activate-leave center-band
+observations,including four null native DPR1 high-threshold signals. The latter
+is logged-observation replay,not new PNG analysis or inner-circle centering.
+
+Focused command: node --test --test-name-pattern="retained sheet content paint|retained inactive switch glyph|retained slider layer inputs|retained checkbox state layers|retained held content paint"
+tests/material-parity/control-state-paint-review.spec.mjs. Five tests pass,
+zero skips/failures,4322.0237ms; prior held-content conservation remains green.
+Existing producer inventory registers both descriptors. No renderer/fixture,
+criteria,capture or original evidence changed. Accepted canonical coherent196
+remains distinct from these pending descriptors; no complete-case closure follows.
+
+One read-only compact log projection initially failed on a pseudo-element without
+a style record. Guarding that optional field allowed inspection; no evidence
+producer or retained log changed. This was output inspection,not a capture retry.
+Next integrate retained raw event/disabled boundaries,then reconcile producer
+source receipts as a coherent batch. The major remaining audit gap is still
+exact applicable-obligation/currentness closure for all2311 cases,not missing
+screenshots for these settled input questions. Final gates remain unchanged.
+
 ## Slider retained paint proof integration — October 12
 
 The existing paint-review suite now authenticates retained log2bb78d0a and live
