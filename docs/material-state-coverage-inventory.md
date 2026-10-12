@@ -1,5 +1,34 @@
 # Material comparison/state coverage inventory
 
+## Retained inactive-switch minus center bands — October 12
+
+Following the unequal glyph-input finding,existing October5 activate-leave
+screenshots can bound historical vertical placement without recapture. All8
+desktop four-profile/DPR contexts authenticate through existing checkpoint.load,
+including16 original PNGs and their case artifacts. A narrow central band uses
+recorded primary CSS boxes,DPR,observed interior background and captured ink
+inputs; color projections at0.25/0.5/0.75 retain threshold sensitivity.
+
+Candidate band-center offsets from its recorded control center range
+-0.359985 to+0.170013CSSpx; native range-0.34375 to+0.453125. The lower two
+thresholds' paired deltas range-0.5 to+0.5CSSpx. These retained candidates do not
+show the earlier multi-pixel bottom displacement relative to the control center.
+This is not inner-circle center measurement,equal shape/color/corner parity,
+calibrated sharpness,current output acceptance or root-cause proof.
+
+Initial method asserted a sample at every threshold and failed before emitting
+its proposed result log; original failure is retained in
+slide-toggle-retained-minus-center-bands-first-failure-20261012.log. Observation-
+only completion explicitly preserves four native DPR1 missing0.75 signals;
+no empty band becomes a pass. Full data:
+slide-toggle-retained-minus-center-bands-observations-20261012.log,exit0,
+SHA107bb560a50e752b0a9a3bf383499892d1f5be8c9d30dc646b86f7c007c5131e.
+Exact8 membership,checkpoint hashes,24 candidate/20 nonempty native bands,
+four missing signals and explicit nonacceptance flags assert read-only.
+Next preserve glyph authoring/centering distinction in existing paint review;
+do not repeat these unchanged images or calibrate a fixture offset. Current
+pixel applicability,inner-circle/edge evidence and complete case closure remain.
+
 ## Slide-toggle inactive glyph authoring/history — October 12
 
 Question: is the reported bottom-aligned inactive minus still a text-baseline
