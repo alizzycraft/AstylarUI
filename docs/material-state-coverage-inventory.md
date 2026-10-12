@@ -1,5 +1,39 @@
 # Material comparison/state coverage inventory
 
+## Coherent196 cold-verified publication — October 12
+
+Independent named complete-baseline cold --check session32487 exits0;
+collector32100 is absent. Log coherent196-held-content-cold-check-20261012.log
+records complete3197338.8724ms (53.29min),SHA
+fccc1b1c82a444b58f8039945372d123c43053223b5984ffd6eceb67bedbd315.
+Evidence session reports2 collectors,10 memory hits,0 disk hits/invalidations,
+1205 files and89158075 read/reverified bytes. The consumed-source freeze ends
+only after this terminal result,not after quiet validation or export success.
+
+Existing compact import+whole-index verify session50231 exits0. Generation
+a64a19141df8690267ad786df24818ed2e76617105d6a15171fbd9417fb67ed3;
+indexSHA9e57eaefae9bf478d9c0140cfa4d9ae6ca8c5eae9c3c254e72953d17ceb95406,
+84 shards,72749010 compact bytes. Import logSHA
+ccedb9ed910d3d397a26101b6135ea9aa3cfc3d99131dc559c0036d16f8c28ee;
+verify logSHA3899c8623f823245a49c35c9541944bc691be5b7e996c75ad032425323d43974.
+Both conserve8483 groups,157 findings,39904 controls,389202 occurrences,
+zero unresolved scalar groups. Full configured population remains436 static/
+1875 interaction,inputEquivalent=false; zero unresolved is not audit closure.
+
+Publication diff review logSHAae2bec6e9e9947ccbfb095f4d240e459a935c3548bd0ebd671505851636bebb3
+asserts whole prior Markdown equality after removing exactly the new held
+calendar/menu/dialog descriptor and normalizing regenerated test-line anchors;
+both normalized prose SHA41c115e6. Compressed62912945-byte payload authenticates
+SHAa64a1914; decoded2224557448-byte SHA4a8b85ba independently checked/imported.
+This publishes the existing coherent196 registered held-content authoring
+classifications,not later standalone raw-control,sheet,slider,checkbox or switch
+pixel findings. Those remain explicitly pending a coherent producer integration.
+Retain predecessor/original/failure evidence; no scratch/capture deleted.
+This supersedes earlier pending-publication status,not historical observations.
+Next integrate that bounded pending batch through existing owners,complete exact
+applicable-obligation/currentness joins and final unfiltered audit/browser gates.
+All2311 whole-case closures remain partial; no renderer/fixture/criteria change.
+
 ## Retained inactive-switch minus center bands — October 12
 
 Following the unequal glyph-input finding,existing October5 activate-leave
