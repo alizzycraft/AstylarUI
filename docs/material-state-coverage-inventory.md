@@ -191,6 +191,22 @@ from its meetsAcceptance condition. The eight radio output failures are event
 gate failures,not eight label-raster gate failures; no focused label rasters are
 present. This classifies the demonstrated horizontal authoring boundary,not all
 label paint or same-input core behavior. Inline exact equation/gate checks exit0.
+Checkbox/slider event-comparison boundary is now inspected independently.
+History c47d589a introduces the checkbox native input/change exclusion;
+749cd5fb generalizes it to both sides plus slider. Current compareEvents still
+filters both types for those two families. Executing the unchanged function
+against a minimal pointer-triplet versus pointer-triplet+input/change control
+returns matches=true for checkbox/slider,false for radio. This is a demonstrated
+lossy harness projection,not a demonstrated actual event defect in those controls.
+Authenticated October5 report ab42dbec contains16 checkbox and16 slider activate/
+activate-leave cases whose stored compared arrays omit both types. Raw tails
+cannot be reconstructed from those arrays; no32-case pass/fail downgrade is
+invented. The historical rationale defines a shared pointer-only contract but
+does not prove complete equal-input event behavior. Keep existing output criteria
+unchanged and record this audit observability limitation separately. Next reuse
+raw DOM/public event receipts from existing control diagnostics,or add only the
+missing paired raw boundary before event-obligation closure. Do not add radio to
+this filter or assume ARIA-state agreement proves form-event equivalence.
 
 Target replay now answers both hover-owner uncertainties below without recapture.
 All eight retained open-hover-content contexts (light,dark,contrast,custom;
