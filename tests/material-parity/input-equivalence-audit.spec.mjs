@@ -37,6 +37,40 @@ const browserDefaults = {
   fontStyle: 'normal', transform: 'none', pointerEvents: 'auto',
 };
 
+test('retained control proof batch conserves predecessor producer and binds complete registered inventory', async () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const prior = execFileSync('git', ['show', `5f8f9da5:${file}`], { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+  const { restoreRetainedMapLocationRegistration } = await import('./position-composition-producer-transition.mjs');
+  assert.equal(restoreRetainedMapLocationRegistration(current), restoreRetainedMapLocationRegistration(prior));
+  for (const fragment of ['retained checkbox state-layer authoring boundary', 'retained slider authored halos and sampled pixel boundary',
+    'retained bottom-sheet content state-layer boundary', 'retained inactive switch glyph input and observation boundary',
+    'retained raw checkbox slider event and disabled-boundary evidence', 'checkbox-retained-state-layer-inputs-20261012.log']) {
+    assert.throws(() => restoreRetainedMapLocationRegistration(current.replace(fragment, `${fragment} changed`)));
+  }
+  const inventory = source => {
+    const ast = ts.createSourceFile(file, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    const functions = ['sourceFingerprints', 'focusedProofInventory', 'proof'].map(name => {
+      const node = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+      assert.ok(node); return node.getText(ast);
+    });
+    return new Function('readFileSync', 'path', 'createHash', functions.join('\n') +
+      '\nreturn { fingerprints: sourceFingerprints(process.cwd()), proofs: focusedProofInventory(process.cwd()) };')
+      (readFileSync, path, createHash);
+  };
+  const before = inventory(prior), after = inventory(current);
+  assert.equal(before.proofs.length, 196); assert.equal(after.proofs.length, 201);
+  assert.equal(before.fingerprints.length, 634); assert.equal(after.fingerprints.length, 650);
+  const oldPaths = new Set(before.fingerprints.map(row => row.file));
+  assert.deepEqual(after.fingerprints.filter(row => oldPaths.has(row.file)), before.fingerprints);
+  assert.equal(new Set(after.fingerprints.map(row => row.file)).size, 650);
+  const oldProofs = new Set(before.proofs.map(row => row.status));
+  const normalized = rows => rows.map(({ line, ...row }) => row);
+  assert.deepEqual(normalized(after.proofs.filter(row => oldProofs.has(row.status))), normalized(before.proofs));
+  const additions = after.proofs.filter(row => !oldProofs.has(row.status));
+  assert.equal(additions.length, 5); assert.ok(additions.every(row => row.status !== 'missing' && row.line > 0));
+});
+
 test('retained divider texel trace preserves edge and interior residual uncertainty', () => {
   const digest = bytes => createHash('sha256').update(bytes).digest('hex');
   const bytes = readFileSync('artifacts/material-parity/divider-texel-boundary-trace-20261007.log');
@@ -2512,7 +2546,7 @@ test('popup proof batch adds four registrations without changing predecessor inv
     'desktop popup hover token alpha versus opaque input boundary',
     'light desktop actual held-option input boundary']) {
     assert.throws(() => restoreScalarReviewExtraction(currentSource.replace(fragment, fragment + ' changed')),
-      /exact four-entry addition|exact retained source-map producer plus bounded option evidence/);
+      /exact four-entry addition|exact retained source-map producer plus bounded option evidence|exact retained control proof registration and dependency batch/);
   }
   assert.deepEqual(current.fingerprints, prior.fingerprints);
   assert.equal(current.proofs.length, prior.proofs.length + 4);

@@ -1,5 +1,32 @@
 # Material comparison/state coverage inventory
 
+## Coherent201 control batch preparation — October 12
+
+Combined six focused retained control/held proofs pass without skips in4189.7021ms.
+Existing producer conservation now reverses exactly five descriptors and sixteen
+dependency paths and proves full predecessor899f2f23 bytes unchanged. Current
+producer LF SHAbac2f6295e1a7551a9a0babb22655f210c95ee98aface2b3dc3836a7838b13bb;
+inventory201 proofs/650 unique paths versus accepted196/634. No classification,
+configured case,pixel threshold or fixture policy changed.
+
+Three batch/passive/popup registration checks pass,zero skips,24458.6824ms;
+coherent201-control-registration-check-20261012.log SHA
+c5daa42bcf2d86df201f9d00f1e6c6b5db80f839ddcdc7b577137e28c40014d6.
+First popup mutation was correctly rejected by the new earlier whole-source
+guard but its expected error-message regex did not name that guard. Retained
+coherent201-control-registration-first-failure-20261012.log SHA
+0816eb567fe0187820f491b3ed88d700122e890cafede8d30e8b265256f22c72.
+Only the expected message alternatives changed; same mutation,assert.throws and
+exact whole-source equality remain. The enclosing first shell returned0 after
+later dry-run checks,not proof of that failed Node test.
+
+Named complete-baseline dry-run confirms all five required input paths. No live
+export process existed at preflight; observed D:free5420355584 bytes. Next launch
+one logged complete-baseline export with consumed source/evidence frozen through
+terminal export and independent cold comparison,then import/verify and review
+the canonical diff. Until those results,accepted coherent196 remains authoritative.
+All2311 case closures and final acceptance gates remain open; no renderer fixes.
+
 ## Raw control boundary proof integration — October 12
 
 The existing input-boundary evidence suite authenticates five retained logs

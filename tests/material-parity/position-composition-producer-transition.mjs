@@ -10,6 +10,31 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 // the explicit retained map paths; no captured receipt or current source is replaced.
 export function restoreRetainedMapLocationRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes('retained raw checkbox slider event and disabled-boundary evidence')) {
+    assert.equal(hash(current), 'bac2f6295e1a7551a9a0babb22655f210c95ee98aface2b3dc3836a7838b13bb',
+      'exact retained control proof registration and dependency batch');
+    for (const file of [
+      'checkbox-retained-state-layer-inputs-20261012.log', 'slider-retained-state-layer-inputs-20261012.log',
+      'slider-live-state-layers-20261012.log', 'slider-live-state-layers-20261012/hover/reference.png',
+      'slider-live-state-layers-20261012/hover/astylar.png', 'slider-live-state-layers-20261012/held/reference.png',
+      'slider-live-state-layers-20261012/held/astylar.png', 'sheet-content-hover-only-retry-20261012.log',
+      'sheet-content-held-20261012.log', 'slide-toggle-inactive-glyph-inputs-20261012.log',
+      'slide-toggle-retained-minus-center-bands-observations-20261012.log', 'raw-control-events-20261012.log',
+      'raw-control-keyboard-events-20261012.log', 'raw-disabled-control-keyboard-events-20261012.log',
+      'raw-disabled-control-pointer-events-20261012.log', 'disabled-slider-held-centers-20261012.log',
+    ]) {
+      const line = `    'artifacts/material-parity/${file}',\n`;
+      assert.equal(current.split(line).length, 2); current = current.replace(line, '');
+    }
+    const start = "    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\\('retained raw checkbox slider boundaries";
+    const end = "    proof(root, 'tests/material-parity/control-state-paint-review.spec.mjs', /test\\('retained held content paint classifies";
+    assert.equal(current.split(start).length, 2); assert.equal(current.split(end).length, 2);
+    current = current.slice(0, current.indexOf(start)) + current.slice(current.indexOf(end));
+    const prior = execFileSync('git', ['show', '5f8f9da5:tests/material-parity/input-equivalence-audit.mjs'],
+      { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+    assert.equal(hash(prior), '899f2f23b57e75c39cc2e16c2d90a27894a7a716d394c5b82ff81a0b9a272d48');
+    assert.equal(current, prior, 'every predecessor producer byte survives the exact five-proof sixteen-path removal');
+  }
   if (current.includes('heldContentPaintInputs: collectHeldContentPaintInputs')) {
     assert.equal(hash(current), '899f2f23b57e75c39cc2e16c2d90a27894a7a716d394c5b82ff81a0b9a272d48',
       'exact retained source-map producer plus supplemental held-content registration');
