@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { applyPaintReviews, validatePaintReviews, collectPaintReviewSources, isPaintReviewRow } from './control-state-paint-review.mjs';
 import { applyOmittedOwnerPaintRequests, validateOmittedOwnerPaintRequests } from './control-state-paint-review.mjs';
+import { collectHeldContentPaintInputs } from './control-state-paint-review.mjs';
 import { applyOwnerMaximumWidths, validateOwnerMaximumWidths } from './control-width-observation.mjs';
 import { applyBadgeMarginReviews, validateBadgeMarginReviews } from './authored-anchor-review.mjs';
 import { applySliderMarginReviews, validateSliderMarginReviews } from './slider-position-request-review.mjs';
@@ -539,6 +540,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     sourceFindings,
     pluginBoundary: pluginBoundaryVerdict,
     focusedProofs: focusedProofInventory(root),
+    heldContentPaintInputs: collectHeldContentPaintInputs({ root }),
     implementationPlan: implementationPlan(),
   };
   return report;
@@ -546,6 +548,12 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
 
 export function validateMaterialInputAudit(report, { requireComplete = true, root = process.cwd() } = {}) {
   const errors = [];
+  if (requireComplete || report.heldContentPaintInputs !== undefined) {
+    try {
+      if (JSON.stringify(report.heldContentPaintInputs) !== JSON.stringify(collectHeldContentPaintInputs({ root })))
+        throw new Error('supplemental held paint differs from authenticated original observations');
+    } catch (error) { errors.push(`held content paint lacks original input evidence: ${error.message}`); }
+  }
   for (const [key, attributions, validateSource, validateRows] of [
     ['overlaySurfaceAuditInputs', overlaySurfaceAttributions, validateOverlaySurfaceAuditInputs, validateOverlaySurfaceAuditClassifications],
     ['chipPaintAuditInputs', [chipPaintAttribution], validateChipPaintAuditInputs, validateChipPaintAuditClassifications],
@@ -8895,6 +8903,8 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'artifacts/material-parity/held-popup-content-conditional-paint-20261012.log',
+    'artifacts/material-parity/selection-pointer-directions-20261011/checkpoint/manifest.json',
     'artifacts/material-parity/timepicker-light-mobile-scroll-current-20261012.log',
     'artifacts/material-parity/held-option-boxes-current-20261012.log',
     'artifacts/material-parity/held-option-bound-text-current-20261012.log',
@@ -9664,6 +9674,8 @@ function focusedProofInventory(root) {
       'desktop popup hover token alpha versus opaque input boundary', 'Authenticates24 retained desktop hover-content rows across three families,four profiles,DPR1/2. Native token/color-mix alpha.08 or active/focus alpha.12 differs from candidate opaque #e5dfe5; option-domain and timepicker selection mismatch remain explicit. This is authored/state input evidence,not equivalent composited pixels,held animation or core alpha causality.'),
     proof(root, 'tests/material-parity/sort-focus-structure.spec.mjs', /test\('held popup option boundaries capture active paint inputs before commit'/,
       'light desktop actual held-option input boundary', 'Full current checkpoint-bound real pointer holds first options before release in three paired families at DPR1. Native :active and candidate target ownership are asserted; logs retain translucent native backgrounds and separate ripple versus opaque candidate active background. Candidate inspection waits for settlement while held. This is not matched-time animation,local raster,all-profile or lifecycle acceptance.'),
+    proof(root, 'tests/material-parity/control-state-paint-review.spec.mjs', /test\('retained held content paint classifies missing scalar owners without fabricating case closure'/,
+      'retained held calendar menu and dialog paint input classifications', 'Three light desktop DPR1 content observations retain actual held hit ownership,native child/persistent/transient layers,conditional visibility and opaque candidate fills. Exact log,capture-source and checkpoint receipts bind supplemental authoring classifications without fabricating configured scalar rows or case closure. Current all-profile pixels,matched-time ripple paint and equal-input renderer causality remain unproved.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('desktop five-family empty caret preserves native visibility and candidate blink evidence'/,
       'current light desktop five-family empty-caret visibility and ink boundary', 'Authenticates ten current-checkpoint populations at DPR1/2, sixty real Tab/delete timed boundaries and240 initial/hide rasters. Localized candidate blink strokes and native visible carets are present; captured authoring/normal/interaction/effective stages preserve omitted candidate caretColor versus native primary ink. This is bounded visibility/input attribution, not equal stroke geometry, sharpness, other themes/states or whole-case closure.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('public equal-input overflow isolates scrollbar gutter before projection'/,

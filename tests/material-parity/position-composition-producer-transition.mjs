@@ -10,6 +10,25 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 // the explicit retained map paths; no captured receipt or current source is replaced.
 export function restoreRetainedMapLocationRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes('heldContentPaintInputs: collectHeldContentPaintInputs')) {
+    assert.equal(hash(current), '899f2f23b57e75c39cc2e16c2d90a27894a7a716d394c5b82ff81a0b9a272d48',
+      'exact retained source-map producer plus supplemental held-content registration');
+    for (const addition of [
+      "import { collectHeldContentPaintInputs } from './control-state-paint-review.mjs';\n",
+      '    heldContentPaintInputs: collectHeldContentPaintInputs({ root }),\n',
+      "    'artifacts/material-parity/held-popup-content-conditional-paint-20261012.log',\n",
+      "    'artifacts/material-parity/selection-pointer-directions-20261011/checkpoint/manifest.json',\n",
+      "  if (requireComplete || report.heldContentPaintInputs !== undefined) {\n    try {\n      if (JSON.stringify(report.heldContentPaintInputs) !== JSON.stringify(collectHeldContentPaintInputs({ root })))\n        throw new Error('supplemental held paint differs from authenticated original observations');\n    } catch (error) { errors.push(`held content paint lacks original input evidence: ${error.message}`); }\n  }\n",
+    ]) { assert.equal(current.split(addition).length, 2); current = current.replace(addition, ''); }
+    const start = "    proof(root, 'tests/material-parity/control-state-paint-review.spec.mjs', /test\\('retained held content paint classifies";
+    const end = "    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\\('desktop five-family empty caret";
+    assert.equal(current.split(start).length, 2); assert.equal(current.split(end).length, 2);
+    current = current.slice(0, current.indexOf(start)) + current.slice(current.indexOf(end));
+    const prior = execFileSync('git', ['show', '02d728d7:tests/material-parity/input-equivalence-audit.mjs'],
+      { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+    assert.equal(hash(prior), '80f65b24a533de17ba4fcb3db8e4779f9f97efbc715cf6486ab722b5e2da83b0');
+    assert.equal(current, prior, 'all predecessor producer bytes remain after exact supplemental registration removal');
+  }
   if (current.includes('held-option-framebuffer-current-20261012.log')) {
     assert.equal(hash(current), '80f65b24a533de17ba4fcb3db8e4779f9f97efbc715cf6486ab722b5e2da83b0', 'exact retained source-map producer plus bounded option evidence');
     for (const name of ['boxes', 'bound-text', 'plane-ink', 'framebuffer']) {

@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
+import path from 'node:path';
+import { readRetainedSortFocusSource } from './position-composition-producer-transition.mjs';
 import { collectButtonPaintAllStates } from '../../scripts/audit-material-button-paint-all-states.mjs';
 import { collectDisabledLabelColorStages } from '../../scripts/audit-material-disabled-label-color-stages.mjs';
 import { applyOverlayTriggerPaintReview, overlayTriggerPaintAttribution } from './overlay-trigger-paint-review.mjs';
@@ -67,20 +69,19 @@ export function proveHeldContentPaintInputs(observations) {
   });
 }
 
-export async function collectHeldContentPaintInputs() {
+export function collectHeldContentPaintInputs({ root = process.cwd() } = {}) {
   const file = 'artifacts/material-parity/held-popup-content-conditional-paint-20261012.log';
-  const bytes = readFileSync(file), sha256 = createHash('sha256').update(bytes).digest('hex');
+  const bytes = readFileSync(path.resolve(root, file)), sha256 = createHash('sha256').update(bytes).digest('hex');
   assert.equal(sha256, 'a96728fde3b226f1d5dd51f6999a3daa0240efdfdac71ebc627c7f7e23ff76c3');
   const observations = bytes.toString().split(/\r?\n/).filter(line => line.startsWith('# {'))
     .map(line => JSON.parse(line.slice(2).replace(/\\([\\#])/g, '$1')));
   const sourceFile = 'tests/material-parity/sort-focus-structure.spec.mjs';
-  const captured = execFileSync('git', ['show', `ee574dd9:${sourceFile}`], { maxBuffer: 4_000_000 });
+  const captured = execFileSync('git', ['show', `ee574dd9:${sourceFile}`], { cwd: root, maxBuffer: 4_000_000 });
   const sourceSha256 = createHash('sha256').update(captured).digest('hex');
   assert.equal(sourceSha256, '1afa971226301b8c6f01e3923099a0889ff1e4924a95da412f974217a85f0583');
-  const { readRetainedSortFocusSource } = await import('./position-composition-producer-transition.mjs');
-  assert.deepEqual(readRetainedSortFocusSource(captured), readRetainedSortFocusSource());
+  assert.deepEqual(readRetainedSortFocusSource(captured), readRetainedSortFocusSource(readFileSync(path.resolve(root, sourceFile))));
   const checkpointFile = 'artifacts/material-parity/selection-pointer-directions-20261011/checkpoint/manifest.json';
-  const checkpointSha256 = createHash('sha256').update(readFileSync(checkpointFile)).digest('hex');
+  const checkpointSha256 = createHash('sha256').update(readFileSync(path.resolve(root, checkpointFile))).digest('hex');
   assert.equal(checkpointSha256, '2aac425d216cdb274ebff0876f2fa365c9ab6e845ed1b1c3b30d9e1bbcaea5c8');
   return proveHeldContentPaintInputs(observations).map(row => ({ ...row,
     evidence: { file, sha256, sourceFile, sourceSha256, checkpointFile, checkpointSha256,

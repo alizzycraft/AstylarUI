@@ -92,9 +92,17 @@ block/import. Seven negative controls reject missing observations,wrong hit path
 altered active state,color,day size,ripple visibility and condition activity.
 Day/Rename scope is light desktopDPR1,not every calendar/menu state; Cancel's
 existing scalar classification is retained separately. No new browser capture.
-Next register this owning proof and exact source/log dependencies in the existing
-producer batch; canonical195 does not yet consume these supplemental rows.
-No case closes; full export remains a batch gate.
+Producer registration now adds heldContentPaintInputs with three supplemental
+rows,independent replay validation,the owning proof and two exact receipt paths.
+Prepared inventory is196 proofs/634 paths; prior scalar population/coverage and
+classification logic remain byte-conserved. Added complete/partial validation
+boundary rejects missing or forged rows; replay also authenticates original Git
+capture source and checkpoint,not current rendering. Existing focused source-map,
+passive-registration and owning-boundary checks pass3/3,17014.2219ms in
+held-content-producer-boundary-integration-20261012.log; preceding registration
+preflight passes2/2,4143.4247ms. Canonical195 does not yet contain these rows.
+Next named complete-baseline export/cold check and compact import at this coherent
+batch milestone; keep consumed sources frozen during it. No case closes.
 
 Target replay now answers both hover-owner uncertainties below without recapture.
 All eight retained open-hover-content contexts (light,dark,contrast,custom;

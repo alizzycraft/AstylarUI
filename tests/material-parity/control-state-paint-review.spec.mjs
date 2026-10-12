@@ -15,8 +15,10 @@ import { collectHeldContentPaintInputs, proveHeldContentPaintInputs } from './co
 test('retained held content paint classifies missing scalar owners without fabricating case closure', async () => {
   const moduleFile = 'tests/material-parity/control-state-paint-review.mjs';
   let current = readFileSync(moduleFile, 'utf8');
-  const addition = "import { execFileSync } from 'node:child_process';\n";
-  assert.equal(current.split(addition).length, 2); current = current.replace(addition, '');
+  for (const addition of ["import { execFileSync } from 'node:child_process';\n", "import path from 'node:path';\n",
+    "import { readRetainedSortFocusSource } from './position-composition-producer-transition.mjs';\n"]) {
+    assert.equal(current.split(addition).length, 2); current = current.replace(addition, '');
+  }
   const start = '// Supplemental held-content inputs are not rows in the configured scalar map.';
   const end = 'export function proveSheetActionAppearance';
   assert.equal(current.split(start).length, 2); assert.equal(current.split(end).length, 2);
@@ -24,6 +26,19 @@ test('retained held content paint classifies missing scalar owners without fabri
   assert.equal(current, execFileSync('git', ['show', `81bacd30:${moduleFile}`], { encoding: 'utf8', maxBuffer: 4_000_000 }),
     'every existing scalar classification and validation byte remains unchanged');
   const rows = await collectHeldContentPaintInputs();
+  const producer = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8');
+  const startGuard = '  if (requireComplete || report.heldContentPaintInputs !== undefined) {';
+  const endGuard = '  for (const [key, attributions, validateSource, validateRows] of [';
+  assert.equal(producer.split(startGuard).length, 2);
+  const startIndex = producer.indexOf(startGuard), endIndex = producer.indexOf(endGuard, startIndex);
+  assert.ok(endIndex > startIndex);
+  const validateAddedBoundary = new Function('report', 'requireComplete', 'root', 'collectHeldContentPaintInputs',
+    'const errors = [];\n' + producer.slice(startIndex, endIndex) + '\nreturn errors;');
+  assert.deepEqual(validateAddedBoundary({ heldContentPaintInputs: rows }, true, process.cwd(), collectHeldContentPaintInputs), []);
+  assert.deepEqual(validateAddedBoundary({}, false, process.cwd(), collectHeldContentPaintInputs), []);
+  assert.equal(validateAddedBoundary({}, true, process.cwd(), collectHeldContentPaintInputs).length, 1);
+  const forged = structuredClone(rows); forged[0].inputEquivalent = true;
+  assert.equal(validateAddedBoundary({ heldContentPaintInputs: forged }, false, process.cwd(), collectHeldContentPaintInputs).length, 1);
   assert.deepEqual(rows.map(row => row.element), ['datepicker-day-1', 'menu-rename', 'dialog-cancel']);
   for (const row of rows) {
     assert.equal(row.classification, 'application-plugin-authoring-defect');

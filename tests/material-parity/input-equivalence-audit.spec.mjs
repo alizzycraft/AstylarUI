@@ -2430,7 +2430,13 @@ test('retained source map migration preserves captured bytes and exact producer 
   assert.ok(fn);
   const fingerprints = new Function('readFileSync', 'path', 'createHash',
     fn.getText(ast) + '\nreturn sourceFingerprints(process.cwd());')(readFileSync, path, createHash);
-  assert.equal(fingerprints.length, 632);
+  assert.equal(fingerprints.length, 634);
+  assert.deepEqual(fingerprints.filter(row => row.file.includes('held-popup-content-conditional-paint-') ||
+    row.file === 'artifacts/material-parity/selection-pointer-directions-20261011/checkpoint/manifest.json')
+    .map(row => row.file).sort(), [
+      'artifacts/material-parity/held-popup-content-conditional-paint-20261012.log',
+      'artifacts/material-parity/selection-pointer-directions-20261011/checkpoint/manifest.json',
+    ]);
   assert.deepEqual(fingerprints.filter(row => row.file.includes('divider-effective-cursor-')).map(row => row.file), [
     'artifacts/material-parity/divider-effective-cursor-20261011.log',
     'artifacts/material-parity/divider-effective-cursor-comparison-20261011.log',
