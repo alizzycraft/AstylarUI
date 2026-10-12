@@ -141,6 +141,17 @@ boundary; it does not exclude other supplemental diagnostics or prove current
 paint. Existing sheet-action progress logs are canonical scalar exports/errors,
 not content-pointer captures. Next use the existing held-content diagnostic for
 Share after source freeze ends; do not recapture focus just to repeat this result.
+Supplemental hover-retarget report d6e95fc6f3120e926c509da95b7fd27a9247eff34465296afa43cd1d1f21610b
+is authenticated read-only: all four bottom-sheet sides (wrappers off/on,
+light900x700DPR1) hold bottom-sheet-primary with overlayPresent=false, then
+observe covered-opener movement. Native DOM active.id identifies the opener;
+candidate pressedElementId does so while DOM active is CANVAS. The initial
+DOM-focus-only assertion failed; the correct explicit pointer-owner assertion
+passes without changing evidence. This is not a Share boundary. Source review
+also confirms overlay-breakpoint collector clicks the opener then captures
+settled geometry,while sheet-focus is a synthetic focus reduction rather than
+paired Material action paint. These named supplements do not discharge the
+missing content-pointer observation; preserve their existing distinct purposes.
 
 Target replay now answers both hover-owner uncertainties below without recapture.
 All eight retained open-hover-content contexts (light,dark,contrast,custom;
