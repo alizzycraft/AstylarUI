@@ -1,5 +1,43 @@
 # Material comparison/state coverage inventory
 
+## Checkbox retained state-layer inputs — October 12
+
+Question: does retained checkbox state-paint acceptance measure equal local
+layers, or do authored differences precede any renderer compositing diagnosis?
+Reused October5 report SHAab42dbec and authenticated64 original input trees for
+all32 configured hover/held/selected/focus cases (four desktop profiles,DPR1/2).
+No browser capture or producer dependency changed. Compact checkbox queries use
+the accepted predecessor index,not pending coherent196 current publication.
+
+All8 focus cases have a native primary-colored layer at opacity0.12 and a
+transparent candidate state layer. All8 held cases have a native on-surface
+layer at0.12 plus a captured on-surface ripple at0.1; candidate uses primary
+RGBA at0.12 and lacks that ripple descendant. Hover primary/0.08 values agree
+in all8 contexts as paint inputs,not proof of equal compositing. Native sizes
+are40px light/dark,28px contrast,32px custom; candidate is40px throughout.
+Selected state layers are transparent on both sides,not complete selected-box
+paint parity. Native generated focus-indicator pseudo elements in focus/held
+compute display:none and transparent border; do not claim a visible missing
+3px outline from generated=true alone. All32 statePaint.matches=true flags use
+the runner's default at1415,not a checkbox local-paint comparison.
+
+Evidence: checkbox-retained-state-layer-inputs-20261012.log,exit0,
+SHAf1fc60db2e7ed3c96ad402ffd1ce2cf1ff49963f3d720adce2a6abe23716022c.
+Assertions authenticate report,exact32 population,64 tree receipts and empty
+tree errors; log preserves per-profile/state values and comparator flags.
+Current whole component LF SHA b493a355 matches served chunk-PCHQTLJM.js.map
+source exactly. Its rules773–775 retain fixed40px,primary hover/active and no
+focus fill. Git f566f807a (August27,checkbox state-layer authoring) introduced
+those three rules. This binds current authored intent,not historical browser
+environment/current pixels. First demonstrated differences are authoring
+omissions/substitutions; equal-input core compositing remains untested here.
+
+Next: integrate through existing paint review after cold/import; inspect actual
+local paint only where these retained inputs cannot answer the question. Keep
+focus semantics separate from layer paint and preserve unequal-input evidence.
+No whole-case closure,output acceptance,renderer fix or fixture compensation;
+all2311 cases remain partial.
+
 ## Slider live state-layer material and local pixels — October 12
 
 The retained16-pair input join lacked actual candidate material alpha. Competing
