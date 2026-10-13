@@ -1,5 +1,34 @@
 # Material comparison/state coverage inventory
 
+## Active-family retained editing target applicability — October 13
+
+While coherent204 export inputs remain frozen,read-only inspection asks which of
+the1957 pending active-family cases actually expose writable text targets. All3914
+paired tree receipts authenticate and have no recorded errors. Exact public fields
+are readonly/contenteditable,not readOnly/contentEditable. Corrected census finds
+443 cases with writable targets on both sides (form-field68,input68,autocomplete102,
+datepicker103,timepicker102),1514 with none on either side,and zero one-sided writable
+targets. Forty of the latter are the disabled contexts of those five families;
+select's94 authored text inputs are all readonly and must not imply free editing.
+Other control value changes/keyboard/popup semantics are separate obligations.
+
+Corrected log active-case-editing-writable-target-census-20261013.log SHA
+37b5f40de933beba17027c9505b5f2a243d21ccd954e562044ae69ecfcb14c43 exits0,
+pinning proposal-file rawSHAb4d35d5f61a5964ea8c531b9e658c87b68aa30ec99608e1434471a42bb5a8174.
+Initial text-capable census used incorrect readOnly projection; retained log
+active-case-editing-target-census-20261013.log SHA
+9eca54e41541cb19c90a6714af2cff59101c952cafd4e8659b8fca99c27ddc53 is not writable-target
+evidence. Current public DOMElement readonly property and source select readonly:true
+confirm the spelling distinction; no new core/input-authoring defect is inferred.
+
+This answers snapshot target applicability only,not source-wide exclusion,editing
+behavior,current rendering or whole-case closure. No consumed source/proposal or
+canonical package changed. After export/cold/publication,extend the existing owning
+case proof with exact target receipts and disabled/readonly negative controls,
+then join existing editable behavior evidence to the443 applicable anchors. Do not
+repeat captures or infer absent behavior from these trees. Source/currentness and
+shared paint remain prioritized; original scope and final gates are unchanged.
+
 ## All-case canonical registration and runner applicability — October 13
 
 Question: can the verified2311-case proposal replace the older354-case pin without
