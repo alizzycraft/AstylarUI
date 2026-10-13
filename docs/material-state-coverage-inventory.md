@@ -1,6 +1,6 @@
 # Material comparison/state coverage inventory
 
-## Current coverage and publication checkpoint — October 13
+## Cold-verified case-obligation publication — October 13
 
 Configured inventory is complete:36 families,2311 cases (436 static,1875
 interaction). Every configured ID has scalar-review evidence; all2311 remain
@@ -21,7 +21,7 @@ Export used1 collector/10 memory hits/1 disk hit; cold used2 collectors/10
 memory hits/0 disk hits; both had0 invalidations. Wrapper elapsed times were
 2828356.7768ms and2755641.6709ms respectively,not focused-check timings.
 
-Compact import/verification both exit0 for pending generationc9cd6957:
+Compact import/verification both exit0 for generationc9cd6957:
 8483 scalar groups,157 source findings,39904 controls,389202 occurrences,
 0 unresolved scalar groups; inputEquivalent remains false. Logs
 coherent203-case-obligation-compact-import-20261013.log SHA
@@ -32,15 +32,26 @@ All prior coverage fields are conserved after removing the additive
 inspectionEvidence field. Complete Markdown is conserved after removing its
 single new case-obligation paragraph and normalizing test line anchors.
 
-Publication is still pending:48544 compact rows conserve their substantive
-fields,but49 button rows change complete-row evidence hashes (one discrepancy,
-48 control-typography rows). Existing authenticated full-row reader comparison
-session23597/process33984 remains live at this checkpoint. Do not describe those
-hash changes as metadata-only before its terminal result explains their paths.
-Accepted committed package remains0be2ffe4/Git24704218; pending generated files
-are not a new accepted publication. Next retain that result,review and publish
-the coherent batch,then continue exact case-obligation/currentness joins.
-No fresh browser audit,renderer/fixture change or final-gate waiver occurred.
+All48544 compact rows conserve their substantive fields. Full-row comparison
+session23597 exits0 for all49 changed button rows:48 control-typography rows
+change only reviewEvidence.observation.normalizationReconciliation.currentModuleSha256
+from816c6347a2c6327b91c2b1ecb2e93ad2d012cc9c7ca7370f4caaf185af45ccb4
+to247399bf04438b7c1b6144ffd4c46bc3829ca2aa92527b7642b49659fb435568.
+The single discrepancy903 changes only its48 corresponding controlProofSha256
+references (proof indices12–59). No values,classifications or proof claims change.
+Independent narrowed control4346 comparison session97664 also exits0 with that
+single changed module-hash path. Existing source-conservation proof authenticates
+the complete producer transition,not a silent receipt waiver.
+
+Canonical generationc9cd6957c82177931072b374d438f3ad4b67038446d3755cd1e6fb5528805b51
+now includes the354 partial joins; predecessor0be2ffe4/Git24704218 remains retained.
+Compressed62955396 bytes,decoded2225827769 bytes SHA
+84102a0a6cc2e48fa5f3056631ef776579f0ef215da135d020ac5c46b51e419a.
+Complete Markdown conservation and current producer LF hash were checked again
+before publication. Next continue exact case-obligation/currentness joins and
+the shared remaining input/paint investigations,not another unchanged export.
+All2311 full-case closures and original final gates remain open. No fresh browser
+audit,renderer/fixture change or final-gate waiver occurred.
 
 ## Case-coverage source conservation and session routing — October 13
 
