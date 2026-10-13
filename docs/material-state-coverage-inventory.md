@@ -1,5 +1,25 @@
 # Material comparison/state coverage inventory
 
+## Pending paint census identifies24 reusable sampled cases; export live — October 14
+
+Read-only ff6feb918 census:1715 activation joins pending,1797 focus joins pending,
+1287 paint joins pending/1024 partial;all2311 history records partial. No whole-case
+closure. Authenticated October5 reportSHAab42dbec shows zero focusedRasters among
+the1287 pending paint cases. Twelve static grid-list cases instead retain24 uniform
+background samples,and twelve disjoint static card cases retain12 bottom-shadow
+profiles. All recorded matches aretrue,not complete paint/currentness acceptance.
+The799 pending cases with1527 textAlignment samples are geometry observations,
+not substitute paint proofs. Thus24 exact cases offer existing sampled-pixel joins
+before new capture;not12 cases containing both sample types. Next reuse the actual
+uniform/shadow comparator/configuration and provenance boundaries after integration.
+
+Previous turn pushedccb24650 and launched exactly one named export. Session97803,
+launcher8496/worker32976 created00:54:55 localOctober14,are confirmed live at
+build-audit;log focus-activation-history-canonical-export-20261014.log. Source,
+proposal and consumed inputs remain frozen. This ledger is not consumed by the
+exporter. Do not restart a quiet collector or edit source to add paint joins yet.
+Published canonicale8 remains unchanged;all original final gates/criteria remain.
+
 ## Focus/activation/static-history batch integration verified — October 14
 
 Producer inventory and named complete-baseline launcher now pin ff6feb918.
