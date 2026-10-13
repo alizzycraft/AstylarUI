@@ -1,5 +1,32 @@
 # Material comparison/state coverage inventory
 
+## Passive authored semantic exact-case join — October 13
+
+Existing passive-descendant-semantics logaa5932cd joins all354 exact proposed
+passive cases,with no omitted/extra family/profile/viewport/state keys. Each
+recorded descendant key/type/attribute value is checked against its authenticated
+original input tree. Current type/bridge source receipts in the original summary
+still match. This is authored subtree observation,not generated bridge or AX.
+The machine proposal retains296 native aria-hidden=true nodes across174 cases
+and zero recorded candidate ariaHidden requests. The existing source proof still
+establishes the public-type/bridge hiding omission; no equivalent hiding behavior
+is invented for visually hidden nodes or absent authored fields.
+
+New proposal review digest
+50dfe67ac3e57172bbd6b3c409723a1abecce140bbd030930825df51315d0e15
+preserves354 partial semantic obligations with an inspected authored-attribute
+subrecord and explicit pending actual AX relationships,assistive-technology,
+complete mapping and current-rendering applicability. Its40 inspected historical
+focus failures remain unchanged. Owning existing applicability and descendant
+semantic assertions pass2/2,zero skips,exit0,4354.0634ms. Log
+passive-case-semantic-obligation-join-20261013.log SHA
+5279168eee53f50343d994cf5e581eca2f15b0198e039f5fc8783b420ee8ec0c.
+No capture or core/fixture changes; coherent203 is unchanged and additive source
+conservation/canonical integration remains pending for the next coherent batch.
+Next attach already-retained actual semantic cohorts where available,keeping
+authored observations separate from runtime/AX and full-case conclusions.
+All2311 complete-case closures and original final gates remain open.
+
 ## Passive progress-focus exact-case join — October 13
 
 The remaining40 applicable progress-focus proposal entries now join the retained

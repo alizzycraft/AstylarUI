@@ -2107,6 +2107,36 @@ test('passive state applicability joins exact cases without discarding progress 
   // only to that authoring, never to unrecorded callbacks or runtime behavior.
   const progressFocus = new Set(focusable.map(row => row.case));
   const reportSha256 = hash(raw);
+  const semanticFile='artifacts/material-parity/passive-descendant-semantics-20261006.log';
+  const semanticBytes=readFileSync(semanticFile),semanticSha256=hash(semanticBytes);
+  assert.equal(semanticSha256,'aa5932cda3140e3f15fa661316c9da38a7e8b274fe6dce24eccb63602233147d');
+  const semanticRecords=semanticBytes.toString().trim().split(/\r?\n/).map(JSON.parse);
+  const semanticSummary=semanticRecords.pop();
+  for(const receipt of semanticSummary.sources)assert.equal(hash(readFileSync(receipt.file)),receipt.sha256);
+  const semanticKey=row=>`${row.family}/${row.profile}/${row.viewport.id}/${row.state??'static'}`;
+  assert.deepEqual(semanticRecords.map(semanticKey).sort(),cases.map(semanticKey).sort());
+  const joinSemantics=entry=>{
+    const matches=semanticRecords.filter(row=>semanticKey(row)===semanticKey(entry));assert.equal(matches.length,1);
+    const observation=matches[0];
+    for(const side of ['reference','astylar']){
+      const tree=JSON.parse(readFileSync(entry.inputTrees[side].file));
+      const byKey=new Map(tree.nodes.map(node=>[node.key,node]));
+      for(const node of observation.sides[side]){
+        const original=byKey.get(node.key);assert.ok(original);
+        const attrs=side==='reference'?original.attributes:original.authored;
+        assert.equal(node.type,side==='reference'?original.type:attrs.type);
+        for(const [name,value]of Object.entries(node.attrs))assert.deepEqual(attrs[name],value);
+      }
+    }
+    const referenceHidden=observation.sides.reference.filter(node=>node.attrs['aria-hidden']==='true').length;
+    return {applicability:'applicable',disposition:'partial',
+      authoredAttributeObservation:{disposition:'inspected',referenceHidden,
+        candidateHidingRequests:observation.sides.astylar.filter(node=>node.attrs.ariaHidden!==undefined).length,
+        evidence:{file:semanticFile,sha256:semanticSha256,case:semanticKey(entry),sources:semanticSummary.sources}},
+      remaining:['actual generated bridge and AX relationships','assistive-technology behavior','complete semantic input mapping','current rendering applicability'],
+      boundary:'Recorded authored subtree attributes only; absent recorded attributes are not invented defaults.'};
+  };
+  assert.throws(()=>joinSemantics({...cases[0],profile:'invented'}));
   const focusFile = 'artifacts/material-parity/progress-programmatic-focus-20261007.log';
   const focusBytes = readFileSync(focusFile), focusSha256 = hash(focusBytes);
   assert.equal(focusSha256,'f896402a1d31e9e14fb6e4382854a140c51f146f1323835e48669fe1ca5176f9');
@@ -2154,7 +2184,7 @@ test('passive state applicability joins exact cases without discarding progress 
         { applicability:'not-applicable',disposition:'inspected-authored-exclusion' },
       inputStyleStructure: { applicability: 'applicable', disposition: 'evidence-join-pending' },
       localPaint: { applicability: 'applicable', disposition: 'evidence-join-pending' },
-      semantics: { applicability: 'applicable', disposition: 'evidence-join-pending' },
+      semantics: joinSemantics(row),
       historyOwnership: { applicability: 'applicable', disposition: 'evidence-join-pending' },
       sourceCurrentness: { applicability: 'applicable', disposition: 'evidence-join-pending' },
     },
