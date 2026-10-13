@@ -1,5 +1,37 @@
 # Material comparison/state coverage inventory
 
+## Retained-observation export terminal success; independent cold check live — October 13
+
+Export99911 terminates exit0;launcher3292/worker26492 are finished. Log
+retained-observations-canonical-export-20261013.log SHA
+8ff2ef65dfcf096207b1aa1ef2d57ed25eb5d28272eed976f657fd35474fc9c2
+records436/436 static,1875/1875 interactions,8483 scalar groups,389202 occurrences,
+157 source findings,inputEquivalent=false. Evidence session:1 collector,10 memory
+hits,1 disk hit,0 invalidations;8616 files/910484833 bytes read and rehashed.
+Session elapsed2987817.7321ms is the evidence-session timing,not full wrapper time.
+
+Workspace generated files now contain candidatee8ba3d4788cfabe938b484d02157de46db1dea6890a8b7e5934da88254cd43d0,
+actual65560555 compressed bytes/hash agree with its manifest. Decoded2270091357
+bytes,SHA c72cb4276e63a574b9adc54ac26bec78223c466be95bf3c3996d7ff953c2324f.
+Prior published918 remains historical accepted publication,not today's workspace
+candidate. No import/publication/acceptance yet. Input/style classifications and
+all2311 partial/unverified case records are still not full-case closure.
+
+Read-only whole Markdown comparison toGit51ee33d3 passes after normalizing only
+tests/material-parity/*.mjs line anchors;all610 lines/claims conserve,added
+acceptance-claim negative control rejects. Log
+retained-observations-markdown-conservation-20261013.log records exit0,current
+MarkdownSHAb506f34ce6f7eac3a0acefa2f535bc134f28ad42885e258d2189ecda8e94aa3f.
+
+Independent named ASTYLAR_AUDIT_COLD=1 --check is confirmed live in session90211,
+launcher13304/worker21352,created23:30:48 local. Progress enabled in this separate
+process;retained-observations-canonical-cold-check-20261013.log reaches build-audit.
+No consumed input/candidate bytes changed after launch. Wait on this exact handle;
+do not infer cold success or restart a quiet build. Then authenticate complete
+compact/package/changed-row conservation before publication. Previous turn was
+verified wait;this turn completes export and launches the next required milestone.
+All original root-cause/equal-input/full-audit/browser acceptance gates remain open.
+
 ## Existing keyboard records can supply120 pending focus joins — October 13
 
 Read-only b7 case census answers whether actual-control focus evidence already
