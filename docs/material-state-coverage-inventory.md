@@ -1,5 +1,38 @@
 # Material comparison/state coverage inventory
 
+## Original focus flags compare only256 normalized identities — October 13
+
+Question: can the original focus fields close remaining actual-focus obligations?
+Authenticated October5 report census and current/Git8aa0e2e5 complete
+focusedIdentity function plus focusMatches expression conservation distinguish
+real identity comparison from defaults. Gate is state!='focus' OR identity equality:
+256 focus cases compare,1619 other cases returntrue without equality enforcement.
+All1875 flags match,but204 non-focus records have different reported identities.
+Those differences are observations,not automatically204 new renderer defects.
+
+Within256 compared cases,216 return the shared family-primary host identity and
+40 identify neither focus owner. The latter are sidenav/grid-list/badge/list/table,
+eight contexts each;existing passive applicability exclusions remain separate.
+focusedIdentity normalizes any active descendant within the primary host,while
+outside nodes use native id versus candidate data-astylar-id. Body/canvas or other
+unidentified owners can produce omitted values;do not call this actual descendant
+focus agreement. This confirms why matching fields alone cannot close1917 pending
+focus records,or all pointer/popup focus requirements.
+
+Read-only Node assertions verify original reportSHAab42dbec,each recorded gate
+result,exact complete helper/gate againstGit8aa0e2e5 and the256/1619/204/216/40
+counts. Initial inline assertion had PowerShell backtick quoting error;corrected
+string construction passes without any source/report change. Missing e01 whole
+runner remains explicit;method conservation is not full provenance or currentness.
+After current integration,link the preserved original fields with explicit compared/
+uncompared and normalized/unidentified modes,then reuse actual-control focus proofs.
+Do not label all flags as passes or normalize away different owners.
+
+Previous turn progressed on historical scope joins. Export session99911 remains
+live in3292/26492 with inputs frozen;canonical918 remains prior publication.
+No capture,source,criteria or whole-case acceptance changes. All original gates
+and2311 full-case closures remain open.
+
 ## Static history backlog is a scope-join gap,not absence of all history — October 13
 
 Question: are the420 pending static history records missing all underlying
