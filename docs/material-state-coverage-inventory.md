@@ -1,5 +1,35 @@
 # Material comparison/state coverage inventory
 
+## Candidate compact conservation passes; full-row and cold checks remain live — October 13
+
+Bounded overlap inspected before import:three production compact readers pin
+immutable779333/89030a/d70aa3 generations;all7410 b7 proposal paths consume neither
+working-audit/current.json nor newe8 generation. Import writes only new generation
+and derived pointer,not cold-consumed source/capture/candidate package. This is
+specific overlap reasoning,not blanket cache/import safety;cold final recheck remains.
+
+Import53358 exits0,reused=false,compact72749010 bytes;whole-index verify exits0.
+Candidatee8 indexSHAaa3af869f592b5bebdd47c899f01bb179922239f3a1a420cf4935752af598f81
+authenticates8483/157/39904/389202/0 counts. Import/verify logs retained-observations-
+compact-import/compact-verify-20261013.log have the same summary hashes as prior
+generations because counts are equal,not because packages/acceptance are identical.
+
+Complete compact comparison to published918 conserves48544 substantive rows,
+summary,contract and base coverage;inspection changes are the intended b7 batch.
+Exactly49 complete-row digests differ:discrepancy903 plus48 button control rows.
+Log retained-observations-compact-conservation-20261013.log SHA
+b17045869834b0f573d578888937ba6abdb112b73458246be423a80037a4d354
+stores exact before/after IDs/digests.2311 cases remain partial/unverified,both
+acceptance flags false. No threshold or substantive finding changes inferred.
+
+Existing original-row authenticator runs once for all49 rows in session6557,
+worker13860 created23:41:36 local;log retained-observations-full-row-conservation-
+20261013.log. It must prove onlyc883→f992 module hashes and corresponding48 proof
+references changed. Do not repeat/restart this reader while live or accept its
+unobserved outcome. Independent cold90211/13304/21352 remains live at build-audit;
+source/candidate bytes frozen. Previous turn completed export and started cold.
+No publication/audit completion claimed;original final gates remain open.
+
 ## Retained-observation export terminal success; independent cold check live — October 13
 
 Export99911 terminates exit0;launcher3292/worker26492 are finished. Log
