@@ -1,5 +1,32 @@
 # Material comparison/state coverage inventory
 
+## Coherent204 all-case export completed; cold check pending — October 13
+
+Named complete-baseline export exits0 after2930401.2953ms (48.84min).
+Log coherent204-all-case-export-20261013.log SHA
+4f0875298cbe25dc283934c3fa73963d31957ab701b5114407251317fe0dd17a.
+Validation and end-of-session rehash complete:1 collector,10 memory hits,1 disk
+hit,0 invalidations,5999 files/702674275 bytes read and reverified. Counts remain
+436/436 static,1875/1875 interaction,8483 groups,389202 occurrences,157 findings;
+inputEquivalent remains false. Generated Markdown now explicitly records2311
+partial case joins/zero unjoined,not full inspection or current rendering acceptance.
+
+Written candidate manifest92024016d8d0d5f1c53668f0bb44c8fdec73867de5e8e9130c8be51749d15297
+has64438820 compressed bytes,2251357184 decoded bytes,decoded SHA
+51dcd64e25d542a704c1db93ab8551bb8ed3ed939993df478a78c7eba3da9757.
+This is not accepted publication yet: independent cold named --check is live in
+session75648,logging coherent204-all-case-cold-check-20261013.log. All consumed
+sources/evidence remain frozen. Free D:4267896832bytes at cold preflight.
+Accepted c9cd6957 working index/predecessor evidence remain retained; do not use
+its pointer as if it already indexes the newly written candidate package.
+
+Next retain cold terminal result,then compact import/whole-index and substantive
+row/Markdown conservation before scoped commit/push of canonical artifacts.
+Do not repeat the export or launch final browser gates while cold collection is
+live. Remaining case applicability/currentness and shared paint/interaction joins,
+all2311 whole-case closures and original final gates remain open. No renderer,
+fixture,threshold or original capture was changed; no evidence was removed.
+
 ## Active-family retained editing target applicability — October 13
 
 While coherent204 export inputs remain frozen,read-only inspection asks which of
