@@ -1,5 +1,29 @@
 # Material comparison/state coverage inventory
 
+## Focus proposal dependencies validate after missing-source representation correction — October 13
+
+Existing loadCaseObligationReview rejected cb2a855c:Conflicting dependency receipt,
+captured e01ef9dc/current584cdfc8 at the same runner path. The new record mistakenly
+encoded unavailable historical bytes as a readable file/sha256 receipt. This is a
+proposal schema error,not new capture drift. No loader assertion is relaxed.
+The unavailableActionSource now stores originalLogicalFile,capturedSha256 and
+original focus/theme body expectations with missing-original-bytes disposition;
+currentRunner remains an ordinary authenticated receipt. The capture/report hash
+authenticates the historical expectation without pretending those bytes exist.
+
+Focused case proof passes1/1,0 skips,16058.4576ms,total17260.7072ms. Corrected
+proposal59409a78eb407588e906e094abd80183fa7dd07a170ad902e706a1bda6d6590e
+is noncanonical. Existing loader validates5276 actual dependency paths,2311 partial
+cases,0 unjoined,inspectionComplete=false,currentRenderingAccepted=false.
+Old rejected proposal remains failure evidence,not a publication candidate.
+
+Existing complete registered-inventory/conservation proof also passes1/1,0 skips,
+8326.2459ms,total9459.2404ms:204 descriptors/668 source paths retain their earlier
+claims. This proves registration conservation,not canonical source currentness.
+Pending coherent batch must pin the corrected proposal and reconcile actual source
+fingerprints before export/cold acceptance. Canonical920 remains unchanged. No
+renderer,fixture,capture,threshold or acceptance changes; final gates remain open.
+
 ## Forty configured text-focus records retain explicit provenance incompleteness — October 13
 
 Existing exact-case proof now joins configured-input-focus capture423b2587 to40

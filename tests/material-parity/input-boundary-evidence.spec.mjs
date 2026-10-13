@@ -2742,7 +2742,10 @@ test('passive state applicability joins exact cases without discarding progress 
     });
     configuredInputFocusCases.set(scalarCaseKey(c),{applicability:'applicable',disposition:'partial',
       retainedObservation:{disposition:'recorded-provenance-incomplete',evidence:{file:focusFile,sha256:hash(focusBytes),
-        checkpointManifest:focusCapture.capture.checkpointManifest,actionSource:focusCapture.actionSource},observations},
+        checkpointManifest:focusCapture.capture.checkpointManifest,
+        unavailableActionSource:{originalLogicalFile:focusCapture.actionSource.file,capturedSha256:focusCapture.actionSource.sha256,
+          focusBodySha256:focusCapture.actionSource.focusBodySha256,themeBodySha256:focusCapture.actionSource.themeBodySha256,
+          disposition:'missing-original-bytes-not-a-readable-receipt'}},observations},
       sourceCurrentness:{disposition:'unverified',missing:'Exact captured e01ef9dc whole runner bytes; bounded recovery already exhausted.',
         currentRunner:{file:focusCapture.actionSource.file,sha256:hash(readFileSync(focusCapture.actionSource.file))}},
       remaining:['Original owning source/behavior/paint assertions with complete runner provenance','Current rendering applicability and other action boundaries'],
