@@ -1,5 +1,38 @@
 # Material comparison/state coverage inventory
 
+## Retained tracked-resource sampling joins1875 interaction cases — October 13
+
+Question: what exact lifecycle evidence underlies original resourcesStable flags?
+All1875 configured interactions retain candidate-only tracked counters/session/plugin
+samples:1857 have one snapshot;18 mobile open-dismiss cases have three. None of
+these fields records live scene counts or final disposal. Original flag checks
+idle/pending0 and,only for multiple samples,first/last tracked-count equality.
+Single-snapshot true is not a resource plateau;three samples do not prove all
+intermediate transitions,remount,races,peers or release after final disposal.
+
+Existing owning applicability proof now joins those exact recorded samples to
+historyOwnership,keeping all1875 partial and recorded-provenance-incomplete. Original
+divider ownership/history evidence remains intact;436 static records are unchanged.
+Current performInteraction/profileTheme/resourceCounts functions conserve complete
+Git8aa0e2e5 bodies after LF normalization;the missing whole e01 captured runner stays
+explicit. This limited method conservation is not whole capture/current lifetime
+acceptance. Forged pending status and changed final tracked mesh count reject.
+No scene observations are invented and no tracked counters substitute for live census.
+
+Final focused proof passes1/1,0 skips,total16655.7468ms in
+all-case-retained-resource-final-20261013.log. Proposal
+8069ae699ec74086a186eadeeb21648235387d224aa16a1ce8635a078b6a825d
+is noncanonical. Existing loader validates5278 dependencies,2311 partial cases and
+false acceptance flags. Complete comparison to daf55fce preserves every field except
+historyOwnership in exactly1875 records;all1000 raster joins remain unchanged. Log
+all-case-retained-resource-loader-conservation-20261013.log exits0.
+
+Next remaining exact action/semantic/history/currentness obligations and local paint
+beyond recorded metrics;do not reopen the settled tracked-versus-live ownership
+defect or recapture unchanged samples. Current canonical918 publication51ee33d3
+remains accepted;this additive proof-source batch awaits later coherent integration.
+No renderer,fixture,capture,threshold or final gate changes;0 full-case closures.
+
 ## Retained target-local metrics join1000 exact cases without paint acceptance — October 13
 
 Question: can the already recorded configured raster observations attach to exact

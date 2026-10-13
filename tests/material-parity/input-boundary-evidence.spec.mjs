@@ -2844,6 +2844,58 @@ test('passive state applicability joins exact cases without discarding progress 
       remaining:[...(previous.remaining??[]),'Complete local paint/input/state/currentness disposition beyond recorded metric boundary']};
   }
   assert.deepEqual(paintCounts,{static:120,interaction:880,ssimPassSharpnessDiagnosticFail:343});
+  const resourceRunnerFile='tests/material-parity/run-material-parity.mjs';
+  const resourceRunnerBytes=readFileSync(resourceRunnerFile);
+  const resourcePrior=execFileSync('git',['show',`8aa0e2e5:${resourceRunnerFile}`],{encoding:'utf8',maxBuffer:4_000_000});
+  const resourceFunctions=(source)=>{
+    const ast=ts.createSourceFile('runner.mjs',source.toString().replaceAll('\r\n','\n'),ts.ScriptTarget.Latest,true,ts.ScriptKind.JS);
+    assert.deepEqual(ast.parseDiagnostics,[]);
+    return Object.fromEntries(['performInteraction','profileTheme','resourceCounts'].map(name=>{
+      const functions=ast.statements.filter(node=>ts.isFunctionDeclaration(node)&&node.name?.text===name);
+      assert.equal(functions.length,1);return [name,functions[0].getText(ast)];
+    }));
+  };
+  const resourceMethods=resourceFunctions(resourceRunnerBytes);
+  assert.deepEqual(resourceMethods,resourceFunctions(resourcePrior));
+  const resourceCounts=snapshot=>({owners:snapshot.surface?.pluginResources?.owners,
+    resources:snapshot.surface?.pluginResources?.resources,cleanups:snapshot.surface?.pluginResources?.cleanups,
+    meshes:snapshot.surface?.resources?.meshes,materials:snapshot.surface?.resources?.materials,textures:snapshot.surface?.resources?.textures});
+  const joinResourceSamples=row=>{
+    assert.equal(row.kind,'interaction');assert.equal(row.resourceSnapshots.length,row.state==='open-dismiss'?3:1);
+    const samples=row.resourceSnapshots.map(snapshot=>{
+      const counts=resourceCounts(snapshot);
+      assert.ok(Object.values(counts).every(value=>Number.isInteger(value)&&value>=0));
+      return {counts,sessionStatus:snapshot.surface.session.status,pluginPending:snapshot.surface.pluginResources.pending};
+    });
+    const stable=samples.every(sample=>sample.sessionStatus==='idle'&&sample.pluginPending===0)&&
+      (samples.length<2||JSON.stringify(samples[0].counts)===JSON.stringify(samples.at(-1).counts));
+    assert.equal(row.resourcesStable,stable,'Preserve exact recorded tracked-counter gate');
+    return {disposition:'recorded-provenance-incomplete',case:scalarCaseKey(row),side:'astylar',samples,
+      recordedResourcesStable:row.resourcesStable,
+      comparisonBoundary:samples.length===1?'Single snapshot; no repeated-count comparison':'Three snapshots; original gate compares first and last tracked counts only',
+      evidence:{report:{file:'artifacts/material-parity/current-full-20261005/latest-report.json',sha256:reportSha256},
+        currentRunner:{file:resourceRunnerFile,sha256:hash(resourceRunnerBytes)},
+        methodConservation:{revision:'8aa0e2e5',functions:Object.fromEntries(Object.entries(resourceMethods).map(([name,source])=>[name,hash(source)]))}},
+      unavailableActionSource:{originalLogicalFile:resourceRunnerFile,capturedSha256:'e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0',disposition:'missing-original-bytes-not-a-readable-receipt'},
+      boundary:'Candidate tracked resources/session/plugin observations only; no live scene census,paired lifetime,final disposal,remount,race,whole-runner conservation,current lifetime or whole-case acceptance.'};
+  };
+  const forgedResourceRow=structuredClone(allCases.find(row=>row.kind==='interaction'));
+  forgedResourceRow.resourceSnapshots[0].surface.session.status='pending';
+  assert.throws(()=>joinResourceSamples(forgedResourceRow));
+  const forgedRepeatedRow=structuredClone(allCases.find(row=>row.kind==='interaction'&&row.state==='open-dismiss'));
+  forgedRepeatedRow.resourceSnapshots.at(-1).surface.resources.meshes++;
+  assert.throws(()=>joinResourceSamples(forgedRepeatedRow));
+  const resourceSampleCounts={single:0,three:0};
+  for(const record of allObligations){
+    const row=paintCaseRows.get(record.case);if(row.kind!=='interaction')continue;
+    const observation=joinResourceSamples(row);
+    resourceSampleCounts[observation.samples.length===1?'single':'three']++;
+    const previous=record.obligations.historyOwnership;
+    record.obligations.historyOwnership={...previous,applicability:'applicable',disposition:'partial',
+      retainedResourceSampling:observation,
+      remaining:[...(previous.remaining??[]),'History/compensation ownership plus live resource and disposal/currentness obligations beyond tracked samples']};
+  }
+  assert.deepEqual(resourceSampleCounts,{single:1857,three:18});
   assert.equal(new Set(allObligations.map(row=>row.case)).size,2311);
   assert.deepEqual(allObligations.map(row=>row.case).sort(),allConfigured.map(scalarCaseKey).sort());
   assert.ok(allObligations.every(row=>row.inspection==='partial'&&row.currentRendering==='unverified'));
@@ -2856,7 +2908,8 @@ test('passive state applicability joins exact cases without discarding progress 
     authoredActivationExclusions:354,authoredEditingExclusions:354,programmaticFocusApplicable:40,
     reportedScalarInputCases:2311,reportedScalarGroups:8483,dividerActualAXCases:24,dividerUpdateDisposalCases:24,dividerLocalTextRasterCases:24,dividerCoordinateHistoryCases:24,supplementaryKeyboardCases:40,extendedKeyboardCases:128,
     editingTargetApplicabilityCases:1957,editingCounts,configuredFocusRecordedProvenanceIncomplete:40,
-    retainedTargetRasterCases:1000,paintCounts,completeCaseClosures:0,currentRenderingAccepted:0}));
+    retainedTargetRasterCases:1000,paintCounts,retainedResourceSamplingCases:1875,resourceSampleCounts,
+    completeCaseClosures:0,currentRenderingAccepted:0}));
   t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,
     scope:'Exact configured retained authoring: no activation/editing descendants. Forty native negative-tabindex progress owners keep a programmatic-focus obligation; no live focus, unrecorded callback, paint, lifecycle, source-currentness or full-case closure is inferred.'}));
 });
