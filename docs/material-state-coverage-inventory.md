@@ -1,5 +1,43 @@
 # Material comparison/state coverage inventory
 
+## Retained event/state flags have bounded comparison scope — October 13
+
+Question: do the original 1875 interaction matching flags compare actual events
+and endpoint state,or merely report defaults? Competing explanations were complete
+behavioral comparison versus state-limited comparison with normalization/defaults.
+Read-only census authenticates current-full-20261005/latest-report.json SHA
+ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62.
+TypeScript AST extraction proves both complete compareEvents and
+compareInteractionState bodies equal Git8aa0e2e5 after LF normalization.
+This does not recover missing e01 whole-runner bytes or certify current capture.
+
+Event flags:647 cases compare normalized primary-host event-type sequences;
+1228 return matches:true without comparing their retained event arrays. Of the
+647,32 checkbox/slider cases omit input/change tails. Filtering also discards
+other targets/types and consecutive duplicate types;normalized arrays cannot
+reconstruct original raw histories. There are0 recorded event failures and320
+empty paired arrays across the full population;neither count establishes event
+parity. Do not extend the existing choice-tail exclusion to radio.
+
+Interaction-state flags:114 cases execute explicit endpoint/trace checks;
+1761 contain exactly {matches:true},without endpoint observations. The explicit
+branches cover range drags,calendar year-view presence,timepicker focus/scroll
+and outside/canvas dismissal. All recorded flags match;this cannot establish
+complete value,selection,focus,commit or action-order equivalence.
+
+Verification:two read-only node -e censuses exit0;the second authenticates the
+report hash,conserves both whole function bodies and asserts every default
+interactionState record exactly. No source/report/criteria modifications or new
+capture. Prior turn was a requested status snapshot,no goal-state progress;this
+turn resolves the comparison-scope question. Existing semantic/raster/resource
+joins remain noncanonical;canonical918 is unchanged.
+
+Next attach these exact scope distinctions through the existing case-obligation
+proof without treating normalized/default flags as behavioral acceptance or
+inventing raw histories. Then close actual action/endpoint gaps using retained
+owning proofs before deciding which missing boundaries need capture. All2311
+cases remain partial;whole-case closure and original final gates remain open.
+
 ## Retained derived-DOM semantic comparisons join all2311 cases — October 13
 
 Question: do original semantic flags prove actual accessibility-tree output? Source
