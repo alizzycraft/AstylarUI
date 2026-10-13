@@ -1,5 +1,40 @@
 # Material comparison/state coverage inventory
 
+## Divider coordinate-history and public core-failure join — October 13
+
+All24 exact divider cases now link recorded paragraph/separator input positions
+to the published fixture-divider-replaces-paragraph-flow-with-coordinates and
+core-empty-block-retains-parent-content-height findings. Current policy/source
+patterns and immutable global finding shard authenticate; every paired tree
+preserves native static paragraphs/separator versus candidate absolute owners.
+Historyfcde1b7 positions paragraph wrappers; the separator was already absolute
+before that revision. Do not misattribute the earlier separator substitution to
+the paragraph change or describe these inputs as technically equivalent.
+
+Each case links the separate public900x800 observed-DPR1/2 reductions and their
+honest four301px failures,with current owning core-source receipt checked against
+the captured Angular compilation. This is a general empty-block cause,not a
+core failure executed in every compensated comparison. Implementation order is
+explicit:fix the general non-replaced auto-height/block-flow rule before removing
+divider coordinates and restoring reference flow; never retune offsets instead.
+
+Existing owning case join plus complete public-reduction receipt proof pass2/2,
+zero skips,8911.5064ms total. Log
+passive-divider-history-and-reduction-verification-20261013.log SHA
+2f873bdaa79c369162dbab760ed42f02f2affa5e161f3cbdfa07cf1da35b3e8e.
+Proposalcbad288126edc9fc1ef619efc49336188d587a4999073a0de351c5d47593fe81
+remains additive/not canonical. Existing loader revalidates838 dependencies,
+354 partial cases/1957 unjoined; all prior proposalf8d7865a fields are conserved
+except the added documentedCoordinateCompensation field. Conservation log
+passive-divider-history-loader-conservation-20261013.log SHA
+5f20074823a780a6261eb8d959223ba7172278e68bb35e347568a07472007a94 exits0.
+
+Full owner inputs/paint,lifetime/currentness and other shared-root substitutions
+remain separate obligations; no full-case closure or current configured rendering
+acceptance is inferred. Next expand exact joins beyond the passive batch and
+reconcile its coherent source/export increment. No renderer/fixture change,
+new capture in this join,normalization waiver or final-gate change.
+
 ## Divider reduction observed-context provenance — October 13
 
 History review exposed a provenance gap,not a new renderer diagnosis:October6

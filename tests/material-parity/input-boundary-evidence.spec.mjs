@@ -11,7 +11,7 @@ import { chromium } from 'playwright-core';
 import { PNG } from 'pngjs';
 import { fingerprintDirectory, materialCaseKey } from './run-checkpoint.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
-import { propertyGroups } from './input-equivalence-policy.mjs';
+import { propertyGroups, sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { readGapSurveySource } from './gap-survey-source-replay.mjs';
 import { verifyRetainedMaterialBrowserFiles } from './historical-audit-module-source.mjs';
 import { materialStaticCases, materialInteractionCases, materialMobileFlowCases } from './benchmark.config.mjs';
@@ -2466,6 +2466,73 @@ test('passive state applicability joins exact cases without discarding progress 
   assert.equal(dividerRaster.rows.filter(row=>row.metric.matches).length,40);
   assert.equal(dividerRaster.rows.filter(row=>!row.metric.matches).length,8);
   assert.equal(dividerRaster.rows.filter(row=>row.metric.sharpness.meetsTarget).length,48);
+  const sourcePolicyFile='tests/material-parity/input-equivalence-policy.mjs';
+  const globalSourceRows=queryFindings(working,'global',pointer).filter(row=>row.evidence.section==='sourceFindings');
+  const globalSourceShard=index.shards.find(row=>row.file==='sourceFindings-global.jsonl');assert.ok(globalSourceShard);
+  const dividerSourceDefinitions=['fixture-divider-replaces-paragraph-flow-with-coordinates','core-empty-block-retains-parent-content-height'].map(id=>{
+    const definition=sourceAuditDefinitions.find(row=>row.id===id);assert.ok(definition);
+    const matches=globalSourceRows.filter(row=>row.classification===definition.classification && row.justification===definition.justification);
+    assert.equal(matches.length,1);const source=readFileSync(definition.file);assert.match(source.toString(),new RegExp(definition.pattern));
+    return {definitionId:id,findingId:matches[0].id,classification:definition.classification,owner:definition.owner,
+      source:{file:definition.file,sha256:hash(source)}};
+  });
+  const dividerHistoryRevision='fcde1b7dd2f5622599283ea80f8f920bd45243d2';
+  const dividerHistory=execFileSync('git',['diff',`${dividerHistoryRevision}^`,dividerHistoryRevision,'--',dividerSourceDefinitions[0].source.file],{encoding:'utf8'});
+  assert.match(dividerHistory,/^\+[^\n]*selector: '\.divider-copy', position: 'absolute'/m);
+  assert.match(dividerHistory,/^-[^\n]*selector: '\.divider', position: 'absolute'/m);
+  const reductionReceipts=[
+    ['16149d2bb8620888a2e48a80c905c8227adafc3ff11269287119f5efda9f4577','8a82dc61c5ca4ab78cc3ca705a4e26ea66fea535df058bde66f611371c5529cd'],
+    ['3a56c17d045a31afdd5eb4d5aa5c390acf9517c0523cf1e0b902513b9fe9c487','92ccccabed50a16e842a937c7bd7592e2cb78ab6465c564d22c9ec99e92f1917'],
+  ];
+  const dividerCoreReductions=[1,2].map(dpr=>{
+    const dir=`artifacts/material-parity/divider-context-verified-angular-20261013-dpr${dpr}`;
+    const resultBytes=readFileSync(`${dir}/result.json`),provenanceBytes=readFileSync(`${dir}/provenance.json`);
+    assert.equal(hash(resultBytes),reductionReceipts[dpr-1][0]);assert.equal(hash(provenanceBytes),reductionReceipts[dpr-1][1]);
+    const result=JSON.parse(resultBytes),provenance=JSON.parse(provenanceBytes);
+    assert.equal(result.runtimeContext.initial.devicePixelRatio,dpr);
+    assert.equal(result.runtimeContext.final.devicePixelRatio,dpr);assert.deepEqual(result.errors,[]);
+    const executed=result.result.results.filter(row=>row.status!=='excluded');assert.equal(executed.length,1);
+    assert.equal(executed[0].status,'failed');assert.equal(executed[0].failures.length,4);
+    assert.ok(executed[0].failures.every(message=>message.endsWith('Expected 301 to be less than 0.5.')));
+    const core=provenance.compiledReceipts.find(row=>row.source===dividerSourceDefinitions[1].source.file);assert.ok(core);
+    assert.equal(core.sourceSha256,dividerSourceDefinitions[1].source.sha256);
+    return {result:{file:`${dir}/result.json`,sha256:hash(resultBytes)},
+      provenance:{file:`${dir}/provenance.json`,sha256:hash(provenanceBytes)},runtimeContext:result.runtimeContext,
+      outcome:'inspected-failure',failures:executed[0].failures};
+  });
+  const joinDividerHistory=entry=>{
+    const paragraphs=[],separators={};
+    for(const side of ['reference','astylar']){
+      const tree=JSON.parse(readFileSync(entry.inputTrees[side].file));
+      const id=node=>side==='reference'?node.attributes?.id:node.authored?.id;
+      for(const name of ['divider-above','divider-below']){
+        const label=tree.nodes.find(node=>id(node)===name);assert.ok(label);
+        const parent=tree.nodes.find(node=>node.key===label.parent);assert.ok(parent);
+        assert.equal(side==='reference'?parent.type:parent.authored.type,'p');
+        const style=side==='reference'?tree.styles[parent.style]:parent.resolvedStyle;
+        assert.equal(style.position,side==='reference'?'static':'absolute');
+        paragraphs.push({side,id:name,stage:side==='reference'?'browser-computed':'candidate-resolved',
+          position:style.position,marginTop:style.marginTop,marginBottom:style.marginBottom,height:style.height});
+      }
+      const separator=tree.nodes.find(node=>id(node)==='divider-primary');assert.ok(separator);
+      const style=side==='reference'?tree.styles[separator.style]:separator.resolvedStyle;
+      assert.equal(style.position,side==='reference'?'static':'absolute');
+      if(side==='reference')assert.equal(style.borderTopWidth,'1px');
+      separators[side]={position:style.position,borderTopWidth:style.borderTopWidth,height:style.height,background:style.background};
+    }
+    return {...joinDividerLifetime(entry),documentedCoordinateCompensation:{disposition:'inspected',
+      classification:'application-plugin-authoring-defect',
+      evidence:{policy:{file:sourcePolicyFile,sha256:hash(readFileSync(sourcePolicyFile))},
+        sourceFindings:{file:`${generation}/${globalSourceShard.file}`,sha256:globalSourceShard.sha256},
+        definitions:dividerSourceDefinitions,history:{revision:dividerHistoryRevision,patchSha256:hash(dividerHistory),
+          boundary:'This revision positions paragraph wrappers; separator was already absolute before it.'},
+        caseInputs:{case:scalarCaseKey(entry),paragraphs,separators},publicCoreReductions:dividerCoreReductions,
+        capturedRunner:{file:'docs/evidence/material-overlay-context-runner.mjs.b64',
+          sha256:hash(readFileSync('docs/evidence/material-overlay-context-runner.mjs.b64'))}},
+      implementationOrder:'Fix general empty non-replaced auto-height/block-flow rule before replacing divider coordinate tables with reference paragraph flow; do not retune offsets.',
+      boundary:'Exact case input mismatch and documented history plus separate observed-DPR public core failure. The reduction is not each compensated fixture or complete paint/currentness acceptance.'}};
+  };
+  assert.throws(()=>joinDividerHistory({...firstDivider,inputTrees:cases.find(row=>row.family==='table').inputTrees}));
   const caseObligations = cases.map(row => ({
     case: `${row.kind}:${row.family}@${row.profile}/${row.viewport.id}${row.state ? `/${row.state}` : ''}`,
     family: row.family,
@@ -2480,7 +2547,7 @@ test('passive state applicability joins exact cases without discarding progress 
       inputStyleStructure: joinScalarInputs(row),
       localPaint: row.family==='divider'?joinDividerPaint(row):{ applicability: 'applicable', disposition: 'evidence-join-pending' },
       semantics: joinSemantics(row),
-      historyOwnership: row.family==='divider'?joinDividerLifetime(row):{ applicability: 'applicable', disposition: 'evidence-join-pending' },
+      historyOwnership: row.family==='divider'?joinDividerHistory(row):{ applicability: 'applicable', disposition: 'evidence-join-pending' },
       sourceCurrentness: { applicability: 'applicable', disposition: 'evidence-join-pending' },
     },
   }));
@@ -2495,7 +2562,7 @@ test('passive state applicability joins exact cases without discarding progress 
   });
   t.diagnostic(JSON.stringify({caseObligationProposal:proposal, cases:354,
     authoredActivationExclusions:354,authoredEditingExclusions:354,programmaticFocusApplicable:40,
-    reportedScalarInputCases:354,reportedScalarGroups:1697,dividerActualAXCases:24,dividerUpdateDisposalCases:24,dividerLocalTextRasterCases:24,
+    reportedScalarInputCases:354,reportedScalarGroups:1697,dividerActualAXCases:24,dividerUpdateDisposalCases:24,dividerLocalTextRasterCases:24,dividerCoordinateHistoryCases:24,
     completeCaseClosures:0,currentRenderingAccepted:0}));
   t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,
     scope:'Exact configured retained authoring: no activation/editing descendants. Forty native negative-tabindex progress owners keep a programmatic-focus obligation; no live focus, unrecorded callback, paint, lifecycle, source-currentness or full-case closure is inferred.'}));
