@@ -1,5 +1,42 @@
 # Material comparison/state coverage inventory
 
+## Input opening actions and retained proof replay gap — October 13
+
+Question:does the retained desktop timepicker input-click population still fail
+to open,or is that conclusion conflating pointer focus with keyboard Tab? Existing
+October5 reportab42dbec records eight exact timepicker focus cases with real
+pointerdown/focus/pointerup/click tails and both popup states true. Independently,
+configured-input-focus-20261008 report423b2587 joins16 exact date/time desktop
+cases to96 paired temporal samples/192 hash-authenticated trees:all48 timepicker
+sample pairs expose48 option owners on both sides; all48 datepicker pairs expose
+no options/calendar. Complete original focus block622d9fc7 and profile-theme
+body6e8166a5 still match current source exactly. This answers the retained pointer
+opening question,not keyboard Tab or current output acceptance. Existing separate
+editable-popup keyboard logc4ef715b retains Material Tab closed/candidate open;
+date Tab stays closed on both. Do not reopen the pointer result as a missing
+capture or generalize it to keyboard behavior.
+
+Bounded inspection log time-date-opening-bounded-inspection-20261013.log SHA
+5a21588e260cbdb03d3775e36460d0c2985b4a9d6899625f869c51ea660bd454 records
+exact case/sample membership and source-body hashes; owningProofPass and
+currentRenderingAccepted explicitly remain false. The owning configured-input
+focus test first fails0/1 before new assertions because current dist lacks its
+historical chunk-3JXWRYJY.js.map. Failure log
+time-date-opening-endpoint-join-20261013.log SHAc3179a2bbc4190c1bb65060006460c4a93e8c5322453b63dd620ac0db41de025.
+Retained component-map-recovery-20261011 bytes match original checkpoint SHA
+dba484044ca0dea965d8ef4b12635673f0f055d7711099d2f6476ca490988ec4;
+all1887 historical assets and14 owning current/installed/captured methods then
+authenticate,but a second0/1 fails the original whole-runner receipt:captured
+e01ef9dc versus current584cdfc8. Retry log
+time-date-opening-endpoint-join-retry-20261013.log SHA7b162527ea2e164fc369f6937668cd727d64571c032fb2cc962ccef9f840465e.
+
+Attempted test extension/path routing was removed; the owning test is unchanged
+and neither source assertion was waived. Next reconcile original raw runner
+bytes/read provenance through existing historical infrastructure; matching two
+function bodies is not complete runner conservation. Preserve both failures.
+No new browser capture,canonical export,renderer/fixture change or whole-case
+closure; accepted publication90b81601 is pushed and remains unchanged.
+
 ## Cold-verified case-obligation publication — October 13
 
 Configured inventory is complete:36 families,2311 cases (436 static,1875
