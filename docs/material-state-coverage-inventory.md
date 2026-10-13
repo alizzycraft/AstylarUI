@@ -1,5 +1,35 @@
 # Material comparison/state coverage inventory
 
+## Candidate editing/focus compact import and bounded conservation pass — October 13
+
+Candidate91837a8d import exits0,reused=false,compact72749010 bytes. Whole-index
+verify exits0 with8483/157/39904/389202/0 counts. Index
+SHA98577870d6c8f5af8ca074ea780fbb09748f286791d76dd054aa0ab226bab86e.
+Logs editing-focus-compact-import-20261013.log SHA
+ccedb9ed910d3d397a26101b6135ea9aa3cfc3d99131dc559c0036d16f8c28ee,
+editing-focus-compact-verify-20261013.log SHA
+3899c8623f823245a49c35c9541944bc691be5b7e996c75ad032425323d43974.
+Identical summary log hashes across generations reflect unchanged counts,not
+identical packages or acceptance. Actual package/index identities are checked.
+
+Read-only whole compact comparison against accepted920 exits0:48544 substantive
+fields/section/ordinal/summary/contract/base-coverage conserve. Inspection records
+differ only in1957 authoredEditing/40 programmaticFocus;false acceptance flags stay.
+Log editing-focus-compact-conservation-20261013.log SHA
+283609568abca58556560a7d5860570ea4d2273db5da9209eaf810d2c308e7b8.
+Exactly49 complete-row digests differ (button aggregate903/48 typography controls).
+Existing original-row authenticator now runs once for these49 rows in44694,
+editing-focus-full-row-conservation-20261013.log. Completion not yet inferred.
+
+Overlap with cold verification is bounded:production compact readers inspected in
+chip-position-inspection,display-request-review and overlay-surface-review explicitly
+pin immutable historical generations. Retained963-dependency collector envelope
+has no mutable current.json path. Import writes only new918 generation/derived
+pointer,not consumed source/capture/old generations or candidate docs bytes.
+Cold25580 remains live; its final complete dependency recheck must still pass.
+This does not approve arbitrary concurrent imports or accept this candidate.
+Next retain both terminal results before publication. Scope and final gates unchanged.
+
 ## Editing/focus candidate Markdown claims conserved during cold verification — October 13
 
 Read-only complete candidate Markdown comparison to published Gita20d54e0 passes
