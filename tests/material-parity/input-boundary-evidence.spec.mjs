@@ -2134,6 +2134,7 @@ test('passive state applicability joins exact cases without discarding progress 
         candidateHidingRequests:observation.sides.astylar.filter(node=>node.attrs.ariaHidden!==undefined).length,
         evidence:{file:semanticFile,sha256:semanticSha256,case:semanticKey(entry),sources:semanticSummary.sources}},
       ...(progressFocus.has(identity(entry,entry.kind))?{actualHostAX:joinProgressAX(entry)}:{}),
+      ...(['table','list'].includes(entry.family)?{actualSubtreeAX:joinCollectionAX(entry)}:{}),
       remaining:['actual generated bridge and AX relationships','assistive-technology behavior','complete semantic input mapping','current rendering applicability'],
       boundary:'Recorded authored subtree attributes only; absent recorded attributes are not invented defaults.'};
   };
@@ -2143,6 +2144,66 @@ test('passive state applicability joins exact cases without discarding progress 
   assert.equal(focusSha256,'f896402a1d31e9e14fb6e4382854a140c51f146f1323835e48669fe1ca5176f9');
   const focusRows = focusBytes.toString().trim().split(/\r?\n/).map(JSON.parse).filter(row=>row.family);
   const cohortKey = row => [row.family,row.profile,row.viewport.width,row.viewport.height,row.viewport.deviceScaleFactor].join('/');
+  const collectionAX=new Map();
+  const historicalManifestBytes=readFileSync('artifacts/material-parity/current-full-20261005/checkpoint/manifest.json');
+  assert.equal(hash(historicalManifestBytes),'7ae2cba1739353661a0c84e28ef70819157311cc824fd00ae94ced29fadeb352');
+  const historicalManifest=JSON.parse(historicalManifestBytes);
+  assert.deepEqual(verifyRetainedMaterialBrowserFiles(historicalManifest.provenance.browserFiles),
+    {authenticatedFiles:1887,currentRenderingAccepted:false});
+  for(const [family,name,expectedHash]of [
+    ['table','table-child-ax-cohorts-20261007.log','a53981184b33cbd4b55119623d6502121f14d0586b02d9005fcd9eeccc81c949'],
+    ['list','list-ax-cohorts-20261007.log','98b2c152497cb4bae46833d0d46a61b7a16fa5f24177cf96652280c805034f04'],
+  ]){
+    const file=`artifacts/material-parity/${name}`,bytes=readFileSync(file);assert.equal(hash(bytes),expectedHash);
+    const records=bytes.toString().trim().split(/\r?\n/).map(JSON.parse);
+    assert.equal(records[0].reportSha256,reportSha256);assert.equal(records.at(-1).acceptance,false);
+    assert.equal(records.at(-1).complete,true);assert.equal(records.at(-1).cohorts,16);
+    const rows=records.filter(row=>row.viewport).map(row=>({...row,family}));assert.equal(rows.length,32);
+    const expected=[...new Set(cases.filter(row=>row.family===family).map(cohortKey))].sort();assert.equal(expected.length,16);
+    for(const mode of ['reference','astylar'])assert.deepEqual(rows.filter(row=>row.mode===mode).map(cohortKey).sort(),expected);
+    collectionAX.set(family,{file,sha256:expectedHash,rows});
+  }
+  const joinCollectionAX=(entry,override)=>{
+    const source=collectionAX.get(entry.family);assert.ok(source);
+    const pair=['reference','astylar'].map(mode=>{
+      const matches=(override??source.rows).filter(row=>row.mode===mode && cohortKey(row)===cohortKey(entry));assert.equal(matches.length,1);
+      return matches[0];
+    });
+    let observations;
+    if(entry.family==='table'){
+      observations=pair.map(row=>{
+        assert.equal(row.observations.length,9);const ids=row.observations.map(item=>item.ax.nodeId);
+        return row.observations.map(item=>({tag:item.domTag,role:item.ax.role.value,name:item.ax.name.value,
+          ignored:item.ax.ignored,parent:ids.indexOf(item.ax.parentId),
+          children:(item.ax.childIds??[]).filter(id=>ids.includes(id)).map(id=>ids.indexOf(id))}));
+      });
+      assert.deepEqual(observations[0],observations[1]);
+      assert.deepEqual(observations[0].map(row=>row.role),['table','rowgroup','row','columnheader','rowgroup','row','cell','row','cell']);
+      assert.ok(observations[0].every(row=>row.ignored===false));
+    }else{
+      observations=pair.map((row,index)=>{
+        const text=row.subtree.filter(n=>!n.ignored && n.role.value==='StaticText').map(n=>n.name.value);
+        assert.deepEqual(text,['Inbox','Archive']);
+        assert.ok(!row.subtree.some(n=>!n.ignored && ['list','listitem','listbox','option'].includes(n.role.value)));
+        const generic=row.subtree.filter(n=>!n.ignored && n.role.value==='generic').length;
+        const ignored=row.subtree.filter(n=>n.ignored).length;
+        assert.equal(generic,index===0?7:5);assert.equal(ignored,index===0?2:0);return {text,generic,ignored};
+      });
+    }
+    return {disposition:'inspected',outcome:entry.family==='table'?'bounded-role-name-hierarchy-agreement':
+      'bounded-text-role-agreement-with-wrapper-differences',
+      evidence:{file:source.file,sha256:source.sha256,cohort:cohortKey(entry),
+        observations:Object.fromEntries(['reference','astylar'].map((mode,index)=>[mode,observations[index]]))},
+      boundary:'Retained supplementary physical-cohort AX,not original action endpoints; header associations,wrapper equivalence,AT behavior and current rendering unverified.'};
+  };
+  const firstTable=cases.find(row=>row.family==='table'),firstList=cases.find(row=>row.family==='list');
+  assert.throws(()=>joinCollectionAX({...firstTable,profile:'invented'}));
+  const forgedTable=structuredClone(collectionAX.get('table').rows);
+  forgedTable.find(row=>cohortKey(row)===cohortKey(firstTable)).observations[0].ax.role.value='generic';
+  assert.throws(()=>joinCollectionAX(firstTable,forgedTable));
+  const forgedList=structuredClone(collectionAX.get('list').rows);
+  forgedList.find(row=>cohortKey(row)===cohortKey(firstList)).subtree.find(n=>n.role.value==='StaticText').name.value='forged';
+  assert.throws(()=>joinCollectionAX(firstList,forgedList));
   const focusCohorts = [...new Set(cases.filter(row=>progressFocus.has(identity(row,row.kind))).map(cohortKey))].sort();
   assert.equal(focusCohorts.length,32);
   const axFile='artifacts/material-parity/progress-actual-ax-cohorts-20261007.log';

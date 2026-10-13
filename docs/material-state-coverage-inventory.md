@@ -1,5 +1,30 @@
 # Material comparison/state coverage inventory
 
+## Table/list exact-case historical AX obligation join — October 13
+
+Retained actual subtree AX now joins52 table and52 list exact passive cases via
+16 physical contexts/32 paired observations per family. Both original log hashes
+and complete1887 historical assets authenticate; original static/interaction
+endpoint observations are not replaced by these supplementary probes. Table
+role/name/ignored/nine-node in-table hierarchy agrees. List Inbox/Archive text
+and absence of list/listitem/listbox/option roles agree,but visible generic
+wrappers remain7 versus5 and ignored nodes2 versus0. Unknown cohort,forged table
+role and forged list text reject. No wrapper/header-association equivalence or
+current-output acceptance follows from bounded AX agreement.
+
+Proposal review digest
+ae416a6ff209bc2bf1a667706474a5f4f7bd683f4e6b481168123bce37ff3994
+retains354 partial records:104 actualSubtreeAX joins plus40 prior actualHostAX
+joins,with pending semantic/currentness obligations unchanged. Owning table/list
+historical replay and extended passive assertion pass2/2,zero skips,exit0,
+6118.9155ms. Log passive-table-list-ax-obligation-join-20261013.log SHA
+0ce2d2bf05347f7aa2c8f52db31c6eefc38cbe3e006452c0cb07fb051a96a2ce.
+No fresh capture/core/fixture change. Canonical coherent203 does not yet contain
+the proposed case records or additive test-source changes. Next prepare existing
+source-conservation/canonical coverage integration for this coherent passive
+batch,then extend other state groups; do not export an unchanged producer and
+claim proposal integration. All2311 full-case closures/final gates remain open.
+
 ## Table/list historical provenance replay correction — October 13
 
 The failed owning replay compared today's served assets with the October5
