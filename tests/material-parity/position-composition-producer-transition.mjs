@@ -8,6 +8,14 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 export function restoreAllCaseObligationRegistration(source) {
   let current=source.toString().replaceAll('\r\n','\n');
   const editing='59409a78eb407588e906e094abd80183fa7dd07a170ad902e706a1bda6d6590e';
+  const observations='b7ebc7694f5fb0cf1577f61ba41062f6ae7658abeb0688214504706a64d976eb';
+  if(current.includes(observations)){
+    assert.equal(hash(current),'f992aa554901072429e0ea3c7c467ae458a1615145b8dc841a0960cd0f742118',
+      'exact retained raster resource semantic action and currentness proposal pin');
+    assert.equal(current.split(observations).length,2);current=current.replace(observations,editing);
+    assert.equal(hash(current),'c883ad58c75d4320f3d45930b44809aa15aac2a733610b0aa77ff1dca3a652b0',
+      'whole published editing-focus producer conserved');
+  }
   if(current.includes(editing)){
     assert.equal(hash(current),'c883ad58c75d4320f3d45930b44809aa15aac2a733610b0aa77ff1dca3a652b0',
       'exact editing-target and incomplete-focus proposal pin');

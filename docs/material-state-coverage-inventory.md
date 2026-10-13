@@ -1,5 +1,38 @@
 # Material comparison/state coverage inventory
 
+## Retained-observation batch source integration verified — October 13
+
+Previous turn resolved the wrong dependency-lock owner. This turn prepares one
+coherent integration of the pending raster/resource/DOM/event/Menu/commit/raw-control
+and source-currentness observations,not another investigation or browser capture.
+Named complete-baseline launcher and producer source inventory now both pin
+b7ebc7694f5fb0cf1577f61ba41062f6ae7658abeb0688214504706a64d976eb.
+Existing dependency loader already authenticates7410 actual receipts/2311 partial
+cases. Dry-run checks all original baseline paths and both proposal arguments.
+
+Complete comparison to published59409a78 preserves every field/header except
+localPaint1000,historyOwnership1875,semantics2311,authoredActivation1875 and
+sourceCurrentness2311. Earlier editing/focus and all unrelated obligations remain
+intact;0 whole-case closures. Log
+retained-observations-complete-batch-conservation-20261013.log records exit0.
+Producer LF SHAf992aa554901072429e0ea3c7c467ae458a1615145b8dc841a0960cd0f742118
+differs from publishedc883ad58 only by the proposal path. Existing restoration
+authenticates both complete hashes before reversing that one pin;original scalar,
+classification,coverage and proof-description bytes then conserve unchanged.
+
+Complete position-composition-producer-transition.spec.mjs passes33/33,0 skips,
+total175954.8552ms in retained-observations-producer-transition-20261013.log
+SHAc30d5a23808ae4936f4931a9fe39dbcd11eb48d1bd1b4166d99b55591cf67933.
+Session94182 and processes22820/16224 are terminal exit0. No unchanged rerun needed.
+Scoped diff/source review and diff--check pass. No renderer,fixture or gate changes.
+
+Next launch exactly one named complete-baseline export with all consumed inputs
+frozen. Recheck headroom before launch;last observedD:free2966949888 bytes. Retain
+terminal result,then independent cold/package/row conservation and publication.
+Do not import or call the new package accepted while export/check remains live.
+Canonical918 remains the prior publication;all2311 whole-case closures,current
+rendering acceptance and original final harness/browser gates remain open.
+
 ## Correction: installedDependencies hashes the workspace-root lock — October 13
 
 The previous turn advanced currentness records,but its installed-lock mismatch
