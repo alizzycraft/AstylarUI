@@ -1,5 +1,24 @@
 # Material comparison/state coverage inventory
 
+## Complete editing/focus producer-transition integration passes — October 13
+
+Full existing position-composition-producer-transition.spec.mjs suite exits0:
+33/33 passes,0 skips,total169725.2509ms. Log
+editing-focus-producer-transition-20261013.log SHA
+e78d71952bb148337bee604b6dd1159e0e2cd06bd770f6e2857d7dc7f3428cc3.
+The confirmed live session63951/worker15128 is now terminal; no duplicate started.
+This authenticates complete preceding producer transitions and drift controls,
+not current browser rendering or complete audit acceptance.
+
+Together with the5276-dependency loader,exact1957/40 record conservation and
+focused registration/selection replay,this supplies the coherent batch preflight.
+Next one named complete-baseline export to editing-focus-canonical-export-20261013.log,
+then independent cold check and compact publication conservation only after terminal
+success. Sources/evidence must stay frozen while export/check consume them.
+Observed D:free3817308160 bytes; original canonical920 stays accepted until the
+new candidate is independently accepted. No renderer,fixture,capture,threshold
+or final gate changes; all2311 whole-case closures remain partial.
+
 ## Coherent editing/focus proposal registration conserves prior producer — October 13
 
 Named launcher and producer now pin validated59409a78 proposal. Complete comparison
