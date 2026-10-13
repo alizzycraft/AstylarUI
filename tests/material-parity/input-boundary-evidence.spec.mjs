@@ -3201,6 +3201,32 @@ test('passive state applicability joins exact cases without discarding progress 
       remaining:[...(previous.remaining??[]),'Complete action/input/focus/currentness disposition beyond retained raw control samples']};
   }
   assert.equal(rawControlJoins,82);
+  const keyboardActivationModes=new Map([
+    ['core','button-enter-space'],['toolbar','child-button-enter-space'],['card','child-button-enter-space'],
+    ['sort','sort-direction-enter-space'],['paginator','page-navigation-enter-space'],
+    ['autocomplete','popup-arrow-enter-escape'],['timepicker','popup-arrow-enter-escape'],
+    ['select','popup-open-navigate-commit-reopen'],['slider','two-input-keyboard-value-steps'],
+    ['button-toggle','option-arrow-enter'],['tabs','tab-arrow-enter'],['stepper','step-arrow-enter'],
+    ['bottom-sheet','pointer-trigger-open-then-tab-focus-scope'],['dialog','pointer-trigger-open-then-tab-focus-scope'],
+  ]);
+  const keyboardActivationCounts={joined:0,previouslyPending:0,existingPartial:0};
+  for(const record of allObligations){
+    if(!keyboardActivationModes.has(record.family))continue;
+    const source=extendedKeyboardCases.get(record.case);if(!source)continue;
+    const previous=record.obligations.authoredActivation;
+    assert.ok(['evidence-join-pending','partial'].includes(previous.disposition));
+    keyboardActivationCounts[previous.disposition==='evidence-join-pending'?'previouslyPending':'existingPartial']++;
+    keyboardActivationCounts.joined++;
+    record.obligations.authoredActivation={...previous,applicability:'applicable',disposition:'partial',
+      supplementaryKeyboardActivation:{...source.supplementaryKeyboard,actionScope:keyboardActivationModes.get(record.family),
+        boundary:'Reuse exact supplementary callback/assertion observations,including failures. Toolbar/card target child buttons;slider records input and store values separately;tabs/stepper retain actual option state rather than assuming store state is the selection owner. Modal sequence activates the trigger by pointer then tests Tab scope,not modal action activation. Tree navigation and datepicker Tab-only sequences are excluded. Not original configured-action equivalence,all keyboard/pointer boundaries,paint,current rendering or whole-case closure.'},
+      remaining:[...(previous.remaining??[]),'Other applicable activation targets,keys,pointer and disabled boundaries',
+        'Complete input/paint/event and source/runtime applicability']};
+  }
+  assert.deepEqual(keyboardActivationCounts,{joined:112,previouslyPending:104,existingPartial:8});
+  assert.ok(allObligations.filter(row=>['tree','datepicker'].includes(row.family))
+    .every(row=>!row.obligations.authoredActivation.supplementaryKeyboardActivation),
+    'Navigation or Tab-only actions cannot supply activation evidence');
   const servedRoot='examples/material-showcase/dist/material-showcase/browser';
   const currentServed=fingerprintDirectory(servedRoot),currentModules=fingerprintModuleGraph(process.cwd(),resourceRunnerFile);
   const assertDependencyOwner=source=>{
@@ -3285,7 +3311,7 @@ test('passive state applicability joins exact cases without discarding progress 
   t.diagnostic(JSON.stringify({caseObligationProposal:proposal, cases:2311,passiveCases:354,additionalCases:1957,additionalTreeReceipts,
     authoredActivationExclusions:354,authoredEditingExclusions:354,programmaticFocusApplicable:40,
     reportedScalarInputCases:2311,reportedScalarGroups:8483,dividerActualAXCases:24,dividerUpdateDisposalCases:24,dividerLocalTextRasterCases:24,dividerCoordinateHistoryCases:24,supplementaryKeyboardCases:40,extendedKeyboardCases:128,
-    editingTargetApplicabilityCases:1957,editingCounts,configuredFocusRecordedProvenanceIncomplete:40,supplementaryFocusCounts,retainedFocusCounts,
+    editingTargetApplicabilityCases:1957,editingCounts,configuredFocusRecordedProvenanceIncomplete:40,supplementaryFocusCounts,retainedFocusCounts,keyboardActivationCounts,
     retainedTargetRasterCases:1000,paintCounts,retainedResourceSamplingCases:1875,resourceSampleCounts,
     retainedTargetDOMComparisonCases:2311,semanticCounts,retainedEventBoundaryCases:1875,eventCounts,supplementaryMenuActionContexts:menuActionJoins,commitEndpointCounts,rawControlJoins,rawActionRecords,buildCaptureCounts,completeCaseClosures:0,currentRenderingAccepted:0}));
   t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,

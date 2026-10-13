@@ -1,5 +1,38 @@
 # Material comparison/state coverage inventory
 
+## Retained keyboard actions join112 exact activation anchors — October 14
+
+Question: which already-authenticated extended keyboard proofs actually exercise
+activation/value changes rather than navigation alone? Existing complete callback/
+assertion replay and exact eight-context cohorts support112 anchors across14
+families. Tree navigation and datepicker's Tab-only sequence remain excluded.
+Toolbar/card activate child buttons;slider keeps native input versus store values
+separate;tabs/stepper retain actual option selection rather than treating store
+selection as the native owner. Sheet/dialog activate triggers by pointer then
+measure Tab scope,not modal action-button activation. Agreements and failures
+remain in original observations;no universal keyboard activation claim.
+
+Join runs after existing raw-control actions,so104 previously pending and8 partial
+slider records gain supplementaryKeyboardActivation without losing raw samples.
+Activation pending falls1819→1715 in this proposal,not in published canonicale8.
+All2311 whole-case records remain partial/unverified;original configured action,
+other targets/keys/pointer/disabled boundaries,paint/currentness remain open.
+
+Final focused owning proof passes1/1,0 skips,total20591.8775ms. Log
+keyboard-activation-final-obligation-join-20261014.log SHA256
+89eb9e5e82892d141db1b13ddfba05059613a60d2f72910bc0799f661f774930.
+Proposal a9c9e0bcba22944e662c47aa23d010c6e2e51803e94a2e56003f3cd9f89dd5c5
+is noncanonical. Existing loader authenticates7410 dependencies/2311 cases and
+0 unjoined IDs. Complete comparison to0670e282 permits only112 authoredActivation
+changes;all headers/other obligations agree. Log
+keyboard-activation-complete-conservation-20261014.log SHA256
+215fdec4a40e540c8fd852e0ff021c6b6edd567f3cccaf0bbe9b9e769b060150.
+
+Previous turn pushed target-availability census b90cb15e. No new browser capture,
+renderer/fixture change or full export for this increment. Focus+activation
+observations await coherent producer integration;next exact static history-source
+scope joins and remaining action/paint obligations. All original gates remain.
+
 ## Activation target availability is not a missing-tree problem — October 14
 
 Question: do the1957 non-passive cases lack retained control targets,requiring
