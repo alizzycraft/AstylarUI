@@ -1,5 +1,47 @@
 # Material comparison/state coverage inventory
 
+## Current coverage and publication checkpoint — October 13
+
+Configured inventory is complete:36 families,2311 cases (436 static,1875
+interaction). Every configured ID has scalar-review evidence; all2311 remain
+partially inspected with zero certified full-case closures. Documented failures
+count as inspected. The detailed obligation join covers354 partial cases,with
+1957 explicitly unjoined; unjoined does not mean untouched. No aggregate audit
+completion percentage follows from matrix coverage or zero unresolved scalar
+signatures. Exact applicable-obligation dispositions and source/currentness
+accounting remain incomplete; acceptance criteria are unchanged.
+
+Complete-baseline case-obligation export and independent cold check now both
+exit0. Logs coherent203-case-obligation-export-20261013.log SHA
+facb2881d99f405bb488931a5c2317a391ad68464d77b6d6b0e72d277a5140d9
+and coherent203-case-obligation-cold-check-20261013.log SHA
+9fada9b46d481b76350fb60e88e7fab0155106a43ecd4788361af1456855f4b9
+retain1923 authenticated files/253724918 bytes read and reverified each.
+Export used1 collector/10 memory hits/1 disk hit; cold used2 collectors/10
+memory hits/0 disk hits; both had0 invalidations. Wrapper elapsed times were
+2828356.7768ms and2755641.6709ms respectively,not focused-check timings.
+
+Compact import/verification both exit0 for pending generationc9cd6957:
+8483 scalar groups,157 source findings,39904 controls,389202 occurrences,
+0 unresolved scalar groups; inputEquivalent remains false. Logs
+coherent203-case-obligation-compact-import-20261013.log SHA
+ccedb9ed910d3d397a26101b6135ea9aa3cfc3d99131dc559c0036d16f8c28ee
+and coherent203-case-obligation-compact-verify-20261013.log SHA
+3899c8623f823245a49c35c9541944bc691be5b7e996c75ad032425323d43974.
+All prior coverage fields are conserved after removing the additive
+inspectionEvidence field. Complete Markdown is conserved after removing its
+single new case-obligation paragraph and normalizing test line anchors.
+
+Publication is still pending:48544 compact rows conserve their substantive
+fields,but49 button rows change complete-row evidence hashes (one discrepancy,
+48 control-typography rows). Existing authenticated full-row reader comparison
+session23597/process33984 remains live at this checkpoint. Do not describe those
+hash changes as metadata-only before its terminal result explains their paths.
+Accepted committed package remains0be2ffe4/Git24704218; pending generated files
+are not a new accepted publication. Next retain that result,review and publish
+the coherent batch,then continue exact case-obligation/currentness joins.
+No fresh browser audit,renderer/fixture change or final-gate waiver occurred.
+
 ## Case-coverage source conservation and session routing — October 13
 
 Complete reviewed producer247399bf restores exactly to accepted coherent203
