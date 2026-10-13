@@ -1,5 +1,31 @@
 # Material comparison/state coverage inventory
 
+## Table/list historical provenance replay correction — October 13
+
+The failed owning replay compared today's served assets with the October5
+checkpoint while testing explicitly retained October7 AX observations. Existing
+verifyRetainedMaterialBrowserFiles now authenticates all1887 original assets,
+including its established recovery paths; original receipt bytes are unchanged.
+The served directory is separately compared in full with authenticated current
+pointer checkpoint2aac425d. Historical/current inventories are asserted unequal;
+missing assets,forged digests and substitution of today's inventory into the
+historical verifier reject. No byte substitution,reference change,renderer change
+or passing-output criterion is introduced. This is a diagnostic provenance
+correction,not current-rendering acceptance or a waiver of historical receipts.
+
+Every original table/list AX role/name/ignored/hierarchy,wrapper-count,exact cohort
+and forged-observation assertion remains. Owning historical replay now passes
+1/1,zero skips,exit0,4685.4232ms. Log
+table-list-ax-historical-replay-20261013.log SHA
+95853f6b8709d11a2c7a72af782d94ce55a9d1be0683cf6fe65f099c001c9574.
+Original table-list-ax-currentness-failure-20261013.log remains retained as the
+reason for this correction. Both raw authoring-source receipts also still match;
+neither that fact nor the separate current build check makes old AX pixels or
+relationships current. Next join these bounded historical AX records to the104
+table/list case obligations,with current-rendering and full-semantic gaps explicit.
+Additive source conservation/canonical integration remains pending for a coherent
+batch; all2311 full-case closures and final acceptance gates remain open.
+
 ## Passive actual AX join and current-build boundary — October 13
 
 Existing progress AX observations now attach to40 exact proposed cases through

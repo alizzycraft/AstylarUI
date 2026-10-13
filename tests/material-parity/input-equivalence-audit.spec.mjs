@@ -386,7 +386,22 @@ test('retained table and list AX cohorts preserve bounded equality and structura
   const checkpoint = JSON.parse(pinned('artifacts/material-parity/current-full-20261005/checkpoint/manifest.json',
     '7ae2cba1739353661a0c84e28ef70819157311cc824fd00ae94ced29fadeb352'));
   const { fingerprintDirectory } = await import('./run-checkpoint.mjs');
-  assert.deepEqual(fingerprintDirectory('examples/material-showcase/dist/material-showcase/browser'), checkpoint.provenance.browserFiles);
+  const { verifyRetainedMaterialBrowserFiles } = await import('./historical-audit-module-source.mjs');
+  // Historical output binds original assets, not today's differently named build.
+  // Authenticate both complete directories independently; never replace receipts
+  // or turn conserved historical AX observations into current rendered acceptance.
+  assert.deepEqual(verifyRetainedMaterialBrowserFiles(checkpoint.provenance.browserFiles),
+    { authenticatedFiles:1887,currentRenderingAccepted:false });
+  const currentCheckpoint = JSON.parse(pinned('artifacts/material-parity/selection-pointer-directions-20261011/checkpoint/manifest.json',
+    '2aac425d216cdb274ebff0876f2fa365c9ab6e845ed1b1c3b30d9e1bbcaea5c8'));
+  const { isDeepStrictEqual } = await import('node:util');
+  assert.ok(isDeepStrictEqual(fingerprintDirectory('examples/material-showcase/dist/material-showcase/browser'),
+    currentCheckpoint.provenance.browserFiles),'current served build must match its own complete checkpoint');
+  assert.equal(isDeepStrictEqual(currentCheckpoint.provenance.browserFiles,checkpoint.provenance.browserFiles),false);
+  assert.throws(()=>verifyRetainedMaterialBrowserFiles(checkpoint.provenance.browserFiles.slice(1)));
+  const forgedAssets=structuredClone(checkpoint.provenance.browserFiles);forgedAssets[0].sha256='0'.repeat(64);
+  assert.throws(()=>verifyRetainedMaterialBrowserFiles(forgedAssets));
+  assert.throws(()=>verifyRetainedMaterialBrowserFiles(currentCheckpoint.provenance.browserFiles));
   pinned('tests/material-parity/sort-focus-structure.spec.mjs', '65d7256f859a0839cdf6364d8f3d4e2b81bdb32978c42e0afeaa27f2622e14ce');
   pinned('examples/material-showcase/src/app/astylar.component.ts', '71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd');
   pinned('examples/material-showcase/src/app/reference.component.ts', 'debe55bc492d0fa1e48a9c7f09e1b668d435a2260588710207ab878b23c1d4aa');
