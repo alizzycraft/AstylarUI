@@ -1,5 +1,22 @@
 # Material comparison/state coverage inventory
 
+## Editing/focus candidate Markdown claims conserved during cold verification — October 13
+
+Read-only complete candidate Markdown comparison to published Gita20d54e0 passes
+after normalizing only tests/material-parity/*.mjs line anchors. Every substantive
+claim and all610 lines remain conserved; appended acceptance-claim control rejects.
+Candidate LF MarkdownSHAb0c1a466bb23404e3f549d4e9241e7fc53696904939939018ead7c7c5c78f5c7.
+Log editing-focus-markdown-conservation-corrected-20261013.log records exit0.
+Initial log editing-focus-markdown-conservation-20261013.log is retained:the
+diagnostic regex omitted dots in .spec.mjs basenames and therefore failed to
+normalize their changed anchors. Correcting only that pattern resolves it; no
+Markdown claim was altered to pass. Machine-row conservation remains separate.
+
+Cold25580 remains confirmed live in13148/14644 at build-audit. No consumed source,
+capture or candidate package was changed. Candidate91837a8d remains unaccepted until
+terminal cold success and publication checks; canonical920 is the prior accepted
+publication. Original audit scope,partial case closures and final gates unchanged.
+
 ## Coherent editing/focus canonical export terminal success — October 13
 
 Original export24483 exits0,total3112398.9991ms (51.87min). Log
