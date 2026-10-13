@@ -1,5 +1,25 @@
 # Material comparison/state coverage inventory
 
+## Existing keyboard records can supply120 pending focus joins — October 13
+
+Read-only b7 case census answers whether actual-control focus evidence already
+exists outside the original trees. All128 keyboardInteraction records retain focus
+fields (identity/boolean/index/text,with differing scopes);104 still have pending
+programmaticFocus joins. Sixteen checkbox/radio supplementary records under
+authoredActivation also have focus observations and pending focus joins. The other
+24 chips/switch/expansion records report active-element tag/role kind,not a named
+owner;keep those distinct. Exact existing anchors therefore offer120 pending joins
+before new capture. These are supplementary actions,not original configured focus
+action equivalence or120 completed cases. Existing source/callback/provenance
+boundaries remain required;do not rerun settled keyboard investigations.
+
+Node census assertions verify128/104/16/16/24 and the120 total;source inspection
+confirms direct active-element getters for the relevant recorded fields. Next
+extend the existing owning focus obligations after current integration,retaining
+raw observations and scope. Export99911 remains live with frozen inputs;no source,
+capture,acceptance or case-closure changes. Previous turn progressed on serializer
+limits. Canonical918 is prior accepted publication;all original final gates remain.
+
 ## Original input-tree schemas do not supply paired actual focus owners — October 13
 
 Question: can normalized focus identities be supplemented by actual focused
