@@ -13,7 +13,7 @@ import {
   encodeMaterialInputAuditStream,
 } from '../tests/material-parity/input-audit-report-stream.mjs';
 import { materialInputAuditPayloadFile } from '../tests/material-parity/input-audit-report-codec.mjs';
-import { withAuditEvidenceSession } from '../tests/material-parity/audit-evidence-session.mjs';
+import { withAuditEvidenceSession, auditReadFileSync } from '../tests/material-parity/audit-evidence-session.mjs';
 import { attachCaseObligationCoverage, assertCaseObligationCoverage } from './audit-findings-store.mjs';
 
 const root = process.cwd();
@@ -38,7 +38,7 @@ const { audit, errors } = withAuditEvidenceSession(() => {
   if (options.caseObligationReview !== undefined) {
     progress('join-case-obligations');
     audit.coverage = attachCaseObligationCoverage(audit.coverage, options.caseObligationReview,
-      options.caseObligationReviewSha256, { root });
+      options.caseObligationReviewSha256, { root, read: auditReadFileSync });
   }
   progress('validate-audit');
   assertCaseObligationCoverage(audit.coverage);

@@ -8922,7 +8922,6 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
-    'scripts/audit-findings-store.mjs',
     'tests/material-parity/audit-findings-store.spec.mjs',
     'artifacts/material-parity/working-audit/proposals/ae416a6ff209bc2bf1a667706474a5f4f7bd683f4e6b481168123bce37ff3994.json',
     'artifacts/material-parity/table-child-ax-cohorts-20261007.log',

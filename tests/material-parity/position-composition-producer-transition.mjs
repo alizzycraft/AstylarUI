@@ -5,11 +5,44 @@ import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
 
 const hash = text => createHash('sha256').update(text).digest('hex');
+export function restoreCaseObligationCoverageRegistration(source) {
+  let current=source.toString().replaceAll('\r\n','\n');
+  const addedImport="import { assertCaseObligationCoverage } from '../../scripts/audit-findings-store.mjs';\n";
+  if(!current.includes(addedImport))return current;
+  assert.equal(hash(current),'247399bf04438b7c1b6144ffd4c46bc3829ca2aa92527b7642b49659fb435568',
+    'exact case obligation coverage registration batch');
+  const prior=execFileSync('git',['show','24704218:tests/material-parity/input-equivalence-audit.mjs'],
+    {encoding:'utf8',maxBuffer:4_000_000}).replaceAll('\r\n','\n');
+  assert.equal(hash(prior),'816c6347a2c6327b91c2b1ecb2e93ad2d012cc9c7ca7370f4caaf185af45ccb4');
+  const declaration=(text,name)=>{
+    const ast=ts.createSourceFile('producer.mjs',text,ts.ScriptTarget.Latest,true,ts.ScriptKind.JS);
+    assert.equal(ast.parseDiagnostics.length,0);
+    const nodes=ast.statements.filter(node=>ts.isFunctionDeclaration(node)&&node.name?.text===name);
+    assert.equal(nodes.length,1);return {ast,node:nodes[0]};
+  };
+  const parser=declaration(current,'parseMaterialInputAuditArguments');
+  current=current.replace(parser.node.getText(parser.ast),
+    declaration(prior,'parseMaterialInputAuditArguments').node.getText(declaration(prior,'parseMaterialInputAuditArguments').ast));
+  const validator=declaration(current,'validateMaterialInputAudit');
+  const addedTry=validator.node.body.statements[1];
+  assert.ok(ts.isTryStatement(addedTry));assert.ok(addedTry.getText(validator.ast).includes('assertCaseObligationCoverage(report.coverage)'));
+  current=current.replace(addedTry.getFullText(validator.ast),'');
+  assert.equal(current.split(addedImport).length,2);current=current.replace(addedImport,'');
+  const start="    ...(report.coverage.inspectionEvidence ? [\n",end="    ] : []),\n";
+  assert.equal(current.split(start).length,2);const first=current.indexOf(start),last=current.indexOf(end,first);
+  assert.ok(last>first);current=current.slice(0,first)+current.slice(last+end.length);
+  for(const file of ['tests/material-parity/audit-findings-store.spec.mjs',
+    'artifacts/material-parity/working-audit/proposals/ae416a6ff209bc2bf1a667706474a5f4f7bd683f4e6b481168123bce37ff3994.json']){
+    const line=`    '${file}',\n`;assert.equal(current.split(line).length,2);current=current.replace(line,'');
+  }
+  assert.equal(current,prior,'complete producer conserved after exact case-coverage additions');
+  return current;
+}
 // Historical conservation only: reverse the exact storage-location migration,
 // then the independently reviewed pointer-proof description. Production keeps
 // the explicit retained map paths; no captured receipt or current source is replaced.
 export function restoreRetainedMapLocationRegistration(source) {
-  let current = source.toString().replaceAll('\r\n', '\n');
+  let current = restoreCaseObligationCoverageRegistration(source);
   if (current.includes('retained table header scope transport boundary')) {
     assert.equal(hash(current), '816c6347a2c6327b91c2b1ecb2e93ad2d012cc9c7ca7370f4caaf185af45ccb4',
       'exact retained table scope and mobile shape proof registration batch');

@@ -20,6 +20,23 @@ import { restoreCaretPositionProducer } from './position-composition-producer-tr
 import { restoreOwnerBoundaryProducer } from './position-composition-producer-transition.mjs';
 import { restorePreparedInputProducer } from './position-composition-producer-transition.mjs';
 import { restorePreparedInputFollowupProducer, restoreStackingProducer } from './position-composition-producer-transition.mjs';
+import { restoreCaseObligationCoverageRegistration } from './position-composition-producer-transition.mjs';
+
+test('case obligation coverage additions conserve the complete accepted producer and reject drift', () => {
+  const file='tests/material-parity/input-equivalence-audit.mjs';
+  const current=readOriginalSource(file,'utf8').replaceAll('\r\n','\n');
+  const prior=execFileSync('git',['show',`24704218:${file}`],{encoding:'utf8',maxBuffer:4_000_000}).replaceAll('\r\n','\n');
+  assert.equal(restoreCaseObligationCoverageRegistration(current),prior);
+  assert.equal(restoreCaseObligationCoverageRegistration(prior),prior);
+  for(const fragment of ['--case-obligation-review=', 'caseObligationReviewSha256',
+    'assertCaseObligationCoverage(report.coverage)', 'Case-obligation evidence:',
+    'ae416a6ff209bc2bf1a667706474a5f4f7bd683f4e6b481168123bce37ff3994',
+    'tests/material-parity/audit-findings-store.spec.mjs', 'uniqueStyleDifferences']) {
+    assert.ok(current.includes(fragment));
+    assert.throws(()=>restoreCaseObligationCoverageRegistration(current.replace(fragment,`${fragment} changed`)));
+  }
+  assert.throws(()=>restoreCaseObligationCoverageRegistration(current+'\n// unreviewed drift\n'));
+});
 
 test('retained sorter paint additions conserve original statements and reject source drift', () => {
   const current = readOriginalSource('tests/material-parity/sort-focus-structure.spec.mjs');

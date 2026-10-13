@@ -62,10 +62,10 @@ test('retained control proof batch conserves predecessor producer and binds comp
   };
   const before = inventory(prior), after = inventory(current);
   assert.equal(before.proofs.length, 196); assert.equal(after.proofs.length, 203);
-  assert.equal(before.fingerprints.length, 634); assert.equal(after.fingerprints.length, 661);
+  assert.equal(before.fingerprints.length, 634); assert.equal(after.fingerprints.length, 663);
   const oldPaths = new Set(before.fingerprints.map(row => row.file));
   assert.deepEqual(after.fingerprints.filter(row => oldPaths.has(row.file)), before.fingerprints);
-  assert.equal(new Set(after.fingerprints.map(row => row.file)).size, 661);
+  assert.equal(new Set(after.fingerprints.map(row => row.file)).size, 663);
   const oldProofs = new Set(before.proofs.map(row => row.status));
   const normalized = rows => rows.map(({ line, ...row }) => row);
   assert.deepEqual(normalized(after.proofs.filter(row => oldProofs.has(row.status))), normalized(before.proofs));
@@ -2544,7 +2544,7 @@ test('retained source map migration preserves captured bytes and exact producer 
     source.replace('Additional160 actual hover points', 'All hover points'),
     source.replace('same four cache keys with referenceCount1', 'identical GPU textures')]) {
     assert.throws(() => restoreRetainedMapLocationRegistration(changed),
-      /exact retained source-map|exact retained table scope and mobile shape proof registration batch/);
+      /exact retained source-map|exact retained table scope and mobile shape proof registration batch|exact case obligation coverage registration batch/);
   }
   // This assertion owns the accepted634-path migration snapshot,not today's
   // additive inventory. Complete current registration is checked separately.
@@ -2639,7 +2639,7 @@ test('popup proof batch adds four registrations without changing predecessor inv
     'desktop popup hover token alpha versus opaque input boundary',
     'light desktop actual held-option input boundary']) {
     assert.throws(() => restoreScalarReviewExtraction(currentSource.replace(fragment, fragment + ' changed')),
-      /exact four-entry addition|exact retained source-map producer plus bounded option evidence|exact retained control proof registration and dependency batch|exact retained table scope and mobile shape proof registration batch/);
+      /exact four-entry addition|exact retained source-map producer plus bounded option evidence|exact retained control proof registration and dependency batch|exact retained table scope and mobile shape proof registration batch|exact case obligation coverage registration batch/);
   }
   assert.deepEqual(current.fingerprints, prior.fingerprints);
   assert.equal(current.proofs.length, prior.proofs.length + 4);

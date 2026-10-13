@@ -6,6 +6,8 @@ import path from 'node:path';
 import { importFindings, queryFindings, verifyFindings, saveReviewProposal, loadFindingEvidence, loadCaseObligationReview, attachCaseObligationCoverage, assertCaseObligationCoverage } from '../../scripts/audit-findings-store.mjs';
 import { createHash } from 'node:crypto';
 import { encodeMaterialInputAuditStream } from './input-audit-report-stream.mjs';
+import { withAuditEvidenceSession, auditReadFileSync } from './audit-evidence-session.mjs';
+import { withAuditScratch } from './audit-scratch.mjs';
 
 test('case obligation integration authenticates exact scope and dependencies without acceptance claims', () => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -51,6 +53,19 @@ test('case obligation integration authenticates exact scope and dependencies wit
     files.set('proposal.json',Buffer.from(JSON.stringify({status:'proposal-not-canonical',sha256:changedDigest,review:changed})));
     assert.throws(()=>loadCaseObligationReview('proposal.json',changedDigest,configured,{root,read}));
   }
+  withAuditScratch('case-coverage-session-',scratch=>{
+    for(const file of ['report.json','reference.json','astylar.json'])fs.writeFileSync(path.join(scratch,file),bytes);
+    fs.writeFileSync(path.join(scratch,'proposal.json'),JSON.stringify(envelope));
+    let metrics;
+    const tracked=withAuditEvidenceSession(()=>attachCaseObligationCoverage(coverage,'proposal.json',digest,
+      {root:scratch,read:auditReadFileSync}),{root:scratch,cold:true,onMetrics:value=>{metrics=value;}});
+    assert.deepEqual(tracked.inspectionEvidence,result);
+    assert.equal(metrics.filesRead,4);assert.ok(metrics.verificationBytes>0);assert.equal(metrics.collectors,0);
+    assert.throws(()=>withAuditEvidenceSession(()=>{
+      loadCaseObligationReview('proposal.json',digest,configured,{root:scratch,read:auditReadFileSync});
+      fs.writeFileSync(path.join(scratch,'reference.json'),'changed after read');
+    },{root:scratch,cold:true}),/Evidence changed during run/);
+  });
 });
 
 test('compact findings preserve counts, missing values and evidence links; corruption is rejected', async () => {

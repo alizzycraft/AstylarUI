@@ -1,5 +1,40 @@
 # Material comparison/state coverage inventory
 
+## Case-coverage source conservation and session routing — October 13
+
+Complete reviewed producer247399bf restores exactly to accepted coherent203
+producer816c6347 after reversing only the coverage-validator import/call,paired
+CLI options,conditional Markdown paragraph and two new source paths. Whole-source
+equality with Git24704218 is required; old registration/restoration chains remain.
+Conservation caught a duplicate store-script path: it already existed in the
+inventory,so the duplicate addition was removed,not counted twice. Inventory is
+203 unchanged proof descriptions/663 unique source paths; prior634-path and
+196-proof expectations remain checked. Drift mutations reject and only expected
+guard-message alternatives were added to existing negative-control matchers.
+
+Focused conservation/registration passes2/2,zero skips,10954.8315ms. Log
+case-coverage-source-conservation-20261013.log SHA
+65be1c357257ba0d3e0797f0f7d0d6cd2370d60706a7529735239f465a67305f.
+Complete existing transition suite passes33/33,zero skips,exit0,164152.3212ms;
+case-coverage-full-producer-transition-20261013.log SHA
+941ebe1526ac9ba77b3725952b8220143dc57e2459e4416114404572a6f7dd11.
+
+Inspection found that the new loader's default fs reader would not join the
+existing evidence session automatically. Export now explicitly supplies
+auditReadFileSync. Existing store suite passes2/2,zero skips,269.346ms with a
+post-read mutation rejected at session finish; successful synthetic scratch is
+removed by withAuditScratch. Real cold reader replay tracks718 files including
+the proposal,164566843 bytes read/reverified,0 collectors/memory/disk hits and
+0 invalidations in2222.389ms. It retains354 joined/1957 unjoined cases and false
+current-rendering acceptance. No persistent reuse is claimed for this path.
+
+This completes producer-conservation/session-routing preparation,not canonical
+publication or every historical owning-test receipt transition. Next run the
+justified complete-baseline export and independent cold comparison,then compact
+import/verification; preserve any newly exposed validation failure. Coherent203
+remains accepted until that milestone succeeds. No renderer/fixture changes;
+all2311 full-case closures and original final gates remain open.
+
 ## Canonical case-coverage export wiring — October 13
 
 The general export command accepts an explicit workspace-relative proposal path
