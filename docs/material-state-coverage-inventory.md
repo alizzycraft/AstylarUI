@@ -1,5 +1,43 @@
 # Material comparison/state coverage inventory
 
+## Raw checkbox/range action records join82 configured anchors — October 13
+
+Question: can retained raw controls supply real action observations that original
+normalized/default flags omit? Existing owning proof preserves105 records across
+82 configured anchors and288 disabled held samples. It distinguishes missing
+checkbox input/change tails,keyboard activation mismatch,slider step5 versus1,
+unequal intermediate drag events and disabled pointer focus versus suppression.
+No settled root cause is reopened and no raw histories are reduced to equal flags.
+
+Existing case-obligation proof now attaches all105 before/after/key/pointer/held
+records to82 exact case identities. Five captured diagnostic script revisions
+authenticate byte-for-byte against their original scriptSha256 receipts via Git
+6b0486f0/7b825141/76025f76/e007a50c/69371bd9. Original sorter bytes authenticate
+against6b0486f0;current withFrozenShowcase body still equals recorded603ac9ca.
+Current whole runner584cdfc8 and exact twelve action-function bytes authenticate.
+Supplementary keyboard/disabled action modes remain explicit,not original action
+equivalence,current browser/every-frame paint,lifetime or full-case acceptance.
+
+Initial focused join failed because LF normalization changed the exact captured
+function-byte digest9f00ecee to9bf480a7. Failure retained in
+all-case-retained-raw-control-actions-20261013.log. Fix extracts original function
+bytes without normalization;no receipt or captured source was changed. Both the
+unchanged raw-boundary assertions and extended owning case proof pass2/2,0 skips,
+total18521.985ms in all-case-retained-raw-control-actions-exact-bytes-20261013.log
+SHA87c509eb24d01b206e953935042c63fb36d8a3db73ef02902f52e3132c191b01.
+
+Proposalbc8b4b87d54279319f0c3eaa0b877716e24578408e3374ec776909efd75144df
+is noncanonical. Existing loader authenticates5510 dependencies,2311 partial cases,
+0 unjoined and false acceptance flags. Complete predecessor comparison against
+61064762 proves only82 authoredActivation changes;all other fields and headers
+conserve. Earlier event,Menu and commit joins remain intact. Previous goal turn
+made progress bounding final field endpoints. No renderer,fixture or criteria changes.
+
+Next prioritize remaining action/focus applicability and all-case sourceCurrentness
+over further repeats of these retained traces;then integrate this coherent pending
+batch through existing producer/source conservation and milestone gates. Canonical
+918 stays unchanged;all2311 whole-case closures and original final gates remain open.
+
 ## Configured field commit evidence proves final endpoints only — October 13
 
 Question: do retained field-popup captures prove commit/focus transitions,or only

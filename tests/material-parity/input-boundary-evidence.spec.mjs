@@ -22,6 +22,13 @@ import { evaluateFocusedRaster } from './focused-raster-metrics.mjs';
 
 const file = 'artifacts/material-parity/input-boundaries-keypress-559f95c/latest-report.json';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+const retainedRawControlLogs = [
+  ['raw-control-events-20261012.log', 'd14e9e6965f8a4e9f9419d494545a867c3e1b48f4ba2475ccb11a1ef3097a5ea', 50, '6b0486f0'],
+  ['raw-control-keyboard-events-20261012.log', '8e202f4cc8eaa800d58acd54c8253ce0d947cee82e96651787571c0ebd086bc1', 16, '7b825141'],
+  ['raw-disabled-control-keyboard-events-20261012.log', 'abe6ea4404c4698d65da0de64e7b63fe18995d73005cb13830922c6320c0c728', 15, '76025f76'],
+  ['raw-disabled-control-pointer-events-20261012.log', 'b227aa5e5bc38d6e0e6ff5c469bab82f4212858432b3dfe67f001771785fd69f', 16, 'e007a50c'],
+  ['disabled-slider-held-centers-20261012.log', '24ddecb803434473e85ba76df0ea6700b608d94c010d363a1ef48a40f08e34d3', 8, '69371bd9'],
+];
 
 test('divider reduction receipts preserve observed DPR and unchanged failing geometry', () => {
   const runnerFile='scripts/audit-overlay-layout-stage.mjs';
@@ -90,13 +97,7 @@ test('divider reduction receipts preserve observed DPR and unchanged failing geo
 });
 
 test('retained raw checkbox slider boundaries preserve missing events disabled focus and sampled inertia', () => {
-  const logs = [
-    ['raw-control-events-20261012.log', 'd14e9e6965f8a4e9f9419d494545a867c3e1b48f4ba2475ccb11a1ef3097a5ea', 50],
-    ['raw-control-keyboard-events-20261012.log', '8e202f4cc8eaa800d58acd54c8253ce0d947cee82e96651787571c0ebd086bc1', 16],
-    ['raw-disabled-control-keyboard-events-20261012.log', 'abe6ea4404c4698d65da0de64e7b63fe18995d73005cb13830922c6320c0c728', 15],
-    ['raw-disabled-control-pointer-events-20261012.log', 'b227aa5e5bc38d6e0e6ff5c469bab82f4212858432b3dfe67f001771785fd69f', 16],
-    ['disabled-slider-held-centers-20261012.log', '24ddecb803434473e85ba76df0ea6700b608d94c010d363a1ef48a40f08e34d3', 8],
-  ];
+  const logs = retainedRawControlLogs;
   const configured = new Set([...materialInteractionCases, ...materialMobileFlowCases].map(row => materialCaseKey('interaction', row)));
   const anchors = new Set(); let records = 0, inertSamples = 0;
   const tails = side => side.events.filter(event => ['input', 'change'].includes(event.type)).map(event => event.type);
@@ -3056,6 +3057,53 @@ test('passive state applicability joins exact cases without discarding progress 
       remaining:[...(previous.remaining??[]),'Intermediate commit/dismiss/reopen boundaries and full action/currentness beyond final endpoint']};
   }
   assert.deepEqual(commitEndpointCounts,{autocomplete:8,select:8});
+  const rawControlActions=new Map(),rawScriptFile='scripts/audit-material-raw-control-events.mjs';
+  const sorterFile='tests/material-parity/sort-focus-structure.spec.mjs',sorterBytes=readFileSync(sorterFile);
+  const frozenHelper=resourceFunctions(sorterBytes,['withFrozenShowcase']).withFrozenShowcase;
+  assert.equal(hash(frozenHelper),'603ac9ca88b9bf2e3443f8be65f125d39002e1ca4e5157487d9ac86ed7d2527f');
+  const rawActionNames=['profileTheme','sendShowcaseCommand','waitForThemeApplied','waitForAstylarBenchmark',
+    'settleInteraction','setBenchmarkPhase','openInteractionPage','performInteraction','interactionTargetBox',
+    'sliderDragCoordinates','readSliderValues','compareEvents'];
+  // These receipts hash exact captured function bytes, including line endings.
+  const rawRunnerAST=ts.createSourceFile('runner.mjs',resourceRunnerBytes.toString(),ts.ScriptTarget.Latest,true,ts.ScriptKind.JS);
+  assert.deepEqual(rawRunnerAST.parseDiagnostics,[]);
+  const rawActionBodies=Object.fromEntries(rawActionNames.map(name=>{
+    const matches=rawRunnerAST.statements.filter(node=>ts.isFunctionDeclaration(node)&&node.name?.text===name);
+    assert.equal(matches.length,1);return [name,matches[0].getText(rawRunnerAST)];
+  }));
+  assert.equal(hash(rawActionNames.map(name=>rawActionBodies[name]).join('\n')),'9f00eceef7051e65a426cf316086528281a2717a6a71da619d18c08ce04604e1');
+  let rawActionRecords=0;
+  for(const [name,sha256,count,revision]of retainedRawControlLogs){
+    const file=`artifacts/material-parity/${name}`,bytes=readFileSync(file);assert.equal(hash(bytes),sha256);
+    const [receipt,...rows]=bytes.toString().trim().split(/\r?\n/).map(JSON.parse),terminal=rows.pop();
+    assert.equal(receipt.cases,count);assert.equal(rows.length,count);assert.equal(terminal.captured,count);
+    assert.equal(terminal.result,'PASS');assert.equal(receipt.acceptance,false);assert.equal(terminal.acceptance,false);
+    const capturedScript=execFileSync('git',['show',`${revision}:${rawScriptFile}`]);assert.equal(hash(capturedScript),receipt.scriptSha256);
+    assert.equal(hash(resourceRunnerBytes),receipt.runnerSha256);assert.equal(hash(frozenHelper),receipt.helperSha256);
+    assert.equal(hash(readFileSync(receipt.checkpointFile)),receipt.checkpointSha256);
+    const originalSorter=execFileSync('git',['show',`6b0486f0:${sorterFile}`]);assert.equal(hash(originalSorter),receipt.sorterSha256);
+    for(const row of rows){
+      const key=scalarCaseKey({...row.case,kind:'interaction'});assert.ok(paintCaseRows.has(key));
+      assert.deepEqual(row.errors,[]);assert.equal(row.acceptance,false);rawActionRecords++;
+      const observations=rawControlActions.get(key)??[];
+      observations.push({observation:row,evidence:{log:{file,sha256},checkpoint:{file:receipt.checkpointFile,sha256:receipt.checkpointSha256},
+        currentRunner:{file:resourceRunnerFile,sha256:hash(resourceRunnerBytes)},currentSorter:{file:sorterFile,sha256:hash(sorterBytes)}},
+        sourceConservation:{capturedScript:{revision,originalLogicalFile:rawScriptFile,capturedSha256:receipt.scriptSha256},
+          capturedSorter:{revision:'6b0486f0',originalLogicalFile:sorterFile,capturedSha256:receipt.sorterSha256},
+          frozenHelperSha256:receipt.helperSha256,actionBodiesSha256:receipt.actionBodiesSha256},
+        boundary:'Exact configured physical anchor with retained raw before/after and optional key/pointer/held samples. Keyboard/disabled probes add supplementary actions; not the original matrix action in every mode. Historical Git/source receipts and current helper/action bodies authenticate; no current browser,all-frame paint,complete lifetime or whole-case acceptance.'});
+      rawControlActions.set(key,observations);
+    }
+  }
+  assert.equal(rawActionRecords,105);assert.equal(rawControlActions.size,82);
+  let rawControlJoins=0;
+  for(const record of allObligations){
+    const observations=rawControlActions.get(record.case);if(!observations)continue;rawControlJoins++;
+    const previous=record.obligations.authoredActivation;
+    record.obligations.authoredActivation={...previous,disposition:'partial',retainedRawControlActions:observations,
+      remaining:[...(previous.remaining??[]),'Complete action/input/focus/currentness disposition beyond retained raw control samples']};
+  }
+  assert.equal(rawControlJoins,82);
   assert.equal(new Set(allObligations.map(row=>row.case)).size,2311);
   assert.deepEqual(allObligations.map(row=>row.case).sort(),allConfigured.map(scalarCaseKey).sort());
   assert.ok(allObligations.every(row=>row.inspection==='partial'&&row.currentRendering==='unverified'));
@@ -3069,7 +3117,7 @@ test('passive state applicability joins exact cases without discarding progress 
     reportedScalarInputCases:2311,reportedScalarGroups:8483,dividerActualAXCases:24,dividerUpdateDisposalCases:24,dividerLocalTextRasterCases:24,dividerCoordinateHistoryCases:24,supplementaryKeyboardCases:40,extendedKeyboardCases:128,
     editingTargetApplicabilityCases:1957,editingCounts,configuredFocusRecordedProvenanceIncomplete:40,
     retainedTargetRasterCases:1000,paintCounts,retainedResourceSamplingCases:1875,resourceSampleCounts,
-    retainedTargetDOMComparisonCases:2311,semanticCounts,retainedEventBoundaryCases:1875,eventCounts,supplementaryMenuActionContexts:menuActionJoins,commitEndpointCounts,completeCaseClosures:0,currentRenderingAccepted:0}));
+    retainedTargetDOMComparisonCases:2311,semanticCounts,retainedEventBoundaryCases:1875,eventCounts,supplementaryMenuActionContexts:menuActionJoins,commitEndpointCounts,rawControlJoins,rawActionRecords,completeCaseClosures:0,currentRenderingAccepted:0}));
   t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,
     scope:'Exact configured retained authoring: no activation/editing descendants. Forty native negative-tabindex progress owners keep a programmatic-focus obligation; no live focus, unrecorded callback, paint, lifecycle, source-currentness or full-case closure is inferred.'}));
 });
