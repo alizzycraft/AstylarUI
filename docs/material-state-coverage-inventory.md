@@ -1,5 +1,36 @@
 # Material comparison/state coverage inventory
 
+## Passive actual AX join and current-build boundary — October 13
+
+Existing progress AX observations now attach to40 exact proposed cases through
+32 physical cohorts/64 paired observations. Hash88c9b67f authenticates role
+progressbar,empty name,value64,range0–100,no AX children and the native-only
+focusable/tabindex=-1 properties. Forged role fails. Proposal review digest
+edaf12128049f579e7b6d48a289a790a2a6e42552b392531c04b7db8cb8b24d4
+retains inspected actualHostAX subrecords and unchanged partial overall semantics,
+historical focus failures and current-rendering uncertainty. Existing progress
+proof plus passive case join pass2/2,zero skips,exit0,3812.3179ms. Log
+passive-progress-ax-obligation-join-20261013.log SHA
+5e0acea6db730c8e2a9a8ef6d7b2ec196d4327d4beb701ca1abd6b17032aa956.
+
+Table/list owning replay fails before AX assertions at its whole-served-directory
+receipt,not a new semantic rendering failure. Original pair run:progress passes,
+table/list fails. Separately retained table/list failure exits1,0/1,zero skips,
+2476.3026ms; table-list-ax-currentness-failure-20261013.log SHA
+9b47468a7ac69351def43fde6e26bbf4b9d392c7fba03adea5ffddb26b99e019.
+Compact direct fingerprint comparison reconfirms1887 historical/current files:
+1880 equal,four historical chunk JS/maps missing,three changed entry files
+(compare/index.html,index.csr.html,main.js),four replacement chunk JS/maps added.
+This is the already-recorded build transition,not permission to waive receipt
+checks or describe old AX output as current. No table/list AX observation was
+attached as current by this increment; historical logs remain intact.
+
+Next reconcile the owning historical replay through the existing authenticated
+source/build transition mechanism,or leave that applicability explicitly pending;
+do not recapture merely to replace old proof truth. Additive proposal/source
+conservation and canonical integration remain pending for a coherent batch.
+No renderer/fixture changes; all2311 full-case closures/final gates remain open.
+
 ## Passive authored semantic exact-case join — October 13
 
 Existing passive-descendant-semantics logaa5932cd joins all354 exact proposed

@@ -2133,6 +2133,7 @@ test('passive state applicability joins exact cases without discarding progress 
       authoredAttributeObservation:{disposition:'inspected',referenceHidden,
         candidateHidingRequests:observation.sides.astylar.filter(node=>node.attrs.ariaHidden!==undefined).length,
         evidence:{file:semanticFile,sha256:semanticSha256,case:semanticKey(entry),sources:semanticSummary.sources}},
+      ...(progressFocus.has(identity(entry,entry.kind))?{actualHostAX:joinProgressAX(entry)}:{}),
       remaining:['actual generated bridge and AX relationships','assistive-technology behavior','complete semantic input mapping','current rendering applicability'],
       boundary:'Recorded authored subtree attributes only; absent recorded attributes are not invented defaults.'};
   };
@@ -2144,6 +2145,32 @@ test('passive state applicability joins exact cases without discarding progress 
   const cohortKey = row => [row.family,row.profile,row.viewport.width,row.viewport.height,row.viewport.deviceScaleFactor].join('/');
   const focusCohorts = [...new Set(cases.filter(row=>progressFocus.has(identity(row,row.kind))).map(cohortKey))].sort();
   assert.equal(focusCohorts.length,32);
+  const axFile='artifacts/material-parity/progress-actual-ax-cohorts-20261007.log';
+  const axBytes=readFileSync(axFile),axSha256=hash(axBytes);
+  assert.equal(axSha256,'88c9b67f0d0dc8267bf7b51d77839e15df74e5a118d3414b6db868813f323d31');
+  const axRows=axBytes.toString().trim().split(/\r?\n/).map(JSON.parse).filter(row=>row.family);
+  assert.equal(axRows.length,64);
+  for(const mode of ['reference','astylar'])
+    assert.deepEqual(axRows.filter(row=>row.mode===mode).map(cohortKey).sort(),focusCohorts);
+  const joinProgressAX=(entry,rows=axRows)=>{
+    const observations=Object.fromEntries(['reference','astylar'].map(mode=>{
+      const matches=rows.filter(row=>row.mode===mode && cohortKey(row)===cohortKey(entry));assert.equal(matches.length,1);
+      const row=matches[0];assert.deepEqual(row.errors,[]);
+      assert.equal(row.target.ignored,false);assert.equal(row.target.role.value,'progressbar');
+      assert.equal(row.target.name.value,'');assert.equal(row.target.value.value,64);assert.deepEqual(row.target.childIds,[]);
+      const properties=Object.fromEntries(row.target.properties.map(p=>[p.name,p.value.value]));
+      assert.deepEqual(properties,mode==='reference'?{focusable:true,valuemin:0,valuemax:100,valuetext:''}:
+        {valuemin:0,valuemax:100,valuetext:''});
+      assert.equal(row.dom.tabindex,mode==='reference'?'-1':null);
+      return [mode,{role:row.target.role.value,name:row.target.name.value,value:row.target.value.value,
+        ignored:row.target.ignored,childIds:row.target.childIds,properties,tabindex:row.dom.tabindex}];
+    }));
+    return {disposition:'inspected',outcome:'bounded-role-value-agreement-with-focusability-difference',
+      evidence:{file:axFile,sha256:axSha256,cohort:cohortKey(entry),observations},
+      boundary:'Historical host AX observations only; complete AX relationships,AT behavior and current rendering remain unverified.'};
+  };
+  const forgedAX=structuredClone(axRows);forgedAX[0].target.role.value='generic';
+  assert.throws(()=>joinProgressAX(cases.find(row=>cohortKey(row)===cohortKey(forgedAX[0])),forgedAX));
   assert.equal(focusRows.length,64);
   for(const mode of ['reference','astylar'])
     assert.deepEqual(focusRows.filter(row=>row.mode===mode).map(cohortKey).sort(),focusCohorts);
