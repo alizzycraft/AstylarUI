@@ -1,5 +1,25 @@
 # Material comparison/state coverage inventory
 
+## Shared fixed-height history has exact witnesses for all436 static cases — October 14
+
+Read-only census authenticates October5 reportSHAab42dbec and872 static trees.
+All436 exact case IDs occur in existing material-root-height-audit.json membership
+(2311 total). Every paired root is a unique section;native inline/matched rules
+omit size constraints,candidate root rule authors a positive pixel height and all
+three captured stages retain it with border-box. Zero declaration-witness gaps.
+This is not used-size equality,responsive winner proof or current rendering.
+
+Bounded Git2f44011 source read SHA256
+6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24
+confirms original reference/compact/contrast height tables and root referenceHeight
+bindings. Existing fixture-fixed-reference-heights finding and root-height owning
+proofs already classify this;do not rediscover the root cause or recapture436 cases.
+Next join these exact declaration/history witnesses through the existing case
+proof,index and source receipts,not a family-name/global finding shortcut. This
+can address408 pending static history joins while preserving slider/divider work;
+it cannot close all history/ownership obligations. No new proposal/export/capture.
+Previous turn pushed3eab5bdd;published canonicale8 and all acceptance gates remain.
+
 ## Exact static slider inputs join separate domain and step history — October 14
 
 Question: does the global fixed-half-domain finding apply to every retained
