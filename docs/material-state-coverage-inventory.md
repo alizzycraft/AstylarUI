@@ -1,5 +1,32 @@
 # Material comparison/state coverage inventory
 
+## Retained-observation cold verification completes; canonical publication — October 14
+
+Independent cold session90211 terminates exit0. Log
+retained-observations-canonical-cold-check-20261013.log SHA256
+cc48f0d5d6ca064f28f4c74d1f86c1b8ddb24a66488f2c66e78d972a585d8915
+records complete elapsed3595129.4463ms. Its cold evidence session executes2
+collectors,10 memory hits,0 disk hits,0 invalidations;8616 actual files and
+910484833 bytes are read and reverified. Source/candidate inputs stayed frozen.
+This is terminal success,not the prior quiet validation phase;do not rerun it.
+
+Canonical generatione8ba3d4788cfabe938b484d02157de46db1dea6890a8b7e5934da88254cd43d0
+now has successful export,cold comparison,compact import/whole-index verification,
+complete compact conservation and all49 original-row conservation. Actual gzip
+SHA/65560555 bytes and indexSHAaa3af869 match manifest/current pointer. Markdown
+SHAb506f34c remains identical to the already verified610-line claim conservation;
+only test line anchors change versus published918. Complete changed-row evidence
+and48 negative controls are recorded immediately below. Three canonical files
+are ready for the scoped publication commit;no renderer/fixture/gate changes.
+
+The b7 retained-observation batch preserves8483 scalar groups,389202 occurrences,
+157 source findings,39904 controls and0 unresolved scalar signatures. All2311
+whole-case records remain partial/unverified;inputEquivalent=false and current
+rendering acceptance=false. Publication is not audit completion or parity success.
+Next reuse the identified120 supplementary focus observations with exact action/
+source/context boundaries,then remaining activation,paint/static history joins.
+All original final unfiltered audit,enforced browser and release gates remain.
+
 ## Retained-observation complete-row conservation succeeds — October 14
 
 Original-row verification session6557 terminates exit0; do not restart it.
