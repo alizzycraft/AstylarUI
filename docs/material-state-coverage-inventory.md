@@ -1,5 +1,41 @@
 # Material comparison/state coverage inventory
 
+## Correction: installedDependencies hashes the workspace-root lock — October 13
+
+The previous turn advanced currentness records,but its installed-lock mismatch
+claim used the wrong evidence owner. Source tracing now proves run-material-parity
+sets root=process.cwd() and hashes path.join(root,'node_modules/.package-lock.json').
+It does NOT hash examples/material-showcase/node_modules/.package-lock.json.
+The workspace-root lock still equals capturedffcc9a253583e0b36f7c4b5a7690499c0ee749e9e267601fae26a51d26745acb
+in all three subset reports. Nested consumercca524 is a different file,not evidence
+that this captured dependency fingerprint changed. Prior mismatch/unknown-original-
+lock claims below are superseded;historical logs/proposals remain immutable.
+
+This is an audit measurement-owner defect,not confirmed dependency/runtime drift.
+Bounded read checks of existing worktrees and the absent visible consumer lock did
+not recover the requested digest because that was the wrong input. Stop that
+search;no package reinstall or speculative metadata normalization is justified.
+Existing owning case proof now checks the exact root declaration and dependency
+hash expression in current and Git8aa0e2e5 source. A nested-lock substitution
+rejects. SourceCurrentness captures explicitly name the root lock and distinguish
+this toolchain receipt from showcase-installed-package equivalence.
+
+Final frozen-source proof passes1/1,0 skips,total21677.038ms in
+all-case-dependency-owner-final-20261013.log SHA
+dfeb3d547d22bb3c988f6e54c9081aac41d26757c14e5f793ceb0e15f904b4fa.
+Proposalb7ebc7694f5fb0cf1577f61ba41062f6ae7658abeb0688214504706a64d976eb
+is noncanonical. Existing loader authenticates7410 dependencies/2311 partial cases;
+all92 capture records have matching correct-root receipts. Complete comparison to
+12c3b0fe proves only sourceCurrentness changes;all other fields/headers conserve.
+Both acceptance flags remain false. No original source,report,scope or gate waived.
+
+Current conclusion:91 unique cases have matching served-build captures with root
+lock agreement;overlay/trace retain runner-only drift,pointer graph matches.
+Browser/runtime/equal-input/full-case applicability is still not certified.
+Next coherent pending-batch producer/source-fingerprint integration and remaining
+focus/action obligations,not further investigation of this resolved false mismatch.
+Canonical918 unchanged;all2311 whole-case closures/final gates remain open.
+
 ## All-case served-build applicability remains distinct from installed dependencies — October 13
 
 Question: which retained observations match today's served build and harness,

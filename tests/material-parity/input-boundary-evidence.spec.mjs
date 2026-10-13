@@ -3106,7 +3106,23 @@ test('passive state applicability joins exact cases without discarding progress 
   assert.equal(rawControlJoins,82);
   const servedRoot='examples/material-showcase/dist/material-showcase/browser';
   const currentServed=fingerprintDirectory(servedRoot),currentModules=fingerprintModuleGraph(process.cwd(),resourceRunnerFile);
-  const installedLockFile='examples/material-showcase/node_modules/.package-lock.json',installedLockSha=hash(readFileSync(installedLockFile));
+  const assertDependencyOwner=source=>{
+    const ast=ts.createSourceFile('runner.mjs',source,ts.ScriptTarget.Latest,true,ts.ScriptKind.JS);
+    assert.deepEqual(ast.parseDiagnostics,[]);
+    const roots=ast.statements.filter(ts.isVariableStatement).flatMap(node=>[...node.declarationList.declarations])
+      .filter(node=>node.name.getText(ast)==='root');
+    assert.equal(roots.length,1);assert.equal(roots[0].initializer.getText(ast),'process.cwd()');
+    const fields=[];const visit=node=>{
+      if(ts.isPropertyAssignment(node)&&node.name.getText(ast)==='installedDependencies')fields.push(node.initializer.getText(ast));
+      ts.forEachChild(node,visit);
+    };visit(ast);
+    assert.deepEqual(fields,["createHash('sha256').update(readFileSync(path.join(root, 'node_modules/.package-lock.json'))).digest('hex')"]);
+  };
+  assertDependencyOwner(resourceRunnerBytes.toString());
+  assertDependencyOwner(resourcePrior);
+  assert.throws(()=>assertDependencyOwner(resourceRunnerBytes.toString().replace(
+    "path.join(root, 'node_modules/.package-lock.json')","path.join(showcaseRoot, 'node_modules/.package-lock.json')")));
+  const installedLockFile='node_modules/.package-lock.json',installedLockSha=hash(readFileSync(installedLockFile));
   const oldServed=new Map(captured.captureProvenance.browserFiles.map(receipt=>[receipt.file,receipt.sha256]));
   const newServed=new Map(currentServed.map(receipt=>[receipt.file,receipt.sha256]));
   const servedDifference={equal:currentServed.filter(receipt=>oldServed.get(receipt.file)===receipt.sha256).length,
@@ -3138,7 +3154,7 @@ test('passive state applicability joins exact cases without discarding progress 
       const key=scalarCaseKey({...row,kind:'interaction'});assert.ok(paintCaseRows.has(key));buildCaptureCounts.records++;
       const observations=currentBuildCases.get(key)??[];
       observations.push({mode,recordedMeetsAcceptance:row.meetsAcceptance,browser:capture.browser,
-        installedDependencies:{capturedSha256:capture.captureProvenance.installedDependencies,currentSha256:installedLockSha,matches:installedLockMatches},
+        installedDependencies:{logicalFile:installedLockFile,capturedSha256:capture.captureProvenance.installedDependencies,currentSha256:installedLockSha,matches:installedLockMatches},
         harnessDifferences:moduleDrift.map(receipt=>({logicalFile:receipt.file,currentSha256:receipt.sha256,
           capturedSha256:capture.captureProvenance.harnessFiles.find(old=>old.file===receipt.file)?.sha256})),
         evidence:{report:{file,sha256},manifest:{file:manifestFile,sha256:hash(readFileSync(manifestFile))}}});
@@ -3157,10 +3173,10 @@ test('passive state applicability joins exact cases without discarding progress 
       ...(record.case===buildEvidenceCase?{sharedBuildEvidence:{servedDifference,baselineBrowser:captured.browser,
         currentServedFiles:currentServed.map(receipt=>({file:`${servedRoot}/${receipt.file}`,sha256:receipt.sha256})),
         currentHarnessFiles:currentModules,installedLock:{file:installedLockFile,sha256:installedLockSha}}}:{}),
-      boundary:'Filesystem/build/harness and exact checkpoint applicability only. Report modes are not combined acceptance; captured browser version,launch,clock,fonts,execution and full equal-input obligations still need scope-specific validity. No current-browser run or whole-case acceptance.',
+      boundary:'Filesystem/build/harness and exact checkpoint applicability only. Dependency-lock field covers the workspace root,not showcase-installed package equivalence. Report modes are not combined acceptance; captured browser version,launch,clock,fonts,execution and full equal-input obligations still need scope-specific validity. No current-browser run or whole-case acceptance.',
       remaining:[...(previous.remaining??[]),'Full runtime/environment/input applicability and complete enforced current rendering evidence']};
   }
-  assert.deepEqual(buildCaptureCounts,{records:92,unique:91,withoutCapture:2220,installedLockMatches:0,installedLockDiffers:3});
+  assert.deepEqual(buildCaptureCounts,{records:92,unique:91,withoutCapture:2220,installedLockMatches:3,installedLockDiffers:0});
   assert.equal(new Set(allObligations.map(row=>row.case)).size,2311);
   assert.deepEqual(allObligations.map(row=>row.case).sort(),allConfigured.map(scalarCaseKey).sort());
   assert.ok(allObligations.every(row=>row.inspection==='partial'&&row.currentRendering==='unverified'));
