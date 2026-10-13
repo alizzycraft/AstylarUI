@@ -1,5 +1,36 @@
 # Material comparison/state coverage inventory
 
+## All configured cases have explicit partial scalar-input records — October 13
+
+Existing case-coverage proof now records all2311 configured cases/36 families,
+not just the354 passive cases. It joins explicit reviewed/sample case membership
+in all8483 classified scalar groups,without expanding occurrence counts into
+unrecorded membership. All1957 additional cases have3914 hash-authenticated
+paired tree receipts,valid unique node identities,no recorded tree errors and
+exact configured viewport/state membership. This authenticates intake,not
+complete structure or rendering. Active-case activation,editing,focus,paint,
+semantics,history and currentness applicability remain explicitly unverified
+and evidence-join-pending; passive exclusions are never copied to them.
+
+All prior354 passive records are byte-equivalent in the new proposal. Existing
+owning proof passes1/1,zero skips,14735.3242ms. Log
+all-case-scalar-obligation-join-20261013.log SHA
+c09493c23fb8022c9ebb50d918449768c0482037af59b9535a4a296db4e5a4eb. Proposal
+38a14852a123c2cd081ef6448c3185de8569b75484b1427c10687b607a215f8f contains
+2311 partial/unverified records; no full inspection/current rendering acceptance.
+Independent existing coverage loader revalidates4779 dependencies and returns
+zero unjoined case identities; conservation log
+all-case-scalar-loader-conservation-20261013.log SHA
+6129dbd4615b325595e1d2c9f474c4e0a88286e6fe9076a8d47e8214603388c2 exits0. No new report framework,
+browser capture,renderer/fixture change or acceptance relaxation.
+
+This closes the proposed case-record identity gap,not inspection obligations.
+Accepted c9cd6957 still contains the earlier354 partial joins/1957 unjoined IDs;
+the all-case proposal is not canonical until coherent source/export validation.
+Next join retained action/semantic/paint evidence for the active families and
+reconcile this batch. Do not infer complete audit coverage from2311 records or
+zero unjoined IDs. All2311 full-case closures and original final gates remain open.
+
 ## Divider coordinate-history and public core-failure join — October 13
 
 All24 exact divider cases now link recorded paragraph/separator input positions
