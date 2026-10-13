@@ -1,5 +1,26 @@
 # Material comparison/state coverage inventory
 
+## Coherent editing/focus canonical export terminal success — October 13
+
+Original export24483 exits0,total3112398.9991ms (51.87min). Log
+editing-focus-canonical-export-20261013.log SHA
+320aca22d6ec7c8aa1ced45e435e46eefeb3a41333a87ac9a1942943a4a6b144.
+Evidence session:1 collector,10 memory hits,1 disk hit,0 invalidations;
+6482 files/807348304 bytes read and rehashed. Counts remain436/436 static,
+1875/1875 interaction,8483 differences,389202 occurrences,157 source findings;
+inputEquivalent=false. Consumed inputs were not edited during execution.
+
+Written candidate manifest91837a8d69827a58dfe9379f39183d261b728e498e6a816dcea1dca1334837ad
+has64528074 compressed bytes,2253733576 decoded bytes,decoded SHA
+b7a220476a7cea3e210c8e1786c8dee0ca2168ae81ee61e4cf8fd337b6d44038.
+It is NOT independently accepted,published or imported. Accepted920 remains the
+previous publication; candidate working-file output must not be called accepted.
+Next independent named ASTYLAR_AUDIT_COLD=1 --check in
+editing-focus-canonical-cold-check-20261013.log,then compact import/conservation and
+publication only after terminal success. Free D:3814100992 bytes at preflight.
+Sources/evidence remain frozen for cold verification. No renderer/fixture/capture,
+threshold or final acceptance changes; all2311 whole-case closures remain partial.
+
 ## Pending obligation census selects retained paint joins while export is live — October 13
 
 Read-only59409a78 proposal census:2311 inputStyleStructure partial;
