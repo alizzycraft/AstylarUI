@@ -442,13 +442,15 @@ test('retained antialias and selection receipts replay after exact diagnostic an
     assert.equal(matches.length, 1);
     const callback = matches[0].expression.arguments[1].getText(ast);
     const run = new Function('assert', 'readFileSync', 'createHash', 'ts', 'transformSync', 'validateSupplementalCapture',
-      'propertyGroups', 'PNG', 'path', `return (${callback});`)(assert, retainedRead, createHash, ts, transformSync,
-        validateSupplementalCapture, propertyGroups, PNG, path);
+      'propertyGroups', 'PNG', 'path', 'materialStaticCases', 'materialInteractionCases', 'materialMobileFlowCases',
+      'materialCaseKey', `return (${callback});`)(assert, retainedRead, createHash, ts, transformSync,
+        validateSupplementalCapture, propertyGroups, PNG, path, materialStaticCases, materialInteractionCases,
+        materialMobileFlowCases, materialCaseKey);
     await run({ diagnostic() {} });
   }
   assert.ok(reads.core > 0); assert.equal(reads.sorter, 2);
   assert.ok(reads.inspector > 0);
-  t.diagnostic('Three original receipt assertions replay unchanged; exact current source deltas are diagnostic/theme-only. Historical applicability, not current browser rendering acceptance. Original direct receipt failures remain visible.');
+  t.diagnostic('Three original receipt/pixel assertion sets are preserved; selection adds an exact configured-context scope guard. Source restorations remain diagnostic/theme-only. Historical applicability, not current browser rendering acceptance. Original direct receipt failures remain visible.');
 });
 
 test('public antialias option evidence binds original core arguments and Babylon override', () => {
@@ -1824,6 +1826,18 @@ test('selection local pixels retain exact native key boundaries and paint receip
   const hash = b => createHash('sha256').update(b).digest('hex');
   assert.equal(hash(readFileSync(report.actionSource.file)),report.actionSource.sha256);
   const expected = [[5,5,'forward'],[0,3,'forward'],[5,5,'forward'],[2,5,'backward']];
+  const sameContext = (c, row) => c.family === row.family && c.profile === row.profile
+    && ['width','height','deviceScaleFactor'].every(key => c.viewport[key] === row.viewport[key]);
+  const staticAnchors = materialStaticCases.filter(c => report.results.some(row => sameContext(c, row)));
+  const interactionAnchors = [...materialInteractionCases,...materialMobileFlowCases]
+    .filter(c => report.results.some(row => sameContext(c, row)));
+  assert.equal(staticAnchors.length, 4);
+  assert.equal(interactionAnchors.length, 0, 'Supplementary mobile editing must not close configured desktop focus actions');
+  t.diagnostic(JSON.stringify({ selectionApplicability: {
+    staticContextAnchors: staticAnchors.map(c => materialCaseKey('static', c)),
+    configuredInteractionAnchors: [],
+    boundary: 'Same physical static contexts only; captured editing actions are supplementary, not original static states or configured interaction closure.'
+  } }));
   const solidPaint = [];
   assert.equal(report.results.length, 16);
   for (const profile of ['light','dark','contrast','custom']) {

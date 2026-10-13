@@ -1,5 +1,31 @@
 # Material comparison/state coverage inventory
 
+## Selection action applicability bounded to supplementary mobile contexts — October 13
+
+Decisive membership check resolves the proposed exact-case join: the retained16
+selection-local-pixels rows have no configured caseId and use four profiles at
+390x844 DPR2 with typed/forward/end-collapsed/backward actions. They match exactly
+four form-field static physical contexts,but zero configured interaction/mobile-flow
+contexts. Therefore they cannot close any configured desktop focus action or be
+counted as16 additional configured cases. They remain supplementary editing/paint
+evidence; matching static viewport does not make their changed state a static pass.
+
+Existing selection proof now asserts those4/0 context counts and emits exact static
+anchors plus the limitation. Original receipt/state/pixel assertions remain intact;
+the existing historical callback replay receives the already imported configuration
+arrays and case-key function,not substituted fixture data. First focused run rejected
+missing callback lexical materialStaticCases (ReferenceError,total2552.4061ms);
+explicit original configuration bindings correct that invocation gap. Final focused
+retained antialias/selection replay passes1/1,0 skips,1514.6977ms owning test,
+2733.5675ms total. No renderer,fixture,capture,threshold or acceptance changes.
+
+This is an applicability answer,not a machine-recorded full-case join or current
+output claim. Next address retained configured40-context focus evidence through
+the existing original runner conservation boundary,or record exact historical-only
+dispositions if missing bytes cannot be recovered; do not repeat the exhausted e01
+search. Other existing action populations must be matched before joining. Pending
+editing/source-fingerprint batch and original final gates remain unchanged.
+
 ## Existing selection replay restored through authenticated inspector transition — October 13
 
 The prior action-source failure has an existing owner: benchmark-config's retained
