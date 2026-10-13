@@ -2720,6 +2720,38 @@ test('passive state applicability joins exact cases without discarding progress 
   const editingCounts={writable:0,notWritable:0,disabledText:0,readonlySelect:0};
   let additionalTreeReceipts=0;
   const pending=()=>({applicability:'unverified',disposition:'evidence-join-pending'});
+  const configuredInputFocusCases=new Map();
+  {
+  const focusFile='artifacts/material-parity/configured-input-focus-20261008/latest-report.json';
+  const focusBytes=readFileSync(focusFile);
+  assert.equal(hash(focusBytes),'423b25877eef3b17418a9849a0059dd101015704462a3097ed6f8761e65db584');
+  const focusCapture=JSON.parse(focusBytes);
+  const focusManifestBytes=readFileSync(focusCapture.capture.checkpointManifest.file);
+  assert.equal(hash(focusManifestBytes),focusCapture.capture.checkpointManifest.sha256);
+  assert.equal(focusCapture.actionSource.sha256,'e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0');
+  const focusFamilies=['form-field','input','autocomplete','datepicker','timepicker'];
+  for(const c of allConfigured.filter(c=>c.kind==='interaction'&&c.state==='focus'&&focusFamilies.includes(c.family))){
+    const samples=focusCapture.results.filter(row=>row.caseId===materialCaseKey('interaction',c));
+    assert.deepEqual(samples.map(row=>row.sample),[0,1,2,3,4,5]);
+    const observations=samples.map(row=>{
+      assert.equal(row.family,c.family);assert.equal(row.profile,c.profile);assert.deepEqual(row.viewport,c.viewport);
+      assert.equal(row.action,row.sample?'wait 125ms':'original configured focus action');
+      for(const side of ['reference','astylar'])assert.equal(hash(readFileSync(row[side].inputTree.file)),row[side].inputTree.sha256);
+      return {sample:row.sample,action:row.action,reference:row.reference.observation.control,
+        astylar:row.astylar.observation.control,pairedTrees:{reference:row.reference.inputTree,astylar:row.astylar.inputTree}};
+    });
+    configuredInputFocusCases.set(scalarCaseKey(c),{applicability:'applicable',disposition:'partial',
+      retainedObservation:{disposition:'recorded-provenance-incomplete',evidence:{file:focusFile,sha256:hash(focusBytes),
+        checkpointManifest:focusCapture.capture.checkpointManifest,actionSource:focusCapture.actionSource},observations},
+      sourceCurrentness:{disposition:'unverified',missing:'Exact captured e01ef9dc whole runner bytes; bounded recovery already exhausted.',
+        currentRunner:{file:focusCapture.actionSource.file,sha256:hash(readFileSync(focusCapture.actionSource.file))}},
+      remaining:['Original owning source/behavior/paint assertions with complete runner provenance','Current rendering applicability and other action boundaries'],
+      boundary:'Exact configured identity and recorded control/tree chronology only. Does not replay the original owning proof,validate complete capture provenance,accept pixels or close focus/editing behavior.'});
+  }
+  assert.equal(configuredInputFocusCases.size,40);assert.equal(focusCapture.results.length,240);
+  assert.deepEqual([...new Set(focusCapture.results.map(row=>row.caseId))].sort(),
+    allConfigured.filter(c=>c.kind==='interaction'&&c.state==='focus'&&focusFamilies.includes(c.family)).map(c=>materialCaseKey('interaction',c)).sort());
+  }
   const additionalObligations=remainingCases.map(row=>{
     const caseId=scalarCaseKey(row),configured=configuredByKey.get(caseId);assert.ok(configured);
     assert.deepEqual(row.viewport,configured.viewport);
@@ -2755,7 +2787,7 @@ test('passive state applicability joins exact cases without discarding progress 
       evidence:{report:'artifacts/material-parity/current-full-20261005/latest-report.json',reportSha256,pairedTrees:row.inputTrees},
       pairedTreeAuthentication:{disposition:'authenticated',nodeCounts,
         boundary:'Exact capture receipts and node identity only; not structure,input equality,control applicability or current rendering.'},
-      obligations:{authoredActivation:keyboardCases.get(caseId)??pending(),authoredEditing:editing,programmaticFocus:pending(),
+      obligations:{authoredActivation:keyboardCases.get(caseId)??pending(),authoredEditing:editing,programmaticFocus:configuredInputFocusCases.get(caseId)??pending(),
         inputStyleStructure:joinScalarInputs(row),localPaint:pending(),semantics:pending(),historyOwnership:pending(),sourceCurrentness:pending(),
         ...(extendedKeyboardCases.has(caseId)?{keyboardInteraction:extendedKeyboardCases.get(caseId)}:{})}};
   });
@@ -2777,7 +2809,7 @@ test('passive state applicability joins exact cases without discarding progress 
   t.diagnostic(JSON.stringify({caseObligationProposal:proposal, cases:2311,passiveCases:354,additionalCases:1957,additionalTreeReceipts,
     authoredActivationExclusions:354,authoredEditingExclusions:354,programmaticFocusApplicable:40,
     reportedScalarInputCases:2311,reportedScalarGroups:8483,dividerActualAXCases:24,dividerUpdateDisposalCases:24,dividerLocalTextRasterCases:24,dividerCoordinateHistoryCases:24,supplementaryKeyboardCases:40,extendedKeyboardCases:128,
-    editingTargetApplicabilityCases:1957,editingCounts,completeCaseClosures:0,currentRenderingAccepted:0}));
+    editingTargetApplicabilityCases:1957,editingCounts,configuredFocusRecordedProvenanceIncomplete:40,completeCaseClosures:0,currentRenderingAccepted:0}));
   t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,
     scope:'Exact configured retained authoring: no activation/editing descendants. Forty native negative-tabindex progress owners keep a programmatic-focus obligation; no live focus, unrecorded callback, paint, lifecycle, source-currentness or full-case closure is inferred.'}));
 });

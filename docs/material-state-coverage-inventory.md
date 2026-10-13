@@ -1,5 +1,35 @@
 # Material comparison/state coverage inventory
 
+## Forty configured text-focus records retain explicit provenance incompleteness — October 13
+
+Existing exact-case proof now joins configured-input-focus capture423b2587 to40
+desktop focus identities across five text families/four profiles/DPR1/2. All240
+sample rows preserve original action then five125ms waits;480 paired tree receipts
+and original checkpoint manifest bytes authenticate. Recorded control endpoints,
+values,types and focused flags are retained,not inferred from the parent target.
+This answers where the evidence belongs,not whether complete capture provenance
+or the original owning behavior/pixel assertions pass.
+
+Each programmaticFocus record remains partial and labels retainedObservation
+recorded-provenance-incomplete. It records captured e01 whole runner expectation,
+current runner hash,and the exact missing bytes; bounded recovery was already
+exhausted. No runner receipt is waived or replaced. These records do not certify
+behavior,equal inputs,current rendering or full-case closure. Supplementary mobile
+selection is deliberately not substituted for these configured desktop actions.
+
+Focused existing applicability proof passes1/1,0 skips,16307.6218ms,total17539.1615ms.
+Initial invocation rejected a duplicate focusFile binding before execution; the
+new population uses its own lexical scope. Proposalcb2a855cfcad77306af158d62412a52b9339dacad962543fcc1b8281622da10e
+is noncanonical. Complete read-only comparison against bd837791 conserves all2311
+case records and headers except programmaticFocus on exactly40 cases; all354
+passive records and1957 editing-target dispositions remain unchanged.
+
+Next address remaining exact action/paint/currentness dispositions,prioritizing
+shared control evidence; source-fingerprint reconciliation remains pending for the
+coherent editing batch. Do not repeat missing-runner search or unchanged failing
+replay. Existing canonical920 acceptance,all full-case closures and original final
+gates remain open. No renderer,fixture,capture or threshold changes.
+
 ## Selection action applicability bounded to supplementary mobile contexts — October 13
 
 Decisive membership check resolves the proposed exact-case join: the retained16
