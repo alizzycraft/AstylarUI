@@ -1,6 +1,6 @@
 # Material comparison/state coverage inventory
 
-## Coherent204 all-case export completed; cold check pending — October 13
+## Coherent204 all-case publication verified — October 13
 
 Named complete-baseline export exits0 after2930401.2953ms (48.84min).
 Log coherent204-all-case-export-20261013.log SHA
@@ -11,13 +11,17 @@ hit,0 invalidations,5999 files/702674275 bytes read and reverified. Counts remai
 inputEquivalent remains false. Generated Markdown now explicitly records2311
 partial case joins/zero unjoined,not full inspection or current rendering acceptance.
 
-Written candidate manifest92024016d8d0d5f1c53668f0bb44c8fdec73867de5e8e9130c8be51749d15297
+Verified manifest92024016d8d0d5f1c53668f0bb44c8fdec73867de5e8e9130c8be51749d15297
 has64438820 compressed bytes,2251357184 decoded bytes,decoded SHA
 51dcd64e25d542a704c1db93ab8551bb8ed3ed939993df478a78c7eba3da9757.
-This is not accepted publication yet: independent cold named --check is live in
-session75648,logging coherent204-all-case-cold-check-20261013.log. All consumed
-sources/evidence remain frozen. Free D:4267896832bytes at cold preflight.
-Accepted c9cd6957 working index/predecessor evidence remain retained.
+Independent cold named --check session75648 exits0 after3261103.9283ms (54.35min).
+Log coherent204-all-case-cold-check-20261013.log SHA
+f24a945fc3c98ec9208759903b5007e6d719c88f67150ed5a2f038fd2aba455a.
+Cold execution uses2 collectors,10 memory hits,0 disk hits,0 invalidations and
+rehashes all5999 files/702674275 bytes. Canonical package and Markdown match.
+Consumed sources/evidence stayed frozen until terminal completion. Free D:
+4267896832bytes at cold preflight. c9cd6957 remains retained as the exact accepted
+predecessor;92024016 is now the independently verified current generation.
 
 Read-only complete Markdown conservation to Git90b81601 now exits0: only exact
 354/1957→2311/0 coverage counts,the one bounded observed-DPR failure descriptor
@@ -26,7 +30,7 @@ explicit reversals; altered coverage claim and appended claim controls reject.
 Log coherent204-all-case-markdown-conservation-20261013.log SHA
 776bde282d9c36743c270cdb7316f690ad9da7aa0487f5d39e9fe951a603f17d.
 Current LF MarkdownSHA339e451e8bb91ecb125941b7931e712ef35434d4af11073eb5cb4cafddef86ca;
-this does not establish complete machine-row conservation or cold acceptance.
+Markdown conservation is separate from the complete machine-row checks below.
 
 Compact import was safely advanced while cold verification remains live: relevant
 review readers pin immutable predecessor generations,and the963-dependency cached
@@ -58,11 +62,14 @@ coherent204-all-case-full-row-conservation-20261013.log SHA
 366f0c38524c5404032c7f43c58650ce86e275ddb525a5b54502cc930cd8da72.
 Reader22284 is terminal; do not repeat this completed comparison.
 
-Next retain the cold terminal result before scoped commit/push of
-canonical artifacts. Derived920 index is current for the written candidate,not
-evidence of accepted publication or current-browser rendering.
-Do not repeat the export or launch final browser gates while cold collection is
-live. Remaining case applicability/currentness and shared paint/interaction joins,
+Final publication preflight reauthenticates actual packed bytes,complete index and
+manifest equality,index SHA3c0c205d28f9b8dab47e26888aa7e77ecb879df3b59562c82d639e02bdc8abd3.
+All2311 records remain partial/unverified; both acceptance flags remain false.
+Log coherent204-all-case-publication-preflight-20261013.log records terminal0.
+Canonical artifacts are ready for scoped commit/push; no live integration jobs
+remain. Next continue exact applicability/currentness joins and retained editing
+evidence,not another unchanged export. This is audit evidence publication,not
+current-browser rendering acceptance. Remaining shared paint/interaction joins,
 all2311 whole-case closures and original final gates remain open. No renderer,
 fixture,threshold or original capture was changed; no evidence was removed.
 
