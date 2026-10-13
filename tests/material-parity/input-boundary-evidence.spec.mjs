@@ -2803,6 +2803,55 @@ test('passive state applicability joins exact cases without discarding progress 
   const booleanReadonly={nodes:[{key:'readonly',type:'input',attributes:{readonly:'false'}}]};
   assert.equal(editingTargets(booleanReadonly,'reference')[0].readonly,true,'HTML boolean attribute presence is authoritative');
   const allObligations=[...caseObligations,...additionalObligations];
+  // Reuse the exact supplementary action receipts above, without equating real
+  // keyboard navigation with the original configured programmatic-focus action.
+  const supplementaryFocusCounts={joined:0,previouslyPending:0,existingPartial:0};
+  const focusFields=['focused','focus','focusIndex','focusText','kind','inside'];
+  const projectSupplementaryFocus=observations=>Object.fromEntries(['reference','astylar'].map(side=>{
+    const steps=Array.isArray(observations[side])?observations[side]:observations[side]?.steps;
+    assert.ok(Array.isArray(steps)&&steps.length>0,'Missing paired supplementary action sequence');
+    return [side,steps.map((step,index)=>{
+      const focus=Object.fromEntries(focusFields.filter(field=>Object.hasOwn(step,field)).map(field=>[field,step[field]]));
+      assert.ok(['focused','focus','focusIndex'].some(field=>Object.hasOwn(focus,field)),
+        'Kind/text alone must not become a named-control focus observation');
+      return {index,...(Object.hasOwn(step,'key')?{key:step.key}:{}),
+        ...(Object.hasOwn(step,'action')?{action:step.action}:{}),
+        ...(Object.hasOwn(step,'boundary')?{boundary:step.boundary}:{}),focus};
+    })];
+  }));
+  const focusModes=family=>family==='sort'?'reference-trigger-containment-versus-candidate-logical-id':
+    ['button-toggle','tabs','stepper'].includes(family)?'ordered-role-option-active-element-index':
+    family==='slider'?'declared-two-input-active-element-index':
+    ['checkbox','select','autocomplete','datepicker','timepicker'].includes(family)?'direct-target-active-element-equality':
+    family==='radio'?'reference-input-value-versus-candidate-logical-choice-id':
+    'active-element-identity-with-source-specific-fallbacks';
+  for(const record of allObligations){
+    const source=extendedKeyboardCases.get(record.case)??
+      (['checkbox','radio'].includes(record.family)?keyboardCases.get(record.case):undefined);
+    if(!source)continue;
+    const supplementary=source.supplementaryKeyboard;
+    assert.ok(supplementary?.evidence?.observations);
+    const observations=projectSupplementaryFocus(supplementary.evidence.observations);
+    const previous=record.obligations.programmaticFocus;
+    assert.ok(['evidence-join-pending','partial'].includes(previous.disposition));
+    supplementaryFocusCounts[previous.disposition==='evidence-join-pending'?'previouslyPending':'existingPartial']++;
+    supplementaryFocusCounts.joined++;
+    record.obligations.programmaticFocus={...previous,applicability:'applicable',disposition:'partial',
+      supplementaryKeyboardFocus:{disposition:'inspected',observationMode:focusModes(record.family),
+        originalOutcome:supplementary.outcome??supplementary.disposition,
+        evidence:supplementary.evidence,observations,
+        boundary:'Exact supplementary keyboard cohort and original assertion replay only. Focus field meanings differ by source; IDs,text fallbacks,indices,containment and equality are not normalized into agreement. Not equivalence to the configured focus action,all focus owners,paint,current rendering or whole-case closure.'},
+      remaining:[...(previous.remaining??[]),'Original configured focus action and other applicable focus/restoration boundaries',
+        'Focus paint and complete source/runtime currentness']};
+  }
+  assert.deepEqual(supplementaryFocusCounts,{joined:144,previouslyPending:120,existingPartial:24});
+  const checkboxFocus=allObligations.find(row=>row.family==='checkbox'&&row.obligations.programmaticFocus.supplementaryKeyboardFocus)
+    .obligations.programmaticFocus.supplementaryKeyboardFocus;
+  const missingFocus=structuredClone(checkboxFocus.evidence.observations);
+  delete missingFocus.astylar.steps[0].focused;
+  assert.throws(()=>projectSupplementaryFocus(missingFocus),'Kind alone cannot stand in for target equality');
+  assert.ok(allObligations.filter(row=>['chips','slide-toggle','expansion'].includes(row.family))
+    .every(row=>!row.obligations.programmaticFocus.supplementaryKeyboardFocus),'Do not promote tag/role-only composite observations');
   const paintCensusFile='artifacts/material-parity/configured-paint-observability-20261008.log';
   const paintCensusBytes=readFileSync(paintCensusFile);
   assert.equal(hash(paintCensusBytes),'457aa9e78a62ef95cb2ada20dab942c66cfcba66aa7d9109a15a0acf1bbd45ca');
@@ -3188,7 +3237,7 @@ test('passive state applicability joins exact cases without discarding progress 
   t.diagnostic(JSON.stringify({caseObligationProposal:proposal, cases:2311,passiveCases:354,additionalCases:1957,additionalTreeReceipts,
     authoredActivationExclusions:354,authoredEditingExclusions:354,programmaticFocusApplicable:40,
     reportedScalarInputCases:2311,reportedScalarGroups:8483,dividerActualAXCases:24,dividerUpdateDisposalCases:24,dividerLocalTextRasterCases:24,dividerCoordinateHistoryCases:24,supplementaryKeyboardCases:40,extendedKeyboardCases:128,
-    editingTargetApplicabilityCases:1957,editingCounts,configuredFocusRecordedProvenanceIncomplete:40,
+    editingTargetApplicabilityCases:1957,editingCounts,configuredFocusRecordedProvenanceIncomplete:40,supplementaryFocusCounts,
     retainedTargetRasterCases:1000,paintCounts,retainedResourceSamplingCases:1875,resourceSampleCounts,
     retainedTargetDOMComparisonCases:2311,semanticCounts,retainedEventBoundaryCases:1875,eventCounts,supplementaryMenuActionContexts:menuActionJoins,commitEndpointCounts,rawControlJoins,rawActionRecords,buildCaptureCounts,completeCaseClosures:0,currentRenderingAccepted:0}));
   t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,

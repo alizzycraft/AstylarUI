@@ -1,5 +1,41 @@
 # Material comparison/state coverage inventory
 
+## Existing supplementary keyboard observations join144 focus obligations — October 14
+
+Question: can the identified retained keyboard observations supply actual-control
+focus evidence without inventing original configured-action equivalence? Existing
+owning case proof already authenticates logs,original callbacks/assertions,current
+helper/input sources and exact eight-context membership per family. Its new
+projection preserves equality,containment,ordered-option/two-input indices and
+identity/text fallback modes separately;raw evidence remains intact. It does not
+convert different IDs or scopes into focus agreement. Tag/role-only composite
+records for chips/switch/expansion remain excluded;missing equality negative
+control rejects. Existing progress failures and configured input-focus records
+remain unchanged.
+
+Exact144 joins cover120 previously pending records plus24 existing partial ones.
+No original focus action,focus paint,current rendering or whole-case acceptance
+is inferred. Focus pending joins fall1917→1797 in this proposal;all2311 whole
+cases remain partial. The original keyboard outcomes,including failures,stay
+separate from focus outcome rather than becoming blanket focus passes.
+
+Focused owning proof passes1/1,0 skips,total26072.1584ms. Log
+supplementary-focus-obligation-join-20261014.log SHA256
+fadd1ab20c3c8025ce03e0c072be05a9b340e9b722315991a0804bf28a13c430.
+Proposal44a5f7c581a591ab941ed543de267295272f609148dcd36c718b133ed5fbdc65
+is noncanonical. Existing loader authenticates7410 dependencies/2311 cases and
+0 unjoined IDs. Complete predecessor comparison tob7ebc769 preserves every
+header/field except144 programmaticFocus additions;both acceptance flags false.
+Log supplementary-focus-complete-conservation-20261014.log SHA256
+03e14e92351feb8f39ebdbd2f1e0527dd615bcdc488cc354162212ee87f0f78d.
+
+Previous turn published/pushed cold-verifiede8 asc4e01a2b;GitHub accepts62.52MB
+payload with recommended50MB warning,not push failure. That remains the published
+canonical;new focus source/proposal awaits coherent batch integration. No export
+or browser recapture for this single join increment. Next attach original focus
+flags with their256 compared/1619 unconditional scope,then remaining activation/
+static-history applicability. Original final gates and equal-input contract stay.
+
 ## Retained-observation cold verification completes; canonical publication — October 14
 
 Independent cold session90211 terminates exit0. Log
