@@ -8,6 +8,7 @@ import ts from 'typescript';
 import { transformSync } from 'esbuild';
 import { PNG } from 'pngjs';
 import { readRetainedSortFocusSource } from './position-composition-producer-transition.mjs';
+import { restoreCursorInspectorCaptureSource } from './public-cursor-defaults-evidence.mjs';
 import { materialCaseKey, fingerprintDirectory } from './run-checkpoint.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { verifyRetainedMaterialBrowserFiles } from './historical-audit-module-source.mjs';
@@ -422,11 +423,17 @@ test('retained antialias and selection receipts replay after exact diagnostic an
   const ast = ts.createSourceFile('benchmark.mjs', readFileSync('tests/material-parity/benchmark-config.spec.mjs', 'utf8'),
     ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   assert.equal(ast.parseDiagnostics.length, 0);
-  const reads = { core: 0, sorter: 0 };
+  const inspectorFile = 'examples/material-showcase/node_modules/astylarui/dist/lib/lib/astylar.js';
+  const currentInspector = readFileSync(inspectorFile, 'utf8');
+  const originalInspector = Buffer.from(restoreCursorInspectorCaptureSource(currentInspector));
+  assert.equal(hash(originalInspector), '6ad4f51ca47a9e1956a66b6e724105a66aaff582c53b0b30374fb6051723f5f8');
+  assert.throws(() => restoreCursorInspectorCaptureSource(currentInspector + '\nconst forged = true;\n'));
+  const reads = { core: 0, sorter: 0, inspector: 0 };
   const retainedRead = (file, encoding) => {
     const normalized = path.normalize(file.toString());
     const bytes = normalized === path.normalize(coreFile) ? (reads.core++, originalCore)
-      : normalized === path.normalize(sorterFile) ? (reads.sorter++, originalSorter) : readFileSync(file);
+      : normalized === path.normalize(sorterFile) ? (reads.sorter++, originalSorter)
+      : normalized === path.normalize(inspectorFile) ? (reads.inspector++, originalInspector) : readFileSync(file);
     return encoding ? bytes.toString(encoding) : bytes;
   };
   for (const name of names) {
@@ -440,6 +447,7 @@ test('retained antialias and selection receipts replay after exact diagnostic an
     await run({ diagnostic() {} });
   }
   assert.ok(reads.core > 0); assert.equal(reads.sorter, 2);
+  assert.ok(reads.inspector > 0);
   t.diagnostic('Three original receipt assertions replay unchanged; exact current source deltas are diagnostic/theme-only. Historical applicability, not current browser rendering acceptance. Original direct receipt failures remain visible.');
 });
 

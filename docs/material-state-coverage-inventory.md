@@ -1,5 +1,36 @@
 # Material comparison/state coverage inventory
 
+## Existing selection replay restored through authenticated inspector transition — October 13
+
+The prior action-source failure has an existing owner: benchmark-config's retained
+antialias/selection replay authenticates current sorter conservation and exact Git
+2bb82ee6 predecessor SHA4a386f107cee16cb120910717a42b6ee9b40c724f02860b68a60ce29d4784f30.
+No new sorter adapter or capture was necessary. Its first focused replay instead
+failed at the installed inspector receipt: currenta18630bd versus captured6ad4f51c,
+1/1 failed,total1605.5606ms. This is independent of missing e01 runner provenance.
+
+Existing restoreCursorInspectorCaptureSource already authenticates this whole-file
+transition,removing only the retained-layout diagnostic additions and rejecting
+any other source drift. The existing retainedRead now routes exactly that installed
+inspector path through this owner; a forged appended statement rejects,and an
+explicit read counter confirms the original callback uses the restored bytes.
+Original three callback bodies,all pixel/state/source assertions and captures stay
+unchanged. No installation is replaced and no general historical-read waiver added.
+
+Focused `node --test --test-name-pattern="^retained antialias and selection receipts
+replay after exact diagnostic and theme conservation$"
+tests/material-parity/benchmark-config.spec.mjs` passes1/1,0 skips,
+2185.3769ms owning test,total3315.5288ms. All three original antialias,selected-caret
+epoch and selection-local-pixel assertions replay. This closes their demonstrated
+historical replay applicability gap,not current browser acceptance. Their unequal
+caret/selection inputs and temporal paint failures remain preserved.
+
+Next join these retained16-row mobile form-field action populations to the existing
+obligation records with their supplementary action/viewport boundary; do not turn
+them into desktop focus or all-writable editing closures. This test-source change
+joins the pending coherent source-fingerprint/export reconciliation batch. Original
+configured-focus runner gap,all2311 full-case closures and final gates remain open.
+
 ## Retained selection behavior replay exposes an action-source gap — October 13
 
 Question: can existing editing/selection pixels be joined to current case obligations
