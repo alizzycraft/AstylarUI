@@ -2623,6 +2623,57 @@ test('passive state applicability joins exact cases without discarding progress 
     }
   }
   assert.equal(keyboardCases.size,40);
+  const extendedKeyboardCases=new Map();
+  for(const [name,sha256,coveredFamilies]of [
+    ['tree-button','92ebadea90cf4edd9859f18b10a6e5cd1fcedd3ed605cc493f31259c2401d295',['tree','core','toolbar','card']],
+    ['sort','bf65224f4943984f8eb566ee0394884d468390a3f0eb02e5849c132d5605d48c',['sort']],
+    ['selection','b847251ebb28ef35b917e63b6872fd5fdfb4db83d7e9234e237280f73d58c383',['button-toggle','tabs','stepper']],
+    ['editable-popup','c4ef715b176983c9ac70f4429174b2261f025ce9b00d8910bfff97de9e9e887b',['autocomplete','timepicker','datepicker']],
+    ['select','c928475b1e311c3740c78d18f8f5d8b3d3b1f0783810c842e5bb974e47c8e9d9',['select']],
+    ['slider','018ef179645fceaca584d2e79ca6e99d5698f7eff1a1c53e571bc96922092a0c',['slider']],
+    ['paginator','86d2b373c65f15df920e212563ea3c3799fc3851c5c42a114edc818ef641622d',['paginator']],
+    ['modal','b2e0b89df181a5189fda3140a79c779586b93a4f5cc641dec4d6944094b2d984',['dialog','bottom-sheet']],
+  ]){
+    const file=`artifacts/material-parity/${name}-configured-keyboard-cohorts-20261007.log`,bytes=readFileSync(file);assert.equal(hash(bytes),sha256);
+    const rows=bytes.toString().trim().split(/\r?\n/).map(JSON.parse);assert.equal(rows.length,10);
+    const header=rows.shift(),terminal=rows.pop();assert.equal(header.helperSha256,hash(keyboardSource));
+    assert.equal(header.reportSha256,reportSha256);assert.equal(header.checkpointSha256,hash(historicalManifestBytes));
+    assert.equal(terminal.complete,true);assert.equal(terminal.acceptance,false);
+    const calls=keyboardAst.statements.filter(node=>ts.isExpressionStatement(node)&&ts.isCallExpression(node.expression)
+      &&node.expression.arguments[1]&&hash(node.expression.arguments[1].getText(keyboardAst))===header.originalCallbackSha256);
+    assert.equal(calls.length,1);const callback=calls[0].expression.arguments[1],outer=callback.body.statements;
+    const invocation=outer.findIndex(node=>node.getText(keyboardAst).startsWith('await withFrozenShowcase'));assert.ok(invocation>=0);
+    const extraSources=[];
+    for(const [source,expectedHash]of name==='paginator'?[[ 'node_modules/@angular/material/fesm2022/paginator.mjs',header.materialSourceSha256 ]]:
+      name==='modal'?[[ 'src/lib/astylar-interaction-runtime.ts',header.currentRuntimeSourceSha256 ]]:[]){
+      assert.equal(hash(readFileSync(source)),expectedHash);extraSources.push({file:source,sha256:expectedHash});
+    }
+    Function('assert','readFileSync',outer.slice(0,invocation).map(node=>node.getText(keyboardAst)).join('\n'))(assert,readFileSync);
+    const body=outer[invocation].expression.expression.arguments[0].body;
+    const marker=name==='modal'?'t.diagnostic(JSON.stringify(observations))':'assert.equal(browser.version()';
+    const start=body.statements.findIndex(node=>node.getText(keyboardAst).startsWith(marker));assert.ok(start>=0);
+    const replay=Function('assert','observations','browser',body.statements.slice(start+(name==='modal'?1:0))
+      .map(node=>node.getText(keyboardAst)).join('\n'));
+    for(const row of rows){
+      replay(assert,row.observations,{version:()=> '154.0.8037.58'});
+      for(const family of coveredFamilies){
+        const caseId=scalarCaseKey({kind:'interaction',family,profile:row.profile,viewport:row.viewport,state:'focus'});
+        assert.ok(configuredByKey.has(caseId));assert.ok(!extendedKeyboardCases.has(caseId));
+        extendedKeyboardCases.set(caseId,{applicability:'applicable',disposition:'partial',
+          supplementaryKeyboard:{disposition:'inspected',outcome:'original-asserted-boundaries-with-agreements-and-failures',
+            evidence:{log:{file,sha256},callbackSha256:header.originalCallbackSha256,cohort:{profile:row.profile,viewport:row.viewport},
+              currentInputSource:sourceApplicability[0],extraSources,
+              currentHelper:{file:'tests/material-parity/sort-focus-structure.spec.mjs',sha256:hash(readFileSync('tests/material-parity/sort-focus-structure.spec.mjs'))},
+              helper:{originalLogicalFile:'tests/material-parity/sort-focus-structure.spec.mjs',restoredSha256:hash(keyboardSource)},
+              observations:row.observations[family]??row.observations},
+            boundary:'Supplementary real-key physical cohort with every original source preamble/runtime assertion preserved. Agreements and failures stay in their own observations; not original focus-action equivalence or current rendering.'},
+          remaining:['other applicable keys/action boundaries and local paint','complete input/state/semantic mapping and current rendering applicability']});
+      }
+    }
+    assert.deepEqual([...extendedKeyboardCases.keys()].filter(key=>coveredFamilies.some(f=>key.startsWith(`interaction:${f}@`))).sort(),
+      allConfigured.filter(row=>coveredFamilies.includes(row.family)&&row.state==='focus').map(scalarCaseKey).sort());
+  }
+  assert.equal(extendedKeyboardCases.size,128);
   let additionalTreeReceipts=0;
   const pending=()=>({applicability:'unverified',disposition:'evidence-join-pending'});
   const additionalObligations=remainingCases.map(row=>{
@@ -2640,7 +2691,8 @@ test('passive state applicability joins exact cases without discarding progress 
       pairedTreeAuthentication:{disposition:'authenticated',nodeCounts,
         boundary:'Exact capture receipts and node identity only; not structure,input equality,control applicability or current rendering.'},
       obligations:{authoredActivation:keyboardCases.get(caseId)??pending(),authoredEditing:pending(),programmaticFocus:pending(),
-        inputStyleStructure:joinScalarInputs(row),localPaint:pending(),semantics:pending(),historyOwnership:pending(),sourceCurrentness:pending()}};
+        inputStyleStructure:joinScalarInputs(row),localPaint:pending(),semantics:pending(),historyOwnership:pending(),sourceCurrentness:pending(),
+        ...(extendedKeyboardCases.has(caseId)?{keyboardInteraction:extendedKeyboardCases.get(caseId)}:{})}};
   });
   assert.equal(additionalTreeReceipts,3914);
   const allObligations=[...caseObligations,...additionalObligations];
@@ -2654,7 +2706,7 @@ test('passive state applicability joins exact cases without discarding progress 
   });
   t.diagnostic(JSON.stringify({caseObligationProposal:proposal, cases:2311,passiveCases:354,additionalCases:1957,additionalTreeReceipts,
     authoredActivationExclusions:354,authoredEditingExclusions:354,programmaticFocusApplicable:40,
-    reportedScalarInputCases:2311,reportedScalarGroups:8483,dividerActualAXCases:24,dividerUpdateDisposalCases:24,dividerLocalTextRasterCases:24,dividerCoordinateHistoryCases:24,supplementaryKeyboardCases:40,
+    reportedScalarInputCases:2311,reportedScalarGroups:8483,dividerActualAXCases:24,dividerUpdateDisposalCases:24,dividerLocalTextRasterCases:24,dividerCoordinateHistoryCases:24,supplementaryKeyboardCases:40,extendedKeyboardCases:128,
     completeCaseClosures:0,currentRenderingAccepted:0}));
   t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,
     scope:'Exact configured retained authoring: no activation/editing descendants. Forty native negative-tabindex progress owners keep a programmatic-focus obligation; no live focus, unrecorded callback, paint, lifecycle, source-currentness or full-case closure is inferred.'}));

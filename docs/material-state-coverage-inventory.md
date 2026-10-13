@@ -1,5 +1,36 @@
 # Material comparison/state coverage inventory
 
+## Extended keyboard observations join128 exact focus contexts — October 13
+
+Existing case records now join eight retained keyboard batches across16 families:
+tree/core/toolbar/card,sort,button-toggle/tabs/stepper,autocomplete/timepicker/
+datepicker,select,slider,paginator,dialog/bottom-sheet. All128 exact focus
+identities match configured membership. Complete original callback hashes,
+source preambles and runtime assertion tails replay,including independent native
+paginator module and candidate modal runtime receipts. No original assertion is
+removed; no blanket pass/failure is assigned to this mixed-boundary population.
+
+The new keyboardInteraction sub-obligation retains original per-family paired
+observations and their agreements/failures. These supplementary real-key cohorts
+are not substituted for original configured focus actions; in particular,date
+Tab and time input-click opening remain distinct. Other keys/actions,local paint,
+complete input/state/semantic mapping and current rendering remain unverified.
+Together with the prior40 enabled composite cases,this joins168 focus identities
+without closing any full case or broadening keyboard applicability to other states.
+
+Focused owning proof passes1/1,zero skips,11623.5191ms. Log
+all-case-extended-keyboard-obligation-join-20261013.log SHA
+2f21fa5f6e84e6a3746aad7905ff68ea2f32505560935dd924ab9459531ee7f3.
+Proposaldb848392d5110c358c2e5b76d3f4e56d1f7fb0e1321563267f5600f283f2a064
+is additive/not canonical. Existing loader revalidates4793 dependencies,2311
+partial cases/zero unjoined IDs. All prior proposald77d77e4 is conserved except
+keyboardInteraction in these128 cases. Conservation log
+all-case-extended-keyboard-loader-conservation-20261013.log SHA
+f14667cb6be8f108c49a2ebb098eb0857727937fb0f9dc5a9dc145efea792620 exits0.
+
+Next join retained remaining action/focus/paint evidence and reconcile the coherent
+canonical source batch; no fresh capture,renderer/fixture change or gate waiver.
+
 ## Enabled composite keyboard evidence joins forty focus contexts — October 13
 
 Existing exact-case records now join the retained checkbox,radio,chips,
