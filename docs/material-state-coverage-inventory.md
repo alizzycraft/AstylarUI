@@ -1,5 +1,32 @@
 # Material comparison/state coverage inventory
 
+## Passive progress-focus exact-case join — October 13
+
+The remaining40 applicable progress-focus proposal entries now join the retained
+actual focus failure,not a missing-observation placeholder. Original focus log
+f896402a is authenticated;64 paired observations map to32 unique family/profile/
+physical viewport/DPR cohorts and all40 exact configured progress cases. Native
+focus moves BODY to the progress host; candidate remains BODY and omits tabindex.
+Existing authoring-defect classification is preserved. Current raw owning source
+receipts71e2d41f (showcase) and1a0011d3 (semantic bridge) still match; broader
+runtime/current rendered acceptance is explicitly unverified. Supplementary
+focus observations do not overwrite original static/inspect capture endpoints.
+
+The existing proposal store retains new review digest
+0283775bebc1af0f589ad1521fa901122242240065fd027a1f9fe19726671462:
+354 exact passive keys,40 programmaticFocus dispositions inspected-failure,
+and other domains still pending. Authenticated accepted-index membership confirms
+all354 keys are configured. Unknown cohort and forged candidate focus mutations
+reject. Existing progress focus/caps/disposal proof plus extended passive proof
+pass2/2,zero skips,exit0,4335.0754ms. Log
+passive-case-focus-obligation-join-20261013.log SHA
+191634d8fdfa05b633f11e839c18b7af7f705e0b574819418d7b3bdfaf27c186.
+This supersedes the initial proposal's pending focus join,not canonical scope,
+historical source provenance or full-case status. No new capture or core/fixture
+changes. Source conservation/canonical integration remains a coherent-batch task;
+next join existing passive semantics/paint/ownership and extend other families.
+All2311 complete-case closures and original final gates remain open.
+
 ## Passive exact-case obligation proposal — October 13
 
 The existing passive applicability assertion now emits an additive proposed

@@ -2107,6 +2107,40 @@ test('passive state applicability joins exact cases without discarding progress 
   // only to that authoring, never to unrecorded callbacks or runtime behavior.
   const progressFocus = new Set(focusable.map(row => row.case));
   const reportSha256 = hash(raw);
+  const focusFile = 'artifacts/material-parity/progress-programmatic-focus-20261007.log';
+  const focusBytes = readFileSync(focusFile), focusSha256 = hash(focusBytes);
+  assert.equal(focusSha256,'f896402a1d31e9e14fb6e4382854a140c51f146f1323835e48669fe1ca5176f9');
+  const focusRows = focusBytes.toString().trim().split(/\r?\n/).map(JSON.parse).filter(row=>row.family);
+  const cohortKey = row => [row.family,row.profile,row.viewport.width,row.viewport.height,row.viewport.deviceScaleFactor].join('/');
+  const focusCohorts = [...new Set(cases.filter(row=>progressFocus.has(identity(row,row.kind))).map(cohortKey))].sort();
+  assert.equal(focusCohorts.length,32);
+  assert.equal(focusRows.length,64);
+  for(const mode of ['reference','astylar'])
+    assert.deepEqual(focusRows.filter(row=>row.mode===mode).map(cohortKey).sort(),focusCohorts);
+  const sourceApplicability = [
+    ['examples/material-showcase/src/app/astylar.component.ts','71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd'],
+    ['src/lib/astylar-semantic-bridge.ts','1a0011d3530701d9a74dc37b9f5a14d0fed0742dfd8793c39f8628e06b6a5725'],
+  ].map(([file,sha256])=>{assert.equal(hash(readFileSync(file)),sha256);return {file,sha256};});
+  const joinFocus = (entry, rows=focusRows) => {
+    const pair = Object.fromEntries(['reference','astylar'].map(mode=>{
+      const matches=rows.filter(row=>row.mode===mode && cohortKey(row)===cohortKey(entry));
+      assert.equal(matches.length,1);const row=matches[0];assert.deepEqual(row.errors,[]);
+      assert.deepEqual(row.actual.before,{focused:false,tag:'BODY'});
+      assert.deepEqual(row.actual.after,mode==='astylar'?{focused:false,tag:'BODY'}:
+        {focused:true,tag:entry.family==='progress-bar'?'MAT-PROGRESS-BAR':'MAT-PROGRESS-SPINNER'});
+      assert.equal(row.actual.tabindex,mode==='reference'?'-1':null);
+      return [mode,row.actual];
+    }));
+    return {applicability:'applicable',disposition:'inspected-failure',
+      classification:'application-plugin-authoring-defect',
+      evidence:{file:focusFile,sha256:focusSha256,cohort:cohortKey(entry),observations:pair,sourceApplicability},
+      boundary:'Historical focus failure and unchanged owning input/bridge sources; broader runtime and current rendering unverified.'};
+  };
+  const firstProgress=cases.find(row=>progressFocus.has(identity(row,row.kind)));
+  assert.throws(()=>joinFocus({...firstProgress,profile:'invented'}));
+  const forgedFocus=structuredClone(focusRows);
+  forgedFocus.find(row=>row.mode==='astylar' && cohortKey(row)===cohortKey(firstProgress)).actual.after.focused=true;
+  assert.throws(()=>joinFocus(firstProgress,forgedFocus));
   const caseObligations = cases.map(row => ({
     case: `${row.kind}:${row.family}@${row.profile}/${row.viewport.id}${row.state ? `/${row.state}` : ''}`,
     family: row.family,
@@ -2116,8 +2150,8 @@ test('passive state applicability joins exact cases without discarding progress 
     obligations: {
       authoredActivation: { applicability: 'not-applicable', disposition: 'inspected-authored-exclusion' },
       authoredEditing: { applicability: 'not-applicable', disposition: 'inspected-authored-exclusion' },
-      programmaticFocus: { applicability: progressFocus.has(identity(row,row.kind)) ? 'applicable' : 'not-applicable',
-        disposition: progressFocus.has(identity(row,row.kind)) ? 'evidence-join-pending' : 'inspected-authored-exclusion' },
+      programmaticFocus: progressFocus.has(identity(row,row.kind)) ? joinFocus(row) :
+        { applicability:'not-applicable',disposition:'inspected-authored-exclusion' },
       inputStyleStructure: { applicability: 'applicable', disposition: 'evidence-join-pending' },
       localPaint: { applicability: 'applicable', disposition: 'evidence-join-pending' },
       semantics: { applicability: 'applicable', disposition: 'evidence-join-pending' },
