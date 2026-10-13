@@ -1,5 +1,36 @@
 # Material comparison/state coverage inventory
 
+## Enabled composite keyboard evidence joins forty focus contexts — October 13
+
+Existing exact-case records now join the retained checkbox,radio,chips,
+slide-toggle and expansion real-key probes to40 configured focus identities.
+All original callback hashes and assertion tails replay from the authenticated
+65d7256f helper; all eight contexts per family match configured membership.
+Checkbox's original final-boundary assertions receive only its actual retained
+second-step fields/events; initial focus/selection is also checked. A forged
+candidate selected result rejects. No original assertion is removed or replaced.
+
+The published Escape-only handler finding and current complete application/helper
+source receipts bind the application-level keyboard omission. These are inspected
+failures,not core input-delivery failures or parity. Each record explicitly labels
+the keys as supplementary physical-cohort observations rather than its original
+configured focus action. Pointer activation,other keys,paint,full event/state
+mapping and current rendering remain open; passive exclusions are not applied.
+
+Owning join passes1/1,zero skips,10694.3311ms. Source-bound log
+all-case-enabled-keyboard-source-bound-20261013.log SHA
+61ffdf7d047a2a3c41462056e258335ae346efc9a1f3cf5f771e51ba8d25e207.
+Proposald77d77e4fa66a9bec95b1d207b024ce13ba845fd95acfd77e9ac3df42076e71a
+remains additive/not canonical. Existing loader verifies4783 dependencies,
+2311 partial records/zero unjoined IDs. All prior38a14852 fields are conserved
+except authoredActivation in these40 exact cases. Conservation log
+all-case-enabled-keyboard-loader-conservation-20261013.log SHA
+4491fb81fe5a0bd7279eb581546c2e5131a7ac0bf6ea1d39b11b1db389698782 exits0.
+
+Next join existing extended keyboard/popups/modal evidence with its original
+assertions and dispositions,then reconcile the coherent canonical source batch.
+No fresh capture,renderer/fixture change,whole-case closure or gate waiver.
+
 ## All configured cases have explicit partial scalar-input records — October 13
 
 Existing case-coverage proof now records all2311 configured cases/36 families,

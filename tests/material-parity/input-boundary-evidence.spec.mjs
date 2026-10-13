@@ -2562,6 +2562,67 @@ test('passive state applicability joins exact cases without discarding progress 
   assert.equal(caseObligations.filter(row=>row.obligations.inputStyleStructure.reportedScalarInputs.disposition==='inspected').length,354);
   const configuredByKey=new Map(allConfigured.map(row=>[scalarCaseKey(row),row]));
   const remainingCases=allCases.filter(row=>!families.has(row.family));assert.equal(remainingCases.length,1957);
+  const {readRetainedSortFocusSource}=await import('./position-composition-producer-transition.mjs');
+  const keyboardSource=readRetainedSortFocusSource();assert.equal(hash(keyboardSource),'65d7256f859a0839cdf6364d8f3d4e2b81bdb32978c42e0afeaa27f2622e14ce');
+  const keyboardAst=ts.createSourceFile('retained-keyboard.mjs',keyboardSource.toString(),ts.ScriptTarget.Latest,true,ts.ScriptKind.JS);
+  const keyboardDefinition=sourceAuditDefinitions.find(row=>row.id==='fixture-composite-keyboard-handler-omits-activation-and-navigation');assert.ok(keyboardDefinition);
+  assert.match(readFileSync(keyboardDefinition.file,'utf8'),new RegExp(keyboardDefinition.pattern));
+  const keyboardFinding=globalSourceRows.filter(row=>row.justification===keyboardDefinition.justification&&row.classification===keyboardDefinition.classification);
+  assert.equal(keyboardFinding.length,1);
+  const keyboardCases=new Map();
+  for(const [name,sha256,prefix,callbackSha256]of [
+    ['checkbox','9fb29baf50ee27759c826afa7c96f0361b0cc799f678e10823fe400c53dc2f68','checkbox real Tab','d42698938cc724c6449af00221a0800f3cf9533726ce093f0e1b4cf567649dcb'],
+    ['radio','b37926dfdb29d300f4f41c2f9e131abbc02915e764c280124a061e63e04c00a2','radio real Tab','98d666dd21a54fd82b348af9d125822c96ea0232257b4c0bfadba518b78605af'],
+    ['composite','882520cd1db88aa6638a08ae2d2d7e3c2e3f95cd9b71492ba4ae33241f243d91','composite controls expose','8140788192c3cbee5f9f642b49cbeaebc965ea61229bb8c5044400b4c2b1bcc0'],
+  ]){
+    const file=`artifacts/material-parity/${name}-configured-keyboard-cohorts-20261007.log`,bytes=readFileSync(file);assert.equal(hash(bytes),sha256);
+    const rows=bytes.toString().trim().split(/\r?\n/).map(JSON.parse);assert.equal(rows.length,10);
+    const header=rows.shift(),terminal=rows.pop();assert.equal(header.helperSha256,hash(keyboardSource));
+    assert.equal(header.reportSha256,reportSha256);assert.equal(header.checkpointSha256,hash(historicalManifestBytes));
+    assert.equal(terminal.complete,true);assert.equal(terminal.acceptance,false);
+    if(name!=='checkbox')assert.equal(header.originalCallbackSha256,callbackSha256);
+    const calls=keyboardAst.statements.filter(node=>ts.isExpressionStatement(node)&&ts.isCallExpression(node.expression)
+      &&node.expression.arguments[0]?.text?.startsWith(prefix));assert.equal(calls.length,1);
+    const callback=calls[0].expression.arguments[1];assert.equal(hash(callback.getText(keyboardAst)),callbackSha256);
+    const body=callback.body.statements[0].expression.expression.arguments[0].body;
+    const start=body.statements.findIndex(node=>node.getText(keyboardAst).startsWith('assert.equal(browser.version()'));assert.ok(start>=0);
+    const replay=Function('assert','observations','browser',body.statements.slice(start).map(node=>node.getText(keyboardAst)).join('\n'));
+    const replayRecord=record=>{
+      const observed=name==='checkbox'?record.observed:record.observations;let projected=observed;
+      if(name==='checkbox')projected=Object.fromEntries(['reference','astylar'].map(side=>{
+        assert.equal(observed[side].steps.length,2);assert.equal(observed[side].steps[0].focused,true);
+        assert.equal(observed[side].steps[0].selected,true);
+        return [side,{...observed[side].steps[1],appEvents:observed[side].events,errors:observed[side].errors}];
+      }));
+      replay(assert,projected,{version:()=> '154.0.8037.58'});return observed;
+    };
+    for(const row of rows){
+      const observations=replayRecord(row);
+      for(const family of name==='composite'?['chips','slide-toggle','expansion']:[name]){
+        const caseId=scalarCaseKey({kind:'interaction',family,profile:row.profile,viewport:row.viewport,state:'focus'});
+        assert.ok(configuredByKey.has(caseId));assert.ok(!keyboardCases.has(caseId));
+        keyboardCases.set(caseId,{applicability:'applicable',disposition:'partial',
+          supplementaryKeyboard:{disposition:'inspected-failure',classification:'application-plugin-authoring-defect',
+            evidence:{log:{file,sha256},cohort:{profile:row.profile,viewport:row.viewport},callbackSha256,
+              helper:{originalLogicalFile:'tests/material-parity/sort-focus-structure.spec.mjs',restoredSha256:hash(keyboardSource)},
+              currentHelper:{file:'tests/material-parity/sort-focus-structure.spec.mjs',sha256:hash(readFileSync('tests/material-parity/sort-focus-structure.spec.mjs'))},
+              sourceFinding:{definitionId:keyboardDefinition.id,findingId:keyboardFinding[0].id,
+                policy:{file:sourcePolicyFile,sha256:hash(readFileSync(sourcePolicyFile))},
+                shard:{file:`${generation}/${globalSourceShard.file}`,sha256:globalSourceShard.sha256}},
+              currentInputSource:sourceApplicability[0],observations:name==='composite'?observations[family]:observations},
+            boundary:'Original assertion replay and supplementary real-key cohort,not the original configured focus action,paint,event completeness or current rendering.'},
+          remaining:['other keys and pointer activation boundaries','complete input/state mapping and current rendering applicability']});
+      }
+    }
+    const applicable=name==='composite'?['chips','slide-toggle','expansion']:[name];
+    assert.deepEqual([...keyboardCases.keys()].filter(key=>applicable.some(f=>key.startsWith(`interaction:${f}@`))).sort(),
+      allConfigured.filter(row=>applicable.includes(row.family)&&row.state==='focus').map(scalarCaseKey).sort());
+    if(name==='checkbox'){
+      const altered=structuredClone(rows[0]);altered.observed.astylar.steps[1].selected=false;
+      assert.throws(()=>replayRecord(altered));
+    }
+  }
+  assert.equal(keyboardCases.size,40);
   let additionalTreeReceipts=0;
   const pending=()=>({applicability:'unverified',disposition:'evidence-join-pending'});
   const additionalObligations=remainingCases.map(row=>{
@@ -2578,7 +2639,7 @@ test('passive state applicability joins exact cases without discarding progress 
       evidence:{report:'artifacts/material-parity/current-full-20261005/latest-report.json',reportSha256,pairedTrees:row.inputTrees},
       pairedTreeAuthentication:{disposition:'authenticated',nodeCounts,
         boundary:'Exact capture receipts and node identity only; not structure,input equality,control applicability or current rendering.'},
-      obligations:{authoredActivation:pending(),authoredEditing:pending(),programmaticFocus:pending(),
+      obligations:{authoredActivation:keyboardCases.get(caseId)??pending(),authoredEditing:pending(),programmaticFocus:pending(),
         inputStyleStructure:joinScalarInputs(row),localPaint:pending(),semantics:pending(),historyOwnership:pending(),sourceCurrentness:pending()}};
   });
   assert.equal(additionalTreeReceipts,3914);
@@ -2593,7 +2654,7 @@ test('passive state applicability joins exact cases without discarding progress 
   });
   t.diagnostic(JSON.stringify({caseObligationProposal:proposal, cases:2311,passiveCases:354,additionalCases:1957,additionalTreeReceipts,
     authoredActivationExclusions:354,authoredEditingExclusions:354,programmaticFocusApplicable:40,
-    reportedScalarInputCases:2311,reportedScalarGroups:8483,dividerActualAXCases:24,dividerUpdateDisposalCases:24,dividerLocalTextRasterCases:24,dividerCoordinateHistoryCases:24,
+    reportedScalarInputCases:2311,reportedScalarGroups:8483,dividerActualAXCases:24,dividerUpdateDisposalCases:24,dividerLocalTextRasterCases:24,dividerCoordinateHistoryCases:24,supplementaryKeyboardCases:40,
     completeCaseClosures:0,currentRenderingAccepted:0}));
   t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,
     scope:'Exact configured retained authoring: no activation/editing descendants. Forty native negative-tabindex progress owners keep a programmatic-focus obligation; no live focus, unrecorded callback, paint, lifecycle, source-currentness or full-case closure is inferred.'}));
