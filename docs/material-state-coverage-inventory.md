@@ -1,5 +1,41 @@
 # Material comparison/state coverage inventory
 
+## Activation target availability is not a missing-tree problem — October 14
+
+Question: do the1957 non-passive cases lack retained control targets,requiring
+fresh capture before activation review? Read-only complete October5 report/tree
+census authenticates reportSHAab42dbec and all3914 paired tree receipts. Across
+all27 non-passive families,every case has at least one explicit control tag or
+interactive role on both sides;zero cases have an empty side. Selector preserves
+native node.type/attributes versus candidate authored.type/role:button,input,
+select,textarea,a or role button,checkbox,radio,switch,tab,option,combobox,slider,
+treeitem,menuitem. This is availability evidence,not exhaustive event-target or
+activation applicability classification. It includes text-input focus/editing
+targets and does not infer click handlers from a role.
+
+Static light/desktop examples expose the mapping distinctions:chips use native
+buttons versus candidate role-option divs;sort's actual native role-button child
+has no captured ID versus candidate sort-trigger;toolbar/card controls are child
+buttons,not the primary container. Native checkbox/radio input IDs differ from
+candidate role div IDs. Select's candidate readonly input is not free editing.
+These known structural inputs must remain distinct;matching target counts do
+not justify generic host activation or descendant association. Do not invent
+disabled semantics from aria-disabled,or infer generic keyboard support.
+
+No new browser capture,test layer,report or proposal was produced. The executed
+census read every non-passive static/interaction tree from the hash-pinned
+report;minimum target counts per side are nonzero in all27 families. This answers
+the availability question and directs the next check toward exact captured owner/
+source callback applicability,not rebuilding target captures. Form-field/input
+have only text inputs in this selector and need separate focus/editing versus
+application-activation treatment;current generic candidate handleClick also
+records status after clicks,so source inspection alone must not presume no
+side effects. No new renderer defect or equal activation is claimed.
+
+Previous turn pushed132a4eb8. Canonicale8 remains published;0670e282 focus proposal
+awaits coherent integration. All2311 whole-case closures and original final
+gates remain open;scope,fixtures,renderer and acceptance criteria are unchanged.
+
 ## Original retained focus flags join1875 cases without blanket focus acceptance — October 14
 
 Existing owning proof now attaches original focus fields to every1875 interaction
