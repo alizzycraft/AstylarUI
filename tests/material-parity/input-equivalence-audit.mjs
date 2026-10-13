@@ -8923,7 +8923,12 @@ function auditEnvironment(root) {
 function sourceFingerprints(root) {
   const files = [
     'tests/material-parity/audit-findings-store.spec.mjs',
-    'artifacts/material-parity/working-audit/proposals/ae416a6ff209bc2bf1a667706474a5f4f7bd683f4e6b481168123bce37ff3994.json',
+    'artifacts/material-parity/working-audit/proposals/db848392d5110c358c2e5b76d3f4e56d1f7fb0e1321563267f5600f283f2a064.json',
+    'docs/evidence/material-overlay-context-runner.mjs.b64',
+    'artifacts/material-parity/divider-context-verified-angular-20261013-dpr1/result.json',
+    'artifacts/material-parity/divider-context-verified-angular-20261013-dpr1/provenance.json',
+    'artifacts/material-parity/divider-context-verified-angular-20261013-dpr2/result.json',
+    'artifacts/material-parity/divider-context-verified-angular-20261013-dpr2/provenance.json',
     'artifacts/material-parity/table-child-ax-cohorts-20261007.log',
     'artifacts/material-parity/timepicker-open-light-mobile-paint-20261011.log',
     'artifacts/material-parity/timepicker-open-dark-mobile-paint-20261011.log',
@@ -9592,6 +9597,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('divider reduction receipts preserve observed DPR and unchanged failing geometry'/,
+      'divider observed DPR public failure and exact runner conservation', 'Authenticates requested and observed initial/final900x800 DPR1/2 contexts,Chrome155,exact preserved runner bytes,104 compiled/source/installed pairs and2517 bundle inputs per reduction. Original geometry/paint assertions remain unchanged; both runs honestly fail with four301px errors and no page errors. Metadata-only whole-source conservation and wrong-DPR/changed-assertion controls reject drift. Not configured-case current rendering acceptance or recovery of the older missing runner receipt.'),
     proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('public omitted box sizing finding preserves explicit controls and complete prior policy'/,
       'public omitted box sizing default defect and exact policy conservation', 'Retained package-root DPR1/2 WebGL evidence authenticates identical inputs, dependency and PNG receipts, native geometry and authored-color pixel bounds. Omitted sizing yields native166x76 versus candidate140x50; explicit content-box and border-box controls agree. Changed-input,missing-DPR and policy mutations reject. Exact156-to155 policy restoration preserves every predecessor definition. This is bounded core initial-value failure,not projection-scale or whole-Material acceptance; explicit native parent request remains a separate authoring difference.'),
     proof(root, 'tests/material-parity/component-cursor-request-review.spec.mjs', /test\('switch cursor owner review conserves the mixed enabled and disabled population'/,

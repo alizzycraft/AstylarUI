@@ -1,5 +1,43 @@
 # Material comparison/state coverage inventory
 
+## All-case canonical registration and runner applicability — October 13
+
+Question: can the verified2311-case proposal replace the older354-case pin without
+changing prior findings or silently accepting stale runner receipts? Named launcher
+and producer now pin db848392;204 proof descriptors/668 unique source paths add only
+the observed-DPR public divider failure proof and five original evidence paths.
+Exact whole-source restoration to247399bf then the unchanged predecessor chain
+conserves all earlier descriptions and rules; drift controls reject. Complete
+producer-transition suite passes33/33,zero skips,156675.1875ms. Log
+all-case-registration-producer-transition-20261013.log SHA
+85c3f50bb76f64c1f248ae68ddf271eb6ca09fa998039233303344f87ce1a87d.
+
+Small pre-export check exposed the packed-consumer proof's historical runner
+dfcd2c16 versus current8437ab81 metadata transition. Original failure is retained:
+all-case-registration-packed-runner-check-20261013.log SHA
+50ab68e5da172b776b81127cc38500bbf04618fbe4033e9d28214d10eaf3e757.
+Git b640ef3e retains exact13349-byte captured dfcd runner,not just normalized text.
+Proof now authenticates those bytes and independently rejects current runner drift
+against preserved8437 bytes. Registered context proof reverses only metadata and
+conserves the complete predecessor; all original browser/package/geometry/dependency
+assertions remain. This does not recover the unrelated missing e01 runner receipt.
+
+Final focused inventory/context/packed proof replay passes3/3,zero skips,
+13759.5135ms. Log all-case-registration-focused-20261013.log SHA
+da024df09cf6ed9f155f1b365807afa16abc82b003c043b95b84ddebbace312a.
+After final edits,the existing loader authenticates4793 dependencies,2311 partial
+records,zero unjoined IDs and unchanged false inspection/current acceptance flags.
+Log all-case-registration-loader-final-20261013.log SHA
+21820131b62e5f843c65bfc062cf56ece2ad7582757d0e088995918fa5eb4d7a.
+Named dry-run passes; diff check is clean. No renderer/fixture/capture/criteria change.
+
+This prepares coherent export,not canonical publication. Accepted c9cd6957 remains
+unchanged. Next run one logged complete-baseline export and independent cold check,
+then compact import/conservation before claiming integration. Remaining priority is
+exact applicable-obligation/currentness closure and shared paint evidence; all2311
+full-case closures and original final gates remain open. Free D:4393648128 bytes
+at preflight; recheck before publication. No scratch or original evidence removed.
+
 ## Extended keyboard observations join128 exact focus contexts — October 13
 
 Existing case records now join eight retained keyboard batches across16 families:

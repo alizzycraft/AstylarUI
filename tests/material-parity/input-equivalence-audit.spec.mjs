@@ -61,16 +61,16 @@ test('retained control proof batch conserves predecessor producer and binds comp
       (readFileSync, path, createHash);
   };
   const before = inventory(prior), after = inventory(current);
-  assert.equal(before.proofs.length, 196); assert.equal(after.proofs.length, 203);
-  assert.equal(before.fingerprints.length, 634); assert.equal(after.fingerprints.length, 663);
+  assert.equal(before.proofs.length, 196); assert.equal(after.proofs.length, 204);
+  assert.equal(before.fingerprints.length, 634); assert.equal(after.fingerprints.length, 668);
   const oldPaths = new Set(before.fingerprints.map(row => row.file));
   assert.deepEqual(after.fingerprints.filter(row => oldPaths.has(row.file)), before.fingerprints);
-  assert.equal(new Set(after.fingerprints.map(row => row.file)).size, 663);
+  assert.equal(new Set(after.fingerprints.map(row => row.file)).size, 668);
   const oldProofs = new Set(before.proofs.map(row => row.status));
   const normalized = rows => rows.map(({ line, ...row }) => row);
   assert.deepEqual(normalized(after.proofs.filter(row => oldProofs.has(row.status))), normalized(before.proofs));
   const additions = after.proofs.filter(row => !oldProofs.has(row.status));
-  assert.equal(additions.length, 7); assert.ok(additions.every(row => row.status !== 'missing' && row.line > 0));
+  assert.equal(additions.length, 8); assert.ok(additions.every(row => row.status !== 'missing' && row.line > 0));
 });
 
 test('retained table header scope joins authored input and actual semantic attributes', () => {

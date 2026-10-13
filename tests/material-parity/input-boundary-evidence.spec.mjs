@@ -28,6 +28,8 @@ test('divider reduction receipts preserve observed DPR and unchanged failing geo
   assert.match(encoded,/^[A-Za-z0-9+/]+={0,2}$/);
   const capturedRunner=Buffer.from(encoded,'base64');
   assert.equal(hash(capturedRunner),'8437ab812e876265a7ff8289aa778678dec64edf2276109489931374ba8c072e');
+  assert.equal(readFileSync(runnerFile,'utf8').replaceAll('\r\n','\n'),
+    capturedRunner.toString().replaceAll('\r\n','\n'),'Current runner conserves the exact context-only transition');
   const prior=execFileSync('git',['show',`b640ef3e:${runnerFile}`],{encoding:'utf8'}).replaceAll('\r\n','\n');
   const addedContext=`  const requestedContext = { viewport: { width: 900, height: 800 }, deviceScaleFactor: dpr };
   const page = await browser.newPage(requestedContext);
@@ -723,6 +725,15 @@ test('fresh divider layout observations join all exact cases and bound single-wo
 });
 
 test('packed layout inspection browser proofs authenticate the complete current consumer suite', () => {
+  // Authenticate the actual historical runner,not today's added context metadata.
+  // The separately registered observed-context proof conserves its entire source
+  // transition; this check still rejects any current runner drift independently.
+  const retainedRunner=execFileSync('git',['show','b640ef3e:scripts/audit-overlay-layout-stage.mjs']);
+  assert.equal(hash(retainedRunner),'dfcd2c165005552ac980deb663c69d7680333c238b6f04a11f814f3276271a5a');
+  const contextRunner=Buffer.from(readFileSync('docs/evidence/material-overlay-context-runner.mjs.b64','utf8').trim(),'base64');
+  assert.equal(hash(contextRunner),'8437ab812e876265a7ff8289aa778678dec64edf2276109489931374ba8c072e');
+  assert.equal(readFileSync('scripts/audit-overlay-layout-stage.mjs','utf8').replaceAll('\r\n','\n'),
+    contextRunner.toString().replaceAll('\r\n','\n'));
   const packageRoot = 'artifacts/material-parity/layout-inspection-package-TKjpCE/package';
   assert.equal(hash(readFileSync(`${packageRoot}/../astylarui-0.2.0.tgz`)),
     '38a3c6fc2bf56641459d76a376ccb6bffbe7cce4dd5fefae22c8ea776d885227');
@@ -744,7 +755,7 @@ test('packed layout inspection browser proofs authenticate the complete current 
     assert.equal(hash(provenanceRaw), provenanceHashes[dpr - 1]);
     const provenance = JSON.parse(provenanceRaw);
     assert.equal(provenance.specFilter, '');
-    assert.equal(provenance.runnerSha256, hash(readFileSync('scripts/audit-overlay-layout-stage.mjs')));
+    assert.equal(provenance.runnerSha256, hash(retainedRunner));
     assert.equal(provenance.bundleSha256, hash(readFileSync(`${dir}/audit.js`)));
     assert.equal(provenance.compiledReceipts.length, 104);
     for (const receipt of provenance.compiledReceipts) {

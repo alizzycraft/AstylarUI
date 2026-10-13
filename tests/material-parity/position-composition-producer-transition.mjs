@@ -5,8 +5,29 @@ import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
 
 const hash = text => createHash('sha256').update(text).digest('hex');
-export function restoreCaseObligationCoverageRegistration(source) {
+export function restoreAllCaseObligationRegistration(source) {
   let current=source.toString().replaceAll('\r\n','\n');
+  const next='db848392d5110c358c2e5b76d3f4e56d1f7fb0e1321563267f5600f283f2a064';
+  if(!current.includes(next))return current;
+  assert.equal(hash(current),'56fc2c49c9ca3b07239b8bca3bb0db905e8553f0fc52d3f77e8b6fbd2e4b1618',
+    'exact all-case proposal and observed-context proof registration');
+  const prior=execFileSync('git',['show','4666ad56:tests/material-parity/input-equivalence-audit.mjs'],
+    {encoding:'utf8',maxBuffer:4_000_000}).replaceAll('\r\n','\n');
+  assert.equal(hash(prior),'247399bf04438b7c1b6144ffd4c46bc3829ca2aa92527b7642b49659fb435568');
+  assert.equal(current.split(next).length,2);
+  current=current.replace(next,'ae416a6ff209bc2bf1a667706474a5f4f7bd683f4e6b481168123bce37ff3994');
+  for(const file of ['docs/evidence/material-overlay-context-runner.mjs.b64',
+    ...[1,2].flatMap(dpr=>['result.json','provenance.json'].map(name=>
+      `artifacts/material-parity/divider-context-verified-angular-20261013-dpr${dpr}/${name}`))]){
+    const line=`    '${file}',\n`;assert.equal(current.split(line).length,2);current=current.replace(line,'');
+  }
+  const added=/    proof\(root, 'tests\/material-parity\/input-boundary-evidence.spec.mjs', \/test\\\('divider reduction receipts preserve observed DPR and unchanged failing geometry'[\s\S]*?\n(?=    proof\(root,)/g;
+  assert.equal([...current.matchAll(added)].length,1);current=current.replace(added,'');
+  assert.equal(current,prior,'complete predecessor conserved; no old proof description or rule changed');
+  return current;
+}
+export function restoreCaseObligationCoverageRegistration(source) {
+  let current=restoreAllCaseObligationRegistration(source);
   const addedImport="import { assertCaseObligationCoverage } from '../../scripts/audit-findings-store.mjs';\n";
   if(!current.includes(addedImport))return current;
   assert.equal(hash(current),'247399bf04438b7c1b6144ffd4c46bc3829ca2aa92527b7642b49659fb435568',
