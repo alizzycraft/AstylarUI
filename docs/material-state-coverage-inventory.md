@@ -1,5 +1,32 @@
 # Material comparison/state coverage inventory
 
+## Exact retained event/state boundaries join1875 cases — October 13
+
+Previous goal turn made progress by resolving comparator scope. Existing owning
+case-obligation proof now attaches the original eventComparison/interactionState
+records to all1875 interaction cases with explicit normalized versus uncompared
+and endpoint versus default modes. Complete comparator bodies conserve Git8aa0e2e5;
+normalized-array equality is replayed without fabricating raw events. Forged event
+arrays and invented default endpoints reject. This is not real-browser action replay.
+All authoredActivation applicability,dispositions,exclusions and failures remain
+unchanged;the observation is additive,not a new behavioral acceptance claim.
+
+Focused existing test passes1/1,0 skips,total19397.9676ms in
+artifacts/material-parity/all-case-retained-event-boundary-20261013.log.
+Proposal089836cf9246abf626ed5863e46b497718f417ce2f96db5f784784b5420fef14
+is noncanonical. Read-only complete predecessor comparison against1e58615e proves
+only1875 retainedEventBoundary additions;all other fields and headers conserve.
+Existing dependency loader exits0:5278 authenticated dependencies,2311 partial
+cases,0 unjoined,inspectionComplete=false/currentRenderingAccepted=false.
+
+Counts preserve647 normalized event comparisons/1228 uncompared flags,32 existing
+tail exclusions,114 explicit state records/1761 defaults. Missing e01 runner bytes
+remain explicit. No renderer,fixture,criteria,capture or final gate changes.
+Next reuse retained owning action/focus/commit proofs to close actual behavioral
+gaps and assess source-currentness;do not infer closure from these historical flags.
+Raster/resource/DOM/event joins await one coherent producer-fingerprint integration;
+accepted canonical918 remains unchanged and all2311 whole-case closures stay open.
+
 ## Retained event/state flags have bounded comparison scope — October 13
 
 Question: do the original 1875 interaction matching flags compare actual events

@@ -2932,6 +2932,52 @@ test('passive state applicability joins exact cases without discarding progress 
       remaining:[...(previous.remaining??[]),'Actual AX/description/target associations and full semantic/currentness disposition beyond DOM comparator']};
   }
   assert.deepEqual(semanticCounts,{cases:2311,targets:5930,recordedFailures:0,absentReferenceTargets:502,choiceValueExclusions:68,activeDescendantPresenceComparisons:88});
+  const eventMethods=resourceFunctions(resourceRunnerBytes,['compareEvents','compareInteractionState']);
+  assert.deepEqual(eventMethods,resourceFunctions(resourcePrior,['compareEvents','compareInteractionState']));
+  const comparedEventStates=['activate','activate-twice','activate-alternate','activate-leave','auto-dismiss','open','open-dismiss'];
+  const eventCounts={cases:0,normalized:0,uncompared:0,tailExclusions:0,explicitState:0,defaultState:0};
+  const joinEventBoundary=row=>{
+    const normalized=comparedEventStates.includes(row.state);
+    const explicitState=row.family==='slider'&&['drag-start','drag-end'].includes(row.state)||
+      row.family==='datepicker'&&row.state==='open-secondary'||
+      row.family==='timepicker'&&['focus','open-scroll'].includes(row.state)||
+      ['open-dismiss-outside','open-dismiss-canvas'].includes(row.state);
+    assert.ok(Array.isArray(row.eventComparison.reference)&&Array.isArray(row.eventComparison.astylar));
+    if(normalized){
+      for(const events of [row.eventComparison.reference,row.eventComparison.astylar]){
+        assert.ok(events.every(type=>['pointerdown','pointerup','click','input','change'].includes(type)));
+        if(['checkbox','slider'].includes(row.family))assert.ok(events.every(type=>!['input','change'].includes(type)));
+      }
+      assert.equal(row.eventComparison.matches,JSON.stringify(row.eventComparison.reference)===JSON.stringify(row.eventComparison.astylar));
+    }else assert.equal(row.eventComparison.matches,true,'Uncompared flag is not a behavioral pass');
+    if(!explicitState)assert.deepEqual(row.interactionState,{matches:true});
+    return {disposition:'recorded-provenance-incomplete',case:scalarCaseKey(row),
+      eventMode:normalized?'normalized-primary-host-types':'uncompared-retained-arrays',
+      inputChangeTailExcluded:normalized&&['checkbox','slider'].includes(row.family),
+      events:row.eventComparison,stateMode:explicitState?'explicit-recorded-endpoint-or-trace':'uncompared-default',
+      interactionState:row.interactionState,
+      evidence:{report:{file:'artifacts/material-parity/current-full-20261005/latest-report.json',sha256:reportSha256},
+        currentComparator:{file:resourceRunnerFile,sha256:hash(resourceRunnerBytes)},
+        methodConservation:{revision:'8aa0e2e5',functions:Object.fromEntries(Object.entries(eventMethods).map(([name,source])=>[name,hash(source)]))}},
+      unavailableActionSource:{originalLogicalFile:resourceRunnerFile,capturedSha256:'e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0',disposition:'missing-original-bytes-not-a-readable-receipt'},
+      boundary:'Preserved comparator observations only. Normalized event arrays cannot recover raw targets,values,discarded types or duplicates. Uncompared/default flags do not prove behavior. Explicit endpoint records are not replayed browser actions. Not complete event ordering,focus,commit,equal input,current rendering or whole-case acceptance.'};
+  };
+  const forgedEventRow=structuredClone(allCases.find(row=>row.kind==='interaction'&&comparedEventStates.includes(row.state)));
+  forgedEventRow.eventComparison.astylar.push('click');
+  assert.throws(()=>joinEventBoundary(forgedEventRow));
+  const forgedDefaultRow=structuredClone(allCases.find(row=>row.kind==='interaction'&&row.state==='hover'));
+  forgedDefaultRow.interactionState.value='invented endpoint';
+  assert.throws(()=>joinEventBoundary(forgedDefaultRow));
+  for(const record of allObligations){
+    const row=paintCaseRows.get(record.case);if(row.kind!=='interaction')continue;
+    const observation=joinEventBoundary(row);eventCounts.cases++;
+    eventCounts[observation.eventMode==='normalized-primary-host-types'?'normalized':'uncompared']++;
+    eventCounts.tailExclusions+=observation.inputChangeTailExcluded?1:0;
+    eventCounts[observation.stateMode==='uncompared-default'?'defaultState':'explicitState']++;
+    // Keep existing authoring applicability, exclusions and proven failures unchanged.
+    record.obligations.authoredActivation={...record.obligations.authoredActivation,retainedEventBoundary:observation};
+  }
+  assert.deepEqual(eventCounts,{cases:1875,normalized:647,uncompared:1228,tailExclusions:32,explicitState:114,defaultState:1761});
   assert.equal(new Set(allObligations.map(row=>row.case)).size,2311);
   assert.deepEqual(allObligations.map(row=>row.case).sort(),allConfigured.map(scalarCaseKey).sort());
   assert.ok(allObligations.every(row=>row.inspection==='partial'&&row.currentRendering==='unverified'));
@@ -2945,7 +2991,7 @@ test('passive state applicability joins exact cases without discarding progress 
     reportedScalarInputCases:2311,reportedScalarGroups:8483,dividerActualAXCases:24,dividerUpdateDisposalCases:24,dividerLocalTextRasterCases:24,dividerCoordinateHistoryCases:24,supplementaryKeyboardCases:40,extendedKeyboardCases:128,
     editingTargetApplicabilityCases:1957,editingCounts,configuredFocusRecordedProvenanceIncomplete:40,
     retainedTargetRasterCases:1000,paintCounts,retainedResourceSamplingCases:1875,resourceSampleCounts,
-    retainedTargetDOMComparisonCases:2311,semanticCounts,completeCaseClosures:0,currentRenderingAccepted:0}));
+    retainedTargetDOMComparisonCases:2311,semanticCounts,retainedEventBoundaryCases:1875,eventCounts,completeCaseClosures:0,currentRenderingAccepted:0}));
   t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,
     scope:'Exact configured retained authoring: no activation/editing descendants. Forty native negative-tabindex progress owners keep a programmatic-focus obligation; no live focus, unrecorded callback, paint, lifecycle, source-currentness or full-case closure is inferred.'}));
 });
