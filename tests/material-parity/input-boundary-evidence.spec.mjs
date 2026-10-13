@@ -16,7 +16,7 @@ import { readGapSurveySource } from './gap-survey-source-replay.mjs';
 import { verifyRetainedMaterialBrowserFiles } from './historical-audit-module-source.mjs';
 import { materialStaticCases, materialInteractionCases, materialMobileFlowCases } from './benchmark.config.mjs';
 import { cursorInput } from '../../examples/material-showcase/audit/cursor-default-input.mjs';
-import { queryFindings, saveReviewProposal } from '../../scripts/audit-findings-store.mjs';
+import { queryFindings, saveReviewProposal, verifyFindings } from '../../scripts/audit-findings-store.mjs';
 
 const file = 'artifacts/material-parity/input-boundaries-keypress-559f95c/latest-report.json';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -2052,6 +2052,42 @@ test('passive state applicability joins exact cases without discarding progress 
   const expected=configured.map(row=>identity(row,row.kind)).sort();
   assert.equal(new Set(expected).size,354);
   assert.deepEqual(cases.map(row=>identity(row,row.kind)).sort(),expected);
+  const working='artifacts/material-parity/working-audit';
+  const pointer=JSON.parse(readFileSync(`${working}/current.json`));
+  const canonical=JSON.parse(readFileSync('docs/material-input-equivalence-audit.json'));
+  assert.equal(pointer.generation,canonical.compressedSha256);
+  const generation=`${working}/${pointer.generation}`;
+  const index=verifyFindings(generation,pointer.indexSha256);
+  assert.deepEqual(index.manifest,canonical);
+  const scalarInputs=new Map([...families.keys()].map(family=>[family,
+    queryFindings(working,family,pointer).filter(row=>row.evidence.section==='discrepancies')]));
+  assert.equal([...scalarInputs.values()].reduce((count,rows)=>count+rows.length,0),1697);
+  const scalarCaseKey=entry=>`${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? `/${entry.state}` : ''}`;
+  const joinScalarInputs=(entry,override)=>{
+    const caseId=scalarCaseKey(entry);
+    const rows=(override??scalarInputs.get(entry.family)).filter(row=>(row.reviewedCases??row.cases??[]).includes(caseId));
+    assert.ok(rows.length>0,'Exact case requires explicit scalar membership');
+    assert.equal(new Set(rows.map(row=>row.id)).size,rows.length);
+    const classifications={};
+    for(const row of rows){
+      assert.equal(row.family,entry.family);assert.equal(row.evidence.sourceSha256,canonical.uncompressedSha256);
+      assert.ok(row.classification && row.justification && row.recommendedOwner);
+      assert.notEqual(row.attribution,'unresolved');
+      classifications[row.classification]=(classifications[row.classification]??0)+1;
+    }
+    const shard=index.shards.find(row=>row.file===`discrepancies-${entry.family}.jsonl`);assert.ok(shard);
+    return {applicability:'applicable',disposition:'partial',
+      reportedScalarInputs:{disposition:'inspected',findings:rows.map(row=>row.id),classifications,
+        evidence:{index:{file:`${generation}/index.json`,sha256:pointer.indexSha256},
+          shard:{file:`${generation}/${shard.file}`,sha256:shard.sha256},
+          sourcePackage:{file:`${generation}/${canonical.payload}`,sha256:canonical.compressedSha256}}},
+      remaining:['complete element/anonymous descendant and structural input mapping','first-stage and paint applicability of remaining owners'],
+      boundary:'Only explicit reviewedCases or recorded sample membership; occurrences never expand sampled cases. Classified scalar inputs do not certify complete structure,used values,equal inputs or current rendering.'};
+  };
+  assert.throws(()=>joinScalarInputs({...cases[0],profile:'invented'}));
+  const firstScalar=scalarInputs.get(cases[0].family).find(row=>(row.reviewedCases??row.cases??[])
+    .includes(scalarCaseKey(cases[0])));
+  assert.throws(()=>joinScalarInputs(cases[0],[{...firstScalar,classification:undefined}]));
   // This is a captured-authoring applicability classifier,not a live event probe.
   const inspect = (type,attrs) => {
     assert.ok(!['button','input','select','textarea','summary','dialog'].includes(type));
@@ -2270,7 +2306,7 @@ test('passive state applicability joins exact cases without discarding progress 
       authoredEditing: { applicability: 'not-applicable', disposition: 'inspected-authored-exclusion' },
       programmaticFocus: progressFocus.has(identity(row,row.kind)) ? joinFocus(row) :
         { applicability:'not-applicable',disposition:'inspected-authored-exclusion' },
-      inputStyleStructure: { applicability: 'applicable', disposition: 'evidence-join-pending' },
+      inputStyleStructure: joinScalarInputs(row),
       localPaint: { applicability: 'applicable', disposition: 'evidence-join-pending' },
       semantics: joinSemantics(row),
       historyOwnership: { applicability: 'applicable', disposition: 'evidence-join-pending' },
@@ -2280,6 +2316,7 @@ test('passive state applicability joins exact cases without discarding progress 
   assert.equal(new Set(caseObligations.map(row => row.case)).size,354);
   assert.equal(caseObligations.filter(row => row.obligations.programmaticFocus.applicability === 'applicable').length,40);
   assert.ok(caseObligations.every(row => row.inspection === 'partial' && row.currentRendering === 'unverified'));
+  assert.equal(caseObligations.filter(row=>row.obligations.inputStyleStructure.reportedScalarInputs.disposition==='inspected').length,354);
   const proposal = saveReviewProposal('artifacts/material-parity/working-audit', {
     kind: 'case-obligation-coverage-extension', status: 'proposal-not-canonical',
     scope: 'Exact retained passive authoring applicability; no runtime or whole-case acceptance.',
@@ -2287,6 +2324,7 @@ test('passive state applicability joins exact cases without discarding progress 
   });
   t.diagnostic(JSON.stringify({caseObligationProposal:proposal, cases:354,
     authoredActivationExclusions:354,authoredEditingExclusions:354,programmaticFocusApplicable:40,
+    reportedScalarInputCases:354,reportedScalarGroups:1697,
     completeCaseClosures:0,currentRenderingAccepted:0}));
   t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,
     scope:'Exact configured retained authoring: no activation/editing descendants. Forty native negative-tabindex progress owners keep a programmatic-focus obligation; no live focus, unrecorded callback, paint, lifecycle, source-currentness or full-case closure is inferred.'}));

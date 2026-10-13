@@ -1,5 +1,43 @@
 # Material comparison/state coverage inventory
 
+## Passive scalar-input obligation join — October 13
+
+Existing passive case-coverage proof now joins all354 exact cases to explicitly
+recorded memberships in1697 classified scalar groups across nine families.
+Published c9cd6957 package,index and family shards authenticate through existing
+verifyFindings/queryFindings; proposals reference immutable finding IDs and
+dependency receipts rather than copying full evidence rows. Only reviewedCases
+or recorded sample membership is used; occurrence counts never extrapolate
+unrecorded case membership. Classification,justification and owning subsystem
+must exist; unknown case and missing-classification negative controls reject.
+InputStyleStructure remains partial,not complete/equal-input acceptance.
+
+New proposal e928a15862c225cd3fe412ae096bdef38b080b7016a9eb910bc28234722c7948
+contains354 partial/unverified records. Independent existing coverage loader
+revalidates728 dependencies and1957 unjoined IDs. Whole prior proposalae416a6f
+is conserved after removing only inputStyleStructure from both records; authored
+exclusions,40 progress focus failures,semantic/AX evidence,local paint,history,
+currentness and all completion flags are unchanged. No whole-case closure.
+
+Focused owning test passes1/1,zero skips,4825.9888ms; log
+passive-case-scalar-obligation-join-retry-20261013.log SHA
+55cbdc67eaaf1de30db891eaa7d1a5cd402092d02bb117b848da2d692e75d1e4. Original failed attempt
+passive-case-scalar-obligation-join-20261013.log SHAc4d15331601b2a41cde3921ecd12ab7abf62057b8e18ca75b0203179cfcf1225 is retained:it incorrectly used
+the harness's serialized JSON materialCaseKey to look up readable scalar finding
+keys. The join now uses the existing coverage record's readable key convention;
+neither identity format nor any case membership is normalized or changed.
+Loader/conservation check exits0; log
+passive-case-scalar-loader-conservation-20261013.log SHA
+3cf700d5c99854d06b0d6b2aae87da0342da21211b32222fad31b156faf7cf74.
+
+Canonical c9cd6957 remains unchanged; this additive proposal is not integrated.
+Next join other already inspected case obligations/currentness in a coherent
+batch before source-fingerprint/export reconciliation. Do not repeat scalar
+classification investigation or export solely for this status change. Original
+raw runner receipte01ef9dc remains unrecovered after bounded read-only attempts;
+normalized Git text/function matches do not close that whole-source replay gap.
+No renderer/fixture change,fresh capture,new audit framework or acceptance waiver.
+
 ## Input opening actions and retained proof replay gap — October 13
 
 Question:does the retained desktop timepicker input-click population still fail
