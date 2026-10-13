@@ -66,8 +66,11 @@ Final publication preflight reauthenticates actual packed bytes,complete index a
 manifest equality,index SHA3c0c205d28f9b8dab47e26888aa7e77ecb879df3b59562c82d639e02bdc8abd3.
 All2311 records remain partial/unverified; both acceptance flags remain false.
 Log coherent204-all-case-publication-preflight-20261013.log records terminal0.
-Canonical artifacts are ready for scoped commit/push; no live integration jobs
-remain. Next continue exact applicability/currentness joins and retained editing
+Canonical publication is committed/pushed asa20d54e0 on
+codex/material-audit-alignment-integration. Push exits0; GitHub accepts the61.45MB
+compressed report with its existing50MB recommended-size warning (GH001/LFS advice),
+not an upload failure. No live integration jobs remain. Next continue exact
+applicability/currentness joins and retained editing
 evidence,not another unchanged export. This is audit evidence publication,not
 current-browser rendering acceptance. Remaining shared paint/interaction joins,
 all2311 whole-case closures and original final gates remain open. No renderer,
