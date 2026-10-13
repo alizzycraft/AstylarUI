@@ -1,5 +1,21 @@
 # Material comparison/state coverage inventory
 
+## Retained-observation complete-row conservation succeeds — October 14
+
+Original-row verification session6557 terminates exit0; do not restart it.
+retained-observations-full-row-conservation-20261013.log SHA256
+56e2e22840e55c2e4c4cfe3f85d7b5c963dcbda41f9923631257c74152146d42
+authenticates all49 complete predecessor rows:48 control rows and the aggregate
+with48 updated proof references. Only producer-module and corresponding proof
+hashes change;all48 negative controls reject. Elapsed2052165.209ms.
+This completes the pending complete-row check,not whole-case inspection.
+
+Independent cold session90211 remains live in audit validation; candidatee8
+and its consumed inputs remain frozen. Publication requires its terminal success
+and final dependency recheck. Previous turn was a verified wait;this turn closes
+the complete-row conservation question. No renderer/fixture/criteria changes;
+all2311 cases remain partial/unverified and original final gates remain open.
+
 ## Candidate compact conservation passes; full-row and cold checks remain live — October 13
 
 Bounded overlap inspected before import:three production compact readers pin
