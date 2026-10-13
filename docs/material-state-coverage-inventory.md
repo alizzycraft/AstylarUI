@@ -1,5 +1,34 @@
 # Material comparison/state coverage inventory
 
+## Exact case accounting representation boundary — October 13
+
+Question: does accepted machine coverage already encode complete per-case audit
+obligations,or only matrix/scalar review? Read the existing coverage builder
+in input-equivalence-audit.mjs and compact schema in audit-findings-store.mjs.
+coverage.complete checks missing static/interaction IDs,paired root-style evidence
+and duplicates. Its explicit scope excludes separate anonymous/pseudo structural
+review; it does not certify paint,history,ownership or currentness closure.
+Compact rows intentionally preserve selected scalar fields; absence of closure
+fields there alone would not prove absence in original evidence. The builder
+itself supplies caseInventory static/interaction IDs but no per-case obligation
+dispositions. Existing proof descriptions carry bounded narrative claims instead.
+
+Authenticated verifyFindings plus queryFindings across all36 families in accepted
+generation0be2ffe4 replays8483 scalar rows: reviewedCases union equals all2311
+configured IDs exactly,zero omissions/extras; zero scalar rows carry obligation,
+closure or currentness fields. This revalidates inspection-start accounting,not
+complete inspection or current parity. No fresh capture or canonical rebuild.
+
+Next extend the existing coverage/caseInventory representation with exact-case
+applicability and evidence dispositions derived from the required-state map and
+owning proofs; preserve original configured identities and matrix completeness.
+Start with passive families'354-case applicability proof,then shared editable,
+popup and selectable obligations. Keep unmeasured/partial/currentness-unknown
+explicit; scalar review must not imply every obligation is inspected. Use the
+existing coverage validator/tests rather than another report/test framework.
+This is the demonstrated representation gap blocking a defensible full-inspection
+denominator; all2311 complete-case closures remain partial and final gates unchanged.
+
 ## Family checklist reconciliation — October 13
 
 Question: are published table/checkbox proofs still represented as unchecked
