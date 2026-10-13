@@ -1,5 +1,32 @@
 # Material comparison/state coverage inventory
 
+## Coherent203 cold-verified publication — October 13
+
+The table-scope/mobile-shape batch is exported and independently cold-checked.
+Export session11589 and cold session60767 both terminate exit0; launcher17888
+and collector28020 are absent. Export log coherent203-table-mobile-export-20261013.log
+SHA8110ca9685fe82ff97ccd109f5481224e39223c3416e70c75d409432e3dd9082;
+cold log coherent203-table-mobile-cold-check-20261013.log SHA
+3455d44aecbc3aa2253317f4fbb08722200e92f457415b7f0dd7a05434951157.
+Cold wrapper elapsed29819899.6513ms includes a delayed observation; do not equate
+wall time with CPU. Cold evidence session records2 collectors,10 memory hits,
+0 disk hits,0 invalidations,1205 files and89158075 bytes read/reverified.
+
+Compact import/verify session13307 exits0. Logs coherent203-compact-import-20261013.log
+SHA ccedb9ed910d3d397a26101b6135ea9aa3cfc3d99131dc559c0036d16f8c28ee
+and coherent203-compact-verify-20261013.log SHA
+3899c8623f823245a49c35c9541944bc691be5b7e996c75ad032425323d43974
+retain8483 differences,157 findings,39904 controls,389202 occurrences,
+0 unresolved scalar groups and72749010 compact bytes. Accepted generation is
+0be2ffe44f7257411b946a2ecad792a048ea6067325fffcead2dce687b1b734f.
+Whole Markdown prose matches predecessor d3073189 after removing exactly the
+two new proof descriptions and normalizing only test line anchors. No scalar
+classification or acceptance rule changes. This supersedes coherent201 publication
+status,not historical evidence provenance. InputEquivalent remains false;
+all2311 complete-case closures and final gates remain open. Next prioritize
+exact applicable-obligation/evidence/currentness joins and remaining local paint
+and ownership gaps,not settled table transport or scrollbar-shape investigations.
+
 ## Table scope and mobile shape registration — October 13
 
 The existing producer now registers the two bounded proofs above with eleven
