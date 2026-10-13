@@ -1,5 +1,39 @@
 # Material comparison/state coverage inventory
 
+## Exact static slider inputs join separate domain and step history — October 14
+
+Question: does the global fixed-half-domain finding apply to every retained
+static slider case,or only a representative source branch? Existing owning
+case proof now authenticates both exact thumb nodes in all12 static cases.
+Native captured bounds are0..65 and30..100,step5,values30/65;candidate requests
+0..50 and50..100,step1,values30/65. Native bounds are peer-constrained,not two
+independent0..100 controls. Current reference authoring remains0..100/step5.
+
+Bounded Git reads separate the actual changes:7159b1d5 introduces half-domains
+and Math.min/Math.max50 clamps while retaining step5;f3c8254c later changes step
+to1. Complete before/after source hashes and exact input lines are retained;
+current two input lines equal the latter source. Existing global finding/policy
+and captured input receipts are bound,not attached merely by family name. Missing
+exact input guard rejects. This is application input inequality,not a new core
+hit-test/projection diagnosis or demonstrated current rendering.
+
+Focused proof passes1/1,0 skips,total21649.4822ms. Log
+static-range-history-obligation-join-20261014.log SHA256
+a7bd11f84d06933eb88e6822f9d8280929fd5370e78034a0b523651dc64966b5.
+Proposal143387182831d369523cd46aa152ee3ba576fa7cfd4d5d54368e53482bf1e546
+is noncanonical. Existing loader authenticates7411 dependencies/2311 cases with
+0 unjoined IDs. Complete comparison toa9c9e0bc permits only12 static slider
+historyOwnership changes;all other fields/headers conserve. Log
+static-range-history-complete-conservation-20261014.log SHA256
+c8808a45e3694ca20ab617c661cc0baf00ad91b000646f6a19d7adcbdc46e01f.
+
+Static pending history joins fall420→408 in this proposal,not complete history
+or ownership acceptance. Other compensation history,live resources/currentness
+and all2311 whole-case closures remain open. Previous turn pushed1e6ca08d;
+published canonicale8 stays unchanged. No browser capture,renderer/fixture change
+or per-edit export. Next extend exact static source/property/history joins from
+existing evidence;integrate the coherent focus/activation/history batch separately.
+
 ## Retained keyboard actions join112 exact activation anchors — October 14
 
 Question: which already-authenticated extended keyboard proofs actually exercise

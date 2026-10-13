@@ -3227,6 +3227,62 @@ test('passive state applicability joins exact cases without discarding progress 
   assert.ok(allObligations.filter(row=>['tree','datepicker'].includes(row.family))
     .every(row=>!row.obligations.authoredActivation.supplementaryKeyboardActivation),
     'Navigation or Tab-only actions cannot supply activation evidence');
+  const rangeDefinition=sourceAuditDefinitions.find(row=>row.id==='fixture-slider-fixed-half-domains');assert.ok(rangeDefinition);
+  const rangeFinding=globalSourceRows.filter(row=>row.classification===rangeDefinition.classification&&row.justification===rangeDefinition.justification);
+  assert.equal(rangeFinding.length,1);
+  const rangeSourceFile=rangeDefinition.file,rangeSourceBytes=readFileSync(rangeSourceFile);
+  const rangeLines=source=>source.toString().split(/\r?\n/).filter(line=>/type: 'input'.*id: 'slider-(start|primary)'/.test(line));
+  const rangeHistory=[];
+  for(const [revision,beforeStep,afterStep,beforeDomains]of [
+    ['7159b1d5','5','5',[[0,100],[0,100]]],['f3c8254c','5','1',[[0,50],[50,100]]],
+  ]){
+    const before=execFileSync('git',['show',`${revision}^:${rangeSourceFile}`],{maxBuffer:4_000_000});
+    const after=execFileSync('git',['show',`${revision}:${rangeSourceFile}`],{maxBuffer:4_000_000});
+    const extract=source=>rangeLines(source).map(line=>{
+      const fields=[...line.matchAll(/\b(min|max|step): '([^']+)'/g)];
+      const values=Object.fromEntries(fields.map(([,name,value])=>[name,value]));
+      return [Number(values.min),Number(values.max),values.step];
+    });
+    assert.deepEqual(extract(before),beforeDomains.map(([min,max])=>[min,max,beforeStep]));
+    assert.deepEqual(extract(after),[[0,50,afterStep],[50,100,afterStep]]);
+    assert.ok(rangeLines(after).every(line=>line.includes('Math.min(50,')||line.includes('Math.max(50,')));
+    rangeHistory.push({revision,sourceFile:rangeSourceFile,beforeSha256:hash(before),afterSha256:hash(after),
+      beforeInputs:rangeLines(before),afterInputs:rangeLines(after)});
+  }
+  assert.deepEqual(rangeLines(rangeSourceBytes),rangeHistory[1].afterInputs);
+  const rangeReferenceFile='examples/material-showcase/src/app/reference.component.ts',rangeReferenceBytes=readFileSync(rangeReferenceFile);
+  const referenceRangeLine=rangeReferenceBytes.toString().split(/\r?\n/).find(line=>line.includes("@case ('slider')"));
+  assert.ok(referenceRangeLine.includes('min="0" max="100" step="5"'));
+  const rangeInputs=(tree,side)=>['slider-start','slider-primary'].map(id=>{
+    const nodes=tree.nodes.filter(node=>(side==='reference'?node.attributes:node.authored)?.id===id);assert.equal(nodes.length,1);
+    const node=nodes[0],attrs=side==='reference'?node.attributes:node.authored;
+    assert.equal(side==='reference'?node.type:attrs.type,'input');assert.equal(side==='reference'?attrs.type:attrs.inputType,'range');
+    return {key:node.key,id,min:attrs.min,max:attrs.max,step:attrs.step,value:side==='reference'?attrs['aria-valuetext']:attrs.value};
+  });
+  let staticRangeHistoryJoins=0;
+  for(const record of allObligations){
+    const row=paintCaseRows.get(record.case);if(row.family!=='slider'||row.kind!=='static')continue;
+    const inputs={};
+    for(const side of ['reference','astylar']){
+      const receipt=row.inputTrees[side],bytes=readFileSync(receipt.file);assert.equal(hash(bytes),receipt.sha256);
+      inputs[side]=rangeInputs(JSON.parse(bytes),side);
+    }
+    assert.deepEqual(inputs.reference.map(x=>[x.min,x.max,x.step,x.value]),[['0','65','5','30'],['30','100','5','65']]);
+    assert.deepEqual(inputs.astylar.map(x=>[x.min,x.max,x.step,x.value]),[['0','50','1','30'],['50','100','1','65']]);
+    const previous=record.obligations.historyOwnership;assert.equal(previous.disposition,'evidence-join-pending');
+    record.obligations.historyOwnership={...previous,applicability:'applicable',disposition:'partial',
+      documentedRangeInputSubstitution:{disposition:'inspected',classification:rangeDefinition.classification,
+        definitionId:rangeDefinition.id,findingId:rangeFinding[0].id,inputs,
+        evidence:{pairedTrees:row.inputTrees,policy:{file:sourcePolicyFile,sha256:hash(readFileSync(sourcePolicyFile))},
+          sourceFinding:{file:`${generation}/${globalSourceShard.file}`,sha256:globalSourceShard.sha256},
+          currentCandidate:{file:rangeSourceFile,sha256:hash(rangeSourceBytes)},
+          currentReference:{file:rangeReferenceFile,sha256:hash(rangeReferenceBytes)},history:rangeHistory},
+        boundary:'Exact retained static inputs and Git source transitions only. Native per-thumb bounds depend on the peer value;reference authoring remains0..100/step5. Half-domain/clamp and later step1 substitution are separate changes. This is application input inequality,not a demonstrated core hit-test/projection cause,current rendering,complete history or ownership acceptance.'},
+      remaining:['Other style/structure compensation history and live resource ownership/currentness']};
+    staticRangeHistoryJoins++;
+  }
+  assert.equal(staticRangeHistoryJoins,12);
+  assert.throws(()=>rangeInputs({nodes:[]},'reference'),'Missing exact input cannot inherit a family finding');
   const servedRoot='examples/material-showcase/dist/material-showcase/browser';
   const currentServed=fingerprintDirectory(servedRoot),currentModules=fingerprintModuleGraph(process.cwd(),resourceRunnerFile);
   const assertDependencyOwner=source=>{
@@ -3311,7 +3367,7 @@ test('passive state applicability joins exact cases without discarding progress 
   t.diagnostic(JSON.stringify({caseObligationProposal:proposal, cases:2311,passiveCases:354,additionalCases:1957,additionalTreeReceipts,
     authoredActivationExclusions:354,authoredEditingExclusions:354,programmaticFocusApplicable:40,
     reportedScalarInputCases:2311,reportedScalarGroups:8483,dividerActualAXCases:24,dividerUpdateDisposalCases:24,dividerLocalTextRasterCases:24,dividerCoordinateHistoryCases:24,supplementaryKeyboardCases:40,extendedKeyboardCases:128,
-    editingTargetApplicabilityCases:1957,editingCounts,configuredFocusRecordedProvenanceIncomplete:40,supplementaryFocusCounts,retainedFocusCounts,keyboardActivationCounts,
+    editingTargetApplicabilityCases:1957,editingCounts,configuredFocusRecordedProvenanceIncomplete:40,supplementaryFocusCounts,retainedFocusCounts,keyboardActivationCounts,staticRangeHistoryJoins,
     retainedTargetRasterCases:1000,paintCounts,retainedResourceSamplingCases:1875,resourceSampleCounts,
     retainedTargetDOMComparisonCases:2311,semanticCounts,retainedEventBoundaryCases:1875,eventCounts,supplementaryMenuActionContexts:menuActionJoins,commitEndpointCounts,rawControlJoins,rawActionRecords,buildCaptureCounts,completeCaseClosures:0,currentRenderingAccepted:0}));
   t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,
