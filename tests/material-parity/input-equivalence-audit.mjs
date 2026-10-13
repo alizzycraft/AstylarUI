@@ -1,4 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
+import { assertCaseObligationCoverage } from '../../scripts/audit-findings-store.mjs';
 import { applyPaintReviews, validatePaintReviews, collectPaintReviewSources, isPaintReviewRow } from './control-state-paint-review.mjs';
 import { applyOmittedOwnerPaintRequests, validateOmittedOwnerPaintRequests } from './control-state-paint-review.mjs';
 import { collectHeldContentPaintInputs } from './control-state-paint-review.mjs';
@@ -183,6 +184,7 @@ const propertyGroupByName = new Map(Object.entries(propertyGroups)
 
 export function parseMaterialInputAuditArguments(args, root = process.cwd()) {
   let parityReport, normalLineBoxReport, controlLineBoxReport, supplementalLineBoxReport, supplementalRoot;
+  let caseObligationReview, caseObligationReviewSha256;
   const flags = new Set();
   for (const arg of args) {
     if (arg === '--check' || arg === '--allow-partial') {
@@ -208,10 +210,20 @@ export function parseMaterialInputAuditArguments(args, root = process.cwd()) {
       if (supplementalRoot !== undefined) throw new Error('Repeated audit option: --supplemental-root');
       supplementalRoot = arg.slice('--supplemental-root='.length);
       if (!supplementalRoot.trim()) throw new Error('--supplemental-root requires a path');
+    } else if (arg.startsWith('--case-obligation-review=')) {
+      if (caseObligationReview !== undefined) throw new Error('Repeated audit option: --case-obligation-review');
+      caseObligationReview = arg.slice('--case-obligation-review='.length);
+      if (!caseObligationReview.trim()) throw new Error('--case-obligation-review requires a path');
+    } else if (arg.startsWith('--case-obligation-review-sha256=')) {
+      if (caseObligationReviewSha256 !== undefined) throw new Error('Repeated audit option: --case-obligation-review-sha256');
+      caseObligationReviewSha256 = arg.slice('--case-obligation-review-sha256='.length);
+      if (!/^[a-f0-9]{64}$/.test(caseObligationReviewSha256)) throw new Error('Invalid case obligation review digest');
     } else {
       throw new Error(`Unknown audit option: ${arg}`);
     }
   }
+  if ((caseObligationReview === undefined) !== (caseObligationReviewSha256 === undefined))
+    throw new Error('Case obligation review requires both path and digest');
   return {
     check: flags.has('--check'),
     allowPartial: flags.has('--allow-partial'),
@@ -220,6 +232,7 @@ export function parseMaterialInputAuditArguments(args, root = process.cwd()) {
     ...(controlLineBoxReport === undefined ? {} : { controlLineBoxPath: path.resolve(root, controlLineBoxReport) }),
     ...(supplementalLineBoxReport === undefined ? {} : { supplementalLineBoxPath: path.resolve(root, supplementalLineBoxReport) }),
     ...(supplementalRoot === undefined ? {} : { supplementalRoot: path.resolve(root, supplementalRoot) }),
+    ...(caseObligationReview === undefined ? {} : { caseObligationReview, caseObligationReviewSha256 }),
   };
 }
 
@@ -548,6 +561,8 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
 
 export function validateMaterialInputAudit(report, { requireComplete = true, root = process.cwd() } = {}) {
   const errors = [];
+  try { assertCaseObligationCoverage(report.coverage); }
+  catch (cause) { errors.push(`case-obligation coverage is invalid: ${cause.message}`); }
   if (requireComplete || report.heldContentPaintInputs !== undefined) {
     try {
       if (JSON.stringify(report.heldContentPaintInputs) !== JSON.stringify(collectHeldContentPaintInputs({ root })))
@@ -1822,6 +1837,10 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Coverage is ${report.coverage.complete ? 'complete' : 'incomplete'}: ${report.coverage.executedStatic}/${report.coverage.configuredStatic} static cases and ` +
       `${report.coverage.executedInteractions}/${report.coverage.configuredInteractions} interaction/mobile-flow cases. All ${report.coverage.families.length} component families are inventoried.`,
     '',
+    ...(report.coverage.inspectionEvidence ? [
+      `Case-obligation evidence: ${report.coverage.inspectionEvidence.cases.length} exact cases have partial evidence joins; ${report.coverage.inspectionEvidence.unjoinedCases.length} configured cases are not yet joined. Matrix completeness is not full inspection closure. Current rendering acceptance and full inspection completion are not certified by these records.`,
+      '',
+    ] : []),
     `Full-element evidence: ${report.elementInventory.cases.length} captured case sides, ${report.elementInventory.variants.length} tree variants; ${report.elementInventory.gaps.length} missing case sides, ${report.elementInventory.resolvedStyleGaps.length} elements without resolved styles, ${report.elementInventory.stateStyleGaps.length} state cases without effective style provenance, and ${report.elementInventory.errors.length} collection errors. Inventory presence does not establish input equivalence.`,
     '',
     `Reference computed context: ${report.elementInventory.referenceContextGaps.length} missing capture declarations or node/pseudo-element fields for direction, writing mode, bidi, last-line alignment, shaping and clipping. Legacy captures remain readable but cannot establish these inputs. A full new capture is required; no direction or clip value is inferred from class names, defaults or screenshots.`,
@@ -8903,6 +8922,9 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'scripts/audit-findings-store.mjs',
+    'tests/material-parity/audit-findings-store.spec.mjs',
+    'artifacts/material-parity/working-audit/proposals/ae416a6ff209bc2bf1a667706474a5f4f7bd683f4e6b481168123bce37ff3994.json',
     'artifacts/material-parity/table-child-ax-cohorts-20261007.log',
     'artifacts/material-parity/timepicker-open-light-mobile-paint-20261011.log',
     'artifacts/material-parity/timepicker-open-dark-mobile-paint-20261011.log',

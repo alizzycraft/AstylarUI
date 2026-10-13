@@ -184,6 +184,31 @@ export function loadCaseObligationReview(file, expectedReviewSha256, configuredC
     inspectionComplete: false, currentRenderingAccepted: false, cases: review.groups,
     unjoinedCases: configuredCases.filter(id => !seen.has(id)), evidenceFingerprints };
 }
+export function attachCaseObligationCoverage(coverage, file, reviewSha256, options) {
+  assert.equal(Object.hasOwn(coverage, 'inspectionEvidence'), false, 'Coverage evidence already attached');
+  const configured = [...coverage.caseInventory.static, ...coverage.caseInventory.interaction];
+  const result = { ...coverage, inspectionEvidence: loadCaseObligationReview(file, reviewSha256, configured, options) };
+  assertCaseObligationCoverage(result);
+  return result;
+}
+export function assertCaseObligationCoverage(coverage) {
+  if (coverage.inspectionEvidence === undefined) return;
+  const evidence = coverage.inspectionEvidence;
+  assert.equal(evidence.schemaVersion, 1);
+  assert.equal(evidence.inspectionComplete, false); assert.equal(evidence.currentRenderingAccepted, false);
+  const configured = [...coverage.caseInventory.static, ...coverage.caseInventory.interaction], seen = new Set();
+  for (const row of evidence.cases) {
+    assert.ok(configured.includes(row.case) && !seen.has(row.case), 'Obligation case membership changed'); seen.add(row.case);
+    assert.equal(row.inspection, 'partial'); assert.equal(row.currentRendering, 'unverified');
+  }
+  assert.ok(JSON.stringify(evidence.unjoinedCases) === JSON.stringify(configured.filter(id => !seen.has(id))),
+    'Unjoined obligation cases changed');
+  assert.equal(digest({kind:'case-obligation-coverage-extension',status:'proposal-not-canonical',
+    scope:evidence.scope,groups:evidence.cases}), evidence.reviewSha256, 'Bound obligation dispositions changed');
+  assert.ok(evidence.evidenceFingerprints.length > 0);
+  assert.equal(new Set(evidence.evidenceFingerprints.map(row => row.file)).size, evidence.evidenceFingerprints.length);
+  for (const receipt of evidence.evidenceFingerprints) assert.match(receipt.sha256, /^[a-f0-9]{64}$/);
+}
 export async function loadFindingEvidence(destination, family, id, snapshot) {
   const pointer = snapshot ?? JSON.parse(fs.readFileSync(path.join(destination, 'current.json')));
   const ids = Array.isArray(id) ? id : [id];

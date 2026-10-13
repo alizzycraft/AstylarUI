@@ -940,6 +940,19 @@ test('audit CLI selects isolated full-matrix evidence without silently accepting
   assert.throws(() => parseMaterialInputAuditArguments(['--parity-report=']), /requires a path/);
   assert.throws(() => parseMaterialInputAuditArguments(['--parity-report=a', '--parity-report=b']), /Repeated audit option/);
   assert.throws(() => parseMaterialInputAuditArguments(['--check', '--check']), /Repeated audit option/);
+  const obligationFile='artifacts/material-parity/working-audit/proposals/review.json',digest='a'.repeat(64);
+  const obligationOptions=parseMaterialInputAuditArguments([`--case-obligation-review=${obligationFile}`,
+    `--case-obligation-review-sha256=${digest}`],root);
+  assert.equal(obligationOptions.caseObligationReview,obligationFile);
+  assert.equal(obligationOptions.caseObligationReviewSha256,digest);
+  assert.throws(()=>parseMaterialInputAuditArguments([`--case-obligation-review=${obligationFile}`]),/both path and digest/);
+  assert.throws(()=>parseMaterialInputAuditArguments([`--case-obligation-review-sha256=${digest}`]),/both path and digest/);
+  assert.throws(()=>parseMaterialInputAuditArguments(['--case-obligation-review-sha256=invalid']),/Invalid/);
+  assert.throws(()=>parseMaterialInputAuditArguments(['--case-obligation-review=']),/requires a path/);
+  assert.throws(()=>parseMaterialInputAuditArguments([`--case-obligation-review=${obligationFile}`,
+    `--case-obligation-review=${obligationFile}`,`--case-obligation-review-sha256=${digest}`]),/Repeated/);
+  assert.throws(()=>parseMaterialInputAuditArguments([`--case-obligation-review=${obligationFile}`,
+    `--case-obligation-review-sha256=${digest}`,`--case-obligation-review-sha256=${digest}`]),/Repeated/);
   const lineBoxReport = 'artifacts/material-parity/normal-line-box-static-audit-v2/latest-report.json';
   assert.equal(parseMaterialInputAuditArguments([`--normal-line-box-report=${lineBoxReport}`], root).normalLineBoxPath,
     path.resolve(root, lineBoxReport));

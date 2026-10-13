@@ -1,5 +1,33 @@
 # Material comparison/state coverage inventory
 
+## Canonical case-coverage export wiring — October 13
+
+The general export command accepts an explicit workspace-relative proposal path
+plus pinned review digest; missing,duplicate or malformed options reject. Named
+current-ancestry launcher retains all five original baseline paths and adds the
+reviewed passive proposal/digest. Within the existing evidence session,export
+attaches authenticated inspectionEvidence after building the unchanged matrix.
+The report validator and export boundary reject altered case membership,
+unjoined identities,dispositions and unsupported completion/current-acceptance
+claims. Existing matrix fields remain byte-equivalent after removing the additive
+inspectionEvidence field. Synthetic/focused builders acquire no implicit proposal
+read. Human Markdown conditionally explains partial joins versus matrix coverage.
+Source inventory adds the existing store/owning test and pinned proposal.
+
+Store suite passes2/2,zero skips,198.468ms; existing CLI assertion passes1/1,
+zero skips,1177.361ms. Named launcher dry-run exits0 and includes original five
+paths plus both review options. Direct authenticated-index attachment revalidates
+717 dependencies,354 joined/1957 unjoined IDs and exact preservation of all prior
+coverage fields; inspectionComplete/currentRenderingAccepted both remain false.
+Exporter and producer syntax checks pass. These focused checks do not establish
+full canonical validation,source-conservation integration or publication.
+
+Coherent203 remains the accepted package/index. Next reconcile the additive
+producer/parser/validator/Markdown/source-inventory and owning-test source changes
+through existing conservation guards,then run the justified export/cold/import
+milestone. No export or fresh capture was launched in this wiring increment;
+all2311 full-case closures and original final gates remain open.
+
 ## Case-coverage integration reader verification — October 13
 
 Existing audit-findings-store now provides loadCaseObligationReview for the

@@ -14,6 +14,7 @@ import {
 } from '../tests/material-parity/input-audit-report-stream.mjs';
 import { materialInputAuditPayloadFile } from '../tests/material-parity/input-audit-report-codec.mjs';
 import { withAuditEvidenceSession } from '../tests/material-parity/audit-evidence-session.mjs';
+import { attachCaseObligationCoverage, assertCaseObligationCoverage } from './audit-findings-store.mjs';
 
 const root = process.cwd();
 const options = parseMaterialInputAuditArguments(process.argv.slice(2), root);
@@ -34,7 +35,13 @@ const parityReport = JSON.parse(readFileSync(parityPath, 'utf8'));
 const { audit, errors } = withAuditEvidenceSession(() => {
   progress('build-audit');
   const audit = buildMaterialInputAudit(parityReport, { ...options, root });
+  if (options.caseObligationReview !== undefined) {
+    progress('join-case-obligations');
+    audit.coverage = attachCaseObligationCoverage(audit.coverage, options.caseObligationReview,
+      options.caseObligationReviewSha256, { root });
+  }
   progress('validate-audit');
+  assertCaseObligationCoverage(audit.coverage);
   const errors = validateMaterialInputAudit(audit, { requireComplete: !allowPartial });
   progress('verify-evidence-session');
   return { audit, errors };

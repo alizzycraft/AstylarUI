@@ -113,6 +113,18 @@ this historical baseline launcher for a different capture. A partial invocation
 has repeatedly produced expensive, incomplete reports; such output must never
 be imported as accepted evidence.
 
+The named launcher also supplies the reviewed passive case-obligation proposal
+and its pinned review digest. Its existence preflight is separate from the export
+reader's exact-case and dependency authentication. The general exporter accepts
+`--case-obligation-review=WORKSPACE_RELATIVE_PATH` together with
+`--case-obligation-review-sha256=REVIEW_DIGEST`; neither option is valid alone.
+This adds partial inspection evidence to existing coverage without changing the
+matrix completeness or rendering acceptance flags. Unjoined cases remain explicit.
+Synthetic/focused builder calls do not implicitly load this historical proposal.
+Source conservation and coherent export/cold/import remain required before the
+new coverage records are described as canonical; a launcher dry run is not proof
+of publication or successful audit validation.
+
 ## Validated reuse
 
 For the original **synthetic ImageResourceService unit assertions only**, the

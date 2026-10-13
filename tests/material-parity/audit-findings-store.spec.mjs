@@ -3,7 +3,7 @@ import test from 'node:test';
 import * as fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { importFindings, queryFindings, verifyFindings, saveReviewProposal, loadFindingEvidence, loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
+import { importFindings, queryFindings, verifyFindings, saveReviewProposal, loadFindingEvidence, loadCaseObligationReview, attachCaseObligationCoverage, assertCaseObligationCoverage } from '../../scripts/audit-findings-store.mjs';
 import { createHash } from 'node:crypto';
 import { encodeMaterialInputAuditStream } from './input-audit-report-stream.mjs';
 
@@ -28,6 +28,17 @@ test('case obligation integration authenticates exact scope and dependencies wit
   assert.deepEqual(result.cases,[row]);assert.deepEqual(result.unjoinedCases,[configured[1]]);
   assert.equal(result.inspectionComplete,false);assert.equal(result.currentRenderingAccepted,false);
   assert.equal(result.evidenceFingerprints.length,3);assert.equal(reads.filter(file=>file==='report.json').length,1);
+  const coverage={complete:true,visualParityGreen:true,caseInventory:{static:[row.case],interaction:[configured[1]]}};
+  const before=JSON.stringify(coverage);
+  const attached=attachCaseObligationCoverage(coverage,'proposal.json',digest,{root,read});
+  assert.equal(JSON.stringify(coverage),before);assertCaseObligationCoverage(attached);
+  const stripped={...attached};delete stripped.inspectionEvidence;assert.deepEqual(stripped,coverage);
+  assert.throws(()=>attachCaseObligationCoverage(attached,'proposal.json',digest,{root,read}));
+  for(const mutate of [r=>r.inspectionEvidence.inspectionComplete=true,r=>r.inspectionEvidence.currentRenderingAccepted=true,
+    r=>r.inspectionEvidence.unjoinedCases.pop(),r=>r.inspectionEvidence.cases[0].obligations.semantics.disposition='complete',
+    r=>r.inspectionEvidence.cases[0].case='invented']){
+    const forged=structuredClone(attached);mutate(forged);assert.throws(()=>assertCaseObligationCoverage(forged));
+  }
   assert.throws(()=>loadCaseObligationReview('proposal.json','0'.repeat(64),configured,{root,read}));
   assert.throws(()=>loadCaseObligationReview('proposal.json',digest,[configured[1]],{root,read}));
   assert.throws(()=>loadCaseObligationReview('proposal.json',digest,[row.case,row.case],{root,read}));

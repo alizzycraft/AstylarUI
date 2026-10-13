@@ -17,6 +17,7 @@ const inputs = {
   'control-line-box-report': 'artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json',
   'supplemental-line-box-report': 'artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json',
   'supplemental-root': 'artifacts/material-parity/supplemental-current-ancestry-audit',
+  'case-obligation-review': 'artifacts/material-parity/working-audit/proposals/ae416a6ff209bc2bf1a667706474a5f4f7bd683f4e6b481168123bce37ff3994.json',
 };
 for (const [name, relative] of Object.entries(inputs)) {
   const stat = statSync(path.join(root, relative));
@@ -24,6 +25,7 @@ for (const [name, relative] of Object.entries(inputs)) {
 }
 const args = ['--max-old-space-size=8192', 'scripts/run-material-input-audit.mjs',
   ...Object.entries(inputs).map(([name, relative]) => `--${name}=${relative}`),
+  '--case-obligation-review-sha256=ae416a6ff209bc2bf1a667706474a5f4f7bd683f4e6b481168123bce37ff3994',
   ...(requested.includes('--check') ? ['--check'] : [])];
 if (requested.includes('--dry-run')) console.log(JSON.stringify({ cwd: root, executable: process.execPath, args }, null, 2));
 else {
