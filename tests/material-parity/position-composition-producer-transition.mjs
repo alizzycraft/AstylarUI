@@ -9,6 +9,14 @@ export function restoreAllCaseObligationRegistration(source) {
   let current=source.toString().replaceAll('\r\n','\n');
   const editing='59409a78eb407588e906e094abd80183fa7dd07a170ad902e706a1bda6d6590e';
   const observations='b7ebc7694f5fb0cf1577f61ba41062f6ae7658abeb0688214504706a64d976eb';
+  const focusHistory='ff6feb918dc14e15204f703429d98fb17a915e3648375d94fe084d0991f20f55';
+  if(current.includes(focusHistory)){
+    assert.equal(hash(current),'2bee797784a736c84298bdeee03eeb2ac036d3b9e0b96bec9a1e5eff0c11f7c2',
+      'exact scoped focus activation and static-history proposal pin');
+    assert.equal(current.split(focusHistory).length,2);current=current.replace(focusHistory,observations);
+    assert.equal(hash(current),'f992aa554901072429e0ea3c7c467ae458a1615145b8dc841a0960cd0f742118',
+      'whole published retained-observation producer conserved');
+  }
   if(current.includes(observations)){
     assert.equal(hash(current),'f992aa554901072429e0ea3c7c467ae458a1615145b8dc841a0960cd0f742118',
       'exact retained raster resource semantic action and currentness proposal pin');

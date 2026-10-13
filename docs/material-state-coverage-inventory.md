@@ -1,5 +1,30 @@
 # Material comparison/state coverage inventory
 
+## Focus/activation/static-history batch integration verified — October 14
+
+Producer inventory and named complete-baseline launcher now pin ff6feb918.
+Complete comparison to published b7 preserves all headers/fields except1875
+programmaticFocus,112 authoredActivation and436 historyOwnership records. Existing
+loader authenticates7412 actual dependencies/2311 cases,0 unjoined;0 whole-case
+closures and both acceptance flags remain false. Log
+focus-activation-history-complete-batch-20261014.log SHA256
+a9f4ee8b2b3d7f356adc5619626224be076ea112aa821e7df1e0e95861d9b5cf.
+
+New producer LF SHA2bee797784a736c84298bdeee03eeb2ac036d3b9e0b96bec9a1e5eff0c11f7c2
+differs from publishedf992aa55 only in proposal path. Existing restoration
+authenticates both whole hashes before reversing that pin;all previous scalar/
+classification/proof claims conserve. Complete producer-transition suite passes
+33/33,0 skips,total176025.704ms;session88520 terminal exit0. Log
+focus-activation-history-producer-integration-20261014.log SHA256
+7780f33b0c9c94f41feb1233ead28cf3ff93b240ac773b88027e14ba6bfe4d13.
+Named dry run supplies all baseline paths and matching proposal digest. Scoped
+diff/check passes. No renderer,fixture,threshold or acceptance changes.
+
+Previous turn pushed3ef90cdf. Next exactly one named export with consumed inputs
+frozen,then independent cold/package/complete-row conservation before publication.
+Observed D:free2160832512 bytes before launch;recheck headroom. Canonicale8 remains
+the prior published package,not the pending batch. All original final gates remain.
+
 ## Fixed-height history joins all436 static cases; coherent integration next — October 14
 
 Existing owning case proof now binds exact unique section nodes,inline/matched
