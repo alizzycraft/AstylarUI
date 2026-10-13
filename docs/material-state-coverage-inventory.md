@@ -1,5 +1,37 @@
 # Material comparison/state coverage inventory
 
+## Original retained focus flags join1875 cases without blanket focus acceptance — October 14
+
+Existing owning proof now attaches original focus fields to every1875 interaction
+case. Complete focusedIdentity method and focusMatches initializer conserve with
+Git8aa0e2e5. The actual gate compares256 focus cases only:216 normalize to primary
+hosts and40 omit both owners. The other1619 flags are unconditional;204 have
+different reported identity values. Raw omissions and identities remain unchanged;
+neither equal host IDs nor two unidentified owners proves actual descendant focus.
+Different native/logical ID namespaces do not automatically establish defects.
+
+This answers the outstanding original-flag scope join,not the missing original
+e01ef9dc whole-runner receipt,focus paint or current rendering. Wrong compared
+owner and false uncompared flag controls reject. All original applicability,
+pending statuses,progress failures and144 supplementary keyboard joins conserve.
+All2311 whole cases remain partial/unverified;0 complete-case closures.
+
+Focused proof passes1/1,0 skips,total22472.876ms. Log
+retained-focus-gate-obligation-join-20261014.log SHA256
+4629aca48c780cf63cbe51524e7ab05f15d43aa95700df51aeb418b0e416ef1f.
+Proposal0670e282ba316875166765add014d3b20b49e29b27bb87be280ff1b2c4adf18f
+is noncanonical. Existing loader authenticates7410 dependencies/2311 cases with
+0 unjoined IDs. Complete comparison to44a5f7c5 permits only1875 additive
+retainedIdentityComparison fields;all other fields and headers agree. Log
+retained-focus-complete-conservation-20261014.log SHA256
+24a67dcb91f859727e2220e608fc90a6954b39d1136751c264c1ba313908bc5c.
+
+Previous turn pushed supplementary focus increment1f0ecce1;published canonicale8
+remains the accepted prior publication. These focus changes await coherent batch
+integration,not a per-edit full export. Next prioritize activation applicability
+and420 static history-source scope joins using existing exact source/tree proofs.
+No renderer,fixture,threshold or acceptance changes;original final gates remain.
+
 ## Existing supplementary keyboard observations join144 focus obligations — October 14
 
 Question: can the identified retained keyboard observations supply actual-control

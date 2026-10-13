@@ -3028,6 +3028,54 @@ test('passive state applicability joins exact cases without discarding progress 
     record.obligations.authoredActivation={...record.obligations.authoredActivation,retainedEventBoundary:observation};
   }
   assert.deepEqual(eventCounts,{cases:1875,normalized:647,uncompared:1228,tailExclusions:32,explicitState:114,defaultState:1761});
+  const focusMethod=resourceFunctions(resourceRunnerBytes,['focusedIdentity']);
+  assert.deepEqual(focusMethod,resourceFunctions(resourcePrior,['focusedIdentity']));
+  const focusGate=source=>{
+    const ast=ts.createSourceFile('runner.mjs',source.toString().replaceAll('\r\n','\n'),ts.ScriptTarget.Latest,true,ts.ScriptKind.JS);
+    const declarations=[];
+    const visit=node=>{
+      if(ts.isVariableDeclaration(node)&&node.name.getText(ast)==='focusMatches')declarations.push(node.initializer.getText(ast));
+      ts.forEachChild(node,visit);
+    };
+    visit(ast);assert.equal(declarations.length,1);return declarations[0];
+  };
+  const focusGateSource=focusGate(resourceRunnerBytes);
+  assert.equal(focusGateSource,focusGate(resourcePrior));
+  assert.equal(focusGateSource,"state !== 'focus' || referenceFocus === astylarFocus");
+  const retainedFocusCounts={cases:0,compared:0,uncompared:0,comparedPrimaryHosts:0,comparedUnidentified:0,uncomparedDifferentIdentities:0};
+  const joinRetainedFocus=row=>{
+    assert.equal(row.kind,'interaction');assert.equal(typeof row.focus?.matches,'boolean');
+    for(const side of ['reference','astylar'])if(Object.hasOwn(row.focus,side))assert.equal(typeof row.focus[side],'string');
+    const compared=row.state==='focus';
+    assert.equal(row.focus.matches,!compared||row.focus.reference===row.focus.astylar,
+      'Preserve the actual original focus gate,not a presumed all-state focus comparison');
+    const identityMode=compared&&row.focus.reference===`${row.family}-primary`&&row.focus.astylar===`${row.family}-primary`?
+      'both-normalized-primary-hosts':!Object.hasOwn(row.focus,'reference')&&!Object.hasOwn(row.focus,'astylar')?
+      'both-unidentified':'source-specific-native-id-versus-candidate-logical-id';
+    return {disposition:'recorded-provenance-incomplete',case:scalarCaseKey(row),
+      comparisonMode:compared?'identity-equality':'uncompared-default',identityMode,observation:row.focus,
+      evidence:{report:{file:'artifacts/material-parity/current-full-20261005/latest-report.json',sha256:reportSha256},
+        currentRunner:{file:resourceRunnerFile,sha256:hash(resourceRunnerBytes)},
+        methodConservation:{revision:'8aa0e2e5',function:'focusedIdentity',bodySha256:hash(focusMethod.focusedIdentity),gateSha256:hash(focusGateSource)}},
+      unavailableActionSource:{originalLogicalFile:resourceRunnerFile,capturedSha256:'e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0',disposition:'missing-original-bytes-not-a-readable-receipt'},
+      boundary:'Original serialized identity fields only. Primary hosts collapse active descendants; omitted owners remain unidentified. Non-focus match flags are unconditional,not focus passes. Different identity namespaces are not automatic defects. Not actual descendant association,whole-runner provenance,focus paint,current rendering or whole-case closure.'};
+  };
+  for(const record of allObligations){
+    const row=paintCaseRows.get(record.case);if(row.kind!=='interaction')continue;
+    const observation=joinRetainedFocus(row);retainedFocusCounts.cases++;
+    const compared=observation.comparisonMode==='identity-equality';
+    retainedFocusCounts[compared?'compared':'uncompared']++;
+    if(compared&&observation.identityMode==='both-normalized-primary-hosts')retainedFocusCounts.comparedPrimaryHosts++;
+    if(compared&&observation.identityMode==='both-unidentified')retainedFocusCounts.comparedUnidentified++;
+    if(!compared&&row.focus.reference!==row.focus.astylar)retainedFocusCounts.uncomparedDifferentIdentities++;
+    // Preserve existing pending status,authoring exclusions and demonstrated failures.
+    record.obligations.programmaticFocus={...record.obligations.programmaticFocus,retainedIdentityComparison:observation};
+  }
+  assert.deepEqual(retainedFocusCounts,{cases:1875,compared:256,uncompared:1619,comparedPrimaryHosts:216,comparedUnidentified:40,uncomparedDifferentIdentities:204});
+  const forgedFocusRow=structuredClone(allCases.find(row=>row.kind==='interaction'&&row.state==='focus'&&row.focus.reference));
+  forgedFocusRow.focus.astylar='forged-owner';assert.throws(()=>joinRetainedFocus(forgedFocusRow));
+  const forgedUncomparedFocus=structuredClone(allCases.find(row=>row.kind==='interaction'&&row.state!=='focus'));
+  forgedUncomparedFocus.focus.matches=false;assert.throws(()=>joinRetainedFocus(forgedUncomparedFocus));
   const menuActionSources=[
     ['menu-actions-reset-20261008','6b93af93ca14dedca2e1b64c37d2b1ffac6e203ea37d8265c681b6ffc0acd828','scripts/audit-material-menu-actions-reset.mjs'],
     ['menu-actions-remaining-20261008','f41bcce117e913caaf956b43848b8b2eedeafd3d4c6792a1da23b0bbb8e33811','scripts/audit-material-menu-actions-remaining.mjs'],
@@ -3237,7 +3285,7 @@ test('passive state applicability joins exact cases without discarding progress 
   t.diagnostic(JSON.stringify({caseObligationProposal:proposal, cases:2311,passiveCases:354,additionalCases:1957,additionalTreeReceipts,
     authoredActivationExclusions:354,authoredEditingExclusions:354,programmaticFocusApplicable:40,
     reportedScalarInputCases:2311,reportedScalarGroups:8483,dividerActualAXCases:24,dividerUpdateDisposalCases:24,dividerLocalTextRasterCases:24,dividerCoordinateHistoryCases:24,supplementaryKeyboardCases:40,extendedKeyboardCases:128,
-    editingTargetApplicabilityCases:1957,editingCounts,configuredFocusRecordedProvenanceIncomplete:40,supplementaryFocusCounts,
+    editingTargetApplicabilityCases:1957,editingCounts,configuredFocusRecordedProvenanceIncomplete:40,supplementaryFocusCounts,retainedFocusCounts,
     retainedTargetRasterCases:1000,paintCounts,retainedResourceSamplingCases:1875,resourceSampleCounts,
     retainedTargetDOMComparisonCases:2311,semanticCounts,retainedEventBoundaryCases:1875,eventCounts,supplementaryMenuActionContexts:menuActionJoins,commitEndpointCounts,rawControlJoins,rawActionRecords,buildCaptureCounts,completeCaseClosures:0,currentRenderingAccepted:0}));
   t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,
