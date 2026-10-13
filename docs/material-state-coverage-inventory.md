@@ -1,5 +1,39 @@
 # Material comparison/state coverage inventory
 
+## Retained derived-DOM semantic comparisons join all2311 cases — October 13
+
+Question: do original semantic flags prove actual accessibility-tree output? Source
+inspection shows both reference and candidate readers use DOM attributes plus
+helper-derived role/name/state values and declared host/descendant selection. They
+are not CDP accessibility-tree or computed-accessible-name observations. The original
+comparator omits checkbox/radio submission values and compares activeDescendant
+presence,not identity/target association. Matching flags cannot close those gaps.
+
+Existing case proof now preserves all5930 target comparisons in2311 semantic
+obligations:0 recorded comparator failures,502 absent reference targets,68 choice
+value exclusions and88 active-descendant presence comparisons. Complete current
+compareSemantics function conserves Git8aa0e2e5; its exact serialized comparator
+replays each retained row. A forged actual name with unchanged matching flag rejects.
+No exclusion or threshold changes. Original target IDs,namespace differences and
+missing fields stay visible;previous354 authored/actual AX dispositions remain intact.
+All semantic records remain partial/recorded-provenance-incomplete with missing e01
+whole runner explicit. No actual AX,association,AT,current rendering or full closure.
+
+Focused1/1 passes,0 skips,total17431.4912ms. Log
+all-case-retained-dom-semantics-join-20261013.log SHA
+c9e534459582339f32682aec679ca3dc39f615730996280a9268f9fd73a4aff9.
+Proposal1e58615e5c27335018bdd8125a22880ee7a49449e9e06d455cf0401389c3f895
+is noncanonical. Existing loader authenticates5278 dependencies/2311 partial cases,
+false acceptance flags. Complete comparison to8069ae69 preserves all fields except
+semantics in exactly2311 records. Log all-case-retained-dom-semantics-loader-
+conservation-20261013.log SHAef5c3f61e3465d60f1719971fadec5caf4482ac7309f1c02dbf14a5b102fb62f.
+
+Next exact action/state/event evidence and remaining actual AX/relationships/history/
+currentness obligations;do not recapture or reclassify settled DOM/AX distinctions.
+Accepted canonical918 remains unchanged;these raster/resource/semantic additions
+await one later coherent source-fingerprint integration batch. No renderer,fixture,
+capture,criteria or final gate changes;0 whole-case closures.
+
 ## Retained tracked-resource sampling joins1875 interaction cases — October 13
 
 Question: what exact lifecycle evidence underlies original resourcesStable flags?

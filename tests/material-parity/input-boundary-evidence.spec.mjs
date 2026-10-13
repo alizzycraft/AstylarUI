@@ -2847,10 +2847,10 @@ test('passive state applicability joins exact cases without discarding progress 
   const resourceRunnerFile='tests/material-parity/run-material-parity.mjs';
   const resourceRunnerBytes=readFileSync(resourceRunnerFile);
   const resourcePrior=execFileSync('git',['show',`8aa0e2e5:${resourceRunnerFile}`],{encoding:'utf8',maxBuffer:4_000_000});
-  const resourceFunctions=(source)=>{
+  const resourceFunctions=(source,names=['performInteraction','profileTheme','resourceCounts'])=>{
     const ast=ts.createSourceFile('runner.mjs',source.toString().replaceAll('\r\n','\n'),ts.ScriptTarget.Latest,true,ts.ScriptKind.JS);
     assert.deepEqual(ast.parseDiagnostics,[]);
-    return Object.fromEntries(['performInteraction','profileTheme','resourceCounts'].map(name=>{
+    return Object.fromEntries(names.map(name=>{
       const functions=ast.statements.filter(node=>ts.isFunctionDeclaration(node)&&node.name?.text===name);
       assert.equal(functions.length,1);return [name,functions[0].getText(ast)];
     }));
@@ -2896,6 +2896,42 @@ test('passive state applicability joins exact cases without discarding progress 
       remaining:[...(previous.remaining??[]),'History/compensation ownership plus live resource and disposal/currentness obligations beyond tracked samples']};
   }
   assert.deepEqual(resourceSampleCounts,{single:1857,three:18});
+  const semanticMethod=resourceFunctions(resourceRunnerBytes,['compareSemantics']);
+  assert.deepEqual(semanticMethod,resourceFunctions(resourcePrior,['compareSemantics']));
+  const replaySemanticComparator=new Function(`return (${semanticMethod.compareSemantics});`)();
+  const semanticCounts={cases:0,targets:0,recordedFailures:0,absentReferenceTargets:0,choiceValueExclusions:0,activeDescendantPresenceComparisons:0};
+  const joinTargetSemantics=row=>{
+    assert.ok(Array.isArray(row.semantics)&&row.semantics.length>0);
+    assert.equal(new Set(row.semantics.map(target=>target.id)).size,row.semantics.length);
+    const reference=Object.fromEntries(row.semantics.map(target=>[target.id,target.expected]));
+    const candidate=Object.fromEntries(row.semantics.map(target=>[target.id,target.actual]));
+    assert.deepEqual(JSON.parse(JSON.stringify(replaySemanticComparator(reference,candidate))),row.semantics,
+      'Replay original serialized DOM attribute comparator without strengthening or weakening its gate');
+    return {disposition:'recorded-provenance-incomplete',case:scalarCaseKey(row),targets:row.semantics,
+      evidence:{report:{file:'artifacts/material-parity/current-full-20261005/latest-report.json',sha256:reportSha256},
+        currentComparator:{file:resourceRunnerFile,sha256:hash(resourceRunnerBytes)},
+        methodConservation:{revision:'8aa0e2e5',function:'compareSemantics',bodySha256:hash(semanticMethod.compareSemantics)}},
+      unavailableActionSource:{originalLogicalFile:resourceRunnerFile,capturedSha256:'e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0',disposition:'missing-original-bytes-not-a-readable-receipt'},
+      boundary:'Derived DOM role/name/state comparisons only. Checkbox/radio submission value is excluded and activeDescendant compares presence,not exact identity/association. Missing targets stay missing. Not actual AX,computed accessible-name fidelity,assistive technology,complete runner provenance,current rendering or whole-case acceptance.'};
+  };
+  const forgedSemanticRow=structuredClone(allCases[0]);
+  forgedSemanticRow.semantics.find(target=>target.expected.exists).actual.name='forged semantic name';
+  assert.throws(()=>joinTargetSemantics(forgedSemanticRow));
+  for(const record of allObligations){
+    const row=paintCaseRows.get(record.case),observation=joinTargetSemantics(row);
+    semanticCounts.cases++;semanticCounts.targets+=observation.targets.length;
+    for(const target of observation.targets){
+      semanticCounts.recordedFailures+=target.matches===false?1:0;
+      semanticCounts.absentReferenceTargets+=!target.expected.exists?1:0;
+      semanticCounts.choiceValueExclusions+=['checkbox','radio'].includes(target.expected.role)?1:0;
+      semanticCounts.activeDescendantPresenceComparisons+=target.expected.activeDescendant||target.actual?.activeDescendant?1:0;
+    }
+    const previous=record.obligations.semantics;
+    record.obligations.semantics={...previous,applicability:'applicable',disposition:'partial',
+      retainedTargetDOMComparison:observation,
+      remaining:[...(previous.remaining??[]),'Actual AX/description/target associations and full semantic/currentness disposition beyond DOM comparator']};
+  }
+  assert.deepEqual(semanticCounts,{cases:2311,targets:5930,recordedFailures:0,absentReferenceTargets:502,choiceValueExclusions:68,activeDescendantPresenceComparisons:88});
   assert.equal(new Set(allObligations.map(row=>row.case)).size,2311);
   assert.deepEqual(allObligations.map(row=>row.case).sort(),allConfigured.map(scalarCaseKey).sort());
   assert.ok(allObligations.every(row=>row.inspection==='partial'&&row.currentRendering==='unverified'));
@@ -2909,7 +2945,7 @@ test('passive state applicability joins exact cases without discarding progress 
     reportedScalarInputCases:2311,reportedScalarGroups:8483,dividerActualAXCases:24,dividerUpdateDisposalCases:24,dividerLocalTextRasterCases:24,dividerCoordinateHistoryCases:24,supplementaryKeyboardCases:40,extendedKeyboardCases:128,
     editingTargetApplicabilityCases:1957,editingCounts,configuredFocusRecordedProvenanceIncomplete:40,
     retainedTargetRasterCases:1000,paintCounts,retainedResourceSamplingCases:1875,resourceSampleCounts,
-    completeCaseClosures:0,currentRenderingAccepted:0}));
+    retainedTargetDOMComparisonCases:2311,semanticCounts,completeCaseClosures:0,currentRenderingAccepted:0}));
   t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,
     scope:'Exact configured retained authoring: no activation/editing descendants. Forty native negative-tabindex progress owners keep a programmatic-focus obligation; no live focus, unrecorded callback, paint, lifecycle, source-currentness or full-case closure is inferred.'}));
 });
