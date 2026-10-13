@@ -1,5 +1,33 @@
 # Material comparison/state coverage inventory
 
+## Case-coverage integration reader verification — October 13
+
+Existing audit-findings-store now provides loadCaseObligationReview for the
+demonstrated missing exact-case coverage join. It authenticates a pinned proposal
+review digest,kind/status,unique configured identities,partial/unverified flags,
+paired tree/report receipts and every recursively declared evidence dependency.
+Conflicting receipts,unknown/duplicate cases,changed bytes,path escape,missing
+paired receipt and unsupported complete/current-accepted claims reject. Shared
+dependencies are read/hashed once per invocation; no persistent collector cache
+or synthetic default dispositions are assumed. Unjoined configured IDs remain
+explicit rather than becoming inapplicable or complete.
+
+Existing store suite passes2/2,zero skips,exit0,215.7809ms,including nine negative
+controls for the new reader and unchanged compact-store checks. Authenticated
+accepted-index plus real proposed passive batch replay joins354 cases,revalidates
+717 unique dependencies and lists1957 unjoined IDs; inspectionComplete=false and
+currentRenderingAccepted=false. Those unjoined IDs still have scalar-review
+evidence; they are not untouched cases. Log
+passive-case-coverage-loader-verification-20261013.log SHA
+22368bc24eb571d6c0c057ef75382f6741589754f432aa3103b9427334a66bfc.
+
+This closes the trusted-consumption prerequisite,not canonical integration.
+Next wire the reviewed partial records into existing coverage,validate their
+scope without changing matrix completeness/acceptance,then reconcile additive
+source receipts for one coherent export/cold/import milestone. No new report
+framework,capture,renderer or fixture changes; all2311 full-case closures and
+original final gates remain open.
+
 ## Table/list exact-case historical AX obligation join — October 13
 
 Retained actual subtree AX now joins52 table and52 list exact passive cases via

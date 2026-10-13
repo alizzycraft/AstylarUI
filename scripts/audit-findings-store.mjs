@@ -132,6 +132,58 @@ export function saveReviewProposal(destination, review) {
   if (!fs.existsSync(file)) atomicJson(file, { status: 'proposal-not-canonical', sha256, review });
   return { file, sha256, groups: review.groups.length };
 }
+// Coverage integration consumes reviewed proposal bytes, not their existence.
+// Reauthenticate every actual evidence dependency; no persistent cache is used.
+export function loadCaseObligationReview(file, expectedReviewSha256, configuredCases,
+  { root = process.cwd(), read = fs.readFileSync } = {}) {
+  assert.match(expectedReviewSha256, /^[a-f0-9]{64}$/);
+  const resolve = name => {
+    assert.equal(typeof name, 'string');
+    assert.ok(!path.isAbsolute(name) && !name.split(/[\\/]/).includes('..'), 'Evidence path must remain workspace-relative');
+    return path.resolve(root, name);
+  };
+  const envelope = JSON.parse(read(resolve(file)));
+  assert.equal(envelope.status, 'proposal-not-canonical');
+  assert.equal(envelope.sha256, expectedReviewSha256);
+  assert.equal(digest(envelope.review), expectedReviewSha256, 'Case-obligation proposal changed');
+  const review = envelope.review;
+  assert.equal(review.kind, 'case-obligation-coverage-extension');
+  assert.equal(review.status, 'proposal-not-canonical');
+  assert.ok(review.groups.length > 0);
+  const configured = new Set(configuredCases), seen = new Set(), dependencies = new Map();
+  assert.equal(configured.size, configuredCases.length, 'Duplicate configured case');
+  const bind = (name, sha256) => {
+    resolve(name); assert.match(sha256, /^[a-f0-9]{64}$/);
+    if (dependencies.has(name)) assert.equal(dependencies.get(name), sha256, 'Conflicting dependency receipt');
+    dependencies.set(name, sha256);
+  };
+  const receipts = value => {
+    if (!value || typeof value !== 'object') return;
+    if (typeof value.file === 'string' && typeof value.sha256 === 'string') bind(value.file, value.sha256);
+    for (const child of Object.values(value)) receipts(child);
+  };
+  for (const row of review.groups) {
+    assert.ok(configured.has(row.case), 'Unknown case in obligation evidence');
+    assert.ok(!seen.has(row.case), 'Duplicate case in obligation evidence'); seen.add(row.case);
+    assert.equal(row.inspection, 'partial'); assert.equal(row.currentRendering, 'unverified');
+    assert.ok(row.case.includes(`:${row.family}@`));
+    assert.ok(row.obligations && Object.keys(row.obligations).length > 0);
+    bind(row.evidence.report, row.evidence.reportSha256);
+    for (const side of ['reference', 'astylar']) {
+      const receipt = row.evidence.pairedTrees[side]; assert.ok(receipt);
+      bind(receipt.file, receipt.sha256);
+    }
+    receipts(row);
+  }
+  const evidenceFingerprints = [...dependencies].sort(([a], [b]) => a.localeCompare(b))
+    .map(([file, sha256]) => {
+      assert.equal(hash(read(resolve(file))), sha256, `Case obligation evidence changed: ${file}`);
+      return { file, sha256 };
+    });
+  return { schemaVersion: 1, scope: review.scope, reviewSha256: expectedReviewSha256,
+    inspectionComplete: false, currentRenderingAccepted: false, cases: review.groups,
+    unjoinedCases: configuredCases.filter(id => !seen.has(id)), evidenceFingerprints };
+}
 export async function loadFindingEvidence(destination, family, id, snapshot) {
   const pointer = snapshot ?? JSON.parse(fs.readFileSync(path.join(destination, 'current.json')));
   const ids = Array.isArray(id) ? id : [id];

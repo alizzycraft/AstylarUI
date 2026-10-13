@@ -3,8 +3,44 @@ import test from 'node:test';
 import * as fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { importFindings, queryFindings, verifyFindings, saveReviewProposal, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
+import { importFindings, queryFindings, verifyFindings, saveReviewProposal, loadFindingEvidence, loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
+import { createHash } from 'node:crypto';
 import { encodeMaterialInputAuditStream } from './input-audit-report-stream.mjs';
+
+test('case obligation integration authenticates exact scope and dependencies without acceptance claims', () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const root = path.resolve('case-obligation-memory-proof');
+  const bytes = Buffer.from('original evidence');
+  const receipt = file => ({ file, sha256: hash(bytes) });
+  const row = { case:'static:table@light/desktop',family:'table',inspection:'partial',currentRendering:'unverified',
+    evidence:{report:'report.json',reportSha256:hash(bytes),
+      pairedTrees:{reference:receipt('reference.json'),astylar:receipt('astylar.json')}},
+    obligations:{semantics:{applicability:'applicable',disposition:'partial',evidence:receipt('report.json')}} };
+  const review = { kind:'case-obligation-coverage-extension',status:'proposal-not-canonical',scope:'bounded proof',groups:[row] };
+  const digest = hash(JSON.stringify(review));
+  const envelope = {status:'proposal-not-canonical',sha256:digest,review};
+  const files = new Map([['proposal.json',Buffer.from(JSON.stringify(envelope))],
+    ...['report.json','reference.json','astylar.json'].map(file=>[file,bytes])]);
+  const reads=[];
+  const read = file => {const relative=path.relative(root,file);reads.push(relative);assert.ok(files.has(relative));return files.get(relative);};
+  const configured=[row.case,'interaction:table@light/desktop-dpr1/hover'];
+  const result=loadCaseObligationReview('proposal.json',digest,configured,{root,read});
+  assert.deepEqual(result.cases,[row]);assert.deepEqual(result.unjoinedCases,[configured[1]]);
+  assert.equal(result.inspectionComplete,false);assert.equal(result.currentRenderingAccepted,false);
+  assert.equal(result.evidenceFingerprints.length,3);assert.equal(reads.filter(file=>file==='report.json').length,1);
+  assert.throws(()=>loadCaseObligationReview('proposal.json','0'.repeat(64),configured,{root,read}));
+  assert.throws(()=>loadCaseObligationReview('proposal.json',digest,[configured[1]],{root,read}));
+  assert.throws(()=>loadCaseObligationReview('proposal.json',digest,[row.case,row.case],{root,read}));
+  files.set('reference.json',Buffer.from('changed'));
+  assert.throws(()=>loadCaseObligationReview('proposal.json',digest,configured,{root,read}));files.set('reference.json',bytes);
+  for(const mutate of [r=>r.groups.push(structuredClone(r.groups[0])),r=>r.groups[0].inspection='complete',
+    r=>r.groups[0].currentRendering='accepted',r=>r.groups[0].evidence.report='../outside.json',
+    r=>delete r.groups[0].evidence.pairedTrees.reference]){
+    const changed=structuredClone(review);mutate(changed);const changedDigest=hash(JSON.stringify(changed));
+    files.set('proposal.json',Buffer.from(JSON.stringify({status:'proposal-not-canonical',sha256:changedDigest,review:changed})));
+    assert.throws(()=>loadCaseObligationReview('proposal.json',changedDigest,configured,{root,read}));
+  }
+});
 
 test('compact findings preserve counts, missing values and evidence links; corruption is rejected', async () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'audit-findings-'));
