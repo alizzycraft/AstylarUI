@@ -17,7 +17,7 @@ const inputs = {
   'control-line-box-report': 'artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json',
   'supplemental-line-box-report': 'artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json',
   'supplemental-root': 'artifacts/material-parity/supplemental-current-ancestry-audit',
-  'case-obligation-review': 'artifacts/material-parity/working-audit/proposals/db848392d5110c358c2e5b76d3f4e56d1f7fb0e1321563267f5600f283f2a064.json',
+  'case-obligation-review': 'artifacts/material-parity/working-audit/proposals/59409a78eb407588e906e094abd80183fa7dd07a170ad902e706a1bda6d6590e.json',
 };
 for (const [name, relative] of Object.entries(inputs)) {
   const stat = statSync(path.join(root, relative));
@@ -25,7 +25,7 @@ for (const [name, relative] of Object.entries(inputs)) {
 }
 const args = ['--max-old-space-size=8192', 'scripts/run-material-input-audit.mjs',
   ...Object.entries(inputs).map(([name, relative]) => `--${name}=${relative}`),
-  '--case-obligation-review-sha256=db848392d5110c358c2e5b76d3f4e56d1f7fb0e1321563267f5600f283f2a064',
+  '--case-obligation-review-sha256=59409a78eb407588e906e094abd80183fa7dd07a170ad902e706a1bda6d6590e',
   ...(requested.includes('--check') ? ['--check'] : [])];
 if (requested.includes('--dry-run')) console.log(JSON.stringify({ cwd: root, executable: process.execPath, args }, null, 2));
 else {

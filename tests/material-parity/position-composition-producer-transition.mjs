@@ -7,6 +7,15 @@ import ts from 'typescript';
 const hash = text => createHash('sha256').update(text).digest('hex');
 export function restoreAllCaseObligationRegistration(source) {
   let current=source.toString().replaceAll('\r\n','\n');
+  const editing='59409a78eb407588e906e094abd80183fa7dd07a170ad902e706a1bda6d6590e';
+  if(current.includes(editing)){
+    assert.equal(hash(current),'c883ad58c75d4320f3d45930b44809aa15aac2a733610b0aa77ff1dca3a652b0',
+      'exact editing-target and incomplete-focus proposal pin');
+    assert.equal(current.split(editing).length,2);
+    current=current.replace(editing,'db848392d5110c358c2e5b76d3f4e56d1f7fb0e1321563267f5600f283f2a064');
+    assert.equal(hash(current),'56fc2c49c9ca3b07239b8bca3bb0db905e8553f0fc52d3f77e8b6fbd2e4b1618',
+      'whole previous all-case producer conserved');
+  }
   const next='db848392d5110c358c2e5b76d3f4e56d1f7fb0e1321563267f5600f283f2a064';
   if(!current.includes(next))return current;
   assert.equal(hash(current),'56fc2c49c9ca3b07239b8bca3bb0db905e8553f0fc52d3f77e8b6fbd2e4b1618',

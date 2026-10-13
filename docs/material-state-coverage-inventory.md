@@ -1,5 +1,27 @@
 # Material comparison/state coverage inventory
 
+## Coherent editing/focus proposal registration conserves prior producer — October 13
+
+Named launcher and producer now pin validated59409a78 proposal. Complete comparison
+against published db848392 preserves all2311 records and headers except exactly
+1957 authoredEditing and40 programmaticFocus dispositions; no other fields change.
+All remain partial/unverified. Original missing e01 bytes remain explicit,not waived.
+
+Existing all-case restoration authenticates complete current producer
+SHA c883ad58c75d4320f3d45930b44809aa15aac2a733610b0aa77ff1dca3a652b0,
+reverses only the proposal pin to exact previous56fc2c49,then follows the unchanged
+predecessor chain. Existing drift controls include the new pin. Focused transition
+proof passes1/1,0 skips,815.3784ms,total1251.7226ms. Existing complete inventory
+proof passes1/1,0 skips,8249.4142ms,total9385.6689ms:204 descriptors/668 paths,
+all prior descriptions conserved. Named --dry-run and scoped diff check pass.
+
+This is source registration,not export/cold publication or browser acceptance.
+Canonical920 stays unchanged. Next run the complete producer-transition suite and
+coherent integration preflight before one milestone export/independent cold check;
+do not export after further isolated metadata changes. All original final gates and
+remaining action/paint/currentness/full-case obligations stay open. No renderer,
+fixture,capture or threshold changes.
+
 ## Focus proposal dependencies validate after missing-source representation correction — October 13
 
 Existing loadCaseObligationReview rejected cb2a855c:Conflicting dependency receipt,
