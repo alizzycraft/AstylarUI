@@ -9,7 +9,7 @@ import test from 'node:test';
 import ts from 'typescript';
 import { chromium } from 'playwright-core';
 import { PNG } from 'pngjs';
-import { fingerprintDirectory, materialCaseKey } from './run-checkpoint.mjs';
+import { fingerprintDirectory, fingerprintModuleGraph, materialCaseKey, openMaterialCheckpoint } from './run-checkpoint.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { propertyGroups, sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { readGapSurveySource } from './gap-survey-source-replay.mjs';
@@ -3104,6 +3104,63 @@ test('passive state applicability joins exact cases without discarding progress 
       remaining:[...(previous.remaining??[]),'Complete action/input/focus/currentness disposition beyond retained raw control samples']};
   }
   assert.equal(rawControlJoins,82);
+  const servedRoot='examples/material-showcase/dist/material-showcase/browser';
+  const currentServed=fingerprintDirectory(servedRoot),currentModules=fingerprintModuleGraph(process.cwd(),resourceRunnerFile);
+  const installedLockFile='examples/material-showcase/node_modules/.package-lock.json',installedLockSha=hash(readFileSync(installedLockFile));
+  const oldServed=new Map(captured.captureProvenance.browserFiles.map(receipt=>[receipt.file,receipt.sha256]));
+  const newServed=new Map(currentServed.map(receipt=>[receipt.file,receipt.sha256]));
+  const servedDifference={equal:currentServed.filter(receipt=>oldServed.get(receipt.file)===receipt.sha256).length,
+    changed:currentServed.filter(receipt=>oldServed.has(receipt.file)&&oldServed.get(receipt.file)!==receipt.sha256).map(receipt=>receipt.file),
+    added:currentServed.filter(receipt=>!oldServed.has(receipt.file)).map(receipt=>receipt.file),
+    removed:[...oldServed.keys()].filter(file=>!newServed.has(file))};
+  assert.equal(currentServed.length,1887);assert.equal(servedDifference.equal,1880);
+  assert.deepEqual(servedDifference.changed,['compare/index.html','index.csr.html','main.js']);
+  assert.equal(servedDifference.added.length,4);assert.equal(servedDifference.removed.length,4);
+  const buildCaptureSources=[
+    ['overlay-used-dimensions-current-20261011','931bc5fbec43ae47a6fc14533c906cce87cd0d083f2911e5d8bdb6d12d582d67','standard-overlay-subset',59,1],
+    ['bottom-sheet-settlement-trace-20261011','84668a6b572916136d0a1d31a52d1eeeebce88f803de2a3c5f43d56da0ea59fa','instrumented-settlement',1,1],
+    ['selection-pointer-directions-20261011','f1497dbd6bb360d25ae62466c4ef1b5d95631f7265af8da3b2969774e0b690a0','selection-replay-diagnostic',32,0],
+  ];
+  const currentBuildCases=new Map(),buildCaptureCounts={records:0,unique:0,withoutCapture:0,installedLockMatches:0,installedLockDiffers:0};
+  for(const [run,sha256,mode,count,driftCount]of buildCaptureSources){
+    const file=`artifacts/material-parity/${run}/latest-report.json`,bytes=readFileSync(file);assert.equal(hash(bytes),sha256);
+    const capture=JSON.parse(bytes);assert.deepEqual(capture.captureProvenance.browserFiles,currentServed);
+    const installedLockMatches=capture.captureProvenance.installedDependencies===installedLockSha;
+    buildCaptureCounts[installedLockMatches?'installedLockMatches':'installedLockDiffers']++;
+    const moduleDrift=currentModules.filter(receipt=>!capture.captureProvenance.harnessFiles.some(old=>old.file===receipt.file&&old.sha256===receipt.sha256));
+    assert.equal(moduleDrift.length,driftCount);
+    if(driftCount)assert.deepEqual(moduleDrift.map(receipt=>receipt.file),[resourceRunnerFile]);
+    const checkpoint=openMaterialCheckpoint({directory:`artifacts/material-parity/${run}`,provenance:capture.captureProvenance,resume:true});
+    assert.equal(capture.interactions.length,count);
+    const manifestFile=`artifacts/material-parity/${run}/checkpoint/manifest.json`;
+    for(const row of capture.interactions){
+      assert.deepEqual(checkpoint.load(materialCaseKey('interaction',row)),row);
+      const key=scalarCaseKey({...row,kind:'interaction'});assert.ok(paintCaseRows.has(key));buildCaptureCounts.records++;
+      const observations=currentBuildCases.get(key)??[];
+      observations.push({mode,recordedMeetsAcceptance:row.meetsAcceptance,browser:capture.browser,
+        installedDependencies:{capturedSha256:capture.captureProvenance.installedDependencies,currentSha256:installedLockSha,matches:installedLockMatches},
+        harnessDifferences:moduleDrift.map(receipt=>({logicalFile:receipt.file,currentSha256:receipt.sha256,
+          capturedSha256:capture.captureProvenance.harnessFiles.find(old=>old.file===receipt.file)?.sha256})),
+        evidence:{report:{file,sha256},manifest:{file:manifestFile,sha256:hash(readFileSync(manifestFile))}}});
+      currentBuildCases.set(key,observations);
+    }
+  }
+  assert.equal(currentBuildCases.size,91);assert.equal(buildCaptureCounts.records,92);
+  const buildEvidenceCase=allObligations[0].case;
+  for(const record of allObligations){
+    const captures=currentBuildCases.get(record.case)??[];
+    buildCaptureCounts[captures.length?'unique':'withoutCapture']++;
+    const previous=record.obligations.sourceCurrentness;
+    record.obligations.sourceCurrentness={...previous,applicability:'applicable',disposition:'partial',
+      baselineOutput:'historical-served-build-differs',currentServedBuildCapture:captures.length?'retained-capture-matches-served-build':'no-retained-capture-matching-served-build',
+      captures,sharedBuildEvidenceCase:buildEvidenceCase,
+      ...(record.case===buildEvidenceCase?{sharedBuildEvidence:{servedDifference,baselineBrowser:captured.browser,
+        currentServedFiles:currentServed.map(receipt=>({file:`${servedRoot}/${receipt.file}`,sha256:receipt.sha256})),
+        currentHarnessFiles:currentModules,installedLock:{file:installedLockFile,sha256:installedLockSha}}}:{}),
+      boundary:'Filesystem/build/harness and exact checkpoint applicability only. Report modes are not combined acceptance; captured browser version,launch,clock,fonts,execution and full equal-input obligations still need scope-specific validity. No current-browser run or whole-case acceptance.',
+      remaining:[...(previous.remaining??[]),'Full runtime/environment/input applicability and complete enforced current rendering evidence']};
+  }
+  assert.deepEqual(buildCaptureCounts,{records:92,unique:91,withoutCapture:2220,installedLockMatches:0,installedLockDiffers:3});
   assert.equal(new Set(allObligations.map(row=>row.case)).size,2311);
   assert.deepEqual(allObligations.map(row=>row.case).sort(),allConfigured.map(scalarCaseKey).sort());
   assert.ok(allObligations.every(row=>row.inspection==='partial'&&row.currentRendering==='unverified'));
@@ -3117,7 +3174,7 @@ test('passive state applicability joins exact cases without discarding progress 
     reportedScalarInputCases:2311,reportedScalarGroups:8483,dividerActualAXCases:24,dividerUpdateDisposalCases:24,dividerLocalTextRasterCases:24,dividerCoordinateHistoryCases:24,supplementaryKeyboardCases:40,extendedKeyboardCases:128,
     editingTargetApplicabilityCases:1957,editingCounts,configuredFocusRecordedProvenanceIncomplete:40,
     retainedTargetRasterCases:1000,paintCounts,retainedResourceSamplingCases:1875,resourceSampleCounts,
-    retainedTargetDOMComparisonCases:2311,semanticCounts,retainedEventBoundaryCases:1875,eventCounts,supplementaryMenuActionContexts:menuActionJoins,commitEndpointCounts,rawControlJoins,rawActionRecords,completeCaseClosures:0,currentRenderingAccepted:0}));
+    retainedTargetDOMComparisonCases:2311,semanticCounts,retainedEventBoundaryCases:1875,eventCounts,supplementaryMenuActionContexts:menuActionJoins,commitEndpointCounts,rawControlJoins,rawActionRecords,buildCaptureCounts,completeCaseClosures:0,currentRenderingAccepted:0}));
   t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,
     scope:'Exact configured retained authoring: no activation/editing descendants. Forty native negative-tabindex progress owners keep a programmatic-focus obligation; no live focus, unrecorded callback, paint, lifecycle, source-currentness or full-case closure is inferred.'}));
 });

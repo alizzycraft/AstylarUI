@@ -1,5 +1,50 @@
 # Material comparison/state coverage inventory
 
+## All-case served-build applicability remains distinct from installed dependencies — October 13
+
+Question: which retained observations match today's served build and harness,
+without conflating them with current installed/runtime acceptance? Existing
+fingerprintDirectory authenticates1887 served files. Against October5,1880 match,
+three change and four names are removed/added;the complete baseline is historical.
+All three October11 subset reports still match the complete served-file vector.
+Existing checkpoint.load replays all92 records and hashes their artifacts:91
+unique configured IDs,2220 without matching-served-build capture. Overlay/trace
+retain runner-only harness drift;pointer diagnostic matches the current graph.
+Report modes/browser versions remain separate;no combined acceptance is inferred.
+
+New authoritative discrepancy: installed node_modules/.package-lock.json is now
+cca5242252563568285aef71a06dc4873aaa7a999366fc63bd2c7609b2edde1c,
+where all three captures recordffcc9a253583e0b36f7c4b5a7690499c0ee749e9e267601fae26a51d26745acb.
+This supersedes the earlier installed-lock equality claim for today's filesystem,
+not the historical checkpoint receipts. Exact changed dependency entries cannot
+be determined from the old digest alone;original lock bytes are not supplied by
+these reports. Same served bytes do not establish current installed-package
+applicability. Preserve this uncertainty rather than waive the mismatch or infer
+a rendering regression from it.
+
+Existing owning case proof attaches partial sourceCurrentness to all2311 cases.
+One shared anchor retains the1887 actual served-file receipts/current harness/
+installed-lock receipt,referenced by every case;no1887-fold per-case duplication.
+All prior obligations/observations conserve. Initial log
+all-case-build-currentness-join-20261013.log retains a wrong lexical report-owner
+failure;corrected log all-case-build-currentness-corrected-20261013.log exposes
+the installed-lock discrepancy. Neither original receipt was changed. Final
+all-case-served-versus-installed-currentness-20261013.log passes1/1,0 skips,total
+21262.9651ms,SHAc0261fdc49231d5e2db04c41dcd9aa5b1d5590d4c56c2df7b6888cc6a408bdf3.
+This asserts explicit installed-lock differences,not a relaxed acceptance gate.
+
+Proposal12c3b0fe3a555dd0c71a4fd41efcc21980ab4708aefeaa37cdb8c50e6b93f107
+is noncanonical. Existing loader authenticates7410 dependencies/2311 partial
+cases/0unjoined and false acceptance flags. Complete predecessor comparison
+againstbc8b4b87 proves only sourceCurrentness changes in2311 records. All shared
+anchor references resolve uniquely. Previous turn made progress joining raw
+controls. No browser audit,renderer,fixture,scope or acceptance changes.
+
+Next assess installed-dependency applicability through existing package/source
+evidence,remaining focus/action gaps and coherent pending-batch producer/source
+reconciliation. Missing historical lock bytes must remain explicit if unrecovered.
+Canonical918 unchanged;all2311 whole-case closures and final gates remain open.
+
 ## Raw checkbox/range action records join82 configured anchors — October 13
 
 Question: can retained raw controls supply real action observations that original
