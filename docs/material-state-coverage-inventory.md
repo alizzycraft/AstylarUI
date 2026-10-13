@@ -46,13 +46,19 @@ and base coverage conserve against c9cd6957. New inspectionEvidence authenticate
 Only49 complete-row hashes change:button discrepancy903 and48 control typography
 rows4346..4816 at10-step intervals. Log coherent204-all-case-compact-conservation-
 20261013.log SHAff17861cdcbbe17bccb5ce88affa6a845e5cc84d9c29d4db8fcaa810236c786c.
-Their complete-row comparison is now live in
-session3227/reader22284,using the existing original-row authenticator. It checks
-exact247399bf→56fc2c49 normalization producer digest plus corresponding48 aggregate
-proof references; no whole-row conservation claim until it returns. Log
-coherent204-all-case-full-row-conservation-20261013.log. Do not rerun either live job.
+Complete-row comparison session3227 exits0 after2007930.9623ms (33.47min),using
+the existing original-row authenticator. All48 full controls change only exact
+reviewEvidence.observation.normalizationReconciliation.currentModuleSha256,
+247399bf→56fc2c49. Hashing each complete original row with that sole replacement
+matches the new authenticated complete-row digest; wrong-module controls reject.
+Full discrepancy903 changes only the corresponding48 controlProofSha256 references,
+with whole-row digest equality after those replacements. No values,classifications,
+observations or other proof fields change. Log
+coherent204-all-case-full-row-conservation-20261013.log SHA
+366f0c38524c5404032c7f43c58650ce86e275ddb525a5b54502cc930cd8da72.
+Reader22284 is terminal; do not repeat this completed comparison.
 
-Next retain cold and full-row terminal results before scoped commit/push of
+Next retain the cold terminal result before scoped commit/push of
 canonical artifacts. Derived920 index is current for the written candidate,not
 evidence of accepted publication or current-browser rendering.
 Do not repeat the export or launch final browser gates while cold collection is
