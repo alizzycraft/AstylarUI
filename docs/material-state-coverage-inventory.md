@@ -1,5 +1,36 @@
 # Material comparison/state coverage inventory
 
+## Divider stored local-raster obligation join — October 13
+
+All24 divider cases now join to48 exact Above/Below crop pairs (96 original
+PNG receipts). Existing evaluateFocusedRaster reproduces every complete stored
+metric object at the original .8 diagnostic threshold:40 SSIM diagnostic passes,
+8 failures,48 sharpness passes. The failures belong to four contrast/DPR1 cases:
+static desktop,tablet,comparison and interaction desktop-dpr1 inspect. Existing
+metric calibration suite passes5/5,zero skips,222.533ms and still rejects genuine
+displacement,blur and wrong paint. No threshold or phase policy changed.
+
+Existing passive case proof passes1/1,zero skips,4912.4081ms. New proposal
+f8d7865a566a706c94476eebd29af3ba7a70e648d07954e9a32300fcd9eaed15 remains
+not canonical; missing crop pair and forged metric negative controls reject.
+Existing coverage loader revalidates830 dependencies/354 partial cases/1957
+unjoined. Whole prior proposala9cb30db is conserved except divider localPaint.
+Focused log passive-divider-local-raster-obligation-join-20261013.log SHA
+3e8c5b6c0f7ba95b5218e038eb0256fb55abce6bed76d2af3ff09c714ee2b442;
+dependency/conservation log passive-divider-raster-loader-conservation-20261013.log
+SHA8238555f41dff912cf0d27a70ca03a16feefe703e68bea8c3a35e3d22ccdfcae.
+
+Stored pixel/metric agreement does not authenticate original crop extraction:
+crop-producer whole-source receipte01ef9dc remains unresolved. New records
+explicitly retain that gap; differing typography,page displacement,separator
+paint/clipping/antialiasing and current rendering are not attributed to a shared
+post-canvas cause by these metrics. Earlier public equal-input texel reductions
+remain separate bounded suspected-cause evidence,not a diagnosis of all48 crops.
+Next finish exact history/input-owner/currentness dispositions and join other
+retained family evidence before coherent source/export integration. Accepted
+c9cd6957 package and all final gates are unchanged; no new capture or renderer/
+fixture changes. All full-case closures remain partial.
+
 ## Divider AX and update/disposal obligation joins — October 13
 
 Existing actual-theme AX and update/disposal proofs replay2/2,zero skips,

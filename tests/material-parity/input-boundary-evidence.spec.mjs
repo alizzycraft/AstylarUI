@@ -17,6 +17,7 @@ import { verifyRetainedMaterialBrowserFiles } from './historical-audit-module-so
 import { materialStaticCases, materialInteractionCases, materialMobileFlowCases } from './benchmark.config.mjs';
 import { cursorInput } from '../../examples/material-showcase/audit/cursor-default-input.mjs';
 import { queryFindings, saveReviewProposal, verifyFindings } from '../../scripts/audit-findings-store.mjs';
+import { evaluateFocusedRaster } from './focused-raster-metrics.mjs';
 
 const file = 'artifacts/material-parity/input-boundaries-keypress-559f95c/latest-report.json';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -2363,6 +2364,44 @@ test('passive state applicability joins exact cases without discarding progress 
   assert.throws(()=>joinDividerLifetime({...dividerCases[0],profile:'invented'}));
   const badDividerLifetime=structuredClone(dividerLifetimeRows);badDividerLifetime[0].updates[0].live.materials++;
   assert.throws(()=>joinDividerLifetime(dividerCases.find(row=>dividerKey(row)===dividerKey(badDividerLifetime[0])),badDividerLifetime));
+  const dividerRasterFile='artifacts/material-parity/divider-retained-text-raster-diagnostic-20261006.log';
+  const dividerRasterBytes=readFileSync(dividerRasterFile),dividerRasterSha256=hash(dividerRasterBytes);
+  assert.equal(dividerRasterSha256,'2fe6c3409840861b93d552ee1fa1acffaa3b7ff1d827fb609224dc2108b21852');
+  const dividerRaster=JSON.parse(dividerRasterBytes);assert.equal(dividerRaster.reportSha256,reportSha256);
+  const metricFile='tests/material-parity/focused-raster-metrics.mjs';
+  assert.equal(hash(readFileSync(metricFile)),dividerRaster.metricSourceSha256);
+  const rasterKey=row=>scalarCaseKey({kind:row.kind,family:'divider',profile:row.profile,
+    viewport:{id:row.viewport},state:row.state??undefined});
+  assert.equal(dividerRaster.rows.length,48);
+  assert.deepEqual([...new Set(dividerRaster.rows.map(rasterKey))].sort(),dividerCases.map(scalarCaseKey).sort());
+  const joinDividerPaint=(entry,rows=dividerRaster.rows)=>{
+    const matching=rows.filter(row=>rasterKey(row)===scalarCaseKey(entry));
+    assert.deepEqual(matching.map(row=>row.id).sort(),['divider-above','divider-below']);
+    for(const row of matching){
+      assert.equal(row.receipts.length,2);
+      const images=row.receipts.map((receipt,index)=>{
+        const bytes=readFileSync(receipt.file);assert.equal(hash(bytes),receipt.sha256);
+        const image=PNG.sync.read(bytes);assert.deepEqual({width:image.width,height:image.height},row.dimensions[index]);return image;
+      });
+      assert.deepEqual(evaluateFocusedRaster(images[0],images[1],{minimumSsim:.8}),row.metric);
+    }
+    return {applicability:'applicable',disposition:'partial',
+      storedTextRasters:{disposition:'inspected',outcome:matching.every(row=>row.metric.matches)?'bounded-diagnostic-pass':'bounded-diagnostic-failure',
+        evidence:{log:{file:dividerRasterFile,sha256:dividerRasterSha256},
+          metric:{file:metricFile,sha256:dividerRaster.metricSourceSha256},
+          observations:matching,
+          cropProducer:{originalLogicalFile:'tests/material-parity/run-material-parity.mjs',
+            recordedSha256:dividerRaster.cropProducerSha256,wholeSourceReceiptReconciled:false}}},
+      remaining:['separator/clipping/antialiasing and complete owner paint attribution','original crop-producer and current rendering applicability'],
+      boundary:'Exact stored crop/metric replay at existing diagnostic threshold,not configured acceptance,equal typography,page placement or full rendering causality. Original crop-producer receipt remains unresolved.'};
+  };
+  const firstDivider=dividerCases[0],firstRasterRows=dividerRaster.rows.filter(row=>rasterKey(row)===scalarCaseKey(firstDivider));
+  assert.throws(()=>joinDividerPaint(firstDivider,firstRasterRows.slice(1)));
+  const badDividerRaster=structuredClone(firstRasterRows);badDividerRaster[0].metric.similarity+=.01;
+  assert.throws(()=>joinDividerPaint(firstDivider,badDividerRaster));
+  assert.equal(dividerRaster.rows.filter(row=>row.metric.matches).length,40);
+  assert.equal(dividerRaster.rows.filter(row=>!row.metric.matches).length,8);
+  assert.equal(dividerRaster.rows.filter(row=>row.metric.sharpness.meetsTarget).length,48);
   const caseObligations = cases.map(row => ({
     case: `${row.kind}:${row.family}@${row.profile}/${row.viewport.id}${row.state ? `/${row.state}` : ''}`,
     family: row.family,
@@ -2375,7 +2414,7 @@ test('passive state applicability joins exact cases without discarding progress 
       programmaticFocus: progressFocus.has(identity(row,row.kind)) ? joinFocus(row) :
         { applicability:'not-applicable',disposition:'inspected-authored-exclusion' },
       inputStyleStructure: joinScalarInputs(row),
-      localPaint: { applicability: 'applicable', disposition: 'evidence-join-pending' },
+      localPaint: row.family==='divider'?joinDividerPaint(row):{ applicability: 'applicable', disposition: 'evidence-join-pending' },
       semantics: joinSemantics(row),
       historyOwnership: row.family==='divider'?joinDividerLifetime(row):{ applicability: 'applicable', disposition: 'evidence-join-pending' },
       sourceCurrentness: { applicability: 'applicable', disposition: 'evidence-join-pending' },
@@ -2392,7 +2431,7 @@ test('passive state applicability joins exact cases without discarding progress 
   });
   t.diagnostic(JSON.stringify({caseObligationProposal:proposal, cases:354,
     authoredActivationExclusions:354,authoredEditingExclusions:354,programmaticFocusApplicable:40,
-    reportedScalarInputCases:354,reportedScalarGroups:1697,dividerActualAXCases:24,dividerUpdateDisposalCases:24,
+    reportedScalarInputCases:354,reportedScalarGroups:1697,dividerActualAXCases:24,dividerUpdateDisposalCases:24,dividerLocalTextRasterCases:24,
     completeCaseClosures:0,currentRenderingAccepted:0}));
   t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,
     scope:'Exact configured retained authoring: no activation/editing descendants. Forty native negative-tabindex progress owners keep a programmatic-focus obligation; no live focus, unrecorded callback, paint, lifecycle, source-currentness or full-case closure is inferred.'}));
