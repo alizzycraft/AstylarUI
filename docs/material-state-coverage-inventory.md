@@ -1,5 +1,31 @@
 # Material comparison/state coverage inventory
 
+## Pending obligation census selects retained paint joins while export is live — October 13
+
+Read-only59409a78 proposal census:2311 inputStyleStructure partial;
+2287 localPaint evidence-join-pending/24 partial;2287 historyOwnership pending/24
+partial;2311 sourceCurrentness pending;1957 semantics pending/354 partial;
+1917 authoredActivation pending/40 partial/354 exclusions;1917 programmaticFocus
+pending/40 partial/40 inspected failures/314 exclusions;1957 authoredEditing
+partial/354 exclusions. Additional128 keyboardInteraction partial records do not
+replace those obligations. These are missing case-record joins,not proof that all
+underlying investigations are absent or a new overall completion denominator.
+
+The existing October8 exact paint-observability census already identifies1000
+configured cases with target-local metrics (120 static/880 interaction) and1311
+without that specific gate. Reuse its exact IDs and original predicates rather
+than repeat the census. Next shared high-impact gap is joining those bounded local
+paint observations and existing range/control/overlay owners to case records with
+honest historical/currentness limitations; neither SSIM nor missing crops determines
+complete paint acceptance. Keep343 diagnostic sharpness discrepancies separate from
+release failures. Snack-bar/tooltip visibility and slider behavior remain priorities,
+but their settled root causes must not be re-investigated without changed inputs.
+
+Export24483 remains confirmed live in launcher20688/worker26456 at build-audit.
+Consumed sources/evidence are unchanged; this ledger is not a producer input.
+Do not restart or import candidate data until terminal export and independent check.
+Original scope,canonical920 and final gates stay unchanged.
+
 ## Complete editing/focus producer-transition integration passes — October 13
 
 Full existing position-composition-producer-transition.spec.mjs suite exits0:
