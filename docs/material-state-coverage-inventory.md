@@ -1,5 +1,34 @@
 # Material comparison/state coverage inventory
 
+## Live export verified; remaining-obligation census prioritizes next work — October 13
+
+Previous turn made progress registering/pushing coherent batchad7eb0da. Named
+export is now confirmed live:session99911,launcher3292/worker26492 created22:35:10
+local. Specific session polling and authoritative process reads confirm running;
+worker CPU200.03s/working set2359377920 bytes at observation. Zero-byte log
+retained-observations-canonical-export-20261013.log is not failure or terminal
+evidence;progress option was not enabled. Do not restart merely for quiet output.
+Consumed producer/proposal/source inputs remain frozen. This ledger is not in
+the exporter/script dependency references inspected;no capture or source is edited.
+
+Read-only exact b7ebc769 obligation census,not a new audit:authoredActivation has
+1819 evidence-join-pending,138 partial and354 authored exclusions;programmaticFocus
+has1917 pending,40 partial,40 inspected failures and314 exclusions. LocalPaint has
+1287 pending/1024 partial;historyOwnership420 pending/1891 partial. Input/style,
+semantics and sourceCurrentness all2311 partial. Editing443 applicable partial,
+1514 non-writable partial and354 exclusions;keyboardInteraction128 partial.
+All2311 whole-case records remain partial/unverified. Pending obligations are
+not synonymous with absent captures or uninvestigated root causes.
+
+The420 pending history records are exactly twelve static contexts in each of35
+families;divider is already joined. Next focus/activation applicability and exact
+static history-source joins can reuse existing owning evidence before considering
+capture. Only then decide demonstrated missing action/paint/runtime boundaries.
+Do not convert generic historical matches into inspection closure. Export terminal
+validation and independent cold/package conservation remain the first milestone;
+canonical918 is prior accepted publication,not the pending batch. All original
+acceptance gates and root-cause/equal-input requirements remain unchanged.
+
 ## Retained-observation batch source integration verified — October 13
 
 Previous turn resolved the wrong dependency-lock owner. This turn prepares one
