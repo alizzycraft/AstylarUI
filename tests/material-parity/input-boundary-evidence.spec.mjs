@@ -16,7 +16,7 @@ import { readGapSurveySource } from './gap-survey-source-replay.mjs';
 import { verifyRetainedMaterialBrowserFiles } from './historical-audit-module-source.mjs';
 import { materialStaticCases, materialInteractionCases, materialMobileFlowCases } from './benchmark.config.mjs';
 import { cursorInput } from '../../examples/material-showcase/audit/cursor-default-input.mjs';
-import { queryFindings } from '../../scripts/audit-findings-store.mjs';
+import { queryFindings, saveReviewProposal } from '../../scripts/audit-findings-store.mjs';
 
 const file = 'artifacts/material-parity/input-boundaries-keypress-559f95c/latest-report.json';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -2102,6 +2102,40 @@ test('passive state applicability joins exact cases without discarding progress 
   assert.throws(()=>inspect('div',{tabindex:'0'}));
   assert.throws(()=>inspect('div',{contenteditable:'true'}));
   assert.throws(()=>inspect('div',{onclick:'activate()'}));
+  // Proposed extension of existing coverage, not canonical closure or new capture.
+  // All authored nodes were authenticated and inspected above; exclusions apply
+  // only to that authoring, never to unrecorded callbacks or runtime behavior.
+  const progressFocus = new Set(focusable.map(row => row.case));
+  const reportSha256 = hash(raw);
+  const caseObligations = cases.map(row => ({
+    case: `${row.kind}:${row.family}@${row.profile}/${row.viewport.id}${row.state ? `/${row.state}` : ''}`,
+    family: row.family,
+    inspection: 'partial', currentRendering: 'unverified',
+    evidence: { report: 'artifacts/material-parity/current-full-20261005/latest-report.json',
+      reportSha256, pairedTrees: row.inputTrees },
+    obligations: {
+      authoredActivation: { applicability: 'not-applicable', disposition: 'inspected-authored-exclusion' },
+      authoredEditing: { applicability: 'not-applicable', disposition: 'inspected-authored-exclusion' },
+      programmaticFocus: { applicability: progressFocus.has(identity(row,row.kind)) ? 'applicable' : 'not-applicable',
+        disposition: progressFocus.has(identity(row,row.kind)) ? 'evidence-join-pending' : 'inspected-authored-exclusion' },
+      inputStyleStructure: { applicability: 'applicable', disposition: 'evidence-join-pending' },
+      localPaint: { applicability: 'applicable', disposition: 'evidence-join-pending' },
+      semantics: { applicability: 'applicable', disposition: 'evidence-join-pending' },
+      historyOwnership: { applicability: 'applicable', disposition: 'evidence-join-pending' },
+      sourceCurrentness: { applicability: 'applicable', disposition: 'evidence-join-pending' },
+    },
+  }));
+  assert.equal(new Set(caseObligations.map(row => row.case)).size,354);
+  assert.equal(caseObligations.filter(row => row.obligations.programmaticFocus.applicability === 'applicable').length,40);
+  assert.ok(caseObligations.every(row => row.inspection === 'partial' && row.currentRendering === 'unverified'));
+  const proposal = saveReviewProposal('artifacts/material-parity/working-audit', {
+    kind: 'case-obligation-coverage-extension', status: 'proposal-not-canonical',
+    scope: 'Exact retained passive authoring applicability; no runtime or whole-case acceptance.',
+    groups: caseObligations,
+  });
+  t.diagnostic(JSON.stringify({caseObligationProposal:proposal, cases:354,
+    authoredActivationExclusions:354,authoredEditingExclusions:354,programmaticFocusApplicable:40,
+    completeCaseClosures:0,currentRenderingAccepted:0}));
   t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,
     scope:'Exact configured retained authoring: no activation/editing descendants. Forty native negative-tabindex progress owners keep a programmatic-focus obligation; no live focus, unrecorded callback, paint, lifecycle, source-currentness or full-case closure is inferred.'}));
 });

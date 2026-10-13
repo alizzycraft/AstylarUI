@@ -1,5 +1,33 @@
 # Material comparison/state coverage inventory
 
+## Passive exact-case obligation proposal — October 13
+
+The existing passive applicability assertion now emits an additive proposed
+coverage extension through saveReviewProposal,not a separate report framework.
+All original report/tree authentication,354 exact configured-case membership,
+708 paired receipts and authored-control negative assertions remain. Each exact
+canonical-style case key carries report/tree evidence and partial/unverified
+status. Authored activation/editing exclusions are inspected for354 cases each;
+40 progress cases preserve applicable programmatic focus with its existing proof
+join still pending. Other style/structure,paint,semantics,history/ownership and
+source-currentness joins remain explicit pending obligations,not inferred passes.
+The remaining passive programmatic-focus exclusions concern authored descendants
+only,not unknown callbacks. This is an initial obligation map,not a complete
+denominator or certification that no additional applicable obligations exist.
+
+Proposal review digest7aa8906e23792b2298525672ccccfb70b42127d74932b8b934eee65e5b92ad69
+is retained under working-audit/proposals at760773 bytes; unchanged reruns reuse
+that exact proposal. Owning focused assertion passes1/1,zero skips,exit0,
+3025.5163ms. Log passive-case-obligation-proposal-20261013.log SHA
+1c4dd2b86f785e49504a18153bacc9c20b940be5dcf5ecfc3ea95fd8f599ca1c.
+First run hashed the same original report once per case; final code hashes once
+per invocation,without changing proposal bytes. No browser capture,renderer or
+fixture changes. Canonical coherent203 remains accepted but lacks this additive
+source/proposal extension; source-fingerprint conservation/integration is pending
+for the next coherent batch,not silently waived. Next join already-proved passive
+focus/semantic/paint evidence to these exact keys and extend other state groups.
+All2311 complete-case closures remain partial; final gates unchanged.
+
 ## Exact case accounting representation boundary — October 13
 
 Question: does accepted machine coverage already encode complete per-case audit
