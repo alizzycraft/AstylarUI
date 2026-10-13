@@ -1,5 +1,24 @@
 # Material comparison/state coverage inventory
 
+## Original PNG replay reproduces all24 sampled paint cases — October 14
+
+Existing checkpoint reader loads/authenticates12 static grid-list and12 static
+card records against unchanged October5 provenance,case digests and every recorded
+artifact hash. Forty-eight original PNGs decode;original comparator bodies match
+the hashes reviewed below. Actual per-side expected/actual boxes from retained
+geometry reproduce all24 RGBA comparisons and12 bottom-shadow profiles exactly,
+not merely their pass flags. No capture/report/source/PNG bytes are rewritten.
+
+Read-only replay exits0;retained-uniform-shadow-pixel-replay-20261014.log SHA256
+13576d93e0d7ba1e7d9069572689f59c8beb1b1ed89f6e3245441a1c6d3b1681.
+This closes the raw-pixel reproducibility question left below. The narrow sample
+positions/tolerances and missing original whole-runner/current-runtime boundaries
+remain;no uniform-region,whole-shadow or current rendering acceptance follows.
+Next bind exact sampled observations/receipts in the existing case proof after
+current export/cold integration,not a new capture or framework. Previous turn
+pushed15521925. Export97803/8496/32976 remains verified live at build-audit;source
+and proposal inputs stay frozen. Canonicale8/all original final gates unchanged.
+
 ## Retained uniform/shadow gates have narrow sampled-pixel scope — October 14
 
 Read-only complete-method conservation against Git8aa0e2e5 passes for uniform
