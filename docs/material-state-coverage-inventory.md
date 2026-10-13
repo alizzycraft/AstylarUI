@@ -1,5 +1,41 @@
 # Material comparison/state coverage inventory
 
+## Retained editing-target obligations join1957 active-family cases — October 13
+
+Existing owning case proof now joins exact text-capable target IDs/types and
+disabled/readonly attributes for all1957 active-family cases,using3914 original
+paired tree receipts. It records443 both-writable boundaries and1514 neither-writable
+boundaries,including40 disabled text cases and94 readonly select cases. These are
+partial retained-state applicability dispositions,not editing-behavior passes or
+source-wide exclusions. Readonly selection/copy,control navigation,value changes,
+focus,paint and currentness remain separate; no new typing capture is implied for
+every static/available target merely by its presence.
+
+Readonly removal,incorrect readOnly spelling and forged enabled disabled-input
+controls reject. Default input type remains text; native readonly="false" is still
+boolean-attribute presence. Original callback/receipt/field assertions stay intact.
+Proof pins the same immutable c9cd6957 predecessor/index1a77bb04,so publishing920
+does not regenerate unrelated finding IDs or repoint old evidence. This is a
+review-baseline pin,not a current-rendering claim or source-fingerprint waiver.
+
+Focused owning proof passes1/1,zero skips,25151.2642ms,total26573.549ms. Log
+all-case-editing-target-obligation-join-20261013.log SHA
+9aac214e1fe2d1e7fe164d0abbbb6c36b002070d2b33958aa34511ddde74dd45.
+Proposalbd83779127fd2cbaf5b65e9b85bc8d57b84d2832c0d5eab4d9d309652ed98fa9
+is not canonical. Existing loader revalidates4793 dependencies,2311 partial cases,
+zero unjoined IDs and false inspection/current acceptance flags. All preceding
+db848392 fields conserve except authoredEditing in exactly1957 records;354 passive
+records are fully byte-equivalent. Conservation log
+all-case-editing-loader-conservation-20261013.log SHA
+a9f94099d3608a28d9dd500a89cdb94774647ac5ec5feaa3b1e077c4c69e575c exits0.
+
+Accepted920 publication is unchanged. Owning test source fingerprint changed and
+requires the next coherent integration batch; do not report an unchanged canonical
+check as current or export solely for this increment. Next join already retained
+state-applicable editable behavior/currentness and remaining action/paint evidence.
+All2311 full-case closures and original final gates remain open. No renderer,
+fixture,browser capture,threshold or additional audit framework changed.
+
 ## Coherent204 all-case publication verified — October 13
 
 Named complete-baseline export exits0 after2930401.2953ms (48.84min).

@@ -2132,12 +2132,13 @@ test('passive state applicability joins exact cases without discarding progress 
   assert.equal(new Set(expected).size,354);
   assert.deepEqual(cases.map(row=>identity(row,row.kind)).sort(),expected);
   const working='artifacts/material-parity/working-audit';
-  const pointer=JSON.parse(readFileSync(`${working}/current.json`));
-  const canonical=JSON.parse(readFileSync('docs/material-input-equivalence-audit.json'));
-  assert.equal(pointer.generation,canonical.compressedSha256);
+  // Review the same authenticated predecessor after publication; the mutable
+  // current index must not rewrite unchanged finding IDs/dependencies on replay.
+  const pointer={generation:'c9cd6957c82177931072b374d438f3ad4b67038446d3755cd1e6fb5528805b51',
+    indexSha256:'01a77bb042201d00ef0e0bba0d7b5477b5524b9e9299225817a44e6cdca630ad'};
   const generation=`${working}/${pointer.generation}`;
   const index=verifyFindings(generation,pointer.indexSha256);
-  assert.deepEqual(index.manifest,canonical);
+  const canonical=index.manifest;assert.equal(canonical.compressedSha256,pointer.generation);
   const allFamilies=[...new Set(allCases.map(row=>row.family))];assert.equal(allFamilies.length,36);
   const scalarInputs=new Map(allFamilies.map(family=>[family,
     queryFindings(working,family,pointer).filter(row=>row.evidence.section==='discrepancies')]));
@@ -2685,27 +2686,85 @@ test('passive state applicability joins exact cases without discarding progress 
       allConfigured.filter(row=>coveredFamilies.includes(row.family)&&row.state==='focus').map(scalarCaseKey).sort());
   }
   assert.equal(extendedKeyboardCases.size,128);
+  const textInputTypes=new Set(['text','search','tel','url','email','password','number','date','datetime-local','month','week','time']);
+  const nonTextInputTypes=new Set(['checkbox','radio','range','color','file','hidden','button','submit','reset','image']);
+  const editingTargets=(tree,side)=>tree.nodes.flatMap(node=>{
+    const authored=side==='reference'?node.attributes??{}:node.authored??{};
+    const type=side==='reference'?node.type:authored.type;
+    for(const alias of ['readOnly','contentEditable'])assert.equal(Object.hasOwn(authored,alias),false,'Use exact public attribute names');
+    if(side==='astylar')for(const flag of ['disabled','readonly','contenteditable'])
+      if(Object.hasOwn(authored,flag))assert.equal(typeof authored[flag],'boolean');
+    const inputType=type==='input'?(side==='reference'?authored.type:authored.inputType)??'text':undefined;
+    if(inputType!==undefined)assert.ok(textInputTypes.has(inputType)||nonTextInputTypes.has(inputType),'Unreviewed input type');
+    const editable=authored.contenteditable;
+    if(side==='reference'&&editable!==undefined)assert.ok(['','true','false','plaintext-only'].includes(editable),'Inherited/unknown editing needs a separate disposition');
+    const explicitEditable=side==='reference'?['','true','plaintext-only'].includes(editable):editable===true;
+    if(type!=='textarea'&&!textInputTypes.has(inputType)&&!explicitEditable)return [];
+    return [{key:node.key,id:authored.id,type,inputType:inputType??null,
+      disabled:side==='reference'?Object.hasOwn(authored,'disabled'):authored.disabled===true,
+      readonly:side==='reference'?Object.hasOwn(authored,'readonly'):authored.readonly===true}];
+  });
+  const joinEditingTargets=(row,trees)=>{
+    const targets=Object.fromEntries(['reference','astylar'].map(side=>[side,editingTargets(trees[side],side)]));
+    const writable=side=>targets[side].some(target=>!target.disabled&&!target.readonly);
+    assert.equal(writable('reference'),writable('astylar'),'One-sided editing applicability needs explicit review');
+    const applicable=writable('reference');
+    return {applicability:applicable?'applicable':'not-applicable',disposition:'partial',
+      retainedTargetApplicability:{disposition:'inspected',case:scalarCaseKey(row),
+        classification:applicable?'both-writable-targets':'neither-writable-targets',targets,
+        evidence:row.inputTrees},
+      remaining:applicable?['editing/caret/selection behavior and paint','source/currentness applicability']:
+        ['source-wide and uncaptured-state applicability','disabled/readonly behavior where applicable'],
+      boundary:'Explicit retained state/target attributes only. No editing behavior,current rendering or whole-case closure. Readonly selection/copy,keyboard control navigation,value changes and focus remain separate obligations.'};
+  };
+  const editingCounts={writable:0,notWritable:0,disabledText:0,readonlySelect:0};
   let additionalTreeReceipts=0;
   const pending=()=>({applicability:'unverified',disposition:'evidence-join-pending'});
   const additionalObligations=remainingCases.map(row=>{
     const caseId=scalarCaseKey(row),configured=configuredByKey.get(caseId);assert.ok(configured);
     assert.deepEqual(row.viewport,configured.viewport);
-    const nodeCounts={};
+    const nodeCounts={},trees={};
     for(const side of ['reference','astylar']){
       const receipt=row.inputTrees[side],bytes=readFileSync(receipt.file);assert.equal(hash(bytes),receipt.sha256);
       const tree=JSON.parse(bytes);assert.deepEqual(tree.errors,[]);assert.ok(Array.isArray(tree.nodes)&&tree.nodes.length>0);
       assert.equal(new Set(tree.nodes.map(node=>node.key)).size,tree.nodes.length);
+      trees[side]=tree;
       nodeCounts[side]=tree.nodes.length;additionalTreeReceipts++;
+    }
+    const editing=joinEditingTargets(row,trees);
+    if(editing.applicability==='applicable')editingCounts.writable++;else editingCounts.notWritable++;
+    const targets=editing.retainedTargetApplicability.targets;
+    if(row.family==='select'){
+      assert.equal(targets.reference.length,0);assert.equal(targets.astylar.length,1);
+      assert.equal(targets.astylar[0].readonly,true);editingCounts.readonlySelect++;
+      if(row.kind==='static'&&row.profile==='light'&&row.viewport.id==='desktop'){
+        const forged=structuredClone(trees);forged.astylar.nodes.find(node=>node.authored?.id==='select-control').authored.readonly=false;
+        assert.throws(()=>joinEditingTargets(row,forged));
+        const misspelled=structuredClone(trees);const control=misspelled.astylar.nodes.find(node=>node.authored?.id==='select-control');
+        control.authored.readOnly=true;assert.throws(()=>joinEditingTargets(row,misspelled));
+      }
+    }else if(targets.reference.length&&editing.applicability==='not-applicable'){
+      assert.equal(row.state,'disabled');assert.ok(targets.reference.every(target=>target.disabled));
+      assert.ok(targets.astylar.every(target=>target.disabled));editingCounts.disabledText++;
+      if(row.family==='input'&&row.profile==='light'&&row.viewport.id==='desktop-dpr1'){
+        const forged=structuredClone(trees);forged.astylar.nodes.find(node=>node.authored?.id==='input-control').authored.disabled=false;
+        assert.throws(()=>joinEditingTargets(row,forged));
+      }
     }
     return {case:caseId,family:row.family,inspection:'partial',currentRendering:'unverified',
       evidence:{report:'artifacts/material-parity/current-full-20261005/latest-report.json',reportSha256,pairedTrees:row.inputTrees},
       pairedTreeAuthentication:{disposition:'authenticated',nodeCounts,
         boundary:'Exact capture receipts and node identity only; not structure,input equality,control applicability or current rendering.'},
-      obligations:{authoredActivation:keyboardCases.get(caseId)??pending(),authoredEditing:pending(),programmaticFocus:pending(),
+      obligations:{authoredActivation:keyboardCases.get(caseId)??pending(),authoredEditing:editing,programmaticFocus:pending(),
         inputStyleStructure:joinScalarInputs(row),localPaint:pending(),semantics:pending(),historyOwnership:pending(),sourceCurrentness:pending(),
         ...(extendedKeyboardCases.has(caseId)?{keyboardInteraction:extendedKeyboardCases.get(caseId)}:{})}};
   });
   assert.equal(additionalTreeReceipts,3914);
+  assert.deepEqual(editingCounts,{writable:443,notWritable:1514,disabledText:40,readonlySelect:94});
+  const defaultInput={nodes:[{key:'default',type:'input',attributes:{},authored:{type:'input'}}]};
+  for(const side of ['reference','astylar'])assert.equal(editingTargets(defaultInput,side)[0].inputType,'text');
+  const booleanReadonly={nodes:[{key:'readonly',type:'input',attributes:{readonly:'false'}}]};
+  assert.equal(editingTargets(booleanReadonly,'reference')[0].readonly,true,'HTML boolean attribute presence is authoritative');
   const allObligations=[...caseObligations,...additionalObligations];
   assert.equal(new Set(allObligations.map(row=>row.case)).size,2311);
   assert.deepEqual(allObligations.map(row=>row.case).sort(),allConfigured.map(scalarCaseKey).sort());
@@ -2718,7 +2777,7 @@ test('passive state applicability joins exact cases without discarding progress 
   t.diagnostic(JSON.stringify({caseObligationProposal:proposal, cases:2311,passiveCases:354,additionalCases:1957,additionalTreeReceipts,
     authoredActivationExclusions:354,authoredEditingExclusions:354,programmaticFocusApplicable:40,
     reportedScalarInputCases:2311,reportedScalarGroups:8483,dividerActualAXCases:24,dividerUpdateDisposalCases:24,dividerLocalTextRasterCases:24,dividerCoordinateHistoryCases:24,supplementaryKeyboardCases:40,extendedKeyboardCases:128,
-    completeCaseClosures:0,currentRenderingAccepted:0}));
+    editingTargetApplicabilityCases:1957,editingCounts,completeCaseClosures:0,currentRenderingAccepted:0}));
   t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,
     scope:'Exact configured retained authoring: no activation/editing descendants. Forty native negative-tabindex progress owners keep a programmatic-focus obligation; no live focus, unrecorded callback, paint, lifecycle, source-currentness or full-case closure is inferred.'}));
 });
