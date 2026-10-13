@@ -20,6 +20,15 @@ sources/evidence remain frozen. Free D:4267896832bytes at cold preflight.
 Accepted c9cd6957 working index/predecessor evidence remain retained; do not use
 its pointer as if it already indexes the newly written candidate package.
 
+Read-only complete Markdown conservation to Git90b81601 now exits0: only exact
+354/1957→2311/0 coverage counts,the one bounded observed-DPR failure descriptor
+and test .mjs line anchors differ. All other claims remain byte-equal after those
+explicit reversals; altered coverage claim and appended claim controls reject.
+Log coherent204-all-case-markdown-conservation-20261013.log SHA
+776bde282d9c36743c270cdb7316f690ad9da7aa0487f5d39e9fe951a603f17d.
+Current LF MarkdownSHA339e451e8bb91ecb125941b7931e712ef35434d4af11073eb5cb4cafddef86ca;
+this does not establish complete machine-row conservation or cold acceptance.
+
 Next retain cold terminal result,then compact import/whole-index and substantive
 row/Markdown conservation before scoped commit/push of canonical artifacts.
 Do not repeat the export or launch final browser gates while cold collection is
