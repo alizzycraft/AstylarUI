@@ -14,7 +14,8 @@ import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs
 import { propertyGroups, sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { readGapSurveySource } from './gap-survey-source-replay.mjs';
 import { verifyRetainedMaterialBrowserFiles } from './historical-audit-module-source.mjs';
-import { materialStaticCases, materialInteractionCases, materialMobileFlowCases } from './benchmark.config.mjs';
+import { materialStaticCases, materialInteractionCases, materialMobileFlowCases,
+  materialFocusedRasterTargets, materialInteractionFocusedRasterTargets } from './benchmark.config.mjs';
 import { cursorInput } from '../../examples/material-showcase/audit/cursor-default-input.mjs';
 import { queryFindings, saveReviewProposal, verifyFindings } from '../../scripts/audit-findings-store.mjs';
 import { evaluateFocusedRaster } from './focused-raster-metrics.mjs';
@@ -2801,6 +2802,48 @@ test('passive state applicability joins exact cases without discarding progress 
   const booleanReadonly={nodes:[{key:'readonly',type:'input',attributes:{readonly:'false'}}]};
   assert.equal(editingTargets(booleanReadonly,'reference')[0].readonly,true,'HTML boolean attribute presence is authoritative');
   const allObligations=[...caseObligations,...additionalObligations];
+  const paintCensusFile='artifacts/material-parity/configured-paint-observability-20261008.log';
+  const paintCensusBytes=readFileSync(paintCensusFile);
+  assert.equal(hash(paintCensusBytes),'457aa9e78a62ef95cb2ada20dab942c66cfcba66aa7d9109a15a0acf1bbd45ca');
+  const paintCensus=JSON.parse(paintCensusBytes);
+  const paintIdentities=new Set(paintCensus.families.flatMap(row=>row.measuredRasterCases));
+  assert.equal(paintIdentities.size,1000);
+  const paintConfigFile='tests/material-parity/benchmark.config.mjs',paintMetricFile='tests/material-parity/focused-raster-metrics.mjs';
+  const paintConfigSha=hash(readFileSync(paintConfigFile)),paintMetricSha=hash(readFileSync(paintMetricFile));
+  assert.equal(paintConfigSha,'a55e95abe098be26d6a99e3faab22a951ae140143fece8701726a23624b98535');
+  assert.equal(paintMetricSha,'c84839968d5ba77534a0af4d56f31f187cd941e607a8418959a1b0771f92e1e0');
+  const paintCaseRows=new Map(allCases.map(row=>[scalarCaseKey(row),row]));
+  const paintCounts={static:0,interaction:0,ssimPassSharpnessDiagnosticFail:0};
+  for(const record of allObligations){
+    const row=paintCaseRows.get(record.case);assert.ok(row);
+    const measured=(row.focusedRasters??[]).filter(raster=>Number.isFinite(raster.similarity));
+    assert.equal(measured.length>0,paintIdentities.has(materialCaseKey(row.kind,row)));
+    if(!measured.length)continue;
+    assert.equal(measured.length,1);
+    const raster=measured[0];
+    const target=row.kind==='static'?materialFocusedRasterTargets[row.family]:materialInteractionFocusedRasterTargets[row.family];
+    assert.ok(target);assert.equal(raster.id,target.element);
+    assert.equal(raster.minimumSsim,target.minimumSsim??.80);
+    if(row.kind==='interaction'){
+      assert.ok(!target.states||target.states.includes(row.state));
+      assert.ok(!target.viewports||target.viewports.includes(row.viewport.id));
+    }
+    assert.equal(raster.matches,raster.similarity>=raster.minimumSsim);
+    assert.equal(typeof raster.sharpness.meetsTarget,'boolean');
+    if(raster.matches&&!raster.sharpness.meetsTarget)paintCounts.ssimPassSharpnessDiagnosticFail++;
+    paintCounts[row.kind]++;
+    const previous=record.obligations.localPaint;
+    record.obligations.localPaint={...previous,applicability:'applicable',disposition:'partial',
+      retainedTargetRaster:{disposition:'recorded-provenance-incomplete',case:record.case,targetId:raster.id,metrics:raster,
+        evidence:{census:{file:paintCensusFile,sha256:hash(paintCensusBytes)},
+          report:{file:'artifacts/material-parity/current-full-20261005/latest-report.json',sha256:reportSha256},
+          targetConfiguration:{file:paintConfigFile,sha256:paintConfigSha},metricOwner:{file:paintMetricFile,sha256:paintMetricSha}},
+        unavailableActionSource:{originalLogicalFile:'tests/material-parity/run-material-parity.mjs',
+          capturedSha256:'e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0',disposition:'missing-original-bytes-not-a-readable-receipt'},
+        boundary:'Original finite target-local metric records and configured predicates only; no raster recomputation,complete runner provenance,equal input,blur diagnosis,current rendering or whole-case acceptance.'},
+      remaining:[...(previous.remaining??[]),'Complete local paint/input/state/currentness disposition beyond recorded metric boundary']};
+  }
+  assert.deepEqual(paintCounts,{static:120,interaction:880,ssimPassSharpnessDiagnosticFail:343});
   assert.equal(new Set(allObligations.map(row=>row.case)).size,2311);
   assert.deepEqual(allObligations.map(row=>row.case).sort(),allConfigured.map(scalarCaseKey).sort());
   assert.ok(allObligations.every(row=>row.inspection==='partial'&&row.currentRendering==='unverified'));
@@ -2812,7 +2855,8 @@ test('passive state applicability joins exact cases without discarding progress 
   t.diagnostic(JSON.stringify({caseObligationProposal:proposal, cases:2311,passiveCases:354,additionalCases:1957,additionalTreeReceipts,
     authoredActivationExclusions:354,authoredEditingExclusions:354,programmaticFocusApplicable:40,
     reportedScalarInputCases:2311,reportedScalarGroups:8483,dividerActualAXCases:24,dividerUpdateDisposalCases:24,dividerLocalTextRasterCases:24,dividerCoordinateHistoryCases:24,supplementaryKeyboardCases:40,extendedKeyboardCases:128,
-    editingTargetApplicabilityCases:1957,editingCounts,configuredFocusRecordedProvenanceIncomplete:40,completeCaseClosures:0,currentRenderingAccepted:0}));
+    editingTargetApplicabilityCases:1957,editingCounts,configuredFocusRecordedProvenanceIncomplete:40,
+    retainedTargetRasterCases:1000,paintCounts,completeCaseClosures:0,currentRenderingAccepted:0}));
   t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,
     scope:'Exact configured retained authoring: no activation/editing descendants. Forty native negative-tabindex progress owners keep a programmatic-focus obligation; no live focus, unrecorded callback, paint, lifecycle, source-currentness or full-case closure is inferred.'}));
 });

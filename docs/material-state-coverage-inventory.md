@@ -1,5 +1,41 @@
 # Material comparison/state coverage inventory
 
+## Retained target-local metrics join1000 exact cases without paint acceptance — October 13
+
+Question: can the already recorded configured raster observations attach to exact
+case obligations without becoming a current/equal-input paint pass? Existing owning
+proof joins120 static/880 interaction contexts against the original1000-ID census,
+actual configured target.element and original state/viewport predicates. Original
+report/config/metric source hashes authenticate; every threshold equals its original
+configured minimumSsim and matches remains the original SSIM rule.343 diagnostic
+sharpness mismatches remain diagnostic,not new release failures or blur attribution.
+No pixels are recaptured/recomputed and no missing-target placeholder counts as measured.
+
+Each localPaint record remains partial,with recorded-provenance-incomplete target
+metrics and explicit missing e01 runner expectation. No full original runner replay,
+complete paint/input/state/currentness or whole-case closure is inferred. Original24
+divider paint dispositions remain intact with additive metric observations;1311 cases
+without this gate retain their preceding records,not fabricated exclusions.
+
+Initial focused log all-case-retained-raster-join-20261013.log fails on diagnostic
+target.id assumption; actual configuration field is element. Correction preserves
+the original target identity rather than changing captured metrics. Corrected1/1
+passes,0 skips,total16785.9889ms. Final exact-threshold proof also passes1/1,0 skips,
+total16506.9519ms in all-case-retained-raster-threshold-20261013.log SHA
+ed18d60d7464fb4c22e670f4976f5d4a5fa58e8d03fcbd8cefbdf1a941ca97ea.
+Proposal daf55fce7ea5e0dfb05e30ecc0e4b6da32eb23761a0c78d1915a2f1994574813
+is noncanonical. Existing loader authenticates5278 dependencies,2311 partial cases,
+false acceptance flags. Complete comparison to59409a78 preserves every field except
+localPaint in exactly1000 records. Log all-case-retained-raster-loader-conservation-
+20261013.log SHA6f689e332f064af80beed535d2fa0774dfdd184247e007149d2bea900df50204.
+
+Previous canonical publication51ee33d3 push is terminal success;remote accepts61.54MB
+gzip with recommended50MB warning,not a failed upload. Accepted91837a8d stays intact.
+This subsequent proof-source change awaits the next coherent integration batch,
+not another immediate export. Next remaining action/history/currentness joins and
+local paint beyond these metric boundaries; no reopening settled observations.
+Original scope,renderer/fixture inputs and all final gates unchanged;0 full closures.
+
 ## Editing/focus canonical independently accepted and publication-ready — October 13
 
 Independent named ASTYLAR_AUDIT_COLD=1 --check25580 exits0,total3182992.4999ms
