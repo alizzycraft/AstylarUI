@@ -1,5 +1,30 @@
 # Material comparison/state coverage inventory
 
+## Retained selection behavior replay exposes an action-source gap — October 13
+
+Question: can existing editing/selection pixels be joined to current case obligations
+without substituting supplemental actions for configured focus? The existing focus
+proof declares40 configured contexts; its known whole-runner provenance gap remains
+unchanged and was not rerun. The separate selection-local-pixels capture has16 rows:
+four profiles at390x844 DPR2,each typed/forward/end-collapsed/backward. These are
+supplementary form-field actions,not40 desktop focus cases or443 writable-case closures.
+
+Focused original command `node --test --test-name-pattern="^selection local pixels
+retain exact native key boundaries and paint receipts$"
+tests/material-parity/benchmark-config.spec.mjs` exits1:1 test,0 passes,0 skips,
+1228.4974ms total. At1817 the original action-source equality rejects before the
+pixel/state assertions. Captured tests/material-parity/sort-focus-structure.spec.mjs
+SHA4a386f107cee16cb120910717a42b6ee9b40c724f02860b68a60ce29d4784f30 differs
+from current9fafec85d890122fa1ad2bb2ac712975b7982c603c28f036d534f875aab0effa.
+This is a demonstrated proof-source applicability gap,not a newly observed renderer
+selection failure. Original capture and assertions remain unchanged.
+
+Next locate the existing exact historical source/restoration owner for these bytes
+and establish complete conservation,or retain an explicit historical-only disposition
+if unavailable. Do not waive the original assertion,rerun unchanged failure,recapture
+settled pixels,or extend the focused state population. Latest editing-target proposal
+remains noncanonical; source-fingerprint integration and all final gates stay open.
+
 ## Retained editing-target obligations join1957 active-family cases — October 13
 
 Existing owning case proof now joins exact text-capable target IDs/types and
