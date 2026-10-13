@@ -1,5 +1,35 @@
 # Material comparison/state coverage inventory
 
+## Static history backlog is a scope-join gap,not absence of all history — October 13
+
+Question: are the420 pending static history records missing all underlying
+investigation,or missing exact applicability joins? Compact immutable918 queries
+show family shards contain no sourceFindings;all157 are in global by store design.
+Zero family source findings therefore does not mean an untouched component.
+Current scanMaterialSources maps sourceAuditDefinitions in original order.
+All157 global ordinal/classification/justification pairs match the current policy;
+all157 patterns detect in their current owning source.155 have introduction text,
+127 explicitly reference Git commits,72 unique referenced objects resolve as
+commits,and79 name focused proofs. Existence/pattern matching alone is not proof
+of causality,complete history or current rendering.
+
+None of the157 definitions supplies cases/reviewedCases/family/families scope.
+Thus existing historical evidence is available,but the case-obligation join must
+prove exact source/branch/property/context applicability. Do not attach global
+findings to every static case by title or family-name substring,or infer that all
+420 are closed from introduction prose. Reuse the referenced owning proofs and
+input-tree/source witnesses to build those joins after the current integration.
+This answers why generic source coverage has not closed the explicit history
+records;it does not reopen settled source findings or require fresh capture.
+
+Read-only Node assertions authenticate the pinned compact index/shards,157 exact
+policy pairs and72 existing commit objects;no new report/framework/capture created.
+Export session99911/3292/26492 remains verified live;inputs stay frozen. Previous
+turn was progress on exact backlog prioritization plus verified wait. Canonical918
+remains prior accepted publication;pending b7 batch requires terminal export and
+independent cold/package conservation. Scope,all2311 partial closures and final
+acceptance criteria remain unchanged.
+
 ## Live export verified; remaining-obligation census prioritizes next work — October 13
 
 Previous turn made progress registering/pushing coherent batchad7eb0da. Named
