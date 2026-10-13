@@ -3026,6 +3026,36 @@ test('passive state applicability joins exact cases without discarding progress 
       remaining:[...(previous.remaining??[]),'Configured standard action and complete activation/currentness beyond supplementary menu sequence']};
   }
   assert.equal(menuActionJoins,8);
+  const joinCommitEndpoint=row=>{
+    assert.equal(row.state,'open-commit-reopen');assert.ok(['autocomplete','select'].includes(row.family));
+    const targets=row.semantics.filter(target=>target.id===`${row.family}-primary`);assert.equal(targets.length,1);
+    const target=targets[0],value=row.family==='autocomplete'?'Cape Town':'Solo';
+    for(const side of ['expected','actual']){
+      assert.equal(target[side].exists,true);assert.equal(target[side].role,'combobox');
+      assert.equal(target[side].value,value);assert.equal(target[side].expanded,true);
+    }
+    assert.deepEqual(row.interactionState,{matches:true});
+    assert.equal(row.focus.reference,`${row.family}-primary`);assert.equal(row.focus.astylar,`${row.family}-primary`);
+    return {disposition:'recorded-provenance-incomplete',case:scalarCaseKey(row),finalTargetDOM:target,
+      finalHostFocus:row.focus,observedValue:value,reopened:true,
+      evidence:{report:{file:'artifacts/material-parity/current-full-20261005/latest-report.json',sha256:reportSha256},
+        currentRunner:{file:resourceRunnerFile,sha256:hash(resourceRunnerBytes)},
+        actionMethodConservation:{revision:'8aa0e2e5',function:'performInteraction',bodySha256:hash(resourceMethods.performInteraction)}},
+      unavailableActionSource:{originalLogicalFile:resourceRunnerFile,capturedSha256:'e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0',disposition:'missing-original-bytes-not-a-readable-receipt'},
+      boundary:'Final derived-DOM value/expanded and host-focus records only. The configured action clicks an option then reopens; no pre-reopen closed-state snapshot,actual focused descendant,complete events/selection/paint,current capture or whole-case acceptance is inferred. Default interactionState remains uncompared.'};
+  };
+  const forgedCommitRow=structuredClone(allCases.find(row=>row.state==='open-commit-reopen'));
+  forgedCommitRow.semantics.find(target=>target.id===`${forgedCommitRow.family}-primary`).actual.value='forged commit';
+  assert.throws(()=>joinCommitEndpoint(forgedCommitRow));
+  const commitEndpointCounts={autocomplete:0,select:0};
+  for(const record of allObligations){
+    const row=paintCaseRows.get(record.case);if(row.state!=='open-commit-reopen')continue;
+    const observation=joinCommitEndpoint(row);commitEndpointCounts[row.family]++;
+    const previous=record.obligations.authoredActivation;
+    record.obligations.authoredActivation={...previous,disposition:'partial',retainedCommitReopenEndpoint:observation,
+      remaining:[...(previous.remaining??[]),'Intermediate commit/dismiss/reopen boundaries and full action/currentness beyond final endpoint']};
+  }
+  assert.deepEqual(commitEndpointCounts,{autocomplete:8,select:8});
   assert.equal(new Set(allObligations.map(row=>row.case)).size,2311);
   assert.deepEqual(allObligations.map(row=>row.case).sort(),allConfigured.map(scalarCaseKey).sort());
   assert.ok(allObligations.every(row=>row.inspection==='partial'&&row.currentRendering==='unverified'));
@@ -3039,7 +3069,7 @@ test('passive state applicability joins exact cases without discarding progress 
     reportedScalarInputCases:2311,reportedScalarGroups:8483,dividerActualAXCases:24,dividerUpdateDisposalCases:24,dividerLocalTextRasterCases:24,dividerCoordinateHistoryCases:24,supplementaryKeyboardCases:40,extendedKeyboardCases:128,
     editingTargetApplicabilityCases:1957,editingCounts,configuredFocusRecordedProvenanceIncomplete:40,
     retainedTargetRasterCases:1000,paintCounts,retainedResourceSamplingCases:1875,resourceSampleCounts,
-    retainedTargetDOMComparisonCases:2311,semanticCounts,retainedEventBoundaryCases:1875,eventCounts,supplementaryMenuActionContexts:menuActionJoins,completeCaseClosures:0,currentRenderingAccepted:0}));
+    retainedTargetDOMComparisonCases:2311,semanticCounts,retainedEventBoundaryCases:1875,eventCounts,supplementaryMenuActionContexts:menuActionJoins,commitEndpointCounts,completeCaseClosures:0,currentRenderingAccepted:0}));
   t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,
     scope:'Exact configured retained authoring: no activation/editing descendants. Forty native negative-tabindex progress owners keep a programmatic-focus obligation; no live focus, unrecorded callback, paint, lifecycle, source-currentness or full-case closure is inferred.'}));
 });

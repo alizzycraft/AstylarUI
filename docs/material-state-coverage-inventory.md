@@ -1,5 +1,39 @@
 # Material comparison/state coverage inventory
 
+## Configured field commit evidence proves final endpoints only — October 13
+
+Question: do retained field-popup captures prove commit/focus transitions,or only
+geometry? field-popup-bounds-recovered-20261008 observations contain primary/popup/
+option bounds,not intermediate values/focus/closed-state snapshots. Do not promote
+its80 endpoint geometry records into action parity. Original configured report
+has16 autocomplete/select open-commit-reopen cases with final derived-DOM values
+Cape Town/Solo,expanded=true and matching primary-host focus. Its interactionState
+is an uncompared default;raw events are preserved separately,not accepted ordering.
+
+Existing owning proof joins those16 exact final endpoints,conserves the complete
+performInteraction method against Git8aa0e2e5 and rejects a forged committed value.
+The action clicks an option then reopens,but there is no pre-reopen closed-state
+observation. Missing e01 whole runner,actual focused descendants,complete event/
+selection/paint and currentness remain explicit. Focused1/1 passes,0 skips,total
+18790.4661ms in all-case-retained-commit-endpoints-20261013.log SHA
+347662e282984e9f24893a30082cabfdea5b106a2f15670ce80591bebd057a13.
+Proposal610647625b252e12fa9527bc8037552dc9768a2fa8c82f3a99b9e33174494766
+is noncanonical. Loader authenticates5504 dependencies/2311 partial cases/0unjoined
+with false acceptance flags. Complete predecessor comparison againsta6d9ab07
+proves only16 authoredActivation changes;all other fields and headers conserve.
+
+Existing picker-commit-audit supplemental evidence separately records four failed
+date/time pointer/keyboard commits and two frozen month-navigation results. Its
+light/DPR1 1440x900 context is not the configured desktop1440x1000 context;none is
+counted as a configured-case closure or newly discovered matrix case. This remains
+the already classified picker authoring/behavioral-coverage defect,not a new core
+diagnosis. No original evidence or matrix/criteria changed.
+
+Previous turn made progress joining eight supplementary Menu contexts. Next raw
+control/selection action applicability and remaining actual focus boundaries,
+then coherent pending-batch fingerprint integration. Canonical918 unchanged;
+all2311 full-case closures and original final gates remain open. No renderer fixes.
+
 ## Supplementary Menu action failures join eight physical contexts — October 13
 
 Question: can existing action captures fill useful behavioral observations beyond
