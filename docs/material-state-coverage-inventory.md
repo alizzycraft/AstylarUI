@@ -1,5 +1,34 @@
 # Material comparison/state coverage inventory
 
+## Fixed-height history joins all436 static cases; coherent integration next — October 14
+
+Existing owning case proof now binds exact unique section nodes,inline/matched
+reference size omissions,candidate explicit positive pixel height/all three
+border-box stages,existing root-height index and exact scalar reviewedCases.
+Initial2f44011 source hash/tables/root binding and current source finding remain
+separate from historical index validity and current runtime. Missing-root guard
+rejects. This is declared-input/history evidence,not responsive winner,used-size,
+descendant layout,raster or full-history/resource acceptance.
+
+All436 static records gain documentedFixedRootHeightHistory:408 pending joins
+become partial and28 existing slider/divider records retain their prior evidence.
+Static history pending joins now0,not complete static inspection;all2311 cases
+remain partial/unverified. Focused proof passes1/1,0 skips,total32514.4403ms:
+static-root-height-history-join-20261014.log SHA256
+a27892fa6aa6f35f2657bbd13219015c1729ffd842cbc527399a7fa4a173d859.
+Proposalff6feb918dc14e15204f703429d98fb17a915e3648375d94fe084d0991f20f55
+is noncanonical. Existing loader authenticates7412 dependencies/2311 cases,
+0 unjoined. Complete comparison to14338718 changes only436 history obligations;
+all prior nested evidence/other fields/headers conserve. Log
+static-root-height-history-conservation-20261014.log SHA256
+34cf963caf263aba4fc5a33dbec248452f37418ee44d7f245652479f7dbc16b0.
+
+Previous turn pushed9e5e1ca3. Published canonicale8 remains unchanged;next
+coherently register/integrate the focus,activation and static-history batch,
+then one export/independent cold/package conservation milestone. Do not export
+each metadata change or call0 pending history joins complete history inspection.
+No renderer/fixture/criteria changes;all original final gates remain required.
+
 ## Shared fixed-height history has exact witnesses for all436 static cases — October 14
 
 Read-only census authenticates October5 reportSHAab42dbec and872 static trees.

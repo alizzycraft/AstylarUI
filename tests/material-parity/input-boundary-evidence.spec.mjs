@@ -3283,6 +3283,70 @@ test('passive state applicability joins exact cases without discarding progress 
   }
   assert.equal(staticRangeHistoryJoins,12);
   assert.throws(()=>rangeInputs({nodes:[]},'reference'),'Missing exact input cannot inherit a family finding');
+  const rootHeightIndexFile='docs/material-root-height-audit.json',rootHeightIndexBytes=readFileSync(rootHeightIndexFile);
+  const rootHeightIndex=JSON.parse(rootHeightIndexBytes),rootHeightMembership=new Map();
+  for(const group of rootHeightIndex.groups)for(const key of group.reviewedCases){
+    assert.ok(!rootHeightMembership.has(key));rootHeightMembership.set(key,group);
+  }
+  assert.equal(rootHeightMembership.size,2311);
+  const fixedHeightDefinition=sourceAuditDefinitions.find(row=>row.id==='fixture-fixed-reference-heights');assert.ok(fixedHeightDefinition);
+  const fixedHeightFinding=globalSourceRows.filter(row=>row.classification===fixedHeightDefinition.classification&&row.justification===fixedHeightDefinition.justification);
+  assert.equal(fixedHeightFinding.length,1);
+  const initialHeightSource=execFileSync('git',['show',`2f44011:${rangeSourceFile}`],{maxBuffer:4_000_000});
+  assert.equal(hash(initialHeightSource),'6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24');
+  for(const name of ['MATERIAL_REFERENCE_HEIGHTS','MATERIAL_COMPACT_REFERENCE_HEIGHTS','MATERIAL_CONTRAST_REFERENCE_HEIGHTS'])
+    assert.ok(initialHeightSource.toString().includes(`const ${name}`));
+  assert.ok(initialHeightSource.toString().split(/\r?\n/).some(line=>line.includes('selector: `#${rootId}`')&&line.includes('height: `${referenceHeight}px`')));
+  assert.match(rangeSourceBytes.toString(),new RegExp(fixedHeightDefinition.pattern));
+  const affectsRootHeight=declarations=>Object.keys(declarations??{}).some(key=>
+    ['height','minheight','maxheight','blocksize','minblocksize','maxblocksize','aspectratio','all'].includes(key.replaceAll('-','').toLowerCase())||
+    /^(animation|transition|containintrinsic)/i.test(key.replaceAll('-','')));
+  const inspectRootHeightDeclarations=(tree,side,id)=>{
+    const matches=tree.nodes.filter(node=>(side==='reference'?node.attributes?.id:node.authored?.id)===id);assert.equal(matches.length,1);
+    const node=matches[0];assert.equal(side==='reference'?node.type:node.authored.type,'section');
+    if(side==='reference'){
+      assert.equal(affectsRootHeight(node.inline),false);
+      assert.ok(!/(?:^|;)\s*(?:(?:min-|max-)?(?:height|block-size)|aspect-ratio|all|animation[^:]*|transition[^:]*|contain-intrinsic[^:]*)\s*:/i.test(node.attributes.style??''));
+      const rules=node.rules.map(index=>tree.rules[index]);assert.ok(rules.every(rule=>!affectsRootHeight(rule.declarations)));
+      const computed=tree.styles[node.style];assert.equal(computed.boxSizing,'content-box');
+      return {key:node.key,type:node.type,inline:node.inline,rules,usedHeight:computed.height,boxSizing:computed.boxSizing,heightDeclaration:'<omitted>'};
+    }
+    assert.equal(affectsRootHeight(node.authored.style),false);
+    const height=node.normalResolvedStyle.height;assert.match(height,/^\d+(?:\.\d+)?px$/);assert.ok(Number.parseFloat(height)>0);
+    const rules=tree.rules.filter(rule=>rule.selector===`#${id}`&&rule.height===height);assert.ok(rules.length>0);
+    for(const stage of ['normalResolvedStyle','resolvedStyle','interactionResolvedStyle']){
+      assert.equal(node[stage].height,height);assert.equal(node[stage].boxSizing,'border-box');
+    }
+    return {key:node.key,type:node.authored.type,inline:node.authored.style??null,rules,heightDeclaration:height,boxSizing:'border-box'};
+  };
+  const staticHeightHistoryCounts={joined:0,previouslyPending:0,existingPartial:0};
+  for(const record of allObligations){
+    const row=paintCaseRows.get(record.case);if(row.kind!=='static')continue;
+    const group=rootHeightMembership.get(record.case);assert.ok(group);assert.equal(group.family,row.family);
+    assert.equal(group.classification,'application-plugin-authoring-defect');assert.equal(group.element,`${row.family}-root`);
+    const declarations={};
+    for(const side of ['reference','astylar']){
+      const receipt=row.inputTrees[side],bytes=readFileSync(receipt.file);assert.equal(hash(bytes),receipt.sha256);
+      declarations[side]=inspectRootHeightDeclarations(JSON.parse(bytes),side,group.element);
+    }
+    const scalarRows=scalarInputs.get(row.family).filter(item=>item.attribution==='reviewed-root-fixed-height-authoring'&&
+      item.element===group.element&&item.property==='height'&&item.reviewedCases?.includes(record.case));
+    assert.equal(scalarRows.length,1);
+    const previous=record.obligations.historyOwnership;assert.ok(['evidence-join-pending','partial'].includes(previous.disposition));
+    staticHeightHistoryCounts[previous.disposition==='evidence-join-pending'?'previouslyPending':'existingPartial']++;staticHeightHistoryCounts.joined++;
+    record.obligations.historyOwnership={...previous,applicability:'applicable',disposition:'partial',
+      documentedFixedRootHeightHistory:{disposition:'inspected',classification:fixedHeightDefinition.classification,
+        definitionId:fixedHeightDefinition.id,findingId:fixedHeightFinding[0].id,scalarFindingId:scalarRows[0].id,declarations,
+        evidence:{pairedTrees:row.inputTrees,index:{file:rootHeightIndexFile,sha256:hash(rootHeightIndexBytes)},
+          policy:{file:sourcePolicyFile,sha256:hash(readFileSync(sourcePolicyFile))},
+          sourceFinding:{file:`${generation}/${globalSourceShard.file}`,sha256:globalSourceShard.sha256},
+          currentCandidate:{file:rangeSourceFile,sha256:hash(rangeSourceBytes)},
+          initialHistory:{revision:'2f44011',sourceFile:rangeSourceFile,sourceSha256:hash(initialHeightSource)}},
+        boundary:'Exact root/property membership and retained declarations plus initial source history only. Omitted native height and explicit candidate fixed border-box height are unequal authoring,even when outer boxes coincide. Existing index is historical;no responsive winner,used-size equivalence,descendant layout,current rendering,complete compensation history or live ownership acceptance.'},
+      remaining:[...(previous.remaining??[]),'Other compensation/history branches and live resource ownership/currentness']};
+  }
+  assert.deepEqual(staticHeightHistoryCounts,{joined:436,previouslyPending:408,existingPartial:28});
+  assert.throws(()=>inspectRootHeightDeclarations({nodes:[]},'reference','core-root'));
   const servedRoot='examples/material-showcase/dist/material-showcase/browser';
   const currentServed=fingerprintDirectory(servedRoot),currentModules=fingerprintModuleGraph(process.cwd(),resourceRunnerFile);
   const assertDependencyOwner=source=>{
@@ -3367,7 +3431,7 @@ test('passive state applicability joins exact cases without discarding progress 
   t.diagnostic(JSON.stringify({caseObligationProposal:proposal, cases:2311,passiveCases:354,additionalCases:1957,additionalTreeReceipts,
     authoredActivationExclusions:354,authoredEditingExclusions:354,programmaticFocusApplicable:40,
     reportedScalarInputCases:2311,reportedScalarGroups:8483,dividerActualAXCases:24,dividerUpdateDisposalCases:24,dividerLocalTextRasterCases:24,dividerCoordinateHistoryCases:24,supplementaryKeyboardCases:40,extendedKeyboardCases:128,
-    editingTargetApplicabilityCases:1957,editingCounts,configuredFocusRecordedProvenanceIncomplete:40,supplementaryFocusCounts,retainedFocusCounts,keyboardActivationCounts,staticRangeHistoryJoins,
+    editingTargetApplicabilityCases:1957,editingCounts,configuredFocusRecordedProvenanceIncomplete:40,supplementaryFocusCounts,retainedFocusCounts,keyboardActivationCounts,staticRangeHistoryJoins,staticHeightHistoryCounts,
     retainedTargetRasterCases:1000,paintCounts,retainedResourceSamplingCases:1875,resourceSampleCounts,
     retainedTargetDOMComparisonCases:2311,semanticCounts,retainedEventBoundaryCases:1875,eventCounts,supplementaryMenuActionContexts:menuActionJoins,commitEndpointCounts,rawControlJoins,rawActionRecords,buildCaptureCounts,completeCaseClosures:0,currentRenderingAccepted:0}));
   t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,
