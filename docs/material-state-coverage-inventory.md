@@ -1,5 +1,27 @@
 # Material comparison/state coverage inventory
 
+## Retained uniform/shadow gates have narrow sampled-pixel scope — October 14
+
+Read-only complete-method conservation against Git8aa0e2e5 passes for uniform
+comparator,sampleFlatColor,colorChannelError and the complete shadow module.
+All24 grid-list uniform records replay the maximum of four pairwise RGBA channel
+errors,threshold1. Sampling uses each side's own boxes:container top-center at
+top+14CSSpx,surface left+10/bottom-10,rounded/clamped to image pixels. This is
+single-pixel evidence,not proof of a uniform region or clipping/edge fidelity.
+All12 card profiles replay five paired luminance-row errors,threshold22. Sampler
+searches strongest contact within±1CSSpx of its own bottom edge,then measures five
+rows against a background eightCSSpx below the nominal edge. It is not whole-shadow
+shape,color,elevation-layer or equal-geometry acceptance. Clamping remains explicit.
+
+ReportSHAab42dbec authenticates;all36 stored gate calculations replay,60 shadow
+rows. Shadow source SHA67393705f380fc19ce76e8eed49e43959ecae116e27b5fb70f6dc276411a8ea6;
+uniform comparator bodySHAf4e85b0db4eaa684b9aa73adc69078af269028b96fb7241332db4b2b1da89e6d.
+No raw PNG replay,current rendering or original whole-runner provenance claimed.
+Next attach exact24 sampled-case observations with these limits after current
+export/cold integration;no new capture/framework/source changes. Previous turn
+pushed0ac000ad. Export97803/8496/32976 remains verified live at build-audit,inputs
+frozen. Canonicale8 and all original acceptance gates remain unchanged.
+
 ## Pending paint census identifies24 reusable sampled cases; export live — October 14
 
 Read-only ff6feb918 census:1715 activation joins pending,1797 focus joins pending,
