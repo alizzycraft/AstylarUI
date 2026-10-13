@@ -17,8 +17,7 @@ has64438820 compressed bytes,2251357184 decoded bytes,decoded SHA
 This is not accepted publication yet: independent cold named --check is live in
 session75648,logging coherent204-all-case-cold-check-20261013.log. All consumed
 sources/evidence remain frozen. Free D:4267896832bytes at cold preflight.
-Accepted c9cd6957 working index/predecessor evidence remain retained; do not use
-its pointer as if it already indexes the newly written candidate package.
+Accepted c9cd6957 working index/predecessor evidence remain retained.
 
 Read-only complete Markdown conservation to Git90b81601 now exits0: only exact
 354/1957→2311/0 coverage counts,the one bounded observed-DPR failure descriptor
@@ -29,8 +28,33 @@ Log coherent204-all-case-markdown-conservation-20261013.log SHA
 Current LF MarkdownSHA339e451e8bb91ecb125941b7931e712ef35434d4af11073eb5cb4cafddef86ca;
 this does not establish complete machine-row conservation or cold acceptance.
 
-Next retain cold terminal result,then compact import/whole-index and substantive
-row/Markdown conservation before scoped commit/push of canonical artifacts.
+Compact import was safely advanced while cold verification remains live: relevant
+review readers pin immutable predecessor generations,and the963-dependency cached
+collector contains no mutable working-index path. Producer supplies explicit
+proposal/immutable receipts. Import changes only the derived pointer/new920 directory,
+not consumed sources,captured evidence,c9 predecessors or written canonical bytes.
+This order change does not accept publication or change any gate. Candidate import
+and whole-index verification both exit0,conserving8483/157/39904/389202/0 counts;
+compact shards72749010 bytes. Logs coherent204-all-case-compact-import-20261013.log
+SHA2bdafe1db43977fa1dc4c02a67697981aaa7b7796b8584e4f2420635cb9f6165 and
+coherent204-all-case-compact-verify-20261013.log SHA
+c57c74e79493789b7cd4be6073b68fd04f66b618db00dd02e76732a584834508.
+
+All48544 compact substantive fields,section/ordinal identities,summary/contract
+and base coverage conserve against c9cd6957. New inspectionEvidence authenticates
+2311 partial cases/zero unjoined/4793 dependencies with both acceptance flags false.
+Only49 complete-row hashes change:button discrepancy903 and48 control typography
+rows4346..4816 at10-step intervals. Log coherent204-all-case-compact-conservation-
+20261013.log SHAff17861cdcbbe17bccb5ce88affa6a845e5cc84d9c29d4db8fcaa810236c786c.
+Their complete-row comparison is now live in
+session3227/reader22284,using the existing original-row authenticator. It checks
+exact247399bf→56fc2c49 normalization producer digest plus corresponding48 aggregate
+proof references; no whole-row conservation claim until it returns. Log
+coherent204-all-case-full-row-conservation-20261013.log. Do not rerun either live job.
+
+Next retain cold and full-row terminal results before scoped commit/push of
+canonical artifacts. Derived920 index is current for the written candidate,not
+evidence of accepted publication or current-browser rendering.
 Do not repeat the export or launch final browser gates while cold collection is
 live. Remaining case applicability/currentness and shared paint/interaction joins,
 all2311 whole-case closures and original final gates remain open. No renderer,
