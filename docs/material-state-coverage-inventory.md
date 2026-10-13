@@ -1,5 +1,31 @@
 # Material comparison/state coverage inventory
 
+## Editing/focus canonical independently accepted and publication-ready — October 13
+
+Independent named ASTYLAR_AUDIT_COLD=1 --check25580 exits0,total3182992.4999ms
+(53.05min). Log editing-focus-canonical-cold-check-20261013.log SHA
+c1b20493833578ff00519c80db539bf5f0b1cb7415aaa1966c6abcf78e6fcf87.
+Two collectors,10 memory hits,0 disk hits,0 invalidations;all6482 actual files/
+807348304 bytes read and rehashed. Complete canonical package and Markdown match.
+This also verifies the bounded concurrent import did not change consumed inputs.
+Both cold25580/14644 and full-row44694/34416 are terminal; do not poll/restart them.
+
+Final editing-focus-publication-preflight-20261013.log exits0,authenticating actual
+64528074 packed bytes/hash,complete index98577870 and exact manifest equality.
+Generation91837a8d is now independently verified; prior920 remains immutable.
+Proposal59409a78 yields5276 dependency receipts,2311 partial/unverified case records,
+0 unjoined IDs,inspectionComplete=false/currentRenderingAccepted=false. Counts
+8483/157/39904/389202/0 remain unchanged;inputEquivalent=false. Producer current
+LF SHA c883ad58 is authenticated. Markdown and all48544 compact substantive rows
+conserve;49 complete rows change only exact module/proof hashes,already validated.
+
+Publish only the three generated canonical report files and this ledger; unrelated
+work remains untouched. This closes coherent editing/focus source-fingerprint and
+export reconciliation,not whole-audit inspection or current-browser acceptance.
+Next resume retained local-paint/action/history/currentness joins without recapture
+of settled observations. All original final gates and2311 full-case closures remain
+open. No renderer,fixture,capture,threshold or audit criteria changes.
+
 ## Editing/focus complete-row conservation terminal success — October 13
 
 Existing original-row authenticator44694 exits0,total2027053.9844ms (33.78min).
