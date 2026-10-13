@@ -1,5 +1,23 @@
 # Material comparison/state coverage inventory
 
+## Focus/activation/history export succeeds; independent cold check live — October 14
+
+Existing export session97803 exits0. Complete progress marker records
+3311153.6582ms; retained focus-activation-history-canonical-export-20261014.log
+SHA256 9eaabfee08ed1f67423dab5ace3c117f7ce5bd7c1aa8267e15f913fcb6902db7.
+Coverage stays436 static/1875 interaction,8483 scalar groups/389202 occurrences,
+157 source findings,inputEquivalent=false. Export success is not publication,
+complete case inspection or current rendering acceptance.
+
+Exactly one independent named --check now runs with ASTYLAR_AUDIT_COLD=1 and
+ASTYLAR_AUDIT_PROGRESS=1: session27577,launcher32964,worker12120. Its complete
+baseline/proposalff6feb918 is unchanged; log
+focus-activation-history-canonical-cold-check-20261014.log reaches build-audit.
+Keep consumed sources/proposal/candidate frozen. Next terminal cold success,
+Markdown/compact/full-row conservation against published e8,then scoped publication.
+The24 sampled-paint joins remain next evidence work after this freeze,not a new
+capture. All2311 whole cases remain partial and all original final gates remain.
+
 ## Original PNG replay reproduces all24 sampled paint cases — October 14
 
 Existing checkpoint reader loads/authenticates12 static grid-list and12 static
