@@ -1,5 +1,35 @@
 # Material comparison/state coverage inventory
 
+## Divider AX and update/disposal obligation joins — October 13
+
+Existing actual-theme AX and update/disposal proofs replay2/2,zero skips,
+5387.01ms total. Log divider-obligation-replay-20261013.log SHA
+cdc04a939383f33ada7040b41caa5cae0e8181c76c690bebb1ddeca086a756de.
+Existing passive coverage proof now joins all24 divider cases through20 exact
+physical contexts to40 paired target AX observations and20 candidate lifecycle
+cohorts. Separator role,empty name,horizontal orientation/no children agree;
+four snapshots across three updates retain live=tracked17/16/4,cache4 and idle
+status,then sampled surface/scene/engine/cache/plugin disposal clears resources.
+Wrong role,unknown context and forged resource-count controls reject.
+
+Focused join passes1/1,zero skips,5384.3452ms. Log
+passive-divider-ax-lifetime-obligation-join-20261013.log SHA
+b29d2ff30c5195ddb7f9dc8758decb7a0cd157154c7397bd0bb56f30c508ffd1.
+Proposal a9cb30db22b89b474540e0103f3a6fcd973ea4a8284e79da289ec3ef0d46b90f
+remains additive/not canonical. Existing loader revalidates732 dependencies,
+354 partial cases/1957 unjoined; full previous proposale928a158 is conserved
+except divider actualHostAX and historyOwnership. Loader/conservation log
+passive-divider-loader-conservation-20261013.log SHA
+f3409c812cdb5f0ff664c813483390dcceef9dc9f13a3c8e0a6650608349f166 exits0.
+
+Actual-theme AX does not retroactively authenticate theme/caller conditions of
+older lifecycle probes. Original action endpoints,current bridge/rendering,
+local paint,history and broader lifetime applicability remain explicit and all
+case closures remain partial. Next join retained local-paint/history evidence
+and remaining families in a coherent batch before canonical/source reconciliation.
+Accepted c9cd6957 package is unchanged; no new capture,renderer/fixture change,
+additional audit framework or acceptance waiver.
+
 ## Passive scalar-input obligation join — October 13
 
 Existing passive case-coverage proof now joins all354 exact cases to explicitly

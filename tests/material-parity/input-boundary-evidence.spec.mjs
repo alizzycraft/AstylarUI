@@ -2170,6 +2170,7 @@ test('passive state applicability joins exact cases without discarding progress 
         candidateHidingRequests:observation.sides.astylar.filter(node=>node.attrs.ariaHidden!==undefined).length,
         evidence:{file:semanticFile,sha256:semanticSha256,case:semanticKey(entry),sources:semanticSummary.sources}},
       ...(progressFocus.has(identity(entry,entry.kind))?{actualHostAX:joinProgressAX(entry)}:{}),
+      ...(entry.family==='divider'?{actualHostAX:joinDividerAX(entry)}:{}),
       ...(['table','list'].includes(entry.family)?{actualSubtreeAX:joinCollectionAX(entry)}:{}),
       remaining:['actual generated bridge and AX relationships','assistive-technology behavior','complete semantic input mapping','current rendering applicability'],
       boundary:'Recorded authored subtree attributes only; absent recorded attributes are not invented defaults.'};
@@ -2295,6 +2296,73 @@ test('passive state applicability joins exact cases without discarding progress 
   const forgedFocus=structuredClone(focusRows);
   forgedFocus.find(row=>row.mode==='astylar' && cohortKey(row)===cohortKey(firstProgress)).actual.after.focused=true;
   assert.throws(()=>joinFocus(firstProgress,forgedFocus));
+  const dividerCases=cases.filter(row=>row.family==='divider');
+  const physicalDividerKey=(profile,viewport,dpr)=>[profile,viewport.width,viewport.height,dpr].join('/');
+  const dividerKey=entry=>physicalDividerKey(entry.profile,entry.viewport,entry.viewport.deviceScaleFactor);
+  const dividerAXRows=[],dividerAXReceipts=[];
+  for(const [name,sha256]of [
+    ['divider-theme-verified-ax-20261009.log','32c55ffb2c1bede46dfefa45e24fa96dcdcab52ee9ac251d0d06bb0333f76347'],
+    ['divider-comparison-theme-ax-20261009.log','b461888f7be8f49c0eb7b337f5bc32a20a0604d7369add569f14fcc6036e78b8'],
+  ]){
+    const file=`artifacts/material-parity/${name}`,bytes=readFileSync(file);assert.equal(hash(bytes),sha256);
+    const rows=bytes.toString().trim().split(/\r?\n/).map(JSON.parse);assert.equal(rows.pop().terminal,'verified');
+    dividerAXRows.push(...rows);dividerAXReceipts.push({file,sha256});
+  }
+  const dividerCohorts=[...new Set(dividerCases.map(dividerKey))].sort();assert.equal(dividerCohorts.length,20);
+  for(const side of ['reference','astylar'])assert.deepEqual(dividerAXRows.filter(row=>row.side===side)
+    .map(row=>physicalDividerKey(row.context.profile,row.context.viewport,row.context.deviceScaleFactor)).sort(),dividerCohorts);
+  const joinDividerAX=(entry,rows=dividerAXRows)=>{
+    const observations=Object.fromEntries(['reference','astylar'].map(side=>{
+      const matches=rows.filter(row=>row.side===side && physicalDividerKey(row.context.profile,row.context.viewport,row.context.deviceScaleFactor)===dividerKey(entry));
+      assert.equal(matches.length,1);const row=matches[0];assert.deepEqual(row.runtime.errors,[]);
+      assert.equal(row.theme.dark,entry.profile==='dark');assert.equal(row.observation.role,'separator');
+      assert.equal(row.observation.name,'');assert.equal(row.observation.orientation,'horizontal');
+      assert.deepEqual(row.observation.childIds,[]);return [side,row.observation];
+    }));
+    return {disposition:'inspected',outcome:'bounded-actual-theme-leaf-role-name-orientation-agreement',
+      evidence:{logs:dividerAXReceipts,cohort:dividerKey(entry),observations},
+      boundary:'Retained supplementary actual-theme target AX,not original action endpoints or current whole-subtree/bridge acceptance.'};
+  };
+  const badDividerAX=structuredClone(dividerAXRows);badDividerAX[0].observation.role='generic';
+  assert.throws(()=>joinDividerAX(dividerCases.find(row=>dividerKey(row)===physicalDividerKey(badDividerAX[0].context.profile,badDividerAX[0].context.viewport,badDividerAX[0].context.deviceScaleFactor)),badDividerAX));
+  const dividerLifetimeReceipts=[],dividerLifetimeRows=[];
+  for(const [name,sha256]of [
+    ['divider-update-disposal-20261006.log','5260c2abddc5b4d3d0a3ee87bcaca765b8e969841e31df5e9ee1851367c26b51'],
+    ['divider-remaining-update-disposal-20261007.log','518513e37a67de7f5651672a7deaf764afcc415da3cf4898c2537a0137885c0a'],
+  ]){
+    const file=`artifacts/material-parity/${name}`,bytes=readFileSync(file);assert.equal(hash(bytes),sha256);
+    dividerLifetimeReceipts.push({file,sha256});
+    if(name==='divider-update-disposal-20261006.log')for(const row of JSON.parse(bytes).rows)
+      dividerLifetimeRows.push({...row,viewport:{width:1440,height:1000,deviceScaleFactor:row.dpr},desktop:true});
+    else dividerLifetimeRows.push(...bytes.toString().trim().split(/\r?\n/).map(JSON.parse).slice(1,-1));
+  }
+  assert.deepEqual(dividerLifetimeRows.map(dividerKey).sort(),dividerCohorts);
+  const joinDividerLifetime=(entry,rows=dividerLifetimeRows)=>{
+    const matches=rows.filter(row=>dividerKey(row)===dividerKey(entry));assert.equal(matches.length,1);
+    const row=matches[0];assert.deepEqual(row.errors,[]);
+    const samples=row.desktop?[row.before,...row.updates]:row.snapshots;assert.equal(samples.length,4);
+    for(const sample of samples){
+      assert.deepEqual(sample.live,{meshes:17,materials:16,textures:4});assert.deepEqual(sample.tracked,sample.live);
+      assert.equal(row.desktop?sample.cache.size:sample.cache,4);
+      assert.equal(row.desktop?sample.loadedTextures:sample.loaded,4);
+      assert.deepEqual(row.desktop?sample.unboundMaterials:sample.unbound,[]);
+      assert.equal(row.desktop?sample.session.status:sample.status,'idle');assert.equal(sample.plugins.pending,0);
+    }
+    const disposal=row.desktop?row.after:row.disposal;
+    for(const name of row.desktop?['surfaceDisposed','sceneDisposed','engineDisposed']:['surface','scene','engine'])assert.equal(disposal[name],true);
+    for(const name of ['meshes','materials','textures'])assert.equal(row.desktop?disposal[name]:disposal.live[name],0);
+    assert.equal(row.desktop?disposal.cacheSize:disposal.cache,0);
+    assert.deepEqual(disposal.plugins,{owners:0,resources:0,cleanups:0,pending:0});
+    return {applicability:'applicable',disposition:'partial',
+      updateDisposal:{disposition:'inspected',outcome:'bounded-three-update-plateau-and-disposal',
+        evidence:{logs:dividerLifetimeReceipts,cohort:dividerKey(entry),snapshots:samples.length,
+          live:samples[0].live,tracked:samples[0].tracked,disposal}},
+      remaining:['historical compensation disposition','late completion/remount/peer isolation applicability','current rendering and lifetime validity'],
+      boundary:'Retained candidate update/disposal at20 physical contexts joined to24 cases; no retroactive actual-theme/caller provenance or whole-lifetime acceptance.'};
+  };
+  assert.throws(()=>joinDividerLifetime({...dividerCases[0],profile:'invented'}));
+  const badDividerLifetime=structuredClone(dividerLifetimeRows);badDividerLifetime[0].updates[0].live.materials++;
+  assert.throws(()=>joinDividerLifetime(dividerCases.find(row=>dividerKey(row)===dividerKey(badDividerLifetime[0])),badDividerLifetime));
   const caseObligations = cases.map(row => ({
     case: `${row.kind}:${row.family}@${row.profile}/${row.viewport.id}${row.state ? `/${row.state}` : ''}`,
     family: row.family,
@@ -2309,7 +2377,7 @@ test('passive state applicability joins exact cases without discarding progress 
       inputStyleStructure: joinScalarInputs(row),
       localPaint: { applicability: 'applicable', disposition: 'evidence-join-pending' },
       semantics: joinSemantics(row),
-      historyOwnership: { applicability: 'applicable', disposition: 'evidence-join-pending' },
+      historyOwnership: row.family==='divider'?joinDividerLifetime(row):{ applicability: 'applicable', disposition: 'evidence-join-pending' },
       sourceCurrentness: { applicability: 'applicable', disposition: 'evidence-join-pending' },
     },
   }));
@@ -2324,7 +2392,7 @@ test('passive state applicability joins exact cases without discarding progress 
   });
   t.diagnostic(JSON.stringify({caseObligationProposal:proposal, cases:354,
     authoredActivationExclusions:354,authoredEditingExclusions:354,programmaticFocusApplicable:40,
-    reportedScalarInputCases:354,reportedScalarGroups:1697,
+    reportedScalarInputCases:354,reportedScalarGroups:1697,dividerActualAXCases:24,dividerUpdateDisposalCases:24,
     completeCaseClosures:0,currentRenderingAccepted:0}));
   t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,
     scope:'Exact configured retained authoring: no activation/editing descendants. Forty native negative-tabindex progress owners keep a programmatic-focus obligation; no live focus, unrecorded callback, paint, lifecycle, source-currentness or full-case closure is inferred.'}));
