@@ -1,5 +1,24 @@
 # Material comparison/state coverage inventory
 
+## Editing/focus complete-row conservation terminal success — October 13
+
+Existing original-row authenticator44694 exits0,total2027053.9844ms (33.78min).
+Log editing-focus-full-row-conservation-20261013.log retains original920 package
+authentication and exact reconstruction against candidate918 complete-row hashes.
+All48 controls change only
+reviewEvidence.observation.normalizationReconciliation.currentModuleSha256
+56fc2c49→c883ad58; each forged zero module digest rejects. Aggregate discrepancy903
+changes only its corresponding48 controlProofSha256 references. Every reconstructed
+complete-row digest equals the authenticated candidate compact digest; no other
+observations,values,classifications or proof fields changed. Worker34416 is terminal;
+do not repeat this completed full-row read.
+
+Cold25580/14644 remains live in validation. Candidate918 is not accepted until its
+independent terminal check and final publication preflight succeed. All sources,
+original/failure evidence and candidate package stay unchanged. Remaining local-paint,
+action/history/currentness joins and all2311 whole-case closures remain open; audit
+scope and final acceptance gates unchanged.
+
 ## Candidate editing/focus compact import and bounded conservation pass — October 13
 
 Candidate91837a8d import exits0,reused=false,compact72749010 bytes. Whole-index
