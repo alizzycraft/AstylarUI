@@ -1,5 +1,35 @@
 # Material comparison/state coverage inventory
 
+## Original input-tree schemas do not supply paired actual focus owners — October 13
+
+Question: can normalized focus identities be supplemented by actual focused
+descendants already serialized in the original input trees? Competing explanations
+were a retained active-element field versus authored/style-only candidate data.
+Read-only source/receipt checks authenticate the original reference serializer
+against the October5 harness fingerprint and the captured candidate serializer
+against recovered map47654b64/source de0efefd. Neither complete serializer reads
+activeElement. Candidate collectAuthoredInputTree visits SiteData objects and
+registry styles,not generated semantic DOM. Reference collects actual DOM attrs,
+values,computed styles and matching rules,but no explicit active-element record.
+
+Four original tree receipts (paired light/DPR1 radio and form-field focus) validate
+against their original hashes and have no dedicated focused/focusedOwner/focusedId/
+activeElement fields. Samples are not extrapolated into a fresh4622-tree census;
+the complete source schemas establish the omitted observation boundary. Matching
+native :focus rules can provide local CSS-state evidence where applicable,but do
+not create a paired candidate generated-DOM owner or prove descendant association.
+Do not infer actual focus from candidate interactionResolvedStyle or authored
+attributes,especially across known semantic replacement updates.
+
+This answers the proposed original-tree reuse route without a new capture or
+framework. Next reuse existing actual-control supplementary focus/keyboard records
+with exact action/context/provenance joins;capture only the demonstrated remainder.
+Original normalized focus fields still need explicit scope records after current
+integration. Previous turn progressed on the focus gate's256/1619 boundary.
+Export99911 remains verified live in3292/26492,consumed inputs frozen. This ledger
+only changes conclusions/next actions;canonical918,all2311 partial closures and
+the original equal-input/root-cause/final acceptance requirements are unchanged.
+
 ## Original focus flags compare only256 normalized identities — October 13
 
 Question: can the original focus fields close remaining actual-focus obligations?
