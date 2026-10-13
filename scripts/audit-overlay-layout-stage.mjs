@@ -91,7 +91,14 @@ await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 let browser;
 try {
   browser = await chromium.launch({ channel: 'chrome', headless: true });
-  const page = await browser.newPage({ viewport: { width: 900, height: 800 }, deviceScaleFactor: dpr });
+  const requestedContext = { viewport: { width: 900, height: 800 }, deviceScaleFactor: dpr };
+  const page = await browser.newPage(requestedContext);
+  const measureContext = () => page.evaluate(() => ({ width: innerWidth, height: innerHeight, devicePixelRatio }));
+  const initialContext = await measureContext();
+  assert.deepEqual(initialContext, { width: 900, height: 800, devicePixelRatio: dpr },
+    'Observed browser context must match the requested reduction context');
+  provenance.runtimeContext = { requested: requestedContext, initial: initialContext, browser: browser.version() };
+  writeFileSync(path.join(output, 'provenance.json'), JSON.stringify(provenance, null, 2));
   const observations = [], errors = [];
   const screenshots = [];
   await page.exposeFunction('auditCapture', async ({ composition, width, height }) => {
@@ -179,7 +186,8 @@ try {
     throw error;
   }
   const result = await page.evaluate(() => window.auditDone);
-  writeFileSync(path.join(output, 'result.json'), JSON.stringify({ browser: browser.version(), result, observations, screenshots, errors }, null, 2));
+  const runtimeContext = { ...provenance.runtimeContext, final: await measureContext() };
+  writeFileSync(path.join(output, 'result.json'), JSON.stringify({ browser: browser.version(), runtimeContext, result, observations, screenshots, errors }, null, 2));
   console.log(JSON.stringify({ output, result, observations: observations.length, errors }));
   if (spec === inspectionConsumer) assert.equal(result.results.length, 2, 'Both public inspection tests must execute');
   process.exitCode = errors.length || result.status !== 'passed' ? 1 : 0;

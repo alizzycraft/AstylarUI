@@ -22,6 +22,70 @@ import { evaluateFocusedRaster } from './focused-raster-metrics.mjs';
 const file = 'artifacts/material-parity/input-boundaries-keypress-559f95c/latest-report.json';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 
+test('divider reduction receipts preserve observed DPR and unchanged failing geometry', () => {
+  const runnerFile='scripts/audit-overlay-layout-stage.mjs';
+  const encoded=readFileSync('docs/evidence/material-overlay-context-runner.mjs.b64','utf8').trim();
+  assert.match(encoded,/^[A-Za-z0-9+/]+={0,2}$/);
+  const capturedRunner=Buffer.from(encoded,'base64');
+  assert.equal(hash(capturedRunner),'8437ab812e876265a7ff8289aa778678dec64edf2276109489931374ba8c072e');
+  const prior=execFileSync('git',['show',`b640ef3e:${runnerFile}`],{encoding:'utf8'}).replaceAll('\r\n','\n');
+  const addedContext=`  const requestedContext = { viewport: { width: 900, height: 800 }, deviceScaleFactor: dpr };
+  const page = await browser.newPage(requestedContext);
+  const measureContext = () => page.evaluate(() => ({ width: innerWidth, height: innerHeight, devicePixelRatio }));
+  const initialContext = await measureContext();
+  assert.deepEqual(initialContext, { width: 900, height: 800, devicePixelRatio: dpr },
+    'Observed browser context must match the requested reduction context');
+  provenance.runtimeContext = { requested: requestedContext, initial: initialContext, browser: browser.version() };
+  writeFileSync(path.join(output, 'provenance.json'), JSON.stringify(provenance, null, 2));`;
+  const addedResult=`  const runtimeContext = { ...provenance.runtimeContext, final: await measureContext() };
+  writeFileSync(path.join(output, 'result.json'), JSON.stringify({ browser: browser.version(), runtimeContext, result, observations, screenshots, errors }, null, 2));`;
+  const conserve=source=>{
+    let restored=source.replaceAll('\r\n','\n');
+    for(const [before,after]of [[addedContext,'  const page = await browser.newPage({ viewport: { width: 900, height: 800 }, deviceScaleFactor: dpr });'],
+      [addedResult,"  writeFileSync(path.join(output, 'result.json'), JSON.stringify({ browser: browser.version(), result, observations, screenshots, errors }, null, 2));"]]){
+      assert.equal(restored.split(before).length,2);restored=restored.replace(before,after);
+    }
+    assert.equal(restored,prior);
+  };
+  conserve(capturedRunner.toString());
+  assert.throws(()=>conserve(capturedRunner.toString().replace('devicePixelRatio: dpr','devicePixelRatio: 1')));
+  assert.throws(()=>conserve(capturedRunner.toString().replace('assert.equal(paneMaskDifferences, 0','assert.equal(paneMaskDifferences, 1')));
+  const failures=['divider-demo.bottom: Astylar=464, browser=163: Expected 301 to be less than 0.5.',
+    'separator.bottom: Astylar=383, browser=82: Expected 301 to be less than 0.5.',
+    'below.top: Astylar=399, browser=98: Expected 301 to be less than 0.5.',
+    'below.bottom: Astylar=419, browser=118: Expected 301 to be less than 0.5.'];
+  const receipts=[
+    ['16149d2bb8620888a2e48a80c905c8227adafc3ff11269287119f5efda9f4577','8a82dc61c5ca4ab78cc3ca705a4e26ea66fea535df058bde66f611371c5529cd'],
+    ['3a56c17d045a31afdd5eb4d5aa5c390acf9517c0523cf1e0b902513b9fe9c487','92ccccabed50a16e842a937c7bd7592e2cb78ab6465c564d22c9ec99e92f1917'],
+  ];
+  for(const dpr of [1,2]){
+    const dir=`artifacts/material-parity/divider-context-verified-angular-20261013-dpr${dpr}`;
+    const bytes=readFileSync(`${dir}/result.json`),provenanceBytes=readFileSync(`${dir}/provenance.json`);
+    assert.equal(hash(bytes),receipts[dpr-1][0]);assert.equal(hash(provenanceBytes),receipts[dpr-1][1]);
+    const result=JSON.parse(bytes),provenance=JSON.parse(provenanceBytes);
+    assert.equal(provenance.runnerSha256,hash(capturedRunner));
+    const expected={requested:{viewport:{width:900,height:800},deviceScaleFactor:dpr},
+      initial:{width:900,height:800,devicePixelRatio:dpr},browser:'155.0.8059.40'};
+    assert.deepEqual(provenance.runtimeContext,expected);
+    assert.deepEqual(result.runtimeContext,{...expected,final:expected.initial});
+    assert.equal(result.browser,expected.browser);assert.deepEqual(result.errors,[]);
+    assert.equal(result.result.status,'failed');
+    const executed=result.result.results.filter(row=>row.status!=='excluded');assert.equal(executed.length,1);
+    assert.ok(executed[0].description.endsWith('paragraph flow places a divider without absolute text or separator offsets'));
+    assert.equal(executed[0].status,'failed');assert.deepEqual(executed[0].failures,failures);
+    assert.equal(provenance.compiledReceipts.length,104);assert.equal(provenance.inputs.length,2517);
+    for(const receipt of provenance.compiledReceipts){
+      assert.equal(hash(readFileSync(receipt.source)),receipt.sourceSha256);
+      for(const root of ['artifacts/material-parity/divider-context-angular-source-build-20261013',
+        'dist/lib','examples/material-showcase/node_modules/astylarui/dist/lib'])
+        assert.equal(hash(readFileSync(path.join(root,receipt.file))),receipt.emittedSha256);
+    }
+    for(const receipt of provenance.inputs)assert.equal(hash(readFileSync(receipt.file)),receipt.sha256);
+    assert.equal(hash(readFileSync(`${dir}/audit.js`)),provenance.bundleSha256);
+  }
+  // Validator success authenticates an honestly failing public reduction,not parity.
+});
+
 test('retained raw checkbox slider boundaries preserve missing events disabled focus and sampled inertia', () => {
   const logs = [
     ['raw-control-events-20261012.log', 'd14e9e6965f8a4e9f9419d494545a867c3e1b48f4ba2475ccb11a1ef3097a5ea', 50],

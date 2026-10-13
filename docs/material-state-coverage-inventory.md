@@ -1,5 +1,47 @@
 # Material comparison/state coverage inventory
 
+## Divider reduction observed-context provenance — October 13
+
+History review exposed a provenance gap,not a new renderer diagnosis:October6
+nominal DPR1/2 reduction result/provenance bytes are identical and contain no
+actual context fields. Directory labels alone cannot authenticate DPR execution;
+the retained301px CSS-height failure remains valid bounded failure evidence.
+Existing audit-overlay-layout-stage now records requested900x800/DPR and observed
+initial/final viewport/devicePixelRatio. Whole-source conservation reverses only
+these receipt additions; original browser arguments,fixtures,geometry/paint
+assertions and exit policy remain identical. Wrong observed-DPR code and altered
+paint assertion negative controls reject. Exact captured runner bytes8437ab81
+are preserved in docs/evidence/material-overlay-context-runner.mjs.b64.
+
+Old compiled snapshot first rejects changed installed lib/astylar.js; failure
+divider-context-verified-20261013-dpr1.log SHAc3dfebec9bc7df7b178246b2f5720af3e208861cc1f6115310e01e47ab7077b9.
+Plain TypeScript compilation succeeds but its decorator format differs from the
+Angular partial-compiled installation; both next preflights reject before any
+browser capture (retry-dpr1 and dpr2 logs SHA
+c8470bee3d24090f419558c8dd18bf7c95b8b45787eeaf35d66976f637c1b1e7).
+Separate Angular ngc snapshot then emits104 JS files matching current installed
+and dist bytes exactly. No installed package,dist or renderer source was changed.
+
+Unchanged public paragraph/divider reduction now executes in Chrome155.0.8059.40
+at observed DPR1 and DPR2,initial/final900x800. Both exit1 with the same four301
+CSS-pixel geometry failures and zero page errors; all other reductions are
+explicitly excluded by the original exact filter. New evidence directories:
+divider-context-verified-angular-20261013-dpr1 and -dpr2. Result hashes16149d2b
+and3a56c17d,provenance hashes8a82dc61 and92ccccab are pinned in the owning proof.
+Existing suite's new receipt assertion passes1/1,zero skips,1064.8588ms; it
+authenticates all104 compiled/source/installed/dist pairs and2517 bundle inputs
+per run. Validator success is not renderer parity or a configured-case capture.
+Validation log divider-context-receipt-validation-20261013.log SHA
+1e1ff0669bff781bcdaa4091318ac6ec8ee1bc071392055133707d492fa8c1b5;
+browser failure logs divider-context-verified-angular-20261013-dpr1.log SHA
+83107ca97d9574394cffc6b337fc2cc0fe557f8f761922d57c87374c85c81866
+and -dpr2.log SHA179e614fb943ed9513807f2eeab209d13dc9234df876ea7a20a81cb862ce664a.
+
+Next join this current bounded core-failure/history ownership evidence to exact
+case dispositions,then reconcile the coherent source/export batch. Earlier
+runner receipte01ef9dc is still unresolved; new preserved8437ab81 bytes do not
+replace it. All original failure evidence,scope and final gates remain unchanged.
+
 ## Divider stored local-raster obligation join — October 13
 
 All24 divider cases now join to48 exact Above/Below crop pairs (96 original

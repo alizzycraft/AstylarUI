@@ -208,6 +208,15 @@ Both hashes matched before/after. Their116,900,879 logical bytes now occupy
 This is a small operational recovery, not sufficient headroom for full capture
 or canonical publication. No original or failure evidence was removed.
 
+The October13 observed-context reduction runner is required provenance,not
+scratch. `docs/evidence/material-overlay-context-runner.mjs.b64` decodes to the
+exact captured source SHA256
+`8437ab812e876265a7ff8289aa778678dec64edf2276109489931374ba8c072e`.
+Keep it with the divider-context-verified-angular-20261013-dpr1/dpr2 failures;
+it preserves mixed source line endings independently of later checkout changes.
+It is a historical receipt source,never a replacement runner for fresh capture.
+It does not recover or supersede the older missing e01ef9dc runner bytes.
+
 The range-default original installed package metadata is required provenance,
 not disposable scratch. Its exact bytes are retained at
 `artifacts/material-parity/retained-evidence/range-default-package-source/package.json`
