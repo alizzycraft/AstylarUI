@@ -1,5 +1,39 @@
 # Material comparison/state coverage inventory
 
+## Supplementary Menu action failures join eight physical contexts — October 13
+
+Question: can existing action captures fill useful behavioral observations beyond
+default comparator flags without pretending they executed the configured action?
+Two original owning receipt tests pass2/2,0 skips,total2132.2322ms in
+retained-menu-action-reuse-20261013.log SHA
+01f13d8486cbd323969262a2717614c2ba5d07c9ab9954828e38b4f7ba95cfc2.
+They preserve the failed navigation precondition in the first capture and the
+later explicit outside reset/reopen before navigation. No recapture or renewed
+root-cause attribution is needed;the action/input defect is already investigated.
+
+Existing case-obligation proof now joins menu-actions-reset-20261008 and
+menu-actions-remaining-20261008 to eight menu/open-hover-content physical contexts.
+Seven paired boundaries each retain exact observations,PNG/tree receipts and
+checkpoint/runtime validation. Native item release closes,candidate remains open;
+native reopened focus advances Rename→Delete on ArrowDown,candidate stays on
+menu-primary. Outside reset and Escape close both. These supplementary sequences
+are not configured hover actions and do not close complete event/focus/paint or
+currentness obligations. Prior raw flags and authored applicability are preserved.
+
+Focused1/1 passes,0 skips,total20138.354ms in
+all-case-supplementary-menu-actions-20261013.log SHA
+f565800f0fca7ec9ffc54ba8696da6cc7e6bfc615572a64b0d76d9935b751ecb.
+Proposal a6d9ab079e19eec02d5ff4610857169e8cd162c39b849de4a8dcd264bd241848
+is noncanonical. Existing loader authenticates5504 dependencies,2311 partial
+cases,0 unjoined and false acceptance flags. Complete predecessor comparison
+to089836cf proves changes only in eight authoredActivation records;all other
+fields and headers conserve. No renderer,fixture,threshold or scope changes.
+
+Previous turn made progress attaching exact event limits. Next remaining actual
+field commit/focus/control action applicability and source-currentness;then one
+coherent producer/export reconciliation for the pending observation batch.
+Canonical918 stays unchanged;all2311 full-case closures and final gates remain open.
+
 ## Exact retained event/state boundaries join1875 cases — October 13
 
 Previous goal turn made progress by resolving comparator scope. Existing owning

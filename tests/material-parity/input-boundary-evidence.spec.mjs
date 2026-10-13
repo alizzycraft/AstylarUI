@@ -2978,6 +2978,54 @@ test('passive state applicability joins exact cases without discarding progress 
     record.obligations.authoredActivation={...record.obligations.authoredActivation,retainedEventBoundary:observation};
   }
   assert.deepEqual(eventCounts,{cases:1875,normalized:647,uncompared:1228,tailExclusions:32,explicitState:114,defaultState:1761});
+  const menuActionSources=[
+    ['menu-actions-reset-20261008','6b93af93ca14dedca2e1b64c37d2b1ffac6e203ea37d8265c681b6ffc0acd828','scripts/audit-material-menu-actions-reset.mjs'],
+    ['menu-actions-remaining-20261008','f41bcce117e913caaf956b43848b8b2eedeafd3d4c6792a1da23b0bbb8e33811','scripts/audit-material-menu-actions-remaining.mjs'],
+  ];
+  const menuContexts=new Map();
+  const menuContextKey=row=>JSON.stringify([row.profile,row.viewport.width,row.viewport.height,row.viewport.deviceScaleFactor]);
+  const menuStates=['opened','item-held','item-clicked','reset-outside','reopened','arrow-down','escape'];
+  for(const [run,sha256,script]of menuActionSources){
+    const file=`artifacts/material-parity/${run}/latest-report.json`,bytes=readFileSync(file);assert.equal(hash(bytes),sha256);
+    const capture=JSON.parse(bytes),manifestBytes=readFileSync(capture.capture.checkpointManifest.file);
+    const manifest=JSON.parse(manifestBytes),pairs=[];
+    for(const native of capture.results.filter(row=>row.mode==='reference')){
+      const candidate=capture.results.filter(row=>row.mode==='astylar'&&menuContextKey(row)===menuContextKey(native));
+      assert.equal(candidate.length,1);const rows={reference:native,astylar:candidate[0]};
+      const observations={};
+      for(const [side,row]of Object.entries(rows)){
+        assert.equal(row.family,'menu');assert.deepEqual(row.boundaries.map(boundary=>boundary.state),menuStates);
+        observations[side]=row.boundaries.map(boundary=>{
+          for(const receipt of [boundary.inputTree,boundary.screenshot])assert.equal(hash(readFileSync(receipt.file)),receipt.sha256);
+          return {state:boundary.state,observation:boundary.observation,inputTree:boundary.inputTree,screenshot:boundary.screenshot};
+        });
+        const states=Object.fromEntries(row.boundaries.map(boundary=>[boundary.state,boundary.observation]));
+        assert.equal(states.opened.open,true);assert.equal(states['reset-outside'].open,false);
+        assert.equal(states.reopened.open,true);assert.equal(states['arrow-down'].open,true);assert.equal(states.escape.open,false);
+        assert.equal(states['item-clicked'].open,side==='astylar');
+        if(side==='reference'){assert.equal(states.reopened.active.text,'Rename');assert.equal(states['arrow-down'].active.text,'Delete');}
+        else{assert.equal(states.reopened.active.astylarId,'menu-primary');assert.equal(states['arrow-down'].active.astylarId,'menu-primary');}
+      }
+      for(let i=0;i<menuStates.length;i++)pairs.push({reference:{runtime:native.runtime,inputTree:native.boundaries[i].inputTree},
+        astylar:{runtime:candidate[0].runtime,inputTree:candidate[0].boundaries[i].inputTree}});
+      const context=menuContextKey(native);assert.equal(menuContexts.has(context),false);
+      menuContexts.set(context,{disposition:'supplementary-action-failure',physicalContext:context,observations,
+        evidence:{report:{file,sha256},manifest:{file:capture.capture.checkpointManifest.file,sha256:hash(manifestBytes)}},
+        boundary:'Paired supplementary item press/release,explicit outside reset,reopen,ArrowDown and Escape. Same physical context,not configured open-hover-content actions. Item dismissal/navigation differ; not complete event/keyboard/paint,current rendering or whole-case acceptance.'});
+    }
+    assert.deepEqual(validateSupplementalCapture({...capture,results:pairs},{reportFile:file,expectedProvenance:manifest.provenance,
+      script,styleProperties:Object.values(propertyGroups).flat()}),{status:'checkpoint-bound',errors:[]});
+  }
+  assert.equal(menuContexts.size,8);
+  let menuActionJoins=0;
+  for(const record of allObligations){
+    const row=paintCaseRows.get(record.case);if(row.family!=='menu'||row.state!=='open-hover-content')continue;
+    const observation=menuContexts.get(menuContextKey(row));assert.ok(observation);menuActionJoins++;
+    const previous=record.obligations.authoredActivation;
+    record.obligations.authoredActivation={...previous,disposition:'partial',supplementaryMenuActions:observation,
+      remaining:[...(previous.remaining??[]),'Configured standard action and complete activation/currentness beyond supplementary menu sequence']};
+  }
+  assert.equal(menuActionJoins,8);
   assert.equal(new Set(allObligations.map(row=>row.case)).size,2311);
   assert.deepEqual(allObligations.map(row=>row.case).sort(),allConfigured.map(scalarCaseKey).sort());
   assert.ok(allObligations.every(row=>row.inspection==='partial'&&row.currentRendering==='unverified'));
@@ -2991,7 +3039,7 @@ test('passive state applicability joins exact cases without discarding progress 
     reportedScalarInputCases:2311,reportedScalarGroups:8483,dividerActualAXCases:24,dividerUpdateDisposalCases:24,dividerLocalTextRasterCases:24,dividerCoordinateHistoryCases:24,supplementaryKeyboardCases:40,extendedKeyboardCases:128,
     editingTargetApplicabilityCases:1957,editingCounts,configuredFocusRecordedProvenanceIncomplete:40,
     retainedTargetRasterCases:1000,paintCounts,retainedResourceSamplingCases:1875,resourceSampleCounts,
-    retainedTargetDOMComparisonCases:2311,semanticCounts,retainedEventBoundaryCases:1875,eventCounts,completeCaseClosures:0,currentRenderingAccepted:0}));
+    retainedTargetDOMComparisonCases:2311,semanticCounts,retainedEventBoundaryCases:1875,eventCounts,supplementaryMenuActionContexts:menuActionJoins,completeCaseClosures:0,currentRenderingAccepted:0}));
   t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,
     scope:'Exact configured retained authoring: no activation/editing descendants. Forty native negative-tabindex progress owners keep a programmatic-focus obligation; no live focus, unrecorded callback, paint, lifecycle, source-currentness or full-case closure is inferred.'}));
 });
