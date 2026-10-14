@@ -19,9 +19,18 @@ unchanged. Candidate compressed SHAa81eef01473d3281dc19390f6fd8de458b79b6f7647b5
 66409105 bytes; decoded2276569868 bytes,SHA1628c6cbfb6b1bb8f94defadc8cfaa764841ee2dafd8f0489c25916fc39fdd42.
 Markdown conservation passes:610 lines,only12 test-line anchors change,claims
 unchanged; focus-activation-history-markdown-conservation-20261014.log.
-One compact import now runs as session1163,log
-focus-activation-history-compact-import-20261014.log. Keep candidate/source inputs
-unchanged through compact/full-row conservation against published e8,then scoped publication.
+Compact import session1163 completes exit0:72749010 compact bytes. Existing
+verifyFindings authenticates both complete indexes/packages. All48544 visible
+compact rows conserve;exactly49 complete-row digests change (button scalar903
+and48 control rows). Counts8483/157/39904/389202/0 unchanged. Log
+focus-activation-history-compact-conservation-20261014.log retains exact IDs.
+Candidate index SHAfc451a28338db854749b4aee1f7a47c525d05a63259a20c0ef61f01b3aa24e07.
+One full-row authentication/conservation now runs as session97663,log
+focus-activation-history-full-row-conservation-20261014.log. It uses existing
+loadFindingEvidence for all49 predecessor/candidate rows,then permits only the
+reviewed2bee→f992 module hash and hashes derived from otherwise conserved objects;
+48 forged property controls remain separate. Terminal result pending. Keep
+candidate/source inputs unchanged through this check,then scoped publication.
 The24 sampled-paint joins remain next evidence work after this freeze,not a new
 capture. All2311 whole cases remain partial and all original final gates remain.
 
