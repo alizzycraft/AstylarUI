@@ -8923,7 +8923,7 @@ function auditEnvironment(root) {
 function sourceFingerprints(root) {
   const files = [
     'tests/material-parity/audit-findings-store.spec.mjs',
-    'artifacts/material-parity/working-audit/proposals/ff6feb918dc14e15204f703429d98fb17a915e3648375d94fe084d0991f20f55.json',
+    'artifacts/material-parity/working-audit/proposals/a1d7bff1ed19bfd90b32746d902586f92004961a64d17ef27d58702eeebcdf4d.json',
     'docs/evidence/material-overlay-context-runner.mjs.b64',
     'artifacts/material-parity/divider-context-verified-angular-20261013-dpr1/result.json',
     'artifacts/material-parity/divider-context-verified-angular-20261013-dpr1/provenance.json',

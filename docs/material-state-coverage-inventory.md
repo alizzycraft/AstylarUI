@@ -1,5 +1,27 @@
 # Material comparison/state coverage inventory
 
+## Coherent retained-state batch registration pending integration — October 14
+
+Dependency loader validates proposala1d7bff1:2311 exact cases,7676 receipts,
+zero unjoined,inspectionComplete=false,currentRenderingAccepted=false.
+Whole-case headers match publishedff6. Changed obligations are24 localPaint,
+358 semantics and146 authoredActivation;these overlapping counts are not cases
+completed. Producer/complete-baseline launcher now pin a1d7bff1;whole producer
+LF SHA5492a808dc1cf05e094fe6d2e6da47f4f5406eb7fd2a3b94b5ea0c5b12ebe991.
+Existing restoration reverses only this pin to published2bee7977 before its
+unchanged predecessor chain. Launcher dry-run and scoped diff check pass.
+
+Existing complete transition suite terminal success:33/33,zero skips,
+176698.3199ms,session98488 exit0. Log artifacts/material-parity/
+retained-state-batch-producer-integration-20261014.log SHA256
+2f6f5c2dd3291594f7cb229d3ea4bd208b0111f50471826fb02f472a2dd11bfc.
+Complete producer conservation and original mutation controls pass. Scope/diff
+review confines changes to proposal registration and its existing restoration
+guard. Observed D:free1376608256 bytes before publication. Published canonicala81
+remains the accepted predecessor;next export this coherent batch,then independent
+cold verification/import before publication acceptance. No browser capture or
+renderer/fixture change. Original final gates and all2311 partial cases remain.
+
 ## Retained radio keyboard actual-state evidence joins eight focus cases — October 14
 
 Original authenticated radio callback reads native input.checked and candidate
