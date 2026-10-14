@@ -81,6 +81,15 @@ groups/389202 occurrences/157 findings,inputEquivalent=false. Candidate package
 is exported but not accepted as independently verified publication.
 Independent ASTYLAR_AUDIT_COLD=1 --check is now live in session90914,log
 artifacts/material-parity/retained-state-batch-canonical-cold-check-20261014.log.
+Candidate package compressed67176847 bytes,SHA256
+14affae195adcdab430dfe73eccfb725614767c4e86bb91bf4b5e4d3f6652ec5;
+decoded2277838645 bytes,SHA256
+0a727691f66daf2416c5bea7211750431bc85bfac1c4041f6dc22b67e644f8c8.
+These are exporter metadata,not independent decoded-byte verification yet.
+Read-only complete Markdown comparison to8d0ef617 preserves610 lines/all claims;
+exactly38 differences are terminal test-file line anchors only. No narrative
+finding or acceptance claim changed. Cold-check launcher36692/child21624 live;
+do not confuse file existence or this Markdown comparison with cold acceptance.
 Keep producer/evidence inputs frozen. Next poll same cold-check session,retain
 terminal result,then existing compact conservation/import at this milestone.
 
