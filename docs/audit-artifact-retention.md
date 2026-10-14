@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October15 queued canonical export is closed successful evidence:retain
+flex-margin-queued-canonical-export-20261015.log SHA
+b1c8b5d99bc55bda8fad4f66811a5848bb94569d39e2f588737938d819872f07
+with candidate86961b43 package (full hashes/lengths in current ledger). Export
+alone is not independent acceptance;cold check and row/section conservation are
+still live. Acceptedb246 gzip/index/shards and original/failure captures remain
+untouched. Do not import/repoint or remove predecessor evidence prematurely.
+
 October15 configured editing case proposal24ee5902 is required queued evidence;
 retain it and predecessor569d8cc6 unchanged. Complete fileSHA
 0dccfcde39f98a9590fb940cf149e8085e4babaaf550746c7ebbecd97d50da24.

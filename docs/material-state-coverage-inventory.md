@@ -2,9 +2,22 @@
 
 ## Current integration pointer — October15
 
-Published canonicalb246 remains accepted as the prior158-finding snapshot.
-Export session39487/worker4768 is validating the frozen159-finding/569d8cc6 batch;
-no terminal export/cold/import claim yet. Previous turn was a verified live wait.
+Accepted working index remainsb246,the prior158-finding snapshot. Export39487
+is TERMINAL exit0 after2776257.6261ms;its worker4768 ended. Candidate86961b43
+has159 findings,all436 static/1875 interaction cases,8483 groups/389202 occurrences
+and inputEquivalent=false. Validation returned no errors before encoding.
+Manifest compressed68385818 bytes/SHA
+86961b43b2c7b811b883b5945466fee14e6e1de41ff117cd7574def3a43ff5c1;
+decoded2282516358 bytes/SHA
+4794d9b548dad1a0cd248780c2c52421b9d7cf61a5fbc78ba50fb26a842a0f1c.
+Export log flex-margin-queued-canonical-export-20261015.log SHA
+b1c8b5d99bc55bda8fad4f66811a5848bb94569d39e2f588737938d819872f07.
+Evidence session:1 collector/10 memory hits/1 disk hit,0 invalidations;11066 files,
+1097265157 bytes read and independently reverified,2618710.3835ms. This is export
+validation,not independent cold acceptance or current rendering parity.
+Cold check86353/worker14972 is live in build-audit. Independent complete-row/
+section conservation46817/worker22848 is live against acceptedb246 and candidate8696.
+Source/proof/569d8cc6 inputs stay frozen;do not import or claim publication yet.
 Safe independent progress now joins the16 configured editing cases to their
 verified80 paired real-action boundaries,32 sampled empty strokes,transient focus
 observations and bounded root/public proofs. Existing saveReviewProposal/loader
@@ -16,7 +29,7 @@ Log configured-input-editing-case-join-20261015.log SHA
 ec8fd8a7429ddaf0bb19f9e2a02ba3f8921dc7a54da881a3c3446f0151a86bcf.
 Only light desktop DPR1 form-field/input subrecords claim measured root causality;
 the other14 explicitly do not. Historical missing-source records remain unchanged.
-This proposal is queued,not selected by the running export or a case promotion.
+This proposal is queued,not selected by that export/cold run or a case promotion.
 Next integrate its semantic owner/assertions in the existing case proof after the
 source freeze,with explicit source-receipt reconciliation;its public-owner test
 and diagnostic graphs must not be silently treated as current after code changes.

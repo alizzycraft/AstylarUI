@@ -1,5 +1,13 @@
 # Material audit: evidence-led implementation priorities
 
+October15 canonical milestone:export TERMINAL0,candidate86961b43 contains159
+findings and the queued569d8cc6 no-editor/divider reviews. All2311 cases remain
+partial/unverified,inputEquivalent=false. Independent cold check and accepted-
+predecessor row/section conservation are live;accepted compact index remainsb246.
+Exact manifest/log/session measurements and handles are in the current coverage
+ledger. Do not describe this candidate as independently accepted or import it
+before those checks finish. Later24ee editing/root-focus evidence remains queued.
+
 October15 semantic focus refinement:light desktop DPR1 form-field/input deletion
 updates first blur the SAME connected input inside unconditional semantic ROOT
 replaceChildren,with identical old/requested child objects and order. Later
