@@ -1,5 +1,28 @@
 # Material comparison/state coverage inventory
 
+## Configured caret vertical temporal runs are measured,not attributed — October14
+
+Unresolved question:do the saved40-context caret frames expose vertical paint
+bounds beyond the registered horizontal-column proof? Read-only replay authenticates
+report423b2587 and all960 initial/hide PNGs,then measures contiguous temporal
+changes in the already-proven caret columns,requiring original10CSSpx minimum.
+All40 contexts have native maximum changed height19CSSpx,candidate20CSSpx at
+DPR1 and19.5CSSpx atDPR2. Both input boxes are24CSSpx high. Native top edges
+vary1.5–3CSSpx relative to the input;candidate2–2.5CSSpx. Nonempty candidate
+glyph overlap splits some shorter runs;maximum runs retain the full observation.
+Thus a single constant vertical offset is not demonstrated by this population.
+
+Log artifacts/material-parity/configured-caret-vertical-temporal-scope-20261014.log
+SHAd8c24d95365e5cede3165bd4be6d186baaaad6dcfc3b3b49656dbdd5a6e47b8f.
+Existing shipped-method proof already establishes CSS size2×19.2 before projection
+for16px font;do not rerun it or infer new core-height causality from unequal Material
+caret-color inputs. New runs are not full alpha footprints,fringe attribution,
+original runner recovery,current rendering or whole-case closure. Competing
+explanations remain font/native caret metrics,input/mesh centering and raster
+sampling. Next compare equal-input public proof's existing vertical bounds and
+caller/layout metrics before deciding whether a new matched raster is needed.
+No renderer,fixture,test/producer or threshold change. Export37648 remains live.
+
 ## Target-crop geometry is available;visual-owner scope remains narrower — October14
 
 Followup read-only owner check resolves the35 direct-marker omissions at captured
