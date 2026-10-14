@@ -1,5 +1,28 @@
 # Material comparison/state coverage inventory
 
+## Concrete divider closure check separates inspection gaps from acceptance — October14
+
+Read-only proposal6bfe953b examination of static:divider@light/desktop identifies
+the requirements below without promoting a case or adding audit criteria.
+
+| Existing obligation | Already inspected evidence | Specific remaining question |
+| --- | --- | --- |
+| Activation,editing,programmatic focus | Authored passive exclusions on all three. | None for hypothetical controls absent from reference. |
+| Input/style/structure |226 exact joined finding IDs for this case;ordered paragraph/separator/paragraph evidence and classified scalar/typography differences. | Does every material anonymous/descendant owner have an explained input mapping,not just sampled scalar incidence? |
+| Paint | Stored text-crop replay preserves failures;separate equal-input layout/paint reductions are already present. | Separator,clipping/AA and full owner-paint attribution;the1000-target reconstruction does not include divider's separate alignment crops. |
+| Semantics | actualHostAX is inspected with retained actual-theme separator outcome. | Separate complete target/companion associations and applicable current bridge validity from already-observed separator role/name/orientation/no-children. |
+| History/ownership |documentedCoordinateCompensation and fixed-root-height history inspected;bounded update/disposal joined. | Remaining authored history branches and applicable remount/late-owner boundaries;do not infer them from tracked counts. |
+| Source/currentness | Baseline and served-build/checkpoint receipts joined. | Original crop-producer/source applicability remains explicit;complete enforced current rendering is a final acceptance gate,not a reason to repeat settled classification. |
+
+Generic remaining text is not itself proof an observable is absent. Conversely,
+inspected subrecords do not certify complete case coverage. The closure schema
+must require exact missing observables/evidence rather than perpetuate generic
+partial labels. No live assistive-technology certification follows from AX;
+retain that observability limit without silently inventing a new audit criterion.
+Next prioritize owner/input mapping and local paint gaps with existing trees/crops,
+then explicit source applicability;keep final gates separate and unchanged.
+Cold57853 remains live and all consumed sources frozen.
+
 ## Whole-case completion counts are constrained by the partial-only schema — October14
 
 Reporting correction:all2311 cases are recorded partial,not independently proved
