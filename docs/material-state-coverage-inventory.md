@@ -1,5 +1,36 @@
 # Material comparison/state coverage inventory
 
+## Current question — October15 writable emptying evidence reuse
+
+Previous turn made verified integration progress:e5a3f711 is pushed. Named
+canonical export is live in execution session39487,launcher34916/worker4768;
+worker observed CPU193.484375s,working set2361217024bytes. Log
+flex-margin-queued-canonical-export-20261015.log is still at build-audit;silence
+does not justify restarting. Source/proof/proposal inputs remain frozen. No
+terminal publication/cold/import result is claimed.
+
+Read-only question:do the443 writable cases need another retained action join,
+or genuinely missing behavioral evidence? The exact16 form-field/input
+edit-empty-blur cases already contain32 paired raw sequences under
+authoredActivation.retainedEventBoundary. Each records original Atlas or
+team@example.com,three keydowns,then empty input/change/blur. Complete arrays
+agree byte-for-value with the authenticated current-full-20261005 report.
+No recorded key/code identifies those keydowns;no intermediate focused-empty
+caret/selection raster follows from this final blurred state. The missing original
+whole-runner bytes remain an explicit provenance limit,not a new search task.
+
+Log writable-emptying-evidence-applicability-20261015.log SHA
+1abce88c2992e5b0902e29459239ab89db685d27668069ce445b2f4d6bf6ab21
+retains all16 exact IDs and asserts443 writable anchors,32 sequences and original
+report hash. All16 editing obligations stay partial. Do not duplicate the existing
+event join or rerun the exhausted historical-source search. Next decisive evidence
+for this cohort is current receipt-bound real-key execution with intermediate
+focused-empty/selection paint through the existing runner,not another final-blur
+snapshot. Match existing supplementary public caret/selection contexts first;
+they do not automatically cover these16 configured action boundaries. Other427
+writable anchors retain their distinct states and are not16 extra editing actions.
+This question changes the next evidence needed,not case closure or acceptance.
+
 ## Current integration checkpoint — October15 coherent queued evidence registration
 
 Previous turn made verified progress:bad397cc registered the bounded margin

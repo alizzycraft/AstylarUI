@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October15 writable emptying applicability:retain
+writable-emptying-evidence-applicability-20261015.log SHA
+1abce88c2992e5b0902e29459239ab89db685d27668069ce445b2f4d6bf6ab21.
+It checks16 exact configured cases/32 already-retained event sequences against
+the original report and identifies missing key identities/intermediate paint.
+No capture or source is replaced;this is bounded evidence reuse,not parity.
+
 October15 coherent queued evidence registration:retain refreshed569d8cc6 proposal
 (full digest/file hash in current ledger),original0773 and all predecessors.
 Retain flex-margin-case-proposal-refresh-20261015.log SHA
