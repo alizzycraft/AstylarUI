@@ -1,5 +1,38 @@
 # Material comparison/state coverage inventory
 
+## Actual pointer choice state joins32 cases while preserving8 radio event failures — October 14
+
+Existing selection-pointer-directions-20261011 reportSHAf1497dbd supplies actual
+native radio input.checked and other choice ARIA states versus actual candidate
+generated semantic-DOM ARIA values. All32 exact configured activate IDs have three
+diagnostic stages (default,opposite,return),96 state comparisons and192 paired-tree
+receipts. Checkpoint.load authenticates case/results/all artifacts;whole current
+runner hash agrees with capture and complete captureSelectionTransitions body
+defines actual owner lookup/guarding. Original radio trees still lack checked;
+this separate eight-context radio proof does not retroactively fill68 baseline trees.
+
+All96 state comparisons agree. Eight radio cases nevertheless fail cumulative
+host events:reference input/change tails are absent from candidate arrays. Their
+eight diagnostic acceptance failures remain false;24 other report passes are
+bounded diagnostics,not whole-case current acceptance. Stage mutation,missing stage,
+missing value and forged event pass controls reject. Extra pointer actions differ
+from baseline;main raster/resource samples precede them and independent page clocks
+cannot establish cross-document event ordering or continuous paint/resource fidelity.
+
+Existing owning proof gains32 partial authoredActivation records and corresponding
+actual-state semantics links,preserving all prior keyboard/control/source evidence.
+Focused1/1,0 skips,25515.3952ms:
+retained-pointer-selection-state-join-20261014.log SHA256
+ecd33b0de8e66d668f410f4179d90d9cc8fad207b6b7d839fb960f70bfd3338b.
+Proposal48cda88c8ed456b633d43b786f1b5f7d32d204ac62acc30b1a1a7952bc37211e
+is noncanonical. Complete conservation changes only32 activation/semantics
+records;7676 dependency receipts authenticate,0 unjoined,both acceptance flags false.
+Pending activation1627→1595;all2311 whole cases remain partial/unverified. Log
+retained-pointer-selection-complete-conservation-20261014.log. No new capture,
+renderer/fixture change or isolated export. Next reuse remaining actual radio
+keyboard-state evidence and integrate a coherent batch only after scoped gaps resolve.
+Prior8ad44676 pushed;publisheda81 unchanged.
+
 ## Sort omission has a bounded unsorted-default explanation,not a transport-loss diagnosis — October 14
 
 Question resolved at attribute-value scope:WAI-ARIA1.2 defines absent aria-sort

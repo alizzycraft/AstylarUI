@@ -3594,6 +3594,33 @@ test('passive state applicability joins exact cases without discarding progress 
     mutate(altered);assert.throws(()=>inspectExplicitPredicate(altered));
   }
   const currentBuildCases=new Map(),buildCaptureCounts={records:0,unique:0,withoutCapture:0,installedLockMatches:0,installedLockDiffers:0};
+  const selectionReplayCounts={cases:0,stages:0,previouslyPending:0,existingPartial:0,stateMismatches:0,diagnosticFailures:0,eventFailures:0};
+  const selectionProbe=resourceFunctions(resourceRunnerBytes,['captureSelectionTransitions']);
+  const selectionOwners={radio:['radio-solo','radio-team'],'button-toggle':['button-toggle-one','button-toggle-two'],
+    tabs:['tab-overview','tab-activity'],stepper:['step-details','step-review']};
+  const inspectSelectionReplay=row=>{
+    assert.equal(row.state,'activate');assert.ok(selectionOwners[row.family]);
+    assert.equal(row.diagnosticAction,'opposite-item-and-return');
+    const result=row.selectionTransitions;assert.equal(result.diagnosticOnly,true);
+    assert.deepEqual(result.stages.map(stage=>stage.stage),['after-default-activation','opposite-item','return-item']);
+    for(const stage of result.stages){
+      for(const side of ['reference','astylar']){
+        assert.equal(stage[side].values.length,2);assert.ok(stage[side].values.every(value=>typeof value==='boolean'));
+        assert.ok(Number.isFinite(stage[side].time));
+      }
+      assert.equal(stage.matches,JSON.stringify(stage.reference.values)===JSON.stringify(stage.astylar.values));
+      for(const side of ['reference','astylar']){
+        const receipt=stage.inputTrees[side],bytes=readFileSync(receipt.file);assert.equal(hash(bytes),receipt.sha256);
+      }
+    }
+    assert.equal(row.eventComparison.matches,JSON.stringify(row.eventComparison.reference)===JSON.stringify(row.eventComparison.astylar));
+    assert.equal(typeof row.meetsAcceptance,'boolean');
+    return {disposition:'recorded-provenance-incomplete',candidateIds:selectionOwners[row.family],
+      nativeStateMode:row.family==='radio'?'actual-native-input-checked-properties':'actual-native-descendant-ARIA-attributes',
+      candidateStateMode:'actual-generated-semantic-DOM-ARIA-attributes',stages:result.stages,
+      cumulativeHostEventComparison:row.eventComparison,recordedDiagnosticAcceptance:row.meetsAcceptance,
+      boundary:'Separate diagnostic capture extends configured activate with opposite-item and return clicks. Native document-order owners and fixed candidate IDs are guarded by the authenticated complete probe. Stage state agrees independently of cumulative host events;events across all three actions are not the original baseline event sequence. Per-page times are not synchronized clocks. Main raster/resource samples precede extra actions;no stage local-paint,resource-plateau,equal input,current rendering or whole-case acceptance follows.'};
+  };
   for(const [run,sha256,mode,count,driftCount]of buildCaptureSources){
     const file=`artifacts/material-parity/${run}/latest-report.json`,bytes=readFileSync(file);assert.equal(hash(bytes),sha256);
     const capture=JSON.parse(bytes);assert.deepEqual(capture.captureProvenance.browserFiles,currentServed);
@@ -3608,6 +3635,27 @@ test('passive state applicability joins exact cases without discarding progress 
     for(const row of capture.interactions){
       assert.deepEqual(checkpoint.load(materialCaseKey('interaction',row)),row);
       const key=scalarCaseKey({...row,kind:'interaction'});assert.ok(paintCaseRows.has(key));buildCaptureCounts.records++;
+      if(mode==='selection-replay-diagnostic'){
+        assert.equal(capture.captureProvenance.selectionReplay,true);assert.equal(capture.captureProvenance.enforce,false);
+        const actionSource=capture.captureProvenance.harnessFiles.find(receipt=>receipt.file===resourceRunnerFile);
+        assert.ok(actionSource);assert.equal(actionSource.sha256,hash(resourceRunnerBytes));
+        const record=allObligations.find(record=>record.case===key);assert.ok(record);
+        const observation=inspectSelectionReplay(row),previous=record.obligations.authoredActivation;
+        assert.ok(['partial','evidence-join-pending'].includes(previous.disposition));
+        selectionReplayCounts.cases++;selectionReplayCounts.stages+=observation.stages.length;
+        selectionReplayCounts[previous.disposition==='evidence-join-pending'?'previouslyPending':'existingPartial']++;
+        selectionReplayCounts.stateMismatches+=observation.stages.filter(stage=>!stage.matches).length;
+        selectionReplayCounts.diagnosticFailures+=row.meetsAcceptance?0:1;
+        selectionReplayCounts.eventFailures+=row.eventComparison.matches?0:1;
+        record.obligations.authoredActivation={...previous,disposition:'partial',retainedPointerSelection:{...observation,
+          evidence:{report:{file,sha256},manifest:{file:manifestFile,sha256:hash(readFileSync(manifestFile))},
+            currentCompleteActionSource:actionSource,completeSelectionProbeHash:hash(selectionProbe.captureSelectionTransitions)}},
+          remaining:[...(previous.remaining??[]),'Complete configured action and diagnostic/baseline scope reconciliation,local paint and resource/current-runtime applicability']};
+        record.obligations.semantics={...record.obligations.semantics,retainedActualChoiceState:{disposition:'partial',
+          evidenceCase:key,evidenceObligation:'authoredActivation.retainedPointerSelection',
+          nativeStateMode:observation.nativeStateMode,candidateStateMode:observation.candidateStateMode,
+          boundary:'Actual live control-state observations in a separate three-stage pointer diagnostic;not complete DOM/AX relationships,original radio checked fields,current rendering or whole-case closure.'}};
+      }
       const observations=currentBuildCases.get(key)??[];
       observations.push({mode,recordedMeetsAcceptance:row.meetsAcceptance,browser:capture.browser,
         installedDependencies:{logicalFile:installedLockFile,capturedSha256:capture.captureProvenance.installedDependencies,currentSha256:installedLockSha,matches:installedLockMatches},
@@ -3618,6 +3666,15 @@ test('passive state applicability joins exact cases without discarding progress 
     }
   }
   assert.equal(currentBuildCases.size,91);assert.equal(buildCaptureCounts.records,92);
+  assert.deepEqual(selectionReplayCounts,{cases:32,stages:96,previouslyPending:32,existingPartial:0,stateMismatches:0,diagnosticFailures:8,eventFailures:8});
+  const selectionControl=JSON.parse(readFileSync('artifacts/material-parity/selection-pointer-directions-20261011/latest-report.json')).interactions
+    .find(row=>row.family==='radio');
+  for(const mutate of [
+    row=>{row.selectionTransitions.stages[1].astylar.values[0]=!row.selectionTransitions.stages[1].astylar.values[0];},
+    row=>{row.selectionTransitions.stages.pop();},
+    row=>{row.selectionTransitions.stages[0].reference.values.pop();},
+    row=>{row.eventComparison.matches=true;},
+  ]){const altered=structuredClone(selectionControl);mutate(altered);assert.throws(()=>inspectSelectionReplay(altered));}
   const buildEvidenceCase=allObligations[0].case;
   for(const record of allObligations){
     const captures=currentBuildCases.get(record.case)??[];
@@ -3646,7 +3703,7 @@ test('passive state applicability joins exact cases without discarding progress 
     reportedScalarInputCases:2311,reportedScalarGroups:8483,dividerActualAXCases:24,dividerUpdateDisposalCases:24,dividerLocalTextRasterCases:24,dividerCoordinateHistoryCases:24,supplementaryKeyboardCases:40,extendedKeyboardCases:128,
     editingTargetApplicabilityCases:1957,editingCounts,configuredFocusRecordedProvenanceIncomplete:40,supplementaryFocusCounts,retainedFocusCounts,keyboardActivationCounts,staticRangeHistoryJoins,staticHeightHistoryCounts,
     retainedTargetRasterCases:1000,paintCounts,sampledPaintCounts,retainedResourceSamplingCases:1875,resourceSampleCounts,
-    retainedTargetDOMComparisonCases:2311,semanticCounts,compositeStateCounts,retainedEventBoundaryCases:1875,eventCounts,explicitPredicateCounts,supplementaryMenuActionContexts:menuActionJoins,commitEndpointCounts,rawControlJoins,rawActionRecords,buildCaptureCounts,completeCaseClosures:0,currentRenderingAccepted:0}));
+    retainedTargetDOMComparisonCases:2311,semanticCounts,compositeStateCounts,retainedEventBoundaryCases:1875,eventCounts,explicitPredicateCounts,supplementaryMenuActionContexts:menuActionJoins,commitEndpointCounts,rawControlJoins,rawActionRecords,buildCaptureCounts,selectionReplayCounts,completeCaseClosures:0,currentRenderingAccepted:0}));
   t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,
     scope:'Exact configured retained authoring: no activation/editing descendants. Forty native negative-tabindex progress owners keep a programmatic-focus obligation; no live focus, unrecorded callback, paint, lifecycle, source-currentness or full-case closure is inferred.'}));
 });
