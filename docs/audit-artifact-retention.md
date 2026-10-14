@@ -56,6 +56,17 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October15 package conservation:retain failed
+flex-margin-queued-package-conservation-20261015.log SHA
+66907f8efbe57007b09a827274edb6f9b7667abd57d68934f022078e51c2f80b.
+It authenticates both full streams and exact finding/case changes,but fails the
+first unreviewed whole-section assertion. Separate targeted
+flex-margin-control-line-box-section-conservation-20261015.log SHA
+f071b2c1c30e4f75241983116b7e2bfc0a0d91532cae135c81298a252cc019f5
+proves671 observations unchanged except48 producer-hash receipts. Retain both;
+the full retry has its own log and is not yet a passing result. No originals,
+measurements,thresholds or prior failure evidence were overwritten.
+
 October15 queued canonical export is closed successful evidence:retain
 flex-margin-queued-canonical-export-20261015.log SHA
 b1c8b5d99bc55bda8fad4f66811a5848bb94569d39e2f588737938d819872f07

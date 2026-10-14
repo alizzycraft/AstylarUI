@@ -15,8 +15,22 @@ b1c8b5d99bc55bda8fad4f66811a5848bb94569d39e2f588737938d819872f07.
 Evidence session:1 collector/10 memory hits/1 disk hit,0 invalidations;11066 files,
 1097265157 bytes read and independently reverified,2618710.3835ms. This is export
 validation,not independent cold acceptance or current rendering parity.
-Cold check86353/worker14972 is live in build-audit. Independent complete-row/
-section conservation46817/worker22848 is live against acceptedb246 and candidate8696.
+Cold check86353/worker14972 is live in build-audit. Conservation46817 is TERMINAL1:
+both complete package hashes/lengths and48545→48546 row census authenticated;
+48 control receipts/one scalar receipt/one new finding,all2311 proposal rows,
+base coverage/summary/contract and source/proof checks passed before a strict
+whole-section check found unreviewed controlLineBoxes. Original failure log SHA
+66907f8efbe57007b09a827274edb6f9b7667abd57d68934f022078e51c2f80b.
+The original command's final whole-section assertion did not pass;retain failure.
+Small targeted prefix replay resolves that exact extra section:all671 complete
+observations and section fields are identical after reversing48 producer-hash
+receipts only. Wrong metric rejects;no physical measurement/typography is waived.
+Log flex-margin-control-line-box-section-conservation-20261015.log SHA
+f071b2c1c30e4f75241983116b7e2bfc0a0d91532cae135c81298a252cc019f5.
+Full retry78161/worker34836 is live. It adds explicit complete line-box reversal
+and non-row control/retained metadata equality,not an unchecked section exclusion.
+It logs all section digests before final assertions to preserve that computation
+if another unexpected section appears. Do not rerun ended46817/worker22848.
 Source/proof/569d8cc6 inputs stay frozen;do not import or claim publication yet.
 Safe independent progress now joins the16 configured editing cases to their
 verified80 paired real-action boundaries,32 sampled empty strokes,transient focus
