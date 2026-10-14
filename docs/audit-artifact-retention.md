@@ -56,6 +56,11 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October15 source-history evidence:retain semantic-root-focus-source-history-
+20261015.log SHA4082833c6b3082b3fcfc62d56e0074eb49336d979bdf649900b296ac032e5ab4.
+It preserves historical blob hashes,source introductions and guard changes,not
+historical execution or a first-bad runtime claim.
+
 October15 public unchanged-root focus proof:retain public-semantic-root-noop-
 20261015 with original input.mjs,audit.js,index.html,latest-report.json and its
 2515 dependency receipts. Capture and independent verification logs are required:

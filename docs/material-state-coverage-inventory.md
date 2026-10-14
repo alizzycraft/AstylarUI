@@ -106,6 +106,18 @@ whole-case acceptance follows. Public reproduction is complete;integration into
 the existing owning regression/finding is queued after the live source freeze,
 not another reason to repeat this diagnostic or export an isolated metadata edit.
 
+Source-history question is closed at source scope:root replacement arrived with
+the original bridge file in0175a0bdcab41e6767ec26a83f587c7aba3b1d47
+(August18,feat:expose native semantic structure). The later547fd6d8f5e9f8110f3ef48e68aca2599f713860
+(August18,feat:synchronize status announcements) guarded unchanged descendant
+child lists but left root replacement unconditional. Active-ancestry pickaxe,
+file-add status,complete historical/current blob hashes and exact old/new guard
+conditions verify in semantic-root-focus-source-history-20261015.log SHA
+4082833c6b3082b3fcfc62d56e0074eb49336d979bdf649900b296ac032e5ab4.
+This is not an executed first-bad runtime revision or evidence that a recent
+Material compensation introduced the root call. Do not repeat this history query
+or broaden its result into historical browser/package acceptance.
+
 Initial verifier incorrectly expected lowercase a;actual event is A/codeKeyA as
 requested by Control+A. Preserve failed verify log2cd530ffe2b7145cc14e4b9c2b9ac4719816e6594d81490aa523d3d733f65aed.
 Corrected verify-retry logSHAb4fd87febb2bf5d50a5dc64c553900fe955e3077d16b088b33d5360d2e8a1fd2

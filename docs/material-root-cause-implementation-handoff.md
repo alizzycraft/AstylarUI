@@ -18,6 +18,10 @@ value changes. Complete current/installed owning methods and2515 actual bundle
 dependencies authenticate;all samples and two negative controls verify. Exact
 report/log hashes are in the ledger. Public reduction is done;owning regression
 and existing finding integration remain queued after the live source freeze.
+Root call source introduction is0175a0bd (August18 original semantic bridge);
+547fd6d8 later added the unchanged-child identity/order guard only to descendant
+reconciliation. Exact history log is in the coverage ledger. Historical first-bad
+runtime remains unproved;do not blame a recent Material parity compensation.
 
 October15 queued evidence is now registered coherently:producer206 adds the
 bounded margin regression and four paths;named launcher selects refreshed569d8cc6
