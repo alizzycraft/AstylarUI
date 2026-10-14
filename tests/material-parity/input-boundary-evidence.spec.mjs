@@ -3724,6 +3724,60 @@ test('passive state applicability joins exact cases without discarding progress 
       remaining:[...(previous.remaining??[]),'Full runtime/environment/input applicability and complete enforced current rendering evidence']};
   }
   assert.deepEqual(buildCaptureCounts,{records:92,unique:91,withoutCapture:2220,installedLockMatches:3,installedLockDiffers:0});
+  const snackbarPaintFile='tests/material-parity/modal-position-inspection.spec.mjs';
+  const snackbarPaintSource=readFileSync(snackbarPaintFile,'utf8');
+  const snackbarPaintCallback=source=>{
+    const ast=ts.createSourceFile(snackbarPaintFile,source,ts.ScriptTarget.Latest,true,ts.ScriptKind.JS);
+    const calls=ast.statements.filter(node=>ts.isExpressionStatement(node)&&ts.isCallExpression(node.expression)
+      &&node.expression.arguments[0]?.text==='all 34 retained snackbar rasters contain the surface inside the viewport');
+    assert.equal(calls.length,1);let pixelPredicate;
+    const visit=node=>{if(ts.isVariableDeclaration(node)&&node.name.getText(ast)==='paintedFraction')pixelPredicate=node.initializer.getText(ast);ts.forEachChild(node,visit);};
+    visit(calls[0]);assert.ok(pixelPredicate);
+    return {callback:calls[0].expression.arguments[1].getText(ast),pixelPredicate};
+  };
+  const snackbarPaintBody=snackbarPaintCallback(snackbarPaintSource);
+  assert.deepEqual(snackbarPaintBody,snackbarPaintCallback(execFileSync('git',['show',`8aa0e2e5:${snackbarPaintFile}`],{encoding:'utf8',maxBuffer:4_000_000})));
+  assert.equal(hash(snackbarPaintBody.callback),'5c42ec7a36cb92860b65ac6e1af9a7d0750df7afe84ab6485bc442048099a5dc');
+  const inspectSnackbarSurface=(row,png)=>{
+    const box=row.overlayPlacement.astylar,dpr=row.viewport.deviceScaleFactor;
+    assert.equal(png.width,row.viewport.width*dpr);assert.equal(png.height,row.viewport.height*dpr);
+    const left=Math.ceil((box.x+8)*dpr),right=Math.floor((box.x+box.width-8)*dpr),
+      top=Math.ceil((box.y+box.height-8)*dpr),bottom=Math.floor((box.y+box.height-4)*dpr);
+    assert.ok(left>=0&&right<=png.width&&top>=0&&bottom<=png.height&&right>left&&bottom>top);
+    const sample=Function('top','bottom','left','right','png',`return (${snackbarPaintBody.pixelPredicate})`)(top,bottom,left,right,png);
+    const paintedFraction=sample(png.data);assert.ok(paintedFraction>.98);
+    assert.equal(sample(Buffer.alloc(png.data.length,255)),0);
+    return {paintedFraction,strip:{left,right,top,bottom},rgba:[50,47,53,255],threshold:.98};
+  };
+  const snackbarPaintCases=new Map();let snackbarRasterReceipts=0;
+  for(const [run,sha256]of [
+    ['current-ancestry-audit','b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a'],
+    ['overlay-used-dimensions-current-20261011','931bc5fbec43ae47a6fc14533c906cce87cd0d083f2911e5d8bdb6d12d582d67'],
+  ]){
+    const file=`artifacts/material-parity/${run}/latest-report.json`,bytes=readFileSync(file);assert.equal(hash(bytes),sha256);
+    const report=JSON.parse(bytes),rows=report.interactions.filter(row=>row.family==='snack-bar'&&row.overlayPlacement?.targetId);
+    assert.equal(rows.length,34);const receipts=[];
+    const checkpoint=run==='current-ancestry-audit'?undefined:openMaterialCheckpoint({directory:`artifacts/material-parity/${run}`,provenance:report.captureProvenance,resume:true});
+    for(const row of rows){
+      if(checkpoint)assert.deepEqual(checkpoint.load(materialCaseKey('interaction',row)),row);
+      const key=scalarCaseKey({...row,kind:'interaction'});assert.ok(paintCaseRows.has(key));
+      const pngFile=row.inputTrees.astylar.file.replace('astylar-input-tree.json','astylar.png'),pngBytes=readFileSync(pngFile),png=PNG.sync.read(pngBytes);
+      const receipt={file:pngFile,sha256:hash(pngBytes)};receipts.push(receipt);snackbarRasterReceipts++;
+      const observations=snackbarPaintCases.get(key)??[];
+      observations.push({run,observation:inspectSnackbarSurface(row,png),evidence:{report:{file,sha256},raster:receipt}});
+      snackbarPaintCases.set(key,observations);
+      const blank={...png,data:Buffer.alloc(png.data.length,255)};assert.throws(()=>inspectSnackbarSurface(row,blank));
+    }
+    if(run==='current-ancestry-audit')assert.equal(hash(JSON.stringify(receipts)),'52f3cf2cd4c63a1e352cb8445f2654b66a99d633072c9e3700492264179574f5');
+  }
+  assert.equal(snackbarPaintCases.size,34);assert.equal(snackbarRasterReceipts,68);
+  for(const [key,captures]of snackbarPaintCases){
+    assert.equal(captures.length,2);const record=allObligations.find(row=>row.case===key),previous=record.obligations.localPaint;
+    assert.equal(previous.disposition,'evidence-join-pending');
+    record.obligations.localPaint={...previous,disposition:'partial',retainedSnackbarSurface:{captures,
+      source:{file:snackbarPaintFile,sha256:hash(readFileSync(snackbarPaintFile))},completeCallbackSha256:hash(snackbarPaintBody.callback),
+      boundary:'Candidate surface visibility in text-free interior strips of two separate retained captures only. Not reference paint,text/edge/sharpness,current rendering,ordinary short-surface behavior,37 closed-state trigger paints or whole-case closure.'}};
+  }
   assert.equal(new Set(allObligations.map(row=>row.case)).size,2311);
   assert.deepEqual(allObligations.map(row=>row.case).sort(),allConfigured.map(scalarCaseKey).sort());
   assert.ok(allObligations.every(row=>row.inspection==='partial'&&row.currentRendering==='unverified'));

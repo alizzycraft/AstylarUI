@@ -1,5 +1,31 @@
 # Material comparison/state coverage inventory
 
+## Snackbar surface visibility joins34 exact cases without closing full paint — October14
+
+Existing owning proof reuses the complete conserved original callback and its
+paintedFraction initializer for34 original plus34 October11 PNGs. All68 receipts
+authenticate;original aggregate52f3cf2c,DPR/dimensions/in-bounds strips,>.98
+surface-color threshold and blank-paint rejection are preserved. October11
+checkpoint rows/artifacts match exactly. Each of34 configured IDs retains both
+capture contexts separately,not merged into current acceptance.
+Focused1/1,zero skips,50141.4755ms;log artifacts/material-parity/
+retained-snackbar-paint-obligation-join-20261014.log SHA256
+80d929da54e6635e53d599c5804f493af553e501635068665b1a504b71b55b9c.
+Proposal63b15bc76f1e99ecf1d9031d56ed4572dde5ee7095c4dfa673eec79359e8e6fd
+is noncanonical. Full predecessor conservation changes only34 localPaint
+additions/dispositions;7746 dependencies validate,zero unjoined,both flags false.
+Log retained-snackbar-paint-complete-conservation-20261014.log. Pending paint
+1263→1229;all2311 whole cases remain partial/unverified.
+
+No reference/text/edge/sharpness,ordinary short-surface or closed-trigger paint
+claim. Existing all-case retainedTargetSemantics already includes explicit
+overlay/surface existence endpoints;do not duplicate closed37 observations merely
+to add another join. Trigger paint/full lifetime/currentness remain open.
+This new proposal is separate from cold-verified14affae1 package awaiting full-row
+conservation in session49986 (Node35524). Its immutable packages/indexes are not
+changed by this owning-test addition. Next finish that publication and accumulate
+remaining paint gaps in a coherent next batch;no new exporter or browser capture.
+
 ## October11 snackbar capture retains actual interior paint in34 cases — October14
 
 Remaining37 historical snackbar cases are closed states,not unexamined open
