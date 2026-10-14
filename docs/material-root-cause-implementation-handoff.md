@@ -1,5 +1,33 @@
 # Material audit: evidence-led implementation priorities
 
+## October14 caret font-response classification — suspected core defect
+
+Finding `core-caret-height-rule-is-font-insensitive` binds the retained public
+equal-input `audit-empty` / `placeholder-keyboard` proof to
+`TextSelectionService.createTextCursor` in `src/app/services/text/text-selection.service.ts`.
+At fontSize16 the owner requests19.2CSSpx height for both Arial and monospace,
+before final projection. Retained native exact-RGB bands respond to the font
+contrast (17 versus19CSSpx atDPR1/2);candidate bands do not (18 atDPR1,19 atDPR2).
+This is a bounded paint mismatch and plausible sizing owner,not a confirmed
+universal caret-height rule or proof of native logical geometry.
+
+Evidence: `public-caret-full-stage-color-isolated-diagnostic-20261014.log` and
+`public-caret-font-family-height-contrast-20261014-retry.log` under
+`artifacts/material-parity`;the existing benchmark regression authenticates their
+full bytes,diagnostic inputs/actions,dependencies and complete owning methods.
+Original pixels were in-memory,not retained PNG replay. Actual native font,
+full antialiased footprint,clipping/blending and correct replacement metrics
+remain unresolved. First-bad revision is not established.
+
+Implementation order: resolve those specific metric/footprint uncertainties at
+the general caret owner,then implement a CSS-space metric rule with public
+equal-input regression protection. Do not add font/profile/DPR offsets or retune
+Material labels. Separate colour,blink,placement,lifetime and unequal Material
+font inputs retain their own findings. This audit does not authorize that fix.
+The classification and closure-vocabulary source changes await coherent
+fingerprint/proposal/canonical reconciliation;published2e196c48 remains the prior
+verified157-finding snapshot. No real case is promoted by this classification.
+
 October12 publication committed and pushed as5c308388 on
 codex/material-audit-alignment-integration; remote and local heads agree.
 Current compact source finding ordinal155 contains the box-sizing default

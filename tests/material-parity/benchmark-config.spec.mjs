@@ -19,6 +19,30 @@ import { materialAbsoluteTextAlignmentTargets, materialAdditionalMeasurementTarg
 
 test('equal-input caret font contrast preserves bounded source and recorded paint failure', t => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const finding = sourceAuditDefinitions.find(row => row.id === 'core-caret-height-rule-is-font-insensitive');
+  assert.ok(finding); assert.equal(finding.classification, 'suspected-core-renderer-defect');
+  assert.equal(finding.observation.element, 'audit-empty');
+  assert.equal(finding.observation.variant, 'placeholder-keyboard');
+  assert.deepEqual(finding.observation.fontFamilies, ['Arial', 'monospace']);
+  assert.deepEqual(finding.observation.dpr, [1, 2]);
+  assert.match(readFileSync(finding.file, 'utf8'), new RegExp(finding.pattern));
+  assert.match(finding.justification, /not a confirmed universal height law/);
+  for (const receipt of finding.evidence) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
+  const policy = readFileSync(policyFile, 'utf8').replaceAll('\r\n', '\n');
+  const prior = execFileSync('git', ['show', `1db063c8:${policyFile}`], { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+  const tree = ts.createSourceFile(policyFile, policy, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  assert.deepEqual(tree.parseDiagnostics, []);
+  const declaration = tree.statements.filter(ts.isVariableStatement).flatMap(n => [...n.declarationList.declarations])
+    .find(n => n.name.getText(tree) === 'sourceAuditDefinitions');
+  const entries = declaration.initializer.arguments[0].elements; assert.equal(entries.length, 158);
+  assert.ok(entries.at(-1).getText(tree).includes(finding.id));
+  assert.equal(policy.slice(0, entries.at(-1).getFullStart()) + policy.slice(entries.at(-1).end + 1), prior,
+    'Only the classified bounded caret finding may be added; every prior policy byte is preserved');
+  assert.equal(restoreSizingDefaultPolicyRegistration(policy), restoreSizingDefaultPolicyRegistration(prior));
+  for (const changed of [policy.replace('not a confirmed universal height law', 'confirmed universal height law'),
+    policy.replace('native chosen font', 'native chosen font proven'), policy + '\n// unreviewed policy drift\n'])
+    assert.throws(() => restoreSizingDefaultPolicyRegistration(changed));
   const restoreProgressJoins = source => {
     if (hash(source) === '1a6f11974d1f8aea924c1de2774abab219aec668998d6fabec0a4942f5d66ac6') return source;
     assert.equal(hash(source), 'b7da01bb7adcca29b13b6585a64d724603c3f38f5ef216a2593b0956e29b92cf');
@@ -116,14 +140,44 @@ test('public omitted box sizing finding preserves explicit controls and complete
   const source = readFileSync(policyFile, 'utf8');
   const prior = execFileSync('git', ['show', `1d2181a3:${policyFile}`], { encoding: 'utf8' }).replaceAll('\r\n', '\n');
   assert.equal(restoreSizingDefaultPolicyRegistration(source), prior);
-  assert.equal(sourceAuditDefinitions.length, 156);
+  // The authenticated restoration above conserves the complete historical
+  // policy; count that same population, not subsequently appended findings.
+  assert.equal(sourceAuditDefinitions.filter(n => ![
+    'core-semantic-descendant-replacement-loses-retained-focus',
+    'core-caret-height-rule-is-font-insensitive',
+  ].includes(n.id)).length, 156);
   const finding = sourceAuditDefinitions.find(n => n.id === 'core-box-sizing-omission-violates-content-box-default');
   assert.equal(finding.classification, 'confirmed-core-renderer-defect');
   assert.ok(new RegExp(finding.pattern).test(readFileSync(finding.file, 'utf8')));
   for (const receipt of finding.evidence)
     assert.equal(createHash('sha256').update(readFileSync(receipt.file)).digest('hex'), receipt.sha256);
-  const replay = execFileSync(process.execPath, ['scripts/audit-public-box-sizing-default.mjs', '--verify',
-    'artifacts/material-parity/public-box-sizing-default-20261011'], { encoding: 'utf8' });
+  const verifierSource = readFileSync('scripts/audit-public-box-sizing-default.mjs', 'utf8').replaceAll('\r\n', '\n');
+  assert.equal(createHash('sha256').update(verifierSource).digest('hex'),
+    '20751d3836080c1d7fc5aabe3ba73551fdcea7be1a700e6edecc60567f6df55c');
+  const verifier = ts.createSourceFile('box-sizing.mjs', verifierSource,
+    ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  assert.equal(verifier.parseDiagnostics.length, 0);
+  const verify = verifier.statements.find(n => ts.isFunctionDeclaration(n) && n.name.text === 'verify');
+  const branch = verifier.statements.find(n => ts.isIfStatement(n) && n.expression.getText(verifier) === 'verifyOnly');
+  const inspectorFile = 'examples/material-showcase/node_modules/astylarui/dist/lib/lib/astylar.js';
+  const inspector = Buffer.from(restoreCursorInspectorCaptureSource(readFileSync(inspectorFile, 'utf8')));
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  assert.equal(hash(inspector), '6ad4f51ca47a9e1956a66b6e724105a66aaff582c53b0b30374fb6051723f5f8');
+  let inspectorReads = 0, exitCode;
+  const retainedRead = (file, encoding) => {
+    const bytes = path.normalize(file.toString()) === path.normalize(inspectorFile)
+      ? (inspectorReads++, inspector) : readFileSync(file);
+    return encoding ? bytes.toString(encoding) : bytes;
+  };
+  let replay = '';
+  // Execute every original verifier/negative-control statement unchanged;
+  // restore only the already-authenticated historical inspector dependency.
+  new Function('assert', 'hash', 'readFileSync', 'PNG', 'path', 'output', 'verifyOnly', 'console', 'process',
+    `${verify.getText(verifier)}\n${branch.getText(verifier)}`)(assert, hash, retainedRead, PNG, path,
+      path.resolve('artifacts/material-parity/public-box-sizing-default-20261011'), true,
+      { log(value) { replay += value + '\n'; } }, { exit(code) { exitCode = code; } });
+  assert.equal(exitCode, 0);
+  assert.ok(inspectorReads > 0);
   assert.ok(replay.includes('negative controls: 2/2 rejected'));
   for (const changed of [source.replace('confirmed-core-renderer-defect', 'equivalent-representation'),
     source.replace('omitted:140x50', 'omitted:166x76')])
@@ -196,7 +250,7 @@ test('description registration conserves complete producer and source-definition
   assert.equal(restoreDescriptionPolicyRegistration(policy), prior(policyFile));
   const before = new Function(prior(policyFile).replace(/^export const /gm, 'const ') + '; return sourceAuditDefinitions;')();
   const predecessorDefinitions = sourceAuditDefinitions.filter(n => !['core-box-sizing-omission-violates-content-box-default',
-    'core-semantic-descendant-replacement-loses-retained-focus'].includes(n.id));
+    'core-semantic-descendant-replacement-loses-retained-focus', 'core-caret-height-rule-is-font-insensitive'].includes(n.id));
   assert.equal(before.length, 153); assert.equal(predecessorDefinitions.length, 155);
   assert.deepEqual(predecessorDefinitions.slice(0, -2), before);
   for (const changed of [producer.replace('sourceFindings,', 'sourceFindings: [],'),
@@ -474,7 +528,7 @@ test('standalone proof batch conserves complete accepted predecessor producer an
   assert.equal(findings[first + 1].arguments[0].properties.find(p => p.name.getText(policyTree) === 'id').initializer.text, ids[1]);
   assert.equal(policy.slice(0, findings[first].getFullStart()) + policy.slice(findings[first + 2].getFullStart()), prior(policyFile));
   assert.equal(sourceAuditDefinitions.filter(n => !['core-box-sizing-omission-violates-content-box-default',
-    'core-semantic-descendant-replacement-loses-retained-focus'].includes(n.id)).length - 2, 153);
+    'core-semantic-descendant-replacement-loses-retained-focus', 'core-caret-height-rule-is-font-insensitive'].includes(n.id)).length - 2, 153);
 });
 
 test('retained antialias and selection receipts replay after exact diagnostic and theme conservation', async t => {

@@ -1813,6 +1813,26 @@ export const sourceAuditDefinitions = Object.freeze([
       stage: 'semantic reconciliation before focus restoration' },
     justification: 'Six current light mobile DPR2 opening/closed boundaries locate the first blur synchronously inside semantic reconcileElement.replaceChildren; the input remains connected. Root replacement occurs later with focus already lost, and syncFocus restores it. Exact served/current owning methods agree. State callbacks trigger reflow but do not directly cause the observed blur. The independent package-root sibling add/remove reduction confirms the same first blur without Material plugins: four native updates preserve focus without events; four candidate updates blur inside descendant replacement and restore focus. A real-keyboard selection control preserves synchronized endpoints1/3 on both sides, while candidate focusout ends on CANVAS under the existing keepCanvasFocus policy. Direct-DOM selection reset is not a demonstrated synchronized-selection-loss defect. Preserve focused descendants through changed child lists rather than suppressing events or patching application focus. This is a bounded confirmed core focus continuity defect, distinct from caret material lifetime. Other profiles, real Tab/assistive-technology continuity, historical first-bad revision and whole-case parity remain unproven.',
   }),
+  Object.freeze({
+    id: 'core-caret-height-rule-is-font-insensitive',
+    introducedBy: 'current and installed owning method plus retained October14 equal-input font contrast; first-bad revision not established',
+    file: 'src/app/services/text/text-selection.service.ts',
+    pattern: String.raw`projection\.projectCssSize\(\{ width: 2, height: style\.fontSize \* 1\.2 \}\)`,
+    classification: 'suspected-core-renderer-defect',
+    owner: 'core CSS-space caret sizing in TextSelectionService.createTextCursor before final projection',
+    focusedProof: 'tests/material-parity/benchmark-config.spec.mjs: equal-input caret font contrast preserves bounded source and recorded paint failure',
+    evidence: [
+      { file: 'artifacts/material-parity/public-caret-full-stage-color-isolated-diagnostic-20261014.log', sha256: '62b92fca4f21f4b9b5456499efb0a3c454792d27808c2dde0e7ed714ffc8e67a' },
+      { file: 'artifacts/material-parity/public-caret-font-family-height-contrast-20261014-retry.log', sha256: 'a2b89a2486a88bfc1c6d8d6f4c81591901e7ec57ec20132217b3f631f81bec4e' },
+    ],
+    observation: { component: 'public equal-input text input reduction', element: 'audit-empty', variant: 'placeholder-keyboard',
+      states: ['focused-empty', 'typed-then-deleted-empty'], fontFamilies: ['Arial', 'monospace'], dpr: [1, 2],
+      property: 'font response of requested CSS caret height and exact-RGB stroke band',
+      reference: 'retained full-stage exact-RGB band height:Arial17CSSpx versus monospace19CSSpx at both DPRs',
+      astylar: 'fontsize16 requests19.2CSSpx for either family; recorded candidate bands remain identical across fonts,18CSSpx atDPR1/19CSSpx atDPR2',
+      stage: 'candidate sizing rule before projectCssSize; native logical metrics and complete raster footprint remain unproved' },
+    justification: 'Both public diagnostic variants preserve original SiteData equality,actions and assertions; only shared font-family and full-native-stage output reporting differ. Original source/executed hashes,distinct bundle hashes,2515 dependency aggregate and complete current/emitted/installed cursor method are authenticated by the retained regression. Native exact-RGB height responds to the font contrast while candidate bounds do not; candidate sizing reads only fontsize and multiplies by1.2 before projection. This identifies a bounded paint mismatch and a plausible font-insensitive sizing owner,not a confirmed universal height law or the exact native logical caret geometry. Original pixels were in-memory and are not independently replayable PNGs;native chosen font,full AA footprint,clipping/blending contribution and correct replacement metrics remain explicit uncertainties. Resolve those at the general caret owner before implementing a metric rule;do not add font/profile/DPR-specific fixture offsets or retune Material labels. Other Material inputs,font stacks,caret colour,selection blink,placement and lifetime remain separate findings and final acceptance obligations.',
+  }),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({

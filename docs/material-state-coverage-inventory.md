@@ -1,5 +1,34 @@
 # Material comparison/state coverage inventory
 
+## Caret height owner classified without overstating native metrics — October14
+
+Source policy now158 definitions:one appended suspected-core-renderer-defect,
+`core-caret-height-rule-is-font-insensitive`;all157 predecessor definitions and
+remaining policy bytes exactly conserve Git1db063c8. Existing regression binds
+audit-empty/placeholder-keyboard,Arial/monospace,DPR1/2 and both retained logs to
+the fontSize×1.2 request before projection. Native exact-RGB font response differs
+from the candidate;actual chosen font,full AA/clipping/blending and replacement
+metrics remain unproved. Handoff specifies general CSS-space owner investigation,
+not Material offsets or renderer implementation. No new capture or case promotion.
+
+Selected four benchmark checks pass4/4,zero skips,12448.0502ms after final
+verifier-source pin;store suite3/3,zero skips,293.2979ms. Initial benchmark run
+failed the historical156 population assertion;after precise later-ID exclusions,
+its direct retained verifier exposed the already-documented inspector6ad4f51c→
+a18630bd dependency drift. Existing restoreCursorInspectorCaptureSource recovers
+exact historical bytes;the existing test executes every original verifier and
+negative-control statement unchanged,in memory,with only that read restored.
+All other dependency/PNG reads remain actual. Complete verifier-source hash and
+read counter protect the boundary;original direct receipt failure is not current
+rendering acceptance. Source drift and overstated caret conclusions reject.
+
+Outstanding reconciliation:current policy158/benchmark/transition and previous
+closure vocabulary changes are not the published157-finding2e196c48 snapshot.
+Reconcile existing dependency/proposal owners as one coherent batch before export,
+not another capture or export solely for this metadata increment. Next derive
+requirement-backed real case closures from retained obligations,including inspected
+failures;all2311 published cases remain partial/unverified and final gates open.
+
 ## Published batch confirmed; canonical closure vocabulary preserved — October14
 
 Package106884b8 is pushed on codex/material-audit-alignment-integration;remote

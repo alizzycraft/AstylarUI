@@ -934,6 +934,22 @@ export function restoreDescriptionProofRegistration(source) {
 
 export function restoreSizingDefaultPolicyRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if(current.includes("id: 'core-caret-height-rule-is-font-insensitive'")){
+    assert.equal(hash(current),'19f7c60bfda3991c1dab58ec6f2898fec1df47a57084a174d7c1e9958fdd5787',
+      'exact bounded caret font-response classification');
+    const ast=ts.createSourceFile('policy.mjs',current,ts.ScriptTarget.Latest,true,ts.ScriptKind.JS);
+    assert.equal(ast.parseDiagnostics.length,0);
+    const entries=ast.statements.filter(ts.isVariableStatement).flatMap(n=>[...n.declarationList.declarations])
+      .find(n=>n.name.getText(ast)==='sourceAuditDefinitions').initializer.arguments[0].elements;
+    assert.equal(entries.length,158);
+    assert.equal(entries.at(-1).arguments[0].properties.find(p=>p.name.getText(ast)==='id').initializer.text,
+      'core-caret-height-rule-is-font-insensitive');
+    current=current.slice(0,entries.at(-1).getFullStart())+current.slice(entries.at(-1).end+1);
+    const prior=execFileSync('git',['show','1db063c8:tests/material-parity/input-equivalence-policy.mjs'],
+      {encoding:'utf8',maxBuffer:4_000_000}).replaceAll('\r\n','\n');
+    assert.equal(hash(prior),'2c5d42f1ab26c6fcd19b3fad6eb3566ad3e0d90b8815ae2dd6acffa280aa7ece');
+    assert.equal(current,prior,'all157 preceding definitions and remaining policy bytes conserved');
+  }
   if (current.includes("id: 'core-semantic-descendant-replacement-loses-retained-focus'")) {
     assert.ok(['e707c0f45c3d95c24f46c7abbd5c97c17d79f7fe96038aafe1f3013147f8f935',
       '2c5d42f1ab26c6fcd19b3fad6eb3566ad3e0d90b8815ae2dd6acffa280aa7ece'].includes(hash(current)),
