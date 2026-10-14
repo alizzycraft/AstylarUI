@@ -1,5 +1,31 @@
 # Material comparison/state coverage inventory
 
+## Retained sampled pixels join24 exact static cases — October 14
+
+Existing owning case proof now authenticates original checkpoints and48 PNGs,
+conserves all three uniform sampler methods and the complete shadow module against
+Git8aa0e2e5,and reproduces24 uniform samples/12 shadow profiles exactly. Missing
+geometry fails all24 controls. Twelve grid-list and12 card cases gain partial
+localPaint observations with exact report,checkpoint,PNG,configuration and sampler
+receipts. Single-pixel uniform and five-row luminance boundaries remain explicit;
+missing original whole-runner bytes,current runtime,equal input and unsampled paint
+are not accepted. Existing prior nested evidence and classifications remain intact.
+
+Focused proof passes1/1,0 skips,23396.1228ms:
+retained-sampled-paint-obligation-join-20261014.log SHA256
+2a1e4d36df81ccc87f47a8e09f849fbc982e0eaa72904c3f02d183c6574e9b9d.
+Proposal001ff5aa79bff133e1ca24e2271be14807729e1811679aa74eb027620fa77d6b
+is noncanonical. Complete predecessor comparison changes only24 localPaint
+obligations;pending paint joins1287→1263,partial1024→1048. Existing dependency
+loader passes,0 unjoined,both acceptance flags false. Log
+retained-sampled-paint-complete-conservation-20261014.log retains exact case IDs.
+All2311 whole cases remain partial/unverified. No new capture,renderer/fixture change
+or separate test framework. Publish this with the next coherent evidence batch,
+not a new export for this isolated join. Next prioritize remaining action/focus
+boundaries and unsampled paint using existing exact-case evidence where available.
+Prior publication8d0ef617 is pushed;its HTTP connection-reset retry succeeded using
+per-command HTTP/1.1 without changing repository configuration or audit claims.
+
 ## Focus/activation/history batch passes publication checks — October 14
 
 Existing export session97803 exits0. Complete progress marker records

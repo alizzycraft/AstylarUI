@@ -15,10 +15,12 @@ import { propertyGroups, sourceAuditDefinitions } from './input-equivalence-poli
 import { readGapSurveySource } from './gap-survey-source-replay.mjs';
 import { verifyRetainedMaterialBrowserFiles } from './historical-audit-module-source.mjs';
 import { materialStaticCases, materialInteractionCases, materialMobileFlowCases,
-  materialFocusedRasterTargets, materialInteractionFocusedRasterTargets } from './benchmark.config.mjs';
+  materialFocusedRasterTargets, materialInteractionFocusedRasterTargets,
+  materialUniformBackgroundTargets, materialShadowProfileTargets } from './benchmark.config.mjs';
 import { cursorInput } from '../../examples/material-showcase/audit/cursor-default-input.mjs';
 import { queryFindings, saveReviewProposal, verifyFindings } from '../../scripts/audit-findings-store.mjs';
 import { evaluateFocusedRaster } from './focused-raster-metrics.mjs';
+import { compareBottomShadowProfiles } from './shadow-profile-metrics.mjs';
 
 const file = 'artifacts/material-parity/input-boundaries-keypress-559f95c/latest-report.json';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -2907,6 +2909,75 @@ test('passive state applicability joins exact cases without discarding progress 
   };
   const resourceMethods=resourceFunctions(resourceRunnerBytes);
   assert.deepEqual(resourceMethods,resourceFunctions(resourcePrior));
+  // Reuse the original sampled-pixel predicates, not whole-component paint claims.
+  const uniformNames=['compareUniformBackgrounds','sampleFlatColor','colorChannelError'];
+  const uniformMethods=resourceFunctions(resourceRunnerBytes,uniformNames);
+  assert.deepEqual(uniformMethods,resourceFunctions(resourcePrior,uniformNames));
+  assert.deepEqual(uniformNames.map(name=>hash(uniformMethods[name])),[
+    'f4e85b0db4eaa684b9aa73adc69078af269028b96fb7241332db4b2b1da89e6d',
+    '33ec55ada5c62cbd408483595e50ae6943cf2c7fa70202df8f6181c86c7fd00c',
+    'f9a84d5e4ea9ccefa89816193f033d45343421f87fd655c6b097c438c6c272f7']);
+  const compareUniform=new Function(`${Object.values(uniformMethods).join('\n')}\nreturn compareUniformBackgrounds;`)();
+  const shadowFile='tests/material-parity/shadow-profile-metrics.mjs',shadowBytes=readFileSync(shadowFile);
+  assert.equal(hash(shadowBytes),'67393705f380fc19ce76e8eed49e43959ecae116e27b5fb70f6dc276411a8ea6');
+  assert.equal(shadowBytes.toString().replaceAll('\r\n','\n'),execFileSync('git',['show',`8aa0e2e5:${shadowFile}`],
+    {encoding:'utf8'}).replaceAll('\r\n','\n'));
+  const sampledRoot='artifacts/material-parity/current-full-20261005';
+  const sampledCheckpoint=openMaterialCheckpoint({directory:sampledRoot,provenance:captured.captureProvenance,resume:true});
+  const sampledManifest=`${sampledRoot}/checkpoint/manifest.json`;
+  const sampledPaintCounts={cases:0,uniformSamples:0,shadowProfiles:0,originalPNGs:0,negativeControls:0};
+  for(const original of captured.results.filter(row=>['grid-list','card'].includes(row.family))){
+    const caseId=scalarCaseKey({...original,kind:'static'});
+    const record=allObligations.find(row=>row.case===caseId);assert.ok(record);
+    const previous=record.obligations.localPaint;
+    assert.equal(previous.disposition,'evidence-join-pending');
+    const key=materialCaseKey('static',original);
+    assert.deepEqual(sampledCheckpoint.load(key),original);
+    const directory=`${sampledRoot}/${original.family}/${original.profile}/${original.viewport.id}`;
+    const images=['reference','astylar'].map(side=>{
+      const file=`${directory}/${side}.png`,bytes=readFileSync(file);
+      return {receipt:{file,sha256:hash(bytes)},image:PNG.sync.read(bytes)};
+    });
+    const boxes=side=>Object.fromEntries(original.geometry.elements.map(row=>[row.id,{borderBox:row[side]}]));
+    const referenceBoxes=boxes('expected'),candidateBoxes=boxes('actual');
+    const scale=original.viewport.deviceScaleFactor??1;
+    let observations,configuration,boundary;
+    if(original.family==='grid-list'){
+      configuration=materialUniformBackgroundTargets[original.family];assert.ok(configuration);
+      observations=compareUniform(images[0].image,images[1].image,referenceBoxes,candidateBoxes,configuration,scale);
+      assert.deepEqual(observations,original.uniformBackgrounds);assert.equal(observations.length,2);
+      assert.equal(compareUniform(images[0].image,images[1].image,{},candidateBoxes,configuration,scale)[0].matches,false);
+      sampledPaintCounts.uniformSamples+=observations.length;
+      boundary='One rounded/clamped RGBA sample per container/surface,using each side own boxes;maximum of four pairwise channel errors <=1. Not a uniform region,edge,clipping,equal geometry or whole-component paint proof.';
+    }else{
+      configuration=materialShadowProfileTargets[original.family];assert.ok(configuration);
+      observations=[{id:configuration.element,...compareBottomShadowProfiles(images[0].image,images[1].image,
+        referenceBoxes[configuration.element]?.borderBox,candidateBoxes[configuration.element]?.borderBox,
+        scale,configuration.maximumRowError)}];
+      assert.deepEqual(observations,original.shadowProfiles);assert.equal(observations.length,1);
+      assert.equal(compareBottomShadowProfiles(images[0].image,images[1].image,undefined,
+        candidateBoxes[configuration.element]?.borderBox,scale,configuration.maximumRowError).matches,false);
+      sampledPaintCounts.shadowProfiles+=observations.length;
+      boundary='Five bottom-center luminance samples at DPR spacing,contact search within +/-1CSSpx,background8CSSpx below nominal bottom,threshold22;each side own boxes and pixel clamping. Not whole shadow shape,color,elevation layers,equal geometry or whole-component paint proof.';
+    }
+    const checkpointFile=`${sampledRoot}/checkpoint/${hash(key)}.json`;
+    record.obligations.localPaint={...previous,applicability:'applicable',disposition:'partial',
+      retainedSampledPixels:{disposition:'recorded-provenance-incomplete',case:caseId,configuration,observations,
+        geometry:original.geometry.elements,evidence:{
+          report:{file:`${sampledRoot}/latest-report.json`,sha256:reportSha256},
+          manifest:{file:sampledManifest,sha256:hash(readFileSync(sampledManifest))},
+          checkpoint:{file:checkpointFile,sha256:hash(readFileSync(checkpointFile))},images:images.map(row=>row.receipt),
+          targetConfiguration:{file:paintConfigFile,sha256:paintConfigSha},
+          currentSamplerSource:{file:resourceRunnerFile,sha256:hash(resourceRunnerBytes)},
+          conservedUniformMethodHashes:Object.fromEntries(uniformNames.map(name=>[name,hash(uniformMethods[name])])),
+          shadowSampler:{file:shadowFile,sha256:hash(shadowBytes)}},
+        unavailableActionSource:{originalLogicalFile:resourceRunnerFile,
+          capturedSha256:'e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0',disposition:'missing-original-bytes-not-a-readable-receipt'},
+        boundary:`Original PNG measurements reproduce exactly under conserved sampler methods. ${boundary} Not complete runner provenance,current runtime,equal inputs or whole-case acceptance.`},
+      remaining:[...(previous.remaining??[]),'Unsampled local paint and complete input/state/source/runtime applicability']};
+    sampledPaintCounts.cases++;sampledPaintCounts.originalPNGs+=2;sampledPaintCounts.negativeControls++;
+  }
+  assert.deepEqual(sampledPaintCounts,{cases:24,uniformSamples:24,shadowProfiles:12,originalPNGs:48,negativeControls:24});
   const resourceCounts=snapshot=>({owners:snapshot.surface?.pluginResources?.owners,
     resources:snapshot.surface?.pluginResources?.resources,cleanups:snapshot.surface?.pluginResources?.cleanups,
     meshes:snapshot.surface?.resources?.meshes,materials:snapshot.surface?.resources?.materials,textures:snapshot.surface?.resources?.textures});
@@ -3432,7 +3503,7 @@ test('passive state applicability joins exact cases without discarding progress 
     authoredActivationExclusions:354,authoredEditingExclusions:354,programmaticFocusApplicable:40,
     reportedScalarInputCases:2311,reportedScalarGroups:8483,dividerActualAXCases:24,dividerUpdateDisposalCases:24,dividerLocalTextRasterCases:24,dividerCoordinateHistoryCases:24,supplementaryKeyboardCases:40,extendedKeyboardCases:128,
     editingTargetApplicabilityCases:1957,editingCounts,configuredFocusRecordedProvenanceIncomplete:40,supplementaryFocusCounts,retainedFocusCounts,keyboardActivationCounts,staticRangeHistoryJoins,staticHeightHistoryCounts,
-    retainedTargetRasterCases:1000,paintCounts,retainedResourceSamplingCases:1875,resourceSampleCounts,
+    retainedTargetRasterCases:1000,paintCounts,sampledPaintCounts,retainedResourceSamplingCases:1875,resourceSampleCounts,
     retainedTargetDOMComparisonCases:2311,semanticCounts,retainedEventBoundaryCases:1875,eventCounts,supplementaryMenuActionContexts:menuActionJoins,commitEndpointCounts,rawControlJoins,rawActionRecords,buildCaptureCounts,completeCaseClosures:0,currentRenderingAccepted:0}));
   t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,
     scope:'Exact configured retained authoring: no activation/editing descendants. Forty native negative-tabindex progress owners keep a programmatic-focus obligation; no live focus, unrecorded callback, paint, lifecycle, source-currentness or full-case closure is inferred.'}));
