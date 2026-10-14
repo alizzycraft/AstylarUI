@@ -1,5 +1,43 @@
 # Material comparison/state coverage inventory
 
+## Caret classification proposal receipts reconciled; closure work stays open — October14
+
+Committedae381cf1 is pushed. Exact2311-case proposalae1e75bd had only two changed
+dependencies:policy2c5d42f1→19f7c60b and benchmarkb7d494bc→1fc8acc1. Whole prior
+file919879f8 and review digest authenticate;the complete progress-paint callback
+baf4899a agrees byte-for-byte with Git1db063c8 and its original raster assertions
+replay. Existing caret conservation proof authenticates the sole appended finding.
+No old proposal/capture receipt is rewritten in place.
+
+Existing saveReviewProposal produces0c7da19a475c9c696bf50cac17ce5992c7d68822f06981e5af434a4f5bef1588:
+complete file SHA3a6637e21ea631118c2dc76972278d2fe3a2100130862ed00c7988391bc17762.
+Only528 policy and40 benchmark receipts change. Reversing exactly those receipts
+recovers every complete prior case field;existing loadCaseObligationReview checks
+all9803 dependencies and exact configured2311 membership. Complete cases0,
+inspectionComplete=false,currentRenderingAccepted=false. Named launcher and
+producer now pin this proposal;exact complete producer25456406 restores to
+Git ae381cf1/961e4d34 after only that pin reversal,then follows the unchanged
+historical chain. Selected four benchmark checks pass4/4,0 skips,13863.5805ms;
+store3/3,0 skips,301.9078ms;launcher dry-run passes. Canonical2e196c48 is still
+the prior157-finding snapshot;no export or browser acceptance claimed here.
+
+The first save failedENOSPC and left only a zero-byte
+0c7da19a475c9c696bf50cac17ce5992c7d68822f06981e5af434a4f5bef1588.json.32380.tmp;
+failure is retained,not published. Four closed historical proposals were then
+NTFS-compressed with full before/after hashes equal (retention ledger). Retry
+success is distinct from that failure. No original/failure evidence was removed.
+
+Gap priority:derive real input/owner and local-paint closure requirements before
+another generic coverage join;then semantics/history applicability,then final
+current-runtime gates. Inspected failures must count as inspected,not passes.
+Read-only exact rows expose stale generic remainder wording:divider already has
+actual target AX associations but still lists generic AX/assistive-technology
+work;progress already has paint/disposal subrecords yet remains partial. Those
+facts do not by themselves close complete semantic,owner-paint or lifetime work.
+Next question is which precise divider semantic owner/association requirements
+are answered by retained target+ancestor evidence,and which remain genuinely
+unobserved. Do not repeat settled target captures or infer live AT certification.
+
 ## Caret height owner classified without overstating native metrics — October14
 
 Source policy now158 definitions:one appended suspected-core-renderer-defect,

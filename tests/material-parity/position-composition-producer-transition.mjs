@@ -8,6 +8,15 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 export function restoreAllCaseObligationRegistration(source) {
   let current=source.toString().replaceAll('\r\n','\n');
   const progressOwnership='ae1e75bd5a994eec473385d5e0396a4785f6f57ff7bb70e748bcd5a260680218';
+  const caretClassification='0c7da19a475c9c696bf50cac17ce5992c7d68822f06981e5af434a4f5bef1588';
+  if(current.includes(caretClassification)){
+    assert.equal(hash(current),'254564061720f2920e00180f0a838b6714e1ce6cbc15e2abb4552f21a7168173');
+    assert.equal(current.split(caretClassification).length,2);
+    current=current.replace(caretClassification,progressOwnership);
+    const prior=execFileSync('git',['show','ae381cf1:tests/material-parity/input-equivalence-audit.mjs'],
+      {encoding:'utf8',maxBuffer:4_000_000}).replaceAll('\r\n','\n');
+    assert.equal(current,prior,'only the two-receipt proposal pin changes in the complete producer');
+  }
   if(current.includes(progressOwnership)){
     assert.equal(hash(current),'961e4d34203fd0ddb61609e50c48127aad0ab79311ab92f54d490819c726cc31',
       'exact progress obligation and retained caret proof registration');

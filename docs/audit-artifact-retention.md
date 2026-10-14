@@ -56,6 +56,31 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October14 caret-classification proposal refresh:the first atomic save failed
+ENOSPC and left a zero-byte
+`working-audit/proposals/0c7da19a475c9c696bf50cac17ce5992c7d68822f06981e5af434a4f5bef1588.json.32380.tmp`.
+It remains failure evidence,not a proposal. Setting directory compression did
+not establish sufficient write headroom. Four closed historical proposal JSONs
+were subsequently compressed in place;every complete before/after SHA256 agrees:
+
+- cd40d24749d1de9a93cc5f99c48a57182f8f4df9caadd898305d621367129b45:
+  fileSHA8801fd77d9c33f9ef1b6c1a0403bf61130d51c16b6469c106cee2d8d107a535e.
+- 63b15bc76f1e99ecf1d9031d56ed4572dde5ee7095c4dfa673eec79359e8e6fd:
+  fileSHAead09221c952846292a6fb2398c9a4ffa9e7193a80d15e983886182121364220.
+- a1d7bff1ed19bfd90b32746d902586f92004961a64d17ef27d58702eeebcdf4d:
+  fileSHA2ad97256e0b66049dda085f2a1f267815dddc7b3aa1a4a85217edb7c6b2abea7.
+- 48cda88c8ed456b633d43b786f1b5f7d32d204ac62acc30b1a1a7952bc37211e:
+  fileSHAc37ab5fc7483a16ce972623deec32e2f3835ce090d1039159c5d70fc7312d248.
+
+322997731 logical bytes occupy174809088 physical bytes afterward.
+D:free86016000→234196992bytes. No originals,failures,paths or pointers removed.
+Retry through existing saveReviewProposal and loadCaseObligationReview succeeds:
+new0c7da19a proposal authenticates9803 dependencies/2311 cases with all fields
+conserved except528 policy/40 benchmark receipts. Complete file hash
+3a6637e21ea631118c2dc76972278d2fe3a2100130862ed00c7988391bc17762;
+83841274 bytes,compressed attribute set. Free104693760bytes after verification;
+recheck before canonical publication or any browser capture.
+
 October14 push headroom:closed predecessorcafd50205a10db91363ef8239a50a4d9471e0a1c65ae7b5e348d0702f82de8d4
 index.json plus84 JSONL shards were transparently NTFS-compressed after existing
 whole-index verification. Every85 individual before/after SHA256 agrees;complete
