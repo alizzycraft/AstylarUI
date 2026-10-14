@@ -1,5 +1,26 @@
 # Material comparison/state coverage inventory
 
+## Divider midpoint paint binds unequal recorded ink inputs — October14
+
+Specific remaining attribution question:recorded border/fill intent versus new
+renderer color divergence. All24 retained cases request native solid1px top border
+RGB123/117/127 on transparent fill and candidate border0/transparent with fill
+#cac4d0 (RGB202/196/208). Existing authoring classification is preserved,not
+reopened. Hash-bound48 full screenshots now provide explicit midpoint pixel rows:
+exact native requested ink appears24/24;exact candidate requested ink16/24.
+Eight candidate contrast/custom DPR1 contexts instead have mixed two-row colors
+(including comparison panes). Their paint is visible;absence of exact ink is
+not absence of the separator or an automatically diagnosed shader/color defect.
+
+Log artifacts/material-parity/divider-separator-recorded-ink-midpoint-20261014.log
+SHA601e8407a3fdfd8ccbd1201cfefd7ef7b37406a4a9d44910e1b8cd06f7acecdd.
+This joins actual paint observation to the known unequal input boundary. It does
+not establish full endpoints/AA,coverage/compositing cause for8 mixed samples,
+equal-input border-versus-fill support or current rendering. No acceptance flags,
+thresholds,renderer or fixtures changed. Next isolate coverage/compositing only
+where existing geometry/sample inputs permit it;do not recapture known native
+ink or reclassify the established literal-fill substitution. Cold57853 stays live.
+
 ## Retained divider separators have no missing painted span columns — October14
 
 Specific gap beyond old strip SSIM:blank/internal clipping versus visible paint
