@@ -3667,6 +3667,40 @@ test('passive state applicability joins exact cases without discarding progress 
   }
   assert.equal(currentBuildCases.size,91);assert.equal(buildCaptureCounts.records,92);
   assert.deepEqual(selectionReplayCounts,{cases:32,stages:96,previouslyPending:32,existingPartial:0,stateMismatches:0,diagnosticFailures:8,eventFailures:8});
+  const inspectRadioKeyboardState=evidence=>{
+    const observations=evidence.observations;
+    assert.equal(observations.reference.steps.length,3);assert.equal(observations.astylar.steps.length,3);
+    const stages=['Tab','ArrowLeft','ArrowRight'].map((action,index)=>{
+      const reference=observations.reference.steps[index],candidate=observations.astylar.steps[index];
+      assert.equal(reference.kind,'input:radio');assert.equal(candidate.kind,'div:radio');
+      for(const step of [reference,candidate])for(const owner of ['solo','team'])assert.equal(typeof step[owner],'boolean');
+      return {action,reference:[reference.solo,reference.team],candidate:[candidate.solo,candidate.team],
+        matches:reference.solo===candidate.solo&&reference.team===candidate.team};
+    });
+    assert.deepEqual(stages.map(stage=>stage.reference),[[false,true],[true,false],[false,true]]);
+    assert.deepEqual(stages.map(stage=>stage.candidate),[[false,true],[false,true],[false,true]]);
+    assert.deepEqual(stages.map(stage=>stage.matches),[true,false,true]);
+    return stages;
+  };
+  const radioKeyboardRecords=allObligations.filter(record=>record.family==='radio'
+    &&record.obligations.programmaticFocus.supplementaryKeyboardFocus);
+  assert.equal(radioKeyboardRecords.length,8);
+  for(const record of radioKeyboardRecords){
+    const focus=record.obligations.programmaticFocus.supplementaryKeyboardFocus;
+    assert.equal(focus.originalOutcome,'inspected-failure');
+    record.obligations.semantics={...record.obligations.semantics,retainedActualRadioKeyboardState:{
+      disposition:'partial',evidenceCase:record.case,evidenceObligation:'programmaticFocus.supplementaryKeyboardFocus.evidence',
+      stages:inspectRadioKeyboardState(focus.evidence),
+      nativeStateMode:'actual-native-input-checked-properties',candidateStateMode:'actual-semantic-DOM-aria-checked-equals-true',
+      boundary:'Original authenticated Tab/ArrowLeft/ArrowRight observations only. Candidate false combines absent and non-true ARIA values;attribute presence and AX associations are not proved. Store selected is not used. Original keyboard failure remains;not baseline radio trees,current rendering or whole-case closure.'}};
+  }
+  for(const mutate of [
+    evidence=>{delete evidence.observations.reference.steps[0].solo;},
+    evidence=>{evidence.observations.astylar.steps[1].solo=true;},
+    evidence=>{evidence.observations.reference.steps[0].kind='div:radio';},
+    evidence=>{evidence.observations.astylar.steps.pop();},
+  ]){const altered=structuredClone(radioKeyboardRecords[0].obligations.programmaticFocus.supplementaryKeyboardFocus.evidence);
+    mutate(altered);assert.throws(()=>inspectRadioKeyboardState(altered));}
   const selectionControl=JSON.parse(readFileSync('artifacts/material-parity/selection-pointer-directions-20261011/latest-report.json')).interactions
     .find(row=>row.family==='radio');
   for(const mutate of [

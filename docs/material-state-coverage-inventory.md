@@ -1,5 +1,25 @@
 # Material comparison/state coverage inventory
 
+## Retained radio keyboard actual-state evidence joins eight focus cases — October 14
+
+Original authenticated radio callback reads native input.checked and candidate
+semantic-DOM aria-checked==='true', independently of store.selected. Existing
+owning proof now links these three Tab/ArrowLeft/ArrowRight observations to the
+eight exact radio focus cases. Native team→solo→team versus candidate team→team→team
+preserves all eight original keyboard failures. Candidate false cannot distinguish
+missing ARIA from a non-true attribute; attribute presence,AX associations,baseline
+radio trees,current rendering and whole-case closure remain unproved.
+
+Focused proof 1/1,zero skips,23425.7408ms: artifacts/material-parity/
+retained-radio-keyboard-state-join-20261014.log. Four missing/mutated state,wrong
+owner-kind and missing-stage controls reject. Complete predecessor comparison
+against48cda88c changes only eight semantics additions; all other fields agree.
+Proposala1d7bff1ed19bfd90b32746d902586f92004961a64d17ef27d58702eeebcdf4d
+is noncanonical;publisheda81 remains unchanged. All2311 cases stay partial/unverified.
+No new capture,renderer/fixture change or export. Next integrate the coherent
+retained-evidence batch through existing producer/restoration and integration
+checks; do not treat retained state agreement as whole-case acceptance.
+
 ## Actual pointer choice state joins32 cases while preserving8 radio event failures — October 14
 
 Existing selection-pointer-directions-20261011 reportSHAf1497dbd supplies actual
