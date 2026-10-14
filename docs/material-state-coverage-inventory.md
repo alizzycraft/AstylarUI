@@ -1,5 +1,31 @@
 # Material comparison/state coverage inventory
 
+## Whole-case completion counts are constrained by the partial-only schema — October14
+
+Reporting correction:all2311 cases are recorded partial,not independently proved
+to have incomplete requirements by that status alone. The producer hardcodes
+partial/unverified;loadCaseObligationReview and assertCaseObligationCoverage
+require every inspection='partial',and aggregate completion/acceptance=false.
+Read-only authenticated published14affae index9e6f1541 passes its existing
+validator. Changing ONLY one synthetic status to complete rejects specifically
+actual complete/expected partial. No evidence or real case was promoted.
+Log artifacts/material-parity/case-inspection-status-schema-scope-20261014.log.
+
+Therefore zero fully-inspected records/100% reached remain accurate record counts,
+but0% whole-case completion is not an evidence-derived audit percentage. Actual
+fully inspected case count is not yet defensibly calculable from this extension.
+Its inspected exclusions/sub-observations do not satisfy every applicable input,
+history,paint,semantics,currentness/ownership requirement automatically. Known
+gaps and final gates remain;this is neither acceptance nor proof any case is done.
+
+Next priority after frozen cold57853:use the existing per-case obligation ledger
+to derive explicit closure requirements and allow evidence-backed inspected-pass
+or inspected-failure dispositions separately from current-rendering acceptance.
+Evolve the existing schema/owning tests only to represent demonstrated closure,
+not lower criteria,create another framework or require renderer fixes for an
+honestly classified audit failure. Before new captures,distinguish actual missing
+inspection from generic partial-only scaffolding and already-inspected evidence.
+
 ## Equal-input font contrast identifies font-insensitive core caret height — October14
 
 Specific competing explanations:font-dependent native metrics versus a universal
