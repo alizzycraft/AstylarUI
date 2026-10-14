@@ -1,5 +1,26 @@
 # Material comparison/state coverage inventory
 
+## Retained divider separators have no missing painted span columns — October14
+
+Specific gap beyond old strip SSIM:blank/internal clipping versus visible paint
+throughout each recorded separator span. Existing checkpoint.load authenticates
+all24 original rows/artifacts;48 full PNGs bind exact hashes. For physical pixel
+centers inside each side's recorded box,inspect a3CSSpx band around the line
+against same-column background5CSSpx above. All48 sides have at least one changed
+RGBA pixel in every span column;zero missing columns. Forty-eight in-memory
+controls replacing that band with the baseline background all report zero painted
+columns;original PNGs untouched. This is actual retained observability,not just
+geometry lying inside the canvas or another SSIM/default-matches pass.
+
+Log artifacts/material-parity/divider-separator-span-visibility-20261014.log SHA
+ff30ee436eac2ee89dc069b6a21100146f6468a68ec5048ddfe3d00bea68ae42.
+No exact-color attribution,subpixel endpoint/full AA footprint,equal-input border
+paint,current rendering or whole-case closure follows. Native border/candidate
+background substitution and18 old sharpness diagnostic failures remain unchanged.
+Next classify remaining edge/color/owner inputs using existing evidence;do not
+repeat the now-settled retained blank/missing-span question. No capture,renderer,
+fixture,threshold or consumed source changes;cold57853 remains live.
+
 ## Divider alignment crops locate exactly in retained full images — October14
 
 Concrete remaining crop-provenance check,not a repeated SSIM proof:existing
