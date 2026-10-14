@@ -1,5 +1,25 @@
 # Material comparison/state coverage inventory
 
+## Paint-batch package bytes and exact coverage conserve — October14
+
+Read-only complete gzip decode/session57481 exits0:one JSON root,compressed
+67777666 bytes SHA cafd50205a10db91363ef8239a50a4d9471e0a1c65ae7b5e348d0702f82de8d4,
+decoded2280111420 bytes SHA d946136121f348c2d74c17a5683db11eedad6261b2d1a839b56bac7645336680.
+Existing assertCaseObligationCoverage authenticates structural/status contract;
+all2311 exported cases exactly equal proposal6bfe953b,9796 receipt entries,
+zero unjoined,inspectionComplete=false,currentRenderingAccepted=false.
+This check is byte/proposal conservation,not another dependency replay or
+acceptance of current pixels. Log retained-paint-batch-package-coverage-conservation-
+20261014.log SHA a27668bc8ea84a2f54128faaf0f269b20b69b71109257a2abb6ecd1f138b8735.
+All610 Markdown lines conserve against publisheda7a90f44 after removing only
+numeric test-line anchors;12 anchors changed,no finding/acceptance prose changes.
+Initial inline comparison had a PowerShell dollar-substitution syntax error;
+callback replacement avoids that shell interpolation and final assertion passes.
+
+Cold57853 is still live;do not restart or import/publish yet. After terminal cold
+success,complete existing compact/full-row conservation and publication preflight.
+All2311 whole cases remain partial/unverified;original final gates unchanged.
+
 ## Equal-input native full-stage caret diagnostic exposes vertical ink difference — October14
 
 Existing public proof executed with one in-memory output-only addition:
