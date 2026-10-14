@@ -30,6 +30,8 @@ const dividerHostContext = process.argv.includes('--divider-host-context');
 assert.ok(!dividerHostContext || divider, 'Host context is a separate opt-in divider observation.');
 const dividerRelatives = process.argv.includes('--divider-relatives');
 assert.ok(!dividerRelatives || divider, 'AX relatives are a separate opt-in divider observation.');
+const dividerCompanions = process.argv.includes('--divider-companions');
+assert.ok(!dividerCompanions || divider, 'Companion subtrees are a separate opt-in divider observation.');
 const dividerCursors = process.argv.includes('--divider-cursors');
 assert.ok(!dividerCursors || divider, 'Cursor points are a separate opt-in divider observation.');
 const comparisonOnly = process.argv.includes('--comparison-only');
@@ -67,7 +69,7 @@ let browser;
 try {
   browser = await chromium.launch(materialBrowserLaunchOptions());
   const options = parseSupplementalCaptureArguments([
-    `--base-url=${baseUrl}`, `--checkpoint=${checkpoint}`, ...process.argv.slice(2).filter(arg => !arg.startsWith('--checkpoint=') && !['--all-contexts', '--ordinary-tooltip', '--divider', '--comparison-only', '--divider-host-context', '--divider-relatives', '--divider-cursors'].includes(arg)),
+    `--base-url=${baseUrl}`, `--checkpoint=${checkpoint}`, ...process.argv.slice(2).filter(arg => !arg.startsWith('--checkpoint=') && !['--all-contexts', '--ordinary-tooltip', '--divider', '--comparison-only', '--divider-host-context', '--divider-relatives', '--divider-companions', '--divider-cursors'].includes(arg)),
   ]);
   const evidence = openSupplementalCapture({ options, browser,
     script: 'scripts/audit-material-field-description.mjs', styleProperties: [] });
@@ -145,6 +147,34 @@ try {
       const { nodeId } = await session.send('DOM.querySelector', { nodeId: document.nodeId, selector });
       assert.ok(nodeId);
       const { nodes } = await session.send('Accessibility.getPartialAXTree', { nodeId, fetchRelatives: dividerRelatives });
+      // Opt-in only: the partial separator tree omits both paragraph siblings.
+      // Bind each actual paragraph DOM owner to its AX subtree, not a guessed ID.
+      const companionAX = [];
+      if (dividerCompanions) {
+        const { nodes: fullAX } = await session.send('Accessibility.getFullAXTree');
+        const byId = new Map(fullAX.map(node => [node.nodeId, node]));
+        assert.equal(byId.size, fullAX.length);
+        for (const id of ['divider-above', 'divider-below']) {
+          const textSelector = side === 'reference' ? `#${id}` : `[data-astylar-id="${id}"]`;
+          const paragraph = page.locator(textSelector).locator('xpath=ancestor::p[1]');
+          assert.equal(await paragraph.count(), 1);
+          const owner = await paragraph.evaluate(node => ({ id: node.id, type: node.tagName.toLowerCase(), text: node.textContent }));
+          const paragraphSelector = side === 'reference' ? `p:has(#${id})` : `[data-astylar-id="${id}-row"]`;
+          const { nodeId: paragraphId } = await session.send('DOM.querySelector', { nodeId: document.nodeId, selector: paragraphSelector });
+          assert.ok(paragraphId);
+          const { node: paragraphDOM } = await session.send('DOM.describeNode', { nodeId: paragraphId });
+          const matches = fullAX.filter(node => node.backendDOMNodeId === paragraphDOM.backendNodeId);
+          assert.equal(matches.length, 1);
+          const subtree = [], seen = new Set();
+          const visit = id => {
+            assert.ok(!seen.has(id), 'AX descendant cycle'); seen.add(id);
+            const node = byId.get(id); assert.ok(node, 'Missing full-tree AX descendant'); subtree.push(node);
+            for (const child of node.childIds ?? []) visit(child);
+          };
+          visit(matches[0].nodeId);
+          companionAX.push({ id, owner, backendDOMNodeId: paragraphDOM.backendNodeId, nodes: subtree });
+        }
+      }
       const ax = nodes.find(node => node.role?.value === (divider ? 'separator' : ordinaryTooltip ? 'button' : 'textbox'));
       assert.ok(ax && !ax.ignored);
       const dom = await page.locator(selector).evaluate(node => ({
@@ -177,6 +207,7 @@ try {
       console.log(JSON.stringify({ context, state, side, url: page.url(), theme, observation, runtime,
         ...(dividerCursors ? { cursorPoints } : {}),
         ...(dividerRelatives ? { axRelatives: nodes } : {}),
+        ...(dividerCompanions ? { companionAX } : {}),
         ...(dividerHostContext ? { hostContext } : {}) }));
       assert.equal(observation.name, divider ? '' : ordinaryTooltip ? 'Hover for help' : 'Project name');
       if (divider) {
@@ -196,6 +227,7 @@ try {
       'examples/material-showcase/src/app/frame-sync.ts', 'examples/material-showcase/src/app/frame-protocol.ts']
       .map(file => ({ file, sha256: hash(readFileSync(file)) })),
     contexts: contexts.length, family, states, ...(dividerRelatives ? { axRelativesRecorded: true } : {}),
+    ...(dividerCompanions ? { companionSubtreesRecorded: true } : {}),
     ...(dividerCursors ? { cursorPointsRecorded: true, cursorMetricReceipt: {
       file: 'tests/material-parity/cursor-metrics.mjs', sha256: hash(readFileSync('tests/material-parity/cursor-metrics.mjs')) } } : {}),
     scope: divider ? 'Separator AX in explicitly verified theme/physical contexts; not paint, lifecycle or complete accessibility acceptance.'

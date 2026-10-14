@@ -1233,7 +1233,11 @@ test('divider actual-theme AX cohorts preserve exact contexts and runtime receip
     assert.equal(end.terminal, 'verified'); assert.equal(end.contexts, contexts);
     assert.equal(end.cursorPointsRecorded, true); assert.equal(rows.length, contexts * 2);
     for (const receipt of [...end.capture.sources, ...end.sourceReceipts, end.capture.checkpointManifest,
-      end.cursorMetricReceipt]) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+      end.cursorMetricReceipt]) {
+      const source = receipt.file === 'scripts/audit-material-field-description.mjs'
+        ? execFileSync('git', ['show', `77788b53:${receipt.file}`]) : readFileSync(receipt.file);
+      assert.equal(hash(source), receipt.sha256);
+    }
     const checkpoint = JSON.parse(readFileSync(end.capture.checkpointManifest.file));
     assert.equal(end.browser, checkpoint.provenance.browser);
     assert.deepEqual(fingerprintDirectory('examples/material-showcase/dist/material-showcase/browser'), checkpoint.provenance.browserFiles);
@@ -1260,6 +1264,69 @@ test('divider actual-theme AX cohorts preserve exact contexts and runtime receip
     current.map(r => `${r.context.profile}:${r.context.viewportId}:${r.side}`).sort());
   // Same-point effective CSS cursors only, not OS pixels, held/click behavior,
   // source-equivalent paint or retroactive measurement of original inspect rows.
+  // Divider companion AX closure: opt-in capture fills the partial-tree siblings.
+  const probeFile = 'scripts/audit-material-field-description.mjs';
+  const probe = readFileSync(probeFile, 'utf8');
+  assert.equal(hash(Buffer.from(probe)), 'b522882efa8d580d9501a16dd9f7c026f40e8f65f639f9d53724068a7595e876');
+  const priorProbe = execFileSync('git', ['show', `77788b53:${probeFile}`], { encoding: 'utf8' });
+  assert.equal(hash(Buffer.from(priorProbe)), 'd5bc55a8aaeb29edcd422531f859361a450b1a926e24ed276e3cdaa98eb2e549');
+  let restoredProbe = probe;
+  const optIn = "const dividerCompanions = process.argv.includes('--divider-companions');\nassert.ok(!dividerCompanions || divider, 'Companion subtrees are a separate opt-in divider observation.');\n";
+  assert.equal(restoredProbe.split(optIn).length, 2); restoredProbe = restoredProbe.replace(optIn, '');
+  restoredProbe = restoredProbe.replace("'--divider-companions', ", '');
+  const start = restoredProbe.indexOf('      // Opt-in only: the partial separator tree omits both paragraph siblings.');
+  const end = restoredProbe.indexOf('      const ax = nodes.find', start);
+  assert.ok(start > 0 && end > start); restoredProbe = restoredProbe.slice(0, start) + restoredProbe.slice(end);
+  restoredProbe = restoredProbe.replace('        ...(dividerCompanions ? { companionAX } : {}),\n', '')
+    .replace('    ...(dividerCompanions ? { companionSubtreesRecorded: true } : {}),\n', '');
+  assert.equal(restoredProbe, priorProbe, 'Every default capture statement conserved; companion query is opt-in only');
+  const companionRows = [];
+  const validateCompanion = (value, side, label) => {
+    assert.equal(value.owner.type, 'p'); assert.equal(value.owner.text, label);
+    if (side === 'reference') assert.equal(value.owner.id, '');
+    else assert.ok(value.owner.id.endsWith(`-${value.id}-row`));
+    assert.equal(value.nodes.length, 4);
+    assert.equal(value.nodes[0].backendDOMNodeId, value.backendDOMNodeId);
+    assert.deepEqual(value.nodes.map(node => [node.role.value, node.name?.value, node.ignored]),
+      [['paragraph', '', false], ['generic', '', false], ['StaticText', label, false], ['InlineTextBox', label, false]]);
+    for (let i = 0; i < value.nodes.length; i++) {
+      const node = value.nodes[i], child = value.nodes[i + 1];
+      assert.deepEqual(node.childIds, child ? [child.nodeId] : []);
+      if (child) assert.equal(child.parentId, node.nodeId);
+    }
+  };
+  for (const [name, digest, contexts] of [
+    ['divider-companion-ax-standard-20261014.log', 'f01e63a7285143b7f0f1f73de3979cca321575b5f32840f7e861d2fae8701901', 16],
+    ['divider-companion-ax-comparison-20261014.log', 'ffa9a7fc91f2ed11c57c63f249759b47d61dfbf7acf06d42951bc3e61f921505', 4],
+  ]) {
+    const bytes = readFileSync(`artifacts/material-parity/${name}`); assert.equal(hash(bytes), digest);
+    const rows = bytes.toString().trim().split(/\r?\n/).map(JSON.parse), terminal = rows.pop();
+    assert.equal(terminal.terminal, 'verified'); assert.equal(terminal.contexts, contexts);
+    assert.equal(terminal.companionSubtreesRecorded, true); assert.equal(rows.length, contexts * 2);
+    for (const receipt of [...terminal.capture.sources, ...terminal.sourceReceipts, terminal.capture.checkpointManifest])
+      assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+    const checkpoint = JSON.parse(readFileSync(terminal.capture.checkpointManifest.file));
+    assert.equal(checkpoint.provenance.kind, 'divider-companion-ax-diagnostic');
+    assert.equal(terminal.browser, checkpoint.provenance.browser);
+    assert.deepEqual(fingerprintDirectory('examples/material-showcase/dist/material-showcase/browser'), checkpoint.provenance.browserFiles);
+    for (const receipt of checkpoint.provenance.harness) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+    for (const row of rows) {
+      assert.deepEqual(row.runtime.errors, []);
+      assert.deepEqual(row.theme, { dark: row.context.profile === 'dark', background: rgb[row.context.profile] });
+      for (const asset of row.runtime.assets) assert.equal(asset.sha256,
+        checkpoint.provenance.browserFiles.find(file => file.file === asset.file)?.sha256);
+      assert.deepEqual(row.companionAX.map(value => value.id), ['divider-above', 'divider-below']);
+      validateCompanion(row.companionAX[0], row.side, 'Above'); validateCompanion(row.companionAX[1], row.side, 'Below');
+    }
+    companionRows.push(...rows);
+  }
+  assert.deepEqual(companionRows.map(row => `${row.context.profile}:${row.context.viewportId}:${row.side}`).sort(),
+    current.map(row => `${row.context.profile}:${row.context.viewportId}:${row.side}`).sort());
+  const forged = structuredClone(companionRows[0].companionAX[0]); forged.nodes[2].name.value = 'Wrong';
+  assert.throws(() => validateCompanion(forged, companionRows[0].side, 'Above'));
+  const detached = structuredClone(companionRows[0].companionAX[0]); detached.nodes[1].parentId = 'missing';
+  assert.throws(() => validateCompanion(detached, companionRows[0].side, 'Above'));
+  // End divider companion AX closure; no live AT or whole-case acceptance inferred.
 });
 
 test('divider host clipping observations preserve bounded DOM ancestry', () => {

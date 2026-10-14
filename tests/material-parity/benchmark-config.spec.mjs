@@ -44,6 +44,19 @@ test('equal-input caret font contrast preserves bounded source and recorded pain
     policy.replace('native chosen font', 'native chosen font proven'), policy + '\n// unreviewed policy drift\n'])
     assert.throws(() => restoreSizingDefaultPolicyRegistration(changed));
   const restoreProgressJoins = source => {
+    if (source.includes('  // Divider companion AX closure:')) {
+      assert.equal(hash(source), '72a38ea69c640b96511267b0608203e91c6286e01c18d4ee1d7833ab12000663');
+      const start = source.indexOf('  // Divider companion AX closure:');
+      const end = source.indexOf('  // End divider companion AX closure;', start);
+      assert.ok(start > 0 && end > start);
+      source = source.slice(0, start) + source.slice(source.indexOf('\n', end) + 1);
+      const added = "      end.cursorMetricReceipt]) {\n      const source = receipt.file === 'scripts/audit-material-field-description.mjs'\n        ? execFileSync('git', ['show', `77788b53:${receipt.file}`]) : readFileSync(receipt.file);\n      assert.equal(hash(source), receipt.sha256);\n    }";
+      assert.equal(source.split(added).length, 2);
+      source = source.replace(added, '      end.cursorMetricReceipt]) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);');
+      const prior = execFileSync('git', ['show', '77788b53:tests/material-parity/input-boundary-evidence.spec.mjs'],
+        { encoding: 'utf8', maxBuffer: 4_000_000 });
+      assert.equal(source, prior, 'Only the bounded companion proof and exact historical probe read may change');
+    }
     if (hash(source) === '1a6f11974d1f8aea924c1de2774abab219aec668998d6fabec0a4942f5d66ac6') return source;
     assert.equal(hash(source), 'b7da01bb7adcca29b13b6585a64d724603c3f38f5ef216a2593b0956e29b92cf');
     const start = source.indexOf('  // Progress exact-case paint join:');

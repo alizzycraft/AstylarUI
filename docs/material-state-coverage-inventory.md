@@ -1,5 +1,52 @@
 # Material comparison/state coverage inventory
 
+## Divider missing companion AX observations now measured — October14
+
+Specific closure question:does the generic semantic remainder mean separator/
+ancestor evidence is absent,or does the partial-tree probe omit local siblings?
+Authenticated40 side rows across20 physical contexts show each region lists
+paragraph/separator/paragraph but the two paragraph IDs are absent from returned
+nodes:80 omitted companion AX nodes. Existing target/ancestor/source/cursor
+assertions pass1/1,4618.2484ms before the new observation;no settled ancestor
+finding or duplicate-main authoring diagnosis was reopened.
+
+Existing field-description probe adds only opt-in --divider-companions. It binds
+each actual paragraph DOM backend ID to its full AX descendant chain;default
+actions/settlement/observations remain exactly conserved to Git77788b53 after
+removing only opt-in additions. Fresh Chrome155.0.8059.40 diagnostic checkpoint
+380c529b authenticates1887 served files,six actual top-level helper-graph sources,
+workspace lock and launch/driver receipts. Initial checkpoint preparation failed
+before writing because the lexical graph scanner interpreted an unused embedded
+TypeScript import as a probe import;parsing actual top-level imports and using
+the existing graph collector for each resolves that preparation boundary.
+
+Standard16-context and comparison4-context captures both terminate0/verified.
+Logs divider-companion-ax-standard-20261014.log SHA
+f01e63a7285143b7f0f1f73de3979cca321575b5f32840f7e861d2fae8701901 and
+divider-companion-ax-comparison-20261014.log SHA
+ffa9a7fc91f2ed11c57c63f249759b47d61dfbf7acf06d42951bc3e61f921505.
+All80 observed companion subtrees match paragraph→generic→StaticText→InlineTextBox,
+with Above/Below text,correct backend identity and intact child/parent links.
+They cover all24 configured divider cases through20 physical cohorts. Existing
+AX owning regression now authenticates logs,sources,checkpoint,runtime assets,
+membership and complete chains;wrong text and detached-parent controls reject.
+Focused1/1 passes6231.4861ms,0 skips. Original historical cursor probe read uses
+authenticated Git77788b53 bytes,not rewritten source receipts. Existing caret
+proof restores only this added block/read adjustment to exact priorb7da01bb,
+then follows the unchanged progress-join restoration. Caret/progress paint2/2,
+0 skips,1865.6348ms;original progress ownership1/1,1901.6691ms passes.
+
+Answered:local companion role/text/association evidence is no longer missing.
+Separator and ancestors remain inspected;the extra candidate main remains an
+application-authored difference. Live screen-reader experience remains an
+unmeasured limitation,not a newly invented audit gate. Whole-case input/paint/
+history/currentness and final acceptance remain open. Next integrate these exact
+semantic dispositions through the existing case owner,retaining any genuine
+unobserved relationships rather than generic already-answered AX wording.
+Proposal0c7da19a/published2e196c48 remain prior snapshots:changed probe/input-boundary/
+benchmark receipts and new logs await one coherent source/proposal/export batch.
+No renderer,reference,fixture,threshold or case-completion flag changed.
+
 ## Caret classification proposal receipts reconciled; closure work stays open — October14
 
 Committedae381cf1 is pushed. Exact2311-case proposalae1e75bd had only two changed

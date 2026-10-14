@@ -56,6 +56,17 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October14 divider companion AX capture is required new semantic evidence,not
+successful scratch. Retain `divider-companion-ax-20261014/checkpoint/manifest.json`
+(SHA380c529b8e5ced00aa45281b8956a6860a8c1a2163ff0192eb38f036d7f7925f),
+the standard/comparison observation directories,and both top-level logs:
+`divider-companion-ax-standard-20261014.log` (SHAf01e63a7285143b7f0f1f73de3979cca321575b5f32840f7e861d2fae8701901)
+and `divider-companion-ax-comparison-20261014.log` (SHAffa9a7fc91f2ed11c57c63f249759b47d61dfbf7acf06d42951bc3e61f921505).
+The fresh checkpoint records actual Chrome155/launch/served files and current
+probe graph;it does not replace the historical target/ancestor checkpoints.
+Initial graph preparation failed before creating a checkpoint;no failed capture
+directory or original evidence was overwritten. Both capture jobs are terminal0.
+
 October14 caret-classification proposal refresh:the first atomic save failed
 ENOSPC and left a zero-byte
 `working-audit/proposals/0c7da19a475c9c696bf50cac17ce5992c7d68822f06981e5af434a4f5bef1588.json.32380.tmp`.
