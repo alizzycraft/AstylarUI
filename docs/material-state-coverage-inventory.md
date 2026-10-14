@@ -15,6 +15,21 @@ Role correspondence is now explicit,but border→plane representation,plugin buf
 contribution,clipping/AA and complete style equivalence are NOT established by it.
 Existing right-origin/track-color differences remain classified separately.
 
+Existing progress-paint-input-boundary-711eec2.log (SHA69a8310dc9bbce45185d4014525b1f4c161f8672745ce66073ecba4f4599dae1)
+does contain actual child observations,not merely source formulas. All four
+retained mobileDPR2 candidate bar contexts have track,buffer,indicator planes.
+Buffer is enabled/visible,alpha.32,scaleX.001,width.520000025devicepx;its recorded
+projected box lies inside indicator within1e-5devicepx and shares vertical bounds.
+All four original candidate PNG hashes authenticate;last interior column at
+indicator vertical midpoint has exact profile foreground RGB103/80/164,
+208/188/255,0/0/0,0/106/106. No extra flat-color discrepancy appears at that sample.
+This closes availability of actual mesh containment/flat sampled paint evidence,
+not full AA footprint,depth/blend ordering or a causal zero-buffer-contribution
+claim. Buffer-removal control is absent. Do not call the buffer hidden/disabled
+or infer border→plane equivalence from containment. A targeted removal/edge
+control is the specific missing evidence if that contribution remains material;
+repeating fill-direction or scalar membership does not answer it. No new capture.
+
 All four profiles retain native track rgb(232,224,235);candidate requests#e7e0ec
 except dark#49454f. Primary border colors follow profile tokens. This confirms
 the already-known unequal track inputs,not a newly diagnosed core color bug.
