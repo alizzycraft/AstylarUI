@@ -44,6 +44,17 @@ test('equal-input caret font contrast preserves bounded source and recorded pain
     policy.replace('native chosen font', 'native chosen font proven'), policy + '\n// unreviewed policy drift\n'])
     assert.throws(() => restoreSizingDefaultPolicyRegistration(changed));
   const restoreProgressJoins = source => {
+    if (source.includes('  // Divider retained paint and owner joins:')) {
+      assert.equal(hash(source), 'f3f554b3d08bb8ad7018ff1fb6dc9f588fb17afe984d2c8835b68590269c9116');
+      const start = source.indexOf('  // Divider retained paint and owner joins:');
+      const end = source.indexOf('  // End divider retained paint and owner joins;', start);
+      assert.ok(start > 0 && end > start);
+      source = source.slice(0, start) + source.slice(source.indexOf('\n', end) + 1);
+      const prior = execFileSync('git', ['show', '1997926c:tests/material-parity/input-boundary-evidence.spec.mjs'],
+        { encoding: 'utf8', maxBuffer: 4_000_000 });
+      assert.equal(source, prior, 'Only the bounded divider paint/paragraph/frame join is added');
+      assert.equal(hash(source), '9745e4596cf4234d60dd09c4730760c026e9fa7b1ef8ca906ba476733e542647');
+    }
     if (source.includes('  // No-editor authored exclusion join:')) {
       assert.equal(hash(source), '9745e4596cf4234d60dd09c4730760c026e9fa7b1ef8ca906ba476733e542647');
       const start = source.indexOf('  // No-editor authored exclusion join:');

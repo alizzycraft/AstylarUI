@@ -4153,6 +4153,95 @@ test('passive state applicability joins exact cases without discarding progress 
   assert.equal(allObligations.filter(row=>row.obligations.authoredEditing.disposition==='inspected-authored-exclusion'
     &&row.obligations.authoredEditing.retainedTargetApplicability).length,1380);
   // End no-editor authored exclusion join; unrelated behavior and whole-case status stay.
+  // Divider retained paint and owner joins: preserve failures and exact remaining boundaries.
+  const dividerPaintLogs=[
+    ['divider-separator-span-visibility-20261014.log','ff30ee436eac2ee89dc069b6a21100146f6468a68ec5048ddfe3d00bea68ae42'],
+    ['divider-separator-recorded-ink-midpoint-20261014.log','601e8407a3fdfd8ccbd1201cfefd7ef7b37406a4a9d44910e1b8cd06f7acecdd'],
+    ['divider-separator-mixed-ink-coverage-model-20261014.log','18495e20e4bbc597bb0d1afebdd714ceb1b7749d4fbe6237873d579f3d294a69'],
+  ].map(([name,sha256])=>{const file=`artifacts/material-parity/${name}`,bytes=readFileSync(file);assert.equal(hash(bytes),sha256);return {file,sha256,data:JSON.parse(bytes)};});
+  const [dividerSpans,dividerInk,dividerMix]=dividerPaintLogs.map(row=>row.data);
+  assert.equal(dividerSpans.observations.length,48);assert.equal(dividerInk.observations.length,48);
+  assert.equal(dividerMix.recordedPixelLogSha256,dividerPaintLogs[1].sha256);
+  assert.equal(dividerMix.mixedCases,8);assert.equal(dividerMix.pixels,16);
+  const paragraphFinding=sourceAuditDefinitions.find(row=>row.id==='fixture-divider-replaces-paragraph-flow-with-coordinates');
+  assert.equal(paragraphFinding.classification,'application-plugin-authoring-defect');
+  const inspectDividerOwners=trees=>{
+    const paragraphs=[],frame=[];
+    for(const id of ['divider-above','divider-below']){
+      const reference=trees.reference.nodes.find(node=>node.attributes?.id===id),candidate=trees.astylar.nodes.find(node=>node.authored?.id===id);
+      assert.equal(reference.type,'span');assert.equal(candidate.authored.type,'span');
+      const nativeOwner=trees.reference.nodes.find(node=>node.key===reference.parent),owner=trees.astylar.nodes.find(node=>node.key===candidate.parent);
+      assert.equal(nativeOwner.type,'p');assert.equal(owner.authored.type,'p');
+      assert.deepEqual(trees.reference.nodes.filter(node=>node.parent===nativeOwner.key).map(node=>node.attributes?.id),[id]);
+      assert.deepEqual(trees.astylar.nodes.filter(node=>node.parent===owner.key).map(node=>node.authored?.id),[id]);
+      assert.equal(trees.reference.styles[nativeOwner.style].position,'static');assert.equal(owner.resolvedStyle.position,'absolute');
+      paragraphs.push({target:id,reference:{key:nativeOwner.key,position:trees.reference.styles[nativeOwner.style].position,usedHeight:trees.reference.styles[nativeOwner.style].height},
+        astylar:{key:owner.key,position:owner.resolvedStyle.position,declaredHeight:owner.resolvedStyle.height,declaredTop:owner.resolvedStyle.top}});
+    }
+    for(const [id,type,text]of [['eyebrow','p','Angular Material 20 reference'],['title','h1','divider']]){
+      const candidate=trees.astylar.nodes.find(node=>node.authored?.id===id);
+      const native=trees.reference.nodes.filter(node=>node.type===type&&node.ownText===text);
+      assert.equal(native.length,1);assert.equal(candidate.authored.type,type);assert.equal(candidate.authored.textContent,text);
+      for(const key of Object.keys(native[0].attributes))assert.ok(!/^(role|aria-|tabindex|contenteditable|hidden|lang|dir$)/.test(key));
+      for(const key of Object.keys(candidate.authored))assert.ok(!/^(role|aria|tabindex|contenteditable|hidden|lang|dir$)/.test(key));
+      frame.push({referenceKey:native[0].key,astylarKey:candidate.key,type,text});
+    }
+    return {paragraphs,frame};
+  };
+  let dividerPaintOwnerJoins=0;
+  for(const record of allObligations.filter(row=>row.family==='divider')){
+    const trees={};
+    for(const side of ['reference','astylar']){const receipt=record.evidence.pairedTrees[side],bytes=readFileSync(receipt.file);assert.equal(hash(bytes),receipt.sha256);trees[side]=JSON.parse(bytes);}
+    const owners=inspectDividerOwners(trees);
+    const separator={};
+    for(const side of ['reference','astylar']){
+      const rows=dividerSpans.observations.filter(row=>scalarCaseKey(JSON.parse(row.case))===record.case&&row.side===side);
+      assert.equal(rows.length,1);const span=rows[0];assert.equal(span.visibleColumns,span.totalColumns);assert.deepEqual(span.missingColumns,[]);
+      const ink=dividerInk.observations.filter(row=>row.side===side&&row.file===span.file);assert.equal(ink.length,1);assert.equal(ink[0].sha256,span.sha256);
+      const bytes=readFileSync(span.file);assert.equal(hash(bytes),span.sha256);
+      assert.equal(span.file.replaceAll('\\','/'),record.evidence.pairedTrees[side].file.replaceAll('\\','/').replace(/-input-tree\.json$/,'.png'));
+      const image=PNG.sync.read(bytes),band=span.band;
+      assert.ok(band.left>=0&&band.right<=image.width&&band.top>=0&&band.bottom<=image.height&&band.baseline>=0&&band.baseline<image.height);
+      let visible=0;
+      for(let x=band.left;x<band.right;x++){
+        const baseline=(band.baseline*image.width+x)*4;let changed=false;
+        for(let y=band.top;y<band.bottom&&!changed;y++){
+          const pixel=(y*image.width+x)*4;changed=[0,1,2,3].some(channel=>image.data[pixel+channel]!==image.data[baseline+channel]);
+        }
+        if(changed)visible++;
+      }
+      assert.equal(visible,span.visibleColumns,'Original separator-band visibility must replay unchanged');
+      separator[side]={span,midpoint:ink[0]};
+    }
+    if(dividerPaintOwnerJoins===0){
+      const forged=structuredClone(trees);forged.astylar.nodes.find(node=>node.authored?.id==='divider-above').authored.type='div';assert.throws(()=>inspectDividerOwners(forged));
+      const wrongFrame=structuredClone(trees);wrongFrame.astylar.nodes.find(node=>node.authored?.id==='eyebrow').authored.textContent='Wrong';assert.throws(()=>inspectDividerOwners(wrongFrame));
+    }
+    const receipts=dividerPaintLogs.map(({data,...receipt})=>receipt);
+    const mixed=dividerMix.observations.filter(row=>row.profile===dividerInk.observations.find(ink=>ink.file===separator.astylar.span.file).profile
+      &&row.viewport.id===dividerInk.observations.find(ink=>ink.file===separator.astylar.span.file).viewport.id
+      &&row.state===dividerInk.observations.find(ink=>ink.file===separator.astylar.span.file).state);
+    record.obligations.localPaint={...record.obligations.localPaint,retainedSeparatorPaint:{disposition:'inspected',
+      outcome:'full-recorded-span-visible-with-unequal-border-fill-ink-inputs',evidence:{logs:receipts,observations:separator,mixedCoverageModel:mixed},
+      boundary:'Recorded full-span visibility replay and authenticated midpoint/model observations only. Model fit is not actual GPU coverage/compositing causality,equal-input border paint or current rendering.'},
+      remaining:['Exact endpoint and full antialiased footprint; actual coverage/compositing mechanism where attribution remains uncertain',
+        'Complete equal-input owner paint attribution,original crop-producer applicability and final current-code gates']};
+    record.obligations.inputStyleStructure={...record.obligations.inputStyleStructure,explicitParagraphOwners:{disposition:'inspected',
+      findings:[{id:paragraphFinding.id,classification:paragraphFinding.classification,owner:'showcase paragraph wrapper authoring',firstDivergence:'static flow versus absolute positioned paragraph requests'}],
+      evidence:{pairedTrees:record.evidence.pairedTrees,policy:{file:'tests/material-parity/input-equivalence-policy.mjs',sha256:hash(readFileSync('tests/material-parity/input-equivalence-policy.mjs'))},observations:owners.paragraphs},
+      boundary:'Exact paragraph/span identity and existing classified position request difference. Native used heights and candidate declarations remain different stages; no anonymous line-box or full-property equivalence.'},
+      remaining:['Complete material property/anonymous line-box correspondence beyond the identified explicit paragraph/span owners',
+        'First-stage and paint applicability of remaining owners']};
+    record.obligations.semantics={...record.obligations.semantics,authoredFrameSiblings:{disposition:'inspected',
+      evidence:{pairedTrees:record.evidence.pairedTrees,observations:owners.frame},
+      conclusion:'Both exact frame sibling owners agree in authored type/text and omit semantic attribute requests;the separately classified extra main remains a failure.',
+      boundary:'Authored frame inputs only;not actual heading AX,live assistive-technology experience or current rendering.'},
+      remaining:['Runtime applicability beyond recorded served-build checkpoints and complete final current-code gates'],
+      limitations:[...record.obligations.semantics.limitations,'Actual frame heading AX is unmeasured;authored correspondence does not certify it']};
+    dividerPaintOwnerJoins++;
+  }
+  assert.equal(dividerPaintOwnerJoins,24);
+  // End divider retained paint and owner joins; whole-case/current-rendering status stays.
   assert.equal(new Set(allObligations.map(row=>row.case)).size,2311);
   assert.deepEqual(allObligations.map(row=>row.case).sort(),allConfigured.map(scalarCaseKey).sort());
   assert.ok(allObligations.every(row=>row.inspection==='partial'&&row.currentRendering==='unverified'));

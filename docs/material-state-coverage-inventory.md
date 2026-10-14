@@ -1,6 +1,30 @@
 # Material comparison/state coverage inventory
 
-## Current batch: complete no-editor case integration verified; divider joins next — October14
+## Current batch: divider paint/paragraph/frame joins verified; full integration live — October14
+
+Existing owner now joins the queued retained observations to all24 divider cases:
+separator full-span visibility with recorded unequal ink/model limits,48 explicit
+paragraph-to-span owners bound to the existing authoring finding,and48 authored
+frame sibling pairs. Generic already-answered backlog text is replaced with exact
+endpoint/full-AA/compositing,crop-source,anonymous-line-box/property and runtime
+questions. Actual frame heading AX/live AT remain explicit unmeasured boundaries;
+the existing extra main failure stays. No rendering input or whole-case flag changes.
+
+Exact block9bff2a23 replay against authenticated37dc2f92 passes:24 cases/72 bounded
+subrecords,all other complete fields conserved,zero whole-case promotions. Original
+48 PNG span observations replay unchanged;two forged owner/frame controls reject.
+Log divider-paint-owner-join-block-20261014.log SHA
+2c07d800a62b8d86aaefd8ceff698e77d94a0d4dcccc0e583f376990ec63767a.
+Existing caret/progress conservation2/2,zero skips,3405.5396ms passes;log
+divider-paint-owner-caret-conservation-20261014.log SHA
+b5c210f5e89a3b3bcf80d8300ff061467ab8daa4ec8c89e108fd1d2329aa5d86.
+The exact added block restores complete Git1997926c/9745e459 before unchanged
+prior source transitions. Full original integration99035 is confirmed live:
+launcher23196/worker6824,log divider-paint-owner-full-case-integration-20261014.log.
+Keep consumed sources frozen;do not restart for silence or infer terminal success.
+Next verify its complete proposal/transitions,then reconcile both coverage increments
+at one justified canonical milestone. Publishedb246 remains the preceding snapshot;
+all final acceptance gates and genuine remaining case obligations stay unchanged.
 
 Publishedc9cb3c16/b246c590 is the cold-verified preceding snapshot. Existing exact
 case owner now reviews the bounded1380 no-target cases across21 families through
@@ -33,9 +57,9 @@ every2311 complete predecessor row with zero unexpected fields. Existing proposa
 loader verifies exact membership/all9809 dependencies,inspectionComplete=false,
 currentRenderingAccepted=false;log no-editor-generated-proposal-verify-20261014.log
 is terminal0. No real whole case is promoted. Do not poll/restart ended workers.
-Next combine the queued divider paint/paragraph/frame dispositions in the existing
-owner before one coherent proposal/source/canonical milestone;do not export after
-each bounded proof edit. Publishedb246 remains the preceding verified snapshot.
+Divider paint/paragraph/frame owner integration is now underway as recorded above,
+before one coherent proposal/source/canonical milestone;do not export after each
+bounded proof edit. Publishedb246 remains the preceding verified snapshot.
 All original final gates remain open.
 
 Read-only next-gap check during integration answers missing separator evidence
@@ -43,7 +67,7 @@ versus missing exact-case join. Authenticated spanff30ee43,midpoint601e8407 and
 mixed-model18495e20 logs map to all24 exactf56 divider case records,with48
 paired unchanged PNG receipts and identical side/file/hash correspondence between
 span and midpoint observations. Each PNG path agrees with its case tree directory;
-all24 localPaint obligations currently lack a retainedSeparatorPaint subrecord.
+all24 prior37dc localPaint obligations lack a retainedSeparatorPaint subrecord.
 The eight mixed cases/16 pixels reference the exact midpoint log. This is join
 eligibility,not another pixel/SSIM proof or current/equal-input paint acceptance.
 Next coherent owner batch should attach those bounded full-span/unequal-ink/

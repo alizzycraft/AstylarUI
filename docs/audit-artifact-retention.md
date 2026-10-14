@@ -56,6 +56,18 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October14 divider paint/owner join coverage evidence:retain closed
+divider-paint-owner-join-block-20261014.log SHA
+2c07d800a62b8d86aaefd8ceff698e77d94a0d4dcccc0e583f376990ec63767a and
+divider-paint-owner-caret-conservation-20261014.log SHA
+b5c210f5e89a3b3bcf80d8300ff061467ab8daa4ec8c89e108fd1d2329aa5d86.
+Block replay checks24 cases/72 bounded subrecords,original48 PNG spans,all other
+complete fields and two owner/frame controls. Conservation passes2/2,zero skips.
+Separate original divider-paint-owner-full-case-integration-20261014.log is active;
+do not compress/delete or restart it. Original span/midpoint/mixed-model logs,
+all original PNGs,37dc proposal and acceptedb246 generation remain untouched.
+No canonical/current-rendering acceptance follows from the focused join alone.
+
 October14 no-editor authored-exclusion owner block is required coverage evidence:
 retain closed no-editor-authored-exclusion-block-20261014.log SHA
 ea78f8f12e733ea24d0352c317f3564f11900934c5cdaa1be8fdd8b6ce33b689 and
