@@ -1,5 +1,35 @@
 # Material comparison/state coverage inventory
 
+## Progress pending paint is a missing exact-case join,not absent evidence — October14
+
+Specific question:does progress-bar's pending localPaint entry require another
+capture,or does existing proof already cover its configured cases? Two unchanged
+owning tests reauthenticate all40 progress-bar/spinner membership rows,32 physical
+cohorts,80 input-tree receipts and paired before/after PNG bytes. The paint test
+decodes the images and recomputes changed pixels; native bar focus leaves paint
+unchanged, native spinner focus changes paint, while both candidate owners remain
+unfocused on BODY with unchanged pixels. The other test binds actual AX/focus,
+current relevant component/bridge source,spinner cap geometry and three equal-value
+updates/final disposal across all32 cohorts. Original failure assertions remain.
+
+Commands:node --test --test-name-pattern='retained progress focus caps and update
+disposal' tests/material-parity/input-boundary-evidence.spec.mjs (1/1,zero skips,
+1955.6017ms terminal); node --test --test-name-pattern='progress focus paint
+preserves forty' tests/material-parity/benchmark-config.spec.mjs (1/1,zero skips,
+1595.0221ms terminal). Original hash-bound receipts remain in these test bodies:
+progress-candidate-focus-paint-20261008.log,progress-reference-focus-paint-
+20261007.log,progress-configured-input-membership-20261006.log and both retained
+progress update/disposal logs. No new capture or diagnostic report was needed.
+
+Conclusion:pending localPaint cannot accurately mean no inspected paint evidence.
+The remaining task is exact-case attachment through the existing proposal owner
+in input-boundary-evidence.spec.mjs,not another pixel investigation. This settles
+only evidence availability/authentication:equal-input track/cap/edge rendering,
+complete structure/ownership applicability,remount/peer/cache safety and final
+current rendering remain distinct gaps. No real case closure or parity promotion.
+Store/caret/progress source/export reconciliation remains pending as one coherent
+batch; canonicalcafd5020 is not updated by this retained-proof replay.
+
 ## Closure validator preserves inspected failure obligations — October14
 
 Progress-bar review exposed a reporting inconsistency: its existing programmatic
