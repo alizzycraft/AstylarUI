@@ -24,9 +24,15 @@ the general caret owner,then implement a CSS-space metric rule with public
 equal-input regression protection. Do not add font/profile/DPR offsets or retune
 Material labels. Separate colour,blink,placement,lifetime and unequal Material
 font inputs retain their own findings. This audit does not authorize that fix.
-The classification and closure-vocabulary source changes await coherent
-fingerprint/proposal/canonical reconciliation;published2e196c48 remains the prior
-verified157-finding snapshot. No real case is promoted by this classification.
+The classification/closure vocabulary and exact divider semantic joins now pass
+coherent source-transition,complete finding/case/report conservation,independent
+cold comparison,compact import and whole-index verification. Canonicalb246c590
+contains158 source findings;index1bb85503 is the accepted working pointer.
+Exact logs,hashes and scopes are recorded in the current coverage ledger.
+All2311 whole-case records remain partial/unverified;inputEquivalent=false.
+No real case is promoted by this classification or publication. Next integrate
+queued authored no-editor/frame exclusions and the original fresh-layout receipt
+boundary,then close remaining actual inspection gaps;all final gates stay open.
 
 October12 publication committed and pushed as5c308388 on
 codex/material-audit-alignment-integration; remote and local heads agree.

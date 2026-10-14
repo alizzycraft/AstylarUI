@@ -110,9 +110,19 @@ conservation evidence:exit0,SHA
 Retain both original failure and retry. Complete decoded packages,48 receipt-only
 controls/one scalar,48 rejected forgeries,all2311 proposal rows and base coverage/
 summary/contract are checked;this does not supersede independent cold acceptance.
-divider-caret-canonical-cold-check-20261014.log remains active verification output;
-do not compress/delete or restart it. No cold acceptance is inferred.
-Observed D:free5117739008bytes before the row census;recheck before publication.
+divider-caret-canonical-cold-check-20261014.log is closed successful independent
+verification evidence:exit0,3300417.9048ms,SHA
+353f3ccc090669179bf2d2d380938db844e1f60d8c7cb60116b48b1938f3b092.
+Retain it and terminal import/verify logs:
+divider-caret-compact-import-20261014.log SHA
+7e3c79c278c3370a7ce498d2afcac097d34f19508d80f9fbff9a2cc5245478e8;
+divider-caret-compact-verify-20261014.log SHA
+fa1c3a0757fdc8bcb476f921a7bc2a2f1a0371b0d38f9f840a0352233117530a.
+New accepted working generationb246c590 retains its complete gzip,index and84
+shards;indexSHA1bb855030b25dc58fd28b0e92351aaae390fad4d9b86fea38cb30e2b8c7fa286.
+Prior2e generation/originals/failures remain untouched. No historical alias was
+repointed;only the existing current pointer advances through verified import.
+Observed D:free5105057792bytes before import;no evidence deletion was needed.
 
 October14 divider companion AX capture is required new semantic evidence,not
 successful scratch. Retain `divider-companion-ax-20261014/checkpoint/manifest.json`

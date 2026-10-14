@@ -1,6 +1,6 @@
 # Material comparison/state coverage inventory
 
-## Current batch: canonical export complete; independent cold verification live — October14
+## Current batch: independent cold, conservation, import and index verification complete — October14
 
 Read-only question during full owner integration:are page-frame sibling semantic
 inputs still unmapped,or is the remaining boundary actual runtime observability?
@@ -98,9 +98,12 @@ records436/436 static,1875/1875 interaction,8483 groups,389202 occurrences,
 b246c590c7a4a19228c7ad97034ee44f69e7c1f63323b0cc2ce108d2abc2d4d8
 is67933586bytes;decoded2280703083bytes/SHA
 2438db47c240f95a7b46918680e958e6ee680a5207e7296339ecff89aa4e3495.
-Independent cold session83713/worker18696 is confirmed live by process and
-session poll;log divider-caret-canonical-cold-check-20261014.log has build-audit,
-not terminal acceptance. Original source/data inputs remain frozen. A read-only
+Independent cold session83713 is TERMINAL exit0 after3300417.9048ms;log
+divider-caret-canonical-cold-check-20261014.log SHA
+353f3ccc090669179bf2d2d380938db844e1f60d8c7cb60116b48b1938f3b092
+compares the complete decoded candidate and Markdown with freshly generated
+evidence. Two collectors,10 memory hits,zero disk hits,11013 files and1093722774
+bytes are reverified;session elapsed3108062.1607ms. A read-only
 single-pass whole-finding-row delta census4146 is TERMINAL exit0 against
 the authenticated accepted2e index. It authenticates all2280703083 decoded bytes
 and preserves every predecessor row:48495 rows are unchanged,48 control rows
@@ -129,12 +132,22 @@ Markdown SHA98c71f74215b167681dae81c5e58835537a4fe599b450037a30aef19291cc72d
 preserves every ordered claim from Git8fd3aafe after only exact benchmark-config/
 input-boundary-evidence test-line anchor normalization and the one appended caret
 classification line. No production input,fixture,threshold or acceptance flag
-changed. Independent cold83713 remains live and still owns complete fresh-audit/
-decoded-value comparison;these conservation checks do not replace that gate.
-Published2e196c48 remains the prior snapshot until independent cold comparison,
-package/case/finding conservation and publication finish. All2311 whole-case
-records remain partial/unverified;final gates are unchanged. Observed D:free
-5117739008bytes at this verification boundary;no evidence deletion was needed.
+changed. Independent cold comparison above separately passes that gate.
+Existing compact import8357 terminates0;log SHA
+7e3c79c278c3370a7ce498d2afcac097d34f19508d80f9fbff9a2cc5245478e8
+at divider-caret-compact-import-20261014.log. Accepted working pointer now
+referencesb246c590;index SHA
+1bb855030b25dc58fd28b0e92351aaae390fad4d9b86fea38cb30e2b8c7fa286.
+Compact shards total72750552bytes. Existing whole-index verification terminates0,
+log divider-caret-compact-verify-20261014.log SHA
+fa1c3a0757fdc8bcb476f921a7bc2a2f1a0371b0d38f9f840a0352233117530a:
+8483 scalar/158 source/39904 controls/389202 occurrences/zero unresolved.
+Canonical package/report publication is now verified for commit and push;
+2e196c48 remains preserved historical evidence. All2311 whole-case records remain
+partial/unverified and inputEquivalent=false;final gates are unchanged. Next
+integrate queued precise no-editor exclusions/frame dispositions and the original
+fresh-layout historical receipt boundary in existing owners,then close genuine
+whole-case gaps. Observed D:free5105057792bytes before import;no deletion needed.
 
 ## Divider semantic dispositions joined; full owner integration running — October14
 
