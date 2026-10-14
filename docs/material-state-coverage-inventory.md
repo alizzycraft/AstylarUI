@@ -88,8 +88,13 @@ is67933586bytes;decoded2280703083bytes/SHA
 Independent cold session83713/worker18696 is confirmed live by process and
 session poll;log divider-caret-canonical-cold-check-20261014.log has build-audit,
 not terminal acceptance. Original source/data inputs remain frozen. A read-only
-single-pass whole-finding-row delta census is running in session4146 against
-the authenticated accepted2e index;its terminal result remains pending.
+single-pass whole-finding-row delta census4146 is TERMINAL exit0 against
+the authenticated accepted2e index. It authenticates all2280703083 decoded bytes
+and preserves every predecessor row:48495 rows are unchanged,48 control rows
+and scalar903 change,and sourceFinding157 appends the caret classification.
+Counts remain8483 scalar/31657 retained/8247 control/158 source. This bounds
+the changed population;exact field-level transition validity and whole-case/
+package-metadata conservation remain pending,not inferred from matching counts.
 Published2e196c48 remains the prior snapshot until independent cold comparison,
 package/case/finding conservation and publication finish. All2311 whole-case
 records remain partial/unverified;final gates are unchanged. Observed D:free

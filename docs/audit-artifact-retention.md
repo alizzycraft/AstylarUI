@@ -96,9 +96,12 @@ divider-caret-canonical-export-20261014.log is now closed successful export
 evidence:exit0,3189735.751ms,SHA
 eb11e92653f9dbc30d11f356822507354addb6462e63c78b9fcefaf62aecb293.
 Retain it with candidateb246c590;export alone is not independent acceptance.
-divider-caret-canonical-cold-check-20261014.log and
-divider-caret-package-row-delta-20261014.log are active verification output;
-do not compress/delete or restart them. No cold/conservation result is inferred.
+divider-caret-package-row-delta-20261014.log is closed successful row-census
+evidence:exit0,complete decoded hash/length authenticated,48495 unchanged rows,
+48 changed control rows/one scalar/one appended source finding. Retain it;
+it is not yet complete field-transition/case/package conservation acceptance.
+divider-caret-canonical-cold-check-20261014.log remains active verification output;
+do not compress/delete or restart it. No cold acceptance is inferred.
 Observed D:free5117739008bytes before the row census;recheck before publication.
 
 October14 divider companion AX capture is required new semantic evidence,not
