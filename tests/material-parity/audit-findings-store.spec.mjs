@@ -49,9 +49,19 @@ test('versioned case inspection closure requires every obligation and never acce
   const excluded = structuredClone(review);
   Object.assign(excluded.groups[0].obligations.authoredActivation, { applicability: 'not-applicable', disposition: 'inspected-authored-exclusion' });
   assert.equal(load(excluded).inspectionEvidence.inspectionComplete, true);
+  const retainedFailure = structuredClone(review);
+  retainedFailure.groups[0].obligations.programmaticFocus.disposition = 'inspected-failure';
+  const retainedCoverage = load(retainedFailure);
+  assertCaseObligationCoverage(retainedCoverage);
+  assert.equal(retainedCoverage.inspectionEvidence.cases[0].obligations.programmaticFocus.disposition, 'inspected-failure');
+  const concealedFailure = structuredClone(passed);
+  concealedFailure.groups[0].obligations.programmaticFocus.disposition = 'inspected-failure';
+  assert.throws(() => load(concealedFailure), /passing closure with a failed obligation/);
   for (const mutate of [
     r => delete r.groups[0].obligations.localPaint,
     r => { r.groups[0].obligations.localPaint.disposition = 'partial'; },
+    r => { r.groups[0].obligations.localPaint.disposition = 'inspected-pass'; },
+    r => { r.groups[0].obligations.localPaint.applicability = 'not-applicable'; r.groups[0].obligations.localPaint.disposition = 'inspected-failure'; },
     r => { r.groups[0].obligations.localPaint.remaining = ['uninspected edge']; },
     r => { r.groups[0].obligations.localPaint.applicability = 'unverified'; },
     r => delete r.groups[0].obligations.localPaint.evidence,

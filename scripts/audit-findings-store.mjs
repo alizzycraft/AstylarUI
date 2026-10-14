@@ -176,7 +176,11 @@ function assertCaseInspection(row, schemaVersion) {
   for (const name of caseInspectionObligations) assert.ok(Object.hasOwn(row.obligations, name), `Missing closure obligation: ${name}`);
   for (const [name, obligation] of Object.entries(row.obligations)) {
     assert.ok(['applicable', 'not-applicable'].includes(obligation.applicability), `Unverified applicability: ${name}`);
-    assert.equal(obligation.disposition, obligation.applicability === 'applicable' ? 'inspected' : 'inspected-authored-exclusion');
+    if (obligation.applicability === 'applicable') {
+      assert.ok(['inspected', 'inspected-failure'].includes(obligation.disposition), `Uninspected obligation: ${name}`);
+      if (obligation.disposition === 'inspected-failure')
+        assert.equal(closure.outcome, 'inspected-failure', `Cannot report a passing closure with a failed obligation: ${name}`);
+    } else assert.equal(obligation.disposition, 'inspected-authored-exclusion');
     assert.ok(typeof obligation.conclusion === 'string' && obligation.conclusion.trim(), `Missing conclusion: ${name}`);
     assert.ok(hasEvidenceReceipt(obligation.evidence), `Missing closure evidence: ${name}`);
     assert.ok(obligation.remaining === undefined || Array.isArray(obligation.remaining) && obligation.remaining.length === 0,

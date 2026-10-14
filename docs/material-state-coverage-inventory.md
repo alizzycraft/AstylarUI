@@ -1,5 +1,24 @@
 # Material comparison/state coverage inventory
 
+## Closure validator preserves inspected failure obligations — October14
+
+Progress-bar review exposed a reporting inconsistency: its existing programmatic
+focus disposition is inspected-failure, but schema2 required applicable
+obligations to use only inspected. The existing validator now accepts either,
+while requiring inspected-failure case outcome whenever an obligation retains
+that failure disposition. Classified failure findings and all original receipt,
+applicability, remaining-work and current-rendering requirements remain enforced.
+The owning synthetic test preserves the failed disposition through loading and
+coverage validation, rejects concealment in a passing closure, and rejects
+unsupported inspected-pass and failed authored-exclusion dispositions.
+
+Focused original closure test passes1/1,zero skips,145.0225ms terminal; scoped
+git diff --check passes. No real case promotion,renderer/fixture change or new
+capture. Canonicalcafd5020 remains historical; this store/test change joins the
+already pending coherent source/export reconciliation. Next reuse existing
+progress paint/ownership proofs for exact-case joins, without relabeling failures
+or clearing genuine outstanding obligations.
+
 ## Caret font-response evidence now has a bounded retained regression — October14
 
 Existing benchmark-config suite adds equal-input caret font contrast preserves
