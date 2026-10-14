@@ -1,5 +1,28 @@
 # Material comparison/state coverage inventory
 
+## Divider alignment crops locate exactly in retained full images — October14
+
+Concrete remaining crop-provenance check,not a repeated SSIM proof:existing
+checkpoint.load authenticates all24 exact original divider rows/artifacts under
+reportab42dbec. All96 alignment crops (two targets/two sides per case) have one
+unique byte-for-byte decoded RGBA region in their own full PNG. Both sides'
+located rectangles agree for all48 target pairs. Recorded side-specific text
+centroids lie inside every located crop;48 above→below swapped-bound controls
+reject. This closes saved-crop/full-image location and target-centroid membership,
+not full text sharpness,separator paint or current rendering acceptance.
+
+Log artifacts/material-parity/divider-alignment-crop-full-image-location-20261014.log
+SHA a6c3eddcb9959cd0c49af2f12ea3e3ad3a9e5c8a3394c23a5f89d34e4c574dc6;
+ordered file receipt071a1670bc104ec46300aaf8c73e8834203b294aba3c0781994ae3563686fed0.
+Example light desktopDPR1:above61,193→114,221;below61,245→113,273.
+Original report geometry includes root/separator,but excludes these text target
+rectangles;input trees also lack rectangles. Therefore original crop-formula/
+owner rectangle cannot be reconstructed from reported geometry as with the1000
+focused targets. Whole e01ef9dc runner bytes remain missing. Do not infer rectangle
+recovery from unique screenshot template matches or repeat the settled location
+question. Next separator/clipping/paint attribution and original source boundary.
+No capture,renderer,fixture,metric or consumed-proof changes;cold57853 still live.
+
 ## Concrete divider closure check separates inspection gaps from acceptance — October14
 
 Read-only proposal6bfe953b examination of static:divider@light/desktop identifies
