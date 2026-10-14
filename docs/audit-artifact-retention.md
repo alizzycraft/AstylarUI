@@ -63,9 +63,15 @@ no-editor-caret-conservation-20261014.log SHA
 f13000545e64a06b48da89c37898a891da1a84df1d4a7ff9c1b203e06ef88137.
 The former checks1380 intended obligations/all2311 other complete fields/six
 negative controls;the latter passes2/2,zero skips. Separate original full-generator
-no-editor-full-case-integration-20261014.log is active;do not compress/delete or
-restart it. No new canonical or current rendering acceptance follows from the
-focused block. Existingf56 proposal/currentb246 generation remain retained.
+no-editor-full-case-integration-20261014.log is closed successful original
+integration evidence:exit0,1/1,zero skips,809942.8104ms,SHA
+c22ab83456638f02791e4c82da6e0b5140606f1ff187e87c2187611f1037a5c3.
+Retain generated37dc2f92 proposal (complete fileSHA
+06f75f43697289619f403bf551a6a46278c2459bc44f21bf2c0d282afcff7d6b) and
+terminal no-editor-generated-proposal-verify-20261014.log with it. The existing
+loader verifies2311 records/9809 dependencies,both acceptance flags false.
+No new canonical or current rendering acceptance follows from this integration.
+Existingf56 proposal/currentb246 generation remain retained.
 
 October14 fresh-divider-layout receipt review:retain the original direct test
 failure `divider-fresh-layout-receipt-direct-20261014.log` (SHA

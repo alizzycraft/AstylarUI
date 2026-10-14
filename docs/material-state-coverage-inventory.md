@@ -1,6 +1,6 @@
 # Material comparison/state coverage inventory
 
-## Current batch: authored no-editor exclusions verified; full case integration live — October14
+## Current batch: complete no-editor case integration verified; divider joins next — October14
 
 Publishedc9cb3c16/b246c590 is the cold-verified preceding snapshot. Existing exact
 case owner now reviews the bounded1380 no-target cases across21 families through
@@ -22,12 +22,21 @@ f13000545e64a06b48da89c37898a891da1a84df1d4a7ff9c1b203e06ef88137.
 It restores the exact added block to Git8587fd96/4649a187 before the unchanged
 historical-boundary/earlier restoration chain;unreviewed drift still rejects.
 
-The complete original generator integration29556 is confirmed live:
-launcher35780/worker27472,log no-editor-full-case-integration-20261014.log.
-No terminal integration success or new canonical promotion is inferred. Keep its
-consumed source batch frozen;do not restart for quiet output. Next verify its
-proposal and exact predecessor transitions,then combine queued frame disposition
-work at a justified canonical milestone. All original final gates remain open.
+The complete original generator integration29556 is TERMINAL exit0:1/1 test,
+zero skips,809942.8104ms. Log no-editor-full-case-integration-20261014.log SHA
+c22ab83456638f02791e4c82da6e0b5140606f1ff187e87c2187611f1037a5c3 produces
+proposal37dc2f922af6e7b847b70e4fe687ac64ded98030ddeecd822dfffd49e37724b5,
+complete fileSHA06f75f43697289619f403bf551a6a46278c2459bc44f21bf2c0d282afcff7d6b.
+Complete predecessor comparison isolates1380 intended authored-editing exclusions,
+64 input-boundary and40 benchmark source receipts;reversing those fields recovers
+every2311 complete predecessor row with zero unexpected fields. Existing proposal
+loader verifies exact membership/all9809 dependencies,inspectionComplete=false,
+currentRenderingAccepted=false;log no-editor-generated-proposal-verify-20261014.log
+is terminal0. No real whole case is promoted. Do not poll/restart ended workers.
+Next combine the queued divider paint/paragraph/frame dispositions in the existing
+owner before one coherent proposal/source/canonical milestone;do not export after
+each bounded proof edit. Publishedb246 remains the preceding verified snapshot.
+All original final gates remain open.
 
 Read-only next-gap check during integration answers missing separator evidence
 versus missing exact-case join. Authenticated spanff30ee43,midpoint601e8407 and
