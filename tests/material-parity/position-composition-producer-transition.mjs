@@ -7,6 +7,21 @@ import ts from 'typescript';
 const hash = text => createHash('sha256').update(text).digest('hex');
 export function restoreAllCaseObligationRegistration(source) {
   let current=source.toString().replaceAll('\r\n','\n');
+  const progressOwnership='ae1e75bd5a994eec473385d5e0396a4785f6f57ff7bb70e748bcd5a260680218';
+  if(current.includes(progressOwnership)){
+    assert.equal(hash(current),'961e4d34203fd0ddb61609e50c48127aad0ab79311ab92f54d490819c726cc31',
+      'exact progress obligation and retained caret proof registration');
+    const prior=execFileSync('git',['show','30d0446c:tests/material-parity/input-equivalence-audit.mjs'],
+      {encoding:'utf8',maxBuffer:4_000_000}).replaceAll('\r\n','\n');
+    assert.equal(hash(prior),'0e1ef18f9bd6d68a5e110418a81beb51939094dea070e977421ad8f89850b8eb');
+    assert.equal(current.split(progressOwnership).length,2);
+    current=current.replace(progressOwnership,'6bfe953bb90903b5b061cbc3a156c917e4010141b10d3af28bf49c9c6c3d1c6a');
+    const start="    proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\\('equal-input caret font contrast";
+    const end="    proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\\('progress focus paint";
+    assert.equal(current.split(start).length,2);const first=current.indexOf(start),last=current.indexOf(end,first);
+    assert.ok(last>first);current=current.slice(0,first)+current.slice(last);
+    assert.equal(current,prior,'complete prior producer conserved after only exact proposal pin and caret proof addition');
+  }
   if (current.includes('describeCaseInspectionCoverage')) {
     assert.equal(hash(current), '0e1ef18f9bd6d68a5e110418a81beb51939094dea070e977421ad8f89850b8eb',
       'exact versioned inspection presentation producer');

@@ -1,5 +1,26 @@
 # Material comparison/state coverage inventory
 
+## Progress/caret/closure registration reconciled before canonical export — October14
+
+ProducerLF961e4d34 pins proposalae1e75bd and registers the existing caret
+font-response regression. Named launcher supplies the same proposal/digest.
+Existing complete-producer restoration authenticates current bytes,reverses only
+that pin/proof addition to exact30d0446c producer0e1ef18f,then follows unchanged
+presentation/history conservation. Original mutation controls plus the new proof
+description mutation reject. Store/transition integration passes36/36,zero skips,
+169062.6856ms terminal,session94417 exit0. Log progress-caret-registration-
+integration-20261014.log SHAd3a7025a914edd6f684c782307c514faf8b947ff8141fe9b7d8714a1752c6183.
+Caret/progress paint focused tests pass2/2;loader reauthenticates2311 cases/9803
+dependencies after registration,both acceptance flags false. Launcher dry-run and
+scoped diff check pass. No current rendering or whole-case closure follows.
+
+Four closed proposal files were transparently NTFS-compressed with each complete
+before/after SHA256 unchanged. Observed D:free173584384→327782400bytes;no original
+capture,failure,path or pointer changed. Retention record names exact proposals.
+Next run coherent canonical export once,retain terminal result,then independent
+cold comparison and whole package/case/finding conservation before publication.
+Canonicalcafd5020 remains the accepted predecessor until those checks finish.
+
 ## Progress ownership joins and caret receipt reconciliation verified — October14
 
 Existing proposal owner attaches original three-equal-value-update/disposal

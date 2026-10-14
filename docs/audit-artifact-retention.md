@@ -56,6 +56,17 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October14 progress/caret export headroom: four closed proposal JSON files under
+working-audit/proposals were transparently NTFS-compressed in place:6bfe953b,
+2df59a35,ab27d795,ae1e75bd (full names remain their review digests). Every complete
+file SHA256 agrees before/after;334625298 logical bytes occupy180154368 physical
+bytes. Observed D:free173584384→327782400bytes. No captures,failure evidence,
+paths,canonical package or working pointer were deleted/repointed. Existing
+loader afterward authenticates ae1e75bd's2311 cases/9803 dependencies;its complete
+file SHA256 remains919879f853c2cedb59914f73a4b0e52fdf8a5ee38c8b2ad1006a2bc5f3b4c23f.
+Previous proposals retain historical proof-source receipts,not current applicability.
+Recheck headroom before import/publication;this is storage conservation only.
+
 October12 zero-space interruption: one regenerable EvidenceSession envelope
 40711e0953a9d8f4e1535e838e76cb325b4e45d9b1280b16de93362b5d1df514.json
 (228653 bytes) was removed after its envelope digest/key and all963 dependency
