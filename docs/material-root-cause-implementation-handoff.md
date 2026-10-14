@@ -1,5 +1,31 @@
 # Material audit: evidence-led implementation priorities
 
+## October15 public flex margin-unit failure — confirmed bounded core defect
+
+Two fresh public-package equal-input runs each show four flex1em-margin failures
+with explicit own16/24px fonts,while four block-em and eight pixel controls agree.
+Native child offsets from the padded parent are36/44px;candidate flex offsets are
+21px,at both requestedDPR1/2. Retained PNG bounds and physical raster sizes agree
+with projected geometry. No relative box dimensions or text metrics are involved.
+Exact current emitted margin method bodies match the actual installed bundle
+inputs;the existing block creation helper resolves these own-font em margins,
+while FlexService.parseMarginBox/parseMargin drops the unit through parseFloat.
+
+Evidence:public-relative-margin-20261015 and public-relative-margin-repeat-20261015
+under artifacts/material-parity,plus their --verify logs and
+public-relative-margin-owner-binding-20261015.log. Exact hashes/limits are in the
+current coverage ledger. Canonical policy registration/regression integration is
+next;published158-finding snapshot has not yet incorporated this new finding.
+
+Implementation should share CSS-space computed length/font resolution at the
+owning layout boundary,with block/flex,own/inherited font,shorthand/longhand and
+pixel controls. Do not replace margin1em with fixture-specific pixels. Keep the
+existing local-font em width/height and positioned margin-box findings distinct.
+The dimension parser also drops units in isolation,but these block controls pass;
+do not claim every caller fails or attribute Material absolute wrappers to this
+flex-flow reduction. First-bad history,other units/contexts,updates and lifecycle
+remain outside this bounded proof. This audit does not authorize renderer fixes.
+
 ## October14 caret font-response classification — suspected core defect
 
 Finding `core-caret-height-rule-is-font-insensitive` binds the retained public

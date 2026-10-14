@@ -56,6 +56,19 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October15 public relative-margin diagnostic is required equal-input evidence.
+Retain public-relative-margin-20261015 and public-relative-margin-repeat-20261015
+with their reports,bundles,HTML and32 original PNGs per run. Both complete reports
+have SHAac83b117088eaa09117d9ddead286d77a913b6c1201830e445af06a75d8e81da;
+both capture logs87a97116059d98f8384422b1e8c0e1f72d5efa797da73ddd94edd837ff4d61a2
+and both verify logs493687ed187bbe6aa79b769014aceb739c92578b9c91560b550ae90c8c38b1cc
+are terminal0. Byte identity does not itself authorize deleting repeat provenance;
+use established reference/alias closure before any deduplication. Retain
+public-relative-margin-owner-binding-20261015.log SHA
+ac2b356d74062bfd7e06d9ca8ee1062e3ff2660b601ec45aa1eae9e51d358012
+with exact current/installed method bindings and retained PNG geometry checks.
+These are16 bounded paired trials per run,not aggregate Material acceptance.
+
 October15 relative-margin owner diagnostic is required bounded investigation
 evidence,not successful capture scratch. Retain
 margin-relative-unit-owner-diagnostic-20261015.log SHA
@@ -71,8 +84,12 @@ divider-paint-owner-caret-conservation-20261014.log SHA
 b5c210f5e89a3b3bcf80d8300ff061467ab8daa4ec8c89e108fd1d2329aa5d86.
 Block replay checks24 cases/72 bounded subrecords,original48 PNG spans,all other
 complete fields and two owner/frame controls. Conservation passes2/2,zero skips.
-Separate original divider-paint-owner-full-case-integration-20261014.log is active;
-do not compress/delete or restart it. Original span/midpoint/mixed-model logs,
+Separate original divider-paint-owner-full-case-integration-20261014.log is now
+closed successful integration evidence:exit0,1/1,zero skips,768459.2868ms,SHA
+9f0adf0709b30291b341c9a36f1bb5c39172656ac19c1a1e47e3178f9b4ecac9.
+Retain its0773e481 proposal/fileSHA
+861e77f7b78b33e6f0037dfed3ad3902b5a88cdde618002c7df9969c439050d7.
+Original span/midpoint/mixed-model logs,
 all original PNGs,37dc proposal and acceptedb246 generation remain untouched.
 No canonical/current-rendering acceptance follows from the focused join alone.
 

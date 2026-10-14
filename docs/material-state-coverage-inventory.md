@@ -1,6 +1,49 @@
 # Material comparison/state coverage inventory
 
-## Current batch: divider paint/paragraph/frame joins verified; full integration live — October14
+## Current batch: public flex-margin defect reproduced; divider integration complete — October15
+
+Public equal-input margin diagnostic closes the isolated-parser/public-path gap.
+New bounded script audit-public-relative-margins.mjs reuses the existing public
+mount/esbuild/browser/receipt pattern because the earlier em-box proof excludes
+margins;no framework,canonical fixture or original capture runner is replaced.
+Two fresh runs each cover16 paired trials:own font16/24px,block/flex,1em0 versus
+matching pixel margins,and requestedDPR1/2. All4 block-em trials and8 pixel controls
+agree. All4 flex-em trials instead place the child21px below its parent versus
+native36/44px (15/23px too high),matching a1px used margin rather than16/24px.
+Inputs remain identical/unchanged,diagnostic errors are empty,and all32 retained
+PNG child-ink bounds corroborate projected output;physical raster dimensions
+match400×260CSSpx at each requestedDPR. No text or relative width/height confound.
+
+Both public-relative-margin-20261015 and public-relative-margin-repeat-20261015
+reports are byte-identical SHA
+ac83b117088eaa09117d9ddead286d77a913b6c1201830e445af06a75d8e81da.
+Both capture logs SHA87a97116059d98f8384422b1e8c0e1f72d5efa797da73ddd94edd837ff4d61a2;
+both --verify logs SHA493687ed187bbe6aa79b769014aceb739c92578b9c91560b550ae90c8c38b1cc
+reject unequal-input and missing-case controls. ScriptSHA
+58c335b85f8405bd807a4a7b023c8a889e52e817d5924d549121c6e6e5cb5474.
+Owner binding log public-relative-margin-owner-binding-20261015.log SHA
+ac2b356d74062bfd7e06d9ca8ee1062e3ff2660b601ec45aa1eae9e51d358012
+authenticates relevant complete emitted method bodies/parameter names against
+actual installed bundle inputs. Chrome155/Playwright1.62.1 launch and2515 bundle
+input receipts are retained. Fresh bundles avoid a dev-server cache assumption.
+
+First divergence is core FlexService.parseMarginBox/parseMargin used-length
+conversion:flow children retain margin1em and own16/24px font,then parseFloat
+drops the unit. Ordinary block creation uses its separate font-aware helper and
+passes these controls. The lower dimension parser concern is not promoted to a
+separate end-to-end defect merely because it also parses1em as1. No Material
+paragraph placement,positioned/inherited-font/percent margin,updates,lifetime or
+aggregate parity claim follows. First-bad history remains unestablished. Next
+register this bounded confirmed flex finding and public regression through existing
+policy/proof mechanisms in the coherent batch;do not compensate with pixel margins.
+
+Original divider integration99035 is now TERMINAL exit0:1/1,zero skips,
+768459.2868ms;log divider-paint-owner-full-case-integration-20261014.log SHA
+9f0adf0709b30291b341c9a36f1bb5c39172656ac19c1a1e47e3178f9b4ecac9.
+Generated0773e481f7393b4deadb0d155685814670448558fbeb4e6774c74955a63ce6e4
+proposal fileSHA861e77f7b78b33e6f0037dfed3ad3902b5a88cdde618002c7df9969c439050d7
+contains2311 cases. Exact predecessor/dependency reconciliation is next;this is
+not canonical or whole-case acceptance. Do not poll/restart ended workers.
 
 Existing owner now joins the queued retained observations to all24 divider cases:
 separator full-span visibility with recorded unequal ink/model limits,48 explicit
@@ -19,9 +62,8 @@ Existing caret/progress conservation2/2,zero skips,3405.5396ms passes;log
 divider-paint-owner-caret-conservation-20261014.log SHA
 b5c210f5e89a3b3bcf80d8300ff061467ab8daa4ec8c89e108fd1d2329aa5d86.
 The exact added block restores complete Git1997926c/9745e459 before unchanged
-prior source transitions. Full original integration99035 is confirmed live:
-launcher23196/worker6824,log divider-paint-owner-full-case-integration-20261014.log.
-Keep consumed sources frozen;do not restart for silence or infer terminal success.
+prior source transitions. Full original integration99035 has now passed as
+recorded above;launcher23196/worker6824 ended. Do not restart the completed run.
 Next verify its complete proposal/transitions,then reconcile both coverage increments
 at one justified canonical milestone. Publishedb246 remains the preceding snapshot;
 all final acceptance gates and genuine remaining case obligations stay unchanged.
