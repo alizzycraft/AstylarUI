@@ -56,6 +56,15 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October15 transient editing focus:retain configured-input-editing-transient-focus-
+20261015.log,configured-input-editing-focus-owner-20261015.log and
+configured-input-editing-focus-owner-binding-20261015.log with their original
+checkpoint/current editing capture. Exact hashes and scopes are in the current
+ledger. Keep docs/evidence/configured-input-editing-focus-owner-20261015.mjs.b64:
+it preserves the logical LF diagnostic command,not an invented original stdin
+byte receipt. Root first-blur evidence and older descendant first-blur evidence
+are distinct;neither may replace the other. No original/failure evidence removed.
+
 October15 configured empty-ink replay:retain
 configured-input-editing-empty-ink-20261015.log SHA
 cd265610188a7c939023131f532677229a8f923a5bb1f85201e0668b8db72716.

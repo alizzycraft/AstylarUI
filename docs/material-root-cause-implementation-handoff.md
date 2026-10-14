@@ -1,5 +1,18 @@
 # Material audit: evidence-led implementation priorities
 
+October15 semantic focus refinement:light desktop DPR1 form-field/input deletion
+updates first blur the SAME connected input inside unconditional semantic ROOT
+replaceChildren,with identical old/requested child objects and order. Later
+syncFocus restores it;native controls have no corresponding update blur. Retained
+16-case editing observations show transient blur/refocus despite matching endpoints,
+but root causality was traced only in these two light DPR1 cases. Earlier mobile
+timepicker/public sibling reductions first blur in DESCENDANT replacement;both
+paths must be covered by a general semantic reconciliation fix. Preserve focused
+descendants and avoid needless detach/reinsert;do not suppress events or add an
+application refocus workaround. Exact trace/executed-source bindings and logical
+command preservation are in the current coverage ledger. This is audit evidence,
+not authorization to implement;public unchanged-root regression remains next.
+
 October15 queued evidence is now registered coherently:producer206 adds the
 bounded margin regression and four paths;named launcher selects refreshed569d8cc6
 case review. Existing loader authenticates9860 dependencies/all2311 cases;

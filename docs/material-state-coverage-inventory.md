@@ -50,6 +50,40 @@ the font lists into equivalence. Select-all form-field endpoints agree0..5 in
 eight samples;email endpoints remain null on both sides,not an observed range.
 Candidate cursor flags remain enabled/visible,which alone does not prove paint.
 
+Transient-focus question now has a bounded root answer. All16 retained action
+intervals between select-all and post-Backspace settlement contain one candidate
+blur/refocus and no native blur,despite matching final focus/value. This is an
+interval observation,not a claim that blur always precedes keyup. Replay log
+configured-input-editing-transient-focus-20261015.log SHA
+d3dae6844ec7d56adc300b62c7f40f260eaa685184808fc5f914f421e1a630c1
+checks exact array prefixes and the sole added Backspace call for both sides.
+
+Small decisive follow-up reused withFrozenShowcase and complete original runner
+functions for light desktop DPR1 form-field/input. Identity-preserving wrappers
+locate first candidate focusout synchronously inside semantic ROOT replaceChildren:
+the requested child objects/order equal the existing children,and the input keeps
+its exact object identity. Native controls blur only at the intended outside click.
+Candidate refocus follows;the later outside blur is separately recorded. Trace
+configured-input-editing-focus-owner-20261015.log SHA
+5e057771a6a88ac246ff7d51fcd25e6fbf76a4205ba0c5267398c1a22b8ee004.
+Independent binding log configured-input-editing-focus-owner-binding-20261015.log
+SHA3c7b72f5a3b62b06a26c18c5b5f53e0fe7305061463fffea087782b45a122607
+authenticates the checkpoint/served assets and exact executed source-map module;
+complete reconcile/reconcileElement/syncFocus methods equal current emitted source.
+This extends the known core semantic focus-continuity defect with a distinct root
+first-blur site. Earlier timepicker/public sibling cases first blur at descendant
+replacement;do not overwrite that finding or attribute this root path to all16
+profiles without measurement. No field/plugin focus workaround is justified.
+
+The logical executed LF command is preserved in
+docs/evidence/configured-input-editing-focus-owner-20261015.mjs.b64,decoded SHA
+5e93d6140683c6c2a471712889b1fe5c0e99834059a88e0b0394a572d5545cfd.
+It is command-source preservation,not a claimed raw PowerShell stdin byte receipt.
+No new framework or original test change;wrappers return original results/errors
+and are restored. Instrumentation can affect timing. Next extend the existing
+semantic-focus regression/handoff to cover unchanged root-child reconciliation,
+alongside changed descendants,after the live canonical source freeze ends.
+
 Initial verifier incorrectly expected lowercase a;actual event is A/codeKeyA as
 requested by Control+A. Preserve failed verify log2cd530ffe2b7145cc14e4b9c2b9ac4719816e6594d81490aa523d3d733f65aed.
 Corrected verify-retry logSHAb4fd87febb2bf5d50a5dc64c553900fe955e3077d16b088b33d5360d2e8a1fd2
