@@ -102,11 +102,22 @@ candidate-data discrepancy. Failure log divider-caret-package-case-conservation-
 20261014.log SHA33c8498ad888fa59947b8b56d27a72dc959a19d02200e10271e3eae6e01a4d37
 is retained. Existing refreshScalarControlReceipts identifies the actual
 reviewEvidence.observation.normalizationReconciliation path. Corrected retry
-session79472/worker13788 is confirmed live;separate log
-divider-caret-package-case-conservation-retry-20261014.log remains pending.
-It uses the existing source-transition/comparator/proposal loader,with48 forged
-control checks and complete decoded/case/metadata checks;no production input,
-fixture,threshold or acceptance flag changed. Do not restart either live job.
+session79472 is now TERMINAL exit0;separate log
+divider-caret-package-case-conservation-retry-20261014.log SHA
+44599ee1344f6fba3eef3549b1cd5e187cf777b535babdaee5dd989e496fbcf4
+authenticates both complete decoded packages. Existing source-transition and
+comparator prove all48 controls change only the producer receipt961e4d34→3880cfa3;
+scalar903 changes only48 embedded control-proof hashes. All48 forged controls
+reject. Existing proposal loader reauthenticates evidence and every2311 complete
+case row agrees withf56f4ca7. Base coverage,summary except157→158 source count,
+and contract agree exactly. The sole appended source finding is the suspected
+caret rule;all157 predecessor source rows remain byte-equivalent in the census.
+Markdown SHA98c71f74215b167681dae81c5e58835537a4fe599b450037a30aef19291cc72d
+preserves every ordered claim from Git8fd3aafe after only exact benchmark-config/
+input-boundary-evidence test-line anchor normalization and the one appended caret
+classification line. No production input,fixture,threshold or acceptance flag
+changed. Independent cold83713 remains live and still owns complete fresh-audit/
+decoded-value comparison;these conservation checks do not replace that gate.
 Published2e196c48 remains the prior snapshot until independent cold comparison,
 package/case/finding conservation and publication finish. All2311 whole-case
 records remain partial/unverified;final gates are unchanged. Observed D:free
