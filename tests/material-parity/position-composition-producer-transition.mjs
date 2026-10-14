@@ -7,6 +7,30 @@ import ts from 'typescript';
 const hash = text => createHash('sha256').update(text).digest('hex');
 export function restoreAllCaseObligationRegistration(source) {
   let current=source.toString().replaceAll('\r\n','\n');
+  if (current.includes('public flex em margin unit-loss defect with block and pixel controls')) {
+    assert.equal(hash(current), 'dd0db0c6d935c1479ae5e00f1328a8502b4991f0ec5192ebea76e5d3a43f017d',
+      'exact flex-margin proof and queued case-review registration');
+    const tree = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    const entries = tree.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory')
+      .body.statements[0].expression.elements;
+    assert.equal(entries.length, 206);
+    assert.equal(entries[0].arguments[3].text, 'public flex em margin unit-loss defect with block and pixel controls');
+    current = current.slice(0, entries[0].getFullStart()) + current.slice(entries[0].end + 1);
+    for (const file of ['scripts/audit-public-relative-margins.mjs',
+      'artifacts/material-parity/public-relative-margin-20261015/latest-report.json',
+      'artifacts/material-parity/public-relative-margin-repeat-20261015/latest-report.json',
+      'artifacts/material-parity/public-relative-margin-owner-binding-20261015.log']) {
+      const line = `    '${file}',\n`;
+      assert.equal(current.split(line).length, 2); current = current.replace(line, '');
+    }
+    const next = '569d8cc6b3bc36b67ac83560633ae455ae950e2722cb44bb2eed4464648ad133';
+    assert.equal(current.split(next).length, 2);
+    current = current.replace(next, 'f56f4ca7efa42579e4fd3bda3de004f7f0ea5c6fec28b7ab4dd11ee1b7fd9d62');
+    const prior = execFileSync('git', ['show', 'bad397cc:tests/material-parity/input-equivalence-audit.mjs'],
+      { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+    assert.equal(current, prior, 'Only the new margin proof, four paths and queued review pin may change');
+    assert.equal(hash(current), '3880cfa3a3a524da3511ca29ff2c438e9c1be20c4e55139ea146cc50ce148041');
+  }
   const progressOwnership='ae1e75bd5a994eec473385d5e0396a4785f6f57ff7bb70e748bcd5a260680218';
   const caretClassification='0c7da19a475c9c696bf50cac17ce5992c7d68822f06981e5af434a4f5bef1588';
   const dividerSemantics='f56f4ca7efa42579e4fd3bda3de004f7f0ea5c6fec28b7ab4dd11ee1b7fd9d62';

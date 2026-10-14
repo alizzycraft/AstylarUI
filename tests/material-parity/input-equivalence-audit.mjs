@@ -8922,8 +8922,12 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'scripts/audit-public-relative-margins.mjs',
+    'artifacts/material-parity/public-relative-margin-20261015/latest-report.json',
+    'artifacts/material-parity/public-relative-margin-repeat-20261015/latest-report.json',
+    'artifacts/material-parity/public-relative-margin-owner-binding-20261015.log',
     'tests/material-parity/audit-findings-store.spec.mjs',
-    'artifacts/material-parity/working-audit/proposals/f56f4ca7efa42579e4fd3bda3de004f7f0ea5c6fec28b7ab4dd11ee1b7fd9d62.json',
+    'artifacts/material-parity/working-audit/proposals/569d8cc6b3bc36b67ac83560633ae455ae950e2722cb44bb2eed4464648ad133.json',
     'docs/evidence/material-overlay-context-runner.mjs.b64',
     'artifacts/material-parity/divider-context-verified-angular-20261013-dpr1/result.json',
     'artifacts/material-parity/divider-context-verified-angular-20261013-dpr1/provenance.json',
@@ -9600,6 +9604,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('public equal-input flex em margins preserve exact failure and block pixel controls'/,
+      'public flex em margin unit-loss defect with block and pixel controls', 'Authenticates two public equal-input16-trial runs,retained PNGs and relevant complete current/emitted/installed method bodies. Four flex-em trials per run fail by15/23CSSpx while four block-em and eight pixel controls agree. Existing verifier rejects unequal inputs and missing cases;exact159-to158 policy restoration rejects drift. Bounded own-font CSS used-length failure before projection,not inherited-font,positioned-margin,update,lifetime or whole-Material parity acceptance.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('divider reduction receipts preserve observed DPR and unchanged failing geometry'/,
       'divider observed DPR public failure and exact runner conservation', 'Authenticates requested and observed initial/final900x800 DPR1/2 contexts,Chrome155,exact preserved runner bytes,104 compiled/source/installed pairs and2517 bundle inputs per reduction. Original geometry/paint assertions remain unchanged; both runs honestly fail with four301px errors and no page errors. Metadata-only whole-source conservation and wrong-DPR/changed-assertion controls reject drift. Not configured-case current rendering acceptance or recovery of the older missing runner receipt.'),
     proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('public omitted box sizing finding preserves explicit controls and complete prior policy'/,

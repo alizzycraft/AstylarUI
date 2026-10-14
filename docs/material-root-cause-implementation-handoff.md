@@ -1,5 +1,13 @@
 # Material audit: evidence-led implementation priorities
 
+October15 queued evidence is now registered coherently:producer206 adds the
+bounded margin regression and four paths;named launcher selects refreshed569d8cc6
+case review. Existing loader authenticates9860 dependencies/all2311 cases;
+only552 policy/40 benchmark receipt fields changed from0773. Complete review and
+producer predecessor conservation pass;focused checks7/7,zero skips. Current
+coverage ledger has exact hashes/limits. Canonical export/cold/import remains
+next;publishedb246 and all partial/unverified case flags remain unchanged.
+
 October15 registration checkpoint:the bounded flex-margin defect below is now
 the159th policy finding,with owning public regression and exact158-predecessor
 conservation. Combined focused checks pass7/7,zero skips;see the current coverage

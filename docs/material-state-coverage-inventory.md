@@ -1,5 +1,35 @@
 # Material comparison/state coverage inventory
 
+## Current integration checkpoint — October15 coherent queued evidence registration
+
+Previous turn made verified progress:bad397cc registered the bounded margin
+finding and preserved all predecessor definitions. This turn resolves current
+applicability of the queued0773 case review before any canonical export:
+all9860 dependencies checked,only policy and benchmark file receipts changed.
+Authenticated dd03fdc8/bad397cc complete source bytes and existing exact policy
+restoration bind those two transitions. Existing saveReviewProposal produces
+569d8cc6b3bc36b67ac83560633ae455ae950e2722cb44bb2eed4464648ad133,
+complete fileSHAb1316c2e2c9374424e1641c24045381c6ccf57970227df60663ceccafa4edeb4.
+All2311 complete review rows are unchanged except552 policy and40 benchmark
+receipts;reversing only those changes restores the full prior review exactly.
+Existing loader authenticates9860 dependencies,zero unjoined cases,both flags
+false. Log flex-margin-case-proposal-refresh-20261015.log SHA
+88739381d4ccae1478170121ee0c37f2e9120103e098bbd9cb19ad81bf8fbdaa.
+
+Producer and named launcher now select that review,which includes the1380
+authored-editing exclusions and24 divider paint/owner/frame joins. Producer
+adds only the margin regression descriptor and four evidence/source paths;
+exact whole-source transition restores complete bad397cc producer3880cfa3.
+Existing focused checks pass7/7,zero skips,35865.5745ms:
+flex-margin-producer-registration-focused-20261015.log SHA
+e4fd718caef0805285ad590fab35d5117f12199d83acb1420f34351a31272fbd.
+Named-launcher dry run supplies all original capture inputs and the exact new
+proposal digest. This proves registration and dependency conservation,not a
+canonical publication or current whole-case parity pass. Publishedb246 remains
+the158-finding predecessor;one coherent export/cold/import milestone is next.
+All2311 cases remain partial/unverified;shared writable editing,readonly/disabled
+behavior,popup boundaries and remaining applicable obligations stay open.
+
 ## Current integration checkpoint — October15 flex-margin registration
 
 The prior snapshot turn was status-only,not investigation progress. Remaining

@@ -56,6 +56,15 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October15 coherent queued evidence registration:retain refreshed569d8cc6 proposal
+(full digest/file hash in current ledger),original0773 and all predecessors.
+Retain flex-margin-case-proposal-refresh-20261015.log SHA
+88739381d4ccae1478170121ee0c37f2e9120103e098bbd9cb19ad81bf8fbdaa and
+flex-margin-producer-registration-focused-20261015.log SHA
+e4fd718caef0805285ad590fab35d5117f12199d83acb1420f34351a31272fbd.
+These prove exact receipt/source conservation and7 focused checks,not final
+canonical publication or current rendering. No original evidence was removed.
+
 October15 flex-margin registration:retain both original predecessor-conservation
 failure logs and the successful flex-margin-registration-conservation-20261015.log
 (SHAef93a9c4e31b91ae143adaa00eb20e53503789487e9e7f85fe6f98339eb0c91c,
