@@ -1,6 +1,33 @@
 # Material comparison/state coverage inventory
 
-## Current batch: independent cold, conservation, import and index verification complete — October14
+## Current batch: authored no-editor exclusions verified; full case integration live — October14
+
+Publishedc9cb3c16/b246c590 is the cold-verified preceding snapshot. Existing exact
+case owner now reviews the bounded1380 no-target cases across21 families through
+Angular template parsing,all selected candidate branches/shared SiteData methods,
+the original retained target census and installed slider type=range inheritance.
+Six inserted writable input/textarea/contenteditable controls reject. Only their
+authoredEditing obligation becomes inspected-authored-exclusion;all unrelated
+complete fields and whole-case partial/unverified flags are preserved. Readonly
+and disabled behavior,non-text values,keyboard/focus,plugin internals,paint and
+lifetime are not excluded by this authoring conclusion.
+
+Exact owner block735a2684 replay against authenticatedf56f4ca7 passes:2311 rows,
+1380 intended obligation changes,all other complete fields conserved,zero whole-
+case promotions. Log no-editor-authored-exclusion-block-20261014.log SHA
+ea78f8f12e733ea24d0352c317f3564f11900934c5cdaa1be8fdd8b6ce33b689.
+Existing caret/progress source conservation passes2/2,zero skips,2775.0049ms;
+log no-editor-caret-conservation-20261014.log SHA
+f13000545e64a06b48da89c37898a891da1a84df1d4a7ff9c1b203e06ef88137.
+It restores the exact added block to Git8587fd96/4649a187 before the unchanged
+historical-boundary/earlier restoration chain;unreviewed drift still rejects.
+
+The complete original generator integration29556 is confirmed live:
+launcher35780/worker27472,log no-editor-full-case-integration-20261014.log.
+No terminal integration success or new canonical promotion is inferred. Keep its
+consumed source batch frozen;do not restart for quiet output. Next verify its
+proposal and exact predecessor transitions,then combine queued frame disposition
+work at a justified canonical milestone. All original final gates remain open.
 
 Read-only question during full owner integration:are page-frame sibling semantic
 inputs still unmapped,or is the remaining boundary actual runtime observability?

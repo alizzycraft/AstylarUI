@@ -44,6 +44,17 @@ test('equal-input caret font contrast preserves bounded source and recorded pain
     policy.replace('native chosen font', 'native chosen font proven'), policy + '\n// unreviewed policy drift\n'])
     assert.throws(() => restoreSizingDefaultPolicyRegistration(changed));
   const restoreProgressJoins = source => {
+    if (source.includes('  // No-editor authored exclusion join:')) {
+      assert.equal(hash(source), '9745e4596cf4234d60dd09c4730760c026e9fa7b1ef8ca906ba476733e542647');
+      const start = source.indexOf('  // No-editor authored exclusion join:');
+      const end = source.indexOf('  // End no-editor authored exclusion join;', start);
+      assert.ok(start > 0 && end > start);
+      source = source.slice(0, start) + source.slice(source.indexOf('\n', end) + 1);
+      const prior = execFileSync('git', ['show', '8587fd96:tests/material-parity/input-boundary-evidence.spec.mjs'],
+        { encoding: 'utf8', maxBuffer: 4_000_000 });
+      assert.equal(source, prior, 'Only the bounded authored no-editor exclusion block is added');
+      assert.equal(hash(source), '4649a18710e0c426b162302c2fd713c79f9d75cdd492a9ddb8f2d21182053bd2');
+    }
     if (source.includes('  // Fresh-divider historical probe boundary:')) {
       assert.equal(hash(source), '4649a18710e0c426b162302c2fd713c79f9d75cdd492a9ddb8f2d21182053bd2');
       const start = source.indexOf('  // Fresh-divider historical probe boundary:');

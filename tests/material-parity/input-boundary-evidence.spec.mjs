@@ -4064,6 +4064,95 @@ test('passive state applicability joins exact cases without discarding progress 
   }
   assert.equal(allObligations.filter(row=>row.obligations.semantics.observedComponentAX).length,24);
   // End divider exact-case semantic join; other obligations and whole-case status stay.
+  // No-editor authored exclusion join: close only the reviewed source/target obligation.
+  const noEditorCases=allObligations.filter(row=>{
+    const targets=row.obligations.authoredEditing.retainedTargetApplicability?.targets;
+    return targets&&targets.reference.length===0&&targets.astylar.length===0;
+  });
+  const noEditorFamilies=[...new Set(noEditorCases.map(row=>row.family))].sort();
+  assert.equal(noEditorCases.length,1380);assert.equal(noEditorFamilies.length,21);
+  const noEditorSources=[
+    ['examples/material-showcase/src/app/reference.component.ts','debe55bc492d0fa1e48a9c7f09e1b668d435a2260588710207ab878b23c1d4aa'],
+    ['examples/material-showcase/src/app/astylar.component.ts','71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd'],
+    ['examples/material-showcase/src/index.html','1a1f2c8ae04e66027dd4af59ca1d170913c0664b78a2017f62dc6cbbeac0a698'],
+    ['examples/material-showcase/node_modules/@angular/material/fesm2022/slider.mjs','b64564b1fc362e1e9b238fc322d2cea6517ebcf3139e58b775484a2218faba48'],
+  ].map(([file,sha256])=>{assert.equal(hash(readFileSync(file)),sha256);return {file,sha256};});
+  const {parseTemplate}=await import('@angular/compiler');
+  const noEditorName=(node,source)=>typeof node.text==='string'?node.text:node.getText(source);
+  const noEditorProp=(object,key,source)=>object.properties.find(node=>ts.isPropertyAssignment(node)&&noEditorName(node.name,source)===key)?.initializer;
+  const referenceSource=ts.createSourceFile(noEditorSources[0].file,readFileSync(noEditorSources[0].file,'utf8'),ts.ScriptTarget.Latest,true,ts.ScriptKind.TS);
+  const referenceClass=referenceSource.statements.find(node=>ts.isClassDeclaration(node)&&node.name?.text==='ReferenceComponent');
+  const referenceMetadata=ts.getDecorators(referenceClass).find(node=>ts.isCallExpression(node.expression)&&node.expression.expression.getText(referenceSource)==='Component').expression.arguments[0];
+  const referenceTemplate=parseTemplate(noEditorProp(referenceMetadata,'template',referenceSource).text,noEditorSources[0].file,{preserveWhitespaces:true});
+  assert.equal(referenceTemplate.errors,null);
+  const walkTemplate=(node,visit,skip)=>{if(node===skip)return;visit(node);for(const key of ['children','branches','cases'])for(const child of node[key]??[])walkTemplate(child,visit,skip);if(node.empty)walkTemplate(node.empty,visit,skip);};
+  let familySwitch;
+  for(const root of referenceTemplate.nodes)walkTemplate(root,node=>{
+    if(node.constructor.name==='SwitchBlock'&&node.expression.source==='family()'){assert.equal(familySwitch,undefined);familySwitch=node;}
+  });
+  assert.ok(familySwitch);
+  let nativeRangeInputs=0;
+  const inspectNativeNoEditor=node=>{
+    assert.notEqual(node.name,'textarea');
+    for(const attribute of [...node.attributes??[],...node.inputs??[]])assert.ok(!/contenteditable|innerhtml|outerhtml|ngcomponentoutlet/i.test(attribute.name));
+    if(node.name==='input'){
+      const attributes=new Set(node.attributes.map(attribute=>attribute.name));
+      assert.ok(attributes.has('matSliderStartThumb')||attributes.has('matSliderEndThumb'));nativeRangeInputs++;
+    }
+  };
+  for(const root of referenceTemplate.nodes)walkTemplate(root,inspectNativeNoEditor,familySwitch);
+  for(const family of noEditorFamilies){
+    const branch=familySwitch.cases.find(node=>node.expression?.source===`'${family}'`)??familySwitch.cases.find(node=>!node.expression);
+    assert.ok(branch);walkTemplate(branch,inspectNativeNoEditor);
+  }
+  assert.equal(nativeRangeInputs,2);
+  const sliderSource=ts.createSourceFile(noEditorSources[3].file,readFileSync(noEditorSources[3].file,'utf8'),ts.ScriptTarget.Latest,true,ts.ScriptKind.JS);
+  const thumbClass=sliderSource.statements.find(node=>ts.isClassDeclaration(node)&&node.name?.text==='MatSliderThumb');
+  const rangeClass=sliderSource.statements.find(node=>ts.isClassDeclaration(node)&&node.name?.text==='MatSliderRangeThumb');
+  assert.equal(rangeClass.heritageClauses[0].types[0].expression.getText(sliderSource),'MatSliderThumb');
+  const directive=thumbClass.members.find(node=>node.name?.getText(sliderSource)==='ɵdir').initializer.arguments[0];
+  assert.equal(noEditorProp(noEditorProp(noEditorProp(directive,'host',sliderSource),'attributes',sliderSource),'type',sliderSource).text,'range');
+  const candidateSource=ts.createSourceFile(noEditorSources[1].file,readFileSync(noEditorSources[1].file,'utf8'),ts.ScriptTarget.Latest,true,ts.ScriptKind.TS);
+  const candidateClass=candidateSource.statements.find(node=>ts.isClassDeclaration(node)&&node.name?.text==='AstylarShowcaseComponent');
+  const familyMethod=candidateClass.members.find(node=>node.name?.getText(candidateSource)==='familyElements');
+  const unwrapNode=node=>ts.isAsExpression(node)||ts.isParenthesizedExpression(node)?unwrapNode(node.expression):node;
+  const inspectCandidateNoEditor=node=>{
+    if(ts.isObjectLiteralExpression(node)){
+      for(const property of node.properties)if(property.name)assert.notEqual(noEditorName(property.name,candidateSource).toLowerCase(),'contenteditable');
+      const authoredType=noEditorProp(node,'type',candidateSource);
+      if(authoredType){
+        const type=unwrapNode(authoredType);assert.ok(ts.isStringLiteral(type),'Dynamic node type requires separate review');assert.notEqual(type.text,'textarea');
+        if(type.text==='input'){
+          const inputType=unwrapNode(noEditorProp(node,'inputType',candidateSource));
+          assert.ok(ts.isStringLiteral(inputType)&&nonTextInputTypes.has(inputType.text),'Writable input requires separate review');
+        }
+      }
+    }
+    ts.forEachChild(node,inspectCandidateNoEditor);
+  };
+  for(const family of noEditorFamilies){
+    const branches=familyMethod.body.statements.filter(ts.isIfStatement).filter(node=>Function('family',`return (${node.expression.getText(candidateSource)});`)(family));
+    assert.ok(branches.length===1||family==='button'&&branches.length===0);
+    inspectCandidateNoEditor(branches[0]?.thenStatement??familyMethod.body.statements.find(ts.isReturnStatement));
+  }
+  for(const method of ['selectionMark','buildSiteData'])inspectCandidateNoEditor(candidateClass.members.find(node=>node.name?.getText(candidateSource)===method).body);
+  for(const receipt of noEditorSources.slice(0,3))assert.ok(!/contenteditable|contentEditable|designMode|innerHTML|outerHTML|insertAdjacentHTML/.test(readFileSync(receipt.file,'utf8')));
+  for(const snippet of ['<textarea></textarea>','<div contenteditable="true"></div>','<input>']){
+    const parsed=parseTemplate(snippet,'control.html');assert.equal(parsed.errors,null);assert.throws(()=>inspectNativeNoEditor(parsed.nodes[0]));
+  }
+  for(const snippet of ['const x={type:"input",inputType:"text"};','const x={type:"textarea"};','const x={type:"div",contenteditable:true};'])
+    assert.throws(()=>inspectCandidateNoEditor(ts.createSourceFile('control.ts',snippet,ts.ScriptTarget.Latest,true,ts.ScriptKind.TS)));
+  for(const record of noEditorCases){
+    const previous=record.obligations.authoredEditing;assert.equal(previous.applicability,'not-applicable');
+    assert.deepEqual(previous.remaining,['source-wide and uncaptured-state applicability','disabled/readonly behavior where applicable']);
+    record.obligations.authoredEditing={...previous,disposition:'inspected-authored-exclusion',remaining:[],
+      conclusion:'No writable text target is authored in either corresponding family branch,shared frame/dialog/sheet template,selection mark or common SiteData construction; retained exact-case targets are empty on both sides.',
+      evidence:{pairedTrees:previous.retainedTargetApplicability.evidence,sources:noEditorSources},
+      boundary:'Authored text editing exclusion only. Range/non-text value changes,keyboard navigation,focus,plugin-generated internals,paint,lifetime and current rendering remain separate obligations; no whole-case closure.'};
+  }
+  assert.equal(allObligations.filter(row=>row.obligations.authoredEditing.disposition==='inspected-authored-exclusion'
+    &&row.obligations.authoredEditing.retainedTargetApplicability).length,1380);
+  // End no-editor authored exclusion join; unrelated behavior and whole-case status stay.
   assert.equal(new Set(allObligations.map(row=>row.case)).size,2311);
   assert.deepEqual(allObligations.map(row=>row.case).sort(),allConfigured.map(scalarCaseKey).sort());
   assert.ok(allObligations.every(row=>row.inspection==='partial'&&row.currentRendering==='unverified'));

@@ -56,6 +56,17 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October14 no-editor authored-exclusion owner block is required coverage evidence:
+retain closed no-editor-authored-exclusion-block-20261014.log SHA
+ea78f8f12e733ea24d0352c317f3564f11900934c5cdaa1be8fdd8b6ce33b689 and
+no-editor-caret-conservation-20261014.log SHA
+f13000545e64a06b48da89c37898a891da1a84df1d4a7ff9c1b203e06ef88137.
+The former checks1380 intended obligations/all2311 other complete fields/six
+negative controls;the latter passes2/2,zero skips. Separate original full-generator
+no-editor-full-case-integration-20261014.log is active;do not compress/delete or
+restart it. No new canonical or current rendering acceptance follows from the
+focused block. Existingf56 proposal/currentb246 generation remain retained.
+
 October14 fresh-divider-layout receipt review:retain the original direct test
 failure `divider-fresh-layout-receipt-direct-20261014.log` (SHA
 33e184fcb3be2eb243b78f87947ed374a12bac68a6341b1560a190ec1fa72cd7) separately
