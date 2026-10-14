@@ -28,6 +28,19 @@ partial. Distinguish1380 cases across21 families with no text-editing targets on
 either side from94 readonly-select cases and40 disabled-text cases. The94
 readonly cohort includes8 disabled selects;do not double-count those as extra
 disabled-text cases. This partitions the generic backlog,not an editing pass.
+The complementary writable cohort is now explicitly bounded from the complete
+authenticatedf56f4ca7 proposal:443 cases,all with at least one non-disabled,
+non-readonly retained target on each side. Family membership is form-field68,
+input68,autocomplete102,datepicker103,timepicker102;60 static/383 interaction.
+Interaction states partition as focus40,hover40,held40,activate41,activate-leave40,
+edit-empty-blur16,error40,open-commit-reopen8,open-hover-content24,
+open-dismiss-outside24,open-dismiss-canvas24,open24,open-secondary8,
+open-scroll8,open-dismiss6. No other family enters that cohort. This answers
+which additional editing records actually require writable-target investigation;
+prioritize shared caret/selection/editing owners across these five families,
+then popup commit/reopen boundaries. Keep readonly-select/disabled-text behavior
+separate. State labels or retained attributes do not prove those behaviors;
+no obligation or whole-case completion is promoted by this census.
 Current source review now covers those21 families:Angular's template parser
 inspects the actual family cases/default and shared dialog/sheet templates;
 TypeScript AST review inspects each selected candidate family branch,conditional
