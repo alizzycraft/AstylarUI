@@ -1,5 +1,27 @@
 # Material comparison/state coverage inventory
 
+## Retained slider pixels reproduce metrics;full measured population replay live — October14
+
+Specific gap:localPaint retainedTargetRaster contains finite metric records but
+explicitly lacks pixel recomputation. Read-only existing evaluateFocusedRaster
+replays all16 slider target pairs exactly after checkpoint.load authenticates
+each complete case and its artifacts. All16 retain SSIM matches=true and sharpness
+diagnostic meetsTarget=false;neither flag is promoted to complete paint acceptance.
+Log artifacts/material-parity/retained-slider-raster-metric-replay-20261014.log
+SHAd0bab57cffccd5eb69323ba2ea0b5310c0c6b2d766935291a4df663e374e814d.
+Metric-owner c8483996 and complete reportab42dbec authenticate. Missing whole
+runner e01ef9dc remains missing;not current rendering or a new blur/root diagnosis.
+
+All1000 measured cases have2000 saved target crops,18415026 logical bytes.
+That census is availability only,outside the16 authenticated/recomputed pairs.
+Full population replay now live in session94268,log artifacts/material-parity/
+retained-target-raster-full-metric-replay-20261014.log;200 cases completed at last
+observation. Existing metric/config thresholds remain unchanged;checkpoint rows
+and artifacts plus exact per-case metric equality are required. No new capture,
+fixtures,renderer changes or framework. Next retain terminal result and join
+authenticated raster observations through the existing owning proof;do not repeat
+that replay unchanged. Earlier full-row reader49986 remains live and separate.
+
 ## Sheet corners join25 cases while retaining six discrepancies — October14
 
 Existing owning proof executes every conserved original callback statement and
