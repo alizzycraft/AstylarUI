@@ -14,13 +14,18 @@ runner e01ef9dc remains missing;not current rendering or a new blur/root diagnos
 
 All1000 measured cases have2000 saved target crops,18415026 logical bytes.
 That census is availability only,outside the16 authenticated/recomputed pairs.
-Full population replay now live in session94268,log artifacts/material-parity/
-retained-target-raster-full-metric-replay-20261014.log;200 cases completed at last
-observation. Existing metric/config thresholds remain unchanged;checkpoint rows
-and artifacts plus exact per-case metric equality are required. No new capture,
-fixtures,renderer changes or framework. Next retain terminal result and join
-authenticated raster observations through the existing owning proof;do not repeat
-that replay unchanged. Earlier full-row reader49986 remains live and separate.
+Full population replay terminal success,session94268 exit0:all1000 cases/2000
+crops across22 families reproduce every metric exactly. Existing checkpoint.load
+authenticates complete original rows/artifacts;metricc8483996/configa55e95ab
+remain unchanged. Preserve996 SSIM passes/four failures and347 sharpness
+diagnostic failures independently. Log artifacts/material-parity/
+retained-target-raster-full-metric-replay-20261014.log SHA256
+4b8f99fd3062052258393d9a1c9b0f9bcf0d138230be649863aa6403bb44f37d.
+No new capture,fixtures,renderer changes,thresholds or framework. Missing original
+runner remains missing;not current rendering,input equivalence or whole-case
+closure. Next join authenticated raster observations through the existing owning
+proof;avoid unchanged standalone replay. Earlier full-row reader49986 remains
+live and separate,with immutable packages/indexes unchanged.
 
 ## Sheet corners join25 cases while retaining six discrepancies — October14
 
