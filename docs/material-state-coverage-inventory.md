@@ -1,5 +1,31 @@
 # Material comparison/state coverage inventory
 
+## Actual target-crop evidence joins1000 measured cases — October14
+
+Existing owning proof now checkpoint-authenticates each original case/artifact,
+binds2000 PNG receipts and current metric/config/transitive module fingerprints,
+and recomputes every metric exactly. Blank-candidate and forged-sharpness flag
+controls reject. Legacy metric records,missing-runner receipt and all prior
+boundaries stay unchanged;new evidence is separately scoped to saved crops.
+Four SSIM failures and347 sharpness diagnostic failures remain explicit.
+
+Initial focused run failed from a redundant local evaluateFocusedRaster import
+shadowing the existing module import before earlier divider assertions. Retain
+retained-target-raster-pixel-obligation-join-20261014.log;remove only duplicate
+import,not any assertion. Final1/1,zero skips,713736.8178ms,session73711 exit0.
+Log artifacts/material-parity/retained-target-raster-pixel-final-join-20261014.log
+SHAf691821df6a37cd55c6a5dbbf0b24a8bd7f763e2df19435f72dd8e63dd8ab685.
+Proposal6bfe953bb90903b5b061cbc3a156c917e4010141b10d3af28bf49c9c6c3d1c6a
+is noncanonical. Complete predecessor comparison changes only1000 localPaint
+evidence additions;all other fields agree.9796 dependencies validate,zero unjoined,
+both acceptance flags false. Log retained-target-raster-pixel-complete-conservation-20261014.log.
+These cases were already partial;pending paint stays1205 and all2311 whole cases
+stay partial/unverified. Crop-owner/layout provenance,original runner,equal input,
+blur attribution,current rendering and whole-case acceptance remain unproved.
+Next reconcile this coherent pending paint batch through existing producer/source
+guards,integration and justified publication;do not rerun the unchanged standalone
+1000-case replay. Published14affae1 remains separate;no renderer/fixture changes.
+
 ## Retained-state canonical publication verified at its bounded snapshot — October14
 
 Generation14affae195adcdab430dfe73eccfb725614767c4e86bb91bf4b5e4d3f6652ec5

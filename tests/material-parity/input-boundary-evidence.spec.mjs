@@ -2866,6 +2866,9 @@ test('passive state applicability joins exact cases without discarding progress 
   assert.equal(paintMetricSha,'c84839968d5ba77534a0af4d56f31f187cd941e607a8418959a1b0771f92e1e0');
   const paintCaseRows=new Map(allCases.map(row=>[scalarCaseKey(row),row]));
   const paintCounts={static:0,interaction:0,ssimPassSharpnessDiagnosticFail:0};
+  const paintCheckpoint=openMaterialCheckpoint({directory:'artifacts/material-parity/current-full-20261005',provenance:captured.captureProvenance,resume:true});
+  const paintMetricGraph=fingerprintModuleGraph(process.cwd(),paintMetricFile);
+  const paintPixelCounts={cases:0,pngs:0,ssimFailures:0,sharpnessFailures:0};
   for(const record of allObligations){
     const row=paintCaseRows.get(record.case);assert.ok(row);
     const measured=(row.focusedRasters??[]).filter(raster=>Number.isFinite(raster.similarity));
@@ -2884,6 +2887,23 @@ test('passive state applicability joins exact cases without discarding progress 
     assert.equal(typeof raster.sharpness.meetsTarget,'boolean');
     if(raster.matches&&!raster.sharpness.meetsTarget)paintCounts.ssimPassSharpnessDiagnosticFail++;
     paintCounts[row.kind]++;
+    const {kind,...originalRow}=row;
+    assert.deepEqual(paintCheckpoint.load(materialCaseKey(kind,row)),originalRow);
+    const cropReceipts={},crops={};
+    for(const side of ['reference','astylar']){
+      const file=row.inputTrees[side].file.replace(`${side}-input-tree.json`,`${target.element}-raster-${side}.png`);
+      const bytes=readFileSync(file);cropReceipts[side]={file,sha256:hash(bytes)};crops[side]=PNG.sync.read(bytes);paintPixelCounts.pngs++;
+    }
+    const recomputed={id:target.element,...evaluateFocusedRaster(crops.reference,crops.astylar,target)};
+    assert.deepEqual(recomputed,raster,'Every original target-local metric must reproduce from its authenticated saved crops');
+    if(paintPixelCounts.cases===0){
+      const blank={...crops.astylar,data:Buffer.alloc(crops.astylar.data.length,255)};
+      assert.notDeepEqual({id:target.element,...evaluateFocusedRaster(crops.reference,blank,target)},raster);
+      const forged=structuredClone(raster);forged.sharpness.meetsTarget=!forged.sharpness.meetsTarget;
+      assert.throws(()=>assert.deepEqual(recomputed,forged));
+    }
+    paintPixelCounts.cases++;paintPixelCounts.ssimFailures+=raster.matches?0:1;
+    paintPixelCounts.sharpnessFailures+=raster.sharpness.meetsTarget?0:1;
     const previous=record.obligations.localPaint;
     record.obligations.localPaint={...previous,applicability:'applicable',disposition:'partial',
       retainedTargetRaster:{disposition:'recorded-provenance-incomplete',case:record.case,targetId:raster.id,metrics:raster,
@@ -2893,9 +2913,15 @@ test('passive state applicability joins exact cases without discarding progress 
         unavailableActionSource:{originalLogicalFile:'tests/material-parity/run-material-parity.mjs',
           capturedSha256:'e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0',disposition:'missing-original-bytes-not-a-readable-receipt'},
         boundary:'Original finite target-local metric records and configured predicates only; no raster recomputation,complete runner provenance,equal input,blur diagnosis,current rendering or whole-case acceptance.'},
+      retainedActualTargetRaster:{disposition:'inspected',case:record.case,targetId:target.element,
+        metricsEvidence:'localPaint.retainedTargetRaster.metrics',exactMetricReplay:true,
+        evidence:{rasters:cropReceipts,metricOwner:{file:paintMetricFile,sha256:paintMetricSha},
+          targetConfiguration:{file:paintConfigFile,sha256:paintConfigSha},metricModuleGraph:paintMetricGraph},
+        boundary:'Exact recomputation from original checkpoint-authenticated target crops only;original SSIM failures and sharpness diagnostics preserved. Does not recover original runner,prove correct crop-owner/layout provenance,equal inputs,blur cause,current rendering or whole-case closure.'},
       remaining:[...(previous.remaining??[]),'Complete local paint/input/state/currentness disposition beyond recorded metric boundary']};
   }
   assert.deepEqual(paintCounts,{static:120,interaction:880,ssimPassSharpnessDiagnosticFail:343});
+  assert.deepEqual(paintPixelCounts,{cases:1000,pngs:2000,ssimFailures:4,sharpnessFailures:347});
   const resourceRunnerFile='tests/material-parity/run-material-parity.mjs';
   const resourceRunnerBytes=readFileSync(resourceRunnerFile);
   const resourcePrior=execFileSync('git',['show',`8aa0e2e5:${resourceRunnerFile}`],{encoding:'utf8',maxBuffer:4_000_000});
