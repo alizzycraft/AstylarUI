@@ -1,5 +1,41 @@
 # Material comparison/state coverage inventory
 
+## Equal-input native full-stage caret diagnostic exposes vertical ink difference — October14
+
+Existing public proof executed with one in-memory output-only addition:
+referenceStageDelta:pair.reference.stageDelta. Complete source is restored exactly
+by reversing that addition;original/ executed hashes and exact replacement are
+logged. No on-disk source,actions,assertions,styles,thresholds or consumer changed.
+First plain-input diagnostic passes1/1,zero skips,14543.0059ms but native full-stage
+delta contains platform focus outline (230×26CSSpx bounds),so cannot measure
+native full caret height. Retain this scope counterexample:
+public-caret-full-stage-native-diagnostic-20261014.log SHA
+a41c8328a9912a7045d55e949ea9206b5025825e3fc63e22d8e3c5642e2a436a.
+
+Changed approach uses existing placeholder-keyboard variant and original calibrated
+requested-color filter on BOTH sides. Pass1/1,zero skips,14233.9143ms atDPR1/2:
+native exact-color full-stage rows44–60 /88–121 (17CSSpx high);candidate43–60 /
+85–122 (18/19CSSpx high). Both use the same declarations,Arial16px/24px and
+requested RGB208/188/255. Candidate typed/deleted bounds match initial bounds;
+core empty metrics/origin remain unchanged. This removes16px crop truncation,
+outline and invalid placeholder-pointer index as explanations for these bounds.
+It does NOT isolate full antialiased footprint,font-metric versus mesh-center/
+sampling contributions or every Material vertical edge. Original2×19.2CSSpx
+preprojection request remains separately established;no universal offset inferred.
+Log public-caret-full-stage-color-isolated-diagnostic-20261014.log SHA
+62b92fca4f21f4b9b5456499efb0a3c454792d27808c2dde0e7ed714ffc8e67a;
+Chrome155.0.8059.40,Angular20.3.31,Babylon8.56.2,packedAstylarUI0.2.0,
+bundle5614de9791b8711740299f023b2c23d3e02918db74e9929f12d4dc7a8f59f968.
+These are explicitly instrumented standalone diagnostics,not original canonical
+proof replay,current whole-Material acceptance or renderer implementation.
+
+Paint export37648 completed exit0;package67777666 bytes,unchanged436/1875,
+8483 scalar groups/389202 occurrences/157 findings,inputEquivalent=false.
+Export log SHA156fcc12f68afb2cc5df180d9f559a8477f2d9f65b5b307089f13e0d2163329f.
+Independent ASTYLAR_AUDIT_COLD=1 named --check is live session57853,
+retained-paint-batch-canonical-cold-check-20261014.log. Producer/proof inputs stay
+frozen;no canonical publication/import before cold and conservation acceptance.
+
 ## Equal-input public caret proof cannot yet compare complete native vertical edges — October14
 
 Existing public reduction was inspected,not recaptured. Its original callback
