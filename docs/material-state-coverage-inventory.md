@@ -43,6 +43,23 @@ absence wording. Keep exact endpoint/full-AA footprint,actual coverage/compositi
 mechanism,original crop producer and current-code validity explicit. Do not
 recapture known spans or promote entire paint obligations from these receipts.
 
+Read-only explicit anonymous-owner mapping now binds all48 paragraph pairs across
+the24 authenticated divider cases:each native/candidate p has exactly one matched
+Above/Below span child,via actual parent keys. All native paragraph positions are
+static and all candidate positions absolute. Accepted source finding ordinal47,
+complete-row SHA875e04d9b2f3c4ba79e27e2e0e12e1b364202b52f6b3c3cd953efbe703e0697a,
+already classifies this ordinary-flow versus positioned-wrapper authoring and
+historical coordinate tuning;do not reopen it as a new projection cause. Its
+scope can be joined to these exact anonymous owners instead of generic mapping
+backlog wording. A first diagnostic incorrectly asserted every native used height
+was19px and rejected an18px context;the corrected bounded check observes19/18/22px
+native used heights versus22/19.8/25.299999999999997px candidate declarations.
+These are different observation stages,not a universal height or rounding defect.
+This closes explicit paragraph-to-child identity and existing classified position
+input correspondence only. Anonymous line boxes,complete property correspondence,
+paint and current-code validity are not certified. No source/case flags changed
+while the original generator remains live.
+
 Read-only question during full owner integration:are page-frame sibling semantic
 inputs still unmapped,or is the remaining boundary actual runtime observability?
 Authenticated f56f4ca7 complete file7c3364dd and all48 paired tree receipts.
