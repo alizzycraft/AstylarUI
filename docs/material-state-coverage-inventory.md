@@ -1,6 +1,6 @@
 # Material comparison/state coverage inventory
 
-## Current batch: full case generator verified; canonical export running — October14
+## Current batch: canonical export complete; independent cold verification live — October14
 
 Read-only question during full owner integration:are page-frame sibling semantic
 inputs still unmapped,or is the remaining boundary actual runtime observability?
@@ -77,14 +77,23 @@ hash remains7c3364dd5a9048388ab630340e3fd2be98420943fda3ee65516714da9da1ecdd.
 
 This verifies the coherent caret classification/closure-vocabulary/divider
 semantic batch for canonical integration. Named complete-baseline export21573
-is now live:launcher30076/worker24584,log
-divider-caret-canonical-export-20261014.log reached validate-audit at
-1213202.9188ms after join-case-obligations;workerCPU1898.609375s. Original source/data
-inputs remain frozen;no canonical success or current rendering acceptance is
-claimed. Published2e196c48 remains the prior snapshot until export,independent
-cold comparison,package/case/finding conservation and publication finish.
-All2311 whole-case records remain partial/unverified;final gates are unchanged.
-Observed D:free322355200bytes before launch;recheck headroom before later stages.
+is TERMINAL exit0 after3189735.751ms. Log
+divider-caret-canonical-export-20261014.log SHA
+eb11e92653f9dbc30d11f356822507354addb6462e63c78b9fcefaf62aecb293
+records436/436 static,1875/1875 interaction,8483 groups,389202 occurrences,
+158 source findings and inputEquivalent=false. Candidate compressed package
+b246c590c7a4a19228c7ad97034ee44f69e7c1f63323b0cc2ce108d2abc2d4d8
+is67933586bytes;decoded2280703083bytes/SHA
+2438db47c240f95a7b46918680e958e6ee680a5207e7296339ecff89aa4e3495.
+Independent cold session83713/worker18696 is confirmed live by process and
+session poll;log divider-caret-canonical-cold-check-20261014.log has build-audit,
+not terminal acceptance. Original source/data inputs remain frozen. A read-only
+single-pass whole-finding-row delta census is running in session4146 against
+the authenticated accepted2e index;its terminal result remains pending.
+Published2e196c48 remains the prior snapshot until independent cold comparison,
+package/case/finding conservation and publication finish. All2311 whole-case
+records remain partial/unverified;final gates are unchanged. Observed D:free
+5117739008bytes at this verification boundary;no evidence deletion was needed.
 
 ## Divider semantic dispositions joined; full owner integration running — October14
 

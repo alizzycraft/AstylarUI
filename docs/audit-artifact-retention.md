@@ -92,9 +92,14 @@ divider-semantic-case-join-integration-20261014.log is now closed successful
 coherence evidence:1/1,zero skips,exit0,844532.0851ms;SHA
 7429b147bbc145e486e57eca415dae5eae7483b4fd838d1e3c31afd7271b96de.
 It reproduces exactf56f4ca7/2311 cases. Retain it with that proposal. The separate
-divider-caret-canonical-export-20261014.log is active;do not compress/delete or
-restart active output. No canonical/cold result inferred from the integration.
-Recheck headroom before publication.
+divider-caret-canonical-export-20261014.log is now closed successful export
+evidence:exit0,3189735.751ms,SHA
+eb11e92653f9dbc30d11f356822507354addb6462e63c78b9fcefaf62aecb293.
+Retain it with candidateb246c590;export alone is not independent acceptance.
+divider-caret-canonical-cold-check-20261014.log and
+divider-caret-package-row-delta-20261014.log are active verification output;
+do not compress/delete or restart them. No cold/conservation result is inferred.
+Observed D:free5117739008bytes before the row census;recheck before publication.
 
 October14 divider companion AX capture is required new semantic evidence,not
 successful scratch. Retain `divider-companion-ax-20261014/checkpoint/manifest.json`
