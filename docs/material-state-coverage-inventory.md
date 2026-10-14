@@ -28,10 +28,25 @@ partial. Distinguish1380 cases across21 families with no text-editing targets on
 either side from94 readonly-select cases and40 disabled-text cases. The94
 readonly cohort includes8 disabled selects;do not double-count those as extra
 disabled-text cases. This partitions the generic backlog,not an editing pass.
-Next review source/configured-state applicability for the1380 no-target cases
-before recording authored exclusions. Leave readonly/disabled runtime behavior,
-selection/copy,keyboard control navigation and focus in their separate obligations.
-No frozen case record,proof source or acceptance flag changed for this census.
+Current source review now covers those21 families:Angular's template parser
+inspects the actual family cases/default and shared dialog/sheet templates;
+TypeScript AST review inspects each selected candidate family branch,conditional
+node objects,selectionMark and the complete common buildSiteData body. Neither
+authors a writable text target or dynamic contenteditable/HTML injection in that
+bounded cohort. The two bare native slider inputs are not guessed editable:
+installed MatSliderRangeThumb inherits MatSliderThumb's type=range host mapping,
+and candidate counterparts explicitly use range. Full retained target census
+remains the configured-state observation;source review is not live behavior.
+Six inserted writable-input/textarea/contenteditable controls reject.
+Source receipts:reference.component.ts debe55bc492d0fa1e48a9c7f09e1b668d435a2260588710207ab878b23c1d4aa;
+astylar.component.ts71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd;
+index.html1a1f2c8ae04e66027dd4af59ca1d170913c0664b78a2017f62dc6cbbeac0a698;
+installed @angular/material/fesm2022/slider.mjs b64564b1fc362e1e9b238fc322d2cea6517ebcf3139e58b775484a2218faba48.
+Next integrate this bounded source review through the existing editing owner
+after the frozen publication batch,then derive authored exclusions for1380 cases.
+Leave readonly/disabled runtime behavior,selection/copy,keyboard control navigation,
+plugin internals and focus separate. No case disposition or acceptance flag was
+promoted by these read-only checks;no new report/test layer or capture was added.
 
 Original full owner integration73327 is TERMINAL exit0:1/1 test,zero skips,
 844532.0851ms total/843020.0997ms owning test. It reproduces the exactf56f4ca7
@@ -44,7 +59,8 @@ hash remains7c3364dd5a9048388ab630340e3fd2be98420943fda3ee65516714da9da1ecdd.
 This verifies the coherent caret classification/closure-vocabulary/divider
 semantic batch for canonical integration. Named complete-baseline export21573
 is now live:launcher30076/worker24584,log
-divider-caret-canonical-export-20261014.log at build-audit. Original source/data
+divider-caret-canonical-export-20261014.log reached validate-audit at
+1213202.9188ms after join-case-obligations;workerCPU1898.609375s. Original source/data
 inputs remain frozen;no canonical success or current rendering acceptance is
 claimed. Published2e196c48 remains the prior snapshot until export,independent
 cold comparison,package/case/finding conservation and publication finish.
