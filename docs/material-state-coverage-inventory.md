@@ -1,6 +1,6 @@
 # Material comparison/state coverage inventory
 
-## Focus/activation/history export succeeds; independent cold check live — October 14
+## Focus/activation/history export and independent cold check succeed — October 14
 
 Existing export session97803 exits0. Complete progress marker records
 3311153.6582ms; retained focus-activation-history-canonical-export-20261014.log
@@ -9,12 +9,19 @@ Coverage stays436 static/1875 interaction,8483 scalar groups/389202 occurrences,
 157 source findings,inputEquivalent=false. Export success is not publication,
 complete case inspection or current rendering acceptance.
 
-Exactly one independent named --check now runs with ASTYLAR_AUDIT_COLD=1 and
-ASTYLAR_AUDIT_PROGRESS=1: session27577,launcher32964,worker12120. Its complete
-baseline/proposalff6feb918 is unchanged; log
-focus-activation-history-canonical-cold-check-20261014.log reaches build-audit.
-Keep consumed sources/proposal/candidate frozen. Next terminal cold success,
-Markdown/compact/full-row conservation against published e8,then scoped publication.
+Exactly one independent named --check with ASTYLAR_AUDIT_COLD=1 and
+ASTYLAR_AUDIT_PROGRESS=1 completes exit0: session27577,launcher32964,worker12120.
+Log focus-activation-history-canonical-cold-check-20261014.log SHA256
+4ba7610e553a212d7dbacb95d8a52090841cf3375efd7bb6c2464afbd50865df;
+elapsed3257197.0255ms. Two collectors,10 memory hits,0 disk hits/invalidations,
+8618 files/923450538 bytes read and reverified. Complete baseline/proposalff6
+unchanged. Candidate compressed SHAa81eef01473d3281dc19390f6fd8de458b79b6f7647b5a4c72265711bbc7257b,
+66409105 bytes; decoded2276569868 bytes,SHA1628c6cbfb6b1bb8f94defadc8cfaa764841ee2dafd8f0489c25916fc39fdd42.
+Markdown conservation passes:610 lines,only12 test-line anchors change,claims
+unchanged; focus-activation-history-markdown-conservation-20261014.log.
+One compact import now runs as session1163,log
+focus-activation-history-compact-import-20261014.log. Keep candidate/source inputs
+unchanged through compact/full-row conservation against published e8,then scoped publication.
 The24 sampled-paint joins remain next evidence work after this freeze,not a new
 capture. All2311 whole cases remain partial and all original final gates remain.
 
