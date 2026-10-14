@@ -1,6 +1,6 @@
 # Material comparison/state coverage inventory
 
-## Divider frame authored semantic correspondence checked across all cases — October14
+## Current batch: full case generator verified; canonical export running — October14
 
 Read-only question during full owner integration:are page-frame sibling semantic
 inputs still unmapped,or is the remaining boundary actual runtime observability?
@@ -22,13 +22,23 @@ blanket certification gates. Integrate this precise disposition in the next
 coherent case batch;do not repeat target/companion captures to prove input text.
 Whole-case input/paint/history/currentness and final criteria remain unchanged.
 
-Original full owner integration73327 is still verified live:launcher14432,
-worker34596,CPU772.09375s/elapsed794.1712563s,log remains TAP header. No terminal
-result or canonical publication is claimed. Sources remain frozen at12d08a9a;
-do not restart because output is quiet. Prior f56f4ca7 complete file hash remains
-7c3364dd5a9048388ab630340e3fd2be98420943fda3ee65516714da9da1ecdd.
-Last observed D:free324108288bytes was an external volume change,not attributed
-to this read-only check;recheck headroom before the justified canonical milestone.
+Original full owner integration73327 is TERMINAL exit0:1/1 test,zero skips,
+844532.0851ms total/843020.0997ms owning test. It reproduces the exactf56f4ca7
+proposal/2311 cases,not a narrower selected-row result. Log
+divider-semantic-case-join-integration-20261014.log SHA
+7429b147bbc145e486e57eca415dae5eae7483b4fd838d1e3c31afd7271b96de.
+Do not poll/restart launcher14432/worker34596;both ended. Complete proposal file
+hash remains7c3364dd5a9048388ab630340e3fd2be98420943fda3ee65516714da9da1ecdd.
+
+This verifies the coherent caret classification/closure-vocabulary/divider
+semantic batch for canonical integration. Named complete-baseline export21573
+is now live:launcher30076/worker24584,log
+divider-caret-canonical-export-20261014.log at build-audit. Original source/data
+inputs remain frozen;no canonical success or current rendering acceptance is
+claimed. Published2e196c48 remains the prior snapshot until export,independent
+cold comparison,package/case/finding conservation and publication finish.
+All2311 whole-case records remain partial/unverified;final gates are unchanged.
+Observed D:free322355200bytes before launch;recheck headroom before later stages.
 
 ## Divider semantic dispositions joined; full owner integration running — October14
 

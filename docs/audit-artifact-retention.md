@@ -77,9 +77,14 @@ D:free87306240→195592192;later-three56963072→157560832 during the live
 integration. No originals,failures,paths or pointers removed. New f56f4ca7
 proposal is immutable required evidence;85134492 logical/45539328 physical bytes,
 fileSHA7c3364dd5a9048388ab630340e3fd2be98420943fda3ee65516714da9da1ecdd.
-The existing loader validates all9807 dependencies/2311 records. Keep the live
-divider-semantic-case-join-integration-20261014.log until its terminal result;
-do not compress/delete/restart active output. Recheck headroom before publication.
+The existing loader validates all9807 dependencies/2311 records. Original
+divider-semantic-case-join-integration-20261014.log is now closed successful
+coherence evidence:1/1,zero skips,exit0,844532.0851ms;SHA
+7429b147bbc145e486e57eca415dae5eae7483b4fd838d1e3c31afd7271b96de.
+It reproduces exactf56f4ca7/2311 cases. Retain it with that proposal. The separate
+divider-caret-canonical-export-20261014.log is active;do not compress/delete or
+restart active output. No canonical/cold result inferred from the integration.
+Recheck headroom before publication.
 
 October14 divider companion AX capture is required new semantic evidence,not
 successful scratch. Retain `divider-companion-ax-20261014/checkpoint/manifest.json`
