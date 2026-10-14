@@ -3840,6 +3840,45 @@ test('passive state applicability joins exact cases without discarding progress 
   }
   assert.equal(sheetCornerCases,25);assert.equal(sheetCornerFailures,6);
   assert.deepEqual(sheetCornerOffsets,{contrast:24,other:76});
+  // Progress exact-case paint join: reuse every assertion in the existing proof.
+  const progressPaintFile='tests/material-parity/benchmark-config.spec.mjs';
+  const progressPaintAST=ts.createSourceFile(progressPaintFile,readFileSync(progressPaintFile,'utf8'),ts.ScriptTarget.Latest,true,ts.ScriptKind.JS);
+  const progressPaintCalls=progressPaintAST.statements.filter(node=>ts.isExpressionStatement(node)&&ts.isCallExpression(node.expression)
+    &&node.expression.arguments[0]?.text==='progress focus paint preserves forty configured cases and paired raster failure evidence');
+  assert.equal(progressPaintCalls.length,1);
+  const progressPaintCallback=progressPaintCalls[0].expression.arguments[1];
+  const progressPaintStatements=progressPaintCallback.body.statements.map(node=>node.getText(progressPaintAST)).join('\n');
+  const progressPaintReplay=Function('readFileSync','createHash','assert','PNG','ts',
+    progressPaintStatements+'\nreturn {candidate,native,membership};')(readFileSync,createHash,assert,PNG,ts);
+  const progressPaintKey=row=>[row.family,row.profile,row.viewport.width,row.viewport.height,row.viewport.deviceScaleFactor].join('/');
+  const progressPaintReceipts=[
+    {file:'artifacts/material-parity/progress-candidate-focus-paint-20261008.log',sha256:'5b498a2d6489924785a02968fd627acfa1ed5704b4b6437d3bca0172c1afc2af'},
+    {file:'artifacts/material-parity/progress-reference-focus-paint-20261007.log',sha256:'d2a134f8e6134d9a99f1d7f25bec67c63f2ba9baed1ea1f85adc3c81f677f94f'},
+    {file:'artifacts/material-parity/progress-configured-input-membership-20261006.log',sha256:'d64d73bea9a8e7d6ad2640bea3bc6a59c072ae9465f1aa3ca8577c5111fb6684'},
+  ];
+  const joinProgressPaint=entry=>{
+    const cohort=progressPaintKey(entry);
+    const observations=Object.fromEntries([['reference',progressPaintReplay.native],['astylar',progressPaintReplay.candidate]].map(([side,rows])=>{
+      const matching=rows.slice(1,-1).filter(row=>progressPaintKey(row)===cohort);assert.equal(matching.length,1);
+      const row=matching[0];
+      return [side,{before:row.before,after:row.after,changedPixels:row.changedPixels,clip:row.clip,
+        rasters:Object.fromEntries(['before','after'].map(state=>[state,{sha256:row.rasters[state].sha256}]))}];
+    }));
+    return {disposition:'inspected',outcome:'bounded-focus-paint-and-unfocusable-candidate-failure',
+      evidence:{logs:progressPaintReceipts,cohort,observations,
+        proof:{file:progressPaintFile,sha256:hash(readFileSync(progressPaintFile))},completeCallbackSha256:hash(progressPaintCallback.getText(progressPaintAST))},
+      boundary:'Every original membership/source/PNG assertion replayed. Focus-input mismatch preserved; not equal-input track/cap/edge paint,full current runtime or whole-case acceptance.'};
+  };
+  assert.throws(()=>joinProgressPaint({...progressPaintReplay.membership[0],profile:'invented'}));
+  const progressPaintIDs=progressPaintReplay.membership.map(row=>scalarCaseKey({...row,kind:row.state==='static'?'static':'interaction',state:row.state==='static'?undefined:row.state}));
+  assert.equal(new Set(progressPaintIDs).size,40);
+  assert.deepEqual(progressPaintIDs.slice().sort(),allObligations.filter(row=>['progress-bar','progress-spinner'].includes(row.family)).map(row=>row.case).sort());
+  for(const id of progressPaintIDs){
+    const record=allObligations.find(row=>row.case===id),entry=configuredByKey.get(id);assert.ok(entry);
+    const previous=record.obligations.localPaint;assert.ok(['partial','evidence-join-pending'].includes(previous.disposition));
+    record.obligations.localPaint={...previous,disposition:'partial',retainedProgressFocusPaint:joinProgressPaint(entry)};
+  }
+  // End progress exact-case paint join; other obligation data is preserved.
   assert.equal(new Set(allObligations.map(row=>row.case)).size,2311);
   assert.deepEqual(allObligations.map(row=>row.case).sort(),allConfigured.map(scalarCaseKey).sort());
   assert.ok(allObligations.every(row=>row.inspection==='partial'&&row.currentRendering==='unverified'));

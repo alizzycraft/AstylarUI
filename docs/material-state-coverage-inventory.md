@@ -1,5 +1,31 @@
 # Material comparison/state coverage inventory
 
+## Progress exact-case paint joins verified for all40 cases — October14
+
+Existing proposal owner now replays every statement/assertion of progress focus
+paint preserves forty configured cases and paired raster failure evidence,then
+attaches its paired focus/pixel observations to all40 exact progress cases.
+Missing cohort control rejects. Bounded execution against authenticated published
+proposal6bfe953b confirms exactly40 localPaint additions/disposition transitions;
+every other complete field across2311 records agrees with the predecessor.
+Original callback replay succeeds; all cases remain partial/current-unverified.
+No new capture,renderer/fixture change or threshold adjustment.
+
+Full owning test passive state applicability joins exact cases without discarding
+progress focusability passes1/1,zero skips,715931.207ms terminal;session15872 exit0.
+Log artifacts/material-parity/progress-exact-case-paint-join-integration-20261014.log
+SHA2874d908df2d81bd57cb9a912fa140a64546439f47636771620bf322a6f101a8.
+It also replays the original1000-raster population. Generated proposal2df59a35
+authenticates9800 dependencies through existing loadCaseObligationReview. Complete
+predecessor comparison proves exactly40 progress localPaint pending→partial
+transitions/additions;all other complete fields across2311 cases agree with6bfe953b.
+Both inspectionComplete and currentRenderingAccepted remain false. No original
+failures or remaining obligations are cleared. Do not rerun this terminal session.
+Canonicalcafd5020 remains unchanged;source/export reconciliation and all original
+final gates remain outstanding. Next attach already-proved progress update/disposal
+observations to exact cases,then integrate the coherent proof/source/proposal batch
+without treating retained observations as current-rendering acceptance.
+
 ## Progress pending paint is a missing exact-case join,not absent evidence — October14
 
 Specific question:does progress-bar's pending localPaint entry require another
