@@ -2,6 +2,22 @@
 
 ## Current integration pointer — October15
 
+Verification status correction: conservation retry78161 is TERMINAL exit1 at
+`Unreviewed section ownerCaretInputs`; its earlier live description below is
+historical. Its saved all-section digests identify exactly two remaining
+unexplained sections: ownerCaretInputs and reviewedSourceBatchInputs. Complete
+targeted predecessor/candidate field comparison54245 completed exit0: exactly
+three changed leaves,one producer receipt in ownerCaretInputs and one producer
+receipt plus derived report hash in reviewedSourceBatchInputs;all other fields
+compare equal. Delta log SHA4d3103a5fc8a4cf2437a898cda441940854b8c3a00dbf0a6652def903400b2a6.
+Strict reversal/source-report derivation verification is running as session21370
+in flex-margin-extra-section-conservation-20261015.log. Do not infer its success
+from the diagnostic delta. Retry failure log SHA
+a7ec929040e4f9384eaba01acade58b0fc530a539ba4ae7f7bb2b850bb8a6048.
+Cold worker14972/launcher30616 were confirmed
+live through Win32_Process; its last logged stage remains validate-audit.
+Do not restart either process for silence or accept/import the candidate yet.
+
 Accepted working index remainsb246,the prior158-finding snapshot. Export39487
 is TERMINAL exit0 after2776257.6261ms;its worker4768 ended. Candidate86961b43
 has159 findings,all436 static/1875 interaction cases,8483 groups/389202 occurrences
