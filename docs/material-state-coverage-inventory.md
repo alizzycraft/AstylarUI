@@ -1,5 +1,36 @@
 # Material comparison/state coverage inventory
 
+## Exact composite state owners join342 cases without candidate-runtime inference — October 14
+
+Existing owning proof maps624 state owners in342 exact chips/sort/button-toggle/
+tabs/stepper cases. Unique native/candidate primary ancestry,known candidate IDs,
+exact corresponding descendant labels and shared roles reject ambiguous mappings.
+Native DOM ARIA values are recorded separately from candidate authored SiteData
+ariaSelected/ariaChecked/ariaSort. Boolean serialization is explicit,not a default.
+Missing native owner,state or candidate ID/state controls reject;valid altered
+candidate state remains an unequal observation rather than unusable evidence.
+
+Thirty-six sort owners retain native aria-sort=none versus omitted candidate
+ariaSort;all other588 owner values agree. The initial strict sort enum assertion
+failure is retained in retained-composite-state-owner-join-20261014.log. Preserving
+omission explicitly is not accepting it as none or diagnosing a renderer defect.
+Actual candidate semantic DOM/default behavior,equivalent-representation justification,
+AX associations and callback/paint/currentness remain open. Radio remains excluded
+from this mapping because its original live checked property was not captured.
+
+Final focused proof1/1,0 skips,29590.9139ms:
+retained-composite-state-owner-final-join-20261014.log SHA256
+fdd0288374f04c8f4641d9dc73d647aeff407fadd063a0d28afe8ab652911a0c.
+Proposalb10f406b6ae3fd7fbe948b3b1eafa3729350f99fe288f7fe9d213754fc38921b
+is noncanonical. Complete conservation changes only342 semantics additions,
+preserving prior nested evidence/all other obligations/headers. Loader authenticates
+7484 dependencies,0 unjoined,both acceptance flags false. Log
+retained-composite-state-complete-conservation-20261014.log retains36 exact omissions.
+All2311 whole cases remain partial/unverified. No renderer/fixture/capture changes,
+framework or isolated export. Next resolve candidate actual transport/default scope
+and reuse separate native radio state captures before requiring missing evidence.
+Priorcda7da75 is pushed;publisheda81 package is unchanged.
+
 ## Composite endpoint census separates342 recoverable owners from68 radio gaps — October 14
 
 Question: do retained primary semantic records prove selection/sort state on the

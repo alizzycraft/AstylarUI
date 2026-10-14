@@ -3053,6 +3053,83 @@ test('passive state applicability joins exact cases without discarding progress 
       remaining:[...(previous.remaining??[]),'Actual AX/description/target associations and full semantic/currentness disposition beyond DOM comparator']};
   }
   assert.deepEqual(semanticCounts,{cases:2311,targets:5930,recordedFailures:0,absentReferenceTargets:502,choiceValueExclusions:68,activeDescendantPresenceComparisons:88});
+  const compositeStateTargets={
+    chips:{attribute:'aria-selected',property:'ariaSelected',role:'option',owners:[['chip-0','Angular'],['chip-1','Astylar']]},
+    'button-toggle':{attribute:'aria-checked',property:'ariaChecked',role:'radio',owners:[['button-toggle-one','List'],['button-toggle-two','Grid']]},
+    tabs:{attribute:'aria-selected',property:'ariaSelected',role:'tab',owners:[['tab-overview','Overview'],['tab-activity','Activity']]},
+    stepper:{attribute:'aria-selected',property:'ariaSelected',role:'tab',owners:[['step-details','Details'],['step-review','Review']]},
+    sort:{attribute:'aria-sort',property:'ariaSort',owners:[['sort-trigger','Sort by name']]},
+  };
+  const mapCompositeState=(row,referenceTree,candidateTree)=>{
+    const target=compositeStateTargets[row.family];assert.ok(target);
+    const nativeRoots=referenceTree.nodes.filter(node=>node.attributes?.id===`${row.family}-primary`);
+    const candidateRoots=candidateTree.nodes.filter(node=>node.authored?.id===`${row.family}-primary`);
+    assert.equal(nativeRoots.length,1);assert.equal(candidateRoots.length,1);
+    const within=(node,root)=>node.key===root.key||node.key.startsWith(`${root.key}/`);
+    const native=referenceTree.nodes.filter(node=>within(node,nativeRoots[0]));
+    const candidate=candidateTree.nodes.filter(node=>within(node,candidateRoots[0]));
+    const nativeOwners=native.filter(node=>Object.hasOwn(node.attributes,target.attribute));
+    assert.equal(nativeOwners.length,target.owners.length,'Every actual state owner must map exactly once');
+    const nativeHasLabel=(owner,label)=>native.some(node=>within(node,owner)&&node.ownText?.replace(/\s+/g,' ').trim()===label);
+    const requestedHasLabel=(owner,label)=>candidate.some(node=>within(node,owner)&&
+      [node.authored.textContent,node.authored.ariaLabel,node.authored.value].includes(label));
+    return target.owners.map(([id,label])=>{
+      const expected=nativeOwners.filter(node=>nativeHasLabel(node,label));assert.equal(expected.length,1);
+      const actual=candidate.filter(node=>node.authored.id===id);assert.equal(actual.length,1);
+      assert.ok(requestedHasLabel(actual[0],label),'Candidate identity must also preserve the corresponding label');
+      if(target.role){assert.equal(expected[0].attributes.role,target.role);assert.equal(actual[0].authored.role,target.role);}
+      const referenceValue=expected[0].attributes[target.attribute],candidateValue=actual[0].authored[target.property];
+      const candidatePropertyPresent=Object.hasOwn(actual[0].authored,target.property);
+      if(row.family==='sort'){
+        assert.ok(['none','ascending','descending'].includes(referenceValue));
+        if(candidatePropertyPresent)assert.ok(['none','ascending','descending'].includes(candidateValue));
+      }else{
+        assert.ok(['true','false'].includes(referenceValue));assert.equal(typeof candidateValue,'boolean');
+      }
+      return {label,reference:{key:expected[0].key,type:expected[0].type,id:expected[0].attributes.id,
+        role:expected[0].attributes.role,attribute:target.attribute,value:referenceValue},
+      candidateRequested:{key:actual[0].key,type:actual[0].authored.type,id,role:actual[0].authored.role,
+        property:target.property,propertyPresent:candidatePropertyPresent,value:candidateValue},
+      sameObservedAndRequestedState:candidatePropertyPresent&&referenceValue===String(candidateValue)};
+    });
+  };
+  const compositeStateCounts={cases:0,owners:0,unequalObservedAndRequestedStates:0,byFamily:{}};
+  for(const record of allObligations){
+    if(!compositeStateTargets[record.family])continue;
+    const row=paintCaseRows.get(record.case),trees={};
+    for(const side of ['reference','astylar']){
+      const receipt=row.inputTrees[side],bytes=readFileSync(receipt.file);assert.equal(hash(bytes),receipt.sha256);
+      trees[side]=JSON.parse(bytes);
+    }
+    const owners=mapCompositeState(row,trees.reference,trees.astylar);
+    compositeStateCounts.cases++;compositeStateCounts.owners+=owners.length;
+    compositeStateCounts.unequalObservedAndRequestedStates+=owners.filter(owner=>!owner.sameObservedAndRequestedState).length;
+    compositeStateCounts.byFamily[row.family]=(compositeStateCounts.byFamily[row.family]??0)+1;
+    const previous=record.obligations.semantics;
+    record.obligations.semantics={...previous,retainedCompositeStateOwners:{disposition:'recorded-provenance-incomplete',
+      case:record.case,owners,evidence:{report:{file:'artifacts/material-parity/current-full-20261005/latest-report.json',sha256:reportSha256},
+        trees:row.inputTrees},
+      boundary:'Native descendant DOM ARIA attributes versus candidate requested SiteData fields at a retained endpoint. Exact primary ancestry,logical ID,label and role where shared;boolean serialization is explicit. Missing candidate sort fields remain missing,not assumed none. Not candidate generated semantic DOM/actual selection,AX,callback sequencing,intermediate states,paint,equal inputs,current runtime or whole-case acceptance. Radio live checked state is unavailable in these original trees.'},
+      remaining:[...(previous.remaining??[]),'Candidate actual descendant control-state transport and complete action/current-runtime applicability']};
+  }
+  assert.deepEqual({...compositeStateCounts,unequalObservedAndRequestedStates:undefined},
+    {cases:342,owners:624,unequalObservedAndRequestedStates:undefined,byFamily:{chips:76,sort:60,'button-toggle':68,tabs:70,stepper:68}});
+  const compositeControlRow=allCases.find(row=>row.family==='chips'&&row.kind==='interaction'&&row.state==='activate');
+  const compositeNative=JSON.parse(readFileSync(compositeControlRow.inputTrees.reference.file));
+  const compositeCandidate=JSON.parse(readFileSync(compositeControlRow.inputTrees.astylar.file));
+  const missingNativeState=structuredClone(compositeNative);
+  delete missingNativeState.nodes.find(node=>node.attributes['aria-selected']!==undefined).attributes['aria-selected'];
+  assert.throws(()=>mapCompositeState(compositeControlRow,missingNativeState,compositeCandidate));
+  const wrongCandidateId=structuredClone(compositeCandidate);
+  wrongCandidateId.nodes.find(node=>node.authored.id==='chip-0').authored.id='foreign-chip';
+  assert.throws(()=>mapCompositeState(compositeControlRow,compositeNative,wrongCandidateId));
+  const missingRequestedState=structuredClone(compositeCandidate);
+  delete missingRequestedState.nodes.find(node=>node.authored.id==='chip-0').authored.ariaSelected;
+  assert.throws(()=>mapCompositeState(compositeControlRow,compositeNative,missingRequestedState));
+  const changedRequestedState=structuredClone(compositeCandidate),changedChoice=changedRequestedState.nodes.find(node=>node.authored.id==='chip-0');
+  changedChoice.authored.ariaSelected=!changedChoice.authored.ariaSelected;
+  assert.ok(mapCompositeState(compositeControlRow,compositeNative,changedRequestedState).some(owner=>!owner.sameObservedAndRequestedState),
+    'A valid unequal state must remain an observation,not be normalized or rejected as unusable evidence');
   const eventMethods=resourceFunctions(resourceRunnerBytes,['compareEvents','compareInteractionState']);
   assert.deepEqual(eventMethods,resourceFunctions(resourcePrior,['compareEvents','compareInteractionState']));
   const comparedEventStates=['activate','activate-twice','activate-alternate','activate-leave','auto-dismiss','open','open-dismiss'];
@@ -3569,7 +3646,7 @@ test('passive state applicability joins exact cases without discarding progress 
     reportedScalarInputCases:2311,reportedScalarGroups:8483,dividerActualAXCases:24,dividerUpdateDisposalCases:24,dividerLocalTextRasterCases:24,dividerCoordinateHistoryCases:24,supplementaryKeyboardCases:40,extendedKeyboardCases:128,
     editingTargetApplicabilityCases:1957,editingCounts,configuredFocusRecordedProvenanceIncomplete:40,supplementaryFocusCounts,retainedFocusCounts,keyboardActivationCounts,staticRangeHistoryJoins,staticHeightHistoryCounts,
     retainedTargetRasterCases:1000,paintCounts,sampledPaintCounts,retainedResourceSamplingCases:1875,resourceSampleCounts,
-    retainedTargetDOMComparisonCases:2311,semanticCounts,retainedEventBoundaryCases:1875,eventCounts,explicitPredicateCounts,supplementaryMenuActionContexts:menuActionJoins,commitEndpointCounts,rawControlJoins,rawActionRecords,buildCaptureCounts,completeCaseClosures:0,currentRenderingAccepted:0}));
+    retainedTargetDOMComparisonCases:2311,semanticCounts,compositeStateCounts,retainedEventBoundaryCases:1875,eventCounts,explicitPredicateCounts,supplementaryMenuActionContexts:menuActionJoins,commitEndpointCounts,rawControlJoins,rawActionRecords,buildCaptureCounts,completeCaseClosures:0,currentRenderingAccepted:0}));
   t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,
     scope:'Exact configured retained authoring: no activation/editing descendants. Forty native negative-tabindex progress owners keep a programmatic-focus obligation; no live focus, unrecorded callback, paint, lifecycle, source-currentness or full-case closure is inferred.'}));
 });
