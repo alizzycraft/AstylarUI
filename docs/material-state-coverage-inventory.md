@@ -1,5 +1,22 @@
 # Material comparison/state coverage inventory
 
+## October11 snackbar capture retains actual interior paint in34 cases — October14
+
+Read-only pixel check answers whether the separate current-build overlay capture
+has usable raster evidence,not just semantic/projected boxes. Report931bc5f,
+openMaterialCheckpoint.load and exact34 result equality authenticate original
+case/artifact membership. Reuse unchanged paintedFraction AST initializer from
+the existing modal-position assertion;same DPR/dimension/in-bounds strip guards
+and >.98 threshold,blank-image control0. All34 candidate strips are fraction1.
+Log artifacts/material-parity/retained-snackbar-current-capture-pixel-scope-20261014.log
+SHA8271eab359da5327c652e4431cfd86ca92d2d911ec32a156047c24094a556961.
+No missing checkpoint result accepted. Distinguish this capture from b07ef154;
+no report/predicate/source changes or browser recapture. Does not prove reference
+paint,text,edges,ordinary short-surface visibility,current whole rendering or
+37 uncaptured snackbar cases. Next attach scope-specific exact raster receipts
+using existing owning proof after export/cold checkpoint. Export7933 still live;
+do not modify its producer/evidence inputs or restart it from quiet output.
+
 ## Snackbar retained paint eligibility resolved without recapture — October 14
 
 Question:can existing paint evidence cover pending snackbar cases,or is a new
