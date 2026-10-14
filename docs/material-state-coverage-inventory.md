@@ -1,5 +1,28 @@
 # Material comparison/state coverage inventory
 
+## Sheet corners join25 cases while retaining six discrepancies — October14
+
+Existing owning proof executes every conserved original callback statement and
+assertion,returning only its already computed cases/receipts/differences. Blank
+actual PNG control rejects. Exact25 configured IDs gain partial localPaint
+evidence with50 original PNG receipts and per-case four corners/six sample deltas.
+Six contrast cases preserve cornersMatch=false;19 others satisfy original<=1
+local-edge contract. Copy-link energy0 remains unobservable,not a shape pass.
+Original callbackff1f6368 and aggregate receiptde6f2710 remain authenticated.
+
+Focused1/1,zero skips,56815.3556ms;log artifacts/material-parity/
+retained-sheet-corner-obligation-join-20261014.log SHA256
+2ce879fd0717fa1c544c9dbaa2d33be81d836a450ee3ee2a913e500869c768bb.
+Proposalcd40d24749d1de9a93cc5f99c48a57182f8f4df9caadd898305d621367129b45
+is noncanonical. Complete predecessor comparison changes only25 paint additions,
+preserving one existing partial and advancing24 pending to partial. All other
+fields agree;7796 dependencies validate,zero unjoined,both flags false. Log
+retained-sheet-corner-complete-conservation-20261014.log. Pending paint1229→1205;
+all2311 whole cases remain partial/unverified. No full-row/text/color/current
+rendering acceptance,renderer/fixture changes or new capture/export.
+Next continue exact retained paint joins;prior14affae1 publication still awaits
+full evidence-row verification in live session49986,with immutable data unchanged.
+
 ## Existing sheet-corner raster proof eligible for25 cases — October14
 
 Remaining bottom-sheet localPaint gap has retained evidence rather than requiring

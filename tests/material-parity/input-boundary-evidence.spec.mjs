@@ -3778,6 +3778,42 @@ test('passive state applicability joins exact cases without discarding progress 
       source:{file:snackbarPaintFile,sha256:hash(readFileSync(snackbarPaintFile))},completeCallbackSha256:hash(snackbarPaintBody.callback),
       boundary:'Candidate surface visibility in text-free interior strips of two separate retained captures only. Not reference paint,text/edge/sharpness,current rendering,ordinary short-surface behavior,37 closed-state trigger paints or whole-case closure.'}};
   }
+  const sheetCornerTitle='retained sheet corner pixels distinguish observable Share from transparent Copy link';
+  const sheetCornerCallback=source=>{
+    const ast=ts.createSourceFile(snackbarPaintFile,source,ts.ScriptTarget.Latest,true,ts.ScriptKind.JS);
+    const calls=ast.statements.filter(node=>ts.isExpressionStatement(node)&&ts.isCallExpression(node.expression)
+      &&node.expression.arguments[0]?.text===sheetCornerTitle);assert.equal(calls.length,1);
+    const callback=calls[0].expression.arguments[1];
+    return {callback:callback.getText(ast),statements:callback.body.statements.map(node=>node.getText(ast)).join('\n')};
+  };
+  const sheetCornerBody=sheetCornerCallback(snackbarPaintSource);
+  assert.deepEqual(sheetCornerBody,sheetCornerCallback(execFileSync('git',['show',`8aa0e2e5:${snackbarPaintFile}`],{encoding:'utf8',maxBuffer:4_000_000})));
+  assert.equal(hash(sheetCornerBody.callback),'ff1f63683d1485c4dfdabf3a3586dec0228d33a70f06edfec7867540826b1627');
+  // Execute every original statement/assertion; return already computed data only.
+  const replaySheetCorners=Function('readFileSync','createHash','assert','PNG',sheetCornerBody.statements+'\nreturn {cases,receipts,differences};');
+  const sheetCornerReplay=replaySheetCorners(readFileSync,createHash,assert,PNG);
+  assert.throws(()=>replaySheetCorners(readFileSync,createHash,assert,{sync:{read:bytes=>{
+    const png=PNG.sync.read(bytes);return {...png,data:Buffer.alloc(png.data.length,255)};
+  }}}),'Blank actual pixels must not become an observable corner pass');
+  const sheetCornerOffsets={contrast:0,other:0};let sheetCornerCases=0,sheetCornerFailures=0;
+  for(const [index,row]of sheetCornerReplay.cases.entries()){
+    const key=scalarCaseKey({...row,kind:'interaction'}),record=allObligations.find(record=>record.case===key);assert.ok(record);
+    const category=row.profile==='contrast'?'contrast':'other',offset=sheetCornerOffsets[category];
+    const deltas=sheetCornerReplay.differences[category].slice(offset,offset+4);sheetCornerOffsets[category]+=4;
+    assert.equal(deltas.length,4);assert.ok(deltas.every(corner=>corner.length===6));
+    const cornersMatch=deltas.every(corner=>corner.every(delta=>delta<=1));
+    assert.equal(cornersMatch,category==='other');sheetCornerCases++;sheetCornerFailures+=cornersMatch?0:1;
+    const receipts=sheetCornerReplay.receipts.slice(index*2,index*2+2).map(([file,sha256])=>({file,sha256}));
+    assert.equal(receipts.length,2);const previous=record.obligations.localPaint;
+    record.obligations.localPaint={...previous,disposition:'partial',retainedSheetCorners:{
+      disposition:'inspected',cornersMatch,shareCornerDeltas:deltas,copyLinkEdge:'unobservable-zero-probe-energy',
+      evidence:{report:{file:'artifacts/material-parity/current-ancestry-audit/latest-report.json',sha256:'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a'},
+        rasters:receipts,source:{file:snackbarPaintFile,sha256:hash(readFileSync(snackbarPaintFile))}},
+      completeCallbackSha256:hash(sheetCornerBody.callback),
+      boundary:'Original six samples per Share corner;all original assertions preserved. Six contrast cases retain discrepancies;transparent Copy-link probes cannot prove its shape. Not full-row/text/color/current rendering or whole-case closure.'}};
+  }
+  assert.equal(sheetCornerCases,25);assert.equal(sheetCornerFailures,6);
+  assert.deepEqual(sheetCornerOffsets,{contrast:24,other:76});
   assert.equal(new Set(allObligations.map(row=>row.case)).size,2311);
   assert.deepEqual(allObligations.map(row=>row.case).sort(),allConfigured.map(scalarCaseKey).sort());
   assert.ok(allObligations.every(row=>row.inspection==='partial'&&row.currentRendering==='unverified'));
