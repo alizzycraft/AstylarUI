@@ -1,5 +1,33 @@
 # Material comparison/state coverage inventory
 
+## Progress native descendant roles narrowed from retained exact inputs — October14
+
+Read-only question during export:which native anonymous progress-bar owners must
+be explained beyond scalar incidence? All20 exact cases/40 tree receipts verify.
+Each native owner has six descendants:buffer wrapper/track,primary wrapper/span,
+secondary wrapper/span. Track supplies background;primary paint is the inner
+span's4px top border under the scaled absolute wrapper. Secondary wrapper is
+display:none in every configured determinate64 case,so its descendant's recorded
+auto/percentage dimensions are not visible-paint evidence. Candidate has no
+authored descendants under its linear-progress plugin host;track,buffer and
+indicator planes are delegated to plugin code,not missing DOM wrapper observations.
+Role correspondence is now explicit,but border→plane representation,plugin buffer
+contribution,clipping/AA and complete style equivalence are NOT established by it.
+Existing right-origin/track-color differences remain classified separately.
+
+All four profiles retain native track rgb(232,224,235);candidate requests#e7e0ec
+except dark#49454f. Primary border colors follow profile tokens. This confirms
+the already-known unequal track inputs,not a newly diagnosed core color bug.
+No hypothetical buffer/query/indeterminate state is added to the authored scope.
+Next decisive mapping question is native4px border paint versus plugin plane
+ownership/inputs,using the existing failure proofs before considering a new probe.
+No case promotion,new report,capture,renderer/fixture or consumed-source edit.
+
+Canonical export98293 remains live:launcher30348/worker28636,CPU102.98→370.77s,
+log progress-caret-canonical-export-20261014.log at build-audit. Do not restart for
+quiet output. Pending terminal/cold/package conservation remains separate from
+this retained structural observation;canonicalcafd5020 remains predecessor.
+
 ## Progress/caret/closure registration reconciled before canonical export — October14
 
 ProducerLF961e4d34 pins proposalae1e75bd and registers the existing caret
