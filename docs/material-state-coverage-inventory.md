@@ -79,8 +79,11 @@ Collector1,memoryHits10,diskHits1,invalidations0;8882 files/943619547 bytes
 read and reverified,collector elapsed3020043.0366ms. Counts436/1875,8483
 groups/389202 occurrences/157 findings,inputEquivalent=false. Candidate package
 is exported but not accepted as independently verified publication.
-Independent ASTYLAR_AUDIT_COLD=1 --check is now live in session90914,log
-artifacts/material-parity/retained-state-batch-canonical-cold-check-20261014.log.
+Independent ASTYLAR_AUDIT_COLD=1 --check terminal success,session90914 exit0,
+log artifacts/material-parity/retained-state-batch-canonical-cold-check-20261014.log
+SHA79ea2ec18f239e1fcb42b017502bce28fe65b0aa36d1e86630731d9e4ec45a9d.
+Collectors2,memoryHits10,diskHits0,invalidations0;8882 files/943619547 bytes
+read and reverified,elapsed5802699.2223ms. All counts/false equivalence unchanged.
 Candidate package compressed67176847 bytes,SHA256
 14affae195adcdab430dfe73eccfb725614767c4e86bb91bf4b5e4d3f6652ec5;
 decoded2277838645 bytes,SHA256
@@ -94,10 +97,22 @@ No import/index-pointer change. This establishes package/proposal membership,
 not cold producer reproducibility,current rendering or whole-case acceptance.
 Read-only complete Markdown comparison to8d0ef617 preserves610 lines/all claims;
 exactly38 differences are terminal test-file line anchors only. No narrative
-finding or acceptance claim changed. Cold-check launcher36692/child21624 live;
-do not confuse file existence or this Markdown comparison with cold acceptance.
-Keep producer/evidence inputs frozen. Next poll same cold-check session,retain
-terminal result,then existing compact conservation/import at this milestone.
+finding or acceptance claim changed. Cold-check launcher36692/child21624 ended.
+Existing compact import started after cold success;do not claim publication until
+import/whole-index conservation and scoped publication checks finish. Final
+browser/harness gates and all2311 partial/unverified cases remain open.
+
+Compact import terminal success,session40583 exit0:72749010 compact bytes,
+generation14affae195adcdab430dfe73eccfb725614767c4e86bb91bf4b5e4d3f6652ec5,
+indexSHA9e6f15412ea88455ff482b6f24891c02632574afbec8e5503459f8c10da1b9a4.
+Existing verifyFindings authenticates both complete predecessora81 and candidate
+indexes. All48544 rows preserve every visible field/count;49 complete-row hashes
+change,all button:discrepancy903 and48 controlTypography rows. Log artifacts/
+material-parity/retained-state-batch-compact-conservation-20261014.log SHA256
+df3de73026ed8eb2c5fa87b10fc6b725b7dfec4a3f54aa9c3893eb73b5ee6e0e.
+Next authenticate those49 complete evidence rows with existing batched
+loadFindingEvidence (array IDs,one traversal per package),not49 repeated full
+package traversals. Do not infer complete-row conservation from compact fields.
 
 ## Retained radio keyboard actual-state evidence joins eight focus cases — October 14
 
