@@ -1,5 +1,35 @@
 # Material comparison/state coverage inventory
 
+## Divider frame authored semantic correspondence checked across all cases — October14
+
+Read-only question during full owner integration:are page-frame sibling semantic
+inputs still unmapped,or is the remaining boundary actual runtime observability?
+Authenticated f56f4ca7 complete file7c3364dd and all48 paired tree receipts.
+Every24-case pair has exactly two siblings before divider-root under its main:
+p/Angular Material20 reference and h1/divider. Actual text retains spaces in
+Angular Material 20 reference;no case-normalization or textTransform equivalence
+was used. All48 paired sibling owners agree in type/text and omit role,aria*,
+tabindex,contenteditable,hidden,lang and dir author requests. This is complete
+for those exact authored header owners,not every style or runtime property.
+Executing the actual current semanticTagName method preserves p,span,h1,main
+and section;source routing is inspected,not a substitute for a served-method
+binding or actual heading AX observation. Extra authored main remains a failure.
+
+Conclusion:the generic frame authored-input mapping question is answered for
+all24 cases,not just the earlier light-desktop pair. Actual heading AX and live
+AT experience are unmeasured boundaries,not demonstrated discrepancies or new
+blanket certification gates. Integrate this precise disposition in the next
+coherent case batch;do not repeat target/companion captures to prove input text.
+Whole-case input/paint/history/currentness and final criteria remain unchanged.
+
+Original full owner integration73327 is still verified live:launcher14432,
+worker34596,CPU772.09375s/elapsed794.1712563s,log remains TAP header. No terminal
+result or canonical publication is claimed. Sources remain frozen at12d08a9a;
+do not restart because output is quiet. Prior f56f4ca7 complete file hash remains
+7c3364dd5a9048388ab630340e3fd2be98420943fda3ee65516714da9da1ecdd.
+Last observed D:free324108288bytes was an external volume change,not attributed
+to this read-only check;recheck headroom before the justified canonical milestone.
+
 ## Divider semantic dispositions joined; full owner integration running — October14
 
 Existing exact-case owner now replays every statement of the unchanged divider
