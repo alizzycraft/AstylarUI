@@ -1,5 +1,32 @@
 # Material comparison/state coverage inventory
 
+## Target-crop geometry is available;visual-owner scope remains narrower — October14
+
+Read-only unresolved question:can saved target crops be traced to reference
+geometry rather than inferred from filenames? All1000 measured cases retain a
+finite expected reference box for their configured target. Both full screenshot
+buffers exactly reproduce the saved slider light/desktop-dpr1/held crop at
+physical bounds left238,top155,right842,bottom256 using original padding28 and
+DPR1 formula. This sample is not a1000-case full-image/crop reconstruction.
+
+Reference-tree receipt census authenticates all1000 trees:965 have one direct
+id/data-parity-id owner,zero ambiguous direct matches;35 lack direct markers
+(dialog16,tooltip18,bottom-sheet1). Captured referenceStructure still records
+type/text/descendant IDs for those targets. Absence of a marker is not evidence
+of a wrong selector or renderer defect;portal/fallback identity tracing remains.
+
+Slider sample owner is native INPUT#slider-primary with matsliderendthumb,
+opacity0,computed width515.797px;visual host is mat-slider marked slider-visual.
+Recorded reference box width547.796875 includes32px input padding. Configured
+hover/held metric deliberately anchors slider-primary with padding28,not the
+whole visual host. Exact crop/metric replay therefore must not certify complete
+slider visual coverage or equivalent event-owner geometry. Original domain/hit
+owner findings remain settled and are not reopened by this scope check.
+Next prove all recorded crop rectangles against saved full images with existing
+crop logic and separately trace35 fallback/portal owners;retain missing original
+runner/currentness limitations. No capture,code/fixture/threshold change. Pending
+paint export37648 remains live;producer/proof inputs stay frozen.
+
 ## Coherent retained-paint registration conserves producer and prior evidence — October14
 
 Batch6bfe953b versus publisheda1d7bff1 changes only localPaint in1058 unique
@@ -19,6 +46,11 @@ Launcher dry-run/scoped diff check pass. Observed D:free776302592 bytes before
 publication. Next coherent export,independent cold check and existing package/
 compact conservation;do not treat registration or old pixels as current rendering.
 Published14affae1 remains predecessor;all2311 whole cases stay partial/unverified.
+Registration3ef0ae63 is pushed. Complete-baseline export now live in session37648,
+log artifacts/material-parity/retained-paint-batch-canonical-export-20261014.log.
+No terminal result yet;keep producer/proof inputs frozen and poll same handle.
+Do not restart for quiet output or describe this batch as published before
+terminal export,independent cold verification and conservation/import acceptance.
 
 ## Actual target-crop evidence joins1000 measured cases — October14
 
