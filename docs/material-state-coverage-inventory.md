@@ -2,6 +2,21 @@
 
 ## Target-crop geometry is available;visual-owner scope remains narrower — October14
 
+Followup read-only owner check resolves the35 direct-marker omissions at captured
+tree scope:all authenticated trees have exactly one matching fallback-class
+owner (.mat-mdc-dialog-surface16,.mat-mdc-tooltip-surface18,
+.mat-bottom-sheet-container1),with matching captured referenceStructure type
+and recursively reconstructed descendant text (whitespace normalized). Existing
+measureReference referenceGeneratedTextTarget maps those logical targets to the
+same classes. This is not live-selector replay,serialized owner rectangles or
+recovery of missing original runner bytes. Do not reopen this marker-absence
+question without changed evidence. Full1000-case crop/full-image reconstruction
+is now running in session52932;log artifacts/material-parity/
+retained-target-crop-full-image-reconstruction-20261014.log. It authenticates
+reportab42dbec and compares every decoded crop row to recorded geometry/padding/
+DPR bounds in both full images,without repeating SSIM or changing metric gates.
+No terminal result yet. Export37648 remains live;producer/proof inputs frozen.
+
 Read-only unresolved question:can saved target crops be traced to reference
 geometry rather than inferred from filenames? All1000 measured cases retain a
 finite expected reference box for their configured target. Both full screenshot
