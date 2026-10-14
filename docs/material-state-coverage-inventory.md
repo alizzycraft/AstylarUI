@@ -85,7 +85,13 @@ Candidate package compressed67176847 bytes,SHA256
 14affae195adcdab430dfe73eccfb725614767c4e86bb91bf4b5e4d3f6652ec5;
 decoded2277838645 bytes,SHA256
 0a727691f66daf2416c5bea7211750431bc85bfac1c4041f6dc22b67e644f8c8.
-These are exporter metadata,not independent decoded-byte verification yet.
+Read-only whole-package conservation now independently authenticates compressed
+hash/bytes and all2277838645 decoded bytes/hash;session45510 exit0. Streaming
+parser verifies one complete root and exact equality of all2311 exported cases
+to proposala1d7bff1,7676 receipts,zero unjoined and both acceptance flags false.
+Log artifacts/material-parity/retained-state-batch-package-coverage-conservation-20261014.log.
+No import/index-pointer change. This establishes package/proposal membership,
+not cold producer reproducibility,current rendering or whole-case acceptance.
 Read-only complete Markdown comparison to8d0ef617 preserves610 lines/all claims;
 exactly38 differences are terminal test-file line anchors only. No narrative
 finding or acceptance claim changed. Cold-check launcher36692/child21624 live;
