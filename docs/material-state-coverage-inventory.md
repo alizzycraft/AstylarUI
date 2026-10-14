@@ -48,6 +48,25 @@ Leave readonly/disabled runtime behavior,selection/copy,keyboard control navigat
 plugin internals and focus separate. No case disposition or acceptance flag was
 promoted by these read-only checks;no new report/test layer or capture was added.
 
+Read-only final-harness applicability check found a concrete pending receipt
+issue in the original fresh-divider-layout test:it still compares its captured
+e46d62d9 whole probe against today's b522882e probe. Direct test fails at that
+first assertion;log divider-fresh-layout-receipt-direct-20261014.log SHA
+33e184fcb3be2eb243b78f87947ed374a12bac68a6341b1560a190ec1fa72cd7 is retained.
+Exact Gitad7133cd recovers originale46d62d9. Complete current layout function
+fcdca25e74e8b1b40a9171c9c835a3a998fa894b9e5b5f8c022de7ceab1698f5
+and early --divider-layout guard62452229fcf6288375e0112ac3babb78cd30660e2084b8f263ff25cccc6367b9
+are unchanged;later optional modes changed unrelated whole-file bytes.
+Executing every original callback assertionf578800390c753c3b26b00107a4a53e9d854ecb14c8e7651da9853868ba2ebff
+with only that one authenticated historical probe read restored passes. All
+other captured dependency/owner/font/wrapping reads remain actual;two source
+forgeries reject. Applicability log SHAe76be314d1ea9c16d9559cc5b0087d7b2d07bbbc9c4848eddb686a193d412943
+at divider-fresh-layout-receipt-applicability-20261014.log preserves the result.
+This is not a current-rendering pass or a waiver of the direct failure. Queue
+the precise historical verification boundary through the existing owning test
+after frozen publication;no recapture or renderer/fixture change is justified.
+Do not omit the original direct test from the final unfiltered harness.
+
 Original full owner integration73327 is TERMINAL exit0:1/1 test,zero skips,
 844532.0851ms total/843020.0997ms owning test. It reproduces the exactf56f4ca7
 proposal/2311 cases,not a narrower selected-row result. Log

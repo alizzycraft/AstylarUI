@@ -56,6 +56,16 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October14 fresh-divider-layout receipt review:retain the original direct test
+failure `divider-fresh-layout-receipt-direct-20261014.log` (SHA
+33e184fcb3be2eb243b78f87947ed374a12bac68a6341b1560a190ec1fa72cd7) separately
+from `divider-fresh-layout-receipt-applicability-20261014.log` (SHA
+e76be314d1ea9c16d9559cc5b0087d7b2d07bbbc9c4848eddb686a193d412943).
+The latter replays every original assertion using only the authenticated Git
+ad7133cd probe receipt;all other reads remain actual and two source forgeries
+reject. It does not replace the failure or prove current browser acceptance.
+No original capture or source was rewritten;both commands are terminal.
+
 October14 divider semantic case-join headroom: six closed historical proposals
 were transparently compressed in place,all complete before/after hashes equal:
 
