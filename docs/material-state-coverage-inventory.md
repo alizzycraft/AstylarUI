@@ -1,6 +1,6 @@
 # Material comparison/state coverage inventory
 
-## Progress/caret canonical candidate exported and conserved; cold live — October14
+## Progress/caret canonical batch independently verified for publication — October14
 
 Export98293 completed exit0 after3005839.9262ms. Log progress-caret-canonical-
 export-20261014.log SHAb48e1d3175713b4177f755db8396c503398990562b063faeec63c40846831ec9.
@@ -22,10 +22,23 @@ case-full-row-conservation-20261014.log SHA5d22c361fd8c1a4dad73934dbe1ae48b23a14
 Markdown610→611 lines:all prior claims exactly conserve after line-anchor
 normalization and removal of the single newly registered caret proof line.
 
-Independent cold15173/worker35672 is confirmed live at build-audit,log progress-
-caret-canonical-cold-check-20261014.log. Do not restart or claim cold success.
-Candidate docs are NOT published acceptance;working pointer still acceptedcafd5020.
-Next retain cold terminal result,then import/verify and publish the coherent package.
+Independent cold15173 completed exit0 after3121442.9274ms. Log progress-caret-
+canonical-cold-check-20261014.log SHAa52bb6a4776eb476331366130a452cba194a36b70d4b1db1833c80d3e20db53a.
+Two collectors/10 memory hits/0 disk hits/0 invalidations,11009 files and1087080856
+bytes read/reverified,elapsed2943686.6665ms. Canonical reconstructed-package and
+Markdown comparison passes. Export/cold/conservation sessions are terminal;do not poll.
+Compact import77636 completes exit0;log SHA
+ccedb9ed910d3d397a26101b6135ea9aa3cfc3d99131dc559c0036d16f8c28ee.
+Working index68371c51bf63c1b0e0d5b9011933aee410ae080f245bc390670d3a92794c0364
+authenticates all84 shards;publication preflight8356 reauthenticates9803 dependencies,
+exact2311 records and both false flags. Log SHA435f3d1fbdd9320e1306270022bf5e718d006804dc197eeec7dbfbbbd7eeef1c.
+Initial diagnostic assumed an absent coverage.file field and failed before replay;
+corrected invocation derives the existing proposal path from recorded review digest.
+No package evidence was changed to satisfy that diagnostic. Closed index plus84
+shards compressed in place;all85 individual hashes unchanged,whole verification
+passes afterward,D:free50032640→130748416bytes. No originals/failures removed.
+This coherent publication integrates closure representation,retained caret proof
+and40 progress paint/ownership joins;it does not promote a case or accept rendering.
 Caret classification/vocabulary and actual case-closure gaps remain as recorded;
 this package does not establish current rendering or final audit completion.
 

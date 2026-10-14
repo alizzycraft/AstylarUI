@@ -56,6 +56,15 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October14 progress/caret verified compact generation2e196c48d05935424c0726c6bb4df4086944fdd9f614eeb46f0a4f38f2d7f095:
+after terminal cold comparison and import,its index.json and84 JSONL shards were
+transparently NTFS-compressed. Every85 individual before/after SHA256 agrees;
+existing whole-index verification passes before/after with8483 scalar groups,
+157 source findings,39904 controls,389202 occurrences and0 unresolved groups.
+Index SHA68371c51bf63c1b0e0d5b9011933aee410ae080f245bc390670d3a92794c0364
+and pointer/evidence bytes remain unchanged. D:free50032640→130748416bytes.
+No original capture,failure log,previous generation or path was removed/repointed.
+
 October14 progress/caret export headroom: four closed proposal JSON files under
 working-audit/proposals were transparently NTFS-compressed in place:6bfe953b,
 2df59a35,ab27d795,ae1e75bd (full names remain their review digests). Every complete
