@@ -2,6 +2,15 @@
 
 ## October11 snackbar capture retains actual interior paint in34 cases — October14
 
+Remaining37 historical snackbar cases are closed states,not unexamined open
+surfaces:12 static,8 focus,8 hover,8 held,1 auto-dismiss. Originalb07ef154 report
+contains74 paired target observations (overlay and surface per case),all with
+explicit expected.exists=false and actual.exists=false. This is bounded semantic
+absence,not negative raster proof or trigger hover/focus/held paint. Do not apply
+the open-surface interior predicate to these37 or mark their paint inapplicable.
+Next join open34 surface paint and closed37 semantic endpoints separately while
+preserving trigger paint and full lifecycle/currentness obligations.
+
 Read-only pixel check answers whether the separate current-build overlay capture
 has usable raster evidence,not just semantic/projected boxes. Report931bc5f,
 openMaterialCheckpoint.load and exact34 result equality authenticate original
