@@ -1,5 +1,31 @@
 # Material comparison/state coverage inventory
 
+## Retained-state canonical publication verified at its bounded snapshot — October14
+
+Generation14affae195adcdab430dfe73eccfb725614767c4e86bb91bf4b5e4d3f6652ec5
+passed complete export,independent cold replay,decoded-byte/proposal equality,
+Markdown claim conservation,compact import and whole-index verification.
+All48544 compact rows preserve visible claims/counts. Existing batched
+loadFindingEvidence authenticated49 changed complete rows in each package;
+existing refreshScalarControlReceipts proves only48 normalization module receipts
+2bee7977→5492a808 and their48 embedded control digests change. Every other
+complete field agrees;48 forged-painted-value controls reject. Session49986
+completed its assertions and exited0;do not poll/restart it. Recorded REPL result:
+artifacts/material-parity/retained-state-batch-full-row-conservation-20261014.log
+SHA6720ed65720e6f2522b5e207552aa66fbe0aef631551b3d325c2d6984185e4be.
+
+Publication preflight10817 exits0:package/index hashes,7676 proposal dependencies,
+2311 cases,zero unjoined,whole producer5492a808 and both acceptance flags false.
+Log retained-state-batch-publication-preflight-20261014.log SHA256
+1af5916a19017b02d5b2d33cce06073e79364b44d726065d987768b5b2cf592f.
+Counts8483 scalar groups/389202 occurrences/157 findings/39904 controls remain.
+All2311 whole cases remain partial/unverified;final gates are not finished.
+This publication pins a1d7bff1 only. Newer snackbar/sheet proof additions remain
+in separate noncanonicalcd40d247,next source-fingerprint reconciliation batch;
+they are not silently included in14affae1 or its cold result. Retained1000-case
+pixel replay is verified separately and still needs owning-proof joins. No
+renderer/fixture changes,current-browser acceptance or input-equivalence claim.
+
 ## Retained slider pixels reproduce metrics;full measured population replay live — October14
 
 Specific gap:localPaint retainedTargetRaster contains finite metric records but
