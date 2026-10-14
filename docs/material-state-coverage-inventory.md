@@ -1,5 +1,25 @@
 # Material comparison/state coverage inventory
 
+## Existing sheet-corner raster proof eligible for25 cases — October14
+
+Remaining bottom-sheet localPaint gap has retained evidence rather than requiring
+immediate recapture. Original modal-position-inspection callback is complete/equal
+to Git8aa0e2e5,SHAff1f63683d1485c4dfdabf3a3586dec0228d33a70f06edfec7867540826b1627.
+Focused1/1,zero skips,6653.3871ms;log artifacts/material-parity/
+retained-sheet-corner-scope-20261014.log SHA256
+76c3bcb6e42542b80a761735b9c065d6afd40818d87d84ad4edb02d23f2c3550.
+All25 originalb07ef154 IDs map to pending63b15bc7 proposal. Owning assertion
+authenticates50 PNG receipts (aggregatede6f2710),actual in-bounds probes and
+observable Share edges. Six contrast cases retain corner differences;19 other
+cases meet its<=1 local edge-distance contract. Copy-link probe energy0 cannot
+establish its invisible shape. No text,color,whole-row,current-rendering or new
+root-cause attribution. Next exact paint joins must preserve those six differences
+and transparent-edge uncertainty rather than blanket shape passes.
+Full evidence reader49986/Node35524 remains live;immutable packages/indexes stay
+unchanged. New owning-test snackbar additions are a separate pending batch,not
+part of14affae1 package or its completed cold verification. Any current proof-source
+fingerprint change must be reconciled at the next coherent producer milestone.
+
 ## Snackbar surface visibility joins34 exact cases without closing full paint — October14
 
 Existing owning proof reuses the complete conserved original callback and its
