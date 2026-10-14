@@ -19,7 +19,22 @@ import { materialAbsoluteTextAlignmentTargets, materialAdditionalMeasurementTarg
 
 test('equal-input caret font contrast preserves bounded source and recorded paint failure', t => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
-  const original = readFileSync('tests/material-parity/input-boundary-evidence.spec.mjs', 'utf8');
+  const restoreProgressJoins = source => {
+    if (hash(source) === '1a6f11974d1f8aea924c1de2774abab219aec668998d6fabec0a4942f5d66ac6') return source;
+    assert.equal(hash(source), 'b7da01bb7adcca29b13b6585a64d724603c3f38f5ef216a2593b0956e29b92cf');
+    const start = source.indexOf('  // Progress exact-case paint join:');
+    const end = source.indexOf('  // End progress exact-case ownership join;', start);
+    assert.ok(start > 0 && end > start);
+    const after = source.indexOf('\n', end) + 1; assert.ok(after > end);
+    assert.equal(hash(source.slice(start, after)), 'fe1549ac3775600e61a58dc2b994ce55644691a4e871587598ccfddab953ccf6');
+    const restored = source.slice(0, start) + source.slice(after);
+    assert.equal(hash(restored), '1a6f11974d1f8aea924c1de2774abab219aec668998d6fabec0a4942f5d66ac6');
+    return restored;
+  };
+  const currentProof = readFileSync('tests/material-parity/input-boundary-evidence.spec.mjs', 'utf8');
+  const original = restoreProgressJoins(currentProof);
+  assert.throws(() => restoreProgressJoins(currentProof.replace('retainedProgressUpdateDisposal:', 'concealedUpdateDisposal:')));
+  assert.throws(() => restoreProgressJoins(currentProof + '\n// unexplained source change'));
   assert.equal(hash(original), '1a6f11974d1f8aea924c1de2774abab219aec668998d6fabec0a4942f5d66ac6');
   const outputEdit = ['referenceEditedEmpty: pair.reference.editedEmpty, stageDelta: pair.astylar.stageDelta,',
     'referenceEditedEmpty: pair.reference.editedEmpty, referenceStageDelta: pair.reference.stageDelta, stageDelta: pair.astylar.stageDelta,'];

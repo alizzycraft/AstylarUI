@@ -1,5 +1,39 @@
 # Material comparison/state coverage inventory
 
+## Progress ownership joins and caret receipt reconciliation verified — October14
+
+Existing proposal owner attaches original three-equal-value-update/disposal
+observations to all40 progress cases. It authenticates unchanged complete owning
+callbackc1775f98,executes every assertion with only relative-import launch
+resolution,and rejects missing cohorts/forged update materials. Redundant owned
+transparent allocation,focus failure and broader lifetime/history work remain.
+Original owning test passes1/1,zero skips,1785.1215ms terminal.
+
+Source reconciliation caught the retained caret regression's whole-file receipt
+failure after these reporting additions (actualb7da01bb versus original1a6f1197).
+Existing caret test now authenticates complete current bytes and exact added
+blockfe1549ac,removes only that block in memory,and recovers original1a6f1197.
+Both unexplained outside edits and changed join contents reject. Original diagnostic
+actions/assertions/executed-source hashes,logs and failure conclusions are retained.
+Caret and original progress paint tests pass2/2,zero skips,1820.0121ms terminal.
+This is historical source conservation,not a recapture or current parity waiver.
+
+Bounded execution of both exact join blocks against authenticated6bfe953b yields
+proposalae1e75bd5a994eec473385d5e0396a4785f6f57ff7bb70e748bcd5a260680218.
+Existing loader authenticates9803 dependencies/exact2311 membership;40 paint
+joins and40 ownership additions change only the intended fields. Every other
+complete field agrees with6bfe953b;both acceptance flags remain false. Prior
+2df59a35/ab27d795 retain their historical source receipts;do not silently update
+their bytes or treat them as applicable after the benchmark proof edit.
+
+The earlier full owning proposal integration passed before this bounded ownership
+addition;it was not repeated merely to recompute1000 unchanged rasters. New block
+assertions,full predecessor conservation,dependency loader and original owning
+tests supply proportional verification;the complete builder/final gates remain
+required at coherent integration/final acceptance. No renderer/fixture/capture
+change. Next register the existing caret proof and reconcile producer/proposal/
+source fingerprints as one coherent batch;canonicalcafd5020 remains unchanged.
+
 ## Progress exact-case paint joins verified for all40 cases — October14
 
 Existing proposal owner now replays every statement/assertion of progress focus

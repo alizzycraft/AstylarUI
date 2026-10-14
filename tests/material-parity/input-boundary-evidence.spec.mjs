@@ -3879,6 +3879,47 @@ test('passive state applicability joins exact cases without discarding progress 
     record.obligations.localPaint={...previous,disposition:'partial',retainedProgressFocusPaint:joinProgressPaint(entry)};
   }
   // End progress exact-case paint join; other obligation data is preserved.
+  // Progress exact-case ownership join: replay the unchanged owning assertions.
+  const progressLifetimeFile='tests/material-parity/input-boundary-evidence.spec.mjs';
+  const progressLifetimeAST=ts.createSourceFile(progressLifetimeFile,readFileSync(progressLifetimeFile,'utf8'),ts.ScriptTarget.Latest,true,ts.ScriptKind.JS);
+  const progressLifetimeCalls=progressLifetimeAST.statements.filter(node=>ts.isExpressionStatement(node)&&ts.isCallExpression(node.expression)
+    &&node.expression.arguments[0]?.text==='retained progress focus caps and update disposal preserve complete configured cohort evidence');
+  assert.equal(progressLifetimeCalls.length,1);
+  const progressLifetimeCallback=progressLifetimeCalls[0].expression.arguments[1];
+  assert.equal(hash(progressLifetimeCallback.getText(progressLifetimeAST)),'c1775f98f759846d3e71a4e844766a0bbcd21cfb79b4767ead8cc9c86fc12212');
+  const progressLifetimeStatements=progressLifetimeCallback.body.statements.map(node=>node.getText(progressLifetimeAST)).join('\n');
+  const progressLifetimeImport="import('./position-composition-producer-transition.mjs')";
+  assert.equal(progressLifetimeStatements.split(progressLifetimeImport).length,2);
+  // Only resolve the original relative import for this in-memory function launch.
+  const progressLifetimeLaunch=progressLifetimeStatements.replace(progressLifetimeImport,'import(proofModuleURL)');
+  assert.equal(progressLifetimeLaunch.replace('import(proofModuleURL)',progressLifetimeImport),progressLifetimeStatements);
+  const progressLifetimeReplay=await Object.getPrototypeOf(async function(){}).constructor('readFileSync','assert','hash','proofModuleURL',
+    progressLifetimeLaunch+'\nreturn {ownership,membership};')(readFileSync,assert,hash,new URL('./position-composition-producer-transition.mjs',import.meta.url).href);
+  const progressLifetimeReceipts=[
+    {file:'artifacts/material-parity/progress-update-disposal-20261007-retry.log',sha256:'e6a3ca134633265655100f3c214812343a47ceaa459d2e96d38e222fbf66143d'},
+    {file:'artifacts/material-parity/progress-remaining-update-disposal-20261007.log',sha256:'9c5751074266de90a09050dd8b313c925b98bbdf94874e3cb99c01a901cbc8ff'},
+  ];
+  const joinProgressLifetime=(entry,rows=progressLifetimeReplay.ownership)=>{
+    const cohort=progressPaintKey(entry);
+    const matches=rows.filter(row=>progressPaintKey({family:row.family,...row.diagnostic})===cohort);assert.equal(matches.length,1);
+    const d=matches[0].diagnostic;assert.deepEqual(d.errors,[]);assert.equal(d.snapshots.length,4);
+    for(const sample of d.snapshots){assert.deepEqual(sample.live,d.snapshots[0].live);assert.deepEqual(sample.tracked,sample.live);}
+    assert.deepEqual(d.disposal.live,{meshes:0,materials:0,textures:0});
+    return {disposition:'inspected',outcome:'bounded-three-equal-value-update-plateau-and-disposal',
+      evidence:{logs:progressLifetimeReceipts,cohort,snapshots:d.snapshots,disposal:d.disposal,
+        proof:{file:progressLifetimeFile,sha256:hash(readFileSync(progressLifetimeFile))},completeCallbackSha256:hash(progressLifetimeCallback.getText(progressLifetimeAST))},
+      boundary:'Original focus/AX/cap/update/disposal assertions replayed with only import launch resolution. Redundant owned transparent material remains. Not changed-value replacement,remount/peer/cache safety,full lifetime or current rendering acceptance.'};
+  };
+  assert.throws(()=>joinProgressLifetime({...progressLifetimeReplay.membership[0],profile:'invented'}));
+  const alteredProgressLifetime=structuredClone(progressLifetimeReplay.ownership);
+  alteredProgressLifetime[0].diagnostic.snapshots[1].live.materials++;
+  assert.throws(()=>joinProgressLifetime({family:alteredProgressLifetime[0].family,...alteredProgressLifetime[0].diagnostic},alteredProgressLifetime));
+  for(const id of progressPaintIDs){
+    const record=allObligations.find(row=>row.case===id),entry=configuredByKey.get(id),previous=record.obligations.historyOwnership;
+    assert.equal(previous.disposition,'partial');
+    record.obligations.historyOwnership={...previous,retainedProgressUpdateDisposal:joinProgressLifetime(entry)};
+  }
+  // End progress exact-case ownership join; remaining history/lifetime work stays.
   assert.equal(new Set(allObligations.map(row=>row.case)).size,2311);
   assert.deepEqual(allObligations.map(row=>row.case).sort(),allConfigured.map(scalarCaseKey).sort());
   assert.ok(allObligations.every(row=>row.inspection==='partial'&&row.currentRendering==='unverified'));
