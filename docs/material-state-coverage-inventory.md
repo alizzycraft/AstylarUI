@@ -71,13 +71,18 @@ remains the accepted predecessor;next export this coherent batch,then independen
 cold verification/import before publication acceptance. No browser capture or
 renderer/fixture change. Original final gates and all2311 partial cases remain.
 
-Registration commitb514e2c4 is pushed. Complete-baseline export now live in
-session7933,launcher9264/child32936,log artifacts/material-parity/
-retained-state-batch-canonical-export-20261014.log. Confirmed process handles,
-not inferred from an output file. No terminal result yet;do not restart or claim
-publication. Keep producer/evidence inputs frozen while it reads them. Next poll
-that same session,retain terminal result,then run independent cold --check and
-existing compact conservation/import at this coherent milestone.
+Registration commitb514e2c4 is pushed. Complete-baseline export session7933
+terminal success,exit0;launcher9264/child32936 have ended. Log artifacts/
+material-parity/retained-state-batch-canonical-export-20261014.log SHA256
+873169f040c07892c18a0b440db3ec95c3b664ba6eaa16619b1b8d4cc1729423.
+Collector1,memoryHits10,diskHits1,invalidations0;8882 files/943619547 bytes
+read and reverified,collector elapsed3020043.0366ms. Counts436/1875,8483
+groups/389202 occurrences/157 findings,inputEquivalent=false. Candidate package
+is exported but not accepted as independently verified publication.
+Independent ASTYLAR_AUDIT_COLD=1 --check is now live in session90914,log
+artifacts/material-parity/retained-state-batch-canonical-cold-check-20261014.log.
+Keep producer/evidence inputs frozen. Next poll same cold-check session,retain
+terminal result,then existing compact conservation/import at this milestone.
 
 ## Retained radio keyboard actual-state evidence joins eight focus cases — October 14
 
