@@ -26,6 +26,20 @@ Next verify its complete proposal/transitions,then reconcile both coverage incre
 at one justified canonical milestone. Publishedb246 remains the preceding snapshot;
 all final acceptance gates and genuine remaining case obligations stay unchanged.
 
+October15 read-only input-owner topology check bounds the next property review:
+all24 authenticated37dc divider case pairs contain9 native elements and9 candidate
+authored elements (216 per side),with corresponding parent/order topology under
+the explicit mat-divider→div owner mapping. All96 nonempty own-text targets agree;
+every recorded element has a nonempty style snapshot and all native pseudo-element
+arrays are empty. This is correspondence,not equivalence of the different host
+types,styles,semantics or runtime. The extra main authoring finding stays separate.
+There is no additional captured anonymous/pseudo input owner to discover in this
+cohort. Next review material property/stage correspondence for the known owners;
+do not turn anonymous layout-output boxes into hypothetical authored input owners
+or repeat the complete explicit-owner census. Anonymous line-box layout/paint and
+current-rendering uncertainty remain distinct,not silently accepted. Current
+owner/proposal source stays frozen while99035 runs;no completion flags changed.
+
 Publishedc9cb3c16/b246c590 is the cold-verified preceding snapshot. Existing exact
 case owner now reviews the bounded1380 no-target cases across21 families through
 Angular template parsing,all selected candidate branches/shared SiteData methods,
