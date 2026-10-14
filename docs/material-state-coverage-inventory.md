@@ -22,6 +22,17 @@ blanket certification gates. Integrate this precise disposition in the next
 coherent case batch;do not repeat target/companion captures to prove input text.
 Whole-case input/paint/history/currentness and final criteria remain unchanged.
 
+Read-only next-gap census during export authenticates the same f56f4ca7 envelope:
+of1957 additional editing records,1514 are already not-applicable but still
+partial. Distinguish1380 cases across21 families with no text-editing targets on
+either side from94 readonly-select cases and40 disabled-text cases. The94
+readonly cohort includes8 disabled selects;do not double-count those as extra
+disabled-text cases. This partitions the generic backlog,not an editing pass.
+Next review source/configured-state applicability for the1380 no-target cases
+before recording authored exclusions. Leave readonly/disabled runtime behavior,
+selection/copy,keyboard control navigation and focus in their separate obligations.
+No frozen case record,proof source or acceptance flag changed for this census.
+
 Original full owner integration73327 is TERMINAL exit0:1/1 test,zero skips,
 844532.0851ms total/843020.0997ms owning test. It reproduces the exactf56f4ca7
 proposal/2311 cases,not a narrower selected-row result. Log
