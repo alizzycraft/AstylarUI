@@ -1,5 +1,37 @@
 # Material comparison/state coverage inventory
 
+## Sort omission has a bounded unsorted-default explanation,not a transport-loss diagnosis — October 14
+
+Question resolved at attribute-value scope:WAI-ARIA1.2 defines absent aria-sort
+and explicit none as no defined sort order;none is the token default. Verified
+October14 at https://www.w3.org/TR/wai-aria-1.2/#aria-sort. The property is intended
+for columnheader/rowheader;this does not certify role validity or actual AX/AT
+behavior of the showcase's native wrapper and candidate button representation.
+All36 retained omissions stay explicit in the proposal. The no-sort token intent
+has a normative equivalent-representation explanation,not a reason to normalize
+the captured DOM fields or accept the complete component's inputs/rendering.
+
+Current authoring sets ariaSort only when state.open,deliberately omitting it
+otherwise. Complete applyAttributes method tokens agree between current TS
+transpilation and installed JS;the method removes old attributes then emits
+aria-sort only for authored nonempty values. An explicit none request would be
+emitted,not dropped. SourceSHA1a0011d3/installedSHA7c892095,complete method token
+SHAce952d733c383987480e7c50809e945c4fbd958694293dcb06e7c4f2025c1e86.
+Formatting/comment normalization only;not whole-class/runtime equivalence.
+Log retained-sort-state-transport-scope-20261014.log SHA256
+6a6cf5e86cc3f1342423adabb08405b69394e3176c2c372bcf5668926dd784aa.
+
+Existing dependency-authenticated supplementary keyboard records confirm actual
+initial DOM none/native versus null/candidate in8 exact desktop focus contexts.
+Their subsequent native ascending/descending/ascending versus candidate nulls
+remain8 inspected authoring/activation failures;the initial default does not
+excuse those sorted-state failures. Log retained-sort-unsorted-dom-scope-20261014.log
+SHAe418e99659e1d9d9e5ff1fcca2ddbf949f27db74f8e72a46a4d2795d162d6788.
+No new browser capture,source change,proposal/export or current rendering acceptance.
+Next bind this narrowly scoped interpretation in a coherent evidence batch and
+continue candidate actual descendant-state/radio coverage. Prior4ce93872 pushed;
+publisheda81/pendingb10 unchanged. All2311 whole cases remain partial/unverified.
+
 ## Exact composite state owners join342 cases without candidate-runtime inference — October 14
 
 Existing owning proof maps624 state owners in342 exact chips/sort/button-toggle/
