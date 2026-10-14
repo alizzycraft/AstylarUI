@@ -1,5 +1,28 @@
 # Material comparison/state coverage inventory
 
+## Equal-input public caret proof cannot yet compare complete native vertical edges — October14
+
+Existing public reduction was inspected,not recaptured. Its original callback
+SHA d69fca9371662b301439b6eeffa967a0478c20be41e0375c1e3bffbf8c32485b
+in input-boundary-evidence.spec.mjs computes both sides' full-stage baseline
+deltas,but exports native paint from interior clip x24/y44/220×16 only and
+candidate full stageDelta. Native full-stage delta is absent from the emitted
+results. A16CSSpx-high native crop cannot establish complete vertical parity
+with the19–20CSSpx temporal runs observed in the configured Material frames.
+This is a demonstrated evidence-scope gap,not a newly diagnosed renderer defect.
+Preserve settled initial-origin,width,placeholder index/deletion and textarea
+4px creation/update findings;the latter already has matched CSS metrics and
+pixel-shift assertions. It does not explain every configured single-line edge.
+
+Next extend only the existing public proof's emitted result to retain the already
+computed native full-stage delta,with original actions/assertions unchanged,
+then execute the smallest applicable variant atDPR1/2 after the consumed-source
+freeze permits it. Do not introduce another harness or change caret geometry,
+styles,thresholds or native truth. Current export37648 has emitted evidence-session
+validation:1 collector/10 memory hits/1 disk hit/0 invalidations,
+11002 files/1085525887 bytes read and reverified,elapsed2606023.9ms.
+No terminal export/cold/publication result yet;keep inputs frozen.
+
 ## Configured caret vertical temporal runs are measured,not attributed — October14
 
 Unresolved question:do the saved40-context caret frames expose vertical paint
