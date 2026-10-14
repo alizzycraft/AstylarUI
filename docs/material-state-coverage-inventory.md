@@ -1,5 +1,25 @@
 # Material comparison/state coverage inventory
 
+## Mixed divider ink fits recorded fill/backdrop coverage,not an unexplained RGB — October14
+
+Eight contrast/custom DPR1 mixed midpoint pairs (16pixels) from authenticated
+601e8407 log fit a fixed0/.25/.5/.75/1 candidate-fill/background RGB model within
+one channel unit. Every pair selects .75 then .25,sum1. Recorded backgrounds
+are contrast240/240/240 and custom229/242/241;ink remains202/196/208.
+All16 wrong-native-ink123/117/127 controls fail the same bounded fit. This is a
+model-consistency result,not a new parity threshold or measurement waiver.
+Log artifacts/material-parity/divider-separator-mixed-ink-coverage-model-20261014.log
+SHA18495e20e4bbc597bb0d1afebdd714ceb1b7749d4fbe6237873d579f3d294a69.
+
+Observed mixed colors therefore do not require an unexplained third ink source.
+Original capture lacks actual GPU coverage/readback here;exact MSAA samples,
+shader/color-space/blend and positional mechanism are NOT proven by this fit.
+Keep that uncertainty separate from established unequal border/fill authoring
+and full-span visibility. No original pixels,thresholds,renderer,fixtures or
+consumed sources changed. Do not repeat this consistency check as a causal proof.
+Next canonical cold/conservation acceptance and evidence-backed closure schema;
+retain historical raster mechanism uncertainty honestly. Cold57853 remains live.
+
 ## Divider midpoint paint binds unequal recorded ink inputs — October14
 
 Specific remaining attribution question:recorded border/fill intent versus new
