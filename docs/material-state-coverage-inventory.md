@@ -1,5 +1,34 @@
 # Material comparison/state coverage inventory
 
+## Progress/caret canonical candidate exported and conserved; cold live — October14
+
+Export98293 completed exit0 after3005839.9262ms. Log progress-caret-canonical-
+export-20261014.log SHAb48e1d3175713b4177f755db8396c503398990562b063faeec63c40846831ec9.
+Evidence session:1 collector,10 memory hits,1 disk hit,0 invalidations,11009 files,
+1087080856 bytes read/reverified,elapsed2826329.3635ms. Coverage436/1875,
+8483 scalar groups/389202 occurrences/157 findings remain;inputEquivalent=false.
+Candidate generation2e196c48d05935424c0726c6bb4df4086944fdd9f614eeb46f0a4f38f2d7f095:
+67778130 compressed bytes;2280329673 decoded bytes,SHA
+b4fd483a3cc75fd20a217413e063f0b066d8460f0956d7b41c42a5595a11e307.
+
+Existing Parser/whole-index/receipt comparator conservation65209 completes exit0:
+all48544 complete finding rows checked against authenticatedcafd5020 predecessor.
+48495 unchanged;48 controls change only cb9ad4c8→961e4d34 producer receipts and
+one scalar changes their embedded hashes. All48 extra-field forgeries reject.
+Both complete gzip/decoded receipts and single-root boundaries verify. All2311
+case rows exactly equal ae1e75bd;base coverage,summary and contract agree with
+predecessor and both acceptance flags remain false. Log progress-caret-package-
+case-full-row-conservation-20261014.log SHA5d22c361fd8c1a4dad73934dbe1ae48b23a14ecd0760690cff8244fe002c0bf7.
+Markdown610→611 lines:all prior claims exactly conserve after line-anchor
+normalization and removal of the single newly registered caret proof line.
+
+Independent cold15173/worker35672 is confirmed live at build-audit,log progress-
+caret-canonical-cold-check-20261014.log. Do not restart or claim cold success.
+Candidate docs are NOT published acceptance;working pointer still acceptedcafd5020.
+Next retain cold terminal result,then import/verify and publish the coherent package.
+Caret classification/vocabulary and actual case-closure gaps remain as recorded;
+this package does not establish current rendering or final audit completion.
+
 ## Remaining caret classification and closure vocabulary handoff gaps — October14
 
 Read-only registry review distinguishes regression registration from classified
