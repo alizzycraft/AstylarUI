@@ -1,5 +1,33 @@
 # Material comparison/state coverage inventory
 
+## Equal-input font contrast identifies font-insensitive core caret height — October14
+
+Specific competing explanations:font-dependent native metrics versus a universal
+projection offset. Existing public placeholder-keyboard reduction reruns with
+ONLY the shared site fontFamily changed Arial→monospace on BOTH sides and the
+previous native full-stage output addition. Original actions/assertions and
+site equality check remain;reversing both exact in-memory replacements recovers
+the complete original source. No on-disk proof,renderer or fixture change.
+Pass1/1,zero skips,14448.0305ms,Chrome155,DPR1/2. Native exact-color height
+changes17→19CSSpx (rows43–61 /86–123);candidate retains Arial's rows43–60 /
+85–122 and18/19CSSpx height. Typed/deleted bounds also remain unchanged.
+
+Current emitted and installed complete createTextCursor methods agree:
+source SHAe075c5fa27f8e4c2b5fa834ffb0ecee54f596782d4be4f2c2245fd195af2d062,
+installed83817ad4f3645dbc7b3c2205e278a13da3053172d70934bce6037388f8ab74f0,
+normalized method e0133c85773d8ac4b30688b6da79f5a615acb544e0c2f9939d4b4c3f8c93cb72.
+It requests fontSize×1.2 height before projectCssSize and has no fontFamily/
+lineHeight dependency. Together these establish font-insensitive core sizing
+against font-responsive native caret paint,not a universal world-coordinate
+offset. Correct replacement metrics,complete antialiased footprint,vertical
+centering policy and historical Material attribution remain unproved.
+Log public-caret-font-family-height-contrast-20261014-retry.log SHA
+a2b89a2486a88bfc1c6d8d6f4c81591901e7ec57ec20132217b3f631f81bec4e.
+Initial .log preserves inline PowerShell quote syntax failure before any capture.
+Next integrate a bounded font-response regression/classification through the
+existing public proof after cold57853 ends;do not implement a fixed pixel offset
+or recapture settled Arial/monospace responses. Canonical inputs remain frozen.
+
 ## Paint-batch package bytes and exact coverage conserve — October14
 
 Read-only complete gzip decode/session57481 exits0:one JSON root,compressed
