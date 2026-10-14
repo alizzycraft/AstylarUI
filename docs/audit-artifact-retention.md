@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October15 public unchanged-root focus proof:retain public-semantic-root-noop-
+20261015 with original input.mjs,audit.js,index.html,latest-report.json and its
+2515 dependency receipts. Capture and independent verification logs are required:
+public-semantic-root-noop-20261015.log and public-semantic-root-noop-verify-20261015.log.
+Exact hashes/limits are in the current ledger. This reuses the original public
+template with repeated no-sibling updates;do not overwrite older sibling-update
+failure evidence or treat direct selection preparation as synchronized selection.
+
 October15 transient editing focus:retain configured-input-editing-transient-focus-
 20261015.log,configured-input-editing-focus-owner-20261015.log and
 configured-input-editing-focus-owner-binding-20261015.log with their original

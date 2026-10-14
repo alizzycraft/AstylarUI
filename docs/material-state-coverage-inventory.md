@@ -84,6 +84,28 @@ and are restored. Instrumentation can affect timing. Next extend the existing
 semantic-focus regression/handoff to cover unchanged root-child reconciliation,
 alongside changed descendants,after the live canonical source freeze ends.
 
+The Material-independent root gap is now reproduced through the existing public
+focus fixture WITHOUT changing its input template. Only the driver requests
+extra=false twice per side/DPR instead of toggling siblings. All four native
+no-op controls preserve focus without events;all four candidate no-op updates
+retain the input object but blur inside root reconcile then refocus (DPR1/2).
+No sibling/value change or Material/plugin module is involved. Thus the root
+path does not depend on application authoring differences or changed descendants.
+Public API-only template,bundle,HTML and2515 actual dependency receipts are saved
+in public-semantic-root-noop-20261015;reportSHA
+841cf391e108c943dce2593da5b6ff7fb5430f307da1be9229252723c9ac5a48.
+Capture logSHA632b531a6e6c4ae81679630bb4f1fbcd692545fc66e5160d0f943937c15c7061.
+Independent public-semantic-root-noop-verify-20261015.log SHA
+95b38a681a244751036407b4fc497e9bf2e0500feced009208d626df4ab8d0c9
+authenticates all original template/bundle/dependency bytes,current complete
+reconcile/reconcileElement/syncFocus methods against installed bundle inputs,
+all8 samples,and missing-sample/wrong-first-owner controls. Capture/verify exit0.
+Direct setSelectionRange preparation is inherited from the existing reproduction;
+do not infer synchronized selection loss from it. No paint/geometry/lifetime or
+whole-case acceptance follows. Public reproduction is complete;integration into
+the existing owning regression/finding is queued after the live source freeze,
+not another reason to repeat this diagnostic or export an isolated metadata edit.
+
 Initial verifier incorrectly expected lowercase a;actual event is A/codeKeyA as
 requested by Control+A. Preserve failed verify log2cd530ffe2b7145cc14e4b9c2b9ac4719816e6594d81490aa523d3d733f65aed.
 Corrected verify-retry logSHAb4fd87febb2bf5d50a5dc64c553900fe955e3077d16b088b33d5360d2e8a1fd2

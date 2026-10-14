@@ -11,7 +11,13 @@ paths must be covered by a general semantic reconciliation fix. Preserve focused
 descendants and avoid needless detach/reinsert;do not suppress events or add an
 application refocus workaround. Exact trace/executed-source bindings and logical
 command preservation are in the current coverage ledger. This is audit evidence,
-not authorization to implement;public unchanged-root regression remains next.
+not authorization to implement. The existing public fixture now independently
+reproduces unchanged-root updates atDPR1/2:four native no-op updates have no focus
+events;four candidate updates blur/refocus at root reconcile with no sibling or
+value changes. Complete current/installed owning methods and2515 actual bundle
+dependencies authenticate;all samples and two negative controls verify. Exact
+report/log hashes are in the ledger. Public reduction is done;owning regression
+and existing finding integration remain queued after the live source freeze.
 
 October15 queued evidence is now registered coherently:producer206 adds the
 bounded margin regression and four paths;named launcher selects refreshed569d8cc6
