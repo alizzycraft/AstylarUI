@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October15 relative-margin owner diagnostic is required bounded investigation
+evidence,not successful capture scratch. Retain
+margin-relative-unit-owner-diagnostic-20261015.log SHA
+b11fc16b679a8758a71f52f6a42fd5865c839a34768dea7b7b4fa210051d74e7.
+It contains exact production file/method receipts,pixel controls and font-relative
+parser observations. No public-pipeline rendering,Material geometry or current
+browser acceptance follows from this isolated arithmetic evidence.
+
 October14 divider paint/owner join coverage evidence:retain closed
 divider-paint-owner-join-block-20261014.log SHA
 2c07d800a62b8d86aaefd8ceff698e77d94a0d4dcccc0e583f376990ec63767a and

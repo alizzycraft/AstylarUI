@@ -40,6 +40,26 @@ or repeat the complete explicit-owner census. Anonymous line-box layout/paint an
 current-rendering uncertainty remain distinct,not silently accepted. Current
 owner/proposal source stays frozen while99035 runs;no completion flags changed.
 
+October15 paragraph margin question is not closed as equivalent rendering merely
+because candidate1em0 and native used values differ in representation. All48
+authenticated paragraph pairs retain candidate margin1em0,native top/bottom equal
+computed font16/14.4/18.4px,left/right0,and no recorded local author rule/inline
+margin. Actual native UA rule text is not captured. Current core default p request
+is1em0. Exact dimension parseMargin/parseLength/zeroBox and flex parseMargin/
+parseMarginBox methods were executed read-only:1em becomes1 and1.5em becomes1.5,
+independent of16/24px own font size;four explicit-pixel controls pass. Twelve
+font-relative shorthand and two longhand arithmetic mismatches remain. Log
+margin-relative-unit-owner-diagnostic-20261015.log SHA
+b11fc16b679a8758a71f52f6a42fd5865c839a34768dea7b7b4fa210051d74e7
+binds complete current production method/file receipts andNode22.22.3.
+This exposes a bounded relative-margin parsing concern before projection,not a
+confirmed public-pipeline defect or Material placement cause. Next inspect caller
+style preprocessing and run the smallest existing public equal-input diagnostic
+with explicit-pixel controls. Keep distinct from the already confirmed local-font
+em width/height defect and positioned pixel-margin omission. Do not change fixture
+margins to pixels or infer actual full-render behavior from extracted methods.
+No renderer,fixture,policy classification or live integration input changed.
+
 Publishedc9cb3c16/b246c590 is the cold-verified preceding snapshot. Existing exact
 case owner now reviews the bounded1380 no-target cases across21 families through
 Angular template parsing,all selected candidate branches/shared SiteData methods,
