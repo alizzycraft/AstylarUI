@@ -1,5 +1,28 @@
 # Material comparison/state coverage inventory
 
+## Remaining caret classification and closure vocabulary handoff gaps — October14
+
+Read-only registry review distinguishes regression registration from classified
+root-cause completion. Current sourceAuditDefinitions contains157 entries;the
+eight caret/cursor-related entries cover lifetime,focus,selected blink,color
+omission and select-arrow authoring,not text-selection createTextCursor's
+fontSize×1.2 height rule. The retained Arial/monospace proof is registered for the
+running export,but does not itself add a classified source finding. Next coherent
+batch must bind its bounded font-response failure,exact owning method/public proof
+and remaining native-font/full-AA uncertainty through the existing classification
+and implementation handoff mechanisms. Do not repeat the browser diagnostic or
+claim this classification deliverable is finished from a passing regression alone.
+
+Also keep closure vocabulary reconciliation explicit:source registry core labels
+use confirmed-core-renderer-defect;schema2 admits confirmed-core-defect and
+suspected-core-defect. Verbatim source labels are not accepted by that set. Before
+closing real core-failure cases,either document a lossless reviewed label mapping
+with original finding/evidence preserved,or support canonical aliases under the
+same mandatory public-reproduction and failure-preservation rules. This is not
+authority to weaken classification or discard existing source findings. No source
+or acceptance change made during export. Export98293/worker28636 remains live in
+validation;CPU2337.44→2480.38s. Terminal/cold/package conservation still pending.
+
 ## Progress native descendant roles narrowed from retained exact inputs — October14
 
 Read-only question during export:which native anonymous progress-bar owners must
