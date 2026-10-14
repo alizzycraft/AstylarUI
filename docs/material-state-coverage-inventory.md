@@ -1,5 +1,27 @@
 # Material comparison/state coverage inventory
 
+## Current integration pointer — October15
+
+Published canonicalb246 remains accepted as the prior158-finding snapshot.
+Export session39487/worker4768 is validating the frozen159-finding/569d8cc6 batch;
+no terminal export/cold/import claim yet. Previous turn was a verified live wait.
+Safe independent progress now joins the16 configured editing cases to their
+verified80 paired real-action boundaries,32 sampled empty strokes,transient focus
+observations and bounded root/public proofs. Existing saveReviewProposal/loader
+produce24ee59023e0cf9518337c2d049930de1aedb491dc13bd0ad10a79a58662e0675,
+fileSHA0dccfcde39f98a9590fb940cf149e8085e4babaaf550746c7ebbecd97d50da24.
+All2311 original complete fields are conserved except those16 additional editing
+subrecords;12709 dependencies validate,zero unjoined cases,both flags false.
+Log configured-input-editing-case-join-20261015.log SHA
+ec8fd8a7429ddaf0bb19f9e2a02ba3f8921dc7a54da881a3c3446f0151a86bcf.
+Only light desktop DPR1 form-field/input subrecords claim measured root causality;
+the other14 explicitly do not. Historical missing-source records remain unchanged.
+This proposal is queued,not selected by the running export or a case promotion.
+Next integrate its semantic owner/assertions in the existing case proof after the
+source freeze,with explicit source-receipt reconciliation;its public-owner test
+and diagnostic graphs must not be silently treated as current after code changes.
+Then close actual remaining obligations;do not repeat completed captures/proofs.
+
 ## Current result — October15 configured emptying action and paint capture
 
 Previous turn made progress by distinguishing existing event joins from genuinely

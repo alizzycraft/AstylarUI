@@ -56,6 +56,15 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October15 configured editing case proposal24ee5902 is required queued evidence;
+retain it and predecessor569d8cc6 unchanged. Complete fileSHA
+0dccfcde39f98a9590fb940cf149e8085e4babaaf550746c7ebbecd97d50da24.
+Retain configured-input-editing-case-join-20261015.log SHA
+ec8fd8a7429ddaf0bb19f9e2a02ba3f8921dc7a54da881a3c3446f0151a86bcf:
+16 added editing subrecords/all other complete fields conserved,12709 validated
+dependencies/all2311 partial cases. It is not the running export's selected review
+or a canonical/current rendering acceptance result. No older evidence removed.
+
 October15 source-history evidence:retain semantic-root-focus-source-history-
 20261015.log SHA4082833c6b3082b3fcfc62d56e0074eb49336d979bdf649900b296ac032e5ab4.
 It preserves historical blob hashes,source introductions and guard changes,not
