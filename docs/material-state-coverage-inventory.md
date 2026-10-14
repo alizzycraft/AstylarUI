@@ -1,6 +1,6 @@
 # Material comparison/state coverage inventory
 
-## Focus/activation/history export and independent cold check succeed — October 14
+## Focus/activation/history batch passes publication checks — October 14
 
 Existing export session97803 exits0. Complete progress marker records
 3311153.6582ms; retained focus-activation-history-canonical-export-20261014.log
@@ -25,14 +25,21 @@ compact rows conserve;exactly49 complete-row digests change (button scalar903
 and48 control rows). Counts8483/157/39904/389202/0 unchanged. Log
 focus-activation-history-compact-conservation-20261014.log retains exact IDs.
 Candidate index SHAfc451a28338db854749b4aee1f7a47c525d05a63259a20c0ef61f01b3aa24e07.
-One full-row authentication/conservation now runs as session97663,log
-focus-activation-history-full-row-conservation-20261014.log. It uses existing
-loadFindingEvidence for all49 predecessor/candidate rows,then permits only the
-reviewed2bee→f992 module hash and hashes derived from otherwise conserved objects;
-48 forged property controls remain separate. Terminal result pending. Keep
-candidate/source inputs unchanged through this check,then scoped publication.
-The24 sampled-paint joins remain next evidence work after this freeze,not a new
-capture. All2311 whole cases remain partial and all original final gates remain.
+Full-row authentication/conservation session97663 exits0:all49 predecessor and
+candidate rows authenticate through existing loadFindingEvidence;only reviewed
+2bee→f992 module hash and203 digests derived from otherwise conserved objects
+change. All48 forged-property controls pass. Log
+focus-activation-history-full-row-conservation-20261014.log SHA256
+b616844d6eafc9af48b67753ba1f71ab0b57790cd623a8cf9669c8b3965f6395;
+elapsed23985672.5715ms. No second export,cold check or row read launched.
+Final publication preflight session92033 exits0:complete compact/package hashes,
+all7412 proposal dependencies and unchanged whole producer authenticate;2311
+cases,0 unjoined,both acceptance flags false. Log
+focus-activation-history-publication-preflight-20261014.log. Scoped canonical
+manifest/gzip/Markdown publication follows these terminal checks;it preserves
+all prior classifications and adds only the reviewed partial evidence batch.
+The24 sampled-paint joins remain next evidence work,not a new capture or framework.
+All2311 whole cases remain partial and all original final gates remain.
 
 ## Original PNG replay reproduces all24 sampled paint cases — October 14
 
