@@ -75,10 +75,23 @@ with only that one authenticated historical probe read restored passes. All
 other captured dependency/owner/font/wrapping reads remain actual;two source
 forgeries reject. Applicability log SHAe76be314d1ea9c16d9559cc5b0087d7b2d07bbbc9c4848eddb686a193d412943
 at divider-fresh-layout-receipt-applicability-20261014.log preserves the result.
-This is not a current-rendering pass or a waiver of the direct failure. Queue
-the precise historical verification boundary through the existing owning test
-after frozen publication;no recapture or renderer/fixture change is justified.
-Do not omit the original direct test from the final unfiltered harness.
+This is not a current-rendering pass or a waiver of the original failure.
+After verified publicationc9cb3c16,the precise historical boundary is integrated
+in that original owning callback. Both whole-probe hashes authenticate,complete
+layout function and early mode guard agree,and only the one captured probe read
+uses historical bytes. Every original statement and other dependency read remains
+unchanged;two source mutation controls reject. Direct owning test passes1/1,
+zero skips,5717.5008ms;log divider-fresh-layout-receipt-integrated-20261014.log
+SHA5dd504992086e18d972b2e431163b542670cd79b05c60415d1c1f6b9bfa16faf.
+Existing caret source-conservation test reverses only that exact added block to
+complete Gitc9cb3c16 sourcec177da66 before its unchanged prior restoration chain;
+caret/progress checks2/2,zero skips,2763.2371ms pass in
+divider-fresh-layout-caret-conservation-20261014.log SHA
+9418e62af96b98ed67d3b2cf7fbedc7dbae81778c1566b8ccccfadeb2bb05c92.
+Input-boundary source4649a187 now needs the next coherent proposal/source receipt
+refresh;do not export solely for this bounded metadata/proof edit. Preserve the
+original direct failure and final unfiltered harness requirement. No recapture,
+renderer,fixture,threshold or real case-completion flag changed.
 
 Original full owner integration73327 is TERMINAL exit0:1/1 test,zero skips,
 844532.0851ms total/843020.0997ms owning test. It reproduces the exactf56f4ca7

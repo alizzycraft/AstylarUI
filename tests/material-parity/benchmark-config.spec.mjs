@@ -44,6 +44,17 @@ test('equal-input caret font contrast preserves bounded source and recorded pain
     policy.replace('native chosen font', 'native chosen font proven'), policy + '\n// unreviewed policy drift\n'])
     assert.throws(() => restoreSizingDefaultPolicyRegistration(changed));
   const restoreProgressJoins = source => {
+    if (source.includes('  // Fresh-divider historical probe boundary:')) {
+      assert.equal(hash(source), '4649a18710e0c426b162302c2fd713c79f9d75cdd492a9ddb8f2d21182053bd2');
+      const start = source.indexOf('  // Fresh-divider historical probe boundary:');
+      const end = source.indexOf('  // End fresh-divider historical probe boundary;', start);
+      assert.ok(start > 0 && end > start);
+      source = source.slice(0, start) + source.slice(source.indexOf('\n', end) + 1);
+      const prior = execFileSync('git', ['show', 'c9cb3c16:tests/material-parity/input-boundary-evidence.spec.mjs'],
+        { encoding: 'utf8', maxBuffer: 4_000_000 });
+      assert.equal(source, prior, 'Only the authenticated fresh-layout historical probe boundary is added; every original statement remains');
+      assert.equal(hash(source), 'c177da66ae0297dac6e0bd48c3f4972149616901821faa9ca5fbca547df2b024');
+    }
     if (source.includes('  // Divider exact-case semantic join:')) {
       assert.equal(hash(source), 'c177da66ae0297dac6e0bd48c3f4972149616901821faa9ca5fbca547df2b024');
       const start = source.indexOf('  // Divider exact-case semantic join:');

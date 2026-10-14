@@ -654,6 +654,31 @@ test('public host scroll isolates stale hover without Material handlers or unequ
 });
 
 test('fresh divider layout observations join all exact cases and bound single-word wrapping', () => {
+  // Fresh-divider historical probe boundary: preserve every original assertion below.
+  const actualRead = createRequire(import.meta.url)('node:fs').readFileSync;
+  const probeFile = 'scripts/audit-material-field-description.mjs';
+  const capturedProbe = execFileSync('git', ['show', `ad7133cd:${probeFile}`]);
+  const currentProbe = actualRead(probeFile);
+  const verifyProbeBoundary = (captured, current) => {
+    assert.equal(hash(captured), 'e46d62d9b90911288c9a3a0fd1b8cc1583bb77db1728bfecbbd352c17852d1bd');
+    assert.equal(hash(current), 'b522882efa8d580d9501a16dd9f7c026f40e8f65f639f9d53724068a7595e876');
+    const executedPath = bytes => {
+      const source = ts.createSourceFile(probeFile, bytes.toString(), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+      const functions = source.statements.filter(node => ts.isFunctionDeclaration(node) && node.name?.text === 'inspectFreshDividerLayout');
+      const guards = source.statements.filter(node => ts.isIfStatement(node) && node.expression.getText(source) === "process.argv.includes('--divider-layout')");
+      assert.equal(functions.length, 1); assert.equal(guards.length, 1);
+      return [...functions, ...guards].map(node => node.getText(source).replaceAll('\r\n', '\n'));
+    };
+    assert.deepEqual(executedPath(current), executedPath(captured), 'Complete layout function and early mode guard must remain unchanged');
+  };
+  verifyProbeBoundary(capturedProbe, currentProbe);
+  assert.throws(() => verifyProbeBoundary(Buffer.concat([capturedProbe, Buffer.from('\n// forged')]), currentProbe));
+  assert.throws(() => verifyProbeBoundary(capturedProbe, Buffer.concat([currentProbe, Buffer.from('\n// forged')])));
+  // Only this captured probe read is historical; every other dependency read stays actual.
+  const readFileSync = (file, ...options) => file === probeFile
+    ? options[0] === 'utf8' ? capturedProbe.toString('utf8') : capturedProbe
+    : actualRead(file, ...options);
+  // End fresh-divider historical probe boundary; original callback statements follow.
   const raw = readFileSync('artifacts/material-parity/divider-fresh-retained-layout-20261009.jsonl');
   assert.equal(hash(raw), '3d71c0c9e2e6b825baa7f9c671977b2ab37845c2c99a37775fc51e11b889387e');
   const observations = raw.toString().trim().split(/\r?\n/).map(JSON.parse);

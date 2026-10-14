@@ -65,6 +65,14 @@ The latter replays every original assertion using only the authenticated Git
 ad7133cd probe receipt;all other reads remain actual and two source forgeries
 reject. It does not replace the failure or prove current browser acceptance.
 No original capture or source was rewritten;both commands are terminal.
+The later integrated original owning test retains separate terminal success log
+divider-fresh-layout-receipt-integrated-20261014.log SHA
+5dd504992086e18d972b2e431163b542670cd79b05c60415d1c1f6b9bfa16faf
+(1/1,zero skips,5717.5008ms) and existing caret/progress conservation log
+divider-fresh-layout-caret-conservation-20261014.log SHA
+9418e62af96b98ed67d3b2cf7fbedc7dbae81778c1566b8ccccfadeb2bb05c92
+(2/2,zero skips,2763.2371ms). Retain all four original/failure/integrated receipts;
+historical source applicability is not a current browser-rendering pass.
 
 October14 divider semantic case-join headroom: six closed historical proposals
 were transparently compressed in place,all complete before/after hashes equal:
