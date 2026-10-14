@@ -17,6 +17,85 @@ import { propertyGroups, sourceAuditDefinitions } from './input-equivalence-poli
 import { restoreSizingDefaultPolicyRegistration } from './position-composition-producer-transition.mjs';
 import { materialAbsoluteTextAlignmentTargets, materialAdditionalMeasurementTargets, materialComparisonViewport, materialFamilies, materialFocusedRasterTargets, materialGeometryExcludedTargets, materialInteractionCases, materialInteractionFocusedRasterTargets, materialInteractionTextAlignmentTargets, materialInteractionViewports, materialLeftAlignedTextTargets, materialMobileFlowCases, materialMobileFlowFamilies, materialProfiles, materialSemanticExcludedTargets, materialStaticCases, materialSupplementalStaticCases, materialTextAlignmentTargets, materialTextAlignmentToleranceOverrides, materialTextAuditTargets, materialTextlessFamilies, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets, materialViewports } from './benchmark.config.mjs';
 
+test('equal-input caret font contrast preserves bounded source and recorded paint failure', t => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const original = readFileSync('tests/material-parity/input-boundary-evidence.spec.mjs', 'utf8');
+  assert.equal(hash(original), '1a6f11974d1f8aea924c1de2774abab219aec668998d6fabec0a4942f5d66ac6');
+  const outputEdit = ['referenceEditedEmpty: pair.reference.editedEmpty, stageDelta: pair.astylar.stageDelta,',
+    'referenceEditedEmpty: pair.reference.editedEmpty, referenceStageDelta: pair.reference.stageDelta, stageDelta: pair.astylar.stageDelta,'];
+  const fontEdit = ["fontFamily:'Arial',fontSize:'16px',fontWeight:'400',lineHeight:'24px',textAlign:'left'",
+    "fontFamily:'monospace',fontSize:'16px',fontWeight:'400',lineHeight:'24px',textAlign:'left'"];
+  const captures = [
+    ['public-caret-full-stage-color-isolated-diagnostic-20261014.log', '62b92fca4f21f4b9b5456499efb0a3c454792d27808c2dde0e7ed714ffc8e67a', [outputEdit]],
+    ['public-caret-font-family-height-contrast-20261014-retry.log', 'a2b89a2486a88bfc1c6d8d6f4c81591901e7ec57ec20132217b3f631f81bec4e', [outputEdit, fontEdit]],
+  ].map(([name, sha256, edits]) => {
+    const file = `artifacts/material-parity/${name}`, bytes = readFileSync(file), text = bytes.toString();
+    assert.equal(hash(bytes), sha256); assert.match(text, /^# pass 1$/m); assert.match(text, /^# skipped 0$/m);
+    const records = text.split(/\r?\n/).flatMap(line => {
+      const start = line.indexOf('{'); if (start < 0) return [];
+      try { return [JSON.parse(line.slice(start).replaceAll('\\#', '#'))]; } catch { return []; }
+    });
+    const metadata = records[0], results = records.filter(row => row.results && row.cases);
+    assert.equal(results.length, 1);
+    assert.equal(metadata.originalSha256, hash(original));
+    assert.deepEqual(metadata.edits ?? [[metadata.change.anchor, metadata.change.replacement]], edits);
+    let executed = original;
+    for (const [before, after] of edits) { assert.equal(executed.split(before).length, 2); executed = executed.replace(before, after); }
+    assert.equal(hash(executed), metadata.executedSha256);
+    let restored = executed;
+    for (const [before, after] of [...edits].reverse()) restored = restored.replace(after, before);
+    assert.equal(restored, original, 'No extra action, assertion, style or renderer change may be hidden in the diagnostic');
+    for (const receipt of results[0].coreSources) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+    return { file, sha256, metadata, data: results[0] };
+  });
+  const inspect = pairs => {
+    assert.equal(pairs.length, 2);
+    for (const pair of pairs) {
+      assert.equal(pair.metadata.acceptance, false); assert.equal(pair.metadata.assertionsAndActionsUnchanged, true);
+      assert.equal(pair.metadata.variant, 'placeholder-keyboard'); assert.deepEqual(pair.metadata.dprs, [1, 2]);
+      assert.equal(pair.data.browser, '155.0.8059.40'); assert.deepEqual(pair.data.cases, ['placeholder-keyboard']);
+      assert.deepEqual(pair.data.packages, { '@angular/core': '20.3.31', '@babylonjs/core': '8.56.2', astylarui: '0.2.0' });
+      assert.equal(pair.data.dependencyCount, 2515);
+      assert.equal(pair.data.dependencyReceiptSha256, 'ef12f9e26fac583ac03c57b53ca7c6764483505345882dc9ef08a4ea4219dea3');
+      assert.deepEqual(pair.data.results.map(row => row.dpr), [1, 2]);
+    }
+    assert.equal(pairs[0].data.bundleSha256, '5614de9791b8711740299f023b2c23d3e02918db74e9929f12d4dc7a8f59f968');
+    assert.equal(pairs[1].data.bundleSha256, '92373135e77e4ce98b60c05e95719334865e2603d3a7d0e0b92970e90e068d6b');
+    for (const dpr of [1, 2]) {
+      const first = pairs[0].data.results.find(row => row.dpr === dpr), second = pairs[1].data.results.find(row => row.dpr === dpr);
+      const height = delta => (delta.bounds.maxY - delta.bounds.minY + 1) / dpr;
+      assert.equal(height(first.referenceStageDelta), 17); assert.equal(height(second.referenceStageDelta), 19);
+      assert.deepEqual(first.stageDelta, second.stageDelta);
+      assert.equal(height(first.stageDelta), dpr === 1 ? 18 : 19);
+      assert.deepEqual(first.stageDelta, first.editedEmpty); assert.deepEqual(second.stageDelta, second.editedEmpty);
+      assert.equal(first.effective.fontFamily, 'Arial'); assert.equal(second.effective.fontFamily, 'monospace');
+    }
+  };
+  inspect(captures);
+  for (const mutate of [
+    rows => rows.pop(), rows => rows[0].data.results.pop(),
+    rows => { rows[0].metadata.acceptance = true; },
+    rows => { rows[1].data.results[0].referenceStageDelta.bounds.maxY -= 2; },
+    rows => { rows[1].data.results[0].stageDelta.bounds.maxY += 2; },
+    rows => { rows[1].data.bundleSha256 = rows[0].data.bundleSha256; },
+  ]) { const forged = structuredClone(captures); mutate(forged); assert.throws(() => inspect(forged)); }
+  const method = text => {
+    const ast = ts.createSourceFile('caret.js', text, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS), matches = [];
+    assert.deepEqual(ast.parseDiagnostics, []);
+    const visit = node => { if (ts.isMethodDeclaration(node) && node.name.getText(ast) === 'createTextCursor') matches.push(node.getText(ast)); ts.forEachChild(node, visit); };
+    visit(ast); assert.equal(matches.length, 1);
+    return transformSync(`class Owner {${matches[0]}}`, { loader: 'js', target: 'es2022', legalComments: 'none', minifyWhitespace: true }).code;
+  };
+  const current = ts.transpileModule(readFileSync('src/app/services/text/text-selection.service.ts', 'utf8'),
+    { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 } }).outputText;
+  const installed = readFileSync('examples/material-showcase/node_modules/astylarui/dist/lib/app/services/text/text-selection.service.js', 'utf8');
+  assert.equal(method(current), method(installed));
+  assert.equal(hash(method(current)), 'e0133c85773d8ac4b30688b6da79f5a615acb544e0c2f9939d4b4c3f8c93cb72');
+  assert.ok(method(current).includes('height:style.fontSize*1.2'));
+  t.diagnostic(JSON.stringify({ pairs: 4, forgedControls: 6, disposition: 'font-insensitive core caret sizing',
+    boundary: 'Authenticated diagnostic logs and complete owning method only. Original pixels were in-memory,not retained PNG replay; native font selection,full antialiased footprint,replacement metrics,other Material cases and whole-pipeline acceptance remain unproved.' }));
+});
+
 test('public omitted box sizing finding preserves explicit controls and complete prior policy', () => {
   const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
   const source = readFileSync(policyFile, 'utf8');

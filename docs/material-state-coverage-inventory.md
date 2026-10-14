@@ -1,5 +1,31 @@
 # Material comparison/state coverage inventory
 
+## Caret font-response evidence now has a bounded retained regression — October14
+
+Existing benchmark-config suite adds equal-input caret font contrast preserves
+bounded source and recorded paint failure. It authenticates both original logs,
+the complete1a6f1197 public proof and only permitted in-memory output/font edits;
+reversing edits recovers exact original source and executed hashes agree.
+Chrome155,package versions,2515-dependency aggregate and both current installed
+core-source receipts bind the context. Arial bundle5614de97 and monospace
+92373135 are correctly distinct;dependency aggregateef12f9e2 agrees. Four font/
+DPR pairs preserve native17→19CSSpx response versus identical candidate paint
+bounds and typed/deleted state. Six missing/forged state,acceptance,bounds and
+bundle controls reject. Complete current/emitted/installed createTextCursor
+normalization e0133c85 agrees and preserves fontSize×1.2 before projection.
+
+Focused test1/1,zero skips,314.124ms (terminal1877.5112ms),log
+caret-font-height-retained-regression-final-20261014.log SHA
+0e8ea25fc3dff585285e4883e294bdbd150e7b557707c9b0a5c30affbb656b1f.
+No new browser capture,renderer/fixture change,threshold or inspection promotion.
+Original pixels were in-memory,not saved PNGs;this protects recorded diagnostic
+bounds/source applicability,not independent raw-pixel replay,native chosen-font
+identity,complete AA footprint,correct replacement metrics,other Material cases
+or full current pipeline acceptance. Earlier raw logs and shell failures retained.
+Necessary producer/proof/source registration remains a coherent-batch task with
+the closure-schema change;canonicalcafd5020 is not silently updated here. Next
+real-case obligation closure must still confront its actual missing evidence.
+
 ## Existing coverage schema can now represent reviewed inspection closure — October14
 
 Demonstrated partial-only reporting gap is addressed in the existing store and
