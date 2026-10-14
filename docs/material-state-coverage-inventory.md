@@ -1,5 +1,25 @@
 # Material comparison/state coverage inventory
 
+## Coherent retained-paint registration conserves producer and prior evidence — October14
+
+Batch6bfe953b versus publisheda1d7bff1 changes only localPaint in1058 unique
+cases:1000 target-crop additions,34 snackbar surfaces,25 sheet corners (one overlap).
+Fifty-eight previously pending paint obligations become partial;all other fields,
+headers and failure evidence agree.9796 dependencies validate,zero unjoined,
+inspectionComplete=false,currentRenderingAccepted=false. Log artifacts/material-parity/
+retained-paint-batch-complete-conservation-20261014.log. No whole-case closure.
+
+Producer/complete-baseline launcher now pin6bfe953b. Whole producer LF SHA256
+cb9ad4c80dac958fb4feea32ef1c6f266743ab9d53eb3d78b86fa5c95b399fb7;
+existing restoration reverses only that pin to published5492a808 before the
+unchanged predecessor chain. Existing complete transition suite33/33,zero skips,
+156939.4714ms,session97448 exit0. Log retained-paint-batch-producer-integration-20261014.log
+SHAffa5debbfadf63006d0a34239c844100760f34b3ac157489630147be0d26115c.
+Launcher dry-run/scoped diff check pass. Observed D:free776302592 bytes before
+publication. Next coherent export,independent cold check and existing package/
+compact conservation;do not treat registration or old pixels as current rendering.
+Published14affae1 remains predecessor;all2311 whole cases stay partial/unverified.
+
 ## Actual target-crop evidence joins1000 measured cases — October14
 
 Existing owning proof now checkpoint-authenticates each original case/artifact,

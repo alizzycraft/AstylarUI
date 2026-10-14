@@ -11,6 +11,14 @@ export function restoreAllCaseObligationRegistration(source) {
   const observations='b7ebc7694f5fb0cf1577f61ba41062f6ae7658abeb0688214504706a64d976eb';
   const focusHistory='ff6feb918dc14e15204f703429d98fb17a915e3648375d94fe084d0991f20f55';
   const retainedState='a1d7bff1ed19bfd90b32746d902586f92004961a64d17ef27d58702eeebcdf4d';
+  const retainedPaint='6bfe953bb90903b5b061cbc3a156c917e4010141b10d3af28bf49c9c6c3d1c6a';
+  if(current.includes(retainedPaint)){
+    assert.equal(hash(current),'cb9ad4c80dac958fb4feea32ef1c6f266743ab9d53eb3d78b86fa5c95b399fb7',
+      'exact authenticated retained target and overlay paint proposal pin');
+    assert.equal(current.split(retainedPaint).length,2);current=current.replace(retainedPaint,retainedState);
+    assert.equal(hash(current),'5492a808dc1cf05e094fe6d2e6da47f4f5406eb7fd2a3b94b5ea0c5b12ebe991',
+      'whole published retained-state producer conserved');
+  }
   if(current.includes(retainedState)){
     assert.equal(hash(current),'5492a808dc1cf05e094fe6d2e6da47f4f5406eb7fd2a3b94b5ea0c5b12ebe991',
       'exact retained sampled paint and actual control-state proposal pin');
