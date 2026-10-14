@@ -3057,6 +3057,47 @@ test('passive state applicability joins exact cases without discarding progress 
   assert.deepEqual(eventMethods,resourceFunctions(resourcePrior,['compareEvents','compareInteractionState']));
   const comparedEventStates=['activate','activate-twice','activate-alternate','activate-leave','auto-dismiss','open','open-dismiss'];
   const eventCounts={cases:0,normalized:0,uncompared:0,tailExclusions:0,explicitState:0,defaultState:0};
+  const explicitPredicateCounts={cases:0,previouslyPending:0,existingPartial:0,recordedFailures:0,byMode:{}};
+  const inspectExplicitPredicate=row=>{
+    const observed=row.interactionState;assert.ok(observed);assert.equal(typeof observed.matches,'boolean');
+    let mode,predicateMatches,boundary;
+    if(['open-dismiss-outside','open-dismiss-canvas'].includes(row.state)){
+      assert.equal(typeof observed.reference,'boolean');assert.equal(typeof observed.astylar,'boolean');
+      mode='native-overlay-presence-versus-candidate-open-store';
+      predicateMatches=observed.reference===false&&observed.astylar===false;
+      boundary='Final native role/listbox/dialog/menu presence versus candidate store.open only;no intermediate-open proof,option cleanup,focus restoration or pointer event equivalence.';
+    }else if(row.family==='datepicker'&&row.state==='open-secondary'||row.family==='timepicker'&&row.state==='focus'){
+      assert.equal(typeof observed.reference,'boolean');assert.equal(typeof observed.astylar,'boolean');
+      mode=row.family==='datepicker'?'native-year-view-versus-candidate-measured-grid':'native-time-panel-versus-candidate-measured-options';
+      predicateMatches=observed.reference===observed.astylar&&observed.reference===true;
+      boundary='Final native element presence versus candidate measured owner presence;not paint,reachability,focus ownership or complete opening sequence. Timepicker focus uses a click;datepicker behavior is separate.';
+    }else if(row.family==='timepicker'&&row.state==='open-scroll'){
+      assert.equal(typeof observed.reference,'number');assert.equal(typeof observed.astylar,'number');
+      assert.ok(Number.isFinite(observed.reference)&&Number.isFinite(observed.astylar));
+      mode='native-scrollTop-versus-candidate-scroll-diagnostic';
+      const difference=Math.abs(observed.reference-observed.astylar);assert.equal(observed.difference,difference);
+      predicateMatches=observed.reference>0&&observed.astylar>0&&difference<=.5;
+      boundary='Final scroll offsets after recorded144px wheel request;not scrollbar/thumb paint,dragging,track interaction,option reachability or the entire scroll trajectory.';
+    }else{
+      assert.equal(row.family,'slider');assert.ok(['drag-start','drag-end'].includes(row.state));
+      mode='native-range-values-versus-candidate-store-and-input-trace';
+      const moved=row.state==='drag-start'?'sliderStart':'sliderValue',fixed=row.state==='drag-start'?'sliderValue':'sliderStart';
+      const traceContract=samples=>{
+        assert.ok(Array.isArray(samples));
+        if(samples.length!==9)return false;
+        const values=samples.map(sample=>Number(sample[moved])),peers=samples.map(sample=>Number(sample[fixed]));
+        return values.every(Number.isFinite)&&peers.every(Number.isFinite)&&peers.every(value=>value===peers[0])&&
+          values.every((value,index)=>index===0||value>=values[index-1])&&new Set(values).size>=3&&values.at(-1)>values[0];
+      };
+      const endpoint=side=>({sliderStart:observed[side].sliderStart,sliderValue:observed[side].sliderValue});
+      predicateMatches=JSON.stringify(endpoint('reference'))===JSON.stringify(endpoint('astylar'))&&
+        traceContract(observed.reference.trace)&&traceContract(observed.astylar.trace);
+      boundary='Final native input values versus candidate store values and nine native/input-event-fallback samples. Predicate requires fixed peer,monotonic movement and>=3 unique samples,not equal per-step traces,smooth travel,full range domains or core hit-testing attribution.';
+    }
+    assert.equal(observed.matches,predicateMatches,'Retained flag must follow the actual nondefault predicate');
+    return {disposition:'recorded-provenance-incomplete',mode,observations:observed,predicateMatches,
+      boundary:`${boundary} Original action runner bytes remain unavailable;conserved current methods do not establish original whole-runner or current-runtime acceptance.`};
+  };
   const joinEventBoundary=row=>{
     const normalized=comparedEventStates.includes(row.state);
     const explicitState=row.family==='slider'&&['drag-start','drag-end'].includes(row.state)||
@@ -3451,6 +3492,30 @@ test('passive state applicability joins exact cases without discarding progress 
     ['bottom-sheet-settlement-trace-20261011','84668a6b572916136d0a1d31a52d1eeeebce88f803de2a3c5f43d56da0ea59fa','instrumented-settlement',1,1],
     ['selection-pointer-directions-20261011','f1497dbd6bb360d25ae62466c4ef1b5d95631f7265af8da3b2969774e0b690a0','selection-replay-diagnostic',32,0],
   ];
+  // Extend after keyboard/raw-control joins so their prior evidence is conserved.
+  for(const record of allObligations){
+    const previous=record.obligations.authoredActivation;
+    if(previous.retainedEventBoundary?.stateMode!=='explicit-recorded-endpoint-or-trace')continue;
+    const predicate=inspectExplicitPredicate(paintCaseRows.get(record.case));
+    assert.ok(['evidence-join-pending','partial'].includes(previous.disposition));
+    explicitPredicateCounts.cases++;
+    explicitPredicateCounts[previous.disposition==='evidence-join-pending'?'previouslyPending':'existingPartial']++;
+    explicitPredicateCounts.recordedFailures+=predicate.predicateMatches?0:1;
+    explicitPredicateCounts.byMode[predicate.mode]=(explicitPredicateCounts.byMode[predicate.mode]??0)+1;
+    record.obligations.authoredActivation={...previous,disposition:'partial',retainedExplicitStatePredicate:predicate,
+      remaining:[...(previous.remaining??[]),'Complete actual action/target/intermediate-state and current-runtime disposition beyond original endpoint predicate']};
+  }
+  assert.equal(explicitPredicateCounts.cases,114);assert.equal(explicitPredicateCounts.previouslyPending,88);
+  assert.equal(explicitPredicateCounts.existingPartial,26);
+  for(const [family,state,mutate]of [
+    ['autocomplete','open-dismiss-outside',row=>{delete row.interactionState.reference;}],
+    ['datepicker','open-secondary',row=>{row.interactionState.matches=!row.interactionState.matches;}],
+    ['timepicker','open-scroll',row=>{row.interactionState.difference=999;}],
+    ['slider','drag-start',row=>{row.interactionState.reference.trace.pop();}],
+  ]){
+    const altered=structuredClone(allCases.find(row=>row.kind==='interaction'&&row.family===family&&row.state===state));
+    mutate(altered);assert.throws(()=>inspectExplicitPredicate(altered));
+  }
   const currentBuildCases=new Map(),buildCaptureCounts={records:0,unique:0,withoutCapture:0,installedLockMatches:0,installedLockDiffers:0};
   for(const [run,sha256,mode,count,driftCount]of buildCaptureSources){
     const file=`artifacts/material-parity/${run}/latest-report.json`,bytes=readFileSync(file);assert.equal(hash(bytes),sha256);
@@ -3504,7 +3569,7 @@ test('passive state applicability joins exact cases without discarding progress 
     reportedScalarInputCases:2311,reportedScalarGroups:8483,dividerActualAXCases:24,dividerUpdateDisposalCases:24,dividerLocalTextRasterCases:24,dividerCoordinateHistoryCases:24,supplementaryKeyboardCases:40,extendedKeyboardCases:128,
     editingTargetApplicabilityCases:1957,editingCounts,configuredFocusRecordedProvenanceIncomplete:40,supplementaryFocusCounts,retainedFocusCounts,keyboardActivationCounts,staticRangeHistoryJoins,staticHeightHistoryCounts,
     retainedTargetRasterCases:1000,paintCounts,sampledPaintCounts,retainedResourceSamplingCases:1875,resourceSampleCounts,
-    retainedTargetDOMComparisonCases:2311,semanticCounts,retainedEventBoundaryCases:1875,eventCounts,supplementaryMenuActionContexts:menuActionJoins,commitEndpointCounts,rawControlJoins,rawActionRecords,buildCaptureCounts,completeCaseClosures:0,currentRenderingAccepted:0}));
+    retainedTargetDOMComparisonCases:2311,semanticCounts,retainedEventBoundaryCases:1875,eventCounts,explicitPredicateCounts,supplementaryMenuActionContexts:menuActionJoins,commitEndpointCounts,rawControlJoins,rawActionRecords,buildCaptureCounts,completeCaseClosures:0,currentRenderingAccepted:0}));
   t.diagnostic(JSON.stringify({cases:354,pairedTreeReceipts:708,counts,programmaticFocusObservations:focusable,
     scope:'Exact configured retained authoring: no activation/editing descendants. Forty native negative-tabindex progress owners keep a programmatic-focus obligation; no live focus, unrecorded callback, paint, lifecycle, source-currentness or full-case closure is inferred.'}));
 });

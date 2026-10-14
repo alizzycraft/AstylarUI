@@ -1,5 +1,35 @@
 # Material comparison/state coverage inventory
 
+## Explicit retained state predicates join114 exact interactions — October 14
+
+Question resolved:114 original interactionState records contain actual endpoint
+or trace fields;1761 flags are defaults,not behavioral passes. Conserved complete
+compareInteractionState method predicates replay exactly:72 native overlay-presence
+versus candidate open-store endpoints,18 native slider endpoints versus candidate
+store/event-fallback traces,8 year-view presence,8 time-panel presence and8 final
+scroll-offset comparisons. All114 recorded predicates match;this is historical
+predicate evidence,not equivalent action sequences,current rendering or full cases.
+Final-only dismissal lacks intermediate-open proof. Slider's fixed-peer,monotonic,
+>=3 unique nine-sample contract does not require equal per-step traces or smooth
+travel. DOM/store/diagnostic owner differences and missing whole-runner remain.
+
+Existing owning proof attaches these after prior keyboard/raw-control joins;
+88 pending activation obligations become partial,26 existing partial retain their
+evidence. Missing fields,forged flags,scroll difference and truncated trace reject.
+Initial ordering failure retained in retained-explicit-state-predicate-join-20261014.log;
+moving only the new join after prior evidence preserves existing assertions.
+Final focused proof1/1,0 skips,21238.5911ms:
+retained-explicit-state-predicate-final-join-20261014.log SHA256
+e2dd637436d41a606cbd0dd1aee9906d16f605942a11d6b6fbae298d027c1acb.
+Proposal7235bd46a7857f9a9d4ce2b336e8f27cb0756382359b7d408d759e138c866d1e
+remains noncanonical. Complete conservation changes only114 authoredActivation
+fields,preserving prior nested evidence/all other obligations/headers;dependency
+loader passes. Pending activation1715→1627;all2311 cases remain partial/unverified.
+Log retained-explicit-state-complete-conservation-20261014.log. No browser capture,
+renderer/fixture changes or isolated export. Combine with24 paint joins at a later
+coherent milestone. Next inspect actual reference-owned control-state boundaries
+where default flags and normalized events cannot establish activation results.
+
 ## Retained sampled pixels join24 exact static cases — October 14
 
 Existing owning case proof now authenticates original checkpoints and48 PNGs,
