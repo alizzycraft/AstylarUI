@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October15 configured empty-ink replay:retain
+configured-input-editing-empty-ink-20261015.log SHA
+cd265610188a7c939023131f532677229a8f923a5bb1f85201e0668b8db72716.
+It authenticates16 configured paired deletion samples and records insertion-edge
+RGB columns,raw font/color requests and all source/tree/PNG receipts. This is
+bounded caret presence/unequal-input evidence,not full paint equivalence. Original
+capture and failed/successful verification logs remain required.
+
 October15 configured editing capture is required gap-closing evidence,not scratch:
 retain configured-input-editing-current-20261015 (80 paired boundaries/160 PNGs/
 160 trees),its -provenance checkpoint and capture log. Current coverage ledger

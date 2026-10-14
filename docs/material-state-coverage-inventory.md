@@ -33,6 +33,23 @@ unfocused. Native and candidate light form-field empty caret images were inspect
 both visibly contain a caret. No universal absence,metric equivalence or temporal
 paint pass is inferred. Input/paint/style differences remain independently open.
 
+Follow-up question answered without recapture:all16 post-deletion pairs have
+unequal effective caret ink inputs. Native computed caretColor is profile primary;
+candidate omits caretColor through every captured resolved ancestor and retains
+text color. Exact-RGB contiguous columns within the input's insertion-edge ROI
+are present in all16 native and16 candidate PNGs. This extends the bounded
+fixture-text-input-primary-caret-color-omitted observation to these configured
+desktop action samples;it is not a new core color-conversion defect. Report,
+32 trees/PNGs and current finding source pattern are authenticated by
+configured-input-editing-empty-ink-20261015.log SHA
+cd265610188a7c939023131f532677229a8f923a5bb1f85201e0668b8db72716.
+No hide-control or full-AA footprint is available in this capture;blink phase,
+stroke width/height/position,sharpness and actual chosen font remain separate.
+Do not use this unequal-ink comparison to diagnose core geometry or normalize
+the font lists into equivalence. Select-all form-field endpoints agree0..5 in
+eight samples;email endpoints remain null on both sides,not an observed range.
+Candidate cursor flags remain enabled/visible,which alone does not prove paint.
+
 Initial verifier incorrectly expected lowercase a;actual event is A/codeKeyA as
 requested by Control+A. Preserve failed verify log2cd530ffe2b7145cc14e4b9c2b9ac4719816e6594d81490aa523d3d733f65aed.
 Corrected verify-retry logSHAb4fd87febb2bf5d50a5dc64c553900fe955e3077d16b088b33d5360d2e8a1fd2
