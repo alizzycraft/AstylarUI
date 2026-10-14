@@ -1,5 +1,28 @@
 # Material comparison/state coverage inventory
 
+## Snackbar retained paint eligibility resolved without recapture — October 14
+
+Question:can existing paint evidence cover pending snackbar cases,or is a new
+capture necessary? Existing modal-position-inspection assertion replays1/1,
+zero skips,7884.7517ms. Log artifacts/material-parity/
+retained-snackbar-raster-scope-20261014.log SHA256
+9e335e2b866168e917ff33995c7df8f8b4e542fc5ed6ba13784bd6d02b35693a.
+Complete callback agrees with Git8aa0e2e5;body SHA256
+5c42ec7a36cb92860b65ac6e1af9a7d0750df7afe84ab6485bc442048099a5dc.
+All34 exact IDs map to configured proposal cases:activate9,activate-leave8,
+activate-twice9,open8. Owning assertion authenticates originalb07ef154 report,
+34 PNG receipt digest52f3cf2c,dimensions/DPR and in-bounds text-free interior
+strips with >98% exact candidate surface RGBA;blank-paint control fails.
+
+This answers bounded historical surface visibility,not native/candidate paint
+equivalence,text/edge/sharpness,current rendering or37 other snackbar states.
+All71 snackbar localPaint obligations remain pending until exact joins are made.
+Do not reopen settled short-surface depth/reachability diagnosis from this result:
+its ordinary-click reduction is a different context from retained benchmark paint.
+Next attach the existing34-case proof after the active export/cold checkpoint;
+keep producer/proof inputs frozen now. No new report framework,source test,
+browser capture or renderer/fixture change. Export7933 remains confirmed live.
+
 ## Coherent retained-state batch registration pending integration — October 14
 
 Dependency loader validates proposala1d7bff1:2311 exact cases,7676 receipts,
@@ -21,6 +44,14 @@ guard. Observed D:free1376608256 bytes before publication. Published canonicala8
 remains the accepted predecessor;next export this coherent batch,then independent
 cold verification/import before publication acceptance. No browser capture or
 renderer/fixture change. Original final gates and all2311 partial cases remain.
+
+Registration commitb514e2c4 is pushed. Complete-baseline export now live in
+session7933,launcher9264/child32936,log artifacts/material-parity/
+retained-state-batch-canonical-export-20261014.log. Confirmed process handles,
+not inferred from an output file. No terminal result yet;do not restart or claim
+publication. Keep producer/evidence inputs frozen while it reads them. Next poll
+that same session,retain terminal result,then run independent cold --check and
+existing compact conservation/import at this coherent milestone.
 
 ## Retained radio keyboard actual-state evidence joins eight focus cases — October 14
 
