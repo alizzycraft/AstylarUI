@@ -11,11 +11,19 @@ measureReference referenceGeneratedTextTarget maps those logical targets to the
 same classes. This is not live-selector replay,serialized owner rectangles or
 recovery of missing original runner bytes. Do not reopen this marker-absence
 question without changed evidence. Full1000-case crop/full-image reconstruction
-is now running in session52932;log artifacts/material-parity/
+completed successfully in session52932 exit0;log artifacts/material-parity/
 retained-target-crop-full-image-reconstruction-20261014.log. It authenticates
 reportab42dbec and compares every decoded crop row to recorded geometry/padding/
 DPR bounds in both full images,without repeating SSIM or changing metric gates.
-No terminal result yet. Export37648 remains live;producer/proof inputs frozen.
+All1000 cases/2000 crops across22 families exactly match. Ordered full/crop-file
+receipt digest fd965714f8ae3389fe2e3ebaa5a924a716514412bcb8e9ead031f1712247586b;
+log SHAfd0714ae986dd929ce3b139d0a6db2e5645026fe7b3ae8e897b71e5c98d67ac7.
+Complete compareFocusedRaster/cropPng functions conserve against8aa0e2e5,
+body hashes7a3a50d382977ab11b2e2f7347befee3f7f21f6620a62a3f954ac12e602639ce/
+919670e9e1c4abb63d53471c1430afec9719868d57a9108e1e07f6a4364989c0.
+This resolves saved-crop geometry/pixel provenance,not original whole-runner
+recovery,equal input,current rendering,complete visual scope or whole-case closure.
+Export37648 remains live;producer/proof inputs frozen.
 
 Read-only unresolved question:can saved target crops be traced to reference
 geometry rather than inferred from filenames? All1000 measured cases retain a
@@ -28,7 +36,7 @@ Reference-tree receipt census authenticates all1000 trees:965 have one direct
 id/data-parity-id owner,zero ambiguous direct matches;35 lack direct markers
 (dialog16,tooltip18,bottom-sheet1). Captured referenceStructure still records
 type/text/descendant IDs for those targets. Absence of a marker is not evidence
-of a wrong selector or renderer defect;portal/fallback identity tracing remains.
+of a wrong selector or renderer defect;followup above resolves captured fallback identity.
 
 Slider sample owner is native INPUT#slider-primary with matsliderendthumb,
 opacity0,computed width515.797px;visual host is mat-slider marked slider-visual.
@@ -37,9 +45,12 @@ hover/held metric deliberately anchors slider-primary with padding28,not the
 whole visual host. Exact crop/metric replay therefore must not certify complete
 slider visual coverage or equivalent event-owner geometry. Original domain/hit
 owner findings remain settled and are not reopened by this scope check.
-Next prove all recorded crop rectangles against saved full images with existing
-crop logic and separately trace35 fallback/portal owners;retain missing original
-runner/currentness limitations. No capture,code/fixture/threshold change. Pending
+Both crop reconstruction and captured fallback identity are now resolved above;
+retain missing original runner/currentness limitations. Next prioritize shared
+text-input local paint gaps without repeating registered configured40-context
+temporal caret and16-state mobile selection proofs. Producer descriptions already
+register those bounded populations;remaining vertical fringe/equal-input/all-family
+selection coverage must be distinguished from joins. No capture,code/fixture/threshold change. Pending
 paint export37648 remains live;producer/proof inputs stay frozen.
 
 ## Coherent retained-paint registration conserves producer and prior evidence — October14
