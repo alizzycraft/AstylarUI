@@ -29,6 +29,20 @@ consumed source batch frozen;do not restart for quiet output. Next verify its
 proposal and exact predecessor transitions,then combine queued frame disposition
 work at a justified canonical milestone. All original final gates remain open.
 
+Read-only next-gap check during integration answers missing separator evidence
+versus missing exact-case join. Authenticated spanff30ee43,midpoint601e8407 and
+mixed-model18495e20 logs map to all24 exactf56 divider case records,with48
+paired unchanged PNG receipts and identical side/file/hash correspondence between
+span and midpoint observations. Each PNG path agrees with its case tree directory;
+all24 localPaint obligations currently lack a retainedSeparatorPaint subrecord.
+The eight mixed cases/16 pixels reference the exact midpoint log. This is join
+eligibility,not another pixel/SSIM proof or current/equal-input paint acceptance.
+Next coherent owner batch should attach those bounded full-span/unequal-ink/
+model-consistency observations and replace generic already-answered separator
+absence wording. Keep exact endpoint/full-AA footprint,actual coverage/compositing
+mechanism,original crop producer and current-code validity explicit. Do not
+recapture known spans or promote entire paint obligations from these receipts.
+
 Read-only question during full owner integration:are page-frame sibling semantic
 inputs still unmapped,or is the remaining boundary actual runtime observability?
 Authenticated f56f4ca7 complete file7c3364dd and all48 paired tree receipts.
