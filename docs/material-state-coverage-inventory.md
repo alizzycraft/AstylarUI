@@ -1,5 +1,41 @@
 # Material comparison/state coverage inventory
 
+## Current integration checkpoint — October15 flex-margin registration
+
+The prior snapshot turn was status-only,not investigation progress. Remaining
+priorities are unchanged: first reconcile queued policy/proof/case receipts;
+then close shared editing/caret/selection evidence across the443 writable cases
+in five families and popup commit/reopen boundaries;keep94 readonly-select and
+40 disabled-text cases separate. Retained no-editor exclusions and24 divider
+joins are ready for coherent integration,not whole-case closure. All2311 cases
+remain partial/unverified;final unfiltered/enforced gates stay open.
+
+Registered confirmed core-flex-margin-font-relative-units-parse-as-pixels as
+the159th source definition. Existing focused benchmark owner authenticates both
+public reports,negative controls,all32 first-run PNGs and complete relevant
+current/emitted/installed method bodies. Exact whole-policy restoration preserves
+all158 predecessor findings;two policy forgeries reject. No renderer,fixture or
+browser capture was changed. Publishedb246 remains the158-finding snapshot.
+
+Historical conservation exposed two separate instrumentation gaps:the original
+192-proof assertion read the later205-proof producer;after selecting the exact
+authenticated historical stage,it attempted obsolete build source-map paths.
+The owning test now checks the192-proof stage while fingerprinting actual current
+retained paths. Complete producer restoration and original assertions/negative
+controls remain. No old map is recreated or receipt weakened.
+
+Original failure log flex-margin-policy-predecessor-conservation-20261015.log
+SHA83debb095f55c2e14d736d3c649aa2cf293ce1c68f8f0548579ea50e95c468f4;
+retry failure log flex-margin-policy-predecessor-conservation-retry-20261015.log
+SHAe75798adfc0ef098caedc09fed5d6d7c82dec0564aeb842b23dcc9c6ae444169.
+Final combined focused check passes7/7,zero skips,29089.263ms:
+flex-margin-registration-conservation-20261015.log SHA
+ef93a9c4e31b91ae143adaa00eb20e53503789487e9e7f85fe6f98339eb0c91c.
+It covers margin,caret,progress,box-sizing and three historical registrations.
+Next integrate this proof in the existing producer and refresh queued case-review
+receipts with complete field conservation before one canonical milestone;these
+focused results do not certify current whole-case rendering or final acceptance.
+
 ## Current batch: public flex-margin defect reproduced; divider integration complete — October15
 
 Public equal-input margin diagnostic closes the isolated-parser/public-path gap.

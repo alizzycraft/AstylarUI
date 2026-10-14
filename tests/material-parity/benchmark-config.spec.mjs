@@ -14,8 +14,81 @@ import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs
 import { verifyRetainedMaterialBrowserFiles } from './historical-audit-module-source.mjs';
 import { restoreLayoutDiagnosticRegistration, restoreDescriptionProofRegistration, restoreDescriptionPolicyRegistration, restoreStandaloneProofBatch, restoreExtendedKeyboardRegistration } from './position-composition-producer-transition.mjs';
 import { propertyGroups, sourceAuditDefinitions } from './input-equivalence-policy.mjs';
-import { restoreSizingDefaultPolicyRegistration } from './position-composition-producer-transition.mjs';
+import { restoreSizingDefaultPolicyRegistration, restoreFlexMarginPolicyRegistration, restoreRetainedMapLocationRegistration } from './position-composition-producer-transition.mjs';
 import { materialAbsoluteTextAlignmentTargets, materialAdditionalMeasurementTargets, materialComparisonViewport, materialFamilies, materialFocusedRasterTargets, materialGeometryExcludedTargets, materialInteractionCases, materialInteractionFocusedRasterTargets, materialInteractionTextAlignmentTargets, materialInteractionViewports, materialLeftAlignedTextTargets, materialMobileFlowCases, materialMobileFlowFamilies, materialProfiles, materialSemanticExcludedTargets, materialStaticCases, materialSupplementalStaticCases, materialTextAlignmentTargets, materialTextAlignmentToleranceOverrides, materialTextAuditTargets, materialTextlessFamilies, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets, materialViewports } from './benchmark.config.mjs';
+
+test('public equal-input flex em margins preserve exact failure and block pixel controls', () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const finding = sourceAuditDefinitions.find(row => row.id === 'core-flex-margin-font-relative-units-parse-as-pixels');
+  assert.equal(finding.classification, 'confirmed-core-renderer-defect');
+  assert.match(readFileSync(finding.file, 'utf8'), new RegExp(finding.pattern));
+  assert.deepEqual(finding.observation.fontSizes, [16, 24]);
+  assert.match(finding.justification, /does not establish inherited-font,percent,positioned,update or lifetime/);
+  for (const receipt of finding.evidence) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  const policy = readFileSync('tests/material-parity/input-equivalence-policy.mjs', 'utf8');
+  assert.equal(sourceAuditDefinitions.length, 159);
+  const prior = execFileSync('git', ['show', 'dd03fdc8:tests/material-parity/input-equivalence-policy.mjs'],
+    { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreFlexMarginPolicyRegistration(policy), prior);
+  for (const changed of [policy.replace('does not establish inherited-font', 'proves inherited-font'), policy + '\n// unexplained drift'])
+    assert.throws(() => restoreFlexMarginPolicyRegistration(changed));
+  for (const directory of ['public-relative-margin-20261015', 'public-relative-margin-repeat-20261015']) {
+    const root = `artifacts/material-parity/${directory}`;
+    const verified = JSON.parse(execFileSync(process.execPath, ['scripts/audit-public-relative-margins.mjs', '--verify', root],
+      { encoding: 'utf8', maxBuffer: 2_000_000 }));
+    assert.equal(verified.negativeControlsRejected, 2); assert.equal(verified.verified.pixelControls, 8);
+    assert.deepEqual(verified.verified.blockEm.map(row => row.error), [0, 0, 0, 0]);
+    assert.deepEqual(verified.verified.flexEm.map(row => row.error), [-15, -23, -15, -23]);
+  }
+  const binding = JSON.parse(readFileSync(finding.evidence[2].file));
+  assert.equal(binding.retainedImages, 32); assert.equal(binding.projectedGeometryMatchesObservedChildInk, true);
+  const printer = ts.createPrinter({ removeComments: true });
+  const locate = (ast, name) => {
+    const found = []; const visit = node => {
+      if ((ts.isClassDeclaration(node) || ts.isClassExpression(node)) && node.name?.text === name) found.push(node);
+      ts.forEachChild(node, visit);
+    }; visit(ast); assert.equal(found.length, 1); return found[0];
+  };
+  const classNames = ['ElementDimensionService', 'FlexService', 'ElementCreationService'];
+  assert.equal(binding.currentAndInstalledOwners.length, 3);
+  for (const [index, owner] of binding.currentAndInstalledOwners.entries()) {
+    const source = readFileSync(owner.file), installed = readFileSync(owner.installed.file);
+    assert.equal(hash(source), owner.sha256); assert.equal(hash(installed), owner.installed.sha256);
+    const currentAST = ts.createSourceFile(owner.file, source.toString(), ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+    const currentClass = locate(currentAST, classNames[index]);
+    const methods = owner.methods.map(receipt => currentClass.members.find(node => node.name?.getText(currentAST) === receipt.method));
+    assert.ok(methods.every(Boolean));
+    const emitted = ts.transpileModule(`export class Owner {${methods.map(node => node.getText(currentAST)).join('\n')}}`,
+      { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 } }).outputText;
+    const emittedAST = ts.createSourceFile('emitted.js', emitted, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    const installedAST = ts.createSourceFile(owner.installed.file, installed.toString(), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    const emittedClass = locate(emittedAST, 'Owner'), installedClass = locate(installedAST, classNames[index]);
+    for (const receipt of owner.methods) {
+      const expected = emittedClass.members.find(node => node.name?.getText(emittedAST) === receipt.method);
+      const actual = installedClass.members.find(node => node.name?.getText(installedAST) === receipt.method);
+      const normalized = (node, ast) => printer.printNode(ts.EmitHint.Unspecified, node.body, ast);
+      assert.equal(normalized(actual, installedAST), normalized(expected, emittedAST));
+      assert.equal(hash(normalized(actual, installedAST)), receipt.completeEmittedBodySha256);
+      assert.deepEqual(actual.parameters.map(node => node.name.getText(installedAST)), expected.parameters.map(node => node.name.getText(emittedAST)));
+    }
+  }
+  const root = 'artifacts/material-parity/public-relative-margin-20261015';
+  const report = JSON.parse(readFileSync(`${root}/latest-report.json`));
+  for (const row of report.results) for (const side of ['reference', 'astylar']) {
+    const observation = row[side], png = PNG.sync.read(readFileSync(`${root}/${observation.screenshot.file}`));
+    assert.equal(png.width, 400 * row.dpr); assert.equal(png.height, 260 * row.dpr);
+    let left = Infinity, top = Infinity, right = -1, bottom = -1;
+    for (let y = 0; y < png.height; y++) for (let x = 0; x < png.width; x++) {
+      const k = (y * png.width + x) * 4;
+      if (png.data[k] === 18 && png.data[k + 1] === 52 && png.data[k + 2] === 86 && png.data[k + 3] === 255) {
+        left = Math.min(left, x); top = Math.min(top, y); right = Math.max(right, x); bottom = Math.max(bottom, y);
+      }
+    }
+    assert.ok(right >= left);
+    const pixels = { left: left / row.dpr, top: top / row.dpr, width: (right - left + 1) / row.dpr, height: (bottom - top + 1) / row.dpr };
+    for (const axis of ['left', 'top', 'width', 'height']) assert.ok(Math.abs(pixels[axis] - observation.bounds.child[axis]) <= 1);
+  }
+});
 
 test('equal-input caret font contrast preserves bounded source and recorded paint failure', t => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -29,7 +102,7 @@ test('equal-input caret font contrast preserves bounded source and recorded pain
   assert.match(finding.justification, /not a confirmed universal height law/);
   for (const receipt of finding.evidence) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
   const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
-  const policy = readFileSync(policyFile, 'utf8').replaceAll('\r\n', '\n');
+  const policy = restoreFlexMarginPolicyRegistration(readFileSync(policyFile, 'utf8'));
   const prior = execFileSync('git', ['show', `1db063c8:${policyFile}`], { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
   const tree = ts.createSourceFile(policyFile, policy, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   assert.deepEqual(tree.parseDiagnostics, []);
@@ -199,6 +272,7 @@ test('public omitted box sizing finding preserves explicit controls and complete
   assert.equal(sourceAuditDefinitions.filter(n => ![
     'core-semantic-descendant-replacement-loses-retained-focus',
     'core-caret-height-rule-is-font-insensitive',
+    'core-flex-margin-font-relative-units-parse-as-pixels',
   ].includes(n.id)).length, 156);
   const finding = sourceAuditDefinitions.find(n => n.id === 'core-box-sizing-omission-violates-content-box-default');
   assert.equal(finding.classification, 'confirmed-core-renderer-defect');
@@ -246,9 +320,15 @@ test('layout diagnostic registration preserves complete predecessor and unchange
   const policy = 'tests/material-parity/input-equivalence-policy.mjs';
   assert.equal(restoreSizingDefaultPolicyRegistration(readFileSync(policy, 'utf8')),
     execFileSync('git', ['show', `ad7133cd:${policy}`], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n'));
-  const ast = ts.createSourceFile(file, current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  // Inspect the original192-proof stage,not later independently conserved additions.
+  const layoutStage = restoreRetainedMapLocationRegistration(current);
+  const ast = ts.createSourceFile(file, layoutStage, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const currentAst = ts.createSourceFile(file, current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  // Fingerprint actual retained evidence paths; historical inventory assertions
+  // must not require reconstructing obsolete build-output locations.
   const functions = ['sourceFingerprints', 'focusedProofInventory', 'proof'].map(name =>
-    ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name).getText(ast));
+    { const owner = name === 'sourceFingerprints' ? currentAst : ast;
+      return owner.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name).getText(owner); });
   const { fingerprints, proofs } = new Function('readFileSync', 'path', 'createHash', functions.join('\n') +
     ';return {fingerprints:sourceFingerprints(process.cwd()),proofs:focusedProofInventory(process.cwd())};')(
     readFileSync, path, createHash);
@@ -304,7 +384,8 @@ test('description registration conserves complete producer and source-definition
   assert.equal(restoreDescriptionPolicyRegistration(policy), prior(policyFile));
   const before = new Function(prior(policyFile).replace(/^export const /gm, 'const ') + '; return sourceAuditDefinitions;')();
   const predecessorDefinitions = sourceAuditDefinitions.filter(n => !['core-box-sizing-omission-violates-content-box-default',
-    'core-semantic-descendant-replacement-loses-retained-focus', 'core-caret-height-rule-is-font-insensitive'].includes(n.id));
+    'core-semantic-descendant-replacement-loses-retained-focus', 'core-caret-height-rule-is-font-insensitive',
+    'core-flex-margin-font-relative-units-parse-as-pixels'].includes(n.id));
   assert.equal(before.length, 153); assert.equal(predecessorDefinitions.length, 155);
   assert.deepEqual(predecessorDefinitions.slice(0, -2), before);
   for (const changed of [producer.replace('sourceFindings,', 'sourceFindings: [],'),
@@ -582,7 +663,8 @@ test('standalone proof batch conserves complete accepted predecessor producer an
   assert.equal(findings[first + 1].arguments[0].properties.find(p => p.name.getText(policyTree) === 'id').initializer.text, ids[1]);
   assert.equal(policy.slice(0, findings[first].getFullStart()) + policy.slice(findings[first + 2].getFullStart()), prior(policyFile));
   assert.equal(sourceAuditDefinitions.filter(n => !['core-box-sizing-omission-violates-content-box-default',
-    'core-semantic-descendant-replacement-loses-retained-focus', 'core-caret-height-rule-is-font-insensitive'].includes(n.id)).length - 2, 153);
+    'core-semantic-descendant-replacement-loses-retained-focus', 'core-caret-height-rule-is-font-insensitive',
+    'core-flex-margin-font-relative-units-parse-as-pixels'].includes(n.id)).length - 2, 153);
 });
 
 test('retained antialias and selection receipts replay after exact diagnostic and theme conservation', async t => {

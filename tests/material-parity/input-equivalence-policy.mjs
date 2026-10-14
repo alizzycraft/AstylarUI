@@ -1833,6 +1833,26 @@ export const sourceAuditDefinitions = Object.freeze([
       stage: 'candidate sizing rule before projectCssSize; native logical metrics and complete raster footprint remain unproved' },
     justification: 'Both public diagnostic variants preserve original SiteData equality,actions and assertions; only shared font-family and full-native-stage output reporting differ. Original source/executed hashes,distinct bundle hashes,2515 dependency aggregate and complete current/emitted/installed cursor method are authenticated by the retained regression. Native exact-RGB height responds to the font contrast while candidate bounds do not; candidate sizing reads only fontsize and multiplies by1.2 before projection. This identifies a bounded paint mismatch and a plausible font-insensitive sizing owner,not a confirmed universal height law or the exact native logical caret geometry. Original pixels were in-memory and are not independently replayable PNGs;native chosen font,full AA footprint,clipping/blending contribution and correct replacement metrics remain explicit uncertainties. Resolve those at the general caret owner before implementing a metric rule;do not add font/profile/DPR-specific fixture offsets or retune Material labels. Other Material inputs,font stacks,caret colour,selection blink,placement and lifetime remain separate findings and final acceptance obligations.',
   }),
+  Object.freeze({
+    id: 'core-flex-margin-font-relative-units-parse-as-pixels',
+    introducedBy: 'current and installed owner binding plus two fresh public equal-input runs; first-bad revision not established',
+    file: 'src/app/services/dom/elements/flex.service.ts',
+    pattern: String.raw`const margin = this\.parseMargin\(style\?\.margin\)`,
+    classification: 'confirmed-core-renderer-defect',
+    owner: 'core FlexService CSS-space font-relative margin used-length resolution',
+    focusedProof: 'tests/material-parity/benchmark-config.spec.mjs: public equal-input flex em margins preserve exact failure and block pixel controls',
+    evidence: [
+      { file: 'artifacts/material-parity/public-relative-margin-20261015/latest-report.json', sha256: 'ac83b117088eaa09117d9ddead286d77a913b6c1201830e445af06a75d8e81da' },
+      { file: 'artifacts/material-parity/public-relative-margin-repeat-20261015/latest-report.json', sha256: 'ac83b117088eaa09117d9ddead286d77a913b6c1201830e445af06a75d8e81da' },
+      { file: 'artifacts/material-parity/public-relative-margin-owner-binding-20261015.log', sha256: 'ac2b356d74062bfd7e06d9ca8ee1062e3ff2660b601ec45aa1eae9e51d358012' },
+    ],
+    observation: { component: 'public equal-input non-text flex/block reduction', element: 'child',
+      states: ['initial-settled'], fontSizes: [16, 24], requestedDpr: [1, 2], property: 'margin:1em 0 used vertical offset',
+      reference: 'padded-parent child offset36/44CSSpx for16/24px own font',
+      astylar: 'flex child offset21CSSpx for either font;block-em and all explicit-pixel controls agree',
+      stage: 'FlexService.parseMarginBox/parseMargin drops units before final projection;retained PNG bounds corroborate projected geometry' },
+    justification: 'Two fresh public-package runs each preserve16 paired identical-input trials and32 screenshot receipts. Four block-em and eight explicit-pixel controls agree;all four flex-em trials are15/23CSSpx too high,consistent with margin1 instead of16/24. Relevant complete emitted method bodies and parameter names bind current source to the installed bundle inputs. Flex flow passes the raw resolved margin to parseFloat-based helpers;ordinary block creation uses a separate own-font-aware helper and passes. Share computed CSS length/font resolution at the owning layout boundary rather than replacing fixture em margins with pixels. This does not establish inherited-font,percent,positioned,update or lifetime behavior,or attribute Material absolute paragraph wrappers to this flex-flow reduction. The dimension parser also drops units in isolation,but that alone does not prove every caller fails.',
+  }),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({

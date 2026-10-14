@@ -954,8 +954,27 @@ export function restoreDescriptionProofRegistration(source) {
   return current;
 }
 
+export function restoreFlexMarginPolicyRegistration(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  if (!current.includes("id: 'core-flex-margin-font-relative-units-parse-as-pixels'")) return current;
+  assert.equal(hash(current), '9937739b846298c74e2e75921cd878e1deaaf0960a4f25a5f9fc1b7983e27474');
+  const ast = ts.createSourceFile('policy.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  assert.equal(ast.parseDiagnostics.length, 0);
+  const entries = ast.statements.filter(ts.isVariableStatement).flatMap(node => [...node.declarationList.declarations])
+    .find(node => node.name.getText(ast) === 'sourceAuditDefinitions').initializer.arguments[0].elements;
+  assert.equal(entries.length, 159);
+  assert.equal(entries.at(-1).arguments[0].properties.find(node => node.name.getText(ast) === 'id').initializer.text,
+    'core-flex-margin-font-relative-units-parse-as-pixels');
+  const restored = current.slice(0, entries.at(-1).getFullStart()) + current.slice(entries.at(-1).end + 1);
+  const prior = execFileSync('git', ['show', 'dd03fdc8:tests/material-parity/input-equivalence-policy.mjs'],
+    { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+  assert.equal(hash(prior), '19f7c60bfda3991c1dab58ec6f2898fec1df47a57084a174d7c1e9958fdd5787');
+  assert.equal(restored, prior, 'All158 preceding findings and remaining policy bytes must be unchanged');
+  return restored;
+}
+
 export function restoreSizingDefaultPolicyRegistration(source) {
-  let current = source.toString().replaceAll('\r\n', '\n');
+  let current = restoreFlexMarginPolicyRegistration(source);
   if(current.includes("id: 'core-caret-height-rule-is-font-insensitive'")){
     assert.equal(hash(current),'19f7c60bfda3991c1dab58ec6f2898fec1df47a57084a174d7c1e9958fdd5787',
       'exact bounded caret font-response classification');

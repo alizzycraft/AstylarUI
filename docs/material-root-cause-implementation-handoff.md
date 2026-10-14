@@ -1,5 +1,13 @@
 # Material audit: evidence-led implementation priorities
 
+October15 registration checkpoint:the bounded flex-margin defect below is now
+the159th policy finding,with owning public regression and exact158-predecessor
+conservation. Combined focused checks pass7/7,zero skips;see the current coverage
+ledger for successful and preserved failure logs. Published canonicalb246 still
+contains158 findings;producer/proposal integration is next. No renderer fix or
+whole-case closure is claimed. The older pending-registration statement below
+describes the preceding checkpoint,not the current policy file.
+
 ## October15 public flex margin-unit failure — confirmed bounded core defect
 
 Two fresh public-package equal-input runs each show four flex1em-margin failures

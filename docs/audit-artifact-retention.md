@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October15 flex-margin registration:retain both original predecessor-conservation
+failure logs and the successful flex-margin-registration-conservation-20261015.log
+(SHAef93a9c4e31b91ae143adaa00eb20e53503789487e9e7f85fe6f98339eb0c91c,
+7/7,zero skips). Exact original/retry hashes and causes are in the current coverage
+ledger. These are required audit verification evidence,not disposable scratch;
+neither successful focused replay nor historical conservation proves full parity.
+
 October15 public relative-margin diagnostic is required equal-input evidence.
 Retain public-relative-margin-20261015 and public-relative-margin-repeat-20261015
 with their reports,bundles,HTML and32 original PNGs per run. Both complete reports
