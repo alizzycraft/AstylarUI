@@ -2,18 +2,20 @@
 
 ## Complete finding-row conservation uses indexed single passes — October14
 
-Package/proposal and Markdown conservation are settled. Remaining integration
-question is whether any complete finding content changed beyond the48 producer
+Package/proposal and Markdown conservation are settled. Integration
+question answered:complete finding content changes only for the48 producer
 normalization receipts and one scalar's embedded control hashes. Read-only
-session81533 is now live (Node35668),log retained-paint-batch-full-row-conservation-
+session81533 completed exit0,log retained-paint-batch-full-row-conservation-
 20261014.log. Existing verifyFindings authenticates published14affae index9e6f1541,
 48544 compact rows supply exact complete-row hashes,then existing JSON parser
 reads each old/current package once with indexed section/ordinal selection.
-Existing refreshScalarControlReceipts must prove the49 changed whole objects;
-all other complete hashes and every visible compact field must agree. Whole
+Existing refreshScalarControlReceipts proves the49 changed whole objects;
+all48495 other complete hashes and every visible compact field agree. Whole
 compressed/decoded hashes and one-root boundaries are checked on both passes.
 This avoids repeated per-token finding scans without changing validation or
-adding a framework. No terminal result yet;do not claim conservation acceptance.
+adding a framework. All48 forged extra-field controls reject. Log SHA256
+2434e797eeeb5f0a18865a1a9a20cef476b655b8f039433a3c4adfe0fc7409ed.
+New candidate generationcafd5020 remains separate from published14affae1.
 Independent cold57853 is separately live;no import/publication or input changes.
 
 ## Mixed divider ink fits recorded fill/backdrop coverage,not an unexplained RGB — October14
