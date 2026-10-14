@@ -1,5 +1,36 @@
 # Material comparison/state coverage inventory
 
+## Retained-paint canonical batch verified for publication — October14
+
+Candidate generationcafd50205a10db91363ef8239a50a4d9471e0a1c65ae7b5e348d0702f82de8d4
+passes terminal export37648,independent cold57853,whole compressed/decoded bytes,
+exact2311-case proposal equality,610-line Markdown claim conservation,complete
+48544 finding-row conservation,compact import66850 and publication preflight.
+Cold log SHA4a278b0f8428a6254ce6344205d91fcc0fb7d2bee2678f8f55de4ac6d2c605cf:
+2 collectors/10 memory hits/0 disk hits/0 invalidations,11002 files,
+1085525887 bytes read/reverified,elapsed2507156.7552ms. Both sessions terminal0;
+do not poll or restart them. Import log SHA
+ccedb9ed910d3d397a26101b6135ea9aa3cfc3d99131dc559c0036d16f8c28ee.
+
+Working index SHAb7453931108df2d21105c6782c6980fb98e106fc2f1dcac8c5c473c587d2e05e;
+existing whole-index verifier and loader revalidate9796 dependencies,zero unjoined,
+producerLFcb9ad4c8 and both acceptance flags false. Preflight log
+retained-paint-batch-publication-preflight-20261014.log SHA
+858f2e30ff334e67144e3a6b6951d3afdb548a7e13f7e6f30661bdcd956681f3.
+Counts8483 scalar groups/389202 occurrences/157 findings/39904 controls remain.
+The batch pins6bfe953b:1000 actual target-raster joins,34 snackbar surfaces and
+25 sheet-corner observations across1058 unique changed cases;58 pending paint
+obligations become partial. Other complete fields,failures and classification
+claims conserve. This is retained evidence publication,not current-rendering or
+whole-audit acceptance. Partial-only schema caveat above remains;no case promoted.
+
+Later standalone full-image crop,captured owner,vertical/font caret,divider paint
+and closure-schema investigations are NOT silently part of this frozen batch.
+Next integrate necessary bounded regression/schema changes coherently with exact
+source conservation;do not repeat settled pixel or root-cause investigations.
+All original final gates remain outstanding. Only report manifest/gzip/Markdown
+and this ledger are in the publication commit;unrelated dirty files preserved.
+
 ## Complete finding-row conservation uses indexed single passes — October14
 
 Package/proposal and Markdown conservation are settled. Integration
@@ -16,7 +47,7 @@ This avoids repeated per-token finding scans without changing validation or
 adding a framework. All48 forged extra-field controls reject. Log SHA256
 2434e797eeeb5f0a18865a1a9a20cef476b655b8f039433a3c4adfe0fc7409ed.
 New candidate generationcafd5020 remains separate from published14affae1.
-Independent cold57853 is separately live;no import/publication or input changes.
+Independent cold57853 subsequently completed;publication verification is above.
 
 ## Mixed divider ink fits recorded fill/backdrop coverage,not an unexplained RGB — October14
 
