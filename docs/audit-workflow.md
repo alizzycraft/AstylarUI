@@ -125,6 +125,26 @@ Source conservation and coherent export/cold/import remain required before the
 new coverage records are described as canonical; a launcher dry run is not proof
 of publication or successful audit validation.
 
+The implicit schema-1 proposal remains partial-only and byte-compatible. An
+explicit `inspectionSchemaVersion: 2` proposal may record `inspection: complete`
+only with a receipt-bound requirement review and conclusions/evidence for every
+existing obligation, including any extra keyboard obligation. Applicability must
+be reviewed, applicable obligations must be inspected, exclusions must be
+justified, and no obligation may retain outstanding work. An inspected failure
+must retain classified, receipt-backed findings; it counts as inspected, not as
+a rendering pass. Do not clear remaining work or invent conclusions just to pass
+the validator. Review records must actually establish the original audit's input,
+root-cause/history/ownership, regression and handoff requirements.
+
+The loader validates structure, exact membership, review digest and every evidence
+receipt; it cannot independently establish the truth of a reviewer conclusion.
+Schema-2 inspection completion is derived from all configured cases being joined
+and closed. Current rendering remains unverified and its acceptance flag stays
+false. Final canonical/browser/release gates and the original acceptance criteria
+are unchanged. No production case is promoted by synthetic schema tests.
+Use review key order `kind`, `status`, `inspectionSchemaVersion`, `scope`, `groups`
+for the existing JSON digest contract. Schema 1 omits the version opt-in.
+
 ## Validated reuse
 
 For the original **synthetic ImageResourceService unit assertions only**, the

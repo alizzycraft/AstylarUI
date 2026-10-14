@@ -1,5 +1,39 @@
 # Material comparison/state coverage inventory
 
+## Existing coverage schema can now represent reviewed inspection closure — October14
+
+Demonstrated partial-only reporting gap is addressed in the existing store and
+owning tests,not a new framework or weakened audit criterion. Implicit schema1
+remains unchanged. Explicit schema2 accepts complete inspected-pass/failure only
+with a receipt-bound requirement review,all eight existing obligations plus any
+extra keyboard obligation inspected/excluded with conclusions/evidence and no
+outstanding obligation work. Classified findings require owner/first-stage
+explanation;core findings require public reproduction receipts. Equivalent
+representations can be documented without becoming failures. Complete-case
+receipts must be in the authenticated dependency set. Current-rendering stays
+unverified and acceptance=false;aggregate inspection completion is derived from
+exact configured membership,not a supplied success flag. Reviewer conclusions
+still require actual original-scope evidence;structural validation is not proof
+of their truth. No real case has been promoted by synthetic tests.
+
+Full existing store/producer-transition integration passes36/36,zero skips,
+147225.7283ms,session57283 exit0. Log case-inspection-closure-integration-20261014.log
+SHAbc1c8a13def476a01b6228260e581104657980d5319104abe4fb6d2e51e39928.
+Actual published2311-case schema1 proposal reauthenticates9796 dependencies;
+complete metadata and legacy Markdown presentation agree exactly,flags false.
+Log case-inspection-closure-published-legacy-compatibility-20261014.log SHA
+6d3b871f94f0b1710b1b9f85cd946bd2fa6785bdaba9eeaab2c54ae8d9d07608.
+Focused final schema3/3 and exact producer restoration1/1 also pass. ProducerLF
+0e1ef18f9bd6d68a5e110418a81beb51939094dea070e977421ad8f89850b8eb restores
+only new presentation call/import to whole publishedcb9ad4c8 before the unchanged
+historical chain;original mutation controls remain. Workflow documents limits.
+
+Canonicalcafd5020 remains the prior verified publication;this source/proof change
+needs coherent fingerprint/export reconciliation later,not a rebuild after every
+record edit. Next derive evidence-backed closure for real cases from existing
+obligations and integrate the necessary standalone regressions without clearing
+real gaps. Full audit/browser/release gates remain unchanged and outstanding.
+
 ## Retained-paint canonical batch verified for publication — October14
 
 Candidate generationcafd50205a10db91363ef8239a50a4d9471e0a1c65ae7b5e348d0702f82de8d4

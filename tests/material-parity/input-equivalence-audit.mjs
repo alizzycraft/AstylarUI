@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { assertCaseObligationCoverage } from '../../scripts/audit-findings-store.mjs';
+import { assertCaseObligationCoverage, describeCaseInspectionCoverage } from '../../scripts/audit-findings-store.mjs';
 import { applyPaintReviews, validatePaintReviews, collectPaintReviewSources, isPaintReviewRow } from './control-state-paint-review.mjs';
 import { applyOmittedOwnerPaintRequests, validateOmittedOwnerPaintRequests } from './control-state-paint-review.mjs';
 import { collectHeldContentPaintInputs } from './control-state-paint-review.mjs';
@@ -1838,7 +1838,7 @@ export function renderMaterialInputAuditMarkdown(report) {
       `${report.coverage.executedInteractions}/${report.coverage.configuredInteractions} interaction/mobile-flow cases. All ${report.coverage.families.length} component families are inventoried.`,
     '',
     ...(report.coverage.inspectionEvidence ? [
-      `Case-obligation evidence: ${report.coverage.inspectionEvidence.cases.length} exact cases have partial evidence joins; ${report.coverage.inspectionEvidence.unjoinedCases.length} configured cases are not yet joined. Matrix completeness is not full inspection closure. Current rendering acceptance and full inspection completion are not certified by these records.`,
+      describeCaseInspectionCoverage(report.coverage),
       '',
     ] : []),
     `Full-element evidence: ${report.elementInventory.cases.length} captured case sides, ${report.elementInventory.variants.length} tree variants; ${report.elementInventory.gaps.length} missing case sides, ${report.elementInventory.resolvedStyleGaps.length} elements without resolved styles, ${report.elementInventory.stateStyleGaps.length} state cases without effective style provenance, and ${report.elementInventory.errors.length} collection errors. Inventory presence does not establish input equivalence.`,

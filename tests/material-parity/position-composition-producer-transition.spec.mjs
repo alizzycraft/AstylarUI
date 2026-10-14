@@ -29,7 +29,7 @@ test('case obligation coverage additions conserve the complete accepted producer
   assert.equal(restoreCaseObligationCoverageRegistration(current),prior);
   assert.equal(restoreCaseObligationCoverageRegistration(prior),prior);
   for(const fragment of ['--case-obligation-review=', 'caseObligationReviewSha256',
-    'assertCaseObligationCoverage(report.coverage)', 'Case-obligation evidence:',
+    'assertCaseObligationCoverage(report.coverage)', 'describeCaseInspectionCoverage(report.coverage)',
     '6bfe953bb90903b5b061cbc3a156c917e4010141b10d3af28bf49c9c6c3d1c6a',
     'divider observed DPR public failure and exact runner conservation',
     'docs/evidence/material-overlay-context-runner.mjs.b64',

@@ -134,6 +134,55 @@ export function saveReviewProposal(destination, review) {
 }
 // Coverage integration consumes reviewed proposal bytes, not their existence.
 // Reauthenticate every actual evidence dependency; no persistent cache is used.
+export const caseInspectionObligations = Object.freeze([
+  'inputStyleStructure', 'localPaint', 'semantics', 'authoredActivation',
+  'authoredEditing', 'programmaticFocus', 'historyOwnership', 'sourceCurrentness',
+]);
+const differenceClassifications = new Set([
+  'equivalent-representation', 'public-api-structural-difference', 'documented-limitation',
+  'application-plugin-authoring-defect', 'stale-fixture-reference-input',
+  'harness-instrumentation-defect', 'confirmed-core-defect', 'suspected-core-defect',
+]);
+const hasEvidenceReceipt = value => !!value && typeof value === 'object' && (
+  typeof value.file === 'string' && /^[a-f0-9]{64}$/.test(value.sha256 ?? '') ||
+  Object.values(value).some(child => hasEvidenceReceipt(child)));
+function assertCaseInspection(row, schemaVersion) {
+  assert.equal(row.currentRendering, 'unverified');
+  if (schemaVersion === 1 || row.inspection === 'partial') {
+    assert.equal(row.inspection, 'partial');
+    assert.equal(row.inspectionClosure, undefined, 'Partial records cannot claim inspection closure');
+    return;
+  }
+  assert.equal(row.inspection, 'complete');
+  const closure = row.inspectionClosure;
+  assert.ok(closure && ['inspected-pass', 'inspected-failure'].includes(closure.outcome));
+  assert.ok(hasEvidenceReceipt(closure.review), 'Closure needs a receipt-bound requirement review');
+  assert.ok(typeof closure.conclusion === 'string' && closure.conclusion.trim());
+  assert.ok(Array.isArray(closure.findings));
+  assert.equal(closure.findings.some(finding => finding.outcome === 'failure'), closure.outcome === 'inspected-failure');
+  const ids = new Set();
+  for (const finding of closure.findings) {
+    assert.ok(typeof finding.id === 'string' && finding.id.trim() && !ids.has(finding.id)); ids.add(finding.id);
+    assert.ok(differenceClassifications.has(finding.classification));
+    assert.ok(['equivalent', 'failure'].includes(finding.outcome));
+    if (finding.outcome === 'equivalent') assert.ok(['equivalent-representation', 'public-api-structural-difference'].includes(finding.classification));
+    assert.ok(typeof finding.owner === 'string' && finding.owner.trim(), 'Missing responsible subsystem');
+    assert.ok(typeof finding.firstDivergence === 'string' && finding.firstDivergence.trim(), 'Missing first meaningful stage or equivalence explanation');
+    assert.ok(typeof finding.conclusion === 'string' && finding.conclusion.trim());
+    assert.ok(hasEvidenceReceipt(finding.evidence), 'Classified finding needs actual evidence');
+    if (['confirmed-core-defect', 'suspected-core-defect'].includes(finding.classification))
+      assert.ok(hasEvidenceReceipt(finding.publicReproduction), 'Core finding needs a receipt-bound public reproduction');
+  }
+  for (const name of caseInspectionObligations) assert.ok(Object.hasOwn(row.obligations, name), `Missing closure obligation: ${name}`);
+  for (const [name, obligation] of Object.entries(row.obligations)) {
+    assert.ok(['applicable', 'not-applicable'].includes(obligation.applicability), `Unverified applicability: ${name}`);
+    assert.equal(obligation.disposition, obligation.applicability === 'applicable' ? 'inspected' : 'inspected-authored-exclusion');
+    assert.ok(typeof obligation.conclusion === 'string' && obligation.conclusion.trim(), `Missing conclusion: ${name}`);
+    assert.ok(hasEvidenceReceipt(obligation.evidence), `Missing closure evidence: ${name}`);
+    assert.ok(obligation.remaining === undefined || Array.isArray(obligation.remaining) && obligation.remaining.length === 0,
+      `Outstanding inspection work: ${name}`);
+  }
+}
 export function loadCaseObligationReview(file, expectedReviewSha256, configuredCases,
   { root = process.cwd(), read = fs.readFileSync } = {}) {
   assert.match(expectedReviewSha256, /^[a-f0-9]{64}$/);
@@ -149,6 +198,9 @@ export function loadCaseObligationReview(file, expectedReviewSha256, configuredC
   const review = envelope.review;
   assert.equal(review.kind, 'case-obligation-coverage-extension');
   assert.equal(review.status, 'proposal-not-canonical');
+  const schemaVersion = review.inspectionSchemaVersion ?? 1;
+  assert.ok([1, 2].includes(schemaVersion));
+  if (Object.hasOwn(review, 'inspectionSchemaVersion')) assert.equal(review.inspectionSchemaVersion, 2, 'Version 1 is the unchanged implicit legacy format');
   assert.ok(review.groups.length > 0);
   const configured = new Set(configuredCases), seen = new Set(), dependencies = new Map();
   assert.equal(configured.size, configuredCases.length, 'Duplicate configured case');
@@ -165,7 +217,7 @@ export function loadCaseObligationReview(file, expectedReviewSha256, configuredC
   for (const row of review.groups) {
     assert.ok(configured.has(row.case), 'Unknown case in obligation evidence');
     assert.ok(!seen.has(row.case), 'Duplicate case in obligation evidence'); seen.add(row.case);
-    assert.equal(row.inspection, 'partial'); assert.equal(row.currentRendering, 'unverified');
+    assertCaseInspection(row, schemaVersion);
     assert.ok(row.case.includes(`:${row.family}@`));
     assert.ok(row.obligations && Object.keys(row.obligations).length > 0);
     bind(row.evidence.report, row.evidence.reportSha256);
@@ -180,8 +232,9 @@ export function loadCaseObligationReview(file, expectedReviewSha256, configuredC
       assert.equal(hash(read(resolve(file))), sha256, `Case obligation evidence changed: ${file}`);
       return { file, sha256 };
     });
-  return { schemaVersion: 1, scope: review.scope, reviewSha256: expectedReviewSha256,
-    inspectionComplete: false, currentRenderingAccepted: false, cases: review.groups,
+  return { schemaVersion, scope: review.scope, reviewSha256: expectedReviewSha256,
+    inspectionComplete: schemaVersion === 2 && seen.size === configured.size && review.groups.every(row => row.inspection === 'complete'),
+    currentRenderingAccepted: false, cases: review.groups,
     unjoinedCases: configuredCases.filter(id => !seen.has(id)), evidenceFingerprints };
 }
 export function attachCaseObligationCoverage(coverage, file, reviewSha256, options) {
@@ -194,20 +247,42 @@ export function attachCaseObligationCoverage(coverage, file, reviewSha256, optio
 export function assertCaseObligationCoverage(coverage) {
   if (coverage.inspectionEvidence === undefined) return;
   const evidence = coverage.inspectionEvidence;
-  assert.equal(evidence.schemaVersion, 1);
-  assert.equal(evidence.inspectionComplete, false); assert.equal(evidence.currentRenderingAccepted, false);
+  assert.ok([1, 2].includes(evidence.schemaVersion));
+  assert.equal(evidence.currentRenderingAccepted, false);
   const configured = [...coverage.caseInventory.static, ...coverage.caseInventory.interaction], seen = new Set();
   for (const row of evidence.cases) {
     assert.ok(configured.includes(row.case) && !seen.has(row.case), 'Obligation case membership changed'); seen.add(row.case);
-    assert.equal(row.inspection, 'partial'); assert.equal(row.currentRendering, 'unverified');
+    assertCaseInspection(row, evidence.schemaVersion);
   }
   assert.ok(JSON.stringify(evidence.unjoinedCases) === JSON.stringify(configured.filter(id => !seen.has(id))),
     'Unjoined obligation cases changed');
+  assert.equal(evidence.inspectionComplete, evidence.schemaVersion === 2 && seen.size === configured.length &&
+    evidence.cases.every(row => row.inspection === 'complete'));
   assert.equal(digest({kind:'case-obligation-coverage-extension',status:'proposal-not-canonical',
+    ...(evidence.schemaVersion === 2 ? {inspectionSchemaVersion: 2} : {}),
     scope:evidence.scope,groups:evidence.cases}), evidence.reviewSha256, 'Bound obligation dispositions changed');
   assert.ok(evidence.evidenceFingerprints.length > 0);
   assert.equal(new Set(evidence.evidenceFingerprints.map(row => row.file)).size, evidence.evidenceFingerprints.length);
   for (const receipt of evidence.evidenceFingerprints) assert.match(receipt.sha256, /^[a-f0-9]{64}$/);
+  const bound = new Map(evidence.evidenceFingerprints.map(row => [row.file, row.sha256]));
+  const assertBound = value => {
+    if (!value || typeof value !== 'object') return;
+    if (typeof value.file === 'string' && typeof value.sha256 === 'string') {
+      assert.ok(!path.isAbsolute(value.file) && !value.file.split(/[\\/]/).includes('..'));
+      assert.equal(bound.get(value.file), value.sha256, 'Closure receipt is not bound to authenticated coverage');
+    }
+    for (const child of Object.values(value)) assertBound(child);
+  };
+  for (const row of evidence.cases) if (row.inspection === 'complete') assertBound(row);
+}
+export function describeCaseInspectionCoverage(coverage) {
+  assertCaseObligationCoverage(coverage);
+  const evidence = coverage.inspectionEvidence;
+  assert.ok(evidence);
+  if (evidence.schemaVersion === 1) return `Case-obligation evidence: ${evidence.cases.length} exact cases have partial evidence joins; ${evidence.unjoinedCases.length} configured cases are not yet joined. Matrix completeness is not full inspection closure. Current rendering acceptance and full inspection completion are not certified by these records.`;
+  const complete = evidence.cases.filter(row => row.inspection === 'complete');
+  const failures = complete.filter(row => row.inspectionClosure.outcome === 'inspected-failure').length;
+  return `Case inspection coverage: ${complete.length} complete (${complete.length - failures} inspected-pass, ${failures} inspected-failure); ${evidence.cases.length - complete.length} partial; ${evidence.unjoinedCases.length} unjoined. Documented failures count as inspected. These are authenticated reviewed inspection dispositions, not independently proven rendering parity or completion of the audit's final gates. Current rendering acceptance remains unverified.`;
 }
 export async function loadFindingEvidence(destination, family, id, snapshot) {
   const pointer = snapshot ?? JSON.parse(fs.readFileSync(path.join(destination, 'current.json')));

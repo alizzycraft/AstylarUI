@@ -7,6 +7,21 @@ import ts from 'typescript';
 const hash = text => createHash('sha256').update(text).digest('hex');
 export function restoreAllCaseObligationRegistration(source) {
   let current=source.toString().replaceAll('\r\n','\n');
+  if (current.includes('describeCaseInspectionCoverage')) {
+    assert.equal(hash(current), '0e1ef18f9bd6d68a5e110418a81beb51939094dea070e977421ad8f89850b8eb',
+      'exact versioned inspection presentation producer');
+    const prior = execFileSync('git', ['show', '1adb7031:tests/material-parity/input-equivalence-audit.mjs'],
+      { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+    assert.equal(hash(prior), 'cb9ad4c80dac958fb4feea32ef1c6f266743ab9d53eb3d78b86fa5c95b399fb7');
+    const addedImport = "import { assertCaseObligationCoverage, describeCaseInspectionCoverage } from '../../scripts/audit-findings-store.mjs';";
+    const oldImport = "import { assertCaseObligationCoverage } from '../../scripts/audit-findings-store.mjs';";
+    assert.equal(current.split(addedImport).length, 2); current = current.replace(addedImport, oldImport);
+    const call = '      describeCaseInspectionCoverage(report.coverage),\n';
+    const lines = prior.split('\n').filter(line => line.includes('Case-obligation evidence:'));
+    assert.equal(lines.length, 1); assert.equal(current.split(call).length, 2);
+    current = current.replace(call, lines[0] + '\n');
+    assert.equal(current, prior, 'whole retained-paint producer conserved after presentation-only change');
+  }
   const editing='59409a78eb407588e906e094abd80183fa7dd07a170ad902e706a1bda6d6590e';
   const observations='b7ebc7694f5fb0cf1577f61ba41062f6ae7658abeb0688214504706a64d976eb';
   const focusHistory='ff6feb918dc14e15204f703429d98fb17a915e3648375d94fe084d0991f20f55';
