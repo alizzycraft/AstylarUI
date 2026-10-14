@@ -1,5 +1,30 @@
 # Material comparison/state coverage inventory
 
+## Published batch confirmed; canonical closure vocabulary preserved — October14
+
+Package106884b8 is pushed on codex/material-audit-alignment-integration;remote
+and local full106884b85dd54029d8e2f42f09885d3f4b689e61 agree. Initial push72040
+failedHTTP408 and remote inspection still showed320df94a;retry12347 completed0.
+GitHub64.64MB/recommended50MB warning is accepted,not a failure. No Git config,
+LFS migration,package bytes or acceptance criteria changed to satisfy transport.
+
+Real source vocabulary review found157 definitions using seven labels,including
+25 confirmed-core-renderer-defect,2 suspected-core-renderer-defect,4 intentional-
+documented-limitation and7 parity-harness-defect. Existing schema2 validator now
+preserves these canonical labels verbatim rather than forcing relabeling. Both
+short and canonical confirmed/suspected core labels share the same mandatory
+public-reproduction guard;failure/equivalence/outstanding-work/currentness rules
+remain. Existing synthetic owning test loads every actual canonical classification,
+asserts unchanged labels/false rendering flag,and rejects missing public proof or
+false equivalence under all four core label variants. Full store suite3/3,zero
+skips,261.5932ms terminal;scoped diff check passes. No real case promoted.
+
+This store/test change is pending next coherent source-fingerprint reconciliation;
+published2e196c48 remains its verified earlier snapshot,not silently regenerated.
+Next classify the already-retained caret font-response finding through existing
+policy/handoff machinery,then derive real requirement-backed case closures.
+Original final audit/browser/release gates remain outstanding.
+
 ## Progress/caret canonical batch independently verified for publication — October14
 
 Export98293 completed exit0 after3005839.9262ms. Log progress-caret-canonical-

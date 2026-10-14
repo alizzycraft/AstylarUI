@@ -8,6 +8,7 @@ import { createHash } from 'node:crypto';
 import { encodeMaterialInputAuditStream } from './input-audit-report-stream.mjs';
 import { withAuditEvidenceSession, auditReadFileSync } from './audit-evidence-session.mjs';
 import { withAuditScratch } from './audit-scratch.mjs';
+import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 
 test('versioned case inspection closure requires every obligation and never accepts current rendering', () => {
   // Synthetic schema proof only: these labels do not promote a real audit case.
@@ -49,6 +50,30 @@ test('versioned case inspection closure requires every obligation and never acce
   const excluded = structuredClone(review);
   Object.assign(excluded.groups[0].obligations.authoredActivation, { applicability: 'not-applicable', disposition: 'inspected-authored-exclusion' });
   assert.equal(load(excluded).inspectionEvidence.inspectionComplete, true);
+  // Preserve the actual canonical source vocabulary rather than relabel findings.
+  for (const classification of new Set(sourceAuditDefinitions.map(row => row.classification))) {
+    const canonical = structuredClone(review);
+    canonical.groups[0].inspectionClosure.findings[0].classification = classification;
+    if (classification === 'equivalent-representation') {
+      canonical.groups[0].inspectionClosure.outcome = 'inspected-pass';
+      canonical.groups[0].inspectionClosure.findings[0].outcome = 'equivalent';
+    }
+    const coverage = load(canonical); assertCaseObligationCoverage(coverage);
+    assert.equal(coverage.inspectionEvidence.cases[0].inspectionClosure.findings[0].classification, classification);
+    assert.equal(coverage.inspectionEvidence.currentRenderingAccepted, false);
+  }
+  for (const classification of ['confirmed-core-defect', 'suspected-core-defect',
+    'confirmed-core-renderer-defect', 'suspected-core-renderer-defect']) {
+    const missingPublicProof = structuredClone(review);
+    missingPublicProof.groups[0].inspectionClosure.findings[0].classification = classification;
+    delete missingPublicProof.groups[0].inspectionClosure.findings[0].publicReproduction;
+    assert.throws(() => load(missingPublicProof), /public reproduction/);
+    const falseEquivalence = structuredClone(review);
+    falseEquivalence.groups[0].inspectionClosure.findings[0].classification = classification;
+    falseEquivalence.groups[0].inspectionClosure.findings[0].outcome = 'equivalent';
+    falseEquivalence.groups[0].inspectionClosure.outcome = 'inspected-pass';
+    assert.throws(() => load(falseEquivalence));
+  }
   const retainedFailure = structuredClone(review);
   retainedFailure.groups[0].obligations.programmaticFocus.disposition = 'inspected-failure';
   const retainedCoverage = load(retainedFailure);

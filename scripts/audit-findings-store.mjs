@@ -138,10 +138,15 @@ export const caseInspectionObligations = Object.freeze([
   'inputStyleStructure', 'localPaint', 'semantics', 'authoredActivation',
   'authoredEditing', 'programmaticFocus', 'historyOwnership', 'sourceCurrentness',
 ]);
+const coreDifferenceClassifications = new Set([
+  'confirmed-core-defect', 'suspected-core-defect',
+  'confirmed-core-renderer-defect', 'suspected-core-renderer-defect',
+]);
 const differenceClassifications = new Set([
   'equivalent-representation', 'public-api-structural-difference', 'documented-limitation',
   'application-plugin-authoring-defect', 'stale-fixture-reference-input',
-  'harness-instrumentation-defect', 'confirmed-core-defect', 'suspected-core-defect',
+  'harness-instrumentation-defect', 'parity-harness-defect', 'intentional-documented-limitation',
+  ...coreDifferenceClassifications,
 ]);
 const hasEvidenceReceipt = value => !!value && typeof value === 'object' && (
   typeof value.file === 'string' && /^[a-f0-9]{64}$/.test(value.sha256 ?? '') ||
@@ -170,7 +175,7 @@ function assertCaseInspection(row, schemaVersion) {
     assert.ok(typeof finding.firstDivergence === 'string' && finding.firstDivergence.trim(), 'Missing first meaningful stage or equivalence explanation');
     assert.ok(typeof finding.conclusion === 'string' && finding.conclusion.trim());
     assert.ok(hasEvidenceReceipt(finding.evidence), 'Classified finding needs actual evidence');
-    if (['confirmed-core-defect', 'suspected-core-defect'].includes(finding.classification))
+    if (coreDifferenceClassifications.has(finding.classification))
       assert.ok(hasEvidenceReceipt(finding.publicReproduction), 'Core finding needs a receipt-bound public reproduction');
   }
   for (const name of caseInspectionObligations) assert.ok(Object.hasOwn(row.obligations, name), `Missing closure obligation: ${name}`);

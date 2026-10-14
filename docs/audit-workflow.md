@@ -142,6 +142,11 @@ Schema-2 inspection completion is derived from all configured cases being joined
 and closed. Current rendering remains unverified and its acceptance flag stays
 false. Final canonical/browser/release gates and the original acceptance criteria
 are unchanged. No production case is promoted by synthetic schema tests.
+Closure findings preserve the existing canonical source labels,including
+confirmed/suspected-core-renderer-defect,parity-harness-defect and
+intentional-documented-limitation. Both short and canonical core labels require
+the same receipt-bound public reproduction;aliases do not permit an equivalent
+pass for a core failure or clear remaining inspection work.
 Use review key order `kind`, `status`, `inspectionSchemaVersion`, `scope`, `groups`
 for the existing JSON digest contract. Schema 1 omits the version opt-in.
 

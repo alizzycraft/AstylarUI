@@ -56,6 +56,15 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October14 push headroom:closed predecessorcafd50205a10db91363ef8239a50a4d9471e0a1c65ae7b5e348d0702f82de8d4
+index.json plus84 JSONL shards were transparently NTFS-compressed after existing
+whole-index verification. Every85 individual before/after SHA256 agrees;complete
+verification afterward preserves8483/157/39904/389202/0 counts and original index
+b7453931108df2d21105c6782c6980fb98e106fc2f1dcac8c5c473c587d2e05e.
+D:free71090176→151523328bytes. No old evidence,paths or current pointer changed.
+The first package pushHTTP408 was a transport failure,not attributed to disk;
+the unchanged retry later succeeded. No originals/failures deleted.
+
 October14 progress/caret verified compact generation2e196c48d05935424c0726c6bb4df4086944fdd9f614eeb46f0a4f38f2d7f095:
 after terminal cold comparison and import,its index.json and84 JSONL shards were
 transparently NTFS-compressed. Every85 individual before/after SHA256 agrees;
