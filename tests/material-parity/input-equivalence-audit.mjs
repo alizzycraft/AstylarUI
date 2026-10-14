@@ -8923,7 +8923,7 @@ function auditEnvironment(root) {
 function sourceFingerprints(root) {
   const files = [
     'tests/material-parity/audit-findings-store.spec.mjs',
-    'artifacts/material-parity/working-audit/proposals/0c7da19a475c9c696bf50cac17ce5992c7d68822f06981e5af434a4f5bef1588.json',
+    'artifacts/material-parity/working-audit/proposals/f56f4ca7efa42579e4fd3bda3de004f7f0ea5c6fec28b7ab4dd11ee1b7fd9d62.json',
     'docs/evidence/material-overlay-context-runner.mjs.b64',
     'artifacts/material-parity/divider-context-verified-angular-20261013-dpr1/result.json',
     'artifacts/material-parity/divider-context-verified-angular-20261013-dpr1/provenance.json',
@@ -9030,6 +9030,9 @@ function sourceFingerprints(root) {
     'artifacts/material-parity/divider-comparison-theme-ax-20261009.log',
     'artifacts/material-parity/divider-ancestor-ax-current-20261011.log',
     'artifacts/material-parity/divider-ancestor-ax-comparison-current-20261011.log',
+    'artifacts/material-parity/divider-companion-ax-standard-20261014.log',
+    'artifacts/material-parity/divider-companion-ax-comparison-20261014.log',
+    'artifacts/material-parity/divider-companion-ax-20261014/checkpoint/manifest.json',
     'artifacts/material-parity/divider-effective-cursor-20261011.log',
     'artifacts/material-parity/divider-effective-cursor-comparison-20261011.log',
     'artifacts/material-parity/divider-update-disposal-20261006.log',

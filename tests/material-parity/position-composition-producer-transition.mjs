@@ -9,6 +9,19 @@ export function restoreAllCaseObligationRegistration(source) {
   let current=source.toString().replaceAll('\r\n','\n');
   const progressOwnership='ae1e75bd5a994eec473385d5e0396a4785f6f57ff7bb70e748bcd5a260680218';
   const caretClassification='0c7da19a475c9c696bf50cac17ce5992c7d68822f06981e5af434a4f5bef1588';
+  const dividerSemantics='f56f4ca7efa42579e4fd3bda3de004f7f0ea5c6fec28b7ab4dd11ee1b7fd9d62';
+  if(current.includes(dividerSemantics)){
+    assert.equal(hash(current),'3880cfa3a3a524da3511ca29ff2c438e9c1be20c4e55139ea146cc50ce148041');
+    assert.equal(current.split(dividerSemantics).length,2);current=current.replace(dividerSemantics,caretClassification);
+    for(const file of ['divider-companion-ax-standard-20261014.log','divider-companion-ax-comparison-20261014.log',
+      'divider-companion-ax-20261014/checkpoint/manifest.json']){
+      const line=`    'artifacts/material-parity/${file}',\n`;
+      assert.equal(current.split(line).length,2);current=current.replace(line,'');
+    }
+    const prior=execFileSync('git',['show','fb7af177:tests/material-parity/input-equivalence-audit.mjs'],
+      {encoding:'utf8',maxBuffer:4_000_000}).replaceAll('\r\n','\n');
+    assert.equal(current,prior,'only the exact divider proposal pin and three capture paths change');
+  }
   if(current.includes(caretClassification)){
     assert.equal(hash(current),'254564061720f2920e00180f0a838b6714e1ce6cbc15e2abb4552f21a7168173');
     assert.equal(current.split(caretClassification).length,2);

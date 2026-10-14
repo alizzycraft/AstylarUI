@@ -1,5 +1,48 @@
 # Material comparison/state coverage inventory
 
+## Divider semantic dispositions joined; full owner integration running — October14
+
+Existing exact-case owner now replays every statement of the unchanged divider
+AX regression (complete callbacka0c5e039) and attaches separate ancestor/companion
+observations to all24 configured divider records. It preserves original target
+AX,DOM comparator,other fields and partial whole-case status. Matched local
+paragraph/text chains do not waive the classified application-authored extra
+main landmark. October11 ancestor and October14 companion IDs are never treated
+as one tree. Missing-cohort/forged-text controls reject. Generic already-answered
+AX/AT remainder wording is replaced with precise frame-sibling input correspondence
+and checkpoint/currentness work;live AT remains an explicit unmeasured limitation,
+not a new acceptance gate. No semantic or whole-case pass is manufactured.
+
+Executing the new owner block against authenticated0c7da19a produces
+f56f4ca7efa42579e4fd3bda3de004f7f0ea5c6fec28b7ab4dd11ee1b7fd9d62;
+complete file SHA7c3364dd5a9048388ab630340e3fd2be98420943fda3ee65516714da9da1ecdd.
+Exactly24 semantic records and40 benchmark/40 input-boundary receipts change.
+Reversing those intended fields recovers all2311 complete predecessor rows.
+Existing loader authenticates9807 dependencies/exact2311 membership,both flags
+false. Existing owning AX/progress tests2/2 pass7011.6226ms;caret/progress paint
+2/2 pass2047.9927ms. Full producer3880cfa3 restores byte-for-byte to prior25456406
+after only the exact proposal pin and three capture paths;original four selected
+conservation tests pass4/4,0 skips,14964.9059ms;store3/3,0 skips,338.9872ms.
+Named launcher dry-run supplies the same new digest and all baseline inputs.
+
+The complete original case-owner integration is running in session73327,
+launcher14432/worker34596,log divider-semantic-case-join-integration-20261014.log.
+Last authoritative check confirms worker live,CPU279.640625s;log still TAP header.
+Do not restart or claim terminal success. This run tests the full original
+generator against the bounded block result;its outcome remains pending.
+Canonical2e196c48 remains the prior snapshot,not current rendering acceptance.
+
+Read-only next-gap check authenticates all48 divider trees:144 paired explicit
+component element owners have section(p(span),separator,p(span)) shape and stable
+Above/Below identity. Reference mat-divider/candidate div host types remain
+distinct. This closes availability of explicit DOM-element correspondence,not
+style equivalence or anonymous CSS line-box mapping. Retained frame p/h1 input
+text also agrees in the checked light-desktop pair;do not extrapolate that one
+pair to all24 or infer actual heading AX. Next use the already-retained trees
+for the precise remaining frame/owner mapping question,not another broad capture.
+Probe/input-boundary/benchmark and proposal/source batch still need canonical
+export,cold verification and final unfiltered gates after integration completes.
+
 ## Divider missing companion AX observations now measured — October14
 
 Specific closure question:does the generic semantic remainder mean separator/

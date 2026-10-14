@@ -56,6 +56,31 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October14 divider semantic case-join headroom: six closed historical proposals
+were transparently compressed in place,all complete before/after hashes equal:
+
+- b10f406b6ae3fd7fbe948b3b1eafa3729350f99fe288f7fe9d213754fc38921b:
+  fileSHA4591abc58c16c2f0441c1e7cc584fba236501bef3ccdbf4c527b657ff931a65a.
+- 7235bd46a7857f9a9d4ce2b336e8f27cb0756382359b7d408d759e138c866d1e:
+  fileSHA14dbe46c2298a41840d9bc7ee51ceb980c1a5514f9319ee3af9bd79baf3d8f4f.
+- 001ff5aa79bff133e1ca24e2271be14807729e1811679aa74eb027620fa77d6b:
+  fileSHA878aad8f4b8f9f22d7b8bf387bd535fb2310c5537087fb4ed155f4e6db6e67c0.
+- ff6feb918dc14e15204f703429d98fb17a915e3648375d94fe084d0991f20f55:
+  fileSHA90e49b398bf583f6e95ff39ffdaa8a9dc4786c600636dbd8263bacdbf5e6f72b.
+- 143387182831d369523cd46aa152ee3ba576fa7cfd4d5d54368e53482bf1e546:
+  fileSHAc144a1590e8f3c4f2737b272699364cc1d98f4d5e6ea440d147b317acd05696c.
+- a9c9e0bcba22944e662c47aa23d010c6e2e51803e94a2e56003f3cd9f89dd5c5:
+  fileSHA86f50a9c796584c1afdc48185f872f99f53ef156de8ba64edc6b516d50bd57bc.
+
+462832132 logical bytes occupy253677568 physical bytes. First-three observed
+D:free87306240→195592192;later-three56963072→157560832 during the live
+integration. No originals,failures,paths or pointers removed. New f56f4ca7
+proposal is immutable required evidence;85134492 logical/45539328 physical bytes,
+fileSHA7c3364dd5a9048388ab630340e3fd2be98420943fda3ee65516714da9da1ecdd.
+The existing loader validates all9807 dependencies/2311 records. Keep the live
+divider-semantic-case-join-integration-20261014.log until its terminal result;
+do not compress/delete/restart active output. Recheck headroom before publication.
+
 October14 divider companion AX capture is required new semantic evidence,not
 successful scratch. Retain `divider-companion-ax-20261014/checkpoint/manifest.json`
 (SHA380c529b8e5ced00aa45281b8956a6860a8c1a2163ff0192eb38f036d7f7925f),

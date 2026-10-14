@@ -44,6 +44,14 @@ test('equal-input caret font contrast preserves bounded source and recorded pain
     policy.replace('native chosen font', 'native chosen font proven'), policy + '\n// unreviewed policy drift\n'])
     assert.throws(() => restoreSizingDefaultPolicyRegistration(changed));
   const restoreProgressJoins = source => {
+    if (source.includes('  // Divider exact-case semantic join:')) {
+      assert.equal(hash(source), 'c177da66ae0297dac6e0bd48c3f4972149616901821faa9ca5fbca547df2b024');
+      const start = source.indexOf('  // Divider exact-case semantic join:');
+      const end = source.indexOf('  // End divider exact-case semantic join;', start);
+      assert.ok(start > 0 && end > start);
+      source = source.slice(0, start) + source.slice(source.indexOf('\n', end) + 1);
+      assert.equal(hash(source), '72a38ea69c640b96511267b0608203e91c6286e01c18d4ee1d7833ab12000663');
+    }
     if (source.includes('  // Divider companion AX closure:')) {
       assert.equal(hash(source), '72a38ea69c640b96511267b0608203e91c6286e01c18d4ee1d7833ab12000663');
       const start = source.indexOf('  // Divider companion AX closure:');

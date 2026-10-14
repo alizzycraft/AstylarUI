@@ -3987,6 +3987,58 @@ test('passive state applicability joins exact cases without discarding progress 
     record.obligations.historyOwnership={...previous,retainedProgressUpdateDisposal:joinProgressLifetime(entry)};
   }
   // End progress exact-case ownership join; remaining history/lifetime work stays.
+  // Divider exact-case semantic join: preserve separate target/ancestor/companion captures.
+  const dividerSemanticFile='tests/material-parity/input-boundary-evidence.spec.mjs';
+  const dividerSemanticAST=ts.createSourceFile(dividerSemanticFile,readFileSync(dividerSemanticFile,'utf8'),ts.ScriptTarget.Latest,true,ts.ScriptKind.JS);
+  const dividerSemanticCallback=dividerSemanticAST.statements.find(node=>ts.isExpressionStatement(node)&&ts.isCallExpression(node.expression)
+    &&node.expression.arguments[0]?.text==='divider actual-theme AX cohorts preserve exact contexts and runtime receipts').expression.arguments[1];
+  assert.equal(hash(dividerSemanticCallback.getText(dividerSemanticAST)),'a0c5e039b2e92db68febff91b127d23f0fa9de7782409c7a79bc5ea83a1cf911');
+  const dividerSemanticStatements=dividerSemanticCallback.body.statements.map(node=>node.getText(dividerSemanticAST)).join('\n');
+  const dividerSemanticReplay=Function('readFileSync','hash','assert','execFileSync','ts','fingerprintDirectory','materialStaticCases','materialInteractionCases',
+    dividerSemanticStatements+'\nreturn {companionRows,current};')(readFileSync,hash,assert,execFileSync,ts,fingerprintDirectory,materialStaticCases,materialInteractionCases);
+  const dividerSemanticReceipts=[
+    ['divider-ancestor-ax-current-20261011.log','c5e5138afd3061697cccde34a2467739786d93705638ba0f5e5725c40e4b3c5a'],
+    ['divider-ancestor-ax-comparison-current-20261011.log','9ebbd9981229138817a4603ff16ecd2bd805b5a7440f1aff483a673f20d433b7'],
+    ['divider-companion-ax-standard-20261014.log','f01e63a7285143b7f0f1f73de3979cca321575b5f32840f7e861d2fae8701901'],
+    ['divider-companion-ax-comparison-20261014.log','ffa9a7fc91f2ed11c57c63f249759b47d61dfbf7acf06d42951bc3e61f921505'],
+  ].map(([name,sha256])=>({file:`artifacts/material-parity/${name}`,sha256}));
+  const joinDividerSemanticScope=(entry,companions=dividerSemanticReplay.companionRows)=>{
+    const cohort=dividerKey(entry),observations={};
+    for(const side of ['reference','astylar']){
+      const select=rows=>rows.filter(row=>row.side===side&&physicalDividerKey(row.context.profile,row.context.viewport,row.context.deviceScaleFactor)===cohort);
+      const local=select(companions),ancestors=select(dividerSemanticReplay.current);
+      assert.equal(local.length,1);assert.equal(ancestors.length,1);
+      assert.deepEqual(local[0].companionAX.map(value=>value.id),['divider-above','divider-below']);
+      for(const [index,label]of ['Above','Below'].entries())assert.equal(local[0].companionAX[index].nodes[2].name.value,label);
+      const mains=ancestors[0].axRelatives.filter(node=>!node.ignored&&node.role.value==='main');
+      assert.equal(mains.length,side==='reference'?1:2);
+      observations[side]={companionCapture:{context:local[0].context,subtrees:local[0].companionAX},
+        ancestorCapture:{context:ancestors[0].context,nodes:ancestors[0].axRelatives}};
+    }
+    return {disposition:'inspected',outcome:'local-paragraph-text-agreement-with-authored-extra-main',
+      evidence:{logs:dividerSemanticReceipts,cohort,observations,
+        proof:{file:dividerSemanticFile,sha256:hash(readFileSync(dividerSemanticFile))},completeCallbackSha256:hash(dividerSemanticCallback.getText(dividerSemanticAST))},
+      findings:[{id:'fixture-divider-extra-main-landmark',classification:'application-plugin-authoring-defect',
+        owner:'showcase outer main.frame and authored SiteData main#page',firstDivergence:'application document structure before semantic bridge',
+        conclusion:'The bridge preserves the two authored main owners; reference has one. Local paragraph/text agreement does not waive this ancestor difference.'}],
+      boundary:'Exact physical-context correspondence only; October11 ancestors and October14 companions are separate observations,not one AX tree or cross-capture node-ID mapping. No live AT or whole-case acceptance.'};
+  };
+  assert.throws(()=>joinDividerSemanticScope({...dividerCases[0],profile:'invented'}));
+  const forgedDividerCompanions=structuredClone(dividerSemanticReplay.companionRows);
+  forgedDividerCompanions[0].companionAX[0].nodes[2].name.value='Wrong';
+  assert.throws(()=>joinDividerSemanticScope(dividerCases.find(entry=>dividerKey(entry)===physicalDividerKey(forgedDividerCompanions[0].context.profile,
+    forgedDividerCompanions[0].context.viewport,forgedDividerCompanions[0].context.deviceScaleFactor)),forgedDividerCompanions));
+  for(const record of allObligations.filter(row=>row.family==='divider')){
+    const previous=record.obligations.semantics;
+    assert.deepEqual(previous.remaining,['actual generated bridge and AX relationships','assistive-technology behavior','complete semantic input mapping',
+      'current rendering applicability','Actual AX/description/target associations and full semantic/currentness disposition beyond DOM comparator']);
+    record.obligations.semantics={...previous,observedComponentAX:joinDividerSemanticScope(configuredByKey.get(record.case)),
+      remaining:['Semantic input correspondence for page-frame siblings outside the observed divider region/ancestor chain',
+        'Applicability beyond recorded served-build checkpoints and complete final current-code gates'],
+      limitations:['Live assistive-technology experience is unmeasured; CDP observations do not certify it']};
+  }
+  assert.equal(allObligations.filter(row=>row.obligations.semantics.observedComponentAX).length,24);
+  // End divider exact-case semantic join; other obligations and whole-case status stay.
   assert.equal(new Set(allObligations.map(row=>row.case)).size,2311);
   assert.deepEqual(allObligations.map(row=>row.case).sort(),allConfigured.map(scalarCaseKey).sort());
   assert.ok(allObligations.every(row=>row.inspection==='partial'&&row.currentRendering==='unverified'));
