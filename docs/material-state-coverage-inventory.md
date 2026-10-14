@@ -1,35 +1,47 @@
 # Material comparison/state coverage inventory
 
-## Current question — October15 writable emptying evidence reuse
+## Current result — October15 configured emptying action and paint capture
 
-Previous turn made verified integration progress:e5a3f711 is pushed. Named
-canonical export is live in execution session39487,launcher34916/worker4768;
-worker observed CPU193.484375s,working set2361217024bytes. Log
-flex-margin-queued-canonical-export-20261015.log is still at build-audit;silence
-does not justify restarting. Source/proof/proposal inputs remain frozen. No
-terminal publication/cold/import result is claimed.
+Previous turn made progress by distinguishing existing event joins from genuinely
+missing key/paint evidence (dacbe3f9). Historical writable-emptying applicability
+log1abce88c remains valid:16 configured form-field/input cases already have32
+paired raw sequences,but omit key identities and intermediate paint. Existing
+mobile selection and configured initial-focus producers do not cover this gap.
 
-Read-only question:do the443 writable cases need another retained action join,
-or genuinely missing behavioral evidence? The exact16 form-field/input
-edit-empty-blur cases already contain32 paired raw sequences under
-authoredActivation.retainedEventBoundary. Each records original Atlas or
-team@example.com,three keydowns,then empty input/change/blur. Complete arrays
-agree byte-for-value with the authenticated current-full-20261005 report.
-No recorded key/code identifies those keydowns;no intermediate focused-empty
-caret/selection raster follows from this final blurred state. The missing original
-whole-runner bytes remain an explicit provenance limit,not a new search task.
+New narrowly scoped scripts/audit-material-configured-input-editing.mjs uses the
+existing checkpoint,asset/runtime/input-tree helpers. It executes complete current
+runner functions extracted through TS AST;the unchanged performInteraction calls
+remain mouse move/down/up,Control+A,Backspace,outside click10,10. Read-only proxy
+observations add settlement/screenshot delays,so timing is explicitly diagnostic.
+No fixture,style,value,selection or renderer is assigned by instrumentation.
+Sixteen configured cases across four profiles/desktop DPR1/2 now retain80 paired
+boundaries and160 PNGs/160 trees,with current readable whole-runner/diagnostic
+graphs and actual Chrome155 served-asset receipts. Capture exit0;all graphs and
+served files are unchanged at completion. This is the retained served build,
+not proof that every installed/current library module is executing.
 
-Log writable-emptying-evidence-applicability-20261015.log SHA
-1abce88c2992e5b0902e29459239ab89db685d27668069ce445b2f4d6bf6ab21
-retains all16 exact IDs and asserts443 writable anchors,32 sequences and original
-report hash. All16 editing obligations stay partial. Do not duplicate the existing
-event join or rerun the exhausted historical-source search. Next decisive evidence
-for this cohort is current receipt-bound real-key execution with intermediate
-focused-empty/selection paint through the existing runner,not another final-blur
-snapshot. Match existing supplementary public caret/selection contexts first;
-they do not automatically cover these16 configured action boundaries. Other427
-writable anchors retain their distinct states and are not16 extra editing actions.
-This question changes the next evidence needed,not case closure or acceptance.
+Report configured-input-editing-current-20261015/latest-report.json SHA
+69695dabc9b1ff9c999f8cf6c92e5e8cdc3e3b9fdf68ddf4925ba176c3df3355;
+checkpoint configured-input-editing-current-20261015-provenance/checkpoint/manifest.json
+SHAf96d5d5be4a1286f7a38d5572707c244a7a67a51d61c93c4817c91f1afab2542.
+ScriptSHA7a7e5ee77db92f7957bf2029f1cb59cdeb63ad1ed8349f388d165f8ee48f3999;
+capture logSHAcdf1d198dcc5882d7881d742f11bedb31f5245e37cc44b5fac3b7f9c8225eb98.
+Existing supplemental validator passes;independent exact membership,method/graph,
+all PNG receipts/dimensions and32 key boundaries pass;changed-tree control rejects.
+All observed post-deletion controls are empty/focused and final controls empty/
+unfocused. Native and candidate light form-field empty caret images were inspected;
+both visibly contain a caret. No universal absence,metric equivalence or temporal
+paint pass is inferred. Input/paint/style differences remain independently open.
+
+Initial verifier incorrectly expected lowercase a;actual event is A/codeKeyA as
+requested by Control+A. Preserve failed verify log2cd530ffe2b7145cc14e4b9c2b9ac4719816e6594d81490aa523d3d733f65aed.
+Corrected verify-retry logSHAb4fd87febb2bf5d50a5dc64c553900fe955e3077d16b088b33d5360d2e8a1fd2
+passes without editing or repeating the capture. Next use these actual local
+rasters and event/control boundaries in the existing owning proof after current
+canonical integration settles;do not repeat this capture or historical-source
+search. All16 editing obligations and all2311 whole cases remain partial.
+Canonical export session39487/worker4768 remains live at build-audit;its existing
+inputs are frozen and no publication/cold/import success is claimed.
 
 ## Current integration checkpoint — October15 coherent queued evidence registration
 

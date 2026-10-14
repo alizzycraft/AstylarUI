@@ -56,6 +56,16 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October15 configured editing capture is required gap-closing evidence,not scratch:
+retain configured-input-editing-current-20261015 (80 paired boundaries/160 PNGs/
+160 trees),its -provenance checkpoint and capture log. Current coverage ledger
+records complete report/checkpoint/script/log hashes. Preserve both verification
+logs:configured-input-editing-current-verify-20261015.log is the lowercase-key
+assertion failure;configured-input-editing-current-verify-retry-20261015.log is
+the independent successful receipt/membership/key validation. No source/capture
+was rewritten for the retry;do not delete either as redundant. These diagnostic
+observations add delays and do not certify uninstrumented timing or full parity.
+
 October15 writable emptying applicability:retain
 writable-emptying-evidence-applicability-20261015.log SHA
 1abce88c2992e5b0902e29459239ab89db685d27668069ce445b2f4d6bf6ab21.
