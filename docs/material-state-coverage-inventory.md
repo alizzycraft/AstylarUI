@@ -1,5 +1,32 @@
 # Material comparison/state coverage inventory
 
+## Composite endpoint census separates342 recoverable owners from68 radio gaps — October 14
+
+Question: do retained primary semantic records prove selection/sort state on the
+actual reference control? Primary wrappers omit those fields for six composites.
+Read-only full census authenticates410 exact cases/820 input-tree receipts under
+reportSHAab42dbec. Descendants of each unique primary native owner retain actual
+ARIA state in all342 chips76/sort60/button-toggle68/tabs70/stepper68 cases. They
+can supply bounded endpoint evidence before new capture;name equality or an
+unconditional interactionState.matches flag cannot substitute for these owners.
+
+All68 radio cases instead contain136 native radio INPUTs without serialized live
+checked properties or aria-checked/selected state. Their value is option/form
+metadata,not selected state;class names and tabindex are not a checked-property
+observation. Existing captureBrowserInputTree serializes attributes and value,
+not live input.checked. This is a specific original-evidence gap,not evidence
+that radio state was false or that the control cannot select. Existing actual
+keyboard/pointer radio diagnostics retain their separate scope and failures.
+
+Evidence:retained-composite-control-endpoint-census-20261014.log,exact case IDs,
+native keys/roles/state values and paired tree receipts. No source/fixture/browser
+change or proposal/export. Next map342 native state owners to candidate authored
+choice/header state using explicit corresponding identities,retaining requested
+SiteData versus actual DOM semantics distinction. Do not claim candidate runtime
+selection or complete activation from its authored tree. Radio live state needs
+existing separately captured actual-owner observations or missing fresh evidence.
+Publisheda81 package and pending7235 proposal unchanged;prior84d4db95 is pushed.
+
 ## Explicit retained state predicates join114 exact interactions — October 14
 
 Question resolved:114 original interactionState records contain actual endpoint
