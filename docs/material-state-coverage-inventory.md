@@ -95,6 +95,18 @@ and scalar903 change,and sourceFinding157 appends the caret classification.
 Counts remain8483 scalar/31657 retained/8247 control/158 source. This bounds
 the changed population;exact field-level transition validity and whole-case/
 package-metadata conservation remain pending,not inferred from matching counts.
+The first field/case conservation command13323 terminates1 after decoding both
+packages:its inline diagnostic incorrectly addressed the receipt under
+comparedAtNormalLineBoxStage.source. This is a diagnostic path error,not a
+candidate-data discrepancy. Failure log divider-caret-package-case-conservation-
+20261014.log SHA33c8498ad888fa59947b8b56d27a72dc959a19d02200e10271e3eae6e01a4d37
+is retained. Existing refreshScalarControlReceipts identifies the actual
+reviewEvidence.observation.normalizationReconciliation path. Corrected retry
+session79472/worker13788 is confirmed live;separate log
+divider-caret-package-case-conservation-retry-20261014.log remains pending.
+It uses the existing source-transition/comparator/proposal loader,with48 forged
+control checks and complete decoded/case/metadata checks;no production input,
+fixture,threshold or acceptance flag changed. Do not restart either live job.
 Published2e196c48 remains the prior snapshot until independent cold comparison,
 package/case/finding conservation and publication finish. All2311 whole-case
 records remain partial/unverified;final gates are unchanged. Observed D:free

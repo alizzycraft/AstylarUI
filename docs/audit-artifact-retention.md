@@ -100,6 +100,12 @@ divider-caret-package-row-delta-20261014.log is closed successful row-census
 evidence:exit0,complete decoded hash/length authenticated,48495 unchanged rows,
 48 changed control rows/one scalar/one appended source finding. Retain it;
 it is not yet complete field-transition/case/package conservation acceptance.
+Retain divider-caret-package-case-conservation-20261014.log as failed diagnostic
+evidence (exit1,SHA33c8498ad888fa59947b8b56d27a72dc959a19d02200e10271e3eae6e01a4d37):
+the inline command addressed the wrong receipt property after authenticating
+both decoded packages. Separate corrected retry output
+divider-caret-package-case-conservation-retry-20261014.log is active;do not
+overwrite the failure,compress active output or infer a passing result.
 divider-caret-canonical-cold-check-20261014.log remains active verification output;
 do not compress/delete or restart it. No cold acceptance is inferred.
 Observed D:free5117739008bytes before the row census;recheck before publication.
