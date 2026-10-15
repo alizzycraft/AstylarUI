@@ -36,6 +36,8 @@ replace("    assert.ok(Math.abs(offset('reference') - (20 + row.font)) < .01);",
   "    assert.ok(Math.abs(offset('reference') - (60 + row.phase)) < .01); summary.phaseGeometry.push({dpr:row.dpr,phase:row.phase,reference:row.reference.bounds.child,candidate:row.astylar.bounds.child});");
 replace("< .5, `Pixel control", "< .01, `Pixel control");
 replace('  assert.equal(keys.size, 16); assert.equal(summary.pixelControls, 8);', '  assert.equal(keys.size, 8); assert.equal(summary.pixelControls, 8);');
+replace("unequal.results[0].astylar.site.styles[2].margin = '0';",
+  "unequal.results[0].astylar.site.styles[2].height = '2px';");
 replace("unit=query.get('unit');", "unit=query.get('unit'),phase=Number(query.get('phase'));");
 replace("height:'24px',fontSize:", "height:'1px',position:'absolute',left:'20px',top:(60+phase)+'px',fontSize:");
 replace("margin:unit==='em'?'1em 0':font+'px 0',", "margin:'0',");

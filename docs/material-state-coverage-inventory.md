@@ -26,6 +26,16 @@ This pointer supersedes the historical checkpoint chronology immediately below.
 
 ### October15 evidence chronology — historical checkpoints
 
+Thin-fill correction conservation now passes without another capture. Driver
+75e7055e differs from Git106c9e46 only by replacing the ineffective margin=0
+negative mutation with height=2px. Complete original/corrected reports are equal
+except scriptSha256 and sourceRecipe.logicalRunnerSha256;32 PNG receipts,5030
+dependency receipts and both runtime bundle/HTML pairs authenticate. Corrected
+report SHA7eef112b2c7615874d4bbced11a2e04f40ab8c3e71ce7eda30e593a6075907b8.
+Log public-thin-fill-phase-correction-conservation-20261015.log establishes repeat
+stability,not whole-frame parity or a causal AA/projection explanation. Original
+failed verification remains preserved;no current export inputs changed.
+
 Progress snapshot reconciled the configured census without changing acceptance:
 2311 cases have evidence,none has complete obligation closure;historical output
 passes do not certify current equal-input rendering. Highest-impact remaining

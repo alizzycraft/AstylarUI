@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Retain public-thin-fill-phase-corrected-20261015 and its capture/verify logs with
+public-thin-fill-phase-correction-conservation-20261015.log. Complete reports
+conserve except driver/recipe hashes;all32 original/repeat PNGs and5030 dependency
+receipts authenticate. The corrected height=2px negative control rejects;the
+original margin=0 no-op failure remains required evidence. Neither report is a
+whole-frame parity pass or a confirmed paint-mechanism diagnosis. No originals
+were overwritten and no third capture was needed.
+
 Keep public-thin-fill-phase-20261015 (report,bundle,HTML,16 PNGs),capture log,
 failed --verify log and preliminary pixels log. Its first driver revision must
 remain recoverable from Git:the reused margin=0 negative mutation is a no-op for
