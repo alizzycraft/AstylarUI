@@ -56,6 +56,16 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Retain margin-context-canonical-census,row-conservation[-retry],source-sections,
+source-conservation[-retry],candidate-source-boundary[-retry] and readable-
+conservation logs dated20261015 with candidate92346052 and accepted6e20 index.
+The selected source-section log permits further checks without another full
+payload read. Preserve original failed direct-receipt/count/raw-hash assumptions;
+they are diagnostic failures,not evidence that observed rendering changed.
+Raw capture evidence hashes and UTF8/LF source fingerprints remain distinct.
+Cold verification and remaining section conservation are pending;no original
+or failure capture was deleted and no successful scratch was created.
+
 Keep paragraph-normal-lineheight-owner-path-20261015.log with retained inherited-
 margin package receipts. It binds complete three-method metric-resolution paths.
 The public paragraph driver has now executed:retain public-paragraph-linebox-

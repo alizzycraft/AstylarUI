@@ -121,7 +121,29 @@ proves whole accepted ac8a1d7a text restores after removing exactly two new proo
 descriptions and normalizing only benchmark line anchors. Prior/current LF hashes
 2524a076/2e56cc60;input-equivalence verdict unchanged. Next compare159 source
 findings and remaining changed section content;then import only after independent
-cold success. Existing worker19856/launcher22960 remain live;
+cold success. Source finding/proof conservation now also passes terminal0:
+margin-context-canonical-source-sections-20261015.log authenticates the full
+decoded candidate and retains only the selected source/proof sections;SHA
+2dc10e48cc247f849e16b6fbc19279085849b568ba5cea873cfa75cbe063af94.
+Using accepted compact complete-row hashes,source-conservation-retry proves all
+159 findings unchanged after deleting ONLY inheritedBlockMargin from the existing
+core-em-box-size-uses-uncomputed-font. All207 prior proof objects restore exactly
+after the two added leading proofs and benchmark line-anchor changes.
+
+Source path accounting is683→694:12 added paths,one removed selected cfd613cf
+proposal path replaced by74d0b4bb,and four modified source paths (producer,policy,
+benchmark,existing transition helper). First count assertion wrongly expected
+zero removals;its failure log remains preserved. Candidate-source-boundary-retry
+authenticates all16 added/modified paths using the exporter's explicit UTF8/LF
+fingerprint convention (input-equivalence-audit.mjs collectSourceFingerprints).
+The initial raw-byte check fails on CRLF owner-binding log:d34d2b7f raw versus
+3eb9fd75 LF;both remain recorded,not rewritten or accepted interchangeably for
+raw evidence receipts. Source finding's raw evidence receipt staysd34d2b7f.
+Exact stdout/stderr logs use margin-context-canonical-source-conservation[-retry]
+and margin-context-candidate-source-boundary[-retry],dated20261015.
+Remaining changed-section content:coverage,controlLineBoxes,ownerCaretInputs,
+reviewedSourceBatchInputs. No full canonical acceptance from these partial checks.
+Existing worker19856/launcher22960 remain live;
 no cold terminal result or acceptance claim. No new browser capture or producer
 change was needed to resolve the population accounting question.
 
