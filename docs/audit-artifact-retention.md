@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Retain source review proposal8091a07d with inherited-block-margin-finding-review-
+20261015.log and both inherited-margin-review-*-replay-20261015.log files. It
+preserves all159 original definitions and queues one bounded field on the existing
+computed-font finding;accepted policy/package are unchanged. Original two margin
+runs,64 PNGs and owner/history evidence remain its dependencies,not stale scratch.
+
 Retain retained-thin-fill-context-20261015 (18 PNGs/reportSHAf5251b3d),its capture,
 verify and pixel-replay logs,and original corrected thin-fill bundle/captures.
 The new script serves those immutable retained assets unchanged;baseline/native

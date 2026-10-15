@@ -73,6 +73,23 @@ This pointer supersedes the historical checkpoint chronology immediately below.
 
 ### October15 evidence chronology — historical checkpoints
 
+Inherited block-margin classification now has a machine-readable queued extension
+through existing saveReviewProposal,not a new finding/framework. Proposal8091a07d
+(full8091a07d07a9cb8f5f7c3980f9c5634b2ec9dd4409894a6853f030bc4aaf4fb6)
+adds only inheritedBlockMargin to core-em-box-size-uses-uncomputed-font. Deleting
+that field restores all159 complete original policy definitions exactly;unrelated
+drift rejects. Policy LF SHA remainsfcbf780a;accepted canonical unchanged.
+Existing inherited-margin --verify replays both runs exit0 with both negative
+controls;2515 current dependencies/64 PNG receipts authenticate. Own-font/pixel
+controls pass;inherited24px two cases/run err-8CSSpx. Complete owner source and
+installed receipts still equal d34d2b7f owner proof. Source history remains source
+conservation,not first-bad runtime. Logs inherited-margin-review-{original,repeat}-
+replay-20261015.log and inherited-block-margin-finding-review-20261015.log.
+This is a distinct block-margin call site of the shared computed-font invariant,
+not the flex parseFloat unit-loss finding or positioned Material paragraph cause.
+Next integrate this bounded field with owning source-conservation assertions and
+queued divider/context proof registration as one batch;no isolated full export.
+
 Queued divider review remains applicable after canonical publication:existing
 loadCaseObligationReview authenticates all12717 dependencies ofcc2dcdaf against
 the current checkout. Whole-record comparison to accepted6e20/index6d3df3e7
