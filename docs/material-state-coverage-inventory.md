@@ -49,8 +49,9 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   retained paragraph typography,box/opacity,routing/wrapping and separator footprint
   evidence;paragraph inherited-request evidence and new public inherited-block-
   margin proof/history. Preserve distinct capture/current/source boundaries.
-- Next gate sequence:commit/push this canonical publication,then resume queued
-  evidence and real case closure. Completed predecessor checks compose against the same
+- Publication ac8a1d7a pushed successfully;GitHub warned67.28MB gzip exceeds its
+  recommended50MB size (not rejected). Next:queued evidence and real case closure.
+  Completed predecessor checks compose against the same
   candidate6e20a321/accepted86961/ec90:current payload hash/70552528 bytes and
   census manifest match;prior/current48546 rows,50 exact changes. Reauthenticated
   census41198dc1 and saved row321e5197,section/case44dbf04b,source-boundary39effa0b,
@@ -96,15 +97,23 @@ Babylon options.antialias=antialias??options.antialias override;public option
 toggling is therefore not a valid isolated intervention. Reuse that known finding,
 do not repeat its historical proof. A later context probe must record actual DPR,
 render dimensions,context attributes/samples and intervention effectiveness.
-Prepared unregistered audit-retained-thin-fill-context.mjs for that exact gap:
-serves retained authenticated bundle/HTML unchanged,records observed DPR and
-context samples,and separately forces context-creation antialias=false. Eighteen
-sequential reference/baseline/intervention pages cover phases0/.25/.5,DPR1/2.
-It requires identical retained site/geometry and matching browser version,verifies
-raw PNG receipts and effective intervention,and fingerprints its local producer
-graph. Syntax and graph preflight pass;BROWSER EXECUTION NOT YET RUN. Do not treat
-the prepared script as evidence or canonical integration. Defer until serial
-cold memory pressure clears;preserve new run separately from original captures.
+Targeted context gap now captured AFTER cold worker exit in new retained-thin-fill-
+context-20261015:18 sequential reference/baseline/intervention pages,phases0/.25/.5,
+DPR1/2,unchanged authenticated bundle/HTML. Capture and --verify exit0;reportSHA
+f5251b3de199f73187a46c6ef9b5089bcdd5be72bcd9449911949a1b965f5a2b.
+Actual DPR/viewport/drawing buffers agree;baseline attributes antialias=true,
+samples4/sampleBuffers1 versus forced context antialias=false,samples0/buffers0.
+Inputs,all measured geometry and browser version match retained;producer graph
+and18 PNG receipts authenticate. Full baseline/reference PNG bytes reproduce
+the original six paired cases exactly. Existing pixel verifier --context replays
+interior differences (baseline/native,no-AA/native,no-AA/baseline):DPR1 phase0
+[0,0,0],.25/.5 [152,0,152];DPR2 phase0 [0,0,0],.25 [304,304,304],.5 [304,304,0].
+Thus effective no-AA removes the tested DPR1 mixed-edge mismatch but does not
+resolve DPR2 row placement;atDPR2 phase.5 AA/no-AA paint is identical yet both
+differ from native. Separate coverage/sample contribution from paint placement.
+No blanket AA fix,universal snapping rule,whole-frame or Material-case acceptance.
+Logs retained-thin-fill-context-{capture,verify,pixel-replay}-20261015.log.
+This reuses the retained bundle,not a new full matrix/build or canonical export.
 
 Thin-fill projection-boundary review closes a narrower rounding explanation:
 authenticated corrected report7eef112b records EXACT paired projected child

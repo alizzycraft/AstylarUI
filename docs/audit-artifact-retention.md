@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Retain retained-thin-fill-context-20261015 (18 PNGs/reportSHAf5251b3d),its capture,
+verify and pixel-replay logs,and original corrected thin-fill bundle/captures.
+The new script serves those immutable retained assets unchanged;baseline/native
+PNGs exactly reproduce six original pairs. Effective context no-AA intervention
+has zero samples but leaves DPR2 placement failures;do not discard them or claim
+whole-frame parity. It closes missing runtime/sample evidence,not a full rerun.
+
 Retain configured-editing-root serial cold stdout/stderr logs and compact import/
 verify logs dated20261015 with accepted6e20a321/index6d3df3e7 and predecessor86961.
 Serial cold completes;original interrupted and allocation-failed attempts remain

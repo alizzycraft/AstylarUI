@@ -17,6 +17,13 @@ replay is scripts/check-material-thin-fill-interior-paint.mjs;exact boundaries
 are in the coverage ledger. Do not turn this observed model into fixture offsets
 or a universal renderer rounding rule. Actual browser/WebGL sample/compositing
 causality,edge behavior and whole-frame acceptance remain unresolved.
+The subsequent retained-bundle context intervention now confirms actualDPR1/2,
+baseline4 samples versus effective no-AA0 samples,unchanged inputs/geometry and
+exact retained baseline PNG reproduction. No-AA removes tested fractionalDPR1
+interior mismatches,butDPR2 placement remains;atphase.5 both AA/no-AA have identical
+pixels while native differs. Therefore correct the known public AA-option owner
+as its own defect,not as an assumed complete thin-fill parity fix. Exact18-page
+report and pixel-replay boundaries are in the ledger;no renderer change made.
 
 New bounded inherited-font margin result (queued outside live export):two public
 runs each show inherited24px 1em block margins resolving as16px atDPR1/2,while

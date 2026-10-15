@@ -58,3 +58,39 @@ console.log(JSON.stringify({ phase: 'retained-thin-fill-interior-paint-model', a
   channelTolerance: 1, nativeModel: 'round CSS top then multiply by DPR',
   candidateModel: 'linear row coverage from unsnapped projected device rectangle', observations,
   boundary: 'Observed interior raster model only;not browser/WebGL causal mechanism,general CSS snapping rule,edge/whole-frame parity,or renderer fix' }));
+
+if (process.argv[2] === '--context') {
+  const contextDirectory = 'artifacts/material-parity/retained-thin-fill-context-20261015';
+  const contextBytes = fs.readFileSync(`${contextDirectory}/latest-report.json`);
+  assert.equal(hash(contextBytes), 'f5251b3de199f73187a46c6ef9b5089bcdd5be72bcd9449911949a1b965f5a2b');
+  const contextReport = JSON.parse(contextBytes);
+  assert.equal(hash(fs.readFileSync('scripts/audit-retained-thin-fill-context.mjs')), contextReport.scriptSha256);
+  const read = (root, row) => {
+    const bytes = fs.readFileSync(`${root}/${row.screenshot.file}`);
+    assert.equal(hash(bytes), row.screenshot.sha256);
+    return PNG.sync.read(bytes);
+  };
+  const expected = [[0, 0, 0], [152, 0, 152], [152, 0, 152], [0, 0, 0], [304, 304, 304], [304, 304, 0]];
+  const results = [];
+  for (const dpr of [1, 2]) for (const phase of [0, .25, .5]) {
+    const rows = Object.fromEntries(contextReport.results.filter(row => row.dpr === dpr && row.phase === phase).map(row => [row.mode, row]));
+    const images = Object.fromEntries(Object.entries(rows).map(([mode, row]) => [mode, read(contextDirectory, row)]));
+    const prior = report.results.find(row => row.dpr === dpr && row.phase === phase);
+    for (const [mode, side] of [['reference', 'reference'], ['baseline', 'astylar']])
+      assert.deepEqual(images[mode].data, read(directory, prior[side]).data, 'Context baseline changed from retained pixels');
+    const counts = [];
+    for (const [a, b] of [['baseline', 'reference'], ['force-no-aa', 'reference'], ['force-no-aa', 'baseline']]) {
+      let differences = 0;
+      for (let y = 78 * dpr; y < 84 * dpr; y++) for (let x = 42 * dpr; x < 118 * dpr; x++) {
+        const offset = (y * images[a].width + x) * 4;
+        if (!images[a].data.subarray(offset, offset + 4).equals(images[b].data.subarray(offset, offset + 4))) differences++;
+      }
+      counts.push(differences);
+    }
+    assert.deepEqual(counts, expected[results.length]);
+    results.push({ dpr, phase, differenceCounts: counts });
+  }
+  console.log(JSON.stringify({ phase: 'context-intervention-pixel-replay', baselineFullPNGsEqualRetained: true,
+    differenceOrder: ['baseline/native', 'no-AA/native', 'no-AA/baseline'], results,
+    boundary: 'AA contribution demonstrated for tested interiors; DPR2 placement residual remains. Not full paint parity or a renderer fix.' }));
+}
