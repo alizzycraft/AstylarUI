@@ -12,6 +12,11 @@ This pointer supersedes the historical checkpoint chronology immediately below.
 - Independent cold check:session76513,log
   configured-editing-root-canonical-cold-check-20261015.log;build-audit reached.
   Consumed producer/policy/benchmark/helper/launcher inputs remain frozen.
+- Candidate6e20a321:70552528 compressed bytes,decoded2290631277 bytes/SHA
+  ba2eb95a85644ac70cc8b925d8028293e62beacc436b571951c19fa9b9557377.
+  Conservation census60704/worker36660 reads this stream once against accepted
+  compact row hashes and saved86961 section digests;log
+  configured-editing-root-canonical-census-20261015.log. No acceptance yet.
 - Selected review:cfd613cf,2311 partial/unverified cases,12709 dependencies;
   root/16 configured editing evidence included,not complete-case acceptance.
 - Queued outside export:cc2dcdaf extends e4b85e47's24 anonymous-border joins with
