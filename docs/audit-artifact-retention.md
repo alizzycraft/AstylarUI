@@ -56,6 +56,11 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep overlay-trigger-authored-applicability-case-join-20261015 stdout/stderr
+and queued1efe84df. This supersedesd33f for current expanded applicability only;
+other popup controls remain uninspected. Earlier source is Git8a45468b. No
+canonical generation or browser capture was added;live1451 remains unchanged.
+
 Keep composite-control-authored-applicability-case-join-20261015 stdout/stderr
 and queued d33fef9f;it supersedes26bdb for the expanded applicability join only.
 Earlier unselected proposals remain historical,not extra cases or current source

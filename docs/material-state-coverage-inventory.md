@@ -30,6 +30,35 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   inputs changed. All original final gates and36-family/relevant-state scope
   remain. No further export is justified solely by this status update.
 
+### Popup opener applicability is not popup-control inspection — October15
+
+Named native opener buttons under matching component roots now witness activation
+and programmatic-focus applicability for menu94,bottom-sheet63,dialog78,snack-bar71
+and tooltip62 cases. Exact candidate button identities and both parent chains
+authenticate. Other native/authored popup buttons are separately recorded,not
+silently treated as inspected or required absent. An inert modal opener remains
+a negative-focus/activation inspection obligation;no delivery is claimed.
+Tooltip opener activation does NOT mean clicking must open a tooltip.
+
+Queued1efe84df0a4d45ebe7db8027f47d183def21f95093d8a5bd67631f089701e51c
+supersedesd33f for the next batch. Combined applicability evidence1349 cases,
+2698 trees,1615 mapped native controls;2039 fields change across1245 cases. This
+adds352 activation+352 focus applicability entries. Restoring original obligation
+objects returns complete87b7;remaining work/dispositions and unrelated data are
+unchanged. Twelve controls reject earlier receipt/type/ID/value/role/ancestry
+mutations plus opener-outside-root and duplicate candidate identity. Loader
+validates2311 cases/12877 dependencies,both completion flagsfalse. Log
+overlay-trigger-authored-applicability-case-join-20261015 stdout/stderr exits0.
+
+QUEUED unverified activation1805→1011;focus1797→552;localPaint969 unchanged.
+No fully inspected case,behavior pass,recapture or renderer/fixture change.
+New proposal/source are outside live1451's immutable87b7 inputs. Olderd33f source
+is Git8a45468b if historical replay is needed;it is no longer current-source
+validation. Remaining focus applicability is concentrated in select,chips,
+expansion,tabs,button-toggle,stepper,sort,paginator,tree. These require explicit
+native/role target mappings;do not extrapolate button behavior or mark popup
+items/actions/keyboard/paint/ownership complete from the opener witness.
+
 ### Composite control applicability retains host/control distinction — October15
 
 Checkbox68,radio68,slider78,slide-toggle68 cases now have exact retained owner
