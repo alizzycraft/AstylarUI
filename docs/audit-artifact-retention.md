@@ -56,6 +56,11 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep tooltip-applied-theme-ownership-case-join[-final]-20261016 stdout/stderr
+and queued117a41db. Initial main-list-only2293/2311 assertion fails;final includes
+all18 separate mobile flows and joins45 exact physical contexts without promoting
+parent or case closure. Predecessor6490 remains for complete conservation.
+
 Keep tooltip-applied-theme-ownership-20261016 report,24 trees/24 PNGs and separate
 -checkpoint. Keep tooltip-applied-theme-ownership-capture[-retry,-final]-20261016
 stdout/stderr:initial missing-dist and module-graph preflight failures are distinct

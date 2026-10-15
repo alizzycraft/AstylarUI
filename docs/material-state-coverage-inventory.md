@@ -33,6 +33,20 @@ was waived. Final driver explicitly authenticates every manifest asset at known
 retained paths and does not import that unrelated producer-replay graph.
 This focused driver/report is outside acceptedf663;no canonical export is needed
 solely to publish this ledger update. Next join existing exact case obligations.
+That bounded join now completes in tooltip-applied-theme-ownership-case-join-final-
+20261016 TERMINAL0. Queued117a41db956f86e1465b8de0fee9e3d5a0fd3073049c1698a837fd0eee4ec3cb
+supersedes6490 for a later batch. All2311 configured IDs include the separate18
+mobile flows (initial join assertion2293/2311 correctly failed and is retained).
+Exactly45 tooltip cases,15 each dark/contrast/custom,match new report theme,
+viewport dimensions and DPR. Their original trees authenticate matching applied
+surface backgrounds. Each history parent gains only a same-cohort ordinary
+pointer-cycle inspected-failure subrecord;original parent disposition,remaining
+work,case inspection and current-rendering status are unchanged. It is NOT an
+exact configured-action/state/keyboard/remount or full-input-equivalence claim.
+Existing loader authenticates2311 cases/12883 dependencies,both flagsfalse;
+restoring45 original history objects returns complete6490. No unrelated review
+data changes,no recapture or canonical export. Remaining16 tooltip cases are
+light or comparison-pane contexts,not silently covered by this new12-context run.
 
 Accepted evidence integration is nowf663c88ea2d75257049f26fe33add569a2fcb7529395f291a2db966db7489948,
 indexbc481df111dc424d221d2f610b53e6f6008a3e5710ddab7a205c12a56854787c.
