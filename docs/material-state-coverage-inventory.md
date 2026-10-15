@@ -30,6 +30,39 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   inputs changed. All original final gates and36-family/relevant-state scope
   remain. No further export is justified solely by this status update.
 
+### Rejected export collector boundaries verified; raw replay remains distinct — October15
+
+Remaining collector run58185 TERMINAL1:14/15 checks pass,311551.2082ms. Follow-up
+and reviewed-input full replay/mutation checks pass. The sole caret command
+failure is its stale asserted CURRENT source hash33c5a4b3 versus observedc13ed230;
+shared complete historical restoration already succeeds. Existing command now
+pins currentc13 while retaining recordedc3cabcfd and exact-restoration status.
+No observation,classifier,normalizer,coverage or rejection control was changed.
+Caret command suite36051 now TERMINAL0:3/3,282785.3977ms. Original2311 cases,
+1734 selected captures/4050 observations,118 reviewed groups/3154 observations,
+896 pending observations and13 source rejection controls remain checked;coverage
+and subset commands retain their own17/15 controls. Logs
+crop-metadata-remaining-collector-boundaries-20261015 and
+crop-metadata-caret-boundary-complete-20261015 stdout/stderr preserve both runs.
+Together with9/9 earlier collector checks,all six rejected export binding
+boundaries now have owning focused proof;this is not full canonical validation.
+
+Root/editing RAW-byte replay remains unproven. Read-only prototype
+root-editing-exact-metadata-read-replay-20261015 stops before invoking the original
+test:normalizing preserved source and converting all lines toCRLF produces764581e3,
+not captured584cdfc8. Existing normalized whole-source082 proof remains valid,
+but it cannot be substituted for raw-byte authentication. Known Material-worktree
+copy isb2477a12,not584;do not retry uniform line-ending reconstruction or infer
+original bytes from normalized equality. No original assertion was waived or
+historical test reported passing. Exact captured bytes or a separately justified
+fresh source-bound proof remain required;oldere01 boundaries are also unchanged.
+
+The four changed collector/report paths have no direct receipts in selected87b7
+review;this narrow dependency observation is not a whole-graph validity claim.
+Next validate that selected review,then one full export retry with phase logging.
+Accepted92346052 remains unchanged until publication/conservation/independent
+verification;full case closure and final browser/harness gates remain pending.
+
 ### Coherent export rejected; exact shared reader reconciliation — October15
 
 Export27040 TERMINAL1;launcher828/worker4360 exited. It did not publish or replace

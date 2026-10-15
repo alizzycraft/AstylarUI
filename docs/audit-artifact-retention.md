@@ -56,6 +56,11 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep crop-metadata-remaining-collector-boundaries-20261015 (14/15,one stale
+current-hash assertion) and crop-metadata-caret-boundary-complete-20261015
+(3/3) stdout/stderr. Keep root-editing-exact-metadata-read-replay-20261015 failure:
+it rejects raw-byte reconstruction before original assertions execute;not a pass.
+
 Retain divider-proof-batch-canonical-export-20261015 stdout/stderr as TERMINAL1
 failure evidence;accepted92346052 remains unchanged. Keep crop-metadata-gap-
 source-reconciliation[-complete],gap-report-refresh,and collector-boundaries
