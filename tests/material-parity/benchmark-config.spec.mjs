@@ -278,7 +278,7 @@ test('retained thin fill context intervention preserves geometry and separates D
     const functions = ['sourceFingerprints', 'proof', 'focusedProofInventory'].map(name => ast.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === name).getText(ast));
     const inventory = new Function('readFileSync', 'path', 'createHash', functions.join('\n')
       + ';return {proofs:focusedProofInventory(process.cwd()),sources:sourceFingerprints(process.cwd())};')(readFileSync, path, createHash);
-    assert.equal(inventory.proofs.length, 209); assert.ok(inventory.proofs.every(row => row.status !== 'missing'));
+    assert.equal(inventory.proofs.length, 213); assert.ok(inventory.proofs.every(row => row.status !== 'missing'));
     assert.equal(inventory.sources.filter(row => row.file === file).length, 1);
     const suiteFile = 'tests/material-parity/benchmark-config.spec.mjs';
     const suite = readFileSync(suiteFile, 'utf8').replaceAll('\r\n', '\n');

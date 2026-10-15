@@ -51,17 +51,29 @@ const currentRunnerSHA = hash(readFileSync(runnerFile));
 assert.equal(currentRunnerSHA, '86ece08b913903e0a06231a58b32826a8fe561b468f82b7c57ccc32422da60e8');
 const conservation = execFileSync(process.execPath, ['--test',
   'tests/material-parity/alignment-crop-provenance.spec.mjs'], { encoding: 'utf8' });
-assert.match(conservation, /# pass 5\b/); assert.match(conservation, /# fail 0\b/);
+assert.match(conservation, /# pass 6\b/); assert.match(conservation, /# fail 0\b/);
+const benchmarkFile = 'tests/material-parity/benchmark-config.spec.mjs';
+const benchmark = readFileSync(benchmarkFile, 'utf8').replaceAll('\r\n', '\n');
+const originalBenchmark = execFileSync('git', ['show', `f3f98bfd:${benchmarkFile}`],
+  { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+assert.equal(benchmark.split('assert.equal(inventory.proofs.length, 213)').length, 2);
+assert.equal(benchmark.replace('assert.equal(inventory.proofs.length, 213)', 'assert.equal(inventory.proofs.length, 209)'), originalBenchmark);
+const benchmarkReceipts = [], benchmarkSHA = hash(readFileSync(benchmarkFile));
 const runnerReceipts = [];
 function refreshRunnerReceipts(value) {
   if (!value || typeof value !== 'object') return;
   if (value.file === runnerFile && Object.hasOwn(value, 'sha256')) {
     assert.equal(value.sha256, oldRunnerSHA); runnerReceipts.push(value); value.sha256 = currentRunnerSHA;
   }
+  if (value.file === benchmarkFile && Object.hasOwn(value, 'sha256')) {
+    assert.equal(value.sha256, 'e39dc1a70b1ef2efd0287be9c5acdf3d0509a45dc30487a8b9c1581a9bb58c07');
+    benchmarkReceipts.push(value); value.sha256 = benchmarkSHA;
+  }
   for (const child of Object.values(value)) if (typeof child === 'object') refreshRunnerReceipts(child);
 }
 refreshRunnerReceipts(review);
 assert.equal(runnerReceipts.length, 8186);
+assert.equal(benchmarkReceipts.length, 40);
 
 function inputs(tree, sample, profile = 'light') {
   const owners = [];
@@ -180,10 +192,13 @@ assert.ok(loaded.cases.every(row => row.inspection === 'partial' && row.currentR
 for (const [id, previous] of previousOwners) review.groups.find(row => row.case === id).obligations.historyOwnership = previous;
 for (const [id, previous] of previousPaint) review.groups.find(row => row.case === id).obligations.localPaint = previous;
 for (const receipt of runnerReceipts) receipt.sha256 = oldRunnerSHA;
+for (const receipt of benchmarkReceipts) receipt.sha256 = 'e39dc1a70b1ef2efd0287be9c5acdf3d0509a45dc30487a8b9c1581a9bb58c07';
 assert.equal(hash(JSON.stringify(review)), priorSHA, 'Unrelated review evidence changed');
 console.log(JSON.stringify({ phase: 'divider-remount-case-join', proposal, predecessor: priorSHA,
   joins, cases: loaded.cases.length, dependencies: loaded.evidenceFingerprints.length,
-  onlyDividerOwnershipPaintAndDemonstratedRunnerReceiptsChanged: true, physicalContexts: 20, inputNegativeControlsRejected: 3,
+  onlyDividerOwnershipPaintAndDemonstratedSourceReceiptsChanged: true, physicalContexts: 20, inputNegativeControlsRejected: 3,
+  benchmarkReceiptTransition: { file: benchmarkFile, receipts: benchmarkReceipts.length, after: benchmarkSHA,
+    boundary: 'Exact whole-suite conservation after reversing only209-to213 inventory count;no assertion omission' },
   freshPaintCases: paintRows.size, passingTargets, failingTargets, textureCases,
   runnerReceiptTransition: { file: runnerFile, before: oldRunnerSHA, after: currentRunnerSHA, receipts: runnerReceipts.length,
     proof: 'Exact metadata-only whole-runner restoration;not original e01ef9dc capture recovery or current rendering acceptance' },

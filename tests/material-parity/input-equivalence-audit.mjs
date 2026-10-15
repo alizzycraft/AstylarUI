@@ -8922,6 +8922,20 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'scripts/audit-public-paragraph-linebox.mjs',
+    'scripts/check-retained-paragraph-font-box.mjs',
+    'artifacts/material-parity/public-paragraph-linebox-20261015/latest-report.json',
+    'scripts/check-material-divider-four-sample-model.mjs',
+    'scripts/audit-material-divider-remount.mjs',
+    'scripts/check-material-divider-remount.mjs',
+    'scripts/join-material-divider-remount.mjs',
+    'docs/evidence/material-divider-remount-initial.mjs.txt',
+    'artifacts/material-parity/divider-remount-peer-20261015/latest-report.json',
+    'artifacts/material-parity/divider-remount-peer-remaining-20261015/latest-report.json',
+    'tests/material-parity/alignment-crop-provenance.spec.mjs',
+    'scripts/audit-material-divider-texture-boundary.mjs',
+    'artifacts/material-parity/divider-configured-texture-boundary-20261015/latest-report.json',
+    'artifacts/material-parity/divider-alignment-provenance-20261015/latest-report.json',
     'scripts/audit-public-inherited-margins.mjs',
     'artifacts/material-parity/public-inherited-margin-20261015/latest-report.json',
     'artifacts/material-parity/public-inherited-margin-repeat-20261015/latest-report.json',
@@ -8946,7 +8960,7 @@ function sourceFingerprints(root) {
     'artifacts/material-parity/public-relative-margin-repeat-20261015/latest-report.json',
     'artifacts/material-parity/public-relative-margin-owner-binding-20261015.log',
     'tests/material-parity/audit-findings-store.spec.mjs',
-    'artifacts/material-parity/working-audit/proposals/74d0b4bbbfaa50fa18b0f4e91a4443aa72ec80813972466bbe9b7008d2e94210.json',
+    'artifacts/material-parity/working-audit/proposals/87b7452d81b98c0c7923103042132c1fcf70e96a3bb2803c298deed7a017719e.json',
     'docs/evidence/material-overlay-context-runner.mjs.b64',
     'artifacts/material-parity/divider-context-verified-angular-20261013-dpr1/result.json',
     'artifacts/material-parity/divider-context-verified-angular-20261013-dpr1/provenance.json',
@@ -9623,6 +9637,14 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'scripts/check-retained-paragraph-font-box.mjs', /assert.equal\(observations.length, 8\)/,
+      'normal paragraph auto height and complete font-box owner boundary', 'Eight public Arial16/24 normal versus explicit line-height pairs atDPR1/2 retain normal paragraph height divergence and explicit controls. Complete current/emitted/installed parser members agree. Supplements existing normal-metrics finding,not a new defect,all fonts or Material wrapper acceptance.'),
+    proof(root, 'scripts/check-material-divider-four-sample-model.mjs', /assert.equal\(observations.length, 24\)/,
+      'divider retained four-row interior coverage prediction', 'Authenticates24 PNG/tree pairs and133356 sampled interior pixels; empirical four-row positions fit within1RGB while continuous-area and alternate-sample controls reject. Exact GPU positions unmeasured;not universal sample rules,equal border/fill inputs or edge acceptance.'),
+    proof(root, 'scripts/join-material-divider-remount.mjs', /assert.equal\(samples.size, 24\)/,
+      'divider configured public remount and fresh paint exact-case join', 'Twenty physical contexts,sixty public remounts and280 boundaries retain peer survival/sampled disposal. Exact24-case join authenticates fresh measured crops and preserves40 passing/eight failing text diagnostics. Current runner receipts require exact metadata conservation. Not Angular remount,late completion,full case closure or current rendering acceptance.'),
+    proof(root, 'tests/material-parity/alignment-crop-provenance.spec.mjs', /test\('configured divider texture observations preserve source frames and bound upload residuals'/,
+      'divider configured texture upload and bounded interior sampler observation', 'Four contrast-DPR1 cases/eight owners retain raw textures,UVs and projected vertices with unchanged source-frame pixels. Row reversal leaves identical alpha and one-level RGB upload residuals. Existing nearest-texel model predicts5287 interior pixels within1RGB;wrong-row controls reject. Not native glyph equality,plane edges or shader causality.'),
     proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('retained inherited block margins extend computed-font finding without changing prior definitions'/,
       'inherited block margin computed-font refinement and complete predecessor conservation', 'Authenticates two public16-pair runs with64 PNGs and2515 dependencies,own-font and pixel controls,exact one-field extension of the existing computed-font finding and complete policy/helper/suite conservation. Inherited24px margins fail by8CSSpx atDPR1/2 before projection. Not flex unit loss,positioned Material attribution,all units,updates,lifetime or whole-case acceptance.'),
     proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('retained thin fill context intervention preserves geometry and separates DPR2 placement residual'/,

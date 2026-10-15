@@ -17,6 +17,21 @@ const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
 const previous = execFileSync('git', ['show', `000394eb:${file}`], { encoding: 'utf8', maxBuffer: 2e6 }).replaceAll('\r\n', '\n');
 const hash = source => createHash('sha256').update(source).digest('hex');
 
+test('divider standalone batch registration conserves prior producer and bounded proof definitions', async () => {
+  const producerFile = 'tests/material-parity/input-equivalence-audit.mjs';
+  const producer = readFileSync(producerFile, 'utf8');
+  const { restoreRootEditingProducerRegistration } = await import('./position-composition-producer-transition.mjs');
+  assert.equal(restoreRootEditingProducerRegistration(producer), execFileSync('git', ['show', `82bf9cee:${producerFile}`],
+    { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n'));
+  assert.throws(() => restoreRootEditingProducerRegistration(producer.replace('Twenty physical contexts,sixty public remounts', 'All rendering accepted')));
+  assert.throws(() => restoreRootEditingProducerRegistration(producer + '\n// unreviewed change'));
+  for (const args of [
+    ['scripts/audit-public-paragraph-linebox.mjs', '--verify', 'artifacts/material-parity/public-paragraph-linebox-20261015'],
+    ['scripts/check-retained-paragraph-font-box.mjs'],
+    ['scripts/check-material-divider-four-sample-model.mjs'],
+  ]) execFileSync(process.execPath, args, { stdio: 'pipe', maxBuffer: 4_000_000 });
+});
+
 test('configured divider texture observations preserve source frames and bound upload residuals', t => {
   const directory = 'artifacts/material-parity/divider-configured-texture-boundary-20261015';
   const bytes = readFileSync(`${directory}/latest-report.json`);

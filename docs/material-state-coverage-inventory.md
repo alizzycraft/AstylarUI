@@ -30,6 +30,41 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   inputs changed. All original final gates and36-family/relevant-state scope
   remain. No further export is justified solely by this status update.
 
+### Coherent standalone proof registration ready — October15
+
+Producer now registers213 focused proofs (none missing),708 LF-normalized source
+fingerprints. Four new entries cover the existing normal-paragraph owner proof,
+retained four-row separator model,actual configured remount/fresh-paint join and
+configured texture/interior observation. Fourteen source paths are added;no new
+source finding or renderer change. Exact new proof-entry hashes and whole prior
+producer restoration preserve209 and all older assertions. Current producerLF
+SHAe6336fa816a5778352963cdee293efbcb63d1a0815895a870b598a864b644eef.
+
+The existing crop suite now has6 tests,including normal-report verification,
+current/installed complete parser-owner execution,retained raster replay,and
+forged-description/unrelated-source rejection. Existing inherited/thin-context
+registration tests pass2/2,zero skips,7794.3514ms after selection. Initial and
+retry registration failures are retained:an overly broad proposal-path match in
+the new restoration branch selected a different proposal;the corrected scoped
+match restores the exact entire prior producer. No evidence receipt was waived.
+
+Final selected review87b7452d81b98c0c7923103042132c1fcf70e96a3bb2803c298deed7a017719e
+validates2311 cases/12876 dependencies,allpartial/unverified. Join conservation
+now also reverses exactly40 benchmark source receipts:whole benchmark suite
+equals predecessor after reversing only inventory count209→213. Existing8186
+runner transition and24 ownership/paint parents remain conserved to74d0.
+The selected review supersedesaf1b because its verifier/join sources and that
+single benchmark count changed. Named launcher selects87b7 in path and digest;
+all five original baseline paths remain. Launcher preflight is not publication.
+
+Logs divider-proof-batch-case-receipts-20261015 and
+divider-proof-batch-registration-complete-20261015,with matching stderr,retain
+terminal0;divider-proof-batch-launcher-preflight-20261015 records invocation.
+Accepted92346052 remains the preceding package. Next execute one coherent full
+export/conservation/cold-check/import milestone;do not report source registration
+as canonical publication or current browser acceptance. Original final gates and
+remaining case obligations are unchanged.
+
 ### Fresh divider paint evidence joined to exact cases — October15
 
 Existing join-material-divider-remount.mjs now also joins fresh4be9c6d1 crop

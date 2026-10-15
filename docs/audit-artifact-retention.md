@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep divider-proof-batch-registration[-retry,-final,-complete]-20261015 logs and
+stderr,divider-proof-batch-case-receipts-20261015 logs/stderr,and launcher-preflight.
+The first two failures explain the corrected proposal-path matching assumption;
+do not remove them or describe them as accepted runs. Selected87b7452d supersedes
+af1b for current source receipts;canonical92346052 is not yet replaced.
+
 Retain divider-fresh-paint-case-join-20261015 stdout/stderr and queuedaf1b74b4.
 It joins the existing fresh crop/texture captures to24 exact cases and supersedes
 1c7b802e for the next batch;it is not another capture or canonical generation.

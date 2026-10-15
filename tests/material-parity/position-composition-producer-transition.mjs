@@ -8,6 +8,43 @@ const hash = text => createHash('sha256').update(text).digest('hex');
 export function restoreRootEditingProducerRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
   if (current.includes('inherited block margin computed-font refinement and complete predecessor conservation')) {
+    if (current.includes('normal paragraph auto height and complete font-box owner boundary')) {
+      const batch = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+      assert.equal(batch.parseDiagnostics.length, 0);
+      const additions = batch.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === 'focusedProofInventory')
+        .body.statements[0].expression.elements;
+      assert.equal(additions.length, 213);
+      assert.deepEqual(additions.slice(0, 4).map(node => hash(node.getText(batch))), [
+        'f5fff63c70a74ec3909fa9c08d939ed22a23b13184072b88ea3a13d27242db76',
+        '451a389012bbe6be567b1454b9a4f22a9ba7cf9beaebd41a982db6689adb38e9',
+        '6fcaf18b73c2c428a1b3436cf3e9caf27dc70488ac3f382b27be509bb863717a',
+        '42b76ac5473abc6d372b7b076dcc95c5c72d14d71ecdcc3b83ad8314d2e7a3c1']);
+      assert.deepEqual(additions.slice(0, 4).map(node => node.arguments[3].text), [
+        'normal paragraph auto height and complete font-box owner boundary',
+        'divider retained four-row interior coverage prediction',
+        'divider configured public remount and fresh paint exact-case join',
+        'divider configured texture upload and bounded interior sampler observation']);
+      for (const entry of additions.slice(0, 4).reverse()) current = current.slice(0, entry.getFullStart()) + current.slice(entry.end + 1);
+      for (const file of ['scripts/audit-public-paragraph-linebox.mjs', 'scripts/check-retained-paragraph-font-box.mjs',
+        'artifacts/material-parity/public-paragraph-linebox-20261015/latest-report.json',
+        'scripts/check-material-divider-four-sample-model.mjs', 'scripts/audit-material-divider-remount.mjs',
+        'scripts/check-material-divider-remount.mjs', 'scripts/join-material-divider-remount.mjs',
+        'docs/evidence/material-divider-remount-initial.mjs.txt',
+        'artifacts/material-parity/divider-remount-peer-20261015/latest-report.json',
+        'artifacts/material-parity/divider-remount-peer-remaining-20261015/latest-report.json',
+        'tests/material-parity/alignment-crop-provenance.spec.mjs', 'scripts/audit-material-divider-texture-boundary.mjs',
+        'artifacts/material-parity/divider-configured-texture-boundary-20261015/latest-report.json',
+        'artifacts/material-parity/divider-alignment-provenance-20261015/latest-report.json']) {
+        const line = `    '${file}',\n`;
+        assert.equal(current.split(line).length, 2); current = current.replace(line, '');
+      }
+      const pin = current.slice(current.indexOf('function sourceFingerprints(root)')).match(/artifacts\/material-parity\/working-audit\/proposals\/((?!8091a07d)[a-f0-9]{64})\.json/);
+      assert.ok(pin); assert.equal(current.split(pin[1]).length, 2);
+      current = current.replace(pin[1], '74d0b4bbbfaa50fa18b0f4e91a4443aa72ec80813972466bbe9b7008d2e94210');
+      const prior = execFileSync('git', ['show', 'f3f98bfd:tests/material-parity/input-equivalence-audit.mjs'],
+        { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+      assert.equal(current, prior, 'Only four bounded proofs,fourteen sources and selected review pin extend209');
+    }
     assert.equal(hash(current), '584711154433dd18b0a64e47f8769755a2fcd7c8bd495e8b16a83f6cb3328734');
     const tree = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
     assert.equal(tree.parseDiagnostics.length, 0);
