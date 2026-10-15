@@ -4,6 +4,31 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Icon retained target AX and resource membership joined — October16
+
+Existing icon-case-obligation-join-20261007-retry census is SHA-pinned1bcab2ae
+and independently crosschecked against full reportab42dbec for all20 IDs/cohort
+dimensions. Four original log hashes authenticate16 paired AX cohorts and the
+bounded three-update/disposal membership. No settled browser investigation repeats.
+Original owning AX source uses benchmark=1/profile (unlike the ordinary tooltip
+scope error);target observations preserve native ariaHiddenElement versus exposed
+candidate image named Favorite. Four corrupted exposure controls reject. New
+join-material-icon-retained-obligations.mjs adds20 target-AX inspected-failure and
+20 historical resource-membership subrecords,not complete semantics/lifetime.
+Run icon-retained-obligation-join-complete-20261016 TERMINAL0 produces queued
+52d44b507fa8bc2c12fbb7c57080e734cfe899f9a1bb8a9949b4efe8e25bad01,
+superseding117a. Loader2311 cases/12889 dependencies,both flagsfalse;restoring
+original40 parent objects returns complete117a. Broader AX/AT,input mapping,
+paint,async/remount and currentness obligations remain;all cases still partial.
+Initial unstrengthened proposal a02f remains historical;stronger census/report
+pinning run failed ENOSPC during publication,not a semantic pass. Failure log
+icon-retained-obligation-join-final-20261016 is retained. Lossless forced LZX
+compression of four closed proposals (a02f,52d4,117a,6490) preserved their complete
+SHA-256 hashes;no evidence was deleted. Ordinary /C initially did nothing because
+files already had Compressed attributes. Three measured files352115928 logical
+bytes now occupy83697664;D:free396849152 after completion. No fresh capture,
+canonical export or renderer/fixture change;acceptedf663 remains separate.
+
 ### Missing actual-theme tooltip pointer ownership inspected — October16
 
 Dedicated bounded driver audit-material-tooltip-applied-theme-ownership.mjs

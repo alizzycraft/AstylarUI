@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep icon-retained-obligation-join[-final,-complete]-20261016 stdout/stderr,
+queued52d44b50 and predecessor117a. Initiala02f is historical;final ENOSPC failure
+is not successful publication,complete is TERMINAL0. Original four AX/resource
+logs and census remain required. Closed proposalsa02f,52d4,117a,6490 are now NTFS
+LZX-compressed with before/after SHA equality;reads/paths/content are unchanged.
+Do not decompress them merely to read or verify. No evidence removal occurred.
+
 Keep tooltip-applied-theme-ownership-case-join[-final]-20261016 stdout/stderr
 and queued117a41db. Initial main-list-only2293/2311 assertion fails;final includes
 all18 separate mobile flows and joins45 exact physical contexts without promoting
