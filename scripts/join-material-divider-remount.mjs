@@ -40,6 +40,26 @@ const configured = [...coverage.caseInventory.static, ...coverage.caseInventory.
 const selected = review.groups.filter(row => row.family === 'divider').map(row => row.case);
 assert.deepEqual([...samples.keys()].sort(), selected.slice().sort());
 
+// Reconcile only the demonstrated metadata-only runner transition. These are
+// current-source applicability receipts,not the unavailable original capture.
+const runnerFile = 'tests/material-parity/run-material-parity.mjs';
+const oldRunnerSHA = '584cdfc8b115e1a8c23834fe939ae6b3d4ff98bca25d61304a094a637825cc4e';
+const currentRunnerSHA = hash(readFileSync(runnerFile));
+assert.equal(currentRunnerSHA, '86ece08b913903e0a06231a58b32826a8fe561b468f82b7c57ccc32422da60e8');
+const conservation = execFileSync(process.execPath, ['--test', '--test-name-pattern=alignment provenance is an exact metadata-only whole-runner extension',
+  'tests/material-parity/alignment-crop-provenance.spec.mjs'], { encoding: 'utf8' });
+assert.match(conservation, /# pass 1\b/); assert.match(conservation, /# fail 0\b/);
+const runnerReceipts = [];
+function refreshRunnerReceipts(value) {
+  if (!value || typeof value !== 'object') return;
+  if (value.file === runnerFile && Object.hasOwn(value, 'sha256')) {
+    assert.equal(value.sha256, oldRunnerSHA); runnerReceipts.push(value); value.sha256 = currentRunnerSHA;
+  }
+  for (const child of Object.values(value)) if (typeof child === 'object') refreshRunnerReceipts(child);
+}
+refreshRunnerReceipts(review);
+assert.equal(runnerReceipts.length, 8186);
+
 function inputs(tree, sample, profile = 'light') {
   const owners = [];
   const walk = (node, key = 'root', parent = null) => {
@@ -111,8 +131,11 @@ assert.equal(loaded.cases.length, 2311); assert.equal(loaded.inspectionComplete,
 assert.equal(loaded.currentRenderingAccepted, false);
 assert.ok(loaded.cases.every(row => row.inspection === 'partial' && row.currentRendering === 'unverified'));
 for (const [id, previous] of previousOwners) review.groups.find(row => row.case === id).obligations.historyOwnership = previous;
+for (const receipt of runnerReceipts) receipt.sha256 = oldRunnerSHA;
 assert.equal(hash(JSON.stringify(review)), priorSHA, 'Unrelated review evidence changed');
 console.log(JSON.stringify({ phase: 'divider-remount-case-join', proposal, predecessor: priorSHA,
   joins, cases: loaded.cases.length, dependencies: loaded.evidenceFingerprints.length,
-  onlyDividerOwnershipSubrecordsChanged: true, physicalContexts: 20, inputNegativeControlsRejected: 3,
+  onlyDividerOwnershipAndDemonstratedRunnerReceiptsChanged: true, physicalContexts: 20, inputNegativeControlsRejected: 3,
+  runnerReceiptTransition: { file: runnerFile, before: oldRunnerSHA, after: currentRunnerSHA, receipts: runnerReceipts.length,
+    proof: 'Exact metadata-only whole-runner restoration;not original e01ef9dc capture recovery or current rendering acceptance' },
   inspectionComplete: loaded.inspectionComplete, currentRenderingAccepted: loaded.currentRenderingAccepted }));

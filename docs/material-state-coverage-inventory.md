@@ -30,6 +30,36 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   inputs changed. All original final gates and36-family/relevant-state scope
   remain. No further export is justified solely by this status update.
 
+### Queued review runner reconciliation — October15
+
+The queuedbc8a remount review was actually revalidated and failed its current
+runner receipt584cdfc8 versus86ece08b after the metadata-only crop instrumentation.
+This is a genuine stale applicability receipt,not permission to overwrite the
+originale01ef9dc capture provenance. Existing join-material-divider-remount.mjs
+now runs the exact whole-runner conservation assertion before refreshing8186
+runner receipts (all retain expected584cdfc8 before transition). No arbitrary
+source substitutions are accepted;the new raw hash is pinned86ece08b.
+
+Final queued proposal is1c7b802e32b2a35f2a0a115289cc5e78cc63508d5c867792e2207ccd4c62dbf3.
+It validates2311 cases/12727 dependencies,all partial/unverified. Reversing only
+these8186 receipts and24 divider ownership additions restores the complete74d0
+review digest. Actual remount verification still covers20 physical contexts,
+with four lifecycle and three input-correspondence negative controls. Log:
+divider-remount-runner-reconciled-join-final-20261015.log and matching stderr,
+terminal0. Preliminaryd23a proposal/log is superseded because its summary field
+incorrectly said only ownership changed;the final summary explicitly includes
+the demonstrated runner receipt transition. No original evidence was rewritten.
+
+Accepted92346052 and selected producer/launcher74d0 remain unchanged. The new
+proposal is dependency-valid standalone evidence,not canonical publication or
+full current-output acceptance. Next coherent integration must select the new
+proposal and register pending normal/raster/configured texture proofs together;
+do not spend a full export merely publishing this receipt correction. Case gaps
+remain input/anonymous-box correspondence,complete owner paint attribution,
+historical compensation/lifetime applicability and final current-code gates.
+The current configured texture/interior evidence is still a separate bounded
+proof,not an excuse to clear those remaining obligations.
+
 ### Configured divider texture upload boundary — October15
 
 The previously captured read-only boundary report now has an owning verification

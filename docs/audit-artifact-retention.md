@@ -56,6 +56,11 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Retain divider-remount-runner-reconciled-join[-final]-20261015 stdout/stderr.
+Final queued review1c7b802e supersedesbc8a/d23a for current runner applicability;
+the latter remain historical checkpoint evidence,not extra inspection coverage.
+No deletion or canonical package replacement was performed in this reconciliation.
+
 Keep divider-configured-texture-boundary-20261015 (four observations,eight owners,
 16 raw texture PNGs,report e7843435),capture stdout/stderr and
 divider-texture-boundary-verify-20261015 stdout/stderr. These reuse the fresh
