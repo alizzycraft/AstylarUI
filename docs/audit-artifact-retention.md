@@ -61,7 +61,11 @@ metadata-only instrumentation. Fresh divider-alignment-provenance-20261015 is
 a separate active capture,not a replacement for current-full-20261005 or its
 96 original alignment crops. Preserve any failed cases/preflight and checkpoint
 receipts. Original e01ef9dc producer/box uncertainty is not filled from a new run.
-Do not clean active capture output or treat report-mode completion as acceptance.
+Capture now completes terminal0 with report4be9c6d1. Retain144 PNGs (48 full,
+96 crops),48 input trees and checkpoint/source/runtime evidence with verification
+stdout/stderr dated20261015. All96 crops reconstruct;8 contrast-DPR1 diagnostic
+failures remain required evidence. All24 broad output passes do not establish
+local-paint or matrix acceptance. No original historical evidence was removed.
 
 Retain divider-remount-peer-remaining-20261015 and its fresh -checkpoint with
 remaining-capture/verify logs;initial-source-replay and all-case-join[-retry]

@@ -8,7 +8,9 @@ import ts from 'typescript';
 import { PNG } from 'pngjs';
 import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-metrics.mjs';
 import { materialLeftAlignedTextTargets, materialAbsoluteTextAlignmentTargets,
-  materialTextAlignmentToleranceOverrides, materialThresholds } from './benchmark.config.mjs';
+  materialTextAlignmentToleranceOverrides, materialThresholds, materialStaticCases, materialInteractionCases } from './benchmark.config.mjs';
+import { fingerprintDirectory, fingerprintModuleGraph, openMaterialCheckpoint, materialCaseKey } from './run-checkpoint.mjs';
+import { evaluateFocusedRaster } from './focused-raster-metrics.mjs';
 
 const file = 'tests/material-parity/run-material-parity.mjs';
 const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
@@ -93,4 +95,65 @@ test('absent geometry and missing ink preserve original decisions and write no i
     assert.equal(rows[0].cropProvenance, undefined);
     assert.equal(rows[0].measurementGeometry.deviceScaleFactor, 1);
   }
+});
+
+test('fresh divider crop provenance reconstructs all96 images from authenticated full captures', t => {
+  const directory = 'artifacts/material-parity/divider-alignment-provenance-20261015';
+  const bytes = readFileSync(`${directory}/latest-report.json`);
+  assert.equal(hash(bytes), '4be9c6d199952f35203f31d08def08d0d936071f4eb313b75ad3bbf72dd46f11');
+  const report = JSON.parse(bytes), provenance = report.captureProvenance;
+  assert.equal(report.mode, 'report-only');
+  assert.deepEqual(fingerprintModuleGraph(process.cwd(), file), provenance.harnessFiles);
+  assert.deepEqual(fingerprintDirectory(path.resolve('examples/material-showcase/dist/material-showcase/browser')), provenance.browserFiles);
+  const checkpoint = openMaterialCheckpoint({ directory, provenance, resume: true });
+  const actual = [...report.results.map(row => ['static', row]), ...report.interactions.map(row => ['interaction', row])];
+  const expected = [...materialStaticCases.map(row => ['static', row]), ...materialInteractionCases.map(row => ['interaction', row])]
+    .filter(([, row]) => row.family === 'divider').map(([kind, row]) => materialCaseKey(kind, row));
+  assert.deepEqual(actual.map(([kind, row]) => materialCaseKey(kind, row)).sort(), expected.sort());
+  assert.equal(actual.length, 24);
+  let crops = 0, diagnosticsPassing = 0, diagnosticsFailing = 0;
+  const metrics = [];
+  for (const [kind, row] of actual) {
+    assert.deepEqual(checkpoint.load(materialCaseKey(kind, row)), row);
+    assert.deepEqual(row.runtimeErrors, []);
+    assert.deepEqual(row.textAlignment.map(value => value.id), ['divider-above', 'divider-below']);
+    const parent = path.dirname(row.inputTrees.reference.file);
+    const full = Object.fromEntries(['reference', 'astylar'].map(side => [side, PNG.sync.read(readFileSync(path.join(parent, `${side}.png`)))]));
+    for (const alignment of row.textAlignment) {
+      const geometry = alignment.measurementGeometry, crop = alignment.cropProvenance, scale = row.viewport.deviceScaleFactor;
+      assert.equal(geometry.deviceScaleFactor, scale); assert.ok(geometry.reference && geometry.astylar);
+      assert.equal(crop.anchor, 'reference-border-box'); assert.equal(crop.paddingCSSpx, 4);
+      const box = geometry.reference, bounds = crop.boundsDevicePx;
+      assert.deepEqual(bounds, { left: Math.max(0, Math.floor((box.left - 4) * scale)),
+        top: Math.max(0, Math.floor((box.top - 4) * scale)), right: Math.min(full.reference.width, Math.ceil((box.right + 4) * scale)),
+        bottom: Math.min(full.reference.height, Math.ceil((box.bottom + 4) * scale)) });
+      const images = {};
+      const reconstruct = (image, area) => {
+        const result = Buffer.alloc((area.right - area.left) * (area.bottom - area.top) * 4);
+        let offset = 0;
+        for (let y = area.top; y < area.bottom; y++) for (let x = area.left; x < area.right; x++) {
+          image.data.copy(result, offset, (y * image.width + x) * 4, (y * image.width + x) * 4 + 4); offset += 4;
+        }
+        return result;
+      };
+      for (const side of ['reference', 'astylar']) {
+        const image = PNG.sync.read(readFileSync(path.join(parent, `${alignment.id}-alignment-${side}.png`)));
+        assert.equal(image.width, bounds.right - bounds.left); assert.equal(image.height, bounds.bottom - bounds.top);
+        assert.deepEqual(Buffer.from(image.data), reconstruct(full[side], bounds));
+        if (crops === 0) assert.notDeepEqual(Buffer.from(image.data), reconstruct(full[side],
+          { ...bounds, top: bounds.top + 1, bottom: bounds.bottom + 1 }));
+        images[side] = image; crops++;
+      }
+      // Same retained diagnostic as the historical divider review,not a new
+      // configured threshold or a replacement for equal-input investigation.
+      const metric = evaluateFocusedRaster(images.reference, images.astylar, { minimumSsim: .8 });
+      if (metric.matches) diagnosticsPassing++; else diagnosticsFailing++;
+      metrics.push({ case: materialCaseKey(kind, row), id: alignment.id, metric });
+    }
+  }
+  assert.equal(crops, 96); assert.equal(metrics.length, 48);
+  assert.equal(report.summary.meetsAcceptance, false); assert.equal(report.interactionSummary.meetsAcceptance, false);
+  t.diagnostic(JSON.stringify({ sourceBoundCases: 24, reconstructedCrops: crops, diagnosticTargets: 48,
+    diagnosticsPassing, diagnosticsFailing, metrics, shiftedCropRejected: true,
+    boundary: 'Fresh served-build crop extraction and unchanged diagnostic metric;not recovered historical producer,full matrix,input equivalence or current-library acceptance.' }));
 });

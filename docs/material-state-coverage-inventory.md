@@ -54,14 +54,34 @@ for fractional/clipped DPR1/2 controls;absent geometry/ink preserve decisions
 and write no invented crops. Existing dirty text-alignment-metrics.spec.mjs was
 not edited. Runner syntax and scoped git diff --check pass.
 
-Focused report-only capture now launched as session52489 with unchanged complete
-divider subset (16 static+8 inspect),--skip-build and a new directory
-divider-alignment-provenance-20261015;port4457. Logs divider-alignment-provenance-
-capture-20261015 stdout/stderr. Existing preflight/threshold computations remain;
-this is not --enforce or a fresh library build. Preserve original full run and
-failures. Consumed runner inputs stay frozen until terminal capture. Next verify
-all recorded owner/crop rectangles and exact source/asset provenance,then classify
-paint observations and reconcile source fingerprints at a coherent batch.
+Focused report-only capture session52489 now TERMINAL0:complete divider subset
+(16 static+8 inspect),--skip-build,new divider-alignment-provenance-20261015
+directory,port4457. Logs divider-alignment-provenance-capture-20261015 stdout/stderr.
+Chrome155.0.8059.40;reportSHA4be9c6d199952f35203f31d08def08d0d936071f4eb313b75ad3bbf72dd46f11.
+All24 existing per-case output checks pass,no runtime errors. Static minimumSSIM
+0.9885041276800782,inspect minimum0.9936804716330772. Both aggregate acceptance
+flags remain false because this is a filtered report-only run,not --enforce or a
+fresh library build. Existing thresholds and original full/failing runs remain.
+
+All48 text target records contain actual supplied measurement boxes,DPR and crop
+provenance. The owning suite now passes4/4,zero skips,3987.9009ms,including fresh
+checkpoint/full-source/served-build and exact24-case membership validation.
+All96 decoded crops independently reconstruct byte-for-byte from their own full
+PNGs and recorded device bounds;a shifted crop rejects. Source geometry is now
+observable for this new run,not synthesized for the old96 crops. Log:
+divider-alignment-provenance-verify-20261015 stdout/stderr.
+
+Unchanged historical local diagnostic settings (minimumSSIM.8) still yield40
+passing/8 failing text targets. Failures are Above/Below in contrast desktop,
+tablet,comparison and desktop-DPR1 inspect;similarities0.7465750858556326 and
+0.7298902713191046,phase offsets0/0. All48 sharpness subdiagnostics pass. Do not
+hide these failures behind24 broad output passes or call them eight failed cases.
+This establishes current served-build extraction/diagnostics,not equal inputs,
+full local-paint causality,current-library freshness or historical font timing.
+Next join this source-bound evidence to exact paint/source obligations and trace
+the remaining contrast glyph difference using existing reductions,then reconcile
+source fingerprints at a coherent batch. No second capture is needed merely
+to verify stored crops or repeat the already-settled historical location search.
 Accepted package92346052 stays the preceding pinned evidence boundary;the new
 consumed harness bytes require explicit reconciliation before another canonical
 check/export. Pendingbc8a ownership and normal/raster proofs remain queued.
