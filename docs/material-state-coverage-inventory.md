@@ -32,6 +32,17 @@ This pointer supersedes the historical checkpoint chronology immediately below.
 
 ### October15 evidence chronology — historical checkpoints
 
+Canonical source/proof comparison now has authenticated predecessor sections
+without rereading the old decoded report. Existing82bf9cee producer functions
+execute with exact Git bytes for producer,policy,benchmark,transition helper and
+launcher only;all other reads remain actual. Both reconstructed complete section
+digests equal saved accepted86961 typed hashes. Current functions yield207 proofs
+versus206,zero missing;all prior definitions conserve except line anchors and the
+sole new editing/root proof is present. Log
+configured-editing-root-source-section-reconstruction-20261015.log retains both
+inventories/hashes for comparison to the running current-stream census. This is
+source/proof authenticity,not current rendering or canonical delta acceptance.
+
 Divider pending-versus-measured reconciliation now joins five retained proof logs
 in one queued batch,not another capture/export. Proposal
 cc2dcdafc39dacc43539e24472de5cf682b01b540e59af69aa42875677a75b28
