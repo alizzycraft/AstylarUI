@@ -30,6 +30,39 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   inputs changed. All original final gates and36-family/relevant-state scope
   remain. No further export is justified solely by this status update.
 
+### Button-family authored applicability closes192 pending case joins — October15
+
+Compact selected87b7 census distinguishes UNVERIFIED applicability from missing
+captures:authoredActivation1805,programmaticFocus1797,localPaint969. All2311
+input/style,semantics,history and source-currentness parents remain partial.
+These are obligation counts,not failed cases or a new audit denominator.
+
+Existing required-state map already makes authored buttons subject to activation
+and focus inspection. New narrow join-material-button-applicability.mjs reuses
+the existing proposal loader and authenticates432 paired trees across216 cases:
+core52,toolbar52,card52,button60. Exact336 native button IDs each match a candidate
+authored button;disabled/aria-disabled inputs remain recorded,not assumed equal.
+Disabled controls retain negative activation/focus expectations rather than being
+silently excluded. Native/button identity establishes applicability only,not
+delivery,keyboard equivalence,focus restoration or paint success.
+
+Queued0183b98b286a6e00b5c030025d77b9119a996c5c162ec785a688113d0b9e6ae4
+changes only384 applicability fields and bounded evidence subrecords across192
+cases. Existing top-level dispositions,remaining work and all other observations
+are preserved. Restoring those192 pairs of original obligation objects restores
+the complete87b7 review digest. Four controls reject changed native type,missing
+candidate,extra unreviewed button and changed tree bytes. Validator checks2311
+cases/12877 dependencies;inspectionComplete/currentRenderingAccepted stayfalse.
+Log button-authored-applicability-case-join-20261015 stdout/stderr terminates0.
+
+For this QUEUED review only,activation applicability unverified1805→1613 and
+programmatic focus1797→1605. No case becomes fully inspected. This is historical
+authored applicability,not current-runtime acceptance. Live export1451 still
+selects immutable87b7;the new script/proposal are outside its explicit source
+inventory and will join a later coherent batch. No renderer/fixture changes or
+browser recapture. Next reuse existing action/focus records against these exact
+owners and resolve remaining families' applicability without inventing variants.
+
 ### Rejected export collector boundaries verified; raw replay remains distinct — October15
 
 Remaining collector run58185 TERMINAL1:14/15 checks pass,311551.2082ms. Follow-up

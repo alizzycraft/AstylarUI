@@ -56,6 +56,10 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep button-authored-applicability-case-join-20261015 stdout/stderr and queued
+0183b98b. This is a216-case/432-tree applicability join,not another browser capture
+or canonical generation. It remains outside live1451's selected87b7 inputs.
+
 Keep crop-metadata-remaining-collector-boundaries-20261015 (14/15,one stale
 current-hash assertion) and crop-metadata-caret-boundary-complete-20261015
 (3/3) stdout/stderr. Keep root-editing-exact-metadata-read-replay-20261015 failure:
