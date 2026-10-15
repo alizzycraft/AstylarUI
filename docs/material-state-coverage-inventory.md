@@ -103,9 +103,25 @@ entire retainedTypography section (therefore its31657 rows). Nine changed:
 sourceFingerprints,coverage,controlLineBoxes,discrepancies,ownerCaretInputs,
 reviewedSourceBatchInputs,controlTypography,sourceFindings,focusedProofs.
 The159 findings are separately pending full content comparison,not omitted
-or assumed conserved from their unchanged count. Next explain49 row changes
-and all nine section deltas,including non-row control metadata,then import only
-after independent cold success. Existing worker19856/launcher22960 remain live;
+or assumed conserved from their unchanged count. Changed-row conservation now
+passes terminal0:margin-context-canonical-row-conservation-retry-20261015.log
+authenticates all49 current/predecessor complete-row hashes. Exactly48 control
+rows restore after producer58471115→faf7071c receipt substitution;the one scalar
+row restores after its48 controlProofSha256 pointers map to those same verified
+rows. Complete predecessor objects agree after these exact changes;no observed
+values or classification fields change. Non-row control metadata digest remains
+83bcfbcbbaa9d2c33850ab3d616911e23960741b998ed0357f5007b87f7d7c01.
+The first attempt's direct-receipt-only assumption failed on the scalar row;
+retain its stdout/stderr as diagnostic failure,not a candidate observation defect.
+The retry verifies both dependent control content and scalar pointers,not arbitrary
+hash normalization. Full decoded candidate length/hash reauthenticate at completion.
+
+Readable conservation also passes:margin-context-readable-conservation-20261015.log
+proves whole accepted ac8a1d7a text restores after removing exactly two new proof
+descriptions and normalizing only benchmark line anchors. Prior/current LF hashes
+2524a076/2e56cc60;input-equivalence verdict unchanged. Next compare159 source
+findings and remaining changed section content;then import only after independent
+cold success. Existing worker19856/launcher22960 remain live;
 no cold terminal result or acceptance claim. No new browser capture or producer
 change was needed to resolve the population accounting question.
 
