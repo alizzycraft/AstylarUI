@@ -2,6 +2,24 @@
 
 ## Current integration pointer — October15
 
+Queued editing/root regression receipt reconciliation now passes. The root test
+conserves the entire82bf9cee benchmark suite after removing only its added AST
+test statement;unrelated trailing source changes reject. Original string-boundary
+attempt matched its own quoted text and failed;preserve
+public-semantic-root-noop-source-conservation-20261015.log. AST-based retry
+public-semantic-root-noop-source-conservation-retry-20261015.log passes1/1,
+zero skips,1760.1786ms. No owning input-boundary source or capture changed.
+Existing saveReviewProposal/loader refresh only40 benchmark receipt leaves in
+queued24ee to f419be4f60e241e0ec75261f1ac635deb6c2cbbed6acd8b8651038df259ebb87
+(fileSHA5a02363e0201fbc7b393216aef98525d1e522614172442ad57bea6e0366d1dc0).
+Log configured-editing-root-regression-proposal-refresh-20261015.log records
+all2311 cases/12709 authenticated dependencies and complete other-field equality.
+Current benchmark rawSHAa0e3f59db94bea40211c54affae99008af22bc3c3a4cd92704d21e55e9cfe22f.
+This is dependency reconciliation only:the existing generator still lacks the
+16 editing subrecord join and producer/finding registration remains pending.
+Do not export or treat f419 as canonical yet;accepted86961 stays historical to
+this benchmark addition. All inspection/render acceptance flags remain false.
+
 Publication82bf9cee is pushed;remote accepted the65.22MB canonical gzip with
 GitHub's existing large-file warning. Root-focus evidence now has a retained
 regression in benchmark-config.spec.mjs:unchanged public input,2515 dependencies,

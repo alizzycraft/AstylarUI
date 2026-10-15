@@ -19,6 +19,25 @@ import { materialAbsoluteTextAlignmentTargets, materialAdditionalMeasurementTarg
 
 test('retained public unchanged-root updates preserve semantic focus failure at both DPRs', () => {
     const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+    // Conserve the complete previous suite, not merely its old assertion count.
+    const suiteFile = 'tests/material-parity/benchmark-config.spec.mjs';
+    const suite = readFileSync(suiteFile, 'utf8').replaceAll('\r\n', '\n');
+    const predecessor = execFileSync('git', ['show', `82bf9cee:${suiteFile}`],
+        { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+    const suiteAst = ts.createSourceFile(suiteFile, suite, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    const testStart = name => {
+        const entries = suiteAst.statements.filter(node => ts.isExpressionStatement(node)
+            && ts.isCallExpression(node.expression) && node.expression.expression.getText(suiteAst) === 'test'
+            && node.expression.arguments[0]?.text === name);
+        assert.equal(entries.length, 1);
+        return entries[0].getStart(suiteAst);
+    };
+    const start = testStart('retained public unchanged-root updates preserve semantic focus failure at both DPRs');
+    const end = testStart('public equal-input flex em margins preserve exact failure and block pixel controls');
+    assert.ok(start >= 0 && end > start);
+    const restore = text => text.slice(0, start) + text.slice(end);
+    assert.equal(restore(suite), predecessor);
+    assert.notEqual(restore(suite + '\n// unrelated assertion drift'), predecessor);
     const file = 'artifacts/material-parity/public-semantic-root-noop-20261015/latest-report.json', bytes = readFileSync(file);
     assert.equal(hash(bytes), '841cf391e108c943dce2593da5b6ff7fb5430f307da1be9229252723c9ac5a48');
     const r = JSON.parse(bytes);

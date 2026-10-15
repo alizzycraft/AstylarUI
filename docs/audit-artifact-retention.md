@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Retain queued configured-editing/root proposalf419be4f and predecessor24ee,
+configured-editing-root-regression-proposal-refresh-20261015.log,and both
+public-semantic-root-noop-source-conservation[-retry]-20261015.log files. The
+initial boundary-selection failure remains failure evidence;the AST-based retry
+proves whole benchmark predecessor conservation and permits exactly40 receipt
+refreshes. All other review fields and12709 dependencies authenticate unchanged.
+This is not canonical publication or permission to delete predecessor evidence.
+
 October15 cold check,compact import and whole-index verification now complete
 exit0 for86961b43. Retain flex-margin-queued-canonical-cold-check-20261015.log,
 flex-margin-canonical-import-20261015.log and
