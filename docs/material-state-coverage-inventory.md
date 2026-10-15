@@ -4,6 +4,26 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Icon synthetic document record is not another authored wrapper — October16
+
+Question resolved at source/serialization boundary,not by changing inputs.
+icon-document-container-source-trace-20261016 TERMINAL0 executes the original
+transpiled collectAuthoredInputTree against a document with one main child:it
+emits keyroot/authored{} then page,parentroot. Renderer createSiteFromData AST
+independently identifies separate createRootBodyElement and one processChildren
+call on siteData.root.children. Thus the extra serialized document-container
+record must not be counted as an extra authored wrapper mesh. The viewport
+root-body owner DOES exist separately and is not certified behaviorally neutral.
+All20 original icon tree pairs authenticate;their document record has no normal
+style observation,and exactly one root rule contains only background. That
+background equals the native frame's computed RGB in all20. No padding/font/root
+type input is invented from the absent serialized observation. Current serializer
+and renderer whole-source/method hashes are retained in the log. This is current
+source tracing plus historical input membership,not fresh package/runtime proof,
+generic root/default/inheritance/containing-block equivalence or case closure.
+Remaining root question is actual viewport-owner behavior,not an unexplained
+additional authored node. Do not change fixture hierarchy to remove this record.
+
 ### Icon complete recorded-node hierarchy inventory — October16
 
 Existing join extended,not another capture/framework. Across20 authenticated

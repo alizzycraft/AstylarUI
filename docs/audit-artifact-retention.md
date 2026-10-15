@@ -56,6 +56,10 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep icon-document-container-source-trace-20261016 stdout/stderr:original
+serializer execution,current renderer AST trace and20 authenticated input pairs.
+No temporary source,PNG,capture or canonical package was generated or replaced.
+
 Keep icon-recorded-hierarchy-obligation-join-20261016 stdout/stderr and queued
 4304b823,which supersedes52d4 for the combined icon join. Its closed JSON uses
 lossless LZX with before/after SHA equality. Original trees/logs and predecessor
