@@ -71,6 +71,39 @@ to exact case records. Next review exact input/context applicability and join
 only proved ownership boundaries through the existing obligation infrastructure;
 retain the separate late-font proof. Whole-case counts remain unchanged.
 
+### Divider remount exact input/case applicability — October15
+
+The fresh lifetime probe now has an exact bounded case join,not merely a family
+label. scripts/join-material-divider-remount.mjs authenticates accepted92346052
+index478d2448 and selected74d0 predecessor. For static:divider@light/desktop and
+interaction:divider@light/desktop-dpr1/inspect plus desktop-dpr2/inspect,it checks
+all10 authored node records including synthetic root,parent/order/content and293
+identical style rules against each original candidate tree. Canvas1440x1000 and
+actual light/DPR contexts match. These are supplementary public lifecycle actions,
+not replacements for the original static/inspect action receipts.
+
+Initial whole294-rule equality correctly rejected one clock-derived difference:
+rule129 .datepicker-selected top186→226px,left50→170px. Current showcase source
+computes both from live day/month helpers. The join preserves these unequal raw
+values and proves that this exact simple-class selector has zero authored owners
+in both divider documents;every other field of that rule agrees. It does NOT
+discard selectors generically,normalize clock-dependent calendar inputs or claim
+global rule-list equality. Three forged applicable-rule,node-content and newly
+matching-calendar-owner controls reject. Input applicability log:
+divider-remount-input-applicability-20261015.log;original rejection remains in
+the conversation/tool trace,not recast as a successful all-rule comparison.
+
+Owning join terminal0 and retained lifetime verifier pass without new browser
+capture. Proposal7425d2a35c7c583d10a126a79fe432c8ffe1d2ea8b53de843c99b4a2f627a516
+adds ONLY actualDividerPublicRemount under historyOwnership in these3 records;
+restoring those three parent objects restores complete predecessor74d0 digest.
+Existing loader validates2311 cases/12723 dependencies,both completion flagsfalse;
+all cases stay partial/unverified. Log divider-remount-case-join-20261015.log and
+matching stderr. Mount-option history,plugin-list serialization,resolved paint,
+Angular remount,late-font/semantic isolation and other physical cohorts remain
+separate. Proposal is queued outside accepted209-proof package92346052;next group
+genuine remaining obligation work before source integration/export.
+
 ### Previous package reconciliation — historical checkpoints
 
 - Accepted package/index:6e20a321/6d3df3e7,159 findings,current207-proof source

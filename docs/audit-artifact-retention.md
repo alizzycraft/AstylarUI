@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep queued7425d2a3 with predecessor74d0 and divider-remount-case-join/input-
+applicability logs dated20261015. The join retains the two clock-derived values
+on the absent calendar selector,not a rewritten stylesheet. Only3 ownership
+subrecords change;all other2311-case fields conserve and12723 dependencies
+validate. New proposal is needed for future coherent integration,not stale scratch.
+Do not delete its original trees/remount report or promote it to canonical status.
+
 Retain divider-remount-peer-20261015 (two per-DPR observations and report),its
 fresh -checkpoint manifest and capture/verify stdout/stderr logs. All28 boundaries
 are required provenance for bounded actual-divider remount/peer evidence,not
