@@ -14,9 +14,9 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   Consumed producer/policy/benchmark/helper/launcher inputs remain frozen.
 - Candidate6e20a321:70552528 compressed bytes,decoded2290631277 bytes/SHA
   ba2eb95a85644ac70cc8b925d8028293e62beacc436b571951c19fa9b9557377.
-  Conservation census60704/worker36660 reads this stream once against accepted
-  compact row hashes and saved86961 section digests;log
-  configured-editing-root-canonical-census-20261015.log. No acceptance yet.
+  Census60704 completed:48496 unchanged rows/50 changed,nine changed sections;
+  log configured-editing-root-canonical-census-20261015.log. Row conservation
+  passes;whole-section/case transitions and cold check remain. No import yet.
 - Selected review:cfd613cf,2311 partial/unverified cases,12709 dependencies;
   root/16 configured editing evidence included,not complete-case acceptance.
 - Queued outside export:cc2dcdaf extends e4b85e47's24 anonymous-border joins with
@@ -31,6 +31,18 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   Supplemental relevant-state/applicability closure and all final gates remain.
 
 ### October15 evidence chronology — historical checkpoints
+
+Candidate full stream now authenticates decoded length/SHA and complete48546-row
+census against accepted compact hashes;all section digests/selected metadata are
+retained in configured-editing-root-canonical-census-20261015.log SHA
+41198dc1ac802f2fd2dc35901638d4060a05e39ab49315270d3f20c4ba86e265.
+Strict row conservation passes:48496 unchanged,48 producer-receipt-only controls,
+one derived scalar receipt and one existing semantic finding's sole root refinement.
+No appended/removed rows;48 forged controls reject. Current source/proof sections
+equal executed inventories;base coverage,summary and contract are unchanged.
+Log configured-editing-root-canonical-row-conservation-20261015.log. Nine changed
+whole sections still need exact transition checks,and selected case review/cold
+verification remain separate gates. Reuse saved stream data,not another full scan.
 
 Canonical source/proof comparison now has authenticated predecessor sections
 without rereading the old decoded report. Existing82bf9cee producer functions
