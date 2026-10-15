@@ -56,6 +56,11 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep icon-formatting-context-obligation-join-20261016 stdout/stderr and queued
+61adfde6,which supersedes4304 for the combined join. Prior source is Git57914ec4.
+Closed JSON uses hash-preserving LZX. Existing context evidence is reused;no
+additional PNGs,capture or replacement canonical report is produced.
+
 Keep icon-document-container-source-trace-20261016 stdout/stderr:original
 serializer execution,current renderer AST trace and20 authenticated input pairs.
 No temporary source,PNG,capture or canonical package was generated or replaced.

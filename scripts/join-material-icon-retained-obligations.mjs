@@ -83,6 +83,17 @@ function inspectHierarchy(reference, candidate) {
   assert.equal(png.readUInt32BE(16), 24); assert.equal(png.readUInt32BE(20), 24);
   const frame = unique(reference.nodes.filter(n => n.key === host.parent)); assert.equal(frame.type, 'main');
   const synthetic = unique(candidate.nodes.filter(n => n.key === page.parent)); assert.deepEqual(synthetic.authored, {});
+  const nativeRootStyle = reference.styles[host.style];
+  assert.equal(nativeRootStyle.display, 'block');
+  assert.equal(reference.styles[frame.style].display, 'block');
+  assert.equal(reference.styles[icon.style].display, 'inline-block');
+  assert.equal(page.normalResolvedStyle.display, 'block');
+  for (const stage of ['normalResolvedStyle', 'interactionResolvedStyle', 'resolvedStyle']) {
+    assert.equal(demo[stage].display, 'flex'); assert.equal(demo[stage].flexDirection, 'column');
+    assert.equal(image[stage].display, 'inline-block');
+  }
+  const displayRules = candidate.rules.filter(r => r.selector === '#icon-root' && r.display !== undefined);
+  assert.equal(displayRules.length, 1); assert.equal(displayRules[0].display, 'flex');
   const paired = [{ reference: frame.key, candidate: page.key }, { reference: host.key, candidate: demo.key }];
   for (const [type, id, text] of [['p', 'eyebrow', 'Angular Material 20 reference'], ['h1', 'title', 'icon']]) {
     const left = unique(reference.nodes.filter(n => n.parent === frame.key && n.type === type));
@@ -96,6 +107,16 @@ function inspectHierarchy(reference, candidate) {
       classification: 'application-plugin-authoring-defect', definition: 'fixture-icon-svg-replaced-by-fixed-raster',
       nativePathSha256: hash(leaf.attributes.d), candidatePngSha256: hash(png), intrinsicPngSize: [24, 24] },
     extraDocumentNode: synthetic.key,
+    formattingContext: { disposition: 'inspected-unequal-input', firstDivergence: 'authored-demo-root-display-before-layout',
+      classification: 'application-plugin-authoring-defect',
+      reference: { rootDisplay: nativeRootStyle.display, parentDisplay: reference.styles[frame.style].display,
+        childDisplay: reference.styles[icon.style].display, childIsFlexItem: false, rootHeight: nativeRootStyle.height,
+        boxSizing: nativeRootStyle.boxSizing },
+      candidate: { authoredRootRule: displayRules[0], rootDisplay: demo.normalResolvedStyle.display,
+        flexDirection: demo.normalResolvedStyle.flexDirection, parentDisplay: page.normalResolvedStyle.display,
+        childDisplay: image.normalResolvedStyle.display, childIsFlexItem: true, rootHeight: demo.normalResolvedStyle.height,
+        boxSizing: demo.normalResolvedStyle.boxSizing },
+      boundary: 'Reuses established icon context finding;matching child display/longhands do not make block-inline and flex-item placement equivalent. Not equal-input anonymous-line layout or current paint acceptance.' },
     boundary: 'Recorded DOM/SiteData element inventory only. Synthetic-root behavior,anonymous formatting boxes,computed property equality,scaling/raster fidelity and current runtime remain unproved.' };
 }
 let hierarchyNegativeControls = 0;
@@ -116,6 +137,8 @@ for (const c of census.cases) {
     assert.throws(() => inspectHierarchy(missing, trees.astylar)); hierarchyNegativeControls++;
     const wrong = structuredClone(trees.astylar); wrong.nodes.find(n => n.authored?.id === 'icon-primary').parent = 'root';
     assert.throws(() => inspectHierarchy(trees.reference, wrong)); hierarchyNegativeControls++;
+    const wrongDisplay = structuredClone(trees.astylar); wrongDisplay.nodes.find(n => n.authored?.id === 'icon-root').normalResolvedStyle.display = 'block';
+    assert.throws(() => inspectHierarchy(trees.reference, wrongDisplay)); hierarchyNegativeControls++;
   }
   originals.push({ row, semantics: row.obligations.semantics, history: row.obligations.historyOwnership, inputs: row.obligations.inputStyleStructure });
   const evidence = { census: { file: censusFile, sha256: hash(readFileSync(censusFile)) },

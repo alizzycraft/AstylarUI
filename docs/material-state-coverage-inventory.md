@@ -4,6 +4,26 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Icon formatting-context finding reused in exact-case hierarchy — October16
+
+The anonymous-line question is NOT a new equivalent-input renderer failure.
+The existing authenticated20-case context finding already establishes native
+icon-root block flow versus authored candidate column flex. Updated existing
+icon join independently checks the current-full20 paired trees:both child owners
+inline-block,but only candidate is a flex item;native frame/candidate page are
+block. Candidate normal,effective and resolved stages all agree with exactly one
+explicit#icon-root display:flex rule. Raw root height/boxSizing remain different
+and recorded,not normalized. Do not use equal child display/longhands to assert
+equivalent placement contexts or patch the fixture to force a matching baseline.
+icon-formatting-context-obligation-join-20261016 TERMINAL0 yields queued
+61adfde6812e8b54592ca634236225b95f3116cdb67bd344d7fa19d74669c05d,
+superseding4304 for the combined icon join. Four AX+three hierarchy/display
+controls reject;2311 cases/12889 dependencies authenticate,complete117a restores,
+both completion flagsfalse. No settled context test or browser capture repeated,
+no new finding,renderer/fixture change or canonical export. Closed proposal is
+losslessly LZX-compressed with before/after SHA equality. Actual equivalent-input
+inline formatting and other root/default behavior remain separate questions.
+
 ### Icon synthetic document record is not another authored wrapper — October16
 
 Question resolved at source/serialization boundary,not by changing inputs.
