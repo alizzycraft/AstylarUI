@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep tree-click-focus-authored-applicability-case-join[-final]-20261015 stdout/
+stderr and queued21d8e0a7. The initial count assertion failure and final successful
+join are distinct evidence. This supersedes queued0c71 for applicability only;
+the live divider candidate still selects87b7. Keep divider-proof-batch-section-
+conservation-20261015 stdout/stderr:both packages authenticate,80 sections remain,
+nine changed sections still need explanation. It does not replace either package.
+
 Keep labelled-control-authored-applicability-case-join-20261015 stdout/stderr
 and queued0c71b36a. It supersedescea6 for current expanded applicability;source
 before expansion is Gitc4a890bb. Focus applicability is now fully dispositioned

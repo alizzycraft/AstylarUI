@@ -23,6 +23,27 @@ No renderer/fixture change, recapture, criterion change or case promotion occurr
 
 ### Tree leaf click applicability is not absent selection — October15
 
+The existing join now authenticates this contract and changes52 additional tree
+activation applicability fields. Final run tree-click-focus-authored-applicability-
+case-join-final-20261015 TERMINAL0 creates queued21d8e0a78bb95717d21864eed1d75208431eb654508f3dfbf2309b2bbc5d2ed1,
+superseding0c71 for the next coherent batch. Across1957 scoped cases it changes
+3135 applicability fields in1805 cases;3914 trees/2661 native controls authenticate.
+All23 negative controls pass,including corrupted map bytes. The existing loader
+validates2311 cases/12879 dependencies;restoring original obligation objects
+recovers whole87b7. Activation unverified519→467 (five editable families only);
+focus unverified remains0. Both completion flags remainfalse. Initial run retains
+its1797-versus1805 assertion failure:eight tree cases already had focus applicability,
+so adding their activation increases the changed-case union. No behavior is promoted.
+Queued21d8 remains outside the live candidate/cold check.
+
+Section conservation session64210 now TERMINAL0:compressed and decoded hashes
+authenticate both accepted92346052 and candidatef663. All80 section names remain;
+71 structural section digests are unchanged. Nine changed sections require exact
+explanation:sourceFingerprints,coverage,controlLineBoxes,discrepancies,gapReviewInputs,
+ownerCaretInputs,reviewedSourceBatchInputs,controlTypography,focusedProofs.
+This complete section census is not approval of those changes. Cold check51122
+remains running (worker3276 verified live);no compact import or acceptance yet.
+
 Specific question: do the52 authored leaf-tree cases lack all pointer activation,
 or do they retain a click-to-focus contract despite no expand/select action?
 The retained full-run checkpoint authenticates chunk-7SL66K3U.js

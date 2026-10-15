@@ -9,6 +9,40 @@ import { saveReviewProposal, loadCaseObligationReview } from './audit-findings-s
 const script = 'scripts/join-material-button-applicability.mjs';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const receipt = file => ({ file, sha256: hash(readFileSync(file)) });
+// A leaf has no authored expand/select action, but the captured Material host
+// still binds click to focus. Authenticate historical source,not today's install.
+const treeCheckpointFile = 'artifacts/material-parity/current-full-20261005/checkpoint/manifest.json';
+const treeBundleRoot = 'examples/material-showcase/.audit-historical-build-1275fa1d/dist/authenticated-replay/browser/';
+function inspectTreeClickContract(mapBytes) {
+  const checkpoint = JSON.parse(readFileSync(treeCheckpointFile));
+  const files = ['chunk-7SL66K3U.js', 'chunk-7SL66K3U.js.map'].map(name => {
+    const expected = checkpoint.provenance.browserFiles.find(item => item.file === name);
+    assert.ok(expected);
+    const file = treeBundleRoot + name;
+    const bytes = name.endsWith('.map') && mapBytes !== undefined ? mapBytes : readFileSync(file);
+    assert.equal(hash(bytes), expected.sha256);
+    return { file, sha256: expected.sha256 };
+  });
+  assert.equal(files[0].sha256, '816c0114708acc9b883f9ac300e21017e2556f81fecaf26e5719bc334cf80237');
+  assert.equal(files[1].sha256, '67e956a6f4b3b0325fc51b7b45688a27d5e9307095f8b4a20391a96f68244df4');
+  const map = JSON.parse(mapBytes ?? readFileSync(files[1].file));
+  const sources = [
+    ['@angular/material/fesm2022/tree.mjs', 'e60038e9cdd752cfbfbdf606a86f3253ea15b54a48c3e718cec42f6bbe388c27', 'return ctx._focusItem();'],
+    ['@angular/cdk/fesm2022/tree.mjs', 'f4c5eba6f763336787b1367004e87e10e5f510dfd2c629bbc1db61ef20610981', 'return ctx._setActiveItem();'],
+  ].map(([suffix, sha256, handler]) => {
+    const index = map.sources.findIndex(name => name.endsWith(suffix));
+    assert.ok(index >= 0);
+    const source = map.sourcesContent[index];
+    assert.equal(hash(source), sha256); assert.ok(source.includes(handler));
+    return { source: map.sources[index], sha256, handler };
+  });
+  return { checkpoint: receipt(treeCheckpointFile), files, sources,
+    contract: 'Leaf pointer click participates in tree focus management;no authored selection,expansion or successful event delivery is inferred.' };
+}
+const treeClickContract = inspectTreeClickContract();
+assert.throws(() => inspectTreeClickContract(Buffer.concat([
+  readFileSync(treeBundleRoot + 'chunk-7SL66K3U.js.map'), Buffer.from(' ')])));
+const treeContractNegativeControls = 1;
 const predecessor = '87b7452d81b98c0c7923103042132c1fcf70e96a3bb2803c298deed7a017719e';
 const review = JSON.parse(readFileSync(`artifacts/material-parity/working-audit/proposals/${predecessor}.json`)).review;
 assert.equal(hash(JSON.stringify(review)), predecessor);
@@ -265,7 +299,7 @@ for (const row of selected) {
     }
   }
   observations.push({ case: row.case, owners });
-  for (const key of editable || row.family === 'tree' ? ['programmaticFocus'] : ['authoredActivation', 'programmaticFocus']) {
+  for (const key of editable ? ['programmaticFocus'] : ['authoredActivation', 'programmaticFocus']) {
     const obligation = row.obligations[key];
     if (obligation.applicability !== 'unverified') {
       assert.equal(obligation.applicability, 'applicable'); continue;
@@ -274,19 +308,19 @@ for (const row of selected) {
     row.obligations[key] = { ...obligation, applicability: 'applicable', recordedControlApplicability: {
       disposition: 'inspected-applicability-only', owners,
       conclusion: row.family === 'tree'
-        ? 'Captured leaf treeitem roles,exact labels and group ancestry establish programmatic-focus applicability only. No activation,selection or expansion contract is inferred.'
+        ? 'Captured leaf treeitem roles,exact labels,group ancestry and authenticated Material/CDK click-focus handlers establish pointer activation/focus inspection applicability. No selection,expansion,keyboard activation or successful focus delivery is inferred.'
         : editable
         ? 'Captured native input and exact candidate input identity establish a programmatic-focus inspection obligation,including disabled negative expectations. No activation,editing or popup-opening disposition follows.'
         : 'Captured native controls and explicit counterpart mapping establish activation/control-interaction and focus inspection obligations,including disabled negative expectations. Range drag/keys and composite role behavior are not replaced by button rules;no successful behavior or input equivalence follows.',
       evidence: { report: { file: row.evidence.report, sha256: row.evidence.reportSha256 },
-        pairedTrees: pair, join: receipt(script) },
+        pairedTrees: pair, join: receipt(script), ...(row.family === 'tree' ? { treeClickContract } : {}) },
       boundary: 'Historical authenticated authored trees only. Not actual events,keyboard equivalence,focus delivery,disabled suppression,paint,current runtime or full-case closure.' } };
     assert.equal(row.obligations[key].disposition, obligation.disposition);
     changedFields++;
   }
   assert.equal(row.inspection, 'partial'); assert.equal(row.currentRendering, 'unverified');
 }
-assert.equal(changedFields, 3083); assert.equal(new Set(previous.map(item => item.row.case)).size, 1797);
+assert.equal(changedFields, 3135); assert.equal(new Set(previous.map(item => item.row.case)).size, 1805);
 assert.equal(observations.reduce((count, row) => count + row.owners.length, 0), 2661);
 assert.equal(fieldNegativeControls, 2);
 assert.equal(compositeNegativeControls, 4);
@@ -307,7 +341,7 @@ assert.equal(hash(JSON.stringify(review)), predecessor, 'Unrelated case evidence
 console.log(JSON.stringify({ phase: 'recorded-native-control-authored-applicability', predecessor, proposal,
   applicabilityCases: selected.length, simpleButtons: 336, editableInputs: 483, rangeInputs: 156,
   nativeCompositeControls: 272, triggerButtons: 368, namedRoleControls: 222, paginatorButtons: 104, labelledControls: 720, authenticatedTrees: 3914,
-  changedCases: 1797, changedApplicabilityFields: changedFields, negativeControls, fieldNegativeControls, compositeNegativeControls, triggerNegativeControls, roleNegativeControls, labelNegativeControls,
+  changedCases: 1805, changedApplicabilityFields: changedFields, negativeControls, fieldNegativeControls, compositeNegativeControls, triggerNegativeControls, roleNegativeControls, labelNegativeControls, treeContractNegativeControls,
   cases: loaded.cases.length, dependencies: loaded.evidenceFingerprints.length,
   unrelatedReviewConserved: true, currentRenderingAccepted: false, inspectionComplete: false,
   observations, boundary: 'Applicability only;all action/focus outcomes and original remaining obligations are preserved. Not selected by the live export.' }));
