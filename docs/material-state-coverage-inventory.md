@@ -30,6 +30,36 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   inputs changed. All original final gates and36-family/relevant-state scope
   remain. No further export is justified solely by this status update.
 
+### Programmatic-focus applicability has no unverified entries in queued review — October15
+
+Chips76,tabs70,button-toggle68,stepper68,tree52 cases now map native roles and
+unique EXACT captured text witnesses under explicit authored hosts to candidate
+IDs/roles/text. No screen position,generated ID equality,selection state or DOM
+ordinal substitutes for label identity. Native button/div/Mat-header/tree-node
+versus candidate role-only DIV/button remains recorded,not declared equivalent.
+Text witnesses are source content,not computed accessible-name or paint proof.
+Tree updates focus applicability ONLY;activation/selection/expansion are not
+inferred from leaf focusability or invented as reference variants.
+
+Queued0c71b36a7969ecc20a269af97f405ad2245a0377e323756a032983e8aacc6c37
+supersedescea6. Combined applicability scope1957 cases/3914 trees/2661 mapped
+native controls;3083 fields change across1797 cases. This adds250 activation and
+302 focus dispositions. All original remaining work/behavior dispositions and
+unrelated data survive;restoring original obligation objects returns complete87b7.
+Twenty-two controls reject receipt,identity,type,role,ancestry,value and label
+corruption. Loader2311 cases/12877 dependencies,both completion flagsfalse.
+Log labelled-control-authored-applicability-case-join-20261015 stdout/stderr exits0.
+
+QUEUED programmaticFocus applicability:1997 applicable,314 authored exclusions,
+ZERO unverified (formerly1797). This is applicability closure,not actual focus
+delivery or full-case inspection. Activation unverified1805→519:five editable
+families plus leaf-tree activation remain distinct questions. LocalPaint969 is
+unchanged. No case is promoted,no renderer/fixture change or recapture. Live1451
+still selects immutable87b7;this join/proposal stay outside its inputs. Previous
+cea6 source is Gitc4a890bb,not current-source validation. Next resolve activation
+from actual editing/popup/leaf contracts,then join existing behavioral evidence;
+do not reopen these verified label/role/ancestor correspondences without drift.
+
 ### Named role and navigation applicability preserves measurement-owner gaps — October15
 
 Select94,expansion68,sort60,paginator52 case mappings now distinguish the native

@@ -21,11 +21,26 @@ const targets = { core: ['core-primary'], toolbar: ['toolbar-action'], card: ['c
   menu: ['menu-primary'], 'bottom-sheet': ['bottom-sheet-primary'], dialog: ['dialog-primary'],
   'snack-bar': ['snack-bar-primary'], tooltip: ['tooltip-primary'],
   select: ['select-control'], expansion: ['expansion-primary'], sort: ['sort-trigger'],
-  paginator: ['paginator-previous', 'paginator-next'] };
+  paginator: ['paginator-previous', 'paginator-next'],
+  chips: ['chip-0', 'chip-1'], tabs: ['tab-overview', 'tab-activity'],
+  'button-toggle': ['button-toggle-one', 'button-toggle-two'], stepper: ['step-details', 'step-review'],
+  tree: ['tree-item-0', 'tree-item-1', 'tree-item-2'] };
 const editableFamilies = new Set(['form-field', 'input', 'autocomplete', 'datepicker', 'timepicker']);
 const compositeFamilies = new Set(['checkbox', 'radio', 'slide-toggle']);
 const triggerFamilies = new Set(['menu', 'bottom-sheet', 'dialog', 'snack-bar', 'tooltip']);
 const roleFamilies = new Set(['select', 'expansion', 'sort']);
+const labelledFamilies = {
+  chips: { host: 'chips-primary', candidateHost: 'chips-primary', groupRole: 'listbox', role: 'option',
+    nativeType: 'button', candidateType: 'div', labels: ['Angular', 'Astylar'] },
+  tabs: { host: 'tabs-primary', candidateHost: 'tabs-list', groupRole: 'tablist', role: 'tab',
+    nativeType: 'div', candidateType: 'button', labels: ['Overview', 'Activity'] },
+  'button-toggle': { host: 'button-toggle-primary', candidateHost: 'button-toggle-primary', groupRole: 'radiogroup', role: 'radio',
+    nativeType: 'button', candidateType: 'div', labels: ['List', 'Grid'] },
+  stepper: { host: 'stepper-primary', candidateHost: 'stepper-primary', groupRole: 'tablist', role: 'tab',
+    nativeType: 'mat-step-header', candidateType: 'div', labels: ['Details', 'Review'] },
+  tree: { host: 'tree-primary', candidateHost: 'tree-primary', groupRole: 'tree', role: 'treeitem',
+    nativeType: 'mat-tree-node', candidateType: 'div', labels: ['Documents', 'Projects', 'Archive'] },
+};
 const readTree = (item, bytes = readFileSync(item.file)) => {
   assert.equal(hash(bytes), item.sha256, item.file);
   const tree = JSON.parse(bytes); assert.deepEqual(tree.errors, []); return tree;
@@ -143,21 +158,55 @@ function inspectPaginator(reference, astylar) {
       boundary: 'Navigation applicability only,including disabled-endpoint expectations. No page-size popup,other controls,focus delivery or pagination outcome is inferred.' };
   });
 }
+function labelWitnesses(tree, owner, label, candidate = false) {
+  return tree.nodes.filter(node => (candidate ? node.authored?.textContent ?? node.authored?.value : node.ownText) === label
+    && (node.key === owner.key || descendant(tree, node, owner)));
+}
+function inspectLabelled(reference, astylar, family) {
+  const definition = labelledFamilies[family]; assert.ok(definition);
+  const nativeHost = reference.nodes.filter(node => node.attributes?.id === definition.host);
+  const candidateHost = astylar.nodes.filter(node => node.authored?.id === definition.candidateHost);
+  assert.equal(nativeHost.length, 1); assert.equal(candidateHost.length, 1);
+  assert.equal(candidateHost[0].authored.role, definition.groupRole);
+  const native = reference.nodes.filter(node => node.attributes?.role === definition.role && descendant(reference, node, nativeHost[0]));
+  assert.equal(native.length, definition.labels.length);
+  const used = new Set();
+  return targets[family].map((id, index) => {
+    const label = definition.labels[index];
+    const left = native.filter(node => labelWitnesses(reference, node, label).length === 1);
+    const right = astylar.nodes.filter(node => node.authored?.id === id);
+    assert.equal(left.length, 1); assert.ok(!used.has(left[0].key)); used.add(left[0].key);
+    assert.equal(right.length, 1); assert.equal(left[0].type, definition.nativeType);
+    assert.equal(right[0].authored.type, definition.candidateType); assert.equal(right[0].authored.role, definition.role);
+    assert.ok(descendant(astylar, right[0], candidateHost[0]));
+    const leftText = labelWitnesses(reference, left[0], label), rightText = labelWitnesses(astylar, right[0], label, true);
+    assert.equal(leftText.length, 1); assert.equal(rightText.length, 1);
+    return { ...describeOwner(id, left[0], right[0]), label,
+      nativeHost: { key: nativeHost[0].key, id: definition.host, role: nativeHost[0].attributes.role ?? null },
+      candidateHost: { key: candidateHost[0].key, id: definition.candidateHost, role: candidateHost[0].authored.role },
+      textWitnesses: { reference: leftText[0].key, astylar: rightText[0].key },
+      mapping: 'unique-exact-authored-text-and-role-under-explicit-host',
+      boundary: 'Captured source text is an identity witness,not a computed accessible name or paint observation. Generated IDs,positions,order and selection state are not identity substitutes. No native/role-only behavior equivalence.' };
+  });
+}
 const selected = review.groups.filter(row => Object.hasOwn(targets, row.family));
-assert.equal(selected.length, 1623);
+assert.equal(selected.length, 1957);
 const previous = [], observations = [];
 let changedFields = 0, negativeControls = 0, fieldNegativeControls = 0;
 const compositeControls = new Set(); let compositeNegativeControls = 0;
 let triggerNegativeControls = 0;
 const roleControls = new Set(); let roleNegativeControls = 0;
+const labelledControls = new Set(); let labelNegativeControls = 0;
 for (const row of selected) {
   const pair = row.evidence.pairedTrees;
   const reference = readTree(pair.reference), astylar = readTree(pair.astylar);
   const editable = editableFamilies.has(row.family), composite = compositeFamilies.has(row.family);
   const trigger = triggerFamilies.has(row.family);
   const namedRole = roleFamilies.has(row.family), paginator = row.family === 'paginator';
+  const labelled = Object.hasOwn(labelledFamilies, row.family);
   const type = editable || row.family === 'slider' ? 'input' : 'button';
-  const owners = namedRole ? inspectNamedRole(reference, astylar, row.family) : paginator ? inspectPaginator(reference, astylar)
+  const owners = labelled ? inspectLabelled(reference, astylar, row.family)
+    : namedRole ? inspectNamedRole(reference, astylar, row.family) : paginator ? inspectPaginator(reference, astylar)
     : trigger ? inspectTrigger(reference, astylar, row.family) : composite ? inspectComposite(reference, astylar, row.family)
     : inspectPair(reference, astylar, targets[row.family], type);
   if (!observations.length) {
@@ -206,8 +255,17 @@ for (const row of selected) {
     }
     roleNegativeControls++;
   }
+  if (labelled && !labelledControls.has(row.family)) {
+    labelledControls.add(row.family);
+    const wrong = structuredClone(reference); wrong.nodes.find(node => node.key === owners[0].textWitnesses.reference).ownText = 'unreviewed-label';
+    assert.throws(() => inspectLabelled(wrong, astylar, row.family)); labelNegativeControls++;
+    if (labelNegativeControls === 1) {
+      const outside = structuredClone(astylar); outside.nodes.find(node => node.authored?.id === owners[0].id).parent = 'root';
+      assert.throws(() => inspectLabelled(reference, outside, row.family)); labelNegativeControls++;
+    }
+  }
   observations.push({ case: row.case, owners });
-  for (const key of editable ? ['programmaticFocus'] : ['authoredActivation', 'programmaticFocus']) {
+  for (const key of editable || row.family === 'tree' ? ['programmaticFocus'] : ['authoredActivation', 'programmaticFocus']) {
     const obligation = row.obligations[key];
     if (obligation.applicability !== 'unverified') {
       assert.equal(obligation.applicability, 'applicable'); continue;
@@ -215,7 +273,9 @@ for (const row of selected) {
     previous.push({ row, key, obligation });
     row.obligations[key] = { ...obligation, applicability: 'applicable', recordedControlApplicability: {
       disposition: 'inspected-applicability-only', owners,
-      conclusion: editable
+      conclusion: row.family === 'tree'
+        ? 'Captured leaf treeitem roles,exact labels and group ancestry establish programmatic-focus applicability only. No activation,selection or expansion contract is inferred.'
+        : editable
         ? 'Captured native input and exact candidate input identity establish a programmatic-focus inspection obligation,including disabled negative expectations. No activation,editing or popup-opening disposition follows.'
         : 'Captured native controls and explicit counterpart mapping establish activation/control-interaction and focus inspection obligations,including disabled negative expectations. Range drag/keys and composite role behavior are not replaced by button rules;no successful behavior or input equivalence follows.',
       evidence: { report: { file: row.evidence.report, sha256: row.evidence.reportSha256 },
@@ -226,12 +286,13 @@ for (const row of selected) {
   }
   assert.equal(row.inspection, 'partial'); assert.equal(row.currentRendering, 'unverified');
 }
-assert.equal(changedFields, 2531); assert.equal(new Set(previous.map(item => item.row.case)).size, 1495);
-assert.equal(observations.reduce((count, row) => count + row.owners.length, 0), 1941);
+assert.equal(changedFields, 3083); assert.equal(new Set(previous.map(item => item.row.case)).size, 1797);
+assert.equal(observations.reduce((count, row) => count + row.owners.length, 0), 2661);
 assert.equal(fieldNegativeControls, 2);
 assert.equal(compositeNegativeControls, 4);
 assert.equal(triggerNegativeControls, 2);
 assert.equal(roleNegativeControls, 4);
+assert.equal(labelNegativeControls, 6);
 const pointer = JSON.parse(readFileSync('artifacts/material-parity/working-audit/current.json'));
 const indexBytes = readFileSync(`artifacts/material-parity/working-audit/${pointer.generation}/index.json`);
 assert.equal(hash(indexBytes), pointer.indexSha256);
@@ -244,9 +305,9 @@ assert.equal(loaded.currentRenderingAccepted, false);
 for (const { row, key, obligation } of previous) row.obligations[key] = obligation;
 assert.equal(hash(JSON.stringify(review)), predecessor, 'Unrelated case evidence changed');
 console.log(JSON.stringify({ phase: 'recorded-native-control-authored-applicability', predecessor, proposal,
-  inspectedCases: selected.length, simpleButtons: 336, editableInputs: 483, rangeInputs: 156,
-  nativeCompositeControls: 272, triggerButtons: 368, namedRoleControls: 222, paginatorButtons: 104, authenticatedTrees: 3246,
-  changedCases: 1495, changedApplicabilityFields: changedFields, negativeControls, fieldNegativeControls, compositeNegativeControls, triggerNegativeControls, roleNegativeControls,
+  applicabilityCases: selected.length, simpleButtons: 336, editableInputs: 483, rangeInputs: 156,
+  nativeCompositeControls: 272, triggerButtons: 368, namedRoleControls: 222, paginatorButtons: 104, labelledControls: 720, authenticatedTrees: 3914,
+  changedCases: 1797, changedApplicabilityFields: changedFields, negativeControls, fieldNegativeControls, compositeNegativeControls, triggerNegativeControls, roleNegativeControls, labelNegativeControls,
   cases: loaded.cases.length, dependencies: loaded.evidenceFingerprints.length,
   unrelatedReviewConserved: true, currentRenderingAccepted: false, inspectionComplete: false,
   observations, boundary: 'Applicability only;all action/focus outcomes and original remaining obligations are preserved. Not selected by the live export.' }));

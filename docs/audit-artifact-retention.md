@@ -56,6 +56,11 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep labelled-control-authored-applicability-case-join-20261015 stdout/stderr
+and queued0c71b36a. It supersedescea6 for current expanded applicability;source
+before expansion is Gitc4a890bb. Focus applicability is now fully dispositioned
+in this queued review only;no behavioral/full-case acceptance or capture added.
+
 Keep named-role-authored-applicability-case-join-20261015 stdout/stderr and
 queuedcea60ac0. It supersedes1efe for the expanded applicability join;earlier
 source is Git4e9bafa7. No canonical generation,capture or live1451 input changed.
