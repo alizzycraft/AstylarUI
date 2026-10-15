@@ -43,9 +43,22 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   retained paragraph typography,box/opacity,routing/wrapping and separator footprint
   evidence;paragraph inherited-request evidence and new public inherited-block-
   margin proof/history. Preserve distinct capture/current/source boundaries.
-- Next gate sequence:finish independent cold comparison,complete
-  predecessor delta conservation,compact import/verification and publication.
+- Next gate sequence:finish independent cold comparison,compact import/verification
+  and publication. Completed predecessor checks now compose against the same
+  candidate6e20a321/accepted86961/ec90:current payload hash/70552528 bytes and
+  census manifest match;prior/current48546 rows,50 exact changes. Reauthenticated
+  census41198dc1 and saved row321e5197,section/case44dbf04b,source-boundary39effa0b,
+  non-row metadata9d347f6d log digests. Their complete section/row outcomes cover
+  all nine changed sections and unchanged remainder. This composes saved executed
+  checks,not independent cold replay. No import/publication or rendering claim yet.
   Then group remaining property/case review work;do not export every new note.
+- Pending readable report delta reviewed read-only:LF SHA2524a0767de0349a2b0168d959229b571ba78a1cad85050d4cd7d5df501b94f4
+  versus accepted bdabdd1ff46b5c9d12df82d5b947aece255cbf40d414f31cba7cdc0bc2c357b2.
+  Removing exactly one new configured editing/root-focus proof description and
+  normalizing only benchmark-config.spec.mjs line anchors restores whole prior
+  text exactly. Verdict still says input equivalence not established and retained
+  visual green is not fresh final-gate evidence. Manifest changes only its four
+  payload size/hash fields;git diff --check passes. Not cold acceptance/publication.
 - Scope/acceptance unchanged:36 families,436 static+1875 interaction cases;
   0 fully inspected,2311 partial,0 untouched/assigned whole-case blockers.
   Supplemental relevant-state/applicability closure and all final gates remain.
