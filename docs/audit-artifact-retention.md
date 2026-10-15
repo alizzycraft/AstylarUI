@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep tooltip-applied-theme-ownership-20261016 report,24 trees/24 PNGs and separate
+-checkpoint. Keep tooltip-applied-theme-ownership-capture[-retry,-final]-20261016
+stdout/stderr:initial missing-dist and module-graph preflight failures are distinct
+from final successful capture. Keep independent verify and six-negative-control
+logs. New12 actual-theme contexts do not rewrite the15 old default-light rows;
+combine scope honestly across browser checkpoints,not current matrix acceptance.
+
 Keep acceptedf663c88e/indexbc481df1 and preceding92346052/index478d2448 working
 packages. Retain divider-proof-batch-canonical-cold-check-20261015 stdout/stderr
 (TERMINAL0),and divider-proof-batch-compact-{import,verify}-20261016 stdout/stderr

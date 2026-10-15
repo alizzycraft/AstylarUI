@@ -4,6 +4,36 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Missing actual-theme tooltip pointer ownership inspected — October16
+
+Dedicated bounded driver audit-material-tooltip-applied-theme-ownership.mjs
+closes the demonstrated theme-setup gap without changing the historical driver,
+fixtures or renderer. It serves the same1887 hash-authenticated retained browser
+assets through established recovery locations,with a new current-browser/launch
+checkpoint. Ordinary-mode store.setTheme plus recorded store value AND captured
+reference frame/candidate page backgrounds verify actual dark/contrast/custom.
+All12 missing combinations (three themes × desktopDPR1/2,tabletDPR1,mobileDPR2)
+complete three paired hover/leave cycles and sampled final disposal. Capture33708
+TERMINAL0,independent --verify TERMINAL0,original-verifier extraction rejects six
+mutations (wrong profile,default-light store,benchmark mode,missing cohort,forged
+asset,forged screenshot). Logs tooltip-applied-theme-ownership-{capture-final,
+verify,negative-controls}-20261016 stdout/stderr;24 trees/24 PNGs retained in
+tooltip-applied-theme-ownership-20261016 with its separate -checkpoint.
+Every cohort retains live materials14/15/16 despite tracked plateau;unbound
+identities and original resource observations remain available. Final disposal
+clears sampled scene meshes/materials/textures. This is inspected resource FAILURE,
+not lifecycle acceptance,GPU/observer/cache safety,late async,remount,isolation,
+paint or current whole-case rendering acceptance. Combined historical light and
+new applied-theme evidence covers16 physical contexts across DIFFERENT browser
+checkpoints,not one current full-matrix run. Exact configured-case joins remain.
+Initial preflight failure found four absent normal-dist files before browser
+launch;retry failure found generic module-graph scan of an unrelated historical
+helper resolving tests/tests/... . Both failed logs remain;no provenance check
+was waived. Final driver explicitly authenticates every manifest asset at known
+retained paths and does not import that unrelated producer-replay graph.
+This focused driver/report is outside acceptedf663;no canonical export is needed
+solely to publish this ledger update. Next join existing exact case obligations.
+
 Accepted evidence integration is nowf663c88ea2d75257049f26fe33add569a2fcb7529395f291a2db966db7489948,
 indexbc481df111dc424d221d2f610b53e6f6008a3e5710ddab7a205c12a56854787c.
 Compressed70662281 bytes;decoded2291302581/SHA2aef93336213683d75574f8e59905d236b62186a463459e9bca8a4f1462c7b71.
