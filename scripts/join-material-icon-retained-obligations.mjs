@@ -60,16 +60,64 @@ for (const mutate of [p => { p.reference.dom.hidden = null; }, p => { p.referenc
   const p = structuredClone(ax.values().next().value); mutate(p); assert.throws(() => checkExposure(p)); rejected++;
 }
 const originals = [];
+function inspectHierarchy(reference, candidate) {
+  assert.equal(reference.nodes.length, 7); assert.equal(candidate.nodes.length, 6);
+  const unique = nodes => { assert.equal(nodes.length, 1); return nodes[0]; };
+  const host = unique(reference.nodes.filter(n => n.attributes?.id === 'icon-root'));
+  const icon = unique(reference.nodes.filter(n => n.attributes?.id === 'icon-primary'));
+  assert.equal(host.type, 'section'); assert.equal(icon.type, 'mat-icon'); assert.equal(icon.parent, host.key);
+  const svg = unique(reference.nodes.filter(n => n.parent === icon.key));
+  const leaf = unique(reference.nodes.filter(n => n.parent === svg.key));
+  assert.equal(svg.type, 'svg'); assert.equal(svg.attributes.viewBox, '0 0 24 24');
+  assert.equal(leaf.type, 'path'); assert.equal(leaf.attributes.fill, 'currentColor');
+  assert.ok(leaf.attributes.d.startsWith('M12 21.35 '));
+  const page = unique(candidate.nodes.filter(n => n.authored?.id === 'page'));
+  const demo = unique(candidate.nodes.filter(n => n.authored?.id === 'icon-root'));
+  const image = unique(candidate.nodes.filter(n => n.authored?.id === 'icon-primary'));
+  assert.equal(page.authored.type, 'main'); assert.equal(demo.parent, page.key);
+  assert.equal(demo.authored.type, 'section'); assert.equal(image.parent, demo.key);
+  assert.equal(image.authored.type, 'img'); assert.equal(image.authored.alt, 'Favorite');
+  assert.ok(image.authored.src.startsWith('data:image/png;base64,'));
+  const png = Buffer.from(image.authored.src.slice('data:image/png;base64,'.length), 'base64');
+  assert.equal(png.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
+  assert.equal(png.readUInt32BE(16), 24); assert.equal(png.readUInt32BE(20), 24);
+  const frame = unique(reference.nodes.filter(n => n.key === host.parent)); assert.equal(frame.type, 'main');
+  const synthetic = unique(candidate.nodes.filter(n => n.key === page.parent)); assert.deepEqual(synthetic.authored, {});
+  const paired = [{ reference: frame.key, candidate: page.key }, { reference: host.key, candidate: demo.key }];
+  for (const [type, id, text] of [['p', 'eyebrow', 'Angular Material 20 reference'], ['h1', 'title', 'icon']]) {
+    const left = unique(reference.nodes.filter(n => n.parent === frame.key && n.type === type));
+    const right = unique(candidate.nodes.filter(n => n.authored?.id === id));
+    assert.equal(left.ownText.trim(), text); assert.equal(right.authored.textContent, text);
+    assert.equal(right.parent, page.key); assert.equal(right.authored.type, type);
+    paired.push({ reference: left.key, candidate: right.key });
+  }
+  return { referenceNodes: 7, candidateNodes: 6, paired,
+    substitution: { reference: [icon.key, svg.key, leaf.key], candidate: image.key,
+      classification: 'application-plugin-authoring-defect', definition: 'fixture-icon-svg-replaced-by-fixed-raster',
+      nativePathSha256: hash(leaf.attributes.d), candidatePngSha256: hash(png), intrinsicPngSize: [24, 24] },
+    extraDocumentNode: synthetic.key,
+    boundary: 'Recorded DOM/SiteData element inventory only. Synthetic-root behavior,anonymous formatting boxes,computed property equality,scaling/raster fidelity and current runtime remain unproved.' };
+}
+let hierarchyNegativeControls = 0;
 for (const c of census.cases) {
   const captured = originalCases.get(c.case); assert.ok(captured);
   assert.equal(key(captured.profile, captured.viewport), c.cohort);
   const parts = c.case.split('/'), id = `${parts[0]}:${parts[1]}@${parts[2]}/${parts[3]}${parts[0] === 'interaction' ? '/' + parts[4] : ''}`;
   const row = review.groups.find(r => r.case === id); assert.equal(row?.family, 'icon');
   const pair = ax.get(c.cohort); assert.ok(pair); checkExposure(pair);
+  const trees = {};
   for (const side of ['reference', 'astylar']) {
-    const receipt = row.evidence.pairedTrees[side]; assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+    const receipt = row.evidence.pairedTrees[side], bytes = readFileSync(receipt.file);
+    assert.equal(hash(bytes), receipt.sha256); trees[side] = JSON.parse(bytes);
   }
-  originals.push({ row, semantics: row.obligations.semantics, history: row.obligations.historyOwnership });
+  const hierarchy = inspectHierarchy(trees.reference, trees.astylar);
+  if (!hierarchyNegativeControls) {
+    const missing = structuredClone(trees.reference); missing.nodes.pop();
+    assert.throws(() => inspectHierarchy(missing, trees.astylar)); hierarchyNegativeControls++;
+    const wrong = structuredClone(trees.astylar); wrong.nodes.find(n => n.authored?.id === 'icon-primary').parent = 'root';
+    assert.throws(() => inspectHierarchy(trees.reference, wrong)); hierarchyNegativeControls++;
+  }
+  originals.push({ row, semantics: row.obligations.semantics, history: row.obligations.historyOwnership, inputs: row.obligations.inputStyleStructure });
   const evidence = { census: { file: censusFile, sha256: hash(readFileSync(censusFile)) },
     logs: receipts.map(({ file, sha256 }) => ({ file, sha256 })), join: { file: script, sha256: hash(readFileSync(script)) } };
   row.obligations.semantics = { ...row.obligations.semantics, retainedActualIconTargetExposure: {
@@ -83,6 +131,9 @@ for (const c of census.cases) {
     disposition: 'inspected-bounded-membership', cohort: c.cohort, evidence,
     sourceLog: { file: lifecycle.file, sha256: lifecycle.sha256 },
     boundary: 'Existing three-update/sampled-disposal cohort membership only;not fresh execution,current source validity,late image completion,remount or peer isolation.' } };
+  row.obligations.inputStyleStructure = { ...row.obligations.inputStyleStructure,
+    retainedIconRecordedHierarchy: { disposition: 'inspected-recorded-node-inventory', ...hierarchy,
+      evidence: { pairedTrees: row.evidence.pairedTrees, join: evidence.join } } };
   assert.equal(row.inspection, 'partial'); assert.equal(row.currentRendering, 'unverified');
 }
 assert.equal(originals.length, 20);
@@ -91,8 +142,9 @@ const indexBytes = readFileSync(`${base}working-audit/${pointer.generation}/inde
 const coverage = JSON.parse(indexBytes).metadata.coverage;
 const proposal = saveReviewProposal(base + 'working-audit', review);
 const loaded = loadCaseObligationReview(proposal.file, proposal.sha256, [...coverage.caseInventory.static, ...coverage.caseInventory.interaction]);
-for (const { row, semantics, history } of originals) { row.obligations.semantics = semantics; row.obligations.historyOwnership = history; }
+for (const { row, semantics, history, inputs } of originals) { row.obligations.semantics = semantics; row.obligations.historyOwnership = history; row.obligations.inputStyleStructure = inputs; }
 assert.equal(hash(JSON.stringify(review)), predecessor);
 console.log(JSON.stringify({ predecessor, proposal, iconCases: 20, physicalCohorts: 16, negativeControls: rejected,
   cases: loaded.cases.length, dependencies: loaded.evidenceFingerprints.length, unrelatedReviewConserved: true,
+  recordedReferenceNodes: 140, recordedCandidateNodes: 120, hierarchyNegativeControls,
   inspectionComplete: loaded.inspectionComplete, currentRenderingAccepted: loaded.currentRenderingAccepted }));

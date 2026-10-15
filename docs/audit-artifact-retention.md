@@ -56,6 +56,11 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep icon-recorded-hierarchy-obligation-join-20261016 stdout/stderr and queued
+4304b823,which supersedes52d4 for the combined icon join. Its closed JSON uses
+lossless LZX with before/after SHA equality. Original trees/logs and predecessor
+117a remain;prior script is Git67672845. No captured input or PNG was modified.
+
 Keep icon-retained-obligation-join[-final,-complete]-20261016 stdout/stderr,
 queued52d44b50 and predecessor117a. Initiala02f is historical;final ENOSPC failure
 is not successful publication,complete is TERMINAL0. Original four AX/resource

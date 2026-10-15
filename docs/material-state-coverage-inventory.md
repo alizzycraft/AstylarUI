@@ -4,6 +4,25 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Icon complete recorded-node hierarchy inventory — October16
+
+Existing join extended,not another capture/framework. Across20 authenticated
+pairs all140 native and120 candidate recorded element nodes account for frame/
+page,eyebrow,title,demo and icon ownership. Native mat-icon→svg→currentColor path
+is replaced by one authored PNG img with24x24 intrinsic header;exact path/image
+hashes remain in each case. Candidate's extra synthetic document root is recorded
+as unpaired,NOT assumed layout-neutral. Anonymous formatting boxes and remaining
+computed-property/scaling/paint equivalence still need evidence. Original tree
+hashes protect node data;missing native leaf/wrong candidate parent controls reject.
+Run icon-recorded-hierarchy-obligation-join-20261016 TERMINAL0 creates queued
+4304b823ff859567fb9dd4e2b882129aa0131ad90f64960ad4a33f8022e61a2c,
+superseding52d4. Existing AX/resource joins survive;all60 original parent objects
+restore whole117a after the bounded additions. Loader2311 cases/12889 dependencies,
+four AX and two hierarchy rejection controls pass,both completion flagsfalse.
+The existing SVG-to-fixed-raster authoring finding is reused,not a new core bug.
+No case promotion,fixture/renderer change or canonical export. Prior52d4 source
+is Git67672845;do not describe its older script receipt as current-source proof.
+
 ### Icon retained target AX and resource membership joined — October16
 
 Existing icon-case-obligation-join-20261007-retry census is SHA-pinned1bcab2ae
