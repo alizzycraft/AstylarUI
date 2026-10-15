@@ -63,6 +63,16 @@ results and the remaining source-boundary failures are reconciled. Root/editing
 direct graph assertion and missinge01 whole-source boundaries remain separate.
 No renderer,comparison input,threshold or acceptance change.
 
+55349 now TERMINAL0:all9 downstream checks pass,195976.684ms. Alignment/font
+replays72 groups/4016 observations across2311 cases without writes;explicit-gap
+and gap-review complete membership and altered-input/tree/identity controls
+pass. Log crop-metadata-collector-boundaries-20261015 stdout/stderr. This confirms
+three of the rejected export's six collector boundaries,not all six or a new
+canonical package. Follow-up/reviewed-input/caret owning suites are the next
+bounded run at crop-metadata-remaining-collector-boundaries-20261015. Keep their
+outcomes separate from the original root/editing direct-graph failure and the
+unrecovered originale01 assertions;no full export retry is justified yet.
+
 ### Runner-consumer follow-up distinguishes three provenance boundaries — October15
 
 Four remaining candidate tests in benchmark-config.spec.mjs were actually run,

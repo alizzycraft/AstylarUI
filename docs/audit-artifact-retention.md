@@ -61,6 +61,9 @@ failure evidence;accepted92346052 remains unchanged. Keep crop-metadata-gap-
 source-reconciliation[-complete],gap-report-refresh,and collector-boundaries
 20261015 logs/stderr. Initial7/8 and final8/8 source checks are distinct records.
 Collector-boundaries55349 remains a live focused run until terminal evidence.
+It now terminates0 with9/9 passing checks;retain that complete result. Also keep
+crop-metadata-remaining-collector-boundaries-20261015 stdout/stderr for the
+separate follow-up/reviewed-input/caret run;do not merge distinct outcomes.
 
 Retain remaining-runner-receipt-consumers-20261015 stdout/stderr (four failures):
 three olde01 whole-runner receipt failures and one already-known historical map
