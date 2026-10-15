@@ -21,10 +21,16 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   passes;three receipt sections,source boundaries and selected cases also pass.
   Non-row control metadata52990 has no terminal receipt; retry stderr
   configured-editing-root-control-metadata-conservation-retry-20261015.stderr.log
-  records RangeError: Array buffer allocation failed. Neither verification passed.
-  No import yet. A synthetic parser probe confirms the intended differences-row
-  selection depths,not the cause of allocation failure. Next distinguish retained
-  metadata size from parser/comparison allocation before another full read.
+  records RangeError: Array buffer allocation failed. Those failed attempts remain
+  preserved. Subsequent bounded-memory check now passes (session12181,exit0):
+  configured-editing-root-control-metadata-streaming-20261015.log records exact
+  typed metadata digest83bcfbcbbaa9d2c33850ab3d616911e23960741b998ed0357f5007b87f7d7c01
+  and forged-scope rejection after2282012672 decoded bytes. Differences-row
+  contents remain covered separately by complete row conservation. The checker
+  no longer holds both metadata trees or a whole split census log;the209457328-byte
+  metadata line alone used about1GB in a diagnostic read. This removes avoidable
+  retention,not proof of the exact failed native allocation or the cold job's cause.
+  Independent cold check remains failed/unverified. No import yet.
 - Selected review:cfd613cf,2311 partial/unverified cases,12709 dependencies;
   root/16 configured editing evidence included,not complete-case acceptance.
 - Queued outside export:cc2dcdaf extends e4b85e47's24 anonymous-border joins with
