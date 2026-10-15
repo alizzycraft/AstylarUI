@@ -23,6 +23,21 @@ This pointer supersedes the historical checkpoint chronology immediately below.
 
 ### October15 evidence chronology — historical checkpoints
 
+Wrapping-default input question is now source-bound for all48 paragraph labels:
+whiteSpace/wordWrap/textOverflow are omitted through every candidate ancestor,
+and the actual parser selects normal/normal/clip. Native paragraph values retain
+normal white-space/overflow-wrap/word-break and clip overflow;the exact authored
+texts are only unspaced Above/Below. Six complete parser/default members equal
+current,installed and captured served-map code. Nondefault nowrap/break-word/
+ellipsis controls demonstrate that explicit inputs are read. Log
+divider-paragraph-wrapping-default-inputs-20261015.log retains144 keyword matches,
+all case/tree/source receipts and boundaries. Node normal-line-height fallback
+is deliberately not used as a browser metric. This resolves missing-keyword
+interpretation,not actual line-break/ellipsis paint or general wordBreak support;
+do not infer broad wrapping parity or invent unauthored long-text matrix cases.
+Queue with other paragraph property conclusions rather than emit another whole
+proposal or mutate the live export's inputs.
+
 Retained typography-stage review now covers all48 anonymous paragraph/text-leaf
 pairs:paragraph wrappers have no own text/glyph entry and exactly one matched
 span child. Ten native paragraph/leaf properties equal captured core-registry

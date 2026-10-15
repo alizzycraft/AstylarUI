@@ -56,6 +56,11 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep divider-paragraph-wrapping-default-inputs-20261015.log with e4b85e47 and
+its authenticated retained trees. It binds six complete parser/default members
+and144 keyword observations,not browser line metrics,wrapping paint or a new
+long-text capture. No extra full proposal or temporary browser output was made.
+
 Retain divider-paragraph-retained-typography-stage-20261015.log with e4b85e47
 and the authenticated86961 compact index. It records480 exact retained-input
 matches and48 existing alignment joins,not complete parent typography or paint
