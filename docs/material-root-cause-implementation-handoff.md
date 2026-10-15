@@ -1,5 +1,15 @@
 # Material audit: evidence-led implementation priorities
 
+October15 current acceptance pointer supersedes pending/live statements below:
+candidate86961b43 now passes independent cold canonical comparison,complete
+predecessor conservation (saved full-stream plus strict section proofs),compact
+import and whole-index verification. Current indexSHA
+ec90ff41e99dcb1223bf02422516aca796b34ec02ed787f5eb62e64793935fe7.
+159 findings;all2311 cases remain partial/unverified,inputEquivalent=false.
+Exact logs/measurements are in the coverage ledger. Queued24ee configured
+editing/root-focus evidence is NOT included;integrate its owning assertions and
+source receipts next. No renderer fixes or final acceptance gates are waived.
+
 October15 canonical milestone:export TERMINAL0,candidate86961b43 contains159
 findings and the queued569d8cc6 no-editor/divider reviews. All2311 cases remain
 partial/unverified,inputEquivalent=false. Independent cold check and accepted-

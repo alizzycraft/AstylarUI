@@ -2,6 +2,22 @@
 
 ## Current integration pointer — October15
 
+Independent cold check86353 is TERMINAL exit0 after2857090.6666ms,including
+canonical comparison. Log flex-margin-queued-canonical-cold-check-20261015.log
+SHAfb7e70e5aa7d45b3e7447306a54d55af94e9ee2f9a5b45d5cea2e192d90a0155.
+Two collectors/ten memory hits/no disk hits or invalidations;11066 files and
+1097265157 bytes read and independently reverified. Composed conservation is
+also complete (log SHA09a2c74f18bfe615ab7da007d6f746f136a9adaa744eb83fbacbcfc161fe17e6).
+Readable report independently compares equal to predecessor except one margin
+finding,one focused proof and refreshed line anchors. Compact import60846 and
+whole-index verification both complete exit0:current generation86961b43,indexSHA
+ec90ff41e99dcb1223bf02422516aca796b34ec02ed787f5eb62e64793935fe7,
+72751809 compact bytes,159 findings/8483 groups/39904 controls/389202 occurrences.
+Logs flex-margin-canonical-import-20261015.log and
+flex-margin-canonical-index-verify-20261015.log. Scoped publication is next.
+All2311 case records
+remain partial/unverified;this cold result is package acceptance,not rendering.
+
 Strict extra-section check21370 completed exit0. All complete ownerCaretInputs
 and reviewedSourceBatchInputs fields equal the predecessor after reversing only
 the three exact receipt leaves. Current owner-initial-motion collector reproduces

@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October15 cold check,compact import and whole-index verification now complete
+exit0 for86961b43. Retain flex-margin-queued-canonical-cold-check-20261015.log,
+flex-margin-canonical-import-20261015.log and
+flex-margin-canonical-index-verify-20261015.log with the accepted package/index.
+Older pending/live descriptions below are historical. Retainb246 predecessor
+and both failure logs;new acceptance does not make those originals disposable.
+
 Retain flex-margin-extra-section-delta-20261015.log and strict
 flex-margin-extra-section-conservation-20261015.log (SHA
 884a28bc2e797ba79a181f1a24628ae891e080667af328c064b3125ea0f2397f),
