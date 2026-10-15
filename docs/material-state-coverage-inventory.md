@@ -2,6 +2,22 @@
 
 ## Current integration pointer — October15
 
+Existing semantic focus finding now carries bounded rootReconciliation evidence,
+without renaming/removing its descendant diagnosis or adding another finding.
+All159 original definitions compare exactly after deleting that sole subrecord;
+the complete policy text restores82bf9cee through the existing transition chain.
+Current policy LF SHA fcbf780a0d2851cbfab678b8cd5a6e3d7b6d448eb0216fd0ee780196851c0ce1.
+Root public/no-op and two configured owner/binding logs plus source history are
+receipt-bound in that subrecord. Other fourteen editing contexts retain only
+transient-focus evidence,not measured root-owner attribution. Focus-only,not
+selection,paint,lifetime or historical-runtime acceptance. A forged root claim
+and unrelated source changes reject. Root/margin focused tests2/2,zero skips,
+4464.9138ms:semantic-root-policy-refinement-negative-controls-20261015.log;
+initial2/2 log semantic-root-policy-refinement-focused-20261015.log also retained.
+Canonical86961 predates this refinement;producer inventory/generator integration
+and batched policy/benchmark receipt reconciliation remain next. Do not refresh
+f419 repeatedly before that coherent source batch or recapture settled evidence.
+
 Queued editing/root regression receipt reconciliation now passes. The root test
 conserves the entire82bf9cee benchmark suite after removing only its added AST
 test statement;unrelated trailing source changes reject. Original string-boundary

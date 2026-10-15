@@ -1,5 +1,14 @@
 # Material audit: evidence-led implementation priorities
 
+Semantic focus source finding refinement is now implemented in audit policy only:
+the existing descendant-focus ID gains rootReconciliation with public no-op,
+two configured light desktop DPR1 owners and source-history receipts. Original
+descendant fields/all other findings remain byte-conserved through the exact
+transition helper. Focused root/margin assertions2/2 pass,including forged-root
+claim rejection. It remains queued for producer/case integration;accepted86961
+does not contain this refinement. No renderer code changed. General semantic
+reconciliation work must cover both root no-op and changed-descendant paths.
+
 October15 current acceptance pointer supersedes pending/live statements below:
 candidate86961b43 now passes independent cold canonical comparison,complete
 predecessor conservation (saved full-stream plus strict section proofs),compact

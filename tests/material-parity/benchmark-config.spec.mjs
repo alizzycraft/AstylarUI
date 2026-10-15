@@ -38,6 +38,26 @@ test('retained public unchanged-root updates preserve semantic focus failure at 
     const restore = text => text.slice(0, start) + text.slice(end);
     assert.equal(restore(suite), predecessor);
     assert.notEqual(restore(suite + '\n// unrelated assertion drift'), predecessor);
+    const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
+    const previousPolicy = execFileSync('git', ['show', `82bf9cee:${policyFile}`], { maxBuffer: 4_000_000 });
+    const policyAst = ts.createSourceFile(policyFile, previousPolicy.toString(), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    const previousDefinitions = new Function(policyAst.statements.filter(node => ts.isVariableStatement(node)
+        && node.declarationList.declarations.some(declaration => declaration.name.getText(policyAst) === 'sourceAuditDefinitions'))
+        .map(node => node.getText(policyAst).replace(/^export /, '')).join('\n') + ';return sourceAuditDefinitions;')();
+    const restoredDefinitions = structuredClone(sourceAuditDefinitions);
+    const refined = restoredDefinitions.find(row => row.id === 'core-semantic-descendant-replacement-loses-retained-focus');
+    const root = refined.rootReconciliation;
+    assert.equal(root.classification, 'confirmed-core-renderer-defect');
+    assert.match(root.firstDivergence, /unconditional semantic root replaceChildren/);
+    assert.match(root.boundary, /no synchronized selection-loss/);
+    for (const receipt of root.evidence) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+    const currentPolicy = readFileSync(policyFile, 'utf8');
+    const forgedPolicy = currentPolicy.replace('Root child identities/order and input value remain unchanged.',
+        'Root child identities changed and the input was replaced.');
+    assert.notEqual(forgedPolicy, currentPolicy);
+    assert.throws(() => restoreFlexMarginPolicyRegistration(forgedPolicy));
+    delete refined.rootReconciliation;
+    assert.deepEqual(restoredDefinitions, previousDefinitions);
     const file = 'artifacts/material-parity/public-semantic-root-noop-20261015/latest-report.json', bytes = readFileSync(file);
     assert.equal(hash(bytes), '841cf391e108c943dce2593da5b6ff7fb5430f307da1be9229252723c9ac5a48');
     const r = JSON.parse(bytes);

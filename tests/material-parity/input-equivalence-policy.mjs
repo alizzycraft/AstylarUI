@@ -1800,6 +1800,23 @@ export const sourceAuditDefinitions = Object.freeze([
     pattern: String.raw`if \(childrenChanged\) node\.replaceChildren\(\.\.\.childNodes\);`,
     classification: 'confirmed-core-renderer-defect',
     owner: 'core semantic descendant reconciliation and retained focus continuity',
+    rootReconciliation: {
+      classification: 'confirmed-core-renderer-defect',
+      owner: 'core semantic root reconciliation and retained focus continuity',
+      focusedProof: 'tests/material-parity/benchmark-config.spec.mjs: retained public unchanged-root updates preserve semantic focus failure at both DPRs',
+      evidence: [
+        { file: 'artifacts/material-parity/public-semantic-root-noop-20261015/latest-report.json', sha256: '841cf391e108c943dce2593da5b6ff7fb5430f307da1be9229252723c9ac5a48' },
+        { file: 'artifacts/material-parity/configured-input-editing-focus-owner-20261015.log', sha256: '5e057771a6a88ac246ff7d51fcd25e6fbf76a4205ba0c5267398c1a22b8ee004' },
+        { file: 'artifacts/material-parity/configured-input-editing-focus-owner-binding-20261015.log', sha256: '3c7b72f5a3b62b06a26c18c5b5f53e0fe7305061463fffea087782b45a122607' },
+        { file: 'artifacts/material-parity/semantic-root-focus-source-history-20261015.log', sha256: '4082833c6b3082b3fcfc62d56e0074eb49336d979bdf649900b296ac032e5ab4' },
+      ],
+      observation: 'Four public candidate no-op updates at DPR1/2 blur/refocus the same connected input inside root reconcile; four native no-op controls preserve focus without events. Root child identities/order and input value remain unchanged.',
+      configuredScope: 'Root first-blur attribution is independently measured only for light desktop DPR1 form-field/input deletion; the other fourteen configured editing contexts establish transient focus loss but not its precise owner.',
+      firstDivergence: 'unconditional semantic root replaceChildren before syncFocus, not Babylon projection or Material plugin authoring',
+      sourceHistory: '0175a0bd introduces the root call; 547fd6d8 adds the unchanged-child guard only to descendant reconciliation. These are source-history receipts, not first-bad runtime executions.',
+      recommendation: 'Preserve focus continuity at both root and descendant reconciliation boundaries; do not suppress events or add application refocus workarounds.',
+      boundary: 'Focus continuity only; no synchronized selection-loss, paint, all-profile, lifetime, historical runtime or whole-case acceptance claim.',
+    },
     focusedProof: 'tests/material-parity/input-boundary-evidence.spec.mjs: semantic descendant replacement focus evidence retains exact current case and source applicability',
     evidence: [
       { file: 'artifacts/material-parity/timepicker-focus-provenance-20261011.log', sha256: '55c6babc6e23292c9cf05983fb78c22daf312ff841d60966dfb55b5ff74fe6ae' },

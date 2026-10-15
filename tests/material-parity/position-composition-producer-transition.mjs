@@ -978,8 +978,32 @@ export function restoreDescriptionProofRegistration(source) {
   return current;
 }
 
-export function restoreFlexMarginPolicyRegistration(source) {
+export function restoreSemanticRootPolicyRefinement(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
+  if (!current.includes('    rootReconciliation: {')) return current;
+  assert.equal(hash(current), 'fcbf780a0d2851cbfab678b8cd5a6e3d7b6d448eb0216fd0ee780196851c0ce1');
+  const ast = ts.createSourceFile('policy.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  assert.equal(ast.parseDiagnostics.length, 0);
+  const entries = ast.statements.filter(ts.isVariableStatement).flatMap(node => [...node.declarationList.declarations])
+    .find(node => node.name.getText(ast) === 'sourceAuditDefinitions').initializer.arguments[0].elements;
+  assert.equal(entries.length, 159);
+  const owners = entries.map(node => node.arguments[0]).filter(node => node.properties
+    .some(property => property.name.getText(ast) === 'id'
+      && property.initializer.text === 'core-semantic-descendant-replacement-loses-retained-focus'));
+  assert.equal(owners.length, 1);
+  const properties = owners[0].properties.filter(node => node.name.getText(ast) === 'rootReconciliation');
+  assert.equal(properties.length, 1);
+  const property = properties[0];
+  const restored = current.slice(0, property.getFullStart()) + current.slice(property.end + 1);
+  const prior = execFileSync('git', ['show', '82bf9cee:tests/material-parity/input-equivalence-policy.mjs'],
+    { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+  assert.equal(hash(prior), '9937739b846298c74e2e75921cd878e1deaaf0960a4f25a5f9fc1b7983e27474');
+  assert.equal(restored, prior, 'Every original finding and complete policy byte survives the bounded root refinement');
+  return restored;
+}
+
+export function restoreFlexMarginPolicyRegistration(source) {
+  const current = restoreSemanticRootPolicyRefinement(source);
   if (!current.includes("id: 'core-flex-margin-font-relative-units-parse-as-pixels'")) return current;
   assert.equal(hash(current), '9937739b846298c74e2e75921cd878e1deaaf0960a4f25a5f9fc1b7983e27474');
   const ast = ts.createSourceFile('policy.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
