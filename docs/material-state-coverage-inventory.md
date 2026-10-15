@@ -2,6 +2,20 @@
 
 ## Current integration pointer — October15
 
+Strict extra-section check21370 completed exit0. All complete ownerCaretInputs
+and reviewedSourceBatchInputs fields equal the predecessor after reversing only
+the three exact receipt leaves. Current owner-initial-motion collector reproduces
+the candidate derived report hash;reversing its sole producer-module receipt
+reproduces the predecessor hash. Added-field negative controls reject. Log
+flex-margin-extra-section-conservation-20261015.log SHA
+884a28bc2e797ba79a181f1a24628ae891e080667af328c064b3125ea0f2397f.
+Composed conservation check exits0: authenticates the saved full-stream check
+and both targeted proofs,checks the complete ten changed-section membership,
+and verifies every other section digest is unchanged. See
+flex-margin-composed-conservation-20261015.log. This does not change either
+original command's failure result or replace the independent cold acceptance.
+Cold session86353 remains live on the same handle;no restart or import.
+
 Verification status correction: conservation retry78161 is TERMINAL exit1 at
 `Unreviewed section ownerCaretInputs`; its earlier live description below is
 historical. Its saved all-section digests identify exactly two remaining

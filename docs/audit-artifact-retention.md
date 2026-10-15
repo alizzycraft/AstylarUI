@@ -56,6 +56,15 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Retain flex-margin-extra-section-delta-20261015.log and strict
+flex-margin-extra-section-conservation-20261015.log (SHA
+884a28bc2e797ba79a181f1a24628ae891e080667af328c064b3125ea0f2397f),
+plus flex-margin-composed-conservation-20261015.log. The strict proof establishes
+complete section equality except three producer/derived-report receipt leaves;
+the composition authenticates saved full-stream and targeted checks without
+repeating a multi-gigabyte scan. Preserve both original failing conservation
+logs;neither is relabeled passing. Independent cold acceptance remains required.
+
 October15 package conservation:retain failed
 flex-margin-queued-package-conservation-20261015.log SHA
 66907f8efbe57007b09a827274edb6f9b7667abd57d68934f022078e51c2f80b.

@@ -49,6 +49,18 @@ describes the preceding checkpoint,not the current policy file.
 
 ## October15 public flex margin-unit failure — confirmed bounded core defect
 
+Source-history refinement (no historical runtime claim):block own-font margin
+resolution was extended in096c8a86228811003da0b05b5daf7f4ddbdb1bdb (August15).
+The following day's flex longhand wrapper5550ba1ff1bc54096838955f995c5f55665ace5c
+uses parseFloat and delegates shorthand to the older parseMargin path,whose
+parseFloat history reaches10bd84c8205e92d228d33580ae4ff1fd62e6d8a5.
+This explains separate resolver evolution,not a Babylon projection failure or
+proof of a recent Material compensation. Complete historical blobs/diffs are
+preserved in flex-margin-source-history-20261015.log SHA
+0f9d00735974d4bbf35ac7ddd2adbf5c211745fbb95f0c244bbc37e7314133ea.
+The block parseMarginBox introduction40ac6f4f is retained too. First-bad executed
+revision remains unproved;the two current public runs remain the runtime proof.
+
 Two fresh public-package equal-input runs each show four flex1em-margin failures
 with explicit own16/24px fonts,while four block-em and eight pixel controls agree.
 Native child offsets from the padded parent are36/44px;candidate flex offsets are
