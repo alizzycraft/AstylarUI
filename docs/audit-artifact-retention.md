@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Retain divider-anonymous-paragraph-property-review-20261015.log and
+divider-paragraph-inherited-text-inputs-20261015.log with the exact selected
+cfd613cf proposal and86961 compact source index. They close specific anonymous
+owner/property and three inherited-request questions using48 authenticated
+paragraph pairs,not a new capture or broad rendering acceptance. Full hashes and
+remaining boundaries are recorded in the current ledger. They are queued outside
+the live configured-editing-root export and must not be described as integrated.
+
 Editing/root source batch selects cfd613cf reviewed merge;retain it with f419,
 24ee and the exact receipt/annotation conservation log
 configured-editing-root-coherent-proposal-20261015.log. Retain both

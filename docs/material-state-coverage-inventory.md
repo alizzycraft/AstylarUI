@@ -2,6 +2,33 @@
 
 ## Current integration pointer — October15
 
+Source batch5354ea03 is pushed;canonical export31960 is live,launcher35440/
+worker26132 confirmed through the process table. Log
+configured-editing-root-canonical-export-20261015.log;last stage build-audit.
+Consumed source/review inputs remain frozen. Do not restart for silence.
+
+Independent remaining-gap review answers the anonymous divider paragraph
+question without reopening the settled topology census:the compact86961 scalar
+shard names only divider-above/below/primary/root,not their anonymous p owners.
+All24 authenticated case pairs yield48 paragraph pairs/3984 material property
+slots;2688 own-stage differences group into93 signatures,retaining absent
+candidate inputs and browser-used versus declared values. Log
+divider-anonymous-paragraph-property-review-20261015.log SHA
+ff643c703078015ee4bd81488acc6e3eaa2e7a3c0b0e8bc64b9923eba4ad2f43.
+Source classification already covers static-versus-absolute flow substitution;
+do not call these93 signatures new core defects or equivalent inputs.
+The specific inherited request question is now answered for all48 pairs:
+fontFamily,fontSize,color are absent on each candidate paragraph but have unique
+nearest captured ancestor requests matching native paragraph computed values
+under the authenticated precision normalizer (144 matches). Log
+divider-paragraph-inherited-text-inputs-20261015.log SHA
+da1fda3df179ea153466de1f554e506d1441192a58df5f47bdef5193938c829a.
+This is captured request/ancestry correspondence,not proof of runtime inheritance,
+chosen fonts,used metrics,remaining defaults or paint. Next resolve remaining
+paragraph property applicability,then exact endpoint/AA and ownership/currentness
+obligations. Both new logs are unregistered queued evidence,not part of the live
+export or a complete-case promotion. No fixture/renderer/consumed source changes.
+
 Coherent editing/root source registration is ready for canonical integration:
 producer207 adds one existing-suite proof,eight evidence paths and selected
 reviewcfd613cf5564fb485d87a9ba2711c8eb6d67f53e7ea35a62ada2d4c78ff1138e.
