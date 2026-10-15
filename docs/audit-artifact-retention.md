@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Retain divider-paragraph-border-initial-attribution-20261015.log and its
+case-join log with queuede4b85e47 proposal and cfd613cf predecessor. These retain
+192 unequal initial border inputs,existing limitation attribution and two
+negative controls;all24 added subrecords conserve other review fields. They are
+outside the live export. Do not discard the original unequal values because no
+border currently paints or relabel them as an equal-input rendering pass.
+
 Retain divider-anonymous-paragraph-property-review-20261015.log and
 divider-paragraph-inherited-text-inputs-20261015.log with the exact selected
 cfd613cf proposal and86961 compact source index. They close specific anonymous

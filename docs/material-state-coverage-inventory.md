@@ -2,6 +2,24 @@
 
 ## Current integration pointer — October15
 
+Anonymous divider paragraph border attribution is now inspected for all48 pairs/
+192 side-color observations. Reusing the existing conservative selector/exclusion
+proof finds no possible color/reset declaration;all three candidate stages retain
+transparent while native sides equal computed text color. Both sides have zero
+width/none style,but this is NOT used to claim input equivalence. This extends
+existing core-border-initial-color-differs-from-css (intentional documented
+limitation),not a new core defect or paint diagnosis. Explicit authored color and
+unknown compound-selector controls reject. Log
+divider-paragraph-border-initial-attribution-20261015.log SHA
+a7d88c5c99c8d4379f07feab85a27d97e0f33620e6d184e60a47c3a3b2b3e24d.
+Existing review machinery joins24 exact case subrecords;all unrelated complete
+fields conserve. Queued proposale4b85e47b0ef0d6a9c8f023f40b18a7372fd71cbfcac5146fc5c9b3157c19fd3
+fileSHAdbfa081eb51b0da3e72fcc316c7f0af5567d3eb428051aa4542d26a7a8db179f;
+2311 cases/12712 dependencies validate,both completion flags false. Log
+divider-paragraph-border-case-join-20261015.log. It is NOT selected by live
+export31960;do not alter cfd613cf/source inputs during that export. Remaining
+paragraph properties,paint footprints and whole-case obligations remain open.
+
 Source batch5354ea03 is pushed;canonical export31960 is live,launcher35440/
 worker26132 confirmed through the process table. Log
 configured-editing-root-canonical-export-20261015.log;last stage build-audit.
