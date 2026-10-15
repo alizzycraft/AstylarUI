@@ -56,6 +56,10 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep icon-inspect-crop-geometry-binding-20261016 stdout/stderr with original
+full report/diagnostic log. It records8 coincident reference/candidate/union
+regions and16 wrong-owner/padding controls;no image files or source recovery.
+
 Keep icon-inspect-pixel-obligation-join-20261016 stdout/stderr and queuede09313be,
 superseding61ad. Original eight-row diagnostic log and16 full images remain
 required. No cropped image files were generated;metric replay used memory only.

@@ -4,6 +4,22 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Icon inspect regions independently bind measured target extent — October16
+
+icon-inspect-crop-geometry-binding-20261016 TERMINAL0 authenticates original
+reportab42dbec and diagnostica253a833. All8 exact regions equal measured reference
+icon-primary border box +8CSSpx converted by recorded DPR with floor/ceil/clamp.
+Candidate-box and reference/candidate-union models produce the SAME8 bounds;
+no projected coordinates were rounded/sanitized to force agreement. Sixteen
+controls reject icon-root as owner or4px padding. Thus each stored diagnostic
+region is independently tied to the measured icon extent,not a whole-page default
+or arbitrary parent crop. This does not distinguish among these coincident anchor
+models,recover original e01 source execution or establish equivalent SVG/PNG/
+formatting inputs. Original runner receipt gap remains;do not repeat reconstruction
+or claim the owning original test passed. No new raster/capture,canonical export,
+threshold,case promotion or renderer/fixture edit. Next work should use this bound
+pixel evidence rather than redoing crop arithmetic or settled metric replay.
+
 ### Eight icon inspect diagnostics joined without new acceptance gates — October16
 
 Existing original test required unavailable e01 whole-runner bytes;do not rerun
