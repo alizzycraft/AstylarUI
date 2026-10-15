@@ -43,6 +43,35 @@ explanation:sourceFingerprints,coverage,controlLineBoxes,discrepancies,gapReview
 ownerCaretInputs,reviewedSourceBatchInputs,controlTypography,focusedProofs.
 This complete section census is not approval of those changes. Cold check51122
 remains running (worker3276 verified live);no compact import or acceptance yet.
+The next exact-leaf comparison is running in session10959/process17056,verified
+live with advancing CPU. It uses existing compareSectionLeaves for gapReviewInputs,
+ownerCaretInputs,reviewedSourceBatchInputs,controlLineBoxes,controlTypography and
+discrepancies,with whole decoded-byte authentication on both streams. Logs:
+divider-proof-batch-changed-leaf-conservation-20261015 stdout/stderr. No result is
+yet available;coverage/focusedProofs/sourceFingerprints additions still require
+separate bounded explanation after this six-section comparison. Do not restart
+these live checks or treat quiet redirected output as a terminal failure.
+Session10959 is now TERMINAL0. All six selected sections preserve identical leaf
+paths/order/container types;149 leaves change and every one is a SHA receipt:
+controlLineBoxes48,controlTypography48,discrepancies48,gapReviewInputs1,
+ownerCaretInputs2,reviewedSourceBatchInputs2. Exact counts and SHA-only field
+allowlist assertions pass. Raw values,classifications and row membership in these
+sections are unchanged. Both complete decoded streams authenticate. This resolves
+the raw-data/shape conservation question,not the semantic approval of all receipt
+transitions. Remaining:explain those149 receipts plus the three additive sections,
+then cold result/compact integration. Cold51122 is still unaccepted/in progress.
+
+Remaining activation-applicability census in queued21d8 is exactly467:
+form-field76,input76,autocomplete102,datepicker111,timepicker102. Those five
+families contain483 cases total;16 picker/autocomplete entries were already
+applicable. Their retained event-boundary subrecords cover423 interaction cases
+(64,64,98,99,98);60 static cases have no such record. Existing modes distinguish
+uncompared-retained-arrays from normalized-primary-host-types. Neither mode
+establishes actual target identity,focus,commit or picker opening;the original
+e01 action-source receipt remains unavailable. Next applicability review must
+separate native pointer/focus expectations from editing,submission and distinct
+date/time popup triggers,not exclude all input activation for lack of onclick
+or promote matching normalized event arrays to successful delivery.
 
 Specific question: do the52 authored leaf-tree cases lack all pointer activation,
 or do they retain a click-to-focus contract despite no expand/select action?
