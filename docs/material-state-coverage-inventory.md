@@ -30,6 +30,36 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   inputs changed. All original final gates and36-family/relevant-state scope
   remain. No further export is justified solely by this status update.
 
+### Composite control applicability retains host/control distinction — October15
+
+Checkbox68,radio68,slider78,slide-toggle68 cases now have exact retained owner
+mapping in the same narrow join. Checkbox input belongs to the named mat-checkbox
+host;switch button belongs to mat-slide-toggle and requests role=switch. Radio
+maps unique solo/team native input values under radio-primary to candidate radio
+owners under its authored radiogroup. Both range input IDs map directly. Parent
+links are walked and checked,not inferred by coordinate or key-prefix equality.
+Native INPUT/BUTTON versus candidate role-only DIV remains an explicit difference;
+range domain/step differences remain in authenticated trees,not normalized away.
+
+Queued d33fef9f0bd22c239f48b7a6f9a2f93036e4c5ce9051fb9102b6f549d9ee2318
+supersedes26bdb for the next batch. Combined scope981 cases/1962 trees/1247 native
+controls;1335 applicability fields change across893 cases. This adds250 activation
+and258 focus applicability dispositions to the prior827 fields. All existing
+behavior dispositions,remaining obligations and unrelated review data survive;
+restoring original obligation objects returns complete87b7. Ten controls reject
+receipt/type/ID/membership/ancestry/value/role corruption. Loader validates2311
+cases/12877 dependencies,inspectionComplete/currentRenderingAccepted remainfalse.
+Log composite-control-authored-applicability-case-join-20261015 stdout/stderr exits0.
+
+QUEUED unverified activation1805→1363;focus1797→904;localPaint969 unchanged.
+This is authored applicability,not parity,actual event/focus delivery,disabled
+blocking,keyboard/range correctness or current-source acceptance. No full-case
+promotion,recapture or renderer change. Same join source expands while older
+unselected proposals remain historical (26bdb source is Git7a8f438c). Live1451
+continues selecting immutable87b7,outside this script/new proposal. Remaining
+overlay/selection/composite applicability needs equally explicit target mapping;
+do not treat the role-only candidates as equivalent native controls.
+
 ### Editable-field focus applicability joins443 more cases — October15
 
 The same narrow join now covers the five editable-field families,without

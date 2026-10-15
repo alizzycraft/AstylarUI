@@ -56,6 +56,11 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep composite-control-authored-applicability-case-join-20261015 stdout/stderr
+and queued d33fef9f;it supersedes26bdb for the expanded applicability join only.
+Earlier unselected proposals remain historical,not extra cases or current source
+validation. Live1451 and original captures are untouched.
+
 Keep native-control-authored-applicability-case-join-20261015 stdout/stderr and
 queued26bdb. It supersedes0183 for current expanded join applicability,not browser
 evidence;old0183/its log remain historical with source Git8d49830a. No new capture
