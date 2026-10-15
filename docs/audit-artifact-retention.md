@@ -66,6 +66,14 @@ Raw capture evidence hashes and UTF8/LF source fingerprints remain distinct.
 Cold verification and remaining section conservation are pending;no original
 or failure capture was deleted and no successful scratch was created.
 
+Section conservation subsequently completes by composition:retain margin-context-
+canonical-remaining-sections stdout/stderr (overall failed derived-digest
+assertion),motion-report-digest-reconstruction,canonical-coverage-conservation
+and canonical-section-conservation-composed logs dated20261015. The standalone
+coverage check stops after the authenticated coverage section rather than reading
+the full package again. No original report or failure was rewritten. Independent
+cold/import/publication remain separate;all2311 cases remain partial/unverified.
+
 Keep paragraph-normal-lineheight-owner-path-20261015.log with retained inherited-
 margin package receipts. It binds complete three-method metric-resolution paths.
 The public paragraph driver has now executed:retain public-paragraph-linebox-

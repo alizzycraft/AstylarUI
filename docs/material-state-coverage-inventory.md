@@ -141,8 +141,28 @@ The initial raw-byte check fails on CRLF owner-binding log:d34d2b7f raw versus
 raw evidence receipts. Source finding's raw evidence receipt staysd34d2b7f.
 Exact stdout/stderr logs use margin-context-canonical-source-conservation[-retry]
 and margin-context-candidate-source-boundary[-retry],dated20261015.
-Remaining changed-section content:coverage,controlLineBoxes,ownerCaretInputs,
-reviewedSourceBatchInputs. No full canonical acceptance from these partial checks.
+Remaining changed-section content now reconciles through executed checks.
+margin-context-canonical-remaining-sections-20261015.log authenticates the full
+candidate and proves controlLineBoxes/ownerCaretInputs conserve after48/1 exact
+producer receipts. Its final reviewedSourceBatchInputs comparison fails only at
+the generated motion-report hash after its one source-receipt update;preserve
+this overall failure. The existing motion report template f8f90799,unchanged
+non-receipt fields and four real source receipts independently reconstruct both
+96fd1252 predecessor and4fc30b9f candidate digests. Log:
+margin-context-motion-report-digest-reconstruction-20261015.log.
+
+Standalone coverage conservation completes terminal0 after67158016 decoded bytes:
+all2311 full candidate records equal selected74d0 review;exact12717 dependency
+list derives from its receipts;base coverage equals accepted6e20 and both
+acceptance flags stay false. This is receipt-content equality,not fresh byte
+validation of every captured dependency or browser acceptance. Log:
+margin-context-canonical-coverage-conservation-20261015.log (SHA6b1ed995).
+The composed section check terminal0 authenticates these saved outcomes and the
+one exact reconstructed digest difference;log margin-context-canonical-section-
+conservation-composed-20261015.log binds remaining-log25a619f2 and reconstruction
+9d58475b. All nine changed sections and71 unchanged sections are now explained
+alongside complete row/source-finding conservation. Independent cold verification,
+compact import/whole-index verification and publication remain pending.
 Existing worker19856/launcher22960 remain live;
 no cold terminal result or acceptance claim. No new browser capture or producer
 change was needed to resolve the population accounting question.
