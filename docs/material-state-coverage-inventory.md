@@ -87,6 +87,28 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   0 fully inspected,2311 partial,0 untouched/assigned whole-case blockers.
   Supplemental relevant-state/applicability closure and all final gates remain.
 
+### Margin/context candidate conservation census — October15
+
+Read-only candidate census completed exit0 (session9952):authenticated candidate
+92346052 compressed/decoded lengths and hashes,accepted6e20 index6d3df3e7 and
+every compact shard receipt. Log margin-context-canonical-census-20261015.log
+contains complete typed section digests and49 changed row hash pairs. Exact
+scalar/control population is8483+8247=16730 rows,16681 unchanged. The initially
+expected48546 includes31657 retainedTypography rows and159 source findings;
+do not describe the16730-row comparison alone as full48546-row conservation.
+
+Authenticated predecessor census41198dc1 supplies accepted6e20 section hashes.
+All80 section names agree;71 complete sections are unchanged,including the
+entire retainedTypography section (therefore its31657 rows). Nine changed:
+sourceFingerprints,coverage,controlLineBoxes,discrepancies,ownerCaretInputs,
+reviewedSourceBatchInputs,controlTypography,sourceFindings,focusedProofs.
+The159 findings are separately pending full content comparison,not omitted
+or assumed conserved from their unchanged count. Next explain49 row changes
+and all nine section deltas,including non-row control metadata,then import only
+after independent cold success. Existing worker19856/launcher22960 remain live;
+no cold terminal result or acceptance claim. No new browser capture or producer
+change was needed to resolve the population accounting question.
+
 ### Normal paragraph owner boundary — October15
 
 The separately scoped public normal-versus-explicit reduction has now executed;
