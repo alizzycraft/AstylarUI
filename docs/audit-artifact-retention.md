@@ -56,6 +56,11 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep root-editing-regression-current-applicability-20261015 stdout/stderr:the
+original owning test fails its captured runner module-graph receipt after the
+metadata-only instrumentation. Do not delete it or label registration success
+as replay of the blocked original behavioral assertions.
+
 Keep divider-coordinate-branch-history-20261015 stdout/stderr (logb92b250b),
 which retains five Git changes and exact current-rule correspondence. It is
 standalone history evidence outside the live cf740d1d batch,not a new capture.

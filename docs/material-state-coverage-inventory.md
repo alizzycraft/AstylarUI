@@ -30,6 +30,27 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   inputs changed. All original final gates and36-family/relevant-state scope
   remain. No further export is justified solely by this status update.
 
+### Original root/editing regression needs runner applicability reconciliation — October15
+
+Read-only owning test execution answers a remaining final-gate question:
+benchmark-config.spec.mjs test `retained public unchanged-root updates preserve
+semantic focus failure at both DPRs` currently FAILS (0/1,2183.6148ms terminal).
+Log root-editing-regression-current-applicability-20261015.log and matching stderr.
+Its exact diagnosticFiles assertion sees runner86ece08b versus captured584cdfc8;
+the other shown graph entries agree. It stops before the retained behavioral
+assertions,so this is neither a new runtime focus regression nor a passing
+historical replay. The current six-test crop/texture proof and refreshed queued
+review receipts do not automatically reconcile this older owning assertion.
+
+Next,after live export27040 terminates,apply the already proven exact metadata-
+only whole-runner conservation at this historical source-read boundary without
+changing captured receipts,omitting assertions or accepting arbitrary hashes.
+Then execute the original assertion again and retain this failure. Scope all
+other consumers of that same captured runner graph before final gates;do not
+describe focused registration checks as the complete audit harness. No test or
+producer source was changed during the frozen export. Canonical export success,
+if obtained,is separate from this outstanding regression/final-gate failure.
+
 ### Divider compensation branches traced while export remains frozen — October15
 
 Read-only Git pickaxe closes the specific DPR/density-offset origin question:
