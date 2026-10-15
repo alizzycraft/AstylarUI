@@ -18,12 +18,15 @@ button;the new paragraph proof binds auto child height. Share one owning fix and
 retain both observables;do not duplicate the finding or repeat its fallback tests.
 
 Current canonical acceptance pointer (supersedes historical checkpoints below):
-6e20a321/6d3df3e7 includes the configured editing/root-focus evidence and207
-registered focused proofs. Independent serial cold comparison,full predecessor
+92346052/index478d2448 includes configured editing/root-focus evidence,selected
+74d0 divider review,inherited-font margin and thin-fill context evidence with209
+registered focused proofs. Independent cold comparison,full predecessor
 conservation,compact import and whole-index verification pass;exact receipts are
 in the coverage ledger. All2311 cases remain partial/unverified,inputEquivalent
-false. Queued cc2dcdaf divider evidence,inherited-font margin and newer thin-fill
-diagnostics are outside this batch. Final gates and complete case closure remain.
+false. New paragraph auto-height and empirical four-sample diagnostics remain
+outside this batch. Final gates and complete case closure remain.
+
+The following source-registration chronology predates that accepted package:
 The inherited block-margin field is now applied in current audit-policy source
 with exact predecessor conservation and3/3 owning root/inherited/flex assertions.
 It is not yet included in published6e20;proof registration and exact case receipt

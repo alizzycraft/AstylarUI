@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Margin/context candidate92346052 is now independently cold-verified,imported and
+whole-index-verified (index478d2448). Retain its original export/cold stdout/stderr,
+all conservation/reconstruction checks and compact import/verify logs dated20261015.
+Predecessor6e20/index6d3d and original failed attempts remain required evidence.
+This supersedes pending/live descriptions below;it is evidence publication,not
+rendering acceptance or case closure. No original or failure evidence was deleted.
+
 Retain margin-context-canonical-census,row-conservation[-retry],source-sections,
 source-conservation[-retry],candidate-source-boundary[-retry] and readable-
 conservation logs dated20261015 with candidate92346052 and accepted6e20 index.

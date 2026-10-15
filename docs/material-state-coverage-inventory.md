@@ -4,6 +4,34 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+- Accepted evidence package is now9234605241791fcd5d15af1747b83921800a7b31f0dc0ec9440ff83e0345081d,
+  index478d24484da0c18b3fa1a09b19fc7f42d0b37e360b819e48fca5e8a141b26bb2.
+  Includes the209-proof margin/context source batch and selected74d0 review.
+  Compressed70618702 bytes;decoded2291083115/SHA19a83381e73242880784fd311a98afd0991603d6ac2eea56d30643091d8cc8e1.
+  Predecessor6e20/index6d3d remains retained. Full row,source-finding,section,
+  source-boundary and readable conservation are complete as recorded below.
+- Independent cold check session20326 TERMINAL0;launcher22960/worker19856 exited.
+  stderr complete3039861.7678ms,check-canonical2865907.8743ms. Two collectors,
+  10 memory hits,0 disk hits/invalidations,13923 files and1178201899 bytes read
+  and independently reverified. stdoutSHAce641af1e09a3f32c285c58e7f86a504aca56171f4af27756211aee86abf75d3;
+  stderrSHA330de9f012cbdd3c3795f2d9ee97fcf632669cf8ac97a424c203bcf612324a56.
+  Logs margin-context-canonical-cold-check-20261015.log and matching .stderr.log.
+  Earlier quiet redirected logs were not a terminal failure;the same worker was
+  observed with advancing CPU/I/O and was never restarted.
+- Compact import60556 TERMINAL0 and whole-index verify TERMINAL0;logs
+  margin-context-compact-{import,verify}-20261015.log and matching stderr.
+  Compact72751809 bytes;8483 scalar groups,39904 typography/control rows,
+  389202 occurrences,159 findings,0 unresolved scalar attributions. These are
+  not failed-case or full-inspection counts. All2311 remain partial/unverified;
+  inspectionComplete=false,currentRenderingAccepted=false,inputEquivalent=false.
+- Next actual audit work:complete case/state obligation closure using existing
+  evidence;join supplemental paragraph auto-height evidence to the EXISTING
+  normal-metrics finding at a later coherent batch. No renderer or comparison
+  inputs changed. All original final gates and36-family/relevant-state scope
+  remain. No further export is justified solely by this status update.
+
+### Previous package reconciliation — historical checkpoints
+
 - Accepted package/index:6e20a321/6d3df3e7,159 findings,current207-proof source
   registration5354ea03. Cold comparison,predecessor conservation,compact import
   and whole-index verification pass. Source/fixture/render acceptance not implied.
