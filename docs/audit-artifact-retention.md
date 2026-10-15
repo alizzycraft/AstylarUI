@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep icon-inspect-pixel-obligation-join-20261016 stdout/stderr and queuede09313be,
+superseding61ad. Original eight-row diagnostic log and16 full images remain
+required. No cropped image files were generated;metric replay used memory only.
+Closed proposal uses hash-preserving LZX;original source gap/diagnostic failures
+are not removed or turned into release gates.
+
 Keep icon-formatting-context-obligation-join-20261016 stdout/stderr and queued
 61adfde6,which supersedes4304 for the combined join. Prior source is Git57914ec4.
 Closed JSON uses hash-preserving LZX. Existing context evidence is reused;no

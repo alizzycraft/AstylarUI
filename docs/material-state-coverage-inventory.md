@@ -4,6 +4,27 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Eight icon inspect diagnostics joined without new acceptance gates — October16
+
+Existing original test required unavailable e01 whole-runner bytes;do not rerun
+or waive that guard. The pinned icon-inspect-local-paint-20261007 log supplies
+eight exact recorded bounds and16 full-image hashes. Updated existing icon join
+authenticates these and all three unchanged metric-module hashes,extracts those
+regions in memory and recomputes every serialized diagnostic exactly. No new PNG,
+metric threshold or crop-owner claim is created. All8 original interaction rows
+have focusedRasters=[]/configuredLocalTargets0. Four DPR2 sharpness diagnostics
+fail,four DPR1 pass;those defaults are not new interaction release gates.
+icon-inspect-pixel-obligation-join-20261016 TERMINAL0 yields queued
+e09313beb553c5701c00100c0fa7ced8b2e75474ba082b52336e701e1c6f3147,
+superseding61ad for combined icon evidence. Eight parents gain inspected-diagnostic
+subrecords while original parent dispositions/remaining work survive. Loader2311
+cases/12906 dependencies authenticates;whole117a restores,seven existing AX/
+hierarchy/display controls pass,both completion flagsfalse. Original runner and
+crop-owner provenance remain unresolved;unequal asset/formatting inputs remain
+authoring failures,not an equal-input renderer-blur attribution. No browser run,
+canonical export or fixture/renderer edit. Closed proposal compressed losslessly
+with SHA equality;prior combined source is Git9ee8f415.
+
 ### Icon formatting-context finding reused in exact-case hierarchy — October16
 
 The anonymous-line question is NOT a new equivalent-input renderer failure.

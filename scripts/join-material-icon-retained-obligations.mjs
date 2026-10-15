@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import { PNG } from 'pngjs';
+import { evaluateFocusedRaster } from '../tests/material-parity/focused-raster-metrics.mjs';
 import { saveReviewProposal, loadCaseObligationReview } from './audit-findings-store.mjs';
 
 // Reuse the existing exact-case census and original TAP observations. No browser
@@ -29,6 +32,26 @@ const reportBytes = readFileSync(base + 'current-full-20261005/latest-report.jso
 assert.equal(hash(reportBytes), census.reportSha256);
 assert.equal(census.reportSha256, 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
 const report = JSON.parse(reportBytes);
+const inspectFile = base + 'icon-inspect-local-paint-20261007.log', inspectBytes = readFileSync(inspectFile);
+assert.equal(hash(inspectBytes), 'a253a8331dfffa856f1f886451487cb6a4a394a56837054fdb7a4eb448b6b1d7');
+const [inspectReceipt, ...inspectRows] = inspectBytes.toString().trim().split(/\r?\n/).map(JSON.parse);
+assert.equal(inspectReceipt.reportSha256, hash(reportBytes)); assert.equal(inspectRows.length, 8);
+const metricSources = [
+  ['tests/material-parity/focused-raster-metrics.mjs', 'c84839968d5ba77534a0af4d56f31f187cd941e607a8418959a1b0771f92e1e0'],
+  ['tests/parity/sharpness-metrics.mjs', '70deaaecebd87fa0b8778fdd7a4c8e9e0666886cb110af049e65c34e15654125'],
+  ['tests/tts-parity/interaction-metrics.mjs', '171423516c4afac56e696ca7da13e9bc412bdca89e70d4bec308caf6bf6cd3bc'],
+].map(([file, sha256]) => { assert.equal(hash(readFileSync(file)), sha256); return { file, sha256 }; });
+function recordedCrop(image, bounds) {
+  const { left, top, right, bottom } = bounds;
+  assert.ok([left, top, right, bottom].every(Number.isSafeInteger));
+  assert.ok(left >= 0 && top >= 0 && right <= image.width && bottom <= image.height && right > left && bottom > top);
+  const width = right - left, height = bottom - top, data = new Uint8Array(width * height * 4);
+  for (let y = 0; y < height; y++) {
+    const start = ((top + y) * image.width + left) * 4;
+    data.set(image.data.subarray(start, start + width * 4), y * width * 4);
+  }
+  return { width, height, data };
+}
 const originalCases = new Map([
   ...report.results.filter(r => r.family === 'icon').map(r => [`static/icon/${r.profile}/${r.viewport.id}/initial`, r]),
   ...report.interactions.filter(r => r.family === 'icon').map(r => [`interaction/icon/${r.profile}/${r.viewport.id}/${r.state}`, r]),
@@ -120,6 +143,7 @@ function inspectHierarchy(reference, candidate) {
     boundary: 'Recorded DOM/SiteData element inventory only. Synthetic-root behavior,anonymous formatting boxes,computed property equality,scaling/raster fidelity and current runtime remain unproved.' };
 }
 let hierarchyNegativeControls = 0;
+let inspectPaintJoins = 0, inspectSharpnessFailures = 0;
 for (const c of census.cases) {
   const captured = originalCases.get(c.case); assert.ok(captured);
   assert.equal(key(captured.profile, captured.viewport), c.cohort);
@@ -140,7 +164,7 @@ for (const c of census.cases) {
     const wrongDisplay = structuredClone(trees.astylar); wrongDisplay.nodes.find(n => n.authored?.id === 'icon-root').normalResolvedStyle.display = 'block';
     assert.throws(() => inspectHierarchy(trees.reference, wrongDisplay)); hierarchyNegativeControls++;
   }
-  originals.push({ row, semantics: row.obligations.semantics, history: row.obligations.historyOwnership, inputs: row.obligations.inputStyleStructure });
+  originals.push({ row, semantics: row.obligations.semantics, history: row.obligations.historyOwnership, inputs: row.obligations.inputStyleStructure, paint: row.obligations.localPaint });
   const evidence = { census: { file: censusFile, sha256: hash(readFileSync(censusFile)) },
     logs: receipts.map(({ file, sha256 }) => ({ file, sha256 })), join: { file: script, sha256: hash(readFileSync(script)) } };
   row.obligations.semantics = { ...row.obligations.semantics, retainedActualIconTargetExposure: {
@@ -157,17 +181,38 @@ for (const c of census.cases) {
   row.obligations.inputStyleStructure = { ...row.obligations.inputStyleStructure,
     retainedIconRecordedHierarchy: { disposition: 'inspected-recorded-node-inventory', ...hierarchy,
       evidence: { pairedTrees: row.evidence.pairedTrees, join: evidence.join } } };
+  if (parts[0] === 'interaction') {
+    const observed = inspectRows.filter(r => r.profile === captured.profile && r.viewport === captured.viewport.id);
+    assert.equal(observed.length, 1); const sample = observed[0];
+    assert.deepEqual(captured.focusedRasters, []); assert.equal(sample.configuredLocalTargets, 0);
+    const crops = {}, images = {};
+    for (const side of ['reference', 'astylar']) {
+      const file = path.join(path.dirname(row.evidence.pairedTrees[side].file), side + '.png'), bytes = readFileSync(file);
+      assert.equal(hash(bytes), sample[side === 'reference' ? 'referenceSha256' : 'astylarSha256']);
+      images[side] = { file, sha256: hash(bytes) }; crops[side] = recordedCrop(PNG.sync.read(bytes), sample.bounds);
+    }
+    const metrics = evaluateFocusedRaster(crops.reference, crops.astylar);
+    assert.deepEqual(metrics, sample.diagnostic);
+    inspectPaintJoins++; if (!metrics.sharpness.meetsTarget) inspectSharpnessFailures++;
+    row.obligations.localPaint = { ...row.obligations.localPaint, retainedIconInspectPixelDiagnostic: {
+      disposition: 'inspected-diagnostic', bounds: sample.bounds, metrics,
+      evidence: { report: { file: inspectFile, sha256: hash(inspectBytes) }, images, metricSources, join: evidence.join },
+      originalRunnerReceipt: inspectReceipt.runnerSha256,
+      boundary: 'Exact recorded-bounds pixel/metric replay only. No configured interaction raster gate existed. Original runner bytes/crop-owner provenance remain unavailable;unequal SVG/PNG and block/flex inputs prevent an equal-input blur diagnosis. Not current rendering or whole-case acceptance.' } };
+  }
   assert.equal(row.inspection, 'partial'); assert.equal(row.currentRendering, 'unverified');
 }
 assert.equal(originals.length, 20);
+assert.equal(inspectPaintJoins, 8); assert.equal(inspectSharpnessFailures, 4);
 const pointer = JSON.parse(readFileSync(base + 'working-audit/current.json'));
 const indexBytes = readFileSync(`${base}working-audit/${pointer.generation}/index.json`); assert.equal(hash(indexBytes), pointer.indexSha256);
 const coverage = JSON.parse(indexBytes).metadata.coverage;
 const proposal = saveReviewProposal(base + 'working-audit', review);
 const loaded = loadCaseObligationReview(proposal.file, proposal.sha256, [...coverage.caseInventory.static, ...coverage.caseInventory.interaction]);
-for (const { row, semantics, history, inputs } of originals) { row.obligations.semantics = semantics; row.obligations.historyOwnership = history; row.obligations.inputStyleStructure = inputs; }
+for (const { row, semantics, history, inputs, paint } of originals) { row.obligations.semantics = semantics; row.obligations.historyOwnership = history; row.obligations.inputStyleStructure = inputs; row.obligations.localPaint = paint; }
 assert.equal(hash(JSON.stringify(review)), predecessor);
 console.log(JSON.stringify({ predecessor, proposal, iconCases: 20, physicalCohorts: 16, negativeControls: rejected,
   cases: loaded.cases.length, dependencies: loaded.evidenceFingerprints.length, unrelatedReviewConserved: true,
   recordedReferenceNodes: 140, recordedCandidateNodes: 120, hierarchyNegativeControls,
+  inspectPaintJoins, inspectSharpnessFailures,
   inspectionComplete: loaded.inspectionComplete, currentRenderingAccepted: loaded.currentRenderingAccepted }));
