@@ -2,6 +2,20 @@
 
 ## Current integration pointer — October15
 
+Publication82bf9cee is pushed;remote accepted the65.22MB canonical gzip with
+GitHub's existing large-file warning. Root-focus evidence now has a retained
+regression in benchmark-config.spec.mjs:unchanged public input,2515 dependencies,
+complete current/installed reconcile,reconcileElement,syncFocus methods,eight
+native/candidate DPR1/2 no-op samples and missing/wrong-owner negative controls.
+Focused command --test-name-pattern="retained public unchanged-root updates"
+passes1/1,zero skips;formatted rerun1686.5983ms at
+public-semantic-root-noop-regression-formatted-20261015.log. No browser recapture.
+This test is not yet a producer proof registration or policy/root finding update;
+canonical86961 remains the accepted predecessor,not current benchmark-source
+acceptance. Integrate the existing root/descendant finding and queued24ee editing
+case review coherently next. The public input-boundary owner remains unmodified,
+so its original report receipt stays exact. No whole-case closure is claimed.
+
 Independent cold check86353 is TERMINAL exit0 after2857090.6666ms,including
 canonical comparison. Log flex-margin-queued-canonical-cold-check-20261015.log
 SHAfb7e70e5aa7d45b3e7447306a54d55af94e9ee2f9a5b45d5cea2e192d90a0155.

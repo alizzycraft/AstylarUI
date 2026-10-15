@@ -17,6 +17,59 @@ import { propertyGroups, sourceAuditDefinitions } from './input-equivalence-poli
 import { restoreSizingDefaultPolicyRegistration, restoreFlexMarginPolicyRegistration, restoreRetainedMapLocationRegistration } from './position-composition-producer-transition.mjs';
 import { materialAbsoluteTextAlignmentTargets, materialAdditionalMeasurementTargets, materialComparisonViewport, materialFamilies, materialFocusedRasterTargets, materialGeometryExcludedTargets, materialInteractionCases, materialInteractionFocusedRasterTargets, materialInteractionTextAlignmentTargets, materialInteractionViewports, materialLeftAlignedTextTargets, materialMobileFlowCases, materialMobileFlowFamilies, materialProfiles, materialSemanticExcludedTargets, materialStaticCases, materialSupplementalStaticCases, materialTextAlignmentTargets, materialTextAlignmentToleranceOverrides, materialTextAuditTargets, materialTextlessFamilies, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets, materialViewports } from './benchmark.config.mjs';
 
+test('retained public unchanged-root updates preserve semantic focus failure at both DPRs', () => {
+    const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+    const file = 'artifacts/material-parity/public-semantic-root-noop-20261015/latest-report.json', bytes = readFileSync(file);
+    assert.equal(hash(bytes), '841cf391e108c943dce2593da5b6ff7fb5430f307da1be9229252723c9ac5a48');
+    const r = JSON.parse(bytes);
+    for (const receipt of [r.owner, r.inputSource, r.bundle, r.html, ...r.inputs])
+        assert.equal(hash(readFileSync(receipt.file)), receipt.sha256, receipt.file);
+    assert.equal(r.inputs.length, 2515);
+    assert.ok(!r.inputs.some(x => x.file.includes('material-showcase/src') || x.file.includes('astylarui/dist/lib/plugins/material')));
+    const owner = ts.createSourceFile(r.owner.file, readFileSync(r.owner.file, 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS), templates = [];
+    const visit = n => { if (ts.isNoSubstitutionTemplateLiteral(n) && n.text.includes('window.focusAudit={'))
+        templates.push(n.text); ts.forEachChild(n, visit); };
+    visit(owner);
+    assert.equal(templates.length, 1);
+    assert.equal(readFileSync(r.inputSource.file, 'utf8'), templates[0], 'Existing public reproduction unchanged');
+    const sourceFile = 'src/lib/astylar-semantic-bridge.ts', installedFile = r.inputs.find(x => x.file.endsWith('/lib/astylar-semantic-bridge.js')).file, source = readFileSync(sourceFile), installed = readFileSync(installedFile), compiled = ts.transpileModule(source.toString(), { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 } }).outputText;
+    const methods = ['reconcile', 'reconcileElement', 'syncFocus'].map(name => { const get = code => { const ast = ts.createSourceFile('semantic.js', code, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS), all = []; const visit = n => { if (ts.isMethodDeclaration(n) && n.name.getText(ast) === name)
+        all.push(n.getText(ast).replace(/\s+/g, ' ').trim()); ts.forEachChild(n, visit); }; visit(ast); assert.equal(all.length, 1); return all[0]; }; const method = get(compiled); assert.equal(get(installed.toString()), method); return { name, sha256: hash(method) }; });
+    const verify = samples => { assert.equal(samples.length, 8); const seen = new Set(); for (const s of samples) {
+        const key = s.dpr + ':' + s.side + ':' + s.repeat;
+        assert.equal(seen.has(key), false);
+        seen.add(key);
+        assert.ok([1, 2].includes(s.dpr));
+        assert.ok([0, 1].includes(s.repeat));
+        assert.equal(s.extra, false);
+        assert.equal(s.sameNode, true);
+        assert.equal(s.focused, true);
+        assert.equal(s.value, 'Atlas');
+        assert.deepEqual(s.diagnostics, []);
+        if (s.side === 'reference') {
+            assert.deepEqual(s.events, []);
+            assert.deepEqual(s.operations, []);
+        }
+        else {
+            assert.equal(s.side, 'candidate');
+            assert.deepEqual(s.events.map(e => e.type), ['focusout', 'focusin']);
+            assert.equal(s.operations.length, 1);
+            const op = s.operations[0];
+            assert.equal(op.owner, null);
+            assert.equal(op.before, true);
+            assert.equal(op.after, false);
+            assert.equal(op.connected, true);
+            assert.match(op.stack, /_AstylarSemanticBridge\.reconcile/);
+        }
+    } };
+    verify(r.samples);
+    assert.deepEqual(r.errors, []);
+    assert.throws(() => verify(r.samples.slice(1)));
+    const bad = structuredClone(r.samples);
+    bad.find(s => s.side === 'candidate').operations[0].owner = 'focus-parent';
+    assert.throws(() => verify(bad));
+});
+
 test('public equal-input flex em margins preserve exact failure and block pixel controls', () => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
   const finding = sourceAuditDefinitions.find(row => row.id === 'core-flex-margin-font-relative-units-parse-as-pixels');
