@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Retain divider-paragraph-retained-typography-stage-20261015.log with e4b85e47
+and the authenticated86961 compact index. It records480 exact retained-input
+matches and48 existing alignment joins,not complete parent typography or paint
+equivalence. No extra proposal generation or capture was created for this review.
+The existing coverage ledger now has one concise live pointer followed by its
+preserved chronological checkpoints;no historical findings or receipts removed.
+
 Keep public-inherited-margin-source-history-20261015.log with authenticated
 flex-margin-source-history-20261015.log. The new proof reuses the existing saved
 August15 blob/diff and establishes complete conservation of all three current

@@ -2,6 +2,40 @@
 
 ## Current integration pointer — October15
 
+This pointer supersedes the historical checkpoint chronology immediately below.
+
+- Accepted package/index:86961b43/ec90ff41,159 findings;predates current207-proof
+  source registration5354ea03. Source/fixture/render acceptance are not implied.
+- Active export:session31960,launcher35440/worker26132,confirmed live;log
+  configured-editing-root-canonical-export-20261015.log,last stage validate-audit.
+  Consumed producer/policy/benchmark/helper/launcher inputs remain frozen.
+- Selected review:cfd613cf,2311 partial/unverified cases,12709 dependencies;
+  root/16 configured editing evidence included,not complete-case acceptance.
+- Queued outside export:e4b85e47's24 anonymous-border joins;paragraph inherited/
+  retained typography,box/opacity and routing evidence;new public inherited-block-
+  margin proof/history. Preserve distinct capture/current/source boundaries.
+- Next gate sequence:finish same export,independent cold comparison,complete
+  predecessor delta conservation,compact import/verification and publication.
+  Then group remaining property/case review work;do not export every new note.
+- Scope/acceptance unchanged:36 families,436 static+1875 interaction cases;
+  0 fully inspected,2311 partial,0 untouched/assigned whole-case blockers.
+  Supplemental relevant-state/applicability closure and all final gates remain.
+
+### October15 evidence chronology — historical checkpoints
+
+Retained typography-stage review now covers all48 anonymous paragraph/text-leaf
+pairs:paragraph wrappers have no own text/glyph entry and exactly one matched
+span child. Ten native paragraph/leaf properties equal captured core-registry
+leaf values after authenticated normalization (480 matches);48 accepted snapshot
+logical-alignment rows join exact case/target IDs. Changed retained size and
+missing registry controls reject. Own-paragraph values independently replay
+against actual p owners;leaf-own values coincide in this cohort. Log
+divider-paragraph-retained-typography-stage-20261015.log SHA
+eeeaaf119e30ccffb1385476d6b1fe83151a827f65944b6378fad7414711777a.
+This is text-input stage correspondence,not parent strut/anonymous line-box,
+whiteSpace/word-break,chosen-font,paint,current-runtime or whole-case acceptance.
+No new font omission finding or recapture is justified by these own-stage gaps.
+
 Inherited block-margin history question is resolved at source scope:all three
 complete current parseMarginBox/parseFontSize/parseLengthValue methods equal
 096c8a86228811003da0b05b5daf7f4ddbdb1bdb (August15). That exact diff adds local
