@@ -4,6 +4,32 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Fresh producer-bound icon execution reproduces all original full pixels — October16
+
+Changed approach after retained pixel/crop checks reached the unavailable original
+runner boundary. Existing run-material-parity.mjs --skip-build,icon family only,
+runs12 static+8 inspect cases in new icon-fresh-producer-retained-build-20261016.
+Capture41910 TERMINAL0;12/12 static gates and8/8 interaction gates pass,12 static
+focused rasters pass,interaction focused targets remain0. Both overall acceptance
+flagsfalse because this is filtered,not the complete enforced matrix.
+Fresh Chromium155.0.8059.40,current readable producer and10 exact harness files
+bind20 complete checkpoint result/evidence records. Independent checkpoint verify
+-final TERMINAL0 authenticates every record,file and40 paired input-tree receipts,
+all1887 served assets and current harness graph. ReportSHA
+ec08642c4a7d5b7830805bf2de4489c318a4b1d338d7148483004ba16a5a4e26.
+ALL40 full PNGs equal original current-full-20261005 bytes exactly. This supplies
+a fresh readable-producer execution boundary for these pixels,not recovery of
+e01 source or every original action. It does not turn unequal SVG/PNG/block/flex
+inputs into equivalence,certify a newly built renderer or close whole cases.
+The asset view is1887 exact hardlinks under the new -browser directory,using
+known retained/recovered paths;no1GB build copy or asset mutation. Do not build
+into this view. New manifest records fresh runtime and exact retained build bytes.
+Logs icon-fresh-producer-{browser-view,capture,checkpoint-verify-final}-20261016.
+Initial verify used wrong manifest field harness instead of harnessFiles and
+failed before case checking;keep its non-final log,not a pass. No renderer/
+fixture/harness edits,original replacement or canonical export. Next use this
+focused boundary in exact case currentness/paint joins rather than rerun pixels.
+
 ### Icon inspect regions independently bind measured target extent — October16
 
 icon-inspect-crop-geometry-binding-20261016 TERMINAL0 authenticates original

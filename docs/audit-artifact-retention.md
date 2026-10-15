@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep icon-fresh-producer-retained-build-20261016 report/checkpoints/PNGs/trees
+and its -browser hardlink view. Never overwrite/build into that view:links share
+retained/recovered asset bytes. Logs icon-fresh-producer-browser-view,capture,
+checkpoint-verify[-final]-20261016 remain;initial verification used an incorrect
+metadata field,final authenticates20 cases/1887 assets/10 harness files and all40
+full-image equality with the original. Filtered report does not certify the matrix.
+
 Keep icon-inspect-crop-geometry-binding-20261016 stdout/stderr with original
 full report/diagnostic log. It records8 coincident reference/candidate/union
 regions and16 wrong-owner/padding controls;no image files or source recovery.
