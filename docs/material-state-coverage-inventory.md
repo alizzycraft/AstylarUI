@@ -60,6 +60,36 @@ sections are unchanged. Both complete decoded streams authenticate. This resolve
 the raw-data/shape conservation question,not the semantic approval of all receipt
 transitions. Remaining:explain those149 receipts plus the three additive sections,
 then cold result/compact integration. Cold51122 is still unaccepted/in progress.
+October16 receipt review authenticates current LF producer e6336fa8 and runner
+c13ed230;gap-review proof LF bytes authenticate olda0ba1bd3 from Git2bd5bea2 and
+current5b5585b0. Existing focused source-conservation proofs remain the semantic
+basis for these transitions,not hash equality alone. The48 nested control-proof
+digests and three additive sections are now checked together by session2645,
+logs divider-proof-batch-additive-metadata-conservation-20261016 stdout/stderr.
+It retains only those metadata sections and48 affected control rows while
+authenticating complete decoded streams;no recapture/export or index import.
+One attempted motion receipt shortcut against the saved historical report fails
+(602ca506 versus expected4fc30b9f):saved historical and fresh replay projections
+are distinct. No file changed. Existing collectOwnerInitialMotion is now invoked
+once in session40609 to authenticate fresh364aac87 and reverse exactly its producer
+receipt to4fc30b9f. Logs divider-proof-batch-motion-receipt-conservation-20261016.
+Both new checks are still running,not passing. Cold51122 advanced to
+join-case-obligations at2187556.4988ms;no acceptance follows from that phase.
+Both focused sessions now TERMINAL0. Session2645 authenticates both full decoded
+streams and verifies all48 nested scalar controlProofSha256 changes against the
+complete affected control rows. Restoring only each row's normalization module
+receipt returns the exact old row. Session40609 authenticates fresh motion report
+364aac87 and restores complete4fc30b9f by reversing exactly one producer receipt;
+the failed historical-document shortcut is not reused. Together with current LF
+producer/runner and gap-proof byte checks,this explains all149 six-section changes
+without changing original values,classifications or actions. No fresh-render claim.
+The metadata diff retains20699 path changes (including ordered-array shifts),not
+20699 findings. Replaying its coverage changes onto the accepted compact index
+checks every before value and yields exactly all2311 selected87b7 review groups;
+configured caseInventory is unchanged,both completion flagsfalse,12876 evidence
+dependencies. Source/proof inventory identity/order reconciliation remains pending,
+as do independent cold completion and compact acceptance/import. Queued21d8 is
+still outside this candidate. Do not repeat the completed six-section comparison.
 
 Remaining activation-applicability census in queued21d8 is exactly467:
 form-field76,input76,autocomplete102,datepicker111,timepicker102. Those five

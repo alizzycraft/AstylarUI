@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep divider-proof-batch-additive-metadata-conservation-20261016 stdout/stderr
+and divider-proof-batch-motion-receipt-conservation-20261016 stdout/stderr;both
+terminate0. They authenticate complete decoded streams and48 nested control-row
+digest transitions,and the complete fresh motion report's one-receipt transition.
+The earlier failed in-memory historical-motion shortcut is recorded in the ledger;
+it changed no saved report. Ordered metadata shifts are not additional findings.
+
 Keep tree-click-focus-authored-applicability-case-join[-final]-20261015 stdout/
 stderr and queued21d8e0a7. The initial count assertion failure and final successful
 join are distinct evidence. This supersedes queued0c71 for applicability only;
