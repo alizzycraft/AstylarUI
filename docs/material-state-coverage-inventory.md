@@ -6,15 +6,18 @@ This pointer supersedes the historical checkpoint chronology immediately below.
 
 - Accepted package/index:86961b43/ec90ff41,159 findings;predates current207-proof
   source registration5354ea03. Source/fixture/render acceptance are not implied.
-- Active export:session31960,launcher35440/worker26132,confirmed live;log
-  configured-editing-root-canonical-export-20261015.log,last stage validate-audit.
+- Export completed:configured-editing-root-canonical-export-20261015.log records
+  complete at2702348.1973ms,159 findings,8483 groups/389202 occurrences and
+  inputEquivalent=false. This is not independent acceptance or index publication.
+- Independent cold check:session76513,log
+  configured-editing-root-canonical-cold-check-20261015.log;build-audit reached.
   Consumed producer/policy/benchmark/helper/launcher inputs remain frozen.
 - Selected review:cfd613cf,2311 partial/unverified cases,12709 dependencies;
   root/16 configured editing evidence included,not complete-case acceptance.
 - Queued outside export:e4b85e47's24 anonymous-border joins;paragraph inherited/
   retained typography,box/opacity and routing evidence;new public inherited-block-
   margin proof/history. Preserve distinct capture/current/source boundaries.
-- Next gate sequence:finish same export,independent cold comparison,complete
+- Next gate sequence:finish independent cold comparison,complete
   predecessor delta conservation,compact import/verification and publication.
   Then group remaining property/case review work;do not export every new note.
 - Scope/acceptance unchanged:36 families,436 static+1875 interaction cases;
@@ -22,6 +25,23 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   Supplemental relevant-state/applicability closure and all final gates remain.
 
 ### October15 evidence chronology — historical checkpoints
+
+Progress snapshot reconciled the configured census without changing acceptance:
+2311 cases have evidence,none has complete obligation closure;historical output
+passes do not certify current equal-input rendering. Highest-impact remaining
+questions concern shared paint/overlay behavior,editable-control focus and exact
+case-level input/state/lifecycle dispositions. Keep these distinct from publication
+bookkeeping. Export now records a complete milestone;its evidence session reports
+1 collector,10 memory hits,1 disk hit,0 invalidations,13915 files and1176486574
+bytes read/reverified. Independent cold check76513 is running against the same
+frozen source/review inputs;do not import before cold comparison and full delta
+conservation pass. Accepted working index remains86961b43/ec90ff41.
+
+Corrected thin-fill diagnostic verification is terminal successful evidence at
+public-thin-fill-phase-corrected-verify-20261015.log:all8 paired geometries and
+two negative controls pass. Original no-op negative-control failure remains
+retained separately. This does not establish pixel parity or its causal mechanism;
+source/capture conservation and paint-stage applicability remain the next checks.
 
 Separator endpoint/AA observation gap now has all48 retained PNG bands replayed:
 flat upper/lower baselines,clear padded rings and single connected components.
