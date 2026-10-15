@@ -23,6 +23,32 @@ This pointer supersedes the historical checkpoint chronology immediately below.
 
 ### October15 evidence chronology — historical checkpoints
 
+Separator endpoint/AA observation gap now has all48 retained PNG bands replayed:
+flat upper/lower baselines,clear padded rings and single connected components.
+Horizontal painted endpoints exactly match recorded boxes;native footprint is
+1CSSpx high in all24,candidate is1px in8 DPR1,2px in8 DPR1 and1.5px in8 DPR2.
+Lossless changed-row/color runs and raw unequal static-border/absolute-fill
+requests remain in divider-separator-endpoint-footprints-20261015.log SHA
+0d36f94f2fcc9f3d93ac8b2dd4f6f483d5a4e4437579d8515acf5c9798378d0a.
+This is not equal-input core paint attribution or an exact blending mechanism.
+
+Missing equal-primitive control is now captured separately through a narrow
+authenticated margin-runner recipe:opaque1CSSpx fill,top phases0/.25/.5/.75,
+DPR1/2,no transforms. All8 paired CSS inputs/geometry agree within.01px and16
+PNGs are retained at public-thin-fill-phase-20261015. Preliminary local rows
+differ at fractional phases while integer-origin controls match. Full-frame
+differences include a separate constant outside-parent backdrop (native white,
+candidate204/25/25);opaque parent backgrounds both238/238/238. Do not mask this
+or call whole-page parity. Capture/report SHA
+a5e6b53afe1e13c5c819ee4c90e3e14a512ef95ea86d36324937abe12d6dedac,
+initial driver SHA9628c11218fd8e53ac3d689cd8109e0884cf6cdc16e62df8522db40760422f21.
+Capture succeeds but --verify FAILS its unequal-input negative control:the
+inherited margin=0 mutation changes nothing in this new margin=0 fixture.
+Retain public-thin-fill-phase-verify-20261015.log and pixels log as preliminary,
+not accepted proof. Correct that diagnostic assertion and rerun in a fresh
+directory;preserve this driver revision/report instead of refreshing its hashes.
+No frozen export input or original public runner changed.
+
 Wrapping-default input question is now source-bound for all48 paragraph labels:
 whiteSpace/wordWrap/textOverflow are omitted through every candidate ancestor,
 and the actual parser selects normal/normal/clip. Native paragraph values retain

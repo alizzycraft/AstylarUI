@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep public-thin-fill-phase-20261015 (report,bundle,HTML,16 PNGs),capture log,
+failed --verify log and preliminary pixels log. Its first driver revision must
+remain recoverable from Git:the reused margin=0 negative mutation is a no-op for
+the new zero-margin fixture. Capture/geometry observations do not override that
+verification failure. Correct the assertion only in source and use a fresh run;
+never rewrite old report source hashes. Keep divider-separator-endpoint-footprints-
+20261015.log separately as retained Material evidence,not an equal-input control.
+
 Keep divider-paragraph-wrapping-default-inputs-20261015.log with e4b85e47 and
 its authenticated retained trees. It binds six complete parser/default members
 and144 keyword observations,not browser line metrics,wrapping paint or a new
