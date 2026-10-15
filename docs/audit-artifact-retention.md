@@ -56,6 +56,10 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep named-role-authored-applicability-case-join-20261015 stdout/stderr and
+queuedcea60ac0. It supersedes1efe for the expanded applicability join;earlier
+source is Git4e9bafa7. No canonical generation,capture or live1451 input changed.
+
 Keep overlay-trigger-authored-applicability-case-join-20261015 stdout/stderr
 and queued1efe84df. This supersedesd33f for current expanded applicability only;
 other popup controls remain uninspected. Earlier source is Git8a45468b. No

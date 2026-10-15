@@ -30,6 +30,34 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   inputs changed. All original final gates and36-family/relevant-state scope
   remain. No further export is justified solely by this status update.
 
+### Named role and navigation applicability preserves measurement-owner gaps — October15
+
+Select94,expansion68,sort60,paginator52 case mappings now distinguish the native
+action/focus target from outer style-measurement hosts. Select maps select-control
+rolecombobox under select-primary to its candidate INPUT;this does not make free
+text editing applicable. Expansion maps the unique native header rolebutton under
+its panel to candidate trigger expansion-primary;sort maps its unique rolebutton
+child to sort-trigger. Wrapper/control identity is NOT asserted equal. Paginator
+maps exactly Previous page/Next page labels under its host to named candidate
+buttons,including disabled endpoint declarations;no page-size popup is inferred.
+
+Queuedcea60ac06a91743a640a5219442e17b9fcb41e87e5ca82febce423f5e545f305
+supersedes1efe for the next batch. Combined applicability evidence1623 cases,
+3246 trees,1941 mapped native controls;2531 fields change across1495 cases. This
+adds242 activation+250 focus dispositions. Full87b7 restores after only original
+obligation objects are reinstated;all behavior dispositions/remaining work and
+unrelated data survive. Sixteen controls now reject role loss and changed
+navigation label in addition to earlier controls. Loader2311 cases/12877
+dependencies,both completion flagsfalse. Log named-role-authored-applicability-
+case-join-20261015 stdout/stderr terminates0. No recapture or renderer change.
+
+QUEUED unverified activation1805→769;focus1797→302;localPaint969 unchanged.
+Remaining focus families:chips,tabs,button-toggle,stepper,tree. Remaining activation
+also includes five editable families whose click/focus/edit/popup contracts must
+not be conflated. No fully inspected case or parity result is added. Live1451
+still selects immutable87b7,outside this join/proposal. Earlier1efe source is
+Git4e9bafa7;it is historical after the join expands,not current-source acceptance.
+
 ### Popup opener applicability is not popup-control inspection — October15
 
 Named native opener buttons under matching component roots now witness activation
