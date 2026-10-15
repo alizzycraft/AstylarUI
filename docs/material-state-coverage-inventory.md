@@ -16,7 +16,8 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   ba2eb95a85644ac70cc8b925d8028293e62beacc436b571951c19fa9b9557377.
   Census60704 completed:48496 unchanged rows/50 changed,nine changed sections;
   log configured-editing-root-canonical-census-20261015.log. Row conservation
-  passes;whole-section/case transitions and cold check remain. No import yet.
+  passes;three receipt sections,source boundaries and selected cases also pass.
+  Non-row control metadata52990 and cold check remain. No import yet.
 - Selected review:cfd613cf,2311 partial/unverified cases,12709 dependencies;
   root/16 configured editing evidence included,not complete-case acceptance.
 - Queued outside export:cc2dcdaf extends e4b85e47's24 anonymous-border joins with
@@ -31,6 +32,20 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   Supplemental relevant-state/applicability closure and all final gates remain.
 
 ### October15 evidence chronology — historical checkpoints
+
+Candidate section/case checks now pass without another current full-stream read.
+controlLineBoxes restores48 producer hashes,ownerCaretInputs one source receipt,
+and reviewedSourceBatchInputs one source plus its derived report hash;each whole
+restored section equals the accepted typed digest,and forged fields reject.
+Selected cfd613cf loader authenticates12709 dependencies/all2311 complete records
+and equals candidate coverage exactly,both completion flags false. Log
+configured-editing-root-section-case-conservation-20261015.log. Separately actual
+producer scanning reproduces the159-finding section;removing the sole root field
+restores its entire accepted digest. Source/proof/coverage digests authenticate;
+all sections outside the nine intended changes are unchanged. Log
+configured-editing-root-section-boundary-conservation-20261015.log. One targeted
+predecessor read52990 checks non-row controlTypography metadata missing from the
+compact representation;do not infer it from row hashes. Cold76513 remains live.
 
 Candidate full stream now authenticates decoded length/SHA and complete48546-row
 census against accepted compact hashes;all section digests/selected metadata are
