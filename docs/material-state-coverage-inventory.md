@@ -90,6 +90,23 @@ configured caseInventory is unchanged,both completion flagsfalse,12876 evidence
 dependencies. Source/proof inventory identity/order reconciliation remains pending,
 as do independent cold completion and compact acceptance/import. Queued21d8 is
 still outside this candidate. Do not repeat the completed six-section comparison.
+Inventory identity check now TERMINAL0 in divider-proof-batch-inventory-identity-
+conservation-final-20261016 stdout/stderr. It extracts only the existing three
+inventory functions via TypeScript AST (no full audit execution),generates current
+inventory and reverses every recorded metadata difference with after-value checks.
+All209 predecessor proof objects (including line/status/description) are exact;
+four new entries prepend them. Source paths694→708 are exact after14 prepended
+additions and one explicit74d0→87b7 review-path replacement. Initial non-final
+check intentionally-overstrictly assumed no retained path replacement and failed;
+keep it,not a pass. Nine retained source hashes change:producer transition helper,
+caret source command,runner,producer,gap replay/helper suite,two gap reports,and
+benchmark suite. Their focused semantic/conservation checks are recorded above;
+no newly unexplained source is present. Source findings and all other71 unchanged
+sections remain structurally identical. Readable Markdown diff is exactly four
+added proof-description lines,no removals or finding/acceptance prose changes.
+Thus candidate conservation is accounted for;independent cold51122 remains live
+(worker3276 advancing CPU),and compact import/current-pointer acceptance is still
+pending. Accepted92346052 remains authoritative;no further export is needed.
 
 Remaining activation-applicability census in queued21d8 is exactly467:
 form-field76,input76,autocomplete102,datepicker111,timepicker102. Those five

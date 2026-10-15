@@ -56,6 +56,11 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep divider-proof-batch-inventory-identity-conservation[-final]-20261016 stdout/
+stderr. Initial assertion rejects an assumed unchanged selected-review path;
+final explicitly checks the sole74d0→87b7 replacement,14 source additions and
+complete209-proof preservation. No second canonical export or original replacement.
+
 Keep divider-proof-batch-additive-metadata-conservation-20261016 stdout/stderr
 and divider-proof-batch-motion-receipt-conservation-20261016 stdout/stderr;both
 terminate0. They authenticate complete decoded streams and48 nested control-row
