@@ -56,6 +56,11 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep tooltip-ownership-actual-theme-census-20261016 stdout/stderr and original
+tooltip-ownership-cohorts-20261008 captures. Authenticated15 requested-profile
+rows collapse to default-light inputs across four viewport/DPRs. Preserve resource
+failures;do not count labels as actual-theme coverage or replace original metadata.
+
 Keep snackbar-retained-visible-surface-census-20261016 failure stdout/stderr
 and snackbar-retained-surface-pixel-census-20261016 successful stdout/stderr.
 They reuse existing images;no crops/captures are added. Initial contrast cutoff

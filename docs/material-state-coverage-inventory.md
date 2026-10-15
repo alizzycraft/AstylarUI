@@ -4,6 +4,27 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Tooltip ownership theme coverage correction — October16
+
+New decisive scope evidence supersedes earlier "all16 physical cohorts" claims
+below. tooltip-ownership-actual-theme-census-20261016 TERMINAL0 authenticates
+reportccecadb4 and all30 trees from15 requested-profile rows. Every native frame
+has IDENTICAL inline light tokens (primary#6750a4,surface#fffbfe,scale1),computed
+backgroundrgb(255,251,254);every candidate page retains#fffbfe. The records cover
+four unique viewport/DPR combinations,not four application themes. Producer uses
+ordinary ?profile= requests and browser colorScheme without explicit store/theme
+setup;the existing ordinary-mode profile guard explains why labels are insufficient.
+The original separately corrected requested-dark/default-light mobile run does
+not add actual dark coverage. Resource14/15/16 versus tracked13/13/13 failures
+remain valid bounded observations;do not erase them or generalize theme independence.
+Actual dark/contrast/custom lifecycle cohorts remain unproved by these records.
+No new capture,renderer/fixture edit or case promotion. Next correct exact owning
+proof/coverage wording through existing source-conservation mechanism,then obtain
+only missing actual-theme evidence if required. Do not repeat light cycles.
+Candidatef663 conservation/cold integrity is separate from semantic scope:even
+a successful cold51122 cannot justify accepting renewed all-theme claims. Hold
+compact acceptance pending this scope reconciliation;do not restart live cold.
+
 ### Snackbar retained visibility is measured,but local glyph paint is not — October16
 
 Specific unresolved question:do the complete retained snackbar output passes
