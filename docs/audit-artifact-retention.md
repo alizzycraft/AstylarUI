@@ -56,6 +56,11 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep editable-pointer-authored-applicability-case-join-20261016 stdout/stderr
+and queuedc46ea21c. It supersedes21d8 for applicability only;actual behavior,
+local paint and whole-case closure remain pending. Live candidate/cold source
+inventory remains87b7,not this later script/proposal. Previous script is Gitd9f99767.
+
 Keep divider-proof-batch-inventory-identity-conservation[-final]-20261016 stdout/
 stderr. Initial assertion rejects an assumed unchanged selected-review path;
 final explicitly checks the sole74d0→87b7 replacement,14 source additions and

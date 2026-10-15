@@ -23,6 +23,28 @@ No renderer/fixture change, recapture, criterion change or case promotion occurr
 
 ### Tree leaf click applicability is not absent selection — October15
 
+### Queued activation and focus applicability complete — October16
+
+Existing native-control join now dispositions the467 remaining editable-field
+activation applicability entries. Authenticated native INPUT identity and the
+existing control-interaction scope require pointer/focus inspection even without
+authored onclick. This does NOT impose button Enter/Space behavior,submission,
+successful editing or popup opening;date/time trigger contracts remain separate.
+Disabled controls retain negative-interaction expectations,not exclusion.
+Run editable-pointer-authored-applicability-case-join-20261016 TERMINAL0 produces
+queuedc46ea21c5306beaceea46b42e98591f0669f90c974f70da090746b4273e421c6,
+superseding21d8 for a later coherent batch. Combined scoped1957 cases/3914 trees/
+2661 controls authenticate;3602 applicability fields change across1829 cases.
+All23 existing negative controls pass. Restoring original obligation objects
+recovers complete87b7;loader2311 cases/12879 dependencies,both completion flagsfalse.
+QUEUED activation:1957 applicable,354 excluded,0 unverified;focus:1997 applicable,
+314 excluded,0 unverified. LocalPaint remains1342 applicable/969 unverified.
+No behavior dispositions or remaining work are cleared,no case promotion,
+renderer/fixture change or recapture. Candidatef663/cold51122 still select87b7;
+do not rerun export merely to incorporate this standalone applicability work.
+Next highest-impact coverage work is exact local-paint applicability/coverage,
+then actual action/focus evidence and full per-case obligation closure.
+
 The existing join now authenticates this contract and changes52 additional tree
 activation applicability fields. Final run tree-click-focus-authored-applicability-
 case-join-final-20261015 TERMINAL0 creates queued21d8e0a78bb95717d21864eed1d75208431eb654508f3dfbf2309b2bbc5d2ed1,
