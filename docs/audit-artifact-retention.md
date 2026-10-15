@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep alignment-crop-provenance-focused-20261015 stdout/stderr with the new
+metadata-only instrumentation. Fresh divider-alignment-provenance-20261015 is
+a separate active capture,not a replacement for current-full-20261005 or its
+96 original alignment crops. Preserve any failed cases/preflight and checkpoint
+receipts. Original e01ef9dc producer/box uncertainty is not filled from a new run.
+Do not clean active capture output or treat report-mode completion as acceptance.
+
 Retain divider-remount-peer-remaining-20261015 and its fresh -checkpoint with
 remaining-capture/verify logs;initial-source-replay and all-case-join[-retry]
 stdout/stderr dated20261015. Keep initial report87c79325 unchanged. Its exact

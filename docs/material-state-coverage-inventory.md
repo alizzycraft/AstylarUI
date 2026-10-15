@@ -30,6 +30,42 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   inputs changed. All original final gates and36-family/relevant-state scope
   remain. No further export is justified solely by this status update.
 
+### Alignment crop measurement provenance — October15 instrumentation
+
+Do not repeat the settled96-crop screenshot-location search (a6c3eddc). It does
+not recover original owner rectangles or missing whole producere01ef9dc. Current
+runner inspection found the same information loss:compareTextAlignment receives
+both border boxes and DPR,writeAlignmentArtifacts computes the crop bounds,but
+the result retained neither. A new capture without instrumentation would repeat
+that gap rather than close it.
+
+Small harness-only correction now retains measurementGeometry (both supplied
+measurement boxes or explicitnull,DPR) on success/missing/ink-failure paths and
+cropProvenance (reference-box anchor,4CSSpx padding,exact clamped device bounds)
+when crops are actually written. These are recorded measurement inputs,not new
+CSS used-box claims or changed crop rules. No renderer,fixture,reference,action,
+settlement,metric or threshold change. No old report is populated retroactively.
+
+New owning alignment-crop-provenance.spec.mjs passes3/3,zero skips,803.0809ms;
+log alignment-crop-provenance-focused-20261015.log and stderr. Full-source
+restoration proves only metadata additions versus000394eb runnerLF082d6d7b.
+Actual old/new functions produce identical PNG bytes and metric/acceptance fields
+for fractional/clipped DPR1/2 controls;absent geometry/ink preserve decisions
+and write no invented crops. Existing dirty text-alignment-metrics.spec.mjs was
+not edited. Runner syntax and scoped git diff --check pass.
+
+Focused report-only capture now launched as session52489 with unchanged complete
+divider subset (16 static+8 inspect),--skip-build and a new directory
+divider-alignment-provenance-20261015;port4457. Logs divider-alignment-provenance-
+capture-20261015 stdout/stderr. Existing preflight/threshold computations remain;
+this is not --enforce or a fresh library build. Preserve original full run and
+failures. Consumed runner inputs stay frozen until terminal capture. Next verify
+all recorded owner/crop rectangles and exact source/asset provenance,then classify
+paint observations and reconcile source fingerprints at a coherent batch.
+Accepted package92346052 stays the preceding pinned evidence boundary;the new
+consumed harness bytes require explicit reconciliation before another canonical
+check/export. Pendingbc8a ownership and normal/raster proofs remain queued.
+
 ### All divider physical contexts: repeated public remount — October15
 
 The specific remaining18-context question is now executed,without repeating the

@@ -1637,20 +1637,24 @@ function compareTextAlignment(referenceImage, candidateImage, referenceElements,
   return targets.map((id) => {
     const expectedBox = referenceElements[id]?.borderBox;
     const actualBox = candidateElements[id]?.borderBox;
-    if (!expectedBox && !actualBox) return { id, matches: true, skipped: true, reason: 'target is absent in both modes' };
-    if (!expectedBox || !actualBox) return { id, matches: false, reason: 'target geometry is missing' };
+    const measurementGeometry = { reference: expectedBox ? { ...expectedBox } : null,
+      astylar: actualBox ? { ...actualBox } : null, deviceScaleFactor: scale };
+    if (!expectedBox && !actualBox) return { id, measurementGeometry, matches: true, skipped: true, reason: 'target is absent in both modes' };
+    if (!expectedBox || !actualBox) return { id, measurementGeometry, matches: false, reason: 'target geometry is missing' };
     const horizontalInsetFraction = materialLeftAlignedTextTargets.includes(id) ? 0 : .12;
     const reference = measureTextInkCenter(referenceImage, expectedBox, scale, { horizontalInsetFraction });
     const astylar = measureTextInkCenter(candidateImage, actualBox, scale, { horizontalInsetFraction });
-    if (!reference || !astylar) return { id, matches: false, reason: 'text ink could not be isolated' };
+    if (!reference || !astylar) return { id, measurementGeometry, matches: false, reason: 'text ink could not be isolated' };
     const offsetErrorPx = materialAbsoluteTextAlignmentTargets.includes(id)
       ? Math.abs(reference.centerY - astylar.centerY)
       : textCenterOffsetError(reference, astylar);
-    writeAlignmentArtifacts(referenceImage, candidateImage, expectedBox, scale, directory, id);
+    const cropProvenance = writeAlignmentArtifacts(referenceImage, candidateImage, expectedBox, scale, directory, id);
     return {
       id,
       reference,
       astylar,
+      measurementGeometry,
+      cropProvenance,
       offsetErrorPx,
       matches: offsetErrorPx <= (materialTextAlignmentToleranceOverrides[id] ?? materialThresholds.maximumTextCenterOffsetErrorPx),
     };
@@ -1756,6 +1760,7 @@ function writeAlignmentArtifacts(reference, candidate, box, scale, directory, id
   const astylarCrop = cropPng(candidate, bounds);
   writeFileSync(path.join(directory, `${id}-alignment-reference.png`), PNG.sync.write(referenceCrop));
   writeFileSync(path.join(directory, `${id}-alignment-astylar.png`), PNG.sync.write(astylarCrop));
+  return { anchor: 'reference-border-box', paddingCSSpx: 4, boundsDevicePx: { ...bounds } };
 }
 
 function cropPng(image, bounds) {
