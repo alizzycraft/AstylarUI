@@ -30,6 +30,47 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   inputs changed. All original final gates and36-family/relevant-state scope
   remain. No further export is justified solely by this status update.
 
+### Actual divider repeated remount and peer boundary — October15
+
+New question was repeated remounting of the actual showcase divider SiteData,
+not the already-settled shared delayed-font counterexample. Existing font logs
+13a14bca/9a61af6b remain separate and were not rerun. Driver
+scripts/audit-material-divider-remount.mjs uses Angular debug access only to
+obtain the existing injected public Astylar service,SiteData and mount options;
+all operations use public mount/update/whenSettled/dispose. No renderer,fixture
+or input style changes. Fresh browser/served-asset provenance is captured,not
+borrowed from the October5 build or Chrome154 runtime.
+
+Chrome155.0.8059.40,actual light desktop1440x1000 DPR1/2:three same-canvas
+remounts and identical updates each;one equal-data live peer on an equal-size
+canvas. Fourteen boundaries/cohort retain complete peer/retired snapshots,
+tracked and actual scene counts,material/texture identities,plugin resources,
+messages and invalid mesh bindings. All519 served runtime assets/cohort match
+the fresh checkpoint;no runtime errors. Fresh remounts plateau at17 meshes,
+17 materials,4 textures;the older post-update16-material baseline is not used
+as an interchangeable initial count. Peer snapshot stays exact during other
+owner's disposal/remount/update;its subsequent public update advances revision
+without replacing its material/texture IDs. Four retired handles/cohort stay
+disposed with zero tracked/live resources;final peer/plugin cleanup is zero.
+
+Report divider-remount-peer-20261015/latest-report.json SHA
+87c793252052bec4f67ef6a2abcb9ab57515ff9e2da33cfaffa72ebb07edf65d;
+driverSHAe0eb35a1bac97a1aba08b171b571ab4274730fd3b9a1219c82b7ff8376e125eb.
+Capture and retained verification terminal0;logs divider-remount-peer-{capture,
+verify}-20261015.log and matching stderr. The narrow retained verifier authenticates
+report/checkpoint/source/served bytes and28 boundaries;three missing-cohort,
+peer-mutation and retired-texture-resurrection forgeries reject. Syntax and
+git diff --check pass. No second capture was needed for verification.
+
+Conclusion:bounded actual-divider public lifetime evidence now exists for these
+two physical contexts,without growth or peer damage in tested operations. This
+is not Angular component teardown/remount,pending-font intervention,other18
+configured physical contexts,semantic peer isolation or paint/current-rendering
+acceptance. It is outside accepted209-proof package92346052 and is not yet joined
+to exact case records. Next review exact input/context applicability and join
+only proved ownership boundaries through the existing obligation infrastructure;
+retain the separate late-font proof. Whole-case counts remain unchanged.
+
 ### Previous package reconciliation — historical checkpoints
 
 - Accepted package/index:6e20a321/6d3df3e7,159 findings,current207-proof source
