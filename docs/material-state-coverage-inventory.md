@@ -26,6 +26,25 @@ This pointer supersedes the historical checkpoint chronology immediately below.
 
 ### October15 evidence chronology — historical checkpoints
 
+Thin-fill backdrop question is bounded without recapture:complete current,
+installed and actual captured-bundle createRootBodyElement methods agree. The
+captured styles omit root background,selecting existing Color3(.8,.1,.1)
+fallback;all16 retained side samples show native white/candidate204,25,25 outside
+the parent and identical238,238,238 inside. Log
+public-thin-fill-root-backdrop-applicability-20261015.log binds report,package,
+method and PNG receipts. This is the previously recorded root fallback,not a
+new finding,authored diagnostic red or stale createScene code. No browser
+intervention/general root-cascade equivalence follows. Keep whole-frame failure
+visible;fractional child raster causality remains unresolved.
+
+Existing retained antialias/selection owner replay passes1/1,zero skips in
+thin-fill-retained-antialias-applicability-20261015.log. It authenticates exact
+diagnostic/theme source restoration and preserves original assertion bodies.
+Keep thin-fill-antialias-option-applicability-20261015.log's direct receipt
+failure:raw current core hash differs because of the known diagnostic additions.
+Historical applicability is restored,not current browser acceptance or proof
+that antialiasing causes the new fractional-fill observations.
+
 Thin-fill correction conservation now passes without another capture. Driver
 75e7055e differs from Git106c9e46 only by replacing the ineffective margin=0
 negative mutation with height=2px. Complete original/corrected reports are equal
