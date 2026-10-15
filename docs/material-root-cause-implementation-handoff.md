@@ -1,5 +1,17 @@
 # Material audit: evidence-led implementation priorities
 
+New bounded inherited-font margin result (queued outside live export):two public
+runs each show inherited24px 1em block margins resolving as16px atDPR1/2,while
+own24px and explicit-pixel controls pass. ElementCreationService.parseMarginBox
+uses parseFontSize(style?.fontSize),whose omission fallback is16. Complete owning
+methods equal installed bundle inputs;all64 PNG receipts corroborate geometry.
+This extends the missing computed-font invariant beyond the existing em-box
+finding to a distinct block-margin call site. Keep flex raw-unit-loss separate.
+Implementation must share authoritative computed CSS font/length resolution;
+do not set fixture-only pixel fonts or margins. Captured positioned divider
+paragraphs have unequal layout inputs and are not assigned this cause. Exact
+scope/receipts and preserved preflight failure are in the current coverage ledger.
+
 Semantic focus source finding refinement is now implemented in audit policy only:
 the existing descendant-focus ID gains rootReconciliation with public no-op,
 two configured light desktop DPR1 owners and source-history receipts. Original

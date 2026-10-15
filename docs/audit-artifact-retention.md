@@ -56,6 +56,15 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Retain both public-inherited-margin-20261015 and public-inherited-margin-repeat-
+20261015 directories (report,bundle,HTML and32 PNGs each),their capture and
+--verify logs,and public-inherited-margin-owner-binding-20261015.log. Keep the
+original import-count preflight failure public-inherited-margin-20261015.log
+separate from successful public-inherited-margin-capture-retry-20261015.log.
+The new narrow driver authenticates/reuses the original margin runner,which
+remains unchanged. This closes a demonstrated inherited-margin proof gap,not a
+repeat of the settled own-font runs. New evidence is queued outside live export.
+
 Preserve divider-paragraph-alignment-dispatch-20261015.log,-retry,-canonical
 and -bound variants. The first two expose method-trivia comparison limitations;
 canonical binds complete methods but stops at an incomplete camera stub;bound

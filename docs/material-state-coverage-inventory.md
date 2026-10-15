@@ -2,6 +2,34 @@
 
 ## Current integration pointer — October15
 
+Inherited-margin evidence gap now has two public equal-input runs. Existing em
+box finding covers inherited width/height,not margins;the original margin runner
+always gives the child an explicit font. New audit-public-inherited-margins.mjs
+reuses its exact authenticated source with a bounded ownership/context recipe:
+block children inherit or own16/24px fonts,eight pixel controls,DPR1/2. No base
+runner,fixture or consumed export input changes. Initial import-line filtering
+preflight rejected embedded template imports before capture;AST import selection
+fixes it. Preserve the original failure log and capture-retry log separately.
+Each run has16 paired cases/32 PNGs:two inherited24px em cases are8CSSpx too high;
+inherited16px controls,four own-font em controls and eight pixel controls agree.
+Both original verifier negative controls reject. Reports in
+public-inherited-margin-20261015 and public-inherited-margin-repeat-20261015.
+Both report SHA0961cd9b3f4b09b66fdff1698fa9a05902c43b7457d2e5b601b8f5bdfdba882f;
+driver raw SHA198743169f2b8f91cd846b56faa1f8bca98477982bbb79443a081e062dbcb4de.
+Complete current/emitted/installed layoutBlockChildren,parseMarginBox,
+parseFontSize,parseLengthValue methods bind to actual bundle input receipts.
+parseMarginBox passes only local style.fontSize to parseFontSize;omission uses16.
+Original helper arithmetic predicts every candidate offset,and64 retained PNG
+solid-color bounds independently corroborate displacement. Both observations
+repeat exactly;no page/diagnostic errors. Owner-binding log
+public-inherited-margin-owner-binding-20261015.log. This is a confirmed bounded
+computed-font proof(logSHAd34d2b7f1cf151ae2e8227292d05caf3278acc54d2269db12e5f9ddea1c60ca5),a
+computed-font omission at the block-margin owner,distinct from flex parseFloat
+unit loss. Queue refinement of the existing computed-font finding/implementation
+handoff after export;do not create a fixture pixel-font workaround or claim this
+causes positioned Material paragraph errors. First-bad runtime,other units,
+positioned contexts,updates and lifetime remain unproved. No canonical promotion.
+
 Paragraph alignment investigation rules out the specific flex/grid routing
 hypothesis for all48 retained p/span pairs:actual processChildren,inline-flow
 predicate,flex/grid display predicates and anonymous-flex-text guard select
