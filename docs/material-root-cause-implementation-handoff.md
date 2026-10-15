@@ -11,6 +11,11 @@ leading rules,other fonts,updates and Material wrapper attribution remain open.
 Do not compensate with fixture line heights or add1px globally. Exact report,
 owner log and retention boundaries are in the current coverage ledger. This proof
 is outside the frozen209-proof candidate;no renderer change or case closure.
+This is supplementary auto-layout evidence for existing source finding
+core-normal-line-height-samples-mg-font-box (8870fc51),not a new defect category.
+The earlier public button proof binds paint/texture height with an explicit48px
+button;the new paragraph proof binds auto child height. Share one owning fix and
+retain both observables;do not duplicate the finding or repeat its fallback tests.
 
 Current canonical acceptance pointer (supersedes historical checkpoints below):
 6e20a321/6d3df3e7 includes the configured editing/root-focus evidence and207

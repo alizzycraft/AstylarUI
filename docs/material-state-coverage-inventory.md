@@ -199,9 +199,18 @@ Normal fallback is replaced by the canvas resolver on this path. Exact general
 CSS normal-line-height algorithm,other fonts,update behavior and the unequal
 Material19px/22px positioned wrappers remain unproved. No Material case promotion.
 This standalone proof is absent from the frozen209-proof producer/policy graph;
-do not claim it is included in candidate92346052. Next integrate the bounded
-finding through existing source inventory after candidate acceptance;preserve
-the original explicit20px separator proof as a distinct defect.
+do not claim it is included in candidate92346052. It extends the EXISTING finding
+core-normal-line-height-samples-mg-font-box,not a new160th source defect. Current
+policy already records Arial16px17-versus18,serif and fallback-run paint/texture
+observations. The existing normal-line-height-audit.spec.ts gives the candidate
+button explicit48px height and observes natural DOM height separately;the new
+zero-margin paragraph control instead proves the candidate auto-layout height.
+Both trace the same resolveNormalLineHeight owner. git log -S confirms existing
+introducedBy8870fc51 (September7),not a recent regression;this search is not a
+runtime bisect or complete historical method-conservation proof. Next join only
+the new auto-height observable to that finding after candidate acceptance;do not
+repeat settled metric/fallback controls. Preserve the original explicit20px
+separator proof as a distinct defect.
 
 ### October15 evidence chronology — historical checkpoints
 
