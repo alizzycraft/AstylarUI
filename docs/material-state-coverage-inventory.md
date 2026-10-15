@@ -10,12 +10,17 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   New inherited-margin policy refinement34f3d6e5 and owning test/helper changes
   are now verified in source but NOT in that published package. Source batch
   547d9a7b completes209-proof registration and74d0 case receipt reconciliation.
-  Grouped export started October15 13:08:00,launcher21416/worker15696 confirmed
-  live with full original arguments,8192MB heap and progress enabled;logs
-  margin-context-canonical-export-20261015.log and matching .stderr.log. No
-  concurrent audit/browser worker. Source/policy/helper/benchmark/launcher/review
-  inputs remain frozen. Published6e20 stays accepted until complete successor
-  export,independent verification,conservation,import and publication.
+  Grouped export now completed:terminal stderr records2785057.7492ms. Candidate
+  compressed70618702 bytes/SHA9234605241791fcd5d15af1747b83921800a7b31f0dc0ec9440ff83e0345081d,
+  decoded2291083115 bytes/SHA19a83381e73242880784fd311a98afd0991603d6ac2eea56d30643091d8cc8e1.
+  Logs:margin-context-canonical-export-20261015.log and matching .stderr.log.
+  Read-only resumption found no live competing audit worker and2697515008 bytes
+  free on D:. Independent named-launcher --check started with cold/progress
+  enabled,8192MB heap,session20326;logs margin-context-canonical-cold-check-
+  20261015.log and matching .stderr.log. No result claimed before terminal proof.
+  Source/policy/helper/benchmark/launcher/review inputs remain frozen. Published
+  6e20 stays accepted until independent verification,conservation,import and
+  publication. This supersedes the former running-export pointer only.
 - Export completed:configured-editing-root-canonical-export-20261015.log records
   complete at2702348.1973ms,159 findings,8483 groups/389202 occurrences and
   inputEquivalent=false. This is not independent acceptance or index publication.
