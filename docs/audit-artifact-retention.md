@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep acceptedf663c88e/indexbc481df1 and preceding92346052/index478d2448 working
+packages. Retain divider-proof-batch-canonical-cold-check-20261015 stdout/stderr
+(TERMINAL0),and divider-proof-batch-compact-{import,verify}-20261016 stdout/stderr
+(both TERMINAL0),with the completed conservation records. The accepted213-proof
+package selects87b7,not later queued6490. Integration is not rendering acceptance.
+
 Keep tooltip-ownership-actual-theme-census-20261016 stdout/stderr and original
 tooltip-ownership-cohorts-20261008 captures. Authenticated15 requested-profile
 rows collapse to default-light inputs across four viewport/DPRs. Preserve resource

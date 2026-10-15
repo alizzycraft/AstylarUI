@@ -1,8 +1,24 @@
 # Material comparison/state coverage inventory
 
-## Current integration pointer — October15
+## Current integration pointer — October16
 
 This pointer supersedes the historical checkpoint chronology immediately below.
+
+Accepted evidence integration is nowf663c88ea2d75257049f26fe33add569a2fcb7529395f291a2db966db7489948,
+indexbc481df111dc424d221d2f610b53e6f6008a3e5710ddab7a205c12a56854787c.
+Compressed70662281 bytes;decoded2291302581/SHA2aef93336213683d75574f8e59905d236b62186a463459e9bca8a4f1462c7b71.
+Independent cold51122 TERMINAL0,complete4786681.8585ms;complete predecessor,
+rows,sections,coverage,source/proof inventories and readable conservation are
+recorded below. Compact import39057 TERMINAL0 and whole-index verify TERMINAL0,
+logs divider-proof-batch-compact-{import,verify}-20261016 stdout/stderr.
+Compact72751809 bytes;8483 scalar groups,39904 control/typography rows,389202
+occurrences,159 findings,0 unresolved scalar attributions. These are not failed
+case counts. All2311 remain partial,current renderingunverified,inputEquivalent=false.
+Includes213 proofs and selected87b7 review;queued6490 applicability and later
+snackbar/tooltip standalone checks are not silently included. Predecessor92346052
+and its exact index remain retained. No final browser/release gate is certified.
+Next audit work:actual per-case requirement evidence and missing applied-theme
+tooltip lifecycle contexts,not another canonical export for this status update.
 
 ### Tooltip ownership theme coverage correction — October16
 
@@ -83,6 +99,18 @@ This was a narrow retained assertion replay,not a pass of the full original
 owning suite's additional current map/source and raster assertions. No recapture.
 
 ### Divider candidate verification in progress — October15
+
+Independent cold51122 now TERMINAL0 (complete4786681.8585ms). Canonical value
+comparison succeeds after full fresh evidence-session replay:2 collectors,
+10 memory hits,0 disk hits/invalidations,14082 files/1189222147 bytes read and
+independently reverified. stdoutSHAdeffc7619b62cfacac8ad9631cecefe7fbd4e3debc6a3a8de8c1856d89734e95;
+stderrSHAfe097169d031952acd9214ef3a6051bd4fe5323d8f4225be36f80c741323fbe1.
+Together with completed predecessor/row/coverage/source/proof/readable conservation,
+candidatef663 is ready for compact integration (not rendering or audit acceptance).
+Existing npm run audit:findings:import runs in session39057,logs divider-proof-
+batch-compact-import-20261016 stdout/stderr. Import is still in progress;whole-index
+verification and coherent canonical commit/push remain. No replacement export,
+browser matrix recapture or renderer/fixture edit was performed.
 
 The reconciled export completed successfully and wrote candidate f663c88e
 (compressed SHA f663c88ea2d75257049f26fe33add569a2fcb7529395f291a2db966db7489948).
@@ -258,7 +286,7 @@ rendering,keyboard activation equivalence or whole-case closure. The queued0c71
 review is unchanged;next bind this contract through the existing applicability
 join and its negative controls,then inspect exact retained click/focus boundaries.
 
-- Accepted evidence package is now9234605241791fcd5d15af1747b83921800a7b31f0dc0ec9440ff83e0345081d,
+- Preceding accepted evidence package was9234605241791fcd5d15af1747b83921800a7b31f0dc0ec9440ff83e0345081d,
   index478d24484da0c18b3fa1a09b19fc7f42d0b37e360b819e48fca5e8a141b26bb2.
   Includes the209-proof margin/context source batch and selected74d0 review.
   Compressed70618702 bytes;decoded2291083115/SHA19a83381e73242880784fd311a98afd0991603d6ac2eea56d30643091d8cc8e1.
