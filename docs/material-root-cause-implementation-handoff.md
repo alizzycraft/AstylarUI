@@ -1,5 +1,15 @@
 # Material audit: evidence-led implementation priorities
 
+Bounded thin-fill paint result (outside the frozen canonical batch):equal measured
+fractional geometry does not yield equal raster coverage. The retained16 PNGs
+fit native round(CSS top)*DPR opaque-row paint versus candidate unsnapped device-
+rectangle overlap coverage across16872 interior pixels (RGB tolerance1). Pure
+installed polygon/projection calculations preserve the fractions. The read-only
+replay is scripts/check-material-thin-fill-interior-paint.mjs;exact boundaries
+are in the coverage ledger. Do not turn this observed model into fixture offsets
+or a universal renderer rounding rule. Actual browser/WebGL sample/compositing
+causality,edge behavior and whole-frame acceptance remain unresolved.
+
 New bounded inherited-font margin result (queued outside live export):two public
 runs each show inherited24px 1em block margins resolving as16px atDPR1/2,while
 own24px and explicit-pixel controls pass. ElementCreationService.parseMarginBox

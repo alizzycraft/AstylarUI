@@ -52,6 +52,21 @@ This pointer supersedes the historical checkpoint chronology immediately below.
 
 ### October15 evidence chronology — historical checkpoints
 
+Thin-fill interior paint now has an exact bounded model,not just different
+row colors. `node scripts/check-material-thin-fill-interior-paint.mjs` passes
+exit0 against corrected report7eef112b and all16 PNG receipts:16872 interior
+pixels (two CSSpx inset horizontally,three-device-row vertical padding) match
+within1 RGB level/alpha255. Native model=round(CSS top)*DPR with opaque rows;
+candidate model=linear overlap coverage of unsnapped projected device rectangle.
+Device-origin-rounding alternative rejects in two native DPR2 cases;CSS-origin-
+snapping alternative rejects in six candidate cases. Equal measured geometry
+still holds. This is an observation model,not browser/WebGL mechanism attribution
+or a general CSS snapping rule. Endpoint/edge/whole-frame parity is not asserted;
+outside-parent root fallback remains a separate failure. A targeted read-only PNG
+replay closes this demonstrated gap without another capture or canonical export.
+Next causal test must observe actual render-context/sample behavior or a controlled
+paint-boundary intervention after the serial cold job,not fixture offsets.
+
 Thin-fill projection-boundary review closes a narrower rounding explanation:
 authenticated corrected report7eef112b records EXACT paired projected child
 bounds at top80/80.25/80.5/80.75,height1 for both DPRs. Installed mesh module
