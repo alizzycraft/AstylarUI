@@ -56,6 +56,11 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Retain divider-fresh-paint-case-join-20261015 stdout/stderr and queuedaf1b74b4.
+It joins the existing fresh crop/texture captures to24 exact cases and supersedes
+1c7b802e for the next batch;it is not another capture or canonical generation.
+All eight failed text-target diagnostics and historical producer uncertainty stay.
+
 Retain divider-remount-runner-reconciled-join[-final]-20261015 stdout/stderr.
 Final queued review1c7b802e supersedesbc8a/d23a for current runner applicability;
 the latter remain historical checkpoint evidence,not extra inspection coverage.

@@ -2,7 +2,10 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import { PNG } from 'pngjs';
 import { saveReviewProposal, loadCaseObligationReview } from './audit-findings-store.mjs';
+import { evaluateFocusedRaster } from '../tests/material-parity/focused-raster-metrics.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const receipt = file => ({ file, sha256: hash(readFileSync(file)) });
@@ -46,9 +49,9 @@ const runnerFile = 'tests/material-parity/run-material-parity.mjs';
 const oldRunnerSHA = '584cdfc8b115e1a8c23834fe939ae6b3d4ff98bca25d61304a094a637825cc4e';
 const currentRunnerSHA = hash(readFileSync(runnerFile));
 assert.equal(currentRunnerSHA, '86ece08b913903e0a06231a58b32826a8fe561b468f82b7c57ccc32422da60e8');
-const conservation = execFileSync(process.execPath, ['--test', '--test-name-pattern=alignment provenance is an exact metadata-only whole-runner extension',
+const conservation = execFileSync(process.execPath, ['--test',
   'tests/material-parity/alignment-crop-provenance.spec.mjs'], { encoding: 'utf8' });
-assert.match(conservation, /# pass 1\b/); assert.match(conservation, /# fail 0\b/);
+assert.match(conservation, /# pass 5\b/); assert.match(conservation, /# fail 0\b/);
 const runnerReceipts = [];
 function refreshRunnerReceipts(value) {
   if (!value || typeof value !== 'object') return;
@@ -90,7 +93,23 @@ function inputs(tree, sample, profile = 'light') {
   return { authoredNodes: owners.length, identicalRules: ruleCount - 1, inapplicableRuleDifferences: changed };
 }
 
-const previousOwners = new Map(), joins = [];
+const paintFile = 'artifacts/material-parity/divider-alignment-provenance-20261015/latest-report.json';
+const paint = JSON.parse(readFileSync(paintFile)), paintRows = new Map();
+assert.equal(hash(readFileSync(paintFile)), '4be9c6d199952f35203f31d08def08d0d936071f4eb313b75ad3bbf72dd46f11');
+for (const [kind, records] of [['static', paint.results], ['interaction', paint.interactions]]) for (const row of records) {
+  const id = `${kind}:${row.family}@${row.profile}/${row.viewport.id}${kind === 'interaction' ? `/${row.state}` : ''}`;
+  assert.ok(!paintRows.has(id)); paintRows.set(id, row);
+}
+assert.deepEqual([...paintRows.keys()].sort(), selected.slice().sort());
+const textureFile = 'artifacts/material-parity/divider-configured-texture-boundary-20261015/latest-report.json';
+const textures = JSON.parse(readFileSync(textureFile));
+assert.equal(hash(readFileSync(textureFile)), 'e78434351000b4ec6802a229578f4b5729c35816e419104c57bc424aaa0c050d');
+const textureRows = new Map(textures.results.map(row => {
+  const key = JSON.parse(row.case);
+  return [`${key.kind}:${key.family}@${key.profile}/${key.viewport.id}${key.kind === 'interaction' ? `/${key.state}` : ''}`, row];
+}));
+const previousOwners = new Map(), previousPaint = new Map(), joins = [];
+let passingTargets = 0, failingTargets = 0, textureCases = 0;
 for (const id of selected) {
   const row = review.groups.find(value => value.case === id); assert.ok(row);
   const { report, reportFile, sample, remaining, profile, viewport } = samples.get(id);
@@ -122,20 +141,50 @@ for (const id of selected) {
       verification: receipt(`artifacts/material-parity/divider-remount-peer-${remaining ? 'remaining-verify' : 'initial-source-replay'}-20261015.log`),
       pairedTrees: row.evidence.pairedTrees },
     boundary: `Supplementary public lifecycle execution in matching physical/input context,not original static/inspect actions. Ten authored node records and${correspondence.identicalRules} rules agree;two clock-derived values on the one absent calendar selector remain unequal and recorded. No old mount-option,plugin-list serialization,resolved paint,Angular remount,late-font,semantic isolation or full-case/current-rendering acceptance.` } };
+  const fresh = paintRows.get(id), parent = path.dirname(fresh.inputTrees.reference.file);
+  const targetDiagnostics = fresh.textAlignment.map(alignment => {
+    const crops = Object.fromEntries(['reference', 'astylar'].map(side => [side,
+      receipt(path.join(parent, `${alignment.id}-alignment-${side}.png`))]));
+    const metric = evaluateFocusedRaster(PNG.sync.read(readFileSync(crops.reference.file)),
+      PNG.sync.read(readFileSync(crops.astylar.file)), { minimumSsim: .8 });
+    if (metric.matches) passingTargets++; else failingTargets++;
+    return { id: alignment.id, measurementGeometry: alignment.measurementGeometry,
+      cropProvenance: alignment.cropProvenance, metric, evidence: crops };
+  });
+  previousPaint.set(id, row.obligations.localPaint);
+  row.obligations.localPaint = { ...row.obligations.localPaint, freshMeasuredTextCrops: {
+    disposition: 'inspected', targetDiagnostics,
+    evidence: { report: receipt(paintFile), verifier: receipt('tests/material-parity/alignment-crop-provenance.spec.mjs'),
+      metric: receipt('tests/material-parity/focused-raster-metrics.mjs'),
+      referenceTree: fresh.inputTrees.reference, astylarTree: fresh.inputTrees.astylar,
+      join: receipt('scripts/join-material-divider-remount.mjs') },
+    boundary: 'Supplementary same configured case/context,not original producer recovery or input equivalence. Both owner boxes and exact crops are observed;all96 crops reconstruct in owning verification. Historical minimumSSIM.8 diagnostic only,not changed acceptance. Original producer uncertainty,remaining paint work and current-library/final gates remain.' } };
+  if (textureRows.has(id)) {
+    textureCases++;
+    row.obligations.localPaint.freshMeasuredTextCrops.configuredTextureInterior = {
+      disposition: 'inspected', targets: ['divider-above', 'divider-below'],
+      observation: 'Row-reversed GPU readback alpha agrees;15/37 RGB channels differ by1. Existing nearest-texel model predicts sampled interiors within1RGB;wrong-row controls reject.',
+      evidence: { report: receipt(textureFile), sources: textures.capture.sources,
+        checkpoint: textures.capture.checkpointManifest },
+      boundary: 'Four contrast-DPR1 contexts only;not native glyph equality,plane-edge coverage,draw-call font history or causal shader identity.' };
+  }
   assert.equal(row.inspection, 'partial'); assert.equal(row.currentRendering, 'unverified');
   joins.push({ case: id, ...correspondence, dpr: sample.dpr });
 }
+assert.equal(passingTargets, 40); assert.equal(failingTargets, 8); assert.equal(textureCases, 4);
 const proposal = saveReviewProposal('artifacts/material-parity/working-audit', review);
 const loaded = loadCaseObligationReview(proposal.file, proposal.sha256, configured);
 assert.equal(loaded.cases.length, 2311); assert.equal(loaded.inspectionComplete, false);
 assert.equal(loaded.currentRenderingAccepted, false);
 assert.ok(loaded.cases.every(row => row.inspection === 'partial' && row.currentRendering === 'unverified'));
 for (const [id, previous] of previousOwners) review.groups.find(row => row.case === id).obligations.historyOwnership = previous;
+for (const [id, previous] of previousPaint) review.groups.find(row => row.case === id).obligations.localPaint = previous;
 for (const receipt of runnerReceipts) receipt.sha256 = oldRunnerSHA;
 assert.equal(hash(JSON.stringify(review)), priorSHA, 'Unrelated review evidence changed');
 console.log(JSON.stringify({ phase: 'divider-remount-case-join', proposal, predecessor: priorSHA,
   joins, cases: loaded.cases.length, dependencies: loaded.evidenceFingerprints.length,
-  onlyDividerOwnershipAndDemonstratedRunnerReceiptsChanged: true, physicalContexts: 20, inputNegativeControlsRejected: 3,
+  onlyDividerOwnershipPaintAndDemonstratedRunnerReceiptsChanged: true, physicalContexts: 20, inputNegativeControlsRejected: 3,
+  freshPaintCases: paintRows.size, passingTargets, failingTargets, textureCases,
   runnerReceiptTransition: { file: runnerFile, before: oldRunnerSHA, after: currentRunnerSHA, receipts: runnerReceipts.length,
     proof: 'Exact metadata-only whole-runner restoration;not original e01ef9dc capture recovery or current rendering acceptance' },
   inspectionComplete: loaded.inspectionComplete, currentRenderingAccepted: loaded.currentRenderingAccepted }));

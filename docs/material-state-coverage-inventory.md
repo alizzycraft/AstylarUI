@@ -30,6 +30,36 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   inputs changed. All original final gates and36-family/relevant-state scope
   remain. No further export is justified solely by this status update.
 
+### Fresh divider paint evidence joined to exact cases — October15
+
+Existing join-material-divider-remount.mjs now also joins fresh4be9c6d1 crop
+evidence to all24 exact configured divider IDs,not merely a family-level note.
+It runs the full existing five-test crop/texture suite before using its evidence,
+then independently evaluates48 stored text crops at the unchanged historical
+diagnostic minimumSSIM.8. Results remain40 passing/8 failing targets. Each joined
+record carries both measured owner boxes,actual crop bounds,metric objects,
+hashed paired crops/input trees,report,metric/verifier/join source receipts.
+Four exact contrast-DPR1 records additionally carry the configured texture and
+interior observation. No input equivalence is inferred from matching case IDs.
+
+Queued proposalaf1b74b4b32e581050dd92bc28ad9c49966607d2c50d4217adbaf80966d12d09
+supersedes1c7b802e for the next coherent batch. Validator authenticates2311 cases,
+12876 dependencies;all remain partial/unverified,both completion flagsfalse.
+Restoring only24 paint parents,24 ownership parents and8186 demonstrated runner
+receipts returns the entire74d0 predecessor digest. Log
+divider-fresh-paint-case-join-20261015.log and matching stderr terminates0.
+Original e01ef9dc capture uncertainty and parent remaining-work lists are NOT
+cleared. New measured boxes explain only the fresh crops;they do not retrofill
+historical reports. No new browser capture,canonical export or renderer change.
+
+This closes the specific unjoined fresh-paint evidence question. Source batch
+registration/publication remains pending:accepted92346052/selected74d0 still
+predate these additions. Remaining divider inspection concerns include complete
+input/anonymous-box stage correspondence,classified historical compensation,
+remaining owner/edge/native-glyph paint attribution and scoped lifetime/current
+validity. Reuse the new case-level receipts instead of repeating crop or texture
+authentication. Final current-code gates remain required for the whole audit.
+
 ### Queued review runner reconciliation — October15
 
 The queuedbc8a remount review was actually revalidated and failed its current
