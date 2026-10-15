@@ -64,6 +64,9 @@ raw;verification compares a vertically reversed copy without rewriting evidence.
 This is a retained configured-boundary observation,not temporary scratch or a
 replacement for failing full/local screenshots. Owning suite5/5 passes;no new
 capture or full export was needed for its verification.
+Keep divider-configured-interior-model-verify-20261015 stdout/stderr with the
+same capture. It verifies5287 interior pixels and wrong-row negative controls;
+no additional image set or replacement report was generated.
 
 Keep alignment-crop-provenance-focused-20261015 stdout/stderr with the new
 metadata-only instrumentation. Fresh divider-alignment-provenance-20261015 is

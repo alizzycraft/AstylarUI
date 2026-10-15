@@ -35,14 +35,15 @@ test('configured divider texture observations preserve source frames and bound u
     .filter(([, row]) => row.profile === 'contrast' && row.viewport.deviceScaleFactor === 1);
   assert.deepEqual(report.results.map(row => row.case).sort(), selected.map(([kind, row]) => materialCaseKey(kind, row)).sort());
   const assets = new Map(provenance.browserFiles.map(row => [row.file, row.sha256]));
-  let targets = 0;
+  let targets = 0, interiorPixels = 0, interiorResiduals = 0;
   for (const row of report.results) {
     assert.deepEqual(row.runtime.errors, []);
     for (const type of ['document', 'script', 'stylesheet', 'font']) assert.ok(row.runtime.assets.some(asset => asset.type === type));
     for (const asset of row.runtime.assets) assert.equal(asset.sha256, assets.get(asset.file));
     const original = readFileSync(row.originalFrame.file);
     assert.equal(hash(original), row.originalFrame.sha256);
-    assert.equal(hash(PNG.sync.read(original).data), row.originalFrame.decodedRGBA);
+    const frame = PNG.sync.read(original);
+    assert.equal(hash(frame.data), row.originalFrame.decodedRGBA);
     assert.deepEqual(row.observation.targets.map(target => target.id), ['divider-above', 'divider-below']);
     const key = JSON.parse(row.case), label = `${key.kind}-${key.viewport.id}`;
     for (const target of row.observation.targets) {
@@ -62,6 +63,35 @@ test('configured divider texture observations preserve source frames and bound u
       }
       assert.equal(changed, target.id === 'divider-above' ? 15 : 37);
       assert.equal(max, 1); assert.equal(alphaChanged, 0);
+      const vertices = target.projected.map(point => point.css);
+      const left = Math.min(...vertices.map(point => point.x)), right = Math.max(...vertices.map(point => point.x));
+      const top = Math.min(...vertices.map(point => point.y)), bottom = Math.max(...vertices.map(point => point.y));
+      const backgroundOffset = (Math.floor(top) * frame.width + Math.floor(left) - 2) * 4;
+      const background = [...frame.data.subarray(backgroundOffset, backgroundOffset + 4)];
+      assert.deepEqual(background, [240, 240, 240, 255]);
+      assert.equal(texture.samplingMode, 1);
+      assert.deepEqual(target.uvs, [0, 0, 1, 0, 1, 1, 0, 1]);
+      // Same bounded pixel-center/nearest-texel/straight-alpha model as the
+      // existing public reduction. Exclude plane-edge coverage; no HTML claim.
+      let modelResiduals = 0, shiftedGreaterThanTwo = 0;
+      for (let y = Math.ceil(top); y < Math.floor(bottom); y++) for (let x = Math.ceil(left); x < Math.floor(right); x++) {
+        const u = (x + .5 - left) / (right - left), v = (y + .5 - top) / (bottom - top);
+        const texelX = Math.floor(u * width), texelY = Math.floor(v * height);
+        const pixel = (y * frame.width + x) * 4;
+        const error = rowShift => {
+          const index = (Math.min(height - 1, texelY + rowShift) * width + texelX) * 4;
+          const alpha = texture.rgba[index + 3] / 255;
+          return Math.max(...[0, 1, 2].map(channel => Math.abs(Math.round(texture.rgba[index + channel] * alpha +
+            background[channel] * (1 - alpha)) - frame.data[pixel + channel])));
+        };
+        const delta = error(0);
+        assert.ok(delta <= 1, 'configured interior exceeds bounded sampler residual');
+        assert.equal(frame.data[pixel + 3], 255);
+        modelResiduals += delta > 0; shiftedGreaterThanTwo += error(1) > 2; interiorPixels++;
+      }
+      assert.equal(modelResiduals, target.id === 'divider-above' ? 9 : 8);
+      assert.ok(shiftedGreaterThanTwo > 0, 'one-row wrong-address control must reject');
+      interiorResiduals += modelResiduals;
       assert.equal(target.retainedStyle.fontSize, '14.4px');
       // Current context state is not the historical draw-call font.
       assert.equal(texture.font, '10px sans-serif');
@@ -69,7 +99,8 @@ test('configured divider texture observations preserve source frames and bound u
     }
   }
   assert.equal(targets, 8);
-  t.diagnostic('4 configured cases/8 owners/16 texture PNGs authenticated; vertically reversed readback has identical alpha and only 15/37 one-level RGB residuals. This does not establish native glyph equality or explain final-frame differences.');
+  assert.equal(interiorPixels, 5287); assert.equal(interiorResiduals, 68);
+  t.diagnostic('4 configured cases/8 owners/16 texture PNGs authenticated; reversed readback alpha agrees. Existing nearest-texel model predicts5287 interior pixels within1RGB level (68 one-level residuals);wrong-row controls reject. Not plane-edge coverage,native glyph equality or full-case acceptance.');
 });
 assert.equal(hash(previous), '082d6d7b3e0b0e5c1789f3d2ceff8862e3244de5319cc941e79c53fa634d6502');
 

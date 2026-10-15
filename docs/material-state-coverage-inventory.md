@@ -66,6 +66,29 @@ new finding,whole-case closure or canonical/current-output acceptance follows.
 Accepted92346052 remains prior to harness reconciliation;standalone proofs stay
 pending the next coherent integration batch.
 
+Configured interior sampling question is now answered using these same bytes,
+without browser rerun or another model family. The existing public reduction's
+pixel-center/nearest-texel/straight-alpha prediction,with observed projected
+bounds,ordinary UVs,samplingMode1 and recorded canvas texels,predicts5287 sampled
+interior screenshot pixels:68 differ by one RGB level,none by more,all alpha255.
+Each Above owner has9 one-level residual pixels;each Below has8. All eight
+deliberately wrong one-row texture-address controls produce errors greater than2.
+Owning suite5/5 passes,zero skips,4470.0288ms;log
+divider-configured-interior-model-verify-20261015.log and matching stderr.
+This is a bounded diagnostic fit,not bit-exact rendering,an enforced threshold,
+shader identity or measured MSAA sample locations. It excludes plane-edge bands.
+
+Consequently the existing public DPR2 interior texel-row residual must NOT be
+assigned to these configured contrast-DPR1 interiors:the actual configured
+observations do not reproduce that discrepancy. The remaining HTML comparison
+failure cannot be labeled unexplained interior post-canvas corruption from this
+evidence. Next separate already classified unequal composition/typography inputs
+and native-versus-canvas glyph generation from plane-edge coverage. Current
+configured evidence does not retain draw-call font/baseline history;current
+context font is insufficient. Reuse the equivalent public glyph/backing controls
+for that boundary,not an inferred configured font diagnosis. No new finding or
+whole-case closure;the eight local diagnostic failures remain retained.
+
 ### Alignment crop measurement provenance — October15 instrumentation
 
 Do not repeat the settled96-crop screenshot-location search (a6c3eddc). It does
