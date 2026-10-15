@@ -84,6 +84,38 @@ This pointer supersedes the historical checkpoint chronology immediately below.
 
 ### October15 evidence chronology — historical checkpoints
 
+Anonymous-line-box gap narrowed without repeating owner census:the existing
+topology proof already finds all9 authored elements per side/24 cases and no
+extra pseudo/input owner. Layout-output struts are not new authored nodes.
+The preserved public paragraph reduction in input-equivalence-proof.spec.ts
+authors explicit parent lineHeight20px and16px Arial,with p margin16px0;it
+demonstrates empty-separator sizing,not normal-line-height/chosen-font metrics.
+Original retained light p computed height19px/lineHeight normal versus candidate
+authored absolute height22px are unequal sizing inputs,not a standalone strut
+defect proof. Existing480 retained leaf-property matches do not fill that gap.
+Before a core normal-strut attribution,need a separately scoped equal-input
+normal-versus-explicit-line-height control with inherited font/actual font
+observations and margin/empty-separator confounds excluded. No diagnosis/case
+promotion from the old explicit20px proof;no repeated owner capture or change
+to the frozen547d9a7b export. This remains an actual unobserved output boundary.
+Prepared unregistered audit-public-paragraph-linebox.mjs reuses the exact
+58c335b8 runner source/lifecycle for8 p/span pairs:Arial16/24 inherited font,
+normal versus explicit1.25x pixel line-height,DPR1/2,zero margins,no separator.
+It records actual DPR,native platform-font observations and public retained leaf
+styles separately;does not infer candidate painted-font identity. Preflight
+authenticates the recipe and validates Node/browser syntax;installed protocol
+declares CSS.getPlatformFontsForNode. BROWSER EXECUTION NOT YET RUN;no defect or
+whole-case acceptance follows. Defer until live export memory pressure clears.
+Read-only owner applicability now binds complete current/emitted/installed
+parseTextProperties,parseLineHeight,resolveNormalLineHeight bodies to retained
+installed receipt55274b6b. Source6c30ccdc uses canvas fontBoundingBoxAscent+
+fontBoundingBoxDescent for normal;1.15 is fallback only. Log paragraph-normal-
+lineheight-owner-path-20261015.log exits0. Do not diagnose a universal hardcoded
+multiplier from parseLineHeight's initial normal branch alone:parseTextProperties
+subsequently invokes metric resolution. Whether runtime metrics/fallback or
+parent auto-height aggregation differs still requires the public probe. No core
+source changed and no normal-paragraph behavior accepted.
+
 Divider residual now has a stronger bounded prediction than continuous area:
 new unregistered check-material-divider-four-sample-model.mjs authenticates
 endpoint log0d36f94f and24 original candidate PNG/tree pairs. Across133356

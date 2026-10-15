@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep paragraph-normal-lineheight-owner-path-20261015.log with retained inherited-
+margin package receipts. It binds complete three-method metric-resolution paths,
+not new public paragraph behavior. The prepared paragraph-linebox driver has only
+preflight proof until browser execution;do not create a fake successful run or
+delete prior explicit20px paragraph/empty-separator evidence as superseded.
+
 Retain divider-four-sample-interior-replay-20261015.log with original endpoint
 log0d36f94f and its24 candidate PNG/tree pairs. The new narrow verifier reads
 those originals and checks133356 pixels without recapture. Preserve continuous
