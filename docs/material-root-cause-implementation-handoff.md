@@ -33,6 +33,14 @@ interior mismatches,butDPR2 placement remains;atphase.5 both AA/no-AA have ident
 pixels while native differs. Therefore correct the known public AA-option owner
 as its own defect,not as an assumed complete thin-fill parity fix. Exact18-page
 report and pixel-replay boundaries are in the ledger;no renderer change made.
+Original24 divider candidate rasters now fit an empirical four-row-sample
+coverage model within0.5 RGB across133356 interior pixels;continuous area fails
+all24 and an alternative arrangement fails15. Replay:
+scripts/check-material-divider-four-sample-model.mjs. Do not treat the previous
+continuous-model residual as proof of faulty projection or force continuous
+coverage in a plugin. Exact GPU sample positions remain unmeasured and native
+border/candidate fill inputs remain unequal;restore equivalent authoring before
+assigning complete Material paint parity. This proof is outside the live export.
 
 New bounded inherited-font margin result (queued outside live export):two public
 runs each show inherited24px 1em block margins resolving as16px atDPR1/2,while

@@ -8,8 +8,14 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   registration5354ea03. Cold comparison,predecessor conservation,compact import
   and whole-index verification pass. Source/fixture/render acceptance not implied.
   New inherited-margin policy refinement34f3d6e5 and owning test/helper changes
-  are now verified in source but NOT in that published package. Next batch must
-  register proofs/refresh exact source receipts before canonical integration.
+  are now verified in source but NOT in that published package. Source batch
+  547d9a7b completes209-proof registration and74d0 case receipt reconciliation.
+  Grouped export started October15 13:08:00,launcher21416/worker15696 confirmed
+  live with full original arguments,8192MB heap and progress enabled;logs
+  margin-context-canonical-export-20261015.log and matching .stderr.log. No
+  concurrent audit/browser worker. Source/policy/helper/benchmark/launcher/review
+  inputs remain frozen. Published6e20 stays accepted until complete successor
+  export,independent verification,conservation,import and publication.
 - Export completed:configured-editing-root-canonical-export-20261015.log records
   complete at2702348.1973ms,159 findings,8483 groups/389202 occurrences and
   inputEquivalent=false. This is not independent acceptance or index publication.
@@ -77,6 +83,22 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   Supplemental relevant-state/applicability closure and all final gates remain.
 
 ### October15 evidence chronology — historical checkpoints
+
+Divider residual now has a stronger bounded prediction than continuous area:
+new unregistered check-material-divider-four-sample-model.mjs authenticates
+endpoint log0d36f94f and24 original candidate PNG/tree pairs. Across133356
+interior pixels,empirical row samples.125/.375/.625/.875 predict every channel
+within0.5 RGB (assertion tolerance1). Continuous area fails all24;alternative
+two-height sample arrangement fails15. Exit0 log divider-four-sample-interior-
+replay-20261015.log. This explains the earlier continuous CPU-model residual
+as consistent with discrete coverage,without moving boxes or demanding linear
+area paint. Exact GPU sample positions remain unmeasured;this is not universal
+sample-location proof,whole-edge/whole-frame parity or a new projection defect.
+Original native static border/color and candidate absolute fill/color inputs
+remain unequal. The separate public context probe verifies4 actual baseline
+samples,but is not direct context telemetry for all old Material captures.
+This closes the empirical row-prediction question,not complete divider inspection.
+It is outside the live547d9a7b export;no frozen source/review input changed.
 
 Coherent margin/context source registration now passes5/5 focused assertions,
 zero skips,25551.6249ms,exit0 in margin-thin-context-registration-complete-

@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Retain divider-four-sample-interior-replay-20261015.log with original endpoint
+log0d36f94f and its24 candidate PNG/tree pairs. The new narrow verifier reads
+those originals and checks133356 pixels without recapture. Preserve continuous
+model residuals as historical model failures,not superseded capture bytes. The
+new empirical model is not universal GPU telemetry or full Material acceptance.
+
 Retain selected74d0b4bb with predecessorcc2dcdaf,margin-context-queued-case-
 receipts-20261015.log,and both margin-thin-context-registration focused/complete
 logs plus launcher dry run. Complete608 receipt-only substitutions conserve all
