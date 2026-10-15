@@ -5,7 +5,7 @@ import { saveReviewProposal, loadCaseObligationReview } from './audit-findings-s
 
 // Close only the demonstrated authored-applicability gap. Existing required-state
 // scope already includes control pointer interaction/focus,including text fields;
-// this does not inspect actions,editing,picker opening or focus delivery.
+// this does not inspect actions,editing,picker opening,focus delivery or paint.
 const script = 'scripts/join-material-button-applicability.mjs';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const receipt = file => ({ file, sha256: hash(readFileSync(file)) });
@@ -299,7 +299,7 @@ for (const row of selected) {
     }
   }
   observations.push({ case: row.case, owners });
-  for (const key of ['authoredActivation', 'programmaticFocus']) {
+  for (const key of ['authoredActivation', 'programmaticFocus', 'localPaint']) {
     const obligation = row.obligations[key];
     if (obligation.applicability !== 'unverified') {
       assert.equal(obligation.applicability, 'applicable'); continue;
@@ -307,7 +307,9 @@ for (const row of selected) {
     previous.push({ row, key, obligation });
     row.obligations[key] = { ...obligation, applicability: 'applicable', recordedControlApplicability: {
       disposition: 'inspected-applicability-only', owners,
-      conclusion: row.family === 'tree'
+      conclusion: key === 'localPaint'
+        ? 'Exact authored counterpart owners in this configured comparison require local-paint inspection. Required visible/hidden state,control/text/state-layer paint,clipping and sharpness remain to inspect;no crop metric or raster outcome is established by owner identity. Absent popup/glyph paint must be checked against the expected state,not excluded wholesale.'
+        : row.family === 'tree'
         ? 'Captured leaf treeitem roles,exact labels,group ancestry and authenticated Material/CDK click-focus handlers establish pointer activation/focus inspection applicability. No selection,expansion,keyboard activation or successful focus delivery is inferred.'
         : editable
         ? 'Captured native input and exact candidate input identity establish pointer/control-interaction and programmatic-focus inspection applicability,including disabled negative expectations. Missing authored onclick does not exclude native pointer/focus inspection. This does not prescribe Enter/Space button activation,submission,editing outcome or popup opening;date/time trigger contracts remain separate.'
@@ -320,7 +322,7 @@ for (const row of selected) {
   }
   assert.equal(row.inspection, 'partial'); assert.equal(row.currentRendering, 'unverified');
 }
-assert.equal(changedFields, 3602); assert.equal(new Set(previous.map(item => item.row.case)).size, 1829);
+assert.equal(changedFields, 4571); assert.equal(new Set(previous.map(item => item.row.case)).size, 1901);
 assert.equal(observations.reduce((count, row) => count + row.owners.length, 0), 2661);
 assert.equal(fieldNegativeControls, 2);
 assert.equal(compositeNegativeControls, 4);
@@ -341,7 +343,7 @@ assert.equal(hash(JSON.stringify(review)), predecessor, 'Unrelated case evidence
 console.log(JSON.stringify({ phase: 'recorded-native-control-authored-applicability', predecessor, proposal,
   applicabilityCases: selected.length, simpleButtons: 336, editableInputs: 483, rangeInputs: 156,
   nativeCompositeControls: 272, triggerButtons: 368, namedRoleControls: 222, paginatorButtons: 104, labelledControls: 720, authenticatedTrees: 3914,
-  changedCases: 1829, changedApplicabilityFields: changedFields, negativeControls, fieldNegativeControls, compositeNegativeControls, triggerNegativeControls, roleNegativeControls, labelNegativeControls, treeContractNegativeControls,
+  changedCases: 1901, changedApplicabilityFields: changedFields, negativeControls, fieldNegativeControls, compositeNegativeControls, triggerNegativeControls, roleNegativeControls, labelNegativeControls, treeContractNegativeControls,
   cases: loaded.cases.length, dependencies: loaded.evidenceFingerprints.length,
   unrelatedReviewConserved: true, currentRenderingAccepted: false, inspectionComplete: false,
   observations, boundary: 'Applicability only;all action/focus outcomes and original remaining obligations are preserved. Not selected by the live export.' }));

@@ -25,6 +25,25 @@ No renderer/fixture change, recapture, criterion change or case promotion occurr
 
 ### Queued activation and focus applicability complete — October16
 
+Queued649034f898fb79a4649d76c967b8cef5bcc212b309042649220c4908c3e1c408
+now supersedesc46e after resolving969 remaining localPaint applicability entries.
+Run local-paint-authored-applicability-case-join-20261016 TERMINAL0;23 negative
+controls pass,whole87b7 restoration succeeds,2311 cases/12879 dependencies validate.
+Combined4571 applicability fields change across1901 cases (1957 scoped owner
+maps/3914 trees). Every configured case requires local paint inspection;closed
+popups/absent glyphs require expected-state visibility checks,not whole-case paint
+exclusions. This is not crop/SSIM/sharpness/clip/state-paint success. Existing
+behavior/paint dispositions,remaining work and all other review data are preserved.
+QUEUED primary obligation applicability now has no unverified entries:
+input/style,local paint,semantics,history,currentness each2311 applicable;
+activation1957 applicable/354 excluded;editing443/1868;focus1997/314.
+Existing128 keyboard-obligation records stay applicable,not an exhaustive new
+keyboard/state denominator. All2311 cases remain partial,current renderingunverified.
+This dispositions existing obligation applicability only,not exhaustive relevant-
+state evidence or whole-case inspection. No canonical selection/export,renderer
+or fixture change. Next join actual inspection evidence against these requirements
+without redoing applicability or confusing it with behavior/paint closure.
+
 Existing native-control join now dispositions the467 remaining editable-field
 activation applicability entries. Authenticated native INPUT identity and the
 existing control-interaction scope require pointer/focus inspection even without

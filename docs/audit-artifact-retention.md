@@ -56,6 +56,11 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep local-paint-authored-applicability-case-join-20261016 stdout/stderr and
+queued649034f8. It supersedesc46e for existing obligation applicability only;
+all behavior/paint dispositions and whole-case gaps remain. Earlier source is
+Gitfc7eb8b2. No new browser capture or canonical generation was produced.
+
 Keep editable-pointer-authored-applicability-case-join-20261016 stdout/stderr
 and queuedc46ea21c. It supersedes21d8 for applicability only;actual behavior,
 local paint and whole-case closure remain pending. Live candidate/cold source
