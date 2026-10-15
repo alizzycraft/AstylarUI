@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep snackbar-retained-visible-surface-census-20261016 failure stdout/stderr
+and snackbar-retained-surface-pixel-census-20261016 successful stdout/stderr.
+They reuse existing images;no crops/captures are added. Initial contrast cutoff
+was a failed presence diagnostic,not a parity gate. Final report retains68 original
+image hashes and exact samples with explicit local-paint/currentness limitations.
+
 Keep local-paint-authored-applicability-case-join-20261016 stdout/stderr and
 queued649034f8. It supersedesc46e for existing obligation applicability only;
 all behavior/paint dispositions and whole-case gaps remain. Earlier source is

@@ -4,6 +4,28 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Snackbar retained visibility is measured,but local glyph paint is not — October16
+
+Specific unresolved question:do the complete retained snackbar output passes
+actually include a visible surface,or only default/unmeasured placement flags?
+Read-only census authenticates full reportab42dbec and118 paired input-tree
+receipts across59 interaction rows. All34 open rows have paired measured boxes
+inside the canvas;25 closed rows have no paired placement boxes,not measured
+placement acceptance. Every interaction row has focusedRasters=[];whole-frame
+similarity cannot close local glyph/sharpness inspection. Selected light candidate
+and dark reference full PNGs were visually inspected and contain the snackbar.
+Pixel census authenticates68 open-state PNG hashes,expected DPR dimensions and
+box containment,and records exact inset-region colors versus a nearby outside
+sample. Log snackbar-retained-surface-pixel-census-20261016 TERMINAL0.
+Initial snackbar-retained-visible-surface-census-20261016 fails on dark reference
+because its arbitrary32-level contrast assumption exceeds the visible fill/page
+difference;retain failure. Final diagnostic uses exact colors without a new parity
+threshold,not a claim of equal pixels,text crispness or all-state acceptance.
+Thus a below-screen/missing surface is not supported by this retained open-state
+population. Original manual reports,current browser visibility,UNDO/timing/action
+source applicability and actual local text/state paint remain distinct checks.
+No fixture/renderer change,new capture,whole-case promotion or canonical export.
+
 ### Divider candidate verification in progress — October15
 
 The reconciled export completed successfully and wrote candidate f663c88e
