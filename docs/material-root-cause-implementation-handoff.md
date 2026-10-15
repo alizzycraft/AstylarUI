@@ -1,5 +1,17 @@
 # Material audit: evidence-led implementation priorities
 
+New bounded normal-line-box evidence:public-paragraph-linebox-20261015 has eight
+equal-input Arial16/24 DPR1/2 pairs. Four normal paragraphs are1CSSpx short;
+four explicit20/30px controls agree. The authenticated installed parser's23
+nonstatic members match current emitted source;canvas font-box heights17/27
+equal candidate layout while native paragraphs are18/28. This locates a CSS
+used-height discrepancy before projection,not a universal pixel correction.
+No margin,separator or explicit child-height confound. General normal-strut/font
+leading rules,other fonts,updates and Material wrapper attribution remain open.
+Do not compensate with fixture line heights or add1px globally. Exact report,
+owner log and retention boundaries are in the current coverage ledger. This proof
+is outside the frozen209-proof candidate;no renderer change or case closure.
+
 Current canonical acceptance pointer (supersedes historical checkpoints below):
 6e20a321/6d3df3e7 includes the configured editing/root-focus evidence and207
 registered focused proofs. Independent serial cold comparison,full predecessor

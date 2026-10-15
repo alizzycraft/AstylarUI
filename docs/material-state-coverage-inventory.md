@@ -87,6 +87,42 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   0 fully inspected,2311 partial,0 untouched/assigned whole-case blockers.
   Supplemental relevant-state/applicability closure and all final gates remain.
 
+### Normal paragraph owner boundary — October15
+
+The separately scoped public normal-versus-explicit reduction has now executed;
+the earlier preflight-only status below is historical. Report
+public-paragraph-linebox-20261015/latest-report.json SHA
+dd72dd2efc9c6838f6bce46b23b1ea0f56bcbab45de0414497ebcbb592aa5bf7
+retains eight equal-input pairs and16 PNGs. Capture and --verify logs are
+public-paragraph-linebox-{capture,verify}-20261015.log;two negative controls
+reject unequal input and missing coverage. Arial16/24 atDPR1/2 has native normal
+paragraph heights18/28 versus candidate17/27 CSSpx;explicit20/30px controls agree.
+Left/top/width agree. Zero margins/padding/borders,no separator and auto child
+height exclude the prior margin/empty-block confounds. Native CDP identifies
+ArialMT;candidate painted-font identity and full raster parity are not certified.
+
+Competing explanations were inherited font-size loss,explicit-height authoring,
+projection displacement and normal-line-box measurement. The bounded mechanism
+check scripts/check-retained-paragraph-font-box.mjs serves retained bytes unchanged
+and executes the authenticated installed parser owner. Its23 nonstatic members
+match current emitted source. All eight native measurements reproduce;normal
+owner heights equal canvas fontBoundingBoxAscent+Descent and retained candidate
+layout,one CSSpx below native paragraphs. Explicit controls remain equal.
+Log paragraph-normal-font-box-owner-boundary-20261015.log binds scriptSHA
+bcd69dfd190e30252264be7a4343611d9d9d3234030c4144cfd7d5ea8c4150a6,
+source6c30ccdc and installed55274b6b. Read-only receipt authentication and
+node --check pass on resumption;no second browser capture was needed.
+
+Conclusion:bounded equal-input core normal-line-box sizing discrepancy before
+projection,not a universal fixed1.15 multiplier or justification to add1px.
+Normal fallback is replaced by the canvas resolver on this path. Exact general
+CSS normal-line-height algorithm,other fonts,update behavior and the unequal
+Material19px/22px positioned wrappers remain unproved. No Material case promotion.
+This standalone proof is absent from the frozen209-proof producer/policy graph;
+do not claim it is included in candidate92346052. Next integrate the bounded
+finding through existing source inventory after candidate acceptance;preserve
+the original explicit20px separator proof as a distinct defect.
+
 ### October15 evidence chronology — historical checkpoints
 
 Anonymous-line-box gap narrowed without repeating owner census:the existing

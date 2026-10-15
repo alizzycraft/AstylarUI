@@ -57,10 +57,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 ## Retention rules for subsequent work
 
 Keep paragraph-normal-lineheight-owner-path-20261015.log with retained inherited-
-margin package receipts. It binds complete three-method metric-resolution paths,
-not new public paragraph behavior. The prepared paragraph-linebox driver has only
-preflight proof until browser execution;do not create a fake successful run or
-delete prior explicit20px paragraph/empty-separator evidence as superseded.
+margin package receipts. It binds complete three-method metric-resolution paths.
+The public paragraph driver has now executed:retain public-paragraph-linebox-
+20261015 (report,bundle,HTML,16 PNGs),capture/verify logs and paragraph-normal-
+font-box-owner-boundary-20261015.log. Four normal-height failures and four explicit
+controls remain diagnostic evidence,not whole-case parity. Preserve prior explicit
+20px paragraph/empty-separator evidence as a distinct defect. The new owner
+checker is outside the frozen209-proof canonical batch;no scratch was deleted.
 
 Retain divider-four-sample-interior-replay-20261015.log with original endpoint
 log0d36f94f and its24 candidate PNG/tree pairs. The new narrow verifier reads
