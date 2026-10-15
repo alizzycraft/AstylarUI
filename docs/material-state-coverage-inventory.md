@@ -2,6 +2,26 @@
 
 ## Current integration pointer — October15
 
+Paragraph alignment investigation rules out the specific flex/grid routing
+hypothesis for all48 retained p/span pairs:actual processChildren,inline-flow
+predicate,flex/grid display predicates and anonymous-flex-text guard select
+inline-child routing with both recorded stretch/flex-start defaults and normal
+controls. Flex/grid positive controls select their respective branches;flex
+center controls return center/middle text placement. Seven complete current/
+installed/served-map methods bind across four modules (including complete inline
+and block layout bodies,which are NOT executed by the mocked endpoint check).
+Log divider-paragraph-alignment-dispatch-bound-20261015.log. This excludes the
+suspected wrong dispatch,not all downstream layout/paint or a general normal/
+stretch normalization. Endpoints/overflow are mocked;projection is forbidden.
+Original direct whitespace comparison and AST-printer comparison failed on
+emitted formatting;whole-method esbuild whitespace-only canonicalization binds.
+That run then exposed a missing camera-property stub before endpoint invocation;
+the final read-only harness supplies a throwing projection guard. Preserve all
+four logs:alignment-dispatch,alignment-dispatch-retry,alignment-dispatch-canonical
+and alignment-dispatch-bound,each suffixed20261015. No source/capture edits or
+new whole-case status. Group this with remaining paragraph property evidence
+after the frozen export;do not recapture or repeatedly emit whole proposals.
+
 Remaining anonymous-paragraph box/default question is now bounded for all48 pairs:
 native computed content-box contrasts with candidate omission;current global/p
 defaults omit boxSizing. The existing public omitted-sizing guard passes1/1,

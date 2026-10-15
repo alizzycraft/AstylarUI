@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Preserve divider-paragraph-alignment-dispatch-20261015.log,-retry,-canonical
+and -bound variants. The first two expose method-trivia comparison limitations;
+canonical binds complete methods but stops at an incomplete camera stub;bound
+passes all48 recorded routing pairs and flex/grid controls without projection.
+None is full layout/paint acceptance or a replacement browser capture. Retain
+the successful bound evidence with its current/installed/served-map receipts;
+this diagnostic created no filesystem scratch directory to clean.
+
 Retain divider-paragraph-border-initial-attribution-20261015.log and its
 case-join log with queuede4b85e47 proposal and cfd613cf predecessor. These retain
 192 unequal initial border inputs,existing limitation attribution and two
