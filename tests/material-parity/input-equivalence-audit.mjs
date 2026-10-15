@@ -8922,6 +8922,17 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'scripts/audit-public-inherited-margins.mjs',
+    'artifacts/material-parity/public-inherited-margin-20261015/latest-report.json',
+    'artifacts/material-parity/public-inherited-margin-repeat-20261015/latest-report.json',
+    'artifacts/material-parity/public-inherited-margin-owner-binding-20261015.log',
+    'artifacts/material-parity/public-inherited-margin-source-history-20261015.log',
+    'scripts/audit-public-thin-fill-phase.mjs',
+    'scripts/audit-retained-thin-fill-context.mjs',
+    'scripts/check-material-thin-fill-interior-paint.mjs',
+    'artifacts/material-parity/public-thin-fill-phase-corrected-20261015/latest-report.json',
+    'artifacts/material-parity/retained-thin-fill-context-20261015/latest-report.json',
+    'artifacts/material-parity/working-audit/proposals/8091a07d07a9cb8f5f7c3980f9c5634b2ec9dd4409894a6853f030bc4aaf4fb6.json',
     'scripts/audit-material-configured-input-editing.mjs',
     'artifacts/material-parity/configured-input-editing-current-20261015/latest-report.json',
     'artifacts/material-parity/configured-input-editing-empty-ink-20261015.log',
@@ -8935,7 +8946,7 @@ function sourceFingerprints(root) {
     'artifacts/material-parity/public-relative-margin-repeat-20261015/latest-report.json',
     'artifacts/material-parity/public-relative-margin-owner-binding-20261015.log',
     'tests/material-parity/audit-findings-store.spec.mjs',
-    'artifacts/material-parity/working-audit/proposals/cfd613cf5564fb485d87a9ba2711c8eb6d67f53e7ea35a62ada2d4c78ff1138e.json',
+    'artifacts/material-parity/working-audit/proposals/74d0b4bbbfaa50fa18b0f4e91a4443aa72ec80813972466bbe9b7008d2e94210.json',
     'docs/evidence/material-overlay-context-runner.mjs.b64',
     'artifacts/material-parity/divider-context-verified-angular-20261013-dpr1/result.json',
     'artifacts/material-parity/divider-context-verified-angular-20261013-dpr1/provenance.json',
@@ -9612,6 +9623,10 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('retained inherited block margins extend computed-font finding without changing prior definitions'/,
+      'inherited block margin computed-font refinement and complete predecessor conservation', 'Authenticates two public16-pair runs with64 PNGs and2515 dependencies,own-font and pixel controls,exact one-field extension of the existing computed-font finding and complete policy/helper/suite conservation. Inherited24px margins fail by8CSSpx atDPR1/2 before projection. Not flex unit loss,positioned Material attribution,all units,updates,lifetime or whole-case acceptance.'),
+    proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('retained thin fill context intervention preserves geometry and separates DPR2 placement residual'/,
+      'thin fill effective context antialias intervention with retained DPR2 placement residual', 'Authenticates eighteen retained-bundle reference/baseline/context-intervention pages,actualDPR1/2 and effective4-to0 samples,unchanged inputs/geometry and exact retained baseline PNG reproduction. Pixel replay demonstrates tested DPR1 antialias contribution whileDPR2 placement remains,including equal AA/no-AA pixels atphase.5. Not universal snapping,full edge/whole-frame/Material acceptance or a renderer fix.'),
     proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('retained public unchanged-root updates preserve semantic focus failure at both DPRs'/,
       'configured editing boundaries and public unchanged-root focus failure', 'Authenticates sixteen configured emptying cases,eighty paired boundaries,160 PNGs,exact action methods and complete capture graphs through an explicit root-policy-only source transition. Public no-op updates retain four native controls and four root blur/refocus failures at DPR1/2 with2515 dependencies and complete current/installed methods. Original descendant finding fields and every prior policy definition remain conserved;missing/wrong-owner/forged-policy controls reject. Focus and sampled caret evidence only,not selection-paint,all-profile root attribution,lifetime or whole-case parity acceptance.'),
     proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('public equal-input flex em margins preserve exact failure and block pixel controls'/,

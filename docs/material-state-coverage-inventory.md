@@ -46,8 +46,10 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   inspectionComplete=false/inputEquivalent=false,CSS-pixel contract unchanged.
   Import/verify logs configured-editing-root-compact-{import,verify}-20261015.log
   have SHA69d5c7f0/577909ee;serial cold stdout/stderr SHA94b9af3d/394a4f1e.
-- Selected review:cfd613cf,2311 partial/unverified cases,12709 dependencies;
-  root/16 configured editing evidence included,not complete-case acceptance.
+- Published review:cfd613cf,2311 partial/unverified cases,12709 dependencies;
+  current source batch now selects74d0b4bb (12717 dependencies) incorporating
+  queued divider evidence and exact policy/benchmark receipt refreshes. No case
+  promotion;new209-proof producer58471115 is not yet exported/published.
 - Queued outside export:cc2dcdaf extends e4b85e47's24 anonymous-border joins with
   retained paragraph typography,box/opacity,routing/wrapping and separator footprint
   evidence;paragraph inherited-request evidence and new public inherited-block-
@@ -75,6 +77,24 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   Supplemental relevant-state/applicability closure and all final gates remain.
 
 ### October15 evidence chronology — historical checkpoints
+
+Coherent margin/context source registration now passes5/5 focused assertions,
+zero skips,25551.6249ms,exit0 in margin-thin-context-registration-complete-
+20261015.log. Producer209 adds two explicit bounded proofs/eleven evidence paths;
+all prior207 proof definitions and entire producer restore exactly after reversing
+only those additions and review pin. Current LF producerSHA
+584711154433dd18b0a64e47f8769755a2fcd7c8bd495e8b16a83f6cb3328734.
+Whole helper/suite predecessor assertions and forged producer-description checks
+remain green,including root/inherited/flex and old192-proof registration replay.
+Current selected proposal74d0b4bbbfaa50fa18b0f4e91a4443aa72ec80813972466bbe9b7008d2e94210
+refreshes ONLY568 policy receipts fcbf→34f3 and40 benchmark receipts a1c36a67→
+e39dc1a70b1ef2efd0287be9c5acdf3d0509a45dc30487a8b9c1581a9bb58c07.
+Reversing608 substitutions restores complete cc2dcdaf review;12717 dependencies
+authenticate,all2311 partial/unverified. Log margin-context-queued-case-receipts-
+20261015.log. Named launcher dry-run selects74d0 in both path/digest;all other
+original arguments remain. Published6e20 is unchanged;canonical integration and
+remaining inspection/final gates are separate. No recapture/full export for this
+source batch,renderer fix,fixture compensation or current-rendering acceptance.
 
 Inherited block-margin proposal8091a07d is now applied to the existing computed-
 font policy finding,not appended as160th. Exact policy restoration returns the

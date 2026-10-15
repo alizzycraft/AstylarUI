@@ -11,6 +11,11 @@ The inherited block-margin field is now applied in current audit-policy source
 with exact predecessor conservation and3/3 owning root/inherited/flex assertions.
 It is not yet included in published6e20;proof registration and exact case receipt
 refresh remain the next coherent integration batch. No renderer code changed.
+That source registration is now complete (209 proofs,5/5 focused checks) and
+selects receipt-refreshed74d0b4bb case review with queued divider records. Only
+568 policy/40 benchmark receipt substitutions change its cc2dcdaf predecessor;
+all observations/other fields conserve and12717 dependencies authenticate.
+Published6e20 still predates the batch;canonical integration is not yet claimed.
 
 Bounded thin-fill paint result (outside the frozen canonical batch):equal measured
 fractional geometry does not yield equal raster coverage. The retained16 PNGs

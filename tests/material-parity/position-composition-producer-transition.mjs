@@ -7,6 +7,37 @@ import ts from 'typescript';
 const hash = text => createHash('sha256').update(text).digest('hex');
 export function restoreRootEditingProducerRegistration(source) {
   let current = source.toString().replaceAll('\r\n', '\n');
+  if (current.includes('inherited block margin computed-font refinement and complete predecessor conservation')) {
+    assert.equal(hash(current), '584711154433dd18b0a64e47f8769755a2fcd7c8bd495e8b16a83f6cb3328734');
+    const tree = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    assert.equal(tree.parseDiagnostics.length, 0);
+    const entries = tree.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === 'focusedProofInventory')
+      .body.statements[0].expression.elements;
+    assert.equal(entries.length, 209);
+    assert.equal(entries[0].arguments[3].text, 'inherited block margin computed-font refinement and complete predecessor conservation');
+    assert.equal(entries[1].arguments[3].text, 'thin fill effective context antialias intervention with retained DPR2 placement residual');
+    for (const entry of entries.slice(0, 2).reverse()) current = current.slice(0, entry.getFullStart()) + current.slice(entry.end + 1);
+    for (const file of ['scripts/audit-public-inherited-margins.mjs',
+      'artifacts/material-parity/public-inherited-margin-20261015/latest-report.json',
+      'artifacts/material-parity/public-inherited-margin-repeat-20261015/latest-report.json',
+      'artifacts/material-parity/public-inherited-margin-owner-binding-20261015.log',
+      'artifacts/material-parity/public-inherited-margin-source-history-20261015.log',
+      'scripts/audit-public-thin-fill-phase.mjs', 'scripts/audit-retained-thin-fill-context.mjs',
+      'scripts/check-material-thin-fill-interior-paint.mjs',
+      'artifacts/material-parity/public-thin-fill-phase-corrected-20261015/latest-report.json',
+      'artifacts/material-parity/retained-thin-fill-context-20261015/latest-report.json',
+      'artifacts/material-parity/working-audit/proposals/8091a07d07a9cb8f5f7c3980f9c5634b2ec9dd4409894a6853f030bc4aaf4fb6.json']) {
+      const line = `    '${file}',\n`;
+      assert.equal(current.split(line).length, 2); current = current.replace(line, '');
+    }
+    const selected = '74d0b4bbbfaa50fa18b0f4e91a4443aa72ec80813972466bbe9b7008d2e94210';
+    assert.equal(current.split(selected).length, 2);
+    current = current.replace(selected, 'cfd613cf5564fb485d87a9ba2711c8eb6d67f53e7ea35a62ada2d4c78ff1138e');
+    const prior = execFileSync('git', ['show', '1efec980:tests/material-parity/input-equivalence-audit.mjs'],
+      { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+    assert.equal(hash(prior), 'faf7071c8d51f76df4e2415012b7673f51942f0640afc475dbaf72710a4f2ac7');
+    assert.equal(current, prior, 'Only two focused proofs,eleven evidence paths and selected review pin extend the accepted producer');
+  }
   if (!current.includes('configured editing boundaries and public unchanged-root focus failure')) return current;
   assert.equal(hash(current), 'faf7071c8d51f76df4e2415012b7673f51942f0640afc475dbaf72710a4f2ac7');
   const tree = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);

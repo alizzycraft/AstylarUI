@@ -224,6 +224,11 @@ test('retained inherited block margins extend computed-font finding without chan
       && node.name?.text === 'restoreInheritedMarginPolicyRefinement');
     assert.equal(additions.length, 1);
     let oldHelper = helper.slice(0, additions[0].getFullStart()) + helper.slice(additions[0].end);
+    const paintAst = ts.createSourceFile(helperFile, oldHelper, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    const paintOwner = paintAst.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === 'restoreRootEditingProducerRegistration');
+    const paintAdditions = paintOwner.body.statements.filter(node => ts.isIfStatement(node) && node.expression.getText(paintAst).includes('inherited block margin computed-font refinement and complete predecessor conservation'));
+    assert.equal(paintAdditions.length, 1);
+    oldHelper = oldHelper.slice(0, paintAdditions[0].getFullStart()) + oldHelper.slice(paintAdditions[0].end);
     const composed = '  const current = restoreInheritedMarginPolicyRefinement(source);';
     assert.equal(oldHelper.split(composed).length, 2);
     oldHelper = oldHelper.replace(composed, "  const current = source.toString().replaceAll('\\r\\n', '\\n');");
@@ -245,6 +250,51 @@ test('retained inherited block margins extend computed-font finding without chan
     const oldSuite = execFileSync('git', ['show', `c72c2fe2:${suiteFile}`], { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
     assert.equal(restored, oldSuite);
     assert.notEqual(restored + '\n// hidden assertion drift', oldSuite);
+});
+
+test('retained thin fill context intervention preserves geometry and separates DPR2 placement residual', async () => {
+    const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+    const file = 'artifacts/material-parity/retained-thin-fill-context-20261015/latest-report.json';
+    const bytes = readFileSync(file);
+    assert.equal(hash(bytes), 'f5251b3de199f73187a46c6ef9b5089bcdd5be72bcd9449911949a1b965f5a2b');
+    const report = JSON.parse(bytes);
+    assert.equal(report.results.length, 18);
+    for (const row of report.results.filter(row => row.mode !== 'reference')) {
+      assert.equal(row.runtime.dpr, row.dpr);
+      assert.equal(row.runtime.contexts[0].samples, row.mode === 'baseline' ? 4 : 0);
+      assert.equal(row.runtime.contexts[0].attributes.antialias, row.mode === 'baseline');
+    }
+    for (const args of [
+      ['scripts/audit-retained-thin-fill-context.mjs', '--verify', 'artifacts/material-parity/retained-thin-fill-context-20261015'],
+      ['scripts/check-material-thin-fill-interior-paint.mjs', '--context'],
+    ]) execFileSync(process.execPath, args, { stdio: 'pipe' });
+    const producerFile = 'tests/material-parity/input-equivalence-audit.mjs';
+    const producer = readFileSync(producerFile, 'utf8');
+    const { restoreRootEditingProducerRegistration } = await import('./position-composition-producer-transition.mjs');
+    assert.equal(restoreRootEditingProducerRegistration(producer), execFileSync('git', ['show', `82bf9cee:${producerFile}`],
+      { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n'));
+    assert.throws(() => restoreRootEditingProducerRegistration(producer.replace('effective4-to0 samples', 'effective4-to4 samples')));
+    const ast = ts.createSourceFile(producerFile, producer, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    const functions = ['sourceFingerprints', 'proof', 'focusedProofInventory'].map(name => ast.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === name).getText(ast));
+    const inventory = new Function('readFileSync', 'path', 'createHash', functions.join('\n')
+      + ';return {proofs:focusedProofInventory(process.cwd()),sources:sourceFingerprints(process.cwd())};')(readFileSync, path, createHash);
+    assert.equal(inventory.proofs.length, 209); assert.ok(inventory.proofs.every(row => row.status !== 'missing'));
+    assert.equal(inventory.sources.filter(row => row.file === file).length, 1);
+    const suiteFile = 'tests/material-parity/benchmark-config.spec.mjs';
+    const suite = readFileSync(suiteFile, 'utf8').replaceAll('\r\n', '\n');
+    const suiteAst = ts.createSourceFile(suiteFile, suite, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    const start = name => suiteAst.statements.find(node => ts.isExpressionStatement(node) && ts.isCallExpression(node.expression)
+      && node.expression.expression.getText(suiteAst) === 'test' && node.expression.arguments[0]?.text === name).getStart(suiteAst);
+    let restored = suite.slice(0, start('retained thin fill context intervention preserves geometry and separates DPR2 placement residual'))
+      + suite.slice(start('public equal-input flex em margins preserve exact failure and block pixel controls'));
+    const added = String.raw`    const paintAst = ts.createSourceFile(helperFile, oldHelper, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    const paintOwner = paintAst.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === 'restoreRootEditingProducerRegistration');
+    const paintAdditions = paintOwner.body.statements.filter(node => ts.isIfStatement(node) && node.expression.getText(paintAst).includes('inherited block margin computed-font refinement and complete predecessor conservation'));
+    assert.equal(paintAdditions.length, 1);
+    oldHelper = oldHelper.slice(0, paintAdditions[0].getFullStart()) + oldHelper.slice(paintAdditions[0].end);
+`;
+    assert.equal(restored.split(added).length, 2); restored = restored.replace(added, '');
+    assert.equal(restored, execFileSync('git', ['show', `1efec980:${suiteFile}`], { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n'));
 });
 
 test('public equal-input flex em margins preserve exact failure and block pixel controls', () => {

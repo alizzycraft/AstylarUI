@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Retain selected74d0b4bb with predecessorcc2dcdaf,margin-context-queued-case-
+receipts-20261015.log,and both margin-thin-context-registration focused/complete
+logs plus launcher dry run. Complete608 receipt-only substitutions conserve all
+other2311-case fields;12717 dependencies authenticate. Source has209 proofs,
+published6e20 remains207. Do not delete original failures or relabel source
+registration as canonical/browser acceptance. No temporary capture was created.
+
 Retain inherited-margin-policy-refinement-focused-20261015.log and -complete log
 with proposal8091a07d. The latter passes3/3 and proves full policy/helper/suite
 predecessor conservation plus original public replay;source policy now contains
