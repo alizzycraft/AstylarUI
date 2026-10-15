@@ -25,6 +25,18 @@ Thus a below-screen/missing surface is not supported by this retained open-state
 population. Original manual reports,current browser visibility,UNDO/timing/action
 source applicability and actual local text/state paint remain distinct checks.
 No fixture/renderer change,new capture,whole-case promotion or canonical export.
+Follow-up snackbar-open-text-input-membership-20261016 TERMINAL0 authenticates
+the report and all68 open-case trees,uniquely maps Project saved/UNDO on both
+sides for34 exact cases,and preserves computed-versus-retained/painted stages.
+All34 message line-height inputs differ. Light desktop message is native
+14px/20px/rgb(245,239,244) versus retained16px/normal/#ffffff;native UNDO ink
+rgb(213,186,255) versus painted#6750a4. Compact accepted92346052 already classifies
+message token substitution,omitted component metrics and font-stack inheritance;
+these are not new core findings. Membership extends the visibility census,not
+fresh authoring-source replay or equivalence. A local raster difference cannot
+diagnose a renderer failure from these unequal text inputs. No new metric/crops
+were generated:next local-paint review must preserve/classify this mismatch or
+use an isolated equivalent-input reduction,not compensate in the fixture.
 
 ### Divider candidate verification in progress — October15
 
