@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep public-inherited-margin-source-history-20261015.log with authenticated
+flex-margin-source-history-20261015.log. The new proof reuses the existing saved
+August15 blob/diff and establishes complete conservation of all three current
+margin/font/length methods. Source history is not historical runtime execution;
+do not delete either receipt or label a first-bad runtime revision as established.
+
 Retain both public-inherited-margin-20261015 and public-inherited-margin-repeat-
 20261015 directories (report,bundle,HTML and32 PNGs each),their capture and
 --verify logs,and public-inherited-margin-owner-binding-20261015.log. Keep the

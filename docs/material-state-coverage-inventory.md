@@ -2,6 +2,19 @@
 
 ## Current integration pointer — October15
 
+Inherited block-margin history question is resolved at source scope:all three
+complete current parseMarginBox/parseFontSize/parseLengthValue methods equal
+096c8a86228811003da0b05b5daf7f4ddbdb1bdb (August15). That exact diff adds local
+font propagation with fallback16;parent source has no parseFontSize helper.
+Existing authenticated flex-margin history blob/diff is reused,not recaptured.
+Log public-inherited-margin-source-history-20261015.log preserves whole blob and
+canonical complete-method hashes. This excludes recent Material compensation
+as the source introduction,not a first-bad historical runtime claim. Normal-flow
+restoration must consider this inherited-font invariant as well as the separately
+proven empty-block height issue;do not assume fixing the separator alone makes
+theme-scaled paragraph flow correct. Current positioned Material wrappers are
+not assigned the new block-path cause. No consumed export input changes.
+
 Inherited-margin evidence gap now has two public equal-input runs. Existing em
 box finding covers inherited width/height,not margins;the original margin runner
 always gives the child an explicit font. New audit-public-inherited-margins.mjs

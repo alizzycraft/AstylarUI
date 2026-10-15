@@ -7,6 +7,10 @@ uses parseFontSize(style?.fontSize),whose omission fallback is16. Complete ownin
 methods equal installed bundle inputs;all64 PNG receipts corroborate geometry.
 This extends the missing computed-font invariant beyond the existing em-box
 finding to a distinct block-margin call site. Keep flex raw-unit-loss separate.
+Source history conserves all three complete current helpers since096c8a86
+(August15 local-font extension with fallback16),not a recent Material change or
+historical runtime bisect. Normal-flow restoration must account for this shared
+font invariant as well as the distinct empty-block sizing defect.
 Implementation must share authoritative computed CSS font/length resolution;
 do not set fixture-only pixel fonts or margins. Captured positioned divider
 paragraphs have unequal layout inputs and are not assigned this cause. Exact
