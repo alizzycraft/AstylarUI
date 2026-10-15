@@ -30,6 +30,31 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   inputs changed. All original final gates and36-family/relevant-state scope
   remain. No further export is justified solely by this status update.
 
+### Divider compensation branches traced while export remains frozen — October15
+
+Read-only Git pickaxe closes the specific DPR/density-offset origin question:
+five source-changing commits match the divider selector history,2f440115,
+fcde1b7d,1f2f2aad,662c1793,7485fc58. August28 adds theme-specifictranslate(0,1px);
+August31 removes that transform and adds DPR>=1.5 half-pixel top subtraction;
+September8 retunes ordinary,density and mobile tops. All eight current divider
+selector rule lines exactly equal the September8 snapshot. Current raw source
+still71e2d41f;the initial absolute separator/paragraph substitution and later
+tuning are distinct changes,not one inferred fix. Recorded patches are full
+unified0 source-file diffs;their hashes are not interchangeable with older
+unified/context patch receipts.
+
+Executed assertion log divider-coordinate-branch-history-20261015.log SHA
+b92b250bdaa722074b3ccfa2258f9965a279d2444eb499ef572777a904fad71c retains
+all five commit IDs,dates,full patch/source hashes,relevant hunks and rule lines;
+matching stderr is empty. This extends the EXISTING fixture-divider-replaces-
+paragraph-flow-with-coordinates history,not a new source finding or evidence that
+each offset's underlying renderer cause is proven. Existing empty-block and
+normal-font public defects remain separate. Root-height history/runtime/paint
+and other case obligations are not cleared. New history is outside the frozen
+cf740d1d export inputs;no producer,selected proposal or live worker was changed.
+Next integrate its exact-case history disposition after the current milestone,
+without repeating this five-commit search or claiming current input equivalence.
+
 ### Coherent standalone proof registration ready — October15
 
 Producer now registers213 focused proofs (none missing),708 LF-normalized source

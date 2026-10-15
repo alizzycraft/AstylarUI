@@ -56,6 +56,10 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep divider-coordinate-branch-history-20261015 stdout/stderr (logb92b250b),
+which retains five Git changes and exact current-rule correspondence. It is
+standalone history evidence outside the live cf740d1d batch,not a new capture.
+
 Keep divider-proof-batch-registration[-retry,-final,-complete]-20261015 logs and
 stderr,divider-proof-batch-case-receipts-20261015 logs/stderr,and launcher-preflight.
 The first two failures explain the corrected proposal-path matching assumption;
