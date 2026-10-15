@@ -4,6 +4,44 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Divider candidate verification in progress — October15
+
+The reconciled export completed successfully and wrote candidate f663c88e
+(compressed SHA f663c88ea2d75257049f26fe33add569a2fcb7529395f291a2db966db7489948).
+This does NOT replace accepted92346052 or certify inspection/parity. Its stdout
+and stderr are divider-proof-batch-canonical-export-reconciled-20261015.
+Independent cold --check now runs in session51122, launcher23484/worker3276;
+both process handles were verified live. Logs are divider-proof-batch-canonical-
+cold-check-20261015 stdout/stderr. Separate session64210/process23900 uses the
+existing material-audit-section-digests reader to authenticate predecessor and
+candidate compressed/decoded bytes and identify every changed top-level section.
+Its logs are divider-proof-batch-section-conservation-20261015 stdout/stderr.
+Neither running check is a pass. Exact changed-row/section conservation,
+successful cold verification and justified compact import remain required before
+acceptance. The queued0c71 applicability review remains outside this candidate.
+No renderer/fixture change, recapture, criterion change or case promotion occurred.
+
+### Tree leaf click applicability is not absent selection — October15
+
+Specific question: do the52 authored leaf-tree cases lack all pointer activation,
+or do they retain a click-to-focus contract despite no expand/select action?
+The retained full-run checkpoint authenticates chunk-7SL66K3U.js
+(2693705 bytes,SHA816c0114708acc9b883f9ac300e21017e2556f81fecaf26e5719bc334cf80237)
+and its map (4106815 bytes,SHA67e956a6f4b3b0325fc51b7b45688a27d5e9307095f8b4a20391a96f68244df4).
+Both original files remain in the authenticated-replay/browser historical build.
+Its sourcesContent contains MatTreeNode's compiled host click handler calling
+_focusItem(),and CdkTreeNode's click handler calling _setActiveItem(). Both methods
+guard isDisabled and delegate to the tree key manager;this is distinct from
+CdkTreeNodeToggle's expand/collapse handlers. Mapped Material source SHAe60038e9
+(full e60038e9cdd752cfbfbdf606a86f3253ea15b54a48c3e718cec42f6bbe388c27),
+CDK source SHA f4c5eba6f763336787b1367004e87e10e5f510dfd2c629bbc1db61ef20610981.
+The read-only hash/handler assertions exit0. Thus no authored selection/expansion
+does NOT justify excluding pointer click/focus inspection for these leaf nodes.
+This is historical source-contract evidence,not observed event delivery,current
+rendering,keyboard activation equivalence or whole-case closure. The queued0c71
+review is unchanged;next bind this contract through the existing applicability
+join and its negative controls,then inspect exact retained click/focus boundaries.
+
 - Accepted evidence package is now9234605241791fcd5d15af1747b83921800a7b31f0dc0ec9440ff83e0345081d,
   index478d24484da0c18b3fa1a09b19fc7f42d0b37e360b819e48fca5e8a141b26bb2.
   Includes the209-proof margin/context source batch and selected74d0 review.
