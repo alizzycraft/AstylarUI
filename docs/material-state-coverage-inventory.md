@@ -14,8 +14,9 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   Consumed producer/policy/benchmark/helper/launcher inputs remain frozen.
 - Selected review:cfd613cf,2311 partial/unverified cases,12709 dependencies;
   root/16 configured editing evidence included,not complete-case acceptance.
-- Queued outside export:e4b85e47's24 anonymous-border joins;paragraph inherited/
-  retained typography,box/opacity and routing evidence;new public inherited-block-
+- Queued outside export:cc2dcdaf extends e4b85e47's24 anonymous-border joins with
+  retained paragraph typography,box/opacity,routing/wrapping and separator footprint
+  evidence;paragraph inherited-request evidence and new public inherited-block-
   margin proof/history. Preserve distinct capture/current/source boundaries.
 - Next gate sequence:finish independent cold comparison,complete
   predecessor delta conservation,compact import/verification and publication.
@@ -25,6 +26,20 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   Supplemental relevant-state/applicability closure and all final gates remain.
 
 ### October15 evidence chronology — historical checkpoints
+
+Divider pending-versus-measured reconciliation now joins five retained proof logs
+in one queued batch,not another capture/export. Proposal
+cc2dcdafc39dacc43539e24472de5cf682b01b540e59af69aa42875677a75b28
+(fileSHAfd87e130ff6982d92c916184542b3b183a9ebf4efb873bf40c064b7c96116566)
+adds48 bounded subrecords across all24 exact divider cases. Each proof has two
+matched target/side observations per case;all other complete case fields conserve.
+Existing loader authenticates12717 dependencies/all2311 cases,both flags false.
+Log divider-paragraph-stage-footprint-case-join-20261015.log. This supersedes the
+queued e4b85e47 descriptions of unmeasured separator endpoints/footprints and
+unjoined box/opacity,routing,retained typography and wrapping-default evidence.
+Actual anonymous line-box/paint attribution,original producer applicability,
+remaining history/lifecycle and final current-code gates remain open. No case
+promotion or source/fixture change;selected cfd613cf cold-check inputs unchanged.
 
 Thin-fill backdrop question is bounded without recapture:complete current,
 installed and actual captured-bundle createRootBodyElement methods agree. The

@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Retain queued cc2dcdaf paragraph-stage/footprint proposal with its e4b85e47
+predecessor,five referenced retained proof logs and
+divider-paragraph-stage-footprint-case-join-20261015.log. It joins48 bounded
+subrecords/24 cases and validates12717 dependencies without changing other case
+fields or whole-case acceptance. Neither proposal is selected by the running
+cfd613cf cold check. No third capture or new canonical export was generated.
+
 Retain public-thin-fill-phase-corrected-20261015 and its capture/verify logs with
 public-thin-fill-phase-correction-conservation-20261015.log. Complete reports
 conserve except driver/recipe hashes;all32 original/repeat PNGs and5030 dependency
