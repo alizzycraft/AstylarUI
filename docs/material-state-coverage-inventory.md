@@ -57,7 +57,8 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   census41198dc1 and saved row321e5197,section/case44dbf04b,source-boundary39effa0b,
   non-row metadata9d347f6d log digests. Their complete section/row outcomes cover
   all nine changed sections and unchanged remainder. This composes saved executed
-  checks,not independent cold replay. No import/publication or rendering claim yet.
+  checks,not independent cold replay. Publication is now independently verified;
+  no current-rendering acceptance follows.
   Then group remaining property/case review work;do not export every new note.
 - Pending readable report delta reviewed read-only:LF SHA2524a0767de0349a2b0168d959229b571ba78a1cad85050d4cd7d5df501b94f4
   versus accepted bdabdd1ff46b5c9d12df82d5b947aece255cbf40d414f31cba7cdc0bc2c357b2.
@@ -71,6 +72,18 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   Supplemental relevant-state/applicability closure and all final gates remain.
 
 ### October15 evidence chronology — historical checkpoints
+
+Queued divider review remains applicable after canonical publication:existing
+loadCaseObligationReview authenticates all12717 dependencies ofcc2dcdaf against
+the current checkout. Whole-record comparison to accepted6e20/index6d3df3e7
+finds exactly24 divider cases changed;all2287 other complete records conserve,
+all2311 remain partial/unverified. Exit0 log
+queued-divider-current-package-applicability-20261015.log. This closes the
+post-publication queue applicability question,not anonymous line-box/paint or
+whole-case inspection. Do not recapture those settled input/footprint proofs.
+Next coherent source batch should register the inherited-block-margin extension
+of existing computed-font ownership and the new thin-fill context boundaries,
+then join queued case evidence;do not trigger a full export per added note.
 
 Thin-fill interior paint now has an exact bounded model,not just different
 row colors. `node scripts/check-material-thin-fill-interior-paint.mjs` passes
