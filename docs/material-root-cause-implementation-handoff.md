@@ -1,5 +1,13 @@
 # Material audit: evidence-led implementation priorities
 
+Current canonical acceptance pointer (supersedes historical checkpoints below):
+6e20a321/6d3df3e7 includes the configured editing/root-focus evidence and207
+registered focused proofs. Independent serial cold comparison,full predecessor
+conservation,compact import and whole-index verification pass;exact receipts are
+in the coverage ledger. All2311 cases remain partial/unverified,inputEquivalent
+false. Queued cc2dcdaf divider evidence,inherited-font margin and newer thin-fill
+diagnostics are outside this batch. Final gates and complete case closure remain.
+
 Bounded thin-fill paint result (outside the frozen canonical batch):equal measured
 fractional geometry does not yield equal raster coverage. The retained16 PNGs
 fit native round(CSS top)*DPR opaque-row paint versus candidate unsnapped device-

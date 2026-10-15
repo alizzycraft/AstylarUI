@@ -4,22 +4,22 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
-- Accepted package/index:86961b43/ec90ff41,159 findings;predates current207-proof
-  source registration5354ea03. Source/fixture/render acceptance are not implied.
+- Accepted package/index:6e20a321/6d3df3e7,159 findings,current207-proof source
+  registration5354ea03. Cold comparison,predecessor conservation,compact import
+  and whole-index verification pass. Source/fixture/render acceptance not implied.
 - Export completed:configured-editing-root-canonical-export-20261015.log records
   complete at2702348.1973ms,159 findings,8483 groups/389202 occurrences and
   inputEquivalent=false. This is not independent acceptance or index publication.
-- Independent cold check is NOT live or passing. Original session76513 has no
-  terminal receipt; retry stderr configured-editing-root-canonical-cold-check-
-  retry-20261015.stderr.log records fatal process out of memory (Zone).
-  Process inspection found no audit worker. Preserve both attempts; consumed
-  producer/policy/benchmark/helper/launcher inputs remain frozen.
-  Serial recovery started October15 10:37:14:launcher21420/worker20104 confirmed
-  live by CIM;configured-editing-root-canonical-cold-check-serial-20261015.log
-  and matching .stderr.log retain output. Same named --check,ASTYLAR_AUDIT_COLD=1,
-  ASTYLAR_AUDIT_PROGRESS=1,unchanged8192MB heap/all assertions. Earlier cold and
-  metadata retries overlapped;contention versus intrinsic collector allocation
-  remains unproved. No concurrent heavy verifier now;no capture or export.
+- Independent serial cold check now COMPLETED successfully:serial stderr records
+  complete at6008029.5552ms and stdout the final436/1875,159-finding summary,
+  inputEquivalent=no. Launcher21420/worker20104 exited after terminal output.
+  Logs:configured-editing-root-canonical-cold-check-serial-20261015.log and
+  matching .stderr.log. Same named --check,cold/progress enabled,8192MB heap and
+  all assertions;2 collectors,10 memory hits,0 disk hits/invalidations,13915 files,
+  1176486574 bytes read and reverified. Wall duration includes a delayed wait;
+  do not present it as uninterrupted throughput. Source inputs stayed frozen.
+  Original76513 lacks terminal receipt;first retry's fatal Zone allocation failure
+  remains preserved. Serial success does not identify the failed native allocation.
 - Candidate6e20a321:70552528 compressed bytes,decoded2290631277 bytes/SHA
   ba2eb95a85644ac70cc8b925d8028293e62beacc436b571951c19fa9b9557377.
   Census60704 completed:48496 unchanged rows/50 changed,nine changed sections;
@@ -36,15 +36,21 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   no longer holds both metadata trees or a whole split census log;the209457328-byte
   metadata line alone used about1GB in a diagnostic read. This removes avoidable
   retention,not proof of the exact failed native allocation or the cold job's cause.
-  Independent cold check remains failed/unverified. No import yet.
+  Independent serial cold comparison passes. Compact import78220 exits0 and
+  whole-index verify exits0:72751809 compact bytes,8483 groups,39904 controls,
+  389202 occurrences/159 findings. IndexSHA6d3df3e7a1518cad3d38bb385921c4098f0dacb8ae2f77cea2a776ff9da72b23.
+  Imported metadata confirms all2311 partial/unverified,cfd613cf review and
+  inspectionComplete=false/inputEquivalent=false,CSS-pixel contract unchanged.
+  Import/verify logs configured-editing-root-compact-{import,verify}-20261015.log
+  have SHA69d5c7f0/577909ee;serial cold stdout/stderr SHA94b9af3d/394a4f1e.
 - Selected review:cfd613cf,2311 partial/unverified cases,12709 dependencies;
   root/16 configured editing evidence included,not complete-case acceptance.
 - Queued outside export:cc2dcdaf extends e4b85e47's24 anonymous-border joins with
   retained paragraph typography,box/opacity,routing/wrapping and separator footprint
   evidence;paragraph inherited-request evidence and new public inherited-block-
   margin proof/history. Preserve distinct capture/current/source boundaries.
-- Next gate sequence:finish independent cold comparison,compact import/verification
-  and publication. Completed predecessor checks now compose against the same
+- Next gate sequence:commit/push this canonical publication,then resume queued
+  evidence and real case closure. Completed predecessor checks compose against the same
   candidate6e20a321/accepted86961/ec90:current payload hash/70552528 bytes and
   census manifest match;prior/current48546 rows,50 exact changes. Reauthenticated
   census41198dc1 and saved row321e5197,section/case44dbf04b,source-boundary39effa0b,
@@ -79,6 +85,26 @@ outside-parent root fallback remains a separate failure. A targeted read-only PN
 replay closes this demonstrated gap without another capture or canonical export.
 Next causal test must observe actual render-context/sample behavior or a controlled
 paint-boundary intervention after the serial cold job,not fixture offsets.
+Screenshot-producer boundary also checked:current driver and base hashes match
+corrected report receipts;AST finds one page.screenshot call with only path,
+whose raw returned bytes are hashed/saved directly. No producer resize step.
+Requested DPR and PNG dimensions agree,but actual window.devicePixelRatio and
+GL context attributes/samples were not recorded. Do not infer actual sample count
+or a universal native snapping rule. Authenticated captured bundlecb73fcd0 also
+contains the already-classified hardcoded Engine(...,true,...) argument and
+Babylon options.antialias=antialias??options.antialias override;public option
+toggling is therefore not a valid isolated intervention. Reuse that known finding,
+do not repeat its historical proof. A later context probe must record actual DPR,
+render dimensions,context attributes/samples and intervention effectiveness.
+Prepared unregistered audit-retained-thin-fill-context.mjs for that exact gap:
+serves retained authenticated bundle/HTML unchanged,records observed DPR and
+context samples,and separately forces context-creation antialias=false. Eighteen
+sequential reference/baseline/intervention pages cover phases0/.25/.5,DPR1/2.
+It requires identical retained site/geometry and matching browser version,verifies
+raw PNG receipts and effective intervention,and fingerprints its local producer
+graph. Syntax and graph preflight pass;BROWSER EXECUTION NOT YET RUN. Do not treat
+the prepared script as evidence or canonical integration. Defer until serial
+cold memory pressure clears;preserve new run separately from original captures.
 
 Thin-fill projection-boundary review closes a narrower rounding explanation:
 authenticated corrected report7eef112b records EXACT paired projected child

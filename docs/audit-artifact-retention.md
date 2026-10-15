@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Retain configured-editing-root serial cold stdout/stderr logs and compact import/
+verify logs dated20261015 with accepted6e20a321/index6d3df3e7 and predecessor86961.
+Serial cold completes;original interrupted and allocation-failed attempts remain
+required failure evidence. Keep row,section/case,source-boundary,source reconstruction,
+census and streaming non-row metadata proofs;they collectively conserve all48546
+rows and all sections. Publication is evidence acceptance,not equal-input rendering
+or2311-case closure. No old capture/package should be deleted from this milestone.
+
 Retain queued cc2dcdaf paragraph-stage/footprint proposal with its e4b85e47
 predecessor,five referenced retained proof logs and
 divider-paragraph-stage-footprint-case-join-20261015.log. It joins48 bounded
