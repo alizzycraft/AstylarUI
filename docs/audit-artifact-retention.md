@@ -65,6 +65,10 @@ Keep snackbar-open-text-input-membership-20261016 stdout/stderr:34 exact open
 cases map message/action owners and retain unequal computed/retained inputs.
 This reuses68 original trees and existing classifications,not a new core finding,
 raster baseline or replacement browser capture.
+Keep snackbar-retained-lifetime-membership-20261016 stdout/stderr and original
+snackbar-lifetime-bound-current-20261008 report/captures. Narrow action/timing
+replay does not replace the original owning suite,rendering evidence or exact
+main-matrix cohort coverage;do not count14 supplemental rows as14 new cases.
 
 Keep local-paint-authored-applicability-case-join-20261016 stdout/stderr and
 queued649034f8. It supersedesc46e for existing obligation applicability only;

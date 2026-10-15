@@ -37,6 +37,20 @@ fresh authoring-source replay or equivalence. A local raster difference cannot
 diagnose a renderer failure from these unequal text inputs. No new metric/crops
 were generated:next local-paint review must preserve/classify this mismatch or
 use an isolated equivalent-input reduction,not compensate in the fixture.
+UNDO/lifetime coverage check finds existing snackbar-lifetime-bound-current-
+20261008 (14 rows,two ordinary contexts),not an absent historical action proof.
+Narrow replay snackbar-retained-lifetime-membership-20261016 TERMINAL0 reuses
+validateSupplementalCapture and original seven-boundary action/timing assertions.
+Checkpoint validation is checkpoint-bound;all recorded clicks trusted,third-open
+UNDO click ends with zero popups,old expiry does not dismiss the replacement and
+new expiry does. Reference transient counts[0,1,2,1,0,1,0] versus candidate
+[0,1,1,1,0,1,0] remain distinct,not normalized into equal opening animation.
+Contexts are light1440x900DPR1 and dark390x844DPR2,not exact main-matrix cohorts.
+No configured snackbar case currently references this supplemental report.
+Reuse it as bounded ordinary lifetime evidence,not71 newly inspected cases or a
+pass for configured1000px-high,all-profile/current runtime/glyph/resource gates.
+This was a narrow retained assertion replay,not a pass of the full original
+owning suite's additional current map/source and raster assertions. No recapture.
 
 ### Divider candidate verification in progress — October15
 
