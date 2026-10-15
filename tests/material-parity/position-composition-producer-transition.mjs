@@ -5,8 +5,40 @@ import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
 
 const hash = text => createHash('sha256').update(text).digest('hex');
+export function restoreRootEditingProducerRegistration(source) {
+  let current = source.toString().replaceAll('\r\n', '\n');
+  if (!current.includes('configured editing boundaries and public unchanged-root focus failure')) return current;
+  assert.equal(hash(current), 'faf7071c8d51f76df4e2415012b7673f51942f0640afc475dbaf72710a4f2ac7');
+  const tree = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  assert.equal(tree.parseDiagnostics.length, 0);
+  const entries = tree.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === 'focusedProofInventory')
+    .body.statements[0].expression.elements;
+  assert.equal(entries.length, 207);
+  assert.equal(entries[0].arguments[3].text, 'configured editing boundaries and public unchanged-root focus failure');
+  current = current.slice(0, entries[0].getFullStart()) + current.slice(entries[0].end + 1);
+  for (const file of ['scripts/audit-material-configured-input-editing.mjs',
+    'artifacts/material-parity/configured-input-editing-current-20261015/latest-report.json',
+    'artifacts/material-parity/configured-input-editing-empty-ink-20261015.log',
+    'artifacts/material-parity/configured-input-editing-transient-focus-20261015.log',
+    'artifacts/material-parity/configured-input-editing-focus-owner-20261015.log',
+    'artifacts/material-parity/configured-input-editing-focus-owner-binding-20261015.log',
+    'artifacts/material-parity/public-semantic-root-noop-20261015/latest-report.json',
+    'artifacts/material-parity/semantic-root-focus-source-history-20261015.log']) {
+    const line = `    '${file}',\n`;
+    assert.equal(current.split(line).length, 2); current = current.replace(line, '');
+  }
+  const selected = 'cfd613cf5564fb485d87a9ba2711c8eb6d67f53e7ea35a62ada2d4c78ff1138e';
+  assert.equal(current.split(selected).length, 2);
+  current = current.replace(selected, '569d8cc6b3bc36b67ac83560633ae455ae950e2722cb44bb2eed4464648ad133');
+  const prior = execFileSync('git', ['show', '82bf9cee:tests/material-parity/input-equivalence-audit.mjs'],
+    { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+  assert.equal(hash(prior), 'dd0db0c6d935c1479ae5e00f1328a8502b4991f0ec5192ebea76e5d3a43f017d');
+  assert.equal(current, prior, 'Only one editing/root proof,eight paths and selected review pin may change');
+  return current;
+}
+
 export function restoreAllCaseObligationRegistration(source) {
-  let current=source.toString().replaceAll('\r\n','\n');
+  let current=restoreRootEditingProducerRegistration(source);
   if (current.includes('public flex em margin unit-loss defect with block and pixel controls')) {
     assert.equal(hash(current), 'dd0db0c6d935c1479ae5e00f1328a8502b4991f0ec5192ebea76e5d3a43f017d',
       'exact flex-margin proof and queued case-review registration');

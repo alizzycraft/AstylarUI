@@ -17,13 +17,12 @@ import { propertyGroups, sourceAuditDefinitions } from './input-equivalence-poli
 import { restoreSizingDefaultPolicyRegistration, restoreFlexMarginPolicyRegistration, restoreRetainedMapLocationRegistration } from './position-composition-producer-transition.mjs';
 import { materialAbsoluteTextAlignmentTargets, materialAdditionalMeasurementTargets, materialComparisonViewport, materialFamilies, materialFocusedRasterTargets, materialGeometryExcludedTargets, materialInteractionCases, materialInteractionFocusedRasterTargets, materialInteractionTextAlignmentTargets, materialInteractionViewports, materialLeftAlignedTextTargets, materialMobileFlowCases, materialMobileFlowFamilies, materialProfiles, materialSemanticExcludedTargets, materialStaticCases, materialSupplementalStaticCases, materialTextAlignmentTargets, materialTextAlignmentToleranceOverrides, materialTextAuditTargets, materialTextlessFamilies, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets, materialViewports } from './benchmark.config.mjs';
 
-test('retained public unchanged-root updates preserve semantic focus failure at both DPRs', () => {
+test('retained public unchanged-root updates preserve semantic focus failure at both DPRs', async () => {
     const hash = bytes => createHash('sha256').update(bytes).digest('hex');
     // Conserve the complete previous suite, not merely its old assertion count.
     const suiteFile = 'tests/material-parity/benchmark-config.spec.mjs';
     const suite = readFileSync(suiteFile, 'utf8').replaceAll('\r\n', '\n');
-    const predecessor = execFileSync('git', ['show', `82bf9cee:${suiteFile}`],
-        { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+    const predecessor = execFileSync('git', ['show', `82bf9cee:${suiteFile}`], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
     const suiteAst = ts.createSourceFile(suiteFile, suite, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
     const testStart = name => {
         const entries = suiteAst.statements.filter(node => ts.isExpressionStatement(node)
@@ -39,7 +38,7 @@ test('retained public unchanged-root updates preserve semantic focus failure at 
     assert.equal(restore(suite), predecessor);
     assert.notEqual(restore(suite + '\n// unrelated assertion drift'), predecessor);
     const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
-    const previousPolicy = execFileSync('git', ['show', `82bf9cee:${policyFile}`], { maxBuffer: 4_000_000 });
+    const previousPolicy = execFileSync('git', ['show', `82bf9cee:${policyFile}`], { maxBuffer: 4000000 });
     const policyAst = ts.createSourceFile(policyFile, previousPolicy.toString(), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
     const previousDefinitions = new Function(policyAst.statements.filter(node => ts.isVariableStatement(node)
         && node.declarationList.declarations.some(declaration => declaration.name.getText(policyAst) === 'sourceAuditDefinitions'))
@@ -50,14 +49,79 @@ test('retained public unchanged-root updates preserve semantic focus failure at 
     assert.equal(root.classification, 'confirmed-core-renderer-defect');
     assert.match(root.firstDivergence, /unconditional semantic root replaceChildren/);
     assert.match(root.boundary, /no synchronized selection-loss/);
-    for (const receipt of root.evidence) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+    for (const receipt of root.evidence)
+        assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
     const currentPolicy = readFileSync(policyFile, 'utf8');
-    const forgedPolicy = currentPolicy.replace('Root child identities/order and input value remain unchanged.',
-        'Root child identities changed and the input was replaced.');
+    const forgedPolicy = currentPolicy.replace('Root child identities/order and input value remain unchanged.', 'Root child identities changed and the input was replaced.');
     assert.notEqual(forgedPolicy, currentPolicy);
     assert.throws(() => restoreFlexMarginPolicyRegistration(forgedPolicy));
     delete refined.rootReconciliation;
     assert.deepEqual(restoredDefinitions, previousDefinitions);
+    {
+        const { fingerprintModuleGraph } = await import('./run-checkpoint.mjs');
+        const file = 'artifacts/material-parity/configured-input-editing-current-20261015/latest-report.json', bytes = readFileSync(file), r = JSON.parse(bytes), manifest = JSON.parse(readFileSync(r.capture.checkpointManifest.file));
+        assert.equal(hash(bytes), '69695dabc9b1ff9c999f8cf6c92e5e8cdc3e3b9fdf68ddf4925ba176c3df3355');
+        const validate = raw => validateSupplementalCapture(raw, { reportFile: file, expectedProvenance: manifest.provenance, script: 'scripts/audit-material-configured-input-editing.mjs', styleProperties: Object.values(propertyGroups).flat() });
+        assert.deepEqual(validate(r), { status: 'checkpoint-bound', errors: [] });
+        assert.deepEqual(fingerprintModuleGraph(process.cwd(), r.actionSource.file), manifest.provenance.harnessFiles);
+        const diagnosticGraph = fingerprintModuleGraph(process.cwd(), 'scripts/audit-material-configured-input-editing.mjs');
+        const { restoreSemanticRootPolicyRefinement } = await import('./position-composition-producer-transition.mjs');
+        const policyBeforeRoot = restoreSemanticRootPolicyRefinement(readFileSync(policyFile, 'utf8'));
+        assert.equal(policyBeforeRoot, previousPolicy.toString().replaceAll('\r\n', '\n'));
+        const capturedGraph = diagnosticGraph.map(receipt => receipt.file === policyFile
+            ? { ...receipt, sha256: hash(policyBeforeRoot) } : receipt);
+        assert.equal(diagnosticGraph.filter(receipt => receipt.file === policyFile).length, 1);
+        assert.deepEqual(capturedGraph, manifest.provenance.diagnosticFiles);
+        const runner = readFileSync(r.actionSource.file);
+        assert.equal(hash(runner), r.actionSource.sha256);
+        const ast = ts.createSourceFile(r.actionSource.file, runner.toString(), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+        for (const m of r.actionSource.methods)
+            assert.equal(hash(ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === m.name).getText(ast)), m.sha256);
+        const expected = materialInteractionCases.filter(c => ['form-field', 'input'].includes(c.family) && c.state === 'edit-empty-blur').map(c => materialCaseKey('interaction', c));
+        const grouped = Map.groupBy(r.results, x => x.caseId);
+        assert.deepEqual([...grouped.keys()].sort(), expected.sort());
+        assert.equal(r.results.length, 80);
+        let screenshots = 0, keyboardKeys = 0;
+        const discrepancies = [];
+        for (const [id, rows] of grouped) {
+            assert.deepEqual(rows.map(x => x.state), ['initial', 'mouse.up:3', 'keyboard.press:4', 'keyboard.press:5', 'mouse.click:6']);
+            for (const row of rows) {
+                for (const side of ['reference', 'astylar']) {
+                    const o = row[side];
+                    const pngBytes = readFileSync(o.screenshot.file);
+                    assert.equal(hash(pngBytes), o.screenshot.sha256);
+                    const png = PNG.sync.read(pngBytes);
+                    assert.ok(Math.abs(png.width - o.screenshot.clip.width * row.viewport.deviceScaleFactor) <= 2);
+                    assert.ok(Math.abs(png.height - o.screenshot.clip.height * row.viewport.deviceScaleFactor) <= 2);
+                    screenshots++;
+                }
+                if (row.state === 'keyboard.press:5') {
+                    for (const side of ['reference', 'astylar']) {
+                        const ev = row[side].observation.events;
+                        assert.ok(ev.some(e => e.type === 'keydown' && e.key === 'Backspace'));
+                        assert.ok(ev.some(e => e.type === 'keydown' && e.key === 'A' && e.code === 'KeyA'));
+                        keyboardKeys++;
+                        const c = row[side].observation.control;
+                        if (c.value !== '' || !c.focused)
+                            discrepancies.push({ id, state: row.state, side, control: c });
+                    }
+                }
+                if (row.state === 'mouse.click:6')
+                    for (const side of ['reference', 'astylar']) {
+                        const c = row[side].observation.control;
+                        if (c.value !== '' || c.focused)
+                            discrepancies.push({ id, state: row.state, side, control: c });
+                    }
+            }
+        }
+        const forged = structuredClone(r);
+        forged.results[0].reference.inputTree.sha256 = '0'.repeat(64);
+        assert.equal(validate(forged).status, 'invalid');
+        assert.notDeepEqual(r.results.slice(1).map(x => x.caseId + ':' + x.state), r.results.map(x => x.caseId + ':' + x.state));
+        assert.deepEqual(discrepancies, []);
+        assert.equal(screenshots, 160);
+        assert.equal(keyboardKeys, 32);
+    }
     const file = 'artifacts/material-parity/public-semantic-root-noop-20261015/latest-report.json', bytes = readFileSync(file);
     assert.equal(hash(bytes), '841cf391e108c943dce2593da5b6ff7fb5430f307da1be9229252723c9ac5a48');
     const r = JSON.parse(bytes);
@@ -66,41 +130,62 @@ test('retained public unchanged-root updates preserve semantic focus failure at 
     assert.equal(r.inputs.length, 2515);
     assert.ok(!r.inputs.some(x => x.file.includes('material-showcase/src') || x.file.includes('astylarui/dist/lib/plugins/material')));
     const owner = ts.createSourceFile(r.owner.file, readFileSync(r.owner.file, 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS), templates = [];
-    const visit = n => { if (ts.isNoSubstitutionTemplateLiteral(n) && n.text.includes('window.focusAudit={'))
-        templates.push(n.text); ts.forEachChild(n, visit); };
+    const visit = n => {
+        if (ts.isNoSubstitutionTemplateLiteral(n) && n.text.includes('window.focusAudit={'))
+            templates.push(n.text);
+        ts.forEachChild(n, visit);
+    };
     visit(owner);
     assert.equal(templates.length, 1);
     assert.equal(readFileSync(r.inputSource.file, 'utf8'), templates[0], 'Existing public reproduction unchanged');
     const sourceFile = 'src/lib/astylar-semantic-bridge.ts', installedFile = r.inputs.find(x => x.file.endsWith('/lib/astylar-semantic-bridge.js')).file, source = readFileSync(sourceFile), installed = readFileSync(installedFile), compiled = ts.transpileModule(source.toString(), { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 } }).outputText;
-    const methods = ['reconcile', 'reconcileElement', 'syncFocus'].map(name => { const get = code => { const ast = ts.createSourceFile('semantic.js', code, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS), all = []; const visit = n => { if (ts.isMethodDeclaration(n) && n.name.getText(ast) === name)
-        all.push(n.getText(ast).replace(/\s+/g, ' ').trim()); ts.forEachChild(n, visit); }; visit(ast); assert.equal(all.length, 1); return all[0]; }; const method = get(compiled); assert.equal(get(installed.toString()), method); return { name, sha256: hash(method) }; });
-    const verify = samples => { assert.equal(samples.length, 8); const seen = new Set(); for (const s of samples) {
-        const key = s.dpr + ':' + s.side + ':' + s.repeat;
-        assert.equal(seen.has(key), false);
-        seen.add(key);
-        assert.ok([1, 2].includes(s.dpr));
-        assert.ok([0, 1].includes(s.repeat));
-        assert.equal(s.extra, false);
-        assert.equal(s.sameNode, true);
-        assert.equal(s.focused, true);
-        assert.equal(s.value, 'Atlas');
-        assert.deepEqual(s.diagnostics, []);
-        if (s.side === 'reference') {
-            assert.deepEqual(s.events, []);
-            assert.deepEqual(s.operations, []);
+    const methods = ['reconcile', 'reconcileElement', 'syncFocus'].map(name => {
+        const get = code => {
+            const ast = ts.createSourceFile('semantic.js', code, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS), all = [];
+            const visit = n => {
+                if (ts.isMethodDeclaration(n) && n.name.getText(ast) === name)
+                    all.push(n.getText(ast).replace(/\s+/g, ' ').trim());
+                ts.forEachChild(n, visit);
+            };
+            visit(ast);
+            assert.equal(all.length, 1);
+            return all[0];
+        };
+        const method = get(compiled);
+        assert.equal(get(installed.toString()), method);
+        return { name, sha256: hash(method) };
+    });
+    const verify = samples => {
+        assert.equal(samples.length, 8);
+        const seen = new Set();
+        for (const s of samples) {
+            const key = s.dpr + ':' + s.side + ':' + s.repeat;
+            assert.equal(seen.has(key), false);
+            seen.add(key);
+            assert.ok([1, 2].includes(s.dpr));
+            assert.ok([0, 1].includes(s.repeat));
+            assert.equal(s.extra, false);
+            assert.equal(s.sameNode, true);
+            assert.equal(s.focused, true);
+            assert.equal(s.value, 'Atlas');
+            assert.deepEqual(s.diagnostics, []);
+            if (s.side === 'reference') {
+                assert.deepEqual(s.events, []);
+                assert.deepEqual(s.operations, []);
+            }
+            else {
+                assert.equal(s.side, 'candidate');
+                assert.deepEqual(s.events.map(e => e.type), ['focusout', 'focusin']);
+                assert.equal(s.operations.length, 1);
+                const op = s.operations[0];
+                assert.equal(op.owner, null);
+                assert.equal(op.before, true);
+                assert.equal(op.after, false);
+                assert.equal(op.connected, true);
+                assert.match(op.stack, /_AstylarSemanticBridge\.reconcile/);
+            }
         }
-        else {
-            assert.equal(s.side, 'candidate');
-            assert.deepEqual(s.events.map(e => e.type), ['focusout', 'focusin']);
-            assert.equal(s.operations.length, 1);
-            const op = s.operations[0];
-            assert.equal(op.owner, null);
-            assert.equal(op.before, true);
-            assert.equal(op.after, false);
-            assert.equal(op.connected, true);
-            assert.match(op.stack, /_AstylarSemanticBridge\.reconcile/);
-        }
-    } };
+    };
     verify(r.samples);
     assert.deepEqual(r.errors, []);
     assert.throws(() => verify(r.samples.slice(1)));

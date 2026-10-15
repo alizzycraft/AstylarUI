@@ -2,6 +2,29 @@
 
 ## Current integration pointer — October15
 
+Coherent editing/root source registration is ready for canonical integration:
+producer207 adds one existing-suite proof,eight evidence paths and selected
+reviewcfd613cf5564fb485d87a9ba2711c8eb6d67f53e7ea35a62ada2d4c78ff1138e.
+Review fileSHA09f1e25f4d6a8519f1d74a2174faa4938c8a6784f45edb6128cec03942e7d526;
+all2311 cases/12709 dependencies validate,both acceptance flags remain false.
+Fromf419 only568 policy/40 benchmark receipts and16 explicit captured-versus-current
+policy applicability annotations change;all other complete fields conserve.
+No captured graph/report/checkpoint bytes are rewritten. The combined regression
+replays16 cases/80 paired boundaries/160 PNGs/32 key boundaries,typed-to-empty and
+outside-blur endpoints,root public controls and exact current/captured graphs.
+Initial graph replay correctly rejects policy drift;explicit whole-policy root
+reversal resolves that sole graph receipt. Preserve integrated and integrated-
+retry failure/success logs. Registered focused checks2/2,zero skips,5280.8719ms;
+inventory207 entries/zero missing;producer whole-source predecessor/historical
+chain and two mutation controls pass. Logs configured-editing-root-registered-
+focused-20261015.log,configured-editing-root-proof-inventory-20261015.log,
+configured-editing-root-producer-conservation-20261015.log and
+configured-editing-root-coherent-proposal-20261015.log. Launcher dry-run preserves
+all five original capture paths plus exact reviewed proposal. Original broad
+passive generator remains unchanged;this explicit reviewed merge is separately
+conserved,not claimed as its automatic output. Canonical86961 remains predecessor
+until new export,cold comparison,complete delta verification and compact import.
+
 Existing semantic focus finding now carries bounded rootReconciliation evidence,
 without renaming/removing its descendant diagnosis or adding another finding.
 All159 original definitions compare exactly after deleting that sole subrecord;

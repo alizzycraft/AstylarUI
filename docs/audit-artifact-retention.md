@@ -56,6 +56,16 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Editing/root source batch selects cfd613cf reviewed merge;retain it with f419,
+24ee and the exact receipt/annotation conservation log
+configured-editing-root-coherent-proposal-20261015.log. Retain both
+configured-editing-root-regression-integrated-20261015.log (policy graph drift
+failure) and its -retry log (explicit whole-policy receipt reconciliation),
+registered-focused,proof-inventory,producer-conservation and launcher-dry-run
+logs. Original captures/checkpoints remain untouched;the source-only root finding
+refinement never becomes a rewritten historical capture. No successful scratch
+directory or browser recapture was created by this integration batch.
+
 Retain queued configured-editing/root proposalf419be4f and predecessor24ee,
 configured-editing-root-regression-proposal-refresh-20261015.log,and both
 public-semantic-root-noop-source-conservation[-retry]-20261015.log files. The

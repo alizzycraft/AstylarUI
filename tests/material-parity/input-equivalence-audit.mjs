@@ -8922,12 +8922,20 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'scripts/audit-material-configured-input-editing.mjs',
+    'artifacts/material-parity/configured-input-editing-current-20261015/latest-report.json',
+    'artifacts/material-parity/configured-input-editing-empty-ink-20261015.log',
+    'artifacts/material-parity/configured-input-editing-transient-focus-20261015.log',
+    'artifacts/material-parity/configured-input-editing-focus-owner-20261015.log',
+    'artifacts/material-parity/configured-input-editing-focus-owner-binding-20261015.log',
+    'artifacts/material-parity/public-semantic-root-noop-20261015/latest-report.json',
+    'artifacts/material-parity/semantic-root-focus-source-history-20261015.log',
     'scripts/audit-public-relative-margins.mjs',
     'artifacts/material-parity/public-relative-margin-20261015/latest-report.json',
     'artifacts/material-parity/public-relative-margin-repeat-20261015/latest-report.json',
     'artifacts/material-parity/public-relative-margin-owner-binding-20261015.log',
     'tests/material-parity/audit-findings-store.spec.mjs',
-    'artifacts/material-parity/working-audit/proposals/569d8cc6b3bc36b67ac83560633ae455ae950e2722cb44bb2eed4464648ad133.json',
+    'artifacts/material-parity/working-audit/proposals/cfd613cf5564fb485d87a9ba2711c8eb6d67f53e7ea35a62ada2d4c78ff1138e.json',
     'docs/evidence/material-overlay-context-runner.mjs.b64',
     'artifacts/material-parity/divider-context-verified-angular-20261013-dpr1/result.json',
     'artifacts/material-parity/divider-context-verified-angular-20261013-dpr1/provenance.json',
@@ -9604,6 +9612,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('retained public unchanged-root updates preserve semantic focus failure at both DPRs'/,
+      'configured editing boundaries and public unchanged-root focus failure', 'Authenticates sixteen configured emptying cases,eighty paired boundaries,160 PNGs,exact action methods and complete capture graphs through an explicit root-policy-only source transition. Public no-op updates retain four native controls and four root blur/refocus failures at DPR1/2 with2515 dependencies and complete current/installed methods. Original descendant finding fields and every prior policy definition remain conserved;missing/wrong-owner/forged-policy controls reject. Focus and sampled caret evidence only,not selection-paint,all-profile root attribution,lifetime or whole-case parity acceptance.'),
     proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('public equal-input flex em margins preserve exact failure and block pixel controls'/,
       'public flex em margin unit-loss defect with block and pixel controls', 'Authenticates two public equal-input16-trial runs,retained PNGs and relevant complete current/emitted/installed method bodies. Four flex-em trials per run fail by15/23CSSpx while four block-em and eight pixel controls agree. Existing verifier rejects unequal inputs and missing cases;exact159-to158 policy restoration rejects drift. Bounded own-font CSS used-length failure before projection,not inherited-font,positioned-margin,update,lifetime or whole-Material parity acceptance.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('divider reduction receipts preserve observed DPR and unchanged failing geometry'/,
