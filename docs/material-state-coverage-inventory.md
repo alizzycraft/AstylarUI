@@ -52,6 +52,23 @@ This pointer supersedes the historical checkpoint chronology immediately below.
 
 ### October15 evidence chronology — historical checkpoints
 
+Thin-fill projection-boundary review closes a narrower rounding explanation:
+authenticated corrected report7eef112b records EXACT paired projected child
+bounds at top80/80.25/80.5/80.75,height1 for both DPRs. Installed mesh module
+0a69b9ae2a31abaecc5a8bd07b77f0852e9a7a58ce65cc3afbf17023c1bc25f7 and
+projection modulefb0ec3983e9e046bab3228f0851e8180ab38f0e51d2aa48522a20babe0f2b06a
+match its captured dependency receipts. Read-only pure execution of installed
+CssBabylonProjection.projectRect/unprojectViewportPoint and the complete extracted
+generatePolygonPoints rectangle member (SHA3a248f2bbb69b12f6e757b51432769288156d928e78291640869257c014576a9)
+preserves all eight top/bottom corners within1e-10 CSSpx;terminal exit0.
+This excludes integer snapping in those calculations as the explanation for
+these measured bounds,not actual GPU coverage/compositing or complete live-call
+attribution. Current TS source similarly has no rounding in these members but
+was not substituted for captured installed code. No new capture,source change
+or raster acceptance. Next decisive paint check must distinguish raster sample
+coverage from other material/render-target behavior,not add fixture offsets or
+repeat already-matching geometry. Keep separate outside-parent fallback failure.
+
 Closure-planning correction during serial cold verification:current
 audit-findings-store.mjs already supports schema2 complete inspected-pass/failure
 with eight explicit obligations,receipt-bound classifications/public reproductions,
