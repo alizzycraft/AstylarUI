@@ -14,6 +14,12 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   retry-20261015.stderr.log records fatal process out of memory (Zone).
   Process inspection found no audit worker. Preserve both attempts; consumed
   producer/policy/benchmark/helper/launcher inputs remain frozen.
+  Serial recovery started October15 10:37:14:launcher21420/worker20104 confirmed
+  live by CIM;configured-editing-root-canonical-cold-check-serial-20261015.log
+  and matching .stderr.log retain output. Same named --check,ASTYLAR_AUDIT_COLD=1,
+  ASTYLAR_AUDIT_PROGRESS=1,unchanged8192MB heap/all assertions. Earlier cold and
+  metadata retries overlapped;contention versus intrinsic collector allocation
+  remains unproved. No concurrent heavy verifier now;no capture or export.
 - Candidate6e20a321:70552528 compressed bytes,decoded2290631277 bytes/SHA
   ba2eb95a85644ac70cc8b925d8028293e62beacc436b571951c19fa9b9557377.
   Census60704 completed:48496 unchanged rows/50 changed,nine changed sections;
@@ -45,6 +51,23 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   Supplemental relevant-state/applicability closure and all final gates remain.
 
 ### October15 evidence chronology — historical checkpoints
+
+Closure-planning correction during serial cold verification:current
+audit-findings-store.mjs already supports schema2 complete inspected-pass/failure
+with eight explicit obligations,receipt-bound classifications/public reproductions,
+and no remaining inspection items. The selected cfd613cf proposal is still legacy
+schema1 (fileSHA09f1e25f4d6a8519f1d74a2174faa4938c8a6784f45edb6128cec03942e7d526;
+recomputed review digest matches). Do not build another closure schema. Its2311
+records report inputStyleStructure,semantics,historyOwnership,sourceCurrentness
+all partial;activation1595 and programmaticFocus1797 are unverified/evidence-join-
+pending. Editing1734 and activation354 have inspected authored exclusions;focus40
+already has inspected-failure dispositions but remaining obligations still prevent
+whole-case closure. These are selected-record counts,not independent proof all
+listed work is missing:queued cc2dcdaf already supersedes24 divider paint/property
+remaining strings. Prioritize reconciling those existing bounded joins and shared
+activation/focus populations,then explicit per-case requirement closure;do not
+recapture or repeat settled investigations from generic remaining text. No review,
+producer or source consumed by the running cold job changed.
 
 Candidate section/case checks now pass without another current full-stream read.
 controlLineBoxes restores48 producer hashes,ownerCaretInputs one source receipt,
