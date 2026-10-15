@@ -20,6 +20,22 @@ export function restoreGapCaptureDiagnostics(source, { targetSha256 } = {}) {
     '33c5a4b31a5140bb19e524eaa9fba5bbbb877b45a38f6f0be5722fbe09113f6a',
     'unsupported historical runner target');
   let current = source.replaceAll('\r\n', '\n');
+  if (current.includes('const measurementGeometry =')) {
+    // Historical source authentication only. The owning crop test proves these
+    // additions retain the same PNG bytes,metrics and missing-data decisions.
+    assert.equal(hash(current), 'c13ed230e7c7b0f05e17e849decf643e847fa08f1220be0b8aa6ace955f6d25f');
+    for (const [before, after, count] of [
+      ["    const measurementGeometry = { reference: expectedBox ? { ...expectedBox } : null,\n      astylar: actualBox ? { ...actualBox } : null, deviceScaleFactor: scale };\n", '', 1],
+      ['{ id, measurementGeometry, matches:', '{ id, matches:', 3],
+      ['    const cropProvenance = writeAlignmentArtifacts(', '    writeAlignmentArtifacts(', 1],
+      ['      measurementGeometry,\n      cropProvenance,\n', '', 1],
+      ["  return { anchor: 'reference-border-box', paddingCSSpx: 4, boundsDevicePx: { ...bounds } };\n", '', 1],
+    ]) {
+      assert.equal(current.split(before).length - 1, count, 'exact crop metadata restoration count');
+      current = current.replaceAll(before, after);
+    }
+    assert.equal(hash(current), '082d6d7b3e0b0e5c1789f3d2ceff8862e3244de5319cc941e79c53fa634d6502');
+  }
   if (current.includes('const selectionReplay =')) {
     // Historical replay only: reverse the reviewed opt-in diagnostics and the
     // report-only preflight split. Neither fresh-capture behavior nor its launch

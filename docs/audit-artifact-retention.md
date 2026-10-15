@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Retain divider-proof-batch-canonical-export-20261015 stdout/stderr as TERMINAL1
+failure evidence;accepted92346052 remains unchanged. Keep crop-metadata-gap-
+source-reconciliation[-complete],gap-report-refresh,and collector-boundaries
+20261015 logs/stderr. Initial7/8 and final8/8 source checks are distinct records.
+Collector-boundaries55349 remains a live focused run until terminal evidence.
+
 Retain remaining-runner-receipt-consumers-20261015 stdout/stderr (four failures):
 three olde01 whole-runner receipt failures and one already-known historical map
 path failure. They are not interchangeable with the584→86 root/editing transition

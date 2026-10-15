@@ -23,6 +23,9 @@ test('capture diagnostic additions preserve historical gap source and reject oth
     { encoding: 'utf8' }).replaceAll('\r\n', '\n');
   const target = { targetSha256: sha(intermediate) };
   assert.equal(restoreGapCaptureDiagnostics(current, target), intermediate);
+  const beforeMetadata = execFileSync('git', ['show', '000394eb:' + file], { encoding: 'utf8' }).replaceAll('\r\n', '\n');
+  assert.equal(sha(beforeMetadata), '082d6d7b3e0b0e5c1789f3d2ceff8862e3244de5319cc941e79c53fa634d6502');
+  assert.equal(restoreGapCaptureDiagnostics(beforeMetadata, target), intermediate);
   assert.equal(restoreGapCaptureDiagnostics(intermediate, target), intermediate);
   assert.throws(() => restoreGapCaptureDiagnostics(current, { targetSha256: '0'.repeat(64) }));
   assert.throws(() => restoreGapCaptureDiagnostics(current + '\n// unrelated', target));

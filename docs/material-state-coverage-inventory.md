@@ -30,6 +30,39 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   inputs changed. All original final gates and36-family/relevant-state scope
   remain. No further export is justified solely by this status update.
 
+### Coherent export rejected; exact shared reader reconciliation — October15
+
+Export27040 TERMINAL1;launcher828/worker4360 exited. It did not publish or replace
+accepted92346052. Evidence-session metrics:one collector executed,10 memory hits,
+one disk hit,zero invalidations,14082 files/1189222147 bytes read and independently
+reverified,elapsed6237129.0261ms. Logs divider-proof-batch-canonical-export-
+20261015 stdout/stderr retain the rejected result. No timeout/restart inference.
+
+First concrete failure is shared restoreGapCaptureDiagnostics:current runnerLF
+c13ed230 versus expected pre-metadata082d6d7b. Export reports six independently
+bound attribution failures and430 unresolved scalar differences,not new430 core
+defects or accepted findings. Both explicit-gap subprocess traces identify this
+same source boundary. Other collector failures still require scoped verification;
+do not assume one correction proves every downstream binding.
+
+The existing reader now reverses only the five exact crop-metadata insertions,
+with their exact multiplicities,requiring whole currentc13 and restored082 hashes
+before continuing the unchanged older source-conservation chain. No captured
+receipt is rewritten,no originale01 bytes recovered,and no fresh capture uses
+historical sources. Existing owning gap-survey-source-replay.spec.mjs passes8/8,
+zero skips,7797.8433ms after existing seven gap producers refresh their outputs.
+Its whole-report conservation assertion proves only permitted receipt changes,
+no changed finding data;all27784 original style stages and negative controls pass.
+Initial7/8 failure was stale regenerated-review runner receipt,not a waived test.
+
+Logs crop-metadata-gap-source-reconciliation[-complete]-20261015 and
+crop-metadata-gap-report-refresh-20261015,with stderr,retain the complete sequence.
+Downstream gap-review/explicit-gap/alignment-font owning suites now run in55349;
+not yet terminal at this checkpoint. Do not start another full export until their
+results and the remaining source-boundary failures are reconciled. Root/editing
+direct graph assertion and missinge01 whole-source boundaries remain separate.
+No renderer,comparison input,threshold or acceptance change.
+
 ### Runner-consumer follow-up distinguishes three provenance boundaries — October15
 
 Four remaining candidate tests in benchmark-config.spec.mjs were actually run,
