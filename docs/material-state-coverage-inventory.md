@@ -30,6 +30,42 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   inputs changed. All original final gates and36-family/relevant-state scope
   remain. No further export is justified solely by this status update.
 
+### Configured divider texture upload boundary — October15
+
+The previously captured read-only boundary report now has an owning verification
+in alignment-crop-provenance.spec.mjs:5/5 tests pass,zero skips,4535.5182ms.
+Report divider-configured-texture-boundary-20261015/latest-report.json SHA
+e78434351000b4ec6802a229578f4b5729c35816e419104c57bc424aaa0c050d binds
+the four actual failing contrast-DPR1 contexts/eight text owners to the fresh
+4be9c6d1 baseline. Driver/source/checkpoint receipts,current served-build files,
+runtime assets,original full-frame hashes and all16 texture PNG arrays verify.
+Capture asserted decoded full-frame equality before readback;this assertion is
+producer evidence,not an independently recaptured frame. Verification log:
+divider-texture-boundary-verify-20261015.log and matching stderr.
+
+Specific question answered:does gross canvas-to-GPU texture corruption explain
+these configured owners? After reversing readback row order,alpha is identical;
+Above has15 differing RGB channels,Below37,each only one channel level. This
+holds in all four contexts. Raw row order remains preserved. This bounds the
+upload discrepancy;it neither proves its cause nor models its final raster
+effect. Direct unflipped differences are not a demonstrated coordinate defect.
+Backing sizes41x18/40x18,ordinary0..1 UVs and projected vertices are now observed,
+not inferred from public controls. Retained requested style remains14.4px Roboto;
+the context's current10px sans-serif state is NOT evidence of the draw-call font.
+Do not introduce a font-size fix from that observation.
+
+Remaining competing explanations include canvas glyph/backing generation versus
+final texture sampling/coverage,as well as already documented unequal comparison
+inputs. No configured native glyph-atlas equivalent is captured here,so this
+does not assign all final contrast residuals to a core paint defect. Reuse the
+existing public backing/phase and sampler reductions;next compare their bounded
+predictions against these actual configured UV/projection/texel observations,
+or record precisely which draw/sampling input is still missing. Do not repeat
+the capture merely to authenticate these arrays. No renderer/fixture changes,
+new finding,whole-case closure or canonical/current-output acceptance follows.
+Accepted92346052 remains prior to harness reconciliation;standalone proofs stay
+pending the next coherent integration batch.
+
 ### Alignment crop measurement provenance — October15 instrumentation
 
 Do not repeat the settled96-crop screenshot-location search (a6c3eddc). It does

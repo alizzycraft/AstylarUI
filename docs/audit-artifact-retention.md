@@ -56,6 +56,15 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep divider-configured-texture-boundary-20261015 (four observations,eight owners,
+16 raw texture PNGs,report e7843435),capture stdout/stderr and
+divider-texture-boundary-verify-20261015 stdout/stderr. These reuse the fresh
+divider-alignment-provenance checkpoint;do not remove it. GPU row order remains
+raw;verification compares a vertically reversed copy without rewriting evidence.
+This is a retained configured-boundary observation,not temporary scratch or a
+replacement for failing full/local screenshots. Owning suite5/5 passes;no new
+capture or full export was needed for its verification.
+
 Keep alignment-crop-provenance-focused-20261015 stdout/stderr with the new
 metadata-only instrumentation. Fresh divider-alignment-provenance-20261015 is
 a separate active capture,not a replacement for current-full-20261005 or its

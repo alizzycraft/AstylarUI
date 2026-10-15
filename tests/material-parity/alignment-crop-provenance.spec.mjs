@@ -16,6 +16,61 @@ const file = 'tests/material-parity/run-material-parity.mjs';
 const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
 const previous = execFileSync('git', ['show', `000394eb:${file}`], { encoding: 'utf8', maxBuffer: 2e6 }).replaceAll('\r\n', '\n');
 const hash = source => createHash('sha256').update(source).digest('hex');
+
+test('configured divider texture observations preserve source frames and bound upload residuals', t => {
+  const directory = 'artifacts/material-parity/divider-configured-texture-boundary-20261015';
+  const bytes = readFileSync(`${directory}/latest-report.json`);
+  assert.equal(hash(bytes), 'e78434351000b4ec6802a229578f4b5729c35816e419104c57bc424aaa0c050d');
+  const report = JSON.parse(bytes), baselineBytes = readFileSync(report.baseline.file);
+  assert.equal(hash(baselineBytes), report.baseline.sha256);
+  assert.equal(report.baseline.sha256, '4be9c6d199952f35203f31d08def08d0d936071f4eb313b75ad3bbf72dd46f11');
+  const baseline = JSON.parse(baselineBytes), provenance = baseline.captureProvenance;
+  for (const receipt of [report.capture.checkpointManifest, ...report.capture.sources]) {
+    assert.equal(hash(readFileSync(receipt.file)), receipt.sha256, receipt.file);
+  }
+  const manifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
+  assert.deepEqual(manifest.provenance.browserFiles, provenance.browserFiles);
+  assert.deepEqual(fingerprintDirectory(path.resolve('examples/material-showcase/dist/material-showcase/browser')), provenance.browserFiles);
+  const selected = [...baseline.results.map(row => ['static', row]), ...baseline.interactions.map(row => ['interaction', row])]
+    .filter(([, row]) => row.profile === 'contrast' && row.viewport.deviceScaleFactor === 1);
+  assert.deepEqual(report.results.map(row => row.case).sort(), selected.map(([kind, row]) => materialCaseKey(kind, row)).sort());
+  const assets = new Map(provenance.browserFiles.map(row => [row.file, row.sha256]));
+  let targets = 0;
+  for (const row of report.results) {
+    assert.deepEqual(row.runtime.errors, []);
+    for (const type of ['document', 'script', 'stylesheet', 'font']) assert.ok(row.runtime.assets.some(asset => asset.type === type));
+    for (const asset of row.runtime.assets) assert.equal(asset.sha256, assets.get(asset.file));
+    const original = readFileSync(row.originalFrame.file);
+    assert.equal(hash(original), row.originalFrame.sha256);
+    assert.equal(hash(PNG.sync.read(original).data), row.originalFrame.decodedRGBA);
+    assert.deepEqual(row.observation.targets.map(target => target.id), ['divider-above', 'divider-below']);
+    const key = JSON.parse(row.case), label = `${key.kind}-${key.viewport.id}`;
+    for (const target of row.observation.targets) {
+      const texture = target.texture, { width, height } = texture.size;
+      assert.equal(texture.rgba.length, width * height * 4);
+      assert.equal(texture.gpuRGBA.length, texture.rgba.length);
+      for (const [name, pixels] of [['canvas', texture.rgba], ['gpu-readback', texture.gpuRGBA]]) {
+        const image = PNG.sync.read(readFileSync(`${directory}/${label}-${target.id}-${name}.png`));
+        assert.equal(image.width, width); assert.equal(image.height, height);
+        assert.deepEqual([...image.data], pixels);
+      }
+      let changed = 0, max = 0, alphaChanged = 0;
+      for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) for (let channel = 0; channel < 4; channel++) {
+        const delta = Math.abs(texture.rgba[(y * width + x) * 4 + channel] -
+          texture.gpuRGBA[((height - 1 - y) * width + x) * 4 + channel]);
+        changed += delta !== 0; max = Math.max(max, delta); alphaChanged += channel === 3 && delta !== 0;
+      }
+      assert.equal(changed, target.id === 'divider-above' ? 15 : 37);
+      assert.equal(max, 1); assert.equal(alphaChanged, 0);
+      assert.equal(target.retainedStyle.fontSize, '14.4px');
+      // Current context state is not the historical draw-call font.
+      assert.equal(texture.font, '10px sans-serif');
+      targets++;
+    }
+  }
+  assert.equal(targets, 8);
+  t.diagnostic('4 configured cases/8 owners/16 texture PNGs authenticated; vertically reversed readback has identical alpha and only 15/37 one-level RGB residuals. This does not establish native glyph equality or explain final-frame differences.');
+});
 assert.equal(hash(previous), '082d6d7b3e0b0e5c1789f3d2ceff8862e3244de5319cc941e79c53fa634d6502');
 
 function withoutProvenance(source) {
