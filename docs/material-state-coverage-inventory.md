@@ -45,7 +45,7 @@ work,case inspection and current-rendering status are unchanged. It is NOT an
 exact configured-action/state/keyboard/remount or full-input-equivalence claim.
 Existing loader authenticates2311 cases/12883 dependencies,both flagsfalse;
 restoring45 original history objects returns complete6490. No unrelated review
-data changes,no recapture or canonical export. Remaining16 tooltip cases are
+data changes,no recapture or canonical export. Remaining17 tooltip cases are
 light or comparison-pane contexts,not silently covered by this new12-context run.
 
 Accepted evidence integration is nowf663c88ea2d75257049f26fe33add569a2fcb7529395f291a2db966db7489948,
