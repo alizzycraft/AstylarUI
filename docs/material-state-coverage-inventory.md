@@ -7,6 +7,9 @@ This pointer supersedes the historical checkpoint chronology immediately below.
 - Accepted package/index:6e20a321/6d3df3e7,159 findings,current207-proof source
   registration5354ea03. Cold comparison,predecessor conservation,compact import
   and whole-index verification pass. Source/fixture/render acceptance not implied.
+  New inherited-margin policy refinement34f3d6e5 and owning test/helper changes
+  are now verified in source but NOT in that published package. Next batch must
+  register proofs/refresh exact source receipts before canonical integration.
 - Export completed:configured-editing-root-canonical-export-20261015.log records
   complete at2702348.1973ms,159 findings,8483 groups/389202 occurrences and
   inputEquivalent=false. This is not independent acceptance or index publication.
@@ -72,6 +75,22 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   Supplemental relevant-state/applicability closure and all final gates remain.
 
 ### October15 evidence chronology — historical checkpoints
+
+Inherited block-margin proposal8091a07d is now applied to the existing computed-
+font policy finding,not appended as160th. Exact policy restoration returns the
+whole accepted fcbf780a predecessor;current LF SHA34f3d6e5869dbbb330d870e751a2a2db3ae051e560cefa88e460ee590ff7ecaf.
+Existing transition helper composes this sole-field removal before the unchanged
+root/flex restorations. Owning benchmark assertions match the complete proposal,
+replay both public runs,authenticate evidence and reject forged policy/unrelated
+drift. Whole old helper and benchmark suite restore byte-for-byte to c72c2fe2;
+all original assertion bodies survive. Focused root/inherited/flex tests pass3/3,
+zero skips,10073.2548ms,exit0 in inherited-margin-policy-refinement-complete-
+20261015.log;initial focused3/3 log is retained separately. No renderer/fixture
+change or browser recapture. Published6e20 remains the previous accepted snapshot.
+Queued cc2dcdaf depends on the prior policy receipt;its earlier applicability is
+historical after this exact source edit. Next coherent integration must refresh
+only demonstrated receipt transitions and register new focused proofs,not silently
+claim the old queue current or export after each individual assertion.
 
 Inherited block-margin classification now has a machine-readable queued extension
 through existing saveReviewProposal,not a new finding/framework. Proposal8091a07d

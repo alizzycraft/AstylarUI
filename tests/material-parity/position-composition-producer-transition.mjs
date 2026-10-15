@@ -1010,8 +1010,31 @@ export function restoreDescriptionProofRegistration(source) {
   return current;
 }
 
-export function restoreSemanticRootPolicyRefinement(source) {
+export function restoreInheritedMarginPolicyRefinement(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
+  if (!current.includes('    inheritedBlockMargin: {')) return current;
+  assert.equal(hash(current), '34f3d6e5869dbbb330d870e751a2a2db3ae051e560cefa88e460ee590ff7ecaf');
+  const ast = ts.createSourceFile('policy.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  assert.equal(ast.parseDiagnostics.length, 0);
+  const entries = ast.statements.filter(ts.isVariableStatement).flatMap(node => [...node.declarationList.declarations])
+    .find(node => node.name.getText(ast) === 'sourceAuditDefinitions').initializer.arguments[0].elements;
+  assert.equal(entries.length, 159);
+  const owners = entries.map(node => node.arguments[0]).filter(node => node.properties
+    .some(property => property.name.getText(ast) === 'id' && property.initializer.text === 'core-em-box-size-uses-uncomputed-font'));
+  assert.equal(owners.length, 1);
+  const properties = owners[0].properties.filter(node => node.name.getText(ast) === 'inheritedBlockMargin');
+  assert.equal(properties.length, 1);
+  const property = properties[0];
+  const restored = current.slice(0, property.getFullStart()) + current.slice(property.end + 1);
+  const prior = execFileSync('git', ['show', 'c72c2fe2:tests/material-parity/input-equivalence-policy.mjs'],
+    { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+  assert.equal(hash(prior), 'fcbf780a0d2851cbfab678b8cd5a6e3d7b6d448eb0216fd0ee780196851c0ce1');
+  assert.equal(restored, prior, 'All159 original definitions and policy bytes survive the inherited-margin refinement');
+  return restored;
+}
+
+export function restoreSemanticRootPolicyRefinement(source) {
+  const current = restoreInheritedMarginPolicyRefinement(source);
   if (!current.includes('    rootReconciliation: {')) return current;
   assert.equal(hash(current), 'fcbf780a0d2851cbfab678b8cd5a6e3d7b6d448eb0216fd0ee780196851c0ce1');
   const ast = ts.createSourceFile('policy.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);

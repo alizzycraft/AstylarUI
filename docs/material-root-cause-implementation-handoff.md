@@ -7,6 +7,10 @@ conservation,compact import and whole-index verification pass;exact receipts are
 in the coverage ledger. All2311 cases remain partial/unverified,inputEquivalent
 false. Queued cc2dcdaf divider evidence,inherited-font margin and newer thin-fill
 diagnostics are outside this batch. Final gates and complete case closure remain.
+The inherited block-margin field is now applied in current audit-policy source
+with exact predecessor conservation and3/3 owning root/inherited/flex assertions.
+It is not yet included in published6e20;proof registration and exact case receipt
+refresh remain the next coherent integration batch. No renderer code changed.
 
 Bounded thin-fill paint result (outside the frozen canonical batch):equal measured
 fractional geometry does not yield equal raster coverage. The retained16 PNGs

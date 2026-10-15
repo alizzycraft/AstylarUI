@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Retain inherited-margin-policy-refinement-focused-20261015.log and -complete log
+with proposal8091a07d. The latter passes3/3 and proves full policy/helper/suite
+predecessor conservation plus original public replay;source policy now contains
+the bounded field. Published6e20 predates it,and old queue source receipts require
+explicit refresh before use. No original report,PNG or failure evidence changed.
+
 Retain source review proposal8091a07d with inherited-block-margin-finding-review-
 20261015.log and both inherited-margin-review-*-replay-20261015.log files. It
 preserves all159 original definitions and queues one bounded field on the existing

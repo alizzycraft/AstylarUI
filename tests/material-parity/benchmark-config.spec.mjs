@@ -44,6 +44,7 @@ test('retained public unchanged-root updates preserve semantic focus failure at 
         && node.declarationList.declarations.some(declaration => declaration.name.getText(policyAst) === 'sourceAuditDefinitions'))
         .map(node => node.getText(policyAst).replace(/^export /, '')).join('\n') + ';return sourceAuditDefinitions;')();
     const restoredDefinitions = structuredClone(sourceAuditDefinitions);
+    delete restoredDefinitions.find(row => row.id === 'core-em-box-size-uses-uncomputed-font').inheritedBlockMargin;
     const refined = restoredDefinitions.find(row => row.id === 'core-semantic-descendant-replacement-loses-retained-focus');
     const root = refined.rootReconciliation;
     assert.equal(root.classification, 'confirmed-core-renderer-defect');
@@ -192,6 +193,58 @@ test('retained public unchanged-root updates preserve semantic focus failure at 
     const bad = structuredClone(r.samples);
     bad.find(s => s.side === 'candidate').operations[0].owner = 'focus-parent';
     assert.throws(() => verify(bad));
+});
+
+test('retained inherited block margins extend computed-font finding without changing prior definitions', async () => {
+    const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+    const { restoreInheritedMarginPolicyRefinement } = await import('./position-composition-producer-transition.mjs');
+    const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
+    const source = readFileSync(policyFile, 'utf8').replaceAll('\r\n', '\n');
+    const prior = execFileSync('git', ['show', `c72c2fe2:${policyFile}`], { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+    assert.equal(restoreInheritedMarginPolicyRefinement(source), prior);
+    const proposalBytes = readFileSync('artifacts/material-parity/working-audit/proposals/8091a07d07a9cb8f5f7c3980f9c5634b2ec9dd4409894a6853f030bc4aaf4fb6.json');
+    const proposal = JSON.parse(proposalBytes);
+    assert.equal(hash(JSON.stringify(proposal.review)), proposal.sha256);
+    assert.equal(proposal.sha256, '8091a07d07a9cb8f5f7c3980f9c5634b2ec9dd4409894a6853f030bc4aaf4fb6');
+    assert.deepEqual(sourceAuditDefinitions, proposal.review.groups);
+    const extension = sourceAuditDefinitions.find(row => row.id === 'core-em-box-size-uses-uncomputed-font').inheritedBlockMargin;
+    for (const receipt of extension.evidence) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+    for (const name of ['public-inherited-margin-20261015', 'public-inherited-margin-repeat-20261015'])
+      execFileSync(process.execPath, ['scripts/audit-public-inherited-margins.mjs', '--verify', `artifacts/material-parity/${name}`], { stdio: 'pipe' });
+    assert.equal(extension.observations.errorCSSpx, -8);
+    assert.match(extension.firstDivergence, /local style.fontSize only/);
+    const forged = source.replace('omitted child font falls back to16', 'omitted child font resolves inherited24');
+    assert.notEqual(forged, source);
+    assert.throws(() => restoreInheritedMarginPolicyRefinement(forged));
+    assert.throws(() => restoreInheritedMarginPolicyRefinement(source + '\n// unrelated drift'));
+    const helperFile = 'tests/material-parity/position-composition-producer-transition.mjs';
+    const helper = readFileSync(helperFile, 'utf8').replaceAll('\r\n', '\n');
+    const helperAst = ts.createSourceFile(helperFile, helper, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    const additions = helperAst.statements.filter(node => ts.isFunctionDeclaration(node)
+      && node.name?.text === 'restoreInheritedMarginPolicyRefinement');
+    assert.equal(additions.length, 1);
+    let oldHelper = helper.slice(0, additions[0].getFullStart()) + helper.slice(additions[0].end);
+    const composed = '  const current = restoreInheritedMarginPolicyRefinement(source);';
+    assert.equal(oldHelper.split(composed).length, 2);
+    oldHelper = oldHelper.replace(composed, "  const current = source.toString().replaceAll('\\r\\n', '\\n');");
+    const predecessorHelper = execFileSync('git', ['show', `c72c2fe2:${helperFile}`], { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+    assert.equal(oldHelper, predecessorHelper);
+    assert.notEqual(oldHelper + '\n// unrelated helper drift', predecessorHelper);
+    // Preserve every prior assertion body, including the root proof; remove only
+    // this new test and its explicit new-field exclusion in that older proof.
+    const suiteFile = 'tests/material-parity/benchmark-config.spec.mjs';
+    const suite = readFileSync(suiteFile, 'utf8').replaceAll('\r\n', '\n');
+    const ast = ts.createSourceFile(suiteFile, suite, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    const start = name => ast.statements.find(node => ts.isExpressionStatement(node) && ts.isCallExpression(node.expression)
+      && node.expression.expression.getText(ast) === 'test' && node.expression.arguments[0]?.text === name).getStart(ast);
+    let restored = suite.slice(0, start('retained inherited block margins extend computed-font finding without changing prior definitions'))
+      + suite.slice(start('public equal-input flex em margins preserve exact failure and block pixel controls'));
+    const added = "    delete restoredDefinitions.find(row => row.id === 'core-em-box-size-uses-uncomputed-font').inheritedBlockMargin;\n";
+    assert.equal(restored.split(added).length, 2);
+    restored = restored.replace(added, '');
+    const oldSuite = execFileSync('git', ['show', `c72c2fe2:${suiteFile}`], { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+    assert.equal(restored, oldSuite);
+    assert.notEqual(restored + '\n// hidden assertion drift', oldSuite);
 });
 
 test('public equal-input flex em margins preserve exact failure and block pixel controls', () => {
