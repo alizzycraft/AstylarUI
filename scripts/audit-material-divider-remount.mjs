@@ -4,6 +4,8 @@ import { createServer } from 'node:http';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright-core';
+import ts from 'typescript';
+import { materialStaticCases, materialInteractionCases } from '../tests/material-parity/benchmark.config.mjs';
 import { fingerprintDirectory, fingerprintModuleGraph, materialBrowserLaunchOptions,
   inspectMaterialBrowserLaunch, openMaterialCheckpoint } from '../tests/material-parity/run-checkpoint.mjs';
 import { openSupplementalCapture } from '../tests/material-parity/supplemental-capture-evidence.mjs';
@@ -14,6 +16,21 @@ const script = 'scripts/audit-material-divider-remount.mjs';
 const output = path.resolve(process.argv[2] ?? '');
 assert.ok(output.startsWith(path.resolve('artifacts/material-parity') + path.sep));
 assert.ok(!existsSync(output) && !existsSync(output + '-checkpoint'));
+assert.ok(process.argv[3] === undefined || process.argv[3] === '--remaining');
+const physical = new Map();
+for (const [kind, rows] of [['static', materialStaticCases], ['interaction', materialInteractionCases]]) {
+  for (const row of rows.filter(value => value.family === 'divider')) {
+    const key = `${row.profile}/${row.viewport.width}/${row.viewport.height}/${row.viewport.deviceScaleFactor}`;
+    if (!physical.has(key)) physical.set(key, { profile: row.profile, viewport: row.viewport, cases: [] });
+    physical.get(key).cases.push(`${kind}:divider@${row.profile}/${row.viewport.id}${kind === 'interaction' ? `/${row.state}` : ''}`);
+  }
+}
+assert.equal(physical.size, 20);
+const initial = row => row.profile === 'light' && row.viewport.width === 1440;
+const cohorts = [...physical.values()].filter(row => process.argv[3] === '--remaining' ? !initial(row) : initial(row));
+assert.equal(cohorts.length, process.argv[3] === '--remaining' ? 18 : 2);
+const themeFile = 'examples/material-showcase/src/app/theme.ts', themeSource = readFileSync(themeFile, 'utf8'), themeModule = {};
+new Function('exports', ts.transpileModule(themeSource, { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText)(themeModule);
 const root = path.resolve('examples/material-showcase/dist/material-showcase/browser');
 const browserFiles = fingerprintDirectory(root), hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const sourceReceipt = { file: script, sha256: hash(readFileSync(script)) };
@@ -33,15 +50,17 @@ try {
   browser = await chromium.launch(launch);
   const provenance = { browser: browser.version(), platform: process.platform, architecture: process.arch, node: process.version,
     browserLaunch: await inspectMaterialBrowserLaunch(browser, launch), browserFiles,
-    harness: fingerprintModuleGraph(process.cwd(), script) };
+    harness: fingerprintModuleGraph(process.cwd(), script),
+    themeSource: { file: themeFile, sha256: hash(readFileSync(themeFile)) } };
   openMaterialCheckpoint({ directory: output + '-checkpoint', provenance });
   const evidence = openSupplementalCapture({ options: { baseUrl, checkpoint: output + '-checkpoint/checkpoint', output },
     browser, script, styleProperties: [] });
-  for (const dpr of [1, 2]) {
-    const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: dpr });
+  for (const cohort of cohorts) {
+    const { profile, viewport } = cohort, dpr = viewport.deviceScaleFactor;
+    const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height }, deviceScaleFactor: dpr });
     const finish = evidence.observe(page);
     try {
-      await page.goto(`${baseUrl}/astylar/divider?benchmark=1&profile=light`);
+      await page.goto(`${baseUrl}/astylar/divider?benchmark=1&profile=${profile}`);
       await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
       await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
       const observation = await page.evaluate(async () => {
@@ -82,16 +101,16 @@ try {
           current.dispose(); retired.push(current); mark('final-current-disposed');
           await peer.update(data); await peer.whenSettled(); mark('peer-updated');
           peer.dispose(); mark('all-disposed');
-          return { dpr: devicePixelRatio, profile: showcase.store.theme().mode, bounds: { width: bounds.width, height: bounds.height },
+          return { dpr: devicePixelRatio, profile: showcase.store.theme().mode, theme: showcase.store.theme(), bounds: { width: bounds.width, height: bounds.height },
             peerBounds: { width: peerCanvas.clientWidth, height: peerCanvas.clientHeight },
             siteData: data, options, steps };
         } finally { current.dispose(); peer?.dispose(); peerCanvas.remove(); }
       });
       const runtime = await finish();
-      results.push({ dpr, observation, runtime });
+      results.push({ ...cohort, dpr, observation, runtime });
       // Retain observations before asserting so a failure never loses its trace.
-      writeFileSync(`${evidence.directory}/observations-dpr${dpr}.json`, JSON.stringify(results.at(-1), null, 2), { flag: 'wx' });
-      assert.equal(observation.dpr, dpr); assert.equal(observation.profile, 'light');
+      writeFileSync(`${evidence.directory}/observations-${profile}-${viewport.width}-${viewport.height}-dpr${dpr}.json`, JSON.stringify(results.at(-1), null, 2), { flag: 'wx' });
+      assert.equal(observation.dpr, dpr); assert.deepEqual(observation.theme, themeModule.MATERIAL_THEME_PROFILES[profile]);
       assert.deepEqual(observation.peerBounds, observation.bounds);
       const steps = observation.steps, peerBaseline = steps.find(step => step.label === 'peer-mounted').peer;
       const remounts = steps.filter(step => step.label.startsWith('remounted-'));
@@ -111,11 +130,12 @@ try {
       for (const step of steps.filter(step => step.label.startsWith('updated-')))
         assert.deepEqual(step.current.live, remounts[0].current.live);
       assert.equal(steps.at(-1).peer.disposed, true);
+      console.log(JSON.stringify({ phase: 'cohort-complete', profile, viewport, cases: cohort.cases }));
     } finally { await page.close(); }
   }
   assert.equal(hash(readFileSync(script)), sourceReceipt.sha256);
   assert.deepEqual(fingerprintDirectory(root), browserFiles);
   writeFileSync(`${evidence.directory}/latest-report.json`, JSON.stringify({ capture: evidence.capture, sourceReceipt, results,
-    boundary: 'Actual divider SiteData,light desktop DPR1/2,three public same-canvas remounts,updates and peer survival. Not Angular remount,late-font intervention,other profiles,paint or full-case acceptance.' }, null, 2), { flag: 'wx' });
+    boundary: 'Actual divider SiteData in explicitly listed physical cohorts,three public same-canvas remounts,updates and peer survival. Not Angular remount,late-font intervention,paint or full-case acceptance.' }, null, 2), { flag: 'wx' });
   console.log(JSON.stringify({ sourceReceipt, browser: browser.version(), cohorts: results.length, remountsPerCohort: 3, output }));
 } finally { if (browser) await browser.close(); await new Promise(resolve => server.close(resolve)); }

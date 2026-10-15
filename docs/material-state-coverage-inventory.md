@@ -30,7 +30,49 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   inputs changed. All original final gates and36-family/relevant-state scope
   remain. No further export is justified solely by this status update.
 
-### Actual divider repeated remount and peer boundary — October15
+### All divider physical contexts: repeated public remount — October15
+
+The specific remaining18-context question is now executed,without repeating the
+initial2 contexts. The existing driver derives20 unique profile/width/height/DPR
+cohorts from the maintained16 static+8 inspect configurations;--remaining selects
+only18 (21 records). Captured full theme config,not merely mode=light,agrees for
+contrast/custom as well as light/dark. Each has3 same-canvas remounts/updates,
+unchanged peer snapshots during other-owner operations,valid mesh bindings and
+zero final tracked/live/plugin resources. No runtime errors;519 actual served
+assets/cohort authenticate. Together with initial evidence:20 physical contexts,
+60 remounts,280 recorded boundaries. This is public surface lifecycle,not Angular
+component remount,late-font intervention,semantic isolation or paint acceptance.
+
+Remaining reportSHA bf8d56513ee044141f8918a421313217b517603310a293516fd30559ae67967b
+at divider-remount-peer-remaining-20261015/latest-report.json;driverSHA
+6eba1d9cf69305c47308ac4bfee3e7772edc368ab0f63c9c53a13bdf2b829e31.
+Capture/verify terminal0;logs divider-remount-peer-remaining-{capture,verify}-
+20261015.log and stderr. Retained verifier checks exact configured cohort order,
+case IDs,viewport/DPR,complete themes,all14 boundaries and four mutation controls.
+Initial report stays byte-identical;initial-source-replay log verifies it using
+exact captured driver bytes retained at docs/evidence/material-divider-remount-
+initial.mjs.txt (SHAe0eb35a1),with a path-specific -text Git attribute preventing
+newline conversion. Historical source is not relabeled as the extended driver.
+
+Complete join now produces queuedbc8a73a26a00a65ff4d9257909d14be6ea66e6fc71ad578956685e7f8f5a4a06
+from accepted74d0. All24 candidate trees authenticate ten authored node records
+and their full294/300/307-rule lists. Exactly the absent .datepicker-selected
+rule's two clock-derived values remain unequal/recorded;293/299/306 other rules
+agree. Initial expanded check failed its light-only294-rule assumption on
+contrast;original divider-remount-all-case-join-20261015 stderr is retained.
+Retry terminal0 checks each full profile list,not a truncated common subset;
+three input forgeries reject. Existing loader validates2311 cases/12727 deps.
+Restoring ONLY24 historyOwnership parent objects restores entire74d0 digest;
+all cases stay partial/unverified. Log divider-remount-all-case-join-retry-
+20261015.log. Earlier7425 is now historical:its driver/verifier/join receipts
+predate this coherent extension;do not select it as current.
+
+No renderer,fixture,canonical package or full-case flag changed. Current209-proof
+package92346052 remains accepted. Next group this ownership extension with the
+pending auto-height/raster evidence through existing proof/obligation integration;
+do not launch a full export for each standalone proof or repeat settled font work.
+
+### Actual divider repeated remount and peer boundary — initial October15 evidence
 
 New question was repeated remounting of the actual showcase divider SiteData,
 not the already-settled shared delayed-font counterexample. Existing font logs

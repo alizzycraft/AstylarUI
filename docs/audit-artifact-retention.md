@@ -56,6 +56,16 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Retain divider-remount-peer-remaining-20261015 and its fresh -checkpoint with
+remaining-capture/verify logs;initial-source-replay and all-case-join[-retry]
+stdout/stderr dated20261015. Keep initial report87c79325 unchanged. Its exact
+driver sourcee0eb35a1 is retained in docs/evidence/material-divider-remount-
+initial.mjs.txt with a path-specific -text attribute;this is required captured
+source,not another active driver. Extended source6eba1d9c belongs to the18 new
+contexts. Queuedbc8a73a2 supersedes7425's scope/receipts;keep that predecessor
+for conservation,not as current validated evidence. All24 ownership additions
+remain outside accepted209-proof package92346052;no original/failure was removed.
+
 Keep queued7425d2a3 with predecessor74d0 and divider-remount-case-join/input-
 applicability logs dated20261015. The join retains the two clock-derived values
 on the absent calendar selector,not a rewritten stylesheet. Only3 ownership
