@@ -2,6 +2,23 @@
 
 ## Current integration pointer — October15
 
+Remaining anonymous-paragraph box/default question is now bounded for all48 pairs:
+native computed content-box contrasts with candidate omission;current global/p
+defaults omit boxSizing. The existing public omitted-sizing guard passes1/1,
+zero skips,2426.8106ms (divider-paragraph-box-sizing-proof-applicability-20261015.log).
+All48 pairs have zero padding and border widths,so the known general default
+failure is NOT an explanation for their different height/position. Preserve
+the separate fixed/absolute authoring classification and actual used-value gap.
+The same exact pair review executes the complete current parseOpacity method:
+native1 and candidate1.0 both yield1 in48 pairs;changed0.5 differs. This establishes
+numeric opacity-request representation only,not ancestor alpha composition or
+final paint. Log divider-paragraph-box-opacity-inputs-20261015.log retains source/
+method/paired-tree receipts and all observations. These two conclusions remain
+queued for a grouped property-review update;do not create another full proposal
+or export for individual property metadata. Export31960 remains live with frozen
+inputs. Remaining inherited defaults,context-sensitive properties and local
+paint/currentness are still open;no whole-case or broad input-equivalence claim.
+
 Anonymous divider paragraph border attribution is now inspected for all48 pairs/
 192 side-color observations. Reusing the existing conservative selector/exclusion
 proof finds no possible color/reset declaration;all three candidate stages retain
