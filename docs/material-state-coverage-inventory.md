@@ -9,15 +9,22 @@ This pointer supersedes the historical checkpoint chronology immediately below.
 - Export completed:configured-editing-root-canonical-export-20261015.log records
   complete at2702348.1973ms,159 findings,8483 groups/389202 occurrences and
   inputEquivalent=false. This is not independent acceptance or index publication.
-- Independent cold check:session76513,log
-  configured-editing-root-canonical-cold-check-20261015.log;build-audit reached.
-  Consumed producer/policy/benchmark/helper/launcher inputs remain frozen.
+- Independent cold check is NOT live or passing. Original session76513 has no
+  terminal receipt; retry stderr configured-editing-root-canonical-cold-check-
+  retry-20261015.stderr.log records fatal process out of memory (Zone).
+  Process inspection found no audit worker. Preserve both attempts; consumed
+  producer/policy/benchmark/helper/launcher inputs remain frozen.
 - Candidate6e20a321:70552528 compressed bytes,decoded2290631277 bytes/SHA
   ba2eb95a85644ac70cc8b925d8028293e62beacc436b571951c19fa9b9557377.
   Census60704 completed:48496 unchanged rows/50 changed,nine changed sections;
   log configured-editing-root-canonical-census-20261015.log. Row conservation
   passes;three receipt sections,source boundaries and selected cases also pass.
-  Non-row control metadata52990 and cold check remain. No import yet.
+  Non-row control metadata52990 has no terminal receipt; retry stderr
+  configured-editing-root-control-metadata-conservation-retry-20261015.stderr.log
+  records RangeError: Array buffer allocation failed. Neither verification passed.
+  No import yet. A synthetic parser probe confirms the intended differences-row
+  selection depths,not the cause of allocation failure. Next distinguish retained
+  metadata size from parser/comparison allocation before another full read.
 - Selected review:cfd613cf,2311 partial/unverified cases,12709 dependencies;
   root/16 configured editing evidence included,not complete-case acceptance.
 - Queued outside export:cc2dcdaf extends e4b85e47's24 anonymous-border joins with
