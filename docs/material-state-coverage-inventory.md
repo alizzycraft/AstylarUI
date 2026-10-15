@@ -30,6 +30,30 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   inputs changed. All original final gates and36-family/relevant-state scope
   remain. No further export is justified solely by this status update.
 
+### Runner-consumer follow-up distinguishes three provenance boundaries — October15
+
+Four remaining candidate tests in benchmark-config.spec.mjs were actually run,
+not counted as failures from search matches:remaining field-popup bounds,overlay
+placement census,menu bounds,and configured input focus. Log
+remaining-runner-receipt-consumers-20261015.log and matching stderr:0/4,
+5625.7945ms terminal. First three fail current86ece08b versus capturede01ef9dc;
+the focus test stops earlier at missing mutable-distchunk-3JXWRYJY.js.map.
+
+These are NOT four additional manifestations of the root/editing584cdfc8 receipt
+transition. Exact metadata-only conservation can bridge584→86,but cannot recover
+the older wholee01 producer. The missing-map failure is already documented in
+October13 time/date endpoint checks;original recovered map bytes authenticate
+dba48404 and existing historical-map infrastructure supplies that boundary.
+Do not repeat the map search or substitute current chunks. The original e01
+whole-source uncertainty remains after map recovery;matching selected action
+bodies is not whole-runner conservation. This follow-up establishes current
+gate dispositions,not new renderer findings or new behavioral failures.
+
+Next repair the recoverable584 root/editing read boundary separately after the
+live export ends. Preserve honest unresolved e01 assertions and use their
+existing recorded-provenance-incomplete dispositions;do not invent an exact
+restoration for missing bytes. No test/source/capture changed during export.
+
 ### Original root/editing regression needs runner applicability reconciliation — October15
 
 Read-only owning test execution answers a remaining final-gate question:

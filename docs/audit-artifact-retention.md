@@ -56,6 +56,11 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Retain remaining-runner-receipt-consumers-20261015 stdout/stderr (four failures):
+three olde01 whole-runner receipt failures and one already-known historical map
+path failure. They are not interchangeable with the584→86 root/editing transition
+or new behavioral regressions;existing recovered-map evidence remains required.
+
 Keep root-editing-regression-current-applicability-20261015 stdout/stderr:the
 original owning test fails its captured runner module-graph receipt after the
 metadata-only instrumentation. Do not delete it or label registration success
