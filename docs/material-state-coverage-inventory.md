@@ -69,6 +69,32 @@ activation/focus populations,then explicit per-case requirement closure;do not
 recapture or repeat settled investigations from generic remaining text. No review,
 producer or source consumed by the running cold job changed.
 
+Activation backlog check against that authenticated selected proposal resolves
+whether1595 pending entries are merely unjoined explicit endpoint evidence:
+324 have no retainedEventBoundary;1271 have stateMode=uncompared-default;
+zero has an unjoined explicit-recorded-endpoint-or-trace predicate. The owning
+existing join at input-boundary-evidence.spec.mjs filters explicit predicates
+and already accounts for114 (88 formerly pending/26 partial). Do not promote the
+remaining default matches:true flags or rerun that settled join. Sample core
+hover retains unequal uncompared event arrays and explicitly missing original
+e01ef9dc action-source bytes;it is not a passing behavioral comparison. Next
+partition applicability and actual action/target evidence using existing retained
+records before deciding which genuinely missing observations need capture.
+Pending-state partition (same authenticated proposal):324 static;217 hover/217
+held;171 activate/200 activate-leave/8 activate-alternate/17 activate-twice
+(396 activation-labelled cases);120 disabled/64 selected/64 focus;16 edit-empty-
+blur/40 error;40 open-hover-content/80 open/1 auto-dismiss/16 open-dismiss.
+Sum1595. These are configured labels,not authenticated historical action execution
+or new applicability exclusions. In particular held lacks release at capture,
+and static/hover must not be treated as missing completed-click tests wholesale.
+Current performInteraction's branches are not a substitute for the unavailable
+original action source. Existing eight radio keyboard actual-state joins are
+already recorded above;do not repeat that settled work. Focused existing store
+tests `versioned case inspection closure` and `case obligation integration
+authenticates` pass2/2,zero skips,exit0 (Node test duration162.5335ms),including
+closure/current-rendering separation and scope/dependency assertions. No case
+status promoted;actual behavior and remaining applicable obligations stay open.
+
 Candidate section/case checks now pass without another current full-stream read.
 controlLineBoxes restores48 producer hashes,ownerCaretInputs one source receipt,
 and reviewedSourceBatchInputs one source plus its derived report hash;each whole
