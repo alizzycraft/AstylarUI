@@ -56,6 +56,11 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep native-control-authored-applicability-case-join-20261015 stdout/stderr and
+queued26bdb. It supersedes0183 for current expanded join applicability,not browser
+evidence;old0183/its log remain historical with source Git8d49830a. No new capture
+or competing canonical package was created;live1451 inputs remain unchanged.
+
 Keep button-authored-applicability-case-join-20261015 stdout/stderr and queued
 0183b98b. This is a216-case/432-tree applicability join,not another browser capture
 or canonical generation. It remains outside live1451's selected87b7 inputs.

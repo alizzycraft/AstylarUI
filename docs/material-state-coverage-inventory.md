@@ -30,6 +30,36 @@ This pointer supersedes the historical checkpoint chronology immediately below.
   inputs changed. All original final gates and36-family/relevant-state scope
   remain. No further export is justified solely by this status update.
 
+### Editable-field focus applicability joins443 more cases — October15
+
+The same narrow join now covers the five editable-field families,without
+generalizing button activation to text inputs. All483 field cases retain exactly
+one named native input and candidate authored input:form-field76,input76,
+autocomplete110,datepicker111,timepicker110. Their443 unverified PROGRAMMATIC
+FOCUS applicability entries become applicable;the40 already applicable entries
+are not overwritten. Input-type/disabled/readonly declarations stay recorded;
+this neither establishes equality nor proves actual focus,editing,caret paint,
+popup opening or modal/disabled behavior. Date/time opening contracts stay separate.
+
+Queued26bdb0fcccb1f832c7faf834f33cb98e3ee7c27c8312fed8b7ef18892e8be968
+supersedes0183 for the next batch. Combined scope:699 cases/1398 authenticated
+trees,336 buttons+483 inputs. Only827 applicability fields and bounded evidence
+subrecords change across635 cases;all existing dispositions/remaining work and
+other evidence are preserved. Reversing those original obligation objects restores
+the complete87b7 predecessor digest. Four existing button/receipt controls and
+two new input-ID/type controls reject. Loader validates2311 cases/12877 dependencies,
+both completion flagsfalse. Log native-control-authored-applicability-case-join-
+20261015 stdout/stderr terminates0. No browser capture or renderer/fixture change.
+
+QUEUED focus applicability unverified1797→1162;activation1805→1613 remains the
+button-only change;localPaint969 is unchanged. No case is promoted to fully
+inspected. Live1451 still selects immutable87b7 and consumes neither this script
+nor queued26bdb. Old0183 is now historical after the same join source expands;
+its exact earlier join source remains in Git8d49830a if replay is needed. Do not
+describe the old proposal as current-source validation or add another full export.
+Next join existing focus/action evidence to these owners;remaining composite
+control applicability needs explicit owner mapping,not native-button inference.
+
 ### Button-family authored applicability closes192 pending case joins — October15
 
 Compact selected87b7 census distinguishes UNVERIFIED applicability from missing
