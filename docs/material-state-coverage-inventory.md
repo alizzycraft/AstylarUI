@@ -4,6 +4,25 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Fresh icon producer/pixels bound to all20 exact case records — October16
+
+Existing combined icon join now loads the fresh report/checkpoints for each exact
+configured ID,verifies current10-file producer graph and all checkpoint artifacts,
+and binds each original/fresh full PNG hash pair.20 sourceCurrentness and20 local
+paint parents gain bounded fresh-producer/pixel-reproduction subrecords;old
+parent dispositions/remaining work/currentRendering stay unchanged. All40 PNGs
+reproduce exactly. The fresh static gates are recorded separately from absent
+inspect configured-local gates;no equal-input or full-matrix claim is inferred.
+icon-fresh-producer-obligation-join-20261016 TERMINAL0 creates queued
+71b986de0484ab233be2df3cfee5266cee01d511e10d3d261a9e4a1c6bf7e281,
+supersedinge093 for combined icon evidence. Loader2311 cases/13032 dependencies,
+seven existing AX/hierarchy/display controls and complete117a restoration pass;
+both completion flagsfalse. It retains readability/current-producer provenance
+without claiming a newly built renderer or recovering historical e01 bytes.
+No extra capture,source/fixture change or canonical export. Closed proposal uses
+hash-preserving LZX;previous combined script is Git7de58564. Remaining work should
+target substantive input/semantic/lifecycle gaps,not repeat this proven boundary.
+
 ### Fresh producer-bound icon execution reproduces all original full pixels — October16
 
 Changed approach after retained pixel/crop checks reached the unavailable original

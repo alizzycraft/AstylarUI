@@ -56,6 +56,10 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep icon-fresh-producer-obligation-join-20261016 stdout/stderr and queued71b986de,
+supersedinge093. Retain fresh report/checkpoint/image files referenced by20 exact
+joins. Closed proposal uses SHA-preserving LZX;prior source is Git7de58564.
+
 Keep icon-fresh-producer-retained-build-20261016 report/checkpoints/PNGs/trees
 and its -browser hardlink view. Never overwrite/build into that view:links share
 retained/recovered asset bytes. Logs icon-fresh-producer-browser-view,capture,

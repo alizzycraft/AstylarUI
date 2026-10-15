@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { PNG } from 'pngjs';
 import { evaluateFocusedRaster } from '../tests/material-parity/focused-raster-metrics.mjs';
+import { openMaterialCheckpoint, materialCaseKey, fingerprintModuleGraph } from '../tests/material-parity/run-checkpoint.mjs';
 import { saveReviewProposal, loadCaseObligationReview } from './audit-findings-store.mjs';
 
 // Reuse the existing exact-case census and original TAP observations. No browser
@@ -32,6 +33,19 @@ const reportBytes = readFileSync(base + 'current-full-20261005/latest-report.jso
 assert.equal(hash(reportBytes), census.reportSha256);
 assert.equal(census.reportSha256, 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
 const report = JSON.parse(reportBytes);
+const freshDirectory = base + 'icon-fresh-producer-retained-build-20261016';
+const freshFile = freshDirectory + '/latest-report.json', freshBytes = readFileSync(freshFile);
+assert.equal(hash(freshBytes), 'ec08642c4a7d5b7830805bf2de4489c318a4b1d338d7148483004ba16a5a4e26');
+const fresh = JSON.parse(freshBytes), manifestFile = freshDirectory + '/checkpoint/manifest.json';
+const manifestBytes = readFileSync(manifestFile), manifest = JSON.parse(manifestBytes);
+assert.deepEqual(manifest.provenance.harnessFiles, fingerprintModuleGraph(process.cwd(), 'tests/material-parity/run-material-parity.mjs'));
+const freshCheckpoint = openMaterialCheckpoint({ directory: freshDirectory, provenance: manifest.provenance, resume: true });
+const freshCases = new Map([
+  ...fresh.results.map(r => [`static/icon/${r.profile}/${r.viewport.id}/initial`, { kind: 'static', result: r }]),
+  ...fresh.interactions.map(r => [`interaction/icon/${r.profile}/${r.viewport.id}/${r.state}`, { kind: 'interaction', result: r }]),
+]);
+assert.equal(freshCases.size, 20);
+assert.equal(fresh.summary.meetsAcceptance, false); assert.equal(fresh.interactionSummary.meetsAcceptance, false);
 const inspectFile = base + 'icon-inspect-local-paint-20261007.log', inspectBytes = readFileSync(inspectFile);
 assert.equal(hash(inspectBytes), 'a253a8331dfffa856f1f886451487cb6a4a394a56837054fdb7a4eb448b6b1d7');
 const [inspectReceipt, ...inspectRows] = inspectBytes.toString().trim().split(/\r?\n/).map(JSON.parse);
@@ -164,7 +178,7 @@ for (const c of census.cases) {
     const wrongDisplay = structuredClone(trees.astylar); wrongDisplay.nodes.find(n => n.authored?.id === 'icon-root').normalResolvedStyle.display = 'block';
     assert.throws(() => inspectHierarchy(trees.reference, wrongDisplay)); hierarchyNegativeControls++;
   }
-  originals.push({ row, semantics: row.obligations.semantics, history: row.obligations.historyOwnership, inputs: row.obligations.inputStyleStructure, paint: row.obligations.localPaint });
+  originals.push({ row, semantics: row.obligations.semantics, history: row.obligations.historyOwnership, inputs: row.obligations.inputStyleStructure, paint: row.obligations.localPaint, currentness: row.obligations.sourceCurrentness });
   const evidence = { census: { file: censusFile, sha256: hash(readFileSync(censusFile)) },
     logs: receipts.map(({ file, sha256 }) => ({ file, sha256 })), join: { file: script, sha256: hash(readFileSync(script)) } };
   row.obligations.semantics = { ...row.obligations.semantics, retainedActualIconTargetExposure: {
@@ -181,6 +195,29 @@ for (const c of census.cases) {
   row.obligations.inputStyleStructure = { ...row.obligations.inputStyleStructure,
     retainedIconRecordedHierarchy: { disposition: 'inspected-recorded-node-inventory', ...hierarchy,
       evidence: { pairedTrees: row.evidence.pairedTrees, join: evidence.join } } };
+  const freshCase = freshCases.get(c.case); assert.ok(freshCase);
+  const freshKey = materialCaseKey(freshCase.kind, freshCase.result);
+  assert.deepEqual(freshCheckpoint.load(freshKey), freshCase.result);
+  assert.equal(freshCase.result.meetsAcceptance, true);
+  const reproducedImages = {};
+  for (const side of ['reference', 'astylar']) {
+    const oldImage = path.join(path.dirname(row.evidence.pairedTrees[side].file), side + '.png');
+    const freshImage = path.join(path.dirname(freshCase.result.inputTrees[side].file), side + '.png');
+    const sha256 = hash(readFileSync(oldImage)); assert.equal(hash(readFileSync(freshImage)), sha256);
+    reproducedImages[side] = { original: { file: oldImage, sha256 }, fresh: { file: freshImage, sha256 } };
+  }
+  const freshEvidence = { report: { file: freshFile, sha256: hash(freshBytes) },
+    manifest: { file: manifestFile, sha256: hash(manifestBytes) },
+    checkpoint: { file: path.join(freshDirectory, 'checkpoint', hash(freshKey) + '.json'),
+      sha256: hash(readFileSync(path.join(freshDirectory, 'checkpoint', hash(freshKey) + '.json'))) },
+    harnessFiles: manifest.provenance.harnessFiles, pairedTrees: freshCase.result.inputTrees, join: evidence.join };
+  row.obligations.sourceCurrentness = { ...row.obligations.sourceCurrentness, freshProducerRetainedBuildExecution: {
+    disposition: 'inspected-bounded-provenance', case: row.case, browser: fresh.browser, evidence: freshEvidence,
+    boundary: 'Fresh current readable producer/browser,exact retained build bytes. Not a newly built renderer,current complete package acceptance,full matrix or recovery of historical runner source.' } };
+  row.obligations.localPaint = { ...row.obligations.localPaint, freshProducerPixelReproduction: {
+    disposition: 'inspected-full-frame-reproduction', reproducedImages, metrics: freshCase.result.focusedRasters,
+    evidence: freshEvidence,
+    boundary: 'Full paired PNGs reproduce byte-for-byte. Static local gates remain configured;inspect local targets remain absent. Not equivalent inputs,all pixel mechanisms or whole-case acceptance.' } };
   if (parts[0] === 'interaction') {
     const observed = inspectRows.filter(r => r.profile === captured.profile && r.viewport === captured.viewport.id);
     assert.equal(observed.length, 1); const sample = observed[0];
@@ -209,10 +246,11 @@ const indexBytes = readFileSync(`${base}working-audit/${pointer.generation}/inde
 const coverage = JSON.parse(indexBytes).metadata.coverage;
 const proposal = saveReviewProposal(base + 'working-audit', review);
 const loaded = loadCaseObligationReview(proposal.file, proposal.sha256, [...coverage.caseInventory.static, ...coverage.caseInventory.interaction]);
-for (const { row, semantics, history, inputs, paint } of originals) { row.obligations.semantics = semantics; row.obligations.historyOwnership = history; row.obligations.inputStyleStructure = inputs; row.obligations.localPaint = paint; }
+for (const { row, semantics, history, inputs, paint, currentness } of originals) { row.obligations.semantics = semantics; row.obligations.historyOwnership = history; row.obligations.inputStyleStructure = inputs; row.obligations.localPaint = paint; row.obligations.sourceCurrentness = currentness; }
 assert.equal(hash(JSON.stringify(review)), predecessor);
 console.log(JSON.stringify({ predecessor, proposal, iconCases: 20, physicalCohorts: 16, negativeControls: rejected,
   cases: loaded.cases.length, dependencies: loaded.evidenceFingerprints.length, unrelatedReviewConserved: true,
   recordedReferenceNodes: 140, recordedCandidateNodes: 120, hierarchyNegativeControls,
   inspectPaintJoins, inspectSharpnessFailures,
+  freshProducerJoins: freshCases.size, reproducedFullImages: freshCases.size * 2,
   inspectionComplete: loaded.inspectionComplete, currentRenderingAccepted: loaded.currentRenderingAccepted }));
