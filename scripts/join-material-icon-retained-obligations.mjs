@@ -114,6 +114,17 @@ function inspectHierarchy(reference, candidate) {
   assert.equal(page.authored.type, 'main'); assert.equal(demo.parent, page.key);
   assert.equal(demo.authored.type, 'section'); assert.equal(image.parent, demo.key);
   assert.equal(image.authored.type, 'img'); assert.equal(image.authored.alt, 'Favorite');
+  // The existing configured-relationships proof establishes applicability for
+  // every recorded node, not hypothetical IDREF variants of this example.
+  const idrefs = new Set(['aria-labelledby', 'aria-describedby', 'aria-controls', 'aria-owns',
+    'aria-activedescendant', 'aria-flowto', 'aria-details', 'aria-errormessage', 'headers', 'for', 'list', 'form',
+    'ariaLabelledby', 'ariaDescribedby', 'ariaControls', 'ariaOwns', 'ariaActivedescendant',
+    'ariaFlowto', 'ariaDetails', 'ariaErrormessage', 'htmlFor']);
+  for (const [nodes, attributes] of [[reference.nodes, n => n.attributes ?? {}], [candidate.nodes, n => n.authored ?? {}]])
+    for (const node of nodes) assert.ok(!Object.keys(attributes(node)).some(key => idrefs.has(key)), 'new Icon relationship requires review');
+  assert.equal(icon.attributes['aria-label'], 'Favorite'); assert.equal(icon.attributes['aria-hidden'], 'true');
+  assert.equal(icon.attributes.role, 'img'); assert.equal(image.authored.ariaHidden, undefined);
+  assert.equal(host.attributes['aria-label'], 'icon showcase'); assert.equal(demo.authored.ariaLabel, 'icon showcase');
   assert.ok(image.authored.src.startsWith('data:image/png;base64,'));
   const png = Buffer.from(image.authored.src.slice('data:image/png;base64,'.length), 'base64');
   assert.equal(png.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
@@ -177,11 +188,20 @@ for (const c of census.cases) {
     assert.throws(() => inspectHierarchy(trees.reference, wrong)); hierarchyNegativeControls++;
     const wrongDisplay = structuredClone(trees.astylar); wrongDisplay.nodes.find(n => n.authored?.id === 'icon-root').normalResolvedStyle.display = 'block';
     assert.throws(() => inspectHierarchy(trees.reference, wrongDisplay)); hierarchyNegativeControls++;
+    const newRelation = structuredClone(trees.reference); newRelation.nodes[0].attributes['aria-describedby'] = 'new-help';
+    assert.throws(() => inspectHierarchy(newRelation, trees.astylar)); hierarchyNegativeControls++;
+    const changedName = structuredClone(trees.astylar); changedName.nodes.find(n => n.authored?.id === 'icon-primary').authored.alt = 'Other';
+    assert.throws(() => inspectHierarchy(trees.reference, changedName)); hierarchyNegativeControls++;
   }
   originals.push({ row, semantics: row.obligations.semantics, history: row.obligations.historyOwnership, inputs: row.obligations.inputStyleStructure, paint: row.obligations.localPaint, currentness: row.obligations.sourceCurrentness });
   const evidence = { census: { file: censusFile, sha256: hash(readFileSync(censusFile)) },
     logs: receipts.map(({ file, sha256 }) => ({ file, sha256 })), join: { file: script, sha256: hash(readFileSync(script)) } };
-  row.obligations.semantics = { ...row.obligations.semantics, retainedActualIconTargetExposure: {
+  row.obligations.semantics = { ...row.obligations.semantics, retainedIconRelationshipApplicability: {
+    disposition: 'inspected-authored-applicability', authoredIdRefs: 0,
+    reference: { regionName: 'icon showcase', targetName: 'Favorite', role: 'img', ariaHidden: 'true' },
+    candidate: { regionName: 'icon showcase', targetName: 'Favorite', type: 'img', ariaHidden: '<omitted>' },
+    evidence: { pairedTrees: row.evidence.pairedTrees, join: evidence.join },
+    boundary: 'All recorded nodes inspected for authored IDREF relationships;none authored. Existing paired AX observations establish target hiding failure. Not whole generated bridge/AX subtree,assistive-technology behavior or current whole-case acceptance.' }, retainedActualIconTargetExposure: {
     disposition: 'inspected-failure', cohort: c.cohort, observations: pair, evidence,
     classification: 'application-plugin-authoring-defect',
     boundary: 'Retained direct target partial AX:reference ARIA-hidden versus exposed candidate image. Not whole-subtree associations,assistive technology or current runtime acceptance.' } };
@@ -251,6 +271,7 @@ assert.equal(hash(JSON.stringify(review)), predecessor);
 console.log(JSON.stringify({ predecessor, proposal, iconCases: 20, physicalCohorts: 16, negativeControls: rejected,
   cases: loaded.cases.length, dependencies: loaded.evidenceFingerprints.length, unrelatedReviewConserved: true,
   recordedReferenceNodes: 140, recordedCandidateNodes: 120, hierarchyNegativeControls,
+  relationshipApplicabilityJoins: originals.length, authoredIconIdRefs: 0,
   inspectPaintJoins, inspectSharpnessFailures,
   freshProducerJoins: freshCases.size, reproducedFullImages: freshCases.size * 2,
   inspectionComplete: loaded.inspectionComplete, currentRenderingAccepted: loaded.currentRenderingAccepted }));

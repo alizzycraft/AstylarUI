@@ -4,6 +4,40 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Icon relationship applicability joined; lifetime triage reconciled — October16
+
+Existing input-boundary-evidence tests for pending Angular remount, current initial
+reporter classification, and configured Icon relationships pass3/3 (2995.3847ms).
+The remount reader authenticates retained browser assets and preserves its runtime
+FAILURE; source execution still distinguishes expected cancellation from genuine
+reflow failure. This is retained evidence/current-source applicability, not a new
+browser run. Minimal public cancellation was already resolved in the October10
+public reduction below; do not repeat it or the unreachable replacement-before-
+initial-load sequence. Those historical pending statements are superseded.
+
+The existing combined icon join now binds all20 cases' recorded-node relationship
+applicability:zero authored IDREFs, region name icon showcase, direct target name
+Favorite, native aria-hidden=true versus candidate omission. The original32 AX
+observations across16 cohorts retain the exposure failure. Two additional controls
+reject a newly introduced IDREF or changed candidate name. This closes the specific
+authored-relationship applicability gap, not all bridge/AX/assistive-technology
+behavior. Other semantic requirements are not waived or declared inapplicable.
+icon-relationship-applicability-obligation-join-20261016 TERMINAL0 creates queued
+c57c36c2bfb755a79bce14862e8fed850907370136bf5d6348466a18830acaf9,
+superseding71b986 for combined icon evidence. Loader2311 cases/13032 dependencies,
+nine AX/hierarchy/display/relationship controls and whole117a restoration pass.
+All cases remain partial; both completion flagsfalse. No canonical export or
+renderer/fixture edits. Closed proposal is losslessly LZX-compressed with complete
+before/after SHA equality; no evidence deleted. Previous combined script Git68c23492.
+
+Remaining priority: root/default and anonymous-formatting input behavior, complete
+local paint/input attribution, compensation-history disposition, and exact runtime
+applicability. Supplementary light1440x900 lifetime evidence must not be presented
+as exact1440x1000 configured-cohort coverage. Existing pending-load remount supports
+sampled retired/replacement isolation; simultaneous peers and other callbacks are
+not proved. Determine their actual relevance before adding scenarios. Current
+canonical remainsf663; this queued evidence does not alter final acceptance.
+
 ### Fresh icon producer/pixels bound to all20 exact case records — October16
 
 Existing combined icon join now loads the fresh report/checkpoints for each exact
