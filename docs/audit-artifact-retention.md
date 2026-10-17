@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep coherent-icon-border-compact-{import,verify},coherent-icon-border-index-
+conservation and coherent-icon-border-button-row-drift-20261017 stdout/stderr.
+The conservation assertion's52-versus3 failure is required evidence,not disposable
+scratch. Candidate0dd7/index37486 is NOT accepted publication while the49 button
+row changes remain unexplained. Preserve acceptedf663/bc481 packages and shards.
+
 Keep coherent-icon-border-export-20261017 stdout/stderr and subsequent
 coherent-icon-border-independent-cold-20261017 stdout/stderr. Candidate0dd7dce3
 is an exported integration candidate,not accepted evidence until cold comparison

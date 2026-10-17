@@ -4,6 +4,40 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Cold comparison and compact verification pass; predecessor conservation HOLD — October17
+
+Independent cold46678/worker24544 is TERMINAL0,complete2892755.4282ms. Full
+candidate package AND readable report compare equal after cold replay:2 collectors,
+10 memory hits,0 disk hits/invalidations,14365 files/1252426145 bytes independently
+read/reverified. stdoutSHAda9798f63e344987aac6f2344d3fb28db82238e44d3095a590aa52b6d3de85d4,
+stderrSHA82e0aeb5f0cc980e5b434772828335200959aa5f0dcccd67e63a4d32e129ee23.
+Compact import4867 and whole-index verify both TERMINAL0;logs coherent-icon-border-
+compact-{import,verify}-20261017 stdout/stderr. Working pointer now0dd7dce3/index
+37486eaa7500efc999bd5ccdca90f5e848e2da289b540b7716e53563aa0888b7;
+8483 groups,39904 control/typography rows,389202 occurrences,161 findings,
+0 unresolved attribution,72757907 compact bytes. Index currentness is not audit
+or rendering acceptance. Candidate package files remain UNCOMMITTED.
+
+Publication is HELD at predecessor conservation. Authenticated old/new compact
+comparison preserves section list,contract and complete configured-case inventory;
+all159 original source-finding COMPLETE ROW hashes survive,plus two new findings.
+However52 existing discrepancy/control complete-row hashes change,not only the
+three intended Icon scalar classifications:one button-disabled lineHeight scalar
+(60 occurrences) and48 corresponding controlTypography rows also differ. Initial
+assertion expected3 and correctly fails;retain coherent-icon-border-index-
+conservation-20261017 stdout/stderr. No tolerance or change-set expansion accepted.
+Compact values/classifications/justifications for the button scalar are unchanged;
+this alone does not explain its complete-row change.
+
+Existing loadFindingEvidence now extracts ALL49 changed button rows from BOTH
+preserved full packages in one retrieval per generation. Session9927/worker21980
+is verified live,CPU increasing;logs coherent-icon-border-button-row-drift-20261017
+stdout/stderr remain pending. Do not restart merely because the stream has not
+finished. Need exact field-level differences and owning provenance before accepting
+them or fixing the producer. Accepted evidence boundary remainsf663/bc481;
+do not equate cold reproducibility with justified predecessor changes. All2311
+cases remain partial;final harness/browser/release gates unchanged.
+
 ### Coherent Icon/border export succeeded; independent cold comparison running — October17
 
 Export43145/worker24396 is TERMINAL0,not a current wait. It validated all436/436
