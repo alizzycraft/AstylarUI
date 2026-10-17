@@ -18,6 +18,62 @@ import { collectIconContextReview, validateIconContextReview, iconContextBaselin
 
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 
+test('Icon-specific compensation history has only the original external-image and fixed-raster authoring stages', t => {
+  const file = 'examples/material-showcase/src/app/astylar.component.ts';
+  const initial = '2f440115', raster = '48825c45';
+  const git = args => execFileSync('git', args, { encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
+  const at = (revision, name) => git(['show', `${revision}:${name}`]);
+  const printer = ts.createPrinter({ removeComments: true, newLine: ts.NewLineKind.LineFeed });
+  function inputs(source) {
+    const ast = ts.createSourceFile(file, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+    const leaves = [], rules = [];
+    function visit(node) {
+      if (ts.isIfStatement(node) && ts.isBinaryExpression(node.expression) &&
+          node.expression.operatorToken.kind === ts.SyntaxKind.EqualsEqualsEqualsToken &&
+          node.expression.left.getText(ast) === 'family' && ts.isStringLiteral(node.expression.right) &&
+          node.expression.right.text === 'icon') leaves.push(node.thenStatement);
+      if (ts.isObjectLiteralExpression(node) && node.properties.some(p => ts.isPropertyAssignment(p) &&
+          p.name.getText(ast) === 'selector' && ts.isStringLiteral(p.initializer) && p.initializer.text === '.material-icon')) rules.push(node);
+      ts.forEachChild(node, visit);
+    }
+    visit(ast);
+    return Object.fromEntries([['leaf', one(leaves)], ['rule', one(rules)]].map(([key, node]) =>
+      [key, printer.printNode(ts.EmitHint.Unspecified, node, ast)]));
+  }
+  const original = inputs(at(initial, file)), replacement = inputs(at(raster, file));
+  assert.match(original.leaf, /src: '\/icons\/favorite\.svg'/);
+  assert.match(replacement.leaf, /theme\.mode === 'dark' \? MATERIAL_FAVORITE_ICON_DARK : MATERIAL_FAVORITE_ICON_LIGHT/);
+  assert.notEqual(original.leaf, replacement.leaf); assert.equal(original.rule, replacement.rule);
+  function assertKnown(snapshot) {
+    assert.equal(snapshot.rule, original.rule, 'unreviewed Icon sizing history');
+    assert.ok(snapshot.leaf === original.leaf || snapshot.leaf === replacement.leaf, 'unreviewed Icon leaf history');
+  }
+  const revisions = [...new Set(git(['log', '--full-history', '--format=%H', '--', file]).trim().split(/\s+/))];
+  const leafStages = new Set();
+  for (const revision of revisions) {
+    const snapshot = inputs(at(revision, file));
+    assertKnown(snapshot);
+    leafStages.add(snapshot.leaf);
+  }
+  const current = inputs(readFileSync(file, 'utf8')); assert.deepEqual(current, replacement);
+  assert.equal(leafStages.size, 2);
+  for (const [name, revision] of [['examples/material-showcase/src/app/material-assets.ts', raster],
+    ['examples/material-showcase/public/icons/favorite.svg', initial]]) {
+    const introduced = at(revision, name).replace(/\r\n/g, '\n');
+    for (const version of new Set(git(['log', '--full-history', '--format=%H', '--', name]).trim().split(/\s+/)))
+      assert.equal(at(version, name).replace(/\r\n/g, '\n'), introduced, `unreviewed asset history at ${version}`);
+    assert.equal(readFileSync(name, 'utf8').replace(/\r\n/g, '\n'), introduced);
+  }
+  for (const changed of [{ ...current, leaf: current.leaf.replace("alt: 'Favorite'", "alt: 'Changed'") },
+    { ...current, rule: current.rule.replace("width: '24px'", "width: '25px'") }]) {
+    assert.notDeepEqual(changed, current); assert.throws(() => assertKnown(changed));
+  }
+  t.diagnostic(JSON.stringify({ componentRevisions: revisions.length, iconLeafStages: leafStages.size,
+    initial, raster, currentIconInputsMatchRasterIntroduction: true,
+    classification: 'existing fixed-raster authoring substitution; not an equal-input renderer fix',
+    boundary: 'Complete reachable file-history Icon leaf/rule and asset contents only; excludes shared ancestor/theme machinery, runtime ownership, original developer intent beyond recorded comment, and whole-case closure.' }));
+});
+
 test('Icon closure retains explicitly unproven context obligations despite zero unresolved attribution', () => {
   const canonical = JSON.parse(readFileSync('docs/material-input-equivalence-audit.json'));
   const pointer = JSON.parse(readFileSync('artifacts/material-parity/working-audit/current.json'));

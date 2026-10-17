@@ -4,6 +4,38 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Icon-specific compensation history is bounded through current sources — October17
+
+Question:do current Icon-specific declarations contain later positioning/sizing or
+asset adjustments beyond the original SVG-to-PNG substitution? Existing history
+described the introduction but did not guard all reachable intermediate versions.
+The existing icon-asset-input.spec.mjs now checks106 reachable full-history component
+revisions using TypeScript AST extraction. Exactly two leaf representations occur:
+original2f440115 external /icons/favorite.svg image,then48825c45 mode-selected fixed
+PNG image. The .material-icon24px/objectFit:contain rule is unchanged from initial
+introduction. All reachable versions of material-assets.ts and favorite.svg,plus
+current working bytes,agree with their introduction apart from CRLF/LF encoding.
+Two altered-name/width controls exercise the same history validator and reject.
+
+Focused test passes1/1,13205.7548ms process;log
+artifacts/material-parity/icon-specific-compensation-history-20261017.log and
+its stderr log retain output. Test source SHA256
+6e50477d5014e7c14160411cc56bd4d50a2b090e6e4f84cca145600e58ac854e.
+This closes subsequent Icon-leaf/rule/asset-history uncertainty,not shared ancestor
+or theme helper history,current runtime,or all-case compensation disposition.
+The existing comment records texture-loader stability as the reason for raster
+authoring;this is not independent proof of the original developer's diagnosis.
+The substitution remains an unequal-input authoring finding,not renderer parity.
+
+No settled block/flex investigation or browser capture repeated,no renderer or
+fixture change. Canonicalf663 and queuedc57c remain separate. The existing test
+file is in the producer source inventory:its changed receipt must be reconciled
+at the next coherent registration/export milestone;do not describe the published
+source graph as current or export merely for this ledger edit. This new assertion
+is standalone until explicitly included in proof registration/case history joins.
+Next prioritize shared ancestor/default input mapping and substantive remaining
+paint questions,not another Icon-leaf history census. All2311 cases remain partial.
+
 ### Icon relationship applicability joined; lifetime triage reconciled — October16
 
 Existing input-boundary-evidence tests for pending Angular remount, current initial
