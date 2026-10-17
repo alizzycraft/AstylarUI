@@ -4,6 +4,18 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+October18 clip-owner applicability:public-legacy-clip-current-owner-trim-20261018
+terminates0. All12 complete resolver methods and five complete top-level owners
+(translation map,family map/construction,ignored-declaration policy,computed
+reader) match current TypeScript emission to the exact installed JS authenticated
+by public reportc40009cf. Thus the observed unsupported loaded-CSS clip boundary
+has current resolver ownership,not merely a matching package version. Initial
+comparison fails on emitted trailing newline retained by template token scanning;
+only outer trim corrects that procedure,with the failed log preserved. No other
+source normalization,source patch or capture rerun. This is not complete package
+acceptance,all clip forms or124 omitted anchors' exact paint/focus/AX impact.
+Cold8423 remains verifiedlive on original11688,CPU1859.98s;no restart/publication.
+
 October18 new bounded public support result:legacy CSS clip is reported unsupported
 and not applied by the installed public loaded-document-styles path. Four paired
 120x80CSSpx captures atDPR1/2 use equal trees and exact same CSS;two unclipped

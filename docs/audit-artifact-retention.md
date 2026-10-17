@@ -56,6 +56,11 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep public-legacy-clip-current-owner and current-owner-trim-20261018 logs.
+Initial newline-boundary mismatch remains a procedure failure;corrected check
+authenticates all17 complete owning declarations against the report-bound
+installed resolver. No new browser capture or changed historical bytes.
+
 Keep public-legacy-clip-20261018 and public-legacy-clip-diagnostic-20261018 failed
 attempts;the latter failure.json records missing required styles array. Keep
 public-legacy-clip-valid-input-20261018 complete report,input/bundle/HTML and all
