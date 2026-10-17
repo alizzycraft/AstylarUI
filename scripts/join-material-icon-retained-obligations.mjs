@@ -39,6 +39,15 @@ const sourceProofEvidence = {
     assertionSummarySha256: hash(JSON.stringify(sourceProofRows)), exitCode: 0 },
 };
 console.log(sourceProofOutput.trimEnd());
+const visibleFile = base + 'icon-visible-heading-paint-20261017/latest-report.json';
+const visibleBytes = readFileSync(visibleFile);
+assert.equal(hash(visibleBytes), '9b2df5c9ac47320641dee96698f475d1b49c12221ed8db775f53cbb18cad4b69');
+const visible = JSON.parse(visibleBytes), visibleDriver = 'scripts/audit-material-visible-heading-paint.mjs';
+const visibleVerification = JSON.parse(execFileSync(process.execPath, [visibleDriver, '--verify', visibleFile], { encoding: 'utf8' }));
+assert.deepEqual(visibleVerification, { contexts: 16, measuredHeadingPairs: 32, currentRenderingAccepted: false });
+const visibleEvidence = { report: { file: visibleFile, sha256: hash(visibleBytes) },
+  driver: { file: visibleDriver, sha256: hash(readFileSync(visibleDriver)) },
+  checkpoint: visible.capture.checkpointManifest, sources: visible.capture.sources, theme: visible.themeSource };
 const predecessor = '117a41db956f86e1465b8de0fee9e3d5a0fd3073049c1698a837fd0eee4ec3cb';
 const review = JSON.parse(readFileSync(`${base}working-audit/proposals/${predecessor}.json`)).review;
 assert.equal(hash(JSON.stringify(review)), predecessor);
@@ -100,6 +109,9 @@ const originalCases = new Map([
 assert.equal(originalCases.size, 20);
 for (const receipt of census.receipts) assert.equal(hash(readFileSync(base + receipt.file)), receipt.sha256);
 const key = (profile, viewport) => `${profile}/${viewport.width}/${viewport.height}/${viewport.deviceScaleFactor}`;
+const visibleContexts = new Map(visible.results.map(row => [key(row.profile, row.viewport), row]));
+assert.equal(visibleContexts.size, 16);
+assert.deepEqual([...visibleContexts.keys()].sort(), [...new Set(census.cases.map(c => c.cohort))].sort());
 const ax = new Map();
 for (const r of receipts[3].records.filter(r => r.family === 'icon')) {
   const k = key(r.profile, r.viewport); const pair = ax.get(k) ?? {}; assert.equal(pair[r.mode], undefined);
@@ -208,6 +220,17 @@ for (const c of census.cases) {
     assert.equal(hash(bytes), receipt.sha256); trees[side] = JSON.parse(bytes);
   }
   const hierarchy = inspectHierarchy(trees.reference, trees.astylar);
+  const unmasked = visibleContexts.get(c.cohort); assert.equal(unmasked?.family, 'icon');
+  const headingInputDifference = {};
+  for (const [tag, id] of [['p', 'eyebrow'], ['h1', 'title']]) {
+    const native = trees.reference.nodes.find(n => n.type === tag);
+    const candidate = trees.astylar.nodes.find(n => n.authored?.id === id);
+    assert.equal(trees.reference.styles[native.style].opacity, '0');
+    const surface = trees.astylar.nodes.find(n => n.authored?.id === 'page').normalResolvedStyle.background;
+    assert.equal(candidate.normalResolvedStyle.color, surface);
+    headingInputDifference[id] = { referenceBenchmarkOpacity: '0', candidateBenchmarkInk: surface,
+      ordinaryModeEvidence: 'Original visible-heading verifier authenticates actual ordinary input trees,theme,owner bounds and pixels.' };
+  }
   if (!hierarchyNegativeControls) {
     const missing = structuredClone(trees.reference); missing.nodes.pop();
     assert.throws(() => inspectHierarchy(missing, trees.astylar)); hierarchyNegativeControls++;
@@ -272,7 +295,13 @@ for (const c of census.cases) {
   row.obligations.localPaint = { ...row.obligations.localPaint, freshProducerPixelReproduction: {
     disposition: 'inspected-full-frame-reproduction', reproducedImages, metrics: freshCase.result.focusedRasters,
     evidence: freshEvidence,
-    boundary: 'Full paired PNGs reproduce byte-for-byte. Static local gates remain configured;inspect local targets remain absent. Not equivalent inputs,all pixel mechanisms or whole-case acceptance.' } };
+    boundary: 'Full paired PNGs reproduce byte-for-byte. Static local gates remain configured;inspect local targets remain absent. Not equivalent inputs,all pixel mechanisms or whole-case acceptance.' },
+    ordinaryVisibleIconHeadings: { disposition: 'inspected-diagnostic', cohort: c.cohort,
+      browser: visible.browser, headingInputDifference,
+      observations: Object.fromEntries(['reference', 'astylar'].map(side => [side, {
+        headings: unmasked[side].headings, inputTree: unmasked[side].inputTree, screenshot: unmasked[side].screenshot,
+      }])), paint: unmasked.paint, evidence: { ...visibleEvidence, metricSources, join: evidence.join },
+      boundary: 'Ordinary unmasked Icon headings in the exact physical context. Deliberately different from benchmark masking;not the complete configured interaction/state,whole-input equivalence,new release gates,newly built renderer or whole-case acceptance.' } };
   if (parts[0] === 'interaction') {
     const observed = inspectRows.filter(r => r.profile === captured.profile && r.viewport === captured.viewport.id);
     assert.equal(observed.length, 1); const sample = observed[0];
@@ -308,6 +337,7 @@ console.log(JSON.stringify({ predecessor, proposal, iconCases: 20, physicalCohor
   recordedReferenceNodes: 140, recordedCandidateNodes: 120, hierarchyNegativeControls,
   relationshipApplicabilityJoins: originals.length, authoredIconIdRefs: 0,
   boundedSourceHistoryJoins: originals.length, viewportOwnerCssJoins: originals.length,
+  ordinaryHeadingPaintJoins: originals.length, ordinaryPhysicalContexts: visibleContexts.size,
   inspectPaintJoins, inspectSharpnessFailures,
   freshProducerJoins: freshCases.size, reproducedFullImages: freshCases.size * 2,
   inspectionComplete: loaded.inspectionComplete, currentRenderingAccepted: loaded.currentRenderingAccepted }));

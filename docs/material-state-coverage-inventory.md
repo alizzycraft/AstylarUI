@@ -4,6 +4,36 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Unmasked heading evidence joined to exact Icon physical contexts — October17
+
+Existing combined join independently invokes the retained visible-heading driver's
+--verify,authenticates report9b2df5c9 and maps its16 physical contexts exactly to
+the20 configured Icon cases. Each localPaint parent gains ordinaryVisibleIconHeadings
+with measured owners,paired tree/PNG receipts,diagnostics,current driver/checkpoint/
+theme/metric sources and explicit ordinary-vs-benchmark input distinction. Original
+benchmark trees independently retain native opacity0 versus surface-colored
+candidate ink for both headings. This is NOT a claim that unmasked pixels are the
+configured masked state or that a diagnostic pass closes whole-case input parity.
+
+icon-visible-heading-case-join-20261017 TERMINAL0 creates queued
+df29d4db3fd032920d0946542ac85e1cb6f0fcde54006a8fe11feb35d60981dd,
+superseding6e4a for combined Icon evidence. Existing loader authenticates2311 cases/
+13105 dependencies;nine existing AX/hierarchy/display/relationship controls and
+complete117a restoration pass. All20 exact history/root/relationship/fresh-producer
+joins survive;all2311 case inspections remain partial,both completion flagsfalse.
+No capture repeated,renderer/fixture changes or canonical export. Closed cea6/1efe
+and finaldf29 proposals are hash-preserving LZX-compressed;no evidence deleted.
+Canonicalf663 remains separate and source/proof registration still requires a
+coherent milestone reconciliation before canonical/current-rendering acceptance.
+
+Next perform a requirement-level Icon closure review using the existing evidence,
+not another isolated source/paint probe. Distinguish actual missing original-goal
+evidence from generic residual wording,already-settled questions and final render
+acceptance. A fully inspected failure is allowed;do not require a renderer fix to
+inspect it,waive an actual remaining obligation,or invent unauthored variants.
+Shared ancestor/history,remaining input/semantic/lifecycle applicability and final
+source/gates must receive specific,evidence-backed dispositions before closure.
+
 ### Actual unmasked Icon heading owner paint captured — October17
 
 Demonstrated geometry gap below is now measured,not inferred. Dedicated bounded
