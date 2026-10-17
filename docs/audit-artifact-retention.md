@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October18 accepted focus batch:keep original cold8423 stdout/stderr as TERMINAL0,
+complete3218529.1782ms. Keep accepted-import and accepted-index-verify-20261018
+logs;maincd867bbe/index551d3c8f is byte-identical to the separately validated
+candidate. Keep all section/row/source/proof/derived/readable conservation logs
+and predecessorcc890/index8d185f4b. Queued77d90ece and compact progress/clip/list
+evidence remain separate. No reference-closed cleanup has been authorized by
+this milestone;no original/failure evidence is removed.
+
 Keep list-mapped-semantic-requests-20261018 stdout/stderr with77d90ece paired
 trees and existing recorded-node mapping. All52 full attribute/request maps and
 156 rejection controls are compact queued evidence,not an accepted full proposal.

@@ -2,13 +2,15 @@
 
 ## Current audit pointer — October18
 
-Acceptedcc890/index8d185f4b remains162 findings/216 proofs. Candidatecd867bbe/
-index551d3c8f has163/217 with selected58ec review;all80 sections and readable
-report conserved. Cold8423 remains the original pending acceptance check;do not
-restart or publish before terminal success. Latest full queued review77d90ece
-and later compact progress/clip/list evidence are outside that candidate.
+Acceptedcd867bbe/index551d3c8f now has163 findings/217 proofs with selected58ec
+review. Original cold8423 terminates0,complete3218529.1782ms;two collectors,
+ten memory hits,zero disk hits/invalidations,15061 files and1433550867 bytes
+read and independently reverified. All80 sections and readable report conserved.
+Accepted import79974 terminates0;whole-index verification passes and index bytes
+equal the independently imported candidate. Latest full queued review77d90ece
+and later compact progress/clip/list evidence are outside this generation.
 All2311 configured cases remainpartial/unverified,zero whole-case closures.
-Priority:finish cold/import/publication,then case input/semantic/interaction and
+Priority:publish this verified generation,then case input/semantic/interaction and
 local-paint gaps;source applicability and original final gates remain required.
 
 New compact list-mapped-semantic-requests-20261018 evidence accounts for every

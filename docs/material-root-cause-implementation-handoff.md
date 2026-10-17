@@ -1,11 +1,14 @@
 # Material audit: evidence-led implementation priorities
 
-Current evidence pointer (October17):accepted packagecc89031a/index8d185f4b has
-162 source findings/216 proof anchors. Original independentcold49441 and accepted
-import16196 terminate0 with full content conservation. Selected0ee8 is published;
-queued649143f5 adds56 direct focus/113 pointer observations plus52 Badge recorded
-hierarchies. All2311 cases remainpartial/unverified. This is audit publication,
-not current rendering/final acceptance. Historical pointers below are superseded.
+Current evidence pointer (October18):accepted packagecd867bbe/index551d3c8f has
+163 source findings/217 proof anchors,selected58ec5402. Original independentcold
+8423 and accepted import79974 terminate0;all80 sections,complete prior source
+payloads,ordered proofs and readable report conserve. Accepted index is byte-
+identical to the independent candidate. Latest full queued77d90ece plus compact
+progress/clip/list evidence remain outside this generation. All2311 cases stay
+partial/unverified. This is audit evidence acceptance,not current rendering or
+final-gate acceptance. Exact logs and remaining obligations are in the coverage
+ledger. Historical pointers below are superseded.
 
 New confirmed public attribute-stage focus defect (October17):on unchanged
 documents,DIV/SPAN tabindex0 controls first blur synchronously inside
@@ -29,8 +32,8 @@ authorization to implement now. Exact first-blur owner of every Material trace,
 other attributes/AT/paint and whole-current-package acceptance remain unproved.
 Attribute finding is now registered in working163/217 source inventory;existing
 registration/public suites pass6/6 and1/1 with complete predecessor conservation.
-Accepted package remains162/216 until the next coherent source/case integration.
-No renderer fix or new canonical export follows from this registration alone.
+Accepted package now includes this finding in163/217 after the October18 cold
+and conservation/import milestone. No renderer fix or whole-case closure follows.
 
 Confirmed public semantic-style support gap (October17):equal authored h1 text
 project atlas and resolved none/capitalize/uppercase inputs atDPR1/2 give two
