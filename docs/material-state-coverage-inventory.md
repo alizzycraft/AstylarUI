@@ -22,10 +22,27 @@ Unfiltered proof-integration milestone now live:full-audit-harness-cd867bbe-
 run-material-audit-harness discovers306 files (4 parity,4 TTS,298 Material),
 including all46 legacy entries and the new standalone clip proof. Sequential
 files and mandatory ASTYLAR_AUDIT_RECEIPT_COMPARE=1 preserve original assertions;
-no test/family filter or historical preload. No pass/fail result yet. Freeze
+no test/family filter or historical preload. No terminal result yet. Freeze
 consumed code/proof inputs while it runs;retain failures and use same handle.
 This checks proof integration after accepted163/217,not complete inspection or
 the separate enforced browser/unit/build/consumer/compatibility final gates.
+
+Live harness now reports failures;it is NOT passing. Initial observed IDs:
+45,61,65,68,70,73,75,78,80,81,82,88,89,90 (not a final census). First inspected
+failures stop on count/receipt/provenance checks:192 versus217 proof count,
+historical input-boundary-suite f3f554b3 versus current34f8ec1e,unreconciled
+additive source-definition fields,old/current build inventories and an antialias
+owner source hash. These assertions do not yet establish new renderer behavior
+failures;other reported failures still need precise triage. Keep full original
+run alive and code frozen;do not bless receipts or globally preload old sources.
+
+Proof-pointer smallest diagnostic:full-harness-proof-pointer-count-diagnostic-
+20261018 executes the exact original callback with ONLY192→217 count guard in
+memory,pinned to acceptedcd867bbe/current producerd260f8ca. All217 pointer checks,
+three named-proof checks and missing-file control pass. Original test remains
+failed and unchanged. A permanent correction must conserve the historical192
+population and validate accepted217,not delete count/drift protection. Await
+terminal unfiltered result before coherent fixes;no gate criterion is waived.
 
 Legacy clip source proposal161aac37ac51e824208d69f1e6893573ac2f72b0142877d5b2940ee7c40272c5
 adds one documented-limitation to exact163 production predecessors,not an

@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Full harness76151 is live with reported failures;keep original stdout/stderr
+unchanged and do not fingerprint the still-growing log as immutable evidence.
+Keep full-harness-proof-pointer-count-diagnostic-20261018 logs separately:
+in-memory count-only variant passes217 pointer checks and original missing-file
+control,but original192-guard assertion remains failed. No waiver or source edit.
+
 Keep public-rounded-border-existing-proof-verify,current-owner,corner-paint and
 curve-geometry-20261018 stdout/stderr with original public-border-contact and
 geometry captures. They reuse those exact images/vertices;no new capture exists.
