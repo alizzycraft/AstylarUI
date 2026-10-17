@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep progress-recorded-node-accounting-20261018 stdout/stderr with original
+77d90ece tree receipts and unchanged accounting helper8f3adab1. Compact log
+includes all40 mappings and recipe;no full review generation,capture,PNG or
+temporary scratch was created. Join/register in the next coherent batch rather
+than recreating this evidence or deleting existing progress-owner findings.
+
 Keep attribute-focus-row-delta,metadata-case-conservation,row-delta-classification
 and row-delta-classification-complete-20261018 stdout/stderr. Initial ENOBUFS is a
 Git-buffer procedure failure,not replaced evidence;explicit-buffer success explains

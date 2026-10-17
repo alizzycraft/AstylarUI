@@ -4,6 +4,13 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+Compact queued progress-node evidence (October18):40 bar/spinner cases,600 native
+and240 candidate records,eight negative controls. Existing accounting function
+is reused unchanged;DOM/SVG-to-plugin substitutions stay explicit. Log138736bytes
+is retained for the next coherent join;no new full review snapshot or canonical
+source registration. Selected77d90ece remains the latest full case proposal.
+Do not repeat this recorded-node inspection or equate it with plugin paint parity.
+
 Integration milestone (October18):original export8288 terminates0 after
 3053541.7926ms. Candidatecd867bbe has163 findings/217 proofs,selected58ec5402;
 acceptedcc890/index8d185f4b stays unchanged. Independentcold8423 is live
@@ -122,6 +129,31 @@ would miss the independently confirmed attribute-stage failure. Original final
 gates and equal-input/root-cause contract remain unchanged.
 
 ## Preserved audit chronology
+
+### Remaining progress recorded-node gap inspected with existing function and no new full snapshot — October18
+
+While section61812/cold8423 remain live,the remaining passive record-accounting
+gap is40 progress-bar/spinner cases. Reuse exact inspect function from receipt-
+bound join-material-passive-recorded-nodes source8f3adab1,functionf04f4bb8;only
+the declared two-family contract data differs. Every native DOM/SVG record maps
+to shared frame groups or the explicit plugin-replacement group. Candidate has
+one linear/circular-progress node with determinate mode/progress.64. No native
+SVG/style/geometry/semantics equivalence is asserted from that representation.
+
+progress-recorded-node-accounting-20261018 terminates0:40 exact cases,600 native/
+240 candidate records,eight missing/duplicate/parent/whitespace controls reject.
+LogSHA d4c39ee257cd3e55ad9a9efb83341d3fcb18a34ff1fb293cf8e80bd2599ad2cd,
+138736bytes,includes complete recipe,contracts,mappings,paired-tree receipts and
+helper/function hashes. Existing linear-origin/track and circular-angle findings
+retain their scopes;there is no new diagnosis or renderer/fixture change.
+
+This compact evidence closes recorded-node investigation but is NOT yet joined
+to full case obligations or registered as a new canonical proof. Batch that work
+with the next coherent evidence increment instead of writing another large case
+review merely for this field. Selected77d90ece/acceptedcc890/frozen58ec remain.
+All2311 whole casespartial/unverified. Section61812 worker15624 and independent
+cold8423 worker11688 are confirmedlive with advancingCPU;next explain actual
+remaining section/source/proof changes once the existing section job completes.
 
 ### Forty-nine row deltas explained; all other metadata and exact case groups conserved — October18
 
