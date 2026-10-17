@@ -4,6 +4,15 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+New standalone passive lifetime cohort:80 actual-theme contexts across sidenav,
+grid-list,badge,list,table;320 live/tracked snapshots after equivalent updates
+and80 final disposals independently verify. Six negative controls reject. This
+is candidate-only retained-build ordinary update/disposal evidence,not native
+lifetime,late callbacks,remount/peer isolation,current source or case closure.
+Original capture verifier fails its paired-row schema;corrected read-only
+candidate-row adapter succeeds without changing helper/report bytes. Details below;
+exact case applicability joins remain next,not a second capture.
+
 Latest queued review5357efed preserves4be737a3 and binds52 Badge rule-history
 records:156 complete current rule evaluations match retained candidate inventories
 under their recorded profiles. Current rule tokens match48c994e3;initial widths
@@ -70,6 +79,42 @@ would miss the independently confirmed attribute-stage failure. Original final
 gates and equal-input/root-cause contract remain unchanged.
 
 ## Preserved audit chronology
+
+### Missing passive live-resource/disposal cohorts observed without repeating tracked flags — October17
+
+Existing retainedResourceSampling already covers1875 interactions and explicitly
+limits1857 single snapshots;do not reprocess it as new lifetime proof. Remaining
+shared question:do ordinary equivalent updates plateau in live scene counts and
+release after final disposal,or do stable tracked counters hide live resources?
+Use the established surface.update/whenSettled/dispose recipe and existing
+supplemental/checkpoint infrastructure on sidenav,grid-list,badge,list,table.
+Exclude already measured Divider/Icon/progress cohorts. Four actual themes x
+desktopDPR1/2,tabletDPR1,mobileDPR2 give80 contexts and80 retained input trees.
+Authenticated1887 retained build files are served unchanged;no screenshot needed.
+
+Original passive-live-resources-capture-20261017 terminates1 AFTER complete80-row
+report publication:existing validator expects paired reference/astylar runtime
+rows,while this explicitly candidate-only probe has one runtime/tree per row.
+ReportSHA68d347cdc733bf4314f586cf64a058569641329735622a4d6e462cebfe9289ac;
+producerSHA8359604a71d51f73a278f896d7999b2c795fda36e308e3c67575f2f1a8d21dab.
+Preserve this schema failure and captured source/report. Do not fabricate native
+observations,modify frozen helper inputs or recapture the same completed cohort.
+
+Independent checker authenticates full helper94d18aa4 and replaces ONLY paired
+row iteration/evidence selection with direct candidate-row iteration in memory.
+Exact reversal restores full original helper;all asset/tree/source/runtime
+checks remain. On-disk helper/report/producer stay unchanged. Initial checker
+fails default-import interop;adding esModuleInterop:true to its TypeScript
+evaluation fixes that reader setup only. Remove that one option to recover
+original checkerSHA8677d745c29e9ec5102d10c535b5bce84afe5249117c1fa79f2e683c35512e75.
+
+passive-live-resources-independent-verify-interop-20261017 terminates0:
+80 contexts,320 idle live=tracked snapshots,80 zero-resource/cache/plugin final
+disposals. Missing context,wrong theme,runtime error,forged tree receipt,live
+count drift and failed disposal all reject. Checkerb4940fe23b467dcaaa4c242dcb5a6a5fb81518fad05a30b704566423f74f642a
+is frozen. No generalized leak-free claim,natural race frequency,AT,paint,
+current-source build or whole-case acceptance. Next exact configured context/
+input joins,then integrate at a justified batch;acceptedcc890/frozen58ec remain.
 
 ### Existing Badge history bound to current rules and exact cases — October17
 

@@ -56,6 +56,15 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep passive-live-resources-20261017 report/80 trees and separate-checkpoint,
+capture failure stdout/stderr,independent-verify interop-setup failure and
+independent-verify-interop success log pairs. Producer8359604a and checkerb4940fe2
+are receipt-bound. Original checker8677d745 recovers by removing only its
+esModuleInterop:true compiler option. Candidate-only reader adaptation changes
+no on-disk helper/report or frozen export input and fabricates no reference side.
+These are bounded lifecycle observations,not successful scratch. No PNGs or
+temporary source files were generated;all original/failure evidence remains.
+
 Keep badge-current-history-lineage and badge-rule-history-case-join-20261017
 stdout/stderr with queued5357efed/4be737a3. Logs retain exact recipes,current/Git
 source hashes,complete three-rule text/tokens and old/current authoring lines.
