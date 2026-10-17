@@ -48,6 +48,30 @@ gates and equal-input/root-cause contract remain unchanged.
 
 ## Preserved audit chronology
 
+### Complete retained frame-child boundary checked without resurveying wrappers — October17
+
+Remaining priorities are component-descendant/style/semantic ownership,local paint,
+history/lifetime and current source/runtime validity. Before pursuing descendants,
+shared-frame-child-order-20261017 answers whether a shared container child-order
+or section-label mismatch invalidates the correspondence,versus substitutions
+inside component roots. Read-only exact176da706 review and4622 tree receipts
+authenticate;all2311 cases/36 families preserve direct main children p,h1,section,
+their sequence and the authored demo-section ID/aria-label/raw-text boundary.
+6933 child correspondences,three order/parent/label negative controls,TERMINAL0.
+LogSHA3e562eda9ae727c3f027a7f2b198d3ab0f1cbe2f78e699e3e23529238629acf8
+includes the complete executable recipe and ordered receipt-list digest
+767f9e6ba11d98178869f18933ba815b9cda7f65fb90117c8be90b61dd951584.
+No new proposal,framework,capture,case closure or acceptance flag is generated.
+
+Existing passive-wrapper-membership and passive-ordered-content investigations
+already own component wrapper populations/content;do not repeat those surveys.
+This result does not equate component descendants,anonymous boxes,styles,actual
+AX exposure or overlay portal owners. Outer-host main issues remain classified.
+Frozen export worker20224 is revalidated live with advancingCPU;acceptedcc890
+and selected58ec remain unchanged. Continue that same export,then independent
+verification/conservation;next investigation should address an unresolved actual
+component owner rather than repeat headings or container order.
+
 ### Shared heading recorded-input mapping across the configured inventory — October17
 
 Question:do corresponding frame-sibling headings preserve exact raw content,

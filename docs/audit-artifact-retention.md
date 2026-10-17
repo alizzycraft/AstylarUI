@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep shared-frame-child-order-20261017 stdout/stderr with exact176da706 and its
+4622 original paired-tree receipts. Log includes its complete executable recipe,
+receipt digest and three negative controls;it is bounded recorded-input evidence,
+not temporary browser output or a new canonical review. No generated scratch or
+original evidence was removed. Existing passive wrapper/content findings remain
+required and are not superseded by matching frame direct-child order.
+
 Keep shared-heading-input-mapping-20261017 failure stdout/stderr,corrected and
 failed-source-recovery log pairs,and queued176da706 with original58ec. Initial
 script source is exactly recoverable from the corrected joiner by replacing
