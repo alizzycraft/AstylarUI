@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep list-retained-label-paint,list-retained-label-paint-bound and
+list-retained-label-geometry-gap-20261018 stdout/stderr. First is a receipt-typo
+failure;second establishes missing geometry;the census confirms104 missing
+label rectangles across52 cases. No new images,crops or scratch were created.
+These failures are not local-paint metrics or authorization to invent boxes.
+
 October18 accepted focus batch:keep original cold8423 stdout/stderr as TERMINAL0,
 complete3218529.1782ms. Keep accepted-import and accepted-index-verify-20261018
 logs;maincd867bbe/index551d3c8f is byte-identical to the separately validated

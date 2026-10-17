@@ -10,7 +10,9 @@ Accepted import79974 terminates0;whole-index verification passes and index bytes
 equal the independently imported candidate. Latest full queued review77d90ece
 and later compact progress/clip/list evidence are outside this generation.
 All2311 configured cases remainpartial/unverified,zero whole-case closures.
-Priority:publish this verified generation,then case input/semantic/interaction and
+Publication24c2532d is pushed;fresh ls-remote confirms the exact commit. GitHub
+accepts the72.89MiB payload with its existing large-file recommendation warning.
+Priority:case input/semantic/interaction and
 local-paint gaps;source applicability and original final gates remain required.
 
 New compact list-mapped-semantic-requests-20261018 evidence accounts for every
@@ -32,6 +34,16 @@ equivalence or configured-action closure. Raw omissions remain explicit.
 attribute-focus-readable-conservation-20261018 verifies complete prior Markdown
 after reversing exactly one new finding row,one proof description and four
 reference-line shifts. No unrelated readable-report change or acceptance claim.
+
+List label-paint next-action correction:retained-label-geometry-gap-20261018
+authenticates originalab42 report and all52 list cases. All104 label rectangles
+are absent;only list-root/list-primary are measured. Initial local-paint attempt
+fails at a mistyped helper receipt;corrected bound attempt fails on missing
+geometry,not a renderer result. Do not infer absolute label boxes from computed
+styles or replace the requested label result with a container crop. Need paired
+label bounds and paint at matching state/settlement;no local-paint metric or
+case closure established. Reuse existing capture infrastructure for that gap,
+not another unchanged canonical export or repeated retained-crop attempt.
 
 ### Previous pointer notes — preserved chronology, not live status
 
