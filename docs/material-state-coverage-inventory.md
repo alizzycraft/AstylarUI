@@ -4,6 +4,19 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+October18 derived-chain/composed conservation completes:attribute-focus-derived-
+report-chain-20261018 authenticates historicalf8f90799 motion bytes,reconstructs
+candidate90c83630 with current four source receipts,and restores only producer
+e77ab729 to reproduce accepted321a9e58. All historical non-receipt fields remain
+exact;this is not fresh observation replay. attribute-focus-composed-conservation-
+20261018 binds the completed section,row,metadata,source/proof and derived-chain
+logs:70 of80 sections identical;all ten changed sections accounted for. All162
+prior source payloads survive,one finding/proof added,zero whole-case closures.
+Independentcold8423 remains live on the original handle,worker11688 CPU1394.95s;
+no accepted import/publication until terminal success. Canonical candidate docs
+remain unstaged. Next:finish that original cold check,then accepted import and
+scoped publication;later77d90ece/progress evidence stays outside this generation.
+
 October18 integration continuation:section61812 is terminal with complete80-section
 receipts and exact reconstruction of all three changed non-row sections. New
 attribute-focus-source-proof-conservation-20261018 log verifies722→727 source

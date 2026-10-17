@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep attribute-focus-derived-report-chain and attribute-focus-composed-
+conservation-20261018 stdout/stderr. They retain exact derived hashes and bind
+all80 section outcomes to existing row/source/proof/metadata receipts without
+another full scan. Historical motion report bytes remain untouched. Cold8423
+is still required before acceptance;no original evidence is disposable here.
+
 Keep attribute-focus-source-proof-conservation-20261018 stdout/stderr with the
 complete section-conservation log and Git3b317663 predecessor. It verifies all
 changed/added source bytes and ordered prior proof conservation without another
