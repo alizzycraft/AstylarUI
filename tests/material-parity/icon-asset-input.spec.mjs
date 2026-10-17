@@ -313,8 +313,18 @@ test('Icon queued history proof receipts remain applicable after unrelated audit
   };
   const historicalHelper = restoreHelper(currentHelper);
   assert.throws(() => restoreHelper(currentHelper + '\n// unrelated helper drift'));
+  // f43 is a historical proposal. The new public focus assertion is appended
+  // after its complete suite,not a change to those retained proof callbacks.
+  const boundaryFile = 'tests/material-parity/input-boundary-evidence.spec.mjs';
+  const currentBoundary = readFileSync(boundaryFile);
+  assert.equal(hash(currentBoundary), '34f8ec1e30814a6a026004b7320898fcd4709192293d5f89d00025508e182ae5');
+  const historicalBoundary = execFileSync('git', ['show', `3b317663:${boundaryFile}`], { maxBuffer: 4_000_000 });
+  assert.equal(hash(historicalBoundary), '2aeff54b756f9adbf7c8e5a6a8ff6e1db73adef93ff30a3def6a7a3d858eef74');
+  assert.ok(currentBoundary.subarray(0, historicalBoundary.length).equals(historicalBoundary));
+  const changedBoundary = Buffer.from(currentBoundary); changedBoundary[0] ^= 1;
+  assert.ok(!changedBoundary.subarray(0, historicalBoundary.length).equals(historicalBoundary));
   const historicalDependencies = new Map([[policyFile, historicalPolicy], [joinerFile, historicalJoiner],
-    [helperFile, historicalHelper]]);
+    [helperFile, historicalHelper], [boundaryFile, historicalBoundary]]);
   const readRetainedDependency = (name, ...args) => {
     const normalized = String(name).replaceAll('\\', '/');
     if (normalized.endsWith(proposalFile)) return Buffer.from(JSON.stringify(envelope));
@@ -949,10 +959,10 @@ test('SVG upload cause registration conserves all predecessor source findings', 
   const priorSource = execFileSync('git', ['show', '91b730a9:tests/material-parity/input-equivalence-policy.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const prior = Function(priorSource.replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
-  // Keep the original147-to148 claim as a historical population. Current162
+  // Keep the original147-to148 claim as a historical population. Current163
   // registration is independently checked;do not relabel it as148 or discard
   // the later inherited-margin refinement without its existing whole-source proof.
-  assert.equal(sourceAuditDefinitions.length, 162);
+  assert.equal(sourceAuditDefinitions.length, 163);
   const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
   const registeredPolicy = execFileSync('git', ['show', '009c9634:' + policyFile],
     { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');

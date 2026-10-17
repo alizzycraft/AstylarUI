@@ -12,7 +12,7 @@ partial/unverified. No whole-case inspection,current rendering or final-gate
 acceptance follows. Earlier live/candidate pointers below are historical.
 Publication commit3b317663 is pushed:unchanged retry40816 terminates0 after the
 firstHTTP408. Fresh remote check confirms3b317663;no history rewrite occurred.
-Latest outside-export case queueae59c79c preserves649143f5/1b34 with52 Badge recorded-node
+Latest selected case review58ec5402 preservesae59/649/1b34 with52 Badge recorded-node
 correspondences (364 pairs),preserving56 focus/113 pointer observations and child
 receipts. All2311 cases remainpartial/unverified;zero full closures.
 
@@ -21,20 +21,53 @@ attribute-refresh cause from reviewed3ccb. Registration conservation6/6 and
 registered public assertion1/1 pass;all162 prior definitions and full prior
 policy/producer bytes recover exactly. Accepted package remains162/216.
 Current policy55c7e9cf,producerd260f8ca;original input-boundary suite2aeff54b
-remains an exact prefix of current34f8ec1e. Queuedae59c79c explicitly reconciles
+remains an exact prefix of current34f8ec1e. Reviewae59 explicitly reconciles
 737 policy/120 suite analysis receipts across669 cases;old649 and all captures
 remain intact. Do not claim the163/217 registration is already canonical.
 
-Next:check broader producer/proof source applicability and select the coherent
-current review before another integration export;old named selection0ee8 belongs
-to accepted162/216,not current163/217. Do not
-rebuild the unchanged accepted package for prose. Remaining shared gaps:
+Broader Icon suite now passes24/24 after two precise historical boundaries;
+58ec5402 reconciles80 Icon proof receipts and authenticates13875 dependencies.
+Named launcher selects58ec5402 for the163/217 coherent batch,not old0ee8.
+Next:one integration export for the new cause/56 focus/113 pointer/52 Badge
+observations and scoped source transitions;then independent check/conservation
+before publication. Do not rebuild unchanged evidence for prose. Remaining gaps:
 descendant/AX/input ownership,event/default-action classification,local paint,
 source/runtime validity and complete case dispositions. Root-only focus repairs
 would miss the independently confirmed attribute-stage failure. Original final
 gates and equal-input/root-cause contract remain unchanged.
 
 ## Preserved audit chronology
+
+### Broader proof boundaries verified; coherent current review selected — October17
+
+Unfiltered attribute-focus-broader-icon-applicability-20261017 finishes22/24:
+f43 proposal rejects current34f8ec1e instead of its original2aeff54b suite receipt;
+SVG registration's current-population assertion still expects162 instead of163.
+No raster or source observation failed. Preserve this failed run unchanged.
+
+History assertion now admits the exact Git3b317663 suite only after pinning
+current34f8/prior2a and proving the entire prior prefix survives;unrelated-prefix
+control rejects. Historical proposal bytes and all original proof callbacks stay
+unchanged. SVG's CURRENT count becomes163;its original147-to148 historical claim
+and every original assertion remain unchanged. Focused checks pass2/2,38796.2568ms.
+Complete source reversal recovers previous whole suitedaad1f38 from current6f46df64;
+only that historical dependency boundary/current count differ. No renderer or
+fixture changed. Full integrated suite passes24/24,zero skips,84863.4142ms.
+
+attribute-focus-icon-case-source-join-20261017 terminates0:review58ec5402d137657aa2d223d78db4fc56d1baec38a80d33d745bf07b233d656a1
+updates80 current analysis/proof receipts across20 Icon cases and adds scoped
+source applicability. Existing loader validates oldae59 at one explicit historical
+Icon-suite read,new review against all13875 actual current dependencies. Reversing
+only these changes recovers completeae59;acceptedcc890 stays unchanged. All2311
+cases remainpartial/unverified. Earlier857 updates remain preserved,not counted
+as additional fully inspected cases. All original captures/failures remain intact.
+
+Named launcher path/digest select58ec5402;dry-run confirms all original five
+capture/line-box/supplemental inputs and the exact review pair. It is path
+preflight only,not audit acceptance. Review does not bind launcher source,so
+selection changes none of its authenticated dependencies. Pre-export D:free
+2087649280bytes. Next freeze this batch for one existing canonical export;do not
+publish until independentcold,whole-content conservation and index checks finish.
 
 ### Exact two-file case-source transition reconciled; wrong callback selection retained — October17
 

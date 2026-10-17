@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep attribute-focus-broader-icon-applicability-20261017 (22/24 failure),boundary-
+check (2/2),integrated (24/24),icon-suite-source-conservation and icon-case-source-
+join logs. New58ec5402 preserves oldae59 and all raw evidence;original old-suite
+bytes remain recoverable from Git3b317663 and old Icon suite from95c7bbae. Keep
+both prior proposals and the explicit historical-read boundaries;no failure
+becomes passing merely through a new current receipt or registry count.
+
 Keep attribute-focus-queued-receipt-census,retained-owner-proof-replay,
 divider-historical-callback,divider-exact-registered-proof and case-source-
 reconciliation-20261017 stdout/stderr. The broader replay's5/6 and wrong callback
