@@ -56,6 +56,15 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep inline-reader-provenance-candidate-index-20261017 and row-conservation-
+20261017 stdout/stderr with the candidate-validation index8d185f4b. These are
+candidate conservation evidence,not accepted publication. Keep the failed
+section-conservation-20261017 ENOENT log separately from the index-manifest-
+20261017 retry:the preserved snapshot has its manifest in index.json,not a
+standalone manifest file. Retry uses existing sectionDigests and authenticates
+compressed/decoded hashes against that manifest. Do not remove either accepted
+0dd7 or candidate package while cold/section/delta validation is unfinished.
+
 Keep closed inline-reader-provenance-canonical-export-20261017 stdout/stderr,
 candidatecc89031a docs package and live independent-cold stdout/stderr. Export
 success does not authorize publication or predecessor cleanup. Keep accepted

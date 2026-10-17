@@ -4,6 +4,20 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+Latest conservation checkpoint: candidate-only index verification succeeds with
+index8d185f4b and accepted0dd7 pointer unchanged. Complete-row comparison verifies
+all shard byte lengths/hashes:48548 predecessor rows versus48549 candidate rows,
+48338 unchanged at the same section/ordinal,210 changed,one added,no removals.
+Of those210,161 are source-finding ordinal shifts:all161 original complete-row
+hashes remain present in the candidate source multiset. The remaining49 changed
+rows are one button scalar and48 button control rows;their exact receipt/content
+delta still needs explanation,not blanket approval. Log inline-reader-provenance-
+row-conservation-20261017 terminates0. Existing section digest comparison runs as
+session48728 using the preserved index manifest;the first standalone-manifest CLI
+attempt fails ENOENT before reading evidence and is retained separately. The
+original cold process14900 is revalidated live (CPU478.23s),not restarted. Neither
+candidate import nor row conservation establishes publication or case closure.
+
 Accepted package:0dd7dce3/index37486eaa (161 source findings/215 proofs).
 Registered source:162/216. Export46814 terminates0;candidatecc89031a is NOT accepted
 publication. Independentcold session49441 is live with selected case review0ee8;
