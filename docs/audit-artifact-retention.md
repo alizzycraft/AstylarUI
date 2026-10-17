@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep omitted-passive-owner-requests-20261018 stdout/stderr and queued77d90ece
+with original52632fb4. Full native computed/active/inline/pseudo evidence remains
+receipt-bound to original paired trees;candidate omissions are not normalized
+away. No capture,scratch or original deletion occurred. Existing structure,
+clipping,paint and semantic findings remain required independently.
+
 Keep passive-recorded-node-accounting-20261017 stdout/stderr and queued52632fb4
 with originald7a99303. Receipt-bound joiner and all original paired trees preserve
 recorded omissions/additions,not equivalent wrapper authoring. Forged controls

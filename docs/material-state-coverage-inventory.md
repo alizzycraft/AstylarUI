@@ -4,7 +4,14 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
-Latest queued review52632fb4 preservesd7a99303 and accounts for every recorded
+Latest queued review77d90ece preserves52632fb4 and inspects540 omitted native
+owner requests across218 cases:124 clipped focus anchors,52 zero-height grid
+wrappers with positioned descendants,208 clipping/ellipsis text wrappers,104
+ungenerated focus indicators,52 display-none footers. Computed/active-rule/inline/
+pseudo inputs remain explicit;none is equated to candidate omission. Whole52632
+recovers;14162 dependencies authenticate. All2311 cases remainpartial/unverified.
+
+Queued review52632fb4 preservesd7a99303 and accounts for every recorded
 element in218 sidenav/grid-list/list/table cases:2648 native and2368 candidate
 nodes. Omitted/added/flattened groups stay explicit;16 altered-input controls
 reject. Existing findings are linked only within their demonstrated scope,not
@@ -101,6 +108,32 @@ would miss the independently confirmed attribute-stage failure. Original final
 gates and equal-input/root-cause contract remain unchanged.
 
 ## Preserved audit chronology
+
+### Omitted passive native-owner requests distinguished by actual style evidence — October18
+
+Question:do omitted records carry relevant layout/paint requests,or are their
+current visible states clipped/non-rendered/ungenerated? Empty ownText alone
+cannot answer this:the grid wrapper has positioned descendants and list text
+wrappers actively clip. Reuse218 original paired trees and the prior complete
+record accounting;no new population or screenshot capture.
+
+omitted-passive-owner-requests-20261018 terminates0 for540 omitted native owners:
+124 sidenav focus anchors with aria-hidden,true/absolute1px/cliprect0;52 static
+zero-height block grid wrappers with two absolute tile children;208 list content/
+primary-text wrappers with hidden overflow and ellipsis;104 absolute focus
+indicators with pointer-events:none and ungenerated pseudo records;52 sticky
+table footers with display:none. Full computed styles,active owner rules,inline
+and pseudo inputs are retained. Altered clip control rejects. No visible-output
+observation is used to equate authored omission or certify hidden-style support,
+focus/AX neutrality,complete paint or an equal-input renderer outcome.
+
+Review77d90ece5c89e13850b47563356b3e297d0fdf759b2894225a1f76397769c41a adds
+ONLY218 omittedNativeOwnerRequests children. Existing loader authenticates2311
+cases/14162 dependencies;whole52632fb4 and acceptedcc890 pointer conserve. Parent
+remaining work,existing source findings and all failing input/paint evidence
+survive. No new source definition,renderer/fixture edit,gate or case closure.
+Next actual first-stage/style ownership for remaining mapped owners,not another
+recorded-wrapper survey. Frozen58ec export worker20224 remains live/advancing.
 
 ### Complete recorded-node accounting joins remaining four passive structures — October17
 
