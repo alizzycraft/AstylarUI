@@ -4,6 +4,44 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Public text-transform semantic reduction and owning-source check — October17
+
+Prior heading AX increment d2b009e1 is pushed. Next decisive distinction was
+Material authoring/retained-build artifact versus public core semantic projection.
+New audit-public-text-transform-ax.mjs uses package-root Astylar.mount and ordinary
+equal-input HTML/CSS from one SiteData definition:one h1,project atlas,none/
+capitalize/uppercase,atDPR1/2. No Material plugin,world-space calculations,PNG or
+fixture mutation. Public accessibility remains enabled by default. Six paired
+observations authenticate unchanged inputs,resolved transforms,actual backend AX
+owners,served bundle/HTML bytes and installed build dependencies.
+
+public-text-transform-ax-20261017/latest-report.json SHA256
+9f6b365fe93fe01b8a3e375247aaceb5d43bd5791273570da74efc75c06556f6;
+capture85198 TERMINAL0. Both none controls agree. Four transformed pairs fail:
+native Project Atlas/PROJECT ATLAS,candidate project atlas;heading role/level1
+agree. Independent --verify TERMINAL0 with three incomplete/unequal-input/
+erased-failure controls. This is an equal-input public semantic-output defect,
+not only a Material authoring mismatch or a screenshot discrepancy.
+
+check-public-text-transform-owner.mjs reruns that verifier and compares COMPLETE
+current emitted versus authenticated installed reconcileElement,applyAttributes,
+semanticTagName methods (424/1131/19 tokens). All match;installed file is one of
+the actual esbuild input receipts. Current source1a0011d3/installed7c892095.
+reconcileElement copies authored text;applyAttributes never projects computed
+textTransform. Thus the missing resolved-style-to-semantic-DOM projection is a
+demonstrated core support gap at the semantic bridge,independent of Material.
+Do not uppercase authored content or special-case title/Icon in fixtures. General
+inherited transforms,locale-sensitive behavior,updates and naming precedence must
+be considered in implementation;this proof does not establish all of them or AT
+speech behavior. No renderer fix is authorized or performed in this audit.
+
+The public failure and owning-method currentness are now established;remaining
+work is coherent source-finding/proof registration and exact20-case heading join,
+plus shared history/ownership and full inspection closure. Canonicalf663 and
+queueddf29 unchanged. Compact icon query reuses current index;the CLI family
+query text-transform returned0 because that is not a family,not evidence that no
+related finding exists. No redundant canonical export or whole-case promotion.
+
 ### Targeted heading AX closes the observation gap with a failure — October17
 
 New icon-heading-ax-20261017/latest-report.json SHA256

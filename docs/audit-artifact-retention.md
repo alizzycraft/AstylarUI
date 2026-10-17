@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep public-text-transform-ax-20261017/latest-report.json,audit.js,index.html.
+These are the minimal public semantic failure and authenticated served inputs,
+not successful disposable scratch. No PNGs were generated. Producer and owning
+method verifier are checked in;independent verification includes three rejection
+controls. Do not rewrite captured names/casing or regenerate into this directory.
+
 Keep icon-heading-ax-20261017 report and32 input trees,its separate-checkpoint,
 and icon-heading-ax-verified-20261017.log. The capture completed16 contexts/64 AX
 targets before its final DOM-case assertion failed;preserve frozen producer

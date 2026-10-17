@@ -1,5 +1,20 @@
 # Material audit: evidence-led implementation priorities
 
+Confirmed public semantic-style support gap (October17):equal authored h1 text
+project atlas and resolved none/capitalize/uppercase inputs atDPR1/2 give two
+matching none controls and four failing transformed AX names. Native exposes
+Project Atlas/PROJECT ATLAS;candidate remains project atlas. Heading role/level1
+agree. audit-public-text-transform-ax.mjs --verify authenticates the minimal
+package-root reproduction;check-public-text-transform-owner.mjs binds complete
+current emitted reconcileElement/applyAttributes/semanticTagName to the captured
+installed methods. Missing computed textTransform projection in the semantic
+bridge is the owning gap,not Material-only authoring. Restore authoritative
+resolved text semantics at that boundary;do not uppercase fixture content or
+duplicate visual text calculation in a plugin. Inheritance,updates,locale and
+explicit naming precedence need implementation coverage. No AT speech or full
+current-package acceptance claim. Exact receipts and16-context Material heading
+observations are in the ledger;canonical finding/proof integration remains pending.
+
 Non-quarter primitive extension (October17):public-thin-fill-nonquarter-20261017
 adds8 equal-input/geometric pairs and16 retained PNGs atDPR1/2,phases0/.546875/
 .5625/.875. Five pairs differ locally from native;continuous candidate coverage
