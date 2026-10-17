@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep original attribute-focus-coherent-canonical-export-20261017 logs as TERMINAL0
+and candidatecd867bbe docs manifest/gzip/Markdown separately from acceptedcc890.
+Keep live attribute-focus-independent-cold-20261018 (8423) and candidate-index-
+20261018 (32989) stdout/stderr. Candidate index destination is working-audit/
+candidate-validation;accepted base pointer is unchanged. No success,live process
+or candidate package authorizes original/predecessor cleanup or publication.
+Later77d90ece queue is independent and must not alter frozen58ec inputs.
+
 Keep omitted-passive-owner-requests-20261018 stdout/stderr and queued77d90ece
 with original52632fb4. Full native computed/active/inline/pseudo evidence remains
 receipt-bound to original paired trees;candidate omissions are not normalized

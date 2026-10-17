@@ -4,6 +4,15 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+Integration milestone (October18):original export8288 terminates0 after
+3053541.7926ms. Candidatecd867bbe has163 findings/217 proofs,selected58ec5402;
+acceptedcc890/index8d185f4b stays unchanged. Independentcold8423 is live
+(launcher3508,worker11688);candidate-only import32989 is live in separate
+working-audit/candidate-validation namespace. Neither is publication. Freeze
+producer/proof/review inputs;next same-handle waits and complete content/index
+conservation,then accepted import only after independent verification succeeds.
+Later77d90ece review remains queued outside this candidate,not silently merged.
+
 Latest queued review77d90ece preserves52632fb4 and inspects540 omitted native
 owner requests across218 cases:124 clipped focus anchors,52 zero-height grid
 wrappers with positioned descendants,208 clipping/ellipsis text wrappers,104
@@ -108,6 +117,40 @@ would miss the independently confirmed attribute-stage failure. Original final
 gates and equal-input/root-cause contract remain unchanged.
 
 ## Preserved audit chronology
+
+### Coherent attribute-focus export completes; independent cold and candidate import launched — October18
+
+Original export8288 terminates0 without restart. Evidence session:one collector,
+ten memory hits,one disk hit,zero invalidations;15061 files,1433550867 bytes read
+and reverified,2880007.6113ms. Complete export3053541.7926ms (~50.89min).
+Coverage436static/1875interaction,8483 scalar groups/389202 occurrences,
+163 source findings/217 proof anchors,inputEquivalent=false. Exact selected
+review58ec5402 remains frozen;all2311 casespartial/unverified.
+
+Candidate docs gzip76426370bytes/SHA
+cd867bbed4534ee4f2e827ac9caea3b706a053bb7a867fceb5bcb26d54e0ecd5;
+decoded2308516424bytes/SHA
+a04e66f0fbcc641cad8488a2cdedf6426a41fc8cc21dfc2fcbb848695b9c481b.
+Original attribute-focus-coherent-canonical-export-20261017 stdout/stderr retain
+all progress phases and metrics. Docs package is a candidate,not acceptance;
+accepted working pointer remainscc890/index8d185f4b and its package is preserved.
+
+Named launcher --check with ASTYLAR_AUDIT_COLD=1/PROGRESS=1 starts8423,actual
+launcher3508/worker11688 verifiedlive. Logs attribute-focus-independent-cold-
+20261018 stdout/stderr. Do not restart quiet buffered output or change frozen
+inputs. Existing importFindings starts separate candidate-index32989 with logs
+attribute-focus-candidate-index-20261018;destination is
+artifacts/material-parity/working-audit/candidate-validation,not accepted base.
+Importer is still live,not a completed index;its current.json is not yet present.
+D:free1501323264bytes before candidate-index completion. Recheck headroom before
+additional generation/publication. Next independentcold terminal result and
+full row/section/case/source conservation plus candidate-index verification.
+No final gate or publication is certified;later queued evidence is not included.
+
+Read-only clip follow-up identified no typed/style-translation support for legacy
+clip rect requests;no new public render proof or source finding was created.
+Defer that unresolved support classification until this integration milestone,
+rather than changing the frozen producer or treating omission as renderer parity.
 
 ### Omitted passive native-owner requests distinguished by actual style evidence — October18
 
