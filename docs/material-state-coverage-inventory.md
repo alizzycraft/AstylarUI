@@ -4,6 +4,43 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Icon shared ancestor/theme history inspected — October17
+
+Specific question:which shared heading/page/theme changes are candidate-only
+compensation versus restoration of reference inputs? Existing leaf/raster history
+was NOT repeated. New focused assertion in icon-asset-input.spec.mjs extracts
+complete relevant AST rules/helpers and compares initial2f440115,before/after
+ee42cb3 and current source. Exact heading-rule pickaxe finds only initial and
+ee42cb3;current rules equal the latter. Reference shared frame/heading/demo CSS
+prefix already equals its initial and pre-ee42cb3 versions.
+
+Conclusion:ee42cb3 removed the old candidate-only31.875/typographyScale margin
+formula,6px eyebrow margin and mobile37px heading-height substitution. It restored
+normal-flow heading inputs and relative offsets already present on the HTML side
+(-2/-6.5,custom3/6.5,mobile.5/-16.5). Do not misclassify those CURRENT shared offsets
+as new candidate-only compensation or remove reference inputs to improve a score.
+This is source-history attribution,not a runtime bisect or proof of why the
+original author chose those numbers. Existing equivalent-heading-offset finding
+remains;no new defect category or renderer change.
+
+Shared root/page/demo rules and density/reference-height helper bodies match
+initial authoring. Icon table requests86/87/86 persist,as do fixed-height/flex
+substitution and benchmark native-opacity0 versus candidate-surface-ink masking.
+Those remain existing authoring/harness findings,not equivalent rendering inputs.
+Theme complete source equals initial after removing only alphaHex. Full-history
+has5 records including3 merges,but only2 exact content versions;initial assertion
+assuming2 records failed5!==2 before explicit merge/content reconciliation.
+No profile,density,typographyScale,cornerScale or container mix rules changed.
+
+node --test --test-name-pattern="Icon shared ancestor history"
+tests/material-parity/icon-asset-input.spec.mjs1/1 pass;two changed-page-padding/
+heading-margin controls reject. No capture,PNG,canonical export or added framework.
+Bounded shared ancestor/history observation is now inspected;remaining whole-case
+ownership/currentness and other source branches are not silently closed. Queue
+this result into the existing coherent Icon case batch rather than generating a
+new large proposal solely to refresh one generic remaining-work label.
+Canonicalf663,queuedb7fe,current160/214 and2311 partial cases remain distinct.
+
 ### Fresh font-box measurements stable across browser update — October17
 
 Resolved the precise environment question without relabeling the old capture.

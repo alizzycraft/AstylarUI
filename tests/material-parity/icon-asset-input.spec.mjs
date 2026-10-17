@@ -140,6 +140,93 @@ test('Icon-specific compensation history has only the original external-image an
     boundary: 'Complete reachable file-history Icon leaf/rule and asset contents only; excludes shared ancestor/theme machinery, runtime ownership, original developer intent beyond recorded comment, and whole-case closure.' }));
 });
 
+test('Icon shared ancestor history distinguishes removed heading compensation from retained input substitutions', t => {
+  const file = 'examples/material-showcase/src/app/astylar.component.ts';
+  const referenceFile = 'examples/material-showcase/src/app/reference.component.ts';
+  const themeFile = 'examples/material-showcase/src/app/theme.ts';
+  const initial = '2f4401157', flow = 'ee42cb3d83c685dbab922808091b803976dc35d3';
+  const git = args => execFileSync('git', args, { encoding: 'utf8', maxBuffer: 4_000_000 });
+  const at = (revision, name) => git(['show', `${revision}:${name}`]).replaceAll('\r\n', '\n');
+  const printer = ts.createPrinter({ removeComments: true });
+  function shared(source) {
+    const ast = ts.createSourceFile(file, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+    const rules = { root: [], page: [], eyebrow: [], title: [], demo: [] }, heights = {};
+    const functions = {};
+    function visit(node) {
+      if (ts.isObjectLiteralExpression(node)) {
+        const selector = node.properties.find(p => ts.isPropertyAssignment(p) && p.name.getText(ast) === 'selector')?.initializer;
+        const name = selector && ts.isStringLiteral(selector) ? ({ root: 'root', '#page': 'page', '#eyebrow': 'eyebrow', '#title': 'title' })[selector.text] : null;
+        const text = printer.printNode(ts.EmitHint.Unspecified, node, ast);
+        if (name) rules[name].push(text);
+        if (selector && ts.isTemplateExpression(selector) && selector.getText(ast) === '`#${rootId}`'
+          && node.properties.some(p => p.name?.getText(ast) === 'gap')) rules.demo.push(text);
+      }
+      if (ts.isFunctionDeclaration(node) && ['materialReferenceHeight', 'materialDensityHeight'].includes(node.name?.text))
+        functions[node.name.text] = printer.printNode(ts.EmitHint.Unspecified, node, ast);
+      if (ts.isVariableDeclaration(node) && ['MATERIAL_REFERENCE_HEIGHTS', 'MATERIAL_COMPACT_REFERENCE_HEIGHTS', 'MATERIAL_CONTRAST_REFERENCE_HEIGHTS'].includes(node.name.getText(ast))) {
+        const icon = node.initializer.arguments[0].properties.find(p => p.name.getText(ast) === 'icon');
+        heights[node.name.getText(ast)] = Number(icon.initializer.getText(ast));
+      }
+      ts.forEachChild(node, visit);
+    }
+    visit(ast);
+    assert.equal(rules.root.length, 1); assert.equal(rules.page.length, 1); assert.equal(rules.demo.length, 1);
+    assert.equal(Object.keys(functions).length, 2);
+    return { rules, heights, functions };
+  }
+  const first = shared(at(initial, file)), before = shared(at(flow + '^', file));
+  const corrected = shared(at(flow, file)), current = shared(readFileSync(file, 'utf8'));
+  assert.deepEqual(first.rules.eyebrow, before.rules.eyebrow); assert.deepEqual(first.rules.title, before.rules.title);
+  assert.deepEqual(current, corrected);
+  for (const key of ['root', 'page', 'demo']) assert.deepEqual(current.rules[key], first.rules[key]);
+  assert.deepEqual(current.functions, first.functions); assert.deepEqual(current.heights, first.heights);
+  assert.deepEqual(Object.values(current.heights), [86, 87, 86]);
+  assert.notDeepEqual(current.rules.eyebrow, first.rules.eyebrow); assert.notDeepEqual(current.rules.title, first.rules.title);
+  assert.match(first.rules.title[0], /31\.875/); assert.match(first.rules.eyebrow[0], /marginBottom: '6px'/);
+  assert.ok(current.rules.title.every(rule => !rule.includes('31.875')));
+  assert.match(current.rules.title[0], /margin: '21\.44px 0'/);
+  assert.match(current.rules.title[0], /this\.benchmarkMode \? theme\.surface/);
+  assert.match(first.rules.title[0], /this\.benchmarkMode \? theme\.surface/);
+  const headingChanges = git(['log', '--full-history', '--format=%H', '-G', "selector: '#(eyebrow|title)'", '--', file]).trim().split(/\s+/);
+  assert.equal(headingChanges.length, 2); assert.equal(headingChanges[0], flow); assert.ok(headingChanges[1].startsWith(initial));
+  const prefix = source => {
+    const start = source.indexOf(':host{display:block;height:100%}.frame');
+    const end = source.indexOf('.spacer{flex:1}', start); assert.ok(start >= 0 && end > start);
+    return source.slice(start, end);
+  };
+  const reference = prefix(readFileSync(referenceFile, 'utf8'));
+  assert.equal(reference, prefix(at(initial, referenceFile)));
+  assert.equal(reference, prefix(at(flow + '^', referenceFile)));
+  assert.match(reference, /top:-2px/); assert.match(reference, /top:-6\.5px/);
+  assert.match(reference, /top:3px/); assert.match(reference, /top:6\.5px/);
+  assert.match(reference, /top:\.5px/); assert.match(reference, /top:-16\.5px/);
+  assert.match(reference, /\.benchmark>\.eyebrow,\.benchmark>h1\{opacity:0\}/);
+  const theme = readFileSync(themeFile, 'utf8').replaceAll('\r\n', '\n');
+  const ast = ts.createSourceFile(themeFile, theme, ts.ScriptTarget.Latest, true);
+  const alpha = one(ast.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === 'alphaHex'));
+  assert.equal(theme.slice(0, alpha.getFullStart()) + theme.slice(alpha.end), at(initial, themeFile));
+  const themeChanges = git(['log', '--full-history', '--format=%H', '--', themeFile]).trim().split(/\s+/);
+  assert.equal(themeChanges.length, 5);
+  const themeStages = new Set();
+  for (const revision of themeChanges) {
+    const snapshot = at(revision, themeFile);
+    assert.ok(snapshot === theme || snapshot === at(initial, themeFile)); themeStages.add(snapshot);
+  }
+  assert.equal(themeStages.size, 2); // three merge records do not create new content stages
+  for (const [from, to] of [["padding: '36px'", "padding: '37px'"], ["margin: '21.44px 0'", "margin: '22px 0'"]]) {
+    const changed = readFileSync(file, 'utf8').replace(from, to);
+    assert.notEqual(changed, readFileSync(file, 'utf8'));
+    assert.throws(() => assert.deepEqual(shared(changed), corrected));
+  }
+  t.diagnostic(JSON.stringify({ sharedAncestorHeadingHistory: true, headingStages: 2, initial, flow,
+    sharedRootRulesUnchanged: true, iconHeightInputs: current.heights, themeRevisions: themeChanges.length,
+    themeContentStages: themeStages.size, themeDelta: 'alphaHex helper only', negativeControls: 2,
+    conclusions: ['old heading margin/height substitutions removed by reference-flow restoration',
+      'current relative offsets already authored by reference;not candidate-only compensation',
+      'fixed per-theme demo heights,block-versus-flex substitution and unequal benchmark masking persist since initial showcase'],
+    boundary: 'Bounded shared ancestor/theme authoring history,not runtime causality,all historical source branches,remaining ownership or whole-case closure.' }));
+});
+
 test('Icon closure retains explicitly unproven context obligations despite zero unresolved attribution', () => {
   const canonical = JSON.parse(readFileSync('docs/material-input-equivalence-audit.json'));
   const pointer = JSON.parse(readFileSync('artifacts/material-parity/working-audit/current.json'));
