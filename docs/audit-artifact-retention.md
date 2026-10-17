@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep icon-heading-ax-obligation-join-20261017 stdout/stderr and queuedb7fe303d,
+supersedingdf29 for combined Icon evidence. Original117a predecessor remains
+required for complete conservation. Exact20-case heading joins retain the
+16-context AX report/public reproduction and source receipts;no browser capture
+or replacement canonical package was produced by this integration.
+
 Keep public-text-transform-ax-20261017/latest-report.json,audit.js,index.html.
 These are the minimal public semantic failure and authenticated served inputs,
 not successful disposable scratch. No PNGs were generated. Producer and owning

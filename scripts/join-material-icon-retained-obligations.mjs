@@ -48,6 +48,26 @@ assert.deepEqual(visibleVerification, { contexts: 16, measuredHeadingPairs: 32, 
 const visibleEvidence = { report: { file: visibleFile, sha256: hash(visibleBytes) },
   driver: { file: visibleDriver, sha256: hash(readFileSync(visibleDriver)) },
   checkpoint: visible.capture.checkpointManifest, sources: visible.capture.sources, theme: visible.themeSource };
+const headingAxFile = base + 'icon-heading-ax-20261017/latest-report.json';
+const headingAxBytes = readFileSync(headingAxFile);
+assert.equal(hash(headingAxBytes), '1e2136092c03bab263e22e45ef6d548eceae2ce91783f158dad2c3584eb3e46f');
+const headingAx = JSON.parse(headingAxBytes);
+const headingAxCheck = JSON.parse(execFileSync(process.execPath, ['scripts/check-material-icon-heading-ax.mjs'], { encoding: 'utf8' }));
+assert.equal(headingAxCheck.contexts, 16); assert.equal(headingAxCheck.targetObservations, 64);
+assert.equal(headingAxCheck.matchingTitles, 0); assert.equal(headingAxCheck.equalTransformInputs, 64);
+assert.equal(headingAxCheck.negativeControlsRejected, 4);
+const publicHeadingOwner = JSON.parse(execFileSync(process.execPath, ['scripts/check-public-text-transform-owner.mjs'], { encoding: 'utf8' }));
+assert.equal(publicHeadingOwner.verification.equalInputSemanticMismatches, 4);
+assert.equal(publicHeadingOwner.verification.noTransformControls, 2);
+assert.equal(publicHeadingOwner.verification.negativeControlsRejected, 3);
+const headingEvidence = {
+  report: { file: headingAxFile, sha256: hash(headingAxBytes) },
+  checkpoint: headingAx.capture.checkpointManifest, sources: headingAx.capture.sources, theme: headingAx.themeSource,
+  publicReproduction: { file: base + 'public-text-transform-ax-20261017/latest-report.json', sha256: publicHeadingOwner.reportSha256 },
+  owningSources: publicHeadingOwner.files,
+  verifiers: ['scripts/check-material-icon-heading-ax.mjs', 'scripts/check-public-text-transform-owner.mjs',
+    'scripts/audit-public-text-transform-ax.mjs'].map(file => ({ file, sha256: hash(readFileSync(file)) })),
+};
 const predecessor = '117a41db956f86e1465b8de0fee9e3d5a0fd3073049c1698a837fd0eee4ec3cb';
 const review = JSON.parse(readFileSync(`${base}working-audit/proposals/${predecessor}.json`)).review;
 assert.equal(hash(JSON.stringify(review)), predecessor);
@@ -112,6 +132,9 @@ const key = (profile, viewport) => `${profile}/${viewport.width}/${viewport.heig
 const visibleContexts = new Map(visible.results.map(row => [key(row.profile, row.viewport), row]));
 assert.equal(visibleContexts.size, 16);
 assert.deepEqual([...visibleContexts.keys()].sort(), [...new Set(census.cases.map(c => c.cohort))].sort());
+const headingContexts = new Map(headingAx.results.map(row => [key(row.profile, row.viewport), row]));
+assert.equal(headingContexts.size, 16);
+assert.deepEqual([...headingContexts.keys()].sort(), [...visibleContexts.keys()].sort());
 const ax = new Map();
 for (const r of receipts[3].records.filter(r => r.family === 'icon')) {
   const k = key(r.profile, r.viewport); const pair = ax.get(k) ?? {}; assert.equal(pair[r.mode], undefined);
@@ -254,7 +277,19 @@ for (const c of census.cases) {
     boundary: 'All recorded nodes inspected for authored IDREF relationships;none authored. Existing paired AX observations establish target hiding failure. Not whole generated bridge/AX subtree,assistive-technology behavior or current whole-case acceptance.' }, retainedActualIconTargetExposure: {
     disposition: 'inspected-failure', cohort: c.cohort, observations: pair, evidence,
     classification: 'application-plugin-authoring-defect',
-    boundary: 'Retained direct target partial AX:reference ARIA-hidden versus exposed candidate image. Not whole-subtree associations,assistive technology or current runtime acceptance.' } };
+    boundary: 'Retained direct target partial AX:reference ARIA-hidden versus exposed candidate image. Not whole-subtree associations,assistive technology or current runtime acceptance.' },
+    actualBenchmarkHeadingTextTransform: {
+      disposition: 'inspected-failure', classification: 'confirmed-core-renderer-defect', cohort: c.cohort,
+      owner: 'core semantic bridge resolved-style projection', property: 'textTransform accessibility name/text',
+      observations: Object.fromEntries(['reference', 'astylar'].map(side => {
+        const observation = headingContexts.get(c.cohort)[side];
+        assert.equal(observation.benchmarkMode, true);
+        return [side, { appliedTheme: observation.appliedTheme, inputTree: observation.inputTree,
+          targets: observation.ax }];
+      })),
+      publicFailure: publicHeadingOwner.verification, currentOwningMethods: publicHeadingOwner.methods,
+      evidence: { ...headingEvidence, join: evidence.join },
+      boundary: 'Actual benchmark title/eyebrow AX at exact physical context. Heading role/level agree;transformed name/child text fail despite equal textTransform inputs. Public package-root reproduction and complete current/installed owning methods bind the support gap. Not AT behavior,ordinary unmasked AX,all inherited/locale/update cases or whole current-package acceptance.' } };
   // Existing census binds the corresponding bounded update/disposal log. This
   // subrecord preserves that historical membership,not new async/remount proof.
   const lifecycle = receipts.find(r => r.file === base + c.updatesDisposal); assert.ok(lifecycle);
@@ -338,6 +373,7 @@ console.log(JSON.stringify({ predecessor, proposal, iconCases: 20, physicalCohor
   relationshipApplicabilityJoins: originals.length, authoredIconIdRefs: 0,
   boundedSourceHistoryJoins: originals.length, viewportOwnerCssJoins: originals.length,
   ordinaryHeadingPaintJoins: originals.length, ordinaryPhysicalContexts: visibleContexts.size,
+  benchmarkHeadingAxFailureJoins: originals.length, benchmarkHeadingAxPhysicalContexts: headingContexts.size,
   inspectPaintJoins, inspectSharpnessFailures,
   freshProducerJoins: freshCases.size, reproducedFullImages: freshCases.size * 2,
   inspectionComplete: loaded.inspectionComplete, currentRenderingAccepted: loaded.currentRenderingAccepted }));

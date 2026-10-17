@@ -4,6 +4,34 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Heading semantic failure joined without whole-case promotion — October17
+
+Existing combined join now authenticates the new Material heading AX report and
+public semantic reproduction through their original focused verifiers. All20
+configured Icon cases map exactly to16 actual physical contexts;each semantics
+obligation retains benchmark-mode title/eyebrow targets,their actual theme and
+input-tree receipts,confirmed public support-gap classification and complete
+current/installed owning-method evidence. Ordinary unmasked paint remains a
+separate subrecord;neither is substituted for the other. All prior Icon hierarchy,
+hiding,history,viewport-owner,relationships and pixel evidence remains joined.
+
+icon-heading-ax-obligation-join-20261017.log/stderr record session98425 TERMINAL0.
+Queued proposal b7fe303deb6d250798d06513f12ec727b52a5ba89508c4410ba6aa7c9f58bb1f
+supersedesdf29 for this combined Icon batch. Existing loader authenticates2311
+cases/13144 dependencies;original four exposure/five hierarchy controls and
+complete117a predecessor restoration pass. Heading/public verifiers additionally
+retain four/three controls. All2311 inspections remainpartial,currentRendering
+unverified;inspectionComplete/currentRenderingAccepted stayfalse. An inspected
+failure is preserved;no parent obligation or whole case is cleared from partial
+merely by this bounded semantic result.
+
+Canonicalf663/selected87b7 remain unchanged. This is a coherent pending-case
+integration,not canonical source-finding/proof registration or a final export.
+Next register the shared semantic-style finding and its focused public proof in
+the existing producer inventories,with source/predecessor conservation;batch the
+other standalone source additions before the next justified canonical milestone.
+Remaining Icon shared history/ownership and other original requirements remain.
+
 ### Public text-transform semantic reduction and owning-source check — October17
 
 Prior heading AX increment d2b009e1 is pushed. Next decisive distinction was
