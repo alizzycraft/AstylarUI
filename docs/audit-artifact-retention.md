@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep passive-paint-coherent-case-join-20261018 failure and corrected
+passive-paint-coherent-case-join-physical-20261018 success logs. First fails on
+viewport labels before saving;actual width/height/DPR matching succeeds with52
+altered-DPR controls. Keep full queuedcefffc09 proposal and predecessor77d90ece;
+complete reversal conserves every previous record. No duplicate capture/export
+or intermediate per-leaf full proposal was created. Acceptedcd867bbe remains
+separate;14378 joined evidence dependencies and the new join producer are pinned.
+
 Keep list-label-bounds-paint-20261018 and its new checkpoint,all104 PNGs/104
 input trees and report590c7549. Keep original capture stdout/stderr,initial
 independent-verify binding failure,and independent-verify-bound success with

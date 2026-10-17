@@ -7,13 +7,26 @@ review. Original cold8423 terminates0,complete3218529.1782ms;two collectors,
 ten memory hits,zero disk hits/invalidations,15061 files and1433550867 bytes
 read and independently reverified. All80 sections and readable report conserved.
 Accepted import79974 terminates0;whole-index verification passes and index bytes
-equal the independently imported candidate. Latest full queued review77d90ece
-and later compact progress/clip/list evidence are outside this generation.
+equal the independently imported candidate. Latest full queued reviewcefffc09
+joins progress/list evidence;public clip support evidence remains compact and
+unregistered. These later records are outside the accepted58ec generation.
 All2311 configured cases remainpartial/unverified,zero whole-case closures.
 Publication24c2532d is pushed;fresh ls-remote confirms the exact commit. GitHub
 accepts the72.89MiB payload with its existing large-file recommendation warning.
 Priority:case input/semantic/interaction and
 local-paint gaps;source applicability and original final gates remain required.
+
+Coherent queued case joincefffc095f1d7dbcfe992725f6fe593595c7499b75b67eb435421409ba56dd85
+preserves77d90ece and adds248 bounded child records across92 cases:40 progress
+record-accounting joins and52 list semantic/AX/paint/input-stage joins. The52
+list localPaint parents move evidence-join-pending→partial;all whole cases stay
+partial/unverified and all original remaining work survives. Loader authenticates
+14378 dependencies,complete77d90ece recovers after reversing only additions and
+disposition changes,and acceptedcd867bbe pointer is unchanged. Physical AX
+contexts join by actual width/height/DPR,not differently spelled viewport IDs;
+52 changed-DPR controls reject. Initial label-normalization attempt fails before
+save and is preserved. Producer join-material-passive-paint-batch is receipt-bound;
+do not mutate it or run a canonical export solely to publish this working join.
 
 New compact list-mapped-semantic-requests-20261018 evidence accounts for every
 recorded mapped descendant in52 cases. Both containers requestaria-disabled=false;
