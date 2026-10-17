@@ -4,6 +4,50 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Icon callback owners narrowed with current-source and peer controls — October17
+
+Question:which actual deferred callbacks remain beyond the recorded load/remount
+scenarios? Source trace separates core resource load/error callbacks,per-element
+configureImage onLoad,semantic native img assignment,font readiness/loadingdone,
+render-session work and scene cleanup. Semantic bridge assigns src without any
+custom image load/error callback into core. Its delegated input listeners are
+removed and adapter cleared on disposal. Native image requests may finish after
+detachment;that is not itself a core callback or renderer resource revival.
+
+New focused Icon assertion authenticates captured chunk-3JXWRYJY mapdba48404 and
+compares18 COMPLETE named current emitted/captured methods:11 image-resource,
+createElement,createScene/collectImageSources,and4 semantic bridge methods.
+Initial comparisons exposed compiler formatting and optional arrow-parenthesis
+differences,not owner logic. Both complete JS methods are parsed/printed with
+the same esbuild target and whitespace-only minification;no syntax minification
+or name/property filtering. Two changed scene/entry guards remain unequal.
+Actual configureImage callback executes with stubs in parent-disposed,content-
+disposed and live modes:disposed controls read/update nothing;live reads once
+and performs both mesh updates. This is not real Babylon event delivery or an
+equal-input geometry/paint proof. Source font guard after await,scene/disposal/
+referenced-source filtering and session-owned unsubscribe/dispose are inspected;
+no new delayed-font race is claimed.
+
+Extended existing ImageResourceService Jasmine suite with two ownership cases:
+disposed-scene load/error alongside a same-URL peer,and a retired entry when the
+same scene AND URL are reused. Stale completions neither emit nor allocate error
+fallbacks/overwrite natural metadata;current peer/entry still completes normally.
+All five tests pass through the existing audit-service/native-Babylon Karma
+configuration (session22277 TERMINAL0;bundle17.132s,5 tests0.041s). Existing three
+tests remain. Synthetic scene/texture records,NOT native browser image races.
+One util._extend deprecation warning is retained,not a test failure.
+
+Logs icon-image-callback-ownership-unit-20261017 stdout/stderr and final
+icon-callback-owner-source-final-20261017 stdout/stderr:Node assertion1/1 pass,
+18 method comparisons,3 guard execution controls,2 owning-guard mutation controls.
+No new screenshot,capture or canonical package. Existing f43fa870 is the latest
+validated combined review BEFORE these additive test changes;its whole test-file
+fingerprint needs additive conservation at the next coherent batch. Do not call
+it freshly current just because production methods did not change. New focused
+proof registration also remains pending;current producer still160/214,canonical
+f663 still159/213. Remaining actual delayed-font and native peer/timing applicability,
+material inputs/local paint and whole-case requirements are not silently closed.
+
 ### Coherent Icon history/lifetime batch verified — October17
 
 Existing lifetime assertions now reach their actual observations:4/4 pass in

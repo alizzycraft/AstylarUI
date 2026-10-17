@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
+import { transformSync } from 'esbuild';
 import { PNG } from 'pngjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
@@ -225,6 +226,86 @@ test('Icon shared ancestor history distinguishes removed heading compensation fr
       'current relative offsets already authored by reference;not candidate-only compensation',
       'fixed per-theme demo heights,block-versus-flex substitution and unequal benchmark masking persist since initial showcase'],
     boundary: 'Bounded shared ancestor/theme authoring history,not runtime causality,all historical source branches,remaining ownership or whole-case closure.' }));
+});
+
+test('Icon image completion callbacks retain explicit owners across captured and current sources', t => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const mapBytes = readFileSync('artifacts/material-parity/retained-evidence/component-map-recovery-20261011/chunk-3JXWRYJY.js.map');
+  assert.equal(hash(mapBytes), 'dba484044ca0dea965d8ef4b12635673f0f055d7711099d2f6476ca490988ec4');
+  const map = JSON.parse(mapBytes);
+  // Parse/print both JS bodies identically:formatting and optional single-arrow
+  // parameter parentheses differ in the two compiler outputs,not owner behavior.
+  const canonical = text => transformSync(`class Owner {${text}}`, {
+    loader: 'js', target: 'esnext', format: 'esm', legalComments: 'none', minifyWhitespace: true,
+  }).code;
+  const source = file => readFileSync(file, 'utf8');
+  const parse = (file, text) => ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true);
+  function member(tree, name) {
+    const nodes = [];
+    function visit(node) {
+      if (ts.isMethodDeclaration(node) && node.name.getText(tree) === name) nodes.push(node);
+      ts.forEachChild(node, visit);
+    }
+    visit(tree); return one(nodes);
+  }
+  const owners = [
+    ['src/app/services/dom/elements/image-resource.service.ts', ['getTexture', 'getNaturalSize', 'getSceneTextures', 'subscribe', 'retain', 'disposeScene', 'entriesFor', 'recordLoaded', 'recordError', 'isCurrent', 'emit']],
+    ['src/app/services/dom/elements/element-creation.service.ts', ['createElement']],
+    ['src/lib/astylar.ts', ['createScene', 'collectImageSources']],
+    ['src/lib/astylar-semantic-bridge.ts', ['applyAttributes', 'reconcileElement', 'dispose', 'disconnectInteractions']],
+  ];
+  let methods = 0, ownerMutationControls = 0;
+  for (const [file, names] of owners) {
+    const tree = parse(file, source(file)), installed = 'node_modules/astylarui/dist/lib/' + file.slice(4).replace(/\.ts$/, '.js');
+    const index = map.sources.indexOf(installed); assert.ok(index >= 0, installed);
+    const captured = parse(installed, map.sourcesContent[index]);
+    for (const name of names) {
+      const emitted = ts.transpileModule(`class Owner {${member(tree, name).getText(tree)}}`, {
+        compilerOptions: { target: ts.ScriptTarget.ES2022 },
+      }).outputText;
+      const compiled = parse('compiled.js', emitted);
+      assert.equal(canonical(member(compiled, name).getText(compiled)),
+        canonical(member(captured, name).getText(captured))); methods++;
+      if (name === 'isCurrent' || name === 'createScene') {
+        const body = member(compiled, name).getText(compiled);
+        const changed = name === 'isCurrent' ? body.replace('=== entry', '!== entry')
+          : body.replace('event.scene !== scene', 'event.scene === scene');
+        assert.notEqual(changed, body); assert.notEqual(canonical(changed), canonical(body)); ownerMutationControls++;
+      }
+    }
+  }
+  const creationFile = 'src/app/services/dom/elements/element-creation.service.ts';
+  const creation = parse(creationFile, source(creationFile)), callbacks = [];
+  function visit(node) {
+    if (ts.isVariableDeclaration(node) && node.name.getText(creation) === 'configureImage') callbacks.push(node.initializer);
+    ts.forEachChild(node, visit);
+  }
+  visit(creation); const callback = one(callbacks).getText(creation);
+  let guardControls = 0;
+  for (const mode of ['parent-disposed', 'content-disposed', 'live']) {
+    let reads = 0, updates = 0;
+    const render = { actions: { mesh: { updateMeshWithBorderRadius: () => { updates++; }, positionTextMesh: () => { updates++; } } } };
+    const get = new Function('mesh', 'imageContent', 'resourceTexture', 'dimensions', 'style', 'render', 'texture', 'projectCssSize', 'projectCssPoint', `return (${callback});`);
+    const run = get.call({ imageLayout: { calculateFit: () => ({ renderedWidth: 24, renderedHeight: 24, uScale: 1, vScale: 1, uOffset: 0, vOffset: 0 }) } },
+      { isDisposed: () => mode === 'parent-disposed' }, { isDisposed: () => mode === 'content-disposed' },
+      { getSize: () => { reads++; return { width: 24, height: 24 }; } },
+      { width: 24, height: 24, padding: { top: 0, right: 0, bottom: 0, left: 0 } }, {}, render, {},
+      (_context, size) => size, (_context, point, z) => ({ ...point, z }));
+    run(); assert.equal(reads, mode === 'live' ? 1 : 0); assert.equal(updates, mode === 'live' ? 2 : 0); guardControls++;
+  }
+  const bridge = source('src/lib/astylar-semantic-bridge.ts');
+  assert.doesNotMatch(bridge, /onload|onerror|addEventListener\(['"](?:load|error)['"]/);
+  assert.match(bridge, /if \(element\.src && node instanceof HTMLImageElement\) node\.src = element\.src/);
+  const renderer = source('src/lib/astylar.ts');
+  assert.match(renderer, /await readiness;\s*if \(scene\.isDisposed\) return/);
+  assert.match(renderer, /if \(event\.scene !== scene \|\| session\.isDisposed\) return/);
+  assert.match(renderer, /session\.addCleanup\(this\.imageResources\.subscribe/);
+  assert.match(renderer, /session\.addCleanup\(\(\) => this\.imageResources\.disposeScene\(scene\)\)/);
+  assert.match(renderer, /fontSet\.removeEventListener\('loadingdone', handleFontsLoaded\)/);
+  t.diagnostic(JSON.stringify({ iconCallbackOwnerInventory: true, capturedCurrentMethodsMatch: methods,
+    visualCompletionGuardControls: guardControls, ownerMutationControls, semanticImageCustomCompletionCallbacks: 0,
+    fontReadyAndSubscriptionGuards: 'inspected source;not a new font race execution',
+    boundary: 'Complete named source-owner equality and actual configureImage guard execution with stubs. Resource peer/stale-entry behavior is separately covered by five Jasmine tests;not native callback delivery,all peer/browser races or whole-case closure.' }));
 });
 
 test('Icon closure retains explicitly unproven context obligations despite zero unresolved attribution', () => {

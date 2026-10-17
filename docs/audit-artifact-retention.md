@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep icon-image-callback-ownership-unit-20261017 stdout/stderr (five current
+synthetic resource-service tests) and icon-callback-owner-source[-final]-20261017
+stdout/stderr (captured/current method and actual callback guard checks). No
+browser screenshots/capture/bundle regeneration of the showcase occurred. The
+Angular test runner's standard build cache is regenerable,not original evidence;
+no deletion was performed. Keep original source map and native late-load reports.
+
 Keep icon-supplemental-ownership-replay-20261017 stdout/stderr and icon-history-
 lifetime-obligation-join[-reconciled,-complete]-20261017 stdout/stderr. First two
 joins failed receipt validation (8726fbef/381832dc);finalf43fa870 validates2311
