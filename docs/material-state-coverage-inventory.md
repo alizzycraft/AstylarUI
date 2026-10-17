@@ -92,6 +92,23 @@ Container/background-heavy agreement does not waive104 later label failures,
 isolated corner/border/shadow inspection,current validity or whole-case closure.
 Keep compact for next coherent join;no new capture/proposal/export was needed.
 
+List retained-corner-paint-20261018 inspects208 corner-region pairs across52
+cases using original measured root bounds and recorded18/24/36px radii plus
+border width. All208 pass the unchanged local diagnostic (SSIM.9217275527 to
+.9953173557),but all208 have exact RGB differences,max channel74. Recorded
+shadow alpha.133 versus.14 and background inputs remain unequal;do not infer
+that these alone explain74 or call this a new equal-input core defect.
+Three identity/altered-image/bounds controls pass. Not pure border/shadow
+decomposition,current rendering or whole-case closure. Next decisive paint
+question needs a minimal equal-input rounded-rectangle reduction,not offsets
+or another broad container score.
+
+Efficiency correction:list-corner-single-read-replay-20261018 authenticates the
+baseline once and indexes52 cases,instead of parsing it52 times. All208 COMPLETE
+corner results and every other non-recipe field equal the original diagnostic;
+original log is unchanged. Use this preserved single-read recipe for any future
+replay,not the inefficient original. No collector cache or acceptance rule added.
+
 New list-label-bounds-paint-20261018 capture closes that measurement gap for all
 52 configured list endpoints (12 static/40 interaction):104 paired labels,
 104 screenshots and104 input trees. Existing current action functions are

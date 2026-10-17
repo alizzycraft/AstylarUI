@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep list-retained-corner-paint and list-corner-single-read-replay-20261018
+stdout/stderr.208 original corner diagnostics preserve nonzero RGB differences
+despite threshold passes. Single-read replay conserves every complete result,
+authenticates original baseline bytes and records its exact recipe;use it instead
+of original52 baseline parses. No PNG,new capture,full proposal or cache added.
+
 Keep list-retained-container-paint-20261018 stdout/stderr with originalab42
 report/checkpoint/PNG receipts.104 measured root/primary regions use their
 original screenshots,not new-label geometry transferred onto old images.
