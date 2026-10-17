@@ -56,6 +56,11 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep full-audit-harness-cd867bbe-20261018 stdout/stderr and any failure scratch
+under established producers. Live session76151 owns the existing unfiltered306-
+file harness;do not overwrite its logs,restart on quiet output or claim a pass
+before terminal status. It includes mandatory receipt-conservation assertions.
+
 Keep legacy-clip-source-finding-proposal and legacy-clip-source-focused-20261018
 stdout/stderr with source proposal161aac37 and its five original evidence
 receipts. Focused suite passes2/2 without changing163 production definitions.

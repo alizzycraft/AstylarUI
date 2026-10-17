@@ -17,6 +17,16 @@ accepts the72.89MiB payload with its existing large-file recommendation warning.
 Priority:case input/semantic/interaction and
 local-paint gaps;source applicability and original final gates remain required.
 
+Unfiltered proof-integration milestone now live:full-audit-harness-cd867bbe-
+20261018 stdout/stderr,session76151,launcher13740,test parent3456. Existing
+run-material-audit-harness discovers306 files (4 parity,4 TTS,298 Material),
+including all46 legacy entries and the new standalone clip proof. Sequential
+files and mandatory ASTYLAR_AUDIT_RECEIPT_COMPARE=1 preserve original assertions;
+no test/family filter or historical preload. No pass/fail result yet. Freeze
+consumed code/proof inputs while it runs;retain failures and use same handle.
+This checks proof integration after accepted163/217,not complete inspection or
+the separate enforced browser/unit/build/consumer/compatibility final gates.
+
 Legacy clip source proposal161aac37ac51e824208d69f1e6893573ac2f72b0142877d5b2940ee7c40272c5
 adds one documented-limitation to exact163 production predecessors,not an
 intentional limitation or a newly broken claimed feature. Public zero-rect
