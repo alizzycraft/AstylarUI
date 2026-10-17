@@ -18,7 +18,7 @@ export const iconContextBaseline = Object.freeze({
   generation: '89030a75f63d832a344b3be8ba8d33bf7def3b78fb4a222ebacb5fac71d27194',
   indexSha256: '8d77725901ede263719fbff6dbf4cef6df17195e0bece98e0f6819edb56ce9ae',
 });
-export function collectIconContextReview() {
+export function collectIconContextReview({ includePrimaryAlignment = true } = {}) {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
   // Publishing reviewed metadata must not replace the original rows we replay.
   const indexFile = `artifacts/material-parity/working-audit/${iconContextBaseline.generation}/index.json`;
@@ -41,6 +41,13 @@ export function collectIconContextReview() {
     assert.equal(rs.display, 'block'); assert.equal(as.display, 'flex'); assert.equal(as.flexDirection, 'column');
     assert.equal(rs.flexWrap, 'nowrap'); assert.equal(as.flexWrap, 'nowrap');
     assert.equal(ri.parent, rr.key); assert.equal(ai.parent, ar.key);
+    if (includePrimaryAlignment) {
+      assert.equal(ri.type, 'mat-icon'); assert.equal(ai.authored.type, 'img');
+      const svg = one(r.nodes.filter(node => node.parent === ri.key)); assert.equal(svg.type, 'svg');
+      assert.equal(one(r.nodes.filter(node => node.parent === svg.key)).type, 'path');
+      assert.deepEqual(a.nodes.filter(node => node.parent === ai.key), []);
+      assert.deepEqual(ai.authored.children ?? [], []);
+    }
     for (const style of [rs,as,r.styles[ri.style],ai.resolvedStyle]) assert.deepEqual([style.flexGrow,style.flexShrink,style.flexBasis], ['0','1','auto']);
     assert.equal(rs.boxSizing, 'content-box'); assert.equal(rs.maxWidth, '720px');
     assert.deepEqual([rs.paddingLeft,rs.paddingRight,rs.borderLeftWidth,rs.borderRightWidth], ['28px','28px','1px','1px']);
@@ -56,32 +63,36 @@ export function collectIconContextReview() {
       owners: { 'icon-root': [rr,ar], 'icon-primary': [ri,ai] } };
   });
   const groups = rows.filter(row => !row.attribution && row.classification === 'parity-harness-defect' &&
-    (row.element === 'icon-root' && ['alignContent','alignItems','justifyContent','flex','width'].includes(row.property) || row.element === 'icon-primary' && row.property === 'flex')).map(row => {
+    (row.element === 'icon-root' && ['alignContent','alignItems','justifyContent','flex','width'].includes(row.property) || row.element === 'icon-primary' &&
+      (row.property === 'flex' || includePrimaryAlignment && ['alignContent','alignItems','justifyContent'].includes(row.property)))).map(row => {
     const matched = observations.filter(observation => {
       const [r,a] = observation.owners[row.element];
       return observation.trees[0].styles[r.style][row.property] === row.reference && a.resolvedStyle[row.property] === row.astylar;
     });
     assert.equal(matched.length, row.occurrences); assert.deepEqual(matched.map(observation=>observation.case).slice(0,12), row.cases);
     const equivalent = row.property === 'width' || row.element === 'icon-root' && row.property === 'flex';
+    const primaryAlignment = row.element === 'icon-primary' && ['alignContent','alignItems','justifyContent'].includes(row.property);
     return { ...row, classification: equivalent ? 'equivalent-representation' : 'application-plugin-authoring-defect',
       attribution: 'reviewed-icon-parent-context-and-width-intent', reviewedCases: matched.map(observation=>observation.case),
-      justification: row.property === 'width' ? 'Scoped authored width intent: native content-box auto/max720 plus56px padding/2px border corresponds to candidate100% border-box/max778 in the retained block-parent contexts. Current candidate used-size/projection equivalence is not established.' : equivalent ? 'Root flex shorthand expands to the captured matching0/1/auto longhands; both roots have non-flex block parents. This inactive item property does not erase root display authoring divergence.' : 'Native root is block; candidate root is column flex, so candidate icon is a flex item and native icon is not. Preserve alignment/flex scalar values: input placement context diverges before layout. No equal-input renderer diagnosis follows.',
-      recommendedOwner: equivalent ? 'audit measurement-stage/representation contract; retain separate root display finding' : 'showcase demo-root display authoring; test core with equal contexts',
+      justification: primaryAlignment ? 'The native primary is a mat-icon formatting container with an SVG/path child; candidate primary is a replaced PNG img leaf with no authored children. Own alignment scalars therefore do not describe equivalent formatting owners. The structural substitution precedes layout;normal versus implicit stretch/flex-start values are preserved,not declared aliases,inert properties or a demonstrated core fault. Restore equivalent image/container input structure before testing used alignment semantics. This reuses the existing SVG-to-image authoring finding,not a new rendering defect.' : row.property === 'width' ? 'Scoped authored width intent: native content-box auto/max720 plus56px padding/2px border corresponds to candidate100% border-box/max778 in the retained block-parent contexts. Current candidate used-size/projection equivalence is not established.' : equivalent ? 'Root flex shorthand expands to the captured matching0/1/auto longhands; both roots have non-flex block parents. This inactive item property does not erase root display authoring divergence.' : 'Native root is block; candidate root is column flex, so candidate icon is a flex item and native icon is not. Preserve alignment/flex scalar values: input placement context diverges before layout. No equal-input renderer diagnosis follows.',
+      recommendedOwner: primaryAlignment ? 'showcase SVG-containing component versus replaced-image authoring;retain core SVG support findings separately' : equivalent ? 'audit measurement-stage/representation contract; retain separate root display finding' : 'showcase demo-root display authoring; test core with equal contexts',
       reviewEvidence: { originalCompleteRowSha256: row.evidence.completeRowSha256, sourceSha256: row.evidence.sourceSha256,
         inputEquivalent: false, renderingEquivalent: false, rendererCauseProven: false,
-        observations: matched.map(observation=>({ case:observation.case, referenceNode:observation.owners[row.element][0].key, candidateNode:observation.owners[row.element][1].key, nativeRootDisplay:'block',candidateRootDisplay:'flex',candidateIconIsFlexItem:true,nativeIconIsFlexItem:false })) } };
+        observations: matched.map(observation=>({ case:observation.case, referenceNode:observation.owners[row.element][0].key, candidateNode:observation.owners[row.element][1].key, nativeRootDisplay:'block',candidateRootDisplay:'flex',candidateIconIsFlexItem:true,nativeIconIsFlexItem:false,
+          ...(primaryAlignment ? { nativePrimaryType: 'mat-icon', nativePrimaryChildren: 'svg/path', candidatePrimaryType: 'img', candidateAuthoredChildren: 0, matchingFormattingOwners: false } : {}) })) } };
   });
-  assert.equal(groups.length, 8); assert.equal(groups.reduce((sum,row)=>sum+row.occurrences,0),120);
-  return { schemaVersion:1,kind:'icon-context-review',sources,groups,canonicalAttributionChanged:false };
+  assert.equal(groups.length, includePrimaryAlignment ? 11 : 8); assert.equal(groups.reduce((sum,row)=>sum+row.occurrences,0), includePrimaryAlignment ? 180 : 120);
+  return { schemaVersion:1,kind:'icon-context-review',sources,groups,canonicalAttributionChanged:false,
+    ...(includePrimaryAlignment ? { primaryAlignmentOwnerReview: true } : {}) };
 }
 
 export function validateIconContextReview(review) {
-  try { assert.deepEqual(review, collectIconContextReview()); return []; }
+  try { assert.deepEqual(review, collectIconContextReview({ includePrimaryAlignment: review.primaryAlignmentOwnerReview === true })); return []; }
   catch (error) { return [`Icon context proposal does not replay from retained inputs: ${error.message}`]; }
 }
 
-export function applyIconContextReviews(rows) {
-  const review = collectIconContextReview(), seen = new Set();
+export function applyIconContextReviews(rows, options) {
+  const review = collectIconContextReview(options), seen = new Set();
   const hash = row => createHash('sha256').update(JSON.stringify(row)).digest('hex');
   const result = rows.map(row => {
     const group = review.groups.find(group => group.family === row.family && group.element === row.element &&
@@ -107,7 +118,8 @@ export function validateIconContextRows(rows) {
       Object.assign(restored, row.reviewEvidence.priorMetadata);
       return Object.fromEntries(row.reviewEvidence.originalKeyOrder.map(key => [key, restored[key]]));
     });
-    assert.deepEqual(selected, applyIconContextReviews(original));
+    const includePrimaryAlignment = selected.some(row => row.element === 'icon-primary' && ['alignContent','alignItems','justifyContent'].includes(row.property));
+    assert.deepEqual(selected, applyIconContextReviews(original, { includePrimaryAlignment }));
     return [];
   } catch (error) { return [`Icon context metadata lacks complete original evidence: ${error.message}`]; }
 }

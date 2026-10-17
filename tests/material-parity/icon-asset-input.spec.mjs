@@ -514,7 +514,7 @@ test('Icon and blank-root effective cursors agree in verified applied-theme poin
 });
 
 test('Icon context proposal changes only eight reviewed metadata groups and preserves scalar evidence', () => {
-  const review = collectIconContextReview(), rows = queryFindings('artifacts/material-parity/working-audit', 'icon', iconContextBaseline);
+  const review = collectIconContextReview({ includePrimaryAlignment: false }), rows = queryFindings('artifacts/material-parity/working-audit', 'icon', iconContextBaseline);
   const metadata = new Set(['classification','attribution','justification','recommendedOwner','reviewedCases','reviewEvidence']);
   const unchanged = row => Object.fromEntries(Object.entries(row).filter(([key])=>!metadata.has(key)));
   assert.equal(review.canonicalAttributionChanged, false); assert.equal(review.groups.length, 8);
@@ -536,11 +536,43 @@ test('Icon context proposal changes only eight reviewed metadata groups and pres
   }
 });
 
-test('Icon review conserves complete original rows and rejects input drift', async () => {
+test('Icon primary alignment review preserves legacy groups and unequal formatting owners', () => {
+  const legacy = collectIconContextReview({ includePrimaryAlignment: false });
   const review = collectIconContextReview();
-  const original = await loadFindingEvidence('artifacts/material-parity/working-audit', 'icon', review.groups.map(row => row.id), iconContextBaseline);
+  assert.equal(review.groups.length, 11);
+  for (const group of legacy.groups) assert.deepEqual(review.groups.find(row => row.id === group.id), group);
+  const added = review.groups.filter(row => !legacy.groups.some(prior => prior.id === row.id));
+  assert.deepEqual(added.map(row => row.property).sort(), ['alignContent', 'alignItems', 'justifyContent']);
+  assert.equal(added.reduce((sum, row) => sum + row.occurrences, 0), 60);
+  for (const group of added) {
+    assert.equal(group.element, 'icon-primary');
+    assert.equal(group.classification, 'application-plugin-authoring-defect');
+    assert.equal(new Set(group.reviewedCases).size, 20);
+    assert.equal(group.reference, 'normal');
+    assert.equal(group.astylar, group.property === 'justifyContent' ? 'flex-start' : 'stretch');
+    for (const key of ['inputEquivalent', 'renderingEquivalent', 'rendererCauseProven']) assert.equal(group.reviewEvidence[key], false);
+    for (const observation of group.reviewEvidence.observations) {
+      assert.equal(observation.nativePrimaryType, 'mat-icon');
+      assert.equal(observation.nativePrimaryChildren, 'svg/path');
+      assert.equal(observation.candidatePrimaryType, 'img');
+      assert.equal(observation.candidateAuthoredChildren, 0);
+      assert.equal(observation.matchingFormattingOwners, false);
+    }
+  }
+  assert.deepEqual(validateIconContextReview(review), []);
+  for (const mutate of [row => { row.groups.pop(); }, row => { row.groups.find(group => group.id === added[0].id).reviewEvidence.observations[0].candidatePrimaryType = 'svg'; }, row => { row.groups.find(group => group.id === added[0].id).reviewEvidence.inputEquivalent = true; }]) {
+    const changed = structuredClone(review); mutate(changed);
+    assert.equal(validateIconContextReview(changed).length, 1);
+  }
+});
+
+test('Icon review conserves complete original rows and rejects input drift', async () => {
+  const review = collectIconContextReview({ includePrimaryAlignment: false });
+  const completeReview = collectIconContextReview();
+  const completeOriginal = await loadFindingEvidence('artifacts/material-parity/working-audit', 'icon', completeReview.groups.map(row => row.id), iconContextBaseline);
+  const original = completeOriginal.filter(row => review.groups.some(group => group.family === row.family && group.element === row.element && group.property === row.property && group.reference === row.reference && group.astylar === row.astylar));
   const unrelated = { family: 'unrelated', reference: 'preserve-me' };
-  const updated = applyIconContextReviews([...original, unrelated]);
+  const updated = applyIconContextReviews([...original, unrelated], { includePrimaryAlignment: false });
   assert.equal(updated.at(-1), unrelated);
   const metadata = new Set(['classification','attribution','justification','recommendedOwner','reviewedCases','reviewEvidence']);
   const inputs = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
@@ -550,9 +582,18 @@ test('Icon review conserves complete original rows and rejects input drift', asy
   const badMetadata = structuredClone(updated); badMetadata[0].justification = 'forged';
   assert.equal(validateIconContextRows(badMetadata).length, 1);
   const forged = structuredClone(original); forged[0].reference = 'forged';
-  assert.throws(() => applyIconContextReviews(forged));
-  assert.throws(() => applyIconContextReviews(original.slice(1)));
-  assert.throws(() => applyIconContextReviews([...original, original[0]]));
+  assert.throws(() => applyIconContextReviews(forged, { includePrimaryAlignment: false }));
+  assert.throws(() => applyIconContextReviews(original.slice(1), { includePrimaryAlignment: false }));
+  assert.throws(() => applyIconContextReviews([...original, original[0]], { includePrimaryAlignment: false }));
+  const completeUpdated = applyIconContextReviews(completeOriginal);
+  assert.equal(completeUpdated.length, 11);
+  completeOriginal.forEach((row, index) => assert.deepEqual(inputs(completeUpdated[index]), inputs(row)));
+  assert.deepEqual(validateIconContextRows(completeUpdated), []);
+  const missingAlignment = completeUpdated.filter(row => !(row.element === 'icon-primary' && row.property === 'alignItems'));
+  assert.equal(validateIconContextRows(missingAlignment).length, 1);
+  const forgedOwner = structuredClone(completeUpdated);
+  forgedOwner.find(row => row.element === 'icon-primary' && row.property === 'alignItems').reviewEvidence.observations[0].matchingFormattingOwners = true;
+  assert.equal(validateIconContextRows(forgedOwner).length, 1);
 });
 
 test('SVG upload cause registration conserves all predecessor source findings', () => {

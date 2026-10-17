@@ -4,6 +4,36 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Three Icon alignment groups classified at unequal formatting owners — October17
+
+Question:are the remaining primary alignment scalars normal versus stretch/
+flex-start an equivalent representation,a demonstrated core fault,or an input
+owner mismatch? The smallest decisive check reuses all20 authenticated original
+tree pairs:HTML primary is mat-icon containing SVG/path,candidate is a replaced
+PNG img leaf with no authored children. Those are not equivalent formatting
+owners. Classify these3 groups/60 observations under the existing image/container
+authoring substitution;do not declare the values aliases,inert,or a core defect.
+The previous implicit-default stage observation remains valid but does not
+establish a renderer diagnosis from these unequal structures.
+
+Existing context collector now includes11 groups/180 observations by default;
+explicit legacy mode retains the original8 groups/120 observations with identical
+group metadata. Focused Node selection `Icon primary alignment review|Icon context
+proposal changes` passes2/2 (12607.4674ms). It authenticates receipts,exact group
+membership and unequal owner details,and rejects forged ownership/equivalence
+or missing groups. The existing complete-original-row integration test loads all
+11 original rows in ONE evidence retrieval,retains all legacy8 assertions,and
+checks input conservation and new11 apply/validation. Missing alignment membership
+and forged matching-owner claims reject;1/1 passes (27256.414ms).
+
+No renderer,fixture,capture or canonical package changed. Canonicalf663 still
+contains5 pending Icon scalar groups;this source classification is not yet
+published. Current160/214 registration and latest combinedf43 review remain
+separate;changed helper/test receipts need coherent source reconciliation before
+export. All2311 cases stay partial/current-rendering unverified. Next reuse the
+retained cursor observations to disposition the remaining two groups without
+normalizing auto/default requests,then reconcile the coherent evidence batch.
+
 ### Remaining Icon scalar stage review uses current canonical population — October17
 
 Current compact canonicalf663 query returns212 Icon groups,with FIVE unattributed
