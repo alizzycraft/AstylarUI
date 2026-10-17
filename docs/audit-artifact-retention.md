@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep badge-recorded-hierarchy-join-20261017 stdout/stderr and proposalb6da4bb7
+with its receipt-bound joiner source. It adds52 recorded-node inventories,not
+new captures or case acceptance. Preserve1b34 predecessor and all referenced
+paired trees. No original or successful scratch was deleted;pending canonical
+publication remains independently frozen at0ee8.
+
 Keep inline-reader-provenance-source-section-classification-20261017 failed
 stdout/stderr and source-section-derived-classification-20261017 passing logs.
 The former incorrectly compares a derived motion-report hash to a module hash;

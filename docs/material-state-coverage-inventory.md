@@ -37,8 +37,9 @@ Accepted package:0dd7dce3/index37486eaa (161 source findings/215 proofs).
 Registered source:162/216. Export46814 terminates0;candidatecc89031a is NOT accepted
 publication. Independentcold session49441 is live with selected case review0ee8;
 freeze its producer/evidence inputs until cold/conservation finish.
-Latest outside-export case queue1b34 binds56 focus/113 pointer observations
-and child receipts. ALL2311 cases remainpartial/unverified;zero full closures.
+Latest outside-export case queueb6da4bb7 extends1b34 with52 Badge recorded-node
+correspondences (364 pairs),preserving56 focus/113 pointer observations and child
+receipts. All2311 cases remainpartial/unverified;zero full closures.
 
 New confirmed public attribute-refresh cause is reviewed separately in source
 proposal3ccb3f7bd6ff9075976037b8408e4a03adfc03113c27a3ed049a4bd0740af2fe:
@@ -57,6 +58,28 @@ would miss the independently confirmed attribute-stage failure. Original final
 gates and equal-input/root-cause contract remain unchanged.
 
 ## Preserved audit chronology
+
+### Badge recorded-node mapping joins52 exact cases — October17
+
+Specific gap:complete recorded element correspondence was absent despite small
+retained trees. Existing paired-tree receipts authenticate52 Badge cases,each
+with seven native records and eight candidate records. New bounded joiner maps
+all seven native elements to seven authored elements,including generated native
+mat-badge-content-0 to badge-count;the eighth candidate record has empty authored
+data and is recorded separately as a synthetic document record. Parent/order,
+types,IDs,style-owner availability and trimmed own-text guards hold in all52.
+This is not raw whitespace/style/semantics equality or anonymous-box coverage.
+
+badge-recorded-hierarchy-join-20261017 terminates0:364 pairs,364 native/416
+candidate records,five rejection controls (missing/extra node,parent,count text,
+unexpected authored wrapper). Existing save/load proposal infrastructure binds
+b6da4bb7f2fd56c88eb7923f51eaa3e9282161c2bad4380043be0a11a4d15f02,
+2311 cases/13868 dependencies. Removing only52 added child records recovers
+the complete1b34 predecessor exactly;accepted pointer remains unchanged.
+InputStyleStructure stayspartial with its original remaining-work entries;
+anonymous formatting,pseudo boxes,all style/AX/paint/currentness remain open.
+New source is outside frozen0ee8 export dependencies;no live producer/evidence
+input,renderer,fixture,canonical package or final gate changed.
 
 ### Complete source/proof section deltas explained without recapture — October17
 
