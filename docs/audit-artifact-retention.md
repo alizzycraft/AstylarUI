@@ -56,6 +56,16 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep icon-supplemental-ownership-replay-20261017 stdout/stderr and icon-history-
+lifetime-obligation-join[-reconciled,-complete]-20261017 stdout/stderr. First two
+joins failed receipt validation (8726fbef/381832dc);finalf43fa870 validates2311
+cases/13151 dependencies. Retain those proposals,predecessor117a and superseded
+b7fe. First failed source snapshot is retained-evidence/icon-history-lifetime-
+join-before-receipt-reconciliation-20261017.mjs SHA2253faad. Original remount/
+queued-replacement/public-cancellation reports remain required failure evidence.
+No new browser capture or original replacement. Closed8726/b7fe already report
+Compressed;compact changed no files,raw SHA619f0c0d/e0433419 before/after equal.
+
 Keep paragraph-font-box-current-browser-20261017 stdout/stderr and crop-provenance-
 browser-reconciled-20261017 stdout/stderr. First log SHA04ac1e05 records eight fresh
 font/line-box observations under Chrome155.0.8059.80 compared with retained.40

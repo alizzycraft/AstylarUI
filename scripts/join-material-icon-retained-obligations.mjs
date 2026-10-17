@@ -7,6 +7,7 @@ import { PNG } from 'pngjs';
 import { evaluateFocusedRaster } from '../tests/material-parity/focused-raster-metrics.mjs';
 import { openMaterialCheckpoint, materialCaseKey, fingerprintModuleGraph } from '../tests/material-parity/run-checkpoint.mjs';
 import { saveReviewProposal, loadCaseObligationReview } from './audit-findings-store.mjs';
+import { readHistoricalBenchmarkSource } from '../tests/material-parity/semantic-text-transform-registration.mjs';
 
 // Reuse the existing exact-case census and original TAP observations. No browser
 // capture,reinterpretation of profile labels,or whole-parent promotion.
@@ -18,27 +19,90 @@ const base = 'artifacts/material-parity/';
 const iconProofFile = 'tests/material-parity/icon-asset-input.spec.mjs';
 const iconProofSha256 = hash(readFileSync(iconProofFile));
 const sourceProofOutput = execFileSync(process.execPath, ['--test',
-  '--test-name-pattern=Icon viewport owner keeps|Icon-specific compensation history', iconProofFile],
+  '--test-name-pattern=Icon viewport owner keeps|Icon-specific compensation history|Icon shared ancestor history', iconProofFile],
 { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
 assert.equal(hash(readFileSync(iconProofFile)), iconProofSha256);
 const sourceProofRows = sourceProofOutput.split(/\r?\n/).filter(line => line.startsWith('# {')).map(line => JSON.parse(line.slice(2)));
-assert.equal(sourceProofRows.length, 2);
+assert.equal(sourceProofRows.length, 3);
 const rootProof = sourceProofRows.find(row => row.capturedRootMethodsMatch);
 const historyProof = sourceProofRows.find(row => row.currentIconInputsMatchRasterIntroduction);
+const sharedHistoryProof = sourceProofRows.find(row => row.sharedAncestorHeadingHistory);
+assert.equal(sharedHistoryProof.headingStages, 2); assert.equal(sharedHistoryProof.themeContentStages, 2);
+assert.equal(sharedHistoryProof.negativeControls, 2);
 assert.equal(rootProof.cases, 20); assert.equal(rootProof.executions, 40);
 assert.equal(historyProof.iconLeafStages, 2); assert.ok(historyProof.componentRevisions >= 106);
 const sourceProofEvidence = {
   test: { file: iconProofFile, sha256: iconProofSha256 },
   sources: ['src/app/services/dom/elements/root.service.ts', 'src/app/services/css-layout-geometry.ts',
-    'examples/material-showcase/src/app/astylar.component.ts', 'examples/material-showcase/src/app/material-assets.ts',
+    'examples/material-showcase/src/app/astylar.component.ts', 'examples/material-showcase/src/app/reference.component.ts',
+    'examples/material-showcase/src/app/theme.ts', 'examples/material-showcase/src/app/material-assets.ts',
     'examples/material-showcase/public/icons/favorite.svg',
     'artifacts/material-parity/retained-evidence/component-map-recovery-20261011/chunk-3JXWRYJY.js.map']
     .map(file => ({ file, sha256: hash(readFileSync(file)) })),
-  execution: { command: `node --test --test-name-pattern="Icon viewport owner keeps|Icon-specific compensation history" ${iconProofFile}`,
+  execution: { command: `node --test --test-name-pattern="Icon viewport owner keeps|Icon-specific compensation history|Icon shared ancestor history" ${iconProofFile}`,
     // TAP timing is diagnostic output,not an input to an immutable review ID.
     assertionSummarySha256: hash(JSON.stringify(sourceProofRows)), exitCode: 0 },
 };
 console.log(sourceProofOutput.trimEnd());
+const lifetimeSuite = 'tests/material-parity/input-boundary-evidence.spec.mjs';
+const lifetimeSuiteSource = readFileSync(lifetimeSuite, 'utf8');
+const originalLifetimeSuiteSha = 'f3f554b3d08bb8ad7018ff1fb6dc9f588fb17afe984d2c8835b68590269c9116';
+let restoredLifetimeSuite = lifetimeSuiteSource;
+for (const [before, after] of [
+  ["import { restoreCursorInspectorCaptureSource } from './public-cursor-defaults-evidence.mjs';\n", ''],
+  [`  for (const receipt of [provenance.script, ...provenance.bundleInputs]) {
+    const current = readFileSync(receipt.file);
+    if (receipt.file === 'examples/material-showcase/node_modules/astylarui/dist/lib/lib/astylar.js'
+      && hash(current) === 'a18630bdc31067ac75907e41f9031865fa192edc164ebf93edacb8b836b09abd') {
+      // Exact existing inspector-only transition;captured bundle remains original.
+      assert.equal(hash(restoreCursorInspectorCaptureSource(current.toString())), receipt.sha256);
+    } else assert.equal(hash(current), receipt.sha256);
+  }`, '  for (const receipt of [provenance.script, ...provenance.bundleInputs]) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);'],
+  ["  assert.deepEqual(verifyRetainedMaterialBrowserFiles(manifest.provenance.browserFiles),\n    { authenticatedFiles: 1887, currentRenderingAccepted: false });\n  const assets = new Map(manifest.provenance.browserFiles.map(receipt => [receipt.file, receipt.sha256]));",
+    "  assert.deepEqual(fingerprintDirectory('examples/material-showcase/dist/material-showcase/browser'), manifest.provenance.browserFiles);\n  const assets = new Map(manifest.provenance.browserFiles.map(receipt => [receipt.file, receipt.sha256]));"],
+]) {
+  assert.equal(restoredLifetimeSuite.split(before).length, 2);
+  restoredLifetimeSuite = restoredLifetimeSuite.replace(before, after);
+}
+assert.equal(hash(restoredLifetimeSuite), originalLifetimeSuiteSha, 'Every original behavioral assertion survives the two historical verification boundaries');
+const sourceTransitions = new Map([[lifetimeSuite, { previous: originalLifetimeSuiteSha, current: hash(lifetimeSuiteSource) }]]);
+for (const file of ['tests/material-parity/input-equivalence-policy.mjs', 'tests/material-parity/benchmark-config.spec.mjs']) {
+  sourceTransitions.set(file, { previous: hash(readHistoricalBenchmarkSource(file, 'utf8')), current: hash(readFileSync(file)) });
+}
+const cropSuite = 'tests/material-parity/alignment-crop-provenance.spec.mjs';
+let oldCropSuite = readFileSync(cropSuite, 'utf8');
+for (const [before, after] of [
+  ["    ['scripts/check-retained-paragraph-font-box.mjs', '--compare-current-browser'],", "    ['scripts/check-retained-paragraph-font-box.mjs'],"],
+  [`  ]) {
+    const output = execFileSync(process.execPath, args, { encoding: 'utf8', maxBuffer: 4_000_000 });
+    if (args[0] === 'scripts/check-retained-paragraph-font-box.mjs') {
+      const proof = JSON.parse(output);
+      assert.equal(proof.comparison.mode, 'fresh-current-browser-versus-retained-measurements');
+      assert.equal(proof.comparison.recordedBrowser, '155.0.8059.40');
+      assert.ok(proof.comparison.observedRuntime.browser);
+      assert.equal(proof.comparison.observationsCompared, 8);
+      assert.equal(proof.comparison.allNumericComparisonsUnchanged, true);
+      assert.equal(proof.comparison.currentRenderingAccepted, false);
+    }
+  }`, "  ]) execFileSync(process.execPath, args, { stdio: 'pipe', maxBuffer: 4_000_000 });"],
+]) {
+  assert.equal(oldCropSuite.split(before).length, 2); oldCropSuite = oldCropSuite.replace(before, after);
+}
+assert.equal(hash(oldCropSuite), 'd55afc2c7e4e1b5eafbfc7af6bc0fbda285ea2791554992368988a7cf041614c');
+sourceTransitions.set(cropSuite, { previous: hash(oldCropSuite), current: hash(readFileSync(cropSuite)) });
+const lifetimeOutput = execFileSync(process.execPath, ['--test', '--test-name-pattern=Icon pending image Angular remount|Icon live theme replacement queues|minimal public mount cancellation|current initial-render reporter', lifetimeSuite], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+assert.match(lifetimeOutput, /# pass 4\b/); assert.match(lifetimeOutput, /# fail 0\b/);
+const supplementalLifetimeReports = [
+  ['icon-pending-remount-failure-bound-20261010/failure-observations.json', '2dbbcbf1baafc2ace9104fdac481be7e4ace436b4ddbdda8c8acd821b1f5c2db'],
+  ['icon-live-replacement-queued-20261010/latest-report.json', '8041e452348889e80c8819365d9135fe265f9962c788374c2f8c0a0582d25048'],
+  ['public-initial-cancellation-20261010/failure-observations.json', '887682d6ac5b4e9291186d5b8d97407872b4173364d72fa7a9f206999005323d'],
+].map(([name, sha256]) => { const file = base + name; assert.equal(hash(readFileSync(file)), sha256); return { file, sha256 }; });
+const supplementalLifetimeEvidence = { reports: supplementalLifetimeReports,
+  sources: [lifetimeSuite, 'tests/material-parity/historical-audit-module-source.mjs',
+    'tests/material-parity/public-cursor-defaults-evidence.mjs', 'src/lib/astylar.ts', 'src/lib/astylar-render-session.ts']
+    .map(file => ({ file, sha256: hash(readFileSync(file)) })),
+  execution: { assertions: 4, failures: 0, browserRecapture: false } };
+console.log(lifetimeOutput.trimEnd());
 const visibleFile = base + 'icon-visible-heading-paint-20261017/latest-report.json';
 const visibleBytes = readFileSync(visibleFile);
 assert.equal(hash(visibleBytes), '9b2df5c9ac47320641dee96698f475d1b49c12221ed8db775f53cbb18cad4b69');
@@ -71,6 +135,17 @@ const headingEvidence = {
 const predecessor = '117a41db956f86e1465b8de0fee9e3d5a0fd3073049c1698a837fd0eee4ec3cb';
 const review = JSON.parse(readFileSync(`${base}working-audit/proposals/${predecessor}.json`)).review;
 assert.equal(hash(JSON.stringify(review)), predecessor);
+const lifetimeReceiptChanges = [];
+function refreshLifetimeSourceReceipt(value) {
+  if (!value || typeof value !== 'object') return;
+  const transition = sourceTransitions.get(value.file);
+  if (transition && typeof value.sha256 === 'string') {
+    assert.equal(value.sha256, transition.previous);
+    lifetimeReceiptChanges.push({ receipt: value, previous: transition.previous }); value.sha256 = transition.current;
+  }
+  for (const child of Object.values(value)) refreshLifetimeSourceReceipt(child);
+}
+refreshLifetimeSourceReceipt(review); assert.ok(lifetimeReceiptChanges.length > 0);
 const receipts = [
   ['icon-update-disposal-20261007.log', '18229d6c75d784e13b6014d040277a3313976798136dd9bb948b04d0e376f098'],
   ['icon-responsive-update-disposal-20261007.log', '22b822f1921a10a843c8cd9cb1c3f8ff52636fd12c8dee832638cb3f722e954a'],
@@ -299,7 +374,20 @@ for (const c of census.cases) {
     boundary: 'Existing three-update/sampled-disposal cohort membership only;not fresh execution,current source validity,late image completion,remount or peer isolation.' },
     iconSpecificCompensationHistory: { disposition: 'inspected-bounded-history', ...historyProof,
       evidence: { ...sourceProofEvidence, join: evidence.join },
-      remaining: ['shared ancestor/theme helper history and whole-case ownership/currentness'] } };
+      remaining: ['whole-case ownership/currentness and other shared state branches'] },
+    sharedIconAncestorCompensationHistory: { disposition: 'inspected-bounded-history', ...sharedHistoryProof,
+      evidence: { ...sourceProofEvidence, join: evidence.join } },
+    supplementalIconLifetimeReview: { disposition: 'inspected-bounded-supplemental',
+      scope: { configuredCohortMembership: false, materialViewport: [1440, 900, 1], profile: 'light',
+        publicCancellation: 'minimal package-root immediate-versus-settled disposal control' },
+      observations: { queuedThemeUpdate: 'same surface waits for held native load before replacing source',
+        pendingAngularRemount: 'retired sampled resources remain zero;replacement sampled state unchanged',
+        runtimeValidation: 'failed:expected initial cancellation reported as render-failed',
+        currentReporter: 'actual disposal cancellation and genuine reflow failure both reported as errors' },
+      evidence: { ...supplementalLifetimeEvidence, join: evidence.join },
+      sourceTransition: { file: lifetimeSuite, sha256: hash(lifetimeSuiteSource),
+        previousSha256: originalLifetimeSuiteSha, reviewedChanges: 'inspector-only restoration and original browser-asset verification;all behavior assertions conserved' },
+      boundary: 'Supplemental900px lifetime evidence and current cancellation-policy execution,not runtime coverage of the configured1000px cases,all callbacks,race timings,simultaneous peers,paint or current whole-package acceptance. Do not exercise impossible replacement-before-held-load completion ordering.' } };
   row.obligations.inputStyleStructure = { ...row.obligations.inputStyleStructure,
     iconViewportOwnerCssBoundary: { disposition: 'inspected-bounded-source-behavior',
       cssViewport: captured.viewport, origin: { x: 0, y: 0 }, padding: { top: 0, right: 0, bottom: 0, left: 0 },
@@ -366,12 +454,16 @@ const coverage = JSON.parse(indexBytes).metadata.coverage;
 const proposal = saveReviewProposal(base + 'working-audit', review);
 const loaded = loadCaseObligationReview(proposal.file, proposal.sha256, [...coverage.caseInventory.static, ...coverage.caseInventory.interaction]);
 for (const { row, semantics, history, inputs, paint, currentness } of originals) { row.obligations.semantics = semantics; row.obligations.historyOwnership = history; row.obligations.inputStyleStructure = inputs; row.obligations.localPaint = paint; row.obligations.sourceCurrentness = currentness; }
+for (const { receipt, previous } of lifetimeReceiptChanges) receipt.sha256 = previous;
 assert.equal(hash(JSON.stringify(review)), predecessor);
 console.log(JSON.stringify({ predecessor, proposal, iconCases: 20, physicalCohorts: 16, negativeControls: rejected,
   cases: loaded.cases.length, dependencies: loaded.evidenceFingerprints.length, unrelatedReviewConserved: true,
   recordedReferenceNodes: 140, recordedCandidateNodes: 120, hierarchyNegativeControls,
   relationshipApplicabilityJoins: originals.length, authoredIconIdRefs: 0,
   boundedSourceHistoryJoins: originals.length, viewportOwnerCssJoins: originals.length,
+  sharedAncestorHistoryJoins: originals.length, supplementalLifetimeJoins: originals.length,
+  reconciledLifetimeSourceReceipts: lifetimeReceiptChanges.length,
+  reconciledSourceFiles: [...sourceTransitions].map(([file, transition]) => ({ file, ...transition })),
   ordinaryHeadingPaintJoins: originals.length, ordinaryPhysicalContexts: visibleContexts.size,
   benchmarkHeadingAxFailureJoins: originals.length, benchmarkHeadingAxPhysicalContexts: headingContexts.size,
   inspectPaintJoins, inspectSharpnessFailures,

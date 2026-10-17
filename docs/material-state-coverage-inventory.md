@@ -4,6 +4,51 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Coherent Icon history/lifetime batch verified — October17
+
+Existing lifetime assertions now reach their actual observations:4/4 pass in
+icon-supplemental-ownership-replay-20261017 stdout/stderr. Original selection2/4
+failed before behavior:public cancellation found the known installed inspector
+a18630bd versus captured6ad4f51c;live replacement compared historical1887 assets
+to today's different build directory. Reused existing exact inspector restoration
+and verifyRetainedMaterialBrowserFiles rather than regenerating captures or
+substituting arbitrary dependency bytes. Entire prior input-boundary suite is
+reconstructed by reversing only this import/two verification boundaries;all
+behavior/mutation assertions survive. Historical validity is not fresh acceptance.
+
+Combined join now runs the shared ancestor history proof and four lifetime checks.
+All20 Icon cases retain shared history plus supplemental900px light/DPR1 lifetime
+records,explicitly NOT configured1000px runtime membership. Queued update waits
+for the held native load;pending Angular remount leaves retired sampled resources
+zero/replacement sampled state unchanged. Runtime-validation failure remains:
+expected initial disposal rejection is reported as render-failed. Minimal public
+cancellation and current reporter execution bind that core policy independently
+of images. No impossible replacement-before-held-load ordering was invented.
+
+First proposal8726fbef fails conflicting lifetime-suite receipts;second381832dc
+fails the changed crop-suite receipt. Original logs remain. A compact dependency
+census finds exactly four changed sources among4685 source files,so all four are
+reconciled together,not one expensive retry per discovered file:policy568,crop24,
+lifetime suite80,benchmark40 receipts,total712. Each has exact complete-source
+predecessor restoration from the already reviewed registration/runner/fresh-font
+boundaries. Original capture/report fields are unchanged. Restoring these712
+applicability receipts AND the20 Icon subrecords recovers complete117a review.
+
+Final icon-history-lifetime-obligation-join-complete-20261017 stdout/stderr:
+session51881 TERMINAL0. Queuedf43fa8701c6ecf209f60f691a20a270bb37ecb7b9e606ca05b1872f8c1382258
+supersedesb7fe for the combined batch. Existing loader authenticates2311 cases/
+13151 dependencies;four exposure/five hierarchy controls and complete predecessor
+restoration pass. All2311 cases remainpartial/current-renderingunverified;
+inspectionComplete/currentRenderingAccepted=false. Canonicalf663/selected87b7
+and current160 definitions/214 proofs remain separate;no canonical export.
+
+First failed join source is retained at retained-evidence/icon-history-lifetime-
+join-before-receipt-reconciliation-20261017.mjs SHA2253faad. Closed8726/b7fe files
+already have Compressed attributes;compact reported0 newly compressed. Before/
+after raw hashes remain619f0c0d/e0433419 respectively,no data deleted or savings
+claimed. Next inspect remaining actual callback/peer applicability and material
+input/local-paint requirements;do not repeat settled history/lifetime scenarios.
+
 ### Icon shared ancestor/theme history inspected — October17
 
 Specific question:which shared heading/page/theme changes are candidate-only
