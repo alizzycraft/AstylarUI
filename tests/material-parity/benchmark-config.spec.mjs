@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readHistoricalBenchmarkSource as readFileSync, historicalSemanticDefinitions } from './semantic-text-transform-registration.mjs';
 import test from 'node:test';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
@@ -13,10 +13,11 @@ import { materialCaseKey, fingerprintDirectory } from './run-checkpoint.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { verifyRetainedMaterialBrowserFiles } from './historical-audit-module-source.mjs';
 import { restoreLayoutDiagnosticRegistration, restoreDescriptionProofRegistration, restoreDescriptionPolicyRegistration, restoreStandaloneProofBatch, restoreExtendedKeyboardRegistration } from './position-composition-producer-transition.mjs';
-import { propertyGroups, sourceAuditDefinitions } from './input-equivalence-policy.mjs';
+import { propertyGroups, sourceAuditDefinitions as currentSourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { restoreSizingDefaultPolicyRegistration, restoreFlexMarginPolicyRegistration, restoreRetainedMapLocationRegistration } from './position-composition-producer-transition.mjs';
 import { materialAbsoluteTextAlignmentTargets, materialAdditionalMeasurementTargets, materialComparisonViewport, materialFamilies, materialFocusedRasterTargets, materialGeometryExcludedTargets, materialInteractionCases, materialInteractionFocusedRasterTargets, materialInteractionTextAlignmentTargets, materialInteractionViewports, materialLeftAlignedTextTargets, materialMobileFlowCases, materialMobileFlowFamilies, materialProfiles, materialSemanticExcludedTargets, materialStaticCases, materialSupplementalStaticCases, materialTextAlignmentTargets, materialTextAlignmentToleranceOverrides, materialTextAuditTargets, materialTextlessFamilies, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets, materialViewports } from './benchmark.config.mjs';
 
+const sourceAuditDefinitions = historicalSemanticDefinitions(currentSourceAuditDefinitions);
 test('retained public unchanged-root updates preserve semantic focus failure at both DPRs', async () => {
     const hash = bytes => createHash('sha256').update(bytes).digest('hex');
     // Conserve the complete previous suite, not merely its old assertion count.

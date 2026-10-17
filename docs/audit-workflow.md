@@ -152,6 +152,17 @@ for the existing JSON digest contract. Schema 1 omits the version opt-in.
 
 ## Validated reuse
 
+For the pre-semantic-text-transform assertions in benchmark-config.spec.mjs,
+the suite now has an explicit historical population/read boundary. It removes
+only the authenticated additive160th finding,214th proof and associated source
+registration,then checks complete prior policy/producer/helper/suite hashes.
+The current-registration suite semantic-text-transform-input.spec.mjs separately
+reads the actual160 definitions/214 proofs and tests conservation/drift rejection.
+Historical reads are limited to four exact workspace paths and change no disk
+files,production collection or capture. Do not present historical replay as
+current renderer acceptance. The root-focus retained runner584cdfc8 versus current
+86ece08b mismatch is deliberately outside this restoration and remains failing.
+
 For the original **synthetic ImageResourceService unit assertions only**, the
 test-only `audit-service` configuration avoids compiling the application's
 Tailwind stylesheet and the existing native-module Karma loader avoids bundling

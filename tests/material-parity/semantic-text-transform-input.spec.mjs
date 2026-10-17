@@ -5,6 +5,8 @@ import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
+import { restoreSemanticTextTransformPolicy, restoreSemanticTextTransformProducer,
+  restoreSemanticRegistrationTransitionSource, readHistoricalBenchmarkSource, historicalSemanticDefinitions } from './semantic-text-transform-registration.mjs';
 
 test('public semantic text transform preserves controls and current owner evidence', t => {
   const hash = b => createHash('sha256').update(b).digest('hex');
@@ -39,8 +41,8 @@ test('public semantic text transform preserves controls and current owner eviden
       ranges.push([proofs[0].getFullStart(), proofs[0].end + 1]);
       const files = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'sourceFingerprints')
         .body.statements[0].declarationList.declarations[0].initializer.elements;
-      const additions = files.slice(0, 7);
-      assert.equal(additions.length, 7);
+      const additions = files.slice(0, 8);
+      assert.equal(additions.length, 8);
       ranges.push([additions[0].getFullStart(), additions.at(-1).end + 1]);
     }
     let restored = current;
@@ -50,4 +52,37 @@ test('public semantic text transform preserves controls and current owner eviden
   }
   t.diagnostic(JSON.stringify({ definitions: 160, priorDefinitionsConserved: 159, focusedProofs: 214,
     publicFailurePairs: 4, materialPhysicalContexts: 16, canonicalPublication: false }));
+});
+
+test('semantic registration historical boundary rejects drift and keeps current population explicit', () => {
+  assert.equal(sourceAuditDefinitions.length, 160);
+  const old = historicalSemanticDefinitions(sourceAuditDefinitions);
+  assert.equal(old.length, 159);
+  assert.equal(sourceAuditDefinitions.length, 160); // never mutates the production registry
+  assert.throws(() => historicalSemanticDefinitions(old));
+  let controls = 1;
+  for (const [file, restore] of [
+    ['tests/material-parity/input-equivalence-policy.mjs', restoreSemanticTextTransformPolicy],
+    ['tests/material-parity/input-equivalence-audit.mjs', restoreSemanticTextTransformProducer],
+  ]) {
+    const current = readFileSync(file, 'utf8');
+    const prior = execFileSync('git', ['show', `c3d1afde:${file}`], { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+    assert.equal(restore(current), prior);
+    assert.equal(readHistoricalBenchmarkSource(file, 'utf8'), prior);
+    assert.throws(() => restore(current + '\n// unexplained drift')); controls++;
+    const changed = file.endsWith('policy.mjs')
+      ? current.replace('four transformed names fail', 'four transformed names pass')
+      : current.replace('sourceFindings,', 'sourceFindings: [],');
+    assert.notEqual(changed, current); assert.throws(() => restore(changed)); controls++;
+  }
+  const suiteFile = 'tests/material-parity/benchmark-config.spec.mjs';
+  const originalSuite = execFileSync('git', ['show', `c3d1afde:${suiteFile}`], { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+  assert.equal(readHistoricalBenchmarkSource(suiteFile, 'utf8'), originalSuite);
+  assert.deepEqual(readHistoricalBenchmarkSource(suiteFile), Buffer.from(originalSuite));
+  const transitionFile = 'tests/material-parity/position-composition-producer-transition.mjs';
+  const transition = readFileSync(transitionFile, 'utf8');
+  assert.equal(restoreSemanticRegistrationTransitionSource(transition), execFileSync('git', ['show', `c3d1afde:${transitionFile}`], { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n'));
+  assert.throws(() => restoreSemanticRegistrationTransitionSource(transition + '\n// unexplained helper drift'));
+  assert.throws(() => restoreSemanticRegistrationTransitionSource(transition.replace('return restored;', 'return source;')));
+  assert.ok(controls >= 5);
 });

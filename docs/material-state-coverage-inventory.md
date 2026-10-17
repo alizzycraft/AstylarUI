@@ -4,6 +4,42 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Additive semantic registration reconciled with historical populations — October17
+
+Resolved the160-versus159 registration failure without changing today's registry
+or historical assertion bodies. semantic-text-transform-registration.mjs checks
+the complete exact current policy/producer source hashes,removes only the new
+definition/proof/eight source entries,and requires whole predecessor hashes.
+The eighth source entry registers this helper. Existing transition chain calls
+these bounded restorers before its unchanged older policy/producer restorations.
+Only its import and two entry calls changed;complete previous helper source is
+independently reconstructed and hashed,with drift controls.
+
+benchmark-config.spec.mjs now explicitly uses a historical read/population
+boundary for its PRE-registration assertions. Only four exact workspace files
+are adapted:policy,producer,transition helper and this suite's own registration
+header. Complete prior suite SHA4a565c81 proves every original assertion body is
+unchanged. It does NOT replace files on disk or affect capture/production commands.
+Current-registration suite imports the actual160-definition registry directly,
+verifies214 actual proofs and exact159-definition conservation,then rejects
+unexplained policy/producer/helper drift and missing-current-population controls.
+No universal read hook or acceptance waiver;do not call historical replay proof
+of current browser rendering. Prior cd5afbee remains the original count-failure
+checkpoint;new source boundary makes that specific historical assertion valid.
+
+Final focused commands:semantic-text-transform-input.spec.mjs2/2 pass;selected
+benchmark inherited-margin,thin-fill context,flex-em and omitted-box-sizing4/4
+pass (session87637 TERMINAL0). Wider five-test selection54838 TERMINAL1 had4 pass
+and one separate root-focus capture provenance failure at line68:expected retained
+runner584cdfc8 versus current86ece08b. No receipt was rewritten and no equivalence
+was inferred. This runner mismatch predates this population reconciliation and
+remains the next specific source-applicability question;do not rerun the complete
+canonical export to rediscover it. Exact runner-byte/history review is needed.
+
+Canonicalf663/indexbc481df1 and selected87b7 still unchanged;current source160
+findings/214 proofs,queuedb7fe remains separate. Final canonical/harness/browser
+gates and whole-case closure are not certified. No renderer/fixture changes.
+
 ### Semantic source/proof registration; legacy population reconciliation pending — October17
 
 Source policy now registers core-semantic-text-transform-not-projected as a

@@ -8929,6 +8929,7 @@ function sourceFingerprints(root) {
     'tests/material-parity/semantic-text-transform-input.spec.mjs',
     'artifacts/material-parity/public-text-transform-ax-20261017/latest-report.json',
     'artifacts/material-parity/icon-heading-ax-20261017/latest-report.json',
+    'tests/material-parity/semantic-text-transform-registration.mjs',
     'scripts/audit-public-paragraph-linebox.mjs',
     'scripts/check-retained-paragraph-font-box.mjs',
     'artifacts/material-parity/public-paragraph-linebox-20261015/latest-report.json',

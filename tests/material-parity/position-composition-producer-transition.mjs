@@ -3,10 +3,11 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
+import { restoreSemanticTextTransformPolicy, restoreSemanticTextTransformProducer } from './semantic-text-transform-registration.mjs';
 
 const hash = text => createHash('sha256').update(text).digest('hex');
 export function restoreRootEditingProducerRegistration(source) {
-  let current = source.toString().replaceAll('\r\n', '\n');
+  let current = restoreSemanticTextTransformProducer(source);
   if (current.includes('inherited block margin computed-font refinement and complete predecessor conservation')) {
     if (current.includes('normal paragraph auto height and complete font-box owner boundary')) {
       const batch = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
@@ -1079,7 +1080,7 @@ export function restoreDescriptionProofRegistration(source) {
 }
 
 export function restoreInheritedMarginPolicyRefinement(source) {
-  const current = source.toString().replaceAll('\r\n', '\n');
+  const current = restoreSemanticTextTransformPolicy(source);
   if (!current.includes('    inheritedBlockMargin: {')) return current;
   assert.equal(hash(current), '34f3d6e5869dbbb330d870e751a2a2db3ae051e560cefa88e460ee590ff7ecaf');
   const ast = ts.createSourceFile('policy.mjs', current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
