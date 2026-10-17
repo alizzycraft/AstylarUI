@@ -6,6 +6,21 @@ This pointer supersedes the historical checkpoint chronology immediately below.
 
 ### Cold comparison and compact verification pass; predecessor conservation HOLD — October17
 
+Follow-up while the SAME extraction9927/21980 remains live: the existing
+`refreshScalarControlReceipts` in scripts/check-material-position-canonical-
+conservation.mjs already handles exactly this potential dependency shape. It
+requires complete control-row equality except the authenticated producer hash,
+then refreshes only matching scalar controlProofSha256 values with case/owner
+checks. Its original focused assertion `embedded scalar control receipts follow
+only exact producer transitions` passes1/1 (1510.3208ms), including changed-value,
+forged-receipt and wrong-owner rejection controls. This is infrastructure proof,
+NOT proof that these49 actual rows satisfy it. Competing explanations remain
+producer-registration receipt propagation versus meaningful evidence drift.
+Next inspect the extraction's exact field differences, authenticate old/current
+producer sources using the existing additive registration reversals, and apply
+the EXISTING guard to the actual rows. Do not repeat the synthetic assertion,
+create another reconciliation framework, or accept a blanket49-row allowance.
+
 Independent cold46678/worker24544 is TERMINAL0,complete2892755.4282ms. Full
 candidate package AND readable report compare equal after cold replay:2 collectors,
 10 memory hits,0 disk hits/invalidations,14365 files/1252426145 bytes independently
