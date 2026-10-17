@@ -4,6 +4,37 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Role-control focus isolation distinguishes attribute refresh from root replacement — October17
+
+Completed chip activation rows show extra candidate blur/refocus cycles despite
+settled owner recovery. Competing causes: attribute refresh temporarily removes
+focusability, versus root/descendant child replacement. Small native-browser
+isolation executes the COMPLETE current applyAttributes method after proving its
+emitted tokens equal installed method8a1ea89df36f65210c1f89b2efd5b329fa76801d44ebd8aed1c3b011c7b2ab46.
+Current source1a0011d3 and installed7c892095 remain separate file receipts.
+
+32 trials cover DIV,SPAN,INPUT,BUTTON × same-tabindex,remove/restore-tabindex,
+actual applyAttributes,root.replaceChildren × DPR1/2 in Chrome155.0.8059.80.
+Same-tabindex preserves allfocus;tabindex removal/restoration AND actual method
+lose DIV/SPAN focus,while native INPUT/BUTTON retain it. Root replacement loses
+allfour kinds. In the four role-like complete-method failures,blur occurs while
+connected with id empty/tabindex absent;role still option. This distinguishes
+an additional attribute-stage mechanism from the existing input/root proof.
+
+First role-control-attribute-focus-isolation-20261017 log has correctly sampled
+pre-cleanup endpoints but event arrays contaminated by later host cleanup;do NOT
+use those arrays as operation event sequences. Corrected role-control-attribute-
+focus-boundary-20261017 snapshots events BEFORE cleanup and asserts all32 focus
+endpoints/event sequences plus the four attribute snapshots;TERMINAL0.
+
+Boundary: actual current/installed method and native DOM isolation only. No
+public Astylar mount or exact Material FIRST-blur owner was measured here;do not
+promote to a new confirmed public/core finding or assign every activation blur
+to this cause. Next minimal public role-control no-op update with native-element
+controls should distinguish this earlier mechanism from root replacement. Avoid
+assuming the existing root-only remedy covers role elements. No renderer edits.
+Original source inventory162/216 and running export inputs remain unchanged.
+
 ### Activation raw capture running with exact listener and unique state paths — October17
 
 Missing maintained reference listener is resolved by extracting the original

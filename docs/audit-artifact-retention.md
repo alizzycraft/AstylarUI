@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep role-control-attribute-focus-{isolation,boundary}-20261017 stdout/stderr.
+The initial log's event arrays include cleanup and are not valid operation-only
+traces;the corrected boundary log snapshots before cleanup and asserts32 endpoint/
+event sequences. Both preserve original diagnostic history and current/installed
+complete-method receipts. These are bounded native-DOM/method experiments,not a
+public mount proof or accepted Material cause;no original capture is replaced.
+
 Keep configured-control-activation-capture-bound-20261017 stdout/stderr and its
 incomplete directory/checkpoint. Exclusive writes caught a cross-state filename
 collision after one paired case;producer03b0a10c is recoverable in Git. The fresh
