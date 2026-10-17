@@ -4,6 +4,30 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Recorded clipping inputs inspected; hidden owners cannot be excluded — October17
+
+Question:does the passive Icon example have no clipping obligation,or a missing
+owner/input distinction? All20 authenticated paired trees show native main/root
+overflow visible,but mat-icon AND its24px SVG viewport use hidden overflow.
+Candidate main/root/replaced PNG omit overflow/clip declarations at all three
+captured stages. This agrees with the two existing primary overflowX/Y scalar
+classifications reviewed-control-clipping-request-omission;no new core finding
+or equivalent hidden/omitted alias is justified. Contained image border boxes do
+not prove SVG viewport or used clipping behavior;do not invent an oversized
+variant as configured coverage or mark clipping globally inapplicable.
+
+The EXISTING joiner's inspectHierarchy method now records this distinction.
+Focused execution extracts that actual complete method and runs it against40
+authenticated trees/20 cases;native overflow mutation and invented candidate
+clipping declaration both reject. icon-recorded-clipping-applicability-20261017
+exits0. This is bounded input inspection,not used clipping/rendering acceptance.
+
+No full join/export was repeated for this one property boundary. Queued d341
+retains its prior script receipt and does not yet contain this addition;current
+joiner changes remain a next-batch integration,not silently current proposal
+applicability. Next inspect remaining inherited/default/descendant inputs in the
+same hierarchy,then rerun one coherent join. ALL2311 cases remain partial.
+
 ### Twenty root-paint records joined; coherent proposal queued — October17
 
 Existing join-material-icon-retained-obligations.mjs now authenticates root report

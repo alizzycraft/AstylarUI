@@ -345,9 +345,22 @@ function inspectHierarchy(reference, candidate) {
   assert.equal(reference.styles[frame.style].display, 'block');
   assert.equal(reference.styles[icon.style].display, 'inline-block');
   assert.equal(page.normalResolvedStyle.display, 'block');
+  for (const node of [frame, host]) {
+    const style = reference.styles[node.style];
+    assert.equal(style.overflowX, 'visible'); assert.equal(style.overflowY, 'visible');
+    assert.equal(style.clipPath, 'none'); assert.equal(style.clip, 'auto');
+  }
+  for (const node of [icon, svg]) {
+    const style = reference.styles[node.style];
+    assert.equal(style.overflowX, 'hidden'); assert.equal(style.overflowY, 'hidden');
+    assert.equal(style.clipPath, 'none'); assert.equal(style.transform, 'none');
+    assert.equal(style.width, '24px'); assert.equal(style.height, '24px');
+  }
   for (const stage of ['normalResolvedStyle', 'interactionResolvedStyle', 'resolvedStyle']) {
     assert.equal(demo[stage].display, 'flex'); assert.equal(demo[stage].flexDirection, 'column');
     assert.equal(image[stage].display, 'inline-block');
+    for (const node of [page, demo, image]) for (const property of ['overflow', 'overflowX', 'overflowY', 'clipPath', 'clip'])
+      assert.equal(node[stage][property], undefined, 'Recorded candidate clipping omission must remain explicit');
   }
   const displayRules = candidate.rules.filter(r => r.selector === '#icon-root' && r.display !== undefined);
   assert.equal(displayRules.length, 1); assert.equal(displayRules[0].display, 'flex');
@@ -364,6 +377,11 @@ function inspectHierarchy(reference, candidate) {
       classification: 'application-plugin-authoring-defect', definition: 'fixture-icon-svg-replaced-by-fixed-raster',
       nativePathSha256: hash(leaf.attributes.d), candidatePngSha256: hash(png), intrinsicPngSize: [24, 24] },
     extraDocumentNode: synthetic.key,
+    clippingInputs: { disposition: 'inspected-unequal-input',
+      reference: { mainAndRootOverflow: 'visible', iconAndSvgOverflow: 'hidden', iconAndSvgSize: [24, 24], clipPath: 'none' },
+      candidate: { mainRootAndImageLocalClipDeclarations: 'omitted at all three captured stages', replacementImageSize: [24, 24] },
+      existingAttribution: 'reviewed-control-clipping-request-omission',
+      boundary: 'Hidden-overflow owners exist and cannot be excluded as passive. Root/image containment is not used clipping proof. Native SVG viewport clipping versus replaced PNG composition is unequal input;no core clipping diagnosis,general overflow acceptance or hypothetical oversized-content coverage.' },
     formattingContext: { disposition: 'inspected-unequal-input', firstDivergence: 'authored-demo-root-display-before-layout',
       classification: 'application-plugin-authoring-defect',
       reference: { rootDisplay: nativeRootStyle.display, parentDisplay: reference.styles[frame.style].display,

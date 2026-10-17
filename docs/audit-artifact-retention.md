@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep icon-recorded-clipping-applicability-20261017 stdout/stderr. It executes the
+actual joiner method against40 original tree receipts,with two rejection
+controls;no browser capture or new proposal was generated. Queued d341 still
+binds the preceding script bytes and must not be treated as including this later
+addition until the next coherent join. Preserve the original hidden-overflow
+input omissions and used-clipping uncertainty.
+
 Keep icon-root-paint-obligation-join-20261017 stdout/stderr and queued proposal
 d341155f4d2184d8ed3f93edabec7622d4cc2821cdc5ebef680e39791ee434f9.
 Its20 retained root-paint joins preserve original failed metrics and exact case
