@@ -4,6 +4,32 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Heading semantic evidence availability — October17
+
+Previous paint increment ebbf7fdf is committed and pushed. No canonical export
+was warranted: standalone proof registration remains pending, canonical f663 and
+queued df29 are unchanged. Remaining priority is requirement closure and shared
+ownership/history, not another paint census.
+
+Decisive retained-evidence check: authenticated passive-badge-icon-ax-verified-
+20261006.log (be9aab6a) and icon-remaining-ax-20261007.log (3613ac86) yield exactly
+32 Icon side observations. Across those records there are ZERO heading-role nodes
+and 80 child references without node records. The original producer in
+sort-focus-structure.spec.mjs queries icon-primary with getPartialAXTree and
+fetchRelatives:true; ancestor relatives do not constitute sibling subtree
+observations. Thus neither a matching title tag nor the existing ancestor census
+proves actual heading role/name/level. The visible-heading paint driver measures
+boxes, input trees and PNGs but makes no AX request. This resolves evidence
+availability, not semantic parity: the required actual heading observation is
+missing, rather than hidden somewhere in these retained target records.
+
+Next decisive check must query the actual title/eyebrow AX nodes on both sides
+with authenticated build/theme/context receipts, reusing existing browser/CDP
+infrastructure. Do not repeat the icon-target query, recapture pixels merely for
+AX, infer AT behavior, or promote a case from authored h1 alone. Configured
+benchmark and ordinary unmasked contexts must remain distinguished. Existing
+target hiding and duplicate-main failures remain preserved; all2311 cases partial.
+
 ### Non-quarter public fill control separates previously coincident models — October17
 
 Git e8121e39 is now pushed;the interrupted approval did not previously execute
