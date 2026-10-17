@@ -10,6 +10,18 @@ partial/unverified. This is audit evidence acceptance,not current rendering or
 final-gate acceptance. Exact logs and remaining obligations are in the coverage
 ledger. Historical pointers below are superseded.
 
+Queued legacy clip support limitation (October18):source proposal161aac37
+preserves all163 production definitions and adds one documented-limitation,
+not an intentional design claim or a supported-feature regression. Public
+zero-rect CSS atDPR1/2 hides native paint but is warned/ignored by Astylar;
+unclipped controls agree. All12 resolver methods/five top-level owners match
+current source emission to captured installed JS. Focused suite passes2/2.
+The owning future work is shared public style/loaded-CSS/clip support in CSS
+space,not replacing native clipping with offsets,overflow or omitted anchors.
+Other rectangles/dynamic/semantic/AT behavior and exact124-anchor consequences
+remain open. Production registration/proof inventory integration is pending;
+accepted163/217 and the original implementation scope/gates remain unchanged.
+
 New confirmed public attribute-stage focus defect (October17):on unchanged
 documents,DIV/SPAN tabindex0 controls first blur synchronously inside
 applyAttributes.removeAttribute('tabindex'),before root replacement. Native

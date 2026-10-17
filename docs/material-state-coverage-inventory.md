@@ -8,13 +8,25 @@ ten memory hits,zero disk hits/invalidations,15061 files and1433550867 bytes
 read and independently reverified. All80 sections and readable report conserved.
 Accepted import79974 terminates0;whole-index verification passes and index bytes
 equal the independently imported candidate. Latest full queued reviewcefffc09
-joins progress/list evidence;public clip support evidence remains compact and
-unregistered. These later records are outside the accepted58ec generation.
+joins progress/list evidence. Separate source proposal161aac37 documents legacy
+clip support as a limitation;production remains163/217. These later records
+are outside the accepted58ec generation.
 All2311 configured cases remainpartial/unverified,zero whole-case closures.
 Publication24c2532d is pushed;fresh ls-remote confirms the exact commit. GitHub
 accepts the72.89MiB payload with its existing large-file recommendation warning.
 Priority:case input/semantic/interaction and
 local-paint gaps;source applicability and original final gates remain required.
+
+Legacy clip source proposal161aac37ac51e824208d69f1e6893573ac2f72b0142877d5b2940ee7c40272c5
+adds one documented-limitation to exact163 production predecessors,not an
+intentional limitation or a newly broken claimed feature. Public zero-rect
+failure/control/current-resolver evidence is retained;124 omitted anchor requests
+are context,not proved anchor paint/focus/AX impact. New focused suite
+legacy-clip-support-input.spec passes2/2,zero skips:four public pairs/four original
+controls,all17 owner declarations and three altered-claim rejection controls.
+Policy,producer,accepted index and case review remain unchanged. Registration
+and focused inventory integration are pending for a coherent source batch;
+do not export unchanged production or claim164 is already canonical.
 
 Coherent queued case joincefffc095f1d7dbcfe992725f6fe593595c7499b75b67eb435421409ba56dd85
 preserves77d90ece and adds248 bounded child records across92 cases:40 progress

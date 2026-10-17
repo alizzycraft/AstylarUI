@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep legacy-clip-source-finding-proposal and legacy-clip-source-focused-20261018
+stdout/stderr with source proposal161aac37 and its five original evidence
+receipts. Focused suite passes2/2 without changing163 production definitions.
+The queued164th limitation is not canonical;no original/failure public capture
+or historical verifier attempt is superseded or disposable.
+
 Keep passive-paint-coherent-case-join-20261018 failure and corrected
 passive-paint-coherent-case-join-physical-20261018 success logs. First fails on
 viewport labels before saving;actual width/height/DPR matching succeeds with52
