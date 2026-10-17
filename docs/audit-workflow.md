@@ -164,9 +164,13 @@ current renderer acceptance. The root-focus runner584cdfc8 versus current86ece08
 now has its own explicit applicability boundary:pin raw current bytes,execute the
 existing metadata-only reversal to normalized082d6d7b,and check all six captured
 editing methods. Captured raw bytes are not claimed recovered;reports are unchanged.
-Original root behavioral assertions execute after this boundary. Font-box browser
-155.0.8059.40 versus available.80 remains a separate failing applicability check;
-neither historical source restoration nor crop conservation waives it.
+Original root behavioral assertions execute after this boundary. Font-box strict
+default still rejects155.0.8059.40 versus available.80. Its explicit
+`node scripts/check-retained-paragraph-font-box.mjs --compare-current-browser`
+mode instead makes fresh measurements with both identities/launch evidence and
+every original numeric comparison unchanged. Eight observations agree;this is
+bounded metric stability,not replay in the old executable or general browser
+equivalence. The standalone-batch suite explicitly requests and checks that mode.
 
 For the original **synthetic ImageResourceService unit assertions only**, the
 test-only `audit-service` configuration avoids compiling the application's

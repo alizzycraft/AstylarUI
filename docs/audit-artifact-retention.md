@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep paragraph-font-box-current-browser-20261017 stdout/stderr and crop-provenance-
+browser-reconciled-20261017 stdout/stderr. First log SHA04ac1e05 records eight fresh
+font/line-box observations under Chrome155.0.8059.80 compared with retained.40
+measurements;original report/version/bundle/PNGs remain unchanged. No new PNGs
+were produced. Strict default version failure remains in the coverage chronology.
+
 Keep icon-heading-ax-obligation-join-20261017 stdout/stderr and queuedb7fe303d,
 supersedingdf29 for combined Icon evidence. Original117a predecessor remains
 required for complete conservation. Exact20-case heading joins retain the

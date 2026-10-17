@@ -4,11 +4,14 @@ import { createHash } from 'node:crypto';
 import { createServer } from 'node:http';
 import ts from 'typescript';
 import { chromium } from 'playwright-core';
-import { materialBrowserLaunchOptions } from '../tests/material-parity/run-checkpoint.mjs';
+import { materialBrowserLaunchOptions, inspectMaterialBrowserLaunch } from '../tests/material-parity/run-checkpoint.mjs';
 
 // Mechanism check alongside,not instead of,the package-root public reproduction.
 // Serve its retained bytes unchanged and execute the authenticated parser owner.
 const hash = value => createHash('sha256').update(value).digest('hex');
+assert.ok(process.argv.slice(2).every(arg => arg === '--compare-current-browser') && process.argv.length <= 3,
+  'Only the explicit current-browser comparison option is supported');
+const compareCurrentBrowser = process.argv.includes('--compare-current-browser');
 const directory = 'artifacts/material-parity/public-paragraph-linebox-20261015';
 const bytes = fs.readFileSync(`${directory}/latest-report.json`);
 assert.equal(hash(bytes), 'dd72dd2efc9c6838f6bce46b23b1ea0f56bcbab45de0414497ebcbb592aa5bf7');
@@ -38,9 +41,12 @@ const server = createServer((request, response) => {
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 let browser;
 const observations = [], errors = [];
+let observedRuntime;
 try {
-  browser = await chromium.launch(materialBrowserLaunchOptions());
-  assert.equal(browser.version(), report.runtime.browser);
+  const launch = materialBrowserLaunchOptions();
+  browser = await chromium.launch(launch);
+  if (!compareCurrentBrowser) assert.equal(browser.version(), report.runtime.browser);
+  observedRuntime = { browser: browser.version(), launch: await inspectMaterialBrowserLaunch(browser, launch) };
   for (const prior of report.results) {
     const page = await browser.newPage({ viewport: { width: 400, height: 260 }, deviceScaleFactor: prior.dpr });
     page.on('pageerror', error => errors.push(String(error)));
@@ -81,6 +87,9 @@ try {
     scriptSha256: hash(fs.readFileSync(import.meta.filename)), publicReportSha256: hash(bytes),
     sourceSha256: hash(Buffer.from(source)), installedSha256: hash(Buffer.from(installed)),
     completeOwnerMembersMatch: capturedMembers.length, observations,
+    comparison: { mode: compareCurrentBrowser ? 'fresh-current-browser-versus-retained-measurements' : 'same-browser-owner-check',
+      recordedBrowser: report.runtime.browser, observedRuntime, observationsCompared: observations.length,
+      allNumericComparisonsUnchanged: true, currentRenderingAccepted: false },
     boundary: 'Bounded CSS normal strut versus canvas font-box mismatch before projection. Not a complete browser normal-line-height algorithm,other fonts,Material wrapper attribution,updates or raster acceptance.' }));
 } finally {
   if (browser) await browser.close();

@@ -4,6 +4,41 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Fresh font-box measurements stable across browser update — October17
+
+Resolved the precise environment question without relabeling the old capture.
+check-retained-paragraph-font-box.mjs is not just an offline verifier:it launches
+Chrome,serves the authenticated retained bundle/HTML and measures native paragraph,
+Range and canvas font-box metrics while executing the complete authenticated
+installed parser owner. The old strict version assertion stopped before those
+measurements. Strict default still rejects observed155.0.8059.80 versus recorded
+155.0.8059.40 (rechecked TERMINAL1);this failure remains honest.
+
+Explicit --compare-current-browser mode now records BOTH browser identities and
+actual launch/driver evidence,then executes every unchanged numeric comparison.
+paragraph-font-box-current-browser-20261017.log SHA256
+04ac1e0546b8a2955b89b83650cf430c3514458010319483e0ee099db531ce7b
+and stderr record TERMINAL0. Eight observations atArial16/24,DPR1/2 match retained
+measurements exactly:four normal paragraph heights18/28 versus owner/font-box17/27
+still fail by1CSSpx;four explicit20/30px controls agree. All23 current emitted/
+installed owner members still agree. This establishes bounded fresh metric
+stability,NOT browser equivalence,new candidate WebGL paint or full current code.
+No original report/version/pixels were replaced and no numeric threshold changed.
+
+The existing standalone-batch test explicitly requests this fresh mode and checks
+its scope/identities/count/nonacceptance fields. Full alignment-crop-provenance
+suite now6/6 pass;session5298 TERMINAL0,logs crop-provenance-browser-reconciled-
+20261017 stdout/stderr. Prior5/6 result remains in chronology. The checker emits
+new observations rather than pretending to replay the absent old executable.
+No new PNGs,bundle generation or test framework. Default strict replay and fresh
+comparison are different commands and must stay distinguished in final reporting.
+
+Next return to remaining Icon shared history/ownership requirement closure and
+coherent pending source/proof/case integration;do not repeat settled browser/font
+or runner checks for status. Canonicalf663/selected87b7,queuedb7fe and current
+160 findings/214 proofs remain separate. All2311 cases partial;final full gates
+not certified. This is audit evidence/instrumentation only,no renderer fixes.
+
 ### Root/editing runner applicability resolved; font-box browser drift remains — October17
 
 Reused the existing October15 whole-runner metadata conservation instead of

@@ -27,9 +27,20 @@ test('divider standalone batch registration conserves prior producer and bounded
   assert.throws(() => restoreRootEditingProducerRegistration(producer + '\n// unreviewed change'));
   for (const args of [
     ['scripts/audit-public-paragraph-linebox.mjs', '--verify', 'artifacts/material-parity/public-paragraph-linebox-20261015'],
-    ['scripts/check-retained-paragraph-font-box.mjs'],
+    ['scripts/check-retained-paragraph-font-box.mjs', '--compare-current-browser'],
     ['scripts/check-material-divider-four-sample-model.mjs'],
-  ]) execFileSync(process.execPath, args, { stdio: 'pipe', maxBuffer: 4_000_000 });
+  ]) {
+    const output = execFileSync(process.execPath, args, { encoding: 'utf8', maxBuffer: 4_000_000 });
+    if (args[0] === 'scripts/check-retained-paragraph-font-box.mjs') {
+      const proof = JSON.parse(output);
+      assert.equal(proof.comparison.mode, 'fresh-current-browser-versus-retained-measurements');
+      assert.equal(proof.comparison.recordedBrowser, '155.0.8059.40');
+      assert.ok(proof.comparison.observedRuntime.browser);
+      assert.equal(proof.comparison.observationsCompared, 8);
+      assert.equal(proof.comparison.allNumericComparisonsUnchanged, true);
+      assert.equal(proof.comparison.currentRenderingAccepted, false);
+    }
+  }
 });
 
 test('configured divider texture observations preserve source frames and bound upload residuals', t => {
