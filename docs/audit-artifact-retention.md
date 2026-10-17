@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep icon-root-paint-publication-applicability-20261017 and its retry stdout/
+stderr. The initial case-key mismatch failure is diagnostic evidence;the retry
+authenticates111 receipts and all20 exact cases without recapture. The original
+root-paint report,old index generation,checkpoints,PNGs and input trees remain
+required even though the current pointer has advanced. Do not replace historical
+pointer hashes or delete original failed shadow profiles.
+
 The49-button-row hold below is resolved by the TERMINAL0 complete-row extraction
 and coherent-icon-border-button-receipt-conservation-20261017 stdout/stderr.
 Retain both alongside the original failed52-versus3 conservation assertion.

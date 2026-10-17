@@ -4,6 +4,33 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Retained root-paint applicability survives publication — October17
+
+Question:does publication invalidate the existing20-case root-paint diagnostic,
+or is only its mutable current-pointer envelope historical? The smallest check
+authenticates reportff56c512,all8 unchanged source files,20 exact source-report
+case/viewport/geometry identities,and111 report/checkpoint/PNG/tree/index receipts.
+It reconstructs the OLD pointer bytes from the report's pinned generation/index
+and matches its original SHA,without replacing today's pointer. Both old/current
+indexes authenticate;the root-shadow input's COMPLETE ROW hash is unchanged.
+Read-only icon-root-paint-publication-applicability-retry-20261017 exits0 and
+preserves three original shadow failures (contrast desktop/tablet,DPR1 inspect).
+Initial applicability log exits1 because checkpoint JSON keys were confused with
+the report's human case IDs;corrected exact keys resolve all20,not omitted cases.
+Retain both logs. No capture,metric recomputation,tolerance change or pixel shift.
+
+This resolves source/publication applicability for those retained observations,
+not current whole-renderer equivalence. Complete clipping/flat-fill claims and
+the exact contribution of the public border failure remain unproved. The current
+Icon joiner carries public-border evidence but does NOT yet join the20 root-paint
+records themselves. Next integrate those existing records through that joiner
+with explicit diagnostic/failure dispositions and preserved boundaries;do not
+recapture or rerun the settled cursor model. ALL2311 whole cases remain partial.
+
+Push sessions are terminal:87ed7bd1 andfcbc920e are confirmed on origin. GitHub
+accepted the74,254,915-byte evidence package with its recommended-size warning;
+no LFS migration,history rewrite or evidence deletion was attempted.
+
 ### Published Icon readiness census reconciled without equivalence promotion — October17
 
 The EXISTING closure-readiness assertion now checks published2 pending cursor
