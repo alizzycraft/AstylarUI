@@ -4,6 +4,33 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Twenty root-paint records joined; coherent proposal queued — October17
+
+Existing join-material-icon-retained-obligations.mjs now authenticates root report
+ff56c512 at its historical index boundary,checks the unchanged complete shadow
+input row,and replays all20 full-root/80 corner metric records and five-row shadow
+profiles from the original PNGs with phase0. Two rejection controls alter geometry
+and shadow evidence;both fail as required. Missing/duplicate case identity and
+input/viewport/tree/receipt disagreement are rejected before attachment.
+
+icon-root-paint-obligation-join-20261017 exits0. New proposal
+d341155f4d2184d8ed3f93edabec7622d4cc2821cdc5ebef680e39791ee434f9
+authenticates2311 cases/13183 dependencies;20 exact parent/observation identities
+are additionally checked after save. Three original shadow failures survive.
+All existing heading/AX/public-border/source/history/lifetime/fresh-pixel joins
+remain;complete117a predecessor is recovered exactly after restoration. The
+712 known source receipts reconcile through the original four transitions.
+
+This is a queued case-evidence integration,NOT another canonical publication.
+Accepted package0dd7/index37486 and launcher's selectedb1a96a review remain
+unchanged. No capture,renderer/fixture correction,threshold waiver or case
+promotion. Root/corner similarity diagnostics do not prove equal inputs,complete
+flat-fill uniformity or general clipping;public border failure is not proven the
+sole Material residual cause. ALL2311 parents stay partial and both acceptance
+flags stayfalse. Next review the remaining descendant/default/inheritance and
+clipping applicability against the complete recorded hierarchy rather than
+repeating authenticated root pixels or launching another export for this join.
+
 ### Retained root-paint applicability survives publication — October17
 
 Question:does publication invalidate the existing20-case root-paint diagnostic,

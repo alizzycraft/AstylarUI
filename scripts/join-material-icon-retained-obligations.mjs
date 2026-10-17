@@ -5,8 +5,9 @@ import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import { PNG } from 'pngjs';
 import { evaluateFocusedRaster } from '../tests/material-parity/focused-raster-metrics.mjs';
+import { compareBottomShadowProfiles } from '../tests/material-parity/shadow-profile-metrics.mjs';
 import { openMaterialCheckpoint, materialCaseKey, fingerprintModuleGraph } from '../tests/material-parity/run-checkpoint.mjs';
-import { saveReviewProposal, loadCaseObligationReview } from './audit-findings-store.mjs';
+import { saveReviewProposal, loadCaseObligationReview, queryFindings } from './audit-findings-store.mjs';
 import { readHistoricalBenchmarkSource } from '../tests/material-parity/semantic-text-transform-registration.mjs';
 
 // Reuse the existing exact-case census and original TAP observations. No browser
@@ -192,6 +193,61 @@ const freshCases = new Map([
   ...fresh.interactions.map(r => [`interaction/icon/${r.profile}/${r.viewport.id}/${r.state}`, { kind: 'interaction', result: r }]),
 ]);
 assert.equal(freshCases.size, 20);
+const rootPaintFile = base + 'icon-retained-root-paint-verified-20261017.json';
+const rootPaintBytes = readFileSync(rootPaintFile);
+assert.equal(hash(rootPaintBytes), 'ff56c512ab65121267e163640613147df59e047204d07862e9fbc321ef469a31');
+const rootPaint = JSON.parse(rootPaintBytes);
+const verifyReceipt = receipt => assert.equal(hash(readFileSync(receipt.file)), receipt.sha256, receipt.file);
+rootPaint.sources.forEach(verifyReceipt);
+[rootPaint.sourceReport, rootPaint.checkpointManifest, rootPaint.canonicalIndex].forEach(verifyReceipt);
+assert.equal(rootPaint.sourceReport.sha256, hash(freshBytes));
+const oldRootPointer = { generation: path.basename(path.dirname(rootPaint.canonicalIndex.file)), indexSha256: rootPaint.canonicalIndex.sha256 };
+assert.equal(hash(JSON.stringify(oldRootPointer, null, 2) + '\n'), rootPaint.canonicalPointer.sha256);
+const shadowRows = snapshot => queryFindings(base + 'working-audit', 'icon', snapshot)
+  .filter(row => row.element === 'icon-root' && row.property === 'boxShadow');
+const oldShadow = shadowRows(oldRootPointer), currentShadow = shadowRows();
+assert.equal(oldShadow.length, 1); assert.equal(currentShadow.length, 1);
+assert.deepEqual(rootPaint.existingShadowInputClassification, oldShadow[0]);
+assert.equal(oldShadow[0].evidence.completeRowSha256, currentShadow[0].evidence.completeRowSha256);
+function verifyRootPaintRecord(record) {
+  const matched = [...freshCases.values()].filter(({ kind, result }) => record.case ===
+    `${kind}:icon@${result.profile}/${result.viewport.id}${kind === 'interaction' ? '/' + result.state : ''}`);
+  assert.equal(matched.length, 1);
+  const row = matched[0].result;
+  assert.deepEqual(record.viewport, row.viewport);
+  for (const [name, id] of [['root', 'icon-root'], ['child', 'icon-primary']])
+    assert.deepEqual(record.geometry[name], row.geometry.elements.find(element => element.id === id));
+  const input = row.styleInputs.find(style => style.id === 'icon-root');
+  assert.deepEqual(record.inputs, { reference: input.reference, candidate: input.astylar });
+  verifyReceipt(record.evidence.checkpoint);
+  const images = {};
+  for (const side of ['reference', 'astylar']) {
+    assert.deepEqual(record.evidence.pairedTrees[side], row.inputTrees[side]);
+    verifyReceipt(record.evidence.pairedTrees[side]); verifyReceipt(record.evidence.images[side]);
+    images[side] = PNG.sync.read(readFileSync(record.evidence.images[side].file));
+  }
+  for (const raster of Object.values(record.rasters)) {
+    const actual = evaluateFocusedRaster(recordedCrop(images.reference, raster.bounds),
+      recordedCrop(images.astylar, raster.bounds), { maximumPhaseOffset: 0 });
+    // Preserve the original finite JSON/-0 contract,not a phase correction.
+    assert.deepEqual(JSON.parse(JSON.stringify(actual)), raster.metrics);
+  }
+  const actualShadow = compareBottomShadowProfiles(images.reference, images.astylar,
+    record.geometry.root.expected, record.geometry.root.actual, row.viewport.deviceScaleFactor);
+  for (const name of Object.keys(actualShadow)) assert.deepEqual(actualShadow[name], record.shadow[name]);
+}
+assert.equal(rootPaint.records.length, 20);
+const rootPaintCases = new Map(rootPaint.records.map(record => [record.case, record]));
+assert.equal(rootPaintCases.size, 20);
+rootPaint.records.forEach(verifyRootPaintRecord);
+for (const change of [record => { record.geometry.root.expected.left++; }, record => { record.shadow.rowErrors[0]++; }]) {
+  const forged = structuredClone(rootPaint.records[0]); change(forged);
+  assert.throws(() => verifyRootPaintRecord(forged));
+}
+assert.equal(rootPaint.records.filter(record => !record.shadow.matches).length, 3);
+const rootPaintEvidence = { report: { file: rootPaintFile, sha256: hash(rootPaintBytes) },
+  sources: rootPaint.sources, sourceReport: rootPaint.sourceReport, checkpoint: rootPaint.checkpointManifest,
+  historicalIndex: rootPaint.canonicalIndex };
 assert.equal(fresh.summary.meetsAcceptance, false); assert.equal(fresh.interactionSummary.meetsAcceptance, false);
 const inspectFile = base + 'icon-inspect-local-paint-20261007.log', inspectBytes = readFileSync(inspectFile);
 assert.equal(hash(inspectBytes), 'a253a8331dfffa856f1f886451487cb6a4a394a56837054fdb7a4eb448b6b1d7');
@@ -432,6 +488,9 @@ for (const c of census.cases) {
     disposition: 'inspected-bounded-provenance', case: row.case, browser: fresh.browser, evidence: freshEvidence,
     boundary: 'Fresh current readable producer/browser,exact retained build bytes. Not a newly built renderer,current complete package acceptance,full matrix or recovery of historical runner source.' } };
   row.obligations.localPaint = { ...row.obligations.localPaint,
+    retainedRootPaint: { disposition: 'inspected-diagnostic-with-failures', observations: rootPaintCases.get(row.case),
+      evidence: { ...rootPaintEvidence, join: evidence.join },
+      boundary: 'Exact20-case retained root/corner metric and five-row shadow replay. Original failures and unequal background/shadow inputs survive. Center samples are not full fill uniformity;contained image boxes are not general clipping proof. Public border reproduction is not proved the sole Material residual cause. No new release target,current rendering acceptance or whole-case closure.' },
     publicFractionalBorderPaintFailure: { disposition: 'inspected-supplemental-public-failure',
       finding: 'core-fractional-border-edge-paint-disagrees-with-native', evidence: borderEvidence,
       observations: { publicPairs: 8, dpr: [1, 2], shadowFreeIntegerMatches: true,
@@ -488,6 +547,7 @@ console.log(JSON.stringify({ predecessor, proposal, iconCases: 20, physicalCohor
   reconciledSourceFiles: [...sourceTransitions].map(([file, transition]) => ({ file, ...transition })),
   ordinaryHeadingPaintJoins: originals.length, ordinaryPhysicalContexts: visibleContexts.size,
   benchmarkHeadingAxFailureJoins: originals.length, benchmarkHeadingAxPhysicalContexts: headingContexts.size,
+  rootPaintJoins: rootPaintCases.size, rootPaintShadowFailures: 3, rootPaintNegativeControls: 2,
   inspectPaintJoins, inspectSharpnessFailures,
   freshProducerJoins: freshCases.size, reproducedFullImages: freshCases.size * 2,
   inspectionComplete: loaded.inspectionComplete, currentRenderingAccepted: loaded.currentRenderingAccepted }));

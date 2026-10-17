@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep icon-root-paint-obligation-join-20261017 stdout/stderr and queued proposal
+d341155f4d2184d8ed3f93edabec7622d4cc2821cdc5ebef680e39791ee434f9.
+Its20 retained root-paint joins preserve original failed metrics and exact case
+identities;it is not a replacement capture or accepted canonical publication.
+Original117a,b1a96a,root-paint report/checkpoints/PNGs and published0dd7 remain
+required. No cleanup is justified by this additive proposal alone.
+
 Keep icon-root-paint-publication-applicability-20261017 and its retry stdout/
 stderr. The initial case-key mismatch failure is diagnostic evidence;the retry
 authenticates111 receipts and all20 exact cases without recapture. The original
