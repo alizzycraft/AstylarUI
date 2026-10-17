@@ -4,6 +4,36 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Remaining-obligation census establishes post-integration priorities — October17
+
+Read-only aggregation of authenticated selected0ee8 (review JSON digest checked,
+2311 exact groups) counts TOP-LEVEL dispositions,not new rendering observations:
+programmaticFocus1797 applicable/evidence-join-pending,160partial,40inspected-
+failure and314 authored exclusions;authoredActivation1595 applicable/join-pending,
+362partial and354 exclusions;localPaint1165 join-pending/1146partial.
+InputStyleStructure,semantics,historyOwnership andsourceCurrentness are each
+partial inall2311 cases. Editing443 applicable partial,1734 authored exclusions
+and134 not-applicable/partial;128 additional keyboard obligations remainpartial.
+These are overlapping obligation counts,not additive case counts or completion.
+
+Most frequent remaining-work strings:full runtime/environment/input/current
+rendering applicability2311;complete descendant/structure mapping2287;
+first-stage/paint applicability2287;AX/description/target disposition2287;
+interaction history/resource/currentness beyond tracked samples1875. Some are
+generic parent remainders,not proof that every child observation is absent.
+
+After export/cold/conservation,prioritize the shared exact-case evidence-join
+gaps for focus/activation and the broad descendant/AX owner mappings,then local
+paint gaps. First distinguish existing reusable evidence from genuinely absent
+action/owner observations;do not repeat settled Icon probes or schedule blanket
+recapture. Exact required case closures and all final gates remain unchanged.
+
+Export session46814/process18880 (launcher23068) is confirmedlive against
+selected0ee8,log inline-reader-provenance-canonical-export-20261017 stdout/stderr;
+accepted0dd7 remains unchanged while it builds. Freeze producer/evidence inputs.
+Next poll the same handle;terminal export still requires independentcold,
+complete conservation and compact verification before accepted publication.
+
 ### Coherent reader/provenance/inline batch authenticated and selected — October17
 
 Existing joiner terminates0 (icon-coherent-reader-provenance-join-20261017):

@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep inline-reader-provenance-canonical-export-20261017 stdout/stderr and any
+resulting candidate package until independent cold/conservation/compact checks
+establish publication. Preserve accepted0dd7 and prior generations;running
+export or a new candidate alone does not supersede their consumers. Selected
+0ee8 remains immutable. The read-only obligation census creates no new capture,
+proposal or report;its counts/derivation are recorded in the current ledger.
+
 Keep icon-coherent-reader-provenance-join-20261017 stdout/stderr and validated
 proposal0ee8db551cebfd4a066e9bb1d136aff3392ae20549e7a97f14d442040aeb77a2.
 It preserves original failures and explicitly unresolved capture provenance;
