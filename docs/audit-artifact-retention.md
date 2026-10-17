@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep passive-async-request-applicability and passive-async-authored-object-guard-
+20261017 stdout/stderr with queuedaaab24ed/648f45e7. Original report/registry/tree
+receipts remain required;no capture,scratch or deletion occurred. Authored
+image/media/custom-renderer exclusions do not remove shared font/root/session
+evidence requirements or the existing lifetime failures/uncertainties.
+
 Keep passive-live-resources-case-join-20261017 stdout/stderr with queued648f45e7
 and its5357efed predecessor. It binds270 cases/80 physical contexts and preserves
 all540 inactive clock-rule leaves,not altered captures. Original/current trees,

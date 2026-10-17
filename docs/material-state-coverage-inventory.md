@@ -4,7 +4,14 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
-Latest queued review648f45e7 preserves5357efed and joins80 passive lifecycle
+Latest queued reviewaaab24ed preserves648f45e7 and records authored async-request
+applicability for270 passive cases/2784 nodes. No image/media/custom Material
+renderer requests,URL styles or registered plugin lifecycle hooks;four new-
+request controls reject. Shared fonts for1132 text owners and root/session/
+remount/peer work remain applicable,not waived. Whole648f45e7 recovers;14158
+dependencies authenticate. All2311 cases remainpartial/unverified.
+
+Queued review648f45e7 preserves5357efed and joins80 passive lifecycle
 contexts to270 exact configured cases (sidenav62;grid-list/badge/list/table52 each).
 All2784 recorded nodes match;540 unrelated clock-derived datepicker-rule leaves
 remain explicit with selector inapplicability proved. Two binding controls reject;
@@ -79,6 +86,34 @@ would miss the independently confirmed attribute-stage failure. Original final
 gates and equal-input/root-cause contract remain unchanged.
 
 ## Preserved audit chronology
+
+### Passive leaf-specific async applicability narrowed without claiming no asynchronous work — October17
+
+Remaining shared lifetime question:which leaf-race probes are actually authored?
+Exact270 cases/2784 candidate records and original captured sealed registry
+inventories show only aside/div/h1/main/p/section/span/table/tbody/td/th/thead/tr.
+Every authored type has a core registration;none requests image/media/embedded
+documents,canvas or a custom Material renderer. Recorded normal/interaction/
+effective/retained-text inputs contain no URL sources or custom Material property
+requests. All captured plugin lifecycleIds areempty. Fonts remain applicable:
+1132 text owners are explicitly retained,not declared synchronous or leak-free.
+
+passive-async-request-applicability-20261017 terminates0;logSHA
+13e37bfcc20fdcf3a1a65cd3db6d0dead6118939e17dadfdb8ba7127ba27b593
+contains executable recipe. Four controls reject new img,URL background,plugin
+hook and custom Material type. Supplemental authored-object guard checks all2784
+whole authored records:no URL strings or nested inline-style objects are hidden
+outside the resolved-style scan. Original registry/report/tree receipts bind.
+
+Reviewaaab24ed6b1aa4e5c175804b2470920152847ed7d686de1ec16f3d651f132ed0 adds
+ONLY270 bounded applicability children;complete648f45e7 and acceptedcc890 pointer
+conserve. Loader validates2311 cases/14158 dependencies. These exclusions concern
+authored leaf requests,not absence of internal textures or general asynchronous
+work. Shared font/text invalidation,root/session scheduling,remount and peer
+ownership remain explicit;current source/build/runtime and all parent remaining
+work stay open. No new capture,framework,renderer/fixture edit or case closure.
+Next reuse the existing public font/remount/peer proof only after exact owning
+source applicability;do not recapture settled image/plugin cases for these leaves.
 
 ### Passive lifecycle observations join270 exact cases with inactive clock differences preserved — October17
 
