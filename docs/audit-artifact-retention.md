@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep list-retained-container-paint-20261018 stdout/stderr with originalab42
+report/checkpoint/PNG receipts.104 measured root/primary regions use their
+original screenshots,not new-label geometry transferred onto old images.
+All104 broad container diagnostics pass;this does not supersede later local
+label failures or establish isolated edge fidelity. No image or scratch added.
+
 Keep full-audit-harness-cd867bbe-20261018 stdout/stderr and any failure scratch
 under established producers. Live session76151 owns the existing unfiltered306-
 file harness;do not overwrite its logs,restart on quiet output or claim a pass

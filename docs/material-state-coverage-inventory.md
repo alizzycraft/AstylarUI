@@ -80,6 +80,18 @@ label bounds and paint at matching state/settlement;no local-paint metric or
 case closure established. Reuse existing capture infrastructure for that gap,
 not another unchanged canonical export or repeated retained-crop attempt.
 
+Retained list container-paint gap now has bounded diagnostics:originalab42
+report/checkpoints supply actual list-root/list-primary rectangles for all52
+cases. Existing exact crop helper and zero-phase metric inspect104 container
+pairs from104 original PNGs;all104 pass existing default,similarity
+0.8942903886561504–0.9869888595949903. Three identity/altered-image/bounds controls
+pass. list-retained-container-paint-20261018 retains complete inputs,geometry,
+metrics and receipts. This is separate historical container evidence,not a
+same-image label experiment:the later label capture has its own bounds/PNGs.
+Container/background-heavy agreement does not waive104 later label failures,
+isolated corner/border/shadow inspection,current validity or whole-case closure.
+Keep compact for next coherent join;no new capture/proposal/export was needed.
+
 New list-label-bounds-paint-20261018 capture closes that measurement gap for all
 52 configured list endpoints (12 static/40 interaction):104 paired labels,
 104 screenshots and104 input trees. Existing current action functions are
