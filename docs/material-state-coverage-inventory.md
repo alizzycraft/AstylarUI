@@ -4,6 +4,37 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Live border frame rules out geometric displacement in public failure — October17
+
+The specific missing distinction is now measured. Read-only geometry recipe
+audit-public-border-contact-geometry.mjs authenticates parentd11f07d6 and reuses
+the original public mount/capture recipe;only snapshot measurement is extended.
+It reads all132 actual frame vertices,parents/world transforms and projects them
+back into CSS coordinates. These are observations,not layout calculations or
+renderer modifications. Eight paired cases preserve the same2515 bundle inputs,
+SiteData,Chrome155.0.8059.80 and ALL16 original PNG hashes byte-for-byte.
+
+Capture25631 TERMINAL0;independent --verify TERMINAL0. Geometry reportSHA
+6d9dd5c43393d686cdebb7b3c014f08b2cc97d1908298860c161e2e2fe98a952.
+Every frame's projected outer bounds match its measured child box within.001px;
+bottom straight outer/inner edges are166/165 CSSpx for integer controls and
+166.546875/165.546875 for fractional controls,at BOTH DPRs,shadow off/on. Actual
+border thickness is1px and fractional origin is preserved. Pixel failures remain
+22/44RGB fractional,no-shadow,while integer/no-shadow controls remain exact.
+Thus displaced/incorrectly thick frame geometry is ruled out in these cases;
+the demonstrated divergence is subsequent edge-pixel coverage/compositing.
+This does not identify exact GPU sample locations or a universal browser snap law.
+
+Existing Icon regression independently verifies the new report,source recipe,
+all frame checks and original image hashes;focused1/1 passes (2252.3862ms).
+Both original forged-width/missing-case controls still reject. No fixture offsets,
+layout rounding,threshold changes or failed-pixel removal. Core ownership remains
+general border final paint,not Material/plugin positioning. This bounded root-
+cause distinction is answered;do not repeat geometry/capture merely to derive an
+exact GPU law. Next coherently register the equal-input public failure and current
+owning-source evidence,retaining Material contribution uncertainty separately.
+Canonical integration/final gates and all2311 partial case statuses remain open.
+
 ### Public border failure bound to current construction/material/placement owners — October17
 
 Specific unresolved question:does the equal-input public failure use stale border

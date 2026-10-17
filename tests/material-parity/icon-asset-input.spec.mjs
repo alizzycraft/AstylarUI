@@ -20,6 +20,36 @@ import { collectIconContextReview, validateIconContextReview, iconContextBaselin
 
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 
+test('public border live frame preserves fractional geometry and all original raster bytes', () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const directory = 'artifacts/material-parity/public-border-contact-geometry-20261017';
+  const raw = readFileSync(`${directory}/latest-report.json`);
+  assert.equal(hash(raw), '6d9dd5c43393d686cdebb7b3c014f08b2cc97d1908298860c161e2e2fe98a952');
+  const report = JSON.parse(raw), priorBytes = readFileSync('artifacts/material-parity/public-border-contact-20261017/latest-report.json');
+  assert.equal(hash(priorBytes), '89e5abb3b94d0b1aadbd3d2e8e7818c760f34fe54675946c5d4a284003640aab');
+  const prior = JSON.parse(priorBytes);
+  assert.deepEqual(report.inputs, prior.inputs);
+  assert.equal(report.runtime.browser, prior.runtime.browser);
+  const verification = JSON.parse(execFileSync(process.execPath, ['scripts/audit-public-border-contact-geometry.mjs', '--verify', directory],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }));
+  assert.equal(verification.negativeControlsRejected, 2);
+  assert.equal(verification.verified.contactPixels.length, 8);
+  let unchangedImages = 0;
+  for (const row of report.results) {
+    const old = one(prior.results.filter(item => item.dpr === row.dpr && item.phase === row.phase && item.shadow === row.shadow));
+    for (const side of ['reference', 'astylar']) {
+      assert.deepEqual(row[side].site, old[side].site);
+      assert.equal(row[side].screenshot.sha256, old[side].screenshot.sha256); unchangedImages++;
+    }
+    const observed = one(verification.verified.contactPixels.filter(item => item.dpr === row.dpr && item.phase === row.phase && item.shadow === row.shadow));
+    assert.deepEqual(observed.liveBottomBorder, { outer: 166 + row.phase, inner: 165 + row.phase, vertices: 132 });
+  }
+  assert.equal(unchangedImages, 16);
+  assert.deepEqual(verification.verified.contactPixels.map(row => row.maximumChannelError), [0, 8, 22, 22, 0, 9, 44, 44]);
+  // These live projected vertices eliminate displaced border geometry for the
+  // bounded public cases. They do not specify the exact GPU coverage algorithm.
+});
+
 test('public border contact capture binds complete current border construction and placement owners', t => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
   const raw = readFileSync('artifacts/material-parity/public-border-contact-20261017/latest-report.json');

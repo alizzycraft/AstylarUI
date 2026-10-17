@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep public-border-contact-geometry-20261017 report,bundle/HTML,16 PNGs and
+public-border-contact-geometry-{capture,verify}-20261017 stdout/stderr. These
+bind actual frame geometry to the original equal-input paint failure;all16 PNGs
+match the prior capture,whose paths/bytes remain required. No archive overwritten
+or deletion performed. Use existing hash-preserving compaction at a later closed
+batch if useful;do not rewrite immutable script/report receipts to save space.
+
 Keep public-border-contact-20261017/latest-report.json,audit.js,index.html and all
 16 PNGs,plus public-border-contact-{capture,verify}-20261017 stdout/stderr. These
 contain the equal-input fractional border/contact FAILURE with integer and
