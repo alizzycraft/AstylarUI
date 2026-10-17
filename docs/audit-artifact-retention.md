@@ -56,6 +56,19 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep icon-coherent-reader-provenance-join-20261017 stdout/stderr and validated
+proposal0ee8db551cebfd4a066e9bb1d136aff3392ae20549e7a97f14d442040aeb77a2.
+It preserves original failures and explicitly unresolved capture provenance;
+accepted0dd7/b1a96a is unchanged until independent publication verification.
+Prior68af and117a remain required conservation evidence,not deletable scratch.
+
+Keep icon-recorded-pixels-provenance-boundary-20261017 and icon-broader-retained-
+proof-replay-20261017 stdout/stderr. The former replays existing16 PNGs and
+records unavailable-unresolved original runner provenance;it does not replace
+the original broad source-equality failure. Keep both original runner receipt
+and pinned current replay source. No image,report or historical source was
+rewritten or becomes disposable through this diagnostic-scope separation.
+
 Keep icon-history-helper-source-transition-20261017 and icon-svg-existing-
 inspector-transition-20261017 stdout/stderr with the original broader21/24 failure.
 They reconcile only demonstrated additive source boundaries,not current raster

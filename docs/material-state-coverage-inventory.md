@@ -4,6 +4,54 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Coherent reader/provenance/inline batch authenticated and selected — October17
+
+Existing joiner terminates0 (icon-coherent-reader-provenance-join-20261017):
+proposal0ee8db551cebfd4a066e9bb1d136aff3392ae20549e7a97f14d442040aeb77a2
+authenticates13185 dependencies/2311 IDs and exactly recovers complete117a after
+reversing the intended additions/712 known source-receipt transitions. It retains
+20 root-paint records/three shadow failures,40 heading-font chains,20 clipping
+distinctions,20 supplemental inline-layout failures,AX/history/lifetime and eight
+inspect diagnostics/four sharpness failures. Inspect provenance is explicitly
+unavailable-unresolved;capture-procedure and current-rendering acceptance false.
+
+Named launcher now selects0ee8 rather than publishedb1a96a. Its dry-run is only
+invocation/path preflight. Accepted package remains0dd7/source161/proofs215;
+working source162/216 and selected queued evidence require one coherent export,
+independent cold check and full conservation before publication. This integration
+milestone is justified by the new inline finding and accumulated root/clipping/
+font evidence,not by prose edits. No browser recapture or whole-case acceptance.
+All2311 cases remain partial. Preserve previous68af/b1a96a and original failures.
+
+### Retained Icon pixels replay; original capture procedure remains unverified — October17
+
+The specific question is now separated: eight original PNG pairs and recorded
+bounds/metrics authenticate independently of unavailable whole-runner bytes.
+Existing inspect assertion pins BOTH olde01ef9dc receipt and actual86ece08b replay
+runner, explicitly verifies their equality assertion fails, and then executes all
+original image,bounds,metric and DPR-sharpness comparisons unchanged. Focused
+replay passes1/1,3574.3275ms (icon-recorded-pixels-provenance-boundary-20261017).
+All four DPR2 sharpness failures survive. Its machine diagnostic explicitly says
+originalRunnerProvenance=unavailable-unresolved,
+originalCaptureProcedureVerified=false,currentRenderingAccepted=false.
+
+This changes the audit assertion's scope accounting,NOT historical source or
+rendering acceptance: the original whole-source mismatch remains required
+failure evidence in icon-broader-source-applicability-20261017. No reconstruction,
+historical owner-box proof or whole-case closure is inferred from pixel replay.
+Original capture-procedure provenance remains an open obligation. This is not
+permission to mark it inapplicable or waive any final acceptance requirement.
+
+Unfiltered existing Icon suite rerun terminates0:24/24,zero skipped/cancelled,
+101408.094ms (icon-broader-retained-proof-replay-20261017). This verifies retained
+assertions including the explicit provenance-failure disposition,not current
+rendering or full case closure. Next reconcile the existing queued Icon join as
+one coherent source batch;its inspect records now carry machine-readable
+unavailable-unresolved provenance and false capture-procedure/current-rendering
+acceptance flags alongside the original failure metrics.
+Accepted0dd7/b1a96a and queued68af remain distinct;current source162/216 is not yet
+canonical. All2311 cases remain partial;no new browser capture/export performed.
+
 ### Broader Icon checks expose three receipt gaps; two reconciled — October17
 
 Unfiltered Icon suite is TERMINAL1,21/24 passing,zero skipped/cancelled,

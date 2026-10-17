@@ -588,6 +588,9 @@ for (const c of census.cases) {
       disposition: 'inspected-diagnostic', bounds: sample.bounds, metrics,
       evidence: { report: { file: inspectFile, sha256: hash(inspectBytes) }, images, metricSources, join: evidence.join },
       originalRunnerReceipt: inspectReceipt.runnerSha256,
+      originalRunnerProvenance: 'unavailable-unresolved',
+      originalCaptureProcedureVerified: false,
+      currentRenderingAccepted: false,
       boundary: 'Exact recorded-bounds pixel/metric replay only. No configured interaction raster gate existed. Original runner bytes/crop-owner provenance remain unavailable;unequal SVG/PNG and block/flex inputs prevent an equal-input blur diagnosis. Not current rendering or whole-case acceptance.' } };
   }
   assert.equal(row.inspection, 'partial'); assert.equal(row.currentRendering, 'unverified');
