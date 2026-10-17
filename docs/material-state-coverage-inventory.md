@@ -4,6 +4,48 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+###113 configured pointer observations verified and joined; child receipts bound — October17
+
+Activation distinct capture terminates0 with113 cases,339 paired boundaries,
+226 trees/226 PNGs. Independent --verify authenticates frozen recipe/base graph,
+original listener/action and runtime/child receipts;report SHA
+945d1232074796ec066d8403ca606e13180c4c91a8540be062ddd7950cc1e406.
+Logs configured-control-activation-{capture-distinct,verify,post-controls-verify}-
+20261017. All678 side-boundary raw-stream/state fields are checked separately.
+
+Initial negative-controls log is NOT five independent module checks:repeated
+imports reused a failed generated module. Preserve this procedure failure.
+Corrected isolated-negative-controls log runs four fresh processes and verifies
+the EXPECTED invariant for missing/duplicate cases,focus identity and screenshot
+receipt. Separate missing-raw-stream guard rejects before module import;no
+claim that inherited verifier alone checks every raw-field invariant. Original
+report verifies again unchanged. No capture/report was rewritten.
+
+Raw census preserves actual differences: native/candidate DOM blur counts are
+chips0/32,slide-toggle0/32,button0/16,menu16/32,expansion0/48,snackbar0/51,
+tooltip0/24. Native slide-toggle maintained listener records32 clicks for16
+cases versus candidate16;other families have one percase. Native/candidate event
+schemas and focus-selector versus pointer ownership remain distinct. Counts
+are observations,not normalized event parity,new causes or unexpected-failure
+counts;native menu focus transfer is not automatically a defect.
+
+Queued1b3421b4c689b43d2ce3fb95bacba209c7051be6f6fee19e170655e1b7a525f9
+joins113 pending activation obligations to partial and adds direct child tree/
+image receipts to56 existing focus observations. Existing loader authenticates
+13867 dependencies/2311 cases;reversing ONLY169 intended subrecords recovers
+complete predecessor2ffd. In-memory changed focus/activation PNG reads each
+reject at their specific child receipt (configured-control-case-child-receipts-
+20261017);no files changed. Join log configured-control-activation-case-join-
+20261017 terminates0. Pending activation1482,partial475,exclusions354 IN THIS
+QUEUE;focus counts unchanged from2ffd. All2311 whole cases remainpartial.
+
+Capture against current readable actions/authenticated retained served build is
+not whole-package current rendering. No source finding or original threshold
+changed. Live0ee8 export46814 remains separate;do not repoint it to this queue.
+Next finish public role-control first-blur reduction,then classify event/state
+ownership using these actual records,not another broad normalized survey.
+Original source162/216 publication/cold/conservation and all final gates remain.
+
 ### Role-control focus isolation distinguishes attribute refresh from root replacement — October17
 
 Completed chip activation rows show extra candidate blur/refocus cycles despite

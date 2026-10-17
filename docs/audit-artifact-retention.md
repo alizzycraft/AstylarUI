@@ -56,6 +56,16 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep configured-control-activation-distinct-20261017 report/226 PNGs/226 trees and
+its -provenance checkpoint. Preserve capture-distinct,verify,post-controls-verify,
+raw-census,case-join and BOTH negative-controls/isolated-negative-controls logs.
+The first negative procedure reused a generated-module rejection;only the later
+fresh-process controls prove four independent module invariants. Keep
+configured-control-case-child-receipts-20261017 stdout/stderr and queued1b3421b4c689b43d2ce3fb95bacba209c7051be6f6fee19e170655e1b7a525f9.
+This binds actual child receipts and113 action observations,not current rendering
+or whole-case acceptance. Original2ffd/0ee8 and all failed capture paths remain
+required;no original/scratch deletion or evidence overwrite occurred.
+
 Keep role-control-attribute-focus-{isolation,boundary}-20261017 stdout/stderr.
 The initial log's event arrays include cleanup and are not valid operation-only
 traces;the corrected boundary log snapshots before cleanup and asserts32 endpoint/
