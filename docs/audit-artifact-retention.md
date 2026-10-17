@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep inline-reader-provenance-section-conservation-index-manifest-20261017
+stdout/stderr (TERMINAL0,all80 sections authenticated) and the subsequent
+source-section-delta-20261017 stdout/stderr. Seventy sections match,ten differ;
+five remaining source/proof sections require exact content explanation before
+publication. Stream extraction authenticates both compressed and decoded bytes,
+retains only those five named sections,and does not change source/capture data.
+
 Keep inline-reader-provenance-row-delta,row-delta-classification,metadata-
 conservation and case-metadata-envelope-binding-20261017 stdout/stderr. Exact
 49-row payload reads authenticate complete row hashes;96 changed leaves reduce

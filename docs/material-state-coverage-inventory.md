@@ -21,10 +21,16 @@ case validator plus exact saved review-envelope binding authenticates all2311
 case rows to b1a96a/0ee8 respectively;all remainpartial,current acceptancefalse.
 All other metadata is deeply equal. Case-metadata-envelope-binding log terminates0;
 the earlier attempt hashed the storage envelope instead of its review and failed,
-retained as procedure failure,not evidence corruption. Existing section digest comparison runs as
-session48728 using the preserved index manifest;the first standalone-manifest CLI
-attempt fails ENOENT before reading evidence and is retained separately. The
-original cold process14900 is revalidated live (CPU478.23s),not restarted. Neither
+retained as procedure failure,not evidence corruption. Existing section digest
+comparison48728 terminates0 using the preserved index manifest:both packages
+have80 sections,same membership/order,no additions/removals,70 unchanged. Ten
+changed sections are coverage,summary,discrepancies,controlTypography,
+sourceFindings (explained above),plus sourceFingerprints,controlLineBoxes,
+ownerCaretInputs,reviewedSourceBatchInputs,focusedProofs. The latter five are
+under exact authenticated stream comparison84214 (source-section-delta log),not
+blanket-approved as provenance. First standalone-manifest CLI attempt fails
+ENOENT before reading evidence and is retained separately. Original cold process
+14900 remains live (CPU1224.19s),not restarted. Neither
 candidate import nor row conservation establishes publication or case closure.
 
 Accepted package:0dd7dce3/index37486eaa (161 source findings/215 proofs).
