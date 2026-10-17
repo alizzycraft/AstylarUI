@@ -4,6 +4,32 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Pending focus population narrowed to56 configured-action contexts — October17
+
+Read-only selected0ee8 census partitions1797 pending focus obligations:
+56 are actual configured focus states,324static and1417 other interaction states.
+The56 are eight contexts each for chips,slide-toggle,button,menu,expansion,
+snack-bar andtooltip. The1741 non-focus-state obligations are NOT1741 missing
+focus-action captures, nor automatically inapplicable;pointer/restoration/state
+boundaries and applicability still need exact dispositions.
+
+Retained reportab42dbec has focus reference/astylar/matches fields for these
+cases,not direct active descendant snapshots. Existing focusedIdentity collapses
+active descendants to family-primary;the already-inspected256/1619 comparator
+limitation therefore still applies. No new claim follows from matching host IDs.
+The existing configured-input-focus producer directly observes actual controls
+only for five editable families/40 contexts;it cannot cover this56-case remainder.
+Tooltip keyboard producers observe exact trigger IDs but drive real Tab,not the
+configured HTMLElement.focus action. Do not relabel them as the same action.
+
+Next decisive gap-closing check after frozen integration:reuse the existing
+configured-focus action/capture infrastructure to observe actual active control
+and descendant ancestry at these56 exact contexts. Distinguish target-selection
+authoring differences from focus delivery/reconciliation;retain event/settlement
+and source receipts. Avoid blanket recapture or more normalized-host surveys.
+No source,fixture,producer input or case disposition changed by this analysis.
+Export46814/18880 remains verifiedlive;original final gates remain unchanged.
+
 ### Remaining-obligation census establishes post-integration priorities — October17
 
 Read-only aggregation of authenticated selected0ee8 (review JSON digest checked,
