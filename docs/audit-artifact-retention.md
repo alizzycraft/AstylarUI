@@ -56,6 +56,11 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep icon-inline-layout-coherent-join-20261017 stdout/stderr and queued68af180c7c61e07fcbb329cda434611ed820db9a1637aa07afcddd51749002c0.
+It preserves original failure populations and all earlier joins;it does not
+supersede accepted0dd7/b1a96a or authorize deletion of a7e0/d341 predecessors
+without consumer/reference checks. No new browser capture was generated.
+
 Keep inline-image-registration-{conservation,inventory}-20261017 stdout/stderr.
 They bind current162/216 source inventories and exact prior161/215 source
 recovery without rewriting accepted0dd7. Original public-inline-image report,

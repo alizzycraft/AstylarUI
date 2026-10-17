@@ -4,6 +4,33 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Inline-layout public failure joined without Material causality promotion — October17
+
+Existing joiner reruns the two public inline-image assertions and attaches the
+registered bounded failure to20 exact Icon input/layout obligations. The report
+and current owner/test/driver sources are receipt-bound. Observations retain16
+public pairs,eight inline failures,eight block controls,and the before-projection
+CSS sizing cause. It explicitly does NOT claim these PNG/Arial pairs are the
+configured SVG/mat-icon versus fixed-flex inputs or the sole compensation cause.
+
+icon-inline-layout-coherent-join-20261017 exits0. Proposal
+68af180c7c61e07fcbb329cda434611ed820db9a1637aa07afcddd51749002c0
+authenticates2311 cases/13185 dependencies. All20 root-paint/three shadow failures,
+40 heading font chains,clipping distinctions,AX/history/lifetime and fresh-pixel
+joins remain;complete117a predecessor is recovered exactly. Known712 source
+receipt transitions now bind actual162-finding policyde4d7a74. No recapture or
+canonical export;accepted0dd7/b1a96a and launcher selection remain unchanged.
+
+Source review found a specific pre-existing final-harness readiness issue:
+`SVG upload cause registration conserves all predecessor source findings` still
+asserts actual production definitions.length===148 and uses slice(0,-1),despite
+today's162. Its original147-to148 claim needs an explicit authenticated historical
+population and complete-source conservation,not a larger count or skipped test.
+The separate f43 queued-history test also binds older raw dependencies. These
+assertions were NOT run/passed by the focused join;do not claim full Icon suite
+acceptance. Next reconcile these precise historical test boundaries before a
+justified broader harness milestone. ALL2311 whole cases remain partial.
+
 ### Inline-image CSS row finding registered; prior populations conserved — October17
 
 Registered core-inline-replaced-row-omits-parent-line-box through the existing

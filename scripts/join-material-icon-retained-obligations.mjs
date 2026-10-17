@@ -15,6 +15,17 @@ import { readHistoricalBenchmarkSource } from '../tests/material-parity/semantic
 const script = 'scripts/join-material-icon-retained-obligations.mjs';
 const hash = b => createHash('sha256').update(b).digest('hex');
 const base = 'artifacts/material-parity/';
+const inlineOutput = execFileSync(process.execPath, ['--test',
+  '--test-name-pattern=public inline image line boxes|inline image line height divergence',
+  'tests/material-parity/icon-asset-input.spec.mjs'], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+assert.match(inlineOutput, /# pass 2\b/); assert.match(inlineOutput, /# fail 0\b/);
+console.log(inlineOutput.trimEnd());
+const inlineFile = base + 'public-inline-image-linebox-20261017/latest-report.json';
+assert.equal(hash(readFileSync(inlineFile)), 'f7120e8e0aba684a3d0ea5cebf47ea37b9f79158ebd58e5eff2d193e11d22bc1');
+const inlineEvidence = { report: { file: inlineFile, sha256: hash(readFileSync(inlineFile)) },
+  sources: ['scripts/audit-public-inline-image-linebox.mjs', 'tests/material-parity/icon-asset-input.spec.mjs',
+    'src/app/services/dom/elements/element-creation.service.ts'].map(file => ({ file, sha256: hash(readFileSync(file)) })),
+  execution: { assertions: 2, failures: 0, browserRecapture: false } };
 // Integrate the completed public border distinction,not a new Material capture.
 const borderOutput = execFileSync(process.execPath, ['--test',
   '--test-name-pattern=public border live frame|public border contact capture binds|public border contact reduction',
@@ -498,6 +509,12 @@ for (const c of census.cases) {
         previousSha256: originalLifetimeSuiteSha, reviewedChanges: 'inspector-only restoration and original browser-asset verification;all behavior assertions conserved' },
       boundary: 'Supplemental900px lifetime evidence and current cancellation-policy execution,not runtime coverage of the configured1000px cases,all callbacks,race timings,simultaneous peers,paint or current whole-package acceptance. Do not exercise impossible replacement-before-held-load completion ordering.' } };
   row.obligations.inputStyleStructure = { ...row.obligations.inputStyleStructure,
+    publicInlineImageFlowFailure: { disposition: 'inspected-supplemental-public-failure',
+      finding: 'core-inline-replaced-row-omits-parent-line-box', evidence: inlineEvidence,
+      observations: { publicPairs: 16, inlineHeightFailures: 8, blockControls: 8,
+        inlineErrorsCSSpx: [-4, -5, -6, -7], currentInstalledMethodsMatch: 4,
+        firstDivergence: 'CSS inline-row maximum child margin-box height omits parent line-box contribution before projection' },
+      boundary: 'Public PNG/block-inline reduction,not the configured Material SVG/mat-icon versus fixed-flex input pair. Relevant shared layout gap,not sole compensation cause,all fonts/vertical-align/wrapping coverage or whole-case closure.' },
     iconViewportOwnerCssBoundary: { disposition: 'inspected-bounded-source-behavior',
       cssViewport: captured.viewport, origin: { x: 0, y: 0 }, padding: { top: 0, right: 0, bottom: 0, left: 0 },
       projectedPlaneProbes: [[9, 7], [99, 31]], sourceProof: rootProof,
@@ -579,6 +596,7 @@ console.log(JSON.stringify({ predecessor, proposal, iconCases: 20, physicalCohor
   recordedReferenceNodes: 140, recordedCandidateNodes: 120, hierarchyNegativeControls,
   relationshipApplicabilityJoins: originals.length, authoredIconIdRefs: 0,
   boundedSourceHistoryJoins: originals.length, viewportOwnerCssJoins: originals.length,
+  supplementalInlineLayoutFailureJoins: originals.length,
   sharedAncestorHistoryJoins: originals.length, supplementalLifetimeJoins: originals.length,
   reconciledLifetimeSourceReceipts: lifetimeReceiptChanges.length,
   reconciledSourceFiles: [...sourceTransitions].map(([file, transition]) => ({ file, ...transition })),
