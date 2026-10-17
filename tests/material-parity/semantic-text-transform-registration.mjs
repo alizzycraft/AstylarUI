@@ -7,8 +7,42 @@ import ts from 'typescript';
 const digest = s => createHash('sha256').update(s).digest('hex');
 const normalized = s => s.toString().replaceAll('\r\n', '\n');
 const id = 'core-semantic-text-transform-not-projected';
-export function restoreSemanticTextTransformPolicy(source) {
+const borderId = 'core-fractional-border-edge-paint-disagrees-with-native';
+export function restoreBorderContactPolicy(source) {
   const current = normalized(source);
+  if (!current.includes(`id: '${borderId}'`)) {
+    assert.ok(!current.includes('public border live frame preserves fractional geometry'), 'Unrecognized border registration');
+    return current;
+  }
+  assert.equal(digest(current), 'a6b685058b7782ad7590de8be91c7e6fd484ddd8ae1dfdf11c1bd66a7777d648');
+  const tree = ts.createSourceFile('policy.mjs', current, ts.ScriptTarget.Latest, true);
+  const entries = tree.statements.filter(ts.isVariableStatement).flatMap(n => [...n.declarationList.declarations])
+    .find(n => n.name.getText(tree) === 'sourceAuditDefinitions').initializer.arguments[0].elements;
+  assert.equal(entries.length, 161); assert.ok(entries[0].getText(tree).includes(borderId));
+  const restored = current.slice(0, entries[0].getFullStart()) + current.slice(entries[0].end + 1);
+  assert.equal(digest(restored), '5cc34579bc381bd5719f32830bef61da71afae3a8cba2185d6566d1d902220e8');
+  return restored;
+}
+export function restoreBorderContactProducer(source) {
+  const current = normalized(source);
+  if (!current.includes('public fractional border paint failure with correct live geometry and current owners')) {
+    assert.ok(!current.includes("'scripts/audit-public-border-contact.mjs'"), 'Unrecognized border proof registration');
+    return current;
+  }
+  assert.equal(digest(current), 'ac3d948a906a45ecfd20b2fbcb69c7681a425085469760493bd3fa8dd9822027');
+  const tree = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true);
+  const owner = name => tree.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+  const proofs = owner('focusedProofInventory').body.statements[0].expression.elements;
+  const files = owner('sourceFingerprints').body.statements[0].declarationList.declarations[0].initializer.elements;
+  assert.equal(proofs.length, 215); assert.ok(proofs[0].getText(tree).includes('public border live frame'));
+  let restored = current;
+  for (const [start, end] of [[proofs[0].getFullStart(), proofs[0].end + 1], [files[0].getFullStart(), files[3].end + 1]].sort((a,b)=>b[0]-a[0]))
+    restored = restored.slice(0,start)+restored.slice(end);
+  assert.equal(digest(restored), 'b7746df868577d3934930c073b6423b9621c38bd4514b5dc0670e4d204940d66');
+  return restored;
+}
+export function restoreSemanticTextTransformPolicy(source) {
+  const current = restoreBorderContactPolicy(source);
   if (!current.includes(`id: '${id}'`)) return current;
   assert.equal(digest(current), '5cc34579bc381bd5719f32830bef61da71afae3a8cba2185d6566d1d902220e8');
   const tree = ts.createSourceFile('policy.mjs', current, ts.ScriptTarget.Latest, true);
@@ -20,7 +54,7 @@ export function restoreSemanticTextTransformPolicy(source) {
   return restored;
 }
 export function restoreSemanticTextTransformProducer(source) {
-  const current = normalized(source);
+  const current = restoreBorderContactProducer(source);
   if (!current.includes('public semantic text-transform support gap and complete predecessor conservation')) return current;
   assert.equal(digest(current), 'b7746df868577d3934930c073b6423b9621c38bd4514b5dc0670e4d204940d66');
   const tree = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true);
@@ -67,8 +101,8 @@ export function reviewedRootEditingGraph(graph, actionSource, expectedRunnerEntr
   return graph.map(row => row.file === runnerFile ? { ...row, sha256: oldRunner } : row);
 }
 export function historicalSemanticDefinitions(current) {
-  assert.equal(current.length, 160);
-  const retained = current.filter(row => row.id !== id); assert.equal(retained.length, 159); return retained;
+  assert.equal(current.length, 161);
+  const retained = current.filter(row => row.id !== id && row.id !== borderId); assert.equal(retained.length, 159); return retained;
 }
 export function restoreSemanticRegistrationTransitionSource(source) {
   let restored = normalized(source);
@@ -84,7 +118,7 @@ export function restoreSemanticRegistrationTransitionSource(source) {
   return restored;
 }
 // This read boundary belongs ONLY to the pre-registration benchmark assertions.
-// Current registration is independently tested against all160 actual definitions.
+// Current registration is independently tested against all161 actual definitions.
 export function readHistoricalBenchmarkSource(file, options) {
   const raw = readActual(file, options), name = path.basename(String(file));
   if (!['input-equivalence-policy.mjs', 'input-equivalence-audit.mjs', 'benchmark-config.spec.mjs', 'position-composition-producer-transition.mjs'].includes(name)) return raw;

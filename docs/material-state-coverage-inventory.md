@@ -4,6 +4,36 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Border/contact core paint finding registered; canonical publication pending — October17
+
+Registered core-fractional-border-edge-paint-disagrees-with-native using the
+existing source finding/proof inventories. Current source now161 findings/215
+proofs;accepted canonicalf663 remains159/213. The new entry records the equal-
+input shadow-free failure,correct live geometry,current complete owning-method
+agreement,and general core final-edge-paint ownership. Exact GPU coverage law,
+other phases/edges/colors and contribution to unequal Material inputs remain
+explicitly unproved. No Material scalar row is relabeled as equal-input failure
+solely because the public reduction fails;separate authoring classifications stay.
+
+One focused proof plus four source/report fingerprints added to the producer.
+All previous160 definitions/214 proofs/source entries survive EXACTLY:bounded
+restoration pins current policya6b68505/producersac3d948a to preceding5cc34579/
+b7746df8 bytes,then the original semantic transition still restores159/213.
+Current registration tests read actual161/215,while historical benchmark population
+explicitly excludes the two authenticated additions. Controls reject unrelated
+drift,changed failure text,renamed finding identifier and changed proof title.
+Initial title mutation exposed a guard bypass;the guard now rejects an unrecognized
+border proof when its registered files remain instead of returning it unchanged.
+
+Focused registration suite4/4 passes (4752.27ms);final added identifier/boundary
+selection2/2 passes (1479.6778ms). Public border geometry/owner/pixel checks3/3
+pass (3884.296ms),preserving observed rendering FAILURES. No recapture/export or
+new large proposal. Pending coherent integration must reconcile the changed
+policy/producer/helper/test receipts AND queued Icon alignment/source evidence;
+do not claim the saved f43 proposal or canonical is freshly current. Next complete
+that bounded integration at a justified milestone,not repeat the border probes.
+All2311 cases remain partial,current renderingunverified;final gates unchanged.
+
 ### Live border frame rules out geometric displacement in public failure — October17
 
 The specific missing distinction is now measured. Read-only geometry recipe

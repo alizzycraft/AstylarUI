@@ -8922,6 +8922,10 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'scripts/audit-public-border-contact.mjs',
+    'scripts/audit-public-border-contact-geometry.mjs',
+    'artifacts/material-parity/public-border-contact-20261017/latest-report.json',
+    'artifacts/material-parity/public-border-contact-geometry-20261017/latest-report.json',
     'scripts/audit-public-text-transform-ax.mjs',
     'scripts/check-public-text-transform-owner.mjs',
     'scripts/audit-material-icon-heading-ax.mjs',
@@ -9645,6 +9649,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/icon-asset-input.spec.mjs', /test\('public border live frame preserves fractional geometry and all original raster bytes'/,
+      'public fractional border paint failure with correct live geometry and current owners', 'Eight equal-input pairs retain integer controls and fractional shadow-free22/44RGB failures atDPR1/2. Live132-vertex frame edges preserve1CSSpx thickness and exact fractional position;all16 PNGs reproduce unchanged. Fifteen complete owning methods match current source. Exact GPU coverage law and Material residual contribution remain unproved;no offsets,threshold changes or case promotion.'),
     proof(root, 'tests/material-parity/semantic-text-transform-input.spec.mjs', /test\('public semantic text transform preserves controls and current owner evidence'/,
       'public semantic text-transform support gap and complete predecessor conservation', 'Six equal-input public pairs atDPR1/2 retain two none controls and four transformed AX-name failures. Complete current emitted/installed owning methods agree;16 actual-theme Material contexts retain corresponding title/eyebrow failures. Complete prior policy/producer definitions are conserved. Not AT behavior,inherited/locale/update coverage or whole-case acceptance.'),
     proof(root, 'scripts/check-retained-paragraph-font-box.mjs', /assert.equal\(observations.length, 8\)/,

@@ -8,12 +8,46 @@ import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { restoreSemanticTextTransformPolicy, restoreSemanticTextTransformProducer,
   restoreSemanticRegistrationTransitionSource, readHistoricalBenchmarkSource, historicalSemanticDefinitions,
   reviewedRootEditingGraph, reviewedRootEditingRunnerReceipt } from './semantic-text-transform-registration.mjs';
+import { restoreBorderContactPolicy, restoreBorderContactProducer } from './semantic-text-transform-registration.mjs';
+
+test('border contact registration preserves all predecessor findings and proof sources', () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const id = 'core-fractional-border-edge-paint-disagrees-with-native';
+  const finding = sourceAuditDefinitions.find(row => row.id === id);
+  assert.equal(sourceAuditDefinitions.length, 161);
+  assert.equal(finding.classification, 'confirmed-core-renderer-defect');
+  assert.equal([...readFileSync(finding.file, 'utf8').matchAll(new RegExp(finding.pattern, 'g'))].length, 1);
+  for (const receipt of finding.evidence) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  for (const [file, restore] of [
+    ['tests/material-parity/input-equivalence-policy.mjs', restoreBorderContactPolicy],
+    ['tests/material-parity/input-equivalence-audit.mjs', restoreBorderContactProducer],
+  ]) {
+    const current = readFileSync(file, 'utf8');
+    const previous = execFileSync('git', ['show', `19c2452c:${file}`], { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+    assert.equal(restore(current), previous);
+    assert.throws(() => restore(current + '\n// unrelated drift'));
+    if (file.endsWith('policy.mjs')) {
+      const before = new Function(previous.replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
+      assert.deepEqual(sourceAuditDefinitions.filter(row => row.id !== id), before);
+      const changed = current.replace('fractional shadow-free cases fail22/44RGB', 'fractional shadow-free cases pass');
+      assert.notEqual(changed, current); assert.throws(() => restore(changed));
+      const renamed = current.replace(id, 'unreviewed-border-identifier');
+      assert.notEqual(renamed, current); assert.throws(() => restore(renamed));
+    } else {
+      const ast = ts.createSourceFile(file, current, ts.ScriptTarget.Latest, true);
+      const proofs = ast.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === 'focusedProofInventory').body.statements[0].expression.elements;
+      assert.equal(proofs.length, 215);
+      const changed = current.replace('correct live geometry and current owners', 'unmeasured geometry');
+      assert.notEqual(changed, current); assert.throws(() => restore(changed));
+    }
+  }
+});
 
 test('public semantic text transform preserves controls and current owner evidence', t => {
   const hash = b => createHash('sha256').update(b).digest('hex');
   const id = 'core-semantic-text-transform-not-projected';
   const finding = sourceAuditDefinitions.find(row => row.id === id);
-  assert.equal(sourceAuditDefinitions.length, 160);
+  assert.equal(sourceAuditDefinitions.length, 161);
   assert.equal(finding.classification, 'confirmed-core-renderer-defect');
   assert.match(readFileSync(finding.file, 'utf8'), new RegExp(finding.pattern));
   for (const receipt of finding.evidence) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
@@ -23,7 +57,7 @@ test('public semantic text transform preserves controls and current owner eviden
   const heading = JSON.parse(execFileSync(process.execPath, ['scripts/check-material-icon-heading-ax.mjs'], { encoding: 'utf8' }));
   assert.equal(heading.contexts, 16); assert.equal(heading.matchingTitles, 0);
   for (const file of ['tests/material-parity/input-equivalence-policy.mjs', 'tests/material-parity/input-equivalence-audit.mjs']) {
-    const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+    const current = (file.endsWith('policy.mjs') ? restoreBorderContactPolicy : restoreBorderContactProducer)(readFileSync(file, 'utf8'));
     const previous = execFileSync('git', ['show', `c3d1afde:${file}`], { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
     const ast = ts.createSourceFile(file, current, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
     const ranges = [];
@@ -34,7 +68,7 @@ test('public semantic text transform preserves controls and current owner eviden
       const added = entries[0]; assert.ok(added.getText(ast).includes(id));
       ranges.push([added.getFullStart(), added.end + 1]);
       const priorDefinitions = new Function(previous.replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
-      assert.deepEqual(sourceAuditDefinitions.filter(row => row.id !== id), priorDefinitions);
+      assert.deepEqual(sourceAuditDefinitions.filter(row => row.id !== id && row.id !== 'core-fractional-border-edge-paint-disagrees-with-native'), priorDefinitions);
     } else {
       const proofs = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory').body.statements[0].expression.elements;
       assert.equal(proofs.length, 214);
@@ -51,7 +85,7 @@ test('public semantic text transform preserves controls and current owner eviden
     assert.equal(restored, previous, `Unrelated ${file} source must survive exactly`);
     assert.notEqual(restored + '\n// unrelated drift', previous);
   }
-  t.diagnostic(JSON.stringify({ definitions: 160, priorDefinitionsConserved: 159, focusedProofs: 214,
+  t.diagnostic(JSON.stringify({ currentDefinitions: 161, semanticRegistrationDefinitions: 160, priorDefinitionsConserved: 159, semanticRegistrationProofs: 214,
     publicFailurePairs: 4, materialPhysicalContexts: 16, canonicalPublication: false }));
 });
 
@@ -78,10 +112,10 @@ test('root editing runner applicability conserves metadata transition and reject
 });
 
 test('semantic registration historical boundary rejects drift and keeps current population explicit', () => {
-  assert.equal(sourceAuditDefinitions.length, 160);
+  assert.equal(sourceAuditDefinitions.length, 161);
   const old = historicalSemanticDefinitions(sourceAuditDefinitions);
   assert.equal(old.length, 159);
-  assert.equal(sourceAuditDefinitions.length, 160); // never mutates the production registry
+  assert.equal(sourceAuditDefinitions.length, 161); // never mutates the production registry
   assert.throws(() => historicalSemanticDefinitions(old));
   let controls = 1;
   for (const [file, restore] of [

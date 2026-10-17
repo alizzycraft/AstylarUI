@@ -157,7 +157,13 @@ the suite now has an explicit historical population/read boundary. It removes
 only the authenticated additive160th finding,214th proof and associated source
 registration,then checks complete prior policy/producer/helper/suite hashes.
 The current-registration suite semantic-text-transform-input.spec.mjs separately
-reads the actual160 definitions/214 proofs and tests conservation/drift rejection.
+reads the actual161 definitions/215 proofs and tests conservation/drift rejection.
+The additive border-contact registration has its own exact reversal to the
+previous160/214 sources before the semantic reversal to159/213. Complete source
+hashes,predecessor inventories and rejection controls bind both stages. These
+are explicit historical populations,not an alteration of the production registry
+or a waiver of the new public border failure. A changed registration identifier
+or proof description cannot silently bypass its restoration guard.
 Historical reads are limited to four exact workspace paths and change no disk
 files,production collection or capture. Do not present historical replay as
 current renderer acceptance. The root-focus runner584cdfc8 versus current86ece08b

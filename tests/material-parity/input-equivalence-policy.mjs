@@ -110,6 +110,21 @@ export const reviewedValueNormalizations = Object.freeze([
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    id: 'core-fractional-border-edge-paint-disagrees-with-native',
+    introducedBy: 'public equal-input reduction and current owning methods; first-bad revision not established',
+    file: 'src/app/services/babylon-mesh.service.ts',
+    pattern: String.raw`const vertexData = this\.createPolygonFrameVertexData\(`,
+    classification: 'confirmed-core-renderer-defect',
+    owner: 'core border final edge coverage/compositing after correct projected geometry',
+    focusedProof: 'tests/material-parity/icon-asset-input.spec.mjs: public border live frame preserves fractional geometry and all original raster bytes; public border contact capture binds complete current border construction and placement owners; public border contact reduction isolates fractional edge mismatch without shadows',
+    evidence: [{ file: 'artifacts/material-parity/public-border-contact-20261017/latest-report.json', sha256: '89e5abb3b94d0b1aadbd3d2e8e7818c760f34fe54675946c5d4a284003640aab' },
+      { file: 'artifacts/material-parity/public-border-contact-geometry-20261017/latest-report.json', sha256: '6d9dd5c43393d686cdebb7b3c014f08b2cc97d1908298860c161e2e2fe98a952' }],
+    observation: { component: 'public plugin-free bordered div', property: 'fractional bottom border pixels', states: ['shadow-off', 'shadow-on'], dpr: [1, 2],
+      reference: 'integer shadow-free controls match; fractional border occupies native solid row',
+      astylar: 'fractional shadow-free maximum channel errors22/44 despite correct1px live frame', stage: 'edge paint after projected geometry' },
+    justification: 'Eight equal-input public pairs preserve1px border ink,width,radius,fill and shadow-off/on requests. Integer shadow-free controls match exactly;fractional shadow-free cases fail22/44RGB atDPR1/2. Live132-vertex frames retain exact outer/inner edges166.546875/165.546875 CSSpx;all16 original screenshots reproduce byte-for-byte after read-only instrumentation. Fifteen complete current/emitted/installed construction/material/placement methods agree;changed subtraction/sign controls reject. This confirms a bounded core paint discrepancy,not displaced frame geometry or solely Material shadow-alpha authoring. Exact GPU/browser coverage algorithms,all phases/edges/colors and contribution to unequal Material inputs remain unproved. Fix the general final border-paint contract,not fixture offsets or CSS layout rounding;retain separate shadow failures and original pixels.',
+  }),
+  Object.freeze({
     id: 'core-semantic-text-transform-not-projected',
     introducedBy: 'public equal-input reduction and complete owning-method comparison; first-bad revision not established',
     file: 'src/lib/astylar-semantic-bridge.ts',
