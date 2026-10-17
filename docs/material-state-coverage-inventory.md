@@ -4,6 +4,30 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+Accepted package:0dd7dce3/index37486eaa (161 source findings/215 proofs).
+Registered source:162/216. Export session46814/PID18880 is live with selected
+case review0ee8;freeze its producer/evidence inputs until export/cold/conservation
+finish. Latest outside-export case queue1b34 binds56 focus/113 pointer observations
+and child receipts. ALL2311 cases remainpartial/unverified;zero full closures.
+
+New confirmed public attribute-refresh cause is reviewed separately in source
+proposal3ccb3f7bd6ff9075976037b8408e4a03adfc03113c27a3ed049a4bd0740af2fe:
+163 QUEUED definitions,not production163. Original162 definitions recover exactly;
+public failure,owner/source/version and verification receipts authenticate.
+Log role-focus-source-finding-proposal-20261017 terminates0. Existing focused
+test/proof inventory registration is explicitly pending;no producer/renderer
+change or extra canonical rebuild. Do not confuse this source review with the
+2311-case obligation proposals.
+
+Next:finish the live integration and independent verification;then register the
+new cause and queued observations in a coherent batch. Remaining shared gaps:
+descendant/AX/input ownership,event/default-action classification,local paint,
+source/runtime validity and complete case dispositions. Root-only focus repairs
+would miss the independently confirmed attribute-stage failure. Original final
+gates and equal-input/root-cause contract remain unchanged.
+
+## Preserved audit chronology
+
 ### Public role-control no-op updates confirm attribute-stage first blur — October17
 
 New gap-closing reduction uses only package-root Astylar mount/update/settlement

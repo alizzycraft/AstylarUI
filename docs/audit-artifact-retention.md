@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep role-focus-source-finding-proposal-20261017 stdout/stderr and source review
+3ccb3f7bd6ff9075976037b8408e4a03adfc03113c27a3ed049a4bd0740af2fe. It preserves
+all162 production definitions plus one queued confirmed public cause;it is not
+production registration or canonical publication. All referenced public/owner/
+isolation evidence stays required. No capture or existing source was overwritten.
+
 Keep public-role-focus-refresh-20261017 report,input.mjs,audit.js,index.html and
 all captured dependency receipts;keep public-role-focus-refresh-{capture,verify,
 owner}-20261017 stdout/stderr. This is the new public attribute-first focus
