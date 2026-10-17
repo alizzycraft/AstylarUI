@@ -4,7 +4,47 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
-###113 configured pointer observations verified and joined; child receipts bound — October17
+### Public role-control no-op updates confirm attribute-stage first blur — October17
+
+New gap-closing reduction uses only package-root Astylar mount/update/settlement
+and the existing esbuild/local-server/browser receipt pattern. Identical authored
+site/style objects are paired with native DOM controls for DIV,SPAN,INPUT,BUTTON
+atDPR1/2,with two unchanged-document updates each. Stable IDs,explicit tabindex0,
+roles and content remain unchanged. Observation-only DOM method wrappers retain
+original return/throw behavior and are restored before disposal;no corrective
+focus,renderer/private-service mutation,Material/plugin or screenshot involved.
+
+public-role-focus-refresh-20261017 reportSHA
+d921c9a64118a4996bd0e3bd7d10101378f44303575729e43883828417492840
+preserves eight paired contexts/32 side updates. All16 native updates retain
+focus without events. All16 candidate updates blur/refocus the SAME node and end
+focused:in eight DIV/SPAN updates the FIRST loss is removeAttribute('tabindex')
+on the connected control;in eight INPUT/BUTTON updates it is root replaceChildren.
+Independent --verify rejects missing context,unequal authored tabindex and altered
+first-loss cause (three controls). Capture/verify bothTERMINAL0.
+
+Owner log public-role-focus-refresh-owner-20261017 binds all four complete
+current/emitted/installed methods applyAttributes,reconcile,reconcileElement,
+syncFocus and the actual bundled installed source receipt. All eight attribute
+first-loss stacks name applyAttributes;all eight root stacks name reconcile.
+Versions AstylarUI0.2.0/Angular20.3.31/Babylon8.56.2,Chrome155.0.8059.80.
+Blame0175a0bd introduces the attribute-clearing lines;this is source history,
+not a first-bad runtime claim.
+
+Classification:bounded confirmed core semantic attribute-refresh focus-continuity
+defect,SEPARATE from the already-confirmed root/descendant replacement defect.
+Do not repair only root replacement,refocus from applications or suppress events;
+preserve unchanged focusability at the owning attribute boundary as well. No
+exact first-blur attribution for every Material chip/slide/expansion event,other
+attributes/keys/AT behavior,paint or whole-case acceptance follows.
+
+This standalone finding still needs existing machine source/proof registration
+after the frozen export/cold milestone. Actual source inventory remains162/216;
+do not claim163 or mutate live0ee8 inputs. Queued1b34 and all2311 partial cases
+remain unchanged. Next register this general cause in the next coherent batch and
+use existing raw event/tree records for exact Material ownership classification.
+
+### 113 configured pointer observations verified and joined; child receipts bound — October17
 
 Activation distinct capture terminates0 with113 cases,339 paired boundaries,
 226 trees/226 PNGs. Independent --verify authenticates frozen recipe/base graph,

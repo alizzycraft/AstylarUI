@@ -1,5 +1,34 @@
 # Material audit: evidence-led implementation priorities
 
+Current evidence pointer (October17):accepted package0dd7dce3/index37486eaa has
+161 source findings/215 proof anchors. Working registered source is162/216;
+selected0ee8 is in the live export,while queued1b34 adds56 direct focus and113
+pointer observations with authenticated child receipts. All2311 cases remain
+partial/unverified. Historical checkpoints below are not current acceptance.
+
+New confirmed public attribute-stage focus defect (October17):on unchanged
+documents,DIV/SPAN tabindex0 controls first blur synchronously inside
+applyAttributes.removeAttribute('tabindex'),before root replacement. Native
+INPUT/BUTTON controls instead first blur at root.replaceChildren. Eight paired
+DPR1/2 contexts/two updates each preserve16 native no-event controls versus16
+candidate blur/refocus failures,with stable node identity and final focus.
+Report public-role-focus-refresh-20261017 SHA
+d921c9a64118a4996bd0e3bd7d10101378f44303575729e43883828417492840;
+capture/independent verify and owner logs are in the current coverage ledger.
+All four complete current/installed owning methods match;public bundle uses root
+imports only and no Material/plugin. Three rejection controls pass.
+
+Implementation order must address BOTH general semantic mutation boundaries:
+preserve unchanged focus-critical attributes during attribute reconciliation,
+then preserve retained focused descendants during root/child-list reconciliation.
+Do not add application refocus or event suppression. Native role-like controls,
+native form/button controls,changed versus unchanged attributes,root/descendant
+updates and focus/selection policy need owning regression coverage. This is not
+authorization to implement now. Exact first-blur owner of every Material trace,
+other attributes/AT/paint and whole-current-package acceptance remain unproved.
+Attribute finding is standalone and NOT yet added to the162/216 source registry;
+register through existing mechanisms after frozen integration,not during export.
+
 Confirmed public semantic-style support gap (October17):equal authored h1 text
 project atlas and resolved none/capitalize/uppercase inputs atDPR1/2 give two
 matching none controls and four failing transformed AX names. Native exposes
@@ -46,7 +75,7 @@ The earlier public button proof binds paint/texture height with an explicit48px
 button;the new paragraph proof binds auto child height. Share one owning fix and
 retain both observables;do not duplicate the finding or repeat its fallback tests.
 
-Current canonical acceptance pointer (supersedes historical checkpoints below):
+Historical canonical checkpoint (superseded by the current pointer above):
 f663c88e/indexbc481df1 includes configured editing/root-focus evidence,selected
 87b7 divider review,inherited-font margin,divider paint/lifecycle and paragraph
 evidence with213

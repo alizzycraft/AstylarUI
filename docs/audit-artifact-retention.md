@@ -56,6 +56,15 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep public-role-focus-refresh-20261017 report,input.mjs,audit.js,index.html and
+all captured dependency receipts;keep public-role-focus-refresh-{capture,verify,
+owner}-20261017 stdout/stderr. This is the new public attribute-first focus
+FAILURE with native no-op and native-element root-first controls,not successful
+scratch. No PNGs were generated because the claim is focus-event continuity,
+not visual parity. Producer source is now receipt-bound;future variants need a
+fresh path/source stage. Keep existing root/descendant/input and method-isolation
+evidence separately;this does not supersede their distinct observations.
+
 Keep configured-control-activation-distinct-20261017 report/226 PNGs/226 trees and
 its -provenance checkpoint. Preserve capture-distinct,verify,post-controls-verify,
 raw-census,case-join and BOTH negative-controls/isolated-negative-controls logs.
