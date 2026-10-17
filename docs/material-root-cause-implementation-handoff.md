@@ -1,5 +1,19 @@
 # Material audit: evidence-led implementation priorities
 
+Non-quarter primitive extension (October17):public-thin-fill-nonquarter-20261017
+adds8 equal-input/geometric pairs and16 retained PNGs atDPR1/2,phases0/.546875/
+.5625/.875. Five pairs differ locally from native;continuous candidate coverage
+fails5/8. Empirical four-row coverage with >top/<=bottom fits8588 checked interior
+positions within1RGB;the earlier >=top/<bottom version fails2 boundary cases.
+Use scripts/check-material-nonquarter-fill-paint.mjs and the coverage ledger for
+receipts. Earlier quarter-phase fits do not establish a continuous general rule.
+Exact GPU sampling remains unmeasured;do not snap all layout or compensate in
+fixtures/plugins. This public primitive isolates a paint-stage mismatch from
+Material shadow authoring,not complete Material border/shadow attribution.
+Retained Icon root contact failures remain failures;only their contact row exceeds
+the existing profile threshold. Equal shadow inputs and actual border/material/
+sampling ownership still need precise attribution before a general implementation.
+
 New bounded normal-line-box evidence:public-paragraph-linebox-20261015 has eight
 equal-input Arial16/24 DPR1/2 pairs. Four normal paragraphs are1CSSpx short;
 four explicit20/30px controls agree. The authenticated installed parser's23
@@ -18,12 +32,13 @@ button;the new paragraph proof binds auto child height. Share one owning fix and
 retain both observables;do not duplicate the finding or repeat its fallback tests.
 
 Current canonical acceptance pointer (supersedes historical checkpoints below):
-92346052/index478d2448 includes configured editing/root-focus evidence,selected
-74d0 divider review,inherited-font margin and thin-fill context evidence with209
+f663c88e/indexbc481df1 includes configured editing/root-focus evidence,selected
+87b7 divider review,inherited-font margin,divider paint/lifecycle and paragraph
+evidence with213
 registered focused proofs. Independent cold comparison,full predecessor
 conservation,compact import and whole-index verification pass;exact receipts are
 in the coverage ledger. All2311 cases remain partial/unverified,inputEquivalent
-false. New paragraph auto-height and empirical four-sample diagnostics remain
+false. Later queueddf29 Icon work and new non-quarter standalone evidence remain
 outside this batch. Final gates and complete case closure remain.
 
 The following source-registration chronology predates that accepted package:

@@ -4,6 +4,50 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Non-quarter public fill control separates previously coincident models — October17
+
+Git e8121e39 is now pushed;the interrupted approval did not previously execute
+the push. Source/final acceptance are unchanged. Next root-contact question used
+existing thin-fill evidence before any new capture:old public phases0/.25/.5/.75
+cannot distinguish continuous coverage from sampled coverage at the observed
+Material contact fractions. Retained contrast pixels have native full border ink
+at row234 and candidate mixed ink at233/234;geometry bottoms234.546875/234.559997.
+Do not force the old continuous model onto this distinct primitive/context.
+
+Narrow source-recipe extension audit-public-thin-fill-nonquarter.mjs pins the
+unchanged75e7055e parent and58c335b8 base;it changes phases to0/.546875/.5625/.875
+and diagnostic identity only. The selected CSS fractions are1/64-grid aligned to
+isolate paint from layout quantization,not corrections to Material geometry.
+Public package-root mounting,reference conversion,readiness,geometry constraints,
+runtime/asset/dependency receipts and both negative controls remain original.
+No Material fixture or renderer changed;integer controls are part of this fresh
+context. Eight pairs atDPR1/2 and16 PNGs are retained in public-thin-fill-nonquarter-
+20261017. Capture4934 TERMINAL0,independent --verify TERMINAL0;all paired source
+inputs and geometry match. ReportSHA970ef77b21fd432e3eed6d210482411dad7c6126349ef4f3fce9d4dea992c2d9,
+Chromium155.0.8059.80. Outside-parent native-white/candidate-red fallback remains
+visible as the already-recorded separate issue;no whole-frame parity claim.
+
+check-material-nonquarter-fill-paint.mjs authenticates the report,bundle/HTML,16
+PNGs and original verifier,then compares8588 paired interior pixel positions.
+Native round(CSS top)*DPR prediction fits all8. Candidate continuous device-area
+prediction rejects5;the previous >=top/<bottom four-row prediction rejects2.
+The >top/<=bottom variant at empirical rows.125/.375/.625/.875 fits all8 within
+1RGB (maximum.5). Integer controls match;five pairs differ locally from native.
+This identifies boundary inclusion as a previously untested distinction,not an
+observed GPU sample-position API or a universal rasterizer rule. Earlier bounded
+quarter-phase and divider findings remain valid within their own sampled domains.
+No threshold relaxation,pixel shift,layout rounding or failure removal.
+
+Logs public-thin-fill-nonquarter-{capture,verify,model}-20261017 preserve results;
+model check TERMINAL0 includes both original forged-height/missing-case controls.
+This supports a shared primitive paint-stage discrepancy independent of Material
+plugins/unequal shadow authoring;it does not complete Material border/shadow cause
+attribution or all input/semantic/lifetime requirements. No case promotion,
+canonical export or renderer fix. Canonicalf663/queueddf29 remain separate;new
+standalone evidence awaits coherent proof/source registration. Prioritize exact
+remaining semantic and history/ownership dispositions rather than repeating the
+quarter/non-quarter pixel census or turning this empirical fit into fixture offsets.
+
 ### Retained root paint saved and independently replayed after disk recovery — October17
 
 Disk now has about4.6GB free from an external state change. Git9e4febfe was pushed
