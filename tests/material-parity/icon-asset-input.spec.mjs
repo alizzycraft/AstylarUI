@@ -18,6 +18,72 @@ import { collectIconContextReview, validateIconContextReview, iconContextBaselin
 
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 
+test('Icon viewport owner keeps CSS extents independent of final plane projection', t => {
+  const rootFile = 'src/app/services/dom/elements/root.service.ts';
+  const geometryFile = 'src/app/services/css-layout-geometry.ts';
+  const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+  const rootBytes = readFileSync(rootFile), geometryBytes = readFileSync(geometryFile);
+  const compile = (source, module = ts.ModuleKind.ESNext) => ts.transpileModule(source, { compilerOptions: {
+    target: ts.ScriptTarget.ES2022, module, experimentalDecorators: true,
+  } }).outputText;
+  const printer = ts.createPrinter({ removeComments: true });
+  function methods(source) {
+    const ast = ts.createSourceFile('root.js', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS), classes = [];
+    function visit(node) {
+      if ((ts.isClassDeclaration(node) || ts.isClassExpression(node)) && node.name?.text === 'RootService') classes.push(node);
+      ts.forEachChild(node, visit);
+    }
+    visit(ast);
+    return ['createRootBodyElement', 'parsePadding'].map(name => printer.printNode(ts.EmitHint.Unspecified,
+      one(one(classes).members.filter(member => member.name?.getText(ast) === name)), ast));
+  }
+  const currentMethods = methods(compile(rootBytes.toString()));
+  const mapBytes = readFileSync('artifacts/material-parity/retained-evidence/component-map-recovery-20261011/chunk-3JXWRYJY.js.map');
+  assert.equal(sha(mapBytes), 'dba484044ca0dea965d8ef4b12635673f0f055d7711099d2f6476ca490988ec4');
+  const map = JSON.parse(mapBytes), sourceIndex = map.sources.indexOf('node_modules/astylarui/dist/lib/app/services/dom/elements/root.service.js');
+  const syntax = source => {
+    const ast = ts.createSourceFile('method.js', `class RootService {${source}}`, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    const shape = node => {
+      if (ts.isParenthesizedExpression(node)) return shape(node.expression);
+      const children = []; ts.forEachChild(node, child => { children.push(shape(child)); });
+      return { kind: node.kind, ...(!ts.isSourceFile(node) && typeof node.text === 'string' ? { text: node.text } : {}), children };
+    };
+    return shape(ast);
+  };
+  assert.ok(sourceIndex >= 0); assert.deepEqual(currentMethods.map(syntax), methods(map.sourcesContent[sourceIndex]).map(syntax));
+  const geometry = { exports: {} }; new Function('exports', compile(geometryBytes.toString(), ts.ModuleKind.CommonJS))(geometry.exports);
+  const Root = new Function('createCssLayoutBox', 'Color3', `return class RootService {${currentMethods.join('\n')}}`)(
+    geometry.exports.createCssLayoutBox, class Color3 {});
+  const reportBytes = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
+  assert.equal(sha(reportBytes), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const report = JSON.parse(reportBytes), cases = [...report.results, ...report.interactions].filter(row => row.family === 'icon');
+  assert.equal(cases.length, 20);
+  let executions = 0;
+  for (const row of cases) {
+    const receipt = row.inputTrees.astylar, bytes = readFileSync(receipt.file); assert.equal(sha(bytes), receipt.sha256);
+    const tree = JSON.parse(bytes), rootRule = one(tree.rules.filter(rule => rule.selector === 'root'));
+    assert.deepEqual(Object.keys(rootRule).sort(), ['background', 'selector']);
+    for (const projected of [[9, 7], [99, 31]]) {
+      const plane = {}, calls = [], context = { elements: new Map(), elementDimensions: new Map(), layoutBoxes: new Map() };
+      const render = { scene: { getEngine: () => ({ getRenderingCanvas: () => ({ clientWidth: row.viewport.width, clientHeight: row.viewport.height }) }) },
+        actions: { camera: { calculateViewportDimensions: () => ({ width: projected[0], height: projected[1] }) },
+          style: { findStyleBySelector: selector => { assert.equal(selector, 'root'); return rootRule; },
+            parseBackgroundColor: value => ({ color: value }), parseOpacity: () => 1 },
+          mesh: { createPlane: (...args) => { calls.push(args); return plane; }, positionTextMesh: () => {}, createMaterial: () => ({}) } } };
+      assert.equal(new Root().createRootBodyElement({ context }, render, tree.rules), plane);
+      assert.deepEqual(calls, [['root-body', ...projected]]);
+      const zero = { top: 0, right: 0, bottom: 0, left: 0 };
+      assert.deepEqual(context.elementDimensions.get('root-body'), { width: row.viewport.width, height: row.viewport.height, padding: zero });
+      const rect = { x: 0, y: 0, width: row.viewport.width, height: row.viewport.height };
+      assert.deepEqual(context.layoutBoxes.get('root-body'), { parentId: null,
+        box: { borderBox: rect, contentBox: rect, padding: zero, margin: zero } }); executions++;
+    }
+  }
+  t.diagnostic(JSON.stringify({ cases: cases.length, executions, rootSourceSha256: sha(rootBytes), geometrySourceSha256: sha(geometryBytes),
+    capturedRootMethodsMatch: true, classification: 'no extra root CSS padding/origin offset in these inputs',
+    boundary: 'Actual current root methods and geometry helper with inert mesh/style adapters; retained root-method source agreement. Not WebGL,descendant flow/inheritance/clipping,all root styles or full viewport-owner neutrality.' }));
+});
+
 test('Icon-specific compensation history has only the original external-image and fixed-raster authoring stages', t => {
   const file = 'examples/material-showcase/src/app/astylar.component.ts';
   const initial = '2f440115', raster = '48825c45';

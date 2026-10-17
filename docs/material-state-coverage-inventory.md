@@ -4,6 +4,42 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Icon viewport-owner CSS boundary checked against current and captured methods — October17
+
+Question:does the separate root-body viewport owner introduce hidden padding or
+an origin offset,or mix final plane dimensions back into registered CSS geometry?
+Existing icon-asset-input.spec.mjs executes actual RootService construction and
+createCssLayoutBox with inert mesh/style adapters. All20 authenticated configured
+Icon candidate trees contain exactly one root rule,with background only. Forty
+executions use each captured CSS viewport and two deliberately different final
+plane extents (9x7 and99x31). The final createPlane call receives those extents;
+elementDimensions and layoutBoxes retain CSS viewport width/height,origin0,0,
+zero padding/margin and identical content/border rectangles. This rejects that
+specific extra-root-padding/origin/projection-feedback explanation for these
+inputs;not descendant flow,inheritance,clipping or whole viewport-owner neutrality.
+
+Pinned retained component mapdba48404 supplies original RootService methods.
+Current transpiled createRootBodyElement/parsePadding agree structurally with
+those captured methods;AST comparison preserves identifiers,literals,operators
+and nesting while ignoring comments,trailing commas and redundant parentheses.
+Current root source SHA8caa5d3c3a3cb896743cae36fcfd5234ab9ff9f727c8390adabe2bc7044b74f3;
+actual geometry source SHA7ac98d4b6459168d01425fc7fcd130e5c9309fdee66aad5649dbc0a470decbf7.
+This is source execution,not a native WebGL/public mounting acceptance run.
+No assertion about nonempty/percentage root padding or hidden zero-size canvases.
+
+Focused test passes1/1,2893.427ms process;retained log
+artifacts/material-parity/icon-viewport-owner-css-boundary-verified-20261017.log.
+The non-final and -final logs retain failed verifier construction attempts:
+module-namespace spelling/formatting and redundant-parenthesis differences,
+not rendering failures. Initial tool-only attempt also stopped before geometry.
+No captured bytes,source methods,renderer or fixtures changed. Test-file current
+SHA6d1978a3bed9282da6911cdda5e24d70d05f23f8de0cca1a98978d0211b90010;
+prior6e50477d source receipt below remains historical. Standalone assertion still
+requires coherent proof/case registration and source-receipt reconciliation;
+canonicalf663/queuedc57c and all2311 partial statuses remain unchanged.
+Next root question is actual authored-page descendant/default behavior,not an
+unexplained additional serialized wrapper or repeated root-origin speculation.
+
 ### Icon-specific compensation history is bounded through current sources — October17
 
 Question:do current Icon-specific declarations contain later positioning/sizing or
