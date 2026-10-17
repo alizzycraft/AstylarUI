@@ -4,6 +4,29 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Reader source applicability reconciled; broader Icon verification running — October17
+
+Priority remains complete case obligations and current-source applicability,
+then remaining local paint/interaction/ownership gaps; zero whole-case closures.
+The specific source question is resolved: restoreEvidenceReaderLookupSource
+authenticates current8dc9b344 and Git462496c8 original7e3611a8, then proves every
+module byte outside the tested streaming-lookup block unchanged. Original
+query/closure/import/hash/cleanup code survives. Unrelated appended source,
+changed lookup ordinal and changed integrity rejection all fail the guard.
+
+Existing store suite passes4/4 (1579.5679ms), source-transition log
+evidence-reader-source-transition-20261017. Original Icon contact assertion
+passes1/1 (1535.9898ms), icon-contact-reader-transition-20261017. Frozen report
+receipts remain original; only derived queued evidence records both captured and
+actual reader hashes plus the transition verifier. No old capture is rewritten.
+
+Unfiltered existing icon-asset-input.spec.mjs is now running under session96434,
+log icon-broader-source-applicability-20261017. Its outcome is not yet certified.
+Do not restart it on quiet buffered output. Next inspect terminal results and
+address the first demonstrated gap, rather than repeat passed narrow checks.
+Accepted0dd7/b1a96a, queued68af and all2311 partial cases remain unchanged; no
+new capture/export or current rendering acceptance follows from this boundary.
+
 ### Evidence-reader repeated per-value scan removed; original integrity preserved — October17
 
 Specific workflow bottleneck:loadFindingEvidence filtered/split every requested

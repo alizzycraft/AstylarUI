@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep evidence-reader-source-transition-20261017 and icon-contact-reader-transition-
+20261017 stdout/stderr, and icon-broader-source-applicability-20261017 stdout/
+stderr when terminal. They establish explicit reader-source applicability and
+the outcome of the existing broader suite, not new browser evidence. Preserve
+Git462496c8 reader bytes and original root-paint report receipts. No capture,
+proposal or prior failure becomes disposable through this source reconciliation.
+
 Keep evidence-reader-{before,batch-baseline,after,integrity-after,real49}-20261017
 stdout/stderr. The complexity failure and corruption rejections are required
 workflow evidence;the real49 log authenticates unchanged preserved package rows,

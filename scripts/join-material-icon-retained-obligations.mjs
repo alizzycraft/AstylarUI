@@ -9,6 +9,7 @@ import { compareBottomShadowProfiles } from '../tests/material-parity/shadow-pro
 import { openMaterialCheckpoint, materialCaseKey, fingerprintModuleGraph } from '../tests/material-parity/run-checkpoint.mjs';
 import { saveReviewProposal, loadCaseObligationReview, queryFindings } from './audit-findings-store.mjs';
 import { readHistoricalBenchmarkSource } from '../tests/material-parity/semantic-text-transform-registration.mjs';
+import { restoreEvidenceReaderLookupSource } from '../tests/material-parity/historical-audit-module-source.mjs';
 
 // Reuse the existing exact-case census and original TAP observations. No browser
 // capture,reinterpretation of profile labels,or whole-parent promotion.
@@ -208,8 +209,17 @@ const rootPaintFile = base + 'icon-retained-root-paint-verified-20261017.json';
 const rootPaintBytes = readFileSync(rootPaintFile);
 assert.equal(hash(rootPaintBytes), 'ff56c512ab65121267e163640613147df59e047204d07862e9fbc321ef469a31');
 const rootPaint = JSON.parse(rootPaintBytes);
-const verifyReceipt = receipt => assert.equal(hash(readFileSync(receipt.file)), receipt.sha256, receipt.file);
-rootPaint.sources.forEach(verifyReceipt);
+const verifyReceipt = receipt => {
+  const bytes = readFileSync(receipt.file);
+  assert.equal(hash(receipt.file === 'scripts/audit-findings-store.mjs'
+    ? restoreEvidenceReaderLookupSource(bytes) : bytes), receipt.sha256, receipt.file);
+};
+const rootPaintSources = rootPaint.sources.map(receipt => {
+  verifyReceipt(receipt);
+  return receipt.file === 'scripts/audit-findings-store.mjs' ? { ...receipt,
+    capturedSha256: receipt.sha256, sha256: hash(readFileSync(receipt.file)),
+    applicability: 'Exact tested lookup-only transition;complete query/closure/hash and other source conserved' } : receipt;
+});
 [rootPaint.sourceReport, rootPaint.checkpointManifest, rootPaint.canonicalIndex].forEach(verifyReceipt);
 assert.equal(rootPaint.sourceReport.sha256, hash(freshBytes));
 const oldRootPointer = { generation: path.basename(path.dirname(rootPaint.canonicalIndex.file)), indexSha256: rootPaint.canonicalIndex.sha256 };
@@ -257,7 +267,8 @@ for (const change of [record => { record.geometry.root.expected.left++; }, recor
 }
 assert.equal(rootPaint.records.filter(record => !record.shadow.matches).length, 3);
 const rootPaintEvidence = { report: { file: rootPaintFile, sha256: hash(rootPaintBytes) },
-  sources: rootPaint.sources, sourceReport: rootPaint.sourceReport, checkpoint: rootPaint.checkpointManifest,
+  sources: rootPaintSources, sourceReport: rootPaint.sourceReport, checkpoint: rootPaint.checkpointManifest,
+  readerTransitionVerifier: { file: 'tests/material-parity/historical-audit-module-source.mjs', sha256: hash(readFileSync('tests/material-parity/historical-audit-module-source.mjs')) },
   historicalIndex: rootPaint.canonicalIndex };
 assert.equal(fresh.summary.meetsAcceptance, false); assert.equal(fresh.interactionSummary.meetsAcceptance, false);
 const inspectFile = base + 'icon-inspect-local-paint-20261007.log', inspectBytes = readFileSync(inspectFile);

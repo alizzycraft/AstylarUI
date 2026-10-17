@@ -9,6 +9,17 @@ import { encodeMaterialInputAuditStream } from './input-audit-report-stream.mjs'
 import { withAuditEvidenceSession, auditReadFileSync } from './audit-evidence-session.mjs';
 import { withAuditScratch } from './audit-scratch.mjs';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
+import { restoreEvidenceReaderLookupSource } from './historical-audit-module-source.mjs';
+
+test('evidence reader source boundary permits only the authenticated lookup transition', () => {
+  const current = fs.readFileSync('scripts/audit-findings-store.mjs', 'utf8');
+  const restored = restoreEvidenceReaderLookupSource(current);
+  assert.equal(createHash('sha256').update(restored).digest('hex'), '7e3611a870eee1c81e857a946781f8669aff8d6189d348d4b872ae9a7919648d');
+  for (const changed of [current + '\n// unrelated drift', current.replace('ordinals.get(this.key)', 'ordinals.get(0)'),
+    current.replace('Evidence row differs from compact finding', 'Evidence row accepted')]) {
+    assert.notEqual(changed, current); assert.throws(() => restoreEvidenceReaderLookupSource(changed));
+  }
+});
 
 test('versioned case inspection closure requires every obligation and never accepts current rendering', () => {
   // Synthetic schema proof only: these labels do not promote a real audit case.

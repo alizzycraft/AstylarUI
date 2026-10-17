@@ -18,6 +18,27 @@ export const originalOverlayAuditSourceCommit = '65487aeba6a26f9715f302f92b4ee45
 export const originalOverlayAuditSourceFile = 'tests/material-parity/input-equivalence-audit.mjs';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 
+// The retained root-paint diagnostic calls queryFindings,not the changed
+// streaming lookup. Preserve its original whole-module receipt after proving
+// every byte outside the independently tested lookup block is unchanged.
+export function restoreEvidenceReaderLookupSource(bytes) {
+  const current = bytes.toString().replaceAll('\r\n', '\n');
+  assert.equal(hash(current), '8dc9b3440e25a80b6a209472c58562a97b644dbec3815f3f9e2b884df9e32b3f');
+  const original = execFileSync('git', ['show', '462496c8:scripts/audit-findings-store.mjs'],
+    { encoding: 'utf8', maxBuffer: 4_000_000 });
+  assert.equal(hash(original), '7e3611a870eee1c81e857a946781f8669aff8d6189d348d4b872ae9a7919648d');
+  const withoutLookup = (source, start) => {
+    const end = '  const input = fs.createReadStream(payload), stream = input.pipe(createGunzip());';
+    assert.equal(source.split(start).length, 2); assert.equal(source.split(end).length, 2);
+    assert.ok(source.indexOf(start) < source.indexOf(end));
+    return source.slice(0, source.indexOf(start)) + '  /* authenticated lookup-only transition */\n' + source.slice(source.indexOf(end));
+  };
+  assert.equal(withoutLookup(current, '  // Parse each requested section once. Streaming a multi-GB payload must not\n'),
+    withoutLookup(original, '  const parser = new Parser(), found = new Map();\n'),
+    'Every query,closure,import,hash/stream-cleanup and other module byte must survive');
+  return original;
+}
+
 // Historical served bytes only. Current source applicability remains a caller obligation.
 export function verifyRetainedMaterialBrowserFiles(files, { root = process.cwd() } = {}) {
   const manifest = JSON.parse(readFileSync(path.resolve(root,

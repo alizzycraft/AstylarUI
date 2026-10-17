@@ -13,7 +13,7 @@ import { evaluateFocusedRaster } from './focused-raster-metrics.mjs';
 import { restoreSvgProofRegistration, restoreInheritedMarginPolicyRefinement } from './position-composition-producer-transition.mjs';
 import { queryFindings, loadFindingEvidence, loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
 import { materialStaticCases, materialInteractionCases, materialProfiles, materialViewports } from './benchmark.config.mjs';
-import { verifyRetainedMaterialBrowserFiles } from './historical-audit-module-source.mjs';
+import { verifyRetainedMaterialBrowserFiles, restoreEvidenceReaderLookupSource } from './historical-audit-module-source.mjs';
 import { effectiveBrowserCursor } from './cursor-metrics.mjs';
 import { compareBottomShadowProfiles } from './shadow-profile-metrics.mjs';
 import { collectIconContextReview, validateIconContextReview, iconContextBaseline, applyIconContextReviews, validateIconContextRows } from './display-request-review.mjs';
@@ -199,8 +199,11 @@ test('Icon retained contact failures include unequal border sampling rather than
   const raw = readFileSync('artifacts/material-parity/icon-retained-root-paint-verified-20261017.json');
   assert.equal(hash(raw), 'ff56c512ab65121267e163640613147df59e047204d07862e9fbc321ef469a31');
   const report = JSON.parse(raw);
-  for (const receipt of [...report.sources, report.sourceReport, report.checkpointManifest])
-    assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  for (const receipt of [...report.sources, report.sourceReport, report.checkpointManifest]) {
+    const bytes = readFileSync(receipt.file);
+    assert.equal(hash(receipt.file === 'scripts/audit-findings-store.mjs'
+      ? restoreEvidenceReaderLookupSource(bytes) : bytes), receipt.sha256);
+  }
   const failures = report.records.filter(row => !row.shadow.matches);
   assert.deepEqual(failures.map(row => row.case), ['static:icon@contrast/desktop', 'static:icon@contrast/tablet', 'interaction:icon@contrast/desktop-dpr1/inspect']);
   const observed = [];
