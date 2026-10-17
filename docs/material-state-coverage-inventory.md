@@ -19,6 +19,13 @@ semantic requests;no disabled behavior,AX/AT effect,wrapper neutrality,current
 bridge delivery or new core defect inferred. Keep this bounded evidence for the
 next coherent join;no new full proposal/export. The remaining recorded owner
 requests and full attributes are retained,not normalized away.
+Follow-up list-false-disabled-retained-ax-20261018 reuses authenticated original
+98b2c152 log:16 physical cohorts/32 paired direct rows have identical generic,
+unnamed,unignored projections with empty state properties and matching label
+descendants;16 forged disabled-state projections differ as required. No exposed
+disabled difference is demonstrated here. This is historical Chrome154 evidence,
+not a causal attribute-removal experiment,current rendering,full wrapper/AX/AT
+equivalence or configured-action closure. Raw omissions remain explicit.
 
 attribute-focus-readable-conservation-20261018 verifies complete prior Markdown
 after reversing exactly one new finding row,one proof description and four

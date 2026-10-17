@@ -62,6 +62,9 @@ trees and existing recorded-node mapping. All52 full attribute/request maps and
 Keep attribute-focus-readable-conservation-20261018 logs for candidate publication:
 the exact full predecessor Markdown recovers after two additions/four line shifts.
 Neither check makes the original evidence or pending cold result disposable.
+Also keep list-false-disabled-retained-ax-20261018 stdout/stderr with original
+list-ax-cohorts-20261007.log. It maps32 direct AX row pairs across16 cohorts;
+no browser capture,new full proposal or replacement of historical receipts.
 
 Keep public-legacy-clip-current-owner and current-owner-trim-20261018 logs.
 Initial newline-boundary mismatch remains a procedure failure;corrected check
