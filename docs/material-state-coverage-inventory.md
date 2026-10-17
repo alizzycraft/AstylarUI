@@ -4,6 +4,37 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Equal-input public border/contact failure reproduced without shadow — October17
+
+Closed the decisive missing control from the prior contact-row review. New bounded
+recipe audit-public-border-contact.mjs reuses the exact original public margin
+runner58c335b8 (mount,settlement,input immutability,geometry,asset receipts,capture
+and rejection checks),without changing that runner or any Material fixture.
+Eight pairs:integer/.546875 CSS phases × DPR1/2 × shadow off/on. Identical style
+requests on both sides:86px border-box height,1px solid#cac4d0,18px radius,#f0f0f0
+fill,and either no shadow or equal black alpha34/255 shadow. Paired measured
+geometry differs by less than.01px;no pixel shift or rounding compensation.
+
+Capture92330 TERMINAL0 and independent --verify TERMINAL0. Report89e5abb3b94d0b1a
+adbd3d2e8e7818c760f34fe54675946c5d4a284003640aab records Chrome155.0.8059.80,
+2515 authenticated bundle inputs and16 PNGs. Shadow-free integer controls match
+exactly at DPR1/2. Shadow-free fractional cases differ by maximum22/44RGB levels;
+adding identical shadow leaves those maxima22/44. Integer shadow controls differ
+8/9. At fractional DPR1,native row166 is202/196/208 while candidate rows165/166
+are221/218/224 and220/217/223,with NO shadow. Therefore unequal Material shadow
+alpha cannot solely explain the observed split colored edge. Exact border mesh/
+raster cause and relative contributions to Material samples remain unproven.
+
+Independent verifier rejects forged border width and missing case. Existing Icon
+suite additionally checks all candidate resolved border/fill/shadow values against
+the identical public requests and exact retained pixel observations;focused1/1
+passes (2811.7527ms). This is an inspected equal-input public paint failure for
+the captured installed package/browser,not a renderer fix,current-source owner
+binding,universal sample-position law or full case acceptance. Next bind the
+captured border-creation/placement owner to current source before registering the
+core finding coherently. Source/canonical integration and all2311 case closures
+remain pending;no new acceptance threshold.
+
 ### Icon contact-row residual isolated to actual sampler inputs — October17
 
 Question:do the three contrast/DPR1 failed root shadow profiles compare isolated

@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep public-border-contact-20261017/latest-report.json,audit.js,index.html and all
+16 PNGs,plus public-border-contact-{capture,verify}-20261017 stdout/stderr. These
+contain the equal-input fractional border/contact FAILURE with integer and
+shadow-off/on controls,not successful temporary scratch. Original base runner
+and earlier thin-fill/Material reports remain unchanged. No old run was deleted.
+
 Keep icon-remaining-scalar-stage-review-20261017 stdout/stderr. These replay the
 existing canonical census,40 recorded trees and original themed-cursor report;
 no new capture or PNG was generated. Current five pending groups and original

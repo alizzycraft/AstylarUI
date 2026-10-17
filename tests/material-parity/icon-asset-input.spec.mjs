@@ -20,6 +20,34 @@ import { collectIconContextReview, validateIconContextReview, iconContextBaselin
 
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 
+test('public border contact reduction isolates fractional edge mismatch without shadows', () => {
+  const directory = 'artifacts/material-parity/public-border-contact-20261017';
+  const raw = readFileSync(`${directory}/latest-report.json`);
+  assert.equal(createHash('sha256').update(raw).digest('hex'), '89e5abb3b94d0b1aadbd3d2e8e7818c760f34fe54675946c5d4a284003640aab');
+  const report = JSON.parse(raw);
+  const verification = JSON.parse(execFileSync(process.execPath, ['scripts/audit-public-border-contact.mjs', '--verify', directory],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }));
+  assert.equal(verification.negativeControlsRejected, 2);
+  assert.equal(verification.verified.pixelControls, 8);
+  assert.equal(report.inputs.length, 2515);
+  for (const row of report.results) {
+    assert.deepEqual(row.reference.site, row.astylar.site);
+    for (const property of ['borderWidth', 'borderStyle', 'borderColor', 'borderRadius', 'boxShadow', 'background'])
+      assert.equal(row.astylar.declared[property], row.astylar.site.styles[2][property]);
+  }
+  const observed = verification.verified.contactPixels;
+  assert.equal(observed.length, 8);
+  assert.deepEqual(observed.map(row => row.maximumChannelError), [0, 8, 22, 22, 0, 9, 44, 44]);
+  for (const row of observed.filter(row => row.phase === 0 && !row.shadow)) assert.equal(row.maximumChannelError, 0);
+  for (const row of observed.filter(row => row.phase !== 0 && !row.shadow)) assert.ok(row.maximumChannelError >= 22);
+  const noShadow = one(observed.filter(row => row.dpr === 1 && row.phase !== 0 && !row.shadow));
+  assert.deepEqual(noShadow.samples.reference.find(sample => sample.y === 166).rgba, [202, 196, 208, 255]);
+  assert.deepEqual(noShadow.samples.astylar.find(sample => sample.y === 165).rgba, [221, 218, 224, 255]);
+  assert.deepEqual(noShadow.samples.astylar.find(sample => sample.y === 166).rgba, [220, 217, 223, 255]);
+  // Equal input public failure for captured installed package/browser. Current
+  // owner-source binding and Material contribution attribution remain separate.
+});
+
 test('Icon retained contact failures include unequal border sampling rather than isolated shadow tails', t => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
   const raw = readFileSync('artifacts/material-parity/icon-retained-root-paint-verified-20261017.json');
