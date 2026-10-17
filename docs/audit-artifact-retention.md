@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep public-inline-image-linebox-20261017 report,bundle/HTML and32 PNGs,plus
+public-inline-image-linebox-{capture,verify,owner}-20261017 stdout/stderr. This
+is the original equal-input inline-layout FAILURE with eight block controls,
+not successful temporary scratch. The driver5353de48 is frozen by the report;
+future variants must use a separate recipe/run,not overwrite these bytes.
+Original paragraph/margin/Material evidence stays independently required.
+
 Keep icon-retained-heading-font-chain-20261017 and icon-hierarchy-input-batch-
 20261017 stdout/stderr,and queueda7e0ee37707cd2cf701922a2c6b0023d896b8af0e59c155d263bc131b5db8558.
 This coherent batch joins40 retained heading input chains and20 clipping records

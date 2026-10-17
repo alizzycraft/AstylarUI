@@ -4,6 +4,51 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Equal-input inline-image row loses parent line-box contribution — October17
+
+Question:does the existing normal-paragraph proof explain the Icon block/inline
+versus fixed-flex height substitution? It does not exercise inline replaced
+content. New bounded reduction reuses the unchanged public relative-margin runner
+(58c335b8) through an authenticated recipe,not another harness. One auto-height
+block contains one24px PNG;the paired sides use identical SiteData/styles/assets,
+Arial16/24,normal versus explicit1.25x line height,andDPR1/2. Block-image variants
+are otherwise identical controls. Native image decode and core settlement are
+awaited;input mutation,missing cases and stale image/source receipts reject.
+
+Report public-inline-image-linebox-20261017/latest-report.json SHA
+f7120e8e0aba684a3d0ea5cebf47ea37b9f79158ebd58e5eff2d193e11d22bc1
+preserves16 paired cases/32 PNGs. Eight inline-block cases FAIL:reference heights
+28/29/30/31px versus candidate24px,errors-4/-5/-6/-7 repeated atDPR1/2. All eight
+block-image controls match24px. Image top positions agree at0 on both sides.
+Explicit line-height still fails,so this is not explained solely by normal-line-
+height Mg sampling. Capture and independent --verify both TERMINAL0,with the
+failures retained as observations,not passing parity. Installed package0.2.0,
+Angular20.3.31,Babylon8.56.2;this is a separate public context,not20 Material IDs.
+
+Two focused assertions in EXISTING icon-asset-input.spec.mjs pass2/2
+(3213.9668ms). Four complete current/emitted/installed methods agree:
+processChildren,shouldUseInlineFlow,layoutInlineChildren,parseMarginBox.
+Actual layoutInlineChildren execution with inert paint/projection adapters
+produces24px in all four font/line-height combinations and never reads the
+parent fontSize/lineHeight. The first demonstrated divergence is CSS row sizing
+(element-creation.service.ts:904),before projection:maximum child margin-box
+height omits the parent line-box/baseline contribution. Browser image dimensions
+and block controls rule out a generic image-size or all-auto-height failure.
+
+Disposition:confirmed bounded core inline-layout gap;standalone registration
+pending,NOT a162nd published finding yet. Native Material uses a different SVG/
+mat-icon/Roboto composition and candidate changes it to flex plus fixed height;
+do not call this the sole original compensation cause or restore an offset.
+Other replaced elements,wrapping,vertical-align variants and exact replacement
+strut metrics remain outside this reduction. Blame points at40ac6f4fc's broad
+May1 migration;that is not an established first-bad runtime revision.
+
+Frozen driver SHA5353de486ce95cabdacc2b83c8e96048f6fef651d9ff60b8bc8860a8891e4f75.
+Retain capture/verify/owner logs under public-inline-image-linebox-*-20261017.
+No renderer/fixture change or canonical export. Queueda7e0's old test receipt
+is historical after these two added assertions;reconcile at the next coherent
+proof-registration/join batch. ALL2311 parents stay partial and final gates remain.
+
 ### Retained heading font chains and clipping integrated as one queued batch — October17
 
 Specific question:are local font-family omissions evidence of a missing heading

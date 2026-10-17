@@ -20,6 +20,65 @@ import { collectIconContextReview, validateIconContextReview, iconContextBaselin
 
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 
+test('public inline image line boxes retain eight failures and eight block controls', () => {
+  const file = 'artifacts/material-parity/public-inline-image-linebox-20261017/latest-report.json';
+  assert.equal(createHash('sha256').update(readFileSync(file)).digest('hex'), 'f7120e8e0aba684a3d0ea5cebf47ea37b9f79158ebd58e5eff2d193e11d22bc1');
+  const result = JSON.parse(execFileSync(process.execPath, ['scripts/audit-public-inline-image-linebox.mjs', '--verify', file.slice(0, file.lastIndexOf('/'))], { encoding: 'utf8' }));
+  assert.equal(result.negativeControlsRejected, 2);
+  const rows = result.verified.observations;
+  assert.equal(rows.length, 16);
+  const inline = rows.filter(row => row.display === 'inline-block'), block = rows.filter(row => row.display === 'block');
+  assert.equal(inline.length, 8); assert.equal(block.length, 8);
+  assert.deepEqual(inline.map(row => row.errorCSSpx), [-4, -5, -6, -7, -4, -5, -6, -7]);
+  for (const row of block) assert.equal(row.errorCSSpx, 0);
+  for (const row of rows) {
+    assert.equal(row.candidateHeight, 24);
+    assert.equal(row.nativeImageTop, 0); assert.equal(row.candidateImageTop, 0);
+  }
+});
+
+test('inline image line height divergence occurs in current CSS row sizing before projection', t => {
+  const report = JSON.parse(readFileSync('artifacts/material-parity/public-inline-image-linebox-20261017/latest-report.json'));
+  const file = 'src/app/services/dom/elements/element-creation.service.ts';
+  const installed = 'examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/element-creation.service.js';
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  assert.equal(digest(readFileSync(installed)), one(report.inputs.filter(row => row.file === installed)).sha256);
+  const parse = (name, text) => ts.createSourceFile(name, text, ts.ScriptTarget.Latest, true);
+  const current = parse(file, readFileSync(file, 'utf8')), compiled = parse(installed, readFileSync(installed, 'utf8'));
+  function method(tree, name) {
+    const found = []; function visit(node) { if (ts.isMethodDeclaration(node) && node.name?.getText(tree) === name) found.push(node); ts.forEachChild(node, visit); }
+    visit(tree); return one(found).getText(tree);
+  }
+  const emit = text => ts.transpileModule(`class Proof {${text}}`, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 } }).outputText;
+  const canonical = text => transformSync(text, { loader: 'js', format: 'esm', minifyWhitespace: true, legalComments: 'none' }).code;
+  for (const name of ['processChildren', 'shouldUseInlineFlow', 'layoutInlineChildren', 'parseMarginBox'])
+    assert.equal(canonical(emit(method(current, name))), canonical(`class Proof {${method(compiled, name)}}`), name);
+  const body = emit(method(current, 'layoutInlineChildren'));
+  let executions = 0;
+  for (const font of [16, 24]) for (const lineHeight of ['normal', `${font * 1.25}px`]) {
+    let fontReads = 0; const placements = [], projections = [];
+    const Parent = new Function('projectCssLength', 'projectCssSize', 'positionRenderedCssBox', 'updateCssLayoutNode', body + ';return Proof;')(
+      (_render, value) => value, (_render, size) => { projections.push({ ...size }); return size; },
+      (_render, _mesh, box) => placements.push({ ...box }), () => { throw Error('No retained layout nodes in this source isolation'); });
+    const owner = new Parent(), parent = { name: 'child', position: { z: 0 } }, image = { name: 'leaf', position: { z: 0 } };
+    const style = new Proxy({ height: 'auto', display: 'block', fontSize: `${font}px`, lineHeight }, { get(target, key) { if (key === 'fontSize' || key === 'lineHeight') fontReads++; return target[key]; } });
+    const imageStyle = { display: 'inline-block', verticalAlign: 'baseline' };
+    owner.styleDefaults = { getElementTypeDefaults: () => ({ display: 'inline-block' }) };
+    owner.borderService = { parseBorderProperties: () => ({ width: 0 }), parseBorderRadius: () => 0 };
+    owner.createElement = () => image;
+    owner.parseMarginBox = () => ({ top: 0, right: 0, bottom: 0, left: 0 });
+    const dom = { context: { elementDimensions: new Map([['child', { width: 80, height: 180, padding: { top: 0, right: 0, bottom: 0, left: 0 } }], ['leaf', { width: 24, height: 24 }]]), elementStyles: new Map(), layoutBoxes: new Map() } };
+    const render = { actions: { style: { findStyleForElement: element => element.id === 'child' ? style : imageStyle }, mesh: { updateMeshWithBorderRadius() {} } } };
+    owner.layoutInlineChildren(dom, render, [{ type: 'img', id: 'leaf' }], parent, [], { type: 'div', id: 'child' });
+    assert.equal(dom.context.elementDimensions.get('child').height, 24);
+    assert.equal(fontReads, 0); assert.equal(projections[0].height, 24);
+    assert.deepEqual(placements, [{ x: 0, y: 0, width: 24, height: 24 }]); executions++;
+  }
+  t.diagnostic(JSON.stringify({ installedCurrentMethodsMatch: 4, cssRowSizingExecutions: executions,
+    firstDivergence: 'inline row height is max child margin-box height;parent font/line-height strut is not consumed',
+    boundary: 'Named source owner isolation with inert paint/projection adapters and separate real public browser failure. Not all dependencies,other replaced elements,wrapping,vertical-align values or sole Material compensation cause.' }));
+});
+
 test('public border live frame preserves fractional geometry and all original raster bytes', () => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
   const directory = 'artifacts/material-parity/public-border-contact-geometry-20261017';
