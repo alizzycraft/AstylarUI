@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep attribute-focus-registration-conservation,registered-public-proof and
+current-suite-conservation-20261017 stdout/stderr. They authenticate working
+163/217 registration and full prior162/216 source recovery,not new canonical or
+browser acceptance. Preserve3ccb proposal,old policy/producer/helper Git sources,
+all original failure reports and queued649 old-source receipts. Publication
+retry40816 succeeds and remote confirms3b317663;firstHTTP408 remains historical.
+
 Keep public-role-focus-refresh-focused-registration/conservation-20261017 logs.
 They bind the new assertion and exact whole-suite append from2aeff54b to f2b5b28b,
 not production163 or a new capture. Keep queued649143f5's original120 old-source

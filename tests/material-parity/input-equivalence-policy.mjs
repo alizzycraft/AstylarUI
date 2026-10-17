@@ -110,6 +110,33 @@ export const reviewedValueNormalizations = Object.freeze([
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    id: 'core-semantic-attribute-refresh-removes-focusability',
+    introducedBy: '0175a0bdc introduces clear-and-restore attribute loop;historical first-bad runtime not established',
+    file: 'src/lib/astylar-semantic-bridge.ts',
+    pattern: String.raw`node\.removeAttribute\(attribute\.name\);`,
+    classification: 'confirmed-core-renderer-defect',
+    owner: 'core semantic attribute reconciliation and retained focusability',
+    focusedProof: 'tests/material-parity/input-boundary-evidence.spec.mjs: public role focus refresh separates attribute-first and root-first failures with unchanged input',
+    observation: { component: 'public package-root unchanged-document controls',
+      element: 'unique retained DIV/SPAN with explicit tabindex0', dpr: [1, 2],
+      state: 'two no-op surface.update calls per paired context',
+      reference: '16 native side updates retain focus with no focus events',
+      astylar: '8 role-control updates first blur in removeAttribute(tabindex);8 native input/button updates instead first blur at root replaceChildren;all16 restore final focus',
+      stage: 'semantic attribute refresh before root replacement,not CSS layout or Babylon projection' },
+    justification: 'Equal authored public SiteData and native DOM controls retain unique IDs,roles,tabindex,content and styles. DIV/SPAN focusability is temporarily removed by clear-and-restore applyAttributes during unchanged updates. Actual public first-loss stacks and complete current/emitted/installed method equality bind this cause. Native input/button controls distinguish the later root defect;native no-op controls preserve focus. Final focus and identity recovery do not make the extra blur/refocus sequence equivalent. Do not compensate through application refocus or suppress events.',
+    evidence: [
+      { file: 'artifacts/material-parity/public-role-focus-refresh-20261017/latest-report.json', sha256: 'd921c9a64118a4996bd0e3bd7d10101378f44303575729e43883828417492840' },
+      { file: 'artifacts/material-parity/public-role-focus-refresh-owner-20261017.log', sha256: 'cfd2278b15d92b3bc1594c6956d119a9ed65aa887b9d2692d76fde371d855196' },
+      { file: 'scripts/audit-public-role-focus-refresh.mjs', sha256: 'b0ffd7893972731130156efec261b44fb9e322b7b9f031891cdbdb18f2525ba6' },
+      { file: 'artifacts/material-parity/public-role-focus-refresh-verify-20261017.log', sha256: '5e8a588da772ec1a1a9a157589f6a4c9e6691ea7d897c0faf6ef3cd9b9888bb4' },
+      { file: 'artifacts/material-parity/role-control-attribute-focus-boundary-20261017.log', sha256: 'bcd8a0dcb6bd2c6a20125fc8a10ed0993c5702f1007a4c2f64f615642f33cf92' },
+    ],
+    publicReproduction: { command: 'node scripts/audit-public-role-focus-refresh.mjs --verify artifacts/material-parity/public-role-focus-refresh-20261017',
+      negativeControls: 3, attributeFirstFailures: 8, rootFirstControls: 8, nativeNoopControls: 16 },
+    recommendation: 'Preserve unchanged focus-critical attributes through general attribute reconciliation;also preserve focused descendants across the separate root/child replacement boundary. No fixture refocus,custom event suppression or coordinate compensation.',
+    boundary: 'Bounded public focus-event continuity and actual first-loss owner only. Not every Material activation first-blur owner,other attributes,keyboard/AT/selection/paint or full current package acceptance.',
+  }),
+  Object.freeze({
     id: 'core-inline-replaced-row-omits-parent-line-box',
     introducedBy: 'public equal-input reduction and current CSS row owner; first-bad runtime revision not established',
     file: 'src/app/services/dom/elements/element-creation.service.ts',

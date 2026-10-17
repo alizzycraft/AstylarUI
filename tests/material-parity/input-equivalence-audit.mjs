@@ -8922,6 +8922,11 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'scripts/audit-public-role-focus-refresh.mjs',
+    'artifacts/material-parity/public-role-focus-refresh-20261017/latest-report.json',
+    'artifacts/material-parity/public-role-focus-refresh-owner-20261017.log',
+    'artifacts/material-parity/public-role-focus-refresh-verify-20261017.log',
+    'artifacts/material-parity/role-control-attribute-focus-boundary-20261017.log',
     'scripts/audit-public-inline-image-linebox.mjs',
     'artifacts/material-parity/public-inline-image-linebox-20261017/latest-report.json',
     'scripts/audit-public-border-contact.mjs',
@@ -9651,6 +9656,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('public role focus refresh separates attribute-first and root-first failures with unchanged input'/,
+      'public attribute-first focus loss and separate root-replacement controls', 'Eight equal-input public contexts atDPR1/2 retain16 native no-op controls,eight DIV/SPAN attribute-first failures and eight input/button root-first failures. Exact current owner/package bytes and actual first-loss stacks authenticate. Final focus/identity recovery does not waive extra events. Not every Material trace,keyboard,selection,AT,paint or whole-case acceptance.'),
     proof(root, 'tests/material-parity/icon-asset-input.spec.mjs', /test\('public inline image line boxes retain eight failures and eight block controls'/,
       'public inline-image line-box failure and current CSS row owner', 'Sixteen equal-input pairs retain eight inline height failures and eight block controls atDPR1/2. Four current/installed methods agree;actual inline row owner computes24px before projection without consuming parent font/line-height. Explicit line-height also fails. Not all inline formatting,physical font selection or sole Material compensation cause.'),
     proof(root, 'tests/material-parity/icon-asset-input.spec.mjs', /test\('public border live frame preserves fractional geometry and all original raster bytes'/,

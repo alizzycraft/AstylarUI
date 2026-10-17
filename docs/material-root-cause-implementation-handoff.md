@@ -27,8 +27,10 @@ native form/button controls,changed versus unchanged attributes,root/descendant
 updates and focus/selection policy need owning regression coverage. This is not
 authorization to implement now. Exact first-blur owner of every Material trace,
 other attributes/AT/paint and whole-current-package acceptance remain unproved.
-Attribute finding is standalone and NOT yet added to the162/216 source registry;
-register through existing mechanisms after frozen integration,not during export.
+Attribute finding is now registered in working163/217 source inventory;existing
+registration/public suites pass6/6 and1/1 with complete predecessor conservation.
+Accepted package remains162/216 until the next coherent source/case integration.
+No renderer fix or new canonical export follows from this registration alone.
 
 Confirmed public semantic-style support gap (October17):equal authored h1 text
 project atlas and resolved none/capitalize/uppercase inputs atDPR1/2 give two

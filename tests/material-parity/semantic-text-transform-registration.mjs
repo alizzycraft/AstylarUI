@@ -9,8 +9,49 @@ const normalized = s => s.toString().replaceAll('\r\n', '\n');
 const id = 'core-semantic-text-transform-not-projected';
 const borderId = 'core-fractional-border-edge-paint-disagrees-with-native';
 const inlineId = 'core-inline-replaced-row-omits-parent-line-box';
-export function restoreInlineImagePolicy(source) {
+const focusId = 'core-semantic-attribute-refresh-removes-focusability';
+export function restoreAttributeFocusPolicy(source) {
   const current = normalized(source);
+  if (!current.includes(`id: '${focusId}'`)) {
+    assert.ok(!current.includes('DIV/SPAN focusability is temporarily removed'), 'Unrecognized attribute-focus registration');
+    return current;
+  }
+  assert.equal(digest(current), '55c7e9cf1c634ebd8b01409b1836d1513f24e0c5ada656ce16f591aee1fd50a2');
+  const tree = ts.createSourceFile('policy.mjs', current, ts.ScriptTarget.Latest, true);
+  const entries = tree.statements.filter(ts.isVariableStatement).flatMap(n => [...n.declarationList.declarations])
+    .find(n => n.name.getText(tree) === 'sourceAuditDefinitions').initializer.arguments[0].elements;
+  assert.equal(entries.length, 163); assert.ok(entries[0].getText(tree).includes(focusId));
+  const restored = current.slice(0, entries[0].getFullStart()) + current.slice(entries[0].end + 1);
+  assert.equal(digest(restored), 'de4d7a74b1576d8120a607a63bc61b86df610ced64dcd9f1f24c332c934546fe');
+  return restored;
+}
+export function restoreAttributeFocusProducer(source) {
+  const current = normalized(source);
+  if (!current.includes('public attribute-first focus loss and separate root-replacement controls')) {
+    assert.ok(!current.includes("'scripts/audit-public-role-focus-refresh.mjs'"), 'Unrecognized attribute-focus proof');
+    return current;
+  }
+  assert.equal(digest(current), 'd260f8cad2b7b23018524d84aa8056381932dbcffa6b7ce7f51236b515b05e1e');
+  const tree = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true);
+  const owner = name => tree.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+  const proofs = owner('focusedProofInventory').body.statements[0].expression.elements;
+  const files = owner('sourceFingerprints').body.statements[0].declarationList.declarations[0].initializer.elements;
+  assert.equal(proofs.length, 217); assert.ok(proofs[0].getText(tree).includes('public role focus refresh separates'));
+  assert.deepEqual(files.slice(0, 5).map(n => n.text), [
+    'scripts/audit-public-role-focus-refresh.mjs',
+    'artifacts/material-parity/public-role-focus-refresh-20261017/latest-report.json',
+    'artifacts/material-parity/public-role-focus-refresh-owner-20261017.log',
+    'artifacts/material-parity/public-role-focus-refresh-verify-20261017.log',
+    'artifacts/material-parity/role-control-attribute-focus-boundary-20261017.log',
+  ]);
+  let restored = current;
+  for (const [start, end] of [[proofs[0].getFullStart(), proofs[0].end + 1], [files[0].getFullStart(), files[4].end + 1]].sort((a,b)=>b[0]-a[0]))
+    restored = restored.slice(0,start)+restored.slice(end);
+  assert.equal(digest(restored), 'e77ab7296deb65409d0a808685ad88b128d00cbe50303f3cf1b15266ca0e411f');
+  return restored;
+}
+export function restoreInlineImagePolicy(source) {
+  const current = restoreAttributeFocusPolicy(source);
   if (!current.includes(`id: '${inlineId}'`)) {
     assert.ok(!current.includes('Sixteen paired public cases preserve identical authored structure'), 'Unrecognized inline-image registration');
     return current;
@@ -25,7 +66,7 @@ export function restoreInlineImagePolicy(source) {
   return restored;
 }
 export function restoreInlineImageProducer(source) {
-  const current = normalized(source);
+  const current = restoreAttributeFocusProducer(source);
   if (!current.includes('public inline-image line-box failure and current CSS row owner')) {
     assert.ok(!current.includes("'scripts/audit-public-inline-image-linebox.mjs'"), 'Unrecognized inline-image proof');
     return current;
@@ -135,8 +176,8 @@ export function reviewedRootEditingGraph(graph, actionSource, expectedRunnerEntr
   return graph.map(row => row.file === runnerFile ? { ...row, sha256: oldRunner } : row);
 }
 export function historicalSemanticDefinitions(current) {
-  assert.equal(current.length, 162);
-  const retained = current.filter(row => row.id !== id && row.id !== borderId && row.id !== inlineId); assert.equal(retained.length, 159); return retained;
+  assert.equal(current.length, 163);
+  const retained = current.filter(row => row.id !== id && row.id !== borderId && row.id !== inlineId && row.id !== focusId); assert.equal(retained.length, 159); return retained;
 }
 export function restoreSemanticRegistrationTransitionSource(source) {
   let restored = normalized(source);
@@ -152,7 +193,7 @@ export function restoreSemanticRegistrationTransitionSource(source) {
   return restored;
 }
 // This read boundary belongs ONLY to the pre-registration benchmark assertions.
-// Current registration is independently tested against all162 actual definitions.
+// Current registration is independently tested against all163 actual definitions.
 export function readHistoricalBenchmarkSource(file, options) {
   const raw = readActual(file, options), name = path.basename(String(file));
   if (!['input-equivalence-policy.mjs', 'input-equivalence-audit.mjs', 'benchmark-config.spec.mjs', 'position-composition-producer-transition.mjs'].includes(name)) return raw;

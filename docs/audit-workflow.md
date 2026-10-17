@@ -168,7 +168,11 @@ the suite now has an explicit historical population/read boundary. It removes
 only the authenticated additive160th finding,214th proof and associated source
 registration,then checks complete prior policy/producer/helper/suite hashes.
 The current-registration suite semantic-text-transform-input.spec.mjs separately
-reads the actual162 definitions/216 proofs and tests conservation/drift rejection.
+reads the actual163 definitions/217 proofs and tests conservation/drift rejection.
+The additive attribute-focus registration reverses exactly to162/216 before the
+inline/border/semantic stages. Full current/prior source hashes,all162 retained
+definitions,five added evidence paths and rejection controls are authenticated;
+this does not mutate production definitions or replace captured receipt bytes.
 The additive inline-image line-box registration reverses exactly to161/215 before
 the border and semantic stages below. Its full policy/producer hashes,complete
 prior definitions and rejection controls are checked by the same existing suite.

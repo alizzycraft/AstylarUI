@@ -10,10 +10,34 @@ import { restoreSemanticTextTransformPolicy, restoreSemanticTextTransformProduce
   reviewedRootEditingGraph, reviewedRootEditingRunnerReceipt } from './semantic-text-transform-registration.mjs';
 import { restoreBorderContactPolicy, restoreBorderContactProducer } from './semantic-text-transform-registration.mjs';
 import { restoreInlineImagePolicy, restoreInlineImageProducer } from './semantic-text-transform-registration.mjs';
+import { restoreAttributeFocusPolicy, restoreAttributeFocusProducer } from './semantic-text-transform-registration.mjs';
+
+test('attribute focus registration preserves all predecessor definitions and proof sources', () => {
+  const id = 'core-semantic-attribute-refresh-removes-focusability';
+  assert.equal(sourceAuditDefinitions.length, 163);
+  const finding = sourceAuditDefinitions.find(row => row.id === id);
+  assert.equal(finding.classification, 'confirmed-core-renderer-defect');
+  for (const receipt of finding.evidence)
+    assert.equal(createHash('sha256').update(readFileSync(receipt.file)).digest('hex'), receipt.sha256);
+  for (const [file, restore] of [
+    ['tests/material-parity/input-equivalence-policy.mjs', restoreAttributeFocusPolicy],
+    ['tests/material-parity/input-equivalence-audit.mjs', restoreAttributeFocusProducer],
+  ]) {
+    const current = readFileSync(file, 'utf8');
+    const prior = execFileSync('git', ['show', `ba1a1e82:${file}`], { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+    assert.equal(restore(current), prior);
+    assert.throws(() => restore(current + '\n// unrelated source drift'));
+    if (file.endsWith('policy.mjs')) {
+      const definitions = new Function(prior.replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
+      assert.deepEqual(sourceAuditDefinitions.filter(row => row.id !== id), definitions);
+      assert.throws(() => restore(current.replace(id, 'unreviewed-focus-id')));
+    } else assert.throws(() => restore(current.replace('public attribute-first focus loss', 'unreviewed focus proof')));
+  }
+});
 
 test('inline image registration preserves complete prior source and finding populations', () => {
   const id = 'core-inline-replaced-row-omits-parent-line-box';
-  assert.equal(sourceAuditDefinitions.length, 162);
+  assert.equal(sourceAuditDefinitions.length, 163);
   const finding = sourceAuditDefinitions.find(row => row.id === id);
   assert.equal(finding.classification, 'confirmed-core-renderer-defect');
   assert.equal([...readFileSync(finding.file, 'utf8').matchAll(new RegExp(finding.pattern, 'g'))].length, 1);
@@ -24,7 +48,7 @@ test('inline image registration preserves complete prior source and finding popu
     assert.throws(() => restore(current + '\n// unrelated source drift'));
     if (file.endsWith('policy.mjs')) {
       const before = new Function(prior.replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
-      assert.deepEqual(sourceAuditDefinitions.filter(row => row.id !== id), before);
+      assert.deepEqual(sourceAuditDefinitions.filter(row => row.id !== id && row.id !== 'core-semantic-attribute-refresh-removes-focusability'), before);
       assert.throws(() => restore(current.replace(id, 'unreviewed-inline-id')));
     } else assert.throws(() => restore(current.replace('public inline-image line-box failure and current CSS row owner', 'unreviewed proof')));
   }
@@ -34,7 +58,7 @@ test('border contact registration preserves all predecessor findings and proof s
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
   const id = 'core-fractional-border-edge-paint-disagrees-with-native';
   const finding = sourceAuditDefinitions.find(row => row.id === id);
-  assert.equal(sourceAuditDefinitions.length, 162);
+  assert.equal(sourceAuditDefinitions.length, 163);
   assert.equal(finding.classification, 'confirmed-core-renderer-defect');
   assert.equal([...readFileSync(finding.file, 'utf8').matchAll(new RegExp(finding.pattern, 'g'))].length, 1);
   for (const receipt of finding.evidence) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
@@ -48,7 +72,7 @@ test('border contact registration preserves all predecessor findings and proof s
     assert.throws(() => restore(current + '\n// unrelated drift'));
     if (file.endsWith('policy.mjs')) {
       const before = new Function(previous.replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
-      assert.deepEqual(sourceAuditDefinitions.filter(row => row.id !== id && row.id !== 'core-inline-replaced-row-omits-parent-line-box'), before);
+      assert.deepEqual(sourceAuditDefinitions.filter(row => row.id !== id && row.id !== 'core-inline-replaced-row-omits-parent-line-box' && row.id !== 'core-semantic-attribute-refresh-removes-focusability'), before);
       const changed = current.replace('fractional shadow-free cases fail22/44RGB', 'fractional shadow-free cases pass');
       assert.notEqual(changed, current); assert.throws(() => restore(changed));
       const renamed = current.replace(id, 'unreviewed-border-identifier');
@@ -56,7 +80,7 @@ test('border contact registration preserves all predecessor findings and proof s
     } else {
       const ast = ts.createSourceFile(file, current, ts.ScriptTarget.Latest, true);
       const proofs = ast.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === 'focusedProofInventory').body.statements[0].expression.elements;
-      assert.equal(proofs.length, 216);
+      assert.equal(proofs.length, 217);
       const changed = current.replace('correct live geometry and current owners', 'unmeasured geometry');
       assert.notEqual(changed, current); assert.throws(() => restore(changed));
     }
@@ -67,7 +91,7 @@ test('public semantic text transform preserves controls and current owner eviden
   const hash = b => createHash('sha256').update(b).digest('hex');
   const id = 'core-semantic-text-transform-not-projected';
   const finding = sourceAuditDefinitions.find(row => row.id === id);
-  assert.equal(sourceAuditDefinitions.length, 162);
+  assert.equal(sourceAuditDefinitions.length, 163);
   assert.equal(finding.classification, 'confirmed-core-renderer-defect');
   assert.match(readFileSync(finding.file, 'utf8'), new RegExp(finding.pattern));
   for (const receipt of finding.evidence) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
@@ -88,7 +112,7 @@ test('public semantic text transform preserves controls and current owner eviden
       const added = entries[0]; assert.ok(added.getText(ast).includes(id));
       ranges.push([added.getFullStart(), added.end + 1]);
       const priorDefinitions = new Function(previous.replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
-      assert.deepEqual(sourceAuditDefinitions.filter(row => row.id !== id && row.id !== 'core-fractional-border-edge-paint-disagrees-with-native' && row.id !== 'core-inline-replaced-row-omits-parent-line-box'), priorDefinitions);
+      assert.deepEqual(sourceAuditDefinitions.filter(row => row.id !== id && row.id !== 'core-fractional-border-edge-paint-disagrees-with-native' && row.id !== 'core-inline-replaced-row-omits-parent-line-box' && row.id !== 'core-semantic-attribute-refresh-removes-focusability'), priorDefinitions);
     } else {
       const proofs = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'focusedProofInventory').body.statements[0].expression.elements;
       assert.equal(proofs.length, 214);
@@ -105,7 +129,7 @@ test('public semantic text transform preserves controls and current owner eviden
     assert.equal(restored, previous, `Unrelated ${file} source must survive exactly`);
     assert.notEqual(restored + '\n// unrelated drift', previous);
   }
-  t.diagnostic(JSON.stringify({ currentDefinitions: 162, semanticRegistrationDefinitions: 160, priorDefinitionsConserved: 159, semanticRegistrationProofs: 214,
+  t.diagnostic(JSON.stringify({ currentDefinitions: 163, semanticRegistrationDefinitions: 160, priorDefinitionsConserved: 159, semanticRegistrationProofs: 214,
     publicFailurePairs: 4, materialPhysicalContexts: 16, canonicalPublication: false }));
 });
 
@@ -132,10 +156,10 @@ test('root editing runner applicability conserves metadata transition and reject
 });
 
 test('semantic registration historical boundary rejects drift and keeps current population explicit', () => {
-  assert.equal(sourceAuditDefinitions.length, 162);
+  assert.equal(sourceAuditDefinitions.length, 163);
   const old = historicalSemanticDefinitions(sourceAuditDefinitions);
   assert.equal(old.length, 159);
-  assert.equal(sourceAuditDefinitions.length, 162); // never mutates the production registry
+  assert.equal(sourceAuditDefinitions.length, 163); // never mutates the production registry
   assert.throws(() => historicalSemanticDefinitions(old));
   let controls = 1;
   for (const [file, restore] of [

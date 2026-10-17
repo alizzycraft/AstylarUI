@@ -6467,7 +6467,11 @@ test('public role focus refresh separates attribute-first and root-first failure
   assert.equal(finding.id, id); assert.equal(finding.classification, 'confirmed-core-renderer-defect');
   assert.deepEqual(sourceAuditDefinitions.filter(row => row.id !== id), queued.review.groups.slice(0, -1));
   const registered = sourceAuditDefinitions.find(row => row.id === id);
-  if (registered) assert.deepEqual(registered, finding);
+  if (registered) {
+    const { focusedProof, ...definition } = registered;
+    assert.deepEqual(definition, finding);
+    assert.equal(focusedProof, 'tests/material-parity/input-boundary-evidence.spec.mjs: public role focus refresh separates attribute-first and root-first failures with unchanged input');
+  }
   assert.equal([...readFileSync(finding.file, 'utf8').matchAll(new RegExp(finding.pattern, 'g'))].length, 1);
   for (const receipt of finding.evidence) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
   const directory = 'artifacts/material-parity/public-role-focus-refresh-20261017';

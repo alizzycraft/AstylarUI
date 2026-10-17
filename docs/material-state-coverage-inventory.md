@@ -10,29 +10,22 @@ all terminate0. Accepted index is byte-identical to the verified candidate index
 Selected case review0ee8 retains436 static/1875 interaction cases;all2311 remain
 partial/unverified. No whole-case inspection,current rendering or final-gate
 acceptance follows. Earlier live/candidate pointers below are historical.
-Publication commit3b317663 is local;first push failsHTTP408 and remote remains
-c983df36. Unchanged retry40816 is live;do not claim remote publication yet.
+Publication commit3b317663 is pushed:unchanged retry40816 terminates0 after the
+firstHTTP408. Fresh remote check confirms3b317663;no history rewrite occurred.
 Latest outside-export case queue649143f5 extends1b34 with52 Badge recorded-node
 correspondences (364 pairs),preserving56 focus/113 pointer observations and child
 receipts. All2311 cases remainpartial/unverified;zero full closures.
 
-New confirmed public attribute-refresh cause is reviewed separately in source
-proposal3ccb3f7bd6ff9075976037b8408e4a03adfc03113c27a3ed049a4bd0740af2fe:
-163 QUEUED definitions,not production163. Original162 definitions recover exactly;
-public failure,owner/source/version and verification receipts authenticate.
-Log role-focus-source-finding-proposal-20261017 terminates0. Existing focused
-test/proof inventory registration is explicitly pending;no producer/renderer
-change or extra canonical rebuild. Do not confuse this source review with the
-2311-case obligation proposals.
+Registered source is now163 findings/217 proof anchors,including the confirmed
+attribute-refresh cause from reviewed3ccb. Registration conservation6/6 and
+registered public assertion1/1 pass;all162 prior definitions and full prior
+policy/producer bytes recover exactly. Accepted package remains162/216.
+Current policy55c7e9cf,producerd260f8ca;original input-boundary suite2aeff54b
+remains an exact prefix of current34f8ec1e. Queued649143f5 still has120 old-suite
+references and needs explicit source applicability reconciliation;do not silently
+refresh originals or claim the163/217 registration is already canonical.
 
-Existing input-boundary suite now has the focused public role-refresh assertion:
-1/1 passes,three forged-report controls rejected,exact current owner files bound.
-Entire old suite2aeff54b is preserved as prefix of f2b5b28b;only one assertion is
-appended. Policy/proof registration is still pending. Queued649143f5 contains120
-references to the old suite receipt and needs explicit append-only applicability
-reconciliation before being treated as current;no saved receipt was rewritten.
-
-Next:register the new cause and queued observations in a coherent batch;do not
+Next:reconcile source applicability and queued observations in a coherent batch;do not
 rebuild the unchanged accepted package for prose. Remaining shared gaps:
 descendant/AX/input ownership,event/default-action classification,local paint,
 source/runtime validity and complete case dispositions. Root-only focus repairs
@@ -40,6 +33,30 @@ would miss the independently confirmed attribute-stage failure. Original final
 gates and equal-input/root-cause contract remain unchanged.
 
 ## Preserved audit chronology
+
+### Attribute-focus source and proof registration conserves complete predecessor — October17
+
+Working source inventory163/217 registers the reviewed attribute-refresh cause
+with its existing focused public assertion and five original evidence sources.
+All162 predecessor definitions survive exactly;new definition equals reviewed
+3ccb plus only the focusedProof pointer. Source pattern still matches exactly
+one current owner location. No finding,observation or threshold was removed.
+
+Existing semantic registration suite passes6/6,zero skips,7408.0736ms in
+attribute-focus-registration-conservation-20261017. New authenticated reversal
+removes only the163rd finding/217th proof and five source entries,restoring
+whole prior policyde4d7a74/producere77ab729. Current55c7e9cf/d260f8ca identities
+and forged ID/proof/unrelated drift controls preserve all earlier historical
+population assertions without pretending those populations are current163.
+Registered public proof passes1/1,2940.166ms;all original counts/three negative
+controls/current owner receipts hold. Current-suite-conservation log preserves
+the complete old2aeff54b suite as prefix of34f8ec1e;only the new assertion differs.
+
+Acceptedcc890 remains162/216,no new export/capture. Queued649 source applicability
+must reconcile120 old-suite references and the reviewed policy/producer/helper
+changes before next integration. Original public failure and all old receipts
+remain unchanged. Publication push retry40816 now terminates0;remote confirms
+3b317663 after firstHTTP408. Large-file warning is advisory,not a failed gate.
 
 ### Public attribute-first focus finding gains existing-suite assertion — October17
 
