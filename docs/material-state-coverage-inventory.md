@@ -4,6 +4,36 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Retained heading font chains and clipping integrated as one queued batch — October17
+
+Specific question:are local font-family omissions evidence of a missing heading
+font input,or does the retained text stage contain the parent declaration? All20
+original paired trees/40 actual heading owners retain the page family despite
+omission at all three local stages. Retained font family,size,weight and style
+agree with native captured inputs;line-height/tracking remain raw and are NOT
+declared equivalent. Root and replaced image have no authored or retained glyph
+text. This bounds typography consumption,not physical font selection,normal
+line-box behavior,paint-time textures or glyph raster equivalence.
+
+The existing inspectHierarchy method now records these40 chains. Focused actual-
+method execution passes20 cases/40 authenticated trees;three controls reject a
+forged parent family,retained family and invented root glyph owner. Log:
+icon-retained-heading-font-chain-20261017 stdout/stderr,TERMINAL0.
+
+ONE coherent join for clipping plus font chains completes TERMINAL0 in
+icon-hierarchy-input-batch-20261017 stdout/stderr. Proposal
+a7e0ee37707cd2cf701922a2c6b0023d896b8af0e59c155d263bc131b5db8558
+authenticates2311 cases/13183 dependencies,recovers complete117a predecessor,
+and preserves every prior Icon join including20 root-paint records/three shadow
+failures. Post-save checks verify40 heading chains,20 clipping records and20
+root-paint identities inside actual parent records. d341 remains historical;
+a7e0 is queued,not selected by the launcher or canonical publication.
+
+No recapture,full export,renderer/fixture edit or acceptance change. ALL2311
+parents remain partial. Next distinguish remaining used-style/font/normal-line-
+box questions from already-classified declaration-stage omissions using the
+existing owning proofs;do not repeat this input-chain or root-pixel census.
+
 ### Recorded clipping inputs inspected; hidden owners cannot be excluded — October17
 
 Question:does the passive Icon example have no clipping obligation,or a missing

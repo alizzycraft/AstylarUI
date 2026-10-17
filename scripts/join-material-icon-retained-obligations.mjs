@@ -365,11 +365,27 @@ function inspectHierarchy(reference, candidate) {
   const displayRules = candidate.rules.filter(r => r.selector === '#icon-root' && r.display !== undefined);
   assert.equal(displayRules.length, 1); assert.equal(displayRules[0].display, 'flex');
   const paired = [{ reference: frame.key, candidate: page.key }, { reference: host.key, candidate: demo.key }];
+  const inheritedHeadingInputs = [];
+  assert.equal(demo.authored.textContent, undefined); assert.equal(image.authored.textContent, undefined);
+  assert.equal(demo.retainedText, undefined); assert.equal(image.retainedText, undefined);
   for (const [type, id, text] of [['p', 'eyebrow', 'Angular Material 20 reference'], ['h1', 'title', 'icon']]) {
     const left = unique(reference.nodes.filter(n => n.parent === frame.key && n.type === type));
     const right = unique(candidate.nodes.filter(n => n.authored?.id === id));
     assert.equal(left.ownText.trim(), text); assert.equal(right.authored.textContent, text);
     assert.equal(right.parent, page.key); assert.equal(right.authored.type, type);
+    assert.equal(right.retainedText.source, 'core-text-registry');
+    const nativeStyle = reference.styles[left.style], retained = right.retainedText.style;
+    for (const stage of ['normalResolvedStyle', 'interactionResolvedStyle', 'resolvedStyle']) {
+      assert.equal(right[stage].fontFamily, undefined);
+      assert.equal(retained.fontFamily, page[stage].fontFamily);
+    }
+    for (const property of ['fontFamily', 'fontSize', 'fontWeight', 'fontStyle'])
+      assert.equal(retained[property], nativeStyle[property]);
+    inheritedHeadingInputs.push({ id, referenceNode: left.key, candidateNode: right.key,
+      parentFamily: page.normalResolvedStyle.fontFamily, localFamily: 'omitted at all three captured stages',
+      retainedTextSource: right.retainedText.source,
+      reference: Object.fromEntries(['fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'lineHeight', 'letterSpacing'].map(property => [property, nativeStyle[property]])),
+      retained: Object.fromEntries(['fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'lineHeight', 'letterSpacing'].map(property => [property, retained[property]])) });
     paired.push({ reference: left.key, candidate: right.key });
   }
   return { referenceNodes: 7, candidateNodes: 6, paired,
@@ -377,6 +393,9 @@ function inspectHierarchy(reference, candidate) {
       classification: 'application-plugin-authoring-defect', definition: 'fixture-icon-svg-replaced-by-fixed-raster',
       nativePathSha256: hash(leaf.attributes.d), candidatePngSha256: hash(png), intrinsicPngSize: [24, 24] },
     extraDocumentNode: synthetic.key,
+    typographyInputConsumption: { disposition: 'inspected-retained-stage', headings: inheritedHeadingInputs,
+      rootAndImageRetainedGlyphText: false,
+      boundary: 'Declared parent family reaches retained heading text despite local omissions. Captured registry style is not physical font selection,all inheritance/default semantics,normal line-box equality,paint-time texture inputs or glyph raster acceptance. Root/image typography scalars do not imply root/image glyph text.' },
     clippingInputs: { disposition: 'inspected-unequal-input',
       reference: { mainAndRootOverflow: 'visible', iconAndSvgOverflow: 'hidden', iconAndSvgSize: [24, 24], clipPath: 'none' },
       candidate: { mainRootAndImageLocalClipDeclarations: 'omitted at all three captured stages', replacementImageSize: [24, 24] },

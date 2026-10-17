@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep icon-retained-heading-font-chain-20261017 and icon-hierarchy-input-batch-
+20261017 stdout/stderr,and queueda7e0ee37707cd2cf701922a2c6b0023d896b8af0e59c155d263bc131b5db8558.
+This coherent batch joins40 retained heading input chains and20 clipping records
+while preserving the20 root-paint observations/failures. No browser pixels were
+regenerated. d341 and published b1a96a remain predecessor/accepted evidence,not
+automatically deletable duplicate runs;reference checks are required first.
+
 Keep icon-recorded-clipping-applicability-20261017 stdout/stderr. It executes the
 actual joiner method against40 original tree receipts,with two rejection
 controls;no browser capture or new proposal was generated. Queued d341 still
