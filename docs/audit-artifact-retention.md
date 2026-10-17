@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep inline-image-registration-{conservation,inventory}-20261017 stdout/stderr.
+They bind current162/216 source inventories and exact prior161/215 source
+recovery without rewriting accepted0dd7. Original public-inline-image report,
+driver and32 PNGs remain required failure evidence. Registration is not grounds
+to remove any prior capture or proposal.
+
 Keep public-inline-image-linebox-20261017 report,bundle/HTML and32 PNGs,plus
 public-inline-image-linebox-{capture,verify,owner}-20261017 stdout/stderr. This
 is the original equal-input inline-layout FAILURE with eight block controls,

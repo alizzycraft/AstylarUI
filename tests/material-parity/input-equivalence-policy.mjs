@@ -110,6 +110,19 @@ export const reviewedValueNormalizations = Object.freeze([
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    id: 'core-inline-replaced-row-omits-parent-line-box',
+    introducedBy: 'public equal-input reduction and current CSS row owner; first-bad runtime revision not established',
+    file: 'src/app/services/dom/elements/element-creation.service.ts',
+    pattern: String.raw`currentLineHeight = Math\.max\(\s*currentLineHeight,\s*marginBox\.top \+ childHeight \+ marginBox\.bottom,`,
+    classification: 'confirmed-core-renderer-defect',
+    owner: 'core CSS inline formatting row height and parent font/line-box contribution before projection',
+    focusedProof: 'tests/material-parity/icon-asset-input.spec.mjs: public inline image line boxes retain eight failures and eight block controls; inline image line height divergence occurs in current CSS row sizing before projection',
+    evidence: [{ file: 'artifacts/material-parity/public-inline-image-linebox-20261017/latest-report.json', sha256: 'f7120e8e0aba684a3d0ea5cebf47ea37b9f79158ebd58e5eff2d193e11d22bc1' }],
+    observation: { component: 'public auto-height div containing one24px PNG', states: ['inline-block image', 'block image control'], dpr: [1, 2],
+      property: 'parent used height', reference: 'inline28/29/30/31px;block24px', astylar: '24px in every case', stage: 'CSS inline row sizing before world projection' },
+    justification: 'Sixteen paired public cases preserve identical authored structure,styles and PNG,Arial16/24 and normal/explicit1.25x line height atDPR1/2. Eight inline-block cases fail by-4/-5/-6/-7CSSpx while all eight block controls match;image top positions agree. Four complete current/emitted/installed methods agree. Actual layoutInlineChildren execution with inert projection/paint adapters computes24px without reading parent fontSize or lineHeight:row height is maximum child margin-box height,omitting the parent line-box contribution before projection. Explicit line-height failures separate this from the normal Mg-probe finding. Fix general inline formatting/strut sizing,not Material root heights or offsets. Other replaced elements,wrapping,vertical-align variants,exact replacement font metrics and contribution to unequal Material SVG/flex inputs remain unproved. Broad40ac6f4fc blame is not established first-bad runtime history.',
+  }),
+  Object.freeze({
     id: 'core-fractional-border-edge-paint-disagrees-with-native',
     introducedBy: 'public equal-input reduction and current owning methods; first-bad revision not established',
     file: 'src/app/services/babylon-mesh.service.ts',

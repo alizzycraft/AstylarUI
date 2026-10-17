@@ -8922,6 +8922,8 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'scripts/audit-public-inline-image-linebox.mjs',
+    'artifacts/material-parity/public-inline-image-linebox-20261017/latest-report.json',
     'scripts/audit-public-border-contact.mjs',
     'scripts/audit-public-border-contact-geometry.mjs',
     'artifacts/material-parity/public-border-contact-20261017/latest-report.json',
@@ -9649,6 +9651,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/icon-asset-input.spec.mjs', /test\('public inline image line boxes retain eight failures and eight block controls'/,
+      'public inline-image line-box failure and current CSS row owner', 'Sixteen equal-input pairs retain eight inline height failures and eight block controls atDPR1/2. Four current/installed methods agree;actual inline row owner computes24px before projection without consuming parent font/line-height. Explicit line-height also fails. Not all inline formatting,physical font selection or sole Material compensation cause.'),
     proof(root, 'tests/material-parity/icon-asset-input.spec.mjs', /test\('public border live frame preserves fractional geometry and all original raster bytes'/,
       'public fractional border paint failure with correct live geometry and current owners', 'Eight equal-input pairs retain integer controls and fractional shadow-free22/44RGB failures atDPR1/2. Live132-vertex frame edges preserve1CSSpx thickness and exact fractional position;all16 PNGs reproduce unchanged. Fifteen complete owning methods match current source. Exact GPU coverage law and Material residual contribution remain unproved;no offsets,threshold changes or case promotion.'),
     proof(root, 'tests/material-parity/semantic-text-transform-input.spec.mjs', /test\('public semantic text transform preserves controls and current owner evidence'/,

@@ -8,8 +8,42 @@ const digest = s => createHash('sha256').update(s).digest('hex');
 const normalized = s => s.toString().replaceAll('\r\n', '\n');
 const id = 'core-semantic-text-transform-not-projected';
 const borderId = 'core-fractional-border-edge-paint-disagrees-with-native';
-export function restoreBorderContactPolicy(source) {
+const inlineId = 'core-inline-replaced-row-omits-parent-line-box';
+export function restoreInlineImagePolicy(source) {
   const current = normalized(source);
+  if (!current.includes(`id: '${inlineId}'`)) {
+    assert.ok(!current.includes('Sixteen paired public cases preserve identical authored structure'), 'Unrecognized inline-image registration');
+    return current;
+  }
+  assert.equal(digest(current), 'de4d7a74b1576d8120a607a63bc61b86df610ced64dcd9f1f24c332c934546fe');
+  const tree = ts.createSourceFile('policy.mjs', current, ts.ScriptTarget.Latest, true);
+  const entries = tree.statements.filter(ts.isVariableStatement).flatMap(n => [...n.declarationList.declarations])
+    .find(n => n.name.getText(tree) === 'sourceAuditDefinitions').initializer.arguments[0].elements;
+  assert.equal(entries.length, 162); assert.ok(entries[0].getText(tree).includes(inlineId));
+  const restored = current.slice(0, entries[0].getFullStart()) + current.slice(entries[0].end + 1);
+  assert.equal(digest(restored), 'a6b685058b7782ad7590de8be91c7e6fd484ddd8ae1dfdf11c1bd66a7777d648');
+  return restored;
+}
+export function restoreInlineImageProducer(source) {
+  const current = normalized(source);
+  if (!current.includes('public inline-image line-box failure and current CSS row owner')) {
+    assert.ok(!current.includes("'scripts/audit-public-inline-image-linebox.mjs'"), 'Unrecognized inline-image proof');
+    return current;
+  }
+  assert.equal(digest(current), 'e77ab7296deb65409d0a808685ad88b128d00cbe50303f3cf1b15266ca0e411f');
+  const tree = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true);
+  const owner = name => tree.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+  const proofs = owner('focusedProofInventory').body.statements[0].expression.elements;
+  const files = owner('sourceFingerprints').body.statements[0].declarationList.declarations[0].initializer.elements;
+  assert.equal(proofs.length, 216); assert.ok(proofs[0].getText(tree).includes('public inline image line boxes'));
+  let restored = current;
+  for (const [start, end] of [[proofs[0].getFullStart(), proofs[0].end + 1], [files[0].getFullStart(), files[1].end + 1]].sort((a,b)=>b[0]-a[0]))
+    restored = restored.slice(0,start)+restored.slice(end);
+  assert.equal(digest(restored), 'ac3d948a906a45ecfd20b2fbcb69c7681a425085469760493bd3fa8dd9822027');
+  return restored;
+}
+export function restoreBorderContactPolicy(source) {
+  const current = restoreInlineImagePolicy(source);
   if (!current.includes(`id: '${borderId}'`)) {
     assert.ok(!current.includes('public border live frame preserves fractional geometry'), 'Unrecognized border registration');
     return current;
@@ -24,7 +58,7 @@ export function restoreBorderContactPolicy(source) {
   return restored;
 }
 export function restoreBorderContactProducer(source) {
-  const current = normalized(source);
+  const current = restoreInlineImageProducer(source);
   if (!current.includes('public fractional border paint failure with correct live geometry and current owners')) {
     assert.ok(!current.includes("'scripts/audit-public-border-contact.mjs'"), 'Unrecognized border proof registration');
     return current;
@@ -101,8 +135,8 @@ export function reviewedRootEditingGraph(graph, actionSource, expectedRunnerEntr
   return graph.map(row => row.file === runnerFile ? { ...row, sha256: oldRunner } : row);
 }
 export function historicalSemanticDefinitions(current) {
-  assert.equal(current.length, 161);
-  const retained = current.filter(row => row.id !== id && row.id !== borderId); assert.equal(retained.length, 159); return retained;
+  assert.equal(current.length, 162);
+  const retained = current.filter(row => row.id !== id && row.id !== borderId && row.id !== inlineId); assert.equal(retained.length, 159); return retained;
 }
 export function restoreSemanticRegistrationTransitionSource(source) {
   let restored = normalized(source);
@@ -118,7 +152,7 @@ export function restoreSemanticRegistrationTransitionSource(source) {
   return restored;
 }
 // This read boundary belongs ONLY to the pre-registration benchmark assertions.
-// Current registration is independently tested against all161 actual definitions.
+// Current registration is independently tested against all162 actual definitions.
 export function readHistoricalBenchmarkSource(file, options) {
   const raw = readActual(file, options), name = path.basename(String(file));
   if (!['input-equivalence-policy.mjs', 'input-equivalence-audit.mjs', 'benchmark-config.spec.mjs', 'position-composition-producer-transition.mjs'].includes(name)) return raw;

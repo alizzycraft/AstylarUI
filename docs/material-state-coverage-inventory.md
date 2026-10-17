@@ -4,6 +4,36 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Inline-image CSS row finding registered; prior populations conserved — October17
+
+Registered core-inline-replaced-row-omits-parent-line-box through the existing
+sourceAuditDefinitions/focusedProofInventory. Current source inventory162 findings/
+216 proof anchors has zero missing locations/anchors,verified by executing the
+ORIGINAL scanner and proof inventory functions (inline-image-registration-
+inventory-20261017,TERMINAL0). Published0dd7 remains161/215;registration alone
+is not canonical publication or whole-case closure.
+
+The EXISTING semantic-text-transform-registration helper now has an exact additive
+inline-image reversal:normalized policyde4d7a74 restores priora6b68505;producer
+e77ab729 restores priorac3d948a. AST removal permits exactly one definition,one
+proof and two evidence/source paths. Full previous source equality and all161
+prior definitions are checked;unexpected source drift,renamed finding and proof
+description bypasses reject. Existing border/semantic stages still recover their
+original160/214 and159/213 populations;current162 is never passed off as159.
+
+Existing registration suite passes5/5,zero skipped/cancelled (7067.2897ms),log
+inline-image-registration-conservation-20261017. Actual current new source scan
+and independent public geometry/owner proofs remain separate. No production
+renderer,fixture,classification threshold or acceptance flag changed. No costly
+canonical rebuild/browser recapture was run for source registration.
+
+Next join this bounded public failure to applicable case obligations alongside
+the queued root/clipping/font evidence,authenticating changed policy/test/helper
+receipts through the existing mechanisms. Do not call it exact configured Material
+causality or discard the explicit-line-height failures/block controls. Complete
+inspection disposition,prioritized implementation handoff and original final
+gates remain;ALL2311 whole cases stay partial.
+
 ### Equal-input inline-image row loses parent line-box contribution — October17
 
 Question:does the existing normal-paragraph proof explain the Icon block/inline
