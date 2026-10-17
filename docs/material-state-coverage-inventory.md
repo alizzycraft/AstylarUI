@@ -4,6 +4,26 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Activation capture preflight exposes exact cohort and listener dependency — October17
+
+Remaining activation census:371 pending activate/activate-leave anchors across
+25 families;the1595 pending count also contains static/other states and is not a
+missing-click count. Original normalized event arrays cannot restore raw target,
+duplicate or discarded-type observations;existing checkbox/slider raw evidence
+is already joined and must not be recaptured as missing.
+
+Bounded follow-up reuses the frozen direct-owner capture through an authenticated
+recipe for the same seven families' pointer actions. Exact configured inventory
+contains113 cases,not112:snackbar has one additional comparison-pane activation.
+Initial preflight rejects the count before creating capture paths. Corrected
+count reaches setup,but standalone capture lacks the maintained reference event
+listener normally installed by openInteractionPage and fails before any complete
+report. Logs configured-control-activation-capture[-complete]-20261017 retain
+both distinct failures. Next extract/install the ORIGINAL runner listener via
+AST rather than inventing a replacement event schema;use fresh capture output.
+Producer failure source is preserved separately in Git. Live export0ee8 inputs,
+original56-focus report and all final acceptance criteria remain unchanged.
+
 ### Direct configured focus owners captured and joined for56 pending cases — October17
 
 Specific missing witness: normalized primary-host identities did not name actual

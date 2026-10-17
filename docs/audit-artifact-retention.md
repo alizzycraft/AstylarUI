@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep configured-control-activation-capture-20261017 stdout/stderr (113-versus112
+preflight) and configured-control-activation-capture-complete-20261017 stdout/
+stderr with its incomplete directory/provenance checkpoint (missing maintained
+reference listener before report publication). These are distinct failures,not
+validated observation reports. Preserve their producer in Git before correcting
+the listener setup;use a fresh output path for the corrected capture. No original
+focus evidence or active export input is superseded by these attempts.
+
 Keep configured-control-focus-20261017 with112 PNGs/112 trees/report and its
 -provenance checkpoint;keep configured-control-focus-{capture,verify,negative-
 controls,case-join}-20261017 stdout/stderr and queued2ffd616445bcfc2f9e0ac180c0cf368e92e29f0d36ba4532ac6360c63a63efd2.
