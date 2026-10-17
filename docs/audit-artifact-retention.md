@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep passive-recorded-node-accounting-20261017 stdout/stderr and queued52632fb4
+with originald7a99303. Receipt-bound joiner and all original paired trees preserve
+recorded omissions/additions,not equivalent wrapper authoring. Forged controls
+use memory only;no successful scratch/capture or original deletion occurred.
+Prior content/wrapper/style findings remain independently required.
+
 Keep passive-font-owner-current-applicability and passive-font-owner-case-
 applicability-20261017 stdout/stderr with queuedd7a99303/aaab24ed. Original public
 font13a14bca/remount9a61af6b logs and recovered runtime map remain required,not

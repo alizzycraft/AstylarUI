@@ -4,7 +4,14 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
-Latest queued reviewd7a99303 preservesaaab24ed and links270 cases/1132 text owners
+Latest queued review52632fb4 preservesd7a99303 and accounts for every recorded
+element in218 sidenav/grid-list/list/table cases:2648 native and2368 candidate
+nodes. Omitted/added/flattened groups stay explicit;16 altered-input controls
+reject. Existing findings are linked only within their demonstrated scope,not
+used to certify unknown wrapper/style equivalence. Whole predecessor recovers;
+14162 dependencies authenticate. All2311 cases remainpartial/unverified.
+
+Queued reviewd7a99303 preservesaaab24ed and links270 cases/1132 text owners
 to retained public font lifecycle evidence after existing current-owner census
 passes1/1:88 linked modules,1583 equal current members,one explicit inspection
 diagnostic difference. Four public DPR1 cohorts are reused,not rerun as270 case
@@ -94,6 +101,33 @@ would miss the independently confirmed attribute-stage failure. Original final
 gates and equal-input/root-cause contract remain unchanged.
 
 ## Preserved audit chronology
+
+### Complete recorded-node accounting joins remaining four passive structures — October17
+
+Question:are all recorded native/candidate elements actually accounted for,
+including previously surveyed omitted wrappers and added nodes? Reuse original
+trees and existing source findings,not another content/shape population survey.
+passive-recorded-node-accounting-20261017 terminates0 for218 cases:62sidenav,
+52grid-list,52list,52table;2648 native/2368 candidate records. Unique-key coverage
+proves every record appears exactly once,with synthetic candidate document root
+separate. Type/ordered-ID/raw-text/parent/stage guards retain literal content;
+sixteen missing-node/duplicate-node/wrong-parent/whitespace controls reject.
+
+Sidenav's empty records and nav text wrapper are explicitly omitted/flattened;
+grid's intermediate wrapper is omitted;list content/primary-text/focus wrappers
+are omitted;table's empty tfoot is omitted and two detached rule divs added.
+Logical mapping groups preserve these unequal structures instead of manufacturing
+equal serialization. Existing positioned-flow,missing-gutter,list-composition and
+detached-table-border findings remain their owning bounded classifications.
+Unknown wrapper/footer neutrality,all descendants' property equality,anonymous
+formatting/pseudo boxes,AX and paint are not asserted by record accounting.
+
+Review52632fb4cc4d1ae37a1a7e6c2d7d3c78314d1691a375fcfb496331dfb127ce0d adds
+ONLY218 recordedPassiveNodeAccounting children. Existing loader validates2311
+cases/14162 dependencies;removing these children restores wholed7a99303 and the
+acceptedcc890 pointer remains unchanged. Producer8f3adab1552c9e3b4576a33f43876bb630f30cfce9c1ac3fc193c62f23e9d399
+is receipt-bound. No new capture,renderer/fixture edit,source definition,gate or
+whole-case closure. Frozen58ec export worker20224 remains live with advancingCPU.
 
 ### Existing shared font lifecycle proof gains current-owner and case applicability — October17
 
