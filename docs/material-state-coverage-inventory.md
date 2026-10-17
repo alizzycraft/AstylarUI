@@ -4,6 +4,38 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Queued Icon source drift isolated and applicability revalidated without another proposal — October17
+
+Priority:shared input/local-paint/lifetime and exact obligation closure remain
+ahead of incidental scalar alias questions. Before another investigation/export,
+checked outstanding queuedf43 source validity. Read-only census authenticates
+the original review digest and13151 distinct receipt pairs:zero missing files,
+ONE changed file (icon-asset-input.spec.mjs),referenced60 times. Those references
+belong exclusively to the existing viewport-owner,leaf-history and shared-
+ancestor-history proof records,not newly recorded runtime acceptance.
+
+Existing Icon suite now contains a bounded reuse assertion. It pins complete
+prior suite5323f8cf from Git512e9e21,compares all THREE referenced test statements
+byte-for-byte to current source,and independently reruns that exact selection.
+Three JSON summaries still hash tofeba24145d,matching every original execution
+record. It substitutes only the60 authenticated test-file receipts in memory,
+then uses the EXISTING loadCaseObligationReview validator against every dependency
+and all2311 IDs. All13151 dependencies authenticate;complete predecessor review
+is recovered exactly when the60 receipts are restored. No saved proposal,report,
+capture,PNG or canonical package is rewritten. No alternate dependency reads:
+only the explicitly transient proposal envelope is supplied in memory.
+
+Focused `Icon queued history proof receipts` passes1/1 (27554.9162ms). Initial
+attempts failed on an incorrect literal test title and Node's inherited recursive
+test context before validation;correct literal names and an independent child
+process context reach the original three assertions. No behavioral check waived.
+This proves retained proof applicability,not full current rendering. Originalf43
+on disk STILL has its old raw test receipt;next coherent integration must publish
+that bounded reconciliation rather than claim the saved proposal is current.
+The separate11-group alignment collector/source change and new semantic160/214
+registration remain pending canonical integration. All2311 cases stay partial;
+final acceptance gates and honest failures are unchanged.
+
 ### Icon cursor evidence is computed-token observation plus model,not displayed-cursor capture — October17
 
 Specific question:can the retained16-context cursor report close the two auto/

@@ -11,13 +11,75 @@ import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { evaluateFocusedRaster } from './focused-raster-metrics.mjs';
 import { restoreSvgProofRegistration } from './position-composition-producer-transition.mjs';
-import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
+import { queryFindings, loadFindingEvidence, loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
 import { materialStaticCases, materialInteractionCases, materialProfiles, materialViewports } from './benchmark.config.mjs';
 import { verifyRetainedMaterialBrowserFiles } from './historical-audit-module-source.mjs';
 import { effectiveBrowserCursor } from './cursor-metrics.mjs';
 import { collectIconContextReview, validateIconContextReview, iconContextBaseline, applyIconContextReviews, validateIconContextRows } from './display-request-review.mjs';
 
 const one = values => { assert.equal(values.length, 1); return values[0]; };
+
+test('Icon queued history proof receipts remain applicable after unrelated audit additions', t => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const file = 'tests/material-parity/icon-asset-input.spec.mjs';
+  const current = readFileSync(file, 'utf8');
+  const previous = execFileSync('git', ['show', '512e9e21:' + file], { encoding: 'utf8' });
+  const previousSha = '5323f8cfac4eb366b2bd9759981635364322425be330a04f95053fc25268960a';
+  assert.equal(hash(previous), previousSha);
+  const names = ['Icon viewport owner keeps CSS extents independent of final plane projection',
+    'Icon-specific compensation history has only the original external-image and fixed-raster authoring stages',
+    'Icon shared ancestor history distinguishes removed heading compensation from retained input substitutions'];
+  const tests = text => {
+    const tree = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    return new Map(tree.statements.filter(node => ts.isExpressionStatement(node)
+      && ts.isCallExpression(node.expression) && node.expression.expression.getText(tree) === 'test')
+      .map(node => [node.expression.arguments[0].text, node.getText(tree)]));
+  };
+  const oldTests = tests(previous), newTests = tests(current);
+  for (const name of names) { assert.ok(oldTests.has(name), name); assert.equal(newTests.get(name), oldTests.get(name)); }
+  const id = 'f43fa8701c6ecf209f60f691a20a270bb37ecb7b9e606ca05b1872f8c1382258';
+  const proposalFile = `artifacts/material-parity/working-audit/proposals/${id}.json`;
+  const envelope = JSON.parse(readFileSync(proposalFile));
+  assert.equal(hash(JSON.stringify(envelope.review)), id);
+  const original = JSON.stringify(envelope.review), receipts = [];
+  function refresh(value, parent) {
+    if (!value || typeof value !== 'object') return;
+    if (value.file === file && typeof value.sha256 === 'string') {
+      assert.equal(value.sha256, previousSha);
+      assert.equal(parent.execution.assertionSummarySha256, 'feba24145db5bee76b6564cccc8bd983d69b804b4af300eeb9282b2c52cbbf36');
+      assert.equal(parent.execution.exitCode, 0);
+      receipts.push(value); value.sha256 = hash(current);
+    }
+    for (const child of Object.values(value)) refresh(child, value);
+  }
+  refresh(envelope.review); assert.equal(receipts.length, 60);
+  const childEnv = { ...process.env };
+  delete childEnv.NODE_TEST_CONTEXT; // Independent focused process,not recursive node:test discovery.
+  const output = execFileSync(process.execPath, ['--test', '--test-name-pattern=Icon viewport owner keeps|Icon-specific compensation history|Icon shared ancestor history', file],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024, env: childEnv });
+  assert.match(output, /# pass 3\b/); assert.match(output, /# fail 0\b/);
+  const observations = output.split(/\r?\n/).filter(line => line.startsWith('# {')).map(line => JSON.parse(line.slice(2)));
+  assert.equal(observations.length, 3);
+  assert.equal(hash(JSON.stringify(observations)), 'feba24145db5bee76b6564cccc8bd983d69b804b4af300eeb9282b2c52cbbf36');
+  envelope.sha256 = hash(JSON.stringify(envelope.review));
+  const pointer = JSON.parse(readFileSync('artifacts/material-parity/working-audit/current.json'));
+  const indexBytes = readFileSync(`artifacts/material-parity/working-audit/${pointer.generation}/index.json`);
+  assert.equal(hash(indexBytes), pointer.indexSha256);
+  const coverage = JSON.parse(indexBytes).metadata.coverage;
+  const loaded = loadCaseObligationReview(proposalFile, envelope.sha256,
+    [...coverage.caseInventory.static, ...coverage.caseInventory.interaction], {
+      read: (name, ...args) => String(name).replaceAll('\\', '/').endsWith(proposalFile)
+        ? Buffer.from(JSON.stringify(envelope)) : readFileSync(name, ...args),
+    });
+  assert.equal(loaded.cases.length, 2311); assert.equal(loaded.evidenceFingerprints.length, 13151);
+  assert.equal(loaded.inspectionComplete, false); assert.equal(loaded.currentRenderingAccepted, false);
+  for (const receipt of receipts) receipt.sha256 = previousSha;
+  assert.equal(JSON.stringify(envelope.review), original);
+  assert.equal(hash(readFileSync(file)), hash(current));
+  t.diagnostic(JSON.stringify({ originalReview: id, changedReceiptFile: file, receiptOccurrences: 60,
+    unchangedProofBodies: 3, repeatedProofSummariesIdentical: true, authenticatedDependencies: 13151,
+    cases: 2311, transientValidationOnly: true, proposalWritten: false, currentRenderingAccepted: false }));
+});
 
 test('Icon viewport owner keeps CSS extents independent of final plane projection', t => {
   const rootFile = 'src/app/services/dom/elements/root.service.ts';
