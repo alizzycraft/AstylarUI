@@ -10,7 +10,7 @@ import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { evaluateFocusedRaster } from './focused-raster-metrics.mjs';
-import { restoreSvgProofRegistration } from './position-composition-producer-transition.mjs';
+import { restoreSvgProofRegistration, restoreInheritedMarginPolicyRefinement } from './position-composition-producer-transition.mjs';
 import { queryFindings, loadFindingEvidence, loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
 import { materialStaticCases, materialInteractionCases, materialProfiles, materialViewports } from './benchmark.config.mjs';
 import { verifyRetainedMaterialBrowserFiles } from './historical-audit-module-source.mjs';
@@ -909,10 +909,30 @@ test('SVG upload cause registration conserves all predecessor source findings', 
   const priorSource = execFileSync('git', ['show', '91b730a9:tests/material-parity/input-equivalence-policy.mjs'],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   const prior = Function(priorSource.replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
+  // Keep the original147-to148 claim as a historical population. Current162
+  // registration is independently checked;do not relabel it as148 or discard
+  // the later inherited-margin refinement without its existing whole-source proof.
+  assert.equal(sourceAuditDefinitions.length, 162);
+  const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
+  const registeredPolicy = execFileSync('git', ['show', '009c9634:' + policyFile],
+    { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+  const originalDefinitions = Function(registeredPolicy.replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
+  assert.equal(originalDefinitions.length, 148);
+  let restoredPolicy = restoreInheritedMarginPolicyRefinement(readFileSync(policyFile));
+  const tree = ts.createSourceFile(policyFile, restoredPolicy, ts.ScriptTarget.Latest, true);
+  const entries = tree.statements.filter(ts.isVariableStatement).flatMap(n => [...n.declarationList.declarations])
+    .find(n => n.name.getText(tree) === 'sourceAuditDefinitions').initializer.arguments[0].elements;
+  const originalIds = new Set(originalDefinitions.map(row => row.id));
+  const later = entries.filter(n => !originalIds.has(n.arguments[0].properties.find(p => p.name.getText(tree) === 'id').initializer.text));
+  assert.equal(later.length, 11);
+  for (const node of later.toReversed()) restoredPolicy = restoredPolicy.slice(0, node.getFullStart()) + restoredPolicy.slice(node.end + 1);
+  assert.equal(restoredPolicy, registeredPolicy, 'Complete historical policy,not only selected finding fields,must be recovered');
+  const historicalDefinitions = Function(restoredPolicy.replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
   assert.equal(prior.length, 147);
-  assert.equal(sourceAuditDefinitions.length, 148);
-  assert.deepEqual(sourceAuditDefinitions.slice(0, -1), prior);
-  const finding = sourceAuditDefinitions.at(-1);
+  assert.equal(historicalDefinitions.length, 148);
+  assert.deepEqual(historicalDefinitions.slice(0, -1), prior);
+  const finding = historicalDefinitions.at(-1);
+  assert.deepEqual(sourceAuditDefinitions.find(row => row.id === finding.id), finding);
   assert.equal(finding.id, 'core-svg-dimensionless-image-upload-not-adapted');
   assert.equal(finding.classification, 'confirmed-core-renderer-defect');
   assert.equal([...readFileSync(finding.file, 'utf8').matchAll(new RegExp(finding.pattern, 'g'))].length, 1);
@@ -927,9 +947,13 @@ test('SVG upload cause registration conserves all predecessor source findings', 
   const priorProducer = execFileSync('git', ['show', '009c9634:' + producerFile],
     { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   assert.equal(restoreSvgProofRegistration(producer), priorProducer.replaceAll('\r\n', '\n'));
+  assert.throws(() => restoreSvgProofRegistration(producer + '\n// unexplained source drift'));
+  const registeredProducer = execFileSync('git', ['show', '7c48ffe2:' + producerFile],
+    { encoding: 'utf8', maxBuffer: 4_000_000 });
+  assert.equal(restoreSvgProofRegistration(registeredProducer), priorProducer.replaceAll('\r\n', '\n'));
   for (const fragment of ['original SVG GPU upload adaptation boundary',
     'decoded native image dimensions isolate upload adaptation', 'not inline SVG support,currentColor inheritance'])
-    assert.throws(() => restoreSvgProofRegistration(producer.replace(fragment, fragment + ' altered')),
+    assert.throws(() => restoreSvgProofRegistration(registeredProducer.replace(fragment, fragment + ' altered')),
       /exact one-entry addition/);
 });
 

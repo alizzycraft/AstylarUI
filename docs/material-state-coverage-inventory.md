@@ -4,6 +4,32 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Original SVG147-to148 conservation assertion restored at explicit historical boundary — October17
+
+The existing SVG registration test's148 count was stale,not an unexplained loss
+of production findings. Actual registry remains162. Read-only comparison finds
+all original147 entries preserved except the separately reviewed inherited-margin
+refinement. Reusing restoreInheritedMarginPolicyRefinement authenticates/removes
+that refinement AND exact later inline/border/semantic source stages;removing
+the11 later definitions then recovers the COMPLETE009c9634 policy bytes,not merely
+matching IDs. Original order and all148 finding records match the historical
+registration,whose first147 still deep-equal91b730a9. The SVG finding itself
+also equals its actual current production entry;no current registry mutation.
+
+The original producer reversal still restores today's producer to complete009c.
+Original three mutation controls run at authenticated7c48ffe2 SVG registration
+source so later prefix hash guards cannot replace the intended one-entry checks.
+An additional current-producer unrelated-drift control rejects. Existing test
+passes1/1 (see svg-registration-historical-population-20261017 stdout/stderr),
+with original147/148 evidence receipts and all original assertions retained.
+No capture,canonical export or full-suite acceptance is inferred.
+
+Next reconcile the separate f43 queued-history raw-dependency boundary against
+the already-proven current additive registrations;do not replace its original
+test bodies or saved proposal. Queued68af's prior raw Icon test receipt is
+historical after this test-only increment. ALL2311 cases remain partial;final
+unfiltered harness/browser/release gates are still required.
+
 ### Inline-layout public failure joined without Material causality promotion — October17
 
 Existing joiner reruns the two public inline-image assertions and attaches the

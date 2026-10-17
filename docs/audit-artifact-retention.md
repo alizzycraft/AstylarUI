@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep svg-registration-historical-population-20261017 stdout/stderr. The original
+147/148 finding conservation and SVG mutation controls execute at an explicitly
+authenticated historical boundary,with actual162 registry kept separate. Original
+Git009c/7c48/91b7 sources and all SVG report receipts remain required;no captures
+or proposal bytes were replaced to make the test pass.
+
 Keep icon-inline-layout-coherent-join-20261017 stdout/stderr and queued68af180c7c61e07fcbb329cda434611ed820db9a1637aa07afcddd51749002c0.
 It preserves original failure populations and all earlier joins;it does not
 supersede accepted0dd7/b1a96a or authorize deletion of a7e0/d341 predecessors
