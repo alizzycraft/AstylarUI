@@ -45,6 +45,28 @@ label bounds and paint at matching state/settlement;no local-paint metric or
 case closure established. Reuse existing capture infrastructure for that gap,
 not another unchanged canonical export or repeated retained-crop attempt.
 
+New list-label-bounds-paint-20261018 capture closes that measurement gap for all
+52 configured list endpoints (12 static/40 interaction):104 paired labels,
+104 screenshots and104 input trees. Existing current action functions are
+extracted unchanged;all1887 retained application asset hashes authenticate.
+Fresh checkpoint records actual browser/launch/action sources;no claim that
+old screenshots gain new geometry or that the retained application is current.
+Report590c7549982197fbd57ac96a33cd965dcb1db9081d2a338108a046fec449e8bd;
+producer22b2e0e26f228799d21eee6aca74f0dc02047cd87bd631cba8ec677cfd4fcb87.
+Capture59661 terminates0;independent verify-bound logd07da835 passes all52 cases
+and five missing/duplicate/bounds/screenshot rejection controls. First independent
+attempt omits propertyGroups binding and fails;preserved,not capture failure.
+
+Existing exact Badge crop function/focused raster metric are reused unchanged
+for104 zero-phase union-label-box comparisons. All104 fall below existing local
+diagnostic default;similarity range -0.07809142176998826 to0.2151011346185355.
+Identity,altered-image andout-of-bounds controls pass. Log8a3c67c2 retains all
+boxes,metrics and original image/tree receipts. Representative paired images
+visually inspected:row1 candidate label higher,row2 lower;known unequal row,
+wrapper,font/line-height inputs remain. Not a new equal-input glyph cause,
+new gate,full list/root/row paint,current whole-runtime or whole-case closure.
+This compact evidence awaits the next coherent case join;no canonical rebuild.
+
 ### Previous pointer notes — preserved chronology, not live status
 
 The entries below describe their recorded checkpoints;the current pointer above

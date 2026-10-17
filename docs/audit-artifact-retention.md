@@ -56,6 +56,15 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep list-label-bounds-paint-20261018 and its new checkpoint,all104 PNGs/104
+input trees and report590c7549. Keep original capture stdout/stderr,initial
+independent-verify binding failure,and independent-verify-bound success with
+five controls. Keep list-label-paint-zero-offset-20261018 diagnostics/all bounds
+and receipts. They use new paired images,never old PNGs with new coordinates.
+All104 local comparisons fail honestly;do not discard them because whole-page
+historical output passed. Exact Badge crop helper/metric remain dependencies.
+No successful temporary scratch or duplicate build copy was created.
+
 Keep list-retained-label-paint,list-retained-label-paint-bound and
 list-retained-label-geometry-gap-20261018 stdout/stderr. First is a receipt-typo
 failure;second establishes missing geometry;the census confirms104 missing
