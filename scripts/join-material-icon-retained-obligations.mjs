@@ -14,6 +14,22 @@ import { readHistoricalBenchmarkSource } from '../tests/material-parity/semantic
 const script = 'scripts/join-material-icon-retained-obligations.mjs';
 const hash = b => createHash('sha256').update(b).digest('hex');
 const base = 'artifacts/material-parity/';
+// Integrate the completed public border distinction,not a new Material capture.
+const borderOutput = execFileSync(process.execPath, ['--test',
+  '--test-name-pattern=public border live frame|public border contact capture binds|public border contact reduction',
+  'tests/material-parity/icon-asset-input.spec.mjs'], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+assert.match(borderOutput, /# pass 3\b/); assert.match(borderOutput, /# fail 0\b/);
+console.log(borderOutput.trimEnd());
+const borderEvidence = {
+  reports: [
+    ['public-border-contact-20261017/latest-report.json', '89e5abb3b94d0b1aadbd3d2e8e7818c760f34fe54675946c5d4a284003640aab'],
+    ['public-border-contact-geometry-20261017/latest-report.json', '6d9dd5c43393d686cdebb7b3c014f08b2cc97d1908298860c161e2e2fe98a952'],
+  ].map(([name, sha256]) => { const file = base + name; assert.equal(hash(readFileSync(file)), sha256); return { file, sha256 }; }),
+  sources: ['scripts/audit-public-border-contact.mjs', 'scripts/audit-public-border-contact-geometry.mjs',
+    'src/app/services/babylon-mesh.service.ts', 'src/app/services/dom/elements/element-border.service.ts',
+    'src/app/services/dom/elements/element-creation.service.ts', 'src/app/services/css-render-boundary.ts']
+    .map(file => ({ file, sha256: hash(readFileSync(file)) })),
+};
 // Coherent integration of the two existing source-bound assertions. Their
 // output is retained by this command's caller, not a new browser capture.
 const iconProofFile = 'tests/material-parity/icon-asset-input.spec.mjs';
@@ -415,7 +431,13 @@ for (const c of census.cases) {
   row.obligations.sourceCurrentness = { ...row.obligations.sourceCurrentness, freshProducerRetainedBuildExecution: {
     disposition: 'inspected-bounded-provenance', case: row.case, browser: fresh.browser, evidence: freshEvidence,
     boundary: 'Fresh current readable producer/browser,exact retained build bytes. Not a newly built renderer,current complete package acceptance,full matrix or recovery of historical runner source.' } };
-  row.obligations.localPaint = { ...row.obligations.localPaint, freshProducerPixelReproduction: {
+  row.obligations.localPaint = { ...row.obligations.localPaint,
+    publicFractionalBorderPaintFailure: { disposition: 'inspected-supplemental-public-failure',
+      finding: 'core-fractional-border-edge-paint-disagrees-with-native', evidence: borderEvidence,
+      observations: { publicPairs: 8, dpr: [1, 2], shadowFreeIntegerMatches: true,
+        shadowFreeFractionalChannelErrors: [22, 44], liveFrameThickness: 1, originalImagesConserved: 16, currentOwnerMethodsMatch: 15 },
+      boundary: 'Public equal-input primitive,not exact configured Material input/state coverage or sole cause of its contact residual. Existing Material shadow alpha/structure mismatches,remaining paint work and partial inspection remain.' },
+    freshProducerPixelReproduction: {
     disposition: 'inspected-full-frame-reproduction', reproducedImages, metrics: freshCase.result.focusedRasters,
     evidence: freshEvidence,
     boundary: 'Full paired PNGs reproduce byte-for-byte. Static local gates remain configured;inspect local targets remain absent. Not equivalent inputs,all pixel mechanisms or whole-case acceptance.' },

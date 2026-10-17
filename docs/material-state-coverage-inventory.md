@@ -4,6 +4,32 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Coherent Icon/border review validated and selected for next export — October17
+
+Combined join completes TERMINAL0 in icon-coherent-border-obligation-join-20261017
+stdout/stderr. New queued reviewb1a96a37847b439cec17bcc8ab8452bc109087d12ea6466a69152dcd876743c7
+authenticates2311 exact cases/13159 dependencies. All20 Icon parents gain the
+bounded public border failure WITHOUT changing their partial status or remaining
+Material paint/input obligations. Existing ordinary-heading,AX failure,history,
+viewport-owner,supplemental lifetime,fresh producer and original pixel joins all
+survive. Complete original117a review is recovered exactly;712 receipts across
+four known source transitions reconcile to actual current files. Oldf43 remains
+historical,not overwritten. The new join reruns border3,source/history3,lifetime4
+and existing receipt/semantic/hierarchy controls;both acceptance flags stayfalse.
+
+Separate complete-row alignment integration passes2/2 (34224.8307ms),including
+legacy8 conservation,new11/180 observations and rejection controls. The ORIGINAL
+source scan/proof inventory functions detect all161 definitions and215 proof
+anchors,none missing. Named-launcher dry-run supplies all five retained baseline
+inputs and now selects newb1a96a review/digest together,not stale87b7. The earlier
+87b7 source fingerprint remains required historical evidence,not a selection claim.
+
+These checks justify ONE coherent export milestone for the accumulated batch,
+not new browser capture or final acceptance. Acceptedf663 and compact index stay
+unchanged until export,independent cold comparison and import/verification succeed.
+Freeze producer/helper/test/review inputs during that work. All2311 case closures
+and final unfiltered harness/browser/release gates remain outstanding.
+
 ### Border/contact core paint finding registered; canonical publication pending — October17
 
 Registered core-fractional-border-edge-paint-disagrees-with-native using the

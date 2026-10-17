@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep icon-coherent-border-obligation-join-20261017 and icon-coherent-alignment-
+integration-20261017 stdout/stderr,and queuedb1a96a37847b439cec17bcc8ab8452bc109087d12ea6466a69152dcd876743c7.
+This is the coherent20-Icon-case/public-border evidence batch,not a new capture.
+Original117a,f43 and87b7 remain required predecessor/canonical evidence. Do not
+delete them on the strength of a newer proposal alone.
+
 Keep public-border-contact-geometry-20261017 report,bundle/HTML,16 PNGs and
 public-border-contact-geometry-{capture,verify}-20261017 stdout/stderr. These
 bind actual frame geometry to the original equal-input paint failure;all16 PNGs
