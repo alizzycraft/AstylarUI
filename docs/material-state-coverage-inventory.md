@@ -4,6 +4,36 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Public border failure bound to current construction/material/placement owners — October17
+
+Specific unresolved question:does the equal-input public failure use stale border
+code rather than current core owners? Complete named-method comparison rules out
+that explanation at the inspected boundaries. Authenticated report89e5abb3 and
+its actual bundle-input receipts bind installed BabylonMeshService,
+ElementBorderService,ElementCreationService and css-render-boundary modules.
+Current TS methods are emitted and both complete JS bodies parsed/printed with
+the same whitespace-only esbuild settings;no syntax/property/name filtering.
+All15 methods match:polygon border/frame/rounded frame/point generation/strips,
+width normalization,material,parenting,frame placement,border parsing,element
+creation and four final CSS projection/position helpers. Two changed subtraction/
+placement-sign controls remain unequal. Existing equal-input pixel proof also
+re-verifies;focused2/2 pass (2883.6375ms). No browser recapture or new report.
+
+The public fractional border paint discrepancy is therefore reproduced with the
+same inspected owning logic as current source,not attributed solely to stale
+package code or Material/plugin/shadow-alpha substitution. Construction retains
+continuous outer and inner extents;that source observation does NOT independently
+measure live border vertices or prove the exact rasterization cause. Current
+confirmed observation is equal-input edge-paint failure;coverage/snapping versus
+actual border-geometry placement remains the next distinction. Inspect the live
+border frame's CSS-projected inner/outer straight-edge coordinates using this
+minimal reproduction before blaming a GPU sample rule or changing any rounding.
+Do not repeat the settled package-method or shadow-free control questions.
+
+Ownership recommendation remains general core border construction/final paint,
+not fixture offsets. Exact Material residual attribution,coherent finding/proof
+registration and final gates remain open;all2311 whole cases stay partial.
+
 ### Equal-input public border/contact failure reproduced without shadow — October17
 
 Closed the decisive missing control from the prior contact-row review. New bounded

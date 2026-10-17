@@ -20,6 +20,62 @@ import { collectIconContextReview, validateIconContextReview, iconContextBaselin
 
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 
+test('public border contact capture binds complete current border construction and placement owners', t => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const raw = readFileSync('artifacts/material-parity/public-border-contact-20261017/latest-report.json');
+  assert.equal(hash(raw), '89e5abb3b94d0b1aadbd3d2e8e7818c760f34fe54675946c5d4a284003640aab');
+  const report = JSON.parse(raw);
+  const parse = (file, text) => ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const canonical = text => transformSync(text, { loader: 'js', target: 'esnext', format: 'esm', legalComments: 'none', minifyWhitespace: true }).code;
+  function declaration(tree, name, method) {
+    const found = [];
+    function visit(node) {
+      if ((method ? ts.isMethodDeclaration(node) : ts.isFunctionDeclaration(node)) && node.name?.getText(tree) === name) found.push(node);
+      ts.forEachChild(node, visit);
+    }
+    visit(tree); return one(found).getText(tree);
+  }
+  const owners = [
+    ['src/app/services/babylon-mesh.service.ts', ['createPolygonBorder', 'createPolygonFrameVertexData', 'generatePolygonPoints', 'normalizeBorderWidths', 'createRoundedPolygonFrameVertexData', 'createBorderStrips', 'positionBorderFrames', 'createMaterial', 'parentTextMesh'], true],
+    ['src/app/services/dom/elements/element-border.service.ts', ['parseBorderProperties'], true],
+    ['src/app/services/dom/elements/element-creation.service.ts', ['createElement'], true],
+    ['src/app/services/css-render-boundary.ts', ['positionRenderedCssBox', 'projectCssLength', 'projectCssPoint', 'projectCssSize'], false],
+  ];
+  let methods = 0, mutationControls = 0;
+  const receipts = [];
+  for (const [file, names, method] of owners) {
+    const installed = 'examples/material-showcase/node_modules/astylarui/dist/lib/' + file.slice(4).replace(/\.ts$/, '.js');
+    const receipt = one(report.inputs.filter(row => row.file === installed)), bytes = readFileSync(installed);
+    assert.equal(hash(bytes), receipt.sha256); receipts.push(receipt);
+    const current = parse(file, readFileSync(file, 'utf8')), captured = parse(installed, bytes.toString());
+    for (const name of names) {
+      const wrap = text => method ? `class Owner {${text}}` : text;
+      const emitted = ts.transpileModule(wrap(declaration(current, name, method)), { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 } }).outputText;
+      const compiled = parse('emitted.js', emitted);
+      assert.equal(canonical(wrap(declaration(compiled, name, method))), canonical(wrap(declaration(captured, name, method))), `${file}:${name}`);
+      if (name === 'createPolygonFrameVertexData' || name === 'positionBorderFrames') {
+        const original = declaration(compiled, name, method);
+        const changed = name === 'createPolygonFrameVertexData'
+          ? original.replace('height - borderWidths.top - borderWidths.bottom', 'height + borderWidths.top + borderWidths.bottom')
+          : original.replace('position.y = centerY', 'position.y = -centerY');
+        assert.notEqual(changed, original);
+        assert.notEqual(canonical(wrap(changed)), canonical(wrap(original))); mutationControls++;
+      }
+      methods++;
+    }
+  }
+  assert.equal(methods, 15);
+  assert.equal(mutationControls, 2);
+  const meshSource = readFileSync(owners[0][0], 'utf8');
+  assert.match(meshSource, /innerHeight = Math\.max\(0\.2, height - borderWidths\.top - borderWidths\.bottom\)/);
+  assert.match(meshSource, /borderMesh\.position\.y = centerY/);
+  // Construction retains continuous extents;source equality does not identify
+  // exact GPU coverage positions or independently measure live border vertices.
+  t.diagnostic(JSON.stringify({ currentCapturedBorderOwnerMethodsMatch: methods, mutationControls, capturedBundleInputs: receipts,
+    publicEqualInputPaintFailure: true, browserRecapture: false, currentRenderingAccepted: false,
+    boundary: 'Complete named construction/material/placement method equality. Does not establish every dependency,live vertex coordinates,exact browser snapping law or sole Material residual cause.' }));
+});
+
 test('public border contact reduction isolates fractional edge mismatch without shadows', () => {
   const directory = 'artifacts/material-parity/public-border-contact-20261017';
   const raw = readFileSync(`${directory}/latest-report.json`);
