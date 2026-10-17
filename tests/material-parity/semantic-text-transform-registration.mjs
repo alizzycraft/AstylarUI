@@ -34,8 +34,38 @@ export function restoreSemanticTextTransformProducer(source) {
   assert.equal(digest(restored), 'e6336fa816a5778352963cdee293efbcb63d1a0815895a870b598a864b644eef');
   return restored;
 }
-const importLine = "import { readHistoricalBenchmarkSource as readFileSync, historicalSemanticDefinitions } from './semantic-text-transform-registration.mjs';";
+const importLine = "import { readHistoricalBenchmarkSource as readFileSync, historicalSemanticDefinitions, reviewedRootEditingGraph, reviewedRootEditingRunnerReceipt } from './semantic-text-transform-registration.mjs';";
 const populationLine = 'const sourceAuditDefinitions = historicalSemanticDefinitions(currentSourceAuditDefinitions);\n';
+const runnerFile = 'tests/material-parity/run-material-parity.mjs';
+const oldRunner = '584cdfc8b115e1a8c23834fe939ae6b3d4ff98bca25d61304a094a637825cc4e';
+export function reviewedRootEditingRunnerReceipt(bytes, actionSource) {
+  assert.equal(actionSource.file, runnerFile); assert.equal(actionSource.sha256, oldRunner);
+  assert.equal(digest(bytes), '86ece08b913903e0a06231a58b32826a8fe561b468f82b7c57ccc32422da60e8');
+  const source = bytes.toString(), tree = ts.createSourceFile(runnerFile, source, ts.ScriptTarget.Latest, true);
+  // Reuse the existing exact metadata-only reversal,not a second recipe.
+  const proofFile = 'tests/material-parity/alignment-crop-provenance.spec.mjs';
+  const proof = ts.createSourceFile(proofFile, readActual(proofFile, 'utf8'), ts.ScriptTarget.Latest, true);
+  const recipe = proof.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'withoutProvenance').getText(proof);
+  assert.equal(digest(normalized(recipe)), 'fa775f1fec145112cfa1a684bab2dc9bbee436e88a9746f7b3a8deac5cdc6737');
+  const restore = new Function('assert', recipe + ';return withoutProvenance;')(assert);
+  const restored = restore(normalized(source));
+  assert.equal(digest(restored), '082d6d7b3e0b0e5c1789f3d2ceff8862e3244de5319cc941e79c53fa634d6502');
+  assert.deepEqual(actionSource.methods.map(row => row.name), ['performInteraction', 'interactionTargetBox',
+    'settleInteraction', 'profileTheme', 'sendShowcaseCommand', 'waitForThemeApplied']);
+  for (const method of actionSource.methods) {
+    const node = tree.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === method.name);
+    assert.ok(node); assert.equal(digest(node.getText(tree)), method.sha256);
+  }
+  // This returns the reviewed historical applicability identity,not a claim
+  // that current raw bytes equal the original captured mixed-line-ending file.
+  return oldRunner;
+}
+export function reviewedRootEditingGraph(graph, actionSource, expectedRunnerEntries = 1) {
+  reviewedRootEditingRunnerReceipt(readActual(runnerFile), actionSource);
+  assert.ok([0, 1].includes(expectedRunnerEntries));
+  assert.equal(graph.filter(row => row.file === runnerFile).length, expectedRunnerEntries);
+  return graph.map(row => row.file === runnerFile ? { ...row, sha256: oldRunner } : row);
+}
 export function historicalSemanticDefinitions(current) {
   assert.equal(current.length, 160);
   const retained = current.filter(row => row.id !== id); assert.equal(retained.length, 159); return retained;
@@ -70,6 +100,13 @@ export function readHistoricalBenchmarkSource(file, options) {
     restored = restored.replace(importLine, "import { readFileSync } from 'node:fs';")
       .replace('propertyGroups, sourceAuditDefinitions as currentSourceAuditDefinitions', 'propertyGroups, sourceAuditDefinitions')
       .replace(populationLine, '');
+    for (const [before, after] of [
+      ['reviewedRootEditingGraph(fingerprintModuleGraph(process.cwd(), r.actionSource.file), r.actionSource)', 'fingerprintModuleGraph(process.cwd(), r.actionSource.file)'],
+      ['assert.deepEqual(reviewedRootEditingGraph(capturedGraph, r.actionSource, 0), manifest.provenance.diagnosticFiles);', 'assert.deepEqual(capturedGraph, manifest.provenance.diagnosticFiles);'],
+      ['assert.equal(reviewedRootEditingRunnerReceipt(runner, r.actionSource), r.actionSource.sha256);', 'assert.equal(hash(runner), r.actionSource.sha256);'],
+    ]) {
+      assert.equal(restored.split(before).length, 2); restored = restored.replace(before, after);
+    }
     assert.equal(digest(restored), '4a565c81ac5624f66d82fb5c3f85b07c20d12c3cc64cb794700a0b62e478c00c');
   }
   return typeof raw === 'string' ? restored : Buffer.from(restored);

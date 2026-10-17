@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readHistoricalBenchmarkSource as readFileSync, historicalSemanticDefinitions } from './semantic-text-transform-registration.mjs';
+import { readHistoricalBenchmarkSource as readFileSync, historicalSemanticDefinitions, reviewedRootEditingGraph, reviewedRootEditingRunnerReceipt } from './semantic-text-transform-registration.mjs';
 import test from 'node:test';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
@@ -65,7 +65,7 @@ test('retained public unchanged-root updates preserve semantic focus failure at 
         assert.equal(hash(bytes), '69695dabc9b1ff9c999f8cf6c92e5e8cdc3e3b9fdf68ddf4925ba176c3df3355');
         const validate = raw => validateSupplementalCapture(raw, { reportFile: file, expectedProvenance: manifest.provenance, script: 'scripts/audit-material-configured-input-editing.mjs', styleProperties: Object.values(propertyGroups).flat() });
         assert.deepEqual(validate(r), { status: 'checkpoint-bound', errors: [] });
-        assert.deepEqual(fingerprintModuleGraph(process.cwd(), r.actionSource.file), manifest.provenance.harnessFiles);
+        assert.deepEqual(reviewedRootEditingGraph(fingerprintModuleGraph(process.cwd(), r.actionSource.file), r.actionSource), manifest.provenance.harnessFiles);
         const diagnosticGraph = fingerprintModuleGraph(process.cwd(), 'scripts/audit-material-configured-input-editing.mjs');
         const { restoreSemanticRootPolicyRefinement } = await import('./position-composition-producer-transition.mjs');
         const policyBeforeRoot = restoreSemanticRootPolicyRefinement(readFileSync(policyFile, 'utf8'));
@@ -73,9 +73,9 @@ test('retained public unchanged-root updates preserve semantic focus failure at 
         const capturedGraph = diagnosticGraph.map(receipt => receipt.file === policyFile
             ? { ...receipt, sha256: hash(policyBeforeRoot) } : receipt);
         assert.equal(diagnosticGraph.filter(receipt => receipt.file === policyFile).length, 1);
-        assert.deepEqual(capturedGraph, manifest.provenance.diagnosticFiles);
+        assert.deepEqual(reviewedRootEditingGraph(capturedGraph, r.actionSource, 0), manifest.provenance.diagnosticFiles);
         const runner = readFileSync(r.actionSource.file);
-        assert.equal(hash(runner), r.actionSource.sha256);
+        assert.equal(reviewedRootEditingRunnerReceipt(runner, r.actionSource), r.actionSource.sha256);
         const ast = ts.createSourceFile(r.actionSource.file, runner.toString(), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
         for (const m of r.actionSource.methods)
             assert.equal(hash(ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === m.name).getText(ast)), m.sha256);

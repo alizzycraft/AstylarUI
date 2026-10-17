@@ -6,7 +6,8 @@ import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { restoreSemanticTextTransformPolicy, restoreSemanticTextTransformProducer,
-  restoreSemanticRegistrationTransitionSource, readHistoricalBenchmarkSource, historicalSemanticDefinitions } from './semantic-text-transform-registration.mjs';
+  restoreSemanticRegistrationTransitionSource, readHistoricalBenchmarkSource, historicalSemanticDefinitions,
+  reviewedRootEditingGraph, reviewedRootEditingRunnerReceipt } from './semantic-text-transform-registration.mjs';
 
 test('public semantic text transform preserves controls and current owner evidence', t => {
   const hash = b => createHash('sha256').update(b).digest('hex');
@@ -52,6 +53,28 @@ test('public semantic text transform preserves controls and current owner eviden
   }
   t.diagnostic(JSON.stringify({ definitions: 160, priorDefinitionsConserved: 159, focusedProofs: 214,
     publicFailurePairs: 4, materialPhysicalContexts: 16, canonicalPublication: false }));
+});
+
+test('root editing runner applicability conserves metadata transition and rejects changed actions', () => {
+  const file = 'artifacts/material-parity/configured-input-editing-current-20261015/latest-report.json';
+  const bytes = readFileSync(file), hash = b => createHash('sha256').update(b).digest('hex');
+  assert.equal(hash(bytes), '69695dabc9b1ff9c999f8cf6c92e5e8cdc3e3b9fdf68ddf4925ba176c3df3355');
+  const report = JSON.parse(bytes), runner = readFileSync(report.actionSource.file);
+  const before = JSON.stringify(report);
+  assert.equal(reviewedRootEditingRunnerReceipt(runner, report.actionSource), report.actionSource.sha256);
+  assert.throws(() => reviewedRootEditingRunnerReceipt(Buffer.from(runner.toString() + '\n// unreviewed'), report.actionSource));
+  const wrong = structuredClone(report.actionSource); wrong.sha256 = '0'.repeat(64);
+  assert.throws(() => reviewedRootEditingRunnerReceipt(runner, wrong));
+  const missing = structuredClone(report.actionSource); missing.methods.pop();
+  assert.throws(() => reviewedRootEditingRunnerReceipt(runner, missing));
+  const action = structuredClone(report.actionSource); action.methods[0].sha256 = '0'.repeat(64);
+  assert.throws(() => reviewedRootEditingRunnerReceipt(runner, action));
+  assert.throws(() => reviewedRootEditingGraph([], report.actionSource));
+  const original = [{ file: report.actionSource.file, sha256: hash(runner) }, { file: 'unrelated', sha256: 'unchanged' }];
+  const mapped = reviewedRootEditingGraph(original, report.actionSource);
+  assert.equal(mapped[0].sha256, report.actionSource.sha256);
+  assert.deepEqual(mapped[1], original[1]); assert.equal(original[0].sha256, hash(runner));
+  assert.equal(JSON.stringify(report), before); assert.equal(hash(readFileSync(file)), hash(bytes));
 });
 
 test('semantic registration historical boundary rejects drift and keeps current population explicit', () => {

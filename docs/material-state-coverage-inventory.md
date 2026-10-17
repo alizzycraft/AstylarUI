@@ -4,6 +4,41 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Root/editing runner applicability resolved; font-box browser drift remains — October17
+
+Reused the existing October15 whole-runner metadata conservation instead of
+recapturing. Current raw86ece08b reverses only alignment-box/crop-provenance
+additions to normalized historical082d6d7b. Existing withoutProvenance function
+hashfa775f1f is pinned and executed unchanged. Captured mixed-line-ending584cdfc8
+remains in the report;this is not recovery of those exact original bytes.
+Explicit applicability graph comparison changes no saved receipt or fresh capture.
+
+The root/editing test now uses that bounded comparison for its two graph checks
+and whole-runner identity,then executes original method,case/action/PNG and behavior
+checks. All SIX methods actually listed in the authenticated editing report match
+current source byte-for-byte. Harness graph has one runner;diagnostic graph zero.
+Initial checks rejected assumed12 methods and runner presence in both graphs;
+the original report resolves those assumptions without reducing actual coverage.
+Reversing only the new comparison calls/header reconstructs the complete previous
+benchmark suite hash. No unrelated assertions changed.
+
+Root/editing test now1/1 pass,including retained behavioral assertions. Semantic
+suite3/3 passes with changed-runner,wrong-receipt,missing-method,wrong-action-hash
+and missing-runner-graph controls;report bytes/unrelated graph rows are conserved.
+Original raw-hash failure remains in prior ledger/commits. Session13318 terminal:
+alignment-crop-provenance suite5/6 pass,NOT6/6. Metadata conservation,crop geometry,
+missing-ink,texture and96 reconstructed crops pass. Standalone-batch test fails in
+check-retained-paragraph-font-box.mjs:43:actual browser155.0.8059.80 versus recorded
+155.0.8059.40. This is environment applicability,not a paragraph geometry result
+or permission to rewrite browser receipts. Chained command's final exit0 belongs
+to the final root test,not the intervening six-test suite.
+
+Next inspect the retained font-box check's actual browser dependency before any
+historical replay/new observation decision. Do not repeat settled root comparison
+or canonical export for status. Canonicalf663/selected87b7,queuedb7fe,current160
+findings/214 proofs and all2311 partial cases remain distinct. No renderer/fixture
+change or whole-case promotion;all final gates remain.
+
 ### Additive semantic registration reconciled with historical populations — October17
 
 Resolved the160-versus159 registration failure without changing today's registry

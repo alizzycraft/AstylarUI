@@ -160,8 +160,13 @@ The current-registration suite semantic-text-transform-input.spec.mjs separately
 reads the actual160 definitions/214 proofs and tests conservation/drift rejection.
 Historical reads are limited to four exact workspace paths and change no disk
 files,production collection or capture. Do not present historical replay as
-current renderer acceptance. The root-focus retained runner584cdfc8 versus current
-86ece08b mismatch is deliberately outside this restoration and remains failing.
+current renderer acceptance. The root-focus runner584cdfc8 versus current86ece08b
+now has its own explicit applicability boundary:pin raw current bytes,execute the
+existing metadata-only reversal to normalized082d6d7b,and check all six captured
+editing methods. Captured raw bytes are not claimed recovered;reports are unchanged.
+Original root behavioral assertions execute after this boundary. Font-box browser
+155.0.8059.40 versus available.80 remains a separate failing applicability check;
+neither historical source restoration nor crop conservation waives it.
 
 For the original **synthetic ImageResourceService unit assertions only**, the
 test-only `audit-service` configuration avoids compiling the application's
