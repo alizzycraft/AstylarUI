@@ -4,6 +4,12 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+New standalone Badge exposure evidence:16 verified actual-theme/physical contexts,
+64 label/count targets,16 native-hidden versus candidate-exposed count failures.
+Independent verifier rejects five forged controls. Exact report/source receipts
+and limitations are below. Not yet joined to case obligations or canonical source;
+no whole-case closure or current-source rendering claim follows.
+
 New queued shared-heading review176da706 adds exact recorded frame-sibling/raw
 text/four-font-input mappings for2291 cases (4582 pairs),reusing20 Icon cases'
 40 already inspected chains. All36 families/4622 pairs are accounted for within
@@ -47,6 +53,42 @@ would miss the independently confirmed attribute-stage failure. Original final
 gates and equal-input/root-cause contract remain unchanged.
 
 ## Preserved audit chronology
+
+### Badge count exposure extends the original one-context observation — October17
+
+Priority gap:Badge actual AX exposure outside the old light/desktop/DPR1 pair.
+Alternatives were a one-context/incorrect-theme observation versus a persistent
+hidden-versus-exposed count difference. Reuse existing supplemental checkpoint,
+runtime observer,theme application and retained-build mechanisms;do not recheck
+settled passive wrapper/content populations. New audit-material-badge-exposure
+captures four actual profiles x desktopDPR1/2,tabletDPR1,mobileDPR2,with exact
+theme objects and DOM backend-ID ownership. Retained1887 build members are
+authenticated against the existing full checkpoint;this is not a current rebuild.
+
+badge-exposure-contexts-capture-20261017 terminates0:16 paired contexts,32 input
+trees,64 label/count AX targets. All16 native counts are ignored with the
+ariaHiddenElement reason;all16 candidate counts are exposed with StaticText4.
+Labels' exact DOM text is Notifications on both sides;full label AX equivalence
+is not asserted. No page screenshot was needed for this semantic-only question.
+This extends existing accessibility-only hiding/unequal-authoring evidence;
+do not register a duplicate root cause or infer assistive-technology speech.
+
+Report badge-exposure-contexts-20261017/latest-report.json SHA
+efdd30922640f809f0b6d05550bca7e11e438ab197e349c670cffa542d825ad4;
+producerSHA9a0b5f8786727d51f00f8e8a521cc86d065c74937dd898469062bbe3756bd703.
+Independent existing-verifier execution terminates0;log badge-exposure-contexts-
+independent-verify-20261017 SHA
+295207f75c2731933d60ed5a794ee9d7114da29ad866a59456965eaa842d5a5d
+includes complete executable recipe. Missing context,wrong backend-ID,wrong
+applied theme,unhidden native and hidden candidate controls all reject. Original
+capture/report/producer bytes are unchanged. No new verification framework.
+
+Not yet joined to52 configured Badge cases:physical-context observations must
+be mapped with their retained inputs and bounded initial-versus-action state
+applicability. No held/focus/event-order behavior,local paint,current-source
+build validity or complete semantics/case closure follows. Acceptedcc890 and
+frozen58ec export are unchanged;worker20224 remains confirmed live. Next use
+these receipts for exact case applicability without recapturing the same cohort.
 
 ### Complete retained frame-child boundary checked without resurveying wrappers — October17
 

@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep badge-exposure-contexts-20261017 report/32 input trees and separate
+-checkpoint,plus capture and independent-verify stdout/stderr. These contain
+16 actual-theme count-exposure failures and five rejection controls,not successful
+scratch or replacement evidence for the original one-context observation. Producer
+is receipt-bound;future variants need a distinct source/run. No PNGs or disposable
+scratch were generated. Do not alter retained browser hardlinks,old captures,
+acceptedcc890 or the running58ec export to integrate this standalone evidence.
+
 Keep shared-frame-child-order-20261017 stdout/stderr with exact176da706 and its
 4622 original paired-tree receipts. Log includes its complete executable recipe,
 receipt digest and three negative controls;it is bounded recorded-input evidence,
