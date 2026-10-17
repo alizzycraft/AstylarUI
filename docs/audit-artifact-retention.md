@@ -56,6 +56,15 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep badge-retained-count-paint-20261017 failed stdout/stderr,zero-offset,
+receipt-binding and case-join log pairs,and queued4be737a3/a00b769f. The original
+failed source recovers exactly through the one-line assertion reversal recorded
+in the coverage ledger;do not delete or relabel that procedure failure. Replayed
+104 full PNGs/checkpoints remain original evidence. No crop/image/scratch files
+were produced. Twenty-six local diagnostic misses and unequal input colours
+remain retained failures/observations,not a new release gate or renderer cause.
+Keep the receipt-bound producer and all module/image inputs unchanged.
+
 Keep badge-exposure-case-join-20261017 stdout/stderr and queueda00b769f with
 its original176da706 predecessor. The joiner binds exact52 case-context/input
 signatures,report/checkpoint/fresh trees and independent verification;it must

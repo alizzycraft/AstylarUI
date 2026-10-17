@@ -4,7 +4,15 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
-Latest queued reviewa00b769f preserves176da706 shared-heading work and adds52
+Latest queued review4be737a3 preservesa00b769f and adds52 retained Badge count
+paint inspections (104 authenticated PNGs);these localPaint obligations move
+from evidence-join-pending to partial,not complete. Twenty-six count crops are
+below the existing default diagnostic SSIM threshold despite historical whole-
+page output passes. Unequal colour inputs remain classified authoring defects;
+no new colour-conversion cause or acceptance gate is inferred. Completea00b769f
+recovers;14071 dependencies authenticate. All2311 cases remainpartial/unverified.
+
+Queued reviewa00b769f preserves176da706 shared-heading work and adds52
 bounded Badge AX-context/input joins. All16 actual-theme/physical contexts and
 208 old/fresh label/count signatures match;13912 dependencies authenticate.
 The observed count-exposure failures remain initial-state evidence,not inspected
@@ -55,6 +63,46 @@ would miss the independently confirmed attribute-stage failure. Original final
 gates and equal-input/root-cause contract remain unchanged.
 
 ## Preserved audit chronology
+
+### Retained Badge count local paint inspected for all52 configured cases — October17
+
+Question:do authenticated full images contain inspectable count-local paint,
+or is the localPaint evidence genuinely absent? Original full reportab42dbec
+contains geometry and text alignment but no focused Badge rasters. New bounded
+replay uses the existing checkpoint loader and focused-raster metric on count
+union-box crops at exact recorded DPR,maximumPhaseOffset0. No screenshot/crop
+file,capture,renderer/fixture change or new release gate. Original52 case rows,
+104 PNG/checkpoint receipts and four existing badge background findings bind.
+
+badge-retained-count-paint-20261017 initially fails only because deep equality
+distinguishes JavaScript-0 from0. Raw failed sourceSHA
+ce1862f12eb911e28ab9ceb6dfa3665d553f166c6b8f110bab0504e23182f3dc
+recovers exactly by replacing the corrected zero test with
+assert.deepEqual(metrics.phaseOffset, { x: 0, y: 0 });
+No metric,phase allowance,image or threshold changed. Corrected zero-offset
+replay terminates0;sourceSHA622170c36be56a4c76a12a578bef0d42d72a5d882d5c4c6f4d61c50f2615676a.
+Its logSHA551fae9c53afe9c4a25fcd8a501da95b77c08ae58ae2b4274d80b86bbaf3508a
+retains all52 records,bounds,metrics,inputs and original image/checkpoint receipts.
+Three identity/altered-image/out-of-bounds controls pass.
+
+SSIM range.27332025175211716–.8796117165433144;26 below the existing default.80
+diagnostic threshold (light0/13,dark7/13,contrast13/13,custom6/13). All52 original
+page-output gates passed. This demonstrates why those gates cannot certify
+count-local paint,not authority to change thresholds. All four profiles retain
+native error-token versus candidate primary-token backgrounds,already classified
+fixture-badge-primary-instead-of-error-token. No inference that this is the sole
+glyph/corner residual cause or an equal-input core colour defect.
+
+badge-retained-count-paint-receipt-binding-20261017 terminates0;logSHA
+3c927dcbc74d50453a7020473215809a34b255581e795eee391cf337c7d03543
+binds actual helper/module sources,all104 image hashes,original52 output passes,
+zero offsets and exact original failed-source recovery. Case-join log terminates0:
+review4be737a350d1f39898c076c686847063b3367a1f73c4ef6c4452e1d333cb6a8e
+changes ONLY52 localPaint obligations from join-pending to partial with bounded
+observations and explicit remaining label/root/corner/glyph/currentness work.
+Existing loader validates2311 cases/14071 dependencies;wholea00b769f recovers and
+acceptedcc890 pointer conserves. Both logs retain executable recipes. Frozen58ec
+export remains live and independent. No complete-case or current rendering claim.
 
 ### Badge initial AX observations bound to exact case inputs without state promotion — October17
 
