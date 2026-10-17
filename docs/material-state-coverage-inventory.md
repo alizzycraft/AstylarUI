@@ -5,9 +5,10 @@
 This pointer supersedes the historical checkpoint chronology immediately below.
 
 Accepted package:0dd7dce3/index37486eaa (161 source findings/215 proofs).
-Registered source:162/216. Export session46814/PID18880 is live with selected
-case review0ee8;freeze its producer/evidence inputs until export/cold/conservation
-finish. Latest outside-export case queue1b34 binds56 focus/113 pointer observations
+Registered source:162/216. Export46814 terminates0;candidatecc89031a is NOT accepted
+publication. Independentcold session49441 is live with selected case review0ee8;
+freeze its producer/evidence inputs until cold/conservation finish.
+Latest outside-export case queue1b34 binds56 focus/113 pointer observations
 and child receipts. ALL2311 cases remainpartial/unverified;zero full closures.
 
 New confirmed public attribute-refresh cause is reviewed separately in source
@@ -27,6 +28,36 @@ would miss the independently confirmed attribute-stage failure. Original final
 gates and equal-input/root-cause contract remain unchanged.
 
 ## Preserved audit chronology
+
+### Coherent inline/reader/provenance export succeeds; independentcold running — October17
+
+Export inline-reader-provenance-canonical-export-20261017 terminates0. Candidate
+gzipcc89031af37771133ec134e84fe92df86627d6d1fe1819b81290e254e6c14e2a,
+74342658 compressed bytes;decoded2303495192 bytes/SHA
+e30b446434cd1284fea87139e8cd1b1b4f00edb169334743aa397d0fe8482b02.
+Coverage436/1875,8483 scalar groups/389202 occurrences,162 source findings;
+inputEquivalent=false. No whole-case or rendering acceptance follows.
+
+Recorded phase timings:build1201415.8008ms from process start;case join begins
+there and validation at1247905.086ms;evidence verification at2864383.2093ms;
+encoding at2882391.6059ms;complete3036034.562ms. Approximately20min build,
+27min validation and2.5min encoding explain the wall time. EvidenceSession
+collectors1,memoryHits10,diskHits1,invalidated0,14371 files and1365047802 bytes
+read AND reverified. Validation is a demonstrated audit-workflow bottleneck,
+not evidence of renderer latency;do not change it during independentcold.
+
+Accepted predecessor preservation separately authenticates the complete0dd7
+compressed snapshot and index37486 in working-audit independently of docs
+(inline-reader-provenance-predecessor-preservation-20261017,TERMINAL0).
+Current working pointer remains0dd7;generated docs are candidatecc890,not a
+reason to import/repoint or call old queries current against changed docs.
+
+Independent cold command uses the SAME named launcher/selected0ee8 with
+ASTYLAR_AUDIT_COLD=1 and --check,session49441;logs inline-reader-provenance-
+independent-cold-20261017 stdout/stderr. Next poll that same handle,then complete
+package/row/source/case conservation and compact verification before publication.
+Do not fold later1b34/3ccb queues into this frozen comparison. Original final
+unfiltered/browser/release gates and all2311 partial statuses remain unchanged.
 
 ### Public role-control no-op updates confirm attribute-stage first blur — October17
 

@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep closed inline-reader-provenance-canonical-export-20261017 stdout/stderr,
+candidatecc89031a docs package and live independent-cold stdout/stderr. Export
+success does not authorize publication or predecessor cleanup. Keep accepted
+0dd7/index37486 package and predecessor-preservation log,whose hashes establish
+the original compressed/index snapshot is independent of overwritten docs.
+No decoded rescan,import or working-pointer change occurred in that check.
+
 Keep role-focus-source-finding-proposal-20261017 stdout/stderr and source review
 3ccb3f7bd6ff9075976037b8408e4a03adfc03113c27a3ed049a4bd0740af2fe. It preserves
 all162 production definitions plus one queued confirmed public cause;it is not
