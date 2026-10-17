@@ -12,7 +12,7 @@ partial/unverified. No whole-case inspection,current rendering or final-gate
 acceptance follows. Earlier live/candidate pointers below are historical.
 Publication commit3b317663 is pushed:unchanged retry40816 terminates0 after the
 firstHTTP408. Fresh remote check confirms3b317663;no history rewrite occurred.
-Latest outside-export case queue649143f5 extends1b34 with52 Badge recorded-node
+Latest outside-export case queueae59c79c preserves649143f5/1b34 with52 Badge recorded-node
 correspondences (364 pairs),preserving56 focus/113 pointer observations and child
 receipts. All2311 cases remainpartial/unverified;zero full closures.
 
@@ -21,11 +21,13 @@ attribute-refresh cause from reviewed3ccb. Registration conservation6/6 and
 registered public assertion1/1 pass;all162 prior definitions and full prior
 policy/producer bytes recover exactly. Accepted package remains162/216.
 Current policy55c7e9cf,producerd260f8ca;original input-boundary suite2aeff54b
-remains an exact prefix of current34f8ec1e. Queued649143f5 still has120 old-suite
-references and needs explicit source applicability reconciliation;do not silently
-refresh originals or claim the163/217 registration is already canonical.
+remains an exact prefix of current34f8ec1e. Queuedae59c79c explicitly reconciles
+737 policy/120 suite analysis receipts across669 cases;old649 and all captures
+remain intact. Do not claim the163/217 registration is already canonical.
 
-Next:reconcile source applicability and queued observations in a coherent batch;do not
+Next:check broader producer/proof source applicability and select the coherent
+current review before another integration export;old named selection0ee8 belongs
+to accepted162/216,not current163/217. Do not
 rebuild the unchanged accepted package for prose. Remaining shared gaps:
 descendant/AX/input ownership,event/default-action classification,local paint,
 source/runtime validity and complete case dispositions. Root-only focus repairs
@@ -33,6 +35,40 @@ would miss the independently confirmed attribute-stage failure. Original final
 gates and equal-input/root-cause contract remain unchanged.
 
 ## Preserved audit chronology
+
+### Exact two-file case-source transition reconciled; wrong callback selection retained — October17
+
+attribute-focus-queued-receipt-census-20261017 authenticates649143f5's2311 cases
+and13868 unique dependencies (1212829271 bytes). Only policyde4d7a74→55c7e9cf
+(737 references) and suite2aeff54b→34f8ec1e (120 references) differ. All other
+dependency bytes agree;this census alone does not prove semantic applicability.
+
+Initial retained-owner replay passes five assertions but fails the older
+responsive-divider raw helper fingerprint,dca53534 versus9fafec85. That is a
+previously documented historical replay boundary,not the queued divider callback.
+The subsequent attempted historical callback check fails its expected callback
+digest because it also selected the wrong older assertion. Keep both attempts as
+procedure failures;neither establishes new capture corruption or a new defect.
+Actual queued divider proof is 'divider actual-theme AX cohorts preserve exact
+contexts and runtime receipts',callbacka0c5e039. Exact registered replay passes
+1/1,6705.3436ms. Five relevant Icon/progress assertions already passed unchanged;
+no browser capture was needed. Older helper failure is not waived as current.
+
+New bounded script reuses existing save/load proposal infrastructure. It proves
+the whole prior policy by the tested attribute-registration reversal and reads
+the complete prior suite from Git3b317663,which remains an exact current prefix.
+Predecessor loader uses ONLY those two explicit historical reads;new proposal
+loader reads all dependencies normally. It updates current analysis/proof
+receipts only and adds a scoped source-applicability record to669 affected cases.
+Original report/checkpoint dependency graphs and old649 are not rewritten.
+
+attribute-focus-case-source-reconciliation-20261017 terminates0:new proposal
+ae59c79c660df4f23582aecdb7c7a2e3b031cead963cf35673eae639697132b1,
+857 receipt updates,2311 cases/13873 dependencies,two negative source controls.
+Reversing ONLY these receipt changes and added applicability records restores
+the complete649 digest. Acceptedcc890 pointer stays unchanged;all2311 cases
+remainpartial/unverified. This is case-review source reconciliation,not broad
+producer replay,canonical publication,current rendering or full inspection.
 
 ### Attribute-focus source and proof registration conserves complete predecessor — October17
 

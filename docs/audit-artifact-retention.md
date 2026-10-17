@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep attribute-focus-queued-receipt-census,retained-owner-proof-replay,
+divider-historical-callback,divider-exact-registered-proof and case-source-
+reconciliation-20261017 stdout/stderr. The broader replay's5/6 and wrong callback
+digest attempt remain procedure failures;only the exact queued divider callback
+is the successful1/1 scope. Preserve old649 and all original captures alongside
+newae59c79c and its receipt-bound reconciliation script. Two historical source
+reads conserve predecessor applicability;they are never fresh-capture inputs.
+
 Keep attribute-focus-registration-conservation,registered-public-proof and
 current-suite-conservation-20261017 stdout/stderr. They authenticate working
 163/217 registration and full prior162/216 source recovery,not new canonical or
