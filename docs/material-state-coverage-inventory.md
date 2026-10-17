@@ -9,9 +9,11 @@ Integration milestone (October18):original export8288 terminates0 after
 acceptedcc890/index8d185f4b stays unchanged. Independentcold8423 is live
 (launcher3508,worker11688). Candidate import32989 terminates0,index551d3c8f,
 in separate working-audit/candidate-validation namespace. Complete-row census
-preserves all162 previous source payloads;49 non-source changed rows still need
-field explanation. Existing authenticated payload extraction35348 is live.
-Neither candidate index nor partial conservation is publication. Freeze
+preserves all162 previous source payloads;49 non-source changed rows are now
+fully explained as48 producer-receipt leaves and48 dependent scalar hashes.
+Metadata/case checks conserve all other metadata and exact2311 selected groups.
+Full section check61812 is live (worker15624),reusing authenticated predecessor
+section receipts. Neither candidate index nor partial conservation is publication. Freeze
 producer/proof/review inputs;next same-handle waits and complete content/index
 conservation,then accepted import only after independent verification succeeds.
 Later77d90ece review remains queued outside this candidate,not silently merged.
@@ -120,6 +122,41 @@ would miss the independently confirmed attribute-stage failure. Original final
 gates and equal-input/root-cause contract remain unchanged.
 
 ## Preserved audit chronology
+
+### Forty-nine row deltas explained; all other metadata and exact case groups conserved — October18
+
+Original batch payload extraction35348 terminates0. Existing loadFindingEvidence
+authenticates both packed snapshots and all49 complete payload hashes;no parser
+or framework change. attribute-focus-row-delta-classification-20261018 initially
+fails only Git's default output buffer while reading the >1MiB historical producer.
+Keep that ENOBUFS procedure failure. Same check with explicit8MiB buffer terminates0
+in attribute-focus-row-delta-classification-complete-20261018.
+
+All48 control rows differ ONLY at reviewEvidence.observation.normalization-
+Reconciliation.currentModuleSha256:e77ab729→d260f8ca. Full original producer
+Git3b317663 and current normalized source hashes agree with these exact values.
+Replacing that one leaf restores each complete old payload. The scalar differs
+ONLY in48 controlProofSha256 leaves,each exactly the corresponding old/new whole
+control payload digest. Restoring only those hashes restores its complete old
+payload.96 leaves explained,zero unexplained row changes;observations,values,
+classification and all other fields survive. This is not rendering acceptance.
+
+attribute-focus-metadata-case-conservation-20261018 terminates0:both authenticated
+indexes retain the exact saved2311 review groups,allpartial/currentunverified.
+Review0ee8→58ec is explicit;outside coverage.inspectionEvidence,the sole metadata
+change is summary.sourceFindings162→163. Schema,contract,all other coverage,
+summary/census and acceptance flags deep-equal. Existing structural coverage
+validator checks both populations;no case promotion or criterion change.
+
+Full section61812 is now live (worker15624),logs attribute-focus-section-
+conservation-20261018. Existing sectionDigests authenticates the candidate stream
+and compares all80 sections against the accepted predecessor's preserved receipts;
+selected old source/proof arrays are rebound to those exact section hashes.
+Three non-row sections attempt exact predecessor reconstruction using previously
+authenticated changed-leaf positions/values;full section hashes must agree or
+the check fails and retains selected payloads. No blanket source refresh or new
+export. Cold8423/worker11688 remainslive. Remaining section/source/proof deltas
+and independentcold must finish before accepted import/publication.
 
 ### Candidate index authenticated; complete-row identities conserved before payload classification — October18
 

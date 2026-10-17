@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep attribute-focus-row-delta,metadata-case-conservation,row-delta-classification
+and row-delta-classification-complete-20261018 stdout/stderr. Initial ENOBUFS is a
+Git-buffer procedure failure,not replaced evidence;explicit-buffer success explains
+all96 receipt/hash leaves with complete payload conservation. Keep live section-
+conservation61812 logs and both preserved predecessor receipt logs it consumes.
+Acceptedcc890/candidatecd867bbe remain separate;no publication or original cleanup
+follows from partial conservation while independentcold is live.
+
 Keep attribute-focus-candidate-index and row-conservation-20261018 stdout/stderr
 with candidatecd867bbe/index551d3c8f under working-audit/candidate-validation.
 Import is TERMINAL0,not accepted publication. Keep live row-delta35348 output
