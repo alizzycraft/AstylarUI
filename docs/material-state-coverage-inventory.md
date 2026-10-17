@@ -4,6 +4,37 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Evidence-reader repeated per-value scan removed; original integrity preserved — October17
+
+Specific workflow bottleneck:loadFindingEvidence filtered/split every requested
+section for EVERY streamed JSON value. Existing store suite passes3/3 before
+change. Extending its original mixed-section test to49 requests demonstrates
+429595 section splits and an honest failing complexity assertion;log evidence-
+reader-batch-baseline-20261017. No wall-clock threshold or new reader API.
+
+The existing reader now pre-indexes section/nested-section/ordinal once;the
+onValue path does constant lookups. Payload hash,complete-row digest,missing
+evidence rejection,stream cleanup and requested return order stay unchanged.
+Store suite passes3/3 (463.2833ms),including49 exact mixed-section results in
+reverse request order,49 section splits,nested decoys,old snapshot reads and
+existing corrupt-index/import controls. Additional controls rehash forged compact
+rows/indexes and still reject wrong complete-row hashes,missing ordinals and
+corrupted generation payloads. Log evidence-reader-integrity-after-20261017.
+
+ONE real current-generation49-button-row extraction completes TERMINAL0 in
+70792.6091ms,with all complete-row receipts authenticated (evidence-reader-real49-
+20261017). No new capture/export/proposal or canonical pointer mutation. The
+prior comparison read BOTH generations;do not assert a like-for-like timing ratio.
+
+Reader source now8dc9b344 versus captured7e3611a8. Retained root-paint/source
+receipts naming the old module need an explicit exact lookup-only source
+transition before broader verification;do not silently overwrite those receipts
+or claim they remain current. Query/closure and other module code should be
+compared completely against Git462496c8 when establishing that applicability.
+Next reconcile this known infrastructure source boundary,then run a justified
+broader focused suite. Renderer/fixture/scalar classifications and all2311 partial
+case dispositions are unchanged;original final gates remain required.
+
 ### Queued-history dependency boundary reconciled without claiming unchanged recipe — October17
 
 Existing focused assertion first fails honestly in icon-queued-history-current-

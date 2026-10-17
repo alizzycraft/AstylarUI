@@ -303,17 +303,27 @@ export async function loadFindingEvidence(destination, family, id, snapshot) {
   assert.equal(index.manifest.payload, 'material-input-equivalence-audit.json.gz');
   const payload = path.join(generation, index.manifest.payload);
   assert.equal(hash(fs.readFileSync(payload)), index.manifest.compressedSha256);
+  // Parse each requested section once. Streaming a multi-GB payload must not
+  // rescan/split every requested ID for every nested JSON value.
+  const requested = new Map();
+  for (const finding of findings) {
+    const [section, nested] = finding.evidence.section.split('.');
+    const sections = requested.get(section) ?? new Map();
+    const ordinals = sections.get(nested) ?? new Map();
+    ordinals.set(finding.evidence.ordinal, finding);
+    sections.set(nested, ordinals); requested.set(section, sections);
+  }
   const parser = new Parser(), found = new Map();
   parser.onValue = function(value) {
     const top = this.stack[1]?.key ?? (this.stack.length === 1 ? this.key : undefined);
-    const candidates = findings.filter(finding => {
-      const [section, nested] = finding.evidence.section.split('.');
-      return top === section && (!nested || this.stack[2]?.key === nested) && this.stack.length === (nested ? 3 : 2);
-    });
-    if (candidates.length) {
-      for (const finding of candidates) if (this.key === finding.evidence.ordinal) found.set(finding.id, value);
+    const sections = requested.get(top);
+    const ordinals = this.stack.length === 2 ? sections?.get(undefined)
+      : this.stack.length === 3 ? sections?.get(this.stack[2]?.key) : undefined;
+    if (ordinals) {
+      const finding = ordinals.get(this.key);
+      if (finding) found.set(finding.id, value);
       delete this.value[this.key];
-    } else if (this.value && !findings.some(finding => top === finding.evidence.section.split('.')[0])) delete this.value[this.key];
+    } else if (this.value && !sections) delete this.value[this.key];
   };
   const input = fs.createReadStream(payload), stream = input.pipe(createGunzip());
   try { for await (const chunk of stream) { parser.write(chunk); if (found.size === findings.length) break; } }

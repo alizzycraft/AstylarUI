@@ -172,7 +172,7 @@ test('case obligation integration authenticates exact scope and dependencies wit
   });
 });
 
-test('compact findings preserve counts, missing values and evidence links; corruption is rejected', async () => {
+test('compact findings preserve counts, missing values and evidence links; corruption is rejected', async t => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'audit-findings-'));
   try {
     const row = { family: 'slider', element: 'start', property: 'left', reference: '0px', occurrences: 2,
@@ -230,6 +230,67 @@ test('compact findings preserve counts, missing values and evidence links; corru
     assert.equal(queryFindings(destination, 'slider').find(r => r.property === 'left').attribution, 'reviewed');
     assert.deepEqual(queryFindings(destination, 'slider', predecessor), records);
     assert.deepEqual(await loadFindingEvidence(destination, 'slider', finding.id, predecessor), row);
+    // Exercise the real49-row mixed-section extraction that exposed repeated
+    // per-value scans,without relying on wall-clock timing or a new reader API.
+    const batchAudit = structuredClone(nextAudit);
+    for (const [section, count] of [['discrepancies', 17], ['sourceFindings', 16], ['controlTypography', 8], ['retainedTypography', 8]]) {
+      const target = Array.isArray(batchAudit[section]) ? batchAudit[section] : batchAudit[section].differences;
+      for (let ordinal = 0; ordinal < count; ordinal++) target.push({ family: 'batch', element: section + ordinal,
+        property: 'width', reference: `${ordinal}px`, occurrences: 1,
+        reviewEvidence: { nested: Array.from({ length: 20 }, (_, i) => ({ value: i,
+          controlTypography: { differences: ['not a top-level row', ordinal] } })) } });
+    }
+    batchAudit.summary = { uniqueStyleDifferences: 20, totalStyleDifferenceOccurrences: 23, sourceFindings: 19 };
+    const batchEncoded = await encodeMaterialInputAuditStream(batchAudit);
+    fs.writeFileSync(path.join(root, 'material-input-equivalence-audit.json'), JSON.stringify(batchEncoded.manifest));
+    fs.writeFileSync(path.join(root, batchEncoded.manifest.payload), batchEncoded.payload);
+    await importFindings(root, destination);
+    const batchRows = queryFindings(destination, 'batch').toReversed();
+    assert.equal(batchRows.length, 49);
+    const expectedBatch = batchRows.map(record => record.evidence.section.split('.').reduce((v, key) => v[key], batchAudit)[record.evidence.ordinal]);
+    const originalSplit = String.prototype.split; let sectionSplits = 0;
+    try {
+      String.prototype.split = function(separator, ...args) {
+        if (separator === '.') sectionSplits++;
+        return originalSplit.call(this, separator, ...args);
+      };
+      assert.deepEqual(await loadFindingEvidence(destination, 'batch', batchRows.map(record => record.id)), expectedBatch);
+    } finally { String.prototype.split = originalSplit; }
+    assert.ok(sectionSplits <= batchRows.length, `Section parsing must be bounded by requested rows,not JSON values: ${sectionSplits}`);
+    assert.equal(sectionSplits, 49);
+    const batchPointerBytes = fs.readFileSync(pointerFile), batchPointer = JSON.parse(batchPointerBytes);
+    const batchGeneration = path.join(destination, batchPointer.generation), batchIndexFile = path.join(batchGeneration, 'index.json');
+    const batchIndexBytes = fs.readFileSync(batchIndexFile), batchIndex = JSON.parse(batchIndexBytes);
+    const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+    const batchShard = batchIndex.shards.find(shard => shard.file === batchRows[0].evidence.section.replaceAll('.', '-') + '-batch.jsonl');
+    const batchShardFile = path.join(batchGeneration, batchShard.file), batchShardBytes = fs.readFileSync(batchShardFile);
+    async function forgedBatchRow(mutate, expected) {
+      const shardRows = batchShardBytes.toString().trim().split('\n').map(JSON.parse);
+      const target = shardRows.find(row => row.id === batchRows[0].id); mutate(target);
+      const changedBytes = Buffer.from(shardRows.map(row => JSON.stringify(row)).join('\n') + '\n');
+      const changedIndex = structuredClone(batchIndex), receipt = changedIndex.shards.find(shard => shard.file === batchShard.file);
+      receipt.sha256 = digest(changedBytes); receipt.bytes = changedBytes.length;
+      const indexBytes = Buffer.from(JSON.stringify(changedIndex));
+      try {
+        fs.writeFileSync(batchShardFile, changedBytes); fs.writeFileSync(batchIndexFile, indexBytes);
+        fs.writeFileSync(pointerFile, JSON.stringify({ ...batchPointer, indexSha256: digest(indexBytes) }));
+        await assert.rejects(loadFindingEvidence(destination, 'batch', target.id), expected);
+      } finally {
+        fs.writeFileSync(batchShardFile, batchShardBytes); fs.writeFileSync(batchIndexFile, batchIndexBytes); fs.writeFileSync(pointerFile, batchPointerBytes);
+      }
+    }
+    await forgedBatchRow(row => { row.evidence.completeRowSha256 = '0'.repeat(64); }, /Evidence row differs from compact finding/);
+    await forgedBatchRow(row => {
+      row.evidence.ordinal = 99999;
+      row.id = digest(JSON.stringify([row.evidence.sourceSha256, row.evidence.section, row.evidence.ordinal]));
+    }, /Evidence row missing/);
+    const batchPayloadFile = path.join(batchGeneration, batchIndex.manifest.payload), batchPayloadBytes = fs.readFileSync(batchPayloadFile);
+    try {
+      fs.writeFileSync(batchPayloadFile, 'corrupted');
+      await assert.rejects(loadFindingEvidence(destination, 'batch', batchRows[0].id));
+    } finally { fs.writeFileSync(batchPayloadFile, batchPayloadBytes); }
+    t.diagnostic(JSON.stringify({ batchRows: 49, sectionSplits, exactMixedSectionRowsAndReturnOrder: true,
+      forgedCompleteRowRejected: true, missingOrdinalRejected: true, corruptedPayloadRejected: true }));
     assert.throws(() => queryFindings(destination, 'slider', { ...predecessor, indexSha256: 'forged' }));
     assert.throws(() => queryFindings(destination, 'slider', { ...predecessor, generation: '../escape' }));
     fs.writeFileSync(pointerFile, JSON.stringify(predecessor));

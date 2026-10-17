@@ -21,6 +21,17 @@ details, or explicit `--all`. Queries refuse stale canonical snapshots. Evidence
 retrieval authenticates the preserved package and the exact requested row.
 Missing candidate fields remain missing rather than becoming assumed defaults.
 
+Batch evidence retrieval pre-indexes requested section/ordinal pairs once instead
+of splitting/scanning every requested finding at every JSON value. Existing
+payload authentication,complete-row hashes,missing-row rejection and requested
+return order are unchanged. The49-row mixed-section regression records49 section
+splits versus429595 before the change,and rejects forged complete-row hashes,
+missing ordinals and corrupted payloads. One read of49 actual button rows from
+the preserved0dd7 package completes in70792.6091ms;this is not a like-for-like
+timing comparison with the earlier TWO-package extraction. Old reader-file source
+receipts remain historical and need explicit applicability reconciliation before
+broader retained-proof verification;do not replace capture receipts in place.
+
 The September 24 index preserved 8,483 scalar discrepancies, 132 source findings,
 39,904 typography/control differences, 389,202 scalar occurrences and 1,668
 unresolved scalar groups. Compact shards total 69,621,642 bytes versus

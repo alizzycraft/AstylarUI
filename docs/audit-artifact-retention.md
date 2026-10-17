@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep evidence-reader-{before,batch-baseline,after,integrity-after,real49}-20261017
+stdout/stderr. The complexity failure and corruption rejections are required
+workflow evidence;the real49 log authenticates unchanged preserved package rows,
+not a new audit generation. Existing synthetic test scratch is removed through
+its original scoped cleanup. Original50-minute/two-generation comparison logs
+remain required and must not be replaced by the later one-generation timing.
+
 Keep icon-queued-history-{current-dependencies,historical-dependencies}-20261017
 stdout/stderr. The first changed-recipe failure remains original evidence;the
 successful replay explicitly separates historical recipe/policy bytes from
