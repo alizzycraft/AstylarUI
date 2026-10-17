@@ -109,6 +109,28 @@ corner results and every other non-recipe field equal the original diagnostic;
 original log is unchanged. Use this preserved single-read recipe for any future
 replay,not the inefficient original. No collector cache or acceptance rule added.
 
+Rounded primitive follow-up reuses existing public border/contact evidence:
+it already authors18px radius,not a square. Original verifier passes;no new
+capture. public-rounded-border-corner-paint-20261018 inspects32 corner pairs,
+including16 shadow-free corners. All16 differ (integer max10RGB;fractional
+max29 atDPR1/max44 atDPR2),despite matching authored trees/border/radius/fill and
+no shadow. Existing diagnostic passes all32;exact pixels remain failures of
+equality. Earlier integer straight-bottom controls remain valid ONLY for that
+straight edge,not full rounded-rectangle equality. This isolates a rounded
+primitive mismatch from unequal Material shadow inputs,not its exact cause.
+
+Existing owner assertion passes1/1:15 complete current construction/material/
+placement methods match installed captured code,two mutation controls reject.
+public-rounded-border-curve-geometry-20261018 authenticates the retained live
+132-point frames in8 contexts.68 outer/64 inner vertices lie on ideal declared
+18/17px boundaries within projection error;connecting chord midpoints deviate
+inward by~.02168/.02330CSSpx.16 changed-radius/vertex controls reject. Current
+relative segmentLength=borderRadius/10 is a candidate approximation contributor,
+not proved pixel-error share,exact native path/GPU law,all dependencies,24/36px
+radius behavior or sole Material cause. Keep source finding scope unchanged.
+Next decisive cause check must distinguish tessellation from coverage/compositing
+at the renderer-owned primitive boundary,not tune fixture radius/coordinates.
+
 New list-label-bounds-paint-20261018 capture closes that measurement gap for all
 52 configured list endpoints (12 static/40 interaction):104 paired labels,
 104 screenshots and104 input trees. Existing current action functions are

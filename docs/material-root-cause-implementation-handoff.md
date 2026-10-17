@@ -22,6 +22,18 @@ Other rectangles/dynamic/semantic/AT behavior and exact124-anchor consequences
 remain open. Production registration/proof inventory integration is pending;
 accepted163/217 and the original implementation scope/gates remain unchanged.
 
+Rounded-corner scope clarification (October18):existing public border/contact
+fixture already has18px radius. New retained-corner analysis finds shadow-free
+corner RGB differences even at integer positions (max10),and up to44 at fractional
+positions. Earlier exact integer bottom-contact controls describe the straight
+edge only. All15 current construction/material/placement owner methods still
+match captured code. Vertices match ideal18/17px circles,but connecting chords
+deviate inward~.022/.023CSSpx;relative tessellation is a candidate contribution,
+not a demonstrated sole raster cause. Separate curve construction from GPU
+coverage/compositing before implementing a general primitive fix. No new capture,
+layout rounding,fixture radius adjustment or expansion of the confirmed source
+finding follows. Exact diagnostics/controls and remaining limits are in the ledger.
+
 New confirmed public attribute-stage focus defect (October17):on unchanged
 documents,DIV/SPAN tabindex0 controls first blur synchronously inside
 applyAttributes.removeAttribute('tabindex'),before root replacement. Native

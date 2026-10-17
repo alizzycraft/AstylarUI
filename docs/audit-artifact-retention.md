@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep public-rounded-border-existing-proof-verify,current-owner,corner-paint and
+curve-geometry-20261018 stdout/stderr with original public-border-contact and
+geometry captures. They reuse those exact images/vertices;no new capture exists.
+Preserve old integer straight-edge matches alongside new corner differences.
+Curve approximation diagnostics are not substitutes for native/GPU measurement.
+
 Keep list-retained-corner-paint and list-corner-single-read-replay-20261018
 stdout/stderr.208 original corner diagnostics preserve nonzero RGB differences
 despite threshold passes. Single-read replay conserves every complete result,
