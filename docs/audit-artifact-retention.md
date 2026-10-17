@@ -64,6 +64,11 @@ and receipts. They use new paired images,never old PNGs with new coordinates.
 All104 local comparisons fail honestly;do not discard them because whole-page
 historical output passed. Exact Badge crop helper/metric remain dependencies.
 No successful temporary scratch or duplicate build copy was created.
+Keep list-label-input-stage-attribution-20261018 stdout/stderr with the52-case
+capture and existing list authoring finding. It records all104 text inputs,
+requested heights versus observed strides and104 rejection controls. Contrast
+allocation arithmetic is bounded evidence,not a new core failure or a reason
+to replace the captured40px request with its32px observed stride.
 
 Keep list-retained-label-paint,list-retained-label-paint-bound and
 list-retained-label-geometry-gap-20261018 stdout/stderr. First is a receipt-typo

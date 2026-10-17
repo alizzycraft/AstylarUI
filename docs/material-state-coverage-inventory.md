@@ -67,6 +67,23 @@ wrapper,font/line-height inputs remain. Not a new equal-input glyph cause,
 new gate,full list/root/row paint,current whole-runtime or whole-case closure.
 This compact evidence awaits the next coherent case join;no canonical rebuild.
 
+List first-stage attribution now binds all52 new case trees/104 text owners to
+existing fixture-list-content-wrappers-and-row-sizing-substituted. Native row
+requests48/24/40 differ from candidate56/40/48;native labels requestRoboto,
+24px line-height,.496px tracking versus retained core-text-registry Roboto/Arial/
+sans-serif,normal,0px. Exact widths/baselines are not attributed solely to one
+token or physical font. All104 changed-root/tracking controls reject in
+list-label-input-stage-attribution-20261018. No new source classification.
+
+Used/requested distinction:26 light/dark cases have observed row-label strides
+48/56,13 custom40/48. In13 CONTRAST cases,native stride24 versus candidate32,
+despite candidate40px requests. Candidate fixed outer122 minus56 padding and2
+borders leaves64;equal shrink allocation predicts32 and matches observed stride.
+This is bounded allocation/input evidence,not a complete internal flex trace or
+new coordinate bug. Earlier commentary saying dark was mistaken;contrast is
+proved by the actual profile records. Restore equivalent component inputs before
+assigning residual baseline/glyph faults to core;do not tune label offsets.
+
 ### Previous pointer notes — preserved chronology, not live status
 
 The entries below describe their recorded checkpoints;the current pointer above
