@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep attribute-focus-source-proof-conservation-20261018 stdout/stderr with the
+complete section-conservation log and Git3b317663 predecessor. It verifies all
+changed/added source bytes and ordered prior proof conservation without another
+canonical scan. Section61812 has finished;independentcold8423 remains separate.
+No candidate publication or evidence cleanup follows from these bounded checks.
+
 Keep progress-recorded-node-accounting-20261018 stdout/stderr with original
 77d90ece tree receipts and unchanged accounting helper8f3adab1. Compact log
 includes all40 mappings and recipe;no full review generation,capture,PNG or

@@ -4,6 +4,19 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+October18 integration continuation:section61812 is terminal with complete80-section
+receipts and exact reconstruction of all three changed non-row sections. New
+attribute-focus-source-proof-conservation-20261018 log verifies722→727 source
+receipts:five additions,six changed files,zero removals;all eleven current files
+hash exactly and all six prior files recover from Git3b317663. Restoring prior
+receipts recovers the complete ordered722 population. Proofs216→217 preserve
+every prior descriptor/order;four line-only shifts point to identical test
+opening lines. One new public attribute-focus proof is explicit. No observation
+or classification is silently replaced. Derived motion-report hash-chain
+verification and independentcold8423 terminal result still precede acceptance.
+Worker11688 was revalidated live atCPU1264.12s;empty buffered log is not failure.
+Candidatecd867bbe remains unaccepted;all2311 whole cases remainpartial/unverified.
+
 Compact queued progress-node evidence (October18):40 bar/spinner cases,600 native
 and240 candidate records,eight negative controls. Existing accounting function
 is reused unchanged;DOM/SVG-to-plugin substitutions stay explicit. Log138736bytes
