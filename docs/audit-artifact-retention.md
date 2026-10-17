@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep attribute-focus-candidate-index and row-conservation-20261018 stdout/stderr
+with candidatecd867bbe/index551d3c8f under working-audit/candidate-validation.
+Import is TERMINAL0,not accepted publication. Keep live row-delta35348 output
+and independent-cold8423 logs separately. Acceptedcc890/index8d185f4b remains
+the base pointer;all predecessor/original/failure records remain required until
+full content/source/case conservation and independent verification finish.
+
 Keep original attribute-focus-coherent-canonical-export-20261017 logs as TERMINAL0
 and candidatecd867bbe docs manifest/gzip/Markdown separately from acceptedcc890.
 Keep live attribute-focus-independent-cold-20261018 (8423) and candidate-index-

@@ -7,8 +7,11 @@ This pointer supersedes the historical checkpoint chronology immediately below.
 Integration milestone (October18):original export8288 terminates0 after
 3053541.7926ms. Candidatecd867bbe has163 findings/217 proofs,selected58ec5402;
 acceptedcc890/index8d185f4b stays unchanged. Independentcold8423 is live
-(launcher3508,worker11688);candidate-only import32989 is live in separate
-working-audit/candidate-validation namespace. Neither is publication. Freeze
+(launcher3508,worker11688). Candidate import32989 terminates0,index551d3c8f,
+in separate working-audit/candidate-validation namespace. Complete-row census
+preserves all162 previous source payloads;49 non-source changed rows still need
+field explanation. Existing authenticated payload extraction35348 is live.
+Neither candidate index nor partial conservation is publication. Freeze
 producer/proof/review inputs;next same-handle waits and complete content/index
 conservation,then accepted import only after independent verification succeeds.
 Later77d90ece review remains queued outside this candidate,not silently merged.
@@ -117,6 +120,35 @@ would miss the independently confirmed attribute-stage failure. Original final
 gates and equal-input/root-cause contract remain unchanged.
 
 ## Preserved audit chronology
+
+### Candidate index authenticated; complete-row identities conserved before payload classification — October18
+
+Original candidate import32989 terminates0:8483 scalar groups,163 sources,
+39904 controls,389202 occurrences,zero unresolved scalar attribution;compact
+shards72760146bytes. Candidate indexSHA
+551d3c8f2827ddf8755dc6a99331c591c8341a101f213b54285d807ff7656fdc
+is in working-audit/candidate-validation/cd867bbe…;accepted base remainscc890.
+No accepted-pointer movement. Default CLI current-canonical queries correctly
+refuse the old accepted pointer during this candidate interval;use explicit
+snapshot/namespace APIs,not premature publication to silence that guard.
+
+attribute-focus-row-conservation-20261018 terminates0. Existing whole-index
+verification authenticates both generations and all shard bytes.48549→48550 rows:
+48338 identical ordinal/complete-payload hashes,211 changed at the same ordinal
+(162 source ordinal shifts,48 controlTypography rows,one scalar),one extra
+source ordinal,no removed rows. All162 previous complete source payload hashes
+remain in the163-row population;this does not confuse an ordinal shift with a
+changed source finding. All80 top-level section memberships remain present;
+complete field/section conservation is not yet established by this census.
+
+Existing batch loadFindingEvidence starts35348 for the49 non-source button rows
+from both exact snapshots,logs attribute-focus-row-delta-20261018 stdout/stderr.
+It authenticates complete requested payloads against compact row hashes;keep
+this live extraction separate from its later classification. No new parser or
+framework. Cold8423 remains live with launcher3508/worker11688 and frozen58ec.
+Next explain full49-row field changes,metadata/case/source/section deltas and
+finish independent cold before accepted import. D:free1205579776bytes after
+candidate import;no predecessor/original cleanup or final acceptance follows.
 
 ### Coherent attribute-focus export completes; independent cold and candidate import launched — October18
 
