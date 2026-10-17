@@ -4,6 +4,47 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Actual unmasked Icon heading owner paint captured — October17
+
+Demonstrated geometry gap below is now measured,not inferred. Dedicated bounded
+audit-material-visible-heading-paint.mjs reuses existing checkpoint/runtime/input-
+tree/raster infrastructure and the exact1887 authenticated retained assets through
+the existing hardlink browser view. Ordinary /reference/icon and /astylar/icon
+routes,actual applied themes and untouched fixture styles cover light/dark/
+contrast/custom × desktopDPR1/2,tabletDPR1,mobileDPR2:16 physical contexts.
+Reference bounds are actual DOM getBoundingClientRect;candidate bounds are the
+existing read-only post-layout measurement plus the measured canvas viewport
+origin. No coordinate estimates,style arithmetic,layout patches or mask removal
+through injected CSS. Both headings' input trees and32 full PNGs are preserved.
+
+Capture41982 TERMINAL0 and independent --verify39127 TERMINAL0 authenticate the
+report/checkpoint/runtime receipts and replay32 measured owner-union+8CSSpx local
+diagnostics. Report icon-visible-heading-paint-20261017/latest-report.json SHA256
+9b2df5c9ac47320641dee96698f475d1b49c12221ed8db775f53cbb18cad4b69;
+fresh browser155.0.8059.80,retained build (not a newly built renderer). All32
+diagnostics and their sharpness checks match existing defaults;minimum similarity
+0.9505869784699746,maximum measured box-field delta0.015625CSSpx. Actual custom/
+mobile eyebrow wraps to two lines on both sides,with measured heights44.15625/
+44.16CSSpx. This is bounded observed paint/geometry,not identical pixels or proof
+of every inherited input/semantic/lifetime requirement. Defaults are diagnostic,
+not newly configured release gates;currentRenderingAccepted remainsfalse.
+
+Original-verifier extraction rejects six mutations (script digest,screenshot
+digest,input-tree digest,profile,benchmark mode,nonfinite bounds). Independent
+checks also bind all32 applied-theme backgrounds and32 candidate heading viewport
+boxes to their actual measured owners/canvas offsets. No driver/source changes
+after capture. Logs icon-visible-heading-paint-{capture,verify,negative-controls}-
+20261017 stdout/stderr. All capture runtime checks pass;no failed rendering result
+was hidden or reclassified. Driver/report are new because retained ordinary trees
+demonstrably lacked measured owner geometry;no existing capture was overwritten.
+
+This closes the missing measured ordinary Icon header-paint boundary across the
+16 existing physical contexts. Exact case-obligation joins,unmasked-vs-benchmark
+input applicability,coherent proof registration and remaining Icon/final gates
+still stand. Canonicalf663/queued6e4a are unchanged;new standalone driver is not
+yet consumed by the canonical producer. Do not repeat these captures merely to
+update status or label them current full-matrix acceptance.
+
 ### Shared heading input coverage is present; unmasked paint needs measured owners — October17
 
 Specific remaining-gap review,not another default/layout investigation:the current
