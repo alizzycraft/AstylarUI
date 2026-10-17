@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep icon-heading-ax-20261017 report and32 input trees,its separate-checkpoint,
+and icon-heading-ax-verified-20261017.log. The capture completed16 contexts/64 AX
+targets before its final DOM-case assertion failed;preserve frozen producer
+SHA6a1a85b1 and the independently verified correction boundary. No screenshots
+were produced. Required failure evidence,not successful scratch. The retained
+build browser view remains read-only provenance;do not rebuild into it. Semantic
+case differences remain failures,not normalized output acceptance.
+
 Keep icon-fresh-producer-obligation-join-20261016 stdout/stderr and queued71b986de,
 supersedinge093. Retain fresh report/checkpoint/image files referenced by20 exact
 joins. Closed proposal uses SHA-preserving LZX;prior source is Git7de58564.

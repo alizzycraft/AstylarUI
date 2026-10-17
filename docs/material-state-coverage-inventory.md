@@ -4,6 +4,43 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Targeted heading AX closes the observation gap with a failure — October17
+
+New icon-heading-ax-20261017/latest-report.json SHA256
+1e2136092c03bab263e22e45ef6d548eceae2ce91783f158dad2c3584eb3e46f
+records64 actual title/eyebrow targets across16 physical contexts (four applied
+themes,desktopDPR1/2,tabletDPR1,mobileDPR2),both sides,benchmark mode. Reuses
+the authenticated1887 retained build assets and existing supplemental runtime/
+checkpoint/input-tree validation;32 trees,no PNGs. This is fresh AX observation
+of the retained build,not a newly built current renderer or ordinary unmasked run.
+
+Capture76794 completed all contexts and saved the report before TERMINAL1:
+its final verifier incorrectly expected DOM text Icon instead of authored icon.
+Frozen producer audit-material-icon-heading-ax.mjs SHA6a1a85b1 retains that failure.
+check-material-icon-heading-ax.mjs authenticates exact producer bytes and executes
+its original verifier with only that one assertion corrected in memory. No
+captured field or source receipt is replaced. Independent replay TERMINAL0;
+four missing-context/backend-owner/benchmark-mode/theme controls reject. Saved
+icon-heading-ax-verified-20261017.log preserves all observations and report digest.
+
+All16 native/candidate titles have heading role,level1,not ignored. Names differ
+Icon versus icon in EVERY context;matchingTitles=0. Eyebrows have paragraph role
+and empty names,but descendant StaticText differs ANGULAR MATERIAL 20 REFERENCE
+versus Angular Material 20 reference. All64 paired input nodes retain matching
+capitalize/uppercase textTransform and authored text;the verifier checks those
+values,not screenshot appearance. Actual title/eyebrow AX correspondence is now
+inspected/failing in this bounded population,not missing or assumed equivalent.
+
+Current src/lib/astylar-semantic-bridge.ts reconcileElement copies authored
+textContent into native text nodes;no textTransform projection exists there.
+This is a specific suspected shared semantic-style projection defect,not a
+confirmed current-code minimal reproduction or proof that AT treats the strings
+differently. Do not uppercase fixture content or normalize AX names to hide it.
+Remaining: bind captured/current bridge ownership and minimal public reduction,
+join this evidence to exact20 configured Icon cases in the coherent batch,then
+complete shared history/other obligations. Canonicalf663/queueddf29 unchanged;
+no whole-case promotion or final gate. Prior duplicate-main/hiding failures remain.
+
 ### Heading semantic evidence availability — October17
 
 Previous paint increment ebbf7fdf is committed and pushed. No canonical export
