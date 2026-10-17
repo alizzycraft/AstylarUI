@@ -24,6 +24,22 @@ replace('assert.equal(cases.length, 56);', 'assert.equal(cases.length, 113);');
 replace('&interaction=focus', '&interaction=${c.state}');
 replace("for (const type of ['focus', 'blur', 'focusin', 'focusout'])", "for (const type of ['focus', 'blur', 'focusin', 'focusout', 'pointerdown', 'pointerup', 'click', 'input', 'change'])");
 replace('function installObserver() {', 'function installFocusObserver() {');
+const runnerFile = 'tests/material-parity/run-material-parity.mjs', runnerBytes = readFileSync(runnerFile);
+const runnerAST = ts.createSourceFile(runnerFile, runnerBytes.toString(), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+assert.equal(runnerAST.parseDiagnostics.length, 0);
+const openers = runnerAST.statements.filter(node => ts.isFunctionDeclaration(node) && node.name?.text === 'openInteractionPage');
+assert.equal(openers.length, 1);
+const branches = openers[0].body.statements.filter(node => ts.isIfStatement(node) && node.expression.getText(runnerAST) === "mode === 'astylar'");
+assert.equal(branches.length, 1);
+const nativeSetup = branches[0].elseStatement.statements;
+assert.equal(nativeSetup.length, 1);
+const nativeCall = nativeSetup[0].expression.expression;
+assert.ok(ts.isCallExpression(nativeCall) && nativeCall.expression.getText(runnerAST) === 'page.evaluate');
+const nativeListener = nativeCall.arguments[0].getText(runnerAST);
+replace("            await actions.sendShowcaseCommand(page, { type: 'showcase:benchmark', phase: 'start' });",
+  "            if (mode === 'reference') await page.evaluate(rawReferenceListener, c.family);\n" +
+  "            else await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.clearEvents());\n" +
+  "            await actions.sendShowcaseCommand(page, { type: 'showcase:benchmark', phase: 'start' });");
 replace('actionSource, results, scope:', 'actionSource, sourceRecipe: recipe, results, scope:');
 replace('assert.deepEqual(report.actionSource, actionSource);',
   'assert.deepEqual(report.actionSource, actionSource); assert.deepEqual(report.sourceRecipe, recipe);');
@@ -48,8 +64,9 @@ assert.equal(observer.split('installFocusObserver();').length, 2);
 // locally rather than relying on a Node-side closure in the browser realm.
 source += '\n' + observer.replace('installFocusObserver();', focusInitializer[0].getText(ast) + '\n  installFocusObserver();');
 const recipe = { base: { file: baseFile, sha256: baseSha256 }, baseGraph: fingerprintModuleGraph(process.cwd(), baseFile),
+  nativeListener: { file: runnerFile, sha256: hash(runnerBytes), bodySha256: hash(nativeListener) },
   logicalRunnerSha256: hash(source), scope: 'Original configured pointer actions;additional read-only raw event/state snapshots. Focus-selector target is not asserted to be the pointer target.' };
-await import('data:text/javascript;base64,' + Buffer.from('const recipe=' + JSON.stringify(recipe) + ';\n' + source).toString('base64'));
+await import('data:text/javascript;base64,' + Buffer.from('const recipe=' + JSON.stringify(recipe) + ';\nconst rawReferenceListener=' + nativeListener + ';\n' + source).toString('base64'));
 
 function installObserver() {
   installFocusObserver();
