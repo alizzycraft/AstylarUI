@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep public-role-focus-refresh-focused-registration/conservation-20261017 logs.
+They bind the new assertion and exact whole-suite append from2aeff54b to f2b5b28b,
+not production163 or a new capture. Keep queued649143f5's original120 old-source
+references until explicit applicability reconciliation;do not overwrite them in
+place. Original public/owner/failure records remain required. Local3b317663 first
+pushHTTP408 and remote-c983 check are recorded in the ledger;retry40816 is live.
+
 Current accepted inline/reader/provenance package iscc89031a/index8d185f4b after
 independentcold49441 and accepted-import16196 both terminate0. Keep both log pairs,
 all complete row/section/case conservation logs and earlier procedure failures.

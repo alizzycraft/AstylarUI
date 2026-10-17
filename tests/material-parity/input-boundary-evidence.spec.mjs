@@ -6457,3 +6457,48 @@ test('public same-document surfaces isolate modal focus and independent disposal
       scope: 'Public same-document modal isolation DPR1/2; not Material input equivalence, equal-rendering acceptance, focus restoration, late async work or all profiles.' }));
   } finally { if (browser) await browser.close(); await new Promise(resolve => server.close(resolve)); }
 });
+
+test('public role focus refresh separates attribute-first and root-first failures with unchanged input', t => {
+  const proposal = '3ccb3f7bd6ff9075976037b8408e4a03adfc03113c27a3ed049a4bd0740af2fe';
+  const queued = JSON.parse(readFileSync(`artifacts/material-parity/working-audit/proposals/${proposal}.json`));
+  assert.equal(queued.sha256, proposal); assert.equal(hash(JSON.stringify(queued.review)), proposal);
+  const id = 'core-semantic-attribute-refresh-removes-focusability';
+  const finding = queued.review.groups.at(-1);
+  assert.equal(finding.id, id); assert.equal(finding.classification, 'confirmed-core-renderer-defect');
+  assert.deepEqual(sourceAuditDefinitions.filter(row => row.id !== id), queued.review.groups.slice(0, -1));
+  const registered = sourceAuditDefinitions.find(row => row.id === id);
+  if (registered) assert.deepEqual(registered, finding);
+  assert.equal([...readFileSync(finding.file, 'utf8').matchAll(new RegExp(finding.pattern, 'g'))].length, 1);
+  for (const receipt of finding.evidence) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  const directory = 'artifacts/material-parity/public-role-focus-refresh-20261017';
+  const verification = JSON.parse(execFileSync(process.execPath,
+    ['scripts/audit-public-role-focus-refresh.mjs', '--verify', directory], { encoding: 'utf8' }));
+  assert.deepEqual(verification, { pairs: 8, nativeNoopControls: 16,
+    candidateAttributeFirstFailures: 8, candidateRootFirstFailures: 8,
+    currentRenderingAccepted: false, negativeControlsRejected: 3 });
+  const owner = JSON.parse(readFileSync('artifacts/material-parity/public-role-focus-refresh-owner-20261017.log'));
+  assert.deepEqual(owner.methods.map(row => row.name), ['applyAttributes', 'reconcile', 'reconcileElement', 'syncFocus']);
+  for (const receipt of [...owner.sources, ...owner.versions]) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  assert.equal(owner.attributeStacks, 8); assert.equal(owner.rootStacks, 8);
+  const report = JSON.parse(readFileSync(`${directory}/latest-report.json`));
+  assert.equal(hash(readFileSync(owner.report.file)), owner.report.sha256);
+  let attributeFirst = 0, rootFirst = 0;
+  for (const row of report.results) for (const update of row.astylar.updates) {
+    const first = update.operations.find(operation => operation.before && !operation.after);
+    assert.ok(first); assert.equal(first.connected, true);
+    assert.equal(update.sameNode, true); assert.equal(update.focused, true);
+    if (['div', 'span'].includes(row.controlKind)) {
+      assert.equal(first.operation, 'removeAttribute'); assert.equal(first.attribute, 'tabindex');
+      assert.match(first.stack, /applyAttributes/); attributeFirst++;
+    } else {
+      assert.equal(first.operation, 'replaceChildren'); assert.match(first.stack, /reconcile/); rootFirst++;
+    }
+  }
+  assert.equal(attributeFirst, 8); assert.equal(rootFirst, 8);
+  const authoredSource = readFileSync(report.inputSource.file, 'utf8');
+  assert.match(authoredSource, /from 'astylarui'/);
+  assert.doesNotMatch(authoredSource, /astylarui\/dist|material-showcase\/src/);
+  t.diagnostic(JSON.stringify({ ...verification, currentOwnerFiles: owner.sources.length,
+    registered: !!registered, wholeCaseAccepted: false,
+    boundary: 'Public no-op focus continuity and exact first-loss owner only; not every Material trace,selection,AT or paint.' }));
+});

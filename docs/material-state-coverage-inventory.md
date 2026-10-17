@@ -10,6 +10,8 @@ all terminate0. Accepted index is byte-identical to the verified candidate index
 Selected case review0ee8 retains436 static/1875 interaction cases;all2311 remain
 partial/unverified. No whole-case inspection,current rendering or final-gate
 acceptance follows. Earlier live/candidate pointers below are historical.
+Publication commit3b317663 is local;first push failsHTTP408 and remote remains
+c983df36. Unchanged retry40816 is live;do not claim remote publication yet.
 Latest outside-export case queue649143f5 extends1b34 with52 Badge recorded-node
 correspondences (364 pairs),preserving56 focus/113 pointer observations and child
 receipts. All2311 cases remainpartial/unverified;zero full closures.
@@ -23,6 +25,13 @@ test/proof inventory registration is explicitly pending;no producer/renderer
 change or extra canonical rebuild. Do not confuse this source review with the
 2311-case obligation proposals.
 
+Existing input-boundary suite now has the focused public role-refresh assertion:
+1/1 passes,three forged-report controls rejected,exact current owner files bound.
+Entire old suite2aeff54b is preserved as prefix of f2b5b28b;only one assertion is
+appended. Policy/proof registration is still pending. Queued649143f5 contains120
+references to the old suite receipt and needs explicit append-only applicability
+reconciliation before being treated as current;no saved receipt was rewritten.
+
 Next:register the new cause and queued observations in a coherent batch;do not
 rebuild the unchanged accepted package for prose. Remaining shared gaps:
 descendant/AX/input ownership,event/default-action classification,local paint,
@@ -31,6 +40,26 @@ would miss the independently confirmed attribute-stage failure. Original final
 gates and equal-input/root-cause contract remain unchanged.
 
 ## Preserved audit chronology
+
+### Public attribute-first focus finding gains existing-suite assertion — October17
+
+public-role-focus-refresh-focused-registration-20261017 terminates0:1/1,zero
+skips,3093.0106ms. Existing public driver authenticates8 paired contexts,16 native
+no-op controls,eight attribute-first failures,eight separate root-first failures
+and three rejection controls. New assertion also binds full current/installed
+owner and package files to the authenticated owner log and checks actual public
+first-loss stacks. All nodes end focused with stable identity;extra events stay
+failures. No browser recapture or new test/report framework was introduced.
+
+public-role-focus-refresh-focused-conservation-20261017 terminates0:the entire
+3b317663 suite is unchanged;only45 lines/one focused assertion are appended.
+The source definition is still queued3ccb,not production163. Acceptedcc890's
+source fingerprints are historical to this new append. Read-only queue census
+finds120 occurrences of old2aeff54b suite receipt in649143f5;preserve originals
+and reconcile this exact append at the next coherent batch,not blanket-refresh
+capture provenance or regenerate the unchanged canonical package for prose.
+Local publication3b317663 push failsHTTP408;fresh remote check returnsc983df36.
+Unchanged retry40816 is live. No branch history or renderer input was rewritten.
 
 ### Inline/reader/provenance batch independently verified and published — October17
 
