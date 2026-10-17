@@ -4,6 +4,24 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Published Icon readiness census reconciled without equivalence promotion — October17
+
+The EXISTING closure-readiness assertion now checks published2 pending cursor
+groups/40 occurrences and11 reviewed groups/180 occurrences,instead of historical
+5/100 and8/120. It additionally asserts the three primary alignment rows remain
+application-plugin-authoring-defect,normal versus stretch/flex-start,20 exact
+reviewed cases each and authenticated current-package receipts. No raw values,
+classification rules,closure requirements or rendering gates changed. Original
+focused assertion passes1/1 (2216.3119ms);no export/browser recapture was needed.
+This test-source increment requires its own applicability at the next coherent
+source-receipt batch;published0dd7 remains the prior frozen source snapshot.
+Do not claim the whole Icon suite or final harness passed from this one check.
+
+Evidence publication commit87ed7bd1 is local;its push session36456 remains live
+at this checkpoint,not yet confirmed remote. Reuse that handle,not a second push.
+Next resolve remaining whole-case obligations using the existing requirement
+table and exact proof IDs;two cursor groups are not a complete case-backlog count.
+
 ### Button receipt drift resolved; coherent evidence publication — October17
 
 Extraction9927/21980 is TERMINAL0,not a current wait. Complete49-row comparison

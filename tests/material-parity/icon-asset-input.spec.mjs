@@ -540,12 +540,26 @@ test('Icon closure retains explicitly unproven context obligations despite zero 
   assert.equal(rows.length, 212);
   const pending = rows.filter(row => row.classification === 'parity-harness-defect' && !row.attribution);
   const counts = pending.reduce((counts,row) => { counts[row.property] = (counts[row.property] ?? 0) + 1; return counts; }, {});
-  assert.deepEqual(counts, { alignContent: 1, alignItems: 1, cursor: 2, justifyContent: 1 });
-  assert.equal(pending.length, 5);
-  assert.equal(pending.reduce((sum,row) => sum + row.occurrences, 0), 100);
+  assert.deepEqual(counts, { cursor: 2 });
+  assert.equal(pending.length, 2);
+  assert.equal(pending.reduce((sum,row) => sum + row.occurrences, 0), 40);
   const reviewed = rows.filter(row => row.attribution === 'reviewed-icon-parent-context-and-width-intent');
-  assert.equal(reviewed.length, 8);
-  assert.equal(reviewed.reduce((sum, row) => sum + row.occurrences, 0), 120);
+  assert.equal(reviewed.length, 11);
+  assert.equal(reviewed.reduce((sum, row) => sum + row.occurrences, 0), 180);
+  // Publication classified these three unequal formatting owners; it did not
+  // make their raw values equivalent or close the remaining paint obligations.
+  const alignment = reviewed.filter(row => row.element === 'icon-primary' &&
+    ['alignContent', 'alignItems', 'justifyContent'].includes(row.property));
+  assert.equal(alignment.length, 3);
+  for (const row of alignment) {
+    assert.equal(row.classification, 'application-plugin-authoring-defect');
+    assert.equal(row.reference, 'normal');
+    assert.equal(row.astylar, row.property === 'justifyContent' ? 'flex-start' : 'stretch');
+    assert.equal(row.occurrences, 20);
+    assert.equal(row.reviewedCases.length, 20);
+    assert.match(row.justification, /not declared aliases,inert properties or a demonstrated core fault/);
+    assert.equal(row.evidence.sourceSha256, canonical.uncompressedSha256);
+  }
   for (const row of pending) {
     assert.equal(row.evidence.section, 'discrepancies');
     assert.equal(row.evidence.sourceSha256, canonical.uncompressedSha256);
