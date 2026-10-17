@@ -10,9 +10,18 @@ all shard byte lengths/hashes:48548 predecessor rows versus48549 candidate rows,
 48338 unchanged at the same section/ordinal,210 changed,one added,no removals.
 Of those210,161 are source-finding ordinal shifts:all161 original complete-row
 hashes remain present in the candidate source multiset. The remaining49 changed
-rows are one button scalar and48 button control rows;their exact receipt/content
-delta still needs explanation,not blanket approval. Log inline-reader-provenance-
-row-conservation-20261017 terminates0. Existing section digest comparison runs as
+rows are now explained:48 button controls change ONLY normalizationReconciliation
+currentModuleSha256 ac3d948a→e77ab729;one button scalar changes ONLY48 linked
+controlProofSha256 leaves,each equal to the exact old/new complete control-row
+hash. Measured values,classifications and all other row content are unchanged.
+Row-conservation,row-delta and row-delta-classification logs (all prefixed
+inline-reader-provenance-,dated20261017) terminate0. Metadata comparison changes
+only coverage.inspectionEvidence and summary.sourceFindings161→162. Existing
+case validator plus exact saved review-envelope binding authenticates all2311
+case rows to b1a96a/0ee8 respectively;all remainpartial,current acceptancefalse.
+All other metadata is deeply equal. Case-metadata-envelope-binding log terminates0;
+the earlier attempt hashed the storage envelope instead of its review and failed,
+retained as procedure failure,not evidence corruption. Existing section digest comparison runs as
 session48728 using the preserved index manifest;the first standalone-manifest CLI
 attempt fails ENOENT before reading evidence and is retained separately. The
 original cold process14900 is revalidated live (CPU478.23s),not restarted. Neither

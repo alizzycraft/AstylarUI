@@ -56,6 +56,15 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep inline-reader-provenance-row-delta,row-delta-classification,metadata-
+conservation and case-metadata-envelope-binding-20261017 stdout/stderr. Exact
+49-row payload reads authenticate complete row hashes;96 changed leaves reduce
+to48 producer fingerprints and48 scalar links to those controls. Retain earlier
+case-metadata-binding-20261017 failure:the ad hoc check incorrectly hashed the
+storage envelope,while existing review digests bind its nested review. Corrected
+check uses the existing case validator and exact authenticated nested groups;
+no proposal,receipt,classification or acceptance flag was rewritten.
+
 Keep inline-reader-provenance-candidate-index-20261017 and row-conservation-
 20261017 stdout/stderr with the candidate-validation index8d185f4b. These are
 candidate conservation evidence,not accepted publication. Keep the failed
