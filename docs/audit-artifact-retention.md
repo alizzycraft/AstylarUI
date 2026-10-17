@@ -56,6 +56,15 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+The49-button-row hold below is resolved by the TERMINAL0 complete-row extraction
+and coherent-icon-border-button-receipt-conservation-20261017 stdout/stderr.
+Retain both alongside the original failed52-versus3 conservation assertion.
+Only embedded producer receipts and their dependent scalar proof hashes changed;
+the current coverage ledger records exact source reversal and hash-pair checks.
+Package0dd7/index37486 is accepted evidence publication,NOT rendering or whole-case
+acceptance. Keep accepted predecessorf663/bc481 and all original capture paths;
+do not remove the previous generation while historical consumers still use it.
+
 Keep coherent-icon-border-compact-{import,verify},coherent-icon-border-index-
 conservation and coherent-icon-border-button-row-drift-20261017 stdout/stderr.
 The conservation assertion's52-versus3 failure is required evidence,not disposable

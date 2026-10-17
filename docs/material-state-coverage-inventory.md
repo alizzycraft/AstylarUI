@@ -4,6 +4,37 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Button receipt drift resolved; coherent evidence publication — October17
+
+Extraction9927/21980 is TERMINAL0,not a current wait. Complete49-row comparison
+reports ONLY48 embedded normalizationReconciliation.currentModuleSha256 changes
+and48 dependent scalar controlProofSha256 changes (proof indices12..59). No
+other fields differ. Original log SHA15621f4d6a7daac444cd4fae4b36e20c6b4d5b86a594f6d65f772aa2c54f94fc
+is retained;the earlier52-versus3 assertion remains honest failure evidence.
+
+Read-only coherent-icon-border-button-receipt-conservation-20261017 passes
+TERMINAL0. Both complete indexes authenticate against their pinned digests;
+all48 scalar before/after hash pairs identify exactly the48 changed control
+complete-row hashes,with unchanged case/owner/property/classification/values.
+Exact EXISTING additive producer reversals bind olde6336fa8 to currentac3d948a;
+the complete-row diff permits no other changes. All12 static scalar proofs stay
+unchanged. Conservation stdout SHAa8662081cdfa9c971f3926fe489fe86bbcd639d0d590bc30336c300d0bb293e9.
+This discharges the49-row publication hold without a blanket change allowance,
+normalization,another extraction,renderer edit or altered acceptance criterion.
+
+Together with the existing cold package/readable comparison,compact import and
+whole-index verification,this accepts evidence package0dd7dce3/index37486 as
+the coherent publication boundary:161 findings/215 proofs,8483 scalar groups,
+39904 control rows,389202 occurrences,zero unresolved scalar attribution.
+All159 previous source findings remain complete-row identical;two are additive.
+The configured2311-case inventory and contract are unchanged;ALL2311 cases
+remain PARTIAL and current rendering acceptance remains unverified.
+
+Next reconcile the existing Icon readiness assertion's historical5-pending/
+8-reviewed census with the published2-pending/11-reviewed population,retaining
+its original non-closure guarantee. Do not recapture or reexport just for this
+test boundary. Whole-case obligation closure and original final gates remain.
+
 ### Cold comparison and compact verification pass; predecessor conservation HOLD — October17
 
 Follow-up while the SAME extraction9927/21980 remains live: the existing
