@@ -4,14 +4,14 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
-New standalone passive lifetime cohort:80 actual-theme contexts across sidenav,
-grid-list,badge,list,table;320 live/tracked snapshots after equivalent updates
-and80 final disposals independently verify. Six negative controls reject. This
-is candidate-only retained-build ordinary update/disposal evidence,not native
-lifetime,late callbacks,remount/peer isolation,current source or case closure.
-Original capture verifier fails its paired-row schema;corrected read-only
-candidate-row adapter succeeds without changing helper/report bytes. Details below;
-exact case applicability joins remain next,not a second capture.
+Latest queued review648f45e7 preserves5357efed and joins80 passive lifecycle
+contexts to270 exact configured cases (sidenav62;grid-list/badge/list/table52 each).
+All2784 recorded nodes match;540 unrelated clock-derived datepicker-rule leaves
+remain explicit with selector inapplicability proved. Two binding controls reject;
+14158 dependencies authenticate and whole5357efed recovers. Candidate-only ordinary
+update/disposal evidence does not close late callbacks,remount/peer isolation,
+current source or whole cases. All2311 remainpartial/unverified. Acceptedcc890
+and frozen58ec export stay unchanged. Exact capture/reader boundaries are below.
 
 Latest queued review5357efed preserves4be737a3 and binds52 Badge rule-history
 records:156 complete current rule evaluations match retained candidate inventories
@@ -79,6 +79,35 @@ would miss the independently confirmed attribute-stage failure. Original final
 gates and equal-input/root-cause contract remain unchanged.
 
 ## Preserved audit chronology
+
+### Passive lifecycle observations join270 exact cases with inactive clock differences preserved — October17
+
+Question:do observed initial documents match configured retained inputs,or are
+the lifetime observations being borrowed across different authoring? Exact80
+family/profile/physical contexts bind270 cases. Original and observed candidate
+nodes deep-equal,including authored,normal/interaction/effective and retained
+text fields:2784 recorded nodes compared. Entire rule inventories also match
+except top/left on global .datepicker-selected:540 leaves across270 pairs.
+Retain old/fresh values,do not rewrite them. Existing selector applicability
+helper proves no recorded node matches that rule on either side. This is the
+already-known unrelated clock-derived rule,not a new datepicker investigation.
+
+passive-live-resources-case-join-20261017 terminates0;logSHA
+0ac2b341cb34cb8309ab516b39c83e9408d8c194ef07fd6b746b003727db4e11
+retains the executable recipe. Changed node and newly applicable datepicker
+selector controls reject. Review648f45e7762728bf8c7205443b78d7e272a72e45e310af57d8c0d0e9ae915b6d
+adds ONLY270 ordinaryPassiveUpdateDisposal children;whole5357efed predecessor
+and acceptedcc890 pointer recover unchanged. Existing loader authenticates all
+2311 cases/14158 dependencies. The children bind original/fresh trees,actual
+themes,checkpoint,capture sources,independent reader,snapshots and final disposal.
+
+Scope remains candidate-only initial-document ordinary equivalent updates and
+final disposal,not configured held/focus/default-action transitions,native
+lifetime,late completion,remount,peer isolation,paint or current-source build.
+Existing single-snapshot limitations/other history remaining-work fields survive;
+all whole casespartial/current renderingunverified. No new capture,source
+definition,renderer/fixture change,gate or full export. Frozen worker20224 remains
+live with advancingCPU;finish its independent integration before publication.
 
 ### Missing passive live-resource/disposal cohorts observed without repeating tracked flags — October17
 

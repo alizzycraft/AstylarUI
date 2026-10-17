@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep passive-live-resources-case-join-20261017 stdout/stderr with queued648f45e7
+and its5357efed predecessor. It binds270 cases/80 physical contexts and preserves
+all540 inactive clock-rule leaves,not altered captures. Original/current trees,
+checkpoint,report,reader and failure logs remain required. No successful scratch
+was generated or deleted;no broader lifetime/whole-case acceptance or permission
+to remove original single-snapshot observations follows.
+
 Keep passive-live-resources-20261017 report/80 trees and separate-checkpoint,
 capture failure stdout/stderr,independent-verify interop-setup failure and
 independent-verify-interop success log pairs. Producer8359604a and checkerb4940fe2
