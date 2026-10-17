@@ -4,6 +4,41 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Semantic source/proof registration; legacy population reconciliation pending — October17
+
+Source policy now registers core-semantic-text-transform-not-projected as a
+confirmed core semantic resolved-style projection defect,with exact public and
+Material report receipts. Producer sourceFingerprints adds the four existing
+drivers/verifiers,new focused suite and two reports;focusedProofInventory adds
+one owning proof (214 total). This is source registration,NOT canonical export.
+Selected review87b7 remains unchanged;queuedb7fe is not silently selected.
+
+node --test tests/material-parity/semantic-text-transform-input.spec.mjs TERMINAL0:
+one owning assertion runs public owner/rejection checks and the16-context heading
+replay,authenticates receipts and pattern,then removes ONLY the new definition,
+proof and seven source entries to reconstruct complete c3d1afde policy/producer
+bytes. All159 previous definitions are deeply equal;160 current definitions and
+214 current proofs are explicit. No arbitrary source restoration or pixel waiver.
+
+Focused historical compatibility check deliberately exposed a concrete remaining
+integration gap:node --test --test-name-pattern="public equal-input flex em margins
+preserve exact failure" tests/material-parity/benchmark-config.spec.mjs TERMINAL1,
+line309,160 !==159. That assertion counts today's registry as its historical
+159-finding population. Existing older policy/producer transition restorers also
+pin the predecessor inventories;they must explicitly conserve/reverse this exact
+additive registration before historical receipt checks can be claimed passing.
+Do not weaken/remove those assertions,pretend the registry is still159,or call
+the canonical stale-package check a new export result. The failure is preserved
+here with exact command/location,not interpreted as a renderer regression.
+
+Next priority is this bounded registration/source-fingerprint reconciliation,
+using the existing transition infrastructure and complete predecessor checks.
+Canonicalf663/indexbc481df1 still has159 findings/213 proofs;current source has
+160/214. No expensive export/browser matrix is justified before the explained
+historical-population boundary is verified. All2311 cases remainpartial and all
+original final acceptance gates remain required. Shared Icon history/ownership
+and remaining whole-case requirements are not cleared by source registration.
+
 ### Heading semantic failure joined without whole-case promotion — October17
 
 Existing combined join now authenticates the new Material heading AX report and

@@ -8922,6 +8922,13 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'scripts/audit-public-text-transform-ax.mjs',
+    'scripts/check-public-text-transform-owner.mjs',
+    'scripts/audit-material-icon-heading-ax.mjs',
+    'scripts/check-material-icon-heading-ax.mjs',
+    'tests/material-parity/semantic-text-transform-input.spec.mjs',
+    'artifacts/material-parity/public-text-transform-ax-20261017/latest-report.json',
+    'artifacts/material-parity/icon-heading-ax-20261017/latest-report.json',
     'scripts/audit-public-paragraph-linebox.mjs',
     'scripts/check-retained-paragraph-font-box.mjs',
     'artifacts/material-parity/public-paragraph-linebox-20261015/latest-report.json',
@@ -9637,6 +9644,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/semantic-text-transform-input.spec.mjs', /test\('public semantic text transform preserves controls and current owner evidence'/,
+      'public semantic text-transform support gap and complete predecessor conservation', 'Six equal-input public pairs atDPR1/2 retain two none controls and four transformed AX-name failures. Complete current emitted/installed owning methods agree;16 actual-theme Material contexts retain corresponding title/eyebrow failures. Complete prior policy/producer definitions are conserved. Not AT behavior,inherited/locale/update coverage or whole-case acceptance.'),
     proof(root, 'scripts/check-retained-paragraph-font-box.mjs', /assert.equal\(observations.length, 8\)/,
       'normal paragraph auto height and complete font-box owner boundary', 'Eight public Arial16/24 normal versus explicit line-height pairs atDPR1/2 retain normal paragraph height divergence and explicit controls. Complete current/emitted/installed parser members agree. Supplements existing normal-metrics finding,not a new defect,all fonts or Material wrapper acceptance.'),
     proof(root, 'scripts/check-material-divider-four-sample-model.mjs', /assert.equal\(observations.length, 24\)/,

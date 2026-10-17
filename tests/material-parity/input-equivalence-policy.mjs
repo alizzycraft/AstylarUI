@@ -110,6 +110,21 @@ export const reviewedValueNormalizations = Object.freeze([
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    id: 'core-semantic-text-transform-not-projected',
+    introducedBy: 'public equal-input reduction and complete owning-method comparison; first-bad revision not established',
+    file: 'src/lib/astylar-semantic-bridge.ts',
+    pattern: String.raw`const semanticText = element\.textContent \?\?`,
+    classification: 'confirmed-core-renderer-defect',
+    owner: 'core resolved typography to browser semantic DOM projection',
+    focusedProof: 'tests/material-parity/semantic-text-transform-input.spec.mjs: public semantic text transform preserves controls and current owner evidence',
+    evidence: [{ file: 'artifacts/material-parity/public-text-transform-ax-20261017/latest-report.json', sha256: '9f6b365fe93fe01b8a3e375247aaceb5d43bd5791273570da74efc75c06556f6' },
+      { file: 'artifacts/material-parity/icon-heading-ax-20261017/latest-report.json', sha256: '1e2136092c03bab263e22e45ef6d548eceae2ce91783f158dad2c3584eb3e46f' }],
+    observation: { component: 'public h1 without Material plugins', element: 'title', states: ['none', 'capitalize', 'uppercase'], dpr: [1, 2],
+      property: 'AX heading name and child text', reference: ['project atlas', 'Project Atlas', 'PROJECT ATLAS'],
+      astylar: ['project atlas', 'project atlas', 'project atlas'], stage: 'resolved style omitted from semantic text projection' },
+    justification: 'Six public package-root pairs preserve equal authored text and resolved textTransform. Both none controls match; all four transformed names fail while heading role/level1 agree. Complete current emitted reconcileElement/applyAttributes/semanticTagName methods equal captured installed owners: authored text is copied without computed textTransform projection. Sixteen actual-theme Material physical contexts separately expose the same title/eyebrow difference. Fix the authoritative resolved-style semantic boundary,not fixture content or plugin text. Inheritance,locale,updates,explicit naming precedence and AT speech behavior remain unverified; no whole-case or current full-package acceptance.',
+  }),
+  Object.freeze({
     id: 'core-public-semantic-subset-omits-accessibility-only-hiding',
     introducedBy: 'current public type/bridge and checkpoint AX evidence; first-bad revision not established',
     file: 'src/app/types/dom-element.ts',
