@@ -56,6 +56,17 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep public-legacy-clip-20261018 and public-legacy-clip-diagnostic-20261018 failed
+attempts;the latter failure.json records missing required styles array. Keep
+public-legacy-clip-valid-input-20261018 complete report,input/bundle/HTML and all
+eight PNGs despite its original validator failure. Exact property matching fixes
+only a background-clip false positive in verification,not captured observations.
+Keep valid-input-verify,verify-complete and verify-boundary stdout/stderr:
+the first two fail at replay-boundary construction;the final passes all four
+pairs/four rejection controls and authenticates original complete producer bytes.
+This is required public support evidence,not temporary successful scratch or
+canonical publication. No frozen producer/proof/review input is changed.
+
 Keep attribute-focus-derived-report-chain and attribute-focus-composed-
 conservation-20261018 stdout/stderr. They retain exact derived hashes and bind
 all80 section outcomes to existing row/source/proof/metadata receipts without

@@ -4,6 +4,32 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+October18 new bounded public support result:legacy CSS clip is reported unsupported
+and not applied by the installed public loaded-document-styles path. Four paired
+120x80CSSpx captures atDPR1/2 use equal trees and exact same CSS;two unclipped
+controls both paint400/1600 red pixels,whereas rect(0,0,0,0) native paints0 and
+candidate still paints400/1600 with exact property=clip diagnostic. Eight PNGs
+and all2515 bundle input receipts authenticate. Report public-legacy-clip-valid-
+input-20261018/latest-report.json SHA c40009cf090eafbaf7db830287fed18c970fa90aa9792e8fd1245698ccbb0169.
+Producer uses package-root Astylar/provideAstylar,not Material or private APIs.
+Existing source-only legacy-clip-core-contract log ties this question to124
+omitted native anchors in62 sidenav cases;this reduction does NOT prove their
+paint/focus/AX impact or authorize omitting them. Classification:unsupported
+core CSS behavior,not a silently supported renderer feature or fixture remedy.
+No new canonical registration or case closure;outside frozen58ec generation.
+
+Capture first failed because test SiteData omitted required styles array;
+diagnostic retry records malformed-site-data explicitly. Valid-input capture
+then completes but its original verifier fails by confusing background-clip
+with clip. Current --verify uses exact diagnostic.property,authenticates the
+entire original producer by reversing only its validator boundary,and verifies
+four rejection controls. Initial two replay-boundary procedure failures are
+preserved;verify-boundary-20261018 terminates0. No capture/report rewrite or
+recapture to conceal those failures. Current/installed full owner applicability,
+inherited/dynamic/nonzero clip rectangles and typed/public support registration
+remain unproved. No claim of current whole-Material rendering. Cold8423 remains
+live on original worker11688 (CPU1729.64s),not restarted.
+
 October18 derived-chain/composed conservation completes:attribute-focus-derived-
 report-chain-20261018 authenticates historicalf8f90799 motion bytes,reconstructs
 candidate90c83630 with current four source receipts,and restores only producer
