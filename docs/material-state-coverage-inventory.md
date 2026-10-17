@@ -4,6 +4,42 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Shared heading input coverage is present; unmasked paint needs measured owners — October17
+
+Specific remaining-gap review,not another default/layout investigation:the current
+compact Icon shard already contains80 heading records (40 reviewed-horizontal-
+start-alignment,40 reviewed-heading-mask). All20 authenticated full-run pairs
+have native eyebrow/title opacity0 and candidate heading ink equal to page surface.
+Thus these are known benchmark-masking inputs,not missing heading records or a new
+root-inheritance defect. Current source policy already classifies the mask and
+requires visible-heading follow-up;shared relative offsets are reference inputs,
+not candidate-only compensations. Do not rediscover these settled classifications.
+
+Existing tooltip-applied-theme-ownership-20261016 report8b0745b4 provides ordinary
+dark/contrast/custom evidence in12 physical contexts. All24 trees and24 PNG hashes
+authenticate. Forty-eight heading nodes across both sides retain ordinary-mode
+input evidence:native opacity1,candidate actual primary/onSurface ink from the
+receipt-bound resolveTheme function. Common eyebrow content is the same,but title
+content is tooltip,not icon. Neither side records heading viewport bounds;candidate
+retainedText contains source/style only,no geometry. These captures therefore
+reusefully establish unmasked input availability,but do not close exact Icon title,
+all16-context coverage,focused header paint or current rendering acceptance.
+
+Read-only check TERMINAL0,retained log
+artifacts/material-parity/icon-heading-mask-and-ordinary-evidence-boundary-20261017.log
+and stderr. Initial tool-only check confused theme config with resolved onSurface;
+corrected check executes the captured theme source rather than inventing that field.
+No new test/report framework,source/fixture change,canonical rebuild or case join.
+Queued6e4a remains source-valid;no source receipt is changed by this ledger update.
+
+Next decisive paint evidence must record actual ordinary-mode heading owner bounds
+with paired input trees and pixels,using existing capture/runtime provenance.
+Do not infer coordinates from style arithmetic,arbitrary screenshot crops,or reuse
+masked benchmark passes as visible-text proof. Obtain only demonstrated missing
+cohorts/content;do not rerun tooltip pointer cycles to collect heading geometry.
+Native/candidate input differences must stay visible and classified. Whole case
+closure,shared ancestor behavior and final gates are still outstanding.
+
 ### Coherent Icon source/history batch joined without timing churn — October17
 
 Existing combined join now executes the two existing source/history assertions
