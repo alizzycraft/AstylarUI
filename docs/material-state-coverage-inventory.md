@@ -4,6 +4,34 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Icon cursor evidence is computed-token observation plus model,not displayed-cursor capture — October17
+
+Specific question:can the retained16-context cursor report close the two auto/
+default scalar groups as equivalent? Inspection of the authenticated original
+driver establishes that page.evaluate records ownerCursor/hitCursor using
+getComputedStyle plus a text-range hit census. AFTER that browser observation,
+the Node driver calculates effectiveCursor with effectiveBrowserCursor. Thus
+64 targets have measured computed tokens and non-text hit evidence,but their
+matching effectiveCursor values are MODEL outputs,not independently measured
+displayed cursor shapes. Earlier wording about maintained effective results
+must be read with this boundary;no universal auto/default equivalence follows.
+
+Existing owning assertion now pins that exact driver computation and the report's
+explicit OS-pixel/current-equivalence exclusions. It also retains the contrasting
+text-hit control:auto maps to text,default stays default. All original32 side
+observations,actual themes,1887 build receipts and four rejection controls remain;
+focused1/1 passes (2737.1246ms). No frozen report/source was rewritten,no new
+capture or audit framework,and no classification/canonical change.
+
+The two cursor groups remain unresolved at request-equivalence level. Existing
+non-text hit samples support a bounded modeled agreement,not case closure. Any
+future disposition must justify CSS contextual cursor semantics and actual
+reference/candidate target applicability,or obtain genuinely independent cursor
+evidence;rerunning the same helper cannot fill that gap. Higher-impact remaining
+work is exact obligation closure/local paint and shared lifetime evidence,plus
+coherent source-receipt reconciliation for pending Icon/semantic registrations.
+All2311 whole cases remain partial;final gates unchanged.
+
 ### Three Icon alignment groups classified at unequal formatting owners — October17
 
 Question:are the remaining primary alignment scalars normal versus stretch/

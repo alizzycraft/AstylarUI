@@ -478,6 +478,18 @@ test('Icon and blank-root effective cursors agree in verified applied-theme poin
   assert.equal(digest(raw), 'c42ca16d0160bb60a3cc692a44f57feded71e324c6c37d14df2e0c8ba3ee4293');
   const record = JSON.parse(raw);
   for (const receipt of [record.capture.checkpointManifest, ...record.capture.sources]) assert.equal(digest(readFileSync(receipt.file)), receipt.sha256);
+  // The browser measures computed tokens/text hits; effectiveCursor is a model
+  // applied by the Node driver afterward, not a displayed-cursor observation.
+  const driverReceipt = one(record.capture.sources.filter(receipt => receipt.file === 'scripts/audit-material-icon-cursor.mjs'));
+  const driver = readFileSync(driverReceipt.file, 'utf8');
+  assert.equal(digest(Buffer.from(driver)), driverReceipt.sha256);
+  assert.equal(driver.split('observation.effectiveCursor=effectiveBrowserCursor(observation.hitCursor,observation.textAtPoint);').length, 2);
+  assert.match(driver, /ownerCursor:getComputedStyle\(owner\)\.cursor,hitCursor:getComputedStyle\(hit\)\.cursor,textAtPoint/);
+  assert.match(record.scope, /no held\/click,OS cursor pixel capture,current source equivalence or complete case closure/);
+  assert.equal(effectiveBrowserCursor('auto', true), 'text');
+  assert.equal(effectiveBrowserCursor('default', true), 'default');
+  // This counterexample prevents promoting the non-text model agreement into
+  // universal request equivalence. No OS cursor bitmap was captured.
   const manifest = JSON.parse(readFileSync(record.capture.checkpointManifest.file));
   assert.deepEqual(verifyRetainedMaterialBrowserFiles(manifest.provenance.browserFiles),
     { authenticatedFiles: 1887, currentRenderingAccepted: false });
