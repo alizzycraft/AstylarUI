@@ -56,6 +56,15 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep configured-control-focus-20261017 with112 PNGs/112 trees/report and its
+-provenance checkpoint;keep configured-control-focus-{capture,verify,negative-
+controls,case-join}-20261017 stdout/stderr and queued2ffd616445bcfc2f9e0ac180c0cf368e92e29f0d36ba4532ac6360c63a63efd2.
+This closes the demonstrated direct-owner observation gap at56 configured focus
+contexts,not whole-case/current rendering acceptance. The producer source is now
+receipt-bound;do not edit it in place for future capture variants. Original0ee8,
+all historical normalized-focus failures and the live export remain independently
+required. No successful temporary scratch or original evidence was deleted.
+
 Keep inline-reader-provenance-canonical-export-20261017 stdout/stderr and any
 resulting candidate package until independent cold/conservation/compact checks
 establish publication. Preserve accepted0dd7 and prior generations;running

@@ -4,6 +4,47 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Direct configured focus owners captured and joined for56 pending cases — October17
+
+Specific missing witness: normalized primary-host identities did not name actual
+active descendants in seven families. New narrow producer reuses the existing
+performInteraction/target-box/settlement/theme methods via AST extraction plus
+the existing checkpoint,supplemental capture and independent validator. It drives
+the ORIGINAL focus action,not Tab,without fixture/style or corrective-focus edits.
+Its observation-only WeakMap tokens distinguish DOM identities across before,
+after-action and settled snapshots;event targets/ancestry stay raw.
+
+configured-control-focus-20261017 completes56 exact desktop profile/DPR contexts,
+168 paired boundaries,112 trees/112 PNGs. Report SHA
+d48829c26c245336a703943019a651900c3b34fad1d2923994fe94839b266419.
+Independent --verify passes with original action/source/runtime/tree/screenshot
+receipts. Four in-memory controls reject missing/duplicate cases,inconsistent
+focus identity and a forged screenshot receipt;no reports were rewritten.
+Logs configured-control-focus-{capture,verify,negative-controls}-20261017.
+
+Observed:104/112 settled active owners equal selected targets. Eight native chip
+hosts delegate to their chip-0 option BUTTON;all eight candidate cases directly
+target their chip-0 option DIV. All112 active owners remain within their primary
+hosts,and immediate/settled identities agree. Slide-toggle native BUTTON/switch
+versus candidate DIV/switch and expansion native header versus candidate DIV
+remain distinct structures. Button/menu/snackbar/tooltip focus their observed
+BUTTON triggers. No default activation,Tab behavior,role/native equivalence,
+between-snapshot temporal paint or general restoration claim follows.
+
+Existing proposal APIs join56 previously pending focus obligations to partial in
+queued2ffd616445bcfc2f9e0ac180c0cf368e92e29f0d36ba4532ac6360c63a63efd2.
+Loader authenticates13188 dependencies/2311 cases;complete0ee8 is recovered after
+reversing ONLY those56 subrecords (configured-control-focus-case-join-20261017,
+TERMINAL0). Pending focus joins now1741,partial216,inspected-failure40,exclusions314
+IN THIS QUEUE;all2311 whole cases remainpartial/unverified. Other boundaries,
+input equivalence,focus paint and full source/runtime currentness remain open.
+
+The capture uses current readable action against authenticated retained served
+assets,not proof of whole-library current rendering. It is outside the running
+0ee8 export46814 and must not mutate that selected input or trigger another export
+just for publication. Next finish export/cold/conservation,then integrate queued
+focus evidence with the next justified batch and address remaining state/owner gaps.
+
 ### Pending focus population narrowed to56 configured-action contexts — October17
 
 Read-only selected0ee8 census partitions1797 pending focus obligations:
