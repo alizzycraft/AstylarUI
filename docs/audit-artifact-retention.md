@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep inline-reader-provenance-source-section-classification-20261017 failed
+stdout/stderr and source-section-derived-classification-20261017 passing logs.
+The former incorrectly compares a derived motion-report hash to a module hash;
+the latter reconstructs both exact report hashes from authenticated historical
+content and source receipts. No original report was rewritten. Retain the
+complete source-section-delta log and both package/index generations until
+independentcold and publication finish;zero unexplained deltas is not acceptance.
+
 Keep inline-reader-provenance-section-conservation-index-manifest-20261017
 stdout/stderr (TERMINAL0,all80 sections authenticated) and the subsequent
 source-section-delta-20261017 stdout/stderr. Seventy sections match,ten differ;

@@ -26,11 +26,11 @@ comparison48728 terminates0 using the preserved index manifest:both packages
 have80 sections,same membership/order,no additions/removals,70 unchanged. Ten
 changed sections are coverage,summary,discrepancies,controlTypography,
 sourceFindings (explained above),plus sourceFingerprints,controlLineBoxes,
-ownerCaretInputs,reviewedSourceBatchInputs,focusedProofs. The latter five are
-under exact authenticated stream comparison84214 (source-section-delta log),not
-blanket-approved as provenance. First standalone-manifest CLI attempt fails
+ownerCaretInputs,reviewedSourceBatchInputs,focusedProofs. Exact authenticated
+stream comparison84214 terminates0;derived-classification log below explains all
+remaining changes,with zero unexplained section deltas. First standalone-manifest CLI attempt fails
 ENOENT before reading evidence and is retained separately. Original cold process
-14900 remains live (CPU1224.19s),not restarted. Neither
+14900 remains live (CPU1658.08s),not restarted. Neither
 candidate import nor row conservation establishes publication or case closure.
 
 Accepted package:0dd7dce3/index37486eaa (161 source findings/215 proofs).
@@ -57,6 +57,31 @@ would miss the independently confirmed attribute-stage failure. Original final
 gates and equal-input/root-cause contract remain unchanged.
 
 ## Preserved audit chronology
+
+### Complete source/proof section deltas explained without recapture — October17
+
+inline-reader-provenance-source-section-delta-20261017 terminates0 and
+authenticates both complete compressed/decoded payloads while retaining only
+the five previously unexplained sections. Existing content differs in48
+controlLineBoxes module receipts,one ownerCaretInputs module receipt,and two
+reviewedSourceBatchInputs leaves. Module transition is ac3d948a→e77ab729.
+The other leaf is a DERIVED motion-report hash,not a module hash:reconstructing
+the authenticated f8f90799 historical report with current four source receipts,
+then changing only producer back to ac3d948a,reproduces321a9e58 and6d1ed65d
+exactly. No observation or saved report was changed. The initial classifier's
+incorrect module-hash assumption fails and is retained separately.
+
+Source fingerprints preserve all720 previous paths,add only the inline-image
+driver/report,and change eight audit/test files;712 prior files are identical.
+All ten added/changed file receipts match actual current LF-normalized bytes.
+All215 old proof entries remain in original order with unchanged file/status/
+description;five line references move and one inline-image proof is prepended.
+No current renderer/fixture source changed in this fingerprint delta.
+source-section-derived-classification-20261017 terminates0,zero unexplained
+section changes. Earlier row/case conservation and candidate index checks remain
+valid. Independentcold49441 is still live;accepted0dd7 remains unchanged.
+This completes candidate content conservation,not independent verification,
+publication,whole-case inspection or any original final acceptance gate.
 
 ### Coherent inline/reader/provenance export succeeds; independentcold running — October17
 
