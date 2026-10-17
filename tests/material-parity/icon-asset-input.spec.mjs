@@ -17,6 +17,7 @@ import { verifyRetainedMaterialBrowserFiles } from './historical-audit-module-so
 import { effectiveBrowserCursor } from './cursor-metrics.mjs';
 import { compareBottomShadowProfiles } from './shadow-profile-metrics.mjs';
 import { collectIconContextReview, validateIconContextReview, iconContextBaseline, applyIconContextReviews, validateIconContextRows } from './display-request-review.mjs';
+import { restoreBorderContactPolicy } from './semantic-text-transform-registration.mjs';
 
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 
@@ -282,6 +283,25 @@ test('Icon queued history proof receipts remain applicable after unrelated audit
   const observations = output.split(/\r?\n/).filter(line => line.startsWith('# {')).map(line => JSON.parse(line.slice(2)));
   assert.equal(observations.length, 3);
   assert.equal(hash(JSON.stringify(observations)), 'feba24145db5bee76b6564cccc8bd983d69b804b4af300eeb9282b2c52cbbf36');
+  // The old proposal still describes its original recipe/policy. The recipe
+  // has gained root/clipping/font/public-inline evidence;do not call it unchanged.
+  // Bind only these two historical dependencies,not an alternate current reader.
+  const policyFile = 'tests/material-parity/input-equivalence-policy.mjs';
+  const historicalPolicy = Buffer.from(restoreBorderContactPolicy(readFileSync(policyFile)));
+  assert.equal(hash(historicalPolicy), '5cc34579bc381bd5719f32830bef61da71afae3a8cba2185d6566d1d902220e8');
+  assert.throws(() => restoreBorderContactPolicy(readFileSync(policyFile, 'utf8') + '\n// unexplained policy drift'));
+  const joinerFile = 'scripts/join-material-icon-retained-obligations.mjs';
+  const historicalJoiner = execFileSync('git', ['show', '512e9e21:' + joinerFile], { maxBuffer: 4_000_000 });
+  assert.equal(hash(historicalJoiner), 'be820855f1c780a0f778c4286340d0ee1456aac183fb7091ffa828e4c4080713');
+  assert.notEqual(hash(readFileSync(joinerFile)), hash(historicalJoiner));
+  const historicalDependencies = new Map([[policyFile, historicalPolicy], [joinerFile, historicalJoiner]]);
+  const readRetainedDependency = (name, ...args) => {
+    const normalized = String(name).replaceAll('\\', '/');
+    if (normalized.endsWith(proposalFile)) return Buffer.from(JSON.stringify(envelope));
+    for (const [relative, bytes] of historicalDependencies)
+      if (normalized === relative || normalized.endsWith('/' + relative)) return bytes;
+    return readFileSync(name, ...args);
+  };
   envelope.sha256 = hash(JSON.stringify(envelope.review));
   const pointer = JSON.parse(readFileSync('artifacts/material-parity/working-audit/current.json'));
   const indexBytes = readFileSync(`artifacts/material-parity/working-audit/${pointer.generation}/index.json`);
@@ -289,8 +309,7 @@ test('Icon queued history proof receipts remain applicable after unrelated audit
   const coverage = JSON.parse(indexBytes).metadata.coverage;
   const loaded = loadCaseObligationReview(proposalFile, envelope.sha256,
     [...coverage.caseInventory.static, ...coverage.caseInventory.interaction], {
-      read: (name, ...args) => String(name).replaceAll('\\', '/').endsWith(proposalFile)
-        ? Buffer.from(JSON.stringify(envelope)) : readFileSync(name, ...args),
+      read: readRetainedDependency,
     });
   assert.equal(loaded.cases.length, 2311); assert.equal(loaded.evidenceFingerprints.length, 13151);
   assert.equal(loaded.inspectionComplete, false); assert.equal(loaded.currentRenderingAccepted, false);
@@ -299,6 +318,7 @@ test('Icon queued history proof receipts remain applicable after unrelated audit
   assert.equal(hash(readFileSync(file)), hash(current));
   t.diagnostic(JSON.stringify({ originalReview: id, changedReceiptFile: file, receiptOccurrences: 60,
     unchangedProofBodies: 3, repeatedProofSummariesIdentical: true, authenticatedDependencies: 13151,
+    historicalDependencyFiles: [...historicalDependencies.keys()], currentRecipeEquivalenceClaimed: false,
     cases: 2311, transientValidationOnly: true, proposalWritten: false, currentRenderingAccepted: false }));
 });
 

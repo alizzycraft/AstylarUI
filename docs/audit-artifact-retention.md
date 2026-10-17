@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep icon-queued-history-{current-dependencies,historical-dependencies}-20261017
+stdout/stderr. The first changed-recipe failure remains original evidence;the
+successful replay explicitly separates historical recipe/policy bytes from
+current proof executions. Originalf43 proposal and Git512e9e21 remain required.
+No saved proposal/capture was overwritten or removed.
+
 Keep svg-registration-historical-population-20261017 stdout/stderr. The original
 147/148 finding conservation and SVG mutation controls execute at an explicitly
 authenticated historical boundary,with actual162 registry kept separate. Original

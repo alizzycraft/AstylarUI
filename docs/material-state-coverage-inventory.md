@@ -4,6 +4,36 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Queued-history dependency boundary reconciled without claiming unchanged recipe — October17
+
+Existing focused assertion first fails honestly in icon-queued-history-current-
+dependencies-20261017:the changed joiner recipe SHA6da40058 does not match old
+be820855. Source-receipt census finds exactly THREE changed files among35 source
+files:Icon suite,policy and joiner. The three referenced historical test bodies
+remain byte-identical to512e9e21 and independently rerun to the originalfeba2414
+summary;sixty suite receipts are still refreshed only transiently in memory.
+
+The savedf43 proposal describes its ORIGINAL recipe/policy,not the later root/
+clipping/font/inline additions. The EXISTING test now explicitly authenticates
+512e9e21 joiner bytes tobe820855 and uses the already-proven policy reversal to
+original160-policy5cc34579. Only those TWO historical dependency reads are bound;
+all other dependency bytes remain actual current reads. No claim that today's
+recipe is unchanged,alternate production reader or saved proposal rewrite.
+Unexpected policy drift rejects through the exact-source reversal.
+
+icon-queued-history-historical-dependencies-20261017 passes1/1 (31829.2551ms):
+all13151 dependencies/2311 IDs authenticate,both acceptance flags remainfalse,
+and restoring the60 transient receipts recovers the complete original review.
+Original failure and successful replay logs are both retained. No capture or
+canonical export. Queued68af's raw test receipt remains prior-stage evidence.
+
+Before broader focused-suite verification,inspect the existing evidence reader's
+batch hot path:loadFindingEvidence currently filters/splits every requested ID
+for every parsed value,which made the49-row extraction require a long live wait.
+Use its EXISTING integrity/multi-ID tests before any bounded lookup optimization;
+do not remove complete-row hashing or source receipt checks. ALL2311 cases
+remain partial and all original final gates remain required.
+
 ### Original SVG147-to148 conservation assertion restored at explicit historical boundary — October17
 
 The existing SVG registration test's148 count was stale,not an unexplained loss
