@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep badge-exposure-case-join-20261017 stdout/stderr and queueda00b769f with
+its original176da706 predecessor. The joiner binds exact52 case-context/input
+signatures,report/checkpoint/fresh trees and independent verification;it must
+remain receipt-stable. Initial-state AX observations do not replace original
+configured action evidence. Existing loader/conservation succeeds without any
+original deletion,canonical publication or accepted-pointer update.
+
 Keep badge-exposure-contexts-20261017 report/32 input trees and separate
 -checkpoint,plus capture and independent-verify stdout/stderr. These contain
 16 actual-theme count-exposure failures and five rejection controls,not successful

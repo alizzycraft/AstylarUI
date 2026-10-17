@@ -4,11 +4,13 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
-New standalone Badge exposure evidence:16 verified actual-theme/physical contexts,
-64 label/count targets,16 native-hidden versus candidate-exposed count failures.
-Independent verifier rejects five forged controls. Exact report/source receipts
-and limitations are below. Not yet joined to case obligations or canonical source;
-no whole-case closure or current-source rendering claim follows.
+Latest queued reviewa00b769f preserves176da706 shared-heading work and adds52
+bounded Badge AX-context/input joins. All16 actual-theme/physical contexts and
+208 old/fresh label/count signatures match;13912 dependencies authenticate.
+The observed count-exposure failures remain initial-state evidence,not inspected
+configured interaction boundaries or new causes. Complete176da706 recovers;
+all2311 cases remainpartial/unverified. Frozen58ec export and acceptedcc890 stay
+unchanged. Exact observations,controls and receipts are below.
 
 New queued shared-heading review176da706 adds exact recorded frame-sibling/raw
 text/four-font-input mappings for2291 cases (4582 pairs),reusing20 Icon cases'
@@ -53,6 +55,32 @@ would miss the independently confirmed attribute-stage failure. Original final
 gates and equal-input/root-cause contract remain unchanged.
 
 ## Preserved audit chronology
+
+### Badge initial AX observations bound to exact case inputs without state promotion — October17
+
+Question:can the sixteen observed physical contexts be joined to configured
+Badge cases,or do retained semantic inputs differ? Existing save/load proposal
+mechanisms authenticate predecessor176da706 and all original trees. Exact raw
+label/count text,type,key and recorded role/name/hiding/IDREF/live/tab-index
+inputs agree between each retained case and its fresh physical-context tree:
+52 cases,16 contexts,208 side/target signature comparisons. A forged native
+aria-hidden value is detected. This is physical/input applicability,not replay
+of the configured focus/hover/held/activate action boundary.
+
+badge-exposure-case-join-20261017 terminates0 with review
+a00b769f09c0100a4437adca30c53002759d6de96021ad26bb1dfa8d37f995f5.
+Existing loader authenticates2311 cases/13912 dependencies. Removing ONLY52
+actualBadgeCountExposure children recovers the complete176da706 predecessor;
+all parent remaining-work/disposition fields and acceptedcc890 pointer conserve.
+The children explicitly retain native-hidden/candidate-exposed initial count
+failures and both original/fresh tree receipts. Whole-case/current-rendering
+flags remainfalse. No canonical source definition or existing proof was edited.
+
+The old single-context evidence remains original;new observations extend its
+cohort,not its cause or acceptance scope. Next address unsampled component
+semantic/paint owners and source/runtime applicability;do not recapture these
+same sixteen contexts merely to publish the join. Running coherent export still
+uses58ec and must complete its own independent checks before publication.
 
 ### Badge count exposure extends the original one-context observation — October17
 
