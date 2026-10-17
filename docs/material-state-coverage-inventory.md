@@ -4,6 +4,14 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+New queued shared-heading review176da706 adds exact recorded frame-sibling/raw
+text/four-font-input mappings for2291 cases (4582 pairs),reusing20 Icon cases'
+40 already inspected chains. All36 families/4622 pairs are accounted for within
+this narrow input boundary. Existing loader validates2311 cases/13876 dependencies;
+five forged-input controls reject,complete58ec predecessor recovers,and accepted
+pointer stays unchanged. All2311 whole cases remainpartial/unverified. This queue
+is outside the running frozen58ec export;do not restart that job to include it.
+
 Accepted package:cc89031a/index8d185f4b (162 source findings/216 proof anchors).
 Export,independentcold49441,complete content conservation and accepted-import16196
 all terminate0. Accepted index is byte-identical to the verified candidate index.
@@ -39,6 +47,38 @@ would miss the independently confirmed attribute-stage failure. Original final
 gates and equal-input/root-cause contract remain unchanged.
 
 ## Preserved audit chronology
+
+### Shared heading recorded-input mapping across the configured inventory — October17
+
+Question:do corresponding frame-sibling headings preserve exact raw content,
+recorded parent/type and family/size/weight/style inputs,or is an independent
+heading-input mismatch hidden behind shared layout/paint symptoms? Smallest
+decisive check reuses original paired trees and existing Icon chains;no browser
+capture or renderer/fixture edit. Initial shared-heading-input-mapping-20261017
+fails because the new joiner assumes inheritedHeadingInputs instead of the
+actual retainedIconRecordedHierarchy.typographyInputConsumption.headings field.
+This is a producer lookup failure,not missing evidence or a renderer failure.
+
+Corrected shared-heading-input-mapping-corrected-20261017 terminates0. Review
+176da70647fdf3ed3ca67b4b15528a9665c4ef54c6dc1afe04dd55037a2346a8 adds2291
+records and reuses20 Icon records. Exact raw text,main/p/h1 parentage,leaf nodes,
+requested uppercase/capitalize and four retained font inputs agree within these
+trees. Local font-family omissions reach the recorded parent family at all three
+style stages. Synthetic empty document record is not an authored extra wrapper;
+the separately classified outer-host main issue is not waived. Five mutations
+(whitespace,parent,local family,font size,transform) reject. Existing loader
+authenticates13876 dependencies;removing ONLY the new subrecords restores complete
+58ec5402. Original remaining-work strings and all acceptance flags stay unchanged.
+
+This establishes recorded input correspondence,not physical font selection,
+used line boxes,anonymous/pseudo/control descendants,AX names,paint or current
+rendering. Existing transformed-AX failure and other causes remain. Source/error
+preservation is checked by shared-heading-failed-source-recovery-20261017:reverse
+the three corrected field references to recover exact original sourceSHA
+29c399aa54b849dd6163374de23bbcf800a90cd1a7154b0db07a6ae7b1218ea9.
+No original report or failed log was overwritten. Acceptedcc890 remains unchanged;
+running export8288 still uses frozen58ec. Next:finish that same export and its
+independent verification,then continue component-descendant/semantic input gaps.
 
 ### Coherent attribute-focus batch export launched after source checks — October17
 

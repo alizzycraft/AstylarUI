@@ -56,6 +56,18 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep shared-heading-input-mapping-20261017 failure stdout/stderr,corrected and
+failed-source-recovery log pairs,and queued176da706 with original58ec. Initial
+script source is exactly recoverable from the corrected joiner by replacing
+prior.typographyInputConsumption.headings with prior.inheritedHeadingInputs and
+retainedIconRecordedHierarchy.typographyInputConsumption.headings with
+retainedIconRecordedHierarchy.inheritedHeadingInputs (three references total);
+recovery asserts originalSHA29c399aa54b849dd6163374de23bbcf800a90cd1a7154b0db07a6ae7b1218ea9.
+New proposal binds corrected source and original paired trees;do not change its
+producer in place. This is narrow recorded-input evidence,not successful scratch,
+new browser output or permission to remove predecessors. Frozen58ec export stays
+separate;acceptedcc890 pointer and all original/failure evidence remain intact.
+
 Keep live attribute-focus-coherent-canonical-export-20261017 stdout/stderr and
 any candidate output separately from acceptedcc890/index8d185f4b. Export8288
 uses frozen source95afed0b/selected58ec5402. No candidate or live process permits
