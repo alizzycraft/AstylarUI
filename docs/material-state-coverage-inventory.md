@@ -4,6 +4,35 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Coherent Icon/border export succeeded; independent cold comparison running — October17
+
+Export43145/worker24396 is TERMINAL0,not a current wait. It validated all436/436
+static and1875/1875 interaction cases,8483 groups/389202 occurrences and161 source
+findings;inputEquivalent remainsfalse. Complete at3002735.4042ms. Evidence session
+records1 collector,10 memory hits,1 disk hit,0 invalidated,14365 files and
+1252426145 bytes read/reverified. Progress output was buffered until process exit;
+earlier empty log reads were not proof of an absent build phase.
+
+Candidate gzip0dd7dce32ed7c049ab32a0909ca40d30e161e8a255756b3cfbef991c8c0ec454
+is74254915 compressed bytes;decoded2303158548 bytes/SHA
+42c425827608d38cd49966b4e8564264e5963087ef80e9daff1ca9c377d7e2e0.
+Readable report explicitly retains2311 partial joins,zero unjoined and neither
+inspection completion nor current rendering acceptance. Selectedb1a96a coherent
+review and both registered source findings are included,not merely standalone.
+
+Logs coherent-icon-border-export-20261017 stdoutSHA708441cca3800128f0eb548ef4666faaa67a14391fdde909c93d759ba64c8a48,
+stderrSHA03611da1c09d7bbc8b6e6d75bb2b8d1e9f9c308ec87799734edf978db08d8688.
+Independent COLD --check is now running under session46678,launcher22964/
+worker24544;log coherent-icon-border-independent-cold-20261017 stdout/stderr.
+Actual process and same handle verified live. Producer/helper/test/review inputs
+remain frozen. No second export or current browser capture launched.
+
+Candidate files are NOT accepted publication. Canonical accepted evidence/index
+remainf663/bc481 until independent cold package/readable comparison,compact
+import/verification and conservation succeed. Do not commit the candidate package
+as certified or use output similarity as input acceptance. All2311 whole-case
+closures and original final harness/browser/release gates remain open.
+
 ### Coherent Icon/border review validated and selected for next export — October17
 
 Combined join completes TERMINAL0 in icon-coherent-border-obligation-join-20261017

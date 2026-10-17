@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep coherent-icon-border-export-20261017 stdout/stderr and subsequent
+coherent-icon-border-independent-cold-20261017 stdout/stderr. Candidate0dd7dce3
+is an exported integration candidate,not accepted evidence until cold comparison
+and compact import/verification succeed. Keep acceptedf663/bc481 and original
+predecessors;do not clean them up while the candidate is being validated.
+
 Keep icon-coherent-border-obligation-join-20261017 and icon-coherent-alignment-
 integration-20261017 stdout/stderr,and queuedb1a96a37847b439cec17bcc8ab8452bc109087d12ea6466a69152dcd876743c7.
 This is the coherent20-Icon-case/public-border evidence batch,not a new capture.
