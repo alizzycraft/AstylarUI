@@ -37,7 +37,7 @@ Accepted package:0dd7dce3/index37486eaa (161 source findings/215 proofs).
 Registered source:162/216. Export46814 terminates0;candidatecc89031a is NOT accepted
 publication. Independentcold session49441 is live with selected case review0ee8;
 freeze its producer/evidence inputs until cold/conservation finish.
-Latest outside-export case queueb6da4bb7 extends1b34 with52 Badge recorded-node
+Latest outside-export case queue649143f5 extends1b34 with52 Badge recorded-node
 correspondences (364 pairs),preserving56 focus/113 pointer observations and child
 receipts. All2311 cases remainpartial/unverified;zero full closures.
 
@@ -58,6 +58,25 @@ would miss the independently confirmed attribute-stage failure. Original final
 gates and equal-input/root-cause contract remain unchanged.
 
 ## Preserved audit chronology
+
+### Badge correspondence guards exact raw text; no whitespace normalization — October17
+
+Review caught trimmed own-text in the initial inventory guard. Executing the
+actual inspect function from Git286b2bd4 accepts a forged trailing space on the
+native count (badge-recorded-hierarchy-whitespace-guard-gap-20261017,TERMINAL0).
+This is a validator weakness,not an observed capture difference or renderer bug.
+The guard now compares raw ownText exactly and rejects native trailing/leading
+whitespace mutations in addition to all five existing structural controls.
+
+badge-recorded-hierarchy-exact-text-20261017 terminates0:all52 unchanged paired
+trees pass exact content/parent/order/type/ID guards,364 mappings,seven rejection
+controls. Proposal649143f5b98cd6c344e9a59fe4fded12e295f1d0eb5fe7844cb57a87c93a7d58
+binds2311 cases/13868 dependencies and recovers complete1b34 predecessor exactly
+after removing only52 added child records. It replaces preliminaryb6da as the
+current queued Badge review;oldb6da retains Git286b2bd4 producer provenance and is
+not claimed applicable to the tightened producer. No capture was changed.
+All original input-style remaining work and all2311 partial dispositions remain.
+Accepted0dd7,candidatecc890,selected0ee8 and livecold49441 remain unchanged.
 
 ### Badge recorded-node mapping joins52 exact cases — October17
 

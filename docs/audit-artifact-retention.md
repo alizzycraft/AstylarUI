@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep badge-recorded-hierarchy-whitespace-guard-gap-20261017 and exact-text-
+20261017 stdout/stderr. Preliminaryb6da proposal's original source is preserved
+in Git286b2bd4;do not validate it as if it captured the later tightened guard.
+Current queued649143f5 preserves exact raw text with seven rejection controls;
+no captured whitespace was normalized or report rewritten. Both proposal stages,
+their logs and1b34 predecessor remain required,not successful scratch.
+
 Keep badge-recorded-hierarchy-join-20261017 stdout/stderr and proposalb6da4bb7
 with its receipt-bound joiner source. It adds52 recorded-node inventories,not
 new captures or case acceptance. Preserve1b34 predecessor and all referenced

@@ -30,7 +30,7 @@ function inspect(reference, candidate) {
     assert.equal(right.authored.id, ids[index]);
     assert.equal(left.parent, index === 0 ? null : key.slice(0, key.lastIndexOf('/')));
     assert.equal(right.parent, index === 0 ? 'root' : left.parent.replace('frame', 'root/0'));
-    assert.equal(left.ownText.trim(), texts[index]);
+    assert.equal(left.ownText, texts[index]);
     assert.equal(right.authored.textContent ?? '', texts[index]);
     assert.ok(reference.styles[left.style]);
     for (const stage of ['normalResolvedStyle', 'interactionResolvedStyle', 'resolvedStyle']) assert.ok(right[stage]);
@@ -57,6 +57,8 @@ for (const row of review.groups.filter(g => g.family === 'badge')) {
     for (const mutate of [p => p.reference.nodes.pop(), p => p.astylar.nodes.push(p.astylar.nodes[1]),
       p => { p.astylar.nodes[7].parent = 'root/0'; },
       p => { p.reference.nodes[6].ownText = '5'; },
+      p => { p.reference.nodes[6].ownText = '4 '; },
+      p => { p.reference.nodes[5].ownText = ' Notifications'; },
       p => { p.astylar.nodes[0].authored.type = 'div'; }]) {
       const forged = structuredClone(trees); mutate(forged);
       assert.throws(() => inspect(forged.reference, forged.astylar)); negativeControls++;
@@ -74,6 +76,7 @@ for (const row of review.groups.filter(g => g.family === 'badge')) {
   assert.equal(row.inspection, 'partial'); assert.equal(row.currentRendering, 'unverified');
 }
 assert.equal(original.length, 52);
+assert.equal(negativeControls, 7);
 const pointerBytes = readFileSync(`${base}/current.json`), pointer = JSON.parse(pointerBytes);
 const indexBytes = readFileSync(`${base}/${pointer.generation}/index.json`);
 assert.equal(hash(indexBytes), pointer.indexSha256);
