@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep list-mapped-semantic-requests-20261018 stdout/stderr with77d90ece paired
+trees and existing recorded-node mapping. All52 full attribute/request maps and
+156 rejection controls are compact queued evidence,not an accepted full proposal.
+Keep attribute-focus-readable-conservation-20261018 logs for candidate publication:
+the exact full predecessor Markdown recovers after two additions/four line shifts.
+Neither check makes the original evidence or pending cold result disposable.
+
 Keep public-legacy-clip-current-owner and current-owner-trim-20261018 logs.
 Initial newline-boundary mismatch remains a procedure failure;corrected check
 authenticates all17 complete owning declarations against the report-bound

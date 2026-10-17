@@ -1,8 +1,33 @@
 # Material comparison/state coverage inventory
 
-## Current integration pointer — October17
+## Current audit pointer — October18
 
-This pointer supersedes the historical checkpoint chronology immediately below.
+Acceptedcc890/index8d185f4b remains162 findings/216 proofs. Candidatecd867bbe/
+index551d3c8f has163/217 with selected58ec review;all80 sections and readable
+report conserved. Cold8423 remains the original pending acceptance check;do not
+restart or publish before terminal success. Latest full queued review77d90ece
+and later compact progress/clip/list evidence are outside that candidate.
+All2311 configured cases remainpartial/unverified,zero whole-case closures.
+Priority:finish cold/import/publication,then case input/semantic/interaction and
+local-paint gaps;source applicability and original final gates remain required.
+
+New compact list-mapped-semantic-requests-20261018 evidence accounts for every
+recorded mapped descendant in52 cases. Both containers requestaria-disabled=false;
+candidate omits104 per-row false requests present on native rows.156 altered-
+request controls reject. Equal aggregate text does not establish equal authored
+semantic requests;no disabled behavior,AX/AT effect,wrapper neutrality,current
+bridge delivery or new core defect inferred. Keep this bounded evidence for the
+next coherent join;no new full proposal/export. The remaining recorded owner
+requests and full attributes are retained,not normalized away.
+
+attribute-focus-readable-conservation-20261018 verifies complete prior Markdown
+after reversing exactly one new finding row,one proof description and four
+reference-line shifts. No unrelated readable-report change or acceptance claim.
+
+### Previous pointer notes — preserved chronology, not live status
+
+The entries below describe their recorded checkpoints;the current pointer above
+supersedes their live-job and next-action wording.
 
 October18 clip-owner applicability:public-legacy-clip-current-owner-trim-20261018
 terminates0. All12 complete resolver methods and five complete top-level owners
