@@ -4,7 +4,15 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
-Latest queued reviewaaab24ed preserves648f45e7 and records authored async-request
+Latest queued reviewd7a99303 preservesaaab24ed and links270 cases/1132 text owners
+to retained public font lifecycle evidence after existing current-owner census
+passes1/1:88 linked modules,1583 equal current members,one explicit inspection
+diagnostic difference. Four public DPR1 cohorts are reused,not rerun as270 case
+executions. Historical timing,profile/font metrics and broader lifetime/wiring
+remain open. Wholeaaab24ed recovers;14161 dependencies authenticate. All2311
+whole cases remainpartial/unverified;acceptedcc890/frozen58ec stay unchanged.
+
+Queued reviewaaab24ed preserves648f45e7 and records authored async-request
 applicability for270 passive cases/2784 nodes. No image/media/custom Material
 renderer requests,URL styles or registered plugin lifecycle hooks;four new-
 request controls reject. Shared fonts for1132 text owners and root/session/
@@ -86,6 +94,36 @@ would miss the independently confirmed attribute-stage failure. Original final
 gates and equal-input/root-cause contract remain unchanged.
 
 ## Preserved audit chronology
+
+### Existing shared font lifecycle proof gains current-owner and case applicability — October17
+
+Question:can the original public delayed-font/remount evidence still inform these
+passive text owners,or has owning behavior drifted? Reuse existing unmodified
+current-runtime-member/linker assertion,not a fresh font browser run. Focused
+passive-font-owner-current-applicability-20261017 passes1/1,zero skips,
+16145.1197ms test/17894.7165ms terminal;logSHA
+d7830eef616cccc57dd009690fec9b6f4292ed4d201eebc48e20eac01187b73d.
+It authenticates88 captured/installed linked modules and1583 current members;
+only the previously explicit inspectCurrentDocumentStyles diagnostic differs.
+This is member/linker applicability,not all current-source metadata/wiring or
+whole-browser acceptance. Do not repeat the known font probe unchanged.
+
+Original font-lifetime-public13a14bca and font-remount-peer-live-resources9a61af6b
+logs authenticate unchanged. Four public DPR1 cohorts remain initial,later,
+disposed-later,remount-peer;cleanup snapshots show retired/live/peer resources
+and textures cleared. The shared FontFaceSet owner is in src/lib/astylar.ts.
+Exact existing public evidence,owning source/test,inspector boundary and recovered
+runtime-map receipts are joined to the270 already-scoped cases/1132 text owners.
+No historical Material font timing,per-profile/font-metric coverage,repeated-
+remount plateau,native lifetime,paint or exact-case font-race execution is inferred.
+
+passive-font-owner-case-applicability-20261017 terminates0;new review
+d7a99303842832c2fda76000058050d5a11ad5b6f5da74e0a6a417142b433e47 adds ONLY270
+sharedPublicFontOwnerEvidence children. Wholeaaab24ed and acceptedcc890 pointer
+recover unchanged;existing loader validates2311 cases/14161 dependencies. Shared
+fonts/root/session work remains applicable and parent remaining-work fields stay
+open. No new capture,framework,source definition,renderer/fixture edit or case
+closure. Frozen export worker20224 remains confirmed live with advancingCPU.
 
 ### Passive leaf-specific async applicability narrowed without claiming no asynchronous work — October17
 

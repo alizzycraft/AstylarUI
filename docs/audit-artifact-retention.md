@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep passive-font-owner-current-applicability and passive-font-owner-case-
+applicability-20261017 stdout/stderr with queuedd7a99303/aaab24ed. Original public
+font13a14bca/remount9a61af6b logs and recovered runtime map remain required,not
+superseded captures. Existing owner census is reused without new font/browser
+capture or successful scratch. Bounded shared-source applicability does not waive
+historical timing,current metadata/wiring or complete case-lifetime requirements.
+
 Keep passive-async-request-applicability and passive-async-authored-object-guard-
 20261017 stdout/stderr with queuedaaab24ed/648f45e7. Original report/registry/tree
 receipts remain required;no capture,scratch or deletion occurred. Authored
