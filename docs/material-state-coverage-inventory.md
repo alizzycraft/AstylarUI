@@ -4,6 +4,30 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Activation raw capture running with exact listener and unique state paths — October17
+
+Missing maintained reference listener is resolved by extracting the original
+openInteractionPage callback from current runner AST,not a new event schema.
+Candidate events are cleared through the existing benchmark hook. Recipe records
+whole runner/listener hashes and the complete frozen base graph. Focus-selector
+candidate is explicitly NOT described as a pointer-hit witness; raw maintained
+events,additional DOM event descriptors and store state are kept separately.
+
+Listener-bound attempt then fails exclusive publication at the second state:
+focus-only filename omitted state and collided. Preserve configured-control-
+activation-capture-bound-20261017 and its first paired evidence;source03b0a10c
+is retained in Git. New recipe includes state plus case-key digest in filenames
+and rejects duplicate case IDs/stems before launch. Fresh distinct run now records
+both activate/activate-leave without overwrite;it is LIVE session30320,not a
+complete report. No failed directory reused. First missing-listener source is
+595e34f7;113-versus112 preflight remains original failure evidence.
+
+Next poll30320 and independently verify the complete113-case report,including
+recipe and source receipts,then classify observations and join only exact cases.
+Do not claim complete raw event parity or current rendering from this capture.
+Existing export46814/18880 remains separatelylive against0ee8;its inputs stay
+frozen. Queued56-focus2ffd and accepted0dd7 remain unchanged.
+
 ### Activation capture preflight exposes exact cohort and listener dependency — October17
 
 Remaining activation census:371 pending activate/activate-leave anchors across

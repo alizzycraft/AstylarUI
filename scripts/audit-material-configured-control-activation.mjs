@@ -20,7 +20,11 @@ function replace(before, after) {
 replace("const script = 'scripts/audit-material-configured-control-focus.mjs';",
   "const script = 'scripts/audit-material-configured-control-activation.mjs';");
 replace("families.includes(c.family) && c.state === 'focus'", "families.includes(c.family) && ['activate', 'activate-leave'].includes(c.state)");
-replace('assert.equal(cases.length, 56);', 'assert.equal(cases.length, 113);');
+replace('assert.equal(cases.length, 56);', `assert.equal(cases.length, 113);
+assert.equal(new Set(cases.map(c => materialCaseKey('interaction', c))).size, cases.length);
+assert.equal(new Set(cases.map(c => [c.family,c.profile,c.viewport.id,c.state,hash(materialCaseKey('interaction', c)).slice(0,12)].join('-'))).size, cases.length);`);
+replace('${c.family}-${c.profile}-${c.viewport.id}-${mode}',
+  "${c.family}-${c.profile}-${c.viewport.id}-${c.state}-${hash(materialCaseKey('interaction', c)).slice(0,12)}-${mode}");
 replace('&interaction=focus', '&interaction=${c.state}');
 replace("for (const type of ['focus', 'blur', 'focusin', 'focusout'])", "for (const type of ['focus', 'blur', 'focusin', 'focusout', 'pointerdown', 'pointerup', 'click', 'input', 'change'])");
 replace('function installObserver() {', 'function installFocusObserver() {');

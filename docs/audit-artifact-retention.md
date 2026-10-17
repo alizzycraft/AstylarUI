@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep configured-control-activation-capture-bound-20261017 stdout/stderr and its
+incomplete directory/checkpoint. Exclusive writes caught a cross-state filename
+collision after one paired case;producer03b0a10c is recoverable in Git. The fresh
+configured-control-activation-distinct-20261017 capture and its -provenance,
+capture-distinct stdout/stderr are live,not accepted or disposable scratch.
+Preserve all earlier preflight/listener failures separately;no path was reused.
+
 Keep configured-control-activation-capture-20261017 stdout/stderr (113-versus112
 preflight) and configured-control-activation-capture-complete-20261017 stdout/
 stderr with its incomplete directory/provenance checkpoint (missing maintained
