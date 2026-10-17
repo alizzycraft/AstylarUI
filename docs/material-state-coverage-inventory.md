@@ -4,39 +4,12 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
-Latest conservation checkpoint: candidate-only index verification succeeds with
-index8d185f4b and accepted0dd7 pointer unchanged. Complete-row comparison verifies
-all shard byte lengths/hashes:48548 predecessor rows versus48549 candidate rows,
-48338 unchanged at the same section/ordinal,210 changed,one added,no removals.
-Of those210,161 are source-finding ordinal shifts:all161 original complete-row
-hashes remain present in the candidate source multiset. The remaining49 changed
-rows are now explained:48 button controls change ONLY normalizationReconciliation
-currentModuleSha256 ac3d948a→e77ab729;one button scalar changes ONLY48 linked
-controlProofSha256 leaves,each equal to the exact old/new complete control-row
-hash. Measured values,classifications and all other row content are unchanged.
-Row-conservation,row-delta and row-delta-classification logs (all prefixed
-inline-reader-provenance-,dated20261017) terminate0. Metadata comparison changes
-only coverage.inspectionEvidence and summary.sourceFindings161→162. Existing
-case validator plus exact saved review-envelope binding authenticates all2311
-case rows to b1a96a/0ee8 respectively;all remainpartial,current acceptancefalse.
-All other metadata is deeply equal. Case-metadata-envelope-binding log terminates0;
-the earlier attempt hashed the storage envelope instead of its review and failed,
-retained as procedure failure,not evidence corruption. Existing section digest
-comparison48728 terminates0 using the preserved index manifest:both packages
-have80 sections,same membership/order,no additions/removals,70 unchanged. Ten
-changed sections are coverage,summary,discrepancies,controlTypography,
-sourceFindings (explained above),plus sourceFingerprints,controlLineBoxes,
-ownerCaretInputs,reviewedSourceBatchInputs,focusedProofs. Exact authenticated
-stream comparison84214 terminates0;derived-classification log below explains all
-remaining changes,with zero unexplained section deltas. First standalone-manifest CLI attempt fails
-ENOENT before reading evidence and is retained separately. Original cold process
-14900 remains live (CPU1658.08s),not restarted. Neither
-candidate import nor row conservation establishes publication or case closure.
-
-Accepted package:0dd7dce3/index37486eaa (161 source findings/215 proofs).
-Registered source:162/216. Export46814 terminates0;candidatecc89031a is NOT accepted
-publication. Independentcold session49441 is live with selected case review0ee8;
-freeze its producer/evidence inputs until cold/conservation finish.
+Accepted package:cc89031a/index8d185f4b (162 source findings/216 proof anchors).
+Export,independentcold49441,complete content conservation and accepted-import16196
+all terminate0. Accepted index is byte-identical to the verified candidate index.
+Selected case review0ee8 retains436 static/1875 interaction cases;all2311 remain
+partial/unverified. No whole-case inspection,current rendering or final-gate
+acceptance follows. Earlier live/candidate pointers below are historical.
 Latest outside-export case queue649143f5 extends1b34 with52 Badge recorded-node
 correspondences (364 pairs),preserving56 focus/113 pointer observations and child
 receipts. All2311 cases remainpartial/unverified;zero full closures.
@@ -50,14 +23,41 @@ test/proof inventory registration is explicitly pending;no producer/renderer
 change or extra canonical rebuild. Do not confuse this source review with the
 2311-case obligation proposals.
 
-Next:finish the live integration and independent verification;then register the
-new cause and queued observations in a coherent batch. Remaining shared gaps:
+Next:register the new cause and queued observations in a coherent batch;do not
+rebuild the unchanged accepted package for prose. Remaining shared gaps:
 descendant/AX/input ownership,event/default-action classification,local paint,
 source/runtime validity and complete case dispositions. Root-only focus repairs
 would miss the independently confirmed attribute-stage failure. Original final
 gates and equal-input/root-cause contract remain unchanged.
 
 ## Preserved audit chronology
+
+### Inline/reader/provenance batch independently verified and published — October17
+
+Originalcold49441 terminates0 without restart. Log inline-reader-provenance-
+independent-cold-20261017 records complete2963627.9677ms (49.39min),two collectors,
+ten memory hits,zero disk hits/invalidations,14371 files and1365047802 bytes both
+read and reverified. The same named launcher/selected0ee8 checks the generated
+canonical package;no acceptance flag/reference/threshold changed during its run.
+
+Accepted-import16196 terminates0,whole-index verification matches independently
+checked candidate index8d185f4b443f67bb0e11e19372d02154f13b51c02c11a2809d1ff53f61b2007a.
+Packagecc89031af37771133ec134e84fe92df86627d6d1fe1819b81290e254e6c14e2a
+has162 findings/216 proofs,8483 groups,39904 controls,389202 occurrences and zero
+unresolved scalar attribution. InputEquivalent=false;all2311 casespartial.
+Manifest/gzip/Markdown diff reviewed:one finding/proof,five moved proof lines and
+package hashes/sizes only. This is accepted audit evidence,not rendering parity.
+
+Complete conservation logs authenticate48548→48549 compact rows:48338 identical
+at the same ordinal,161 old source rows preserved after ordinal shifts,48 button
+module-receipt changes plus one scalar's48 links,no removed rows. All80 top-level
+sections retain membership/order;70 identical,ten changed and fully explained.
+Metadata changes only selected case reviewb1a96a→0ee8 and source count161→162;
+all2311 exact rows bind saved reviews and remainpartial. Earlier failed manifest,
+review-envelope and derived-hash procedure attempts remain preserved,not passes.
+Accepted0dd7 predecessor and candidate-validation namespace remain retained for
+their conservation references. Later649143f5/3ccb queues are NOT folded in.
+Original unfiltered audit/browser/release gates and full scope remain unchanged.
 
 ### Badge correspondence guards exact raw text; no whitespace normalization — October17
 

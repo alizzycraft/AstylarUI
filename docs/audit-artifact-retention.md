@@ -56,6 +56,15 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Current accepted inline/reader/provenance package iscc89031a/index8d185f4b after
+independentcold49441 and accepted-import16196 both terminate0. Keep both log pairs,
+all complete row/section/case conservation logs and earlier procedure failures.
+Accepted index is byte-identical to candidate-validation index;both logical
+locations currently remain for reproducible conservation references. Old0dd7
+package/index remains predecessor evidence,not an alternative current result.
+Later649143f5/3ccb queues are separate;publication does not supersede them or
+authorize original/failure deletion. Earlier live/candidate notes are historical.
+
 Keep badge-recorded-hierarchy-whitespace-guard-gap-20261017 and exact-text-
 20261017 stdout/stderr. Preliminaryb6da proposal's original source is preserved
 in Git286b2bd4;do not validate it as if it captured the later tightened guard.

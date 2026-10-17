@@ -1,10 +1,11 @@
 # Material audit: evidence-led implementation priorities
 
-Current evidence pointer (October17):accepted package0dd7dce3/index37486eaa has
-161 source findings/215 proof anchors. Working registered source is162/216;
-selected0ee8 is in the live export,while queued1b34 adds56 direct focus and113
-pointer observations with authenticated child receipts. All2311 cases remain
-partial/unverified. Historical checkpoints below are not current acceptance.
+Current evidence pointer (October17):accepted packagecc89031a/index8d185f4b has
+162 source findings/216 proof anchors. Original independentcold49441 and accepted
+import16196 terminate0 with full content conservation. Selected0ee8 is published;
+queued649143f5 adds56 direct focus/113 pointer observations plus52 Badge recorded
+hierarchies. All2311 cases remainpartial/unverified. This is audit publication,
+not current rendering/final acceptance. Historical pointers below are superseded.
 
 New confirmed public attribute-stage focus defect (October17):on unchanged
 documents,DIV/SPAN tabindex0 controls first blur synchronously inside
