@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep badge-current-history-lineage and badge-rule-history-case-join-20261017
+stdout/stderr with queued5357efed/4be737a3. Logs retain exact recipes,current/Git
+source hashes,complete three-rule text/tokens and old/current authoring lines.
+Git2f440115/48c994e3 blobs remain required history provenance. Matching rule
+evaluation is not historical runtime or current renderer acceptance. No temporary
+capture/scratch or original deletion occurred;frozen58ec export stays separate.
+
 Keep badge-retained-count-paint-20261017 failed stdout/stderr,zero-offset,
 receipt-binding and case-join log pairs,and queued4be737a3/a00b769f. The original
 failed source recovers exactly through the one-line assertion reversal recorded

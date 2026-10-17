@@ -4,7 +4,14 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
-Latest queued review4be737a3 preservesa00b769f and adds52 retained Badge count
+Latest queued review5357efed preserves4be737a3 and binds52 Badge rule-history
+records:156 complete current rule evaluations match retained candidate inventories
+under their recorded profiles. Current rule tokens match48c994e3;initial widths
+and primary colour were already present in2f440115. Exact lineage,not intent or
+historical runtime. Loader authenticates14072 dependencies;whole4be737a3 recovers.
+All2311 cases remainpartial/unverified;acceptedcc890/frozen58ec stay unchanged.
+
+Queued review4be737a3 preservesa00b769f and adds52 retained Badge count
 paint inspections (104 authenticated PNGs);these localPaint obligations move
 from evidence-join-pending to partial,not complete. Twenty-six count crops are
 below the existing default diagnostic SSIM threshold despite historical whole-
@@ -63,6 +70,31 @@ would miss the independently confirmed attribute-stage failure. Original final
 gates and equal-input/root-cause contract remain unchanged.
 
 ## Preserved audit chronology
+
+### Existing Badge history bound to current rules and exact cases — October17
+
+Do not repeat settled width/anchor/token investigations. Remaining case history
+records lacked exact current applicability of the known authoring lineage.
+badge-current-history-lineage-20261017 terminates0 (logSHA
+fbf2dd84f233d81b23d8b1e6763c1f237f50c7596c506c3906ee0d262e7f8b51):
+full Git source receipts plus trivia-skipping TypeScript tokens preserve string
+contents. Current anchor/width rules equal initial2f440115;all three current
+rules equal48c994e3. Bubble geometry/typography changed between these snapshots;
+initial direct Notifications text/count ariaLabel becomes separate label/count
+with no explicit count name. Primary background token is already initial.
+No source-intent,first-bad runtime or universal layout inference follows.
+
+badge-rule-history-case-join-20261017 terminates0 (logSHA
+ef6bf44793024c6c21d1efcf2ad26d15fb820b29d9d36e7ec193f5023c6de71a).
+Evaluate the exact current three object literals under the existing resolved
+profile theme;all156 whole objects equal52 retained candidate rule inventories.
+An altered rule is detected. New5357efedd3d95f2491965a3de18c887381128e934e0d7781b39aa2010b4de3c9
+adds ONLY52 bounded history children;whole4be737a3 predecessor and acceptedcc890
+pointer conserve. Existing loader validates2311 cases/14072 dependencies. Both
+logs retain executable recipes. No renderer/fixture/source-definition change,
+new capture,canonical publication or whole-case closure. Resource/lifetime,
+other history branches and current source/build/runtime acceptance remain open.
+Frozen export worker20224 is confirmed live with advancingCPU;do not restart it.
 
 ### Retained Badge count local paint inspected for all52 configured cases — October17
 
