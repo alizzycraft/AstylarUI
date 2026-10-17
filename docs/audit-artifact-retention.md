@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep live attribute-focus-coherent-canonical-export-20261017 stdout/stderr and
+any candidate output separately from acceptedcc890/index8d185f4b. Export8288
+uses frozen source95afed0b/selected58ec5402. No candidate or live process permits
+publication,predecessor cleanup or original/failure deletion. Preserve all source
+boundary failures and queued predecessor reviews through independent verification.
+
 Keep attribute-focus-broader-icon-applicability-20261017 (22/24 failure),boundary-
 check (2/2),integrated (24/24),icon-suite-source-conservation and icon-case-source-
 join logs. New58ec5402 preserves oldae59 and all raw evidence;original old-suite

@@ -28,8 +28,10 @@ remain intact. Do not claim the163/217 registration is already canonical.
 Broader Icon suite now passes24/24 after two precise historical boundaries;
 58ec5402 reconciles80 Icon proof receipts and authenticates13875 dependencies.
 Named launcher selects58ec5402 for the163/217 coherent batch,not old0ee8.
-Next:one integration export for the new cause/56 focus/113 pointer/52 Badge
-observations and scoped source transitions;then independent check/conservation
+Integration export8288 is now live (launcher11680,worker20224),logs attribute-
+focus-coherent-canonical-export-20261017 stdout/stderr. Source commit95afed0b is
+pushed;freeze its producer/proof/review inputs. Acceptedcc890 remains unchanged.
+Next:poll this same export,then independent check/conservation
 before publication. Do not rebuild unchanged evidence for prose. Remaining gaps:
 descendant/AX/input ownership,event/default-action classification,local paint,
 source/runtime validity and complete case dispositions. Root-only focus repairs
@@ -37,6 +39,18 @@ would miss the independently confirmed attribute-stage failure. Original final
 gates and equal-input/root-cause contract remain unchanged.
 
 ## Preserved audit chronology
+
+### Coherent attribute-focus batch export launched after source checks — October17
+
+Source95afed0b is pushed before launch. Existing named exporter starts8288 with
+ASTYLAR_AUDIT_PROGRESS=1 and original five retained inputs plus review58ec5402.
+Read-only process check confirms launcher11680 and worker20224 with exact
+review path/digest. No cold reuse assumption:existing validated cache policy
+decides reuse and must report actual collector metrics. No second export was
+started. Keep producer/proof/review inputs frozen until terminal outcome.
+Accepted pointer remainscc890/index8d185f4b. On success,independentcold and full
+content/index conservation remain required before publication. On quiet output,
+poll the same8288 handle or these actual processes;do not infer termination.
 
 ### Broader proof boundaries verified; coherent current review selected — October17
 
