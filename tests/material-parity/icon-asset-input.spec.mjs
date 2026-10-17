@@ -15,9 +15,57 @@ import { queryFindings, loadFindingEvidence, loadCaseObligationReview } from '..
 import { materialStaticCases, materialInteractionCases, materialProfiles, materialViewports } from './benchmark.config.mjs';
 import { verifyRetainedMaterialBrowserFiles } from './historical-audit-module-source.mjs';
 import { effectiveBrowserCursor } from './cursor-metrics.mjs';
+import { compareBottomShadowProfiles } from './shadow-profile-metrics.mjs';
 import { collectIconContextReview, validateIconContextReview, iconContextBaseline, applyIconContextReviews, validateIconContextRows } from './display-request-review.mjs';
 
 const one = values => { assert.equal(values.length, 1); return values[0]; };
+
+test('Icon retained contact failures include unequal border sampling rather than isolated shadow tails', t => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const raw = readFileSync('artifacts/material-parity/icon-retained-root-paint-verified-20261017.json');
+  assert.equal(hash(raw), 'ff56c512ab65121267e163640613147df59e047204d07862e9fbc321ef469a31');
+  const report = JSON.parse(raw);
+  for (const receipt of [...report.sources, report.sourceReport, report.checkpointManifest])
+    assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  const failures = report.records.filter(row => !row.shadow.matches);
+  assert.deepEqual(failures.map(row => row.case), ['static:icon@contrast/desktop', 'static:icon@contrast/tablet', 'interaction:icon@contrast/desktop-dpr1/inspect']);
+  const observed = [];
+  const luminance = rgba => rgba[0] * .2126 + rgba[1] * .7152 + rgba[2] * .0722;
+  for (const row of failures) {
+    assert.equal(row.viewport.deviceScaleFactor, 1);
+    assert.equal(row.inputs.reference.borderBottomWidth, '1px');
+    assert.equal(row.inputs.candidate.borderWidth, '1px');
+    assert.equal(row.inputs.reference.borderBottomColor, 'rgb(202, 196, 208)');
+    assert.equal(row.inputs.candidate.borderColor, '#cac4d0');
+    const images = Object.fromEntries(['reference', 'astylar'].map(side => {
+      const receipt = row.evidence.images[side], bytes = readFileSync(receipt.file);
+      assert.equal(hash(bytes), receipt.sha256); return [side, PNG.sync.read(bytes)];
+    }));
+    const actual = compareBottomShadowProfiles(images.reference, images.astylar, row.geometry.root.expected, row.geometry.root.actual, 1);
+    for (const key of ['matches', 'reference', 'candidate', 'rowErrors', 'maximumError']) assert.deepEqual(actual[key], row.shadow[key]);
+    const samples = {};
+    for (const [side, box] of [['reference', row.geometry.root.expected], ['astylar', row.geometry.root.actual]]) {
+      const image = images[side], x = Math.round(box.left + box.width / 2), edge = Math.round(box.bottom);
+      assert.equal(edge, 235);
+      const pixel = y => [...image.data.subarray((y * image.width + x) * 4, (y * image.width + x) * 4 + 4)];
+      const rows = Array.from({ length: 6 }, (_, index) => ({ y: edge - 3 + index, rgba: pixel(edge - 3 + index) }));
+      const window = rows.filter(sample => sample.y >= edge - 1 && sample.y <= edge + 1);
+      const chosen = window.reduce((best, sample) => luminance(sample.rgba) < luminance(best.rgba) ? sample : best);
+      samples[side] = { rows, chosen, search: [edge - 1, edge + 1] };
+    }
+    assert.deepEqual(samples.reference.chosen, { y: 234, rgba: [202, 196, 208, 255] });
+    assert.deepEqual(samples.astylar.rows.slice(0, 4).map(sample => sample.rgba),
+      [[240, 240, 240, 255], [221, 218, 224, 255], [228, 225, 231, 255], [226, 226, 226, 255]]);
+    assert.equal(samples.astylar.chosen.y, 235);
+    assert.ok(luminance(samples.astylar.rows.find(sample => sample.y === 233).rgba) < luminance(samples.astylar.chosen.rgba));
+    assert.equal(row.shadow.rowErrors[0], 26.858000000000033);
+    assert.ok(row.shadow.rowErrors.slice(1).every(error => error <= 18));
+    observed.push({ case: row.case, samples });
+  }
+  t.diagnostic(JSON.stringify({ retainedContactObservations: observed,
+    boundary: 'Original failed five-row profiles preserved. Matching border width/ink alone is not equal whole input:shadow alpha and structure differ. Candidate darker row lies outside the original search window;do not shift pixels or change the gate. Next isolate border/contact paint with equivalent inputs,not a pure shadow-tail diagnosis.',
+    currentRenderingAccepted: false }));
+});
 
 test('Icon queued history proof receipts remain applicable after unrelated audit additions', t => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');

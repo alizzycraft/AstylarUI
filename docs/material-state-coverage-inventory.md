@@ -4,6 +4,29 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Icon contact-row residual isolated to actual sampler inputs — October17
+
+Question:do the three contrast/DPR1 failed root shadow profiles compare isolated
+shadow tails? NO. Authenticated retained reportff56c512,all eight source receipts,
+original source-report/checkpoint receipts and six PNG receipts replay the exact
+three five-row failures. Both borders request1px/#cac4d0,but whole inputs still
+differ (including shadow alpha). At center x,HTML row234 is exactly202/196/208;
+candidate rows233/234 are221/218/224 and228/225/231. The original edge235 search
+window is rows234..236:it selects HTML234 but candidate235 (226/226/226),excluding
+the candidate's darker colored row233. Thus contact-row error26.858 includes
+different edge-pixel sampling,not a measured isolated shadow-tail difference.
+All four later row errors remain within18. No rows moved/discarded,thresholds
+changed or original failure reclassified as passing. Candidate colored-edge
+coverage is observed;contributions of border,fill and shadow are not decomposed.
+
+Existing Icon suite now asserts exact rows,search windows,chosen samples,matching
+border width/ink and unchanged original profile values for all three IDs.
+Focused1/1 passes (1208.8236ms),without new captures/reports. Next decisive core
+check is an equivalent-input border/contact primitive with no shadow plus a
+matched-shadow control at these fractional positions,not another broad shadow
+census. Shared fractional-fill proofs alone do not establish border behavior.
+Source reconciliation remains bounded as above;all2311 cases stay partial.
+
 ### Queued Icon source drift isolated and applicability revalidated without another proposal — October17
 
 Priority:shared input/local-paint/lifetime and exact obligation closure remain
