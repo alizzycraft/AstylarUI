@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import { PNG } from 'pngjs';
 import { evaluateFocusedRaster } from '../tests/material-parity/focused-raster-metrics.mjs';
@@ -12,6 +13,32 @@ import { saveReviewProposal, loadCaseObligationReview } from './audit-findings-s
 const script = 'scripts/join-material-icon-retained-obligations.mjs';
 const hash = b => createHash('sha256').update(b).digest('hex');
 const base = 'artifacts/material-parity/';
+// Coherent integration of the two existing source-bound assertions. Their
+// output is retained by this command's caller, not a new browser capture.
+const iconProofFile = 'tests/material-parity/icon-asset-input.spec.mjs';
+const iconProofSha256 = hash(readFileSync(iconProofFile));
+const sourceProofOutput = execFileSync(process.execPath, ['--test',
+  '--test-name-pattern=Icon viewport owner keeps|Icon-specific compensation history', iconProofFile],
+{ encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+assert.equal(hash(readFileSync(iconProofFile)), iconProofSha256);
+const sourceProofRows = sourceProofOutput.split(/\r?\n/).filter(line => line.startsWith('# {')).map(line => JSON.parse(line.slice(2)));
+assert.equal(sourceProofRows.length, 2);
+const rootProof = sourceProofRows.find(row => row.capturedRootMethodsMatch);
+const historyProof = sourceProofRows.find(row => row.currentIconInputsMatchRasterIntroduction);
+assert.equal(rootProof.cases, 20); assert.equal(rootProof.executions, 40);
+assert.equal(historyProof.iconLeafStages, 2); assert.ok(historyProof.componentRevisions >= 106);
+const sourceProofEvidence = {
+  test: { file: iconProofFile, sha256: iconProofSha256 },
+  sources: ['src/app/services/dom/elements/root.service.ts', 'src/app/services/css-layout-geometry.ts',
+    'examples/material-showcase/src/app/astylar.component.ts', 'examples/material-showcase/src/app/material-assets.ts',
+    'examples/material-showcase/public/icons/favorite.svg',
+    'artifacts/material-parity/retained-evidence/component-map-recovery-20261011/chunk-3JXWRYJY.js.map']
+    .map(file => ({ file, sha256: hash(readFileSync(file)) })),
+  execution: { command: `node --test --test-name-pattern="Icon viewport owner keeps|Icon-specific compensation history" ${iconProofFile}`,
+    // TAP timing is diagnostic output,not an input to an immutable review ID.
+    assertionSummarySha256: hash(JSON.stringify(sourceProofRows)), exitCode: 0 },
+};
+console.log(sourceProofOutput.trimEnd());
 const predecessor = '117a41db956f86e1465b8de0fee9e3d5a0fd3073049c1698a837fd0eee4ec3cb';
 const review = JSON.parse(readFileSync(`${base}working-audit/proposals/${predecessor}.json`)).review;
 assert.equal(hash(JSON.stringify(review)), predecessor);
@@ -211,8 +238,16 @@ for (const c of census.cases) {
   row.obligations.historyOwnership = { ...row.obligations.historyOwnership, retainedIconUpdateDisposalMembership: {
     disposition: 'inspected-bounded-membership', cohort: c.cohort, evidence,
     sourceLog: { file: lifecycle.file, sha256: lifecycle.sha256 },
-    boundary: 'Existing three-update/sampled-disposal cohort membership only;not fresh execution,current source validity,late image completion,remount or peer isolation.' } };
+    boundary: 'Existing three-update/sampled-disposal cohort membership only;not fresh execution,current source validity,late image completion,remount or peer isolation.' },
+    iconSpecificCompensationHistory: { disposition: 'inspected-bounded-history', ...historyProof,
+      evidence: { ...sourceProofEvidence, join: evidence.join },
+      remaining: ['shared ancestor/theme helper history and whole-case ownership/currentness'] } };
   row.obligations.inputStyleStructure = { ...row.obligations.inputStyleStructure,
+    iconViewportOwnerCssBoundary: { disposition: 'inspected-bounded-source-behavior',
+      cssViewport: captured.viewport, origin: { x: 0, y: 0 }, padding: { top: 0, right: 0, bottom: 0, left: 0 },
+      projectedPlaneProbes: [[9, 7], [99, 31]], sourceProof: rootProof,
+      evidence: { ...sourceProofEvidence, pairedTrees: row.evidence.pairedTrees, join: evidence.join },
+      remaining: ['authored-page descendant flow/default/inheritance/clipping and full rendering applicability'] },
     retainedIconRecordedHierarchy: { disposition: 'inspected-recorded-node-inventory', ...hierarchy,
       evidence: { pairedTrees: row.evidence.pairedTrees, join: evidence.join } } };
   const freshCase = freshCases.get(c.case); assert.ok(freshCase);
@@ -272,6 +307,7 @@ console.log(JSON.stringify({ predecessor, proposal, iconCases: 20, physicalCohor
   cases: loaded.cases.length, dependencies: loaded.evidenceFingerprints.length, unrelatedReviewConserved: true,
   recordedReferenceNodes: 140, recordedCandidateNodes: 120, hierarchyNegativeControls,
   relationshipApplicabilityJoins: originals.length, authoredIconIdRefs: 0,
+  boundedSourceHistoryJoins: originals.length, viewportOwnerCssJoins: originals.length,
   inspectPaintJoins, inspectSharpnessFailures,
   freshProducerJoins: freshCases.size, reproducedFullImages: freshCases.size * 2,
   inspectionComplete: loaded.inspectionComplete, currentRenderingAccepted: loaded.currentRenderingAccepted }));

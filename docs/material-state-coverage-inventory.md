@@ -1,8 +1,43 @@
 # Material comparison/state coverage inventory
 
-## Current integration pointer — October16
+## Current integration pointer — October17
 
 This pointer supersedes the historical checkpoint chronology immediately below.
+
+### Coherent Icon source/history batch joined without timing churn — October17
+
+Existing combined join now executes the two existing source/history assertions
+together and binds their current test/source/map receipts to all20 Icon cases.
+Twenty history parents gain the bounded106-revision leaf/rule/asset disposition;
+twenty input parents gain the exact viewport-owner CSS boundary with paired trees.
+It does not clear other ancestor/history/paint/semantic/runtime requirements or
+promote any parent/case. Current canonical remainsf663;queued proposal is now
+6e4ac38c85b53bf5f487aa8f02d27fafb8a736a70058e3f7afd4b1785889b9d5,
+supersedingc57c for combined Icon evidence. Stable join TERMINAL0 authenticates
+all2311 cases/13038 dependencies,nine existing controls and complete117a restoration.
+Both completion flagsfalse;all2311 cases remain partial/current-rendering unverified.
+Logs icon-coherent-source-history-case-join-stable-20261017 stdout/stderr contain
+both focused passes and the existing loader/conservation result. No browser run,
+renderer/fixture change,canonical export or reinterpretation of original failures.
+
+Initial publication failed ENOSPC and left a zero-byte atomic temporary;its failure
+log remains. Closed c46e/21d8/0c71 proposals were LZX-compressed with full before/
+after SHA equality,freeing space without deletion. Retry1d2e validated but included
+raw TAP timing in an execution hash. Final script uses only the stable assertion
+summary for review identity;two actual runs' parsed summaries agree exactly and
+all20 final records exclude the timing-dependent hash. Full stdout remains in the
+logs. Retry1d2e and final6e4a are likewise losslessly compressed and retained;
+none of these proposals is accepted canonical evidence. Do not repeat source tests
+or export solely for another metadata/pointer update. Proof registration/current
+producer-source receipts still need reconciliation at the coherent integration
+milestone before final canonical acceptance;case currentness is not a substitute.
+
+Substantive remaining Icon questions are now narrower:shared ancestor/theme
+compensation history and actual descendant/default behavior;complete local paint
+and semantic disposition;relevant unresolved lifetime contexts;whole current-code
+applicability/final gates. The original full-closure requirements remain in the
+parents. Settled icon-specific history,root-origin,pixel-reproduction and direct
+relationship applicability must not be reopened without drift/contradiction.
 
 ### Icon viewport-owner CSS boundary checked against current and captured methods — October17
 
