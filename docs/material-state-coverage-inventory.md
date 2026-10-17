@@ -4,6 +4,47 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Remaining Icon scalar stage review uses current canonical population — October17
+
+Current compact canonicalf663 query returns212 Icon groups,with FIVE unattributed
+harness groups/100 occurrences:primary alignContent,alignItems,justifyContent and
+primary/root cursor. The old readiness guard expected13/220 from before the eight
+parent-context/width reviews were published. Corrected only that CURRENT guard:
+it now also requires all8 reviewed groups/120 occurrences. The separate original
+baseline query/conservation assertions still retain13/220. No canonical finding
+or classification changed,and no completed width/flex investigation was restarted.
+
+New focused stage assertion authenticates all20 current-full recorded Icon pairs
+and current/captured browser-defaults source. Native own matched/inline rules do
+not request the three alignment fields;candidate authored image has only
+type/id/class/src/alt and relevant rules request none. Native computed values are
+normal;candidate normal/effective/interaction values are stretch/stretch/flex-start.
+Those EXACT values already come from core globalDefaultStyle;img defaults do not
+override them. All60 stage observations match. An authored alignment mutation is
+rejected. First divergence is implicit default-token resolution,not a new
+Material-only alignment compensation. Native mat-icon containing SVG versus
+candidate replaced img remains the separately classified structural substitution.
+No claim that normal/stretch/flex-start are universally equivalent or that these
+own fields caused measured misplacement;used-value/property-applicability work
+must preserve those distinct structures and defaults before any core diagnosis.
+
+Existing themed cursor assertion now authenticates1887 ORIGINAL build assets
+through the established retained-build helper,not today's different dist folder.
+All16 physical contexts/32 side observations/64 examined primary/root targets
+retain actual themes,non-text hit points,auto versus default requests and default
+maintained effective-cursor results. Four missing-cohort/theme/text-hit/cursor
+controls reject. This proves those retained points,not identical authored cursor
+requests,general auto/default equivalence,new current-browser acceptance or OS
+cursor bitmap capture. Raw two cursor groups remain preserved,not normalized away.
+
+icon-remaining-scalar-stage-review-20261017 stdout/stderr:3/3 pass (current census,
+alignment stage,cursor evidence). No capture/PNG/canonical export. The material
+question is narrowed from generic13 fields to actual5 with measured stage/context
+evidence;it is not whole-case closure. Canonicalf663/selected87b7,latest validated
+f43 before additive test changes,current160/214 and all2311 partial statuses remain
+separate. Next compare applicable used alignment semantics at equivalent inputs,
+not fixture offsets or replay of the already classified eight groups.
+
 ### Icon callback owners narrowed with current-source and peer controls — October17
 
 Question:which actual deferred callbacks remain beyond the recorded load/remount

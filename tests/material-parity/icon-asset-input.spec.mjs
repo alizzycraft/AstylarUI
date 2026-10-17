@@ -13,7 +13,7 @@ import { evaluateFocusedRaster } from './focused-raster-metrics.mjs';
 import { restoreSvgProofRegistration } from './position-composition-producer-transition.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
 import { materialStaticCases, materialInteractionCases, materialProfiles, materialViewports } from './benchmark.config.mjs';
-import { fingerprintDirectory } from './run-checkpoint.mjs';
+import { verifyRetainedMaterialBrowserFiles } from './historical-audit-module-source.mjs';
 import { effectiveBrowserCursor } from './cursor-metrics.mjs';
 import { collectIconContextReview, validateIconContextReview, iconContextBaseline, applyIconContextReviews, validateIconContextRows } from './display-request-review.mjs';
 
@@ -316,9 +316,12 @@ test('Icon closure retains explicitly unproven context obligations despite zero 
   assert.equal(rows.length, 212);
   const pending = rows.filter(row => row.classification === 'parity-harness-defect' && !row.attribution);
   const counts = pending.reduce((counts,row) => { counts[row.property] = (counts[row.property] ?? 0) + 1; return counts; }, {});
-  assert.deepEqual(counts, { alignContent: 2, alignItems: 2, cursor: 2, flex: 2, justifyContent: 2, width: 3 });
-  assert.equal(pending.length, 13);
-  assert.equal(pending.reduce((sum,row) => sum + row.occurrences, 0), 220);
+  assert.deepEqual(counts, { alignContent: 1, alignItems: 1, cursor: 2, justifyContent: 1 });
+  assert.equal(pending.length, 5);
+  assert.equal(pending.reduce((sum,row) => sum + row.occurrences, 0), 100);
+  const reviewed = rows.filter(row => row.attribution === 'reviewed-icon-parent-context-and-width-intent');
+  assert.equal(reviewed.length, 8);
+  assert.equal(reviewed.reduce((sum, row) => sum + row.occurrences, 0), 120);
   for (const row of pending) {
     assert.equal(row.evidence.section, 'discrepancies');
     assert.equal(row.evidence.sourceSha256, canonical.uncompressedSha256);
@@ -328,6 +331,63 @@ test('Icon closure retains explicitly unproven context obligations despite zero 
   }
   // This is a closure-readiness blocker list, not a new source finding,
   // failing-case census, rendering result or waiver of the required checks.
+});
+
+test('remaining Icon alignment scalars first diverge at implicit core defaults', t => {
+  const properties = { alignContent: 'stretch', alignItems: 'stretch', justifyContent: 'flex-start' };
+  const css = { alignContent: 'align-content', alignItems: 'align-items', justifyContent: 'justify-content' };
+  const defaultsFile = 'src/app/config/browser-defaults.ts';
+  function defaults(text) {
+    const tree = ts.createSourceFile(defaultsFile, text, ts.ScriptTarget.Latest, true);
+    const declarations = tree.statements.filter(ts.isVariableStatement).flatMap(n => [...n.declarationList.declarations]);
+    const global = one(declarations.filter(n => n.name.getText(tree) === 'globalDefaultStyle')).initializer;
+    const value = property => one(global.properties.filter(p => p.name.getText(tree) === property)).initializer.text;
+    const element = one(declarations.filter(n => n.name.getText(tree) === 'elementDefaults')).initializer;
+    const image = one(element.properties.filter(p => p.name.getText(tree) === 'img')).initializer;
+    for (const property of Object.keys(properties)) assert.ok(!image.properties.some(p => p.name.getText(tree) === property));
+    return Object.fromEntries(Object.keys(properties).map(property => [property, value(property)]));
+  }
+  assert.deepEqual(defaults(readFileSync(defaultsFile, 'utf8')), properties);
+  const mapBytes = readFileSync('artifacts/material-parity/retained-evidence/component-map-recovery-20261011/chunk-3JXWRYJY.js.map');
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  assert.equal(hash(mapBytes), 'dba484044ca0dea965d8ef4b12635673f0f055d7711099d2f6476ca490988ec4');
+  const map = JSON.parse(mapBytes), index = map.sources.indexOf('node_modules/astylarui/dist/lib/app/config/browser-defaults.js');
+  assert.ok(index >= 0); assert.deepEqual(defaults(map.sourcesContent[index]), properties);
+  const bytes = readFileSync('artifacts/material-parity/current-full-20261005/latest-report.json');
+  assert.equal(hash(bytes), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const report = JSON.parse(bytes), rows = [...report.results, ...report.interactions].filter(row => row.family === 'icon');
+  assert.equal(rows.length, 20); let observed = 0;
+  function inspect(native, candidate) {
+    const left = one(native.nodes.filter(n => n.attributes?.id === 'icon-primary'));
+    const right = one(candidate.nodes.filter(n => n.authored?.id === 'icon-primary'));
+    assert.equal(left.type, 'mat-icon'); assert.equal(right.authored.type, 'img');
+    assert.deepEqual(Object.keys(right.authored).sort(), ['alt', 'class', 'id', 'src', 'type']);
+    assert.deepEqual(right.authored.children ?? [], []);
+    const matching = candidate.rules.filter(r => ['*', 'img'].includes(r.selector) || /material-icon|icon-primary/.test(r.selector));
+    assert.equal(matching.filter(r => r.selector === '.material-icon').length, 1);
+    for (const [property, value] of Object.entries(properties)) {
+      assert.equal(native.styles[left.style][property], 'normal');
+      assert.ok(!Object.hasOwn(left.inline, css[property]));
+      for (const rule of left.rules.map(i => native.rules[i])) assert.ok(!Object.hasOwn(rule.declarations, css[property]));
+      for (const rule of matching) assert.ok(!Object.hasOwn(rule, property), 'new authored request needs new review');
+      for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) assert.equal(right[stage][property], value);
+      observed++;
+    }
+  }
+  for (const row of rows) {
+    const pair = ['reference', 'astylar'].map(side => {
+      const receipt = row.inputTrees[side], raw = readFileSync(receipt.file); assert.equal(hash(raw), receipt.sha256); return JSON.parse(raw);
+    });
+    inspect(...pair);
+    if (observed === 3) {
+      const authored = structuredClone(pair[1]); authored.rules.find(r => r.selector === '.material-icon').alignContent = 'stretch';
+      assert.throws(() => inspect(pair[0], authored));
+    }
+  }
+  assert.equal(observed, 60);
+  t.diagnostic(JSON.stringify({ cases: 20, imageAlignmentStageObservations: observed, capturedCurrentDefaultsMatch: true,
+    firstDivergence: 'native computed normal versus core implicit default tokens,not authored fixture alignment',
+    boundary: 'Default/request provenance only. Native mat-icon contains SVG;candidate img is a replaced leaf. Does not establish normal/stretch/flex-start used-value equivalence,all property applicability or a measured renderer failure. No classification or threshold changed.' }));
 });
 
 test('all configured Icon owners retain block versus flex parent-context divergence', () => {
@@ -419,7 +479,8 @@ test('Icon and blank-root effective cursors agree in verified applied-theme poin
   const record = JSON.parse(raw);
   for (const receipt of [record.capture.checkpointManifest, ...record.capture.sources]) assert.equal(digest(readFileSync(receipt.file)), receipt.sha256);
   const manifest = JSON.parse(readFileSync(record.capture.checkpointManifest.file));
-  assert.deepEqual(fingerprintDirectory('examples/material-showcase/dist/material-showcase/browser'), manifest.provenance.browserFiles);
+  assert.deepEqual(verifyRetainedMaterialBrowserFiles(manifest.provenance.browserFiles),
+    { authenticatedFiles: 1887, currentRenderingAccepted: false });
   const assets = new Map(manifest.provenance.browserFiles.map(receipt => [receipt.file, receipt.sha256]));
   const exports = {};
   new Function('exports', ts.transpileModule(readFileSync('examples/material-showcase/src/app/theme.ts','utf8'), {

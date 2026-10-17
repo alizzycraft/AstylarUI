@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep icon-remaining-scalar-stage-review-20261017 stdout/stderr. These replay the
+existing canonical census,40 recorded trees and original themed-cursor report;
+no new capture or PNG was generated. Current five pending groups and original
+thirteen-group baseline remain distinct. Original cursor report/build assets and
+source map are required evidence,not redundant new runs.
+
 Keep icon-image-callback-ownership-unit-20261017 stdout/stderr (five current
 synthetic resource-service tests) and icon-callback-owner-source[-final]-20261017
 stdout/stderr (captured/current method and actual callback guard checks). No
