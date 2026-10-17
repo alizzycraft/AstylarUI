@@ -4,6 +4,40 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Broader Icon checks expose three receipt gaps; two reconciled — October17
+
+Unfiltered Icon suite is TERMINAL1,21/24 passing,zero skipped/cancelled,
+102031.2658ms (icon-broader-source-applicability-20261017). This supersedes the
+live-session description below. Three failures occurred before their remaining
+assertions: added historical helper bytes, old e01ef9dc capture-runner receipt,
+and installed inspector a18630bd versus captured6ad4f51c. Do not call this suite
+green or infer three new rendering regressions.
+
+Historical helper boundary now proves complete original70c07826 recovery after
+removing ONLY the added reader-transition function/comment from currentbfa8fcd0;
+all other helper bytes equal Git462496c8. Unrelated drift rejects. Existing history
+assertion passes1/1,33166.0544ms (icon-history-helper-source-transition-20261017),
+reruns three unchanged proof bodies and authenticates13151 dependencies/2311 IDs.
+Only three explicit historical dependency reads are used; savedf43 is unchanged.
+
+SVG runtime/alpha census finds exactly ONE changed receipt among each2515:
+the known installed inspector. Reuse restoreCursorInspectorCaptureSource to
+authenticate/remove its two read-only retained-layout additions; all2514 other
+reads remain actual and unrelated inspector drift rejects. Original runtime,
+upload errors,alpha controls,PNGs and owner assertions now pass1/1 in
+icon-svg-existing-inspector-transition-20261017. This is retained evidence
+applicability,not fresh rendering acceptance or a rewritten historical receipt.
+
+Remaining precise readiness gap: retained Icon inspect assertion still demands
+missing original whole runner e01ef9dc against current86ece08b. Existing evidence
+already replays eight image pairs/four DPR2 diagnostic sharpness failures, but
+does not recover original runner/crop-owner provenance. Next reuse the existing
+authenticated recorded-bounds replay and explicitly disposition that provenance
+limit;do not invent source equality,remove raw failures or recapture settled
+pixels. No full-suite retry/export yet justified. Accepted0dd7/b1a96a and all2311
+partial-case statuses remain unchanged. Prior source-boundary commit66da9505 is
+pushed. Renderer/fixtures and original acceptance criteria are unchanged.
+
 ### Reader source applicability reconciled; broader Icon verification running — October17
 
 Priority remains complete case obligations and current-source applicability,

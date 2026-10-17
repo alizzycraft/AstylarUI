@@ -15,6 +15,7 @@ import { queryFindings, loadFindingEvidence, loadCaseObligationReview } from '..
 import { materialStaticCases, materialInteractionCases, materialProfiles, materialViewports } from './benchmark.config.mjs';
 import { verifyRetainedMaterialBrowserFiles, restoreEvidenceReaderLookupSource } from './historical-audit-module-source.mjs';
 import { effectiveBrowserCursor } from './cursor-metrics.mjs';
+import { restoreCursorInspectorCaptureSource } from './public-cursor-defaults-evidence.mjs';
 import { compareBottomShadowProfiles } from './shadow-profile-metrics.mjs';
 import { collectIconContextReview, validateIconContextReview, iconContextBaseline, applyIconContextReviews, validateIconContextRows } from './display-request-review.mjs';
 import { restoreBorderContactPolicy } from './semantic-text-transform-registration.mjs';
@@ -297,7 +298,23 @@ test('Icon queued history proof receipts remain applicable after unrelated audit
   const historicalJoiner = execFileSync('git', ['show', '512e9e21:' + joinerFile], { maxBuffer: 4_000_000 });
   assert.equal(hash(historicalJoiner), 'be820855f1c780a0f778c4286340d0ee1456aac183fb7091ffa828e4c4080713');
   assert.notEqual(hash(readFileSync(joinerFile)), hash(historicalJoiner));
-  const historicalDependencies = new Map([[policyFile, historicalPolicy], [joinerFile, historicalJoiner]]);
+  const helperFile = 'tests/material-parity/historical-audit-module-source.mjs';
+  const currentHelper = readFileSync(helperFile, 'utf8').replaceAll('\r\n', '\n');
+  assert.equal(hash(currentHelper), 'bfa8fcd04884333faabe034e46435fac91a5ac820f1d2eb51e101923c439a272');
+  const originalHelper = execFileSync('git', ['show', '462496c8:' + helperFile], { encoding: 'utf8' });
+  assert.equal(hash(originalHelper), '70c0782666799fbed5b2d1f2422fa9d8cfc44fd6031f59fab5ad9b2c17bfbf45');
+  const restoreHelper = source => {
+    const start = '// The retained root-paint diagnostic calls queryFindings,not the changed\n';
+    const end = '// Historical served bytes only. Current source applicability remains a caller obligation.\n';
+    assert.equal(source.split(start).length, 2); assert.equal(source.split(end).length, 2);
+    assert.ok(source.indexOf(start) < source.indexOf(end));
+    const restored = source.slice(0, source.indexOf(start)) + source.slice(source.indexOf(end));
+    assert.equal(restored, originalHelper); return Buffer.from(restored);
+  };
+  const historicalHelper = restoreHelper(currentHelper);
+  assert.throws(() => restoreHelper(currentHelper + '\n// unrelated helper drift'));
+  const historicalDependencies = new Map([[policyFile, historicalPolicy], [joinerFile, historicalJoiner],
+    [helperFile, historicalHelper]]);
   const readRetainedDependency = (name, ...args) => {
     const normalized = String(name).replaceAll('\\', '/');
     if (normalized.endsWith(proposalFile)) return Buffer.from(JSON.stringify(envelope));
@@ -1076,10 +1093,14 @@ test('retained original SVG upload failure binds public runtime and matched alph
     'd08a6efff4c16dcd148ba1b4f5430bcfdb2eccbda8da5fcfe62c95648edb3aac');
   const [owners] = load('icon-svg-owner-binding-20261007',
     '3fad20ad2f518a13036ebd10a3d6197ca9bd4faa53235039ec3d4121e9b17ba2');
+  const inspectorFile = 'examples/material-showcase/node_modules/astylarui/dist/lib/lib/astylar.js';
+  const currentInspector = readFileSync(inspectorFile, 'utf8');
+  const capturedInspector = Buffer.from(restoreCursorInspectorCaptureSource(currentInspector));
+  assert.throws(() => restoreCursorInspectorCaptureSource(currentInspector + '\n// unrelated source drift'));
   for (const collection of [runtime, controls]) {
     assert.equal(collection[0].receipts.length, 2515);
     for (const receipt of collection[0].receipts)
-      assert.equal(digest(readFileSync(receipt.file)), receipt.sha256);
+      assert.equal(digest(receipt.file === inspectorFile ? capturedInspector : readFileSync(receipt.file)), receipt.sha256);
   }
   assert.equal(digest(readFileSync(upload.source.file)), upload.source.sha256);
   for (const binding of owners.bindings) {

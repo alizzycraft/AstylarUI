@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep icon-history-helper-source-transition-20261017 and icon-svg-existing-
+inspector-transition-20261017 stdout/stderr with the original broader21/24 failure.
+They reconcile only demonstrated additive source boundaries,not current raster
+acceptance. Original f43 proposal,SVG runtime/alpha/owner logs and PNGs stay
+required. Missing e01ef9dc whole-runner provenance remains explicit;do not replace
+it with current runner bytes or delete the original failed assertion evidence.
+
 Keep evidence-reader-source-transition-20261017 and icon-contact-reader-transition-
 20261017 stdout/stderr, and icon-broader-source-applicability-20261017 stdout/
 stderr when terminal. They establish explicit reader-source applicability and
