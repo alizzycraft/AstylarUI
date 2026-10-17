@@ -4,6 +4,96 @@
 
 This pointer supersedes the historical checkpoint chronology immediately below.
 
+### Retained root paint saved and independently replayed after disk recovery — October17
+
+Disk now has about4.6GB free from an external state change. Git9e4febfe was pushed
+after automatic packing failed ENOSPC;the original process is terminal. Its
+read-only286916608-byte tmp_pack_vAx7fc remains untouched:ordinary removal failed,
+forced removal was policy-blocked,and compression could not proceed at40KB free.
+No audit evidence was deleted. Use command-scoped gc.auto=0 for this commit rather
+than repeating automatic packing or changing repository configuration.
+
+The prior read-only root-paint calculations are now retained by a focused script,
+audit-material-retained-icon-root-paint.mjs. It authenticates the existing fresh
+producer reportec08642c,20 checkpoint results and their images,uses measured root
+geometry,and reuses unchanged raster/shadow/flat-color code. No browser recapture
+or fixture/renderer change. Verified output icon-retained-root-paint-verified-
+20261017.json SHA256ff56c512ab65121267e163640613147df59e047204d07862e9fbc321ef469a31
+contains all20 cases,80 corner regions,source receipts and raw input/metric data.
+Generation and independent --check both exit0;no phase alignment is applied.
+
+All20 full-root and80 corner similarity diagnostics match existing defaults.
+Five full-root sharpness diagnostics fail (dark/mobile,contrast/desktop/tablet,
+dark/desktop-dpr2 inspect,contrast/desktop-dpr1 inspect);all80 corner sharpness
+diagnostics match. These are NOT newly configured release targets or whole-case
+passes. The unobstructed measured center pixels agree exactly in all20 cases;
+this proves those samples,not complete fill uniformity. Forty image border boxes
+remain inside their root boxes;general overflow/clipping is not thereby proven.
+
+The original flat-color sampler's bottom-left point10px from each edge intersects
+the36px custom corner instead of guaranteed flat fill. Its five raw failures are
+preserved and marked inapplicable to that fill question,not rewritten as passes.
+The original bottom-shadow diagnostic still fails three contrast/DPR1 records:
+static desktop/tablet and desktop-dpr1 inspect. Only contact row0 exceeds18
+(26.858000000000033);all tail rows across20 cases are within18,max14.07340000000002.
+Do not discard row0,relax thresholds,move pixels,or infer a pure shadow-tail core
+defect. Existing20-case reviewed-root-shadow-inputs authoring classification stays:
+native alpha0.133 versus candidate0.14. Equal-input border/contact/shadow cause
+remains unresolved;the authored mismatch does not explain the full pixel residual.
+
+Initial output326821dc and its original source snapshot are preserved at
+icon-retained-root-paint-20261017.json and retained-evidence/icon-root-paint-before-
+json-replay-20261017.mjs. Its replay stopped on JSON0 versus in-memory -0 phase
+coordinates,not a changed raster. Corrected comparison validates finite values
+and the exact JSON contract. All original records/metrics are conserved;only the
+script receipt changes. Controls retain nonzero offsets and reject NaN/Infinity.
+No rounding,measurement correction or threshold waiver. Eight source fingerprints
+and checkpoint/PNG receipts are explicit;currentRenderingAccepted remainsfalse.
+
+Next isolate the contact-edge residual using existing equivalent-input proofs or
+the smallest public reduction,then reconcile remaining Icon semantic/history/
+ownership requirements and coherent proof/source registration. Canonicalf663 and
+queueddf29 remain separate;this new standalone diagnostic is not yet canonically
+registered or case-joined. No case inspection was promoted and final gates remain.
+
+### Icon requirement-level closure review — October17; no case promotion
+
+Reviewed original goal and existing schema2 closure contract,not a new acceptance
+definition. The current schema1 joins deliberately remain partial;their generic
+remaining labels are not evidence that every named question is still unanswered.
+A documented failure may finish inspection without being fixed. Conversely,source
+classification or a passing diagnostic alone cannot close an unreviewed obligation.
+
+| Original-goal obligation | Existing disposition/evidence | Concrete remaining boundary |
+| --- | --- | --- |
+| Every relevant configured state |20 exact cases/16 physical contexts,all scalar memberships;activation/editing/focus exclusions already authenticated |No invented controls or new Cartesian variants. Whole-case requirement review must explicitly reuse these exclusions. |
+| Structure/styles/content before outputs |Complete7/6 recorded-node mapping;SVG/path to PNG substitution,block/flex and fixed-height differences classified;current viewport owner checked |Complete material descendant/property/default correspondence needs a final disposition;do not invent another authored node from anonymous layout output. |
+| Local paint and responsive/theme/DPR evidence |12 static target crops;8 inspect diagnostics including4 DPR2 failures;fresh producer reproduces40 full PNGs;32 ordinary heading diagnostics |Fresh static focused targets cover icon-primary ONLY;uniformBackgrounds/shadowProfiles are empty. Root container border/background/corner/shadow/clipping paint is not established by those target crops. Reuse retained full PNGs and actual root geometry before considering capture. |
+| Semantics/interaction correspondence |Direct names/hiding failure and absent IDREF applicability inspected in16 contexts;noninteractive controls excluded |Actual ancestor landmarks now classified below. Complete heading role/name/level and remaining generated semantic correspondence are not certified by the target-only AX observations;AT remains explicitly unverified,not silently assumed. |
+| Historical compensation and owning subsystem |106-revision Icon leaf/rule/asset history;initial shared fixed-root-height finding;SVG upload public reproduction;existing shared-offset/masking findings |Consolidate shared ancestor/theme branches with the existing findings. Do not redo settled leaf history or equate output coincidence with input equivalence. |
+| Ownership/root causes and regressions |16-context update/disposal;bounded late PNG completion,queued replacement,Angular remount;minimal public cancellation classification |Join/disposition already-existing supplemental lifetime evidence at its actual900px/other scope;do not repeat impossible load ordering. Wider relevant callbacks/peer/currentness claims still need specific applicability. |
+| Source validity and final handoff |Canonicalf663 versus queueddf29;retained build and fresh producer/browser boundaries are explicit |Register coherent standalone proofs/reconcile changed source receipts. Whole-current-code/enforced browser/release gates and pushed final handoff remain required;historical passes are not current acceptance. |
+
+New conclusion from EXISTING AX data,not a recapture:all32 side observations across
+16 physical contexts have an actual target-to-RootWebArea ancestor chain with one
+main on reference versus TWO on AstylarUI. Each has exactly one named icon showcase
+region. Both log hashes authenticate;following parentId edges rules out counting
+an unrelated sibling landmark. Current unchanged authoring SHA71e2d41f contains
+outer <main class="frame"> AND inner SiteData type:main,id:page. First divergence
+is this shared authoring structure,not a core inventing an extra authored element.
+Classify as application-plugin-authoring-defect,consistent with the already-recorded
+divider extra-main observation;do not remove the authored main during this audit.
+Log icon-retained-ancestor-landmark-closure-review-20261017 TERMINAL0 preserves the
+32-observation/16-context census and boundary. This is retained actual ancestor AX,
+not complete heading AX,live AT,current whole-package proof or case closure.
+
+Next substantive check:retained root-container paint/input coverage,using measured
+geometry and original pixels. This review narrows generic residual work without
+clearing an actual missing obligation or changing original scope/thresholds.
+Git9e4febfe was queued behind automatic packing at the original review checkpoint;
+its subsequent push succeeded after packing failed. The job is terminal,not a
+current wait. This review has not changed any producer source.
+
 ### Unmasked heading evidence joined to exact Icon physical contexts — October17
 
 Existing combined join independently invokes the retained visible-heading driver's
