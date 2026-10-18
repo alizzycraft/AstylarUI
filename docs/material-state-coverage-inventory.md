@@ -2,6 +2,21 @@
 
 ## Current audit pointer — October18
 
+Unfiltered harness follow-up:failure116 stops before button-width assertions.
+button-fixed-width-canonical-integration.spec selects480 button-containing cases
+and600 owners;its current builder calls applyIconContextReviews whenever the
+owner-initial binding is bound. That helper requires all11 retained Icon rows,
+but this selected population contains none (0!==11). This establishes a partial-
+population/shared-review contract mismatch,not a button renderer regression.
+Failure106 is distinct:the box-sizing integration reaches an Icon row whose
+complete hash differs (1401a26b versus15987e8f);its precise row delta remains
+unexplained. Failures110/114 additionally stop on source receipts. Evidence is
+the original full-audit-harness-cd867bbe-20261018 log and unchanged test/helper
+sources. Do not waive Icon conservation or substitute expected hashes. After
+the original run terminates,reconcile explicit population applicability while
+preserving full-population membership/hash checks and original button assertions.
+No code/input changes or new capture were made for this read-only triage.
+
 Acceptedcd867bbe/index551d3c8f now has163 findings/217 proofs with selected58ec
 review. Original cold8423 terminates0,complete3218529.1782ms;two collectors,
 ten memory hits,zero disk hits/invalidations,15061 files and1433550867 bytes
