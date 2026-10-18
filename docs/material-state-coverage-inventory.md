@@ -2,6 +2,22 @@
 
 ## Current audit pointer — October18
 
+Additional subset-contract triage from the unchanged live harness:failure412
+in gap-review-canonical-integration.spec.mjs:55 selects676 cases by38 reviewed
+owners across12 families;the membership contains zero Icon owners. Current
+buildMaterialInputAudit reaches applyIconContextReviews,which unconditionally
+requires all11 complete retained Icon rows and rejects0!==11 before the36-gap-
+group/1838-occurrence and original conservation/rejection assertions execute.
+Failure1294 in owner-initial-style-attribution.spec.mjs:329 has the same first
+barrier with its two stepper cases. Together with failure116,this identifies a
+shared subset/population applicability boundary,not new gap/owner renderer
+regressions. Preserve full-population Icon hashes/membership and all original
+downstream assertions;after the original run terminates,reconcile explicit
+subset applicability rather than deleting guards or substituting expected rows.
+Evidence:full-audit-harness-cd867bbe-20261018.log failures412/1294,the unchanged
+test selections,material-gap-review-membership.json and display-request-review.mjs:108.
+No capture,consumed source/test change or whole-case closure follows.
+
 Additional bounded live-log triage (original run still nonterminal):failure373
 passes its577-case/1154-proof coverage and attribution assertions before stopping
 at the durable producer receipt82854bcc versus currentd260f8ca. Later durable
