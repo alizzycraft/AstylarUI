@@ -18,6 +18,7 @@ import { bindPreciseAuditNormalization } from './audit-normalization-contracts.m
 import { collectBoundFieldHostLayout, fieldHostLayoutAttribution, fieldHostWidthAttribution } from './field-host-layout-source-binding.mjs';
 import { collectButtonBoxSizingInputs } from './button-box-sizing-source-binding.mjs';
 import { buttonBoxSizingAttribution } from './button-box-sizing-classification.mjs';
+import { validateIconContextRows } from './display-request-review.mjs';
 
 const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
 const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
@@ -120,6 +121,9 @@ export function independentlyReconstructLaterScalarReviews(audit, previous, curr
   const needsFieldHost = current.some(row => [fieldHostLayoutAttribution, fieldHostWidthAttribution].includes(row.attribution));
   const needsButtonBox = current.some(row => row.attribution === buttonBoxSizingAttribution);
   const { initial, cases, inventory } = capturedInitialScalarReplay(audit, options, needsFieldHost, needsButtonBox);
+  const iconAttribution = 'reviewed-icon-parent-context-and-width-intent';
+  if (current.some(row => row.attribution === iconAttribution))
+    assert.deepEqual(validateIconContextRows(current, { cases }), []);
   const sourceRows = new Map(initial.map(r => [signature(r), r]));
   const before = new Map(previous.discrepancies.map(r => [signature(r), r]));
   assert.equal(before.size, previous.discrepancies.length, 'ambiguous historical scalar membership');
@@ -127,7 +131,9 @@ export function independentlyReconstructLaterScalarReviews(audit, previous, curr
   assert.equal(supplied.size, current.length, 'duplicate current scalar membership');
   const candidates = current.filter(row => {
     const prior = before.get(signature(row));
-    return prior?.attribution === 'unresolved' && JSON.stringify(row) !== JSON.stringify(prior);
+    const admitted = prior && (prior.attribution === 'unresolved' ||
+      prior.attribution === undefined && row.attribution === iconAttribution);
+    return admitted && JSON.stringify(row) !== JSON.stringify(prior);
   });
   const seeds = candidates.map(row => {
     const prior = before.get(signature(row)), source = sourceRows.get(signature(row));

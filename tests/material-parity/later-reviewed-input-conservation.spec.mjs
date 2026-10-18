@@ -17,10 +17,36 @@ import { collectBoundFieldHostLayout, fieldHostLayoutAttribution } from './field
 import { collectButtonBoxSizingInputs } from './button-box-sizing-source-binding.mjs';
 import { buttonBoxSizingAttribution } from './button-box-sizing-classification.mjs';
 import { selectedButtonInputs } from './button-pill-radius-evidence.mjs';
+import { collectIconContextReview, applyIconContextReviews, iconContextBaseline } from './display-request-review.mjs';
+import { loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
 import { restoreScalarReviewExtraction } from './position-composition-producer-transition.mjs';
 import { reviewedSourceBatchAttributions } from './reviewed-source-batch-audit-source-binding.mjs';
 
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
+
+test('scalar replay admits authenticated unattributed Icon predecessors without dropping cohort guards', async () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const original = JSON.parse(bytes), entries = original.results.filter(entry => entry.family === 'icon' && entry.profile === 'light' && entry.viewport.id === 'desktop');
+  assert.equal(entries.length, 1);
+  const entry = { ...entries[0], kind: 'static' }, review = collectIconContextReview({ cases: [entry] });
+  const full = await loadFindingEvidence('artifacts/material-parity/working-audit', 'icon', review.groups.map(group => group.id), iconContextBaseline);
+  const previous = full.map(row => ({ ...row, occurrences: 1, cases: ['static:icon@light/desktop'], states: ['static'] }));
+  assert.equal(previous.length, 9); assert.ok(previous.every(row => row.attribution === undefined));
+  return withAuditScratch('icon-scalar-predecessor-', directory => {
+    const supplied = { ...original, results: entries, interactions: [] }, file = path.join(directory, 'report.json');
+    writeFileSync(file, JSON.stringify(supplied));
+    const options = { root: process.cwd(), parityPath: file }, current = applyIconContextReviews(previous, { cases: [entry] });
+    const audit = { discrepancies: current, ownerInitialStyleBinding: bindOwnerInitialStyleSource(supplied, options) };
+    const before = structuredClone({ audit, previous });
+    const replay = independentlyReconstructLaterScalarReviews(audit, { discrepancies: previous }, current, options);
+    assert.deepEqual(replay.rows, previous); assert.equal(replay.changes.length, 9);
+    assert.deepEqual({ audit, previous }, before);
+    assert.throws(() => independentlyReconstructLaterScalarReviews(audit, { discrepancies: previous }, current.slice(1), options), /Missing Icon original rows/);
+    const forged = structuredClone(previous); forged[0].justification = 'forged';
+    assert.throws(() => independentlyReconstructLaterScalarReviews(audit, { discrepancies: forged }, current, options), /Icon complete original row drift/);
+  });
+});
 
 test('pre-scalar replay preserves all nine source-bound button box owners and rejects forged stages', () => withAuditScratch('button-box-prescalar-', directory => {
   const bytes = readFileSync('artifacts/material-parity/button-box-sizing-integration-rMnjPU/report.json');

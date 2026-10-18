@@ -2,6 +2,25 @@
 
 ## Current audit pointer — October18
 
+October19 Icon predecessor admission verified:the latest original button-box
+integration terminates1,0/1,723618.9685ms in button-box-prescalar-owner-batch-
+integration-20261019 logs. Field-host/button pre-scalar stages clear;next failure
+is Missing Icon original rows0!==9. Historical Icon predecessors have no
+attribution field,not literal unresolved,so the replay's candidate filter drops
+them. Existing helper now admits only this independently validated Icon review
+population with absent historical attribution;complete original-row hashes,
+raw-source equality and case membership remain mandatory. No generic missing-
+attribution waiver,fixture edit or rendering claim follows.
+Focused actual retained static Icon cohort restores all9 rows without mutating
+callers;missing-row and forged-predecessor controls reject. Existing pure/raw/
+unauthenticated-source controls also pass:6/6,exit0,no skips/cancellations,
+31974.7063ms in icon-unattributed-predecessor-conservation-20261019 stdout/stderr.
+Successful scratch is removed by withAuditScratch;original integration failure
+and scratchSRXcnr remain. Next:original button-box integration at this coherent
+shared-stage milestone,then current-source/canonical reconciliation. Broader
+pre-scalar populations and later assertions remain unverified;all2311 whole
+cases remainpartial/current renderingunverified and final gates unchanged.
+
 October19 shared pre-scalar audit extended BEFORE another long integration:
 independent button sizing collection/validation from retained rMnjPU capture
 finds all9 source-bound button owners. Resetting each to unresolved sends it
