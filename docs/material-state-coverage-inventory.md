@@ -2,6 +2,24 @@
 
 ## Current audit pointer — October18
 
+October19 original button-box integration18923 TERMINAL1,0/1,no skips/cancellations,
+657750.6251ms in button-box-icon-predecessor-integration-20261019 stdout/stderr;
+failure scratchvG48jh retained. Icon replay and original59-group/76-observation
+later-input assertions now pass. Next failure is unrelated-row count6318!==6282;
+complete unrelated-row hash and later binding/mutation assertions remain unexecuted.
+Small source-only precision diagnosis authenticates the SAME88-case raw report
+SHA703ba4cb and original0165f76 normalizeColor hash8fb8ac9b,then executes original
+and current precise canonical normalization without a production rebuild.
+Exactly36 distinct root backgroundColor groups/88 occurrences were equal only
+under historical8-bit rounding:native rgba(245.879925,240.73989,248.60001,1)
+versus candidate rgba(246,241,249,1). All36 configured families are represented.
+Log button-box-precision-population-diagnosis-20261019 stdout/stderr. These actual
+input differences account for the36-row count delta;do not round them away or
+blindly replace6282. Next:bind the expected unrelated population to this exact
+source-derived precision-only membership and preserve whole unrelated-row hash
+equality,then run the coherent integration. No rendering/current-case acceptance
+or final-gate pass follows. Existing source/export reconciliation remains open.
+
 October19 continuation priorities from the existing selected review,not a new
 audit:recomputed JSON review digest equals pinned58ec5402d137657aa2d223d78db4fc56d1baec38a80d33d745bf07b233d656a1.
 All2311 groups retain partial inputStyleStructure,semantics,historyOwnership and
