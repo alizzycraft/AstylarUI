@@ -2,6 +2,14 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { assertCaretClassificationDelta, assertLaterCaretClassifications, gapScalarProjection } from './owner-gap-integration-conservation.mjs';
 import { ownerCaretAttributions } from './owner-caret-classification.mjs';
+import { readFileSync, writeFileSync } from 'node:fs';
+import path from 'node:path';
+import { createHash } from 'node:crypto';
+import { withAuditScratch } from './audit-scratch.mjs';
+import { collectOwnerCaretAuditInputs } from './owner-caret-audit-source-binding.mjs';
+import { collectFullTreeInventory, collectStyleDiscrepancies } from './input-equivalence-audit.mjs';
+import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
+import { applyComponentCaretReviews } from '../../scripts/audit-material-overlay-caret-context.mjs';
 
 function fixture() {
   const base = element => ({ family: 'fixture', element, property: 'caretColor', reference: 'rgba(1,2,3,1)',
@@ -72,3 +80,38 @@ test('historical caret wrapper cannot accept rows without authenticated captured
   for (const evidence of [undefined, { binding: { status: 'unbound' } }, { binding: { status: 'bound' }, plannedCoverage: f.expected }])
     assert.throws(() => assertLaterCaretClassifications({ discrepancies: f.current, ownerCaretInputs: evidence }, { discrepancies: f.previous }));
 });
+
+test('owner-pending component caret changes require original capture replay and unchanged raw inputs', () => withAuditScratch('pending-caret-component-', directory => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const original = JSON.parse(bytes);
+  const interactions = original.interactions.filter(entry => entry.family === 'bottom-sheet' && entry.profile === 'light' &&
+    entry.viewport.id === 'desktop-dpr1' && ['activate', 'activate-leave', 'open'].includes(entry.state))
+    .map(entry => ({ ...entry, styleInputs: entry.styleInputs.filter(input => input.id === 'bottom-sheet-copy') }));
+  assert.equal(interactions.length, 3);
+  const supplied = { ...original, results: [], interactions };
+  const file = path.join(directory, 'report.json'); writeFileSync(file, JSON.stringify(supplied));
+  const options = { root: process.cwd(), parityPath: file }, cases = interactions.map(entry => ({ ...entry, kind: 'interaction' }));
+  const inventory = collectFullTreeInventory(cases); assert.deepEqual(inventory.errors, []);
+  const initial = collectStyleDiscrepancies(cases, { observations: [] }, { comparisons: [], differences: [] },
+    ...Array.from({ length: 19 }, () => []), { observations: [] }, { observations: [] }, { observations: [] }, [], { observations: [] });
+  const previous = initial.filter(row => row.property === 'caretColor');
+  assert.equal(previous.length, 1); assert.equal(previous[0].attribution, 'unresolved');
+  const current = applyComponentCaretReviews(previous, cases, inventory, bindPreciseAuditNormalization());
+  assert.equal(current[0].attribution, 'reviewed-overlay-caret-local-observation-boundary');
+  const evidence = collectOwnerCaretAuditInputs(supplied, options);
+  assert.equal(evidence.binding.status, 'bound', evidence.binding.error);
+  assert.equal(evidence.plannedCoverage.pendingGroups, 1); assert.equal(evidence.plannedCoverage.pendingObservations, 3);
+  const audit = { discrepancies: current, ownerCaretInputs: evidence }, before = structuredClone({ audit, previous });
+  assert.equal(assertLaterCaretClassifications(audit, { discrepancies: previous }, options).size, 0);
+  assert.deepEqual({ audit, previous }, before);
+  for (const mutate of [row => { row.justification = 'forged'; }, row => { row.referenceAuthoredExamples = []; }]) {
+    const changed = structuredClone(audit); mutate(changed.discrepancies[0]);
+    assert.throws(() => assertLaterCaretClassifications(changed, { discrepancies: previous }, options));
+  }
+  const forgedPrevious = structuredClone(previous), forgedAudit = structuredClone(audit);
+  forgedPrevious[0].referenceAuthoredExamples = [];
+  forgedAudit.discrepancies = applyComponentCaretReviews(forgedPrevious, cases, inventory, bindPreciseAuditNormalization());
+  assert.throws(() => assertLaterCaretClassifications(forgedAudit, { discrepancies: forgedPrevious }, options),
+    /pending caret raw evidence differs from captured inputs/);
+}));

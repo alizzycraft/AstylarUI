@@ -10,6 +10,13 @@ import { validateGapReviewClassifications } from './gap-review-coverage.mjs';
 import { validateOwnerCaretAuditInputs } from './owner-caret-audit-source-binding.mjs';
 import { validateOwnerCaretAttributionRows } from './owner-caret-attribution-coverage.mjs';
 import { ownerCaretAttributions } from './owner-caret-classification.mjs';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import { createHash } from 'node:crypto';
+import { isDeepStrictEqual } from 'node:util';
+import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
+import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
+import { applyComponentCaretReviews, isComponentCaretReviewRow } from '../../scripts/audit-material-overlay-caret-context.mjs';
 
 export const gapScalarProjection = row => [row.family, row.element, row.property, row.reference,
   row.astylar, row.occurrences, row.cases, row.states];
@@ -59,7 +66,46 @@ export function assertLaterCaretClassifications(audit, previous, options = {}) {
   // subset. A caller-provided attribution or self-consistent expected list is
   // insufficient to exempt a row from historical conservation.
   assert.deepEqual(validateOwnerCaretAuditInputs(audit.ownerCaretInputs, { ...options, requireComplete: false }), []);
-  return assertCaretClassificationDelta(previous.discrepancies, audit.discrepancies,
+  const pending = audit.ownerCaretInputs.plannedCoverage.pending;
+  const matches = (row, item) => row.family === item.family && row.element === item.element &&
+    row.property === item.property && row.reference === item.reference && row.astylar === undefined;
+  const changed = previous.discrepancies.filter(row => pending.some(item => matches(row, item)) &&
+    !isDeepStrictEqual(row, audit.discrepancies.find(current =>
+      JSON.stringify(gapScalarProjection(current)) === JSON.stringify(gapScalarProjection(row)))));
+  let before = previous.discrepancies;
+  if (changed.length) {
+    const binding = audit.ownerCaretInputs.binding;
+    const bytes = readFileSync(path.resolve(options.root ?? process.cwd(), binding.file));
+    assert.equal(createHash('sha256').update(bytes).digest('hex'), binding.sha256);
+    const source = JSON.parse(bytes), cases = [...(source.results ?? []).map(entry => ({ ...entry, kind: 'static' })),
+      ...(source.interactions ?? []).map(entry => ({ ...entry, kind: 'interaction' }))];
+    const inventory = collectFullTreeInventory(cases, options);
+    assert.deepEqual(inventory.errors, []);
+    const replay = applyComponentCaretReviews(changed, cases, inventory, bindPreciseAuditNormalization());
+    const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+    const restored = new Map();
+    for (const row of replay) {
+      assert.ok(isComponentCaretReviewRow(row), 'pending caret change lacks independent component review');
+      const key = JSON.stringify(gapScalarProjection(row));
+      assert.deepEqual(audit.discrepancies.find(current => JSON.stringify(gapScalarProjection(current)) === key), row,
+        'pending caret metadata differs from captured component replay');
+      const caseKey = entry => `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`;
+      const members = row.reviewedCases.map(key => {
+        const found = cases.filter(entry => caseKey(entry) === key); assert.equal(found.length, 1); return found[0];
+      });
+      const inputs = members[0].styleInputs.filter(input => input.id === row.element); assert.equal(inputs.length, 1);
+      const compact = rules => (rules ?? []).slice(-4).map(rule => ({ selector: rule.selector, declarations: rule.declarations }));
+      assert.deepEqual(Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key))), {
+        family: members[0].family, element: inputs[0].id, property: 'caretColor', propertyGroup: 'typography',
+        reference: row.reference, astylar: undefined, occurrences: members.length, cases: row.reviewedCases.slice(0, 12),
+        states: [...new Set(members.map(entry => entry.state ?? 'static'))],
+        referenceAuthoredExamples: compact(inputs[0].referenceAuthored), astylarAuthoredExamples: compact(inputs[0].astylarAuthored),
+      }, 'pending caret raw evidence differs from captured inputs');
+      assert.ok(!restored.has(key)); restored.set(key, row);
+    }
+    before = before.map(row => restored.get(JSON.stringify(gapScalarProjection(row))) ?? row);
+  }
+  return assertCaretClassificationDelta(before, audit.discrepancies,
     audit.ownerCaretInputs.plannedCoverage);
 }
 

@@ -2,6 +2,29 @@
 
 ## Current audit pointer — October18
 
+Pending caret conservation now replays the existing component review rather
+than broadly excluding later metadata. assertLaterCaretClassifications first
+authenticates the original owner-caret binding,then re-reads/rehashes that exact
+supplied capture and independently rebuilds its full trees. Only changed rows
+in the owner's PENDING population go through existing applyComponentCaretReviews.
+Actual whole metadata must equal that replay;all raw fields,ordered membership,
+states and both authored-example arrays must equal captured inputs. The original
+strict pure delta checker and outer unrelated-row obligations remain unchanged;
+no new exemption signatures are returned for these pending component rows.
+Existing4 tests/18 mutations pass. Added actual bottom-sheet-copy3-case source
+replay matches unresolved→reviewed-overlay-caret-local-observation-boundary and
+rejects forged metadata,changed authored inputs and a self-consistent forged
+before/after pair regenerated through the classifier. Complete suite5/5 exit0,
+128864.4617ms in pending-caret-component-source-controls-20261018 logs;success
+scratch removed through withAuditScratch. Earlier source-replay suite5/5 remains;
+complete-controls attempt4/5 is preserved:the first forgery was correctly stopped
+by its stale original-row hash before the desired raw-source guard. The stronger
+test regenerates that hash and proves rejection at captured raw evidence.
+This is audit conservation instrumentation,not caret/renderer repair or input/
+paint equivalence. Owning helper/test fingerprints now need explicit canonical
+applicability reconciliation. Next:original button-box integration with precise
+measurement,then its remaining assertions;full acceptance remains unproved.
+
 Original button-box integration42285 terminates1,0/1,duration484511.1369ms:
 Icon subset barrier cleared and all9 button box-sizing rows exist,raw capture
 unchanged;next failure is complete scalar population comparison against0165f76.
