@@ -2,6 +2,29 @@
 
 ## Current audit pointer — October18
 
+October19 shared pre-scalar audit extended BEFORE another long integration:
+independent button sizing collection/validation from retained rMnjPU capture
+finds all9 source-bound button owners. Resetting each to unresolved sends it
+to a generic omission proof that rejects native border-box versus its expected
+content-box;it cannot reproduce the correct earlier bounded sizing review.
+Exact9 outcomes:button-box-prescalar-owner-diagnosis-20261019 stdout/stderr.
+Existing replay now independently collects button sizing evidence from the SAME
+owner-initial source capture,checks a bound result and complete supplied evidence
+when present,and supplies it to collectStyleDiscrepancies at the actual pre-scalar
+argument slot before field-host input. Verified source rows,not submitted labels,
+seed later replay;the native request/omission proofs remain strict. No fixture,
+style,threshold or family exemption is added.
+Coherent selected suite covers all9 button owners across their retained selected
+states,all6 field-host static box rows,predecessor refinement and original
+conservation/mutation checks:8/8 exit0,no skips/cancellations,141582.9085ms in
+prescalar-owner-batch-conservation-20261019 stdout/stderr. Forged stage evidence
+and output metadata reject for both owning stages;inputs remain unmodified.
+Successful scratch is removed through withAuditScratch. This is bounded audit
+instrumentation,not proof that every possible pre-scalar owner is reconstructed
+or that whole rendering/case closure is accepted. Next justified milestone is
+the original button-box integration with both known stages restored;canonical
+source/export and final gates remain outstanding after helper/test changes.
+
 October19 field-host pre-scalar stage is now reconstructed from the owning
 collector,not submitted classification labels. When current rows require that
 stage,capturedInitialScalarReplay independently collects bound field-host inputs

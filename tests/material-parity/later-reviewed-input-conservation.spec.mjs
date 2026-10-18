@@ -14,10 +14,48 @@ import { collectOriginStageEvidence } from './origin-stage-inventory-evidence.mj
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { collectFollowupInputAuditInputs } from './followup-input-audit-source-binding.mjs';
 import { collectBoundFieldHostLayout, fieldHostLayoutAttribution } from './field-host-layout-source-binding.mjs';
+import { collectButtonBoxSizingInputs } from './button-box-sizing-source-binding.mjs';
+import { buttonBoxSizingAttribution } from './button-box-sizing-classification.mjs';
+import { selectedButtonInputs } from './button-pill-radius-evidence.mjs';
 import { restoreScalarReviewExtraction } from './position-composition-producer-transition.mjs';
 import { reviewedSourceBatchAttributions } from './reviewed-source-batch-audit-source-binding.mjs';
 
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
+
+test('pre-scalar replay preserves all nine source-bound button box owners and rejects forged stages', () => withAuditScratch('button-box-prescalar-', directory => {
+  const bytes = readFileSync('artifacts/material-parity/button-box-sizing-integration-rMnjPU/report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), '703ba4cbeb92f658b9382216caed8839cdb504bce92eee589461f17e2841b242');
+  const original = JSON.parse(bytes), select = entries => entries.filter(entry => selectedButtonInputs(entry).length)
+    .map(entry => ({ ...entry, styleInputs: selectedButtonInputs(entry) }));
+  const supplied = { ...original, results: select(original.results), interactions: select(original.interactions) };
+  const file = path.join(directory, 'report.json'); writeFileSync(file, JSON.stringify(supplied));
+  const options = { root: process.cwd(), parityPath: file }, cases = [...supplied.results.map(entry => ({ ...entry, kind: 'static' })),
+    ...supplied.interactions.map(entry => ({ ...entry, kind: 'interaction' }))];
+  const inventory = collectFullTreeInventory(cases), owner = collectOwnerInitialStyleEvidence(supplied, inventory);
+  const origin = collectOriginStageEvidence(cases, inventory, bindPreciseAuditNormalization(), { reviewedDisjointMotion: true });
+  const binding = bindOwnerInitialStyleSource(supplied, options), buttonBox = collectButtonBoxSizingInputs(supplied, options);
+  assert.equal(buttonBox.binding.status, 'bound', buttonBox.binding.error);
+  const prefix = [cases, origin, { comparisons: [], differences: [] }, ...Array.from({ length: 19 }, () => []),
+    { observations: [] }, { observations: [] }, { observations: [] }, [], owner];
+  const initial = collectStyleDiscrepancies(...prefix);
+  const classified = collectStyleDiscrepancies(...prefix, ...Array.from({ length: 8 }, () => ({ observations: [] })), buttonBox);
+  const current = classified.filter(row => row.attribution === buttonBoxSizingAttribution);
+  assert.equal(current.length, 9);
+  const keys = new Set(current.map(row => JSON.stringify([row.family, row.element, row.property, row.reference, row.astylar])));
+  const previous = initial.filter(row => keys.has(JSON.stringify([row.family, row.element, row.property, row.reference, row.astylar])));
+  assert.equal(previous.length, 9);
+  const audit = { discrepancies: current, ownerInitialStyleBinding: binding, buttonBoxSizingInputs: buttonBox };
+  const before = structuredClone({ audit, previous });
+  const replay = independentlyReconstructLaterScalarReviews(audit, { discrepancies: previous }, current, options);
+  assert.deepEqual(replay.rows, previous); assert.equal(replay.changes.length, 9);
+  assert.deepEqual({ audit, previous }, before);
+  const forged = structuredClone(audit); forged.buttonBoxSizingInputs.observations[0].proof.candidateOwnStageAbsent = false;
+  assert.throws(() => independentlyReconstructLaterScalarReviews(forged, { discrepancies: previous }, forged.discrepancies, options),
+    /pre-scalar button box evidence differs/);
+  const forgedRows = structuredClone(audit); forgedRows.discrepancies[0].justification = 'forged';
+  assert.throws(() => independentlyReconstructLaterScalarReviews(forgedRows, { discrepancies: previous }, forgedRows.discrepancies, options),
+    /later scalar metadata does not match/);
+}));
 
 test('pre-scalar replay preserves independently bound field-host stages instead of fabricating omissions', () => withAuditScratch('field-host-prescalar-', directory => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
