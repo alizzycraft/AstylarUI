@@ -2,6 +2,24 @@
 
 ## Current audit pointer — October18
 
+Snackbar failure1600 (snackbar-position-observation.spec.mjs:14) authenticates
+its original report/checkpoint binding then stops in the104-core dependency loop:
+src/lib/astylar-surface.ts expected91c2b6fe,currentcc874b03. Read-only census of
+all208 source/installed checks finds zero missing and exactly three mismatches:
+that surface source;src/lib/astylar.ts expectede72cfb8e,current5742ba6c;installed
+lib/astylar.js expected6ad4f51c,currenta18630bd. The remaining205 raw checks match.
+This narrows applicability work,not harmlessness:original popup geometry,pixels,
+camera/mesh and action assertions have not executed. Preserve the existing
+snackbar-boundary-e331e79 capture and all original receipts;review these exact
+owner transitions before historical replay or any justified current recapture.
+Do not call this a newly observed snackbar paint regression or a current pass.
+Slider failure1589 similarly stops before its mutation checks at the shared
+11-Icon-row requirement;withCapture in slider-input-box-test-support.mjs builds
+only two synthetic slider states. Reconcile subset applicability after terminal
+run while retaining all original binding/row/equivalence rejection assertions.
+Evidence:unchanged full-audit-harness-cd867bbe-20261018.log,the named test/support
+sources and original snackbar report/checkpoint. No new capture or source/test edit.
+
 Historical-source barrier triage:failures432/433 in
 historical-case-index-source-assertion.spec.mjs stop in
 collectCaseIndexConservation at component currentb493a355 versus capturedb7957cd9.
