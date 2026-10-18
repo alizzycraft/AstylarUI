@@ -44,6 +44,25 @@ failed and unchanged. A permanent correction must conserve the historical192
 population and validate accepted217,not delete count/drift protection. Await
 terminal unfiltered result before coherent fixes;no gate criterion is waived.
 
+Repeated f3→34f suite-hash failure triage now recovers EXACT499721-byte captured
+suite from Git99d56384 (f3f554b3). Current34f8ec1e is not an append-only prefix:
+49→50 callbacks,47 byte-identical,two changed,zero missing. Changed originals
+are mount cancellation and Icon pending-texture lifetime;do not bless them as
+unchanged through a global historical reader. Existing scoped helpers support
+older snapshots but do not yet cover this exact current transition.
+
+For public-semantic-root-noop report841cf391,all2515 loaded runtime dependencies
+plus input/bundle/HTML match actual bytes. Its public focusAudit program is
+byte-identical in captured suite,current suite and recorded input asset (8ff244da).
+full-harness-root-noop-program-lineage-20261018 pins these results and rejects
+a changed-program control. The demonstrated first barrier is whole owner-file
+provenance resolution,not an observed new renderer failure. Original test is
+still failed/unrepaired. Two attempted callback extractions fail in setup
+(module binding,relative module import);do not repeat that approach. After the
+original unfiltered run terminates,use a case-scoped historical owner read with
+raw/program/current-owner conservation,then execute the actual original module
+assertions. Never replace capture receipts or claim all old callbacks equivalent.
+
 Legacy clip source proposal161aac37ac51e824208d69f1e6893573ac2f72b0142877d5b2940ee7c40272c5
 adds one documented-limitation to exact163 production predecessors,not an
 intentional limitation or a newly broken claimed feature. Public zero-rect

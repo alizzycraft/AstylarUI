@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep full-harness-boundary-suite-drift-triage,root-noop-owner-diagnostic,
+root-noop-owner-diagnostic-bound and root-noop-program-lineage-20261018 logs.
+The two owner variants fail in diagnostic setup,not behavioral assertions;
+do not report them passing. Exact Git99d56384 owner bytes and unchanged program
+are independently authenticated by lineage log. Full live run remains original;
+no immutable receipt is assigned to its growing stdout.
+
 Full harness76151 is live with reported failures;keep original stdout/stderr
 unchanged and do not fingerprint the still-growing log as immutable evidence.
 Keep full-harness-proof-pointer-count-diagnostic-20261018 logs separately:
