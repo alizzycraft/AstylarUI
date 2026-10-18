@@ -15,6 +15,7 @@ import { readOwnerInitialStyleSource, collectOwnerInitialStyleEvidence, validate
   ownerInitialStyleAttribution } from './owner-initial-style-attribution.mjs';
 import { collectOriginStageEvidence, validateOriginStageEvidence, originStageAttribution } from './origin-stage-inventory-evidence.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
+import { collectBoundFieldHostLayout, fieldHostLayoutAttribution, fieldHostWidthAttribution } from './field-host-layout-source-binding.mjs';
 
 const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
 const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
@@ -79,7 +80,7 @@ function reconstructMetadata(previous, current, evidence, attributions, validate
 
 // Replay the production sequence against independently read original trees,
 // not a category exemption or the row's own claimed previous metadata.
-function capturedInitialScalarReplay(audit, options) {
+function capturedInitialScalarReplay(audit, options, includeFieldHost = false) {
   assert.equal(audit.ownerInitialStyleBinding?.status, 'bound');
   const original = readOwnerInitialStyleSource(audit.ownerInitialStyleBinding, options);
   const cases = [...original.results.map(e => ({ ...e, kind: 'static' })),
@@ -89,16 +90,26 @@ function capturedInitialScalarReplay(audit, options) {
   const owner = collectOwnerInitialStyleEvidence(original, inventory);
   assert.deepEqual(validateOwnerInitialStyleSource(audit.ownerInitialStyleBinding, owner, options), []);
   const origin = collectOriginStageEvidence(cases, inventory, normalize, { reviewedDisjointMotion: true });
-  // Only these two initial observation classifiers are being reconstructed.
-  // Other earlier input proofs remain owned by the original caller's gates.
+  let fieldHost = { observations: [] };
+  if (includeFieldHost) {
+    fieldHost = collectBoundFieldHostLayout(original, { ...options,
+      parityPath: audit.ownerInitialStyleBinding.file, collectInventory: collectFullTreeInventory });
+    assert.equal(fieldHost.binding.status, 'bound', fieldHost.binding.error);
+    if (audit.fieldHostLayoutInputs !== undefined)
+      assert.deepEqual(audit.fieldHostLayoutInputs, fieldHost, 'pre-scalar field-host evidence differs from captured source');
+  }
+  // Reconstruct the owning pre-scalar classification, not an unresolved seed
+  // that would incorrectly enter a later, incompatible omission reviewer.
   const initial = collectStyleDiscrepancies(cases, origin, { comparisons: [], differences: [] },
-    ...Array.from({ length: 19 }, () => []), { observations: [] }, { observations: [] }, { observations: [] }, [], owner);
+    ...Array.from({ length: 19 }, () => []), { observations: [] }, { observations: [] }, { observations: [] }, [], owner,
+    ...Array.from({ length: 9 }, () => ({ observations: [] })), fieldHost);
   assert.deepEqual(validateOriginStageEvidence(origin, inventory, initial, normalize, { reviewedDisjointMotion: true }), []);
   return { initial, cases, inventory };
 }
 
 export function independentlyReconstructLaterScalarReviews(audit, previous, current = audit.discrepancies, options = {}) {
-  const { initial, cases, inventory } = capturedInitialScalarReplay(audit, options);
+  const needsFieldHost = current.some(row => [fieldHostLayoutAttribution, fieldHostWidthAttribution].includes(row.attribution));
+  const { initial, cases, inventory } = capturedInitialScalarReplay(audit, options, needsFieldHost);
   const sourceRows = new Map(initial.map(r => [signature(r), r]));
   const before = new Map(previous.discrepancies.map(r => [signature(r), r]));
   assert.equal(before.size, previous.discrepancies.length, 'ambiguous historical scalar membership');
@@ -112,7 +123,7 @@ export function independentlyReconstructLaterScalarReviews(audit, previous, curr
     const prior = before.get(signature(row)), source = sourceRows.get(signature(row));
     assert.ok(source, 'later review lacks original scalar observation');
     assert.equal(JSON.stringify(raw(prior)), JSON.stringify(raw(source)), 'historical raw evidence differs from captured source');
-    if ([originStageAttribution, ownerInitialStyleAttribution].includes(row.attribution)) {
+    if ([originStageAttribution, ownerInitialStyleAttribution, fieldHostLayoutAttribution, fieldHostWidthAttribution].includes(row.attribution)) {
       assert.equal(source.attribution, row.attribution, 'initial observation stage is not independently proved');
       return source;
     }

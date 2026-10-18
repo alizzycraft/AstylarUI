@@ -2,6 +2,27 @@
 
 ## Current audit pointer — October18
 
+October19 field-host pre-scalar stage is now reconstructed from the owning
+collector,not submitted classification labels. When current rows require that
+stage,capturedInitialScalarReplay independently collects bound field-host inputs
+from the owner-initial source capture,requires a bound result,and compares the
+complete submitted field-host evidence when present. The existing production
+collectStyleDiscrepancies receives that verified evidence at its actual argument
+slot before later review replay. Seeds use the reconstructed stage only after
+raw-source equality and attribution checks;general box-sizing omission guards
+remain unchanged. No family/property exclusion or style edit is introduced.
+Added six-family captured regression restores all6 box-sizing rows and rejects
+forged field-host evidence/output metadata. Selected conservation suite6/6 exit0,
+23370.5937ms in field-host-prescalar-source-conservation-20261019 stdout/stderr;
+the prior5 pure/default controls also pass separately. Shared predecessor-source
+path rechecked1/1 exit0,75127.8226ms in field-host-prescalar-predecessor-regression-
+20261019 logs. Successful scratch removed through withAuditScratch. This proves
+the demonstrated field-host stage,not every pre-scalar evidence owner or full
+button-box integration. Next:inspect other pre-scalar owners affected by the same
+unresolved-seed assumption before another expensive integration,then verify a
+coherent batch. Helper/test receipts need canonical applicability reconciliation;
+current rendering,all2311 whole-case closures and final gates remain open.
+
 October19 integration63320 TERMINAL1,0/1,duration700279.8916ms in button-box-
 followup-predecessor-integration-20261019 stdout/stderr,scratchrMnjPU retained.
 Earlier pending-caret and follow-up predecessor checks now pass. Failure moves

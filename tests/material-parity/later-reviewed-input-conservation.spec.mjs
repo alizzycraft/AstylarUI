@@ -13,10 +13,47 @@ import { collectFullTreeInventory, collectStyleDiscrepancies } from './input-equ
 import { collectOriginStageEvidence } from './origin-stage-inventory-evidence.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { collectFollowupInputAuditInputs } from './followup-input-audit-source-binding.mjs';
+import { collectBoundFieldHostLayout, fieldHostLayoutAttribution } from './field-host-layout-source-binding.mjs';
 import { restoreScalarReviewExtraction } from './position-composition-producer-transition.mjs';
 import { reviewedSourceBatchAttributions } from './reviewed-source-batch-audit-source-binding.mjs';
 
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
+
+test('pre-scalar replay preserves independently bound field-host stages instead of fabricating omissions', () => withAuditScratch('field-host-prescalar-', directory => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const original = JSON.parse(bytes), families = ['form-field', 'input', 'autocomplete', 'select', 'datepicker', 'timepicker'];
+  const results = original.results.filter(entry => families.includes(entry.family) && entry.profile === 'light' && entry.viewport.id === 'desktop')
+    .map(entry => ({ ...entry, styleInputs: entry.styleInputs.filter(input => input.id === `${entry.family}-primary`) }));
+  assert.equal(results.length, 6);
+  const supplied = { ...original, results, interactions: [] }, file = path.join(directory, 'report.json');
+  writeFileSync(file, JSON.stringify(supplied));
+  const options = { root: process.cwd(), parityPath: file }, cases = results.map(entry => ({ ...entry, kind: 'static' }));
+  const inventory = collectFullTreeInventory(cases), owner = collectOwnerInitialStyleEvidence(supplied, inventory);
+  const origin = collectOriginStageEvidence(cases, inventory, bindPreciseAuditNormalization(), { reviewedDisjointMotion: true });
+  const binding = bindOwnerInitialStyleSource(supplied, options);
+  const field = collectBoundFieldHostLayout(supplied, { ...options, collectInventory: collectFullTreeInventory });
+  assert.equal(field.binding.status, 'bound', field.binding.error);
+  const prefix = [cases, origin, { comparisons: [], differences: [] }, ...Array.from({ length: 19 }, () => []),
+    { observations: [] }, { observations: [] }, { observations: [] }, [], owner];
+  const initial = collectStyleDiscrepancies(...prefix);
+  const classified = collectStyleDiscrepancies(...prefix, ...Array.from({ length: 9 }, () => ({ observations: [] })), field);
+  const current = classified.filter(row => row.property === 'boxSizing');
+  const previous = initial.filter(row => row.property === 'boxSizing');
+  assert.equal(current.length, 6); assert.equal(previous.length, 6);
+  assert.ok(current.every(row => row.attribution === fieldHostLayoutAttribution && row.reference === 'content-box' && row.astylar === 'border-box'));
+  const audit = { discrepancies: current, ownerInitialStyleBinding: binding, fieldHostLayoutInputs: field };
+  const before = structuredClone({ audit, previous });
+  const replay = independentlyReconstructLaterScalarReviews(audit, { discrepancies: previous }, current, options);
+  assert.deepEqual(replay.rows, previous); assert.equal(replay.changes.length, 6);
+  assert.deepEqual({ audit, previous }, before);
+  const forged = structuredClone(audit); forged.fieldHostLayoutInputs.observations[0].proof.properties[0].candidateAuthored = 'forged';
+  assert.throws(() => independentlyReconstructLaterScalarReviews(forged, { discrepancies: previous }, forged.discrepancies, options),
+    /pre-scalar field-host evidence differs/);
+  const forgedRows = structuredClone(audit); forgedRows.discrepancies[0].justification = 'forged';
+  assert.throws(() => independentlyReconstructLaterScalarReviews(forgedRows, { discrepancies: previous }, forgedRows.discrepancies, options),
+    /later scalar metadata does not match/);
+}));
 
 test('followup refinement authenticates the complete captured initial predecessor without a family exemption', () => withAuditScratch('followup-predecessor-', directory => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
