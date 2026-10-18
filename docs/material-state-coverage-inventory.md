@@ -2,6 +2,26 @@
 
 ## Current audit pointer — October18
 
+Case-index historical applicability now reaches original assertions. Existing
+collector reuses exact component diagnostic reversal and authenticates both
+39b3e0fd layout-inspection additions against complete Git predecessor/source
+hashes (renderer observation method and optional snapshot type). Policy chain
+reuses four-registration/inherited-margin restoration,then removes24 later
+definitions and requires whole-source equality to authenticated987b631f's135-
+definition policy before the original three-registration reversal. No retained
+definition/receipt is rewritten. Current producer's explicit subset-call change
+reverses exactly628d3b06→d260f8ca in the existing registration replay boundary;
+unreviewed changes reject,not silently normalize.
+case-index-policy-applicability-20261018:positive nine-index authentication passes;
+negative test rejects modified producer at an earlier strict hash but fails its
+expected diagnostic string (1/2). After diagnostic-only clarification,original
+negative test plus added component-drift rejection passes1/1 in
+case-index-policy-rejection-20261018 (19145.9494ms). Keep all earlier failed
+component/component-bound/component-core/complete-layout attempts. These prove
+historical receipt/conservation applicability,not fresh rendering or final
+canonical acceptance. Current source/export reconciliation and other169 original
+failure contexts remain separate. No renderer,reference or capture was changed.
+
 Post-terminal slider subset integration46474 finishes exit0:2/2 original tests
 pass,no skips/cancellations,duration869747.4907ms. Existing production
 normalization/value/other-row conservation and original missing-binding,

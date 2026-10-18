@@ -26,7 +26,17 @@ export function restoreAttributeFocusPolicy(source) {
   return restored;
 }
 export function restoreAttributeFocusProducer(source) {
-  const current = normalized(source);
+  let current = normalized(source);
+  // Historical registration replay predates explicit non-Icon applicability.
+  // Authenticate the complete transition; never relabel the current producer.
+  const subsetCall = "applyIconContextReviews(discrepancies, { cases })";
+  if (current.includes(subsetCall)) {
+    assert.equal(digest(current), '628d3b060a265e793e04671df14a82bbdece47c16c25e5d0fbdf0edb7a32674d',
+      'mapping or normalization changed beyond reviewed subset applicability');
+    assert.equal(current.split(subsetCall).length, 2);
+    current = current.replace(subsetCall, 'applyIconContextReviews(discrepancies)');
+    assert.equal(digest(current), 'd260f8cad2b7b23018524d84aa8056381932dbcffa6b7ce7f51236b515b05e1e');
+  }
   if (!current.includes('public attribute-first focus loss and separate root-replacement controls')) {
     assert.ok(!current.includes("'scripts/audit-public-role-focus-refresh.mjs'"), 'Unrecognized attribute-focus proof');
     return current;

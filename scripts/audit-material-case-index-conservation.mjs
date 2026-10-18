@@ -6,9 +6,10 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import ts from 'typescript';
 import { caseIndexReceiptFiles, caseIndexReceiptRevision, caseIndexAuditModule } from './refresh-material-case-index-receipts.mjs';
-import { verifyAlignmentAuditProjection } from '../tests/material-parity/alignment-survey-conservation.mjs';
+import { verifyAlignmentAuditProjection, restoreAstylarDiagnostics } from '../tests/material-parity/alignment-survey-conservation.mjs';
 import { verifyCaseIndexAssertionMigration } from '../tests/material-parity/case-index-assertion-migration.mjs';
 import { restoreGapCaptureDiagnostics } from '../tests/material-parity/gap-survey-source-replay.mjs';
+import { restoreInheritedMarginPolicyRefinement } from '../tests/material-parity/position-composition-producer-transition.mjs';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
 const normalize = value => value.toString().replaceAll('\r\n', '\n');
@@ -40,7 +41,31 @@ export function verifyInputTreeHeadingExtension(bytes, expected) {
 // These later source findings and classification do not replace historical policy. Prove
 // the exact additive transition before reusing the unchanged case memberships.
 export function policyProjection(bytes, expected) {
-  const source = normalize(bytes);
+  let source = normalize(bytes);
+  const actualCurrentSha256 = sourceHash(source);
+  if (actualCurrentSha256 === '55c7e9cf1c634ebd8b01409b1836d1513f24e0c5ada656ce16f591aee1fd50a2') {
+    // Reuse the existing exact four-registration/refinement reversal first.
+    source = restoreInheritedMarginPolicyRefinement(source);
+    const target = normalize(historical('987b631f', 'tests/material-parity/input-equivalence-policy.mjs'));
+    assert.equal(sourceHash(target), '3256863af7432ce2d9e05e2cc2569bc7f68db5f9a063f718ef09594e13c2474f');
+    const entries = text => {
+      const tree = ts.createSourceFile('policy.mjs', text, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+      assert.equal(tree.parseDiagnostics.length, 0);
+      return { tree, rows: tree.statements.filter(ts.isVariableStatement).flatMap(n => [...n.declarationList.declarations])
+        .find(n => n.name.getText(tree) === 'sourceAuditDefinitions').initializer.arguments[0].elements };
+    };
+    const before = entries(target), after = entries(source);
+    const idOf = row => row.arguments[0].properties.find(p => p.name.getText() === 'id').initializer.text;
+    assert.equal(before.rows.length, 135); assert.equal(after.rows.length, 159);
+    const retainedIds = new Set(before.rows.map(idOf));
+    const additions = after.rows.filter(row => !retainedIds.has(idOf(row)));
+    assert.equal(additions.length, 24);
+    for (const node of additions.reverse()) {
+      assert.equal(source[node.end], ',');
+      source = source.slice(0, node.getFullStart()) + source.slice(node.end + 1);
+    }
+    assert.equal(source, target, 'complete historical135 policy differs');
+  }
   assert.equal(sourceHash(source), '3256863af7432ce2d9e05e2cc2569bc7f68db5f9a063f718ef09594e13c2474f', 'unreviewed policy transition');
   assert.equal(expected, '7e939aece26dd69b846b78fc6d21aa332463b53068f488cf19343578306d80d8');
   const ast = ts.createSourceFile('policy.mjs', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
@@ -66,7 +91,7 @@ export function policyProjection(bytes, expected) {
   restored = restored.replace(classification, '');
   assert.equal(sourceHash(restored), expected, 'retained policy changed');
   return { file: 'tests/material-parity/input-equivalence-policy.mjs', recordedSha256: expected,
-    currentSha256: sourceHash(source), addedSourceFindings: ids,
+    currentSha256: actualCurrentSha256, addedSourceFindings: ids,
     addedClassifications: ['documented-limitation'], retainedSourceUnchanged: true };
 }
 
@@ -103,6 +128,55 @@ export function collectCaseIndexConservation({ read = readFileSync } = {}) {
         if (!dependencyProjections.some(p => p.file === dependency.file)) dependencyProjections.push({
           file: dependency.file, recordedSha256: dependency.sha256, currentSha256: sourceHash(bytes),
           retainedSourceUnchanged: true, addedInteractionDiagnostics: ['geometry', 'controlPaintGeometry'],
+        });
+      } else if (dependency.file === 'examples/material-showcase/src/app/astylar.component.ts' && sourceHash(bytes) !== dependency.sha256) {
+        assert.equal(dependency.sha256, 'b7957cd9e651efdf85bcbb70d7b9dd4fd8fbddb18c1b616ab6c9d54d3937ff90');
+        assert.equal(sourceHash(restoreAstylarDiagnostics(bytes)), dependency.sha256, 'retained component changed beyond diagnostics');
+        if (!dependencyProjections.some(p => p.file === dependency.file)) dependencyProjections.push({
+          file: dependency.file, recordedSha256: dependency.sha256, currentSha256: sourceHash(bytes),
+          retainedSourceUnchanged: true, addedReadOnlyDiagnostics: ['paintDepth', 'camera'],
+        });
+      } else if (dependency.file === 'src/lib/astylar.ts' && sourceHash(bytes) !== dependency.sha256) {
+        assert.equal(dependency.sha256, 'e72cfb8e8e1d91c5a4de9002de3ae98f76f1ed26112251b47fde3b77b13f1094');
+        assert.equal(sourceHash(bytes), '5742ba6c19debd5c18ad7d407f1a10e14271cbcd38bf99889d4b4e2474f17451');
+        // Same exact read-only addition proved by the existing retained
+        // antialias/selection receipt test; no current layout result is inferred.
+        let restored = normalize(bytes);
+        for (const block of [
+          '      const layoutMesh = element.id && authoredById.get(element.id) === element\n' +
+            '        ? this.elementManager.elementsMap.get(element.id) : undefined;\n' +
+            '      const retainedDimensions = layoutMesh\n' +
+            '        ? this.elementManager.getElementDimensions(layoutMesh.name) : undefined;\n',
+          '        ...(retainedDimensions ? { retainedLayout: {\n' +
+            "          source: 'core-dimension-registry' as const, ...structuredClone(retainedDimensions),\n" +
+            '        } } : {}),\n',
+        ]) {
+          assert.equal(restored.split(block).length, 2);
+          restored = restored.replace(block, '');
+        }
+        assert.equal(sourceHash(restored), dependency.sha256);
+        assert.equal(restored, normalize(historical('39b3e0fd^', dependency.file)));
+        if (!dependencyProjections.some(p => p.file === dependency.file)) dependencyProjections.push({
+          file: dependency.file, recordedSha256: dependency.sha256, currentSha256: sourceHash(bytes),
+          retainedSourceUnchanged: true, addedReadOnlyDiagnostics: ['retainedLayout'],
+        });
+      } else if (dependency.file === 'src/lib/astylar-surface.ts' && sourceHash(bytes) !== dependency.sha256) {
+        assert.equal(dependency.sha256, '91c2b6fe2fed03da0573d819cd3deed2330ffca91faf22b5083588cbb32fbb13');
+        assert.equal(sourceHash(bytes), 'cc874b030ffdd0960db4b68fea88e1864824b40ce72d716f69a2ec025f0e182a');
+        const addition = "    /** Detached current core CSS dimensions, not projected mesh bounds.\n" +
+          "     * Absent for unrendered or ambiguous owners. Does not certify that a\n" +
+          "     * retained text texture was repainted using this current layout.\n" +
+          "     */\n    readonly retainedLayout?: {\n" +
+          "      readonly source: 'core-dimension-registry';\n" +
+          "      readonly width: number;\n      readonly height: number;\n" +
+          "      readonly padding: Readonly<{ top: number; right: number; bottom: number; left: number }>;\n    };\n";
+        assert.equal(normalize(bytes).split(addition).length, 2);
+        const restored = normalize(bytes).replace(addition, '');
+        assert.equal(sourceHash(restored), dependency.sha256);
+        assert.equal(restored, normalize(historical('39b3e0fd^', dependency.file)));
+        if (!dependencyProjections.some(p => p.file === dependency.file)) dependencyProjections.push({
+          file: dependency.file, recordedSha256: dependency.sha256, currentSha256: sourceHash(bytes),
+          retainedSourceUnchanged: true, addedReadOnlyDiagnostics: ['retainedLayout snapshot type'],
         });
       } else assert.equal(sourceHash(bytes), dependency.sha256, `changed dependency: ${dependency.file}`);
     }

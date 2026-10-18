@@ -25,4 +25,7 @@ test('historical source assertion refuses a different caller, unknown file and c
   assert.throws(() => assertHistoricalCaseIndexSources(file, index, { read: name => name === caseIndexAuditModule
     ? Buffer.from(readFileSync(name, 'utf8').replace('function reviewedTemplateTextMappings(', 'function changedTemplateTextMappings('))
     : readFileSync(name) }), /mapping or normalization changed/);
+  assert.throws(() => assertHistoricalCaseIndexSources(file, index, { read: name => name === 'examples/material-showcase/src/app/astylar.component.ts'
+    ? Buffer.from(readFileSync(name, 'utf8') + '\n// unreviewed component drift\n')
+    : readFileSync(name) }), /retained component changed beyond diagnostics/);
 });
