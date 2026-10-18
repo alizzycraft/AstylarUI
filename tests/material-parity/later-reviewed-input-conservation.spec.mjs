@@ -19,10 +19,50 @@ import { buttonBoxSizingAttribution } from './button-box-sizing-classification.m
 import { selectedButtonInputs } from './button-pill-radius-evidence.mjs';
 import { collectIconContextReview, applyIconContextReviews, iconContextBaseline } from './display-request-review.mjs';
 import { loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
+import { applyExplicitComponentCursors } from './component-cursor-request-review.mjs';
+import { applyTabWidthOwners } from './modal-position-inspection.mjs';
 import { restoreScalarReviewExtraction } from './position-composition-producer-transition.mjs';
 import { reviewedSourceBatchAttributions } from './reviewed-source-batch-audit-source-binding.mjs';
 
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
+
+test('scalar replay authenticates unattributed cursor and tab owner predecessors from captured source', () => withAuditScratch('unattributed-owner-predecessor-', directory => {
+  const bytes = readFileSync('artifacts/material-parity/button-box-sizing-integration-Akpx6Y/report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), '703ba4cbeb92f658b9382216caed8839cdb504bce92eee589461f17e2841b242');
+  const original = JSON.parse(bytes), owners = new Map([
+    ['expansion', new Set(['expansion-primary'])], ['slide-toggle', new Set(['slide-toggle-primary'])],
+    ['tabs', new Set(['tab-activity', 'tab-overview'])],
+  ]);
+  // Preserve sibling inputs required by the production owner-mapping proof.
+  const results = original.results.filter(entry => owners.has(entry.family));
+  assert.equal(results.length, 3);
+  const supplied = { ...original, results, interactions: [] }, file = path.join(directory, 'report.json');
+  writeFileSync(file, JSON.stringify(supplied));
+  const options = { root: process.cwd(), parityPath: file }, cases = results.map(entry => ({ ...entry, kind: 'static' }));
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  const owner = collectOwnerInitialStyleEvidence(supplied, inventory);
+  const origin = collectOriginStageEvidence(cases, inventory, normalize, { reviewedDisjointMotion: true });
+  const initial = collectStyleDiscrepancies(cases, origin, { comparisons: [], differences: [] },
+    ...Array.from({ length: 19 }, () => []), { observations: [] }, { observations: [] }, { observations: [] }, [], owner);
+  const previous = initial.filter(row => owners.get(row.family).has(row.element) &&
+    (row.family === 'tabs' ? row.property === 'width' : row.property === 'cursor'));
+  assert.equal(previous.length, 4); assert.ok(previous.every(row => !Object.hasOwn(row, 'attribution')));
+  const current = applyTabWidthOwners(applyExplicitComponentCursors(previous, cases, inventory, normalize), cases, inventory, normalize);
+  assert.ok(current.every(row => row.reviewEvidence.originalRowSha256));
+  const audit = { discrepancies: current, ownerInitialStyleBinding: bindOwnerInitialStyleSource(supplied, options) };
+  const before = structuredClone({ audit, previous });
+  const restored = independentlyReconstructLaterScalarReviews(audit, { discrepancies: previous }, current, options);
+  assert.deepEqual(restored.rows, previous); assert.equal(restored.changes.length, 4);
+  assert.deepEqual({ audit, previous }, before);
+  const forged = structuredClone(current); forged[0].justification = 'forged';
+  assert.throws(() => independentlyReconstructLaterScalarReviews(audit, { discrepancies: previous }, forged, options), /unattributed owner metadata/);
+  const forgedBefore = structuredClone(previous); forgedBefore[0].justification = 'forged';
+  assert.throws(() => independentlyReconstructLaterScalarReviews(audit, { discrepancies: forgedBefore }, current, options), /unattributed owner metadata/);
+  assert.throws(() => independentlyReconstructLaterScalarReviews(audit, { discrepancies: previous }, current.slice(1), options), /unattributed owner metadata/);
+  const rawBefore = structuredClone(previous), rawCurrent = structuredClone(current);
+  rawBefore[0].reference = 'crosshair'; rawCurrent[0].reference = 'crosshair';
+  assert.throws(() => independentlyReconstructLaterScalarReviews(audit, { discrepancies: rawBefore }, rawCurrent, options));
+}));
 
 test('scalar replay admits authenticated unattributed Icon predecessors without dropping cohort guards', async () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');

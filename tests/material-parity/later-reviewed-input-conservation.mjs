@@ -19,6 +19,8 @@ import { collectBoundFieldHostLayout, fieldHostLayoutAttribution, fieldHostWidth
 import { collectButtonBoxSizingInputs } from './button-box-sizing-source-binding.mjs';
 import { buttonBoxSizingAttribution } from './button-box-sizing-classification.mjs';
 import { validateIconContextRows } from './display-request-review.mjs';
+import { applyExplicitComponentCursors } from './component-cursor-request-review.mjs';
+import { applyTabWidthOwners } from './modal-position-inspection.mjs';
 
 const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
 const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
@@ -129,10 +131,33 @@ export function independentlyReconstructLaterScalarReviews(audit, previous, curr
   assert.equal(before.size, previous.discrepancies.length, 'ambiguous historical scalar membership');
   const supplied = new Map(current.map(r => [signature(r), r]));
   assert.equal(supplied.size, current.length, 'duplicate current scalar membership');
+  // These production reviewers intentionally accept unattributed owner-mismatch
+  // predecessors. Re-run their original-source proofs before admitting any row;
+  // absence of an attribution alone is never a reconstruction permission.
+  const unattributed = previous.discrepancies.filter(row => !Object.hasOwn(row, 'attribution'));
+  for (const prior of unattributed) {
+    const key = signature(prior);
+    if (JSON.stringify(supplied.get(key)) === JSON.stringify(prior)) continue;
+    const source = sourceRows.get(key);
+    assert.ok(source, 'unattributed predecessor lacks original scalar observation');
+    assert.equal(JSON.stringify(raw(prior)), JSON.stringify(raw(source)),
+      'unattributed predecessor raw evidence differs from captured source');
+  }
+  const normalize = bindPreciseAuditNormalization();
+  const ownerReviews = applyTabWidthOwners(
+    applyExplicitComponentCursors(unattributed, cases, inventory, normalize), cases, inventory, normalize);
+  const authenticatedUnattributed = new Set();
+  for (const expected of ownerReviews) {
+    const key = signature(expected), prior = before.get(key);
+    if (JSON.stringify(expected) === JSON.stringify(prior)) continue;
+    assert.equal(JSON.stringify(supplied.get(key)), JSON.stringify(expected),
+      'unattributed owner metadata does not match original-source review');
+    authenticatedUnattributed.add(key);
+  }
   const candidates = current.filter(row => {
     const prior = before.get(signature(row));
     const admitted = prior && (prior.attribution === 'unresolved' ||
-      prior.attribution === undefined && row.attribution === iconAttribution);
+      prior.attribution === undefined && (row.attribution === iconAttribution || authenticatedUnattributed.has(signature(row))));
     return admitted && JSON.stringify(row) !== JSON.stringify(prior);
   });
   const seeds = candidates.map(row => {

@@ -2,6 +2,26 @@
 
 ## Current audit pointer — October18
 
+October19 unattributed owner reconstruction now uses existing production cursor
+and tab-width reviewers against authenticated captured cases/inventory BEFORE
+admission. Each changed unattributed predecessor must first match original raw
+source evidence;complete reviewer output must then equal supplied current row,
+including original-row hash,prior metadata and owner observations. Only those
+source-proved review transitions join replay candidates;absence alone permits
+nothing. Later full production replay and whole unrelated-row hash stay strict.
+Actual3-case/four-row regression plus forged current/predecessor metadata,
+missing row and self-consistent altered raw values pass alongside Icon and
+original conservation/source-rejection controls:7/7 exit0,no skips/cancel,
+55767.8201ms in unattributed-owner-source-guard-controls-20261019 stdout/stderr.
+Original failed tests retained:first subset omitted expansion-title required by
+owner mapping (uf922l);complete-input test restored4 rows but its raw-forgery
+control exposed admission-before-source-check ordering (ptpPwn). The corrected
+guard checks changed unattributed raw evidence first;neither owning proof was
+relaxed. Successful scratch removed by withAuditScratch. Next:original coherent
+button-box integration with these four transitions restored,then remaining
+binding/mutation assertions and source/canonical applicability reconciliation.
+Current rendering,all2311 case closures and final gates remain unverified.
+
 October19 diagnostic integration74540 TERMINAL1,0/1,852022.9553ms,no skips/cancel.
 Original hash guard still rejects;logs button-box-complete-row-diagnostic-
 integration-20261019 and failure scratchAkpx6Y retained. Bounded diagnostics
