@@ -14,6 +14,14 @@ acceptance. Do not map all receipts to today's files or dismiss this as metadata
 Next:scope changed owners/callers against the actual held-update proof before
 choosing historical replay versus justified affected current recapture. Existing
 bundle/provenance are the evidence;no replacement report/capture was generated.
+One complete owner boundary is now compared:captured bundled
+_AstylarSurfaceComponent constructor versus current installed constructor match
+under esbuild lexical-local renaming/formatting,normalized SHA4b7b27b678c231ef.
+Changing renderedData assignment rejects. Saved bundle/provenance authenticate
+before extraction;whole surface file still differs. This establishes constructor
+body continuity only,not Angular globals/runtime,remaining fields/metadata,
+astylar.js or highlight module equivalence. Other27-input applicability remains
+open;do not waive dependency guards or claim current held-button acceptance.
 Additional live failures120/125 stop at source receipts,132 at captured runner
 b2477a12 versus86ece08b;these add no new demonstrated renderer regression yet.
 
