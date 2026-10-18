@@ -21,6 +21,18 @@ retain original hashes,then separately execute current-source/method checks.
 This closes asset availability uncertainty only,not original test acceptance.
 No new run,framework,report or immutable hash for growing stdout was created.
 
+Bounded applicability follow-up:all three complete application sources embedded
+in authenticated snackbar maps equal current sources after the original CRLF
+normalization:astylar.component b493a355,reference.component debe55bc,store
+0760fb81. Reusing the original configured-input-focus method extraction and
+formatting comparison against authenticated3JXWRYJY dba48404 matches all14
+complete methods across current TS emission,installed JS and captured JS:four
+text-selection caret methods,three text-input controller/style methods,seven
+highlight factory methods. This rules out method drift in that bounded set,
+not caller/action/palette/full-module drift. The original test still stops at
+missing current-dist asset;remaining action-source/current rendering assertions
+have not passed. No whole-case status changes or recapture follow.
+
 Unfiltered harness follow-up:failure116 stops before button-width assertions.
 button-fixed-width-canonical-integration.spec selects480 button-containing cases
 and600 owners;its current builder calls applyIconContextReviews whenever the
