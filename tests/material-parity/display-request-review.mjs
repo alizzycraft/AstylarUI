@@ -120,8 +120,17 @@ export function applyIconContextReviews(rows, options) {
   return result;
 }
 
-export function validateIconContextRows(rows) {
+export function validateIconContextRows(rows, options) {
   try {
+    if (options?.cases !== undefined) {
+      assert.ok(Array.isArray(options.cases), 'Icon validation case population must be explicit');
+      assert.ok(options.cases.every(entry => typeof entry.family === 'string'), 'Icon validation case family missing');
+      if (!options.cases.some(entry => entry.family === 'icon')) {
+        assert.ok(!rows.some(row => row.family === 'icon' || row.attribution === 'reviewed-icon-parent-context-and-width-intent'),
+          'Icon evidence outside supplied validation case population');
+        return [];
+      }
+    }
     const selected = rows.filter(row => row.attribution === 'reviewed-icon-parent-context-and-width-intent');
     const original = selected.map(row => {
       const restored = { ...row };

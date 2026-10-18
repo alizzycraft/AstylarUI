@@ -56,7 +56,7 @@ test('historical case-index binding retains saved receipts and never promotes so
   ]);
   historicalProjection.dependencyProjections = historicalProjection.dependencyProjections.filter(p => !p.addedReadOnlyDiagnostics);
   for (const row of historicalProjection.reports) {
-    assert.equal(row.currentSourceSha256, '628d3b060a265e793e04671df14a82bbdece47c16c25e5d0fbdf0edb7a32674d');
+    assert.equal(row.currentSourceSha256, '7bb5bfb183e60281b70eb7356631af2c9cf6638419b703f7e2d0286c608ddab6');
     row.currentSourceSha256 = 'a787e493d0e36d37fe5517bba8a6c3ba7a876f5bdb5ff7991e4d5bdcd0a0ebd0';
   }
   for (const [file, current, previous] of [

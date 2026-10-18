@@ -27,6 +27,14 @@ export function restoreAttributeFocusPolicy(source) {
 }
 export function restoreAttributeFocusProducer(source) {
   let current = normalized(source);
+  const validationSubsetCall = 'validateIconContextRows(report.discrepancies, { cases })';
+  if (current.includes(validationSubsetCall)) {
+    assert.equal(digest(current), '7bb5bfb183e60281b70eb7356631af2c9cf6638419b703f7e2d0286c608ddab6',
+      'mapping or normalization changed beyond reviewed validation subset applicability');
+    assert.equal(current.split(validationSubsetCall).length, 2);
+    current = current.replace(validationSubsetCall, 'validateIconContextRows(report.discrepancies)');
+    assert.equal(digest(current), '628d3b060a265e793e04671df14a82bbdece47c16c25e5d0fbdf0edb7a32674d');
+  }
   // Historical registration replay predates explicit non-Icon applicability.
   // Authenticate the complete transition; never relabel the current producer.
   const subsetCall = "applyIconContextReviews(discrepancies, { cases })";

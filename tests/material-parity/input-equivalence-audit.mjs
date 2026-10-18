@@ -795,7 +795,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
       errors.push(...validateExpansionTreeFormattingReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
       errors.push(...validateRemainingBorderReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
       errors.push(...validateFinalOwnerStyleReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
-      errors.push(...validateIconContextRows(report.discrepancies));
+      errors.push(...validateIconContextRows(report.discrepancies, { cases }));
       errors.push(...validateComponentColorReviews(report.discrepancies, replayedRows, cases, report.elementInventory,
         collectRetainedTypographyEvidence(cases.filter(e => ['sort', 'sidenav'].includes(e.family)), report.elementInventory), canonicalStyle));
       errors.push(...validatePaintReviews(report.discrepancies, replayedRows, cases, report.elementInventory,

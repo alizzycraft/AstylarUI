@@ -2,6 +2,26 @@
 
 ## Current audit pointer — October18
 
+Tooltip subset original integration99744 TERMINAL exit1:1/2 pass,zero skips or
+cancellations,duration3045279.1095ms in tooltip-subset-original-integration-
+20261018 stdout/stderr. Original builder barrier is cleared:positive test reaches
+its final validator error-list comparison after all wrapping/scalar/precedence/
+unrelated-row conservation assertions. Negative binding/lost-row/false-equivalence
+test passes. Remaining positive failure is validator's unconditional eight-Icon-
+row prerequisite on a tooltip-only population,not new tooltip rendering evidence.
+Preserve original scratchCF2Bq4 failure report;successful second scratch is removed
+by established retention helper. Existing validator now takes explicit cases;
+non-Icon omission requires no Icon rows AND no Icon attribution. Default/Icon
+populations still reject missing evidence. Focused original Icon conservation and
+new invalid/forged-population controls pass2/2 in icon-validator-subset-focused-
+20261018 logs,duration23459.7599ms. Existing producer restoration authenticates
+whole7bb5bfb1→628d3b06 exact validator-call reversal,then original subset/registration
+chain;direct prior equality and unexpected-drift rejection pass. Case-index
+report-only current hash expectation follows this exact transition;its full
+suite needs revalidation. Positive tooltip integration retry also remains needed;
+no full-suite pass,current rendering,canonical source reconciliation or whole-
+case closure is claimed. No renderer,reference input or capture changed.
+
 Snackbar original failure1600 now replays its complete ordinary-open assertion:
 1/1 pass,no skips/cancellations,duration2401.445ms in
 artifacts/material-parity/snackbar-historical-diagnostic-replay-20261018.log

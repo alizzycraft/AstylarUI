@@ -932,6 +932,14 @@ test('Icon review skips only explicitly non-Icon populations without altering th
   assert.throws(() => applyIconContextReviews([{ family: 'icon' }], { cases: [{ family: 'slider' }] }), /outside supplied case population/);
   assert.throws(() => applyIconContextReviews(rows, { cases: {} }), /must be explicit/);
   assert.throws(() => applyIconContextReviews(rows, { cases: [{}] }), /case family missing/);
+  assert.deepEqual(validateIconContextRows(rows, { cases: [{ family: 'tooltip' }] }), []);
+  assert.equal(validateIconContextRows([{ family: 'icon' }], { cases: [{ family: 'tooltip' }] }).length, 1);
+  assert.equal(validateIconContextRows([{ family: 'tooltip', attribution: 'reviewed-icon-parent-context-and-width-intent' }],
+    { cases: [{ family: 'tooltip' }] }).length, 1);
+  assert.equal(validateIconContextRows(rows, { cases: {} }).length, 1);
+  assert.equal(validateIconContextRows(rows, { cases: [{}] }).length, 1);
+  assert.equal(validateIconContextRows([], { cases: [{ family: 'icon' }] }).length, 1);
+  assert.equal(validateIconContextRows([]).length, 1);
 });
 
 test('Icon review conserves complete original rows and rejects input drift', async () => {
