@@ -2,6 +2,29 @@
 
 ## Current audit pointer — October18
 
+October19 diagnostic integration74540 TERMINAL1,0/1,852022.9553ms,no skips/cancel.
+Original hash guard still rejects;logs button-box-complete-row-diagnostic-
+integration-20261019 and failure scratchAkpx6Y retained. Bounded diagnostics
+identify EXACTLY4 differing rows among6318,zero key-order-only rows:static
+light/desktop expansion-primary cursor,slide-toggle-primary cursor,and tabs
+tab-activity/tab-overview width. Scalars,occurrences,cases and states match;
+only justification,recommendedOwner,attribution,reviewedCases,reviewEvidence
+change. Prior attribution is absent in all4. Current production classifications
+are reviewed-expansion-panel-header-cursor-owner,reviewed-switch-host-control-
+cursor-owner and reviewed-tab-width-owner-inputs. Existing owning reviewers
+explicitly accept absent-attribution parity-harness predecessors and retain
+originalRowSha256/priorMetadata plus complete original owner observations.
+Thus replay's unresolved-only candidate assumption also drops these source
+review paths;the demonstrated gap is not serialization or new raw observations.
+Next:use existing source reviewers/validators to authenticate complete absent-
+attribution predecessors before admission,with forged metadata/raw rejection;
+do not introduce a blanket missing-attribution waiver or omit these4 rows.
+Separate3-second source-only check authenticates b07ef154 original/703ba4cb
+subset and rules out full-only root-background classification for this88-case
+subset (2223 source cases missing);log button-box-root-background-applicability-
+diagnosis-20261019. No production source or capture changed. Later integration
+assertions,current rendering,canonical reconciliation and final gates remain open.
+
 October19 complete-row failure locality added to the SAME existing integration:
 before the unchanged hash assertion,diagnostics count all differing rows and
 fields,show at most20 scalar/attribution/reviewEvidence-field examples,and
