@@ -2,6 +2,26 @@
 
 ## Current audit pointer — October18
 
+Historical-source barrier triage:failures432/433 in
+historical-case-index-source-assertion.spec.mjs stop in
+collectCaseIndexConservation at component currentb493a355 versus capturedb7957cd9.
+The positive nine-index loop does not finish;the changed-caller negative control
+is masked by this earlier dependency assertion,not demonstrated broken. Reuse
+the complete component reversal already established below within the existing
+case-index conservation boundary after the live run;retain caller/source mutation
+controls and all original saved receipt bytes. Later assertions remain unverified.
+Failure503 in input-boundary-evidence.spec.mjs:869 stops opening historical
+chunk-3JXWRYJY.js.map in current dist,before its17-source census/comparison.
+Read-only census against the original current-full-20261005 checkpoint finds
+ALL912 named JS maps under icon-fresh-producer-retained-build-20261016-browser:
+zero missing,all912 SHA256 values equal their original browserFiles receipts.
+This establishes complete map availability for this exact checkpoint,not current
+source equality or rendering acceptance. Use capture-bound retained reads,never
+copy historical assets into current dist;execute the original remaining source
+census after the verification boundary is corrected. Evidence is unchanged
+full-audit-harness-cd867bbe-20261018.log failures432/433/503,the named tests,
+original checkpoint manifest and retained maps. No report/capture/source/test edit.
+
 Additional subset-contract triage from the unchanged live harness:failure412
 in gap-review-canonical-integration.spec.mjs:55 selects676 cases by38 reviewed
 owners across12 families;the membership contains zero Icon owners. Current
