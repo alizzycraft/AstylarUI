@@ -2,6 +2,20 @@
 
 ## Current audit pointer — October18
 
+Runtime-wiring failure521 is resolved in its existing callback replay:missing
+Function-scope hash binding caused ReferenceError before runtime assertions.
+After binding it,retained diagnostic wrapper exposed a second stale assumption:
+installed/current inspector method hashes now both2949e37e,not historicaleffd5c12
+versus current2949e37e. Wrapper now checks exact current equality separately from
+the pinned historical method transition,requires exactly one diagnostic owner
+and zero differences for today's installation. All unrelated runtime members,
+wiring,metadata assertions and unexpected-declaration controls remain unchanged.
+Original complete class-body test and actual callback replay pass2/2 exit0 in
+runtime-wiring-current-equality-20261018 stdout/stderr. Keep earlier hash-binding
+attempt failure:it demonstrates the stale forced-difference assumption,not a
+renderer regression. No source maps,captures,renderer or fixture edits;this is
+bounded runtime-body/metadata equality,not browser rendering or lifecycle parity.
+
 Checkpoint application census original failure503 is now verified1/1 exit0
 through its existing test with retained-map location,not current dist. Original
 manifest7ae2cba1 and each912 map receipt authenticate;all original contributing-

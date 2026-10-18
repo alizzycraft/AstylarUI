@@ -4676,7 +4676,8 @@ test('captured runtime class bodies match current repository compilation without
 
 test('runtime wiring and metadata retain original assertions beyond authenticated diagnostic drift', async () => {
   const { transformSync } = await import('esbuild');
-  // Diagnostic only: the original whole-runtime equality test above must still fail.
+  // Historical diagnostic drift is not required to persist after installation.
+  // Current equality is checked independently by the original test above.
   // Execute its actual callback, not a copied or reduced metadata assertion body.
   const sourceFile = 'tests/material-parity/input-boundary-evidence.spec.mjs';
   const source = readFileSync(sourceFile, 'utf8');
@@ -4702,6 +4703,7 @@ test('runtime wiring and metadata retain original assertions beyond authenticate
     return result;
   };
   let diagnosticDifferences = 0;
+  let diagnosticOwners = 0;
   const compare = (actual, expected, message) => {
     if (message !== path.join('src', 'lib', 'astylar.ts'))
       return assert.deepEqual(actual, expected, message);
@@ -4719,9 +4721,13 @@ test('runtime wiring and metadata retain original assertions beyond authenticate
         if (member !== 'MethodDeclaration:inspectCurrentDocumentStyles')
           assert.equal(body, current.get(member), member);
         else {
-          assert.equal(hash(body), 'effd5c129a1c70cb9343a8d5c863b92169b6c7316f25e8c0120df575a8cb3147');
+          diagnosticOwners++;
           assert.equal(hash(current.get(member)), '2949e37e0ec074e81855e4835170c5165ba0b497cec902f70ad406f0cff95160');
-          diagnosticDifferences++;
+          if (body === current.get(member)) assert.equal(hash(body), '2949e37e0ec074e81855e4835170c5165ba0b497cec902f70ad406f0cff95160');
+          else {
+            assert.equal(hash(body), 'effd5c129a1c70cb9343a8d5c863b92169b6c7316f25e8c0120df575a8cb3147');
+            diagnosticDifferences++;
+          }
         }
       }
     }
@@ -4731,9 +4737,10 @@ test('runtime wiring and metadata retain original assertions beyond authenticate
     new Map([['function:unexpected', 'b']]), path.join('src', 'lib', 'astylar.ts')));
   assert.throws(() => compare(['changed'], ['original'], 'runtime export wiring'));
   const callback = calls[0].expression.arguments[1].getText(ast);
-  const execute = new Function('assert', 'readFileSync', 'path', 'ts', `return (${callback})();`);
-  await execute({ ...assert, deepEqual: compare }, readFileSync, path, ts);
-  assert.equal(diagnosticDifferences, 1);
+  const execute = new Function('assert', 'readFileSync', 'path', 'ts', 'hash', `return (${callback})();`);
+  await execute({ ...assert, deepEqual: compare }, readFileSync, path, ts, hash);
+  assert.equal(diagnosticOwners, 1);
+  assert.equal(diagnosticDifferences, 0, 'current installation must not be reported as historical drift');
 });
 
 test('public semantic sibling updates isolate retained focus loss without Material plugins', async t => {
