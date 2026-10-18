@@ -2,6 +2,18 @@
 
 ## Current audit pointer — October18
 
+Cursor failure332 bounded replay answers whether observations changed:
+collectExplicitCursors against authenticated savede6b98e25 preserves EVERY
+non-sourceFingerprints field exactly,including2311 cases/763 differing owner
+observations. Ordered receipt membership also matches;removing one finding
+rejects. Five source hashes differ:vertical collector,generated-node mapper,
+audit producer,runner,component. Existing conservation projects only collector/
+producer,leaving mapper c21d439f→51f017cc,runner c3cabcf→c13ed230 and component
+b7957cd9→b493a355. Component reversal is already proved below;mapper/runner
+applicability still requires explicit review. Original assertion stays failed;
+do not silently project these receipts or claim current cursor/hit-target parity.
+Read-only existing collector replay wrote no report or capture.
+
 Repeated component receipt barrier b493a355→b7957cd9 is now independently
 reconciled through EXISTING restoreAstylarDiagnostics:current component reverses
 to the COMPLETE retained Material-worktree predecessor (raw2c2979ad,normalized
