@@ -2,6 +2,32 @@
 
 ## Current audit pointer — October18
 
+Original button-box integration42285 terminates1,0/1,duration484511.1369ms:
+Icon subset barrier cleared and all9 button box-sizing rows exist,raw capture
+unchanged;next failure is complete scalar population comparison against0165f76.
+Log button-box-icon-subset-original-integration-20261018 and scratchc3JQfu remain.
+Diff exposes existing measurement transition:old normalizeColor rounds sRGB to
+8-bit integers,current preserves finite decimal channels. Native root245.879925/
+240.73989/248.60001 versus candidate246/241/249 remains a genuine current input
+difference,not equivalence. Historical rounded values cannot constrain current
+scalar conservation. Existing color precision checks pass3/3,exit0,1640.9262ms
+in button-box-precise-color-contract-20261018 logs.
+The owning existing integration now replays prior CLASSIFICATION code under
+the SAME precise measurement:pin old normalizeColor8fb8ac9b/current72ccd810,
+verify eight surrounding functions unchanged,replace only that AST function and
+relative import paths,and compare every other complete statement unchanged.
+Original Git source,captures and failure remain immutable;this is explicit
+measurement-aligned stage replay,not byte-identical historical runtime replay.
+Retry51626 terminates1,0/1,duration522643.0004ms in button-box-precise-normalization-
+integration-20261018 logs,scratchFCecIN retained. Complete scalar comparison now
+passes,as do9 button rows,48 field-host rows and later gap conservation. Next
+failure at assertLaterCaretClassifications is pending bottom-sheet-copy caret
+metadata:unresolved→reviewed-overlay-caret-local-observation-boundary. The current
+review retains false equivalence/computed/paint flags;its owning independent
+replay must be authenticated before relaxing pending WHOLE-row equality. Do not
+delete that assertion or broadly exempt caret rows. Full integration remains
+failing;later assertions unexecuted,current rendering/canonical acceptance open.
+
 Explicit Icon subset applicability now has focused proof in the existing review
 collector,not a hash waiver. It authenticates original20 cases/trees and11/8
 groups first,binds each supplied Icon case's complete non-style fields and every
