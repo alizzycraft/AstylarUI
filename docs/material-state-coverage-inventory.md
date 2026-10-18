@@ -2,6 +2,21 @@
 
 ## Current audit pointer — October18
 
+Post-terminal subset correction:applyIconContextReviews now accepts the actual
+builder case population and skips only when it explicitly contains no Icon
+cases AND its rows contain no Icon rows. Row-only absence never authorizes a
+skip. Default/full/partial-Icon populations retain original strict complete-row,
+membership and hash checks;partial-Icon projection remains unresolved. Existing
+Icon suite focused checks pass2/2 (icon-subset-applicability-focused-20261018
+stdout/stderr),including invalid population,unexpected Icon rows,missing/duplicate
+rows,forged values/metadata and complete11-row conservation. Original slider
+integration is launched separately in icon-subset-slider-integration-20261018
+logs;its terminal outcome is pending. This is audit-instrumentation correction,
+not renderer/fixture change or whole-case closure. Producer/helper/suite bytes
+have changed;acceptedcd867bbe remains historical for those source dependencies
+until explicit source conservation and coherent export reconciliation. Do not
+replace accepted receipts or describe the original169 failures as repaired.
+
 Original unfiltered harness76151 is now TERMINAL exit1,not passing:
 1828 tests,1659 pass,169 fail,zero cancelled/skipped/todo;
 duration71632739.3269ms. All306 discovered files were launched by the unchanged

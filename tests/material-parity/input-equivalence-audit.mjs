@@ -322,7 +322,7 @@ export function replayMaterialScalarReviewStages(overlaySurfaceDiscrepancies, ca
     ? [applyOwnerMaximumWidths, applyOmittedOwnerPaintRequests, applyBadgeMarginReviews, applySliderMarginReviews, applyListSpacingReviews, applyHeadingVisibleOverflow, applyTabPanelOverflowBoundary, applyTableVisibleOverflow, applyControlOverflowOwnerBoundaries, applyRangeVisibleOverflow, applyFocusShadowSubstitutions, applyCardShadowSyntax, applyMappedNonwidgetAppearance, applyRangeAppearanceInitial, applyAppearanceOwnerBoundaries, applySheetActionAppearance, applyTooltipWordBreakReview, applyStepperSpacingReviews, applyChipSpacingReviews, applyChoiceSpacingReviews, applyToolbarSpacingReviews, applyDialogActionSpacingReviews, applyDialogPanelGapReview, applyOverlayFlowReviews, applyPanelVisibilityOwnership, applyTooltipShrinkReviews, applyExpansionTreeFormattingReviews, applyRemainingBorderReviews, applyFinalOwnerStyleReviews]
       .reduce((rows, apply) => apply(rows, cases, elementInventory, canonicalStyle), beforeOwnerOmissionReviews)
     : beforeOwnerOmissionReviews;
-  return ownerInitialStyleBinding.status === 'bound' ? applyIconContextReviews(discrepancies) : discrepancies;
+  return ownerInitialStyleBinding.status === 'bound' ? applyIconContextReviews(discrepancies, { cases }) : discrepancies;
 }
 
 export function buildMaterialInputAudit(parityReport, options = {}) {

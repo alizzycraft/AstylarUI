@@ -92,6 +92,17 @@ export function validateIconContextReview(review) {
 }
 
 export function applyIconContextReviews(rows, options) {
+  // The production builder also serves bounded non-Icon investigations. Their
+  // absence is applicability, not missing evidence from the full Icon cohort.
+  // Never infer this from rows alone: a lost Icon row must still fail closed.
+  if (options?.cases !== undefined) {
+    assert.ok(Array.isArray(options.cases), 'Icon review case population must be explicit');
+    assert.ok(options.cases.every(entry => typeof entry.family === 'string'), 'Icon review case family missing');
+    if (!options.cases.some(entry => entry.family === 'icon')) {
+      assert.ok(!rows.some(row => row.family === 'icon'), 'Icon rows outside supplied case population');
+      return rows;
+    }
+  }
   const review = collectIconContextReview(options), seen = new Set();
   const hash = row => createHash('sha256').update(JSON.stringify(row)).digest('hex');
   const result = rows.map(row => {

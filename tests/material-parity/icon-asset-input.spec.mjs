@@ -925,6 +925,15 @@ test('Icon primary alignment review preserves legacy groups and unequal formatti
   }
 });
 
+test('Icon review skips only explicitly non-Icon populations without altering their rows', () => {
+  const rows = [{ family: 'slider', property: 'width', reference: '200px', astylar: '50%' }];
+  assert.equal(applyIconContextReviews(rows, { cases: [{ family: 'slider' }] }), rows);
+  assert.deepEqual(rows, [{ family: 'slider', property: 'width', reference: '200px', astylar: '50%' }]);
+  assert.throws(() => applyIconContextReviews([{ family: 'icon' }], { cases: [{ family: 'slider' }] }), /outside supplied case population/);
+  assert.throws(() => applyIconContextReviews(rows, { cases: {} }), /must be explicit/);
+  assert.throws(() => applyIconContextReviews(rows, { cases: [{}] }), /case family missing/);
+});
+
 test('Icon review conserves complete original rows and rejects input drift', async () => {
   const review = collectIconContextReview({ includePrimaryAlignment: false });
   const completeReview = collectIconContextReview();
@@ -943,6 +952,7 @@ test('Icon review conserves complete original rows and rejects input drift', asy
   const forged = structuredClone(original); forged[0].reference = 'forged';
   assert.throws(() => applyIconContextReviews(forged, { includePrimaryAlignment: false }));
   assert.throws(() => applyIconContextReviews(original.slice(1), { includePrimaryAlignment: false }));
+  assert.throws(() => applyIconContextReviews(original.slice(1), { includePrimaryAlignment: false, cases: [{ family: 'icon' }] }));
   assert.throws(() => applyIconContextReviews([...original, original[0]], { includePrimaryAlignment: false }));
   const completeUpdated = applyIconContextReviews(completeOriginal);
   assert.equal(completeUpdated.length, 11);
