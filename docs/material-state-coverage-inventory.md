@@ -2,6 +2,18 @@
 
 ## Current audit pointer — October18
 
+Post-terminal slider subset integration46474 finishes exit0:2/2 original tests
+pass,no skips/cancellations,duration869747.4907ms. Existing production
+normalization/value/other-row conservation and original missing-binding,
+changed-row,false-equivalence rejection assertions execute successfully after
+the explicit non-Icon applicability correction. Logs:
+artifacts/material-parity/icon-subset-slider-integration-20261018.log and
+.stderr.log. This resolves original failures1588/1589 for this exact suite,
+not other subset tests,partial-Icon coverage,current slider rendering or final
+acceptance. Preserve original full-harness failures and both focused/integration
+logs;no recapture or canonical publication occurred. Next:remaining failure
+families and explicit source conservation/export reconciliation.
+
 Post-terminal subset correction:applyIconContextReviews now accepts the actual
 builder case population and skips only when it explicitly contains no Icon
 cases AND its rows contain no Icon rows. Row-only absence never authorizes a
