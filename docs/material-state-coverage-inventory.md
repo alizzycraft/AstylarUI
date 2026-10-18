@@ -2,6 +2,22 @@
 
 ## Current audit pointer — October18
 
+October19 continuation priorities from the existing selected review,not a new
+audit:recomputed JSON review digest equals pinned58ec5402d137657aa2d223d78db4fc56d1baec38a80d33d745bf07b233d656a1.
+All2311 groups retain partial inputStyleStructure,semantics,historyOwnership and
+sourceCurrentness. Top-level evidence-join-pending counts are programmaticFocus
+1741,authoredActivation1482 and localPaint1165;these overlap and must not be
+summed as cases. This is a compact census of the frozen review,not revalidation
+of every dependency or a current rendering census. Shared review prerequisites
+still prevent complete case closure; do not require rendering fixes to classify
+an inspected failure. Priority:finish active shared-stage conservation integration,
+reconcile consumed source fingerprints/coherent export applicability,then resolve
+existing exact action/focus/paint joins and remaining structural/semantic/history
+owners in shared cohorts before new captures. Supplemental relevant-state and
+final runtime/currentness gaps remain explicit. No new report/framework or
+acceptance change. Integration session18923 is confirmed live;poll that handle,
+do not restart or treat quiet redirected output as termination.
+
 October19 Icon predecessor admission verified:the latest original button-box
 integration terminates1,0/1,723618.9685ms in button-box-prescalar-owner-batch-
 integration-20261019 logs. Field-host/button pre-scalar stages clear;next failure
