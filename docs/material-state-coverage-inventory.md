@@ -2,6 +2,17 @@
 
 ## Current audit pointer — October18
 
+Repeated component receipt barrier b493a355→b7957cd9 is now independently
+reconciled through EXISTING restoreAstylarDiagnostics:current component reverses
+to the COMPLETE retained Material-worktree predecessor (raw2c2979ad,normalized
+b7957cd9),not merely matching selected functions. This explains the component
+receipt in failures110/189/190 without changing captures or blessing current
+bytes. Reuse that existing narrowly scoped reversal after terminal integration;
+do not invent another source reader or apply global historical substitution.
+check-historical-component-proofs also pins older boundary/sorter snapshots;
+its complete launcher is NOT demonstrated passing for current sources. Those
+other guards and original behavioral/rejection assertions remain required.
+
 Held-button applicability question now has a dependency census:public
 button-held-update-audit original provenance and audit.js authenticate,but27
 of2516 loaded inputs differ from current installation,zero missing. Twenty-four
