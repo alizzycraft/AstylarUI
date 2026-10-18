@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Original full-audit-harness-cd867bbe-20261018 is now terminal exit1:
+1828 tests,1659 pass,169 fail,no cancelled/skipped/todo. Keep both original
+closed logs unchanged. Stdout26462260 bytes SHA256
+6c5f3936de70d994061f93bd4a46b1cdcd05f5484f36f1e7c9c197edd3d95353;
+empty stderr SHA256e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.
+Earlier live notes below are historical. No failure evidence is superseded by
+triage or later focused passing checks;retain the original terminal baseline.
+
 Keep full-harness-boundary-suite-drift-triage,root-noop-owner-diagnostic,
 root-noop-owner-diagnostic-bound and root-noop-program-lineage-20261018 logs.
 The two owner variants fail in diagnostic setup,not behavioral assertions;

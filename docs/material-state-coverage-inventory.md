@@ -2,6 +2,22 @@
 
 ## Current audit pointer — October18
 
+Original unfiltered harness76151 is now TERMINAL exit1,not passing:
+1828 tests,1659 pass,169 fail,zero cancelled/skipped/todo;
+duration71632739.3269ms. All306 discovered files were launched by the unchanged
+runner with mandatory receipt comparison. Closed stdout26462260 bytes SHA256
+6c5f3936de70d994061f93bd4a46b1cdcd05f5484f36f1e7c9c197edd3d95353;
+stderr zero bytes SHA256e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.
+Paths:artifacts/material-parity/full-audit-harness-cd867bbe-20261018.log
+and corresponding .stderr.log. Below live/nonterminal notes are historical.
+Compact census finds169 top-level not-ok records,including16 with the shared
+Missing Icon original rows barrier and8 with ENOENT. These are overlapping
+message indicators,not an exhaustive root-cause classification or case-failure
+census. Preserve every original failure and downstream assertion. Next:reconcile
+the shared subset contract and authenticated historical-source applicability in
+coherent focused batches,then rerun required integration/final gates. No whole
+case closure,current rendering acceptance or criterion change follows.
+
 Snackbar failure1600 (snackbar-position-observation.spec.mjs:14) authenticates
 its original report/checkpoint binding then stops in the104-core dependency loop:
 src/lib/astylar-surface.ts expected91c2b6fe,currentcc874b03. Read-only census of
