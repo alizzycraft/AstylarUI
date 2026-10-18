@@ -2,6 +2,25 @@
 
 ## Current audit pointer — October18
 
+Compact live failure triage through completed test119:18 reported failures,
+not a terminal census. First barriers group as follows:proof count45;captured
+owner suite61/65;definition predecessor68;historical build inventory/path70/78/
+82/89;captured runner80/81/88;selection action source75/90;antialias owner73;
+button source receipts110/114;Icon cohort contracts106/116. All are first
+integration/provenance barriers;this does not establish that later behavioral
+assertions pass or that every underlying source change is harmless.
+
+Historical asset recovery is available without capture:snackbar-lifetime-bound-
+current-20261008 checkpoint authenticates retained JPEJK334,7SL66K3U,YSOHGT2J
+source maps;configured-input-focus-20261008 checkpoint authenticates retained
+3JXWRYJY map. All four retained bytes match original browserFiles hashes under
+icon-fresh-producer-retained-build-20261016-browser. JPEJK334/3JXWRYJY are absent
+from current dist,where original tests still look. Do not copy old assets into
+current dist. After terminal run,use explicit capture-bound historical reads,
+retain original hashes,then separately execute current-source/method checks.
+This closes asset availability uncertainty only,not original test acceptance.
+No new run,framework,report or immutable hash for growing stdout was created.
+
 Unfiltered harness follow-up:failure116 stops before button-width assertions.
 button-fixed-width-canonical-integration.spec selects480 button-containing cases
 and600 owners;its current builder calls applyIconContextReviews whenever the
