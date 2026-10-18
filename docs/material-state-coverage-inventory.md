@@ -2,6 +2,18 @@
 
 ## Current audit pointer — October18
 
+Checkpoint application census original failure503 is now verified1/1 exit0
+through its existing test with retained-map location,not current dist. Original
+manifest7ae2cba1 and each912 map receipt authenticate;all original contributing-
+map membership,17-source membership,16 source-equality assertions and named
+serializer transition assertions execute unchanged. Exact test log:
+checkpoint-app-retained-map-census-20261018 stdout/stderr. Added path containment
+guard rejects absolute/parent traversal before reads. No historical asset was
+copied into dist,no capture/reference/renderer changed. This establishes the
+bounded source census,not CSS/assets,current browser paint or whole-case closure.
+The boundary suite source changed;its historical owner receipts and canonical
+export applicability require explicit reconciliation,not receipt replacement.
+
 Cursor five-source reconciliation now verified:original explicit-cursor-inputs
 and explicit-cursor-census-conservation suites pass6/6,exit0,no skips/cancellations,
 duration67238.4553ms (cursor-five-source-conservation-20261018 stdout/stderr).

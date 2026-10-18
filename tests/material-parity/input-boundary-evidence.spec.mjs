@@ -865,8 +865,12 @@ test('checkpoint application source census confines drift to the documented seri
   const manifest = JSON.parse(raw);
   const captured = new Map();
   const contributingMaps = [];
+  // Read this checkpoint's retained bytes, not whichever build is in dist now.
+  // Each original receipt below remains authoritative; no fallback or recapture.
+  const retainedBrowserRoot = 'artifacts/material-parity/icon-fresh-producer-retained-build-20261016-browser';
   for (const receipt of manifest.provenance.browserFiles.filter(row => row.file.endsWith('.js.map'))) {
-    const bytes = readFileSync(path.join('examples/material-showcase/dist/material-showcase/browser', receipt.file));
+    assert.ok(!path.isAbsolute(receipt.file) && !receipt.file.split(/[\\/]/).includes('..'));
+    const bytes = readFileSync(path.join(retainedBrowserRoot, receipt.file));
     assert.equal(hash(bytes), receipt.sha256, receipt.file);
     const map = JSON.parse(bytes);
     let contributes = false;
