@@ -2,6 +2,30 @@
 
 ## Current audit pointer — October18
 
+October19 integration63320 TERMINAL1,0/1,duration700279.8916ms in button-box-
+followup-predecessor-integration-20261019 stdout/stderr,scratchrMnjPU retained.
+Earlier pending-caret and follow-up predecessor checks now pass. Failure moves
+inside independentlyReconstructLaterScalarReviews:proveBoxSizingOmission rejects
+the actual .field-shell boxSizing:border-box rule,as it must. Do not remove the
+rule or weaken the omission proof. A2-second source-only diagnosis authenticates
+the same88-case captureSHA703ba4cb,independently collects/validates bound field-host
+layout evidence,and proves ALL SIX form-field/input/autocomplete/select/datepicker/
+timepicker static rows retain content-box versus authored candidate border-box.
+Existing classifier returns reviewed-field-host-layout-authoring;generic box-sizing
+review preserves that already-classified row by identity. Generic omission proof
+rejects the same original trees. Exact values/rules/receipts and six outcomes:
+button-box-field-host-stage-diagnosis-20261019 stdout/stderr.
+First replay divergence is upstream metadata loss:capturedInitialScalarReplay
+currently reconstructs only origin/owner-initial stages;later scalar replay seeds
+other changed rows from historical unresolved metadata,discarding current source-
+bound field-host classification that precedes general box-sizing review. Thus
+the wrong stage reaches a correctly strict downstream proof. Next:reconstruct
+and authenticate the applicable pre-scalar field-host stage from the owning
+capture/collector before later review replay,preserving complete earlier metadata
+and raw rows. Do not exclude a family/property or suppress the declaration/error.
+No new renderer/fixture change or equal-rendering conclusion follows. Remaining
+integration assertions/current-source export/final gates stay open.
+
 October19 follow-up predecessor refinement now has source-bound proof without
 a fixture exception. Default reconstruction still rejects any non-unresolved
 historical attribution. Explicit sourceAudit context independently validates
