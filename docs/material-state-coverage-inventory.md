@@ -2,6 +2,21 @@
 
 ## Current audit pointer — October18
 
+Held-button applicability question now has a dependency census:public
+button-held-update-audit original provenance and audit.js authenticate,but27
+of2516 loaded inputs differ from current installation,zero missing. Twenty-four
+are Angular files (captured core/platform-browser20.3.29,current20.3.31);three
+are installed AstylarUI text-highlight-mesh.factory.js,astylar-surface.component.js
+and astylar.js. Same Astylar package version0.2.0 does not establish same bytes.
+Failure134 stops at the first Angular common hash,not behavioral assertions.
+Historical40-case observations/24failures/16controls remain preserved,not current
+acceptance. Do not map all receipts to today's files or dismiss this as metadata.
+Next:scope changed owners/callers against the actual held-update proof before
+choosing historical replay versus justified affected current recapture. Existing
+bundle/provenance are the evidence;no replacement report/capture was generated.
+Additional live failures120/125 stop at source receipts,132 at captured runner
+b2477a12 versus86ece08b;these add no new demonstrated renderer regression yet.
+
 Compact live failure triage through completed test119:18 reported failures,
 not a terminal census. First barriers group as follows:proof count45;captured
 owner suite61/65;definition predecessor68;historical build inventory/path70/78/
