@@ -2,7 +2,9 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { alignmentSurveyBaseline, verifyAlignmentAuditProjection, verifyAlignmentCollectorProjection } from './alignment-survey-conservation.mjs';
+import { alignmentSurveyBaseline, verifyAlignmentAuditProjection, verifyAlignmentCollectorProjection, restoreAstylarDiagnostics } from './alignment-survey-conservation.mjs';
+import { restoreMappingReadAdapterSource } from './audit-evidence-session.mjs';
+import { restoreGapCaptureDiagnostics } from './gap-survey-source-replay.mjs';
 
 const target = 'docs/material-explicit-cursor-inputs.json';
 const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
@@ -16,11 +18,16 @@ export function assertExplicitCursorCensusConserved(replay, { read = readFileSyn
   const savedBytes = read(target);
   assert.equal(hash(savedBytes), 'e6b98e2580716e8c5d597bb244ff575571604d8df8be5de5cdf9ac3dd5b637c2');
   const saved = JSON.parse(savedBytes), projected = structuredClone(replay), receipts = [];
-  for (const file of [moduleFile, helperFile]) {
+  for (const file of [moduleFile, helperFile, 'examples/material-showcase/src/app/astylar.component.ts',
+    'tests/material-parity/generated-node-mapping-evidence.mjs', 'tests/material-parity/run-material-parity.mjs']) {
     const historical = execFileSync('git', ['show', `${alignmentSurveyBaseline}:${file}`], { maxBuffer: 8 * 1024 * 1024 });
     const current = read(file);
     if (file === moduleFile) verifyAlignmentAuditProjection(historical, current);
-    else verifyAlignmentCollectorProjection('docs/material-vertical-align-population.json', historical, current);
+    else if (file === helperFile) verifyAlignmentCollectorProjection('docs/material-vertical-align-population.json', historical, current);
+    else if (file.endsWith('/astylar.component.ts')) assert.equal(restoreAstylarDiagnostics(current), lf(historical));
+    else if (file.endsWith('/generated-node-mapping-evidence.mjs'))
+      assert.equal(restoreMappingReadAdapterSource({ file, sha256: hash(historical) }, current), lf(historical));
+    else assert.equal(restoreGapCaptureDiagnostics(lf(current)), lf(historical));
     const oldRows = saved.sourceFingerprints.filter(row => row.file === file);
     const newRows = projected.sourceFingerprints.filter(row => row.file === file);
     assert.equal(oldRows.length, 1); assert.equal(newRows.length, 1);

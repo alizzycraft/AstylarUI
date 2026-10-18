@@ -6,7 +6,9 @@ import { assertExplicitCursorCensusConserved } from './explicit-cursor-census-co
 
 const hash = file => createHash('sha256').update(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')).digest('hex');
 const replay = JSON.parse(readFileSync('docs/material-explicit-cursor-inputs.json'));
-for (const file of ['tests/material-parity/input-equivalence-audit.mjs', 'scripts/audit-material-vertical-align-population.mjs']) {
+for (const file of ['tests/material-parity/input-equivalence-audit.mjs', 'scripts/audit-material-vertical-align-population.mjs',
+  'examples/material-showcase/src/app/astylar.component.ts', 'tests/material-parity/generated-node-mapping-evidence.mjs',
+  'tests/material-parity/run-material-parity.mjs']) {
   replay.sourceFingerprints.find(row => row.file === file).sha256 = hash(file);
 }
 

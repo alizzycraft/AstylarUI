@@ -2,6 +2,18 @@
 
 ## Current audit pointer — October18
 
+Cursor five-source reconciliation now verified:original explicit-cursor-inputs
+and explicit-cursor-census-conservation suites pass6/6,exit0,no skips/cancellations,
+duration67238.4553ms (cursor-five-source-conservation-20261018 stdout/stderr).
+The existing collector replays2311 cases/763 differing owner inputs and all
+original identity/stage/ancestry/rejection assertions. Existing mapper reader,
+runner diagnostics and component reversals join original producer/collector
+projections;complete saved evidence remains equal and caller unmodified.
+No observation,captured receipt or original full-harness failure is overwritten.
+This resolves cursor evidence source applicability for the tested population,
+not current actual hit targets/effective cursor paint or whole-case closure.
+Canonical source/export reconciliation remains outstanding after helper changes.
+
 Case-index historical applicability now reaches original assertions. Existing
 collector reuses exact component diagnostic reversal and authenticates both
 39b3e0fd layout-inspection additions against complete Git predecessor/source
