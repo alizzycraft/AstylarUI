@@ -2,6 +2,22 @@
 
 ## Current audit pointer — October18
 
+Additional bounded live-log triage (original run still nonterminal):failure373
+passes its577-case/1154-proof coverage and attribution assertions before stopping
+at the durable producer receipt82854bcc versus currentd260f8ca. Later durable
+group equality/capture checks have not executed. Failure529 stops on historical
+versus current browserFiles inventories (including captured3JXWRYJY assets),not
+a caret-pixel assertion. Failure546 stops at217 proofs versus historical155,
+before remaining registration assertions. These are first verification barriers,
+not newly demonstrated rendering regressions or proof that later checks pass.
+Evidence:unchanged full-audit-harness-cd867bbe-20261018.log,test373 at
+field-host-weight-tracking-evidence.spec.mjs:127,test529 at
+input-boundary-evidence.spec.mjs:5328,and test546 at
+input-equivalence-audit.spec.mjs:516. After terminal census,reconcile exact
+historical populations/source applicability and preserve original subsequent
+assertions and negative controls;do not replace receipts or delete count guards.
+No new capture,report,source/test change or whole-case closure follows.
+
 Cursor failure332 bounded replay answers whether observations changed:
 collectExplicitCursors against authenticated savede6b98e25 preserves EVERY
 non-sourceFingerprints field exactly,including2311 cases/763 differing owner
