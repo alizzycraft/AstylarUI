@@ -29,8 +29,17 @@ export function reconstructBeforeReviewedInputMetadata(previous, current, eviden
   return reconstructMetadata(previous, current, evidence, reviewedInputAttributions, validateReviewedInputClassifications);
 }
 
-export function reconstructBeforeFollowupInputMetadata(previous, current, evidence) {
-  return reconstructMetadata(previous, current, evidence, followupInputAttributions, validateFollowupInputClassifications);
+export function reconstructBeforeFollowupInputMetadata(previous, current, evidence, options = {}) {
+  const before = new Map(previous.map(row => [signature(row), row]));
+  const needsPredecessor = current.some(row => followupInputAttributions.includes(row.attribution) &&
+    before.get(signature(row))?.attribution !== 'unresolved');
+  let predecessors;
+  if (needsPredecessor && options.sourceAudit) {
+    assert.deepEqual(validateFollowupInputAuditInputs(evidence, { ...options, requireComplete: false }), []);
+    const { initial } = capturedInitialScalarReplay(options.sourceAudit, options);
+    predecessors = new Map(initial.map(row => [signature(row), row]));
+  }
+  return reconstructMetadata(previous, current, evidence, followupInputAttributions, validateFollowupInputClassifications, predecessors);
 }
 
 export function reconstructBeforeReviewedSourceBatchMetadata(previous, current, evidence) {
@@ -41,7 +50,7 @@ export function reconstructBeforeReviewedSourceBatchMetadata(previous, current, 
   return reconstructMetadata(previous, current, evidence, reviewedSourceBatchAttributions, validateReviewedSourceBatchClassifications);
 }
 
-function reconstructMetadata(previous, current, evidence, attributions, validate) {
+function reconstructMetadata(previous, current, evidence, attributions, validate, predecessors) {
   assert.deepEqual(validate(evidence, current), []);
   const before = new Map(previous.map(row => [signature(row), row]));
   assert.equal(before.size, previous.length, 'ambiguous historical scalar membership');
@@ -51,7 +60,12 @@ function reconstructMetadata(previous, current, evidence, attributions, validate
     const key = signature(row), prior = before.get(key);
     assert.ok(prior, 'reviewed row has no exact historical scalar membership');
     assert.ok(!seen.has(key), 'duplicate later reviewed row'); seen.add(key);
-    assert.equal(prior.attribution, 'unresolved', 'later review cannot overwrite a historical attribution');
+    if (prior.attribution !== 'unresolved') {
+      assert.ok(predecessors, 'later review cannot overwrite a historical attribution');
+      assert.equal(prior.attribution, ownerInitialStyleAttribution, 'unreviewed predecessor attribution');
+      assert.equal(JSON.stringify(prior), JSON.stringify(predecessors.get(key)),
+        'complete historical predecessor differs from captured initial-source replay');
+    }
     assert.ok(isDeepStrictEqual(raw(row), raw(prior)), 'later review changed original raw evidence');
     changes.push({ family: row.family, element: row.element, property: row.property,
       occurrences: row.occurrences, attribution: row.attribution,
@@ -65,7 +79,7 @@ function reconstructMetadata(previous, current, evidence, attributions, validate
 
 // Replay the production sequence against independently read original trees,
 // not a category exemption or the row's own claimed previous metadata.
-export function independentlyReconstructLaterScalarReviews(audit, previous, current = audit.discrepancies, options = {}) {
+function capturedInitialScalarReplay(audit, options) {
   assert.equal(audit.ownerInitialStyleBinding?.status, 'bound');
   const original = readOwnerInitialStyleSource(audit.ownerInitialStyleBinding, options);
   const cases = [...original.results.map(e => ({ ...e, kind: 'static' })),
@@ -80,6 +94,11 @@ export function independentlyReconstructLaterScalarReviews(audit, previous, curr
   const initial = collectStyleDiscrepancies(cases, origin, { comparisons: [], differences: [] },
     ...Array.from({ length: 19 }, () => []), { observations: [] }, { observations: [] }, { observations: [] }, [], owner);
   assert.deepEqual(validateOriginStageEvidence(origin, inventory, initial, normalize, { reviewedDisjointMotion: true }), []);
+  return { initial, cases, inventory };
+}
+
+export function independentlyReconstructLaterScalarReviews(audit, previous, current = audit.discrepancies, options = {}) {
+  const { initial, cases, inventory } = capturedInitialScalarReplay(audit, options);
   const sourceRows = new Map(initial.map(r => [signature(r), r]));
   const before = new Map(previous.discrepancies.map(r => [signature(r), r]));
   assert.equal(before.size, previous.discrepancies.length, 'ambiguous historical scalar membership');
@@ -134,7 +153,8 @@ export function independentlyReconstructBeforeReviewedInputs(audit, previous, op
     // and replay every follow-up source proof for this exact historical subset.
     assert.deepEqual(validateFollowupInputAuditInputs(audit.followupInputs,
       { ...options, requireComplete: false }), []);
-    const restored = reconstructBeforeFollowupInputMetadata(previous.discrepancies, current, audit.followupInputs);
+    const restored = reconstructBeforeFollowupInputMetadata(previous.discrepancies, current, audit.followupInputs,
+      { ...options, sourceAudit: audit });
     current = restored.rows; followupChanges = restored.changes;
   }
   let sourceBatchChanges;

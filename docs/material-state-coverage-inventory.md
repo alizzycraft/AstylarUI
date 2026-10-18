@@ -2,6 +2,28 @@
 
 ## Current audit pointer — October18
 
+October19 follow-up predecessor refinement now has source-bound proof without
+a fixture exception. Default reconstruction still rejects any non-unresolved
+historical attribution. Explicit sourceAudit context independently validates
+the follow-up source binding and reconstructs initial scalar rows from the
+original owner-initial capture/trees,precise normalization and origin proofs.
+Only an owner-initial predecessor whose COMPLETE serialized row equals that
+reconstruction may be restored after the newer review;raw-row equality,current
+review coverage and unrelated-row retention remain unchanged. The existing
+initial-source replay code is factored for reuse,not duplicated or made
+caller-controlled. Historical coordinator supplies its authenticated audit
+context;plain callers retain the old guard.
+Existing selected controls pass5/5. Added real captured expansion refinement
+plus source-context omission,unbound source,forged earlier justification and
+self-consistent changed before/after authored examples pass with the existing
+controls6/6,exit0,duration73344.9343ms in followup-captured-predecessor-conservation-
+20261019 stdout/stderr. Original20 mutation checks remain;success scratch removed
+through withAuditScratch. No label/count exemption or equivalent rendering
+claim is introduced. Helper/test source receipts now require explicit canonical
+applicability reconciliation. Next:original button-box integration after the
+proved predecessor correction;later conservation/count/validation assertions
+and whole-current rendering/full acceptance remain unverified.
+
 October19 button-box integration33948 TERMINAL1,0/1,duration595238.9851ms:
 pending-caret conservation now passes with55 reviewed signatures/119 reviewed
 observations/53 pending observations preserved. Next failure is the follow-up

@@ -1,15 +1,64 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
+import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { reconstructBeforeReviewedInputMetadata, independentlyReconstructBeforeReviewedInputs,
-  reconstructBeforeReviewedSourceBatchMetadata, independentlyReconstructLaterScalarReviews } from './later-reviewed-input-conservation.mjs';
-import { bindOwnerInitialStyleSource } from './owner-initial-style-attribution.mjs';
+  reconstructBeforeReviewedSourceBatchMetadata, independentlyReconstructLaterScalarReviews,
+  reconstructBeforeFollowupInputMetadata } from './later-reviewed-input-conservation.mjs';
+import { bindOwnerInitialStyleSource, collectOwnerInitialStyleEvidence } from './owner-initial-style-attribution.mjs';
+import { withAuditScratch } from './audit-scratch.mjs';
+import { collectFullTreeInventory, collectStyleDiscrepancies } from './input-equivalence-audit.mjs';
+import { collectOriginStageEvidence } from './origin-stage-inventory-evidence.mjs';
+import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
+import { collectFollowupInputAuditInputs } from './followup-input-audit-source-binding.mjs';
 import { restoreScalarReviewExtraction } from './position-composition-producer-transition.mjs';
 import { reviewedSourceBatchAttributions } from './reviewed-source-batch-audit-source-binding.mjs';
 
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
+
+test('followup refinement authenticates the complete captured initial predecessor without a family exemption', () => withAuditScratch('followup-predecessor-', directory => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const original = JSON.parse(bytes), entries = original.results.filter(entry => entry.family === 'expansion' &&
+    entry.profile === 'light' && entry.viewport.id === 'desktop');
+  assert.equal(entries.length, 1);
+  const entry = { ...entries[0], styleInputs: entries[0].styleInputs.filter(input => input.id === 'expansion-primary') };
+  const supplied = { ...original, results: [entry], interactions: [] }, file = path.join(directory, 'report.json');
+  writeFileSync(file, JSON.stringify(supplied));
+  const options = { root: process.cwd(), parityPath: file };
+  const sourceAudit = { ownerInitialStyleBinding: bindOwnerInitialStyleSource(supplied, options) };
+  const cases = [{ ...entry, kind: 'static' }], inventory = collectFullTreeInventory(cases);
+  const owner = collectOwnerInitialStyleEvidence(supplied, inventory);
+  const origin = collectOriginStageEvidence(cases, inventory, bindPreciseAuditNormalization(), { reviewedDisjointMotion: true });
+  const initial = collectStyleDiscrepancies(cases, origin, { comparisons: [], differences: [] },
+    ...Array.from({ length: 19 }, () => []), { observations: [] }, { observations: [] }, { observations: [] }, [], owner);
+  const evidence = collectFollowupInputAuditInputs(supplied, options);
+  assert.equal(evidence.binding.status, 'bound', evidence.binding.error);
+  const previous = evidence.groups.map(group => {
+    const matches = initial.filter(row => row.family === group.family && row.element === group.element &&
+      row.property === group.property && row.reference === group.reference && row.astylar === group.astylar);
+    assert.equal(matches.length, 1); return matches[0];
+  });
+  const current = previous.map((row, i) => ({ ...row, ...Object.fromEntries(
+    ['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']
+      .map(key => [key, evidence.groups[i][key]])) }));
+  const earlier = previous.findIndex(row => row.property === 'appearance'); assert.ok(earlier >= 0);
+  assert.equal(previous[earlier].attribution, 'reviewed-owner-initial-style-observation-stage');
+  assert.equal(current[earlier].attribution, 'reviewed-expansion-panel-header-owner-mismatch');
+  assert.throws(() => reconstructBeforeFollowupInputMetadata(previous, current, evidence), /cannot overwrite a historical attribution/);
+  const scoped = { ...options, sourceAudit }, before = structuredClone({ previous, current, evidence });
+  assert.deepEqual(reconstructBeforeFollowupInputMetadata(previous, current, evidence, scoped).rows, previous);
+  assert.deepEqual({ previous, current, evidence }, before);
+  const forged = structuredClone(previous); forged[earlier].justification = 'forged earlier conclusion';
+  assert.throws(() => reconstructBeforeFollowupInputMetadata(forged, current, evidence, scoped), /complete historical predecessor differs/);
+  const forgedRaw = structuredClone(previous), forgedCurrent = structuredClone(current);
+  forgedRaw[earlier].referenceAuthoredExamples = []; forgedCurrent[earlier].referenceAuthoredExamples = [];
+  assert.throws(() => reconstructBeforeFollowupInputMetadata(forgedRaw, forgedCurrent, evidence, scoped), /complete historical predecessor differs/);
+  assert.throws(() => reconstructBeforeFollowupInputMetadata(previous, current, evidence,
+    { ...scoped, sourceAudit: { ownerInitialStyleBinding: { status: 'unbound' } } }));
+}));
 
 test('scalar stage extraction preserves complete production source and rejects drift', () => {
   const current = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8');
