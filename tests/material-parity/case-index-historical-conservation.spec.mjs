@@ -47,13 +47,34 @@ test('historical case-index binding retains saved receipts and never promotes so
   const collected = collectCaseIndexConservation();
   const saved = JSON.parse(readFileSync('docs/material-case-index-historical-conservation.json'));
   const { membership, ...recorded } = saved;
-  assert.deepEqual({ ...recorded, membershipAssertionsReplayed: false }, collected.report);
+  const historicalProjection = structuredClone(collected.report);
+  const addedDiagnostics = historicalProjection.dependencyProjections.filter(p => p.addedReadOnlyDiagnostics);
+  assert.deepEqual(addedDiagnostics.map(p => [p.file, p.addedReadOnlyDiagnostics]), [
+    ['examples/material-showcase/src/app/astylar.component.ts', ['paintDepth', 'camera']],
+    ['src/lib/astylar.ts', ['retainedLayout']],
+    ['src/lib/astylar-surface.ts', ['retainedLayout snapshot type']],
+  ]);
+  historicalProjection.dependencyProjections = historicalProjection.dependencyProjections.filter(p => !p.addedReadOnlyDiagnostics);
+  for (const row of historicalProjection.reports) {
+    assert.equal(row.currentSourceSha256, '628d3b060a265e793e04671df14a82bbdece47c16c25e5d0fbdf0edb7a32674d');
+    row.currentSourceSha256 = 'a787e493d0e36d37fe5517bba8a6c3ba7a876f5bdb5ff7991e4d5bdcd0a0ebd0';
+  }
+  for (const [file, current, previous] of [
+    ['tests/material-parity/input-equivalence-policy.mjs', '55c7e9cf1c634ebd8b01409b1836d1513f24e0c5ada656ce16f591aee1fd50a2', '3256863af7432ce2d9e05e2cc2569bc7f68db5f9a063f718ef09594e13c2474f'],
+    ['tests/material-parity/run-material-parity.mjs', 'c13ed230e7c7b0f05e17e849decf643e847fa08f1220be0b8aa6ace955f6d25f', '4ed6abe8b6c8028565ffc5c0674d285a567714e19842f75672b599125bd99e6d'],
+  ]) {
+    const row = historicalProjection.dependencyProjections.find(p => p.file === file);
+    assert.equal(row.currentSha256, current); row.currentSha256 = previous;
+  }
+  // Collector authenticates current/historical sources before this report-only
+  // comparison. Saved bytes and every other complete field remain unchanged.
+  assert.deepEqual({ ...recorded, membershipAssertionsReplayed: false }, historicalProjection);
   assert.equal(membership.tests, 11); assert.equal(membership.failures, 0);
   assert.equal(collected.report.reports.length, 9);
   assert.equal(collected.report.projection.normalizationTransition.colorValuesEquivalent, false);
   assert.equal(collected.report.historicalReceiptsRewritten, false);
   assert.equal(collected.report.canonicalClassificationVerified, false);
-  assert.equal(collected.report.dependencyProjections.length, 3);
+  assert.equal(collected.report.dependencyProjections.length, 6);
   const policy = collected.report.dependencyProjections.find(p => p.file === 'tests/material-parity/input-equivalence-policy.mjs');
   assert.deepEqual(policy.addedSourceFindings, [
     'core-rounded-radius-sampling-uses-unclamped-request', 'fixture-dialog-sampled-panel-and-action-geometry',
@@ -107,5 +128,5 @@ test('historical binding rejects changed findings in every index, receipts, depe
   assert.ok(source.includes('function reviewedTemplateTextMappings('));
   assert.throws(() => collectCaseIndexConservation({ read: name => name === caseIndexAuditModule
     ? Buffer.from(source.replace('function reviewedTemplateTextMappings(', 'function renamedTemplateTextMappings('))
-    : readFileSync(name) }), /producer changed beyond reviewed stacking integration/);
+    : readFileSync(name) }), /producer changed beyond reviewed stacking integration|mapping or normalization changed beyond reviewed subset applicability/);
 });

@@ -2,6 +2,21 @@
 
 ## Current audit pointer — October18
 
+Original case-index conservation integration now completes4/4,zero failures,
+skips or cancellations,duration158071.6976ms,with terminal TAP retained in
+artifacts/material-parity/case-index-original-conservation-reconciled-20261018.log
+and empty corresponding stderr. Both processes25984/25400 have terminated.
+The existing suite authenticates the six current dependency projections before
+comparing a cloned report with the immutable saved report:only the three named
+read-only diagnostic entries and exact authenticated current-source metadata
+are projected to their historical representation. Every other complete report
+field remains equal. All original policy,heading,index,receipt,dependency and
+producer mutation rejection checks execute. No saved receipt,renderer,fixture
+or canonical package is changed. This closes this specific historical report-
+shape/diagnostic expectation barrier,not current rendering or whole-case closure.
+Next:remaining shared non-Icon/partial-Icon applicability failures and snackbar
+dependency reconciliation;coherent current source/export and final gates remain.
+
 Runtime-wiring failure521 is resolved in its existing callback replay:missing
 Function-scope hash binding caused ReferenceError before runtime assertions.
 After binding it,retained diagnostic wrapper exposed a second stale assumption:
