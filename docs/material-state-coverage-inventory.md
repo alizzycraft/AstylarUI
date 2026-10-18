@@ -2,6 +2,31 @@
 
 ## Current audit pointer — October18
 
+October19 button-box integration33948 TERMINAL1,0/1,duration595238.9851ms:
+pending-caret conservation now passes with55 reviewed signatures/119 reviewed
+observations/53 pending observations preserved. Next failure is the follow-up
+reconstruction's unconditional historical attribution===unresolved assertion.
+Keep button-box-pending-caret-source-integration-20261018 logs and PBKwi6 scratch.
+Small independent source census (no full builder) authenticates that exact
+88-case capture SHA703ba4cbeb92f658b9382216caed8839cdb504bce92eee589461f17e2841b242,
+replays owner-initial tree evidence and bound follow-up source plans:34 follow-up
+groups,exactly ONE owner-initial overlap,static:expansion@light/desktop,
+expansion-primary/appearance,none versus omitted,one occurrence. Earlier label
+reviewed-owner-initial-style-observation-stage becomes independently source-
+reviewed-expansion-panel-header-owner-mismatch;both are parity-harness-defect,
+not equivalent input/rendering. Log button-box-followup-owner-precedence-census-
+20261019 stdout/stderr. Captured tree receipts separately authenticate native
+frame/2/0 mat-expansion-panel with header/content children versus candidate
+root/0/2/0/0 div with span child. This is a generic observation-label refinement
+to a more specific mismatched-owner finding,not evidence of changed scalar or
+permission to replace earlier reviewed metadata blindly. Next:revalidate the
+COMPLETE previous row against independently reconstructed initial-source proof
+before allowing a follow-up transition;preserve default unresolved-only guards,
+raw-row equality and rejection of unproved/forged earlier attributions. Do not
+add an expansion-name exception or exclude the row from unrelated conservation.
+Later assertions/full integration remain unexecuted or failing;no renderer,
+fixture,capture,canonical package or case-closure status changed.
+
 Pending caret conservation now replays the existing component review rather
 than broadly excluding later metadata. assertLaterCaretClassifications first
 authenticates the original owner-caret binding,then re-reads/rehashes that exact
