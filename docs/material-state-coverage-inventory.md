@@ -8,9 +8,15 @@ and600 owners;its current builder calls applyIconContextReviews whenever the
 owner-initial binding is bound. That helper requires all11 retained Icon rows,
 but this selected population contains none (0!==11). This establishes a partial-
 population/shared-review contract mismatch,not a button renderer regression.
-Failure106 is distinct:the box-sizing integration reaches an Icon row whose
-complete hash differs (1401a26b versus15987e8f);its precise row delta remains
-unexplained. Failures110/114 additionally stop on source receipts. Evidence is
+Failure106 reaches an Icon row whose complete hash differs (1401a26b versus
+15987e8f). Read-only reconstruction of the exact test selection against hash-
+authenticated b07ef154 capture yields one Icon case (light/desktop/initial).
+Authenticated89030a75/index8d777259 query locates expected15987e8f as
+icon-primary.alignContent,normal versusstretch,20 occurrences. Thus the pinned
+full-population row and selected population differ;this is not evidence of a
+new alignment value regression. Complete actual-row field reconstruction remains
+open;do not attribute every byte to cohort counts without that check.
+Failures110/114 additionally stop on source receipts. Evidence is
 the original full-audit-harness-cd867bbe-20261018 log and unchanged test/helper
 sources. Do not waive Icon conservation or substitute expected hashes. After
 the original run terminates,reconcile explicit population applicability while
