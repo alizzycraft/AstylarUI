@@ -13,6 +13,18 @@ b7957cd9→b493a355. Component reversal is already proved below;mapper/runner
 applicability still requires explicit review. Original assertion stays failed;
 do not silently project these receipts or claim current cursor/hit-target parity.
 Read-only existing collector replay wrote no report or capture.
+Follow-up resolves the remaining source-transition mechanisms without new code:
+restoreMappingReadAdapterSource recovers exactc21d439f from51f017cc by its
+authenticated reader-import reversal;restoreGapCaptureDiagnostics DEFAULT path
+recovers exactc3cabcf fromc13ed230. Explicit target=c3cabcf is deliberately
+unsupported and rejected;its optional target accepts the newer33c5 intermediate,
+so do not extend that enum unnecessarily. Together with complete component
+reversal and the original two producer/collector projections,existing source
+conservation mechanisms cover all five observed receipt transitions. Original
+cursor test remains failed until these proofs are integrated in its actual
+module and original assertions/negative controls execute after terminal run.
+Historical runner restoration does not establish fresh launch/action equivalence
+or current rendering;retain both actual and captured provenance.
 
 Repeated component receipt barrier b493a355→b7957cd9 is now independently
 reconciled through EXISTING restoreAstylarDiagnostics:current component reverses
