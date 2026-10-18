@@ -946,6 +946,14 @@ test('Icon review conserves complete original rows and rejects input drift', asy
   const review = collectIconContextReview({ includePrimaryAlignment: false });
   const completeReview = collectIconContextReview();
   const completeOriginal = await loadFindingEvidence('artifacts/material-parity/working-audit', 'icon', completeReview.groups.map(row => row.id), iconContextBaseline);
+  // Original button-box integration failure: only aggregation membership differs.
+  // This diagnoses the strict full-cohort contract; it does not authorize a skip.
+  const fullAlignment = one(completeOriginal.filter(row => row.element === 'icon-primary' && row.property === 'alignContent'));
+  const subsetAlignment = { ...fullAlignment, occurrences: 1, cases: ['static:icon@light/desktop'], states: ['static'] };
+  const rowHash = row => createHash('sha256').update(JSON.stringify(row)).digest('hex');
+  assert.equal(rowHash(fullAlignment), '15987e8fcf3b7112832e1082da84729387ed51288543c3a0cec2ca8148867556');
+  assert.equal(rowHash(subsetAlignment), '1401a26bc9ee578e88b4a886755237382f183620ee9a60aa692d184b1d339bae');
+  assert.throws(() => applyIconContextReviews([subsetAlignment], { cases: [{ family: 'icon' }] }), /Icon complete original row drift/);
   const original = completeOriginal.filter(row => review.groups.some(group => group.family === row.family && group.element === row.element && group.property === row.property && group.reference === row.reference && group.astylar === row.astylar));
   const unrelated = { family: 'unrelated', reference: 'preserve-me' };
   const updated = applyIconContextReviews([...original, unrelated], { includePrimaryAlignment: false });

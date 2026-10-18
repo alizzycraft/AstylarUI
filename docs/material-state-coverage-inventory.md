@@ -2,6 +2,27 @@
 
 ## Current audit pointer — October18
 
+Partial-Icon first barrier now isolated exactly,without another production build:
+original button-box integration failure106's actual hash1401a26b is reproduced
+from authenticated complete original icon-primary/alignContent row15987e8f by
+changing ONLY occurrences20→1,cases→[static:icon@light/desktop],states→[static].
+Every other complete field/key order,scalar,authored example and classification
+is unchanged. Existing query/index plus loadFindingEvidence authenticate the
+original row;log icon-partial-population-hash-diagnosis-20261018 records hashes.
+Existing Icon conservation test now pins both original failure hashes and
+requires current strict applyIconContextReviews to reject this subset,not skip
+or relabel it. Whole existing8/11-row conservation,forged/missing/duplicate and
+owner mutation checks still execute:1/1 pass,exit0,duration21315.264ms in
+icon-partial-population-conservation-20261018 stdout/stderr. This demonstrates a
+full-cohort versus subset aggregation contract mismatch for this exact first
+row;other partial-Icon failures are not automatically classified as the same.
+Next:define explicit subset applicability against authenticated original case
+membership AND supplied per-case inputs,derive required rows/observations from
+that intersection,and preserve complete full-population hashes/default checks.
+No production subset projection is implemented or authorized by hash matching
+alone;changed/foreign/duplicate cases and mismatched authored inputs must reject.
+No renderer,fixture,capture,canonical package or case-closure status changed.
+
 Validator subset integration is verified,not a rendering fix:original positive
 tooltip integration39118 terminates0,1/1,no skips/cancellations,duration714969.6299ms
 in tooltip-subset-validator-integration-20261018 stdout/stderr. Existing two
