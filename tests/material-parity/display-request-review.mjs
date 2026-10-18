@@ -11,6 +11,7 @@ import { inspectOwnerGapInput } from './owner-gap-input-evidence.mjs';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
+import { propertyGroups } from './input-equivalence-policy.mjs';
 
 // A bounded proposal through the existing review store, not canonical mutation.
 // No persistent cache: queryFindings performs its own authenticated direct reads.
@@ -18,7 +19,7 @@ export const iconContextBaseline = Object.freeze({
   generation: '89030a75f63d832a344b3be8ba8d33bf7def3b78fb4a222ebacb5fac71d27194',
   indexSha256: '8d77725901ede263719fbff6dbf4cef6df17195e0bece98e0f6819edb56ce9ae',
 });
-export function collectIconContextReview({ includePrimaryAlignment = true } = {}) {
+export function collectIconContextReview({ includePrimaryAlignment = true, cases: suppliedCases } = {}) {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
   // Publishing reviewed metadata must not replace the original rows we replay.
   const indexFile = `artifacts/material-parity/working-audit/${iconContextBaseline.generation}/index.json`;
@@ -82,12 +83,59 @@ export function collectIconContextReview({ includePrimaryAlignment = true } = {}
           ...(primaryAlignment ? { nativePrimaryType: 'mat-icon', nativePrimaryChildren: 'svg/path', candidatePrimaryType: 'img', candidateAuthoredChildren: 0, matchingFormattingOwners: false } : {}) })) } };
   });
   assert.equal(groups.length, includePrimaryAlignment ? 11 : 8); assert.equal(groups.reduce((sum,row)=>sum+row.occurrences,0), includePrimaryAlignment ? 180 : 120);
-  return { schemaVersion:1,kind:'icon-context-review',sources,groups,canonicalAttributionChanged:false,
+  const review = { schemaVersion:1,kind:'icon-context-review',sources,groups,canonicalAttributionChanged:false,
     ...(includePrimaryAlignment ? { primaryAlignmentOwnerReview: true } : {}) };
+  if (suppliedCases === undefined) return review;
+  assert.ok(Array.isArray(suppliedCases), 'Icon review case population must be explicit');
+  const selected = suppliedCases.filter(entry => entry.family === 'icon'), seen = new Set();
+  const caseKey = entry => `${entry.kind}:icon@${entry.profile}/${entry.viewport?.id}${entry.state ? '/' + entry.state : ''}`;
+  for (const entry of selected) {
+    const key = caseKey(entry), original = observations.find(observation => observation.case === key)?.entry;
+    assert.ok(original, 'Icon subset case is outside authenticated capture');
+    assert.ok(!seen.has(key), 'Duplicate Icon subset case'); seen.add(key);
+    assert.ok(Array.isArray(entry.styleInputs), 'Icon subset style inputs missing');
+    assert.deepEqual({ ...entry, styleInputs: original.styleInputs }, original, 'Icon subset case input drift');
+    const ids = new Set();
+    for (const input of entry.styleInputs) {
+      assert.ok(!ids.has(input.id), 'Duplicate Icon subset style owner'); ids.add(input.id);
+      assert.deepEqual(input, original.styleInputs.find(value => value.id === input.id), 'Icon subset style input drift');
+    }
+  }
+  // Reconstruct only the original aggregation envelope, then authenticate every
+  // complete field against the saved full-row hash before deriving a subset.
+  const reconstruct = (summary, entries) => {
+    const input = entries[0].styleInputs.find(input => input.id === summary.element);
+    const compact = rules => (rules ?? []).slice(-4).map(rule => ({ selector: rule.selector, declarations: rule.declarations }));
+    return { family: summary.family, element: summary.element, property: summary.property,
+      propertyGroup: Object.entries(propertyGroups).find(([, properties]) => properties.includes(summary.property))?.[0] ?? 'other',
+      reference: summary.reference, astylar: summary.astylar, classification: summary.classification,
+      justification: summary.justification, recommendedOwner: summary.recommendedOwner,
+      occurrences: entries.length, cases: entries.map(caseKey).slice(0, 12),
+      states: [...new Set(entries.map(entry => entry.state ?? 'static'))],
+      referenceAuthoredExamples: compact(input.referenceAuthored), astylarAuthoredExamples: compact(input.astylarAuthored) };
+  };
+  const projected = groups.flatMap(group => {
+    const summary = one(rows.filter(row => row.id === group.id));
+    const full = observations.filter(observation => group.reviewedCases.includes(observation.case)).map(observation => observation.entry);
+    assert.equal(hash(JSON.stringify(reconstruct(summary, full))), group.reviewEvidence.originalCompleteRowSha256,
+      'Icon complete original aggregation reconstruction drift');
+    const matched = selected.filter(entry => group.reviewedCases.includes(caseKey(entry)) &&
+      entry.styleInputs.some(input => input.id === group.element));
+    if (!matched.length) return [];
+    const keys = matched.map(caseKey), originalRow = reconstruct(summary, matched);
+    // A complete unchanged cohort must retain its original metadata byte shape.
+    if (hash(JSON.stringify(originalRow)) === group.reviewEvidence.originalCompleteRowSha256) return [group];
+    return [{ ...group, occurrences: matched.length, cases: keys.slice(0, 12), states: originalRow.states,
+      reviewedCases: keys, reviewEvidence: { ...group.reviewEvidence,
+        fullPopulationCompleteRowSha256: group.reviewEvidence.originalCompleteRowSha256,
+        originalCompleteRowSha256: hash(JSON.stringify(originalRow)),
+        observations: keys.map(key => one(group.reviewEvidence.observations.filter(observation => observation.case === key))) } }];
+  });
+  return { ...review, groups: projected };
 }
 
-export function validateIconContextReview(review) {
-  try { assert.deepEqual(review, collectIconContextReview({ includePrimaryAlignment: review.primaryAlignmentOwnerReview === true })); return []; }
+export function validateIconContextReview(review, options) {
+  try { assert.deepEqual(review, collectIconContextReview({ ...options, includePrimaryAlignment: review.primaryAlignmentOwnerReview === true })); return []; }
   catch (error) { return [`Icon context proposal does not replay from retained inputs: ${error.message}`]; }
 }
 
@@ -139,7 +187,8 @@ export function validateIconContextRows(rows, options) {
       return Object.fromEntries(row.reviewEvidence.originalKeyOrder.map(key => [key, restored[key]]));
     });
     const includePrimaryAlignment = selected.some(row => row.element === 'icon-primary' && ['alignContent','alignItems','justifyContent'].includes(row.property));
-    assert.deepEqual(selected, applyIconContextReviews(original, { includePrimaryAlignment }));
+    assert.deepEqual(selected, applyIconContextReviews(original, { ...options,
+      includePrimaryAlignment: options?.cases?.some(entry => entry.family === 'icon') ? true : includePrimaryAlignment }));
     return [];
   } catch (error) { return [`Icon context metadata lacks complete original evidence: ${error.message}`]; }
 }

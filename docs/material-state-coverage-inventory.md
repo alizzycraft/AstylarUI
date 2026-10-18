@@ -2,6 +2,29 @@
 
 ## Current audit pointer — October18
 
+Explicit Icon subset applicability now has focused proof in the existing review
+collector,not a hash waiver. It authenticates original20 cases/trees and11/8
+groups first,binds each supplied Icon case's complete non-style fields and every
+selected style input to that capture,rejects duplicates/foreign/changed inputs,
+then reconstructs each FULL original aggregation envelope from retained inputs.
+Every complete reconstructed row must match its original saved hash before
+membership/first-authored-example/state aggregation is derived for the subset.
+Subset evidence retains full-population hash plus new exact subset-row hash;
+default/full-cohort review remains deep-equal with original shape. Validator
+replays with explicit cases,not only caller-claimed prior metadata. A family-only
+placeholder now fails at earlier capture membership guard;original failure log
+icon-subset-projection-first-controls-20261018 is retained. Updated existing
+conservation suite pins that rejection and validates actual static light desktop
+9-row subset,missing/duplicate rows,viewport/tree/style/owner mutations,altered
+authored examples and forged provenance. Full20-case review equality and all
+original8/11-row controls pass2/2,exit0,duration45004.607ms in icon-subset-projection-
+complete-controls-20261018 stdout/stderr. Earlier narrower controls pass2/2 too.
+No production source/fixture/capture changed;helper/test fingerprints change and
+canonical source/export applicability remains outstanding. Next decisive check:
+original button-box-sizing production integration (original failure106),not
+another full audit or new capture. Other partial populations/earlier precedence
+and whole-case/current rendering acceptance remain unverified.
+
 Partial-Icon first barrier now isolated exactly,without another production build:
 original button-box integration failure106's actual hash1401a26b is reproduced
 from authenticated complete original icon-primary/alignContent row15987e8f by

@@ -953,7 +953,40 @@ test('Icon review conserves complete original rows and rejects input drift', asy
   const rowHash = row => createHash('sha256').update(JSON.stringify(row)).digest('hex');
   assert.equal(rowHash(fullAlignment), '15987e8fcf3b7112832e1082da84729387ed51288543c3a0cec2ca8148867556');
   assert.equal(rowHash(subsetAlignment), '1401a26bc9ee578e88b4a886755237382f183620ee9a60aa692d184b1d339bae');
-  assert.throws(() => applyIconContextReviews([subsetAlignment], { cases: [{ family: 'icon' }] }), /Icon complete original row drift/);
+  assert.throws(() => applyIconContextReviews([subsetAlignment], { cases: [{ family: 'icon' }] }), /outside authenticated capture/);
+  const captured = JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));
+  const subsetCase = { ...one(captured.results.filter(entry => entry.family === 'icon' &&
+    entry.profile === 'light' && entry.viewport.id === 'desktop')), kind: 'static' };
+  const subsetOptions = { cases: [subsetCase] };
+  const subsetReview = collectIconContextReview(subsetOptions);
+  assert.equal(subsetReview.groups.length, 9);
+  assert.deepEqual(validateIconContextReview(subsetReview, subsetOptions), []);
+  assert.equal(validateIconContextReview(subsetReview).length, 1);
+  const allIconCases = [...captured.results.map(entry => ({ ...entry, kind: 'static' })),
+    ...captured.interactions.map(entry => ({ ...entry, kind: 'interaction' }))].filter(entry => entry.family === 'icon');
+  assert.deepEqual(collectIconContextReview({ cases: allIconCases }), completeReview);
+  const subsetRows = completeOriginal.filter(row => subsetReview.groups.some(group =>
+    group.element === row.element && group.property === row.property && group.reference === row.reference && group.astylar === row.astylar))
+    .map(row => ({ ...row, occurrences: 1, cases: ['static:icon@light/desktop'], states: ['static'] }));
+  const subsetBefore = structuredClone(subsetRows), subsetApplied = applyIconContextReviews(subsetRows, subsetOptions);
+  assert.deepEqual(subsetRows, subsetBefore);
+  assert.equal(subsetApplied.length, 9);
+  assert.ok(subsetApplied.every(row => row.reviewedCases.length === 1 && row.reviewEvidence.fullPopulationCompleteRowSha256));
+  assert.deepEqual(validateIconContextRows(subsetApplied, subsetOptions), []);
+  const alteredSubset = structuredClone(subsetRows); alteredSubset[0].referenceAuthoredExamples = [];
+  assert.throws(() => applyIconContextReviews(alteredSubset, subsetOptions), /Icon complete original row drift/);
+  const alteredMetadata = structuredClone(subsetApplied); alteredMetadata[0].reviewEvidence.fullPopulationCompleteRowSha256 = 'forged';
+  assert.equal(validateIconContextRows(alteredMetadata, subsetOptions).length, 1);
+  assert.throws(() => applyIconContextReviews(subsetRows.slice(1), subsetOptions), /Missing Icon original rows/);
+  assert.throws(() => applyIconContextReviews([...subsetRows, subsetRows[0]], subsetOptions), /Duplicate Icon original row/);
+  assert.throws(() => collectIconContextReview({ cases: [subsetCase, subsetCase] }), /Duplicate Icon subset case/);
+  for (const change of [entry => { entry.viewport.width++; },
+    entry => { entry.inputTrees.reference.sha256 = '0'.repeat(64); },
+    entry => { entry.styleInputs[0].astylar.width = 'forged'; },
+    entry => { entry.styleInputs.push(entry.styleInputs[0]); }]) {
+    const changed = structuredClone(subsetCase); change(changed);
+    assert.throws(() => collectIconContextReview({ cases: [changed] }));
+  }
   const original = completeOriginal.filter(row => review.groups.some(group => group.family === row.family && group.element === row.element && group.property === row.property && group.reference === row.reference && group.astylar === row.astylar));
   const unrelated = { family: 'unrelated', reference: 'preserve-me' };
   const updated = applyIconContextReviews([...original, unrelated], { includePrimaryAlignment: false });
