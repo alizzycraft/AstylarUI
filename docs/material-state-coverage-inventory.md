@@ -2,6 +2,19 @@
 
 ## Current audit pointer — October18
 
+October19 complete-row failure locality added to the SAME existing integration:
+before the unchanged hash assertion,diagnostics count all differing rows and
+fields,show at most20 scalar/attribution/reviewEvidence-field examples,and
+distinguish top-level key-order-only differences. No row is rewritten,filtered
+or accepted by diagnostics. Existing-suite focused control checks raw/metadata
+differences,25-row truncation to20 examples,key ordering and caller immutability;
+precision population/rejection controls also pass:2/2 exit0,no skips/cancel,
+3085.7774ms in button-box-row-diagnostic-controls-20261019 stdout/stderr.
+This closes only the demonstrated failure-locality gap,not conservation.
+Next:one original integration with bounded diagnostics to identify actual rows;
+preserve prior hash failure/log/scratch. Updated suite fingerprint needs explicit
+canonical applicability reconciliation;all case closures/final gates stay open.
+
 October19 button-box precision population integration57481 TERMINAL1,0/1,
 715393.1854ms,no skips/cancellations. Exact precision-only36-group/88-observation
 membership passes on both reconstructed current and precise historical rows;

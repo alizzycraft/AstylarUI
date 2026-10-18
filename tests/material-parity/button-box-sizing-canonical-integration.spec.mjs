@@ -101,6 +101,48 @@ function assertPrecisionPopulation(rows, expected) {
   return matched.length;
 }
 
+function unrelatedRowDiagnostics(actual, expected) {
+  const fields = {}, examples = [];
+  let differentRows = 0, orderOnlyRows = 0;
+  for (let i = 0; i < Math.max(actual.length, expected.length); i++) {
+    const row = actual[i], prior = expected[i];
+    if (JSON.stringify(row) === JSON.stringify(prior)) continue;
+    differentRows++;
+    const changed = [...new Set([...Object.keys(row ?? {}), ...Object.keys(prior ?? {})])]
+      .filter(key => JSON.stringify(row?.[key]) !== JSON.stringify(prior?.[key]));
+    for (const key of changed) fields[key] = (fields[key] ?? 0) + 1;
+    if (!changed.length) orderOnlyRows++;
+    if (examples.length < 20) examples.push({ index: i,
+      currentScalar: row && scalar(row), previousScalar: prior && scalar(prior),
+      currentAttribution: row?.attribution, previousAttribution: prior?.attribution,
+      changedFields: changed,
+      reviewEvidenceFields: [...new Set([...Object.keys(row?.reviewEvidence ?? {}), ...Object.keys(prior?.reviewEvidence ?? {})])]
+        .filter(key => JSON.stringify(row?.reviewEvidence?.[key]) !== JSON.stringify(prior?.reviewEvidence?.[key])),
+      ...(!changed.length ? { currentKeyOrder: Object.keys(row), previousKeyOrder: Object.keys(prior) } : {}),
+    });
+  }
+  return { kind: 'button-box-unrelated-row-differences', currentRows: actual.length, previousRows: expected.length,
+    differentRows, orderOnlyRows, changedFieldCounts: fields, examples, omittedExamples: differentRows - examples.length };
+}
+
+test('unrelated row diagnostics expose metadata raw and ordering differences without changing rows', () => {
+  const previous = Array.from({ length: 25 }, (_, i) => ({ family: 'core', element: `row-${i}`, property: 'color',
+    reference: 'red', astylar: 'blue', occurrences: 1, cases: ['static:core@light/desktop'], states: ['static'],
+    attribution: 'original', reviewEvidence: { owner: 'original' } }));
+  const current = structuredClone(previous);
+  for (const row of current) row.reviewEvidence.owner = 'changed';
+  current[0].astylar = 'green';
+  const before = structuredClone({ current, previous }), diagnostic = unrelatedRowDiagnostics(current, previous);
+  assert.equal(diagnostic.differentRows, 25); assert.equal(diagnostic.examples.length, 20); assert.equal(diagnostic.omittedExamples, 5);
+  assert.deepEqual(diagnostic.changedFieldCounts, { astylar: 1, reviewEvidence: 25 });
+  assert.deepEqual(diagnostic.examples[0].reviewEvidenceFields, ['owner']);
+  assert.deepEqual({ current, previous }, before);
+  const reordered = Object.fromEntries(Object.entries(previous[0]).reverse());
+  const order = unrelatedRowDiagnostics([reordered], [previous[0]]);
+  assert.equal(order.orderOnlyRows, 1); assert.deepEqual(order.examples[0].changedFields, []);
+  assert.deepEqual(unrelatedRowDiagnostics(previous, previous).differentRows, 0);
+});
+
 test('precise color population accounts for exactly thirty-six source-bound root groups', () => {
   const expected = precisionOnlyPopulation(), rows = [...expected.values()];
   assert.equal(assertPrecisionPopulation(rows, expected), 36);
@@ -164,6 +206,8 @@ test('button box sizing production integration preserves all scalar inputs earli
   const newlyObservable = assertPrecisionPopulation(other(audit), precisionPopulation);
   assert.equal(assertPrecisionPopulation(other(previous), precisionPopulation), newlyObservable);
   assert.equal(other(audit).length - newlyObservable, 6282, 'historical count plus exact newly observable input population');
+  if (hash(other(audit)) !== hash(other(previous)))
+    console.log(JSON.stringify(unrelatedRowDiagnostics(other(audit), other(previous))));
   assert.equal(hash(other(audit)), hash(other(previous)), 'complete unrelated rows unchanged');
   const binding = audit.buttonBoxSizingInputs;
   assert.equal(binding.binding.status, 'bound');
