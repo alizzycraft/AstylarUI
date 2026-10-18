@@ -2,6 +2,22 @@
 
 ## Current audit pointer — October18
 
+October19 button-box precision population integration57481 TERMINAL1,0/1,
+715393.1854ms,no skips/cancellations. Exact precision-only36-group/88-observation
+membership passes on both reconstructed current and precise historical rows;
+original6282 remainder count also passes. Full unrelated-row hash correctly
+rejects:currentdc5abcf286d1eba66311b607d0ee12680b3e1e586159d5988226a1e56948e2b0
+versus historical21fe92b099acd3e63cad9b898a4f13bc65721f643689b0b86d18e8112ca27b27.
+Keep button-box-precision-population-integration-20261019 stdout/stderr and
+failure scratchi9JOqj. Later binding/validation/mutation assertions remain
+unexecuted. Count correction is not complete conservation. Next unresolved
+question:which complete row fields differ after independent replay? Competing
+explanations are unrepresented source-bound classification stages,unexpected
+metadata changes or serialization/order drift;raw scalar population already
+matches. Existing hash-only failure lacks locality,so add bounded row/field
+diagnostics to this SAME assertion before another costly run;do not omit rows,
+erase metadata or change the expected hash. No new rendering or case closure.
+
 October19 precision population assertion now binds the count to source evidence
 inside the existing button-box integration suite. Authenticated original/current
 normalizer bodies and unchanged caseKey derive exactly36 root-background groups,
