@@ -57,6 +57,61 @@ const seen = new Set(), interactions = original.interactions.filter(e => {
 const scalar = r => [r.family, r.element, r.property, r.reference, r.astylar, r.occurrences, r.cases, r.states];
 const hash = v => createHash('sha256').update(JSON.stringify(v)).digest('hex');
 
+// Account for newly observable inputs rather than silently updating an old count.
+// The normalizer bodies are authenticated above; this never rounds live rows.
+const normalizationNames = ['canonicalStyle', 'expandQuad', 'expandPair', 'splitCssTerms', 'normalizeValue', 'normalizeColor', 'formatNumber'];
+const normalizeAt = tree => new Function(normalizationNames.map(name => functionText(tree, name)).join('\n') + '\nreturn canonicalStyle;')();
+const rounded = normalizeAt(parsed), precise = normalizeAt(current);
+assert.equal(functionText(parsed, 'caseKey'), functionText(current, 'caseKey'));
+const capturedCaseKey = new Function(functionText(current, 'caseKey') + '\nreturn caseKey;')();
+const precisionKey = row => JSON.stringify([row.family, row.element, row.property, row.reference, row.astylar]);
+function precisionOnlyPopulation() {
+  assert.equal(hash({ ...original, results, interactions }), '703ba4cbeb92f658b9382216caed8839cdb504bce92eee589461f17e2841b242');
+  const groups = new Map();
+  for (const entry of [...results, ...interactions]) for (const input of entry.styleInputs ?? []) {
+    const oldReference = rounded(input.reference ?? {}), oldCandidate = rounded(input.astylar ?? {});
+    const reference = precise(input.reference ?? {}), candidate = precise(input.astylar ?? {});
+    for (const property of new Set([...Object.keys(reference), ...Object.keys(candidate)])) {
+      if (oldReference[property] !== oldCandidate[property] || reference[property] === candidate[property]) continue;
+      assert.equal(property, 'backgroundColor'); assert.equal(input.id, `${entry.family}-root`);
+      assert.equal(reference[property], 'rgba(245.879925,240.73989,248.60001,1)');
+      assert.equal(candidate[property], 'rgba(246,241,249,1)');
+      const row = { family: entry.family, element: input.id, property, reference: reference[property], astylar: candidate[property] };
+      const key = precisionKey(row), group = groups.get(key) ?? { ...row, occurrences: 0, cases: [], states: [] };
+      group.occurrences++;
+      const caseId = capturedCaseKey(entry), state = entry.state ?? 'static';
+      if (!group.cases.includes(caseId)) group.cases.push(caseId);
+      if (!group.states.includes(state)) group.states.push(state);
+      groups.set(key, group);
+    }
+  }
+  assert.equal(groups.size, 36); assert.equal(new Set([...groups.values()].map(row => row.family)).size, 36);
+  assert.equal([...groups.values()].reduce((n, row) => n + row.occurrences, 0), 88);
+  return groups;
+}
+function assertPrecisionPopulation(rows, expected) {
+  const matched = rows.filter(row => expected.has(precisionKey(row)));
+  assert.equal(matched.length, expected.size, 'complete precision-only population');
+  assert.equal(new Set(matched.map(precisionKey)).size, expected.size, 'duplicate precision-only row');
+  for (const row of matched) {
+    const wanted = expected.get(precisionKey(row));
+    assert.deepEqual(Object.fromEntries(Object.keys(wanted).map(key => [key, row[key]])), wanted,
+      'source-bound precision-only membership and observations');
+  }
+  return matched.length;
+}
+
+test('precise color population accounts for exactly thirty-six source-bound root groups', () => {
+  const expected = precisionOnlyPopulation(), rows = [...expected.values()];
+  assert.equal(assertPrecisionPopulation(rows, expected), 36);
+  assert.throws(() => assertPrecisionPopulation(rows.slice(1), expected), /complete precision-only population/);
+  assert.throws(() => assertPrecisionPopulation([...rows.slice(1), rows[1]], expected), /duplicate precision-only row/);
+  for (const property of ['occurrences', 'cases', 'states']) {
+    const forged = structuredClone(rows); forged[0][property] = property === 'occurrences' ? 99 : ['forged'];
+    assert.throws(() => assertPrecisionPopulation(forged, expected), /source-bound precision-only membership/);
+  }
+});
+
 test('button box sizing production integration preserves all scalar inputs earlier precedence and measurement gaps', () => withAuditScratch('button-box-sizing-integration-', directory => {
   assert.equal(selected.size, 36); assert.ok(interactions.length > 0);
   const raw = { ...original, results, interactions }, before = hash(raw);
@@ -105,7 +160,10 @@ test('button box sizing production integration preserves all scalar inputs earli
   assert.equal(restored.changes.reduce((n, r) => n + r.occurrences, 0), 76);
   const other = report => (report === audit ? restored.rows : report.discrepancies)
     .filter(r => !signatures.has(JSON.stringify(scalar(r))));
-  assert.equal(other(audit).length, 6282);
+  const precisionPopulation = precisionOnlyPopulation();
+  const newlyObservable = assertPrecisionPopulation(other(audit), precisionPopulation);
+  assert.equal(assertPrecisionPopulation(other(previous), precisionPopulation), newlyObservable);
+  assert.equal(other(audit).length - newlyObservable, 6282, 'historical count plus exact newly observable input population');
   assert.equal(hash(other(audit)), hash(other(previous)), 'complete unrelated rows unchanged');
   const binding = audit.buttonBoxSizingInputs;
   assert.equal(binding.binding.status, 'bound');

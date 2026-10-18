@@ -2,6 +2,20 @@
 
 ## Current audit pointer — October18
 
+October19 precision population assertion now binds the count to source evidence
+inside the existing button-box integration suite. Authenticated original/current
+normalizer bodies and unchanged caseKey derive exactly36 root-background groups,
+all36 families/88 observations from the pinned703ba4cb selected capture. Both
+current/restored and precise historical rows must preserve complete source case,
+state and occurrence membership for those groups. The original6282 count remains
+for the rest,and whole unrelated-row hash equality is unchanged;no color row is
+excluded from that comparison. Existing-suite focused test also rejects missing,
+duplicate and forged occurrence/case/state membership:1/1 exit0,no skips/cancel,
+2583.1204ms in button-box-precision-population-controls-20261019 stdout/stderr.
+No full integration pass yet;the next justified check is the original integration
+with this exact measurement-population boundary. Canonical source applicability,
+all2311 whole-case closures and final gates remain open.
+
 October19 original button-box integration18923 TERMINAL1,0/1,no skips/cancellations,
 657750.6251ms in button-box-icon-predecessor-integration-20261019 stdout/stderr;
 failure scratchvG48jh retained. Icon replay and original59-group/76-observation
