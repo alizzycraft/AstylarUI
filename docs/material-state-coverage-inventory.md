@@ -2,6 +2,24 @@
 
 ## Current audit pointer — October18
 
+Snackbar original failure1600 now replays its complete ordinary-open assertion:
+1/1 pass,no skips/cancellations,duration2401.445ms in
+artifacts/material-parity/snackbar-historical-diagnostic-replay-20261018.log
+(corresponding stderr empty). All208 captured dependency checks remain enforced:
+two exact source files authenticate complete current hashes and equality to
+Git39b3e0fd before reading authenticated predecessor bytes;installed inspector
+uses existing whole-file diagnostic restoration with unexpected-drift rejection.
+Exact projection counts2 source/1 installed prevent silent bypass. No disk source,
+capture or receipt replacement. Original DPR1/2,1000/240px initial/click states,
+trusted clicks,input-tree presence,PNG hashes/recomputed local dark pixels,
+344x48 in-bounds boxes and enabled/visible mesh/camera-depth assertions all run.
+Historical short-surface failure is paint behind camera,not below-screen layout:
+candidate opens in bounds but has zero dark pixels when mesh.z exceeds cameraZ.
+Tall controls paint. This restores the existing bounded diagnosis,not a fresh
+current-runtime reproduction,universal snackbar cause or renderer fix. The second
+34-wrapper assertion and current rendering acceptance remain separate;changed
+suite source needs explicit receipt applicability at canonical integration.
+
 Original case-index conservation integration now completes4/4,zero failures,
 skips or cancellations,duration158071.6976ms,with terminal TAP retained in
 artifacts/material-parity/case-index-original-conservation-reconciled-20261018.log

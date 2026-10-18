@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+import { restoreCursorInspectorCaptureSource } from './public-cursor-defaults-evidence.mjs';
 import { PNG } from 'pngjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { propertyGroups } from './input-equivalence-policy.mjs';
@@ -22,10 +24,32 @@ test('ordinary snackbar opens in bounds but loses paint behind the short-surface
     styleProperties: Object.values(propertyGroups).flat() });
   assert.equal(binding.status, 'checkpoint-bound', JSON.stringify(binding.errors));
   assert.equal(manifest.provenance.core.length, 104);
+  // Historical replay only: authenticate the complete diagnostic-only revision,
+  // not today's rendering. All other captured dependency checks remain exact.
+  const sourceTransitions = new Map([
+    ['src/lib/astylar-surface.ts', 'cc874b030ffdd0960db4b68fea88e1864824b40ce72d716f69a2ec025f0e182a'],
+    ['src/lib/astylar.ts', '5742ba6c19debd5c18ad7d407f1a10e14271cbcd38bf99889d4b4e2474f17451'],
+  ]);
+  let projectedSources = 0, projectedInstalled = 0;
   for (const receipt of manifest.provenance.core) {
-    assert.equal(hash(readFileSync(receipt.source)), receipt.sourceSha256);
-    assert.equal(hash(readFileSync(`examples/material-showcase/node_modules/astylarui/dist/lib/${receipt.file}`)), receipt.sha256);
+    let source = readFileSync(receipt.source);
+    if (sourceTransitions.has(receipt.source)) {
+      assert.equal(hash(source), sourceTransitions.get(receipt.source));
+      assert.deepEqual(source, execFileSync('git', ['show', `39b3e0fd:${receipt.source}`], { maxBuffer: 4_000_000 }));
+      source = execFileSync('git', ['show', `39b3e0fd^:${receipt.source}`], { maxBuffer: 4_000_000 });
+      projectedSources++;
+    }
+    assert.equal(hash(source), receipt.sourceSha256);
+    let installed = readFileSync(`examples/material-showcase/node_modules/astylarui/dist/lib/${receipt.file}`);
+    if (hash(installed) === 'a18630bdc31067ac75907e41f9031865fa192edc164ebf93edacb8b836b09abd') {
+      assert.match(receipt.file.replaceAll('\\', '/'), /^lib\/astylar\.js$/);
+      assert.throws(() => restoreCursorInspectorCaptureSource(installed.toString() + '\n// unexpected drift'));
+      installed = Buffer.from(restoreCursorInspectorCaptureSource(installed.toString()));
+      projectedInstalled++;
+    }
+    assert.equal(hash(installed), receipt.sha256);
   }
+  assert.equal(projectedSources, 2); assert.equal(projectedInstalled, 1);
   assert.deepEqual(report.results.map(e => [e.deviceScaleFactor, e.viewport.height, e.action]),
     [1, 2].flatMap(d => [1000, 240].flatMap(h => ['initial', 'click'].map(a => [d, h, a]))));
   for (const row of report.results) {
