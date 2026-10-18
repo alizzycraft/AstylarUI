@@ -2,6 +2,27 @@
 
 ## Current audit pointer — October18
 
+Validator subset integration is verified,not a rendering fix:original positive
+tooltip integration39118 terminates0,1/1,no skips/cancellations,duration714969.6299ms
+in tooltip-subset-validator-integration-20261018 stdout/stderr. Existing two
+wrapping rows/36 occurrences/18 reviewed cases,raw-input immutability,complete
+scalar population,earlier/later classification precedence,unrelated complete-row
+hash equality and exact expected nine validation gaps all pass. Success scratch
+is removed by withAuditScratch;previous CF2Bq4 failure and original logs remain.
+Negative tooltip test passed in preceding full run;it has not been rerun after
+the validator correction,so no fresh complete-suite pass is claimed.
+Case-index source revalidation27622 terminates1,3/4:policy,heading and complete
+nine-index conservation pass;last producer mutation correctly rejects but its
+expected message predates the new earlier validation-subset guard. Diagnostic-
+only expectation update preserves every mutation. Original complete rejection
+test then passes1/1,exit0,duration138394.8463ms in case-index-validator-source-
+rejection-20261018 stdout/stderr. Preserve failed case-index-validator-source-
+reconciliation-20261018 log;this is split verification,not a new4/4 full-run claim.
+Producer7bb5bfb1 remains exactly conserved to628d3b06 then prior registration
+sources;canonical source/export reconciliation still outstanding. Next shared
+barrier is partial-Icon population evidence,not a waiver of complete-row hashes.
+All2311 cases remain partial/current rendering unverified;scope/gates unchanged.
+
 Tooltip subset original integration99744 TERMINAL exit1:1/2 pass,zero skips or
 cancellations,duration3045279.1095ms in tooltip-subset-original-integration-
 20261018 stdout/stderr. Original builder barrier is cleared:positive test reaches

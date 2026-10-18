@@ -128,5 +128,5 @@ test('historical binding rejects changed findings in every index, receipts, depe
   assert.ok(source.includes('function reviewedTemplateTextMappings('));
   assert.throws(() => collectCaseIndexConservation({ read: name => name === caseIndexAuditModule
     ? Buffer.from(source.replace('function reviewedTemplateTextMappings(', 'function renamedTemplateTextMappings('))
-    : readFileSync(name) }), /producer changed beyond reviewed stacking integration|mapping or normalization changed beyond reviewed subset applicability/);
+    : readFileSync(name) }), /producer changed beyond reviewed stacking integration|mapping or normalization changed beyond reviewed (?:validation )?subset applicability/);
 });
