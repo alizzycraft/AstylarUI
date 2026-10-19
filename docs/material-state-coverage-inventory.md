@@ -2,6 +2,26 @@
 
 ## Current audit pointer — October19
 
+October19 picker raw-event gap inspected using the existing completed capture,
+not another browser run. Independent picker-focus-events-independent-verify-
+20261019 exits0:16 exact configured contexts/48 paired boundaries,report SHA
+45e9180f4e90e92b2b770edf9317d266aac0165a810a146055cc31fcb9c0bf44.
+Sequence census authenticates that report:all eight timepicker contexts begin
+with zero options and end with48 on both sides;all eight datepicker focus
+contexts retain zero options/calendar contents. Native has no blur events;
+candidate datepicker has one and timepicker two blur events per context with
+refocus. Actual candidate pointer targets are canvas,not the focus-selector
+candidate;logical retained typed events are recorded separately. Capture reuses
+the exact maintained actions and retained build;observer microtasks may affect
+timing. No PNGs,renderer/fixture changes,current-code acceptance or closure.
+The older eight timepicker endpoint cases were already partial;the attempted
+duplicate endpoint join rejected before saving and is not new coverage.
+Keep original capture,independent verification,sequence census and failed
+endpoint-join logs. Next:attribute extra focus transitions against existing
+root/attribute reconciliation evidence;do not infer the exact asynchronous
+opening instant from document-capture microtasks. Existing export process27180
+is confirmed live;accepted package and selected104d7c61 remain unchanged.
+
 October19 coherent source-receipt package ACCEPTED:e7a91a22e150c14dd1d971fa55ff8ca3e7cbbb20282ac95cf25ec1338faa7cc8,
 index4032a569bd13e4d12a1576b76740f7f7fb2474e97e46d1d1fc77d62be9450e34.
 Independentcold77071 TERMINAL0,3384801.0134ms complete;2 collectors,10 memory
