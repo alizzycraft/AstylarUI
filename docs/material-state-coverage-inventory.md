@@ -2,6 +2,22 @@
 
 ## Current audit pointer — October19
 
+October19 FULL export89952 TERMINAL0,3328291.5532ms:validation passes before
+write. Candidate65e072fdb75367403cdec41c04c9e07a279a2d0f2c742ed827e9343f54e2ab93,
+packed84568629/decoded2326831354bytes,decodedSHA
+0c30adc06e2fbf0830406fc015927db2dc86a433068e3189514c2197eb206ea9.
+165findings,436static/1875interaction,8483groups/389202occurrences,inputEquivalent
+false. Session executes1collector/10memoryhits/1diskhit,zero invalidated,
+16330files/1673134522bytes read AND reverified. Logs flush at process completion;
+earlier empty logs did NOT establish startup phase. Main accepted working pointer
+remains4acc/index44ca. Candidate import10203/process24064 writes ONLY separate
+candidate-validation store;independent COLD check41341/launcher26160/child13428
+is confirmed live. Logs text-backing-candidate-import and text-backing-independent-
+cold-check-20261019. Do not restart live handles,modify consumed sources,import
+into main store or commit candidate canonical files before conservation/cold
+acceptance. Next candidate section/row conservation and terminal cold result.
+No full browser rerun,whole-case promotion or final audit acceptance follows.
+
 October19 justified full export STARTED,session89952,launcher1388/child23212:
 named current-ancestry launcher supplies all original reports plus queued33a0bd8b
 and its explicit source-applicability reader. Accepted archive4acc raw compressed

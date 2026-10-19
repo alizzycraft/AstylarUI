@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep text-backing-queued-export-20261019 stdout/stderr:successful full candidate
+65e072fd validates before write,accepted4acc preserved in immutable generation.
+Keep candidate-import and independent-cold-check logs separately;both processes
+were live when started,not accepted outcomes. Candidate import uses separate
+candidate-validation store;main working pointer4acc remains unchanged. Canonical
+files on disk are candidate until conservation/cold/import complete;do not
+delete old package or overwrite candidate paths while those readers are active.
+
 Keep text-backing-export-reader-integration,export-registration-integration and
 export-invocation-preflight-20261019 log pairs. Reader verifies current bytes via
 the supplied session reader and records explicit historical-source applicability;
