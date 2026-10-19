@@ -2,6 +2,21 @@
 
 ## Current audit pointer — October19
 
+October19 stronger Angular observation first-cohort failure retained:
+divider-angular-cohorts-20261019/observations-light-desktop-dpr1.json records
+actual1440x1000 canvas/viewport and post-disposal zero tracked/live objects,
+pointer/wheel/keyboard registrations,semantic registrations,scroll containers,
+plugin owners/resources/cleanups/pending and scene observers. New assertion
+handlers0 fails because retired interaction.snapshot.handlers remains1. Source
+distinguishes this field: AstylarEventDispatcher.handlerCount counts configured
+options.onEvent/options.handlers,not active browser registrations. Retired runtime
+references are intentionally kept by this observer;configured callback retention
+in that object is not demonstrated production GC leakage. Preserve this
+failure/driver revision;next correct ONLY the new configured-versus-active
+measurement assumption and independently check detached-canvas events. Do not
+remove active-registration/resource-zero requirements or call this a core fix.
+The20-context run stopped after its first cohort;no population pass is claimed.
+
 October19 genuine Angular teardown distinction now observed,not relabeled public
 remount: new existing-protocol supplemental capture divider-angular-remount-
 20261019 TERMINAL0 executes public RouterOutlet.deactivate/activateWith in two
