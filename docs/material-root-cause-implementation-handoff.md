@@ -1,5 +1,17 @@
 # Material audit: evidence-led implementation priorities
 
+October19 Angular lifetime evidence now distinguishes true component teardown
+from public remount:20 actual physical divider contexts/24 configured memberships,
+60 Angular recreations and80 deactivations preserve a passive peer and clear
+tracked/live resources and active registrations. Independent verifier rejects240
+mutations. The dispatcher handlerCount1 is configured caller callbacks retained
+by the diagnostic reference,not an active listener leak;original false zero-count
+assertion is preserved and actual registration-zero criteria remain unchanged.
+No implementation authorized. Delayed font/media cancellation,trusted navigation,
+interactive peer callbacks,rendering and full-case closure remain separate.
+See current coverage ledger and divider-angular-cohorts-observed-20261019 report;
+standalone result not yet integrated into canonical65e072fd/queuedfe692b14.
+
 October19 actual divider context extension of existing transparent-backing/
 local-phase finding: eight native Roboto owners across four desktop DPR1 themes
 match opaque canvas controls byte-for-byte at measured baselines;transparent

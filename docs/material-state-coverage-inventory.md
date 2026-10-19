@@ -2,6 +2,41 @@
 
 ## Current audit pointer — October19
 
+October19 complete configured physical Angular lifecycle observation verified:
+divider-angular-cohorts-observed-20261019 TERMINAL0 covers20 source-derived
+physical contexts/24 exact configured memberships,all four profiles and observed
+viewport/canvas/peer dimensions,DPR and actual theme.60 real Angular recreate
+cycles/80 deactivations retain destroy witnesses,new component/canvas/surface
+identities and zero retired live/tracked meshes/materials/textures,active
+pointer/wheel/keyboard registrations,semantic nodes/events/observers,scroll
+containers,plugin owners/resources/cleanups/pending and scene observers.
+Read-only retained runtime references permit post-disposal snapshots;these are
+instrumentation retention,not production GC roots.360 synthetic detached-canvas
+events invoke no new retired showcase callbacks. Peer resource/registration
+counts survive every Angular teardown/update and clear on its own disposal.
+Configured dispatcher handlerCount1 remains separately asserted as caller
+configuration,not silently renamed/waived as a live registration. Core goal and
+all actual registration-zero assertions remain unchanged. Original failed driver
+bytes are preserved in Git1b00cc91:scripts/audit-material-divider-angular-cohorts.mjs;
+original partial failure/directory/receipts are not rewritten.
+Report SHA256c4085cff905e8aed82ded6a30e2e96b92ddaabbfd9103d57d62f75d7a7888790
+at divider-angular-cohorts-observed-20261019/latest-report.json. Independent
+scripts/check-divider-angular-cohorts.mjs authenticates capture/manifest/source/
+assets/exact membership and rejects240 viewport/theme/destroy/resource/observer/
+semantic/plugin/peer/event/component/runtime mutations,TERMINAL0. Log
+divider-angular-cohorts-independent-20261019.log. Earlier independent verifier's
+black-color mutation was a no-op for an already-black contrast theme;its failed
+log is preserved,corrected control always changes the value,no recapture.
+Remount counts plateau17/17/4 versus initial17/16/4,not initial-equality or a new
+leak diagnosis. This closes the missing Angular-versus-public destruction and
+measured/registration population gap,NOT delayed-font/media cancellation,trusted
+Router navigation,interactive peer callbacks,paint/current rendering or whole
+case closure. Original two-context requested-only report remains bounded,not
+retroactively populated. Next join these exact lifecycle observations with the
+pending native-canvas/placement/source applicability batch;no more equivalent
+destroy/recreate cycles absent changed inputs. Canonical65e072fd/queuedfe692b14
+remain unchanged and all whole cases partial/current rendering unverified.
+
 October19 stronger Angular observation first-cohort failure retained:
 divider-angular-cohorts-20261019/observations-light-desktop-dpr1.json records
 actual1440x1000 canvas/viewport and post-disposal zero tracked/live objects,
