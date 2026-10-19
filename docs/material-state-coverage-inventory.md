@@ -2,6 +2,21 @@
 
 ## Current audit pointer — October19
 
+October19 remaining configured-focus batch demonstrates a measurement-boundary
+failure,not104 inspected cases. Exact13 missing families/104 contexts selected
+from beda645a;capture exits1 on first core/light/DPR1 candidate input-tree read:
+inspectResolvedStyles requires whenSettled. Only native tree was saved;no
+complete report or new coverage. Original stdout/stderr/checkpoint and producer
+3c0e5a9631bebf5a2b8846faae0283666df68f5c8b6e774d886c037235e65e61
+remain required. Driver follows original action/settlement,then directly reads
+measure([]).inputTree after recorded observations. Existing authoritative
+measureAstylarInputs instead awaits benchmark.waitForSettled in the same page
+evaluation as measure;the diagnostic omitted this measurement guard. Exact
+reason pending work arose after the earlier settle is not yet attributed.
+Next reuse that existing measurement helper AFTER original action observations,
+record the later tree boundary explicitly,preserve this failure and avoid
+claiming action timing was fixed. No renderer/fixture or frozen export changes.
+
 October19 original checkbox/radio configured-focus gap inspected across16 exact
 contexts (four profiles,desktopDPR1/2),not reused Tab/arrow evidence. Capture73222
 and independent verify TERMINAL0,reportSHA
