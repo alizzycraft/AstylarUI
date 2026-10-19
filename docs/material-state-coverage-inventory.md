@@ -2,6 +2,15 @@
 
 ## Current audit pointer — October19
 
+October19 choice AX capture72795 TERMINAL1 after collecting16 contexts/64 AX
+targets. Existing supplemental validator rejects absent required paired input
+trees. This is diagnostic-producer omission,not a semantic/parity failure or
+accepted evidence. Preserve original report/checkpoint/logs and producer006689a5.
+Next add exact existing native tree capture and guarded candidate measurement
+AFTER AX observations in a separately named bound producer/run;do not waive
+validator or attach unrelated older trees. No renderer/fixture changes or case
+credit;new evidence remains pending independent validation.
+
 October19 next semantic gap selected after pointer cause closure:checkbox/radio
 actual accessibility-tree role/name/checked/focus/association transport,not just
 DOM comparators. Retained choice focus and radio Space captures provide live DOM

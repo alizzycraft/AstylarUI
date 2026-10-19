@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep choice-ax-20261019 original report/checkpoint/logs and producer006689a5:
+capture72795 terminates1 because paired input trees required by existing
+supplemental validator were omitted.64 AX observations are not accepted proof.
+Correct in separate bound producer/run;do not overwrite original or fabricate
+missing trees from a later or unrelated capture. No PNGs created.
+
 October19 low-space safeguard:accepted4acc8585/index.json and independent
 candidate-validation/4acc8585/index.json are now transparently NTFS-compressed.
 Their350908348 logical bytes occupy159858688 bytes,saving191049660 bytes without
