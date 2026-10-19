@@ -5,6 +5,7 @@ import path from 'node:path';
 import vm from 'node:vm';
 import ts from 'typescript';
 import { auditSuites, selectAuditTests } from '../../scripts/run-audit-tests.mjs';
+import { sectionDigests } from '../../scripts/material-audit-section-digests.mjs';
 
 test('selection replay preserves real pointer sequence and rejects missing selection state', async () => {
   const source = readFileSync('tests/material-parity/run-material-parity.mjs', 'utf8');
@@ -90,7 +91,7 @@ test('diagnostic capture preflight separates retained replay while enforced vali
   }
 });
 
-test('all canonical proof pointers resolve after focused/integration test moves', () => {
+test('all canonical proof pointers resolve after focused/integration test moves', async () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';
   const ast = ts.createSourceFile(file, readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, true);
   const code = ['focusedProofInventory', 'proof'].map(name => {
@@ -100,9 +101,18 @@ test('all canonical proof pointers resolve after focused/integration test moves'
   const inspect = reader => vm.runInNewContext(code + '; focusedProofInventory(root)',
     { readFileSync: reader, path, root: process.cwd() });
   const proofs = inspect(readFileSync);
-  // Independently cold-verified coherent192 publication. Count is explicit:
-  // additional proofs must be reconciled, not silently accepted as growth.
-  assert.equal(proofs.length, 192);
+  // Exact e7717418 cold-verified publication, not unchecked registry growth.
+  // The authenticated section receipt c74126c8 binds every field and order as
+  // well as the explicit population; the historical 192 count predates it.
+  assert.equal(proofs.length, 219);
+  const expected = [{ name: 'focusedProofs', tokens: 3943,
+    sha256: 'f7936d9cdd0e1c9057233c15465716cff161bd7d3a163ad5d81a675fc091aa79' }];
+  const digestProofs = value => sectionDigests([Buffer.from(JSON.stringify({ focusedProofs: value }))]);
+  assert.deepEqual(await digestProofs(proofs), expected);
+  const altered = JSON.parse(JSON.stringify(proofs));
+  altered[0].description += ' unchecked claim';
+  assert.notDeepEqual(await digestProofs(altered), expected);
+  assert.notDeepEqual(await digestProofs([...proofs, proofs[0]]), expected);
   assert.equal(proofs.filter(p => p.status === 'current light desktop five-family empty-caret visibility and ink boundary').length, 1);
   assert.equal(proofs.filter(p => p.status === 'public equal-input scrollbar track interaction diagnostic counterexample').length, 1);
   assert.equal(proofs.filter(p => p.status ===

@@ -30,6 +30,22 @@ navigation summary,not new acceptance criteria or a substitute for exact records
 
 ## Evidence chronology — retain original scope and checkpoint dates
 
+October19 original full-harness failure45 reconciled against accepted e7717418
+publication: its dated192-proof count stopped the original217-proof run before
+pointer checks. Current explicit219 population is now additionally bound to the
+complete focusedProofs section digest f7936d9cdd0e1c9057233c15465716cff161bd7d3a163ad5d81a675fc091aa79
+(3943 tokens), authenticated by retained candidate section receipt c74126c8.
+All original pointer/status assertions and broken-pointer control remain;
+changed-description and duplicate-entry controls reject unchecked inventory drift.
+Existing workflow suite passes5/5,0 skipped/cancelled/todo,1584.111ms.
+Command: node --test tests/material-parity/audit-workflow.spec.mjs.
+Log: artifacts/material-parity/proof-pointer-publication-reconciliation-20261019.log,
+SHA256 eeb16b0f731dad605290a98f8cf45d6d94f2127b7944c07cf6d26854c5debf2a.
+This is a harness inventory reconciliation,not renderer evidence or a subtraction
+from the historical169 full-harness failures. Canonical package remains unchanged;
+workflow test source joins the explicit post-publication support-source changes
+for next coherent integration reconciliation. No full export justified here.
+
 October19 known predecessor-reader focused failure RESOLVED without changing
 historical receipts or strict loader: original three-source reader still rejects
 the later alignment-suite extension,now explicitly asserted as a negative
