@@ -262,6 +262,16 @@ describe('Astylar simultaneous surface isolation', () => {
       'loadingdone',
       jasmine.any(Function),
     );
+    // Listener removal cannot cancel a callback already delivered/queued by the
+    // browser. Exercise the retained callback, not a synthetic new subscription.
+    expect(loadingDone).toEqual(jasmine.any(Function));
+    const retiredRevision = surface.diagnostics.session?.revision;
+    expect(() => loadingDone!(new Event('loadingdone'))).not.toThrow();
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(surface.diagnostics.session?.status).toBe('disposed');
+    expect(surface.diagnostics.session?.revision).toBe(retiredRevision);
+    expect(surface.diagnostics.resources).toEqual({ meshes: 0, materials: 0, textures: 0 });
+    expect(surface.scene.isDisposed).toBeTrue();
   });
 
   it('does not revive an Angular-owned surface when initial fonts resolve after destruction', async () => {

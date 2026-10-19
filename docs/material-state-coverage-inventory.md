@@ -18,7 +18,7 @@ unverified throughout. Evidence contact is100%,not inspection completion/parity.
 | --- | --- | --- |
 | Divider input/structure |48 wrapper requests and inline top attribution;existing classified absolute-flow substitutions. | Remaining material/anonymous-line-box requirements beyond these scoped results. |
 | Divider paint | Configured contrast-DPR1 complete texture footprint;four-theme desktop native/canvas backing and settled-font controls. | Scope of remaining native phase/separator-coverage questions and original full paint criteria;do not transfer public DPR2 residuals here. |
-| Divider ownership |20 observed physical contexts/24 memberships,60 Angular recreations with tracked/registration cleanup and passive peer survival. | Pending-generation/late-font work and other original applicable lifetime/history requirements;settled teardown is not delayed-work cancellation. |
+| Divider ownership |20 observed physical contexts/24 memberships,60 Angular recreations with tracked/registration cleanup and passive peer survival;controlled initial font readiness after Angular destroy and retained later font callback after disposal. | Applicability of these source-level font guards to captured Material runtime and other original lifetime/history requirements;controlled callbacks are not network timing evidence. |
 | Applicability/integration | Newer88-module core/linker/wiring,2280 mapped sources,17 current app sources,55 media/five style identities. | Explicit production reader/source-fingerprint reconciliation for changed owning suite/new queue;runtime/environment boundaries and original final gates. |
 | Whole audit | Complete configured inventory and bounded findings/reproductions remain retained. | Exact obligation/state closure across all36 families and all original final verification/handoff requirements. |
 
@@ -28,6 +28,26 @@ subquestions merely because a parent still says partial. This table is a current
 navigation summary,not new acceptance criteria or a substitute for exact records.
 
 ## Evidence chronology — retain original scope and checkpoint dates
+
+October19 retained later-font callback after disposal answered with the EXISTING
+settled-font test,not another capture/framework. After successful initial and
+later font reflow,dispose removes the loadingdone listener;direct invocation of
+that exact retained callback then neither throws nor changes revision,disposed
+status or0/0/0 resources. This specifically tests the session.isDisposed guard
+when listener removal alone cannot cancel an already queued callback. Combined
+with5f5c9edb,this covers both controlled initial readiness and later callback
+ordering,not actual delayed network delivery or every configured Material case.
+Same focused Angular/Karma command plus --progress=false exits0,10/10 SUCCESS,
+Chrome Headless155/WebGL2/Babylon8.15.1,16.083s build,2.583s browser execution.
+Proxy warning and original initial-render disposal diagnostic remain visible.
+Source-fingerprint review: no direct astylar-isolation.spec.ts receipt consumer
+found in tests/material-parity or scripts;canonical165/219 and queuedbe99 remain
+unchanged. Production reader still selects33a0bd8b only;the80-child be99 join
+uses exact b187103f four-source restoration but has not been selected by export.
+Next priority is explicit reader/integration reconciliation using that existing
+validated boundary,then applicable remaining paint/state obligations—not another
+equivalent settled teardown or controlled-font run. No whole-case promotion,
+renderer/fixture change,network-font claim or final-gate waiver follows.
 
 October19 pending-font Angular destruction bounded check COMPLETE: existing
 src/lib/astylar-isolation.spec.ts now mounts the REAL AstylarSurfaceComponent
