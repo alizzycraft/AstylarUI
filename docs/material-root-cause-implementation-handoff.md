@@ -1,5 +1,18 @@
 # Material audit: evidence-led implementation priorities
 
+October19 bounded new allocation finding,canonical registration PENDING:
+equal explicit22px input at18.4px font produces23px backing with22px logical
+mesh/full UVs;16px-font control allocates22px. Same authored SiteData and matching
+22px container geometry rule out a Material-only compensation as cause. Five
+captured executable methods bind the arithmetic/allocation path;existing-suite
+focused assertion and six mutation controls pass. Classify bounded core
+allocation/logical-texture mapping discrepancy,not yet measured raster blur.
+General fix must preserve CSS dimensions and account for backing padding at
+paint/sampling boundary,not round layout or retune fixtures. New additive test
+changes retained suite source;source/export/dependency reconciliation is pending
+and prior accepted164/218 package is not silently current. See public-explicit-
+line-backing and explicit-line-backing-focused-20261019 logs/current ledger.
+
 October19 new bounded text-allocation mechanism:custom18.4px normal line-height
 roundtrip18.4*(22/18.4)=22.000000000000004 reaches canvas.ceil→23px,while live
 mesh remains22px with full UV range. Exact live canvas-copy ancestry distinguishes

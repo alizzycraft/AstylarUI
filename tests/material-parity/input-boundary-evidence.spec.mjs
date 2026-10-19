@@ -25,6 +25,53 @@ import { compareBottomShadowProfiles } from './shadow-profile-metrics.mjs';
 
 const file = 'artifacts/material-parity/input-boundaries-keypress-559f95c/latest-report.json';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+test('equal explicit line height isolates text backing allocation from authored geometry', () => {
+  const evidenceFile='artifacts/material-parity/public-explicit-line-backing-20261019.log';
+  const bytes=readFileSync(evidenceFile);
+  assert.equal(hash(bytes),'6a480999fe86e2d1ae7b19b79b7949ad79f13d83cf2a2b1a5a3fbe55d2463d74');
+  const report=JSON.parse(bytes);
+  assert.equal(hash(readFileSync('scripts/audit-public-explicit-line-backing.mjs')),report.producerSha256);
+  const ownerFile='artifacts/material-parity/divider-backing-owners-bound-20261019.log',ownerBytes=readFileSync(ownerFile);
+  assert.equal(hash(ownerBytes),'3089be882519251bfda7c660ad1c050edbce7421f3cda67de0c84dd8e26bf13a');
+  const owner=JSON.parse(ownerBytes);
+  assert.equal(hash(readFileSync('scripts/check-divider-backing-owners.mjs')),owner.producerSha256);
+  assert.equal(hash(readFileSync(owner.mapFile)),owner.mapSha256);
+  assert.equal(owner.observations.length,5);
+  for(const source of owner.observations)assert.equal(hash(readFileSync(source.installedFile)),source.installedSha256);
+  const inspect=rows=>{
+    assert.equal(rows.length,4);
+    for(const font of [16,18.4]){
+      const sides=rows.filter(row=>row.font===font);assert.equal(sides.length,2);
+      const reference=sides.find(row=>row.mode==='reference'),candidate=sides.find(row=>row.mode==='astylar');
+      assert.ok(reference&&candidate);
+      for(const row of sides){
+        assert.equal(row.unit,'px');assert.equal(row.snapshot.inputUnchanged,true);
+        assert.deepEqual(row.snapshot.errors,[]);
+        assert.equal(row.snapshot.site.styles.find(s=>s.selector==='#parent').lineHeight,'22px');
+        assert.deepEqual(row.snapshot.bounds.child,{left:40,top:40,width:80,height:22});
+      }
+      assert.deepEqual(reference.snapshot.site,candidate.snapshot.site);
+      assert.equal(reference.nativeBaseline.markerDidNotChangeParagraph,true);
+      assert.equal(reference.nativeBaseline.markerDidNotMoveText,true);
+      const [texture]=candidate.snapshot.liveTextures;assert.equal(candidate.snapshot.liveTextures.length,1);
+      assert.equal(texture.logical.height,22);assert.equal(texture.dimensions.height,22);
+      assert.equal(texture.size.height,font===16?22:23);
+      assert.deepEqual(texture.uvs,[0,0,1,0,1,1,0,1]);
+      assert.equal(candidate.draws.length,1);
+      assert.equal(candidate.draws[0].y,reference.nativeBaseline.offset);
+      assert.equal(candidate.draws[0].height,texture.size.height);
+    }
+  };
+  inspect(report.results);
+  for(const mutate of [
+    rows=>{rows[3].snapshot.site.styles.find(s=>s.selector==='#parent').lineHeight='23px';},
+    rows=>{rows[3].snapshot.liveTextures[0].size.height=22;},
+    rows=>{rows[3].snapshot.liveTextures[0].logical.height=23;},
+    rows=>{rows[3].snapshot.liveTextures[0].uvs[3]=0.9;},
+    rows=>{rows[3].snapshot.bounds.child.height=23;},
+    rows=>{rows[3].draws[0].y+=1;},
+  ]){const altered=structuredClone(report.results);mutate(altered);assert.throws(()=>inspect(altered));}
+});
 const retainedRawControlLogs = [
   ['raw-control-events-20261012.log', 'd14e9e6965f8a4e9f9419d494545a867c3e1b48f4ba2475ccb11a1ef3097a5ea', 50, '6b0486f0'],
   ['raw-control-keyboard-events-20261012.log', '8e202f4cc8eaa800d58acd54c8253ce0d947cee82e96651787571c0ebd086bc1', 16, '7b825141'],

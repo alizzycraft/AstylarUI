@@ -2,6 +2,24 @@
 
 ## Current audit pointer — October19
 
+October19 explicit-height allocation regression added to EXISTING
+input-boundary-evidence.spec.mjs;focused named test TERMINAL0,one original
+counterexample assertion/six altered-evidence controls. It authenticates public
+diagnostic/producer and captured owner-binding receipts,checks equal complete
+SiteData,22px paired boxes,16px backing22 control,18.4px backing23 failure,
+full UVs and unchanged local baseline values. Log explicit-line-backing-focused-
+20261019 records scope. Bounded classification:confirmed core allocation/logical
+texture mapping discrepancy;pixel-level blur/ink effect remains unmeasured,
+not application authoring or proof of all normal-line-height failures. Pending
+canonical registration/batch integration,not silently added to accepted164/218.
+IMPORTANT source-reconciliation change:this additive test changes the retained
+suite file. Earlier733-source/predecessor dependency matches predate this edit;
+do NOT claim they remain fully current or rerun dependent old joins without
+an explicit additive-test applicability review. Accepted4acc stays historical
+and unchanged. Next integrate the five-owner/equal-input proof coherently and
+reconcile this exact source transition,then return to remaining divider paint/
+owner obligations;no repeated captures or whole-case promotions.
+
 October19 minimal equal-input explicit-height control COMPLETE,TERMINAL0:
 public-explicit-line-backing-20261019 records4 side observations,Arial16/18.4px,
 DPR1,explicit22px line-height in BOTH reference CSS/public SiteData. Both
