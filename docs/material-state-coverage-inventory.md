@@ -2,6 +2,20 @@
 
 ## Current audit pointer — October18
 
+October19 read-only proof-pointer pre-conservation while export40421 remains
+live:actual accepted24c2532d producer d260f8ca and current7bb5bfb1 retain identical
+focusedProofInventory/proof function bodies. Eight complete old/current source
+transitions authenticate before explicit historical file reads. Both inventories
+contain217 entries in identical order with identical file/status/description,
+none missing. Exactly28 line numbers shift due to the reviewed boundary/Icon
+suite edits;exact ordinal/file/old/new locations are in review-suite-proof-
+pointer-conservation-20261019 stdout/stderr (exit0). Use that exact population
+for later canonical comparison,not broad line normalization. This does not
+execute217 proofs,establish source payload conservation or promote cases.
+Export inputs remain fixed;ledger is outside the consumed source/proof inventory.
+Original accepted archivecd867bbe is separately authenticated/preserved. Cold
+check,complete section/derived-payload conservation and import remain pending.
+
 October19 two-suite receipt reconciliation verified without refreshing captures.
 Specific script reconcile-material-review-suite-receipts pins complete old/current
 suite bytes,conserves77/46 unrelated top-level statements and48/23 unchanged test
