@@ -30,6 +30,29 @@ navigation summary,not new acceptance criteria or a substitute for exact records
 
 ## Evidence chronology — retain original scope and checkpoint dates
 
+October19 input-focus recorded-observation replay separated from missing whole
+runner provenance,following EXISTING Icon inspect boundary. No recovery search
+repeated. Current runner focus-action body622d9fc7 and theme body6e8166a5 match
+the original capture's two recorded body receipts;WHOLE runner remains different
+e01ef9dc/86ece08b. Existing assertion pins both exact hashes,requires the original
+whole-equality assertion to throw,and retains original manifest identity. Its
+machine diagnostic explicitly records originalRunnerProvenance unavailable-
+unresolved,originalCaptureProcedureVerified false,currentRenderingAccepted false.
+All original control,PNG,geometry,temporal and method assertions then run unchanged.
+40 configured focus cases/240 temporal samples authenticate;reference temporal
+caret edge1CSSpx at input edge versus candidate2CSSpx starting1CSSpx left survives.
+Original capture.inputEquivalent/renderingEquivalent stay FALSE. This replay
+does not prove original procedure,current pipeline,vertical-fringe cause or case
+closure. Original failure17822b08 log remains immutable evidence of unresolved
+provenance;the former whole-source requirement is not satisfied or excluded.
+Existing historical-suite control reverses ONLY digest43931f0d new accounting
+block and checks complete original suite bytes. Focused2/2,0 skipped/cancelled/
+todo,13843.8337ms,log input-focus-recorded-observations-provenance-20261019.log
+SHA04113f4a2271221181939c29b5521cd02982ca3d58975446eadd34a90ca8b02a.
+Command:node --test --test-name-pattern="configured input focus evidence|semantic registration historical boundary" tests/material-parity/benchmark-config.spec.mjs tests/material-parity/semantic-text-transform-input.spec.mjs.
+No renderer/fixture/capture/source-receipt change. Same support-source batch
+reconciliation remains queued;no canonical export justified for this alone.
+
 October19 input-focus missing-map caller89:own checkpoint authenticates retained
 3JXWRYJY recovery map SHA dba484044ca0dea965d8ef4b12635673f0f055d7711099d2f6476ca490988ec4.
 Existing owner assertion reads that retained path instead of missing active-build

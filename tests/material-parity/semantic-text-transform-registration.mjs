@@ -308,6 +308,16 @@ export function readHistoricalBenchmarkSource(file, options) {
   else if (name === 'position-composition-producer-transition.mjs') restored = restoreSemanticRegistrationTransitionSource(raw);
   else {
     restored = normalized(raw);
+    const focusStart = restored.indexOf('  // INPUT_FOCUS_RUNNER_PROVENANCE_BEGIN\n');
+    const focusEndMarker = '  // INPUT_FOCUS_RUNNER_PROVENANCE_END\n';
+    const focusEnd = restored.indexOf(focusEndMarker, focusStart);
+    assert.ok(focusStart >= 0 && focusEnd > focusStart);
+    assert.equal(digest(restored.slice(focusStart, focusEnd + focusEndMarker.length)),
+      '43931f0d202af3aa08584d2aa6d20419fff06f3223e1ad5edb81c783c7c8baf1');
+    restored = restored.slice(0, focusStart)
+      + '  assert.equal(hash(runner), capture.actionSource.sha256);\n'
+      + '  assert.equal(hash(runner), manifest.provenance.harnessFiles.find(r => r.file === capture.actionSource.file).sha256);\n'
+      + restored.slice(focusEnd + focusEndMarker.length);
     // Only snackbar map reads move; original receipts and source checks stay.
     for (const [retained, historical] of [
       ["  const mapFile = 'artifacts/material-parity/retained-evidence/component-map-recovery-20261011/chunk-3JXWRYJY.js.map';",

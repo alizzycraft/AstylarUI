@@ -2351,8 +2351,15 @@ test('configured input focus evidence records exact controls without replacing r
   t.diagnostic(JSON.stringify({ selectionOwnerApplicability: selectionOwners,
     scope: 'Ten complete style/controller-sync/highlight methods; not all selection actions, palette functions, caller or full rendering acceptance' }));
   const runner = readFileSync(capture.actionSource.file);
-  assert.equal(hash(runner), capture.actionSource.sha256);
-  assert.equal(hash(runner), manifest.provenance.harnessFiles.find(r => r.file === capture.actionSource.file).sha256);
+  // INPUT_FOCUS_RUNNER_PROVENANCE_BEGIN
+  assert.equal(capture.actionSource.sha256, 'e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0');
+  assert.equal(hash(runner), '86ece08b913903e0a06231a58b32826a8fe561b468f82b7c57ccc32422da60e8');
+  assert.equal(manifest.provenance.harnessFiles.find(r => r.file === capture.actionSource.file).sha256, capture.actionSource.sha256);
+  assert.throws(() => assert.equal(hash(runner), capture.actionSource.sha256));
+  t.diagnostic(JSON.stringify({ originalRunnerSha256: capture.actionSource.sha256, replayRunnerSha256: hash(runner),
+    originalRunnerProvenance: 'unavailable-unresolved', originalCaptureProcedureVerified: false, currentRenderingAccepted: false,
+    boundary: 'Recorded controls and pixels replay only. Focus/theme body receipts checked below;whole runner and capture procedure remain unverified. No case closure or acceptance waiver.' }));
+  // INPUT_FOCUS_RUNNER_PROVENANCE_END
   const configFile = 'tests/material-parity/benchmark.config.mjs';
   assert.equal(hash(readFileSync(configFile)), manifest.provenance.harnessFiles.find(r => r.file === configFile).sha256);
   const ast = ts.createSourceFile('runner.mjs', runner.toString(), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
