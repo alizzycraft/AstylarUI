@@ -2,6 +2,21 @@
 
 ## Current audit pointer — October19
 
+October19 accepted package publication9b58ac1d is pushed. Next demonstrated gap:
+retained113 configured pointer activate/activate-leave records expose extra
+focus events without first-mutation witnesses. Competing causes are attribute
+removal,root/descendant replacement or intended canvas→semantic handoff;do not
+generalize prior programmatic-focus causes. New pointer-focus-mutations adapter
+reuses frozen measured-focus/event/mutation producers,exact configured actions
+and post-observation measurement guard;only cohort/state-unique paths and raw
+mutation witnesses differ. Capture19416 is confirmed live with completed chips
+rows and empty stderr. Preliminary rows separate CANVAS handoff from a later
+DIV blur inside removeAttribute;full capture,independent verification,current
+owner binding and exact-case join remain required. No case promotion or new
+defect category. Initial read-only live stdout census attempted to parse its
+unfinished last line;corrected census reads newline-terminated rows only. This
+did not affect capture bytes or actions. No PNGs or renderer/fixture changes.
+
 October19 candidate4acc8585 is now ACCEPTED audit evidence. Independent cold
 31464 TERMINAL0 completes3125495.0144ms;2 collectors,10 memory hits,0 disk hits,
 0 invalidated,15643 files/1514866083 bytes read and independently reverified.

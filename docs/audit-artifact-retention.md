@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep pointer-focus-mutations-20261019 capture/checkpoint/trees and capture log
+pair with its frozen adapter. Session19416 is live;partial rows are not complete
+proof. It supplies missing first-mutation witnesses for113 exact pointer cases,
+not replacement screenshots. No PNGs or successful scratch created. Preserve
+the older activation records;independent verification/owner applicability/join
+are pending. Do not edit the captured producer or restart quiet live capture.
+
 Keep legacy-clip-queued-independent-cold-check and accepted-import-20261019
 stdout/stderr:both terminal0,main4acc8585/index44ca448b accepted,independent index
 byte identity verified. Preserve prior e7a91 and candidate-validation copies,
