@@ -12,7 +12,7 @@ existing loader authenticates15167 dependency receipts/all2311 cases. Receipt:
 divider-reviewed-boundaries-space-retry-20261019.log (TERMINAL0).
 
 Current launcher selection is newer queued bfc2b6d546a0a636f07272eef14591ec830dcc7e90098c06a865af72076d238e,
-not yet exported/canonical. It adds24 case-evidence children/192 reviewed property
+exported as a candidate but not yet accepted/published. It adds24 case-evidence children/192 reviewed property
 slots without closing cases. Keep published be99 and selected bfc distinct.
 
 Working docs now contain exported candidate46eaeb4c;separate candidate index
