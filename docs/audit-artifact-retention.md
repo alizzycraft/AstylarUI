@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep divider-baseline-diagnostic-20261019 candidate-only-hook timeout separately
+from divider-baseline-bound-diagnostic-20261019 successful log pair and producer
+scripts/audit-material-divider-baselines.mjs. Success records8 pages/four profiles,
+all loaded runtime asset receipts,complete matching-text draw sequences and
+native bounds-stable baseline markers. No images,new build,canonical changes or
+claim of old-browser replay. Final draw order alone is not live-texture identity.
+
 Keep paragraph-baseline-boundary-20261019 stdout/stderr and frozen diagnostic
 scripts/audit-paragraph-baseline-boundary.mjs. It serves existing public bundle
 unchanged,authenticates original report/bundle/HTML and records8 fresh side

@@ -2,6 +2,28 @@
 
 ## Current audit pointer — October19
 
+October19 actual Material baseline diagnostic14672 TERMINAL0 records four
+profiles×two sides at desktopDPR1,Chrome155.0.8059.80 on exact1887 served-file
+receipts. Native Above/Below markers preserve paragraph/text bounds;baseline
+offsets light/dark15,contrast14,custom17px. Final observed candidate draws have
+matching NUMERIC local y15/15/14/17,identity canvas transforms;backing heights
+19/19/18/23 versus native paragraph19/19/18/22. Earlier draw calls have y14/14/
+13/17 and backing17/17/16/21,so keep the entire sequence rather than selecting
+transient metrics as settled failures. Font-loading causality is not proved by
+unchanged font strings;final live texture membership still needs observation.
+Custom23 backing versus22 CSS paragraph is not itself a line-box defect:canvas
+integer rounding/backing size and retained CSS geometry are different stages.
+This disproves transferring the public Arial normal-height discrepancy directly
+to settled Material baseline offsets. Does NOT establish global baseline equality,
+native/candidate line-box equivalence or all24-case acceptance. All518reference/
+519candidate runtime asset responses per page authenticate against served files;
+no pageerrors,build receipts unchanged before/after. Producerbb87aa6576b1c52b9c2aa077a94ddba832802942c0096fac3717d3ca2eac638f.
+Initial diagnostic incorrectly waited for candidate-only benchmark on reference;
+timeout preserved separately,route itself valid. Next bind final actual texture
+membership and CSS projection/owner offsets from these numeric observations,
+not another public Arial experiment. Logs divider-baseline-bound-diagnostic-
+20261019 retain complete paired values/asset receipts.
+
 October19 new decisive public baseline diagnostic TERMINAL0,8 side observations:
 paragraph-baseline-boundary-20261019.log uses immutable authenticated public
 paragraph bundle/reportdd72dd2e,Chrome155.0.8059.80,DPR1,Arial16/24px,
