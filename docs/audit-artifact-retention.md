@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep divider-coordinate-branch-history-case-join-20261019 stdout/stderr with
+original October15 history logb92b250b,queued e835378e and1c43e733 predecessor.
+Twenty-four branch-history children/task refinements reverse exactly;14499
+dependencies validate. No new Git survey,capture,scratch or cleanup occurred.
+Historical compensation branches remain authoring defects,not runtime cause
+claims. Frozen export104d7c61 and accepted e7a91 stay separate.
+
 Keep picker-focus-mutations-current-owner-binding and case-join-20261019 logs,
 queued1c43e733 and complete104d7c61 predecessor. All16 added action children
 reverse exactly;all14497 actual dependencies validate. Frozen export continues
