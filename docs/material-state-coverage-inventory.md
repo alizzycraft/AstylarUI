@@ -2,6 +2,25 @@
 
 ## Current audit pointer — October18
 
+October19 changed-leaf comparison77254 TERMINAL0:both full streams authenticate;
+183 changed leaves comprise8 source hashes,98 direct producer receipts,one
+derived motion-report hash,48 scalar control-row hashes and28 proof lines.
+Coverage exactly equals accepted base plus dependency-validatedab4b successor
+(SHAab0b4d694fdd5980b6a7a73fbc338c0146a9bfda8e2d8fa07068a17725f9f6d3).
+No scalar/property/classification changes outside reviewEvidence occur. Exact
+source/proof transition multiplicities match independently authenticated prior
+logs. Whole producer text conserves except the two reviewed Icon case-population
+arguments;all98 direct receipts match that transition. Reconstructing the original
+motion report with actual four current receipts derives0a6fd119;restoring only
+the producer receipt recovers90c83630 exactly. Log review-suite-metadata-derived-
+conservation-20261019 records135 explained leaves,not blanket metadata acceptance.
+The remaining48 links all resolve to accepted button control rows. Existing
+loadFindingEvidence batch1280 now retrieves their complete authenticated payloads
+to derive each new hash by changing only that producer receipt. No new framework,
+capture or rendering claim. Independentcold77071 remains confirmed live;candidate
+e7a91 is still unaccepted,acceptedcd867bbe pointer unchanged. Next:finish48-row
+hash proof,cold check and coherent import before resuming exact case joins.
+
 October19 section comparison45000 TERMINAL0:both preservedcd867bbe and candidate
 e7a91a22 packed/decoded streams authenticate;all80 ordered sections survive,
 72 digests identical,no added/removed sections. Changed8 are sourceFingerprints,
