@@ -2,6 +2,32 @@
 
 ## Current audit pointer — October19
 
+October19 actual text-material/owner question answered for four desktop DPR1
+profiles,eight owners: audit-material-divider-material-state TERMINAL0 reuses
+the authenticated baseline server/settlement/asset path,not new baseline or
+copy-ancestry work. All1887 served receipts unchanged;519 actual assets per page
+authenticate,Chrome155.0.8059.80,no pageerrors. Every text material has alpha1,
+ready=true,alpha-from-diffuse,unlit,emissive texture identical to diffuse and
+useEmissiveAsIllumination=true. Every six-owner chain is enabled/visible with
+visibility1 and all recorded opacity requests are unit. Span/paragraph background
+material alpha0 is transparent background,NOT inherited text/group opacity.
+Thus missing emissive flag or reduced scalar text/mesh visibility is not observed
+in these contexts;this does not prove compiled shader transfer or native pixel
+equivalence. Capture divider-material-state-20261019.log SHA256
+b29387269259568893908dcfa09a28942e05be26fdb0ee247afdf4f82482f2a3,
+producer6eb6d865998fc847a9e0cf3bb71618733abb9a08e343dbc332115c4c6fa34aeb.
+Method-verification TERMINAL0 binds complete createTextMaterial executable AST
+tokens across current transpilation,installed package and captured executable;
+49 source/runtime mutations reject. Initial verification included attached
+JSDoc tokens and failed;original failure log is retained,success parses method
+getText inside a class and excludes documentation only. See divider-material-
+state-method-verification-20261019.log for exact recipe/owner receipts. No shader
+execution trace,all-viewport coverage,ancestor group-compositing equivalence,
+current whole-core or whole-case acceptance. Standalone evidence is not yet a
+canonical/proposal integration;accepted65e072fd remains unchanged. Next investigate
+remaining sampling/coverage attribution using retained texture/GPU pixels and
+owner geometry,not another flag/alpha observation.
+
 October19 bounded paragraph paint-input question answered without capture:
 check-divider-paragraph-paint-inputs.mjs TERMINAL0 authenticates selected33a0bd8b
 and48 paired trees/paragraph owners across24 divider cases. All144 candidate
