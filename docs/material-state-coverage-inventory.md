@@ -2,6 +2,34 @@
 
 ## Current audit pointer — October19
 
+October19 cross-capture dependency reuse question answered without linker/capture
+reruns: check-divider-capture-dependency-reuse TERMINAL0 authenticates ALL912
+JavaScript maps in EACH original full/newer divider capture. Both inventories
+contain2280 unique sources,zero additions/removals/conflicting duplicates;
+2278 whole source strings are byte-identical. Only lib/astylar.js and
+src/app/material-input-evidence.ts differ. All55 actual media files and allfive
+CSS/CSS-map bytes authenticate and agree. Full original dependency derivation
+population therefore need not be rerun to explain a nonexistent new dependency
+source change;this is cross-capture identity,not current-installed equivalence.
+Log divider-capture-dependency-reuse-20261019.log SHA256
+8ac5ac08fcbb0ffade8e5dcaa4be09a759e6156d6e85f9e3a247642ee8648c78,
+producer40458cc07501ce1007c71a93b89590ff34469a7f3367597b6014a4c8edf73ed1.
+Independent join verifies counts/changed population and all17 newer captured
+application sources equal CURRENT whole files after LF normalization,including
+serializer521940b6. Exact current/raw/normalized source and map receipts/recipe:
+divider-current-application-capture-join-20261019.log SHA256
+fb70d461c6b1f0ce8941331d7cc79ea5456939a456fe234cf838fe52f7dfc594.
+Inspector transition is already covered by88 linked modules/1584 current members
+and original runtime-wiring assertions;serializer equality is now direct,not
+assumed from an old transition. No broad dependency transformation rerun needed.
+Newer divider browser is155.0.8059.40 versus later diagnostics155.0.8059.80;
+identical recorded launch/driver does NOT prove identical runtime/rendering.
+Remaining: physical font/clock/settlement/environment applicability where needed,
+Angular-versus-public lifetime and exact case/state/paint closure/final gates.
+Do not repeat source/module/media/style equality censuses absent relevant drift.
+Standalone evidence not yet in queuedfe692b14/canonical65e072fd;no status promotion,
+renderer,fixture,reference or acceptance change.
+
 October19 mapped-core top-level/runtime-wiring boundary revalidated with EXISTING
 original tests,not a new projection/checker. Both original complete class-body
 assertion and its existing diagnostic wrapper pass2/2,zero skips/cancel/fail,
