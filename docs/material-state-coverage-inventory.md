@@ -2,6 +2,27 @@
 
 ## Current audit pointer — October19
 
+October19 date shortcut source/classification join complete:space-retry71342
+TERMINAL0 validates15122 dependencies/all2311 cases and saves queued
+23f01644f5662334094778ef0111f3ace85987eb0c5553701f3f3d67e019c091.
+Eight keyboard children/precise task refinements recover completea5f37bcd;
+16 altered open-state/modifier controls reject. Captured app whole source agrees
+with current source;authored handler handles only Escape. Native complete
+MatDatepickerInputBase._onKeydown matches captured map tokens after ONLY explicit
+optional single-arrow-parameter parentheses removal;whole native module bytes
+are NOT claimed equal. Both served chunks/maps authenticate against new capture
+checkpoint. Existing application-plugin keyboard finding gains Alt+ArrowDown
+opening failure;DOM keys/callback arrival do not prove core modifier payload.
+Remaining calendar navigation,default-action/paint/currentness work survives.
+First join rejects exact native token comparison because captured source omits
+optional (modifier) parentheses;bound retry then fails ENOSPC before publishing
+proposal (zero-byte temporary file retained). Stronger transparent compression
+of closeda5f37bcd restores write headroom;its expected complete review digest
+and all dependencies reauthenticate in successful retry. All original logs kept
+separately. No browser recapture,renderer/fixture change or whole-case promotion.
+Accepted4acc/index44ca unchanged. Next remaining state/input/paint obligations;
+do not repeat these8 shortcut actions without relevant drift.
+
 October19 keyboard inventory exposes concrete datepicker gap,not missing Sort
 Enter/Space (already recorded). Datepicker's old cohort stops at Tab,while actual
 installed input _onKeydown accepts Alt+ArrowDown with no ctrl/shift/meta and opens

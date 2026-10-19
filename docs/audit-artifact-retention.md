@@ -56,6 +56,21 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep datepicker-alt-arrowdown-case-join token-comparison failure,bound-case-join
+ENOSPC failure and space-retry-case-join success logs separately. Failed atomic
+proposal23f01644*.19708.tmp is zero bytes and retained as failure provenance.
+Success71342 adds8 exact children,16 controls,15122 dependencies and complete
+a5f37bcd recovery;queued23f01644 is not accepted canonical. Native owner binding
+records only one exact arrow-parameter syntax normalization,not whole-module
+byte equality. All original capture/verification artifacts remain.
+
+Low-space recovery for this join applied compact /C /EXE:LZX /F to ONLY immutable
+proposala5f37bcd.json;163163370 logical bytes occupy36397056 bytes afterward.
+Post-compression raw SHA256cc297ad4652262116f9d2500a398ff76177e73cf4cec036d6c327970cd0e6d39;
+successful join reauthenticates exact expected review digesta5f37bcd and all
+existing dependency receipts. Free space221241344→426901504 before retry. No
+file deletion,path substitution,content edit or goal/acceptance change occurred.
+
 Keep original datepicker-alt-arrowdown pre-capture resolver failure/source
 6c798247 and separately named -bound-20261019 report/checkpoint/16 trees,corrected
 producer,bound-capture/independent-verify logs. Capture16643/verify terminate0,
