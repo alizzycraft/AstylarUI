@@ -2,6 +2,26 @@
 
 ## Current audit pointer — October19
 
+October19 minimal equal-input explicit-height control COMPLETE,TERMINAL0:
+public-explicit-line-backing-20261019 records4 side observations,Arial16/18.4px,
+DPR1,explicit22px line-height in BOTH reference CSS/public SiteData. Both
+containers are22px and same40,40 origin/80px width. At16px candidate backing22px,
+logical22px,drawy16 agrees native localbaseline16. At18.4px backing23px despite
+logical22px,drawy17 agrees native localbaseline17 before texture mapping;full
+UV range remains. This reproduces allocation/logical-size discrepancy WITHOUT
+Material,normal-line-height choice,compensating offsets or different inputs.
+Separate backing/UV behavior from matching box geometry and raw local baseline;
+general raster effect/antialiasing remains unmeasured. Diagnostic in-memory
+bundle derivative changes exactly the shared line-height input to22px plus
+read-only live texture observation;original retained bundle stays untouched.
+OriginalSHA4ab0215adeeac0e69029a752db916729d9d1c97a29b4c3543feb1ae72e68e678,
+diagnosticSHAe158a3b24738cba27763a3ffd0c786f89c92d553e4a667625d7cefbf6ac502b5,
+producer9d1f257ecac5620725822a70fbd27e24735c4b54c55ba1e2af8085ebd48a7ab3.
+Next integrate bounded allocation/mapping classification and focused assertions
+with existing text findings,then remaining whole-case paint/owner work. Do not
+repeat the explicit-height controls or reattribute this to app authoring.
+No renderer fix,current full-core build claim or whole-case acceptance follows.
+
 October19 captured allocation-owner binding COMPLETE,check-divider-backing-owners
 TERMINAL0. Authenticated servedchunk-XOU37TRR.js/map contain five complete
 installed-equivalent methods:createStyledCanvas,measureTextBounds,

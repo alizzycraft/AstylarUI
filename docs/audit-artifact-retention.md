@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep public-explicit-line-backing-20261019 stdout/stderr and frozen adapter
+scripts/audit-public-explicit-line-backing.mjs. It authenticates prior public
+driver/source bundle and serves a separate in-memory diagnostic derivative;
+original/diagnostic SHA receipts are recorded. No on-disk bundle copies or
+screenshots generated. Original immutable public reproduction remains required.
+
 Keep divider-backing-owners original scanner/template-token failure and bound
 AST-leaf success log pairs,plus scripts/check-divider-backing-owners.mjs.
 Bound check authenticates servedchunk/map,five complete methods and five
