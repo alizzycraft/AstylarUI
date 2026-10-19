@@ -2,6 +2,30 @@
 
 ## Current audit pointer — October19
 
+October19 picker focus-loss owner is now directly observed,not extrapolated.
+Bounded mutation variant28745 TERMINAL0 and independent verify TERMINAL0 retain
+16 exact configured desktop contexts/48 paired boundaries,reportSHA
+b649d152f7bed697890045bac86f03b59d6aa67f99a6acc9c88a50b3936cb123.
+All16 first input blurs occur synchronously inside descendant replaceChildren
+on family-primary,stack _AstylarSemanticBridge.reconcileElement in authenticated
+served chunk-3JXWRYJY.js:212387. Exactly one observed mutation loses focus per
+case;input remains connected and its original object token is focused at end.
+Native has no blur. Root replacement/attribute refresh are not the first-loss
+owners in these contexts. Existing descendant-reconciliation finding applies;
+this is not a new defect category or permission for fixture/application refocus.
+Owner census authenticates complete report and rejects32 altered method/target
+controls. Logs picker-focus-mutations-bound-capture,independent-verify and
+owner-census-20261019 retain exact recipes/observations. Initial unbound launcher
+fails before capture on nested data-URL bare-module resolution;stderr preserves
+the failed adapted source. Corrected variant adds only explicit package URL
+resolution before checkpoint creation;no old evidence is rewritten.
+Wrappers preserve receiver,args,return/throw behavior and page-owned lifetime;
+instrumentation may affect timing. Retained build,current executed action and
+actual runtime stack are bound;whole current-source/fixture equivalence,paint,
+other actions and case closure remain unproved. No PNGs or renderer edits.
+Next:bind exact served semantic owner methods/current applicability and join
+bounded evidence to existing case obligations without duplicate endpoint credit.
+
 October19 picker identity check distinguishes substrate handoff from the actual
 control discontinuity. Authenticated report45e9180f census confirms all16 exact
 cases have ONE candidate INPUT blur/refocus with the same object token retained

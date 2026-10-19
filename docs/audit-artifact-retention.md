@@ -56,6 +56,16 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep picker-focus-events-20261019 and picker-focus-mutations-bound-20261019,
+their checkpoints/input trees and capture/independent-verify/sequence/identity/
+owner-census logs. Preserve initial picker-focus-mutations-capture failure:
+it stops before capture at nested data-URL module resolution;its stderr embeds
+the failed adapted source. Corrected producer is frozen after bound capture.
+These are required event/mutation witnesses,not successful scratch. No PNGs
+were produced. Exact16 desktop picker owner observations extend the existing
+descendant-reconciliation finding without current-rendering/case acceptance.
+Keep the rejected duplicate timepicker endpoint-join log;no proposal was saved.
+
 Keep live legacy-clip-queued-coherent-canonical-export-20261019 stdout/stderr
 (27263),fixed source epochce83ece4 and selected104d7c61. A resulting candidate
 must stay separate from accepted e7a91 until independent cold,complete content
