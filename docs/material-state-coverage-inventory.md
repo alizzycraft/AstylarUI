@@ -2,6 +2,24 @@
 
 ## Current audit pointer — October19
 
+October19 bounded paragraph paint-input question answered without capture:
+check-divider-paragraph-paint-inputs.mjs TERMINAL0 authenticates selected33a0bd8b
+and48 paired trees/paragraph owners across24 divider cases. All144 candidate
+stages match the reference's transparent background COLOR,unit opacity,zero
+padding,border widths/radii and none border styles;336 altered-value controls
+reject. Known reference currentColor versus candidate transparent border inputs
+remain explicitly UNEQUAL under existing core-border-initial-color-differs-from-css.
+Receipt divider-paragraph-paint-inputs-20261019.log SHA256
+a94ccbd6c3f86e1f9c426d784258a2aef57309d338d21a6aa2b7e86d780f0fec;
+producer ccebb97badc5f948a208202d42df2a61f3437e230e9c9adee4124c0b0c1b74fe.
+This closes only the finite retained wrapper color/inset/border-shape request
+question,not background-layer completeness,actual shader/material execution,
+ancestor compositing,anonymous baseline,used geometry or rendering causality.
+No case promotion or proposal/canonical regeneration;standalone new evidence is
+not silently integrated into accepted65e072fd. Next actual material/ancestor
+execution applicability and remaining anonymous line-box geometry;reuse existing
+numeric baseline/copy-ancestry measurements rather than recapture them.
+
 October19 publication verification COMPLETE: independent cold session41341
 TERMINAL0 compares the entire candidate canonical package after rebuilding and
 reverifying16330 inputs/1673134522 bytes. Two collectors execute,10 memory hits,
