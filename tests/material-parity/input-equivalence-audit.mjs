@@ -8922,6 +8922,12 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'tests/material-parity/legacy-clip-support-input.spec.mjs',
+    'scripts/audit-public-legacy-clip.mjs',
+    'artifacts/material-parity/public-legacy-clip-valid-input-20261018/latest-report.json',
+    'artifacts/material-parity/public-legacy-clip-valid-input-verify-boundary-20261018.log',
+    'artifacts/material-parity/public-legacy-clip-current-owner-trim-20261018.log',
+    'artifacts/material-parity/legacy-clip-core-contract-20261018.log',
     'scripts/audit-public-role-focus-refresh.mjs',
     'artifacts/material-parity/public-role-focus-refresh-20261017/latest-report.json',
     'artifacts/material-parity/public-role-focus-refresh-owner-20261017.log',
@@ -9656,6 +9662,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/legacy-clip-support-input.spec.mjs', /test\('public legacy clip support limitation preserves controls and exact diagnostics'/,
+      'public legacy CSS clip support limitation and retained controls', 'Four equal-input public pairs atDPR1/2 retain two unclipped controls and two zero-rect clip failures with exact unsupported-property diagnostics. Twelve complete resolver methods and five top-level owners match current/installed code. Documents missing legacy clip translation,not an intentional design or supported-feature regression. Material anchor impact,other rects,AX/AT/dynamic behavior and whole-case acceptance remain open.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('public role focus refresh separates attribute-first and root-first failures with unchanged input'/,
       'public attribute-first focus loss and separate root-replacement controls', 'Eight equal-input public contexts atDPR1/2 retain16 native no-op controls,eight DIV/SPAN attribute-first failures and eight input/button root-first failures. Exact current owner/package bytes and actual first-loss stacks authenticate. Final focus/identity recovery does not waive extra events. Not every Material trace,keyboard,selection,AT,paint or whole-case acceptance.'),
     proof(root, 'tests/material-parity/icon-asset-input.spec.mjs', /test\('public inline image line boxes retain eight failures and eight block controls'/,

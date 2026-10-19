@@ -21,6 +21,31 @@ No old capture,predecessorcd867bbe or failure evidence removed. Next:continue
 exact case-obligation work from the validated queue;do not repeat this export/
 cold/conservation milestone without relevant source drift. Final gates unchanged.
 
+October19 legacy CSS clip source registration is verified,not a renderer fix.
+Existing reviewed proposal161aac37 becomes one additive documented-limitation
+in production164 findings/218 proofs. All163 prior complete definitions/217
+ordered proof claims survive;exact policy/producer reversals recover55c7e9cf/
+7bb5bfb1 with every unrelated byte conserved. Existing registration helper
+extends these exact guards;older semantic/inline/border/focus proofs retain
+their explicitly authenticated163/217 predecessor rather than a count waiver.
+Focused public/support/registration/source-drift controls pass9/9,no skips,
+9114.2758ms in legacy-clip-registration-complete-20261019. Actual source scan
+finds one resolver createPropertyFamilies location;source inventory adds exactly
+six required paths (727→733). Bound inventory uses five explicit Git5f57 reads
+for original metadata and records the sole prior proof-line shift90→98.
+Earlier inventory used live reads on both sides and was not a historical line
+comparison;keep both logs. No canonical export or all218-proof execution claim.
+Read-only changed-source intersection finds only policy receipts in latestqueue:
+955 slots/815 cases;other four changed source paths have no direct queue refs.
+Case receipt join75784 TERMINAL0:queued104d7c6108078241059e944e43ea022353ff7d9d9a8cc1a779014c52c6aec209
+validates14457 dependencies/all2311 cases. Reversing955 exact receipt changes
+and815 applicability children recovers complete d672395e;all raw input,status,
+remaining work and previous observations survive. Existing launcher now selects
+this source-current queue. Accepted e7a91/index4032 remains163/217 and unchanged.
+Next justified milestone:coherent export of this source registration PLUS the
+already validated queued coverage,then independent cold/content/index checks;
+do not repeat public clip capture or reinterpret unsupported clip as equivalence.
+
 October19 bounded progress AX join21110 TERMINAL0:latest queued successor
 d672395e3b22f47b9af855ff26dc70e2b92429e8efeeed34fa28b1ef3c5a48b5
 validates all2311 cases/14454 dependencies.40 supplemental initial-region/host

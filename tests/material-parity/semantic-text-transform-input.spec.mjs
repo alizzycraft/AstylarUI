@@ -4,13 +4,21 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
-import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
+import { sourceAuditDefinitions as currentSourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { restoreSemanticTextTransformPolicy, restoreSemanticTextTransformProducer,
   restoreSemanticRegistrationTransitionSource, readHistoricalBenchmarkSource, historicalSemanticDefinitions,
   reviewedRootEditingGraph, reviewedRootEditingRunnerReceipt } from './semantic-text-transform-registration.mjs';
 import { restoreBorderContactPolicy, restoreBorderContactProducer } from './semantic-text-transform-registration.mjs';
 import { restoreInlineImagePolicy, restoreInlineImageProducer } from './semantic-text-transform-registration.mjs';
 import { restoreAttributeFocusPolicy, restoreAttributeFocusProducer } from './semantic-text-transform-registration.mjs';
+import { restoreLegacyClipPolicy, restoreLegacyClipProducer } from './semantic-text-transform-registration.mjs';
+
+// These original registration assertions own the authenticated 163/217
+// predecessor. The clip suite separately verifies the additive 164/218 state.
+const preClipPolicy = restoreLegacyClipPolicy(readFileSync('tests/material-parity/input-equivalence-policy.mjs', 'utf8'));
+const sourceAuditDefinitions = new Function(preClipPolicy.replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
+assert.equal(currentSourceAuditDefinitions.length, 164);
+assert.deepEqual(currentSourceAuditDefinitions.slice(1), sourceAuditDefinitions);
 
 test('attribute focus registration preserves all predecessor definitions and proof sources', () => {
   const id = 'core-semantic-attribute-refresh-removes-focusability';
@@ -78,7 +86,7 @@ test('border contact registration preserves all predecessor findings and proof s
       const renamed = current.replace(id, 'unreviewed-border-identifier');
       assert.notEqual(renamed, current); assert.throws(() => restore(renamed));
     } else {
-      const ast = ts.createSourceFile(file, current, ts.ScriptTarget.Latest, true);
+      const ast = ts.createSourceFile(file, restoreLegacyClipProducer(current), ts.ScriptTarget.Latest, true);
       const proofs = ast.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === 'focusedProofInventory').body.statements[0].expression.elements;
       assert.equal(proofs.length, 217);
       const changed = current.replace('correct live geometry and current owners', 'unmeasured geometry');
@@ -129,7 +137,7 @@ test('public semantic text transform preserves controls and current owner eviden
     assert.equal(restored, previous, `Unrelated ${file} source must survive exactly`);
     assert.notEqual(restored + '\n// unrelated drift', previous);
   }
-  t.diagnostic(JSON.stringify({ currentDefinitions: 163, semanticRegistrationDefinitions: 160, priorDefinitionsConserved: 159, semanticRegistrationProofs: 214,
+  t.diagnostic(JSON.stringify({ currentDefinitions: 164, preClipDefinitions: 163, semanticRegistrationDefinitions: 160, priorDefinitionsConserved: 159, semanticRegistrationProofs: 214,
     publicFailurePairs: 4, materialPhysicalContexts: 16, canonicalPublication: false }));
 });
 
@@ -157,9 +165,13 @@ test('root editing runner applicability conserves metadata transition and reject
 
 test('semantic registration historical boundary rejects drift and keeps current population explicit', () => {
   assert.equal(sourceAuditDefinitions.length, 163);
-  const old = historicalSemanticDefinitions(sourceAuditDefinitions);
+  const old = historicalSemanticDefinitions(currentSourceAuditDefinitions);
   assert.equal(old.length, 159);
-  assert.equal(sourceAuditDefinitions.length, 163); // never mutates the production registry
+  assert.equal(sourceAuditDefinitions.length, 163); // authenticated predecessor remains unchanged
+  assert.equal(currentSourceAuditDefinitions.length, 164); // actual registry is never mutated
+  const forgedClip = structuredClone(currentSourceAuditDefinitions);
+  forgedClip[0].classification = 'intentional-documented-limitation';
+  assert.throws(() => historicalSemanticDefinitions(forgedClip));
   assert.throws(() => historicalSemanticDefinitions(old));
   let controls = 1;
   for (const [file, restore] of [

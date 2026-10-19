@@ -56,6 +56,17 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep legacy-clip-registration-focused,registration-complete,registration-inventory,
+registration-inventory-bound,queued-source-intersection and queued-policy-receipt-
+join-20261019 stdout/stderr. Production164/218 preserves complete prior163/217;
+accepted e7a91 stays unchanged pending coherent export. Keep selected104d7c61
+with d672395e/ecdab1b9 and original161aac37 source proposal;all955 receipt changes
+and815 applicability additions reverse exactly. Original public clip failures,
+controls,owner evidence and unsupported diagnostics remain required. Initial
+inventory uses live proof-source reads;bound inventory uses exact five Git
+predecessors and preserves the historical90→98 line shift. Neither is a fresh
+browser result or grounds for deleting any predecessor/capture.
+
 Keep progress-region-host-ax-eof-source-conservation and its -bound success,
 original bounded-case-join failure and bounded-case-join-verified success logs.
 Gitf7ed600a preserves the reduced producer's original11815 bytes;the current

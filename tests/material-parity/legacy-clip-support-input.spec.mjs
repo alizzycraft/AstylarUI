@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
+import { restoreLegacyClipPolicy, restoreLegacyClipProducer } from './semantic-text-transform-registration.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const id = '161aac37ac51e824208d69f1e6893573ac2f72b0142877d5b2940ee7c40272c5';
@@ -12,14 +13,19 @@ function validate(review) {
   assert.equal(review.kind, 'material-source-finding-review');
   assert.equal(review.status, 'reviewed-not-integrated');
   assert.equal(review.groups.length, 164);
-  assert.equal(sourceAuditDefinitions.length, 163);
-  assert.deepEqual(review.groups.slice(0, -1), sourceAuditDefinitions);
+  assert.equal(sourceAuditDefinitions.length, 164);
+  assert.deepEqual(review.groups.slice(0, -1), sourceAuditDefinitions.slice(1));
   const finding = review.groups.at(-1);
+  assert.deepEqual(finding, sourceAuditDefinitions[0]);
   assert.equal(finding.id, 'core-legacy-css-clip-not-translated');
   assert.equal(finding.classification, 'documented-limitation');
   assert.equal([...readFileSync(finding.file, 'utf8').matchAll(new RegExp(finding.pattern, 'g'))].length, 1);
-  for (const receipt of [...review.evidenceSources, ...finding.evidence])
-    assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  for (const receipt of [...review.evidenceSources, ...finding.evidence]) {
+    const bytes = readFileSync(receipt.file);
+    const authenticated = receipt.file === 'tests/material-parity/input-equivalence-policy.mjs'
+      ? Buffer.from(restoreLegacyClipPolicy(bytes)) : bytes;
+    assert.equal(hash(authenticated), receipt.sha256);
+  }
   return finding;
 }
 
@@ -44,7 +50,7 @@ test('public legacy clip support limitation preserves controls and exact diagnos
   }
 });
 
-test('queued clip finding conserves every production definition and rejects altered claims', () => {
+test('registered clip finding conserves its queued predecessor and rejects altered claims', () => {
   const review = JSON.parse(readFileSync(file)).review;
   validate(review);
   for (const mutate of [
@@ -54,5 +60,20 @@ test('queued clip finding conserves every production definition and rejects alte
   ]) {
     const forged = structuredClone(review); mutate(forged); assert.throws(() => validate(forged));
   }
-  assert.equal(sourceAuditDefinitions.some(row => row.id === 'core-legacy-css-clip-not-translated'), false);
+  assert.equal(sourceAuditDefinitions.filter(row => row.id === 'core-legacy-css-clip-not-translated').length, 1);
+});
+
+test('legacy clip registration preserves complete predecessor source and proof inventory', () => {
+  for (const [file, restore] of [
+    ['tests/material-parity/input-equivalence-policy.mjs', restoreLegacyClipPolicy],
+    ['tests/material-parity/input-equivalence-audit.mjs', restoreLegacyClipProducer],
+  ]) {
+    const current = readFileSync(file, 'utf8');
+    const previous = execFileSync('git', ['show', `5f57f113:${file}`],
+      { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+    assert.equal(restore(current), previous);
+    assert.throws(() => restore(current + '\n// unreviewed source drift'));
+    const changed = current.replace('legacy clip', 'changed legacy clipping');
+    assert.notEqual(changed, current); assert.throws(() => restore(changed));
+  }
 });

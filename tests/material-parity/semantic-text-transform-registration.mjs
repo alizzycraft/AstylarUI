@@ -10,8 +10,47 @@ const id = 'core-semantic-text-transform-not-projected';
 const borderId = 'core-fractional-border-edge-paint-disagrees-with-native';
 const inlineId = 'core-inline-replaced-row-omits-parent-line-box';
 const focusId = 'core-semantic-attribute-refresh-removes-focusability';
-export function restoreAttributeFocusPolicy(source) {
+const clipId = 'core-legacy-css-clip-not-translated';
+export function restoreLegacyClipPolicy(source) {
   const current = normalized(source);
+  if (!current.includes(clipId)) return current;
+  assert.equal(digest(current), 'da0c6f3359f1146b07a9cd1f686c184df55185bbc0517c3a7df832f40e5c1512',
+    'unreviewed legacy clip policy change');
+  const tree = ts.createSourceFile('policy.mjs', current, ts.ScriptTarget.Latest, true);
+  const entries = tree.statements.filter(ts.isVariableStatement).flatMap(n => [...n.declarationList.declarations])
+    .find(n => n.name.getText(tree) === 'sourceAuditDefinitions').initializer.arguments[0].elements;
+  assert.equal(entries.length, 164); assert.ok(entries[0].getText(tree).includes(clipId));
+  const restored = current.slice(0, entries[0].getFullStart()) + current.slice(entries[0].end + 1);
+  assert.equal(digest(restored), '55c7e9cf1c634ebd8b01409b1836d1513f24e0c5ada656ce16f591aee1fd50a2');
+  return restored;
+}
+export function restoreLegacyClipProducer(source) {
+  const current = normalized(source);
+  if (!current.includes('public legacy CSS clip support limitation and retained controls')) return current;
+  assert.equal(digest(current), 'e486c704013f4d3f132cd9922accd048d745aa27307010218d0967d68d74d84d',
+    'unreviewed legacy clip producer change');
+  const tree = ts.createSourceFile('producer.mjs', current, ts.ScriptTarget.Latest, true);
+  const owner = name => tree.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+  const proofs = owner('focusedProofInventory').body.statements[0].expression.elements;
+  const files = owner('sourceFingerprints').body.statements[0].declarationList.declarations[0].initializer.elements;
+  assert.equal(proofs.length, 218); assert.ok(proofs[0].getText(tree).includes('legacy-clip-support-input.spec.mjs'));
+  assert.deepEqual(files.slice(0, 6).map(n => n.text), [
+    'tests/material-parity/legacy-clip-support-input.spec.mjs',
+    'scripts/audit-public-legacy-clip.mjs',
+    'artifacts/material-parity/public-legacy-clip-valid-input-20261018/latest-report.json',
+    'artifacts/material-parity/public-legacy-clip-valid-input-verify-boundary-20261018.log',
+    'artifacts/material-parity/public-legacy-clip-current-owner-trim-20261018.log',
+    'artifacts/material-parity/legacy-clip-core-contract-20261018.log',
+  ]);
+  let restored = current;
+  for (const [start, end] of [[proofs[0].getFullStart(), proofs[0].end + 1],
+    [files[0].getFullStart(), files[5].end + 1]].sort((a, b) => b[0] - a[0]))
+    restored = restored.slice(0, start) + restored.slice(end);
+  assert.equal(digest(restored), '7bb5bfb183e60281b70eb7356631af2c9cf6638419b703f7e2d0286c608ddab6');
+  return restored;
+}
+export function restoreAttributeFocusPolicy(source) {
+  const current = restoreLegacyClipPolicy(source);
   if (!current.includes(`id: '${focusId}'`)) {
     assert.ok(!current.includes('DIV/SPAN focusability is temporarily removed'), 'Unrecognized attribute-focus registration');
     return current;
@@ -26,7 +65,7 @@ export function restoreAttributeFocusPolicy(source) {
   return restored;
 }
 export function restoreAttributeFocusProducer(source) {
-  let current = normalized(source);
+  let current = restoreLegacyClipProducer(source);
   const validationSubsetCall = 'validateIconContextRows(report.discrepancies, { cases })';
   if (current.includes(validationSubsetCall)) {
     assert.equal(digest(current), '7bb5bfb183e60281b70eb7356631af2c9cf6638419b703f7e2d0286c608ddab6',
@@ -194,6 +233,13 @@ export function reviewedRootEditingGraph(graph, actionSource, expectedRunnerEntr
   return graph.map(row => row.file === runnerFile ? { ...row, sha256: oldRunner } : row);
 }
 export function historicalSemanticDefinitions(current) {
+  if (current.length === 164) {
+    const source = readActual('tests/material-parity/input-equivalence-policy.mjs', 'utf8');
+    restoreLegacyClipPolicy(source); // Authenticate the complete additive source.
+    const actual = new Function(source.replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
+    assert.deepEqual(current, actual, 'unreviewed current definition population');
+    current = current.filter(row => row.id !== clipId);
+  }
   assert.equal(current.length, 163);
   const retained = current.filter(row => row.id !== id && row.id !== borderId && row.id !== inlineId && row.id !== focusId); assert.equal(retained.length, 159); return retained;
 }

@@ -5,24 +5,29 @@ Current evidence pointer (October19):accepted packagee7a91a22/index4032a569 has
 and accepted import8224 terminate0. All80 sections conserve:72 identical,eight
 with183 exactly explained source/receipt/proof-line changes and exact successor
 coverage. Complete readable report conserves except28 authenticated proof lines.
-Accepted index is byte-identical to the independent candidate. Queued d672395e
+Accepted index is byte-identical to the independent candidate. Queued 104d7c61
 (including progress/list/source-applicability additions) and legacy clip/new AX
 evidence remain outside this generation. All2311 cases stay partial/unverified.
 This is audit evidence acceptance,not current rendering or final-gate acceptance.
 Exact logs and remaining obligations are in the coverage ledger. Historical
 pointers below are superseded;acceptedcd867bbe remains required predecessor.
 
-Queued legacy clip support limitation (October18):source proposal161aac37
-preserves all163 production definitions and adds one documented-limitation,
+Source-registered legacy clip support limitation (October19):proposal161aac37
+is integrated additively into164 definitions/218 proof anchors;all163 prior
+definitions/217 proof claims conserve. The addition is a documented-limitation,
 not an intentional design claim or a supported-feature regression. Public
 zero-rect CSS atDPR1/2 hides native paint but is warned/ignored by Astylar;
 unclipped controls agree. All12 resolver methods/five top-level owners match
-current source emission to captured installed JS. Focused suite passes2/2.
+current source emission to captured installed JS. Registration/public/history
+checks pass9/9;actual source scan detects the new owning location. Source/proof
+inventory is733 files versus727,with exactly six reviewed additions.
 The owning future work is shared public style/loaded-CSS/clip support in CSS
 space,not replacing native clipping with offsets,overflow or omitted anchors.
 Other rectangles/dynamic/semantic/AT behavior and exact124-anchor consequences
-remain open. Production registration/proof inventory integration is pending;
-accepted163/217 and the original implementation scope/gates remain unchanged.
+remain open. Canonical publication is pending;accepted163/217 and the original
+implementation scope/gates remain unchanged. Selected104d7c61 validates14457
+dependencies;955 exact additive-policy receipts change across815 cases with
+complete prior d672395e recovered. This is source applicability,not case closure.
 
 Rounded-corner scope clarification (October18):existing public border/contact
 fixture already has18px radius. New retained-corner analysis finds shadow-free

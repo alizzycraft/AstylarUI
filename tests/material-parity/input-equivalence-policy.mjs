@@ -110,6 +110,62 @@ export const reviewedValueNormalizations = Object.freeze([
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    "id": "core-legacy-css-clip-not-translated",
+    "introducedBy": "current public support observation and complete resolver-owner agreement;first-bad runtime revision not established",
+    "file": "src/lib/astylar-document-style-resolver.ts",
+    "pattern": "function createPropertyFamilies\\(",
+    "classification": "documented-limitation",
+    "owner": "core public style schema,loaded-document CSS translation and CSS-space clipping support",
+    "observation": {
+      "component": "public package-root loaded CSS",
+      "element": "absolutely positioned20x20 red target",
+      "dpr": [
+        1,
+        2
+      ],
+      "states": [
+        "unclipped control",
+        "clip:rect(0px,0px,0px,0px)"
+      ],
+      "reference": "clipped targets paint0 red pixels;unclipped controls400/1600",
+      "astylar": "clipped and unclipped targets paint400/1600 red pixels;clip declaration produces exact unsupported-property diagnostic",
+      "stage": "missing legacy clip translation before layout/paint,not an equal-input supported-feature regression"
+    },
+    "justification": "Four public paired cases use identical trees and loaded CSS. Two unclipped controls agree;both legacy rect clipping cases differ and report unsupported clip. Source schema/diagnostic property set/loaded translation omit legacy clip,while overflow clipping remains a separate supported property/value. All12 complete resolver methods and five top-level owners match current emission to captured installed JS. This documents a core support limitation without asserting intentional design,all clip forms,physical focus-anchor behavior or a newly broken claimed feature. Native124 clipped-anchor requests across62 sidenav cases remain explicit inputs;their omission is not equivalent merely because this feature is unsupported.",
+    "evidence": [
+      {
+        "file": "scripts/audit-public-legacy-clip.mjs",
+        "sha256": "ccd38945a6e7652ed1d5e6ff8dea8677c7642033d1f10b1ffb5c48da0c25043a"
+      },
+      {
+        "file": "artifacts/material-parity/public-legacy-clip-valid-input-20261018/latest-report.json",
+        "sha256": "c40009cf090eafbaf7db830287fed18c970fa90aa9792e8fd1245698ccbb0169"
+      },
+      {
+        "file": "artifacts/material-parity/public-legacy-clip-valid-input-verify-boundary-20261018.log",
+        "sha256": "b95993ad7fbea968882fd157399af8c026f5f3678c42e87ff8e493164df082c9"
+      },
+      {
+        "file": "artifacts/material-parity/public-legacy-clip-current-owner-trim-20261018.log",
+        "sha256": "ca5d93399fb05221241c942b39150fb152fad6b4ad58c32b9504c8fa59fb2e19"
+      },
+      {
+        "file": "artifacts/material-parity/legacy-clip-core-contract-20261018.log",
+        "sha256": "a7b14ec49bc5f2523092f2866937637e9f98ba3defc940ad599db5b47b3fbd95"
+      }
+    ],
+    "focusedProof": "tests/material-parity/legacy-clip-support-input.spec.mjs: public legacy clip support limitation preserves controls and exact diagnostics",
+    "publicReproduction": {
+      "command": "node scripts/audit-public-legacy-clip.mjs --verify artifacts/material-parity/public-legacy-clip-valid-input-20261018",
+      "pairs": 4,
+      "unclippedControls": 2,
+      "unsupportedClipFailures": 2,
+      "negativeControls": 4
+    },
+    "recommendation": "Keep legacy clip support work at the shared typed/loaded CSS and clipping boundary. Do not substitute overflow,clip-path,offsets or removed focus anchors to imitate output. A future implementation must preserve CSS-space rect semantics and validate supported forms before projection.",
+    "boundary": "Bounded zero-rect legacy clip support result and current resolver applicability. No all-rect/dynamic/inherited/AT/focus semantics,full package acceptance or Material anchor impact. No renderer/fixture fix."
+  }),
+  Object.freeze({
     id: 'core-semantic-attribute-refresh-removes-focusability',
     introducedBy: '0175a0bdc introduces clear-and-restore attribute loop;historical first-bad runtime not established',
     file: 'src/lib/astylar-semantic-bridge.ts',
