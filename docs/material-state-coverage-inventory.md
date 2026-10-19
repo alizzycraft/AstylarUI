@@ -17,7 +17,7 @@ unverified throughout. Evidence contact is100%,not inspection completion/parity.
 
 | Next requirement review | Already answered; do not repeat | Still to establish |
 | --- | --- | --- |
-| Divider input/structure |48 wrapper requests and inline top attribution;existing classified absolute-flow substitutions. | Remaining material/anonymous-line-box requirements beyond these scoped results. |
+| Divider input/structure |48 wrapper requests and inline top attribution;existing classified absolute-flow substitutions;96 paragraph grid-track and96 own-transform/origin slots reviewed as context-inactive. | Remaining material/anonymous-line-box requirements beyond these scoped results;new property evidence awaits coherent join. |
 | Divider paint | Configured contrast-DPR1 complete texture footprint;four-theme desktop native/canvas backing and settled-font controls. | Scope of remaining native phase/separator-coverage questions and original full paint criteria;do not transfer public DPR2 residuals here. |
 | Divider ownership |20 observed physical contexts/24 memberships,60 Angular recreations with tracked/registration cleanup and passive peer survival;controlled initial font readiness after Angular destroy and retained later font callback after disposal. | Applicability of these source-level font guards to captured Material runtime and other original lifetime/history requirements;controlled callbacks are not network timing evidence. |
 | Applicability/integration | Newer88-module core/linker/wiring,2280 mapped sources,17 current app sources,55 media/five style identities;four-source reader/export/content conservation/cold publication complete. | Post-publication reader/store-test source changes need explicit reconciliation at the next coherent milestone;runtime/environment boundaries and original final gates remain. |
@@ -29,6 +29,29 @@ subquestions merely because a parent still says partial. This table is a current
 navigation summary,not new acceptance criteria or a substitute for exact records.
 
 ## Evidence chronology — retain original scope and checkpoint dates
+
+October19 next anonymous-paragraph property question resolved:transform-origin
+differences are computed centers on untransformed owners,not evidence of an
+active own transform. Authenticated priorff643c70/be99 raw17a4de34 and all48 paired
+tree receipts cover24 cases/48 paragraph pairs. Native transform:none,origin
+equals EXACT half recorded computed width/height on every owner;candidate own
+transform/origin remain ABSENT and captured parser returns null.96 property
+slots(transform+origin) inspected;do not collapse the recorded values to equality.
+Complete parseCssTransform AND parseAngle functions conserve current TS emission,
+installed JS and captured3JXWRYJY module under existing formatting normalization,
+functionSHA d436919a8432e9efa46d1f0456269ae5359bd4b8d646e4c8802af064db4f6dad.
+Four absent/none parser controls return null;rotate/translate/scale controls are
+active,and transformed owner is excluded from this classification. Source trace
+keeps element material parsing/application boundary explicit. No live layout or
+paint execution is inferred. Log divider-paragraph-transform-origin-applicability-
+20261019.log TERMINAL0,SHAa82a2af4fdb9aaf133e86cc0c422ba288bb0f7972084015787efa09061a37cb9,
+retains exact rows,tree/module receipts and controls. Scope excludes ancestor
+transforms,perspective,z-order,projection/hit-testing,complete box equivalence,
+runtime/environment and whole-case acceptance. Does not dismiss previously
+classified coordinate problems elsewhere. New bounded queued evidence,not yet
+joined/canonical;no source/renderer/fixture/test changes or browser capture.
+Broader line-box/material-property requirements remain;do not repeat this own-
+transform question solely because parent case is still partial.
 
 October19 substantive divider input applicability question answered without new
 capture:are missing paragraph grid tracks active layout inputs? Prior93-signature
