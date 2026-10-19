@@ -2,6 +2,51 @@
 
 ## Current audit pointer — October19
 
+October19 configured-focus record cohort now fully accounted for,not full focus
+or whole-case acceptance. Final text-input capture41887 and independent verify
+TERMINAL0:24 contexts/72 paired boundaries,reportSHA
+21387e63992d907e6a5675a0c3bad150c5face9073d9f1d39d42c146279f6cd0.
+Form-field/input/autocomplete each8 candidate first blurs at descendant picker-
+style primary replacement;native0. Existing144 timed samples lacked raw events,
+so this closes a demonstrated gap without repeating other families. Source-map/
+current complete four-method proof is reused against actual identical bundle.
+Join94061 TERMINAL0 saves queued
+1c7a7e2b522fef3a86d64845a9037af639046be9efc998ea5e7aea6b69778a53,
+validates14807 dependencies/all2311 cases and detects40 altered-caller controls.
+Adds24 text raw-action children plus16 picker focus-task dispositions;only24
+existing task strings narrow (form-field/input had no such generic task).
+Timepicker's actual programmatic focus() remains explicitly uninspected beyond
+the observed configured POINTER focus action. Older missing-runner provenance,
+paint and other focus/restoration/currentness tasks stay. Complete aa18b19d
+recovers by reversing only these40 children/task refinements. Exact census:
+216 applicable configured focus-case records each have one direct cohort;
+40 others are authored exclusions. This is NOT every relevant focus state,
+current-rendering acceptance or full inspection;all2311 remain partial.
+Initial launcher fails before capture because global replacement also altered
+a literal guard;corrected AST replaces only two actual resolver calls. Initial
+join rejects before saving because16 older field records lacked the assumed
+task;corrected guard preserves their exact two tasks. Keep all failures and
+bound-capture/independent-verify/bound-case-join logs. No renderer/fixture edits.
+
+October19 coherent legacy-clip/queued export27263 TERMINAL0,3257998.8798ms.
+Evidence session:1 collector,10 memory hits,1 disk hit,0 invalidated;15643 files/
+1514866083 bytes read and reverified. Candidate4acc8585,index44ca448b contains
+8483 scalar groups/389202 occurrences,39904 controls,164 source findings;
+all2311 current rendering remains unverified,inputEquivalent=false. Candidate
+import13938 TERMINAL0 verifies80 sections/all shards under candidate-validation;
+accepted e7a91/index4032 pointer stays unchanged. Independent cold31464 is live
+against frozen selected104d7c61;do not select newer1c7a7e2b mid-check.
+Content comparison85376 is live:accepted section log5d36f0e4 and retained e7a91
+payload/index authenticate;whole comparison algorithm equals Gite246aaad after
+line-ending decoding. Reuse those accepted digests and scan ONLY new candidate.
+Changed sections still require explanation before publication. Logs legacy-clip-
+queued-{coherent-canonical-export,independent-cold-check,candidate-index-summary,
+section-conservation}-20261019 retain receipts. Candidate-index command printed
+the full index inadvertently;verbose stdout remains NTFS-compressed,99670540
+logical bytes/63553536 physical bytes,hash577d1d78 unchanged after compression.
+Use compact summary,not repeated full-index output. Next:finish cold/content
+acceptance;latest1c7a7e2b focus evidence remains outside frozen candidate.
+
 October19 remaining original-focus batch COMPLETE,not a whole-case closure.
 Capture23157 TERMINAL0,104 exact contexts/13 families,208 trees,no PNGs;
 independent verify TERMINAL0 checks312 paired boundaries,reportSHA

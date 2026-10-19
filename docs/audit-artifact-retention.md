@@ -56,6 +56,25 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep text-input-focus-events initial pre-capture failure and separate -bound-
+20261019 report/trees/checkpoint,producer and capture/independent-verify logs.
+Initial global resolver replacement alters a literal guard;corrected source
+uses AST call sites only. Keep text-and-picker-focus original rejected join
+and -bound-case-join logs with queued1c7a7e2b/aa18b19d;40 children/task changes
+reverse exactly and14807 dependencies validate. Initial join saved no proposal;
+corrected guard preserves the16 field records' original exact remaining tasks.
+No PNGs/successful scratch were generated;old timed samples remain required.
+
+Keep candidate4acc8585 separately from accepted e7a91 and both index locations.
+Export27263 and candidate import13938 terminate0;independent cold31464 and
+section comparison85376 remain live. Keep all log pairs and compact candidate-
+index summary. Original successful candidate-index stdout unnecessarily contains
+the complete index;it is now NTFS-compressed without changing its99670540 bytes
+or SHA577d1d78343ab188aecdb7a5ebfa71a2605fc8587914fbe6b6921d1cd35d2a1e.
+Use compact summary for routine work;verbose duplicate is a reference-closed
+cleanup candidate after publication,not unique finding evidence. No deletion
+or accepted-pointer update follows from import or partial content checks.
+
 Remaining-configured-focus-measured-20261019 now TERMINAL0 with104 contexts,
 208 trees and no PNGs. Keep capture,independent-verify and case-join stdout/
 stderr,report13f04f39 and frozen producer/source recipe. Keep queuedaa18b19d
