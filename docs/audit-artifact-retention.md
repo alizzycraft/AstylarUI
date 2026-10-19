@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep progress-mapped-semantic-requests and progress-semantic-request-case-join-
+20261019 stdout/stderr with queued ecdab1b9 and predecessor e34e7890. Mapping
+uses80 original paired trees and existing complete recorded node groups;no
+PNG,capture,scratch or renderer change. All160 mutation controls reject and
+complete predecessor recovers after40 bounded child/task changes. Original
+progress AX/focus/paint/SVG/plugin findings remain required independently;
+recorded-request coverage does not supersede actual AX/AT/currentness evidence.
+
 Keep queued-review-suite-merge-preflight,queued-review-suite-coherent-merge
 (original in-memory dependency conflict),queued-review-added-suite-receipts,
 queued-font-suite-source-conservation and queued-review-suite-font-coherent-merge-

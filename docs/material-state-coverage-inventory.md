@@ -2,6 +2,26 @@
 
 ## Current audit pointer — October19
 
+October19 progress semantic-input gap narrowed across40 exact cases without
+new capture. Existing recorded DOM/SVG/plugin node groups account for every
+recorded owner;all80 input trees authenticate. Complete raw attribute maps and
+semantic requests show matching section labels/host role/value inputs,omitted
+candidate tabindex=-1,and native aria-hidden/SVG focusable=false descendant
+requests absent with the plugin-replaced structure. No extra recorded ARIA
+name/relationship input is present.160 changed-description/value/hiding/label
+controls reject. Log progress-mapped-semantic-requests-20261019 retains every
+mapped owner/omission and recipe;this does not infer AX/AT or structural parity.
+Case join39241 TERMINAL0:queued successor
+ecdab1b9cb700a204000ed5824f877aec7ea78e261ae0064508d43d66833d448
+validates14384 dependencies/all2311 cases.40 semantics children add the exact
+mapping;their stale generic input-mapping task becomes the still-open actual
+bridge/AX-delivery task. Other remaining work and partial parents are unchanged.
+Reversing those40 children/task refinements recovers entire e34e7890 predecessor.
+Acceptedcd867bbe/frozene7a91-ab4b/cold77071 unchanged;no renderer or fixture edit,
+current-rendering claim or whole-case closure. Next:finish cold acceptance;
+for progress semantics distinguish actual association/exposure delivery from
+the now-inspected recorded input requests before adding captures or closing.
+
 October19 queued coverage source applicability now reconciled without another
 capture/export. Three-way preflight proves the58ec→ab4b200 receipt updates/100
 applicability children are disjoint from cefffc09 additions. Original merge29282
