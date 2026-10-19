@@ -56,6 +56,16 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep divider-served-capture original key-mismatch, bound ENOSPC and successful
+space-retry log pairs separately,plus join producer and queued33a0bd8b with
+84d695d9 predecessor. Success validates15144 dependencies and exact24 additive
+children/predecessor recovery. Transparent LZX compression of CLOSED84d695d9
+and7ed334d5 preserves before/after raw hashes respectively
+a8cf406e9acf36ea4127a7c8bb5dcbd165b022d16f296bdd217537f855f5a03b
+and0bba574d7349f1be8fb20ad2ea3d49edb7a30b2dc3f3bd7828681bd2846bc388.
+Compact reports36438016/36417536 physical bytes respectively;original logical sizes
+163392054/163264722. No deletion or historical byte replacement occurred.
+
 Keep divider-exclusion-requirements-case-join-20261019 log pair,producer and queued
 84d695d9 with7ed334d5 predecessor. Join9782 TERMINAL0 authenticates456 recorded
 nodes,72 existing-exclusion evidence/conclusion linkages,7 controls and15143

@@ -2,6 +2,22 @@
 
 ## Current audit pointer — October19
 
+October19 retained divider sourceCurrentness join COMPLETE: session19310
+TERMINAL0 authenticates24 original checkpoints/48 trees/1887 served files,
+10 current harness files,workspace lock and exact executable application source.
+Queued33a0bd8b71e92c7ededcc6f8e2cbf9ef1f5e981034362793c0531851672fe617
+validates15144 dependencies/all2311 cases. Removing only24 new nested
+retainedMatchingDividerCapture children recovers complete84d695d9 predecessor.
+Earlier three-run no-match field is preserved with its bounded interpretation;
+new evidence explicitly supplies the omitted matching report. All dispositions,
+remaining tasks,current rendering and whole-case completion stay unchanged.
+Logs divider-served-capture-space-retry-case-join-20261019 retain final receipt.
+Initial checkpoint/review key mismatch and subsequent ENOSPC logs remain separate.
+Next unresolved whole-case work is material-property/line-box stage mapping and
+paint attribution,plus current core/showcase-installed runtime and lifetime bounds;
+do not repeat this retained-build capture search or invoke a fresh matrix solely
+because the original three-run field said no matching capture.
+
 October19 retained divider applicability verification: existing
 openMaterialCheckpoint(...resume:true).load(materialCaseKey(kind,row)) authenticates
 all24 report rows against original checkpoint result digests and captured
