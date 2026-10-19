@@ -21,6 +21,34 @@ No old capture,predecessorcd867bbe or failure evidence removed. Next:continue
 exact case-obligation work from the validated queue;do not repeat this export/
 cold/conservation milestone without relevant source drift. Final gates unchanged.
 
+October19 progress region/host association gap now has actual retained-build
+AX observations,not the old host-only/derived-DOM comparison. Two purpose-bound
+drivers reuse existing supplemental/checkpoint/served-asset infrastructure;
+no screenshots,fixture or renderer edits. First capture50082 passes32 contexts/
+64 side graphs/128 targets and16 controls but its configured-input binding
+rejects a meaningful animation-class difference. Original matrix explicitly
+requests reducedMotion:reduce and per-profile colorScheme;first probe did not.
+Do not normalize away the resulting _mat-animation-noopable versus animation-
+ready class. Separately named reduced variant31140 repeats only this missing
+AX observation under actual original media settings,records/validates matchMedia,
+and passes independent verification,16 association/target controls and4 wrong-
+media controls. Both expose progressbar within its named region,empty host AX
+children and native-only focusability. This is initial retained-build AX,not AT,
+dynamic/focused-state or current-code acceptance.
+Strict reduced case-binding then rejects root class serialization order,and
+computed-style conservation rejects missing fields. Exact80-tree census retains
+all differences:20 frame/class token permutations;all other native attributes/
+type/text/parent and candidate authored objects/parents agree. Six old frame
+computed fields (visibility,padding,margin,flex,gap,objectFit) were not requested
+by this AX capture's recorded property set;no added or changed common frame
+computed values occur. Missing fields remain missing,not inferred equal.
+Keep all original binding failures. No new case join or coverage promotion;
+queued ecdab1b9 unchanged. Logs progress-region-host-ax[-reduced]-{capture,verify,
+controls},reduced-media-controls and both binding/conservation failures plus
+reduced-input-delta-census retain exact observations/recipes. Next:disposition
+the explicit input/capture boundaries before claiming configured-case applicability;
+do not repeat captures merely to force byte-identical serialization.
+
 October19 progress semantic-input gap narrowed across40 exact cases without
 new capture. Existing recorded DOM/SVG/plugin node groups account for every
 recorded owner;all80 input trees authenticate. Complete raw attribute maps and

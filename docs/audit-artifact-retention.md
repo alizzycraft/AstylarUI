@@ -56,6 +56,16 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep progress-region-host-ax-20261019 and progress-region-host-ax-reduced-20261019,
+their separate checkpoints,64 input trees per capture,full/partial AX
+graphs and all capture/verify/control logs. Both producer source files are
+receipt-bound;future variants must preserve these sources. First capture lacks
+original media settings and must not replace the reduced variant or historical
+host-only evidence. Keep original/reduced case-input-binding and reduced case-
+input-conservation failures plus reduced-input-delta-census. No case has been
+promoted by these standalone observations;missing computed fields/class-order
+differences remain explicit. No successful scratch or PNGs were generated.
+
 October19 source-receipt packagee7a91a22/index4032a569 is accepted after
 independentcold77071 and accepted-import8224 TERMINAL0. Keep both log pairs,
 all full-stream/leaf/source/proof/derived/control-row/composed/readable checks,
