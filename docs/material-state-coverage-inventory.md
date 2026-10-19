@@ -34,6 +34,21 @@ navigation summary,not new acceptance criteria or a substitute for exact records
 
 ## Evidence chronology — retain original scope and checkpoint dates
 
+October19 frozen-export proof delta precomputed READ-ONLY:all219 current pointers
+resolve;EXACT published array reconstructed through bounded Git7efd source reads
+authenticates accepted sectionf7936d9c/3943tokens. Current array differs ONLY in
+21 benchmark line numbers;all other fields and order equal. Current section
+digestf1597df730ae3e3fbf4f79cf1ed6ead8ec6edc5cb397a7a5d2d9931b5eba789a.
+Log inactive-paragraph-pre-export-proof-line-conservation-20261019.log
+SHAb51e4b31318cfc5362e07f98e52afd11718ac066a6ad8081d4d11379913d87d8.
+This anticipates legitimate candidate focusedProofs section movement,not actual
+candidate conservation/publication. The workflow suite's e771 digest oracle is
+now historical and needs explicit reconciliation AFTER coherent publication;
+do not change it during frozen export or treat it as current passing evidence.
+Same export45320/worker10436 independently confirmed live again,CPU counters
+advance and working set2275164160bytes;logs still buffered. No restart,terminal
+success,cold check or import inferred. Current source/proof inputs unchanged.
+
 October19 coherent support/property integration export STARTED,not accepted.
 Preflight authenticates complete738 ordered source inventory against unchanged
 accepted e771 section receipt47fefb60:733 unchanged,FIVE reviewed changes,no
