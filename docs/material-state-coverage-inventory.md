@@ -2,6 +2,27 @@
 
 ## Current audit pointer — October18
 
+October19 coherent export40421 TERMINAL0:2880302.4719ms reported to complete.
+Candidate e7a91a22e150c14dd1d971fa55ff8ca3e7cbbb20282ac95cf25ec1338faa7cc8
+is written to docs (76460187 packed/2308674250 decoded bytes;decodedSHA
+d919ca561ea46cda55201e4cd2a838a323e180d092e31b891431d1bc4ab818ff).
+Full builder/validation/evidence-session verification pass with436 static/1875
+interaction cases,8483 groups/389202 occurrences,163 findings,inputEquivalent
+false. Evidence session records1 collector,10 memory hits,1 disk hit,0 invalidated,
+15065 files/1433789302 bytes read and the same verification-byte count;do not
+describe the whole builder as cached. Logs review-suite-coherent-canonical-
+export-20261019 stdout/stderr retain exact phases/metrics.
+This is an UNACCEPTED candidate,not replacement of acceptedcd867bbe/index551d.
+Original archive authenticates via its index-embedded manifest and packed hash
+(accepted-archive-before-review-export-20261019);the attempted standalone manifest
+path was wrong,not lost evidence. Independent cold --check77071 and full80-section
+digest comparison45000 now run against this fixed candidate. Section comparison
+authenticates both packed/decoded streams with existing sectionDigests;changed
+sections still require exact field/derived-value conservation,including only the
+known8 source changes,28 line shifts and bounded58ec→ab4b review transition.
+No case status/rendering acceptance is promoted. Queued cefffc09 coverage remains
+separate;canonical acceptance/import and all original final gates remain pending.
+
 October19 read-only proof-pointer pre-conservation while export40421 remains
 live:actual accepted24c2532d producer d260f8ca and current7bb5bfb1 retain identical
 focusedProofInventory/proof function bodies. Eight complete old/current source
