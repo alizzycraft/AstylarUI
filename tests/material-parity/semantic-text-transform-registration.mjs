@@ -308,6 +308,20 @@ export function readHistoricalBenchmarkSource(file, options) {
   else if (name === 'position-composition-producer-transition.mjs') restored = restoreSemanticRegistrationTransitionSource(raw);
   else {
     restored = normalized(raw);
+    // Only snackbar map reads move; original receipts and source checks stay.
+    for (const [retained, historical] of [
+      ["  const build = 'artifacts/material-parity/retained-evidence/component-map-recovery-20261011';",
+        "  const build = 'examples/material-showcase/dist/material-showcase/browser';"],
+      ["  const mapName = 'chunk-JPEJK334.js.map', mapBytes = readFileSync(`artifacts/material-parity/retained-evidence/component-map-recovery-20261011/${mapName}`);",
+        "  const mapName = 'chunk-JPEJK334.js.map', mapBytes = readFileSync(`examples/material-showcase/dist/material-showcase/browser/${mapName}`);"],
+      ['  const sessionMapBytes = readFileSync(`artifacts/material-parity/retained-evidence/component-map-recovery-20261011/${sessionMapName}`);',
+        '  const sessionMapBytes = readFileSync(`examples/material-showcase/dist/material-showcase/browser/${sessionMapName}`);'],
+      ['    const bytes = readFileSync(`artifacts/material-parity/retained-evidence/component-map-recovery-20261011/${mapName}`);',
+        '    const bytes = readFileSync(`examples/material-showcase/dist/material-showcase/browser/${mapName}`);'],
+    ]) {
+      assert.equal(restored.split(retained).length, 2);
+      restored = restored.replace(retained, historical);
+    }
     const descriptionStart = restored.indexOf('  // DESCRIPTION_REFINEMENT_APPLICABILITY_BEGIN\n');
     const descriptionEndMarker = '  // DESCRIPTION_REFINEMENT_APPLICABILITY_END\n';
     const descriptionEnd = restored.indexOf(descriptionEndMarker, descriptionStart);

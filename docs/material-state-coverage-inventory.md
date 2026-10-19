@@ -30,6 +30,32 @@ navigation summary,not new acceptance criteria or a substitute for exact records
 
 ## Evidence chronology — retain original scope and checkpoint dates
 
+October19 shared missing-map group:original snackbar failures78/82 are stale
+build-directory reads,not lost captured maps. Exact JPEJK334,7SL66K3U,YSOHGT2J
+retained recovery maps match captured snackbar checkpoint receipts;all three
+embedded application sources equal current files after CRLF normalization.
+Applicability log snackbar-retained-map-applicability-20261019.log,
+SHAc7470564ed5de40bfeda8d95419470e73b82e7818daec5f0191753295866df77.
+Its unused diagnostic-removal comparison is FALSE;raw normalized equality is
+TRUE,so do not apply diagnostic restoration or claim that operation is needed.
+Two existing owning assertions now read retained maps;every original receipt,
+source equality,14paired-state records/seven action boundaries,timer generation,
+late settlement,disposed session and queued-expiry assertion remains unchanged.
+First combined run5/6 exposed later3JXWRYJY read in SAME timer assertion;preserve
+snackbar-retained-map-owner-integration-20261019 log as failure. Session/comparison/
+route maps likewise moved to retained recovery paths;original hash/source/class
+checks then pass. Final two owners plus historical registration conservation
+pass3/3,0 skipped/cancelled/todo,3345.4599ms. Command:
+node --test --test-name-pattern="snackbar lifetime replacement|snackbar captured timer methods|semantic registration historical boundary" tests/material-parity/benchmark-config.spec.mjs tests/material-parity/semantic-text-transform-input.spec.mjs.
+Log snackbar-retained-map-owner-final-20261019.log,
+SHA37c2ffadceb84c9bd2ac9468aced9e15fc4a8aea5d53581d65b074901931bdfa.
+Historical suite restoration reverses ONLY exact map-read paths and still checks
+complete predecessor bytes. No map recopied/deleted,no receipt rewritten,no
+capture/renderer/fixture change. This is historical replay and current source/
+class applicability,NOT current snackbar visual acceptance or revised169 census.
+Other missing-map callers and other capture inventories require own receipt
+checks. Benchmark/helper post-publication source reconciliation remains pending.
+
 October19 description-registration failure68 reconciled as historical definition
 population mismatch,not renderer failure. Existing complete-policy restoration
 already authenticates inheritedBlockMargin refinement;the older object-level

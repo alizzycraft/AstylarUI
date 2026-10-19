@@ -1355,7 +1355,7 @@ test('snackbar lifetime replacement binds real actions and all seven boundaries 
   const options = { reportFile: file, expectedProvenance: manifest.provenance,
     script: 'scripts/audit-material-snackbar-lifetime.mjs', styleProperties: Object.values(propertyGroups).flat() };
   assert.deepEqual(validateSupplementalCapture(raw, options), { status: 'checkpoint-bound', errors: [] });
-  const build = 'examples/material-showcase/dist/material-showcase/browser';
+  const build = 'artifacts/material-parity/retained-evidence/component-map-recovery-20261011';
   for (const [name, mapName] of [['astylar.component.ts', 'chunk-JPEJK334.js.map'],
     ['reference.component.ts', 'chunk-7SL66K3U.js.map'], ['showcase.store.ts', 'chunk-YSOHGT2J.js.map']]) {
     const bytes = readFileSync(`${build}/${mapName}`);
@@ -1764,7 +1764,7 @@ test('configured overlay placement census distinguishes measured boxes from comp
 test('snackbar captured timer methods reject late settlement and queued expiry after destruction', async t => {
   const capture = JSON.parse(readFileSync('artifacts/material-parity/snackbar-lifetime-bound-current-20261008/latest-report.json'));
   const manifest = JSON.parse(readFileSync(capture.capture.checkpointManifest.file));
-  const mapName = 'chunk-JPEJK334.js.map', mapBytes = readFileSync(`examples/material-showcase/dist/material-showcase/browser/${mapName}`);
+  const mapName = 'chunk-JPEJK334.js.map', mapBytes = readFileSync(`artifacts/material-parity/retained-evidence/component-map-recovery-20261011/${mapName}`);
   assert.equal(createHash('sha256').update(mapBytes).digest('hex'), manifest.provenance.browserFiles.find(f => f.file === mapName).sha256);
   const map = JSON.parse(mapBytes), index = map.sources.indexOf('src/app/astylar.component.ts');
   assert.ok(index >= 0);
@@ -1802,7 +1802,7 @@ test('snackbar captured timer methods reject late settlement and queued expiry a
   destroyed(); expiry[0].fn();
   assert.equal(pending.size, 0); assert.equal(patches, 0);
   const sessionMapName = 'chunk-3JXWRYJY.js.map';
-  const sessionMapBytes = readFileSync(`examples/material-showcase/dist/material-showcase/browser/${sessionMapName}`);
+  const sessionMapBytes = readFileSync(`artifacts/material-parity/retained-evidence/component-map-recovery-20261011/${sessionMapName}`);
   assert.equal(createHash('sha256').update(sessionMapBytes).digest('hex'), manifest.provenance.browserFiles.find(f => f.file === sessionMapName).sha256);
   const sessionMap = JSON.parse(sessionMapBytes);
   const sessionIndex = sessionMap.sources.indexOf('node_modules/astylarui/dist/lib/lib/astylar-render-session.js');
@@ -1831,7 +1831,7 @@ test('snackbar captured timer methods reject late settlement and queued expiry a
   destroyed(); session.dispose(); await Promise.all([invalidationRejected, startRejected]);
   assert.equal(pending.size, 0); assert.equal(patches, 0);
   for (const [mapName, sourceName] of [['chunk-625ZTKCG.js.map', 'comparison.component.ts'], ['main.js.map', 'app.routes.ts']]) {
-    const bytes = readFileSync(`examples/material-showcase/dist/material-showcase/browser/${mapName}`);
+    const bytes = readFileSync(`artifacts/material-parity/retained-evidence/component-map-recovery-20261011/${mapName}`);
     assert.equal(createHash('sha256').update(bytes).digest('hex'), manifest.provenance.browserFiles.find(f => f.file === mapName).sha256);
     const parsed = JSON.parse(bytes), sourceIndex = parsed.sources.indexOf(`src/app/${sourceName}`);
     assert.ok(sourceIndex >= 0);
