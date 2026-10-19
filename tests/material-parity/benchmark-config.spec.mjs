@@ -486,7 +486,27 @@ test('equal-input caret font contrast preserves bounded source and recorded pain
     assert.equal(hash(restored), '1a6f11974d1f8aea924c1de2774abab219aec668998d6fabec0a4942f5d66ac6');
     return restored;
   };
-  const currentProof = readFileSync('tests/material-parity/input-boundary-evidence.spec.mjs', 'utf8');
+  // CARET_OWNER_APPLICABILITY_BEGIN
+  const caretOwnerFile = 'tests/material-parity/input-boundary-evidence.spec.mjs';
+  const liveCaretOwner = readFileSync(caretOwnerFile, 'utf8');
+  const retainedCaretOwner = execFileSync('git', ['show', `99d56384:${caretOwnerFile}`], { encoding: 'utf8', maxBuffer: 4_000_000 });
+  assert.equal(hash(retainedCaretOwner), 'f3f554b3d08bb8ad7018ff1fb6dc9f588fb17afe984d2c8835b68590269c9116');
+  const caretCallback = source => {
+    const tree = ts.createSourceFile(caretOwnerFile, source, ts.ScriptTarget.Latest, true);
+    const nodes = tree.statements.filter(node => ts.isExpressionStatement(node) && ts.isCallExpression(node.expression)
+      && node.expression.expression.getText(tree) === 'test'
+      && node.expression.arguments[0]?.text === 'public equal-input empty caret has paired WebGL raster evidence');
+    assert.equal(nodes.length, 1); return nodes[0].getText(tree);
+  };
+  const scopedCaretOwner = source => {
+    assert.equal(hash(source), '171bf9fae8fe2e701f5a42d5eef896685085ef267200956729ab447e04a032d5');
+    assert.equal(caretCallback(source), caretCallback(retainedCaretOwner), 'Complete captured caret callback must remain unchanged');
+    return retainedCaretOwner;
+  };
+  const currentProof = scopedCaretOwner(liveCaretOwner);
+  assert.throws(() => scopedCaretOwner(liveCaretOwner + '\n// unreviewed owner drift'));
+  assert.throws(() => scopedCaretOwner(liveCaretOwner.replace('placeholder-keyboard', 'changed-keyboard')));
+  // CARET_OWNER_APPLICABILITY_END
   const original = restoreProgressJoins(currentProof);
   assert.throws(() => restoreProgressJoins(currentProof.replace('retainedProgressUpdateDisposal:', 'concealedUpdateDisposal:')));
   assert.throws(() => restoreProgressJoins(currentProof + '\n// unexplained source change'));

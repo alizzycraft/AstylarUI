@@ -308,6 +308,15 @@ export function readHistoricalBenchmarkSource(file, options) {
   else if (name === 'position-composition-producer-transition.mjs') restored = restoreSemanticRegistrationTransitionSource(raw);
   else {
     restored = normalized(raw);
+    const caretStart = restored.indexOf('  // CARET_OWNER_APPLICABILITY_BEGIN\n');
+    const caretEndMarker = '  // CARET_OWNER_APPLICABILITY_END\n';
+    const caretEnd = restored.indexOf(caretEndMarker, caretStart);
+    assert.ok(caretStart >= 0 && caretEnd > caretStart);
+    assert.equal(digest(restored.slice(caretStart, caretEnd + caretEndMarker.length)),
+      '35e9feec3e009b354fc999444551474b47153e4e979fe895df222c40ca7b0689');
+    restored = restored.slice(0, caretStart)
+      + "  const currentProof = readFileSync('tests/material-parity/input-boundary-evidence.spec.mjs', 'utf8');\n"
+      + restored.slice(caretEnd + caretEndMarker.length);
     const ownerStart = restored.indexOf('    // ROOT_NOOP_OWNER_APPLICABILITY_BEGIN\n');
     const ownerEndMarker = '    // ROOT_NOOP_OWNER_APPLICABILITY_END\n';
     assert.ok(ownerStart >= 0);

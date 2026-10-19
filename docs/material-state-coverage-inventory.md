@@ -30,6 +30,28 @@ navigation summary,not new acceptance criteria or a substitute for exact records
 
 ## Evidence chronology — retain original scope and checkpoint dates
 
+October19 full-harness failure65 caret-owner barrier reconciled in existing
+owning assertion. Competing explanations:changed public caret diagnostic versus
+unrelated containing-suite drift. Exact current owner171bf9fa and Git99d56384
+raw ownerf3f554b3 are authenticated;TS extraction proves COMPLETE named public
+caret test callback byte-identical. Only then does this assertion reuse historical
+owner bytes through its ORIGINAL progress/divider-join reversals. Current-owner
+drift/changed-keyboard controls reject;all original restoration mutation controls,
+two diagnostic log hashes,exact diagnostic edits,four font/DPR observations,six
+forged-evidence controls and complete current/installed createTextCursor method
+comparison remain. Historical benchmark reader reverses ONLY authenticated new
+block35e9feec,then still proves complete predecessor suite equality.
+Combined original caret/root-focus assertions and existing runner/registration
+controls pass4/4,0 skipped/cancelled/todo,6288.3289ms. Command:
+node --test --test-name-pattern="equal-input caret font contrast|retained public unchanged-root updates|root editing runner applicability|semantic registration historical boundary" tests/material-parity/benchmark-config.spec.mjs tests/material-parity/semantic-text-transform-input.spec.mjs.
+Log caret-owner-scoped-integration-20261019.log,
+SHA65eb882240b05d86debd9e9cc146a1dc751b917905d7c29ad08c6e1d0db98134.
+Conclusion remains SUSPECTED font-insensitive caret sizing,not a universal native
+height law/current pixel acceptance. Original rasters were in-memory,not retained
+PNG replay. No capture,renderer or fixture changes;published package unchanged.
+These same two support-source files remain queued for batch reconciliation;
+do not export solely for this correction or subtract from historical169 failures.
+
 October19 full-harness failure61 owner applicability reconciled,not renderer
 fixed. Current focused invocation still failed at original owner receipt barrier
 f3f554b3 versus171bf9fa (root-focus-current-barrier-20261019.log,
