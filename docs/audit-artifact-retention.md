@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep choice-ax-bound reportc9e1279c,32 paired trees/checkpoint,original failed
+choice-ax run and all capture/independent-verify/case-join logs. Corrected capture
+1682,independent verify and join39977 terminate0;queued968a6198 with0889 predecessor
+preserves all2311 partial cases.32 altered checked/name controls reject;15095
+dependencies validate. Focused AX transport agreement is not general semantic
+or rendering acceptance. No deletion,original overwrite or PNG capture occurred.
+
 Keep choice-ax-bound-20261019 capture/checkpoint/32 paired trees and log pair
 separately from original choice-ax failure. Capture1682 is live;bound adapter
 pins original006689a5 and adds only required post-AX input-tree measurement.

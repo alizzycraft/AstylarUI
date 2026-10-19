@@ -2,6 +2,26 @@
 
 ## Current audit pointer — October19
 
+October19 choice AX gap bounded:corrected capture1682 and independent verify
+TERMINAL0,16 focus contexts/64 actual AX targets,report
+c9e1279cd761d7ef299affe9f55b30cf2453f30be6efc470ce87ff26469958c6.
+Exact AX role/name/checked/focused/focusable/group-required properties agree;
+native label-for provenance differs from candidate aria-label/content. Native
+invalid=false and differing association fields remain raw,not normalized away.
+This rules out missing AX state transport at these endpoints,not native-control
+default actions,post-activation/disabled semantics or AT equivalence. Candidate
+mapped authored source agrees completely with current source;served chunk/map
+receipts authenticate. Join39977 TERMINAL0 rejects32 altered checked/name controls,
+validates15095 dependencies/all2311 cases and saves queued
+968a619813530c5f5be9e6edf1257265dc4bf8578cf887d1c1df5b8fd8c3adc2.
+Sixteen semantic children/task refinements recover complete0889e9db predecessor;
+known radio activation failure and all other remaining work survive. No new
+source finding,renderer change,current-rendering or whole-case promotion.
+Original missing-tree failure remains separate. Logs choice-ax-bound-capture,
+bound-independent-verify and choice-ax-case-join-20261019 retain exact evidence.
+Accepted4acc/index44ca stays unchanged. Next remaining input/paint/semantic/
+lifetime work;do not recapture these focus endpoints without relevant drift.
+
 October19 choice AX bound correction capture1682 is confirmed live. Original
 producer006689a5/report/failure are preserved inGite2207701. Separate bound
 adapter adds exact native captureBrowserInputTree and maintained guarded
