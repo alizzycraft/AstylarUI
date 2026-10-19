@@ -2,6 +2,29 @@
 
 ## Current audit pointer — October19
 
+October19 mapped-core top-level/runtime-wiring boundary revalidated with EXISTING
+original tests,not a new projection/checker. Both original complete class-body
+assertion and its existing diagnostic wrapper pass2/2,zero skips/cancel/fail,
+7252.3554ms total. Original assertions cover80 classes,98 functions,53 variables,
+373 runtime imports,four module effects,130 exports,60 authored decorators,
+113 constructor dependencies and one component's signal/template/style metadata;
+110 extra authored DI imports/171 generated namespaces/644 metadata uses remain
+checked,not discarded. SuiteSHA171bf9fa unchanged. Log
+divider-current-runtime-wiring-20261019.log SHA256
+5b7063881f6196b90a1f860530e99cb4fbddbe4ff6dc1e5dd441555efd67e3a2.
+Its module inventory is the same88 IDs already authenticated between original
+and newer divider maps;the separate newer-capture linker proof checks COMPLETE
+captured-installed modules including generated fields. Together these answer
+the previously named current-source/runtime-wiring gap within the original
+explicit projection/metadata checks. Not byte-identical TS/AOT modules,all
+dependencies,execution coverage,application/style/font/clock applicability or
+rendering/lifetime acceptance. No need to repeat these bodies/class/member/
+linker checks absent relevant changes. Next reconcile remaining newer-capture
+dependency/environment applicability and genuine case state/paint/lifetime
+obligations using retained evidence. Source/export and queuedfe692b14 status
+remain explicit;no canonical rebuild merely for this ledger entry,no case
+promotion,renderer,fixture,reference or criteria change.
+
 October19 newer-divider captured library applicability narrowed without rebuild:
 original existing current-runtime-member test passes1/1 (divider-current-library-
 member-reuse-20261019.log),retaining its1583 equal/one inspection-method historical
