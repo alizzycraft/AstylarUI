@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep original datepicker-alt-arrowdown pre-capture resolver failure/source
+6c798247 and separately named -bound-20261019 report/checkpoint/16 trees,corrected
+producer,bound-capture/independent-verify logs. Capture16643/verify terminate0,
+reportb898770f,8 contexts/32 paired boundaries. Both closed after focus;native
+only opens on trusted Alt+ArrowDown. No PNGs or behavioral fixture changes.
+Source/classification binding and exact-case join remain pending.
+
 Keep post-milestone-source-inventory-current-20261019 stdout/stderr:the exact
 production733-source section matches accepted4acc via existing digester;no
 full report export/read or new generation is produced. Latest queueda5f37bcd

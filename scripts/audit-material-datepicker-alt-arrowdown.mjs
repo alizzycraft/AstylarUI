@@ -26,6 +26,13 @@ replace('code: event.code ?? null, trusted: event.isTrusted,',
 replace('radioControls: [...document.querySelectorAll',
   'candidateCalendarContents: document.querySelectorAll(\'[data-astylar-id="datepicker-popup"]\').length, radioControls: [...document.querySelectorAll');
 replace('const recipe = { measuredDiagnosticParent:', `const recipe = { shortcutAdapterParent: { file: '${file}', sha256: '${sha256}' }, measuredDiagnosticParent:`);
+const resolverTree=ts.createSourceFile(file,source,99,true,ts.ScriptKind.JS),calls=[];
+const visit=node=>{
+  if(ts.isCallExpression(node)&&node.expression.getText(resolverTree)==='import.meta.resolve')calls.push(node);
+  ts.forEachChild(node,visit);
+};visit(resolverTree);assert.equal(calls.length,2);
+const urls=Object.fromEntries(['typescript','playwright-core'].map(name=>[name,import.meta.resolve(name)]));
+for(const node of calls.toReversed())source=source.slice(0,node.getStart(resolverTree))+JSON.stringify(urls)+'[name]'+source.slice(node.end);
 const ast=ts.createSourceFile(file,source,99,true,ts.ScriptKind.JS);assert.equal(ast.parseDiagnostics.length,0);
 for(const node of ast.statements.filter(ts.isImportDeclaration).toReversed()){
   const name=node.moduleSpecifier.text;if(name.startsWith('node:'))continue;

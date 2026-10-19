@@ -2,6 +2,24 @@
 
 ## Current audit pointer — October19
 
+October19 keyboard inventory exposes concrete datepicker gap,not missing Sort
+Enter/Space (already recorded). Datepicker's old cohort stops at Tab,while actual
+installed input _onKeydown accepts Alt+ArrowDown with no ctrl/shift/meta and opens
+non-readonly popup. New exact8 desktop contexts retain original focus then real
+Alt+ArrowDown. Bound capture16643 and independent verify TERMINAL0,32 paired
+boundaries,reportb898770f469b813d937f4b1c6e4cd370f489d5b4e323aebebb548a99a85e534c.
+Both sides remain closed after focus. Trusted Alt/ArrowDown reach both;native
+opens calendar and focuses button,candidate remains closed/input-focused in all8.
+No pointer action or change to date/time focus behavior. Current app Escape-only
+handler suggests existing authoring route gap;exact mapped source/classification
+and case join still required,not asserted core delivery defect. Original adapter
+fails BEFORE capture at nested data-URL package resolution;source6c798247/error
+log preserved. Corrected AST replaces only actual resolver calls,not guards;
+separate -bound run uses frozen source. No PNGs,renderer/fixture changes or case
+promotion. Logs datepicker-alt-arrowdown-{bound-capture,independent-verify}-20261019
+retain exact evidence. Next bind owning source and join8 keyboard obligations;
+do not recapture the already answered focus-versus-shortcut opening question.
+
 October19 post-milestone source reconciliation answers whether recent standalone
 work invalidated the accepted producer inventory:no. Executing the actual current
 sourceFingerprints function and existing token-section digester yields733 rows/
