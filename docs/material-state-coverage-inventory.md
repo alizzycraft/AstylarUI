@@ -2,6 +2,23 @@
 
 ## Current audit pointer — October18
 
+October19 section comparison45000 TERMINAL0:both preservedcd867bbe and candidate
+e7a91a22 packed/decoded streams authenticate;all80 ordered sections survive,
+72 digests identical,no added/removed sections. Changed8 are sourceFingerprints,
+coverage,controlLineBoxes,discrepancies,ownerCaretInputs,reviewedSourceBatchInputs,
+controlTypography,focusedProofs. Seven retain identical token counts;coverage
+adds9200 tokens. Full80 receipts are in review-suite-canonical-section-
+conservation-20261019 stdout/stderr. Changed-section census is not acceptance.
+Existing compareSectionLeaves now runs77254 on all seven same-shaped changed
+sections,retaining current coverage in that SAME authenticated stream. It also
+constructs expected coverage from accepted base plus independently loadedab4b
+successor via existing attachCaseObligationCoverage,and requires complete ordered
+JSON hash equality. Scalar changes outside reviewEvidence reject;changed evidence
+leaves still need exact source/derived-hash explanations. No raw scalar/property
+or classification exemption is added. Independent cold77071 remains live.
+Only known source8/proof-line28/bounded review transition may be accepted;all
+other prior payloads must conserve. No case closure/rendering promotion follows.
+
 October19 coherent export40421 TERMINAL0:2880302.4719ms reported to complete.
 Candidate e7a91a22e150c14dd1d971fa55ff8ca3e7cbbb20282ac95cf25ec1338faa7cc8
 is written to docs (76460187 packed/2308674250 decoded bytes;decodedSHA
