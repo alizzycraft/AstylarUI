@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep divider-live-baseline original package-resolution failure,bound direct-draw
+identity failure and copy-diagnostic success log pairs separately;producer
+scripts/audit-material-divider-live-baselines.mjs pins immutable prior driver
+bb87aa65 and extends observations only. Success retains live canvas/drawImage
+ancestry,projected vertices,UVs,texture dimensions and paired native baselines.
+No images/build copies generated. Copy ancestry is specific to these live
+backings,not evidence of missing text on first failed direct-identity assumption.
+
 Keep divider-baseline-diagnostic-20261019 candidate-only-hook timeout separately
 from divider-baseline-bound-diagnostic-20261019 successful log pair and producer
 scripts/audit-material-divider-baselines.mjs. Success records8 pages/four profiles,

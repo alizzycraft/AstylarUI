@@ -2,6 +2,25 @@
 
 ## Current audit pointer — October19
 
+October19 live texture identity ambiguity CLOSED in four desktopDPR1 profiles:
+copy-aware diagnostic14088 TERMINAL0 authenticates served bytes and records8
+live owners. Each live backing has exactly ONE source canvas with matching
+Above/Below draw and one unscaled drawImage(source,0,0) edge;earlier transient
+draws are not in these live ancestry chains. Final y15/15/14/17 matches native
+local baseline offsets. Light/dark textures+meshes19px,contrast18px;custom
+backing23px maps onto22px mesh. UVs are full0..1,invertY=true,identity texture
+matrix. Thus same local draw y does NOT imply same screen baseline:explicit
+top-down affine mapping yields native-relative residual about-.308px light/dark,
++.513px contrast,+.177px custom. This is geometry-derived,NOT independently
+validated raster/ink equality or new core root-cause attribution. Existing
+authored absolute positions and backing/mesh scale must remain separate owners.
+Next trace the custom backing-ceil versus mesh-height rule against existing
+texture-scaling finding and attribute remaining owner-position residuals using
+retained layout/history,not another live-identity capture. Producer0c0f7df063dad2f5b4e4d28b0d2f52371143c4fc8d65733f580c635c6e92cb2b,
+log divider-live-baseline-copy-diagnostic-20261019. Initial adapter package
+resolution and direct-fillText identity failures retained separately. No input
+changes,case promotion or canonical export.
+
 October19 actual Material baseline diagnostic14672 TERMINAL0 records four
 profiles×two sides at desktopDPR1,Chrome155.0.8059.80 on exact1887 served-file
 receipts. Native Above/Below markers preserve paragraph/text bounds;baseline
