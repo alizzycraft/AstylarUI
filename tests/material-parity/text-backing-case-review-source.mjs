@@ -5,7 +5,37 @@ import ts from 'typescript';
 import { restoreTextBackingPolicy } from './semantic-text-transform-registration.mjs';
 
 export const textBackingRetainedReview='33a0bd8b71e92c7ededcc6f8e2cbf9ef1f5e981034362793c0531851672fe617';
+export const dividerReviewedBoundariesReview='be99cd383dabb304da259cef9046b6b81ce44922c3ae4d8fe6dfc2a76ab33f6f';
 const hash=b=>createHash('sha256').update(b).digest('hex');
+// Reuse the exact validated four-source boundary. The supplied session reader
+// observes every current byte, including the immutable boundary owner itself.
+export function createDividerReviewedBoundariesReader({root,read,reviewSha256}){
+  assert.equal(reviewSha256,dividerReviewedBoundariesReview);
+  const owner='scripts/join-material-divider-paint-boundaries.mjs';
+  const source=read(path.resolve(root,owner),'utf8');
+  assert.equal(hash(source),'b187103f2f773955dd97ea3e0ee4e0b5d4b4b9faab4af0ebb6fe5d6627f681da');
+  const start=source.indexOf("const suite = 'tests/material-parity/alignment-crop-provenance.spec.mjs'");
+  const end=source.indexOf('const review = JSON.parse',start);
+  assert.ok(start>0&&end>start);
+  const boundary=source.slice(start,end);
+  assert.equal(hash(boundary),'d15efcaec30d491a75cdbad706e2ec7baf41ddbb76f6648a854f0a08d7f8b355');
+  let baseReader;
+  const createBase=options=>{
+    baseReader=createTextBackingReviewReader(options);
+    return baseReader;
+  };
+  const {trackedRead}=new Function('assert','readFileSync','hash','path','createTextBackingReviewReader','predecessor',
+    `${boundary}\nreturn {trackedRead};`)(assert,read,hash,path,createBase,textBackingRetainedReview);
+  const suite='tests/material-parity/alignment-crop-provenance.spec.mjs';
+  return {read:trackedRead,sourceApplicability:{
+    mode:'explicit-reviewed-divider-boundaries-historical-review',reviewSha256,
+    transitions:[...baseReader.sourceApplicability.transitions,{
+      logicalFile:suite,currentSha256:hash(read(path.resolve(root,suite))),
+      historicalSha256:hash(trackedRead(path.resolve(root,suite))),
+    }],boundaryOwner:{file:owner,sha256:hash(source)},boundarySha256:hash(boundary),
+    boundary:'Four exact historical source restorations;current bytes remain tracked. No current-rendering acceptance or inspection promotion.',
+  }};
+}
 // This adapter is selected only for the named retained review. Supplied reader
 // observes CURRENT bytes first, so evidence sessions still detect concurrent drift.
 export function createTextBackingReviewReader({root,read,reviewSha256}){

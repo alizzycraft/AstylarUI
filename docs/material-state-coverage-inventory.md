@@ -5,7 +5,8 @@
 Accepted canonical/index:65e072fd/4837b33b (165 source findings,219 focused proof
 anchors). Latest validated QUEUED case review:
 be99cd383dabb304da259cef9046b6b81ce44922c3ae4d8fe6dfc2a76ab33f6f,
-not selected by the production exporter or published as canonical. Its join adds
+selected by the production export launcher after bounded reader verification,
+but NOT exported/cold-verified/published as canonical. Its join adds
 exactly80 children to fe692b14 and recovers that complete predecessor on reversal;
 existing loader authenticates15167 dependency receipts/all2311 cases. Receipt:
 divider-reviewed-boundaries-space-retry-20261019.log (TERMINAL0).
@@ -28,6 +29,29 @@ subquestions merely because a parent still says partial. This table is a current
 navigation summary,not new acceptance criteria or a substitute for exact records.
 
 ## Evidence chronology — retain original scope and checkpoint dates
+
+October19 queued-divider production-reader integration implemented,not canonical
+publication: createDividerReviewedBoundariesReader in the EXISTING
+text-backing-case-review-source.mjs executes the exact b187103f/d15efcae boundary,
+with current bytes supplied through the evidence-session reader. Four exact
+historical restorations remain explicitly reported;normal loader stays strict.
+run-material-input-audit selects it ONLY for be99cd38;old33a path remains separate.
+Named current-ancestry launcher now selects exact be99 path/digest;--dry-run exits0
+and runner syntax check passes. No canonical output or accepted pointer changed.
+New existing-store-suite test authenticates all2311 queued cases,retains
+inspectionComplete=false/currentRenderingAccepted=false and rejects altered
+four-source inputs,owner bytes,wrong digest and concurrent alignment-suite drift.
+Focused new test1/1 passes (18.022s). Combined new+original-reader command returns
+1/2: new test passes;original three-source test fails on alignment-crop suite
+c35322fc versus historical043d4663. This is the exact additive suite transition
+now handled by the NEW four-source reader,not a reason to weaken the old loader
+or replace historical receipts. Full failure retained in terminal output for
+node --test --test-name-pattern="retained text backing review|reviewed divider
+boundary reader" tests/material-parity/audit-findings-store.spec.mjs.
+Next verify production registration/source applicability and complete coherent
+export/conservation/cold verification at the next justified integration milestone;
+the queued review is not accepted merely because its reader/launcher works.
+All whole-case statuses and original final gates remain unchanged.
 
 October19 retained later-font callback after disposal answered with the EXISTING
 settled-font test,not another capture/framework. After successful initial and

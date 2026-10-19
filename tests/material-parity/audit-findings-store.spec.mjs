@@ -4,7 +4,33 @@ import * as fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { importFindings, queryFindings, verifyFindings, saveReviewProposal, loadFindingEvidence, loadCaseObligationReview, attachCaseObligationCoverage, assertCaseObligationCoverage, caseInspectionObligations, describeCaseInspectionCoverage } from '../../scripts/audit-findings-store.mjs';
-import { createTextBackingReviewReader, textBackingRetainedReview } from './text-backing-case-review-source.mjs';
+import { createTextBackingReviewReader, textBackingRetainedReview, createDividerReviewedBoundariesReader, dividerReviewedBoundariesReview } from './text-backing-case-review-source.mjs';
+
+test('reviewed divider boundary reader validates exact queued cases and rejects source drift',()=>{
+  const root=process.cwd(),file=`artifacts/material-parity/working-audit/proposals/${dividerReviewedBoundariesReview}.json`;
+  const review=JSON.parse(fs.readFileSync(file)).review;
+  const options={root,read:fs.readFileSync,reviewSha256:dividerReviewedBoundariesReview};
+  const reader=createDividerReviewedBoundariesReader(options);
+  assert.equal(reader.sourceApplicability.transitions.length,4);
+  const result=loadCaseObligationReview(file,dividerReviewedBoundariesReview,review.groups.map(g=>g.case),{root,read:reader.read});
+  assert.equal(result.cases.length,2311);
+  assert.equal(result.currentRenderingAccepted,false);assert.equal(result.inspectionComplete,false);
+  for(const transition of reader.sourceApplicability.transitions){
+    const absolute=path.resolve(root,transition.logicalFile);
+    assert.equal(createHash('sha256').update(reader.read(absolute)).digest('hex'),transition.historicalSha256);
+    assert.throws(()=>createDividerReviewedBoundariesReader({...options,
+      read(name,...args){const value=fs.readFileSync(name,...args);return path.resolve(name)===absolute?value.toString()+'\n// drift':value;}}));
+  }
+  assert.throws(()=>createDividerReviewedBoundariesReader({...options,reviewSha256:'0'.repeat(64)}));
+  assert.throws(()=>createDividerReviewedBoundariesReader({...options,read(name,...args){
+    const value=fs.readFileSync(name,...args);return name.endsWith('join-material-divider-paint-boundaries.mjs')?value+'\n// drift':value;
+  }}));
+  let drift=false;
+  const tracked=createDividerReviewedBoundariesReader({...options,read(name,...args){
+    const value=fs.readFileSync(name,...args);return drift&&name.endsWith('alignment-crop-provenance.spec.mjs')?value.toString()+'\n// drift':value;
+  }});
+  drift=true;assert.throws(()=>tracked.read(path.resolve(root,'tests/material-parity/alignment-crop-provenance.spec.mjs')));
+});
 
 test('retained text backing review uses explicit tracked source applicability without changing receipts',()=>{
   const root=process.cwd(),file=`artifacts/material-parity/working-audit/proposals/${textBackingRetainedReview}.json`;
