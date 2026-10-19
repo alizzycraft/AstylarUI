@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep text-backing candidate-import,section-conservation,row-conservation,
+row-deltas and row-deltas-explained-20261019 logs. Candidate65e072fd/index4837
+stays in separate candidate-validation store;main4acc remains accepted. New
+section receipts authenticate both packed/decoded candidate hashes and reuse
+old receipt23417f6d instead of rescanning old package. Full-row evidence is
+retrieved once in batches;96 metadata leaves account for all49 changed rows.
+Do not repeat those scans or delete old generation/candidate during cold check.
+
 Keep text-backing-queued-export-20261019 stdout/stderr:successful full candidate
 65e072fd validates before write,accepted4acc preserved in immutable generation.
 Keep candidate-import and independent-cold-check logs separately;both processes

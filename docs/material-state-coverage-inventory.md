@@ -2,6 +2,25 @@
 
 ## Current audit pointer — October19
 
+October19 candidate import10203 TERMINAL0:65e072fd index4837b33b2e1e5ced142cc45fcc61b03b898f8e66981fb283f9164d1a198bc95c,
+8483discrepancies/165findings/39904controls/389202occurrences/zero unresolved.
+Section conservation71605 TERMINAL0 authenticates new packed/decoded bytes and
+reuses authenticated old4acc section receipt23417f6d:all80sections retained,
+70structurally identical,no added/removed sections. Ten changed sections are
+sourceFingerprints,coverage,controlLineBoxes,summary,discrepancies,ownerCaretInputs,
+reviewedSourceBatchInputs,controlTypography,sourceFindings,focusedProofs.
+Authenticated shard complete-row hashes preserve48502rows unchanged;49 old
+rows differ plusONE new source finding. Batched full-row extraction48788
+TERMINAL0 finds exactly96 changed leaves:48 currentModuleSha256 changes from
+e486c704→a2771d8c and48 propagated controlProofSha256 links in one discrepancy.
+Exact current producer reversal recovers complete predecessor;all96 leaves
+explain,not changed styles/classifications. Logs text-backing-candidate-section-
+conservation,row-conservation,row-deltas,row-deltas-explained-20261019 retain
+receipts. Next derive remaining changed registry/coverage/nonrow metadata and
+readable sections;do not rescan/reextract these49 rows or old full package.
+Independent cold41341/13428 still live,main accepted4acc pointer unchanged.
+No publication or rendering/whole-case acceptance inferred from candidate import.
+
 October19 FULL export89952 TERMINAL0,3328291.5532ms:validation passes before
 write. Candidate65e072fdb75367403cdec41c04c9e07a279a2d0f2c742ed827e9343f54e2ab93,
 packed84568629/decoded2326831354bytes,decodedSHA
