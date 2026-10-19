@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep paragraph-baseline-boundary-20261019 stdout/stderr and frozen diagnostic
+scripts/audit-paragraph-baseline-boundary.mjs. It serves existing public bundle
+unchanged,authenticates original report/bundle/HTML and records8 fresh side
+observations with browser launch identity. Native markers are diagnostic-only
+and checked not to move paragraph/text bounds. Candidate fillText observation
+is texture-local,not a world/CSS baseline proof. No screenshots or extra bundle
+copies were generated;do not delete the original public reproduction.
+
 Keep divider-served-capture original key-mismatch, bound ENOSPC and successful
 space-retry log pairs separately,plus join producer and queued33a0bd8b with
 84d695d9 predecessor. Success validates15144 dependencies and exact24 additive

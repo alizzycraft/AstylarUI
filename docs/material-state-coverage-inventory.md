@@ -2,6 +2,25 @@
 
 ## Current audit pointer — October19
 
+October19 new decisive public baseline diagnostic TERMINAL0,8 side observations:
+paragraph-baseline-boundary-20261019.log uses immutable authenticated public
+paragraph bundle/reportdd72dd2e,Chrome155.0.8059.80,DPR1,Arial16/24px,
+normal versus20/30px explicit line-height. Native zero-size baseline marker
+changes neither paragraph height nor text range top/height in all4 controls.
+Native offsets14/15/22/23px numerically equal observed candidate fillText y,
+alphabetic mode,identity canvas transform. Normal paragraph heights18/28 native
+versus17/27 candidate leave4/6px native and3/5px candidate below those local
+baseline values;explicit heights20/30 agree. Draw observer forwards original
+receiver/arguments/return;authored SiteData remains unchanged,no runtime errors.
+This narrows the existing public normal-line-height mismatch to lower extent
+in these contexts,not evidence of a generic local draw-baseline shift. Texture
+coordinates are NOT projected CSS baseline coordinates. Public bundle is retained,
+not a current full-core build,and Arial is not the Material Roboto context.
+Producer5e75811e232e7c009c37823ef8fd3bc151f332f14d68d364166d3c3c6366657e.
+Next apply the numeric observation approach to actual divider diagnostic owners
+and bind owning layout/draw stage before assigning Material causality;do not
+repeat this public16/24 normal-versus-explicit experiment. No acceptance promotion.
+
 October19 retained baseline search exhausted the relevant existing measurements:
 divider-configured-texture-boundary-20261015 contains8 targets across4 contrast
 DPR1 contexts;all record canvas baseline mode alphabetic,but no numeric draw
