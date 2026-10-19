@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep divider-backing-owners original scanner/template-token failure and bound
+AST-leaf success log pairs,plus scripts/check-divider-backing-owners.mjs.
+Bound check authenticates servedchunk/map,five complete methods and five
+unexpected-call controls. Whole source files remain different and original
+captured map bytes unchanged. No new browser run or generated bundle.
+
 Keep divider-live-baseline original package-resolution failure,bound direct-draw
 identity failure and copy-diagnostic success log pairs separately;producer
 scripts/audit-material-divider-live-baselines.mjs pins immutable prior driver

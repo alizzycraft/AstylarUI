@@ -2,6 +2,25 @@
 
 ## Current audit pointer — October19
 
+October19 captured allocation-owner binding COMPLETE,check-divider-backing-owners
+TERMINAL0. Authenticated servedchunk-XOU37TRR.js/map contain five complete
+installed-equivalent methods:createStyledCanvas,measureTextBounds,
+resolveNormalLineHeight,renderTextToTexture,getLogicalTextureSize. Whole source
+files are NOT byte-identical. AST leaf-token comparison ignores formatting and
+ONLY optional trailing commas/single-bare-arrow-parameter parentheses;five
+unexpected-call controls reject. Initial context-free scanner mishandles template
+continuations and fails;separate bound log uses parsed AST leaves instead of
+normalizing literal whitespace. Source normalization does not change captured
+methods,files or runtime. Existing current/installed method comparisons separately
+establish current applicability. Numeric22.000000000000004→ceil23 and both
+custom live23backing/22mesh owners authenticate. Existing public text phase proof
+does not isolate this exact allocation/UV pairing;no duplicate proof is assumed.
+Log divider-backing-owners-bound-20261019 carries all five full source/method
+receipts. Next minimal equal-input fractional-height backing/UV reproduction,
+including integer/explicit-height controls and actual projected/raster effect;
+do not rerun method binding unless these dependencies change. No new canonical
+finding/current raster acceptance or whole-case promotion yet.
+
 October19 custom-profile backing mechanism narrowed WITHOUT another capture:
 actual normal parser returns fontBoxHeight/fontSize. Numeric execution gives
 18.4*(22/18.4)=22.000000000000004;createStyledCanvas ceilings this to23 backing
