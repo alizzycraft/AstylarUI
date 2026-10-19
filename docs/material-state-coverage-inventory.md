@@ -1,6 +1,6 @@
 # Material comparison/state coverage inventory
 
-## Current audit pointer — October19
+## Current audit pointer — October20
 
 Accepted canonical/index:e7717418/7ca89ad0 (165 source findings,219 focused proof
 anchors). Published case review:
@@ -14,6 +14,10 @@ divider-reviewed-boundaries-space-retry-20261019.log (TERMINAL0).
 Current launcher selection is newer queued bfc2b6d546a0a636f07272eef14591ec830dcc7e90098c06a865af72076d238e,
 not yet exported/canonical. It adds24 case-evidence children/192 reviewed property
 slots without closing cases. Keep published be99 and selected bfc distinct.
+
+Working docs now contain exported candidate46eaeb4c;separate candidate index
+fb581ba7 validates. Independent cold replay and section conservation remain live.
+Accepted main store still selects e771/7ca89;do not confuse exported with accepted.
 
 Scope remains36 families/436 static+1875 interaction configured cases. Recorded
 whole-case status:0 complete,2311 partial,0 untouched,0 blocked;current rendering
@@ -33,6 +37,40 @@ subquestions merely because a parent still says partial. This table is a current
 navigation summary,not new acceptance criteria or a substitute for exact records.
 
 ## Evidence chronology — retain original scope and checkpoint dates
+
+October20 frozen export45320 TERMINAL0. Complete progress3270446.5898ms;
+evidence session3072534.4356ms,1collector/10memory hits/1disk hit/0invalidated,
+16358files/1678478467read and verification bytes. Candidate compressed generation
+46eaeb4ce2ef6efbef249d6eab36f8f2b6f190c0715ceb89aedc5b10a368b067,
+84655375packed bytes;2327171274decoded bytes,
+decodedSHA7d92d4abd4cffca82e9aa4b260a01f06ca3a9be1cf581f9493322916879a3227.
+Export stdout2995242c92c2cd76bd715f299380eaa7fb16b3da511d4cc424e5c0eca00753c1,
+stderr0b01a86f061c8a37ab8b1793c6c0ff5f7875387996deed2b629bae458109128e
+(inactive-paragraph-coherent-export-20261019 log pair retains START date).
+Not whole-audit completion or accepted publication.
+
+Separate candidate-validation import74443 TERMINAL0:8483discrepancies,
+165source findings,39904controls,389202occurrences,0unresolved scalar groups,
+72762327compact bytes,indexSHAfb581ba7cfb4666f3cc3abb797fbc4c9aede2133000b0715b3cac116e28fe890.
+Log inactive-paragraph-candidate-import-retry-20261020.log
+SHA7c48a14d3349487896273fc80a8343a6ec779c87188f14a0eb2ea06f7cd030d1.
+First import command failed syntax setup before reading data;original import log
+pair retained. Closed candidate index180681735logical bytes LZX-compressed to
+37793792physical bytes;complete indexSHA unchanged before/after. Main accepted
+e771 pointer NOT modified. Zero unresolved scalar groups does not close cases.
+
+Complete readable report conservation passes:only21 authenticated benchmark
+proof line anchors changed from7efd83e7;ALL other bytes equal. New254508bytes,
+SHAe55333fd62dc89023d99c5be6e9bbff84187950237b48264d55e6f8cb5086cc5.
+Log inactive-paragraph-readable-conservation-20261020.log
+SHAea328ffa58a498f7f7c5cadb9c768f9b1b4a10faf3798bd83bd9959b407a73ff.
+Pending required checks:full candidate section conservation4334/worker26104,
+independent ASTYLAR_AUDIT_COLD=1 named-launcher --check29208/launcher21552/
+worker22276,all confirmed live after export. Logs inactive-paragraph-candidate-
+section-conservation-20261020 and inactive-paragraph-independent-cold-check-
+20261020. Poll SAME handles;no restart or success inference from buffered logs.
+Keep consumed inputs/candidate immutable. Actual changed-section semantic
+conservation and independent cold success must precede main import/publication.
 
 October19 frozen-export proof delta precomputed READ-ONLY:all219 current pointers
 resolve;EXACT published array reconstructed through bounded Git7efd source reads

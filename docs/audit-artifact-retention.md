@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+October20 closed46eaeb4c candidate-validation index is required unpublished
+evidence. It was losslessly LZX-compressed from180681735logical bytes to37793792
+physical bytes;SHA256fb581ba7cfb4666f3cc3abb797fbc4c9aede2133000b0715b3cac116e28fe890
+matches before/after. Retain export,corrected candidate import,readable
+conservation,section conservation and independent cold logs. Original failed
+import command log is setup-failure evidence,not a completed import. Main
+accepted e771 package/store remains retained and unchanged;candidate46ea is not
+accepted until pending conservation/cold/main-import requirements succeed.
+
 October19 inactive-paragraph queued proposal bfc2b6d5 is required additive case
 evidence,not successful scratch. Retain its two property applicability proofs and
 divider-inactive-paragraph-inputs-join-20261019 log. Closed proposal164038361
