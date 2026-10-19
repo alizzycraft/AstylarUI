@@ -2,6 +2,25 @@
 
 ## Current audit pointer — October19
 
+October19 remaining line-box question narrowed from authenticated retained24-case
+report,without recapture: all48 Above/Below pairs resolve reference paragraph
+normal-flow heights19/19/18/22px for light/dark/contrast/custom. Candidate paragraph
+declarations are absolute with heights22/22/19.8/25.299999999999997px;current
+astylar.component.ts:760 explicitly authors22*theme.typographyScale. The retained
+candidate inline spans instead measure19/19/18/22.000000000000004px. Both sides
+record normal line-height and matching16/16/14.4/18.4px font sizes;reference
+inline vertical-align is baseline,candidate resolved verticalAlign is absent.
+Each profile contributes12 pairs. Reference style values are pooled: dereference
+tree.styles[node.style],not node.style as an object. These observations distinguish
+used paragraph height,declared container height and retained inline height;they
+do NOT prove equal line boxes,baseline alignment or a missing core baseline rule.
+The authored fixed-height/absolute structure is already classified,not a new
+renderer diagnosis. Precise missing evidence: anonymous line-box ascent/descent,
+leading and baseline-to-owner geometry;element/style trees do not record these.
+Next inspect retained texture/font-box evidence for those actual metrics before
+any new public/browser measurement. Do not repeat paragraph margin/height census
+or infer anonymous geometry from nearly equal inline retained heights.
+
 October19 retained divider sourceCurrentness join COMPLETE: session19310
 TERMINAL0 authenticates24 original checkpoints/48 trees/1887 served files,
 10 current harness files,workspace lock and exact executable application source.
