@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep native-button-key-applicability-case-join-20261019 log pair,producer and
+queueda5f37bcd with348b80b9 predecessor. Join34295 TERMINAL0 binds24 source/control
+and retained-key applicability children,24 missing-key controls and15099 actual
+dependencies;all2311 cases remain partial. No browser capture,new pixel artifact,
+source replacement or accepted generation rewrite occurred.
+
 Keep divider-paragraph-margin-case-join-20261019 log pair,producer and queued
 348b80b9 with98a56bda predecessor. Join86339 TERMINAL0 adds24 recorded-stage
 children/48 paired paragraphs,48 altered-value controls,15098 validated

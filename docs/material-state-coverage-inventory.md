@@ -2,6 +2,23 @@
 
 ## Current audit pointer — October19
 
+October19 required-state applicability narrowed for24 Core/Toolbar/Card keyboard
+anchors without another capture. Current native opening tags and candidate AST
+records identify exactly core-primary/toolbar-action/card-open native BUTTON
+targets;toolbar/card containers are not composite navigation controls. All24
+authenticated retained cohorts already contain Tab/Enter/Space steps on both
+sides. Do not repeatedly list those keys as undiscovered or invent Arrow/Home/
+End composite navigation for these fixtures. Join34295 TERMINAL0 rejects24
+missing-key controls,validates15099 dependencies/all2311 cases and saves queued
+a5f37bcdbc0266b5dfa06693aaa4e8e4dc6ce45821820b48508f23df1e261539.
+Reversing only24 children/task refinements recovers complete348b80b9. Remaining
+tasks explicitly retain event/focus/action-boundary and local paint checks,plus
+complete input/semantics/currentness;reverse traversal,disabled and intermediate
+release behavior are not certified. Other104 extra keyboard anchors and broader
+relevant-state applicability remain pending. No whole-audit denominator or
+completion percentage inferred. Log native-button-key-applicability-case-join-
+20261019 retains exact source/control witnesses. Accepted4acc unchanged.
+
 October19 divider paragraph margin-stage integration completed from retained
 evidence,not another parser/public capture. All48 paragraph pairs across24 cases
 authenticate native used top/bottom margins equal computed font and zero sides;
