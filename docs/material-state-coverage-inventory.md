@@ -38,6 +38,39 @@ navigation summary,not new acceptance criteria or a substitute for exact records
 
 ## Evidence chronology — retain original scope and checkpoint dates
 
+October20 candidate46ea conservation COMPLETE,independent cold still pending.
+Section4334 TERMINAL0 authenticates84655375packed/2327171274decoded bytes and
+all80 section receipts.0added/removed;ONLY coverage,sourceFingerprints and
+focusedProofs change. All77 other sections,including original full findings/
+controls,are identical;no redundant original-row payload re-extraction needed.
+Log inactive-paragraph-candidate-section-conservation-20261020.log
+SHAbe43596d5bc19b60b24ce9e53bc58a426c106e724c253e061f10d1ba4d08cbe0.
+
+Coverage semantic conservation removes exactly24 inactive-property children and
+recovers ALL2311 complete PRIOR case objects (not2311 completed inspections).
+Every previous dependency remains unchanged;EXACT five additions are two property
+proof logs,the bounded join producer,and current css-transform.ts/grid.service.ts
+receipts. New reader metadata matches actual named-reader output;reversing ONLY
+review selection,added benchmark transition,reviewed helper-current hash and
+explicit boundary description recovers complete old metadata. After accounting
+for those exact changes,ENTIRE previous coverage JSON recovers,including all
+outer coverage,remaining tasks,case dispositions and acceptance flags.
+Log inactive-paragraph-candidate-coverage-conservation-20261020.log
+SHA2b52791201b6fa8b100a25ba7c0845f836f81803ba57aca2b1fe858c8e769377.
+
+Actual frozen producer source/proof arrays independently match candidate AND
+published section digests:738sources,733unchanged/five reviewed replacements;
+219proofs,21line-only moves,all other fields/order unchanged and pointers resolve.
+Candidate source sectioncda35246b0af03ed0269a9ff53e24c2636019847207cf1028a7e72921ed14382;
+proof sectionf1597df7 remains exact preflight result. Log inactive-paragraph-
+candidate-source-proof-conservation-20261020.log
+SHA8c2137ea7b286fe2324236f051575656fde0eea338f8ef65679ce7e9ef5ccb6b.
+All THREE changed sections now have complete bounded semantic explanations;
+readable report conservation already passed. This does NOT replace independent
+cold check29208/worker22276,confirmed LIVE again with advancing CPU/read counters.
+Keep sources/package immutable. Main accepted pointer remains e771/7ca89 until
+cold success then verified main import/publication;no case/renderer acceptance.
+
 October20 frozen export45320 TERMINAL0. Complete progress3270446.5898ms;
 evidence session3072534.4356ms,1collector/10memory hits/1disk hit/0invalidated,
 16358files/1678478467read and verification bytes. Candidate compressed generation
