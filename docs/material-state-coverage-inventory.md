@@ -2,6 +2,30 @@
 
 ## Current audit pointer — October18
 
+October19 canonical milestone preflight avoids a premature full export. One
+read-only streamed census authenticates acceptedcd867bbe packed/decoded hashes,
+all2308516424 decoded bytes/80 sections,and compares the actual current producer
+sourceFingerprints function:727 original/current paths,719 unchanged,EIGHT
+changed,no additions/removals. Exact paths/hashes:accepted-source-receipt-delta-
+20261019 stdout/stderr. Delta is producer,display-request review,registration
+restorer,button integration,caret conservation,and snackbar/boundary/Icon suites;
+no renderer or comparison source appears. This explicit inventory does not
+certify transitive dependencies or payload conservation.
+Existing loadCaseObligationReview preflight TERMINAL1 rejects selected58ec5402
+at Icon suite6f46df64→5b6d0f91 before any export;keep case-review-current-source-
+preflight-20261019 logs. Exact selected-review intersection with those8 paths
+finds only TWO receipt owners:input-boundary suite34f8ec1e→9ef88338 in120 receipt
+slots/100 cases,and Icon suite6f46df64→5b6d0f91 in80 slots/20 cases. Log selected-
+review-source-delta-intersection-20261019. Counts overlap obligations and are not
+whole-case closure. Original58ec review and canonical package remain unchanged.
+Next:authenticate whole two-suite transitions and conservation of the actual
+referenced proof callbacks,then use existing receipt/proposal/loader mechanisms
+for a narrowly bound successor review;do not refresh all receipts or run a full
+builder just to rediscover this stale dependency. Boundary changes are retained-
+map census and current-equality diagnostic wrapper;Icon changes add subset and
+rejection checks. Existing focused outcomes remain separately scoped;the owning
+callback/source conservation still needs explicit proof before receipt reuse.
+
 October19 original button-box integration20011 TERMINAL0,1/1,no skips/cancel,
 reported28120939.1601ms wall duration including the long observation/clock gap;
 do not present that as measured active CPU time. Log button-box-unattributed-
