@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep explicit-line-backing-source-transition-20261019 log pair and producer.
+Whole-current suite/exact additive-test/removal/predecessor hashes authenticate
+an explicit one-path historical reader,which verifies15144 prior dependencies
+and2311 cases. No stored receipt or historical suite file is rewritten. This
+does not authorize transparent historical substitution in current capture or
+default production reads;the boundary must be explicitly selected and verified.
+
 Keep public-explicit-line-backing-20261019 stdout/stderr and frozen adapter
 scripts/audit-public-explicit-line-backing.mjs. It authenticates prior public
 driver/source bundle and serves a separate in-memory diagnostic derivative;
