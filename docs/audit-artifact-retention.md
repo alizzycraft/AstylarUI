@@ -2,6 +2,18 @@
 
 ## Current versus historical evidence
 
+October19 reviewed-boundary join: first atomic proposal write failed ENOSPC,
+leaving only zero-byte be99cd38...json.20528.tmp;failure log/temp preserved. The
+immutable ACCEPTED65e072fd index was LZX-compressed from180114245 logical bytes
+to37679104 physical bytes with SHA2564837b33b2e1e5ced142cc45fcc61b03b898f8e66981fb283f9164d1a198bc95c
+unchanged before/after. Accepted pointer/content were not edited. Retried join
+completed;new closed be99cd38 proposal163892085 logical bytes now occupies
+36564992 physical bytes. RAW envelope hash before/after remains
+17a4de341fb0af5ab613879f96e089deda7c0044ff4396d5a59d3fa1378f8a70
+(not the review digest). No original/failure/unique evidence deleted or repointed.
+Observed free space after compression388849664bytes is a volume observation,
+not proof that every change in free space came from these operations.
+
 October19 checklist-join headroom: closed candidate-validation65e072fd/index.json
 was losslessly LZX-compressed from180114245 logical bytes to37679104 physical
 bytes. SHA256 before/after remained4837b33b2e1e5ced142cc45fcc61b03b898f8e66981fb283f9164d1a198bc95c.

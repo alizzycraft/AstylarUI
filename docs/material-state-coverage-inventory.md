@@ -2,6 +2,45 @@
 
 ## Current audit pointer — October19
 
+Accepted canonical/index:65e072fd/4837b33b (165 source findings,219 focused proof
+anchors). Latest validated QUEUED case review:
+be99cd383dabb304da259cef9046b6b81ce44922c3ae4d8fe6dfc2a76ab33f6f,
+not selected by the production exporter or published as canonical. Its join adds
+exactly80 children to fe692b14 and recovers that complete predecessor on reversal;
+existing loader authenticates15167 dependency receipts/all2311 cases. Receipt:
+divider-reviewed-boundaries-space-retry-20261019.log (TERMINAL0).
+
+Scope remains36 families/436 static+1875 interaction configured cases. Recorded
+whole-case status:0 complete,2311 partial,0 untouched,0 blocked;current rendering
+unverified throughout. Evidence contact is100%,not inspection completion/parity.
+
+| Next requirement review | Already answered; do not repeat | Still to establish |
+| --- | --- | --- |
+| Divider input/structure |48 wrapper requests and inline top attribution;existing classified absolute-flow substitutions. | Remaining material/anonymous-line-box requirements beyond these scoped results. |
+| Divider paint | Configured contrast-DPR1 complete texture footprint;four-theme desktop native/canvas backing and settled-font controls. | Scope of remaining native phase/separator-coverage questions and original full paint criteria;do not transfer public DPR2 residuals here. |
+| Divider ownership |20 observed physical contexts/24 memberships,60 Angular recreations with tracked/registration cleanup and passive peer survival. | Pending-generation/late-font work and other original applicable lifetime/history requirements;settled teardown is not delayed-work cancellation. |
+| Applicability/integration | Newer88-module core/linker/wiring,2280 mapped sources,17 current app sources,55 media/five style identities. | Explicit production reader/source-fingerprint reconciliation for changed owning suite/new queue;runtime/environment boundaries and original final gates. |
+| Whole audit | Complete configured inventory and bounded findings/reproductions remain retained. | Exact obligation/state closure across all36 families and all original final verification/handoff requirements. |
+
+Before another capture,review these remaining requirements against existing
+evidence and choose a specific unresolved question;do not reopen answered
+subquestions merely because a parent still says partial. This table is a current
+navigation summary,not new acceptance criteria or a substitute for exact records.
+
+## Evidence chronology — retain original scope and checkpoint dates
+
+October19 coherent reviewed-boundary join COMPLETE,not canonical publication:
+24 placement,4 native/canvas,4 settled-font,24 mapped-source and24 Angular-lifetime
+children added to exact cases. Every status,remaining task and classification
+unchanged;all original predecessor content conserved. Existing four-source reader
+boundary is executed from its exact authenticated b187103f owner block,not copied
+or broadened. BlockSHAd15efcaec30d491a75cdbad706e2ec7baf41ddbb76f6648a854f0a08d7f8b355.
+Initial proposal write failed ENOSPC (zero-byte temporary retained);no report or
+accepted pointer changed. Hash-preserving accepted-index compression recovered
+headroom;only this join retried,not captures/investigations. Validated proposal
+be99cd38/15167 dependencies/2311 cases now queued. No production-reader selection,
+canonical export,renderer/fixture change or case promotion follows.
+
 October19 complete configured physical Angular lifecycle observation verified:
 divider-angular-cohorts-observed-20261019 TERMINAL0 covers20 source-derived
 physical contexts/24 exact configured memberships,all four profiles and observed
