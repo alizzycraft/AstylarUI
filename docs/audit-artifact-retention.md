@@ -56,6 +56,11 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep post-milestone-source-inventory-current-20261019 stdout/stderr:the exact
+production733-source section matches accepted4acc via existing digester;no
+full report export/read or new generation is produced. Latest queueda5f37bcd
+and all predecessors remain distinct from selected104 canonical coverage.
+
 Keep native-button-key-applicability-case-join-20261019 log pair,producer and
 queueda5f37bcd with348b80b9 predecessor. Join34295 TERMINAL0 binds24 source/control
 and retained-key applicability children,24 missing-key controls and15099 actual

@@ -2,6 +2,20 @@
 
 ## Current audit pointer — October19
 
+October19 post-milestone source reconciliation answers whether recent standalone
+work invalidated the accepted producer inventory:no. Executing the actual current
+sourceFingerprints function and existing token-section digester yields733 rows/
+7331 tokens/SHA0b70b7dee55ceaf2fc4053611bb938aa7d5558b404944f6ece888745684398bf,
+exactly accepted4acc's authenticated section receipt. Producer remains e486c704,
+accepted pointer4acc/index44ca and canonical files unchanged. No full export or
+payload rescan justified just for queued observations. Exact command/receipts in
+post-milestone-source-inventory-current-20261019 log pair. Queueda5f37bcd remains
+the latest case work,NOT selected104 canonical coverage. This proves current
+consumed source inventory,not whole-rendering currentness or final acceptance.
+Remaining shared applicability work includes104 extra keyboard anchors beyond
+the24 native-button records,plus input/paint/semantic/lifetime obligations.
+Do not restart settled focus/pointer/AX histories or invent absent controls.
+
 October19 required-state applicability narrowed for24 Core/Toolbar/Card keyboard
 anchors without another capture. Current native opening tags and candidate AST
 records identify exactly core-primary/toolbar-action/card-open native BUTTON
