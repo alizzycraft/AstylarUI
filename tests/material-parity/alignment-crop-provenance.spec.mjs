@@ -62,6 +62,7 @@ test('configured divider texture observations preserve source frames and bound u
   assert.deepEqual(report.results.map(row => row.case).sort(), selected.map(([kind, row]) => materialCaseKey(kind, row)).sort());
   const assets = new Map(provenance.browserFiles.map(row => [row.file, row.sha256]));
   let targets = 0, interiorPixels = 0, interiorResiduals = 0;
+  let edgeHaloPixels = 0, edgeHaloInkPixels = 0, changedPixelControls = 0;
   for (const row of report.results) {
     assert.deepEqual(row.runtime.errors, []);
     for (const type of ['document', 'script', 'stylesheet', 'font']) assert.ok(row.runtime.assets.some(asset => asset.type === type));
@@ -118,6 +119,31 @@ test('configured divider texture observations preserve source frames and bound u
       assert.equal(modelResiduals, target.id === 'divider-above' ? 9 : 8);
       assert.ok(shiftedGreaterThanTwo > 0, 'one-row wrong-address control must reject');
       interiorResiduals += modelResiduals;
+      // Extend the SAME retained model to its previously omitted plane-edge
+      // band and a one-device-pixel exterior halo. This is an empirical fit,
+      // not a measurement of hardware coverage/sample locations.
+      let firstEdge;
+      for (let y = Math.floor(top) - 1; y <= Math.ceil(bottom); y++) for (let x = Math.floor(left) - 1; x <= Math.ceil(right); x++) {
+        if (x >= Math.ceil(left) && x < Math.floor(right) && y >= Math.ceil(top) && y < Math.floor(bottom)) continue;
+        assert.ok(x >= 0 && y >= 0 && x < frame.width && y < frame.height);
+        const u = (x + .5 - left) / (right - left), v = (y + .5 - top) / (bottom - top);
+        const inside = u >= 0 && u < 1 && v >= 0 && v < 1;
+        const texel = (Math.max(0, Math.min(height - 1, Math.floor(v * height))) * width +
+          Math.max(0, Math.min(width - 1, Math.floor(u * width)))) * 4;
+        const alpha = inside ? texture.rgba[texel + 3] / 255 : 0;
+        const predicted = [0, 1, 2].map(channel => Math.round((inside ? texture.rgba[texel + channel] * alpha : 0) +
+          background[channel] * (1 - alpha)));
+        const pixel = (y * frame.width + x) * 4;
+        assert.deepEqual([...frame.data.subarray(pixel, pixel + 4)], [...predicted, 255],
+          'configured edge/halo disagrees with retained model');
+        edgeHaloInkPixels += predicted.some((value, channel) => value !== background[channel]);
+        edgeHaloPixels++;
+        firstEdge ??= { actual: [...frame.data.subarray(pixel, pixel + 4)], expected: [...predicted, 255] };
+      }
+      assert.ok(firstEdge);
+      const changedEdge = [...firstEdge.actual]; changedEdge[0] = changedEdge[0] === 255 ? 254 : changedEdge[0] + 1;
+      assert.throws(() => assert.deepEqual(changedEdge, firstEdge.expected), 'one-channel edge mutation must reject');
+      changedPixelControls++;
       assert.equal(target.retainedStyle.fontSize, '14.4px');
       // Current context state is not the historical draw-call font.
       assert.equal(texture.font, '10px sans-serif');
@@ -126,7 +152,8 @@ test('configured divider texture observations preserve source frames and bound u
   }
   assert.equal(targets, 8);
   assert.equal(interiorPixels, 5287); assert.equal(interiorResiduals, 68);
-  t.diagnostic('4 configured cases/8 owners/16 texture PNGs authenticated; reversed readback alpha agrees. Existing nearest-texel model predicts5287 interior pixels within1RGB level (68 one-level residuals);wrong-row controls reject. Not plane-edge coverage,native glyph equality or full-case acceptance.');
+  assert.equal(edgeHaloPixels, 1916); assert.equal(edgeHaloInkPixels, 36); assert.equal(changedPixelControls, 8);
+  t.diagnostic('4 configured cases/8 owners/16 texture PNGs authenticated; reversed readback alpha agrees. Existing nearest-texel model predicts5287 interior pixels within1RGB level (68 one-level residuals) and1916 edge/halo pixels exactly (36 nonbackground);wrong-row and8 changed-edge-pixel controls reject. Empirical retained fit,not hardware sample locations,shader identity,native glyph equality or full-case acceptance.');
 });
 assert.equal(hash(previous), '082d6d7b3e0b0e5c1789f3d2ceff8862e3244de5319cc941e79c53fa634d6502');
 

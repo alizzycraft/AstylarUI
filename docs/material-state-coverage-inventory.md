@@ -2,6 +2,29 @@
 
 ## Current audit pointer — October19
 
+October19 configured text edge/halo gap CLOSED for the retained four contrast
+DPR1 contexts/eight owners,not whole-case inspection: existing owning texture
+test extended without new capture/model family. Original source/checkpoint/
+asset/16 PNG/upload/interior assertions remain. SAME nearest-texel straight-alpha
+model predicts1916 previously omitted edge/one-device-pixel exterior-halo pixels
+EXACTLY,including36 nonbackground pixels;5287 interior pixels retain68 one-level
+residuals/none larger. Eight one-channel edge mutations and original wrong-row
+controls reject. Focused original test passes1/1,terminal0,in
+divider-configured-edge-halo-fixed-20261019.log. Initial duplicate local variable
+syntax failure remains in divider-configured-edge-halo-20261019.log;renamed only
+the new negative-control variable. This bounds the COMPLETE local texture
+footprint for these owners,not hardware sample locations,shader identity,
+native-versus-canvas glyph generation,other profiles/DPR2 or all paint.
+Do not repeat upload/interior/edge searches for these bytes or assign public
+DPR2 residuals here. The current evidence places no unexplained >1RGB transfer
+failure between these retained canvas texels and local screenshot footprint.
+Next separate native glyph generation and already classified unequal owner
+composition/placement inputs;retain original public equal-input paint failures.
+No renderer/fixture/threshold changes or case promotion. This additive existing
+suite change requires explicit source-fingerprint applicability reconciliation
+at next coherent integration;accepted65e072fd and its original receipts remain
+unchanged,not silently current for the modified suite.
+
 October19 actual text-material/owner question answered for four desktop DPR1
 profiles,eight owners: audit-material-divider-material-state TERMINAL0 reuses
 the authenticated baseline server/settlement/asset path,not new baseline or
