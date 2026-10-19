@@ -2,6 +2,13 @@
 
 ## Current audit pointer — October19
 
+October19 choice AX bound correction capture1682 is confirmed live. Original
+producer006689a5/report/failure are preserved inGite2207701. Separate bound
+adapter adds exact native captureBrowserInputTree and maintained guarded
+measureAstylarInputs AFTER AX observations,with32 distinct tree paths;no focus,
+theme,action,AX target or settlement replacement. Independent verify and actual
+AX classification/join remain pending. No accepted evidence/case promotion.
+
 October19 choice AX capture72795 TERMINAL1 after collecting16 contexts/64 AX
 targets. Existing supplemental validator rejects absent required paired input
 trees. This is diagnostic-producer omission,not a semantic/parity failure or

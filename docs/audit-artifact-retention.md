@@ -56,6 +56,11 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep choice-ax-bound-20261019 capture/checkpoint/32 paired trees and log pair
+separately from original choice-ax failure. Capture1682 is live;bound adapter
+pins original006689a5 and adds only required post-AX input-tree measurement.
+No original overwrites,PNG capture or successful scratch. Verify before joining.
+
 Keep choice-ax-20261019 original report/checkpoint/logs and producer006689a5:
 capture72795 terminates1 because paired input trees required by existing
 supplemental validator were omitted.64 AX observations are not accepted proof.
