@@ -30,16 +30,17 @@ export function restoreTextBackingProducer(source) {
   if(!current.includes('equal-input explicit line-height backing allocation and logical mapping')){
     assert.ok(!current.includes("'scripts/check-divider-backing-owners.mjs'"),'Unrecognized text backing producer registration');return current;
   }
-  assert.equal(digest(current),'446f4793bdf7c185dcd014672f5756be0e5fed353a4eae82dae0338ad4874fa4');
+  assert.equal(digest(current),'a2771d8cc9a080dc384fcc857a36bde4212f4c417fd8468c143d593bf0a7c48b');
   const tree=ts.createSourceFile('producer.mjs',current,99,true);
   const owner=name=>tree.statements.find(n=>ts.isFunctionDeclaration(n)&&n.name.text===name);
   const proofs=owner('focusedProofInventory').body.statements[0].expression.elements;
   const files=owner('sourceFingerprints').body.statements[0].declarationList.declarations[0].initializer.elements;
   assert.equal(proofs.length,219);assert.ok(proofs[0].getText(tree).includes('equal-input explicit line-height backing allocation'));
-  assert.deepEqual(files.slice(0,4).map(n=>n.text),['scripts/check-divider-backing-owners.mjs','scripts/audit-public-explicit-line-backing.mjs',
-    'artifacts/material-parity/public-explicit-line-backing-20261019.log','artifacts/material-parity/divider-backing-owners-bound-20261019.log']);
+  assert.deepEqual(files.slice(0,5).map(n=>n.text),['scripts/check-divider-backing-owners.mjs','scripts/audit-public-explicit-line-backing.mjs',
+    'artifacts/material-parity/public-explicit-line-backing-20261019.log','artifacts/material-parity/divider-backing-owners-bound-20261019.log',
+    'tests/material-parity/text-backing-case-review-source.mjs']);
   let restored=current;
-  for(const [start,end]of [[proofs[0].getFullStart(),proofs[0].end+1],[files[0].getFullStart(),files[3].end+1]].sort((a,b)=>b[0]-a[0]))
+  for(const [start,end]of [[proofs[0].getFullStart(),proofs[0].end+1],[files[0].getFullStart(),files[4].end+1]].sort((a,b)=>b[0]-a[0]))
     restored=restored.slice(0,start)+restored.slice(end);
   assert.equal(digest(restored),'e486c704013f4d3f132cd9922accd048d745aa27307010218d0967d68d74d84d');return restored;
 }

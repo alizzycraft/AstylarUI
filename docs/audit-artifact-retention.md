@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep text-backing-export-reader-integration,export-registration-integration and
+export-invocation-preflight-20261019 log pairs. Reader verifies current bytes via
+the supplied session reader and records explicit historical-source applicability;
+normal loader stays strict. Dry-run is path/argument evidence only,not export.
+Existing standalone applicability logs remain bound to their earlier helper
+hashes;production reader pins current4a116068 and original60056387 separately.
+
 Keep text-backing-case-review original wrong-suite-predecessor failure and
 separate bound-applicability success log pairs,plus checker producer. Three
 exact historical source reads validate15144 unchanged receipts/all2311 cases;

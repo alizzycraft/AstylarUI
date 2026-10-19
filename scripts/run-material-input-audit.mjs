@@ -15,6 +15,7 @@ import {
 import { materialInputAuditPayloadFile } from '../tests/material-parity/input-audit-report-codec.mjs';
 import { withAuditEvidenceSession, auditReadFileSync } from '../tests/material-parity/audit-evidence-session.mjs';
 import { attachCaseObligationCoverage, assertCaseObligationCoverage } from './audit-findings-store.mjs';
+import { createTextBackingReviewReader, textBackingRetainedReview } from '../tests/material-parity/text-backing-case-review-source.mjs';
 
 const root = process.cwd();
 const options = parseMaterialInputAuditArguments(process.argv.slice(2), root);
@@ -37,8 +38,11 @@ const { audit, errors } = withAuditEvidenceSession(() => {
   const audit = buildMaterialInputAudit(parityReport, { ...options, root });
   if (options.caseObligationReview !== undefined) {
     progress('join-case-obligations');
+    const applicability=options.caseObligationReviewSha256===textBackingRetainedReview
+      ? createTextBackingReviewReader({root,read:auditReadFileSync,reviewSha256:options.caseObligationReviewSha256}) : undefined;
     audit.coverage = attachCaseObligationCoverage(audit.coverage, options.caseObligationReview,
-      options.caseObligationReviewSha256, { root, read: auditReadFileSync });
+      options.caseObligationReviewSha256, { root, read: applicability?.read ?? auditReadFileSync });
+    if(applicability)audit.coverage.inspectionEvidence.sourceApplicability=applicability.sourceApplicability;
   }
   progress('validate-audit');
   assertCaseObligationCoverage(audit.coverage);

@@ -2,6 +2,26 @@
 
 ## Current audit pointer — October19
 
+October19 explicit export-reader integration COMPLETE (not publication):named
+launcher now selects queued33a0bd8b;run-material-input-audit selects the bounded
+reader ONLY for that exact digest and records sourceApplicability separately
+in inspection evidence. Default loadCaseObligationReview remains strict. Adapter
+reads current bytes through supplied evidence-session reader before returning
+receipt-authenticated historical text;concurrent drift still rejects. Existing
+store suite integration38768 TERMINAL0 validates2311 retained cases and wrong
+review/three source drift/after-construction drift controls. Registration suites
+49039 TERMINAL0,10/10. Named launcher dry-run verifies complete paths/selected
+digest,NOT report validation. New reader module is the fifth added source path:
+source inventory now738;producer exact reversal still recovers e486c704 after
+removing one proof/five paths. Helper current4a116068 is separately guarded by
+reader while historical60056387 remains original evidence. Earlier standalone
+checker/logs retain their older8168 helper scope;do not rerun them as current
+without their own boundary. Logs text-backing-export-reader-integration,
+text-backing-export-registration-integration and text-backing-export-invocation-
+preflight-20261019 preserve scope. Next justified export/check milestone with
+storage headroom and independent candidate conservation/cold validation;accepted
+4acc/164/218 remains unchanged. No renderer/fixture/criteria change or case closure.
+
 October19 queued-review source applicability COMPLETE under explicit boundary:
 source receipt census117 paths finds EXACTLY3 drifted files among15144 receipt
 paths:policy,suite,registration helper. check-text-backing-case-review restores

@@ -4,6 +4,31 @@ import * as fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { importFindings, queryFindings, verifyFindings, saveReviewProposal, loadFindingEvidence, loadCaseObligationReview, attachCaseObligationCoverage, assertCaseObligationCoverage, caseInspectionObligations, describeCaseInspectionCoverage } from '../../scripts/audit-findings-store.mjs';
+import { createTextBackingReviewReader, textBackingRetainedReview } from './text-backing-case-review-source.mjs';
+
+test('retained text backing review uses explicit tracked source applicability without changing receipts',()=>{
+  const root=process.cwd(),file=`artifacts/material-parity/working-audit/proposals/${textBackingRetainedReview}.json`;
+  const review=JSON.parse(fs.readFileSync(file)).review;
+  const applicability=createTextBackingReviewReader({root,read:fs.readFileSync,reviewSha256:textBackingRetainedReview});
+  assert.equal(applicability.sourceApplicability.transitions.length,3);
+  const cases=review.groups.map(g=>g.case);
+  const result=loadCaseObligationReview(file,textBackingRetainedReview,cases,{root,read:applicability.read});
+  assert.equal(result.cases.length,2311);assert.equal(result.currentRenderingAccepted,false);assert.equal(result.inspectionComplete,false);
+  for(const transition of applicability.sourceApplicability.transitions){
+    assert.notEqual(transition.currentSha256,transition.historicalSha256);
+    const absolute=path.resolve(root,transition.logicalFile);
+    const original=fs.readFileSync(absolute);
+    assert.equal(createHash('sha256').update(original).digest('hex'),transition.currentSha256);
+    assert.equal(createHash('sha256').update(applicability.read(absolute)).digest('hex'),transition.historicalSha256);
+    assert.throws(()=>createTextBackingReviewReader({root,reviewSha256:textBackingRetainedReview,
+      read(name,...args){const value=fs.readFileSync(name,...args);return path.resolve(name)===absolute?value.toString()+'\n// drift':value;}}));
+  }
+  assert.throws(()=>createTextBackingReviewReader({root,read:fs.readFileSync,reviewSha256:'0'.repeat(64)}));
+  let drift=false;
+  const tracked=createTextBackingReviewReader({root,reviewSha256:textBackingRetainedReview,
+    read(name,...args){const value=fs.readFileSync(name,...args);return drift?value.toString()+'\n// drift':value;}});
+  drift=true;assert.throws(()=>tracked.read(path.resolve(root,applicability.sourceApplicability.transitions[0].logicalFile)));
+});
 import { createHash } from 'node:crypto';
 import { encodeMaterialInputAuditStream } from './input-audit-report-stream.mjs';
 import { withAuditEvidenceSession, auditReadFileSync } from './audit-evidence-session.mjs';

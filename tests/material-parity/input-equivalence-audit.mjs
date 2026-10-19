@@ -8926,6 +8926,7 @@ function sourceFingerprints(root) {
     'scripts/audit-public-explicit-line-backing.mjs',
     'artifacts/material-parity/public-explicit-line-backing-20261019.log',
     'artifacts/material-parity/divider-backing-owners-bound-20261019.log',
+    'tests/material-parity/text-backing-case-review-source.mjs',
     'tests/material-parity/legacy-clip-support-input.spec.mjs',
     'scripts/audit-public-legacy-clip.mjs',
     'artifacts/material-parity/public-legacy-clip-valid-input-20261018/latest-report.json',

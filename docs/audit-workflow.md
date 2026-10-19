@@ -149,6 +149,15 @@ root-cause/history/ownership, regression and handoff requirements.
 
 The loader validates structure, exact membership, review digest and every evidence
 receipt; it cannot independently establish the truth of a reviewer conclusion.
+For the exact retained33a0bd8b review,the export runner selects
+text-backing-case-review-source.mjs explicitly and records sourceApplicability.
+It authenticates three current files through the session reader,then restores
+only the reviewed additive policy/test/helper transitions to their original
+receipts. Normal loader reads remain strict;other review IDs cannot select this
+boundary. Historical receipt validity does not imply current rendering or
+inspection closure. The named launcher selects this newer review;its dry run
+checks paths/arguments only. The accepted package is not updated until actual
+export,conservation and independent verification/import complete.
 Schema-2 inspection completion is derived from all configured cases being joined
 and closed. Current rendering remains unverified and its acceptance flag stays
 false. Final canonical/browser/release gates and the original acceptance criteria
