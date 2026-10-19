@@ -1,5 +1,16 @@
 # Material audit: evidence-led implementation priorities
 
+October19 new bounded text-allocation mechanism:custom18.4px normal line-height
+roundtrip18.4*(22/18.4)=22.000000000000004 reaches canvas.ceil→23px,while live
+mesh remains22px with full UV range. Exact live canvas-copy ancestry distinguishes
+final draw from transient metrics. Current/installed complete14canvas-renderer/
+23text-rendering methods match. Keep this separate from authored divider offsets
+and the existing transparent-backing/fractional-phase finding. Next captured
+executable binding and minimal equal-input backing/UV reproduction;not authorized
+to fix via layout rounding,fixture dimensions or offsets. See current coverage
+ledger and divider-live-baseline-copy-diagnostic-20261019 evidence. No complete
+case or current raster acceptance follows.
+
 October19 audit-continuation priority:whole-case divider requirement review now
 separates three receipt-bound authored exclusions from five genuine applicable
 areas.72 exclusion metadata gaps close without changing dispositions;24 cases

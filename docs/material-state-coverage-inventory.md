@@ -2,6 +2,30 @@
 
 ## Current audit pointer — October19
 
+October19 custom-profile backing mechanism narrowed WITHOUT another capture:
+actual normal parser returns fontBoxHeight/fontSize. Numeric execution gives
+18.4*(22/18.4)=22.000000000000004;createStyledCanvas ceilings this to23 backing
+pixels atDPR1 (text-canvas-renderer.service.ts:43–48). measureTextBounds multiplies
+the numeric line-height back by fontSize(:355). renderTextToTexture allocates
+DynamicTexture at canvas backing size,copies at0,0 and separately retains CSS
+logical dimensions(text-rendering.service.ts:152–183). Renderer uses logical
+texture size for mesh projection(renderer.service.ts:287),while observed live
+UV/texture matrix retains full backing range. Current/emitted/installed complete
+method inventories agree14canvas-renderer and23text-rendering methods;prior
+parser23-member comparison remains. This identifies a FLOATING ROUNDTRIP→CEIL
+amplification before final texture sampling,not a reason to round CSS layout,
+adjust fixture offsets or enlarge its mesh. Observed custom22/23 scale moves
+local y17 to16.2608695652 relative to mesh top under affine mapping. The initial
+authoring position and this scale contribution must remain distinct.
+Existing core-text-transparent-backing-and-local-raster-phase finding covers
+different transparent/phase mechanisms;do NOT silently attribute this arithmetic
+to that proof or claim it already tests integer-allocation UV compensation.
+Next bind captured executable owners and add the smallest equivalent fractional
+height reproduction to the existing text evidence,then classify this bounded
+allocation/sampling behavior. No generic raster/sharpness verdict yet;all24
+cases remain partial. This answers why integer-looking custom CSS height can
+allocate23px without requiring another baseline/texture-identity capture.
+
 October19 live texture identity ambiguity CLOSED in four desktopDPR1 profiles:
 copy-aware diagnostic14088 TERMINAL0 authenticates served bytes and records8
 live owners. Each live backing has exactly ONE source canvas with matching
