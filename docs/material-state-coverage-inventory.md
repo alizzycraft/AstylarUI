@@ -2,6 +2,28 @@
 
 ## Current audit pointer — October19
 
+October19 original checkbox/radio configured-focus gap inspected across16 exact
+contexts (four profiles,desktopDPR1/2),not reused Tab/arrow evidence. Capture73222
+and independent verify TERMINAL0,reportSHA
+ac05ed5e8d3c04c7182290f42b47d9996e492e2c92d93375067ec57dc7f2304d.
+All32 side sequences contain exactly focus/focusin,stable event/active owner,
+no observed blur and no focused-target mutation. Checkbox focuses native INPUT
+versus candidate checkbox-role DIV;radio focuses first solo on BOTH sides,
+including tabindex=-1,not selected-team Tab navigation. Thus picker focus-loss
+cannot be generalized to these unchanged focus actions. Updates,keyboard
+activation,paint and equal-input mapping remain independent;no regression fix.
+New driver reuses exact maintained actions/base graph and frozen event/mutation
+observers;no PNGs,changed controls or corrective focus. Observer timing remains
+a limitation. Case join25848 TERMINAL0 rejects32 changed identity/event controls,
+validates14535 dependencies/all2311 cases and saves queued
+beda645a72d8c899b7732104bb258d55fdff68eeeb834e2dc25988d36d710683.
+Sixteen focus children and precise original-action task refinements reverse to
+complete e835378e;all other evidence/tasks and partial whole-case statuses stay.
+Logs choice-focus-mutations-{capture,independent-verify,case-join}-20261019 retain
+receipts/results. Frozen export27180 remains confirmed live on104d7c61;accepted
+e7a91 unchanged. Next use beda645a for outstanding exact action/input/paint work,
+not another original checkbox/radio focus capture without relevant input drift.
+
 October19 divider history integration gap closed without another survey/capture.
 Existing October15 logb92b250b authenticates five source-changing commits and
 all eight current selector lines;current authoring71e2d41f still agrees exactly.

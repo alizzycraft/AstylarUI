@@ -56,6 +56,15 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep choice-focus-mutations-20261019 with checkpoint,input trees and capture,
+independent-verify,case-join stdout/stderr. Producer is frozen at capture;
+reuses receipt-bound picker event/mutation producers without modifying them.
+Keep queued beda645a and e835378e predecessor:16 focus children/task refinements
+reverse exactly,14535 dependencies validate. No PNGs or successful scratch added.
+Absence of observed blur/mutation during configured focus does not supersede
+keyboard/update failures or authorize original evidence deletion. Frozen export
+still selects104d7c61;new queue is not accepted canonical/current rendering.
+
 Keep divider-coordinate-branch-history-case-join-20261019 stdout/stderr with
 original October15 history logb92b250b,queued e835378e and1c43e733 predecessor.
 Twenty-four branch-history children/task refinements reverse exactly;14499
