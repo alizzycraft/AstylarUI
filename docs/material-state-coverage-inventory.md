@@ -2,6 +2,29 @@
 
 ## Current audit pointer — October19
 
+October19 newer-divider captured library applicability narrowed without rebuild:
+original existing current-runtime-member test passes1/1 (divider-current-library-
+member-reuse-20261019.log),retaining its1583 equal/one inspection-method historical
+drift conclusion. Complete older/newer map comparison finds SAME88 module IDs,
+87 complete modules identical after comment/whitespace-only formatting,and only
+lib/astylar.js changed. New-capture checker executes the SAME owning callback
+against exact newer8692027f map,without historical inspector restoration;all88
+complete captured-installed modules reproduce through consumer Angular20.3.31
+linker,and ALL1584 current class members agree,zero differences. Original callback
+and historical map remain unchanged;exact six selection/expectation substitutions
+and original/selected callback digests are in divider-current-library-new-capture-
+20261019.log. Module-effects/imports/generated metadata remain in the captured-
+versus-installed complete-module assertion;current TS comparison is explicitly
+class-member only. This closes the old diagnostic-member drift for this NEW
+capture,not complete current TS top-level wiring/Angular metadata equivalence,
+all dependency/environment/font applicability,execution coverage or rendering.
+Producer scripts/check-divider-current-library-members.mjs;no source/test/fixture
+or criteria changed. Existing older dependency census is reused,not reinterpreted
+as newer-capture full-runtime acceptance. Next identify remaining actual top-level
+current-source boundary and join this bounded result at a coherent case batch;
+do not repeat88 class/member/linker derivations absent changed inputs. Standalone
+evidence not yet in queuedfe692b14/canonical65e072fd;all whole cases stay partial.
+
 October19 retained inline-owner placement question answered,TERMINAL0:
 check-divider-inline-owner-placement authenticates24 report rows/48 text owners
 and paired trees. Complete layoutInlineChildren method agrees across current
