@@ -1,5 +1,16 @@
 # Material audit: evidence-led implementation priorities
 
+October19 actual divider context extension of existing transparent-backing/
+local-phase finding: eight native Roboto owners across four desktop DPR1 themes
+match opaque canvas controls byte-for-byte at measured baselines;transparent
+controls differ before Babylon (maximum79–117RGB levels). Measured/rounded Y
+controls are identical within these tested phases only. Keep distinct from the
+separate23px backing/22px logical-size allocation finding,unequal absolute wrapper
+authoring and public DPR2 sampling uncertainty. No opaque-atlas workaround,
+layout snapping or fixture offsets are justified. Exact recipe,32 visible-pixel
+controls,asset receipts and limitations are in the current coverage ledger and
+divider-native-canvas*-20261019 logs;not yet integrated into canonical65e072fd.
+
 October19 accepted publication checkpoint: independent cold41341 and accepted
 import7975 both TERMINAL0. Main65e072fd/index4837b33b matches the separately
 validated candidate index exactly;165 findings/219 focused proof anchors/738

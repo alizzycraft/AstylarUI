@@ -2,6 +2,33 @@
 
 ## Current audit pointer — October19
 
+October19 actual-divider native/canvas generation boundary answered in four
+desktop DPR1 themes,eight Above/Below owners,Chrome155.0.8059.80. Reference-only
+diagnostic reuses the authenticated server/font settlement;1887 served receipts
+unchanged and518 actual assets per page authenticate. Native measured-baseline
+markers preserve paragraph/text bounds. All16 opaque controls (alpha:false plus
+painted actual background;measured and rounded baseline) match EVERY native crop
+RGBA byte. All16 transparent controls differ before Babylon:236–358 pixels per
+owner,maximum79–117RGB levels after straight-alpha background composition. Each
+measured/rounded pair is byte-identical for BOTH backing modes in these contexts;
+this is not a universal baseline-snapping rule or DPR2 conclusion. Requested and
+actual canvas font strings match native16/14.4/18.4px Roboto stacks;no independent
+physical fallback-font selection claim. This extends EXISTING
+core-text-transparent-backing-and-local-raster-phase to actual theme/font
+contexts,not a new core finding or sole explanation for Material placement.
+Capture divider-native-canvas-20261019.log SHA256
+af1d47ea60c1b7b1052d5fad5e2a0f9d59185bfaa2c40ec16b8ef174a2a15f35,
+producer952b352949f014f40f43916b834dc79ca6ed8f40958743667623886302cb3b6f.
+Independent array/asset replay TERMINAL0 recomputes all32 probe comparisons and
+rejects32 visible-pixel mutations;recipe/receipt in divider-native-canvas-visible-
+control-verification-20261019.log SHA29425dc24fc6c821c5009cac3299c608b3c2caf67663920e393161f4dcc921b3.
+Original verifier's invisible RGB mutation on alpha0 correctly failed its
+expected-visible-change assertion;failure retained,control now changes an opaque
+composited pixel. Do not make production atlases opaque or tune fixture positions.
+Remaining: exact native/Astylar local-phase/backing relation,already unequal
+owner composition/line boxes,other contexts and original full acceptance gates.
+Standalone evidence not yet in queuedfe692b14/canonical65e072fd;no status promotion.
+
 October19 coherent divider paint checklist join COMPLETE,not canonical export:
 join-material-divider-paint-boundaries TERMINAL0 attaches24 exact wrapper-input
 children,four static-desktop diagnostic material-state children,and four exact
