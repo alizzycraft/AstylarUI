@@ -164,4 +164,3 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
     console.log(JSON.stringify(verifyProgressAssociationCapture(JSON.parse(readFileSync(file)), file)));
   } else await capture(path.resolve(process.argv[2] ?? ''));
 }
-

@@ -56,6 +56,15 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep progress-region-host-ax-eof-source-conservation and its -bound success,
+original bounded-case-join failure and bounded-case-join-verified success logs.
+Gitf7ed600a preserves the reduced producer's original11815 bytes;the current
+source removes only one final LF. Frozen capture/source receipts stay unchanged.
+Existing readBytes replay authenticates this exact one-file boundary and rejects
+other drift;strict default remains strict. Queued d672395e retains ecdab1b9 by
+complete reversal and carries the 40 bounded AX observations without closing
+parents. No third capture,new framework,original deletion or receipt rewrite.
+
 Keep progress-region-host-ax-20261019 and progress-region-host-ax-reduced-20261019,
 their separate checkpoints,64 input trees per capture,full/partial AX
 graphs and all capture/verify/control logs. Both producer source files are

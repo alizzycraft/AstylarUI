@@ -21,6 +21,28 @@ No old capture,predecessorcd867bbe or failure evidence removed. Next:continue
 exact case-obligation work from the validated queue;do not repeat this export/
 cold/conservation milestone without relevant source drift. Final gates unchanged.
 
+October19 bounded progress AX join21110 TERMINAL0:latest queued successor
+d672395e3b22f47b9af855ff26dc70e2b92429e8efeeed34fa28b1ef3c5a48b5
+validates all2311 cases/14454 dependencies.40 supplemental initial-region/host
+observations map32 physical contexts while retaining each case's exact raw
+class-order differences and six missing frame capture fields. All40 semantics
+parents stay partial;no remaining work,status or equivalence flag changes.
+Removing only those40 children recovers entire ecdab1b9 predecessor. Accepted
+e7a91/index4032 and selectedab4b are unchanged. Log progress-region-host-ax-
+bounded-case-join-verified-20261019 retains exact proof/recipe. This integrates
+bounded observations,not full configured-input/current-code acceptance.
+EOF formatting caveat is now resolved without recapture:current reduced driver
+removes EXACTLY one final LF;all other bytes equal Gitf7ed600a's original11815
+bytes,whose hash matches the frozen capture. Existing validateSupplementalCapture
+readBytes supplies that ONE authenticated historical source;all other reads are
+actual. Strict default still rejects the old source hash. Positive replay and
+two source-drift controls pass;scoped diff check is clean. Log progress-region-
+host-ax-eof-source-conservation-bound-20261019 supersedes the earlier pending
+caveat only. Original EOF check failed an overly exact diagnostic-message match
+(Node appends hash details);initial bounded join stopped on that empty log before
+saving anything. Both failures remain. The owning validator/assertions were
+unchanged;no historical capture/receipt was rewritten. No new canonical export.
+
 October19 progress region/host association gap now has actual retained-build
 AX observations,not the old host-only/derived-DOM comparison. Two purpose-bound
 drivers reuse existing supplemental/checkpoint/served-asset infrastructure;

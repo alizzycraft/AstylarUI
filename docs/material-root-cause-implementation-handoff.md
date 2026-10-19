@@ -5,7 +5,7 @@ Current evidence pointer (October19):accepted packagee7a91a22/index4032a569 has
 and accepted import8224 terminate0. All80 sections conserve:72 identical,eight
 with183 exactly explained source/receipt/proof-line changes and exact successor
 coverage. Complete readable report conserves except28 authenticated proof lines.
-Accepted index is byte-identical to the independent candidate. Queued ecdab1b9
+Accepted index is byte-identical to the independent candidate. Queued d672395e
 (including progress/list/source-applicability additions) and legacy clip/new AX
 evidence remain outside this generation. All2311 cases stay partial/unverified.
 This is audit evidence acceptance,not current rendering or final-gate acceptance.
