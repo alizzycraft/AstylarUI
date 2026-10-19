@@ -1,5 +1,16 @@
 # Material audit: evidence-led implementation priorities
 
+October19 audit-continuation priority:whole-case divider requirement review now
+separates three receipt-bound authored exclusions from five genuine applicable
+areas.72 exclusion metadata gaps close without changing dispositions;24 cases
+remain partial. Existing semantics/public remount/history answers must not be
+recaptured as if missing. Next inspect actual current served-build applicability:
+all24 case records still explicitly lack a matching current served capture.
+Input/material-property,paint attribution and Angular-versus-public lifetime
+bounds remain real work. See current coverage table,queued84d695d9 and exact
+exclusion-requirements join log. Original unfiltered harness failure/final
+criteria remain intact;this is not renderer implementation authorization.
+
 October19 pointer first-cause extension covers113 configured actions:122 control
 blurs directly bind existing attribute-refresh,descendant and root replacement
 owners,distinct from113 CANVAS handoffs. Existing complete four-method current/

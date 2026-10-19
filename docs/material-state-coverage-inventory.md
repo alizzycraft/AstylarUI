@@ -2,6 +2,35 @@
 
 ## Current audit pointer — October19
 
+October19 whole-case divider requirement review,not another symptom survey:
+all24 cases have three justified exclusions and FIVE still-partial applicable
+obligations. Existing exclusion records lacked the per-obligation evidence and
+conclusion fields required by eventual closure. Join9782 TERMINAL0 executes the
+actual original passive classifier on all216 native/240 candidate recorded nodes,
+rejects7 inserted interactive/writable controls and adds72 receipt/conclusion
+linkages WITHOUT changing applicability,dispositions or completion flags.
+Queued84d695d9dd852ac2018b8eeefc7d1f01afaa299f030857e6656d98088d206b14
+validates15143 dependencies/all2311 cases;reversing only72 added field sets
+recovers complete7ed334d5. This is a bounded predicate execution,NOT a passing
+rerun of the combined original test. Full harness still records that test failing
+at later runner receipt86ece08b versus584cdfc8 (log lines249976–249998).
+
+Current divider closure work,with existing criteria unchanged:
+
+| Obligation | Already established | Still required |
+| --- | --- | --- |
+| Activation/editing/programmatic focus | All24 authored exclusions now receipt/conclusion bound. | No invented interactive variants;do not repeat passive-node census. |
+| Input/style/structure | Ordered recorded owners,classified scalar inputs,paragraph/font/wrap/margin stages and compensation histories. | Finish material-property/anonymous line-box stage correspondence and remaining owner applicability;unequal inputs must not be called equivalent. |
+| Local paint | Retained failures/endpoints,separator footprints and fresh measured text crops. | Remaining coverage/compositing and equal-input paint attribution,crop-producer applicability,current gates. |
+| Semantics | Actual separator/ancestor AX and authored sibling relationships. | Current served-runtime applicability/final gates;not another identical AX capture. |
+| History/ownership | Initial and later coordinate history,unchanged fixed-height lineage,and all24 public-remount evidence joins. | Causal/later-owner/Angular-versus-public lifetime boundaries and remaining live-source applicability;do not treat public remount as Angular teardown. |
+| Source currentness | Exact source inventory and bounded owner proofs. | All24 still explicitly report historical-served-build-differs/no matching current capture. Reconcile actual current served build before claiming current rendering,then original enforced final gates. |
+
+Next decisive check is current served-build/runtime applicability preflight,not
+more shortcut/pointer/AX recaptures. No case is promoted or criterion weakened;
+whole-case closure remains0. Exact log divider-exclusion-requirements-case-join-
+20261019 retains predicate/case/dependency receipts.
+
 October19 actual date-key callback payload integration COMPLETE for8 contexts.
 Join65615 TERMINAL0 rejects40 altered modifier/code/owner/open-state controls,
 validates15142 dependencies/all2311 cases and saves queued

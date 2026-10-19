@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep divider-exclusion-requirements-case-join-20261019 log pair,producer and queued
+84d695d9 with7ed334d5 predecessor. Join9782 TERMINAL0 authenticates456 recorded
+nodes,72 existing-exclusion evidence/conclusion linkages,7 controls and15143
+dependencies. Full combined-test runner-receipt failure remains preserved and
+is NOT overwritten by this bounded original-predicate execution. No capture,
+new raster artifact,disposition change or accepted-package rewrite occurred.
+
 Keep datepicker-key-payload-case-join-20261019 log pair/producer and queued7ed334d5
 with23f01644 predecessor. Join65615 TERMINAL0 binds8 direct payload children,
 40 altered-value controls,15142 dependencies and complete predecessor recovery.
