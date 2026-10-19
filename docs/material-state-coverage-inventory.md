@@ -2,6 +2,20 @@
 
 ## Current audit pointer — October19
 
+October19 justified full export STARTED,session89952,launcher1388/child23212:
+named current-ancestry launcher supplies all original reports plus queued33a0bd8b
+and its explicit source-applicability reader. Accepted archive4acc raw compressed
+SHA authenticates before start;docs canonical was clean. Free space460333056bytes
+before launch;no new browser matrix/build. Actual process23212 observed live with
+CPU73.81seconds/working set2474766336bytes while logs initially empty during
+module initialization. Logs text-backing-queued-export-20261019 stdout/stderr.
+This is a LIVE milestone,not success,publication or validation evidence. Next
+poll SAME handle/process;do not restart for empty logs or observation timeout.
+Keep consumed source files unchanged during evidence session. After terminal
+success inspect candidate conservation and independently cold-check/import;
+after failure preserve exact failure and resolve owning applicability gap before
+any retry. Accepted4acc remains the last verified package until those checks.
+
 October19 explicit export-reader integration COMPLETE (not publication):named
 launcher now selects queued33a0bd8b;run-material-input-audit selects the bounded
 reader ONLY for that exact digest and records sourceApplicability separately
