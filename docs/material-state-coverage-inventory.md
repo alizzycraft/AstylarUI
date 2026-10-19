@@ -2,6 +2,24 @@
 
 ## Current audit pointer — October19
 
+October19 source registration COMPLETE for core-text-backing-ceil-rescales-logical-
+line-height:165 source definitions/219 focused proof anchors,FOUR new evidence/
+producer inventory paths. Accepted4acc package remains164/218,not republished.
+Existing restoration chain now removes EXACTLY one new definition/one proof/four
+paths and recovers whole prior policyda0c6f33/producere486c704;no predecessor
+finding or original assertion removed. Policy public proof names two paired
+explicit22px cases,one backing mismatch,and explicitly leaves DPR2/fonts/pixel
+impact open. Initial altered-id control exposed absence-fallback bypass;bound
+guard rejects renamed additions rather than silently accepting them as absent.
+Focused2/2,full clip/predecessor suite4/4 and selected registration ancestry3/3
+pass;logs text-backing-registration-bound-focused,text-backing-clip-predecessor-
+integration,text-backing-registration-ancestry-20261019. No full harness/browser
+gate implied. Source/export reconciliation now has genuine consumed changes;
+next coherent milestone must reconcile new737-source inventory and registry
+with historical producers before export/cold/import. Do not describe prior733
+match as current after these additions. New queued case evidence and remaining
+whole-case paint/lifetime obligations still require integration;no promotion.
+
 October19 additive-suite source transition VERIFIED,58836 TERMINAL0:
 check-explicit-line-backing-source-transition pins whole current normalized
 suite171bf9fa,removes exactly one named test via TS AST and recovers COMPLETE

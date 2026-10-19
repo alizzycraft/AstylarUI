@@ -110,6 +110,25 @@ export const reviewedValueNormalizations = Object.freeze([
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    id: 'core-text-backing-ceil-rescales-logical-line-height',
+    introducedBy: 'current installed and captured owner agreement; first-bad revision not established',
+    file: 'src/app/services/text/text-canvas-renderer.service.ts',
+    pattern: String.raw`canvas\.height = Math\.ceil\(dimensions\.height \* devicePixelRatio\);`,
+    classification: 'confirmed-core-renderer-defect',
+    owner: 'text logical-size, backing allocation and texture UV sampling boundary',
+    focusedProof: 'tests/material-parity/input-boundary-evidence.spec.mjs: equal explicit line height isolates text backing allocation from authored geometry',
+    evidence: [
+      { file: 'artifacts/material-parity/public-explicit-line-backing-20261019.log', sha256: '6a480999fe86e2d1ae7b19b79b7949ad79f13d83cf2a2b1a5a3fbe55d2463d74' },
+      { file: 'artifacts/material-parity/divider-backing-owners-bound-20261019.log', sha256: '3089be882519251bfda7c660ad1c050edbce7421f3cda67de0c84dd8e26bf13a' },
+    ],
+    observation: { component: 'public plugin-free paragraph/span', property: 'allocated versus logical text height',
+      states: ['explicit 22px line-height at 16px and 18.4px Arial'], dpr: [1],
+      reference: 'both CSS paragraph heights22px', astylar: 'both logical heights22px; backing22px control versus23px fractional-font case with full UV range',
+      stage: 'line-height multiplier roundtrip, integer backing allocation, then logical-size texture mapping' },
+    publicReproduction: { pairs: 2, matchedGeometryControls: 2, backingMismatchCases: 1, currentRenderingAccepted: false },
+    justification: 'Both sides retain identical public SiteData/CSS intent and 22px container geometry without Material offsets. 18.4*(22/18.4) produces22.000000000000004 before ceil allocates23px;16px control allocates22px. Full UV range maps the backing onto logical22px text. Five complete installed/captured methods agree under explicit syntax-only normalization. Native local baseline and raw draw y agree;this does not prove projected glyph equality or quantify blur/antialiasing. Preserve CSS fractional dimensions;fix at allocation/sampling boundary rather than round layout or retune fixtures. Separate existing transparent-backing/local-phase mechanisms and independent normal-strut mismatch. DPR2,other fonts and pixel-level impact remain open.',
+  }),
+  Object.freeze({
     "id": "core-legacy-css-clip-not-translated",
     "introducedBy": "current public support observation and complete resolver-owner agreement;first-bad runtime revision not established",
     "file": "src/lib/astylar-document-style-resolver.ts",

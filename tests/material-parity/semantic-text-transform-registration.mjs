@@ -11,8 +11,40 @@ const borderId = 'core-fractional-border-edge-paint-disagrees-with-native';
 const inlineId = 'core-inline-replaced-row-omits-parent-line-box';
 const focusId = 'core-semantic-attribute-refresh-removes-focusability';
 const clipId = 'core-legacy-css-clip-not-translated';
+const backingId = 'core-text-backing-ceil-rescales-logical-line-height';
+export function restoreTextBackingPolicy(source) {
+  const current=normalized(source);
+  if(!current.includes(backingId)){
+    assert.ok(!current.includes('both logical heights22px'),'Unrecognized text backing policy registration');return current;
+  }
+  assert.equal(digest(current),'59830913045a108948c812fc4a9eb210c0a94a9466e1a3354db480a7e0bd110f');
+  const tree=ts.createSourceFile('policy.mjs',current,99,true);
+  const entries=tree.statements.filter(ts.isVariableStatement).flatMap(n=>[...n.declarationList.declarations])
+    .find(n=>n.name.getText(tree)==='sourceAuditDefinitions').initializer.arguments[0].elements;
+  assert.equal(entries.length,165);assert.ok(entries[0].getText(tree).includes(backingId));
+  const restored=current.slice(0,entries[0].getFullStart())+current.slice(entries[0].end+1);
+  assert.equal(digest(restored),'da0c6f3359f1146b07a9cd1f686c184df55185bbc0517c3a7df832f40e5c1512');return restored;
+}
+export function restoreTextBackingProducer(source) {
+  const current=normalized(source);
+  if(!current.includes('equal-input explicit line-height backing allocation and logical mapping')){
+    assert.ok(!current.includes("'scripts/check-divider-backing-owners.mjs'"),'Unrecognized text backing producer registration');return current;
+  }
+  assert.equal(digest(current),'446f4793bdf7c185dcd014672f5756be0e5fed353a4eae82dae0338ad4874fa4');
+  const tree=ts.createSourceFile('producer.mjs',current,99,true);
+  const owner=name=>tree.statements.find(n=>ts.isFunctionDeclaration(n)&&n.name.text===name);
+  const proofs=owner('focusedProofInventory').body.statements[0].expression.elements;
+  const files=owner('sourceFingerprints').body.statements[0].declarationList.declarations[0].initializer.elements;
+  assert.equal(proofs.length,219);assert.ok(proofs[0].getText(tree).includes('equal-input explicit line-height backing allocation'));
+  assert.deepEqual(files.slice(0,4).map(n=>n.text),['scripts/check-divider-backing-owners.mjs','scripts/audit-public-explicit-line-backing.mjs',
+    'artifacts/material-parity/public-explicit-line-backing-20261019.log','artifacts/material-parity/divider-backing-owners-bound-20261019.log']);
+  let restored=current;
+  for(const [start,end]of [[proofs[0].getFullStart(),proofs[0].end+1],[files[0].getFullStart(),files[3].end+1]].sort((a,b)=>b[0]-a[0]))
+    restored=restored.slice(0,start)+restored.slice(end);
+  assert.equal(digest(restored),'e486c704013f4d3f132cd9922accd048d745aa27307010218d0967d68d74d84d');return restored;
+}
 export function restoreLegacyClipPolicy(source) {
-  const current = normalized(source);
+  const current = restoreTextBackingPolicy(source);
   if (!current.includes(clipId)) return current;
   assert.equal(digest(current), 'da0c6f3359f1146b07a9cd1f686c184df55185bbc0517c3a7df832f40e5c1512',
     'unreviewed legacy clip policy change');
@@ -25,7 +57,7 @@ export function restoreLegacyClipPolicy(source) {
   return restored;
 }
 export function restoreLegacyClipProducer(source) {
-  const current = normalized(source);
+  const current = restoreTextBackingProducer(source);
   if (!current.includes('public legacy CSS clip support limitation and retained controls')) return current;
   assert.equal(digest(current), 'e486c704013f4d3f132cd9922accd048d745aa27307010218d0967d68d74d84d',
     'unreviewed legacy clip producer change');

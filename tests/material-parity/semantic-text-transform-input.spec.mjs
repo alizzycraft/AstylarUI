@@ -17,8 +17,8 @@ import { restoreLegacyClipPolicy, restoreLegacyClipProducer } from './semantic-t
 // predecessor. The clip suite separately verifies the additive 164/218 state.
 const preClipPolicy = restoreLegacyClipPolicy(readFileSync('tests/material-parity/input-equivalence-policy.mjs', 'utf8'));
 const sourceAuditDefinitions = new Function(preClipPolicy.replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
-assert.equal(currentSourceAuditDefinitions.length, 164);
-assert.deepEqual(currentSourceAuditDefinitions.slice(1), sourceAuditDefinitions);
+assert.equal(currentSourceAuditDefinitions.length, 165);
+assert.deepEqual(currentSourceAuditDefinitions.slice(2), sourceAuditDefinitions);
 
 test('attribute focus registration preserves all predecessor definitions and proof sources', () => {
   const id = 'core-semantic-attribute-refresh-removes-focusability';

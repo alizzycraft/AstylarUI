@@ -8922,6 +8922,10 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'scripts/check-divider-backing-owners.mjs',
+    'scripts/audit-public-explicit-line-backing.mjs',
+    'artifacts/material-parity/public-explicit-line-backing-20261019.log',
+    'artifacts/material-parity/divider-backing-owners-bound-20261019.log',
     'tests/material-parity/legacy-clip-support-input.spec.mjs',
     'scripts/audit-public-legacy-clip.mjs',
     'artifacts/material-parity/public-legacy-clip-valid-input-20261018/latest-report.json',
@@ -9662,6 +9666,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('equal explicit line height isolates text backing allocation from authored geometry'/,
+      'equal-input explicit line-height backing allocation and logical mapping', 'Two public paired22px-height cases retain matching container geometry and local baselines;18.4px-font backing allocates23px versus22px logical/full UV range,while16px control allocates22px. Five captured methods and six altered-evidence controls bind the discrepancy. Not DPR2,other fonts,pixel-level blur or whole-case acceptance.'),
     proof(root, 'tests/material-parity/legacy-clip-support-input.spec.mjs', /test\('public legacy clip support limitation preserves controls and exact diagnostics'/,
       'public legacy CSS clip support limitation and retained controls', 'Four equal-input public pairs atDPR1/2 retain two unclipped controls and two zero-rect clip failures with exact unsupported-property diagnostics. Twelve complete resolver methods and five top-level owners match current/installed code. Documents missing legacy clip translation,not an intentional design or supported-feature regression. Material anchor impact,other rects,AX/AT/dynamic behavior and whole-case acceptance remain open.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('public role focus refresh separates attribute-first and root-first failures with unchanged input'/,

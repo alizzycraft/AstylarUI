@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep text-backing-registration initial failed altered-id guard log pair and
+separate bound-focused2/2,clip-predecessor-integration4/4,registration-ancestry3/3
+logs. Original policy/producer restored bytes authenticate exact predecessor;
+accepted164/218 package unchanged while source registration is165/219. No
+historical receipts or browser artifacts were overwritten by registration.
+
 Keep explicit-line-backing-source-transition-20261019 log pair and producer.
 Whole-current suite/exact additive-test/removal/predecessor hashes authenticate
 an explicit one-path historical reader,which verifies15144 prior dependencies
