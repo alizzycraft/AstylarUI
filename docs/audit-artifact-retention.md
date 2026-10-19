@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep divider-paragraph-margin-case-join-20261019 log pair,producer and queued
+348b80b9 with98a56bda predecessor. Join86339 TERMINAL0 adds24 recorded-stage
+children/48 paired paragraphs,48 altered-value controls,15098 validated
+dependencies. Historical parser log stays historical;no new PNG/tree capture,
+source replacement,accepted generation rewrite or successful scratch created.
+
 Keep divider-root-height-history-case-join-20261019 log pair,producer and queued
 98a56bda with968a6198 predecessor. Join99253 TERMINAL0 retains103 whole-source
 Git LF hashes and unchanged divider helper/table/binding evidence in24 children;

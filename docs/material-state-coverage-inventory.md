@@ -2,6 +2,22 @@
 
 ## Current audit pointer — October19
 
+October19 divider paragraph margin-stage integration completed from retained
+evidence,not another parser/public capture. All48 paragraph pairs across24 cases
+authenticate native used top/bottom margins equal computed font and zero sides;
+candidate resolved/normal/interaction requests retain1em0 with absolute position.
+These are distinct stages,not demonstrated equivalent used margins. Historical
+parser diagnosticb11fc16b is bound explicitly as historical;separate public flex/
+inherited-margin defects are NOT attributed to positioned Material paragraphs.
+Join86339 TERMINAL0 rejects48 altered margin/font controls,validates15098
+dependencies/all2311 partial cases and saves queued
+348b80b9476da74518e08dd4fe8b8da16c4a83981260e71838aacd59bfbed43b.
+Removing only24 margin-input children recovers complete98a56bda;all remaining
+material-property,line-box,paint,history/currentness obligations survive. Actual
+historical positioned used margins and original UA rule provenance remain open.
+Log divider-paragraph-margin-case-join-20261019 retains exact recipe/case list.
+No new finding,renderer/fixture change,export,recapture or whole-case promotion.
+
 October19 divider root-height lineage gap answered without browser recapture.
 Recorded hierarchy was already accounted for;no duplicate node survey performed.
 Join99253 TERMINAL0 inspects all103 reachable file-change revisions:actual helper
