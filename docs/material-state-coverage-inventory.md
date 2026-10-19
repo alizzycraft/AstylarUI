@@ -2,6 +2,26 @@
 
 ## Current audit pointer — October19
 
+October19 retained baseline search exhausted the relevant existing measurements:
+divider-configured-texture-boundary-20261015 contains8 targets across4 contrast
+DPR1 contexts;all record canvas baseline mode alphabetic,but no numeric draw
+baseline/ascent/descent/leading field. All3 original capture-source receipts
+authenticate. Complete current parser transpilation versus installed nonstatic
+members matches23/23. DEFAULT_TEXT_STYLE.verticalAlign is baseline and only an
+explicit request overrides it (text-style-parser.service.ts:38,88);absence in
+resolved tree fields is NOT itself evidence of a lost default. This establishes
+parser behavior,not final composite inline positioning or captured executable
+owner equality. Existing paragraph-font-box-current-browser-20261017 log already
+shows8 stable normal/explicit-height measurements across155.0.8059.40/.80 and
+separate normal-strut/font-box mismatch;do not rerun or transfer that different
+public font/context proof onto Material paragraphs. Texture mode and font-box
+height cannot recover numeric baselines. Next decisive action must be ONE paired
+diagnostic baseline/leading measurement with source-bound native strut and
+candidate actual draw coordinates,kept separate from canonical authoring;stop
+searching these same trees/textures. Preserve original authoring differences and
+classify resulting stage divergence without interpreting diagnostic markers as
+canonical input equivalence. No case promotion or renderer change follows.
+
 October19 remaining line-box question narrowed from authenticated retained24-case
 report,without recapture: all48 Above/Below pairs resolve reference paragraph
 normal-flow heights19/19/18/22px for light/dark/contrast/custom. Candidate paragraph
