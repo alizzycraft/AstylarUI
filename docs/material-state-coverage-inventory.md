@@ -6,7 +6,8 @@ Accepted canonical/index:65e072fd/4837b33b (165 source findings,219 focused proo
 anchors). Latest validated QUEUED case review:
 be99cd383dabb304da259cef9046b6b81ce44922c3ae4d8fe6dfc2a76ab33f6f,
 selected by the production export launcher after bounded reader verification,
-but NOT exported/cold-verified/published as canonical. Its join adds
+and exported as candidatee7717418,but NOT cold-verified/published as accepted.
+Its join adds
 exactly80 children to fe692b14 and recovers that complete predecessor on reversal;
 existing loader authenticates15167 dependency receipts/all2311 cases. Receipt:
 divider-reviewed-boundaries-space-retry-20261019.log (TERMINAL0).
@@ -29,6 +30,28 @@ subquestions merely because a parent still says partial. This table is a current
 navigation summary,not new acceptance criteria or a substitute for exact records.
 
 ## Evidence chronology — retain original scope and checkpoint dates
+
+October19 queued-divider export60565 TERMINAL0: candidatee7717418da5b50bec6ff0485c2bac2cef243ee5290906dd9b832308de8aeda36
+packed84638103/decoded2327080710bytes,decodedSHAabab6078177b9fb491515212eb9e39e4827830307e5bf03c1a89c779374891ae.
+Validation passes before canonical write;9740038.6842ms wall elapsed includes
+the observed long runtime gap,not an inferred continuous CPU duration. Session
+authenticates16353files/1678210553bytes with1collector/10memoryhits/1diskhit,
+zero invalidated.165findings,8483groups/389202occurrences,436static/1875interaction,
+inputEquivalent=false. Original stdout/stderr are divider-reviewed-queued-export-
+20261019 logs. Main accepted65e072fd/index4837b33b remains preserved/selected.
+Candidate import61276 TERMINAL0 in SEPARATE candidate-validation store reports
+8483discrepancies/165findings/39904controls/389202occurrences/0unresolved and
+72762327compact shard bytes;index7ca89ad034b14fcdcced28e00f1bb649dc3199e8f3310ad4e8528d9ffc9bbde9.
+Closed candidate index180522304logical bytes losslessly LZX-compressed to
+37740544physical bytes,exact hash unchanged;volume free325476352afterward.
+Independent COLD check24870/child13752 confirmed live;candidate section scan27306
+reuses authenticated prior46a2c5a8 section receipt for65e072fd,scans ONLY new
+candidate through existing auditSectionDigests. Logs divider-reviewed-independent-
+cold-check,divider-reviewed-candidate-import and divider-reviewed-candidate-
+section-conservation-20261019 retain exact outcomes. No duplicate old-payload scan.
+Next inspect section/row/coverage/registry conservation and terminal cold result;
+do NOT import into main,commit candidate canonical or claim publication yet.
+All cases remain partial/current rendering unverified and final gates unchanged.
 
 October19 remaining-priority clarification from ACCEPTED compact records,not a
 new audit/capture: current.json selects65e072fd/index4837b33b. Independent bounded

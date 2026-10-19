@@ -2,6 +2,17 @@
 
 ## Current versus historical evidence
 
+October19 queued-divider candidate validation: retain divider-reviewed-queued-
+export,independent-cold-check,candidate-import and candidate-section-conservation-
+20261019 log pairs. Export succeeded;candidate import is separate from accepted
+main store. Candidatee7717418 index180522304logical bytes was losslessly LZX-
+compressed to37740544physical bytes after import completed;before/afterSHA256
+7ca89ad034b14fcdcced28e00f1bb649dc3199e8f3310ad4e8528d9ffc9bbde9.
+Exact resolved path is within Material artifacts/working-audit/candidate-validation;
+no evidence,paths or accepted pointer changed. Observed free325476352bytes is
+volume state,not an attribution of all changes. Cold check/section conservation
+are still live,not accepted outcomes;do not delete candidate or predecessor.
+
 October19 queued-export candidate-import headroom: two CLOSED historical working
 indexes were transparently LZX-compressed,not deleted or rewritten as evidence.
 The e7a91a22 generation index145811970bytes now occupies31059968 physical bytes;
