@@ -2,6 +2,26 @@
 
 ## Current audit pointer — October19
 
+October19 pointer mutation capture19416 TERMINAL0:113 exact contexts/339 paired
+boundaries,reportd49b33a5e32e51cb7e1674574ec2b16f4b12a4ffc607df0595c007b8d3abf89d.
+Original independent verifier fails only its one-trusted-click assumption at
+native slide-toggle:all16 rows have label SPAN click then forwarded BUTTON click,
+one pointerdown/up each. Frozen capture producer/report remain unchanged. Separate
+bound verifier reuses validateSupplementalCapture,all actual harness/diagnostic/
+recipe receipts,exact maintained action methods,113-case membership,trees and
+all339 observation pairs;checks precise16 forwarding patterns and rejects226
+altered pointer-trust controls. Bound verify TERMINAL0;both original failure and
+corrected logs retained. No browser recapture or meaningful event normalization.
+Raw census distinguishes CANVAS handoff from retained-control losses:chips16
+and slide-toggle16 removeAttribute(tabindex);expansion32 such losses;menu16
+descendant replacements;snack-bar17 descendant plus17 root replacements;
+tooltip8 root replacements;button none beyond CANVAS handoff. Native menu16
+blurs are separate raw observations,not assumed equivalent to candidate losses.
+These counts are observations,not completed cause/current-source applicability:
+next authenticate owning methods/captured map and join precise113 case obligations.
+All2311 whole cases remain partial,current rendering unverified. No renderer,
+fixture,threshold or accepted package modification.
+
 October19 accepted package publication9b58ac1d is pushed. Next demonstrated gap:
 retained113 configured pointer activate/activate-leave records expose extra
 focus events without first-mutation witnesses. Competing causes are attribute

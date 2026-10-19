@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Pointer capture19416 now TERMINAL0;retain reportd49b33a5,226 trees,checkpoint,
+frozen producer and capture logs. Preserve independent-verify failure separately
+from bound-verify success:the former assumed one click,the latter explicitly
+checks16 native label→button forwarded-click sequences and226 rejection controls.
+No recapture or overwrite occurred. Current owner binding/exact-case join remain
+pending;do not promote raw mutation census to full diagnosis or case closure.
+
 Keep pointer-focus-mutations-20261019 capture/checkpoint/trees and capture log
 pair with its frozen adapter. Session19416 is live;partial rows are not complete
 proof. It supplies missing first-mutation witnesses for113 exact pointer cases,
