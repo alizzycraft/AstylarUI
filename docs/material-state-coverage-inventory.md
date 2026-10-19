@@ -2,6 +2,28 @@
 
 ## Current audit pointer — October19
 
+October19 pointer first-mutation question answered for113 exact contexts;join
+74803 TERMINAL0 saves queued0889e9db2a685f69fd2ae64e809264437bf05f10565ba25b59448dba6543adfa,
+validates15059 dependencies/all2311 cases and recovers completebad78781 by
+reversing only113 children/precise task refinements. Current TS,installed JS,
+captured chunk/map all retain actual owner receipts from the existing four-
+method source proof;new checkpoint authenticates identical served owner bytes.
+Existing public reproductions/classifications remain bound.122 extra control
+blurs have direct mutation witnesses and122 altered-caller controls reject:
+chips16/slide-toggle16/expansion32 attribute focusability removal;menu16 and
+snack-bar17 descendant replacement;snack-bar17 plus tooltip8 root replacement.
+113 CANVAS handoffs stay separate;native menu16 blurs are not claimed equivalent.
+Button16 and tooltip8 contexts have no additional observed control blur,not
+immunity to future updates. Existing attribute/descendant/root findings explain
+the bounded observations;no new category,app refocus or renderer fix. Report
+d49b33a5,bound verification and pointer-focus-mutations-case-join-20261019 retain
+exact cases/receipts/census.113 authoredActivation tasks now retain remaining
+focus boundaries beyond observed sequence,default-action/input ownership,held
+paint and source/runtime applicability. All2311 cases stay partial/unverified;
+accepted4acc/index44ca unchanged,queued0889 is not silently canonical. Next:
+remaining exact input/paint/semantic/lifetime obligations;do not repeat these
+pointer actions absent relevant drift or contradictory evidence.
+
 October19 pointer mutation capture19416 TERMINAL0:113 exact contexts/339 paired
 boundaries,reportd49b33a5e32e51cb7e1674574ec2b16f4b12a4ffc607df0595c007b8d3abf89d.
 Original independent verifier fails only its one-trusted-click assumption at

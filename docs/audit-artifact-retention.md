@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep pointer-focus-mutations-case-join-20261019 log pair and queued0889e9db with
+bad78781 predecessor. Join74803 TERMINAL0 authenticates15059 dependencies,
+113 children and precise task refinements,122 caller-sensitivity controls and
+complete predecessor recovery. Reused four-method owner proof/current files/
+new checkpoint hashes all agree. All captures and original verifier failure
+remain required;no deletion,recapture,whole-case or accepted-package promotion.
+
 Pointer capture19416 now TERMINAL0;retain reportd49b33a5,226 trees,checkpoint,
 frozen producer and capture logs. Preserve independent-verify failure separately
 from bound-verify success:the former assumed one click,the latter explicitly

@@ -1,5 +1,16 @@
 # Material audit: evidence-led implementation priorities
 
+October19 pointer first-cause extension covers113 configured actions:122 control
+blurs directly bind existing attribute-refresh,descendant and root replacement
+owners,distinct from113 CANVAS handoffs. Existing complete four-method current/
+installed/captured proof applies to identical owner bytes. Chips/slide-toggle/
+expansion show64 attribute losses;menu/snackbar33 descendant losses;snackbar/
+tooltip25 root losses. Preserve native menu's separate focus behavior and no-
+additional-loss controls. Exact queued0889e9db validates15059 dependencies and
+all2311 partial cases. This reinforces generic focus continuity fixes,not app
+refocus or event suppression;does not establish all-state paint/input or current
+rendering. Accepted4acc remains unchanged;full details/logs in coverage ledger.
+
 October19 accepted evidence milestone:independent cold31464 and accepted import
 17254 TERMINAL0. Main package4acc8585/index44ca448b is byte-identical to verified
 candidate index;164 findings/218 proof anchors,selected104d7c61. All80 sections
