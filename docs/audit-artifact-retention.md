@@ -56,6 +56,15 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep queued-review-suite-merge-preflight,queued-review-suite-coherent-merge
+(original in-memory dependency conflict),queued-review-added-suite-receipts,
+queued-font-suite-source-conservation and queued-review-suite-font-coherent-merge-
+20261019 stdout/stderr. Corrected successor e34e7890 retains complete cefffc09
+by exact reversal;both proposals and ab4b/58ec predecessors remain required.
+No failed merge proposal was saved. Font-source applicability is not a new font
+capture or grounds to delete original public/remount evidence. Keep candidate
+e7a91 separate while independentcold77071 is live;acceptedcd867bbe is unchanged.
+
 Original full-audit-harness-cd867bbe-20261018 is now terminal exit1:
 1828 tests,1659 pass,169 fail,no cancelled/skipped/todo. Keep both original
 closed logs unchanged. Stdout26462260 bytes SHA256

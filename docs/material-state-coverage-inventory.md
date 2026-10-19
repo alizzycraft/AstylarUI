@@ -1,6 +1,28 @@
 # Material comparison/state coverage inventory
 
-## Current audit pointer — October18
+## Current audit pointer — October19
+
+October19 queued coverage source applicability now reconciled without another
+capture/export. Three-way preflight proves the58ec→ab4b200 receipt updates/100
+applicability children are disjoint from cefffc09 additions. Original merge29282
+then correctly rejects conflicting dependencies:the queue adds270 old boundary-
+suite receipts in sharedPublicFontOwnerEvidence. No invalid proposal was saved.
+Exact added-receipt census locates all270;separate font-source proof authenticates
+whole old/current suite bytes and identical complete public delayed-font test
+declaration,including all assertions. No fresh font execution is claimed.
+Corrected merge7692 TERMINAL0:queued successor
+e34e789076b67bb22a24de0998b709491d81c2b0b92f8b5c91e688ec9d4ceb09
+validates all2311 cases/14383 dependencies. Changes are470 exact suite receipts,
+100 inherited source-applicability children and270 font-applicability children.
+Reversing only those changes recovers entire cefffc09 digest;all prior progress,
+list and other evidence,statuses,remaining work and raw inputs survive unchanged.
+Logs queued-review-suite-{merge-preflight,coherent-merge,added-suite-receipts},
+queued-font-suite-source-conservation and queued-review-suite-font-coherent-merge-
+20261019 retain recipe/results and original rejection. Acceptedcd867bbe and
+fixed candidatee7a91/selectedab4b remain separate;new queue is NOT canonical.
+Independentcold77071/child17188 confirmed live11:12;no restart or publication.
+Next:finish current cold acceptance,then use this already dependency-validated
+queued successor for exact remaining case-obligation work,not a repeat merge.
 
 October19 candidate index46741 TERMINAL1 after successful import/whole-index
 verification:ad hoc final assertion addressed nonexistent coverage.staticCases
