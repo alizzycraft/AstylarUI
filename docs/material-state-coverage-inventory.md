@@ -31,6 +31,29 @@ navigation summary,not new acceptance criteria or a substitute for exact records
 
 ## Evidence chronology — retain original scope and checkpoint dates
 
+October19 queued-divider candidate conservation PROGRESS,not publication:
+candidate section27306 TERMINAL0 authenticates new compressed/decoded payload
+and reuses original46a2c5a8 predecessor-section receipt. No sections added/removed;
+ONLY coverage and sourceFingerprints differ;all other complete sections match.
+Receipt divider-reviewed-candidate-section-conservation-20261019.log SHAc74126c8829858d28448bd64f539c32c30d42c03ac9f647f0af90a8dd7094eef.
+Authenticated old/new compact complete-row hashes preserve ALL48552 ordered
+rows,zero changes:8483discrepancies+165findings+39904controls. Row receipt
+SHA8aa57f672d9c0c239b9229b527d0b7f922049e930c463b280ff850e04e0dbfb0.
+Coverage26955 TERMINAL0 removes exactly136 additive divider evidence children
+and recovers ALL2311 predecessor case objects;outer coverage unchanged,23new
+dependency receipts,zero old dependencies lost/changed,other inspection metadata
+unchanged. Coverage receipt SHAe0c6ec920b858d4b1cd778f9244e0a2c4b7a82bc1b76068c80a6d0fe584b4e02.
+Full sourceFingerprint arrays reconstruct through unchanged production function:
+738same ordered paths,734unchanged hashes,four exact Git-bound source changes
+(reader,alignment suite,store suite,runner). BEFORE/AFTER structural token hashes
+match BOTH original section receipts,not a sample or inferred inventory match.
+Source receipt SHAa282f67b6a40b6cc1c31f483ce55520c537ea688a957c9cf2b6b183c799f7d27.
+All four logs use divider-reviewed-candidate-*-conservation-20261019 names.
+Next finish explicit review/sourceApplicability metadata and readable-output
+conservation;independent cold24870/13752 remains live. Main65e072fd pointer and
+all partial/unverified case statuses unchanged. No canonical commit/import into
+main or final acceptance until these remaining checks finish.
+
 October19 queued-divider export60565 TERMINAL0: candidatee7717418da5b50bec6ff0485c2bac2cef243ee5290906dd9b832308de8aeda36
 packed84638103/decoded2327080710bytes,decodedSHAabab6078177b9fb491515212eb9e39e4827830307e5bf03c1a89c779374891ae.
 Validation passes before canonical write;9740038.6842ms wall elapsed includes
