@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep text-backing-candidate-registry-section,coverage,readable,source-intersection,
+nonrow-leaves,nonrow-leaves-explained and aggregate-content-conservation logs
+with their -20261019 suffixes/log pairs. Aggregate receipt authenticates all
+eight current content proofs and exact candidate index/payload. Old source/proof
+receipts are reused rather than rescanned;original motion report is unchanged.
+Complete readable predecessor recovered;all52 nonrow changes explain. This
+does not replace the live independent cold check or authorize main-store import.
+
 Keep text-backing candidate-import,section-conservation,row-conservation,
 row-deltas and row-deltas-explained-20261019 logs. Candidate65e072fd/index4837
 stays in separate candidate-validation store;main4acc remains accepted. New

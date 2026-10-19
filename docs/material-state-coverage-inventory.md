@@ -2,6 +2,27 @@
 
 ## Current audit pointer — October19
 
+October19 complete candidate CONTENT conservation verified,not publication:
+actual production reconstruction matches all3 registry sections165/738/219.
+Coverage12925 TERMINAL0 equals original base inventory plus exact queued33a0bd8b
+and explicit3-source applicability;all2311 remain partial/unverified. Summary
+changes only sourceFindings164→165. Full four-section leaf comparison84234
+TERMINAL0 checks1198195 container/value entries and52 changes:50 producer source
+hashes,one report hash derived from unchanged original motion report plus its
+receipts,and one finding count. No other values/shapes change. Old proof section
+is independently reconstructed from72 authenticated Git source files;readable
+report recovers its COMPLETE predecessor after removing one finding/one proof
+and reverting40 actual proof-line shifts. Source intersection verifies725 prior
+receipts identical,8 reviewed source changes,5 additions/no removals (733→738).
+Aggregate text-backing-candidate-content-conservation-20261019 authenticates all
+eight supporting receipts,current manifest/payload and candidate index4837;
+all80 sections are identical or exactly accounted for. Earlier49 changed-row/
+96-leaf proof remains reused,not re-extracted. Candidate65e072fd still not
+accepted:independent cold41341/13428 is live and main4acc pointer unchanged.
+Next terminal cold result,then accepted import/index equality and publication
+only if successful. No repeat full scans/content investigations needed absent
+drift,and no renderer/input/criteria change or whole-case closure implied.
+
 October19 candidate import10203 TERMINAL0:65e072fd index4837b33b2e1e5ced142cc45fcc61b03b898f8e66981fb283f9164d1a198bc95c,
 8483discrepancies/165findings/39904controls/389202occurrences/zero unresolved.
 Section conservation71605 TERMINAL0 authenticates new packed/decoded bytes and
