@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep text-backing-case-review original wrong-suite-predecessor failure and
+separate bound-applicability success log pairs,plus checker producer. Three
+exact historical source reads validate15144 unchanged receipts/all2311 cases;
+original proposal33a0bd8b remains immutable. No current-source hash is substituted
+for an old expected hash,and this boundary is not implicitly active in export.
+
 Keep text-backing-registration-full-ancestry original stale-population failure
 and separate text-backing-full-registration-integration10/10 success log pairs.
 Keep text-backing-production-source-preflight-20261019 actual collector output:

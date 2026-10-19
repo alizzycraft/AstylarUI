@@ -2,6 +2,22 @@
 
 ## Current audit pointer — October19
 
+October19 queued-review source applicability COMPLETE under explicit boundary:
+source receipt census117 paths finds EXACTLY3 drifted files among15144 receipt
+paths:policy,suite,registration helper. check-text-backing-case-review restores
+whole policy via actual registration reversal,suite via exact single-test AST
+removal,and helper via exact added functions/declaration/population branch plus
+three owning expression restorations. Full originals match pinned Git sources;
+current whole-file hashes are guarded. Bound13303 TERMINAL0 validates all15144
+dependencies/all2311 cases of queued33a0bd8b with exactly3 historical file reads;
+all other reads remain normal. Original wrong suite predecessor commit failure
+is retained separately;correct suite predecessor isd125a47e,policy/helper98b60259.
+No proposal/receipt rewritten,no default-loader acceptance implied. Log
+text-backing-case-review-bound-applicability-20261019 records exact current/
+historical hashes. Next publication integration must explicitly carry this
+reviewed applicability into export reader/selected review;standalone verification
+does NOT wire it into default export. No new browser run/full export yet.
+
 October19 FULL registration/ancestry integration COMPLETE:32940 TERMINAL0,
 10tests10pass,zero skip/fail. Earlier full semantic suite exposed stale164-only
 historicalSemanticDefinitions adapter (actual165);exact source-authenticated
