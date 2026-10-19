@@ -30,6 +30,34 @@ navigation summary,not new acceptance criteria or a substitute for exact records
 
 ## Evidence chronology — retain original scope and checkpoint dates
 
+October19 selected-review support-source reconciliation VERIFIED,not canonical
+publication. Existing reader authenticates helper141bc88a,removes ONLY guarded
+4577-byte support reversal blockc679fe6a,and recovers COMPLETE published helper
+4a116068 before its original text-backing→60056387 reversal. It reuses that exact
+block to recover COMPLETE published benchmark e74ef1d5 from currenta270e3d3;
+no duplicated reversal recipe or changed historical receipt. Current source bytes
+remain tracked. Base reader now has4 explicit transitions;alignment wrapper5.
+Original source drift/wrong-review/tracked-mutation controls apply to every
+transition,including newly bound benchmark. Base still rejects missing alignment
+boundary;actual loaded review/cases and all acceptance flags remain original.
+First helper-only integration0/2 exposed benchmark receipt,retained at post-
+publication-reader-support-reconciliation-20261019 log pair. Final both exact
+be99/33a full review checks pass2/2,0 skipped/cancelled/todo,44055.4258ms:
+post-publication-reader-acceptance-controls-20261019.log
+SHAda207624eba3ffcbb50a855dbfa4a8354cc29591af1811315c8335ae560bce41.
+Other four existing store/closure/integrity controls pass4/4,1751.3543ms:
+post-publication-reader-store-controls-20261019.log
+SHA78fa7c320b29db6143a0666a97f09c0a707271f06ebc60ee7075fb8a214d5b4a.
+Commands:node --test --test-name-pattern="reviewed divider boundary reader|retained text backing review" tests/material-parity/audit-findings-store.spec.mjs;
+node --test --test-name-pattern="evidence reader source boundary|versioned case inspection closure|case obligation integration|compact findings preserve" tests/material-parity/audit-findings-store.spec.mjs.
+Full store suite covered by these two scoped commands;NOT full audit harness.
+Selected reader prerequisite is resolved. Current reader/store source hashes
+advance again within the same FOUR-file support batch;previous734/4 census is
+dated,not their newest hash receipt. Accepted e771 package unchanged. Next assess
+remaining retained harness barriers and coherent publication timing;do not spend
+a full export on isolated prose. No whole-case/current-rendering promotion,
+renderer/fixture change or relaxation of missing original runner provenance.
+
 October19 post-publication support batch census authenticates ALL738 ordered
 producer source receipts against accepted e7717418 section digest47fefb60
 (7381tokens),using unchanged exact producera2771d8c and bounded Git7efd83e7

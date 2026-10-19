@@ -35,7 +35,7 @@ export function createDividerReviewedBoundariesReader({root,read,reviewSha256}){
       logicalFile:suite,currentSha256:hash(read(path.resolve(root,suite))),
       historicalSha256:hash(trackedRead(path.resolve(root,suite))),
     }],boundaryOwner:{file:owner,sha256:hash(source)},boundarySha256:hash(boundary),
-    boundary:'Four exact historical source restorations;current bytes remain tracked. No current-rendering acceptance or inspection promotion.',
+    boundary:'Exact historical source restorations,including benchmark support replay;current bytes remain tracked. No current-rendering acceptance or inspection promotion.',
   }};
 }
 // This adapter is selected only for the named retained review. Supplied reader
@@ -59,8 +59,19 @@ export function createTextBackingReviewReader({root,read,reviewSha256}){
   bind(suite,suiteText,suiteText.slice(0,addition[0].getFullStart())+suiteText.slice(addition[0].end),
     '9ef883389c3aa8811d3a0a4756bc9e6f7cce82158c62ea453c08b4bb654c6367');
   const helper='tests/material-parity/semantic-text-transform-registration.mjs',helperText=read(path.resolve(root,helper),'utf8');
-  assert.equal(hash(helperText),'4a1160686d55a5a27d722a55f7ddee6cd6a8674dec4cc381391d76965d69cd16');
-  const ast=ts.createSourceFile(helper,helperText,99,true,ts.ScriptKind.JS),ranges=[];
+  let reviewedHelperText=helperText,replayRestorationBlock;
+  if(hash(helperText)==='141bc88ae07fda6194f856f55dd374d9116be7b92e3f2983aa25923dd88cac72'){
+    // Only later benchmark historical-replay accounting is removed. No policy,
+    // producer,actions or original helper statement is treated as equivalent by name.
+    const start=helperText.indexOf('    const focusStart =');
+    const end=helperText.indexOf('    assert.equal(restored.split(importLine).length, 2);',start);
+    assert.ok(start>0&&end>start);
+    assert.equal(hash(helperText.slice(start,end)),'c679fe6a57ab2e3734e97f3ca855c9e68b2b7ad6b35c6143f767d294b6b5bf88');
+    replayRestorationBlock=helperText.slice(start,end);
+    reviewedHelperText=helperText.slice(0,start)+helperText.slice(end);
+  }
+  assert.equal(hash(reviewedHelperText),'4a1160686d55a5a27d722a55f7ddee6cd6a8674dec4cc381391d76965d69cd16');
+  const ast=ts.createSourceFile(helper,reviewedHelperText,99,true,ts.ScriptKind.JS),ranges=[];
   for(const node of ast.statements){
     if(ts.isFunctionDeclaration(node)&&['restoreTextBackingPolicy','restoreTextBackingProducer'].includes(node.name.text))ranges.push([node.getFullStart(),node.end]);
     if(ts.isVariableStatement(node)&&node.declarationList.declarations.some(d=>d.name.getText(ast)==='backingId'))ranges.push([node.getFullStart(),node.end]);
@@ -68,13 +79,23 @@ export function createTextBackingReviewReader({root,read,reviewSha256}){
       const first=node.body.statements[0];assert.equal(first.expression.getText(ast),'current.length === 165');ranges.push([first.getFullStart(),first.end]);
     }
   }
-  assert.equal(ranges.length,4);let prior=helperText;
+  assert.equal(ranges.length,4);let prior=reviewedHelperText;
   for(const [start,end]of ranges.sort((a,b)=>b[0]-a[0]))prior=prior.slice(0,start)+prior.slice(end);
   const replace=(a,b)=>{assert.equal(prior.split(a).length,2);prior=prior.replace(a,b);};
   replace('const current = restoreTextBackingPolicy(source);','const current = normalized(source);');
   replace('const current = restoreTextBackingProducer(source);','const current = normalized(source);');
   replace("new Function(restoreTextBackingPolicy(source).replace(/^export const /gm, 'const ')","new Function(source.replace(/^export const /gm, 'const ')");
   bind(helper,helperText,prior,'6005638773f461cc73ed5f8ee41971127181186000cf4e464ca04dd42cca9ff7');
+  if(replayRestorationBlock){
+    // Reuse the exact guarded support reversal already executed by the existing
+    // benchmark reader. This stops BEFORE its older registration-header reversal.
+    const benchmark='tests/material-parity/benchmark-config.spec.mjs';
+    const benchmarkText=read(path.resolve(root,benchmark),'utf8');
+    assert.equal(hash(benchmarkText),'a270e3d3330d361512593efa60f69771c71709f70f2f679c8787f186ceb275d0');
+    const originalBenchmark=new Function('assert','digest','restored',
+      replayRestorationBlock+'\nreturn restored;')(assert,hash,benchmarkText);
+    bind(benchmark,benchmarkText,originalBenchmark,'e74ef1d5d42b3534ed33396347e67eea6beb8625a7c9dccd18c9c51142ca88b4');
+  }
   return {
     read(file,...args){const actual=read(file,...args),old=restored.get(path.resolve(file));
       if(!old)return actual;

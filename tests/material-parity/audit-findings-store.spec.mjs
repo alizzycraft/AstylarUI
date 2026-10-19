@@ -11,7 +11,7 @@ test('reviewed divider boundary reader validates exact queued cases and rejects 
   const review=JSON.parse(fs.readFileSync(file)).review;
   const options={root,read:fs.readFileSync,reviewSha256:dividerReviewedBoundariesReview};
   const reader=createDividerReviewedBoundariesReader(options);
-  assert.equal(reader.sourceApplicability.transitions.length,4);
+  assert.equal(reader.sourceApplicability.transitions.length,5);
   const result=loadCaseObligationReview(file,dividerReviewedBoundariesReview,review.groups.map(g=>g.case),{root,read:reader.read});
   assert.equal(result.cases.length,2311);
   assert.equal(result.currentRenderingAccepted,false);assert.equal(result.inspectionComplete,false);
@@ -36,15 +36,15 @@ test('retained text backing review uses explicit tracked source applicability wi
   const root=process.cwd(),file=`artifacts/material-parity/working-audit/proposals/${textBackingRetainedReview}.json`;
   const review=JSON.parse(fs.readFileSync(file)).review;
   const applicability=createTextBackingReviewReader({root,read:fs.readFileSync,reviewSha256:textBackingRetainedReview});
-  assert.equal(applicability.sourceApplicability.transitions.length,3);
+  assert.equal(applicability.sourceApplicability.transitions.length,4);
   const cases=review.groups.map(g=>g.case);
-  // The original three-source adapter must still reject the later alignment
-  // extension. Replaying the full old review now requires its explicit fourth
-  // source boundary, not replacing receipts or weakening the strict loader.
+  // The base adapter must still reject the later alignment
+  // extension. Replaying the full old review now requires its explicit
+  // alignment boundary, not replacing receipts or weakening the strict loader.
   assert.throws(()=>loadCaseObligationReview(file,textBackingRetainedReview,cases,{root,read:applicability.read}),
     /Case obligation evidence changed: tests\/material-parity\/alignment-crop-provenance.spec.mjs/);
   const fullApplicability=createDividerReviewedBoundariesReader({root,read:fs.readFileSync,reviewSha256:textBackingRetainedReview});
-  assert.equal(fullApplicability.sourceApplicability.transitions.length,4);
+  assert.equal(fullApplicability.sourceApplicability.transitions.length,5);
   assert.equal(fullApplicability.sourceApplicability.reviewSha256,textBackingRetainedReview);
   const result=loadCaseObligationReview(file,textBackingRetainedReview,cases,{root,read:fullApplicability.read});
   assert.equal(result.cases.length,2311);assert.equal(result.currentRenderingAccepted,false);assert.equal(result.inspectionComplete,false);
