@@ -48,6 +48,12 @@ controls},reduced-media-controls and both binding/conservation failures plus
 reduced-input-delta-census retain exact observations/recipes. Next:disposition
 the explicit input/capture boundaries before claiming configured-case applicability;
 do not repeat captures merely to force byte-identical serialization.
+Publication note:f7ed600a staged whitespace check reports one new blank line
+at EOF in reduced driver167;it is NOT a green diff check. Both captured producer
+sources remain byte-stable. This formatting/provenance boundary remains to be
+resolved before final acceptance;do not change captured bytes silently or
+repeat browser capture solely for whitespace. Canonical e246aaad publication
+had a clean scoped diff check and remains a separate verified increment.
 
 October19 progress semantic-input gap narrowed across40 exact cases without
 new capture. Existing recorded DOM/SVG/plugin node groups account for every
