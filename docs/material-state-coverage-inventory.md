@@ -30,6 +30,23 @@ navigation summary,not new acceptance criteria or a substitute for exact records
 
 ## Evidence chronology — retain original scope and checkpoint dates
 
+October19 remaining-priority clarification from ACCEPTED compact records,not a
+new audit/capture: current.json selects65e072fd/index4837b33b. Independent bounded
+read authenticates complete index SHA and every discrepancies-family shard SHA,
+then counts attribution==='unresolved':0,matching index.counts.unresolved0.
+Therefore there is no remaining canonical unclassified scalar-group population
+to prioritize by size;old historical unresolved counts must not drive new work.
+This is NOT zero defects,equal inputs or whole-case closure. Existing classified
+rows can explicitly retain incomplete used-stage equivalence (for example
+divider alignContent normal/stretch is classified as a harness-stage issue,
+with container/item semantics still unproved). The actual outstanding work is
+the recorded full structure/state/paint/history/currentness obligation closure,
+plus exact evidence applicability and final gates. Do not recapture settled
+scalar classifications solely because all2311 parent cases remain partial.
+Export60565 remains live;no consumed source,canonical pointer or case status
+changed by this read-only census. Next complete candidate acceptance before
+editing any input consumed by that evidence session.
+
 October19 live-export storage safeguard COMPLETE: accepted65e072fd untouched;
 two closed historical e7a91a22/cd867bbe indexes now use LZX with exact hashes
 unchanged (see audit-artifact-retention.md). Combined291389254logical bytes
