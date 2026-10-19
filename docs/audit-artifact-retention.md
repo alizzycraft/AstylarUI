@@ -56,6 +56,14 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October19 low-space safeguard:accepted4acc8585/index.json and independent
+candidate-validation/4acc8585/index.json are now transparently NTFS-compressed.
+Their350908348 logical bytes occupy159858688 bytes,saving191049660 bytes without
+deletion,path changes or content changes. Both post-compression SHA-256 remain
+44ca448bbd8ecbd8fcf20805d33cf1825ce47830e08ea2cac2186f191c187e42,
+exactly the accepted pointer. Free space rose195674112→386727936 bytes. This
+is storage preservation,not another import or evidence/currentness promotion.
+
 Keep pointer-focus-mutations-case-join-20261019 log pair and queued0889e9db with
 bad78781 predecessor. Join74803 TERMINAL0 authenticates15059 dependencies,
 113 children and precise task refinements,122 caller-sensitivity controls and

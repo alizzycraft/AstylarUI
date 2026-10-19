@@ -2,6 +2,20 @@
 
 ## Current audit pointer — October19
 
+October19 next semantic gap selected after pointer cause closure:checkbox/radio
+actual accessibility-tree role/name/checked/focus/association transport,not just
+DOM comparators. Retained choice focus and radio Space captures provide live DOM
+states but not actual AX nodes;existing keyboard/pointer state proofs retain
+their scope. Search found no matching choice AX capture;reuse existing CDP
+getPartialAXTree method from icon-heading AX producer rather than infer AX from
+aria-checked. Compare native input owners to candidate semantic owners at exact
+configured focus boundaries,then classify authoring versus transport divergence.
+No new capture started:disk headroom195674112 bytes required storage safeguard.
+Compressing two immutable4acc indexes saves191049660 bytes,hashes unchanged
+44ca448b;free386727936. Details in retention doc. Existing accepted package,
+queued0889 and all case dispositions unchanged;semantic investigation remains
+pending,not blocked or complete. No completed pointer/focus action repeated.
+
 October19 pointer first-mutation question answered for113 exact contexts;join
 74803 TERMINAL0 saves queued0889e9db2a685f69fd2ae64e809264437bf05f10565ba25b59448dba6543adfa,
 validates15059 dependencies/all2311 cases and recovers completebad78781 by
