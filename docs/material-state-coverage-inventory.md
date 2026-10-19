@@ -2,6 +2,24 @@
 
 ## Current audit pointer — October19
 
+October19 divider root-height lineage gap answered without browser recapture.
+Recorded hierarchy was already accounted for;no duplicate node survey performed.
+Join99253 TERMINAL0 inspects all103 reachable file-change revisions:actual helper
+SHA838ea6b8,three divider table values161/176.5625/152.5625 and explicit pixel
+height binding stay identical from initial2f440115. Executing each historical
+referenceHeight initializer for divider across five density branches/open+closed
+states yields the same ten outputs;later button/expansion changes do not retune
+divider height. All historical whole-source LF receipts are retained in24 exact
+case children. Existing fixed-reference-height authoring classification remains;
+this does not prove renderer causality or complete style/paint equivalence.
+Queued98a56bda14164544899d20ee424c9440b985143e1fd42376239c3f9002ea819a
+validates15096 dependencies/all2311 partial cases and recovers complete968a6198
+by reversing only24 children/task refinements. Remaining task now explicitly
+keeps renderer causality beyond the inspected unchanged lineage. Log divider-
+root-height-history-case-join-20261019 and producer preserve exact recipe/scope.
+Accepted4acc unchanged;next unresolved anonymous/material-property and paint/
+currentness obligations,not repeated historical fixed-height discovery.
+
 October19 storage safeguard completed before further evidence growth:existing
 compaction mechanism verifies258 identical object groups/516 original aliases
 across three closed main generations and candidate-validation. All bytes/paths

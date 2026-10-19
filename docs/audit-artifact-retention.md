@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep divider-root-height-history-case-join-20261019 log pair,producer and queued
+98a56bda with968a6198 predecessor. Join99253 TERMINAL0 retains103 whole-source
+Git LF hashes and unchanged divider helper/table/binding evidence in24 children;
+15096 dependencies/all2311 cases validate,complete predecessor recovers. No
+browser artifacts,PNG capture,successful scratch or accepted-package rewrite.
+
 October19 closed working-store generation deduplication:the existing compactor
 plans/applies/verifies258 byte-identical groups/516 aliases across4acc8585,
 e7a91a22,cd867bbe and candidate-validation under the physical working-audit
