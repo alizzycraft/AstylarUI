@@ -2,6 +2,26 @@
 
 ## Current audit pointer — October19
 
+October19 coherent divider paint checklist join COMPLETE,not canonical export:
+join-material-divider-paint-boundaries TERMINAL0 attaches24 exact wrapper-input
+children,four static-desktop diagnostic material-state children,and four exact
+retained contrast-DPR1 full-texture-footprint children. No interaction/viewport
+extrapolation of fresh material diagnostics.24 source-currentness children
+record the additive owning-suite transition. Removing exactly56 new children
+recovers COMPLETE33a0bd8b predecessor. Existing loader validates15151 dependency
+receipts/all2311 cases with the established three-source reader plus exact
+whole-file edge-test restoration (currentc35322fc→historical043d4663). No receipt
+rewritten;new test success remains distinct from original historical assertions.
+Queued proposalfe692b146f9c2ffc1755db931327220fa6f80b80c8dade503625cb7dea775dba;
+log divider-paint-boundaries-case-join-20261019 retains exact counts/transitions.
+All cases partial,current rendering unverified and original remaining tasks
+preserved. Accepted65e072fd and selected exporter33a0bd8b remain unchanged;the
+modified suite requires explicit production applicability at the next justified
+integration milestone,not an immediate full export for metadata. Next separate
+native-versus-canvas glyph generation from classified unequal composition/
+placement and anonymous line-box inputs. Completed upload,interior,edge/halo,
+alpha and emissive-state questions must not be reopened absent changed inputs.
+
 October19 configured text edge/halo gap CLOSED for the retained four contrast
 DPR1 contexts/eight owners,not whole-case inspection: existing owning texture
 test extended without new capture/model family. Original source/checkpoint/

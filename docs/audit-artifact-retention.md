@@ -2,6 +2,19 @@
 
 ## Current versus historical evidence
 
+October19 checklist-join headroom: closed candidate-validation65e072fd/index.json
+was losslessly LZX-compressed from180114245 logical bytes to37679104 physical
+bytes. SHA256 before/after remained4837b33b2e1e5ced142cc45fcc61b03b898f8e66981fb283f9164d1a198bc95c.
+The new closed proposalfe692b14 initially inherited ordinary NTFS compression;
+the first no-force LZX command correctly did nothing. Explicit force conversion
+then reduced its163674947 logical bytes from78548992 to36499456 physical bytes.
+Its RAW envelope SHA256 remained
+eac98d9d22378b3e857c9d1d5284b47325c49b1aeab65ee68f3e6f4e49d4d78c
+(distinct from the review-content digestfe692b14). No evidence bytes,paths,
+aliases,references or acceptance flags changed;no files deleted. Observed D:
+free after conversion300208128bytes is a volume observation,not an attribution
+of every free-space change to these two compression operations.
+
 The latest completed full Material output run is
 `artifacts/material-parity/current-full-20261005`: all 436 static cases pass,
 but five of 1,875 interaction cases fail. Retain this current failure evidence
