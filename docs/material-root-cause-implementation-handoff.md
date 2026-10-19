@@ -1,14 +1,16 @@
 # Material audit: evidence-led implementation priorities
 
-Current evidence pointer (October18):accepted packagecd867bbe/index551d3c8f has
-163 source findings/217 proof anchors,selected58ec5402. Original independentcold
-8423 and accepted import79974 terminate0;all80 sections,complete prior source
-payloads,ordered proofs and readable report conserve. Accepted index is byte-
-identical to the independent candidate. Latest full queued77d90ece plus compact
-progress/clip/list evidence remain outside this generation. All2311 cases stay
-partial/unverified. This is audit evidence acceptance,not current rendering or
-final-gate acceptance. Exact logs and remaining obligations are in the coverage
-ledger. Historical pointers below are superseded.
+Current evidence pointer (October19):accepted packagee7a91a22/index4032a569 has
+163 source findings/217 proof anchors,selectedab4b8275. Independentcold77071
+and accepted import8224 terminate0. All80 sections conserve:72 identical,eight
+with183 exactly explained source/receipt/proof-line changes and exact successor
+coverage. Complete readable report conserves except28 authenticated proof lines.
+Accepted index is byte-identical to the independent candidate. Queued ecdab1b9
+(including progress/list/source-applicability additions) and legacy clip/new AX
+evidence remain outside this generation. All2311 cases stay partial/unverified.
+This is audit evidence acceptance,not current rendering or final-gate acceptance.
+Exact logs and remaining obligations are in the coverage ledger. Historical
+pointers below are superseded;acceptedcd867bbe remains required predecessor.
 
 Queued legacy clip support limitation (October18):source proposal161aac37
 preserves all163 production definitions and adds one documented-limitation,

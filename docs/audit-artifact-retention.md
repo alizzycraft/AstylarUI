@@ -56,6 +56,15 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October19 source-receipt packagee7a91a22/index4032a569 is accepted after
+independentcold77071 and accepted-import8224 TERMINAL0. Keep both log pairs,
+all full-stream/leaf/source/proof/derived/control-row/composed/readable checks,
+the candidate-validation index and acceptedcd867bbe predecessor. Earlier
+candidate/pending descriptions are historical. All original/failure captures
+remain required;publication is not rendering or case-closure acceptance and
+does not authorize deletion or repointing of historical evidence. Queued
+ecdab1b9 and new standalone AX/clip records remain outside this generation.
+
 Keep progress-mapped-semantic-requests and progress-semantic-request-case-join-
 20261019 stdout/stderr with queued ecdab1b9 and predecessor e34e7890. Mapping
 uses80 original paired trees and existing complete recorded node groups;no

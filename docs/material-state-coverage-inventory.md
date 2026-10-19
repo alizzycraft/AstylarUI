@@ -2,6 +2,25 @@
 
 ## Current audit pointer — October19
 
+October19 coherent source-receipt package ACCEPTED:e7a91a22e150c14dd1d971fa55ff8ca3e7cbbb20282ac95cf25ec1338faa7cc8,
+index4032a569bd13e4d12a1576b76740f7f7fb2474e97e46d1d1fc77d62be9450e34.
+Independentcold77071 TERMINAL0,3384801.0134ms complete;2 collectors,10 memory
+hits,0 disk hits,0 invalidated,15065 files/1433789302 bytes read and reverified.
+Cold stdout/stderr review-suite-independent-cold-check-20261019 retain phases.
+All80 sections conserve through authenticated full-stream/leaf/source/derived/
+complete-row/readable checks:72 identical,183 explicitly explained changed
+leaves plus exact58ec→ab4b coverage. Accepted import8224 TERMINAL0 verifies
+all shards;main index is byte-identical to independently verified candidate.
+Logs review-suite-accepted-import-20261019 and candidate-index-verified retain
+results. Counts remain436 static/1875 interaction,8483 scalar groups/389202
+occurrences,39904 controls,163 findings/217 proof anchors,inputEquivalent=false.
+All2311 cases stay partial/current rendering unverified;full harness169 failures
+remain the historical unfiltered baseline,not reduced by focused passes.
+Queued ecdab1b9 and new clip/AX evidence are outside this accepted generation.
+No old capture,predecessorcd867bbe or failure evidence removed. Next:continue
+exact case-obligation work from the validated queue;do not repeat this export/
+cold/conservation milestone without relevant source drift. Final gates unchanged.
+
 October19 progress semantic-input gap narrowed across40 exact cases without
 new capture. Existing recorded DOM/SVG/plugin node groups account for every
 recorded owner;all80 input trees authenticate. Complete raw attribute maps and
