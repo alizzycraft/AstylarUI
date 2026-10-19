@@ -711,7 +711,19 @@ test('description registration conserves complete producer and source-definition
     'core-semantic-descendant-replacement-loses-retained-focus', 'core-caret-height-rule-is-font-insensitive',
     'core-flex-margin-font-relative-units-parse-as-pixels'].includes(n.id));
   assert.equal(before.length, 153); assert.equal(predecessorDefinitions.length, 155);
-  assert.deepEqual(predecessorDefinitions.slice(0, -2), before);
+  // DESCRIPTION_REFINEMENT_APPLICABILITY_BEGIN
+  // Whole-policy restoration above authenticates this later bounded refinement.
+  // Compare the historical population without mutating actual current definitions.
+  const historicalDescriptionDefinitions = structuredClone(predecessorDefinitions.slice(0, -2));
+  const marginOwner = historicalDescriptionDefinitions.find(n => n.id === 'core-em-box-size-uses-uncomputed-font');
+  assert.equal(marginOwner.inheritedBlockMargin.classification, 'confirmed-core-renderer-defect');
+  delete marginOwner.inheritedBlockMargin;
+  assert.deepEqual(historicalDescriptionDefinitions, before);
+  const alteredDescriptionDefinitions = structuredClone(historicalDescriptionDefinitions);
+  alteredDescriptionDefinitions[0].justification += ' unchecked equivalence';
+  assert.notDeepEqual(alteredDescriptionDefinitions, before);
+  assert.ok(predecessorDefinitions.find(n => n.id === 'core-em-box-size-uses-uncomputed-font').inheritedBlockMargin);
+  // DESCRIPTION_REFINEMENT_APPLICABILITY_END
   for (const changed of [producer.replace('sourceFindings,', 'sourceFindings: [],'),
     producer.replace('configured field hint-description input boundary', 'unreviewed description acceptance'),
     producer.replace('scripts/audit-material-tooltip-description.mjs', 'scripts/other.mjs'),

@@ -308,6 +308,15 @@ export function readHistoricalBenchmarkSource(file, options) {
   else if (name === 'position-composition-producer-transition.mjs') restored = restoreSemanticRegistrationTransitionSource(raw);
   else {
     restored = normalized(raw);
+    const descriptionStart = restored.indexOf('  // DESCRIPTION_REFINEMENT_APPLICABILITY_BEGIN\n');
+    const descriptionEndMarker = '  // DESCRIPTION_REFINEMENT_APPLICABILITY_END\n';
+    const descriptionEnd = restored.indexOf(descriptionEndMarker, descriptionStart);
+    assert.ok(descriptionStart >= 0 && descriptionEnd > descriptionStart);
+    assert.equal(digest(restored.slice(descriptionStart, descriptionEnd + descriptionEndMarker.length)),
+      '670701daa6bba97ae7ad9cded6636982ecb464f0d2e4ea771230190f2fef85ca');
+    restored = restored.slice(0, descriptionStart)
+      + '  assert.deepEqual(predecessorDefinitions.slice(0, -2), before);\n'
+      + restored.slice(descriptionEnd + descriptionEndMarker.length);
     const caretStart = restored.indexOf('  // CARET_OWNER_APPLICABILITY_BEGIN\n');
     const caretEndMarker = '  // CARET_OWNER_APPLICABILITY_END\n';
     const caretEnd = restored.indexOf(caretEndMarker, caretStart);

@@ -30,6 +30,35 @@ navigation summary,not new acceptance criteria or a substitute for exact records
 
 ## Evidence chronology — retain original scope and checkpoint dates
 
+October19 description-registration failure68 reconciled as historical definition
+population mismatch,not renderer failure. Existing complete-policy restoration
+already authenticates inheritedBlockMargin refinement;the older object-level
+comparison still included it. Compare a cloned predecessor view with ONLY that
+named field removed;all153 prior definitions match,altered-justification control
+differs,and actual current definition retains the refinement. Complete producer/
+policy restoration and all original negative controls remain. Historical suite
+reader reverses exact authenticated new block670701da before checking COMPLETE
+predecessor suite. Seven coherent owner/registration checks pass7/7,0 skipped/
+cancelled/todo,34662.0559ms:description registration,field hint descriptions,
+standalone proof batch,root-focus,caret font,runner applicability,historical
+registration boundary. Log description-refinement-owner-batch-20261019.log,
+SHAa52336ee3906580d36484c38f280f0f95dc8c19d2e6e60808ac85fe271e79ac8.
+No browser recapture,renderer/fixture changes or canonical publication. Same
+benchmark/helper files remain queued for explicit batch source reconciliation.
+
+Bounded grouping of retained full-harness next first barriers (not diagnoses of
+all downstream assertions):70 rejects old complete browser asset inventory with
+3JXWRYJY assets;78/82 require missing historical JPEJK334 map;89 missing3JXWRYJY
+map;80/81/88 runner86ece08b versus historicale01ef9dc;75/90 sorter9fafec85 versus
+4a386f10;73 owning antialias source5742ba6c versuse72cfb8e. Original full log
+full-audit-harness-cd867bbe-20261018 lines4227,15677,15711,15751,15778,15806,
+15834,15887,15915,15936 preserves exact failures. Do not call these rendering
+regressions or blindly bless hashes. Reuse existing retained map recovery,
+historical browser inventory and source-conservation owners;different capture
+populations cannot be substituted merely because filenames overlap. Next assess
+shared missing-map group through those existing helpers and exact caller receipts,
+then runner/sorter applicability. No revised full-harness169-failure census.
+
 October19 full-harness failure65 caret-owner barrier reconciled in existing
 owning assertion. Competing explanations:changed public caret diagnostic versus
 unrelated containing-suite drift. Exact current owner171bf9fa and Git99d56384
