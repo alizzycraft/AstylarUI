@@ -308,6 +308,18 @@ export function readHistoricalBenchmarkSource(file, options) {
   else if (name === 'position-composition-producer-transition.mjs') restored = restoreSemanticRegistrationTransitionSource(raw);
   else {
     restored = normalized(raw);
+    const ownerStart = restored.indexOf('    // ROOT_NOOP_OWNER_APPLICABILITY_BEGIN\n');
+    const ownerEndMarker = '    // ROOT_NOOP_OWNER_APPLICABILITY_END\n';
+    assert.ok(ownerStart >= 0);
+    const ownerEnd = restored.indexOf(ownerEndMarker, ownerStart);
+    assert.ok(ownerEnd > ownerStart);
+    assert.equal(digest(restored.slice(ownerStart, ownerEnd + ownerEndMarker.length)),
+      'cdc254af1d25ca47d00b016279c2a14ea8268d3f13e547602a3ac8be027af49d');
+    restored = restored.slice(0, ownerStart) + restored.slice(ownerEnd + ownerEndMarker.length);
+    assert.equal(restored.split('hash(readRootOwner(receipt.file))').length, 2);
+    assert.equal(restored.split("readRootOwner(r.owner.file, 'utf8')").length, 2);
+    restored = restored.replace('hash(readRootOwner(receipt.file))', 'hash(readFileSync(receipt.file))')
+      .replace("readRootOwner(r.owner.file, 'utf8')", "readFileSync(r.owner.file, 'utf8')");
     assert.equal(restored.split(importLine).length, 2);
     assert.equal(restored.split(populationLine).length, 2);
     restored = restored.replace(importLine, "import { readFileSync } from 'node:fs';")

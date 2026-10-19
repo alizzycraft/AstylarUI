@@ -127,11 +127,34 @@ test('retained public unchanged-root updates preserve semantic focus failure at 
     const file = 'artifacts/material-parity/public-semantic-root-noop-20261015/latest-report.json', bytes = readFileSync(file);
     assert.equal(hash(bytes), '841cf391e108c943dce2593da5b6ff7fb5430f307da1be9229252723c9ac5a48');
     const r = JSON.parse(bytes);
+    // ROOT_NOOP_OWNER_APPLICABILITY_BEGIN
+    // Scope historical owner bytes to this exact captured public program only.
+    const ownerFile = 'tests/material-parity/input-boundary-evidence.spec.mjs';
+    assert.equal(r.owner.file, ownerFile);
+    const currentOwner = readFileSync(ownerFile);
+    assert.equal(hash(currentOwner), '171bf9fae8fe2e701f5a42d5eef896685085ef267200956729ab447e04a032d5');
+    const capturedOwner = execFileSync('git', ['show', `99d56384:${ownerFile}`], { maxBuffer: 4000000 });
+    assert.equal(hash(capturedOwner), r.owner.sha256);
+    const publicProgram = source => {
+        const tree = ts.createSourceFile(ownerFile, source.toString(), ts.ScriptTarget.Latest, true), matches = [];
+        const visit = node => {
+            if (ts.isNoSubstitutionTemplateLiteral(node) && node.text.includes('window.focusAudit={')) matches.push(node.text);
+            ts.forEachChild(node, visit);
+        };
+        visit(tree); assert.equal(matches.length, 1); return matches[0];
+    };
+    const originalProgram = publicProgram(capturedOwner);
+    assert.equal(publicProgram(currentOwner), originalProgram);
+    assert.equal(originalProgram, readFileSync(r.inputSource.file, 'utf8'));
+    assert.notEqual(publicProgram(currentOwner).replace('window.focusAudit={', 'window.focusAudit={changed:true,'), originalProgram);
+    const readRootOwner = (file, options) => file === ownerFile
+        ? (options === 'utf8' ? capturedOwner.toString() : capturedOwner) : readFileSync(file, options);
+    // ROOT_NOOP_OWNER_APPLICABILITY_END
     for (const receipt of [r.owner, r.inputSource, r.bundle, r.html, ...r.inputs])
-        assert.equal(hash(readFileSync(receipt.file)), receipt.sha256, receipt.file);
+        assert.equal(hash(readRootOwner(receipt.file)), receipt.sha256, receipt.file);
     assert.equal(r.inputs.length, 2515);
     assert.ok(!r.inputs.some(x => x.file.includes('material-showcase/src') || x.file.includes('astylarui/dist/lib/plugins/material')));
-    const owner = ts.createSourceFile(r.owner.file, readFileSync(r.owner.file, 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS), templates = [];
+    const owner = ts.createSourceFile(r.owner.file, readRootOwner(r.owner.file, 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS), templates = [];
     const visit = n => {
         if (ts.isNoSubstitutionTemplateLiteral(n) && n.text.includes('window.focusAudit={'))
             templates.push(n.text);

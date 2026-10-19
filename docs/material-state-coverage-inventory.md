@@ -30,6 +30,29 @@ navigation summary,not new acceptance criteria or a substitute for exact records
 
 ## Evidence chronology — retain original scope and checkpoint dates
 
+October19 full-harness failure61 owner applicability reconciled,not renderer
+fixed. Current focused invocation still failed at original owner receipt barrier
+f3f554b3 versus171bf9fa (root-focus-current-barrier-20261019.log,
+SHA64ee6e6f6d97a57a6eb118f234e3a2b6752ef2272d86e71bf9fd2f0932acfa1a).
+Original captured public program lineage was already established;do not repeat
+capture/history investigation. Existing owning assertion now scopes historical
+Git99d56384 owner bytes ONLY to exact public-semantic-root-noop report841cf391,
+after full current owner hash authentication and TS-extracted current/original/
+recorded program equality. Altered program control differs;all2515 runtime
+dependency receipts and original behavioral assertions remain unchanged.
+Historical suite conservation reverses this exact additive block only after its
+whole-block digest cdc254af is authenticated;complete predecessor hash remains
+checked. No global historical owner read or blanket equivalence of changed
+callbacks. Final owning assertion plus two existing registration/applicability
+control tests pass3/3,0 skipped/cancelled/todo,4341.063ms:
+node --test --test-name-pattern="retained public unchanged-root updates|root editing runner applicability|semantic registration historical boundary" tests/material-parity/benchmark-config.spec.mjs tests/material-parity/semantic-text-transform-input.spec.mjs.
+Final log root-focus-owner-final-controls-20261019.log,
+SHA316a868bf8617551a653379845991a67f006e5f071af75ef1191c1765ccb5abc.
+This replays retained DPR1/2 root-focus failure,not current rendering acceptance
+or a revised full-harness failure count. Benchmark suite and semantic registration
+helper now join explicit post-publication source reconciliation at next coherent
+milestone. Canonical publication unchanged;whole-case obligations remain open.
+
 October19 original full-harness failure45 reconciled against accepted e7717418
 publication: its dated192-proof count stopped the original217-proof run before
 pointer checks. Current explicit219 population is now additionally bound to the
