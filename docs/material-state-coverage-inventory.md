@@ -2,12 +2,30 @@
 
 ## Current audit pointer — October19
 
+October19 actual date-key callback payload integration COMPLETE for8 contexts.
+Join65615 TERMINAL0 rejects40 altered modifier/code/owner/open-state controls,
+validates15142 dependencies/all2311 cases and saves queued
+7ed334d554be29f4f179922cc849d11a8db57e97d4964850c55ac1846b034440.
+Only8 nested payload children change;removing them recovers complete23f01644.
+Mapped app source/chunk/map agree with current source and capture checkpoint.
+Correct Alt/ArrowDown payload reaches actual leaf callback and four ancestors;
+candidate still stays closed. Prior typed-recorder payload uncertainty is closed
+by this new instrumented witness only,not retroactively rewritten. Existing
+application-route finding is strengthened;no key/modifier-loss core diagnosis
+in these contexts. No duplicate whole-case coverage credit,new defect category,
+recapture,renderer/fixture change or canonical export. All cases remain partial.
+Log datepicker-key-payload-case-join-20261019 retains precise recipe/receipts.
+Before write,stronger transparent compression of three CLOSED review snapshots
+preserves all raw before/after hashes and restores795172864 bytes free;details
+in retention doc. Accepted4acc/index44ca stays unchanged. Next other unresolved
+state/input/paint/semantic/lifetime questions,not these8 shortcut/payload actions.
+
 October19 date shortcut payload uncertainty directly observed,not inferred from
 DOM delivery. Capture53606 TERMINAL0,8 contexts/32 boundaries,report
 6d905fb31ba815cc532240354ecb8544da7aaa65922aea8164de741893bcc066.
 Observer wraps actual component handleKeydown argument,preserving original
 receiver,args,return and call. Both Alt/ArrowDown payloads carry correct key,
-code,alt=true,ctrl/shift/meta=false,targetId=date-control through five authored
+code,alt=true,ctrl/shift/meta=false,targetId=datepicker-control through five authored
 bubbling handlers (control,input-region,primary,root,page);leaf id is
 datepicker-control. Native opens,candidate stays closed. This supplies missing
 application payload evidence in these contexts,not a universal core key guarantee.

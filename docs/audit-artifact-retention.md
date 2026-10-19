@@ -56,6 +56,17 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep datepicker-key-payload-case-join-20261019 log pair/producer and queued7ed334d5
+with23f01644 predecessor. Join65615 TERMINAL0 binds8 direct payload children,
+40 altered-value controls,15142 dependencies and complete predecessor recovery.
+Earlier source/capture/failed verifier evidence stays immutable. No duplicate
+case credit or accepted-generation rewrite follows from this payload extension.
+
+closed-review-lzx-headroom-20261019 log pair authenticates raw SHA-256 before and
+after stronger transparent compression of ONLY closed proposal23f01644,348b80b9
+and98a56bda. All bytes and references unchanged;free space795172864 bytes after
+compression,before new join. No artifact deletion,source mutation or scope change.
+
 Keep datepicker-key-payload-20261019 report6d905fb3/checkpoint/16 trees,frozen
 producer8137014e,capture log,original independent-verify two-versus-ten failure
 and separate bound-verify success. Capture53606/verify terminate0;actual callback
