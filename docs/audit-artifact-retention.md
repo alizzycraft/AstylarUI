@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep live legacy-clip-queued-coherent-canonical-export-20261019 stdout/stderr
+(27263),fixed source epochce83ece4 and selected104d7c61. A resulting candidate
+must stay separate from accepted e7a91 until independent cold,complete content
+conservation and index verification finish. No export/live process authorizes
+predecessor cleanup or replacement of original/failure evidence.
+
 Keep legacy-clip-registration-focused,registration-complete,registration-inventory,
 registration-inventory-bound,queued-source-intersection and queued-policy-receipt-
 join-20261019 stdout/stderr. Production164/218 preserves complete prior163/217;

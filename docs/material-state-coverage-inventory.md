@@ -42,9 +42,13 @@ validates14457 dependencies/all2311 cases. Reversing955 exact receipt changes
 and815 applicability children recovers complete d672395e;all raw input,status,
 remaining work and previous observations survive. Existing launcher now selects
 this source-current queue. Accepted e7a91/index4032 remains163/217 and unchanged.
-Next justified milestone:coherent export of this source registration PLUS the
-already validated queued coverage,then independent cold/content/index checks;
-do not repeat public clip capture or reinterpret unsupported clip as equivalence.
+Source incrementce83ece4 is pushed. Coherent export27263 now runs against that
+fixed source epoch/selected104d7c61 with the already validated queued coverage.
+Keep legacy-clip-queued-coherent-canonical-export-20261019 stdout/stderr;cache
+eligibility is not assumed outside the existing dependency-validated collector.
+Independent cold/content/index checks follow terminal export;accepted e7a91
+remains unchanged meanwhile. Do not repeat public clip capture or reinterpret
+unsupported clip as equivalence;do not restart a quiet live export.
 
 October19 bounded progress AX join21110 TERMINAL0:latest queued successor
 d672395e3b22f47b9af855ff26dc70e2b92429e8efeeed34fa28b1ef3c5a48b5
