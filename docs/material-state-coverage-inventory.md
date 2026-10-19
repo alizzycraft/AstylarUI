@@ -20,7 +20,7 @@ unverified throughout. Evidence contact is100%,not inspection completion/parity.
 | Divider input/structure |48 wrapper requests and inline top attribution;existing classified absolute-flow substitutions. | Remaining material/anonymous-line-box requirements beyond these scoped results. |
 | Divider paint | Configured contrast-DPR1 complete texture footprint;four-theme desktop native/canvas backing and settled-font controls. | Scope of remaining native phase/separator-coverage questions and original full paint criteria;do not transfer public DPR2 residuals here. |
 | Divider ownership |20 observed physical contexts/24 memberships,60 Angular recreations with tracked/registration cleanup and passive peer survival;controlled initial font readiness after Angular destroy and retained later font callback after disposal. | Applicability of these source-level font guards to captured Material runtime and other original lifetime/history requirements;controlled callbacks are not network timing evidence. |
-| Applicability/integration | Newer88-module core/linker/wiring,2280 mapped sources,17 current app sources,55 media/five style identities. | Explicit production reader/source-fingerprint reconciliation for changed owning suite/new queue;runtime/environment boundaries and original final gates. |
+| Applicability/integration | Newer88-module core/linker/wiring,2280 mapped sources,17 current app sources,55 media/five style identities;four-source reader/export/content conservation/cold publication complete. | Post-publication reader/store-test source changes need explicit reconciliation at the next coherent milestone;runtime/environment boundaries and original final gates remain. |
 | Whole audit | Complete configured inventory and bounded findings/reproductions remain retained. | Exact obligation/state closure across all36 families and all original final verification/handoff requirements. |
 
 Before another capture,review these remaining requirements against existing
@@ -29,6 +29,28 @@ subquestions merely because a parent still says partial. This table is a current
 navigation summary,not new acceptance criteria or a substitute for exact records.
 
 ## Evidence chronology — retain original scope and checkpoint dates
+
+October19 known predecessor-reader focused failure RESOLVED without changing
+historical receipts or strict loader: original three-source reader still rejects
+the later alignment-suite extension,now explicitly asserted as a negative
+control. Existing four-source boundary additionally accepts ONLY exact original
+33a0bd8b review as well as be99cd38;all four whole-source hashes and immutable
+b187103f/d15efcae boundary remain guarded. Full original review then validates
+through that explicit reader,retaining2311partial/unverified cases. Original
+three-source transition assertions and drift/wrong-digest controls are retained.
+Focused two reader tests pass2/2,51677.1883ms;remaining four store/closure/control
+tests pass4/4,1667.7394ms,no skipped/cancelled/todo. Logs divider-predecessor-
+reader-focused-20261019 SHA7ac792b20811246737bc2572238fc4f3803e85101ed9bcec9861aa7ee3ee5436
+and divider-predecessor-store-controls-20261019 SHA8e0c2036b6dcddb77944fd9da4c440ed5505e4469cfa6673da3ecf9f33c2bf59.
+This answers the observed prior1/2 focused result,NOT a new full-harness result
+or subtraction from its historical169failures. Published e771/7ca89 remains
+unchanged. Two indexed source files now differ from published receipts:
+text-backing-case-review-source.mjs865ef7fb0a5363cab98826521dec013d63a0b20c1da1fd5752ad5e427d100aa6
+and audit-findings-store.spec.mjscabc004a3586cc8d5ce70bb6a35eb8a407cbcbcd1731359fe4f7b1d94d7f71d3.
+No renderer/fixture/producer/launcher change. Reconcile these exact support-only
+changes at next coherent integration milestone,not another full export for this
+increment. Next investigate actual remaining case obligations/full-harness
+failure owners;whole-audit scope and acceptance unchanged.
 
 October19 queued-divider publication ACCEPTED as audit EVIDENCE,not audit
 completion: independent cold24870 TERMINAL0,3244861.7146ms,2collectors/10memory

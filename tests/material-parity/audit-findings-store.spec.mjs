@@ -38,7 +38,15 @@ test('retained text backing review uses explicit tracked source applicability wi
   const applicability=createTextBackingReviewReader({root,read:fs.readFileSync,reviewSha256:textBackingRetainedReview});
   assert.equal(applicability.sourceApplicability.transitions.length,3);
   const cases=review.groups.map(g=>g.case);
-  const result=loadCaseObligationReview(file,textBackingRetainedReview,cases,{root,read:applicability.read});
+  // The original three-source adapter must still reject the later alignment
+  // extension. Replaying the full old review now requires its explicit fourth
+  // source boundary, not replacing receipts or weakening the strict loader.
+  assert.throws(()=>loadCaseObligationReview(file,textBackingRetainedReview,cases,{root,read:applicability.read}),
+    /Case obligation evidence changed: tests\/material-parity\/alignment-crop-provenance.spec.mjs/);
+  const fullApplicability=createDividerReviewedBoundariesReader({root,read:fs.readFileSync,reviewSha256:textBackingRetainedReview});
+  assert.equal(fullApplicability.sourceApplicability.transitions.length,4);
+  assert.equal(fullApplicability.sourceApplicability.reviewSha256,textBackingRetainedReview);
+  const result=loadCaseObligationReview(file,textBackingRetainedReview,cases,{root,read:fullApplicability.read});
   assert.equal(result.cases.length,2311);assert.equal(result.currentRenderingAccepted,false);assert.equal(result.inspectionComplete,false);
   for(const transition of applicability.sourceApplicability.transitions){
     assert.notEqual(transition.currentSha256,transition.historicalSha256);

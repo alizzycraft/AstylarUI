@@ -10,7 +10,9 @@ const hash=b=>createHash('sha256').update(b).digest('hex');
 // Reuse the exact validated four-source boundary. The supplied session reader
 // observes every current byte, including the immutable boundary owner itself.
 export function createDividerReviewedBoundariesReader({root,read,reviewSha256}){
-  assert.equal(reviewSha256,dividerReviewedBoundariesReview);
+  // Both exact reviews retain the same pre-extension alignment-suite receipt.
+  // Supporting the predecessor does not change the three-source base contract.
+  assert.ok([textBackingRetainedReview,dividerReviewedBoundariesReview].includes(reviewSha256));
   const owner='scripts/join-material-divider-paint-boundaries.mjs';
   const source=read(path.resolve(root,owner),'utf8');
   assert.equal(hash(source),'b187103f2f773955dd97ea3e0ee4e0b5d4b4b9faab4af0ebb6fe5d6627f681da');
