@@ -1,5 +1,19 @@
 # Material audit: evidence-led implementation priorities
 
+October19 acceptance update:all80 candidate sections now fully accounted for
+(70 identical,10 exactly explained). Remaining99 metadata leaves reduce to98
+producer receipts and one reconstructed report hash. Cold31464 remains live;
+accepted e7a91 is unchanged until it passes and import identity is checked.
+
+Existing composite keyboard authoring finding now has8 enabled unchecked radio
+Space observations:both receive trusted keys,native selects solo and generates
+click/input/change,candidate role-only DIV stays team despite callback arrival.
+Complete current/mapped authored source agrees;the application handles only
+Escape. This does not prove core key-payload delivery or justify a competing
+plugin input system. Preserve equivalent native-control intent/owning generic
+semantics rather than styling or event-suppression workarounds. Exact bounded
+evidence is queuedbad78781,outside candidate4acc. No implementation authorized.
+
 October19 candidate4acc8585 acceptance remains pending. All163 earlier source
 finding rows conserve completely;the added clip limitation derives exactly from
 current production scanner/definition/location461.49 changed scalar/control

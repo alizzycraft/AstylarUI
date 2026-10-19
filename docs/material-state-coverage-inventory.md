@@ -2,6 +2,46 @@
 
 ## Current audit pointer — October19
 
+October19 candidate CONTENT conservation COMPLETE;independent cold still live.
+Metadata leaf compare19069 TERMINAL0 authenticates both full streams and checks
+263567/590705/343859/3684597 entries in controlLineBoxes/ownerCaretInputs/
+reviewedSourceBatchInputs/controlTypography. Exactly99 leaves differ:98 exact
+producer receipts7bb→e486 at four explicitly checked path patterns/counts48/1/
+1/48,and ONE derived motion-report digest0a6fd119→1083f33a. Reconstructing the
+preserved report with actual four current receipts and reversing only producer
+receipt derives both exact hashes. No generic metadata exception. Composed
+content-conservation authenticates seven constituent proofs,all80 sections,
+70 identical and all10 changed fully explained,49 complete-row metadata changes,
+one added limitation,six source additions/one proof addition and exact selected
+104 coverage. Entire readable report changes only two derived lines and one
+proof-line shift. Candidate4acc8585/index44ca448b remains separate from accepted
+e7a91/index4032. Independent cold31464/process25136 is confirmed live;no
+publication or final-rendering acceptance yet. Logs legacy-clip-queued-metadata-
+leaves-bound,metadata-explained and composed-content-conservation-20261019 retain
+exact receipts/recipes. Next milestone:terminal cold result,then accepted import/
+index identity and publication;do not rescan the already conserved payloads.
+
+October19 enabled unchecked radio Space gap inspected in8 exact desktop focus
+contexts (four profiles,DPR1/2). Bound capture67758 and independent verify
+TERMINAL0,report54a0fd31807035ff172c5d99efc7a7286f334a4813626bd520984909511164bb:
+after original focus on solo,both receive trusted DOM Space keydown/keyup;
+native switches team→solo and emits click/input/change,candidate stays team
+with no activation. Candidate logical callback records keydown on radio-solo,
+not its key payload. Native INPUT[type=radio] versus candidate DIV[role=radio]
+and current callback handling only Escape extend EXISTING composite-keyboard
+authoring finding,not a demonstrated core delivery defect or new category.
+Captured app chunk/map receipts authenticate complete mapped/current source
+byte equality71e2d41f. Join40539 TERMINAL0 rejects16 altered-state/trust controls,
+validates14829 dependencies/all2311 cases,saves queued
+bad787812f6803ae08c7fbd49a8edf206b9edf309b225f5ee6f756e44b6488d5.
+Eight activation children/precise task refinements reverse to complete1c7a7e2b;
+all other evidence/tasks remain,all whole cases partial. Not selected/disabled
+Space,other keys,paint or current-package acceptance. Initial adapter guard fails
+before capture on observer text absent from parent;corrected edit applies at
+the actual nested event source. Keep failure and separately named bound capture,
+independent-verify/case-join logs. No PNGs or renderer/fixture changes. Latest
+queuebad78781 remains outside frozen candidate/selected104 while cold runs.
+
 October19 candidate content conservation narrows to FOUR sections;no publication.
 Section comparison85376 TERMINAL0 authenticates candidate4acc8585 and reused
 accepted e7a91 receipts:all80 sections survive,70 identical. Ten changed:

@@ -56,6 +56,20 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep legacy-clip-queued-metadata-leaves-bound,metadata-explained and composed-
+content-conservation-20261019 stdout/stderr. All candidate content changes are
+now explained,not accepted rendering. Independent cold31464 remains required;
+candidate4acc and accepted e7a91/predecessor proofs stay separate. No rescan,
+original deletion or pointer update follows until cold acceptance finishes.
+
+Keep radio-space initial pre-capture guard failure and radio-space-bound-20261019
+report/checkpoint/16 trees,producer and capture/independent-verify/case-join logs.
+The corrected producer applies observer additions at their actual source layer;
+it is frozen after capture. Keep queuedbad78781 and1c7a7e2b predecessor:8 children/
+task refinements reverse exactly,14829 dependencies validate. Eight enabled
+unchecked Space failures do not replace Arrow/disabled/selected/paint evidence.
+No PNGs or successful scratch generated. No renderer changes/whole-case closure.
+
 Keep legacy-clip-queued-section-conservation,source-row-conservation,row-
 conservation,row-deltas-explained,registry-section-conservation,coverage-
 conservation and readable-conservation-20261019 stdout/stderr. These conserve
