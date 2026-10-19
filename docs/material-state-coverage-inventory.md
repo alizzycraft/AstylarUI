@@ -2,6 +2,21 @@
 
 ## Current audit pointer — October18
 
+October19 remaining48 control-row links now verified:batch1280 TERMINAL0 loads
+all48 complete accepted button rows through existing loadFindingEvidence. Each
+original row hash matches its compact receipt;replacing ONLY the authenticated
+producer receipt derives its exact candidate scalar-link hash,48/48 unique.
+Log review-suite-control-row-hash-conservation-20261019 retains exact cases,
+ordinals and hash pairs. Composed-content-conservation log authenticates all
+five constituent logs,80 sections/72 identical,183 explained changed leaves and
+exact successor coverage. Full readable Markdown recovers by ONLY28 authenticated
+proof-line replacements. No broader metadata exception or fresh capture follows.
+Separate candidate-index import46741 now runs in working-audit/candidate-validation;
+acceptedcd867bbe pointer stays unchanged. Independentcold77071 remains live.
+This closes content-conservation uncertainty,not independent cold/index acceptance,
+current rendering or whole-case closure. Next:retain terminal candidate-index/cold
+results,verify candidate coverage/index and publish only after acceptance checks.
+
 October19 changed-leaf comparison77254 TERMINAL0:both full streams authenticate;
 183 changed leaves comprise8 source hashes,98 direct producer receipts,one
 derived motion-report hash,48 scalar control-row hashes and28 proof lines.
