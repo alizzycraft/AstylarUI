@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep text-backing-registration-full-ancestry original stale-population failure
+and separate text-backing-full-registration-integration10/10 success log pairs.
+Keep text-backing-production-source-preflight-20261019 actual collector output:
+165definitions/zero undetected/737sources/219proofs. These source-only checks do
+not replace full canonical validation or make old helper/suite receipts current.
+
 Keep text-backing-registration initial failed altered-id guard log pair and
 separate bound-focused2/2,clip-predecessor-integration4/4,registration-ancestry3/3
 logs. Original policy/producer restored bytes authenticate exact predecessor;

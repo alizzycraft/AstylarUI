@@ -265,10 +265,17 @@ export function reviewedRootEditingGraph(graph, actionSource, expectedRunnerEntr
   return graph.map(row => row.file === runnerFile ? { ...row, sha256: oldRunner } : row);
 }
 export function historicalSemanticDefinitions(current) {
+  if (current.length === 165) {
+    const source=readActual('tests/material-parity/input-equivalence-policy.mjs','utf8');
+    restoreTextBackingPolicy(source);
+    const actual=new Function(source.replace(/^export const /gm,'const ')+';return sourceAuditDefinitions;')();
+    assert.deepEqual(current,actual,'unreviewed text backing definition population');
+    current=current.filter(row=>row.id!==backingId);
+  }
   if (current.length === 164) {
     const source = readActual('tests/material-parity/input-equivalence-policy.mjs', 'utf8');
     restoreLegacyClipPolicy(source); // Authenticate the complete additive source.
-    const actual = new Function(source.replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
+    const actual = new Function(restoreTextBackingPolicy(source).replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
     assert.deepEqual(current, actual, 'unreviewed current definition population');
     current = current.filter(row => row.id !== clipId);
   }

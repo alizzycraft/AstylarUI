@@ -137,7 +137,7 @@ test('public semantic text transform preserves controls and current owner eviden
     assert.equal(restored, previous, `Unrelated ${file} source must survive exactly`);
     assert.notEqual(restored + '\n// unrelated drift', previous);
   }
-  t.diagnostic(JSON.stringify({ currentDefinitions: 164, preClipDefinitions: 163, semanticRegistrationDefinitions: 160, priorDefinitionsConserved: 159, semanticRegistrationProofs: 214,
+  t.diagnostic(JSON.stringify({ currentDefinitions: 165, preBackingDefinitions:164, preClipDefinitions: 163, semanticRegistrationDefinitions: 160, priorDefinitionsConserved: 159, semanticRegistrationProofs: 214,
     publicFailurePairs: 4, materialPhysicalContexts: 16, canonicalPublication: false }));
 });
 
@@ -168,10 +168,13 @@ test('semantic registration historical boundary rejects drift and keeps current 
   const old = historicalSemanticDefinitions(currentSourceAuditDefinitions);
   assert.equal(old.length, 159);
   assert.equal(sourceAuditDefinitions.length, 163); // authenticated predecessor remains unchanged
-  assert.equal(currentSourceAuditDefinitions.length, 164); // actual registry is never mutated
+  assert.equal(currentSourceAuditDefinitions.length, 165); // actual registry is never mutated
   const forgedClip = structuredClone(currentSourceAuditDefinitions);
-  forgedClip[0].classification = 'intentional-documented-limitation';
+  forgedClip[1].classification = 'intentional-documented-limitation';
   assert.throws(() => historicalSemanticDefinitions(forgedClip));
+  const forgedBacking=structuredClone(currentSourceAuditDefinitions);
+  forgedBacking[0].classification='equivalent-representation';
+  assert.throws(()=>historicalSemanticDefinitions(forgedBacking));
   assert.throws(() => historicalSemanticDefinitions(old));
   let controls = 1;
   for (const [file, restore] of [

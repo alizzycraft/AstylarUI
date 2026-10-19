@@ -2,6 +2,23 @@
 
 ## Current audit pointer — October19
 
+October19 FULL registration/ancestry integration COMPLETE:32940 TERMINAL0,
+10tests10pass,zero skip/fail. Earlier full semantic suite exposed stale164-only
+historicalSemanticDefinitions adapter (actual165);exact source-authenticated
+165→164 addition now precedes unchanged clip/semantic reductions. Forged clip
+AND backing entries reject;original159-definition historical population survives.
+Original full-ancestry failure retained separately,not overwritten. Production
+source preflight executes ACTUAL scanMaterialSources/sourceFingerprints methods:
+165definitions,zero undetected patterns,737source rows/219proof anchors. New
+finding matches canvas allocation line48 exactly. InventoryJSON SHA
+8aa5b490ade1868bd52546f71d3b3e9ebfd398a62794437c0813a47384bc62e6;
+receipt in text-backing-production-source-preflight-20261019. This is not export
+or full report validation. Accepted package4acc remains164/218. Next coherent
+publication preparation must reconcile changed registration helper/suite source
+receipts AND selected queued case review against export inputs. Earlier15144
+dependency verification predates these helper/suite edits;do not describe it as
+current blanket validation. No new browser work or whole-case promotion needed.
+
 October19 source registration COMPLETE for core-text-backing-ceil-rescales-logical-
 line-height:165 source definitions/219 focused proof anchors,FOUR new evidence/
 producer inventory paths. Accepted4acc package remains164/218,not republished.
