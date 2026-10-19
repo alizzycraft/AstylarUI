@@ -31,6 +31,16 @@ replace('  const events = [];', '  const events = [];\n' + observer[0].getText(o
 replace("snapshotPoint: 'document-capture-listener', before: state()", "snapshotPoint: 'document-capture-listener', mutation: structuredClone(mutations.active), before: state()");
 replace('events.length = 0; sequence = 0; context = null;', 'events.length = 0; sequence = 0; context = null; mutations.records.length = 0;');
 replace('activeAncestry, state: state(), events: structuredClone(events),', 'activeAncestry, state: state(), events: structuredClone(events), mutations: structuredClone(mutations.records),');
+// Preserve dd987abe's failed direct measurement. Use the main harness's exact
+// measurement helper only after all original action observations are recorded.
+const measurementAdaptation = [
+  ["'sendShowcaseCommand', 'waitForThemeApplied'];", "'sendShowcaseCommand', 'waitForThemeApplied', 'measureAstylarInputs'];"],
+  ['waitForThemeApplied};', 'waitForThemeApplied,measureAstylarInputs};'],
+  ['await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([]).inputTree)', '(await actions.measureAstylarInputs(page, [])).inputTree'],
+  ['row[mode] = { observations, inputTree:', "row[mode] = { observations, inputTreeBoundary: 'Collected after recorded observations; candidate uses exact maintained measureAstylarInputs settlement guard,not an action-timing observation.', inputTree:"],
+].map(([before, after]) => `replace(${JSON.stringify(before)}, ${JSON.stringify(after)});`).join('\n');
+replace('const ast = ts.createSourceFile(baseFile, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);',
+  measurementAdaptation + '\nconst ast = ts.createSourceFile(baseFile, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);');
 const ast = ts.createSourceFile(file, source, 99, true, ts.ScriptKind.JS);
 assert.equal(ast.parseDiagnostics.length, 0);
 for (const node of ast.statements.filter(ts.isImportDeclaration).toReversed()) {

@@ -2,6 +2,23 @@
 
 ## Current audit pointer — October19
 
+October19 remaining-focus measurement correction is bounded and capture pending.
+Original failed producer/rawSHA3c0e5a96 is preserved in Gitdd987abe;source-
+conservation log recovers that complete source by removing ONLY the new helper
+adaptation block. The main harness's exact measureAstylarInputs joins extracted
+methods and guards candidate input-tree collection after all recorded action
+observations. Tree records explicitly identify that later measurement boundary;
+no action,focus,settlement call,delay or observation is replaced. Original
+failure stdout/stderr/checkpoint remain unchanged and are not a passing run.
+Corrected remaining-configured-focus-measured-20261019 capture session23157 /
+process26544 is confirmed live,with completed row output and empty stderr so far.
+It targets104 contexts in13 remaining families,no completed report/coverage
+claim yet. Keep both runs separate;do not restart quiet output or change frozen
+producer during capture. Independent verification and exact-case analysis must
+follow terminal capture. Existing export27180 is independently live on104d7c61;
+accepted e7a91 and latest queued beda645a remain unchanged. No renderer edit,
+new accepted result or relaxed requirement follows from this diagnostic guard.
+
 October19 remaining configured-focus batch demonstrates a measurement-boundary
 failure,not104 inspected cases. Exact13 missing families/104 contexts selected
 from beda645a;capture exits1 on first core/light/DPR1 candidate input-tree read:

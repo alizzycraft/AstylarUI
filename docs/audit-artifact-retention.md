@@ -56,6 +56,17 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep remaining-configured-focus-20261019 initial failure/checkpoint/native tree
+and original capture stdout/stderr. Gitdd987abe preserves its exact producer
+SHA3c0e5a9631bebf5a2b8846faae0283666df68f5c8b6e774d886c037235e65e61.
+Keep measurement-source-conservation-20261019 logs and separate live
+remaining-configured-focus-measured-20261019 run/checkpoint/logs (session23157,
+process26544). Only input-tree collection adds the existing owning measurement
+helper AFTER recorded observations. This does not replace failed timing evidence
+or authorize interpreting later trees as action-boundary observations. Neither
+run is successful disposable scratch;no PNGs produced. Freeze current producer
+while capture runs;no whole-case/current-rendering acceptance is claimed.
+
 Keep choice-focus-mutations-20261019 with checkpoint,input trees and capture,
 independent-verify,case-join stdout/stderr. Producer is frozen at capture;
 reuses receipt-bound picker event/mutation producers without modifying them.
