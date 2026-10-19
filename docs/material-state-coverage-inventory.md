@@ -2,6 +2,25 @@
 
 ## Current audit pointer — October19
 
+October19 picker identity check distinguishes substrate handoff from the actual
+control discontinuity. Authenticated report45e9180f census confirms all16 exact
+cases have ONE candidate INPUT blur/refocus with the same object token retained
+through final focus;native has none. Timepicker's other blur is CANVAS handing
+focus to that input (relatedTarget is the exact input token),not a second input
+loss. Retained logical typed history has only one focus and no blur/focusout,
+so that history alone conceals the DOM discontinuity. All16 altered-identity
+controls reject. Log picker-focus-events-identity-discontinuity-20261019 retains
+the executed assertion recipe,exact cases and token/sequence witnesses.
+Existing light/mobile timepicker mutation trace already attributes its first
+control loss to descendant replaceChildren;public root/attribute reductions
+establish other genuine shared mechanisms. Do not extrapolate that stack to
+these16 desktop cases:their event-only capture cannot distinguish descendant,
+root or attribute mutation. Next decisive evidence is a mutation-stack witness
+using the existing bounded lifecycle diagnostic at these exact action boundaries,
+not another endpoint capture or logical-event replay. No source/fixture change,
+new finding category,case closure or current rendering claim. Export27180
+remains confirmed live;no restart or canonical acceptance follows.
+
 October19 picker raw-event gap inspected using the existing completed capture,
 not another browser run. Independent picker-focus-events-independent-verify-
 20261019 exits0:16 exact configured contexts/48 paired boundaries,report SHA
