@@ -2,6 +2,18 @@
 
 ## Current audit pointer — October19
 
+October19 storage safeguard completed before further evidence growth:existing
+compaction mechanism verifies258 identical object groups/516 original aliases
+across three closed main generations and candidate-validation. All bytes/paths
+and predecessor proofs survive;immutable aliases are now read-only hard links.
+Independent verify and accepted-index verification terminate0,4acc/index44ca
+unchanged. Volume free space134168576→959545344 bytes;queued review files already
+compressed,not rewritten. Exact plan/logs and immutability rules in retention
+doc. This is storage progress,not added inspection coverage or another audit
+export. Next substantive work remains exact input/structure mapping beyond
+reported scalar/heading owners,then unresolved paint/semantic/lifetime bounds;
+do not restart completed focus/pointer/choice AX investigations.
+
 October19 choice AX gap bounded:corrected capture1682 and independent verify
 TERMINAL0,16 focus contexts/64 actual AX targets,report
 c9e1279cd761d7ef299affe9f55b30cf2453f30be6efc470ce87ff26469958c6.

@@ -56,6 +56,22 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+October19 closed working-store generation deduplication:the existing compactor
+plans/applies/verifies258 byte-identical groups/516 aliases across4acc8585,
+e7a91a22,cd867bbe and candidate-validation under the physical working-audit
+root. Each completed generation is immutable:importFindings reuses/verifies its
+index instead of writing it. All original paths remain read-only hard links to
+working-audit/retained-evidence/objects;recovery manifest is stored there before
+replacement. Do not overwrite any archived alias in place. Original files'
+bytes,path consumers and prior generations are preserved;only redundant physical
+copies are removed. Logical duplication921243580 bytes;volume free space rises
+134168576→959545344 bytes (physical saving differs because compression exists).
+Plan,apply,independent verify and post-compaction accepted-index logs are
+working-store-compaction-{plan,apply,verify}-20261019 and
+working-store-post-compaction-index-20261019. All terminate0;accepted4acc/index
+44ca and all shards verify with unchanged8483/164/39904/389202 counts.
+Queued0889/968a review files were already compressed and were NOT modified.
+
 Keep choice-ax-bound reportc9e1279c,32 paired trees/checkpoint,original failed
 choice-ax run and all capture/independent-verify/case-join logs. Corrected capture
 1682,independent verify and join39977 terminate0;queued968a6198 with0889 predecessor
