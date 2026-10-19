@@ -1,5 +1,15 @@
 # Material audit: evidence-led implementation priorities
 
+October19 accepted evidence milestone:independent cold31464 and accepted import
+17254 TERMINAL0. Main package4acc8585/index44ca448b is byte-identical to verified
+candidate index;164 findings/218 proof anchors,selected104d7c61. All80 sections
+are conserved or exactly explained. Prior e7a91 stays preserved. All2311 cases
+remain partial/current-rendering unverified;latest queuedbad78781 focus/radio
+extensions are not silently included. Full harness169 failures and all original
+final gates remain. Cold/import logs and precise next obligations are in the
+coverage ledger. This supersedes pending-publication statements below,not their
+historical observations or the original audit/implementation boundary.
+
 October19 acceptance update:all80 candidate sections now fully accounted for
 (70 identical,10 exactly explained). Remaining99 metadata leaves reduce to98
 producer receipts and one reconstructed report hash. Cold31464 remains live;

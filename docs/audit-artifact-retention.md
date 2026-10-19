@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep legacy-clip-queued-independent-cold-check and accepted-import-20261019
+stdout/stderr:both terminal0,main4acc8585/index44ca448b accepted,independent index
+byte identity verified. Preserve prior e7a91 and candidate-validation copies,
+all content-conservation proofs and queuedbad78781 outside selected104. No
+original evidence deletion follows from acceptance. This supersedes live/pending
+milestone status below;no current-rendering or whole-case closure is implied.
+
 Keep legacy-clip-queued-metadata-leaves-bound,metadata-explained and composed-
 content-conservation-20261019 stdout/stderr. All candidate content changes are
 now explained,not accepted rendering. Independent cold31464 remains required;

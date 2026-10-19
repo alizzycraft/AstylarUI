@@ -2,6 +2,24 @@
 
 ## Current audit pointer — October19
 
+October19 candidate4acc8585 is now ACCEPTED audit evidence. Independent cold
+31464 TERMINAL0 completes3125495.0144ms;2 collectors,10 memory hits,0 disk hits,
+0 invalidated,15643 files/1514866083 bytes read and independently reverified.
+All436 static/1875 interaction cases,8483 groups/389202 occurrences and164 source
+findings validate;inputEquivalent remains false. Accepted import17254 TERMINAL0
+authenticates all shards and confirms index44ca448b byte-identical to separately
+verified candidate-validation. Main current.json now points4acc8585/index44ca448b;
+prior e7a91/index4032 and all predecessor/failure evidence remain preserved.
+Complete content-conservation proof already accounts for all80 sections;no
+completed payload scan repeated. Logs legacy-clip-queued-independent-cold-check
+and legacy-clip-queued-accepted-import-20261019 retain exact terminal results.
+This is evidence-package acceptance,not rendering acceptance:all2311 whole cases
+remain partial/current rendering unverified,and full harness169 failures/final
+gates remain outstanding. Latest queuedbad78781 focus/radio evidence remains
+outside selected104 canonical coverage. Next:publish this coherent milestone,
+then resume exact remaining case obligations from that validated queue without
+restarting completed investigations or immediately exporting queued metadata.
+
 October19 candidate CONTENT conservation COMPLETE;independent cold still live.
 Metadata leaf compare19069 TERMINAL0 authenticates both full streams and checks
 263567/590705/343859/3684597 entries in controlLineBoxes/ownerCaretInputs/
