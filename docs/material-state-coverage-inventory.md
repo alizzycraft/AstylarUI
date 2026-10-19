@@ -2,6 +2,26 @@
 
 ## Current audit pointer — October18
 
+October19 original button-box integration20011 TERMINAL0,1/1,no skips/cancel,
+reported28120939.1601ms wall duration including the long observation/clock gap;
+do not present that as measured active CPU time. Log button-box-unattributed-
+owner-integration-20261019 stdoutSHA450d9629858b8a93deeb2869961f3fb74d1f2d73e89af07e76d3f1fc950b3932;
+stderr empty. Original36 static/52 interaction cases conserve6590 scalar rows,
+all9 button groups,48 field-host groups,55 later caret signatures/119 reviewed
+and53 pending observations,and59 later-input groups/76 observations. All6318
+complete unrelated rows now equal historical SHA21fe92b099acd3e63cad9b898a4f13bc65721f643689b0b86d18e8112ca27b27.
+This includes the exact36 newly observable color groups,not their exclusion.
+All subsequent original binding/geometry-gap/false-equivalence rejection and
+mutation assertions execute and pass:73 button observations retain9 measured
+and64 geometry gaps. Successful scratchVtSE5B is absent after withAuditScratch;
+all earlier failures and original captures remain. This closes the demonstrated
+selected reconstruction/conservation barrier,not full canonical conservation,
+equal-input rendering or any whole-case closure. Next:reconcile changed consumed
+producer/helper/suite sources at a coherent canonical milestone using existing
+source/conservation tooling,then resume prioritized exact case-obligation joins.
+The original full harness169 failures remain historical baseline,not reduced
+arithmetically by this focused pass;final unfiltered/browser/release gates remain.
+
 October19 unattributed owner reconstruction now uses existing production cursor
 and tab-width reviewers against authenticated captured cases/inventory BEFORE
 admission. Each changed unattributed predecessor must first match original raw
