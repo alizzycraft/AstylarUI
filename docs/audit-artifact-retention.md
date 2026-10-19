@@ -56,6 +56,17 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep legacy-clip-queued-section-conservation,source-row-conservation,row-
+conservation,row-deltas-explained,registry-section-conservation,coverage-
+conservation and readable-conservation-20261019 stdout/stderr. These conserve
+70 whole sections,all earlier row content except49 exactly reversed metadata
+rows,and six fully explained changed sections. Keep accepted original package/
+index/proof logs and candidate separately. Initial metadata-leaves invocation
+fails at syntax before reads;retain failure separately from live -bound compare
+19069/process14976. Independent cold31464 remains live. No original/candidate
+deletion or publication follows from these partial content checks;remaining four
+sections and cold acceptance are still required. No new capture/scratch produced.
+
 Keep text-input-focus-events initial pre-capture failure and separate -bound-
 20261019 report/trees/checkpoint,producer and capture/independent-verify logs.
 Initial global resolver replacement alters a literal guard;corrected source

@@ -2,6 +2,40 @@
 
 ## Current audit pointer — October19
 
+October19 candidate content conservation narrows to FOUR sections;no publication.
+Section comparison85376 TERMINAL0 authenticates candidate4acc8585 and reused
+accepted e7a91 receipts:all80 sections survive,70 identical. Ten changed:
+sourceFingerprints,coverage,controlLineBoxes,summary,discrepancies,ownerCaretInputs,
+reviewedSourceBatchInputs,controlTypography,sourceFindings,focusedProofs.
+Existing verified indices prove48501 of48550 prior complete rows identical:
+8482/8483 scalar,all31657 retained-typography,8199/8247 control-typography and
+all163 source rows.49 changed rows are EXACT metadata:batch20926 TERMINAL0
+authenticates complete candidate button rows,then reversing only48 producer
+receipts e486→7bb and48 linked complete-row hashes in ONE scalar recovers all
+49 predecessor hashes. Added clip finding's complete row e2cf7479 derives
+exactly from existing production scanner/current definition,resolver location461;
+no second payload scan needed for that row. No observed values/classifications
+or unrelated row content change. Logs legacy-clip-queued-{source-row-conservation,
+row-conservation,row-deltas-explained}-20261019 retain exact recipes/hash chains.
+Registry-section-conservation derives COMPLETE old/new section digests from
+actual production methods:source727→733 (six additions/four common fingerprint
+changes),proof217→218 (one added proof/one line90→98),summary source count163→164
+ONLY. Coverage68458 TERMINAL0 preserves everything outside inspectionEvidence;
+entire new inspection evidence exactly equals selected104d7c61 via existing
+loader,14457 actual dependencies/all2311 partial cases. Readable conservation
+recovers whole accepted Markdown with only two precisely derived additions and
+one proof-line substitution. No full-report reparse for these derivations.
+Thus six changed sections are explained,including complete indexed rows;four
+remaining same-shape sections need exact metadata leaves. Corrected leaf compare
+19069/process14976 is confirmed live,authenticating both original streams.
+Initial leaf invocation has a syntax-only extra closing bracket failure before
+any read;preserve original stderr and separately named -bound logs. Independent
+cold31464/process25136 is separately confirmed live. No input/source/proposal
+changed mid-check. Accepted e7a91/index4032 and latest queued1c7a7e2b remain
+separate from candidate4acc/selected104. Next:explain every remaining leaf and
+finish cold acceptance before publication;do not repeat completed row/registry/
+coverage/readable checks without dependency drift. All final gates remain.
+
 October19 configured-focus record cohort now fully accounted for,not full focus
 or whole-case acceptance. Final text-input capture41887 and independent verify
 TERMINAL0:24 contexts/72 paired boundaries,reportSHA

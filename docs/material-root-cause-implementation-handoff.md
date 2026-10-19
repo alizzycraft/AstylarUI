@@ -1,5 +1,14 @@
 # Material audit: evidence-led implementation priorities
 
+October19 candidate4acc8585 acceptance remains pending. All163 earlier source
+finding rows conserve completely;the added clip limitation derives exactly from
+current production scanner/definition/location461.49 changed scalar/control
+rows reverse solely producer-receipt/link metadata;observations/classifications
+are not adjusted.70/80 sections are identical,six changed sections fully
+explained;four metadata sections and independent cold still run. Accepted e7a91
+remains authoritative;latest configured-focus queue1c7a7e2b is outside this
+selected104d7c61 candidate. No renderer implementation or acceptance change.
+
 October19 original-focus extension across104 contexts strengthens both semantic
 mutation priorities:sort/tree16 first-blur at applyAttributes.removeAttribute
 (tabindex),select8 at descendant replacement,and toolbar custom/DPR1 at root
