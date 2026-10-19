@@ -56,6 +56,12 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep picker-focus-mutations-current-owner-binding and case-join-20261019 logs,
+queued1c43e733 and complete104d7c61 predecessor. All16 added action children
+reverse exactly;all14497 actual dependencies validate. Frozen export continues
+to select104d7c61;neither proposal nor source applicability authorizes old
+capture deletion or current rendering acceptance. No successful scratch added.
+
 Keep picker-focus-events-20261019 and picker-focus-mutations-bound-20261019,
 their checkpoints/input trees and capture/independent-verify/sequence/identity/
 owner-census logs. Preserve initial picker-focus-mutations-capture failure:

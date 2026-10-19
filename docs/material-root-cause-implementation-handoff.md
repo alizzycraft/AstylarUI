@@ -1,5 +1,16 @@
 # Material audit: evidence-led implementation priorities
 
+October19 bounded picker extension:all16 configured desktop date/time focus
+contexts now directly locate retained-input blur inside descendant semantic
+reconcileElement.replaceChildren,picker-primary. Input stays connected and is
+refocused;native has no blur. Four complete current/emitted/installed/capture-map
+owner methods agree. This strengthens the existing descendant reconciliation
+finding,not a new category or application refocus workaround. Exact evidence
+and32 altered-cause controls are in picker-focus-mutations owner-census;
+current-owner-binding and case-join logs authenticate queued1c43e733 with
+14497 dependencies. All2311 cases remain partial. Frozen export still selects
+104d7c61;this queued extension is not in accepted e7a91. No renderer edits.
+
 Current evidence pointer (October19):accepted packagee7a91a22/index4032a569 has
 163 source findings/217 proof anchors,selectedab4b8275. Independentcold77071
 and accepted import8224 terminate0. All80 sections conserve:72 identical,eight

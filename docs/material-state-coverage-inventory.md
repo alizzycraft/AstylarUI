@@ -2,6 +2,26 @@
 
 ## Current audit pointer — October19
 
+October19 picker owner/current-source applicability and exact-case join complete.
+Current-owner-binding authenticates reportb649d152,checkpoint643d1a9a,served
+chunk/map and all four complete reconcile,reconcileElement,applyAttributes,
+syncFocus methods:current TS emission,installed JS and captured source-map JS
+tokens agree. This is owning-method applicability,not whole-library freshness.
+Case join96821 TERMINAL0 saves queued successor
+1c43e73336c5dfbc1f01fb2075ab56cbc93d9a4597ab7cd7e46a3556cdf7eaf9,
+validates14497 dependencies/all2311 cases and attaches16 bounded mutation-owner
+children (datepicker programmaticFocus,timepicker authoredActivation).
+Removing only these children/restoring parent dispositions recovers complete
+104d7c61 predecessor. Existing remaining work,raw inputs,other evidence and
+all partial whole-case/current-rendering statuses survive. Logs picker-focus-
+mutations-current-owner-binding and case-join-20261019 retain exact receipts.
+Selected export queue remains104d7c61 while export27180 is live;new1c43e733 is
+NOT selected/canonical and accepted e7a91 remains unchanged. No duplicate
+endpoint credit,new capture,renderer/fixture change or whole-case closure.
+Next:finish existing coherent export acceptance before selecting this successor;
+continue remaining exact action/input/paint obligations from1c43e733 rather
+than re-investigating the now-observed desktop picker descendant-loss owner.
+
 October19 picker focus-loss owner is now directly observed,not extrapolated.
 Bounded mutation variant28745 TERMINAL0 and independent verify TERMINAL0 retain
 16 exact configured desktop contexts/48 paired boundaries,reportSHA
