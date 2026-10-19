@@ -6,7 +6,25 @@ import test from 'node:test';
 import ts from 'typescript';
 import { verifyCaseIndexAssertionMigration } from './case-index-assertion-migration.mjs';
 import { caseIndexReceiptRevision, caseIndexAuditModule, caseIndexReceiptFiles, collectCaseIndexReceiptRefresh, applyCaseIndexReceiptRefresh } from '../../scripts/refresh-material-case-index-receipts.mjs';
+import { verifyMaterialReviewSuiteTransitions, suiteReceiptTransitions } from '../../scripts/reconcile-material-review-suite-receipts.mjs';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+
+test('two case-review suite transitions preserve original proof statements and bound diagnostic changes', () => {
+  const proof = verifyMaterialReviewSuiteTransitions();
+  assert.equal(proof.sources.length, 2); assert.equal(proof.historicalSources.size, 2);
+  assert.ok(proof.sources.every(source => source.unchangedTestCallbacks > 0));
+  assert.ok(proof.sources[1].preservedIconStatements > 0);
+  assert.equal(proof.renderingEquivalent, false); assert.equal(proof.inspectionComplete, false);
+});
+
+test('case-review suite transitions reject unreviewed source and changed proof log bytes', () => {
+  for (const source of suiteReceiptTransitions) {
+    assert.throws(() => verifyMaterialReviewSuiteTransitions({ read: file => file === source.file
+      ? Buffer.concat([readFileSync(file), Buffer.from('\n// unrelated drift')]) : readFileSync(file) }), /unreviewed suite source drift/);
+  }
+  assert.throws(() => verifyMaterialReviewSuiteTransitions({ read: file => file.endsWith('.log')
+    ? Buffer.from('forged passing log') : readFileSync(file) }), /source transition proof log changed/);
+});
 
 test('nine case-index receipt proposals preserve complete original findings and authenticate current dependencies', () => {
   const result = collectCaseIndexReceiptRefresh();

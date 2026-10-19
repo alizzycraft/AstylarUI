@@ -2,6 +2,31 @@
 
 ## Current audit pointer — October18
 
+October19 two-suite receipt reconciliation verified without refreshing captures.
+Specific script reconcile-material-review-suite-receipts pins complete old/current
+suite bytes,conserves77/46 unrelated top-level statements and48/23 unchanged test
+callbacks,and preserves all29 original Icon review statements in order. Only
+two reviewed boundary diagnostics and added Icon checks differ. Exact original
+checkpoint/current-equality/Icon-control logs authenticate their bounded results.
+Existing case-index suite gains2 focused controls:source/log drift rejects;
+2/2 exit0,no skips/cancel,1963.2605ms in review-suite-source-conservation-controls-
+20261019 logs. This new narrow script closes the demonstrated two-receipt gap;
+it is not a generic receipt bypass or new audit framework.
+Actual reconciliation exits0:successor ab4b8275f0c8d524732ee8dc9f3f3d9e3d837f6b51e5d9bdc2a0b618f354f123
+contains the same2311 groups;200 exact receipt slots change across100 affected
+cases (the two source cohorts overlap). All13879 dependencies pass the existing
+loader. Removing only added applicability notes and restoring receipt slots
+recovers complete58ec5402 digest exactly;acceptedcd867bbe pointer is unchanged.
+Log review-suite-receipt-reconciliation-20261019 stdout/stderr. No status,
+remaining obligation,classification,capture or rendering flag is promoted.
+Named ancestry launcher now selects this dependency-validated successor;its
+dry-run path/digest preflight passes in review-suite-selected-launcher-preflight-
+20261019 logs. Old58ec proposal remains immutable required history,not deleted.
+Next:coherent canonical export/check and complete section/payload conservation
+for the eight changed consumed sources plus this bounded review transition.
+Current source selection is not canonical acceptance;all whole-case closures,
+current rendering and original final gates remain open.
+
 October19 canonical milestone preflight avoids a premature full export. One
 read-only streamed census authenticates acceptedcd867bbe packed/decoded hashes,
 all2308516424 decoded bytes/80 sections,and compares the actual current producer
