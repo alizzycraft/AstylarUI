@@ -2,6 +2,26 @@
 
 ## Current audit pointer — October19
 
+October19 served-build preflight changes the next action: the existing
+no-retained-capture-matching-served-build field was produced from only THREE
+named October11 reports in input-boundary-evidence.spec.mjs,not a complete
+retained-run search. Executing existing fingerprintDirectory on the actual
+showcase browser directory yields1887 files,JSON receipt digest
+6babf9a127ffb849175d0e9924ee3710f7f9e9a3cccb33ea473e50006c8f193b.
+Read-only comparison against retained checkpoint manifests finds exact equality
+for divider-alignment-provenance-20261015,including all16 static/8 interaction
+records. Its report SHA is4be9c6d199952f35203f31d08def08d0d936071f4eb313b75ad3bbf72dd46f11;
+manifest SHA62829d76ac8a7345984bf0e3edab45f27a179afe746faabf658172b77ddae07d.
+Browser155.0.8059.40,static gate16pass/0fail,but summary.meetsAcceptance=false;
+this is NOT current-code whole-case acceptance. Additional matching divider
+AX/remount checkpoints exist. October5 full checkpoint does NOT match.
+Next authenticate the existing24-case report's complete provenance,checkpoint
+membership and relevant source/runtime/harness applicability,then extend the
+existing sourceCurrentness records rather than recapture just to fill this field.
+No review flags,canonical package,fixtures,renderer or acceptance criteria change.
+The sourceCurrentness table below describes the still-unamended case records,
+not absence of all potentially reusable retained evidence.
+
 October19 whole-case divider requirement review,not another symptom survey:
 all24 cases have three justified exclusions and FIVE still-partial applicable
 obligations. Existing exclusion records lacked the per-obligation evidence and
