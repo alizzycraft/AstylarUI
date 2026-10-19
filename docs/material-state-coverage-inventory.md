@@ -2,6 +2,23 @@
 
 ## Current audit pointer — October19
 
+October19 date shortcut payload uncertainty directly observed,not inferred from
+DOM delivery. Capture53606 TERMINAL0,8 contexts/32 boundaries,report
+6d905fb31ba815cc532240354ecb8544da7aaa65922aea8164de741893bcc066.
+Observer wraps actual component handleKeydown argument,preserving original
+receiver,args,return and call. Both Alt/ArrowDown payloads carry correct key,
+code,alt=true,ctrl/shift/meta=false,targetId=date-control through five authored
+bubbling handlers (control,input-region,primary,root,page);leaf id is
+datepicker-control. Native opens,candidate stays closed. This supplies missing
+application payload evidence in these contexts,not a universal core key guarantee.
+Original independent verifier assumes2 callbacks but actual10 correctly include
+bubbling;failure preserved. Separate bound verifier pins producer8137014e and
+changes ONLY verifier expectation to exact10-owner/key sequence plus every
+payload field. Bound verify TERMINAL0;capture producer unchanged. No PNGs,
+fixture/renderer/action changes. Logs datepicker-key-payload-{capture,
+independent-verify,bound-verify}-20261019 retain evidence. Next source-bound
+join/rejection controls on existing8 records;do not repeat shortcut action again.
+
 October19 date shortcut source/classification join complete:space-retry71342
 TERMINAL0 validates15122 dependencies/all2311 cases and saves queued
 23f01644f5662334094778ef0111f3ace85987eb0c5553701f3f3d67e019c091.

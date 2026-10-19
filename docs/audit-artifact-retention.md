@@ -56,6 +56,13 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Keep datepicker-key-payload-20261019 report6d905fb3/checkpoint/16 trees,frozen
+producer8137014e,capture log,original independent-verify two-versus-ten failure
+and separate bound-verify success. Capture53606/verify terminate0;actual callback
+payloads include five-handler bubbling per key. Bound verifier reuses original
+capture/provenance checks and strengthens exact sequence/field assertions without
+editing source receipts or capture bytes. Next exact-case join remains pending.
+
 Keep datepicker-alt-arrowdown-case-join token-comparison failure,bound-case-join
 ENOSPC failure and space-retry-case-join success logs separately. Failed atomic
 proposal23f01644*.19708.tmp is zero bytes and retained as failure provenance.
