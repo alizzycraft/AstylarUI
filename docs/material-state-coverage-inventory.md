@@ -2,6 +2,26 @@
 
 ## Current audit pointer — October19
 
+October19 retained divider applicability verification: existing
+openMaterialCheckpoint(...resume:true).load(materialCaseKey(kind,row)) authenticates
+all24 report rows against original checkpoint result digests and captured
+artifact receipts. Separately all48 input-tree hashes match. All10 captured
+harnessFiles match current raw files; workspace node_modules/.package-lock.json
+matches installedDependencies (NOT showcase package equivalence). Executable
+chunk-PCHQTLJM.js.map embeds src/app/astylar.component.ts byte-text equal to
+current application source. The same source name in astylar.component.css.map
+is a stylesheet transform and differs;do not misidentify it as executable TS.
+All24 row.meetsAcceptance values are true:16static/8interaction. Both aggregate
+flags are false because summarize/summarizeInteractions require FULL configured
+matrix lengths436/1875;the retained report is filtered,enforce=false,textAudit=false.
+Thus false aggregate flags are not24 row failures. No browser launch/current
+binary observation occurred;captured155.0.8059.40 remains historical. Current
+build correspondence and harness continuity are established,not full current
+core-source/installed-package equivalence,missing focused paint or equal inputs.
+Next join this authenticated report into existing24 sourceCurrentness records,
+preserving remaining runtime/core/paint obligations and full final gates. Do not
+repeat build-directory,checkpoint,tree or harness verification absent drift.
+
 October19 served-build preflight changes the next action: the existing
 no-retained-capture-matching-served-build field was produced from only THREE
 named October11 reports in input-boundary-evidence.spec.mjs,not a complete
