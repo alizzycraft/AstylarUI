@@ -4,7 +4,7 @@ import * as fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { importFindings, queryFindings, verifyFindings, saveReviewProposal, loadFindingEvidence, loadCaseObligationReview, attachCaseObligationCoverage, assertCaseObligationCoverage, caseInspectionObligations, describeCaseInspectionCoverage } from '../../scripts/audit-findings-store.mjs';
-import { createTextBackingReviewReader, textBackingRetainedReview, createDividerReviewedBoundariesReader, dividerReviewedBoundariesReview } from './text-backing-case-review-source.mjs';
+import { createTextBackingReviewReader, textBackingRetainedReview, createDividerReviewedBoundariesReader, dividerReviewedBoundariesReview, inactiveParagraphInputsReview } from './text-backing-case-review-source.mjs';
 
 test('reviewed divider boundary reader validates exact queued cases and rejects source drift',()=>{
   const root=process.cwd(),file=`artifacts/material-parity/working-audit/proposals/${dividerReviewedBoundariesReview}.json`;
@@ -30,6 +30,22 @@ test('reviewed divider boundary reader validates exact queued cases and rejects 
     const value=fs.readFileSync(name,...args);return drift&&name.endsWith('alignment-crop-provenance.spec.mjs')?value.toString()+'\n// drift':value;
   }});
   drift=true;assert.throws(()=>tracked.read(path.resolve(root,'tests/material-parity/alignment-crop-provenance.spec.mjs')));
+  const descendantFile=`artifacts/material-parity/working-audit/proposals/${inactiveParagraphInputsReview}.json`;
+  const descendant=JSON.parse(fs.readFileSync(descendantFile)).review;
+  const descendantReader=createDividerReviewedBoundariesReader({...options,reviewSha256:inactiveParagraphInputsReview});
+  const descendantResult=loadCaseObligationReview(descendantFile,inactiveParagraphInputsReview,
+    descendant.groups.map(group=>group.case),{root,read:descendantReader.read});
+  assert.equal(descendantResult.cases.length,2311);
+  assert.equal(descendantResult.inspectionComplete,false);assert.equal(descendantResult.currentRenderingAccepted,false);
+  let removed=0,slots=0;
+  for(const group of descendant.groups.filter(group=>group.family==='divider')){
+    const child=group.obligations.inputStyleStructure.retainedInactiveParagraphInputs;
+    assert.equal(child.gridTracks.length,4);assert.equal(child.ownTransformOrigins.length,2);
+    slots+=child.gridTracks.length+2*child.ownTransformOrigins.length;
+    delete group.obligations.inputStyleStructure.retainedInactiveParagraphInputs;removed++;
+  }
+  assert.equal(removed,24);assert.equal(slots,192);
+  assert.equal(createHash('sha256').update(JSON.stringify(descendant)).digest('hex'),dividerReviewedBoundariesReview);
 });
 
 test('retained text backing review uses explicit tracked source applicability without changing receipts',()=>{

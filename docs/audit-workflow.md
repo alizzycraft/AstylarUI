@@ -136,6 +136,14 @@ Source conservation and coherent export/cold/import remain required before the
 new coverage records are described as canonical; a launcher dry run is not proof
 of publication or successful audit validation.
 
+The October19 launcher selects exact bfc2b6d5 inactive-paragraph successor of
+published be99cd38. The existing reader authenticates five historical source
+transitions,including bounded benchmark replay support. Old reviews remain
+explicitly supported;unknown digests do not select this boundary. Full review
+loading and complete predecessor recovery are separate from launcher dry-run
+preflight. Selection is not canonical publication,current rendering or case
+closure;all original final gates remain required.
+
 The implicit schema-1 proposal remains partial-only and byte-compatible. An
 explicit `inspectionSchemaVersion: 2` proposal may record `inspection: complete`
 only with a receipt-bound requirement review and conclusions/evidence for every

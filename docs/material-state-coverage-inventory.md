@@ -11,6 +11,10 @@ exactly80 children to fe692b14 and recovers that complete predecessor on reversa
 existing loader authenticates15167 dependency receipts/all2311 cases. Receipt:
 divider-reviewed-boundaries-space-retry-20261019.log (TERMINAL0).
 
+Current launcher selection is newer queued bfc2b6d546a0a636f07272eef14591ec830dcc7e90098c06a865af72076d238e,
+not yet exported/canonical. It adds24 case-evidence children/192 reviewed property
+slots without closing cases. Keep published be99 and selected bfc distinct.
+
 Scope remains36 families/436 static+1875 interaction configured cases. Recorded
 whole-case status:0 complete,2311 partial,0 untouched,0 blocked;current rendering
 unverified throughout. Evidence contact is100%,not inspection completion/parity.
@@ -29,6 +33,29 @@ subquestions merely because a parent still says partial. This table is a current
 navigation summary,not new acceptance criteria or a substitute for exact records.
 
 ## Evidence chronology — retain original scope and checkpoint dates
+
+October19 queued inactive-paragraph descendant selected explicitly. Named ancestry
+launcher now supplies exact bfc2b6d5 path/digest;production runner chooses existing
+historical reader for that exact digest only,retaining33a/be99 handling and strict
+default for all others. No new reader or capture framework. Launcher --dry-run
+passes path/invocation completeness ONLY (inactive-paragraph-selected-launcher-
+20261019.log SHA483f970dd077321ec6964f3af9b84e51db3be7f369a025b22cff8ef5a1e994e2);
+runner node --check passes. Existing owning reader test additionally loads whole
+bfc review through named reader,checks2311cases/both acceptance flags false,
+counts24 exact child removals/192slots and recovers COMPLETE be99 digest.
+Original be99/33a full-review,wrong-digest,source-drift and tracking controls stay.
+Both owning tests pass2/2,0 skipped/cancelled/todo,62330.8871ms:
+inactive-paragraph-selected-review-integration-20261019.log
+SHA494a30b82b4cd6952153c2cd7e12b20338a36ed2b8000699c116123cac685ea0.
+Command:node --test --test-name-pattern="reviewed divider boundary reader|retained text backing review" tests/material-parity/audit-findings-store.spec.mjs.
+No actual export/check/browser capture run;canonical remains e771/be99. Consumed
+source batch now additionally changes run-material-input-audit selection and
+reader/store support code;prior734/4 source census is historical,not newest full
+fingerprint reconciliation. Launcher is outside the explicit producer inventory
+unless independently registered;do not infer complete dependency coverage from
+that inventory. Next coherent publication must authenticate source/proof and
+coverage conservation/cold validation before canonical import. All original
+anonymous-owner,line-box,paint,lifetime/currentness and final gates remain open.
 
 October19 grid/origin evidence joined through EXISTING saveReviewProposal/
 loadCaseObligationReview machinery. New bounded join script
