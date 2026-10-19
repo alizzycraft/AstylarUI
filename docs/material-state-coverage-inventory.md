@@ -2,6 +2,32 @@
 
 ## Current audit pointer — October19
 
+October19 genuine Angular teardown distinction now observed,not relabeled public
+remount: new existing-protocol supplemental capture divider-angular-remount-
+20261019 TERMINAL0 executes public RouterOutlet.deactivate/activateWith in two
+light requested1440x1000 contexts,observedDPR1/2. Six Angular recreations/eight
+deactivations destroy actual routed/surface components (DestroyRef witnesses),
+remove prior hosts/canvases/benchmark and create distinct component/canvas/surface
+identities. Retired scenes have0 meshes/materials/textures;passive separately
+mounted peer survives every Angular teardown,updates and finally disposes to0.
+Remounted main counts plateau17/17/4 versus initial17/16/4;retain the one-time
+material-count difference,not an initial/remount equality or new leak diagnosis.
+Original public-remount evidence remains independently bounded.
+Report divider-angular-remount-20261019/latest-report.json SHA256
+3766f8567ad3537c9a26e3f609017b57ef709bfc5a7d2a00358c905d65f1900e;
+producer eada8fcd6c5f17cb6bf88e041b4e3081c080be0a1e15983f22564d12e12dcd87.
+Independent receipt/asset/observation replay TERMINAL0 rejects12 mutations of
+destroy witnesses,disposal,retained meshes,peer survival,component identity and
+runtime errors. Recipe: divider-angular-remount-verification-20261019.log.
+No renderer/fixture changes. This is Angular outlet component destruction,
+not trusted user navigation/full Router transitions or all20 contexts. Actual
+viewport bounds and tracked resource/registration snapshots were NOT retained;
+requested viewport and zero live scene objects must not stand in for those
+observations. Late font/media cancellation and interactive peer callbacks remain
+untested here. Before broader lifetime closure,extend observation to those exact
+missing fields/contexts rather than repeat an unchanged three-cycle capture.
+Standalone evidence not yet in queuedfe692b14/canonical65e072fd;no case promotion.
+
 October19 settled font-freshness question answered for four candidate desktop
 DPR1 themes/eight live text owners,Chrome155.0.8059.80: live font draws report
 fontSet loaded/requested font available,with exact source-to-backing single
