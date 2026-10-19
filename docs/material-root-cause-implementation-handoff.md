@@ -1,5 +1,18 @@
 # Material audit: evidence-led implementation priorities
 
+October19 accepted publication checkpoint: independent cold41341 and accepted
+import7975 both TERMINAL0. Main65e072fd/index4837b33b matches the separately
+validated candidate index exactly;165 findings/219 focused proof anchors/738
+source paths and queued33a0bd8b are now integrated. All80 canonical sections
+were conserved or exactly explained before acceptance. The equal-explicit22px
+backing allocation finding below is registered,not a renderer fix or measured
+blur attribution. All2311 cases remain partial/current rendering unverified;
+full harness169 failures and original final gates remain outstanding. See the
+current coverage ledger and text-backing-independent-cold-check / accepted-
+import-20261019 logs. Next whole-case divider obligations,not repeated baseline
+probes or another canonical rebuild without new consumed evidence. This entry
+supersedes older pending-registration/publication statements below.
+
 October19 bounded new allocation finding,canonical registration PENDING:
 equal explicit22px input at18.4px font produces23px backing with22px logical
 mesh/full UVs;16px-font control allocates22px. Same authored SiteData and matching

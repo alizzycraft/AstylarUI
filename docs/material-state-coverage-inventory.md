@@ -2,6 +2,27 @@
 
 ## Current audit pointer — October19
 
+October19 publication verification COMPLETE: independent cold session41341
+TERMINAL0 compares the entire candidate canonical package after rebuilding and
+reverifying16330 inputs/1673134522 bytes. Two collectors execute,10 memory hits,
+zero disk hits/invalidations; complete elapsed3333404.7229ms. Logs:
+`artifacts/material-parity/text-backing-independent-cold-check-20261019.log`
+and `.stderr.log`. Accepted import7975 TERMINAL0 then verifies every shard and
+sets main pointer65e072fdb75367403cdec41c04c9e07a279a2d0f2c742ed827e9343f54e2ab93,
+index4837b33b2e1e5ced142cc45fcc61b03b898f8e66981fb283f9164d1a198bc95c,
+EXACTLY matching the independently imported candidate index. Receipt:
+`artifacts/material-parity/text-backing-accepted-import-20261019.log`.
+Accepted inventory165 findings/219 proof anchors/738 source paths includes queued
+33a0bd8b and explicit source applicability. All80 sections already conserved;
+no repeated payload scan was needed. Previous4acc remains preserved. All2311
+cases remain partial/current-rendering unverified,inputEquivalent=false; zero
+unresolved scalar groups does NOT close whole-case obligations. Full harness169
+failures and every original final gate remain. Next resume remaining divider
+material/anonymous-line-box,paint and runtime/lifetime applicability obligations;
+do not repeat completed baseline/copy-ancestry/capture joins. No renderer,
+fixture,reference or acceptance change. This supersedes pending-publication
+statements below,not their historical evidence.
+
 October19 complete candidate CONTENT conservation verified,not publication:
 actual production reconstruction matches all3 registry sections165/738/219.
 Coverage12925 TERMINAL0 equals original base inventory plus exact queued33a0bd8b
