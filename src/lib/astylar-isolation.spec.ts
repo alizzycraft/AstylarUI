@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import type { SiteData } from '../app/types/site-data';
 import { Astylar, ASTYLAR_INTERNAL_INSPECTION } from './astylar';
 import { AstylarDiagnosticError, type AstylarDiagnostic } from './astylar-diagnostics';
+import { AstylarSurfaceComponent } from './astylar-surface.component';
 
 describe('Astylar simultaneous surface isolation', () => {
   const originalResizeObserver = globalThis.ResizeObserver;
@@ -261,6 +262,54 @@ describe('Astylar simultaneous surface isolation', () => {
       'loadingdone',
       jasmine.any(Function),
     );
+  });
+
+  it('does not revive an Angular-owned surface when initial fonts resolve after destruction', async () => {
+    let releaseFonts!: () => void;
+    const fontsReady = new Promise<FontFaceSet>((resolve) => {
+      releaseFonts = () => resolve(fonts);
+    });
+    const fonts = {
+      ready: fontsReady,
+      addEventListener: jasmine.createSpy('addFontListener'),
+      removeEventListener: jasmine.createSpy('removeFontListener'),
+    } as unknown as FontFaceSet;
+    spyOnProperty(document, 'fonts', 'get').and.returnValue(fonts);
+    const fixture = TestBed.createComponent(AstylarSurfaceComponent);
+    fixture.componentRef.setInput('siteData', site('Pending font'));
+    const mounted = jasmine.createSpy('mounted');
+    const failed = jasmine.createSpy('failed');
+    fixture.componentInstance.mounted.subscribe(mounted);
+    fixture.componentInstance.failed.subscribe(failed);
+    fixture.detectChanges();
+    await waitUntil(() => !!fixture.componentInstance.surface());
+    const surface = fixture.componentInstance.surface()!;
+    try {
+      await waitUntil(() => surface.diagnostics.session?.status === 'rendering');
+      expect(surface.diagnostics.session?.status).toBe('rendering');
+      expect(surface.diagnostics.session?.revision).toBe(0);
+      const settlement = surface.whenSettled().then(
+        () => 'unexpected settlement',
+        (error: Error) => error.message,
+      );
+      fixture.destroy();
+      expect(await settlement).toContain('disposed before settling');
+      expect(surface.disposed).toBeTrue();
+      releaseFonts();
+      await new Promise((resolve) => setTimeout(resolve, 50));
+      expect(surface.diagnostics.session?.status).toBe('disposed');
+      // The session counts the returned async callback, even when the renderer
+      // exits at its disposed-scene guard; resource/output assertions own revival.
+      expect(surface.diagnostics.session?.revision).toBe(1);
+      expect(surface.diagnostics.resources).toEqual({ meshes: 0, materials: 0, textures: 0 });
+      expect(surface.scene.isDisposed).toBeTrue();
+      expect(fonts.addEventListener).not.toHaveBeenCalled();
+      expect(mounted).not.toHaveBeenCalled();
+      expect(failed).not.toHaveBeenCalled();
+    } finally {
+      releaseFonts();
+      if (!fixture.componentRef.hostView.destroyed) fixture.destroy();
+    }
   });
 
   it('treats a class-authored focus color as the control focus indicator', async () => {

@@ -29,6 +29,29 @@ navigation summary,not new acceptance criteria or a substitute for exact records
 
 ## Evidence chronology — retain original scope and checkpoint dates
 
+October19 pending-font Angular destruction bounded check COMPLETE: existing
+src/lib/astylar-isolation.spec.ts now mounts the REAL AstylarSurfaceComponent
+with real Astylar service and a controlled document.fonts.ready promise. It
+observes rendering/revision0 before destruction, destroys the Angular fixture,
+verifies settlement rejection, then releases readiness. After completion the
+scene remains disposed, resources remain0/0/0, no font listener attaches and no
+mounted/failed component output fires. Session revision becomes1 because
+performReflow counts the returning callback even when the renderer exits at
+its disposed-scene guard; this is not resource/render revival. Existing settled
+font test alone did not cover this ordering; no renderer change was needed.
+Command: npm test -- --watch=false --browsers=ChromeHeadless
+--configuration=audit-service --include=src/lib/astylar-isolation.spec.ts.
+Terminal0,10/10 SUCCESS,Chrome Headless155,WebGL2,Babylon8.15.1;2.428s browser
+execution,30.471s bundle generation. Karma proxy warning and the existing
+initial-render-failed disposal diagnostic appeared; do not claim a silent
+diagnostic path. This is controlled readiness through genuine Angular
+destruction,NOT actual delayed network font delivery or all Material cohorts.
+Current source-only spec evidence is standalone: no old captured receipt,
+queued review or canonical acceptance changed. Next reconcile applicability
+and remaining late-loadingdone/network obligations against existing proofs;
+do not repeat the now-covered initial-readiness ordering. Whole cases remain
+partial/current rendering unverified and original final gates remain required.
+
 October19 coherent reviewed-boundary join COMPLETE,not canonical publication:
 24 placement,4 native/canvas,4 settled-font,24 mapped-source and24 Angular-lifetime
 children added to exact cases. Every status,remaining task and classification
