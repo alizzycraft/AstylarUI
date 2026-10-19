@@ -2,6 +2,32 @@
 
 ## Current audit pointer — October19
 
+October19 settled font-freshness question answered for four candidate desktop
+DPR1 themes/eight live text owners,Chrome155.0.8059.80: live font draws report
+fontSet loaded/requested font available,with exact source-to-backing single
+unscaled copy ancestry. ALL eight actual live RGBA textures equal fresh
+transparent same-font/draw-state/draw-coordinate/unscaled-copy controls BYTE for
+BYTE. All eight Arial-only fallback controls differ,including231–408 alpha
+texels per owner;not merely changed RGB under alpha0. This excludes stale Arial
+fallback as the settled texture explanation IN THESE contexts. Does not recover
+historical font timing,expose physical canvas font names or prove general
+late-font/update/disposal correctness. Current request/source agreement alone was
+insufficient;this closes that specific missing pixel freshness observation.
+Capture divider-font-freshness-resolved-20261019.log SHA256
+e468bff835e6921d1f351c5180e3d3004bd4e76ff3bd45fed444abe964e73496,
+producer1d170f24e7db94134c0097e291c8f231e4907fc46552762a822e2751a9fd709f.
+Independent replay authenticates519 assets/page,all draw/copy/settings/array
+receipts and16 fallback/alpha mutation controls;TERMINAL0 recipe and per-owner
+RGBA hashes in divider-font-freshness-verification-20261019.log. Original outer
+data-URL bare-import resolution failure retained;resolved dependency URL before
+evaluation,not a runtime/renderer/source change.1887 served receipts unchanged.
+No baseline/layout rerun claimed;those fields are incidental to reused live
+identity observer. No opaque atlas,fixture offset,renderer or acceptance change.
+Remaining genuine environment/lifetime applicability is broader native physical
+font identity,other viewport/DPR/update contexts and Angular-versus-public
+teardown;do not repeat settled same-font/fallback texture checks. Standalone
+evidence not yet in queuedfe692b14/canonical65e072fd;all cases remain partial.
+
 October19 cross-capture dependency reuse question answered without linker/capture
 reruns: check-divider-capture-dependency-reuse TERMINAL0 authenticates ALL912
 JavaScript maps in EACH original full/newer divider capture. Both inventories
