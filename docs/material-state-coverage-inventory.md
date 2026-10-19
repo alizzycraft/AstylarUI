@@ -30,6 +30,34 @@ navigation summary,not new acceptance criteria or a substitute for exact records
 
 ## Evidence chronology — retain original scope and checkpoint dates
 
+October19 post-publication support batch census authenticates ALL738 ordered
+producer source receipts against accepted e7717418 section digest47fefb60
+(7381tokens),using unchanged exact producera2771d8c and bounded Git7efd83e7
+substitutions.734 unchanged,FOUR changed,no added/removed paths:review reader
+59eaf434→865ef7fb,semantic registration helper4a116068→141bc88a,store suite
+d18daf67→cabc004a,benchmark suitee74ef1d5→a270e3d3. No direct renderer/fixture
+source change in this inventory. Workflow suite edit is NOT indexed,so prior
+claim that it necessarily joined indexed drift was overbroad. This does not
+authenticate transitive source/dependency changes or current runtime rendering.
+Log post-publication-support-source-delta-final-20261019.log,
+SHA5b09babd59d213d48e03cd762bd88870fa389cfb740d18bd1bdc63387a7dce85.
+Initial census setup failed on cross-VM array prototypes,not differing path
+values;original post-publication-support-source-delta log pair retained. Final
+comparison materializes JSON data before strict equality,not value normalization.
+
+Selected be99 review reader construction now fails at helper whole-source pin
+4a116068 versus actual141bc88a. Exact first-barrier preflight preserves this
+failure in post-publication-selected-reader-barrier-20261019 log pair;no review
+loaded/export started. Next implement a bounded complete-source conservation
+transition for ONLY reviewed historical benchmark replay additions,then use it
+in existing named reader before original text-backing reversal. Do not replace
+historical receipts,globally preload older modules,or merely raise a hash. All
+other source bytes and original predecessor reconstruction must remain checked.
+This is a concrete integration prerequisite,not a reason to repeat browser
+capture or rebuild2GB canonical output before reader applicability is repaired.
+All2311 cases remain partial/current rendering unverified;original final gates
+and whole-runner provenance uncertainties remain open.
+
 October19 input-focus recorded-observation replay separated from missing whole
 runner provenance,following EXISTING Icon inspect boundary. No recovery search
 repeated. Current runner focus-action body622d9fc7 and theme body6e8166a5 match
