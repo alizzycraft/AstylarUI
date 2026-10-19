@@ -2,6 +2,16 @@
 
 ## Current versus historical evidence
 
+October19 inactive-paragraph queued proposal bfc2b6d5 is required additive case
+evidence,not successful scratch. Retain its two property applicability proofs and
+divider-inactive-paragraph-inputs-join-20261019 log. Closed proposal164038361
+logical bytes was losslessly LZX-compressed to36573184 physical bytes;RAW envelope
+SHA2560042a92a7bbf346f524f260714bbcc7345264857c319ce4926b11418f7fdeb65
+matched before/after. First no-force conversion did nothing;force conversion
+completed. Original be99 predecessor and selected e771 publication remain intact;
+no findings,paths or receipt bytes deleted/repointed. This proposal is not selected
+or canonical and does not close any whole case.
+
 October19 accepted e7717418 evidence publication: independent cold check and
 candidate content conservation pass before main import. Main generation shares
 ALL86 immutable regular files with candidate-validation/e7717418 through hard

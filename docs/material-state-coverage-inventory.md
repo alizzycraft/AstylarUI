@@ -30,6 +30,32 @@ navigation summary,not new acceptance criteria or a substitute for exact records
 
 ## Evidence chronology — retain original scope and checkpoint dates
 
+October19 grid/origin evidence joined through EXISTING saveReviewProposal/
+loadCaseObligationReview machinery. New bounded join script
+scripts/join-material-divider-inactive-paragraph-inputs.mjs is needed to attach
+the two otherwise-loose proofs to exact case owners;not a new audit framework,
+capture,test layer or classification inventory. It authenticates both complete
+proof hashes,current source/installed/map/tree receipts,exact case/target/property
+membership and scope controls. Adds ONLY24 retainedInactiveParagraphInputs child
+records,covering192 slots across24 divider cases.120 altered membership/context/
+value/transformed-owner controls reject. Complete be99 predecessor recovers on
+removing only those24 children;all original statuses,remaining tasks,findings,
+other2311-case content and acceptance flags survive unchanged.
+Queued reviewbfc2b6d546a0a636f07272eef14591ec830dcc7e90098c06a865af72076d238e
+validates15172 dependencies/2311cases through existing named historical reader.
+Not selected by launcher,exported or canonical. Actual command:
+node scripts/join-material-divider-inactive-paragraph-inputs.mjs.
+Log divider-inactive-paragraph-inputs-join-20261019.log TERMINAL0,
+SHA9e747826afa1703474446c3ed782942a8337edf256d7d9bad68a4ed261fa0750.
+Closed proposal164038361logical bytes losslessly LZX-compressed to36573184
+physical bytes;RAW envelope SHA0042a92a7bbf346f524f260714bbcc7345264857c319ce4926b11418f7fdeb65
+unchanged before/after. First no-force command did nothing due inherited
+compression;explicit force conversion performed. No evidence/path removed.
+Selected/canonical remains be99/e771. Next coherent integration must explicitly
+select/validate this descendant and register consumed evidence,not assume that
+creating a proposal changed production collection. Remaining paragraph,line-box,
+paint,ownership,current-runtime and all final gate obligations stay open.
+
 October19 next anonymous-paragraph property question resolved:transform-origin
 differences are computed centers on untransformed owners,not evidence of an
 active own transform. Authenticated priorff643c70/be99 raw17a4de34 and all48 paired
