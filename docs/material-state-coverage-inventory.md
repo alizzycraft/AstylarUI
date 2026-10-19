@@ -2,6 +2,30 @@
 
 ## Current audit pointer — October19
 
+October19 retained inline-owner placement question answered,TERMINAL0:
+check-divider-inline-owner-placement authenticates24 report rows/48 text owners
+and paired trees. Complete layoutInlineChildren method agrees across current
+transpilation,installed package and captured executable after syntax-only optional
+comma/single-arrow-parenthesis normalization. Constrained actual-method execution
+with fitting single-child dimensions and recorded explicit parent height returns
+inlineY0 in all48 inputs;it does NOT center19/18/22px text in22/19.8/25.3px rows.
+Mocked creation and fitting width are explicit,not full-layout/used-width proof.
+Independent retained-frame decomposition actual rootTop+borderWidth+authored
+paragraphTop predicts every inline top;maximum residual0.000009155276671890533
+CSSpx.48 one-pixel wrong-owner offsets and one changed-method control reject.
+This quantitatively binds EXISTING fixture-divider-replaces-paragraph-flow-with-
+coordinates,not a new renderer baseline defect. Initial raw token comparison
+showed formatting-only commas/arrow parentheses;the owning checker uses the
+already explicit syntax boundary rather than accepting arbitrary token drift.
+Log divider-inline-owner-placement-20261019.log SHAb911b73595017da188e3b4fba461d15d162ee9def82d9db237f6cd8bf4a9f418,
+producer a163ef6170a60d50c9010c736f0f962f08cde5258f15b79d6d26982322409b75.
+The numerical bound checks retained float decomposition,NOT a new rendering
+acceptance threshold. Native anonymous strut/leading equivalence,actual projected
+glyph baseline,paint and current whole-case gates remain separately scoped.
+Do not reopen the single-child centering/owner-displacement hypothesis or tune
+row positions. Standalone evidence not yet in queuedfe692b14/canonical65e072fd;
+all whole cases remain partial/current rendering unverified.
+
 October19 actual-divider native/canvas generation boundary answered in four
 desktop DPR1 themes,eight Above/Below owners,Chrome155.0.8059.80. Reference-only
 diagnostic reuses the authenticated server/font settlement;1887 served receipts
