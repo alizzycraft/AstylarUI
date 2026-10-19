@@ -34,6 +34,30 @@ navigation summary,not new acceptance criteria or a substitute for exact records
 
 ## Evidence chronology — retain original scope and checkpoint dates
 
+October19 coherent support/property integration export STARTED,not accepted.
+Preflight authenticates complete738 ordered source inventory against unchanged
+accepted e771 section receipt47fefb60:733 unchanged,FIVE reviewed changes,no
+added/removed direct paths. Five files are review reader,semantic helper,store
+suite,benchmark suite and production runner;new join/proofs enter through
+15172-receipt case-review dependency evidence,not assumed direct inventory.
+Log inactive-paragraph-pre-export-source-census-20261019.log
+SHA4cd0f0d0d8d280d7852f2bbef2c70f0290e052ebc23ff3d71a5153c54cb74b6f.
+D:observed1.29GiB free,no competing exporter process at start;owned consumed
+source paths clean. Named complete-baseline invocation uses selected bfc2b6d5,
+ASTYLAR_AUDIT_PROGRESS=1,not cold. Command:
+node scripts/export-material-input-audit-current-ancestry.mjs.
+Session45320,launcher21536/child10436 independently confirmed LIVE at23:34:26
+Africa/Johannesburg. Subsequent same-session poll confirms worker10436 live
+(working set1518333952bytes;CPU counters nonzero). Both inactive-paragraph-
+coherent-export-20261019 log files currently0bytes/buffered;not failure or
+permission to restart. Keep consumed source/proof inputs frozen and revalidate
+same handle/process on continuation. This export is justified by accumulated
+support-source reconciliation plus selected192-slot evidence batch,not prose.
+No terminal result,session metrics,new canonical acceptance,cold verification
+or index import yet. Existing accepted e771/index7ca89 remains authoritative
+until terminal validation/conservation/independent verification/import succeed.
+All2311 cases remain partial;this is NOT a final browser/unit/build/release gate.
+
 October19 queued inactive-paragraph descendant selected explicitly. Named ancestry
 launcher now supplies exact bfc2b6d5 path/digest;production runner chooses existing
 historical reader for that exact digest only,retaining33a/be99 handling and strict
