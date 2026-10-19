@@ -30,6 +30,19 @@ navigation summary,not new acceptance criteria or a substitute for exact records
 
 ## Evidence chronology — retain original scope and checkpoint dates
 
+October19 live-export storage safeguard COMPLETE: accepted65e072fd untouched;
+two closed historical e7a91a22/cd867bbe indexes now use LZX with exact hashes
+unchanged (see audit-artifact-retention.md). Combined291389254logical bytes
+occupy62046208physical bytes;free volume514867200bytes afterward. No evidence
+deleted,repointed or reclassified. This addresses candidate-import headroom,
+not export acceptance. Same export60565/child13340 remains live;do not restart.
+Read-only queued obligation census confirms all2311 input/structure,semantics,
+history and source-currentness records remain partial;1741 programmatic-focus
+and1482 authored-activation entries say evidence-join-pending,not passes. These
+are obligation labels,not new cases or grounds for indiscriminate recapture.
+Next after export: exact candidate conservation/cold verification,then select
+the highest-impact unresolved applicability/evidence join using existing proofs.
+
 October19 coherent queued-divider export LIVE,not acceptance: existing semantic
 registration and legacy-clip suites pass10/10 (11133.404ms),preserving165 current
 definitions and all historical predecessor/proof assertions after042b7005.

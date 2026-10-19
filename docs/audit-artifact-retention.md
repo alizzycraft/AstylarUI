@@ -2,6 +2,19 @@
 
 ## Current versus historical evidence
 
+October19 queued-export candidate-import headroom: two CLOSED historical working
+indexes were transparently LZX-compressed,not deleted or rewritten as evidence.
+The e7a91a22 generation index145811970bytes now occupies31059968 physical bytes;
+before/after SHA2564032a569bd13e4d12a1576b76740f7f7fb2474e97e46d1d1fc77d62be9450e34.
+The cd867bbe generation index145577284bytes now occupies30986240 physical bytes;
+before/after SHA256551d3c8f2827ddf8755dc6a99331c591c8341a101f213b54285d807ff7656fdc.
+Exact resolved targets were checked within the physical Material artifacts
+working-audit directory. Both original paths,all decoded bytes and references
+remain unchanged. Observed free D: space514867200bytes after compression is a
+volume observation,not an attribution of every volume change. This creates
+headroom for candidate validation while export60565/child13340 remains live;
+it does not establish successful export,import or canonical publication.
+
 October19 reviewed-boundary join: first atomic proposal write failed ENOSPC,
 leaving only zero-byte be99cd38...json.20528.tmp;failure log/temp preserved. The
 immutable ACCEPTED65e072fd index was LZX-compressed from180114245 logical bytes
