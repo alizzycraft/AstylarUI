@@ -2,6 +2,35 @@
 
 ## Current audit pointer — October19
 
+October19 remaining original-focus batch COMPLETE,not a whole-case closure.
+Capture23157 TERMINAL0,104 exact contexts/13 families,208 trees,no PNGs;
+independent verify TERMINAL0 checks312 paired boundaries,reportSHA
+13f04f3928891894ed7b2039aaab407a6a4eb7282c418ad69ffcf013ed63fc66.
+Native blur count0. Candidate25 contexts each have one observed blur:sort8 and
+tree8 first lose focus in applyAttributes.removeAttribute(tabindex);select8
+in descendant reconcileElement.replaceChildren;toolbar custom/DPR1 alone in
+root reconcile.replaceChildren with unchanged child identities/order. Other79
+contexts show no blur during this action,not immunity to future updates.
+Core,card,paginator,slider,button-toggle,tabs,stepper,bottom-sheet,dialog each
+have8 no-blur observations;other7 toolbar contexts also have none. Slider
+focus reaches value65 input on both sides;raw paginator targets remain distinct,
+not assumed equivalent because activeEqualsTarget=true. Sort IDs temporarily
+disappear during attribute clearing;raw node tokens/stack are preserved.
+Case join91356 TERMINAL0 saves queued
+aa18b19d0727456cc2d483cbe6ba15064888b9a962b5d1de4b41b54201328f4e,
+validates14755 dependencies/all2311 cases and detects25 altered-caller controls.
+Reused four-method owner proof authenticates actual current files and exact
+new-capture served chunk/map;existing public attribute/root/descendant evidence
+receipts validate. No new defect category or new owning-method replay needed.
+Removing104 focus children/restoring precise task text recovers complete
+beda645a. All other tasks/evidence and partial whole-case status remain.
+Input trees were measured AFTER recorded observations using existing guarded
+helper;they are not evidence for earlier action timing. Original unguarded
+failure/sourceGitdd987abe remains separate. Keep independent-verify/case-join
+logs with exact summaries. Frozen export27263/27180 remains live on104d7c61;
+accepted e7a91 unchanged. Next work from aa18b19d on other action/input/paint/
+source-currentness gaps;do not recapture these104 actions without changed inputs.
+
 October19 remaining-focus measurement correction is bounded and capture pending.
 Original failed producer/rawSHA3c0e5a96 is preserved in Gitdd987abe;source-
 conservation log recovers that complete source by removing ONLY the new helper

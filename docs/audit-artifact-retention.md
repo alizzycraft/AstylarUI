@@ -56,6 +56,15 @@ immutable evidence only, not active harness output, dependencies, or source code
 
 ## Retention rules for subsequent work
 
+Remaining-configured-focus-measured-20261019 now TERMINAL0 with104 contexts,
+208 trees and no PNGs. Keep capture,independent-verify and case-join stdout/
+stderr,report13f04f39 and frozen producer/source recipe. Keep queuedaa18b19d
+and complete beda645a predecessor:104 children/task refinements reverse exactly,
+14755 dependencies validate. Twenty-five observed focus losses retain distinct
+attribute16/descendant8/root1 causes;79 no-blur observations are not general
+update acceptance. Original unguarded failure/checkpoint/Gitdd987abe remain
+required. No successful scratch cleanup or original deletion follows.
+
 Keep remaining-configured-focus-20261019 initial failure/checkpoint/native tree
 and original capture stdout/stderr. Gitdd987abe preserves its exact producer
 SHA3c0e5a9631bebf5a2b8846faae0283666df68f5c8b6e774d886c037235e65e61.

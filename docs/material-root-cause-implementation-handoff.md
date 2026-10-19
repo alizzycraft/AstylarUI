@@ -1,5 +1,18 @@
 # Material audit: evidence-led implementation priorities
 
+October19 original-focus extension across104 contexts strengthens both semantic
+mutation priorities:sort/tree16 first-blur at applyAttributes.removeAttribute
+(tabindex),select8 at descendant replacement,and toolbar custom/DPR1 at root
+replacement despite unchanged children. Native has0 blurs;79 other contexts
+have no observed interruption in this action,not general reflow immunity.
+Existing public reductions and complete four-method current/installed/capture-
+map owner applicability are reused. Exact raw targets,event causes and later
+input-tree measurement boundary are retained in report13f04f39 and queued
+aa18b19d;14755 dependencies validate. This is additional case inspection,not
+renderer implementation,new defect categories or whole-case/current acceptance.
+Fix focus-critical attribute continuity AND focused descendant/root retention;
+do not add application refocus,event suppression or Material-only exceptions.
+
 October19 bounded picker extension:all16 configured desktop date/time focus
 contexts now directly locate retained-input blur inside descendant semantic
 reconcileElement.replaceChildren,picker-primary. Input stays connected and is
