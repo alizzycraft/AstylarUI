@@ -2,12 +2,11 @@
 
 ## Current audit pointer — October19
 
-Accepted canonical/index:65e072fd/4837b33b (165 source findings,219 focused proof
-anchors). Latest validated QUEUED case review:
+Accepted canonical/index:e7717418/7ca89ad0 (165 source findings,219 focused proof
+anchors). Published case review:
 be99cd383dabb304da259cef9046b6b81ce44922c3ae4d8fe6dfc2a76ab33f6f,
-selected by the production export launcher after bounded reader verification,
-and exported as candidatee7717418,but NOT cold-verified/published as accepted.
-Its join adds
+selected by the production exporter,content-conserved and independently cold-
+verified before main-store import. Its join adds
 exactly80 children to fe692b14 and recovers that complete predecessor on reversal;
 existing loader authenticates15167 dependency receipts/all2311 cases. Receipt:
 divider-reviewed-boundaries-space-retry-20261019.log (TERMINAL0).
@@ -30,6 +29,25 @@ subquestions merely because a parent still says partial. This table is a current
 navigation summary,not new acceptance criteria or a substitute for exact records.
 
 ## Evidence chronology — retain original scope and checkpoint dates
+
+October19 queued-divider publication ACCEPTED as audit EVIDENCE,not audit
+completion: independent cold24870 TERMINAL0,3244861.7146ms,2collectors/10memory
+hits/0disk hits/0invalidated. All16353files/1678210553read bytes reverified;
+full freshly generated decoded values and readable report match candidatee771.
+Cold stdoutSHAa1f86549e9569a3ad28fefc8788413b96119a621e20ade24dd7da1cbe71daf45;
+stderrSHA0da2df8a00c568c8f00de5d32b70010171bf04546f75980b772e8b6e8232a081.
+All prior content-conservation checks remain required/passing. Main import
+TERMINAL0 verifies candidate index/shards/payload before reusing86 immutable
+hard-linked files from separate validation store,checks same filesystem/file
+identity for each,and publishes e7717418/index7ca89ad0 pointer. Original65e072fd
+generation stays intact. No duplicated index/payload allocation;shared hardlinks
+MUST NOT be overwritten in place. Main-import receiptSHAd74b752652db20d94d48dd3968f44974a5d82ba1bf34c3daf6faf2717ba2dc31.
+Full names/logs retain divider-reviewed-independent-cold-check/main-import-
+20261019. Canonical payload84638103packed/2327080710decoded;decodedSHAabab6078.
+All2311cases remain partial/current rendering unverified,165findings/219proof
+anchors,8483groups/389202occurrences,inputEquivalent=false. Original scope and
+final gates unchanged. Next return to actual remaining case obligations and
+original full-harness failures;do not repeat the now-complete publication batch.
 
 October19 queued-divider candidate CONTENT conservation COMPLETE,not cold
 acceptance/publication: metadata-readable check TERMINAL0 authenticates both

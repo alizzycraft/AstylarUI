@@ -2,6 +2,17 @@
 
 ## Current versus historical evidence
 
+October19 accepted e7717418 evidence publication: independent cold check and
+candidate content conservation pass before main import. Main generation shares
+ALL86 immutable regular files with candidate-validation/e7717418 through hard
+links;exact filenames,index/payload/shard hashes and same volume/file identity
+were checked before normal importFindings reuse/pointer publication. Previous
+accepted65e072fd is retained. No source copy deleted or overwritten;shared files
+MUST NOT be overwritten in place. Main-import receipt is divider-reviewed-main-
+import-20261019.log SHAd74b752652db20d94d48dd3968f44974a5d82ba1bf34c3daf6faf2717ba2dc31.
+Keep cold stdout/stderr and all five candidate conservation receipts. Publication
+is audit-evidence acceptance only,not rendering parity or whole-audit completion.
+
 October19 queued-divider candidate validation: retain divider-reviewed-queued-
 export,independent-cold-check,candidate-import and candidate-section-conservation-
 20261019 log pairs. Export succeeded;candidate import is separate from accepted
