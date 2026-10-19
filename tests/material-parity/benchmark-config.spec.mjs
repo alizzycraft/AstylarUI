@@ -2296,7 +2296,7 @@ test('configured input focus evidence records exact controls without replacing r
   const hash = b => createHash('sha256').update(b).digest('hex');
   const ownerSourceFile = 'src/app/services/text/text-selection.service.ts';
   const ownerInstalledFile = 'examples/material-showcase/node_modules/astylarui/dist/lib/app/services/text/text-selection.service.js';
-  const mapFile = 'examples/material-showcase/dist/material-showcase/browser/chunk-3JXWRYJY.js.map';
+  const mapFile = 'artifacts/material-parity/retained-evidence/component-map-recovery-20261011/chunk-3JXWRYJY.js.map';
   const ownerSource = readFileSync(ownerSourceFile), ownerInstalled = readFileSync(ownerInstalledFile);
   const compiled = ts.transpileModule(ownerSource.toString(), { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 } }).outputText;
   const mapBytes = readFileSync(mapFile), map = JSON.parse(mapBytes);

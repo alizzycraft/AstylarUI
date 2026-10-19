@@ -310,6 +310,8 @@ export function readHistoricalBenchmarkSource(file, options) {
     restored = normalized(raw);
     // Only snackbar map reads move; original receipts and source checks stay.
     for (const [retained, historical] of [
+      ["  const mapFile = 'artifacts/material-parity/retained-evidence/component-map-recovery-20261011/chunk-3JXWRYJY.js.map';",
+        "  const mapFile = 'examples/material-showcase/dist/material-showcase/browser/chunk-3JXWRYJY.js.map';"],
       ["  const build = 'artifacts/material-parity/retained-evidence/component-map-recovery-20261011';",
         "  const build = 'examples/material-showcase/dist/material-showcase/browser';"],
       ["  const mapName = 'chunk-JPEJK334.js.map', mapBytes = readFileSync(`artifacts/material-parity/retained-evidence/component-map-recovery-20261011/${mapName}`);",

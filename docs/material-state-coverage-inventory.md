@@ -30,6 +30,28 @@ navigation summary,not new acceptance criteria or a substitute for exact records
 
 ## Evidence chronology — retain original scope and checkpoint dates
 
+October19 input-focus missing-map caller89:own checkpoint authenticates retained
+3JXWRYJY recovery map SHA dba484044ca0dea965d8ef4b12635673f0f055d7711099d2f6476ca490988ec4.
+Existing owner assertion reads that retained path instead of missing active-build
+map;all original hash/method/action checks stay. Original test now verifies FOUR
+complete caret methods and TEN selection/style/highlight methods across mapped,
+installed and current sources,plus original pixel-size parseTextStyle controls
+(candidate19.2CSSpx/zero tracking versus explicit24/0.496). This is source/method
+applicability only,not full pipeline or live rendering acceptance.
+It then fails at known historical runner e01ef9dc versus current86ece08b. Do NOT
+substitute current runner hash or infer later240 samples/paint checks executed.
+Earlier missing whole-runner provenance remains unresolved;do not repeat closed
+marker/history searches. Existing suite-conservation control passes after exact
+path reversal. Focused result1/2,0 skipped/cancelled/todo,5160.9747ms;failure kept:
+input-focus-retained-map-integration-20261019.log,
+SHA17822b0814f857ba939ea54772c562428976b67bcd15a1714bf7ae88b18f2f12.
+Command:node --test --test-name-pattern="configured input focus evidence|semantic registration historical boundary" tests/material-parity/benchmark-config.spec.mjs tests/material-parity/semantic-text-transform-input.spec.mjs.
+Bounded path correction is retained despite downstream honest failure;no
+renderer/fixture/capture/receipt changes. Canonical publication unchanged and
+post-publication source reconciliation remains queued. Next use existing exact
+runner-applicability investigation to identify what can legitimately replay and
+what requires new evidence,without silently changing original capture provenance.
+
 October19 shared missing-map group:original snackbar failures78/82 are stale
 build-directory reads,not lost captured maps. Exact JPEJK334,7SL66K3U,YSOHGT2J
 retained recovery maps match captured snackbar checkpoint receipts;all three
