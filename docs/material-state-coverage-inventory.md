@@ -2,6 +2,16 @@
 
 ## Current audit pointer — October18
 
+October19 candidate index46741 TERMINAL1 after successful import/whole-index
+verification:ad hoc final assertion addressed nonexistent coverage.staticCases
+(undefined versus436). Preserve original stderr;this is a procedure failure,
+not an import/rendering failure. Separate candidate-index-verified-20261019
+check TERMINAL0 reuses that existing index without reimport,verifies every shard,
+actual caseInventory436/1875 and complete ordered coverage SHAab0b4d69 against
+the authenticated leaf proof. Manifest equals fixed candidatee7a91;all80 sections
+survive. Acceptedcd867bbe pointer remains byte-identical. Independentcold77071
+is still live;no publication or case promotion before its terminal result.
+
 October19 remaining48 control-row links now verified:batch1280 TERMINAL0 loads
 all48 complete accepted button rows through existing loadFindingEvidence. Each
 original row hash matches its compact receipt;replacing ONLY the authenticated
