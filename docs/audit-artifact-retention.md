@@ -2,6 +2,21 @@
 
 ## Current versus historical evidence
 
+Retain button-native-touch-target-20261020.log/failed stderr and failed-source.mjs,
+button-native-touch-target-recovered-20261020.log/empty stderr,and button-native-
+touch-target-verification-20261020.log/empty stderr. Recovered SHA256
+cd0c9c978f734c446e7cd755c438e77b94a7078f86a23512b7cfd755bcc71197;
+verification51ff4bc72beb8784ece9b104561c08e6af6f4ad4ed9630ea4ce96b98f510894f.
+Initial attempt selected the frozen helper's older default checkpoint and failed
+its unchanged asset assertion BEFORE browser launch. Explicit divider-alignment
+checkpoint62829d76 matches all1887 served assets. Successful source is retained in
+producerArgs;failed-source is evaluated from workspace-root context,not runnable
+from its artifact directory. Seven native pointer boundaries establish active
+48px touch geometry around a40px button in ONE fresh light/desktopDPR1 case.
+Candidate retained leaf/absence is separately authenticated,not live hit behavior
+or a diagnosed renderer defect. Keep original and controls;this new standalone
+supplement is outside the running frozen433b export and closes no whole case.
+
 Retain divider-property-review-selection-20261020.log/empty stderr and divider-
 property-pre-export-source-census-20261020.log/empty stderr. Three selected owning
 tests pass;all original store assertions remain an exact prefix. Launcher/runner/

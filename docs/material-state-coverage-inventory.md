@@ -4,6 +4,43 @@
 
 Current conclusions only;earlier next/live statements in chronology are historical.
 
+- LIVE canonical export for433b:unified execution session31650,started after
+  pushed sourced7b5e353. Exact named complete-baseline launcher;progress enabled.
+  Logs:divider-property-coherent-export-20261020.log and .stderr.log. Sources and
+  consumed evidence are frozen until export/cold comparison/import finish.
+  Poll the SAME confirmed handle;quiet collector output is not failure and must
+  not trigger a second export. Acceptedb661 remains the working pointer meanwhile.
+  Pre-launch free space11909853184B. No browser recapture or final-gate pass claimed.
+- Wait verified against the same session and live node worker12284 (launcher21136),
+  not inferred from a lock/log. Worker CPU advanced85.45→165.72s while logs remained
+  quiet;do not restart. Read-only gap prioritization from accepted736e confirms
+  complete owner/anonymous structural mapping and first-stage applicability remain
+  open in2287 non-divider cases;actual AX associations remain open in2271 cases,
+  and all2311 retain full runtime/environment/current-rendering applicability work.
+  Interaction history/resource/disposal work remains in1875 cases;editing/caret/
+  selection work in443 editable cases. These are overlapping remaining-question
+  populations,NOT summed case counts or completion percentages. After publication,
+  prioritize shared structural/owner mapping across families over repeating the
+  settled divider clamp/flex questions;then actual AX and interaction ownership.
+- Read-only follow-up reused the existing shared-heading proof:2291 case mappings
+  plus20 prior Icon mappings already cover frame/p/h1 identity and four font fields.
+  Do NOT repeat that survey. Remaining component descendants are separate.
+- New bounded shared-button question answered WITHOUT changing export inputs:
+  native light/desktop primary button has40px visible height and an active48px
+  descendant touch span extending4px above/below. Seven trusted-pointer boundaries
+  show outside hits2px above/below activate;setting only the span's pointerEvents
+  to none removes outside hits,center remains active,and exact restoration restores
+  both outside hits. Actual Chrome155.0.8059.80 is NOT old155.0.8059.40 replay.
+  Recovered capturecd0c9c97 and independent verification51ff4bc7 authenticate the
+  original ab42 paired-tree membership and all1887 served assets after capture.
+  Candidate retained button is a leaf with no corresponding authored descendant;
+  this DOES NOT prove its actual outside-edge behavior or a core defect. Next
+  decisive check:paired candidate trusted-pointer edges,then equal-input public
+  reproduction/applicability across shared variants before classification.
+  Evidence:button-native-touch-target[-recovered/-verification]-20261020 logs;
+  original attempt failed BEFORE browser launch on the helper's older default
+  checkpoint. Retain failure/source;explicit matching checkpoint succeeds without
+  relaxing fingerprint assertion. This supplement is outside frozen433b export.
 - Scope unchanged:36 families/2311 cases (436 static,1875 interaction). All2311
   remain partial;0 complete/0 unjoined or blocked. Current rendering unverified.
 - Accepted:b6610e71ef744b5d589d07c18e562df9927202a3adb7a5b31acb334b100839f2,

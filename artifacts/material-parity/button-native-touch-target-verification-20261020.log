@@ -1,0 +1,68 @@
+{
+  "producerArgs": [
+    "--input-type=module",
+    "-e",
+    "import fs from \"node:fs\";import {createHash} from \"node:crypto\";import a from \"node:assert/strict\";import {fingerprintDirectory} from \"./tests/material-parity/run-checkpoint.mjs\";const h=v=>createHash(\"sha256\").update(v).digest(\"hex\"),file=\"artifacts/material-parity/button-native-touch-target-recovered-20261020.log\",bytes=fs.readFileSync(file),r=JSON.parse(bytes),checkpoint=JSON.parse(fs.readFileSync(r.checkpoint.file));a.equal(h(fs.readFileSync(r.checkpoint.file)),r.checkpoint.sha256);const files=fingerprintDirectory(\"examples/material-showcase/dist/material-showcase/browser\");a.deepEqual(files,checkpoint.provenance.browserFiles);const original=\"artifacts/material-parity/current-full-20261005/latest-report.json\",b=fs.readFileSync(original);a.equal(h(b),\"ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62\");const row=JSON.parse(b).results.find(x=>x.family===\"button\"&&x.profile===\"light\"&&x.viewport.id===\"desktop\");a.deepEqual(row.inputTrees.reference,r.referenceTree);a.equal(h(fs.readFileSync(r.referenceTree.file)),r.referenceTree.sha256);const candidate=JSON.parse(fs.readFileSync(row.inputTrees.astylar.file));a.equal(h(fs.readFileSync(row.inputTrees.astylar.file)),row.inputTrees.astylar.sha256);const node=candidate.nodes.find(x=>x.authored?.id===\"button-primary\");a.equal(node.authored.type,\"button\");a.equal(candidate.nodes.filter(x=>x.parent===node.key).length,0);const observations=r.observation.observations;a.equal(observations.length,7);a.deepEqual(observations.map(x=>x.buttonClickDelta),[1,1,0,0,1,1,1]);a.equal(r.observation.restoredExactInlineAttribute,true);a.deepEqual(r.observation.runtimeErrors,[]);console.log(JSON.stringify({producerArgs:process.execArgv,capture:{file,sha256:h(bytes)},referenceReport:{file:original,sha256:h(b)},trees:row.inputTrees,assetsAfterCapture:files.length,sevenTrustedClickBoundaries:observations.map(x=>({state:x.state,delta:x.buttonClickDelta})),runtime:r.observation.runtime,candidateAuthored:{key:node.key,type:node.authored.type,value:node.authored.value,childCount:0},boundary:\"Native active outside-host target proven for one fresh case. Candidate retained leaf omits the descendant;actual candidate outside-edge hit behavior and equal-input public reproduction remain unresolved. No renderer diagnosis or broad case closure.\"},null,2));"
+  ],
+  "capture": {
+    "file": "artifacts/material-parity/button-native-touch-target-recovered-20261020.log",
+    "sha256": "cd0c9c978f734c446e7cd755c438e77b94a7078f86a23512b7cfd755bcc71197"
+  },
+  "referenceReport": {
+    "file": "artifacts/material-parity/current-full-20261005/latest-report.json",
+    "sha256": "ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62"
+  },
+  "trees": {
+    "reference": {
+      "file": "artifacts/material-parity/current-full-20261005/button/light/desktop/reference-input-tree.json",
+      "sha256": "b04b2d4cd300b30a57c5cd63328ebabd24278b6d1ec0844057aa6adb24f70b15"
+    },
+    "astylar": {
+      "file": "artifacts/material-parity/current-full-20261005/button/light/desktop/astylar-input-tree.json",
+      "sha256": "d95e41c1e840de7b631eb8c1673a4f7222ab5fed0029cded1c17f62421b76947"
+    }
+  },
+  "assetsAfterCapture": 1887,
+  "sevenTrustedClickBoundaries": [
+    {
+      "state": "original-touch-target",
+      "delta": 1
+    },
+    {
+      "state": "original-touch-target",
+      "delta": 1
+    },
+    {
+      "state": "touch-pointer-events-none",
+      "delta": 0
+    },
+    {
+      "state": "touch-pointer-events-none",
+      "delta": 0
+    },
+    {
+      "state": "disabled-touch-center-positive",
+      "delta": 1
+    },
+    {
+      "state": "restored-touch-target",
+      "delta": 1
+    },
+    {
+      "state": "restored-touch-target",
+      "delta": 1
+    }
+  ],
+  "runtime": {
+    "actualBrowser": "155.0.8059.80",
+    "checkpointBrowser": "155.0.8059.40",
+    "historicalBrowserReplay": false
+  },
+  "candidateAuthored": {
+    "key": "root/0/2/0/0",
+    "type": "button",
+    "value": "Primary action",
+    "childCount": 0
+  },
+  "boundary": "Native active outside-host target proven for one fresh case. Candidate retained leaf omits the descendant;actual candidate outside-edge hit behavior and equal-input public reproduction remain unresolved. No renderer diagnosis or broad case closure."
+}

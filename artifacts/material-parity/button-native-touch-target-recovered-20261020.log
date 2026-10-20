@@ -1,0 +1,162 @@
+{
+  "producerArgs": [
+    "--input-type=module",
+    "-e",
+    "\nimport assert from 'node:assert/strict';\nimport {readFileSync,existsSync} from 'node:fs';\nimport {createHash} from 'node:crypto';\nimport {createServer} from 'node:http';\nimport path from 'node:path';\nimport ts from 'typescript';\nimport {chromium} from 'playwright-core';\nimport {fingerprintDirectory} from './tests/material-parity/run-checkpoint.mjs';\nconst hash=v=>createHash('sha256').update(v).digest('hex'),receipt=file=>({file,sha256:hash(readFileSync(file))});\nconst helperFile='tests/material-parity/sort-focus-structure.spec.mjs';\nconst ast=ts.createSourceFile(helperFile,readFileSync(helperFile,'utf8'),99,true);\nconst helper=ast.statements.find(n=>ts.isFunctionDeclaration(n)&&n.name?.text==='withFrozenShowcase').getText(ast);\nassert.equal(hash(helper),'603ac9ca88b9bf2e3443f8be65f125d39002e1ca4e5157487d9ac86ed7d2527f');\nconst withFrozen=new Function('assert','path','readFileSync','existsSync','createServer','chromium','fingerprintDirectory',helper+';return withFrozenShowcase;')(assert,path,readFileSync,existsSync,createServer,chromium,fingerprintDirectory);\nconst treeFile='artifacts/material-parity/current-full-20261005/button/light/desktop/reference-input-tree.json';\nconst tree=JSON.parse(readFileSync(treeFile)),host=tree.nodes.find(n=>n.attributes?.id==='button-primary');\nconst touch=tree.nodes.find(n=>n.parent===host.key&&n.attributes?.class==='mat-mdc-button-touch-target');\nassert.ok(touch);assert.equal(tree.styles[host.style].height,'40px');assert.equal(tree.styles[touch.style].height,'48px');\nlet observation;\nawait withFrozen(async(browser,baseUrl)=>{\n const context=await browser.newContext({viewport:{width:1440,height:1000},deviceScaleFactor:1});\n try{\n const page=await context.newPage(),errors=[];\n page.on('pageerror',e=>errors.push(e.message));\n await page.goto(baseUrl+'/reference/button?benchmark=1&profile=light');\n await page.waitForFunction(()=>typeof window.__MATERIAL_SHOWCASE_COMMAND__==='function');\n await page.evaluate(async()=>{await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});\n const initial=await page.locator('#button-primary').evaluate(button=>{\n  const target=button.querySelector('.mat-mdc-button-touch-target'),box=button.getBoundingClientRect(),t=target.getBoundingClientRect();\n  const keys=['display','position','height','top','left','right','transform','pointerEvents','visibility','overflowX','overflowY'];\n  window.__TOUCH_AUDIT_CLICKS__=[];\n  button.addEventListener('click',e=>window.__TOUCH_AUDIT_CLICKS__.push({x:e.clientX,y:e.clientY,targetClass:e.target.className}));\n  return {box:{x:box.x,y:box.y,width:box.width,height:box.height,top:box.top,bottom:box.bottom},targetBox:{x:t.x,y:t.y,width:t.width,height:t.height,top:t.top,bottom:t.bottom},\n   targetStyle:Object.fromEntries(keys.map(k=>[k,getComputedStyle(target)[k]])),originalStyle:target.getAttribute('style')};\n });\n for(const k of ['display','position','height','top','left','right','transform','pointerEvents','visibility','overflowX','overflowY'])\n  assert.equal(initial.targetStyle[k],tree.styles[touch.style][k],k);\n assert.equal(initial.box.height,40);assert.equal(initial.targetBox.height,48);\n assert.equal(initial.targetBox.top,initial.box.top-4);assert.equal(initial.targetBox.bottom,initial.box.bottom+4);\n const x=initial.box.x+initial.box.width/2,points=[{name:'above',x,y:initial.box.top-2},{name:'below',x,y:initial.box.bottom+2}];\n const observations=[];\n async function probe(state,point,expectedButton){\n  const before=await page.evaluate(()=>window.__TOUCH_AUDIT_CLICKS__.length);\n  const hit=await page.evaluate(({x,y})=>{const e=document.elementFromPoint(x,y);return {tag:e?.tagName,class:e?.className,buttonId:e?.closest('button')?.id??null};},point);\n  assert.equal(hit.buttonId==='button-primary',expectedButton);\n  await page.mouse.click(point.x,point.y);\n  const after=await page.evaluate(()=>window.__TOUCH_AUDIT_CLICKS__.length);\n  assert.equal(after-before,expectedButton?1:0);\n  observations.push({state,point,hit,buttonClickDelta:after-before});\n }\n for(const p of points)await probe('original-touch-target',p,true);\n await page.locator('#button-primary .mat-mdc-button-touch-target').evaluate(e=>e.style.pointerEvents='none');\n for(const p of points)await probe('touch-pointer-events-none',p,false);\n await probe('disabled-touch-center-positive',{name:'center',x,y:initial.box.top+20},true);\n await page.locator('#button-primary .mat-mdc-button-touch-target').evaluate((e,value)=>{e.style.cssText=value??'';e.getAttribute('style');if(value===null)e.removeAttribute('style');else e.setAttribute('style',value);},initial.originalStyle);\n assert.equal(await page.locator('#button-primary .mat-mdc-button-touch-target').getAttribute('style'),initial.originalStyle);\n for(const p of points)await probe('restored-touch-target',p,true);\n assert.deepEqual(errors,[]);\n observation={runtime:{actualBrowser:browser.version(),checkpointBrowser:'155.0.8059.40',historicalBrowserReplay:false},initial,observations,restoredExactInlineAttribute:true,runtimeErrors:errors};\n }finally{await context.close();}\n}, {}, {checkpointFile:'artifacts/material-parity/divider-alignment-provenance-20261015/checkpoint/manifest.json'});\nconsole.log(JSON.stringify({producerArgs:process.execArgv,helper:{file:helperFile,functionSha256:hash(helper)},referenceTree:receipt(treeFile),checkpoint:receipt('artifacts/material-parity/divider-alignment-provenance-20261015/checkpoint/manifest.json'),observation,\n conclusion:'The fresh native primary button touch span extends4CSSpx above and below the40px host and receives trusted clicks2px outside both host edges. Disabling only its pointer events removes those outside hits while the center still activates;exact restoration restores outside hits.',\n boundary:'One native light/desktopDPR1 diagnostic on the retained served build with a newer browser patch,not historical replay,candidate hit testing,all shared button variants/states or whole-case closure. No fixture/source changes and no renderer diagnosis.'},null,2));\n"
+  ],
+  "helper": {
+    "file": "tests/material-parity/sort-focus-structure.spec.mjs",
+    "functionSha256": "603ac9ca88b9bf2e3443f8be65f125d39002e1ca4e5157487d9ac86ed7d2527f"
+  },
+  "referenceTree": {
+    "file": "artifacts/material-parity/current-full-20261005/button/light/desktop/reference-input-tree.json",
+    "sha256": "b04b2d4cd300b30a57c5cd63328ebabd24278b6d1ec0844057aa6adb24f70b15"
+  },
+  "checkpoint": {
+    "file": "artifacts/material-parity/divider-alignment-provenance-20261015/checkpoint/manifest.json",
+    "sha256": "62829d76ac8a7345984bf0e3edab45f27a179afe746faabf658172b77ddae07d"
+  },
+  "observation": {
+    "runtime": {
+      "actualBrowser": "155.0.8059.80",
+      "checkpointBrowser": "155.0.8059.40",
+      "historicalBrowserReplay": false
+    },
+    "initial": {
+      "box": {
+        "x": 65,
+        "y": 181.078125,
+        "width": 140.78125,
+        "height": 40,
+        "top": 181.078125,
+        "bottom": 221.078125
+      },
+      "targetBox": {
+        "x": 65,
+        "y": 177.078125,
+        "width": 140.78125,
+        "height": 48,
+        "top": 177.078125,
+        "bottom": 225.078125
+      },
+      "targetStyle": {
+        "display": "block",
+        "position": "absolute",
+        "height": "48px",
+        "top": "20px",
+        "left": "0px",
+        "right": "0px",
+        "transform": "matrix(1, 0, 0, 1, 0, -24)",
+        "pointerEvents": "auto",
+        "visibility": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      },
+      "originalStyle": null
+    },
+    "observations": [
+      {
+        "state": "original-touch-target",
+        "point": {
+          "name": "above",
+          "x": 135.390625,
+          "y": 179.078125
+        },
+        "hit": {
+          "tag": "SPAN",
+          "class": "mat-mdc-button-touch-target",
+          "buttonId": "button-primary"
+        },
+        "buttonClickDelta": 1
+      },
+      {
+        "state": "original-touch-target",
+        "point": {
+          "name": "below",
+          "x": 135.390625,
+          "y": 223.078125
+        },
+        "hit": {
+          "tag": "SPAN",
+          "class": "mat-mdc-button-touch-target",
+          "buttonId": "button-primary"
+        },
+        "buttonClickDelta": 1
+      },
+      {
+        "state": "touch-pointer-events-none",
+        "point": {
+          "name": "above",
+          "x": 135.390625,
+          "y": 179.078125
+        },
+        "hit": {
+          "tag": "SECTION",
+          "class": "demo",
+          "buttonId": null
+        },
+        "buttonClickDelta": 0
+      },
+      {
+        "state": "touch-pointer-events-none",
+        "point": {
+          "name": "below",
+          "x": 135.390625,
+          "y": 223.078125
+        },
+        "hit": {
+          "tag": "SECTION",
+          "class": "demo",
+          "buttonId": null
+        },
+        "buttonClickDelta": 0
+      },
+      {
+        "state": "disabled-touch-center-positive",
+        "point": {
+          "name": "center",
+          "x": 135.390625,
+          "y": 201.078125
+        },
+        "hit": {
+          "tag": "SPAN",
+          "class": "mdc-button__label",
+          "buttonId": "button-primary"
+        },
+        "buttonClickDelta": 1
+      },
+      {
+        "state": "restored-touch-target",
+        "point": {
+          "name": "above",
+          "x": 135.390625,
+          "y": 179.078125
+        },
+        "hit": {
+          "tag": "SPAN",
+          "class": "mat-mdc-button-touch-target",
+          "buttonId": "button-primary"
+        },
+        "buttonClickDelta": 1
+      },
+      {
+        "state": "restored-touch-target",
+        "point": {
+          "name": "below",
+          "x": 135.390625,
+          "y": 223.078125
+        },
+        "hit": {
+          "tag": "SPAN",
+          "class": "mat-mdc-button-touch-target",
+          "buttonId": "button-primary"
+        },
+        "buttonClickDelta": 1
+      }
+    ],
+    "restoredExactInlineAttribute": true,
+    "runtimeErrors": []
+  },
+  "conclusion": "The fresh native primary button touch span extends4CSSpx above and below the40px host and receives trusted clicks2px outside both host edges. Disabling only its pointer events removes those outside hits while the center still activates;exact restoration restores outside hits.",
+  "boundary": "One native light/desktopDPR1 diagnostic on the retained served build with a newer browser patch,not historical replay,candidate hit testing,all shared button variants/states or whole-case closure. No fixture/source changes and no renderer diagnosis."
+}
