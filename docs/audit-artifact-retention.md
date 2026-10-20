@@ -2,6 +2,26 @@
 
 ## Current versus historical evidence
 
+Retain readonly-candidate-unexpected-section-leaves-20261020 log pair and
+readonly-candidate-derived-receipt-conservation-20261020.log plus .failed.log.
+Both full payloads authenticate;70 of80 sections are unchanged. All147 extra
+leaves in five nested receipt sections are explicitly attributed (99 source/
+report receipts,48 derived control hashes),not silently allowed. Actual indexed
+proof hashes and reconstructed motion-report hashes agree;every other selected
+leaf/shape/order is conserved. Original strict-section failure and diagnostic
+group-enumeration failure remain. Candidate39fc is NOT main acceptance;retain
+independent cold-check logs/frozen inputs while94817 remains live.
+
+Retain old-test-build-removal-review-20261020.json,including its exact302-child
+inventory and reference-check scope. SHA15bb2076943f54c6f2287a7051d089df903531903c26e0bd1b9ef4725e35850c.
+These old generated Material dist/test-out builds are reviewed removal candidates;
+no retained dependency found in plain evidence,all128 physical gzip files
+(123 distinct contents) or12 tgz packages. Historical cleanup/compression records
+are mentions,not live build loaders;preserve those records. This review grants
+NO deletion approval. Recheck exact resolved targets/membership/consumers before
+any approved removal;never delete the parent or newer/unlisted directories.
+Logical10.69GiB is not a physical-recovery guarantee. No files deleted.
+
 Retain retained-active-option-input-targets,select-open-ax-target-resolution and
 select-listbox-name-inputs-20261020 log pairs. They authenticate88 retained target
 joins,one frozen actual AX backend relation pair and40 exact label omissions.

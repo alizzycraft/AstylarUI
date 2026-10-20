@@ -11,12 +11,17 @@ below. Earlier next/live statements in chronology are not current instructions.
   Chip batch passed export,independent cold replay,full section/coverage/source/
   proof conservation and main import.86 immutable files share verified hard links.
 - Source registration now166 findings/220 proofs (readonly core defect),not yet
-  accepted/exported. Complete165-definition/219-proof predecessor recovers.
+  accepted. Export39fc0e3e completed;complete165-definition/219-proof predecessor recovers.
   Source census743 paths:729 unchanged,nine changed,five added,no removal.
   Source section04e54857;proof07065eba. All219 original proof records unchanged.
-- LIVE readonly export:session6487,launcher26652/worker23464,16:02:52 local
-  October20 after86065d0f. readonly-coherent-export-20261020 log pair. Preserve
-  frozen inputs;do not restart on quiet output/observation timeout. Main remainsfc888710.
+- Readonly candidate39fc0e3e:export6487 and candidate import completed exit0.
+  Full80-section comparison authenticates both payloads:70 unchanged,ten changed.
+  Five expected registration sections reconcile;the extra147 leaves are99 source
+  receipts plus48 derived control hashes,all attributed with exact proof hashes.
+  Every other leaf/shape/order in those five sections is unchanged. See chronology.
+- LIVE independent cold check94817:launcher26804/worker2356,16:52:16 local
+  October20. Preserve frozen inputs;do not restart on quiet output/observation
+  timeout. Candidate not accepted;main remainsfc888710 until cold check/publication.
 - Readonly root:public report8a541560 proves native readonly Atlas unchanged versus
   candidate xAtlas/xtlas/tlas atDPR1/2,with four writable/four disabled controls.
   Six complete current/installed owner methods agree. Guard missing at shared
@@ -39,16 +44,59 @@ below. Earlier next/live statements in chronology are not current instructions.
   lifetime ownership,local composited paint and current-runtime applicability.
   Shared editing:1734 authored exclusions inspected;443 writable and134 readonly/
   disabled cases remain partial. Do not reopen settled work without input drift.
-- Next:finish readonly export,authenticate expected deltas,independent cold check
-  and main import;then checkbox owning proof/case join and remaining coverage.
+- Next:finish independent readonly cold check and verified main publication;
+  then checkbox owning proof/case join and remaining coverage.
   Original full canonical/browser/unit/build/packed-consumer/release gates remain.
-- Storage:no deletions. Verified LZX/hard-link conservation;3398 closed build files
-  hash-identical after compression (about68MiB free-space recovery). Deleting old
-  builds/caches still awaits approval and reference closure.
+- Storage:no deletions. Exact302 old Material test-build directories reviewed as
+  removal candidates:428143 files/11473598284 logical bytes,no retained dependency
+  found,including compressed reports/packages. Exact list in old-test-build-
+  removal-review-20261020.json;deletion remains unauthorized. Caches separately pending.
 
 ## Audit chronology — retained evidence, newest first
 
 ### October20 — retained chip/readonly registration and checkbox checkpoint
+
+Readonly export reconciliation completed without another export or capture:
+readonly-candidate-unexpected-section-leaves-20261020.log
+SHA cc0412322c46e7c52e38e7cdb19fafbd7e214cace9c890e2f9f457a6ee0075bf.
+Both complete decoded packages authenticate;all80 section names/order agree,
+70 section digests are unchanged. Ten changes include five expected registration
+sections and five nested receipt sections. The original strict-five-section check
+failure remains retained;no allowlist was silently broadened.
+
+readonly-candidate-derived-receipt-conservation-20261020.log
+SHA02a33375bce330f2b141b26e93887eb22dca70d2909daf3d983ebc99b8b9f954
+attributes ALL147 extra leaves:48 line-box and48 embedded control producer hashes,
+one owner-caret source hash,one motion source-transition hash,one motion-report
+hash and48 scalar proof hashes. Actual old/current authenticated index shards
+prove each scalar hash names exactly one complete old/current control proof;
+all48 cases/elements/properties match. Reconstructing the complete motion report
+with current receipts yields b84e4083;reversing ONLY the producer receipt recovers
+11ac4705. The complete leaf comparison conserves every other value,container,
+membership and ordering in all five sections. The diagnostic's initial grouped-
+enumeration-order mistake is preserved in its .failed.log;recovery compares exact
+group membership/counts while the original leaf check still enforces data order.
+
+Candidate source/proof/finding sections exactly match prior independent receipts:
+04e548574f4fd43ffc1dc34aa678344026170d9550ede6b5a15d41a6fb2dc152,
+07065eba46f8650f81ae61487fd7b78f374be3465342ec39cbedbda6305865ce,
+beb3da46b4a1ed1d4187e69078c85328a6a8233eb7f3e4f2c17a4ec23716a2f1.
+Existing complete findings/readable and metadata/coverage conservation also pass.
+Cold94817 remains live;main stillfc888710. No renderer/fixture/source edit,
+new capture,whole-case closure,current rendering acceptance or deletion follows.
+
+Requested old-build removal review is complete,NOT permission to delete:
+old-test-build-removal-review-20261020.json
+SHA15bb2076943f54c6f2287a7051d089df903531903c26e0bd1b9ef4725e35850c.
+Exact302 child names/dates revalidated against inventory6e6f8a77;428143 generated
+files,11473598284 logical bytes,no reparse entries,none tracked. All four worktrees
+and retained plain evidence yield only historical cleanup/compression mentions.
+128 unique physical gzip files reduce to123 distinct contents (five duplicates);
+all checked,including two already completed authenticated zero-hit packages.
+All12 retained tgz packages also contain no reference. No active build consumer
+observed. Preserve historical compression logs;future deletion requires approval
+and a fresh exact-target/consumer check. Physical recovered space is not inferred
+from logical bytes. No build/cache/evidence deleted.
 
 Active-descendant association gap narrowed without repeating settled timepicker AX:
 retained-active-option-input-targets-20261020 log
