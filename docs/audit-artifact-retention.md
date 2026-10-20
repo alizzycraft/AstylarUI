@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Retain readonly-select-keyboard-probe,readonly-select-keyboard-bound and
+readonly-select-intermediate-events-20261020 log pairs. First is historical
+checkpoint preflight failure before browser launch;second uses existing explicit
+62829d76 context;third captures missing intermediate xTeam input value before
+application Solo normalization. All are acceptance:false and separate from
+the frozen chip batch. No current minimal/core-only/94-case acceptance follows.
+Keep original caret/newer divider manifests unchanged. Chip coherent export49114
+is live with15672/26368;retain its logs and source freeze until terminal state.
+
 Retain chip-graphic-selected-integration,chip-graphic-selected-source-census and
 chip-graphic-selected-launcher-20261020 log pairs. They prove exacte837 selection,
 complete868d predecessor recovery and five-file/219-proof source preflight,not

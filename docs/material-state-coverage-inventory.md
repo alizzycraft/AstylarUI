@@ -2,6 +2,48 @@
 
 ## Current audit pointer — October20
 
+Readonly-select gap changed the next action without reopening completed editing
+exclusions. Authenticated accepted3072 index372d4128 partitions authoredEditing:
+1734 inspected-authored-exclusions,443 applicable/partial writable cases,134
+not-applicable/partial (94 select plus40 disabled text,eight each across five
+field families). Existing1734 exclusions are settled,not a fresh backlog.
+
+Specific new behavior observation:Chrome155.0.8059.80/light desktopDPR1,receipt-
+bound1887-file served context62829d76,programmatically focused enabled readonly
+select-control starts Team. Real trusted x key yields public Astylar input event
+value xTeam while readonly=true;THEN showcase selected state changes true→false
+and display normalizes to Solo,with focus lost. This is not merely typing x
+into a native MatSelect;the candidate is an authored readonly text input. A
+separate native readonly-input control initialized Team ignores x/Backspace.
+No pageerrors. The second probe uses the EXISTING benchmark event log to expose
+that intermediate value,not a handler patch or new event framework.
+First divergence therefore precedes the app's domain-label normalization,but
+minimal package-root readonly isolation and exact owning-method served/current
+binding remain required before CORE-ONLY classification. Focus loss is observed,
+not assigned to a first-blur owner by this log. No all94-case transfer,disabled
+behavior,selection/copy,local paint or whole-case acceptance. Keep134 exclusions
+partial;do not clear behavior work because readonly/disabled attributes exist.
+Evidence readonly-select-keyboard-bound-20261020.log
+SHA20b49d2d227499a62580f4d86f2d072013a4d50ccf4ec94d98e611df8a969591;
+readonly-select-intermediate-events-20261020.log
+SHA54408eb527b0cbd853d036302a9666c34e65e2df5af27b41d188209fa5fd802e.
+Original readonly-select-keyboard-probe-20261020 fails BEFORE browser launch:
+old default caret checkpoint does not match served files. Keep stderr ed3be918;
+no readonly outcome follows. Existing helper's explicit checkpoint parameter uses
+the already-authenticated newer divider context;no old receipt overwritten.
+Current source route:semantic bridge mirrors readOnly;facade forwards semantic
+keydown→runtime→control defaults→KeyboardInputHandler text mutation. The readonly
+check at runtime1281 excludes implicit-submit targets,NOT editing. Current raw
+handler04aa5fcd/runtime10a7d573/bridge1a0011d3/input-service1feefdf3/facade5742ba6c
+identify source inspection,not a substitute for the required public reduction.
+Next isolate readonly printable-key behavior through existing public proof
+infrastructure after frozen chip publication;do not compensate the select fixture.
+
+Chip export remains verified LIVE:session49114,launcher15672/worker26368,
+created13:39:48 local October20,exact e837 arguments/all five baseline paths.
+Logs chip-coherent-export-20261020 stdout/stderr. Keep source/evidence inputs
+frozen;do not restart a quiet process. Accepted3072 remains unchanged.
+
 Exact graphic successore837 is SELECTED,not canonical. New owning reader test
 loads2311 cases/15185 dependencies,removes ONLY76 graphic children and recovers
 COMPLETE868d predecessor;all cases/acceptance flags remain partial/unverified.
