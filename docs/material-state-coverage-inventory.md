@@ -2,6 +2,23 @@
 
 ## Current audit pointer — October20
 
+October20 underline activation review:40 unfocused error cases (eight each for
+form-field,input,autocomplete,datepicker,timepicker) retain native before-border1px,
+opacity1 and after-border2px withopacity0/scaleX0,but candidate active-line height2px,
+opacity1.0 in all three captured stages. Native invalid class and absence of
+focused wrapper are checked. Exact current componentSHA b493a355 and its
+`focusedId() === controlId || state.error` condition bind the authoring cause;
+Git994da86b introduces that condition and line primitive (source history,not runtime
+bisect). Classification:application-plugin-authoring-defect,error incorrectly
+activates focus-decoration request;not a core stroke/projection defect. Complete
+577-case census also retains196 native-active/candidate-present,251 collapsed/
+candidate-absent,48 disabled transparent-identity/candidate-absent,and42 native-
+active/candidate-absent cases. The42 reverse differences require separate state/
+focus-owner review;no common cause asserted. Existing owning filled-field test
+passes1/1,zero skip/cancel/todo,3052.8763ms with all original assertions preserved.
+No new capture/renderer/fixture change or whole-case closure. Canonical export/
+source reconciliation remains queued for this coherent structure/decoration batch.
+
 October20 filled-field structure review authenticates all577 paired main cases
 (form-field76,input76,autocomplete110,select94,datepicker111,timepicker110) and
 their1154 tree receipts under reportb07ef154. Native control parent is the

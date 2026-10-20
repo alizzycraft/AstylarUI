@@ -438,6 +438,9 @@ test('retained main mixed-text owners have only out-of-flow chip focus-indicator
 
 test('retained filled-field structure substitutes absolute regions for the native infix chain', () => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const component = readFileSync('examples/material-showcase/src/app/astylar.component.ts', 'utf8').replaceAll('\r\n', '\n');
+  assert.equal(hash(component), 'b493a355679903f988e29f0dafbb95d2d6cce41275302fce5c978ae55f423b9f');
+  assert.ok(component.includes('const fieldActiveLine = (controlId: string): DOMElement[] => this.focusedId() === controlId || state.error ?'));
   const load = descriptor => {
     const file = resolve(descriptor.file), rel = relative(resolve('artifacts/material-parity'), file);
     assert.ok(!isAbsolute(rel) && rel !== '..' && !rel.startsWith('../') && !rel.startsWith('..\\'));
@@ -453,6 +456,7 @@ test('retained filled-field structure substitutes absolute regions for the nativ
   const families = ['form-field', 'input', 'autocomplete', 'select', 'datepicker', 'timepicker'];
   let absentDisabledLayers = 0;
   const focusOpacities = {}, cornerSubstitutions = {};
+  const underlineStates = {}, errorActivation = {};
   for (const entry of [...report.results, ...report.interactions].filter(entry => families.includes(entry.family))) {
     const native = load(entry.inputTrees.reference), candidate = load(entry.inputTrees.astylar);
     assert.deepEqual(native.errors, []); assert.deepEqual(candidate.errors, []);
@@ -490,6 +494,28 @@ test('retained filled-field structure substitutes absolute regions for the nativ
     cornerSubstitutions[radius] = (cornerSubstitutions[radius] ?? 0) + 1;
     const ripple = unique(native.nodes.filter(node => node.parent === wrapper.key && classHas(node, 'mdc-line-ripple')));
     assert.equal(ripple.ownText, '');
+    const after = unique(ripple.pseudoElements.filter(pseudo => pseudo.pseudo === '::after'));
+    assert.equal(after.generated, true);
+    const afterStyle = native.styles[after.style];
+    const lines = candidate.nodes.filter(node => node.authored?.id === `${family}-control-active-line`);
+    assert.ok(lines.length <= 1);
+    const underlineState = JSON.stringify([afterStyle.opacity, afterStyle.transform, !!lines.length]);
+    underlineStates[underlineState] = (underlineStates[underlineState] ?? 0) + 1;
+    if (lines.length && afterStyle.opacity === '0') {
+      assert.equal(entry.state, 'error');
+      assert.ok(classHas(host, 'mat-form-field-invalid'));
+      assert.ok(!classHas(wrapper, 'mdc-text-field--focused'));
+      assert.equal(afterStyle.transform, 'matrix(0, 0, 0, 1, 0, 0)');
+      assert.equal(afterStyle.borderBottomWidth, '2px');
+      const before = unique(ripple.pseudoElements.filter(pseudo => pseudo.pseudo === '::before'));
+      assert.equal(native.styles[before.style].borderBottomWidth, '1px');
+      assert.equal(native.styles[before.style].opacity, '1');
+      for (const stage of ['normalResolvedStyle', 'interactionResolvedStyle', 'resolvedStyle']) {
+        assert.equal(lines[0][stage].height, '2px');
+        assert.equal(lines[0][stage].opacity, '1.0');
+      }
+      errorActivation[family] = (errorActivation[family] ?? 0) + 1;
+    }
     const focus = native.nodes.filter(node => node.parent === wrapper.key && classHas(node, 'mat-mdc-form-field-focus-overlay'));
     if (classHas(wrapper, 'mdc-text-field--disabled')) { assert.equal(focus.length, 0); absentDisabledLayers++; }
     else assert.equal(focus.length, 1);
@@ -501,6 +527,14 @@ test('retained filled-field structure substitutes absolute regions for the nativ
   assert.equal(absentDisabledLayers, 48);
   assert.deepEqual(cornerSubstitutions, { '4px': 293, '3px': 142, '6px': 142 });
   assert.deepEqual(focusOpacities, { '0': 463, '0.08': 66, absent: 48 });
+  assert.deepEqual(underlineStates, {
+    '["0","matrix(0, 0, 0, 1, 0, 0)",false]': 251,
+    '["1","matrix(1, 0, 0, 1, 0, 0)",true]': 196,
+    '["0","matrix(1, 0, 0, 1, 0, 0)",false]': 48,
+    '["0","matrix(0, 0, 0, 1, 0, 0)",true]': 40,
+    '["1","matrix(1, 0, 0, 1, 0, 0)",false]': 42,
+  });
+  assert.deepEqual(errorActivation, { 'form-field': 8, input: 8, autocomplete: 8, datepicker: 8, timepicker: 8 });
   // These are unequal layout/tree requests, not a one-to-one wrapper mapping or
   // proof that every removed wrapper has a separate renderer defect. Preserve
   // existing label/token diagnoses and investigate unclassified paint separately.
