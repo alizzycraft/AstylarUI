@@ -11,6 +11,22 @@ below. Earlier next/live statements in chronology are not current instructions.
   Readonly batch passed export,independent cold replay,full section/coverage/source/
   proof conservation and normal main import.86 immutable files share verified
   hard links;accepted predecessorfc888710 remains preserved.
+- Pending candidate:b6610e71/indexd0e7623d;170 findings/226 proofs,review736e685c.
+  Export logged complete after2569095.5785ms;detached monitor confirms terminal
+  but returned null exit code (not reported as numeric0). Candidate import exits0,
+  main pointer remains39fc. Candidate86018384 packed/2329808066 decoded bytes.
+  Whole payload authentication/80-section comparison passes:70 unchanged/ten
+  changed. Source/proof/finding sections exactly match frozen production output;
+  all prior166 findings/220 proofs conserve. Complete2311 prior case records and
+  all15185 old dependency receipts conserve after removing only116 added children.
+  Six residual coverage leaves are two successor IDs/four reviewed source hashes;
+  summary changes only166→170. All147 extra leaves in five receipt sections are
+  attributed to producerd2d49ef9→d97e15b4 and derived control/report hashes;
+  every other value/shape/order is unchanged. See control-input candidate import,
+  full-section-comparison,metadata-conservation,candidate-registration-conservation,
+  derived-section-leaves and derived-receipt-conservation-20261020 logs.
+  Independent cold check is LIVE:session29495,launcher5580/worker4652. No restart,
+  main import or rendering acceptance until terminal comparison is inspected.
 - Readonly registration is now canonical audit evidence,not a renderer fix or
   rendering pass. Complete165-definition/219-proof predecessor recovers.
   Source census743 paths:729 unchanged,nine changed,five added,no removal.
@@ -73,8 +89,8 @@ below. Earlier next/live statements in chronology are not current instructions.
 - Review736e685c is now selected by the complete-baseline launcher and existing
   exact five-transition reader. Old/new review and registration checks pass3/3;
   unknown IDs reject. Launcher dry-run passes (not evidence authentication).
-- Next:reconcile the changed source census,then freeze for one coherent export/
-  conservation/independent cold/import milestone. New proposal is not canonical.
+- Next:finish the live independent cold comparison,then verified immutable staging
+  and normal main import. New proposal is not accepted canonical evidence yet.
   Remaining structure/
   AX/paint/current-runtime coverage stays open.
   Original full canonical/browser/unit/build/packed-consumer/release gates remain.

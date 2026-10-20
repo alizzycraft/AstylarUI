@@ -1,0 +1,40 @@
+Command:
+@'
+import ts from 'typescript';import fs from 'node:fs';import path from 'node:path';import {createHash} from 'node:crypto';import {execFileSync} from 'node:child_process';import assert from 'node:assert/strict';import {sourceAuditDefinitions} from './tests/material-parity/input-equivalence-policy.mjs';import {sectionDigests} from './scripts/material-audit-section-digests.mjs';
+const file='tests/material-parity/input-equivalence-audit.mjs',source=fs.readFileSync(file,'utf8'),ast=ts.createSourceFile(file,source,ts.ScriptTarget.Latest,true),names=['scanMaterialSources','sourceFingerprints','focusedProofInventory','proof'];
+const bodies=names.map(name=>{const n=ast.statements.find(n=>ts.isFunctionDeclaration(n)&&n.name?.text===name);assert.ok(n);return n.getText(ast)}).join('\n');
+const f=new Function('readFileSync','path','createHash','sourceAuditDefinitions',bodies+'\nreturn {scanMaterialSources,sourceFingerprints,focusedProofInventory};')(fs.readFileSync,path,createHash,sourceAuditDefinitions);
+const sources=f.sourceFingerprints(process.cwd()),proofs=f.focusedProofInventory(process.cwd()),findings=f.scanMaterialSources(process.cwd());
+assert.deepEqual([sources.length,proofs.length,findings.length],[756,226,170]);assert.equal(proofs.filter(p=>p.status==='missing').length,0);assert.ok(findings.every(f=>f.detected));
+const expected=[{"name":"sourceFingerprints","tokens":7561,"sha256":"5b971ab52e7f80448e9f65ac1d8f51b1233322fb1a5ae7e31b80df2213db2fc7"},{"name":"sourceFindings","tokens":13705,"sha256":"37576baca1835749da538196a70b44238623c5d02b3a4b0cc456ac1ad66dd765"},{"name":"focusedProofs","tokens":4069,"sha256":"4e2af61eb73d9cf3c355c6bc9756b8b69ac8562c1eea8584dad4890ccc734782"}];
+const actual=await sectionDigests([Buffer.from(JSON.stringify({sourceFingerprints:sources,focusedProofs:proofs,sourceFindings:findings}))]);
+for(const row of actual)assert.deepEqual(row,expected.find(r=>r.name===row.name));
+console.log(JSON.stringify({counts:{sources:sources.length,proofs:proofs.length,findings:findings.length},sections:actual,exactCandidateRegistrationSections:true,scope:'Unchanged production functions extracted through TypeScript AST;all actual candidate source/finding/proof section tokens equal current production output. Prior populations conserve through the authenticated pre-export source census. No full builder/browser recapture.'},null,2));
+'@ | node --input-type=module
+Terminal exit: 0
+{
+  "counts": {
+    "sources": 756,
+    "proofs": 226,
+    "findings": 170
+  },
+  "sections": [
+    {
+      "name": "sourceFingerprints",
+      "tokens": 7561,
+      "sha256": "5b971ab52e7f80448e9f65ac1d8f51b1233322fb1a5ae7e31b80df2213db2fc7"
+    },
+    {
+      "name": "focusedProofs",
+      "tokens": 4069,
+      "sha256": "4e2af61eb73d9cf3c355c6bc9756b8b69ac8562c1eea8584dad4890ccc734782"
+    },
+    {
+      "name": "sourceFindings",
+      "tokens": 13705,
+      "sha256": "37576baca1835749da538196a70b44238623c5d02b3a4b0cc456ac1ad66dd765"
+    }
+  ],
+  "exactCandidateRegistrationSections": true,
+  "scope": "Unchanged production functions extracted through TypeScript AST;all actual candidate source/finding/proof section tokens equal current production output. Prior populations conserve through the authenticated pre-export source census. No full builder/browser recapture."
+}

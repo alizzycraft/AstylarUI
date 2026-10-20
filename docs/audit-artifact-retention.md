@@ -2,6 +2,17 @@
 
 ## Current versus historical evidence
 
+Retain control-input-coherent-export-20261020 stdout/stderr and candidate generation
+b6610e71ef744b5d589d07c18e562df9927202a3adb7a5b31acb334b100839f2 under
+working-audit-candidate-validation. Main39fc remains accepted. Retain control-input-
+candidate-import (and syntax-failed attempt),full-section-comparison,metadata-
+conservation,candidate-registration-conservation,derived-section-leaves and derived-
+receipt-conservation-20261020 logs. Complete predecessor cases/receipts/findings/
+proofs conserve;all147 extra receipt leaves are attributed. No old evidence or
+threshold changed. Export logged complete but detached terminal exit was null;
+do not relabel it numeric0. Independent cold-check-20261020 log pair is LIVE;
+retain the terminal result before main publication. Source remains frozen.
+
 Retain case proposal736e685c55bf033db3d0ffc5b564e2ed42648438e1ed0b3ab66b7f26ed83d8bd,
 control-input-case-join-20261020.log and its failed/receipt-conflict logs. It adds
 116 bounded retained-input children across108 cases and conserves completee837;

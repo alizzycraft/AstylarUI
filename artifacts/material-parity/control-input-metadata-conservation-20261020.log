@@ -1,0 +1,259 @@
+Command:
+@'
+import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+const hash=b=>createHash('sha256').update(b).digest('hex');
+function index(base,p){const b=fs.readFileSync(base+'/'+p.generation+'/index.json');assert.equal(hash(b),p.indexSha256);return JSON.parse(b)}
+const main='artifacts/material-parity/working-audit',candidate=main+'-candidate-validation';
+const a=index(main,JSON.parse(fs.readFileSync(main+'/current.json'))),b=index(candidate,JSON.parse(fs.readFileSync(candidate+'/current.json')));
+const before=a.metadata.coverage,after=b.metadata.coverage;
+let removed=0;for(const g of after.inspectionEvidence.cases)for(const [owner,key]of [['inputStyleStructure','retainedCheckboxMarkRequests'],['localPaint','retainedCheckboxDisabledInkRequests'],['semantics','retainedSelectListboxNamingRequests']])if(g.obligations[owner]?.[key]){delete g.obligations[owner][key];removed++}
+assert.equal(removed,116);assert.deepEqual(after.inspectionEvidence.cases,before.inspectionEvidence.cases);
+const oldDeps=new Map(before.inspectionEvidence.evidenceFingerprints.map(r=>[r.file,r.sha256]));
+const added=after.inspectionEvidence.evidenceFingerprints.filter(r=>!oldDeps.has(r.file));
+assert.equal(added.length,7);
+assert.deepEqual(after.inspectionEvidence.evidenceFingerprints.filter(r=>oldDeps.has(r.file)),before.inspectionEvidence.evidenceFingerprints);
+after.inspectionEvidence.evidenceFingerprints=before.inspectionEvidence.evidenceFingerprints;
+const changes=[];
+function diff(a,b,p=[]){if(Object.is(a,b))return;if(a&&b&&typeof a==='object'&&typeof b==='object'){assert.deepEqual(Object.keys(a),Object.keys(b),'shape '+p.join('.'));for(const k of Object.keys(a))diff(a[k],b[k],[...p,k]);}else changes.push({path:p,before:a,after:b})}
+diff(before,after);
+assert.deepEqual(changes.map(r=>r.path.join('.')),[
+'inspectionEvidence.reviewSha256','inspectionEvidence.sourceApplicability.reviewSha256',
+'inspectionEvidence.sourceApplicability.transitions.0.currentSha256','inspectionEvidence.sourceApplicability.transitions.1.currentSha256',
+'inspectionEvidence.sourceApplicability.transitions.2.currentSha256','inspectionEvidence.sourceApplicability.transitions.3.currentSha256']);
+for(const row of changes.slice(0,2)){assert.equal(row.before,'e837c58e3b9c0594f6003a6001a03cb12b4fa875403db08724e9c9defb329854');assert.equal(row.after,'736e685c55bf033db3d0ffc5b564e2ed42648438e1ed0b3ab66b7f26ed83d8bd');}
+const log=fs.readFileSync('artifacts/material-parity/control-input-pre-export-source-census-20261020.log','utf8');
+const tail=log.slice(log.indexOf('Note:'));const census=JSON.parse(tail.slice(tail.indexOf('\n{')));
+for(const row of changes.slice(2)){const transition=after.inspectionEvidence.sourceApplicability.transitions[Number(row.path[3])];const expected=census.changed.find(r=>r.file===transition.logicalFile);assert.ok(expected);assert.equal(row.before,expected.before);assert.equal(row.after,expected.after);}
+const summary=structuredClone(b.metadata.summary);assert.equal(summary.sourceFindings,170);summary.sourceFindings=166;assert.deepEqual(summary,a.metadata.summary);
+
+console.log(JSON.stringify({authenticatedIndexes:true,complete2311PredecessorCasesConserved:true,removedOnlyChildren:removed,addedDependencies:added,all15185PriorDependencyReceiptsConserved:true,remainingCoverageLeafChanges:changes,summaryBefore:a.metadata.summary,summaryAfter:b.metadata.summary,scope:'Exact compact metadata conservation only;full payload section comparison,cold check and main import remain required.'},null,2));
+'@ | node --input-type=module
+Terminal exit: 0
+{
+  "authenticatedIndexes": true,
+  "complete2311PredecessorCasesConserved": true,
+  "removedOnlyChildren": 116,
+  "addedDependencies": [
+    {
+      "file": "artifacts/material-parity/checkbox-checkmark-retained-inputs-20261020.log",
+      "sha256": "30ff029a6f116c88e63027b960391e6e08bbaf6ddf3a89c305506cb43a18b8c4"
+    },
+    {
+      "file": "artifacts/material-parity/checkbox-disabled-checkmark-token-20261020.log",
+      "sha256": "1750461e2aafd8b9b6100799d3c81267e04be242d70f14cdf02d92f389a2b41f"
+    },
+    {
+      "file": "artifacts/material-parity/queued-control-owning-20261020.log",
+      "sha256": "aac72a08875827648bb454200a4ee1a30ff082fa703f2edd55c72f6c9addbaf4"
+    },
+    {
+      "file": "artifacts/material-parity/queued-control-source-history-20261020.log",
+      "sha256": "57f539672cfb6f82ed05f8c3141d866d0a7518fda7b6bb5756dbea60e41093a3"
+    },
+    {
+      "file": "artifacts/material-parity/retained-active-option-input-targets-20261020.log",
+      "sha256": "162a3754ad10427a6341b9d2fd7144f7c9164424d7389101e2a3ade1ace1042b"
+    },
+    {
+      "file": "artifacts/material-parity/select-listbox-name-inputs-20261020.log",
+      "sha256": "7351677374f8515257904ee3620484ed84fa0d30880b46299204eafb19cf4833"
+    },
+    {
+      "file": "scripts/join-material-control-inputs.mjs",
+      "sha256": "0fdb61002aeffa888faaaad7d54f5c130df7067f4657f4abafe5a52ec1007c2b"
+    }
+  ],
+  "all15185PriorDependencyReceiptsConserved": true,
+  "remainingCoverageLeafChanges": [
+    {
+      "path": [
+        "inspectionEvidence",
+        "reviewSha256"
+      ],
+      "before": "e837c58e3b9c0594f6003a6001a03cb12b4fa875403db08724e9c9defb329854",
+      "after": "736e685c55bf033db3d0ffc5b564e2ed42648438e1ed0b3ab66b7f26ed83d8bd"
+    },
+    {
+      "path": [
+        "inspectionEvidence",
+        "sourceApplicability",
+        "reviewSha256"
+      ],
+      "before": "e837c58e3b9c0594f6003a6001a03cb12b4fa875403db08724e9c9defb329854",
+      "after": "736e685c55bf033db3d0ffc5b564e2ed42648438e1ed0b3ab66b7f26ed83d8bd"
+    },
+    {
+      "path": [
+        "inspectionEvidence",
+        "sourceApplicability",
+        "transitions",
+        "0",
+        "currentSha256"
+      ],
+      "before": "7875b717fe7693f5bdad8158f99461f09512b7bdbcdda4465a0478c4bc24566c",
+      "after": "6a330a84e3b43c7ebecebcbb12640fc10ed04b9363dbf74815f74e53efab96b0"
+    },
+    {
+      "path": [
+        "inspectionEvidence",
+        "sourceApplicability",
+        "transitions",
+        "1",
+        "currentSha256"
+      ],
+      "before": "cdcfd338d0823fefaa780efbba5e500a78f952e745f1c0d6039f0c59a2e8cc50",
+      "after": "58fe244dc56a251e144dcc6eab2c36cb18f017291da968e1d002dc36404d60ea"
+    },
+    {
+      "path": [
+        "inspectionEvidence",
+        "sourceApplicability",
+        "transitions",
+        "2",
+        "currentSha256"
+      ],
+      "before": "b9d1e65a82176a32beec12c26102b530efdb752ed76181542e25248eeca9b4a0",
+      "after": "8eba578d04c9b2a96ef8a5a7615aa5c81dcb315617789aef0a293e5b688d0200"
+    },
+    {
+      "path": [
+        "inspectionEvidence",
+        "sourceApplicability",
+        "transitions",
+        "3",
+        "currentSha256"
+      ],
+      "before": "cba155304dfc1024fad3224789ed032ef8df5885b4367c9664e472a63772cf10",
+      "after": "dc30dfac735721633f6fe04d8319255f41b305f113118fe96de0d757c313cb47"
+    }
+  ],
+  "summaryBefore": {
+    "inputEquivalent": false,
+    "structureDifferences": 88,
+    "uniqueStyleDifferences": 8483,
+    "totalStyleDifferenceOccurrences": 389202,
+    "classifications": {
+      "application-plugin-authoring-defect": 1760,
+      "documented-limitation": 1,
+      "equivalent-representation": 2147,
+      "intentional-documented-limitation": 485,
+      "parity-harness-defect": 4090
+    },
+    "propertyGroups": {
+      "interaction": 351,
+      "layout": 3106,
+      "other": 351,
+      "paint": 1399,
+      "transform": 937,
+      "typography": 2339
+    },
+    "affectedFamilies": {
+      "autocomplete": 151,
+      "badge": 286,
+      "bottom-sheet": 416,
+      "button": 309,
+      "button-toggle": 264,
+      "card": 380,
+      "checkbox": 224,
+      "chips": 321,
+      "core": 149,
+      "datepicker": 151,
+      "dialog": 491,
+      "divider": 304,
+      "expansion": 268,
+      "form-field": 151,
+      "grid-list": 282,
+      "icon": 132,
+      "input": 151,
+      "list": 153,
+      "menu": 154,
+      "paginator": 273,
+      "progress-bar": 134,
+      "progress-spinner": 128,
+      "radio": 308,
+      "select": 151,
+      "sidenav": 132,
+      "slide-toggle": 194,
+      "slider": 335,
+      "snack-bar": 266,
+      "sort": 155,
+      "stepper": 345,
+      "table": 146,
+      "tabs": 346,
+      "timepicker": 151,
+      "toolbar": 277,
+      "tooltip": 253,
+      "tree": 152
+    },
+    "unclassifiedDifferences": 0,
+    "unresolvedAttributions": 0,
+    "sourceFindings": 166,
+    "unexplainedSourceFindings": 0,
+    "undetectedSourceDefinitions": 0
+  },
+  "summaryAfter": {
+    "inputEquivalent": false,
+    "structureDifferences": 88,
+    "uniqueStyleDifferences": 8483,
+    "totalStyleDifferenceOccurrences": 389202,
+    "classifications": {
+      "application-plugin-authoring-defect": 1760,
+      "documented-limitation": 1,
+      "equivalent-representation": 2147,
+      "intentional-documented-limitation": 485,
+      "parity-harness-defect": 4090
+    },
+    "propertyGroups": {
+      "interaction": 351,
+      "layout": 3106,
+      "other": 351,
+      "paint": 1399,
+      "transform": 937,
+      "typography": 2339
+    },
+    "affectedFamilies": {
+      "autocomplete": 151,
+      "badge": 286,
+      "bottom-sheet": 416,
+      "button": 309,
+      "button-toggle": 264,
+      "card": 380,
+      "checkbox": 224,
+      "chips": 321,
+      "core": 149,
+      "datepicker": 151,
+      "dialog": 491,
+      "divider": 304,
+      "expansion": 268,
+      "form-field": 151,
+      "grid-list": 282,
+      "icon": 132,
+      "input": 151,
+      "list": 153,
+      "menu": 154,
+      "paginator": 273,
+      "progress-bar": 134,
+      "progress-spinner": 128,
+      "radio": 308,
+      "select": 151,
+      "sidenav": 132,
+      "slide-toggle": 194,
+      "slider": 335,
+      "snack-bar": 266,
+      "sort": 155,
+      "stepper": 345,
+      "table": 146,
+      "tabs": 346,
+      "timepicker": 151,
+      "toolbar": 277,
+      "tooltip": 253,
+      "tree": 152
+    },
+    "unclassifiedDifferences": 0,
+    "unresolvedAttributions": 0,
+    "sourceFindings": 170,
+    "unexplainedSourceFindings": 0,
+    "undetectedSourceDefinitions": 0
+  },
+  "scope": "Exact compact metadata conservation only;full payload section comparison,cold check and main import remain required."
+}
