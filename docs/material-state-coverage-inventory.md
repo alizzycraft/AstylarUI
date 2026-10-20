@@ -20,6 +20,15 @@ their receipts; older "next" or "live" statements are not current instructions.
   section-conservation session74946 (worker10152) are live. Preserve input freeze;
   chip-independent-cold-check/chip-candidate-section-conservation-20261020 logs.
   Accepted main remains3072/f471 pending conservation,cold success and main import.
+- Candidate import85258 completed exit0 in separate candidate-validation store:
+  index0633e01b;8483 scalar groups/165 findings/39904 controls/389202 occurrences.
+  Import log chip-candidate-import-recovered-20261020 SHA7c48a14d3349487896273fc80a8343a6ec779c87188f14a0eb2ea06f7cd030d1.
+  Complete coverage conservation passes after reversing exactly76 graphic,
+  76 focus-indicator and24 state-layer children,10 new dependency receipts and
+  two review identifiers;all remaining fields/order/statuses recover accepted3072.
+  Log chip-candidate-coverage-conservation-20261020
+  SHA285c991fc28fd0d5ee8709e0ef5bffab61f55a139e6963cdf60d3438aa6deca5.
+  First import command failed syntax before execution;original log pair retained.
 - New standalone result:public readonly keyboard mutation confirmed atDPR1/2,
   with writable/disabled controls and six current/installed method bodies bound.
   Public report8a541560;committed f8017c10.Outside frozen chip batch and current

@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Retain chip-coherent-export-20261020 completed export logs,candidate fc888710,
+and chip-candidate-import-20261020 initial command-syntax failure logs. Corrected
+chip-candidate-import-recovered-20261020 completes exit0;candidate index0633e01b
+is separate from accepted3072. Retain chip-candidate-coverage-conservation-
+20261020 logs:complete prior coverage recovered after only176 children,ten new
+dependency receipts and two review identifiers are reversed. Cold verification
+and complete section conservation remain live;no main acceptance follows yet.
+No original/candidate evidence or old build/cache directories deleted.
+
 Retain public-readonly-editing-20261020 original failure directory/log pair and
 public-readonly-editing-recovered-20261020 complete public input/bundle/HTML/
 report plus log pair. Original failed producer bytes are separately preserved
