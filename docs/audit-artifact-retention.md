@@ -2,6 +2,12 @@
 
 ## Current versus historical evidence
 
+Retain chip-focus-indicator-retained-inputs-20261020 log pair. It authenticates76
+original chip cases/152 focus-wrapper owners against reportab42dbec and exact
+tree receipts:112 ungenerated pseudo records,40 display:none/transparent-border
+generated records. This is new bounded request evidence,not current rendering
+or full chip state-paint closure. Original captures remain unchanged.
+
 Retain filled-field-candidate-coverage-conservation-20261020 stdout/stderr:the
 full accepted coverage digestcc5d91a0 is recovered by reversing exactly577 new
 children,three new dependency receipts and two review digests. Candidate index

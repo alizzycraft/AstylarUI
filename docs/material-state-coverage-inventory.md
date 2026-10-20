@@ -2,6 +2,21 @@
 
 ## Current audit pointer — October20
 
+Chip empty-focus-wrapper paint question narrowed using existing October5 evidence,
+not fresh capture:all76 chip cases/152 exact native primary-focus-indicator spans
+are authenticated against reportab42dbec and individual tree receipts. All spans
+are absolute,pointer-events:none,transparent-background,no-shadow with zero top
+border.112 ::before pseudo records are ungenerated;40 generated records compute
+display:none,3px transparent top border. Thus these retained requests do NOT
+establish a visible missing3px focus outline;do not confuse the indicator wrapper
+with the separate ripple/state layer or equate all candidate paint from this.
+Evidence chip-focus-indicator-retained-inputs-20261020.log
+SHA3df845222863b4a52e7a3e4cccd3f629ae3343707029114bb7fbe075fa2da3b1,
+stderr empty;read-only check completed successfully. No indexed source changed
+while cold verification runs. Next review separate chip ripple/state-layer
+requests/ownership with existing retained paint infrastructure;bind any additive
+owning assertion after frozen publication. No whole-case/current-pixel acceptance.
+
 Detailed filled-field coverage conservation now passes. Candidate index372d4128
 and accepted indexfb581ba7 were authenticated against their respective pointers.
 Removing exactly577 retainedFilledFieldStructure children,exactly THREE new
