@@ -4,10 +4,18 @@
 
 Current conclusions only;earlier next/live statements in retained detail are historical.
 
-- LIVE export:session31650,worker12284,launcher21136,started at sourced7b5e353.
-  Poll this same confirmed handle;do not restart quiet work. Logs:divider-property-
-  coherent-export-20261020 stdout/stderr. Consumed sources/evidence remain frozen;
-  subsequent touch diagnostics are separate,not inputs to this export.
+- Divider export31650 is TERMINAL0 at sourced7b5e353. Candidate90467e5a
+  (86073789 packed/2330458286 decoded bytes) retains170 source findings and is
+  NOT yet accepted. Evidence session:16407 files/1686628828 bytes;collector1,
+  memory hits10/disk hits1. Complete elapsed3035034ms. Logs:divider-property-
+  coherent-export-20261020 stdout/stderr;all original validation ran.
+- LIVE independent COLD check98069,launcher18088/worker26388. Separate candidate
+  import82029 is TERMINAL0,index681dba6c:8483 scalar groups/170 source findings/
+  39904 controls/389202 occurrences/zero unresolved groups. This is not acceptance.
+  Poll the same cold handle;do not restart quiet work.
+  Full section comparison44186 also runs. Consumed sources/evidence stay frozen;
+  subsequent touch diagnostics remain outside this publication. Main pointer
+  staysb661 until conservation,cold comparison and main import finish.
 - Accepted audit remainsb6610e71/indexd0e7623d/review736e685c:170 findings,
   226 proofs,756 source fingerprints;36 families/2311 cases (436static/1875interaction).
   All2311 remain partial/current rendering unverified. No criteria/gates waived.

@@ -2,6 +2,16 @@
 
 ## Current versus historical evidence
 
+Retain divider-property-coherent-export-20261020.log/stderr:session31650 terminal0,
+candidate90467e5a8a17a1b51f374c21aec44e1ef82734db34cd394c3abf2443e754936c.
+Accepted main pointer staysb661 pending conservation/independent cold/import.
+Retain independent-cold,candidate-import and full-section-comparison log pairs
+under the same dated divider-property prefix. Initial section comparison failed
+before payload reading because the prior log contains a command preamble,not
+bare JSON;its stderr remains failure evidence. Recovered comparison parses the
+retained JSON result explicitly and authenticates the current package normally.
+No original payload,previous generation or failed evidence was removed/replaced.
+
 Retain scripts/join-material-button-touch-inputs.mjs,button-touch-case-join-
 20261020.log/empty stderr,and queued local proposal
 234eb163a6db98769d1aa37c8aeef57b8f9d2eb110eaeb61c93981feb7cfe8a0.

@@ -1,0 +1,10 @@
+<anonymous_script>:1
+Command:
+^
+
+SyntaxError: Unexpected token 'C', "Command:
+@"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at file:///D:/dev/github/AstylarUI-audit-integration/[eval1]:1:167
+
+Node.js v22.22.3
