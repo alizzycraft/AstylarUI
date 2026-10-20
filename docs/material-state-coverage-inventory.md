@@ -12,13 +12,20 @@ while traversal separately enumerates element.children; their shared order is
 not retained. This is a demonstrated harness evidence limitation,not a diagnosed
 Material renderer failure or proof that actual configured cases have mixed text.
 Existing generated-node survey covers387 boundaries/six alias targets only;
-it cannot close full anonymous/element structure obligations. Next establish the
-actual affected Material population from retained source/capture evidence before
-changing capture instrumentation or requesting any recapture. No fixture or
-renderer changed;all2311 cases remain partial/current rendering unverified.
+it cannot close full anonymous/element structure obligations. Subsequent complete
+retained main-population check authenticates report b07ef154 and every2311
+reference-tree hash. Exactly76 chip cases have152 mixed-text owners;every owner
+has just one empty,leaf,absolute-positioned,pointer-events:none focus-indicator
+span. No other family has nonempty direct text plus element children in this
+retained population. Thus the demonstrated loss of inline text/child order is
+not evidence of an in-flow ordering discrepancy in these captures. It does not
+settle absolute child/pseudo-element paint order or current runtime;no broad
+recapture justified by this question. Next continue full wrapper correspondence
+and classify focus-indicator/paint ownership separately. No fixture or renderer
+changed;all2311 cases remain partial/current rendering unverified.
 Verification: `node --test tests/material-parity/input-tree-evidence.spec.mjs`
-passes11/11,zero skip/cancel/todo,10569.6495ms. Prior suite retained exactly;
-only one diagnostic test appended. Its indexed source fingerprint now differs
+passes12/12,zero skip/cancel/todo,10795.0066ms;population assertion3830.0153ms.
+Prior suite retained exactly;two diagnostic tests appended. Its indexed source fingerprint now differs
 from accepted46ea;canonical remains historical at that boundary until the next
 coherent source/export reconciliation. Existing219 proof anchors do not move.
 

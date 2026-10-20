@@ -384,3 +384,54 @@ test('retained tree capture cannot distinguish text interleaving around an inlin
     }
   } finally { await browser.close(); }
 });
+
+// Append-only diagnostic block preserves the published proof line anchors above.
+import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { resolve, relative, isAbsolute } from 'node:path';
+
+test('retained main mixed-text owners have only out-of-flow chip focus-indicator children', () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const descriptor = JSON.parse(readFileSync('docs/material-generated-node-mapping-audit.json')).mainCapture;
+  assert.equal(descriptor.sha256, 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const load = descriptor => {
+    const file = resolve(descriptor.file), rel = relative(resolve('artifacts/material-parity'), file);
+    assert.ok(!isAbsolute(rel) && rel !== '..' && !rel.startsWith('../') && !rel.startsWith('..\\'));
+    const bytes = readFileSync(file);
+    assert.equal(hash(bytes), descriptor.sha256);
+    return JSON.parse(bytes);
+  };
+  const report = load(descriptor), families = new Set();
+  let cases = 0, mixedCases = 0, owners = 0;
+  for (const entry of [...report.results, ...report.interactions]) {
+    cases++;
+    const tree = load(entry.inputTrees.reference);
+    assert.deepEqual(tree.errors, []);
+    const children = new Map();
+    for (const node of tree.nodes) {
+      if (!children.has(node.parent)) children.set(node.parent, []);
+      children.get(node.parent).push(node);
+    }
+    const mixed = tree.nodes.filter(node => node.ownText?.trim() && children.has(node.key));
+    if (mixed.length) { mixedCases++; families.add(entry.family); }
+    for (const owner of mixed) {
+      owners++;
+      assert.equal(entry.family, 'chips');
+      assert.match(owner.attributes.class, /\bmat-mdc-chip-action-label\b/);
+      const descendants = children.get(owner.key);
+      assert.equal(descendants.length, 1);
+      const child = descendants[0];
+      assert.equal(child.type, 'span');
+      assert.equal(child.ownText, '');
+      assert.ok(!children.has(child.key));
+      assert.match(child.attributes.class, /\bmat-mdc-chip-primary-focus-indicator\b/);
+      assert.equal(tree.styles[child.style].position, 'absolute');
+      assert.equal(tree.styles[child.style].pointerEvents, 'none');
+    }
+  }
+  assert.deepEqual({ cases, mixedCases, owners, families: [...families] },
+    { cases: 2311, mixedCases: 76, owners: 152, families: ['chips'] });
+  // This bounds the demonstrated inline-flow capture risk only. Absolute child
+  // paint order, generated pseudo-elements, semantics and current runtime remain
+  // separate obligations; historical trees are not current rendering acceptance.
+});
