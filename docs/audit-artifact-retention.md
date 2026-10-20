@@ -2,6 +2,22 @@
 
 ## Current versus historical evidence
 
+Divider publication is now complete:independent cold98069,recovered main import
+72083 and main verification terminate0. Retain both independent-cold logs,both
+main-import[-recovered] pairs and main-verification pair. Initial main-import
+command has one extra closing parenthesis and fails parsing before importing;
+preserve its syntax-error stderr,not a failed importer or renderer result.
+Accepted90467e5a8a17a1b51f374c21aec44e1ef82734db34cd394c3abf2443e754936c
+index681dba6ca394189bbe7dd62604be466bcabd77cd24101f202fd6c170a7ee20cc
+exactly matches the independently validated candidate. Keep both complete stores
+and the priorb661 generation. Cold collector has zero disk hits/16407 authenticated
+files;all2311 cases remain partial/current rendering unverified. No original gate
+is waived;queued50315381/sourcea79bdf44 remain separate. Earlier pending/live
+statements below describe retained checkpoints,not the current publication state.
+Cold stderr is a raw Windows CRLF progress artifact;binary Git storage preserves
+its exact bytes without treating carriage returns as source trailing whitespace.
+No producer,rendering input or audit assertion is modified.
+
 Retain scripts/join-material-current-divider-and-focus-evidence.mjs and both
 divider-current-and-focus-case-join[-recovered]-20261020 log pairs,plus initial
 failed-producer.mjs. First attempt incorrectly expected profile/viewport fields

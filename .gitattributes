@@ -30,3 +30,7 @@ artifacts/material-parity/divider-current-browser-20261020.log binary
 scripts/join-material-current-divider-and-focus-evidence.mjs -text
 artifacts/material-parity/divider-current-and-focus-case-join-20261020.failed-producer.mjs -text
 artifacts/material-parity/divider-current-and-focus-case-join-recovered-20261020.log -text
+artifacts/material-parity/divider-property-independent-cold-20261020.log -text
+artifacts/material-parity/divider-property-independent-cold-20261020.stderr.log binary
+artifacts/material-parity/divider-property-main-import-recovered-20261020.log -text
+artifacts/material-parity/divider-property-main-verification-20261020.log -text

@@ -4,27 +4,22 @@
 
 Current conclusions only;earlier next/live statements in retained detail are historical.
 
-- Divider export31650 is TERMINAL0 at sourced7b5e353. Candidate90467e5a
-  (86073789 packed/2330458286 decoded bytes) retains170 source findings and is
-  NOT yet accepted. Evidence session:16407 files/1686628828 bytes;collector1,
-  memory hits10/disk hits1. Complete elapsed3035034ms. Logs:divider-property-
-  coherent-export-20261020 stdout/stderr;all original validation ran.
-- LIVE independent COLD check98069,launcher18088/worker26388. Separate candidate
-  import82029 is TERMINAL0,index681dba6c:8483 scalar groups/170 source findings/
-  39904 controls/389202 occurrences/zero unresolved groups. This is not acceptance.
-  Poll the same cold handle;do not restart quiet work.
-  Full section comparison44186 is TERMINAL0. Consumed sources/evidence stay frozen;
-  subsequent touch diagnostics remain outside this publication. Main pointer
-  staysb661 until conservation,cold comparison and main import finish.
-- Accepted audit remainsb6610e71/indexd0e7623d/review736e685c:170 findings,
+- Divider publication COMPLETE:export31650,candidate import82029,independent
+  COLD98069,recovered main import72083 and main verification all TERMINAL0.
+  Accepted90467e5a/index681dba6c/review433b794f exactly matches the independently
+  validated candidate index. Cold replay:two collectors,ten memory hits,ZERO disk
+  hits,16407 files/1686628828 bytes authenticated;complete3672872ms. Logs:
+  divider-property-independent-cold,main-import-recovered,main-verification-20261020.
+  Originalb661/736e and failures remain retained;no job remains live in this batch.
+- Accepted generation90467e5a retains170 findings,
   226 proofs,756 source fingerprints;36 families/2311 cases (436static/1875interaction).
   All2311 remain partial/current rendering unverified. No criteria/gates waived.
-- Selected433b794f review adds25 bounded children across24 divider cases.
+- Accepted433b794f review adds25 bounded children across24 divider cases.
   Exact predecessor recovery,15217 dependency checks,12 current-source checks,
   three selection/owning tests and source/proof/finding section reconciliation pass.
-  It is NOT canonical until export,candidate conservation,independent cold replay
-  and import complete. Original736e/b661 and all failure evidence remain retained.
-- Candidate compact metadata conservation now passes:removing only25 children
+  Complete conservation,cold comparison and import now pass. No case is closed
+  and no current-rendering flag is promoted.
+- Accepted compact metadata conservation passes:removing only25 children
   across24 cases,25 added dependency receipts and12 current-source checks restores
   complete prior coverage after the two explicit review-digest changes. All2311
   prior cases,summary and scalar counts are unchanged. Replayable check:
@@ -34,7 +29,7 @@ Current conclusions only;earlier next/live statements in retained detail are his
   inventory exactly matches all756 sources/226 proofs/170 findings in the candidate;
   reversing exactly the three pre-reviewed source fingerprints recovers the accepted
   section completely. Evidence:full-section-comparison-recovered and registration-
-  conservation-20261020 logs. Independent cold/main publication remain required.
+  conservation-20261020 logs. All original final acceptance gates remain required.
 - Divider supplement limits:32 natural line boxes cover16 STATIC native contexts,
   not interaction cases or candidate paint. Clamp/flex checks cover96 owners in24
   retained cases;normal/stretch alignment and complete owner mapping remain open.
@@ -86,14 +81,14 @@ Current conclusions only;earlier next/live statements in retained detail are his
   request rows276 link the proposed authoring finding;324 suppressed rows do not.
   Evidence:button-touch-case-join-20261020.log and
   scripts/join-material-button-touch-inputs.mjs. This is not selected for export
-  or canonical;the running433b inputs are unchanged.
+  or canonical;accepted433b remains unchanged.
 - Latest QUEUED successor50315381 extends234eb163 with480 focus-pseudo
   applicability children and24 fresh-divider execution children. Existing loader
   authenticates15281 dependencies;1248 wrong-case/tree/profile/viewport controls
   reject,and removing only504 additions restores the complete predecessor.
   All2311 cases remain partial/unverified. No selection/registration/publication
   change. Evidence:divider-current-and-focus-case-join-recovered-20261020.log.
-- Next:finish the running publication milestone;then register the bounded shared
+- Next:register the bounded shared
   touch-descendant omission and existing unit limitation's interaction evidence,
   preserving suppressed/disabled distinctions. Continue component-owner/
   generated-descendant mapping across families,AX and interaction ownership.
