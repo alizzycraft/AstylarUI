@@ -1,0 +1,22 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ '<p _ngcontent-ng-c2921559503="" style=""><span _ngcontent-ng-c2921559503="" id="divider-above">Above</span></p>'
+- '<p _ngcontent-ng-c2921559503=""><span _ngcontent-ng-c2921559503="" id="divider-above">Above</span></p>'
+
+    at withFrozen.checkpointFile.checkpointFile (file:///D:/dev/github/AstylarUI-audit-integration/[eval1]:38:11)
+    at async withFrozenShowcase (eval at <anonymous> (file:///D:/dev/github/AstylarUI-audit-integration/[eval1]:6:18), <anonymous>:24:5)
+    at async file:///D:/dev/github/AstylarUI-audit-integration/[eval1]:12:1 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: '<p _ngcontent-ng-c2921559503="" style=""><span _ngcontent-ng-c2921559503="" id="divider-above">Above</span></p>',
+  expected: '<p _ngcontent-ng-c2921559503=""><span _ngcontent-ng-c2921559503="" id="divider-above">Above</span></p>',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.22.3

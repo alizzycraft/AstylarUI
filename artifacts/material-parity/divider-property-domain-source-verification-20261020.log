@@ -1,0 +1,26 @@
+{
+  "sourceReceiptChecks": [
+    {
+      "file": "src/app/services/dom/elements/element-creation.service.ts",
+      "sha256": "bf5fd5861c7d1b412520a41abf5bfa0aa1085d9a139a96f3d202dde6cbf8ea3a"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/element-creation.service.js",
+      "sha256": "68e45ca7b851ddeac40f6f55d3e2f176768b47dd6ad8e0d8eefa5c2a77d28ef3"
+    },
+    {
+      "file": "examples/material-showcase/dist/material-showcase/browser/chunk-XOU37TRR.js.map",
+      "module": "node_modules/astylarui/dist/lib/app/services/dom/elements/element-creation.service.js",
+      "sha256": "565e127faf915acf7861be1c39c8815d3c4234cbd4fbe553afcbd039662ca897"
+    }
+  ],
+  "collectorReceipt": {
+    "file": "tests/material-parity/input-tree-evidence.mjs",
+    "sha256": "06197edaf92b2296e3e0564771f307a1036ce7bc5eb13d8e242a5c420e7a7e3b"
+  },
+  "originalReport": {
+    "path": "artifacts/material-parity/current-full-20261005/latest-report.json",
+    "sha256": "ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62"
+  },
+  "boundary": "Hashes authenticate source applicability only, not full consumer execution. Empty generated pseudo records cover collector before/after content tests, not every pseudo-element or pseudo-class."
+}

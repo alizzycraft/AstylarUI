@@ -1,0 +1,35 @@
+{
+  "producerArgs": [
+    "--input-type=module",
+    "-e",
+    "import assert from 'node:assert/strict';import {readFileSync,existsSync,mkdirSync,writeFileSync} from 'node:fs';\nimport {createHash} from 'node:crypto';import {createServer} from 'node:http';import path from 'node:path';import ts from 'typescript';import {chromium} from 'playwright-core';import {PNG} from 'pngjs';import {fingerprintDirectory} from './tests/material-parity/run-checkpoint.mjs';\nconst hash=b=>createHash('sha256').update(b).digest('hex'),helperFile='tests/material-parity/sort-focus-structure.spec.mjs';\nconst ast=ts.createSourceFile(helperFile,readFileSync(helperFile,'utf8'),99,true),helper=ast.statements.find(n=>ts.isFunctionDeclaration(n)&&n.name?.text==='withFrozenShowcase').getText(ast);\nassert.equal(hash(helper),'603ac9ca88b9bf2e3443f8be65f125d39002e1ca4e5157487d9ac86ed7d2527f');\nconst withFrozen=new Function('assert','path','readFileSync','existsSync','createServer','chromium','fingerprintDirectory',helper+';return withFrozenShowcase;')(assert,path,readFileSync,existsSync,createServer,chromium,fingerprintDirectory);\nconst checkpointFile='artifacts/material-parity/divider-alignment-provenance-20261015/checkpoint/manifest.json',checkpoint=JSON.parse(readFileSync(checkpointFile));\nawait withFrozen(async(browser,baseUrl)=>{const p=await browser.newPage({viewport:{width:1440,height:1000}});await p.goto(baseUrl+'/reference/divider?benchmark=1&profile=light');await p.waitForFunction(()=>typeof window.__MATERIAL_SHOWCASE_COMMAND__==='function');await p.evaluate(async()=>{await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))});const before=await p.locator('#divider-above').evaluate(e=>({html:e.parentElement.outerHTML,parentStyle:e.parentElement.getAttribute('style'),leafStyle:e.getAttribute('style')}));const steps=[{step:'before',before}];for(const[target,values]of [['parent',{fill:'red'}],['leaf',{color:'magenta'}]]){await p.locator('#divider-above').evaluate((e,{before,target,values})=>{for(const[node,value]of [[e.parentElement,before.parentStyle],[e,before.leafStyle]]){node.style.cssText=value??'';if(value===null)node.removeAttribute('style');else node.setAttribute('style',value)}Object.assign((target==='parent'?e.parentElement:e).style,values)},{before,target,values});steps.push(await p.locator('#divider-above').evaluate(e=>({step:'after-change',html:e.parentElement.outerHTML,parentStyle:e.parentElement.getAttribute('style'),leafStyle:e.getAttribute('style')})));await p.screenshot();}\nawait p.locator('#divider-above').evaluate((e,before)=>{for(const[node,value]of [[e.parentElement,before.parentStyle],[e,before.leafStyle]]){node.style.cssText=value??'';if(value===null)node.removeAttribute('style');else node.setAttribute('style',value)}},before);steps.push(await p.locator('#divider-above').evaluate(e=>({step:'after-restore',html:e.parentElement.outerHTML,parentStyle:e.parentElement.getAttribute('style'),leafStyle:e.getAttribute('style')})));console.log(JSON.stringify({producerArgs:process.execArgv,steps},null,2));},{},{checkpointFile});"
+  ],
+  "steps": [
+    {
+      "step": "before",
+      "before": {
+        "html": "<p _ngcontent-ng-c2921559503=\"\"><span _ngcontent-ng-c2921559503=\"\" id=\"divider-above\">Above</span></p>",
+        "parentStyle": null,
+        "leafStyle": null
+      }
+    },
+    {
+      "step": "after-change",
+      "html": "<p _ngcontent-ng-c2921559503=\"\" style=\"fill: red;\"><span _ngcontent-ng-c2921559503=\"\" id=\"divider-above\" style=\"\">Above</span></p>",
+      "parentStyle": "fill: red;",
+      "leafStyle": ""
+    },
+    {
+      "step": "after-change",
+      "html": "<p _ngcontent-ng-c2921559503=\"\"><span _ngcontent-ng-c2921559503=\"\" id=\"divider-above\" style=\"color: magenta;\">Above</span></p>",
+      "parentStyle": null,
+      "leafStyle": "color: magenta;"
+    },
+    {
+      "step": "after-restore",
+      "html": "<p _ngcontent-ng-c2921559503=\"\" style=\"\"><span _ngcontent-ng-c2921559503=\"\" id=\"divider-above\">Above</span></p>",
+      "parentStyle": "",
+      "leafStyle": null
+    }
+  ]
+}

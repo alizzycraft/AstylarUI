@@ -1,0 +1,80 @@
+{
+  "verifiedReport": {
+    "path": "artifacts/material-parity/divider-native-property-domain-verified-20261020.log",
+    "sha256": "8d53ed0ef75df6746f88c8fde3ea564f7a8379b1d1dbe1d0051c6aac8b544ad6"
+  },
+  "imageHashesVerified": 17,
+  "pixelComparisons": [
+    {
+      "id": "divider-above",
+      "state": "fill",
+      "changedPixels": 0
+    },
+    {
+      "id": "divider-above",
+      "state": "stroke",
+      "changedPixels": 0
+    },
+    {
+      "id": "divider-above",
+      "state": "object-fit",
+      "changedPixels": 0
+    },
+    {
+      "id": "divider-above",
+      "state": "color-positive",
+      "changedPixels": 316
+    },
+    {
+      "id": "divider-below",
+      "state": "fill",
+      "changedPixels": 0
+    },
+    {
+      "id": "divider-below",
+      "state": "stroke",
+      "changedPixels": 0
+    },
+    {
+      "id": "divider-below",
+      "state": "object-fit",
+      "changedPixels": 0
+    },
+    {
+      "id": "divider-below",
+      "state": "color-positive",
+      "changedPixels": 332
+    },
+    {
+      "id": "domain-svg",
+      "state": "fill",
+      "changedPixels": 235
+    },
+    {
+      "id": "domain-svg",
+      "state": "stroke",
+      "changedPixels": 978
+    },
+    {
+      "id": "domain-img",
+      "state": "object-fit-positive",
+      "changedPixels": 3500
+    }
+  ],
+  "exactRestorationComparisons": 2,
+  "staticInputReport": {
+    "path": "artifacts/material-parity/divider-paragraph-svg-replaced-inputs-20261020.log",
+    "sha256": "c3c8ba4792937aab7c76aa0958a9805049a2a8cade386ffb60be694181f85b95",
+    "cases": 24,
+    "paragraphPairs": 48,
+    "nativePropertySlots": 384,
+    "candidateOwnStageSlots": 1152,
+    "rejectedControls": 291
+  },
+  "runtime": {
+    "actualBrowser": "155.0.8059.80",
+    "checkpointBrowser": "155.0.8059.40",
+    "historicalBrowserReplay": false
+  },
+  "scopeCorrection": "Static tag-only absence does not prove general fill/stroke inactivity: the evolving CSS Fill and Stroke text model requires actual browser evidence. Pixel inactivity is demonstrated only for these two HTML paragraphs in fresh Chrome 155.0.8059.80, not historical browser replay or every retained context. All raw omissions remain. Object-fit image-type consumer gates are a separate bounded source result. No case closure or renderer parity acceptance."
+}

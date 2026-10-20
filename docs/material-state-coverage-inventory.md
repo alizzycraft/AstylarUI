@@ -78,6 +78,34 @@ Current conclusions only;earlier next/live statements in chronology are historic
 - Storage:no deletion by the agent. After the302-build review,test-out contained
   0 directories (observed external change). Exact old inventory/removal review
   and compression/failure records remain preserved.
+- Queued divider property-domain review (outside acceptedb661):24 retained cases/
+  48 paragraph pairs preserve384 native values and1152 candidate own-stage slots
+  for fill,stroke,strokeWidth,objectFit;omissions remain omissions.291 rejection
+  controls pass. Current/installed/captured objectFit reads are image-type gated;
+  source-verification log authenticates all three module receipts and the original
+  input-tree collector against ab42. Empty generated records cover before/after
+  content only,not all pseudo-elements/classes.
+- Competing explanations were active inherited text paint versus inert computed
+  fields. Static HTML tags alone cannot settle fill/stroke:the evolving CSS Fill
+  and Stroke draft includes text (https://drafts.csswg.org/fill-stroke/),unlike a
+  tag-only reading of SVG2. The earlier static report's no-consumer conclusion
+  is therefore conditional,not universal proof. Fresh Chrome155.0.8059.80 controls
+  on the two light/desktop native paragraphs show zero changed pixels for fill,
+  stroke8px and objectFit interventions. Direct text color changes316/332 pixels;
+  SVG fill/stroke controls235/978;replaced-image fit3500. All17 PNG hashes and11
+  pixel comparisons independently replay;both exact restorations match baseline.
+  This is NOT Chrome155.0.8059.40 historical replay,all-context paint evidence,
+  candidate execution,equal-input acceptance or case closure. No values normalized.
+- Evidence:divider-paragraph-svg-replaced-inputs-20261020.log;divider-native-
+  property-domain-verified-20261020.log (SHA8d53ed0ef75df6746f88c8fde3ea564f7a8379b1d1dbe1d0051c6aac8b544ad6)
+  and its17 PNGs;divider-property-domain-independent/source-verification-20261020
+  logs. Two prior attempts failed exact markup restoration because of a residual
+  empty style attribute;retain their sources/logs/images and both restoration
+  traces. Synchronized CSSOM/attribute cleanup passes the unchanged assertion;
+  this diagnostic ordering observation is not a diagnosed renderer/browser bug.
+  Next priority remains complete owner-property/structure mapping and exact-case
+  joins,then AX/event/lifetime and current-runtime/paint gaps. In particular,
+  min/max/default/inheritance/alignment are not closed by these four properties.
 
 ## Audit chronology — retained evidence, newest first
 

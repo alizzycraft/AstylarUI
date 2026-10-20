@@ -2,6 +2,23 @@
 
 ## Current versus historical evidence
 
+Retain divider-paragraph-svg-replaced-inputs-20261020.log and stderr,all three
+divider-native-property-domain[-recovered/-verified]-20261020 capture directories,
+their log pairs,the two failed-producer.mjs sources,and both divider-property-
+style-restore[-synchronized]-20261020 traces. These are required question-specific
+evidence and failures,not disposable successful scratch. Retain divider-property-
+domain-independent-20261020.log and divider-property-domain-source-verification-
+20261020.log. Independent replay checks17 image hashes,11 pixel differences,two
+exact baseline restorations,three source module receipts and the original collector.
+The verified report SHA256 is
+8d53ed0ef75df6746f88c8fde3ea564f7a8379b1d1dbe1d0051c6aac8b544ad6.
+Static tag-only no-consumer wording is conditional:the evolving CSS Fill/Stroke
+draft includes text. Actual inactivity is only demonstrated for two fresh-browser
+light/desktop paragraphs;do not generalize it to historical browser/all contexts
+or erase raw missing candidate fields. Earlier attempts fail strict original-markup
+restoration,not the property-pixel comparisons. Preserve both as failures. None
+of this queued evidence updates acceptedb661 or grants whole-case closure.
+
 Retain divider-natural-line-box-20261020.log and its failed.log/failed-source.mjs.
 Initial browser equality check found155.0.8059.80 versus checkpoint155.0.8059.40;
 the first failed source SHA256 iscc02808eada3a17165aa9040bb6ac4b60085c7860b8539ab0ac3e69932412acc.
