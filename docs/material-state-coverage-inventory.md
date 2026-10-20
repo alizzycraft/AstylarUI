@@ -42,6 +42,14 @@ their receipts; older "next" or "live" statements are not current instructions.
 - Shared editing coverage:1734 authored exclusions already inspected;443 writable
   cases and134 readonly/disabled exclusions remain partial. Do not reopen the
   settled1734 exclusions or clear behavior work from attribute presence alone.
+- Readonly clipboard follow-up (SOURCE ONLY):keyboard-input.handler.ts:146/150
+  routes Ctrl/Cmd+V/X to text-input.manager.ts:916/931. Paste awaits clipboard
+  read then calls insertTextAtCursor;cut awaits copy then calls deleteCharacter.
+  Neither clipboard method adds a readonly guard. Current raw handlerSHA04aa5fcd
+  and managerSHAe001e695dbc16b9c8d61d4db5ba49544f82f636bfaec69e1977cdd497729151d.
+  Thus clipboard is not an independently guarded source path;runtime paste/cut,
+  permissions,async readonly updates and native event order remain UNPROVED.
+  Do not extend the demonstrated Home/x/Delete/Backspace failure to clipboard.
 - Next:finish chip export,authenticate section/coverage/source/proof conservation,
   independent cold replay and main import before publication. Then integrate
   readonly finding/regression through existing owners;remaining full structure,
