@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+Retain queued graphic proposale837c58e and chip-graphic-case-join-20261020 log
+pair.76 scoped additions recover complete868d predecessor after only their
+removal;15185 receipts authenticate. Closed167818927 logical bytes occupy
+37421056 after LZX;RAW envelopeSHAaacd5b0a455b6dc27747e7f6000cd34367e35bb6c47e39c83f348d8aa6b29013
+matches before/after. No evidence paths/bytes/pointers changed or files deleted.
+Selected868d and accepted3072 remain required;this is not canonical publication.
+
 Retain chip-unselected-graphic-layout and chip-graphic-owning-pair-20261020
 log pairs. They preserve32 exact hidden-glyph/padded-flex-wrapper owners and
 the passing2/2 focused graphic proofs;not used-layout/current-pixel acceptance.

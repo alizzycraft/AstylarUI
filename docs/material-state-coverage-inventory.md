@@ -2,6 +2,28 @@
 
 ## Current audit pointer — October20
 
+Graphic dispositions joined with EXISTING proposal/receipt helpers,no new
+framework or collector:queued successor
+e837c58e3b9c0594f6003a6001a03cb12b4fa875403db08724e9c9defb329854
+adds76 inputStyleStructure.retainedChipGraphicInputs children to selected868d.
+Each carries both exact owner paths,original paired-tree receipts,selected SVG/
+plugin request fields and inactive-wrapper padding/flex/opacity observations.
+120 selected/32 unselected owners,608 altered-selection/path/size/padding/stroke
+controls reject;all15185 dependencies authenticate. Removing ONLY76 children
+recovers COMPLETE868d digest,including all parent remaining/status/acceptance
+fields and earlier100 chip-paint children. Current source path is explicitly
+not actual captured mesh vertices or current pixels. Still2311 partial cases,
+no rendering acceptance. Log chip-graphic-case-join-20261020.log
+SHA214fa0766c7d42d84536d4d42187525fde8b5031461683ba16e1cfea2be5d7cd.
+Closed167818927 logical-byte proposal losslessly LZX-compressed to37421056
+physical bytes;RAW envelopeSHAaacd5b0a455b6dc27747e7f6000cd34367e35bb6c47e39c83f348d8aa6b29013
+matches before/after. Original868d and accepted3072/f471 remain untouched.
+New successor is NOT selected/canonical. Next extend the existing exact-review
+selector/loader test for this76-child successor and reconcile the queued fifth
+indexed source change in a coherent batch;do not restart settled chip paint or
+graphic investigations. Full anonymous/description/AX/event/lifetime/local paint/
+current-runtime requirements and original final gates remain open.
+
 Unselected chip follow-up distinguishes paint suppression from layout inactivity:
 all32 exact unselected owners have native absolute20px checkmark wrappers at
 opacity0,but their graphic parents remain relative/flex/content-box,width0,
