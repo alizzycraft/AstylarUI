@@ -2,6 +2,21 @@
 
 ## Current versus historical evidence
 
+Readonly coherent export6487 is live (launcher26652/worker23464,16:02:52 local
+October20 after86065d0f),complete named baseline/e837 review. Retain readonly-
+coherent-export-20261020 log pair and frozen source/evidence inputs until terminal.
+Acceptedfc888710 remains unchanged;no candidate/main/current rendering acceptance.
+
+Three closed dist/test-out directories in physical AstylarUI-material checkout
+were losslessly LZX-compressed,not deleted:04e5598a-8a17-4e87-a1b6-ed07d5bf4b3b,
+057417c6-d82a-4d66-b6d4-e076ea0f2f57,04c86788-f24d-49f3-b9f7-e10c81035274.
+Resolved exact targets checked within test-out;reparse points refused. ALL3398
+individual hashes and memberships match before/after. Receipt-set hashes and
+per-target results retained in closed-test-build-compression-20261020 stdout,
+SHA39ebe6255becf358ab70eff969951216bbb0840a2b2550c1f3f004dd1c5835c8.
+Observed free bytes386904064→457711616. Paths,bytes and all findings remain;
+this does not approve deleting these builds or establish reference closure.
+
 Retain readonly-registration-* and readonly-registered-public-owner-20261020
 log pairs. Source166/220 registration is additive,NOT yet canonical publication.
 Original conservation2/3 and previous-owner9/10 failures remain alongside recovered

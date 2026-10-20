@@ -26,6 +26,12 @@ their receipts; older "next" or "live" statements are not current instructions.
   historical conservation4/4. Original2/3 and9/10 failures retained;repaired
   mutation target was previously absent from producer,and stale count/index
   expectations were updated to actual166 without removing original assertions.
+- Readonly coherent export is LIVE:session6487,launcher26652/worker23464,
+  started16:02:52 local October20 after pushed86065d0f. Complete five-path named
+  baseline/e837 review selected. readonly-coherent-export-20261020 log pair.
+  Keep source/evidence inputs frozen;no duplicate export on quiet output/timeout.
+  Acceptedfc888710 remains unchanged pending terminal validation/conservation/
+  independent cold check/main import. No browser recapture or renderer fix.
 - Published:e837c58e chip successor,176 additions beyond f471 across
   76 cases. Full predecessor/source preflight passes;five changed inventory files,
   738 total,733 unchanged,all219 proof records unchanged;source section9e74ce09.
@@ -123,6 +129,10 @@ their receipts; older "next" or "live" statements are not current instructions.
   AX,interaction/lifetime,local paint/currentness and original final gates stay open.
 - Storage:no original evidence or old build/cache data deleted. Cleanup awaits
   user approval;closed evidence uses verified lossless compression/hard links.
+  Three exact closed old test-build directories were losslessly LZX-compressed;
+  all3398 individual before/after hashes and full memberships match. Free bytes
+  386904064→457711616;no deletion. closed-test-build-compression-20261020 log
+  SHA39ebe6255becf358ab70eff969951216bbb0840a2b2550c1f3f004dd1c5835c8.
 
 ## Audit chronology — retained evidence, newest first
 
