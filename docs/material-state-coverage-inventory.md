@@ -31,6 +31,10 @@ below. Earlier next/live statements in chronology are not current instructions.
   disabled native INPUT rejects focus,candidate role-DIV accepts it. Plain HTML
   role-DIV reproduces candidate:widget-authoring mismatch,not invented core focus.
   Full AX/form/relationship equivalence remains open. See chronology.
+- Active-option input targets joined in all88 retained contexts:40 select/48
+  timepicker,all labels agree;48 timepicker selected flags retain known mismatch.
+  One select AX pair resolves both relations;native listbox Plan versus candidate
+  unnamed is a separate authoring omission,confirmed in all40 retained select inputs.
 - Remaining priorities:full structure/generated descendants,AX,interaction and
   lifetime ownership,local composited paint and current-runtime applicability.
   Shared editing:1734 authored exclusions inspected;443 writable and134 readonly/
@@ -45,6 +49,39 @@ below. Earlier next/live statements in chronology are not current instructions.
 ## Audit chronology — retained evidence, newest first
 
 ### October20 — retained chip/readonly registration and checkbox checkpoint
+
+Active-descendant association gap narrowed without repeating settled timepicker AX:
+retained-active-option-input-targets-20261020 log
+SHA162a3754ad10427a6341b9d2fd7144f7c9164424d7389101e2a3ade1ace1042b.
+All88 exactab42dbec presence comparisons (40 select,48 timepicker) join unique
+native DOM targets and candidate AUTHORED targets after captured namespace decode;
+all are role option and all single-label owners match.40 select selected flags
+agree;48 timepicker native false/candidate true reproduce the existing option
+structure/selection substitution finding,not a new core selection bug. This does
+not prove every generated candidate DOM/AX target exists/exposes the authored node.
+
+One frozen light desktopDPR1 select pointer-open pair now resolves actual browser
+AX controls and activedescendant to actual backend node IDs on BOTH sides:
+select-open-ax-target-resolution-20261020 log
+SHAa673c563a91f47eca0e5687cb499bb84cfc0ece693f43eef715b5017bfecd27d.
+Reuses helper603ac9ca/checkpoint62829d76 and actual standard settleInteraction
+function;no new build or changed authoring. Controls resolves to sole exposed
+listbox;active target is selected Team on both sides. No namespace bug observed
+here;not all40 contexts,keyboard/AT navigation or full relationship acceptance.
+Actual AX listbox differs:native name Plan/focusable=true,candidate empty name/
+no focusable property. Native panel has aria-label Plan/tabindex=-1;candidate
+authors only DIV/id/class/role=listbox. Source select-options factory952 lacks
+the label/focusability inputs. Do not make core invent labels/focus defaults for
+every listbox to conceal different authored requests.
+
+Naming omission is input-inspected across ALL40 retained select active contexts:
+select-listbox-name-inputs-20261020 log
+SHA7351677374f8515257904ee3620484ed84fa0d30880b46299204eafb19cf4833.
+Every native panel explicitly aria-label=Plan;every candidate listbox omits
+ariaLabel/ariaLabelledby (including aliases). This is application authoring mismatch,
+not demonstrated core naming failure. Fresh AX observation remains one pair;
+other54 select cases/intermediate boundaries and full ARIA/form/paint remain open.
+Owning assertion/classification/case joins queued outside frozen readonly export.
 
 Disabled checkbox AX/programmatic-focus ownership isolated without core changes:
 checkbox-disabled-ax-focus-probe-20261020 log

@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain retained-active-option-input-targets,select-open-ax-target-resolution and
+select-listbox-name-inputs-20261020 log pairs. They authenticate88 retained target
+joins,one frozen actual AX backend relation pair and40 exact label omissions.
+Each producer/receipt/namespace scope remains explicit;authored target mapping
+is NOT proof of all generated DOM/AX exposure. Known48 timepicker selection
+differences retained without reclassification. No new build,core/fixture change,
+old evidence rewrite or case closure;integration awaits readonly publication.
+
 Retain checkbox-disabled-ax-focus-probe and checkbox-disabled-native-role-control-
 20261020 log pairs. First records one frozen disabled pair and actual CDP AX plus
 direct focus before/after settlement;second preserves exact native HTML attributes
