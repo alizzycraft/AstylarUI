@@ -65,8 +65,8 @@ AX controls and activedescendant to actual backend node IDs on BOTH sides:
 select-open-ax-target-resolution-20261020 log
 SHAa673c563a91f47eca0e5687cb499bb84cfc0ece693f43eef715b5017bfecd27d.
 Reuses helper603ac9ca/checkpoint62829d76 and actual standard settleInteraction
-function;no new build or changed authoring. Controls resolves to sole exposed
-listbox;active target is selected Team on both sides. No namespace bug observed
+function;no new build or changed authoring. Controls resolves to its exposed
+listbox target;active target is selected Team on both sides. No namespace bug observed
 here;not all40 contexts,keyboard/AT navigation or full relationship acceptance.
 Actual AX listbox differs:native name Plan/focusable=true,candidate empty name/
 no focusable property. Native panel has aria-label Plan/tabindex=-1;candidate
