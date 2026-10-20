@@ -2,6 +2,12 @@
 
 ## Current versus historical evidence
 
+Retain checkbox-disabled-ax-focus-probe and checkbox-disabled-native-role-control-
+20261020 log pairs. First records one frozen disabled pair and actual CDP AX plus
+direct focus before/after settlement;second preserves exact native HTML attributes
+and reproduces candidate fields/focus without Astylar. Both retain inline producer/
+browser provenance;no new build,old capture rewrite,core/fixture edit or case closure.
+
 Retain checkbox-native-value-ax-probe-20261020 log pair,including exact inline
 producer,existing helper/checkpoint receipts,browser launch and raw CDP AX targets.
 One initial light desktopDPR1 pair confirms DOM on absent from AX value;full

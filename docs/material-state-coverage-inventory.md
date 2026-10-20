@@ -27,8 +27,10 @@ below. Earlier next/live statements in chronology are not current instructions.
   Six of eight disabled ink requests differ from candidate onPrimary substitution.
   checkbox-checkmark-retained-inputs/checkbox-disabled-checkmark-token-20261020
   log pairs. No renderer change,owning proof/case join or canonical promotion yet.
-- One frozen light desktopDPR1 checkbox AX pair confirms native DOM value on is
-  absent from both AX values;not full AX/form/relationship equivalence. See chronology.
+- Frozen light desktopDPR1 checkbox AX pairs:initial DOM value on absent from AX;
+  disabled native INPUT rejects focus,candidate role-DIV accepts it. Plain HTML
+  role-DIV reproduces candidate:widget-authoring mismatch,not invented core focus.
+  Full AX/form/relationship equivalence remains open. See chronology.
 - Remaining priorities:full structure/generated descendants,AX,interaction and
   lifetime ownership,local composited paint and current-runtime applicability.
   Shared editing:1734 authored exclusions inspected;443 writable and134 readonly/
@@ -43,6 +45,27 @@ below. Earlier next/live statements in chronology are not current instructions.
 ## Audit chronology — retained evidence, newest first
 
 ### October20 — retained chip/readonly registration and checkbox checkpoint
+
+Disabled checkbox AX/programmatic-focus ownership isolated without core changes:
+checkbox-disabled-ax-focus-probe-20261020 log
+SHAa0ca85fd1d76dbff03b293bf2a914b42120ca3a08d6d5f6da07fb17159135438.
+Same authenticated62829d76 frozen application/light desktopDPR1;existing
+interaction=disabled bootstrap only. Both actual AX nodes expose checkbox,name,
+checked=true and disabled=true. Native INPUT disabled=true/tabindex=-1 omits
+focusable and rejects direct focus before/after settlement. Candidate DIV with
+role=checkbox,aria-disabled=true/tabindex=-1 exposes focusable=true and retains
+direct programmatic focus. Sequential-Tab exclusions do not prove this contract.
+Plain HTML role-checkbox control exactly matching observed candidate attributes
+reproduces all projected AX fields and focus behavior,without Astylar:
+checkbox-disabled-native-role-control-20261020 log
+SHA8bae9a4ee17b7ad676aabe98ebc91169fe7af9671c435b9dde6b471c1ad791e8.
+This isolates normal browser role-DIV behavior,not a core-invented disabled focus
+state. Current authoring:astylar.component.ts926–927 chooses DIV/ARIA;reference
+component79 chooses disabled MatCheckbox/native input. Fix future authoring/control
+intent at its owner;do NOT globally suppress aria-disabled programmatic focus.
+One disabled pair/native control only;not all eight contexts,pointer/key delivery,
+AT,form semantics,local paint or complete AX relationships. No fixture/renderer
+edits or case promotion;source/proof integration remains outside frozen readonly.
 
 Checkbox native-value AX question now bounded by actual browser evidence:
 checkbox-native-value-ax-probe-20261020 log
