@@ -140,9 +140,25 @@ Current conclusions only;earlier next/live statements in chronology are historic
   runtime proof. Native block-root/static paragraphs versus candidate flex-root/
   absolute paragraphs remain unequal authoring. alignContent/alignItems/
   justifyContent normal/stretch/flex-start equivalence remains OPEN. No scalar
-  classifications changed. Next coherent step:join queued line-box,property-domain,
-  constraint and flex-context evidence to exact existing case obligations before
-  further owner mapping;do not export an unchanged producer as integration.
+  classifications changed. Exact-case integration is now prepared below;do not
+  export an unchanged producer as integration.
+- Queued review433b794f0a1d51b7592fb9932fab3fe6c6376c1412958f7aafca089e509799b2
+  adds25 bounded children to24 divider cases:24 input-context children (48 domain,
+  96 clamp,288 flex-stage rows;32 native natural boxes in16 STATIC cases only),
+  plus one fresh native paint-control child on light/desktop only. No interaction
+  case borrows a static line box or another case's native paint observation.
+  Existing loader authenticates15217 dependencies;120 changed joins reject.
+  Removing only25 children recovers the COMPLETE736e predecessor,all2311 cases,
+  statuses,remaining work and prior findings. All2311 remain partial/unverified.
+  Evidence:join-material-divider-property-contexts.mjs and divider-property-context-
+  case-join-20261020 stdout/empty stderr (terminal0). Proposal envelope169754728B,
+  SHA9a1b9e38ba8ee916b52707db87f38b6f84a7df99d181383789a1f353950afd6f.
+  Historical source receipt keys remain unchanged;current sources were separately
+  rehashed/referenced rather than substituted. This proposal is NOT selected,
+  registered/exported or canonical;acceptedb661/736e remains unchanged.
+  Next:bounded review-selection/source-inventory reconciliation and owning checks
+  for this coherent batch,then justified canonical milestone. Continue complete
+  owner/alignment/AX/event-lifetime/current-runtime gaps afterward;final gates stay.
 
 ## Audit chronology — retained evidence, newest first
 

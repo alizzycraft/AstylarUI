@@ -2,6 +2,18 @@
 
 ## Current versus historical evidence
 
+Retain queued case proposal433b794f0a1d51b7592fb9932fab3fe6c6376c1412958f7aafca089e509799b2
+under working-audit/proposals with scripts/join-material-divider-property-contexts.mjs
+and divider-property-context-case-join-20261020.log/empty stderr. Envelope169754728B,
+SHA2569a1b9e38ba8ee916b52707db87f38b6f84a7df99d181383789a1f353950afd6f.
+The existing loader authenticates15217 dependencies;complete736e recovers after
+only25 child removals. Original proposal and evidence remain untouched. These
+25 children cover24 exact divider cases;32 natural line boxes apply only to16
+static cases,and native paint controls only to light/desktop. No status/remaining
+work/classification/acceptance changed. This remains a queued local proposal,not
+selected/exported/canonical. Do not delete its referenced input/control evidence
+or confuse current-source references with replacement historical receipt keys.
+
 Retain divider-flex-context-inputs-final-20261020.log (SHA256
 762f23bf2d0f9e94876cb14367c2ed0e1f582d694ae5976c2cd35daf4391f513),empty stderr
 and scripts/check-divider-flex-context-inputs.mjs. Keep initial and recovered log
