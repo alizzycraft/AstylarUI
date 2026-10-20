@@ -6,15 +6,15 @@ import { execFileSync } from 'node:child_process';
 import { sourceAuditDefinitions as currentSourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { restoreLegacyClipPolicy, restoreLegacyClipProducer, restoreTextBackingPolicy, restoreTextBackingProducer } from './semantic-text-transform-registration.mjs';
 
-const sourceAuditDefinitions=currentSourceAuditDefinitions.slice(1);
+const sourceAuditDefinitions=currentSourceAuditDefinitions.slice(2);
 assert.equal(sourceAuditDefinitions.length,164);
-assert.equal(currentSourceAuditDefinitions[0].id,'core-text-backing-ceil-rescales-logical-line-height');
+assert.equal(currentSourceAuditDefinitions[1].id,'core-text-backing-ceil-rescales-logical-line-height');
 restoreTextBackingPolicy(readFileSync('tests/material-parity/input-equivalence-policy.mjs'));
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 test('text backing registration preserves complete clip predecessor and bounded public evidence', () => {
-  assert.equal(currentSourceAuditDefinitions.length,165);
-  const finding=currentSourceAuditDefinitions[0];
+  assert.equal(currentSourceAuditDefinitions.length,166);
+  const finding=currentSourceAuditDefinitions[1];
   assert.equal(finding.classification,'confirmed-core-renderer-defect');
   assert.equal([...readFileSync(finding.file,'utf8').matchAll(new RegExp(finding.pattern,'g'))].length,1);
   for(const receipt of finding.evidence)assert.equal(hash(readFileSync(receipt.file)),receipt.sha256);

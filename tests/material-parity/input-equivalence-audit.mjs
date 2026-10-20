@@ -8922,6 +8922,11 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'scripts/audit-public-readonly-editing.mjs',
+    'artifacts/material-parity/public-readonly-editing-recovered-20261020/latest-report.json',
+    'artifacts/material-parity/public-readonly-owning-methods-20261020.log',
+    'artifacts/material-parity/public-readonly-editing-independent-20261020.log',
+    'artifacts/material-parity/public-readonly-owning-proof-20261020.log',
     'scripts/check-divider-backing-owners.mjs',
     'scripts/audit-public-explicit-line-backing.mjs',
     'artifacts/material-parity/public-explicit-line-backing-20261019.log',
@@ -9667,6 +9672,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('public readonly keyboard mutation preserves equal inputs and binds current default owners'/,
+      'public readonly text keyboard mutation with writable and disabled controls', 'Two readonly public pairs atDPR1/2 mutate Atlas to xAtlas/xtlas/tlas despite readOnly=true and retained focus. Four writable and four disabled controls agree with native behavior;all six complete current/installed owner methods and six altered-evidence controls authenticate. No Material callbacks,clipboard/dynamic readonly/navigation raster or whole-case acceptance.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('equal explicit line height isolates text backing allocation from authored geometry'/,
       'equal-input explicit line-height backing allocation and logical mapping', 'Two public paired22px-height cases retain matching container geometry and local baselines;18.4px-font backing allocates23px versus22px logical/full UV range,while16px control allocates22px. Five captured methods and six altered-evidence controls bind the discrepancy. Not DPR2,other fonts,pixel-level blur or whole-case acceptance.'),
     proof(root, 'tests/material-parity/legacy-clip-support-input.spec.mjs', /test\('public legacy clip support limitation preserves controls and exact diagnostics'/,

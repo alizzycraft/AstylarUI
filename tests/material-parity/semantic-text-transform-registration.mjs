@@ -12,8 +12,45 @@ const inlineId = 'core-inline-replaced-row-omits-parent-line-box';
 const focusId = 'core-semantic-attribute-refresh-removes-focusability';
 const clipId = 'core-legacy-css-clip-not-translated';
 const backingId = 'core-text-backing-ceil-rescales-logical-line-height';
-export function restoreTextBackingPolicy(source) {
+const readonlyId = 'core-readonly-text-keyboard-defaults-mutate-value';
+export function restoreReadonlyPolicy(source) {
   const current=normalized(source);
+  if(!current.includes(readonlyId)){
+    assert.ok(!current.includes('Six current/installed method bodies agree;first-bad revision and historical runtime not established'),'Unrecognized readonly policy registration');return current;
+  }
+  assert.equal(digest(current),'7875b717fe7693f5bdad8158f99461f09512b7bdbcdda4465a0478c4bc24566c');
+  const tree=ts.createSourceFile('policy.mjs',current,99,true);
+  const entries=tree.statements.filter(ts.isVariableStatement).flatMap(n=>[...n.declarationList.declarations])
+    .find(n=>n.name.getText(tree)==='sourceAuditDefinitions').initializer.arguments[0].elements;
+  assert.equal(entries.length,166);assert.ok(entries[0].getText(tree).includes(readonlyId));
+  const restored=current.slice(0,entries[0].getFullStart())+current.slice(entries[0].end+1);
+  assert.equal(digest(restored),'59830913045a108948c812fc4a9eb210c0a94a9466e1a3354db480a7e0bd110f');
+  return restored;
+}
+export function restoreReadonlyProducer(source) {
+  const current=normalized(source);
+  if(!current.includes('public readonly text keyboard mutation with writable and disabled controls')){
+    assert.ok(!current.includes("'scripts/audit-public-readonly-editing.mjs'"),'Unrecognized readonly proof registration');return current;
+  }
+  assert.equal(digest(current),'d2d49ef981833dc1e2fa6882c08e7527f0899aa4d65832b47d0571884450c6b4');
+  const tree=ts.createSourceFile('producer.mjs',current,99,true);
+  const owner=name=>tree.statements.find(n=>ts.isFunctionDeclaration(n)&&n.name.text===name);
+  const proofs=owner('focusedProofInventory').body.statements[0].expression.elements;
+  const files=owner('sourceFingerprints').body.statements[0].declarationList.declarations[0].initializer.elements;
+  assert.equal(proofs.length,220);
+  assert.ok(proofs[0].getText(tree).includes('public readonly text keyboard mutation with writable and disabled controls'));
+  assert.deepEqual(files.slice(0,5).map(n=>n.text),['scripts/audit-public-readonly-editing.mjs',
+    'artifacts/material-parity/public-readonly-editing-recovered-20261020/latest-report.json',
+    'artifacts/material-parity/public-readonly-owning-methods-20261020.log',
+    'artifacts/material-parity/public-readonly-editing-independent-20261020.log',
+    'artifacts/material-parity/public-readonly-owning-proof-20261020.log']);
+  let restored=current;
+  for(const [start,end]of [[proofs[0].getFullStart(),proofs[0].end+1],[files[0].getFullStart(),files[4].end+1]].sort((a,b)=>b[0]-a[0]))
+    restored=restored.slice(0,start)+restored.slice(end);
+  assert.equal(digest(restored),'a2771d8cc9a080dc384fcc857a36bde4212f4c417fd8468c143d593bf0a7c48b');return restored;
+}
+export function restoreTextBackingPolicy(source) {
+  const current=restoreReadonlyPolicy(source);
   if(!current.includes(backingId)){
     assert.ok(!current.includes('both logical heights22px'),'Unrecognized text backing policy registration');return current;
   }
@@ -26,7 +63,7 @@ export function restoreTextBackingPolicy(source) {
   assert.equal(digest(restored),'da0c6f3359f1146b07a9cd1f686c184df55185bbc0517c3a7df832f40e5c1512');return restored;
 }
 export function restoreTextBackingProducer(source) {
-  const current=normalized(source);
+  const current=restoreReadonlyProducer(source);
   if(!current.includes('equal-input explicit line-height backing allocation and logical mapping')){
     assert.ok(!current.includes("'scripts/check-divider-backing-owners.mjs'"),'Unrecognized text backing producer registration');return current;
   }
@@ -266,10 +303,17 @@ export function reviewedRootEditingGraph(graph, actionSource, expectedRunnerEntr
   return graph.map(row => row.file === runnerFile ? { ...row, sha256: oldRunner } : row);
 }
 export function historicalSemanticDefinitions(current) {
+  if (current.length === 166) {
+    const source=readActual('tests/material-parity/input-equivalence-policy.mjs','utf8');
+    restoreReadonlyPolicy(source);
+    const actual=new Function(source.replace(/^export const /gm,'const ')+';return sourceAuditDefinitions;')();
+    assert.deepEqual(current,actual,'unreviewed readonly definition population');
+    current=current.filter(row=>row.id!==readonlyId);
+  }
   if (current.length === 165) {
     const source=readActual('tests/material-parity/input-equivalence-policy.mjs','utf8');
     restoreTextBackingPolicy(source);
-    const actual=new Function(source.replace(/^export const /gm,'const ')+';return sourceAuditDefinitions;')();
+    const actual=new Function(restoreReadonlyPolicy(source).replace(/^export const /gm,'const ')+';return sourceAuditDefinitions;')();
     assert.deepEqual(current,actual,'unreviewed text backing definition population');
     current=current.filter(row=>row.id!==backingId);
   }

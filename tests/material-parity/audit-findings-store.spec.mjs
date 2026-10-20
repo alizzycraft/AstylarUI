@@ -499,3 +499,23 @@ test('readonly source finding proposal preserves every prior definition and rece
   assert.match(finding.boundary, /Clipboard,paste\/cut/);
   assert.match(finding.boundary, /Does not close all94 Material readonly cases/);
 });
+
+test('readonly registration recovers complete prior policy and producer without weakening guards', async () => {
+  const { restoreReadonlyPolicy, restoreReadonlyProducer } = await import('./semantic-text-transform-registration.mjs');
+  const { execFileSync } = await import('node:child_process');
+  for (const [file, restore, marker] of [
+    ['tests/material-parity/input-equivalence-policy.mjs', restoreReadonlyPolicy, 'core-readonly-text-keyboard-defaults-mutate-value'],
+    ['tests/material-parity/input-equivalence-audit.mjs', restoreReadonlyProducer, 'public readonly text keyboard mutation with writable and disabled controls'],
+  ]) {
+    const current = fs.readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+    const prior = execFileSync('git', ['show', `820d6180:${file}`],
+      { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+    assert.equal(restore(current), prior);
+    assert.equal(restore(prior), prior);
+    assert.throws(() => restore(current + '\n// unrelated source drift'));
+    assert.throws(() => restore(current.replace(marker, 'unreviewed-readonly-registration')));
+    const previousMarker=file.includes('policy')?'core-text-backing-ceil-rescales-logical-line-height':'equal-input explicit line-height backing allocation and logical mapping';
+    assert.ok(current.includes(previousMarker));
+    assert.throws(() => restore(current.replace(previousMarker, 'unreviewed-predecessor')));
+  }
+});

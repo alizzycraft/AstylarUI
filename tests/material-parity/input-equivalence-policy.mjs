@@ -110,6 +110,71 @@ export const reviewedValueNormalizations = Object.freeze([
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    "id": "core-readonly-text-keyboard-defaults-mutate-value",
+    "introducedBy": "Six current/installed method bodies agree;first-bad revision and historical runtime not established",
+    "file": "src/app/services/dom/input/keyboard-input.handler.ts",
+    "pattern": "private handleTextInput\\(",
+    "classification": "confirmed-core-renderer-defect",
+    "owner": "shared core text-control keyboard default and readonly mutation boundary",
+    "focusedProof": "tests/material-parity/input-boundary-evidence.spec.mjs: public readonly keyboard mutation preserves equal inputs and binds current default owners",
+    "observation": {
+      "component": "public package-root plugin-free text input",
+      "element": "control",
+      "dpr": [
+        1,
+        2
+      ],
+      "states": [
+        "writable",
+        "readonly",
+        "disabled"
+      ],
+      "actionBoundaries": [
+        "Home",
+        "x",
+        "Delete",
+        "Backspace"
+      ],
+      "reference": "Readonly value remains Atlas while focused and readOnly=true",
+      "astylar": "Readonly value becomes xAtlas then xtlas then tlas while focused and readOnly=true",
+      "stage": "focused core keyboard defaults reach text insertion/deletion without enforcing authored readonly"
+    },
+    "justification": "Identical public SiteData and styles produce a readonly semantic input on both sides. Trusted keyboard actions mutate the candidate despite readOnly=true before any Material callback can normalize state. Four writable controls match the mutation sequence and four disabled controls remain unchanged/unfocused. Six complete compiled-current/installed owning methods agree. The public reproduction has no Material plugin,application callback,document update or compensating authoring. This is a core control-default defect,not missing semantic readonly or a fixture text mismatch.",
+    "evidence": [
+      {
+        "file": "scripts/audit-public-readonly-editing.mjs",
+        "sha256": "60fcf3d822f15a7ccfefddc8590c0acfda4af914661c6897a06b2f4e39a5384f"
+      },
+      {
+        "file": "artifacts/material-parity/public-readonly-editing-recovered-20261020/latest-report.json",
+        "sha256": "8a54156092f7f25fd64c546175ce5e7682636966c794f893209d1b10c5baedb0"
+      },
+      {
+        "file": "artifacts/material-parity/public-readonly-owning-methods-20261020.log",
+        "sha256": "4d4dd8440ab6c2a3c9c357b24fa6f6d00110f67b288284a86466b8d73500b81a"
+      },
+      {
+        "file": "artifacts/material-parity/public-readonly-editing-independent-20261020.log",
+        "sha256": "9642dda3ecba5be6f85b6df7f6f5813e6963f615f0f24cb48d48db86f3a6daa4"
+      },
+      {
+        "file": "artifacts/material-parity/public-readonly-owning-proof-20261020.log",
+        "sha256": "d3c960a1df20680f0ac8ce4adcb8323b0eb2c5bf52482b5157091c23214f77d5"
+      }
+    ],
+    "publicReproduction": {
+      "command": "node scripts/audit-public-readonly-editing.mjs --verify artifacts/material-parity/public-readonly-editing-recovered-20261020",
+      "pairs": 6,
+      "readonlyFailures": 2,
+      "writableControls": 4,
+      "disabledControls": 4,
+      "negativeControls": 6,
+      "currentRenderingAccepted": false
+    },
+    "recommendation": "Enforce readonly for mutating defaults at the shared core control boundary. Preserve keyboard event delivery,focus,allowed programmatic value changes and independently verified native navigation/selection behavior. Do not patch the Material select or add application callbacks to undo edits.",
+    "boundary": "Only demonstrated Home/x/Delete/Backspace value mutation at DPR1/2. Clipboard,paste/cut,textarea,dynamic readonly updates,other types/browsers,readonly navigation semantics and selection/caret raster remain unproved. Does not close all94 Material readonly cases or any whole comparison."
+  }),
+  Object.freeze({
     id: 'core-text-backing-ceil-rescales-logical-line-height',
     introducedBy: 'current installed and captured owner agreement; first-bad revision not established',
     file: 'src/app/services/text/text-canvas-renderer.service.ts',

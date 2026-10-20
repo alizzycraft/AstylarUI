@@ -75,6 +75,24 @@ export function createTextBackingReviewReader({root,read,reviewSha256}){
     '9ef883389c3aa8811d3a0a4756bc9e6f7cce82158c62ea453c08b4bb654c6367');
   const helper='tests/material-parity/semantic-text-transform-registration.mjs',helperText=read(path.resolve(root,helper),'utf8');
   let reviewedHelperText=helperText,replayRestorationBlock;
+  if(hash(reviewedHelperText)==='b9d1e65a82176a32beec12c26102b530efdb752ed76181542e25248eeca9b4a0'){
+    const tree=ts.createSourceFile(helper,reviewedHelperText,99,true),ranges=[];
+    for(const node of tree.statements){
+      if(ts.isFunctionDeclaration(node)&&['restoreReadonlyPolicy','restoreReadonlyProducer'].includes(node.name.text))ranges.push([node.getFullStart(),node.end]);
+      if(ts.isVariableStatement(node)&&node.declarationList.declarations.some(d=>d.name.getText(tree)==='readonlyId'))ranges.push([node.getFullStart(),node.end]);
+      if(ts.isFunctionDeclaration(node)&&node.name.text==='historicalSemanticDefinitions'){
+        const first=node.body.statements[0];assert.equal(first.expression.getText(tree),'current.length === 166');ranges.push([first.getFullStart(),first.end]);
+      }
+    }
+    assert.equal(ranges.length,4);
+    for(const [start,end]of ranges.sort((a,b)=>b[0]-a[0]))reviewedHelperText=reviewedHelperText.slice(0,start)+reviewedHelperText.slice(end);
+    for(const [current,previous]of [
+      ['const current=restoreReadonlyPolicy(source);','const current=normalized(source);'],
+      ['const current=restoreReadonlyProducer(source);','const current=normalized(source);'],
+      ["new Function(restoreReadonlyPolicy(source).replace(/^export const /gm,'const ')","new Function(source.replace(/^export const /gm,'const ')"],
+    ]){assert.equal(reviewedHelperText.split(current).length,2);reviewedHelperText=reviewedHelperText.replace(current,previous);}
+    assert.equal(hash(reviewedHelperText),'0ad29fca2d503298da8e397dcedba8648e1951a104a9710fe64c9a567e7c1559');
+  }
   if(hash(reviewedHelperText)==='0ad29fca2d503298da8e397dcedba8648e1951a104a9710fe64c9a567e7c1559'){
     for(const [current,previous]of [
       ['fc3f20524e782e645d3ecb086cfbba47496e41b2451443a97216ba66fe90eaff','35e9feec3e009b354fc999444551474b47153e4e979fe895df222c40ca7b0689'],

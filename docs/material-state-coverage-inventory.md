@@ -10,6 +10,22 @@ their receipts; older "next" or "live" statements are not current instructions.
   Evidence contact is not inspection closure or a current parity pass.
 - Accepted audit evidence:fc888710 package/e837c58e review,index0633e01b.165 registered
   findings/219 proofs;zero unresolved scalar groups does NOT mean zero defects.
+- Current SOURCE registration now166 findings/220 proofs (readonly addition),
+  not yet exported/accepted. Exact definition matches proposal30bd233e;removing
+  only that definition,one proof and five evidence-source entries recovers complete
+  policy59830913 and producera2771d8c. Canonical remainsfc888710/165/219.
+  Bounded source/proof census:743 files,729 unchanged,nine changed,five added,
+  zero removed;ALL219 prior proof records/anchors/descriptions/order unchanged.
+  Recovered accepted source9e74ce09 and prooff1597df7 sections. New source section
+  04e548574f4fd43ffc1dc34aa678344026170d9550ede6b5a15d41a6fb2dc152;
+  new220-proof section07065eba46f8650f81ae61487fd7b78f374be3465342ec39cbedbda6305865ce.
+  readonly-registration-source-proof-census-20261020 log
+  SHA36dc93b905b7a8719ddb7c6f4de73653b48b830cfd6f01f5016c819040b27241.
+  Verification:registration conservation3/3,previous registration-owner suites
+  10/10,selected review reader1/1,public readonly owner1/1 and complete case-index
+  historical conservation4/4. Original2/3 and9/10 failures retained;repaired
+  mutation target was previously absent from producer,and stale count/index
+  expectations were updated to actual166 without removing original assertions.
 - Published:e837c58e chip successor,176 additions beyond f471 across
   76 cases. Full predecessor/source preflight passes;five changed inventory files,
   738 total,733 unchanged,all219 proof records unchanged;source section9e74ce09.
@@ -50,12 +66,11 @@ their receipts; older "next" or "live" statements are not current instructions.
   adds core-readonly-text-keyboard-defaults-mutate-value after all165 unchanged
   definitions. Five exact evidence receipts,unique current source pattern,public
   two-failure/four-writable/four-disabled controls and six mutation checks bound.
-  Existing proposal mechanism/status reviewed-not-integrated;canonical remains
-  165/219 and no case closes. Source-finding proposal/restoration owning pair
+  Original proposal remains immutable/status reviewed-not-integrated;source
+  registration now166/220,canonical remains165/219 and no case closes. Owning pair
   passes2/2;readonly-source-finding-proposal(-owning)-20261020 log pairs retained.
-  Next:apply that exact definition and owning proof through existing policy/proof
-  inventories with complete165/219 predecessor recovery,then coherent-batch export
-  only after all current source-applicability consumers are reconciled.
+  Next:one coherent readonly export after verified source reconciliation,then
+  conservation,independent cold verification and main import before publication.
 - Queued owning readonly assertion now passes1/1 (4444.1648ms),six complete
   current/installed method bodies plus public verifier/six negative controls.
   Existing input-boundary suite extended append-only:507642-character prefix
@@ -104,7 +119,7 @@ their receipts; older "next" or "live" statements are not current instructions.
   route is the existing unguarded keyboard default,not a new proven first-stage
   cause. Pointer-focused/native readonly navigation expectations remain unproved;
   do not blanket-disable navigation or claim renderer caret/selection pixels pass.
-- Next:integrate readonly finding/regression through existing owners;remaining full structure,
+- Next:publish reconciled readonly source registration;remaining full structure,
   AX,interaction/lifetime,local paint/currentness and original final gates stay open.
 - Storage:no original evidence or old build/cache data deleted. Cleanup awaits
   user approval;closed evidence uses verified lossless compression/hard links.

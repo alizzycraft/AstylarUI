@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain readonly-registration-* and readonly-registered-public-owner-20261020
+log pairs. Source166/220 registration is additive,NOT yet canonical publication.
+Original conservation2/3 and previous-owner9/10 failures remain alongside recovered
+3/3 and10/10;selected review1/1,public owner1/1,case-index4/4 and complete source/
+proof census pass. Full prior165 policy/219 proofs and accepted738-source section
+recover;new743-source population has nine changed,five added,729 unchanged paths.
+No old receipt/capture rewritten,no renderer/fixture changes,no cleanup deletion.
+
 Retain source-finding proposal30bd233e3e9f40c07b0e2e3f1bb7476a63ce775ffad4070c7f92cbcf3df5c8bd
 and readonly-source-finding-proposal(-owning)-20261020 log pairs. Existing format
 preserves complete165-definition predecessor and adds one scoped readonly core

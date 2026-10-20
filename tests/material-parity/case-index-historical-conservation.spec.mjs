@@ -9,7 +9,7 @@ test('policy additions conserve the complete historical policy without promoting
   const current = readFileSync('tests/material-parity/input-equivalence-policy.mjs', 'utf8');
   const expected = '7e939aece26dd69b846b78fc6d21aa332463b53068f488cf19343578306d80d8';
   const proof = policyProjection(current, expected);
-  assert.equal(proof.currentSha256, '59830913045a108948c812fc4a9eb210c0a94a9466e1a3354db480a7e0bd110f');
+  assert.equal(proof.currentSha256, '7875b717fe7693f5bdad8158f99461f09512b7bdbcdda4465a0478c4bc24566c');
   assert.equal(proof.retainedSourceUnchanged, true);
   assert.deepEqual(proof.addedClassifications, ['documented-limitation']);
   assert.deepEqual(proof.addedSourceFindings, ['core-rounded-radius-sampling-uses-unclamped-request',
@@ -59,11 +59,11 @@ test('historical case-index binding retains saved receipts and never promotes so
   ]);
   historicalProjection.dependencyProjections = historicalProjection.dependencyProjections.filter(p => !p.addedReadOnlyDiagnostics);
   for (const row of historicalProjection.reports) {
-    assert.equal(row.currentSourceSha256, 'a2771d8cc9a080dc384fcc857a36bde4212f4c417fd8468c143d593bf0a7c48b');
+    assert.equal(row.currentSourceSha256, 'd2d49ef981833dc1e2fa6882c08e7527f0899aa4d65832b47d0571884450c6b4');
     row.currentSourceSha256 = 'a787e493d0e36d37fe5517bba8a6c3ba7a876f5bdb5ff7991e4d5bdcd0a0ebd0';
   }
   for (const [file, current, previous] of [
-    ['tests/material-parity/input-equivalence-policy.mjs', '59830913045a108948c812fc4a9eb210c0a94a9466e1a3354db480a7e0bd110f', '3256863af7432ce2d9e05e2cc2569bc7f68db5f9a063f718ef09594e13c2474f'],
+    ['tests/material-parity/input-equivalence-policy.mjs', '7875b717fe7693f5bdad8158f99461f09512b7bdbcdda4465a0478c4bc24566c', '3256863af7432ce2d9e05e2cc2569bc7f68db5f9a063f718ef09594e13c2474f'],
     ['tests/material-parity/run-material-parity.mjs', 'c13ed230e7c7b0f05e17e849decf643e847fa08f1220be0b8aa6ace955f6d25f', '4ed6abe8b6c8028565ffc5c0674d285a567714e19842f75672b599125bd99e6d'],
     ['tests/material-parity/input-tree-evidence.spec.mjs', '49d18927e57e04fc37b42e25469a5861a1744465953d22b2d2b470d2c9809a46', 'e442a49c26b916eed34300e22a1897d977b723df83a31da3c955421e52d95c5e'],
   ]) {
@@ -136,9 +136,9 @@ test('historical binding rejects changed findings in every index, receipts, depe
     // The newer exact-source registration guard rejects BEFORE the older
     // mapping projection. Require that specific rejection, not any exception.
     assert.equal(error.code, 'ERR_ASSERTION');
-    assert.equal(error.expected, 'a2771d8cc9a080dc384fcc857a36bde4212f4c417fd8468c143d593bf0a7c48b');
+    assert.equal(error.expected, 'd2d49ef981833dc1e2fa6882c08e7527f0899aa4d65832b47d0571884450c6b4');
     assert.equal(error.actual, createHash('sha256').update(alteredSource.replaceAll('\r\n', '\n')).digest('hex'));
-    assert.match(error.stack, /restoreTextBackingProducer/);
+    assert.match(error.stack, /restoreReadonlyProducer/);
     return true;
   });
 });
