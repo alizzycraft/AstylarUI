@@ -456,3 +456,18 @@ test('reviewed chip graphics reader preserves exact predecessor and all partial 
   assert.deepEqual({children,selected,unselected},{children:76,selected:120,unselected:32});
   assert.equal(createHash('sha256').update(JSON.stringify(review)).digest('hex'),chipPaintReview);
 });
+
+test('readonly proof append restoration preserves complete predecessor and rejects drift', async () => {
+  const { restoreInputBoundaryReadonlyAppend } = await import('./text-backing-case-review-source.mjs');
+  const { execFileSync } = await import('node:child_process');
+  const file = 'tests/material-parity/input-boundary-evidence.spec.mjs';
+  const current = fs.readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previous = execFileSync('git', ['show', `3c7cd2cc:${file}`],
+    { encoding: 'utf8', maxBuffer: 2_000_000 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreInputBoundaryReadonlyAppend(current), previous);
+  assert.equal(restoreInputBoundaryReadonlyAppend(previous), previous);
+  for (const drift of [current + '\n// unrelated drift',
+    current.replace('readonlyFailingPairs: 2', 'readonlyFailingPairs: 0'),
+    current.replace('typed-x', 'changed-key'), previous + '\n// previous drift'])
+    assert.throws(() => restoreInputBoundaryReadonlyAppend(drift));
+});

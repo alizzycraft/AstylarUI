@@ -6,9 +6,11 @@ import { pathToFileURL } from 'node:url';
 import path from 'node:path';
 import ts from 'typescript';
 import { transformSync } from 'esbuild';
+import { restoreInputBoundaryReadonlyAppend } from '../tests/material-parity/text-backing-case-review-source.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
-const suite = 'tests/material-parity/input-boundary-evidence.spec.mjs', source = readFileSync(suite, 'utf8');
+const suite = 'tests/material-parity/input-boundary-evidence.spec.mjs', currentSource = readFileSync(suite, 'utf8');
+const source = restoreInputBoundaryReadonlyAppend(currentSource);
 assert.equal(hash(source), '171bf9fae8fe2e701f5a42d5eef896685085ef267200956729ab447e04a032d5');
 const oldFile = 'artifacts/material-parity/retained-evidence/component-map-recovery-20261011/chunk-3JXWRYJY.js.map';
 const oldBytes = readFileSync(oldFile); assert.equal(hash(oldBytes), 'dba484044ca0dea965d8ef4b12635673f0f055d7711099d2f6476ca490988ec4');
@@ -48,7 +50,7 @@ replace("assert.deepEqual(differences, [{ file: 'src/lib/astylar.ts',\n    key: 
   'assert.deepEqual(differences, []);', 'newer capture must have zero class-member drift');
 await new Function('assert', 'readFileSync', 'hash', 'path', 'ts', 'createRequire', `return (${callback})();`)(
   assert, readFileSync, hash, path, ts, createRequire);
-console.log(JSON.stringify({ producerSha256: hash(readFileSync(import.meta.filename)), sourceSuite: { file: suite, sha256: hash(source) },
+console.log(JSON.stringify({ producerSha256: hash(readFileSync(import.meta.filename)), sourceSuite: { file: suite, sha256: hash(currentSource), reviewedPrefixSha256: hash(source) },
   baseline: { file: baselineFile, sha256: hash(baselineBytes) }, previousMap: { file: oldFile, sha256: hash(oldBytes) },
   capturedMap: { file: currentFile, sha256: hash(currentBytes) },
   sameModuleInventory: 88, unchangedCompleteCapturedModules: 87, changedCapturedModules: changed,

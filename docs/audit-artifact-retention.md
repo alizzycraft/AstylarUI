@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain all readonly-append-*-20261020 log pairs. Benchmark owner checks2/2,
+historical reader/drift1/1,append-restoration1/1 (four mutations) and three direct
+script consumers succeed. Original backing-transition and text-backing-reader
+failures retain older alignment/helper assumptions;recovered runs use existing
+five-transition reader. Receipt follow-ups distinguish actual CURRENT suite from
+restored historical prefix;earlier log versions remain historical,not overwritten.
+No capture/package/old evidence changed or deleted;no new canonical export.
+
 Retain public-readonly-owning-proof and public-readonly-historical-review-reader-
 20261020 log pairs. New owning assertion1/1 and original historical reader/drift
 assertion1/1 pass;input-boundary suite is append-only and recovers exact171bf9fa

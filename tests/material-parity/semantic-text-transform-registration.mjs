@@ -348,7 +348,7 @@ export function readHistoricalBenchmarkSource(file, options) {
     const caretEnd = restored.indexOf(caretEndMarker, caretStart);
     assert.ok(caretStart >= 0 && caretEnd > caretStart);
     assert.equal(digest(restored.slice(caretStart, caretEnd + caretEndMarker.length)),
-      '35e9feec3e009b354fc999444551474b47153e4e979fe895df222c40ca7b0689');
+      'fc3f20524e782e645d3ecb086cfbba47496e41b2451443a97216ba66fe90eaff');
     restored = restored.slice(0, caretStart)
       + "  const currentProof = readFileSync('tests/material-parity/input-boundary-evidence.spec.mjs', 'utf8');\n"
       + restored.slice(caretEnd + caretEndMarker.length);
@@ -358,7 +358,7 @@ export function readHistoricalBenchmarkSource(file, options) {
     const ownerEnd = restored.indexOf(ownerEndMarker, ownerStart);
     assert.ok(ownerEnd > ownerStart);
     assert.equal(digest(restored.slice(ownerStart, ownerEnd + ownerEndMarker.length)),
-      'cdc254af1d25ca47d00b016279c2a14ea8268d3f13e547602a3ac8be027af49d');
+      '770dc607ca140b8938afd8f4ad8409739a1d09e8ce6ed6ee7dbadb5c80308678');
     restored = restored.slice(0, ownerStart) + restored.slice(ownerEnd + ownerEndMarker.length);
     assert.equal(restored.split('hash(readRootOwner(receipt.file))').length, 2);
     assert.equal(restored.split("readRootOwner(r.owner.file, 'utf8')").length, 2);

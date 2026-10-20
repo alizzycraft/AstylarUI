@@ -56,11 +56,20 @@ their receipts; older "next" or "live" statements are not current instructions.
   CURRENT source receipts before restoration;original full reader/drift test
   passes1/1 (57057.5158ms). Neither candidate reports nor old proofs rewritten.
   Reader log SHAeb855e5404a19ddab8577ccb44f43c7c0ca7dee28ae6c3888e652d4764b25616.
-  Two inventory files changed after publishedfc888710;no new canonical export.
-  Next registration batch must reconcile six remaining literal171bf9fa assertions
-  (two benchmark checks,three check scripts and preserved reader baseline guard);
-  baseline reader guard already operates on explicitly restored text. Do not
-  rerun whole export before reviewing the other five direct consumers.
+  Owning/source-applicability changes are queued after publishedfc888710;no new
+  canonical export. All five direct suite-hash consumers now reconciled:
+  two benchmark owner assertions pass2/2 (4741.2275ms),three existing scripts exit0.
+  Shared restoreInputBoundaryReadonlyAppend checks complete current/old sources
+  and exact appended bytes;existing historical reader/drift test passes1/1
+  (49477.9362ms). New append-restoration owning test passes1/1 (1053.8983ms),
+  complete Git predecessor recovery and four drift controls. Benchmark authenticates
+  whole CURRENT suite and preserves captured callbacks;replay restores only exact
+  updated receipt literals. Current raw suite hashes and historical prefixes are
+  reported separately. Two stale duplicate script-reader failures retained;
+  both recovered by reusing existing five-transition reader,not relaxed checks.
+  Logs readonly-append-{benchmark-owners,consumer-reader,owning-restoration,
+  library-members-receipts,backing-transition-receipts,text-backing-reader-recovered}
+  -20261020. No full export/browser acceptance follows;next is readonly registration.
 - Shared editing coverage:1734 authored exclusions already inspected;443 writable
   cases and134 readonly/disabled exclusions remain partial. Do not reopen the
   settled1734 exclusions or clear behavior work from attribute presence alone.

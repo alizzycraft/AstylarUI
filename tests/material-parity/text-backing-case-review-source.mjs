@@ -11,6 +11,16 @@ export const filledFieldStructureReview='f471932bd9ed51a2df35d533632acafc5e4788d
 export const chipPaintReview='868daaecb79c16d632701361c4303197f5d2760aec70f4cdd5d138840decabe5';
 export const chipGraphicReview='e837c58e3b9c0594f6003a6001a03cb12b4fa875403db08724e9c9defb329854';
 const hash=b=>createHash('sha256').update(b).digest('hex');
+export function restoreInputBoundaryReadonlyAppend(source){
+  const text=source.toString().replaceAll('\r\n','\n');
+  const previous='171bf9fae8fe2e701f5a42d5eef896685085ef267200956729ab447e04a032d5';
+  if(hash(text)===previous)return text;
+  assert.equal(hash(text),'cdcfd338d0823fefaa780efbba5e500a78f952e745f1c0d6039f0c59a2e8cc50');
+  const start=text.indexOf("\ntest('public readonly keyboard mutation preserves equal inputs and binds current default owners'");
+  assert.ok(start>0);
+  assert.equal(hash(text.slice(start)),'0344aa16c76792afd9fab101e4f48a3bb03d1f958565efd1473d1fb3da74f69c');
+  assert.equal(hash(text.slice(0,start)),previous);return text.slice(0,start);
+}
 // Reuse the exact validated four-source boundary. The supplied session reader
 // observes every current byte, including the immutable boundary owner itself.
 export function createDividerReviewedBoundariesReader({root,read,reviewSha256}){
@@ -55,14 +65,7 @@ export function createTextBackingReviewReader({root,read,reviewSha256}){
   const policy='tests/material-parity/input-equivalence-policy.mjs',policyText=read(path.resolve(root,policy),'utf8');
   bind(policy,policyText,restoreTextBackingPolicy(policyText),'da0c6f3359f1146b07a9cd1f686c184df55185bbc0517c3a7df832f40e5c1512');
   const suite='tests/material-parity/input-boundary-evidence.spec.mjs',suiteCurrentText=read(path.resolve(root,suite),'utf8');
-  let suiteText=suiteCurrentText;
-  if(hash(suiteText)==='cdcfd338d0823fefaa780efbba5e500a78f952e745f1c0d6039f0c59a2e8cc50'){
-    // Exact append-only readonly proof; retain all original bodies and anchors.
-    const start=suiteText.indexOf("\ntest('public readonly keyboard mutation preserves equal inputs and binds current default owners'");
-    assert.ok(start>0);
-    assert.equal(hash(suiteText.slice(start)),'0344aa16c76792afd9fab101e4f48a3bb03d1f958565efd1473d1fb3da74f69c');
-    suiteText=suiteText.slice(0,start);
-  }
+  const suiteText=restoreInputBoundaryReadonlyAppend(suiteCurrentText);
   assert.equal(hash(suiteText),'171bf9fae8fe2e701f5a42d5eef896685085ef267200956729ab447e04a032d5');
   const suiteAst=ts.createSourceFile(suite,suiteText,99,true,ts.ScriptKind.JS);
   const addition=suiteAst.statements.filter(n=>ts.isExpressionStatement(n)&&ts.isCallExpression(n.expression)
@@ -72,15 +75,21 @@ export function createTextBackingReviewReader({root,read,reviewSha256}){
     '9ef883389c3aa8811d3a0a4756bc9e6f7cce82158c62ea453c08b4bb654c6367');
   const helper='tests/material-parity/semantic-text-transform-registration.mjs',helperText=read(path.resolve(root,helper),'utf8');
   let reviewedHelperText=helperText,replayRestorationBlock;
-  if(hash(helperText)==='141bc88ae07fda6194f856f55dd374d9116be7b92e3f2983aa25923dd88cac72'){
+  if(hash(reviewedHelperText)==='0ad29fca2d503298da8e397dcedba8648e1951a104a9710fe64c9a567e7c1559'){
+    for(const [current,previous]of [
+      ['fc3f20524e782e645d3ecb086cfbba47496e41b2451443a97216ba66fe90eaff','35e9feec3e009b354fc999444551474b47153e4e979fe895df222c40ca7b0689'],
+      ['770dc607ca140b8938afd8f4ad8409739a1d09e8ce6ed6ee7dbadb5c80308678','cdc254af1d25ca47d00b016279c2a14ea8268d3f13e547602a3ac8be027af49d'],
+    ]){assert.equal(reviewedHelperText.split(current).length,2);reviewedHelperText=reviewedHelperText.replace(current,previous);}
+  }
+  if(hash(reviewedHelperText)==='141bc88ae07fda6194f856f55dd374d9116be7b92e3f2983aa25923dd88cac72'){
     // Only later benchmark historical-replay accounting is removed. No policy,
     // producer,actions or original helper statement is treated as equivalent by name.
-    const start=helperText.indexOf('    const focusStart =');
-    const end=helperText.indexOf('    assert.equal(restored.split(importLine).length, 2);',start);
+    const start=reviewedHelperText.indexOf('    const focusStart =');
+    const end=reviewedHelperText.indexOf('    assert.equal(restored.split(importLine).length, 2);',start);
     assert.ok(start>0&&end>start);
-    assert.equal(hash(helperText.slice(start,end)),'c679fe6a57ab2e3734e97f3ca855c9e68b2b7ad6b35c6143f767d294b6b5bf88');
-    replayRestorationBlock=helperText.slice(start,end);
-    reviewedHelperText=helperText.slice(0,start)+helperText.slice(end);
+    assert.equal(hash(reviewedHelperText.slice(start,end)),'c679fe6a57ab2e3734e97f3ca855c9e68b2b7ad6b35c6143f767d294b6b5bf88');
+    replayRestorationBlock=reviewedHelperText.slice(start,end);
+    reviewedHelperText=reviewedHelperText.slice(0,start)+reviewedHelperText.slice(end);
   }
   assert.equal(hash(reviewedHelperText),'4a1160686d55a5a27d722a55f7ddee6cd6a8674dec4cc381391d76965d69cd16');
   const ast=ts.createSourceFile(helper,reviewedHelperText,99,true,ts.ScriptKind.JS),ranges=[];
@@ -102,11 +111,17 @@ export function createTextBackingReviewReader({root,read,reviewSha256}){
     // Reuse the exact guarded support reversal already executed by the existing
     // benchmark reader. This stops BEFORE its older registration-header reversal.
     const benchmark='tests/material-parity/benchmark-config.spec.mjs';
-    const benchmarkText=read(path.resolve(root,benchmark),'utf8');
+    const benchmarkCurrentText=read(path.resolve(root,benchmark),'utf8');
+    let benchmarkText=benchmarkCurrentText;
+    if(hash(benchmarkText)==='cba155304dfc1024fad3224789ed032ef8df5885b4367c9664e472a63772cf10'){
+      const current='cdcfd338d0823fefaa780efbba5e500a78f952e745f1c0d6039f0c59a2e8cc50';
+      assert.equal(benchmarkText.split(current).length,3);
+      benchmarkText=benchmarkText.replaceAll(current,'171bf9fae8fe2e701f5a42d5eef896685085ef267200956729ab447e04a032d5');
+    }
     assert.equal(hash(benchmarkText),'a270e3d3330d361512593efa60f69771c71709f70f2f679c8787f186ceb275d0');
     const originalBenchmark=new Function('assert','digest','restored',
       replayRestorationBlock+'\nreturn restored;')(assert,hash,benchmarkText);
-    bind(benchmark,benchmarkText,originalBenchmark,'e74ef1d5d42b3534ed33396347e67eea6beb8625a7c9dccd18c9c51142ca88b4');
+    bind(benchmark,benchmarkCurrentText,originalBenchmark,'e74ef1d5d42b3534ed33396347e67eea6beb8625a7c9dccd18c9c51142ca88b4');
   }
   return {
     read(file,...args){const actual=read(file,...args),old=restored.get(path.resolve(file));
