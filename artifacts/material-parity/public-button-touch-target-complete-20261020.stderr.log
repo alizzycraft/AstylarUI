@@ -1,0 +1,126 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Public boundary controls failed;retain the complete failing matrix
++ actual - expected
+
++ [
++   {
++     dpr: 1,
++     error: 'AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n' +
++       '\n' +
++       '1 !== 0\n',
++     mode: 'astylar',
++     parentClicks: 1,
++     point: {
++       name: 'far-above8',
++       x: 106,
++       y: 40
++     },
++     translated: false,
++     variant: 'touch-centered'
++   },
++   {
++     dpr: 1,
++     error: 'AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n' +
++       '\n' +
++       '1 !== 0\n',
++     mode: 'astylar',
++     parentClicks: 1,
++     point: {
++       name: 'far-above8',
++       x: 170,
++       y: 80
++     },
++     translated: true,
++     variant: 'touch-centered'
++   },
++   {
++     dpr: 2,
++     error: 'AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n' +
++       '\n' +
++       '1 !== 0\n',
++     mode: 'astylar',
++     parentClicks: 1,
++     point: {
++       name: 'far-above8',
++       x: 106,
++       y: 40
++     },
++     translated: false,
++     variant: 'touch-centered'
++   },
++   {
++     dpr: 2,
++     error: 'AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n' +
++       '\n' +
++       '1 !== 0\n',
++     mode: 'astylar',
++     parentClicks: 1,
++     point: {
++       name: 'far-above8',
++       x: 170,
++       y: 80
++     },
++     translated: true,
++     variant: 'touch-centered'
++   }
++ ]
+- []
+
+    at file:///D:/dev/github/AstylarUI-audit-integration/scripts/audit-public-button-touch-target.mjs:133:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [
+    {
+      mode: 'astylar',
+      dpr: 1,
+      translated: false,
+      variant: 'touch-centered',
+      point: { name: 'far-above8', x: 106, y: 40 },
+      parentClicks: 1,
+      error: 'AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n' +
+        '\n' +
+        '1 !== 0\n'
+    },
+    {
+      mode: 'astylar',
+      dpr: 1,
+      translated: true,
+      variant: 'touch-centered',
+      point: { name: 'far-above8', x: 170, y: 80 },
+      parentClicks: 1,
+      error: 'AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n' +
+        '\n' +
+        '1 !== 0\n'
+    },
+    {
+      mode: 'astylar',
+      dpr: 2,
+      translated: false,
+      variant: 'touch-centered',
+      point: { name: 'far-above8', x: 106, y: 40 },
+      parentClicks: 1,
+      error: 'AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n' +
+        '\n' +
+        '1 !== 0\n'
+    },
+    {
+      mode: 'astylar',
+      dpr: 2,
+      translated: true,
+      variant: 'touch-centered',
+      point: { name: 'far-above8', x: 170, y: 80 },
+      parentClicks: 1,
+      error: 'AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n' +
+        '\n' +
+        '1 !== 0\n'
+    }
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.22.3

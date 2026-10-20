@@ -1,0 +1,297 @@
+{
+  "producerArgs": [
+    "-e",
+    "const fs=require(\"fs\"),c=require(\"crypto\"),a=require(\"assert/strict\"),h=v=>c.createHash(\"sha256\").update(v).digest(\"hex\"),dir=\"artifacts/material-parity/public-button-touch-target-complete-20261020\",file=dir+\"/latest-report.json\",bytes=fs.readFileSync(file),r=JSON.parse(bytes),p=r.provenance; a.equal(r.accepted,false);a.equal(r.captures.length,32);a.deepEqual(r.errors,[]);a.equal(r.boundaryFailures.length,4);a.equal(h(fs.readFileSync(dir+\"/audit.js\")),p.bundleSha256);a.equal(h(fs.readFileSync(p.producer.file)),p.producer.sha256);for(const x of p.bundleInputs)a.equal(h(fs.readFileSync(x.file)),x.sha256,x.file);for(const o of p.overlays){a.equal(h(o.compiledSource),o.compiledSha256);a.equal(h(fs.readFileSync(o.file)),o.originalSha256);a.equal(p.bundleInputs.find(x=>x.file===o.file).compiledOverlaySha256,o.compiledSha256);}const pairs=new Map;for(const x of r.captures){a.equal(x.disposed.disposed,true);const key=JSON.stringify([x.dpr,x.translated,x.variant]);const pair=pairs.get(key)??{};a.equal(pair[x.mode],undefined);pair[x.mode]=x;pairs.set(key,pair);}let mismatches=0;const summary=[];for(const [key,pair]of pairs){a.deepEqual(pair.reference.initial.site,pair.astylar.initial.site);const native=pair.reference.trials.map(t=>t.parentClicks),actual=pair.astylar.trials.map(t=>t.parentClicks),variant=pair.reference.variant;a.deepEqual(native,variant===\"plain\"?[0,0,1,0,0]:[1,1,1,0,0]);a.deepEqual(actual,variant===\"plain\"?[0,0,1,0,0]:variant===\"touch-centered\"?[1,0,1,1,0]:[1,1,1,0,0]);mismatches+=native.filter((n,i)=>n!==actual[i]).length;summary.push({key,native,actual});}a.equal(pairs.size,16);a.equal(mismatches,8);a.ok(r.boundaryFailures.every(x=>x.mode===\"astylar\"&&x.variant===\"touch-centered\"&&x.point.name===\"far-above8\"));const oldFile=\"artifacts/material-parity/public-button-touch-target-20261020/latest-report.json\",old=JSON.parse(fs.readFileSync(oldFile));a.equal(h(fs.readFileSync(\"artifacts/material-parity/public-button-touch-target-20261020/original-producer.mjs\")),old.provenance.producer.sha256);const materialFile=\"artifacts/material-parity/button-paired-touch-target-20261020.log\",material=JSON.parse(fs.readFileSync(materialFile));a.deepEqual(material.captures[0].trials.map(t=>t.buttonClickCount),[1,1,1,0,0]);a.deepEqual(material.captures[1].trials.map(t=>t.buttonClickCount),[0,0,1,0,0]);console.log(JSON.stringify({producerArgs:process.execArgv,completeCapture:{file,sha256:h(bytes)},bundleInputsVerified:p.bundleInputs.length,overlayInputs:2,pairedCases:pairs.size,trustedClickBoundaries:160,equalInputHitMismatches:mismatches,strictFarOutsideAssertionFailures:r.boundaryFailures.length,summary,originalPositiveProducerRecovered:true,materialPair:{file:materialFile,sha256:h(fs.readFileSync(materialFile))},existingFinding:\"core-transform-translation-discards-css-units\",scope:\"Complete failing matrix authenticated,not made passing. Direct-pixel and native-centered literal-pixel controls agree;native-centered percentage variant has8 paired hit differences across4contexts. No renderer/fixture changes,other cases or full audit acceptance.\"},null,2));"
+  ],
+  "completeCapture": {
+    "file": "artifacts/material-parity/public-button-touch-target-complete-20261020/latest-report.json",
+    "sha256": "92031c0f08e2b84e938744e2fe6128254574b0247281e3a7e906f39def3c35da"
+  },
+  "bundleInputsVerified": 2517,
+  "overlayInputs": 2,
+  "pairedCases": 16,
+  "trustedClickBoundaries": 160,
+  "equalInputHitMismatches": 8,
+  "strictFarOutsideAssertionFailures": 4,
+  "summary": [
+    {
+      "key": "[1,false,\"plain\"]",
+      "native": [
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "actual": [
+        0,
+        0,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "key": "[1,false,\"touch\"]",
+      "native": [
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "actual": [
+        1,
+        1,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "key": "[1,false,\"touch-centered\"]",
+      "native": [
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "actual": [
+        1,
+        0,
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "key": "[1,false,\"touch-centered-px\"]",
+      "native": [
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "actual": [
+        1,
+        1,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "key": "[1,true,\"plain\"]",
+      "native": [
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "actual": [
+        0,
+        0,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "key": "[1,true,\"touch\"]",
+      "native": [
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "actual": [
+        1,
+        1,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "key": "[1,true,\"touch-centered\"]",
+      "native": [
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "actual": [
+        1,
+        0,
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "key": "[1,true,\"touch-centered-px\"]",
+      "native": [
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "actual": [
+        1,
+        1,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "key": "[2,false,\"plain\"]",
+      "native": [
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "actual": [
+        0,
+        0,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "key": "[2,false,\"touch\"]",
+      "native": [
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "actual": [
+        1,
+        1,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "key": "[2,false,\"touch-centered\"]",
+      "native": [
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "actual": [
+        1,
+        0,
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "key": "[2,false,\"touch-centered-px\"]",
+      "native": [
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "actual": [
+        1,
+        1,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "key": "[2,true,\"plain\"]",
+      "native": [
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "actual": [
+        0,
+        0,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "key": "[2,true,\"touch\"]",
+      "native": [
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "actual": [
+        1,
+        1,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "key": "[2,true,\"touch-centered\"]",
+      "native": [
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "actual": [
+        1,
+        0,
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "key": "[2,true,\"touch-centered-px\"]",
+      "native": [
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "actual": [
+        1,
+        1,
+        1,
+        0,
+        0
+      ]
+    }
+  ],
+  "originalPositiveProducerRecovered": true,
+  "materialPair": {
+    "file": "artifacts/material-parity/button-paired-touch-target-20261020.log",
+    "sha256": "c207422cc32a5553249c698c5cfc0cf82f19c700424e15563edb8dfc1926d9a7"
+  },
+  "existingFinding": "core-transform-translation-discards-css-units",
+  "scope": "Complete failing matrix authenticated,not made passing. Direct-pixel and native-centered literal-pixel controls agree;native-centered percentage variant has8 paired hit differences across4contexts. No renderer/fixture changes,other cases or full audit acceptance."
+}

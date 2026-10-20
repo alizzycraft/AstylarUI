@@ -2,7 +2,52 @@
 
 ## Current audit pointer — October20
 
-Current conclusions only;earlier next/live statements in chronology are historical.
+Current conclusions only;earlier next/live statements in retained detail are historical.
+
+- LIVE export:session31650,worker12284,launcher21136,started at sourced7b5e353.
+  Poll this same confirmed handle;do not restart quiet work. Logs:divider-property-
+  coherent-export-20261020 stdout/stderr. Consumed sources/evidence remain frozen;
+  subsequent touch diagnostics are separate,not inputs to this export.
+- Accepted audit remainsb6610e71/indexd0e7623d/review736e685c:170 findings,
+  226 proofs,756 source fingerprints;36 families/2311 cases (436static/1875interaction).
+  All2311 remain partial/current rendering unverified. No criteria/gates waived.
+- Selected433b794f review adds25 bounded children across24 divider cases.
+  Exact predecessor recovery,15217 dependency checks,12 current-source checks,
+  three selection/owning tests and source/proof/finding section reconciliation pass.
+  It is NOT canonical until export,candidate conservation,independent cold replay
+  and import complete. Original736e/b661 and all failure evidence remain retained.
+- Divider supplement limits:32 natural line boxes cover16 STATIC native contexts,
+  not interaction cases or candidate paint. Clamp/flex checks cover96 owners in24
+  retained cases;normal/stretch alignment and complete owner mapping remain open.
+- New touch evidence (OUTSIDE433b):one fresh Material primary-button pair activates
+  outside the visible40px host only on native;its active48px descendant is omitted
+  from candidate authoring. Plain/direct-pixel equal-input public controls pass at
+  DPR1/2 and translated surfaces. Actual native-centered percentage CSS does NOT:
+  the full160-boundary/32-capture public matrix records8 paired hit differences
+  and4 strict far-outside assertion failures;exit1,not a passing matrix.
+- Root link is the EXISTING documented limitation
+  core-transform-translation-discards-css-units:current,installed and actual public
+  bundle parsers return-50 for-50%,not the48px reference-box displacement-24.
+  Otherwise matched top50%/translateY(-24px) controls pass. Independent verification
+  authenticates2517 input receipts,two in-memory diagnostic overlays and all paired
+  inputs. This adds interaction impact to the existing limitation,not a duplicate
+  core finding or a new world-coordinate diagnosis. No pixel-position replacement
+  may be shipped as a fixture fix;preserve original CSS and repair core units first.
+- Evidence:button-paired-touch-target-20261020.log;public-button-touch-target-
+  complete-20261020/latest-report.json SHA92031c0f08e2b84e938744e2fe6128254574b0247281e3a7e906f39def3c35da;
+  button-touch-transform-parser-binding and button-touch-target-independent-
+  20261020 logs. Earlier successful control and both first-failure captures/sources
+  remain distinct. The failed boundary is now retained,not lost on assertion exit.
+- Next:finish the running publication milestone;then bound/register the new shared
+  touch-descendant input omission and this existing unit limitation's interaction
+  impact without generalizing the single Material case. Continue component-owner/
+  generated-descendant mapping across families,AX and interaction ownership.
+  Shared frame/headings already map all2311 cases;do not repeat that survey.
+  Full unfiltered audit/browser/unit/build/packed-consumer/release gates still apply.
+
+## October20 retained detail — bounded evidence and earlier steps
+
+Earlier next/live statements below are retained history;use the current pointer above.
 
 - LIVE canonical export for433b:unified execution session31650,started after
   pushed sourced7b5e353. Exact named complete-baseline launcher;progress enabled.

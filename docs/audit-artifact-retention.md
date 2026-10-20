@@ -2,6 +2,31 @@
 
 ## Current versus historical evidence
 
+Retain button-paired-touch-target-20261020.log/empty stderr (SHA256
+c207422cc32a5553249c698c5cfc0cf82f19c700424e15563edb8dfc1926d9a7) and all four
+public-button-touch-target[-centered/-centered-boundary/-complete]-20261020 directories
+with their external stdout/stderr. These are distinct control/failure observations,
+not successful scratch. First control has16 captures/80 boundaries and its exact
+original-producer.mjs. Centered and boundary failures retain failed-producer.mjs;
+the latter retains the actual failing point and preceding trials. Complete matrix
+has32 captures/160 boundaries,8 paired differences,4 failed strict assertions and
+terminal exit1. Its latest-report.json SHA256 is
+92031c0f08e2b84e938744e2fe6128254574b0247281e3a7e906f39def3c35da.
+Do not describe it as passing because collection completed. Original assertions
+remain and the final exit fails;collecting all boundaries preserves later controls.
+Retain complete/producer.mjs,all bundles/provenance and failure.json records.
+Scoped -text attributes preserve bundle and original-source bytes across checkout.
+Retain button-touch-transform-parser-binding-20261020 log pair (SHA256
+bf992b30d0e82b7ac4dc60577cf031cd7982aac2e084e72e29fb17c8bc066288) and
+button-touch-target-independent-20261020 log pair (SHA256
+e40f456effff1ee6d7ed1970f27555a319060fb182dd6ad032a3ff08ef19242e).
+Independent verification authenticates2517 inputs,compiled overlays,paired input
+equality,original positive producer and all actual hit counts. Existing CSS unit
+limitation is linked,not duplicated or reclassified. Public centered literal-pixel
+variants are diagnostics ONLY,not permission to replace original Material CSS.
+No source/fixture edits occurred in the maintained page/input files. These new
+proofs are separate from the running frozen433b export and grant no case closure.
+
 Retain button-native-touch-target-20261020.log/failed stderr and failed-source.mjs,
 button-native-touch-target-recovered-20261020.log/empty stderr,and button-native-
 touch-target-verification-20261020.log/empty stderr. Recovered SHA256

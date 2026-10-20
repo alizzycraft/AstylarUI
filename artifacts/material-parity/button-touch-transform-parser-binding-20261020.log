@@ -1,0 +1,48 @@
+{
+  "producerArgs": [
+    "--input-type=module",
+    "-e",
+    "import fs from \"node:fs\";import ts from \"typescript\";import a from \"node:assert/strict\";import {createHash} from \"node:crypto\";const h=v=>createHash(\"sha256\").update(v).digest(\"hex\"),receipt=file=>({file,sha256:h(fs.readFileSync(file))}),dir=\"artifacts/material-parity/public-button-touch-target-complete-20261020\",p=JSON.parse(fs.readFileSync(dir+\"/provenance.json\")),bundle=fs.readFileSync(dir+\"/audit.js\",\"utf8\");a.equal(h(bundle),p.bundleSha256);const current=\"src/app/services/dom/elements/css-transform.ts\",installed=\"examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/css-transform.js\";a.ok(p.bundleInputs.some(x=>x.file===installed));const sources=[{kind:\"current-transpiled\",file:current,source:ts.transpileModule(fs.readFileSync(current,\"utf8\"),{compilerOptions:{target:99,module:99}}).outputText},{kind:\"installed\",file:installed,source:fs.readFileSync(installed,\"utf8\")},{kind:\"served-public-bundle\",file:dir+\"/audit.js\",source:bundle}],traces=[];for(const s of sources){const ast=ts.createSourceFile(s.file,s.source,99,true,ts.ScriptKind.JS),functions=[];for(const name of [\"parseCssTransform\",\"parseAngle\"]){const found=[];function visit(n){if(ts.isFunctionDeclaration(n)&&n.name?.text===name)found.push(n);ts.forEachChild(n,visit);}visit(ast);a.equal(found.length,1,name);functions.push(found[0].getText(ast).replace(/^export /,\"\"));}const parse=new Function(functions.join(\"\\n\")+\";return parseCssTransform;\")();const percent=parse(\"translateY(-50%)\"),pixel=parse(\"translateY(-24px)\");a.equal(percent.translate.y,-50);a.equal(pixel.translate.y,-24);a.equal(parse(\"none\"),null);traces.push({kind:s.kind,input:receipt(s.file),functionSha256:h(functions.join(\"\\n\")),percentTranslate:percent.translate.y,literalTranslate:pixel.translate.y,referenceBoxParameter:false});}console.log(JSON.stringify({producerArgs:process.execArgv,bundleProvenance:receipt(dir+\"/provenance.json\"),traces,existingFinding:\"core-transform-translation-discards-css-units\",boundary:\"Pure extracted-function execution with actual current/installed/generated-bundle bytes;does not by itself establish complete paint or event behavior. The independent public matrix retains actual pointer outcomes. Existing documented unsupported-unit semantics finding is not duplicated.\"},null,2));"
+  ],
+  "bundleProvenance": {
+    "file": "artifacts/material-parity/public-button-touch-target-complete-20261020/provenance.json",
+    "sha256": "17e623a124405b7776c060e76c3e395f08c627d654427af9e3b3f760aa77c6dd"
+  },
+  "traces": [
+    {
+      "kind": "current-transpiled",
+      "input": {
+        "file": "src/app/services/dom/elements/css-transform.ts",
+        "sha256": "65fca50a260da0212bb1988969810b95dee2f9bafbf1a7a9ead830f8d2a57b5f"
+      },
+      "functionSha256": "4ae8dc38245688d58af4806cb775fa1a1d16412b90bf3bb04f1faf619652190f",
+      "percentTranslate": -50,
+      "literalTranslate": -24,
+      "referenceBoxParameter": false
+    },
+    {
+      "kind": "installed",
+      "input": {
+        "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/css-transform.js",
+        "sha256": "d53f4f12d24e4eec71eb54e714043fbf43811ad8de7944fca566bea93a320cc3"
+      },
+      "functionSha256": "4ae8dc38245688d58af4806cb775fa1a1d16412b90bf3bb04f1faf619652190f",
+      "percentTranslate": -50,
+      "literalTranslate": -24,
+      "referenceBoxParameter": false
+    },
+    {
+      "kind": "served-public-bundle",
+      "input": {
+        "file": "artifacts/material-parity/public-button-touch-target-complete-20261020/audit.js",
+        "sha256": "c0b6f3133f4be13589039b1b9fa07517cff552ee7dc56ab4b5d663ad80ab7aff"
+      },
+      "functionSha256": "6a5ba874a1c66502b25317e651e14712c8224d6bffddce8599dd531a1c8ce799",
+      "percentTranslate": -50,
+      "literalTranslate": -24,
+      "referenceBoxParameter": false
+    }
+  ],
+  "existingFinding": "core-transform-translation-discards-css-units",
+  "boundary": "Pure extracted-function execution with actual current/installed/generated-bundle bytes;does not by itself establish complete paint or event behavior. The independent public matrix retains actual pointer outcomes. Existing documented unsupported-unit semantics finding is not duplicated."
+}

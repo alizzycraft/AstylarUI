@@ -1,0 +1,684 @@
+{
+  "producerArgs": [
+    "--input-type=module",
+    "-e",
+    "\nimport assert from 'node:assert/strict';\nimport {readFileSync,existsSync} from 'node:fs';\nimport {createHash} from 'node:crypto';\nimport {createServer} from 'node:http';\nimport path from 'node:path';\nimport ts from 'typescript';\nimport {chromium} from 'playwright-core';\nimport {fingerprintDirectory} from './tests/material-parity/run-checkpoint.mjs';\nconst hash=v=>createHash('sha256').update(v).digest('hex'),receipt=file=>({file,sha256:hash(readFileSync(file))});\nconst helperFile='tests/material-parity/sort-focus-structure.spec.mjs';\nconst ast=ts.createSourceFile(helperFile,readFileSync(helperFile,'utf8'),99,true);\nconst helper=ast.statements.find(n=>ts.isFunctionDeclaration(n)&&n.name?.text==='withFrozenShowcase').getText(ast);\nassert.equal(hash(helper),'603ac9ca88b9bf2e3443f8be65f125d39002e1ca4e5157487d9ac86ed7d2527f');\nconst withFrozen=new Function('assert','path','readFileSync','existsSync','createServer','chromium','fingerprintDirectory',helper+';return withFrozenShowcase;')(assert,path,readFileSync,existsSync,createServer,chromium,fingerprintDirectory);\n\nconst checkpointFile='artifacts/material-parity/divider-alignment-provenance-20261015/checkpoint/manifest.json';\nconst captures=[];\nawait withFrozen(async(browser,baseUrl)=>{\n for(const side of ['reference','astylar']){\n const context=await browser.newContext({viewport:{width:1440,height:1000},deviceScaleFactor:1});\n try{\n  const page=await context.newPage(),errors=[];\n  page.on('pageerror',e=>errors.push(e.message));\n  await page.goto(baseUrl+'/'+side+'/button?benchmark=1&profile=light');\n  if(side==='astylar'){\n   await page.waitForFunction(()=>typeof window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure==='function');\n   await page.evaluate(()=>window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());\n  }else await page.waitForFunction(()=>typeof window.__MATERIAL_SHOWCASE_COMMAND__==='function');\n  await page.evaluate(async()=>{await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});\n  const initial=await page.evaluate(side=>{\n   window.__BUTTON_EDGE_BROWSER_CLICKS__=[];\n   document.addEventListener('click',e=>window.__BUTTON_EDGE_BROWSER_CLICKS__.push({trusted:e.isTrusted,x:e.clientX,y:e.clientY,target:e.target.tagName,buttonId:e.target.closest('button')?.id??null}),true);\n   if(side==='reference'){\n    const button=document.querySelector('#button-primary'),r=button.getBoundingClientRect();\n    return {box:{left:r.left,top:r.top,right:r.right,bottom:r.bottom,width:r.width,height:r.height}};\n   }\n   const b=window.__ASTYLAR_MATERIAL_BENCHMARK__,m=b.measure(['button-primary']);\n   const canvas=document.querySelector('canvas'),r=canvas.getBoundingClientRect(),box=m.elements['button-primary'].borderBox;\n   const node=m.inputTree.nodes.find(n=>n.authored?.id==='button-primary');\n   return {box:{left:r.left+box.left,top:r.top+box.top,right:r.left+box.right,bottom:r.top+box.bottom,width:box.width,height:box.height},\n    canvas:{left:r.left,top:r.top,width:r.width,height:r.height},measuredBorderBox:box,authored:node.authored,\n    authoredChildren:m.inputTree.nodes.filter(n=>n.parent===node.key).map(n=>n.authored),state:b.state(),diagnostics:m.diagnostics};\n  },side);\n  assert.ok(Math.abs(initial.box.height-40)<.01);\n  const x=(initial.box.left+initial.box.right)/2;\n  const points=[{name:'above2',x,y:initial.box.top-2},{name:'below2',x,y:initial.box.bottom+2},\n   {name:'center',x,y:initial.box.top+initial.box.height/2},{name:'far-above8',x,y:initial.box.top-8},{name:'far-below8',x,y:initial.box.bottom+8}];\n  const trials=[];\n  for(const point of points){\n   await page.mouse.move(5,5);\n   await page.evaluate(side=>{window.__BUTTON_EDGE_BROWSER_CLICKS__=[];if(side==='astylar')window.__ASTYLAR_MATERIAL_BENCHMARK__.clearEvents();},side);\n   await page.mouse.click(point.x,point.y);\n   if(side==='astylar')await page.evaluate(()=>window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());\n   const result=await page.evaluate(side=>({browser:window.__BUTTON_EDGE_BROWSER_CLICKS__,events:side==='astylar'?window.__ASTYLAR_MATERIAL_BENCHMARK__.events():[]}),side);\n   assert.equal(result.browser.length,1);assert.equal(result.browser[0].trusted,true);\n   const buttonClicks=side==='reference'?result.browser.filter(e=>e.buttonId==='button-primary'):result.events.filter(e=>e.type==='click'&&e.targetId==='button-primary');\n   if(point.name==='center')assert.equal(buttonClicks.length,1);\n   if(point.name.startsWith('far-'))assert.equal(buttonClicks.length,0);\n   if(side==='reference'&&['above2','below2'].includes(point.name))assert.equal(buttonClicks.length,1);\n   trials.push({point,buttonClickCount:buttonClicks.length,...result});\n  }\n  assert.deepEqual(errors,[]);\n  captures.push({side,runtime:{actualBrowser:browser.version(),historicalBrowserReplay:false},initial,trials,runtimeErrors:errors});\n }finally{await context.close();}\n }\n},{},{checkpointFile});\nconsole.log(JSON.stringify({producerArgs:process.execArgv,helper:{file:helperFile,functionSha256:hash(helper)},checkpoint:receipt(checkpointFile),captures,\n conclusion:'Paired fresh trusted pointer boundaries observe actual button activation outside and inside measured visible hosts,with center and far-outside controls. Inspect trial counts before assigning cause.',\n boundary:'One primary button light/desktopDPR1 context on frozen served build;newer browser patch,not historical replay or all variants. Source/fixture unchanged. An unequal-input hit difference does not by itself diagnose core;equal-input public reproduction remains required.'},null,2));\n"
+  ],
+  "helper": {
+    "file": "tests/material-parity/sort-focus-structure.spec.mjs",
+    "functionSha256": "603ac9ca88b9bf2e3443f8be65f125d39002e1ca4e5157487d9ac86ed7d2527f"
+  },
+  "checkpoint": {
+    "file": "artifacts/material-parity/divider-alignment-provenance-20261015/checkpoint/manifest.json",
+    "sha256": "62829d76ac8a7345984bf0e3edab45f27a179afe746faabf658172b77ddae07d"
+  },
+  "captures": [
+    {
+      "side": "reference",
+      "runtime": {
+        "actualBrowser": "155.0.8059.80",
+        "historicalBrowserReplay": false
+      },
+      "initial": {
+        "box": {
+          "left": 65,
+          "top": 181.078125,
+          "right": 205.78125,
+          "bottom": 221.078125,
+          "width": 140.78125,
+          "height": 40
+        }
+      },
+      "trials": [
+        {
+          "point": {
+            "name": "above2",
+            "x": 135.390625,
+            "y": 179.078125
+          },
+          "buttonClickCount": 1,
+          "browser": [
+            {
+              "trusted": true,
+              "x": 135,
+              "y": 179,
+              "target": "SPAN",
+              "buttonId": "button-primary"
+            }
+          ],
+          "events": []
+        },
+        {
+          "point": {
+            "name": "below2",
+            "x": 135.390625,
+            "y": 223.078125
+          },
+          "buttonClickCount": 1,
+          "browser": [
+            {
+              "trusted": true,
+              "x": 135,
+              "y": 223,
+              "target": "SPAN",
+              "buttonId": "button-primary"
+            }
+          ],
+          "events": []
+        },
+        {
+          "point": {
+            "name": "center",
+            "x": 135.390625,
+            "y": 201.078125
+          },
+          "buttonClickCount": 1,
+          "browser": [
+            {
+              "trusted": true,
+              "x": 135,
+              "y": 201,
+              "target": "SPAN",
+              "buttonId": "button-primary"
+            }
+          ],
+          "events": []
+        },
+        {
+          "point": {
+            "name": "far-above8",
+            "x": 135.390625,
+            "y": 173.078125
+          },
+          "buttonClickCount": 0,
+          "browser": [
+            {
+              "trusted": true,
+              "x": 135,
+              "y": 173,
+              "target": "SECTION",
+              "buttonId": null
+            }
+          ],
+          "events": []
+        },
+        {
+          "point": {
+            "name": "far-below8",
+            "x": 135.390625,
+            "y": 229.078125
+          },
+          "buttonClickCount": 0,
+          "browser": [
+            {
+              "trusted": true,
+              "x": 135,
+              "y": 229,
+              "target": "SECTION",
+              "buttonId": null
+            }
+          ],
+          "events": []
+        }
+      ],
+      "runtimeErrors": []
+    },
+    {
+      "side": "astylar",
+      "runtime": {
+        "actualBrowser": "155.0.8059.80",
+        "historicalBrowserReplay": false
+      },
+      "initial": {
+        "box": {
+          "left": 64.99999999998818,
+          "top": 181.07998657225374,
+          "right": 206.00000000001182,
+          "bottom": 221.0799865722775,
+          "width": 141.00000000002365,
+          "height": 40.00000000002376
+        },
+        "canvas": {
+          "left": 0,
+          "top": 0,
+          "width": 1440,
+          "height": 1000
+        },
+        "measuredBorderBox": {
+          "left": 64.99999999998818,
+          "top": 181.07998657225374,
+          "right": 206.00000000001182,
+          "bottom": 221.0799865722775,
+          "width": 141.00000000002365,
+          "height": 40.00000000002376
+        },
+        "authored": {
+          "type": "button",
+          "id": "button-primary",
+          "class": "material-button",
+          "value": "Primary action"
+        },
+        "authoredChildren": [],
+        "state": {
+          "disabled": false,
+          "selected": true,
+          "error": false,
+          "open": false,
+          "sliderValue": 65,
+          "sliderStart": 30,
+          "pageIndex": 0,
+          "sortDirection": "asc",
+          "chips": [
+            "Angular",
+            "Astylar"
+          ],
+          "chipSelections": [
+            true,
+            true
+          ]
+        },
+        "diagnostics": {
+          "surface": {
+            "messages": [],
+            "session": {
+              "revision": 2,
+              "status": "idle",
+              "pendingReasons": [],
+              "cleanupRegistrations": 9
+            },
+            "resources": {
+              "meshes": 18,
+              "materials": 20,
+              "textures": 5
+            },
+            "interaction": {
+              "pointerObservers": 1,
+              "wheelHandlers": 1,
+              "keyboardListeners": 2,
+              "handlers": 1,
+              "focusVisible": false,
+              "navigationOutcomes": [],
+              "disposed": false
+            },
+            "scrolling": {
+              "containers": {},
+              "disposed": false
+            },
+            "semantics": {
+              "nodes": 8,
+              "eventRegistrations": 5,
+              "observerRegistrations": 0,
+              "identities": {
+                "totalNodes": 8,
+                "uniqueAuthoredIds": 8,
+                "anonymousNodes": 0,
+                "duplicateAuthoredIds": [],
+                "duplicateNodes": 0
+              },
+              "reconciliation": {
+                "reused": 8,
+                "created": 0,
+                "replaced": 0,
+                "disposed": 0
+              }
+            },
+            "reconciliation": {
+              "strategy": "rebuild",
+              "identities": {
+                "totalNodes": 8,
+                "uniqueAuthoredIds": 8,
+                "anonymousNodes": 0,
+                "duplicateAuthoredIds": [],
+                "duplicateNodes": 0
+              },
+              "last": {
+                "reused": 8,
+                "created": 0,
+                "replaced": 0,
+                "disposed": 0,
+                "reconciled": 8,
+                "reflowed": 8
+              },
+              "totals": {
+                "reused": 8,
+                "created": 8,
+                "replaced": 0,
+                "disposed": 0,
+                "reconciled": 16,
+                "reflowed": 16
+              }
+            },
+            "plugins": {
+              "sealed": true,
+              "pluginIds": [
+                "astylar.core",
+                "showcase.material"
+              ],
+              "elementIds": [
+                "astylar.core:a",
+                "astylar.core:abbr",
+                "astylar.core:address",
+                "astylar.core:area",
+                "astylar.core:article",
+                "astylar.core:aside",
+                "astylar.core:audio",
+                "astylar.core:b",
+                "astylar.core:blockquote",
+                "astylar.core:br",
+                "astylar.core:button",
+                "astylar.core:canvas",
+                "astylar.core:caption",
+                "astylar.core:cite",
+                "astylar.core:code",
+                "astylar.core:col",
+                "astylar.core:colgroup",
+                "astylar.core:datalist",
+                "astylar.core:dd",
+                "astylar.core:del",
+                "astylar.core:details",
+                "astylar.core:dfn",
+                "astylar.core:dialog",
+                "astylar.core:div",
+                "astylar.core:dl",
+                "astylar.core:dt",
+                "astylar.core:em",
+                "astylar.core:embed",
+                "astylar.core:fieldset",
+                "astylar.core:figcaption",
+                "astylar.core:figure",
+                "astylar.core:footer",
+                "astylar.core:form",
+                "astylar.core:h1",
+                "astylar.core:h2",
+                "astylar.core:h3",
+                "astylar.core:h4",
+                "astylar.core:h5",
+                "astylar.core:h6",
+                "astylar.core:header",
+                "astylar.core:hgroup",
+                "astylar.core:hr",
+                "astylar.core:i",
+                "astylar.core:iframe",
+                "astylar.core:img",
+                "astylar.core:input",
+                "astylar.core:ins",
+                "astylar.core:kbd",
+                "astylar.core:label",
+                "astylar.core:legend",
+                "astylar.core:li",
+                "astylar.core:main",
+                "astylar.core:map",
+                "astylar.core:mark",
+                "astylar.core:menu",
+                "astylar.core:nav",
+                "astylar.core:object",
+                "astylar.core:ol",
+                "astylar.core:optgroup",
+                "astylar.core:option",
+                "astylar.core:output",
+                "astylar.core:p",
+                "astylar.core:param",
+                "astylar.core:pre",
+                "astylar.core:q",
+                "astylar.core:s",
+                "astylar.core:samp",
+                "astylar.core:section",
+                "astylar.core:select",
+                "astylar.core:small",
+                "astylar.core:source",
+                "astylar.core:span",
+                "astylar.core:strike",
+                "astylar.core:strong",
+                "astylar.core:sub",
+                "astylar.core:summary",
+                "astylar.core:sup",
+                "astylar.core:table",
+                "astylar.core:tbody",
+                "astylar.core:td",
+                "astylar.core:textarea",
+                "astylar.core:tfoot",
+                "astylar.core:th",
+                "astylar.core:thead",
+                "astylar.core:tr",
+                "astylar.core:track",
+                "astylar.core:u",
+                "astylar.core:ul",
+                "astylar.core:var",
+                "astylar.core:video",
+                "astylar.core:wbr",
+                "showcase.material:check-mark",
+                "showcase.material:circular-progress",
+                "showcase.material:linear-progress",
+                "showcase.material:range-visual",
+                "showcase.material:sort-arrow",
+                "showcase.material:state-layer",
+                "showcase.material:tab-panel"
+              ],
+              "propertyIds": [
+                "showcase.material:indicator-color",
+                "showcase.material:state-layer-color",
+                "showcase.material:stroke-width",
+                "showcase.material:track-color"
+              ],
+              "rendererIds": [
+                "astylar.core:compatibility-renderer",
+                "showcase.material:check-mark-renderer",
+                "showcase.material:circular-progress-renderer",
+                "showcase.material:linear-progress-renderer",
+                "showcase.material:range-visual-renderer",
+                "showcase.material:sort-arrow-renderer",
+                "showcase.material:state-layer-renderer",
+                "showcase.material:tab-panel-renderer"
+              ],
+              "lifecycleIds": []
+            },
+            "pluginResources": {
+              "owners": 2,
+              "resources": 0,
+              "cleanups": 1,
+              "pending": 0
+            }
+          },
+          "camera": {
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": 866.0254037844387
+            },
+            "viewport": {
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 1000
+            }
+          },
+          "clearColor": "#FFFBFEFF",
+          "backgroundPick": {
+            "name": "page",
+            "metadata": {
+              "elementId": "page",
+              "cursor": "default"
+            }
+          }
+        }
+      },
+      "trials": [
+        {
+          "point": {
+            "name": "above2",
+            "x": 135.5,
+            "y": 179.07998657225374
+          },
+          "buttonClickCount": 0,
+          "browser": [
+            {
+              "trusted": true,
+              "x": 135,
+              "y": 179,
+              "target": "CANVAS",
+              "buttonId": null
+            }
+          ],
+          "events": [
+            {
+              "type": "pointerenter",
+              "targetId": "button-root",
+              "clientX": 135.5,
+              "localX": 99.5
+            },
+            {
+              "type": "pointermove",
+              "targetId": "button-root",
+              "clientX": 135.5,
+              "localX": 99.5
+            },
+            {
+              "type": "pointerdown",
+              "targetId": "button-root",
+              "clientX": 135.5,
+              "localX": 99.5
+            },
+            {
+              "type": "pointerup",
+              "targetId": "button-root",
+              "clientX": 135.5,
+              "localX": 99.5
+            },
+            {
+              "type": "click",
+              "targetId": "button-root",
+              "clientX": 135.5,
+              "localX": 99.5
+            }
+          ]
+        },
+        {
+          "point": {
+            "name": "below2",
+            "x": 135.5,
+            "y": 223.0799865722775
+          },
+          "buttonClickCount": 0,
+          "browser": [
+            {
+              "trusted": true,
+              "x": 135,
+              "y": 223,
+              "target": "CANVAS",
+              "buttonId": null
+            }
+          ],
+          "events": [
+            {
+              "type": "pointerenter",
+              "targetId": "button-root",
+              "clientX": 135.5,
+              "localX": 99.5
+            },
+            {
+              "type": "pointermove",
+              "targetId": "button-root",
+              "clientX": 135.5,
+              "localX": 99.5
+            },
+            {
+              "type": "pointerdown",
+              "targetId": "button-root",
+              "clientX": 135.5,
+              "localX": 99.5
+            },
+            {
+              "type": "pointerup",
+              "targetId": "button-root",
+              "clientX": 135.5,
+              "localX": 99.5
+            },
+            {
+              "type": "click",
+              "targetId": "button-root",
+              "clientX": 135.5,
+              "localX": 99.5
+            }
+          ]
+        },
+        {
+          "point": {
+            "name": "center",
+            "x": 135.5,
+            "y": 201.07998657226562
+          },
+          "buttonClickCount": 1,
+          "browser": [
+            {
+              "trusted": true,
+              "x": 135,
+              "y": 201,
+              "target": "CANVAS",
+              "buttonId": null
+            }
+          ],
+          "events": [
+            {
+              "type": "pointerenter",
+              "targetId": "button-root",
+              "clientX": 135.5,
+              "localX": 99.5
+            },
+            {
+              "type": "pointerenter",
+              "targetId": "button-content",
+              "clientX": 135.5,
+              "localX": 70.5
+            },
+            {
+              "type": "pointerenter",
+              "targetId": "button-primary",
+              "value": "Primary action",
+              "clientX": 135.5,
+              "localX": 70.5
+            },
+            {
+              "type": "pointermove",
+              "targetId": "button-primary",
+              "value": "Primary action",
+              "clientX": 135.5,
+              "localX": 70.5
+            },
+            {
+              "type": "pointerdown",
+              "targetId": "button-primary",
+              "value": "Primary action",
+              "clientX": 135.5,
+              "localX": 70.5
+            },
+            {
+              "type": "focus",
+              "targetId": "button-primary",
+              "value": "Primary action"
+            },
+            {
+              "type": "pointerup",
+              "targetId": "button-primary",
+              "value": "Primary action",
+              "clientX": 135.5,
+              "localX": 70.5
+            },
+            {
+              "type": "click",
+              "targetId": "button-primary",
+              "value": "Primary action",
+              "clientX": 135.5,
+              "localX": 70.5
+            }
+          ]
+        },
+        {
+          "point": {
+            "name": "far-above8",
+            "x": 135.5,
+            "y": 173.07998657225374
+          },
+          "buttonClickCount": 0,
+          "browser": [
+            {
+              "trusted": true,
+              "x": 135,
+              "y": 173,
+              "target": "CANVAS",
+              "buttonId": null
+            }
+          ],
+          "events": [
+            {
+              "type": "pointerenter",
+              "targetId": "button-root",
+              "clientX": 135.5,
+              "localX": 99.5
+            },
+            {
+              "type": "pointermove",
+              "targetId": "button-root",
+              "clientX": 135.5,
+              "localX": 99.5
+            },
+            {
+              "type": "pointerdown",
+              "targetId": "button-root",
+              "clientX": 135.5,
+              "localX": 99.5
+            },
+            {
+              "type": "blur",
+              "targetId": "button-primary",
+              "value": "Primary action"
+            },
+            {
+              "type": "pointerup",
+              "targetId": "button-root",
+              "clientX": 135.5,
+              "localX": 99.5
+            },
+            {
+              "type": "click",
+              "targetId": "button-root",
+              "clientX": 135.5,
+              "localX": 99.5
+            }
+          ]
+        },
+        {
+          "point": {
+            "name": "far-below8",
+            "x": 135.5,
+            "y": 229.0799865722775
+          },
+          "buttonClickCount": 0,
+          "browser": [
+            {
+              "trusted": true,
+              "x": 135,
+              "y": 229,
+              "target": "CANVAS",
+              "buttonId": null
+            }
+          ],
+          "events": [
+            {
+              "type": "pointerenter",
+              "targetId": "button-root",
+              "clientX": 135.5,
+              "localX": 99.5
+            },
+            {
+              "type": "pointermove",
+              "targetId": "button-root",
+              "clientX": 135.5,
+              "localX": 99.5
+            },
+            {
+              "type": "pointerdown",
+              "targetId": "button-root",
+              "clientX": 135.5,
+              "localX": 99.5
+            },
+            {
+              "type": "pointerup",
+              "targetId": "button-root",
+              "clientX": 135.5,
+              "localX": 99.5
+            },
+            {
+              "type": "click",
+              "targetId": "button-root",
+              "clientX": 135.5,
+              "localX": 99.5
+            }
+          ]
+        }
+      ],
+      "runtimeErrors": []
+    }
+  ],
+  "conclusion": "Paired fresh trusted pointer boundaries observe actual button activation outside and inside measured visible hosts,with center and far-outside controls. Inspect trial counts before assigning cause.",
+  "boundary": "One primary button light/desktopDPR1 context on frozen served build;newer browser patch,not historical replay or all variants. Source/fixture unchanged. An unequal-input hit difference does not by itself diagnose core;equal-input public reproduction remains required."
+}

@@ -1,1 +1,12 @@
 docs/evidence/material-divider-remount-initial.mjs.txt -text
+artifacts/material-parity/public-button-touch-target-20261020/original-producer.mjs -text
+artifacts/material-parity/public-button-touch-target-centered-20261020/failed-producer.mjs -text
+artifacts/material-parity/public-button-touch-target-centered-boundary-20261020/failed-producer.mjs -text
+artifacts/material-parity/public-button-touch-target-complete-20261020/producer.mjs -text
+artifacts/material-parity/public-button-touch-target-20261020/audit.js binary
+artifacts/material-parity/public-button-touch-target-centered-20261020/audit.js binary
+artifacts/material-parity/public-button-touch-target-centered-boundary-20261020/audit.js binary
+artifacts/material-parity/public-button-touch-target-complete-20261020/audit.js binary
+artifacts/material-parity/button-paired-touch-target-20261020.log -text
+artifacts/material-parity/button-touch-transform-parser-binding-20261020.log -text
+artifacts/material-parity/button-touch-target-independent-20261020.log -text
