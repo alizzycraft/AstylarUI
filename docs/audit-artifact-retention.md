@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Retain checkbox-checkmark-retained-inputs and checkbox-disabled-checkmark-token-
+20261020 log pairs. They authenticate all68 originalab42dbec checkbox cases/136
+trees,record native SVG unit conversion/current-only fixed path and eight active
+disabled token chains. Exact inline census producer retained. Disabled token log
+SHA1750461e2aafd8b9b6100799d3c81267e04be242d70f14cdf02d92f389a2b41f.
+No new
+capture,renderer/fixture change or canonical finding/case promotion. Queued owning
+proof/case integration must wait until frozen readonly publication completes.
+
 Readonly coherent export6487 is live (launcher26652/worker23464,16:02:52 local
 October20 after86065d0f),complete named baseline/e837 review. Retain readonly-
 coherent-export-20261020 log pair and frozen source/evidence inputs until terminal.

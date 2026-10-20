@@ -2,8 +2,45 @@
 
 ## Current audit pointer — October20
 
-This summary is current. The chronology below preserves earlier checkpoints and
-their receipts; older "next" or "live" statements are not current instructions.
+Current conclusions only;full receipts and superseded checkpoints are retained
+below. Earlier next/live statements in chronology are not current instructions.
+
+- Scope unchanged:36 families/2311 cases (436 static,1875 interaction). All2311
+  remain partially inspected;0 complete/0 unjoined or blocked. Rendering unaccepted.
+- Accepted evidence:fc888710/e837 review,index0633e01b;165 findings/219 proofs.
+  Chip batch passed export,independent cold replay,full section/coverage/source/
+  proof conservation and main import.86 immutable files share verified hard links.
+- Source registration now166 findings/220 proofs (readonly core defect),not yet
+  accepted/exported. Complete165-definition/219-proof predecessor recovers.
+  Source census743 paths:729 unchanged,nine changed,five added,no removal.
+  Source section04e54857;proof07065eba. All219 original proof records unchanged.
+- LIVE readonly export:session6487,launcher26652/worker23464,16:02:52 local
+  October20 after86065d0f. readonly-coherent-export-20261020 log pair. Preserve
+  frozen inputs;do not restart on quiet output/observation timeout. Main remainsfc888710.
+- Readonly root:public report8a541560 proves native readonly Atlas unchanged versus
+  candidate xAtlas/xtlas/tlas atDPR1/2,with four writable/four disabled controls.
+  Six complete current/installed owner methods agree. Guard missing at shared
+  text-keyboard defaults. Clipboard/dynamic updates/selection pixels remain open.
+- Queued checkbox request evidence:68 retainedab42dbec cases,52 visible marks,
+  selection flags agree. Boxes14px each;native stroke1.82 CSSpx after viewBox
+  versus candidate1.8. Current-only bend delta1.149px;not actual historical mesh.
+  Six of eight disabled ink requests differ from candidate onPrimary substitution.
+  checkbox-checkmark-retained-inputs/checkbox-disabled-checkmark-token-20261020
+  log pairs. No renderer change,owning proof/case join or canonical promotion yet.
+- Remaining priorities:full structure/generated descendants,AX,interaction and
+  lifetime ownership,local composited paint and current-runtime applicability.
+  Shared editing:1734 authored exclusions inspected;443 writable and134 readonly/
+  disabled cases remain partial. Do not reopen settled work without input drift.
+- Next:finish readonly export,authenticate expected deltas,independent cold check
+  and main import;then checkbox owning proof/case join and remaining coverage.
+  Original full canonical/browser/unit/build/packed-consumer/release gates remain.
+- Storage:no deletions. Verified LZX/hard-link conservation;3398 closed build files
+  hash-identical after compression (about68MiB free-space recovery). Deleting old
+  builds/caches still awaits approval and reference closure.
+
+## Audit chronology — retained evidence, newest first
+
+### October20 — retained chip/readonly registration and checkbox checkpoint
 
 - Scope:36 families,2311 configured cases (436 static,1875 interaction). Accepted
   case ledger:0 complete,2311 partial,0 unjoined/blocked;rendering acceptance false.
@@ -104,6 +141,27 @@ their receipts; older "next" or "live" statements are not current instructions.
 - Shared editing coverage:1734 authored exclusions already inspected;443 writable
   cases and134 readonly/disabled exclusions remain partial. Do not reopen the
   settled1734 exclusions or clear behavior work from attribute presence alone.
+- New standalone CHECKBOX request census (outside frozen readonly batch):all68
+  retainedab42dbec cases/136 authenticated trees inspected;52 selected marks,
+  16 hidden native SVGs/omitted candidate marks;all selection flags agree.
+  Both visible boxes14px;native viewBox0 0 24 24 and pathM1.73,12.91 8.1,19.28
+  22.79,4.59 differ from current plugin fixed CSS points. Native3.12 user-unit
+  stroke scales to1.82 CSSpx,NOT3.12 CSSpx;candidate1.8. Current-only point deltas
+  0.508/1.149/0.804 CSSpx (no historical mesh/current raster claim).
+  Eight selected-disabled cases retain active --mat-checkbox-disabled-selected-
+  checkmark-color;candidate selectionMark uses theme.onPrimary unconditionally
+  for checkbox marks. Six have distinct RGB requests,two happen to match white.
+  This is unequal plugin/component authoring,not proven CSS/world projection
+  failure or a license to compensate coordinates. Captured geometry and current
+  helper remain separate evidence;caps/joins/compositing/temporal paint unresolved.
+  checkbox-checkmark-retained-inputs-20261020 log
+  SHA30ff029a6f116c88e63027b960391e6e08bbaf6ddf3a89c305506cb43a18b8c4;
+  checkbox-disabled-checkmark-token-20261020 retains all eight active token chains.
+  Sources:component selectionMark1101–1108,plugin materialCheckMarkPath278.
+  Git7159b1d5 authored the checkbox color/stroke substitution (August25),fc45b58b
+  later extends color branching;db8f7432 includes the fixed path. These are source
+  history observations,not first-bad runtime proofs. Owning assertion/case join
+  remain queued after readonly publication;do not reopen settled chip/label proofs.
 - Readonly clipboard follow-up (SOURCE ONLY):keyboard-input.handler.ts:146/150
   routes Ctrl/Cmd+V/X to text-input.manager.ts:916/931. Paste awaits clipboard
   read then calls insertTextAtCursor;cut awaits copy then calls deleteCharacter.
@@ -133,8 +191,6 @@ their receipts; older "next" or "live" statements are not current instructions.
   all3398 individual before/after hashes and full memberships match. Free bytes
   386904064→457711616;no deletion. closed-test-build-compression-20261020 log
   SHA39ebe6255becf358ab70eff969951216bbb0840a2b2550c1f3f004dd1c5835c8.
-
-## Audit chronology — retained evidence, newest first
 
 Readonly CORE isolation COMPLETE for the tested public contract,not a fix:
 new bounded scripts/audit-public-readonly-editing.mjs reuses existing package-
