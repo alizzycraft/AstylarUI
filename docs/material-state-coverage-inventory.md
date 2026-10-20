@@ -2,6 +2,26 @@
 
 ## Current audit pointer — October20
 
+Filled-field publication checkpoint: warm export retry30517 finished successfully;
+candidate3072dbe6 is on disk,NOT accepted. Candidate import completed with8483
+discrepancies,165 source findings,39904 controls,389202 occurrences and zero
+unresolved scalar groups (not zero defects). Import log
+filled-field-candidate-import-20261020.log SHA7c48a14d3349487896273fc80a8343a6ec779c87188f14a0eb2ea06f7cd030d1.
+Full packed/decoded section conservation completed:all80 sections authenticated,
+78 unchanged;only sourceFingerprints(d358bffc) and coverage differ. Readable
+report remains byte-identical. Receipt filled-field-candidate-section-conservation-
+20261020.log SHA9d9e58970916c62f83ce756dd66bb9efdbe08caa2f4df5ab391a4f8e2ff85ad4.
+Independent cold check remains verified live:launcher24016/worker17456,created
+11:59:52 local October20,CPU increasing on successive observations. Do not restart.
+Next:complete detailed577-child/dependency/coverage conservation,then require
+terminal successful cold check and validated main import before publication.
+Accepted main pointer remains46ea/fb581;all2311 cases remain partial and current
+rendering unaccepted. Sources/evidence stay frozen;no browser recapture justified.
+Remaining inspection priorities remain shared structure/generated descendants,
+interaction/AX/ownership,local paint and current-runtime applicability,not a new
+investigation of already-settled field topology. Cleanup candidates were identified
+but deletion is awaiting user approval;no old test outputs or caches were removed.
+
 Read-only case-index policy question resolved while export retry stays frozen:
 the exact existing policyProjection conditional body34678b54 accepts current598
 through the already-guarded restoration chain and recovers COMPLETE historical
