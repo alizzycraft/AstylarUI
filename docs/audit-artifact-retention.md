@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Chip generationfc888710 is now accepted audit evidence following terminal0 cold
+check88232,complete section/coverage/source/proof/readable conservation and main
+import. Keep chip-independent-cold-check and chip-main-import-20261020 log pairs.
+Main shares ALL86 verified immutable files with candidate-validation through hard
+links;every filename/hash and same device/inode checked before normal importer
+verification/reuse/pointer publication. NEVER overwrite shared files in place.
+Previous accepted3072 and original failure logs remain intact. This supersedes
+pending checkpoints below,not rendering parity or whole-case inspection acceptance.
+
 Retain public-readonly-navigation-20261020 stdout/stderr. It reuses original
 public-readonly-editing-recovered input/bundle/HTML byte-for-byte and authenticates
 2518 receipts before/after. Stdout retains exact inline producer arguments,launch

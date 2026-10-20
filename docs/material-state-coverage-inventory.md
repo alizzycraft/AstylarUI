@@ -8,18 +8,25 @@ their receipts; older "next" or "live" statements are not current instructions.
 - Scope:36 families,2311 configured cases (436 static,1875 interaction). Accepted
   case ledger:0 complete,2311 partial,0 unjoined/blocked;rendering acceptance false.
   Evidence contact is not inspection closure or a current parity pass.
-- Accepted audit evidence:3072dbe6 package/f471 review,index372d4128.165 registered
+- Accepted audit evidence:fc888710 package/e837c58e review,index0633e01b.165 registered
   findings/219 proofs;zero unresolved scalar groups does NOT mean zero defects.
-- Selected,NOT published:e837c58e chip successor,176 additions beyond f471 across
+- Published:e837c58e chip successor,176 additions beyond f471 across
   76 cases. Full predecessor/source preflight passes;five changed inventory files,
   738 total,733 unchanged,all219 proof records unchanged;source section9e74ce09.
 - Chip export session49114 completed exit0: candidate fc888710,decoded05f29bc9,
   85699629 packed/2329461426 decoded bytes. Original chip-coherent-export-20261020
-  log pair retained. Readable report SHAe55333fd unchanged. NOT main acceptance.
-- Independent cold check session88232 (launcher17192/worker19380) and full
-  section-conservation session74946 (worker10152):cold is live,section check exit0. Preserve input freeze;
+  log pair retained. Readable report SHAe55333fd unchanged. Audit evidence only.
+- Independent cold check88232 and section-conservation74946 both completed exit0.
   chip-independent-cold-check/chip-candidate-section-conservation-20261020 logs.
-  Accepted main remains3072/f471 pending conservation,cold success and main import.
+  Cold stdoutSHA972497fb9ab565b2dbf5b6a60958f2759286d72cbac334aef5d5b053184620fe;
+  stderrSHAaea79f40b240995afc17ddecdcec0f3c6431e1d4d1dc0ddf5b4d4b62ed34f2af.
+  Cold session:2 collectors/10 memory hits/0 disk hits;16371 files,
+  1683598624 read/verified bytes;2922503.8431ms collection/session time.
+  Main import completed exit0,ALL86 immutable files verified and hard-linked to
+  candidate-validation;normal importer verified/reused them and publishedfc888710.
+  Log chip-main-import-20261020
+  SHA6102777d1233cba5735f6dd5230efcd70bc2cf4461b5458023a7ec40abad94b0.
+  Prior accepted3072 remains intact;shared files MUST NOT be overwritten in place.
 - Candidate import85258 completed exit0 in separate candidate-validation store:
   index0633e01b;8483 scalar groups/165 findings/39904 controls/389202 occurrences.
   Import log chip-candidate-import-recovered-20261020 SHA7c48a14d3349487896273fc80a8343a6ec779c87188f14a0eb2ea06f7cd030d1.
@@ -34,10 +41,10 @@ their receipts; older "next" or "live" statements are not current instructions.
   Log chip-candidate-section-conservation-20261020
   SHA4ea48ec985457af2043688e763a1e6adba7ec96beae22afa0f7dd61c0754517e.
   Closed candidate index compressed losslessly184765791→38658048 physical bytes;
-  before/afterSHA0633e01b unchanged. No deletion or main acceptance.
+  before/afterSHA0633e01b unchanged. No deletion or rendering acceptance.
 - New standalone result:public readonly keyboard mutation confirmed atDPR1/2,
   with writable/disabled controls and six current/installed method bodies bound.
-  Public report8a541560;committed f8017c10.Outside frozen chip batch and current
+  Public report8a541560;committed f8017c10.Outside published chip batch and current
   165/219 inventories;not a full current-package or94-case acceptance claim.
 - Shared editing coverage:1734 authored exclusions already inspected;443 writable
   cases and134 readonly/disabled exclusions remain partial. Do not reopen the
@@ -63,9 +70,7 @@ their receipts; older "next" or "live" statements are not current instructions.
   route is the existing unguarded keyboard default,not a new proven first-stage
   cause. Pointer-focused/native readonly navigation expectations remain unproved;
   do not blanket-disable navigation or claim renderer caret/selection pixels pass.
-- Next:finish chip export,authenticate section/coverage/source/proof conservation,
-  independent cold replay and main import before publication. Then integrate
-  readonly finding/regression through existing owners;remaining full structure,
+- Next:integrate readonly finding/regression through existing owners;remaining full structure,
   AX,interaction/lifetime,local paint/currentness and original final gates stay open.
 - Storage:no original evidence or old build/cache data deleted. Cleanup awaits
   user approval;closed evidence uses verified lossless compression/hard links.
