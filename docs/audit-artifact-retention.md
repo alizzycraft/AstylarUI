@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Closed candidate3072 index was losslessly LZX-compressed after completed import
+and coverage conservation:183442620 logical bytes now occupy38432768 bytes.
+Before/after SHA256372d41289d69314d2c16900657ccccd9cc6663d52dc6c5cc75393e82fbd4e8e7
+matches its candidate pointer. Exact resolved target was checked inside physical
+Material artifacts/working-audit/candidate-validation. No decoded bytes,path,
+pointer or evidence changed;no files deleted. Observed D:free858451968 bytes is
+volume state,not attribution of every change. Independent cold check still live.
+
 Retain chip-state-layer-retained-inputs-20261020 log pair:24 exact configured
 focus/hover/held contexts and48 hash-authenticated trees bind separate native
 alpha overlays versus opaque candidate host substitutions/omitted focus fill.

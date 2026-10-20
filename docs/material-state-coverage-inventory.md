@@ -2,6 +2,17 @@
 
 ## Current audit pointer — October20
 
+Chip source-history follow-up:Git ae9cdad226ea19f05c0a791e4fba23e8de5f60a0
+(September4,`fix(material): restore shared control interaction affordances`)
+adds all four .chip:hover/:active and .chip.selected:hover/:active mixHex
+background rules. Current b493a355 retains them;the24-context tree observation
+above/below binds the resulting opaque host requests separately. This identifies
+the authoring change and intent,not a first-bad runtime bisect or proof of a core
+blend defect. Focus-fill absence remains a separately observed omission.
+Candidate3072 closed index was losslessly compressed with exact pointer hash
+372d4128 unchanged before/after;183442620 logical bytes occupy38432768 physical.
+No evidence deletion or pointer publication;old cleanup still awaits approval.
+
 Chip state-layer input question answered for all24 configured focus/hover/held
 contexts (four desktop profiles,DPR1/2),using48 authenticated October5 trees.
 Native chip0 owns a separate focus overlay:focus/held RGB75,67,87 atopacity.12;
