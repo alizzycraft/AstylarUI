@@ -4,6 +4,17 @@
 
 Updated October21. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- Current selection census passes:780 sources/229 proofs/171 findings. Complete
+  historical source/proof/finding sections recover accepted90467 digests;all170
+  prior findings,226 prior proof claims and756 prior source paths survive. Receipt:
+  button-touch-selection-census-20261021.log (producerArgs retained). This supersedes
+  the779-path census for currentness,not its historical observations.
+- Coherent50315381 export launched in session91197;launcher PID12872 verified live.
+  Logs:button-touch-coherent-export-20261021.log and stderr pair. Sources consumed
+  by the export are frozen. No terminal outcome or canonical acceptance claimed;
+  next retain terminal result,compare complete sections,then independent cold check
+  and verified import. No restart solely because progress output is quiet.
+
 - Selection reconciliation:working launcher/runner now name50315381. Six shared-
   touch owning tests and six historical control/divider selection checks pass.
   The production reader authenticates15281 dependencies/2311 exact cases and12

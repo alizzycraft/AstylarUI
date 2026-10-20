@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+October21 shared-touch selection census is terminal0 and retained as
+button-touch-selection-census-20261021.log/empty stderr. Its embedded producerArgs
+reuse the existing census with the newly explicit launcher source and780/229/171
+inventory. Complete predecessor sections recover accepted90467;old censuses remain
+historical evidence. Retain the live button-touch-coherent-export-20261021 log pair;
+session91197/launcher12872 was verified live. Do not commit or reinterpret live logs
+as terminal success. Required conservation,cold validation/import remain pending.
+
 October21 final working-registration census/owning logs are button-touch-
 registration-current-census-20261021 and registration-current-owning-20261021
 with empty stderr pairs,both terminal0. These supersede earlier census currentness,
