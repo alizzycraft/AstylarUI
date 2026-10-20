@@ -27,6 +27,8 @@ below. Earlier next/live statements in chronology are not current instructions.
   Six of eight disabled ink requests differ from candidate onPrimary substitution.
   checkbox-checkmark-retained-inputs/checkbox-disabled-checkmark-token-20261020
   log pairs. No renderer change,owning proof/case join or canonical promotion yet.
+- One frozen light desktopDPR1 checkbox AX pair confirms native DOM value on is
+  absent from both AX values;not full AX/form/relationship equivalence. See chronology.
 - Remaining priorities:full structure/generated descendants,AX,interaction and
   lifetime ownership,local composited paint and current-runtime applicability.
   Shared editing:1734 authored exclusions inspected;443 writable and134 readonly/
@@ -41,6 +43,21 @@ below. Earlier next/live statements in chronology are not current instructions.
 ## Audit chronology — retained evidence, newest first
 
 ### October20 — retained chip/readonly registration and checkbox checkpoint
+
+Checkbox native-value AX question now bounded by actual browser evidence:
+checkbox-native-value-ax-probe-20261020 log
+SHAa3b121fc950dc3c497b1d171e2db804d95cf01edddb335885a8271417bcae2dd.
+Reuses exact existing withFrozenShowcase function603ac9ca and explicit checkpoint
+62829d76 (all1887 browser files verified),not a new build or altered action set.
+Chrome155.0.8059.80,light desktop1440x1000 DPR1,initial checked state. Native DOM
+INPUT value on versus candidate role-checkbox DIV null;actual CDP AX targets both
+nonignored checkbox named Include archived,checked true,disabled false,and no
+AX value. This supports only this role/value exclusion,not form serialization.
+Native AX also has invalid:false and a labelledby relation;candidate lacks both
+properties. Matching projected fields do NOT establish full AX representation/
+relationship equivalence. No focus,key/action,all-theme,DPR2,AT or full current
+runtime/case claim;semantic obligation remains partial. No frozen export source
+or captured receipt changed. Exact producer/launch/raw AX evidence retained.
 
 - Scope:36 families,2311 configured cases (436 static,1875 interaction). Accepted
   case ledger:0 complete,2311 partial,0 unjoined/blocked;rendering acceptance false.

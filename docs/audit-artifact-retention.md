@@ -2,6 +2,12 @@
 
 ## Current versus historical evidence
 
+Retain checkbox-native-value-ax-probe-20261020 log pair,including exact inline
+producer,existing helper/checkpoint receipts,browser launch and raw CDP AX targets.
+One initial light desktopDPR1 pair confirms DOM on absent from AX value;full
+properties/label relationships remain different representations,not an AX pass.
+No new build,renderer/fixture edit,old capture rewrite or case promotion.
+
 Retain checkbox-checkmark-retained-inputs and checkbox-disabled-checkmark-token-
 20261020 log pairs. They authenticate all68 originalab42dbec checkbox cases/136
 trees,record native SVG unit conversion/current-only fixed path and eight active
