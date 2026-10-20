@@ -4,6 +4,17 @@
 
 Updated October21. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- Selection reconciliation:working launcher/runner now name50315381. Six shared-
+  touch owning tests and six historical control/divider selection checks pass.
+  The production reader authenticates15281 dependencies/2311 exact cases and12
+  current-source checks;480 touch/480 focus/24 fresh-divider children survive.
+  Whole-source runner/launcher/case-reader and historical-suite restoration reject
+  drift. The launcher is newly explicit in source fingerprints (779→780 paths;
+  complete current census/export reconciliation remains pending). No definition
+  or proof anchor is added. Accepted90467/433b remains unchanged;all2311 cases
+  stay partial/current rendering unverified. Next:coherent census/export,complete
+  conservation,independent cold validation/import;not a browser acceptance claim.
+
 - Divider publication COMPLETE:export31650,candidate import82029,independent
   COLD98069,recovered main import72083 and main verification all TERMINAL0.
   Accepted90467e5a/index681dba6c/review433b794f exactly matches the independently

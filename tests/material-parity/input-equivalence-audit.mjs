@@ -8922,6 +8922,7 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'scripts/export-material-input-audit-current-ancestry.mjs',
     'scripts/audit-material-case-index-conservation.mjs',
     'tests/material-parity/case-index-historical-conservation.spec.mjs',
     'tests/material-parity/button-touch-inputs.spec.mjs',

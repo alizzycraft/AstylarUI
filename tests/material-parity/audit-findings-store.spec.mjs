@@ -738,7 +738,7 @@ test('retained divider property source selection conserves prior owners and reje
     { encoding: 'utf8', maxBuffer: 3_000_000 }).replaceAll('\r\n', '\n');
   const helperFile = 'tests/material-parity/text-backing-case-review-source.mjs';
   let helper = fs.readFileSync(helperFile, 'utf8').replaceAll('\r\n', '\n');
-  const { restoreSharedButtonCaseHelper, restoreSharedButtonStoreSuiteSource } = await import('./button-touch-registration.mjs');
+  const { restoreSharedButtonCaseHelper, restoreSharedButtonStoreSuiteSource, restoreSharedButtonRunnerSelection, restoreSharedButtonLauncherSelection, restoreSharedButtonLauncherInvocation } = await import('./button-touch-registration.mjs');
   helper = restoreSharedButtonCaseHelper(helper);
   const blockStart = helper.indexOf('  const currentSourceChecks=[];');
   const blockEnd = helper.indexOf('  return {read:trackedRead,sourceApplicability:{', blockStart);
@@ -749,11 +749,11 @@ test('retained divider property source selection conserves prior owners and reje
     .replace('    ...(currentSourceChecks.length?{currentSourceChecks}:{}),\n', '');
   assert.equal(helper, previous(helperFile));
   const runner = 'scripts/run-material-input-audit.mjs';
-  assert.equal(fs.readFileSync(runner, 'utf8').replaceAll('\r\n', '\n')
+  assert.equal(restoreSharedButtonRunnerSelection(fs.readFileSync(runner, 'utf8'))
     .replace(', controlInputReview, dividerPropertyContextReview }', ', controlInputReview }')
     .replace(',controlInputReview,dividerPropertyContextReview]', ',controlInputReview]'), previous(runner));
   const launcher = 'scripts/export-material-input-audit-current-ancestry.mjs';
-  assert.equal(fs.readFileSync(launcher, 'utf8').replaceAll('\r\n', '\n')
+  assert.equal(restoreSharedButtonLauncherSelection(fs.readFileSync(launcher, 'utf8'))
     .replaceAll(dividerPropertyContextReview, '736e685c55bf033db3d0ffc5b564e2ed42648438e1ed0b3ab66b7f26ed83d8bd'), previous(launcher));
   const suite = 'tests/material-parity/audit-findings-store.spec.mjs';
   const current = restoreSharedButtonStoreSuiteSource(fs.readFileSync(suite, 'utf8'));
@@ -766,8 +766,8 @@ test('retained divider property source selection conserves prior owners and reje
       return path.resolve(file) === target ? Buffer.concat([Buffer.from(bytes), Buffer.from('\n// changed source')]) : bytes;
     } }), /Queued divider current source changed/);
   assert.throws(() => createDividerReviewedBoundariesReader({ root, read: fs.readFileSync, reviewSha256: '0'.repeat(64) }));
-  const invocation = JSON.parse(execFileSync(process.execPath,
-    [launcher, '--dry-run'], { encoding: 'utf8' }));
+  const invocation = restoreSharedButtonLauncherInvocation(JSON.parse(execFileSync(process.execPath,
+    [launcher, '--dry-run'], { encoding: 'utf8' })));
   assert.ok(invocation.args.includes(`--case-obligation-review-sha256=${dividerPropertyContextReview}`));
   assert.ok(invocation.args.some(arg => arg.endsWith(`/proposals/${dividerPropertyContextReview}.json`)));
 });

@@ -48,7 +48,13 @@ export function restoreSharedButtonTouchPolicy(source) {
   return prior;
 }
 export function restoreSharedButtonTouchProducer(source) {
-  const text = normalized(source), marker = 'shared button touch additive registration preserves prior definitions';
+  let text = normalized(source);
+  const launcher = "    'scripts/export-material-input-audit-current-ancestry.mjs',\n";
+  if (text.includes(launcher)) {
+    assert.equal(hash(text), 'cca481561332a3ae872d49318014f5c4faa0e37cf6f03503e4a7c85024e5c284');
+    assert.equal(text.split(launcher).length, 2); text = text.replace(launcher, '');
+  }
+  const marker = 'shared button touch additive registration preserves prior definitions';
   if (!text.includes(marker)) {
     assert.ok(!text.includes("'tests/material-parity/button-touch-inputs.spec.mjs'"), 'Unrecognized touch proof registration');
     return text;
@@ -121,6 +127,18 @@ export function restoreSharedButtonSuitePrelude(source) {
 }
 export function restoreSharedButtonCaseHelper(source) {
   let text = normalized(source);
+  const selection = "export const sharedButtonTouchReview='50315381bf02df83158d2743488dddd5aee827d4695f7047d49802c2637de44a';\n";
+  if (text.includes(selection)) {
+    assert.equal(hash(text), '2fa149f3ea25b46e9e5ffeaa3bbce6508aebe7ec1f1b5679e489ed223498c0c6');
+    assert.equal(text.split(selection).length, 2);
+    text = text.replace(selection, '');
+    assert.equal(text.split(',sharedButtonTouchReview').length, 3);
+    text = text.replaceAll(',sharedButtonTouchReview', '');
+    const currentSelection = 'if([dividerPropertyContextReview].includes(reviewSha256)){';
+    assert.equal(text.split(currentSelection).length, 2);
+    text = text.replace(currentSelection, 'if(reviewSha256===dividerPropertyContextReview){');
+    assert.equal(hash(text), '7c53915686cf4b05903b521785c3447a3230b551264897dc637cdb9c62daead0');
+  }
   const line = "import { restoreSharedButtonSemanticHelper } from './button-touch-registration.mjs';\n";
   if (!text.includes(line)) return text;
   assert.equal(hash(text), '7c53915686cf4b05903b521785c3447a3230b551264897dc637cdb9c62daead0');
@@ -130,8 +148,51 @@ export function restoreSharedButtonCaseHelper(source) {
   text = text.replace(current, "let text=source.toString().replaceAll('\\r\\n','\\n');");
   assert.equal(hash(text), '36f828cd27ec32129d21fa492c736d46587e7c31360ceb505fc9e37c8a396590'); return text;
 }
+export function restoreSharedButtonRunnerSelection(source) {
+  let text = normalized(source);
+  assert.equal(hash(text), '9ae9203fc2b87eda8fb3f7ad97061988a77f8dbe53bdd6d9a1774821401010d2');
+  for (const addition of [', sharedButtonTouchReview', ',sharedButtonTouchReview']) {
+    assert.equal(text.split(addition).length, 2);
+    text = text.replace(addition, '');
+  }
+  assert.equal(hash(text), '37235faee8d356b7780c6497d56cc9a92b3f95ec791e3c0794c632e07606a85e');
+  return text;
+}
+export function restoreSharedButtonLauncherSelection(source) {
+  let text = normalized(source);
+  assert.equal(hash(text), '727fcd139de7bb68501bb77c7a98aaaabbe170414ddb3c71c8d8b95f0b268e54');
+  const current = '50315381bf02df83158d2743488dddd5aee827d4695f7047d49802c2637de44a';
+  assert.equal(text.split(current).length, 3);
+  text = text.replaceAll(current, '433b794f0a1d51b7592fb9932fab3fe6c6376c1412958f7aafca089e509799b2');
+  assert.equal(hash(text), 'ca48c2ba1c9f109be297231d03f1eba61e62fc643fd53e8a529f8fcc7d01c0ea');
+  return text;
+}
+export function restoreSharedButtonLauncherInvocation(invocation) {
+  const current = '50315381bf02df83158d2743488dddd5aee827d4695f7047d49802c2637de44a';
+  const prior = '433b794f0a1d51b7592fb9932fab3fe6c6376c1412958f7aafca089e509799b2';
+  const expected = [
+    `--case-obligation-review=artifacts/material-parity/working-audit/proposals/${current}.json`,
+    `--case-obligation-review-sha256=${current}`,
+  ];
+  for (const arg of expected) assert.equal(invocation.args.filter(value => value === arg).length, 1);
+  assert.equal(invocation.args.filter(value => value.includes(current)).length, 2);
+  return { ...invocation, args: invocation.args.map(value => expected.includes(value) ? value.replace(current, prior) : value) };
+}
 export function restoreSharedButtonStoreSuiteSource(source) {
   let text = normalized(source);
+  if (text.includes('restoreSharedButtonLauncherInvocation')) {
+    assert.equal(hash(text), 'abce0065aaa6753f3235a14ff29edea0e788b0f50e0cfe3734f65ca91faf0d7a');
+    const selectionChanges = [
+      [', restoreSharedButtonRunnerSelection, restoreSharedButtonLauncherSelection, restoreSharedButtonLauncherInvocation }', ' }'],
+      ["restoreSharedButtonRunnerSelection(fs.readFileSync(runner, 'utf8'))", "fs.readFileSync(runner, 'utf8').replaceAll('\\r\\n', '\\n')"],
+      ["restoreSharedButtonLauncherSelection(fs.readFileSync(launcher, 'utf8'))", "fs.readFileSync(launcher, 'utf8').replaceAll('\\r\\n', '\\n')"],
+      ['const invocation = restoreSharedButtonLauncherInvocation(JSON.parse(execFileSync(process.execPath,\n    [launcher, \'--dry-run\'], { encoding: \'utf8\' })));',
+       'const invocation = JSON.parse(execFileSync(process.execPath,\n    [launcher, \'--dry-run\'], { encoding: \'utf8\' }));'],
+    ];
+    for (const [current, prior] of selectionChanges) {
+      assert.equal(text.split(current).length, 2); text = text.replace(current, prior);
+    }
+  }
   assert.equal(hash(text), 'd65da56bc12841a33589d9fa143c584c70e61bacd8f38b5c3b64fd6a1090cee0');
   const changes = [
     ["  const { sourceAuditDefinitions: registeredDefinitions } = await import('./input-equivalence-policy.mjs');\n"

@@ -12,6 +12,47 @@ function captured(file, sha256) {
 }
 const proposalDigest = 'a79bdf4496b89608128fcd7ca223508ce576a1728ba856c030ca15e0a32e5266';
 
+test('shared button selected review authenticates dependencies without promoting cases', async () => {
+  const { loadCaseObligationReview } = await import('../../scripts/audit-findings-store.mjs');
+  const { createDividerReviewedBoundariesReader, sharedButtonTouchReview } = await import('./text-backing-case-review-source.mjs');
+  const file = `artifacts/material-parity/working-audit/proposals/${sharedButtonTouchReview}.json`;
+  const review = JSON.parse(readFileSync(file)).review;
+  const reader = createDividerReviewedBoundariesReader({ root: process.cwd(), read: readFileSync, reviewSha256: sharedButtonTouchReview });
+  assert.equal(reader.sourceApplicability.currentSourceChecks.length, 12);
+  const loaded = loadCaseObligationReview(file, sharedButtonTouchReview, review.groups.map(group => group.case), { read: reader.read });
+  assert.equal(loaded.cases.length, 2311);
+  assert.equal(loaded.evidenceFingerprints.length, 15281);
+  assert.deepEqual(loaded.unjoinedCases, []);
+  assert.equal(loaded.inspectionComplete, false);
+  assert.equal(loaded.currentRenderingAccepted, false);
+  const counts = { touch: 0, focus: 0, divider: 0 };
+  for (const group of review.groups) {
+    assert.equal(group.inspection, 'partial'); assert.equal(group.currentRendering, 'unverified');
+    if (group.obligations.inputStyleStructure.retainedSharedButtonTouchInputs) counts.touch++;
+    if (group.obligations.inputStyleStructure.retainedSharedButtonFocusPseudoApplicability) counts.focus++;
+    if (group.obligations.sourceCurrentness.freshCurrentBrowserDividerCapture) counts.divider++;
+  }
+  assert.deepEqual(counts, { touch: 480, focus: 480, divider: 24 });
+});
+
+test('shared button touch selection preserves complete prior sources and rejects unrelated drift', async () => {
+  const helpers = await import('./button-touch-registration.mjs');
+  for (const [file, restore] of [
+    ['scripts/run-material-input-audit.mjs', helpers.restoreSharedButtonRunnerSelection],
+    ['scripts/export-material-input-audit-current-ancestry.mjs', helpers.restoreSharedButtonLauncherSelection],
+    ['tests/material-parity/text-backing-case-review-source.mjs', helpers.restoreSharedButtonCaseHelper],
+  ]) {
+    const source = readFileSync(file, 'utf8');
+    assert.ok(restore(source).length > 0);
+    assert.throws(() => restore(source + '\n// unrelated drift\n'));
+  }
+  const invocation = JSON.parse(execFileSync(process.execPath,
+    ['scripts/export-material-input-audit-current-ancestry.mjs', '--dry-run'], { encoding: 'utf8' }));
+  const digest = '50315381bf02df83158d2743488dddd5aee827d4695f7047d49802c2637de44a';
+  assert.ok(invocation.args.includes(`--case-obligation-review=artifacts/material-parity/working-audit/proposals/${digest}.json`));
+  assert.ok(invocation.args.includes(`--case-obligation-review-sha256=${digest}`));
+});
+
 test('shared button touch proposal preserves all prior definitions and the existing core unit limitation', () => {
   const envelope = JSON.parse(readFileSync(`artifacts/material-parity/working-audit/proposals/${proposalDigest}.json`));
   assert.equal(hash(JSON.stringify(envelope.review)), proposalDigest);
