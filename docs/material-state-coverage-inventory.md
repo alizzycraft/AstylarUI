@@ -25,7 +25,9 @@ below. Earlier next/live statements in chronology are not current instructions.
 - Readonly root:public report8a541560 proves native readonly Atlas unchanged versus
   candidate xAtlas/xtlas/tlas atDPR1/2,with four writable/four disabled controls.
   Six complete current/installed owner methods agree. Guard missing at shared
-  text-keyboard defaults. Clipboard/dynamic updates/selection pixels remain open.
+  text-keyboard defaults. One DPR1 public readonly-update pair also reproduces
+  mutation after the flag updates correctly;clipboard,broader dynamic cases and
+  selection pixels remain open. New standalone result is outside the frozen batch.
 - Queued checkbox request evidence:68 retainedab42dbec cases,52 visible marks,
   selection flags agree. Boxes14px each;native stroke1.82 CSSpx after viewBox
   versus candidate1.8. Current-only bend delta1.149px;not actual historical mesh.
@@ -55,6 +57,30 @@ below. Earlier next/live statements in chronology are not current instructions.
 ## Audit chronology — retained evidence, newest first
 
 ### October20 — retained chip/readonly registration and checkbox checkpoint
+
+Dynamic readonly question narrowed while the frozen cold check remains active:
+public-dynamic-readonly-20261020.log
+SHA84e0c8cb97ed06d386a0f076eb116e4167a5b4c113c0b4e0c8427549848d4160.
+One plugin-free package-root DPR1 pair starts writable,sets readonly through
+surface.update versus the native property,types trusted x,and restores writable.
+Both flags/focus update correctly and authored SiteData agrees at all boundaries.
+Native values Atlas/Atlas/Atlas/yAtlas versus candidate Atlas/Atlas/xAtlas/yxAtlas
+exclude a missing readonly update as the cause of the tested readonly mutation.
+The restored writable key prefixes EACH side's existing value;the earlier x is
+not erased or treated as a new reset defect. No renderer/Material/style changes.
+
+The exact in-memory diagnostic source is retained with producer arguments,served
+bundle digest,browser launch and full samples/events. Its2515 dependencies match
+the original8a541560 report exactly and authenticate before/after. Reversing only
+two diagnostic source additions recovers the COMPLETE original input source.
+public-dynamic-readonly-independent-20261020.log independently validates these
+boundaries and rejects8 mutations. The initial false runtime-reset expectation
+and exact producer remain in public-dynamic-readonly-20261020.failed.log
+SHA7e7518892c43fdeb01fd43990133268f53689d2f9a97f0dc731754a8e046af0e.
+This is one updated-readonly character/restored-writable pair,not all updates,
+clipboard,DPR2,all keys,Material membership,paint or general reconciliation
+acceptance. No old capture rewritten;owning-test/source/case integration remains
+queued beyond frozen166/220. Cold94817 is still active;main remainsfc888710.
 
 Post-review storage observation:Material dist/test-out parent still exists but
 contains0 directories;D: free12831477760 bytes. The agent issued no deletion and

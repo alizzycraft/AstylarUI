@@ -2,6 +2,16 @@
 
 ## Current versus historical evidence
 
+Retain public-dynamic-readonly-20261020.log,its .failed.log and public-dynamic-
+readonly-independent-20261020.log. The package-root DPR1 update probe preserves
+exact source/producer/bundle digest/browser/events and authenticates the original
+2515 dependencies before/after. Two source additions reverse to the full original
+input;independent verifier rejects8 mutations. Initial failure was an incorrect
+expectation that an unchanged authored value resets edited runtime text;preserve
+it rather than hiding the candidate's earlier unwanted x. No original input,
+capture,test,fixture or renderer modified;no new on-disk browser build. These
+standalone observations are outside frozen39fc/166/220 pending later integration.
+
 After the302-build review,the agent observed the Material dist/test-out parent
 still present with0 child directories and D: free12831477760 bytes. No deletion
 was executed by this agent. Preserve the immutable removal review and historical
