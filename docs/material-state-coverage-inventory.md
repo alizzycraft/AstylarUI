@@ -47,14 +47,22 @@ below. Earlier next/live statements in chronology are not current instructions.
 - Next:finish independent readonly cold check and verified main publication;
   then checkbox owning proof/case join and remaining coverage.
   Original full canonical/browser/unit/build/packed-consumer/release gates remain.
-- Storage:no deletions. Exact302 old Material test-build directories reviewed as
-  removal candidates:428143 files/11473598284 logical bytes,no retained dependency
-  found,including compressed reports/packages. Exact list in old-test-build-
-  removal-review-20261020.json;deletion remains unauthorized. Caches separately pending.
+- Storage:the agent performed no deletion. After the302-build review,the existing
+  Material test-out parent now contains0 directories;D: free12831477760 bytes.
+  This is an observed external change,not an agent-executed cleanup. Exact prior
+  inventory/removal review and historical compression records remain preserved.
 
 ## Audit chronology — retained evidence, newest first
 
 ### October20 — retained chip/readonly registration and checkbox checkpoint
+
+Post-review storage observation:Material dist/test-out parent still exists but
+contains0 directories;D: free12831477760 bytes. The agent issued no deletion and
+does not infer who removed the builds or that the full free-space increase came
+only from them. Keep the immutable302-build review SHA15bb2076 and all historical
+compression records as pre-removal evidence;do not rewrite its approval/deletion
+fields to claim an authorized agent action. Retained audit inputs remain outside
+the reviewed build paths. Cold94817/worker2356 remains active.
 
 Readonly export reconciliation completed without another export or capture:
 readonly-candidate-unexpected-section-leaves-20261020.log

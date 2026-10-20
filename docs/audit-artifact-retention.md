@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+After the302-build review,the agent observed the Material dist/test-out parent
+still present with0 child directories and D: free12831477760 bytes. No deletion
+was executed by this agent. Preserve the immutable removal review and historical
+compression logs as pre-removal records;do not rewrite their receipts or infer
+the responsible actor from the disk observation. This does not permit deletion
+of other retained evidence or caches.
+
 Retain readonly-candidate-unexpected-section-leaves-20261020 log pair and
 readonly-candidate-derived-receipt-conservation-20261020.log plus .failed.log.
 Both full payloads authenticate;70 of80 sections are unchanged. All147 extra
