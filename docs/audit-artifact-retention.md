@@ -2,6 +2,17 @@
 
 ## Current versus historical evidence
 
+Readonly generation39fc0e3e is now accepted AUDIT evidence following terminal0
+cold94817,full source/proof/findings/readable/coverage/section conservation and
+normal main import. Keep readonly-independent-cold-check,readonly-main-staging
+and readonly-main-import-20261020 records. ALL86 immutable generation files share
+verified same-device/file-ID hard links with candidate-validation;every filename/
+hash was checked before and after staging. NEVER overwrite shared files in place.
+Main index6b8af878 exactly matches candidate;accepted predecessorfc888710 and all
+original/failure records remain retained. Newer standalone dynamic/checkbox/select
+observations are outside this published166/220 snapshot. No rendering acceptance
+or whole-case closure follows. Earlier live/pending statements below are archival.
+
 Retain public-dynamic-readonly-20261020.log,its .failed.log and public-dynamic-
 readonly-independent-20261020.log. The package-root DPR1 update probe preserves
 exact source/producer/bundle digest/browser/events and authenticates the original

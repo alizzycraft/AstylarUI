@@ -7,27 +7,28 @@ below. Earlier next/live statements in chronology are not current instructions.
 
 - Scope unchanged:36 families/2311 cases (436 static,1875 interaction). All2311
   remain partially inspected;0 complete/0 unjoined or blocked. Rendering unaccepted.
-- Accepted evidence:fc888710/e837 review,index0633e01b;165 findings/219 proofs.
-  Chip batch passed export,independent cold replay,full section/coverage/source/
-  proof conservation and main import.86 immutable files share verified hard links.
-- Source registration now166 findings/220 proofs (readonly core defect),not yet
-  accepted. Export39fc0e3e completed;complete165-definition/219-proof predecessor recovers.
+- Accepted evidence:39fc0e3e/e837 review,index6b8af878;166 findings/220 proofs.
+  Readonly batch passed export,independent cold replay,full section/coverage/source/
+  proof conservation and normal main import.86 immutable files share verified
+  hard links;accepted predecessorfc888710 remains preserved.
+- Readonly registration is now canonical audit evidence,not a renderer fix or
+  rendering pass. Complete165-definition/219-proof predecessor recovers.
   Source census743 paths:729 unchanged,nine changed,five added,no removal.
   Source section04e54857;proof07065eba. All219 original proof records unchanged.
-- Readonly candidate39fc0e3e:export6487 and candidate import completed exit0.
+- Readonly39fc0e3e:export6487,candidate import,cold94817 and main import exit0.
   Full80-section comparison authenticates both payloads:70 unchanged,ten changed.
   Five expected registration sections reconcile;the extra147 leaves are99 source
   receipts plus48 derived control hashes,all attributed with exact proof hashes.
   Every other leaf/shape/order in those five sections is unchanged. See chronology.
-- LIVE independent cold check94817:launcher26804/worker2356,16:52:16 local
-  October20. Preserve frozen inputs;do not restart on quiet output/observation
-  timeout. Candidate not accepted;main remainsfc888710 until cold check/publication.
+- Cold94817 completed:two session collectors,ten memory hits,zero disk hits;
+  16371 actual files/1683609139 read and verification bytes. CLI4329605.6447ms.
+  Both old/new payloads and all sections/receipts conserve;main matches candidate.
 - Readonly root:public report8a541560 proves native readonly Atlas unchanged versus
   candidate xAtlas/xtlas/tlas atDPR1/2,with four writable/four disabled controls.
   Six complete current/installed owner methods agree. Guard missing at shared
   text-keyboard defaults. One DPR1 public readonly-update pair also reproduces
   mutation after the flag updates correctly;clipboard,broader dynamic cases and
-  selection pixels remain open. New standalone result is outside the frozen batch.
+  selection pixels remain open. New standalone result is outside published39fc.
 - Queued checkbox request evidence:68 retainedab42dbec cases,52 visible marks,
   selection flags agree. Boxes14px each;native stroke1.82 CSSpx after viewBox
   versus candidate1.8. Current-only bend delta1.149px;not actual historical mesh.
@@ -46,8 +47,8 @@ below. Earlier next/live statements in chronology are not current instructions.
   lifetime ownership,local composited paint and current-runtime applicability.
   Shared editing:1734 authored exclusions inspected;443 writable and134 readonly/
   disabled cases remain partial. Do not reopen settled work without input drift.
-- Next:finish independent readonly cold check and verified main publication;
-  then checkbox owning proof/case join and remaining coverage.
+- Next:batch queued checkbox/select and dynamic-readonly owning proof/case
+  integration,then remaining structure/AX/paint/current-runtime coverage.
   Original full canonical/browser/unit/build/packed-consumer/release gates remain.
 - Storage:the agent performed no deletion. After the302-build review,the existing
   Material test-out parent now contains0 directories;D: free12831477760 bytes.
@@ -57,6 +58,29 @@ below. Earlier next/live statements in chronology are not current instructions.
 ## Audit chronology — retained evidence, newest first
 
 ### October20 — retained chip/readonly registration and checkbox checkpoint
+
+Readonly publication COMPLETE:independent cold94817 terminated exit0 and verified
+the canonical candidate. Stdout SHA8321c61f60e0aef5c6a4f7cce5327ea5141d849590e941ef7f2238bb5c8bc28a;
+stderr progress-only SHAe73e4d70f81c45c96a8b62adf0ddfca7c1983310dfc882012c491dce0b29d000.
+Session:two collectors,ten memory hits,zero disk hits,16371 files,
+1683609139 bytes read and independently reverified,4089395.8696ms session elapsed.
+Whole CLI4329605.6447ms;these are actual run metrics,not audit completion metrics.
+
+ALL86 candidate files were checked by filename/byte hash before staging as hard
+links into the main39fc generation. Exact resolved paths,complete membership,
+every source/target hash and same device/file ID were verified after linking.
+readonly-main-staging-20261020.log SHA6ac4c6d1e0f24d65634bbbeadcdf03311b9aa8ee051d42200900604fe64f0d88.
+Normal importer then verified the complete existing generation and published the
+main pointer;readonly-main-import-20261020.log
+SHA9cb8cdf525f1546726bfbf1d044cba72092889ca586622facdcbb657de3920dd.
+Main39fc0e3e/index6b8af878 exactly matches candidate validation and canonical
+manifest. Current166 findings/220 proofs retain all165/219 predecessors. Existing
+8483 scalar groups/39904 controls/389202 occurrences/zero unresolved groups and
+all2311 PARTIAL cases/current-rendering-unverified flags remain unchanged.
+No case closure,output-parity repair,renderer/fixture change or final-gate waiver.
+The newer dynamic-readonly/checkbox/select observations remain queued separately.
+Keep acceptedfc888710 and all original/failure evidence. Shared files must NEVER
+be overwritten in place. This supersedes earlier pending/live checkpoints below.
 
 Dynamic readonly question narrowed while the frozen cold check remains active:
 public-dynamic-readonly-20261020.log
