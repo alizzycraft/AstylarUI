@@ -1,0 +1,143 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    'const',
+    'minWidth',
+    '=',
+    'style',
+...
+      'if (minWidth !== undefined && !Number.isNaN(minWidth)) {\n' +
++     '      const originalWidth = width;\n' +
++     '      width = Math.max(width, minWidth);\n' +
++     '      if (width !== originalWidth) {\n' +
++     "        widthSource += '+minWidth';\n" +
++     '      }\n' +
++     '    }\n' +
+-     '            const originalWidth = width;\n' +
+-     '            width = Math.max(width, minWidth);\n' +
+-     '            if (width !== originalWidth) {\n' +
+-     "                widthSource += '+minWidth';\n" +
+-     '            }\n' +
+-     '        }\n' +
+      'if (maxWidth !== undefined && !Number.isNaN(maxWidth)) {\n' +
++     '      const originalWidth = width;\n' +
++     '      const effectiveMaxWidth = minWidth !== undefined && !Number.isNaN(minWidth) ? Math.max(maxWidth, minWidth) : maxWidth;\n' +
++     '      width = Math.min(width, effectiveMaxWidth);\n' +
++     '      if (width !== originalWidth) {\n' +
++     "        widthSource += '+maxWidth';\n" +
++     '      }\n' +
++     '    }'
+-     '            const originalWidth = width;\n' +
+-     '            const effectiveMaxWidth = minWidth !== undefined && !Number.isNaN(minWidth)\n' +
+-     '                ? Math.max(maxWidth, minWidth)\n' +
+-     '                : maxWidth;\n' +
+-     '            width = Math.min(width, effectiveMaxWidth);\n' +
+-     '            if (width !== originalWidth) {\n' +
+-     "                widthSource += '+maxWidth';\n" +
+-     '            }\n' +
+-     '        }'
+  ]
+
+    at file:///D:/dev/github/AstylarUI-audit-integration/scripts/check-divider-paragraph-constraint-inputs.mjs:55:10
+    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'const',
+    'minWidth',
+    '=',
+    'style',
+    '?.',
+    'minWidth',
+    '?',
+    'this',
+    '.',
+    'parseLength',
+    '(',
+    '`${',
+    'style',
+    '.',
+    'minWidth',
+    '}',
+    '`, contentWidth) : undefined;\n' +
+      'const maxWidth = style?.maxWidth ? this.parseLength(`',
+    '$',
+    '{',
+    'style',
+    '.',
+    'maxWidth',
+    '}',
+    '`, contentWidth) : undefined;\n' +
+      'if (minWidth !== undefined && !Number.isNaN(minWidth)) {\n' +
+      '      const originalWidth = width;\n' +
+      '      width = Math.max(width, minWidth);\n' +
+      '      if (width !== originalWidth) {\n' +
+      "        widthSource += '+minWidth';\n" +
+      '      }\n' +
+      '    }\n' +
+      'if (maxWidth !== undefined && !Number.isNaN(maxWidth)) {\n' +
+      '      const originalWidth = width;\n' +
+      '      const effectiveMaxWidth = minWidth !== undefined && !Number.isNaN(minWidth) ? Math.max(maxWidth, minWidth) : maxWidth;\n' +
+      '      width = Math.min(width, effectiveMaxWidth);\n' +
+      '      if (width !== originalWidth) {\n' +
+      "        widthSource += '+maxWidth';\n" +
+      '      }\n' +
+      '    }'
+  ],
+  expected: [
+    'const',
+    'minWidth',
+    '=',
+    'style',
+    '?.',
+    'minWidth',
+    '?',
+    'this',
+    '.',
+    'parseLength',
+    '(',
+    '`${',
+    'style',
+    '.',
+    'minWidth',
+    '}',
+    '`, contentWidth) : undefined;\n' +
+      'const maxWidth = style?.maxWidth ? this.parseLength(`',
+    '$',
+    '{',
+    'style',
+    '.',
+    'maxWidth',
+    '}',
+    '`, contentWidth) : undefined;\n' +
+      'if (minWidth !== undefined && !Number.isNaN(minWidth)) {\n' +
+      '            const originalWidth = width;\n' +
+      '            width = Math.max(width, minWidth);\n' +
+      '            if (width !== originalWidth) {\n' +
+      "                widthSource += '+minWidth';\n" +
+      '            }\n' +
+      '        }\n' +
+      'if (maxWidth !== undefined && !Number.isNaN(maxWidth)) {\n' +
+      '            const originalWidth = width;\n' +
+      '            const effectiveMaxWidth = minWidth !== undefined && !Number.isNaN(minWidth)\n' +
+      '                ? Math.max(maxWidth, minWidth)\n' +
+      '                : maxWidth;\n' +
+      '            width = Math.min(width, effectiveMaxWidth);\n' +
+      '            if (width !== originalWidth) {\n' +
+      "                widthSource += '+maxWidth';\n" +
+      '            }\n' +
+      '        }'
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.22.3

@@ -2,6 +2,19 @@
 
 ## Current versus historical evidence
 
+Retain divider-paragraph-constraint-inputs-final-20261020.log (SHA256
+8be7667a27f58b57d5f91e0a15e1e9be51616f191a3f6492f7ae272f64a51132) and its
+empty stderr with scripts/check-divider-paragraph-constraint-inputs.mjs. Retain
+the earlier failed.log/failed.stderr.log/failed-producer.mjs,recovered log pair/
+producer snapshot,and verified log pair/failed-producer.mjs under the same dated
+prefix. First failure was raw template-token scanning,not source semantic drift;
+parsed AST leaves correctly compare template syntax. Second failure expected an
+inventory-adapter marker on raw capture trees;final checks raw errors arrays and
+actual authored/applicable rules. No production collector/assertion was weakened.
+The final24-case/96-owner observation covers only clamp inputs and exact bounded
+consumer blocks,not whole sizing/layout/parity. All original evidence is preserved;
+this standalone supplement is not yet part of acceptedb661 or case closure.
+
 Retain divider-paragraph-svg-replaced-inputs-20261020.log and stderr,all three
 divider-native-property-domain[-recovered/-verified]-20261020 capture directories,
 their log pairs,the two failed-producer.mjs sources,and both divider-property-

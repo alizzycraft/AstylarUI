@@ -106,6 +106,24 @@ Current conclusions only;earlier next/live statements in chronology are historic
   Next priority remains complete owner-property/structure mapping and exact-case
   joins,then AX/event/lifetime and current-runtime/paint gaps. In particular,
   min/max/default/inheritance/alignment are not closed by these four properties.
+- Queued constraint follow-up answers the min/max branch question for24 exact
+  retained divider cases/96 paragraph+span owners:384 native computed slots are
+  0px/none;1152 candidate own-stage slots remain omitted. Native inline/matched
+  rules and candidate inline/possibly applicable rules request no constraints.
+  Exact width/height clamp blocks conserve across current transpiled,installed
+  and captured source.1728 bounded executions leave positive probe dimensions
+  unchanged without parsing;18 positive min/max/conflict controls engage clamps,
+  768 changed-input controls reject,and changed clamp logic fails token equality.
+  All source/helper/tree receipts independently rehashed after execution.
+  Evidence:check-divider-paragraph-constraint-inputs.mjs and divider-paragraph-
+  constraint-inputs-final-20261020.log SHA
+  8be7667a27f58b57d5f91e0a15e1e9be51616f191a3f6492f7ae272f64a51132.
+  This closes only the recorded clamp-input question,NOT used-size equality,
+  complete dimension execution,inheritance/alignment,paint or case inspection.
+  No computed-default alias or existing authoring failure is cleared. Accepted
+  b661 stays unchanged;these supplements await a coherent registration/case-join
+  batch rather than an unchanged full export. Remaining priority:alignment and
+  complete owner mapping,then exact joins/AX/event-lifetime/current-runtime gaps.
 
 ## Audit chronology — retained evidence, newest first
 
