@@ -46,6 +46,16 @@ their receipts; older "next" or "live" statements are not current instructions.
   with writable/disabled controls and six current/installed method bodies bound.
   Public report8a541560;committed f8017c10.Outside published chip batch and current
   165/219 inventories;not a full current-package or94-case acceptance claim.
+- Queued source-finding proposal30bd233e3e9f40c07b0e2e3f1bb7476a63ce775ffad4070c7f92cbcf3df5c8bd
+  adds core-readonly-text-keyboard-defaults-mutate-value after all165 unchanged
+  definitions. Five exact evidence receipts,unique current source pattern,public
+  two-failure/four-writable/four-disabled controls and six mutation checks bound.
+  Existing proposal mechanism/status reviewed-not-integrated;canonical remains
+  165/219 and no case closes. Source-finding proposal/restoration owning pair
+  passes2/2;readonly-source-finding-proposal(-owning)-20261020 log pairs retained.
+  Next:apply that exact definition and owning proof through existing policy/proof
+  inventories with complete165/219 predecessor recovery,then coherent-batch export
+  only after all current source-applicability consumers are reconciled.
 - Queued owning readonly assertion now passes1/1 (4444.1648ms),six complete
   current/installed method bodies plus public verifier/six negative controls.
   Existing input-boundary suite extended append-only:507642-character prefix

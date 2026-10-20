@@ -471,3 +471,31 @@ test('readonly proof append restoration preserves complete predecessor and rejec
     current.replace('typed-x', 'changed-key'), previous + '\n// previous drift'])
     assert.throws(() => restoreInputBoundaryReadonlyAppend(drift));
 });
+
+test('readonly source finding proposal preserves every prior definition and receipt', async () => {
+  const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');
+  const sha256 = '30bd233e3e9f40c07b0e2e3f1bb7476a63ce775ffad4070c7f92cbcf3df5c8bd';
+  const proposal = JSON.parse(fs.readFileSync(`artifacts/material-parity/working-audit/proposals/${sha256}.json`));
+  assert.equal(proposal.status, 'proposal-not-canonical');
+  assert.equal(proposal.sha256, sha256);
+  assert.equal(createHash('sha256').update(JSON.stringify(proposal.review)).digest('hex'), sha256);
+  assert.equal(proposal.review.kind, 'material-source-finding-review');
+  assert.equal(proposal.review.registrationPending, true);
+  assert.equal(proposal.review.groups.length, 166);
+  const finding = proposal.review.groups.at(-1);
+  assert.equal(finding.id, 'core-readonly-text-keyboard-defaults-mutate-value');
+  assert.deepEqual(proposal.review.groups.slice(0, -1), sourceAuditDefinitions.filter(r => r.id !== finding.id));
+  const registered = sourceAuditDefinitions.find(r => r.id === finding.id);
+  if (registered) assert.deepEqual(registered, finding);
+  assert.equal(finding.classification, 'confirmed-core-renderer-defect');
+  assert.equal([...fs.readFileSync(finding.file, 'utf8').matchAll(new RegExp(finding.pattern, 'g'))].length, 1);
+  for (const receipt of finding.evidence)
+    assert.equal(createHash('sha256').update(fs.readFileSync(receipt.file)).digest('hex'), receipt.sha256);
+  assert.deepEqual(finding.publicReproduction, {
+    command: 'node scripts/audit-public-readonly-editing.mjs --verify artifacts/material-parity/public-readonly-editing-recovered-20261020',
+    pairs: 6, readonlyFailures: 2, writableControls: 4, disabledControls: 4,
+    negativeControls: 6, currentRenderingAccepted: false,
+  });
+  assert.match(finding.boundary, /Clipboard,paste\/cut/);
+  assert.match(finding.boundary, /Does not close all94 Material readonly cases/);
+});

@@ -2,6 +2,12 @@
 
 ## Current versus historical evidence
 
+Retain source-finding proposal30bd233e3e9f40c07b0e2e3f1bb7476a63ce775ffad4070c7f92cbcf3df5c8bd
+and readonly-source-finding-proposal(-owning)-20261020 log pairs. Existing format
+preserves complete165-definition predecessor and adds one scoped readonly core
+failure with five receipts. Owning proposal/restoration tests2/2 pass. It remains
+reviewed-not-integrated;no canonical166/220 or whole-case acceptance follows yet.
+
 Retain all readonly-append-*-20261020 log pairs. Benchmark owner checks2/2,
 historical reader/drift1/1,append-restoration1/1 (four mutations) and three direct
 script consumers succeed. Original backing-transition and text-backing-reader
