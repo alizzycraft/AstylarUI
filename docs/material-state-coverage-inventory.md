@@ -2,6 +2,26 @@
 
 ## Current audit pointer — October20
 
+Queued chip case join COMPLETE through existing saveReviewProposal/receipt loader:
+proposal868daaecb79c16d632701361c4303197f5d2760aec70f4cdd5d138840decabe5
+adds76 localPaint.retainedChipFocusIndicatorRequests children and24 separate
+retainedChipStateLayerRequests children (the latter are a subset of those cases).
+Each matches the exact original October5 case/report/paired trees,not an ID-only
+transfer. All15180 dependencies authenticate;324 case/tree/style/ownership
+controls reject. Removing ONLY those100 children recovers COMPLETE predecessor
+f471932b digest,including parent remaining/status/acceptance fields and order.
+All2311 remain partial/unverified. Join log chip-paint-case-join-20261020.log
+SHAa993faf08597c3733786bf8750e0a17f6e476d9b4526fe3af7ebae8f62540ca7.
+Existing proposal mechanism reused by bounded scripts/join-material-chip-paint.mjs;
+no new acceptance schema,collector framework or historical reader waiver.
+Closed166896351-byte proposal is losslessly LZX-compressed to37257216 physical
+bytes;RAW envelopeSHA6e48b18ff2571965cffaecff4824f441573096d6d51586a7517635ea530b645a
+matches before/after (distinct from review digest868d). Accepted3072/f471 remains
+unchanged;868d is NOT selected/exported/canonical. Next reconcile exact supported
+review selection/source fingerprints in a coherent batch with the known policy
+entry-gate issue;do not rerun full export solely for this join. Local raster,
+ripple timing,full chip input/semantics/ownership/currentness remain open.
+
 Queued chip observations now have owning regression protection in the EXISTING
 control-state-paint-review.spec.mjs:two append-only tests pass2/2,zero skip/cancel/
 todo,2391.3716ms. Focus-indicator40/112 census and24 state contexts/48 tree

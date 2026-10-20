@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain queued chip proposal868daaec and chip-paint-case-join-20261020 log pair.
+It adds100 scoped children to76 chip cases,authenticates15180 dependencies and
+recovers completef471 predecessor after only those removals. Closed166896351
+logical-byte proposal was losslessly LZX-compressed to37257216 physical bytes;
+RAW envelopeSHA6e48b18ff2571965cffaecff4824f441573096d6d51586a7517635ea530b645a
+is identical before/after. Accepted3072/f471 remains retained unchanged;new
+proposal is queued,not selected/canonical/current rendering. No evidence deleted.
+
 Retain chip-state-paint-owning-focused and chip-state-paint-owning-history-
 20261020 log pairs. Both complete2/2;history follow-up adds exact Git source
 origin and real default-paint-guard assertions. Existing paint suite is extended
