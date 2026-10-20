@@ -6615,3 +6615,210 @@ test('public readonly keyboard mutation preserves equal inputs and binds current
   t.diagnostic(JSON.stringify({ ...result, completeCurrentOwnerBodies: 6,
     boundary: 'Readonly typing/Delete/Backspace only. Clipboard,other keys,selection paint,dynamic attributes and all Material readonly cases remain unproved.' }));
 });
+
+// Append-only queued batch: keep every previously registered body/line anchor.
+test('retained checkbox checkmark requests bind SVG units and disabled ink before projection', t => {
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  const read = (file, expected) => {
+    const bytes = readFileSync(file); assert.equal(digest(bytes), expected); return JSON.parse(bytes);
+  };
+  const file = 'artifacts/material-parity/checkbox-checkmark-retained-inputs-20261020.log';
+  const evidence = read(file, '30ff029a6f116c88e63027b960391e6e08bbaf6ddf3a89c305506cb43a18b8c4');
+  // Replay the exact authenticated, read-only census rather than a new collector.
+  const replay = JSON.parse(execFileSync(process.execPath, evidence.producerArgs,
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }));
+  assert.deepEqual(replay, evidence);
+  const inspect = value => {
+    assert.equal(value.cases, 68); assert.equal(value.observations.length, 68);
+    assert.equal(value.selectedReference, 52); assert.equal(value.candidateMarks, 52);
+    assert.deepEqual(value.selectionMismatches, []);
+    assert.equal(new Set(value.observations.map(row => row.case)).size, 68);
+    for (const row of value.observations) {
+      assert.equal(row.reference.selected, row.candidate.selected);
+      assert.equal(row.reference.svg.viewBox, '0 0 24 24');
+      assert.equal(row.reference.svg.width, '14px'); assert.equal(row.reference.svg.height, '14px');
+      assert.equal(row.reference.path.d, 'M1.73,12.91 8.1,19.28 22.79,4.59');
+      assert.equal(row.reference.path.strokeWidth, '3.12px');
+      assert.equal(row.reference.strokeCssAfterViewBox, 3.12 * 14 / 24);
+      assert.deepEqual(row.currentSourceOnly.fixedCssPoints,
+        [{ x: -5.5, y: .4 }, { x: -1.8, y: 3.2 }, { x: 5.5, y: -4.2 }]);
+      const coordinates = row.reference.path.d.match(/-?\d+(?:\.\d+)?/g).map(Number);
+      const native = [0, 2, 4].map(i => ({ x: coordinates[i] * 14 / 24 - 7,
+        y: coordinates[i + 1] * 14 / 24 - 7 }));
+      assert.deepEqual(row.reference.centerlineCssRelativeToOwnSvgCenter, native);
+      assert.deepEqual(row.currentSourceOnly.pointDeltas, native.map((point, i) => {
+        const candidate = row.currentSourceOnly.fixedCssPoints[i];
+        return Math.hypot(point.x - candidate.x, point.y - candidate.y);
+      }));
+      assert.ok(row.currentSourceOnly.pointDeltas[1] > 1);
+      if (row.reference.selected) {
+        assert.equal(row.reference.svg.opacity, '1'); assert.ok(row.candidate.mark);
+        assert.equal(row.candidate.mark.authored.type, 'showcase.material:check-mark');
+        assert.equal(row.candidate.mark.authored.data['stroke-width'], 1.8);
+        assert.equal(row.candidate.mark.width, '14px'); assert.equal(row.candidate.mark.height, '14px');
+      } else { assert.equal(row.reference.svg.opacity, '0'); assert.equal(row.candidate.mark, null); }
+    }
+  };
+  inspect(evidence);
+  for (const mutate of [r => r.observations.pop(), r => r.selectedReference--,
+    r => r.selectionMismatches.push('forged'), r => r.observations[0].reference.svg.viewBox = '-2 -3 30 30',
+    r => r.observations[0].reference.strokeCssAfterViewBox = 3.12,
+    r => r.observations[0].currentSourceOnly.pointDeltas[1] = 0,
+    r => r.observations[0].candidate.mark.authored.data['stroke-width'] = 3.12]) {
+    const altered = structuredClone(evidence); mutate(altered); assert.throws(() => inspect(altered));
+  }
+  const ink = read('artifacts/material-parity/checkbox-disabled-checkmark-token-20261020.log',
+    '1750461e2aafd8b9b6100799d3c81267e04be242d70f14cdf02d92f389a2b41f');
+  assert.equal(ink.input.sha256, digest(readFileSync(file))); assert.equal(ink.disabled.length, 8);
+  const expected = { light: [255, 251, 254], dark: [28, 27, 31], contrast: [255, 255, 255], custom: [244, 251, 250] };
+  let different = 0;
+  for (const row of ink.disabled) {
+    const owner = evidence.observations.find(item => item.case === row.case); assert.ok(owner);
+    assert.equal(owner.candidate.disabled, true); assert.equal(owner.reference.selected, true);
+    assert.deepEqual(row.tree, owner.inputTrees.reference);
+    const tree = read(row.tree.file, row.tree.sha256);
+    const svg = tree.nodes.filter(node => node.type === 'svg' && node.attributes?.class === 'mdc-checkbox__checkmark');
+    assert.equal(svg.length, 1); assert.equal(tree.styles[svg[0].style].color, row.native);
+    const colors = svg[0].rules.map(index => tree.rules[index]).filter(rule => rule.declarations?.color);
+    for (const inactive of colors.filter(rule => !rule.active)) {
+      assert.equal(inactive.active, false); assert.deepEqual(inactive.conditions, ['(forced-colors: active)']);
+      assert.equal(inactive.declarations.color.value, 'canvastext');
+    }
+    assert.deepEqual(colors.filter(rule => rule.active)
+      .map(rule => ({ source: rule.source, selector: rule.selector, declaration: rule.declarations.color,
+        conditions: rule.conditions, active: rule.active })), row.rules);
+    assert.ok(row.rules.some(rule => rule.active && rule.declaration.value.includes('disabled-selected-checkmark-color')));
+    assert.equal(row.candidate, owner.candidate.mark.authored.data['indicator-color']);
+    const profile = row.case.split('@')[1].split('/')[0];
+    const rgb = row.native.match(/\d+/g).map(Number); assert.deepEqual(rgb, expected[profile]);
+    const candidate = row.candidate.slice(1).match(/../g).map(component => parseInt(component, 16));
+    if (JSON.stringify(rgb) !== JSON.stringify(candidate)) different++;
+  }
+  assert.equal(different, 6);
+  for (const receipt of evidence.currentSources) assert.equal(digest(readFileSync(receipt.file)), receipt.sha256);
+  const component = readFileSync(evidence.currentSources[1].file, 'utf8');
+  const tree = ts.createSourceFile('component.ts', component, ts.ScriptTarget.Latest, true);
+  const ownerClass = tree.statements.find(node => ts.isClassDeclaration(node) && node.members.some(member => member.name?.getText(tree) === 'selectionMark'));
+  const mark = ownerClass.members.find(member => member.name?.getText(tree) === 'selectionMark').getText(tree);
+  assert.match(mark, /extraClass === 'checkbox-mark'/); assert.match(mark, /\? theme\.onPrimary/);
+  assert.doesNotMatch(mark, /disabled/);
+  t.diagnostic(JSON.stringify({ cases: 68, selected: 52, disabledInkDifferences: 6,
+    boundary: 'Unequal SVG/plugin path and disabled ink requests before projection;not mesh,cap/join,raster,current case or core-coordinate acceptance.' }));
+});
+
+test('retained select listbox naming omission precedes the queried browser AX targets', t => {
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  const bytes = readFileSync('artifacts/material-parity/select-listbox-name-inputs-20261020.log');
+  assert.equal(digest(bytes), '7351677374f8515257904ee3620484ed84fa0d30880b46299204eafb19cf4833');
+  const record = JSON.parse(bytes);
+  assert.equal(digest(readFileSync(record.input.file)), record.input.sha256);
+  assert.equal(digest(readFileSync(record.currentSource.file)), record.currentSource.sha256);
+  const inspect = value => {
+    assert.equal(value.cases, 40); assert.equal(value.rows.length, 40);
+    assert.equal(new Set(value.rows.map(row => row.case)).size, 40);
+    for (const row of value.rows) {
+      assert.equal(row.reference.attributes.role, 'listbox'); assert.equal(row.reference.attributes['aria-label'], 'Plan');
+      assert.equal(row.reference.attributes.tabindex, '-1'); assert.equal(row.candidate.authored.role, 'listbox');
+      assert.equal(row.candidate.authored.id, 'select-options');
+      for (const key of ['ariaLabel', 'ariaLabelledby', 'aria-label', 'aria-labelledby'])
+        assert.equal(Object.hasOwn(row.candidate.authored, key), false);
+    }
+  };
+  inspect(record);
+  for (const mutate of [r => r.rows.pop(), r => r.cases--,
+    r => r.rows[1].case = r.rows[0].case, r => r.rows[0].reference.attributes['aria-label'] = '',
+    r => r.rows[0].candidate.authored.ariaLabel = 'Plan']) {
+    const altered = structuredClone(record); mutate(altered); assert.throws(() => inspect(altered));
+  }
+  for (const row of record.rows) {
+    for (const side of ['reference', 'astylar']) {
+      const receipt = row.inputTrees[side], bytes = readFileSync(receipt.file);
+      assert.equal(digest(bytes), receipt.sha256); const tree = JSON.parse(bytes); assert.deepEqual(tree.errors, []);
+      const expected = side === 'reference' ? row.reference : row.candidate;
+      const actual = tree.nodes.filter(node => node.key === expected.key); assert.equal(actual.length, 1);
+      assert.deepEqual(side === 'reference' ? actual[0].attributes : actual[0].authored,
+        side === 'reference' ? expected.attributes : expected.authored);
+    }
+  }
+  const component = ts.createSourceFile('component.ts', readFileSync(record.currentSource.file, 'utf8'), ts.ScriptTarget.Latest, true);
+  const owners = [];
+  const visit = node => {
+    if (ts.isObjectLiteralExpression(node) && node.properties.some(property => ts.isPropertyAssignment(property)
+      && property.name.getText(component) === 'id' && ts.isStringLiteral(property.initializer)
+      && property.initializer.text === 'select-options')) owners.push(node);
+    ts.forEachChild(node, visit);
+  };
+  visit(component); assert.equal(owners.length, 1);
+  assert.ok(!owners[0].properties.some(property => /aria.?label/i.test(property.name?.getText(component) ?? '')));
+  const axBytes = readFileSync('artifacts/material-parity/select-open-ax-target-resolution-20261020.log');
+  assert.equal(digest(axBytes), 'a673c563a91f47eca0e5687cb499bb84cfc0ece693f43eef715b5017bfecd27d');
+  const ax = axBytes.toString().trim().split(/\r?\n/).map(line => JSON.parse(line));
+  assert.equal(ax.at(-1).complete, true); assert.deepEqual(ax.at(-1).errors, []);
+  assert.equal(ax.at(-1).currentRenderingAccepted, false);
+  for (const mode of ['reference', 'astylar']) {
+    const row = ax.find(entry => entry.mode === mode); assert.equal(row.dom.focused, true);
+    for (const relation of row.relations) {
+      assert.equal(relation.pointsToActualTarget, true);
+      const target = relation.targetNodes.filter(node => node.backendDOMNodeId === relation.backendDOMNodeId);
+      assert.equal(target.length, 1); assert.equal(target[0].ignored, false);
+      assert.equal(target[0].role.value, relation.name === 'controls' ? 'listbox' : 'option');
+      assert.equal(target[0].name.value, relation.name === 'activedescendant' ? 'Team' : mode === 'reference' ? 'Plan' : '');
+    }
+  }
+  t.diagnostic(JSON.stringify({ retainedInputCases: 40, actualAxPairs: 1,
+    boundary: 'Authored name omission plus queried relation targets only;not all94 select cases,whole AX exposure,AT,paint or case acceptance.' }));
+});
+
+test('disabled checkbox native role control isolates focusability from the renderer', t => {
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  const bytes = readFileSync('artifacts/material-parity/checkbox-disabled-ax-focus-probe-20261020.log');
+  assert.equal(digest(bytes), 'a0ca85fd1d76dbff03b293bf2a914b42120ca3a08d6d5f6da07fb17159135438');
+  const rows = bytes.toString().trim().split(/\r?\n/).map(line => JSON.parse(line));
+  const native = rows.find(row => row.mode === 'reference'), candidate = rows.find(row => row.mode === 'astylar');
+  const controlBytes = readFileSync('artifacts/material-parity/checkbox-disabled-native-role-control-20261020.log');
+  assert.equal(digest(controlBytes), '8bae9a4ee17b7ad676aabe98ebc91169fe7af9671c435b9dde6b471c1ad791e8');
+  const control = JSON.parse(controlBytes); assert.equal(control.input.sha256, digest(bytes));
+  const inspect = (reference, actual, plain) => {
+    assert.equal(reference.dom.tag, 'INPUT'); assert.equal(reference.dom.disabled, true);
+    assert.equal(actual.dom.tag, 'DIV'); assert.equal(actual.dom.role, 'checkbox');
+    for (const row of [reference, actual]) {
+      assert.equal(row.dom.tabindex, '-1'); assert.equal(row.projection.disabled, true);
+      assert.equal(row.projection.role, 'checkbox'); assert.equal(row.projection.checked, 'true');
+    }
+    assert.equal(reference.programmaticFocus, false); assert.equal(reference.focusAfterSettle, false);
+    assert.equal(reference.projection.focusable, false);
+    assert.equal(actual.programmaticFocus, true); assert.equal(actual.focusAfterSettle, true);
+    assert.equal(actual.projection.focusable, true);
+    assert.deepEqual(plain.projection, actual.projection); assert.equal(plain.focused, true);
+    assert.deepEqual(plain.errors, []);
+    assert.equal(plain.html, '<div id="control" role="checkbox" tabindex="-1" aria-label="Include archived" aria-checked="true" aria-disabled="true"></div>');
+  };
+  inspect(native, candidate, control);
+  for (const mutate of [v => v[0].programmaticFocus = true, v => v[1].dom.tag = 'INPUT',
+    v => v[1].projection.focusable = false, v => v[2].html = '<input disabled>', v => v[2].focused = false]) {
+    const values = structuredClone([native, candidate, control]); mutate(values); assert.throws(() => inspect(...values));
+  }
+  assert.equal(rows.at(-1).complete, true); assert.deepEqual(rows.at(-1).errors, []);
+  assert.equal(rows.at(-1).currentRenderingAccepted, false);
+  t.diagnostic('One pinned disabled AX/focus pair and equivalent native role-DIV control;not full AX/form/AT behavior,all profiles or a core focus defect.');
+});
+
+test('public readonly update preserves the flag while trusted typing mutates the value', t => {
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  const file = 'artifacts/material-parity/public-dynamic-readonly-20261020.log', bytes = readFileSync(file);
+  assert.equal(digest(bytes), '84e0c8cb97ed06d386a0f076eb116e4167a5b4c113c0b4e0c8427549848d4160');
+  const captured = JSON.parse(bytes), originalBytes = readFileSync(captured.original.file);
+  assert.equal(digest(originalBytes), captured.original.sha256); const original = JSON.parse(originalBytes);
+  for (const receipt of [original.source, original.bundle, original.html, ...original.inputs])
+    assert.equal(digest(readFileSync(receipt.file)), receipt.sha256);
+  const verifierBytes = readFileSync('artifacts/material-parity/public-dynamic-readonly-independent-20261020.log');
+  assert.equal(digest(verifierBytes), '8f7fb05d99efd69783e2f083dc54a0b5afe91832a025b75128b6394a3710b31f');
+  const verifier = JSON.parse(verifierBytes);
+  const verified = JSON.parse(execFileSync(process.execPath, verifier.producerArgs,
+    { encoding: 'utf8', maxBuffer: 1024 * 1024 }));
+  assert.deepEqual(verified, verifier); assert.equal(verified.negativeControlsRejected, 8);
+  assert.equal(verified.originalSourceRecovered, true); assert.equal(verified.trustedReadonlyXBothSides, true);
+  assert.deepEqual(captured.results[0].samples.map(sample => sample.value), ['Atlas', 'Atlas', 'Atlas', 'yAtlas']);
+  assert.deepEqual(captured.results[1].samples.map(sample => sample.value), ['Atlas', 'Atlas', 'xAtlas', 'yxAtlas']);
+  t.diagnostic('One plugin-free DPR1 public readonly-update pair;the earlier unwanted x is preserved,not normalized away. No general reconciliation,clipboard,DPR2,Material-case or raster acceptance.');
+});

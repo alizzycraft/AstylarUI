@@ -132,7 +132,7 @@ test('retained public unchanged-root updates preserve semantic focus failure at 
     const ownerFile = 'tests/material-parity/input-boundary-evidence.spec.mjs';
     assert.equal(r.owner.file, ownerFile);
     const currentOwner = readFileSync(ownerFile);
-    assert.equal(hash(currentOwner), 'cdcfd338d0823fefaa780efbba5e500a78f952e745f1c0d6039f0c59a2e8cc50');
+    assert.equal(hash(currentOwner), '58fe244dc56a251e144dcc6eab2c36cb18f017291da968e1d002dc36404d60ea');
     const capturedOwner = execFileSync('git', ['show', `99d56384:${ownerFile}`], { maxBuffer: 4000000 });
     assert.equal(hash(capturedOwner), r.owner.sha256);
     const publicProgram = source => {
@@ -499,7 +499,7 @@ test('equal-input caret font contrast preserves bounded source and recorded pain
     assert.equal(nodes.length, 1); return nodes[0].getText(tree);
   };
   const scopedCaretOwner = source => {
-    assert.equal(hash(source), 'cdcfd338d0823fefaa780efbba5e500a78f952e745f1c0d6039f0c59a2e8cc50');
+    assert.equal(hash(source), '58fe244dc56a251e144dcc6eab2c36cb18f017291da968e1d002dc36404d60ea');
     assert.equal(caretCallback(source), caretCallback(retainedCaretOwner), 'Complete captured caret callback must remain unchanged');
     return retainedCaretOwner;
   };

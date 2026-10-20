@@ -13,6 +13,12 @@ export const chipGraphicReview='e837c58e3b9c0594f6003a6001a03cb12b4fa875403db087
 const hash=b=>createHash('sha256').update(b).digest('hex');
 export function restoreInputBoundaryReadonlyAppend(source){
   const text=source.toString().replaceAll('\r\n','\n');
+  if(hash(text)==='58fe244dc56a251e144dcc6eab2c36cb18f017291da968e1d002dc36404d60ea'){
+    const start=text.indexOf('\n// Append-only queued batch:');assert.ok(start>0);
+    assert.equal(hash(text.slice(start)),'52a9172b09a5c677c91547f44bac5ef01aac6a70a43b3a0849f7bb4372997fd5');
+    assert.equal(hash(text.slice(0,start)),'cdcfd338d0823fefaa780efbba5e500a78f952e745f1c0d6039f0c59a2e8cc50');
+    return restoreInputBoundaryReadonlyAppend(text.slice(0,start));
+  }
   const previous='171bf9fae8fe2e701f5a42d5eef896685085ef267200956729ab447e04a032d5';
   if(hash(text)===previous)return text;
   assert.equal(hash(text),'cdcfd338d0823fefaa780efbba5e500a78f952e745f1c0d6039f0c59a2e8cc50');
@@ -75,6 +81,14 @@ export function createTextBackingReviewReader({root,read,reviewSha256}){
     '9ef883389c3aa8811d3a0a4756bc9e6f7cce82158c62ea453c08b4bb654c6367');
   const helper='tests/material-parity/semantic-text-transform-registration.mjs',helperText=read(path.resolve(root,helper),'utf8');
   let reviewedHelperText=helperText,replayRestorationBlock;
+  if(hash(reviewedHelperText)==='18eec69ef63dc741a3edba301dbba9a8b221f808f583c67cd0b3867160363bc8'){
+    const start=reviewedHelperText.indexOf('    // QUEUED_CONTROL_OWNER_RECEIPT_BEGIN\n');
+    const marker='    // QUEUED_CONTROL_OWNER_RECEIPT_END\n',end=reviewedHelperText.indexOf(marker,start)+marker.length;
+    assert.ok(start>0&&end>start);
+    assert.equal(hash(reviewedHelperText.slice(start,end)),'86e1644300ae8608c2f7e77f5c5a4e636977a3da3710fb9cfa0d1096e2168e58');
+    reviewedHelperText=reviewedHelperText.slice(0,start)+reviewedHelperText.slice(end);
+    assert.equal(hash(reviewedHelperText),'b9d1e65a82176a32beec12c26102b530efdb752ed76181542e25248eeca9b4a0');
+  }
   if(hash(reviewedHelperText)==='b9d1e65a82176a32beec12c26102b530efdb752ed76181542e25248eeca9b4a0'){
     const tree=ts.createSourceFile(helper,reviewedHelperText,99,true),ranges=[];
     for(const node of tree.statements){
@@ -131,6 +145,11 @@ export function createTextBackingReviewReader({root,read,reviewSha256}){
     const benchmark='tests/material-parity/benchmark-config.spec.mjs';
     const benchmarkCurrentText=read(path.resolve(root,benchmark),'utf8');
     let benchmarkText=benchmarkCurrentText;
+    if(hash(benchmarkText)==='dc30dfac735721633f6fe04d8319255f41b305f113118fe96de0d757c313cb47'){
+      const queued='58fe244dc56a251e144dcc6eab2c36cb18f017291da968e1d002dc36404d60ea';
+      assert.equal(benchmarkText.split(queued).length,3);
+      benchmarkText=benchmarkText.replaceAll(queued,'cdcfd338d0823fefaa780efbba5e500a78f952e745f1c0d6039f0c59a2e8cc50');
+    }
     if(hash(benchmarkText)==='cba155304dfc1024fad3224789ed032ef8df5885b4367c9664e472a63772cf10'){
       const current='cdcfd338d0823fefaa780efbba5e500a78f952e745f1c0d6039f0c59a2e8cc50';
       assert.equal(benchmarkText.split(current).length,3);

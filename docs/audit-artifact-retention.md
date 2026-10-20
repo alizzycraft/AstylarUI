@@ -2,6 +2,18 @@
 
 ## Current versus historical evidence
 
+Retain queued-control-owning-20261020.log,its .failed.log and verbatim
+queued-control-owning-20261020.failed-source.mjs;the last is a failure-source
+snapshot,not executable from its artifact directory without the original checkout
+context. Keep queued-control-conservation-20261020.failed.log and recovered log,
+queued-control-benchmark-20261020.log and all three queued-control-*-consumer logs.
+Focused proofs5/5,benchmark2/2,existing historical reader/append guards and recovered
+new conservation check pass. Initial failures concern inactive forced-colors rule
+selection and an absent mutation target;original captures/rules remain immutable.
+The four test callbacks are append-only;exact accepted suite/benchmark/helper
+predecessors recover. This new proof batch is NOT yet part of published39fc/166/220
+or its source-fingerprint population. No additional full export or capture ran.
+
 Readonly generation39fc0e3e is now accepted AUDIT evidence following terminal0
 cold94817,full source/proof/findings/readable/coverage/section conservation and
 normal main import. Keep readonly-independent-cold-check,readonly-main-staging

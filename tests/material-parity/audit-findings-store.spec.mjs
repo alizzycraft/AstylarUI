@@ -519,3 +519,43 @@ test('readonly registration recovers complete prior policy and producer without 
     assert.throws(() => restore(current.replace(previousMarker, 'unreviewed-predecessor')));
   }
 });
+
+test('queued control proof append conserves complete accepted sources and rejects drift', async () => {
+  const { execFileSync } = await import('node:child_process');
+  const { default: ts } = await import('typescript');
+  const { restoreInputBoundaryReadonlyAppend } = await import('./text-backing-case-review-source.mjs');
+  const hash = value => createHash('sha256').update(value).digest('hex');
+  const suite = 'tests/material-parity/input-boundary-evidence.spec.mjs';
+  const current = fs.readFileSync(suite, 'utf8').replaceAll('\r\n', '\n');
+  const accepted = execFileSync('git', ['show', `437a4535:${suite}`], { encoding: 'utf8', maxBuffer: 2_000_000 }).replaceAll('\r\n', '\n');
+  const start = current.indexOf('\n// Append-only queued batch:'); assert.ok(start > 0);
+  assert.equal(current.slice(0, start), accepted);
+  assert.equal(hash(accepted), 'cdcfd338d0823fefaa780efbba5e500a78f952e745f1c0d6039f0c59a2e8cc50');
+  const tree = ts.createSourceFile('append.mjs', current.slice(start), ts.ScriptTarget.Latest, true);
+  assert.equal(tree.parseDiagnostics.length, 0); assert.equal(tree.statements.length, 4);
+  assert.deepEqual(tree.statements.map(node => node.expression.arguments[0].text), [
+    'retained checkbox checkmark requests bind SVG units and disabled ink before projection',
+    'retained select listbox naming omission precedes the queried browser AX targets',
+    'disabled checkbox native role control isolates focusability from the renderer',
+    'public readonly update preserves the flag while trusted typing mutates the value',
+  ]);
+  assert.equal(restoreInputBoundaryReadonlyAppend(current), restoreInputBoundaryReadonlyAppend(accepted));
+  for (const changed of [current + '\n// unrelated drift', current.replace('disabledInkDifferences: 6', 'disabledInkDifferences: 0'),
+    current.replace('public readonly update preserves the flag while trusted typing mutates the value', 'unreviewed dynamic readonly test'),
+    current.replace('strokeCssAfterViewBox', 'wrong-units')]) {
+    assert.notEqual(changed, current, 'The rejection control must actually mutate the source');
+    assert.throws(() => restoreInputBoundaryReadonlyAppend(changed));
+  }
+  const benchmark = 'tests/material-parity/benchmark-config.spec.mjs';
+  const benchmarkNow = fs.readFileSync(benchmark, 'utf8').replaceAll('\r\n', '\n');
+  assert.equal(benchmarkNow.split(hash(current)).length, 3);
+  const benchmarkBefore = execFileSync('git', ['show', `437a4535:${benchmark}`], { encoding: 'utf8', maxBuffer: 2_000_000 }).replaceAll('\r\n', '\n');
+  assert.equal(benchmarkNow.replaceAll(hash(current), hash(accepted)), benchmarkBefore);
+  const helper = 'tests/material-parity/semantic-text-transform-registration.mjs';
+  const helperNow = fs.readFileSync(helper, 'utf8').replaceAll('\r\n', '\n');
+  const begin = helperNow.indexOf('    // QUEUED_CONTROL_OWNER_RECEIPT_BEGIN\n');
+  const marker = '    // QUEUED_CONTROL_OWNER_RECEIPT_END\n', end = helperNow.indexOf(marker, begin) + marker.length;
+  assert.ok(begin > 0 && end > begin);
+  const helperBefore = execFileSync('git', ['show', `437a4535:${helper}`], { encoding: 'utf8', maxBuffer: 2_000_000 }).replaceAll('\r\n', '\n');
+  assert.equal(helperNow.slice(0, begin) + helperNow.slice(end), helperBefore);
+});

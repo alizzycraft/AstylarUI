@@ -352,6 +352,14 @@ export function readHistoricalBenchmarkSource(file, options) {
   else if (name === 'position-composition-producer-transition.mjs') restored = restoreSemanticRegistrationTransitionSource(raw);
   else {
     restored = normalized(raw);
+    // QUEUED_CONTROL_OWNER_RECEIPT_BEGIN
+    if(digest(restored)==='dc30dfac735721633f6fe04d8319255f41b305f113118fe96de0d757c313cb47'){
+      const current='58fe244dc56a251e144dcc6eab2c36cb18f017291da968e1d002dc36404d60ea';
+      assert.equal(restored.split(current).length,3);
+      restored=restored.replaceAll(current,'cdcfd338d0823fefaa780efbba5e500a78f952e745f1c0d6039f0c59a2e8cc50');
+      assert.equal(digest(restored),'cba155304dfc1024fad3224789ed032ef8df5885b4367c9664e472a63772cf10');
+    }
+    // QUEUED_CONTROL_OWNER_RECEIPT_END
     const focusStart = restored.indexOf('  // INPUT_FOCUS_RUNNER_PROVENANCE_BEGIN\n');
     const focusEndMarker = '  // INPUT_FOCUS_RUNNER_PROVENANCE_END\n';
     const focusEnd = restored.indexOf(focusEndMarker, focusStart);

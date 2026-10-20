@@ -28,13 +28,15 @@ below. Earlier next/live statements in chronology are not current instructions.
   Six complete current/installed owner methods agree. Guard missing at shared
   text-keyboard defaults. One DPR1 public readonly-update pair also reproduces
   mutation after the flag updates correctly;clipboard,broader dynamic cases and
-  selection pixels remain open. New standalone result is outside published39fc.
+  selection pixels remain open. New update result now has an owning proof but
+  remains outside published39fc pending the next coherent registration batch.
 - Queued checkbox request evidence:68 retainedab42dbec cases,52 visible marks,
   selection flags agree. Boxes14px each;native stroke1.82 CSSpx after viewBox
   versus candidate1.8. Current-only bend delta1.149px;not actual historical mesh.
   Six of eight disabled ink requests differ from candidate onPrimary substitution.
   checkbox-checkmark-retained-inputs/checkbox-disabled-checkmark-token-20261020
-  log pairs. No renderer change,owning proof/case join or canonical promotion yet.
+  log pairs. Owning proof now passes;case join/classification registration remains
+  pending. No renderer change or canonical promotion of these observations yet.
 - Frozen light desktopDPR1 checkbox AX pairs:initial DOM value on absent from AX;
   disabled native INPUT rejects focus,candidate role-DIV accepts it. Plain HTML
   role-DIV reproduces candidate:widget-authoring mismatch,not invented core focus.
@@ -47,8 +49,13 @@ below. Earlier next/live statements in chronology are not current instructions.
   lifetime ownership,local composited paint and current-runtime applicability.
   Shared editing:1734 authored exclusions inspected;443 writable and134 readonly/
   disabled cases remain partial. Do not reopen settled work without input drift.
-- Next:batch queued checkbox/select and dynamic-readonly owning proof/case
-  integration,then remaining structure/AX/paint/current-runtime coverage.
+- Queued owning batch:four append-only input-boundary tests pass alongside the
+  original readonly test (5/5). Retained reader,old append guard,new conservation
+  guard,two benchmark owners and three direct consumers pass. Existing proof
+  bodies/anchors remain unchanged;source fingerprints await batched reconciliation.
+- Next:register queued checkbox/select classifications and five new owning/
+  conservation proof anchors,join applicable cases,then one coherent export/cold
+  milestone. Remaining structure/AX/paint/current-runtime coverage stays open.
   Original full canonical/browser/unit/build/packed-consumer/release gates remain.
 - Storage:the agent performed no deletion. After the302-build review,the existing
   Material test-out parent now contains0 directories;D: free12831477760 bytes.
@@ -58,6 +65,39 @@ below. Earlier next/live statements in chronology are not current instructions.
 ## Audit chronology — retained evidence, newest first
 
 ### October20 — retained chip/readonly registration and checkbox checkpoint
+
+Queued control owning proofs COMPLETE (not canonical registration/case closure):
+input-boundary-evidence.spec.mjs now appends four tests to its exact511089-byte
+accepted prefix. Full old normalized sourcecdcfd338 is unchanged;current58fe244d,
+append52a9172b. Existing220 registered anchors and all original test bodies remain.
+Focused command selecting original readonly plus four new tests passes5/5:
+queued-control-owning-20261020.log. Checkbox proof freshly replays its exact
+authenticated68-case census,checks SVG3.12 user units→1.82CSSpx (not3.12CSSpx),
+source-only path geometry,all eight disabled ink token chains/six color differences.
+Select proof authenticates40 paired inputs plus one queried actual AX relation
+pair;disabled checkbox proof retains the native role-DIV isolation;readonly update
+proof replays its independent verifier/eight rejection controls. None proves new
+mesh/raster,all-profile AX/AT,whole-case inspection or current rendering acceptance.
+
+Original focused4/5 failure is retained with its verbatim source snapshot. It
+compared active-only ink records with inactive forced-colors rules;recovery
+explicitly verifies those inactive conditions before comparing active declarations.
+No captured rule was rewritten or enabled/disabled. New conservation test initially
+had a no-op mutation targeting absent text;its failure log remains. Recovery both
+changes a present target and asserts every rejection input differs from current.
+
+Complete accepted suite/benchmark/helper sources conserve. The existing append
+reader pins whole current source+tail hashes and recovers exactcdcfd338 before
+its original171bf9fa boundary. Two benchmark whole-owner guards alone move to
+58fe244d;all captured callbacks remain identical. The helper's exact additive
+receipt prepass reverses completely to acceptedb9d1e65a;old historical recipes are
+unchanged. Existing retained text-backing reader and original append/drift check
+pass;new conservation test passes after its mutation-target correction. Logs:
+queued-control-conservation-20261020.failed.log,recovered counterpart,
+queued-control-benchmark-20261020.log (2/2),and queued-control-{divider,backing,
+review}-consumer-20261020.log (three exit0). No expensive canonical/browser gate
+rerun for this owning-proof increment. Accepted39fc remains166/220;new tests and
+changed source receipts are explicitly pending the coherent registration batch.
 
 Readonly publication COMPLETE:independent cold94817 terminated exit0 and verified
 the canonical candidate. Stdout SHA8321c61f60e0aef5c6a4f7cce5327ea5141d849590e941ef7f2238bb5c8bc28a;
