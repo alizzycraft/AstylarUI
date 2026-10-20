@@ -2,6 +2,25 @@
 
 ## Current audit pointer — October20
 
+Queued chip observations now have owning regression protection in the EXISTING
+control-state-paint-review.spec.mjs:two append-only tests pass2/2,zero skip/cancel/
+todo,2391.3716ms. Focus-indicator40/112 census and24 state contexts/48 tree
+receipts are checked;ten mutation controls reject visible-outline invention,
+population loss,altered alpha/background/child ownership/receipt and false
+acceptance boundary text. Current componentb493a355,four exact current rules,
+ae9cdad2 additions and actual runner default statePaint guard are checked.
+Log chip-state-paint-owning-history-20261020.log
+SHA0b51f880e1865a7d4ef1954add039b9d6cb6717280a1af589ca67968ae52b072.
+The original93347-character LF-normalized suite is an EXACT unchanged prefix:
+oldSHAda7d84fe31499b20f170e3470e7983e3bf9b7cf69e7899c419994bbf6d058e49,
+newSHAe73b276b78c3bb6ac8f2e2df5e6ba3f4e550322edaa3c055a7378f75b53b6d65;
+appended7780 characters SHA776a5ddd4468322fef2a674b2efd802b54c14d8faed3c80a006c493677c76686.
+Original proof anchors are stationary. This indexed-source append is QUEUED for
+coherent source reconciliation;accepted3072 remains its own checkpoint,not a
+claim that the canonical package already includes these tests. No full suite or
+browser gate rerun/promoted. Next join scoped chip evidence through the existing
+case-obligation mechanism,retaining every parent remaining/status/acceptance field.
+
 ACCEPTED field evidence publication:independent cold session23829 finished0;
 main validated import finished0. Current generation
 3072dbe6c49e182e5c4e8734e53847b27206f9215d31e1ba5d09f133c79a6ac3,

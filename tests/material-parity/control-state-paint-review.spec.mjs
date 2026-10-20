@@ -1173,3 +1173,116 @@ test('control paint preserves owner boundaries and all 397 captured observations
   fabricated.find(isPaintReviewRow).reviewEvidence.renderingEquivalent = true;
   assert.ok(validatePaintReviews(fabricated, allRows, cases, inventory, retained, normalize, sources).length);
 });
+
+// Append-only: retain every published proof body and its line anchors above.
+test('retained chip focus indicators do not establish a visible missing outline', () => {
+  const bytes = readFileSync('artifacts/material-parity/chip-focus-indicator-retained-inputs-20261020.log');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    '3df845222863b4a52e7a3e4cccd3f629ae3343707029114bb7fbe075fa2da3b1');
+  const original = JSON.parse(bytes.toString().replace(/^\uFEFF/, ''));
+  const verify = result => {
+    assert.equal(result.cases, 76); assert.equal(result.owners, 152);
+    assert.equal(result.report.sha256, 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+    assert.equal(result.groups.reduce((sum, group) => sum + group.count, 0), 152);
+    let generated = 0, absent = 0;
+    for (const group of result.groups) {
+      assert.equal(group.position, 'absolute'); assert.equal(group.pointerEvents, 'none');
+      assert.equal(group.background, 'rgba(0, 0, 0, 0)');
+      assert.equal(group.border, '0px'); assert.equal(group.boxShadow, 'none');
+      assert.equal(group.pseudo.length, 1);
+      const pseudo = group.pseudo[0]; assert.equal(pseudo.pseudo, '::before');
+      if (pseudo.generated) {
+        generated += group.count;
+        assert.equal(pseudo.style.display, 'none');
+        assert.equal(pseudo.style.borderTopWidth, '3px');
+        assert.equal(pseudo.style.borderTopColor, 'rgba(0, 0, 0, 0)');
+      } else { absent += group.count; assert.equal(pseudo.style, null); }
+    }
+    assert.deepEqual({ generated, absent }, { generated: 40, absent: 112 });
+    assert.match(result.boundary, /No candidate pixel or current runtime acceptance/);
+  };
+  verify(original);
+  for (const mutate of [
+    r => r.groups.find(g => g.pseudo[0].generated).pseudo[0].style.display = 'block',
+    r => r.groups.find(g => g.pseudo[0].generated).pseudo[0].style.borderTopColor = 'black',
+    r => r.groups[0].count++,
+    r => r.boundary = 'Current rendering accepted',
+  ]) { const altered = structuredClone(original); mutate(altered); assert.throws(() => verify(altered)); }
+});
+
+test('retained chip state paint preserves separate native alpha layers and opaque host substitutions', () => {
+  const hash = value => createHash('sha256').update(value).digest('hex');
+  const bytes = readFileSync('artifacts/material-parity/chip-state-layer-retained-inputs-20261020.log');
+  assert.equal(hash(bytes), '725676d749bfd6a9c75a89b7e3dea0ca35438b568861eca21a91ce0f2945a997');
+  const original = JSON.parse(bytes.toString().replace(/^\uFEFF/, ''));
+  const reportBytes = readFileSync(original.report.file); assert.equal(hash(reportBytes), original.report.sha256);
+  assert.equal(original.report.sha256, 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const report = JSON.parse(reportBytes);
+  const cases = report.interactions.filter(e => e.family === 'chips' && ['focus', 'hover', 'held'].includes(e.state));
+  const identity = row => `${row.profile}/${typeof row.viewport === 'string' ? row.viewport : row.viewport.id}/${row.state}`;
+  const expectedCases = ['light', 'dark', 'contrast', 'custom'].flatMap(profile => ['desktop-dpr1', 'desktop-dpr2']
+    .flatMap(viewport => ['focus', 'hover', 'held'].map(state => `${profile}/${viewport}/${state}`))).sort();
+  assert.deepEqual(cases.map(identity).sort(), expectedCases);
+  const source = readFileSync(original.component.file, 'utf8').replaceAll('\r\n', '\n');
+  assert.equal(hash(source), original.component.normalizedSha256);
+  assert.equal(original.component.normalizedSha256, 'b493a355679903f988e29f0dafbb95d2d6cce41275302fce5c978ae55f423b9f');
+  assert.equal(/selector: '\.chip[^']*:focus/.test(source), false);
+  const history = execFileSync('git', ['-c', 'gc.auto=0', '-c', 'maintenance.auto=false', 'show',
+    'ae9cdad226ea19f05c0a791e4fba23e8de5f60a0', '--', original.component.file], { encoding: 'utf8' });
+  for (const rule of [
+    "{ selector: '.chip:hover', background: mixHex(theme.surfaceContainer, theme.onSurface, .08) }",
+    "{ selector: '.chip:active', background: mixHex(theme.surfaceContainer, theme.onSurface, .12) }",
+    "{ selector: '.chip.selected:hover', background: mixHex('#eadef7', '#4b4357', .08) }",
+    "{ selector: '.chip.selected:active', background: mixHex('#eadef7', '#4b4357', .12) }",
+  ]) {
+    assert.ok(source.includes(rule));
+    assert.ok(history.split(/\r?\n/).some(line => line.startsWith('+') && line.includes(rule)));
+  }
+  const runner = readFileSync('tests/material-parity/run-material-parity.mjs', 'utf8');
+  assert.ok(runner.includes("if (family !== 'button' || state !== 'activate-leave') return { matches: true };"));
+  const verify = result => {
+    assert.equal(result.cases, 24); assert.equal(result.authenticatedTrees, 48);
+    assert.deepEqual(result.observations.map(identity).sort(), expectedCases);
+    assert.match(result.boundary, /not a local-paint measurement/);
+    for (const row of result.observations) {
+      const entry = cases.find(c => identity(c) === identity(row)); assert.ok(entry);
+      assert.deepEqual(row.treeReceipts, entry.inputTrees);
+      const trees = Object.fromEntries(Object.entries(row.treeReceipts).map(([side, receipt]) => {
+        const data = readFileSync(receipt.file); assert.equal(hash(data), receipt.sha256);
+        const tree = JSON.parse(data); assert.deepEqual(tree.errors, []); return [side, tree];
+      }));
+      const host = trees.reference.nodes.find(n => n.attributes?.id === 'chip-0');
+      const layer = trees.reference.nodes.find(n => n.key === row.reference.key);
+      assert.equal(layer.parent, host.key); assert.equal(row.reference.parent, host.key);
+      assert.equal(layer.attributes.class, 'mat-mdc-chip-focus-overlay');
+      const native = trees.reference.styles[layer.style];
+      assert.equal(row.reference.background, native.backgroundColor);
+      assert.equal(row.reference.opacity, native.opacity);
+      assert.equal(native.backgroundColor, row.state === 'hover' ? 'rgb(73, 69, 78)' : 'rgb(75, 67, 87)');
+      assert.equal(native.opacity, row.state === 'hover' ? '0.08' : '0.12');
+      const candidate = trees.astylar.nodes.find(n => n.key === row.candidate.key);
+      assert.equal(candidate.authored.id, 'chip-0');
+      assert.deepEqual(row.candidate.children, ['chip-0-mark', 'chip-0-label']);
+      assert.deepEqual(trees.astylar.nodes.filter(n => n.parent === candidate.key).map(n => n.authored.id), row.candidate.children);
+      for (const stage of ['normalResolvedStyle', 'interactionResolvedStyle', 'resolvedStyle']) {
+        for (const property of ['background', 'opacity', 'borderRadius', 'width', 'height'])
+          assert.equal(row.candidate.stages[stage][property], candidate[stage][property] ?? null);
+      }
+      const actual = row.candidate.stages.interactionResolvedStyle;
+      assert.equal(actual.background, { focus: '#eadef7', hover: '#ddd2ea', held: '#d7cbe4' }[row.state]);
+      assert.equal(actual.opacity, '1.0');
+      assert.equal(native.height, ['light', 'dark'].includes(row.profile) ? '32px' : '24px');
+      assert.equal(actual.height, native.height);
+      assert.deepEqual(row.recordedStatePaint, { matches: true }); // Default, not measured parity.
+    }
+  };
+  verify(original);
+  for (const mutate of [
+    r => r.observations.pop(),
+    r => r.observations[0].reference.opacity = '0',
+    r => r.observations[0].candidate.stages.interactionResolvedStyle.background = '#000000',
+    r => r.observations[0].candidate.children.push('invented-state-layer'),
+    r => r.observations[0].treeReceipts.reference.sha256 = '0'.repeat(64),
+    r => r.boundary = 'Current rendering accepted',
+  ]) { const altered = structuredClone(original); mutate(altered); assert.throws(() => verify(altered)); }
+});

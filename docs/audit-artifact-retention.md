@@ -2,6 +2,12 @@
 
 ## Current versus historical evidence
 
+Retain chip-state-paint-owning-focused and chip-state-paint-owning-history-
+20261020 log pairs. Both complete2/2;history follow-up adds exact Git source
+origin and real default-paint-guard assertions. Existing paint suite is extended
+append-only;no original assertions or line anchors removed. These standalone
+proofs are queued beyond accepted3072,not canonical findings/current rendering.
+
 October20 field generation3072 is now accepted audit evidence after successful
 independent cold check and complete section/coverage/source/proof/readable
 conservation. Normal main import verifies/reuses ALL86 immutable files shared
