@@ -2,6 +2,36 @@
 
 ## Current audit pointer — October20
 
+Next chip graphic question resolved as unequal INPUT requests,not core paint:
+all76 original cases/152 paired host selections and152 tree receipts authenticate.
+120 selected owners retain native20px SVG/viewBox(-2,-3,30,30),path
+M1.73,12.91 8.1,19.28 22.79,4.59,computed stroke2px/RGB75,67,87;candidate
+requests16px plugin boxes,data stroke1.8/color#49454f. Remaining32 unselected
+owners retain native SVG descendants while candidate omits the mark;do not call
+that omission harmless/equivalent without visibility/layout justification.
+Current whole pluginSHAdee2c10a is bound. Actual materialCheckMarkPath executes
+[-5.5,.4],[-1.8,3.2],[5.5,-4.2];each point differs by>1CSSpx from the native
+centerline mapped into its OWN20px CSS viewport. No chip/world placement inferred.
+Renderer maps those CSS points through context.coordinates only at projection;
+plugin-owned vector paint is legitimate,but different path/box/stroke/ink inputs
+are not equivalent representation. First mismatch is application/plugin paint
+authoring;no equal-input core blending/stroke or captured live mesh verdict.
+Git5b74d1b3 changes bend/end Y signs under `align plugin indicator coordinates`;
+that history alone does not establish when other geometry/ink mismatches began
+or prove a first-bad runtime/coordinate regression. Tube cap/join raster and
+current-runtime binding remain open. Existing canonical chip state-paint review
+already covers10 scalar groups;the recent24-context review/join extends scoped
+case evidence/focus diagnosis,not ten newly discovered scalar findings.
+Existing chip-position-inspection suite appended proof passes1/1,zero skip/
+cancel/todo,2543.011ms,four altered-input controls. Log
+chip-checkmark-owning-proof-20261020.log SHA23f3449d6a8f1c50c7581dbd3b9230045acec1f861762cae3cfa71ff4eea5489;
+input census chip-checkmark-retained-inputs-20261020.log SHAc72a3c4abee38e39edb96b3bd5304f3a63ed05c8d355cc1501af40696dc90ab6.
+Original15754-character normalized suite is exact prefix(aaa2080a);newd016f60e,
+6032-character appendix77021c5b. This is an additional queued indexed source
+change beyond the preceding four-file census;no canonical/currentness promotion.
+Next join this scoped graphic disposition with the existing chip obligations
+in a coherent batch;retain complete structure/semantics/paint/currentness work.
+
 Chip successor868d is SELECTED by the existing named launcher/production reader,
 not canonical. Exact supported digest added;all five historical source transitions
 and unknown-digest/source-drift rejection remain. Owning loader pair passes2/2,

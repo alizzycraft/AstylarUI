@@ -233,3 +233,81 @@ test('chip production binding rejects incomplete, foreign and forged evidence', 
   assert.equal(unbound.binding.status, 'unbound');
   assert.throws(() => applyChipPaintAuditRows([{ attribution: 'reviewed-chip-state-layer-substitution' }], unbound));
 });
+
+// Append-only: existing chip proof bodies and registered line anchors stay fixed.
+test('retained chip checkmark inputs distinguish custom plugin geometry from native SVG', async () => {
+  const hash = value => createHash('sha256').update(value).digest('hex');
+  const bytes = readFileSync('artifacts/material-parity/chip-checkmark-retained-inputs-20261020.log');
+  assert.equal(hash(bytes), 'c72a3c4abee38e39edb96b3bd5304f3a63ed05c8d355cc1501af40696dc90ab6');
+  const observation = JSON.parse(bytes.toString().replace(/^\uFEFF/, ''));
+  const check = result => {
+    assert.equal(result.cases, 76); assert.equal(result.selected, 120); assert.equal(result.unselected, 32);
+    assert.equal(result.combinations.length, 2);
+    const selected = result.combinations.find(row => row.selected), unselected = result.combinations.find(row => !row.selected);
+    assert.equal(selected.count, 120); assert.equal(unselected.count, 32); assert.equal(unselected.candidate, null);
+    const native = { viewBox: '-2 -3 30 30', width: '20px', height: '20px',
+      path: 'M1.73,12.91 8.1,19.28 22.79,4.59', strokeWidth: '2px', stroke: 'rgb(75, 67, 87)' };
+    assert.deepEqual(selected.native, native); assert.deepEqual(unselected.native, native);
+    assert.deepEqual(selected.candidate, { type: 'showcase.material:check-mark',
+      data: { 'indicator-color': '#49454f', 'stroke-width': 1.8 }, width: '16px', height: '16px' });
+  };
+  check(observation);
+  for (const mutate of [r => r.selected--, r => r.combinations[0].native.width = '16px',
+    r => r.combinations[0].candidate.data['stroke-width'] = 2,
+    r => r.combinations[0].candidate.data['indicator-color'] = '#4b4357']) {
+    const changed = structuredClone(observation); mutate(changed); assert.throws(() => check(changed));
+  }
+  const reportBytes = readFileSync(observation.report.file); assert.equal(hash(reportBytes), observation.report.sha256);
+  assert.equal(observation.report.sha256, 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const report = JSON.parse(reportBytes), counts = { selected: 0, unselected: 0 };
+  const cases = [...report.results, ...report.interactions].filter(e => e.family === 'chips'); assert.equal(cases.length, 76);
+  for (const entry of cases) {
+    const trees = Object.fromEntries(Object.entries(entry.inputTrees).map(([side, receipt]) => {
+      const data = readFileSync(receipt.file); assert.equal(hash(data), receipt.sha256);
+      const tree = JSON.parse(data); assert.deepEqual(tree.errors, []); return [side, tree];
+    }));
+    for (const id of ['chip-0', 'chip-1']) {
+      const native = trees.reference, candidate = trees.astylar;
+      const host = native.nodes.find(n => n.attributes?.id === id);
+      const action = native.nodes.find(n => n.key.startsWith(host.key + '/') && n.type === 'button');
+      const selected = action.attributes['aria-selected'] === 'true';
+      assert.equal(candidate.nodes.find(n => n.authored?.id === id).authored.ariaSelected, selected);
+      const svg = native.nodes.find(n => n.key.startsWith(host.key + '/') && n.type === 'svg');
+      const path = native.nodes.find(n => n.parent === svg.key && n.type === 'path');
+      const ns = native.styles[svg.style], ps = native.styles[path.style];
+      assert.deepEqual({ viewBox: svg.attributes.viewBox, width: ns.width, height: ns.height,
+        path: path.attributes.d, strokeWidth: ps.strokeWidth, stroke: ps.stroke }, observation.combinations[0].native);
+      assert.equal(ns.transform, 'none'); assert.equal(ps.transform, 'none');
+      const mark = candidate.nodes.find(n => n.authored?.id === `${id}-mark`);
+      if (selected) {
+        counts.selected++; assert.ok(mark); assert.equal(mark.parent, candidate.nodes.find(n => n.authored?.id === id).key);
+        assert.equal(mark.authored.type, 'showcase.material:check-mark');
+        assert.deepEqual(mark.authored.data, observation.combinations[0].candidate.data);
+        for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle']) {
+          assert.equal(mark[stage].width, '16px'); assert.equal(mark[stage].height, '16px');
+        }
+      } else { counts.unselected++; assert.equal(mark, undefined); }
+    }
+  }
+  assert.deepEqual(counts, { selected: 120, unselected: 32 });
+  const { default: ts } = await import('typescript');
+  const plugin = readFileSync('examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts', 'utf8');
+  assert.equal(hash(plugin.replaceAll('\r\n', '\n')), 'dee2c10af7f3116bc6a476d63182ac182e5717b90f5333a327b77213e0b9107e');
+  const ast = ts.createSourceFile('plugin.ts', plugin, 99, true, ts.ScriptKind.TS);
+  const declaration = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name.text === 'materialCheckMarkPath');
+  const javascript = ts.transpileModule(declaration.getText(ast).replace(/^export /, ''), {
+    compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext },
+  }).outputText;
+  const points = new Function(javascript + '\nreturn materialCheckMarkPath();')();
+  assert.deepEqual(points, [{ x: -5.5, y: .4 }, { x: -1.8, y: 3.2 }, { x: 5.5, y: -4.2 }]);
+  // Native centerline in its own 20px CSS viewport, not chip/world coordinates.
+  const nativePoints = [[1.73, 12.91], [8.1, 19.28], [22.79, 4.59]]
+    .map(([x, y]) => ({ x: (x + 2) * 20 / 30 - 10, y: (y + 3) * 20 / 30 - 10 }));
+  assert.ok(points.every((point, i) => Math.hypot(point.x - nativePoints[i].x, point.y - nativePoints[i].y) > 1));
+  const renderer = ast.statements.find(n => ts.isClassDeclaration(n) && n.name.text === 'MaterialCheckMarkRenderer').getText(ast);
+  assert.ok(renderer.includes('materialCheckMarkPath().map'));
+  assert.ok(renderer.includes('context.coordinates.toRenderPoint(point)'));
+  assert.ok(renderer.includes("Math.max(.6, this.number(context, 'stroke-width', 1.8) / 2)"));
+  // Legitimate plugin paint ownership does not equate different paths/boxes/ink.
+  // Source geometry only: no captured tube mesh, cap/join raster or current pixels.
+});

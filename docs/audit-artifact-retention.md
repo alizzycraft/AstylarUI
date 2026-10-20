@@ -2,6 +2,12 @@
 
 ## Current versus historical evidence
 
+Retain chip-checkmark-retained-inputs and chip-checkmark-owning-proof-20261020
+log pairs:76-case/120selected/32unselected requests and current plugin path
+source proof,not live mesh/current raster acceptance. Existing chip-position
+suite is append-only;original bodies/anchors unchanged. This evidence remains
+queued outside selected868d and accepted3072;do not overwrite either proposal.
+
 Retain chip-selected-review-integration,chip-selected-launcher and chip-selected-
 source-census-20261020 log pairs. Exact868d selection and full predecessor/source/
 219-proof conservation are preflight evidence,not coherent export or canonical
