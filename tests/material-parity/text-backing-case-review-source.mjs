@@ -54,13 +54,21 @@ export function createTextBackingReviewReader({root,read,reviewSha256}){
   };
   const policy='tests/material-parity/input-equivalence-policy.mjs',policyText=read(path.resolve(root,policy),'utf8');
   bind(policy,policyText,restoreTextBackingPolicy(policyText),'da0c6f3359f1146b07a9cd1f686c184df55185bbc0517c3a7df832f40e5c1512');
-  const suite='tests/material-parity/input-boundary-evidence.spec.mjs',suiteText=read(path.resolve(root,suite),'utf8');
+  const suite='tests/material-parity/input-boundary-evidence.spec.mjs',suiteCurrentText=read(path.resolve(root,suite),'utf8');
+  let suiteText=suiteCurrentText;
+  if(hash(suiteText)==='cdcfd338d0823fefaa780efbba5e500a78f952e745f1c0d6039f0c59a2e8cc50'){
+    // Exact append-only readonly proof; retain all original bodies and anchors.
+    const start=suiteText.indexOf("\ntest('public readonly keyboard mutation preserves equal inputs and binds current default owners'");
+    assert.ok(start>0);
+    assert.equal(hash(suiteText.slice(start)),'0344aa16c76792afd9fab101e4f48a3bb03d1f958565efd1473d1fb3da74f69c');
+    suiteText=suiteText.slice(0,start);
+  }
   assert.equal(hash(suiteText),'171bf9fae8fe2e701f5a42d5eef896685085ef267200956729ab447e04a032d5');
   const suiteAst=ts.createSourceFile(suite,suiteText,99,true,ts.ScriptKind.JS);
   const addition=suiteAst.statements.filter(n=>ts.isExpressionStatement(n)&&ts.isCallExpression(n.expression)
     &&n.expression.arguments[0]?.text==='equal explicit line height isolates text backing allocation from authored geometry');
   assert.equal(addition.length,1);
-  bind(suite,suiteText,suiteText.slice(0,addition[0].getFullStart())+suiteText.slice(addition[0].end),
+  bind(suite,suiteCurrentText,suiteText.slice(0,addition[0].getFullStart())+suiteText.slice(addition[0].end),
     '9ef883389c3aa8811d3a0a4756bc9e6f7cce82158c62ea453c08b4bb654c6367');
   const helper='tests/material-parity/semantic-text-transform-registration.mjs',helperText=read(path.resolve(root,helper),'utf8');
   let reviewedHelperText=helperText,replayRestorationBlock;

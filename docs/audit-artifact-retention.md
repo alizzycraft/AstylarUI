@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+Retain public-readonly-owning-proof and public-readonly-historical-review-reader-
+20261020 log pairs. New owning assertion1/1 and original historical reader/drift
+assertion1/1 pass;input-boundary suite is append-only and recovers exact171bf9fa
+prefix. No original proof bodies/anchors or captures rewritten. This queued
+assertion is outside publishedfc888710/219 inventory until registration and source
+reconciliation;five other direct suite-hash consumers still need review.
+
 Chip generationfc888710 is now accepted audit evidence following terminal0 cold
 check88232,complete section/coverage/source/proof/readable conservation and main
 import. Keep chip-independent-cold-check and chip-main-import-20261020 log pairs.

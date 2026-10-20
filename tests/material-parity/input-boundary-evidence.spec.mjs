@@ -6564,3 +6564,54 @@ test('public role focus refresh separates attribute-first and root-first failure
     registered: !!registered, wholeCaseAccepted: false,
     boundary: 'Public no-op focus continuity and exact first-loss owner only; not every Material trace,selection,AT or paint.' }));
 });
+
+test('public readonly keyboard mutation preserves equal inputs and binds current default owners', t => {
+  const directory = 'artifacts/material-parity/public-readonly-editing-recovered-20261020';
+  const reportBytes = readFileSync(`${directory}/latest-report.json`);
+  assert.equal(hash(reportBytes), '8a54156092f7f25fd64c546175ce5e7682636966c794f893209d1b10c5baedb0');
+  const result = JSON.parse(execFileSync(process.execPath,
+    ['scripts/audit-public-readonly-editing.mjs', '--verify', directory], { encoding: 'utf8' }));
+  assert.deepEqual(result, { pairs: 6, readonlyFailingPairs: 2, writableControls: 4,
+    disabledControls: 4, currentRenderingAccepted: false, negativeControlsRejected: 6 });
+  const report = JSON.parse(reportBytes);
+  assert.match(readFileSync(report.source.file, 'utf8'), /from 'astylarui'/);
+  assert.ok(!report.inputs.some(r => /material-showcase\/src|astylarui\/dist\/lib\/plugins\/material/.test(r.file)));
+  for (const row of report.results) {
+    assert.equal(row.inputUnchanged, true);
+    assert.deepEqual(row.diagnostics, []);
+    assert.deepEqual(row.samples.map(s => s.boundary), ['focused-home', 'typed-x', 'delete', 'backspace']);
+    if (row.kind === 'readonly') {
+      for (const sample of row.samples) { assert.equal(sample.readonly, true); assert.equal(sample.focused, true); }
+      assert.deepEqual(row.samples.map(s => s.value), row.mode === 'reference'
+        ? ['Atlas', 'Atlas', 'Atlas', 'Atlas'] : ['Atlas', 'xAtlas', 'xtlas', 'tlas']);
+    }
+  }
+  const ownerBytes = readFileSync('artifacts/material-parity/public-readonly-owning-methods-20261020.log');
+  assert.equal(hash(ownerBytes), '4d4dd8440ab6c2a3c9c357b24fa6f6d00110f67b288284a86466b8d73500b81a');
+  const owner = JSON.parse(ownerBytes);
+  assert.equal(owner.report.sha256, hash(reportBytes));
+  assert.deepEqual(owner.methods.map(r => r.method), ['handleKeyboardEvent', 'handleTextInput',
+    'handleFocusedKeyDown', 'handleKeyboardInput', 'insertTextAtCursor', 'deleteCharacter']);
+  const printer = ts.createPrinter({ removeComments: true, newLine: ts.NewLineKind.LineFeed });
+  const body = (source, name) => {
+    const tree = ts.createSourceFile('owner.js', source, ts.ScriptTarget.ES2022, true, ts.ScriptKind.JS);
+    const found = [];
+    const visit = node => {
+      if (ts.isMethodDeclaration(node) && node.name.getText(tree) === name) found.push(node);
+      ts.forEachChild(node, visit);
+    };
+    visit(tree); assert.equal(found.length, 1);
+    return printer.printNode(ts.EmitHint.Unspecified, found[0].body, tree);
+  };
+  for (const row of owner.methods) {
+    for (const receipt of [row.source, row.installed]) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+    const compiled = ts.transpileModule(readFileSync(row.source.file, 'utf8'), { compilerOptions: {
+      target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext, experimentalDecorators: true,
+    } }).outputText;
+    const actual = body(compiled, row.method), installed = body(readFileSync(row.installed.file, 'utf8'), row.method);
+    assert.equal(actual, installed, `Complete owner body differs: ${row.method}`);
+    assert.equal(row.completeBodyEqual, true);
+  }
+  t.diagnostic(JSON.stringify({ ...result, completeCurrentOwnerBodies: 6,
+    boundary: 'Readonly typing/Delete/Backspace only. Clipboard,other keys,selection paint,dynamic attributes and all Material readonly cases remain unproved.' }));
+});

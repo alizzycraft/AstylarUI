@@ -46,6 +46,21 @@ their receipts; older "next" or "live" statements are not current instructions.
   with writable/disabled controls and six current/installed method bodies bound.
   Public report8a541560;committed f8017c10.Outside published chip batch and current
   165/219 inventories;not a full current-package or94-case acceptance claim.
+- Queued owning readonly assertion now passes1/1 (4444.1648ms),six complete
+  current/installed method bodies plus public verifier/six negative controls.
+  Existing input-boundary suite extended append-only:507642-character prefix
+  SHA171bf9fa unchanged;new normalizedSHAcdcfd338,appendSHA0344aa16.
+  public-readonly-owning-proof-20261020 log
+  SHAd3c960a1df20680f0ac8ce4adcb8323b0eb2c5bf52482b5157091c23214f77d5.
+  Existing historical review reader supports only that exact append and keeps
+  CURRENT source receipts before restoration;original full reader/drift test
+  passes1/1 (57057.5158ms). Neither candidate reports nor old proofs rewritten.
+  Reader log SHAeb855e5404a19ddab8577ccb44f43c7c0ca7dee28ae6c3888e652d4764b25616.
+  Two inventory files changed after publishedfc888710;no new canonical export.
+  Next registration batch must reconcile six remaining literal171bf9fa assertions
+  (two benchmark checks,three check scripts and preserved reader baseline guard);
+  baseline reader guard already operates on explicitly restored text. Do not
+  rerun whole export before reviewing the other five direct consumers.
 - Shared editing coverage:1734 authored exclusions already inspected;443 writable
   cases and134 readonly/disabled exclusions remain partial. Do not reopen the
   settled1734 exclusions or clear behavior work from attribute presence alone.
