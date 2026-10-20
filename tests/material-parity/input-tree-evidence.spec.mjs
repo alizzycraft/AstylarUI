@@ -435,3 +435,59 @@ test('retained main mixed-text owners have only out-of-flow chip focus-indicator
   // paint order, generated pseudo-elements, semantics and current runtime remain
   // separate obligations; historical trees are not current rendering acceptance.
 });
+
+test('retained filled-field structure substitutes absolute regions for the native infix chain', () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const load = descriptor => {
+    const file = resolve(descriptor.file), rel = relative(resolve('artifacts/material-parity'), file);
+    assert.ok(!isAbsolute(rel) && rel !== '..' && !rel.startsWith('../') && !rel.startsWith('..\\'));
+    const bytes = readFileSync(file);
+    assert.equal(hash(bytes), descriptor.sha256);
+    return JSON.parse(bytes);
+  };
+  const descriptor = JSON.parse(readFileSync('docs/material-generated-node-mapping-audit.json')).mainCapture;
+  assert.equal(descriptor.sha256, 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const report = load(descriptor), counts = {}, classHas = (node, cls) =>
+    String(node.attributes?.class ?? '').split(/\s+/).includes(cls);
+  const unique = nodes => { assert.equal(nodes.length, 1); return nodes[0]; };
+  const families = ['form-field', 'input', 'autocomplete', 'select', 'datepicker', 'timepicker'];
+  let absentDisabledLayers = 0;
+  for (const entry of [...report.results, ...report.interactions].filter(entry => families.includes(entry.family))) {
+    const native = load(entry.inputTrees.reference), candidate = load(entry.inputTrees.astylar);
+    assert.deepEqual(native.errors, []); assert.deepEqual(candidate.errors, []);
+    const byKey = new Map(native.nodes.map(node => [node.key, node]));
+    const family = entry.family, named = id => unique(native.nodes.filter(node => node.attributes?.id === id));
+    const authored = id => unique(candidate.nodes.filter(node => node.authored?.id === id));
+    const host = named(`${family}-primary`), shell = authored(`${family}-primary`);
+    assert.equal(host.type, 'mat-form-field'); assert.equal(shell.authored.type, 'div');
+    const control = named(`${family}-control`), infix = byKey.get(control.parent);
+    assert.ok(classHas(infix, 'mat-mdc-form-field-infix'));
+    assert.equal(native.styles[infix.style].position, 'relative');
+    const flex = byKey.get(infix.parent), wrapper = byKey.get(flex.parent);
+    assert.ok(classHas(flex, 'mat-mdc-form-field-flex'));
+    assert.ok(classHas(wrapper, 'mat-mdc-text-field-wrapper'));
+    assert.equal(wrapper.parent, host.key);
+    const label = named(`${family}-label`), floating = byKey.get(label.parent);
+    assert.ok(classHas(floating, 'mdc-floating-label'));
+    assert.equal(floating.parent, infix.key);
+    assert.equal(authored(`${family}-label`).parent, shell.key);
+    const region = authored(`${family}-input-region`), surface = authored(`${family}-control-surface`);
+    assert.equal(region.parent, shell.key); assert.equal(surface.parent, shell.key);
+    assert.equal(authored(`${family}-control`).parent, region.key);
+    for (const stage of ['normalResolvedStyle', 'interactionResolvedStyle', 'resolvedStyle']) {
+      assert.equal(region[stage].position, 'absolute');
+      assert.equal(surface[stage].position, 'absolute');
+    }
+    const ripple = unique(native.nodes.filter(node => node.parent === wrapper.key && classHas(node, 'mdc-line-ripple')));
+    assert.equal(ripple.ownText, '');
+    const focus = native.nodes.filter(node => node.parent === wrapper.key && classHas(node, 'mat-mdc-form-field-focus-overlay'));
+    if (classHas(wrapper, 'mdc-text-field--disabled')) { assert.equal(focus.length, 0); absentDisabledLayers++; }
+    else assert.equal(focus.length, 1);
+    counts[family] = (counts[family] ?? 0) + 1;
+  }
+  assert.deepEqual(counts, { 'form-field': 76, input: 76, autocomplete: 110, select: 94, datepicker: 111, timepicker: 110 });
+  assert.equal(absentDisabledLayers, 48);
+  // These are unequal layout/tree requests, not a one-to-one wrapper mapping or
+  // proof that every removed wrapper has a separate renderer defect. Preserve
+  // existing label/token diagnoses and investigate unclassified paint separately.
+});

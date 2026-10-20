@@ -2,6 +2,28 @@
 
 ## Current audit pointer — October20
 
+October20 filled-field structure review authenticates all577 paired main cases
+(form-field76,input76,autocomplete110,select94,datepicker111,timepicker110) and
+their1154 tree receipts under reportb07ef154. Native control parent is the
+relative-positioned infix inside flex/text-field-wrapper/host;native label is
+inside a floating-label wrapper under that infix. Candidate control parent is
+an absolute input-region directly under shell;label and absolute surface are
+shell siblings. All three captured candidate style stages retain those absolute
+positions. This is unequal layout/tree authoring,not an equivalent serialization
+or a new renderer diagnosis;existing field-label transform/token/density findings
+remain the controlling diagnoses. Every native wrapper also owns a line-ripple;
+the separate focus-overlay exists in529 cases and is absent in48 disabled cases.
+Do not label the always-present candidate surface as a one-to-one counterpart
+of both native decoration owners. Complete pseudo/state-layer paint,all anonymous
+descendant mappings,used geometry and runtime remain independent/open. The added
+owning test `retained filled-field structure substitutes absolute regions for
+the native infix chain` passes1/1 in3068.3669ms (body2599.7871ms),no skips.
+Complete owning suite passes13/13,zero skip/cancel/todo,13294.2917ms.
+No new capture,fixture or renderer edit;no whole-case promotion. Next resolve
+the decoration requests/ownership against existing state-layer findings before
+classifying any remaining difference as unsupported/core. Source reconciliation
+for the appended diagnostic suite remains queued,not silently waived.
+
 October20 structure-capture question: the existing browser collector loses direct
 text/element interleaving. The new appended owning test in
 `tests/material-parity/input-tree-evidence.spec.mjs` proves that
