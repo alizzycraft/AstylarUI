@@ -4,6 +4,17 @@
 
 Updated October21. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- Complete candidate section comparison24003 now TERMINAL0:70/80 sections are
+  unchanged;sourceFingerprints/sourceFindings/focusedProofs exactly equal the
+  reviewed780/229/171 production census. Coverage and summary are conserved by
+  the separate strict metadata check. Five OTHER changed sections require leaf
+  reconciliation:controlLineBoxes,discrepancies,ownerCaretInputs,reviewedSourceBatchInputs,
+  controlTypography. Do not assume changes are receipt-only. Existing authenticated
+  streaming compareSectionLeaves runs in session78980;log button-touch-propagated-
+  leaves-20261021 and stderr pair. It checks every selected shape/path/value and
+  authenticates complete old/new compressed and decoded streams. Independent
+  cold57898 remains live;accepted main90467 remains unchanged. Sources stay frozen.
+
 - Shared-touch compact conservation TERMINAL0:all2311 prior case objects and
   complete coverage recover after exactly480 touch+480 focus+24 fresh-divider
   children,64 added receipts,two review IDs and two authenticated current-source

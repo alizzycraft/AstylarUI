@@ -49,3 +49,4 @@ artifacts/material-parity/button-touch-coherent-export-20261021.stderr.log binar
 artifacts/material-parity/button-touch-candidate-import-20261021.log -text
 artifacts/material-parity/button-touch-metadata-conservation-20261021.stderr.log binary
 artifacts/material-parity/button-touch-metadata-conservation-recovered-20261021.log -text
+artifacts/material-parity/button-touch-full-section-comparison-20261021.log -text

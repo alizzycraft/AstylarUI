@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+Retain button-touch-full-section-comparison-20261021 log/empty stderr,terminal0:
+70 of80 sections unchanged;five changed non-registration/coverage/summary sections
+still need exact leaf reconciliation. Existing compareSectionLeaves execution78980
+is live;retain button-touch-propagated-leaves-20261021 pair,not terminal evidence
+yet. Independent cold57898 remains separate/live. No main import is authorized
+by broad section conservation alone;original gates and failures remain.
+
 Shared-touch compact conservation recovered check is terminal0. Retain both
 button-touch-metadata-conservation[-recovered]-20261021 log pairs. Initial check
 preserves all2311 cases but fails complete coverage comparison because it omits
