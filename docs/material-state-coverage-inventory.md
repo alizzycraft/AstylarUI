@@ -2,6 +2,13 @@
 
 ## Current audit pointer — October20
 
+Repaired frozen export retry is LIVE:session30517,launcher20840,worker23468,
+creation11:08:04 local October20 after pushed ea6a88c9. Exact process commands
+verify selected f471 and all five baseline inputs. Logs filled-field-coherent-
+export-retry-20261020 stdout/stderr. Do not poll old terminal40064 or restart a
+quiet live retry. Accepted46ea remains unchanged pending terminal/conservation/
+independent verification/import;indexed sources and evidence inputs stay frozen.
+
 Repaired pre-export census passes after a6c07e7a:738 paths,730 unchanged,eight
 reviewed changes,no added/removed source paths. Complete accepted source section
 cda35246 recovers through exact4e1e4b10 bytes;current sectiond358bffc. Complete219
