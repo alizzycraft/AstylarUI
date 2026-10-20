@@ -456,7 +456,7 @@ test('retained filled-field structure substitutes absolute regions for the nativ
   const families = ['form-field', 'input', 'autocomplete', 'select', 'datepicker', 'timepicker'];
   let absentDisabledLayers = 0;
   const focusOpacities = {}, cornerSubstitutions = {};
-  const underlineStates = {}, errorActivation = {};
+  const underlineStates = {}, errorActivation = {}, alternateLineStates = {}, missingLineCases = [];
   for (const entry of [...report.results, ...report.interactions].filter(entry => families.includes(entry.family))) {
     const native = load(entry.inputTrees.reference), candidate = load(entry.inputTrees.astylar);
     assert.deepEqual(native.errors, []); assert.deepEqual(candidate.errors, []);
@@ -516,6 +516,26 @@ test('retained filled-field structure substitutes absolute regions for the nativ
       }
       errorActivation[family] = (errorActivation[family] ?? 0) + 1;
     }
+    if (!lines.length && afterStyle.opacity === '1') {
+      assert.equal(family, 'timepicker');
+      assert.ok(classHas(host, 'mat-focused'));
+      assert.ok(classHas(wrapper, 'mdc-text-field--focused'));
+      const alternate = candidate.nodes.filter(node => node.authored?.id === 'timepicker-active-line');
+      assert.ok(alternate.length <= 1);
+      if (alternate.length) {
+        assert.equal(entry.astylarState.open, true);
+        for (const stage of ['normalResolvedStyle', 'interactionResolvedStyle', 'resolvedStyle']) {
+          assert.equal(alternate[0][stage].height, '2px');
+          assert.equal(alternate[0][stage].opacity, '1.0');
+        }
+        alternateLineStates[entry.state] = (alternateLineStates[entry.state] ?? 0) + 1;
+      } else {
+        assert.equal(entry.astylarState.open, false);
+        assert.equal(entry.state, 'open-dismiss');
+        assert.deepEqual(entry.focus, { reference: 'timepicker-primary', astylar: 'timepicker-primary', matches: true });
+        missingLineCases.push(`${entry.profile}/${entry.viewport.id}/${entry.state}`);
+      }
+    }
     const focus = native.nodes.filter(node => node.parent === wrapper.key && classHas(node, 'mat-mdc-form-field-focus-overlay'));
     if (classHas(wrapper, 'mdc-text-field--disabled')) { assert.equal(focus.length, 0); absentDisabledLayers++; }
     else assert.equal(focus.length, 1);
@@ -535,6 +555,8 @@ test('retained filled-field structure substitutes absolute regions for the nativ
     '["1","matrix(1, 0, 0, 1, 0, 0)",false]': 42,
   });
   assert.deepEqual(errorActivation, { 'form-field': 8, input: 8, autocomplete: 8, datepicker: 8, timepicker: 8 });
+  assert.deepEqual(alternateLineStates, { activate: 8, 'activate-leave': 8, 'open-scroll': 8, 'open-hover-content': 8, open: 8 });
+  assert.deepEqual(missingLineCases, ['light/mobile-dpr2/open-dismiss', 'dark/mobile-dpr2/open-dismiss']);
   // These are unequal layout/tree requests, not a one-to-one wrapper mapping or
   // proof that every removed wrapper has a separate renderer defect. Preserve
   // existing label/token diagnoses and investigate unclassified paint separately.

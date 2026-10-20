@@ -13,9 +13,19 @@ bisect). Classification:application-plugin-authoring-defect,error incorrectly
 activates focus-decoration request;not a core stroke/projection defect. Complete
 577-case census also retains196 native-active/candidate-present,251 collapsed/
 candidate-absent,48 disabled transparent-identity/candidate-absent,and42 native-
-active/candidate-absent cases. The42 reverse differences require separate state/
-focus-owner review;no common cause asserted. Existing owning filled-field test
-passes1/1,zero skip/cancel/todo,3052.8763ms with all original assertions preserved.
+active/generic-helper-absent cases. Separate exact-owner review resolves40 of
+the42 as alternate `timepicker-active-line` nodes driven by open state,eight each
+activate,activate-leave,open-scroll,open-hover-content,open. Their three captured
+stages request2px/unit opacity;these are not absent underline nodes,but no equal
+geometry/paint or focus-driven condition is inferred. Remaining two exact cases
+are light/mobile-dpr2/open-dismiss anddark/mobile-dpr2/open-dismiss:closed candidate
+state,no generic or alternate line,while native focused host/wrapper and active
+after-line remain. Both report normalized family-primary focus;the already-
+classified focusedIdentity descendant collapse cannot establish equal actual
+focus owners. Missing precise evidence is actual descendant focus/event history
+at these two endpoints;do not diagnose failed core stroke paint. Existing owning
+filled-field test passes1/1,zero skip/cancel/todo,2931.7925ms with all original
+assertions preserved and40 alternate/two missing endpoints explicitly checked.
 No new capture/renderer/fixture change or whole-case closure. Canonical export/
 source reconciliation remains queued for this coherent structure/decoration batch.
 
