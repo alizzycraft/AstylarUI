@@ -2,6 +2,25 @@
 
 ## Current audit pointer — October20
 
+Chip state-layer input question answered for all24 configured focus/hover/held
+contexts (four desktop profiles,DPR1/2),using48 authenticated October5 trees.
+Native chip0 owns a separate focus overlay:focus/held RGB75,67,87 atopacity.12;
+hover RGB73,69,78 at.08. Candidate has only mark+label children and substitutes
+opaque host backgrounds:focus#eadef7,hover#ddd2ea,held#d7cbe4. Height32px in
+light/dark and24px in contrast/custom agrees as requests;this does not equate
+width,radius,paint order or raster. Current component normalizedb493a355 binds
+the mixHex hover/active rules at693–696 and absence of a chip focus selector.
+Classify the scoped difference as application authoring omission/substitution,
+not an equal-input core blending failure. All24 statePaint.matches=true values
+are the existing runner's non-button default at1415,not a chip paint comparison.
+Evidence chip-state-layer-retained-inputs-20261020.log
+SHA725676d749bfd6a9c75a89b7e3dea0ca35438b568861eca21a91ce0f2945a997,
+stderr empty;read-only assertions pass. No indexed source changed during cold
+check. Next bind both new chip observations in the existing owning paint suite
+after publication,review exact source-history provenance,and join scoped case
+evidence without clearing remaining paint/interaction/currentness obligations.
+Transient ripple timing,local raster and full chip input mapping remain open.
+
 Chip empty-focus-wrapper paint question narrowed using existing October5 evidence,
 not fresh capture:all76 chip cases/152 exact native primary-focus-indicator spans
 are authenticated against reportab42dbec and individual tree receipts. All spans

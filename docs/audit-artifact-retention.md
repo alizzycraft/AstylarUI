@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+Retain chip-state-layer-retained-inputs-20261020 log pair:24 exact configured
+focus/hover/held contexts and48 hash-authenticated trees bind separate native
+alpha overlays versus opaque candidate host substitutions/omitted focus fill.
+Current component whole normalized source is checked;this is not matched raster,
+current runtime or a canonical new finding. Owning assertion/case join remain
+queued until frozen filled-field publication completes. No captures overwritten.
+
 Retain chip-focus-indicator-retained-inputs-20261020 log pair. It authenticates76
 original chip cases/152 focus-wrapper owners against reportab42dbec and exact
 tree receipts:112 ungenerated pseudo records,40 display:none/transparent-border
