@@ -2,22 +2,17 @@
 
 ## Current audit pointer — October20
 
-Accepted canonical/index:e7717418/7ca89ad0 (165 source findings,219 focused proof
+Accepted canonical/index:46eaeb4c/fb581ba7 (165 source findings,219 focused proof
 anchors). Published case review:
-be99cd383dabb304da259cef9046b6b81ce44922c3ae4d8fe6dfc2a76ab33f6f,
+bfc2b6d546a0a636f07272eef14591ec830dcc7e90098c06a865af72076d238e,
 selected by the production exporter,content-conserved and independently cold-
-verified before main-store import. Its join adds
-exactly80 children to fe692b14 and recovers that complete predecessor on reversal;
-existing loader authenticates15167 dependency receipts/all2311 cases. Receipt:
-divider-reviewed-boundaries-space-retry-20261019.log (TERMINAL0).
-
-Current launcher selection is newer queued bfc2b6d546a0a636f07272eef14591ec830dcc7e90098c06a865af72076d238e,
-exported as a candidate but not yet accepted/published. It adds24 case-evidence children/192 reviewed property
-slots without closing cases. Keep published be99 and selected bfc distinct.
-
-Working docs now contain exported candidate46eaeb4c;separate candidate index
-fb581ba7 validates. Independent cold replay and section conservation remain live.
-Accepted main store still selects e771/7ca89;do not confuse exported with accepted.
+verified before main-store import. Its join adds exactly24 children/192 reviewed
+property slots to be99 and recovers the complete predecessor on reversal.
+Existing loader authenticates15172 dependency receipts/all2311 cases. Cold check
+29208 and main import are TERMINAL0;all86 immutable store files share verified
+hard-link identities with separate candidate validation. Earlier e771/be99 stays
+retained historical evidence. Publication is evidence acceptance,not rendering
+parity or completed whole-case inspection.
 
 Scope remains36 families/436 static+1875 interaction configured cases. Recorded
 whole-case status:0 complete,2311 partial,0 untouched,0 blocked;current rendering
@@ -25,10 +20,10 @@ unverified throughout. Evidence contact is100%,not inspection completion/parity.
 
 | Next requirement review | Already answered; do not repeat | Still to establish |
 | --- | --- | --- |
-| Divider input/structure |48 wrapper requests and inline top attribution;existing classified absolute-flow substitutions;96 paragraph grid-track and96 own-transform/origin slots reviewed as context-inactive. | Remaining material/anonymous-line-box requirements beyond these scoped results;new property evidence awaits coherent join. |
+| Divider input/structure |48 wrapper requests and inline top attribution;existing classified absolute-flow substitutions;96 paragraph grid-track and96 own-transform/origin slots reviewed as context-inactive and joined/published. | Remaining material/anonymous-line-box requirements beyond these scoped results. |
 | Divider paint | Configured contrast-DPR1 complete texture footprint;four-theme desktop native/canvas backing and settled-font controls. | Scope of remaining native phase/separator-coverage questions and original full paint criteria;do not transfer public DPR2 residuals here. |
 | Divider ownership |20 observed physical contexts/24 memberships,60 Angular recreations with tracked/registration cleanup and passive peer survival;controlled initial font readiness after Angular destroy and retained later font callback after disposal. | Applicability of these source-level font guards to captured Material runtime and other original lifetime/history requirements;controlled callbacks are not network timing evidence. |
-| Applicability/integration | Newer88-module core/linker/wiring,2280 mapped sources,17 current app sources,55 media/five style identities;four-source reader/export/content conservation/cold publication complete. | Post-publication reader/store-test source changes need explicit reconciliation at the next coherent milestone;runtime/environment boundaries and original final gates remain. |
+| Applicability/integration | Newer88-module core/linker/wiring,2280 mapped sources,17 current app sources,55 media/five style identities;five-source reader and support-source export/conservation/cold publication complete. | Historical workflow proof-digest oracle needs bounded update after publication;runtime/environment boundaries,remaining harness failures and original final gates remain. |
 | Whole audit | Complete configured inventory and bounded findings/reproductions remain retained. | Exact obligation/state closure across all36 families and all original final verification/handoff requirements. |
 
 Before another capture,review these remaining requirements against existing
@@ -37,6 +32,31 @@ subquestions merely because a parent still says partial. This table is a current
 navigation summary,not new acceptance criteria or a substitute for exact records.
 
 ## Evidence chronology — retain original scope and checkpoint dates
+
+October20 publication ACCEPTED as audit EVIDENCE,not audit completion. Independent
+cold29208 TERMINAL0:complete32146787.2245ms,evidence session31963744.238ms,
+2collectors/10memory hits/0disk hits/0invalidated,16358files/1678478467bytes
+read and reverified. Full freshly generated audit values AND readable report
+match candidate46ea. Elapsed time includes a long observation/machine-runtime
+gap;do not describe it as continuous CPU time or restart on such a gap.
+Cold stdoutSHA8fd4ac1ddacbe7991fcbdecb6d0e71dab7e8bd58e38125a9f873c50feda9e50d,
+stderrSHAbe8907759c44f799a88f491e111cfc4864b114b76c92bbf77841f5e8987c3e50
+(inactive-paragraph-independent-cold-check-20261020 pair).
+All80 section and exact changed-section semantic conservation checks pass as
+recorded below. Existing importFindings then verifies/reuses86 closed candidate
+regular files through hard links:exact filename set,payload/index/every shard
+hash and same device/inode identity verified BEFORE pointer publication.
+Shared338099437logical bytes,not duplicated physical allocation. Previous e771
+generation stays intact and its index7ca89 hash unchanged. Main pointer selects
+46eaeb4ce2ef6efbef249d6eab36f8f2b6f190c0715ceb89aedc5b10a368b067 /
+fb581ba7cfb4666f3cc3abb797fbc4c9aede2133000b0715b3cac116e28fe890.
+Main-import receipt inactive-paragraph-main-import-20261020.log TERMINAL0,
+SHA626b002bdbf8886ae037c141b3e8c54c281ac7e9bc3b50b7e653c9926984ace6.
+165source findings/219proofs/738source paths;case status stays0complete/2311partial,
+inspectionComplete/currentRenderingAccepted false. No final browser/unit/build/
+consumer gates claimed. Next reconcile workflow e771 digest oracle against
+authenticated f1597df7 published proof section,then resume actual remaining case
+requirements/harness owners without rerunning settled investigations.
 
 October20 candidate46ea conservation COMPLETE,independent cold still pending.
 Section4334 TERMINAL0 authenticates84655375packed/2327171274decoded bytes and

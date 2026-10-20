@@ -2,6 +2,17 @@
 
 ## Current versus historical evidence
 
+October20 accepted46eaeb4c evidence publication passed independent cold replay,
+complete section/coverage/source/proof/readable conservation and verified main
+import. Main and candidate-validation generations share ALL86 immutable regular
+files through hard links;exact filenames,every hash and same device/inode were
+checked before normal importFindings reuse/pointer publication. Retain prior
+accepted e771 unchanged. NEVER overwrite shared archived files in place.
+Main-import receipt inactive-paragraph-main-import-20261020.log
+SHA626b002bdbf8886ae037c141b3e8c54c281ac7e9bc3b50b7e653c9926984ace6.
+Keep original failures and all conservation/cold logs. Acceptance is audit
+evidence only,not rendering parity,whole-case closure or final release gates.
+
 October20 closed46eaeb4c candidate-validation index is required unpublished
 evidence. It was losslessly LZX-compressed from180681735logical bytes to37793792
 physical bytes;SHA256fb581ba7cfb4666f3cc3abb797fbc4c9aede2133000b0715b3cac116e28fe890
