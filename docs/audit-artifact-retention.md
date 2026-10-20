@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+Retain button-live-ripple-inputs-20261021.log/empty stderr as bounded new historical
+input evidence outside the frozen50315381 export. Embedded producerArgs authenticate
+the600-owner source and both original tree receipts for each of8 core/held rows;
+16 structural mutation controls reject. No browser run,source registry change,
+canonical join or case promotion occurred. Original persistent-layer proofs remain
+unchanged;live-node own declarations do not establish pixels or animation timing.
+
 October21 shared-touch selection census is terminal0 and retained as
 button-touch-selection-census-20261021.log/empty stderr. Its embedded producerArgs
 reuse the existing census with the newly explicit launcher source and780/229/171

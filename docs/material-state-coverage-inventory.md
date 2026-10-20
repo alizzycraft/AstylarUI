@@ -4,6 +4,30 @@
 
 Updated October21. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- Eight live-ripple rows authenticated from the retained shared-button population:
+  all core/held four profiles/two DPRs have one direct mat-ripple-element with
+  display:block,visibility:visible,opacity:1 and12%-alpha background;candidate
+  buttons remain childless. Sixteen wrong-parent/extra-candidate-child controls
+  reject. Evidence:button-live-ripple-inputs-20261021.log (exact inline producer,
+  original tree receipts/styles/rules retained). Existing146-owner persistent-layer
+  collector does not record these dynamic nodes;control-state review's explicit
+  nativeRipples branch concerns button-toggle,not these core hosts. This answers
+  own-declaration suppression/structural presence only. Existing state-paint
+  authoring mismatch remains;do not register a duplicate core defect or infer
+  pixels,animation timing,ancestor clipping or current rendering. Next reconcile
+  original held screenshot/local paint and history before classification/join.
+
+- Read-only next-gap inventory:authenticated button-touch-retained-inputs-20261020
+  log (SHAa6756e4a0bcab6904d14959d5bb70775ef02d358c6b1d955638e769c50aec7dd)
+  records600 direct persistent-ripple spans,600 label spans,600 focus spans,600
+  touch spans,380 mat-mdc-button-ripple containers and8 direct mat-ripple-element
+  divs. The8 occur only in core/held across four profiles/two DPRs. Count recipe:
+  group rows[].reference.nativeDirectChildren by type/class;retain exact case/element
+  identities from those same rows. This is structural inventory,not paint/runtime
+  equivalence. Existing146-owner survey tests persistent pseudo layers;whether
+  separate existing proof covers these8 live ripples remains unresolved. Next
+  check exact existing paint evidence before gathering new browser evidence.
+
 - Current selection census passes:780 sources/229 proofs/171 findings. Complete
   historical source/proof/finding sections recover accepted90467 digests;all170
   prior findings,226 prior proof claims and756 prior source paths survive. Receipt:
