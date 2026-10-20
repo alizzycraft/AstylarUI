@@ -650,3 +650,41 @@ test('queued control registration restores exact predecessors and rejects unrela
     assert.equal(restored, previous(file), 'Older suite may change only explicit current-population metadata');
   }
 });
+
+test('retained control input join preserves every predecessor case and bounds finding applicability', () => {
+  const digest = '736e685c55bf033db3d0ffc5b564e2ed42648438e1ed0b3ab66b7f26ed83d8bd';
+  const file = `artifacts/material-parity/working-audit/proposals/${digest}.json`;
+  const review = JSON.parse(fs.readFileSync(file)).review;
+  const reader = createDividerReviewedBoundariesReader({ root: process.cwd(), read: fs.readFileSync, reviewSha256: chipGraphicReview });
+  const loaded = loadCaseObligationReview(file, digest, review.groups.map(g => g.case), { read: reader.read });
+  assert.equal(loaded.cases.length, 2311); assert.equal(loaded.evidenceFingerprints.length, 15192);
+  assert.equal(loaded.inspectionComplete, false); assert.equal(loaded.currentRenderingAccepted, false);
+  const counts = { checkbox: 0, selected: 0, ink: 0, inkMismatch: 0, select: 0 };
+  for (const group of review.groups) {
+    assert.equal(group.inspection, 'partial'); assert.equal(group.currentRendering, 'unverified');
+    for (const [obligation, key] of [['inputStyleStructure', 'retainedCheckboxMarkRequests'],
+      ['localPaint', 'retainedCheckboxDisabledInkRequests'], ['semantics', 'retainedSelectListboxNamingRequests']]) {
+      const owner = group.obligations[obligation], child = owner?.[key]; if (!child) continue;
+      assert.equal(child.observation.case, group.case);
+      if (key === 'retainedCheckboxMarkRequests') {
+        counts.checkbox++; assert.equal(group.family, 'checkbox');
+        assert.deepEqual(child.observation.inputTrees, group.evidence.pairedTrees);
+        if (child.observation.reference.selected) counts.selected++;
+        assert.deepEqual(child.findingIds, child.observation.reference.selected ? ['fixture-checkbox-checkmark-path-substitution'] : []);
+      } else if (key === 'retainedCheckboxDisabledInkRequests') {
+        counts.ink++; assert.equal(group.family, 'checkbox');
+        assert.deepEqual(child.observation.tree, group.evidence.pairedTrees.reference);
+        if (child.findingIds.length) counts.inkMismatch++;
+        assert.ok(child.findingIds.every(id => id === 'fixture-checkbox-disabled-checkmark-ink-substitution'));
+      } else {
+        counts.select++; assert.equal(group.family, 'select');
+        assert.deepEqual(child.observation.inputTrees, group.evidence.pairedTrees);
+        assert.equal(child.observation.reference.attributes['aria-label'], 'Plan');
+        assert.deepEqual(child.findingIds, ['fixture-select-listbox-name-omission']);
+      }
+      assert.match(child.boundary, /not|Not/); delete owner[key];
+    }
+  }
+  assert.deepEqual(counts, { checkbox: 68, selected: 52, ink: 8, inkMismatch: 6, select: 40 });
+  assert.equal(createHash('sha256').update(JSON.stringify(review)).digest('hex'), chipGraphicReview);
+});

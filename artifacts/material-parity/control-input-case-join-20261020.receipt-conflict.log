@@ -1,0 +1,28 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Conflicting dependency receipt
++ actual - expected
+
++ '9ef883389c3aa8811d3a0a4756bc9e6f7cce82158c62ea453c08b4bb654c6367'
+- '58fe244dc56a251e144dcc6eab2c36cb18f017291da968e1d002dc36404d60ea'
+
+    at bind (file:///D:/dev/github/AstylarUI-audit-integration/scripts/audit-findings-store.mjs:218:40)
+    at receipts (file:///D:/dev/github/AstylarUI-audit-integration/scripts/audit-findings-store.mjs:223:77)
+    at receipts (file:///D:/dev/github/AstylarUI-audit-integration/scripts/audit-findings-store.mjs:224:47)
+    at receipts (file:///D:/dev/github/AstylarUI-audit-integration/scripts/audit-findings-store.mjs:224:47)
+    at receipts (file:///D:/dev/github/AstylarUI-audit-integration/scripts/audit-findings-store.mjs:224:47)
+    at receipts (file:///D:/dev/github/AstylarUI-audit-integration/scripts/audit-findings-store.mjs:224:47)
+    at receipts (file:///D:/dev/github/AstylarUI-audit-integration/scripts/audit-findings-store.mjs:224:47)
+    at loadCaseObligationReview (file:///D:/dev/github/AstylarUI-audit-integration/scripts/audit-findings-store.mjs:237:5)
+    at file:///D:/dev/github/AstylarUI-audit-integration/scripts/join-material-control-inputs.mjs:104:16 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '9ef883389c3aa8811d3a0a4756bc9e6f7cce82158c62ea453c08b4bb654c6367',
+  expected: '58fe244dc56a251e144dcc6eab2c36cb18f017291da968e1d002dc36404d60ea',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.22.3

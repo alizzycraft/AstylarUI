@@ -1,0 +1,30 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  {
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+-   normalizedSha256: 'b493a355679903f988e29f0dafbb95d2d6cce41275302fce5c978ae55f423b9f',
+    sha256: '71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd'
+  }
+
+    at file:///D:/dev/github/AstylarUI-audit-integration/scripts/join-material-control-inputs.mjs:24:81 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: {
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    sha256: '71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd'
+  },
+  expected: {
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    sha256: '71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd',
+    normalizedSha256: 'b493a355679903f988e29f0dafbb95d2d6cce41275302fce5c978ae55f423b9f'
+  },
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.22.3

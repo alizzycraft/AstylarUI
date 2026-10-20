@@ -63,8 +63,17 @@ below. Earlier next/live statements in chronology are not current instructions.
   the complete743-source section04e54857;13 evidence paths are additive.
   Preflight:queued-control-registration-preflight-20261020.log. Historical case
   index checks pass4/4;retained review reader/proposal/new drift guard pass3/3.
-- Next:join applicable cases for proposal430dada4,then one coherent export/cold
-  milestone. Remaining structure/AX/paint/current-runtime coverage stays open.
+- Case-join proposal736e685c adds116 children to108 exact retained cases:
+  68 checkbox mark requests (52 selected/16 suppressed),eight disabled ink rows
+  (six differing/two matching contrast),40 select listbox naming rows.15192
+  dependencies authenticate;removing only116 children recovers completee837.
+  One-pair primitive-focus and dynamic-readonly probes are NOT generalized to
+  captured cases. All2311 remain partial/current-rendering unverified. Evidence:
+  control-input-case-join-20261020.log;owning assertion checks exact populations.
+- Next:select736e685c through the existing exact-review source boundary and
+  launcher,then reconcile the changed source census in one coherent export/cold
+  milestone. New proposal is not selected or canonical yet. Remaining structure/
+  AX/paint/current-runtime coverage stays open.
   Original full canonical/browser/unit/build/packed-consumer/release gates remain.
 - Storage:the agent performed no deletion. After the302-build review,the existing
   Material test-out parent now contains0 directories;D: free12831477760 bytes.

@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Retain case proposal736e685c55bf033db3d0ffc5b564e2ed42648438e1ed0b3ab66b7f26ed83d8bd,
+control-input-case-join-20261020.log and its failed/receipt-conflict logs. It adds
+116 bounded retained-input children across108 cases and conserves completee837;
+all2311 cases stay partial/unverified. Preserve the rejected conflict proposal
+as failure evidence:one dependency path cannot carry historical and current
+hashes. Current proof owner is explicitly checked/referenced,not substituted for
+the historical receipt;canonical source inventory fingerprints its current bytes.
+No loader assertion or receipt was waived. Selection/publication remains pending.
+
 Retain source proposal430dada4 and queued-control-source-proposal(-owning)-
 20261020 logs. All166 prior definitions are preserved in the170-group proposal;
 four authoring findings are now registered in source,with readonly update only a
