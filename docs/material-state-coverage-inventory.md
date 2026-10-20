@@ -13,7 +13,7 @@ Current conclusions only;earlier next/live statements in retained detail are his
   import82029 is TERMINAL0,index681dba6c:8483 scalar groups/170 source findings/
   39904 controls/389202 occurrences/zero unresolved groups. This is not acceptance.
   Poll the same cold handle;do not restart quiet work.
-  Full section comparison44186 also runs. Consumed sources/evidence stay frozen;
+  Full section comparison44186 is TERMINAL0. Consumed sources/evidence stay frozen;
   subsequent touch diagnostics remain outside this publication. Main pointer
   staysb661 until conservation,cold comparison and main import finish.
 - Accepted audit remainsb6610e71/indexd0e7623d/review736e685c:170 findings,
@@ -29,7 +29,12 @@ Current conclusions only;earlier next/live statements in retained detail are his
   complete prior coverage after the two explicit review-digest changes. All2311
   prior cases,summary and scalar counts are unchanged. Replayable check:
   scripts/check-divider-property-publication-metadata.mjs;metadata-conservation-
-  replayable-20261020 log. Full payload/cold/publication checks remain separate.
+  replayable-20261020 log. Complete authenticated payload comparison conserves78
+  of80 sections;only sourceFingerprints/coverage change. Current production
+  inventory exactly matches all756 sources/226 proofs/170 findings in the candidate;
+  reversing exactly the three pre-reviewed source fingerprints recovers the accepted
+  section completely. Evidence:full-section-comparison-recovered and registration-
+  conservation-20261020 logs. Independent cold/main publication remain required.
 - Divider supplement limits:32 natural line boxes cover16 STATIC native contexts,
   not interaction cases or candidate paint. Clamp/flex checks cover96 owners in24
   retained cases;normal/stretch alignment and complete owner mapping remain open.

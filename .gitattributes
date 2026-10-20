@@ -21,3 +21,5 @@ artifacts/material-parity/button-touch-case-join-20261020.log -text
 scripts/check-divider-property-publication-metadata.mjs -text
 artifacts/material-parity/divider-property-metadata-conservation-20261020.log -text
 artifacts/material-parity/divider-property-metadata-conservation-replayable-20261020.log -text
+artifacts/material-parity/divider-property-full-section-comparison-recovered-20261020.log -text
+artifacts/material-parity/divider-property-registration-conservation-20261020.log -text

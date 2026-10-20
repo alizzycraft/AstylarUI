@@ -21,6 +21,15 @@ from24 cases plus declared receipt/review metadata recovers all prior coverage.
 Summary/counts remain identical. This is compact metadata conservation,not complete
 payload equality,current rendering or permission to publish before cold validation.
 
+The recovered full-section comparison44186 is terminal0:80 sections,78 unchanged,
+only sourceFingerprints/coverage changed. Retain its log pair and divider-property-
+registration-conservation-20261020 pair (terminal0,full producer source in args).
+Current production756/226/170 inventories exactly match candidate section digests;
+reversing only the three pre-export reviewed fingerprints restores accepted
+sourceFingerprints completely. Original proof/finding sections remain unchanged.
+Compact coverage conservation accounts for the other changed section. This does
+not waive independent cold replay or promote the accepted main pointer.
+
 Retain scripts/join-material-button-touch-inputs.mjs,button-touch-case-join-
 20261020.log/empty stderr,and queued local proposal
 234eb163a6db98769d1aa37c8aeef57b8f9d2eb110eaeb61c93981feb7cfe8a0.
