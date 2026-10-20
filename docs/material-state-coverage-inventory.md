@@ -17,7 +17,7 @@ their receipts; older "next" or "live" statements are not current instructions.
   85699629 packed/2329461426 decoded bytes. Original chip-coherent-export-20261020
   log pair retained. Readable report SHAe55333fd unchanged. NOT main acceptance.
 - Independent cold check session88232 (launcher17192/worker19380) and full
-  section-conservation session74946 (worker10152) are live. Preserve input freeze;
+  section-conservation session74946 (worker10152):cold is live,section check exit0. Preserve input freeze;
   chip-independent-cold-check/chip-candidate-section-conservation-20261020 logs.
   Accepted main remains3072/f471 pending conservation,cold success and main import.
 - Candidate import85258 completed exit0 in separate candidate-validation store:
@@ -29,6 +29,12 @@ their receipts; older "next" or "live" statements are not current instructions.
   Log chip-candidate-coverage-conservation-20261020
   SHA285c991fc28fd0d5ee8709e0ef5bffab61f55a139e6963cdf60d3438aa6deca5.
   First import command failed syntax before execution;original log pair retained.
+- Complete80-section conservation passes:78 unchanged,only expected source
+  fingerprints9e74ce09 and coverage6c754155 differ;all219 proofs unchanged.
+  Log chip-candidate-section-conservation-20261020
+  SHA4ea48ec985457af2043688e763a1e6adba7ec96beae22afa0f7dd61c0754517e.
+  Closed candidate index compressed losslessly184765791→38658048 physical bytes;
+  before/afterSHA0633e01b unchanged. No deletion or main acceptance.
 - New standalone result:public readonly keyboard mutation confirmed atDPR1/2,
   with writable/disabled controls and six current/installed method bodies bound.
   Public report8a541560;committed f8017c10.Outside frozen chip batch and current

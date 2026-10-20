@@ -10,6 +10,12 @@ is separate from accepted3072. Retain chip-candidate-coverage-conservation-
 dependency receipts and two review identifiers are reversed. Cold verification
 and complete section conservation remain live;no main acceptance follows yet.
 No original/candidate evidence or old build/cache directories deleted.
+Section conservation subsequently completed exit0:all80 sections authenticated,
+78 unchanged and only expected source/coverage changes. Retain its full log pair.
+Closed candidate fc888710 index compressed losslessly with LZX:184765791 logical
+bytes occupy38658048 physical bytes;SHA0633e01b29f598792bd7b1906a9362a6843f7aaf5dd89f726e69c794ce84ead2
+matches before/after. Exact resolved target checked within physical candidate-
+validation directory. Cold check remains live;accepted main3072 unchanged.
 
 Retain public-readonly-editing-20261020 original failure directory/log pair and
 public-readonly-editing-recovered-20261020 complete public input/bundle/HTML/
