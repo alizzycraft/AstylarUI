@@ -2,6 +2,26 @@
 
 ## Current versus historical evidence
 
+Retain divider-current-browser-20261020 capture directory/all219 files (5254693B)
+and external log pair,plus divider-current-browser-verification-20261020 pair.
+Capture1941 and independent verification82127 terminate0. The unchanged maintained
+runner uses --skip-build,divider-only and a distinct4457 port;no served files,
+renderer,fixtures or frozen433b inputs change. Fresh Chrome155.0.8059.80 executes
+all16 static/eight inspect memberships. All24 per-row thresholds pass;both
+aggregate acceptance flags correctly remain false for a filtered diagnostic.
+ReportSHA4be5d06fb652e9fbdc754ec14adfbe312eebe8b6e1df8a1b5e3f72d607dc10cc;
+manifestSHA9d0f1220ea6c2ca95cbfb143d94f7f5680a0d8cb11e074db879768f9763fd5b0.
+Independent verification authenticates all checkpoint artifacts/48 trees,1887
+post-capture served files,ten harness receipts and workspace lock. Exact inline
+verification recipe is in producerArgs. Custom comparison pair was viewed:ink/
+separator/shadow differences remain despite broad passing scores. No complete
+input/paint/core-source equivalence or case closure follows. Keep original older
+browser captures;this is a fresh supplement,not their replay/replacement.
+The generated stdout retains its original final blank line as a binary Git
+artifact rather than editing capture bytes to satisfy source whitespace checks.
+Checkpoint/report JSON stays readable and byte-preserved;no rendering assertion
+or acceptance threshold is omitted.
+
 Retain button-focus-indicator-applicability-20261020.log/empty stderr (terminal0,
 SHA256d666f3987bd0420ff0407f60b8f3c22ef9bfb975252f5594d29fc1521946d4b0).
 The exact inline producer is recorded in producerArgs. It reuses the600-owner/

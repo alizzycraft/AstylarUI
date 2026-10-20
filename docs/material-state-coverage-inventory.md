@@ -38,6 +38,16 @@ Current conclusions only;earlier next/live statements in retained detail are his
 - Divider supplement limits:32 natural line boxes cover16 STATIC native contexts,
   not interaction cases or candidate paint. Clamp/flex checks cover96 owners in24
   retained cases;normal/stretch alignment and complete owner mapping remain open.
+- Fresh no-build divider execution is terminal0:divider-current-browser-20261020
+  captures all16 configured static/eight inspect cases in Chrome155.0.8059.80.
+  All24 row thresholds pass;both aggregate acceptance flags remain false because
+  this is filtered,not an enforced full run. Independent verification82127 exits0,
+  checking48 trees,all checkpoint artifacts,1887 unchanged served files,ten harness
+  receipts and workspace lock. ReportSHA4be5d06fb652e9fbdc754ec14adfbe312eebe8b6e1df8a1b5e3f72d607dc10cc.
+  This fills fresh-browser execution evidence,not complete core-source applicability,
+  input/paint equivalence or case closure. Custom comparison screenshots still show
+  different separator/shadow paint;existing broad row scores do not waive it.
+  Outside433b/current export;queue its exact-case integration with the next batch.
 - New touch evidence (OUTSIDE433b):one fresh Material primary-button pair activates
   outside the visible40px host only on native;its active48px descendant is omitted
   from candidate authoring. Plain/direct-pixel equal-input public controls pass at

@@ -1,0 +1,21 @@
+# Material parity report
+
+- Mode: report-only
+- Cases: 16/436
+- Passing: 16
+- Failing: 0
+- Minimum SSIM: 0.988504
+- Median SSIM: 0.994254
+- Maximum edge error: 0.022px
+- Text alignment: 32/32 (maximum center-offset error 0.445px)
+- Uniform backgrounds: 0/0
+- Focused rasters: 0/0
+- Shadow profiles: 0/0
+- Meets acceptance: no
+- Interaction cases: 8
+- Interaction passing: 8
+- Interaction failing: 0
+- Interaction minimum SSIM: 0.993680
+- Interaction text alignment: 16/16 (maximum center-offset error 0.291px)
+- Interaction focused rasters: 0/0
+- Interaction meets acceptance: no

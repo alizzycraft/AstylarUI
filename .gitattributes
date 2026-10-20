@@ -24,3 +24,6 @@ artifacts/material-parity/divider-property-metadata-conservation-replayable-2026
 artifacts/material-parity/divider-property-full-section-comparison-recovered-20261020.log -text
 artifacts/material-parity/divider-property-registration-conservation-20261020.log -text
 artifacts/material-parity/button-focus-indicator-applicability-20261020.log -text
+artifacts/material-parity/divider-current-browser-20261020/** -text
+artifacts/material-parity/divider-current-browser-verification-20261020.log -text
+artifacts/material-parity/divider-current-browser-20261020.log binary

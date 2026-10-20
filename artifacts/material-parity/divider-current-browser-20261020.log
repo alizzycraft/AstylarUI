@@ -1,0 +1,68 @@
+TAP version 13
+# Subtest: covers every installed Angular Material component entry point
+ok 1 - covers every installed Angular Material component entry point
+  ---
+  duration_ms: 26.3183
+  type: 'test'
+  ...
+# Subtest: keeps the app catalog and enforced static matrix complete
+ok 2 - keeps the app catalog and enforced static matrix complete
+  ---
+  duration_ms: 10.2947
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2221.6719
+Material parity: divider@light/desktop
+Material parity: divider@light/tablet
+Material parity: divider@light/mobile
+Material parity: divider@dark/desktop
+Material parity: divider@dark/tablet
+Material parity: divider@dark/mobile
+Material parity: divider@contrast/desktop
+Material parity: divider@contrast/tablet
+Material parity: divider@contrast/mobile
+Material parity: divider@custom/desktop
+Material parity: divider@custom/tablet
+Material parity: divider@custom/mobile
+Material parity: divider@light/comparison
+Material parity: divider@dark/comparison
+Material parity: divider@contrast/comparison
+Material parity: divider@custom/comparison
+Material interaction: divider@light/desktop-dpr1/inspect
+Material interaction: divider@light/desktop-dpr2/inspect
+Material interaction: divider@dark/desktop-dpr1/inspect
+Material interaction: divider@dark/desktop-dpr2/inspect
+Material interaction: divider@contrast/desktop-dpr1/inspect
+Material interaction: divider@contrast/desktop-dpr2/inspect
+Material interaction: divider@custom/desktop-dpr1/inspect
+Material interaction: divider@custom/desktop-dpr2/inspect
+# Material parity report
+
+- Mode: report-only
+- Cases: 16/436
+- Passing: 16
+- Failing: 0
+- Minimum SSIM: 0.988504
+- Median SSIM: 0.994254
+- Maximum edge error: 0.022px
+- Text alignment: 32/32 (maximum center-offset error 0.445px)
+- Uniform backgrounds: 0/0
+- Focused rasters: 0/0
+- Shadow profiles: 0/0
+- Meets acceptance: no
+- Interaction cases: 8
+- Interaction passing: 8
+- Interaction failing: 0
+- Interaction minimum SSIM: 0.993680
+- Interaction text alignment: 16/16 (maximum center-offset error 0.291px)
+- Interaction focused rasters: 0/0
+- Interaction meets acceptance: no
+
