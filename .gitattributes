@@ -16,3 +16,5 @@ artifacts/material-parity/button-touch-authoring-history-20261020.log -text
 artifacts/material-parity/button-touch-newer-capture-reconciliation-20261020.log -text
 artifacts/material-parity/button-touch-source-proposal-20261020.log -text
 artifacts/material-parity/button-touch-scope-independent-20261020.log -text
+scripts/join-material-button-touch-inputs.mjs -text
+artifacts/material-parity/button-touch-case-join-20261020.log -text

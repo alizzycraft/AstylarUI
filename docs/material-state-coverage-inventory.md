@@ -50,6 +50,14 @@ Current conclusions only;earlier next/live statements in retained detail are his
   core unit finding;registration pending,canonical counts unchanged. Evidence:
   button-touch-retained-inputs,authoring-history,newer-capture-reconciliation,
   source-proposal and scope-independent-20261020 logs;1200 mutation controls pass.
+- Queued touch case review234eb163 adds480 bounded input children/600 owners to
+  selected433b. Existing loader authenticates15228 dependencies;1200 wrong-case/
+  wrong-tree controls reject,and removing only those480 children recovers433b
+  completely. All2311 cases remain partial/current rendering unverified. Visible
+  request rows276 link the proposed authoring finding;324 suppressed rows do not.
+  Evidence:button-touch-case-join-20261020.log and
+  scripts/join-material-button-touch-inputs.mjs. This is not selected for export
+  or canonical;the running433b inputs are unchanged.
 - Next:finish the running publication milestone;then register the bounded shared
   touch-descendant omission and existing unit limitation's interaction evidence,
   preserving suppressed/disabled distinctions. Continue component-owner/

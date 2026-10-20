@@ -2,6 +2,17 @@
 
 ## Current versus historical evidence
 
+Retain scripts/join-material-button-touch-inputs.mjs,button-touch-case-join-
+20261020.log/empty stderr,and queued local proposal
+234eb163a6db98769d1aa37c8aeef57b8f9d2eb110eaeb61c93981feb7cfe8a0.
+Existing loader authenticates15228 dependencies for2311 partial cases;480 added
+children retain600 owners,276 visible requests and324 suppressed targets.
+All1200 wrong-case/tree controls reject;complete433b predecessor recovers after
+only480 child removals. Keep the source proposal and all referenced old/new trees.
+This is dependency-validated queued input evidence,not current rendering or case
+closure. It is outside the currently running433b export;do not change that export's
+inputs or force-add the large ignored proposal to Git.
+
 Retain scripts/audit-material-button-touch-inputs.mjs and button-touch-retained-
 inputs-20261020.log/empty stderr (SHAa6756e4a0bcab6904d14959d5bb70775ef02d358c6b1d955638e769c50aec7dd),
 button-touch-authoring-history-20261020 pair (SHAe8e0493f6f8e9608071264e3e25a875018d758b2cfe174c9b3e08b33255ecb72),
