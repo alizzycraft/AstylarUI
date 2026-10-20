@@ -4,14 +4,20 @@
 
 Retain control-input-coherent-export-20261020 stdout/stderr and candidate generation
 b6610e71ef744b5d589d07c18e562df9927202a3adb7a5b31acb334b100839f2 under
-working-audit-candidate-validation. Main39fc remains accepted. Retain control-input-
+working-audit-candidate-validation and working-audit. Mainb661 is now accepted;
+prior39fc remains immutable. Retain control-input-
 candidate-import (and syntax-failed attempt),full-section-comparison,metadata-
 conservation,candidate-registration-conservation,derived-section-leaves and derived-
 receipt-conservation-20261020 logs. Complete predecessor cases/receipts/findings/
 proofs conserve;all147 extra receipt leaves are attributed. No old evidence or
 threshold changed. Export logged complete but detached terminal exit was null;
-do not relabel it numeric0. Independent cold-check-20261020 log pair is LIVE;
-retain the terminal result before main publication. Source remains frozen.
+do not relabel it numeric0. Independent cold-check-20261020 log pair and terminal
+record prove exit0 with zero disk hits;main import exits0. Keep main-staging and
+its initial numeric-IDs diagnostic:rounded JavaScript numbers were not adequate
+identity evidence;the successful final check uses exact bigint IDs. All86 files
+share verified IDs/hashes across stores;never overwrite them in place. No source
+changes occurred during the cold run. This is audit publication,not rendering or
+whole-audit completion.
 
 Retain case proposal736e685c55bf033db3d0ffc5b564e2ed42648438e1ed0b3ab66b7f26ed83d8bd,
 control-input-case-join-20261020.log and its failed/receipt-conflict logs. It adds
@@ -21,14 +27,14 @@ as failure evidence:one dependency path cannot carry historical and current
 hashes. Current proof owner is explicitly checked/referenced,not substituted for
 the historical receipt;canonical source inventory fingerprints its current bytes.
 No loader assertion or receipt was waived. Exact-review selection is implemented;
-canonical publication remains pending. Retain control-input-selected-review-
+canonical audit publication is complete after cold replay/import. Retain control-input-selected-review-
 20261020.log and control-input-pre-export-source-census-20261020.log with this batch.
 
 Retain source proposal430dada4 and queued-control-source-proposal(-owning)-
 20261020 logs. All166 prior definitions are preserved in the170-group proposal;
 four authoring findings are now registered in source,with readonly update only a
-supplement to the existing core finding. Source counts170/226;canonical stays
-166/220 until case joins and coherent export/cold/import. Retain queued-control-
+supplement to the existing core finding. Source and accepted canonical counts
+are170/226 after case joins/export/cold/import. Retain queued-control-
 registration-preflight-20261020.log plus its two failed attempts (untracked Git
 path and bounded output buffer),registration-prior-owners and registration-focused
 logs. Complete743-source/220-proof/166-finding predecessor sections authenticate;

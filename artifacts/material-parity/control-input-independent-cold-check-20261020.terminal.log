@@ -1,0 +1,8 @@
+Command: ASTYLAR_AUDIT_COLD=1 ASTYLAR_AUDIT_PROGRESS=1 node scripts/export-material-input-audit-current-ancestry.mjs --check
+Session29495 terminal exit: 0
+Cold-check terminal exit: 0
+stdout SHA256: ddf6f7430b63c97dff3aca3320e547f91335eda0860270e4a68bdb6348d81ab2
+stderr SHA256: 0944b341a8a19529bde3e5b54be763c665ea6f70c3f4bde70c2589ad5565cbc8
+CLI completion elapsedMs: 2738973.1426
+Evidence session: collectors2,memoryHits10,diskHits0,invalidated0,filesRead16378,bytesRead1684517934,verificationBytes1684517934,elapsedMs2582524.0781.
+Check compares complete rebuilt audit and Markdown with exported candidate. Not current rendering or full audit completion.

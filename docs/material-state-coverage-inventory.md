@@ -2,108 +2,61 @@
 
 ## Current audit pointer — October20
 
-Current conclusions only;full receipts and superseded checkpoints are retained
-below. Earlier next/live statements in chronology are not current instructions.
+Current conclusions only;earlier next/live statements in chronology are historical.
 
 - Scope unchanged:36 families/2311 cases (436 static,1875 interaction). All2311
-  remain partially inspected;0 complete/0 unjoined or blocked. Rendering unaccepted.
-- Accepted evidence:39fc0e3e/e837 review,index6b8af878;166 findings/220 proofs.
-  Readonly batch passed export,independent cold replay,full section/coverage/source/
-  proof conservation and normal main import.86 immutable files share verified
-  hard links;accepted predecessorfc888710 remains preserved.
-- Pending candidate:b6610e71/indexd0e7623d;170 findings/226 proofs,review736e685c.
-  Export logged complete after2569095.5785ms;detached monitor confirms terminal
-  but returned null exit code (not reported as numeric0). Candidate import exits0,
-  main pointer remains39fc. Candidate86018384 packed/2329808066 decoded bytes.
-  Whole payload authentication/80-section comparison passes:70 unchanged/ten
-  changed. Source/proof/finding sections exactly match frozen production output;
-  all prior166 findings/220 proofs conserve. Complete2311 prior case records and
-  all15185 old dependency receipts conserve after removing only116 added children.
-  Six residual coverage leaves are two successor IDs/four reviewed source hashes;
-  summary changes only166→170. All147 extra leaves in five receipt sections are
-  attributed to producerd2d49ef9→d97e15b4 and derived control/report hashes;
-  every other value/shape/order is unchanged. See control-input candidate import,
-  full-section-comparison,metadata-conservation,candidate-registration-conservation,
-  derived-section-leaves and derived-receipt-conservation-20261020 logs.
-  Independent cold check is LIVE:session29495,launcher5580/worker4652. No restart,
-  main import or rendering acceptance until terminal comparison is inspected.
-- Readonly registration is now canonical audit evidence,not a renderer fix or
-  rendering pass. Complete165-definition/219-proof predecessor recovers.
-  Source census743 paths:729 unchanged,nine changed,five added,no removal.
-  Source section04e54857;proof07065eba. All219 original proof records unchanged.
-- Readonly39fc0e3e:export6487,candidate import,cold94817 and main import exit0.
-  Full80-section comparison authenticates both payloads:70 unchanged,ten changed.
-  Five expected registration sections reconcile;the extra147 leaves are99 source
-  receipts plus48 derived control hashes,all attributed with exact proof hashes.
-  Every other leaf/shape/order in those five sections is unchanged. See chronology.
-- Cold94817 completed:two session collectors,ten memory hits,zero disk hits;
-  16371 actual files/1683609139 read and verification bytes. CLI4329605.6447ms.
-  Both old/new payloads and all sections/receipts conserve;main matches candidate.
-- Readonly root:public report8a541560 proves native readonly Atlas unchanged versus
-  candidate xAtlas/xtlas/tlas atDPR1/2,with four writable/four disabled controls.
-  Six complete current/installed owner methods agree. Guard missing at shared
-  text-keyboard defaults. One DPR1 public readonly-update pair also reproduces
-  mutation after the flag updates correctly;clipboard,broader dynamic cases and
-  selection pixels remain open. New update result now has an owning proof but
-  remains outside published39fc pending the next coherent registration batch.
-- Queued checkbox request evidence:68 retainedab42dbec cases,52 visible marks,
-  selection flags agree. Boxes14px each;native stroke1.82 CSSpx after viewBox
-  versus candidate1.8. Current-only bend delta1.149px;not actual historical mesh.
-  Six of eight disabled ink requests differ from candidate onPrimary substitution.
-  checkbox-checkmark-retained-inputs/checkbox-disabled-checkmark-token-20261020
-  log pairs. Owning proof now passes;case join/classification registration remains
-  pending. No renderer change or canonical promotion of these observations yet.
-- Frozen light desktopDPR1 checkbox AX pairs:initial DOM value on absent from AX;
-  disabled native INPUT rejects focus,candidate role-DIV accepts it. Plain HTML
-  role-DIV reproduces candidate:widget-authoring mismatch,not invented core focus.
-  Full AX/form/relationship equivalence remains open. See chronology.
-- Active-option input targets joined in all88 retained contexts:40 select/48
-  timepicker,all labels agree;48 timepicker selected flags retain known mismatch.
-  One select AX pair resolves both relations;native listbox Plan versus candidate
-  unnamed is a separate authoring omission,confirmed in all40 retained select inputs.
-- Remaining priorities:full structure/generated descendants,AX,interaction and
-  lifetime ownership,local composited paint and current-runtime applicability.
-  Shared editing:1734 authored exclusions inspected;443 writable and134 readonly/
-  disabled cases remain partial. Do not reopen settled work without input drift.
-- Queued owning batch:four append-only input-boundary tests pass alongside the
-  original readonly test (5/5). Retained reader,old append guard,new conservation
-  guard,two benchmark owners and three direct consumers pass. Existing proof
-  bodies/anchors remain unchanged;source fingerprints await batched reconciliation.
-- Classified proposal430dada4 now preserves all166 accepted definitions and adds
-  four distinct authoring causes:checkbox path,disabled ink,disabled primitive,
-  select listbox naming. Readonly update is a supplement to the existing core
-  finding,not a duplicate. Proposal/source/history owning checks pass3/3.
-- Source registration now contains170 findings/226 proofs/756 fingerprints;
-  canonical39fc remains166/220. Complete prior166 finding rows and220 proof
-  records conserve exactly. Restoring nine changed audit-source receipts recovers
-  the complete743-source section04e54857;13 evidence paths are additive.
-  Preflight:queued-control-registration-preflight-20261020.log. Historical case
-  index checks pass4/4;retained review reader/proposal/new drift guard pass3/3.
-- Case-join proposal736e685c adds116 children to108 exact retained cases:
-  68 checkbox mark requests (52 selected/16 suppressed),eight disabled ink rows
-  (six differing/two matching contrast),40 select listbox naming rows.15192
-  dependencies authenticate;removing only116 children recovers completee837.
-  One-pair primitive-focus and dynamic-readonly probes are NOT generalized to
-  captured cases. All2311 remain partial/current-rendering unverified. Evidence:
-  control-input-case-join-20261020.log;owning assertion checks exact populations.
-- Review736e685c is now selected by the complete-baseline launcher and existing
-  exact five-transition reader. Old/new review and registration checks pass3/3;
-  unknown IDs reject. Launcher dry-run passes (not evidence authentication).
-- Next:finish the live independent cold comparison,then verified immutable staging
-  and normal main import. New proposal is not accepted canonical evidence yet.
-  Remaining structure/
-  AX/paint/current-runtime coverage stays open.
-  Original full canonical/browser/unit/build/packed-consumer/release gates remain.
-- Pre-export census now passes756/226/170 with zero missing proof/source findings.
-  Ten changed registered source receipts plus13 added paths reconcile to the
-  complete accepted743-source section04e54857;all prior220 proof/166 finding
-  objects conserve to07065eba/beb3da46. Source selection adds the runner receipt
-  to the prior nine changed sources. control-input-pre-export-source-census-
-  20261020.log retains exact producer/receipts;no full builder/browser was run.
-- Storage:the agent performed no deletion. After the302-build review,the existing
-  Material test-out parent now contains0 directories;D: free12831477760 bytes.
-  This is an observed external change,not an agent-executed cleanup. Exact prior
-  inventory/removal review and historical compression records remain preserved.
+  remain partial;0 complete/0 unjoined or blocked. Current rendering unverified.
+- Accepted:b6610e71ef744b5d589d07c18e562df9927202a3adb7a5b31acb334b100839f2,
+  indexd0e7623de72caddf94446cf4de1396975e59c9cf1e0d9a0865f8d5b0a8761bce,
+  review736e685c.170 findings/226 proofs/756 source fingerprints. Prior39fc/e837
+  and all original/failure evidence remain preserved. No renderer/fixture fix.
+- Publication COMPLETE:export logged complete (detached exit unavailable,not
+  relabeled0);candidate import,independent cold29495 and normal main import exit0.
+  Cold CLI2738973.1426ms:two collectors,ten memory hits,zero disk hits,16378 files,
+  1684517934 read/verification bytes. Normal importer reused86 immutable files;
+  exact bigint device/file IDs and full per-file hashes agree across both stores.
+  Never overwrite shared archive files in place.
+- Complete80-section comparison:70 unchanged/ten changed. Current registration
+  sections exactly equal frozen producer output. All166 prior findings/220 proofs
+  and complete743-source section conserve (ten reviewed changes,13 added paths).
+  Removing only116 new case children recovers all2311 predecessor records;all15185
+  old dependency receipts unchanged. Six other coverage leaves are two successor
+  IDs/four reviewed source hashes. Summary changes only166→170.
+- All147 other receipt leaves are attributed:d2d49ef9→d97e15b4 producer update,
+  48 actual complete control-proof hash pairs and one complete report hash.
+  Every other leaf/shape/order in those five sections is unchanged.
+  Evidence:control-input-full-section-comparison,metadata-conservation,candidate-
+  registration-conservation,derived-section-leaves,derived-receipt-conservation,
+  independent-cold-check (including terminal),main-staging and main-import-
+  20261020 logs. Accepted package86018384 packed/2329808066 decoded bytes.
+- Four additive authoring findings:checkbox fixed-path geometry,disabled mark ink,
+  disabled native primitive substitution,and omitted select listbox name.
+  Checkbox68 retained pairs:52 marks/16 suppressed;native SVG stroke1.82CSSpx
+  versus candidate1.8;current-only bend delta1.149px,not historical mesh.
+  Eight disabled ink cases include six differences/two matching contrast controls.
+  Plain HTML role-DIV reproduces one frozen disabled checkbox focus/AX divergence,
+  so this primitive mismatch is not invented core focus failure.
+- Case join116 children/108 cases:68 checkbox structure,eight disabled ink,40
+  select naming. Native Plan versus omitted listbox name precedes AX projection;
+  one separate actual AX pair resolves targets. Neither the single AX/primitive
+  probe nor dynamic readonly probe is generalized to every captured case.
+  Exact populations/prior recovery are guarded by existing owning tests.
+- Existing core readonly finding now also has one public readonly-update proof:
+  flag update succeeds,but trusted typing still mutates. Original publicDPR1/2
+  readonly/writable/disabled controls and six current/installed methods bind.
+  Clipboard,broader dynamic cases,selection pixels and full current-runtime
+  applicability remain open;no duplicate defect or renderer fix.
+- Next:resume complete structure/generated-owner/property mapping,AX,interaction/
+  lifetime ownership and composited paint/current-runtime gaps. Divider anonymous
+  paragraph line boxes are not supplied by baseline control-target selection;
+  do not rerun that unchanged collector or mistake ink-centre crops for line boxes.
+  Reuse settled proofs;batch further integration until a justified milestone.
+  Full unfiltered audit/browser/unit/build/packed-consumer/release gates and all
+  original completion/handoff requirements remain. Historical passes are not
+  current rendering acceptance.
+- Storage:no deletion by the agent. After the302-build review,test-out contained
+  0 directories (observed external change). Exact old inventory/removal review
+  and compression/failure records remain preserved.
 
 ## Audit chronology — retained evidence, newest first
 
