@@ -50,6 +50,19 @@ their receipts; older "next" or "live" statements are not current instructions.
   Thus clipboard is not an independently guarded source path;runtime paste/cut,
   permissions,async readonly updates and native event order remain UNPROVED.
   Do not extend the demonstrated Home/x/Delete/Backspace failure to clipboard.
+- Readonly NAVIGATION boundary observed separately,not assumed passing:retained
+  public8a541560 input/bundle reused unchanged,no build/plugin/callback/style edit.
+  Real Home,End,Shift+Home,Shift+ArrowRight,ArrowRight atDPR1/2;writable pairs
+  match endpoints/direction. Programmatically focused native readonly remains
+  [5,5]/forward for all five keys;candidate moves [0,0],[5,5],[0,5]backward,
+  [1,5]backward,[5,5]forward. All values Atlas/focus retained,no input/change,
+  no page/diagnostic errors.2518 input/build receipts authenticate before/after.
+  Log public-readonly-navigation-20261020
+  SHA122336f1c73468ec01cb9c0b757dc64b3e75bb28b71398c8c1fb9bcd8d7e7be4
+  retains exact inline producer arguments,launch and every observation. Source
+  route is the existing unguarded keyboard default,not a new proven first-stage
+  cause. Pointer-focused/native readonly navigation expectations remain unproved;
+  do not blanket-disable navigation or claim renderer caret/selection pixels pass.
 - Next:finish chip export,authenticate section/coverage/source/proof conservation,
   independent cold replay and main import before publication. Then integrate
   readonly finding/regression through existing owners;remaining full structure,

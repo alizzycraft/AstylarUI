@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+Retain public-readonly-navigation-20261020 stdout/stderr. It reuses original
+public-readonly-editing-recovered input/bundle/HTML byte-for-byte and authenticates
+2518 receipts before/after. Stdout retains exact inline producer arguments,launch
+and forty trusted-key action observations. Writable selection endpoints match;
+readonly endpoints differ in the tested programmatic-focus setup. No new build,
+fixture rewrite,current raster acceptance or all-readonly navigation claim.
+
 Retain chip-coherent-export-20261020 completed export logs,candidate fc888710,
 and chip-candidate-import-20261020 initial command-syntax failure logs. Corrected
 chip-candidate-import-recovered-20261020 completes exit0;candidate index0633e01b
