@@ -2,6 +2,36 @@
 
 ## Current audit pointer — October20
 
+This summary is current. The chronology below preserves earlier checkpoints and
+their receipts; older "next" or "live" statements are not current instructions.
+
+- Scope:36 families,2311 configured cases (436 static,1875 interaction). Accepted
+  case ledger:0 complete,2311 partial,0 unjoined/blocked;rendering acceptance false.
+  Evidence contact is not inspection closure or a current parity pass.
+- Accepted audit evidence:3072dbe6 package/f471 review,index372d4128.165 registered
+  findings/219 proofs;zero unresolved scalar groups does NOT mean zero defects.
+- Selected,NOT published:e837c58e chip successor,176 additions beyond f471 across
+  76 cases. Full predecessor/source preflight passes;five changed inventory files,
+  738 total,733 unchanged,all219 proof records unchanged;source section9e74ce09.
+- Active publication job:session49114,launcher15672/worker26368,started13:39:48
+  local October20. chip-coherent-export-20261020 log pair. Verified live;keep
+  its existing inputs frozen and never restart merely because output is quiet.
+- New standalone result:public readonly keyboard mutation confirmed atDPR1/2,
+  with writable/disabled controls and six current/installed method bodies bound.
+  Public report8a541560;committed f8017c10.Outside frozen chip batch and current
+  165/219 inventories;not a full current-package or94-case acceptance claim.
+- Shared editing coverage:1734 authored exclusions already inspected;443 writable
+  cases and134 readonly/disabled exclusions remain partial. Do not reopen the
+  settled1734 exclusions or clear behavior work from attribute presence alone.
+- Next:finish chip export,authenticate section/coverage/source/proof conservation,
+  independent cold replay and main import before publication. Then integrate
+  readonly finding/regression through existing owners;remaining full structure,
+  AX,interaction/lifetime,local paint/currentness and original final gates stay open.
+- Storage:no original evidence or old build/cache data deleted. Cleanup awaits
+  user approval;closed evidence uses verified lossless compression/hard links.
+
+## Audit chronology — retained evidence, newest first
+
 Readonly CORE isolation COMPLETE for the tested public contract,not a fix:
 new bounded scripts/audit-public-readonly-editing.mjs reuses existing package-
 root public mount/native-control driver pattern. No Material/plugin,application
