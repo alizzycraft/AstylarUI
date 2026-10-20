@@ -559,3 +559,51 @@ test('queued control proof append conserves complete accepted sources and reject
   const helperBefore = execFileSync('git', ['show', `437a4535:${helper}`], { encoding: 'utf8', maxBuffer: 2_000_000 }).replaceAll('\r\n', '\n');
   assert.equal(helperNow.slice(0, begin) + helperNow.slice(end), helperBefore);
 });
+
+test('queued control source proposal preserves all prior definitions and binds distinct authoring causes', async () => {
+  const { execFileSync } = await import('node:child_process');
+  const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');
+  const hash = value => createHash('sha256').update(value).digest('hex');
+  const sha = '430dada4b7b57b0e54f8d41ba3524f2031c285f516bc846b3b5a5f8d17684aa4';
+  const envelope = JSON.parse(fs.readFileSync(`artifacts/material-parity/working-audit/proposals/${sha}.json`));
+  assert.equal(envelope.status, 'proposal-not-canonical'); assert.equal(envelope.sha256, sha);
+  const review = envelope.review; assert.equal(hash(JSON.stringify(review)), sha);
+  assert.equal(review.kind, 'material-source-finding-review'); assert.equal(review.status, 'reviewed-not-integrated');
+  assert.equal(review.registrationPending, true);
+  const source = execFileSync('git', ['show', '437a4535:tests/material-parity/input-equivalence-policy.mjs'],
+    { encoding: 'utf8', maxBuffer: 2_000_000 }).replaceAll('\r\n', '\n');
+  assert.equal(hash(source), '7875b717fe7693f5bdad8158f99461f09512b7bdbcdda4465a0478c4bc24566c');
+  const prior = new Function(source.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
+  assert.equal(prior.length, 166); assert.deepEqual(review.groups.slice(0, 166), prior);
+  assert.equal(review.groups.length, 170);
+  if (sourceAuditDefinitions.length === 166) assert.deepEqual(sourceAuditDefinitions, prior);
+  else assert.deepEqual(sourceAuditDefinitions, review.groups, 'Only this exact complete registered successor is allowed');
+  const added = review.groups.slice(166);
+  assert.deepEqual(added.map(row => row.id), [
+    'fixture-checkbox-checkmark-path-substitution', 'fixture-checkbox-disabled-checkmark-ink-substitution',
+    'fixture-checkbox-disabled-native-primitive-substitution', 'fixture-select-listbox-name-omission',
+  ]);
+  for (const receipt of review.evidenceSources) assert.equal(hash(fs.readFileSync(receipt.file)), receipt.sha256);
+  for (const finding of added) {
+    assert.equal(finding.classification, 'application-plugin-authoring-defect');
+    assert.equal([...fs.readFileSync(finding.file, 'utf8').matchAll(new RegExp(finding.pattern, 'g'))].length, 1);
+    assert.ok(finding.owner && finding.justification && finding.recommendation && finding.boundary);
+    assert.match(finding.introducedBy, /first-bad runtime not established/);
+    for (const receipt of finding.evidence) assert.equal(hash(fs.readFileSync(receipt.file)), receipt.sha256);
+    const [file, title] = finding.focusedProof.split(': ');
+    assert.equal(fs.readFileSync(file, 'utf8').split(`test('${title}'`).length, 2);
+  }
+  const historyReceipt = review.evidenceSources.find(row => row.file.endsWith('queued-control-source-history-20261020.log'));
+  assert.ok(historyReceipt); const history = JSON.parse(fs.readFileSync(historyReceipt.file));
+  for (const row of history.history) {
+    const bytes = execFileSync('git', ['show', `${row.commit}:${row.file}`], { maxBuffer: 4_000_000 });
+    assert.equal(hash(bytes), row.moduleSha256); assert.equal(hash(row.excerpt), row.excerptSha256);
+    assert.ok(bytes.toString().includes(row.excerpt));
+  }
+  assert.match(history.history.find(row => row.kind === 'checkmark-coordinate-rework').excerpt, /Vector3\[\]/);
+  assert.match(history.history.find(row => row.kind === 'checkmark-css-helper').excerpt, /CssPoint\[\]/);
+  assert.deepEqual(review.supplementalFindingEvidence.map(row => row.id), ['core-readonly-text-keyboard-defaults-mutate-value']);
+  assert.equal(review.groups.filter(row => row.id === 'core-readonly-text-keyboard-defaults-mutate-value').length, 1);
+  const changed = structuredClone(review); changed.groups[0].classification = 'equivalent-representation';
+  assert.notEqual(hash(JSON.stringify(changed)), sha);
+});

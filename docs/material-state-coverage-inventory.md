@@ -53,8 +53,12 @@ below. Earlier next/live statements in chronology are not current instructions.
   original readonly test (5/5). Retained reader,old append guard,new conservation
   guard,two benchmark owners and three direct consumers pass. Existing proof
   bodies/anchors remain unchanged;source fingerprints await batched reconciliation.
-- Next:register queued checkbox/select classifications and five new owning/
-  conservation proof anchors,join applicable cases,then one coherent export/cold
+- Classified proposal430dada4 now preserves all166 accepted definitions and adds
+  four distinct authoring causes:checkbox path,disabled ink,disabled primitive,
+  select listbox naming. Readonly update is a supplement to the existing core
+  finding,not a duplicate. Proposal/source/history owning checks pass3/3.
+- Next:integrate proposal430dada4 and six new owning/conservation anchors into
+  the registry/inventory,join applicable cases,then one coherent export/cold
   milestone. Remaining structure/AX/paint/current-runtime coverage stays open.
   Original full canonical/browser/unit/build/packed-consumer/release gates remain.
 - Storage:the agent performed no deletion. After the302-build review,the existing
@@ -65,6 +69,32 @@ below. Earlier next/live statements in chronology are not current instructions.
 ## Audit chronology — retained evidence, newest first
 
 ### October20 — retained chip/readonly registration and checkbox checkpoint
+
+Source classification proposal430dada4b7b57b0e54f8d41ba3524f2031c285f516bc846b3b5a5f8d17684aa4
+is reviewed-not-integrated in the existing content-addressed proposal store.
+It preserves the complete166-definition vector,adds four application/plugin
+authoring findings,and separately links the new readonly-update observation to
+the existing core finding. Registry/canonical counts remain166/220,NOT170/226.
+queued-control-source-proposal-20261020.log retains the exact producer and scope.
+Owning proposal,append conservation and prior readonly registration checks pass
+3/3 in queued-control-source-proposal-owning-20261020.log. Patterns each identify
+one current source location;all evidence receipts and original definitions bind.
+No authoring,renderer,case-status or canonical package was changed.
+
+Seven exact Git module/excerpt histories are retained in queued-control-source-
+history-20261020.log. c47d589a contains the explicit role-DIV checkbox branch;
+7159b1d5 already uses checkbox onPrimary;fc45b58b extends its color branch;
+2f440115 already has the unnamed select listbox. Geometry history is DISTINCT:
+db8f7432 is a fixed-path predecessor;5b74d1b3 still returns scaled Vector3 points,
+while e4ca3db4 returns CSS points. Do not call the older world/local calculation
+the current CSS helper or infer a runtime bisect from Git blame. Initial metadata
+labels were corrected with the unchanged substantive excerpts preserved in the
+initial-labels log;the current owning check verifies each whole Git module hash,
+exact excerpt hash/membership and both different return conventions. Current
+plugin/helper uses shared final projection;the observed fixed path does not
+preserve native SVG request geometry. This is not a demonstrated current core
+coordinate bug. All four proposed causes retain their specific coverage limits,
+first-bad-runtime uncertainty and no whole-case/current-rendering acceptance.
 
 Queued control owning proofs COMPLETE (not canonical registration/case closure):
 input-boundary-evidence.spec.mjs now appends four tests to its exact511089-byte

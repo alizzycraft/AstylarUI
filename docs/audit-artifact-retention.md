@@ -2,6 +2,17 @@
 
 ## Current versus historical evidence
 
+Retain source proposal430dada4 and queued-control-source-proposal(-owning)-
+20261020 logs. All166 prior definitions are preserved in the170-group proposal;
+four authoring findings remain queued,with readonly update only a supplement to
+the existing core finding. Current registry/canonical counts stay166/220.
+Keep queued-control-source-history-20261020.log and initial-labels log as the
+metadata-correction record:raw module/excerpt histories are unchanged,but5b74d1b3
+must not be labeled a CSS-point helper (it still returns scaled Vector3 values).
+e4ca3db4 is the CSS-point return boundary. Seven whole Git/excerpt receipts and
+all new source/evidence locations validate;three selected owning checks pass.
+No original evidence,fixture/renderer,case status or canonical package changed.
+
 Retain queued-control-owning-20261020.log,its .failed.log and verbatim
 queued-control-owning-20261020.failed-source.mjs;the last is a failure-source
 snapshot,not executable from its artifact directory without the original checkout
