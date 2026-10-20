@@ -54,6 +54,18 @@ Current conclusions only;earlier next/live statements in chronology are historic
   Full unfiltered audit/browser/unit/build/packed-consumer/release gates and all
   original completion/handoff requirements remain. Historical passes are not
   current rendering acceptance.
+- Queued divider line-box supplement (not part of publishedb661):fresh Chrome
+  155.0.8059.80 with frozen served build and retained typography measures Above/
+  Below natural boxes19CSSpx each,matching actual paragraph heights19. Parent/span
+  font requests agree;zero insets,one span,empty own paragraph text;before/after
+  boxes unchanged and temporary observers removed. Six negative checks retain
+  original button-only rejection and reject altered text/font requests. Original
+  checkpoint Chrome155.0.8059.40 was NOT replayed:strict version failure and exact
+  failed source retained. divider-natural-line-box-20261020.log plus failed pair;
+  scripts/audit-material-divider-line-boxes.mjs owns explicit diagnostic recipe.
+  No new core defect,all-context closure or current candidate/rendering claim.
+  Next:remaining physical contexts/complete owner properties with this explicit
+  fresh-browser boundary;do not confuse this19px measurement with ink centres.
 - Storage:no deletion by the agent. After the302-build review,test-out contained
   0 directories (observed external change). Exact old inventory/removal review
   and compression/failure records remain preserved.

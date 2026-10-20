@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Retain divider-natural-line-box-20261020.log and its failed.log/failed-source.mjs.
+Initial browser equality check found155.0.8059.80 versus checkpoint155.0.8059.40;
+the first failed source SHA256 iscc02808eada3a17165aa9040bb6ac4b60085c7860b8539ab0ac3e69932412acc.
+Successful source explicitly records a fresh-browser supplement,not a replay or
+receipt replacement. Two native natural-height measurements match19CSSpx actual
+paragraph boxes;all six rejection controls pass,original probe remains unchanged.
+This evidence fills only one light/desktop reference context;do not delete the
+failure as obsolete or treat this queued supplement as canonical/rendering proof.
+
 Retain control-input-coherent-export-20261020 stdout/stderr and candidate generation
 b6610e71ef744b5d589d07c18e562df9927202a3adb7a5b31acb334b100839f2 under
 working-audit-candidate-validation and working-audit. Mainb661 is now accepted;

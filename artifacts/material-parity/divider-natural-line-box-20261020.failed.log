@@ -1,0 +1,26 @@
+Command: node scripts/audit-material-divider-line-boxes.mjs
+Terminal exit: 1
+Exact initial source retained separately as divider-natural-line-box-20261020.failed-source.mjs.
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ '155.0.8059.80'
+- '155.0.8059.40'
+              ^
+
+    at withFrozen.checkpointFile.checkpointFile (file:///D:/dev/github/AstylarUI-audit-integration/scripts/audit-material-divider-line-boxes.mjs:36:10)
+    at withFrozenShowcase (eval at <anonymous> (file:///D:/dev/github/AstylarUI-audit-integration/scripts/audit-material-divider-line-boxes.mjs:18:20), <anonymous>:24:11)
+    at async file:///D:/dev/github/AstylarUI-audit-integration/scripts/audit-material-divider-line-boxes.mjs:35:1 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: '155.0.8059.80',
+  expected: '155.0.8059.40',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.22.3
