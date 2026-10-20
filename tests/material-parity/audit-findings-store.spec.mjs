@@ -523,7 +523,7 @@ test('readonly registration recovers complete prior policy and producer without 
 test('queued control proof append conserves complete accepted sources and rejects drift', async () => {
   const { execFileSync } = await import('node:child_process');
   const { default: ts } = await import('typescript');
-  const { restoreInputBoundaryReadonlyAppend } = await import('./text-backing-case-review-source.mjs');
+  const { restoreInputBoundaryReadonlyAppend, restoreQueuedControlHelperSource } = await import('./text-backing-case-review-source.mjs');
   const hash = value => createHash('sha256').update(value).digest('hex');
   const suite = 'tests/material-parity/input-boundary-evidence.spec.mjs';
   const current = fs.readFileSync(suite, 'utf8').replaceAll('\r\n', '\n');
@@ -552,7 +552,7 @@ test('queued control proof append conserves complete accepted sources and reject
   const benchmarkBefore = execFileSync('git', ['show', `437a4535:${benchmark}`], { encoding: 'utf8', maxBuffer: 2_000_000 }).replaceAll('\r\n', '\n');
   assert.equal(benchmarkNow.replaceAll(hash(current), hash(accepted)), benchmarkBefore);
   const helper = 'tests/material-parity/semantic-text-transform-registration.mjs';
-  const helperNow = fs.readFileSync(helper, 'utf8').replaceAll('\r\n', '\n');
+  const helperNow = restoreQueuedControlHelperSource(fs.readFileSync(helper, 'utf8'));
   const begin = helperNow.indexOf('    // QUEUED_CONTROL_OWNER_RECEIPT_BEGIN\n');
   const marker = '    // QUEUED_CONTROL_OWNER_RECEIPT_END\n', end = helperNow.indexOf(marker, begin) + marker.length;
   assert.ok(begin > 0 && end > begin);
@@ -606,4 +606,47 @@ test('queued control source proposal preserves all prior definitions and binds d
   assert.equal(review.groups.filter(row => row.id === 'core-readonly-text-keyboard-defaults-mutate-value').length, 1);
   const changed = structuredClone(review); changed.groups[0].classification = 'equivalent-representation';
   assert.notEqual(hash(JSON.stringify(changed)), sha);
+});
+
+test('queued control registration restores exact predecessors and rejects unrelated source changes', async () => {
+  const { execFileSync } = await import('node:child_process');
+  const { restoreQueuedControlPolicy, restoreQueuedControlProducer } = await import('./semantic-text-transform-registration.mjs');
+  const { restoreQueuedControlHelperSource } = await import('./text-backing-case-review-source.mjs');
+  const previous = file => execFileSync('git', ['show', `b01e3fc5:${file}`],
+    { encoding: 'utf8', maxBuffer: 4_000_000 }).replaceAll('\r\n', '\n');
+  for (const [file, restore, marker, oldMarker] of [
+    ['tests/material-parity/input-equivalence-policy.mjs', restoreQueuedControlPolicy, 'fixture-checkbox-checkmark-path-substitution', 'core-readonly-text-keyboard-defaults-mutate-value'],
+    ['tests/material-parity/input-equivalence-audit.mjs', restoreQueuedControlProducer, 'retained checkbox SVG path units and disabled ink inputs', 'public readonly text keyboard mutation with writable and disabled controls'],
+  ]) {
+    const current = fs.readFileSync(file, 'utf8').replaceAll('\r\n', '\n'), prior = previous(file);
+    assert.equal(restore(current), prior); assert.equal(restore(prior), prior);
+    assert.ok(current.includes(marker)); assert.ok(current.includes(oldMarker));
+    for (const changed of [current + '\n// unrelated drift', current.replace(marker, 'unreviewed-control-registration'),
+      current.replace(oldMarker, 'unreviewed-old-finding')]) {
+      assert.notEqual(changed, current);
+      assert.throws(() => restore(changed));
+    }
+  }
+  const helper = 'tests/material-parity/semantic-text-transform-registration.mjs';
+  const currentHelper = fs.readFileSync(helper, 'utf8').replaceAll('\r\n', '\n');
+  assert.equal(restoreQueuedControlHelperSource(currentHelper), previous(helper));
+  for (const changed of [currentHelper + '\n// unrelated drift', currentHelper.replace('const controlIds =', 'const renamedIds =')])
+    assert.throws(() => restoreQueuedControlHelperSource(changed));
+  for (const [file, changes] of [
+    ['tests/material-parity/semantic-text-transform-input.spec.mjs', [
+      ['currentSourceAuditDefinitions.length, 170', 'currentSourceAuditDefinitions.length, 166', 2],
+      ['currentSourceAuditDefinitions.slice(3, 166)', 'currentSourceAuditDefinitions.slice(3)', 1],
+      ['currentDefinitions: 170', 'currentDefinitions: 166', 1],
+    ]],
+    ['tests/material-parity/legacy-clip-support-input.spec.mjs', [
+      ['currentSourceAuditDefinitions.slice(2,166)', 'currentSourceAuditDefinitions.slice(2)', 1],
+      ['currentSourceAuditDefinitions.length,170', 'currentSourceAuditDefinitions.length,166', 1],
+    ]],
+  ]) {
+    let restored = fs.readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+    for (const [from, to, count] of changes) {
+      assert.equal(restored.split(from).length, count + 1); restored = restored.replaceAll(from, to);
+    }
+    assert.equal(restored, previous(file), 'Older suite may change only explicit current-population metadata');
+  }
 });

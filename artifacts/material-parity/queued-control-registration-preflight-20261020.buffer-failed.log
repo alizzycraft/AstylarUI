@@ -1,0 +1,53 @@
+Terminal exit: 1
+node:internal/child_process:1120
+    result.error = new ErrnoException(result.error, 'spawnSync ' + options.file);
+                   ^
+
+<ref *1> Error: spawnSync git ENOBUFS
+    at Object.spawnSync (node:internal/child_process:1120:20)
+    at spawnSync (node:child_process:902:24)
+    at execFileSync (node:child_process:945:15)
+    at file:///D:/dev/github/AstylarUI-audit-integration/[eval1]:9:105
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+  errno: -4060,
+  code: 'ENOBUFS',
+  syscall: 'spawnSync git',
+  path: 'git',
+  spawnargs: [ 'show', '437a4535:docs/material-position-input-population.json' ],
+  error: [Circular *1],
+  status: null,
+  signal: 'SIGTERM',
+  output: [
+    null,
+    Buffer(4063232) [Uint8Array] [
+      123,  10,  32,  32,  34, 115,  99, 104, 101, 109,  97,  86,
+      101, 114, 115, 105, 111, 110,  34,  58,  32,  49,  44,  10,
+       32,  32,  34, 107, 105, 110, 100,  34,  58,  32,  34, 114,
+      101, 109,  97, 105, 110, 105, 110, 103,  45, 112, 111, 115,
+      105, 116, 105, 111, 110,  45, 105, 110, 112, 117, 116,  45,
+      112, 111, 112, 117, 108,  97, 116, 105, 111, 110,  34,  44,
+       10,  32,  32,  34,  99,  97, 112, 116, 117, 114, 101,  34,
+       58,  32, 123,  10,  32,  32,  32,  32,  34, 102, 105, 108,
+      101,  34,  58,  32,
+      ... 4063132 more items
+    ],
+    Buffer(0) [Uint8Array] []
+  ],
+  pid: 17788,
+  stdout: Buffer(4063232) [Uint8Array] [
+    123,  10,  32,  32,  34, 115,  99, 104, 101, 109,  97,  86,
+    101, 114, 115, 105, 111, 110,  34,  58,  32,  49,  44,  10,
+     32,  32,  34, 107, 105, 110, 100,  34,  58,  32,  34, 114,
+    101, 109,  97, 105, 110, 105, 110, 103,  45, 112, 111, 115,
+    105, 116, 105, 111, 110,  45, 105, 110, 112, 117, 116,  45,
+    112, 111, 112, 117, 108,  97, 116, 105, 111, 110,  34,  44,
+     10,  32,  32,  34,  99,  97, 112, 116, 117, 114, 101,  34,
+     58,  32, 123,  10,  32,  32,  32,  32,  34, 102, 105, 108,
+    101,  34,  58,  32,
+    ... 4063132 more items
+  ],
+  stderr: Buffer(0) [Uint8Array] []
+}
+
+Node.js v22.22.3
+

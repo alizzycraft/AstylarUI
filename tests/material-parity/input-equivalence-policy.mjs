@@ -2098,6 +2098,218 @@ export const sourceAuditDefinitions = Object.freeze([
       stage: 'FlexService.parseMarginBox/parseMargin drops units before final projection;retained PNG bounds corroborate projected geometry' },
     justification: 'Two fresh public-package runs each preserve16 paired identical-input trials and32 screenshot receipts. Four block-em and eight explicit-pixel controls agree;all four flex-em trials are15/23CSSpx too high,consistent with margin1 instead of16/24. Relevant complete emitted method bodies and parameter names bind current source to the installed bundle inputs. Flex flow passes the raw resolved margin to parseFloat-based helpers;ordinary block creation uses a separate own-font-aware helper and passes. Share computed CSS length/font resolution at the owning layout boundary rather than replacing fixture em margins with pixels. This does not establish inherited-font,percent,positioned,update or lifetime behavior,or attribute Material absolute paragraph wrappers to this flex-flow reduction. The dimension parser also drops units in isolation,but that alone does not prove every caller fails.',
   }),
+  Object.freeze({
+    "id": "fixture-checkbox-checkmark-path-substitution",
+    "introducedBy": "db8f7432 fixed-path predecessor;5b74d1b3 coefficient/polarity rework;e4ca3db4 CSS-point helper boundary;first-bad runtime not established",
+    "file": "examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts",
+    "pattern": "export function materialCheckMarkPath\\(",
+    "classification": "application-plugin-authoring-defect",
+    "owner": "Material showcase checkmark plugin authored SVG/path request boundary",
+    "focusedProof": "tests/material-parity/input-boundary-evidence.spec.mjs: retained checkbox checkmark requests bind SVG units and disabled ink before projection",
+    "observation": {
+      "component": "checkbox",
+      "cases": 68,
+      "selectedMarks": 52,
+      "reference": {
+        "viewBox": "0 0 24 24",
+        "viewportCss": "14px",
+        "path": "M1.73,12.91 8.1,19.28 22.79,4.59",
+        "strokeUserUnits": 3.12,
+        "strokeCss": 1.82
+      },
+      "astylar": {
+        "viewportCss": "14px",
+        "fixedCssPoints": [
+          [
+            -5.5,
+            0.4
+          ],
+          [
+            -1.8,
+            3.2
+          ],
+          [
+            5.5,
+            -4.2
+          ]
+        ],
+        "strokeCss": 1.8
+      },
+      "stage": "Different authored path/viewport interpretation before final CSS-to-render projection"
+    },
+    "justification": "All68 retained checkbox pairs authenticate,with52 selected marks and matching selection flags. Both mark boxes are14CSSpx. The native24-unit SVG maps its3.12-unit stroke to1.82CSSpx,not3.12CSSpx. Its centerline differs from the current fixed plugin points,including a1.149CSSpx bend delta. Current plugin geometry therefore does not preserve the original SVG request. The helper returns CSS points and current rendering uses the shared final conversion;these unequal inputs do not demonstrate a current core coordinate defect.",
+    "evidence": [
+      {
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd"
+      },
+      {
+        "file": "examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts",
+        "sha256": "dee2c10af7f3116bc6a476d63182ac182e5717b90f5333a327b77213e0b9107e"
+      },
+      {
+        "file": "tests/material-parity/input-boundary-evidence.spec.mjs",
+        "sha256": "58fe244dc56a251e144dcc6eab2c36cb18f017291da968e1d002dc36404d60ea"
+      },
+      {
+        "file": "artifacts/material-parity/checkbox-checkmark-retained-inputs-20261020.log",
+        "sha256": "30ff029a6f116c88e63027b960391e6e08bbaf6ddf3a89c305506cb43a18b8c4"
+      },
+      {
+        "file": "artifacts/material-parity/queued-control-source-history-20261020.log",
+        "sha256": "57f539672cfb6f82ed05f8c3141d866d0a7518fda7b6bb5756dbea60e41093a3"
+      },
+      {
+        "file": "artifacts/material-parity/queued-control-owning-20261020.log",
+        "sha256": "aac72a08875827648bb454200a4ee1a30ff082fa703f2edd55c72f6c9addbaf4"
+      }
+    ],
+    "recommendation": "Preserve the original SVG path,viewBox,stroke and visibility inputs through a legitimate generic paint/plugin boundary before testing residual equal-input renderer behavior. Do not tune a new set of checkmark points to imitate a screenshot or move layout into Babylon space.",
+    "boundary": "Retained requests and current source-only centerlines. Not captured historical mesh points,cap/join raster,current output parity,world-conversion failure,all symbol consumers or whole-case acceptance."
+  }),
+  Object.freeze({
+    "id": "fixture-checkbox-disabled-checkmark-ink-substitution",
+    "introducedBy": "7159b1d5 already chooses checkbox onPrimary;fc45b58b extends the color branch to step completion;first-bad runtime not established",
+    "file": "examples/material-showcase/src/app/astylar.component.ts",
+    "pattern": "const color = extraClass === 'checkbox-mark'",
+    "classification": "application-plugin-authoring-defect",
+    "owner": "Material showcase disabled checkbox checkmark token authoring",
+    "focusedProof": "tests/material-parity/input-boundary-evidence.spec.mjs: retained checkbox checkmark requests bind SVG units and disabled ink before projection",
+    "observation": {
+      "component": "checkbox",
+      "selectedDisabledCases": 8,
+      "unequalRgbRequests": 6,
+      "reference": "Active --mat-checkbox-disabled-selected-checkmark-color with surface fallback",
+      "astylar": "Unconditional theme.onPrimary in selectionMark",
+      "stage": "Authored token selection before compositing or projection"
+    },
+    "justification": "All eight selected disabled retained contexts bind active native disabled-checkmark declarations to computed ink and candidate authored mark data. Six RGB requests differ across light,dark and custom profiles;the two contrast requests agree. The helper never tests disabled state and chooses onPrimary for checkbox marks. Inactive forced-colors rules are retained and explicitly excluded from this active-rule comparison,not changed or claimed tested. This is a state-token input substitution,not evidence that core alpha conversion or compositing is wrong.",
+    "evidence": [
+      {
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd"
+      },
+      {
+        "file": "tests/material-parity/input-boundary-evidence.spec.mjs",
+        "sha256": "58fe244dc56a251e144dcc6eab2c36cb18f017291da968e1d002dc36404d60ea"
+      },
+      {
+        "file": "artifacts/material-parity/checkbox-checkmark-retained-inputs-20261020.log",
+        "sha256": "30ff029a6f116c88e63027b960391e6e08bbaf6ddf3a89c305506cb43a18b8c4"
+      },
+      {
+        "file": "artifacts/material-parity/checkbox-disabled-checkmark-token-20261020.log",
+        "sha256": "1750461e2aafd8b9b6100799d3c81267e04be242d70f14cdf02d92f389a2b41f"
+      },
+      {
+        "file": "artifacts/material-parity/queued-control-source-history-20261020.log",
+        "sha256": "57f539672cfb6f82ed05f8c3141d866d0a7518fda7b6bb5756dbea60e41093a3"
+      },
+      {
+        "file": "artifacts/material-parity/queued-control-owning-20261020.log",
+        "sha256": "aac72a08875827648bb454200a4ee1a30ff082fa703f2edd55c72f6c9addbaf4"
+      }
+    ],
+    "recommendation": "Restore the actual disabled-selected checkmark token intent for the original Material composition. Then investigate residual equal-input paint without sampled-color overrides,opacity compensation or a global core theme special case.",
+    "boundary": "Eight retained selected-disabled input requests and active declarations only. Not forced-colors runtime,composited/current pixels,cap/join behavior,other checkbox states or whole-case acceptance."
+  }),
+  Object.freeze({
+    "id": "fixture-checkbox-disabled-native-primitive-substitution",
+    "introducedBy": "c47d589a explicit role-DIV checkbox branch;first-bad runtime not established",
+    "file": "examples/material-showcase/src/app/astylar.component.ts",
+    "pattern": "type: 'div', id: 'checkbox-primary', role: 'checkbox'",
+    "classification": "application-plugin-authoring-defect",
+    "owner": "Material showcase checkbox authored native-disabled control contract",
+    "focusedProof": "tests/material-parity/input-boundary-evidence.spec.mjs: disabled checkbox native role control isolates focusability from the renderer",
+    "observation": {
+      "component": "checkbox",
+      "runtimePairs": 1,
+      "context": "Frozen light desktop DPR1 disabled selected state",
+      "reference": "Native disabled INPUT with tabindex -1 rejects programmatic focus",
+      "astylar": "Role checkbox DIV with aria-disabled true and tabindex -1 accepts focus",
+      "nativeControl": "Ordinary HTML with candidate role-DIV attributes reproduces the candidate projection and focus",
+      "stage": "Unequal authored primitive and disabled contract before renderer focus handling"
+    },
+    "justification": "The exact browser AX/focus pair reports disabled on both sides but different focusability. A separate ordinary HTML DIV with the same role,tabindex,name,checked and aria-disabled attributes reproduces the candidate logical projection and focus without Astylar. Thus the observed disabled-focus mismatch is already explained by the custom role-DIV contract versus a native disabled input;it is not evidence of a core focus defect. The factory currently authors that role-DIV branch.",
+    "evidence": [
+      {
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd"
+      },
+      {
+        "file": "tests/material-parity/input-boundary-evidence.spec.mjs",
+        "sha256": "58fe244dc56a251e144dcc6eab2c36cb18f017291da968e1d002dc36404d60ea"
+      },
+      {
+        "file": "artifacts/material-parity/checkbox-disabled-ax-focus-probe-20261020.log",
+        "sha256": "a0ca85fd1d76dbff03b293bf2a914b42120ca3a08d6d5f6da07fb17159135438"
+      },
+      {
+        "file": "artifacts/material-parity/checkbox-disabled-native-role-control-20261020.log",
+        "sha256": "8bae9a4ee17b7ad676aabe98ebc91169fe7af9671c435b9dde6b471c1ad791e8"
+      },
+      {
+        "file": "artifacts/material-parity/queued-control-source-history-20261020.log",
+        "sha256": "57f539672cfb6f82ed05f8c3141d866d0a7518fda7b6bb5756dbea60e41093a3"
+      },
+      {
+        "file": "artifacts/material-parity/queued-control-owning-20261020.log",
+        "sha256": "aac72a08875827648bb454200a4ee1a30ff082fa703f2edd55c72f6c9addbaf4"
+      }
+    ],
+    "recommendation": "Preserve the original native-disabled checkbox control intent and composition in authoring. If public API support is missing,reduce that as a support/public-API gap. Do not globally suppress programmatic focus for every aria-disabled DIV or treat tabindex -1 as equivalent to native disabled.",
+    "boundary": "One pinned browser AX/programmatic-focus pair and native role-DIV control. Not all disabled profiles,pointer/keyboard activation,full AX relationships,form serialization,AT,paint,current full-runtime or case acceptance."
+  }),
+  Object.freeze({
+    "id": "fixture-select-listbox-name-omission",
+    "introducedBy": "2f440115 unnamed select-options listbox branch already present;first-bad runtime not established",
+    "file": "examples/material-showcase/src/app/astylar.component.ts",
+    "pattern": "id: 'select-options', class: 'select-popup', role: 'listbox'",
+    "classification": "application-plugin-authoring-defect",
+    "owner": "Material showcase select overlay authored accessible-name contract",
+    "focusedProof": "tests/material-parity/input-boundary-evidence.spec.mjs: retained select listbox naming omission precedes the queried browser AX targets",
+    "observation": {
+      "component": "select",
+      "retainedInputCases": 40,
+      "actualAxPairs": 1,
+      "reference": "Native controlled listbox explicitly requests aria-label Plan",
+      "astylar": "select-options role listbox omits ariaLabel/ariaLabelledby and corresponding aliases",
+      "stage": "Accessible-name input omitted before semantic bridge/AX name computation"
+    },
+    "justification": "All40 retained active-option select contexts bind an explicitly named native Plan listbox to a candidate authored listbox with no naming property. The current factory likewise omits it. One frozen pointer-open actual AX pair resolves both controls and active-descendant relations to their actual backend targets and confirms Plan versus an empty controlled-listbox name. That rules out a namespace-target explanation in this pair and locates the first naming divergence in authoring,not an invented core naming failure.",
+    "evidence": [
+      {
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd"
+      },
+      {
+        "file": "tests/material-parity/input-boundary-evidence.spec.mjs",
+        "sha256": "58fe244dc56a251e144dcc6eab2c36cb18f017291da968e1d002dc36404d60ea"
+      },
+      {
+        "file": "artifacts/material-parity/select-listbox-name-inputs-20261020.log",
+        "sha256": "7351677374f8515257904ee3620484ed84fa0d30880b46299204eafb19cf4833"
+      },
+      {
+        "file": "artifacts/material-parity/retained-active-option-input-targets-20261020.log",
+        "sha256": "162a3754ad10427a6341b9d2fd7144f7c9164424d7389101e2a3ade1ace1042b"
+      },
+      {
+        "file": "artifacts/material-parity/select-open-ax-target-resolution-20261020.log",
+        "sha256": "a673c563a91f47eca0e5687cb499bb84cfc0ece693f43eef715b5017bfecd27d"
+      },
+      {
+        "file": "artifacts/material-parity/queued-control-source-history-20261020.log",
+        "sha256": "57f539672cfb6f82ed05f8c3141d866d0a7518fda7b6bb5756dbea60e41093a3"
+      },
+      {
+        "file": "artifacts/material-parity/queued-control-owning-20261020.log",
+        "sha256": "aac72a08875827648bb454200a4ee1a30ff082fa703f2edd55c72f6c9addbaf4"
+      }
+    ],
+    "recommendation": "Preserve the original listbox naming inputs through the public authoring API,then retest actual AX relationships. Do not make core invent a label from the parent combobox or claim complete AX equivalence from matching queried targets.",
+    "boundary": "40 retained authored input pairs and one queried actual AX relation pair only. Not all94 select cases,all generated/exposed AX nodes,AT,full role behavior,focus lifetime,current all-profile rendering or case acceptance."
+  }),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({

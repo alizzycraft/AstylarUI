@@ -4,8 +4,13 @@
 
 Retain source proposal430dada4 and queued-control-source-proposal(-owning)-
 20261020 logs. All166 prior definitions are preserved in the170-group proposal;
-four authoring findings remain queued,with readonly update only a supplement to
-the existing core finding. Current registry/canonical counts stay166/220.
+four authoring findings are now registered in source,with readonly update only a
+supplement to the existing core finding. Source counts170/226;canonical stays
+166/220 until case joins and coherent export/cold/import. Retain queued-control-
+registration-preflight-20261020.log plus its two failed attempts (untracked Git
+path and bounded output buffer),registration-prior-owners and registration-focused
+logs. Complete743-source/220-proof/166-finding predecessor sections authenticate;
+no old evidence is overwritten or promoted to current rendering acceptance.
 Keep queued-control-source-history-20261020.log and initial-labels log as the
 metadata-correction record:raw module/excerpt histories are unchanged,but5b74d1b3
 must not be labeled a CSS-point helper (it still returns scaled Vector3 values).

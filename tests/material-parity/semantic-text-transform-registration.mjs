@@ -13,8 +13,44 @@ const focusId = 'core-semantic-attribute-refresh-removes-focusability';
 const clipId = 'core-legacy-css-clip-not-translated';
 const backingId = 'core-text-backing-ceil-rescales-logical-line-height';
 const readonlyId = 'core-readonly-text-keyboard-defaults-mutate-value';
-export function restoreReadonlyPolicy(source) {
+const controlIds = ["fixture-checkbox-checkmark-path-substitution","fixture-checkbox-disabled-checkmark-ink-substitution","fixture-checkbox-disabled-native-primitive-substitution","fixture-select-listbox-name-omission"];
+export function restoreQueuedControlPolicy(source) {
   const current=normalized(source);
+  if(!controlIds.some(id=>current.includes(id))){
+    assert.ok(!current.includes('Current plugin geometry therefore does not preserve the original SVG request.'),'Unrecognized queued control policy');return current;
+  }
+  assert.equal(digest(current),'6a330a84e3b43c7ebecebcbb12640fc10ed04b9363dbf74815f74e53efab96b0');
+  const tree=ts.createSourceFile('policy.mjs',current,99,true);
+  const entries=tree.statements.filter(ts.isVariableStatement).flatMap(n=>[...n.declarationList.declarations])
+    .find(n=>n.name.getText(tree)==='sourceAuditDefinitions').initializer.arguments[0].elements;
+  assert.equal(entries.length,170);
+  const actual=entries.slice(166).map(n=>n.arguments[0].properties.find(p=>p.name?.text==='id').initializer.text);
+  assert.deepEqual(actual,controlIds);
+  const restored=current.slice(0,entries[166].getFullStart())+current.slice(entries[169].end+1);
+  assert.equal(digest(restored),'7875b717fe7693f5bdad8158f99461f09512b7bdbcdda4465a0478c4bc24566c');return restored;
+}
+export function restoreQueuedControlProducer(source) {
+  const current=normalized(source),marker='retained checkbox SVG path units and disabled ink inputs';
+  if(!current.includes(marker)){
+    assert.ok(!current.includes("'artifacts/material-parity/queued-control-source-proposal-owning-20261020.log'"),'Unrecognized queued control producer');return current;
+  }
+  assert.equal(digest(current),'d97e15b446f6fe5c53688f3ff504fed86dd1793d0912cb39f374a77abe9c6ea7');
+  const tree=ts.createSourceFile('producer.mjs',current,99,true),owner=name=>tree.statements.find(n=>ts.isFunctionDeclaration(n)&&n.name.text===name);
+  const proofs=owner('focusedProofInventory').body.statements[0].expression.elements;
+  const files=owner('sourceFingerprints').body.statements[0].declarationList.declarations[0].initializer.elements;
+  assert.equal(proofs.length,226);
+  assert.deepEqual(proofs.slice(0,6).map(n=>n.arguments[3].text),['retained checkbox SVG path units and disabled ink inputs',
+    'retained select listbox authored naming and queried AX targets','disabled checkbox primitive and native role control',
+    'public readonly mutation after a public readonly update','queued control append and historical source conservation',
+    'queued control source proposal and source-history ownership']);
+  assert.deepEqual(files.slice(0,13).map(n=>n.text),["artifacts/material-parity/queued-control-source-history-20261020.log","artifacts/material-parity/queued-control-owning-20261020.log","artifacts/material-parity/checkbox-checkmark-retained-inputs-20261020.log","artifacts/material-parity/checkbox-disabled-checkmark-token-20261020.log","artifacts/material-parity/checkbox-disabled-ax-focus-probe-20261020.log","artifacts/material-parity/checkbox-disabled-native-role-control-20261020.log","artifacts/material-parity/select-listbox-name-inputs-20261020.log","artifacts/material-parity/retained-active-option-input-targets-20261020.log","artifacts/material-parity/select-open-ax-target-resolution-20261020.log","artifacts/material-parity/public-dynamic-readonly-20261020.log","artifacts/material-parity/public-dynamic-readonly-independent-20261020.log","artifacts/material-parity/working-audit/proposals/430dada4b7b57b0e54f8d41ba3524f2031c285f516bc846b3b5a5f8d17684aa4.json","artifacts/material-parity/queued-control-source-proposal-owning-20261020.log"]);
+  let restored=current;
+  for(const [start,end]of [[proofs[0].getFullStart(),proofs[5].end+1],[files[0].getFullStart(),files[12].end+1]].sort((a,b)=>b[0]-a[0]))
+    restored=restored.slice(0,start)+restored.slice(end);
+  assert.equal(digest(restored),'d2d49ef981833dc1e2fa6882c08e7527f0899aa4d65832b47d0571884450c6b4');return restored;
+}
+export function restoreReadonlyPolicy(source) {
+  const current=restoreQueuedControlPolicy(source);
   if(!current.includes(readonlyId)){
     assert.ok(!current.includes('Six current/installed method bodies agree;first-bad revision and historical runtime not established'),'Unrecognized readonly policy registration');return current;
   }
@@ -28,7 +64,7 @@ export function restoreReadonlyPolicy(source) {
   return restored;
 }
 export function restoreReadonlyProducer(source) {
-  const current=normalized(source);
+  const current=restoreQueuedControlProducer(source);
   if(!current.includes('public readonly text keyboard mutation with writable and disabled controls')){
     assert.ok(!current.includes("'scripts/audit-public-readonly-editing.mjs'"),'Unrecognized readonly proof registration');return current;
   }
@@ -303,10 +339,17 @@ export function reviewedRootEditingGraph(graph, actionSource, expectedRunnerEntr
   return graph.map(row => row.file === runnerFile ? { ...row, sha256: oldRunner } : row);
 }
 export function historicalSemanticDefinitions(current) {
+  if(current.length===170){
+    const source=readActual('tests/material-parity/input-equivalence-policy.mjs','utf8');
+    restoreQueuedControlPolicy(source);
+    const actual=new Function(source.replace(/^export const /gm,'const ')+';return sourceAuditDefinitions;')();
+    assert.deepEqual(current,actual,'unreviewed queued control definition population');
+    assert.deepEqual(current.slice(166).map(row=>row.id),controlIds);current=current.slice(0,166);
+  }
   if (current.length === 166) {
     const source=readActual('tests/material-parity/input-equivalence-policy.mjs','utf8');
     restoreReadonlyPolicy(source);
-    const actual=new Function(source.replace(/^export const /gm,'const ')+';return sourceAuditDefinitions;')();
+    const actual=new Function(restoreQueuedControlPolicy(source).replace(/^export const /gm,'const ')+';return sourceAuditDefinitions;')();
     assert.deepEqual(current,actual,'unreviewed readonly definition population');
     current=current.filter(row=>row.id!==readonlyId);
   }

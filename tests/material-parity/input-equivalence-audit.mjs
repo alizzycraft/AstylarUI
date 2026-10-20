@@ -8922,6 +8922,19 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'artifacts/material-parity/queued-control-source-history-20261020.log',
+    'artifacts/material-parity/queued-control-owning-20261020.log',
+    'artifacts/material-parity/checkbox-checkmark-retained-inputs-20261020.log',
+    'artifacts/material-parity/checkbox-disabled-checkmark-token-20261020.log',
+    'artifacts/material-parity/checkbox-disabled-ax-focus-probe-20261020.log',
+    'artifacts/material-parity/checkbox-disabled-native-role-control-20261020.log',
+    'artifacts/material-parity/select-listbox-name-inputs-20261020.log',
+    'artifacts/material-parity/retained-active-option-input-targets-20261020.log',
+    'artifacts/material-parity/select-open-ax-target-resolution-20261020.log',
+    'artifacts/material-parity/public-dynamic-readonly-20261020.log',
+    'artifacts/material-parity/public-dynamic-readonly-independent-20261020.log',
+    'artifacts/material-parity/working-audit/proposals/430dada4b7b57b0e54f8d41ba3524f2031c285f516bc846b3b5a5f8d17684aa4.json',
+    'artifacts/material-parity/queued-control-source-proposal-owning-20261020.log',
     'scripts/audit-public-readonly-editing.mjs',
     'artifacts/material-parity/public-readonly-editing-recovered-20261020/latest-report.json',
     'artifacts/material-parity/public-readonly-owning-methods-20261020.log',
@@ -9672,6 +9685,18 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('retained checkbox checkmark requests bind SVG units and disabled ink before projection'/,
+      'retained checkbox SVG path units and disabled ink inputs', 'All68 retained pairs replay with52 selected marks and16 suppressed marks. Native3.12 SVG user-unit stroke maps to1.82CSSpx;current fixed CSS path differs. Eight selected-disabled token chains retain six RGB request differences;inactive forced-colors rules remain excluded with explicit condition checks. Not mesh,cap/join,current raster or core-coordinate acceptance.'),
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('retained select listbox naming omission precedes the queried browser AX targets'/,
+      'retained select listbox authored naming and queried AX targets', 'Forty retained input pairs preserve native Plan versus omitted candidate listbox naming. One actual AX pair resolves queried controls/active-descendant backend targets and confirms Plan versus empty listbox name. Current factory omission binds. Not all94 select cases,whole AX exposure,AT,current all-profile rendering or case acceptance.'),
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('disabled checkbox native role control isolates focusability from the renderer'/,
+      'disabled checkbox primitive and native role control', 'One frozen disabled selected pair distinguishes native INPUT from aria-disabled role DIV programmatic focus. Ordinary HTML with candidate attributes reproduces its AX projection and focus without Astylar. Not a demonstrated core focus bug,all profiles,pointer/keyboard,form,AT or raster acceptance.'),
+    proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('public readonly update preserves the flag while trusted typing mutates the value'/,
+      'public readonly mutation after a public readonly update', 'One plugin-free DPR1 pair applies readonly through the public update API before trusted x. Flags/focus agree but native stays Atlas and candidate becomes xAtlas. Writable restoration prefixes each actual value,preserving the earlier unwanted x. Exact2515 dependencies,two-source-edit reversal and eight altered-result controls bind. Not general reconciliation,clipboard,DPR2,Material-case or raster acceptance.'),
+    proof(root, 'tests/material-parity/audit-findings-store.spec.mjs', /test\('queued control proof append conserves complete accepted sources and rejects drift'/,
+      'queued control append and historical source conservation', 'Four callbacks append after the exact accepted input-boundary suite. Whole suite,benchmark and helper predecessors recover;every rejection input actually changes the source. Old proof bodies/anchors and captured callbacks remain intact. Source applicability only,not current rendering or case closure.'),
+    proof(root, 'tests/material-parity/audit-findings-store.spec.mjs', /test\('queued control source proposal preserves all prior definitions and binds distinct authoring causes'/,
+      'queued control source proposal and source-history ownership', 'Complete166-definition predecessor and four reviewed authoring findings bind exact current locations and receipts. Seven whole Git/excerpt histories distinguish the older scaled Vector3 helper from the later CSS-point helper. Readonly-update evidence supplements the existing core finding without duplication. Not a first-bad runtime bisect,canonical publication or rendering acceptance.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('public readonly keyboard mutation preserves equal inputs and binds current default owners'/,
       'public readonly text keyboard mutation with writable and disabled controls', 'Two readonly public pairs atDPR1/2 mutate Atlas to xAtlas/xtlas/tlas despite readOnly=true and retained focus. Four writable and four disabled controls agree with native behavior;all six complete current/installed owner methods and six altered-evidence controls authenticate. No Material callbacks,clipboard/dynamic readonly/navigation raster or whole-case acceptance.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('equal explicit line height isolates text backing allocation from authored geometry'/,

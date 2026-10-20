@@ -44,6 +44,7 @@ export function policyProjection(bytes, expected) {
   let source = normalize(bytes);
   const actualCurrentSha256 = sourceHash(source);
   if (['55c7e9cf1c634ebd8b01409b1836d1513f24e0c5ada656ce16f591aee1fd50a2',
+    '6a330a84e3b43c7ebecebcbb12640fc10ed04b9363dbf74815f74e53efab96b0',
     '7875b717fe7693f5bdad8158f99461f09512b7bdbcdda4465a0478c4bc24566c',
     '59830913045a108948c812fc4a9eb210c0a94a9466e1a3354db480a7e0bd110f'].includes(actualCurrentSha256)) {
     // Reuse the existing exact registration/refinement reversal first.

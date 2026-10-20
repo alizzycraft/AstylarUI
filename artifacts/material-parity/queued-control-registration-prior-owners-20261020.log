@@ -1,0 +1,74 @@
+Command: node --test tests/material-parity/semantic-text-transform-input.spec.mjs tests/material-parity/legacy-clip-support-input.spec.mjs
+Exit: 0
+TAP version 13
+# Subtest: text backing registration preserves complete clip predecessor and bounded public evidence
+ok 1 - text backing registration preserves complete clip predecessor and bounded public evidence
+  ---
+  duration_ms: 638.6341
+  type: 'test'
+  ...
+# Subtest: public legacy clip support limitation preserves controls and exact diagnostics
+ok 2 - public legacy clip support limitation preserves controls and exact diagnostics
+  ---
+  duration_ms: 2209.5087
+  type: 'test'
+  ...
+# Subtest: registered clip finding conserves its queued predecessor and rejects altered claims
+ok 3 - registered clip finding conserves its queued predecessor and rejects altered claims
+  ---
+  duration_ms: 60.2806
+  type: 'test'
+  ...
+# Subtest: legacy clip registration preserves complete predecessor source and proof inventory
+ok 4 - legacy clip registration preserves complete predecessor source and proof inventory
+  ---
+  duration_ms: 589.4338
+  type: 'test'
+  ...
+# Subtest: attribute focus registration preserves all predecessor definitions and proof sources
+ok 5 - attribute focus registration preserves all predecessor definitions and proof sources
+  ---
+  duration_ms: 838.5686
+  type: 'test'
+  ...
+# Subtest: inline image registration preserves complete prior source and finding populations
+ok 6 - inline image registration preserves complete prior source and finding populations
+  ---
+  duration_ms: 761.1435
+  type: 'test'
+  ...
+# Subtest: border contact registration preserves all predecessor findings and proof sources
+ok 7 - border contact registration preserves all predecessor findings and proof sources
+  ---
+  duration_ms: 1324.6922
+  type: 'test'
+  ...
+# Subtest: public semantic text transform preserves controls and current owner evidence
+ok 8 - public semantic text transform preserves controls and current owner evidence
+  ---
+  duration_ms: 4147.8224
+  type: 'test'
+  ...
+# {"currentDefinitions":170,"preBackingDefinitions":164,"preClipDefinitions":163,"semanticRegistrationDefinitions":160,"priorDefinitionsConserved":159,"semanticRegistrationProofs":214,"publicFailurePairs":4,"materialPhysicalContexts":16,"canonicalPublication":false}
+# Subtest: root editing runner applicability conserves metadata transition and rejects changed actions
+ok 9 - root editing runner applicability conserves metadata transition and rejects changed actions
+  ---
+  duration_ms: 258.5288
+  type: 'test'
+  ...
+# Subtest: semantic registration historical boundary rejects drift and keeps current population explicit
+ok 10 - semantic registration historical boundary rejects drift and keeps current population explicit
+  ---
+  duration_ms: 1857.6008
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 9772.5334
+

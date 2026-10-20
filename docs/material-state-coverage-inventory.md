@@ -57,8 +57,13 @@ below. Earlier next/live statements in chronology are not current instructions.
   four distinct authoring causes:checkbox path,disabled ink,disabled primitive,
   select listbox naming. Readonly update is a supplement to the existing core
   finding,not a duplicate. Proposal/source/history owning checks pass3/3.
-- Next:integrate proposal430dada4 and six new owning/conservation anchors into
-  the registry/inventory,join applicable cases,then one coherent export/cold
+- Source registration now contains170 findings/226 proofs/756 fingerprints;
+  canonical39fc remains166/220. Complete prior166 finding rows and220 proof
+  records conserve exactly. Restoring nine changed audit-source receipts recovers
+  the complete743-source section04e54857;13 evidence paths are additive.
+  Preflight:queued-control-registration-preflight-20261020.log. Historical case
+  index checks pass4/4;retained review reader/proposal/new drift guard pass3/3.
+- Next:join applicable cases for proposal430dada4,then one coherent export/cold
   milestone. Remaining structure/AX/paint/current-runtime coverage stays open.
   Original full canonical/browser/unit/build/packed-consumer/release gates remain.
 - Storage:the agent performed no deletion. After the302-build review,the existing

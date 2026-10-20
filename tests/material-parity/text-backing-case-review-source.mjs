@@ -27,6 +27,29 @@ export function restoreInputBoundaryReadonlyAppend(source){
   assert.equal(hash(text.slice(start)),'0344aa16c76792afd9fab101e4f48a3bb03d1f958565efd1473d1fb3da74f69c');
   assert.equal(hash(text.slice(0,start)),previous);return text.slice(0,start);
 }
+export function restoreQueuedControlHelperSource(source){
+  let text=source.toString().replaceAll('\r\n','\n');
+  if(!text.includes('const controlIds =')){
+    assert.ok(!text.includes('restoreQueuedControlPolicy'),'Unrecognized queued helper registration');return text;
+  }
+  assert.equal(hash(text),'8eba578d04c9b2a96ef8a5a7615aa5c81dcb315617789aef0a293e5b688d0200');
+  const tree=ts.createSourceFile('helper.mjs',text,99,true),ranges=[];
+  for(const node of tree.statements){
+    if(ts.isFunctionDeclaration(node)&&['restoreQueuedControlPolicy','restoreQueuedControlProducer'].includes(node.name.text))ranges.push([node.getFullStart(),node.end]);
+    if(ts.isVariableStatement(node)&&node.declarationList.declarations.some(d=>d.name.getText(tree)==='controlIds'))ranges.push([node.getFullStart(),node.end]);
+    if(ts.isFunctionDeclaration(node)&&node.name.text==='historicalSemanticDefinitions'){
+      const first=node.body.statements[0];assert.equal(first.expression.getText(tree),'current.length===170');ranges.push([first.getFullStart(),first.end]);
+    }
+  }
+  assert.equal(ranges.length,4);
+  for(const [start,end]of ranges.sort((a,b)=>b[0]-a[0]))text=text.slice(0,start)+text.slice(end);
+  for(const [current,previous]of [
+    ['const current=restoreQueuedControlPolicy(source);','const current=normalized(source);'],
+    ['const current=restoreQueuedControlProducer(source);','const current=normalized(source);'],
+    ["new Function(restoreQueuedControlPolicy(source).replace(/^export const /gm,'const ')","new Function(source.replace(/^export const /gm,'const ')"],
+  ]){assert.equal(text.split(current).length,2);text=text.replace(current,previous);}
+  assert.equal(hash(text),'18eec69ef63dc741a3edba301dbba9a8b221f808f583c67cd0b3867160363bc8');return text;
+}
 // Reuse the exact validated four-source boundary. The supplied session reader
 // observes every current byte, including the immutable boundary owner itself.
 export function createDividerReviewedBoundariesReader({root,read,reviewSha256}){
@@ -80,7 +103,7 @@ export function createTextBackingReviewReader({root,read,reviewSha256}){
   bind(suite,suiteCurrentText,suiteText.slice(0,addition[0].getFullStart())+suiteText.slice(addition[0].end),
     '9ef883389c3aa8811d3a0a4756bc9e6f7cce82158c62ea453c08b4bb654c6367');
   const helper='tests/material-parity/semantic-text-transform-registration.mjs',helperText=read(path.resolve(root,helper),'utf8');
-  let reviewedHelperText=helperText,replayRestorationBlock;
+  let reviewedHelperText=restoreQueuedControlHelperSource(helperText),replayRestorationBlock;
   if(hash(reviewedHelperText)==='18eec69ef63dc741a3edba301dbba9a8b221f808f583c67cd0b3867160363bc8'){
     const start=reviewedHelperText.indexOf('    // QUEUED_CONTROL_OWNER_RECEIPT_BEGIN\n');
     const marker='    // QUEUED_CONTROL_OWNER_RECEIPT_END\n',end=reviewedHelperText.indexOf(marker,start)+marker.length;
