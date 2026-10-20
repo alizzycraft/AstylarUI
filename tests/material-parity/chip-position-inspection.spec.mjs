@@ -311,3 +311,59 @@ test('retained chip checkmark inputs distinguish custom plugin geometry from nat
   // Legitimate plugin paint ownership does not equate different paths/boxes/ink.
   // Source geometry only: no captured tube mesh, cap/join raster or current pixels.
 });
+
+test('unselected chip glyph suppression does not remove padded flex wrapper inputs', () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const bytes = readFileSync('artifacts/material-parity/chip-unselected-graphic-layout-20261020.log');
+  assert.equal(hash(bytes), '138338820a69294e77504b3c7db593b1c3c542737e84b195d3bc0b4513b5117b');
+  const original = JSON.parse(bytes.toString().replace(/^\uFEFF/, ''));
+  const reportBytes = readFileSync(original.report.file); assert.equal(hash(reportBytes), original.report.sha256);
+  assert.equal(original.report.sha256, 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const report = JSON.parse(reportBytes);
+  const entries = [...report.results.map(e => ({ ...e, kind: 'static' })),
+    ...report.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => e.family === 'chips');
+  const seen = new Set();
+  const verify = evidence => {
+    assert.equal(evidence.owners, 32); assert.equal(evidence.observations.length, 32); seen.clear();
+    for (const row of evidence.observations) {
+      const key = `${row.case}/${row.element}`; assert.ok(!seen.has(key)); seen.add(key);
+      const entry = entries.find(e => `${e.kind}:chips@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}` === row.case);
+      assert.ok(entry); assert.deepEqual(row.inputTrees, entry.inputTrees);
+      const trees = Object.fromEntries(Object.entries(row.inputTrees).map(([side, receipt]) => {
+        const data = readFileSync(receipt.file); assert.equal(hash(data), receipt.sha256);
+        const tree = JSON.parse(data); assert.deepEqual(tree.errors, []); return [side, tree];
+      }));
+      const native = trees.reference, candidate = trees.astylar;
+      const host = native.nodes.find(n => n.attributes?.id === row.element);
+      const action = native.nodes.find(n => n.key.startsWith(host.key + '/') && n.type === 'button');
+      assert.equal(action.attributes['aria-selected'], 'false');
+      const graphic = native.nodes.find(n => n.key === row.graphic.key);
+      const check = native.nodes.find(n => n.key === row.check.key);
+      assert.equal(graphic.parent, action.key); assert.equal(check.parent, graphic.key);
+      for (const [record, node] of [[row.graphic, graphic], [row.check, check]]) {
+        assert.equal(record.parent, node.parent);
+        for (const [property, value] of Object.entries(record).filter(([name]) => !['key', 'parent'].includes(name)))
+          assert.equal(native.styles[node.style][property], value);
+      }
+      assert.equal(row.graphic.boxSizing, 'content-box'); assert.equal(row.graphic.width, '0px');
+      assert.equal(row.graphic.paddingLeft, '6px'); assert.equal(row.graphic.paddingRight, '6px');
+      assert.equal(row.graphic.flexGrow, '1'); assert.equal(row.graphic.overflowX, 'hidden');
+      assert.equal(row.check.position, 'absolute'); assert.equal(row.check.opacity, '0');
+      const ast = candidate.nodes.find(n => n.key === row.candidate.key);
+      assert.equal(ast.authored.id, row.element); assert.equal(ast.authored.ariaSelected, false);
+      assert.deepEqual(row.candidate.children, [`${row.element}-label`]);
+      assert.deepEqual(candidate.nodes.filter(n => n.parent === ast.key).map(n => n.authored.id), row.candidate.children);
+      for (const [name, stage] of [['normal', 'normalResolvedStyle'], ['effective', 'resolvedStyle']])
+        for (const [property, value] of Object.entries(row.candidate[name])) assert.equal(ast[stage][property], value);
+      assert.equal(row.candidate.normal.padding, '0 12px');
+      assert.equal(row.candidate.normal.width, row.element === 'chip-0' ? '68px' : '64px');
+    }
+    assert.match(evidence.boundary, /no complete layout equivalence/);
+  };
+  verify(original);
+  for (const mutate of [e => e.observations.pop(), e => e.observations[0].graphic.paddingLeft = '0px',
+    e => e.observations[0].graphic.flexGrow = '0', e => e.observations[0].check.opacity = '1',
+    e => e.observations[0].candidate.normal.width = 'auto', e => e.boundary = 'Complete layout equivalence']) {
+    const altered = structuredClone(original); mutate(altered); assert.throws(() => verify(altered));
+  }
+});

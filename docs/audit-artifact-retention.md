@@ -2,6 +2,11 @@
 
 ## Current versus historical evidence
 
+Retain chip-unselected-graphic-layout and chip-graphic-owning-pair-20261020
+log pairs. They preserve32 exact hidden-glyph/padded-flex-wrapper owners and
+the passing2/2 focused graphic proofs;not used-layout/current-pixel acceptance.
+Old selected-checkmark log/proof remains required;neither original overwritten.
+
 Retain chip-checkmark-retained-inputs and chip-checkmark-owning-proof-20261020
 log pairs:76-case/120selected/32unselected requests and current plugin path
 source proof,not live mesh/current raster acceptance. Existing chip-position

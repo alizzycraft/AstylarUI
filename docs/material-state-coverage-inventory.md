@@ -2,6 +2,28 @@
 
 ## Current audit pointer — October20
 
+Unselected chip follow-up distinguishes paint suppression from layout inactivity:
+all32 exact unselected owners have native absolute20px checkmark wrappers at
+opacity0,but their graphic parents remain relative/flex/content-box,width0,
+padding-left/right6px,flex-grow1 and hidden overflow. Thus no visible glyph is
+requested there,yet width0 is NOT a zero-padding/no-layout-role declaration.
+Candidate omits the graphic wrapper and has only the label under fixed68/64px
+hosts with0 12px padding. That can preserve a baseline inset without proving
+equal flex constraints;do not diagnose a visible missing mark or declare full
+layout equivalence from these requests. Existing graphic/fixed-width ownership
+findings remain controlling. Used geometry,current raster and all-state structure
+remain separate/open. No new core defect or full-case disposition follows.
+Authenticated32-owner observation log chip-unselected-graphic-layout-20261020.log
+SHA138338820a69294e77504b3c7db593b1c3c542737e84b195d3bc0b4513b5117b.
+Existing chip suite now retains both graphic proofs;focused pair2/2 passes,
+zero skip/cancel/todo,3987.2729ms with six additional altered-input controls.
+Log chip-graphic-owning-pair-20261020.log
+SHA2c25737c2613c46a4c8b652f79fcceaa7837ccf68f1426bb40567651bdf6bf8d.
+Original21786-character suite remains exact prefix(d016f60e);newd866ad20,
+4196-character appendix77b2543b. Still queued beyond868d/3072. Next integrate
+the two graphic dispositions into the existing chip proposal in one bounded
+addition,retaining all prior obligations/source applicability/acceptance flags.
+
 Next chip graphic question resolved as unequal INPUT requests,not core paint:
 all76 original cases/152 paired host selections and152 tree receipts authenticate.
 120 selected owners retain native20px SVG/viewBox(-2,-3,30,30),path
