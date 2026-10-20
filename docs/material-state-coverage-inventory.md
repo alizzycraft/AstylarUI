@@ -14,11 +14,25 @@ or a new renderer diagnosis;existing field-label transform/token/density finding
 remain the controlling diagnoses. Every native wrapper also owns a line-ripple;
 the separate focus-overlay exists in529 cases and is absent in48 disabled cases.
 Do not label the always-present candidate surface as a one-to-one counterpart
-of both native decoration owners. Complete pseudo/state-layer paint,all anonymous
+of both native decoration owners. Decoration request review further proves
+native wrapper radii4px/4px/0px/0px inall577 cases versus candidate all-corner
+borderRadius4px in293,3px in142,and6px in142 across all three captured candidate
+style stages. Thus all577 bottom-corner requests differ,and284 top-corner requests
+also differ. Classify this bounded mismatch as application-plugin-authoring-defect,
+not a core rounded-corner defect or equivalent structural representation. Native
+focus-overlay opacity is0 in463 cases,.08 in66,andabsent in48 disabled cases;
+these are retained requests,not candidate mesh/raster observations. Git87bc351c
+(`fix(renderer): align Material filled field text`) introduces the separate
+field-surface with all-corner4*cornerScale,background and shadow substitutions;
+this is source-history evidence,not first-bad runtime bisect. Existing current
+component normalizedSHA b493a355679903f988e29f0dafbb95d2d6cce41275302fce5c978ae55f423b9f
+still authors that radius rule at line541. Complete pseudo/state-layer paint,all anonymous
 descendant mappings,used geometry and runtime remain independent/open. The added
 owning test `retained filled-field structure substitutes absolute regions for
 the native infix chain` passes1/1 in3068.3669ms (body2599.7871ms),no skips.
-Complete owning suite passes13/13,zero skip/cancel/todo,13294.2917ms.
+Complete owning suite passes13/13,zero skip/cancel/todo,13294.2917ms before the
+additive radius/opacity assertions;updated owning test passes1/1,zero skips,
+2918.5379ms (body2447.6376ms). Original structure assertions remain intact.
 No new capture,fixture or renderer edit;no whole-case promotion. Next resolve
 the decoration requests/ownership against existing state-layer findings before
 classifying any remaining difference as unsupported/core. Source reconciliation

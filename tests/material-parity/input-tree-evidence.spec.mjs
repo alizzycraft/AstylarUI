@@ -452,6 +452,7 @@ test('retained filled-field structure substitutes absolute regions for the nativ
   const unique = nodes => { assert.equal(nodes.length, 1); return nodes[0]; };
   const families = ['form-field', 'input', 'autocomplete', 'select', 'datepicker', 'timepicker'];
   let absentDisabledLayers = 0;
+  const focusOpacities = {}, cornerSubstitutions = {};
   for (const entry of [...report.results, ...report.interactions].filter(entry => families.includes(entry.family))) {
     const native = load(entry.inputTrees.reference), candidate = load(entry.inputTrees.astylar);
     assert.deepEqual(native.errors, []); assert.deepEqual(candidate.errors, []);
@@ -477,16 +478,29 @@ test('retained filled-field structure substitutes absolute regions for the nativ
     for (const stage of ['normalResolvedStyle', 'interactionResolvedStyle', 'resolvedStyle']) {
       assert.equal(region[stage].position, 'absolute');
       assert.equal(surface[stage].position, 'absolute');
+      assert.ok(['3px', '4px', '6px'].includes(surface[stage].borderRadius));
+      assert.equal(surface[stage].borderRadius, surface.resolvedStyle.borderRadius);
     }
+    const wrapperStyle = native.styles[wrapper.style];
+    assert.equal(wrapperStyle.borderTopLeftRadius, '4px');
+    assert.equal(wrapperStyle.borderTopRightRadius, '4px');
+    assert.equal(wrapperStyle.borderBottomLeftRadius, '0px');
+    assert.equal(wrapperStyle.borderBottomRightRadius, '0px');
+    const radius = surface.resolvedStyle.borderRadius;
+    cornerSubstitutions[radius] = (cornerSubstitutions[radius] ?? 0) + 1;
     const ripple = unique(native.nodes.filter(node => node.parent === wrapper.key && classHas(node, 'mdc-line-ripple')));
     assert.equal(ripple.ownText, '');
     const focus = native.nodes.filter(node => node.parent === wrapper.key && classHas(node, 'mat-mdc-form-field-focus-overlay'));
     if (classHas(wrapper, 'mdc-text-field--disabled')) { assert.equal(focus.length, 0); absentDisabledLayers++; }
     else assert.equal(focus.length, 1);
+    const opacity = focus.length ? native.styles[focus[0].style].opacity : 'absent';
+    focusOpacities[opacity] = (focusOpacities[opacity] ?? 0) + 1;
     counts[family] = (counts[family] ?? 0) + 1;
   }
   assert.deepEqual(counts, { 'form-field': 76, input: 76, autocomplete: 110, select: 94, datepicker: 111, timepicker: 110 });
   assert.equal(absentDisabledLayers, 48);
+  assert.deepEqual(cornerSubstitutions, { '4px': 293, '3px': 142, '6px': 142 });
+  assert.deepEqual(focusOpacities, { '0': 463, '0.08': 66, absent: 48 });
   // These are unequal layout/tree requests, not a one-to-one wrapper mapping or
   // proof that every removed wrapper has a separate renderer defect. Preserve
   // existing label/token diagnoses and investigate unclassified paint separately.
