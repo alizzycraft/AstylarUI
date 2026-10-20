@@ -3,7 +3,8 @@
 ## Current versus historical evidence
 
 October20 queued field structure proposal f471932b is required new case evidence,
-not selected/canonical scratch. Retain filled-field-structure-ledger-review,
+now selected by the named exporter but not canonical. Retain filled-field-selected-
+review-integration,selected-launcher,pre-export-source-census and filled-field-structure-ledger-review,
 case-join-complete and owning-suite-20261020 log pairs. Retain initial case-join
 and case-join-retry failures:both stop at TAP diagnostic parsing before proposal
 write;the complete join reconstructs escaped/chunked comments using the existing

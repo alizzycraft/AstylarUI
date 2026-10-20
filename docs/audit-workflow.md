@@ -136,8 +136,8 @@ Source conservation and coherent export/cold/import remain required before the
 new coverage records are described as canonical; a launcher dry run is not proof
 of publication or successful audit validation.
 
-The October19 launcher selects exact bfc2b6d5 inactive-paragraph successor of
-published be99cd38. The existing reader authenticates five historical source
+The October20 launcher selects exact f471932b filled-field successor of accepted
+bfc2b6d5 (which succeeds be99cd38). The existing reader authenticates five historical source
 transitions,including bounded benchmark replay support. Old reviews remain
 explicitly supported;unknown digests do not select this boundary. Full review
 loading and complete predecessor recovery are separate from launcher dry-run

@@ -2,6 +2,24 @@
 
 ## Current audit pointer — October20
 
+Field successor f471 is now selected by the existing named launcher/production
+reader. Existing five historical transitions remain unchanged;unknown review
+and source-drift controls remain strict. Two owning reader tests pass2/2,zero
+skip/cancel/todo,57865.0971ms,including full f471 load and577-child recovery to
+bfc2. Log filled-field-selected-review-integration-20261020.log
+SHAd6d3136dcb64e4ecc0103c964b8aadb491954e05ba46b24fd767e3d4c4fddba0.
+Named dry-run log7065f27a is argument/path completeness only. Complete pre-export
+source census (filled-field-pre-export-source-census-20261020.log
+SHA21097c0c1fa6ec4dc4988a05a124220128313597fafd090c7545d4c27a577a42)
+authenticates accepted46ea source sectioncda35246 through exact4e1e4b10 predecessor
+bytes:738 paths,734 unchanged,no added/removed;only field owning suite,review
+reader,store suite and export runner change. Complete219 proof sectionf1597df7
+remains unchanged,including line anchors/order/descriptions. Producer is byte-
+identical after LF normalization. New source section6080f040 is queued,not yet
+canonical. Next run frozen coherent export then content conservation,independent
+verification and validated import;do not interpret source reconciliation as
+current runtime or final acceptance. Accepted46ea/bfc2 remains authoritative.
+
 Queued coherent field review f471932bd9ed51a2df35d533632acafc5e4788df07e6e46ed4b5b8bf0c57739b
 adds577 inputStyleStructure children to accepted bfc2,without changing any parent
 remaining/status/acceptance field. Exact original October5 paired-tree receipts
@@ -9,9 +27,9 @@ match the ledger;the owning test separately replays all577 ancestry and577 ledge
 cases rather than transferring results by ID. Existing loader authenticates15175
 dependencies;2308 altered-case/tree/corner/position controls reject. Removing only
 577 children recovers complete bfc2 predecessor digest. Still2311 partial cases,
-no current rendering acceptance. Not selected/exported/canonical. Next reconcile
-this bounded review through the existing named exporter/reader and source census
-before a coherent publication;do not launch fresh browser capture for these facts.
+no current rendering acceptance. Now selected,not exported/canonical. Reader and
+source census checks above precede coherent publication;do not launch fresh browser
+capture for these facts.
 Evidence:filled-field-structure-ledger-review-20261020.log
 SHA5fadba044b06bd7dd601687ab0f30ecde740413623feaf55d6bd2d0a2e5b6a09;
 filled-field-structure-case-join-complete-20261020.log

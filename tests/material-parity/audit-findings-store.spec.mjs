@@ -4,7 +4,7 @@ import * as fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { importFindings, queryFindings, verifyFindings, saveReviewProposal, loadFindingEvidence, loadCaseObligationReview, attachCaseObligationCoverage, assertCaseObligationCoverage, caseInspectionObligations, describeCaseInspectionCoverage } from '../../scripts/audit-findings-store.mjs';
-import { createTextBackingReviewReader, textBackingRetainedReview, createDividerReviewedBoundariesReader, dividerReviewedBoundariesReview, inactiveParagraphInputsReview } from './text-backing-case-review-source.mjs';
+import { createTextBackingReviewReader, textBackingRetainedReview, createDividerReviewedBoundariesReader, dividerReviewedBoundariesReview, inactiveParagraphInputsReview, filledFieldStructureReview } from './text-backing-case-review-source.mjs';
 
 test('reviewed divider boundary reader validates exact queued cases and rejects source drift',()=>{
   const root=process.cwd(),file=`artifacts/material-parity/working-audit/proposals/${dividerReviewedBoundariesReview}.json`;
@@ -46,6 +46,25 @@ test('reviewed divider boundary reader validates exact queued cases and rejects 
   }
   assert.equal(removed,24);assert.equal(slots,192);
   assert.equal(createHash('sha256').update(JSON.stringify(descendant)).digest('hex'),dividerReviewedBoundariesReview);
+  const fieldFile=`artifacts/material-parity/working-audit/proposals/${filledFieldStructureReview}.json`;
+  const fieldReview=JSON.parse(fs.readFileSync(fieldFile)).review;
+  const fieldReader=createDividerReviewedBoundariesReader({...options,reviewSha256:filledFieldStructureReview});
+  assert.equal(fieldReader.sourceApplicability.transitions.length,5);
+  const fieldResult=loadCaseObligationReview(fieldFile,filledFieldStructureReview,
+    fieldReview.groups.map(group=>group.case),{root,read:fieldReader.read});
+  assert.equal(fieldResult.cases.length,2311);assert.equal(fieldResult.evidenceFingerprints.length,15175);
+  assert.equal(fieldResult.inspectionComplete,false);assert.equal(fieldResult.currentRenderingAccepted,false);
+  let fields=0;
+  for(const group of fieldReview.groups){
+    const child=group.obligations.inputStyleStructure.retainedFilledFieldStructure;
+    if(!child)continue;
+    assert.equal(child.observation.case,group.case);
+    assert.deepEqual(child.observation.inputTrees,group.evidence.pairedTrees);
+    assert.equal(child.observation.classifications.corners,'application-plugin-authoring-defect');
+    delete group.obligations.inputStyleStructure.retainedFilledFieldStructure;fields++;
+  }
+  assert.equal(fields,577);
+  assert.equal(createHash('sha256').update(JSON.stringify(fieldReview)).digest('hex'),inactiveParagraphInputsReview);
 });
 
 test('retained text backing review uses explicit tracked source applicability without changing receipts',()=>{
