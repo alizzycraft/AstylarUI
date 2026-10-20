@@ -2,6 +2,11 @@
 
 ## Current versus historical evidence
 
+Retain filled-field-repaired-source-census-20261020 stdout/stderr,including exact
+eight reviewed source deltas and the complete original source/proof digest checks.
+It is pre-export evidence,not replacement for the failed export or original
+four-change census. No old receipt/report/capture has been overwritten.
+
 October20 first filled-field coherent export is terminal1,not a candidate. Keep
 filled-field-coherent-export-20261020 stdout(empty)/stderr82160bytes,
 stderrSHAcf5ed87527ff7d27272681bbc063fb3b3d44dcd60dd91f93a15d94f9bea8c12f.

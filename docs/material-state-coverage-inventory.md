@@ -2,6 +2,20 @@
 
 ## Current audit pointer — October20
 
+Repaired pre-export census passes after a6c07e7a:738 paths,730 unchanged,eight
+reviewed changes,no added/removed source paths. Complete accepted source section
+cda35246 recovers through exact4e1e4b10 bytes;current sectiond358bffc. Complete219
+proof sectionf1597df7 still matches,including every line/description/order field;
+producer unchanged. Evidence filled-field-repaired-source-census-20261020.log
+SHAf7a50e73beae8578e3179ae1da9f766ff24767bf87d0d40ed550cbdd4d8322e3.
+Case-index conservation script/test are reviewed changes OUTSIDE explicit738
+source inventory;their focused heading-boundary check remains independently
+recorded,not implicitly covered by the source census. Reverse receipt search
+finds only the unchanged scalar-rule-loss report and exact guarded reader for
+the newly changed source hashes. No further unhandled literal receipt consumer
+was found in maintained docs/scripts/Material tests;this is not a full export.
+Next freeze and retry under a NEW log name;first failed export remains retained.
+
 Frozen field export40064/17472/13904 terminated1 during build,not a rendering
 failure or successful candidate. Its original stderrCF5ed875 records two old
 whole-suite receipt consumers rejecting appended input-tree diagnostics49d18927
