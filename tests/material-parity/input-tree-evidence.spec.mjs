@@ -357,3 +357,30 @@ test('browser inventory includes anonymous wrappers, SVG, pseudo-elements, and i
     assert.equal(tree.styles[anonymous.style].display, 'flex');
   } finally { await browser.close(); }
 });
+
+test('retained tree capture cannot distinguish text interleaving around an inline child', async () => {
+  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  try {
+    for (const deviceScaleFactor of [1, 2]) {
+      const page = await browser.newPage({ viewport: { width: 640, height: 360 }, deviceScaleFactor });
+      try {
+        const observe = async (content) => {
+          await page.setContent(`<app-reference><main class="frame"><div>${content}</div></main></app-reference>`);
+          const tree = await page.evaluate(captureBrowserInputTree,
+            { styleProperties: ['display', 'width', 'height', 'fontFamily', 'fontSize'] });
+          const childLeft = await page.locator('span').evaluate(node => node.getBoundingClientRect().left);
+          return { tree, childLeft };
+        };
+        const interleaved = await observe('A<span>X</span>B');
+        const preceding = await observe('AB<span>X</span>');
+        const changedText = await observe('AC<span>X</span>');
+        assert.deepEqual(interleaved.tree.errors, []);
+        assert.deepEqual(interleaved.tree, preceding.tree);
+        assert.ok(preceding.childLeft > interleaved.childLeft,
+          'native inline placement must distinguish the two text/element orders');
+        assert.notDeepEqual(preceding.tree, changedText.tree,
+          'control: changed direct text is still observable');
+      } finally { await page.close(); }
+    }
+  } finally { await browser.close(); }
+});

@@ -2,6 +2,26 @@
 
 ## Current audit pointer — October20
 
+October20 structure-capture question: the existing browser collector loses direct
+text/element interleaving. The new appended owning test in
+`tests/material-parity/input-tree-evidence.spec.mjs` proves that
+`A<span>X</span>B` and `AB<span>X</span>` produce byte-equivalent JSON tree values
+but different native inline-child positions at DPR1 and2. Changed direct text
+is a rejecting control. Cause: `ownText` concatenates direct TEXT_NODE values,
+while traversal separately enumerates element.children; their shared order is
+not retained. This is a demonstrated harness evidence limitation,not a diagnosed
+Material renderer failure or proof that actual configured cases have mixed text.
+Existing generated-node survey covers387 boundaries/six alias targets only;
+it cannot close full anonymous/element structure obligations. Next establish the
+actual affected Material population from retained source/capture evidence before
+changing capture instrumentation or requesting any recapture. No fixture or
+renderer changed;all2311 cases remain partial/current rendering unverified.
+Verification: `node --test tests/material-parity/input-tree-evidence.spec.mjs`
+passes11/11,zero skip/cancel/todo,10569.6495ms. Prior suite retained exactly;
+only one diagnostic test appended. Its indexed source fingerprint now differs
+from accepted46ea;canonical remains historical at that boundary until the next
+coherent source/export reconciliation. Existing219 proof anchors do not move.
+
 Accepted canonical/index:46eaeb4c/fb581ba7 (165 source findings,219 focused proof
 anchors). Published case review:
 bfc2b6d546a0a636f07272eef14591ec830dcc7e90098c06a865af72076d238e,
