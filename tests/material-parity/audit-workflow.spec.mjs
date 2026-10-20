@@ -101,12 +101,12 @@ test('all canonical proof pointers resolve after focused/integration test moves'
   const inspect = reader => vm.runInNewContext(code + '; focusedProofInventory(root)',
     { readFileSync: reader, path, root: process.cwd() });
   const proofs = inspect(readFileSync);
-  // Exact e7717418 cold-verified publication, not unchecked registry growth.
-  // The authenticated section receipt c74126c8 binds every field and order as
-  // well as the explicit population; the historical 192 count predates it.
+  // Exact 46eaeb4c cold-verified publication, not unchecked registry growth.
+  // Section receipt be43596d binds every field/order; conservation b51e4b31
+  // proves only21 benchmark line numbers moved from the e771 publication.
   assert.equal(proofs.length, 219);
   const expected = [{ name: 'focusedProofs', tokens: 3943,
-    sha256: 'f7936d9cdd0e1c9057233c15465716cff161bd7d3a163ad5d81a675fc091aa79' }];
+    sha256: 'f1597df730ae3e3fbf4f79cf1ed6ead8ec6edc5cb397a7a5d2d9931b5eba789a' }];
   const digestProofs = value => sectionDigests([Buffer.from(JSON.stringify({ focusedProofs: value }))]);
   assert.deepEqual(await digestProofs(proofs), expected);
   const altered = JSON.parse(JSON.stringify(proofs));

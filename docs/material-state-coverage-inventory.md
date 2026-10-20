@@ -23,7 +23,7 @@ unverified throughout. Evidence contact is100%,not inspection completion/parity.
 | Divider input/structure |48 wrapper requests and inline top attribution;existing classified absolute-flow substitutions;96 paragraph grid-track and96 own-transform/origin slots reviewed as context-inactive and joined/published. | Remaining material/anonymous-line-box requirements beyond these scoped results. |
 | Divider paint | Configured contrast-DPR1 complete texture footprint;four-theme desktop native/canvas backing and settled-font controls. | Scope of remaining native phase/separator-coverage questions and original full paint criteria;do not transfer public DPR2 residuals here. |
 | Divider ownership |20 observed physical contexts/24 memberships,60 Angular recreations with tracked/registration cleanup and passive peer survival;controlled initial font readiness after Angular destroy and retained later font callback after disposal. | Applicability of these source-level font guards to captured Material runtime and other original lifetime/history requirements;controlled callbacks are not network timing evidence. |
-| Applicability/integration | Newer88-module core/linker/wiring,2280 mapped sources,17 current app sources,55 media/five style identities;five-source reader and support-source export/conservation/cold publication complete. | Historical workflow proof-digest oracle needs bounded update after publication;runtime/environment boundaries,remaining harness failures and original final gates remain. |
+| Applicability/integration | Newer88-module core/linker/wiring,2280 mapped sources,17 current app sources,55 media/five style identities;five-source reader/support-source cold publication complete;workflow oracle reconciled5/5. | Runtime/environment boundaries,remaining harness failures and original final gates remain. |
 | Whole audit | Complete configured inventory and bounded findings/reproductions remain retained. | Exact obligation/state closure across all36 families and all original final verification/handoff requirements. |
 
 Before another capture,review these remaining requirements against existing
@@ -32,6 +32,29 @@ subquestions merely because a parent still says partial. This table is a current
 navigation summary,not new acceptance criteria or a substitute for exact records.
 
 ## Evidence chronology — retain original scope and checkpoint dates
+
+October20 publication854e7573 pushed successfully after transport recovery.
+First default and HTTP/1.1 attempts returned HTTP408/disconnect;remote ls-remote
+still18c74224,so no success inferred from misleading Everything up-to-date text.
+Existing SSH route unavailable(host verification failure,no public key files,
+agent stopped);no trust/credential/remote configuration modified. Per-command
+HTTP/2 plus157286400postBuffer succeeded;remote accepted18c74224→854e7573.
+GitHub80.73MB gzip/50MB recommendation warning is advisory,not failure. No LFS
+migration or artifact/acceptance change introduced to work around transport.
+
+Workflow proof-digest follow-up conserves explicit219-proof population,3943tokens
+and original pointer/status/broken-pointer/altered-claim/duplicate-entry controls.
+Oracle now uses accepted46ea sectionf1597df7,authenticated by section receipt
+be43596d and exact21-line-only conservation b51e4b31;not unchecked hash growth.
+All FIVE existing workflow tests pass5/5,0 skipped/cancelled/todo,1603.7925ms:
+node --test tests/material-parity/audit-workflow.spec.mjs.
+Log published-proof-pointer-reconciliation-20261020.log
+SHA1547e00021dc9ca680d23d0fb2be9f143f0a1a1ef2c6b7991d34a25c84469590.
+Workflow suite is outside explicit738-source/proof owner inventory,as established
+by full census;no new canonical export justified for this oracle-only change.
+This is not a new full-harness result or subtraction from historical169 failures.
+Next resume actual remaining case requirements and scoped harness owners;all
+whole-case,current-rendering and original final acceptance obligations remain.
 
 October20 publication ACCEPTED as audit EVIDENCE,not audit completion. Independent
 cold29208 TERMINAL0:complete32146787.2245ms,evidence session31963744.238ms,
