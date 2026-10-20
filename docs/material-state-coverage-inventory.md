@@ -2,6 +2,20 @@
 
 ## Current audit pointer — October20
 
+Read-only case-index policy question resolved while export retry stays frozen:
+the exact existing policyProjection conditional body34678b54 accepts current598
+through the already-guarded restoration chain and recovers COMPLETE historical
+135-definition3256863a bytes,then existing132-definition projection7e939aec.
+Three unrelated/definition/classification drift controls reject. Actual production
+gate admits only55c7e9cf,so598 never enters that valid body;no source was changed,
+no current registry normalized,and no failing full suite promoted. Evidence
+case-index-policy-existing-body-applicability-20261020.log
+SHAcfdac5a4c395e9ba087db75f893b7d477aedf8677613ea0e1532e1342b19a9bb,
+complete owning functione71ea46f/producer1a641a82. After frozen publication,review
+the exact supported gate extension using this existing body and retain actual
+currentSHA598 separately from historical projections. Do not duplicate the
+restoration recipe or rerun the same failed policy suite before that change.
+
 Repaired frozen export retry is LIVE:session30517,launcher20840,worker23468,
 creation11:08:04 local October20 after pushed ea6a88c9. Exact process commands
 verify selected f471 and all five baseline inputs. Logs filled-field-coherent-

@@ -2,6 +2,11 @@
 
 ## Current versus historical evidence
 
+Retain case-index-policy-existing-body-applicability-20261020 log pair:it binds
+the exact existing conditional body and complete135/132 historical policy bytes
+with three drift controls,not a production gate fix or full-suite pass. Sources
+remain frozen for filled-field export retry30517;no registry/evidence rewritten.
+
 Retain filled-field-repaired-source-census-20261020 stdout/stderr,including exact
 eight reviewed source deltas and the complete original source/proof digest checks.
 It is pre-export evidence,not replacement for the failed export or original
