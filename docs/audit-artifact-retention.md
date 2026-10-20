@@ -2,6 +2,34 @@
 
 ## Current versus historical evidence
 
+October21 final working-registration census/owning logs are button-touch-
+registration-current-census-20261021 and registration-current-owning-20261021
+with empty stderr pairs,both terminal0. These supersede earlier census currentness,
+not original observations. Counts remain779/229/171. The definition projection
+now uses exact171-vector30614a96 and170-vector7df65cff digests instead of adding
+a new untracked proposal read. Current tests preserve the same positive and
+forged-vector rejection assertions. Accepted90467 remains unchanged.
+
+Working shared-touch registration is now171 definitions/229 proof anchors/779
+source paths,not yet accepted canonical data. Retain button-touch-registration.mjs,
+all original owning suites and button-touch-registered-owning,legacy-owning,
+source-conservation,case-review-owning,registration-census,registration-complete-
+census and registration-final-owning-20261020 log pairs. Terminal results:
+3 registered owning,13 semantic/clip,8 touch/case-index,6 case-review and4 final
+touch checks pass. No new browser run or canonical export was required.
+Complete census recovers all accepted756/226/170 section digests after exact
+nine-file source restoration;current779/229/171 scan has no missing proofs or
+undetected definitions. All170 prior findings/226 proof claims remain unchanged;
+two proof line coordinates shift due to declared historical suite preludes.
+First777-path census is an intermediate success,not the complete inventory:two
+edited conservation files were subsequently registered explicitly. Its normalized
+producerf3e74aa9 can be recovered from current5780012c by removing only the two
+new case-index source-list entries;this is not a raw-byte preservation claim.
+The historical suite adapters restore exact whole prior sources and reject drift;
+current registry assertions remain independent. No renderer/fixture change or
+case promotion follows. Accepted90467 and queued50315381 remain distinct until
+source/dependency selection,coherent export,conservation,cold replay and import.
+
 Retain tests/material-parity/button-touch-inputs.spec.mjs,both button-touch-owning-
 regressions[-recovered]-20261020 log pairs,and initial failed-source.mjs. The first
 run passes two tests and fails the third because the captured disposal result is

@@ -37,3 +37,7 @@ artifacts/material-parity/divider-property-main-verification-20261020.log -text
 artifacts/material-parity/working-audit/proposals/a79bdf4496b89608128fcd7ca223508ce576a1728ba856c030ca15e0a32e5266.json -text
 artifacts/material-parity/button-touch-owning-regressions-20261020.failed-source.mjs -text
 artifacts/material-parity/button-touch-owning-regressions-20261020.log binary
+tests/material-parity/button-touch-registration.mjs -text
+artifacts/material-parity/button-touch-registration-census-20261020.log -text
+artifacts/material-parity/button-touch-registration-complete-census-20261020.log -text
+artifacts/material-parity/button-touch-registration-current-census-20261021.log -text

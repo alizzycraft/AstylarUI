@@ -2,7 +2,7 @@
 
 ## Current audit pointer — October20
 
-Current conclusions only;earlier next/live statements in retained detail are historical.
+Updated October21. Current conclusions only;earlier next/live statements in retained detail are historical.
 
 - Divider publication COMPLETE:export31650,candidate import82029,independent
   COLD98069,recovered main import72083 and main verification all TERMINAL0.
@@ -71,7 +71,7 @@ Current conclusions only;earlier next/live statements in retained detail are his
   28 mocked current family/open/phase calls produce36 leaf buttons. No inference
   about every intermediate revision or compensation motive. Source proposala79bdf44
   adds ONE authoring definition to the complete170 predecessor,not a duplicate
-  core unit finding;registration pending,canonical counts unchanged. Evidence:
+  core unit finding;working-source registration is complete,canonical counts unchanged. Evidence:
   button-touch-retained-inputs,authoring-history,newer-capture-reconciliation,
   source-proposal and scope-independent-20261020 logs;1200 mutation controls pass.
 - Queued touch case review234eb163 adds480 bounded input children/600 owners to
@@ -88,16 +88,22 @@ Current conclusions only;earlier next/live statements in retained detail are his
   reject,and removing only504 additions restores the complete predecessor.
   All2311 cases remain partial/unverified. No selection/registration/publication
   change. Evidence:divider-current-and-focus-case-join-recovered-20261020.log.
-- Touch registration now has an owning regression gate:three tests in
-  tests/material-parity/button-touch-inputs.spec.mjs pass,including exact600-owner
-  replay/1200 controls,complete170-definition conservation and the still-failing
-  percentage matrix versus passing literals. Source proposala79bdf44 is now
-  checked in (278716B),not just local. Initial disposal-field assertion failure
-  and source remain retained;recovered test uses the actual disposed.disposed field.
-  No registered definition/proof/source counts changed in this increment.
-- Next:register the bounded shared
-  touch-descendant omission and existing unit limitation's interaction evidence,
-  preserving suppressed/disabled distinctions. Continue component-owner/
+- Touch WORKING registry is171 definitions/229 proof anchors/779 source paths;
+  accepted90467 remains170/226/756. All170 prior findings and226 proof claims
+  conserve;only two prior proof line locations shift. Complete census reverses
+  nine controlled source edits to7ab1360f and recovers accepted section digests;
+  all756 prior source paths survive,23 are added. Latest evidence:button-touch-
+  registration-current-census-20261021.log;earlier complete/777-path censuses remain
+  intermediate records. Historical definition projection uses pinned complete
+  vector hashes,not a new untracked proposal-file read.
+- Focused verification:four final touch owning tests pass;13 semantic/clip checks,
+  eight touch/case-index conservation checks and six queued/control/divider case
+  checks pass. Historical170-definition assertions use an explicit whole-source-
+  authenticated read/population boundary;actual171 registry has separate checks.
+  No old receipt/assertion is replaced. Original disposal-field failure survives.
+- Next:select a dependency-reconciled successor of queued50315381 for the next
+  coherent export/cold/import milestone,preserving all suppressed/disabled and
+  historical-currentness distinctions. Continue component-owner/
   generated-descendant mapping across families,AX and interaction ownership.
   Shared frame/headings already map all2311 cases;do not repeat that survey.
   Full unfiltered audit/browser/unit/build/packed-consumer/release gates still apply.

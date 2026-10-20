@@ -21,7 +21,8 @@ The latest shared-button evidence adds this dependency to tracks6–7:
    substitutes. The candidate currently omits this descendant in600 retained
    button owners/480 cases. Only276 have visible pointer-enabled requests;
    294 display-none and30 pointer-events-none observations must stay separate.
-   The authoring finding is still proposed,not in the accepted170 definitions.
+   The authoring finding is registered in the working171-definition registry,
+   but not yet in the accepted170-definition package;publication is pending.
 3. Reuse the failing32-capture/160-boundary public matrix atDPR1/2 and translated
    surfaces,plus the actual Material pair. The percentage matrix currently fails
    four strict assertions/eight paired hit comparisons;literal controls passing

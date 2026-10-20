@@ -8922,6 +8922,29 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'scripts/audit-material-case-index-conservation.mjs',
+    'tests/material-parity/case-index-historical-conservation.spec.mjs',
+    'tests/material-parity/button-touch-inputs.spec.mjs',
+    'tests/material-parity/button-touch-registration.mjs',
+    'scripts/audit-material-button-touch-inputs.mjs',
+    'scripts/audit-public-button-touch-target.mjs',
+    'scripts/join-material-button-touch-inputs.mjs',
+    'scripts/join-material-current-divider-and-focus-evidence.mjs',
+    'artifacts/material-parity/working-audit/proposals/a79bdf4496b89608128fcd7ca223508ce576a1728ba856c030ca15e0a32e5266.json',
+    'artifacts/material-parity/button-touch-retained-inputs-20261020.log',
+    'artifacts/material-parity/button-touch-authoring-history-20261020.log',
+    'artifacts/material-parity/button-touch-newer-capture-reconciliation-20261020.log',
+    'artifacts/material-parity/button-touch-scope-independent-20261020.log',
+    'artifacts/material-parity/public-button-touch-target-complete-20261020/latest-report.json',
+    'artifacts/material-parity/public-button-touch-target-complete-20261020/provenance.json',
+    'artifacts/material-parity/public-button-touch-target-complete-20261020/producer.mjs',
+    'artifacts/material-parity/button-paired-touch-target-20261020.log',
+    'artifacts/material-parity/button-touch-target-independent-20261020.log',
+    'artifacts/material-parity/button-touch-transform-parser-binding-20261020.log',
+    'artifacts/material-parity/button-focus-indicator-applicability-20261020.log',
+    'artifacts/material-parity/divider-current-browser-20261020/latest-report.json',
+    'artifacts/material-parity/divider-current-browser-verification-20261020.log',
+    'artifacts/material-parity/button-touch-owning-regressions-recovered-20261020.log',
     'artifacts/material-parity/queued-control-source-history-20261020.log',
     'artifacts/material-parity/queued-control-owning-20261020.log',
     'artifacts/material-parity/checkbox-checkmark-retained-inputs-20261020.log',
@@ -9685,6 +9708,12 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/button-touch-inputs.spec.mjs', /test\('shared button touch proposal preserves all prior definitions and the existing core unit limitation'/,
+      'shared button touch additive registration preserves prior definitions', 'The exact proposed171-definition vector preserves all170 predecessors and the existing documented transform-unit limitation. The added descendant omission remains an authoring finding,not a duplicate core finding or proof of600 activations.'),
+    proof(root, 'tests/material-parity/button-touch-inputs.spec.mjs', /test\('shared button touch retained input proof replays all owners without promoting suppressed targets'/,
+      'shared button touch retained owner inputs and suppression', 'All600 owners in480 cases replay exactly with1200 rejection controls. Preserve276 visible pointer requests,294 display-none and30 pointer-events-none;candidate buttons are leaves. No generalized runtime or rendering acceptance.'),
+    proof(root, 'tests/material-parity/button-touch-inputs.spec.mjs', /test\('shared button touch public percentage matrix remains a failure distinct from literal controls'/,
+      'shared button touch percentage hit failure and literal controls', 'Package-root equal-input32-capture/160-boundary matrix retains four strict assertion failures/eight paired differences only for centered percentage CSS. Literal/plain controls pass atDPR1/2 and translated surfaces. The actual Material pair independently demonstrates omitted outside-host activation. Never ship diagnostic pixels as a fixture fix.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('retained checkbox checkmark requests bind SVG units and disabled ink before projection'/,
       'retained checkbox SVG path units and disabled ink inputs', 'All68 retained pairs replay with52 selected marks and16 suppressed marks. Native3.12 SVG user-unit stroke maps to1.82CSSpx;current fixed CSS path differs. Eight selected-disabled token chains retain six RGB request differences;inactive forced-colors rules remain excluded with explicit condition checks. Not mesh,cap/join,current raster or core-coordinate acceptance.'),
     proof(root, 'tests/material-parity/input-boundary-evidence.spec.mjs', /test\('retained select listbox naming omission precedes the queried browser AX targets'/,

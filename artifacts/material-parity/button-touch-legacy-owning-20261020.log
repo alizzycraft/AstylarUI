@@ -1,0 +1,89 @@
+TAP version 13
+# Subtest: shared button touch proposal preserves all prior definitions and the existing core unit limitation
+ok 1 - shared button touch proposal preserves all prior definitions and the existing core unit limitation
+  ---
+  duration_ms: 7.8783
+  type: 'test'
+  ...
+# Subtest: shared button touch retained input proof replays all owners without promoting suppressed targets
+ok 2 - shared button touch retained input proof replays all owners without promoting suppressed targets
+  ---
+  duration_ms: 6357.1424
+  type: 'test'
+  ...
+# Subtest: shared button touch public percentage matrix remains a failure distinct from literal controls
+ok 3 - shared button touch public percentage matrix remains a failure distinct from literal controls
+  ---
+  duration_ms: 12.494
+  type: 'test'
+  ...
+# Subtest: text backing registration preserves complete clip predecessor and bounded public evidence
+ok 4 - text backing registration preserves complete clip predecessor and bounded public evidence
+  ---
+  duration_ms: 1065.5152
+  type: 'test'
+  ...
+# Subtest: public legacy clip support limitation preserves controls and exact diagnostics
+ok 5 - public legacy clip support limitation preserves controls and exact diagnostics
+  ---
+  duration_ms: 4132.2998
+  type: 'test'
+  ...
+# Subtest: registered clip finding conserves its queued predecessor and rejects altered claims
+ok 6 - registered clip finding conserves its queued predecessor and rejects altered claims
+  ---
+  duration_ms: 86.7222
+  type: 'test'
+  ...
+# Subtest: legacy clip registration preserves complete predecessor source and proof inventory
+ok 7 - legacy clip registration preserves complete predecessor source and proof inventory
+  ---
+  duration_ms: 863.5431
+  type: 'test'
+  ...
+# Subtest: attribute focus registration preserves all predecessor definitions and proof sources
+ok 8 - attribute focus registration preserves all predecessor definitions and proof sources
+  ---
+  duration_ms: 1399.7029
+  type: 'test'
+  ...
+# Subtest: inline image registration preserves complete prior source and finding populations
+ok 9 - inline image registration preserves complete prior source and finding populations
+  ---
+  duration_ms: 1177.8314
+  type: 'test'
+  ...
+# Subtest: border contact registration preserves all predecessor findings and proof sources
+ok 10 - border contact registration preserves all predecessor findings and proof sources
+  ---
+  duration_ms: 2215.4865
+  type: 'test'
+  ...
+# Subtest: public semantic text transform preserves controls and current owner evidence
+ok 11 - public semantic text transform preserves controls and current owner evidence
+  ---
+  duration_ms: 5693.9039
+  type: 'test'
+  ...
+# {"currentDefinitions":170,"preBackingDefinitions":164,"preClipDefinitions":163,"semanticRegistrationDefinitions":160,"priorDefinitionsConserved":159,"semanticRegistrationProofs":214,"publicFailurePairs":4,"materialPhysicalContexts":16,"canonicalPublication":false}
+# Subtest: root editing runner applicability conserves metadata transition and rejects changed actions
+ok 12 - root editing runner applicability conserves metadata transition and rejects changed actions
+  ---
+  duration_ms: 320.6682
+  type: 'test'
+  ...
+# Subtest: semantic registration historical boundary rejects drift and keeps current population explicit
+ok 13 - semantic registration historical boundary rejects drift and keeps current population explicit
+  ---
+  duration_ms: 2599.7032
+  type: 'test'
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 14269.4932

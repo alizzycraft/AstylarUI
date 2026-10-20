@@ -562,7 +562,9 @@ test('queued control proof append conserves complete accepted sources and reject
 
 test('queued control source proposal preserves all prior definitions and binds distinct authoring causes', async () => {
   const { execFileSync } = await import('node:child_process');
-  const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');
+  const { sourceAuditDefinitions: registeredDefinitions } = await import('./input-equivalence-policy.mjs');
+  const { sharedButtonTouchDefinitions } = await import('./button-touch-registration.mjs');
+  const sourceAuditDefinitions = sharedButtonTouchDefinitions(registeredDefinitions);
   const hash = value => createHash('sha256').update(value).digest('hex');
   const sha = '430dada4b7b57b0e54f8d41ba3524f2031c285f516bc846b3b5a5f8d17684aa4';
   const envelope = JSON.parse(fs.readFileSync(`artifacts/material-parity/working-audit/proposals/${sha}.json`));
@@ -644,6 +646,8 @@ test('queued control registration restores exact predecessors and rejects unrela
     ]],
   ]) {
     let restored = fs.readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+    const { restoreSharedButtonSuitePrelude } = await import('./button-touch-registration.mjs');
+    restored = restoreSharedButtonSuitePrelude(restored);
     for (const [from, to, count] of changes) {
       assert.equal(restored.split(from).length, count + 1); restored = restored.replaceAll(from, to);
     }
@@ -734,6 +738,8 @@ test('retained divider property source selection conserves prior owners and reje
     { encoding: 'utf8', maxBuffer: 3_000_000 }).replaceAll('\r\n', '\n');
   const helperFile = 'tests/material-parity/text-backing-case-review-source.mjs';
   let helper = fs.readFileSync(helperFile, 'utf8').replaceAll('\r\n', '\n');
+  const { restoreSharedButtonCaseHelper, restoreSharedButtonStoreSuiteSource } = await import('./button-touch-registration.mjs');
+  helper = restoreSharedButtonCaseHelper(helper);
   const blockStart = helper.indexOf('  const currentSourceChecks=[];');
   const blockEnd = helper.indexOf('  return {read:trackedRead,sourceApplicability:{', blockStart);
   assert.ok(blockStart > 0 && blockEnd > blockStart);
@@ -750,7 +756,7 @@ test('retained divider property source selection conserves prior owners and reje
   assert.equal(fs.readFileSync(launcher, 'utf8').replaceAll('\r\n', '\n')
     .replaceAll(dividerPropertyContextReview, '736e685c55bf033db3d0ffc5b564e2ed42648438e1ed0b3ab66b7f26ed83d8bd'), previous(launcher));
   const suite = 'tests/material-parity/audit-findings-store.spec.mjs';
-  const current = fs.readFileSync(suite, 'utf8').replaceAll('\r\n', '\n');
+  const current = restoreSharedButtonStoreSuiteSource(fs.readFileSync(suite, 'utf8'));
   const append = current.indexOf("\ntest('retained divider property context review binds exact cases without promoting inspection'");
   assert.ok(append > 0); assert.equal(current.slice(0, append), previous(suite));
   const root = process.cwd(), target = path.resolve(root, 'scripts/check-divider-paragraph-constraint-inputs.mjs');

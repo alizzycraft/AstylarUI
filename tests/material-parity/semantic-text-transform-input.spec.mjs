@@ -4,7 +4,11 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
-import { sourceAuditDefinitions as currentSourceAuditDefinitions } from './input-equivalence-policy.mjs';
+import { sourceAuditDefinitions as registeredSourceAuditDefinitions } from './input-equivalence-policy.mjs';
+import { sharedButtonTouchDefinitions } from './button-touch-registration.mjs';
+// Explicit pre-touch population;original historical assertions below are unchanged.
+assert.equal(registeredSourceAuditDefinitions.length, 171);
+const currentSourceAuditDefinitions = sharedButtonTouchDefinitions(registeredSourceAuditDefinitions);
 import { restoreSemanticTextTransformPolicy, restoreSemanticTextTransformProducer,
   restoreSemanticRegistrationTransitionSource, readHistoricalBenchmarkSource, historicalSemanticDefinitions,
   reviewedRootEditingGraph, reviewedRootEditingRunnerReceipt } from './semantic-text-transform-registration.mjs';

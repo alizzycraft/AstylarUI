@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync as readActual } from 'node:fs';
 import path from 'node:path';
 import ts from 'typescript';
+import { restoreSharedButtonTouchPolicy, restoreSharedButtonTouchProducer, sharedButtonTouchDefinitions } from './button-touch-registration.mjs';
 
 const digest = s => createHash('sha256').update(s).digest('hex');
 const normalized = s => s.toString().replaceAll('\r\n', '\n');
@@ -15,7 +16,7 @@ const backingId = 'core-text-backing-ceil-rescales-logical-line-height';
 const readonlyId = 'core-readonly-text-keyboard-defaults-mutate-value';
 const controlIds = ["fixture-checkbox-checkmark-path-substitution","fixture-checkbox-disabled-checkmark-ink-substitution","fixture-checkbox-disabled-native-primitive-substitution","fixture-select-listbox-name-omission"];
 export function restoreQueuedControlPolicy(source) {
-  const current=normalized(source);
+  const current=restoreSharedButtonTouchPolicy(source);
   if(!controlIds.some(id=>current.includes(id))){
     assert.ok(!current.includes('Current plugin geometry therefore does not preserve the original SVG request.'),'Unrecognized queued control policy');return current;
   }
@@ -30,7 +31,7 @@ export function restoreQueuedControlPolicy(source) {
   assert.equal(digest(restored),'7875b717fe7693f5bdad8158f99461f09512b7bdbcdda4465a0478c4bc24566c');return restored;
 }
 export function restoreQueuedControlProducer(source) {
-  const current=normalized(source),marker='retained checkbox SVG path units and disabled ink inputs';
+  const current=restoreSharedButtonTouchProducer(source),marker='retained checkbox SVG path units and disabled ink inputs';
   if(!current.includes(marker)){
     assert.ok(!current.includes("'artifacts/material-parity/queued-control-source-proposal-owning-20261020.log'"),'Unrecognized queued control producer');return current;
   }
@@ -339,10 +340,11 @@ export function reviewedRootEditingGraph(graph, actionSource, expectedRunnerEntr
   return graph.map(row => row.file === runnerFile ? { ...row, sha256: oldRunner } : row);
 }
 export function historicalSemanticDefinitions(current) {
+  current=sharedButtonTouchDefinitions(current);
   if(current.length===170){
     const source=readActual('tests/material-parity/input-equivalence-policy.mjs','utf8');
     restoreQueuedControlPolicy(source);
-    const actual=new Function(source.replace(/^export const /gm,'const ')+';return sourceAuditDefinitions;')();
+    const actual=new Function(restoreSharedButtonTouchPolicy(source).replace(/^export const /gm,'const ')+';return sourceAuditDefinitions;')();
     assert.deepEqual(current,actual,'unreviewed queued control definition population');
     assert.deepEqual(current.slice(166).map(row=>row.id),controlIds);current=current.slice(0,166);
   }

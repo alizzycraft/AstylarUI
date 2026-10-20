@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 import ts from 'typescript';
 import { restoreTextBackingPolicy } from './semantic-text-transform-registration.mjs';
+import { restoreSharedButtonSemanticHelper } from './button-touch-registration.mjs';
 
 export const textBackingRetainedReview='33a0bd8b71e92c7ededcc6f8e2cbf9ef1f5e981034362793c0531851672fe617';
 export const dividerReviewedBoundariesReview='be99cd383dabb304da259cef9046b6b81ce44922c3ae4d8fe6dfc2a76ab33f6f';
@@ -30,7 +31,7 @@ export function restoreInputBoundaryReadonlyAppend(source){
   assert.equal(hash(text.slice(0,start)),previous);return text.slice(0,start);
 }
 export function restoreQueuedControlHelperSource(source){
-  let text=source.toString().replaceAll('\r\n','\n');
+  let text=restoreSharedButtonSemanticHelper(source);
   if(!text.includes('const controlIds =')){
     assert.ok(!text.includes('restoreQueuedControlPolicy'),'Unrecognized queued helper registration');return text;
   }

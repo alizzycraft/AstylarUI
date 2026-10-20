@@ -3,7 +3,11 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { sourceAuditDefinitions as currentSourceAuditDefinitions } from './input-equivalence-policy.mjs';
+import { sourceAuditDefinitions as registeredSourceAuditDefinitions } from './input-equivalence-policy.mjs';
+import { sharedButtonTouchDefinitions } from './button-touch-registration.mjs';
+// Explicit pre-touch population;original historical assertions below are unchanged.
+assert.equal(registeredSourceAuditDefinitions.length, 171);
+const currentSourceAuditDefinitions = sharedButtonTouchDefinitions(registeredSourceAuditDefinitions);
 import { restoreLegacyClipPolicy, restoreLegacyClipProducer, restoreTextBackingPolicy, restoreTextBackingProducer } from './semantic-text-transform-registration.mjs';
 
 const sourceAuditDefinitions=currentSourceAuditDefinitions.slice(2,166);

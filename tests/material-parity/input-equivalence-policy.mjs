@@ -2310,6 +2310,16 @@ export const sourceAuditDefinitions = Object.freeze([
     "recommendation": "Preserve the original listbox naming inputs through the public authoring API,then retest actual AX relationships. Do not make core invent a label from the parent combobox or claim complete AX equivalence from matching queried targets.",
     "boundary": "40 retained authored input pairs and one queried actual AX relation pair only. Not all94 select cases,all generated/exposed AX nodes,AT,full role behavior,focus lifetime,current all-profile rendering or case acceptance."
   }),
+  Object.freeze({
+    "id": "fixture-shared-button-touch-descendant-omission",
+    "introducedBy": "2f440115740ff76fa9e55b3f4a11568207b2af5a and current source each retain nine childless shared button constructors;no intermediate-history or compensation-motive claim",
+    "file": "examples/material-showcase/src/app/astylar.component.ts",
+    "pattern": "class: 'material-button', value: label \\}",
+    "classification": "application-plugin-authoring-defect",
+    "owner": "showcase shared Material button descendant and hit-target authoring",
+    "justification": "Exactly600 retained owners in480 cases across core,button,menu,bottom-sheet,dialog,snack-bar and tooltip have a native48px touch-span descendant but no authored candidate child. Preserve suppression:276 visible pointer-enabled requests,294 display-none and30 pointer-events-none;these are not600 live activation tests. Native matched rules retain top50% and translateY(-50%). One fresh primary-button pair shows native outside-host activation versus candidate container clicks. Package-root equal-input controls support descendant hit testing,but the actual centered percentage transform exposes the existing documented unit-loss limitation;literal-pixel controls pass across DPR1/2 and translated surfaces. First input divergence is authored descendant omission;repair the shared core percentage-reference semantics before restoring native structure/CSS. Never ship the diagnostic fixed-position or literal-pixel variants as fixture compensation. Initial/current constructors and36 factory outputs bind current authoring;this does not prove every historical revision,motive,all controls or full current rendering.",
+    "focusedProof": "scripts/audit-material-button-touch-inputs.mjs:600 exact native/candidate owners and1200 rejection controls; scripts/audit-public-button-touch-target.mjs:full failing centered-percentage matrix and passing plain/literal controls"
+  }),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({

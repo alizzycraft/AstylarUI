@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readSharedButtonPredecessorSource as readFileSync } from './button-touch-registration.mjs';
 import { createHash } from 'node:crypto';
 import test from 'node:test';
 import { collectCaseIndexConservation, verifyInputTreeHeadingExtension, policyProjection } from '../../scripts/audit-material-case-index-conservation.mjs';
@@ -47,7 +47,7 @@ test('heading overflow coverage conserves the complete original input-tree suite
 });
 
 test('historical case-index binding retains saved receipts and never promotes source proof to canonical acceptance', () => {
-  const collected = collectCaseIndexConservation();
+  const collected = collectCaseIndexConservation({ read: readFileSync });
   const saved = JSON.parse(readFileSync('docs/material-case-index-historical-conservation.json'));
   const { membership, ...recorded } = saved;
   const historicalProjection = structuredClone(collected.report);

@@ -77,3 +77,23 @@ test('shared button touch public percentage matrix remains a failure distinct fr
     assert.ok(capture.trials.every(t => t.browser.length > 0 && t.browser.every(e => e.trusted === true)));
   }
 });
+
+test('shared button touch registration recovers exact sources and rejects unrelated drift', async () => {
+  const helpers = await import('./button-touch-registration.mjs');
+  for (const [name, restore, expected] of [
+    ['input-equivalence-policy.mjs', helpers.restoreSharedButtonTouchPolicy, '6a330a84e3b43c7ebecebcbb12640fc10ed04b9363dbf74815f74e53efab96b0'],
+    ['input-equivalence-audit.mjs', helpers.restoreSharedButtonTouchProducer, 'd97e15b446f6fe5c53688f3ff504fed86dd1793d0912cb39f374a77abe9c6ea7'],
+    ['semantic-text-transform-registration.mjs', helpers.restoreSharedButtonSemanticHelper, '8eba578d04c9b2a96ef8a5a7615aa5c81dcb315617789aef0a293e5b688d0200'],
+    ['semantic-text-transform-input.spec.mjs', helpers.restoreSharedButtonSuitePrelude, '97ce5c4862de1335a2da17ae4d96d07f9e0fad5f2f5df89dd5b614a2e1ca9bc7'],
+    ['legacy-clip-support-input.spec.mjs', helpers.restoreSharedButtonSuitePrelude, '1039d8995e8411cb78f951353408a3ed18cdca3bab64dc7de21df7e9be4984c0'],
+    ['text-backing-case-review-source.mjs', helpers.restoreSharedButtonCaseHelper, '36f828cd27ec32129d21fa492c736d46587e7c31360ceb505fc9e37c8a396590'],
+    ['audit-findings-store.spec.mjs', helpers.restoreSharedButtonStoreSuiteSource, 'cc5e6ba9a9dfd9abd7cdc61eec71e1241faf0ea978524ca26b49822f1ebe1bbb'],
+  ]) {
+    const current = readFileSync('tests/material-parity/' + name, 'utf8');
+    assert.equal(hash(restore(current)), expected, name);
+    assert.throws(() => restore(current + '\n// unrelated drift'), name);
+  }
+  const forged = structuredClone(sourceAuditDefinitions); forged[0].classification = 'equivalent-representation';
+  assert.throws(() => helpers.sharedButtonTouchDefinitions(forged));
+  assert.equal(sourceAuditDefinitions.length, 171);
+});
