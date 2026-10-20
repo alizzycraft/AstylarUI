@@ -2,6 +2,17 @@
 
 ## Current versus historical evidence
 
+October20 field generation3072 is now accepted audit evidence after successful
+independent cold check and complete section/coverage/source/proof/readable
+conservation. Normal main import verifies/reuses ALL86 immutable files shared
+with candidate-validation through hard links;every filename/hash and same
+device/inode were checked. Retain predecessor46ea unchanged. Shared files MUST
+NOT be overwritten in place. Retain cold stdout/stderr and filled-field-main-
+import-20261020.log pair (main stdoutSHAfd71a9588cc88884f0e7358d8e91916be8ef82f6e1c9b29bb0bd55ebf65a20c1).
+This supersedes pending-publication checkpoints below,not original failed runs.
+Audit evidence acceptance is not rendering parity,whole-case closure or final
+release acceptance. New chip logs remain queued evidence outside this package.
+
 Closed candidate3072 index was losslessly LZX-compressed after completed import
 and coverage conservation:183442620 logical bytes now occupy38432768 bytes.
 Before/after SHA256372d41289d69314d2c16900657ccccd9cc6663d52dc6c5cc75393e82fbd4e8e7

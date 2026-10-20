@@ -2,6 +2,29 @@
 
 ## Current audit pointer — October20
 
+ACCEPTED field evidence publication:independent cold session23829 finished0;
+main validated import finished0. Current generation
+3072dbe6c49e182e5c4e8734e53847b27206f9215d31e1ba5d09f133c79a6ac3,
+index372d41289d69314d2c16900657ccccd9cc6663d52dc6c5cc75393e82fbd4e8e7.
+All86 immutable files share verified device/inode identity and exact hashes with
+candidate-validation;normal importFindings verified/reused the generation before
+advancing the main pointer. Predecessor46ea is retained untouched. Main receipt
+filled-field-main-import-20261020.log
+SHAfd71a9588cc88884f0e7358d8e91916be8ef82f6e1c9b29bb0bd55ebf65a20c1.
+Cold stdout1cb77b2d69130d2dfae157667fc1c757f2a80999bda34596cd16d212fa62fba2;
+stderr e19d84dc579c689c81678e5e9d99f32dc96aeff6e86b36a672b758ff1daf3ac0.
+Cold elapsed2840327.0462ms;session2 collectors/10 memory hits/0 disk hits,
+16361 files/1681936501 read and verification bytes. Complete80-section and
+coverage conservation above/below bind only sourceFingerprints and577 additive
+field children/three dependencies;219 proofs and readable report unchanged.
+Counts8483 differences/165 findings/39904 controls/389202 occurrences/zero
+unresolved scalar groups remain. This is audit-evidence acceptance ONLY:2311
+partial cases,currentRenderingAccepted=false,inspectionComplete=false,input
+equivalent=no;no final release gates promoted. Frozen publication is complete.
+Next bind the two queued chip observations in the existing owning paint suite,
+join scoped case evidence,and review the demonstrated case-index policy entry
+gate using its existing restoration body. No new full export per metadata edit.
+
 Chip source-history follow-up:Git ae9cdad226ea19f05c0a791e4fba23e8de5f60a0
 (September4,`fix(material): restore shared control interaction affordances`)
 adds all four .chip:hover/:active and .chip.selected:hover/:active mixHex
