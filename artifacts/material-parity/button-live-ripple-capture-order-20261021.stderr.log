@@ -1,0 +1,15 @@
+file:///D:/dev/github/AstylarUI-audit-integration/[eval1]:1
+import fs from'node:fs';import assert from'node:assert/strict';import{createHash}from'node:crypto';const file='D:/dev/github/AstylarUI-material/tests/material-parity/run-material-parity.mjs';const b=fs.readFileSync(file);const sha=createHash('sha256').update(b).digest('hex');assert.equal(sha,'b2477a124293aec6bba3a2413ff58d41f409288dcf0cb53a54ed17d162b9fa97');const s=b.toString();const start=s.indexOf('const referenceMeasurement = await measureReference(reference.page, ids);');const image=s.indexOf('captureInteractionImage(reference.page',start);const release=s.indexOf('for (const release of heldReleases)',image);assert.ok(start>0&&image>start&&release>image);const fn=s.indexOf('async function captureInteractionImage(');assert.ok(fn>0);const end=s.indexOf('\n}',fn);const body=s.slice(fn,end+2);assert.ok(body.includes(\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ^
+
+SyntaxError: Invalid or unexpected token
+    at compileSourceTextModule (node:internal/modules/esm/utils:346:16)
+    at ModuleLoader.createModuleWrap (node:internal/modules/esm/loader:266:12)
+    at ModuleLoader.eval (node:internal/modules/esm/loader:306:23)
+    at node:internal/process/execution:73:24
+    at asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:11)
+    at Object.runEntryPointWithESMLoader (node:internal/modules/run_main:139:19)
+    at evalModuleEntryPoint (node:internal/process/execution:72:47)
+    at node:internal/main/eval_string:38:3
+
+Node.js v22.22.3

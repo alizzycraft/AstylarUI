@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+Retain both button-live-ripple-capture-order[-recovered]-20261021 log pairs.
+Original invocation fails shell/JavaScript parsing before assertions;recovered
+invocation authenticates exact original b2477a12 runner and records measurement/
+screenshot/release ordering. No browser or renderer failure is implied. Embedded
+producerArgs and original source receipt preserve the precise check. No animation
+timestamp or local-pixel acceptance follows;this evidence stays outside50315381.
+
 Retain button-live-ripple-inputs-20261021.log/empty stderr as bounded new historical
 input evidence outside the frozen50315381 export. Embedded producerArgs authenticate
 the600-owner source and both original tree receipts for each of8 core/held rows;

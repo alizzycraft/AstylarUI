@@ -4,6 +4,18 @@
 
 Updated October21. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- Live-ripple timing boundary:original Material-worktree runner bytes authenticate
+  checkpoint SHA b2477a124293aec6bba3a2413ff58d41f409288dcf0cb53a54ed17d162b9fa97.
+  It measures input trees before captureInteractionImage;that helper screenshots
+  with animations:'disabled',then held-pointer release follows. Recovered log:
+  button-live-ripple-capture-order-recovered-20261021.log. This is ordering evidence,
+  not an animation timestamp or proof that screenshot pixels correspond to the
+  ripple's recorded animated state. First shell invocation failed parsing before
+  any assertions;original stderr retained. Do not classify a local paint/harness
+  defect from these declarations. Missing evidence is synchronized ripple state,
+  original local pixels and ancestor clipping at the image boundary. Defer any
+  fresh bounded capture until the frozen export validation milestone completes.
+
 - Eight live-ripple rows authenticated from the retained shared-button population:
   all core/held four profiles/two DPRs have one direct mat-ripple-element with
   display:block,visibility:visible,opacity:1 and12%-alpha background;candidate
