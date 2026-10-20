@@ -2,12 +2,30 @@
 
 ## Current audit pointer — October20
 
-Frozen field export launched after pushed bf26bbea:session40064,launcher17472,
-worker13904,creation10:34:28 local October20. Both exact-command processes and
-live session are verified;worker has active CPU. Logs filled-field-coherent-export-
-20261020 stdout/stderr. No terminal result yet;do not restart on quiet output.
-Source/receipt inputs remain frozen. Accepted46ea/bfc2 and its main pointer stay
-retained until terminal export plus conservation/independent verification/import.
+Frozen field export40064/17472/13904 terminated1 during build,not a rendering
+failure or successful candidate. Its original stderrCF5ed875 records two old
+whole-suite receipt consumers rejecting appended input-tree diagnostics49d18927
+versus originale442a49c. Packed46ea,readablee55333fd and main46ea/fb581 pointer
+are reauthenticated unchanged. Preserve original export stdout/stderr;do not poll
+the terminal handle or restart without repaired preflight.
+
+Bounded repair reuses gap-survey source replay:only exact49d18927 is accepted as
+the original23466-character e442 suite plus exact appended block30b9da3b. All old
+statements/assertions survive;unknown original or appended edits reject. Historical
+gap --check restores only its metadata recipe to complete original producer2b4fb7e6;
+fresh producer mode remains current. No stored report/capture receipt overwritten.
+Heading overflow consumes the same restored suite;case-index heading extension
+retains actual currentSHA while independently restoring its earlier c2d suite.
+Affected gap owner suite9/9 passes8249.1618ms (log4fec8168);gap receipt replay
+authenticates4 groups/59 cases/118 observations/all17 negative controls and unchanged
+canonical files (log83d18dd3);84 heading owners pass1/1,2987.3419ms (loge9393bfc).
+Focused historical-boundary pair2/2 passes1370.4903ms (log668b7d39).
+Broader owner batch was9/13 before final gap-test repair;retain failure logbef9e627.
+Its three case-index failures share older policy expectation3256863a versus current
+59830913. Current policy and COMPLETE policyProjection function are unchanged since
+accepted4e1e4b10 (functionSHAe71ea46f),so do not hide these as passes or attribute them
+to this suite extension. Next complete repaired-source/proof census and all known
+consumer checks before retrying the expensive export. Original gates unchanged.
 
 Field successor f471 is now selected by the existing named launcher/production
 reader. Existing five historical transitions remain unchanged;unknown review

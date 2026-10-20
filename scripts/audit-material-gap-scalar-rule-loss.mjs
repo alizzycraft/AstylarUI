@@ -97,10 +97,11 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   const sourceFiles = ['scripts/audit-material-gap-scalar-rule-loss.mjs', 'tests/material-parity/owner-gap-input-evidence.mjs',
     'tests/material-parity/origin-alias-mapping-evidence.mjs', 'tests/material-parity/run-material-parity.mjs',
     'tests/material-parity/input-tree-evidence.mjs', 'tests/material-parity/input-tree-evidence.spec.mjs'];
+  const recordedSources = args[0] === '--check' ? JSON.parse(readFileSync('docs/material-gap-scalar-rule-loss.json')).sourceFingerprints : undefined;
   assert.match(readFileSync(sourceFiles.at(-1), 'utf8'), /captured Material scalar collector skips layer rules that full-tree capture retains/);
   const result = { schemaVersion: 1, kind: 'owner-gap-scalar-layer-rule-loss-review',
     parent: { file: parentFile, sha256: hash(parentBytes) }, capture: parent.capture,
-    sourceFingerprints: sourceFiles.map(file => ({ file, sha256: hash(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')) })),
+    sourceFingerprints: sourceFiles.map(file => ({ file, sha256: hash((recordedSources ? readGapSurveySource(recordedSources.find(row => row.file === file)) : readFileSync(file, 'utf8')).replaceAll('\r\n', '\n')) })),
     groups: 4, cases: distinctCases.size, observations, negativeControls, findings,
     canonicalIntegration: false, inputEquivalent: false, renderingEquivalent: false,
     limitation: 'Original gap-group binding to an independently demonstrated scalar layer-rule capture defect only. The original scalar record is not repaired; layer precedence, computed candidate gaps, inherited context, used spacing and rendering are not established.' };

@@ -2,6 +2,17 @@
 
 ## Current versus historical evidence
 
+October20 first filled-field coherent export is terminal1,not a candidate. Keep
+filled-field-coherent-export-20261020 stdout(empty)/stderr82160bytes,
+stderrSHAcf5ed87527ff7d27272681bbc063fb3b3d44dcd60dd91f93a15d94f9bea8c12f.
+Keep filled-field-historical-owner-suites failure9/13 (bef9e627) and subsequent
+gap-owner-suite-complete9/9 (4fec8168),historical-suite-boundary2/2 (668b7d39),
+gap-receipt-replay (83d18dd3) and heading-receipt-replay1/1 (e9393bfc) log pairs,
+all suffixed20261020. Repairs preserve original suite/report receipts through
+exact append-only restoration;no original report or capture bytes overwritten.
+Three broader case-index policy barriers remain explicit,not passing evidence.
+Accepted46ea package/readable/main pointer remain unchanged;f471 remains queued.
+
 October20 queued field structure proposal f471932b is required new case evidence,
 now selected by the named exporter but not canonical. Retain filled-field-selected-
 review-integration,selected-launcher,pre-export-source-census and filled-field-structure-ledger-review,

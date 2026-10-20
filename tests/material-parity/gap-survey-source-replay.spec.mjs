@@ -5,7 +5,7 @@ import { execFileSync } from 'node:child_process';
 import { isDeepStrictEqual } from 'node:util';
 import test from 'node:test';
 import { readGapSurveySource, bindGapSurveyNormalizer, gapSurveyNormalizationRevision,
-  restoreGapCaptureDiagnostics } from './gap-survey-source-replay.mjs';
+  restoreGapCaptureDiagnostics, restoreInputTreeReviewAppendices } from './gap-survey-source-replay.mjs';
 import { restoreMappingReadAdapterSource } from './audit-evidence-session.mjs';
 import { borderEvidenceBaseline, verifyBorderEvidenceSourceTransition } from './position-composition-producer-transition.mjs';
 
@@ -172,6 +172,11 @@ test('gap report refresh changes seventeen integration receipts plus the heading
             'regenerated review records the live runner; the original capture remains separately authenticated');
           assert.equal(sha(readGapSurveySource(prior, { current: () => bytes.toString('utf8') })), prior.sha256,
             'live runner must still pass the exact reviewed restoration to the original survey dependency');
+        } else if (current.file === 'scripts/audit-material-gap-scalar-rule-loss.mjs') {
+          assert.equal(current.sha256, sha(readGapSurveySource(current)));
+        } else if (current.file === 'tests/material-parity/input-tree-evidence.spec.mjs') {
+          assert.equal(current.sha256, sha(restoreInputTreeReviewAppendices(bytes)));
+          assert.equal(readGapSurveySource(current), restoreInputTreeReviewAppendices(bytes));
         } else assert.equal(current.sha256, sha(current.file.endsWith('.mjs')
           ? bytes.toString('utf8').replaceAll('\r\n', '\n') : bytes));
         assert.notEqual(current.sha256, prior.sha256);
@@ -186,4 +191,30 @@ test('gap report refresh changes seventeen integration receipts plus the heading
     assert.throws(() => conserve(forged));
   }
   assert.equal(changes, 18);
+});
+
+test('appended input-tree diagnostics preserve complete historical suite and scalar producer receipts', () => {
+  const file = 'tests/material-parity/input-tree-evidence.spec.mjs';
+  const current = readFileSync(file, 'utf8');
+  const original = execFileSync('git', ['show', `4e1e4b10:${file}`], { encoding: 'utf8' }).replaceAll('\r\n', '\n');
+  assert.equal(sha(original), 'e442a49c26b916eed34300e22a1897d977b723df83a31da3c955421e52d95c5e');
+  assert.equal(restoreInputTreeReviewAppendices(current), original);
+  assert.equal(restoreInputTreeReviewAppendices(original), original);
+  const descriptor = { file, sha256: sha(original) };
+  assert.equal(readGapSurveySource(descriptor), original);
+  for (const changed of [current + '\n// unrelated', original + '\n// unrelated',
+    current.replace("assert.deepEqual(result.initial, ['left', 'start']);", 'assert.ok(true);'),
+    current.replace('reviewedRows.length, 577', 'reviewedRows.length, 576')]) {
+    assert.notEqual(changed, current);
+    assert.throws(() => restoreInputTreeReviewAppendices(changed));
+  }
+  assert.throws(() => readGapSurveySource({ ...descriptor, sha256: '0'.repeat(64) }));
+  const producer = 'scripts/audit-material-gap-scalar-rule-loss.mjs';
+  const recorded = JSON.parse(readFileSync('docs/material-gap-scalar-rule-loss.json')).sourceFingerprints.find(row => row.file === producer);
+  const restored = readGapSurveySource(recorded);
+  assert.equal(restored.replaceAll('\r\n', '\n'), execFileSync('git', ['show', `4e1e4b10:${producer}`], { encoding: 'utf8' }).replaceAll('\r\n', '\n'));
+  const producerSource = readFileSync(producer, 'utf8');
+  const changed = producerSource.replace('assert.equal(distinctCases.size, 59);', 'assert.equal(distinctCases.size, 58);');
+  assert.notEqual(changed, producerSource);
+  assert.throws(() => readGapSurveySource(recorded, { current: () => changed }));
 });

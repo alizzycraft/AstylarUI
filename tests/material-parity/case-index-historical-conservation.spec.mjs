@@ -28,6 +28,7 @@ test('heading overflow coverage conserves the complete original input-tree suite
   const current = readFileSync('tests/material-parity/input-tree-evidence.spec.mjs', 'utf8');
   const expected = 'c2d0884f99fc4e1f41ac65d22b95643c8785f4fb7a339a47746bf31fe91344b3';
   const proof = verifyInputTreeHeadingExtension(current, expected);
+  assert.equal(proof.currentSha256, '49d18927e57e04fc37b42e25469a5861a1744465953d22b2d2b470d2c9809a46');
   assert.equal(proof.retainedSourceUnchanged, true);
   assert.deepEqual(proof.addedHeadingCases, ['omitted', 'visible', 'hidden', 'ancestor-clipped']);
   for (const changed of [current + '\n// unrelated',
@@ -62,6 +63,7 @@ test('historical case-index binding retains saved receipts and never promotes so
   for (const [file, current, previous] of [
     ['tests/material-parity/input-equivalence-policy.mjs', '55c7e9cf1c634ebd8b01409b1836d1513f24e0c5ada656ce16f591aee1fd50a2', '3256863af7432ce2d9e05e2cc2569bc7f68db5f9a063f718ef09594e13c2474f'],
     ['tests/material-parity/run-material-parity.mjs', 'c13ed230e7c7b0f05e17e849decf643e847fa08f1220be0b8aa6ace955f6d25f', '4ed6abe8b6c8028565ffc5c0674d285a567714e19842f75672b599125bd99e6d'],
+    ['tests/material-parity/input-tree-evidence.spec.mjs', '49d18927e57e04fc37b42e25469a5861a1744465953d22b2d2b470d2c9809a46', 'e442a49c26b916eed34300e22a1897d977b723df83a31da3c955421e52d95c5e'],
   ]) {
     const row = historicalProjection.dependencyProjections.find(p => p.file === file);
     assert.equal(row.currentSha256, current); row.currentSha256 = previous;

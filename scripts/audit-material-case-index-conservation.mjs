@@ -8,7 +8,7 @@ import ts from 'typescript';
 import { caseIndexReceiptFiles, caseIndexReceiptRevision, caseIndexAuditModule } from './refresh-material-case-index-receipts.mjs';
 import { verifyAlignmentAuditProjection, restoreAstylarDiagnostics } from '../tests/material-parity/alignment-survey-conservation.mjs';
 import { verifyCaseIndexAssertionMigration } from '../tests/material-parity/case-index-assertion-migration.mjs';
-import { restoreGapCaptureDiagnostics } from '../tests/material-parity/gap-survey-source-replay.mjs';
+import { restoreGapCaptureDiagnostics, restoreInputTreeReviewAppendices } from '../tests/material-parity/gap-survey-source-replay.mjs';
 import { restoreInheritedMarginPolicyRefinement } from '../tests/material-parity/position-composition-producer-transition.mjs';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
@@ -20,7 +20,7 @@ const historical = (revision, file) => execFileSync('git', ['show', `${revision}
 export function verifyInputTreeHeadingExtension(bytes, expected) {
   const current = normalize(bytes);
   assert.equal(expected, 'c2d0884f99fc4e1f41ac65d22b95643c8785f4fb7a339a47746bf31fe91344b3');
-  let restored = current;
+  let restored = restoreInputTreeReviewAppendices(current);
   for (const [from, to] of [
     ["const observe = (overflow, parentClips = false, type = 'div') => {", "const observe = (overflow, parentClips = false) => {"],
     ["box = document.createElement(type)", "box = document.createElement('div')"],

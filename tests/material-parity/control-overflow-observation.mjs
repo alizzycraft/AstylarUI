@@ -6,6 +6,7 @@ import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { applyModalBoxReview } from './modal-position-inspection.mjs';
 import { proveTabPanelWrapping } from './wrapping-input-review.mjs';
 import { proveSliderMarginOwner } from './slider-position-request-review.mjs';
+import { restoreInputTreeReviewAppendices } from './gap-survey-source-replay.mjs';
 
 // The original receipt includes a later test that extracts the snackbar stage.
 // Its extraction moved when more stages were appended to the audit builder;
@@ -364,7 +365,9 @@ export function applyHeadingVisibleOverflow(rows, cases, inventory, normalize) {
     'tests/material-parity/input-tree-evidence.spec.mjs': 'e442a49c26b916eed34300e22a1897d977b723df83a31da3c955421e52d95c5e',
     'src/app/services/dom/elements/element-creation.service.ts': 'bf5fd5861c7d1b412520a41abf5bfa0aa1085d9a139a96f3d202dde6cbf8ea3a' };
   for (const [file, expected] of Object.entries(sources)) assert.equal(createHash('sha256')
-    .update(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')).digest('hex'), expected, file);
+    .update(file === 'tests/material-parity/input-tree-evidence.spec.mjs'
+      ? restoreInputTreeReviewAppendices(readFileSync(file))
+      : readFileSync(file, 'utf8').replaceAll('\r\n', '\n')).digest('hex'), expected, file);
   return [['card', 'card-title'], ['dialog', 'dialog-title']].reduce((values, [family, element]) =>
     applyModalBoxReview(values, cases, inventory, normalize, { family, element, properties: ['overflowX', 'overflowY'],
       prove: (entry, r, a) => ({ ...proveHeadingVisibleOverflow(entry, r, a), sources }),

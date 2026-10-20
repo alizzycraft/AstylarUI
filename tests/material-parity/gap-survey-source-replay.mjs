@@ -12,6 +12,19 @@ const hash = text => createHash('sha256').update(text.replaceAll('\r\n', '\n')).
 export const gapSurveyNormalizationRevision = '4650791a7208b841dd29f1ced015f98234949623';
 const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
 
+// Historical receipts only. All original statements survive verbatim; the
+// independently executed field diagnostics are one exact appended block.
+export function restoreInputTreeReviewAppendices(bytes) {
+  const source = bytes.toString().replaceAll('\r\n', '\n');
+  const previous = 'e442a49c26b916eed34300e22a1897d977b723df83a31da3c955421e52d95c5e';
+  if (hash(source) === previous) return source;
+  assert.equal(hash(source), '49d18927e57e04fc37b42e25469a5861a1744465953d22b2d2b470d2c9809a46', 'Unreviewed input-tree suite drift');
+  const original = source.slice(0, 23466), appended = source.slice(23466);
+  assert.equal(hash(original), previous);
+  assert.equal(hash(appended), '30b9da3bbf26e49316c6c514cc413909629967d75de4d646db0151d6a181c528');
+  return original;
+}
+
 // Historical gap evidence predates additive interaction paint/box diagnostics.
 // Authenticate both complete sources and prove that removing only those additions
 // restores the original capture; never reuse this receipt for a fresh capture.
@@ -143,6 +156,19 @@ export function readGapSurveySource(descriptor, readers = {}) {
     ['show', `${revision}:${file}`], { encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 }));
   let source = descriptor.file === moduleFile
     ? readHistorical(gapSurveyNormalizationRevision, descriptor.file) : readCurrent(descriptor.file);
+  if (descriptor.file === 'tests/material-parity/input-tree-evidence.spec.mjs' && hash(source) !== descriptor.sha256) {
+    assert.equal(descriptor.sha256, 'e442a49c26b916eed34300e22a1897d977b723df83a31da3c955421e52d95c5e');
+    source = restoreInputTreeReviewAppendices(source);
+  }
+  if (descriptor.file === 'scripts/audit-material-gap-scalar-rule-loss.mjs' && hash(source) !== descriptor.sha256) {
+    assert.equal(descriptor.sha256, '2b4fb7e6fea46366b0d456c8d14c2da194558e95bfbb11b007eb8581a047187a');
+    const addition = "  const recordedSources = args[0] === '--check' ? JSON.parse(readFileSync('docs/material-gap-scalar-rule-loss.json')).sourceFingerprints : undefined;\n";
+    const metadata = "sourceFingerprints: sourceFiles.map(file => ({ file, sha256: hash((recordedSources ? readGapSurveySource(recordedSources.find(row => row.file === file)) : readFileSync(file, 'utf8')).replaceAll('\\r\\n', '\\n')) })),";
+    const previous = "sourceFingerprints: sourceFiles.map(file => ({ file, sha256: hash(readFileSync(file, 'utf8').replaceAll('\\r\\n', '\\n')) })),";
+    assert.equal(source.split(addition).length, 2);
+    assert.equal(source.split(metadata).length, 2);
+    source = source.replace(addition, '').replace(metadata, previous);
+  }
   if (descriptor.file === 'scripts/audit-material-visible-caret.mjs' && hash(source) !== descriptor.sha256) {
     // Historical receipt only: exact reviewed optional family/DPR collection
     // and empty/focus/type guards. Never use old bytes for fresh capture.
