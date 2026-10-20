@@ -1,5 +1,49 @@
 # Material audit: evidence-led implementation priorities
 
+## Current reading guide — October20
+
+Use [the current coverage pointer](material-state-coverage-inventory.md#current-audit-pointer--october20)
+for accepted versus queued evidence,live process handles and remaining work.
+The checkpoint narratives below are retained history,not additional current
+ledgers. Their old counts and next/live statements must not override that pointer.
+The numbered implementation tracks remain a future plan;this audit authorizes
+neither renderer fixes nor compensating fixture changes. Final gates are unchanged.
+
+The latest shared-button evidence adds this dependency to tracks6–7:
+
+1. Resolve the EXISTING documented CSS transform unit/reference-box limitation
+   at the core CSS-space owner before projecting geometry or using it for hits.
+   Actual public percentage input loses its unit:translateY(-50%) becomes-50,
+   instead of resolving against the48px box to-24CSSpx. This is an extension of
+   `core-transform-translation-discards-css-units`,not a new world-axis diagnosis.
+2. Restore the reference-equivalent48px touch descendant with its original
+   top50%/translateY(-50%) declarations,not the diagnostic top-4px or translateY(-24px)
+   substitutes. The candidate currently omits this descendant in600 retained
+   button owners/480 cases. Only276 have visible pointer-enabled requests;
+   294 display-none and30 pointer-events-none observations must stay separate.
+   The authoring finding is still proposed,not in the accepted170 definitions.
+3. Reuse the failing32-capture/160-boundary public matrix atDPR1/2 and translated
+   surfaces,plus the actual Material pair. The percentage matrix currently fails
+   four strict assertions/eight paired hit comparisons;literal controls passing
+   is not permission to change native inputs. Then verify disabled/suppressed
+   targets,updates,other transforms and actual family states without assuming
+   that one primary-button result proves600 activations or complete parity.
+
+Evidence:button-paired-touch-target-20261020.log,public-button-touch-target-complete-
+20261020/latest-report.json,button-touch-transform-parser-binding-20261020.log,
+button-touch-retained-inputs-20261020.log and button-touch-newer-capture-
+reconciliation-20261020.log under artifacts/material-parity. Exact receipts and
+the queued source/case reviews are in the current ledger.
+
+Do not broaden the omission diagnosis to every missing native descendant:
+the600 retained focus-indicator ::before records are366 not-generated and234
+display:none. Their omission does not demonstrate missing visible focus paint
+in those captures. Keep the existing,independent semantic focus/gesture failures
+and state-layer composition findings;forced-colors and full focus parity remain
+separate obligations. See button-focus-indicator-applicability-20261020.log.
+
+## Retained checkpoint history
+
 October19 Angular lifetime evidence now distinguishes true component teardown
 from public remount:20 actual physical divider contexts/24 configured memberships,
 60 Angular recreations and80 deactivations preserve a passive peer and clear
