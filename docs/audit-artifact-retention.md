@@ -11,6 +11,17 @@ paragraph boxes;all six rejection controls pass,original probe remains unchanged
 This evidence fills only one light/desktop reference context;do not delete the
 failure as obsolete or treat this queued supplement as canonical/rendering proof.
 
+Retain divider-natural-line-box-contexts-recovered-20261020.log (SHA256
+cc4839ff5ce689aec6bf01689d15abb41cacd4a3e2b675083cd0f37d8b304416),its empty
+stderr and contexts-verification log. This is the complete32-target/16-case
+extension,not a replacement of old observations;both original observations compare
+exactly. Old producer23b22790 is preserved in Giteec3554d and recovered/hashed in
+the runner. The first all-context console response was tool-truncated despite
+exit0;keep its truncated-console diagnostic,never treat it as complete JSON.
+The targeted retry writes raw runtime output directly and exits0;all96 negative
+controls pass. Browser patch40 versus80 boundary remains explicit. No broad
+capture,canonical export or renderer/fixture change was performed for this step.
+
 Retain control-input-coherent-export-20261020 stdout/stderr and candidate generation
 b6610e71ef744b5d589d07c18e562df9927202a3adb7a5b31acb334b100839f2 under
 working-audit-candidate-validation and working-audit. Mainb661 is now accepted;

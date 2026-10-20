@@ -1,0 +1,117 @@
+Command:
+@'
+import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';import {execFileSync} from 'node:child_process';
+const hash=b=>createHash('sha256').update(b).digest('hex'),file='artifacts/material-parity/divider-natural-line-box-contexts-recovered-20261020.log',bytes=fs.readFileSync(file),r=JSON.parse(bytes);
+assert.equal(hash(bytes),'cc4839ff5ce689aec6bf01689d15abb41cacd4a3e2b675083cd0f37d8b304416');
+assert.equal(hash(fs.readFileSync(r.producer.file)),r.producer.sha256);assert.equal(hash(fs.readFileSync(r.checkpoint.file)),r.checkpoint.sha256);
+assert.equal(hash(fs.readFileSync(r.recipe.source.file)),r.recipe.source.sha256);
+assert.deepEqual(r.runtime,{actualBrowser:'155.0.8059.80',checkpointBrowser:'155.0.8059.40',historicalBrowserReplay:false});
+const review=JSON.parse(fs.readFileSync('artifacts/material-parity/working-audit/proposals/736e685c55bf033db3d0ffc5b564e2ed42648438e1ed0b3ab66b7f26ed83d8bd.json')).review;
+const cases=new Map(review.groups.map(g=>[g.case,g]));
+assert.equal(r.captures.length,16);assert.equal(new Set(r.captures.map(c=>c.case)).size,16);const groups={},caseMembership=[];
+for(const c of r.captures){
+ const parent=cases.get(c.case);caseMembership.push({case:c.case,inConfiguredReview:!!parent});
+ if(parent)assert.deepEqual(parent.evidence.pairedTrees.reference,c.inputTree);
+ assert.equal(hash(fs.readFileSync(c.inputTree.file)),c.inputTree.sha256);assert.equal(c.observations.length,2);
+ assert.deepEqual(c.observations.map(o=>o.id),['divider-above','divider-below']);
+ for(const o of c.observations){
+  assert.equal(o.rejectedControls,3);assert.equal(o.measured.fontReady,true);assert.equal(o.measured.naturalHeight,o.before.parentBox.height);
+  assert.deepEqual(o.before.paragraph,o.before.label);assert.deepEqual(o.before.insets,['0px','0px','0px','0px']);
+  assert.deepEqual(o.before.parentBox,o.after.parentBox);assert.deepEqual(o.before.labelBox,o.after.labelBox);assert.equal(o.after.observers,0);
+  assert.deepEqual(o.measured.viewport,{width:c.viewport.width,height:c.viewport.height,deviceScaleFactor:c.viewport.deviceScaleFactor});
+  const key=JSON.stringify([o.measured.typography.fontSize,o.measured.naturalHeight]);groups[key]=(groups[key]??0)+1;
+ }
+}
+assert.deepEqual(groups,{'["16px",19]':16,'["14.4px",18]':8,'["18.4px",22]':8});
+const prior=JSON.parse(fs.readFileSync(r.predecessor.record.file));assert.equal(hash(fs.readFileSync(r.predecessor.record.file)),r.predecessor.record.sha256);
+const h=r.predecessor.historicalProducer;assert.equal(hash(execFileSync('git',['show',h.revision+':'+h.logicalFile],{maxBuffer:1_000_000})),h.sha256);assert.equal(h.sha256,prior.producer.sha256);
+assert.deepEqual(r.captures.find(c=>c.case===prior.case).observations,prior.observations);
+console.log(JSON.stringify({record:{file,sha256:hash(bytes)},targets:32,rejectedRuntimeControls:96,measurements:groups,caseMembership,
+ exactPriorObservationsConserved:true,historicalProducerSourceRecoveredFromGit:true,currentProducerAuthenticated:true,originalProbeUnchanged:true,
+ boundary:'Fresh Chrome patch80 on frozen build,not checkpoint patch40 replay,candidate renderer or case closure.'},null,2));
+'@ | node --input-type=module
+Terminal exit: 0
+{
+  "record": {
+    "file": "artifacts/material-parity/divider-natural-line-box-contexts-recovered-20261020.log",
+    "sha256": "cc4839ff5ce689aec6bf01689d15abb41cacd4a3e2b675083cd0f37d8b304416"
+  },
+  "targets": 32,
+  "rejectedRuntimeControls": 96,
+  "measurements": {
+    "[\"16px\",19]": 16,
+    "[\"14.4px\",18]": 8,
+    "[\"18.4px\",22]": 8
+  },
+  "caseMembership": [
+    {
+      "case": "static:divider@light/desktop",
+      "inConfiguredReview": true
+    },
+    {
+      "case": "static:divider@light/tablet",
+      "inConfiguredReview": true
+    },
+    {
+      "case": "static:divider@light/mobile",
+      "inConfiguredReview": true
+    },
+    {
+      "case": "static:divider@dark/desktop",
+      "inConfiguredReview": true
+    },
+    {
+      "case": "static:divider@dark/tablet",
+      "inConfiguredReview": true
+    },
+    {
+      "case": "static:divider@dark/mobile",
+      "inConfiguredReview": true
+    },
+    {
+      "case": "static:divider@contrast/desktop",
+      "inConfiguredReview": true
+    },
+    {
+      "case": "static:divider@contrast/tablet",
+      "inConfiguredReview": true
+    },
+    {
+      "case": "static:divider@contrast/mobile",
+      "inConfiguredReview": true
+    },
+    {
+      "case": "static:divider@custom/desktop",
+      "inConfiguredReview": true
+    },
+    {
+      "case": "static:divider@custom/tablet",
+      "inConfiguredReview": true
+    },
+    {
+      "case": "static:divider@custom/mobile",
+      "inConfiguredReview": true
+    },
+    {
+      "case": "static:divider@light/comparison",
+      "inConfiguredReview": true
+    },
+    {
+      "case": "static:divider@dark/comparison",
+      "inConfiguredReview": true
+    },
+    {
+      "case": "static:divider@contrast/comparison",
+      "inConfiguredReview": true
+    },
+    {
+      "case": "static:divider@custom/comparison",
+      "inConfiguredReview": true
+    }
+  ],
+  "exactPriorObservationsConserved": true,
+  "historicalProducerSourceRecoveredFromGit": true,
+  "currentProducerAuthenticated": true,
+  "originalProbeUnchanged": true,
+  "boundary": "Fresh Chrome patch80 on frozen build,not checkpoint patch40 replay,candidate renderer or case closure."
+}

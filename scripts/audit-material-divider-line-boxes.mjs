@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { createServer } from 'node:http';
+import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import ts from 'typescript';
 import { chromium } from 'playwright-core';
@@ -27,24 +28,44 @@ const checkpointFile = 'artifacts/material-parity/divider-alignment-provenance-2
 const checkpoint = JSON.parse(readFileSync(checkpointFile));
 const reportFile = 'artifacts/material-parity/current-full-20261005/latest-report.json', bytes = readFileSync(reportFile);
 assert.equal(hash(bytes), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
-const entry = JSON.parse(bytes).results.find(r => r.family === 'divider' && r.profile === 'light' && r.viewport.id === 'desktop');
-assert.ok(entry);
-const input = readFileSync(entry.inputTrees.reference.file);
-assert.equal(hash(input), entry.inputTrees.reference.sha256);
-const reference = JSON.parse(input), observations = [];
+assert.ok(process.argv.length === 2 || process.argv.length === 3 && process.argv[2] === '--all');
+const all = process.argv[2] === '--all';
+const entries = JSON.parse(bytes).results.filter(r => r.family === 'divider');
+assert.equal(entries.length,16);
+const selected = all ? entries : entries.filter(r => r.profile === 'light' && r.viewport.id === 'desktop');
+assert.equal(selected.length,all ? 16 : 1);
+const captures = [];
+const themes = {
+  light:{mode:'light',primary:'#6750a4',tertiary:'#7d5260',surface:'#fffbfe',error:'#b3261e',density:0,cornerScale:1,typographyScale:1},
+  dark:{mode:'dark',primary:'#d0bcff',tertiary:'#efb8c8',surface:'#1c1b1f',error:'#f2b8b5',density:0,cornerScale:1,typographyScale:1},
+  contrast:{mode:'light',primary:'#000000',tertiary:'#203864',surface:'#ffffff',error:'#8b0000',density:-5,cornerScale:.75,typographyScale:.9},
+  custom:{mode:'light',primary:'#006a6a',tertiary:'#a43c42',surface:'#f4fbfa',error:'#ba1a1a',density:-2,cornerScale:1.5,typographyScale:1.15},
+};
 let actualBrowser;
 await withFrozen(async (browser, baseUrl) => {
   // Fresh supplementary observation,NOT a historical-browser replay. Preserve
   // both versions explicitly;the initial strict replay failure remains retained.
   actualBrowser = browser.version();
   assert.equal(actualBrowser, '155.0.8059.80');
+  for(const entry of selected) {
+  const input = readFileSync(entry.inputTrees.reference.file);
+  assert.equal(hash(input),entry.inputTrees.reference.sha256);
+  const reference = JSON.parse(input), observations = [];
   const context = await browser.newContext({ viewport: { width: entry.viewport.width, height: entry.viewport.height }, deviceScaleFactor: entry.viewport.deviceScaleFactor });
   try {
     const page = await context.newPage(), errors = [];
     page.on('pageerror', error => errors.push(error.message));
     page.on('console', message => { if(message.type() === 'error') errors.push(message.text()); });
-    await page.goto(baseUrl + '/reference/divider?benchmark=1&profile=light');
+    await page.goto(baseUrl + '/reference/divider?benchmark=1&profile=' + entry.profile);
     await page.waitForFunction(() => typeof window.__MATERIAL_SHOWCASE_COMMAND__ === 'function');
+    if(all) {
+      assert.equal(await page.evaluate(theme=>window.__MATERIAL_SHOWCASE_COMMAND__({type:'showcase:theme',theme}),themes[entry.profile]),true);
+      await page.waitForFunction(surface=>{
+        const frame=document.querySelector('app-reference .frame'),probe=document.createElement('span');
+        probe.style.color=surface;document.body.append(probe);const expected=getComputedStyle(probe).color;probe.remove();
+        return frame && getComputedStyle(frame).backgroundColor===expected;
+      },themes[entry.profile].surface);
+    }
     await page.evaluate(async () => { await document.fonts.ready;await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))); });
     for(const id of ['divider-above','divider-below']) {
       const node = reference.nodes.find(n => n.attributes?.id === id);assert.ok(node);
@@ -70,13 +91,30 @@ await withFrozen(async (browser, baseUrl) => {
       observations.push({id,before,measured,after,rejectedControls:3});
     }
     assert.deepEqual(errors,[]);
+    captures.push({case:'static:divider@'+entry.profile+'/'+entry.viewport.id,profile:entry.profile,viewport:entry.viewport,
+      inputTree:entry.inputTrees.reference,observations});
   } finally { await context.close(); }
+  }
 }, {}, {checkpointFile});
 assert.deepEqual(fingerprintDirectory(path.resolve('examples/material-showcase/dist/material-showcase/browser')),checkpoint.provenance.browserFiles);
-console.log(JSON.stringify({kind:'divider-natural-line-box-diagnostic',producer:receipt('scripts/audit-material-divider-line-boxes.mjs'),
-  checkpoint:receipt(checkpointFile),originalReport:{file:reportFile,sha256:hash(bytes)},inputTree:entry.inputTrees.reference,
+const result = {kind:all ? 'divider-natural-line-box-contexts-diagnostic' : 'divider-natural-line-box-diagnostic',producer:receipt('scripts/audit-material-divider-line-boxes.mjs'),
+  checkpoint:receipt(checkpointFile),originalReport:{file:reportFile,sha256:hash(bytes)},
   runtime:{actualBrowser,checkpointBrowser:checkpoint.provenance.browser,historicalBrowserReplay:false},
   recipe:{source:receipt('tests/material-parity/normal-line-box-evidence.mjs'),originalFunction:hash(original),beforeIdentity,afterIdentity,
     diagnosticFunction:hash(diagnostic),frozenHelper:{file:helperFile,sha256:hash(helper)}},
-  case:'static:divider@light/desktop',observations,rejectedControls:6,
-  scope:'One fresh Chrome155.0.8059.80 reference light/desktop supplement with frozen served build/typography;checkpoint Chrome155.0.8059.40 is NOT replayed. Natural unwrapped paragraph/span height and actual box equality only;original probe remains strict. Not historical layout/pixels,candidate layout,baseline,glyph raster,other contexts,multi-run anonymous layout,current renderer or case closure.'}));
+  ...(all ? {captures,cases:16,targets:32,rejectedControls:96} : {inputTree:captures[0].inputTree,case:captures[0].case,observations:captures[0].observations,rejectedControls:6}),
+  scope:all
+    ? 'Sixteen fresh Chrome155.0.8059.80 reference contexts at retained viewport/DPR/theme inputs and frozen build. Natural paragraph/span heights only;checkpoint Chrome155.0.8059.40 is NOT replayed. Not historical pixels,candidate layout,baseline,glyph raster,multi-run anonymous layout,current renderer or case closure.'
+    : 'One fresh Chrome155.0.8059.80 reference light/desktop supplement with frozen served build/typography;checkpoint Chrome155.0.8059.40 is NOT replayed. Natural unwrapped paragraph/span height and actual box equality only;original probe remains strict. Not historical layout/pixels,candidate layout,baseline,glyph raster,other contexts,multi-run anonymous layout,current renderer or case closure.'};
+if(all) {
+  const priorFile='artifacts/material-parity/divider-natural-line-box-20261020.log',prior=JSON.parse(readFileSync(priorFile));
+  const revision='eec3554d',logicalFile='scripts/audit-material-divider-line-boxes.mjs';
+  assert.equal(prior.producer.sha256,'23b2279076c11a48e740a3f65b8c7eea8569be0ba3a2adb79e09d1ebfc66fd03');
+  assert.equal(hash(execFileSync('git',['show',revision+':'+logicalFile],{maxBuffer:1_000_000})),prior.producer.sha256);
+  assert.deepEqual(result.runtime,prior.runtime);assert.deepEqual(result.recipe,prior.recipe);
+  const same=captures.find(c=>c.case===prior.case);assert.ok(same);
+  assert.deepEqual(same.inputTree,prior.inputTree);assert.deepEqual(same.observations,prior.observations);
+  result.predecessor={record:receipt(priorFile),historicalProducer:{revision,logicalFile,sha256:prior.producer.sha256},
+    completeTwoObservationsConserved:true};
+}
+console.log(JSON.stringify(result));

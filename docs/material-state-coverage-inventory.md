@@ -64,8 +64,17 @@ Current conclusions only;earlier next/live statements in chronology are historic
   failed source retained. divider-natural-line-box-20261020.log plus failed pair;
   scripts/audit-material-divider-line-boxes.mjs owns explicit diagnostic recipe.
   No new core defect,all-context closure or current candidate/rendering claim.
-  Next:remaining physical contexts/complete owner properties with this explicit
-  fresh-browser boundary;do not confuse this19px measurement with ink centres.
+  Context extension now covers all16 retained static cases/32 targets,including
+  desktop/tablet/mobile/comparison and all four themes. Actual/natural heights
+  agree:16px font→19px (16 targets),14.4px→18px (eight),18.4px→22px (eight).
+  All96 runtime rejection controls pass;all source/tree receipts and case IDs
+  authenticate. Complete two prior observations conserve;old producer23b22790
+  recovers from Giteec3554d,not the changed current file. Full94,597-byte record
+  cc4839ff retained in divider-natural-line-box-contexts-recovered-20261020.log;
+  independent contexts-verification log binds every viewport and prior record.
+  First console response was truncated;retain its diagnostic,not as full data.
+  Next:complete owner properties,candidate/interaction applicability and exact
+  case joins. Fresh-browser/version limits remain;no blanket19px normalization.
 - Storage:no deletion by the agent. After the302-build review,test-out contained
   0 directories (observed external change). Exact old inventory/removal review
   and compression/failure records remain preserved.
