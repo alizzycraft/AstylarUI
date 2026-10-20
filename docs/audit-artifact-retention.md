@@ -12,6 +12,15 @@ bare JSON;its stderr remains failure evidence. Recovered comparison parses the
 retained JSON result explicitly and authenticates the current package normally.
 No original payload,previous generation or failed evidence was removed/replaced.
 
+Retain both divider-property-metadata-conservation[-replayable]-20261020 log pairs
+and scripts/check-divider-property-publication-metadata.mjs. Both terminate0.
+The replayable form pins both existing generation/index receipts instead of
+depending on future current pointers,and records its producer SHA. It authenticates
+the25 new dependency receipts and12 current source checks;removing only25 children
+from24 cases plus declared receipt/review metadata recovers all prior coverage.
+Summary/counts remain identical. This is compact metadata conservation,not complete
+payload equality,current rendering or permission to publish before cold validation.
+
 Retain scripts/join-material-button-touch-inputs.mjs,button-touch-case-join-
 20261020.log/empty stderr,and queued local proposal
 234eb163a6db98769d1aa37c8aeef57b8f9d2eb110eaeb61c93981feb7cfe8a0.

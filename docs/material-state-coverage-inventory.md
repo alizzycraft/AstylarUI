@@ -24,6 +24,12 @@ Current conclusions only;earlier next/live statements in retained detail are his
   three selection/owning tests and source/proof/finding section reconciliation pass.
   It is NOT canonical until export,candidate conservation,independent cold replay
   and import complete. Original736e/b661 and all failure evidence remain retained.
+- Candidate compact metadata conservation now passes:removing only25 children
+  across24 cases,25 added dependency receipts and12 current-source checks restores
+  complete prior coverage after the two explicit review-digest changes. All2311
+  prior cases,summary and scalar counts are unchanged. Replayable check:
+  scripts/check-divider-property-publication-metadata.mjs;metadata-conservation-
+  replayable-20261020 log. Full payload/cold/publication checks remain separate.
 - Divider supplement limits:32 natural line boxes cover16 STATIC native contexts,
   not interaction cases or candidate paint. Clamp/flex checks cover96 owners in24
   retained cases;normal/stretch alignment and complete owner mapping remain open.
