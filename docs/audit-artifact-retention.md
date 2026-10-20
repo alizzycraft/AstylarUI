@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain terminal0 button-touch-propagated-leaves and propagated-receipt-
+reconciliation-20261021 logs/empty stderr. Existing streaming comparison conserves
+all shapes/paths/other values in five changed sections. All147 changed leaves
+recompute exactly(98 direct producer receipts,48 complete control-proof hashes,
+one motion-report hash);embedded producerArgs retain the exact recipes. Current
+control rows are authenticated through existing batch evidence retrieval,not new
+capture or invented report values. Cold57898 remains live and separately required.
+
 Retain button-touch-full-section-comparison-20261021 log/empty stderr,terminal0:
 70 of80 sections unchanged;five changed non-registration/coverage/summary sections
 still need exact leaf reconciliation. Existing compareSectionLeaves execution78980

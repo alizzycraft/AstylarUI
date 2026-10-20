@@ -50,3 +50,5 @@ artifacts/material-parity/button-touch-candidate-import-20261021.log -text
 artifacts/material-parity/button-touch-metadata-conservation-20261021.stderr.log binary
 artifacts/material-parity/button-touch-metadata-conservation-recovered-20261021.log -text
 artifacts/material-parity/button-touch-full-section-comparison-20261021.log -text
+artifacts/material-parity/button-touch-propagated-leaves-20261021.log -text
+artifacts/material-parity/button-touch-propagated-receipt-reconciliation-20261021.log -text

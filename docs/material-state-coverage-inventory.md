@@ -4,6 +4,20 @@
 
 Updated October21. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- Five-section leaf comparison78980 and exact receipt recomputation41286 now
+  TERMINAL0. All selected shapes/paths and unchanged values conserve;147 changes
+  are exactly98 producer fingerprints(d97e15b4→cca48156),48 derived control-proof
+  hashes and one derived motion-report hash. Existing evidence loader authenticates
+  all48 complete button control rows;reversing only the single normalization source
+  fingerprint recomputes each prior proof hash. Existing collectOwnerInitialMotion
+  recomputes both report hashes after the same one-receipt reversal. Whole-source
+  producer restoration independently recovers d97e15b4. No measurement or
+  classification changes are inferred/approved. Logs:button-touch-propagated-leaves
+  and button-touch-propagated-receipt-reconciliation-20261021(empty stderr pairs).
+  This explains all ten changed payload sections together with the source census
+  and complete coverage/summary conservation. Cold57898 remains live;accepted
+  main90467 unchanged. No case closure or current-rendering acceptance follows.
+
 - Complete candidate section comparison24003 now TERMINAL0:70/80 sections are
   unchanged;sourceFingerprints/sourceFindings/focusedProofs exactly equal the
   reviewed780/229/171 production census. Coverage and summary are conserved by
