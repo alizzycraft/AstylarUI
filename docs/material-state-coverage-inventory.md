@@ -2,6 +2,21 @@
 
 ## Current audit pointer — October20
 
+Detailed filled-field coverage conservation now passes. Candidate index372d4128
+and accepted indexfb581ba7 were authenticated against their respective pointers.
+Removing exactly577 retainedFilledFieldStructure children,exactly THREE new
+dependency receipts,and restoring the two review-digest fields recovers the
+COMPLETE accepted coverage JSON digestcc5d91a0c3810a66030fc2554f08ae108e18d4d641889b2e84984dde5ade5923.
+All15172 old dependency receipts/order and all2311 complete case objects recover;
+parent obligations,remaining lists,source-applicability transitions and acceptance
+flags are conserved,not cleared. Added population:form-field76,input76,
+autocomplete110,select94,datepicker111,timepicker110. Receipt
+filled-field-candidate-coverage-conservation-20261020.log
+SHAaa9101278147306b6ac1df7a6775dcf3cecfc3ef429f5dc75d1f876fa564f904.
+Cold session23829 remains live with original24016/17456 process commands;no
+terminal result yet. Next successful cold result and validated main import;
+candidate3072 remains unaccepted until then. Original final gates unchanged.
+
 Filled-field publication checkpoint: warm export retry30517 finished successfully;
 candidate3072dbe6 is on disk,NOT accepted. Candidate import completed with8483
 discrepancies,165 source findings,39904 controls,389202 occurrences and zero

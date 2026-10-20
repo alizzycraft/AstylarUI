@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Retain filled-field-candidate-coverage-conservation-20261020 stdout/stderr:the
+full accepted coverage digestcc5d91a0 is recovered by reversing exactly577 new
+children,three new dependency receipts and two review digests. Candidate index
+372d4128 and acceptedfb581 were independently pointer-authenticated. Retain
+candidate-import and candidate-section-conservation-20261020 log pairs too;
+these are completed candidate validations,not successful cold verification or
+main acceptance. Candidate3072 and predecessor46ea remain required. No evidence,
+old test-build directories or Angular caches deleted;cleanup approval pending.
+
 Retain case-index-policy-existing-body-applicability-20261020 log pair:it binds
 the exact existing conditional body and complete135/132 historical policy bytes
 with three drift controls,not a production gate fix or full-suite pass. Sources
