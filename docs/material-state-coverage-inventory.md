@@ -2,6 +2,49 @@
 
 ## Current audit pointer — October20
 
+Readonly CORE isolation COMPLETE for the tested public contract,not a fix:
+new bounded scripts/audit-public-readonly-editing.mjs reuses existing package-
+root public mount/native-control driver pattern. No Material/plugin,application
+callback,document update or compensating style. Exact paired SiteData is
+unchanged;real Home,x,Delete,Backspace atDPR1/2. Native readonly stays Atlas;
+candidate readonly becomes xAtlas→xtlas→tlas,remaining focused/readOnly=true.
+Four writable controls agree on that edit sequence;four disabled controls remain
+Atlas/unfocused.12 observations/six pairs,two failing readonly pairs,zero page/
+diagnostic errors. All2515 package/build input receipts authenticate before/after.
+This confirms a scoped public core control-default failure,not merely the
+showcase's Team→Solo normalization or a missing readonly semantic attribute.
+
+Report public-readonly-editing-recovered-20261020/latest-report.json
+SHA8a54156092f7f25fd64c546175ce5e7682636966c794f893209d1b10c5baedb0;
+producer60fcf3d822f15a7ccfefddc8590c0acfda4af914661c6897a06b2f4e39a5384f.
+Independent --verify authenticates captured input/bundle/HTML and all build
+receipts,six altered-evidence controls reject. Log
+public-readonly-editing-independent-20261020.log
+SHA9642dda3ecba5be6f85b6df7f6f5813e6963f615f0f24cb48d48db86f3a6daa4.
+Source applicability is bounded but direct:COMPLETE handleKeyboardEvent,
+handleTextInput,handleFocusedKeyDown,handleKeyboardInput,insertTextAtCursor and
+deleteCharacter bodies match CURRENT TS after ordinary compilation/AST formatting
+to the exact captured installed modules. No behavior is stripped or normalized
+away. Receipt public-readonly-owning-methods-20261020.log
+SHA4d4dd8440ab6c2a3c9c357b24fa6f6d00110f67b288284a86466b8d73500b81a.
+First owning divergence:focused text-keyboard defaults route mutating commands
+without enforcing element.readonly,despite correctly mirrored native readOnly.
+Implementation priority:guard mutating defaults at the shared control boundary,
+preserving keyboard event delivery,navigation,selection/copy,focus and allowed
+programmatic value updates;do NOT replace/patch the Material select fixture.
+Paste/cut,textarea,readonly updates,other types/keys/browsers,full current package
+and94 Material case closure remain separate/unproven. No criteria weakened.
+
+Initial public-readonly-editing-20261020 fails at OPTIONAL private-method
+observer before readonly trial. Its exact original producer9413cee8 is retained
+as failed-producer.mjs alongside failure.json/bundle/input/HTML;stderrdd4fc8dd.
+Recovery removes only the unavailable observer,not inputs/actions or assertions.
+The public failure/proof is standalone QUEUED evidence,not registered in165/219
+canonical inventories or the frozen e837 chip batch. New producer is outside
+explicit738 source inventory;no existing frozen source/input was edited. Next
+register/integrate this confirmed bounded defect with owning regression after
+chip publication,retaining original failures and the134 pending behavior scopes.
+
 Readonly-select gap changed the next action without reopening completed editing
 exclusions. Authenticated accepted3072 index372d4128 partitions authoredEditing:
 1734 inspected-authored-exclusions,443 applicable/partial writable cases,134

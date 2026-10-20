@@ -2,6 +2,16 @@
 
 ## Current versus historical evidence
 
+Retain public-readonly-editing-20261020 original failure directory/log pair and
+public-readonly-editing-recovered-20261020 complete public input/bundle/HTML/
+report plus log pair. Original failed producer bytes are separately preserved
+as failed-producer.mjs SHA9413cee80faa02b0e1ddd54e2ae4da65f58a01e58370bc7af57d01c3e3f20803.
+Keep public-readonly-editing-independent and public-readonly-owning-methods-
+20261020 log pairs. No screenshots are claimed/needed for this value-mutation
+contract;all twelve behavioral observations and2515 build receipts are retained.
+Standalone defect evidence remains outside frozen chip publication/current
+canonical165/219 counts. No original capture or source receipt overwritten.
+
 Retain readonly-select-keyboard-probe,readonly-select-keyboard-bound and
 readonly-select-intermediate-events-20261020 log pairs. First is historical
 checkpoint preflight failure before browser launch;second uses existing explicit
