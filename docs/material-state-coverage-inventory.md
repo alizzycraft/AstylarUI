@@ -83,6 +83,13 @@ Current conclusions only;earlier next/live statements in retained detail are his
   generated-descendant mapping across families,AX and interaction ownership.
   Shared frame/headings already map all2311 cases;do not repeat that survey.
   Full unfiltered audit/browser/unit/build/packed-consumer/release gates still apply.
+- Additional shared-descendant question answered outside433b:all600 retained
+  native button focus-indicator ::before pseudos are non-paint-eligible (366 not
+  generated/234 display:none);960 paired tree receipts and1200 rejection controls
+  authenticate the exact480-case population. No missing-visible-focus-pseudo
+  defect is inferred. Evidence:button-focus-indicator-applicability-20261020.log.
+  This is retained-state applicability,not forced-colors/current-browser/full
+  focus or structural equivalence;all other focus/hit/state-paint findings survive.
 
 ## October20 retained detail — bounded evidence and earlier steps
 

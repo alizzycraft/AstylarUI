@@ -2,6 +2,18 @@
 
 ## Current versus historical evidence
 
+Retain button-focus-indicator-applicability-20261020.log/empty stderr (terminal0,
+SHA256d666f3987bd0420ff0407f60b8f3c22ef9bfb975252f5594d29fc1521946d4b0).
+The exact inline producer is recorded in producerArgs. It reuses the600-owner/
+480-case newer touch mapping,authenticates960 paired trees and rejects1200
+wrong-parent/paint-eligible mutations. All366 not-generated and234 display:none
+native focus-indicator ::before records remain explicit,with matched rules.
+The generated cases retain the display token's fallback none;do not mistake
+content generation for visible paint or infer a new missing-focus-ring defect.
+This closes only retained pseudo-paint applicability,not event/hit/AX or forced-
+colors/current-browser equivalence. It is outside the frozen433b publication;
+no source finding,case closure or acceptance flag changes.
+
 Retain divider-property-coherent-export-20261020.log/stderr:session31650 terminal0,
 candidate90467e5a8a17a1b51f374c21aec44e1ef82734db34cd394c3abf2443e754936c.
 Accepted main pointer staysb661 pending conservation/independent cold/import.
