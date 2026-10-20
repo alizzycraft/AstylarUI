@@ -2,6 +2,18 @@
 
 ## Current versus historical evidence
 
+Retain scripts/join-material-current-divider-and-focus-evidence.mjs and both
+divider-current-and-focus-case-join[-recovered]-20261020 log pairs,plus initial
+failed-producer.mjs. First attempt incorrectly expected profile/viewport fields
+on review groups;it fails before saving a proposal. Recovery validates the exact
+encoded case identity and retains wrong-profile/viewport controls. Terminal0
+success authenticates15281 dependencies/2311 partial cases with1248 rejection
+controls. Queued local50315381bf02df83158d2743488dddd5aee827d4695f7047d49802c2637de44a
+adds504 children to234eb163;removing exactly those restores it completely.
+Keep the large ignored proposal local,not force-added to Git. Existing source
+proposal remains pending;frozen433b selection/cold check and all remaining
+inspection/rendering flags are untouched.
+
 Retain divider-current-browser-20261020 capture directory/all219 files (5254693B)
 and external log pair,plus divider-current-browser-verification-20261020 pair.
 Capture1941 and independent verification82127 terminate0. The unchanged maintained

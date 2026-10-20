@@ -27,3 +27,6 @@ artifacts/material-parity/button-focus-indicator-applicability-20261020.log -tex
 artifacts/material-parity/divider-current-browser-20261020/** -text
 artifacts/material-parity/divider-current-browser-verification-20261020.log -text
 artifacts/material-parity/divider-current-browser-20261020.log binary
+scripts/join-material-current-divider-and-focus-evidence.mjs -text
+artifacts/material-parity/divider-current-and-focus-case-join-20261020.failed-producer.mjs -text
+artifacts/material-parity/divider-current-and-focus-case-join-recovered-20261020.log -text

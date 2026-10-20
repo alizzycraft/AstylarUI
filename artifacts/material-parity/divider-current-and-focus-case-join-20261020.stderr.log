@@ -1,0 +1,21 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ undefined
+- 'light'
+
+    at validate (file:///D:/dev/github/AstylarUI-audit-integration/scripts/join-material-current-divider-and-focus-evidence.mjs:82:12)
+    at file:///D:/dev/github/AstylarUI-audit-integration/scripts/join-material-current-divider-and-focus-evidence.mjs:84:3 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: undefined,
+  expected: 'light',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.22.3

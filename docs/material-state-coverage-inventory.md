@@ -87,6 +87,12 @@ Current conclusions only;earlier next/live statements in retained detail are his
   Evidence:button-touch-case-join-20261020.log and
   scripts/join-material-button-touch-inputs.mjs. This is not selected for export
   or canonical;the running433b inputs are unchanged.
+- Latest QUEUED successor50315381 extends234eb163 with480 focus-pseudo
+  applicability children and24 fresh-divider execution children. Existing loader
+  authenticates15281 dependencies;1248 wrong-case/tree/profile/viewport controls
+  reject,and removing only504 additions restores the complete predecessor.
+  All2311 cases remain partial/unverified. No selection/registration/publication
+  change. Evidence:divider-current-and-focus-case-join-recovered-20261020.log.
 - Next:finish the running publication milestone;then register the bounded shared
   touch-descendant omission and existing unit limitation's interaction evidence,
   preserving suppressed/disabled distinctions. Continue component-owner/
