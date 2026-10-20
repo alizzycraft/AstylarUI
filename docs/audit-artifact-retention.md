@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+Retain case-index-policy-gate-repair and case-index-policy-gate-complete-20261020
+log pairs. Initial2/4 exposed stale producer-hash/error-stage test expectations
+after the policy entry repair;successful4/4 retains all full historical object
+comparisons and strict mutation rejection. No original report rewritten. The
+earlier read-only body-applicability receipt remains historical evidence of the
+entry-gate cause,not a receipt for the subsequently edited validator source.
+
 Retain queued chip proposal868daaec and chip-paint-case-join-20261020 log pair.
 It adds100 scoped children to76 chip cases,authenticates15180 dependencies and
 recovers completef471 predecessor after only those removals. Closed166896351

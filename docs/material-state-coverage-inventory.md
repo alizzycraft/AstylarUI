@@ -2,6 +2,27 @@
 
 ## Current audit pointer — October20
 
+Historical case-index entry gate repaired and owning suite passes4/4,zero skip/
+cancel/todo,128245.7206ms. Exact current policy59830913 now enters the EXISTING
+guarded restoration body (old55c7 support retained),which still proves complete
+135-definition3256863a and original132-definition7e939aec equality. No policy or
+producer source changed. Current producer expectation is actuala2771d8c,not its
+older7bb5 checkpoint;the complete saved report comparison remains unchanged after
+existing explicit metadata projection. Altered producer now rejects earlier in
+restoreTextBackingProducer;the test requires exact assertion code,expecteda277,
+actual mutated-source hash and owning stack,not a broad any-error allowance.
+Initial gate run2/4 is retained:case-index-policy-gate-repair-20261020.log
+SHA7864f5e5aa7d6e6f1ed4c7a7c13169fea24114613363ccf68ac9f016375e8eda.
+Successful case-index-policy-gate-complete-20261020.log
+SHAe12cfcde08fa935fc4861692611843e474aed32ff7b26d08319ee5b125c55f33.
+All nine saved report/non-receipt comparisons and mutation controls execute;
+saved reports/canonical3072 unchanged. This is an owning historical-conservation
+suite pass,not a new full harness,eleven-membership replay or release acceptance.
+Both edited case-index files remain outside explicit738 source inventory;their
+verification is explicit,not implied by that census. Next review queued868d
+selection and source reconciliation as a coherent batch;continue actual remaining
+structure/paint/interaction/AX/ownership/currentness obligations afterward.
+
 Queued chip case join COMPLETE through existing saveReviewProposal/receipt loader:
 proposal868daaecb79c16d632701361c4303197f5d2760aec70f4cdd5d138840decabe5
 adds76 localPaint.retainedChipFocusIndicatorRequests children and24 separate

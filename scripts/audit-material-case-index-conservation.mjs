@@ -43,8 +43,9 @@ export function verifyInputTreeHeadingExtension(bytes, expected) {
 export function policyProjection(bytes, expected) {
   let source = normalize(bytes);
   const actualCurrentSha256 = sourceHash(source);
-  if (actualCurrentSha256 === '55c7e9cf1c634ebd8b01409b1836d1513f24e0c5ada656ce16f591aee1fd50a2') {
-    // Reuse the existing exact four-registration/refinement reversal first.
+  if (['55c7e9cf1c634ebd8b01409b1836d1513f24e0c5ada656ce16f591aee1fd50a2',
+    '59830913045a108948c812fc4a9eb210c0a94a9466e1a3354db480a7e0bd110f'].includes(actualCurrentSha256)) {
+    // Reuse the existing exact registration/refinement reversal first.
     source = restoreInheritedMarginPolicyRefinement(source);
     const target = normalize(historical('987b631f', 'tests/material-parity/input-equivalence-policy.mjs'));
     assert.equal(sourceHash(target), '3256863af7432ce2d9e05e2cc2569bc7f68db5f9a063f718ef09594e13c2474f');
