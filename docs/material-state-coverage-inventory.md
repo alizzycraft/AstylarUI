@@ -13,9 +13,13 @@ their receipts; older "next" or "live" statements are not current instructions.
 - Selected,NOT published:e837c58e chip successor,176 additions beyond f471 across
   76 cases. Full predecessor/source preflight passes;five changed inventory files,
   738 total,733 unchanged,all219 proof records unchanged;source section9e74ce09.
-- Active publication job:session49114,launcher15672/worker26368,started13:39:48
-  local October20. chip-coherent-export-20261020 log pair. Verified live;keep
-  its existing inputs frozen and never restart merely because output is quiet.
+- Chip export session49114 completed exit0: candidate fc888710,decoded05f29bc9,
+  85699629 packed/2329461426 decoded bytes. Original chip-coherent-export-20261020
+  log pair retained. Readable report SHAe55333fd unchanged. NOT main acceptance.
+- Independent cold check session88232 (launcher17192/worker19380) and full
+  section-conservation session74946 (worker10152) are live. Preserve input freeze;
+  chip-independent-cold-check/chip-candidate-section-conservation-20261020 logs.
+  Accepted main remains3072/f471 pending conservation,cold success and main import.
 - New standalone result:public readonly keyboard mutation confirmed atDPR1/2,
   with writable/disabled controls and six current/installed method bodies bound.
   Public report8a541560;committed f8017c10.Outside frozen chip batch and current
