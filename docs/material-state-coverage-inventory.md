@@ -2,6 +2,28 @@
 
 ## Current audit pointer — October20
 
+Exact graphic successore837 is SELECTED,not canonical. New owning reader test
+loads2311 cases/15185 dependencies,removes ONLY76 graphic children and recovers
+COMPLETE868d predecessor;all cases/acceptance flags remain partial/unverified.
+Earlier full review/source-drift test also passes:2/2,zero skip/cancel/todo,
+73497.4113ms. Log chip-graphic-selected-integration-20261020.log
+SHA18006ff400403fdc7954f555499f0ec327941f41c5419946fa512fb89a9ded74.
+Batch source preflight reuses exact unchanged producer functions,authenticates
+accepted3072 source sectiond358bffc through Git d10 bytes,then accounts for
+five reviewed deltas among738 paths (733 unchanged,no additions/removals):paint
+suite,chip-position suite,review reader,store suite,export runner. Entire219-proof
+sectionf1597df7 is unchanged,including line anchors/order/descriptions. New source
+section9e74ce09. Log chip-graphic-selected-source-census-20261020.log
+SHA23680b9f4764b73193f7fbcb3a5ffd3659b4df728c8293c9717ead684b62d57b.
+Named launcher dry-run log62b23f88 checks paths/arguments only;unknown digests
+remain rejected and five historical transitions unchanged. Launcher,chip join
+and two case-index files remain separately checked outside explicit738 inventory.
+Original accepted3072/f471 is unchanged. The coherent accumulated chip batch
+(100 paint plus76 graphic children and owning proofs) now justifies ONE export
+milestone after source freeze,then full content conservation,independent cold
+check and validated import before publication. Not a full export per metadata
+edit;no browser recapture or final gate claim. All original criteria remain.
+
 Graphic dispositions joined with EXISTING proposal/receipt helpers,no new
 framework or collector:queued successor
 e837c58e3b9c0594f6003a6001a03cb12b4fa875403db08724e9c9defb329854

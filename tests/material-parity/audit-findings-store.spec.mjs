@@ -4,7 +4,7 @@ import * as fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { importFindings, queryFindings, verifyFindings, saveReviewProposal, loadFindingEvidence, loadCaseObligationReview, attachCaseObligationCoverage, assertCaseObligationCoverage, caseInspectionObligations, describeCaseInspectionCoverage } from '../../scripts/audit-findings-store.mjs';
-import { createTextBackingReviewReader, textBackingRetainedReview, createDividerReviewedBoundariesReader, dividerReviewedBoundariesReview, inactiveParagraphInputsReview, filledFieldStructureReview, chipPaintReview } from './text-backing-case-review-source.mjs';
+import { createTextBackingReviewReader, textBackingRetainedReview, createDividerReviewedBoundariesReader, dividerReviewedBoundariesReview, inactiveParagraphInputsReview, filledFieldStructureReview, chipPaintReview, chipGraphicReview } from './text-backing-case-review-source.mjs';
 
 test('reviewed divider boundary reader validates exact queued cases and rejects source drift',()=>{
   const root=process.cwd(),file=`artifacts/material-parity/working-audit/proposals/${dividerReviewedBoundariesReview}.json`;
@@ -428,4 +428,31 @@ test('compact findings preserve counts, missing values and evidence links; corru
     fs.writeFileSync(path.join(root, encoded.manifest.payload), 'corrupted');
     await assert.rejects(importFindings(root, destination));
   } finally { fs.rmSync(root, { recursive: true, force: true }); }
+});
+
+test('reviewed chip graphics reader preserves exact predecessor and all partial dispositions', () => {
+  const root=process.cwd(),file=`artifacts/material-parity/working-audit/proposals/${chipGraphicReview}.json`;
+  const review=JSON.parse(fs.readFileSync(file)).review;
+  const reader=createDividerReviewedBoundariesReader({root,read:fs.readFileSync,reviewSha256:chipGraphicReview});
+  assert.equal(reader.sourceApplicability.transitions.length,5);
+  const result=loadCaseObligationReview(file,chipGraphicReview,review.groups.map(g=>g.case),{root,read:reader.read});
+  assert.equal(result.evidenceFingerprints.length,15185);assert.equal(result.cases.length,2311);
+  assert.equal(result.inspectionComplete,false);assert.equal(result.currentRenderingAccepted,false);
+  let children=0,selected=0,unselected=0;
+  for(const group of review.groups){
+    assert.equal(group.inspection,'partial');assert.equal(group.currentRendering,'unverified');
+    const child=group.obligations.inputStyleStructure.retainedChipGraphicInputs;if(!child)continue;
+    assert.equal(group.family,'chips');assert.equal(child.observations.length,2);
+    assert.equal(child.selectedClassification,'application-plugin-authoring-defect');
+    assert.match(child.currentSourceGeometry.scope,/not actual historical mesh vertices or current pixels/);
+    for(const row of child.observations){
+      assert.equal(row.reference.svg.viewBox,'-2 -3 30 30');
+      if(row.selected){selected++;assert.equal(row.candidate.authored.type,'showcase.material:check-mark');}
+      else{unselected++;assert.equal(row.candidate,null);assert.equal(row.reference.check.opacity,'0');
+        assert.equal(row.reference.graphic.paddingLeft,'6px');assert.equal(row.reference.graphic.flexGrow,'1');}
+    }
+    delete group.obligations.inputStyleStructure.retainedChipGraphicInputs;children++;
+  }
+  assert.deepEqual({children,selected,unselected},{children:76,selected:120,unselected:32});
+  assert.equal(createHash('sha256').update(JSON.stringify(review)).digest('hex'),chipPaintReview);
 });

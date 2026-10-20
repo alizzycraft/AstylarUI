@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+Retain chip-graphic-selected-integration,chip-graphic-selected-source-census and
+chip-graphic-selected-launcher-20261020 log pairs. They prove exacte837 selection,
+complete868d predecessor recovery and five-file/219-proof source preflight,not
+coherent export or current rendering. Keep accepted3072 and both queued chip
+predecessors. The accumulated chip batch is ready for one frozen milestone;
+no old capture/report/source receipt is replaced by the dry-run result.
+
 Retain queued graphic proposale837c58e and chip-graphic-case-join-20261020 log
 pair.76 scoped additions recover complete868d predecessor after only their
 removal;15185 receipts authenticate. Closed167818927 logical bytes occupy
