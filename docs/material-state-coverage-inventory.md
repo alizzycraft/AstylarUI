@@ -4,6 +4,37 @@
 
 Updated October21. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- Shared-touch compact conservation TERMINAL0:all2311 prior case objects and
+  complete coverage recover after exactly480 touch+480 focus+24 fresh-divider
+  children,64 added receipts,two review IDs and two authenticated current-source
+  fingerprint transitions(policy/semantic helper). Complete summary/counts change
+  only sourceFindings170→171. Evidence:button-touch-metadata-conservation-recovered-
+  20261021.log;first failed comparison omitted the two source transitions and is
+  retained separately,not waived. Exact whole-source restoration authenticates both.
+- Independent cold check57898 is live with ASTYLAR_AUDIT_COLD=1 and --check via
+  the same complete-baseline launcher. Logs:button-touch-independent-cold-20261021
+  and stderr pair. Full section comparison24003 remains live;accepted main90467
+  unchanged. Candidate/package and consumed sources remain frozen. No case closes.
+
+- Coherent50315381 export91197 is now TERMINAL0 (complete3692020ms),superseding
+  earlier live statements. Written candidate8259d4f708e5ffec9a55f629674cdd2c4811c56937fab36b1004207bde2b6f6c:
+  87471098 compressed/2332689868 decoded bytes;decodedSHA
+  9795e6e8e67af3ef0cf2fc3cbdf12b134e0ab9dd3520c3dc6748a57874097f9e.
+  Export reports436/436 static,1875/1875 interaction,8483 discrepancies/389202
+  occurrences/171 findings;inputEquivalent remains false. Session authenticated
+  16471 files/1700122566 bytes;one disk hit,ten memory hits,one collector. This is
+  NOT independent cold validation. Accepted working pointer remains90467.
+- Candidate import57363 and complete section comparison24003 are live;logs
+  button-touch-candidate-import and button-touch-full-section-comparison-20261021
+  with stderr pairs. Comparison reuses the prior authenticated90467 section digest
+  record and authenticates complete candidate compressed/decoded payloads. Wait
+  for terminal results before conclusions;then explain changed sections/metadata
+  and run independent cold check before accepted main import. Sources stay frozen.
+- Candidate import57363 now TERMINAL0:8259d4f7/index84421c53d880bb3c5241888e61859accf883acb58e1c4e3d2d9a747ea601fb3a.
+  Counts8483 discrepancies/171 findings/39904 controls/389202 occurrences/0 unresolved
+  scalar groups. These counts are not complete inspection or input equivalence.
+  Full section comparison24003 remains pending;accepted main90467 is unchanged.
+
 - Live-ripple timing boundary:original Material-worktree runner bytes authenticate
   checkpoint SHA b2477a124293aec6bba3a2413ff58d41f409288dcf0cb53a54ed17d162b9fa97.
   It measures input trees before captureInteractionImage;that helper screenshots

@@ -2,6 +2,22 @@
 
 ## Current versus historical evidence
 
+Shared-touch compact conservation recovered check is terminal0. Retain both
+button-touch-metadata-conservation[-recovered]-20261021 log pairs. Initial check
+preserves all2311 cases but fails complete coverage comparison because it omits
+two actual source-fingerprint transitions;recovery authenticates whole-source
+reversals,not a generic ignored-field comparison. Original assertions remain.
+Independent cold57898 is live;retain button-touch-independent-cold-20261021 pair
+and do not commit live logs as completed evidence. Full section comparison24003
+remains separate. No main import or rendering acceptance is claimed.
+
+Shared-touch export91197 terminates0,complete3692020ms. Retain both button-touch-
+coherent-export-20261021 logs and candidate8259d4f7 package. Export uses one disk
+hit,so it is not the independent cold gate. Accepted90467 store/pointer and all
+prior evidence remain required. Candidate import57363/full-section comparison
+24003 are live;retain their log pairs and do not describe them as passing yet.
+No sources consumed by export/cold validation are changed during this milestone.
+
 Retain both button-live-ripple-capture-order[-recovered]-20261021 log pairs.
 Original invocation fails shell/JavaScript parsing before assertions;recovered
 invocation authenticates exact original b2477a12 runner and records measurement/
