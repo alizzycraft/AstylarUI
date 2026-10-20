@@ -2,6 +2,17 @@
 
 ## Current versus historical evidence
 
+Retain divider-property-review-selection-20261020.log/empty stderr and divider-
+property-pre-export-source-census-20261020.log/empty stderr. Three selected owning
+tests pass;all original store assertions remain an exact prefix. Launcher/runner/
+helper whole predecessors recover after only the declared selection/current-source
+check additions. Existing source inventory remains756;reversing three reviewed
+hash changes recovers accepted5b971ab5 completely;226 proofs/170 findings conserve.
+433b is selected but NOT yet exported/canonical. Its reader authenticates12 current
+source references through the existing session reader without replacing historical
+keys. Keep new and original review evidence;do not claim a dry-run/census/test pass
+as publication,current rendering or whole-audit acceptance.
+
 Retain queued case proposal433b794f0a1d51b7592fb9932fab3fe6c6376c1412958f7aafca089e509799b2
 under working-audit/proposals with scripts/join-material-divider-property-contexts.mjs
 and divider-property-context-case-join-20261020.log/empty stderr. Envelope169754728B,

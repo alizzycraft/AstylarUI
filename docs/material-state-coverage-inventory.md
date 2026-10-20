@@ -154,11 +154,26 @@ Current conclusions only;earlier next/live statements in chronology are historic
   case-join-20261020 stdout/empty stderr (terminal0). Proposal envelope169754728B,
   SHA9a1b9e38ba8ee916b52707db87f38b6f84a7df99d181383789a1f353950afd6f.
   Historical source receipt keys remain unchanged;current sources were separately
-  rehashed/referenced rather than substituted. This proposal is NOT selected,
-  registered/exported or canonical;acceptedb661/736e remains unchanged.
-  Next:bounded review-selection/source-inventory reconciliation and owning checks
-  for this coherent batch,then justified canonical milestone. Continue complete
+  rehashed/referenced rather than substituted. Review selection is now prepared
+  and verified below;it is NOT exported/canonical;acceptedb661/736e stays unchanged.
+  Next:justified canonical milestone for this coherent batch. Continue complete
   owner/alignment/AX/event-lifetime/current-runtime gaps afterward;final gates stay.
+- Export preflight for433b:launcher/runner select only the exact reviewed digest;
+  original reviews and unknown-digest rejection survive. Reader additionally
+  authenticates12 unique current source references through the supplied session
+  reader and reports them separately from five historical source transitions.
+  Three owning checks pass (new review,complete prior control join,append/source
+  conservation and drift rejection),0 failures/skips. Existing original suite
+  prefix and complete helper/runner/launcher predecessors recover exactly.
+  divider-property-review-selection-20261020 log pair records terminal0.
+  Production source/proof/findings census stays756/226/170. Reversing ONLY helper,
+  runner and appended store-suite fingerprints recovers full accepted source
+  section5b971ab5;complete proof4e2af61e/finding37576bac sections are unchanged.
+  No producer/policy/renderer/fixture change. New12-source applicability is tracked
+  by review/session coverage,not falsely counted as newly registered scalar proofs.
+  divider-property-pre-export-source-census-20261020 log pair records terminal0.
+  Export/candidate conservation/independent cold comparison/import remain required
+  before calling433b canonical. Full original final gates remain required.
 
 ## Audit chronology — retained evidence, newest first
 

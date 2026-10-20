@@ -1,0 +1,51 @@
+{
+  "producerArgs": [
+    "--input-type=module",
+    "-e",
+    "import ts from \"typescript\";import fs from \"node:fs\";import path from \"node:path\";import {createHash} from \"node:crypto\";import {execFileSync} from \"node:child_process\";import assert from \"node:assert/strict\";import {sourceAuditDefinitions} from \"./tests/material-parity/input-equivalence-policy.mjs\";import {sectionDigests} from \"./scripts/material-audit-section-digests.mjs\";const hash=v=>createHash(\"sha256\").update(v).digest(\"hex\"),file=\"tests/material-parity/input-equivalence-audit.mjs\",source=fs.readFileSync(file,\"utf8\"),ast=ts.createSourceFile(file,source,99,true),names=[\"scanMaterialSources\",\"sourceFingerprints\",\"focusedProofInventory\",\"proof\"];const bodies=names.map(name=>{const node=ast.statements.find(n=>ts.isFunctionDeclaration(n)&&n.name?.text===name);assert.ok(node);return node.getText(ast);}).join(\"\\n\");const f=new Function(\"readFileSync\",\"path\",\"createHash\",\"sourceAuditDefinitions\",bodies+\"\\nreturn {scanMaterialSources,sourceFingerprints,focusedProofInventory};\")(fs.readFileSync,path,createHash,sourceAuditDefinitions);const sources=f.sourceFingerprints(process.cwd()),proofs=f.focusedProofInventory(process.cwd()),findings=f.scanMaterialSources(process.cwd());assert.deepEqual([sources.length,proofs.length,findings.length],[756,226,170]);assert.ok(proofs.every(p=>p.status!==\"missing\"));assert.ok(findings.every(f=>f.detected));const restored=structuredClone(sources),changes=[];for(const file of [\"tests/material-parity/text-backing-case-review-source.mjs\",\"scripts/run-material-input-audit.mjs\",\"tests/material-parity/audit-findings-store.spec.mjs\"]){const row=restored.find(r=>r.file===file);assert.ok(row);const before=hash(execFileSync(\"git\",[\"show\",\"15af5b13:\"+file],{maxBuffer:4000000}).toString().replaceAll(\"\\r\\n\",\"\\n\"));assert.notEqual(before,row.sha256);changes.push({file,before,after:row.sha256});row.sha256=before;}const sections=await sectionDigests([Buffer.from(JSON.stringify({sourceFingerprints:restored,focusedProofs:proofs,sourceFindings:findings}))]);for(const [name,expected]of [[\"sourceFingerprints\",\"5b971ab52e7f80448e9f65ac1d8f51b1233322fb1a5ae7e31b80df2213db2fc7\"],[\"focusedProofs\",\"4e2af61eb73d9cf3c355c6bc9756b8b69ac8562c1eea8584dad4890ccc734782\"],[\"sourceFindings\",\"37576baca1835749da538196a70b44238623c5d02b3a4b0cc456ac1ad66dd765\"]])assert.equal(sections.find(s=>s.name===name).sha256,expected,name);console.log(JSON.stringify({producerArgs:process.execArgv,kind:\"divider-property-pre-export-source-reconciliation\",counts:{sources:sources.length,proofs:proofs.length,findings:findings.length},changes,completeAcceptedSectionsRecovered:sections,producerSha256:hash(source.replaceAll(\"\\r\\n\",\"\\n\")),canonicalUnchanged:true,newSourcesTrackedThrough:\"Selected review sourceApplicability.currentSourceChecks authenticates12 source files through session reader;no new scalar finding/proof or producer registration.\",boundary:\"Source/proof/findings census only. Selection tests independently validate case joins. Not canonical publication,browser parity or full audit acceptance.\"},null,2));"
+  ],
+  "kind": "divider-property-pre-export-source-reconciliation",
+  "counts": {
+    "sources": 756,
+    "proofs": 226,
+    "findings": 170
+  },
+  "changes": [
+    {
+      "file": "tests/material-parity/text-backing-case-review-source.mjs",
+      "before": "711a706d07e7be74b2e66bfe482f3609690fdbf2544298f30f98940de3806f12",
+      "after": "36f828cd27ec32129d21fa492c736d46587e7c31360ceb505fc9e37c8a396590"
+    },
+    {
+      "file": "scripts/run-material-input-audit.mjs",
+      "before": "9a151542be7aed4d78edb3408b77f9a3f6ccf43b9daf340b004847e6cb87f2f6",
+      "after": "37235faee8d356b7780c6497d56cc9a92b3f95ec791e3c0794c632e07606a85e"
+    },
+    {
+      "file": "tests/material-parity/audit-findings-store.spec.mjs",
+      "before": "92183be2cbd7bd65f8c868a7d4b11ffbe274b79e2a660d852759f671009c5675",
+      "after": "cc5e6ba9a9dfd9abd7cdc61eec71e1241faf0ea978524ca26b49822f1ebe1bbb"
+    }
+  ],
+  "completeAcceptedSectionsRecovered": [
+    {
+      "name": "sourceFingerprints",
+      "tokens": 7561,
+      "sha256": "5b971ab52e7f80448e9f65ac1d8f51b1233322fb1a5ae7e31b80df2213db2fc7"
+    },
+    {
+      "name": "focusedProofs",
+      "tokens": 4069,
+      "sha256": "4e2af61eb73d9cf3c355c6bc9756b8b69ac8562c1eea8584dad4890ccc734782"
+    },
+    {
+      "name": "sourceFindings",
+      "tokens": 13705,
+      "sha256": "37576baca1835749da538196a70b44238623c5d02b3a4b0cc456ac1ad66dd765"
+    }
+  ],
+  "producerSha256": "d97e15b446f6fe5c53688f3ff504fed86dd1793d0912cb39f374a77abe9c6ea7",
+  "canonicalUnchanged": true,
+  "newSourcesTrackedThrough": "Selected review sourceApplicability.currentSourceChecks authenticates12 source files through session reader;no new scalar finding/proof or producer registration.",
+  "boundary": "Source/proof/findings census only. Selection tests independently validate case joins. Not canonical publication,browser parity or full audit acceptance."
+}

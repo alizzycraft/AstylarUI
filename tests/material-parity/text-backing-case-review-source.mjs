@@ -11,6 +11,7 @@ export const filledFieldStructureReview='f471932bd9ed51a2df35d533632acafc5e4788d
 export const chipPaintReview='868daaecb79c16d632701361c4303197f5d2760aec70f4cdd5d138840decabe5';
 export const chipGraphicReview='e837c58e3b9c0594f6003a6001a03cb12b4fa875403db08724e9c9defb329854';
 export const controlInputReview='736e685c55bf033db3d0ffc5b564e2ed42648438e1ed0b3ab66b7f26ed83d8bd';
+export const dividerPropertyContextReview='433b794f0a1d51b7592fb9932fab3fe6c6376c1412958f7aafca089e509799b2';
 const hash=b=>createHash('sha256').update(b).digest('hex');
 export function restoreInputBoundaryReadonlyAppend(source){
   const text=source.toString().replaceAll('\r\n','\n');
@@ -56,7 +57,7 @@ export function restoreQueuedControlHelperSource(source){
 export function createDividerReviewedBoundariesReader({root,read,reviewSha256}){
   // Both exact reviews retain the same pre-extension alignment-suite receipt.
   // Supporting the predecessor does not change the three-source base contract.
-  assert.ok([textBackingRetainedReview,dividerReviewedBoundariesReview,inactiveParagraphInputsReview,filledFieldStructureReview,chipPaintReview,chipGraphicReview,controlInputReview].includes(reviewSha256));
+  assert.ok([textBackingRetainedReview,dividerReviewedBoundariesReview,inactiveParagraphInputsReview,filledFieldStructureReview,chipPaintReview,chipGraphicReview,controlInputReview,dividerPropertyContextReview].includes(reviewSha256));
   const owner='scripts/join-material-divider-paint-boundaries.mjs';
   const source=read(path.resolve(root,owner),'utf8');
   assert.equal(hash(source),'b187103f2f773955dd97ea3e0ee4e0b5d4b4b9faab4af0ebb6fe5d6627f681da');
@@ -73,8 +74,29 @@ export function createDividerReviewedBoundariesReader({root,read,reviewSha256}){
   const {trackedRead}=new Function('assert','readFileSync','hash','path','createTextBackingReviewReader','predecessor',
     `${boundary}\nreturn {trackedRead};`)(assert,read,hash,path,createBase,textBackingRetainedReview);
   const suite='tests/material-parity/alignment-crop-provenance.spec.mjs';
+  const currentSourceChecks=[];
+  if(reviewSha256===dividerPropertyContextReview){
+    const file=path.resolve(root,`artifacts/material-parity/working-audit/proposals/${reviewSha256}.json`);
+    const envelope=JSON.parse(read(file));
+    assert.equal(envelope.sha256,reviewSha256);assert.equal(hash(JSON.stringify(envelope.review)),reviewSha256);
+    const groups=envelope.review.groups.filter(group=>group.family==='divider');assert.equal(groups.length,24);
+    const checked=new Map();
+    for(const group of groups){
+      const child=group.obligations.inputStyleStructure.retainedDividerPropertyContexts;assert.ok(child);
+      for(const reference of child.evidence.currentSources){
+        const file=reference.currentFile,expected=reference.currentSha256;
+        assert.ok(typeof file==='string'&&!path.isAbsolute(file)&&!file.split(/[\\/]/).includes('..'));
+        assert.match(expected,/^[a-f0-9]{64}$/);
+        if(checked.has(file)){assert.equal(checked.get(file),expected);continue;}
+        assert.equal(hash(read(path.resolve(root,file))),expected,`Queued divider current source changed: ${file}`);
+        checked.set(file,expected);currentSourceChecks.push({file,sha256:expected});
+      }
+    }
+    assert.equal(currentSourceChecks.length,12);
+  }
   return {read:trackedRead,sourceApplicability:{
     mode:'explicit-reviewed-divider-boundaries-historical-review',reviewSha256,
+    ...(currentSourceChecks.length?{currentSourceChecks}:{}),
     transitions:[...baseReader.sourceApplicability.transitions,{
       logicalFile:suite,currentSha256:hash(read(path.resolve(root,suite))),
       historicalSha256:hash(trackedRead(path.resolve(root,suite))),

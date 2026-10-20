@@ -691,3 +691,77 @@ test('retained control input join preserves every predecessor case and bounds fi
   assert.deepEqual(counts, { checkbox: 68, selected: 52, ink: 8, inkMismatch: 6, select: 40 });
   assert.equal(createHash('sha256').update(JSON.stringify(review)).digest('hex'), chipGraphicReview);
 });
+
+test('retained divider property context review binds exact cases without promoting inspection', async () => {
+  const { dividerPropertyContextReview, controlInputReview } = await import('./text-backing-case-review-source.mjs');
+  const file = `artifacts/material-parity/working-audit/proposals/${dividerPropertyContextReview}.json`;
+  const review = JSON.parse(fs.readFileSync(file)).review;
+  const reader = createDividerReviewedBoundariesReader({ root: process.cwd(), read: fs.readFileSync,
+    reviewSha256: dividerPropertyContextReview });
+  assert.equal(reader.sourceApplicability.transitions.length, 5);
+  assert.equal(reader.sourceApplicability.currentSourceChecks.length, 12);
+  const loaded = loadCaseObligationReview(file, dividerPropertyContextReview, review.groups.map(g => g.case), { read: reader.read });
+  assert.equal(loaded.evidenceFingerprints.length, 15217); assert.equal(loaded.cases.length, 2311);
+  assert.equal(loaded.inspectionComplete, false); assert.equal(loaded.currentRenderingAccepted, false);
+  let contexts = 0, lineBoxes = 0, nativePaint = 0;
+  for (const group of review.groups) {
+    assert.equal(group.inspection, 'partial'); assert.equal(group.currentRendering, 'unverified');
+    const input = group.obligations.inputStyleStructure?.retainedDividerPropertyContexts;
+    if (input) {
+      contexts++; assert.equal(group.family, 'divider');
+      assert.equal(input.rows.domains.length, 2); assert.equal(input.rows.clamps.length, 4); assert.equal(input.rows.flex.length, 12);
+      if (group.case.startsWith('static:')) {
+        assert.equal(input.rows.lineBox.case, group.case); lineBoxes += input.rows.lineBox.observations.length;
+      } else assert.equal(input.rows.lineBox, undefined);
+      assert.match(input.boundary, /No full dimension\/renderer execution/);
+      delete group.obligations.inputStyleStructure.retainedDividerPropertyContexts;
+    }
+    const paint = group.obligations.localPaint?.freshNativeDividerPropertyControls;
+    if (paint) {
+      nativePaint++; assert.equal(group.case, 'static:divider@light/desktop');
+      assert.equal(paint.runtime.historicalBrowserReplay, false); assert.equal(paint.evidence.images.length, 17);
+      delete group.obligations.localPaint.freshNativeDividerPropertyControls;
+    }
+  }
+  assert.deepEqual({ contexts, lineBoxes, nativePaint }, { contexts: 24, lineBoxes: 32, nativePaint: 1 });
+  assert.equal(createHash('sha256').update(JSON.stringify(review)).digest('hex'), controlInputReview);
+});
+
+test('retained divider property source selection conserves prior owners and rejects drift', async () => {
+  const { execFileSync } = await import('node:child_process');
+  const { dividerPropertyContextReview } = await import('./text-backing-case-review-source.mjs');
+  const previous = file => execFileSync('git', ['show', `15af5b13:${file}`],
+    { encoding: 'utf8', maxBuffer: 3_000_000 }).replaceAll('\r\n', '\n');
+  const helperFile = 'tests/material-parity/text-backing-case-review-source.mjs';
+  let helper = fs.readFileSync(helperFile, 'utf8').replaceAll('\r\n', '\n');
+  const blockStart = helper.indexOf('  const currentSourceChecks=[];');
+  const blockEnd = helper.indexOf('  return {read:trackedRead,sourceApplicability:{', blockStart);
+  assert.ok(blockStart > 0 && blockEnd > blockStart);
+  helper = helper.slice(0, blockStart) + helper.slice(blockEnd);
+  helper = helper.replace(`export const dividerPropertyContextReview='${dividerPropertyContextReview}';\n`, '')
+    .replace(',controlInputReview,dividerPropertyContextReview]', ',controlInputReview]')
+    .replace('    ...(currentSourceChecks.length?{currentSourceChecks}:{}),\n', '');
+  assert.equal(helper, previous(helperFile));
+  const runner = 'scripts/run-material-input-audit.mjs';
+  assert.equal(fs.readFileSync(runner, 'utf8').replaceAll('\r\n', '\n')
+    .replace(', controlInputReview, dividerPropertyContextReview }', ', controlInputReview }')
+    .replace(',controlInputReview,dividerPropertyContextReview]', ',controlInputReview]'), previous(runner));
+  const launcher = 'scripts/export-material-input-audit-current-ancestry.mjs';
+  assert.equal(fs.readFileSync(launcher, 'utf8').replaceAll('\r\n', '\n')
+    .replaceAll(dividerPropertyContextReview, '736e685c55bf033db3d0ffc5b564e2ed42648438e1ed0b3ab66b7f26ed83d8bd'), previous(launcher));
+  const suite = 'tests/material-parity/audit-findings-store.spec.mjs';
+  const current = fs.readFileSync(suite, 'utf8').replaceAll('\r\n', '\n');
+  const append = current.indexOf("\ntest('retained divider property context review binds exact cases without promoting inspection'");
+  assert.ok(append > 0); assert.equal(current.slice(0, append), previous(suite));
+  const root = process.cwd(), target = path.resolve(root, 'scripts/check-divider-paragraph-constraint-inputs.mjs');
+  assert.throws(() => createDividerReviewedBoundariesReader({ root, reviewSha256: dividerPropertyContextReview,
+    read(file, ...args) {
+      const bytes = fs.readFileSync(file, ...args);
+      return path.resolve(file) === target ? Buffer.concat([Buffer.from(bytes), Buffer.from('\n// changed source')]) : bytes;
+    } }), /Queued divider current source changed/);
+  assert.throws(() => createDividerReviewedBoundariesReader({ root, read: fs.readFileSync, reviewSha256: '0'.repeat(64) }));
+  const invocation = JSON.parse(execFileSync(process.execPath,
+    [launcher, '--dry-run'], { encoding: 'utf8' }));
+  assert.ok(invocation.args.includes(`--case-obligation-review-sha256=${dividerPropertyContextReview}`));
+  assert.ok(invocation.args.some(arg => arg.endsWith(`/proposals/${dividerPropertyContextReview}.json`)));
+});
