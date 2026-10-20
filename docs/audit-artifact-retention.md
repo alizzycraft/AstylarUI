@@ -2,6 +2,20 @@
 
 ## Current versus historical evidence
 
+Retain divider-flex-context-inputs-final-20261020.log (SHA256
+762f23bf2d0f9e94876cb14367c2ed0e1f582d694ae5976c2cd35daf4391f513),empty stderr
+and scripts/check-divider-flex-context-inputs.mjs. Keep initial and recovered log
+pairs and their failed-producer snapshots. Initial lexical equality rejected
+redundant arithmetic grouping;the recovered structural comparison then rejected
+empty-block whitespace. Final AST comparison ignores only grouping wrappers and
+non-token empty-container spelling,retains expression hierarchy,and explicitly
+distinguishes (a+b)*c from a+b*c. This is bounded source applicability,not a
+general source-equivalence framework or a waived production assertion. Exact
+partition/dispatch execution covers24 cases/96 owners/three stages with147 positive
+controls. Downstream layout,creation and grid exclusion are mocked. No current
+browser,normal/stretch alignment equivalence or case closure follows;acceptedb661
+remains unchanged pending coherent registration and exact-case integration.
+
 Retain divider-paragraph-constraint-inputs-final-20261020.log (SHA256
 8be7667a27f58b57d5f91e0a15e1e9be51616f191a3f6492f7ae272f64a51132) and its
 empty stderr with scripts/check-divider-paragraph-constraint-inputs.mjs. Retain

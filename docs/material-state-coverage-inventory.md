@@ -124,6 +124,25 @@ Current conclusions only;earlier next/live statements in chronology are historic
   b661 stays unchanged;these supplements await a coherent registration/case-join
   batch rather than an unchanged full export. Remaining priority:alignment and
   complete owner mapping,then exact joins/AX/event-lifetime/current-runtime gaps.
+- Queued flex-context question answered for the same24 retained divider cases:
+  all96 paragraph/span owners retain five flex-item fields (order,grow,shrink,
+  basis,self-alignment),but do not enter flex-item sizing in their recorded
+  contexts. Exact current/installed/captured partition and dispatch methods
+  conserve as expression ASTs;redundant parentheses/empty-block whitespace are
+  ignored without erasing arithmetic grouping. All72 root-stage executions send
+  three positioned children to creation with no flex-assigned position/size;
+  all144 paragraph-stage executions route the span inline.147 positive controls
+  include changed-display dispatch and hidden/fixed/flow classification. All
+  current source,captured-module and tree receipts independently rehashed.
+  Evidence:check-divider-flex-context-inputs.mjs and divider-flex-context-inputs-
+  final-20261020.log SHA762f23bf2d0f9e94876cb14367c2ed0e1f582d694ae5976c2cd35daf4391f513.
+  Downstream layout/creation and grid exclusion are mocked;not geometry or full
+  runtime proof. Native block-root/static paragraphs versus candidate flex-root/
+  absolute paragraphs remain unequal authoring. alignContent/alignItems/
+  justifyContent normal/stretch/flex-start equivalence remains OPEN. No scalar
+  classifications changed. Next coherent step:join queued line-box,property-domain,
+  constraint and flex-context evidence to exact existing case obligations before
+  further owner mapping;do not export an unchanged producer as integration.
 
 ## Audit chronology — retained evidence, newest first
 

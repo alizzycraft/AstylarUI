@@ -1,0 +1,42 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    307,
+    [
+      [
+        263,
+...
+                                                241,
++                                               '{}'
+-                                               '{\n            }'
+                                              ]
+                                            ]
+                                          ],
+                                          [
+                                            253,
+
+    at file:///D:/dev/github/AstylarUI-audit-integration/scripts/check-divider-flex-context-inputs.mjs:56:48
+    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    307,
+    [ [ 263, [ [ 80, 'Owner' ], [ 174, [Array] ] ] ], [ 1, '' ] ]
+  ],
+  expected: [
+    307,
+    [ [ 263, [ [ 80, 'Owner' ], [ 174, [Array] ] ] ], [ 1, '' ] ]
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.22.3
