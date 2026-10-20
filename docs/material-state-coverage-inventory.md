@@ -88,6 +88,13 @@ Current conclusions only;earlier next/live statements in retained detail are his
   reject,and removing only504 additions restores the complete predecessor.
   All2311 cases remain partial/unverified. No selection/registration/publication
   change. Evidence:divider-current-and-focus-case-join-recovered-20261020.log.
+- Touch registration now has an owning regression gate:three tests in
+  tests/material-parity/button-touch-inputs.spec.mjs pass,including exact600-owner
+  replay/1200 controls,complete170-definition conservation and the still-failing
+  percentage matrix versus passing literals. Source proposala79bdf44 is now
+  checked in (278716B),not just local. Initial disposal-field assertion failure
+  and source remain retained;recovered test uses the actual disposed.disposed field.
+  No registered definition/proof/source counts changed in this increment.
 - Next:register the bounded shared
   touch-descendant omission and existing unit limitation's interaction evidence,
   preserving suppressed/disabled distinctions. Continue component-owner/

@@ -2,6 +2,21 @@
 
 ## Current versus historical evidence
 
+Retain tests/material-parity/button-touch-inputs.spec.mjs,both button-touch-owning-
+regressions[-recovered]-20261020 log pairs,and initial failed-source.mjs. The first
+run passes two tests and fails the third because the captured disposal result is
+an object,not a boolean. Recovery requires disposed.disposed===true for all32
+captures;all other assertions remain. Three tests pass without browser recapture,
+canonical rebuild or definition registration. They replay600 original owners,
+preserve276/294/30 suppression distinctions and keep the percentage matrix a
+failure despite passing literal controls. Source proposala79bdf44 is278716B and
+now checked in with byte preservation,unlike large ignored case-review proposals.
+Its complete171-entry proposed vector preserves the exact170 registered entries;
+the owning test accepts only the exact pre-registration or exact proposed stage,
+not arbitrary counts,classification changes or other registry drift.
+Original failing TAP stdout contains indented blank diagnostic lines;binary Git
+storage retains them unchanged rather than editing failure evidence for formatting.
+
 Divider publication is now complete:independent cold98069,recovered main import
 72083 and main verification terminate0. Retain both independent-cold logs,both
 main-import[-recovered] pairs and main-verification pair. Initial main-import

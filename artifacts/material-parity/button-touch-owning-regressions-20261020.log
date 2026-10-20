@@ -1,0 +1,48 @@
+TAP version 13
+# Subtest: shared button touch proposal preserves all prior definitions and the existing core unit limitation
+ok 1 - shared button touch proposal preserves all prior definitions and the existing core unit limitation
+  ---
+  duration_ms: 11.0795
+  type: 'test'
+  ...
+# Subtest: shared button touch retained input proof replays all owners without promoting suppressed targets
+ok 2 - shared button touch retained input proof replays all owners without promoting suppressed targets
+  ---
+  duration_ms: 4862.3976
+  type: 'test'
+  ...
+# Subtest: shared button touch public percentage matrix remains a failure distinct from literal controls
+not ok 3 - shared button touch public percentage matrix remains a failure distinct from literal controls
+  ---
+  duration_ms: 16.4313
+  type: 'test'
+  location: 'D:\\dev\\github\\AstylarUI-audit-integration\\tests\\material-parity\\button-touch-inputs.spec.mjs:48:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(report.captures.every(c => c.disposed === true && c.trials.length === 5))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///D:/dev/github/AstylarUI-audit-integration/tests/material-parity/button-touch-inputs.spec.mjs:53:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..3
+# tests 3
+# suites 0
+# pass 2
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5006.9484

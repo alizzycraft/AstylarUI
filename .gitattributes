@@ -34,3 +34,6 @@ artifacts/material-parity/divider-property-independent-cold-20261020.log -text
 artifacts/material-parity/divider-property-independent-cold-20261020.stderr.log binary
 artifacts/material-parity/divider-property-main-import-recovered-20261020.log -text
 artifacts/material-parity/divider-property-main-verification-20261020.log -text
+artifacts/material-parity/working-audit/proposals/a79bdf4496b89608128fcd7ca223508ce576a1728ba856c030ca15e0a32e5266.json -text
+artifacts/material-parity/button-touch-owning-regressions-20261020.failed-source.mjs -text
+artifacts/material-parity/button-touch-owning-regressions-20261020.log binary
