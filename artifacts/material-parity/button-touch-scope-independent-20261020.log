@@ -1,0 +1,51 @@
+{
+  "producerArgs": [
+    "--input-type=module",
+    "-e",
+    "import fs from \"node:fs\";import a from \"node:assert/strict\";import {createHash} from \"node:crypto\";import {execFileSync} from \"node:child_process\";import {sourceAuditDefinitions} from \"./tests/material-parity/input-equivalence-policy.mjs\";const h=v=>createHash(\"sha256\").update(v).digest(\"hex\"),files=[\"button-touch-retained-inputs\",\"button-touch-authoring-history\",\"button-touch-newer-capture-reconciliation\",\"button-touch-source-proposal\"].map(n=>\"artifacts/material-parity/\"+n+\"-20261020.log\"),[scope,history,reconciliation,proposal]=files.map(f=>JSON.parse(fs.readFileSync(f)));for(const x of [scope.producer,scope.inventory,scope.capture,scope.selectorHelper,...scope.treeReceipts,reconciliation.currentReport,...reconciliation.currentTreeReceipts,history.currentSource,...proposal.evidenceSources])a.equal(h(fs.readFileSync(x.file)),x.sha256,x.file);a.equal(h(execFileSync(\"git\",[\"show\",history.initialSource.revision+\":\"+history.initialSource.file],{maxBuffer:3000000})),history.initialSource.sha256);a.equal(scope.rows.length,600);a.equal(reconciliation.rows.length,600);a.deepEqual(reconciliation.touchAndHostRequestDifferences,[]);a.equal(reconciliation.candidateOwnerPathChanges,0);const dispositions=scope.rows.reduce((s,x)=>(s[x.requestDisposition]=(s[x.requestDisposition]??0)+1,s),{});a.deepEqual(dispositions,{\"declared-visible-target-not-runtime-verified\":276,\"target-display-none\":294,\"target-pointer-events-none\":30});const envelope=JSON.parse(fs.readFileSync(proposal.proposed.file));a.equal(h(JSON.stringify(envelope.review)),proposal.proposed.sha256);a.equal(envelope.review.groups.length,171);a.deepEqual(envelope.review.groups.slice(0,170),sourceAuditDefinitions);a.equal(envelope.review.groups[170].classification,\"application-plugin-authoring-defect\");a.equal(envelope.review.registrationPending,true);a.equal(sourceAuditDefinitions.find(x=>x.id===\"core-transform-translation-discards-css-units\").classification,\"intentional-documented-limitation\");console.log(JSON.stringify({producerArgs:process.execArgv,evidence:files.map(file=>({file,sha256:h(fs.readFileSync(file))})),cases:480,owners:600,oldAndNewTreeReceiptsVerified:scope.treeReceipts.length+reconciliation.currentTreeReceipts.length,dispositions,sourceConstructors:history.records.map(x=>({kind:x.kind,count:x.constructors.length})),factoryCalls:history.factoryCalls,factoryButtonOutputs:history.factoryButtonOutputs,nativeCenteredRequests:history.nativeCenteredRequests,complete170DefinitionPredecessorRecovered:true,proposedReview:proposal.proposed.sha256,canonicalDefinitions:sourceAuditDefinitions.length,registrationPending:true,boundary:\"Historical-to-newer exact request correspondence,not full input/current-rendering or600 live activations. Existing unit limitation classification is unchanged;new application finding remains proposed only.\"},null,2));"
+  ],
+  "evidence": [
+    {
+      "file": "artifacts/material-parity/button-touch-retained-inputs-20261020.log",
+      "sha256": "a6756e4a0bcab6904d14959d5bb70775ef02d358c6b1d955638e769c50aec7dd"
+    },
+    {
+      "file": "artifacts/material-parity/button-touch-authoring-history-20261020.log",
+      "sha256": "e8e0493f6f8e9608071264e3e25a875018d758b2cfe174c9b3e08b33255ecb72"
+    },
+    {
+      "file": "artifacts/material-parity/button-touch-newer-capture-reconciliation-20261020.log",
+      "sha256": "e1df86ae8dbd45c167f78c6f56892d009d0e6da24eb3d68c2de1b4b214f2211b"
+    },
+    {
+      "file": "artifacts/material-parity/button-touch-source-proposal-20261020.log",
+      "sha256": "ce4bac83557a2add4610d6a655f5c60f8210dcaf6525f0a91f9865b67e1d26d1"
+    }
+  ],
+  "cases": 480,
+  "owners": 600,
+  "oldAndNewTreeReceiptsVerified": 1920,
+  "dispositions": {
+    "declared-visible-target-not-runtime-verified": 276,
+    "target-display-none": 294,
+    "target-pointer-events-none": 30
+  },
+  "sourceConstructors": [
+    {
+      "kind": "initial",
+      "count": 9
+    },
+    {
+      "kind": "current",
+      "count": 9
+    }
+  ],
+  "factoryCalls": 28,
+  "factoryButtonOutputs": 36,
+  "nativeCenteredRequests": 600,
+  "complete170DefinitionPredecessorRecovered": true,
+  "proposedReview": "a79bdf4496b89608128fcd7ca223508ce576a1728ba856c030ca15e0a32e5266",
+  "canonicalDefinitions": 170,
+  "registrationPending": true,
+  "boundary": "Historical-to-newer exact request correspondence,not full input/current-rendering or600 live activations. Existing unit limitation classification is unchanged;new application finding remains proposed only."
+}

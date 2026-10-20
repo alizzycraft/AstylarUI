@@ -38,9 +38,21 @@ Current conclusions only;earlier next/live statements in retained detail are his
   button-touch-transform-parser-binding and button-touch-target-independent-
   20261020 logs. Earlier successful control and both first-failure captures/sources
   remain distinct. The failed boundary is now retained,not lost on assertion exit.
-- Next:finish the running publication milestone;then bound/register the new shared
-  touch-descendant input omission and this existing unit limitation's interaction
-  impact without generalizing the single Material case. Continue component-owner/
+- Touch scope now bounded:600 owners/480 cases/seven families;276 visible pointer
+  requests,294 display-none,30 pointer-events-none. All600 native matched rules
+  retain48px/top50%/translateY(-50%);candidate buttons are leaves. All600 requests,
+  host requests and authored leaves exactly reconcile from originalb07 to newer
+  ab42 captures (1920 tree receipts authenticated),without claiming600 activations.
+  Initial2f440/current sources each have nine childless shared-button constructors;
+  28 mocked current family/open/phase calls produce36 leaf buttons. No inference
+  about every intermediate revision or compensation motive. Source proposala79bdf44
+  adds ONE authoring definition to the complete170 predecessor,not a duplicate
+  core unit finding;registration pending,canonical counts unchanged. Evidence:
+  button-touch-retained-inputs,authoring-history,newer-capture-reconciliation,
+  source-proposal and scope-independent-20261020 logs;1200 mutation controls pass.
+- Next:finish the running publication milestone;then register the bounded shared
+  touch-descendant omission and existing unit limitation's interaction evidence,
+  preserving suppressed/disabled distinctions. Continue component-owner/
   generated-descendant mapping across families,AX and interaction ownership.
   Shared frame/headings already map all2311 cases;do not repeat that survey.
   Full unfiltered audit/browser/unit/build/packed-consumer/release gates still apply.

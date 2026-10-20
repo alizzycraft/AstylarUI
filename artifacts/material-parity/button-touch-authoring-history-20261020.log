@@ -1,0 +1,580 @@
+{
+  "producerArgs": [
+    "--input-type=module",
+    "-e",
+    "import fs from \"node:fs\";import ts from \"typescript\";import a from \"node:assert/strict\";import {execFileSync} from \"node:child_process\";import {createHash} from \"node:crypto\";const h=v=>createHash(\"sha256\").update(v).digest(\"hex\"),file=\"examples/material-showcase/src/app/astylar.component.ts\",revision=\"2f440115740ff76fa9e55b3f4a11568207b2af5a\",current=fs.readFileSync(file,\"utf8\"),initial=execFileSync(\"git\",[\"show\",revision+\":\"+file],{encoding:\"utf8\",maxBuffer:3000000}),records=[];let currentMethod;for(const [kind,source]of [[\"initial\",initial],[\"current\",current]]){const ast=ts.createSourceFile(file,source,99,true),constructors=[];function visit(n){if(ts.isMethodDeclaration(n)&&n.name?.getText(ast)===\"familyElements\"&&kind===\"current\")currentMethod=n.getText(ast);if(ts.isObjectLiteralExpression(n)){const get=k=>n.properties.find(p=>p.name?.text===k)?.initializer,type=get(\"type\"),cls=get(\"class\");if(type?.getText(ast).startsWith(\"\\u0027button\\u0027\")&&cls&&ts.isStringLiteral(cls)&&cls.text.split(/\\s+/).includes(\"material-button\")){a.equal(get(\"children\"),undefined);constructors.push({line:ast.getLineAndCharacterOfPosition(n.getStart(ast)).line+1,idExpression:get(\"id\")?.getText(ast),classValue:cls.text,childDeclaration:\"omitted\",source:n.getText(ast)});}}ts.forEachChild(n,visit);}visit(ast);a.equal(constructors.length,9);records.push({kind,sourceSha256:h(source),constructors});}a.ok(currentMethod);const compiled=ts.transpileModule(\"class Owner {\"+currentMethod+\"}\",{compilerOptions:{target:99,module:99}}).outputText,Owner=new Function(compiled+\";return Owner;\")(),factory=[];for(const family of [\"core\",\"button\",\"menu\",\"bottom-sheet\",\"dialog\",\"snack-bar\",\"tooltip\"])for(const open of [false,true])for(const phase of [\"start\",\"held\"]){const owner=new Owner;owner.store={state:()=>({open,disabled:false,selected:true,error:false}),tokens:()=>({primary:\"#6750a4\"}),benchmarkPhase:()=>phase};const output=owner.familyElements(family),buttons=[];function walk(n){if(n.type===\"button\"&&n.class?.split(/\\s+/).includes(\"material-button\")){a.equal(n.children,undefined);buttons.push({id:n.id,class:n.class,value:n.value,children:\"omitted\"});}for(const child of n.children??[])walk(child);}output.forEach(walk);a.equal(buttons.length,family===\"button\"?3:1);factory.push({family,open,phase,buttons});}a.equal(factory.length,28);a.equal(factory.reduce((n,r)=>n+r.buttons.length,0),36);const scopeFile=\"artifacts/material-parity/button-touch-retained-inputs-20261020.log\",scope=JSON.parse(fs.readFileSync(scopeFile));let nativeCenteredRequests=0;for(const row of scope.rows){const declarations=row.reference.matchedTargetRules.filter(r=>r.active).map(r=>r.declarations);a.ok(declarations.some(d=>d.top?.value===\"50%\"&&d.transform?.value===\"translateY(-50%)\"&&d.height?.value===\"48px\"));nativeCenteredRequests++;}a.equal(nativeCenteredRequests,600);console.log(JSON.stringify({producerArgs:process.execArgv,currentSource:{file,sha256:h(fs.readFileSync(file))},initialSource:{revision,file,sha256:h(initial)},records,currentMethodSha256:h(currentMethod),factoryCalls:factory.length,factoryButtonOutputs:36,factory,nativeCenteredRequests,retainedScope:{file:scopeFile,sha256:h(fs.readFileSync(scopeFile))},conclusion:\"Initial and current sources each contain9 shared material-button object constructors without authored children. Current familyElements execution produces36 leaf buttons across28 family/open/phase calls. All600 retained native touch spans request48px height,top50%,translateY(-50%) in active matched rules;display and pointer suppression remain distinct.\",boundary:\"Current factory execution is mocked authoring,not renderer runtime. Initial/current constructor evidence does not prove every intermediate revision or a compensation motive. Historical600-owner scope is not600 activation tests. Percentage-transform support limitation and fresh Material/public pointer results remain separately bounded;no source/fixture edits or canonical registration.\"},null,2));"
+  ],
+  "currentSource": {
+    "file": "examples/material-showcase/src/app/astylar.component.ts",
+    "sha256": "71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd"
+  },
+  "initialSource": {
+    "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+    "file": "examples/material-showcase/src/app/astylar.component.ts",
+    "sha256": "6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24"
+  },
+  "records": [
+    {
+      "kind": "initial",
+      "sourceSha256": "6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24",
+      "constructors": [
+        {
+          "line": 408,
+          "idExpression": "'menu-primary'",
+          "classValue": "material-button",
+          "childDeclaration": "omitted",
+          "source": "{ type: 'button', id: 'menu-primary', class: 'material-button', ariaHaspopup: 'menu', ariaExpanded: state.open, ariaControls: 'menu-popup', value: 'Open menu' }"
+        },
+        {
+          "line": 443,
+          "idExpression": "`${family}-primary`",
+          "classValue": "material-button",
+          "childDeclaration": "omitted",
+          "source": "{ type: 'button', id: `${family}-primary`, class: 'material-button', value: label }"
+        },
+        {
+          "line": 453,
+          "idExpression": "'tooltip-primary'",
+          "classValue": "material-button",
+          "childDeclaration": "omitted",
+          "source": "{ type: 'button', id: 'tooltip-primary', class: 'material-button', value: 'Hover for help', ariaDescribedby: state.open ? 'tooltip-popup' : undefined }"
+        },
+        {
+          "line": 456,
+          "idExpression": "'core-primary'",
+          "classValue": "material-button",
+          "childDeclaration": "omitted",
+          "source": "{ type: 'button', id: 'core-primary', class: 'material-button', value: 'Material ripple foundation' }"
+        },
+        {
+          "line": 459,
+          "idExpression": "`${family}-primary`",
+          "classValue": "material-button",
+          "childDeclaration": "omitted",
+          "source": "{ type: 'button', id: `${family}-primary`, class: 'material-button', value: family === 'button' ? 'Primary action' : family.replaceAll('-', ' ') }"
+        },
+        {
+          "line": 460,
+          "idExpression": "`${family}-secondary`",
+          "classValue": "material-button outlined",
+          "childDeclaration": "omitted",
+          "source": "{ type: 'button', id: `${family}-secondary`, class: 'material-button outlined', value: 'Secondary' }"
+        },
+        {
+          "line": 461,
+          "idExpression": "`${family}-disabled`",
+          "classValue": "material-button",
+          "childDeclaration": "omitted",
+          "source": "{ type: 'button', id: `${family}-disabled`, class: 'material-button', value: 'Disabled', disabled: true }"
+        },
+        {
+          "line": 470,
+          "idExpression": "`${family}-one`",
+          "classValue": "material-button",
+          "childDeclaration": "omitted",
+          "source": "{ type: 'button', id: `${family}-one`, class: 'material-button', role: family === 'tabs' ? 'tab' : family === 'tree' ? 'treeitem' : family === 'menu' ? 'menuitem' : undefined, ariaSelected: family === 'tabs' ? true : undefined, tabindex: 0, value: first }"
+        },
+        {
+          "line": 471,
+          "idExpression": "`${family}-two`",
+          "classValue": "material-button outlined",
+          "childDeclaration": "omitted",
+          "source": "{ type: 'button', id: `${family}-two`, class: 'material-button outlined', role: family === 'tabs' ? 'tab' : family === 'tree' ? 'treeitem' : family === 'menu' ? 'menuitem' : undefined, ariaSelected: family === 'tabs' ? false : undefined, tabindex: -1, value: second }"
+        }
+      ]
+    },
+    {
+      "kind": "current",
+      "sourceSha256": "71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd",
+      "constructors": [
+        {
+          "line": 970,
+          "idExpression": "'menu-primary'",
+          "classValue": "material-button",
+          "childDeclaration": "omitted",
+          "source": "{ type: 'button', id: 'menu-primary', class: 'material-button', ariaHaspopup: 'menu', ariaExpanded: state.open, ariaControls: 'menu-popup', value: 'Open menu' }"
+        },
+        {
+          "line": 1023,
+          "idExpression": "`${family}-primary`",
+          "classValue": "material-button",
+          "childDeclaration": "omitted",
+          "source": "{ type: 'button', id: `${family}-primary`, class: 'material-button', value: label }"
+        },
+        {
+          "line": 1077,
+          "idExpression": "'tooltip-primary'",
+          "classValue": "material-button",
+          "childDeclaration": "omitted",
+          "source": "{ type: 'button', id: 'tooltip-primary', class: 'material-button', value: 'Hover for help', ariaDescribedby: state.open ? 'tooltip-popup' : undefined }"
+        },
+        {
+          "line": 1082,
+          "idExpression": "'core-primary'",
+          "classValue": "material-button",
+          "childDeclaration": "omitted",
+          "source": "{ type: 'button', id: 'core-primary', class: 'material-button', value: 'Material ripple foundation' }"
+        },
+        {
+          "line": 1085,
+          "idExpression": "`${family}-primary`",
+          "classValue": "material-button",
+          "childDeclaration": "omitted",
+          "source": "{ type: 'button', id: `${family}-primary`, class: 'material-button', value: family === 'button' ? 'Primary action' : family.replaceAll('-', ' ') }"
+        },
+        {
+          "line": 1086,
+          "idExpression": "`${family}-secondary`",
+          "classValue": "material-button outlined",
+          "childDeclaration": "omitted",
+          "source": "{ type: 'button', id: `${family}-secondary`, class: 'material-button outlined', value: 'Secondary' }"
+        },
+        {
+          "line": 1087,
+          "idExpression": "`${family}-disabled`",
+          "classValue": "material-button",
+          "childDeclaration": "omitted",
+          "source": "{ type: 'button', id: `${family}-disabled`, class: 'material-button', value: 'Disabled', disabled: true }"
+        },
+        {
+          "line": 1096,
+          "idExpression": "`${family}-one`",
+          "classValue": "material-button",
+          "childDeclaration": "omitted",
+          "source": "{ type: 'button', id: `${family}-one`, class: 'material-button', role: family === 'tabs' ? 'tab' : family === 'tree' ? 'treeitem' : family === 'menu' ? 'menuitem' : undefined, ariaSelected: family === 'tabs' ? true : undefined, tabindex: 0, value: first }"
+        },
+        {
+          "line": 1097,
+          "idExpression": "`${family}-two`",
+          "classValue": "material-button outlined",
+          "childDeclaration": "omitted",
+          "source": "{ type: 'button', id: `${family}-two`, class: 'material-button outlined', role: family === 'tabs' ? 'tab' : family === 'tree' ? 'treeitem' : family === 'menu' ? 'menuitem' : undefined, ariaSelected: family === 'tabs' ? false : undefined, tabindex: -1, value: second }"
+        }
+      ]
+    }
+  ],
+  "currentMethodSha256": "2fa12295fbf0aecd113bed19a72d0ddc2d27625610231175ffce2732e597cf2e",
+  "factoryCalls": 28,
+  "factoryButtonOutputs": 36,
+  "factory": [
+    {
+      "family": "core",
+      "open": false,
+      "phase": "start",
+      "buttons": [
+        {
+          "id": "core-primary",
+          "class": "material-button",
+          "value": "Material ripple foundation",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "core",
+      "open": false,
+      "phase": "held",
+      "buttons": [
+        {
+          "id": "core-primary",
+          "class": "material-button",
+          "value": "Material ripple foundation",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "core",
+      "open": true,
+      "phase": "start",
+      "buttons": [
+        {
+          "id": "core-primary",
+          "class": "material-button",
+          "value": "Material ripple foundation",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "core",
+      "open": true,
+      "phase": "held",
+      "buttons": [
+        {
+          "id": "core-primary",
+          "class": "material-button",
+          "value": "Material ripple foundation",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "button",
+      "open": false,
+      "phase": "start",
+      "buttons": [
+        {
+          "id": "button-primary",
+          "class": "material-button",
+          "value": "Primary action",
+          "children": "omitted"
+        },
+        {
+          "id": "button-secondary",
+          "class": "material-button outlined",
+          "value": "Secondary",
+          "children": "omitted"
+        },
+        {
+          "id": "button-disabled",
+          "class": "material-button",
+          "value": "Disabled",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "button",
+      "open": false,
+      "phase": "held",
+      "buttons": [
+        {
+          "id": "button-primary",
+          "class": "material-button",
+          "value": "Primary action",
+          "children": "omitted"
+        },
+        {
+          "id": "button-secondary",
+          "class": "material-button outlined",
+          "value": "Secondary",
+          "children": "omitted"
+        },
+        {
+          "id": "button-disabled",
+          "class": "material-button",
+          "value": "Disabled",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "button",
+      "open": true,
+      "phase": "start",
+      "buttons": [
+        {
+          "id": "button-primary",
+          "class": "material-button",
+          "value": "Primary action",
+          "children": "omitted"
+        },
+        {
+          "id": "button-secondary",
+          "class": "material-button outlined",
+          "value": "Secondary",
+          "children": "omitted"
+        },
+        {
+          "id": "button-disabled",
+          "class": "material-button",
+          "value": "Disabled",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "button",
+      "open": true,
+      "phase": "held",
+      "buttons": [
+        {
+          "id": "button-primary",
+          "class": "material-button",
+          "value": "Primary action",
+          "children": "omitted"
+        },
+        {
+          "id": "button-secondary",
+          "class": "material-button outlined",
+          "value": "Secondary",
+          "children": "omitted"
+        },
+        {
+          "id": "button-disabled",
+          "class": "material-button",
+          "value": "Disabled",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "menu",
+      "open": false,
+      "phase": "start",
+      "buttons": [
+        {
+          "id": "menu-primary",
+          "class": "material-button",
+          "value": "Open menu",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "menu",
+      "open": false,
+      "phase": "held",
+      "buttons": [
+        {
+          "id": "menu-primary",
+          "class": "material-button",
+          "value": "Open menu",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "menu",
+      "open": true,
+      "phase": "start",
+      "buttons": [
+        {
+          "id": "menu-primary",
+          "class": "material-button",
+          "value": "Open menu",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "menu",
+      "open": true,
+      "phase": "held",
+      "buttons": [
+        {
+          "id": "menu-primary",
+          "class": "material-button",
+          "value": "Open menu",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "bottom-sheet",
+      "open": false,
+      "phase": "start",
+      "buttons": [
+        {
+          "id": "bottom-sheet-primary",
+          "class": "material-button",
+          "value": "Open bottom sheet",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "bottom-sheet",
+      "open": false,
+      "phase": "held",
+      "buttons": [
+        {
+          "id": "bottom-sheet-primary",
+          "class": "material-button",
+          "value": "Open bottom sheet",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "bottom-sheet",
+      "open": true,
+      "phase": "start",
+      "buttons": [
+        {
+          "id": "bottom-sheet-primary",
+          "class": "material-button",
+          "value": "Open bottom sheet",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "bottom-sheet",
+      "open": true,
+      "phase": "held",
+      "buttons": [
+        {
+          "id": "bottom-sheet-primary",
+          "class": "material-button",
+          "value": "Open bottom sheet",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "dialog",
+      "open": false,
+      "phase": "start",
+      "buttons": [
+        {
+          "id": "dialog-primary",
+          "class": "material-button",
+          "value": "Open dialog",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "dialog",
+      "open": false,
+      "phase": "held",
+      "buttons": [
+        {
+          "id": "dialog-primary",
+          "class": "material-button",
+          "value": "Open dialog",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "dialog",
+      "open": true,
+      "phase": "start",
+      "buttons": [
+        {
+          "id": "dialog-primary",
+          "class": "material-button",
+          "value": "Open dialog",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "dialog",
+      "open": true,
+      "phase": "held",
+      "buttons": [
+        {
+          "id": "dialog-primary",
+          "class": "material-button",
+          "value": "Open dialog",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "snack-bar",
+      "open": false,
+      "phase": "start",
+      "buttons": [
+        {
+          "id": "snack-bar-primary",
+          "class": "material-button",
+          "value": "Show snackbar",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "snack-bar",
+      "open": false,
+      "phase": "held",
+      "buttons": [
+        {
+          "id": "snack-bar-primary",
+          "class": "material-button",
+          "value": "Show snackbar",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "snack-bar",
+      "open": true,
+      "phase": "start",
+      "buttons": [
+        {
+          "id": "snack-bar-primary",
+          "class": "material-button",
+          "value": "Show snackbar",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "snack-bar",
+      "open": true,
+      "phase": "held",
+      "buttons": [
+        {
+          "id": "snack-bar-primary",
+          "class": "material-button",
+          "value": "Show snackbar",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "tooltip",
+      "open": false,
+      "phase": "start",
+      "buttons": [
+        {
+          "id": "tooltip-primary",
+          "class": "material-button",
+          "value": "Hover for help",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "tooltip",
+      "open": false,
+      "phase": "held",
+      "buttons": [
+        {
+          "id": "tooltip-primary",
+          "class": "material-button",
+          "value": "Hover for help",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "tooltip",
+      "open": true,
+      "phase": "start",
+      "buttons": [
+        {
+          "id": "tooltip-primary",
+          "class": "material-button",
+          "value": "Hover for help",
+          "children": "omitted"
+        }
+      ]
+    },
+    {
+      "family": "tooltip",
+      "open": true,
+      "phase": "held",
+      "buttons": [
+        {
+          "id": "tooltip-primary",
+          "class": "material-button",
+          "value": "Hover for help",
+          "children": "omitted"
+        }
+      ]
+    }
+  ],
+  "nativeCenteredRequests": 600,
+  "retainedScope": {
+    "file": "artifacts/material-parity/button-touch-retained-inputs-20261020.log",
+    "sha256": "a6756e4a0bcab6904d14959d5bb70775ef02d358c6b1d955638e769c50aec7dd"
+  },
+  "conclusion": "Initial and current sources each contain9 shared material-button object constructors without authored children. Current familyElements execution produces36 leaf buttons across28 family/open/phase calls. All600 retained native touch spans request48px height,top50%,translateY(-50%) in active matched rules;display and pointer suppression remain distinct.",
+  "boundary": "Current factory execution is mocked authoring,not renderer runtime. Initial/current constructor evidence does not prove every intermediate revision or a compensation motive. Historical600-owner scope is not600 activation tests. Percentage-transform support limitation and fresh Material/public pointer results remain separately bounded;no source/fixture edits or canonical registration."
+}

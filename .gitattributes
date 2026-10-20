@@ -10,3 +10,9 @@ artifacts/material-parity/public-button-touch-target-complete-20261020/audit.js 
 artifacts/material-parity/button-paired-touch-target-20261020.log -text
 artifacts/material-parity/button-touch-transform-parser-binding-20261020.log -text
 artifacts/material-parity/button-touch-target-independent-20261020.log -text
+scripts/audit-material-button-touch-inputs.mjs -text
+artifacts/material-parity/button-touch-retained-inputs-20261020.log -text
+artifacts/material-parity/button-touch-authoring-history-20261020.log -text
+artifacts/material-parity/button-touch-newer-capture-reconciliation-20261020.log -text
+artifacts/material-parity/button-touch-source-proposal-20261020.log -text
+artifacts/material-parity/button-touch-scope-independent-20261020.log -text

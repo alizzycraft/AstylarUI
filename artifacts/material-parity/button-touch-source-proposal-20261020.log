@@ -1,0 +1,60 @@
+{
+  "producerArgs": [
+    "--input-type=module",
+    "-e",
+    "import fs from \"node:fs\";import a from \"node:assert/strict\";import {createHash} from \"node:crypto\";import {sourceAuditDefinitions} from \"./tests/material-parity/input-equivalence-policy.mjs\";import {saveReviewProposal} from \"./scripts/audit-findings-store.mjs\";const h=v=>createHash(\"sha256\").update(v).digest(\"hex\"),receipt=file=>({file,sha256:h(fs.readFileSync(file))}),scopeFile=\"artifacts/material-parity/button-touch-retained-inputs-20261020.log\",scope=JSON.parse(fs.readFileSync(scopeFile)),historyFile=\"artifacts/material-parity/button-touch-authoring-history-20261020.log\",history=JSON.parse(fs.readFileSync(historyFile));a.equal(scope.owners,600);a.equal(scope.cases,480);a.equal(history.nativeCenteredRequests,600);a.equal(history.factoryCalls,28);a.equal(sourceAuditDefinitions.length,170);const previousGroupsHash=h(JSON.stringify(sourceAuditDefinitions));a.equal(previousGroupsHash,\"7df65cfffad6916f661ea477c056cbaffacf2feac88faf22756b951c1036b89e\");const q=String.fromCharCode(39),anchor=\"class: \"+q+\"material-button\"+q+\", value: label }\",definition={id:\"fixture-shared-button-touch-descendant-omission\",introducedBy:\"2f440115740ff76fa9e55b3f4a11568207b2af5a and current source each retain nine childless shared button constructors;no intermediate-history or compensation-motive claim\",file:\"examples/material-showcase/src/app/astylar.component.ts\",pattern:anchor.replaceAll(\"}\",\"\\\\}\"),classification:\"application-plugin-authoring-defect\",owner:\"showcase shared Material button descendant and hit-target authoring\",justification:\"Exactly600 retained owners in480 cases across core,button,menu,bottom-sheet,dialog,snack-bar and tooltip have a native48px touch-span descendant but no authored candidate child. Preserve suppression:276 visible pointer-enabled requests,294 display-none and30 pointer-events-none;these are not600 live activation tests. Native matched rules retain top50% and translateY(-50%). One fresh primary-button pair shows native outside-host activation versus candidate container clicks. Package-root equal-input controls support descendant hit testing,but the actual centered percentage transform exposes the existing documented unit-loss limitation;literal-pixel controls pass across DPR1/2 and translated surfaces. First input divergence is authored descendant omission;repair the shared core percentage-reference semantics before restoring native structure/CSS. Never ship the diagnostic fixed-position or literal-pixel variants as fixture compensation. Initial/current constructors and36 factory outputs bind current authoring;this does not prove every historical revision,motive,all controls or full current rendering.\",focusedProof:\"scripts/audit-material-button-touch-inputs.mjs:600 exact native/candidate owners and1200 rejection controls; scripts/audit-public-button-touch-target.mjs:full failing centered-percentage matrix and passing plain/literal controls\"};const source=fs.readFileSync(definition.file,\"utf8\"),locations=[...source.matchAll(new RegExp(definition.pattern,\"g\"))];a.equal(locations.length,1);const groups=[...sourceAuditDefinitions,definition];a.equal(h(JSON.stringify(groups.slice(0,-1))),previousGroupsHash);const evidenceSources=[scopeFile,historyFile,\"artifacts/material-parity/button-paired-touch-target-20261020.log\",\"artifacts/material-parity/public-button-touch-target-complete-20261020/latest-report.json\",\"artifacts/material-parity/button-touch-transform-parser-binding-20261020.log\",\"artifacts/material-parity/button-touch-target-independent-20261020.log\"].map(receipt);const review={kind:\"material-source-finding-review\",status:\"proposal-not-canonical\",scope:\"One additive shared-button authored-descendant omission;complete170-definition predecessor retained. Existing percentage-transform support limitation gains bounded pointer evidence without a duplicate core finding or reclassification.\",evidenceSources,registrationPending:true,supplementalFindingEvidence:[{id:\"core-transform-translation-discards-css-units\",classificationUnchanged:\"intentional-documented-limitation\",evidence:evidenceSources.slice(3)}],groups};const proposed=saveReviewProposal(\"artifacts/material-parity/working-audit\",review);console.log(JSON.stringify({producerArgs:process.execArgv,proposed,previousGroupsHash,priorDefinitions:170,proposedDefinitions:171,newDefinition:definition,sourceLocations:locations.map(m=>({line:source.slice(0,m.index).split(/\\r?\\n/).length,excerpt:source.slice(m.index,source.indexOf(\"\\n\",m.index)).trim()})),completePredecessorRecovered:true,canonicalDefinitionsUnchanged:sourceAuditDefinitions.length,registrationPending:true,evidenceSources},null,2));"
+  ],
+  "proposed": {
+    "file": "artifacts\\material-parity\\working-audit\\proposals\\a79bdf4496b89608128fcd7ca223508ce576a1728ba856c030ca15e0a32e5266.json",
+    "sha256": "a79bdf4496b89608128fcd7ca223508ce576a1728ba856c030ca15e0a32e5266",
+    "groups": 171
+  },
+  "previousGroupsHash": "7df65cfffad6916f661ea477c056cbaffacf2feac88faf22756b951c1036b89e",
+  "priorDefinitions": 170,
+  "proposedDefinitions": 171,
+  "newDefinition": {
+    "id": "fixture-shared-button-touch-descendant-omission",
+    "introducedBy": "2f440115740ff76fa9e55b3f4a11568207b2af5a and current source each retain nine childless shared button constructors;no intermediate-history or compensation-motive claim",
+    "file": "examples/material-showcase/src/app/astylar.component.ts",
+    "pattern": "class: 'material-button', value: label \\}",
+    "classification": "application-plugin-authoring-defect",
+    "owner": "showcase shared Material button descendant and hit-target authoring",
+    "justification": "Exactly600 retained owners in480 cases across core,button,menu,bottom-sheet,dialog,snack-bar and tooltip have a native48px touch-span descendant but no authored candidate child. Preserve suppression:276 visible pointer-enabled requests,294 display-none and30 pointer-events-none;these are not600 live activation tests. Native matched rules retain top50% and translateY(-50%). One fresh primary-button pair shows native outside-host activation versus candidate container clicks. Package-root equal-input controls support descendant hit testing,but the actual centered percentage transform exposes the existing documented unit-loss limitation;literal-pixel controls pass across DPR1/2 and translated surfaces. First input divergence is authored descendant omission;repair the shared core percentage-reference semantics before restoring native structure/CSS. Never ship the diagnostic fixed-position or literal-pixel variants as fixture compensation. Initial/current constructors and36 factory outputs bind current authoring;this does not prove every historical revision,motive,all controls or full current rendering.",
+    "focusedProof": "scripts/audit-material-button-touch-inputs.mjs:600 exact native/candidate owners and1200 rejection controls; scripts/audit-public-button-touch-target.mjs:full failing centered-percentage matrix and passing plain/literal controls"
+  },
+  "sourceLocations": [
+    {
+      "line": 1023,
+      "excerpt": "class: 'material-button', value: label },"
+    }
+  ],
+  "completePredecessorRecovered": true,
+  "canonicalDefinitionsUnchanged": 170,
+  "registrationPending": true,
+  "evidenceSources": [
+    {
+      "file": "artifacts/material-parity/button-touch-retained-inputs-20261020.log",
+      "sha256": "a6756e4a0bcab6904d14959d5bb70775ef02d358c6b1d955638e769c50aec7dd"
+    },
+    {
+      "file": "artifacts/material-parity/button-touch-authoring-history-20261020.log",
+      "sha256": "e8e0493f6f8e9608071264e3e25a875018d758b2cfe174c9b3e08b33255ecb72"
+    },
+    {
+      "file": "artifacts/material-parity/button-paired-touch-target-20261020.log",
+      "sha256": "c207422cc32a5553249c698c5cfc0cf82f19c700424e15563edb8dfc1926d9a7"
+    },
+    {
+      "file": "artifacts/material-parity/public-button-touch-target-complete-20261020/latest-report.json",
+      "sha256": "92031c0f08e2b84e938744e2fe6128254574b0247281e3a7e906f39def3c35da"
+    },
+    {
+      "file": "artifacts/material-parity/button-touch-transform-parser-binding-20261020.log",
+      "sha256": "bf992b30d0e82b7ac4dc60577cf031cd7982aac2e084e72e29fb17c8bc066288"
+    },
+    {
+      "file": "artifacts/material-parity/button-touch-target-independent-20261020.log",
+      "sha256": "e40f456effff1ee6d7ed1970f27555a319060fb182dd6ad032a3ff08ef19242e"
+    }
+  ]
+}

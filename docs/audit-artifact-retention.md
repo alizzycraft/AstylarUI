@@ -2,6 +2,24 @@
 
 ## Current versus historical evidence
 
+Retain scripts/audit-material-button-touch-inputs.mjs and button-touch-retained-
+inputs-20261020.log/empty stderr (SHAa6756e4a0bcab6904d14959d5bb70775ef02d358c6b1d955638e769c50aec7dd),
+button-touch-authoring-history-20261020 pair (SHAe8e0493f6f8e9608071264e3e25a875018d758b2cfe174c9b3e08b33255ecb72),
+button-touch-newer-capture-reconciliation-20261020 pair
+(SHAe1df86ae8dbd45c167f78c6f56892d009d0e6da24eb3d68c2de1b4b214f2211b),
+button-touch-source-proposal-20261020 pair and source proposala79bdf4496b89608128fcd7ca223508ce576a1728ba856c030ca15e0a32e5266,
+plus button-touch-scope-independent-20261020 pair
+(SHAd0671af08f5cb7dcd4b1714646fab1d5866e9c457a75693ce8c55ba5b66774f7).
+All600 owners/480 cases reconcile from originalb07 to newerab42 request/leaf records;
+1920 old/new tree receipts authenticate. Preserve276 visible requests versus294
+display-none/30 pointer-events-none,not600 actual activations. Initial/current nine
+constructors and28 mocked factory calls add bounded authoring/history evidence,
+not every intermediate-history or renderer-runtime coverage. New171-definition
+proposal recovers all170 current definitions;it is unregistered,not canonical.
+Existing percentage-transform limitation is supplemented,not duplicated/reclassified.
+These standalone records are outside the running frozen433b export. Scoped byte
+attributes preserve raw producer/log receipts,not normalization of rendering inputs.
+
 Retain button-paired-touch-target-20261020.log/empty stderr (SHA256
 c207422cc32a5553249c698c5cfc0cf82f19c700424e15563edb8dfc1926d9a7) and all four
 public-button-touch-target[-centered/-centered-boundary/-complete]-20261020 directories
