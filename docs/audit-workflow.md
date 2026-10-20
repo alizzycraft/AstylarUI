@@ -136,11 +136,12 @@ Source conservation and coherent export/cold/import remain required before the
 new coverage records are described as canonical; a launcher dry run is not proof
 of publication or successful audit validation.
 
-The October20 launcher selects exact f471932b filled-field successor of accepted
-bfc2b6d5 (which succeeds be99cd38). The existing reader authenticates five historical source
+The October20 launcher selects exact868daaec chip-paint successor of accepted
+f471932b (which succeeds bfc2b6d5 and be99cd38). The existing reader authenticates five historical source
 transitions,including bounded benchmark replay support. Old reviews remain
 explicitly supported;unknown digests do not select this boundary. Full review
-loading and complete predecessor recovery are separate from launcher dry-run
+loading and complete predecessor recovery (only100 scoped chip children removed
+to recover f471) are separate from launcher dry-run
 preflight. Selection is not canonical publication,current rendering or case
 closure;all original final gates remain required.
 

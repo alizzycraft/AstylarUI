@@ -2,6 +2,28 @@
 
 ## Current audit pointer — October20
 
+Chip successor868d is SELECTED by the existing named launcher/production reader,
+not canonical. Exact supported digest added;all five historical source transitions
+and unknown-digest/source-drift rejection remain. Owning loader pair passes2/2,
+zero skip/cancel/todo,77556.9545ms:full2311-case/15180-dependency load and removal
+of exactly76+24 children recover COMPLETE f471 predecessor. Receipt
+chip-selected-review-integration-20261020.log
+SHAfd6fcf64b913b10b65771f11aec8a1a6db4289a447c7a057c691920b58045910.
+Dry-run chip-selected-launcher-20261020.log SHA6320b0138b0fd4061a1da179aaaa8920a0c51adbc0ff15a26dbc5adf261f2408
+is path/argument completeness only. Source preflight reuses exact producer
+sourceFingerprints/proof functions:738 paths,734 unchanged,four reviewed changes
+(paint suite,review reader,store suite,export runner),no additions/removals;
+complete accepted source sectiond358bffc recovers from Git d10cecb3 bytes.
+All219 proof records/line anchors/descriptions/order retain fullf1597df7 digest;
+producer unchanged. Current source section7ca0f4de. Receipt
+chip-selected-source-census-20261020.log
+SHAa7e9be392921354fe4e8fb0471635f842bafa2bd1d95684454250a36e1a0c52f.
+Launcher,chip join and two case-index files are explicitly outside that738-file
+inventory;their separate checks are not implied by it. Accepted3072/f471 stays
+authoritative. Queue coherent export/conservation/cold/import for a justified
+batch;resume remaining material structure/paint questions rather than exporting
+again for every metadata edit. No whole-case or current rendering acceptance.
+
 Historical case-index entry gate repaired and owning suite passes4/4,zero skip/
 cancel/todo,128245.7206ms. Exact current policy59830913 now enters the EXISTING
 guarded restoration body (old55c7 support retained),which still proves complete

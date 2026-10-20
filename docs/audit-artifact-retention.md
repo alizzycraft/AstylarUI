@@ -2,6 +2,12 @@
 
 ## Current versus historical evidence
 
+Retain chip-selected-review-integration,chip-selected-launcher and chip-selected-
+source-census-20261020 log pairs. Exact868d selection and full predecessor/source/
+219-proof conservation are preflight evidence,not coherent export or canonical
+publication. Accepted3072/f471 and queued868d are both required;do not overwrite
+either. No new browser capture was created for these source/metadata checks.
+
 Retain case-index-policy-gate-repair and case-index-policy-gate-complete-20261020
 log pairs. Initial2/4 exposed stale producer-hash/error-stage test expectations
 after the policy entry repair;successful4/4 retains all full historical object

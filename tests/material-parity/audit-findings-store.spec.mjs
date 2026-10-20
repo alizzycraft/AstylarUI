@@ -4,7 +4,7 @@ import * as fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { importFindings, queryFindings, verifyFindings, saveReviewProposal, loadFindingEvidence, loadCaseObligationReview, attachCaseObligationCoverage, assertCaseObligationCoverage, caseInspectionObligations, describeCaseInspectionCoverage } from '../../scripts/audit-findings-store.mjs';
-import { createTextBackingReviewReader, textBackingRetainedReview, createDividerReviewedBoundariesReader, dividerReviewedBoundariesReview, inactiveParagraphInputsReview, filledFieldStructureReview } from './text-backing-case-review-source.mjs';
+import { createTextBackingReviewReader, textBackingRetainedReview, createDividerReviewedBoundariesReader, dividerReviewedBoundariesReview, inactiveParagraphInputsReview, filledFieldStructureReview, chipPaintReview } from './text-backing-case-review-source.mjs';
 
 test('reviewed divider boundary reader validates exact queued cases and rejects source drift',()=>{
   const root=process.cwd(),file=`artifacts/material-parity/working-audit/proposals/${dividerReviewedBoundariesReview}.json`;
@@ -65,6 +65,30 @@ test('reviewed divider boundary reader validates exact queued cases and rejects 
   }
   assert.equal(fields,577);
   assert.equal(createHash('sha256').update(JSON.stringify(fieldReview)).digest('hex'),inactiveParagraphInputsReview);
+  const chipFile=`artifacts/material-parity/working-audit/proposals/${chipPaintReview}.json`;
+  const chipReview=JSON.parse(fs.readFileSync(chipFile)).review;
+  const chipReader=createDividerReviewedBoundariesReader({...options,reviewSha256:chipPaintReview});
+  assert.equal(chipReader.sourceApplicability.transitions.length,5);
+  const chipResult=loadCaseObligationReview(chipFile,chipPaintReview,
+    chipReview.groups.map(group=>group.case),{root,read:chipReader.read});
+  assert.equal(chipResult.cases.length,2311);assert.equal(chipResult.evidenceFingerprints.length,15180);
+  assert.equal(chipResult.inspectionComplete,false);assert.equal(chipResult.currentRenderingAccepted,false);
+  let indicators=0,layers=0;
+  for(const group of chipReview.groups){
+    const owner=group.obligations.localPaint;
+    if(owner.retainedChipFocusIndicatorRequests){
+      assert.equal(group.family,'chips');assert.equal(owner.retainedChipFocusIndicatorRequests.observations.length,2);
+      delete owner.retainedChipFocusIndicatorRequests;indicators++;
+    }
+    if(owner.retainedChipStateLayerRequests){
+      const child=owner.retainedChipStateLayerRequests;
+      assert.equal(group.family,'chips');assert.equal(child.classification,'application-plugin-authoring-defect');
+      assert.deepEqual(child.observation.treeReceipts,group.evidence.pairedTrees);
+      delete owner.retainedChipStateLayerRequests;layers++;
+    }
+  }
+  assert.equal(indicators,76);assert.equal(layers,24);
+  assert.equal(createHash('sha256').update(JSON.stringify(chipReview)).digest('hex'),filledFieldStructureReview);
 });
 
 test('retained text backing review uses explicit tracked source applicability without changing receipts',()=>{
