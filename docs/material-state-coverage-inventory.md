@@ -22,9 +22,17 @@ are light/mobile-dpr2/open-dismiss anddark/mobile-dpr2/open-dismiss:closed candi
 state,no generic or alternate line,while native focused host/wrapper and active
 after-line remain. Both report normalized family-primary focus;the already-
 classified focusedIdentity descendant collapse cannot establish equal actual
-focus owners. Missing precise evidence is actual descendant focus/event history
-at these two endpoints;do not diagnose failed core stroke paint. Existing owning
-filled-field test passes1/1,zero skip/cancel/todo,2931.7925ms with all original
+focus owners. Complete retained eventComparison for each endpoint is only three
+pointerdown/pointerup/click triples per side;interactionState is just matches:true.
+No actual-focus target/timing history survives in these fields. The original
+focusMatches initializer gates equality only for state=focus,not open-dismiss;
+its true value here is not a tested focus pass. Existing separate October11
+semantic descendant replaceChildren diagnostic (timepicker-focus-provenance log
+55c6babc) proves focus-loss ownership in its own checkpoint,but does not recover
+these original endpoints' missing history. Missing precise evidence is actual
+descendant focus/event history at these two endpoints;do not diagnose failed core
+stroke paint or repeat the separate diagnostic as if it restores history. Existing owning
+filled-field test passes1/1,zero skip/cancel/todo,3156.1844ms with all original
 assertions preserved and40 alternate/two missing endpoints explicitly checked.
 No new capture/renderer/fixture change or whole-case closure. Canonical export/
 source reconciliation remains queued for this coherent structure/decoration batch.

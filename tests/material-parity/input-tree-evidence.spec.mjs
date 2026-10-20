@@ -533,6 +533,9 @@ test('retained filled-field structure substitutes absolute regions for the nativ
         assert.equal(entry.astylarState.open, false);
         assert.equal(entry.state, 'open-dismiss');
         assert.deepEqual(entry.focus, { reference: 'timepicker-primary', astylar: 'timepicker-primary', matches: true });
+        const pointerEvents = Array.from({ length: 3 }, () => ['pointerdown', 'pointerup', 'click']).flat();
+        assert.deepEqual(entry.eventComparison, { matches: true, reference: pointerEvents, astylar: pointerEvents });
+        assert.deepEqual(entry.interactionState, { matches: true });
         missingLineCases.push(`${entry.profile}/${entry.viewport.id}/${entry.state}`);
       }
     }
