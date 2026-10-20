@@ -181,6 +181,13 @@ for the existing JSON digest contract. Schema 1 omits the version opt-in.
 
 ## Validated reuse
 
+The October20 control-input successor736e685c retains the completee837 review
+and adds116 bounded children to108 exact checkbox/select cases. The named launcher
+selects it through the same explicit five-transition source reader;unknown review
+digests remain rejected. Old review support and original receipts remain intact.
+Source selection and focused green checks are not canonical publication,current
+rendering or case closure. Export/conservation/independent cold/import remain.
+
 For the pre-semantic-text-transform assertions in benchmark-config.spec.mjs,
 the suite now has an explicit historical population/read boundary. It removes
 only the authenticated additive160th finding,214th proof and associated source

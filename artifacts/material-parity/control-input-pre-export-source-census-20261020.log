@@ -1,0 +1,193 @@
+Command:
+@'
+import ts from 'typescript';import fs from 'node:fs';import path from 'node:path';import {createHash} from 'node:crypto';import {execFileSync} from 'node:child_process';import assert from 'node:assert/strict';import {sourceAuditDefinitions} from './tests/material-parity/input-equivalence-policy.mjs';import {sectionDigests} from './scripts/material-audit-section-digests.mjs';
+const file='tests/material-parity/input-equivalence-audit.mjs',source=fs.readFileSync(file,'utf8'),ast=ts.createSourceFile(file,source,ts.ScriptTarget.Latest,true),names=['scanMaterialSources','sourceFingerprints','focusedProofInventory','proof'];
+const bodies=names.map(name=>{const n=ast.statements.find(n=>ts.isFunctionDeclaration(n)&&n.name?.text===name);assert.ok(n);return n.getText(ast)}).join('\n');
+const f=new Function('readFileSync','path','createHash','sourceAuditDefinitions',bodies+'\nreturn {scanMaterialSources,sourceFingerprints,focusedProofInventory};')(fs.readFileSync,path,createHash,sourceAuditDefinitions);
+const sources=f.sourceFingerprints(process.cwd()),proofs=f.focusedProofInventory(process.cwd()),findings=f.scanMaterialSources(process.cwd());
+assert.deepEqual([sources.length,proofs.length,findings.length],[756,226,170]);assert.equal(proofs.filter(p=>p.status==='missing').length,0);assert.ok(findings.every(f=>f.detected));
+const tracked=new Set(execFileSync('git',['ls-tree','-r','--name-only','437a4535'],{encoding:'utf8',maxBuffer:4000000}).trim().split('\n'));
+const oldSources=structuredClone(sources.slice(13)),changed=[];
+for(const row of oldSources){if(!tracked.has(row.file)||!(/^(tests\/material-parity\/|scripts\/)/.test(row.file)))continue;const prior=createHash('sha256').update(execFileSync('git',['show','437a4535:'+row.file],{maxBuffer:4000000}).toString().replaceAll('\r\n','\n')).digest('hex');if(prior!==row.sha256){changed.push({file:row.file,before:prior,after:row.sha256});row.sha256=prior;}}
+const restored=await sectionDigests([Buffer.from(JSON.stringify({sourceFingerprints:oldSources,focusedProofs:proofs.slice(6),sourceFindings:findings.slice(0,166)}))]);
+for(const [name,sha] of [['sourceFingerprints','04e548574f4fd43ffc1dc34aa678344026170d9550ede6b5a15d41a6fb2dc152'],['focusedProofs','07065eba46f8650f81ae61487fd7b78f374be3465342ec39cbedbda6305865ce'],['sourceFindings','beb3da46b4a1ed1d4187e69078c85328a6a8233eb7f3e4f2c17a4ec23716a2f1']])assert.equal(restored.find(r=>r.name===name).sha256,sha,name);
+console.log(JSON.stringify({kind:'queued-control-registration-preflight',method:'AST-extracted unchanged production functions; tracked sources restored from Git437a4535; complete predecessor section digests verified including untracked evidence; no full builder/browser',counts:{sources:sources.length,proofs:proofs.length,findings:findings.length},restored,changed,addedSourceFiles:sources.slice(0,13),addedFindings:findings.slice(166).map(f=>({id:f.id,locations:f.locations})),canonicalUnchanged:true,caseJoinPending:true},null,2));
+'@ | node --input-type=module
+Exit: 0
+Note: caseJoinPending in the generic census output refers to canonical integration; proposal736e685c already has a complete116-child join and selected-review proof. Publication remains pending.
+{
+  "kind": "queued-control-registration-preflight",
+  "method": "AST-extracted unchanged production functions; tracked sources restored from Git437a4535; complete predecessor section digests verified including untracked evidence; no full builder/browser",
+  "counts": {
+    "sources": 756,
+    "proofs": 226,
+    "findings": 170
+  },
+  "restored": [
+    {
+      "name": "sourceFingerprints",
+      "tokens": 7431,
+      "sha256": "04e548574f4fd43ffc1dc34aa678344026170d9550ede6b5a15d41a6fb2dc152"
+    },
+    {
+      "name": "focusedProofs",
+      "tokens": 3961,
+      "sha256": "07065eba46f8650f81ae61487fd7b78f374be3465342ec39cbedbda6305865ce"
+    },
+    {
+      "name": "sourceFindings",
+      "tokens": 13017,
+      "sha256": "beb3da46b4a1ed1d4187e69078c85328a6a8233eb7f3e4f2c17a4ec23716a2f1"
+    }
+  ],
+  "changed": [
+    {
+      "file": "tests/material-parity/text-backing-case-review-source.mjs",
+      "before": "8ecd5f4bf0b53e64ce9621a8ad41265327d5c4fbe3cf2b667842756e3911c134",
+      "after": "711a706d07e7be74b2e66bfe482f3609690fdbf2544298f30f98940de3806f12"
+    },
+    {
+      "file": "tests/material-parity/legacy-clip-support-input.spec.mjs",
+      "before": "0dddba478e928a71e378f28ed4a2e05f2deac1f0375b7213f8d2e035eebff189",
+      "after": "1039d8995e8411cb78f951353408a3ed18cdca3bab64dc7de21df7e9be4984c0"
+    },
+    {
+      "file": "tests/material-parity/semantic-text-transform-input.spec.mjs",
+      "before": "31a256b322ae7a63340cef740ef6b438fd94321133cb7cfa675223bf632978d2",
+      "after": "97ce5c4862de1335a2da17ae4d96d07f9e0fad5f2f5df89dd5b614a2e1ca9bc7"
+    },
+    {
+      "file": "tests/material-parity/semantic-text-transform-registration.mjs",
+      "before": "b9d1e65a82176a32beec12c26102b530efdb752ed76181542e25248eeca9b4a0",
+      "after": "8eba578d04c9b2a96ef8a5a7615aa5c81dcb315617789aef0a293e5b688d0200"
+    },
+    {
+      "file": "tests/material-parity/audit-findings-store.spec.mjs",
+      "before": "fd36ebe2fe2e45906a468023161e1dbb9a91d36083e324a9158b8c8087144e1f",
+      "after": "92183be2cbd7bd65f8c868a7d4b11ffbe274b79e2a660d852759f671009c5675"
+    },
+    {
+      "file": "tests/material-parity/input-equivalence-audit.mjs",
+      "before": "d2d49ef981833dc1e2fa6882c08e7527f0899aa4d65832b47d0571884450c6b4",
+      "after": "d97e15b446f6fe5c53688f3ff504fed86dd1793d0912cb39f374a77abe9c6ea7"
+    },
+    {
+      "file": "tests/material-parity/input-equivalence-policy.mjs",
+      "before": "7875b717fe7693f5bdad8158f99461f09512b7bdbcdda4465a0478c4bc24566c",
+      "after": "6a330a84e3b43c7ebecebcbb12640fc10ed04b9363dbf74815f74e53efab96b0"
+    },
+    {
+      "file": "scripts/run-material-input-audit.mjs",
+      "before": "958123137588d4b746d5e87de990237654c4102684607cbb3e5cbe517c87340d",
+      "after": "9a151542be7aed4d78edb3408b77f9a3f6ccf43b9daf340b004847e6cb87f2f6"
+    },
+    {
+      "file": "tests/material-parity/input-boundary-evidence.spec.mjs",
+      "before": "cdcfd338d0823fefaa780efbba5e500a78f952e745f1c0d6039f0c59a2e8cc50",
+      "after": "58fe244dc56a251e144dcc6eab2c36cb18f017291da968e1d002dc36404d60ea"
+    },
+    {
+      "file": "tests/material-parity/benchmark-config.spec.mjs",
+      "before": "cba155304dfc1024fad3224789ed032ef8df5885b4367c9664e472a63772cf10",
+      "after": "dc30dfac735721633f6fe04d8319255f41b305f113118fe96de0d757c313cb47"
+    }
+  ],
+  "addedSourceFiles": [
+    {
+      "file": "artifacts/material-parity/queued-control-source-history-20261020.log",
+      "sha256": "57f539672cfb6f82ed05f8c3141d866d0a7518fda7b6bb5756dbea60e41093a3"
+    },
+    {
+      "file": "artifacts/material-parity/queued-control-owning-20261020.log",
+      "sha256": "aac72a08875827648bb454200a4ee1a30ff082fa703f2edd55c72f6c9addbaf4"
+    },
+    {
+      "file": "artifacts/material-parity/checkbox-checkmark-retained-inputs-20261020.log",
+      "sha256": "30ff029a6f116c88e63027b960391e6e08bbaf6ddf3a89c305506cb43a18b8c4"
+    },
+    {
+      "file": "artifacts/material-parity/checkbox-disabled-checkmark-token-20261020.log",
+      "sha256": "1750461e2aafd8b9b6100799d3c81267e04be242d70f14cdf02d92f389a2b41f"
+    },
+    {
+      "file": "artifacts/material-parity/checkbox-disabled-ax-focus-probe-20261020.log",
+      "sha256": "a0ca85fd1d76dbff03b293bf2a914b42120ca3a08d6d5f6da07fb17159135438"
+    },
+    {
+      "file": "artifacts/material-parity/checkbox-disabled-native-role-control-20261020.log",
+      "sha256": "8bae9a4ee17b7ad676aabe98ebc91169fe7af9671c435b9dde6b471c1ad791e8"
+    },
+    {
+      "file": "artifacts/material-parity/select-listbox-name-inputs-20261020.log",
+      "sha256": "7351677374f8515257904ee3620484ed84fa0d30880b46299204eafb19cf4833"
+    },
+    {
+      "file": "artifacts/material-parity/retained-active-option-input-targets-20261020.log",
+      "sha256": "162a3754ad10427a6341b9d2fd7144f7c9164424d7389101e2a3ade1ace1042b"
+    },
+    {
+      "file": "artifacts/material-parity/select-open-ax-target-resolution-20261020.log",
+      "sha256": "a673c563a91f47eca0e5687cb499bb84cfc0ece693f43eef715b5017bfecd27d"
+    },
+    {
+      "file": "artifacts/material-parity/public-dynamic-readonly-20261020.log",
+      "sha256": "84e0c8cb97ed06d386a0f076eb116e4167a5b4c113c0b4e0c8427549848d4160"
+    },
+    {
+      "file": "artifacts/material-parity/public-dynamic-readonly-independent-20261020.log",
+      "sha256": "8f7fb05d99efd69783e2f083dc54a0b5afe91832a025b75128b6394a3710b31f"
+    },
+    {
+      "file": "artifacts/material-parity/working-audit/proposals/430dada4b7b57b0e54f8d41ba3524f2031c285f516bc846b3b5a5f8d17684aa4.json",
+      "sha256": "6ff3c61df5fc388ab1abead99a314188703d2ba968c7d8baa80d8c2b4aa9aca5"
+    },
+    {
+      "file": "artifacts/material-parity/queued-control-source-proposal-owning-20261020.log",
+      "sha256": "08d99c74f0fac7bb2d2c5410b46d77f0205453c62d3ab3846bf6c5e1d64d1f6b"
+    }
+  ],
+  "addedFindings": [
+    {
+      "id": "fixture-checkbox-checkmark-path-substitution",
+      "locations": [
+        {
+          "file": "examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts",
+          "line": 278,
+          "excerpt": "export function materialCheckMarkPath(): CssPoint[] {"
+        }
+      ]
+    },
+    {
+      "id": "fixture-checkbox-disabled-checkmark-ink-substitution",
+      "locations": [
+        {
+          "file": "examples/material-showcase/src/app/astylar.component.ts",
+          "line": 1103,
+          "excerpt": "const color = extraClass === 'checkbox-mark' || extraClass === 'step-complete-mark'"
+        }
+      ]
+    },
+    {
+      "id": "fixture-checkbox-disabled-native-primitive-substitution",
+      "locations": [
+        {
+          "file": "examples/material-showcase/src/app/astylar.component.ts",
+          "line": 927,
+          "excerpt": "type: 'div', id: 'checkbox-primary', role: 'checkbox', tabindex: state.disabled ? -1 : 0,"
+        }
+      ]
+    },
+    {
+      "id": "fixture-select-listbox-name-omission",
+      "locations": [
+        {
+          "file": "examples/material-showcase/src/app/astylar.component.ts",
+          "line": 953,
+          "excerpt": "id: 'select-options', class: 'select-popup', role: 'listbox', children: ["
+        }
+      ]
+    }
+  ],
+  "canonicalUnchanged": true,
+  "caseJoinPending": true
+}

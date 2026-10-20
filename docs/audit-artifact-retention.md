@@ -9,7 +9,9 @@ all2311 cases stay partial/unverified. Preserve the rejected conflict proposal
 as failure evidence:one dependency path cannot carry historical and current
 hashes. Current proof owner is explicitly checked/referenced,not substituted for
 the historical receipt;canonical source inventory fingerprints its current bytes.
-No loader assertion or receipt was waived. Selection/publication remains pending.
+No loader assertion or receipt was waived. Exact-review selection is implemented;
+canonical publication remains pending. Retain control-input-selected-review-
+20261020.log and control-input-pre-export-source-census-20261020.log with this batch.
 
 Retain source proposal430dada4 and queued-control-source-proposal(-owning)-
 20261020 logs. All166 prior definitions are preserved in the170-group proposal;

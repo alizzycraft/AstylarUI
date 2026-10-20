@@ -10,6 +10,7 @@ export const inactiveParagraphInputsReview='bfc2b6d546a0a636f07272eef14591ec830d
 export const filledFieldStructureReview='f471932bd9ed51a2df35d533632acafc5e4788df07e6e46ed4b5b8bf0c57739b';
 export const chipPaintReview='868daaecb79c16d632701361c4303197f5d2760aec70f4cdd5d138840decabe5';
 export const chipGraphicReview='e837c58e3b9c0594f6003a6001a03cb12b4fa875403db08724e9c9defb329854';
+export const controlInputReview='736e685c55bf033db3d0ffc5b564e2ed42648438e1ed0b3ab66b7f26ed83d8bd';
 const hash=b=>createHash('sha256').update(b).digest('hex');
 export function restoreInputBoundaryReadonlyAppend(source){
   const text=source.toString().replaceAll('\r\n','\n');
@@ -55,7 +56,7 @@ export function restoreQueuedControlHelperSource(source){
 export function createDividerReviewedBoundariesReader({root,read,reviewSha256}){
   // Both exact reviews retain the same pre-extension alignment-suite receipt.
   // Supporting the predecessor does not change the three-source base contract.
-  assert.ok([textBackingRetainedReview,dividerReviewedBoundariesReview,inactiveParagraphInputsReview,filledFieldStructureReview,chipPaintReview,chipGraphicReview].includes(reviewSha256));
+  assert.ok([textBackingRetainedReview,dividerReviewedBoundariesReview,inactiveParagraphInputsReview,filledFieldStructureReview,chipPaintReview,chipGraphicReview,controlInputReview].includes(reviewSha256));
   const owner='scripts/join-material-divider-paint-boundaries.mjs';
   const source=read(path.resolve(root,owner),'utf8');
   assert.equal(hash(source),'b187103f2f773955dd97ea3e0ee4e0b5d4b4b9faab4af0ebb6fe5d6627f681da');

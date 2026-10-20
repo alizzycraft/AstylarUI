@@ -655,7 +655,10 @@ test('retained control input join preserves every predecessor case and bounds fi
   const digest = '736e685c55bf033db3d0ffc5b564e2ed42648438e1ed0b3ab66b7f26ed83d8bd';
   const file = `artifacts/material-parity/working-audit/proposals/${digest}.json`;
   const review = JSON.parse(fs.readFileSync(file)).review;
-  const reader = createDividerReviewedBoundariesReader({ root: process.cwd(), read: fs.readFileSync, reviewSha256: chipGraphicReview });
+  const reader = createDividerReviewedBoundariesReader({ root: process.cwd(), read: fs.readFileSync, reviewSha256: digest });
+  assert.equal(reader.sourceApplicability.reviewSha256, digest);
+  assert.equal(reader.sourceApplicability.transitions.length, 5);
+  assert.throws(() => createDividerReviewedBoundariesReader({ root: process.cwd(), read: fs.readFileSync, reviewSha256: '0'.repeat(64) }));
   const loaded = loadCaseObligationReview(file, digest, review.groups.map(g => g.case), { read: reader.read });
   assert.equal(loaded.cases.length, 2311); assert.equal(loaded.evidenceFingerprints.length, 15192);
   assert.equal(loaded.inspectionComplete, false); assert.equal(loaded.currentRenderingAccepted, false);

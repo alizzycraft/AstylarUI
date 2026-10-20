@@ -70,11 +70,20 @@ below. Earlier next/live statements in chronology are not current instructions.
   One-pair primitive-focus and dynamic-readonly probes are NOT generalized to
   captured cases. All2311 remain partial/current-rendering unverified. Evidence:
   control-input-case-join-20261020.log;owning assertion checks exact populations.
-- Next:select736e685c through the existing exact-review source boundary and
-  launcher,then reconcile the changed source census in one coherent export/cold
-  milestone. New proposal is not selected or canonical yet. Remaining structure/
+- Review736e685c is now selected by the complete-baseline launcher and existing
+  exact five-transition reader. Old/new review and registration checks pass3/3;
+  unknown IDs reject. Launcher dry-run passes (not evidence authentication).
+- Next:reconcile the changed source census,then freeze for one coherent export/
+  conservation/independent cold/import milestone. New proposal is not canonical.
+  Remaining structure/
   AX/paint/current-runtime coverage stays open.
   Original full canonical/browser/unit/build/packed-consumer/release gates remain.
+- Pre-export census now passes756/226/170 with zero missing proof/source findings.
+  Ten changed registered source receipts plus13 added paths reconcile to the
+  complete accepted743-source section04e54857;all prior220 proof/166 finding
+  objects conserve to07065eba/beb3da46. Source selection adds the runner receipt
+  to the prior nine changed sources. control-input-pre-export-source-census-
+  20261020.log retains exact producer/receipts;no full builder/browser was run.
 - Storage:the agent performed no deletion. After the302-build review,the existing
   Material test-out parent now contains0 directories;D: free12831477760 bytes.
   This is an observed external change,not an agent-executed cleanup. Exact prior
