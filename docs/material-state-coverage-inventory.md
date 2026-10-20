@@ -2,6 +2,26 @@
 
 ## Current audit pointer — October20
 
+Queued coherent field review f471932bd9ed51a2df35d533632acafc5e4788df07e6e46ed4b5b8bf0c57739b
+adds577 inputStyleStructure children to accepted bfc2,without changing any parent
+remaining/status/acceptance field. Exact original October5 paired-tree receipts
+match the ledger;the owning test separately replays all577 ancestry and577 ledger
+cases rather than transferring results by ID. Existing loader authenticates15175
+dependencies;2308 altered-case/tree/corner/position controls reject. Removing only
+577 children recovers complete bfc2 predecessor digest. Still2311 partial cases,
+no current rendering acceptance. Not selected/exported/canonical. Next reconcile
+this bounded review through the existing named exporter/reader and source census
+before a coherent publication;do not launch fresh browser capture for these facts.
+Evidence:filled-field-structure-ledger-review-20261020.log
+SHA5fadba044b06bd7dd601687ab0f30ecde740413623feaf55d6bd2d0a2e5b6a09;
+filled-field-structure-case-join-complete-20261020.log
+SHA2332d74297c943f2c81540e98bbe249fe8083bcdea64ed7dada1238c1bafa2d1;
+filled-field-structure-owning-suite-20261020.log
+SHAfaee68e037cb7370819014d92890a0b5fd9964bcc25a8046f72e3f0a865995e4,
+14/14 pass,zero skip/cancel/todo,18299.6594ms. Published original suite remains an
+exact prefix;all219 original proof anchors remain stationary. Only indexed suite
+source bytes changed in this investigation batch;full census remains next.
+
 October20 underline activation review:40 unfocused error cases (eight each for
 form-field,input,autocomplete,datepicker,timepicker) retain native before-border1px,
 opacity1 and after-border2px withopacity0/scaleX0,but candidate active-line height2px,

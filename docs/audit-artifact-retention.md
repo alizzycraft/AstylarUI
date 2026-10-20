@@ -2,6 +2,18 @@
 
 ## Current versus historical evidence
 
+October20 queued field structure proposal f471932b is required new case evidence,
+not selected/canonical scratch. Retain filled-field-structure-ledger-review,
+case-join-complete and owning-suite-20261020 log pairs. Retain initial case-join
+and case-join-retry failures:both stop at TAP diagnostic parsing before proposal
+write;the complete join reconstructs escaped/chunked comments using the existing
+retained-log convention. No original evidence was rewritten. Closed proposal
+166605363 logical bytes was losslessly LZX-compressed to37195776 physical bytes;
+raw envelopeSHA8417371df038a621586a61bcafc13eff2f66a1099f996c659c3e522013ebdbdc
+is unchanged before/after (distinct from review digest f471932b). All577 additions
+have exact original ledger tree receipts;complete bfc2 predecessor is recoverable.
+Accepted46ea/bfc2 pointers remain unchanged. No evidence/caches deleted.
+
 October20 accepted46eaeb4c evidence publication passed independent cold replay,
 complete section/coverage/source/proof/readable conservation and verified main
 import. Main and candidate-validation generations share ALL86 immutable regular

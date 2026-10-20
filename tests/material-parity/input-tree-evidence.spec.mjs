@@ -436,7 +436,7 @@ test('retained main mixed-text owners have only out-of-flow chip focus-indicator
   // separate obligations; historical trees are not current rendering acceptance.
 });
 
-test('retained filled-field structure substitutes absolute regions for the native infix chain', () => {
+for (const capture of ['ancestry', 'ledger']) test(`retained filled-field structure substitutes absolute regions for the native infix chain (${capture})`, () => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
   const component = readFileSync('examples/material-showcase/src/app/astylar.component.ts', 'utf8').replaceAll('\r\n', '\n');
   assert.equal(hash(component), 'b493a355679903f988e29f0dafbb95d2d6cce41275302fce5c978ae55f423b9f');
@@ -448,8 +448,13 @@ test('retained filled-field structure substitutes absolute regions for the nativ
     assert.equal(hash(bytes), descriptor.sha256);
     return JSON.parse(bytes);
   };
-  const descriptor = JSON.parse(readFileSync('docs/material-generated-node-mapping-audit.json')).mainCapture;
-  assert.equal(descriptor.sha256, 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const descriptor = capture === 'ancestry'
+    ? JSON.parse(readFileSync('docs/material-generated-node-mapping-audit.json')).mainCapture
+    : { file: 'artifacts/material-parity/current-full-20261005/latest-report.json',
+      sha256: 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62' };
+  assert.equal(descriptor.sha256, capture === 'ancestry'
+    ? 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a'
+    : 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
   const report = load(descriptor), counts = {}, classHas = (node, cls) =>
     String(node.attributes?.class ?? '').split(/\s+/).includes(cls);
   const unique = nodes => { assert.equal(nodes.length, 1); return nodes[0]; };
@@ -457,6 +462,7 @@ test('retained filled-field structure substitutes absolute regions for the nativ
   let absentDisabledLayers = 0;
   const focusOpacities = {}, cornerSubstitutions = {};
   const underlineStates = {}, errorActivation = {}, alternateLineStates = {}, missingLineCases = [];
+  const reviewedRows = [];
   for (const entry of [...report.results, ...report.interactions].filter(entry => families.includes(entry.family))) {
     const native = load(entry.inputTrees.reference), candidate = load(entry.inputTrees.astylar);
     assert.deepEqual(native.errors, []); assert.deepEqual(candidate.errors, []);
@@ -544,6 +550,24 @@ test('retained filled-field structure substitutes absolute regions for the nativ
     else assert.equal(focus.length, 1);
     const opacity = focus.length ? native.styles[focus[0].style].opacity : 'absent';
     focusOpacities[opacity] = (focusOpacities[opacity] ?? 0) + 1;
+    reviewedRows.push({
+      case: `${entry.state ? 'interaction' : 'static'}:${family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`,
+      family, inputTrees: entry.inputTrees,
+      reference: { host: host.key, wrapper: wrapper.key, flex: flex.key, infix: infix.key,
+        control: control.key, floatingLabel: floating.key, label: label.key,
+        infixPosition: native.styles[infix.style].position,
+        corners: ['borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomRightRadius', 'borderBottomLeftRadius'].map(key => wrapperStyle[key]),
+        focusLayer: focus.length ? { key: focus[0].key, opacity } : null,
+        underline: { key: ripple.key, activeOpacity: afterStyle.opacity, activeTransform: afterStyle.transform } },
+      astylar: { shell: shell.key, surface: surface.key, region: region.key,
+        label: authored(`${family}-label`).key, control: authored(`${family}-control`).key,
+        regionPosition: region.resolvedStyle.position, surfaceRadius: radius,
+        genericLine: lines[0]?.key ?? null,
+        alternateLine: candidate.nodes.find(node => node.authored?.id === 'timepicker-active-line')?.key ?? null },
+      classifications: { structure: 'application-plugin-authoring-defect', corners: 'application-plugin-authoring-defect',
+        errorActivatesFocusLine: lines.length && afterStyle.opacity === '0' ? 'application-plugin-authoring-defect' : null },
+      boundary: 'Exact retained requests only;not complete wrapper equivalence,current runtime,paint equivalence or whole-case closure.',
+    });
     counts[family] = (counts[family] ?? 0) + 1;
   }
   assert.deepEqual(counts, { 'form-field': 76, input: 76, autocomplete: 110, select: 94, datepicker: 111, timepicker: 110 });
@@ -560,6 +584,16 @@ test('retained filled-field structure substitutes absolute regions for the nativ
   assert.deepEqual(errorActivation, { 'form-field': 8, input: 8, autocomplete: 8, datepicker: 8, timepicker: 8 });
   assert.deepEqual(alternateLineStates, { activate: 8, 'activate-leave': 8, 'open-scroll': 8, 'open-hover-content': 8, open: 8 });
   assert.deepEqual(missingLineCases, ['light/mobile-dpr2/open-dismiss', 'dark/mobile-dpr2/open-dismiss']);
+  assert.equal(reviewedRows.length, 577);
+  assert.equal(new Set(reviewedRows.map(row => row.case)).size, 577);
+  if (capture === 'ledger' && process.env.ASTYLAR_AUDIT_FIELD_REVIEW === '1') console.log('FIELD_STRUCTURE_REVIEW ' + JSON.stringify({
+    kind: 'retained-filled-field-structure-review', report: descriptor,
+    source: { file: 'examples/material-showcase/src/app/astylar.component.ts',
+      sha256: hash(readFileSync('examples/material-showcase/src/app/astylar.component.ts')) },
+    proof: { file: 'tests/material-parity/input-tree-evidence.spec.mjs', sha256: hash(readFileSync(new URL(import.meta.url))) },
+    counts, cornerSubstitutions, focusOpacities, underlineStates, errorActivation, alternateLineStates, missingLineCases,
+    rows: reviewedRows,
+  }));
   // These are unequal layout/tree requests, not a one-to-one wrapper mapping or
   // proof that every removed wrapper has a separate renderer defect. Preserve
   // existing label/token diagnoses and investigate unclassified paint separately.
