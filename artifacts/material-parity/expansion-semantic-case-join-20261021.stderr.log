@@ -1,0 +1,50 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  {
+    astylar: {
++     file: 'artifacts/material-parity/current-full-20261005/expansion/light/desktop/astylar-input-tree.json',
++     sha256: '2cc8ab737f6310a0255fc1c02159fcf0c9414a6e340a6317f2a006de071a77eb'
+-     file: 'artifacts/material-parity/current-ancestry-audit/expansion/light/desktop/astylar-input-tree.json',
+-     sha256: '9c504d4e1f2c0b0cfc9d28824c3bc3279ea3996d194eb52b8d1fe5c25d1d3f5f'
+    },
+    reference: {
++     file: 'artifacts/material-parity/current-full-20261005/expansion/light/desktop/reference-input-tree.json',
++     sha256: '26ee6ce74ecc4addfc60f8efe9dbfa8829695b5c08675a153955af47bc9ba076'
+-     file: 'artifacts/material-parity/current-ancestry-audit/expansion/light/desktop/reference-input-tree.json',
+-     sha256: '6563e014940c36e44ac444187f7b9e387c45dd51839f5a94775552b2220742a2'
+    }
+  }
+
+    at file:///D:/dev/github/AstylarUI-audit-integration/scripts/join-expansion-semantic-evidence.mjs:26:10 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: {
+    reference: {
+      file: 'artifacts/material-parity/current-full-20261005/expansion/light/desktop/reference-input-tree.json',
+      sha256: '26ee6ce74ecc4addfc60f8efe9dbfa8829695b5c08675a153955af47bc9ba076'
+    },
+    astylar: {
+      file: 'artifacts/material-parity/current-full-20261005/expansion/light/desktop/astylar-input-tree.json',
+      sha256: '2cc8ab737f6310a0255fc1c02159fcf0c9414a6e340a6317f2a006de071a77eb'
+    }
+  },
+  expected: {
+    reference: {
+      file: 'artifacts/material-parity/current-ancestry-audit/expansion/light/desktop/reference-input-tree.json',
+      sha256: '6563e014940c36e44ac444187f7b9e387c45dd51839f5a94775552b2220742a2'
+    },
+    astylar: {
+      file: 'artifacts/material-parity/current-ancestry-audit/expansion/light/desktop/astylar-input-tree.json',
+      sha256: '9c504d4e1f2c0b0cfc9d28824c3bc3279ea3996d194eb52b8d1fe5c25d1d3f5f'
+    }
+  },
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.22.3

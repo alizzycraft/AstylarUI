@@ -210,6 +210,19 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   exits0 via review-expansion-semantic-inputs.mjs;retain expansion-semantic-source-
   review-20261021 log pair/proposal. Registration/case-evidence join still pending;
   accepted package remains176,all2311 cases partial/current-rendering unverified.
+- Expansion case-evidence successor5caa57e5f2254471d9d082ff0831db36704f73997b41ae48aa4b4064b45c4c99
+  adds68 retained relationship-target children and12 collapsed actual-AX children
+  to accepted review20dfb804;loader authenticates15588 dependencies/2311 cases.
+  Removing exactly80 children recovers COMPLETE20dfb804;all dispositions/findings/
+  remaining work and accepted pointer survive. Original join rejects ancestry
+  receipts versus accepted October5 tree receipts;preserve that failure. Retry
+  authenticates all68 accepted pairs and explicitly matches only claimed target
+  type/role/label relation,candidate target authoring,expanded flags and three
+  display stages against retained ancestry evidence. Both receipts are preserved;
+  no whole-capture equivalence/currentness is inferred. Accepted input bindings
+  are recorded in expansion-semantic-case-join-retry-20261021 log;terminal0.
+  Producer:join-expansion-semantic-evidence.mjs. New proposal remains unselected/
+  noncanonical;source registration and coherent integration remain pending.
 - Next card descendant question narrowed across all52 authenticated retained pairs:
   reference title is nested under the native header-text div;candidate h2 is a
   direct header child. Native15 static/16 interaction nodes versus11 candidate
