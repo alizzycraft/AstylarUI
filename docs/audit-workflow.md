@@ -189,6 +189,16 @@ preflight only;full export/conservation/cold/import still precede publication.
 Existing source-restoration guards bind complete prior helper/runner/launcher
 bytes and reject drift;unknown reviews cannot select this boundary.
 
+For the reviewed card successor, the same launcher accepts `--card-inputs`
+(also with `--dry-run` or `--check`). This explicitly selects20dfb804;default5031
+and `--static-ax`33b7 remain unchanged. The two supplement flags are mutually
+exclusive. Full review loading authenticates15420 dependencies/twelve current
+source checks;removing52 recorded-node and12 actual-AX children recovers complete
+33b7. All2311 cases remain partial/current-rendering unverified. Selection and
+dry run are not canonical publication;source conservation,export,cold comparison
+and accepted import remain required. Exact prior selection-source restoration
+rejects drift;unknown review IDs remain rejected.
+
 ## Validated reuse
 
 The October20 control-input successor736e685c retains the completee837 review

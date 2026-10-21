@@ -1,0 +1,323 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+... Skipped lines
+
+  "import assert from 'node:assert/strict';\n" +
+    "import { createHash } from 'node:crypto';\n" +
+    "import path from 'node:path';\n" +
+    "import ts from 'typescript';\n" +
+    "import { restoreTextBackingPolicy } from './semantic-text-transform-registration.mjs';\n" +
+...
+    "export const passiveStaticAxReview='33b7ccf93a9df72a878ba302c5a0b8867ef01a2b24cb81a47a59e9c7a5b16460';\n" +
++   "export const cardInputsReview='20dfb80485f094eaec4025e56ac7d5bb4a375f388643d192cb14f5d5fecbf82b';\n" +
+    "const hash=b=>createHash('sha256').update(b).digest('hex');\n" +
+    'export function restoreInputBoundaryReadonlyAppend(source){\n' +
+    "  const text=source.toString().replaceAll('\\r\\n','\\n');\n" +
+    "  if(hash(text)==='58fe244dc56a251e144dcc6eab2c36cb18f017291da968e1d002dc36404d60ea'){\n" +
+    "    const start=text.indexOf('\\n// Append-only queued batch:');assert.ok(start>0);\n" +
+...
+    '  // Supporting the predecessor does not change the three-source base contract.\n' +
++   '  assert.ok([textBackingRetainedReview,dividerReviewedBoundariesReview,inactiveParagraphInputsReview,filledFieldStructureReview,chipPaintReview,chipGraphicReview,controlInputReview,dividerPropertyContextReview,sharedButtonTouchReview,passiveStaticAxReview,cardInputsReview].includes(reviewSha256));\n' +
+-   '  assert.ok([textBackingRetainedReview,dividerReviewedBoundariesReview,inactiveParagraphInputsReview,filledFieldStructureReview,chipPaintReview,chipGraphicReview,controlInputReview,dividerPropertyContextReview,sharedButtonTouchReview,passiveStaticAxReview].includes(reviewSha256));\n' +
+    "  const owner='scripts/join-material-divider-paint-boundaries.mjs';\n" +
+    "  const source=read(path.resolve(root,owner),'utf8');\n" +
+    "  assert.equal(hash(source),'b187103f2f773955dd97ea3e0ee4e0b5d4b4b9faab4af0ebb6fe5d6627f681da');\n" +
+    `  const start=source.indexOf("const suite = 'tests/material-parity/alignment-crop-provenance.spec.mjs'");\n` +
+    "  const end=source.indexOf('const review = JSON.parse',start);\n" +
+...
+    '  const currentSourceChecks=[];\n' +
++   '  if([dividerPropertyContextReview,sharedButtonTouchReview,passiveStaticAxReview,cardInputsReview].includes(reviewSha256)){\n' +
+-   '  if([dividerPropertyContextReview,sharedButtonTouchReview,passiveStaticAxReview].includes(reviewSha256)){\n' +
+    '    const file=path.resolve(root,`artifacts/material-parity/working-audit/proposals/${reviewSha256}.json`);\n' +
+    '    const envelope=JSON.parse(read(file));\n' +
+    '    assert.equal(envelope.sha256,reviewSha256);assert.equal(hash(JSON.stringify(envelope.review)),reviewSha256);\n' +
+    "    const groups=envelope.review.groups.filter(group=>group.family==='divider');assert.equal(groups.length,24);\n" +
+    '    const checked=new Map();\n' +
+...
+    "  const helper='tests/material-parity/semantic-text-transform-registration.mjs',helperText=read(path.resolve(root,helper),'utf8');\n" +
++   '  let reviewedHelperT'... 7426 more characters
+-   '  let reviewedHelperText=restoreQueuedControlHelperSource(helperText),replayRestorationBlock;\n' +
+-   "  if(hash(reviewedHelperText)==='18eec69ef63dc741a3edba301d"... 7294 more characters
+
+    at file:///D:/dev/github/AstylarUI-audit-integration/[eval1]:1:1099
+    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:282:26)
+    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:278:20)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: "import assert from 'node:assert/strict';\n" +
+    "import { createHash } from 'node:crypto';\n" +
+    "import path from 'node:path';\n" +
+    "import ts from 'typescript';\n" +
+    "import { restoreTextBackingPolicy } from './semantic-text-transform-registration.mjs';\n" +
+    "import { restoreSharedButtonSemanticHelper } from './button-touch-registration.mjs';\n" +
+    '\n' +
+    "export const textBackingRetainedReview='33a0bd8b71e92c7ededcc6f8e2cbf9ef1f5e981034362793c0531851672fe617';\n" +
+    "export const dividerReviewedBoundariesReview='be99cd383dabb304da259cef9046b6b81ce44922c3ae4d8fe6dfc2a76ab33f6f';\n" +
+    "export const inactiveParagraphInputsReview='bfc2b6d546a0a636f07272eef14591ec830dcc7e90098c06a865af72076d238e';\n" +
+    "export const filledFieldStructureReview='f471932bd9ed51a2df35d533632acafc5e4788df07e6e46ed4b5b8bf0c57739b';\n" +
+    "export const chipPaintReview='868daaecb79c16d632701361c4303197f5d2760aec70f4cdd5d138840decabe5';\n" +
+    "export const chipGraphicReview='e837c58e3b9c0594f6003a6001a03cb12b4fa875403db08724e9c9defb329854';\n" +
+    "export const controlInputReview='736e685c55bf033db3d0ffc5b564e2ed42648438e1ed0b3ab66b7f26ed83d8bd';\n" +
+    "export const dividerPropertyContextReview='433b794f0a1d51b7592fb9932fab3fe6c6376c1412958f7aafca089e509799b2';\n" +
+    "export const sharedButtonTouchReview='50315381bf02df83158d2743488dddd5aee827d4695f7047d49802c2637de44a';\n" +
+    "export const passiveStaticAxReview='33b7ccf93a9df72a878ba302c5a0b8867ef01a2b24cb81a47a59e9c7a5b16460';\n" +
+    "export const cardInputsReview='20dfb80485f094eaec4025e56ac7d5bb4a375f388643d192cb14f5d5fecbf82b';\n" +
+    "const hash=b=>createHash('sha256').update(b).digest('hex');\n" +
+    'export function restoreInputBoundaryReadonlyAppend(source){\n' +
+    "  const text=source.toString().replaceAll('\\r\\n','\\n');\n" +
+    "  if(hash(text)==='58fe244dc56a251e144dcc6eab2c36cb18f017291da968e1d002dc36404d60ea'){\n" +
+    "    const start=text.indexOf('\\n// Append-only queued batch:');assert.ok(start>0);\n" +
+    "    assert.equal(hash(text.slice(start)),'52a9172b09a5c677c91547f44bac5ef01aac6a70a43b3a0849f7bb4372997fd5');\n" +
+    "    assert.equal(hash(text.slice(0,start)),'cdcfd338d0823fefaa780efbba5e500a78f952e745f1c0d6039f0c59a2e8cc50');\n" +
+    '    return restoreInputBoundaryReadonlyAppend(text.slice(0,start));\n' +
+    '  }\n' +
+    "  const previous='171bf9fae8fe2e701f5a42d5eef896685085ef267200956729ab447e04a032d5';\n" +
+    '  if(hash(text)===previous)return text;\n' +
+    "  assert.equal(hash(text),'cdcfd338d0823fefaa780efbba5e500a78f952e745f1c0d6039f0c59a2e8cc50');\n" +
+    `  const start=text.indexOf("\\ntest('public readonly keyboard mutation preserves equal inputs and binds current default owners'");\n` +
+    '  assert.ok(start>0);\n' +
+    "  assert.equal(hash(text.slice(start)),'0344aa16c76792afd9fab101e4f48a3bb03d1f958565efd1473d1fb3da74f69c');\n" +
+    '  assert.equal(hash(text.slice(0,start)),previous);return text.slice(0,start);\n' +
+    '}\n' +
+    'export function restoreQueuedControlHelperSource(source){\n' +
+    '  let text=restoreSharedButtonSemanticHelper(source);\n' +
+    "  if(!text.includes('const controlIds =')){\n" +
+    "    assert.ok(!text.includes('restoreQueuedControlPolicy'),'Unrecognized queued helper registration');return text;\n" +
+    '  }\n' +
+    "  assert.equal(hash(text),'8eba578d04c9b2a96ef8a5a7615aa5c81dcb315617789aef0a293e5b688d0200');\n" +
+    "  const tree=ts.createSourceFile('helper.mjs',text,99,true),ranges=[];\n" +
+    '  for(const node of tree.statements){\n' +
+    "    if(ts.isFunctionDeclaration(node)&&['restoreQueuedControlPolicy','restoreQueuedControlProducer'].includes(node.name.text))ranges.push([node.getFullStart(),node.end]);\n" +
+    "    if(ts.isVariableStatement(node)&&node.declarationList.declarations.some(d=>d.name.getText(tree)==='controlIds'))ranges.push([node.getFullStart(),node.end]);\n" +
+    "    if(ts.isFunctionDeclaration(node)&&node.name.text==='historicalSemanticDefinitions'){\n" +
+    "      const first=node.body.statements[0];assert.equal(first.expression.getText(tree),'current.length===170');ranges.push([first.getFullStart(),first.end]);\n" +
+    '    }\n' +
+    '  }\n' +
+    '  assert.equal(ranges.length,4);\n' +
+    '  for(const [start,end]of ranges.sort((a,b)=>b[0]-a[0]))text=text.slice(0,start)+text.slice(end);\n' +
+    '  for(const [current,previous]of [\n' +
+    "    ['const current=restoreQueuedControlPolicy(source);','const current=normalized(source);'],\n" +
+    "    ['const current=restoreQueuedControlProducer(source);','const current=normalized(source);'],\n" +
+    `    ["new Function(restoreQueuedControlPolicy(source).replace(/^export const /gm,'const ')","new Function(source.replace(/^export const /gm,'const ')"],\n` +
+    '  ]){assert.equal(text.split(current).length,2);text=text.replace(current,previous);}\n' +
+    "  assert.equal(hash(text),'18eec69ef63dc741a3edba301dbba9a8b221f808f583c67cd0b3867160363bc8');return text;\n" +
+    '}\n' +
+    '// Reuse the exact validated four-source boundary. The supplied session reader\n' +
+    '// observes every current byte, including the immutable boundary owner itself.\n' +
+    'export function createDividerReviewedBoundariesReader({root,read,reviewSha256}){\n' +
+    '  // Both exact reviews retain the same pre-extension alignment-suite receipt.\n' +
+    '  // Supporting the predecessor does not change the three-source base contract.\n' +
+    '  assert.ok([textBackingRetainedReview,dividerReviewedBoundariesReview,inactiveParagraphInputsReview,filledFieldStructureReview,chipPaintReview,chipGraphicReview,controlInputReview,dividerPropertyContextReview,sharedButtonTouchReview,passiveStaticAxReview,cardInputsReview].includes(reviewSha256));\n' +
+    "  const owner='scripts/join-material-divider-paint-boundaries.mjs';\n" +
+    "  const source=read(path.resolve(root,owner),'utf8');\n" +
+    "  assert.equal(hash(source),'b187103f2f773955dd97ea3e0ee4e0b5d4b4b9faab4af0ebb6fe5d6627f681da');\n" +
+    `  const start=source.indexOf("const suite = 'tests/material-parity/alignment-crop-provenance.spec.mjs'");\n` +
+    "  const end=source.indexOf('const review = JSON.parse',start);\n" +
+    '  assert.ok(start>0&&end>start);\n' +
+    '  const boundary=source.slice(start,end);\n' +
+    "  assert.equal(hash(boundary),'d15efcaec30d491a75cdbad706e2ec7baf41ddbb76f6648a854f0a08d7f8b355');\n" +
+    '  let baseReader;\n' +
+    '  const createBase=options=>{\n' +
+    '    baseReader=createTextBackingReviewReader(options);\n' +
+    '    return baseReader;\n' +
+    '  };\n' +
+    "  const {trackedRead}=new Function('assert','readFileSync','hash','path','createTextBackingReviewReader','predecessor',\n" +
+    '    `${boundary}\\nreturn {trackedRead};`)(assert,read,hash,path,createBase,textBackingRetainedReview);\n' +
+    "  const suite='tests/material-parity/alignment-crop-provenance.spec.mjs';\n" +
+    '  const currentSourceChecks=[];\n' +
+    '  if([dividerPropertyContextReview,sharedButtonTouchReview,passiveStaticAxReview,cardInputsReview].includes(reviewSha256)){\n' +
+    '    const file=path.resolve(root,`artifacts/material-parity/working-audit/proposals/${reviewSha256}.json`);\n' +
+    '    const envelope=JSON.parse(read(file));\n' +
+    '    assert.equal(envelope.sha256,reviewSha256);assert.equal(hash(JSON.stringify(envelope.review)),reviewSha256);\n' +
+    "    const groups=envelope.review.groups.filter(group=>group.family==='divider');assert.equal(groups.length,24);\n" +
+    '    const checked=new Map();\n' +
+    '    for(const group of groups){\n' +
+    '      const child=group.obligations.inputStyleStructure.retainedDividerPropertyContexts;assert.ok(child);\n' +
+    '      for(const reference of child.evidence.currentSources){\n' +
+    '        const file=reference.currentFile,expected=reference.currentSha256;\n' +
+    "        assert.ok(typeof file==='string'&&!path.isAbsolute(file)&&!file.split(/[\\\\/]/).includes('..'));\n" +
+    '        assert.match(expected,/^[a-f0-9]{64}$/);\n' +
+    '        if(checked.has(file)){assert.equal(checked.get(file),expected);continue;}\n' +
+    '        assert.equal(hash(read(path.resolve(root,file))),expected,`Queued divider current source changed: ${file}`);\n' +
+    '        checked.set(file,expected);currentSourceChecks.push({file,sha256:expected});\n' +
+    '      }\n' +
+    '    }\n' +
+    '    assert.equal(currentSourceChecks.length,12);\n' +
+    '  }\n' +
+    '  return {read:trackedRead,sourceApplicability:{\n' +
+    "    mode:'explicit-reviewed-divider-boundaries-historical-review',reviewSha256,\n" +
+    '    ...(currentSourceChecks.length?{currentSourceChecks}:{}),\n' +
+    '    transitions:[...baseReader.sourceApplicability.transitions,{\n' +
+    '      logicalFile:suite,currentSha256:hash(read(path.resolve(root,suite))),\n' +
+    '      historicalSha256:hash(trackedRead(path.resolve(root,suite))),\n' +
+    '    }],boundaryOwner:{file:owner,sha256:hash(source)},boundarySha256:hash(boundary),\n' +
+    "    boundary:'Exact historical source restorations,including benchmark support replay;current bytes remain tracked. No current-rendering acceptance or inspection promotion.',\n" +
+    '  }};\n' +
+    '}\n' +
+    '// This adapter is selected only for the named retained review. Supplied reader\n' +
+    '// observes CURRENT bytes first, so evidence sessions still detect concurrent drift.\n' +
+    'export function createTextBackingReviewReader({root,read,reviewSha256}){\n' +
+    '  assert.equal(reviewSha256,textBackingRetainedReview);\n' +
+    '  const restored=new Map(),transitions=[];\n' +
+    '  const bind=(file,current,prior,expected)=>{\n' +
+    "    assert.equal(hash(prior),expected,'Unreviewed historical source restoration');\n" +
+    '    restored.set(path.resolve(root,file),Buffer.from(prior));\n' +
+    '    transitions.push({logicalFile:file,currentSha256:hash(current),historicalSha256:expected});\n' +
+    '  };\n' +
+    "  const policy='tests/material-parity/input-equivalence-policy.mjs',policyText=read(path.resolve(root,policy),'utf8');\n" +
+    "  bind(policy,policyText,restoreTextBackingPolicy(policyText),'da0c6f3359f1146b07a9cd1f686c184df55185bbc0517c3a7df832f40e5c1512');\n" +
+    "  const suite='tests/material-parity/input-boundary-evidence.spec.mjs',suiteCurrentText=read(path.resolve(root,suite),'utf8');\n" +
+    '  const suiteText=restoreInputBoundaryReadonlyAppend(suiteCurrentText);\n' +
+    "  assert.equal(hash(suiteText),'171bf9fae8fe2e701f5a42d5eef896685085ef267200956729ab447e04a032d5');\n" +
+    '  const suiteAst=ts.createSourceFile(suite,suiteText,99,true,ts.ScriptKind.JS);\n' +
+    '  const addition=suiteAst.statements.filter(n=>ts.isExpressionStatement(n)&&ts.isCallExpression(n.expression)\n' +
+    "    &&n.expression.arguments[0]?.text==='equal explicit line height isolates text backing allocation from authored geometry');\n" +
+    '  assert.equal(addition.length,1);\n' +
+    '  bind(suite,suiteCurrentText,suiteText.slice(0,addition[0].getFullStart())+suiteText.slice(addition[0].end),\n' +
+    "    '9ef883389c3aa8811d3a0a4756bc9e6f7cce82158c62ea453c08b4bb654c6367');\n" +
+    "  const helper='tests/material-parity/semantic-text-transform-registration.mjs',helperText=read(path.resolve(root,helper),'utf8');\n" +
+    '  let reviewedHelperT'... 7426 more characters,
+  expected: "import assert from 'node:assert/strict';\n" +
+    "import { createHash } from 'node:crypto';\n" +
+    "import path from 'node:path';\n" +
+    "import ts from 'typescript';\n" +
+    "import { restoreTextBackingPolicy } from './semantic-text-transform-registration.mjs';\n" +
+    "import { restoreSharedButtonSemanticHelper } from './button-touch-registration.mjs';\n" +
+    '\n' +
+    "export const textBackingRetainedReview='33a0bd8b71e92c7ededcc6f8e2cbf9ef1f5e981034362793c0531851672fe617';\n" +
+    "export const dividerReviewedBoundariesReview='be99cd383dabb304da259cef9046b6b81ce44922c3ae4d8fe6dfc2a76ab33f6f';\n" +
+    "export const inactiveParagraphInputsReview='bfc2b6d546a0a636f07272eef14591ec830dcc7e90098c06a865af72076d238e';\n" +
+    "export const filledFieldStructureReview='f471932bd9ed51a2df35d533632acafc5e4788df07e6e46ed4b5b8bf0c57739b';\n" +
+    "export const chipPaintReview='868daaecb79c16d632701361c4303197f5d2760aec70f4cdd5d138840decabe5';\n" +
+    "export const chipGraphicReview='e837c58e3b9c0594f6003a6001a03cb12b4fa875403db08724e9c9defb329854';\n" +
+    "export const controlInputReview='736e685c55bf033db3d0ffc5b564e2ed42648438e1ed0b3ab66b7f26ed83d8bd';\n" +
+    "export const dividerPropertyContextReview='433b794f0a1d51b7592fb9932fab3fe6c6376c1412958f7aafca089e509799b2';\n" +
+    "export const sharedButtonTouchReview='50315381bf02df83158d2743488dddd5aee827d4695f7047d49802c2637de44a';\n" +
+    "export const passiveStaticAxReview='33b7ccf93a9df72a878ba302c5a0b8867ef01a2b24cb81a47a59e9c7a5b16460';\n" +
+    "const hash=b=>createHash('sha256').update(b).digest('hex');\n" +
+    'export function restoreInputBoundaryReadonlyAppend(source){\n' +
+    "  const text=source.toString().replaceAll('\\r\\n','\\n');\n" +
+    "  if(hash(text)==='58fe244dc56a251e144dcc6eab2c36cb18f017291da968e1d002dc36404d60ea'){\n" +
+    "    const start=text.indexOf('\\n// Append-only queued batch:');assert.ok(start>0);\n" +
+    "    assert.equal(hash(text.slice(start)),'52a9172b09a5c677c91547f44bac5ef01aac6a70a43b3a0849f7bb4372997fd5');\n" +
+    "    assert.equal(hash(text.slice(0,start)),'cdcfd338d0823fefaa780efbba5e500a78f952e745f1c0d6039f0c59a2e8cc50');\n" +
+    '    return restoreInputBoundaryReadonlyAppend(text.slice(0,start));\n' +
+    '  }\n' +
+    "  const previous='171bf9fae8fe2e701f5a42d5eef896685085ef267200956729ab447e04a032d5';\n" +
+    '  if(hash(text)===previous)return text;\n' +
+    "  assert.equal(hash(text),'cdcfd338d0823fefaa780efbba5e500a78f952e745f1c0d6039f0c59a2e8cc50');\n" +
+    `  const start=text.indexOf("\\ntest('public readonly keyboard mutation preserves equal inputs and binds current default owners'");\n` +
+    '  assert.ok(start>0);\n' +
+    "  assert.equal(hash(text.slice(start)),'0344aa16c76792afd9fab101e4f48a3bb03d1f958565efd1473d1fb3da74f69c');\n" +
+    '  assert.equal(hash(text.slice(0,start)),previous);return text.slice(0,start);\n' +
+    '}\n' +
+    'export function restoreQueuedControlHelperSource(source){\n' +
+    '  let text=restoreSharedButtonSemanticHelper(source);\n' +
+    "  if(!text.includes('const controlIds =')){\n" +
+    "    assert.ok(!text.includes('restoreQueuedControlPolicy'),'Unrecognized queued helper registration');return text;\n" +
+    '  }\n' +
+    "  assert.equal(hash(text),'8eba578d04c9b2a96ef8a5a7615aa5c81dcb315617789aef0a293e5b688d0200');\n" +
+    "  const tree=ts.createSourceFile('helper.mjs',text,99,true),ranges=[];\n" +
+    '  for(const node of tree.statements){\n' +
+    "    if(ts.isFunctionDeclaration(node)&&['restoreQueuedControlPolicy','restoreQueuedControlProducer'].includes(node.name.text))ranges.push([node.getFullStart(),node.end]);\n" +
+    "    if(ts.isVariableStatement(node)&&node.declarationList.declarations.some(d=>d.name.getText(tree)==='controlIds'))ranges.push([node.getFullStart(),node.end]);\n" +
+    "    if(ts.isFunctionDeclaration(node)&&node.name.text==='historicalSemanticDefinitions'){\n" +
+    "      const first=node.body.statements[0];assert.equal(first.expression.getText(tree),'current.length===170');ranges.push([first.getFullStart(),first.end]);\n" +
+    '    }\n' +
+    '  }\n' +
+    '  assert.equal(ranges.length,4);\n' +
+    '  for(const [start,end]of ranges.sort((a,b)=>b[0]-a[0]))text=text.slice(0,start)+text.slice(end);\n' +
+    '  for(const [current,previous]of [\n' +
+    "    ['const current=restoreQueuedControlPolicy(source);','const current=normalized(source);'],\n" +
+    "    ['const current=restoreQueuedControlProducer(source);','const current=normalized(source);'],\n" +
+    `    ["new Function(restoreQueuedControlPolicy(source).replace(/^export const /gm,'const ')","new Function(source.replace(/^export const /gm,'const ')"],\n` +
+    '  ]){assert.equal(text.split(current).length,2);text=text.replace(current,previous);}\n' +
+    "  assert.equal(hash(text),'18eec69ef63dc741a3edba301dbba9a8b221f808f583c67cd0b3867160363bc8');return text;\n" +
+    '}\n' +
+    '// Reuse the exact validated four-source boundary. The supplied session reader\n' +
+    '// observes every current byte, including the immutable boundary owner itself.\n' +
+    'export function createDividerReviewedBoundariesReader({root,read,reviewSha256}){\n' +
+    '  // Both exact reviews retain the same pre-extension alignment-suite receipt.\n' +
+    '  // Supporting the predecessor does not change the three-source base contract.\n' +
+    '  assert.ok([textBackingRetainedReview,dividerReviewedBoundariesReview,inactiveParagraphInputsReview,filledFieldStructureReview,chipPaintReview,chipGraphicReview,controlInputReview,dividerPropertyContextReview,sharedButtonTouchReview,passiveStaticAxReview].includes(reviewSha256));\n' +
+    "  const owner='scripts/join-material-divider-paint-boundaries.mjs';\n" +
+    "  const source=read(path.resolve(root,owner),'utf8');\n" +
+    "  assert.equal(hash(source),'b187103f2f773955dd97ea3e0ee4e0b5d4b4b9faab4af0ebb6fe5d6627f681da');\n" +
+    `  const start=source.indexOf("const suite = 'tests/material-parity/alignment-crop-provenance.spec.mjs'");\n` +
+    "  const end=source.indexOf('const review = JSON.parse',start);\n" +
+    '  assert.ok(start>0&&end>start);\n' +
+    '  const boundary=source.slice(start,end);\n' +
+    "  assert.equal(hash(boundary),'d15efcaec30d491a75cdbad706e2ec7baf41ddbb76f6648a854f0a08d7f8b355');\n" +
+    '  let baseReader;\n' +
+    '  const createBase=options=>{\n' +
+    '    baseReader=createTextBackingReviewReader(options);\n' +
+    '    return baseReader;\n' +
+    '  };\n' +
+    "  const {trackedRead}=new Function('assert','readFileSync','hash','path','createTextBackingReviewReader','predecessor',\n" +
+    '    `${boundary}\\nreturn {trackedRead};`)(assert,read,hash,path,createBase,textBackingRetainedReview);\n' +
+    "  const suite='tests/material-parity/alignment-crop-provenance.spec.mjs';\n" +
+    '  const currentSourceChecks=[];\n' +
+    '  if([dividerPropertyContextReview,sharedButtonTouchReview,passiveStaticAxReview].includes(reviewSha256)){\n' +
+    '    const file=path.resolve(root,`artifacts/material-parity/working-audit/proposals/${reviewSha256}.json`);\n' +
+    '    const envelope=JSON.parse(read(file));\n' +
+    '    assert.equal(envelope.sha256,reviewSha256);assert.equal(hash(JSON.stringify(envelope.review)),reviewSha256);\n' +
+    "    const groups=envelope.review.groups.filter(group=>group.family==='divider');assert.equal(groups.length,24);\n" +
+    '    const checked=new Map();\n' +
+    '    for(const group of groups){\n' +
+    '      const child=group.obligations.inputStyleStructure.retainedDividerPropertyContexts;assert.ok(child);\n' +
+    '      for(const reference of child.evidence.currentSources){\n' +
+    '        const file=reference.currentFile,expected=reference.currentSha256;\n' +
+    "        assert.ok(typeof file==='string'&&!path.isAbsolute(file)&&!file.split(/[\\\\/]/).includes('..'));\n" +
+    '        assert.match(expected,/^[a-f0-9]{64}$/);\n' +
+    '        if(checked.has(file)){assert.equal(checked.get(file),expected);continue;}\n' +
+    '        assert.equal(hash(read(path.resolve(root,file))),expected,`Queued divider current source changed: ${file}`);\n' +
+    '        checked.set(file,expected);currentSourceChecks.push({file,sha256:expected});\n' +
+    '      }\n' +
+    '    }\n' +
+    '    assert.equal(currentSourceChecks.length,12);\n' +
+    '  }\n' +
+    '  return {read:trackedRead,sourceApplicability:{\n' +
+    "    mode:'explicit-reviewed-divider-boundaries-historical-review',reviewSha256,\n" +
+    '    ...(currentSourceChecks.length?{currentSourceChecks}:{}),\n' +
+    '    transitions:[...baseReader.sourceApplicability.transitions,{\n' +
+    '      logicalFile:suite,currentSha256:hash(read(path.resolve(root,suite))),\n' +
+    '      historicalSha256:hash(trackedRead(path.resolve(root,suite))),\n' +
+    '    }],boundaryOwner:{file:owner,sha256:hash(source)},boundarySha256:hash(boundary),\n' +
+    "    boundary:'Exact historical source restorations,including benchmark support replay;current bytes remain tracked. No current-rendering acceptance or inspection promotion.',\n" +
+    '  }};\n' +
+    '}\n' +
+    '// This adapter is selected only for the named retained review. Supplied reader\n' +
+    '// observes CURRENT bytes first, so evidence sessions still detect concurrent drift.\n' +
+    'export function createTextBackingReviewReader({root,read,reviewSha256}){\n' +
+    '  assert.equal(reviewSha256,textBackingRetainedReview);\n' +
+    '  const restored=new Map(),transitions=[];\n' +
+    '  const bind=(file,current,prior,expected)=>{\n' +
+    "    assert.equal(hash(prior),expected,'Unreviewed historical source restoration');\n" +
+    '    restored.set(path.resolve(root,file),Buffer.from(prior));\n' +
+    '    transitions.push({logicalFile:file,currentSha256:hash(current),historicalSha256:expected});\n' +
+    '  };\n' +
+    "  const policy='tests/material-parity/input-equivalence-policy.mjs',policyText=read(path.resolve(root,policy),'utf8');\n" +
+    "  bind(policy,policyText,restoreTextBackingPolicy(policyText),'da0c6f3359f1146b07a9cd1f686c184df55185bbc0517c3a7df832f40e5c1512');\n" +
+    "  const suite='tests/material-parity/input-boundary-evidence.spec.mjs',suiteCurrentText=read(path.resolve(root,suite),'utf8');\n" +
+    '  const suiteText=restoreInputBoundaryReadonlyAppend(suiteCurrentText);\n' +
+    "  assert.equal(hash(suiteText),'171bf9fae8fe2e701f5a42d5eef896685085ef267200956729ab447e04a032d5');\n" +
+    '  const suiteAst=ts.createSourceFile(suite,suiteText,99,true,ts.ScriptKind.JS);\n' +
+    '  const addition=suiteAst.statements.filter(n=>ts.isExpressionStatement(n)&&ts.isCallExpression(n.expression)\n' +
+    "    &&n.expression.arguments[0]?.text==='equal explicit line height isolates text backing allocation from authored geometry');\n" +
+    '  assert.equal(addition.length,1);\n' +
+    '  bind(suite,suiteCurrentText,suiteText.slice(0,addition[0].getFullStart())+suiteText.slice(addition[0].end),\n' +
+    "    '9ef883389c3aa8811d3a0a4756bc9e6f7cce82158c62ea453c08b4bb654c6367');\n" +
+    "  const helper='tests/material-parity/semantic-text-transform-registration.mjs',helperText=read(path.resolve(root,helper),'utf8');\n" +
+    '  let reviewedHelperText=restoreQueuedControlHelperSource(helperText),replayRestorationBlock;\n' +
+    "  if(hash(reviewedHelperText)==='18eec69ef63dc741a3edba301d"... 7294 more characters,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.22.3

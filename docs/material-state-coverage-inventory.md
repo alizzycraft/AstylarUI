@@ -203,8 +203,18 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   conserve;15 paths/two proofs added,four predecessor source changes and only two
   landmark proof-line shifts(+2) explicitly accounted. Whole producer restoration
   recovers acceptedc638b8ca before older boundaries;drift controls remain strict.
-  Next:explicit20dfb804 case selection and coherent selection conservation,then
-  milestone export/cold/import when batch ready. Accepted e828/175 stays unchanged.
+  Explicit20dfb804 case selection now available through --card-inputs;default5031
+  and --static-ax33b7 remain unchanged,combined flags reject. Whole prior helper/
+  runner/launcher bytes recover exactly;unknown review IDs reject. All13 focused
+  owning/historical tests pass(card-title-selection-owning-20261021). Full selected
+  review integration authenticates15420 dependencies/twelve source checks and
+  removes exactly64 children to recover complete33b7;all2311 statuses conserve.
+  Source census retry exits0:804/234/175→819/236/176 with seven explained prior
+  source changes. First census invocation inserted paths before positional fields
+  and failed;original log pair retained,corrected ordering changes no assertion.
+  Evidence:card-title-selected-review-integration/selection-census-retry-20261021.
+  Next:freeze coherent batch and milestone export/conservation/cold/import.
+  Accepted e828/175 stays unchanged;no renderer/fixture changes or case promotion.
 - All original final full audit/browser/Material/TTS/unit/build/packed-consumer/
   capability/example/skill/diff gates remain. This is audit only;goal not complete.
 

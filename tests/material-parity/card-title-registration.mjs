@@ -51,3 +51,40 @@ export function restoreCardTitleProducer(source) {
   assert.equal(hash(prior), 'c638b8ca8ab705a9cad00a6f6e7de9917d418bca31f53fef0df9f3ef6624006d');
   return prior;
 }
+export function restoreCardTitleCaseSelection(source) {
+  let text = source.toString().replaceAll('\r\n', '\n');
+  if (!text.includes('export const cardInputsReview=')) return text;
+  assert.equal(hash(text), 'a0f724b13faa820717c4b7d0232e6d566a7ff118d73af95259c8df527ee8607d');
+  const line = "export const cardInputsReview='20dfb80485f094eaec4025e56ac7d5bb4a375f388643d192cb14f5d5fecbf82b';\n";
+  assert.equal(text.split(line).length, 2); text = text.replace(line, '');
+  assert.equal(text.split(',cardInputsReview').length, 3); text = text.replaceAll(',cardInputsReview', '');
+  assert.equal(hash(text), '976c4b379f03e095a267f3b97865e3a97ef83df77cc699e8e9b01013fb9e929b');
+  return text;
+}
+export function restoreCardTitleRunnerSelection(source) {
+  let text = source.toString().replaceAll('\r\n', '\n');
+  if (!text.includes(', cardInputsReview')) return text;
+  assert.equal(hash(text), '03fc64661a9fd02527d25d3b5ac3a1d519318badb654c5f89943eef8910a0e22');
+  for (const addition of [', cardInputsReview', ',cardInputsReview']) {
+    assert.equal(text.split(addition).length, 2); text = text.replace(addition, '');
+  }
+  assert.equal(hash(text), 'ad0652a5dac171d19ff7d762ec68391123d0597fdb77fb444664875f0d1aae92');
+  return text;
+}
+export function restoreCardTitleLauncherSelection(source) {
+  let text = source.toString().replaceAll('\r\n', '\n');
+  if (!text.includes('const cardInputs =')) return text;
+  assert.equal(hash(text), '67d8688991da94838ae1f17a31b82018c395d9e5b7a9a6cc0017cb93a0e5a3c7');
+  for (const addition of [
+    "const cardInputs = rawRequested.includes('--card-inputs');\n",
+    "assert.ok(!(staticAx && cardInputs), 'Choose one case-review supplement');\n",
+    "cardInputs ? 'artifacts/material-parity/working-audit/proposals/20dfb80485f094eaec4025e56ac7d5bb4a375f388643d192cb14f5d5fecbf82b.json' : ",
+    "cardInputs ? '--case-obligation-review-sha256=20dfb80485f094eaec4025e56ac7d5bb4a375f388643d192cb14f5d5fecbf82b' : ",
+  ]) { assert.equal(text.split(addition).length, 2); text = text.replace(addition, ''); }
+  const filter = "!['--static-ax', '--card-inputs'].includes(argument)";
+  assert.equal(text.split(filter).length, 2); text = text.replace(filter, "argument !== '--static-ax'");
+  assert.equal(text.split('[--static-ax|--card-inputs]').length, 2);
+  text = text.replace('[--static-ax|--card-inputs]', '[--static-ax]');
+  assert.equal(hash(text), '37e5e298431d66cbf8911f00310ea35433e17cd2b90c44e8d8207f57f013211c');
+  return text;
+}

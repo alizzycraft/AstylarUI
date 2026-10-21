@@ -4,7 +4,8 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
-import { cardTitlePredecessor, restoreCardTitlePolicy, restoreCardTitleProducer } from './card-title-registration.mjs';
+import { cardTitlePredecessor, restoreCardTitlePolicy, restoreCardTitleProducer,
+  restoreCardTitleCaseSelection, restoreCardTitleRunnerSelection, restoreCardTitleLauncherSelection } from './card-title-registration.mjs';
 import { passiveMainPredecessor, restorePassiveMainPolicy } from './passive-main-registration.mjs';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const normalize = bytes => bytes.toString().replaceAll('\r\n', '\n');
@@ -38,10 +39,13 @@ test('card title registration preserves all175 findings and exact predecessor so
   const helperFile = 'tests/material-parity/passive-main-registration.mjs';
   let helper = normalize(readFileSync(helperFile));
   for (const [current, before] of [
-    ["import { cardTitlePredecessor, restoreCardTitlePolicy, restoreCardTitleProducer } from './card-title-registration.mjs';\n", ''],
+    ["import { cardTitlePredecessor, restoreCardTitlePolicy, restoreCardTitleProducer, restoreCardTitleCaseSelection, restoreCardTitleRunnerSelection, restoreCardTitleLauncherSelection } from './card-title-registration.mjs';\n", ''],
     ['  current = cardTitlePredecessor(current);\n', ''],
     ['  const text = restoreCardTitlePolicy(source);', '  const text = normalized(source);'],
     ['  const text = restoreCardTitleProducer(source);', '  const text = normalized(source);'],
+    ['  let text = restoreCardTitleCaseSelection(source);', '  let text = normalized(source);'],
+    ['  let text = restoreCardTitleRunnerSelection(source);', '  let text = normalized(source);'],
+    ['  let text = restoreCardTitleLauncherSelection(source);', '  let text = normalized(source);'],
   ]) { assert.equal(helper.split(current).length, 2); helper = helper.replace(current, before); }
   assert.equal(helper, normalize(execFileSync('git', ['show', `d4cfb0e5:${helperFile}`])));
   const suiteFile = 'tests/material-parity/passive-main-landmark-input.spec.mjs';
@@ -51,6 +55,23 @@ test('card title registration preserves all175 findings and exact predecessor so
   const suite = normalize(readFileSync(suiteFile)); assert.equal(suite.split(prelude).length, 2);
   assert.equal(suite.replace(prelude, "import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';"),
     normalize(execFileSync('git', ['show', `d4cfb0e5:${suiteFile}`])));
+  for (const [file, restore] of [
+    ['tests/material-parity/text-backing-case-review-source.mjs', restoreCardTitleCaseSelection],
+    ['scripts/run-material-input-audit.mjs', restoreCardTitleRunnerSelection],
+    ['scripts/export-material-input-audit-current-ancestry.mjs', restoreCardTitleLauncherSelection],
+  ]) {
+    const source = readFileSync(file, 'utf8');
+    assert.equal(restore(source), normalize(execFileSync('git', ['show', `c636f7ef:${file}`])));
+    assert.throws(() => restore(source + '\n// drift'));
+  }
+  const launcher = 'scripts/export-material-input-audit-current-ancestry.mjs';
+  const previous = JSON.parse(execFileSync(process.execPath, [launcher, '--static-ax', '--dry-run']));
+  const current = JSON.parse(execFileSync(process.execPath, [launcher, '--card-inputs', '--dry-run']));
+  const oldId = '33b7ccf93a9df72a878ba302c5a0b8867ef01a2b24cb81a47a59e9c7a5b16460';
+  const newId = '20dfb80485f094eaec4025e56ac7d5bb4a375f388643d192cb14f5d5fecbf82b';
+  assert.equal(current.args.filter(arg => arg.includes(newId)).length, 2);
+  assert.deepEqual({ ...current, args: current.args.map(arg => arg.replace(newId, oldId)) }, previous);
+  assert.throws(() => execFileSync(process.execPath, [launcher, '--static-ax', '--card-inputs', '--dry-run'], { stdio: 'pipe' }));
 });
 test('card title actual AX and recorded descendants replay their full retained populations', () => {
   for (const [script, file] of [

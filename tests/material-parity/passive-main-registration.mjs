@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
-import { cardTitlePredecessor, restoreCardTitlePolicy, restoreCardTitleProducer } from './card-title-registration.mjs';
+import { cardTitlePredecessor, restoreCardTitlePolicy, restoreCardTitleProducer, restoreCardTitleCaseSelection, restoreCardTitleRunnerSelection, restoreCardTitleLauncherSelection } from './card-title-registration.mjs';
 const hash = value => createHash('sha256').update(value).digest('hex');
 const normalized = value => value.toString().replaceAll('\r\n', '\n');
 const ids = ['fixture-showcase-outer-and-semantic-page-duplicate-main-landmarks', 'fixture-sidenav-content-promoted-to-main-landmark'];
@@ -56,7 +56,7 @@ export function restorePassiveMainProducer(source) {
 }
 
 export function restorePassiveMainCaseSelection(source) {
-  let text = normalized(source);
+  let text = restoreCardTitleCaseSelection(source);
   if (!text.includes('export const passiveStaticAxReview=')) return text;
   assert.equal(hash(text), '976c4b379f03e095a267f3b97865e3a97ef83df77cc699e8e9b01013fb9e929b');
   const line = "export const passiveStaticAxReview='33b7ccf93a9df72a878ba302c5a0b8867ef01a2b24cb81a47a59e9c7a5b16460';\n";
@@ -67,7 +67,7 @@ export function restorePassiveMainCaseSelection(source) {
   return text;
 }
 export function restorePassiveMainRunnerSelection(source) {
-  let text = normalized(source);
+  let text = restoreCardTitleRunnerSelection(source);
   if (!text.includes(', passiveStaticAxReview')) return text;
   assert.equal(hash(text), 'ad0652a5dac171d19ff7d762ec68391123d0597fdb77fb444664875f0d1aae92');
   for (const addition of [', passiveStaticAxReview', ',passiveStaticAxReview']) {
@@ -77,7 +77,7 @@ export function restorePassiveMainRunnerSelection(source) {
   return text;
 }
 export function restorePassiveMainLauncherSelection(source) {
-  let text = normalized(source);
+  let text = restoreCardTitleLauncherSelection(source);
   if (!text.includes('const rawRequested =')) return text;
   assert.equal(hash(text), '37e5e298431d66cbf8911f00310ea35433e17cd2b90c44e8d8207f57f013211c');
   const block = "const rawRequested = process.argv.slice(2);\nconst staticAx = rawRequested.includes('--static-ax');\nconst requested = rawRequested.filter(argument => argument !== '--static-ax');";
