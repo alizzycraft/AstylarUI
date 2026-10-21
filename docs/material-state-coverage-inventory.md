@@ -71,6 +71,10 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   and sidenav-content evidence remains outside frozen export/proposalf39d;no new
   case completion or interaction-state claim. Source explicitly authors the extra
   MAIN,so do not treat it as a core role invention or suppress authored roles.
+  Sidenav-specific history now binds full initial2f440115 candidate/reference
+  source hashes:MAIN versus MAT-SIDENAV-CONTENT already appears in initial inputs.
+  Evidence:sidenav-main-authoring-history-20261021 log pair;not proof of initial
+  runtime,intent or all intervening revisions,and not a later-compensation claim.
 - Existing case-review mechanism now has queued successor33b7ccf93a9df72a878ba302c5a0b8867ef01a2b24cb81a47a59e9c7a5b16460:
   adds48 static actual-AX children/96 captures to semantics only,authenticates15388
   dependencies and recovers COMPLETE predecessor50315381 after removing precisely
