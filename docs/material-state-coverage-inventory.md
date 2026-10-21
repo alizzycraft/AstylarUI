@@ -256,6 +256,15 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   integration20261021 log pairs. Next freeze/replay census and serialized coherent
   export,then section/receipt/coverage conservation,cold comparison,accepted import.
   Accepted package remains176;all original final acceptance gates stay open.
+- Coherent expansion178-finding/80-child export session17464 is verified live
+  (launcher23416,producer28056),named launcher --expansion-semantics,build-audit.
+  Frozen839/238/178 census replays byte-exact(censusSHA902ad5b2);accepted796984e0/
+  indexdcca1c76 pointer and compressed payload authenticate unchanged. Retain
+  expansion-semantic-export-source-freeze-20261021 log pair and expansion-
+  semantic-coherent-export-20261021 stdout/stderr/resources/fatal diagnostics.
+  Inputs frozen,no parallel heavy job. Export terminal result,section/receipt/
+  coverage conservation,independent cold check and accepted import remain required.
+  This adds evidence only;all2311 cases remain partial/current-rendering unverified.
 - Next card descendant question narrowed across all52 authenticated retained pairs:
   reference title is nested under the native header-text div;candidate h2 is a
   direct header child. Native15 static/16 interaction nodes versus11 candidate
