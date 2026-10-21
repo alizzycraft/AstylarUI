@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain passive-main-export-source-freeze-20261021 log pair:complete804/234/175
+census replays byte-exact against frozen source. Coherent export66401 is live
+(launcher24728,producer18488),--static-ax;retain passive-main-coherent-export-
+20261021 stdout/stderr/resources.jsonl and any fatal report. Diagnostics exclude
+environment/network;inspect before future commit. Do not commit live logs as a
+terminal result or run other heavy jobs alongside it. Accepted c2a58b7c is unchanged;
+export/conservation/cold/import remain required,with all original gates intact.
+
 Retain passive-main-selection-source-owning,selection-current-owning,
 selection-final-owning,selection-census and selected-review-integration20261021
 log pairs. Explicit --static-ax selection authenticates15388 dependencies and
