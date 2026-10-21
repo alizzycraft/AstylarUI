@@ -4,6 +4,54 @@
 
 Updated October21. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- Scope/acceptance unchanged:36 families,2311 cases(436 static/1875 interaction),
+  all2311 partial,0 complete,current rendering unverified. A documented failure
+  counts as inspected evidence,not a rendering pass or automatic whole-case closure.
+- ACCEPTED canonical8259d4f7/index84421c53/review50315381 remains171 source findings,
+  229 focused proofs,780 source paths. Its compressed/decoded package and full
+  predecessor/conservation/cold/import evidence remain retained. No new acceptance.
+- WORKING source batch90eddcc5 is committed/pushed:173 findings/232 proofs/790 paths.
+  Complete prior171 findings/229 proof claims/780 paths conserve;only2/3/10 added,
+  six prior source fingerprints and explicit proof-line shifts explained by census.
+  Three new current,seven historical registration and six original button checks
+  pass. Initial partial-ID guard failure is preserved and corrected,not waived.
+- Coherent export session15448/producer23184 is VERIFIED LIVE;latest CPU2165.6s,
+  no terminal/error output. Logs:native-checkable-coherent-export-20261021 pair.
+  Frozen source/evidence inputs are unchanged. Do not restart on quiet logs.
+  Export completion,80-section/coverage/receipt conservation,independent cold
+  check,candidate/main import and shard verification remain pending.
+- Two registered causes:CheckboxManager wrongly synthesizes visible labels from
+  native checkbox/radio form values(32 package-root captures across two runs,
+  three complete current/installed/bundle method bindings);radio ring state/theme
+  inputs differ before rendering(60 colors/16 disabled own-opacity requests among
+  136 owners). Keep core and authoring causes distinct;no fixture/renderer fixes.
+- Standalone evidence OUTSIDE running publication:radio68-case descendant/current-
+  authoring/native dispatch checks;136 inner-circle local CSS bounds(68 matching
+  selected extents/68 zero-scale versus absent). These do not certify full paint,
+  animation,AX,activation or whole-case equivalence.
+- New actual AX supplement covers12 STATIC list cases/24 pages against explicit
+  October20 divider checkpoint9d0f1220(all1887 served files verified before/after).
+  Original October5-checkpoint rejection is retained. Component text subtrees
+  agree,but all12 candidate pages expose authored outer MAIN plus SiteData MAIN
+  versus one native MAIN. Both served component source maps match current sources.
+  Pending source proposalf39d4c4cf1065eadfa494307434e7b1c17d393d8bc5794ca7d0fffd9974780e4
+  preserves all173 working definitions and appends one authoring finding. Initial
+  2f440115 already authors both MAIN inputs;initial runtime/motive are unproven.
+  Restore single landmark ownership in future authoring,not core role suppression.
+- Prioritized remaining gaps:finish publication reconciliation first;then complete
+  descendant/first-stage mapping(baseline2287 cases/35 families),actual AX relations
+  (baseline2271 cases),1875 interaction history/resource obligations,443 editable
+  obligations,and full current runtime/environment applicability across2311 cases.
+  Counts overlap and precede unjoined standalone evidence;do not invent completion
+  percentages. Shared headings,settled grid boundaries and existing badge/icon AX
+  hiding findings must not be rerun without changed inputs or contrary evidence.
+- All original final full audit/browser/Material/TTS/unit/build/packed-consumer/
+  capability/example/skill/diff gates remain. This is audit only;goal not complete.
+
+## October21 standalone and registration detail — historical checkpoints
+
+The concise pointer above supersedes earlier next/live/pending statements below.
+
 - New broader-family actual-AX gap answered for12 STATIC list cases(24 pages),
   outside frozen native-checkable export. First October5-checkpoint attempt rejects
   changed served files before browser capture;retain original failure. Explicit

@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain pending source proposalf39d4c4cf1065eadfa494307434e7b1c17d393d8bc5794ca7d0fffd9974780e4
+and showcase-main-landmark-review-20261021 log/empty stderr. Existing proposal
+mechanism preserves all173 working definitions plus one shared landmark-authoring
+finding. Embedded producerArgs replay actual24-capture verifier and authenticate
+the exact initial source file/excerpts;initial runtime/motive remain unproven.
+This is outside live export15448 and does not authorize a restart or canonical
+promotion. Current ledger pointer is consolidated;old checkpoints remain intact.
+
 Retain list-static-ax-20261021 initial failure directory/log pair and list-static-
 ax-current-checkpoint-20261021 successful24-capture directory/log pair. The first
 correctly rejects old October5 checkpoint versus newer served build;do not rewrite
