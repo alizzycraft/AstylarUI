@@ -1,0 +1,8 @@
+{"evidenceSession":{"collectors":2,"memoryHits":10,"diskHits":0,"invalidated":0,"filesRead":16471,"bytesRead":1700133716,"verificationBytes":1700133716,"elapsedMs":2404851.2398}}
+# Material input-equivalence audit
+- Parity evidence: artifacts\material-parity\current-ancestry-audit\latest-report.json
+- Coverage: 436/436 static, 1875/1875 interaction
+- Unique differences: 8483
+- Occurrences: 389202
+- Source findings: 173
+- Input equivalent: no

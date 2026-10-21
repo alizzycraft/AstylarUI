@@ -2,10 +2,15 @@
 
 ## Current versus historical evidence
 
-Retain live native-checkable-cold-check-20261021 stdout/stderr and any fatal report.
-Session59397/launcher13156/producer23288 is verified live with cold --check;
-initial empty logs are not failure or completion. Fatal reports exclude env/network.
-Do not commit live logs as a terminal result or restart from observation timeout.
+Retain terminal native-checkable-cold-check-20261021 stdout/stderr:session59397
+exits0,2557439ms,2 collectors/10 memory hits/0 disk hits,16471 authenticated files.
+Retain native-checkable-main-import-verification-20261021 log pair:9232 exits0,
+all shards verify and candidate/main indexes match. Accepted generation now
+c2a58b7c35fed299da02fe92043d58f98102d3724ce69070bc4ef6aaa2c744e8,indexSHA
+7fba06b9180bf1d55dba0221183cba81a4dd395f8302d00a5fe5c4d9a0e8f872.
+Keep complete gzip/index/shards and all predecessor8259 evidence. Initial quiet
+logs were not failure;no crash report was produced. This publication does not
+promote any case or establish rendering acceptance.
 
 Retain native-checkable-full-section-comparison,receipt-leaf-comparison,
 propagated-receipt-reconciliation and export-census-binding20261021 log pairs,

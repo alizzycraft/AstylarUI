@@ -7,9 +7,12 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
 - Scope/acceptance unchanged:36 families,2311 cases(436 static/1875 interaction),
   all2311 partial,0 complete,current rendering unverified. A documented failure
   counts as inspected evidence,not a rendering pass or automatic whole-case closure.
-- ACCEPTED canonical8259d4f7/index84421c53/review50315381 remains171 source findings,
-  229 focused proofs,780 source paths. Its compressed/decoded package and full
-  predecessor/conservation/cold/import evidence remain retained. No new acceptance.
+- ACCEPTED canonicalc2a58b7c/index7fba06b9/review50315381 now has173 source findings,
+  232 focused proofs,790 source paths. Prior8259d4f7/index84421c53 remains retained.
+  Full80-section/149-leaf/census conservation,cold check59397(exit0,2557439ms)
+  and main import9232(exit0) complete;candidate/main indexes match and every shard
+  verifies. Cold authenticates16471 files/1700133716 bytes with2 collectors,
+  10 memory hits/0 disk hits. All2311 cases remain partial;no rendering acceptance.
 - WORKING source batch90eddcc5 is committed/pushed:173 findings/232 proofs/790 paths.
   Complete prior171 findings/229 proof claims/780 paths conserve;only2/3/10 added,
   six prior source fingerprints and explicit proof-line shifts explained by census.
@@ -22,23 +25,22 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   Preserve native-checkable-coherent-export-failure-20261021.json and original
   empty log pair. Frozen790/232/173 source census replay is byte-exact again.
   SERIAL recovery29865 is TERMINAL SUCCESS(exit0,2523570ms);validation,encoding
-  and writing completed. Candidate c2a58b7c has173 findings;accepted pointer8259
-  is unchanged. Full80-section comparison72245 terminates0:70 unchanged,10 changed.
+  and writing completed. Candidate c2a58b7c has173 findings;prior accepted8259
+  stayed unchanged until cold success. Full80-section comparison72245 terminates0:70 unchanged,10 changed.
   Leaf comparison95691 and receipt verifier81063 terminate0:all149 changes explain
   as98 producer receipts,1 policy receipt,171→173 count,48 recomputed control-proof
   hashes and1 recomputed motion report. All other selected values/containers,
   including case dispositions/remaining work,conserve. Separate candidate import
   succeeds;exported790/232/173 inventories match registration census exactly61201.
-  Independent cold verification59397 is verified live(launcher13156,producer23288),
-  ASTYLAR_AUDIT_COLD=1/current-ancestry --check;logs/fatal diagnostics in
-  native-checkable-cold-check-20261021. Initial logs empty,CPU advancing;no stage
-  completion inferred. Accepted import remains pending;source inputs stay frozen.
+  Independent cold verification59397 terminates0,ASTYLAR_AUDIT_COLD=1/current-
+  ancestry --check;complete logs in native-checkable-cold-check-20261021.
+  Main import9232 terminates0 and advances accepted pointer only after cold success.
   Directory:native-checkable-export-
   recovery-20261021(stdout.log,stderr.log,resources.jsonl plus any fatal reports).
   Node fatal/uncaught reports exclude env/network;resources sample every15 seconds.
   Source code,arguments,thresholds and accepted package remain unchanged.
   Do not weaken gates or run another memory-heavy audit job alongside it.
-  Export/conservation succeeded;cold check/accepted import remain pending.
+  Export/conservation/cold check/accepted import succeeded;verified package published.
 - Two registered causes:CheckboxManager wrongly synthesizes visible labels from
   native checkbox/radio form values(32 package-root captures across two runs,
   three complete current/installed/bundle method bindings);radio ring state/theme
@@ -81,7 +83,7 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   those48 children. All2311 cases/statuses/findings/remaining work are preserved;
   no inspection/current-rendering promotion. Join87206 terminates0. This proposal
   is NOT selected for export;the173-source batch/recovery must remain frozen.
-- Prioritized remaining gaps:finish publication reconciliation first;then complete
+- Prioritized remaining gaps:publish verified package;then complete
   descendant/first-stage mapping(baseline2287 cases/35 families),actual AX relations
   (baseline2271 cases),1875 interaction history/resource obligations,443 editable
   obligations,and full current runtime/environment applicability across2311 cases.
