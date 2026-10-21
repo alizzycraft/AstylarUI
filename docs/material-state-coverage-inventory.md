@@ -7,7 +7,13 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
 - Scope/acceptance unchanged:36 families,2311 cases(436 static/1875 interaction),
   all2311 partial,0 complete,current rendering unverified. A documented failure
   counts as inspected evidence,not a rendering pass or automatic whole-case closure.
-- ACCEPTED canonicale828ab28/index7e45bbd1/review33b7ccf9 now has175 source findings,
+- ACCEPTED canonical796984e0/indexdcca1c76/review20dfb804 has176 source findings,
+  236 focused proofs,819 source paths. Cold check26470 exits0(2749723ms),with
+  2 collectors/10 memory hits/0 disk hits,16610 files/1703066202 bytes authenticated.
+  Main import44551 exits0;all shards verify and candidate/main pointers match.
+  Complete section/receipt/coverage conservation below explains the card batch.
+  All2311 cases remain partial/current-rendering unverified;prior e828 is retained.
+- PRIOR accepted canonicale828ab28/index7e45bbd1/review33b7ccf9 has175 source findings,
   234 focused proofs,804 source paths. Cold check26642 exits0(2610315ms),with
   2 collectors/10 memory hits/0 disk hits,16578 files/1701708708 bytes authenticated.
   Main import83215 exits0;all shards verify and candidate/main indexes match.
@@ -220,7 +226,7 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   87817974 compressed/2333095298 decoded bytes;decodedSHAab82d93b.
   Frozen819/236/176
   source census replay is byte-exact(card-title-export-source-freeze-20261021).
-  Accepted e828/index7e45 remains unchanged. No parallel heavy job/input changes;
+  Prior e828/index7e45 stayed accepted until cold/import success. No input changes;
   retain card-title-coherent-export-20261021 stdout/stderr/resources/fatal reports.
   Full-section reconciliation82747 exits0:70 unchanged/10 changed,no added/removed
   sections,reusing accepted e828 section receipts. Census16185 exits0:exact819
@@ -234,10 +240,12 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   32 added dependencies and declared review/policy provenance transitions.
   Evidence:card-title-full-section-comparison/export-census-binding/receipt-leaf-
   comparison/propagated-receipt-reconciliation/candidate-import/coverage-
-  conservation20261021 log pairs. Independent cold session26470 is live,same
+  conservation20261021 log pairs. Independent cold session26470 exits0,same
   --card-inputs --check with ASTYLAR_AUDIT_COLD=1;retain card-title-cold-check-
-  20261021 stdout/stderr and any fatal reports. Cold success and accepted import
-  remain required. All2311 cases remain partial/
+  20261021 stdout/stderr/terminal.json and any fatal reports. Main import44551
+  exits0;every shard verifies and candidate/main pointers match exactly(indexdcca1c76).
+  Retain card-title-main-import-verification-20261021 log pair. Batch publication
+  verification is complete;all2311 cases remain partial/
   current-rendering unverified;full original final gates remain unchanged.
 - All original final full audit/browser/Material/TTS/unit/build/packed-consumer/
   capability/example/skill/diff gates remain. This is audit only;goal not complete.

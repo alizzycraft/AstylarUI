@@ -1,0 +1,1 @@
+{"type":"terminal","session":26470,"exitCode":0,"elapsedMs":2749722.6172,"utc":"2026-10-21T07:40:39.1163424Z","command":"node scripts/export-material-input-audit-current-ancestry.mjs --card-inputs --check","ASTYLAR_AUDIT_COLD":"1"}
