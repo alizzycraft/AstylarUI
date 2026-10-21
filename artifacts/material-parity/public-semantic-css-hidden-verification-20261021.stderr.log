@@ -1,0 +1,294 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: public-semantic-css-hidden-20261021:reconcileElement
++ actual - expected
+... Skipped lines
+
+  [
+    [
+      86,
+      'class'
+    ],
+...
+      80,
++     'text'
+-     'text2'
+    ],
+    [
+      64,
+      '='
+    ],
+...
+      80,
++     'text'
+-     'text2'
+    ],
+    [
+      22,
+      ')'
+    ],
+...
+      80,
++     'text'
+-     'text2'
+    ],
+    [
+      64,
+      '='
+    ],
+...
+      80,
++     'text'
+-     'text2'
+    ],
+    [
+      22,
+      ')'
+    ],
+...
+      80,
++     'text'
+-     'text2'
+    ],
+    [
+      25,
+      '.'
+    ],
+...
+      80,
++     'text'
+-     'text2'
+    ],
+    [
+      25,
+      '.'
+    ],
+...
+      80,
++     'text'
+-     'text2'
+    ],
+    [
+      22,
+      ')'
+    ],
+
+    at file:///D:/dev/github/AstylarUI-audit-integration/scripts/check-public-semantic-css-hidden.mjs:50:36
+    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [
+    [ 86, 'class' ],
+    [ 80, 'Probe' ],
+    [ 19, '{' ],
+    [ 80, 'reconcileElement' ],
+    [ 21, '(' ],
+    [ 80, 'element' ],
+    [ 28, ',' ],
+    [ 80, 'path' ],
+    [ 28, ',' ],
+    [ 80, 'identities' ],
+    [ 28, ',' ],
+    [ 80, 'liveKeys' ],
+    [ 22, ')' ],
+    [ 19, '{' ],
+    [ 87, 'const' ],
+    [ 80, 'key' ],
+    [ 64, '=' ],
+    [ 80, 'identities' ],
+    [ 25, '.' ],
+    [ 80, 'key' ],
+    [ 21, '(' ],
+    [ 80, 'element' ],
+    [ 28, ',' ],
+    [ 80, 'path' ],
+    [ 22, ')' ],
+    [ 27, ';' ],
+    [ 80, 'liveKeys' ],
+    [ 25, '.' ],
+    [ 80, 'add' ],
+    [ 21, '(' ],
+    [ 80, 'key' ],
+    [ 22, ')' ],
+    [ 27, ';' ],
+    [ 87, 'const' ],
+    [ 80, 'tagName' ],
+    [ 64, '=' ],
+    [ 110, 'this' ],
+    [ 25, '.' ],
+    [ 80, 'semanticTagName' ],
+    [ 21, '(' ],
+    [ 80, 'element' ],
+    [ 25, '.' ],
+    [ 80, 'type' ],
+    [ 22, ')' ],
+    [ 27, ';' ],
+    [ 121, 'let' ],
+    [ 80, 'node' ],
+    [ 64, '=' ],
+    [ 110, 'this' ],
+    [ 25, '.' ],
+    [ 80, 'nodes' ],
+    [ 25, '.' ],
+    [ 80, 'get' ],
+    [ 21, '(' ],
+    [ 80, 'key' ],
+    [ 22, ')' ],
+    [ 27, ';' ],
+    [ 87, 'const' ],
+    [ 80, 'previousElement' ],
+    [ 64, '=' ],
+    [ 110, 'this' ],
+    [ 25, '.' ],
+    [ 80, 'elements' ],
+    [ 25, '.' ],
+    [ 80, 'get' ],
+    [ 21, '(' ],
+    [ 80, 'key' ],
+    [ 22, ')' ],
+    [ 27, ';' ],
+    [ 101, 'if' ],
+    [ 21, '(' ],
+    [ 54, '!' ],
+    [ 80, 'node' ],
+    [ 57, '||' ],
+    [ 54, '!' ],
+    [ 80, 'previousElement' ],
+    [ 57, '||' ],
+    [ 54, '!' ],
+    [ 80, 'areAstylarReconciliationNodesCompatible' ],
+    [ 21, '(' ],
+    [ 80, 'previousElement' ],
+    [ 28, ',' ],
+    [ 80, 'element' ],
+    [ 22, ')' ],
+    [ 57, '||' ],
+    [ 80, 'node' ],
+    [ 25, '.' ],
+    [ 80, 'tagName' ],
+    [ 25, '.' ],
+    [ 80, 'toLowerCase' ],
+    [ 21, '(' ],
+    [ 22, ')' ],
+    [ 38, '!==' ],
+    [ 80, 'tagName' ],
+    [ 22, ')' ],
+    [ 19, '{' ],
+    [ 87, 'const' ],
+    [ 80, 'replacement' ],
+    [ 64, '=' ],
+    [ 110, 'this' ],
+    ... 328 more items
+  ],
+  expected: [
+    [ 86, 'class' ],
+    [ 80, 'Probe' ],
+    [ 19, '{' ],
+    [ 80, 'reconcileElement' ],
+    [ 21, '(' ],
+    [ 80, 'element' ],
+    [ 28, ',' ],
+    [ 80, 'path' ],
+    [ 28, ',' ],
+    [ 80, 'identities' ],
+    [ 28, ',' ],
+    [ 80, 'liveKeys' ],
+    [ 22, ')' ],
+    [ 19, '{' ],
+    [ 87, 'const' ],
+    [ 80, 'key' ],
+    [ 64, '=' ],
+    [ 80, 'identities' ],
+    [ 25, '.' ],
+    [ 80, 'key' ],
+    [ 21, '(' ],
+    [ 80, 'element' ],
+    [ 28, ',' ],
+    [ 80, 'path' ],
+    [ 22, ')' ],
+    [ 27, ';' ],
+    [ 80, 'liveKeys' ],
+    [ 25, '.' ],
+    [ 80, 'add' ],
+    [ 21, '(' ],
+    [ 80, 'key' ],
+    [ 22, ')' ],
+    [ 27, ';' ],
+    [ 87, 'const' ],
+    [ 80, 'tagName' ],
+    [ 64, '=' ],
+    [ 110, 'this' ],
+    [ 25, '.' ],
+    [ 80, 'semanticTagName' ],
+    [ 21, '(' ],
+    [ 80, 'element' ],
+    [ 25, '.' ],
+    [ 80, 'type' ],
+    [ 22, ')' ],
+    [ 27, ';' ],
+    [ 121, 'let' ],
+    [ 80, 'node' ],
+    [ 64, '=' ],
+    [ 110, 'this' ],
+    [ 25, '.' ],
+    [ 80, 'nodes' ],
+    [ 25, '.' ],
+    [ 80, 'get' ],
+    [ 21, '(' ],
+    [ 80, 'key' ],
+    [ 22, ')' ],
+    [ 27, ';' ],
+    [ 87, 'const' ],
+    [ 80, 'previousElement' ],
+    [ 64, '=' ],
+    [ 110, 'this' ],
+    [ 25, '.' ],
+    [ 80, 'elements' ],
+    [ 25, '.' ],
+    [ 80, 'get' ],
+    [ 21, '(' ],
+    [ 80, 'key' ],
+    [ 22, ')' ],
+    [ 27, ';' ],
+    [ 101, 'if' ],
+    [ 21, '(' ],
+    [ 54, '!' ],
+    [ 80, 'node' ],
+    [ 57, '||' ],
+    [ 54, '!' ],
+    [ 80, 'previousElement' ],
+    [ 57, '||' ],
+    [ 54, '!' ],
+    [ 80, 'areAstylarReconciliationNodesCompatible' ],
+    [ 21, '(' ],
+    [ 80, 'previousElement' ],
+    [ 28, ',' ],
+    [ 80, 'element' ],
+    [ 22, ')' ],
+    [ 57, '||' ],
+    [ 80, 'node' ],
+    [ 25, '.' ],
+    [ 80, 'tagName' ],
+    [ 25, '.' ],
+    [ 80, 'toLowerCase' ],
+    [ 21, '(' ],
+    [ 22, ')' ],
+    [ 38, '!==' ],
+    [ 80, 'tagName' ],
+    [ 22, ')' ],
+    [ 19, '{' ],
+    [ 87, 'const' ],
+    [ 80, 'replacement' ],
+    [ 64, '=' ],
+    [ 110, 'this' ],
+    ... 328 more items
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.22.3

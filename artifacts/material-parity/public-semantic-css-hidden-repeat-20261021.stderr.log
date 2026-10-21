@@ -1,0 +1,78 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: CSS-hidden content remains exposed in actual AX
++ actual - expected
+
++ [
++   {
++     actual: 1,
++     dpr: 1,
++     expected: 0,
++     mode: 'astylar',
++     variant: 'display-none'
++   },
++   {
++     actual: 1,
++     dpr: 1,
++     expected: 0,
++     mode: 'astylar',
++     variant: 'visibility-hidden'
++   },
++   {
++     actual: 1,
++     dpr: 2,
++     expected: 0,
++     mode: 'astylar',
++     variant: 'display-none'
++   },
++   {
++     actual: 1,
++     dpr: 2,
++     expected: 0,
++     mode: 'astylar',
++     variant: 'visibility-hidden'
++   }
++ ]
+- []
+
+    at file:///D:/dev/github/AstylarUI-audit-integration/scripts/audit-public-semantic-css-hidden.mjs:100:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [
+    {
+      mode: 'astylar',
+      variant: 'display-none',
+      dpr: 1,
+      expected: 0,
+      actual: 1
+    },
+    {
+      mode: 'astylar',
+      variant: 'visibility-hidden',
+      dpr: 1,
+      expected: 0,
+      actual: 1
+    },
+    {
+      mode: 'astylar',
+      variant: 'display-none',
+      dpr: 2,
+      expected: 0,
+      actual: 1
+    },
+    {
+      mode: 'astylar',
+      variant: 'visibility-hidden',
+      dpr: 2,
+      expected: 0,
+      actual: 1
+    }
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.22.3

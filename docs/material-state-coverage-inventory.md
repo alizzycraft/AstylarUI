@@ -165,6 +165,30 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   visibility before any core diagnosis;open-state relations,public minimal repro,
   AT traversal/current paint remain unproven. No fixture/renderer changes,no
   case closure or new canonical finding. Do not export for this standalone check.
+- Expansion hidden-style followup authenticates all68 retained requests:collapsed
+  content resolves display:none in normal/interaction/effective stages;expanded
+  content resolves block,authored hidden omitted. Evidence:expansion-hidden-style-
+  boundary-20261021. Minimal package-root proof independently repeats16 captures
+  twice atDPR1/2 with identical reference/candidate SiteData. Both runs retain
+  four failures:CSS display:none and visibility:hidden text remains exposed in
+  candidate actual AX while native hides it. Visible/authored-hidden controls
+  pass;all32 captures have zero runtime errors and disposal succeeds.
+  Evidence:public-semantic-css-hidden-20261021 and repeat,including bundles,
+  originals/overlays/dependency receipts/raw AX/failure reports. Final independent
+  verifier exits0,authenticates all dependencies/captures,and binds complete
+  reconcile/reconcileElement/applyAttributes methods across current source,
+  installed package and both public bundles. Existing token comparator reused;
+  compiler text2/attribute2 locals are guarded by exact declarations and property
+  rename rejection. Five mutation controls reject. Keep original verifier failures
+  and retry logs;final evidence is public-semantic-css-hidden-verification-final-
+  20261021 via scripts/check-public-semantic-css-hidden.mjs.
+  Confirmed bounded core cause:semantic reconciliation filters authored hidden
+  flags and never consumes resolved CSS visibility;visual style resolution is
+  correct in the public proof. This is distinct from the authored target-region
+  substitution. Not yet canonical registration/current Material core binding,
+  inherited visibility overrides,updates,AT behavior or complete-case acceptance.
+  Next:bind Material served bridge's compiler spread helper explicitly,then
+  register/classify the separate causes in a coherent source batch;no fix authority.
 - Next card descendant question narrowed across all52 authenticated retained pairs:
   reference title is nested under the native header-text div;candidate h2 is a
   direct header child. Native15 static/16 interaction nodes versus11 candidate
