@@ -4,6 +4,27 @@
 
 Updated October21. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- New broader-family actual-AX gap answered for12 STATIC list cases(24 pages),
+  outside frozen native-checkable export. First October5-checkpoint attempt rejects
+  changed served files before browser capture;retain original failure. Explicit
+  successor pins the existing divider-current-browser October20 checkpoint
+  SHA9d0f1220 and verifies all1887 served files before/after,without rebuilding.
+  Reuses exact withFrozenShowcase server helper;full AX trees and referenced backend
+  DOM nodes are retained,not queried target-role approximations.
+- List actual AX component subtrees expose matching Inbox/Archive StaticText in
+  all12 pairs and no list/listitem role request on either side. However all12
+  candidate pages expose TWO nested main landmarks versus one native main:
+  authored outer .frame MAIN plus semantic SiteData page MAIN. Actual backend
+  IDs/ancestry prove owners;both component source-map contents exactly match
+  current source modulo line endings. First divergence is application landmark
+  nesting,not a core invented role. Preserve one intended page-main contract at
+  host/document authoring boundary;do not make core discard authored MAIN roles.
+  Evidence:list-static-ax-current-checkpoint-20261021 and list-static-ax-review-
+  20261021 via capture-list-static-ax.mjs/check-list-static-ax.mjs. No AT/full AX
+  relations,40 list interaction cases,paint or complete-case acceptance follows.
+  This new authoring finding awaits a later coherent batch;do not mutate running
+  session15448 inputs or rerun previously settled grid/badge/icon investigations.
+
 - Independent retained inner-circle question answered OUTSIDE frozen173/232/790
   publication inputs:all136 original mapped owners bind complete native style
   receipts. Native20px border-box/10px border/50% radii scales around10px10px;

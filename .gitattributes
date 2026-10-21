@@ -76,6 +76,13 @@ artifacts/material-parity/native-checkable-value-independent-20261021.log -text
 scripts/review-native-checkable-value.mjs -text
 scripts/check-radio-ring-inputs.mjs -text
 scripts/check-radio-inner-circle-inputs.mjs -text
+scripts/capture-list-static-ax.mjs -text
+scripts/check-list-static-ax.mjs -text
+artifacts/material-parity/list-static-ax-20261021/* -text
+artifacts/material-parity/list-static-ax-current-checkpoint-20261021/* -text
+artifacts/material-parity/list-static-ax-20261021.stderr.log binary
+artifacts/material-parity/list-static-ax-current-checkpoint-20261021.log -text
+artifacts/material-parity/list-static-ax-review-20261021.log -text
 artifacts/material-parity/radio-inner-circle-inputs-20261021.log -text
 scripts/review-radio-ring-inputs.mjs -text
 tests/material-parity/native-checkable-registration.mjs -text

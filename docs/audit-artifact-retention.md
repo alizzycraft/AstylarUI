@@ -2,6 +2,16 @@
 
 ## Current versus historical evidence
 
+Retain list-static-ax-20261021 initial failure directory/log pair and list-static-
+ax-current-checkpoint-20261021 successful24-capture directory/log pair. The first
+correctly rejects old October5 checkpoint versus newer served build;do not rewrite
+its producer snapshot/provenance or claim it captured AX. Success explicitly pins
+existing October20 divider checkpoint and fingerprints1887 served files before/
+after. Retain list-static-ax-review-20261021 log pair and both capture/check scripts.
+These close a demonstrated actual-AX evidence gap,not temporary scratch;all raw
+trees/backend DOM nodes and original failures remain. No changed export input or
+canonical case promotion;no permission to remove source maps/checkpoint assets.
+
 Retain scripts/check-radio-inner-circle-inputs.mjs and radio-inner-circle-inputs-
 20261021 log/empty stderr pair. Reuses original136-owner trees;no browser recapture
 or modification of frozen native-checkable publication inputs. Bounds arithmetic
