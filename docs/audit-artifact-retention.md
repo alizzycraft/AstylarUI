@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain passive-static-ax-20261021 successful72-capture directory/log pair and
+passive-static-ax-review-20261021 log/empty stderr plus capture/check scripts.
+This extends the existing list collector procedure to36 static cases in three
+previously uninspected actual-AX families,reusing the pinned server/CDP helper.
+Both original list source binding and1887-file checkpoint remain required.
+Raw ignored/generic/inline nodes are NOT discarded;focused projection explicitly
+limits matching claims. No changed frozen export source or canonical acceptance.
+
 Retain pending source proposalf39d4c4cf1065eadfa494307434e7b1c17d393d8bc5794ca7d0fffd9974780e4
 and showcase-main-landmark-review-20261021 log/empty stderr. Existing proposal
 mechanism preserves all173 working definitions plus one shared landmark-authoring

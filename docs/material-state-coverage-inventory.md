@@ -38,6 +38,20 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   preserves all173 working definitions and appends one authoring finding. Initial
   2f440115 already authors both MAIN inputs;initial runtime/motive are unproven.
   Restore single landmark ownership in future authoring,not core role suppression.
+- Broader actual-AX supplement now adds36 STATIC sidenav/grid-list/table pairs,
+  72 pages,against the same1887-file pinned checkpoint(no build/input changes).
+  All24 table/grid-list component role/name/property/child projections agree after
+  explicitly omitting ignored,generic and InlineTextBox wrappers;raw full trees
+  remain preserved,so this is not full generic/AT/header-association equivalence.
+  All36 candidate pages expose the extra shared page MAIN. All12 sidenav pairs
+  additionally expose authored sidenav-content MAIN instead of native generic
+  MAT-SIDENAV-CONTENT. Backend IDs and actual AX parent/child paths identify the
+  owners;current served-source bindings are reused only after exact receipt checks.
+  Evidence:passive-static-ax-20261021 and passive-static-ax-review-20261021 via
+  capture-passive-static-ax.mjs/check-passive-static-ax.mjs. New shared-instance
+  and sidenav-content evidence remains outside frozen export/proposalf39d;no new
+  case completion or interaction-state claim. Source explicitly authors the extra
+  MAIN,so do not treat it as a core role invention or suppress authored roles.
 - Prioritized remaining gaps:finish publication reconciliation first;then complete
   descendant/first-stage mapping(baseline2287 cases/35 families),actual AX relations
   (baseline2271 cases),1875 interaction history/resource obligations,443 editable

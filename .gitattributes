@@ -78,6 +78,11 @@ scripts/check-radio-ring-inputs.mjs -text
 scripts/check-radio-inner-circle-inputs.mjs -text
 scripts/capture-list-static-ax.mjs -text
 scripts/check-list-static-ax.mjs -text
+scripts/capture-passive-static-ax.mjs -text
+scripts/check-passive-static-ax.mjs -text
+artifacts/material-parity/passive-static-ax-20261021/* -text
+artifacts/material-parity/passive-static-ax-20261021.log -text
+artifacts/material-parity/passive-static-ax-review-20261021.log -text
 artifacts/material-parity/showcase-main-landmark-review-20261021.log -text
 artifacts/material-parity/working-audit/proposals/f39d4c4cf1065eadfa494307434e7b1c17d393d8bc5794ca7d0fffd9974780e4.json -text
 artifacts/material-parity/list-static-ax-20261021/* -text
