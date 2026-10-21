@@ -162,8 +162,18 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   card-recorded-node-accounting-20261021 log pair. Full groups retain omitted
   header wrapper and native button descendants versus candidate value-label;
   existing button findings are reused,not duplicated. Not canonical case closure,
-  anonymous-box equivalence or current rendering. Next:actual AX title role effects;
-  do not infer a core flex failure from unequal inputs.
+  anonymous-box equivalence or current rendering. Actual title AX gap now answered
+  for12 static contexts/24 pages via unchanged pinned checkpoint9d0f1220 and the
+  existing CDP capture procedure(card-static-ax-20261021,terminal0). All reference
+  MAT-CARD-TITLE nodes are generic with StaticText Project Atlas;all candidate H2
+  nodes are heading level2 named Project Atlas. Full source/map bindings replay;
+  checker rejects48 runtime/role mutations. scripts/capture-card-static-ax.mjs
+  derives and retains exact executed source without modifying old capture bytes;
+  scripts/check-card-static-ax.mjs and card-static-ax-review-20261021 log pair
+  authenticate all24 captures. Standalone authoring defect,not yet one of accepted
+  175 source findings;not a core-generated heading or complete case closure.
+  Next:initial/current authoring history and coherent existing-schema registration/
+  evidence join;retain interaction/AT/anonymous-box/paint uncertainty.
 - All original final full audit/browser/Material/TTS/unit/build/packed-consumer/
   capability/example/skill/diff gates remain. This is audit only;goal not complete.
 
