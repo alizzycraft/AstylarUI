@@ -21,13 +21,16 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   Resource pressure is possible,not proven;the48-case full-review join overlapped.
   Preserve native-checkable-coherent-export-failure-20261021.json and original
   empty log pair. Frozen790/232/173 source census replay is byte-exact again.
-  SERIAL recovery29865 is VERIFIED LIVE(launcher17048,producer29428);existing
-  progress reports read-reference/build-audit. Directory:native-checkable-export-
+  SERIAL recovery29865 is TERMINAL SUCCESS(exit0,2523570ms);validation,encoding
+  and writing completed. Candidate c2a58b7c has173 findings;accepted pointer8259
+  is unchanged. Full80-section comparison72245 is running;receipt/coverage
+  reconciliation,independent cold verification and import remain pending.
+  Directory:native-checkable-export-
   recovery-20261021(stdout.log,stderr.log,resources.jsonl plus any fatal reports).
   Node fatal/uncaught reports exclude env/network;resources sample every15 seconds.
   Source code,arguments,thresholds and accepted package remain unchanged.
   Do not weaken gates or run another memory-heavy audit job alongside it.
-  Export,80-section/coverage/receipt conservation,cold check/import remain pending.
+  Export succeeded;80-section/coverage/receipt conservation,cold check/import remain pending.
 - Two registered causes:CheckboxManager wrongly synthesizes visible labels from
   native checkbox/radio form values(32 package-root captures across two runs,
   three complete current/installed/bundle method bindings);radio ring state/theme
