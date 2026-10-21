@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain radio-native-routing-20261021.log/empty stderr and radio-native-owning-unit-
+20261021 log pair. Actual current routing methods distinguish136 retained role-
+DIV options from explicit native radio inputs;exact producerArgs replay passes.
+Twelve original two-suite Angular assertions pass through maintained audit-service
+configuration;util._extend warning is retained,not suppressed. Raw ANSI/CRLF unit
+logs use binary Git storage for byte preservation. No renderer source changes,
+capture substitutions,case promotion or Material native-control raster claim.
+
 Retain scripts/check-material-radio-authoring-applicability.mjs and radio-
 authoring-applicability-20261021.log/empty stderr(139843B,SHA
 a88213f0b0b55320e75b092d2eed3596fdfae36148b16a2fb3c9b3f0385ac2eb).

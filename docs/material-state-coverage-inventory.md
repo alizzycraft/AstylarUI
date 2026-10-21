@@ -4,6 +4,25 @@
 
 Updated October21. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- Radio native-path question answered:current public DOMElement exposes inputType,
+  and actual InputElementService determineInputType/mapStringToInputType methods
+  route explicit native radio to InputType.Radio/createRadioButton. Executed actual
+  methods for all136 mapped role-DIV options return null(native-control dispatch);
+  corresponding explicit input/radio objects return radio. Four text/checkbox/
+  uppercase/unknown controls retain correct routing. Evidence:radio-native-routing-
+  20261021.log(original method sources,source receipts and exact replay retained).
+  This rules out an absent radio type/dispatch path,NOT missing Material CSS/paint
+  support. The showcase bypasses that native path;existing Space-key/authoring
+  findings remain,not a new core key-delivery diagnosis.
+- Existing input-element.service.spec.ts and checkbox.manager.spec.ts run together
+  through the maintained audit-service/native-module Karma setup:12/12 original
+  assertions PASS,terminal0,ChromeHeadless155. Log pair:radio-native-owning-unit-
+  20261021. Existing util._extend deprecation warning retained. These are unit/
+  NullEngine and manager tests,not installed public browser/Material raster or
+  full-unit acceptance. Next native-control check must use equivalent original
+  structure/styles before claiming it restores Material parity;actual label/AX,
+  event order,hit regions,clipping and animated circle/ripple paint stay open.
+
 - Radio source applicability answered outside50315381:all68 retained candidate
   subtrees(136 options) and13 radio-specific style objects exactly equal current
   familyElements output/style expressions using captured selected/disabled states
