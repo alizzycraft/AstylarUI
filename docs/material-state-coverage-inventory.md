@@ -25,12 +25,20 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   accepted c2a58b7c remains unchanged. Full80-section comparison90907 exits0:
   70 unchanged/10 changed. Export census42920 exits0 and authenticates exact
   registered804 source paths/234 proofs/175 findings against the frozen batch.
-  Six non-coverage changed sections are under exact leaf/structure comparison
-  session39647;coverage additions require separate conservation. Retain passive-main-
+  Exact six-section leaf/structure comparison39647 and receipt reconciliation53299
+  exit0:148 changes are98 producer receipts,48 recomputed control-proof hashes,
+  one recomputed motion report and173→175 finding count. Candidate import76063
+  exits0;every shard verifies(index7e45bbd1),accepted pointer remains unchanged.
+  Coverage comparison16020/conservation82236 exit0:all15281 prior dependencies
+  and complete prior case records conserve;48 reviewed static AX children and107
+  dependencies added,only explicit review/policy provenance changes otherwise.
+  Independent cold check26642 is live(launcher4904),ASTYLAR_AUDIT_COLD=1 with
+  the same --static-ax --check selection. Retain passive-main-cold-check-20261021
+  stdout/stderr;do not restart while live. Retain passive-main-
   coherent-export-20261021 progress/resource/fatal diagnostics and passive-main-
   export-source-freeze-20261021 log pair. Inputs stay frozen;no parallel heavy job.
-  Exact receipt/coverage conservation,cold check and
-  accepted import remain pending. This adds evidence,not rendering/case acceptance.
+  Cold terminal result and accepted import remain pending. This adds evidence,
+  not rendering/case acceptance;all2311 cases remain partial/unverified.
 - Coherent export session15448 is TERMINAL FAILED(-1073740791/0xC0000409),with
   empty stdout/stderr. Accepted8259d4f7 compressed payload hashes intact;no result
   published. Targeted Windows event/dump/WER checks found no diagnostic cause.
