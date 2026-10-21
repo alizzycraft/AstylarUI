@@ -52,3 +52,39 @@ export function restoreExpansionSemanticProducer(source) {
   assert.equal(hash(prior), 'ea1a6051b1e0e3df7fb820754ea9534103d0d0161328b0821ef7f8392d3123c2');
   return prior;
 }
+export function restoreExpansionSemanticCaseSelection(source) {
+  let text = source.toString().replaceAll('\r\n', '\n');
+  if (!text.includes('export const expansionSemanticsReview=')) return text;
+  assert.equal(hash(text), '7ffd95b3327cc270e374c7c80a2f6506ae0092f72567278a3b6b7bff4bac53bf');
+  const line = "export const expansionSemanticsReview='5caa57e5f2254471d9d082ff0831db36704f73997b41ae48aa4b4064b45c4c99';\n";
+  assert.equal(text.split(line).length, 2); text = text.replace(line, '');
+  assert.equal(text.split(',expansionSemanticsReview').length, 3); text = text.replaceAll(',expansionSemanticsReview', '');
+  assert.equal(hash(text), 'a0f724b13faa820717c4b7d0232e6d566a7ff118d73af95259c8df527ee8607d');
+  return text;
+}
+export function restoreExpansionSemanticRunnerSelection(source) {
+  let text = source.toString().replaceAll('\r\n', '\n');
+  if (!text.includes(', expansionSemanticsReview')) return text;
+  assert.equal(hash(text), 'b3eee6c0c0e3377aa9bda24de72df9c548d4e9bfa48fc94016e25cfa99b0c667');
+  for (const addition of [', expansionSemanticsReview', ',expansionSemanticsReview']) {
+    assert.equal(text.split(addition).length, 2); text = text.replace(addition, '');
+  }
+  assert.equal(hash(text), '03fc64661a9fd02527d25d3b5ac3a1d519318badb654c5f89943eef8910a0e22');
+  return text;
+}
+export function restoreExpansionSemanticLauncherSelection(source) {
+  let text = source.toString().replaceAll('\r\n', '\n');
+  if (!text.includes('const expansionSemantics =')) return text;
+  assert.equal(hash(text), '3381283405e9d4f7f5037ff2603da2226df586b434e1d1fc82c23900d0606d52');
+  for (const addition of [
+    "const expansionSemantics = rawRequested.includes('--expansion-semantics');\n",
+    "assert.ok(!(expansionSemantics && (staticAx || cardInputs)), 'Choose one case-review supplement');\n",
+    "expansionSemantics ? 'artifacts/material-parity/working-audit/proposals/5caa57e5f2254471d9d082ff0831db36704f73997b41ae48aa4b4064b45c4c99.json' : ",
+    "expansionSemantics ? '--case-obligation-review-sha256=5caa57e5f2254471d9d082ff0831db36704f73997b41ae48aa4b4064b45c4c99' : ",
+  ]) { assert.equal(text.split(addition).length, 2); text = text.replace(addition, ''); }
+  for (const addition of [", '--expansion-semantics'", '|--expansion-semantics']) {
+    assert.equal(text.split(addition).length, 2); text = text.replace(addition, '');
+  }
+  assert.equal(hash(text), '67d8688991da94838ae1f17a31b82018c395d9e5b7a9a6cc0017cb93a0e5a3c7');
+  return text;
+}

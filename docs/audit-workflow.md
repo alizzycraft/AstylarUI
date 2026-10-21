@@ -199,6 +199,15 @@ dry run are not canonical publication;source conservation,export,cold comparison
 and accepted import remain required. Exact prior selection-source restoration
 rejects drift;unknown review IDs remain rejected.
 
+The reviewed expansion successor uses explicit `--expansion-semantics` (also
+with `--dry-run` or `--check`),selecting5caa57e5. Default,static-AX and card
+selections remain unchanged;all supplement flags are mutually exclusive.
+Full loading authenticates15588 dependencies/twelve current-source checks;
+removing68 target-input and12 static-AX children recovers complete20dfb804.
+Current selection-source reversal binds complete prior files and rejects drift.
+This is not canonical publication or case/rendering acceptance. Freeze the full
+839-source/238-proof/178-finding batch before export/conservation/cold/import.
+
 ## Validated reuse
 
 The October20 control-input successor736e685c retains the completee837 review

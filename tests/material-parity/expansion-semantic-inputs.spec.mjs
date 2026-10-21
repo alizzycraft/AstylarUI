@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
-import { expansionSemanticPredecessor, restoreExpansionSemanticPolicy, restoreExpansionSemanticProducer } from './expansion-semantic-registration.mjs';
+import { expansionSemanticPredecessor, restoreExpansionSemanticPolicy, restoreExpansionSemanticProducer, restoreExpansionSemanticCaseSelection, restoreExpansionSemanticRunnerSelection, restoreExpansionSemanticLauncherSelection } from './expansion-semantic-registration.mjs';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const normalize = bytes => bytes.toString().replaceAll('\r\n', '\n');
 test('expansion semantic registration preserves176 findings and exact predecessor sources', () => {
@@ -33,10 +33,13 @@ test('expansion semantic registration preserves176 findings and exact predecesso
   const helperFile = 'tests/material-parity/card-title-registration.mjs';
   let helper = normalize(readFileSync(helperFile));
   for (const [added, before] of [
-    ["import { expansionSemanticPredecessor, restoreExpansionSemanticPolicy, restoreExpansionSemanticProducer } from './expansion-semantic-registration.mjs';\n", ''],
+    ["import { expansionSemanticPredecessor, restoreExpansionSemanticPolicy, restoreExpansionSemanticProducer, restoreExpansionSemanticCaseSelection, restoreExpansionSemanticRunnerSelection, restoreExpansionSemanticLauncherSelection } from './expansion-semantic-registration.mjs';\n", ''],
     ['  current = expansionSemanticPredecessor(current);\n', ''],
     ['  const text = restoreExpansionSemanticPolicy(source);', "  const text = source.toString().replaceAll('\\r\\n', '\\n');"],
     ['  const text = restoreExpansionSemanticProducer(source);', "  const text = source.toString().replaceAll('\\r\\n', '\\n');"],
+    ['  let text = restoreExpansionSemanticCaseSelection(source);', "  let text = source.toString().replaceAll('\\r\\n', '\\n');"],
+    ['  let text = restoreExpansionSemanticRunnerSelection(source);', "  let text = source.toString().replaceAll('\\r\\n', '\\n');"],
+    ['  let text = restoreExpansionSemanticLauncherSelection(source);', "  let text = source.toString().replaceAll('\\r\\n', '\\n');"],
   ]) { assert.equal(helper.split(added).length, 2); helper = helper.replace(added, before); }
   assert.equal(helper, normalize(execFileSync('git', ['show', `09431889:${helperFile}`])));
   const suiteFile = 'tests/material-parity/card-title-inputs.spec.mjs';
@@ -46,6 +49,24 @@ test('expansion semantic registration preserves176 findings and exact predecesso
   const suite = normalize(readFileSync(suiteFile)); assert.equal(suite.split(prelude).length, 2);
   assert.equal(suite.replace(prelude, "import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';"),
     normalize(execFileSync('git', ['show', `09431889:${suiteFile}`])));
+  for (const [file, restore] of [
+    ['tests/material-parity/text-backing-case-review-source.mjs', restoreExpansionSemanticCaseSelection],
+    ['scripts/run-material-input-audit.mjs', restoreExpansionSemanticRunnerSelection],
+    ['scripts/export-material-input-audit-current-ancestry.mjs', restoreExpansionSemanticLauncherSelection],
+  ]) {
+    const source = readFileSync(file, 'utf8');
+    assert.equal(restore(source), normalize(execFileSync('git', ['show', `07d9fc64:${file}`])));
+    assert.throws(() => restore(source + '\n// drift'));
+  }
+  const launcher = 'scripts/export-material-input-audit-current-ancestry.mjs';
+  const previous = JSON.parse(execFileSync(process.execPath, [launcher, '--card-inputs', '--dry-run']));
+  const current = JSON.parse(execFileSync(process.execPath, [launcher, '--expansion-semantics', '--dry-run']));
+  const oldId = '20dfb80485f094eaec4025e56ac7d5bb4a375f388643d192cb14f5d5fecbf82b';
+  const newId = '5caa57e5f2254471d9d082ff0831db36704f73997b41ae48aa4b4064b45c4c99';
+  assert.equal(current.args.filter(arg => arg.includes(newId)).length, 2);
+  assert.deepEqual({ ...current, args: current.args.map(arg => arg.replace(newId, oldId)) }, previous);
+  for (const other of ['--card-inputs', '--static-ax'])
+    assert.throws(() => execFileSync(process.execPath, [launcher, '--expansion-semantics', other, '--dry-run'], { stdio: 'pipe' }));
 });
 test('expansion semantic public failures and pinned Material AX replay independently', () => {
   for (const [script, file] of [

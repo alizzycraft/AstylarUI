@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
-import { expansionSemanticPredecessor, restoreExpansionSemanticPolicy, restoreExpansionSemanticProducer } from './expansion-semantic-registration.mjs';
+import { expansionSemanticPredecessor, restoreExpansionSemanticPolicy, restoreExpansionSemanticProducer, restoreExpansionSemanticCaseSelection, restoreExpansionSemanticRunnerSelection, restoreExpansionSemanticLauncherSelection } from './expansion-semantic-registration.mjs';
 const hash = value => createHash('sha256').update(value).digest('hex');
 export function cardTitlePredecessor(current) {
   current = expansionSemanticPredecessor(current);
@@ -54,7 +54,7 @@ export function restoreCardTitleProducer(source) {
   return prior;
 }
 export function restoreCardTitleCaseSelection(source) {
-  let text = source.toString().replaceAll('\r\n', '\n');
+  let text = restoreExpansionSemanticCaseSelection(source);
   if (!text.includes('export const cardInputsReview=')) return text;
   assert.equal(hash(text), 'a0f724b13faa820717c4b7d0232e6d566a7ff118d73af95259c8df527ee8607d');
   const line = "export const cardInputsReview='20dfb80485f094eaec4025e56ac7d5bb4a375f388643d192cb14f5d5fecbf82b';\n";
@@ -64,7 +64,7 @@ export function restoreCardTitleCaseSelection(source) {
   return text;
 }
 export function restoreCardTitleRunnerSelection(source) {
-  let text = source.toString().replaceAll('\r\n', '\n');
+  let text = restoreExpansionSemanticRunnerSelection(source);
   if (!text.includes(', cardInputsReview')) return text;
   assert.equal(hash(text), '03fc64661a9fd02527d25d3b5ac3a1d519318badb654c5f89943eef8910a0e22');
   for (const addition of [', cardInputsReview', ',cardInputsReview']) {
@@ -74,7 +74,7 @@ export function restoreCardTitleRunnerSelection(source) {
   return text;
 }
 export function restoreCardTitleLauncherSelection(source) {
-  let text = source.toString().replaceAll('\r\n', '\n');
+  let text = restoreExpansionSemanticLauncherSelection(source);
   if (!text.includes('const cardInputs =')) return text;
   assert.equal(hash(text), '67d8688991da94838ae1f17a31b82018c395d9e5b7a9a6cc0017cb93a0e5a3c7');
   for (const addition of [

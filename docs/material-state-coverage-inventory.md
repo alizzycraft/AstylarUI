@@ -243,6 +243,19 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   inventory-owning-20261021 log pair). Accepted package remains176/236/819;
   exact source census,explicit case-review selection and coherent publication
   are pending. No export is justified until the complete batch is selected.
+- Expansion review5caa57e5 now has explicit --expansion-semantics selection;
+  default5031/static-AX33b7/card20df remain unchanged and mixed flags reject.
+  Whole case-helper/runner/launcher recovery to prior sources rejects drift;
+  owning/card/landmark/native/shared-button run passes15/15,zero fail/skip.
+  Exact census exits0:819/236/176→839/238/178,all176 findings/236 proof claims/
+  819 paths conserve.20 paths added,seven prior source receipts changed;only
+  two card proof lines shift+2. Selected review integration41959 exits0:15588
+  dependencies/twelve current checks/2311 partial cases,no unjoined cases;
+  removes exactly80 children to recover complete20dfb804,unknown reviews reject.
+  Evidence:expansion-semantic-selection-owning/selection-census/selected-review-
+  integration20261021 log pairs. Next freeze/replay census and serialized coherent
+  export,then section/receipt/coverage conservation,cold comparison,accepted import.
+  Accepted package remains176;all original final acceptance gates stay open.
 - Next card descendant question narrowed across all52 authenticated retained pairs:
   reference title is nested under the native header-text div;candidate h2 is a
   direct header child. Native15 static/16 interaction nodes versus11 candidate
