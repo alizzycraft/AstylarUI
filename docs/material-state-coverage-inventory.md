@@ -91,7 +91,15 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   dependencies and recovers COMPLETE predecessor50315381 after removing precisely
   those48 children. All2311 cases/statuses/findings/remaining work are preserved;
   no inspection/current-rendering promotion. Join87206 terminates0. This proposal
-  is NOT selected for export;join/source registration belongs to a later coherent batch.
+  now has explicit launcher selection via --static-ax(default remains50315381).
+  Existing reader/runner support exact33b7 only;integration authenticates15388
+  dependencies/twelve source checks and removes exactly48 children to recover
+  complete5031. Unknown reviews reject. All2311 dispositions/remaining work conserve.
+  Fifteen final owning/historical checks pass;whole helper/runner/launcher source
+  restoration rejects drift. Complete selection census preserves173/232/790 before
+  and175/234/804 after,including eight explained predecessor source changes.
+  Evidence:passive-main-selected-review-integration/selection-final-owning/
+  selection-census20261021. Export/conservation/cold/import remain pending for this batch.
 - Prioritized remaining gaps:integrate queued AX review coherently;then complete
   descendant/first-stage mapping(baseline2287 cases/35 families),actual AX relations
   (baseline2271 cases),1875 interaction history/resource obligations,443 editable

@@ -179,6 +179,16 @@ pass for a core failure or clear remaining inspection work.
 Use review key order `kind`, `status`, `inspectionSchemaVersion`, `scope`, `groups`
 for the existing JSON digest contract. Schema 1 omits the version opt-in.
 
+For the reviewed48-case static actual-AX supplement, the same named launcher
+accepts explicit `--static-ax`, including `--static-ax --dry-run` and
+`--static-ax --check`. It selects exact33b7ccf9;default invocation retains50315381.
+The existing reader authenticates all15388 dependencies and twelve current
+divider source checks;removing exactly48 semantic children recovers complete5031.
+All2311 cases remain partial/current-rendering unverified. Dry run is invocation
+preflight only;full export/conservation/cold/import still precede publication.
+Existing source-restoration guards bind complete prior helper/runner/launcher
+bytes and reject drift;unknown reviews cannot select this boundary.
+
 ## Validated reuse
 
 The October20 control-input successor736e685c retains the completee837 review

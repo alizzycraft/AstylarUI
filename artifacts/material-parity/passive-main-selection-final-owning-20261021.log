@@ -1,0 +1,100 @@
+TAP version 13
+# Subtest: shared button touch selection preserves complete prior sources and rejects unrelated drift
+ok 1 - shared button touch selection preserves complete prior sources and rejects unrelated drift
+  ---
+  duration_ms: 113.517
+  type: 'test'
+  ...
+# Subtest: shared button touch proposal preserves all prior definitions and the existing core unit limitation
+ok 2 - shared button touch proposal preserves all prior definitions and the existing core unit limitation
+  ---
+  duration_ms: 7.5598
+  type: 'test'
+  ...
+# Subtest: shared button touch registration recovers exact sources and rejects unrelated drift
+ok 3 - shared button touch registration recovers exact sources and rejects unrelated drift
+  ---
+  duration_ms: 951.2296
+  type: 'test'
+  ...
+# Subtest: text backing registration preserves complete clip predecessor and bounded public evidence
+ok 4 - text backing registration preserves complete clip predecessor and bounded public evidence
+  ---
+  duration_ms: 1428.2311
+  type: 'test'
+  ...
+# Subtest: registered clip finding conserves its queued predecessor and rejects altered claims
+ok 5 - registered clip finding conserves its queued predecessor and rejects altered claims
+  ---
+  duration_ms: 85.2797
+  type: 'test'
+  ...
+# Subtest: legacy clip registration preserves complete predecessor source and proof inventory
+ok 6 - legacy clip registration preserves complete predecessor source and proof inventory
+  ---
+  duration_ms: 1333.2283
+  type: 'test'
+  ...
+# Subtest: native checkable registration preserves all prior findings and distinct core authoring causes
+ok 7 - native checkable registration preserves all prior findings and distinct core authoring causes
+  ---
+  duration_ms: 937.8911
+  type: 'test'
+  ...
+# Subtest: public native checkable form values retain repeatable pixel failures and owning method binding
+ok 8 - public native checkable form values retain repeatable pixel failures and owning method binding
+  ---
+  duration_ms: 7273.0883
+  type: 'test'
+  ...
+# Subtest: radio ring state paint inputs replay complete retained population
+ok 9 - radio ring state paint inputs replay complete retained population
+  ---
+  duration_ms: 205.017
+  type: 'test'
+  ...
+# Subtest: passive landmark registration preserves accepted findings and exact source boundaries
+ok 10 - passive landmark registration preserves accepted findings and exact source boundaries
+  ---
+  duration_ms: 1428.502
+  type: 'test'
+  ...
+# Subtest: passive static AX and initial landmark history replay retained observations
+ok 11 - passive static AX and initial landmark history replay retained observations
+  ---
+  duration_ms: 3318.6624
+  type: 'test'
+  ...
+# Subtest: attribute focus registration preserves all predecessor definitions and proof sources
+ok 12 - attribute focus registration preserves all predecessor definitions and proof sources
+  ---
+  duration_ms: 1767.9116
+  type: 'test'
+  ...
+# Subtest: inline image registration preserves complete prior source and finding populations
+ok 13 - inline image registration preserves complete prior source and finding populations
+  ---
+  duration_ms: 1516.3766
+  type: 'test'
+  ...
+# Subtest: border contact registration preserves all predecessor findings and proof sources
+ok 14 - border contact registration preserves all predecessor findings and proof sources
+  ---
+  duration_ms: 2373.8643
+  type: 'test'
+  ...
+# Subtest: semantic registration historical boundary rejects drift and keeps current population explicit
+ok 15 - semantic registration historical boundary rejects drift and keeps current population explicit
+  ---
+  duration_ms: 3143.6899
+  type: 'test'
+  ...
+1..15
+# tests 15
+# suites 0
+# pass 15
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 9698.3695

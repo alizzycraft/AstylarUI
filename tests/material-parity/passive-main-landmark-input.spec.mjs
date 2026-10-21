@@ -4,7 +4,8 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
-import { passiveMainPredecessor, restorePassiveMainPolicy, restorePassiveMainProducer } from './passive-main-registration.mjs';
+import { passiveMainPredecessor, restorePassiveMainPolicy, restorePassiveMainProducer,
+  restorePassiveMainCaseSelection, restorePassiveMainRunnerSelection, restorePassiveMainLauncherSelection } from './passive-main-registration.mjs';
 const hash = value => createHash('sha256').update(value).digest('hex');
 
 test('passive landmark registration preserves accepted findings and exact source boundaries', () => {
@@ -49,6 +50,23 @@ test('passive landmark registration preserves accepted findings and exact source
     ['  const text = restorePassiveMainProducer(source);', '  const text = normalized(source);'],
   ]) { assert.equal(helper.split(current).length, 2); helper = helper.replace(current, prior); }
   assert.equal(helper, priorHelper);
+  for (const [file, restore] of [
+    ['tests/material-parity/text-backing-case-review-source.mjs', restorePassiveMainCaseSelection],
+    ['scripts/run-material-input-audit.mjs', restorePassiveMainRunnerSelection],
+    ['scripts/export-material-input-audit-current-ancestry.mjs', restorePassiveMainLauncherSelection],
+  ]) {
+    const source = readFileSync(file, 'utf8');
+    const prior = execFileSync('git', ['show', `d0b4d633:${file}`], { encoding: 'utf8' }).replaceAll('\r\n', '\n');
+    assert.equal(restore(source), prior);
+    assert.throws(() => restore(source + '\n// drift'));
+  }
+  const launcher = 'scripts/export-material-input-audit-current-ancestry.mjs';
+  const old = JSON.parse(execFileSync(process.execPath, [launcher, '--dry-run'], { encoding: 'utf8' }));
+  const next = JSON.parse(execFileSync(process.execPath, [launcher, '--static-ax', '--dry-run'], { encoding: 'utf8' }));
+  const before = '50315381bf02df83158d2743488dddd5aee827d4695f7047d49802c2637de44a';
+  const after = '33b7ccf93a9df72a878ba302c5a0b8867ef01a2b24cb81a47a59e9c7a5b16460';
+  assert.equal(next.args.filter(arg => arg.includes(after)).length, 2);
+  assert.deepEqual({ ...next, args: next.args.map(arg => arg.replace(after, before)) }, old);
 });
 
 test('passive static AX and initial landmark history replay retained observations', () => {

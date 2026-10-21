@@ -8,16 +8,18 @@ import { spawnSync } from 'node:child_process';
 // general exporter available for other captures; do not silently use its
 // default supplemental/line-box paths for this historical capture.
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const requested = process.argv.slice(2);
+const rawRequested = process.argv.slice(2);
+const staticAx = rawRequested.includes('--static-ax');
+const requested = rawRequested.filter(argument => argument !== '--static-ax');
 assert.ok(requested.length <= 1 && requested.every(a => ['--check', '--dry-run'].includes(a)),
-  'Usage: node scripts/export-material-input-audit-current-ancestry.mjs [--check|--dry-run]');
+  'Usage: node scripts/export-material-input-audit-current-ancestry.mjs [--check|--dry-run] [--static-ax]');
 const inputs = {
   'parity-report': 'artifacts/material-parity/current-ancestry-audit/latest-report.json',
   'normal-line-box-report': 'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',
   'control-line-box-report': 'artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json',
   'supplemental-line-box-report': 'artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json',
   'supplemental-root': 'artifacts/material-parity/supplemental-current-ancestry-audit',
-  'case-obligation-review': 'artifacts/material-parity/working-audit/proposals/50315381bf02df83158d2743488dddd5aee827d4695f7047d49802c2637de44a.json',
+  'case-obligation-review': staticAx ? 'artifacts/material-parity/working-audit/proposals/33b7ccf93a9df72a878ba302c5a0b8867ef01a2b24cb81a47a59e9c7a5b16460.json' : 'artifacts/material-parity/working-audit/proposals/50315381bf02df83158d2743488dddd5aee827d4695f7047d49802c2637de44a.json',
 };
 for (const [name, relative] of Object.entries(inputs)) {
   const stat = statSync(path.join(root, relative));
@@ -25,7 +27,7 @@ for (const [name, relative] of Object.entries(inputs)) {
 }
 const args = ['--max-old-space-size=8192', 'scripts/run-material-input-audit.mjs',
   ...Object.entries(inputs).map(([name, relative]) => `--${name}=${relative}`),
-  '--case-obligation-review-sha256=50315381bf02df83158d2743488dddd5aee827d4695f7047d49802c2637de44a',
+  staticAx ? '--case-obligation-review-sha256=33b7ccf93a9df72a878ba302c5a0b8867ef01a2b24cb81a47a59e9c7a5b16460' : '--case-obligation-review-sha256=50315381bf02df83158d2743488dddd5aee827d4695f7047d49802c2637de44a',
   ...(requested.includes('--check') ? ['--check'] : [])];
 if (requested.includes('--dry-run')) console.log(JSON.stringify({ cwd: root, executable: process.execPath, args }, null, 2));
 else {

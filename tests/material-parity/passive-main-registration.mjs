@@ -52,3 +52,40 @@ export function restorePassiveMainProducer(source) {
   assert.equal(hash(prior), '74c966fc3c3a178b0b64436026fa658e052bdaf021f2951c15558ceba0fbba9b');
   return prior;
 }
+
+export function restorePassiveMainCaseSelection(source) {
+  let text = normalized(source);
+  if (!text.includes('export const passiveStaticAxReview=')) return text;
+  assert.equal(hash(text), '976c4b379f03e095a267f3b97865e3a97ef83df77cc699e8e9b01013fb9e929b');
+  const line = "export const passiveStaticAxReview='33b7ccf93a9df72a878ba302c5a0b8867ef01a2b24cb81a47a59e9c7a5b16460';\n";
+  assert.equal(text.split(line).length, 2); text = text.replace(line, '');
+  assert.equal(text.split(',passiveStaticAxReview').length, 3);
+  text = text.replaceAll(',passiveStaticAxReview', '');
+  assert.equal(hash(text), '2fa149f3ea25b46e9e5ffeaa3bbce6508aebe7ec1f1b5679e489ed223498c0c6');
+  return text;
+}
+export function restorePassiveMainRunnerSelection(source) {
+  let text = normalized(source);
+  if (!text.includes(', passiveStaticAxReview')) return text;
+  assert.equal(hash(text), 'ad0652a5dac171d19ff7d762ec68391123d0597fdb77fb444664875f0d1aae92');
+  for (const addition of [', passiveStaticAxReview', ',passiveStaticAxReview']) {
+    assert.equal(text.split(addition).length, 2); text = text.replace(addition, '');
+  }
+  assert.equal(hash(text), '9ae9203fc2b87eda8fb3f7ad97061988a77f8dbe53bdd6d9a1774821401010d2');
+  return text;
+}
+export function restorePassiveMainLauncherSelection(source) {
+  let text = normalized(source);
+  if (!text.includes('const rawRequested =')) return text;
+  assert.equal(hash(text), '37e5e298431d66cbf8911f00310ea35433e17cd2b90c44e8d8207f57f013211c');
+  const block = "const rawRequested = process.argv.slice(2);\nconst staticAx = rawRequested.includes('--static-ax');\nconst requested = rawRequested.filter(argument => argument !== '--static-ax');";
+  assert.equal(text.split(block).length, 2); text = text.replace(block, 'const requested = process.argv.slice(2);');
+  assert.equal(text.split('[--check|--dry-run] [--static-ax]').length, 2);
+  text = text.replace('[--check|--dry-run] [--static-ax]', '[--check|--dry-run]');
+  for (const addition of [
+    "staticAx ? 'artifacts/material-parity/working-audit/proposals/33b7ccf93a9df72a878ba302c5a0b8867ef01a2b24cb81a47a59e9c7a5b16460.json' : ",
+    "staticAx ? '--case-obligation-review-sha256=33b7ccf93a9df72a878ba302c5a0b8867ef01a2b24cb81a47a59e9c7a5b16460' : ",
+  ]) { assert.equal(text.split(addition).length, 2); text = text.replace(addition, ''); }
+  assert.equal(hash(text), '727fcd139de7bb68501bb77c7a98aaaabbe170414ddb3c71c8d8b95f0b268e54');
+  return text;
+}

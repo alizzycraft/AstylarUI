@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import ts from 'typescript';
 import path from 'node:path';
+import { restorePassiveMainCaseSelection, restorePassiveMainRunnerSelection, restorePassiveMainLauncherSelection } from './passive-main-registration.mjs';
 import { nativeCheckablePredecessor, restoreNativeCheckablePolicy, restoreNativeCheckableSuite, restoreNativeCheckableProducer } from './native-checkable-registration.mjs';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
@@ -128,7 +129,7 @@ export function restoreSharedButtonSuitePrelude(source) {
   assert.equal(hash(text), expected); return text;
 }
 export function restoreSharedButtonCaseHelper(source) {
-  let text = normalized(source);
+  let text = restorePassiveMainCaseSelection(source);
   const selection = "export const sharedButtonTouchReview='50315381bf02df83158d2743488dddd5aee827d4695f7047d49802c2637de44a';\n";
   if (text.includes(selection)) {
     assert.equal(hash(text), '2fa149f3ea25b46e9e5ffeaa3bbce6508aebe7ec1f1b5679e489ed223498c0c6');
@@ -151,7 +152,7 @@ export function restoreSharedButtonCaseHelper(source) {
   assert.equal(hash(text), '36f828cd27ec32129d21fa492c736d46587e7c31360ceb505fc9e37c8a396590'); return text;
 }
 export function restoreSharedButtonRunnerSelection(source) {
-  let text = normalized(source);
+  let text = restorePassiveMainRunnerSelection(source);
   assert.equal(hash(text), '9ae9203fc2b87eda8fb3f7ad97061988a77f8dbe53bdd6d9a1774821401010d2');
   for (const addition of [', sharedButtonTouchReview', ',sharedButtonTouchReview']) {
     assert.equal(text.split(addition).length, 2);
@@ -161,7 +162,7 @@ export function restoreSharedButtonRunnerSelection(source) {
   return text;
 }
 export function restoreSharedButtonLauncherSelection(source) {
-  let text = normalized(source);
+  let text = restorePassiveMainLauncherSelection(source);
   assert.equal(hash(text), '727fcd139de7bb68501bb77c7a98aaaabbe170414ddb3c71c8d8b95f0b268e54');
   const current = '50315381bf02df83158d2743488dddd5aee827d4695f7047d49802c2637de44a';
   assert.equal(text.split(current).length, 3);

@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Retain passive-main-selection-source-owning,selection-current-owning,
+selection-final-owning,selection-census and selected-review-integration20261021
+log pairs. Explicit --static-ax selection authenticates15388 dependencies and
+recovers all2311 predecessor cases after removing exactly48 semantic children.
+Whole prior helper/runner/launcher source guards and fifteen final checks pass.
+Eight predecessor source receipt changes are explicit in the selection census;
+working175/234/804 is not accepted until coherent export/cold/import. Keep all
+previous proposals/logs and do not force-add the >100MB case proposal to Git.
+
 Retain passive-main-registration-owning,registration-final-owning,historical-owning,
 button-registration-owning and registration-census20261021 log pairs. Working
 175 findings/234 proofs/804 paths preserve complete accepted173/232/790;
