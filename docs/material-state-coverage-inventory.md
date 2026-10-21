@@ -15,11 +15,15 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   six prior source fingerprints and explicit proof-line shifts explained by census.
   Three new current,seven historical registration and six original button checks
   pass. Initial partial-ID guard failure is preserved and corrected,not waived.
-- Coherent export session15448/producer23184 is VERIFIED LIVE;latest CPU2165.6s,
-  no terminal/error output. Logs:native-checkable-coherent-export-20261021 pair.
-  Frozen source/evidence inputs are unchanged. Do not restart on quiet logs.
-  Export completion,80-section/coverage/receipt conservation,independent cold
-  check,candidate/main import and shard verification remain pending.
+- Coherent export session15448 is TERMINAL FAILED(-1073740791/0xC0000409),with
+  empty stdout/stderr. Accepted8259d4f7 compressed payload hashes intact;no result
+  published. Targeted Windows event/dump/WER checks found no diagnostic cause.
+  Resource pressure is possible,not proven;the48-case full-review join overlapped.
+  Preserve native-checkable-coherent-export-failure-20261021.json and original
+  empty log pair. Next revalidate frozen source census and perform one SERIAL
+  retry with progress,fatal reports excluding env/network,and resource sampling.
+  Do not weaken gates or run another memory-heavy audit job alongside it.
+  Export,80-section/coverage/receipt conservation,cold check/import remain pending.
 - Two registered causes:CheckboxManager wrongly synthesizes visible labels from
   native checkbox/radio form values(32 package-root captures across two runs,
   three complete current/installed/bundle method bindings);radio ring state/theme
@@ -52,6 +56,12 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   and sidenav-content evidence remains outside frozen export/proposalf39d;no new
   case completion or interaction-state claim. Source explicitly authors the extra
   MAIN,so do not treat it as a core role invention or suppress authored roles.
+- Existing case-review mechanism now has queued successor33b7ccf93a9df72a878ba302c5a0b8867ef01a2b24cb81a47a59e9c7a5b16460:
+  adds48 static actual-AX children/96 captures to semantics only,authenticates15388
+  dependencies and recovers COMPLETE predecessor50315381 after removing precisely
+  those48 children. All2311 cases/statuses/findings/remaining work are preserved;
+  no inspection/current-rendering promotion. Join87206 terminates0. This proposal
+  is NOT selected for export;the173-source batch/recovery must remain frozen.
 - Prioritized remaining gaps:finish publication reconciliation first;then complete
   descendant/first-stage mapping(baseline2287 cases/35 families),actual AX relations
   (baseline2271 cases),1875 interaction history/resource obligations,443 editable

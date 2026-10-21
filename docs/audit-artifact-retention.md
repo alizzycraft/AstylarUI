@@ -2,6 +2,19 @@
 
 ## Current versus historical evidence
 
+Coherent native-checkable export15448 has TERMINAL FAILED0xC0000409 with no stdout/
+stderr. Retain both empty logs and native-checkable-coherent-export-failure-
+20261021.json;the latter records tool exit observations and limited diagnostic
+scope,not an invented native stack or memory-causality claim. Accepted8259 payload
+is hash-verified intact. Future retry must retain originals and run serially with
+progress/fatal/resource diagnostics;do not remove evidence or weaken checks.
+Retain scripts/join-static-passive-ax-evidence.mjs,static-passive-ax-coverage-join-
+20261021 log pair and queued case proposal33b7ccf93a9df72a878ba302c5a0b8867ef01a2b24cb81a47a59e9c7a5b16460.
+The large local proposal remains ignored,not force-added above Git hosting limits;
+producer and all original inputs are retained.48 children/96 captures add without
+changing any2311-case predecessor object after reversal;15388 dependencies verify.
+No canonical selection or permission to remove predecessor reviews follows.
+
 Retain passive-static-ax-20261021 successful72-capture directory/log pair and
 passive-static-ax-review-20261021 log/empty stderr plus capture/check scripts.
 This extends the existing list collector procedure to36 static cases in three

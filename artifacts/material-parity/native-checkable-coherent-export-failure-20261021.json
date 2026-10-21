@@ -1,0 +1,19 @@
+{
+  "kind": "audit-export-process-failure-observation",
+  "sessionId": 15448,
+  "producerProcessId": 23184,
+  "command": "node scripts/export-material-input-audit-current-ancestry.mjs",
+  "terminalExitCode": -1073740791,
+  "windowsExitCodeHex": "0xC0000409",
+  "stdout": "artifacts/material-parity/native-checkable-coherent-export-20261021.log",
+  "stderr": "artifacts/material-parity/native-checkable-coherent-export-20261021.stderr.log",
+  "stdoutBytes": 0,
+  "stderrBytes": 0,
+  "acceptedCompressedPayloadVerifiedIntact": true,
+  "acceptedGeneration": "8259d4f708e5ffec9a55f629674cdd2c4811c56937fab36b1004207bde2b6f6c",
+  "acceptedCompressedBytes": 87471098,
+  "cause": "unconfirmed",
+  "diagnosticChecks": "Application events1000/1001 in the last two hours(max30),System resource-exhaustion2004(max5),local node crash dumps and targeted WER node directories returned no matching crash artifact. This does not prove no crash artifact exists elsewhere.",
+  "resourceHypothesis": "Resource pressure is possible,not demonstrated. A separate full case-review join overlapped the export near termination. No pre-crash system-memory trace or native stack was captured.",
+  "nextAction": "Revalidate frozen source census,then one serial retry with existing progress diagnostics,Node fatal/uncaught reports excluding environment/network data,and resource sampling. Preserve this original terminal failure. Do not weaken validation or replace accepted results."
+}
