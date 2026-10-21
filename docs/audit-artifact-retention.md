@@ -2,6 +2,16 @@
 
 ## Current versus historical evidence
 
+Retain radio-descendant-inputs-20261021.log/empty stderr(2353714B,SHA
+aa8c59ff5c9e751bb0ff0b2f391e43d57409ef6bf0d32bd7f2daa4fcd3e0b355)
+and radio-descendant-owning-20261021 log pair. Exact embedded producer replay
+agrees;four original/new focused tests pass. Uses the existing68-case radio
+population and original tree receipts,not a new browser run. New mapper/spec
+bytes are preserved with-text disabled for source receipts. All136 owners,
+hidden/passive targets and eight dynamic ripples remain explicit;no full-case
+inspection,rendering acceptance or new core finding follows. Evidence remains
+outside accepted50315381 until a justified coherent future integration batch.
+
 October21 shared-touch publication complete:independent cold57898 exits0,
 3060673ms,two collectors/zero disk hits,16471 authenticated files. Main import
 51878 and main verification terminate0;main8259d4f7/index84421c53 exactly matches

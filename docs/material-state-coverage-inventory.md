@@ -4,6 +4,25 @@
 
 Updated October21. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- Next bounded owner-mapping gap answered OUTSIDE50315381:radio descendants map
+  all68 retained cases/136 options via existing authenticated radio-position
+  population. Accounts for1640 native nodes/612 candidate nodes,including eight
+  dynamic ripples;native LABEL.for→INPUT.id and stable label text/option ancestry
+  are checked. Native input/LABEL and separate touch-target contracts are absent
+  from the authored role-DIV composite;wrapper/circle/ripple flattening is mapped
+  but NOT certified equivalent. Reuses the existing inline→absolute first-stage
+  proof and existing separate Space-key evidence;no repeated browser survey.
+- Native radio touch requests remain separated:60 visible/pointer-auto,68
+  display:none,eight visible/pointer-none. Native checked classes/candidate
+  ariaChecked agree in these retained states(68 on/68 off),not proof of AX or
+  future state transitions. Four focused original/new tests pass with six new
+  identity/ownership/primitive/label/extra-dot rejection controls. Complete evidence
+  replay agrees. Evidence:radio-descendant-inputs-20261021.log SHA
+  aa8c59ff5c9e751bb0ff0b2f391e43d57409ef6bf0d32bd7f2daa4fcd3e0b355,
+  radio-descendant-owning-20261021.log. No registry/export/case-status change.
+  Next:review the mapped wrapper/circle/ripple request differences and current
+  authoring/history applicability;keep actual AX/hit/pixel/animation proof open.
+
 - ACCEPTED publication8259d4f708e5ffec9a55f629674cdd2c4811c56937fab36b1004207bde2b6f6c,
   index84421c53d880bb3c5241888e61859accf883acb58e1c4e3d2d9a747ea601fb3a,
   review50315381. Main and validated candidate indexes are byte-identical;every

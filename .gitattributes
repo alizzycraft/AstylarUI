@@ -56,3 +56,7 @@ artifacts/material-parity/button-touch-independent-cold-20261021.log -text
 artifacts/material-parity/button-touch-independent-cold-20261021.stderr.log binary
 artifacts/material-parity/button-touch-main-import-20261021.log -text
 artifacts/material-parity/button-touch-main-verification-20261021.log -text
+tests/material-parity/radio-descendant-inputs.mjs -text
+tests/material-parity/radio-descendant-inputs.spec.mjs -text
+artifacts/material-parity/radio-descendant-inputs-20261021.log -text
+artifacts/material-parity/radio-descendant-owning-20261021.log -text
