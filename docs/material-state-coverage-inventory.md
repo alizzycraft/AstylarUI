@@ -7,14 +7,20 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
 - Scope/acceptance unchanged:36 families,2311 cases(436 static/1875 interaction),
   all2311 partial,0 complete,current rendering unverified. A documented failure
   counts as inspected evidence,not a rendering pass or automatic whole-case closure.
-- ACCEPTED canonicalc2a58b7c/index7fba06b9/review50315381 now has173 source findings,
+- ACCEPTED canonicale828ab28/index7e45bbd1/review33b7ccf9 now has175 source findings,
+  234 focused proofs,804 source paths. Cold check26642 exits0(2610315ms),with
+  2 collectors/10 memory hits/0 disk hits,16578 files/1701708708 bytes authenticated.
+  Main import83215 exits0;all shards verify and candidate/main indexes match.
+  Receipt/coverage conservation below explains the complete batch. All2311 cases
+  remain partial/current-rendering unverified. Priorc2a58b7c/index7fba06b9 retained.
+- PRIOR accepted canonicalc2a58b7c/index7fba06b9/review50315381 has173 source findings,
   232 focused proofs,790 source paths. Prior8259d4f7/index84421c53 remains retained.
   Full80-section/149-leaf/census conservation,cold check59397(exit0,2557439ms)
   and main import9232(exit0) complete;candidate/main indexes match and every shard
   verifies. Cold authenticates16471 files/1700133716 bytes with2 collectors,
   10 memory hits/0 disk hits. All2311 cases remain partial;no rendering acceptance.
-- WORKING landmark registration now has175 findings/234 proofs/804 source paths,
-  not yet published. Complete accepted173 findings/232 proof claims/790 source paths
+- Landmark registration is now published with175 findings/234 proofs/804 source paths.
+  Complete prior173 findings/232 proof claims/790 source paths
   conserve;only2/2/14 added,four source fingerprints and three+2 proof-line shifts
   explicitly reviewed. Whole prior native helper/suite bodies recover exactly.
   Five current/owning,seven historical and three shared-button registration checks
@@ -22,22 +28,24 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   button-registration-owning20261021. No renderer/fixture changes or case promotion.
 - Coherent175-finding/48-case AX export66401 is TERMINAL SUCCESS(exit0,
   2588692ms),named launcher --static-ax. Candidatee828ab28 has175 findings;
-  accepted c2a58b7c remains unchanged. Full80-section comparison90907 exits0:
+  prior accepted c2a58b7c stayed unchanged until cold/import success. Full80-section comparison90907 exits0:
   70 unchanged/10 changed. Export census42920 exits0 and authenticates exact
   registered804 source paths/234 proofs/175 findings against the frozen batch.
   Exact six-section leaf/structure comparison39647 and receipt reconciliation53299
   exit0:148 changes are98 producer receipts,48 recomputed control-proof hashes,
   one recomputed motion report and173→175 finding count. Candidate import76063
-  exits0;every shard verifies(index7e45bbd1),accepted pointer remains unchanged.
+  exits0;every shard verifies(index7e45bbd1),before the later accepted import.
   Coverage comparison16020/conservation82236 exit0:all15281 prior dependencies
   and complete prior case records conserve;48 reviewed static AX children and107
   dependencies added,only explicit review/policy provenance changes otherwise.
-  Independent cold check26642 is live(launcher4904),ASTYLAR_AUDIT_COLD=1 with
+  Independent cold check26642 is TERMINAL SUCCESS(exit0),ASTYLAR_AUDIT_COLD=1 with
   the same --static-ax --check selection. Retain passive-main-cold-check-20261021
-  stdout/stderr;do not restart while live. Retain passive-main-
+  stdout/stderr and passive-main-main-import-verification-20261021 log pair.
+  Main import83215 succeeds and advances accepted pointer only after cold success.
+  Retain passive-main-
   coherent-export-20261021 progress/resource/fatal diagnostics and passive-main-
   export-source-freeze-20261021 log pair. Inputs stay frozen;no parallel heavy job.
-  Cold terminal result and accepted import remain pending. This adds evidence,
+  Export/conservation/cold/import complete. This adds evidence,
   not rendering/case acceptance;all2311 cases remain partial/unverified.
 - Coherent export session15448 is TERMINAL FAILED(-1073740791/0xC0000409),with
   empty stdout/stderr. Accepted8259d4f7 compressed payload hashes intact;no result
@@ -128,7 +136,7 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   and175/234/804 after,including eight explained predecessor source changes.
   Evidence:passive-main-selected-review-integration/selection-final-owning/
   selection-census20261021. Export/conservation/cold/import remain pending for this batch.
-- Prioritized remaining gaps:integrate queued AX review coherently;then complete
+- Prioritized remaining gaps:AX batch integration complete;next complete
   descendant/first-stage mapping(baseline2287 cases/35 families),actual AX relations
   (baseline2271 cases),1875 interaction history/resource obligations,443 editable
   obligations,and full current runtime/environment applicability across2311 cases.
