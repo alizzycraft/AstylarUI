@@ -20,12 +20,16 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   Five current/owning,seven historical and three shared-button registration checks
   pass. Evidence:passive-main-registration-census/final-owning/historical-owning/
   button-registration-owning20261021. No renderer/fixture changes or case promotion.
-- Coherent175-finding/48-case AX export66401 is verified live(launcher24728,
-  producer18488),named launcher --static-ax,stage build-audit. Source-freeze census
-  replay is byte-exact;accepted c2a58b7c remains unchanged. Retain passive-main-
+- Coherent175-finding/48-case AX export66401 is TERMINAL SUCCESS(exit0,
+  2588692ms),named launcher --static-ax. Candidatee828ab28 has175 findings;
+  accepted c2a58b7c remains unchanged. Full80-section comparison90907 exits0:
+  70 unchanged/10 changed. Export census42920 exits0 and authenticates exact
+  registered804 source paths/234 proofs/175 findings against the frozen batch.
+  Six non-coverage changed sections are under exact leaf/structure comparison
+  session39647;coverage additions require separate conservation. Retain passive-main-
   coherent-export-20261021 progress/resource/fatal diagnostics and passive-main-
   export-source-freeze-20261021 log pair. Inputs stay frozen;no parallel heavy job.
-  Export terminal result,80-section/receipt/coverage conservation,cold check and
+  Exact receipt/coverage conservation,cold check and
   accepted import remain pending. This adds evidence,not rendering/case acceptance.
 - Coherent export session15448 is TERMINAL FAILED(-1073740791/0xC0000409),with
   empty stdout/stderr. Accepted8259d4f7 compressed payload hashes intact;no result
