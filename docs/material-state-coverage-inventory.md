@@ -135,7 +135,7 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   restoration rejects drift. Complete selection census preserves173/232/790 before
   and175/234/804 after,including eight explained predecessor source changes.
   Evidence:passive-main-selected-review-integration/selection-final-owning/
-  selection-census20261021. Export/conservation/cold/import remain pending for this batch.
+  selection-census20261021. Export/conservation/cold/import are complete for this batch.
 - Prioritized remaining gaps:AX batch integration complete;next complete
   descendant/first-stage mapping(baseline2287 cases/35 families),actual AX relations
   (baseline2271 cases),1875 interaction history/resource obligations,443 editable
@@ -143,6 +143,14 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   Counts overlap and precede unjoined standalone evidence;do not invent completion
   percentages. Shared headings,settled grid boundaries and existing badge/icon AX
   hiding findings must not be rerun without changed inputs or contrary evidence.
+- Next card descendant question narrowed across all52 authenticated retained pairs:
+  reference title is nested under the native header-text div;candidate h2 is a
+  direct header child. Native15 static/16 interaction nodes versus11 candidate
+  nodes;shared button omissions are already classified,not a new finding.
+  Evidence:card-recorded-header-topology-20261021 log pair(exit0). This establishes
+  unequal authored topology only,not layout neutrality,AX effects or current paint.
+  Next decisive check:header/text-wrapper formatting and inherited title requests
+  before projection;then classify the first material divergence,if demonstrated.
 - All original final full audit/browser/Material/TTS/unit/build/packed-consumer/
   capability/example/skill/diff gates remain. This is audit only;goal not complete.
 
