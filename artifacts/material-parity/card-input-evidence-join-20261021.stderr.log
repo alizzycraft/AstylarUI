@@ -1,0 +1,24 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Evidence path must remain workspace-relative
+    at resolve (file:///D:/dev/github/AstylarUI-audit-integration/scripts/audit-findings-store.mjs:200:12)
+    at bind (file:///D:/dev/github/AstylarUI-audit-integration/scripts/audit-findings-store.mjs:217:5)
+    at receipts (file:///D:/dev/github/AstylarUI-audit-integration/scripts/audit-findings-store.mjs:223:77)
+    at receipts (file:///D:/dev/github/AstylarUI-audit-integration/scripts/audit-findings-store.mjs:224:47)
+    at receipts (file:///D:/dev/github/AstylarUI-audit-integration/scripts/audit-findings-store.mjs:224:47)
+    at receipts (file:///D:/dev/github/AstylarUI-audit-integration/scripts/audit-findings-store.mjs:224:47)
+    at receipts (file:///D:/dev/github/AstylarUI-audit-integration/scripts/audit-findings-store.mjs:224:47)
+    at receipts (file:///D:/dev/github/AstylarUI-audit-integration/scripts/audit-findings-store.mjs:224:47)
+    at loadCaseObligationReview (file:///D:/dev/github/AstylarUI-audit-integration/scripts/audit-findings-store.mjs:237:5)
+    at file:///D:/dev/github/AstylarUI-audit-integration/scripts/join-card-input-evidence.mjs:62:16 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v22.22.3

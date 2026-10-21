@@ -179,8 +179,16 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   digest roundtrip and byte-exact actual-AX verifier replay pass;terminal0 evidence
   card-title-source-review-20261021. scripts/review-card-title-inputs.mjs binds
   initial/current sources and all24 observations. Not registered or canonical yet.
-  Next:coherent existing-schema registration/evidence join;retain interaction/AT/
-  anonymous-box/paint uncertainty. Avoid another full export for metadata alone.
+  Queued case review20dfb804 joins52 recorded-card-node children and12 actual-AX
+  children(64 total). Existing loader authenticates15420 dependencies/2311 cases;
+  removing exactly64 children recovers COMPLETE33b7ccf9. All statuses/remaining work
+  conserve;not selected for export/canonical yet. Terminal0:
+  card-input-evidence-join-retry-20261021;producer scripts/join-card-input-evidence.mjs.
+  Original join rejects absolute producer receipt(first log pair retained);retry
+  uses the same hash-verified producer file by workspace-relative path without
+  editing capture bytes or weakening the loader. Preserve both proposal attempts.
+  Next:coherent source registration and explicit case-review selection;retain
+  interaction/AT/anonymous-box/paint uncertainty. Avoid full export for metadata alone.
 - All original final full audit/browser/Material/TTS/unit/build/packed-consumer/
   capability/example/skill/diff gates remain. This is audit only;goal not complete.
 
