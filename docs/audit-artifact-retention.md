@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain scripts/review-passive-main-landmarks.mjs,passive-main-landmark-source-
+review-20261021 log pair and pending source proposal
+e89ad4a82100f3671f8d15210f19819eac4914a3e37fde47b200d734687fe104.
+Existing AX verifiers replay byte-exact and full initial Git source hashes bind.
+All173 accepted definitions preserve;shared page finding expands to48 static
+pairs and distinct sidenav-content finding covers12. Keep f39d predecessor and
+all96 raw captures/source maps/checkpoints;no canonical promotion or deletion.
+
 Retain terminal native-checkable-cold-check-20261021 stdout/stderr:session59397
 exits0,2557439ms,2 collectors/10 memory hits/0 disk hits,16471 authenticated files.
 Retain native-checkable-main-import-verification-20261021 log pair:9232 exits0,

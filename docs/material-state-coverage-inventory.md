@@ -38,15 +38,15 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   Directory:native-checkable-export-
   recovery-20261021(stdout.log,stderr.log,resources.jsonl plus any fatal reports).
   Node fatal/uncaught reports exclude env/network;resources sample every15 seconds.
-  Source code,arguments,thresholds and accepted package remain unchanged.
-  Do not weaken gates or run another memory-heavy audit job alongside it.
+  No source code/argument/threshold change was needed for recovery. Run future
+  memory-heavy milestone jobs serially;preserve original failures and diagnostics.
   Export/conservation/cold check/accepted import succeeded;verified package published.
 - Two registered causes:CheckboxManager wrongly synthesizes visible labels from
   native checkbox/radio form values(32 package-root captures across two runs,
   three complete current/installed/bundle method bindings);radio ring state/theme
   inputs differ before rendering(60 colors/16 disabled own-opacity requests among
   136 owners). Keep core and authoring causes distinct;no fixture/renderer fixes.
-- Standalone evidence OUTSIDE running publication:radio68-case descendant/current-
+- Standalone evidence OUTSIDE accepted package:radio68-case descendant/current-
   authoring/native dispatch checks;136 inner-circle local CSS bounds(68 matching
   selected extents/68 zero-scale versus absent). These do not certify full paint,
   animation,AX,activation or whole-case equivalence.
@@ -77,13 +77,20 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   source hashes:MAIN versus MAT-SIDENAV-CONTENT already appears in initial inputs.
   Evidence:sidenav-main-authoring-history-20261021 log pair;not proof of initial
   runtime,intent or all intervening revisions,and not a later-compensation claim.
+- Pending source review e89ad4a82100f3671f8d15210f19819eac4914a3e37fde47b200d734687fe104
+  preserves complete173 accepted definitions and records175 proposed findings.
+  Extends shared page-MAIN observation from12 to48 static pairs and separately
+  classifies sidenav-content MAIN in12 pairs. Both original AX verifiers replay
+  byte-exact(96 captures);initial candidate/reference source histories reauthenticate.
+  Evidence:passive-main-landmark-source-review-20261021 via existing proposal store.
+  No canonical registration,case closure or rendering acceptance. Keep f39d predecessor.
 - Existing case-review mechanism now has queued successor33b7ccf93a9df72a878ba302c5a0b8867ef01a2b24cb81a47a59e9c7a5b16460:
   adds48 static actual-AX children/96 captures to semantics only,authenticates15388
   dependencies and recovers COMPLETE predecessor50315381 after removing precisely
   those48 children. All2311 cases/statuses/findings/remaining work are preserved;
   no inspection/current-rendering promotion. Join87206 terminates0. This proposal
-  is NOT selected for export;the173-source batch/recovery must remain frozen.
-- Prioritized remaining gaps:publish verified package;then complete
+  is NOT selected for export;join/source registration belongs to a later coherent batch.
+- Prioritized remaining gaps:integrate queued AX review coherently;then complete
   descendant/first-stage mapping(baseline2287 cases/35 families),actual AX relations
   (baseline2271 cases),1875 interaction history/resource obligations,443 editable
   obligations,and full current runtime/environment applicability across2311 cases.
