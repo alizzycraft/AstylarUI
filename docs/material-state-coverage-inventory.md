@@ -29,7 +29,10 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   hashes and1 recomputed motion report. All other selected values/containers,
   including case dispositions/remaining work,conserve. Separate candidate import
   succeeds;exported790/232/173 inventories match registration census exactly61201.
-  Independent cold verification and accepted import remain pending.
+  Independent cold verification59397 is verified live(launcher13156,producer23288),
+  ASTYLAR_AUDIT_COLD=1/current-ancestry --check;logs/fatal diagnostics in
+  native-checkable-cold-check-20261021. Initial logs empty,CPU advancing;no stage
+  completion inferred. Accepted import remains pending;source inputs stay frozen.
   Directory:native-checkable-export-
   recovery-20261021(stdout.log,stderr.log,resources.jsonl plus any fatal reports).
   Node fatal/uncaught reports exclude env/network;resources sample every15 seconds.

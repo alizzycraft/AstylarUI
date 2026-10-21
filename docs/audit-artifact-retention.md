@@ -2,6 +2,11 @@
 
 ## Current versus historical evidence
 
+Retain live native-checkable-cold-check-20261021 stdout/stderr and any fatal report.
+Session59397/launcher13156/producer23288 is verified live with cold --check;
+initial empty logs are not failure or completion. Fatal reports exclude env/network.
+Do not commit live logs as a terminal result or restart from observation timeout.
+
 Retain native-checkable-full-section-comparison,receipt-leaf-comparison,
 propagated-receipt-reconciliation and export-census-binding20261021 log pairs,
 plus scripts/check-native-checkable-publication-receipts.mjs. All terminate0:
