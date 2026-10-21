@@ -149,8 +149,15 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   nodes;shared button omissions are already classified,not a new finding.
   Evidence:card-recorded-header-topology-20261021 log pair(exit0). This establishes
   unequal authored topology only,not layout neutrality,AX effects or current paint.
-  Next decisive check:header/text-wrapper formatting and inherited title requests
-  before projection;then classify the first material divergence,if demonstrated.
+  Header formatting check now exits0 across52 pairs(card-header-formatting-boundary-
+  20261021):native block header-text wrapper is the flex item(0 1 auto,min-width:auto),
+  with a block title(min-width:0px);candidate omits it and makes h2 the direct flex
+  item. Native zero wrapper margin/padding does not establish neutral omission.
+  Native title normal versus candidate nowrap in all three captured stages is
+  ALREADY classified by reviewed-explicit-nowrap-input-substitution,not new.
+  Candidate used automatic minimum,anonymous boxes,AX and constrained wrapping
+  remain unproven. Next:account complete card descendants under this role mapping
+  and inspect semantic title effects;do not infer a core flex failure from unequal inputs.
 - All original final full audit/browser/Material/TTS/unit/build/packed-consumer/
   capability/example/skill/diff gates remain. This is audit only;goal not complete.
 
