@@ -4,6 +4,17 @@
 
 Updated October21. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- Source batch90eddcc5 is committed/pushed. Coherent native-checkable export is
+  LIVE in session15448(parent launcher26692,producer23184),using unchanged full
+  current-ancestry launcher/review50315381. Last handle poll remains live;producer
+  CPU increased61.7→165.7 seconds and memory2266MiB,no terminal/error output yet.
+  Logs:native-checkable-coherent-export-20261021.log/.stderr.log. Do not restart
+  because logs are quiet. All consumed source/evidence inputs remain frozen.
+  Accepted8259d4f7/index84421c53 still authenticates;the prior full-section record
+  contains its80 section digests and exactly matching manifest,reusable for the
+  successor comparison. Export completion,full-section/conservation reconciliation,
+  independent cold validation and candidate/main index verification remain pending.
+
 - WORKING registration now173 source findings/232 focused proofs/790 source paths;
   accepted canonical remains8259d4f7 with171/229/780 until coherent export and
   independent verification/import. New native-checkable registration stage recovers

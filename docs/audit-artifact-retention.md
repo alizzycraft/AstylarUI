@@ -2,6 +2,11 @@
 
 ## Current versus historical evidence
 
+Retain live native-checkable-coherent-export-20261021 log pair. Session15448 and
+producer23184 are verified live;quiet logs are not a stopped process. Do not commit
+these logs as terminal success or delete original8259d4f7 evidence. Source batch
+90eddcc5 remains frozen until export/reconciliation/cold validation complete.
+
 Retain native-checkable-registration-census-20261021,registration-owning-20261021,
 historical-owning-20261021 and button-predecessor-owning-20261021 log pairs,plus
 native-checkable-registration-initial-failure-20261021.md. The latter is explicitly
