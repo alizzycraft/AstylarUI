@@ -222,9 +222,22 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   source census replay is byte-exact(card-title-export-source-freeze-20261021).
   Accepted e828/index7e45 remains unchanged. No parallel heavy job/input changes;
   retain card-title-coherent-export-20261021 stdout/stderr/resources/fatal reports.
-  Full-section reconciliation82747 is live,reusing accepted e828 section receipts.
-  Section/receipt/coverage conservation,independent cold
-  comparison and accepted import remain required. All2311 cases remain partial/
+  Full-section reconciliation82747 exits0:70 unchanged/10 changed,no added/removed
+  sections,reusing accepted e828 section receipts. Census16185 exits0:exact819
+  source paths/236 proofs/176 findings match frozen selection census.
+  Six-section leaf comparison15319/reconciliation47006 exit0:148 changes are98
+  producer receipts,48 recomputed control-proof hashes,one recomputed motion-report
+  hash and175→176 finding count;all other selected values/containers conserve.
+  Candidate import24945 exits0;every shard verifies(indexdcca1c76),main unchanged.
+  Coverage conservation25130 exits0:all15388 prior dependencies and complete prior
+  case records recover after removing precisely52 card-node/12 card-AX children,
+  32 added dependencies and declared review/policy provenance transitions.
+  Evidence:card-title-full-section-comparison/export-census-binding/receipt-leaf-
+  comparison/propagated-receipt-reconciliation/candidate-import/coverage-
+  conservation20261021 log pairs. Independent cold session26470 is live,same
+  --card-inputs --check with ASTYLAR_AUDIT_COLD=1;retain card-title-cold-check-
+  20261021 stdout/stderr and any fatal reports. Cold success and accepted import
+  remain required. All2311 cases remain partial/
   current-rendering unverified;full original final gates remain unchanged.
 - All original final full audit/browser/Material/TTS/unit/build/packed-consumer/
   capability/example/skill/diff gates remain. This is audit only;goal not complete.
