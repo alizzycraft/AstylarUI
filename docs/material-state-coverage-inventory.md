@@ -4,6 +4,20 @@
 
 Updated October21. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- Independent retained inner-circle question answered OUTSIDE frozen173/232/790
+  publication inputs:all136 original mapped owners bind complete native style
+  receipts. Native20px border-box/10px border/50% radii scales around10px10px;
+  selected.5 yields local[5,5,15,15],matching68 centered10px candidate dots inside
+  a20px/2px-border flex ring. Unselected zero-scale collapses68 native shapes while
+  candidate dot is absent. Two origin/size drift controls stay distinguishable.
+  Evidence:radio-inner-circle-inputs-20261021.log via
+  scripts/check-radio-inner-circle-inputs.mjs. This is CSS-local request arithmetic,
+  not observed used-layout/raster,global-position,animation,hit or full structure
+  equivalence. Existing disabled opacity/color differences remain. Do not infer a
+  new core geometry defect from differing serialization or approve the composite
+  as a substitute for original input contracts. No consumed export source changed;
+  session15448 remains live(producer23184 CPU414s),original export logs quiet.
+
 - Source batch90eddcc5 is committed/pushed. Coherent native-checkable export is
   LIVE in session15448(parent launcher26692,producer23184),using unchanged full
   current-ancestry launcher/review50315381. Last handle poll remains live;producer

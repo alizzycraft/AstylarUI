@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+Retain scripts/check-radio-inner-circle-inputs.mjs and radio-inner-circle-inputs-
+20261021 log/empty stderr pair. Reuses original136-owner trees;no browser recapture
+or modification of frozen native-checkable publication inputs. Bounds arithmetic
+and zero-scale/absent mapping are bounded separately from pixels/animation and
+do not remove original failure evidence. This standalone proof is not registered
+in the running790-path export and does not justify restarting it.
+
 Retain live native-checkable-coherent-export-20261021 log pair. Session15448 and
 producer23184 are verified live;quiet logs are not a stopped process. Do not commit
 these logs as terminal success or delete original8259d4f7 evidence. Source batch
