@@ -8922,6 +8922,21 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'tests/material-parity/card-title-inputs.spec.mjs',
+    'tests/material-parity/card-title-registration.mjs',
+    'scripts/check-card-recorded-nodes.mjs',
+    'scripts/capture-card-static-ax.mjs',
+    'scripts/check-card-static-ax.mjs',
+    'scripts/review-card-title-inputs.mjs',
+    'scripts/join-card-input-evidence.mjs',
+    'artifacts/material-parity/card-recorded-header-topology-20261021.log',
+    'artifacts/material-parity/card-header-formatting-boundary-20261021.log',
+    'artifacts/material-parity/card-recorded-node-accounting-20261021.log',
+    'artifacts/material-parity/card-static-ax-review-20261021.log',
+    'artifacts/material-parity/card-title-source-review-20261021.log',
+    'artifacts/material-parity/card-input-evidence-join-retry-20261021.log',
+    'artifacts/material-parity/working-audit/proposals/617d82df0024332dfbfc98002c8d8d4dc1543b7691a26bfcc5e65757106ee902.json',
+    'artifacts/material-parity/card-static-ax-20261021/latest-report.json',
     'tests/material-parity/passive-main-landmark-input.spec.mjs',
     'tests/material-parity/passive-main-registration.mjs',
     'scripts/review-passive-main-landmarks.mjs',
@@ -9733,6 +9748,10 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/card-title-inputs.spec.mjs', /test\('card title registration preserves all175 findings and exact predecessor sources'/,
+      'card title additive registration preserves accepted findings', 'All175 accepted findings preserve exactly;the authored H2 title is distinct from native generic MAT-CARD-TITLE. Whole policy/vector/source reversal and mutation controls reject unrelated drift. Not canonical publication or whole-case acceptance.'),
+    proof(root, 'tests/material-parity/card-title-inputs.spec.mjs', /test\('card title actual AX and recorded descendants replay their full retained populations'/,
+      'card title actual AX and complete recorded descendant evidence', 'All52 card tree pairs/820 native and572 candidate records replay with208 mutation controls;24 actual AX captures expose12 title-role substitutions and48 rejected controls. Initial whole source bytes reauthenticate. Not anonymous formatting,interaction AX,AT behavior,current paint or case closure.'),
     proof(root, 'tests/material-parity/passive-main-landmark-input.spec.mjs', /test\('passive landmark registration preserves accepted findings and exact source boundaries'/,
       'passive landmark additive registration preserves accepted findings', 'All173 accepted findings preserve exactly;shared page and sidenav-content authored MAIN causes remain separate. Exact source reversal and mutation controls reject unrelated changes. Not whole-case or rendering acceptance.'),
     proof(root, 'tests/material-parity/passive-main-landmark-input.spec.mjs', /test\('passive static AX and initial landmark history replay retained observations'/,

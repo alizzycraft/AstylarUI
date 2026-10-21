@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
-import { cardTitlePredecessor, restoreCardTitlePolicy } from './card-title-registration.mjs';
+import { cardTitlePredecessor, restoreCardTitlePolicy, restoreCardTitleProducer } from './card-title-registration.mjs';
 const hash = value => createHash('sha256').update(value).digest('hex');
 const normalized = value => value.toString().replaceAll('\r\n', '\n');
 const ids = ['fixture-showcase-outer-and-semantic-page-duplicate-main-landmarks', 'fixture-sidenav-content-promoted-to-main-landmark'];
@@ -31,7 +31,7 @@ export function restorePassiveMainPolicy(source) {
   return prior;
 }
 export function restorePassiveMainProducer(source) {
-  const text = normalized(source);
+  const text = restoreCardTitleProducer(source);
   if (!text.includes('passive landmark additive registration preserves accepted findings')) {
     assert.ok(!text.includes("'tests/material-parity/passive-main-landmark-input.spec.mjs'"), 'Partial landmark proof registration');
     return text;

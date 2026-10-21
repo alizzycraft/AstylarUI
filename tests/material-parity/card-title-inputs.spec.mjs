@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
-import { cardTitlePredecessor, restoreCardTitlePolicy } from './card-title-registration.mjs';
+import { cardTitlePredecessor, restoreCardTitlePolicy, restoreCardTitleProducer } from './card-title-registration.mjs';
 import { passiveMainPredecessor, restorePassiveMainPolicy } from './passive-main-registration.mjs';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const normalize = bytes => bytes.toString().replaceAll('\r\n', '\n');
@@ -25,6 +25,10 @@ test('card title registration preserves all175 findings and exact predecessor so
   const prior = execFileSync('git', ['show', `d4cfb0e5:${file}`], { maxBuffer: 4000000 });
   assert.equal(restoreCardTitlePolicy(policy), normalize(prior));
   assert.equal(hash(restorePassiveMainPolicy(policy)), '13b2a2a13a44ab6cd9f40fa5e8ee63156d816c78ca93246b33b8a2c5e6cc94ee');
+  const producerFile = 'tests/material-parity/input-equivalence-audit.mjs', producer = readFileSync(producerFile);
+  assert.equal(restoreCardTitleProducer(producer), normalize(execFileSync('git', ['show', `d4cfb0e5:${producerFile}`], { maxBuffer: 4000000 })));
+  for (const value of [normalize(producer) + '\n// drift', normalize(producer).replace('card title actual AX and complete recorded descendant evidence', 'forged-proof')])
+    assert.throws(() => restoreCardTitleProducer(value));
   for (const value of [normalize(policy) + '\n// drift', normalize(policy).replace(finding.id, 'forged-id')])
     assert.throws(() => restoreCardTitlePolicy(value));
   for (const index of [0, 175]) {
@@ -34,9 +38,10 @@ test('card title registration preserves all175 findings and exact predecessor so
   const helperFile = 'tests/material-parity/passive-main-registration.mjs';
   let helper = normalize(readFileSync(helperFile));
   for (const [current, before] of [
-    ["import { cardTitlePredecessor, restoreCardTitlePolicy } from './card-title-registration.mjs';\n", ''],
+    ["import { cardTitlePredecessor, restoreCardTitlePolicy, restoreCardTitleProducer } from './card-title-registration.mjs';\n", ''],
     ['  current = cardTitlePredecessor(current);\n', ''],
     ['  const text = restoreCardTitlePolicy(source);', '  const text = normalized(source);'],
+    ['  const text = restoreCardTitleProducer(source);', '  const text = normalized(source);'],
   ]) { assert.equal(helper.split(current).length, 2); helper = helper.replace(current, before); }
   assert.equal(helper, normalize(execFileSync('git', ['show', `d4cfb0e5:${helperFile}`])));
   const suiteFile = 'tests/material-parity/passive-main-landmark-input.spec.mjs';

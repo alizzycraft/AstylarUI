@@ -197,8 +197,14 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   passes13 tests/no skips(card-title-registration-owning-retry-20261021,terminal0).
   First run retains one failed forged-ID control;guard now rejects partial card
   registration,without weakening the control. Accepted canonical remains175/e828.
-  Next:source/proof inventory integration and explicit20dfb804 case selection,
-  coherent source conservation,then milestone export/cold/import when batch ready.
+  Source/proof inventory integration now passes13 owning/historical tests and
+  bounded census(card-title-inventory-owning/registration-census-20261021,exit0):
+  before804/234/175→after819/236/176. All175 old findings/234 proof claims/804 paths
+  conserve;15 paths/two proofs added,four predecessor source changes and only two
+  landmark proof-line shifts(+2) explicitly accounted. Whole producer restoration
+  recovers acceptedc638b8ca before older boundaries;drift controls remain strict.
+  Next:explicit20dfb804 case selection and coherent selection conservation,then
+  milestone export/cold/import when batch ready. Accepted e828/175 stays unchanged.
 - All original final full audit/browser/Material/TTS/unit/build/packed-consumer/
   capability/example/skill/diff gates remain. This is audit only;goal not complete.
 

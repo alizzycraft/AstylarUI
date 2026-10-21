@@ -27,3 +27,27 @@ export function restoreCardTitlePolicy(source) {
   assert.equal(hash(prior), '7c42affa92ea9baae611d024f9bc6cb395f92cbf8ecbd71b4786b11e6ca784ac');
   return prior;
 }
+export function restoreCardTitleProducer(source) {
+  const text = source.toString().replaceAll('\r\n', '\n');
+  if (!text.includes('card title additive registration preserves accepted findings')) {
+    assert.ok(!text.includes("'tests/material-parity/card-title-inputs.spec.mjs'"), 'Partial card proof registration');
+    return text;
+  }
+  assert.equal(hash(text), 'ea1a6051b1e0e3df7fb820754ea9534103d0d0161328b0821ef7f8392d3123c2');
+  const ast = ts.createSourceFile('producer.mjs', text, 99, true);
+  const owner = name => ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+  const proofs = owner('focusedProofInventory').body.statements[0].expression.elements;
+  const files = owner('sourceFingerprints').body.statements[0].declarationList.declarations[0].initializer.elements;
+  assert.equal(proofs.length, 236);
+  assert.deepEqual(proofs.slice(0, 2).map(n => n.arguments[3].text), [
+    'card title additive registration preserves accepted findings', 'card title actual AX and complete recorded descendant evidence']);
+  assert.equal(files[0].text, 'tests/material-parity/card-title-inputs.spec.mjs');
+  assert.equal(files[14].text, 'artifacts/material-parity/card-static-ax-20261021/latest-report.json');
+  assert.equal(files[15].text, 'tests/material-parity/passive-main-landmark-input.spec.mjs');
+  let prior = text;
+  for (const [start, end] of [[proofs[0].getFullStart(), proofs[1].end + 1],
+    [files[0].getFullStart(), files[14].end + 1]].sort((a, b) => b[0] - a[0]))
+    prior = prior.slice(0, start) + prior.slice(end);
+  assert.equal(hash(prior), 'c638b8ca8ab705a9cad00a6f6e7de9917d418bca31f53fef0df9f3ef6624006d');
+  return prior;
+}
