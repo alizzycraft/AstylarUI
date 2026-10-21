@@ -197,6 +197,19 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   separately. This rules out stale visibility-relevant methods,not all core drift.
   Next:history and registration/classification of separate core visibility and
   authored target-region causes in a coherent source batch;no fix authority.
+- Expansion semantic source review now queues178 groups in proposal
+  bfba66484e2e218edab363a40ade43294d0fdc588b7063daea22e2e5bf065059:
+  all176 accepted findings preserve exactly;adds core-semantic-css-visibility-
+  not-projected and fixture-expansion-controlled-region-replaced-with-paragraph.
+  Existing ariaHidden support limitation and expansion flow/offset authoring
+  findings remain unchanged and distinct. Actual AX/served-method/public verifiers
+  replay byte-exact. Full Git source hashes bind initial2f440115 plain paragraph,
+  bridge introduction0175a0bd authored-hidden-only filtering,and exact6e1c156
+  parent354084ea→successor transition from conditional omission to CSS hiding.
+  No initial runtime,first-bad runtime or compensation motive claim. Source review
+  exits0 via review-expansion-semantic-inputs.mjs;retain expansion-semantic-source-
+  review-20261021 log pair/proposal. Registration/case-evidence join still pending;
+  accepted package remains176,all2311 cases partial/current-rendering unverified.
 - Next card descendant question narrowed across all52 authenticated retained pairs:
   reference title is nested under the native header-text div;candidate h2 is a
   direct header child. Native15 static/16 interaction nodes versus11 candidate
