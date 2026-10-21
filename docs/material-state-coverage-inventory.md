@@ -23,14 +23,19 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   empty log pair. Frozen790/232/173 source census replay is byte-exact again.
   SERIAL recovery29865 is TERMINAL SUCCESS(exit0,2523570ms);validation,encoding
   and writing completed. Candidate c2a58b7c has173 findings;accepted pointer8259
-  is unchanged. Full80-section comparison72245 is running;receipt/coverage
-  reconciliation,independent cold verification and import remain pending.
+  is unchanged. Full80-section comparison72245 terminates0:70 unchanged,10 changed.
+  Leaf comparison95691 and receipt verifier81063 terminate0:all149 changes explain
+  as98 producer receipts,1 policy receipt,171→173 count,48 recomputed control-proof
+  hashes and1 recomputed motion report. All other selected values/containers,
+  including case dispositions/remaining work,conserve. Separate candidate import
+  succeeds;exported790/232/173 inventories match registration census exactly61201.
+  Independent cold verification and accepted import remain pending.
   Directory:native-checkable-export-
   recovery-20261021(stdout.log,stderr.log,resources.jsonl plus any fatal reports).
   Node fatal/uncaught reports exclude env/network;resources sample every15 seconds.
   Source code,arguments,thresholds and accepted package remain unchanged.
   Do not weaken gates or run another memory-heavy audit job alongside it.
-  Export succeeded;80-section/coverage/receipt conservation,cold check/import remain pending.
+  Export/conservation succeeded;cold check/accepted import remain pending.
 - Two registered causes:CheckboxManager wrongly synthesizes visible labels from
   native checkbox/radio form values(32 package-root captures across two runs,
   three complete current/installed/bundle method bindings);radio ring state/theme

@@ -2,6 +2,16 @@
 
 ## Current versus historical evidence
 
+Retain native-checkable-full-section-comparison,receipt-leaf-comparison,
+propagated-receipt-reconciliation and export-census-binding20261021 log pairs,
+plus scripts/check-native-checkable-publication-receipts.mjs. All terminate0:
+70/80 sections unchanged;149 exact leaf changes fully reconciled;exported
+790/232/173 inventories bind to frozen census. Retain candidate-import20261021
+initial syntax failure and separate successful candidate-import-retry log pairs.
+Candidate-validation c2a58b7c is separate from accepted8259;independent cold check
+and accepted import remain required. None of these records authorizes cleanup
+of previous packages or establishes case closure/rendering acceptance.
+
 Retain native-checkable-recovery-source-freeze-20261021 log/empty stderr:existing
 790-path/232-proof/173-finding census producer replays byte-exact. Serial recovery
 session29865 is terminal0(2523570ms),with explicit existing progress
