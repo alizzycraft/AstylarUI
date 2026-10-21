@@ -149,6 +149,22 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   Counts overlap and precede unjoined standalone evidence;do not invent completion
   percentages. Shared headings,settled grid boundaries and existing badge/icon AX
   hiding findings must not be rerun without changed inputs or contrary evidence.
+- New expansion relationship question is bounded outside accepted176 package.
+  All68 original receipt-authenticated pairs map native header aria-controls to
+  a labelled role=region wrapper versus candidate plain P expansion-content.
+  Evidence:expansion-controls-retained-boundary-20261021 log pair;existing panel/
+  header diagnostic-owner mismatch is reused,not reopened. Fresh pinned checkpoint
+  9d0f1220 static AX capture exits0(24 pages/12 pairs);verifier exits0 with48
+  runtime/expanded-state forgeries rejected. All headers report collapsed,but
+  candidate AX exposes Additional options StaticText and controls→unlabelled
+  paragraph;native omits the hidden target controls relation and content text.
+  Evidence:expansion-static-ax-20261021,capture/review log pairs,through existing
+  pinned capture procedure and current component/source-map receipt bindings.
+  Keep authored target-role substitution separate from unexpected collapsed AX
+  exposure. Next authenticate hidden-style applicability and trace semantic
+  visibility before any core diagnosis;open-state relations,public minimal repro,
+  AT traversal/current paint remain unproven. No fixture/renderer changes,no
+  case closure or new canonical finding. Do not export for this standalone check.
 - Next card descendant question narrowed across all52 authenticated retained pairs:
   reference title is nested under the native header-text div;candidate h2 is a
   direct header child. Native15 static/16 interaction nodes versus11 candidate
