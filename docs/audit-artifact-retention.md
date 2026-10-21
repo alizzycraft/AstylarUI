@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+Retain scripts/review-radio-ring-inputs.mjs and proposal8806b3eca09284e7de6c14671b40897ae441fdb1f3c2e285a1210bccebe87774.
+It preserves complete172-definition predecessor22dfe and adds one radio-ring state
+paint-input finding. Two whole historical Git file hashes and exact ring/dot rule
+excerpts bind the history scope;exact retained136-row replay passes. Originals,
+predecessor proposal and all native core failure captures remain required. Pending
+canonical registration is explicit;no deletion or rendering acceptance follows.
+
 Retain scripts/check-radio-ring-inputs.mjs and radio-ring-inputs-20261021 log/empty
 stderr pair. It reuses authenticated136-owner descendant mapping and original
 trees;no browser recapture. Four-side color and own-opacity request differences

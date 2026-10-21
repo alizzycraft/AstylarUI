@@ -4,6 +4,21 @@
 
 Updated October21. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- Radio ring history/classification complete within the bounded136-owner input
+  question. Exact initial2f440115 and laterf3c8254c sources both author onSurface
+  base/primary selected with no circle-opacity rule despite later dot/layout
+  changes. These snapshots do not establish compensation motive or every revision.
+  Existing proposal mechanism now has successor8806b3eca09284e7de6c14671b40897ae441fdb1f3c2e285a1210bccebe87774:
+  all172 pending definitions preserved exactly,one distinct application-authoring
+  finding appended(fixture-radio-ring-state-paint-token-substitution). Receipt-
+  verified predecessor includes the native form-value core failure;no duplication
+  of disabled-label ink or core color rendering. Exact136-row replay/current source
+  and both historical file hashes pass via scripts/review-radio-ring-inputs.mjs.
+  Registration/export reconciliation remains pending for this173-definition batch;
+  accepted canonical remains171/229/780,all2311 cases partial. Next preserve old
+  strict171-population source readers while registering both findings/proofs,then
+  coherent integration/publication. Inner-circle/ripple/composited paint remain open.
+
 - Radio circle-request question answered for136 mapped owners:four native border
   sides agree per ring,but60 differ from candidate ring color(52 enabled-unselected,
   eight disabled-selected). All16 disabled rings request native own opacity.38
