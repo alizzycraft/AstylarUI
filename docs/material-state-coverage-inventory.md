@@ -26,6 +26,17 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   Evidence:expansion-semantic-export-census-binding/receipt-leaf-comparison/
   coverage-conservation-20261022 log pairs. Separate candidate import is running;
   accepted796984 remains unchanged. Cold check/main import remain pending.
+- Candidate import54226 and propagated receipt reconciliation3435 exit0.
+  Candidate3175514b/indexbd602e66 authenticates every shard with178 findings,
+  8483 scalar groups,39904 controls,389202 occurrences and0 unresolved groups;
+  main accepted pointer remains796984. Actual48 control rows and one complete
+  motion report reproduce all49 derived hash changes;98 producer receipts recover
+  exact prior producer bytes and the remaining change is176→178 finding count.
+  All148 selected changes exhausted;non-receipt values/containers conserved.
+  Evidence:expansion-semantic-candidate-import-20261022 and
+  expansion-semantic-propagated-receipt-reconciliation-20261022 log pairs.
+  Independent --expansion-semantics --check cold replay and main import remain
+  required before acceptance. No rendering/whole-case completion is asserted.
 
 - Scope/acceptance unchanged:36 families,2311 cases(436 static/1875 interaction),
   all2311 partial,0 complete,current rendering unverified. A documented failure
