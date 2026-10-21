@@ -4,6 +4,30 @@
 
 Updated October21. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- Native checkable form-value investigation IN PROGRESS outside50315381:
+  independent read-only scripts/check-public-native-checkable-value.mjs authenticates
+  both public-native-checkable-value[-repeat]-20261021 captures against current
+  2517 bundle inputs per run, producer/overlay/bundle receipts and all32 PNGs.
+  Equal paired SiteData,empty native input text,no runtime errors and all16
+  disposal results per run verify. Pixel recomputation agrees exactly:form value
+  changes zero native pixels but580 candidate pixels atDPR1/1903 atDPR2 for both
+  radio and checkbox,in both runs. Supplied value produces visible label_target;
+  omitted value does not. Both original reports remain accepted:false/four failures.
+  Command node scripts/check-public-native-checkable-value.mjs exits0 for evidence
+  verification,NOT rendering acceptance. This rules out stale captured dependency
+  bytes and an incorrect stored pixel tally. Complete createCheckbox/createRadioButton/
+  createLabelMesh bodies now bind current TS,installed JS and both captured bundles:
+  only type erasure,parameter alpha names,MeshBuilder namespace flattening,object
+  shorthand and optional call trailing commas normalize. Four changed branch/text-
+  source/fallback controls reject. Initial scanner comparison failed on template
+  boundaries;AST-token traversal fixes the verifier,not captured evidence.
+  Confirmed first divergence:constructors treat value/textContent as label requests,
+  then createLabelMesh uses input.value as visible text. Owner:CheckboxManager,
+  distinct from existing button typography instrumentation finding. Future general
+  fix must keep form value separate from explicit label content;removing value from
+  fixtures would hide the defect. Registry/proposal integration and broader native
+  label/AX/activation/paint remain next. No renderer/fixture edit or case promotion.
+
 - Radio native-path question answered:current public DOMElement exposes inputType,
   and actual InputElementService determineInputType/mapStringToInputType methods
   route explicit native radio to InputType.Radio/createRadioButton. Executed actual

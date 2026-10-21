@@ -1,0 +1,3 @@
+{"run":"public-native-checkable-value-20261021","authenticatedInputs":2517,"screenshots":16,"failuresPreserved":4,"browser":"155.0.8059.80"}
+{"run":"public-native-checkable-value-repeat-20261021","authenticatedInputs":2517,"screenshots":16,"failuresPreserved":4,"browser":"155.0.8059.80"}
+Retained pixel/provenance and three complete owning-method bindings pass; four semantic drift controls reject. Renderer failures remain.

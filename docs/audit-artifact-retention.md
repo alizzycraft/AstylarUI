@@ -2,6 +2,16 @@
 
 ## Current versus historical evidence
 
+Retain both public-native-checkable-value-20261021 and public-native-checkable-
+value-repeat-20261021 original directories and external log pairs. Both are
+expected-failure captures,not successful scratch:each retains16 PNGs,producer,
+bundle,provenance,latest-report and failure.json. The read-only independent
+scripts/check-public-native-checkable-value.mjs verifies all32 screenshots and
+2517 current dependencies per run;four original renderer failures per run remain.
+Complete three-method current/installed/bundle binding now passes with four semantic
+drift controls. Retain native-checkable-value-independent-20261021 log pair.
+No deletion or canonical acceptance follows;registry integration remains pending.
+
 Retain radio-native-routing-20261021.log/empty stderr and radio-native-owning-unit-
 20261021 log pair. Actual current routing methods distinguish136 retained role-
 DIV options from explicit native radio inputs;exact producerArgs replay passes.

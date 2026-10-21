@@ -1,0 +1,106 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Native form-value rendering differs;retain complete failures
++ actual - expected
+
++ [
++   {
++     assertion: 'Form value alone must not change input pixels',
++     bounds: {
++       bottom: 62,
++       left: 64,
++       right: 157,
++       top: 51
++     },
++     changedPixels: 580,
++     dpr: 1,
++     kind: 'radio',
++     mode: 'astylar'
++   },
++   {
++     assertion: 'Form value alone must not change input pixels',
++     bounds: {
++       bottom: 62,
++       left: 64,
++       right: 157,
++       top: 51
++     },
++     changedPixels: 580,
++     dpr: 1,
++     kind: 'checkbox',
++     mode: 'astylar'
++   },
++   {
++     assertion: 'Form value alone must not change input pixels',
++     bounds: {
++       bottom: 125,
++       left: 128,
++       right: 315,
++       top: 103
++     },
++     changedPixels: 1903,
++     dpr: 2,
++     kind: 'radio',
++     mode: 'astylar'
++   },
++   {
++     assertion: 'Form value alone must not change input pixels',
++     bounds: {
++       bottom: 125,
++       left: 128,
++       right: 315,
++       top: 103
++     },
++     changedPixels: 1903,
++     dpr: 2,
++     kind: 'checkbox',
++     mode: 'astylar'
++   }
++ ]
+- []
+
+    at file:///D:/dev/github/AstylarUI-audit-integration/scripts/audit-public-native-checkable-value.mjs:139:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [
+    {
+      mode: 'astylar',
+      dpr: 1,
+      kind: 'radio',
+      changedPixels: 580,
+      bounds: { left: 64, top: 51, right: 157, bottom: 62 },
+      assertion: 'Form value alone must not change input pixels'
+    },
+    {
+      mode: 'astylar',
+      dpr: 1,
+      kind: 'checkbox',
+      changedPixels: 580,
+      bounds: { left: 64, top: 51, right: 157, bottom: 62 },
+      assertion: 'Form value alone must not change input pixels'
+    },
+    {
+      mode: 'astylar',
+      dpr: 2,
+      kind: 'radio',
+      changedPixels: 1903,
+      bounds: { left: 128, top: 103, right: 315, bottom: 125 },
+      assertion: 'Form value alone must not change input pixels'
+    },
+    {
+      mode: 'astylar',
+      dpr: 2,
+      kind: 'checkbox',
+      changedPixels: 1903,
+      bounds: { left: 128, top: 103, right: 315, bottom: 125 },
+      assertion: 'Form value alone must not change input pixels'
+    }
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.22.3
