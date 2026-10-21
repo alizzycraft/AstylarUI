@@ -83,6 +83,7 @@ scripts/check-passive-static-ax.mjs -text
 scripts/join-static-passive-ax-evidence.mjs -text
 artifacts/material-parity/static-passive-ax-coverage-join-20261021.log -text
 artifacts/material-parity/native-checkable-coherent-export-failure-20261021.json -text
+artifacts/material-parity/native-checkable-recovery-source-freeze-20261021.log -text
 artifacts/material-parity/passive-static-ax-20261021/* -text
 artifacts/material-parity/passive-static-ax-20261021.log -text
 artifacts/material-parity/passive-static-ax-review-20261021.log -text

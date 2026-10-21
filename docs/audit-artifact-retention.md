@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Retain native-checkable-recovery-source-freeze-20261021 log/empty stderr:existing
+790-path/232-proof/173-finding census producer replays byte-exact. Serial recovery
+session29865 is live(launcher17048,producer29428),with explicit existing progress
+and Node fatal/uncaught diagnostics excluding environment/network details.
+Retain native-checkable-export-recovery-20261021 directory including live stdout,
+stderr,resources.jsonl and any crash reports;inspect diagnostics before any future
+commit. Do not commit live logs as terminal success. Original15448 failure and
+accepted8259 payload remain unchanged. No parallel memory-heavy audit job.
+
 Coherent native-checkable export15448 has TERMINAL FAILED0xC0000409 with no stdout/
 stderr. Retain both empty logs and native-checkable-coherent-export-failure-
 20261021.json;the latter records tool exit observations and limited diagnostic
