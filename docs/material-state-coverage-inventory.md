@@ -215,12 +215,15 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   Evidence:card-title-selected-review-integration/selection-census-retry-20261021.
   Next:freeze coherent batch and milestone export/conservation/cold/import.
   Accepted e828/175 stays unchanged;no renderer/fixture changes or case promotion.
-- Coherent card176-finding/64-child export36673 is verified live(launcher18956,
-  producer28856),named launcher --card-inputs,stage build-audit. Frozen819/236/176
+- Coherent card176-finding/64-child export36673 is TERMINAL SUCCESS(exit0,
+  2589055ms),named launcher --card-inputs. Candidate796984e0 has176 findings,
+  87817974 compressed/2333095298 decoded bytes;decodedSHAab82d93b.
+  Frozen819/236/176
   source census replay is byte-exact(card-title-export-source-freeze-20261021).
   Accepted e828/index7e45 remains unchanged. No parallel heavy job/input changes;
   retain card-title-coherent-export-20261021 stdout/stderr/resources/fatal reports.
-  Export terminal result,section/receipt/coverage conservation,independent cold
+  Full-section reconciliation82747 is live,reusing accepted e828 section receipts.
+  Section/receipt/coverage conservation,independent cold
   comparison and accepted import remain required. All2311 cases remain partial/
   current-rendering unverified;full original final gates remain unchanged.
 - All original final full audit/browser/Material/TTS/unit/build/packed-consumer/
