@@ -1,8 +1,10 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
+import { expansionSemanticPredecessor, restoreExpansionSemanticPolicy } from './expansion-semantic-registration.mjs';
 const hash = value => createHash('sha256').update(value).digest('hex');
 export function cardTitlePredecessor(current) {
+  current = expansionSemanticPredecessor(current);
   if (current.length !== 176) return current;
   assert.equal(hash(JSON.stringify(current)), '0196bd3ca3cba45bc0aae347cec98930d5fa2ebeb4a8966ce091993bb2001c86');
   assert.equal(current.at(-1).id, 'fixture-card-title-promoted-to-heading');
@@ -11,7 +13,7 @@ export function cardTitlePredecessor(current) {
   return prior;
 }
 export function restoreCardTitlePolicy(source) {
-  const text = source.toString().replaceAll('\r\n', '\n');
+  const text = restoreExpansionSemanticPolicy(source);
   if (!text.includes('fixture-card-title-promoted-to-heading')) {
     assert.ok(!text.includes('scripts/check-card-static-ax.mjs'), 'Partial card title registration');
     return text;

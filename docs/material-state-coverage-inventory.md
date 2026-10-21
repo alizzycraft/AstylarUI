@@ -223,6 +223,18 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   are recorded in expansion-semantic-case-join-retry-20261021 log;terminal0.
   Producer:join-expansion-semantic-evidence.mjs. New proposal remains unselected/
   noncanonical;source registration and coherent integration remain pending.
+- WORKING expansion semantic registration now has178 definitions,exact proposal
+  bfba6648,with all176 predecessors unchanged. Guarded expansion-semantic-
+  registration.mjs recovers complete prior policy3c1509e5 and vector0196bd3c;
+  full178 vector01e16e05/policye4229646 reject drift,forged IDs and partial entries.
+  Existing card boundary delegates through that exact reversal;original card
+  suite body remains byte-exact under a three-line predecessor-selection prelude.
+  New owning test rehashes all finding receipts and Git histories,and replays
+  complete public/Material AX verifiers. Focused owning/card/landmark/native/
+  shared-button run exits0:15 pass,0 fail/skip(expansion-semantic-registration-
+  owning-20261021 log pair). No renderer/fixture changes. Accepted canonical
+  remains176;source/proof inventory and explicit case-review selection updates,
+  census/conservation and coherent export/cold/import are still pending.
 - Next card descendant question narrowed across all52 authenticated retained pairs:
   reference title is nested under the native header-text div;candidate h2 is a
   direct header child. Native15 static/16 interaction nodes versus11 candidate

@@ -3092,6 +3092,492 @@ export const sourceAuditDefinitions = Object.freeze([
   "recommendation": "Preserve the reference title semantic contract and formatting ancestry in comparison authoring. Do not suppress correctly requested heading roles in core or tune title offsets to conceal unequal inputs.",
   "boundary": "Actual AX for12 static contexts only;not interaction AX,AT traversal,all descriptions/associations,anonymous formatting,constrained wrapping,current paint,initial runtime or compensation motive."
 }),
+Object.freeze({
+  "id": "core-semantic-css-visibility-not-projected",
+  "file": "src/lib/astylar-semantic-bridge.ts",
+  "pattern": "filter\\(\\(element\\) => !element\\.hidden\\)",
+  "introducedBy": "Initial0175a0bd bridge source filters authored hidden without CSS visibility;first-bad runtime unproven.6e1c156 changes Material collapsed content from omission to CSS hiding.",
+  "classification": "confirmed-core-renderer-defect",
+  "owner": "core resolved CSS visibility to semantic DOM reconciliation",
+  "focusedProof": "node scripts/check-public-semantic-css-hidden.mjs",
+  "history": [
+    {
+      "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "sha256": "6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24",
+      "excerpt": "    if (family === 'expansion') return [{ type: 'article', id: 'expansion-shell', class: 'expansion-panel', children: [{ type: 'button', id: 'expansion-primary', class: 'expansion-trigger', disabled: state.disabled, ariaExpanded: state.open, ariaControls: 'expansion-content', value: 'Advanced settings' }, { type: 'span', id: 'expansion-chevron', class: 'expansion-chevron', textContent: state.open ? '⌃' : '⌄' }, ...(state.open ? [{ type: 'p' as const, id: 'expansion-content', textContent: 'Additional options.' }] : [])] }];"
+    },
+    {
+      "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+      "file": "examples/material-showcase/src/app/reference.component.ts",
+      "sha256": "2e070cc31b08750e07f6a8c5c3103607e5399291930b91d590140203be719c8e",
+      "excerpt": "          @case ('expansion') { <mat-expansion-panel id=\"expansion-primary\" [expanded]=\"store.state().open\" [disabled]=\"store.state().disabled\"><mat-expansion-panel-header><mat-panel-title>Advanced settings</mat-panel-title></mat-expansion-panel-header><p>Additional options.</p></mat-expansion-panel> }"
+    },
+    {
+      "revision": "354084ea1f1a6abb3e010222062e3cea9f945b61",
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "sha256": "28b5df6d99ef888d5ac0858de77f1e5e7ece572c976aed8660d9427d59beef64",
+      "excerpt": "    if (family === 'expansion') return [{ type: 'article', id: 'expansion-shell', class: 'expansion-panel', children: [{ type: 'div', id: 'expansion-primary', class: 'expansion-trigger', role: 'button', tabindex: state.disabled ? -1 : 0, ariaDisabled: state.disabled, ariaExpanded: state.open, ariaControls: 'expansion-content', children: [{ type: 'span', id: 'expansion-title', class: 'expansion-title', textContent: 'Advanced settings' }] }, { type: 'span', id: 'expansion-chevron', class: 'expansion-chevron', textContent: state.open ? '⌃' : '⌄' }, ...(state.open ? [{ type: 'p' as const, id: 'expansion-content', textContent: 'Additional options.' }] : [])] }];"
+    },
+    {
+      "revision": "6e1c15666fa0c488a1accd1f4df3a6da7fe37aa7",
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "sha256": "c149f84a682413e8ed94709c0e6fc0e8c3ee50653f482adf120525c770ed1338",
+      "excerpt": {
+        "line": "    if (family === 'expansion') return [{ type: 'article', id: 'expansion-shell', class: 'expansion-panel', children: [{ type: 'div', id: 'expansion-primary', class: 'expansion-trigger', role: 'button', tabindex: state.disabled ? -1 : 0, ariaDisabled: state.disabled, ariaExpanded: state.open, ariaControls: 'expansion-content', children: [{ type: 'span', id: 'expansion-title', class: 'expansion-title', textContent: 'Advanced settings' }] }, { type: 'span', id: 'expansion-chevron', class: 'expansion-chevron', textContent: state.open ? '⌃' : '⌄' }, { type: 'p' as const, id: 'expansion-content', textContent: 'Additional options.' }] }];",
+        "style": "        { selector: '#expansion-content', position: 'absolute', display: state.open ? 'block' : 'none', top: `${state.open ? theme.density === 0 ? 80 : theme.density <= -5 ? 60 : 68 : 0}px`, left: '24px', margin: '0', verticalAlign: 'middle' },"
+      }
+    },
+    {
+      "revision": "0175a0bdcab41e6767ec26a83f587c7aba3b1d47",
+      "file": "src/lib/astylar-semantic-bridge.ts",
+      "sha256": "a8ab51086c1f0b2396583c2b86fc126df9e239dcd90d19457ab25f48d7d88f82",
+      "excerpt": [
+        ".filter((element) => !element.hidden)",
+        "if (child.hidden) continue;"
+      ]
+    }
+  ],
+  "observation": {
+    "component": "expansion and minimal public text",
+    "property": "CSS-hidden actual AX exposure",
+    "reference": "CSS display:none/visibility:hidden text absent from actual AX",
+    "astylar": "same resolved requests but Hidden content StaticText remains exposed",
+    "publicCaptures": 32,
+    "publicFailures": 8,
+    "materialStaticPairs": 12,
+    "stage": "semantic reconciliation consumes authored hidden only"
+  },
+  "justification": "Two package-root runs use identical paired SiteData and resolve both hidden CSS values correctly. Visible/authored-hidden controls pass;CSS-hidden text is exposed atDPR1/2. Complete current/installed/public-bundle methods and pinned Material served methods/compiler helper bind. Distinct from unsupported ariaHidden accessibility-only intent:these are supported visual CSS hiding requests,not unequal authored semantics. The region-target mismatch is separately classified.",
+  "evidence": [
+    {
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "sha256": "71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd"
+    },
+    {
+      "file": "examples/material-showcase/src/app/reference.component.ts",
+      "sha256": "debe55bc492d0fa1e48a9c7f09e1b668d435a2260588710207ab878b23c1d4aa"
+    },
+    {
+      "file": "src/lib/astylar-semantic-bridge.ts",
+      "sha256": "1a0011d3530701d9a74dc37b9f5a14d0fed0742dfd8793c39f8628e06b6a5725"
+    },
+    {
+      "file": "src/lib/astylar.ts",
+      "sha256": "5742ba6c19debd5c18ad7d407f1a10e14271cbcd38bf99889d4b4e2474f17451"
+    },
+    {
+      "file": "scripts/check-expansion-static-ax.mjs",
+      "sha256": "529a6354f8e137c8a1581d36615b41e22c9ad95a94ada185b1d35fd8d3d3912d"
+    },
+    {
+      "file": "scripts/check-material-semantic-visibility-binding.mjs",
+      "sha256": "a320c97ece4ac0191ff102b473029cc8d2800d5979216658c02eea61ffb0ac23"
+    },
+    {
+      "file": "artifacts/material-parity/material-semantic-visibility-binding-retry-20261021.log",
+      "sha256": "2f130ff825b7885e0c7d0a35eaea849d6560bc486cb88ee033899966e7bc7aaf"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-review-20261021.log",
+      "sha256": "3541b52e5b5b641f45f57a1eb7c7474241a759f127d7e30fd62588f0c62dbf17"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-20261021/latest-report.json",
+      "sha256": "c1ababf7c391ba769c5a25f41da09d5ed72d46445b95ee6caf73dd4687d6e597"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-controls-retained-boundary-20261021.log",
+      "sha256": "560ce34b790c74ea493a6d8b3373f1d6691e147133a1c3e03378dd7a9be3d2b8"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-hidden-style-boundary-20261021.log",
+      "sha256": "683a42abffee90605c5ed5ec03c8a245f5b9335cef2e1cd0ac3d6b1ae616697f"
+    },
+    {
+      "file": "scripts/audit-public-semantic-css-hidden.mjs",
+      "sha256": "54d86b62291e69492752bdb0ddb6df269f13f95d691d34d3d7437f5be58317bc"
+    },
+    {
+      "file": "scripts/check-public-semantic-css-hidden.mjs",
+      "sha256": "8a5679624d560cd1950032c0a956d42847a3d7e1dfa67c4633ce5e296c81437d"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-verification-final-20261021.log",
+      "sha256": "d51d8c17338f3421999237913340082bee0fe7776abb6aa574e2f49ac0d1577a"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-20261021/latest-report.json",
+      "sha256": "2763edde9fddb8007b2cd6e19864c56e57f4da529bd4513ee24c920033baf92e"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-20261021/provenance.json",
+      "sha256": "7678eb2f4ed383f8f9e599ee1b3c6a49bb7ebdd28ea24a86d205a815a035743c"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-20261021/failure.json",
+      "sha256": "8d804482e8275c41b22216adb3db421830bf08f6e1d6fbd10580744baba4ec02"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-20261021/producer.mjs",
+      "sha256": "54d86b62291e69492752bdb0ddb6df269f13f95d691d34d3d7437f5be58317bc"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-20261021/audit.js",
+      "sha256": "6ea91416683659b54d54bd937c02374db4b3a3e365f69a7843566e01a957c727"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-20261021/visible-reference-dpr1.json",
+      "sha256": "e577035c40805ab3dca7c99b3fe18a8d31a1b443acc3ae91ac24a21f7bf247b4"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-20261021/visible-astylar-dpr1.json",
+      "sha256": "39d45d7b735150d24da6000c125cec4e9030f6138023347a17c1a36db387870b"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-20261021/display-none-reference-dpr1.json",
+      "sha256": "47b872143009898bdf5837a3c4f1974c3800a50167dec81298464b018cb5c3d2"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-20261021/display-none-astylar-dpr1.json",
+      "sha256": "dd5f571edd5c89d4595cf92de03ad0dc11884159eff798edc9adbb3c248d9673"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-20261021/visibility-hidden-reference-dpr1.json",
+      "sha256": "c384551dbcbc04a7fd2bb6b842dd741e245a6685e3bb80a13f4259077197366e"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-20261021/visibility-hidden-astylar-dpr1.json",
+      "sha256": "435f88d190724dd4014037f85f41b1b98cce280c9f08d9b0b0c0bdceae373377"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-20261021/authored-hidden-reference-dpr1.json",
+      "sha256": "757991eb37f45eb4dc6c869c3118b592a9403048bdf7d2657815faec7fa958ad"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-20261021/authored-hidden-astylar-dpr1.json",
+      "sha256": "78a7012eb4906d4a6989cf8cfb6866b69a1066b24bb20a161462c97eb7667a34"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-20261021/visible-reference-dpr2.json",
+      "sha256": "8fcffac2b5378ffea09690e6741065e56c583c44ac4b360b3db7023b3a4caf97"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-20261021/visible-astylar-dpr2.json",
+      "sha256": "8362f49029f1d6f268545ba48b27e270f8437a037a17ee7d555f1429b8f6bb79"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-20261021/display-none-reference-dpr2.json",
+      "sha256": "5ca29c02aa4c7452185da382153f712f0523999109a776ecc073275f840745dc"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-20261021/display-none-astylar-dpr2.json",
+      "sha256": "3d7e8c82dc1046f53b09e798d917e4fcfd62b58eebadee738384740e04f97aec"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-20261021/visibility-hidden-reference-dpr2.json",
+      "sha256": "da788498486abb5a722fe326f00f28e72edf2d2dd86775ec6954b4b62bd179bb"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-20261021/visibility-hidden-astylar-dpr2.json",
+      "sha256": "383db52365d7b24b7706f0ac760ec100ec360c8f2069bb89070374f6b637a7cf"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-20261021/authored-hidden-reference-dpr2.json",
+      "sha256": "74f3b5c6966b78cf8125f534c4169cbd43d44107599f8145ca1c579d9e310a18"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-20261021/authored-hidden-astylar-dpr2.json",
+      "sha256": "c2b6cb89e0b760bd8fa48b0d6037e7045b1788291493382320a9c11a989312ed"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-repeat-20261021/latest-report.json",
+      "sha256": "951e279fea120fa4876c477106f2c106e68bb18abd0882a5f14b1bc7ad8ace63"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-repeat-20261021/provenance.json",
+      "sha256": "7678eb2f4ed383f8f9e599ee1b3c6a49bb7ebdd28ea24a86d205a815a035743c"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-repeat-20261021/failure.json",
+      "sha256": "c276b4fcb80ad120692a44eedeccbcba5f0af49aed102e3fa2459636cb67173f"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-repeat-20261021/producer.mjs",
+      "sha256": "54d86b62291e69492752bdb0ddb6df269f13f95d691d34d3d7437f5be58317bc"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-repeat-20261021/audit.js",
+      "sha256": "6ea91416683659b54d54bd937c02374db4b3a3e365f69a7843566e01a957c727"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-repeat-20261021/visible-reference-dpr1.json",
+      "sha256": "8b1de28211f82521e03f1807371180f7ca49ce706ce6b6cced52999c20025c06"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-repeat-20261021/visible-astylar-dpr1.json",
+      "sha256": "a0bacdb133e31438520109b33574d7d04409cd28a035263cfd064ac00cc0529e"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-repeat-20261021/display-none-reference-dpr1.json",
+      "sha256": "5410329fdd5b86abba5d1da0da086a8ee265447496055552c23d445cead10805"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-repeat-20261021/display-none-astylar-dpr1.json",
+      "sha256": "81332f8f03eff771802d78721e50a61cc60b6ea8d695ff1d15c9396cabd22507"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-repeat-20261021/visibility-hidden-reference-dpr1.json",
+      "sha256": "7633dc25d1f6b7d5f089cd72f769d45da3fad93a75f243ac52e78e2f83e44c9f"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-repeat-20261021/visibility-hidden-astylar-dpr1.json",
+      "sha256": "c42e716d933801f1a7f46a3839d486628f4f5a24a01b647feb273a80fe27d203"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-repeat-20261021/authored-hidden-reference-dpr1.json",
+      "sha256": "745963a41113df3dcf4a1878dd5ba0683016dc83ef578266d1e8ee9cc44e89ad"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-repeat-20261021/authored-hidden-astylar-dpr1.json",
+      "sha256": "6d9a92861167f8791f71b67b270ea2916077cb95fa575f5c7959d436ac25bf2b"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-repeat-20261021/visible-reference-dpr2.json",
+      "sha256": "1bcd54fc9678d33907d3b995cc58179e8cdac696aef16a1cec6e940798e2ed76"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-repeat-20261021/visible-astylar-dpr2.json",
+      "sha256": "d9ad5303575aa01ad096d4844dd3e5ed4e2ec411ba55c4da6711ed2954a5d50a"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-repeat-20261021/display-none-reference-dpr2.json",
+      "sha256": "e0faabdb3cd29f46d795169f950f1b4accbb7b5ff16168dbf257a7a279885875"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-repeat-20261021/display-none-astylar-dpr2.json",
+      "sha256": "48b71aea18928e1a79410add3683d0b7bbcedf696503b7bdc5c938dc4920865c"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-repeat-20261021/visibility-hidden-reference-dpr2.json",
+      "sha256": "5a062cbe134be33f0cd05062fa7ec0bdbe5870b0a76c2667e79056f52c1ad059"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-repeat-20261021/visibility-hidden-astylar-dpr2.json",
+      "sha256": "79a55e38dc5c8a627cf278847553310320a223c50773f9b20b3421b93857df85"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-repeat-20261021/authored-hidden-reference-dpr2.json",
+      "sha256": "5cf96a2b26234149236f25d78fe21797458569b850cf8955112ee3f56fe9ece6"
+    },
+    {
+      "file": "artifacts/material-parity/public-semantic-css-hidden-repeat-20261021/authored-hidden-astylar-dpr2.json",
+      "sha256": "b2c2c2d43a8dc8542e4723d83e6c65fad26f390727795df941efa5e73cb5da16"
+    }
+  ],
+  "recommendation": "At the core semantic reconciliation boundary,derive semantic inclusion from authoritative resolved CSS visibility including ancestry and updates. Do not patch Material by conditionally deleting content or adding accessibility-only fixture flags to conceal supported CSS hiding failures.",
+  "boundary": "Static text/AX visibility atDPR1/2 and12 Material collapsed contexts;not inherited visibility override semantics,updates,AT traversal,all core methods or complete rendering acceptance."
+}),
+Object.freeze({
+  "id": "fixture-expansion-controlled-region-replaced-with-paragraph",
+  "file": "examples/material-showcase/src/app/astylar.component.ts",
+  "pattern": "ariaControls: 'expansion-content'",
+  "introducedBy": "Initial2f440115 already controls a plain paragraph versus Material custom panel;initial runtime/region projection and motive unproven.",
+  "classification": "application-plugin-authoring-defect",
+  "owner": "Material expansion header-to-labelled-content-region authoring",
+  "focusedProof": "node scripts/check-expansion-static-ax.mjs",
+  "history": [
+    {
+      "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "sha256": "6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24",
+      "excerpt": "    if (family === 'expansion') return [{ type: 'article', id: 'expansion-shell', class: 'expansion-panel', children: [{ type: 'button', id: 'expansion-primary', class: 'expansion-trigger', disabled: state.disabled, ariaExpanded: state.open, ariaControls: 'expansion-content', value: 'Advanced settings' }, { type: 'span', id: 'expansion-chevron', class: 'expansion-chevron', textContent: state.open ? '⌃' : '⌄' }, ...(state.open ? [{ type: 'p' as const, id: 'expansion-content', textContent: 'Additional options.' }] : [])] }];"
+    },
+    {
+      "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+      "file": "examples/material-showcase/src/app/reference.component.ts",
+      "sha256": "2e070cc31b08750e07f6a8c5c3103607e5399291930b91d590140203be719c8e",
+      "excerpt": "          @case ('expansion') { <mat-expansion-panel id=\"expansion-primary\" [expanded]=\"store.state().open\" [disabled]=\"store.state().disabled\"><mat-expansion-panel-header><mat-panel-title>Advanced settings</mat-panel-title></mat-expansion-panel-header><p>Additional options.</p></mat-expansion-panel> }"
+    },
+    {
+      "revision": "354084ea1f1a6abb3e010222062e3cea9f945b61",
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "sha256": "28b5df6d99ef888d5ac0858de77f1e5e7ece572c976aed8660d9427d59beef64",
+      "excerpt": "    if (family === 'expansion') return [{ type: 'article', id: 'expansion-shell', class: 'expansion-panel', children: [{ type: 'div', id: 'expansion-primary', class: 'expansion-trigger', role: 'button', tabindex: state.disabled ? -1 : 0, ariaDisabled: state.disabled, ariaExpanded: state.open, ariaControls: 'expansion-content', children: [{ type: 'span', id: 'expansion-title', class: 'expansion-title', textContent: 'Advanced settings' }] }, { type: 'span', id: 'expansion-chevron', class: 'expansion-chevron', textContent: state.open ? '⌃' : '⌄' }, ...(state.open ? [{ type: 'p' as const, id: 'expansion-content', textContent: 'Additional options.' }] : [])] }];"
+    },
+    {
+      "revision": "6e1c15666fa0c488a1accd1f4df3a6da7fe37aa7",
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "sha256": "c149f84a682413e8ed94709c0e6fc0e8c3ee50653f482adf120525c770ed1338",
+      "excerpt": {
+        "line": "    if (family === 'expansion') return [{ type: 'article', id: 'expansion-shell', class: 'expansion-panel', children: [{ type: 'div', id: 'expansion-primary', class: 'expansion-trigger', role: 'button', tabindex: state.disabled ? -1 : 0, ariaDisabled: state.disabled, ariaExpanded: state.open, ariaControls: 'expansion-content', children: [{ type: 'span', id: 'expansion-title', class: 'expansion-title', textContent: 'Advanced settings' }] }, { type: 'span', id: 'expansion-chevron', class: 'expansion-chevron', textContent: state.open ? '⌃' : '⌄' }, { type: 'p' as const, id: 'expansion-content', textContent: 'Additional options.' }] }];",
+        "style": "        { selector: '#expansion-content', position: 'absolute', display: state.open ? 'block' : 'none', top: `${state.open ? theme.density === 0 ? 80 : theme.density <= -5 ? 60 : 68 : 0}px`, left: '24px', margin: '0', verticalAlign: 'middle' },"
+      }
+    },
+    {
+      "revision": "0175a0bdcab41e6767ec26a83f587c7aba3b1d47",
+      "file": "src/lib/astylar-semantic-bridge.ts",
+      "sha256": "a8ab51086c1f0b2396583c2b86fc126df9e239dcd90d19457ab25f48d7d88f82",
+      "excerpt": [
+        ".filter((element) => !element.hidden)",
+        "if (child.hidden) continue;"
+      ]
+    }
+  ],
+  "observation": {
+    "component": "expansion",
+    "retainedCases": 68,
+    "actualStaticPairs": 12,
+    "reference": "header controls wrapper role=region labelled by header",
+    "astylar": "header controls unlabelled P expansion-content",
+    "stage": "authored relationship-target structure before semantic bridge"
+  },
+  "justification": "All68 original authenticated target chains expose unequal DOM/SiteData inputs. Pinned collapsed AX binds candidate controls to its paragraph. Native hidden target is absent from collapsed actual AX;no open-state actual region behavior is inferred. This names the semantic role/label/relationship substitution,not a duplicate finding about already-classified absolute flow/top/paragraph-spacing changes.",
+  "evidence": [
+    {
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "sha256": "71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd"
+    },
+    {
+      "file": "examples/material-showcase/src/app/reference.component.ts",
+      "sha256": "debe55bc492d0fa1e48a9c7f09e1b668d435a2260588710207ab878b23c1d4aa"
+    },
+    {
+      "file": "src/lib/astylar-semantic-bridge.ts",
+      "sha256": "1a0011d3530701d9a74dc37b9f5a14d0fed0742dfd8793c39f8628e06b6a5725"
+    },
+    {
+      "file": "src/lib/astylar.ts",
+      "sha256": "5742ba6c19debd5c18ad7d407f1a10e14271cbcd38bf99889d4b4e2474f17451"
+    },
+    {
+      "file": "scripts/check-expansion-static-ax.mjs",
+      "sha256": "529a6354f8e137c8a1581d36615b41e22c9ad95a94ada185b1d35fd8d3d3912d"
+    },
+    {
+      "file": "scripts/check-material-semantic-visibility-binding.mjs",
+      "sha256": "a320c97ece4ac0191ff102b473029cc8d2800d5979216658c02eea61ffb0ac23"
+    },
+    {
+      "file": "artifacts/material-parity/material-semantic-visibility-binding-retry-20261021.log",
+      "sha256": "2f130ff825b7885e0c7d0a35eaea849d6560bc486cb88ee033899966e7bc7aaf"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-review-20261021.log",
+      "sha256": "3541b52e5b5b641f45f57a1eb7c7474241a759f127d7e30fd62588f0c62dbf17"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-20261021/latest-report.json",
+      "sha256": "c1ababf7c391ba769c5a25f41da09d5ed72d46445b95ee6caf73dd4687d6e597"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-controls-retained-boundary-20261021.log",
+      "sha256": "560ce34b790c74ea493a6d8b3373f1d6691e147133a1c3e03378dd7a9be3d2b8"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-hidden-style-boundary-20261021.log",
+      "sha256": "683a42abffee90605c5ed5ec03c8a245f5b9335cef2e1cd0ac3d6b1ae616697f"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-20261021/expansion-light-1440x1000-dpr1-reference.json",
+      "sha256": "1f225ba1fea8f1345ece15908e3bf75417057a51849337f65505154667d52e81"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-20261021/expansion-light-1440x1000-dpr1-astylar.json",
+      "sha256": "3d32168853f0693110efe94c152a733c2a6d794aac55f34b480fb3df1e465f8e"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-20261021/expansion-light-768x1024-dpr1-reference.json",
+      "sha256": "8d3d57de86a412d8c95e9479ffc4ecac9983b29df2640e31aea0a01a5420da54"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-20261021/expansion-light-768x1024-dpr1-astylar.json",
+      "sha256": "492a8e090f80bf8f44e121bad066929a5f652376b5b0cdc34e10c321f1542f6d"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-20261021/expansion-light-390x844-dpr2-reference.json",
+      "sha256": "5c02f0d9b92a0232755d76ee8057c7b078be59bdb7eec3951e23ff2d5669a74c"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-20261021/expansion-light-390x844-dpr2-astylar.json",
+      "sha256": "30036cb8be1c903463c1786d3deba49df05ede06bbc6bcfa4a62c8888445332b"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-20261021/expansion-dark-1440x1000-dpr1-reference.json",
+      "sha256": "d6903616e0abca1a95d4701e79d0f6256cdcab2d9bbd4944dd99d4c0d1efca5c"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-20261021/expansion-dark-1440x1000-dpr1-astylar.json",
+      "sha256": "1758f4550068e3477f7208b83784d9526c7d7fab2978a148d2a6adf8939f661b"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-20261021/expansion-dark-768x1024-dpr1-reference.json",
+      "sha256": "81f8d14fd50073883848fbdaba634c9f3790e479d2d01e5f37d7d8559e25580a"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-20261021/expansion-dark-768x1024-dpr1-astylar.json",
+      "sha256": "4074083bb3c066e4d6bbae3fb551258e0380db36c46e7f29edbb6dff71b55432"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-20261021/expansion-dark-390x844-dpr2-reference.json",
+      "sha256": "47c193c2ff1dc27c560ba1a1e2e63f5b627fd792c0a8b042b8b3756f284c1f78"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-20261021/expansion-dark-390x844-dpr2-astylar.json",
+      "sha256": "0c619dbaa8e00dd980324de473eddfbd930022e058a33c8e368d43330564c5c5"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-20261021/expansion-contrast-1440x1000-dpr1-reference.json",
+      "sha256": "eb4bccb21efe0a0f225b1b4b75056c89a416b613013ee149f9f5e6ce8acbe30e"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-20261021/expansion-contrast-1440x1000-dpr1-astylar.json",
+      "sha256": "10492d8663dc3401b17cf423c59c541a8cb7bcc1da2564288b3c75d76885e282"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-20261021/expansion-contrast-768x1024-dpr1-reference.json",
+      "sha256": "b8367aa8d61f4d3b7f1e66eb38483190e6b233f6abff0ebca295e24a708a568a"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-20261021/expansion-contrast-768x1024-dpr1-astylar.json",
+      "sha256": "6254e9ab187171a1cbcb5ebd9c39083b7fd05ced0c248a4a9c7938a651335717"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-20261021/expansion-contrast-390x844-dpr2-reference.json",
+      "sha256": "ab13ca65bcaab4dba568db52b3a8538b869184a269b7e9547173a212a03020df"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-20261021/expansion-contrast-390x844-dpr2-astylar.json",
+      "sha256": "ce234e32170216711829811165fde9e9dc043fd1c421117a5f1280bb9df7aa19"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-20261021/expansion-custom-1440x1000-dpr1-reference.json",
+      "sha256": "5d9a92100a3f93ea916e2da0f0a317f3c264d2d8f7d0b66c981df6e0dbe48b9d"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-20261021/expansion-custom-1440x1000-dpr1-astylar.json",
+      "sha256": "6090c106b3b8b6b189db223b3f3bbb249cd3a6bb9d0776cd8a452a877582d21f"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-20261021/expansion-custom-768x1024-dpr1-reference.json",
+      "sha256": "165fac90acf3f6e6616ac2a9db23aea9313048db47fbd6a4d8fe199796471f86"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-20261021/expansion-custom-768x1024-dpr1-astylar.json",
+      "sha256": "3e457bb811b6a063ec07c6a62aea45859ddef5afaf5d271e3d6fe63eef345e7f"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-20261021/expansion-custom-390x844-dpr2-reference.json",
+      "sha256": "ebfb37b7dad9c21afbaba55fd2b409393a07da1fd799341e9b1fdcbaed4d1a8f"
+    },
+    {
+      "file": "artifacts/material-parity/expansion-static-ax-20261021/expansion-custom-390x844-dpr2-astylar.json",
+      "sha256": "5abf9e2ad68c918d4eaec56a6c9189b4aaf92ed378f341ef1be7a5f7a32a04c8"
+    }
+  ],
+  "recommendation": "Restore equivalent header/labelled-region relationship intent in future comparison inputs,then evaluate core behavior. Keep the generic CSS visibility defect separate;do not make core invent a region for an authored paragraph.",
+  "boundary": "Retained target attributes68 cases and actual collapsed AX12 pairs;not open-state region AX,AT navigation,initial runtime or whole-case acceptance."
+}),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({

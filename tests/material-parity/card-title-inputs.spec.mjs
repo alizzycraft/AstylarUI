@@ -3,7 +3,9 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
+import { sourceAuditDefinitions as expansionSemanticRegisteredDefinitions } from './input-equivalence-policy.mjs';
+import { expansionSemanticPredecessor } from './expansion-semantic-registration.mjs';
+const sourceAuditDefinitions = expansionSemanticPredecessor(expansionSemanticRegisteredDefinitions);
 import { cardTitlePredecessor, restoreCardTitlePolicy, restoreCardTitleProducer,
   restoreCardTitleCaseSelection, restoreCardTitleRunnerSelection, restoreCardTitleLauncherSelection } from './card-title-registration.mjs';
 import { passiveMainPredecessor, restorePassiveMainPolicy } from './passive-main-registration.mjs';
