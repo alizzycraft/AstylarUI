@@ -4,6 +4,23 @@
 
 Updated October21. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- Radio source applicability answered outside50315381:all68 retained candidate
+  subtrees(136 options) and13 radio-specific style objects exactly equal current
+  familyElements output/style expressions using captured selected/disabled states
+  and actual resolveTheme profiles.136 forged checked-state/left-offset controls
+  reject;exact independent execution replay agrees. Evidence:radio-authoring-
+  applicability-20261021.log SHA
+  a88213f0b0b55320e75b092d2eed3596fdfae36148b16a2fb3c9b3f0385ac2eb.
+  App raw71e2d41f/theme60a0737e receipts and full method hash are retained.
+- History snapshots:initial2f440115 radio branch already uses role-DIV/ring/dot
+  composition without native input/LABEL;f3c8254c adds state-layer descendants.
+  Both exact branch sources/revision/source hashes retained. Not every revision,
+  first-bad runtime or compensation motive. This establishes current AUTHORING
+  applicability,not installed/rendered runtime or whole-cascade/paint equivalence.
+  Existing flow/disabled-tabindex/Space-key findings remain,not duplicate core
+  diagnoses. Next review mapped circle/ripple/wrapper requests before assuming
+  collapsed structure equivalent;actual AX/hit/pixel/animation evidence stays open.
+
 - Next bounded owner-mapping gap answered OUTSIDE50315381:radio descendants map
   all68 retained cases/136 options via existing authenticated radio-position
   population. Accounts for1640 native nodes/612 candidate nodes,including eight

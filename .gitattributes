@@ -60,3 +60,5 @@ tests/material-parity/radio-descendant-inputs.mjs -text
 tests/material-parity/radio-descendant-inputs.spec.mjs -text
 artifacts/material-parity/radio-descendant-inputs-20261021.log -text
 artifacts/material-parity/radio-descendant-owning-20261021.log -text
+scripts/check-material-radio-authoring-applicability.mjs -text
+artifacts/material-parity/radio-authoring-applicability-20261021.log -text

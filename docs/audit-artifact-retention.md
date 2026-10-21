@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Retain scripts/check-material-radio-authoring-applicability.mjs and radio-
+authoring-applicability-20261021.log/empty stderr(139843B,SHA
+a88213f0b0b55320e75b092d2eed3596fdfae36148b16a2fb3c9b3f0385ac2eb).
+Exact replay passes;actual source factory/radio styles match all68 retained cases,
+136 rejection controls pass. Original four radio tests remain passing. Current
+source and two historical branch snapshots are explicit;no browser/runtime or
+universal history claim follows. This is new source applicability evidence outside
+accepted50315381,not replacement capture or permission to remove older evidence.
+
 Retain radio-descendant-inputs-20261021.log/empty stderr(2353714B,SHA
 aa8c59ff5c9e751bb0ff0b2f391e43d57409ef6bf0d32bd7f2daa4fcd3e0b355)
 and radio-descendant-owning-20261021 log pair. Exact embedded producer replay
