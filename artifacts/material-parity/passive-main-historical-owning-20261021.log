@@ -1,0 +1,52 @@
+TAP version 13
+# Subtest: text backing registration preserves complete clip predecessor and bounded public evidence
+ok 1 - text backing registration preserves complete clip predecessor and bounded public evidence
+  ---
+  duration_ms: 904.6762
+  type: 'test'
+  ...
+# Subtest: registered clip finding conserves its queued predecessor and rejects altered claims
+ok 2 - registered clip finding conserves its queued predecessor and rejects altered claims
+  ---
+  duration_ms: 77.5914
+  type: 'test'
+  ...
+# Subtest: legacy clip registration preserves complete predecessor source and proof inventory
+ok 3 - legacy clip registration preserves complete predecessor source and proof inventory
+  ---
+  duration_ms: 807.4726
+  type: 'test'
+  ...
+# Subtest: attribute focus registration preserves all predecessor definitions and proof sources
+ok 4 - attribute focus registration preserves all predecessor definitions and proof sources
+  ---
+  duration_ms: 1084.061
+  type: 'test'
+  ...
+# Subtest: inline image registration preserves complete prior source and finding populations
+ok 5 - inline image registration preserves complete prior source and finding populations
+  ---
+  duration_ms: 980.881
+  type: 'test'
+  ...
+# Subtest: border contact registration preserves all predecessor findings and proof sources
+ok 6 - border contact registration preserves all predecessor findings and proof sources
+  ---
+  duration_ms: 1653.1614
+  type: 'test'
+  ...
+# Subtest: semantic registration historical boundary rejects drift and keeps current population explicit
+ok 7 - semantic registration historical boundary rejects drift and keeps current population explicit
+  ---
+  duration_ms: 2472.3153
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6824.3018

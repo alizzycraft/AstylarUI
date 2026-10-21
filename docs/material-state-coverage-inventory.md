@@ -13,11 +13,13 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   and main import9232(exit0) complete;candidate/main indexes match and every shard
   verifies. Cold authenticates16471 files/1700133716 bytes with2 collectors,
   10 memory hits/0 disk hits. All2311 cases remain partial;no rendering acceptance.
-- WORKING source batch90eddcc5 is committed/pushed:173 findings/232 proofs/790 paths.
-  Complete prior171 findings/229 proof claims/780 paths conserve;only2/3/10 added,
-  six prior source fingerprints and explicit proof-line shifts explained by census.
-  Three new current,seven historical registration and six original button checks
-  pass. Initial partial-ID guard failure is preserved and corrected,not waived.
+- WORKING landmark registration now has175 findings/234 proofs/804 source paths,
+  not yet published. Complete accepted173 findings/232 proof claims/790 source paths
+  conserve;only2/2/14 added,four source fingerprints and three+2 proof-line shifts
+  explicitly reviewed. Whole prior native helper/suite bodies recover exactly.
+  Five current/owning,seven historical and three shared-button registration checks
+  pass. Evidence:passive-main-registration-census/final-owning/historical-owning/
+  button-registration-owning20261021. No renderer/fixture changes or case promotion.
 - Coherent export session15448 is TERMINAL FAILED(-1073740791/0xC0000409),with
   empty stdout/stderr. Accepted8259d4f7 compressed payload hashes intact;no result
   published. Targeted Windows event/dump/WER checks found no diagnostic cause.
@@ -77,13 +79,13 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   source hashes:MAIN versus MAT-SIDENAV-CONTENT already appears in initial inputs.
   Evidence:sidenav-main-authoring-history-20261021 log pair;not proof of initial
   runtime,intent or all intervening revisions,and not a later-compensation claim.
-- Pending source review e89ad4a82100f3671f8d15210f19819eac4914a3e37fde47b200d734687fe104
+- Reviewed source proposal e89ad4a82100f3671f8d15210f19819eac4914a3e37fde47b200d734687fe104
   preserves complete173 accepted definitions and records175 proposed findings.
   Extends shared page-MAIN observation from12 to48 static pairs and separately
   classifies sidenav-content MAIN in12 pairs. Both original AX verifiers replay
   byte-exact(96 captures);initial candidate/reference source histories reauthenticate.
   Evidence:passive-main-landmark-source-review-20261021 via existing proposal store.
-  No canonical registration,case closure or rendering acceptance. Keep f39d predecessor.
+  Registered in working policy only;no canonical publication,case closure or rendering acceptance. Keep f39d predecessor.
 - Existing case-review mechanism now has queued successor33b7ccf93a9df72a878ba302c5a0b8867ef01a2b24cb81a47a59e9c7a5b16460:
   adds48 static actual-AX children/96 captures to semantics only,authenticates15388
   dependencies and recovers COMPLETE predecessor50315381 after removing precisely

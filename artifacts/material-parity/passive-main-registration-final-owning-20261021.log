@@ -1,0 +1,40 @@
+TAP version 13
+# Subtest: native checkable registration preserves all prior findings and distinct core authoring causes
+ok 1 - native checkable registration preserves all prior findings and distinct core authoring causes
+  ---
+  duration_ms: 514.1307
+  type: 'test'
+  ...
+# Subtest: public native checkable form values retain repeatable pixel failures and owning method binding
+ok 2 - public native checkable form values retain repeatable pixel failures and owning method binding
+  ---
+  duration_ms: 5774.4843
+  type: 'test'
+  ...
+# Subtest: radio ring state paint inputs replay complete retained population
+ok 3 - radio ring state paint inputs replay complete retained population
+  ---
+  duration_ms: 185.3432
+  type: 'test'
+  ...
+# Subtest: passive landmark registration preserves accepted findings and exact source boundaries
+ok 4 - passive landmark registration preserves accepted findings and exact source boundaries
+  ---
+  duration_ms: 521.9947
+  type: 'test'
+  ...
+# Subtest: passive static AX and initial landmark history replay retained observations
+ok 5 - passive static AX and initial landmark history replay retained observations
+  ---
+  duration_ms: 2909.6085
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6897.4346

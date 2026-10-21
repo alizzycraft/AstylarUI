@@ -8922,6 +8922,20 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'tests/material-parity/passive-main-landmark-input.spec.mjs',
+    'tests/material-parity/passive-main-registration.mjs',
+    'scripts/review-passive-main-landmarks.mjs',
+    'scripts/check-list-static-ax.mjs',
+    'scripts/check-passive-static-ax.mjs',
+    'scripts/capture-list-static-ax.mjs',
+    'scripts/capture-passive-static-ax.mjs',
+    'scripts/join-static-passive-ax-evidence.mjs',
+    'artifacts/material-parity/working-audit/proposals/e89ad4a82100f3671f8d15210f19819eac4914a3e37fde47b200d734687fe104.json',
+    'artifacts/material-parity/passive-main-landmark-source-review-20261021.log',
+    'artifacts/material-parity/list-static-ax-review-20261021.log',
+    'artifacts/material-parity/passive-static-ax-review-20261021.log',
+    'artifacts/material-parity/sidenav-main-authoring-history-20261021.log',
+    'artifacts/material-parity/working-audit/proposals/f39d4c4cf1065eadfa494307434e7b1c17d393d8bc5794ca7d0fffd9974780e4.json',
     'tests/material-parity/native-checkable-inputs.spec.mjs',
     'tests/material-parity/native-checkable-registration.mjs',
     'scripts/audit-public-native-checkable-value.mjs',
@@ -9719,6 +9733,10 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/passive-main-landmark-input.spec.mjs', /test\('passive landmark registration preserves accepted findings and exact source boundaries'/,
+      'passive landmark additive registration preserves accepted findings', 'All173 accepted findings preserve exactly;shared page and sidenav-content authored MAIN causes remain separate. Exact source reversal and mutation controls reject unrelated changes. Not whole-case or rendering acceptance.'),
+    proof(root, 'tests/material-parity/passive-main-landmark-input.spec.mjs', /test\('passive static AX and initial landmark history replay retained observations'/,
+      'passive static actual AX and landmark history evidence', 'Both original verifiers replay96 captures across48 static pairs,including12 distinct sidenav-content mismatches. Whole initial source hashes reauthenticate. Not interactions,AT behavior,all semantic relationships or complete rendering parity.'),
     proof(root, 'tests/material-parity/native-checkable-inputs.spec.mjs', /test\('native checkable registration preserves all prior findings and distinct core authoring causes'/,
       'native checkable additive registration and predecessor conservation', 'All171 prior findings preserve exactly;two reviewed findings distinguish core form-value label construction from unequal radio state paint inputs. Whole-source policy and historical suite boundaries reject unrelated drift. Not canonical publication or complete case inspection.'),
     proof(root, 'tests/material-parity/native-checkable-inputs.spec.mjs', /test\('public native checkable form values retain repeatable pixel failures and owning method binding'/,

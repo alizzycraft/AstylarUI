@@ -2493,6 +2493,437 @@ export const sourceAuditDefinitions = Object.freeze([
     "recommendation": "Restore original component state/theme paint requests with original structure/CSS before evaluating core paint. Preserve disabled circle opacity separately from label opacity and selected/unselected/hover/focus tokens. Do not tune sampled colors or opacity to imitate a screenshot.",
     "boundary": "Four-side requested color and own opacity only. Ancestor compositing,inner-dot scale equivalence,animated ripple paint,actual pixels,AX,activation and complete current case rendering remain open. Distinct from disabled-label ink and native form-value label synthesis. Historical source snapshots do not establish motive or a first-bad runtime revision."
   }),
+  Object.freeze({
+    "id": "fixture-showcase-outer-and-semantic-page-duplicate-main-landmarks",
+    "introducedBy": "Initial2f440115 authors both MAIN inputs;actual duplicate AX exposure verified only in pinned October20 build,not initial runtime",
+    "file": "examples/material-showcase/src/app/astylar.component.ts",
+    "pattern": "type: 'main', id: 'page'",
+    "classification": "application-plugin-authoring-defect",
+    "owner": "showcase host wrapper versus SiteData page landmark ownership",
+    "focusedProof": "node scripts/check-list-static-ax.mjs",
+    "observation": {
+      "component": "shared showcase frame;48 static list/sidenav/grid-list/table cases",
+      "reference": "one exposed outer MAIN frame",
+      "astylar": "outer MAIN frame plus nested SiteData MAIN page,each exposed",
+      "stage": "two authored landmark inputs before semantic bridge projection",
+      "pairedStaticCases": 48,
+      "captures": 96
+    },
+    "justification": "Full actual AX trees and referenced backend DOM IDs identify two distinct candidate MAIN elements versus one reference MAIN in all12 static list profile/viewport contexts. Candidate inner page is an AX descendant of the outer frame;list component meaningful descendants independently agree on Inbox/Archive text. Both served component source maps equal current source modulo line endings. Current and exact initial source each explicitly author both MAINs. Core is preserving requested roles,not inventing a duplicate. Shared-source applicability does not imply runtime verification of every family/state. A separate retained72-capture actual-AX supplement verifies the same outer-frame/inner-page ancestor relationship in all36 static sidenav/grid-list/table cases. Sidenav has a third, separately authored content MAIN;do not conflate its local owner with the shared page owner.",
+    "history": {
+      "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "sha256": "6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24",
+      "lines": [
+        "<main class=\"frame\" [class.dark]=\"store.theme().mode === 'dark'\" [style.background]=\"store.theme().surface\">",
+        "type: 'main', id: 'page', children: ["
+      ]
+    },
+    "evidence": [
+      {
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd"
+      },
+      {
+        "file": "examples/material-showcase/src/app/reference.component.ts",
+        "sha256": "debe55bc492d0fa1e48a9c7f09e1b668d435a2260588710207ab878b23c1d4aa"
+      },
+      {
+        "file": "scripts/capture-list-static-ax.mjs",
+        "sha256": "c6bb3437e776ae7cc49e1eab16e10af13286705b6f30a526b8038ce2c495d8fc"
+      },
+      {
+        "file": "scripts/check-list-static-ax.mjs",
+        "sha256": "c0420b487c6ce8ea6c6a751d11ffa9eed6ffbd18d17bf2ae4a6b0a7d9e199f30"
+      },
+      {
+        "file": "artifacts/material-parity/list-static-ax-current-checkpoint-20261021/latest-report.json",
+        "sha256": "bedbf72390784c5731fc594c0076507746581e466e0dd7701fb996ae3a6c5f32"
+      },
+      {
+        "file": "artifacts/material-parity/list-static-ax-current-checkpoint-20261021/provenance.json",
+        "sha256": "72315b01576a2d7175f287b6fcae204d77be864dc8d2be7c3b15ced2567fcda7"
+      },
+      {
+        "file": "artifacts/material-parity/list-static-ax-review-20261021.log",
+        "sha256": "a5ebaffa495e23a3b35362fee84cf2348dba54771533564d2b1f4bbff8a99473"
+      },
+      {
+        "file": "examples/material-showcase/dist/material-showcase/browser/chunk-PCHQTLJM.js.map",
+        "sha256": "55fedcbf88e93c3e0ca413d6458495aeb36087e947314dd4f0671358af8727b8"
+      },
+      {
+        "file": "examples/material-showcase/dist/material-showcase/browser/chunk-7SL66K3U.js.map",
+        "sha256": "67e956a6f4b3b0325fc51b7b45688a27d5e9307095f8b4a20391a96f68244df4"
+      },
+      {
+        "file": "scripts/capture-passive-static-ax.mjs",
+        "sha256": "8cbbb5d1b64a879bd0e47bb123c23d8979bc10bbfeecee7158c008b363a2e1b0"
+      },
+      {
+        "file": "scripts/check-passive-static-ax.mjs",
+        "sha256": "87dfdd40238896a1c5ffe9aa51442ca701e8edb0266592f02128001d6fcde46a"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-review-20261021.log",
+        "sha256": "fb6769405b639d04da5f0e3908374225ab86da5012de6579c2d8c8fe44dbfc02"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/latest-report.json",
+        "sha256": "f4c570cd0db7742a1da8b3a49d45fdf3cfc00b99d5695adc5554ce2ad1717912"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/sidenav-light-1440x1000-dpr1-reference.json",
+        "sha256": "9c1fe20b6603936a94b3fae470ac471fc0cd476a7b33dec3b519816653be3650"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/sidenav-light-1440x1000-dpr1-astylar.json",
+        "sha256": "40c087ee9bfb1ea7af8a444f67475998d3e586aed939a2c047bcf1fd20431ce2"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/sidenav-light-768x1024-dpr1-reference.json",
+        "sha256": "b09ccb1dc5abd516bb3eb2f65d822340d2aedfa4720dab77b71a4a20ed983222"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/sidenav-light-768x1024-dpr1-astylar.json",
+        "sha256": "603de9e9a38f18cf8c2b9b2a6940dde07a988cbe9806ded89223a5780f1ae181"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/sidenav-light-390x844-dpr2-reference.json",
+        "sha256": "a4ed1a01ca9ae7676d71c748df86e0e4ae87a345a9bec96758fa3dca2abd2397"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/sidenav-light-390x844-dpr2-astylar.json",
+        "sha256": "6fd63a2070f29cf2af35b862b4b7f3bcba74a07ff99bea9f02043f52771f2c8f"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/sidenav-dark-1440x1000-dpr1-reference.json",
+        "sha256": "976364d01cb4eda84dc63def3198ea12cd489cb8a392d13d33009e0cecd7baed"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/sidenav-dark-1440x1000-dpr1-astylar.json",
+        "sha256": "29ac5f6cc89864f6b0541400308d49d158398bde79e5cd6e79bf59cf1f6edaea"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/sidenav-dark-768x1024-dpr1-reference.json",
+        "sha256": "cefd10e1798d7b5dad417eafae1d56193b36f015a249af2b907da7a11564ca74"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/sidenav-dark-768x1024-dpr1-astylar.json",
+        "sha256": "f333993082395cb670042ee2750c7e76244a14b5e585dac67b696448d6038b0c"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/sidenav-dark-390x844-dpr2-reference.json",
+        "sha256": "720013b5a045f2300c8ebfe9706b1e1738b7f66534e3be49627a504091527b18"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/sidenav-dark-390x844-dpr2-astylar.json",
+        "sha256": "41049a654b63829eb42d56abee68d7cf9d67be9e3ef6b089cf355a2364f72202"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/sidenav-contrast-1440x1000-dpr1-reference.json",
+        "sha256": "92fd862b3bff59c8b72f5f9fa5174f856ada5225273f7c14f657b7570124a2de"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/sidenav-contrast-1440x1000-dpr1-astylar.json",
+        "sha256": "7547d91510b85ad920fde700d3cac8582823723730c6c374a835f2eb3b0e4772"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/sidenav-contrast-768x1024-dpr1-reference.json",
+        "sha256": "2b90c6686a9e1fdee0c4b424c3c55b235e4ec22f6f8470a510673c765f75667f"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/sidenav-contrast-768x1024-dpr1-astylar.json",
+        "sha256": "ebb1dc60d0fc978ff3906ba1dfcb533ac2a1f874ecb7a940e7383130cea70c34"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/sidenav-contrast-390x844-dpr2-reference.json",
+        "sha256": "cfdd0b2b5884fa9057fd0c7393a5121aeaf0afe6611987974af7ddb279a2de02"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/sidenav-contrast-390x844-dpr2-astylar.json",
+        "sha256": "9e7228ee6531b12e00852669435fecfb4bd434d50de4b618f3105e6f7baf414e"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/sidenav-custom-1440x1000-dpr1-reference.json",
+        "sha256": "d4d1e1ff1e2649c6ca523617d4ec015cb22dd2f9fb3d747f97f3f9d89d073d50"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/sidenav-custom-1440x1000-dpr1-astylar.json",
+        "sha256": "27b1ee7e549a7cadbeebcc61de82d89898536618e331b4384f7d6e10e5eb44e9"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/sidenav-custom-768x1024-dpr1-reference.json",
+        "sha256": "a4deb3fb6d885f98c22b7786a85eab9381bdf8eb72912fd9cc94f0a2e75977ca"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/sidenav-custom-768x1024-dpr1-astylar.json",
+        "sha256": "f2dd1016395503c085b968ccb7ee119225b7c1ff42c52abb2713331fca561c04"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/sidenav-custom-390x844-dpr2-reference.json",
+        "sha256": "1d6ad35d9370444aa8b6f2d4c56d6c720ce080a17cf427e9f0d98839d71e7e09"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/sidenav-custom-390x844-dpr2-astylar.json",
+        "sha256": "626b14dc4547ad12dd5e23359876871c8a74c9850af0d03feb6aaf9ed3d6a395"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/grid-list-light-1440x1000-dpr1-reference.json",
+        "sha256": "074a3c3dd14d926178bbe27dd79007b199e5af2a1abea1d34565e5d091615846"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/grid-list-light-1440x1000-dpr1-astylar.json",
+        "sha256": "5c238ca15890a5aa176fd9148f6a070d4b98158fec3b8a4d9ffd28aac87e0b59"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/grid-list-light-768x1024-dpr1-reference.json",
+        "sha256": "f402338b1e5f592f6e4ee47cd40e8b16121c3e9b38cebeef018cd30c2f3698a4"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/grid-list-light-768x1024-dpr1-astylar.json",
+        "sha256": "92c9e7a3e15799bd6856ef68a8d8e82258c74446577c7f4b11a31bc4c7b388bf"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/grid-list-light-390x844-dpr2-reference.json",
+        "sha256": "c32627e784f95af75199d990fee0f7f1eba8fa739408e1863a13e8f1fbc34f35"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/grid-list-light-390x844-dpr2-astylar.json",
+        "sha256": "1499c638b0cc19a9374e1b2828a1d6ff4eb1c8f4c36fb7c9cd180e33095bd8f7"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/grid-list-dark-1440x1000-dpr1-reference.json",
+        "sha256": "dc0080e008b7be0516a1ce45509821df52b8963185e3dd86ffb07134802f3265"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/grid-list-dark-1440x1000-dpr1-astylar.json",
+        "sha256": "4361feba6beed2dcc343d1968e8439f3e58726c1c24d8cac6fcb98f5320a4bd3"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/grid-list-dark-768x1024-dpr1-reference.json",
+        "sha256": "9f3078b24d29ca486a50017cb79c97404c414a04d48c34435ea48a6a2be07ad0"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/grid-list-dark-768x1024-dpr1-astylar.json",
+        "sha256": "e3e404b5d542245b411ce761b8ae7723273d9f19b66f61b337fdb39333e810b1"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/grid-list-dark-390x844-dpr2-reference.json",
+        "sha256": "c0a40871caa6faafe0da26acde856d7515840267975d53172d32ad23e053ac51"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/grid-list-dark-390x844-dpr2-astylar.json",
+        "sha256": "0c1f8c15c4c25c66fb5b23fbbd93977c025fb6a420b9916740ca94e366fd537b"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/grid-list-contrast-1440x1000-dpr1-reference.json",
+        "sha256": "7b075f919963a043d35b61cec76f3211ce1e4991494ac0223e96db7d77389b2b"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/grid-list-contrast-1440x1000-dpr1-astylar.json",
+        "sha256": "7cc5ce87858212afd98c507a7bc874ff6dbe9d3ebd873cb16859a2ed887c7cdb"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/grid-list-contrast-768x1024-dpr1-reference.json",
+        "sha256": "878241d1504b2b87517ea8895c925818f0380c6fa98e38983cadafaf2e4ebc7f"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/grid-list-contrast-768x1024-dpr1-astylar.json",
+        "sha256": "f4850303204ff0670dee6edbe4fdb1e6cb6f7aab883ef4e3f26cc2072b46f270"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/grid-list-contrast-390x844-dpr2-reference.json",
+        "sha256": "a29063d92b309a36e70c303ecbc59ea39f2712077173591ac50adef8e631c5dd"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/grid-list-contrast-390x844-dpr2-astylar.json",
+        "sha256": "9925f23579e5a8b8da5629cdf1a7146257791df2ac64afdbaad5a5337e2ccb63"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/grid-list-custom-1440x1000-dpr1-reference.json",
+        "sha256": "72a7401ac0b8aa55d8654a14d9646b23bf49f0efd4d6c154874abe0f5b67ae56"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/grid-list-custom-1440x1000-dpr1-astylar.json",
+        "sha256": "7babe861ec774f89e1db3e8c3f3c91ed9ede56b8b0a40634b5b481292f3f5aa4"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/grid-list-custom-768x1024-dpr1-reference.json",
+        "sha256": "75e0e3de52677869e5c5e9a329859ccc190c579220c32ad5ae6122095be530c7"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/grid-list-custom-768x1024-dpr1-astylar.json",
+        "sha256": "a75ec71f96115cb8b51ed995b1a54a94a909415ff471ca553b0e8ea8ce85d7b9"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/grid-list-custom-390x844-dpr2-reference.json",
+        "sha256": "672b34c0a317fc82e2b95a799b3b495068e9dccf99264fd50d00aa1f06a8ef1f"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/grid-list-custom-390x844-dpr2-astylar.json",
+        "sha256": "8b6cc9b0157a859c370fc2b5736f6f5e2916783f07fc0947496a69b68847d7f2"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/table-light-1440x1000-dpr1-reference.json",
+        "sha256": "ded954fd4354b755f0b1cd938ab6d9603a6afdaecea3eb35621417969ee7dad2"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/table-light-1440x1000-dpr1-astylar.json",
+        "sha256": "db50739e0d6f9920eaecdb7e5670aec21b72ae20eb8728be7fb4029715d6f1f0"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/table-light-768x1024-dpr1-reference.json",
+        "sha256": "2a77f528226fb0354a90a10a5b5d7d023096107515cf9e68460ec3e696572509"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/table-light-768x1024-dpr1-astylar.json",
+        "sha256": "e9ecea77e914e482a11649508bf1345309cce9ba45edbe6227db5f4df955db5f"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/table-light-390x844-dpr2-reference.json",
+        "sha256": "a9f64c7cb4b04fc28690861309315c7a35bdb7ffd8d0562913bd626ab8c0c236"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/table-light-390x844-dpr2-astylar.json",
+        "sha256": "46088799a76cf6c7cba0550abf978f10362849ceb66656cc3497782a91ffb303"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/table-dark-1440x1000-dpr1-reference.json",
+        "sha256": "355210d9dd83d92f44210ab555d9ff8f81fda5d2e8dd5d63d345c7823924d407"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/table-dark-1440x1000-dpr1-astylar.json",
+        "sha256": "b289fde98f25ae5baf85dc13a82929c3dad431da11e0a99431bdc42f6f2e2db6"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/table-dark-768x1024-dpr1-reference.json",
+        "sha256": "34e449980f76f61b9ba324f6a2131eebbd83b1c475f4570edd4c1630d89dd9bd"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/table-dark-768x1024-dpr1-astylar.json",
+        "sha256": "a79d7273ff9f234d5fc3571feca2a219f06310274918aa07d3b7c8d3a411e057"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/table-dark-390x844-dpr2-reference.json",
+        "sha256": "2b59e4e515b2bf2b7125c244baf5f7f1634101c71118390efd37bad72639945a"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/table-dark-390x844-dpr2-astylar.json",
+        "sha256": "de6f756f96732d68e2f46e4950cad441c260124f057563edbfbef80f63bb2ac4"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/table-contrast-1440x1000-dpr1-reference.json",
+        "sha256": "cf35fd3f300942aabf7b44fe0e4b2ef90ca624de494a78068c9f233bd5b65685"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/table-contrast-1440x1000-dpr1-astylar.json",
+        "sha256": "de136bf794101a548ac46a7bbf04b2f017f0c1f01633c6a3ba254f17dad01a1e"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/table-contrast-768x1024-dpr1-reference.json",
+        "sha256": "e47c7c1d6477793cf00d1c3746751e430976c2efc7c05cc981c691b3d6165249"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/table-contrast-768x1024-dpr1-astylar.json",
+        "sha256": "5bccd0a445dcf4be428cfc1855953c6c04b85aa23c4a9c24d0f55ec6cc9b5096"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/table-contrast-390x844-dpr2-reference.json",
+        "sha256": "322d582eaf092079869bca799340b49105e8a815e9a97c7937d724a7fda81fba"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/table-contrast-390x844-dpr2-astylar.json",
+        "sha256": "15856ebe65cc788f772bb41a5dd496d764919379438172b3008562dfc7d2d17a"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/table-custom-1440x1000-dpr1-reference.json",
+        "sha256": "e8ec0b33e1b4e4f2b320dbc0ee81e4e1f4d26668076ad637d0568de9860ad207"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/table-custom-1440x1000-dpr1-astylar.json",
+        "sha256": "8d5f96945a653ee1c5f888e5ff0eca0e3194914cdd5c56ba9370d2761f8506ac"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/table-custom-768x1024-dpr1-reference.json",
+        "sha256": "bc5975bee42fad879fdbe4fa0d9d4581cc517ebbefe9ef8481a85cfbbfabe89d"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/table-custom-768x1024-dpr1-astylar.json",
+        "sha256": "bd4d14f242a5d1e40b6b4ded8c35ccd1e4d08ea69f37ff40480b5e5f0f90cf70"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/table-custom-390x844-dpr2-reference.json",
+        "sha256": "baab07f57643a9958a87ddfe433fbc97a12011f111997250268daeccc875146f"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/table-custom-390x844-dpr2-astylar.json",
+        "sha256": "2f4d738522babc21a58f23c7405f23c61bd024b5060fe01f721684e00bf67bb9"
+      }
+    ],
+    "recommendation": "Give the intended page MAIN one authoring owner across host wrapper and SiteData. Preserve the native page landmark contract with a neutral extra host wrapper where necessary;do not make the renderer silently discard MAIN roles or hide an ancestor containing intended accessible content.",
+    "boundary": "Actual duplicate page exposure verified for48 static pairs/96 captures only;not interaction states,all36 families,AT behavior,all AX associations,paint,first-bad runtime or compensation motive. Keep the original12-case proposal and checkpoint rejection."
+  }),
+  Object.freeze({
+    "id": "fixture-sidenav-content-promoted-to-main-landmark",
+    "introducedBy": "Initial2f440115 candidate authors MAIN for sidenav-content versus reference MAT-SIDENAV-CONTENT;initial runtime and motive unproven",
+    "file": "examples/material-showcase/src/app/astylar.component.ts",
+    "pattern": "type: 'main', id: 'sidenav-content'",
+    "classification": "application-plugin-authoring-defect",
+    "owner": "Material showcase sidenav content semantic element authoring",
+    "focusedProof": "node scripts/check-passive-static-ax.mjs",
+    "observation": {
+      "component": "sidenav-content",
+      "pairedStaticCases": 12,
+      "captures": 24,
+      "reference": "MAT-SIDENAV-CONTENT exposed as generic with Main content text",
+      "astylar": "MAIN exposed as main with Main content text",
+      "stage": "authored content element before semantic bridge projection"
+    },
+    "justification": "All12 static pairs retain actual AX nodes resolved by backend DOM identity. Reference content is generic;candidate content is main. Current served component source maps bind to current authoring;candidate explicitly requests MAIN. Initial whole Git source bytes already retain this input mismatch. The renderer preserves the requested role;this is separate from the shared outer/page duplicate MAIN and not evidence that core invented a landmark.",
+    "history": [
+      {
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+        "sha256": "6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24",
+        "excerpt": "type: 'main', id: 'sidenav-content', class: 'sidenav-content', textContent: 'Main content'"
+      },
+      {
+        "file": "examples/material-showcase/src/app/reference.component.ts",
+        "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+        "sha256": "2e070cc31b08750e07f6a8c5c3103607e5399291930b91d590140203be719c8e",
+        "excerpt": "<mat-sidenav-content>Main content</mat-sidenav-content>"
+      }
+    ],
+    "evidence": [
+      {
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd"
+      },
+      {
+        "file": "examples/material-showcase/src/app/reference.component.ts",
+        "sha256": "debe55bc492d0fa1e48a9c7f09e1b668d435a2260588710207ab878b23c1d4aa"
+      },
+      {
+        "file": "scripts/check-passive-static-ax.mjs",
+        "sha256": "87dfdd40238896a1c5ffe9aa51442ca701e8edb0266592f02128001d6fcde46a"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-review-20261021.log",
+        "sha256": "fb6769405b639d04da5f0e3908374225ab86da5012de6579c2d8c8fe44dbfc02"
+      },
+      {
+        "file": "artifacts/material-parity/sidenav-main-authoring-history-20261021.log",
+        "sha256": "151b73db6a3c75623f15e055f4264267fa8c0d1c0186844a1f2469a84b0169b0"
+      },
+      {
+        "file": "artifacts/material-parity/passive-static-ax-20261021/latest-report.json",
+        "sha256": "f4c570cd0db7742a1da8b3a49d45fdf3cfc00b99d5695adc5554ce2ad1717912"
+      }
+    ],
+    "recommendation": "Author sidenav content with the reference generic semantic contract while retaining its content and layout intent. Do not suppress MAIN roles in core or hide intended content to compensate.",
+    "boundary": "Twelve static pairs only;not dynamic sidenav behavior,AT traversal,all header/description associations,layout/paint equivalence,initial runtime or compensation intent."
+  }),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({

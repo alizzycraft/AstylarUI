@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Retain passive-main-registration-owning,registration-final-owning,historical-owning,
+button-registration-owning and registration-census20261021 log pairs. Working
+175 findings/234 proofs/804 paths preserve complete accepted173/232/790;
+whole prior native helper/suite bodies recover exactly and drift controls reject.
+Five current/owning,seven historical and three button registration checks pass.
+Policy/producer and two native registration files changed only at reviewed additive
+boundaries. Accepted c2a58b7c is unchanged until a later coherent export/cold/import.
+Retain both new source tests/helper and all original evidence;no fixture/core fix.
+
 Retain scripts/review-passive-main-landmarks.mjs,passive-main-landmark-source-
 review-20261021 log pair and pending source proposal
 e89ad4a82100f3671f8d15210f19819eac4914a3e37fde47b200d734687fe104.

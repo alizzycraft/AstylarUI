@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
+import { passiveMainPredecessor, restorePassiveMainPolicy, restorePassiveMainProducer } from './passive-main-registration.mjs';
 const hash = value => createHash('sha256').update(value).digest('hex');
 const normalized = value => value.toString().replaceAll('\r\n', '\n');
 const ids = ['core-native-checkable-form-value-synthesizes-visible-label', 'fixture-radio-ring-state-paint-token-substitution'];
@@ -8,6 +9,7 @@ const ids = ['core-native-checkable-form-value-synthesizes-visible-label', 'fixt
 // One exact additive registration boundary. Historical assertions still see
 // their complete171-definition source,not a filtered arbitrary population.
 export function nativeCheckablePredecessor(current) {
+  current = passiveMainPredecessor(current);
   if (current.length !== 173) return current;
   assert.equal(hash(JSON.stringify(current)), 'fd942c4c5cc68504b8511e308960c5e8b3223f0bc0656e35721df5942f207796');
   assert.deepEqual(current.slice(-2).map(row => row.id), ids);
@@ -16,7 +18,7 @@ export function nativeCheckablePredecessor(current) {
   return prior;
 }
 export function restoreNativeCheckablePolicy(source) {
-  const text = normalized(source);
+  const text = restorePassiveMainPolicy(source);
   if (!text.includes(ids[0])) {
     assert.ok(!text.includes(ids[1]), 'Unrecognized partial native registration');
     return text;
@@ -47,7 +49,7 @@ export function restoreNativeCheckableSuite(source) {
   assert.equal(hash(text), expected); return text;
 }
 export function restoreNativeCheckableProducer(source) {
-  const text = normalized(source);
+  const text = restorePassiveMainProducer(source);
   if (!text.includes('native checkable additive registration and predecessor conservation')) {
     assert.ok(!text.includes("'tests/material-parity/native-checkable-inputs.spec.mjs'"), 'Unrecognized native proof registration');
     return text;
