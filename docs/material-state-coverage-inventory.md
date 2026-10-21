@@ -4,6 +4,19 @@
 
 Updated October21. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- Native form-value core finding now has reviewed proposal22dfe00b8db5f815fb460847c2bdc39e8d60d8e54222266b5d7dc85cadaeb7b7
+  via existing saveReviewProposal,not canonical registration. It preserves all171
+  current definitions exactly and appends only core-native-checkable-form-value-
+  synthesizes-visible-label. Evidence receipts bind complete source,installed
+  module,both original/repeat reports/bundles/provenance/failures and verifier.
+  node scripts/review-native-checkable-value.mjs passes current independent replay,
+  unique-source pattern,complete predecessor and identifier checks. Scope explicitly
+  excludes checked/disabled/AX/activation/full Material paint. Implementation order:
+  core form-value/display-label separation before restoring native structure;never
+  erase submitted values as fixture compensation. Next integrate through existing
+  registration/predecessor-conservation mechanisms in a coherent batch;canonical
+  remains8259d4f7 with171 findings,all2311 cases partial. No new export justified yet.
+
 - Native checkable form-value investigation IN PROGRESS outside50315381:
   independent read-only scripts/check-public-native-checkable-value.mjs authenticates
   both public-native-checkable-value[-repeat]-20261021 captures against current

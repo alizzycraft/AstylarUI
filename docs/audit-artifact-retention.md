@@ -2,6 +2,12 @@
 
 ## Current versus historical evidence
 
+Retain source review22dfe00b8db5f815fb460847c2bdc39e8d60d8e54222266b5d7dc85cadaeb7b7
+and scripts/review-native-checkable-value.mjs. Existing proposal storage preserves
+all171 predecessor definitions and one new native checkable form-value finding.
+This is a pending review,not a replacement canonical package or successful scratch.
+Original/repeat captures and their failures remain required. No deletion follows.
+
 Retain both public-native-checkable-value-20261021 and public-native-checkable-
 value-repeat-20261021 original directories and external log pairs. Both are
 expected-failure captures,not successful scratch:each retains16 PNGs,producer,
