@@ -14,6 +14,18 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   stdout/stderr/resources and expansion-semantic-full-section-comparison-20261022
   log pair. Exact census,leaf/coverage reconciliation and independent cold replay
   remain pending;this is not case closure or rendering acceptance.
+- October22 census84176 and six-section leaf comparison84429 exit0. Exported
+  839 source paths/238 proofs/178 findings exactly match the frozen census.
+  Leaf comparison preserves all paths/container shapes:148 changed values comprise
+  98 producer receipts,48 control-proof hashes,one motion-report hash and176→178
+  finding count. Derived hashes still require reconciliation against actual rows.
+  Coverage conservation98918 exits0:15420 prior dependencies and complete prior
+  case/coverage records recover exactly after removing only68 expansion target
+  children/12 static AX children,168 added dependencies and reviewed policy/review
+  provenance. Zero case-status changes;rendering acceptance remains false.
+  Evidence:expansion-semantic-export-census-binding/receipt-leaf-comparison/
+  coverage-conservation-20261022 log pairs. Separate candidate import is running;
+  accepted796984 remains unchanged. Cold check/main import remain pending.
 
 - Scope/acceptance unchanged:36 families,2311 cases(436 static/1875 interaction),
   all2311 partial,0 complete,current rendering unverified. A documented failure
