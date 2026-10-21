@@ -172,8 +172,15 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   scripts/check-card-static-ax.mjs and card-static-ax-review-20261021 log pair
   authenticate all24 captures. Standalone authoring defect,not yet one of accepted
   175 source findings;not a core-generated heading or complete case closure.
-  Next:initial/current authoring history and coherent existing-schema registration/
-  evidence join;retain interaction/AT/anonymous-box/paint uncertainty.
+  Initial history now reauthenticated:whole2f440115 candidate already authors H2
+  and reference MAT-CARD-TITLE. No initial-runtime/intermediate-history/motive claim.
+  Pending source proposal617d82df has176 groups,complete175 accepted definitions
+  unchanged plus fixture-card-title-promoted-to-heading. Existing saveReviewProposal
+  digest roundtrip and byte-exact actual-AX verifier replay pass;terminal0 evidence
+  card-title-source-review-20261021. scripts/review-card-title-inputs.mjs binds
+  initial/current sources and all24 observations. Not registered or canonical yet.
+  Next:coherent existing-schema registration/evidence join;retain interaction/AT/
+  anonymous-box/paint uncertainty. Avoid another full export for metadata alone.
 - All original final full audit/browser/Material/TTS/unit/build/packed-consumer/
   capability/example/skill/diff gates remain. This is audit only;goal not complete.
 
