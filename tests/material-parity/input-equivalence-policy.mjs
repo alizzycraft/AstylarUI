@@ -2924,6 +2924,174 @@ export const sourceAuditDefinitions = Object.freeze([
     "recommendation": "Author sidenav content with the reference generic semantic contract while retaining its content and layout intent. Do not suppress MAIN roles in core or hide intended content to compensate.",
     "boundary": "Twelve static pairs only;not dynamic sidenav behavior,AT traversal,all header/description associations,layout/paint equivalence,initial runtime or compensation intent."
   }),
+  Object.freeze({
+  "id": "fixture-card-title-promoted-to-heading",
+  "introducedBy": "Initial2f440115 candidate authors H2 versus native MAT-CARD-TITLE;initial runtime and motive unproven",
+  "file": "examples/material-showcase/src/app/astylar.component.ts",
+  "pattern": "type: 'h2', id: 'card-title'",
+  "classification": "application-plugin-authoring-defect",
+  "owner": "Material showcase card title semantic element authoring",
+  "focusedProof": "node scripts/check-card-static-ax.mjs",
+  "observation": {
+    "component": "card-title",
+    "pairedStaticCases": 12,
+    "captures": 24,
+    "reference": "MAT-CARD-TITLE generic container with StaticText Project Atlas",
+    "astylar": "H2 heading level2 named Project Atlas with the same StaticText",
+    "stage": "authored title tag before semantic bridge projection"
+  },
+  "justification": "All12 pinned static pairs resolve actual AX nodes through backend DOM identity and preserve the same title text. Candidate explicitly authors H2;the reference custom element exposes generic. Complete current component/source-map bindings and initial Git source authenticate. This is a semantic authoring substitution,not a renderer-invented heading. Native header-text wrapper omission is separately observed and does not prove a core flex defect;the already-classified normal/nowrap and font-family inputs are not duplicate findings.",
+  "history": [
+    {
+      "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "sha256": "6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24",
+      "excerpt": "type: 'h2', id: 'card-title'"
+    },
+    {
+      "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+      "file": "examples/material-showcase/src/app/reference.component.ts",
+      "sha256": "2e070cc31b08750e07f6a8c5c3103607e5399291930b91d590140203be719c8e",
+      "excerpt": "<mat-card-title>Project Atlas</mat-card-title>"
+    }
+  ],
+  "evidence": [
+    {
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "sha256": "71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd"
+    },
+    {
+      "file": "examples/material-showcase/src/app/reference.component.ts",
+      "sha256": "debe55bc492d0fa1e48a9c7f09e1b668d435a2260588710207ab878b23c1d4aa"
+    },
+    {
+      "file": "scripts/capture-card-static-ax.mjs",
+      "sha256": "1c8042d5f0de8bf078a3a7197d9accdefbb01c7a70f1031edf5d0138702749ad"
+    },
+    {
+      "file": "scripts/check-card-static-ax.mjs",
+      "sha256": "dcfccbe84e46ac5e3cb3e632c479b9deb3c955b8a1e141a0ec0652eb05e23503"
+    },
+    {
+      "file": "scripts/check-card-recorded-nodes.mjs",
+      "sha256": "8905a8f74be4e40680c2a7d42bce99f8b1a36f89cc94cf48b1654305f352ce36"
+    },
+    {
+      "file": "artifacts/material-parity/card-static-ax-review-20261021.log",
+      "sha256": "624b2201a997a6a978ecc526c31e14b10b748415d699da297be081cc2b039fcb"
+    },
+    {
+      "file": "artifacts/material-parity/card-static-ax-20261021/latest-report.json",
+      "sha256": "1cef2e23c59a7d472bf949b68ff229e36c1a44b26e7018cd0723cfef5e87e3aa"
+    },
+    {
+      "file": "artifacts/material-parity/card-recorded-node-accounting-20261021.log",
+      "sha256": "205a8c88b98649fbf6c9ffd3916d1c4cf4cf15d5ebad2ccc5aa7720687dae431"
+    },
+    {
+      "file": "artifacts/material-parity/card-header-formatting-boundary-20261021.log",
+      "sha256": "61bcc1d37bd75e4a96cc8488102c57eb2844f2e145bd3c8886a94e634c56e1f2"
+    },
+    {
+      "file": "artifacts/material-parity/card-static-ax-20261021/card-light-1440x1000-dpr1-reference.json",
+      "sha256": "e775ebe61e61feca8b47dfd91f01576151f947f86e39193e19c0675c6d9ee5cb"
+    },
+    {
+      "file": "artifacts/material-parity/card-static-ax-20261021/card-light-1440x1000-dpr1-astylar.json",
+      "sha256": "2c357196bc596c17953f584f6001423d8a624147a561125076f6b749598d4142"
+    },
+    {
+      "file": "artifacts/material-parity/card-static-ax-20261021/card-light-768x1024-dpr1-reference.json",
+      "sha256": "20ac1cb9245dcb7c4f1dc912f9843299969af313042a986485704d9ac93670b0"
+    },
+    {
+      "file": "artifacts/material-parity/card-static-ax-20261021/card-light-768x1024-dpr1-astylar.json",
+      "sha256": "b30e832f5d651b6025759c84f8109fabaaf8aa302e212f9b365ff723eb9efd8c"
+    },
+    {
+      "file": "artifacts/material-parity/card-static-ax-20261021/card-light-390x844-dpr2-reference.json",
+      "sha256": "8eb888c884a008499f80267925caa19922fa33836b34c455dd875279bf805001"
+    },
+    {
+      "file": "artifacts/material-parity/card-static-ax-20261021/card-light-390x844-dpr2-astylar.json",
+      "sha256": "b3b72f2e0ae52ccfa5d4961e6b0c2b5a31c770dc9aab879157602c0e12a97da6"
+    },
+    {
+      "file": "artifacts/material-parity/card-static-ax-20261021/card-dark-1440x1000-dpr1-reference.json",
+      "sha256": "0e156d57fa35b0fd3a60c23178f5deda86e951bd00060732eeb95ed7d7a2b2a7"
+    },
+    {
+      "file": "artifacts/material-parity/card-static-ax-20261021/card-dark-1440x1000-dpr1-astylar.json",
+      "sha256": "dd46d881dffc64ce1318dc53632fa5e2d3ddee7767b8c00dd72067c57f2a9e63"
+    },
+    {
+      "file": "artifacts/material-parity/card-static-ax-20261021/card-dark-768x1024-dpr1-reference.json",
+      "sha256": "38fa7ea21f27cbdf06a1375d71bd8a3ca6c38587a19498feaffcd95ffce0d504"
+    },
+    {
+      "file": "artifacts/material-parity/card-static-ax-20261021/card-dark-768x1024-dpr1-astylar.json",
+      "sha256": "b6393454af6baa4931ad4eefd5d8b5babebfd105ae0cf3310534a5ab4b350ad5"
+    },
+    {
+      "file": "artifacts/material-parity/card-static-ax-20261021/card-dark-390x844-dpr2-reference.json",
+      "sha256": "ba8b943f39b6849f3ee550ae2ad59283b72968dd9ed1fb263930e03fd5b8a2d0"
+    },
+    {
+      "file": "artifacts/material-parity/card-static-ax-20261021/card-dark-390x844-dpr2-astylar.json",
+      "sha256": "7d54c8fa2ccf17d92fce9b73bb4dd6c87afb9286dc95b84395c34c18cd86ef9d"
+    },
+    {
+      "file": "artifacts/material-parity/card-static-ax-20261021/card-contrast-1440x1000-dpr1-reference.json",
+      "sha256": "53408255f644732bfcaa98b8a420b9ca6dd0071a23a82028a255e7aa0487d8e3"
+    },
+    {
+      "file": "artifacts/material-parity/card-static-ax-20261021/card-contrast-1440x1000-dpr1-astylar.json",
+      "sha256": "8229edf55a19f16ede157afecaaa09d4f6ae679138f3f3b136fa88970f124977"
+    },
+    {
+      "file": "artifacts/material-parity/card-static-ax-20261021/card-contrast-768x1024-dpr1-reference.json",
+      "sha256": "137eca13681b3147381049535dea0ad2724c2f752eec76d85ad1980cdc3f1d9c"
+    },
+    {
+      "file": "artifacts/material-parity/card-static-ax-20261021/card-contrast-768x1024-dpr1-astylar.json",
+      "sha256": "20b8c717a5ea3f045aaf8a7a9adce665cc53bc565d0a2a7daeee767dd2c9de79"
+    },
+    {
+      "file": "artifacts/material-parity/card-static-ax-20261021/card-contrast-390x844-dpr2-reference.json",
+      "sha256": "b9f6fa878b66e1104c3f71faa74d021fb1b236a7230b190635d583079710603f"
+    },
+    {
+      "file": "artifacts/material-parity/card-static-ax-20261021/card-contrast-390x844-dpr2-astylar.json",
+      "sha256": "24163255cf555788a9beee93bf75a8694e95307167e863bb51cfaa99fdff97c3"
+    },
+    {
+      "file": "artifacts/material-parity/card-static-ax-20261021/card-custom-1440x1000-dpr1-reference.json",
+      "sha256": "dee86cf8e25abab66342dea1208ded84274f97165ecab9f7aa80b4275d4f82e1"
+    },
+    {
+      "file": "artifacts/material-parity/card-static-ax-20261021/card-custom-1440x1000-dpr1-astylar.json",
+      "sha256": "b0ee8b57d045478e6741219496f097db153d45d1566867e1c3aa71db5f0756ae"
+    },
+    {
+      "file": "artifacts/material-parity/card-static-ax-20261021/card-custom-768x1024-dpr1-reference.json",
+      "sha256": "b228d82b55d8bfc7041cf5b0d8e9b30849d7a3c09b7684e965c06438c2990f51"
+    },
+    {
+      "file": "artifacts/material-parity/card-static-ax-20261021/card-custom-768x1024-dpr1-astylar.json",
+      "sha256": "6e2bb5a85551f48a792e06e560eb83dc592c98c185ffc73768ec0fef4a994860"
+    },
+    {
+      "file": "artifacts/material-parity/card-static-ax-20261021/card-custom-390x844-dpr2-reference.json",
+      "sha256": "cf44920608beb459a678096892c6541288d483be3b706a2c04fb310e656f98b7"
+    },
+    {
+      "file": "artifacts/material-parity/card-static-ax-20261021/card-custom-390x844-dpr2-astylar.json",
+      "sha256": "ff1d5e59b755948950a6a2c57fe36b6be994e5e236eae1f5d8d8a8d82253279a"
+    }
+  ],
+  "recommendation": "Preserve the reference title semantic contract and formatting ancestry in comparison authoring. Do not suppress correctly requested heading roles in core or tune title offsets to conceal unequal inputs.",
+  "boundary": "Actual AX for12 static contexts only;not interaction AX,AT traversal,all descriptions/associations,anonymous formatting,constrained wrapping,current paint,initial runtime or compensation motive."
+}),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({

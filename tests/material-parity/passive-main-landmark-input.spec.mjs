@@ -3,7 +3,9 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
+import { sourceAuditDefinitions as cardTitleRegisteredDefinitions } from './input-equivalence-policy.mjs';
+import { cardTitlePredecessor } from './card-title-registration.mjs';
+const sourceAuditDefinitions = cardTitlePredecessor(cardTitleRegisteredDefinitions);
 import { passiveMainPredecessor, restorePassiveMainPolicy, restorePassiveMainProducer,
   restorePassiveMainCaseSelection, restorePassiveMainRunnerSelection, restorePassiveMainLauncherSelection } from './passive-main-registration.mjs';
 const hash = value => createHash('sha256').update(value).digest('hex');

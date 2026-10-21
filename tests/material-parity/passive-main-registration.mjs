@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
+import { cardTitlePredecessor, restoreCardTitlePolicy } from './card-title-registration.mjs';
 const hash = value => createHash('sha256').update(value).digest('hex');
 const normalized = value => value.toString().replaceAll('\r\n', '\n');
 const ids = ['fixture-showcase-outer-and-semantic-page-duplicate-main-landmarks', 'fixture-sidenav-content-promoted-to-main-landmark'];
@@ -8,6 +9,7 @@ const vector = '1d87ea04c45cbd796bb6dc627f77e7349253ef0d8d1e25a40ca0c87ed633b474
 const policy = '7c42affa92ea9baae611d024f9bc6cb395f92cbf8ecbd71b4786b11e6ca784ac';
 const producer = 'c638b8ca8ab705a9cad00a6f6e7de9917d418bca31f53fef0df9f3ef6624006d';
 export function passiveMainPredecessor(current) {
+  current = cardTitlePredecessor(current);
   if (current.length !== 175) return current;
   assert.equal(hash(JSON.stringify(current)), vector);
   assert.deepEqual(current.slice(-2).map(row => row.id), ids);
@@ -16,7 +18,7 @@ export function passiveMainPredecessor(current) {
   return prior;
 }
 export function restorePassiveMainPolicy(source) {
-  const text = normalized(source);
+  const text = restoreCardTitlePolicy(source);
   if (!text.includes(ids[0])) { assert.ok(!text.includes(ids[1]), 'Partial landmark registration'); return text; }
   assert.equal(hash(text), policy);
   const ast = ts.createSourceFile('policy.mjs', text, 99, true);

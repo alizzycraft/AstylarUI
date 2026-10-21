@@ -189,6 +189,16 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   editing capture bytes or weakening the loader. Preserve both proposal attempts.
   Next:coherent source registration and explicit case-review selection;retain
   interaction/AT/anonymous-box/paint uncertainty. Avoid full export for metadata alone.
+- WORKING card source registration now has176 definitions,exact proposal617d82df,
+  preserving all175 predecessors. card-title-registration.mjs guards full vector/
+  policy hashes and restores complete accepted175 policy before existing historical
+  boundaries. Original landmark helper/suite recover byte-exactly after removing
+  only explicit delegation/prelude. Focused card/landmark/native/shared-button batch
+  passes13 tests/no skips(card-title-registration-owning-retry-20261021,terminal0).
+  First run retains one failed forged-ID control;guard now rejects partial card
+  registration,without weakening the control. Accepted canonical remains175/e828.
+  Next:source/proof inventory integration and explicit20dfb804 case selection,
+  coherent source conservation,then milestone export/cold/import when batch ready.
 - All original final full audit/browser/Material/TTS/unit/build/packed-consumer/
   capability/example/skill/diff gates remain. This is audit only;goal not complete.
 
