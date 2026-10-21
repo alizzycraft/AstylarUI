@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+Retain passive-table-header-observation-boundary-20261021 log/empty stderr.
+It authenticates24 original table captures and current authoring/source-map
+bindings,records target backend identities/properties/ancestry and distinguishes
+explicit scope input from missing platform association observations. Raw AX/DOM
+captures remain required;this bounded inspection is not a new core finding or
+permission to clear semantic remaining work. Frozen export inputs are unchanged.
+
 Retain passive-main-export-source-freeze-20261021 log pair:complete804/234/175
 census replays byte-exact against frozen source. Coherent export66401 is live
 (launcher24728,producer18488),--static-ax;retain passive-main-coherent-export-

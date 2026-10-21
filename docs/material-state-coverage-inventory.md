@@ -86,6 +86,15 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   source hashes:MAIN versus MAT-SIDENAV-CONTENT already appears in initial inputs.
   Evidence:sidenav-main-authoring-history-20261021 log pair;not proof of initial
   runtime,intent or all intervening revisions,and not a later-compensation claim.
+- Table header boundary narrowed for all12 static pairs/24 retained captures:
+  actual TH/TD tags and row/rowgroup/table ancestry agree;candidate explicitly
+  authors scope=col while native scope is absent. No target headers/span attributes
+  or direct header-cell association properties are recorded(readonly/required only
+  on TH,empty TD properties). Thus matching topology does not prove actual platform
+  header-to-cell associations/AT traversal;absence of recorded relations is not a
+  demonstrated association failure. Evidence:passive-table-header-observation-
+  boundary-20261021 log pair,current source/source-map receipts reauthenticated.
+  No new core finding,scope-equivalence claim,registration or case closure.
 - Reviewed source proposal e89ad4a82100f3671f8d15210f19819eac4914a3e37fde47b200d734687fe104
   preserves complete173 accepted definitions and records175 proposed findings.
   Extends shared page-MAIN observation from12 to48 static pairs and separately
