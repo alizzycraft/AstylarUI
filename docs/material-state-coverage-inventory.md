@@ -4,6 +4,22 @@
 
 Updated October21. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- Radio circle-request question answered for136 mapped owners:four native border
+  sides agree per ring,but60 differ from candidate ring color(52 enabled-unselected,
+  eight disabled-selected). All16 disabled rings request native own opacity.38
+  versus candidate1;all60 enabled-selected ring colors agree. Native active rules
+  explicitly select unselected/hover/focus/disabled Material tokens;candidate source
+  uses onSurface base and primary selected,with no disabled ring opacity rule.
+  Evidence:radio-ring-inputs-20261021.log via scripts/check-radio-ring-inputs.mjs;
+  original trees and current71e2d41f source/existing applicability receipts bind.
+  First divergence is unequal requested state/theme paint,not demonstrated core
+  color/opacity rendering. This is distinct from disabled LABEL ink and core form-
+  value label creation. Ancestor/composited paint,inner-circle scale representation,
+  ripple/animation and full runtime remain open;do not claim pixel equivalence.
+  New core proposal22dfe remains pending canonical registration;batch this related
+  input attribution before changing producer fingerprints rather than republishing
+  the full canonical package after each standalone observation.
+
 - Native form-value core finding now has reviewed proposal22dfe00b8db5f815fb460847c2bdc39e8d60d8e54222266b5d7dc85cadaeb7b7
   via existing saveReviewProposal,not canonical registration. It preserves all171
   current definitions exactly and appends only core-native-checkable-form-value-

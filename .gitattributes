@@ -74,4 +74,6 @@ artifacts/material-parity/public-native-checkable-value-repeat-20261021/audit.js
 artifacts/material-parity/public-native-checkable-value*.stderr.log binary
 artifacts/material-parity/native-checkable-value-independent-20261021.log -text
 scripts/review-native-checkable-value.mjs -text
+scripts/check-radio-ring-inputs.mjs -text
+artifacts/material-parity/radio-ring-inputs-20261021.log -text
 artifacts/material-parity/working-audit/proposals/22dfe00b8db5f815fb460847c2bdc39e8d60d8e54222266b5d7dc85cadaeb7b7.json -text

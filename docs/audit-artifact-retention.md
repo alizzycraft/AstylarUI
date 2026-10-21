@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+Retain scripts/check-radio-ring-inputs.mjs and radio-ring-inputs-20261021 log/empty
+stderr pair. It reuses authenticated136-owner descendant mapping and original
+trees;no browser recapture. Four-side color and own-opacity request differences
+are scoped separately from actual paint and native form-value core reproduction.
+Existing current-authoring applicability receipt remains unchanged. This bounded
+evidence stays outside accepted50315381 and does not authorize deleting originals.
+
 Retain source review22dfe00b8db5f815fb460847c2bdc39e8d60d8e54222266b5d7dc85cadaeb7b7
 and scripts/review-native-checkable-value.mjs. Existing proposal storage preserves
 all171 predecessor definitions and one new native checkable form-value finding.
