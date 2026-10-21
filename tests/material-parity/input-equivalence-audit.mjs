@@ -8922,6 +8922,16 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'tests/material-parity/native-checkable-inputs.spec.mjs',
+    'tests/material-parity/native-checkable-registration.mjs',
+    'scripts/audit-public-native-checkable-value.mjs',
+    'scripts/check-public-native-checkable-value.mjs',
+    'scripts/check-radio-ring-inputs.mjs',
+    'scripts/review-native-checkable-value.mjs',
+    'scripts/review-radio-ring-inputs.mjs',
+    'artifacts/material-parity/working-audit/proposals/8806b3eca09284e7de6c14671b40897ae441fdb1f3c2e285a1210bccebe87774.json',
+    'artifacts/material-parity/native-checkable-value-independent-20261021.log',
+    'artifacts/material-parity/radio-ring-inputs-20261021.log',
     'scripts/export-material-input-audit-current-ancestry.mjs',
     'scripts/audit-material-case-index-conservation.mjs',
     'tests/material-parity/case-index-historical-conservation.spec.mjs',
@@ -9709,6 +9719,12 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/native-checkable-inputs.spec.mjs', /test\('native checkable registration preserves all prior findings and distinct core authoring causes'/,
+      'native checkable additive registration and predecessor conservation', 'All171 prior findings preserve exactly;two reviewed findings distinguish core form-value label construction from unequal radio state paint inputs. Whole-source policy and historical suite boundaries reject unrelated drift. Not canonical publication or complete case inspection.'),
+    proof(root, 'tests/material-parity/native-checkable-inputs.spec.mjs', /test\('public native checkable form values retain repeatable pixel failures and owning method binding'/,
+      'public native checkable form-value label failure and full method binding', 'Both package-root16-capture runs retain four rendering failures each. All32 PNGs and2517 dependencies per run authenticate;three complete current/installed/bundle methods bind and four semantic drift controls reject. No full native or Material rendering acceptance.'),
+    proof(root, 'tests/material-parity/native-checkable-inputs.spec.mjs', /test\('radio ring state paint inputs replay complete retained population'/,
+      'radio ring state paint requests before rendering', 'All136 retained owners replay with60 color differences and16 disabled own-opacity differences. Native four-side/token-rule inputs and current authoring bind. Not composited pixels,inner-circle/ripple equivalence,AX or complete current case rendering.'),
     proof(root, 'tests/material-parity/button-touch-inputs.spec.mjs', /test\('shared button touch proposal preserves all prior definitions and the existing core unit limitation'/,
       'shared button touch additive registration preserves prior definitions', 'The exact proposed171-definition vector preserves all170 predecessors and the existing documented transform-unit limitation. The added descendant omission remains an authoring finding,not a duplicate core finding or proof of600 activations.'),
     proof(root, 'tests/material-parity/button-touch-inputs.spec.mjs', /test\('shared button touch retained input proof replays all owners without promoting suppressed targets'/,

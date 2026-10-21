@@ -4,6 +4,25 @@
 
 Updated October21. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- WORKING registration now173 source findings/232 focused proofs/790 source paths;
+  accepted canonical remains8259d4f7 with171/229/780 until coherent export and
+  independent verification/import. New native-checkable registration stage recovers
+  exact prior policy13b2→9734 and producer74c9→cca4 sources;the historical171-vector
+  remains exact30614a96. Original historical assertions receive that explicit
+  population,not broadened expected counts. Three new current tests and seven
+  historical registration checks pass. First partial-ID guard failure is retained
+  as a clearly labelled tool-output transcription;the guard is tightened,not waived.
+- Census native-checkable-registration-census-20261021.log authenticates all171
+  predecessor findings,229 proof claims and780 source paths:only two findings,
+  three proofs,ten source paths added;six prior source fingerprints change and
+  explicit proof-line shifts preserve all other claims. Full original public
+  failures and radio authoring evidence remain. Native form-value label synthesis
+  is core;radio ring token substitution is authoring. No fixture/renderer changes,
+  case promotion or current rendering acceptance. All2311 cases remain partial.
+  Six original button predecessor checks also pass(terminal0,17616ms). Next:commit
+  the verified source batch,then one coherent canonical export/conservation/cold/
+  import milestone. Original final browser/unit/build/consumer gates remain required.
+
 - Radio ring history/classification complete within the bounded136-owner input
   question. Exact initial2f440115 and laterf3c8254c sources both author onSurface
   base/primary selected with no circle-opacity rule despite later dot/layout

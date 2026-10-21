@@ -2,6 +2,16 @@
 
 ## Current versus historical evidence
 
+Retain native-checkable-registration-census-20261021,registration-owning-20261021,
+historical-owning-20261021 and button-predecessor-owning-20261021 log pairs,plus
+native-checkable-registration-initial-failure-20261021.md. The latter is explicitly
+a transcription of the original terminal1 tool result,not invented raw stdout.
+Three current tests/seven historical checks pass;button six-test successor is
+separate. New exact registration stage preserves all171/229/780 prior findings/
+proof claims/source paths while adding2/3/10. Working173/232/790 is not published
+canonical acceptance. Preserve previous accepted package/census/proposals/captures;
+do not remove old evidence or replace original source receipts.
+
 Retain scripts/review-radio-ring-inputs.mjs and proposal8806b3eca09284e7de6c14671b40897ae441fdb1f3c2e285a1210bccebe87774.
 It preserves complete172-definition predecessor22dfe and adds one radio-ring state
 paint-input finding. Two whole historical Git file hashes and exact ring/dot rule

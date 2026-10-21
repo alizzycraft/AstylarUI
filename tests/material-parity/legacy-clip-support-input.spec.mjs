@@ -3,7 +3,9 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { sourceAuditDefinitions as registeredSourceAuditDefinitions } from './input-equivalence-policy.mjs';
+import { sourceAuditDefinitions as nativeRegisteredSourceAuditDefinitions } from './input-equivalence-policy.mjs';
+import { nativeCheckablePredecessor } from './native-checkable-registration.mjs';
+const registeredSourceAuditDefinitions = nativeCheckablePredecessor(nativeRegisteredSourceAuditDefinitions);
 import { sharedButtonTouchDefinitions } from './button-touch-registration.mjs';
 // Explicit pre-touch population;original historical assertions below are unchanged.
 assert.equal(registeredSourceAuditDefinitions.length, 171);

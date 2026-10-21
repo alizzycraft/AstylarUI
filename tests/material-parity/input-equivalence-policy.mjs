@@ -2320,6 +2320,179 @@ export const sourceAuditDefinitions = Object.freeze([
     "justification": "Exactly600 retained owners in480 cases across core,button,menu,bottom-sheet,dialog,snack-bar and tooltip have a native48px touch-span descendant but no authored candidate child. Preserve suppression:276 visible pointer-enabled requests,294 display-none and30 pointer-events-none;these are not600 live activation tests. Native matched rules retain top50% and translateY(-50%). One fresh primary-button pair shows native outside-host activation versus candidate container clicks. Package-root equal-input controls support descendant hit testing,but the actual centered percentage transform exposes the existing documented unit-loss limitation;literal-pixel controls pass across DPR1/2 and translated surfaces. First input divergence is authored descendant omission;repair the shared core percentage-reference semantics before restoring native structure/CSS. Never ship the diagnostic fixed-position or literal-pixel variants as fixture compensation. Initial/current constructors and36 factory outputs bind current authoring;this does not prove every historical revision,motive,all controls or full current rendering.",
     "focusedProof": "scripts/audit-material-button-touch-inputs.mjs:600 exact native/candidate owners and1200 rejection controls; scripts/audit-public-button-touch-target.mjs:full failing centered-percentage matrix and passing plain/literal controls"
   }),
+  Object.freeze({
+    "id": "core-native-checkable-form-value-synthesizes-visible-label",
+    "introducedBy": "Present in current source and both authenticated installed-package captures; introduction revision and compensation motive not established",
+    "file": "src/app/services/dom/input/checkbox.manager.ts",
+    "pattern": "const textContent = input\\.value \\|\\| 'Option';",
+    "classification": "confirmed-core-renderer-defect",
+    "owner": "CheckboxManager native checkbox/radio label construction before text rasterization and projection",
+    "focusedProof": "node scripts/check-public-native-checkable-value.mjs",
+    "observation": {
+      "component": [
+        "checkbox",
+        "radio"
+      ],
+      "state": "unchecked,enabled,appearance:none,no textContent",
+      "property": "value",
+      "reference": "Form value changes no rendered pixels",
+      "astylar": "value:VALUEONLY creates a visible label_target mesh and text pixels",
+      "stage": "createCheckbox/createRadioButton request createLabelMesh;createLabelMesh substitutes input.value for visible text"
+    },
+    "justification": "Two package-root equal-input runs independently verify16 captures each atDPR1/2. Changing only omitted value to VALUEONLY changes zero reference pixels but580/1903 candidate pixels for both kinds in each run. Current TS,installed JS and both actual bundles bind all three complete owning methods after explicit compiler-only transformations. Label metadata corroborates the pixels;all2517 bundle dependencies per run authenticate. This is not a cursor,coordinate or text-measurement diagnosis and does not depend on replacing Material role-DIV authoring.",
+    "publicReproduction": {
+      "verificationCommand": "node scripts/check-public-native-checkable-value.mjs",
+      "captureCommand": "node scripts/audit-public-native-checkable-value.mjs --output=artifacts/material-parity/NEW-UNUSED-DIRECTORY",
+      "expectedCaptureExit": 1,
+      "runs": 2,
+      "capturesPerRun": 16,
+      "renderingFailuresPerRun": 4,
+      "semanticDriftControls": 4,
+      "currentRenderingAccepted": false
+    },
+    "evidence": [
+      {
+        "file": "src/app/services/dom/input/checkbox.manager.ts",
+        "sha256": "e12976121d07bd5cd622b055352d981dd0ee4dd2874590bd85fde10219ec81f9"
+      },
+      {
+        "file": "scripts/audit-public-native-checkable-value.mjs",
+        "sha256": "ef9ca206889593a6c09b81c6221c565ad8058c98f957512db21d3899fc703950"
+      },
+      {
+        "file": "scripts/check-public-native-checkable-value.mjs",
+        "sha256": "7f3ff2c868ce9dc6c5eb52ce28f1e5f66db2fcd96e1bfb29bc743c72eb6998fc"
+      },
+      {
+        "file": "scripts/review-native-checkable-value.mjs",
+        "sha256": "4f12176d582b88649b42e78ec2711307290f797657b43068e39712916108cced"
+      },
+      {
+        "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/input/checkbox.manager.js",
+        "sha256": "f093316c5d621522710a4fc21bad7265eee731bf454ab354750fade0126e0f1f"
+      },
+      {
+        "file": "artifacts/material-parity/native-checkable-value-independent-20261021.log",
+        "sha256": "c4063322fca0929612e744fa43ff35f316a669b4e7c5b8b5828a4802b450c46d"
+      },
+      {
+        "file": "artifacts/material-parity/public-native-checkable-value-20261021/latest-report.json",
+        "sha256": "46df9f4b9b515cf2e4b043d526af98e4aeedf85c18791735d0adfc3082dc738b"
+      },
+      {
+        "file": "artifacts/material-parity/public-native-checkable-value-20261021/provenance.json",
+        "sha256": "9826d50da26bb9b022cd4bc134ca7f63dbac2e551bce162942d88131f0334c08"
+      },
+      {
+        "file": "artifacts/material-parity/public-native-checkable-value-20261021/audit.js",
+        "sha256": "6416f9e90da4c7127cef7f8f8f69c71da3718cd3481bac9cbec84760f73eeaa1"
+      },
+      {
+        "file": "artifacts/material-parity/public-native-checkable-value-20261021/producer.mjs",
+        "sha256": "ef9ca206889593a6c09b81c6221c565ad8058c98f957512db21d3899fc703950"
+      },
+      {
+        "file": "artifacts/material-parity/public-native-checkable-value-20261021/failure.json",
+        "sha256": "15bdb2ba906a0ee168b723cc02a4847840f6bc39eb60175458cf1acb468341bf"
+      },
+      {
+        "file": "artifacts/material-parity/public-native-checkable-value-repeat-20261021/latest-report.json",
+        "sha256": "46df9f4b9b515cf2e4b043d526af98e4aeedf85c18791735d0adfc3082dc738b"
+      },
+      {
+        "file": "artifacts/material-parity/public-native-checkable-value-repeat-20261021/provenance.json",
+        "sha256": "9826d50da26bb9b022cd4bc134ca7f63dbac2e551bce162942d88131f0334c08"
+      },
+      {
+        "file": "artifacts/material-parity/public-native-checkable-value-repeat-20261021/audit.js",
+        "sha256": "6416f9e90da4c7127cef7f8f8f69c71da3718cd3481bac9cbec84760f73eeaa1"
+      },
+      {
+        "file": "artifacts/material-parity/public-native-checkable-value-repeat-20261021/producer.mjs",
+        "sha256": "ef9ca206889593a6c09b81c6221c565ad8058c98f957512db21d3899fc703950"
+      },
+      {
+        "file": "artifacts/material-parity/public-native-checkable-value-repeat-20261021/failure.json",
+        "sha256": "15bdb2ba906a0ee168b723cc02a4847840f6bc39eb60175458cf1acb468341bf"
+      }
+    ],
+    "recommendation": "Separate native checkbox/radio form value from explicit associated label content at the core construction boundary. Preserve submitted value and label/AX contracts;then prove explicit label and no-label controls. Do not remove values or replace native controls with role-DIV composites to hide this defect.",
+    "boundary": "Unchecked enabled minimal public inputs only. Does not establish full native/Material paint,checked/disabled behavior,AX associations,activation,event order,animation,all case closure or historical compensation motive. Existing button value-label typography instrumentation and showcase radio Space/structure findings remain distinct."
+  }),
+  Object.freeze({
+    "id": "fixture-radio-ring-state-paint-token-substitution",
+    "introducedBy": "Initial2f440115 and laterf3c8254c both retain the base/selected token substitution;not every revision or compensation motive",
+    "file": "examples/material-showcase/src/app/astylar.component.ts",
+    "pattern": "selector: '\\.radio-ring',",
+    "classification": "application-plugin-authoring-defect",
+    "owner": "Material showcase radio state/theme border-color and disabled circle-opacity authoring",
+    "focusedProof": "node scripts/check-radio-ring-inputs.mjs; node scripts/review-radio-ring-inputs.mjs",
+    "observation": {
+      "component": "radio",
+      "owners": 136,
+      "cases": 68,
+      "colorDifferences": 60,
+      "opacityDifferences": 16,
+      "enabledUnselectedColorDifferences": 52,
+      "disabledSelectedColorDifferences": 8,
+      "stage": "Original native matched component rules and computed paint requests differ before candidate rendering"
+    },
+    "justification": "All136 rings map four native border sides to the candidate ring.52 enabled-unselected and8 disabled-selected color inputs differ;all16 disabled own-opacity inputs differ(.38 versus1).60 enabled-selected colors agree. Native active rules distinguish component unselected,hover,focus,selected and disabled tokens;current candidate uses onSurface base and primary selected without disabled ring opacity. Existing complete current-authoring applicability binds all68 source subtrees/styles. Two exact historical files preserve these color choices despite dot/layout changes. This is unequal requested paint,not proof that core misrenders equal color/opacity inputs.",
+    "history": [
+      {
+        "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24",
+        "rules": [
+          "{ selector: '.radio-ring', position: 'relative', width: '20px', height: '20px', boxSizing: 'border-box', borderWidth: '2px', borderStyle: 'solid', borderColor: theme.onSurface, borderRadius: '10px' },",
+          "{ selector: '.radio-ring.selected', borderColor: theme.primary },",
+          "{ selector: '.radio-dot', position: 'absolute', top: '3px', left: '3px', width: '10px', height: '10px', borderRadius: '5px', background: theme.primary },"
+        ]
+      },
+      {
+        "revision": "f3c8254c2aa63197c03e0fb2bd43cc98c0e57fed",
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "944417c135e7f917f88ff9772096d2b527b47c1c9911369bcecef71ed540d94c",
+        "rules": [
+          "{ selector: '.radio-ring', position: 'relative', zIndex: '2', width: '20px', height: '20px', boxSizing: 'border-box', borderWidth: '2px', borderStyle: 'solid', borderColor: theme.onSurface, borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' },",
+          "{ selector: '.radio-ring.selected', borderColor: theme.primary },",
+          "{ selector: '.radio-dot', width: '10px', height: '10px', flexShrink: '0', borderRadius: '5px', background: theme.primary },"
+        ]
+      }
+    ],
+    "evidence": [
+      {
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd"
+      },
+      {
+        "file": "scripts/check-radio-ring-inputs.mjs",
+        "sha256": "fae0f09d82707a929e24ee424fbbaf7fd5bf53ddb0f38d91a823e6832330fba2"
+      },
+      {
+        "file": "scripts/review-radio-ring-inputs.mjs",
+        "sha256": "fc25c9dd753358e7243f35ad883a3eb77e7d64044f32ff33985de73248a83968"
+      },
+      {
+        "file": "artifacts/material-parity/radio-ring-inputs-20261021.log",
+        "sha256": "213e5605f47fe813e0bd029ecf9372e2ffc08ec4de71d61d4d4ea6f0d42bc84b"
+      },
+      {
+        "file": "artifacts/material-parity/radio-descendant-inputs-20261021.log",
+        "sha256": "aa8c59ff5c9e751bb0ff0b2f391e43d57409ef6bf0d32bd7f2daa4fcd3e0b355"
+      },
+      {
+        "file": "artifacts/material-parity/radio-authoring-applicability-20261021.log",
+        "sha256": "a88213f0b0b55320e75b092d2eed3596fdfae36148b16a2fb3c9b3f0385ac2eb"
+      },
+      {
+        "file": "artifacts/material-parity/working-audit/proposals/22dfe00b8db5f815fb460847c2bdc39e8d60d8e54222266b5d7dc85cadaeb7b7.json",
+        "sha256": "d72fda1fb78957bb1d1dfe832312fa25dffe75933825fb33e3b7443ed0a23a24"
+      }
+    ],
+    "recommendation": "Restore original component state/theme paint requests with original structure/CSS before evaluating core paint. Preserve disabled circle opacity separately from label opacity and selected/unselected/hover/focus tokens. Do not tune sampled colors or opacity to imitate a screenshot.",
+    "boundary": "Four-side requested color and own opacity only. Ancestor compositing,inner-dot scale equivalence,animated ripple paint,actual pixels,AX,activation and complete current case rendering remain open. Distinct from disabled-label ink and native form-value label synthesis. Historical source snapshots do not establish motive or a first-bad runtime revision."
+  }),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({

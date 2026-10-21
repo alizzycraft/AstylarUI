@@ -3,7 +3,9 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
+import { sourceAuditDefinitions as nativeRegisteredSourceAuditDefinitions } from './input-equivalence-policy.mjs';
+import { nativeCheckablePredecessor } from './native-checkable-registration.mjs';
+const sourceAuditDefinitions = nativeCheckablePredecessor(nativeRegisteredSourceAuditDefinitions);
 
 const hash = value => createHash('sha256').update(value).digest('hex');
 function captured(file, sha256) {

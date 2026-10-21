@@ -76,6 +76,12 @@ artifacts/material-parity/native-checkable-value-independent-20261021.log -text
 scripts/review-native-checkable-value.mjs -text
 scripts/check-radio-ring-inputs.mjs -text
 scripts/review-radio-ring-inputs.mjs -text
+tests/material-parity/native-checkable-registration.mjs -text
+tests/material-parity/native-checkable-inputs.spec.mjs -text
+artifacts/material-parity/native-checkable-registration-census-20261021.log -text
+artifacts/material-parity/native-checkable-registration-owning-20261021.log -text
+artifacts/material-parity/native-checkable-historical-owning-20261021.log -text
+artifacts/material-parity/native-checkable-button-predecessor-owning-20261021.log -text
 artifacts/material-parity/working-audit/proposals/8806b3eca09284e7de6c14671b40897ae441fdb1f3c2e285a1210bccebe87774.json -text
 artifacts/material-parity/radio-ring-inputs-20261021.log -text
 artifacts/material-parity/working-audit/proposals/22dfe00b8db5f815fb460847c2bdc39e8d60d8e54222266b5d7dc85cadaeb7b7.json -text

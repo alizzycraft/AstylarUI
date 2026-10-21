@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import ts from 'typescript';
 import path from 'node:path';
+import { nativeCheckablePredecessor, restoreNativeCheckablePolicy, restoreNativeCheckableSuite, restoreNativeCheckableProducer } from './native-checkable-registration.mjs';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
 const normalized = value => value.toString().replaceAll('\r\n', '\n');
@@ -35,7 +36,7 @@ const files = [
 
 // Exact additive source boundary;never rewrite a captured receipt on disk.
 export function restoreSharedButtonTouchPolicy(source) {
-  const text = normalized(source);
+  const text = restoreNativeCheckablePolicy(source);
   if (!text.includes(id)) return text;
   assert.equal(hash(text), '9734869f4dcc4777c4c18bacb5fed030c7cf01fd3c85757200624ecb72974ae3');
   const tree = ts.createSourceFile('policy.mjs', text, 99, true);
@@ -48,7 +49,7 @@ export function restoreSharedButtonTouchPolicy(source) {
   return prior;
 }
 export function restoreSharedButtonTouchProducer(source) {
-  let text = normalized(source);
+  let text = restoreNativeCheckableProducer(source);
   const launcher = "    'scripts/export-material-input-audit-current-ancestry.mjs',\n";
   if (text.includes(launcher)) {
     assert.equal(hash(text), 'cca481561332a3ae872d49318014f5c4faa0e37cf6f03503e4a7c85024e5c284');
@@ -75,6 +76,7 @@ export function restoreSharedButtonTouchProducer(source) {
   return prior;
 }
 export function sharedButtonTouchDefinitions(current) {
+  current = nativeCheckablePredecessor(current);
   if (current.length !== 171) return current;
   // Exact proposal group and predecessor digests avoid a new untracked I/O read.
   assert.equal(hash(JSON.stringify(current)), '30614a9632c7a2e4f08220fe3fa8bc52773eaef4a92b352231631410341fa9b7');
@@ -108,7 +110,7 @@ export function readSharedButtonPredecessorSource(file, ...args) {
   return typeof actual === 'string' ? restored : Buffer.from(restored);
 }
 export function restoreSharedButtonSuitePrelude(source) {
-  let text = normalized(source);
+  let text = restoreNativeCheckableSuite(source);
   const current = "import { sourceAuditDefinitions as registeredSourceAuditDefinitions } from './input-equivalence-policy.mjs';\n"
     + "import { sharedButtonTouchDefinitions } from './button-touch-registration.mjs';\n"
     + '// Explicit pre-touch population;original historical assertions below are unchanged.\n'
