@@ -4,6 +4,17 @@
 
 Updated October21. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- October22 reconciliation:expansion export17464 is TERMINAL SUCCESS(exit0,
+  2959235ms),not a live job. Candidate3175514b has178 findings;accepted796984e0
+  remains the working pointer pending conservation,cold check and import.
+  Full80-section comparison63092 exits0:70 unchanged/10 changed(source inventories,
+  coverage and six propagated-receipt sections). Compressed/decoded hashes and
+  sizes authenticate;the accepted predecessor's retained80 section receipts are
+  reused,not rescanned. Evidence:expansion-semantic-coherent-export-20261021
+  stdout/stderr/resources and expansion-semantic-full-section-comparison-20261022
+  log pair. Exact census,leaf/coverage reconciliation and independent cold replay
+  remain pending;this is not case closure or rendering acceptance.
+
 - Scope/acceptance unchanged:36 families,2311 cases(436 static/1875 interaction),
   all2311 partial,0 complete,current rendering unverified. A documented failure
   counts as inspected evidence,not a rendering pass or automatic whole-case closure.

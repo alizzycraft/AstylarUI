@@ -1,0 +1,851 @@
+{
+  "acceptedPointer": {
+    "generation": "796984e0bef4a637f55360ead756bbbe8cf047045a7a2d06ebf5d6fb49a0f4af",
+    "indexSha256": "dcca1c764f991591ab6ddcda097acabf5413a3f9ef5990e2e387e6606dafd56c"
+  },
+  "previous": {
+    "manifest": {
+      "format": "astylar-material-input-audit-gzip",
+      "formatVersion": 1,
+      "auditSchemaVersion": 3,
+      "payload": "material-input-equivalence-audit.json.gz",
+      "encoding": "utf-8",
+      "compression": "gzip",
+      "compressedBytes": 87817974,
+      "compressedSha256": "796984e0bef4a637f55360ead756bbbe8cf047045a7a2d06ebf5d6fb49a0f4af",
+      "uncompressedBytes": 2333095298,
+      "uncompressedSha256": "ab82d93b725b718d8d1d73d67fa9c2b39f07a2fe4914c7ec46010aa1dee81e50"
+    },
+    "sections": [
+      {
+        "name": "schemaVersion",
+        "tokens": 1,
+        "sha256": "cb24d699cb5cc700d7da0418cc632783fe69e883f1ce1336db50244bd5c0aaae"
+      },
+      {
+        "name": "generatedFrom",
+        "tokens": 86717,
+        "sha256": "9ff2497046a7a9774bee681852275f8398fff24fdc0db0ffa4ea13800a36da3a"
+      },
+      {
+        "name": "contract",
+        "tokens": 17,
+        "sha256": "d4de6dc0bbe01eba0882fb0db5b82de5337d4f60ceb5f845add495a06bf1c634"
+      },
+      {
+        "name": "environment",
+        "tokens": 51,
+        "sha256": "7478a42f4d7bd7dcee6564835f10ec97bca53a39a8d6bb9c597cc2cb722fe52f"
+      },
+      {
+        "name": "sourceFingerprints",
+        "tokens": 8191,
+        "sha256": "5458cd9d51873742700ea19f6187905b1df297bc0d4be60a09be6539066c69bc"
+      },
+      {
+        "name": "reviewedValueNormalizations",
+        "tokens": 101,
+        "sha256": "6a26d7e7f613692428cfbfe579b094dbec4dfd6171f9f56a8aa8960d90a370bc"
+      },
+      {
+        "name": "coverage",
+        "tokens": 10019096,
+        "sha256": "9485c060c5a3628d8fa468026b057d4e6c6055d11c784f217767492600515fb1"
+      },
+      {
+        "name": "supplementalBehavior",
+        "tokens": 88926,
+        "sha256": "a7c48b699fe5321044d3ec478eca8d861907ac285cba429397963711fbe6a725"
+      },
+      {
+        "name": "supplementalOverlays",
+        "tokens": 44710,
+        "sha256": "a70aecf151fe4841a976c107632d28109a06d1c020caee0e1a786b5642f15c33"
+      },
+      {
+        "name": "supplementalSlider",
+        "tokens": 63996,
+        "sha256": "915cc1977c9bfc600275d1803f68d2950890791dd88b026744c08fdff5361733"
+      },
+      {
+        "name": "supplementalCalendarClose",
+        "tokens": 53860,
+        "sha256": "f1f6cdc031fc924d86aaf9660ec42fd856558f0ae6860a785b4a5b2ca7495439"
+      },
+      {
+        "name": "supplementalTooltipState",
+        "tokens": 458852,
+        "sha256": "57aaad51362065b3ff54a7dabbba402da42bfc6b7353e0c2665a9b7056c8c03d"
+      },
+      {
+        "name": "supplementalPaginatorNavigation",
+        "tokens": 1945586,
+        "sha256": "a59f5cf79d5312f10f135d7bb5220081aae21b509014ec861319c4207228cd1b"
+      },
+      {
+        "name": "normalLineBoxes",
+        "tokens": 49231,
+        "sha256": "d056bbb3934c6ff7c38b1bbec52de711ae5dd38c729e897b01b378a7f24aaccd"
+      },
+      {
+        "name": "controlLineBoxes",
+        "tokens": 768442,
+        "sha256": "f25c5a6667cd63031d6ac70d42925381b8d73198870651a305ed4547fc319204"
+      },
+      {
+        "name": "supplementalLineBoxes",
+        "tokens": 56027,
+        "sha256": "525288c68792ab6ebb72a6a5749a132add65b92998690d38b966eeff8f7e1177"
+      },
+      {
+        "name": "summary",
+        "tokens": 237,
+        "sha256": "f870829099a963d28c9d36387910396b24a1db65a7afabb0cae7152f4d7ae8f3"
+      },
+      {
+        "name": "discrepancies",
+        "tokens": 27610660,
+        "sha256": "d0d159c8dbfac205cc102297ab49e7db142a5491d3aca4e17bcc39c47ab81bda"
+      },
+      {
+        "name": "structureEvidence",
+        "tokens": 15564,
+        "sha256": "fe1ed12116a80b361e3b417634645e6e4468910635ef184367fcc30f856a67b7"
+      },
+      {
+        "name": "elementInventory",
+        "tokens": 6012435,
+        "sha256": "1068b27441db9486714c4b171036ffb62dd39a7f3d5a29e67181ecc7d227766f"
+      },
+      {
+        "name": "visibleOverflowInputs",
+        "tokens": 329941,
+        "sha256": "9ed5254745c86048b29a84091a3971906f63b4383f5c8759f519765baa0523c6"
+      },
+      {
+        "name": "borderInitialInputs",
+        "tokens": 485592,
+        "sha256": "3e1d50e4900004ef79eca33c10dda908558c6b037bcbf0f49c6365161b7f905b"
+      },
+      {
+        "name": "buttonBorderResetInputs",
+        "tokens": 110513,
+        "sha256": "13f0f43ffa6983bccdd438e35db6393d3f3c284086f780a53127c3a0784ea01a"
+      },
+      {
+        "name": "outlineTokenInputs",
+        "tokens": 65069,
+        "sha256": "7083673a4ac99b94655de73bc4f457a8168b8b58c0a00b6f893d6203e8a522ef"
+      },
+      {
+        "name": "chipOutlineInputs",
+        "tokens": 259501,
+        "sha256": "bd21fb2e841e2efe383da91e051f84250cc34969c9090b8719de8580e1d32873"
+      },
+      {
+        "name": "nonGridTemplateInputs",
+        "tokens": 246385,
+        "sha256": "5b0a59d5f4b1ed1913574ef31823e11e7da576d60633dcd3d2dc0835a6e49b7c"
+      },
+      {
+        "name": "buttonTypographyScalarInputs",
+        "tokens": 914845,
+        "sha256": "5f8151cc52e3c6bd65596a1406d3601bc23ee1094ee7a89e1056db4a713b76d4"
+      },
+      {
+        "name": "chipHostTypographyInputs",
+        "tokens": 2708637,
+        "sha256": "9f90c859204e108cd60c2a6f26e39279dd313d00e1abfdde3942bd37aefeadd8"
+      },
+      {
+        "name": "fieldHostTypographyInputs",
+        "tokens": 7307374,
+        "sha256": "9e92147263fd483cc8aa46720330948a5d98dd16a6b68211363225373a4095d5"
+      },
+      {
+        "name": "rootTypographyInputs",
+        "tokens": 14824257,
+        "sha256": "c039c62a10200e3fdb2a6b1d4836043ab100e6e4c9559b08b8fdec8ec6e2fa7d"
+      },
+      {
+        "name": "rootInitialStyleInputs",
+        "tokens": 96718181,
+        "sha256": "5683fa438550a37727b48c88fc445fdb29f82e06d680ac91495f36807a8df640"
+      },
+      {
+        "name": "originStageBinding",
+        "tokens": 17,
+        "sha256": "a7c74eed118b5535aed8f97b264542e3ba254a1560e8d356d0e6edec944863fb"
+      },
+      {
+        "name": "originStageEvidence",
+        "tokens": 10429982,
+        "sha256": "7d96ecd5bf0e021a15706146eacb81edfe8e82de85beca8ece937548cd9cbff0"
+      },
+      {
+        "name": "tooltipUnpairedStyles",
+        "tokens": 76595,
+        "sha256": "c95b8255074c5884e72f42286af49118751a82aed7caf90658526f2c52d64cc4"
+      },
+      {
+        "name": "tooltipWrappingInputs",
+        "tokens": 319701,
+        "sha256": "6d240625af0892f2ea691c20c480e86765b714a908d18dc944f726310b6e439c"
+      },
+      {
+        "name": "rootShadowInputs",
+        "tokens": 6762792,
+        "sha256": "6ae64def334d5efb082dcb014720fdae64a224dc2384509814b8b07cab63738c"
+      },
+      {
+        "name": "rootFlowHeightInputs",
+        "tokens": 584543,
+        "sha256": "9ea869a4f7943affcf30a2ed5e5dba046f15f3f2b53eb5ff7cf0b6d34ddc3328"
+      },
+      {
+        "name": "buttonPillRadiusInputs",
+        "tokens": 3136674,
+        "sha256": "540bc760cf4568898de78b49384a2e8f5bf38c0829f29c66f8ab3d56d3c74990"
+      },
+      {
+        "name": "buttonFlexInputs",
+        "tokens": 3102114,
+        "sha256": "5a986deaeca2bc9a48b011a26245189149c772c663a88fa4570f02a4d167653f"
+      },
+      {
+        "name": "buttonHostRequestInputs",
+        "tokens": 3120758,
+        "sha256": "2ddf5ef2607ea6bf5fd96e3c1ba56e0a273c23e1d166b7619dda931d3116d1e2"
+      },
+      {
+        "name": "buttonFixedWidthInputs",
+        "tokens": 275182,
+        "sha256": "d837189aa21e3746588d3aae4adbe3503a447ad4367ebb8b2bdb2dab63fb2a5f"
+      },
+      {
+        "name": "ownerGridInitialInputs",
+        "tokens": 2892040,
+        "sha256": "87a883bd180306fd7581b2c3369442a405739e5dacd825eb61cce27fa2bedf44"
+      },
+      {
+        "name": "buttonBoxSizingInputs",
+        "tokens": 300408,
+        "sha256": "06f8b41d6475dc5b282fb3a9623e7a8197292ef60545795a8661dab9c5c4d826"
+      },
+      {
+        "name": "fieldHostLayoutInputs",
+        "tokens": 496025,
+        "sha256": "40fec56b109271d2793f2c1b82d8ba9a1864f66226441b2d5a25e30dcd12056d"
+      },
+      {
+        "name": "ownerGapInputs",
+        "tokens": 3180099,
+        "sha256": "5a5144524ff81c89bc13b7ccdd3f1ba262f11e6c08a0ee597a1a55d81941844e"
+      },
+      {
+        "name": "explicitGapInputs",
+        "tokens": 289007,
+        "sha256": "622f5b48a7a43d7705156cff3bd084f89d1837dfbb9ab01b8f22b356446f07cf"
+      },
+      {
+        "name": "gapReviewInputs",
+        "tokens": 434809,
+        "sha256": "dfaf6b9d502f8c8199a2663784c2e07143a5aafae1fa1439171c9f1c88b62d41"
+      },
+      {
+        "name": "ownerCaretInputs",
+        "tokens": 1816518,
+        "sha256": "afe85e50f96e0130e17918c229ca1aaf1776148c438c3c93df8765e2bfe6cd5a"
+      },
+      {
+        "name": "reviewedInputs",
+        "tokens": 494058,
+        "sha256": "d2f3e1eb2325ce388d98002a34cc69dd0ae2988d635c40beccc1823c9fd9bf16"
+      },
+      {
+        "name": "followupInputs",
+        "tokens": 343348,
+        "sha256": "af3172e3f3dee28082ff5604d95fa99c5419e1941f8300856002bbbb976ba298"
+      },
+      {
+        "name": "alignmentFontInputs",
+        "tokens": 578032,
+        "sha256": "3c0e1bdd9eb59746a432ff7f1e78871e06cb0d6197a7285bce4cb7a3a2e07388"
+      },
+      {
+        "name": "textAlignInputs",
+        "tokens": 383556,
+        "sha256": "6f9abee7591673e61d00a1d896d974f298db0999164fa25bde7e8e3097cb6fd6"
+      },
+      {
+        "name": "ltrAlignmentInputs",
+        "tokens": 24342,
+        "sha256": "a94abab5ecb453b4446d19cd18a2b28b40d4e024188287e321bc00c7d625d33c"
+      },
+      {
+        "name": "reviewedSourceBatchInputs",
+        "tokens": 1144184,
+        "sha256": "63054656863ec788985d979f1993ab40cbc19084fc136b1b11089970010d5a64"
+      },
+      {
+        "name": "rootBackgroundInputs",
+        "tokens": 374371,
+        "sha256": "66ac80a60baa06a8d09da45d4daf3541b490371c364b2b9660e47583a0bf1e71"
+      },
+      {
+        "name": "visibilityAuditInputs",
+        "tokens": 46421,
+        "sha256": "04603a93d45959d4c5a951494f2d2020e4acabe43025793febc62707a4a7bb12"
+      },
+      {
+        "name": "positionAuditInputs",
+        "tokens": 6949,
+        "sha256": "0e41429cd760c5aa444a3e3041a078a1dc26bd6035b4a0b05745886099c0e386"
+      },
+      {
+        "name": "positionFollowupAuditInputs",
+        "tokens": 16669,
+        "sha256": "83ae824b18143c1dac0630b64eac97f4fd6f79dc4994d83eb230260c7db13ec3"
+      },
+      {
+        "name": "chipPaintAuditInputs",
+        "tokens": 3201,
+        "sha256": "22f4fb10c38111bccf147ea41448fdbb38c470f7849560e5fcadb2f6c2229e24"
+      },
+      {
+        "name": "overlaySurfaceAuditInputs",
+        "tokens": 19673,
+        "sha256": "828f5ce021fae3448ee766f64c9c5ffcfa07788cdab954e9e099b59c40dd6300"
+      },
+      {
+        "name": "sliderInputBoxes",
+        "tokens": 903843,
+        "sha256": "1a46aeafce36dac1fda0d8c40257e98df122c82a57497b053d0d12b5623fbacb"
+      },
+      {
+        "name": "sliderBorderDefaults",
+        "tokens": 898541,
+        "sha256": "8e8c11447fabdc86451e1672daaccd47807a5a31fa34acf4c01e1f6707d923ed"
+      },
+      {
+        "name": "rootHeightInputs",
+        "tokens": 7449105,
+        "sha256": "e6a27e7388085fe609aa087366dd517a59b5826a7dd35c493de11c27d4d94e0a"
+      },
+      {
+        "name": "rootColorInputs",
+        "tokens": 7417911,
+        "sha256": "2acf72ed3f734c2d0a4123f84807377434b779405315d1ff483a494640b8795b"
+      },
+      {
+        "name": "fieldColorInputs",
+        "tokens": 2439546,
+        "sha256": "cf81e25a9cbb7d9bf984ee3e30c09afa8bd3e090a80fa55cedabc8f4dce735cc"
+      },
+      {
+        "name": "containerCaretInputs",
+        "tokens": 9850228,
+        "sha256": "2a393144e99d38d7b55f91b2f3a0c31994feba2b62a3e9bef77bd6d37c701dd6"
+      },
+      {
+        "name": "fieldHostAlignmentInputs",
+        "tokens": 2438100,
+        "sha256": "024ae17957132833a5a60d5793bd7786c94aec2c8db332e46d141f1356356064"
+      },
+      {
+        "name": "fieldHostWeightTrackingInputs",
+        "tokens": 4880815,
+        "sha256": "92d8d55e615592a181d3d51907e9175021e321a9dbf6e1d118d3e297ba23c7fb"
+      },
+      {
+        "name": "fieldHostInitialStyleInputs",
+        "tokens": 19523257,
+        "sha256": "433735d3772c99a678f7ec7d8729a4277bae3c86ffeceaf97a36c5c5fda790d3"
+      },
+      {
+        "name": "ownerInitialStyleBinding",
+        "tokens": 13,
+        "sha256": "31b5472346a94dcc33afeda452185ce29708d0b24e1141de8548e2a49bdb898b"
+      },
+      {
+        "name": "ownerInitialStyleEvidence",
+        "tokens": 20500772,
+        "sha256": "448c78e26d35ff3362d1739b657ad84de2a9236cef22dc257ad65ca4203603ac"
+      },
+      {
+        "name": "appearanceInitialInputs",
+        "tokens": 423063,
+        "sha256": "e6cec9600edba8ad8d43395bf4f7e5ef525717d0c884f95d12b35758dde2015c"
+      },
+      {
+        "name": "buttonAppearanceInputs",
+        "tokens": 552386,
+        "sha256": "10569853e855b9db2a321efdb8fa41917d7b700af70f3f57eacd702de8d66ff2"
+      },
+      {
+        "name": "retainedTypography",
+        "tokens": 70035982,
+        "sha256": "d5823884e6280d44b11051cc1534746de672fca2c05b0555bd21d6a2b53426a6"
+      },
+      {
+        "name": "controlTypography",
+        "tokens": 12469568,
+        "sha256": "81abf58aba7b101f133b86a6931fa920ed0c5bdecd7a303dadcda8a0ecb19bcf"
+      },
+      {
+        "name": "sourceFindings",
+        "tokens": 15915,
+        "sha256": "ddd0328ee1e61368ec6e28c04e63a266a431e7f0cf55454d1735c47d5d6a918f"
+      },
+      {
+        "name": "pluginBoundary",
+        "tokens": 41,
+        "sha256": "cca15340f73ae1a7f445c5c3f8d12965c8f05de7d4cbcb4422ffcab16df663f8"
+      },
+      {
+        "name": "focusedProofs",
+        "tokens": 4249,
+        "sha256": "f55b97f789601943e049f5cd4dbb0cc4eb767623987137c452eb14bce03c16cd"
+      },
+      {
+        "name": "heldContentPaintInputs",
+        "tokens": 13681,
+        "sha256": "99ae816992bb53504d8bc66516b91296034ec7d1d31857724cad595b82ceb376"
+      },
+      {
+        "name": "implementationPlan",
+        "tokens": 869,
+        "sha256": "2bd6497213f88f47416658db6bf81df8289ecae10b1b27c268c120f3ffb21ba7"
+      }
+    ]
+  },
+  "current": {
+    "manifest": {
+      "format": "astylar-material-input-audit-gzip",
+      "formatVersion": 1,
+      "auditSchemaVersion": 3,
+      "payload": "material-input-equivalence-audit.json.gz",
+      "encoding": "utf-8",
+      "compression": "gzip",
+      "compressedBytes": 88020548,
+      "compressedSha256": "3175514b41bfed86ddbfeae54e494ab69c2e56723e5589ed8e7e763aba09425e",
+      "uncompressedBytes": 2333367609,
+      "uncompressedSha256": "34b18e4f054928a9cecc7592c607572de242c5abdd2cd114d2a1b6e1f6327647"
+    },
+    "sections": [
+      {
+        "name": "schemaVersion",
+        "tokens": 1,
+        "sha256": "cb24d699cb5cc700d7da0418cc632783fe69e883f1ce1336db50244bd5c0aaae"
+      },
+      {
+        "name": "generatedFrom",
+        "tokens": 86717,
+        "sha256": "9ff2497046a7a9774bee681852275f8398fff24fdc0db0ffa4ea13800a36da3a"
+      },
+      {
+        "name": "contract",
+        "tokens": 17,
+        "sha256": "d4de6dc0bbe01eba0882fb0db5b82de5337d4f60ceb5f845add495a06bf1c634"
+      },
+      {
+        "name": "environment",
+        "tokens": 51,
+        "sha256": "7478a42f4d7bd7dcee6564835f10ec97bca53a39a8d6bb9c597cc2cb722fe52f"
+      },
+      {
+        "name": "sourceFingerprints",
+        "tokens": 8391,
+        "sha256": "2a8542c8394329c34fcf5351e44db0f063299667bd13de1701a0a5c6daf7c317"
+      },
+      {
+        "name": "reviewedValueNormalizations",
+        "tokens": 101,
+        "sha256": "6a26d7e7f613692428cfbfe579b094dbec4dfd6171f9f56a8aa8960d90a370bc"
+      },
+      {
+        "name": "coverage",
+        "tokens": 10039592,
+        "sha256": "78fad285461df313ad3dbcc934cf84f5a43bdacbae6022e0d1223c6187026f78"
+      },
+      {
+        "name": "supplementalBehavior",
+        "tokens": 88926,
+        "sha256": "a7c48b699fe5321044d3ec478eca8d861907ac285cba429397963711fbe6a725"
+      },
+      {
+        "name": "supplementalOverlays",
+        "tokens": 44710,
+        "sha256": "a70aecf151fe4841a976c107632d28109a06d1c020caee0e1a786b5642f15c33"
+      },
+      {
+        "name": "supplementalSlider",
+        "tokens": 63996,
+        "sha256": "915cc1977c9bfc600275d1803f68d2950890791dd88b026744c08fdff5361733"
+      },
+      {
+        "name": "supplementalCalendarClose",
+        "tokens": 53860,
+        "sha256": "f1f6cdc031fc924d86aaf9660ec42fd856558f0ae6860a785b4a5b2ca7495439"
+      },
+      {
+        "name": "supplementalTooltipState",
+        "tokens": 458852,
+        "sha256": "57aaad51362065b3ff54a7dabbba402da42bfc6b7353e0c2665a9b7056c8c03d"
+      },
+      {
+        "name": "supplementalPaginatorNavigation",
+        "tokens": 1945586,
+        "sha256": "a59f5cf79d5312f10f135d7bb5220081aae21b509014ec861319c4207228cd1b"
+      },
+      {
+        "name": "normalLineBoxes",
+        "tokens": 49231,
+        "sha256": "d056bbb3934c6ff7c38b1bbec52de711ae5dd38c729e897b01b378a7f24aaccd"
+      },
+      {
+        "name": "controlLineBoxes",
+        "tokens": 768442,
+        "sha256": "0849a30b4c584f5337d8676d0547999ca4891afaa836caedc661d7cefef1aa19"
+      },
+      {
+        "name": "supplementalLineBoxes",
+        "tokens": 56027,
+        "sha256": "525288c68792ab6ebb72a6a5749a132add65b92998690d38b966eeff8f7e1177"
+      },
+      {
+        "name": "summary",
+        "tokens": 237,
+        "sha256": "bfefc2d7a6e423f99b8fa14d71dbdd6b8d6d18397f2e1ad791571d5cc85e2deb"
+      },
+      {
+        "name": "discrepancies",
+        "tokens": 27610660,
+        "sha256": "8f06b6fe2ddcf0398609deba28390165fd48f9ee7cc17f437c00515b3f486079"
+      },
+      {
+        "name": "structureEvidence",
+        "tokens": 15564,
+        "sha256": "fe1ed12116a80b361e3b417634645e6e4468910635ef184367fcc30f856a67b7"
+      },
+      {
+        "name": "elementInventory",
+        "tokens": 6012435,
+        "sha256": "1068b27441db9486714c4b171036ffb62dd39a7f3d5a29e67181ecc7d227766f"
+      },
+      {
+        "name": "visibleOverflowInputs",
+        "tokens": 329941,
+        "sha256": "9ed5254745c86048b29a84091a3971906f63b4383f5c8759f519765baa0523c6"
+      },
+      {
+        "name": "borderInitialInputs",
+        "tokens": 485592,
+        "sha256": "3e1d50e4900004ef79eca33c10dda908558c6b037bcbf0f49c6365161b7f905b"
+      },
+      {
+        "name": "buttonBorderResetInputs",
+        "tokens": 110513,
+        "sha256": "13f0f43ffa6983bccdd438e35db6393d3f3c284086f780a53127c3a0784ea01a"
+      },
+      {
+        "name": "outlineTokenInputs",
+        "tokens": 65069,
+        "sha256": "7083673a4ac99b94655de73bc4f457a8168b8b58c0a00b6f893d6203e8a522ef"
+      },
+      {
+        "name": "chipOutlineInputs",
+        "tokens": 259501,
+        "sha256": "bd21fb2e841e2efe383da91e051f84250cc34969c9090b8719de8580e1d32873"
+      },
+      {
+        "name": "nonGridTemplateInputs",
+        "tokens": 246385,
+        "sha256": "5b0a59d5f4b1ed1913574ef31823e11e7da576d60633dcd3d2dc0835a6e49b7c"
+      },
+      {
+        "name": "buttonTypographyScalarInputs",
+        "tokens": 914845,
+        "sha256": "5f8151cc52e3c6bd65596a1406d3601bc23ee1094ee7a89e1056db4a713b76d4"
+      },
+      {
+        "name": "chipHostTypographyInputs",
+        "tokens": 2708637,
+        "sha256": "9f90c859204e108cd60c2a6f26e39279dd313d00e1abfdde3942bd37aefeadd8"
+      },
+      {
+        "name": "fieldHostTypographyInputs",
+        "tokens": 7307374,
+        "sha256": "9e92147263fd483cc8aa46720330948a5d98dd16a6b68211363225373a4095d5"
+      },
+      {
+        "name": "rootTypographyInputs",
+        "tokens": 14824257,
+        "sha256": "c039c62a10200e3fdb2a6b1d4836043ab100e6e4c9559b08b8fdec8ec6e2fa7d"
+      },
+      {
+        "name": "rootInitialStyleInputs",
+        "tokens": 96718181,
+        "sha256": "5683fa438550a37727b48c88fc445fdb29f82e06d680ac91495f36807a8df640"
+      },
+      {
+        "name": "originStageBinding",
+        "tokens": 17,
+        "sha256": "a7c74eed118b5535aed8f97b264542e3ba254a1560e8d356d0e6edec944863fb"
+      },
+      {
+        "name": "originStageEvidence",
+        "tokens": 10429982,
+        "sha256": "7d96ecd5bf0e021a15706146eacb81edfe8e82de85beca8ece937548cd9cbff0"
+      },
+      {
+        "name": "tooltipUnpairedStyles",
+        "tokens": 76595,
+        "sha256": "c95b8255074c5884e72f42286af49118751a82aed7caf90658526f2c52d64cc4"
+      },
+      {
+        "name": "tooltipWrappingInputs",
+        "tokens": 319701,
+        "sha256": "6d240625af0892f2ea691c20c480e86765b714a908d18dc944f726310b6e439c"
+      },
+      {
+        "name": "rootShadowInputs",
+        "tokens": 6762792,
+        "sha256": "6ae64def334d5efb082dcb014720fdae64a224dc2384509814b8b07cab63738c"
+      },
+      {
+        "name": "rootFlowHeightInputs",
+        "tokens": 584543,
+        "sha256": "9ea869a4f7943affcf30a2ed5e5dba046f15f3f2b53eb5ff7cf0b6d34ddc3328"
+      },
+      {
+        "name": "buttonPillRadiusInputs",
+        "tokens": 3136674,
+        "sha256": "540bc760cf4568898de78b49384a2e8f5bf38c0829f29c66f8ab3d56d3c74990"
+      },
+      {
+        "name": "buttonFlexInputs",
+        "tokens": 3102114,
+        "sha256": "5a986deaeca2bc9a48b011a26245189149c772c663a88fa4570f02a4d167653f"
+      },
+      {
+        "name": "buttonHostRequestInputs",
+        "tokens": 3120758,
+        "sha256": "2ddf5ef2607ea6bf5fd96e3c1ba56e0a273c23e1d166b7619dda931d3116d1e2"
+      },
+      {
+        "name": "buttonFixedWidthInputs",
+        "tokens": 275182,
+        "sha256": "d837189aa21e3746588d3aae4adbe3503a447ad4367ebb8b2bdb2dab63fb2a5f"
+      },
+      {
+        "name": "ownerGridInitialInputs",
+        "tokens": 2892040,
+        "sha256": "87a883bd180306fd7581b2c3369442a405739e5dacd825eb61cce27fa2bedf44"
+      },
+      {
+        "name": "buttonBoxSizingInputs",
+        "tokens": 300408,
+        "sha256": "06f8b41d6475dc5b282fb3a9623e7a8197292ef60545795a8661dab9c5c4d826"
+      },
+      {
+        "name": "fieldHostLayoutInputs",
+        "tokens": 496025,
+        "sha256": "40fec56b109271d2793f2c1b82d8ba9a1864f66226441b2d5a25e30dcd12056d"
+      },
+      {
+        "name": "ownerGapInputs",
+        "tokens": 3180099,
+        "sha256": "5a5144524ff81c89bc13b7ccdd3f1ba262f11e6c08a0ee597a1a55d81941844e"
+      },
+      {
+        "name": "explicitGapInputs",
+        "tokens": 289007,
+        "sha256": "622f5b48a7a43d7705156cff3bd084f89d1837dfbb9ab01b8f22b356446f07cf"
+      },
+      {
+        "name": "gapReviewInputs",
+        "tokens": 434809,
+        "sha256": "dfaf6b9d502f8c8199a2663784c2e07143a5aafae1fa1439171c9f1c88b62d41"
+      },
+      {
+        "name": "ownerCaretInputs",
+        "tokens": 1816518,
+        "sha256": "1ca1f0d321ad9d12e64f60a6d31a06a01387870aa35ab9bdf4a632e49cdda8a6"
+      },
+      {
+        "name": "reviewedInputs",
+        "tokens": 494058,
+        "sha256": "d2f3e1eb2325ce388d98002a34cc69dd0ae2988d635c40beccc1823c9fd9bf16"
+      },
+      {
+        "name": "followupInputs",
+        "tokens": 343348,
+        "sha256": "af3172e3f3dee28082ff5604d95fa99c5419e1941f8300856002bbbb976ba298"
+      },
+      {
+        "name": "alignmentFontInputs",
+        "tokens": 578032,
+        "sha256": "3c0e1bdd9eb59746a432ff7f1e78871e06cb0d6197a7285bce4cb7a3a2e07388"
+      },
+      {
+        "name": "textAlignInputs",
+        "tokens": 383556,
+        "sha256": "6f9abee7591673e61d00a1d896d974f298db0999164fa25bde7e8e3097cb6fd6"
+      },
+      {
+        "name": "ltrAlignmentInputs",
+        "tokens": 24342,
+        "sha256": "a94abab5ecb453b4446d19cd18a2b28b40d4e024188287e321bc00c7d625d33c"
+      },
+      {
+        "name": "reviewedSourceBatchInputs",
+        "tokens": 1144184,
+        "sha256": "4208c28f2ad27997a08f00671942e2bdd685d805cc5fe9674d654c80549539b8"
+      },
+      {
+        "name": "rootBackgroundInputs",
+        "tokens": 374371,
+        "sha256": "66ac80a60baa06a8d09da45d4daf3541b490371c364b2b9660e47583a0bf1e71"
+      },
+      {
+        "name": "visibilityAuditInputs",
+        "tokens": 46421,
+        "sha256": "04603a93d45959d4c5a951494f2d2020e4acabe43025793febc62707a4a7bb12"
+      },
+      {
+        "name": "positionAuditInputs",
+        "tokens": 6949,
+        "sha256": "0e41429cd760c5aa444a3e3041a078a1dc26bd6035b4a0b05745886099c0e386"
+      },
+      {
+        "name": "positionFollowupAuditInputs",
+        "tokens": 16669,
+        "sha256": "83ae824b18143c1dac0630b64eac97f4fd6f79dc4994d83eb230260c7db13ec3"
+      },
+      {
+        "name": "chipPaintAuditInputs",
+        "tokens": 3201,
+        "sha256": "22f4fb10c38111bccf147ea41448fdbb38c470f7849560e5fcadb2f6c2229e24"
+      },
+      {
+        "name": "overlaySurfaceAuditInputs",
+        "tokens": 19673,
+        "sha256": "828f5ce021fae3448ee766f64c9c5ffcfa07788cdab954e9e099b59c40dd6300"
+      },
+      {
+        "name": "sliderInputBoxes",
+        "tokens": 903843,
+        "sha256": "1a46aeafce36dac1fda0d8c40257e98df122c82a57497b053d0d12b5623fbacb"
+      },
+      {
+        "name": "sliderBorderDefaults",
+        "tokens": 898541,
+        "sha256": "8e8c11447fabdc86451e1672daaccd47807a5a31fa34acf4c01e1f6707d923ed"
+      },
+      {
+        "name": "rootHeightInputs",
+        "tokens": 7449105,
+        "sha256": "e6a27e7388085fe609aa087366dd517a59b5826a7dd35c493de11c27d4d94e0a"
+      },
+      {
+        "name": "rootColorInputs",
+        "tokens": 7417911,
+        "sha256": "2acf72ed3f734c2d0a4123f84807377434b779405315d1ff483a494640b8795b"
+      },
+      {
+        "name": "fieldColorInputs",
+        "tokens": 2439546,
+        "sha256": "cf81e25a9cbb7d9bf984ee3e30c09afa8bd3e090a80fa55cedabc8f4dce735cc"
+      },
+      {
+        "name": "containerCaretInputs",
+        "tokens": 9850228,
+        "sha256": "2a393144e99d38d7b55f91b2f3a0c31994feba2b62a3e9bef77bd6d37c701dd6"
+      },
+      {
+        "name": "fieldHostAlignmentInputs",
+        "tokens": 2438100,
+        "sha256": "024ae17957132833a5a60d5793bd7786c94aec2c8db332e46d141f1356356064"
+      },
+      {
+        "name": "fieldHostWeightTrackingInputs",
+        "tokens": 4880815,
+        "sha256": "92d8d55e615592a181d3d51907e9175021e321a9dbf6e1d118d3e297ba23c7fb"
+      },
+      {
+        "name": "fieldHostInitialStyleInputs",
+        "tokens": 19523257,
+        "sha256": "433735d3772c99a678f7ec7d8729a4277bae3c86ffeceaf97a36c5c5fda790d3"
+      },
+      {
+        "name": "ownerInitialStyleBinding",
+        "tokens": 13,
+        "sha256": "31b5472346a94dcc33afeda452185ce29708d0b24e1141de8548e2a49bdb898b"
+      },
+      {
+        "name": "ownerInitialStyleEvidence",
+        "tokens": 20500772,
+        "sha256": "448c78e26d35ff3362d1739b657ad84de2a9236cef22dc257ad65ca4203603ac"
+      },
+      {
+        "name": "appearanceInitialInputs",
+        "tokens": 423063,
+        "sha256": "e6cec9600edba8ad8d43395bf4f7e5ef525717d0c884f95d12b35758dde2015c"
+      },
+      {
+        "name": "buttonAppearanceInputs",
+        "tokens": 552386,
+        "sha256": "10569853e855b9db2a321efdb8fa41917d7b700af70f3f57eacd702de8d66ff2"
+      },
+      {
+        "name": "retainedTypography",
+        "tokens": 70035982,
+        "sha256": "d5823884e6280d44b11051cc1534746de672fca2c05b0555bd21d6a2b53426a6"
+      },
+      {
+        "name": "controlTypography",
+        "tokens": 12469568,
+        "sha256": "5e217de1464f5df0739476de854e5ab0d7836f54092c302dcbe47ec38d96c06d"
+      },
+      {
+        "name": "sourceFindings",
+        "tokens": 17237,
+        "sha256": "ef84ce10fd5039f22536be318f5cf7914df0aac4fe9c1e7f710ba9be08e049e7"
+      },
+      {
+        "name": "pluginBoundary",
+        "tokens": 41,
+        "sha256": "cca15340f73ae1a7f445c5c3f8d12965c8f05de7d4cbcb4422ffcab16df663f8"
+      },
+      {
+        "name": "focusedProofs",
+        "tokens": 4285,
+        "sha256": "bc38256ada03cf5c2dca67c2ccdc7e1f168d626ba3c30c1a1da9236575b24b07"
+      },
+      {
+        "name": "heldContentPaintInputs",
+        "tokens": 13681,
+        "sha256": "99ae816992bb53504d8bc66516b91296034ec7d1d31857724cad595b82ceb376"
+      },
+      {
+        "name": "implementationPlan",
+        "tokens": 869,
+        "sha256": "2bd6497213f88f47416658db6bf81df8289ecae10b1b27c268c120f3ffb21ba7"
+      }
+    ]
+  },
+  "unchanged": 70,
+  "changed": [
+    "sourceFingerprints",
+    "coverage",
+    "controlLineBoxes",
+    "summary",
+    "discrepancies",
+    "ownerCaretInputs",
+    "reviewedSourceBatchInputs",
+    "controlTypography",
+    "sourceFindings",
+    "focusedProofs"
+  ]
+}
