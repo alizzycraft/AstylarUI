@@ -2,6 +2,17 @@
 
 ## Current versus historical evidence
 
+October21 shared-touch publication complete:independent cold57898 exits0,
+3060673ms,two collectors/zero disk hits,16471 authenticated files. Main import
+51878 and main verification terminate0;main8259d4f7/index84421c53 exactly matches
+the candidate. Retain button-touch-independent-cold,main-import and main-
+verification-20261021 log pairs plus both complete stores and original90467.
+All2311 cases remain partial/unverified. No publication job remains live. Raw cold
+stderr retains Windows CRLF progress bytes as binary Git evidence. Earlier live
+statements below are historical checkpoints,not current process status. Live-ripple
+supplements remain outside the published review;no original/failure evidence is
+removed and no final acceptance gate is waived.
+
 Retain terminal0 button-touch-propagated-leaves and propagated-receipt-
 reconciliation-20261021 logs/empty stderr. Existing streaming comparison conserves
 all shapes/paths/other values in five changed sections. All147 changed leaves

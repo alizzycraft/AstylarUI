@@ -4,6 +4,41 @@
 
 Updated October21. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- ACCEPTED publication8259d4f708e5ffec9a55f629674cdd2c4811c56937fab36b1004207bde2b6f6c,
+  index84421c53d880bb3c5241888e61859accf883acb58e1c4e3d2d9a747ea601fb3a,
+  review50315381. Main and validated candidate indexes are byte-identical;every
+  main shard verifies. Original90467 predecessor/captures/failures remain retained.
+- Scope unchanged:36 families/2311 cases(436 static/1875 interaction),all2311
+  partial,0 complete,current rendering unverified.171 source findings/229 focused
+  proofs/780 source paths;8483 discrepancy groups/39904 controls/389202 occurrences,
+  0 unresolved scalar attributions. These are not complete inspection or parity.
+- Publication gates complete:export91197,candidate import57363,full-section24003,
+  metadata conservation recovered,leaf comparison78980,receipt recomputation41286,
+  independent cold57898,main import51878 and main verification all TERMINAL0.
+  Cold3060673ms:two collectors,ten memory hits,ZERO disk hits,16471 files and
+  1700122566 read/verification bytes. No job remains live in this publication batch.
+- Conservation:70/80 payload sections unchanged;all ten changed sections explained
+  by exact source/finding/proof registration,984 additive evidence children/64 new
+  receipts,two review IDs/two source-applicability receipts,and147 recomputed
+  propagated receipt leaves. All prior case objects,remaining work,measurements
+  and classifications preserve. Summary/counts add only one source finding.
+- New accepted evidence covers600 touch owners/480 cases(with276 visible pointer
+  requests,294 display-none,30 pointer-events-none),600 suppressed focus pseudos
+  and24 fresh divider execution supplements. Existing percentage-transform unit
+  limitation retains public failures;no literal-pixel fixture workaround is approved.
+- Next prioritized gaps:complete component-owner/anonymous-descendant mapping and
+  first-divergence applicability across remaining families;actual AX associations;
+  interaction history/ownership/disposal and443 editable-case obligations. Shared
+  frame/headings already map all2311 cases;do not repeat. Bounded live-ripple input
+  and capture-order evidence below stays outside50315381;pixel/timing/clipping
+  proof remains open. All original full audit/browser/unit/build/packed-consumer/
+  release gates remain required. No renderer or fixture fixes are authorized.
+
+## October21 publication detail — historical checkpoints
+
+The entries below retain intermediate states;the accepted pointer above supersedes
+their pending/live/current statements without changing original observations.
+
 - Five-section leaf comparison78980 and exact receipt recomputation41286 now
   TERMINAL0. All selected shapes/paths and unchanged values conserve;147 changes
   are exactly98 producer fingerprints(d97e15b4→cca48156),48 derived control-proof
