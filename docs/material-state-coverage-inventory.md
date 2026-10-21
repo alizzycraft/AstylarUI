@@ -156,8 +156,14 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   Native title normal versus candidate nowrap in all three captured stages is
   ALREADY classified by reviewed-explicit-nowrap-input-substitution,not new.
   Candidate used automatic minimum,anonymous boxes,AX and constrained wrapping
-  remain unproven. Next:account complete card descendants under this role mapping
-  and inspect semantic title effects;do not infer a core flex failure from unequal inputs.
+  remain unproven. Complete RECORDED card descendants now account across52 cases:
+  820 reference/572 candidate nodes;208 omission/parent/text/duplicate mutations
+  reject. Owning check:scripts/check-card-recorded-nodes.mjs;terminal0 evidence:
+  card-recorded-node-accounting-20261021 log pair. Full groups retain omitted
+  header wrapper and native button descendants versus candidate value-label;
+  existing button findings are reused,not duplicated. Not canonical case closure,
+  anonymous-box equivalence or current rendering. Next:actual AX title role effects;
+  do not infer a core flex failure from unequal inputs.
 - All original final full audit/browser/Material/TTS/unit/build/packed-consumer/
   capability/example/skill/diff gates remain. This is audit only;goal not complete.
 
