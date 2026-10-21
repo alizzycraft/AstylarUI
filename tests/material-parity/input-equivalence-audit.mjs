@@ -8922,6 +8922,26 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'tests/material-parity/expansion-semantic-inputs.spec.mjs',
+    'tests/material-parity/expansion-semantic-registration.mjs',
+    'scripts/capture-expansion-static-ax.mjs',
+    'scripts/check-expansion-static-ax.mjs',
+    'scripts/audit-public-semantic-css-hidden.mjs',
+    'scripts/check-public-semantic-css-hidden.mjs',
+    'scripts/check-material-semantic-visibility-binding.mjs',
+    'scripts/review-expansion-semantic-inputs.mjs',
+    'scripts/join-expansion-semantic-evidence.mjs',
+    'artifacts/material-parity/expansion-controls-retained-boundary-20261021.log',
+    'artifacts/material-parity/expansion-hidden-style-boundary-20261021.log',
+    'artifacts/material-parity/expansion-static-ax-review-20261021.log',
+    'artifacts/material-parity/public-semantic-css-hidden-verification-final-20261021.log',
+    'artifacts/material-parity/material-semantic-visibility-binding-retry-20261021.log',
+    'artifacts/material-parity/expansion-semantic-source-review-20261021.log',
+    'artifacts/material-parity/expansion-semantic-case-join-retry-20261021.log',
+    'artifacts/material-parity/working-audit/proposals/bfba66484e2e218edab363a40ade43294d0fdc588b7063daea22e2e5bf065059.json',
+    'artifacts/material-parity/expansion-static-ax-20261021/latest-report.json',
+    'artifacts/material-parity/public-semantic-css-hidden-20261021/latest-report.json',
+    'artifacts/material-parity/public-semantic-css-hidden-repeat-20261021/latest-report.json',
     'tests/material-parity/card-title-inputs.spec.mjs',
     'tests/material-parity/card-title-registration.mjs',
     'scripts/check-card-recorded-nodes.mjs',
@@ -9748,6 +9768,10 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/expansion-semantic-inputs.spec.mjs', /test\('expansion semantic registration preserves176 findings and exact predecessor sources'/,
+      'expansion semantic additive registration preserves accepted findings', 'All176 predecessor findings preserve exactly;core CSS visibility and authored labelled-region substitution remain separate. Whole vector/policy/source reversal and mutation controls reject drift. Not canonical publication or complete case acceptance.'),
+    proof(root, 'tests/material-parity/expansion-semantic-inputs.spec.mjs', /test\('expansion semantic public failures and pinned Material AX replay independently'/,
+      'expansion semantic CSS hiding public failures and Material AX binding', 'Two package-root32-capture runs retain eight CSS-hidden AX failures;12 pinned Material pairs expose collapsed content. Complete current/installed/public/Material methods and compiler helpers bind;history rehashes. Not inherited visibility overrides,updates,AT behavior,paint or case closure.'),
     proof(root, 'tests/material-parity/card-title-inputs.spec.mjs', /test\('card title registration preserves all175 findings and exact predecessor sources'/,
       'card title additive registration preserves accepted findings', 'All175 accepted findings preserve exactly;the authored H2 title is distinct from native generic MAT-CARD-TITLE. Whole policy/vector/source reversal and mutation controls reject unrelated drift. Not canonical publication or whole-case acceptance.'),
     proof(root, 'tests/material-parity/card-title-inputs.spec.mjs', /test\('card title actual AX and recorded descendants replay their full retained populations'/,

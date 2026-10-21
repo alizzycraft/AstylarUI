@@ -235,6 +235,14 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   owning-20261021 log pair). No renderer/fixture changes. Accepted canonical
   remains176;source/proof inventory and explicit case-review selection updates,
   census/conservation and coherent export/cold/import are still pending.
+- WORKING expansion export inventory now adds exactly20 source/evidence paths
+  and two focused proofs(238 total). Full producer50c2182b reverses byte-exactly
+  to accepted ea1a6051 after only that prefix is removed;historical card/native/
+  landmark guards delegate through the exact boundary. Drift/forged-proof controls
+  reject. Owning inventory run exits0:15 pass,0 fail/skip(expansion-semantic-
+  inventory-owning-20261021 log pair). Accepted package remains176/236/819;
+  exact source census,explicit case-review selection and coherent publication
+  are pending. No export is justified until the complete batch is selected.
 - Next card descendant question narrowed across all52 authenticated retained pairs:
   reference title is nested under the native header-text div;candidate h2 is a
   direct header child. Native15 static/16 interaction nodes versus11 candidate

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
-import { expansionSemanticPredecessor, restoreExpansionSemanticPolicy } from './expansion-semantic-registration.mjs';
+import { expansionSemanticPredecessor, restoreExpansionSemanticPolicy, restoreExpansionSemanticProducer } from './expansion-semantic-registration.mjs';
 const hash = value => createHash('sha256').update(value).digest('hex');
 export function cardTitlePredecessor(current) {
   current = expansionSemanticPredecessor(current);
@@ -30,7 +30,7 @@ export function restoreCardTitlePolicy(source) {
   return prior;
 }
 export function restoreCardTitleProducer(source) {
-  const text = source.toString().replaceAll('\r\n', '\n');
+  const text = restoreExpansionSemanticProducer(source);
   if (!text.includes('card title additive registration preserves accepted findings')) {
     assert.ok(!text.includes("'tests/material-parity/card-title-inputs.spec.mjs'"), 'Partial card proof registration');
     return text;

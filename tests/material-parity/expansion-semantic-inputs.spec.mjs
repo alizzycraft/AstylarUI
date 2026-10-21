@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
-import { expansionSemanticPredecessor, restoreExpansionSemanticPolicy } from './expansion-semantic-registration.mjs';
+import { expansionSemanticPredecessor, restoreExpansionSemanticPolicy, restoreExpansionSemanticProducer } from './expansion-semantic-registration.mjs';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const normalize = bytes => bytes.toString().replaceAll('\r\n', '\n');
 test('expansion semantic registration preserves176 findings and exact predecessor sources', () => {
@@ -26,12 +26,17 @@ test('expansion semantic registration preserves176 findings and exact predecesso
     assert.throws(() => expansionSemanticPredecessor(altered));
   }
   assert.throws(() => expansionSemanticPredecessor(sourceAuditDefinitions.slice(0, -1)));
+  const producerFile = 'tests/material-parity/input-equivalence-audit.mjs', producer = readFileSync(producerFile);
+  assert.equal(restoreExpansionSemanticProducer(producer), normalize(execFileSync('git', ['show', `3834df66:${producerFile}`], { maxBuffer: 4000000 })));
+  for (const altered of [normalize(producer) + '\n// drift', normalize(producer).replace('expansion semantic CSS hiding public failures and Material AX binding', 'forged-proof')])
+    assert.throws(() => restoreExpansionSemanticProducer(altered));
   const helperFile = 'tests/material-parity/card-title-registration.mjs';
   let helper = normalize(readFileSync(helperFile));
   for (const [added, before] of [
-    ["import { expansionSemanticPredecessor, restoreExpansionSemanticPolicy } from './expansion-semantic-registration.mjs';\n", ''],
+    ["import { expansionSemanticPredecessor, restoreExpansionSemanticPolicy, restoreExpansionSemanticProducer } from './expansion-semantic-registration.mjs';\n", ''],
     ['  current = expansionSemanticPredecessor(current);\n', ''],
     ['  const text = restoreExpansionSemanticPolicy(source);', "  const text = source.toString().replaceAll('\\r\\n', '\\n');"],
+    ['  const text = restoreExpansionSemanticProducer(source);', "  const text = source.toString().replaceAll('\\r\\n', '\\n');"],
   ]) { assert.equal(helper.split(added).length, 2); helper = helper.replace(added, before); }
   assert.equal(helper, normalize(execFileSync('git', ['show', `09431889:${helperFile}`])));
   const suiteFile = 'tests/material-parity/card-title-inputs.spec.mjs';
