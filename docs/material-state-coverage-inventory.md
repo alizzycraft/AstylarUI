@@ -187,8 +187,16 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
   correct in the public proof. This is distinct from the authored target-region
   substitution. Not yet canonical registration/current Material core binding,
   inherited visibility overrides,updates,AT behavior or complete-case acceptance.
-  Next:bind Material served bridge's compiler spread helper explicitly,then
-  register/classify the separate causes in a coherent source batch;no fix authority.
+  Material applicability now binds complete reconcile/reconcileElement/
+  applyAttributes methods to pinned served chunk-XOU37TRR and authenticates all
+  six declarations of its imported spread helper against exact compiler lowering.
+  Both served files match checkpoint9d0f1220 receipts. Three helper/filter mutations
+  reject;public verifier replays byte-exact. Terminal0 evidence:material-semantic-
+  visibility-binding-retry-20261021 via check-material-semantic-visibility-binding.
+  Keep original extractor failure(requested three methods from one-method probe)
+  separately. This rules out stale visibility-relevant methods,not all core drift.
+  Next:history and registration/classification of separate core visibility and
+  authored target-region causes in a coherent source batch;no fix authority.
 - Next card descendant question narrowed across all52 authenticated retained pairs:
   reference title is nested under the native header-text div;candidate h2 is a
   direct header child. Native15 static/16 interaction nodes versus11 candidate
