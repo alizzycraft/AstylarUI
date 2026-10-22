@@ -2,6 +2,18 @@
 
 ## Current audit pointer — October22
 
+- Existing historical-component verifier replay TERMINATES1 before owning tests:
+  exact launch-addition guard fails at script line93. Current sorter9fafec85 has37
+  tests versus original26;all original names remain,three bodies differ(slider
+  pointer ownership,popup-cycle cursor resources,timepicker wheel). Independent
+  AST assertion comparison finds original browser154 assertion absent from popup
+  cycles/wheel and original failedPlateaus.length4 assertion absent from cycles.
+  Existing allowlist covers earlier36-test snapshots and only two changed bodies;
+  blindly adding current hash would misrepresent assertion conservation. Preserve
+  harness-component-receipt-replay-20261022.log/empty stderr. Next trace exact
+  Git changes/previous reviewed transitions for these three bodies;retain original
+  assertions as historical,do not pretend current37-test suite is old runtime.
+  No new renderer conclusion or historical applicability accepted by this failure.
 - Proof-inventory test57 now passes with248 proofs/4465 tokens,current digest
   d50b9033122c357582470dc0f812ccaade8c11480fc909f630fb2be5e19de284.
   Read-only exact03fafef8 replay of only store/fixed-width test-file reads recovers

@@ -1,0 +1,36 @@
+TAP version 13
+# node:internal/modules/run_main:123
+#     triggerUncaughtException(
+#     ^
+# AssertionError [ERR_ASSERTION]: Exact launch addition must occur once
+# 1 !== 2
+#     at file:///D:/dev/github/AstylarUI-audit-integration/scripts/check-historical-component-proofs.mjs:93:12 {
+#   generatedMessage: false,
+#   code: 'ERR_ASSERTION',
+#   actual: 1,
+#   expected: 2,
+#   operator: 'strictEqual',
+#   diff: 'simple'
+# }
+# Node.js v22.22.3
+# Subtest: tests\\material-parity\\input-equivalence-audit.spec.mjs
+not ok 1 - tests\\material-parity\\input-equivalence-audit.spec.mjs
+  ---
+  duration_ms: 1272.665
+  type: 'test'
+  location: 'D:\\dev\\github\\AstylarUI-audit-integration\\tests\\material-parity\\input-equivalence-audit.spec.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1283.2926

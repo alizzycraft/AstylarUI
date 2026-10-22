@@ -2,6 +2,11 @@
 
 ## Current versus historical evidence
 
+Retain harness-component-receipt-replay-20261022.log/.stderr.log as original
+failed historical-loader evidence. Current37-test sorter is outside reviewed
+snapshot allowlist;original assertion changes require explicit applicability
+review,not replacing captured hashes or adding an unchecked allowlist entry.
+
 Retain proof-inventory-reconciliation-20261022.log/.stderr.log:focused test57
 passes248-proof inventory and original negative controls after exact cold-record
 conservation plus three anchor shifts. Cold package/original failure unchanged;
