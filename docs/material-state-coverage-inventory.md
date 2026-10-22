@@ -2,6 +2,16 @@
 
 ## Current audit pointer — October22
 
+- Existing antialias/selection historical wrapper passes1/1,4525.2753ms,
+  executing all three original antialias/selected-caret/selection-pixel assertion
+  sets with authenticated core/sorter/inspector transitions. Existing historical
+  component preload also passes complete radius evidence suite4/4,11064.7056ms.
+  Logs:harness-antialias-selection-replay and harness-radius-receipt-replay20261022
+  .log/empty stderr pairs. No new capture or source edit needed for these proofs;
+  direct harness receipt failures85/87/102/170 remain historical mismatches,not
+  demonstrated current renderer regressions or fresh rendering acceptance.
+  Remaining failure groups include tooltip served-asset census,missing-original
+  runner provenance and held-update applicability;reuse existing owners first.
 - Historical-component replay38522 TERMINATES0:four original phases pass8/8,
   8/8,1/1,1/1(18 total),zero skips/failures,empty stderr. Durations4527.7847,
   29618.6677,42367.8316,4272.5551ms. Original retained progress/field/keyboard/

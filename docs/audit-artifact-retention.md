@@ -2,6 +2,10 @@
 
 ## Current versus historical evidence
 
+Retain harness-antialias-selection-replay-20261022.log/.stderr.log(1/1 wrapper,
+three original assertion sets) and harness-radius-receipt-replay-20261022.log/
+.stderr.log(4/4). Both terminal0,stderr empty;no fresh browser acceptance claimed.
+
 Historical-component registry replay38522 terminates0,18 tests across four phases
 (8+8+1+1),zero skips/failures,empty stderr. Keep terminal logs and all prior failed
 guard/registry replays. Source/receipt negative controls remain;successful synthetic
