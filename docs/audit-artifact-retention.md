@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+Retain review-stepper-semantic-inputs.mjs,stepper-semantic-source-review-20261022
+log/empty stderr and source proposal5d5c15f9532ea5446bad81e49280432e9393cf83db986f21cc5aac048d24ddd9.
+It preserves178 predecessor definitions and adds one pending authored tab/panel
+relationship finding. Exact replay authenticates initial whole source bytes and
+existing complete semantic-method applicability proofs. Keep numeric AX names
+separate under the existing ariaHidden support limitation;no new core finding.
+
 Retain stepper-static-ax-20261022(all24 raw AX/DOM records,exact derived producer,
 provenance and report),capture/review log pairs and both stepper AX scripts. These
 close a specific static relationship observation gap,not disposable successful

@@ -61,6 +61,22 @@ Updated October22. Current conclusions only;earlier next/live statements in reta
   only after hashes match. No AT/interaction/paint/case-closure claim. Next:trace
   relationship/name omissions through authored inputs/history before registering
   a distinct finding;keep inactive-panel omission and aria-hiding support separate.
+- Stepper source/history question now answered:current and initial2f440115 candidate
+  branches omit supported ariaControls/ariaLabelledby;actual candidate DOM/AX
+  faithfully exposes those omissions. Complete current/installed/pinned served
+  semantic methods rebind through existing verifier;public type fields exist.
+  One pending authoring finding,fixture-stepper-tab-panel-relationships-omitted,
+  is distinct from missing inactive panel. Numeric1Details/2Review names reuse
+  the existing accessibility-only-hiding public support limitation,not another
+  core defect or permission to visually hide badge text. Initial runtime/motive
+  and interactive relationship updates remain unproven. Full initial candidate/
+  reference bytes and excerpts bind;source review replays exactly.
+  Pending proposal5d5c15f9532ea5446bad81e49280432e9393cf83db986f21cc5aac048d24ddd9
+  preserves all178 predecessors/adds1(179 groups),not registered or canonical.
+  Evidence:review-stepper-semantic-inputs.mjs and stepper-semantic-source-review-
+  20261022 log pair,terminal0. Next:coherent registration/obligation join for queued
+  expansion68/stepper68 recorded-node and stepper12 actual-AX evidence;do not
+  promote entire cases or rerun settled source-history/capture questions.
 
 - October22 reconciliation:expansion export17464 is TERMINAL SUCCESS(exit0,
   2959235ms),not a live job. Candidate3175514b has178 findings;accepted796984e0
