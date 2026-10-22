@@ -46,6 +46,15 @@
   its named sort-trigger parent,not assumed to carry the host ID.97 mutation
   controls/exact replay pass. Tooltip reuses its existing finding. Initial runtime,
   AT,interactive AX and paint remain open;no claim that all sort states are closed.
+- Button-toggle source reviewaf08f832 adds explicit ListGrid group-name substitution
+  (191 pending definitions;all190 predecessors preserve).12 static pairs/24 raw
+  observations,74 negative controls/exact replay pass. Complete initial and
+  immediate pre/post c47d589a methods establish that commit adds the group name;
+  current familyElements/composite/selectionMark match captured source-map methods.
+  Existing native-button substitution finding is reused,not duplicated. Child
+  checked/name/tabstop agreement does not certify native form/naming defaults,
+  interaction or paint. Evidence:toggle-group-input-review-20261022 log/empty
+  stderr and review-toggle-group-inputs.mjs. No renderer/fixture changes.
 - Bounded follow-up:all48 retained static sort/tooltip observations authenticate
   their raw SHA256 and have no runtime errors. In each family's12 paired cases,
   native buttons have aria-describedby and AX descriptions(Sort/Create a project),
@@ -61,6 +70,9 @@
   missing authored links with the demonstrated hidden-reference core defect. Do not
   repeat settled checkbox history or current known findings. Continue static-role
   reviews,then join/register the coherent pending batch before another export.
+  Pending source batch now has11 additions beyond accepted180;case proposal48e8
+  still preserves869 queued children. Selection/registration/source conservation
+  must precede export;exporting the unchanged producer would not integrate these.
 - Final unfiltered canonical/audit harness/browser/units/builds/consumer/
   capability/example/skills/diff/handoff gates remain unchanged. Storage:closed
   JSON LZX conversion saved453483648 physical bytes with hashes/paths/indexes

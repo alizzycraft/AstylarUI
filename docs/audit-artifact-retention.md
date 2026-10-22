@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain review-toggle-group-inputs.mjs,toggle-group-input-review-20261022 log/empty
+stderr and source proposalaf08f832.24 raw observations/12 pairs authenticate;
+74 negative controls/exact replay pass. Initial/immediate pre/post c47d589a
+complete authoring locates ListGrid group-name addition;current complete family,
+composite and selectionMark methods bind captured source map. Native-button
+substitution reuses its existing finding;all190 predecessor definitions preserve.
+191 pending definitions are not registered/exported/current rendering acceptance.
+
 Retain review-sort-description-inputs.mjs,sort-description-input-review-final-
 20261022 log/empty stderr and source proposal6f890ed1.48 retained static raw
 observations authenticate;97 negative controls/exact replay pass. Complete
