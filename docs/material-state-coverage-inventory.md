@@ -108,6 +108,15 @@
   Evidence:review-bottom-sheet-name-inputs.mjs,bottom-sheet-name-input-review-
   20261022 log/empty stderr and proposal835eba45. Exact replay passes;no new core
   cause,registration or export. Batch with later evidence after export5359 closes.
+- Dialog recorded-node gap now covered across78 pairs/1514 native+724 candidate
+  records;312 mutation controls reject and exact replay passes. Explicit mappings
+  retain native direct heading/content/actions,button label/state/focus/touch
+  descendants,portal/inner/surface/focus-trap owners versus authored modal/panel,
+  nested title and value buttons. Ten empty native portals are not open dialogs.
+  Existing seven composition/typography/geometry findings reused;unequal naming/
+  modal attributes retained,not normalized. Evidence:check-dialog-recorded-nodes.mjs,
+  dialog-recorded-node-accounting-20261022 log/empty stderr. Outside frozen export;
+  full styles/anonymous/pseudo/paint/AX/currentness/case closure still open.
 - Evidence:stepper-coherent-export-20261022,stepper-cold-check-20261022 and
   stepper-main-import-verification-20261022;full-section-comparison,export-census-
   binding,receipt-leaf-comparison,coverage-conservation,candidate-import and

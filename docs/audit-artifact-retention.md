@@ -2,6 +2,12 @@
 
 ## Current versus historical evidence
 
+Retain check-dialog-recorded-nodes.mjs and dialog-recorded-node-accounting-
+20261022 log/empty stderr. All78 pairs/2238 records account,312 mutations reject
+and byte-exact replay passes. Preserve original trees,including10 empty native
+portals and all action descendants. Known findings reused;no new currentness,
+paint,AX or case closure. Keep outside live873-source export5359 for a later join.
+
 Retain review-bottom-sheet-name-inputs.mjs,bottom-sheet-name-input-review-
 20261022 log/empty stderr and pending proposal835eba45(391129 bytes). Complete
 180 predecessor definitions preserve;current/initial complete-method execution
