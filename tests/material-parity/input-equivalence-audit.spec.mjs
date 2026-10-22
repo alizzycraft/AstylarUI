@@ -2740,7 +2740,16 @@ test('recent public and popup proofs join existing inventories without changing 
 });
 
 async function conservedPrePassiveDefinitions(registeredInput) {
-  const latestRegistered = registeredInput ?? (await import('./input-equivalence-policy.mjs')).sourceAuditDefinitions;
+  let latestRegistered = registeredInput ?? (await import('./input-equivalence-policy.mjs')).sourceAuditDefinitions;
+  if (latestRegistered.length !== 155) {
+    const { restoreSizingDefaultPolicyRegistration } = await import('./position-composition-producer-transition.mjs');
+    const source = readFileSync('tests/material-parity/input-equivalence-policy.mjs', 'utf8');
+    const definitions = text => new Function(text.replace(/^export const /gm, 'const ') + '\nreturn sourceAuditDefinitions;')();
+    // Authenticate every current definition before the exact whole-source
+    // restoration. A caller's altered registry must never be replaced silently.
+    assert.deepEqual(latestRegistered, definitions(source));
+    latestRegistered = definitions(restoreSizingDefaultPolicyRegistration(source));
+  }
   assert.equal(latestRegistered.length, 155);
   // Reverse only the five explicitly registered later findings. The full
   // historical population and predecessor equality below remain authoritative.

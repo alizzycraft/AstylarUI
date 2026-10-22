@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Historical-component registry replay38522 terminates0,18 tests across four phases
+(8+8+1+1),zero skips/failures,empty stderr. Keep terminal logs and all prior failed
+guard/registry replays. Source/receipt negative controls remain;successful synthetic
+scratch uses established cleanup. Original captures/failures are not scratch.
+
+Retain pre-passive-registry-conservation-20261022.log/.stderr.log(focused pass)
+and live harness-component-registry-replay-20261022.log/.stderr.log(session38522).
+All original population/mutation checks remain;full historical batch is pending.
+
 Retain harness-component-boundary-replay-20261022.log/.stderr.log:source guards
 clear,eight original tests execute,three pass/five fail at historical registry
 population191 versus155. Later phases unexecuted;preserve prior guard failures.

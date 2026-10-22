@@ -2,6 +2,26 @@
 
 ## Current audit pointer — October22
 
+- Historical-component replay38522 TERMINATES0:four original phases pass8/8,
+  8/8,1/1,1/1(18 total),zero skips/failures,empty stderr. Durations4527.7847,
+  29618.6677,42367.8316,4272.5551ms. Original retained progress/field/keyboard/
+  focus/selection/tooltip/visibility assertions,button width/flex/host/box source
+  proofs and box-binding eight source/15 receipt controls all execute. Existing
+  source restorations plus exact current191→155 policy conservation resolve
+  this historical applicability batch;production registry stays191. Evidence:
+  harness-component-registry-replay-20261022 logs and pre-passive focused log.
+  Original direct harness failures remain;historical replay is not fresh rendering,
+  full harness success,canonical source reconciliation or case closure. Next
+  retain complete batch and address remaining receipt groups/coverage obligations.
+- Existing restoreSizingDefaultPolicyRegistration authenticates current191→155,
+  complete restored source17f0045f;forged appended source rejects. Historical
+  conservedPrePassiveDefinitions now checks supplied full current registry against
+  actual source definitions BEFORE that owning restoration,then preserves every
+  original155/150/148/147/145 population/predecessor assertion. Existing focused
+  five mutation controls pass in pre-passive-registry-conservation-20261022 logs.
+  Full existing historical-component batch is RUNNING session38522,new logs
+  harness-component-registry-replay-20261022.log/.stderr.log. Freeze tested sources
+  until terminal;do not infer batch acceptance from focused population pass.
 - Input-boundary restoration integrated into existing historical verifier:
   exact58fe append owner→171bf9fa,then two exact import reversals and retained-map
   preamble reversal. All42 original progress-stage statements conserve except

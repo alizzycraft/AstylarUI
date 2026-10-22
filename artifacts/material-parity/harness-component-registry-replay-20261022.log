@@ -1,0 +1,149 @@
+TAP version 13
+# Subtest: retained progress paint binds plugin geometry and unequal track inputs
+ok 1 - retained progress paint binds plugin geometry and unequal track inputs
+  ---
+  duration_ms: 492.0387
+  type: 'test'
+  ...
+# Subtest: retained compact empty and filled inputs bind authored inset before projection
+ok 2 - retained compact empty and filled inputs bind authored inset before projection
+  ---
+  duration_ms: 392.7317
+  type: 'test'
+  ...
+# Subtest: retained keyboard profiles replay original assertions and bind the Escape-only handler
+ok 3 - retained keyboard profiles replay original assertions and bind the Escape-only handler
+  ---
+  duration_ms: 457.4052
+  type: 'test'
+  ...
+# Subtest: retained applied-theme popup focus states preserve action boundaries
+ok 4 - retained applied-theme popup focus states preserve action boundaries
+  ---
+  duration_ms: 441.1909
+  type: 'test'
+  ...
+# Subtest: retained selection states preserve palettes and original geometry failures
+ok 5 - retained selection states preserve palettes and original geometry failures
+  ---
+  duration_ms: 444.4457
+  type: 'test'
+  ...
+# Subtest: retained tooltip textures separate popup placement from raster phase
+ok 6 - retained tooltip textures separate popup placement from raster phase
+  ---
+  duration_ms: 180.7159
+  type: 'test'
+  ...
+# Subtest: retained Tab, popup-state and email-edit boundaries preserve exact action evidence
+ok 7 - retained Tab, popup-state and email-edit boundaries preserve exact action evidence
+  ---
+  duration_ms: 20.498
+  type: 'test'
+  ...
+# Subtest: retained standalone visibility disabled and selection cohorts preserve exact receipts and failures
+ok 8 - retained standalone visibility disabled and selection cohorts preserve exact receipts and failures
+  ---
+  duration_ms: 44.4503
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4527.7847
+TAP version 13
+# Subtest: button box-sizing survey replays all original owners and keeps interaction geometry gaps
+ok 1 - button box-sizing survey replays all original owners and keeps interaction geometry gaps
+  ---
+  duration_ms: 6012.2321
+  type: 'test'
+  ...
+# Subtest: button box-sizing input proof rejects unsupported defaults, compensated sizes and forged geometry
+ok 2 - button box-sizing input proof rejects unsupported defaults, compensated sizes and forged geometry
+  ---
+  duration_ms: 62.9081
+  type: 'test'
+  ...
+# Subtest: button fixed widths retain all original authoring differences including the numerically matching core
+ok 3 - button fixed widths retain all original authoring differences including the numerically matching core
+  ---
+  duration_ms: 3842.6885
+  type: 'test'
+  ...
+# Subtest: button fixed width proof rejects invented authoring changed stages and unreviewed requests
+ok 4 - button fixed width proof rejects invented authoring changed stages and unreviewed requests
+  ---
+  duration_ms: 55.1141
+  type: 'test'
+  ...
+# Subtest: button formatting survey retains complete original class inventory and every property observation
+ok 5 - button formatting survey retains complete original class inventory and every property observation
+  ---
+  duration_ms: 3584.5581
+  type: 'test'
+  ...
+# Subtest: button formatting proof rejects competing declarations, identity loss and changed local stages
+ok 6 - button formatting proof rejects competing declarations, identity loss and changed local stages
+  ---
+  duration_ms: 63.7445
+  type: 'test'
+  ...
+# Subtest: button host requests retain all original owners and distinguish omissions from absolute requests
+ok 7 - button host requests retain all original owners and distinguish omissions from absolute requests
+  ---
+  duration_ms: 3788.2645
+  type: 'test'
+  ...
+# Subtest: button host request proof rejects competing requests false defaults and source loss
+ok 8 - button host request proof rejects competing requests false defaults and source loss
+  ---
+  duration_ms: 51.8601
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 29618.6677
+TAP version 13
+# Subtest: button box sizing binds all original trees and measured geometry without upgrading gaps or width authoring
+ok 1 - button box sizing binds all original trees and measured geometry without upgrading gaps or width authoring
+  ---
+  duration_ms: 39401.188
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 42367.8316
+TAP version 13
+# {"sourceControls":8,"receiptControls":15,"diagnosticCases":3,"diagnosticOwners":6,"temporaryDiagnosticCapture":"D:\\\\dev\\\\github\\\\AstylarUI-audit-integration\\\\artifacts\\\\material-parity\\\\button-box-sizing-binding-control-OOM8jd\\\\capture.json"}
+# Subtest: button box sizing source binding rejects detached geometry populations and upgraded claims
+ok 1 - button box sizing source binding rejects detached geometry populations and upgraded claims
+  ---
+  duration_ms: 996.5088
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4272.5551
