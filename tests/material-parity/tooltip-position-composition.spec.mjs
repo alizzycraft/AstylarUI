@@ -12,6 +12,65 @@ import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { propertyGroups } from './input-equivalence-policy.mjs';
 
+test('current source retains viewport-dependent camera crossing for unbounded root paint depth', () => {
+  // Execute complete owning method bodies, not copied arithmetic. This is a
+  // source-stage applicability check, deliberately not a browser reproduction.
+  const receipts = [];
+  const source = file => {
+    const bytes = readFileSync(file);
+    receipts.push({ file, sha256: createHash('sha256').update(bytes).digest('hex') });
+    return ts.createSourceFile(file, bytes.toString('utf8'), ts.ScriptTarget.Latest, true);
+  };
+  const camera = source('src/app/services/babylon-camera.service.ts');
+  const stacking = source('src/app/services/dom/positioning/stacking-context.manager.ts');
+  const projection = source('src/app/services/css-babylon-projection.ts');
+  const member = (tree, name) => {
+    const owner = tree.statements.find(ts.isClassDeclaration);
+    const matches = owner.members.filter(node => node.name?.getText(tree) === name);
+    assert.equal(matches.length, 1, name);
+    return matches[0];
+  };
+  const compile = text => {
+    const js = ts.transpileModule(text, { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
+    return new Function(`${js}; return Probe;`)();
+  };
+  const initialize = member(camera, 'initialize');
+  const declarations = initialize.body.statements.filter(ts.isVariableStatement)
+    .flatMap(node => [...node.declarationList.declarations]);
+  const distance = declarations.find(node => node.name.getText(camera) === 'cameraDistance');
+  assert.ok(distance?.initializer);
+  const CameraProbe = compile(`class Probe {
+    ${member(camera, 'getFOV').getText(camera)}
+    ${member(camera, 'calculateUiClipRange').getText(camera)}
+    distance(cssHeight:number) { const fov=this.getFOV(); return ${distance.initializer.getText(camera)}; }
+  }`);
+  const StackProbe = compile(`class Probe {
+    ${member(stacking, 'rootContextStep').getText(stacking)}
+    ${member(stacking, 'rootContextDepth').getText(stacking)}
+  }`);
+  const ProjectProbe = compile(`class Probe {
+    worldUnitsPerCssPixel=1;
+    ${member(projection, 'projectLocalPoint').getText(projection)}
+  }`);
+  // Orthographic x/y is independent of depth; it does not bound paint Z.
+  assert.match(member(camera, 'updateViewport').getText(camera), /Camera\.ORTHOGRAPHIC_CAMERA/);
+  const c = new CameraProbe(), s = new StackProbe(), p = new ProjectProbe();
+  const depth = s.rootContextDepth(1000);
+  assert.equal(depth, 250.01);
+  assert.equal(p.projectLocalPoint({ x: 10, y: 20 }, depth).z, depth);
+  const observations = [1000, 240].map(height => {
+    const cameraZ = c.distance(height), clip = c.calculateUiClipRange(cameraZ, height);
+    return { height, cameraZ, depth, forwardDistance: cameraZ - depth, ...clip };
+  });
+  assert.ok(observations[0].forwardDistance > observations[0].minZ);
+  assert.ok(observations[0].forwardDistance < observations[0].maxZ);
+  assert.ok(observations[1].forwardDistance < 0);
+  assert.ok(s.rootContextDepth(1) < c.distance(240));
+  console.log(JSON.stringify({ proof: 'current-source-root-depth-camera-applicability', receipts,
+    observations, boundary: 'Extracted current source arithmetic only;not current browser paint,exact tooltip world depth,full ancestry or case acceptance.',
+    currentRenderingAccepted: false }));
+});
+
 test('tooltip z-index scalar compares different stacking owners in all 18 retained cases', () => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
   const review = collectTooltipPositionComposition();

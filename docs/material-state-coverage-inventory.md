@@ -2,6 +2,23 @@
 
 ## Current audit pointer — October22
 
+- Current-source camera/depth applicability is now bounded explicitly by the
+  existing tooltip suite's 'current source retains viewport-dependent camera
+  crossing for unbounded root paint depth'. It executes complete current owning
+  getFOV/clip-range/root-depth/local-projection methods and the actual initialize
+  camera-distance initializer;logs raw source SHA256 receipts. Root z-index1000
+  maps to250.01 unchanged through local projection. Height1000 cameraZ866.0254
+  puts it in the forward clip range;height240 cameraZ207.8461 puts it behind the
+  camera. Current orthographic x/y does not remove that arithmetic hazard.
+  Focused1/1 passes;retained log tooltip-current-source-depth-applicability-
+  20261022.log and empty stderr. This is extracted-source arithmetic,NOT current
+  browser paint,exact tooltip world-depth/ancestry equivalence or case closure.
+  Historical contrast/light rasters remain frozen-build evidence. Next question:
+  reduce this through the current public renderer with equivalent root stacking
+  inputs and authenticate served current code;do not rerun the frozen theme
+  capture or treat the orthographic change as resolving depth clipping.
+  Pending tab/tooltip source/case integration remains separate from accepted
+  5ed659b3;no export or acceptance flag changed,no core/fixture edits.
 - Contrast DPR1 tall/short paint question now has actual new depth observations,
   not transplanted light values. Existing producer's explicit --paint-depth-pair
   (requires --short-boundary) selects only contrast/900x1000+900x240/DPR1.
