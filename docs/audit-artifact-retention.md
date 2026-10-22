@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+Retain join-tabs-menu-sheet-input-evidence.mjs and tabs-menu-sheet-case-join-
+20261022 log/empty stderr. Pending7eb107de case proposal adds exactly201 children
+and validates15657 dependencies;completeff305b14 and accepted pointer conserve.
+Its178895974-byte generated JSON remains ignored/reproducible by the recorded
+producer,not another checked-in full result set. Retain locally through pending
+registration/export reconciliation;all original/failure evidence remains required.
+
 Retain review-tabs-semantic-inputs.mjs,tabs-semantic-input-review-20261022 log/
 empty stderr and pending proposal4eb7698c. Existing full semantic-binding and
 12-pair AX verifiers replay byte-exactly;all179 prior definitions preserve.

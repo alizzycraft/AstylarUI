@@ -39,9 +39,17 @@
   and adds fixture-tab-panel-accessible-name-substitution;not registered/exported.
   Evidence:review-tabs-semantic-inputs.mjs,tabs-semantic-input-review-20261022
   log/empty stderr. No renderer/fixture edit or current rendering acceptance.
-- Next:coherently join the pending bounded node/AX/source evidence using existing
-  registration and conservation infrastructure,without recapturing unchanged
-  evidence or promoting partial cases. Then remaining
+- Pending case proposal7eb107de now joins70 tabs/94 menu recorded-node records,
+  25 bottom-sheet action-presence records and12 tabs static-AX pairs(201children).
+  Existing loader authenticates15657 dependencies;removing exactly201 additions
+  recovers completeff305b14. Accepted pointer/statuses remain unchanged. Evidence:
+  join-tabs-menu-sheet-input-evidence.mjs,tabs-menu-sheet-case-join-20261022 log/
+  empty stderr. The178895974-byte generated proposal stays ignored,not another
+  checked-in full result set;its deterministic producer and digest are retained.
+- Next:register pending180 source findings and7eb107de selection through existing
+  exact predecessor-restoration guards,then reconcile source census and perform
+  coherent export/cold/import. Do not recapture unchanged evidence or promote
+  partial cases. Then remaining
   descendant/first-stage/anonymous and semantic gaps;
   interaction histories/resources(1875),editable caret/selection(443) and complete
   current input/runtime/rendering applicability(2311) remain open and overlapping.
