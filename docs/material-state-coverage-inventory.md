@@ -4,6 +4,22 @@
 
 Updated October22. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- Standalone tabs recorded-element gap answered while frozen stepper cold replay
+  runs:all70 accepted paired trees authenticate and account for2458 native/840
+  candidate records. Two topologies:62 ordinary/8 held(extra native ripple).
+  Native pagination,list/content/label wrappers,two indicators,two panel IDs and
+  active text have explicit groups versus flat button values,positioned baseline/
+  indicator and one private-paint plugin. Selected states/label texts and retained
+  native DOM relationships bind;this is not actual AX or full relation equivalence.
+  Existing typography/breakpoint/private-paint/baseline causes are reused,not
+  reopened or counted as new findings. All280 forged records reject and exact
+  replay passes. Evidence:check-tabs-recorded-nodes.mjs and tabs-recorded-node-
+  accounting-20261022 log pair,terminal0. New files are outside frozen856-source
+  batch;no frozen source/renderer/fixture changes or additional heavy collector.
+  Next:queue70 bounded accounting children for a later coherent join;actual tab/
+  panel AX,anonymous/pseudo/full-style/paint/event/resource/current applicability
+  and whole-case closure remain open. Do not export metadata during cold replay.
+
 - Independent stepper cold check is live(session92085),same frozen invocation
   `node scripts/export-material-input-audit-current-ancestry.mjs --stepper-inputs --check`
   with ASTYLAR_AUDIT_COLD=1 and progress diagnostics. Retain stepper-cold-check-

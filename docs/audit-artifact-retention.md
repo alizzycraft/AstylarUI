@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain check-tabs-recorded-nodes.mjs and tabs-recorded-node-accounting-20261022
+log/empty stderr. All70 retained pairs authenticate,2458 native/840 candidate
+records account explicitly,280 mutations reject and exact replay passes. This is
+required new descendant evidence,not disposable successful scratch. Preserve all
+original trees,including held ripples and both native panels. New files remain
+outside frozen stepper batch856 sources;do not integrate/export them until the
+independent cold milestone is closed. No current rendering or case promotion.
+
 Independent cold check92085 is live with ASTYLAR_AUDIT_COLD=1 and
 --stepper-inputs --check. Retain stepper-cold-check-20261022 stdout/stderr and
 any failure evidence;do not commit live logs as terminal results. Preserve frozen
