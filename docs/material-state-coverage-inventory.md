@@ -2,6 +2,17 @@
 
 ## Current audit pointer — October22
 
+- Post-gate export69850 is TERMINAL with native exit -1073740791(0xC0000409),
+  not a validation pass. Last phase is validate-audit at1570942.2219ms;
+  no verify-evidence-session,encoding or publication receipt follows. Original
+  post-gate-canonical-export-20261022.log is empty;stderr retains four progress
+  records. Recheck confirms canonical gzip SHA e7d22b1ad3a17ae1d00cfd131dd0c51164fc8b5efe39484fb31b95561240c678,
+  unchanged canonical Git diff and accepted generation/index e7d22b1a/80632431.
+  No matching export process remains. Bounded Windows event queries yielded no
+  Node crash diagnosis;unrelated nvcontainer 0xc0000409 events are not attribution.
+  Cause remains unknown,not proven OOM. Next isolate the two validation calls
+  behind this phase before any repeat expensive export;seven-source applicability
+  publication remains pending. Coverage stays2311 partial/current unverified.
 - Frozen post-gate census:928 registered paths unchanged;seven LF-substantive
   tracked changes versus03fafef8(store/benchmark/fixed-width/input-audit tests,
   static-semantic test,tabs helper,case reader). Full248-proof inventory recovers

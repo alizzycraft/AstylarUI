@@ -2,6 +2,12 @@
 
 ## Current versus historical evidence
 
+Retain post-gate-canonical-export-20261022.log/.stderr.log unchanged as native
+failure evidence:session69850 exit -1073740791(0xC0000409),last phase validate-audit,
+no successful validation/publication. Accepted e7d22b1a package/index unchanged
+by hash,pointer and canonical Git diff. Do not overwrite logs on retry or infer
+OOM from the exit code;unrelated NVIDIA crash events do not diagnose Node.
+
 Retain post-gate-proof-inventory-20261022.log/.stderr.log:248 proofs/4465 tokens,
 exact421b2d19 digest and existing negative controls pass after seven-source
 conservation. This is not full canonical publication or case/rendering acceptance.
