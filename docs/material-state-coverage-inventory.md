@@ -2,6 +2,33 @@
 
 ## Current audit pointer — October22
 
+- Scope unchanged:36 families/2311 cases(436 static/1875 interaction),all partial;
+  current rendering unverified. No case closure or acceptance promotion.
+- Accepted canonical7fa7ca35/index77af769e/review7eb107de:180 findings/243 proofs/
+  873 paths. Cold99596 exits0 in2629114.6378ms;2 collectors/10 memory hits/0 disk
+  hits,16847 files/1720170485 bytes authenticated. Source/full80-section/coverage/
+  148-receipt conservation complete. Main import verifies all shards and matches
+  candidate exactly,reusing authenticated index without another full decode.
+  Logs:tabs-cold-check-20261022 and tabs-main-import-verification-20261022 with
+  retained command provenance. Prior8d6c5964 and original/failure evidence retained.
+- Accepted addition:201 partial evidence children(70 tabs/94 menu node cases,
+  25 sheet action-presence and12 tabs AX pairs),one authored tab-panel-name
+  substitution finding. No rendering or full-case acceptance follows.
+- NEXT:publish this checkpoint,then retry deferred851-child field/overlay join
+  with node --max-old-space-size=4096 scripts/join-field-overlay-node-evidence.mjs.
+  Eight proofs cover six fields577 cases/four overlays274 cases. Original alias/
+  heap failures retained;new early heap guard passes. No new join proposal yet.
+- Separate pending evidence:bottom-sheet name proposal835eba45,activateAX9 pairs,
+  focus-source applicability. Static actual-AX resume authenticates97 reused
+  pairs,339 remain;defer capture until join memory work completes. Raw failures
+  remain immutable;resume preflight proves selection,not new capture outcomes.
+- Remaining:full-style/anonymous/first-stage/semantic correspondence,1875 event/
+  resource histories,443 editable caret/selection and2311 full runtime/currentness
+  obligations. Final unfiltered canonical/audit harness/browser/units/builds/
+  consumer/capability/example/skills/diff/handoff gates remain unchanged.
+
+## October22 retained working checkpoints — superseded current-pointer detail
+
 - Field/overlay851-child join is prepared,not verified or published. First run
   rejected verifier-name snackbar versus canonical family snack-bar;exact alias
   corrected. Second run exhausted V8 heap before producing a proposal while

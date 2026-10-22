@@ -1,0 +1,9 @@
+{
+  "sessionId": 99596,
+  "exitCode": 0,
+  "command": "node scripts/export-material-input-audit-current-ancestry.mjs --tabs-menu-sheet --check",
+  "environment": { "ASTYLAR_AUDIT_COLD": "1", "ASTYLAR_AUDIT_PROGRESS": "1" },
+  "elapsedMs": 2629114.6378,
+  "canonicalCheckPassed": true,
+  "renderingAccepted": false
+}

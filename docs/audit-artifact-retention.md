@@ -2,6 +2,17 @@
 
 ## Current versus historical evidence
 
+Cold99596 terminates exit0 in2629114.6378ms;retain tabs-cold-check-20261022
+stdout/stderr/terminal.json. Full source/section/coverage/receipt conservation
+and independent canonical comparison pass. Main import selects7fa7ca35/index
+77af769e with every shard verified,exact candidate equality and existing index
+reuse(no full re-decode). Retain tabs-main-import-verification-20261022 log/
+empty stderr and command.mjs(streamed-module provenance,not a repeatable import
+after pointer advancement). Prior8d6c5964 and all original/failure evidence stay.
+Older live99596/frozen873/pending acceptance notes below are historical. Release
+the source freeze only after publication;all2311 cases remain partial/unverified.
+851-child join retry and339-pair AX resume remain queued,not successful outcomes.
+
 Retain join-field-overlay-node-evidence.mjs and field-overlay-node-join-
 20261022,field-overlay-node-join-final-20261022 and heap-guard-20261022 log/
 stderr pairs. Initial canonical snack-bar naming guard failure and second V8
