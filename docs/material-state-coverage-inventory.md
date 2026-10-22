@@ -2,6 +2,25 @@
 
 ## Current audit pointer — October22
 
+- Remote publication incomplete:local48ca876b(cold-verified canonical publication)
+  and1aa194ee(slider semantic proof) are committed,not pushed. Remote readback
+  after terminal HTTP408 remains6026e5ed867f533f7df4ca60053ab3c348e34844.
+  Two HTTP2 attempts and HTTP1.1 retry fail;one bounded HTTP1.1 retry with
+  pack.window=0/core.compression=0/postBuffer536870912 writes23 objects/91.89MiB
+  before the same HTTP408. Upload completion is not remote acceptance. Do not
+  keep identical retries running or rewrite/remove evidence to shrink history.
+  Local accepted evidence remains valid;remote publication must still complete.
+- Remaining-gap triage:reuse existing paginator disabled/focus/group-name and
+  form-field hint-description findings,not new duplicate classifications. Divider
+  numeric baseline/live texture identity and affine mapping are already answered
+  in divider-live-baseline-copy-diagnostic-20261019 and the October19 ledger;
+  no repeat baseline/texture capture is justified. Highest shared outstanding
+  requirements are complete input/style/anonymous-owner correspondence and
+  interaction/runtime/lifetime applicability. For divider specifically,the exact
+  case ledger retains material properties beyond explicit paragraph/span owners,
+  equal-input paint attribution/compositing,late completion/remount/peer isolation,
+  other compensation/history branches and final current-code gates. Existing
+  bounded answers must be reused without promoting them to complete case review.
 - Bounded slider semantic question answered:all12 retained initial-state pairs
   expose matching thumb names/values/remaining scalar AX properties,but native
   bounds0..65/30..100 versus candidate0..50/50..100 and DOM step5 versus1 remain.
