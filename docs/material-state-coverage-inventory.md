@@ -2,6 +2,18 @@
 
 ## Current audit pointer — October22
 
+- Proof-inventory test57 now passes with248 proofs/4465 tokens,current digest
+  d50b9033122c357582470dc0f812ccaade8c11480fc909f630fb2be5e19de284.
+  Read-only exact03fafef8 replay of only store/fixed-width test-file reads recovers
+  cold section8d484b87;all248 records/order/non-line fields deep-equal. Exactly
+  three anchors move:store523→535,563→575;fixed-width47→84. No proof additions,
+  omissions or claim changes. Existing altered-description/duplicate/missing-proof
+  controls remain and pass. Evidence:proof-inventory-reconciliation-20261022.log/
+  empty stderr. Canonical package remains historical for these changed source
+  receipts/anchors until coherent reconciliation,not silently current.
+- Remote push50908 succeeded6026e5ed→891df012 on the integration branch.
+  GitHub warns the retained canonical gzip is87.14MiB;no rejection. Later commits
+  are not included in that push and remain pending publication.
 - Readonly historical proposal test36 corrected and focused command exits0.
   Exact165 predecessor definitions remain unchanged/in-order within current191;
   prior test incorrectly required historical proposal to contain later additions.

@@ -2,6 +2,11 @@
 
 ## Current versus historical evidence
 
+Retain proof-inventory-reconciliation-20261022.log/.stderr.log:focused test57
+passes248-proof inventory and original negative controls after exact cold-record
+conservation plus three anchor shifts. Cold package/original failure unchanged;
+new source receipts still require coherent canonical applicability reconciliation.
+
 Retain readonly-proposal-conservation-20261022.log/.stderr.log:focused original
 test36 now checks exact ordered165 historical predecessor definitions within191,
 all prior receipt checks and three missing/duplicate/alteration controls. Exit0.
