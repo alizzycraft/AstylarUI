@@ -2,6 +2,17 @@
 
 ## Current versus historical evidence
 
+Retain join-bottom-sheet-ax-input-evidence.mjs,bottom-sheet-ax-input-join and
+bottom-sheet-ax-input-join-final20261022 log/stderr pairs. First fails canonical
+workspace-relative path validation;failed proposal2fd3236c remains ignored and
+retained. Final48e8e7ca adds18 children/9 pairs,15703 dependencies authenticate,
+complete9f9dfaf0 predecessor recovers and accepted pointer stays unchanged.
+Keep bottom-sheet-preserved-source-20261022/astylar.component.ts,byte-identical
+to original2c2979ad. Original sibling-worktree source still required by retained
+focus verifier;do not delete it. No source receipt rewritten,no renderer fix.
+Do not force-add either large generated case proposal. Push54598 and follow-up
+through82a1a8b0 succeed;older pending-push/DNS notes below are historical.
+
 Resume capture81226 is live;retain remaining-static-ax-resume-20261022 directory
 and remaining-static-ax-resume-capture-20261022 log/stderr without committing live
 results. Original97 reused pairs are unchanged. No successful full capture claim

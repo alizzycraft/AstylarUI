@@ -2,14 +2,13 @@
 
 ## Current audit pointer — October22
 
-- Publication7176fc4a is committed locally;push54598 remains confirmed live.
-  Independent remote-ref probe10384 exits1(Could not resolve host:github.com),
-  so remote publication is unconfirmed. Do not restart live push or claim pushed.
-  Verified join checkpointaf211172 also awaits the next successful push.
+- Publication7176fc4a and subsequent checkpoints through82a1a8b0 are pushed.
+  Push54598 exits0 despite84.54MB recommendation warning;follow-up push succeeds.
+  Earlier DNS-failed probe10384 is historical,not an outstanding blocker.
 - Actual-static AX resume81226 is confirmed live in remaining-static-ax-resume-
   20261022;capture log/stderr use remaining-static-ax-resume-capture-20261022.
-  Original97 reused pairs remain intact;137/678 new observations reached at
-  06:40 local,not a terminal count. Poll same handle;do not restart or commit
+  Original97 reused pairs remain intact;355/678 new observations reached during
+  this checkpoint,not a terminal count. Poll same handle;do not restart or commit
   live logs. After completion authenticate/report/review before coverage claims.
 - Scope unchanged:36 families/2311 cases(436 static/1875 interaction),all partial;
   current rendering unverified. No case closure or acceptance promotion.
@@ -27,12 +26,15 @@
   proposal9f9dfaf0 adds851 children across10 families/15675 authenticated deps;
   complete7eb107de predecessor recovers and accepted pointer remains unchanged.
   All eight proof replays pass. Log:field-overlay-node-join-sized-20261022.
-  Initial alias/heap failures retained. Proposal not registered/exported;
-  NEXT:combine queued sheet AX/name evidence before coherent registration.
-- Separate pending evidence:bottom-sheet name proposal835eba45,activateAX9 pairs,
-  focus-source applicability. Static actual-AX resume authenticates97 reused
-  pairs,339 remain;defer capture until join memory work completes. Raw failures
-  remain immutable;resume preflight proves selection,not new capture outcomes.
+  Initial alias/heap failures retained. Successor48e8e7ca now adds18 sheet AX/
+  historical-source-applicability children across9 configured activate pairs;
+  all15703 dependencies validate and complete9f9 predecessor recovers. Recorded
+  endpoints and old trace ordering remain separate claims. Log:bottom-sheet-ax-
+  input-join-final-20261022. Initial absolute-evidence-path failure2fd3236c retained;
+  byte-identical2c2979ad source archived workspace-relative,original stays intact.
+  Both proposals remain unregistered/unexported;name source proposal835eba45
+  remains pending. NEXT:finish/review live static AX capture before coherent
+  source/proof registration,not another export for each intermediate proposal.
 - Remaining:full-style/anonymous/first-stage/semantic correspondence,1875 event/
   resource histories,443 editable caret/selection and2311 full runtime/currentness
   obligations. Final unfiltered canonical/audit harness/browser/units/builds/
