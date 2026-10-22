@@ -28,6 +28,16 @@ Updated October22. Current conclusions only;earlier next/live statements in reta
   not anonymous formatting boxes/full styles/paint/AX/currentness/case closure.
   Next:join these68 bounded children with the next coherent evidence batch;
   no full export is justified solely by this standalone addition.
+- Standalone October22 stepper owner-context question answered:136/136 labels
+  across68 accepted pairs map the same span IDs/text,not wrong measurement owners.
+  Native label spans sit inside text-label/label block wrappers under relative
+  flex headers;candidate spans directly enter absolute flex headers(all three
+  captured stages). Unequal composition precedes projection;raw inline alignment
+  fields do not establish equal used layout. Existing absolute-header finding is
+  reused,not a new core defect. All544 forged records reject;exact saved producer
+  recipe replay passes. Evidence:stepper-label-owner-context-20261022 log pair.
+  Full descendants/anonymous boxes/styles/paint/current applicability remain open;
+  standalone context proof is not yet joined or a whole-case closure.
 
 - October22 reconciliation:expansion export17464 is TERMINAL SUCCESS(exit0,
   2959235ms),not a live job. Candidate3175514b has178 findings;accepted796984e0

@@ -2,6 +2,12 @@
 
 ## Current versus historical evidence
 
+Retain stepper-label-owner-context-20261022 log/empty stderr,including its exact
+producerArgs replay recipe and136 paired label/header ancestry records. All68
+accepted tree pairs authenticate,544 forged mappings reject,and exact replay
+passes. This distinguishes correct label IDs from unequal parent layout inputs;
+it does not establish current applicability or used-layout/paint equivalence.
+
 Retain check-expansion-recorded-nodes.mjs and expansion-recorded-node-accounting-
 20261022 log/empty stderr. The proof authenticates all68 accepted paired trees,
 accounts for996 native/748 candidate records and rejects280 mutations. Disabled
