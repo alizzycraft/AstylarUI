@@ -41,6 +41,14 @@
   wrapper/corner diagnosis. Evidence:check-basic-field-recorded-nodes.mjs and
   basic-field-recorded-node-accounting-20261022 log/empty stderr. Still outside
   frozen export;editing/caret,AX,paint,currentness and full-case gaps remain.
+  Autocomplete/select204 cases likewise account5178 native+2880 candidate
+  records,reusing the same577-case wrapper proof and inspecting the remaining
+  captions,templates,trigger/SVG,value,option/ripple/selection and portal/local-
+  popup owners. Final816 mutation controls/exact replay pass. First two verifier
+  failures(infix template parent,valid alternate closed shape after portal removal)
+  are retained,not fixture defects. Evidence:check-choice-field-recorded-nodes.mjs,
+  choice-field-recorded-node-accounting-final-20261022 log/empty stderr;initial/
+  retry log pairs preserve failures. Outside frozen export;no case promotion.
 - Sheet activate AX9 pairs/18 captures plus108 mutation controls bind actual
   names/roles/focus. Pending source proposal835eba45 preserves180 definitions:
   current/initial methods author Sharing options versus Open bottom sheet.

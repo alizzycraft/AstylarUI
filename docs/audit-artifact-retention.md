@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain check-choice-field-recorded-nodes.mjs and all three choice-field-recorded-
+node-accounting20261022 log/stderr pairs(initial,retry,final). Initial verifier
+assumed template outside infix;retry negative control allowed a different valid
+closed shape. Final binds the authenticated infix and original case shape;204
+pairs/8058 records account,816 controls reject and exact replay passes. Existing
+577-case wrapper evidence reused,not rerun or overwritten. Keep outside cold99596
+and frozen873 sources for later coherent join. No rendering or case acceptance.
+
 Independent cold99596 is live with ASTYLAR_AUDIT_COLD=1 and --tabs-menu-sheet
 --check. Retain tabs-cold-check-20261022 stdout/stderr without committing live
 logs. Freeze873 consumed sources;older finished export/conservation jobs must
