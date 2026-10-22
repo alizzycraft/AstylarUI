@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain bottom-sheet-action-presence-20261022 log/empty stderr,its exact inline
+producerArgs and all63 referenced paired trees. All25 open pairs retain both
+native labels and candidate action values;50 forged labels/values reject and
+byte-exact replay passes. Candidate direct three-stage styles are original data,
+not used layout or proof of visibility. This closes only a retained presence
+question,not the older screenshot diagnosis/current paint/full case obligations.
+Keep it outside frozen stepper export until a later coherent evidence join.
+
 Retain check-menu-recorded-nodes.mjs,initial menu-recorded-node-accounting-
 20261022 failure log/stderr and menu-recorded-node-accounting-retry-20261022
 log/empty stderr. All94 pairs/1416 native/724 candidate elements account,376

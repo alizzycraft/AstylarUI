@@ -4,6 +4,19 @@
 
 Updated October22. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- Bounded bottom-sheet action-presence question answered without a collector:
+  all63 accepted tree pairs authenticate;25 open pairs each contain both native
+  Share/Copy link label spans and both candidate button values. The38 closed pairs
+  contain no candidate action buttons. Direct three-stage candidate action/panel
+  style records are retained without inventing omitted values or used layout.
+  All50 label/value mutation controls reject and exact producerArgs replay passes.
+  Evidence:bottom-sheet-action-presence-20261022 log/empty stderr. This excludes
+  missing authored second-action content for this retained Oct5 cohort only,not
+  current/older-screenshot visibility,ancestor clipping,paint or hit reachability.
+  Existing list/token and fixed-constraint findings are not reopened or replaced.
+  Complete descendants,actual AX and current applicability remain open. Queue25
+  bounded presence children for a later join;frozen stepper sources remain intact.
+
 - Standalone menu recorded-element gap answered across94 accepted pairs:
   1416 native/724 candidate records account explicitly. Four shapes distinguish
   trigger children/portal records:20(4/0),24(5/0),32 open(5/12),18 dismissed(5/1).
