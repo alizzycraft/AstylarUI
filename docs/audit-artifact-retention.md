@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Retain check-datepicker-cell-inputs.mjs and both datepicker-cell-input-review-
+20261022 and datepicker-cell-input-review-final-20261022 log/stderr pairs.
+Initial verifier wrongly assumed uninterrupted seven-column indices;final
+preserves the partial October row. All111 pairs classify70 closed/33 month/8
+year;1215 cells match value/order,164 mutations reject and exact replay passes.
+Raw native ink/preview/label/marker inputs and independent candidate ring remain
+explicit. Not complete node accounting,rendering acceptance or currentness.
+Keep outside live cold99596/frozen873 sources for a later coherent join.
+
 Retain check-timepicker-recorded-nodes.mjs and timepicker-recorded-node-
 accounting-20261022 log/empty stderr. All110 pairs/14004 records account;48 open
 pairs preserve all48 labels,440 mutations reject and exact replay passes.

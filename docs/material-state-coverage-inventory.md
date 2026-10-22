@@ -2,6 +2,17 @@
 
 ## Current audit pointer — October22
 
+- Datepicker cell question closed for retained inputs:all111 pairs classify
+  70 closed/33 month/8 year;1215 day/year cell pairs preserve value and order.
+  Native ink/preview owners,raw whitespace,date labels and row-local indices
+  versus direct candidate value buttons are explicit;month-marker colspan4/
+  four candidate leading cells and independent sibling ring remain distinct.
+  Existing calendar composition/accessibility/typography/ring findings reused.
+  Evidence:check-datepicker-cell-inputs.mjs and datepicker-cell-input-review-
+  final-20261022 log/empty stderr;164 mutations reject and exact replay passes.
+  Initial failure preserves a verifier error(flat seven-column indexing despite
+  October's partial first row),not a renderer finding. No full-node/style/paint/
+  currentness/case closure;keep this outside frozen873 sources for later join.
 - Datepicker next-question reconnaissance:the retained111 cases have seven
   recorded-node shapes:25/17(12),25/18(16),26/17(16),228/67(33),179/47(8),
   27/17(18),24/17(8),reference/candidate respectively. Receipt-authenticated
