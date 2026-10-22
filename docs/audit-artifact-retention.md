@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+Keep tab-pagination-display-exclusion(-verified,-final)-20261022 log/stderr pairs.
+First fails a new instrumentation schema assumption;verified/final pass the exact
+70 retained reference-tree checks and280 mutation controls. Final binds its test
+source receipt and derives140 controls/280 excluded element owners. No capture or
+scratch generated;original node-accounting report/trees remain unchanged. This is
+standalone retained hidden-helper exclusion,not canonical joining/current parity.
+
 Post-gate publication succeeds:keep accepted5ed659b3/indexf259bcd7,candidate copy
 and original e7d22b1a separately with terminal candidate/main verification logs.
 All shards authenticate before/after copying and existing import reuses verified

@@ -205,3 +205,66 @@ test('tab proof rejects changed border ownership, positioning and calibrated wid
     mutate(trees); assert.throws(() => proveTabPositionSubstitution(...trees));
   }
 });
+
+test('retained tab pagination helpers are excluded by display none in all70 cases', () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const file = 'artifacts/material-parity/tabs-recorded-node-accounting-20261022.log';
+  const bytes = readFileSync(file);
+  assert.equal(hash(bytes), '13023f54f758a57893ab2394260255aac4103eb11f8996bd67d8a256e362d729');
+  const report = JSON.parse(bytes);
+  assert.equal(hash(readFileSync(report.producer.file)), report.producer.sha256);
+  assert.equal(report.observations.length, 70);
+  assert.equal(new Set(report.observations.map(row => row.case)).size, 70);
+  const hasClass = (node, name) => node.attributes?.class?.split(/\s+/).includes(name);
+  const inspect = (tree, groups) => {
+    assert.deepEqual(tree.errors, []);
+    // The retained browser schema records computed styles and CSS read errors;
+    // ruleEvidenceComplete is a candidate-resolver field, not a browser field.
+    assert.equal(tree.schemaVersion, 1);
+    const controls = tree.nodes.filter(node => hasClass(node, 'mat-mdc-tab-header-pagination'));
+    assert.equal(controls.length, 2);
+    return ['before', 'after'].map(direction => {
+      const matching = controls.filter(node => hasClass(node, `mat-mdc-tab-header-pagination-${direction}`));
+      assert.equal(matching.length, 1);
+      const node = matching[0], style = tree.styles[node.style];
+      assert.equal(style.display, 'none');
+      assert.equal(style.pointerEvents, 'none');
+      assert.ok(hasClass(node, 'mat-mdc-tab-header-pagination-disabled'));
+      const owners = tree.nodes.filter(child => child.key === node.key || child.key.startsWith(node.key + '/'));
+      const group = groups.filter(group => group.label === `native-pagination-${direction}`);
+      assert.equal(group.length, 1);
+      assert.deepEqual(group[0].reference.map(owner => owner.key), owners.map(owner => owner.key));
+      assert.deepEqual(group[0].candidate, []);
+      return { key: node.key, direction, display: style.display, pointerEvents: style.pointerEvents,
+        excludedElementOwners: owners.length };
+    });
+  };
+  let controlsRejected = 0;
+  const observations = report.observations.map(row => {
+    const receipt = row.evidence.reference, raw = readFileSync(receipt.file);
+    assert.equal(hash(raw), receipt.sha256);
+    const tree = JSON.parse(raw), result = inspect(tree, row.groups);
+    for (const mutate of [
+      value => { value.styles[value.nodes.find(node => hasClass(node, 'mat-mdc-tab-header-pagination')).style].display = 'flex'; },
+      value => { value.styles[value.nodes.find(node => hasClass(node, 'mat-mdc-tab-header-pagination')).style].pointerEvents = 'auto'; },
+      value => { value.nodes.find(node => hasClass(node, 'mat-mdc-tab-header-pagination')).attributes.class = 'mat-mdc-tab-header-pagination'; },
+      value => { value.nodes.splice(value.nodes.findIndex(node => hasClass(node, 'mat-mdc-tab-header-pagination')), 1); },
+    ]) {
+      const changed = structuredClone(tree); mutate(changed);
+      assert.throws(() => inspect(changed, row.groups)); controlsRejected++;
+    }
+    return { case: row.case, evidence: receipt, controls: result };
+  });
+  assert.equal(controlsRejected, 280);
+  assert.equal(observations.filter(row => row.case.endsWith('/held')).length, 8);
+  const excludedControls = observations.reduce((sum, row) => sum + row.controls.length, 0);
+  const excludedElementOwners = observations.reduce((sum, row) => sum + row.controls.reduce((n, control) => n + control.excludedElementOwners, 0), 0);
+  assert.equal(excludedControls, 140); assert.equal(excludedElementOwners, 280);
+  const verifier = 'tests/material-parity/tab-position-substitution.spec.mjs';
+  console.log(JSON.stringify({ proof: 'retained-tab-pagination-display-exclusion',
+    evidence: { file, sha256: hash(bytes), producer: report.producer,
+      verifier: { file: verifier, sha256: hash(readFileSync(verifier)) } }, observations,
+    cases: observations.length, excludedControls, excludedElementOwners, negativeControlsRejected: controlsRejected,
+    boundary: 'CSS display:none excludes these retained native helpers and their descendants from layout/paint at the captured endpoints. Not equivalent full tab structure,overflow-triggered pagination,between-action timing,actual AX,current runtime or whole-case acceptance.',
+    canonicalPublication: false, currentRenderingAccepted: false }));
+});

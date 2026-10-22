@@ -2,6 +2,20 @@
 
 ## Current audit pointer — October22
 
+- Substantive tab owner question resolved for70 retained cases:both unmatched
+  pagination controls compute display:none,pointer-events:none and disabled in
+  every endpoint(62 ordinary/eight held). Their140 controls/280 total element
+  owners are excluded from CSS layout/paint there,not a visible pagination
+  omission explaining the screenshot. Existing tab suite now authenticates exact
+  recorded-node report/all70 reference trees and rejects280 visibility,input and
+  membership mutations. Final focused test1/1 passes1952.5964ms;log tab-pagination-
+  display-exclusion-final-20261022 binds actual counts and verifier receipt.
+  Initial failure wrongly requested candidate-only ruleEvidenceComplete from
+  browser schema;corrected browser schema1/computed-style assertions pass. Preserve
+  initial and intermediate logs. No full-structure,overflow-triggered pagination,
+  event timing,AX,current-runtime or case-closure claim. Standalone proof is not
+  canonically joined;append changes one registered test source after accepted
+  5ed659b3. Defer coherent export until a substantive batch,not per proof append.
 - Post-gate publication COMPLETE:accepted generation5ed659b3cee9b0947213e8eae570247066fe6fe880c5704eeafbb91ba5289fac,
   index f259bcd7038ef190d42a3b18b0cf5415986614f89eb697d8434582aa61d05c4b.
   Candidate76096 and main4638 terminate0;existing full-shard verification runs
