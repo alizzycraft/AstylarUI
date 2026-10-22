@@ -2,6 +2,17 @@
 
 ## Current audit pointer — October22
 
+- Input-boundary applicability narrowed without new whitelist:existing
+  restoreInputBoundaryReadonlyAppend authenticates58fe244d→cdcfd338→171bf9fa
+  exactly. Independent AST comparison of171bf9fa against verifier's96be6b7c
+  progress snapshot finds80 versus42 statements. All old test names remain;
+  two import statements expanded(fingerprintDirectory/propertyGroups),and three
+  bodies differ:public divider typography reduction,retained progress focus/caps/
+  disposal,captured-runtime class compilation. The older verifier already names
+  the first two body extensions,but not the import/runtime-compilation changes.
+  Next examine these exact three source transitions and reuse owning checks;
+  append restoration alone does not establish full historical applicability.
+  No source mutation or accepted historical/runtime equivalence follows yet.
 - Sorter applicability gap has an existing owner:readRetainedSortFocusSource
   authenticates current9fafec85 through exact whole-source intermediate hashes,
   restoring opt-in lifecycle/browser/plateau additions and returning65d7256f.
