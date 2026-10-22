@@ -2,6 +2,22 @@
 
 ## Current audit pointer — October22
 
+- Fixed-width measurement-aligned integration63343 TERMINATES1,0/1,
+  duration1173113.6562ms. The first scalar equality now passes,as do all preceding
+  eight width/nine box groups,600 owners,later gap/caret reviews and eight reviewed
+  input groups/24 occurrences. Next failure is fixed historical unrelated-row
+  count1146 versus actual1174 at current test line108. Complete unrelated-row
+  equality and later validation/mutation assertions remain UNEXECUTED. Independently
+  account for28 rows before changing this count;do not merely bless1174. Existing
+  box-sizing precise-color population derivation is reusable guidance,not proof
+  of this different480-case subset. Original failure and new log both retained.
+- Historical launch:fixed-width measurement-aligned integration session63343,
+  test runner26724/child24316. Existing test now uses the same pinned historical
+  normalizeColor8fb8ac9b→current72ccd810 transition as box-sizing integration;
+  every other historical AST statement/import relocation remains authenticated.
+  Syntax check passes;all original scalar/whole-row assertions remain. Logs:
+  button-fixed-width-precise-measurement-20261022.log/.stderr.log. No terminal
+  result yet;do not describe this pending test change as verified or canonical.
 - Test130 first-divergence question answered by reusing the October18 precise-
   color investigation:its actual baseline30357b9f8c7b95da668914032557c5f7416c81db
   normalizes identical native color(srgb0.9642350.9440780.974902) to rounded

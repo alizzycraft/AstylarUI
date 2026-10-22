@@ -2,6 +2,17 @@
 
 ## Current versus historical evidence
 
+Fixed-width precise-measurement session63343 now terminates1,0/1,
+1173113.6562ms. Preserve both logs as failure evidence. Earlier scalar conservation
+passes;next count assertion1146 versus1174 fails before complete unrelated-row
+equality. Do not present the measurement adjustment as a complete integration pass.
+
+Retain button-fixed-width-precise-measurement-20261022.log/.stderr.log while
+session63343 runs and afterward as original focused-gate evidence. Preserve the
+earlier unfiltered failure. Historical classification replay changes only the
+pinned color normalizer and import relocation,not captured inputs or assertions.
+No pass or complete conservation claim precedes its terminal result.
+
 October22 process revalidation finds session65418 unavailable and no matching
 harness/test child live. Its stdout ends at test173,with18 explicit failures but
 no terminal TAP aggregate/exit receipt. Retain both original logs as incomplete

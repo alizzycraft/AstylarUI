@@ -23,7 +23,14 @@ const current = ts.createSourceFile(moduleFile, readFileSync(moduleFile, 'utf8')
 const functionText = (f, name) => f.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name).getText(f);
 for (const name of ['reviewedTemplateTextMappings', 'canonicalStyle', 'normalizeValue', 'formatNumber', 'equivalentValue'])
   assert.equal(functionText(current, name), functionText(parsed, name), `unchanged production ${name}`);
-let relocated = source;
+// Replay historical classification under the same precise color measurement.
+// Preserve the original source and reject any unreviewed normalizer transition.
+const normalizationHash = value => createHash('sha256').update(value).digest('hex');
+const historicalColor = functionText(parsed, 'normalizeColor'), preciseColor = functionText(current, 'normalizeColor');
+assert.equal(normalizationHash(historicalColor), '8fb8ac9b17cc2a2cad2fce61e36c8dd1b77991bb56c73e3dee94354aa4a28a1a');
+assert.equal(normalizationHash(preciseColor), '72ccd81044437192569c028d93be8312b700cd199e3cb0f173d16f64b0839d42');
+const colorNode = parsed.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === 'normalizeColor');
+let relocated = source.slice(0, colorNode.getStart(parsed)) + preciseColor + source.slice(colorNode.end);
 for (const node of [...parsed.statements.filter(ts.isImportDeclaration)].reverse()) {
   if (!node.moduleSpecifier.text.startsWith('./')) continue;
   const s = node.moduleSpecifier, url = new URL(s.text, pathToFileURL(path.resolve(moduleFile))).href;
@@ -33,7 +40,8 @@ const relocatedFile = ts.createSourceFile(moduleFile, relocated, ts.ScriptTarget
 assert.equal(relocatedFile.statements.length, parsed.statements.length);
 for (let i = 0; i < parsed.statements.length; i++) {
   const withoutPath = (n, f) => ts.isImportDeclaration(n) ? n.getText(f).replace(n.moduleSpecifier.getText(f), '<import>') : n.getText(f);
-  assert.equal(withoutPath(parsed.statements[i], parsed), withoutPath(relocatedFile.statements[i], relocatedFile));
+  assert.equal(parsed.statements[i] === colorNode ? preciseColor : withoutPath(parsed.statements[i], parsed),
+    withoutPath(relocatedFile.statements[i], relocatedFile));
 }
 const prior = await import(`data:text/javascript;base64,${Buffer.from(relocated).toString('base64')}`);
 const original = JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));
