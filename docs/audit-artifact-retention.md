@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+Retain check-stepper-recorded-nodes.mjs and stepper-recorded-node-accounting-
+20261022 log/empty stderr. All68 accepted pairs authenticate and1996 native/1104
+candidate nodes are accounted for;272 mutations reject and exact replay passes.
+Preserve all original trees,including held ripples and both native panels. Unequal
+glyph/wrapper/panel groups do not establish paint,AX or case acceptance. Standalone
+proof awaits coherent obligation integration rather than another metadata export.
+
 Retain stepper-label-owner-context-20261022 log/empty stderr,including its exact
 producerArgs replay recipe and136 paired label/header ancestry records. All68
 accepted tree pairs authenticate,544 forged mappings reject,and exact replay

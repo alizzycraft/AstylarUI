@@ -38,6 +38,17 @@ Updated October22. Current conclusions only;earlier next/live statements in reta
   recipe replay passes. Evidence:stepper-label-owner-context-20261022 log pair.
   Full descendants/anonymous boxes/styles/paint/current applicability remain open;
   standalone context proof is not yet joined or a whole-case closure.
+- Stepper complete recorded-node accounting now covers all68 accepted pairs:
+  1996 native/1104 candidate records,272 forged records rejected and exact replay
+  passed. Three shapes are44 ordinary,8 held(native ripple addition),16 activated
+  (native Editable/create versus candidate presentation checkmark). Both native
+  panels remain recorded versus one candidate panel with replaced text. Every
+  header,label/number wrapper,ripple,connector and panel belongs to an explicit
+  group;existing four authoring causes are reused without reopening history.
+  Evidence:check-stepper-recorded-nodes.mjs and stepper-recorded-node-accounting-
+  20261022 log pair,terminal0. Queue68 bounded children with expansion accounting
+  for the next coherent join;anonymous/pseudo/style/paint/AX/event/resource/current
+  applicability and whole-case closure remain open. No canonical export needed yet.
 
 - October22 reconciliation:expansion export17464 is TERMINAL SUCCESS(exit0,
   2959235ms),not a live job. Candidate3175514b has178 findings;accepted796984e0
