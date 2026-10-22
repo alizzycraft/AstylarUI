@@ -2,6 +2,10 @@
 
 ## Current versus historical evidence
 
+Retain post-gate-proof-inventory-20261022.log/.stderr.log:248 proofs/4465 tokens,
+exact421b2d19 digest and existing negative controls pass after seven-source
+conservation. This is not full canonical publication or case/rendering acceptance.
+
 Post-gate static-semantic integration7074 terminates0,5/5,zero skips,
 173535.98ms. Preserve terminal stdout/empty stderr plus all earlier individual
 selection/registration attempts. Nine original reviewers and complete case join

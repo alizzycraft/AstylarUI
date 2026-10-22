@@ -2,6 +2,17 @@
 
 ## Current audit pointer — October22
 
+- Frozen post-gate census:928 registered paths unchanged;seven LF-substantive
+  tracked changes versus03fafef8(store/benchmark/fixed-width/input-audit tests,
+  static-semantic test,tabs helper,case reader). Full248-proof inventory recovers
+  exact cold8d484b87 section when those seven reads use03fafef8;all non-line fields/
+  order conserve. Current section421b2d190e288589563209e81be62f2a9162d570925340fc12b63f2a6af923c4,
+  4465 tokens. Existing workflow proof check updated only after that complete
+  comparison and passes with altered/duplicate/missing controls. Evidence:
+  post-gate-proof-inventory-20261022.log/empty stderr. Next coherent named export
+  may reconcile these verified sources/anchors;unchanged191 definitions and
+  all2311 partial/unverified cases must conserve. Standalone held-update capture
+  is not automatically registered or joined by this export.
 - Combined post-gate static-semantic integration7074 TERMINATES0,5/5,zero skips,
   173535.98ms. Executes original registration conservation,nine restricted180-
   definition reviewer replays,complete predecessor case join,named-selection

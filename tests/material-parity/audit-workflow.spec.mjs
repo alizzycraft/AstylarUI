@@ -102,12 +102,12 @@ test('all canonical proof pointers resolve after focused/integration test moves'
     { readFileSync: reader, path, root: process.cwd() });
   const proofs = inspect(readFileSync);
   // Cold-verified e7d22b1a publication has248 proofs,section8d484b87.
-  // Exact03fafef8 replay of the two subsequently edited test files recovers
-  // that section. All248 records/order/claims conserve;only three anchors move:
-  // store523→535,563→575 and fixed-width47→84. No unchecked proof additions.
+  // Exact03fafef8 replay of the seven changed registered sources recovers
+  // that section. All248 records/order/non-line fields conserve. Reviewed test
+  // insertions shift anchors only; no unchecked proof additions or claim edits.
   assert.equal(proofs.length, 248);
   const expected = [{ name: 'focusedProofs', tokens: 4465,
-    sha256: 'd50b9033122c357582470dc0f812ccaade8c11480fc909f630fb2be5e19de284' }];
+    sha256: '421b2d190e288589563209e81be62f2a9162d570925340fc12b63f2a6af923c4' }];
   const digestProofs = value => sectionDigests([Buffer.from(JSON.stringify({ focusedProofs: value }))]);
   assert.deepEqual(await digestProofs(proofs), expected);
   const altered = JSON.parse(JSON.stringify(proofs));
