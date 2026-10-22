@@ -77,6 +77,18 @@
   visibility/paint/reachability/currentness remain unproven. Evidence:
   check-bottom-sheet-recorded-nodes.mjs,bottom-sheet-recorded-node-accounting-
   20261022 log/empty stderr. Join only after current export/cold milestone closes.
+- Also outside frozen export:bottom-sheet activate actual AX now covers9 configured
+  pairs/18 raw AX+backend-DOM captures(21 retained files,total296081 bytes).
+  Same pinned9d0f1220 build and maintained activate/settlement methods;all source/
+  capture receipts authenticate,no page errors. All9 pairs:reference dialog
+  Sharing options with navigation/two links;candidate Open bottom sheet/no
+  navigation/two buttons. Native focus Share,candidate focus remains opener.
+  Backend identity/ancestry/names/roles/focus checks pass108 mutation controls
+  and byte-exact replay. Evidence:capture-bottom-sheet-activate-ax.mjs,
+  check-bottom-sheet-activate-ax.mjs,bottom-sheet-activate-ax-20261022 and capture/
+  review log pairs. Names/roles reflect unequal inputs;next trace authored naming
+  history and autofocus lifecycle before classifying residual focus behavior.
+  No focus-trap,full-event,AT,paint,current-rendering or case-closure claim.
 - Evidence:stepper-coherent-export-20261022,stepper-cold-check-20261022 and
   stepper-main-import-verification-20261022;full-section-comparison,export-census-
   binding,receipt-leaf-comparison,coverage-conservation,candidate-import and

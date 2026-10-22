@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Retain all21 bottom-sheet-activate-ax-20261022 files(296081 bytes),both capture/
+review scripts and capture/review20261022 log/empty stderr pairs. Capture29171
+exits0;9 configured activate pairs retain actual full AX/backend DOM at the
+maintained action/settlement endpoint on pinned9d0f1220. All raw/provenance/
+action-method/current component-source-map receipts authenticate;108 mutations
+reject and exact replay passes. Observed focus remains opener on candidate versus
+native Share;do not discard this failure or infer its core cause yet. Keep this
+outside frozen873-source export5359 until its milestone closes. No case promotion.
+
 Export5359 with --tabs-menu-sheet is confirmed live;retain tabs-coherent-export-
 20261022 stdout/stderr without treating them as terminal or committing live logs.
 Freeze873 source paths through export/conservation/cold;new bottom-sheet proof
