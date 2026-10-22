@@ -2,7 +2,18 @@
 
 ## Current audit pointer — October20
 
-Updated October21. Current conclusions only;earlier next/live statements in retained detail are historical.
+Updated October22. Current conclusions only;earlier next/live statements in retained detail are historical.
+
+- ACCEPTED canonical3175514b/indexbd602e66/review5caa57e5 has178 source findings,
+  238 focused proofs,839 source paths. Independent cold55327 terminates0
+  (3943126ms),same --expansion-semantics --check,with2 collectors/10 memory hits/
+  0 disk hits,16778 files/1712647436 bytes authenticated. Main import29141 exits0;
+  every shard verifies and main/candidate pointers match. Complete80-section,
+  census,148-leaf and80-child coverage conservation below explains this batch.
+  All2311 cases remain partial/current-rendering unverified;prior796984 retained.
+  No collector is live. Next:remaining descendant/first-stage and actual-AX gaps,
+  then interaction/editable obligations and complete current-rendering/final gates.
+  Counts below are overlapping baselines,not a completion percentage.
 
 - October22 reconciliation:expansion export17464 is TERMINAL SUCCESS(exit0,
   2959235ms),not a live job. Candidate3175514b has178 findings;accepted796984e0
@@ -41,7 +52,7 @@ Updated October21. Current conclusions only;earlier next/live statements in reta
 - Scope/acceptance unchanged:36 families,2311 cases(436 static/1875 interaction),
   all2311 partial,0 complete,current rendering unverified. A documented failure
   counts as inspected evidence,not a rendering pass or automatic whole-case closure.
-- ACCEPTED canonical796984e0/indexdcca1c76/review20dfb804 has176 source findings,
+- PRIOR accepted canonical796984e0/indexdcca1c76/review20dfb804 has176 source findings,
   236 focused proofs,819 source paths. Cold check26470 exits0(2749723ms),with
   2 collectors/10 memory hits/0 disk hits,16610 files/1703066202 bytes authenticated.
   Main import44551 exits0;all shards verify and candidate/main pointers match.

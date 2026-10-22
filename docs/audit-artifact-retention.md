@@ -2,6 +2,18 @@
 
 ## Current versus historical evidence
 
+October22 expansion batch is closed and published after terminal cold check55327
+(exit0,3943126ms) and main import29141(exit0). Retain expansion-semantic-cold-check-
+20261022 stdout/stderr/resources/terminal and expansion-semantic-main-import-
+verification-20261022 log pair,with the already retained export/conservation logs.
+Current3175514b41bfed86ddbfeae54e494ab69c2e56723e5589ed8e7e763aba09425e
+indexbd602e66ac05e78911dd89dd1f0628525a51ae2ccb7ab7133b876d6d723fed3d
+authenticates178 findings/238 proofs/839 source paths. Complete gzip88020548bytes
+decodes to2333367609bytes,decodedSHA34b18e4f054928a9cecc7592c607572de242c5abdd2cd114d2a1b6e1f6327647.
+Retain prior796984 and all original/failure evidence;no deletion or historical
+alias repointing. All2311 cases remain partial/current-rendering unverified.
+Older live/next statements below describe historical milestones,not current jobs.
+
 Retain passive-table-header-observation-boundary-20261021 log/empty stderr.
 It authenticates24 original table captures and current authoring/source-map
 bindings,records target backend identities/properties/ancestry and distinguishes
