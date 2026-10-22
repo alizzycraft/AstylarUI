@@ -54,3 +54,39 @@ export function restoreStepperSemanticProducer(source) {
   assert.equal(hash(prior), '50c2182b37bc291584faccb147ad3882a88359be1eaf72fd53bbfedb39695db7');
   return prior;
 }
+export function restoreStepperCaseSelection(source) {
+  let text = source.toString().replaceAll('\r\n', '\n');
+  if (!text.includes('export const stepperInputsReview=')) return text;
+  assert.equal(hash(text), 'bf5bb2ac5ba58ca4aeb89819f351e52ce6fc182a7c953e1b0696e690ea16b08b');
+  const line = "export const stepperInputsReview='ff305b14217b7123b98a2e00f3ecb9ad443cd89606eaf688ea11f6118b7fb069';\n";
+  assert.equal(text.split(line).length, 2); text = text.replace(line, '');
+  assert.equal(text.split(',stepperInputsReview').length, 3); text = text.replaceAll(',stepperInputsReview', '');
+  assert.equal(hash(text), '7ffd95b3327cc270e374c7c80a2f6506ae0092f72567278a3b6b7bff4bac53bf');
+  return text;
+}
+export function restoreStepperRunnerSelection(source) {
+  let text = source.toString().replaceAll('\r\n', '\n');
+  if (!text.includes(', stepperInputsReview')) return text;
+  assert.equal(hash(text), '5d658498f857e95971cdfcee9336119dfd546d0f32a8f59a4e61bbda32be9c65');
+  for (const addition of [', stepperInputsReview', ',stepperInputsReview']) {
+    assert.equal(text.split(addition).length, 2); text = text.replace(addition, '');
+  }
+  assert.equal(hash(text), 'b3eee6c0c0e3377aa9bda24de72df9c548d4e9bfa48fc94016e25cfa99b0c667');
+  return text;
+}
+export function restoreStepperLauncherSelection(source) {
+  let text = source.toString().replaceAll('\r\n', '\n');
+  if (!text.includes('const stepperInputs =')) return text;
+  assert.equal(hash(text), 'ef67291fcd1aaa97b8884db56e3969fd714dea93768d692229b17987d73c1437');
+  for (const addition of [
+    "const stepperInputs = rawRequested.includes('--stepper-inputs');\n",
+    "assert.ok(!(stepperInputs && (staticAx || cardInputs || expansionSemantics)), 'Choose one case-review supplement');\n",
+    "stepperInputs ? 'artifacts/material-parity/working-audit/proposals/ff305b14217b7123b98a2e00f3ecb9ad443cd89606eaf688ea11f6118b7fb069.json' : ",
+    "stepperInputs ? '--case-obligation-review-sha256=ff305b14217b7123b98a2e00f3ecb9ad443cd89606eaf688ea11f6118b7fb069' : ",
+  ]) { assert.equal(text.split(addition).length, 2); text = text.replace(addition, ''); }
+  for (const addition of [", '--stepper-inputs'", '|--stepper-inputs']) {
+    assert.equal(text.split(addition).length, 2); text = text.replace(addition, '');
+  }
+  assert.equal(hash(text), '3381283405e9d4f7f5037ff2603da2226df586b434e1d1fc82c23900d0606d52');
+  return text;
+}

@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
-import { stepperSemanticPredecessor, restoreStepperSemanticPolicy, restoreStepperSemanticProducer } from './stepper-semantic-registration.mjs';
+import { stepperSemanticPredecessor, restoreStepperSemanticPolicy, restoreStepperSemanticProducer, restoreStepperCaseSelection, restoreStepperRunnerSelection, restoreStepperLauncherSelection } from './stepper-semantic-registration.mjs';
 const hash = value => createHash('sha256').update(value).digest('hex');
 const normalize = bytes => bytes.toString().replaceAll('\r\n', '\n');
 const previous = file => normalize(execFileSync('git', ['show', `e38618a0:${file}`], { maxBuffer: 4000000 }));
@@ -32,10 +32,13 @@ test('stepper semantic registration preserves178 findings and complete predecess
   const helperFile = 'tests/material-parity/expansion-semantic-registration.mjs';
   let helper = normalize(readFileSync(helperFile));
   for (const [addition, before] of [
-    ["import { stepperSemanticPredecessor, restoreStepperSemanticPolicy, restoreStepperSemanticProducer } from './stepper-semantic-registration.mjs';\n", ''],
+    ["import { stepperSemanticPredecessor, restoreStepperSemanticPolicy, restoreStepperSemanticProducer, restoreStepperCaseSelection, restoreStepperRunnerSelection, restoreStepperLauncherSelection } from './stepper-semantic-registration.mjs';\n", ''],
     ['  current = stepperSemanticPredecessor(current);\n', ''],
     ['  const text = restoreStepperSemanticPolicy(source);', "  const text = source.toString().replaceAll('\\r\\n', '\\n');"],
     ['  const text = restoreStepperSemanticProducer(source);', "  const text = source.toString().replaceAll('\\r\\n', '\\n');"],
+    ['  let text = restoreStepperCaseSelection(source);', "  let text = source.toString().replaceAll('\\r\\n', '\\n');"],
+    ['  let text = restoreStepperRunnerSelection(source);', "  let text = source.toString().replaceAll('\\r\\n', '\\n');"],
+    ['  let text = restoreStepperLauncherSelection(source);', "  let text = source.toString().replaceAll('\\r\\n', '\\n');"],
   ]) { assert.equal(helper.split(addition).length, 2); helper = helper.replace(addition, before); }
   assert.equal(helper, previous(helperFile));
   const suiteFile = 'tests/material-parity/expansion-semantic-inputs.spec.mjs';
@@ -48,6 +51,24 @@ test('stepper semantic registration preserves178 findings and complete predecess
   assert.equal(restoreStepperSemanticProducer(producer), previous(producerFile));
   for (const altered of [producer + '\n// drift', producer.replace('stepper semantic additive registration preserves accepted findings', 'forged-proof')])
     assert.throws(() => restoreStepperSemanticProducer(altered));
+  for (const [file, restore] of [
+    ['tests/material-parity/text-backing-case-review-source.mjs', restoreStepperCaseSelection],
+    ['scripts/run-material-input-audit.mjs', restoreStepperRunnerSelection],
+    ['scripts/export-material-input-audit-current-ancestry.mjs', restoreStepperLauncherSelection],
+  ]) {
+    const source = readFileSync(file, 'utf8');
+    assert.equal(restore(source), previous(file));
+    assert.throws(() => restore(source + '\n// drift'));
+  }
+  const launcher = 'scripts/export-material-input-audit-current-ancestry.mjs';
+  const before = JSON.parse(execFileSync(process.execPath, [launcher, '--expansion-semantics', '--dry-run']));
+  const after = JSON.parse(execFileSync(process.execPath, [launcher, '--stepper-inputs', '--dry-run']));
+  const oldId = '5caa57e5f2254471d9d082ff0831db36704f73997b41ae48aa4b4064b45c4c99';
+  const newId = 'ff305b14217b7123b98a2e00f3ecb9ad443cd89606eaf688ea11f6118b7fb069';
+  assert.equal(after.args.filter(arg => arg.includes(newId)).length, 2);
+  assert.deepEqual({ ...after, args: after.args.map(arg => arg.replace(newId, oldId)) }, before);
+  for (const other of ['--card-inputs', '--static-ax', '--expansion-semantics'])
+    assert.throws(() => execFileSync(process.execPath, [launcher, '--stepper-inputs', other, '--dry-run'], { stdio: 'pipe' }));
 });
 
 test('stepper semantic actual AX and initial authoring history retain distinct public support limits', () => {

@@ -210,6 +210,17 @@ This is not canonical publication or case/rendering acceptance. Freeze the full
 
 ## Validated reuse
 
+For the bounded stepper/expansion successor,use explicit `--stepper-inputs`
+with the same launcher(also `--dry-run` or `--check`). It selects exactff305b14;
+default,static-AX,card and expansion selections remain unchanged and supplement
+flags remain mutually exclusive. The strict reader authenticates15622 evidence
+dependencies and twelve current-source checks;removing exactly148 new children
+recovers complete5caa. All2311 cases remain partial/current-rendering unverified.
+Working856/241/179 source/proof/finding census conserves accepted839/238/178,
+with17 added paths and seven explicitly reconciled source changes. Whole prior
+selection-source recovery rejects drift and unknown review IDs. Freeze sources
+before coherent export/conservation/cold/import;selection alone is not publication.
+
 The October20 control-input successor736e685c retains the completee837 review
 and adds116 bounded children to108 exact checkbox/select cases. The named launcher
 selects it through the same explicit five-transition source reader;unknown review

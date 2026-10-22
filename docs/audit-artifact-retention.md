@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Retain stepper-selection-owning,stepper-selected-review-integration and
+stepper-selection-census20261022 log pairs. All18 owning tests pass;strict selected
+ff305b14 load authenticates15622 dependencies/twelve current-source checks and
+whole5caa recovery after exactly148 child removals. Census preserves all prior
+839/238/178 entries at working856/241/179 with17 additive/seven changed paths.
+Replay recipes and exact whole-source reversals remain required;keep all queued
+and original evidence. Do not force-add176MB ff305b14 proposal to Git. Explicit
+selection is not canonical publication,current rendering or case closure.
+
 Retain stepper-semantic-registration-census-20261022 log/empty stderr. It records
 the exact reusable producerArgs and working856/241/179 source/proof/finding
 inventories,with complete839/238/178 predecessor conservation and exactly four

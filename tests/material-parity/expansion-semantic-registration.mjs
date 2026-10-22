@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
-import { stepperSemanticPredecessor, restoreStepperSemanticPolicy, restoreStepperSemanticProducer } from './stepper-semantic-registration.mjs';
+import { stepperSemanticPredecessor, restoreStepperSemanticPolicy, restoreStepperSemanticProducer, restoreStepperCaseSelection, restoreStepperRunnerSelection, restoreStepperLauncherSelection } from './stepper-semantic-registration.mjs';
 const hash = value => createHash('sha256').update(value).digest('hex');
 const ids = ['core-semantic-css-visibility-not-projected', 'fixture-expansion-controlled-region-replaced-with-paragraph'];
 export function expansionSemanticPredecessor(current) {
@@ -55,7 +55,7 @@ export function restoreExpansionSemanticProducer(source) {
   return prior;
 }
 export function restoreExpansionSemanticCaseSelection(source) {
-  let text = source.toString().replaceAll('\r\n', '\n');
+  let text = restoreStepperCaseSelection(source);
   if (!text.includes('export const expansionSemanticsReview=')) return text;
   assert.equal(hash(text), '7ffd95b3327cc270e374c7c80a2f6506ae0092f72567278a3b6b7bff4bac53bf');
   const line = "export const expansionSemanticsReview='5caa57e5f2254471d9d082ff0831db36704f73997b41ae48aa4b4064b45c4c99';\n";
@@ -65,7 +65,7 @@ export function restoreExpansionSemanticCaseSelection(source) {
   return text;
 }
 export function restoreExpansionSemanticRunnerSelection(source) {
-  let text = source.toString().replaceAll('\r\n', '\n');
+  let text = restoreStepperRunnerSelection(source);
   if (!text.includes(', expansionSemanticsReview')) return text;
   assert.equal(hash(text), 'b3eee6c0c0e3377aa9bda24de72df9c548d4e9bfa48fc94016e25cfa99b0c667');
   for (const addition of [', expansionSemanticsReview', ',expansionSemanticsReview']) {
@@ -75,7 +75,7 @@ export function restoreExpansionSemanticRunnerSelection(source) {
   return text;
 }
 export function restoreExpansionSemanticLauncherSelection(source) {
-  let text = source.toString().replaceAll('\r\n', '\n');
+  let text = restoreStepperLauncherSelection(source);
   if (!text.includes('const expansionSemantics =')) return text;
   assert.equal(hash(text), '3381283405e9d4f7f5037ff2603da2226df586b434e1d1fc82c23900d0606d52');
   for (const addition of [

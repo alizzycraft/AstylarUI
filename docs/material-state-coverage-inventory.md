@@ -4,6 +4,21 @@
 
 Updated October22. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- Explicit --stepper-inputs now selects queuedff305b14 via existing reader and
+  runner;all four older selections retain exact behavior. Three full selection
+  source reversals recover accepted prior files and reject unrelated drift;
+  original expansion helper/suite bodies recover exactly. All18 owning tests
+  pass(session49461,exit0). Full selected review load69798 exits0,authenticates
+  15622 dependencies/twelve current-source checks and recovers whole5caa after
+  removing exactly148 children(68 expansion nodes,68 stepper nodes,12 static AX).
+  Unknown review IDs reject;no captured receipt is rewritten. Selection census
+  exits0:working856/241/179 retains complete839/238/178;17 added paths/seven
+  changed prior source paths are explicit. Evidence:stepper-selection-owning,
+  stepper-selected-review-integration and stepper-selection-census20261022 log
+  pairs. Next:freeze this coherent batch,export with --stepper-inputs,compare
+  full80 sections and changed leaves/coverage,then independent cold/import.
+  Accepted3175514b remains unchanged;all2311 cases partial/current unverified.
+
 - Stepper registration census now proves working856 source paths/241 proofs/179
   findings versus complete accepted839/238/178. All prior paths,proof claims and
   findings preserve;only four existing files change(policy,producer,expansion

@@ -17,6 +17,7 @@ export const sharedButtonTouchReview='50315381bf02df83158d2743488dddd5aee827d469
 export const passiveStaticAxReview='33b7ccf93a9df72a878ba302c5a0b8867ef01a2b24cb81a47a59e9c7a5b16460';
 export const cardInputsReview='20dfb80485f094eaec4025e56ac7d5bb4a375f388643d192cb14f5d5fecbf82b';
 export const expansionSemanticsReview='5caa57e5f2254471d9d082ff0831db36704f73997b41ae48aa4b4064b45c4c99';
+export const stepperInputsReview='ff305b14217b7123b98a2e00f3ecb9ad443cd89606eaf688ea11f6118b7fb069';
 const hash=b=>createHash('sha256').update(b).digest('hex');
 export function restoreInputBoundaryReadonlyAppend(source){
   const text=source.toString().replaceAll('\r\n','\n');
@@ -62,7 +63,7 @@ export function restoreQueuedControlHelperSource(source){
 export function createDividerReviewedBoundariesReader({root,read,reviewSha256}){
   // Both exact reviews retain the same pre-extension alignment-suite receipt.
   // Supporting the predecessor does not change the three-source base contract.
-  assert.ok([textBackingRetainedReview,dividerReviewedBoundariesReview,inactiveParagraphInputsReview,filledFieldStructureReview,chipPaintReview,chipGraphicReview,controlInputReview,dividerPropertyContextReview,sharedButtonTouchReview,passiveStaticAxReview,cardInputsReview,expansionSemanticsReview].includes(reviewSha256));
+  assert.ok([textBackingRetainedReview,dividerReviewedBoundariesReview,inactiveParagraphInputsReview,filledFieldStructureReview,chipPaintReview,chipGraphicReview,controlInputReview,dividerPropertyContextReview,sharedButtonTouchReview,passiveStaticAxReview,cardInputsReview,expansionSemanticsReview,stepperInputsReview].includes(reviewSha256));
   const owner='scripts/join-material-divider-paint-boundaries.mjs';
   const source=read(path.resolve(root,owner),'utf8');
   assert.equal(hash(source),'b187103f2f773955dd97ea3e0ee4e0b5d4b4b9faab4af0ebb6fe5d6627f681da');
@@ -80,7 +81,7 @@ export function createDividerReviewedBoundariesReader({root,read,reviewSha256}){
     `${boundary}\nreturn {trackedRead};`)(assert,read,hash,path,createBase,textBackingRetainedReview);
   const suite='tests/material-parity/alignment-crop-provenance.spec.mjs';
   const currentSourceChecks=[];
-  if([dividerPropertyContextReview,sharedButtonTouchReview,passiveStaticAxReview,cardInputsReview,expansionSemanticsReview].includes(reviewSha256)){
+  if([dividerPropertyContextReview,sharedButtonTouchReview,passiveStaticAxReview,cardInputsReview,expansionSemanticsReview,stepperInputsReview].includes(reviewSha256)){
     const file=path.resolve(root,`artifacts/material-parity/working-audit/proposals/${reviewSha256}.json`);
     const envelope=JSON.parse(read(file));
     assert.equal(envelope.sha256,reviewSha256);assert.equal(hash(JSON.stringify(envelope.review)),reviewSha256);

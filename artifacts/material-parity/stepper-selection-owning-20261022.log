@@ -1,0 +1,118 @@
+TAP version 13
+# Subtest: shared button selected review authenticates dependencies without promoting cases
+ok 1 - shared button selected review authenticates dependencies without promoting cases
+  ---
+  duration_ms: 18107.8216
+  type: 'test'
+  ...
+# Subtest: shared button touch selection preserves complete prior sources and rejects unrelated drift
+ok 2 - shared button touch selection preserves complete prior sources and rejects unrelated drift
+  ---
+  duration_ms: 69.6797
+  type: 'test'
+  ...
+# Subtest: shared button touch proposal preserves all prior definitions and the existing core unit limitation
+ok 3 - shared button touch proposal preserves all prior definitions and the existing core unit limitation
+  ---
+  duration_ms: 4.6826
+  type: 'test'
+  ...
+# Subtest: shared button touch retained input proof replays all owners without promoting suppressed targets
+ok 4 - shared button touch retained input proof replays all owners without promoting suppressed targets
+  ---
+  duration_ms: 4740.219
+  type: 'test'
+  ...
+# Subtest: shared button touch public percentage matrix remains a failure distinct from literal controls
+ok 5 - shared button touch public percentage matrix remains a failure distinct from literal controls
+  ---
+  duration_ms: 10.2926
+  type: 'test'
+  ...
+# Subtest: shared button touch registration recovers exact sources and rejects unrelated drift
+ok 6 - shared button touch registration recovers exact sources and rejects unrelated drift
+  ---
+  duration_ms: 759.2059
+  type: 'test'
+  ...
+# Subtest: card title registration preserves all175 findings and exact predecessor sources
+ok 7 - card title registration preserves all175 findings and exact predecessor sources
+  ---
+  duration_ms: 2150.7085
+  type: 'test'
+  ...
+# Subtest: card title actual AX and recorded descendants replay their full retained populations
+ok 8 - card title actual AX and recorded descendants replay their full retained populations
+  ---
+  duration_ms: 2012.3183
+  type: 'test'
+  ...
+# Subtest: expansion semantic registration preserves176 findings and exact predecessor sources
+ok 9 - expansion semantic registration preserves176 findings and exact predecessor sources
+  ---
+  duration_ms: 2176.3821
+  type: 'test'
+  ...
+# Subtest: expansion semantic public failures and pinned Material AX replay independently
+ok 10 - expansion semantic public failures and pinned Material AX replay independently
+  ---
+  duration_ms: 11130.4837
+  type: 'test'
+  ...
+# Subtest: native checkable registration preserves all prior findings and distinct core authoring causes
+ok 11 - native checkable registration preserves all prior findings and distinct core authoring causes
+  ---
+  duration_ms: 1566.2358
+  type: 'test'
+  ...
+# Subtest: public native checkable form values retain repeatable pixel failures and owning method binding
+ok 12 - public native checkable form values retain repeatable pixel failures and owning method binding
+  ---
+  duration_ms: 8909.8447
+  type: 'test'
+  ...
+# Subtest: radio ring state paint inputs replay complete retained population
+ok 13 - radio ring state paint inputs replay complete retained population
+  ---
+  duration_ms: 278.1515
+  type: 'test'
+  ...
+# Subtest: passive landmark registration preserves accepted findings and exact source boundaries
+ok 14 - passive landmark registration preserves accepted findings and exact source boundaries
+  ---
+  duration_ms: 2233.2083
+  type: 'test'
+  ...
+# Subtest: passive static AX and initial landmark history replay retained observations
+ok 15 - passive static AX and initial landmark history replay retained observations
+  ---
+  duration_ms: 4417.2571
+  type: 'test'
+  ...
+# Subtest: stepper semantic registration preserves178 findings and complete predecessor sources
+ok 16 - stepper semantic registration preserves178 findings and complete predecessor sources
+  ---
+  duration_ms: 1995.4538
+  type: 'test'
+  ...
+# Subtest: stepper semantic actual AX and initial authoring history retain distinct public support limits
+ok 17 - stepper semantic actual AX and initial authoring history retain distinct public support limits
+  ---
+  duration_ms: 715.9279
+  type: 'test'
+  ...
+# Subtest: stepper and expansion recorded node accounting replays complete retained populations
+ok 18 - stepper and expansion recorded node accounting replays complete retained populations
+  ---
+  duration_ms: 6923.4978
+  type: 'test'
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 24386.0852
