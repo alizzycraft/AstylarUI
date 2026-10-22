@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain check-datepicker-recorded-nodes.mjs and datepicker-recorded-node-
+accounting-20261022 plus final-20261022 log/empty stderr pairs. Final tightens
+the initial successful grouping to exact remaining native type/class counts
+and pins cell-proof bytes.111 pairs/14543 records account;444 mutations reject
+and exact replay passes. Reuse authenticated wrapper/cell evidence,not another
+capture. Full-style,anonymous/pseudo,AX,events,paint,currentness remain open.
+Keep outside live cold99596/frozen873 sources for later coherent joining.
+
 Retain check-datepicker-cell-inputs.mjs and both datepicker-cell-input-review-
 20261022 and datepicker-cell-input-review-final-20261022 log/stderr pairs.
 Initial verifier wrongly assumed uninterrupted seven-column indices;final

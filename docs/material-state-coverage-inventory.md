@@ -2,6 +2,18 @@
 
 ## Current audit pointer — October22
 
+- Datepicker retained element accounting now exhausts111 pairs/14543 records
+  (10750 native/3793 candidate),reusing authenticated577-case wrapper and1215-
+  cell proofs. Exact remaining native type/class populations preserve month/
+  year/closed branches,focus mode,weekday/table/hidden-label owners,focus traps,
+  close control and navigation SVG/touch/ripple descendants versus local popup/
+  text controls. Existing findings reused;444 mutation controls and exact replay
+  pass. Evidence:check-datepicker-recorded-nodes.mjs,datepicker-recorded-node-
+  accounting-final-20261022 log/empty stderr;initial looser-check success also
+  retained. No anonymous/pseudo/full-style/AX/event/paint/currentness closure.
+  All six shared filled-field families now have retained element accounting;
+  next prioritize actual-AX coverage once cold verification releases browser
+  work,and coherent later joining of these queued proofs. No case promotion.
 - Datepicker cell question closed for retained inputs:all111 pairs classify
   70 closed/33 month/8 year;1215 day/year cell pairs preserve value and order.
   Native ink/preview owners,raw whitespace,date labels and row-local indices
