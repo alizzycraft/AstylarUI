@@ -2,6 +2,23 @@
 
 ## Current versus historical evidence
 
+Publication upload17645 terminates0;c5ebd32f is pushed. Retain all27 tabs-static-
+ax-20261022 files,both tabs AX scripts and capture/review20261022 log pairs.
+All24 captures/producers/source-binding receipts authenticate;full12-pair review
+and144 mutation controls pass and replay exactly. Preserve native hidden-target
+DOM controls distinct from exposed AX relationships. Candidate one-panel/content-
+name/labelledby differences still need authored/history classification;no case
+promotion or current rendering claim. Older next/live capture/upload notes below
+are historical checkpoints,not active jobs or unreviewed full-population claims.
+
+Retain tabs-static-ax-20261022(all24 raw AX/DOM records,exact derived producer,
+provenance/report),capture-tabs-static-ax.mjs and tabs-static-ax-capture-20261022
+log/empty stderr. Capture32085 exits0;all raw/producer receipts authenticate and
+page errors are zero. First-pair panel naming/labelledby observations do not replace
+full12-pair/backend verification,current source-map applicability or history.
+Stepper publication upload17645 is live at this checkpoint;keep its committed
+snapshot and poll the same handle rather than creating another push.
+
 Stepper cold92085 is terminal success(exit0,2531277ms),2 collectors/10 memory hits/
 0 disk hits,16812 files/1715970043 bytes authenticated. Retain closed
 stepper-cold-check-20261022 stdout/stderr and stepper-main-import-verification-

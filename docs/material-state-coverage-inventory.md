@@ -8,7 +8,8 @@
   decoded2334127261 bytes/SHA c4dfe40587d5544984248904d827f64e9e4ce52868b1de9e0877f66cafdbe8ed.
   Independent cold92085 exits0(2531277ms),2 collectors/10 memory hits/0 disk hits,
   16812 files/1715970043 bytes authenticated. Main import48477 exits0;all shards
-  verify and main/candidate pointers match. No audit collector is live.
+  verify and main/candidate pointers match. Publicationc5ebd32f is pushed;Git
+  returned success with an84.12MB recommendation warning,not rejection. No audit collector is live.
 - Scope remains36 families/2311 cases(436 static/1875 interaction),all partial;
   current rendering remains unverified. No inspected-complete or rendering-pass
   promotion follows from source classification,recorded trees,AX or cold export.
@@ -21,9 +22,20 @@
 - Outside this accepted snapshot:tabs70-case node accounting(42d1da70),menu94-case
   node accounting(2aefca3f),bottom-sheet25-open-pair action presence(4055ba5c).
   Exact replay/mutation controls pass;these bounded proofs await a later coherent
-  join. They do not close anonymous boxes,full styles,paint,AX or whole cases.
-- Next:actual tab/panel AX using the existing pinned capture/applicability
-  procedure,then remaining descendant/first-stage/anonymous and semantic gaps;
+  join. New tabs actual-AX24 records/12 pairs also remain outside this snapshot.
+  They do not close anonymous boxes,full styles,paint or whole cases.
+- Tabs actual-AX verification now passes all12 pairs/144 mutation controls and
+  exact replay. Native active panel is named Overview/labelledby its tab,with two
+  distinct authored panel targets;candidate panel is named Overview content,
+  omits labelledby and receives both tabs' controls. Tab names/selected states
+  agree. Backend identities,DOM attributes and list ancestry bind;current component/
+  source-map receipts reauthenticate. Pinned9d0f1220/Chrome155.0.8059.80 unchanged.
+  Evidence:tabs-static-ax-20261022,capture/review log pairs and both tabs AX scripts.
+- Next:trace tab panel naming/identity relationships through authored input and
+  history before classifying a distinct finding. Keep known private-paint and
+  typography causes separate;do not infer a core defect from unequal inputs.
+  Then remaining
+  descendant/first-stage/anonymous and semantic gaps;
   interaction histories/resources(1875),editable caret/selection(443) and complete
   current input/runtime/rendering applicability(2311) remain open and overlapping.
   Do not reopen settled typography/private-tab-paint causes without changed inputs.
@@ -35,6 +47,22 @@
   capability/example/skill/handoff gates remain required. Goal is not complete.
 
 ## October22 milestone detail — historical checkpoints
+
+- Publication upload17645 terminates0;c5ebd32f is pushed successfully. Tabs
+  capture32085 terminates0,all24 records and producer receipts authenticate.
+  check-tabs-static-ax.mjs verifies12 pairs/144 mutation controls,exact replay,
+  DOM/backend relationship targets and tablist ancestry. No page errors or new
+  renderer/fixture changes. Supported-input/history review is next;actual static
+  AX does not establish interaction updates,AT traversal,paint or case closure.
+
+- Stepper publication commitc5ebd32f is created;Git push17645 remains live at this
+  checkpoint. Poll the same handle;do not duplicate the large upload. No audit
+  collector is live. Tabs capture32085 exits0 and retains27 files/24 raw AX/DOM
+  records plus exact derived producer/provenance/report. Wrapper only narrows the
+  existing passive procedure to tabs12 contexts;all source substitutions guard
+  exact matches. Raw records/producer receipts authenticate,errors0. Full-pair
+  semantic verifier and source/history classification are next,not proven by the
+  first-pair observation or capture success. Preserve all prior original evidence.
 
 Updated October22. Current conclusions only;earlier next/live statements in retained detail are historical.
 
