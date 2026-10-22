@@ -1,0 +1,118 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Referenced hidden descriptions are lost in actual AX
++ actual - expected
+
++ [
++   {
++     actual: null,
++     check: 'description',
++     dpr: 1,
++     expected: 'Help info',
++     mode: 'astylar',
++     variant: 'hidden-child'
++   },
++   {
++     actual: null,
++     check: 'description',
++     dpr: 1,
++     expected: 'Help info',
++     mode: 'astylar',
++     variant: 'hidden-root'
++   },
++   {
++     actual: null,
++     check: 'description',
++     dpr: 1,
++     expected: 'Help info',
++     mode: 'astylar',
++     variant: 'hidden-parent'
++   },
++   {
++     actual: null,
++     check: 'description',
++     dpr: 2,
++     expected: 'Help info',
++     mode: 'astylar',
++     variant: 'hidden-child'
++   },
++   {
++     actual: null,
++     check: 'description',
++     dpr: 2,
++     expected: 'Help info',
++     mode: 'astylar',
++     variant: 'hidden-root'
++   },
++   {
++     actual: null,
++     check: 'description',
++     dpr: 2,
++     expected: 'Help info',
++     mode: 'astylar',
++     variant: 'hidden-parent'
++   }
++ ]
+- []
+
+    at file:///D:/dev/github/AstylarUI-audit-integration/[eval1]:119:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [
+    {
+      check: 'description',
+      mode: 'astylar',
+      variant: 'hidden-child',
+      dpr: 1,
+      expected: 'Help info',
+      actual: null
+    },
+    {
+      check: 'description',
+      mode: 'astylar',
+      variant: 'hidden-root',
+      dpr: 1,
+      expected: 'Help info',
+      actual: null
+    },
+    {
+      check: 'description',
+      mode: 'astylar',
+      variant: 'hidden-parent',
+      dpr: 1,
+      expected: 'Help info',
+      actual: null
+    },
+    {
+      check: 'description',
+      mode: 'astylar',
+      variant: 'hidden-child',
+      dpr: 2,
+      expected: 'Help info',
+      actual: null
+    },
+    {
+      check: 'description',
+      mode: 'astylar',
+      variant: 'hidden-root',
+      dpr: 2,
+      expected: 'Help info',
+      actual: null
+    },
+    {
+      check: 'description',
+      mode: 'astylar',
+      variant: 'hidden-parent',
+      dpr: 2,
+      expected: 'Help info',
+      actual: null
+    }
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.22.3

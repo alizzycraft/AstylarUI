@@ -1,0 +1,11 @@
+{
+  "sessionId": 47467,
+  "exitCode": 1,
+  "command": "node scripts/audit-public-hidden-description.mjs artifacts/material-parity/public-hidden-description-repeat-20261022",
+  "captureComplete": true,
+  "captures": 16,
+  "observedDescriptionFailures": 6,
+  "runtimeErrors": 0,
+  "reason": "Independent repetition completes all captures and records the same final assertion failure.",
+  "renderingAccepted": false
+}

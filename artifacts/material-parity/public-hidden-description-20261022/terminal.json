@@ -1,0 +1,11 @@
+{
+  "sessionId": 2467,
+  "exitCode": 1,
+  "command": "node scripts/audit-public-hidden-description.mjs artifacts/material-parity/public-hidden-description-20261022",
+  "captureComplete": true,
+  "captures": 16,
+  "observedDescriptionFailures": 6,
+  "runtimeErrors": 0,
+  "reason": "Final assertion records actual loss of hidden referenced descriptions after completing all captures.",
+  "renderingAccepted": false
+}
