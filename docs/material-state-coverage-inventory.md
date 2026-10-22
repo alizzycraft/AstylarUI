@@ -2,6 +2,17 @@
 
 ## Current audit pointer — October22
 
+- Remaining-static AX resume preflight now authenticates97 reused pairs(96
+  completed+one partial-run core/light/desktop),leaving339 pairs,exactly436
+  configured contexts without overlap. resume-remaining-static-ax.mjs derives
+  the original immutable producer with only completed-row exclusion/counts/
+  provenance changed;no action,settlement,CDP or timeout change. Original failed
+  envelope and both completed raw files pinned. Final preflight exact replay
+  passes;invalid mode,existing output and out-of-root output reject,no capture
+  directory created. Logs:remaining-static-ax-resume-preflight-final-20261022
+  log/empty stderr(initial pre-pin success retained). Do not launch until live
+  cold99596 finishes. This closes resume bookkeeping,not actual AX coverage;
+  prior timeout cause remains unproven,no case/status promotion.
 - Datepicker retained element accounting now exhausts111 pairs/14543 records
   (10750 native/3793 candidate),reusing authenticated577-case wrapper and1215-
   cell proofs. Exact remaining native type/class populations preserve month/

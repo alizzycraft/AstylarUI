@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain resume-remaining-static-ax.mjs and remaining-static-ax-resume-preflight-
+20261022 plus final-20261022 log/empty stderr pairs. Exact failure/provenance
+bytes and prior producer pinned;194 observations reused/678 pending,all872
+configured observations partition without overlap. No original raw/failed file
+modified,no browser/capture directory created. Exact final dry-run replay and
+three invalid-invocation controls pass. Defer actual capture through cold99596;
+not new AX evidence or timeout-cause proof. Keep outside frozen873 sources.
+
 Retain check-datepicker-recorded-nodes.mjs and datepicker-recorded-node-
 accounting-20261022 plus final-20261022 log/empty stderr pairs. Final tightens
 the initial successful grouping to exact remaining native type/class counts
