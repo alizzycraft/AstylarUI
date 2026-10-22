@@ -87,7 +87,7 @@
   and byte-exact replay. Evidence:capture-bottom-sheet-activate-ax.mjs,
   check-bottom-sheet-activate-ax.mjs,bottom-sheet-activate-ax-20261022 and capture/
   review log pairs. Names/roles reflect unequal inputs;authored naming history
-  remains pending. Focus applicability is bounded by the following completed check.
+  is now resolved below. Focus applicability is bounded by the following check.
   No focus-trap,full-event,AT,paint,current-rendering or case-closure claim.
 - Existing focus scheduling investigation reused,not reopened:preserved captured
   source2c2979ad authenticates to the original tracecc12796e. Complete handleClick
@@ -100,6 +100,14 @@
   issues. Evidence:check-bottom-sheet-focus-source-applicability.mjs and matching
   20261022 log/empty stderr;byte-exact replay passes. No fresh browser reduction
   justified without contradictory input/timeline evidence. No core defect/fix claim.
+- Pending source proposal835eba45 preserves all180 current definitions and adds
+  fixture-bottom-sheet-dialog-name-substitution. Executed complete current and
+  initial2f440115 methods resolve native Sharing options versus candidate Open
+  bottom sheet;two forged-name controls reject. Existing semantic binding/9-pair
+  AX proof replay exactly;public ariaLabel projects the supplied unequal value.
+  Evidence:review-bottom-sheet-name-inputs.mjs,bottom-sheet-name-input-review-
+  20261022 log/empty stderr and proposal835eba45. Exact replay passes;no new core
+  cause,registration or export. Batch with later evidence after export5359 closes.
 - Evidence:stepper-coherent-export-20261022,stepper-cold-check-20261022 and
   stepper-main-import-verification-20261022;full-section-comparison,export-census-
   binding,receipt-leaf-comparison,coverage-conservation,candidate-import and

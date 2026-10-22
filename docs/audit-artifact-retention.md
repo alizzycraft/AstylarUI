@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+Retain review-bottom-sheet-name-inputs.mjs,bottom-sheet-name-input-review-
+20261022 log/empty stderr and pending proposal835eba45(391129 bytes). Complete
+180 predecessor definitions preserve;current/initial complete-method execution
+and two forged-name controls establish unequal name authoring. Existing actual
+AX and full semantic bindings replay exactly. Keep this outside frozen export5359;
+do not launch a separate export just for this pending finding.
+
 Retain check-bottom-sheet-focus-source-applicability.mjs and bottom-sheet-focus-
 source-applicability-20261022 log/empty stderr. Reauthenticates original trace
 cc12796e and preserved Material-worktree component2c2979ad;complete two authored
