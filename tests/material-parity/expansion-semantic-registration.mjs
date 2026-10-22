@@ -1,9 +1,11 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
+import { stepperSemanticPredecessor, restoreStepperSemanticPolicy } from './stepper-semantic-registration.mjs';
 const hash = value => createHash('sha256').update(value).digest('hex');
 const ids = ['core-semantic-css-visibility-not-projected', 'fixture-expansion-controlled-region-replaced-with-paragraph'];
 export function expansionSemanticPredecessor(current) {
+  current = stepperSemanticPredecessor(current);
   if (current.length <= 176) return current;
   assert.equal(current.length, 178);
   assert.equal(hash(JSON.stringify(current)), '01e16e058c2a8373b9471862a176d397fc238c3e11e25124d0a23f80268f2d92');
@@ -13,7 +15,7 @@ export function expansionSemanticPredecessor(current) {
   return prior;
 }
 export function restoreExpansionSemanticPolicy(source) {
-  const text = source.toString().replaceAll('\r\n', '\n');
+  const text = restoreStepperSemanticPolicy(source);
   if (!text.includes(ids[0])) {
     assert.ok(!text.includes(ids[1]) && !text.includes('scripts/check-public-semantic-css-hidden.mjs'), 'Partial expansion semantic registration');
     return text;

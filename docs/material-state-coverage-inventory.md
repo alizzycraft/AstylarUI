@@ -4,6 +4,21 @@
 
 Updated October22. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- Working stepper source registration now contains179 findings,matching exact
+  pending5d5c15f9 groups and preserving all178 predecessors. New owning suite
+  stepper-semantic-inputs.spec.mjs authenticates33 evidence files/two initial
+  historical sources,actual12-pair AX replay and complete prior policy/helper/
+  suite recovery. Source policy reversal bindsbc449ff3 to acceptede4229646;
+  definition reversal binds73f00293 to01e16e05. Existing15 predecessor tests pass
+  (session74161);new registration initially rejected its missing-ID mutation
+  incorrectly,so the historical reader now rejects partial owner-marker presence.
+  Both new tests then pass(focused Node test command,exit0). No historical test body changes.
+  This is working registration only:accepted canonical remains178/238/839 and
+  review5caa. Next:register focused proofs/source census and select queuedff305b14
+  with exact source-applicability reconciliation,then one coherent milestone
+  export/conservation/cold/import. All2311 cases remain partial;renderer/fixtures
+  unchanged. No browser recapture or full export justified for this increment.
+
 - ACCEPTED canonical3175514b/indexbd602e66/review5caa57e5 has178 source findings,
   238 focused proofs,839 source paths. Independent cold55327 terminates0
   (3943126ms),same --expansion-semantics --check,with2 collectors/10 memory hits/

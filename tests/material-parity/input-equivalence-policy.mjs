@@ -3578,6 +3578,174 @@ Object.freeze({
   "recommendation": "Restore equivalent header/labelled-region relationship intent in future comparison inputs,then evaluate core behavior. Keep the generic CSS visibility defect separate;do not make core invent a region for an authored paragraph.",
   "boundary": "Retained target attributes68 cases and actual collapsed AX12 pairs;not open-state region AX,AT navigation,initial runtime or whole-case acceptance."
 }),
+  Object.freeze({
+  "id": "fixture-stepper-tab-panel-relationships-omitted",
+  "file": "examples/material-showcase/src/app/astylar.component.ts",
+  "pattern": "id: 'stepper-content', role: 'tabpanel'",
+  "introducedBy": "Initial2f440115 already omits tab ariaControls and panel ariaLabelledby;initial runtime/motive unproven.",
+  "classification": "application-plugin-authoring-defect",
+  "owner": "Material stepper tab-to-labelled-panel relationship authoring",
+  "focusedProof": "node scripts/check-stepper-static-ax.mjs",
+  "history": [
+    {
+      "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "sha256": "6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24",
+      "excerpt": "    if (family === 'stepper') return [{ type: 'div', id: 'stepper-primary', class: 'stepper', role: 'tablist', ariaLabel: state.selected ? '1Details2ReviewProject detailsReview changes' : 'EditablecreateDetails2ReviewProject detailsReview changes', children: [{ type: 'div', id: 'stepper-head', class: 'stepper-head', children: [{ type: 'div', id: 'step-details', class: 'step-tab', role: 'tab', tabindex: state.selected ? 0 : -1, ariaSelected: state.selected, children: [{ type: 'span', id: 'step-details-badge', class: `step-badge${state.selected ? ' selected' : ''}`, textContent: '1' }, { type: 'span', id: 'step-details-text', class: 'step-text', textContent: 'Details' }] }, { type: 'span', id: 'step-connector', class: 'step-connector' }, { type: 'div', id: 'step-review', class: 'step-tab', role: 'tab', tabindex: state.selected ? -1 : 0, ariaSelected: !state.selected, children: [{ type: 'span', id: 'step-review-badge', class: `step-badge${state.selected ? '' : ' selected'}`, textContent: '2' }, { type: 'span', id: 'step-review-text', class: 'step-text', textContent: 'Review' }] }] }, { type: 'div', id: 'stepper-content', role: 'tabpanel', textContent: state.selected ? 'Project details' : 'Review changes' }] }];"
+    },
+    {
+      "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+      "file": "examples/material-showcase/src/app/reference.component.ts",
+      "sha256": "2e070cc31b08750e07f6a8c5c3103607e5399291930b91d590140203be719c8e",
+      "excerpt": "          @case ('stepper') { <mat-stepper id=\"stepper-primary\"><mat-step label=\"Details\">Project details</mat-step><mat-step label=\"Review\">Review changes</mat-step></mat-stepper> }"
+    }
+  ],
+  "observation": {
+    "component": "stepper",
+    "staticPairs": 12,
+    "property": "active tab controls and panel labelledby",
+    "reference": "native active tab controls panel whose labelledby resolves back to that header",
+    "astylar": "authored tab and single panel omit both supported relationships;actual DOM/AX agree with omissions",
+    "stage": "SiteData relationship authoring before supported semantic attribute projection"
+  },
+  "justification": "All12 pinned static pairs preserve tablist name and selected states but candidate active panel is unnamed and has no labelledby,while its tabs have no controls. Whole served component/source-map bindings authenticate. Public DOMElement supports both relationship fields and current/installed/served applyAttributes methods bind exactly;current and initial candidate branches omit them. This is distinct from already-classified inactive-panel omission. Numeric accessible names1Details/2Review remain separate evidence of missing accessibility-only hiding intent and the existing public ariaHidden support limitation,not another core finding or a reason to visually hide badges.",
+  "evidence": [
+    {
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "sha256": "71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd"
+    },
+    {
+      "file": "examples/material-showcase/src/app/reference.component.ts",
+      "sha256": "debe55bc492d0fa1e48a9c7f09e1b668d435a2260588710207ab878b23c1d4aa"
+    },
+    {
+      "file": "src/app/types/dom-element.ts",
+      "sha256": "72eef2f09d5cdacaab10db7328c40e5b4748c3f22640e2b40f0436a268351e83"
+    },
+    {
+      "file": "src/lib/astylar-semantic-bridge.ts",
+      "sha256": "1a0011d3530701d9a74dc37b9f5a14d0fed0742dfd8793c39f8628e06b6a5725"
+    },
+    {
+      "file": "scripts/check-stepper-static-ax.mjs",
+      "sha256": "9ad62e0881c0e610c1e5585a10240ed4df92f2e689aa8f7c03c86be63a41c689"
+    },
+    {
+      "file": "artifacts/material-parity/stepper-static-ax-review-20261022.log",
+      "sha256": "198584a432478f4e2c3a490b27883a01acf40bf73f0d7278f6fa47859b2e16ff"
+    },
+    {
+      "file": "artifacts/material-parity/stepper-static-ax-20261022/latest-report.json",
+      "sha256": "8db8555f87894a01ede3f71efd37209e9d651bdc92fdd0ec7aaed06f1cc925cf"
+    },
+    {
+      "file": "artifacts/material-parity/material-semantic-visibility-binding-retry-20261021.log",
+      "sha256": "2f130ff825b7885e0c7d0a35eaea849d6560bc486cb88ee033899966e7bc7aaf"
+    },
+    {
+      "file": "scripts/check-material-semantic-visibility-binding.mjs",
+      "sha256": "a320c97ece4ac0191ff102b473029cc8d2800d5979216658c02eea61ffb0ac23"
+    },
+    {
+      "file": "artifacts/material-parity/stepper-static-ax-20261022/stepper-light-1440x1000-dpr1-reference.json",
+      "sha256": "da12aef1c2ae05ff870dc2cf6dc941c3e9ea15759bd263caf547dd327a3101e6"
+    },
+    {
+      "file": "artifacts/material-parity/stepper-static-ax-20261022/stepper-light-1440x1000-dpr1-astylar.json",
+      "sha256": "eeef28e96a152bb875320fe8e800f5f056d1736ab65ee2028c124c2ae641e638"
+    },
+    {
+      "file": "artifacts/material-parity/stepper-static-ax-20261022/stepper-light-768x1024-dpr1-reference.json",
+      "sha256": "48add3de068006814d70f274285aed4897e16b4bd9c54472150b1e940d1a0444"
+    },
+    {
+      "file": "artifacts/material-parity/stepper-static-ax-20261022/stepper-light-768x1024-dpr1-astylar.json",
+      "sha256": "c47266f5e204ca2b2e757529521faaa1ae2cba343cbe6a7bb262a9d72476e6cc"
+    },
+    {
+      "file": "artifacts/material-parity/stepper-static-ax-20261022/stepper-light-390x844-dpr2-reference.json",
+      "sha256": "b9fb1a5f63e321ee31159f75508da7ebc699871dac2bc968dc81d0e1b837ba65"
+    },
+    {
+      "file": "artifacts/material-parity/stepper-static-ax-20261022/stepper-light-390x844-dpr2-astylar.json",
+      "sha256": "30b5fc76d95a107af1dbcd8cb9e55b4564e90b3dd936e4f7c10239b7130b0931"
+    },
+    {
+      "file": "artifacts/material-parity/stepper-static-ax-20261022/stepper-dark-1440x1000-dpr1-reference.json",
+      "sha256": "a0fac64a6c026af6ef92527323b00556db2017cfd0b3602250983e99f175b2f2"
+    },
+    {
+      "file": "artifacts/material-parity/stepper-static-ax-20261022/stepper-dark-1440x1000-dpr1-astylar.json",
+      "sha256": "969cb89720599387370e0dca3d3e0381eced2df83060c0bcf1fa5f0261750d99"
+    },
+    {
+      "file": "artifacts/material-parity/stepper-static-ax-20261022/stepper-dark-768x1024-dpr1-reference.json",
+      "sha256": "60f9237b3b1d990e817088da040880c180c0dd559e004ac3a62685f68fb8a20f"
+    },
+    {
+      "file": "artifacts/material-parity/stepper-static-ax-20261022/stepper-dark-768x1024-dpr1-astylar.json",
+      "sha256": "1499b5d67d1cbcb42afe303e60a87824274c2d8bfa75ba0bd9bc7d5d8ce6a8bb"
+    },
+    {
+      "file": "artifacts/material-parity/stepper-static-ax-20261022/stepper-dark-390x844-dpr2-reference.json",
+      "sha256": "e6167de1a75f94832fea8c837d5a2164e767a5daf6b14c39eea388d268591dc0"
+    },
+    {
+      "file": "artifacts/material-parity/stepper-static-ax-20261022/stepper-dark-390x844-dpr2-astylar.json",
+      "sha256": "0af04eb2ef2233d87ec896fea711acf3aa0767d78cd7a292713c71101c27f989"
+    },
+    {
+      "file": "artifacts/material-parity/stepper-static-ax-20261022/stepper-contrast-1440x1000-dpr1-reference.json",
+      "sha256": "6352195bd4d0a0250866df0332d8deef6c57b903f0c626167fb2b6efc8bdd468"
+    },
+    {
+      "file": "artifacts/material-parity/stepper-static-ax-20261022/stepper-contrast-1440x1000-dpr1-astylar.json",
+      "sha256": "eaf236156280e9fee239c36b0e52bc5a52e6404e7c536f9e6fd79a232af27264"
+    },
+    {
+      "file": "artifacts/material-parity/stepper-static-ax-20261022/stepper-contrast-768x1024-dpr1-reference.json",
+      "sha256": "d5e288c62046cbb3b4cfb4f690aacbe70d6871926c22138824d39b6971ffb37c"
+    },
+    {
+      "file": "artifacts/material-parity/stepper-static-ax-20261022/stepper-contrast-768x1024-dpr1-astylar.json",
+      "sha256": "6f6696cedb65bb609374dbe5a2df78c39ae27019ee9914debc689c8632f726ec"
+    },
+    {
+      "file": "artifacts/material-parity/stepper-static-ax-20261022/stepper-contrast-390x844-dpr2-reference.json",
+      "sha256": "3e5159052a85f71c570df3e8e173296936d5428841e9265378073ccf22de75dc"
+    },
+    {
+      "file": "artifacts/material-parity/stepper-static-ax-20261022/stepper-contrast-390x844-dpr2-astylar.json",
+      "sha256": "90e4c6fc843d669086f213cd747d212bc3b94e1a6059e931b3d3c9c81ae28172"
+    },
+    {
+      "file": "artifacts/material-parity/stepper-static-ax-20261022/stepper-custom-1440x1000-dpr1-reference.json",
+      "sha256": "f92454e2553a82d2a2126fb5712a9fa1cfd2b1103effe6c5ce8ef31e161f7ee6"
+    },
+    {
+      "file": "artifacts/material-parity/stepper-static-ax-20261022/stepper-custom-1440x1000-dpr1-astylar.json",
+      "sha256": "ad0b76866a9528c303434e0869323818885b45d6409728ae213b965117407f55"
+    },
+    {
+      "file": "artifacts/material-parity/stepper-static-ax-20261022/stepper-custom-768x1024-dpr1-reference.json",
+      "sha256": "a4b363e339bf8fd81f1d38da6ffe2c2aa37ae8bba6e898092002ed1106a77629"
+    },
+    {
+      "file": "artifacts/material-parity/stepper-static-ax-20261022/stepper-custom-768x1024-dpr1-astylar.json",
+      "sha256": "7217c4fee30ea6a22aeead62b9381ff30efa6079806b9b78cf0255aba6453674"
+    },
+    {
+      "file": "artifacts/material-parity/stepper-static-ax-20261022/stepper-custom-390x844-dpr2-reference.json",
+      "sha256": "e994aa9f4dec3076769fb53828676e76ea1c044b35222fbb2927ba999da4d25f"
+    },
+    {
+      "file": "artifacts/material-parity/stepper-static-ax-20261022/stepper-custom-390x844-dpr2-astylar.json",
+      "sha256": "81a1e2da4e12c37a7915ae95b9ad010668e6dd56eb94ca1d070ccb0bf7e1fc4f"
+    }
+  ],
+  "recommendation": "Restore equivalent stable tab/panel identities and supported controls/labelledby authoring in future comparison inputs,including both native panels. Address accessibility-only hiding at the existing core/public boundary;do not hide visible numbers or override tab names solely to imitate output.",
+  "boundary": "Actual static relationships12 pairs and initial authored omission,not initial runtime,all revisions,interactive relation updates,AT navigation or complete rendering/case acceptance."
+}),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({

@@ -2,6 +2,16 @@
 
 ## Current versus historical evidence
 
+Retain stepper-semantic-registration.mjs and stepper-semantic-inputs.spec.mjs
+with source proposal5d5c15f9 and all referenced33 evidence files/two historical
+sources. Working179 definitions preserve accepted178 exactly;owning checks bind
+complete prior policy and expansion helper/suite bytes. No old capture receipt is
+rewritten. Initial missing-ID rejection-control failure was repaired at the new
+historical reader's partial-registration guard;both new tests pass afterward.
+Canonical remains3175514b/178 findings until source/proof census,queuedff305b14
+selection,coherent export/conservation/cold/import. Keep all queued/predecessor
+evidence;this registration is not rendering or case acceptance.
+
 Retain join-stepper-expansion-input-evidence.mjs,stepper-expansion-input-evidence-
 join-20261022 log/empty stderr and queued case proposal
 ff305b14217b7123b98a2e00f3ecb9ad443cd89606eaf688ea11f6118b7fb069.
