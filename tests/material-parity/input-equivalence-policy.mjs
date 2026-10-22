@@ -3746,6 +3746,186 @@ Object.freeze({
   "recommendation": "Restore equivalent stable tab/panel identities and supported controls/labelledby authoring in future comparison inputs,including both native panels. Address accessibility-only hiding at the existing core/public boundary;do not hide visible numbers or override tab names solely to imitate output.",
   "boundary": "Actual static relationships12 pairs and initial authored omission,not initial runtime,all revisions,interactive relation updates,AT navigation or complete rendering/case acceptance."
 }),
+Object.freeze({
+  "id": "fixture-tab-panel-accessible-name-substitution",
+  "file": "examples/material-showcase/src/app/astylar.component.ts",
+  "pattern": "ariaLabel: state\\.selected \\? 'Overview content' : 'Activity content'",
+  "introducedBy": "a0f3328b introduces explicit content-as-name; initial2f440115 already omits labelledby and reuses one panel. Initial runtime and motive unproven.",
+  "classification": "application-plugin-authoring-defect",
+  "owner": "Material tab panel semantic identity and relationship authoring",
+  "focusedProof": "node scripts/check-tabs-static-ax.mjs",
+  "history": [
+    {
+      "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "sha256": "6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24",
+      "excerpt": "    if (family === 'tabs') return [{ type: 'div', id: 'tabs-primary', class: 'tabs', children: [{ type: 'div', id: 'tabs-list', class: 'tab-list', role: 'tablist', children: [{ type: 'button', id: 'tab-overview', class: 'tab', role: 'tab', ariaSelected: state.selected, tabindex: state.selected ? 0 : -1, ariaControls: 'tab-panel', value: 'Overview' }, { type: 'button', id: 'tab-activity', class: 'tab', role: 'tab', ariaSelected: !state.selected, tabindex: state.selected ? -1 : 0, ariaControls: 'tab-panel', value: 'Activity' }] }, { type: 'div', id: 'tab-indicator', class: 'tab-indicator' }, { type: 'div', id: 'tab-panel', class: 'tab-panel', role: 'tabpanel', textContent: state.selected ? 'Overview content' : 'Activity content' }] }];"
+    },
+    {
+      "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+      "file": "examples/material-showcase/src/app/reference.component.ts",
+      "sha256": "2e070cc31b08750e07f6a8c5c3103607e5399291930b91d590140203be719c8e",
+      "excerpt": "          @case ('tabs') { <mat-tab-group id=\"tabs-primary\"><mat-tab label=\"Overview\">Overview content</mat-tab><mat-tab label=\"Activity\">Activity content</mat-tab></mat-tab-group> }"
+    },
+    {
+      "revision": "a0f3328b^",
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "sha256": "4da994cecc57446a5d49d78fe9fecbaa9eedd83519cd7831edda10ecd10e9e40",
+      "excerpt": "    if (family === 'tabs') return [{ type: 'div', id: 'tabs-primary', class: 'tabs', children: [{ type: 'div', id: 'tabs-list', class: 'tab-list', role: 'tablist', children: [{ type: 'button', id: 'tab-overview', class: 'tab', role: 'tab', ariaSelected: state.selected, tabindex: state.selected ? 0 : -1, ariaControls: 'tab-panel', value: 'Overview' }, { type: 'button', id: 'tab-activity', class: 'tab', role: 'tab', ariaSelected: !state.selected, tabindex: state.selected ? -1 : 0, ariaControls: 'tab-panel', value: 'Activity' }] }, { type: 'div', id: 'tab-indicator', class: 'tab-indicator' }, { type: 'showcase.material:tab-panel', id: 'tab-panel', class: 'tab-panel', role: 'tabpanel', textContent: state.selected ? 'Overview content' : 'Activity content', data: { selected: state.selected, phase: this.benchmarkMode ? 1 : undefined, 'text-color': theme.onSurface } }] }];"
+    },
+    {
+      "revision": "a0f3328b",
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "sha256": "40d208cd5d28f2858af29b6fc13e40e500aa7349b6aae17b6ff7eb6cfa1425c4",
+      "excerpt": "    if (family === 'tabs') return [{ type: 'div', id: 'tabs-primary', class: 'tabs', ariaLabel: `OverviewActivity${state.selected ? 'Overview content' : 'Activity content'}`, children: [{ type: 'div', id: 'tabs-list', class: 'tab-list', role: 'tablist', children: [{ type: 'button', id: 'tab-overview', class: 'tab', role: 'tab', ariaSelected: state.selected, tabindex: state.selected ? 0 : -1, ariaControls: 'tab-panel', value: 'Overview' }, { type: 'button', id: 'tab-activity', class: 'tab', role: 'tab', ariaSelected: !state.selected, tabindex: state.selected ? -1 : 0, ariaControls: 'tab-panel', value: 'Activity' }] }, { type: 'div', id: 'tab-indicator', class: 'tab-indicator' }, { type: 'showcase.material:tab-panel', id: 'tab-panel', class: 'tab-panel', role: 'tabpanel', ariaLabel: state.selected ? 'Overview content' : 'Activity content', data: { selected: state.selected, phase: this.benchmarkMode ? 1 : undefined, 'text-color': theme.onSurface } }] }];"
+    }
+  ],
+  "observation": {
+    "component": "tabs",
+    "staticPairs": 12,
+    "property": "panel accessible name and labelledby relationship",
+    "reference": "active panel named Overview through labelledby resolving to Overview tab; distinct authored panel targets",
+    "astylar": "single reused panel explicitly named Overview content, no labelledby; both tabs control same panel",
+    "stage": "SiteData semantic authoring before supported attribute projection"
+  },
+  "justification": "All12 pinned static AX pairs bind DOM/backend identities and preserve tab names/selection but disagree on the panel name and naming relationship. Current public fields support ariaLabel/ariaControls/ariaLabelledby; existing full current/installed/pinned bridge binding replays exactly. The candidate explicitly supplies the observed content name rather than the reference tab relationship. Initial source already omitted labelledby; the checked a0f3328b parent/child transition introduces the explicit name. This is unequal authored semantic intent, not evidence that core loses a supplied relationship. Existing private glyph-paint/baseline and accessibility-only-hiding findings remain separate.",
+  "evidence": [
+    {
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "sha256": "71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd"
+    },
+    {
+      "file": "examples/material-showcase/src/app/reference.component.ts",
+      "sha256": "debe55bc492d0fa1e48a9c7f09e1b668d435a2260588710207ab878b23c1d4aa"
+    },
+    {
+      "file": "src/app/types/dom-element.ts",
+      "sha256": "72eef2f09d5cdacaab10db7328c40e5b4748c3f22640e2b40f0436a268351e83"
+    },
+    {
+      "file": "src/lib/astylar-semantic-bridge.ts",
+      "sha256": "1a0011d3530701d9a74dc37b9f5a14d0fed0742dfd8793c39f8628e06b6a5725"
+    },
+    {
+      "file": "scripts/check-tabs-static-ax.mjs",
+      "sha256": "84c72dce8667ca1e0745a7b8cc0ca03c18c7e4a73305245868e0f99b66fb82c1"
+    },
+    {
+      "file": "artifacts/material-parity/tabs-static-ax-review-20261022.log",
+      "sha256": "54e7876b46747b34bacc5d2da16d98b5ec51678cca51cb9d29f56da17cc19093"
+    },
+    {
+      "file": "artifacts/material-parity/tabs-static-ax-20261022/latest-report.json",
+      "sha256": "78c59cedbd0200b86abbdc0d78ab573ef9e1431b619ad0ea6f1a99c3cb40a434"
+    },
+    {
+      "file": "artifacts/material-parity/material-semantic-visibility-binding-retry-20261021.log",
+      "sha256": "2f130ff825b7885e0c7d0a35eaea849d6560bc486cb88ee033899966e7bc7aaf"
+    },
+    {
+      "file": "scripts/check-material-semantic-visibility-binding.mjs",
+      "sha256": "a320c97ece4ac0191ff102b473029cc8d2800d5979216658c02eea61ffb0ac23"
+    },
+    {
+      "file": "artifacts/material-parity/tabs-static-ax-20261022/tabs-light-1440x1000-dpr1-reference.json",
+      "sha256": "3eec664a4441e72c2f026fcd6c187bba16873ee3591992d2990d0807806e69b7"
+    },
+    {
+      "file": "artifacts/material-parity/tabs-static-ax-20261022/tabs-light-1440x1000-dpr1-astylar.json",
+      "sha256": "bc1ad886115145b427f674fc1be3fb460172e58a5005696aa89187c2fe6880a8"
+    },
+    {
+      "file": "artifacts/material-parity/tabs-static-ax-20261022/tabs-light-768x1024-dpr1-reference.json",
+      "sha256": "dfe3c92de53820332ad0d40d766bc9d41391b8a96e517fa96ac77812b49d5417"
+    },
+    {
+      "file": "artifacts/material-parity/tabs-static-ax-20261022/tabs-light-768x1024-dpr1-astylar.json",
+      "sha256": "4c589f7e17de5896e7548d25b3841f549291fc162b2415db4a69994703819e4b"
+    },
+    {
+      "file": "artifacts/material-parity/tabs-static-ax-20261022/tabs-light-390x844-dpr2-reference.json",
+      "sha256": "9362c12ce136411094102676cca22140f20f8a01df4cae9cdb8314c21682fd1a"
+    },
+    {
+      "file": "artifacts/material-parity/tabs-static-ax-20261022/tabs-light-390x844-dpr2-astylar.json",
+      "sha256": "528b4bbf3b220f002eff9691553ec9794ddd40efed8afbd542224dc9ef89c705"
+    },
+    {
+      "file": "artifacts/material-parity/tabs-static-ax-20261022/tabs-dark-1440x1000-dpr1-reference.json",
+      "sha256": "edd6643e7a5547d62d68fe3b38c93d515fbad28fe902ae140443d6fda3fb543d"
+    },
+    {
+      "file": "artifacts/material-parity/tabs-static-ax-20261022/tabs-dark-1440x1000-dpr1-astylar.json",
+      "sha256": "4335dd1b7c285473b0c977ad199dad8a093a8be26eafddade2dbc154bc800b18"
+    },
+    {
+      "file": "artifacts/material-parity/tabs-static-ax-20261022/tabs-dark-768x1024-dpr1-reference.json",
+      "sha256": "291a2c8109cc614afa5fbf3b285fe074e13f47959a244a21083cac92e5910487"
+    },
+    {
+      "file": "artifacts/material-parity/tabs-static-ax-20261022/tabs-dark-768x1024-dpr1-astylar.json",
+      "sha256": "f3f662814616dcadd01b29a3003ff15e5d12dbcb87d670495453778640db4dd2"
+    },
+    {
+      "file": "artifacts/material-parity/tabs-static-ax-20261022/tabs-dark-390x844-dpr2-reference.json",
+      "sha256": "f882ee7f441992e74ba87393f6f4c51f7152d0fdb27b228a51fb715e8afa1406"
+    },
+    {
+      "file": "artifacts/material-parity/tabs-static-ax-20261022/tabs-dark-390x844-dpr2-astylar.json",
+      "sha256": "9ef90fb7d29cfc3a593b68c59bf2880c393492d5ac9a9d198b8d6b5795a40b6e"
+    },
+    {
+      "file": "artifacts/material-parity/tabs-static-ax-20261022/tabs-contrast-1440x1000-dpr1-reference.json",
+      "sha256": "ac9ab9200a0a48dcf4a5f1e82ff0f8cf5330524056b75daf29099094ee562479"
+    },
+    {
+      "file": "artifacts/material-parity/tabs-static-ax-20261022/tabs-contrast-1440x1000-dpr1-astylar.json",
+      "sha256": "d0f97bfee3035861a572c0f6cb5d64407ea262029cd1ebf41043d85b07e4821c"
+    },
+    {
+      "file": "artifacts/material-parity/tabs-static-ax-20261022/tabs-contrast-768x1024-dpr1-reference.json",
+      "sha256": "0bafff7b62f530d69e94e924d4dc2583f22baa82e61b887f384302a5d773b8d4"
+    },
+    {
+      "file": "artifacts/material-parity/tabs-static-ax-20261022/tabs-contrast-768x1024-dpr1-astylar.json",
+      "sha256": "896d35759f37ad98724edc063fa6c12d03b65932ce49c7c5ca06f50f90ada0fc"
+    },
+    {
+      "file": "artifacts/material-parity/tabs-static-ax-20261022/tabs-contrast-390x844-dpr2-reference.json",
+      "sha256": "d66dd095dab19c4ec7fb1ed9365bcf42ca78e737512533b3e791cf8689a1cf90"
+    },
+    {
+      "file": "artifacts/material-parity/tabs-static-ax-20261022/tabs-contrast-390x844-dpr2-astylar.json",
+      "sha256": "3da8dbc6ce81b60a88c9df2004bc4bb9ad18c7d88c338e3830205b88a8f0ffce"
+    },
+    {
+      "file": "artifacts/material-parity/tabs-static-ax-20261022/tabs-custom-1440x1000-dpr1-reference.json",
+      "sha256": "82e6f93407d55324588efeacbb0dd4de8c532bc261b478847902483330e43d6b"
+    },
+    {
+      "file": "artifacts/material-parity/tabs-static-ax-20261022/tabs-custom-1440x1000-dpr1-astylar.json",
+      "sha256": "75a70841b73b7449698e4ec511027ff237f5e6444c34d768f216cab29e961570"
+    },
+    {
+      "file": "artifacts/material-parity/tabs-static-ax-20261022/tabs-custom-768x1024-dpr1-reference.json",
+      "sha256": "4acd92b30f77f177d7381e23e50d5e77e64a2054c83e7ff15ad289531c9ad13d"
+    },
+    {
+      "file": "artifacts/material-parity/tabs-static-ax-20261022/tabs-custom-768x1024-dpr1-astylar.json",
+      "sha256": "0d30670354c222f448faac865a3b03774342393c7393de44c473d8e43371aed5"
+    },
+    {
+      "file": "artifacts/material-parity/tabs-static-ax-20261022/tabs-custom-390x844-dpr2-reference.json",
+      "sha256": "9662c206bb1596aa39d8f745c5ac41ba0068ad3b03725cfa39f69523f22ca3f6"
+    },
+    {
+      "file": "artifacts/material-parity/tabs-static-ax-20261022/tabs-custom-390x844-dpr2-astylar.json",
+      "sha256": "00147d6f96c9feabe30455f463b43cecc1ac344829cbb2477a3d7b57d0d57b18"
+    }
+  ],
+  "recommendation": "In future comparison input work preserve stable tab/panel identities and supported labelledby relationships rather than hardcoding content as the panel name. Do not change visible text, private paint or CSS hiding to imitate accessibility output; investigate those at their already-recorded owning boundaries.",
+  "boundary": "Twelve pinned initial-state static pairs and exact source transitions only; not historical runtime, every intervening revision, interactive updates, AT behavior, current rendering or case closure."
+}),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({

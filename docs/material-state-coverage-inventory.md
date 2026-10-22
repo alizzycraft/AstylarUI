@@ -46,10 +46,20 @@
   join-tabs-menu-sheet-input-evidence.mjs,tabs-menu-sheet-case-join-20261022 log/
   empty stderr. The178895974-byte generated proposal stays ignored,not another
   checked-in full result set;its deterministic producer and digest are retained.
-- Next:register pending180 source findings and7eb107de selection through existing
-  exact predecessor-restoration guards,then reconcile source census and perform
-  coherent export/cold/import. Do not recapture unchanged evidence or promote
-  partial cases. Then remaining
+- Registration now selects7eb107de explicitly with --tabs-menu-sheet;all older
+  selections conserve. The180-definition vector preserves179 prior definitions;
+  only the new proposal's literal search excerpt is regex-escaped for registry
+  execution,with positive/negative detection asserted. Complete policy/producer/
+  selection/helper/prior-suite recovery passes. Owning final batch20/20 passes
+  (42760ms). Census856/241/179→873/243/180 retains all prior paths/claims/findings,
+  adds17 paths and changes exactly7 old source receipts. Exact census freeze
+  replay passes. Evidence:tabs-registration-owning-final,tabs-selection-census
+  and tabs-export-source-freeze20261022 log pairs. Earlier owning run also passes
+  but precedes the new literal-pattern escape;it is not the final source proof.
+- Next:coherent --tabs-menu-sheet export,complete section/coverage/receipt
+  reconciliation,independent cold verification and accepted import. Current
+  canonical remains179 until those gates close;registration is not publication.
+  Do not recapture unchanged evidence or promote partial cases. Then remaining
   descendant/first-stage/anonymous and semantic gaps;
   interaction histories/resources(1875),editable caret/selection(443) and complete
   current input/runtime/rendering applicability(2311) remain open and overlapping.

@@ -1,9 +1,11 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
+import { tabsSemanticPredecessor, restoreTabsSemanticPolicy, restoreTabsSemanticProducer, restoreTabsCaseSelection, restoreTabsRunnerSelection, restoreTabsLauncherSelection } from './tabs-semantic-registration.mjs';
 const hash = value => createHash('sha256').update(value).digest('hex');
 const id = 'fixture-stepper-tab-panel-relationships-omitted';
 export function stepperSemanticPredecessor(current) {
+  current = tabsSemanticPredecessor(current);
   if (current.length <= 178) return current;
   assert.equal(current.length, 179);
   assert.equal(hash(JSON.stringify(current)), '73f0029326c2ca8e61c572b494101875aa49ae52ce526947e4e8268c7aeb0c0b');
@@ -13,7 +15,7 @@ export function stepperSemanticPredecessor(current) {
   return prior;
 }
 export function restoreStepperSemanticPolicy(source) {
-  const text = source.toString().replaceAll('\r\n', '\n');
+  const text = restoreTabsSemanticPolicy(source);
   if (!text.includes(id)) {
     assert.ok(!text.includes('Material stepper tab-to-labelled-panel relationship authoring'), 'Partial stepper semantic registration');
     return text;
@@ -29,7 +31,7 @@ export function restoreStepperSemanticPolicy(source) {
   return prior;
 }
 export function restoreStepperSemanticProducer(source) {
-  const text = source.toString().replaceAll('\r\n', '\n');
+  const text = restoreTabsSemanticProducer(source);
   if (!text.includes('stepper semantic additive registration preserves accepted findings')) {
     assert.ok(!text.includes("'tests/material-parity/stepper-semantic-inputs.spec.mjs'"), 'Partial stepper proof registration');
     return text;
@@ -55,7 +57,7 @@ export function restoreStepperSemanticProducer(source) {
   return prior;
 }
 export function restoreStepperCaseSelection(source) {
-  let text = source.toString().replaceAll('\r\n', '\n');
+  let text = restoreTabsCaseSelection(source);
   if (!text.includes('export const stepperInputsReview=')) return text;
   assert.equal(hash(text), 'bf5bb2ac5ba58ca4aeb89819f351e52ce6fc182a7c953e1b0696e690ea16b08b');
   const line = "export const stepperInputsReview='ff305b14217b7123b98a2e00f3ecb9ad443cd89606eaf688ea11f6118b7fb069';\n";
@@ -65,7 +67,7 @@ export function restoreStepperCaseSelection(source) {
   return text;
 }
 export function restoreStepperRunnerSelection(source) {
-  let text = source.toString().replaceAll('\r\n', '\n');
+  let text = restoreTabsRunnerSelection(source);
   if (!text.includes(', stepperInputsReview')) return text;
   assert.equal(hash(text), '5d658498f857e95971cdfcee9336119dfd546d0f32a8f59a4e61bbda32be9c65');
   for (const addition of [', stepperInputsReview', ',stepperInputsReview']) {
@@ -75,7 +77,7 @@ export function restoreStepperRunnerSelection(source) {
   return text;
 }
 export function restoreStepperLauncherSelection(source) {
-  let text = source.toString().replaceAll('\r\n', '\n');
+  let text = restoreTabsLauncherSelection(source);
   if (!text.includes('const stepperInputs =')) return text;
   assert.equal(hash(text), 'ef67291fcd1aaa97b8884db56e3969fd714dea93768d692229b17987d73c1437');
   for (const addition of [

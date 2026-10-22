@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Retain tabs registration helper/suite and tabs-registration-owning20261022 plus
+owning-final log/empty stderr pairs. Both20tests pass;final run42760ms includes
+the literal-to-regex escaping correction. Census and export-source-freeze20261022
+log pairs authenticate873 paths/243 proofs/180 findings versus856/241/179,all
+prior claims/paths/findings and exactly7 changed receipts. Existing complete
+predecessor restoration remains required;no old hash waived. --tabs-menu-sheet
+selection7eb107de is registered,but export/cold/conservation/import remain pending.
+Accepted canonical stays8d6c5964/179;retain it and every original/failure capture.
+
 Retain join-tabs-menu-sheet-input-evidence.mjs and tabs-menu-sheet-case-join-
 20261022 log/empty stderr. Pending7eb107de case proposal adds exactly201 children
 and validates15657 dependencies;completeff305b14 and accepted pointer conserve.

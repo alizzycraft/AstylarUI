@@ -8922,6 +8922,23 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'tests/material-parity/tabs-semantic-inputs.spec.mjs',
+    'tests/material-parity/tabs-semantic-registration.mjs',
+    'scripts/check-tabs-recorded-nodes.mjs',
+    'scripts/check-menu-recorded-nodes.mjs',
+    'scripts/capture-tabs-static-ax.mjs',
+    'scripts/check-tabs-static-ax.mjs',
+    'scripts/review-tabs-semantic-inputs.mjs',
+    'scripts/join-tabs-menu-sheet-input-evidence.mjs',
+    'artifacts/material-parity/tabs-recorded-node-accounting-20261022.log',
+    'artifacts/material-parity/menu-recorded-node-accounting-retry-20261022.log',
+    'artifacts/material-parity/bottom-sheet-action-presence-20261022.log',
+    'artifacts/material-parity/tabs-static-ax-capture-20261022.log',
+    'artifacts/material-parity/tabs-static-ax-review-20261022.log',
+    'artifacts/material-parity/tabs-semantic-input-review-20261022.log',
+    'artifacts/material-parity/tabs-menu-sheet-case-join-20261022.log',
+    'artifacts/material-parity/working-audit/proposals/4eb7698c523610a095b209c497274bdad32fefc4972934bde73980da28b9d5d5.json',
+    'artifacts/material-parity/tabs-static-ax-20261022/latest-report.json',
     'tests/material-parity/stepper-semantic-inputs.spec.mjs',
     'tests/material-parity/stepper-semantic-registration.mjs',
     'scripts/check-expansion-recorded-nodes.mjs',
@@ -9785,6 +9802,10 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/tabs-semantic-inputs.spec.mjs', /test\('tabs semantic registration preserves179 findings and complete predecessor sources'/,
+      'tabs semantic additive registration preserves accepted findings', 'All179 prior definitions and complete predecessor policy/producer/selection sources conserve;one authored panel-name substitution is distinct from private glyph paint and public hiding support. Mutation controls reject drift. Not canonical publication or case closure.'),
+    proof(root, 'tests/material-parity/tabs-semantic-inputs.spec.mjs', /test\('tabs semantic history and queued node AX presence evidence replay'/,
+      'tabs menu and sheet bounded evidence and semantic history', 'All12 static AX pairs and initial/name-introduction whole source transitions authenticate;70 tabs and94 menu recorded-node cases plus25 sheet action-presence cases replay and201 additive coverage children recover the complete predecessor. Not full styles,paint,interaction/resource history,current rendering or case closure.'),
     proof(root, 'tests/material-parity/stepper-semantic-inputs.spec.mjs', /test\('stepper semantic registration preserves178 findings and complete predecessor sources'/,
       'stepper semantic additive registration preserves accepted findings', 'All178 predecessor findings preserve exactly;the supported tab/panel relationship omission is an authoring defect distinct from inactive panel omission and accessibility-only hiding support. Whole source/vector recovery and mutation controls reject drift. Not canonical publication or case acceptance.'),
     proof(root, 'tests/material-parity/stepper-semantic-inputs.spec.mjs', /test\('stepper semantic actual AX and initial authoring history retain distinct public support limits'/,

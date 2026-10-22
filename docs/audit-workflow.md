@@ -364,6 +364,17 @@ in a coherent batch; exporting an unchanged producer does not integrate them.
 
 ## Retention and measurements
 
+The pending tabs/menu/sheet batch uses explicit `--tabs-menu-sheet` on the same
+current-ancestry launcher(with `--dry-run` or `--check`). It selects exact7eb107de;
+all earlier selections remain unchanged and supplement combinations reject.
+Existing receipt readers authenticate this exact successor only. New registration
+restores the complete179-definition policy/producer and selection sources before
+all earlier restoration stages. The proposed literal search excerpt is regex-
+escaped only for registry execution;the new owning assertion checks the exact
+conversion,positive source detection and rejection of an altered excerpt.
+Selection is not publication:full source census,export conservation,independent
+cold verification and import still precede acceptance. All2311 cases stay partial.
+
 Follow [artifact retention](audit-artifact-retention.md). Original and failed-case
 evidence is immutable. Five formerly always-retained scratch producers now use
 `withAuditScratch`: remove successful scratch, retain failures with a reported path,
