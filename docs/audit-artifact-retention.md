@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Post-gate diagnostic export25178 terminates0. Preserve its complete stdout/stderr
+including172 debugger boundary observations and final complete marker;original
+native-failure logs remain independently retained. Pending package5ed659b3 must
+not replace accepted e7d22b1a working index before conservation/cold/import. Keep
+post-gate-full-section-comparison-20261022 logs while84811 runs and afterward.
+Successful diagnostic export does not establish original crash cause,current
+rendering or case closure. Direct child file descriptors avoid buffered visibility
+for subsequent checks;do not overwrite previous logs to change their presentation.
+
 Retain post-gate-debugger-observation-20261022 log/stderr and live post-gate-
 canonical-debugger-export-20261022 log/stderr. Debugger setup changes no producer
 source;original fatal export logs remain separate. Keep any native fatal-error

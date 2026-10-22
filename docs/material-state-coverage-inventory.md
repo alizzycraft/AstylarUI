@@ -2,6 +2,19 @@
 
 ## Current audit pointer — October22
 
+- Diagnostic export25178 TERMINATES0:all validation reaches completion,then
+  evidence-session verification/encoding/write complete at3556009.545ms. Existing
+  unchanged-source debugger observes172 hits across154 validation-call sites;
+  first coverage,last supplemental line-box. Original native crash is NOT
+  reproduced or diagnosed by this success. Session authenticates17370 files/
+  1746230365 bytes(one collector,ten memory hits,one disk hit). New pending gzip
+  5ed659b3cee9b0947213e8eae570247066fe6fe880c5704eeafbb91ba5289fac,
+  91375578 compressed/2340736619 decoded bytes;decoded SHA d34678ec1f7f5165d8b664e61950424aa37a46dc863cff388426b144c57a48f2.
+  Accepted index remains e7d22b1a/80632431. Existing complete80-section comparison
+  now runs as84811 against that accepted predecessor;pending conservation,cold
+  check/import remain mandatory. All2311 cases remain partial/current unverified.
+  Retain terminal diagnostic logs;redirected live file visibility was buffered,
+  not proof of pre-collection setup. Future checks use direct file descriptors.
 - Diagnostic export25178 is live,Node PID24044 confirmed with increasing CPU.
   Uses original named-launcher dry-run arguments and unchanged producer source;
   an in-process Node debugger observes validation-call boundaries selected from
