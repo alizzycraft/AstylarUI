@@ -12,6 +12,28 @@ import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { propertyGroups } from './input-equivalence-policy.mjs';
 
+test('root depth registration preserves all191 predecessor findings and binds current failure receipts', async () => {
+  const { execFileSync } = await import('node:child_process');
+  const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');
+  const file = 'tests/material-parity/input-equivalence-policy.mjs';
+  const previous = execFileSync('git', ['show', `c60c7206:${file}`], { maxBuffer: 4000000 }).toString().replaceAll('\r\n', '\n');
+  const prior = new Function(previous.replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
+  assert.equal(prior.length, 191); assert.equal(sourceAuditDefinitions.length, 192);
+  assert.deepEqual(sourceAuditDefinitions.slice(0, -1), prior);
+  const source = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const ast = ts.createSourceFile(file, source, 99, true);
+  const entries = ast.statements.filter(ts.isVariableStatement).flatMap(n => [...n.declarationList.declarations])
+    .find(n => n.name.getText(ast) === 'sourceAuditDefinitions').initializer.arguments[0].elements;
+  assert.equal(source.slice(0, entries.at(-1).getFullStart()) + source.slice(entries.at(-1).end + 1), previous);
+  const finding = sourceAuditDefinitions.at(-1);
+  assert.equal(finding.id, 'core-root-paint-depth-crosses-viewport-camera');
+  assert.equal(finding.classification, 'confirmed-core-renderer-defect');
+  assert.ok(new RegExp(finding.pattern).test(readFileSync(finding.file, 'utf8')));
+  for (const r of finding.evidence) assert.equal(createHash('sha256').update(readFileSync(r.file)).digest('hex'), r.sha256);
+  assert.equal(finding.publicReproduction.equalAuthoredInputs, true);
+  assert.equal(finding.publicReproduction.currentRenderingAccepted, false);
+});
+
 test('current public depth reduction loses only the high-z short pane despite equal CSS geometry', () => {
   const sha = bytes => createHash('sha256').update(bytes).digest('hex');
   const dir = 'artifacts/material-parity/current-depth-public-reduction-20261022';

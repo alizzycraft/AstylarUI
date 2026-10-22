@@ -2,6 +2,22 @@
 
 ## Current audit pointer — October22
 
+- Shared depth failure is now registered once as
+  core-root-paint-depth-crosses-viewport-camera in the existing policy. It binds
+  current public result/provenance/validation receipts,exact source pattern,
+  equal-input observation,owner,recommendation and explicit DPR1/root-pane scope.
+  All191 predecessor definitions AND complete previous policy bytes conserve;
+  new working count192 is NOT the accepted canonical191. Existing tooltip
+  suite registration/source/public checks pass3/3;retained log root-depth-
+  registration-20261022. No duplicate tooltip/snackbar diagnosis or broad current
+  case claim. First-bad history,full case joins and configured rendering remain.
+  Deliberate integration check of the unchanged historical191-definition static
+  registration rejects new192(exit1),log root-depth-historical-registration-
+  boundary-20261022. Preserve that failure. Next extend the existing explicit
+  historical registration boundary with exact full-source/population conservation
+  before coherent source/proof/case integration/export. Do not silently change
+  the old expected population or relabel retained receipts current. Producer
+  proof inventory and accepted package remain unchanged at this bounded step.
 - Current public depth reduction now confirms the source hazard in Chrome
   155.0.8059.85 at observed DPR1. Reused unchanged audit-overlay-layout-stage
   runner/spec with exact depth- filter and retained Angular compilation. All104

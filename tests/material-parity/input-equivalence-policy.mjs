@@ -6472,6 +6472,30 @@ Object.freeze({
     ],
     "boundary": "Twelve enabled static pairs and executed authored selection variants only. Native primitive metadata is preserved under its existing finding,not a new defect. Not keyboard/form submission,disabled states,paint,current whole rendering or case closure."
   }),
+  Object.freeze({
+    id: 'core-root-paint-depth-crosses-viewport-camera',
+    introducedBy: 'Current source and authenticated public reproduction agree;first-bad revision not established',
+    file: 'src/app/services/dom/positioning/stacking-context.manager.ts',
+    pattern: String.raw`return 0\.01 \+ zIndex \* this\.rootContextStep;`,
+    classification: 'confirmed-core-renderer-defect',
+    owner: 'shared root stacking-depth allocation and final camera clip boundary',
+    focusedProof: 'tests/material-parity/tooltip-position-composition.spec.mjs: current public depth reduction loses only the high-z short pane despite equal CSS geometry',
+    observation: { component: 'plugin-free public root pane', property: 'z-index versus visible paint',
+      states: ['z-index1 and1000 at320x240 and320x1000'], dpr: [1],
+      reference: 'All four120x24 panes paint2880 solid pixels at20,20',
+      astylar: 'Identical CSS/projected boxes;high-z1000 short pane paints0 pixels,three controls paint2880',
+      stage: 'unbounded root paint depth exceeds viewport-height-dependent camera position' },
+    evidence: [
+      { file: 'artifacts/material-parity/current-depth-public-reduction-20261022/result.json', sha256: 'd464b8d4931c652dcc46d6e1da3114641b38c9205477dcb7271f5024d7797257' },
+      { file: 'artifacts/material-parity/current-depth-public-reduction-20261022/provenance.json', sha256: 'da3ff1622585e00f10d7df0ba51739d2fe9585a053ac3bb8c56893c56f79f979' },
+      { file: 'artifacts/material-parity/current-depth-public-validation-20261022.log', sha256: '1db33fb2dff32c068f946eddc38bd9bcfd6ced69577f591387a700273ccf7755' },
+    ],
+    publicReproduction: { command: 'ASTYLAR_AUDIT_SPEC_FILTER=depth- node scripts/audit-overlay-layout-stage.mjs <new-output> 1 artifacts/material-parity/divider-context-angular-source-build-20261013',
+      pairs: 4, rendererFailures: 1, controls: 3, equalAuthoredInputs: true, currentRenderingAccepted: false },
+    justification: 'The unchanged public reduction derives native CSS from the same SiteData styles and preserves authored input across mount. All104 current source/compiled/installed receipts equal the authenticated Angular compilation;2516 served bundle inputs authenticate. Native,CSS and projected boxes agree in all four cases. Only high-z1000 at240px places meshZ250 beyond cameraZ207.8461 while enabled/visible/visibility1 remain true;native2880 solid pixels become0. Tall high-z and both low-z controls paint. Orthographic projection fixes apparent x/y scaling but does not bound physical stacking depth. This is a core paint failure distinct from unequal Material tooltip connected-overlay versus flow inputs and historical off-screen placement. Current source arithmetic corroborates the mechanism without substituting for browser evidence.',
+    recommendation: 'Keep CSS z-index as paint order and allocate final render depth within the camera-visible range at the shared core boundary. Preserve stacking-context ordering and fractional CSS geometry. Do not lower fixture z-index,move popups,or add plugin camera calculations to hide clipping.',
+    boundary: 'Current reduced root-pane failure at observed DPR1 only. Not full Material tooltip/snackbar causality,current configured-case parity,all z-indices,DPRs or complete raster equivalence. First-bad history and canonical case joins remain open.',
+  }),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({
