@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain check-bottom-sheet-focus-source-applicability.mjs and bottom-sheet-focus-
+source-applicability-20261022 log/empty stderr. Reauthenticates original trace
+cc12796e and preserved Material-worktree component2c2979ad;complete two authored
+methods equal current and pinned source-map methods. Original timing failure and
+new AX endpoints remain distinct evidence. Keep preserved raw component at its
+referenced path;do not delete it as stale workspace data. Exact replay passes;
+no fresh runtime capture or source added to frozen export5359.
+
 Retain all21 bottom-sheet-activate-ax-20261022 files(296081 bytes),both capture/
 review scripts and capture/review20261022 log/empty stderr pairs. Capture29171
 exits0;9 configured activate pairs retain actual full AX/backend DOM at the

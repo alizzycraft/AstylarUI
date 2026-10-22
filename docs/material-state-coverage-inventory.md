@@ -86,9 +86,20 @@
   Backend identity/ancestry/names/roles/focus checks pass108 mutation controls
   and byte-exact replay. Evidence:capture-bottom-sheet-activate-ax.mjs,
   check-bottom-sheet-activate-ax.mjs,bottom-sheet-activate-ax-20261022 and capture/
-  review log pairs. Names/roles reflect unequal inputs;next trace authored naming
-  history and autofocus lifecycle before classifying residual focus behavior.
+  review log pairs. Names/roles reflect unequal inputs;authored naming history
+  remains pending. Focus applicability is bounded by the following completed check.
   No focus-trap,full-event,AT,paint,current-rendering or case-closure claim.
+- Existing focus scheduling investigation reused,not reopened:preserved captured
+  source2c2979ad authenticates to the original tracecc12796e. Complete handleClick
+  and familyElements methods equal current source and new pinned source-map bytes.
+  Historical focus('bottom-sheet-dismiss') returns false with target absent before
+  first open-tree update;target exists after update. New9-pair AX endpoints agree
+  on failed transfer,but do not prove the timing cause of every new execution.
+  Role=dialog div does not opt into existing modal type:dialog autofocus lifecycle;
+  retain application request ordering,modal policy and names/roles as separate
+  issues. Evidence:check-bottom-sheet-focus-source-applicability.mjs and matching
+  20261022 log/empty stderr;byte-exact replay passes. No fresh browser reduction
+  justified without contradictory input/timeline evidence. No core defect/fix claim.
 - Evidence:stepper-coherent-export-20261022,stepper-cold-check-20261022 and
   stepper-main-import-verification-20261022;full-section-comparison,export-census-
   binding,receipt-leaf-comparison,coverage-conservation,candidate-import and
