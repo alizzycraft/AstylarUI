@@ -8,6 +8,7 @@ import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import { sourceAuditDefinitions as currentSourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { retainedStaticSemanticPopulation, staticSemanticPredecessor, restoreStaticSemanticPolicy, restoreStaticSemanticProducer } from './static-semantic-registration.mjs';
+import { restorePopupDepthTabsHelper } from './static-semantic-registration.mjs';
 // Original assertions below inspect the exact retained191-definition population.
 const sourceAuditDefinitions = retainedStaticSemanticPopulation(currentSourceAuditDefinitions);
 const hash = b => createHash('sha256').update(b).digest('hex');
@@ -36,7 +37,7 @@ test('static semantic registration preserves180 findings and exact predecessor p
   assert.equal(sourceAuditDefinitions.slice(180).filter(d => d.classification === 'confirmed-core-renderer-defect').length, 1);
   assert.equal(sourceAuditDefinitions.find(d => d.id === 'core-hidden-referenced-description-targets-pruned').publicReproduction.authoredInputsEqualPerPair, true);
   const helperFile = 'tests/material-parity/tabs-semantic-registration.mjs';
-  let helper = normalize(fs.readFileSync(helperFile));
+  let helper = restorePopupDepthTabsHelper(normalize(fs.readFileSync(helperFile)));
   const helperAst = ts.createSourceFile(helperFile, helper, 99, true);
   const gateRestorers = helperAst.statements.filter(node => ts.isFunctionDeclaration(node) && node.name?.text === 'restorePostGateCaseReader');
   assert.equal(gateRestorers.length, 1);

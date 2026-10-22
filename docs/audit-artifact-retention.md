@@ -2,6 +2,12 @@
 
 ## Current versus historical evidence
 
+Keep popup-depth-export-selection-integration-20261023 and popup-depth-export-
+factory-routing-20261023 log/stderr pairs. First validates the complete queued
+proposal plus original/new selection checks(5/5);second executes actual runner
+factory routing and preserves original selection assertions(3/3). No capture
+or canonical publication occurred;these logs do not replace final gates.
+
 Keep popup-depth-queued-reader-20261023.log/.stderr.log (original changed-suite
 receipt failure) and popup-depth-queued-reader-source-bound-20261023.log/.stderr.log
 (terminal0,one focused assertion validating2311 cases/16186 dependencies).

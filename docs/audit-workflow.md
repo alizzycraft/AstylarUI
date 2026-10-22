@@ -43,6 +43,16 @@ index for current counts and pending integration work, not the figures above.
 
 ## One investigation per question
 
+The existing current-ancestry launcher accepts explicit `--popup-depth-inputs`
+(also with `--dry-run` or `--check`) for exact queued revieweb8ca85a. It is
+mutually exclusive with all older supplement flags;default/older invocations
+remain unchanged. The general runner selects the bounded queued reader only for
+that exact review digest. It preserves historical producer/verifier receipts,
+133 bounded endpoint additions and all2311 partial statuses. Invocation preflight
+is not source-census completion,canonical publication or current rendering.
+Complete coherent source/proof integration and the existing conservation,cold
+comparison and verified import gates before publishing this pending batch.
+
 Record competing explanations, the first meaningful divergence, the next decisive
 check, and the population to which the result actually applies. Similar symptoms
 are not proof of a shared cause. Distinguish input mismatch, confirmed core defect,

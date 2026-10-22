@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import { staticSemanticPredecessor, restoreStaticSemanticPolicy, restoreStaticSemanticProducer } from './static-semantic-registration.mjs';
+import { restorePopupDepthExportSource } from './static-semantic-registration.mjs';
 const hash = value => createHash('sha256').update(value).digest('hex');
 const normalize = value => value.toString().replaceAll('\r\n', '\n');
 const id = 'fixture-tab-panel-accessible-name-substitution';
@@ -23,6 +24,7 @@ function restorePostGateCaseReader(source) {
 // Exact additive case selection only. Finding/proof registration is independent;
 // these reversals do not declare the pending semantic batch canonical.
 export function restoreStaticSemanticCaseSelection(source, kind) {
+  source = restorePopupDepthExportSource(source, kind);
   let text = kind === 'case' ? restorePostGateCaseReader(source) : normalize(source);
   if (!text.includes('staticSemanticInputs')) return text;
   const review = '821919099916339a177403d8c6cc66ede9aeaa20501a23ace9c568df75160f11';

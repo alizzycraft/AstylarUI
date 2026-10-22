@@ -2,6 +2,25 @@
 
 ## Current audit pointer — October22
 
+- October23 export selection now supports explicit --popup-depth-inputs on the
+  existing current-ancestry launcher,selecting exacteb8ca85a proposal and reader.
+  Default and all six older supplements retain original invocation;combining
+  the new flag with any older supplement rejects. General runner's actual
+  readerFactory expression executes under real module bindings:exactnew→new
+  reader,82191909→existing divider reader,text-backing→existing reader,unknown→
+  undefined(no historical waiver). Complete new runnerf345a665/launcher9f258608
+  restore exact prior1473d732/d6555a61;new tabs-helper81253bc8 restores complete
+  ce23ce76 before original historical assertions. Changed source/selector and
+  drift controls reject. Original registration and both older selection checks
+  remain unchanged after explicit historical binding.
+  Combined selection+full queued-case validation passes5/5,35547.8255ms,log
+  popup-depth-export-selection-integration-20261023/empty stderr. Follow-up actual
+  factory routing and both original selection checks pass3/3,log popup-depth-
+  export-factory-routing-20261023/empty stderr. No canonical export/capture ran.
+  Next finish the coherent source/proof census(new adapter/joiner and endpoint/
+  queued-reader/selection proofs),then freeze and run canonical conservation,
+  independent cold verification and import. Accepted5ed659b3 and all2311 partial/
+  current-unverified statuses stay unchanged;dry-run selection is not acceptance.
 - October23 exact queued-reader adapter is verified for eb8ca85a. It uses the
   existing case loader and existing82191909 predecessor reader;133-child removal
   recovers the COMPLETE predecessor before any dependency read. Two bounded

@@ -77,3 +77,36 @@ export function restoreRootDepthProducer(source) {
   assert.equal(hash(prior), 'a0480845099038416ce2f420dca03e3cd99712ea083c18075c8bebabbc00f747');
   return prior;
 }
+
+export function restorePopupDepthExportSource(source, kind) {
+  let text = source.toString().replaceAll('\r\n', '\n');
+  if (kind === 'case' || !text.includes('popupDepthInputs')) return text;
+  const entries = {
+    runner: ['f345a665eb3f517aef958a054cfc4f18c4bd26927cb582e5b45a5d8945040add', '1473d7324b68f6e312305837e71ab7a68e2878beb306c977b5d21ec998d9b290', [
+      "import { popupDepthInputsReview, createPopupDepthReviewReader } from '../tests/material-parity/popup-depth-case-review-source.mjs';\n",
+      'options.caseObligationReviewSha256===popupDepthInputsReview ? createPopupDepthReviewReader : ',
+    ]],
+    launcher: ['9f258608bd31db7c581ce1c6d6268affe86a1559aaf27a8869925bb53ae93f3f', 'd6555a6152b439cdc0a605e5f88ffb42b893299a94d7de9d6679119f583d8a4b', [
+      "const popupDepthInputs = rawRequested.includes('--popup-depth-inputs');\n",
+      "assert.ok(!(popupDepthInputs && (staticAx || cardInputs || expansionSemantics || stepperInputs || tabsMenuSheet || staticSemanticInputs)), 'Choose one case-review supplement');\n",
+      ", '--popup-depth-inputs'", '|--popup-depth-inputs',
+      "if (popupDepthInputs) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/eb8ca85a92bc8707f6fe2ba7404bf1e7caaacc9e57c733faf5a4cda6588862d4.json';\n",
+      "if (popupDepthInputs) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=eb8ca85a92bc8707f6fe2ba7404bf1e7caaacc9e57c733faf5a4cda6588862d4';\n",
+    ]],
+  };
+  const [current, prior, removals] = entries[kind]; assert.equal(hash(text), current);
+  for (const addition of removals) { assert.equal(text.split(addition).length, 2); text = text.replace(addition, ''); }
+  assert.equal(hash(text), prior); return text;
+}
+
+export function restorePopupDepthTabsHelper(source) {
+  let text = source.toString().replaceAll('\r\n', '\n');
+  if (!text.includes('source = restorePopupDepthExportSource(source, kind);')) return text;
+  assert.equal(hash(text), '81253bc88e3e8e7ae5c1933b92df5973b80cbf53f5a8848f8399a4959090db1e');
+  for (const addition of [
+    "import { restorePopupDepthExportSource } from './static-semantic-registration.mjs';\n",
+    '  source = restorePopupDepthExportSource(source, kind);\n',
+  ]) { assert.equal(text.split(addition).length, 2); text = text.replace(addition, ''); }
+  assert.equal(hash(text), 'ce23ce76c049d845ba790fe295f1e908a5f0f585e66fb00086252d8fa6e4229f');
+  return text;
+}
