@@ -1,0 +1,10 @@
+{
+  "sessionId": 92085,
+  "exitCode": 0,
+  "elapsedMs": 2531277.3001,
+  "command": ["node", "scripts/export-material-input-audit-current-ancestry.mjs", "--stepper-inputs", "--check"],
+  "environment": {"ASTYLAR_AUDIT_COLD": "1", "ASTYLAR_AUDIT_PROGRESS": "1"},
+  "stdout": "artifacts/material-parity/stepper-cold-check-20261022/stdout.log",
+  "stderr": "artifacts/material-parity/stepper-cold-check-20261022/stderr.log",
+  "boundary": "Independent validation, evidence authentication and canonical comparison. Not complete inspection or current rendering acceptance."
+}

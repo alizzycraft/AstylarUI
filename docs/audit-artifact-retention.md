@@ -2,6 +2,16 @@
 
 ## Current versus historical evidence
 
+Stepper cold92085 is terminal success(exit0,2531277ms),2 collectors/10 memory hits/
+0 disk hits,16812 files/1715970043 bytes authenticated. Retain closed
+stepper-cold-check-20261022 stdout/stderr and stepper-main-import-verification-
+20261022 log/empty stderr(main import48477 exit0). Main/candidate exact index
+889691e1 now authenticates canonical8d6c5964/179 findings/241 proofs/856 paths.
+Preserve accepted predecessor3175514b and all original/failure evidence. Standalone
+tabs/menu/bottom-sheet proofs remain outside this snapshot until a later join.
+All2311 cases remain partial/current-rendering unverified. Every older live/next
+reference below is a historical checkpoint,not another active collector or waiver.
+
 Retain bottom-sheet-action-presence-20261022 log/empty stderr,its exact inline
 producerArgs and all63 referenced paired trees. All25 open pairs retain both
 native labels and candidate action values;50 forged labels/values reject and

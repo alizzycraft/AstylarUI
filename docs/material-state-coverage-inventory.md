@@ -1,6 +1,40 @@
 # Material comparison/state coverage inventory
 
-## Current audit pointer — October20
+## Current audit pointer — October22
+
+- Accepted canonical8d6c596421e6b96018328199aea28981b85d15921c611fe2b1837b3b412a976f,
+  index889691e1fe057d44dc87a454ef54fbab82d8bcbd571df069737d55e4ae950593,
+  reviewff305b14:179 findings/241 proofs/856 source paths. Gzip88202430 bytes,
+  decoded2334127261 bytes/SHA c4dfe40587d5544984248904d827f64e9e4ce52868b1de9e0877f66cafdbe8ed.
+  Independent cold92085 exits0(2531277ms),2 collectors/10 memory hits/0 disk hits,
+  16812 files/1715970043 bytes authenticated. Main import48477 exits0;all shards
+  verify and main/candidate pointers match. No audit collector is live.
+- Scope remains36 families/2311 cases(436 static/1875 interaction),all partial;
+  current rendering remains unverified. No inspected-complete or rendering-pass
+  promotion follows from source classification,recorded trees,AX or cold export.
+- Stepper finding proves omission of supported tab controls/panel labelledby
+  authoring,distinct from inactive-panel omission and accessibility-only hiding
+  support. All178 prior findings preserve. Full80-section comparison conserves70
+  sections;all10 changed sections reconcile,including148 changed receipt leaves
+  and148 additive coverage children. Complete prior coverage and15588 dependencies
+  recover;34 dependencies added. Prior3175514b and original/failure evidence remain.
+- Outside this accepted snapshot:tabs70-case node accounting(42d1da70),menu94-case
+  node accounting(2aefca3f),bottom-sheet25-open-pair action presence(4055ba5c).
+  Exact replay/mutation controls pass;these bounded proofs await a later coherent
+  join. They do not close anonymous boxes,full styles,paint,AX or whole cases.
+- Next:actual tab/panel AX using the existing pinned capture/applicability
+  procedure,then remaining descendant/first-stage/anonymous and semantic gaps;
+  interaction histories/resources(1875),editable caret/selection(443) and complete
+  current input/runtime/rendering applicability(2311) remain open and overlapping.
+  Do not reopen settled typography/private-tab-paint causes without changed inputs.
+- Evidence:stepper-coherent-export-20261022,stepper-cold-check-20261022 and
+  stepper-main-import-verification-20261022;full-section-comparison,export-census-
+  binding,receipt-leaf-comparison,coverage-conservation,candidate-import and
+  propagated-receipt-reconciliation20261022 log pairs. Final unfiltered audit
+  harness,complete enforced browser/parity matrix,units/builds/consumer and
+  capability/example/skill/handoff gates remain required. Goal is not complete.
+
+## October22 milestone detail — historical checkpoints
 
 Updated October22. Current conclusions only;earlier next/live statements in retained detail are historical.
 
