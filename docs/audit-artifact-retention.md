@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain full-audit-harness-c20b160d-20261022.log/.stderr.log while session65418
+is active and afterward as original full-gate evidence. Its inventory covers316
+unfiltered test files;receipt comparison is enabled by the existing runner and
+NODE_OPTIONS=--max-old-space-size=8192 is inherited by child Node processes.
+Do not truncate/replace the live logs or present initial results as a terminal
+aggregate. Test sources remain frozen until completion;historical failure logs
+remain separately retained. No new capture or evidence-cleanup waiver follows.
+
 Retain check-slider-static-ax.mjs and slider-static-ax-review-20261022 log/empty
 stderr. All24 raw observations/twelve initial pairs authenticate,120 mutation
 controls reject and exact replay agrees. Existing fixed-half-domain authoring

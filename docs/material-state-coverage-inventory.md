@@ -2,6 +2,15 @@
 
 ## Current audit pointer — October22
 
+- Full audit-harness milestone now RUNNING fromc20b160d,session65418/launcher
+  PID30116. Existing unfiltered runner discovers316 files(308Material/four general/
+  four TTS),sequential files,ASTYLAR_AUDIT_RECEIPT_COMPARE=1;child environment
+  NODE_OPTIONS=--max-old-space-size=8192. Logs:full-audit-harness-c20b160d-20261022
+  .log/.stderr.log. Initial tests are producing results;no terminal aggregate yet.
+  Keep tested sources frozen and poll this handle,not another harness run.
+  This milestone follows successful cold canonical/main import,not a metadata-only
+  recheck. Preserve all failures;neither partial output nor eventual harness success
+  substitutes for complete case inspection or enforced browser/release gates.
 - Remote publication incomplete:local48ca876b(cold-verified canonical publication)
   and1aa194ee(slider semantic proof) are committed,not pushed. Remote readback
   after terminal HTTP408 remains6026e5ed867f533f7df4ca60053ab3c348e34844.
