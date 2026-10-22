@@ -14,10 +14,12 @@
 - Accepted addition:201 partial evidence children(70 tabs/94 menu node cases,
   25 sheet action-presence and12 tabs AX pairs),one authored tab-panel-name
   substitution finding. No rendering or full-case acceptance follows.
-- NEXT:publish this checkpoint,then retry deferred851-child field/overlay join
-  with node --max-old-space-size=4096 scripts/join-field-overlay-node-evidence.mjs.
-  Eight proofs cover six fields577 cases/four overlays274 cases. Original alias/
-  heap failures retained;new early heap guard passes. No new join proposal yet.
+- Field/overlay join now passes with explicit4096MiB heap after cold completion:
+  proposal9f9dfaf0 adds851 children across10 families/15675 authenticated deps;
+  complete7eb107de predecessor recovers and accepted pointer remains unchanged.
+  All eight proof replays pass. Log:field-overlay-node-join-sized-20261022.
+  Initial alias/heap failures retained. Proposal not registered/exported;
+  NEXT:combine queued sheet AX/name evidence before coherent registration.
 - Separate pending evidence:bottom-sheet name proposal835eba45,activateAX9 pairs,
   focus-source applicability. Static actual-AX resume authenticates97 reused
   pairs,339 remain;defer capture until join memory work completes. Raw failures

@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+Field/overlay sized join terminates0 after cold completion. Retain field-overlay-
+node-join-sized-20261022 log/empty stderr and ignored proposal9f9dfaf0. All851
+children/10 families/15675 dependencies validate,complete predecessor7eb107de
+recovers and accepted pointer remains unchanged. Eight owning proofs replay.
+Do not force-add the large generated proposal. Prior alias/heap/guard failures
+stay;older pending-retry notes are historical. Not registered/canonical evidence.
+
 Cold99596 terminates exit0 in2629114.6378ms;retain tabs-cold-check-20261022
 stdout/stderr/terminal.json. Full source/section/coverage/receipt conservation
 and independent canonical comparison pass. Main import selects7fa7ca35/index
