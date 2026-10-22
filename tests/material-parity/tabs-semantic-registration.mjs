@@ -5,10 +5,25 @@ import { staticSemanticPredecessor, restoreStaticSemanticPolicy, restoreStaticSe
 const hash = value => createHash('sha256').update(value).digest('hex');
 const normalize = value => value.toString().replaceAll('\r\n', '\n');
 const id = 'fixture-tab-panel-accessible-name-substitution';
+function restorePostGateCaseReader(source) {
+  let text = normalize(source);
+  if (hash(text) !== '8e9ce4c63fd0aa7b129f00a682e5fef21b92cd8abca60968da54e61814df30a4') return text;
+  const ast = ts.createSourceFile('case-reader.mjs', text, 99, true), additions = [];
+  const visit = node => {
+    if (ts.isIfStatement(node) && node.expression.getText(ast) ===
+      "hash(benchmarkText)==='31f2cb8ec0aa6299e4854d07b70f8031e0e646a2a39812841e984e5a7098ab57'") additions.push(node);
+    ts.forEachChild(node, visit);
+  };
+  visit(ast); assert.equal(additions.length, 1);
+  const addition = additions[0];
+  text = text.slice(0, addition.getFullStart()) + text.slice(addition.end);
+  assert.equal(hash(text), '1d0821a937a8eeefa480ed62271aafa11b41aec9cd7bc05428da04f9224d3a20');
+  return text;
+}
 // Exact additive case selection only. Finding/proof registration is independent;
 // these reversals do not declare the pending semantic batch canonical.
 export function restoreStaticSemanticCaseSelection(source, kind) {
-  let text = normalize(source);
+  let text = kind === 'case' ? restorePostGateCaseReader(source) : normalize(source);
   if (!text.includes('staticSemanticInputs')) return text;
   const review = '821919099916339a177403d8c6cc66ede9aeaa20501a23ace9c568df75160f11';
   const entries = {

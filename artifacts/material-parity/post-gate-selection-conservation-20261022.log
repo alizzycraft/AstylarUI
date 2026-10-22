@@ -1,0 +1,22 @@
+TAP version 13
+# Subtest: static semantic case selection restores complete accepted predecessor sources and rejects drift
+ok 1 - static semantic case selection restores complete accepted predecessor sources and rejects drift
+  ---
+  duration_ms: 151.5718
+  type: 'test'
+  ...
+# Subtest: static semantic named launcher selects only the exact new proposal and preserves old invocation
+ok 2 - static semantic named launcher selects only the exact new proposal and preserves old invocation
+  ---
+  duration_ms: 429.0092
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1245.8502

@@ -2,6 +2,27 @@
 
 ## Current audit pointer — October22
 
+- Combined post-gate static-semantic integration7074 TERMINATES0,5/5,zero skips,
+  173535.98ms. Executes original registration conservation,nine restricted180-
+  definition reviewer replays,complete predecessor case join,named-selection
+  source restoration/drift controls and launcher selection/invalid combinations.
+  Logs:post-gate-static-semantic-integration-20261022.log/empty stderr. Named reader
+  whole-source restoration is verified,not a hash replacement. Earlier individual
+  registration failures remain retained. This closes that source-boundary question,
+  not source export/cold/import,current rendering or case inspection. Pending
+  registered-source batch now includes tabs helper/static-semantic test in addition
+  to four original tests and case reader;recompute exact census before export.
+- Named-selection boundary now restores current case reader8e9ce4c6→exact1d0821a9
+  by removing only the one AST if-block for benchmark31f2,under complete current/
+  prior hashes. Existing selection suite passes2/2 including drift controls.
+  Registration owning test separately restores exact older helper after removing
+  only this function/call;all original policy/definition/source assertions pass.
+  First registration check retained expected helper-source mismatch;second failed
+  missing TypeScript import in new instrumentation;verified third passes. Logs:
+  post-gate-selection-conservation and post-gate-registration-conservation(-final,
+  -verified)20261022. Existing combined static-semantic integration now RUNNING,
+  post-gate-static-semantic-integration-20261022.log/.stderr.log. No canonical
+  publication or full batch pass yet;freeze tested sources pending terminal.
 - Selected-review10264 TERMINATES0,authenticating16180 dependencies/twelve current
   source checks and all2311 partial/current-rendering-unverified cases through
   existing producerArgs;accepted pointer unchanged. Evidence:post-gate-selected-

@@ -5,6 +5,7 @@ import { execFileSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
+import ts from 'typescript';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { staticSemanticPredecessor, restoreStaticSemanticPolicy, restoreStaticSemanticProducer } from './static-semantic-registration.mjs';
 const hash = b => createHash('sha256').update(b).digest('hex');
@@ -34,6 +35,13 @@ test('static semantic registration preserves180 findings and exact predecessor p
   assert.equal(sourceAuditDefinitions.find(d => d.id === 'core-hidden-referenced-description-targets-pruned').publicReproduction.authoredInputsEqualPerPair, true);
   const helperFile = 'tests/material-parity/tabs-semantic-registration.mjs';
   let helper = normalize(fs.readFileSync(helperFile));
+  const helperAst = ts.createSourceFile(helperFile, helper, 99, true);
+  const gateRestorers = helperAst.statements.filter(node => ts.isFunctionDeclaration(node) && node.name?.text === 'restorePostGateCaseReader');
+  assert.equal(gateRestorers.length, 1);
+  helper = helper.slice(0, gateRestorers[0].getFullStart()) + helper.slice(gateRestorers[0].end);
+  const gateCall = "  let text = kind === 'case' ? restorePostGateCaseReader(source) : normalize(source);";
+  assert.equal(helper.split(gateCall).length, 2);
+  helper = helper.replace(gateCall, '  let text = normalize(source);');
   for (const [addition, replacement] of [
     ["import { staticSemanticPredecessor, restoreStaticSemanticPolicy, restoreStaticSemanticProducer } from './static-semantic-registration.mjs';\n", ''],
     ['  current = staticSemanticPredecessor(current);\n', ''],

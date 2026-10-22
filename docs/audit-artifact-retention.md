@@ -2,6 +2,17 @@
 
 ## Current versus historical evidence
 
+Post-gate static-semantic integration7074 terminates0,5/5,zero skips,
+173535.98ms. Preserve terminal stdout/empty stderr plus all earlier individual
+selection/registration attempts. Nine original reviewers and complete case join
+replay pass;this is not canonical export/current rendering acceptance.
+
+Retain all post-gate-selection-conservation,post-gate-registration-conservation,
+post-gate-registration-conservation-final and -verified20261022 log/stderr pairs.
+First two registration attempts fail(helper-source mismatch,missing import),third
+passes;selection2/2 passes. Retain live post-gate-static-semantic-integration logs.
+Do not remove failures or report combined acceptance before its terminal result.
+
 Retain post-gate-selected-review-verification-20261022.log/.stderr.log:terminal0,
 16180 dependencies/twelve current checks,all2311 partial/unverified statuses and
 pointer unchanged. Separate named-selection reader-source guard still fails;

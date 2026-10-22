@@ -1,0 +1,16 @@
+TAP version 13
+# Subtest: static semantic registration preserves180 findings and exact predecessor policy
+ok 1 - static semantic registration preserves180 findings and exact predecessor policy
+  ---
+  duration_ms: 666.6574
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1047.1983
