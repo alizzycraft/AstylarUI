@@ -1,0 +1,18 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "http://127.0.0.1:61404/reference/core?benchmark=1&profile=light", waiting until "load"
+
+    at withFrozenShowcase.checkpointFile.checkpointFile (D:\dev\github\AstylarUI-audit-integration\[eval1]:50:20)
+    at async withFrozenShowcase (<anonymous>:24:5)
+    at async file:///D:/dev/github/AstylarUI-audit-integration/[eval1]:43:3 {
+  log: [
+    '  - navigating to "http://127.0.0.1:61404/reference/core?benchmark=1&profile=light", waiting until "load"'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.22.3

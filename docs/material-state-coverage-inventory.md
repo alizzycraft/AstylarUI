@@ -36,6 +36,16 @@
   name-input and focus-source-applicability20261022 logs;no repeated reduction.
 - Next:finish export5359,then full section/coverage/receipt reconciliation,
   independent cold comparison and accepted import. Batch queued evidence later.
+  Remaining initial-state AX batch is deferred until that export closes:reuse
+  authenticates192 existing observations/96 pairs across8 families,leaving340
+  configured pairs across28 families. First preflight rejects legacy list's
+  absent family field;exact bedbf723 envelope+list-primary target guard repairs
+  that instrumentation assumption without editing evidence. Retry74762 exits1
+  on30s navigation/load timeout at the next core page,after one core/light/desktop
+  pair. Its2 raw observations/producer/checkpoint authenticate with no page errors;
+  not full verification or semantic failure. Retain remaining-static-ax-20261022,
+  both capture log pairs and capture-remaining-static-ax.mjs. Do not restart the
+  same browser work while export remains CPU-heavy;failure cause is unproven.
   Continue unresolved descendant/full-style/anonymous/semantic coverage,1875
   interaction histories/resources,443 editable caret/selection and2311 complete
   current-input/runtime/rendering applicability obligations. Do not reopen settled

@@ -2,6 +2,16 @@
 
 ## Current versus historical evidence
 
+Retain capture-remaining-static-ax.mjs,initial remaining-static-ax-capture-
+20261022 preflight failure log/stderr,retry log/stderr and all5 partial remaining-
+static-ax-20261022 files. Retry74762 terminates1 with navigation/load timeout
+after2 completed observations;producer/raw/checkpoint hashes authenticate and
+those pages report no runtime errors. Not a completed340-pair batch or semantic
+failure. Same-checkpoint reuse authenticates96 existing pairs;legacy list family
+omission is handled only for exactbedbf723+list-primary identity. No previous raw
+file rewritten. Defer further browser attempts until live export5359 closes;
+do not repeatedly restart under the unchanged competing-job condition.
+
 Retain check-tooltip-recorded-nodes.mjs and tooltip-recorded-node-accounting-
 20261022 log/empty stderr. All62 pairs/1200 records account,248 mutations reject
 and exact replay passes. Keep native visual aria-hidden and persistent described-
