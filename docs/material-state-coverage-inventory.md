@@ -2,6 +2,25 @@
 
 ## Current audit pointer — October22
 
+- Retained popup depth-input applicability now accounts for133 exact configured
+  endpoints:tooltip62(26 popup present/36 absent),snackbar71(34 overlay present/
+  37 absent). All133 original candidate tree SHA receipts authenticate against
+  accepted82191909 case proposal. Every present owner retains normal/effective
+  z-index1000 and relative(tooltip)/fixed(snackbar) position;its recorded normal
+  ancestor chain contains no transform,opacity or positioned-z-index stacking
+  context. HOWEVER synthetic root has no style observation,so actual root-context
+  participation is unproved. Do NOT equate60 high-z inputs with60 camera failures.
+  Existing tooltip suite's bounded assertion emits exact133 case/tree/chain rows
+  and rejects300 altered-state/ancestry controls. Focused1/1 passes23728.8862ms;
+  log popup-depth-endpoint-input-20261022/empty stderr. Initial assertion wrongly
+  required normal styles on synthetic root;retain initial failure log separately.
+  Corrected proof records the missing stage instead of filling it with defaults.
+  This closes present-versus-absent applicability,not actual root/world depth,
+  paint,currentness or full-case inspection. Machine rows remain standalone for
+  case joining;any join must preserve the synthetic-root uncertainty and73 absent
+  endpoints. No fresh capture or renderer/fixture edit. Next bind shared-mechanism
+  support explicitly without asserting missing runtime ancestry;source-review
+  transitions/canonical publication remain pending,accepted5ed659b3 unchanged.
 - Root-depth producer integration now registers four existing owning assertions
   and four missing source dependencies(camera,projection,final CSS boundary,
   applied-theme producer). Working census192 findings/252 proofs/932 paths;

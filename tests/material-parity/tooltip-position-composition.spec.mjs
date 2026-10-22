@@ -12,6 +12,73 @@ import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { propertyGroups } from './input-equivalence-policy.mjs';
 
+test('retained tooltip and snackbar endpoints distinguish high-z root inputs from absent popups', () => {
+  const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+  const id = '821919099916339a177403d8c6cc66ede9aeaa20501a23ace9c568df75160f11';
+  const file = `artifacts/material-parity/working-audit/proposals/${id}.json`;
+  const review = JSON.parse(readFileSync(file)).review;
+  assert.equal(sha(JSON.stringify(review)), id);
+  const selected = review.groups.filter(g => ['tooltip', 'snack-bar'].includes(g.family));
+  assert.equal(selected.length, 133);
+  const inspect = (tree, targetId) => {
+    assert.equal(tree.schemaVersion, 1); assert.deepEqual(tree.errors, []);
+    const index = new Map(tree.nodes.map(n => [n.key, n]));
+    assert.equal(index.size, tree.nodes.length);
+    const matches = tree.nodes.filter(n => n.authored?.id === targetId);
+    assert.ok(matches.length <= 1);
+    if (!matches.length) return { popup: 'absent', highZWithNoRecordedStackingAncestor: false };
+    const target = matches[0], chain = [], seen = new Set(); let node = target;
+    while (node) {
+      assert.ok(!seen.has(node.key)); seen.add(node.key);
+      if (node.key === 'root') {
+        assert.equal(node.parent, null); assert.deepEqual(node.authored, {});
+        assert.equal(node.normalResolvedStyle, undefined); assert.equal(node.resolvedStyle, undefined);
+        chain.push({ key: node.key, parent: null, snapshotBoundary: true }); break;
+      }
+      assert.ok(node.normalResolvedStyle); assert.ok(node.resolvedStyle);
+      chain.push({ key: node.key, parent: node.parent, id: node.authored?.id ?? null,
+        position: node.normalResolvedStyle.position ?? '<omitted>', zIndex: node.normalResolvedStyle.zIndex ?? '<omitted>',
+        transform: node.normalResolvedStyle.transform ?? '<omitted>', opacity: node.normalResolvedStyle.opacity ?? '<omitted>' });
+      if (node.parent === null) break;
+      assert.ok(index.has(node.parent), 'Missing ancestor'); node = index.get(node.parent);
+    }
+    assert.equal(chain.at(-1).parent, null);
+    assert.equal(target.normalResolvedStyle.zIndex, '1000');
+    assert.equal(target.resolvedStyle.zIndex, '1000');
+    assert.equal(target.normalResolvedStyle.position, targetId === 'tooltip-popup' ? 'relative' : 'fixed');
+    for (const ancestor of chain.slice(1).filter(n => !n.snapshotBoundary)) {
+      assert.ok(ancestor.transform === '<omitted>' || ancestor.transform === 'none');
+      assert.ok(ancestor.opacity === '<omitted>' || Number.parseFloat(ancestor.opacity) >= 1);
+      assert.ok(ancestor.position === '<omitted>' || ancestor.position === 'static' || ['<omitted>', 'auto'].includes(ancestor.zIndex));
+    }
+    return { popup: 'present', highZWithNoRecordedStackingAncestor: true, syntheticRootStyleUnobserved: true, chain };
+  };
+  const counts = {}, observations = [];
+  for (const group of selected) {
+    assert.equal(group.inspection, 'partial'); assert.equal(group.currentRendering, 'unverified');
+    const receipt = group.evidence.pairedTrees.astylar, bytes = readFileSync(receipt.file);
+    assert.equal(sha(bytes), receipt.sha256);
+    const tree = JSON.parse(bytes), targetId = group.family === 'tooltip' ? 'tooltip-popup' : 'snack-bar-overlay';
+    const result = inspect(tree, targetId), key = `${group.family}:${result.popup}`;
+    counts[key] = (counts[key] ?? 0) + 1;
+    observations.push({ case: group.case, family: group.family, targetId, result, inputTree: receipt });
+    if (result.popup === 'present') {
+      for (const mutate of [
+        t => { t.nodes.find(n => n.authored?.id === targetId).normalResolvedStyle.zIndex = 'auto'; },
+        t => { t.nodes.find(n => n.authored?.id === targetId).resolvedStyle.zIndex = 'auto'; },
+        t => { t.nodes.find(n => n.authored?.id === targetId).parent = 'missing'; },
+        t => { const n = t.nodes.find(n => n.authored?.id === targetId); t.nodes.push(structuredClone(n)); },
+        t => { const n = t.nodes.find(n => n.authored?.id === targetId); t.nodes.find(a => a.key === n.parent).normalResolvedStyle.transform = 'translateX(0px)'; },
+      ]) { const changed = structuredClone(tree); mutate(changed); assert.throws(() => inspect(changed, targetId)); }
+    }
+  }
+  assert.deepEqual(counts, { 'tooltip:absent': 36, 'snack-bar:absent': 37, 'snack-bar:present': 34, 'tooltip:present': 26 });
+  console.log(JSON.stringify({ proof: 'retained-popup-root-depth-input-applicability', predecessorReview: id,
+    counts, observations, negativeControlsRejected: 300,
+    boundary: 'Captured normal/effective z-index and normal ancestor requests only.60 present endpoints have high-z1000 with no recorded stacking ancestor;73 endpoints lack the popup. Synthetic root has no style observation,so actual root-context participation is NOT established. Not final world depth,camera,visible paint,first-bad history,current capture or full case acceptance.',
+    canonicalPublication: false, currentRenderingAccepted: false }));
+});
+
 test('root depth registration preserves all191 predecessor findings and binds current failure receipts', async () => {
   const { execFileSync } = await import('node:child_process');
   const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');
