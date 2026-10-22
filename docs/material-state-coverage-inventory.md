@@ -2,6 +2,18 @@
 
 ## Current audit pointer — October22
 
+- Post-gate registered-source census:AST inventory still928 paths. Git-tracked
+  changes versus frozen03fafef8,filtered to that inventory and LF-normalized,
+  identify exactly four substantive changed registered sources:store spec
+  abce0065→6c7fcfee,benchmark config spec dc30dfac→31f2cb8e,fixed-width integration
+  c1a452ea→8cc27bed,input-equivalence audit spec61abec22→fcc82028. Each is the
+  verified audit-instrumentation change above;no renderer/fixture edit in this
+  tracked census. This does not reauthenticate ignored evidence or all928 bytes.
+  Canonical source receipts/anchors therefore remain pre-batch until explicit
+  four-test applicability/conservation is integrated. Do not claim current source
+  acceptance from old package or start another exporter merely to discover this
+  known four-file gap. Current held-update capture is still standalone,not an
+  implicit new source registration or canonical case promotion.
 - Publication confirmed throughb51f0ee1,current held-update capture retained.
   Reuse existing docs/material-button-held-update-root-cause.json and recorder's
   ownership classification,not a duplicate finding. New current validator's12
