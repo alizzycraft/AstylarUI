@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain check-slider-static-ax.mjs and slider-static-ax-review-20261022 log/empty
+stderr. All24 raw observations/twelve initial pairs authenticate,120 mutation
+controls reject and exact replay agrees. Existing fixed-half-domain authoring
+finding is corroborated by actual AX bounds/DOM steps,not duplicated. Whole
+current/source-map and semantic projection bindings reuse authenticated records.
+This is standalone bounded evidence,not canonical case join,current rendering,
+interaction/paint acceptance or permission to remove original raw observations.
+
 Retain static-semantic-cold-check-20261022 log/stderr(progress,not empty) and
 static-semantic-main-import-verification-20261022 log/empty stderr with executable
 producerArgs. Cold23328 exits0:two collectors/ten memory hits/zero disk hits,

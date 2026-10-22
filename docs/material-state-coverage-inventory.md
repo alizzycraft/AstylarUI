@@ -2,6 +2,16 @@
 
 ## Current audit pointer — October22
 
+- Bounded slider semantic question answered:all12 retained initial-state pairs
+  expose matching thumb names/values/remaining scalar AX properties,but native
+  bounds0..65/30..100 versus candidate0..50/50..100 and DOM step5 versus1 remain.
+  Existing fixture-slider-fixed-half-domains explains the first input divergence;
+  no new core finding or claim of correct dragging. Backend identities,whole
+  current/source-map bindings and semantic projection binding authenticate;
+  120 mutation controls and exact replay pass. Evidence:check-slider-static-ax.mjs
+  and slider-static-ax-review-20261022 log/empty stderr. This standalone proof is
+  not yet joined to canonical coverage;all2311 partial statuses remain unchanged.
+  Full attributes,keyboard/event transitions,drag/paint and closure remain open.
 - PUBLICATION:independent cold23328 exits0 for the frozen static-semantic batch;
   two collectors/ten memory hits/zero disk hits authenticate17370 files and
   1746229963 bytes,with equal verification bytes. Total3503031.6052ms;original
