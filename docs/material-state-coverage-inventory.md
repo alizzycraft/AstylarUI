@@ -2,7 +2,14 @@
 
 ## Current audit pointer — October22
 
-- Full audit-harness milestone now RUNNING fromc20b160d,session65418/launcher
+- October22 revalidation:session65418 is unavailable and no matching harness,
+  test runner or canonical-integration child process remains. The original stdout
+  ends at test173 without a TAP aggregate or terminal exit receipt;18 explicit
+  failures are retained. Log3694592 bytes,last modified13:04:10+02:00;stderr empty.
+  Treat this run as incomplete,not passing or still running. Cause of termination
+  is unproven. Preserve originals;triage recorded failures before scheduling a
+  replacement full milestone. No source or acceptance criteria changed.
+- Historical launch:full audit-harness milestone started fromc20b160d,session65418/launcher
   PID30116. Existing unfiltered runner discovers316 files(308Material/four general/
   four TTS),sequential files,ASTYLAR_AUDIT_RECEIPT_COMPARE=1;child environment
   NODE_OPTIONS=--max-old-space-size=8192. Logs:full-audit-harness-c20b160d-20261022

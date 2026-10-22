@@ -2,6 +2,12 @@
 
 ## Current versus historical evidence
 
+October22 process revalidation finds session65418 unavailable and no matching
+harness/test child live. Its stdout ends at test173,with18 explicit failures but
+no terminal TAP aggregate/exit receipt. Retain both original logs as incomplete
+full-gate evidence;do not overwrite them for a replacement run. Termination cause
+is unknown;absence of a process is not successful completion.
+
 Retain full-audit-harness-c20b160d-20261022.log/.stderr.log while session65418
 is active and afterward as original full-gate evidence. Its inventory covers316
 unfiltered test files;receipt comparison is enabled by the existing runner and
