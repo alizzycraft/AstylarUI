@@ -34,6 +34,25 @@ test('root depth registration preserves all191 predecessor findings and binds cu
   assert.equal(finding.publicReproduction.currentRenderingAccepted, false);
 });
 
+test('root depth historical boundary conserves exact prior population and rejects source drift', async () => {
+  const { retainedStaticSemanticPopulation, restoreRootDepthPolicy } = await import('./static-semantic-registration.mjs');
+  const { sourceAuditDefinitions } = await import('./input-equivalence-policy.mjs');
+  const file = 'tests/material-parity/input-equivalence-policy.mjs', text = readFileSync(file, 'utf8');
+  const prior = retainedStaticSemanticPopulation(sourceAuditDefinitions);
+  assert.equal(prior.length, 191);
+  assert.deepEqual(prior, sourceAuditDefinitions.slice(0, 191));
+  const restored = restoreRootDepthPolicy(text);
+  assert.equal(createHash('sha256').update(restored).digest('hex'), '85491fc1e6bb7a9d98f160bed17c2c90b8b75081d20f056a87135cb0635cdeec');
+  for (const index of [0, 180, 190, 191]) {
+    const changed = structuredClone(sourceAuditDefinitions); changed[index].classification = 'equivalent-representation';
+    assert.throws(() => retainedStaticSemanticPopulation(changed));
+  }
+  assert.throws(() => retainedStaticSemanticPopulation([...sourceAuditDefinitions, sourceAuditDefinitions.at(-1)]));
+  assert.throws(() => restoreRootDepthPolicy(text + '\n// drift'));
+  assert.throws(() => restoreRootDepthPolicy(text.replace('unbounded root paint depth', 'changed root paint depth')));
+  assert.equal(sourceAuditDefinitions.length, 192, 'Historical read must not mutate production');
+});
+
 test('current public depth reduction loses only the high-z short pane despite equal CSS geometry', () => {
   const sha = bytes => createHash('sha256').update(bytes).digest('hex');
   const dir = 'artifacts/material-parity/current-depth-public-reduction-20261022';

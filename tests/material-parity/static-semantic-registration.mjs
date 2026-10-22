@@ -2,7 +2,30 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
 const hash = b => createHash('sha256').update(b).digest('hex');
+// Explicit historical population only. Production continues to use all192.
+export function retainedStaticSemanticPopulation(current) {
+  if (current.length <= 191) return current;
+  assert.equal(current.length, 192);
+  assert.equal(hash(JSON.stringify(current)), '2e14f5dfc62d16eba75b481615f3f3bc148fb59856aafa96cdc18e6d36c74ab8');
+  assert.equal(current[191].id, 'core-root-paint-depth-crosses-viewport-camera');
+  const prior = current.slice(0, 191);
+  assert.equal(hash(JSON.stringify(prior)), '13c86852010dbff5153a44c53756eff3c59344c66b5391b9a2b3f2430c22c064');
+  return prior;
+}
+export function restoreRootDepthPolicy(source) {
+  const text = source.toString().replaceAll('\r\n', '\n');
+  if (!text.includes('core-root-paint-depth-crosses-viewport-camera')) return text;
+  assert.equal(hash(text), 'bcd145e1efc0d45a4285420a8e8b0166ec102aaa8a921a532be30fba6a65c0f9');
+  const ast = ts.createSourceFile('policy.mjs', text, 99, true);
+  const entries = ast.statements.filter(ts.isVariableStatement).flatMap(n => [...n.declarationList.declarations])
+    .find(n => n.name.getText(ast) === 'sourceAuditDefinitions').initializer.arguments[0].elements;
+  assert.equal(entries.length, 192);
+  const prior = text.slice(0, entries[191].getFullStart()) + text.slice(entries[191].end + 1);
+  assert.equal(hash(prior), '85491fc1e6bb7a9d98f160bed17c2c90b8b75081d20f056a87135cb0635cdeec');
+  return prior;
+}
 export function staticSemanticPredecessor(current) {
+  current = retainedStaticSemanticPopulation(current);
   if (current.length <= 180) return current;
   assert.equal(current.length, 191);
   assert.equal(hash(JSON.stringify(current)), '13c86852010dbff5153a44c53756eff3c59344c66b5391b9a2b3f2430c22c064');
@@ -10,7 +33,7 @@ export function staticSemanticPredecessor(current) {
   assert.equal(hash(JSON.stringify(prior)), 'dffdbf4e6a22d0aa95f59619aaf05e9b6b67669ff5ef84ec5d630d5411f7b3be'); return prior;
 }
 export function restoreStaticSemanticPolicy(source) {
-  const text = source.toString().replaceAll('\r\n', '\n');
+  const text = restoreRootDepthPolicy(source);
   if (!text.includes('fixture-toggle-group-accessible-name-substitution')) return text;
   assert.equal(hash(text), '85491fc1e6bb7a9d98f160bed17c2c90b8b75081d20f056a87135cb0635cdeec');
   const ast = ts.createSourceFile('policy.mjs', text, 99, true);

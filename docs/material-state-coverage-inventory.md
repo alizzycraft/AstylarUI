@@ -2,6 +2,23 @@
 
 ## Current audit pointer — October22
 
+- Root-depth historical registration mismatch reconciled without rewriting the
+  old191-population assertions or captured receipts. Existing static-semantic
+  helper authenticates complete current192-definition digest2e14f5df and policy
+  bcd145e1,removes only the appended depth finding,and recovers exact prior191
+  digest13c86852/policy85491fc1 before its existing180 predecessor boundary.
+  Production keeps all192 definitions;only explicit historical reads select191.
+  Four altered-definition controls,extra entry and two source-drift controls
+  reject;the new core finding remains separately verified. Original static
+  registration body unchanged,only imported population bound explicitly.
+  Integration includes original registration,all nine restricted retained
+  reviewers,new registration/boundary and current public/source checks:6/6,
+  zero skips/failures,95521.6198ms. Retain root-depth-historical-boundary-
+  integration-20261022.log/empty stderr plus original rejecting log. No new
+  browser capture,core/fixture edits or rendering acceptance. Next coherent
+  integration still needs producer proof/source inventory,case evidence joining,
+  review-source transitions and canonical conservation/cold/import;accepted
+  5ed659b3 remains unchanged. Do not treat this six-test batch as full harness.
 - Shared depth failure is now registered once as
   core-root-paint-depth-crosses-viewport-camera in the existing policy. It binds
   current public result/provenance/validation receipts,exact source pattern,

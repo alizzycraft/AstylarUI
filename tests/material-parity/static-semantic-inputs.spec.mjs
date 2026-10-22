@@ -6,8 +6,10 @@ import { pathToFileURL } from 'node:url';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
-import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
-import { staticSemanticPredecessor, restoreStaticSemanticPolicy, restoreStaticSemanticProducer } from './static-semantic-registration.mjs';
+import { sourceAuditDefinitions as currentSourceAuditDefinitions } from './input-equivalence-policy.mjs';
+import { retainedStaticSemanticPopulation, staticSemanticPredecessor, restoreStaticSemanticPolicy, restoreStaticSemanticProducer } from './static-semantic-registration.mjs';
+// Original assertions below inspect the exact retained191-definition population.
+const sourceAuditDefinitions = retainedStaticSemanticPopulation(currentSourceAuditDefinitions);
 const hash = b => createHash('sha256').update(b).digest('hex');
 const normalize = b => b.toString().replaceAll('\r\n', '\n');
 test('static semantic registration preserves180 findings and exact predecessor policy', () => {
