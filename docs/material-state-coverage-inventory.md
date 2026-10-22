@@ -2,6 +2,28 @@
 
 ## Current audit pointer — October22
 
+- Current public depth reduction now confirms the source hazard in Chrome
+  155.0.8059.85 at observed DPR1. Reused unchanged audit-overlay-layout-stage
+  runner/spec with exact depth- filter and retained Angular compilation. All104
+  complete source/emitted receipts equal the previously authenticated October13
+  compilation AND current source/dist/installed/snapshot bytes;all2516 actual
+  bundle inputs authenticate. No rebuilding,package replacement or gate bypass.
+  New current-depth-public-reduction-20261022 result SHA
+  d464b8d4931c652dcc46d6e1da3114641b38c9205477dcb7271f5024d7797257,
+  provenance da3ff1622585e00f10d7df0ba51739d2fe9585a053ac3bb8c56893c56f79f979.
+  Four equal-input panes preserve native/CSS/projected20,20,120,24 geometry.
+  Low-z1 at heights240/1000 and high-z1000 at1000 paint2880 native/candidate
+  solid pixels;high-z1000 at240 paints2880 native versus0 candidate. MeshZ250
+  exceeds cameraZ207.8461 only there;enabled/visible/visibility1 remain true.
+  Original renderer assertion honestly exits1(one failure/three controls);
+  zero page errors. Retain bundle,provenance,result,eight PNGs and capture logs.
+  Existing tooltip suite's receipt/raster proof plus source calculation pass2/2;
+  log current-depth-public-validation-20261022/empty stderr. This establishes
+  the current reduced core paint failure,not Material whole-case acceptance,
+  all DPRs or complete raster equivalence. Pending coherent registration/case
+  joining/export remains;do not repeat this captured DPR1 question. Next use
+  existing finding/obligation infrastructure to integrate the shared diagnosis
+  and its distinct unequal-tooltip-authoring evidence without duplicate findings.
 - Current-source camera/depth applicability is now bounded explicitly by the
   existing tooltip suite's 'current source retains viewport-dependent camera
   crossing for unbounded root paint depth'. It executes complete current owning

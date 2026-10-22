@@ -12,6 +12,69 @@ import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { propertyGroups } from './input-equivalence-policy.mjs';
 
+test('current public depth reduction loses only the high-z short pane despite equal CSS geometry', () => {
+  const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+  const dir = 'artifacts/material-parity/current-depth-public-reduction-20261022';
+  const raw = readFileSync(`${dir}/result.json`), provenanceRaw = readFileSync(`${dir}/provenance.json`);
+  assert.equal(sha(raw), 'd464b8d4931c652dcc46d6e1da3114641b38c9205477dcb7271f5024d7797257');
+  assert.equal(sha(provenanceRaw), 'da3ff1622585e00f10d7df0ba51739d2fe9585a053ac3bb8c56893c56f79f979');
+  const report = JSON.parse(raw), provenance = JSON.parse(provenanceRaw);
+  const prior = readFileSync('artifacts/material-parity/divider-context-verified-angular-20261013-dpr1/provenance.json');
+  assert.equal(sha(prior), '8a82dc61c5ca4ab78cc3ca705a4e26ea66fea535df058bde66f611371c5529cd');
+  // Reuse the authenticated Angular compilation, not a newly labelled old build.
+  assert.deepEqual(provenance.compiledReceipts, JSON.parse(prior).compiledReceipts);
+  assert.equal(provenance.compiledReceipts.length, 104);
+  for (const receipt of provenance.compiledReceipts) {
+    assert.equal(sha(readFileSync(receipt.source)), receipt.sourceSha256);
+    for (const root of ['dist/lib', 'examples/material-showcase/node_modules/astylarui/dist/lib', provenance.freshBuild])
+      assert.equal(sha(readFileSync(`${root}/${receipt.file}`)), receipt.emittedSha256);
+  }
+  assert.equal(provenance.specFilter, 'depth-');
+  assert.equal(provenance.inputs.length, 2516);
+  for (const receipt of provenance.inputs) assert.equal(sha(readFileSync(receipt.file)), receipt.sha256);
+  assert.equal(sha(readFileSync('scripts/audit-overlay-layout-stage.mjs')), provenance.runnerSha256);
+  assert.equal(sha(readFileSync(`${dir}/audit.js`)), provenance.bundleSha256);
+  for (const asset of provenance.runtimeAssets) if (asset.url === '/audit.js') assert.equal(asset.sha256, provenance.bundleSha256);
+  assert.equal(report.browser, '155.0.8059.85');
+  assert.deepEqual(report.runtimeContext.initial, { width: 900, height: 800, devicePixelRatio: 1 });
+  assert.deepEqual(report.runtimeContext.final, report.runtimeContext.initial);
+  assert.deepEqual(report.errors, []);
+  const executed = report.result.results.filter(row => row.status !== 'excluded');
+  assert.equal(executed.length, 4);
+  assert.equal(executed.filter(row => row.status === 'passed').length, 3);
+  assert.equal(executed.filter(row => row.status === 'failed').length, 1);
+  assert.match(executed.find(row => row.status === 'failed').description, /depth-high at 320 x 240$/);
+  assert.equal(report.observations.length, 4); assert.equal(report.screenshots.length, 4);
+  for (const entry of report.observations) {
+    const [pane] = entry.observations;
+    assert.equal(entry.observations.length, 1);
+    assert.deepEqual(pane.css, pane.reference); assert.deepEqual(pane.projected, pane.css);
+    assert.deepEqual(pane.css, { x: 20, y: 20, width: 120, height: 24 });
+    assert.equal(entry.viewport.dpr, 1);
+    assert.equal(entry.viewport.canvasClientHeight, entry.height);
+    assert.equal(entry.viewport.referenceInnerHeight, entry.height);
+    assert.equal(pane.depth.enabled, true); assert.equal(pane.depth.visible, true); assert.equal(pane.depth.visibility, 1);
+    const failed = entry.composition === 'depth-high' && entry.height === 240;
+    assert.equal(pane.depth.meshZ > pane.depth.cameraZ, failed);
+    const image = report.screenshots.find(row => row.composition === entry.composition && row.height === entry.height);
+    assert.ok(image);
+    for (const side of ['reference', 'astylar']) {
+      const bytes = readFileSync(`${dir}/${image.captures[side].file}`);
+      assert.equal(sha(bytes), image.captures[side].sha256);
+      const png = PNG.sync.read(bytes); assert.equal(png.width, 320); assert.equal(png.height, entry.height);
+      let dark = 0;
+      for (let i = 0; i < png.data.length; i += 4)
+        if (png.data[i] === 48 && png.data[i + 1] === 45 && png.data[i + 2] === 50 && png.data[i + 3] === 255) dark++;
+      assert.equal(dark, side === 'astylar' && failed ? 0 : 2880);
+      assert.equal(dark, image.paint[side === 'reference' ? 'referencePanePixels' : 'candidatePanePixels']);
+    }
+  }
+  console.log(JSON.stringify({ proof: 'current-public-root-depth-camera', compiledSources: 104, bundleInputs: 2516,
+    executed: 4, honestRendererFailures: 1, controls: 3, errors: 0,
+    boundary: 'Equal-input reduced root pane,DPR1,current authenticated installed code;not complete Material cases or full raster equivalence.',
+    currentRenderingAccepted: false }));
+});
+
 test('current source retains viewport-dependent camera crossing for unbounded root paint depth', () => {
   // Execute complete owning method bodies, not copied arithmetic. This is a
   // source-stage applicability check, deliberately not a browser reproduction.
