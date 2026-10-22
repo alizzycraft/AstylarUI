@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+Post-gate cold79913 terminates0 after complete canonical comparison;preserve
+stdout/stderr with original metrics/timestamps. Keep post-gate-candidate-import-
+20261022 logs while76096 builds/verifies the candidate through existing importer.
+Accepted e7d22b1a remains retained and unchanged pending terminal candidate/main
+verification. Do not delete the original native failure or successful diagnostic
+logs because independent cold now passes;its native cause remains unproven.
+
 Preserve terminal post-gate-full-section-comparison,post-gate-changed-section-
 leaves and post-gate-leaf-reconciliation20261022 log/empty-stderr pairs. Complete
 80-section authentication and3864850 selected-entry comparisons reconcile exactly

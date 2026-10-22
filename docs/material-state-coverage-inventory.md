@@ -2,6 +2,16 @@
 
 ## Current audit pointer — October22
 
+- Independent post-gate cold check79913 TERMINATES0,complete12437682.9787ms.
+  All validation,evidence-session reauthentication and actual canonical comparison
+  pass for5ed659b3. Two collectors,ten memory hits,zero disk hits;17370 files/
+  1746230365 bytes reauthenticated with equal verification bytes. Retain original
+  elapsed records,including delayed observation;no unsupported timing cause.
+  Candidate import76096 now RUNNING via existing importFindings/verifyFindings
+  against all shards,main accepted pointer e7d22b1a unchanged. Logs:post-gate-cold-
+  check and post-gate-candidate-import20261022. Terminal import verification still
+  precedes accepted pointer publication. This closes independent cold applicability,
+  not rendering/case closure;all2311 cases remain partial/current unverified.
 - Post-gate conservation completes:80 authenticated sections,77 identical;only
   sourceFingerprints,coverage,focusedProofs differ. Existing leaf comparator
   checks3864850 entries and finds exactly71 changes:seven reviewed source hashes,
