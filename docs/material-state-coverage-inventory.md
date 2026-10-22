@@ -49,6 +49,12 @@
   are retained,not fixture defects. Evidence:check-choice-field-recorded-nodes.mjs,
   choice-field-recorded-node-accounting-final-20261022 log/empty stderr;initial/
   retry log pairs preserve failures. Outside frozen export;no case promotion.
+  Timepicker110 cases account9938 native+4066 candidate records using the same
+  wrapper proof;48 open pairs retain all48 half-hour labels each. Existing active/
+  selected and composition causes reused;native scrollbar chrome is not a DOM
+  element or proof of scrolling. Exact replay/440 controls pass. Evidence:
+  check-timepicker-recorded-nodes.mjs,timepicker-recorded-node-accounting-
+  20261022 log/empty stderr. Outside cold snapshot;no new rendering claim.
 - Sheet activate AX9 pairs/18 captures plus108 mutation controls bind actual
   names/roles/focus. Pending source proposal835eba45 preserves180 definitions:
   current/initial methods author Sharing options versus Open bottom sheet.
@@ -56,8 +62,8 @@
   methods and new pinned source map;old request precedes tree update. New AX
   endpoints do not establish timing cause for every execution. See sheet activate,
   name-input and focus-source-applicability20261022 logs;no repeated reduction.
-- Next:finish full section/coverage/receipt reconciliation,
-  independent cold comparison and accepted import. Batch queued evidence later.
+- Next:independent cold comparison and accepted import;section/coverage/receipt
+  reconciliation is complete. Batch queued evidence later.
   Independent cold99596 is live with ASTYLAR_AUDIT_COLD=1 and --tabs-menu-sheet
   --check;logs tabs-cold-check-20261022. Keep873 consumed sources unchanged.
   Coverage52254 exits0:complete prior coverage and15622 ordered dependencies

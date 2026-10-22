@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain check-timepicker-recorded-nodes.mjs and timepicker-recorded-node-
+accounting-20261022 log/empty stderr. All110 pairs/14004 records account;48 open
+pairs preserve all48 labels,440 mutations reject and exact replay passes.
+Authenticated577-case wrapper/focus-line evidence reused. Clock SVG/CSS owners,
+option/ripple/selection/portal/panel inputs remain explicit;browser scrollbar
+chrome is not invented as a DOM node or inferred functional. Keep outside live
+cold99596/frozen873 source batch for a later coherent join. No case promotion.
+
 Retain check-choice-field-recorded-nodes.mjs and all three choice-field-recorded-
 node-accounting20261022 log/stderr pairs(initial,retry,final). Initial verifier
 assumed template outside infix;retry negative control allowed a different valid
