@@ -2,6 +2,21 @@
 
 ## Current audit pointer — October22
 
+- Post-gate publication COMPLETE:accepted generation5ed659b3cee9b0947213e8eae570247066fe6fe880c5704eeafbb91ba5289fac,
+  index f259bcd7038ef190d42a3b18b0cf5415986614f89eb697d8434582aa61d05c4b.
+  Candidate76096 and main4638 terminate0;existing full-shard verification runs
+  before/after copy and accepted import reuses exact candidate without full decode.
+  Complete prior e7d22b1a remains retained. Counts unchanged:191 findings/248 proofs/
+  928 source paths,8483 scalar groups,389202 occurrences,39904 controls. All2311
+  cases remain partial/current-rendering-unverified,acceptance false. Candidate
+  and main index LZX compression preserves full209079838-byte index SHA;no evidence
+  deleted. Logs:post-gate-candidate-import,post-gate-main-import-verification,
+  post-gate-candidate-index-compression,post-gate-main-index-compression20261022.
+  This closes seven-source export/applicability reconciliation,not audit completion.
+  Next substantive priorities:complete element/anonymous-owner input correspondence
+  and first divergence;shared control/overlay event/ownership/lifetime gaps;then
+  remaining per-case history/paint/currentness and unchanged full acceptance gates.
+  Standalone current held-update failure is still separate,not automatically joined.
 - Independent post-gate cold check79913 TERMINATES0,complete12437682.9787ms.
   All validation,evidence-session reauthentication and actual canonical comparison
   pass for5ed659b3. Two collectors,ten memory hits,zero disk hits;17370 files/

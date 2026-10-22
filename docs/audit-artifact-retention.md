@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Post-gate publication succeeds:keep accepted5ed659b3/indexf259bcd7,candidate copy
+and original e7d22b1a separately with terminal candidate/main verification logs.
+All shards authenticate before/after copying and existing import reuses verified
+index. Candidate/main compression logs bind unchanged209079838 logical bytes and
+full index digest;no deletion or evidence substitution. Preserve all native-failure,
+diagnostic,cold,section/leaf-conservation and receipt-reconciliation records. Current
+publication is source applicability only;all2311 cases stay partial/unverified.
+
 Post-gate cold79913 terminates0 after complete canonical comparison;preserve
 stdout/stderr with original metrics/timestamps. Keep post-gate-candidate-import-
 20261022 logs while76096 builds/verifies the candidate through existing importer.
