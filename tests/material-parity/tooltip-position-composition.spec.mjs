@@ -485,3 +485,37 @@ test('actual-theme short tooltip contexts preserve fallback versus flow input in
     boundary: 'Frozen application with verified actual themes and viewport geometry. Native capture is mid-animation;do not compare settled height/sharpness or infer current-renderer paint causality. Candidate layout boxes do not prove visible popup paint. Not complete scroll/lifetime,canonical case closure or rendering acceptance.',
     canonicalPublication: false, currentRenderingAccepted: false }));
 });
+
+test('actual-theme tooltip capture conserves depth-proof assets but does not retain new depth observations', () => {
+  const hash = value => createHash('sha256').update(value).digest('hex');
+  const load = (file, expected) => {
+    const bytes = readFileSync(file); assert.equal(hash(bytes), expected); return JSON.parse(bytes);
+  };
+  const previous = load('artifacts/material-parity/tooltip-boundary-depth-c479097f-fresh/latest-report.json',
+    '79573fb4c070970f11f97b1eab90b08b340680aedd8b64df662b3f44ec3fa3e7');
+  const current = load('artifacts/material-parity/tooltip-actual-theme-short-boundary-20261022/latest-report.json',
+    '5ec72acad66a4c3be382df77ae3d8fb32af3141da2ddcc03748ed645d05d6c83');
+  const manifest = report => load(report.capture.checkpointManifest.file, report.capture.checkpointManifest.sha256);
+  const before = manifest(previous), after = manifest(current);
+  assert.equal(before.provenance.browserFiles.length, 1887);
+  assert.deepEqual(after.provenance.browserFiles, before.provenance.browserFiles);
+  assert.equal(previous.browser, '154.0.8037.58');
+  assert.equal(current.browser, '155.0.8059.85');
+  const oldDepthSamples = previous.results.filter(row => row.action === 'hover');
+  assert.equal(oldDepthSamples.length, 4);
+  for (const row of oldDepthSamples) assert.ok(row.astylar.candidatePaintDepth && row.astylar.candidateCamera);
+  // This checks the scope of a fixed historical report, not a desired omission
+  // in future producers. Equal source bytes do not manufacture runtime fields.
+  for (const row of current.results) {
+    assert.equal(Object.hasOwn(row.astylar.openBoundary, 'paintDepth'), false);
+    assert.equal(Object.hasOwn(row.astylar.openBoundary, 'camera'), false);
+  }
+  const forged = structuredClone(after.provenance.browserFiles); forged[0].sha256 = '0'.repeat(64);
+  assert.throws(() => assert.deepEqual(forged, before.provenance.browserFiles));
+  assert.throws(() => assert.deepEqual(after.provenance.browserFiles.slice(1), before.provenance.browserFiles));
+  console.log(JSON.stringify({ proof: 'tooltip-depth-build-applicability-only', identicalServedAssets: 1887,
+    previousBrowser: previous.browser, currentBrowser: current.browser, browserIdentityChanged: true,
+    freshDepthObservationPresent: false, freshCameraCauseProven: false,
+    boundary: 'Changed served application bytes are excluded. Browser and theme/state applicability remain separate;prior camera observations are not observations of the new capture.',
+    canonicalPublication: false, currentRenderingAccepted: false }));
+});

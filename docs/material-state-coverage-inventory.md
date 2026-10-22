@@ -2,6 +2,20 @@
 
 ## Current audit pointer — October22
 
+- Short-tooltip paint applicability narrowed without recapture:old light depth
+  proof79573fb4 and new actual-theme report5ec72aca bind byte-identical ordered
+  manifests for all1887 served assets. Changed served build is excluded,not browser
+  change(154.0.8037.58→155.0.8059.85). New open trees retain opaque/background/text
+  requests but no final camera/mesh-depth fields;CSS boxes and text registry entries
+  do not prove painted visibility or new camera causality. Existing owning suite
+  now binds this exact source-applicability boundary and missing runtime evidence;
+  altered/missing asset controls reject. Focused1/1 passes1436.9738ms,total,log
+  tooltip-depth-build-applicability-20261022/empty stderr. No duplicate core finding
+  or replay of the settled light diagnosis. Next smallest decisive runtime check:
+  contrast DPR1 tall/short pair with explicit open state,canvas/camera/mesh-depth
+  diagnostics already exposed by the public benchmark measurement;then distinguish
+  clipping/state/paint inputs from the known depth boundary. Do not substitute old
+  depth values into the new report or repeat all light/theme cohorts blindly.
 - Actual-theme tooltip fallback question answered for12 frozen-application
   contexts:dark/contrast/custom at900x1000/900x240,DPR1/2. Reused the existing
   applied-theme producer with explicit --short-boundary;original light boundary

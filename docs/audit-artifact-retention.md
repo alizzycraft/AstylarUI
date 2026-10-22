@@ -2,6 +2,12 @@
 
 ## Current versus historical evidence
 
+Keep tooltip-depth-build-applicability-20261022.log/.stderr.log. Existing old/new
+report and checkpoint manifests authenticate1887 identical served assets;two
+forged/missing asset controls reject. Browser identities differ and new report
+lacks runtime camera/depth fields. This is source-applicability evidence only,
+not a new capture or fresh causal acceptance;both original captures stay retained.
+
 Keep entire tooltip-actual-theme-short-boundary-20261022 capture(97 files,
 6430285 logical bytes),its checkpoint manifest and original capture log/empty
 stderr. New report5ec72aca authenticates actual dark/contrast/custom themes and
