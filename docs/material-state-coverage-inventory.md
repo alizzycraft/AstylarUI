@@ -2,6 +2,15 @@
 
 ## Current audit pointer — October22
 
+- Bounded initial widget-state AX review now covers108 static pairs across
+  input,autocomplete,tree,menu,dialog,bottom-sheet,snack-bar and both progress
+  families. Exact role/name/description/value/all scalar properties agree except
+  explicitly retained progress tabindex/focusability under the existing finding.
+  Tree levels/positions/size,roving tabindex and ancestry also verify.540 mutation
+  controls/exact replay pass;current/installed/pinned projection and authored
+  source-map bindings reauthenticate. Evidence:check-static-widget-state-ax.mjs,
+  static-widget-state-ax-review-20261022 log/empty stderr. Not full AX relationships,
+  other landmarks,AT/events,paint or case closure;no canonical/source registration.
 - Pending source proposal0951b7ae preserves184 predecessors and adds timepicker
   popup/toggle metadata plus select readonly-input/non-text-host substitution.
  24 static pairs/48 observations,98 negative controls/exact replay pass. Initial

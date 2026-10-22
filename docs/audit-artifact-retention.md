@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain check-static-widget-state-ax.mjs and static-widget-state-ax-review-
+20261022 log/empty stderr.216 observations/108 pairs/nine families inspect exact
+widget role/name/description/value/all scalar states;progress focusability stays
+explicit under its existing finding. Tree ancestry/roving metadata also inspect.
+540 controls and exact replay pass. Reuses completed raw captures and existing
+source/projection bindings,no browser recapture. Not full semantics/current
+whole-rendering/case acceptance and not registered in canonical output yet.
+
 Retain review-picker-semantic-inputs.mjs,picker-semantic-input-review-20261022
 log/empty stderr,readonly-combobox-native-probe-20261022 log/empty stderr and
 pending source proposal0951b7ae. All184 predecessors preserve;48 observations/
