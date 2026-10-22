@@ -2,6 +2,20 @@
 
 ## Current versus historical evidence
 
+Retain static-semantic-export-conservation,static-semantic-candidate-import,
+static-semantic-propagated-receipt-reconciliation and static-semantic-candidate-
+index-compression20261022 log/empty stderr pairs,all with executable producerArgs.
+Conservation95158 passes:exact current census/complete prior coverage,15657 prior
+dependencies preserved,1109 new children/523 new dependencies,zero status changes.
+All148 changed leaves reconcile through98 producer receipts/48 actual full-row
+control hashes/one full motion report and180→191 source count. Candidate35504
+all-shard verification passes at e7d22b1a/index80632431;main accepted7fa pointer
+unchanged. Closed candidate index209079837 logical bytes/SHA80632431 stays exact
+after transparent LZX conversion. Observed free1834369024→2001399808 is not an
+exclusive physical savings claim. No source,shard,preserved package or pointer
+changed. Keep both prior/candidate generations;independent cold/main publication
+still pending. These checks are not whole-case or rendering acceptance.
+
 Retain static-semantic-export-20261022 log/stderr and static-semantic-full-section-
 comparison-20261022 log/empty stderr. Export84145 exits0;pending packagee7d22b1a
 has91375500 compressed/2340736618 decoded bytes,decoded SHAb87db14a. Actual session

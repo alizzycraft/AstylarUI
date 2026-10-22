@@ -51,9 +51,22 @@
   Accepted predecessor digests reused;current compressed/decoded bytes authenticate.
   Evidence:static-semantic-full-section-comparison-20261022 log/empty stderr.
   Changed sections still require detailed conservation;this is not acceptance.
-- NEXT:finish live combined source-census/coverage/receipt conservation95158,
-  then independent cold verification and candidate/main import. Main accepted
-  pointer remains7fa7ca35;generated docs packagee7d22b1a is pending. Registered
+- Conservation95158 completed exit0:exact registered census binds the exported
+  package;all15657 prior dependencies/complete prior coverage recover,with1109
+  reviewed children/523 dependencies added and zero case-status changes. All148
+  changed leaves explain as98 producer receipts,48 recomputed complete control-
+  proof hashes,one recomputed motion-report hash and180→191 source count. Selected
+  nonreceipt values/containers preserve;no geometry/state/classification waiver.
+  Evidence:static-semantic-export-conservation and static-semantic-propagated-
+  receipt-reconciliation20261022 logs/empty stderr. Existing helper used one
+  paired package pass for census,coverage and leaf comparison,not separate rescans.
+- Candidate import35504 completed exit0 and all shards verify:e7d22b1a/index80632431,
+  8483 discrepancies/39904 controls/389202 occurrences/191 findings,unresolved
+  scalar attribution0(not complete case inspection). Main pointer remains7fa.
+  Closed209079837-byte candidate index transparently LZX-compressed;raw SHA80632431
+  remains pointer-equal. No deletion/repointing;free-space changes are observations.
+- NEXT:independent cold verification,then verified main import/publication. Main
+  accepted pointer remains7fa7ca35;generated docs packagee7d22b1a is pending. Registered
   source/proof/evidence files stay frozen. Do not repeat the prior canonical
   investigations or treat this registration as publication. Final unfiltered
   canonical/audit-harness/browser/units/builds/consumer/capability/examples/skills/
