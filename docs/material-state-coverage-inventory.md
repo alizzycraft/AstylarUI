@@ -4,6 +4,16 @@
 
 Updated October22. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- Coherent stepper milestone export is live(session15105),explicit
+  `node scripts/export-material-input-audit-current-ancestry.mjs --stepper-inputs`.
+  Before launch,stepper-export-source-freeze-20261022 log pair exits0 and replays
+  complete selection census byte-exact(856 sources/241 proofs/179 findings).
+  Retain stepper-coherent-export-20261022 stdout/stderr;do not start another heavy
+  collector or mutate frozen sources. Accepted3175514b remains unchanged until
+  export/full80-section and changed-leaf/coverage conservation,independent cold
+  check and accepted import. Next:poll same live handle,not a duplicate export.
+  All2311 cases remain partial/current-rendering unverified;no final gate waived.
+
 - Explicit --stepper-inputs now selects queuedff305b14 via existing reader and
   runner;all four older selections retain exact behavior. Three full selection
   source reversals recover accepted prior files and reject unrelated drift;

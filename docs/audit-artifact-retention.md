@@ -2,6 +2,12 @@
 
 ## Current versus historical evidence
 
+Retain stepper-export-source-freeze-20261022 log pair:selection census replays
+byte-exact at856/241/179 before coherent export15105 starts with --stepper-inputs.
+Retain live stepper-coherent-export-20261022 stdout/stderr and any failure output;
+do not commit live logs as terminal results. Preserve accepted3175514b and all
+original/failure evidence. Export/conservation/cold/import remain mandatory.
+
 Retain stepper-selection-owning,stepper-selected-review-integration and
 stepper-selection-census20261022 log pairs. All18 owning tests pass;strict selected
 ff305b14 load authenticates15622 dependencies/twelve current-source checks and
