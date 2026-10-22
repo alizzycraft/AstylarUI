@@ -2,6 +2,25 @@
 
 ## Current audit pointer — October22
 
+- Current gap-navigation correction:do NOT reopen the already-proved mixed-text
+  capture limitation,chip empty-focus-indicator exclusion or default-light
+  tooltip fallback merely because the broad family table still lists anonymous/
+  paint/fallback work. Existing owners are input-tree-evidence.spec.mjs tests
+  'retained tree capture cannot distinguish text interleaving around an inline
+  child' and 'retained main mixed-text owners have only out-of-flow chip focus-
+  indicator children';control-state-paint-review.spec.mjs test 'retained chip
+  focus indicators do not establish a visible missing outline';and tooltip-
+  position-composition.spec.mjs test 'short viewport exposes missing tooltip
+  fallback and unequal scroll extents'. Read-only corpus reinspection reproduces
+  the existing2311/76/152 population,not a new finding. The fallback producer
+  audit-material-tooltip-boundary.mjs hardcodes profile=light and900x1000/900x240
+  at DPR1/2. Actual-theme ownership producer covers dark/contrast/custom at normal
+  heights,not those short-surface fallback cohorts. Specific next question:does
+  that independently verified light fallback/flow difference apply to those
+  missing actual-theme short-surface cohorts? Reuse the existing boundary producer
+  with explicit profile/applied-theme authentication if capture is needed;do not
+  recapture light or create a parallel overlay audit framework. Remaining absolute
+  child/pseudo paint,currentness and full-case obligations stay explicit.
 - Substantive tab owner question resolved for70 retained cases:both unmatched
   pagination controls compute display:none,pointer-events:none and disabled in
   every endpoint(62 ordinary/eight held). Their140 controls/280 total element
