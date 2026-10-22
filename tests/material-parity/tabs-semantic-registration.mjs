@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
+import { staticSemanticPredecessor, restoreStaticSemanticPolicy, restoreStaticSemanticProducer } from './static-semantic-registration.mjs';
 const hash = value => createHash('sha256').update(value).digest('hex');
 const normalize = value => value.toString().replaceAll('\r\n', '\n');
 const id = 'fixture-tab-panel-accessible-name-substitution';
@@ -27,6 +28,7 @@ export function restoreStaticSemanticCaseSelection(source, kind) {
   assert.equal(hash(text), previous); return text;
 }
 export function tabsSemanticPredecessor(current) {
+  current = staticSemanticPredecessor(current);
   if (current.length <= 179) return current;
   assert.equal(current.length, 180);
   assert.equal(hash(JSON.stringify(current)), 'dffdbf4e6a22d0aa95f59619aaf05e9b6b67669ff5ef84ec5d630d5411f7b3be');
@@ -36,7 +38,7 @@ export function tabsSemanticPredecessor(current) {
   return prior;
 }
 export function restoreTabsSemanticPolicy(source) {
-  const text = normalize(source);
+  const text = restoreStaticSemanticPolicy(source);
   if (!text.includes(id)) {
     assert.ok(!text.includes('Material tab panel semantic identity and relationship authoring'), 'Partial tabs registration'); return text;
   }
@@ -50,7 +52,7 @@ export function restoreTabsSemanticPolicy(source) {
   assert.equal(hash(prior), 'bc449ff3710a560919d985801045505807f0e404cb3b7a7c8452844616d10ba9'); return prior;
 }
 export function restoreTabsSemanticProducer(source) {
-  const text = normalize(source);
+  const text = restoreStaticSemanticProducer(source);
   if (!text.includes('tabs semantic additive registration preserves accepted findings')) {
     assert.ok(!text.includes("'tests/material-parity/tabs-semantic-inputs.spec.mjs'"), 'Partial tabs proof registration'); return text;
   }

@@ -364,15 +364,20 @@ in a coherent batch; exporting an unchanged producer does not integrate them.
 
 ## Retention and measurements
 
-The pending static-semantic successor uses explicit `--static-semantic-inputs`
+The registered static-semantic successor uses explicit `--static-semantic-inputs`
 on the current-ancestry launcher(with `--dry-run` or `--check`),selecting exact
 82191909. Existing selections stay unchanged and supplement combinations reject.
 Whole-source guarded reversals preserve prior case-reader/runner/launcher bytes;
 the existing tabs regression and new selector checks pass4/4. Full selected-review
 loading authenticates16180 dependencies/twelve current-source checks with all2311
-cases partial and rendering unverified. This is selection support only:191-finding
-registration and source/proof inventory reconciliation remain pending. Do not
-export this batch until those are coherent;dry run is not publication/acceptance.
+cases partial and rendering unverified.191 findings/248 proofs/928 paths now
+register:complete accepted180/243/873 tables conserve,with11/five/55 additions
+and seven exact source changes. Seven sequential integration tests pass. The
+restricted static-semantic-historical-loader exposes only the restored180 policy
+to nine authenticated retained reviewers;production sees191 and arbitrary imports
+reject. Original reviewer files/receipts stay unchanged. Freeze before coherent
+export/section and receipt conservation/cold/import;none is waived by registration.
+Dry run and registration are not publication/current rendering acceptance.
 
 The pending tabs/menu/sheet batch uses explicit `--tabs-menu-sheet` on the same
 current-ancestry launcher(with `--dry-run` or `--check`). It selects exact7eb107de;

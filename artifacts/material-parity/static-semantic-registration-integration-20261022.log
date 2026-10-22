@@ -1,0 +1,52 @@
+TAP version 13
+# Subtest: static semantic registration preserves180 findings and exact predecessor policy
+ok 1 - static semantic registration preserves180 findings and exact predecessor policy
+  ---
+  duration_ms: 640.5787
+  type: 'test'
+  ...
+# Subtest: static semantic retained reviewers replay through restricted180-definition module boundary
+ok 2 - static semantic retained reviewers replay through restricted180-definition module boundary
+  ---
+  duration_ms: 57464.3491
+  type: 'test'
+  ...
+# Subtest: static semantic case join preserves the complete predecessor after registration
+ok 3 - static semantic case join preserves the complete predecessor after registration
+  ---
+  duration_ms: 64138.6972
+  type: 'test'
+  ...
+# Subtest: static semantic case selection restores complete accepted predecessor sources and rejects drift
+ok 4 - static semantic case selection restores complete accepted predecessor sources and rejects drift
+  ---
+  duration_ms: 170.2583
+  type: 'test'
+  ...
+# Subtest: static semantic named launcher selects only the exact new proposal and preserves old invocation
+ok 5 - static semantic named launcher selects only the exact new proposal and preserves old invocation
+  ---
+  duration_ms: 420.0785
+  type: 'test'
+  ...
+# Subtest: tabs semantic registration preserves179 findings and complete predecessor sources
+ok 6 - tabs semantic registration preserves179 findings and complete predecessor sources
+  ---
+  duration_ms: 1122.6109
+  type: 'test'
+  ...
+# Subtest: tabs semantic history and queued node AX presence evidence replay
+ok 7 - tabs semantic history and queued node AX presence evidence replay
+  ---
+  duration_ms: 29394.4982
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 154555.3602

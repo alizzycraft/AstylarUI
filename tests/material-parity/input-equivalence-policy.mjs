@@ -3926,6 +3926,2552 @@ Object.freeze({
   "recommendation": "In future comparison input work preserve stable tab/panel identities and supported labelledby relationships rather than hardcoding content as the panel name. Do not change visible text, private paint or CSS hiding to imitate accessibility output; investigate those at their already-recorded owning boundaries.",
   "boundary": "Twelve pinned initial-state static pairs and exact source transitions only; not historical runtime, every intervening revision, interactive updates, AT behavior, current rendering or case closure."
 }),
+  Object.freeze({
+    "id": "fixture-bottom-sheet-dialog-name-substitution",
+    "file": "examples/material-showcase/src/app/astylar.component.ts",
+    "pattern": "const label = family === 'dialog' \\? 'Open dialog' : family === 'bottom-sheet' \\? 'Open bottom sheet' : 'Show snackbar'",
+    "introducedBy": "Initial2f440115 already supplies Open bottom sheet while native opening options supply Sharing options;initial runtime/motive unproven.",
+    "classification": "application-plugin-authoring-defect",
+    "owner": "Material bottom-sheet dialog accessible-name authoring",
+    "focusedProof": "node scripts/review-bottom-sheet-name-inputs.mjs",
+    "history": [
+      {
+        "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24",
+        "observation": {
+          "name": "Open bottom sheet",
+          "type": "dialog",
+          "excerpt": "      const label = family === 'dialog' ? 'Open dialog' : family === 'bottom-sheet' ? 'Open bottom sheet' : 'Show snackbar';"
+        }
+      },
+      {
+        "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+        "file": "examples/material-showcase/src/app/reference.component.ts",
+        "sha256": "2e070cc31b08750e07f6a8c5c3103607e5399291930b91d590140203be719c8e",
+        "observation": {
+          "name": "Sharing options",
+          "excerpt": "protected openBottomSheet(): void { const content = this.sheetContent(); if (content) this.bottomSheet.open(content, { ariaLabel: 'Sharing options' }); }"
+        }
+      }
+    ],
+    "observation": {
+      "component": "bottom-sheet",
+      "configuredActivatePairs": 9,
+      "property": "dialog accessible name",
+      "reference": "Sharing options",
+      "astylar": "Open bottom sheet",
+      "stage": "application options/SiteData ariaLabel before semantic projection"
+    },
+    "justification": "Actual AX/backend DOM in all9 configured activate pairs exposes the unequal names. Executing the complete authored opening/familyElements methods resolves those exact differing inputs;two forged-name controls reject. Initial whole sources preserve the same difference. Existing current/installed/pinned semantic projection binding replays exactly and ariaLabel is supported. This is not a core naming failure or proof of equal semantics. Keep the existing list/link substitution,local/modal lifecycle and request-before-input focus scheduling separate.",
+    "evidence": [
+      {
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd"
+      },
+      {
+        "file": "examples/material-showcase/src/app/reference.component.ts",
+        "sha256": "debe55bc492d0fa1e48a9c7f09e1b668d435a2260588710207ab878b23c1d4aa"
+      },
+      {
+        "file": "src/app/types/dom-element.ts",
+        "sha256": "72eef2f09d5cdacaab10db7328c40e5b4748c3f22640e2b40f0436a268351e83"
+      },
+      {
+        "file": "src/lib/astylar-semantic-bridge.ts",
+        "sha256": "1a0011d3530701d9a74dc37b9f5a14d0fed0742dfd8793c39f8628e06b6a5725"
+      },
+      {
+        "file": "scripts/check-bottom-sheet-activate-ax.mjs",
+        "sha256": "c4db8c3d0f34c2aec2f4c39f1bfe847d4f830cbcda82810b5ca191dd661bf65d"
+      },
+      {
+        "file": "artifacts/material-parity/bottom-sheet-activate-ax-review-20261022.log",
+        "sha256": "0156e32ad25c8381b17da64bbda6c79de9e0299dc7de361fb3d434e97e8dfdec"
+      },
+      {
+        "file": "artifacts/material-parity/bottom-sheet-activate-ax-20261022/latest-report.json",
+        "sha256": "15d911d3e067f64f7f37b0d820f20f2099f71b62923f3b37ffafa0afad0b7f77"
+      },
+      {
+        "file": "scripts/check-material-semantic-visibility-binding.mjs",
+        "sha256": "a320c97ece4ac0191ff102b473029cc8d2800d5979216658c02eea61ffb0ac23"
+      },
+      {
+        "file": "artifacts/material-parity/material-semantic-visibility-binding-retry-20261021.log",
+        "sha256": "2f130ff825b7885e0c7d0a35eaea849d6560bc486cb88ee033899966e7bc7aaf"
+      },
+      {
+        "file": "artifacts/material-parity/bottom-sheet-activate-ax-20261022/bottom-sheet-light-1440x1000-dpr1-reference.json",
+        "sha256": "20005b98964a748327b0aa7c8d11338389edd962809827c373c1f2dab9cd9ec3"
+      },
+      {
+        "file": "artifacts/material-parity/bottom-sheet-activate-ax-20261022/bottom-sheet-light-1440x1000-dpr1-astylar.json",
+        "sha256": "871afd0c1b7e3210bdc49da707f5b646163f547dd3f32d6ce8f71fd8981a1675"
+      },
+      {
+        "file": "artifacts/material-parity/bottom-sheet-activate-ax-20261022/bottom-sheet-light-1440x1000-dpr2-reference.json",
+        "sha256": "1e3bce1ff01eb7d55ca98048056c4afe658583b94bd168297a102040f588a533"
+      },
+      {
+        "file": "artifacts/material-parity/bottom-sheet-activate-ax-20261022/bottom-sheet-light-1440x1000-dpr2-astylar.json",
+        "sha256": "c6fd3a57133bcbe1fc483ca2044e540150c8c6767b4290a6ae9abf7f48336256"
+      },
+      {
+        "file": "artifacts/material-parity/bottom-sheet-activate-ax-20261022/bottom-sheet-dark-1440x1000-dpr1-reference.json",
+        "sha256": "a35b95f8d29a0d7e77e7b210d54ccaf7e1eb5f0cfc6264b539edd4b407e439bc"
+      },
+      {
+        "file": "artifacts/material-parity/bottom-sheet-activate-ax-20261022/bottom-sheet-dark-1440x1000-dpr1-astylar.json",
+        "sha256": "7dd779e283e437af8e95e11282f5e09c279946234f46452d8c3f85645ec0c4dd"
+      },
+      {
+        "file": "artifacts/material-parity/bottom-sheet-activate-ax-20261022/bottom-sheet-dark-1440x1000-dpr2-reference.json",
+        "sha256": "63801490be9e54cce524fe16ac48249637fac4dc113ed6f18753bca86d0feaa8"
+      },
+      {
+        "file": "artifacts/material-parity/bottom-sheet-activate-ax-20261022/bottom-sheet-dark-1440x1000-dpr2-astylar.json",
+        "sha256": "5699f0598688dec92f3961810e90f341027e9d9b54b3d14787640903598d92e0"
+      },
+      {
+        "file": "artifacts/material-parity/bottom-sheet-activate-ax-20261022/bottom-sheet-contrast-1440x1000-dpr1-reference.json",
+        "sha256": "ad3e53ad731ace62a52b6e1c48e78fd9144c2189329dc99a08740d44d973dfb8"
+      },
+      {
+        "file": "artifacts/material-parity/bottom-sheet-activate-ax-20261022/bottom-sheet-contrast-1440x1000-dpr1-astylar.json",
+        "sha256": "a7ccd0ebee560b0672b451ba806c05c84681f83f132daf7970e4dce33c425d51"
+      },
+      {
+        "file": "artifacts/material-parity/bottom-sheet-activate-ax-20261022/bottom-sheet-contrast-1440x1000-dpr2-reference.json",
+        "sha256": "a0f0a91e9d348e11b40c33db8e12b89dde16061aa81c33628862d27677092bfa"
+      },
+      {
+        "file": "artifacts/material-parity/bottom-sheet-activate-ax-20261022/bottom-sheet-contrast-1440x1000-dpr2-astylar.json",
+        "sha256": "7f95d4d4f59e82cbeeee2b3800f34be67a4b7ded94ba6aa1ac539d2423faf559"
+      },
+      {
+        "file": "artifacts/material-parity/bottom-sheet-activate-ax-20261022/bottom-sheet-custom-1440x1000-dpr1-reference.json",
+        "sha256": "d95f8a65f20da817e3a807385f3c5bfb38a04e5a7025db73df204f76165e2741"
+      },
+      {
+        "file": "artifacts/material-parity/bottom-sheet-activate-ax-20261022/bottom-sheet-custom-1440x1000-dpr1-astylar.json",
+        "sha256": "3b9072ea3da6d8cda212ef1df8ebca365925b071ee83d99acb235089a66a2841"
+      },
+      {
+        "file": "artifacts/material-parity/bottom-sheet-activate-ax-20261022/bottom-sheet-custom-1440x1000-dpr2-reference.json",
+        "sha256": "5d0eba113c65b26a9e664677e7cbc5e2b3bd29f1926238c94ffad7e2ae914f20"
+      },
+      {
+        "file": "artifacts/material-parity/bottom-sheet-activate-ax-20261022/bottom-sheet-custom-1440x1000-dpr2-astylar.json",
+        "sha256": "a7955835aa702945768d81f710d268993506d1c3508b31aa44588bdca045c7e9"
+      },
+      {
+        "file": "artifacts/material-parity/bottom-sheet-activate-ax-20261022/bottom-sheet-light-900x800-dpr1-reference.json",
+        "sha256": "2ae6da3c4db7bf2a37e83f18b531260756051d919d0b689d91f6927992e39705"
+      },
+      {
+        "file": "artifacts/material-parity/bottom-sheet-activate-ax-20261022/bottom-sheet-light-900x800-dpr1-astylar.json",
+        "sha256": "3c0c79d90e009093038063af9088eda9f0ae36a26b2010178cc09c482595c565"
+      }
+    ],
+    "recommendation": "Preserve the reference dialog-name input independently from its opener text in future fixture correction. Do not change visible labels,force focus,convert the local sheet into a global modal or tune geometry to conceal this semantic input mismatch.",
+    "boundary": "Nine pinned configured activate endpoints and initial/current executed authored names,not historical runtime,all revisions,AT navigation,paint,current whole rendering or case closure."
+  }),
+  Object.freeze({
+    "id": "fixture-chip-listbox-orientation-input-omitted",
+    "file": "examples/material-showcase/src/app/astylar.component.ts",
+    "pattern": "    if \\(family === 'chips'\\) return \\[\\{ type: 'div', id: 'chips-primary', class: 'row', role: 'listbox', ariaLabel: 'Tags', ariaDisabled: false, ariaMultiselectable: true, children: state\\.chips\\.map\\(\\(chip, index\\) => \\(\\{",
+    "introducedBy": "Initial2f440115 already omits orientation on its authored listbox;initial runtime and API support/motive at that revision unproven.",
+    "classification": "application-plugin-authoring-defect",
+    "owner": "Material chip-listbox semantic orientation authoring",
+    "focusedProof": "node scripts/review-chip-orientation-inputs.mjs",
+    "history": [
+      {
+        "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24",
+        "observation": {
+          "authored": {
+            "type": "div",
+            "id": "chips-primary",
+            "class": "row",
+            "role": "listbox",
+            "ariaLabel": "Tags",
+            "ariaDisabled": false,
+            "ariaMultiselectable": true
+          },
+          "excerpt": "    if (family === 'chips') return [{ type: 'div', id: 'chips-primary', class: 'row', role: 'listbox', ariaLabel: 'Tags', ariaDisabled: false, ariaMultiselectable: true, children: state.chips.map((chip, index) => ({ type: 'button' as const, id: `chip-${index}`, class: 'chip', role: 'option', ariaSelected: state.selected, value: chip })) }];",
+          "wholeMethodSha256": "f033583a668c3fa5df0ea0ac0d188730d0debc77ba6b73d82f116eb587805728"
+        }
+      }
+    ],
+    "observation": {
+      "component": "chips",
+      "staticPairs": 12,
+      "property": "aria-orientation/AX orientation",
+      "reference": "horizontal",
+      "astylar": "omitted input;actual AX vertical",
+      "stage": "authored listbox SiteData before semantic projection"
+    },
+    "justification": "All12 pinned static pairs expose horizontal native versus vertical candidate listboxes. Backend DOM has explicit native aria-orientation=horizontal and no candidate attribute. Complete current/initial authored methods omit ariaOrientation;current public type and fully bound current/installed/pinned projection support it. This is unequal fixture input,not a demonstrated semantic bridge failure. Focusability,chip descriptions,keyboard behavior and paint remain separate.",
+    "evidence": [
+      {
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd"
+      },
+      {
+        "file": "src/app/types/dom-element.ts",
+        "sha256": "72eef2f09d5cdacaab10db7328c40e5b4748c3f22640e2b40f0436a268351e83"
+      },
+      {
+        "file": "src/lib/astylar-semantic-bridge.ts",
+        "sha256": "1a0011d3530701d9a74dc37b9f5a14d0fed0742dfd8793c39f8628e06b6a5725"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/latest-report.json",
+        "sha256": "407b996d780c12d025b82bc2392781422818674c360c8dce73b5c23f669db987"
+      },
+      {
+        "file": "artifacts/material-parity/material-semantic-visibility-binding-retry-20261021.log",
+        "sha256": "2f130ff825b7885e0c7d0a35eaea849d6560bc486cb88ee033899966e7bc7aaf"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-light-1440x1000-dpr1-reference.json",
+        "sha256": "063c078c95490d32a8aac4ace8a053c02de7f2d52def0e0733e09a877bdc74e5"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-light-1440x1000-dpr1-astylar.json",
+        "sha256": "c703ab326e9daaed7d75f74b5de5b37257358ea31eeb7af224e7d0cf4ed76669"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-light-768x1024-dpr1-reference.json",
+        "sha256": "ef9e0eea18668a6988178e6b3bab42e0fe2653188b51af564309d02d272f4419"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-light-768x1024-dpr1-astylar.json",
+        "sha256": "bb5e93400d1200a967680c8cd18ca1fc63194fe4417016f94156952d0d2b2276"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-light-390x844-dpr2-reference.json",
+        "sha256": "572800228929fcb9351e342bb364c6d7b2d3854237039edd464bccc79e442610"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-light-390x844-dpr2-astylar.json",
+        "sha256": "6d5a9c547ffd49af994f2be8b730361412480395e296d467183c2c475b473632"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-dark-1440x1000-dpr1-reference.json",
+        "sha256": "d96cf58f15d6a519b3424b05d19ac9c1218845a85cda64c9a8555c6b659f662a"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-dark-1440x1000-dpr1-astylar.json",
+        "sha256": "bde335faed78f089d1b36cdaf7b1fbe8938a4e48ac1d650f756905af2ac92b5f"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-dark-768x1024-dpr1-reference.json",
+        "sha256": "7e857ea9fb562eecd94578c51da1eeb8c6d4a9d96101484489d0be76780ceb19"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-dark-768x1024-dpr1-astylar.json",
+        "sha256": "492b1494ddc74d70818bb72e40c2579e1b5fd7565a074b2a7494070433d91176"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-dark-390x844-dpr2-reference.json",
+        "sha256": "c1bc90718f571dbc1277e8914c222f336eae9317f63d2005a8ed95df7528eec7"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-dark-390x844-dpr2-astylar.json",
+        "sha256": "fd99753e615a262b775772313709b6ab633dad8c4896f2c16cf6f5682188146e"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-contrast-1440x1000-dpr1-reference.json",
+        "sha256": "f7b6e174d126846091fc7ccd772a1184c77a4ddad07b14f197a1c95683a7b83f"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-contrast-1440x1000-dpr1-astylar.json",
+        "sha256": "3808eb20488e90cd6a37e4808c91bdf9af5587e74dc19bfb53f39f25a3d56442"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-contrast-768x1024-dpr1-reference.json",
+        "sha256": "a600df999cead07ef1a263aa7d5b5aa4e825b64926d734092ee1db2dfbf85f44"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-contrast-768x1024-dpr1-astylar.json",
+        "sha256": "1c54475a50a07f1479774c51305423d697e277fd7834ea274790e8f79a0b1d97"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-contrast-390x844-dpr2-reference.json",
+        "sha256": "e0626dfc97e81eabdfd80711619051ca70b6a7caccb4fd3b74518d9e954d9052"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-contrast-390x844-dpr2-astylar.json",
+        "sha256": "e97b1432a135f2aad1e8e32b1de75a9571e42f6c0cafbd4d46a174ab5d8f0901"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-custom-1440x1000-dpr1-reference.json",
+        "sha256": "bd22bae279b76fe56801dfb078ca08c650e37b40f682e6a26f88b83730e08649"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-custom-1440x1000-dpr1-astylar.json",
+        "sha256": "3d39f7b44f83b58db0f34783344f97c7bc305f7089a72115e6545029db7a787f"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-custom-768x1024-dpr1-reference.json",
+        "sha256": "d259b2b238bd7355cb5500265ae4904ef0174f2daf022a42c1bc504c0b20de92"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-custom-768x1024-dpr1-astylar.json",
+        "sha256": "789e59233991afc7432dcf0c958e39bed43cf5f748910280bfe5ad0e4f48cfdc"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-custom-390x844-dpr2-reference.json",
+        "sha256": "cb3b96e95d2a7f808b9a2f1b4ec9ae0a1fcd712e7546bed01d109645de62a05f"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-custom-390x844-dpr2-astylar.json",
+        "sha256": "16923170e1cb56d3200a41fb8c41a5d7d6ab0b3a2a5861e3c71e02124c5f1376"
+      }
+    ],
+    "recommendation": "Preserve the reference semantic orientation input in a future fixture correction;do not infer orientation from screenshot layout,change core listbox defaults or tune chip geometry to hide the omission.",
+    "boundary": "Twelve static AX/backend DOM pairs and executed initial/current authoring,not historical runtime,all interaction states,AT traversal,current whole rendering or case closure."
+  }),
+  Object.freeze({
+    "id": "fixture-chip-listbox-tabstop-input-omitted",
+    "file": "examples/material-showcase/src/app/astylar.component.ts",
+    "pattern": "    if \\(family === 'chips'\\) return \\[\\{ type: 'div', id: 'chips-primary', class: 'row', role: 'listbox', ariaLabel: 'Tags', ariaDisabled: false, ariaMultiselectable: true, children: state\\.chips\\.map\\(\\(chip, index\\) => \\(\\{",
+    "introducedBy": "Initial2f440115 already contains the differing root metadata;initial runtime and API support/motive at that revision unproven.",
+    "classification": "application-plugin-authoring-defect",
+    "owner": "Material chip-listbox container focusability authoring",
+    "focusedProof": "node scripts/review-group-semantic-inputs.mjs",
+    "history": [
+      {
+        "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24",
+        "observation": {
+          "chips": {
+            "type": "div",
+            "id": "chips-primary",
+            "class": "row",
+            "role": "listbox",
+            "ariaLabel": "Tags",
+            "ariaDisabled": false,
+            "ariaMultiselectable": true
+          },
+          "paginator": {
+            "type": "div",
+            "id": "paginator-primary",
+            "class": "paginator",
+            "role": "group",
+            "ariaLabel": "Items per page: 10 1 – 10 of 100"
+          },
+          "wholeMethodSha256": "f033583a668c3fa5df0ea0ac0d188730d0debc77ba6b73d82f116eb587805728",
+          "excerpts": {
+            "chips": "    if (family === 'chips') return [{ type: 'div', id: 'chips-primary', class: 'row', role: 'listbox', ariaLabel: 'Tags', ariaDisabled: false, ariaMultiselectable: true, children: state.chips.map((chip, index) => ({ type: 'button' as const, id: `chip-${index}`, class: 'chip', role: 'option', ariaSelected: state.selected, value: chip })) }];",
+            "paginator": "    if (family === 'paginator') return [{ type: 'div', id: 'paginator-primary', class: 'paginator', role: 'group', ariaLabel: `Items per page: 10 ${state.pageIndex * 10 + 1} – ${Math.min(100, state.pageIndex * 10 + 10)} of 100`, children: [{ type: 'span', id: 'paginator-size', textContent: 'Items per page: 10' }, { type: 'span', id: 'paginator-range', textContent: `${state.pageIndex * 10 + 1} – ${Math.min(100, state.pageIndex * 10 + 10)} of 100` }, { type: 'button', id: 'paginator-previous', class: 'paginator-button', disabled: state.pageIndex === 0, ariaLabel: 'Previous page', value: '‹' }, { type: 'button', id: 'paginator-next', class: 'paginator-button', disabled: state.pageIndex === 9, ariaLabel: 'Next page', value: '›' }] }];"
+          }
+        }
+      }
+    ],
+    "observation": {
+      "component": "chips",
+      "staticPairs": 12,
+      "property": "container tabindex/AX focusable",
+      "reference": "tabindex0;AX focusable true",
+      "astylar": "tabindex omitted;AX focusable absent",
+      "stage": "authored SiteData before semantic projection"
+    },
+    "justification": "Complete current/initial root authoring omits supported tabindex while all12 native backend DOM roots have tabindex0 and all12 candidate roots omit it. Bound current/installed/pinned projection supports the public input. Keep child focusability,keyboard navigation,orientation,descriptions and focus runtime ordering separate.",
+    "recommendation": "Preserve the native container focusability input in future fixture correction. Do not force focus,change default listbox semantics or alter child hit regions to conceal the omission.",
+    "evidence": [
+      {
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd"
+      },
+      {
+        "file": "src/app/types/dom-element.ts",
+        "sha256": "72eef2f09d5cdacaab10db7328c40e5b4748c3f22640e2b40f0436a268351e83"
+      },
+      {
+        "file": "src/lib/astylar-semantic-bridge.ts",
+        "sha256": "1a0011d3530701d9a74dc37b9f5a14d0fed0742dfd8793c39f8628e06b6a5725"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/latest-report.json",
+        "sha256": "407b996d780c12d025b82bc2392781422818674c360c8dce73b5c23f669db987"
+      },
+      {
+        "file": "artifacts/material-parity/material-semantic-visibility-binding-retry-20261021.log",
+        "sha256": "2f130ff825b7885e0c7d0a35eaea849d6560bc486cb88ee033899966e7bc7aaf"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-light-1440x1000-dpr1-reference.json",
+        "sha256": "063c078c95490d32a8aac4ace8a053c02de7f2d52def0e0733e09a877bdc74e5"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-light-1440x1000-dpr1-astylar.json",
+        "sha256": "c703ab326e9daaed7d75f74b5de5b37257358ea31eeb7af224e7d0cf4ed76669"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-light-768x1024-dpr1-reference.json",
+        "sha256": "ef9e0eea18668a6988178e6b3bab42e0fe2653188b51af564309d02d272f4419"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-light-768x1024-dpr1-astylar.json",
+        "sha256": "bb5e93400d1200a967680c8cd18ca1fc63194fe4417016f94156952d0d2b2276"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-light-390x844-dpr2-reference.json",
+        "sha256": "572800228929fcb9351e342bb364c6d7b2d3854237039edd464bccc79e442610"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-light-390x844-dpr2-astylar.json",
+        "sha256": "6d5a9c547ffd49af994f2be8b730361412480395e296d467183c2c475b473632"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-dark-1440x1000-dpr1-reference.json",
+        "sha256": "d96cf58f15d6a519b3424b05d19ac9c1218845a85cda64c9a8555c6b659f662a"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-dark-1440x1000-dpr1-astylar.json",
+        "sha256": "bde335faed78f089d1b36cdaf7b1fbe8938a4e48ac1d650f756905af2ac92b5f"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-dark-768x1024-dpr1-reference.json",
+        "sha256": "7e857ea9fb562eecd94578c51da1eeb8c6d4a9d96101484489d0be76780ceb19"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-dark-768x1024-dpr1-astylar.json",
+        "sha256": "492b1494ddc74d70818bb72e40c2579e1b5fd7565a074b2a7494070433d91176"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-dark-390x844-dpr2-reference.json",
+        "sha256": "c1bc90718f571dbc1277e8914c222f336eae9317f63d2005a8ed95df7528eec7"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-dark-390x844-dpr2-astylar.json",
+        "sha256": "fd99753e615a262b775772313709b6ab633dad8c4896f2c16cf6f5682188146e"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-contrast-1440x1000-dpr1-reference.json",
+        "sha256": "f7b6e174d126846091fc7ccd772a1184c77a4ddad07b14f197a1c95683a7b83f"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-contrast-1440x1000-dpr1-astylar.json",
+        "sha256": "3808eb20488e90cd6a37e4808c91bdf9af5587e74dc19bfb53f39f25a3d56442"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-contrast-768x1024-dpr1-reference.json",
+        "sha256": "a600df999cead07ef1a263aa7d5b5aa4e825b64926d734092ee1db2dfbf85f44"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-contrast-768x1024-dpr1-astylar.json",
+        "sha256": "1c54475a50a07f1479774c51305423d697e277fd7834ea274790e8f79a0b1d97"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-contrast-390x844-dpr2-reference.json",
+        "sha256": "e0626dfc97e81eabdfd80711619051ca70b6a7caccb4fd3b74518d9e954d9052"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-contrast-390x844-dpr2-astylar.json",
+        "sha256": "e97b1432a135f2aad1e8e32b1de75a9571e42f6c0cafbd4d46a174ab5d8f0901"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-custom-1440x1000-dpr1-reference.json",
+        "sha256": "bd22bae279b76fe56801dfb078ca08c650e37b40f682e6a26f88b83730e08649"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-custom-1440x1000-dpr1-astylar.json",
+        "sha256": "3d39f7b44f83b58db0f34783344f97c7bc305f7089a72115e6545029db7a787f"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-custom-768x1024-dpr1-reference.json",
+        "sha256": "d259b2b238bd7355cb5500265ae4904ef0174f2daf022a42c1bc504c0b20de92"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-custom-768x1024-dpr1-astylar.json",
+        "sha256": "789e59233991afc7432dcf0c958e39bed43cf5f748910280bfe5ad0e4f48cfdc"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-custom-390x844-dpr2-reference.json",
+        "sha256": "cb3b96e95d2a7f808b9a2f1b4ec9ae0a1fcd712e7546bed01d109645de62a05f"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/chips-custom-390x844-dpr2-astylar.json",
+        "sha256": "16923170e1cb56d3200a41fb8c41a5d7d6ab0b3a2a5861e3c71e02124c5f1376"
+      }
+    ],
+    "boundary": "Twelve static pairs per family and initial/current executed authoring. Not all AX properties,keyboard/event behavior,AT traversal,current whole rendering or case closure."
+  }),
+  Object.freeze({
+    "id": "fixture-paginator-group-accessible-name-substitution",
+    "file": "examples/material-showcase/src/app/astylar.component.ts",
+    "pattern": "      ariaLabel: `Items per page: 10 \\$\\{state\\.pageIndex \\* 10 \\+ 1\\} – \\$\\{Math\\.min\\(100, state\\.pageIndex \\* 10 \\+ 10\\)\\} of 100`,",
+    "introducedBy": "Initial2f440115 already contains the differing root metadata;initial runtime and API support/motive at that revision unproven.",
+    "classification": "application-plugin-authoring-defect",
+    "owner": "Material paginator group accessible-name authoring",
+    "focusedProof": "node scripts/review-group-semantic-inputs.mjs",
+    "history": [
+      {
+        "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24",
+        "observation": {
+          "chips": {
+            "type": "div",
+            "id": "chips-primary",
+            "class": "row",
+            "role": "listbox",
+            "ariaLabel": "Tags",
+            "ariaDisabled": false,
+            "ariaMultiselectable": true
+          },
+          "paginator": {
+            "type": "div",
+            "id": "paginator-primary",
+            "class": "paginator",
+            "role": "group",
+            "ariaLabel": "Items per page: 10 1 – 10 of 100"
+          },
+          "wholeMethodSha256": "f033583a668c3fa5df0ea0ac0d188730d0debc77ba6b73d82f116eb587805728",
+          "excerpts": {
+            "chips": "    if (family === 'chips') return [{ type: 'div', id: 'chips-primary', class: 'row', role: 'listbox', ariaLabel: 'Tags', ariaDisabled: false, ariaMultiselectable: true, children: state.chips.map((chip, index) => ({ type: 'button' as const, id: `chip-${index}`, class: 'chip', role: 'option', ariaSelected: state.selected, value: chip })) }];",
+            "paginator": "    if (family === 'paginator') return [{ type: 'div', id: 'paginator-primary', class: 'paginator', role: 'group', ariaLabel: `Items per page: 10 ${state.pageIndex * 10 + 1} – ${Math.min(100, state.pageIndex * 10 + 10)} of 100`, children: [{ type: 'span', id: 'paginator-size', textContent: 'Items per page: 10' }, { type: 'span', id: 'paginator-range', textContent: `${state.pageIndex * 10 + 1} – ${Math.min(100, state.pageIndex * 10 + 10)} of 100` }, { type: 'button', id: 'paginator-previous', class: 'paginator-button', disabled: state.pageIndex === 0, ariaLabel: 'Previous page', value: '‹' }, { type: 'button', id: 'paginator-next', class: 'paginator-button', disabled: state.pageIndex === 9, ariaLabel: 'Next page', value: '›' }] }];"
+          }
+        }
+      }
+    ],
+    "observation": {
+      "component": "paginator",
+      "staticPairs": 12,
+      "property": "group aria-label/AX name",
+      "reference": "no aria-label;empty AX group name",
+      "astylar": "Items per page: 10 1 – 10 of 100",
+      "stage": "authored SiteData before semantic projection"
+    },
+    "justification": "Complete current/initial root authoring supplies a content-derived ariaLabel absent from the reference. All12 paired backend DOM/AX roots expose precisely that input difference. Supported name projection is fully bound;this is not a bridge naming failure. Reference accessibility design may merit separate review,but reference truth is not changed by this audit.",
+    "recommendation": "Resolve shared semantic intent explicitly in a future fixture review;do not silently rename the reference or change visible text/core accessible-name rules to manufacture parity.",
+    "evidence": [
+      {
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd"
+      },
+      {
+        "file": "src/app/types/dom-element.ts",
+        "sha256": "72eef2f09d5cdacaab10db7328c40e5b4748c3f22640e2b40f0436a268351e83"
+      },
+      {
+        "file": "src/lib/astylar-semantic-bridge.ts",
+        "sha256": "1a0011d3530701d9a74dc37b9f5a14d0fed0742dfd8793c39f8628e06b6a5725"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/latest-report.json",
+        "sha256": "407b996d780c12d025b82bc2392781422818674c360c8dce73b5c23f669db987"
+      },
+      {
+        "file": "artifacts/material-parity/material-semantic-visibility-binding-retry-20261021.log",
+        "sha256": "2f130ff825b7885e0c7d0a35eaea849d6560bc486cb88ee033899966e7bc7aaf"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/paginator-light-1440x1000-dpr1-reference.json",
+        "sha256": "1c80ff12e72707e91025095b2e9fcb6b4ece6e264a34c64ca1dd783edb170d9b"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/paginator-light-1440x1000-dpr1-astylar.json",
+        "sha256": "243e04def64af2b070d4c29fbf9425b83f49b16dff71373e801c3df74e48a549"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/paginator-light-768x1024-dpr1-reference.json",
+        "sha256": "6c9935b53e316f6c2656ef93044d2ff1d1b06dc7e3ba0867122c76a34363fc73"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/paginator-light-768x1024-dpr1-astylar.json",
+        "sha256": "46b0da3712a16111344a7c643bf67d854e4d1de73b5fc59028f7523bdce4e25a"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/paginator-light-390x844-dpr2-reference.json",
+        "sha256": "57f339b8d93be555683c486c039e447744e11358567e09aaf14450838df9ed90"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/paginator-light-390x844-dpr2-astylar.json",
+        "sha256": "004b1e78e8eda79ebfb5ab6bc6a1580269da84f2b02c1a240044236424dc2198"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/paginator-dark-1440x1000-dpr1-reference.json",
+        "sha256": "3718afe4ecf65298b449a0187d1aec3d8ec466fdad33b023240456cdbf763cdb"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/paginator-dark-1440x1000-dpr1-astylar.json",
+        "sha256": "58a45671a286238684a4c6b6fd283dca14661338a87c0e2a18187482ac4f9896"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/paginator-dark-768x1024-dpr1-reference.json",
+        "sha256": "6724e23a56f200d165752385d7ab334d2eefe23142dbe555192f6b1738b958ce"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/paginator-dark-768x1024-dpr1-astylar.json",
+        "sha256": "6261ad2cdbfdb111bb19f13d13bc9eef74c095e1f2fef3d04ecedc3a216d0f8a"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/paginator-dark-390x844-dpr2-reference.json",
+        "sha256": "92cc93c060711d64531e9a10117c593f9f603865603858bdc48abf6ff03554a1"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/paginator-dark-390x844-dpr2-astylar.json",
+        "sha256": "576744589c821c1b0afd98161d521745270d54c2133e7ef1bc46c700ccec344b"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/paginator-contrast-1440x1000-dpr1-reference.json",
+        "sha256": "bd93a88af926ee653190e749fac95645ee49c70dd7c17fee7c6a1f2b797990f3"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/paginator-contrast-1440x1000-dpr1-astylar.json",
+        "sha256": "6a5ef5f0a8a1b713bc3a55f55f67227eecfa14c96424cbef97266025f2586fd1"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/paginator-contrast-768x1024-dpr1-reference.json",
+        "sha256": "686c06c8433d3cc053030a5fcec2793056621345fd5a44d75291a8346aeabf1d"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/paginator-contrast-768x1024-dpr1-astylar.json",
+        "sha256": "45d1ce150e5b74dee49b42907a66db27924a1ba060ec52eeb290a206fa8218a4"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/paginator-contrast-390x844-dpr2-reference.json",
+        "sha256": "6d12e11622df7387a38ceee5e1f7719485ed1dbeb7ac54042be9b96072c59ebc"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/paginator-contrast-390x844-dpr2-astylar.json",
+        "sha256": "d7e46b20111d0f205906740c96ae56991fc47c52e992fc0a622fc8e962956391"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/paginator-custom-1440x1000-dpr1-reference.json",
+        "sha256": "5fd2f23e8090accc8f98fdc9f7b3c374b3ac2e3ecfb51f3b7fd6e52892c733c8"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/paginator-custom-1440x1000-dpr1-astylar.json",
+        "sha256": "f71d26852cd6131f2badbbb1a12f7295b8a5ecac9c5df77bd797c245a3e21cfe"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/paginator-custom-768x1024-dpr1-reference.json",
+        "sha256": "7e96c539d0fc71aeb6ff75f54caa1d5bccf48a7abbf16958d5189b777534f51e"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/paginator-custom-768x1024-dpr1-astylar.json",
+        "sha256": "2a263082e47e7f53e8ccc058c1d39cd3d7fdcac53e8dc8d5ddaa621b490cf35e"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/paginator-custom-390x844-dpr2-reference.json",
+        "sha256": "3fb29701aa653dc8ab1a8a3929f78e986215a39aadb7ebbe10b78e6d7675efda"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/paginator-custom-390x844-dpr2-astylar.json",
+        "sha256": "4b6e89cfd6fa997a81bbae8285a84dd5fb4236a62ec1458da6ad8b087da6bc7d"
+      }
+    ],
+    "boundary": "Twelve static pairs per family and initial/current executed authoring. Not all AX properties,keyboard/event behavior,AT traversal,current whole rendering or case closure."
+  }),
+  Object.freeze({
+    "id": "fixture-timepicker-trigger-popup-metadata-substitution",
+    "file": "examples/material-showcase/src/app/astylar.component.ts",
+    "pattern": "      \\{ type: 'div', id: `\\$\\{family\\}-input-region`, class: 'field-input-region', children: \\[\\{ type: 'input', inputType: 'text', id: `\\$\\{family\\}-control`, class: `field-control\\$\\{family === 'timepicker' \\? ' picker-control' : ''\\}\\$\\{family === 'timepicker' && state\\.open \\? ' open' : ''\\}`, value: '', disabled: state\\.disabled, role: family === 'timepicker' \\? 'combobox' : undefined, ariaLabel: family === 'datepicker' \\? 'Due date' : 'Meeting time', ariaInvalid: state\\.error, ariaHaspopup: 'dialog', ariaExpanded: family === 'timepicker' \\? state\\.open : undefined, ariaControls: family === 'timepicker' \\? 'timepicker-options' : undefined, ariaActivedescendant: family === 'timepicker' && state\\.open \\? 'timepicker-option-0' : undefined \\}\\] \\},",
+    "introducedBy": "Initial2f440115 already authors dialog popup;7159b1d5 replaces presentation icon with the current differently named button lacking popup/expanded metadata. Historical runtime/motive unproven.",
+    "classification": "application-plugin-authoring-defect",
+    "owner": "Material timepicker combobox and toggle semantic metadata authoring",
+    "focusedProof": "node scripts/review-picker-semantic-inputs.mjs",
+    "history": [
+      {
+        "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24",
+        "observation": {
+          "select": {
+            "type": "input",
+            "inputType": "text",
+            "id": "select-control",
+            "class": "field-control select-control",
+            "value": "Team",
+            "readonly": true,
+            "disabled": false,
+            "role": "combobox",
+            "ariaLabel": "Plan",
+            "ariaInvalid": false,
+            "ariaExpanded": false,
+            "ariaControls": "select-options"
+          },
+          "timeInput": {
+            "type": "input",
+            "inputType": "text",
+            "id": "timepicker-control",
+            "class": "field-control picker-control",
+            "value": "",
+            "disabled": false,
+            "role": "combobox",
+            "ariaLabel": "Meeting time",
+            "ariaInvalid": false,
+            "ariaHaspopup": "dialog",
+            "ariaExpanded": false,
+            "ariaControls": "timepicker-options"
+          },
+          "timeIcon": {
+            "type": "span",
+            "id": "timepicker-icon",
+            "class": "picker-clock",
+            "role": "presentation",
+            "textContent": "◷"
+          },
+          "wholeMethodSha256": "f033583a668c3fa5df0ea0ac0d188730d0debc77ba6b73d82f116eb587805728",
+          "excerpts": {
+            "select": "        type: 'input', inputType: 'text', id: 'select-control', class: 'field-control select-control',",
+            "time": "      { type: 'input', inputType: 'text', id: `${family}-control`, class: `field-control${family === 'timepicker' ? ' picker-control' : ''}${family === 'timepicker' && state.open ? ' open' : ''}`, value: '', disabled: state.disabled, role: family === 'timepicker' ? 'combobox' : undefined, ariaLabel: family === 'datepicker' ? 'Due date' : 'Meeting time', ariaInvalid: state.error, ariaHaspopup: 'dialog', ariaExpanded: family === 'timepicker' ? state.open : undefined, ariaControls: family === 'timepicker' ? 'timepicker-options' : undefined, ariaActivedescendant: family === 'timepicker' && state.open ? 'timepicker-option-0' : undefined },"
+          }
+        }
+      },
+      {
+        "revision": "3c9306001df98a1423876f122057c5db56b63e2c",
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "8ec3cf91ea249914b31112f6c249d7cff70f2ad13873a754b51cd45e396f2aaa",
+        "observation": {
+          "select": {
+            "type": "input",
+            "inputType": "text",
+            "id": "select-control",
+            "class": "field-control select-control",
+            "value": "Team",
+            "readonly": true,
+            "disabled": false,
+            "role": "combobox",
+            "ariaLabel": "Plan",
+            "ariaInvalid": false,
+            "ariaExpanded": false,
+            "ariaControls": "select-options"
+          },
+          "timeInput": {
+            "type": "input",
+            "inputType": "text",
+            "id": "timepicker-control",
+            "class": "field-control picker-control",
+            "value": "",
+            "disabled": false,
+            "role": "combobox",
+            "ariaLabel": "Meeting time",
+            "ariaInvalid": false,
+            "ariaHaspopup": "dialog",
+            "ariaExpanded": false,
+            "ariaControls": "timepicker-options"
+          },
+          "timeIcon": {
+            "type": "span",
+            "id": "timepicker-icon",
+            "class": "picker-clock",
+            "role": "presentation",
+            "textContent": "◷"
+          },
+          "wholeMethodSha256": "90a6f2bb1c3b94e73a615a2bf3b01693e395cc537b1c4c5c4ca64e97204a2b46",
+          "excerpts": {
+            "select": "        type: 'input', inputType: 'text', id: 'select-control', class: 'field-control select-control',",
+            "time": "      { type: 'div', id: `${family}-input-region`, class: 'field-input-region', children: [{ type: 'input', inputType: 'text', id: `${family}-control`, class: `field-control${family === 'timepicker' ? ' picker-control' : ''}${family === 'timepicker' && state.open ? ' open' : ''}`, value: '', disabled: state.disabled, role: family === 'timepicker' ? 'combobox' : undefined, ariaLabel: family === 'datepicker' ? 'Due date' : 'Meeting time', ariaInvalid: state.error, ariaHaspopup: 'dialog', ariaExpanded: family === 'timepicker' ? state.open : undefined, ariaControls: family === 'timepicker' ? 'timepicker-options' : undefined, ariaActivedescendant: family === 'timepicker' && state.open ? 'timepicker-option-0' : undefined }] },"
+          }
+        }
+      },
+      {
+        "revision": "7159b1d5266ed4bc03b56581b8034526abae892b",
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "8835dc9714940ff55cb5d926a72df4dd6af5c3bf1683dec360926440c5120e0e",
+        "observation": {
+          "select": {
+            "type": "input",
+            "inputType": "text",
+            "id": "select-control",
+            "class": "field-control select-control",
+            "value": "Team",
+            "readonly": true,
+            "disabled": false,
+            "role": "combobox",
+            "ariaLabel": "Plan",
+            "ariaInvalid": false,
+            "ariaExpanded": false,
+            "ariaControls": "select-options"
+          },
+          "timeInput": {
+            "type": "input",
+            "inputType": "text",
+            "id": "timepicker-control",
+            "class": "field-control picker-control",
+            "value": "",
+            "disabled": false,
+            "role": "combobox",
+            "ariaLabel": "Meeting time",
+            "ariaInvalid": false,
+            "ariaHaspopup": "dialog",
+            "ariaExpanded": false,
+            "ariaControls": "timepicker-options"
+          },
+          "timeIcon": {
+            "type": "button",
+            "id": "timepicker-icon",
+            "class": "picker-clock",
+            "ariaLabel": "Open time options",
+            "value": "◷"
+          },
+          "wholeMethodSha256": "7bf8a0426b0b1a2dbf86720553306d1419ff987357fababeac6a483d9d156005",
+          "excerpts": {
+            "select": "        type: 'input', inputType: 'text', id: 'select-control', class: 'field-control select-control',",
+            "time": "      { type: 'div', id: `${family}-input-region`, class: 'field-input-region', children: [{ type: 'input', inputType: 'text', id: `${family}-control`, class: `field-control${family === 'timepicker' ? ' picker-control' : ''}${family === 'timepicker' && state.open ? ' open' : ''}`, value: '', disabled: state.disabled, role: family === 'timepicker' ? 'combobox' : undefined, ariaLabel: family === 'datepicker' ? 'Due date' : 'Meeting time', ariaInvalid: state.error, ariaHaspopup: 'dialog', ariaExpanded: family === 'timepicker' ? state.open : undefined, ariaControls: family === 'timepicker' ? 'timepicker-options' : undefined, ariaActivedescendant: family === 'timepicker' && state.open ? 'timepicker-option-0' : undefined }] },"
+          }
+        }
+      }
+    ],
+    "observation": {
+      "component": "timepicker",
+      "staticPairs": 12,
+      "property": "semantic control kind/popup metadata",
+      "reference": "input/listbox popup;toggle Open timepicker options+hasPopup listbox+expanded false",
+      "astylar": "input/dialog popup;toggle Open time options without popup/expanded metadata",
+      "stage": "authored SiteData before semantic projection"
+    },
+    "justification": "All12 actual static pairs expose metadata matching the unequal authored inputs. Complete current/initial and exact icon-introduction parent/child methods execute with these values. Public fields are supported by the fully bound current/installed/pinned bridge. This is not a reason to change datepicker metadata or merge time/date focus behavior.",
+    "recommendation": "Preserve native timepicker-specific popup kind and toggle metadata in future fixture correction,without changing datepicker behavior or tuning popup coordinates.",
+    "evidence": [
+      {
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd"
+      },
+      {
+        "file": "src/app/types/dom-element.ts",
+        "sha256": "72eef2f09d5cdacaab10db7328c40e5b4748c3f22640e2b40f0436a268351e83"
+      },
+      {
+        "file": "src/lib/astylar-semantic-bridge.ts",
+        "sha256": "1a0011d3530701d9a74dc37b9f5a14d0fed0742dfd8793c39f8628e06b6a5725"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/latest-report.json",
+        "sha256": "407b996d780c12d025b82bc2392781422818674c360c8dce73b5c23f669db987"
+      },
+      {
+        "file": "artifacts/material-parity/material-semantic-visibility-binding-retry-20261021.log",
+        "sha256": "2f130ff825b7885e0c7d0a35eaea849d6560bc486cb88ee033899966e7bc7aaf"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/timepicker-light-1440x1000-dpr1-reference.json",
+        "sha256": "a39bb8ee9467ded400de5311a7526a49cb1dd1d265ebcc1763e48443c686f431"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/timepicker-light-1440x1000-dpr1-astylar.json",
+        "sha256": "2e02586f4c2526906ed2f693f57f8f7dc9ba580e91b6f1ab8a5b7c8112a06f1f"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/timepicker-light-768x1024-dpr1-reference.json",
+        "sha256": "e1d984b90215ea3ad741dc6734752868a7100d41384147e977e308b6a1411d6b"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/timepicker-light-768x1024-dpr1-astylar.json",
+        "sha256": "975421c8c20e14041e17c27f591dbaf75ea35b7f7c1b0f361245503ed1029743"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/timepicker-light-390x844-dpr2-reference.json",
+        "sha256": "d69a14cc3f2d1810417403e29167754fff4847aa4d815a1ac74320e600a85272"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/timepicker-light-390x844-dpr2-astylar.json",
+        "sha256": "e4e9d77982046d4827221b386a5890d5efee81b04716d84865b368929676da7f"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/timepicker-dark-1440x1000-dpr1-reference.json",
+        "sha256": "3cd18dca7bf45a4cfdc430d7b8b59687553c79865e9cc37e07364cd81aae067b"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/timepicker-dark-1440x1000-dpr1-astylar.json",
+        "sha256": "8d525ee98e8e341b85a41224ecf40be263eae566a0ae103096bbfea848c5b682"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/timepicker-dark-768x1024-dpr1-reference.json",
+        "sha256": "4c7e7ec33385591401c1454cfce4df6dbf5d2cab45387ebf2c34256049a164ab"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/timepicker-dark-768x1024-dpr1-astylar.json",
+        "sha256": "6c3e8e603c52e332e5e82a2d6f69909da2072276ded5a3ba31ec094c395921b6"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/timepicker-dark-390x844-dpr2-reference.json",
+        "sha256": "78e747ec32d63f165488a64352819a9480e15fa022b05f7bbaac9263e34daf2b"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/timepicker-dark-390x844-dpr2-astylar.json",
+        "sha256": "f3e07e293eed69803d1a7f5668689241b4d2ba9a8f215ab949921dca6fe2f91d"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/timepicker-contrast-1440x1000-dpr1-reference.json",
+        "sha256": "fdaf3578ac7c835036fcae84c4f10a1a5e80701be2739b6fb08cab4168fce053"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/timepicker-contrast-1440x1000-dpr1-astylar.json",
+        "sha256": "c5df51735dfe50ec88b2c753cfe1583c2e0b3c7d1d9c694a1035db2e1d5fc802"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/timepicker-contrast-768x1024-dpr1-reference.json",
+        "sha256": "bbc93847e31e913b92008f8fab7c28d76d3ca36bff874431f1baa2e01420dd45"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/timepicker-contrast-768x1024-dpr1-astylar.json",
+        "sha256": "21e97ee8268909f9aeb29b6fe16bb3711f53577ff6a01b06afa7aba72d07012b"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/timepicker-contrast-390x844-dpr2-reference.json",
+        "sha256": "c744f66bd224f81c7443c9c27e3d27319263bc58b5c8918385b2f77a597f2b88"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/timepicker-contrast-390x844-dpr2-astylar.json",
+        "sha256": "2e744575010181963150ea7dfc9e8e12f18431b4e05817de7a5d5dcfddf5abe8"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/timepicker-custom-1440x1000-dpr1-reference.json",
+        "sha256": "9e371cbe8545eea80cd23e1fa202fde54835cea3ae5838a9c876f5da15e49be5"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/timepicker-custom-1440x1000-dpr1-astylar.json",
+        "sha256": "dadc5356615b8d380c119167e80ae908e8152ddba64d5a607de42dcec4775789"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/timepicker-custom-768x1024-dpr1-reference.json",
+        "sha256": "e6287563b5523adb4059a0723c3e36dab3cd543da2c709cd4fffd8fdbb7785fe"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/timepicker-custom-768x1024-dpr1-astylar.json",
+        "sha256": "c35d5aa01a12ffbce270bf1a6fbd6c005b7bd932f91e6681c0472156cca423b7"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/timepicker-custom-390x844-dpr2-reference.json",
+        "sha256": "7c8ceaf29cb7477af7d3216aa9be9e1e0ac50ad2cdeee5409fef5e3552845af6"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/timepicker-custom-390x844-dpr2-astylar.json",
+        "sha256": "6781b9cbceecc7e6b2625e9719da9cb358659386299958e090bfa8321005b00b"
+      }
+    ],
+    "boundary": "Twelve static pairs per family,whole authored methods and bounded native Chromium diagnostic. Not all AX relationships,interaction/AT behavior,current whole rendering or case closure."
+  }),
+  Object.freeze({
+    "id": "fixture-select-readonly-text-input-replaces-noneditable-host",
+    "file": "examples/material-showcase/src/app/astylar.component.ts",
+    "pattern": "        type: 'input', inputType: 'text', id: 'select-control', class: 'field-control select-control',",
+    "introducedBy": "Initial2f440115 already uses readonly text input;historical runtime/motive unproven.",
+    "classification": "application-plugin-authoring-defect",
+    "owner": "Material select control semantic element authoring",
+    "focusedProof": "node scripts/review-picker-semantic-inputs.mjs",
+    "history": [
+      {
+        "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24",
+        "observation": {
+          "select": {
+            "type": "input",
+            "inputType": "text",
+            "id": "select-control",
+            "class": "field-control select-control",
+            "value": "Team",
+            "readonly": true,
+            "disabled": false,
+            "role": "combobox",
+            "ariaLabel": "Plan",
+            "ariaInvalid": false,
+            "ariaExpanded": false,
+            "ariaControls": "select-options"
+          },
+          "timeInput": {
+            "type": "input",
+            "inputType": "text",
+            "id": "timepicker-control",
+            "class": "field-control picker-control",
+            "value": "",
+            "disabled": false,
+            "role": "combobox",
+            "ariaLabel": "Meeting time",
+            "ariaInvalid": false,
+            "ariaHaspopup": "dialog",
+            "ariaExpanded": false,
+            "ariaControls": "timepicker-options"
+          },
+          "timeIcon": {
+            "type": "span",
+            "id": "timepicker-icon",
+            "class": "picker-clock",
+            "role": "presentation",
+            "textContent": "◷"
+          },
+          "wholeMethodSha256": "f033583a668c3fa5df0ea0ac0d188730d0debc77ba6b73d82f116eb587805728",
+          "excerpts": {
+            "select": "        type: 'input', inputType: 'text', id: 'select-control', class: 'field-control select-control',",
+            "time": "      { type: 'input', inputType: 'text', id: `${family}-control`, class: `field-control${family === 'timepicker' ? ' picker-control' : ''}${family === 'timepicker' && state.open ? ' open' : ''}`, value: '', disabled: state.disabled, role: family === 'timepicker' ? 'combobox' : undefined, ariaLabel: family === 'datepicker' ? 'Due date' : 'Meeting time', ariaInvalid: state.error, ariaHaspopup: 'dialog', ariaExpanded: family === 'timepicker' ? state.open : undefined, ariaControls: family === 'timepicker' ? 'timepicker-options' : undefined, ariaActivedescendant: family === 'timepicker' && state.open ? 'timepicker-option-0' : undefined },"
+          }
+        }
+      },
+      {
+        "revision": "3c9306001df98a1423876f122057c5db56b63e2c",
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "8ec3cf91ea249914b31112f6c249d7cff70f2ad13873a754b51cd45e396f2aaa",
+        "observation": {
+          "select": {
+            "type": "input",
+            "inputType": "text",
+            "id": "select-control",
+            "class": "field-control select-control",
+            "value": "Team",
+            "readonly": true,
+            "disabled": false,
+            "role": "combobox",
+            "ariaLabel": "Plan",
+            "ariaInvalid": false,
+            "ariaExpanded": false,
+            "ariaControls": "select-options"
+          },
+          "timeInput": {
+            "type": "input",
+            "inputType": "text",
+            "id": "timepicker-control",
+            "class": "field-control picker-control",
+            "value": "",
+            "disabled": false,
+            "role": "combobox",
+            "ariaLabel": "Meeting time",
+            "ariaInvalid": false,
+            "ariaHaspopup": "dialog",
+            "ariaExpanded": false,
+            "ariaControls": "timepicker-options"
+          },
+          "timeIcon": {
+            "type": "span",
+            "id": "timepicker-icon",
+            "class": "picker-clock",
+            "role": "presentation",
+            "textContent": "◷"
+          },
+          "wholeMethodSha256": "90a6f2bb1c3b94e73a615a2bf3b01693e395cc537b1c4c5c4ca64e97204a2b46",
+          "excerpts": {
+            "select": "        type: 'input', inputType: 'text', id: 'select-control', class: 'field-control select-control',",
+            "time": "      { type: 'div', id: `${family}-input-region`, class: 'field-input-region', children: [{ type: 'input', inputType: 'text', id: `${family}-control`, class: `field-control${family === 'timepicker' ? ' picker-control' : ''}${family === 'timepicker' && state.open ? ' open' : ''}`, value: '', disabled: state.disabled, role: family === 'timepicker' ? 'combobox' : undefined, ariaLabel: family === 'datepicker' ? 'Due date' : 'Meeting time', ariaInvalid: state.error, ariaHaspopup: 'dialog', ariaExpanded: family === 'timepicker' ? state.open : undefined, ariaControls: family === 'timepicker' ? 'timepicker-options' : undefined, ariaActivedescendant: family === 'timepicker' && state.open ? 'timepicker-option-0' : undefined }] },"
+          }
+        }
+      },
+      {
+        "revision": "7159b1d5266ed4bc03b56581b8034526abae892b",
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "8835dc9714940ff55cb5d926a72df4dd6af5c3bf1683dec360926440c5120e0e",
+        "observation": {
+          "select": {
+            "type": "input",
+            "inputType": "text",
+            "id": "select-control",
+            "class": "field-control select-control",
+            "value": "Team",
+            "readonly": true,
+            "disabled": false,
+            "role": "combobox",
+            "ariaLabel": "Plan",
+            "ariaInvalid": false,
+            "ariaExpanded": false,
+            "ariaControls": "select-options"
+          },
+          "timeInput": {
+            "type": "input",
+            "inputType": "text",
+            "id": "timepicker-control",
+            "class": "field-control picker-control",
+            "value": "",
+            "disabled": false,
+            "role": "combobox",
+            "ariaLabel": "Meeting time",
+            "ariaInvalid": false,
+            "ariaHaspopup": "dialog",
+            "ariaExpanded": false,
+            "ariaControls": "timepicker-options"
+          },
+          "timeIcon": {
+            "type": "button",
+            "id": "timepicker-icon",
+            "class": "picker-clock",
+            "ariaLabel": "Open time options",
+            "value": "◷"
+          },
+          "wholeMethodSha256": "7bf8a0426b0b1a2dbf86720553306d1419ff987357fababeac6a483d9d156005",
+          "excerpts": {
+            "select": "        type: 'input', inputType: 'text', id: 'select-control', class: 'field-control select-control',",
+            "time": "      { type: 'div', id: `${family}-input-region`, class: 'field-input-region', children: [{ type: 'input', inputType: 'text', id: `${family}-control`, class: `field-control${family === 'timepicker' ? ' picker-control' : ''}${family === 'timepicker' && state.open ? ' open' : ''}`, value: '', disabled: state.disabled, role: family === 'timepicker' ? 'combobox' : undefined, ariaLabel: family === 'datepicker' ? 'Due date' : 'Meeting time', ariaInvalid: state.error, ariaHaspopup: 'dialog', ariaExpanded: family === 'timepicker' ? state.open : undefined, ariaControls: family === 'timepicker' ? 'timepicker-options' : undefined, ariaActivedescendant: family === 'timepicker' && state.open ? 'timepicker-option-0' : undefined }] },"
+          }
+        }
+      }
+    ],
+    "observation": {
+      "component": "select",
+      "staticPairs": 12,
+      "property": "semantic control kind/popup metadata",
+      "reference": "non-text MAT-SELECT combobox host;no AX editable property",
+      "astylar": "readonly text INPUT combobox;AX editable plaintext",
+      "stage": "authored SiteData before semantic projection"
+    },
+    "justification": "All12 paired backend controls have different semantic element kinds before projection. Candidate readonly is present in actual DOM,not dropped. A native same-Chromium control reproduces editable=plaintext on readonly text input while typed X does not change its value;generic non-text combobox has no editable property. Do not infer a readonly bridge failure from this AX token. Known core readonly-keyboard defaults remain a distinct finding;this probe does not test AstylarUI keyboard behavior.",
+    "recommendation": "Review reference-equivalent noneditable semantic control composition at the fixture boundary in future implementation. Do not remove readonly,normalize away AX differences or change core editable reporting to mimic a different authored element.",
+    "evidence": [
+      {
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd"
+      },
+      {
+        "file": "src/app/types/dom-element.ts",
+        "sha256": "72eef2f09d5cdacaab10db7328c40e5b4748c3f22640e2b40f0436a268351e83"
+      },
+      {
+        "file": "src/lib/astylar-semantic-bridge.ts",
+        "sha256": "1a0011d3530701d9a74dc37b9f5a14d0fed0742dfd8793c39f8628e06b6a5725"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/latest-report.json",
+        "sha256": "407b996d780c12d025b82bc2392781422818674c360c8dce73b5c23f669db987"
+      },
+      {
+        "file": "artifacts/material-parity/material-semantic-visibility-binding-retry-20261021.log",
+        "sha256": "2f130ff825b7885e0c7d0a35eaea849d6560bc486cb88ee033899966e7bc7aaf"
+      },
+      {
+        "file": "artifacts/material-parity/readonly-combobox-native-probe-20261022.log",
+        "sha256": "a17e34c1af636aa40c829e805dbee0d4b04cebb1cbe8cdd02484710bef3c73b7"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/select-light-1440x1000-dpr1-reference.json",
+        "sha256": "b1a3a2bc9720ac31f02d8f64fb20487075e5466f3fe51016cb22401773de8164"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/select-light-1440x1000-dpr1-astylar.json",
+        "sha256": "8e9a714397e93251c11f4f6dae40640bfb3d58278e941d4787014d7de2469721"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/select-light-768x1024-dpr1-reference.json",
+        "sha256": "0b1aa6508d736fbe55f1e743e5bab311a2fc65b4e5c4561d3ae7adf31157f007"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/select-light-768x1024-dpr1-astylar.json",
+        "sha256": "dd27151a65a3dd22b767f27d0545269645ee26a68ab98d911490763aea74b66b"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/select-light-390x844-dpr2-reference.json",
+        "sha256": "8e4a6b763ffdc2f1ba2ddb3b698a516f9c9ebbcf2d0827ca4ebfc195eded5723"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/select-light-390x844-dpr2-astylar.json",
+        "sha256": "5d85da9d2a43ab1ac5fe07f7362708b551c5dd4f91af5bef8fa723b06e9d65cc"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/select-dark-1440x1000-dpr1-reference.json",
+        "sha256": "5bc316bc12d8abcdf99d5c7e2bdb14665977134090caabddb348dcc8834fa1db"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/select-dark-1440x1000-dpr1-astylar.json",
+        "sha256": "718c2d9f63d6491f4861829d65d0a524a0ba44b73754582f039f59a7127f3081"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/select-dark-768x1024-dpr1-reference.json",
+        "sha256": "f286dc888013d4c21eca7ca70cae722a4e1267d745164e70c191477b562305a2"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/select-dark-768x1024-dpr1-astylar.json",
+        "sha256": "0b5c564d1587b6d0a6401c5f561e053589fa57fc7d5bfcbeee367443466bafef"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/select-dark-390x844-dpr2-reference.json",
+        "sha256": "46d943fb5d44d55e5c0b841db029fdeefee1720fe0308a651dfb3f0311142cb7"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/select-dark-390x844-dpr2-astylar.json",
+        "sha256": "842d33a32253fb8651ada4641abf1a5e3fcff3308ae0b85ab6540dc2f86eaf91"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/select-contrast-1440x1000-dpr1-reference.json",
+        "sha256": "8e9b0b6bab273c5cf2d5029b1879bd36e96d5be8b8e721f88d41c22270e56834"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/select-contrast-1440x1000-dpr1-astylar.json",
+        "sha256": "cf3443bed26f8c1426a738eeaa17b801519da2047dcf0d1c4a65b4784b7d122e"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/select-contrast-768x1024-dpr1-reference.json",
+        "sha256": "e5799dad7e828b6f0fbe3280751759b2f1330b2e77ca7cfcacb95b76d461aca8"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/select-contrast-768x1024-dpr1-astylar.json",
+        "sha256": "f252a7725aeb1fd0dd11620f6034cdd3f5c44c82c3a4ff8c6fb530236cbe8559"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/select-contrast-390x844-dpr2-reference.json",
+        "sha256": "27f59e7b73ce14cbb5e7bd0754d38279c072aa6a7c1478693f91a58aac54f327"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/select-contrast-390x844-dpr2-astylar.json",
+        "sha256": "ea43049ea914401215ce09a3b3d465aeb461626e69f17778be4b01c5f87bddb6"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/select-custom-1440x1000-dpr1-reference.json",
+        "sha256": "5bf295a163b5c92da9dcebe611b01be15aec8a8bf8f019402eaeaf36f99fbc6e"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/select-custom-1440x1000-dpr1-astylar.json",
+        "sha256": "5d01a08293f644573302c901317642dec4e1f812f38fbcbb9e78a3ed8e289f48"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/select-custom-768x1024-dpr1-reference.json",
+        "sha256": "251501fb4395e4e5b2e17cd3c85c8bf4c5a1ffa38e1ecbe09c9e9c9862176942"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/select-custom-768x1024-dpr1-astylar.json",
+        "sha256": "71852bd3f0c20faaf17cdb2521ea7498d57a428c1b661090c8f5d8d716a598fc"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/select-custom-390x844-dpr2-reference.json",
+        "sha256": "f8941cbc8d1062fea4d8ba6d0ab8848157bdc882b6741bbe742285116c1e9799"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/select-custom-390x844-dpr2-astylar.json",
+        "sha256": "b08bb035dbc8de3c383312d8e5f4733cd14036b41dad65b561bce080921b8caf"
+      }
+    ],
+    "boundary": "Twelve static pairs per family,whole authored methods and bounded native Chromium diagnostic. Not all AX relationships,interaction/AT behavior,current whole rendering or case closure."
+  }),
+  Object.freeze({
+    "id": "fixture-radio-native-input-group-replaced-by-role-divs",
+    "file": "examples/material-showcase/src/app/astylar.component.ts",
+    "pattern": "      \\{ type: 'div', id: 'radio-solo', class: 'radio-option', role: 'radio', tabindex: state\\.selected \\? -1 : 0, ariaChecked: !state\\.selected, ariaDisabled: state\\.disabled, children: \\[\\{ type: 'span', id: 'radio-solo-state-layer', class: `radio-state-layer\\$\\{state\\.selected \\? '' : ' selected'\\}` \\}, \\{ type: 'span', id: 'radio-solo-ring', class: `radio-ring\\$\\{state\\.selected \\? '' : ' selected'\\}`, children: state\\.selected \\? \\[\\] : \\[\\{ type: 'span', id: 'radio-solo-dot', class: 'radio-dot' \\}\\] \\}, \\{ type: 'span', id: 'radio-solo-label', class: 'radio-label', textContent: 'Solo' \\}\\] \\},",
+    "introducedBy": "Initial2f440115 already authors the role-DIV representation;historical runtime/motive unproven.",
+    "classification": "application-plugin-authoring-defect",
+    "owner": "Material radio native input/group/value and label composition authoring",
+    "focusedProof": "node scripts/review-checkable-semantic-inputs.mjs",
+    "history": [
+      {
+        "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24",
+        "observation": {
+          "states": [
+            {
+              "family": "checkbox",
+              "selected": false,
+              "controls": [
+                {
+                  "type": "input",
+                  "inputType": "checkbox",
+                  "id": "checkbox-primary",
+                  "checked": false,
+                  "disabled": false,
+                  "ariaLabel": "Include archived"
+                }
+              ]
+            },
+            {
+              "family": "radio",
+              "selected": false,
+              "controls": [
+                {
+                  "type": "div",
+                  "id": "radio-solo",
+                  "class": "radio-option",
+                  "role": "radio",
+                  "tabindex": 0,
+                  "ariaChecked": true,
+                  "ariaDisabled": false
+                },
+                {
+                  "type": "div",
+                  "id": "radio-team",
+                  "class": "radio-option",
+                  "role": "radio",
+                  "tabindex": -1,
+                  "ariaChecked": false,
+                  "ariaDisabled": false
+                }
+              ]
+            },
+            {
+              "family": "slide-toggle",
+              "selected": false,
+              "controls": [
+                {
+                  "type": "div",
+                  "id": "slide-toggle-primary",
+                  "role": "switch",
+                  "tabindex": 0,
+                  "ariaLabel": "Automatic updates",
+                  "ariaChecked": false,
+                  "ariaDisabled": false
+                }
+              ]
+            },
+            {
+              "family": "checkbox",
+              "selected": true,
+              "controls": [
+                {
+                  "type": "input",
+                  "inputType": "checkbox",
+                  "id": "checkbox-primary",
+                  "checked": true,
+                  "disabled": false,
+                  "ariaLabel": "Include archived"
+                }
+              ]
+            },
+            {
+              "family": "radio",
+              "selected": true,
+              "controls": [
+                {
+                  "type": "div",
+                  "id": "radio-solo",
+                  "class": "radio-option",
+                  "role": "radio",
+                  "tabindex": -1,
+                  "ariaChecked": false,
+                  "ariaDisabled": false
+                },
+                {
+                  "type": "div",
+                  "id": "radio-team",
+                  "class": "radio-option",
+                  "role": "radio",
+                  "tabindex": 0,
+                  "ariaChecked": true,
+                  "ariaDisabled": false
+                }
+              ]
+            },
+            {
+              "family": "slide-toggle",
+              "selected": true,
+              "controls": [
+                {
+                  "type": "div",
+                  "id": "slide-toggle-primary",
+                  "role": "switch",
+                  "tabindex": 0,
+                  "ariaLabel": "Automatic updates",
+                  "ariaChecked": true,
+                  "ariaDisabled": false
+                }
+              ]
+            }
+          ],
+          "wholeMethodSha256": "f033583a668c3fa5df0ea0ac0d188730d0debc77ba6b73d82f116eb587805728",
+          "wholeHelperHashes": [],
+          "excerpts": {
+            "radio": "      { type: 'div', id: 'radio-solo', class: 'radio-option', role: 'radio', tabindex: state.selected ? -1 : 0, ariaChecked: !state.selected, ariaDisabled: state.disabled, children: [{ type: 'span', id: 'radio-solo-ring', class: `radio-ring${state.selected ? '' : ' selected'}`, children: state.selected ? [] : [{ type: 'span', id: 'radio-solo-dot', class: 'radio-dot' }] }, { type: 'span', id: 'radio-solo-label', class: 'radio-label', textContent: 'Solo' }] },",
+            "slide-toggle": "    if (family === 'slide-toggle') return [{ type: 'div', id: 'slide-toggle-primary', role: 'switch', tabindex: state.disabled ? -1 : 0, ariaLabel: 'Automatic updates', ariaChecked: state.selected, ariaDisabled: state.disabled, children: [{ type: 'span', id: 'slide-toggle-track', class: 'switch-track', children: [{ type: 'span', id: 'slide-toggle-thumb', class: 'switch-thumb', textContent: state.selected ? '✓' : '' }] }, { type: 'span', id: 'slide-toggle-label', class: 'switch-label', textContent: 'Automatic updates' }] }];"
+          }
+        }
+      }
+    ],
+    "observation": {
+      "component": "radio",
+      "staticPairs": 12,
+      "property": "native semantic control and label/form metadata",
+      "reference": "native radio inputs with shared name,solo/team values,HTML labels and explicit aria-invalid=false",
+      "astylar": "role-radio DIVs with ariaChecked,no form name/value and content naming",
+      "stage": "authored control kind and metadata before projection"
+    },
+    "justification": "All12 enabled static pairs preserve names/checked state but expose the different primitive,validity and label association inputs. Complete current/initial family methods execute both selected states with actual selectionMark helper when present. Supported native types/control fields and fully bound current/installed/pinned projection distinguish application composition from a proven core projection failure. Native defaults and explicit reference aria-invalid metadata remain recorded separately;no form-submission,disabled-focus or keyboard outcome is inferred from static AX.",
+    "recommendation": "Preserve reference-equivalent native input/group/value/label intent in future fixture correction. Retain the separate public native-checkable value-label core failure rather than masking it with role-DIV authoring or fabricated ARIA defaults.",
+    "evidence": [
+      {
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd"
+      },
+      {
+        "file": "src/app/types/dom-element.ts",
+        "sha256": "72eef2f09d5cdacaab10db7328c40e5b4748c3f22640e2b40f0436a268351e83"
+      },
+      {
+        "file": "src/lib/astylar-semantic-bridge.ts",
+        "sha256": "1a0011d3530701d9a74dc37b9f5a14d0fed0742dfd8793c39f8628e06b6a5725"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/latest-report.json",
+        "sha256": "407b996d780c12d025b82bc2392781422818674c360c8dce73b5c23f669db987"
+      },
+      {
+        "file": "artifacts/material-parity/material-semantic-visibility-binding-retry-20261021.log",
+        "sha256": "2f130ff825b7885e0c7d0a35eaea849d6560bc486cb88ee033899966e7bc7aaf"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/radio-light-1440x1000-dpr1-reference.json",
+        "sha256": "24277201818809655b3431a731c1d0f7c89a7e7a0fed399dc78daa1957c52707"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/radio-light-1440x1000-dpr1-astylar.json",
+        "sha256": "269f33cac56463d195a8f6fd2a9f543ea44ddbfd5a8bb6aac9842819b37e28b1"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/radio-light-768x1024-dpr1-reference.json",
+        "sha256": "95f5d127a40721d8e27cd38d2d656277d2d422a8ae16ac56aa5aa22df6d5399a"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/radio-light-768x1024-dpr1-astylar.json",
+        "sha256": "8acdcca526350630ed8f433165d8b6675962cbeb8410ee4ac58b3b0bab59595f"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/radio-light-390x844-dpr2-reference.json",
+        "sha256": "2e9646344282dc010a3e330c8cd3f6ce0893512402f8ac1a2cc6ce3e8dd31a8e"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/radio-light-390x844-dpr2-astylar.json",
+        "sha256": "888e224863f5f6b6ab1ef8a28030480676b244e5de778b8fb4858790aac56e94"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/radio-dark-1440x1000-dpr1-reference.json",
+        "sha256": "bf99210dde0c6cb744473fd6a4842489b116de5041573b7b5bb42c15ab95d8a9"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/radio-dark-1440x1000-dpr1-astylar.json",
+        "sha256": "05e707c74a7ddd5627cb6343627456a90647c455a525508abbee51665a6d3fe9"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/radio-dark-768x1024-dpr1-reference.json",
+        "sha256": "eb4ad6773b9a400ee7486e0cac1970ef0e54e7eeb26d42480bb241e644a57111"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/radio-dark-768x1024-dpr1-astylar.json",
+        "sha256": "258209d88f2b71e84a14b6fb587224b6639299438cf1f53755c5c4fac160213b"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/radio-dark-390x844-dpr2-reference.json",
+        "sha256": "2cf2abeb99fea8e647afb1ff4515f064afcdabb68aa479da9786aaaa267cd3ed"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/radio-dark-390x844-dpr2-astylar.json",
+        "sha256": "63095661463e09f14f71ba11858b273ca1ff9d39c71c80c8c5dab8ca43351c88"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/radio-contrast-1440x1000-dpr1-reference.json",
+        "sha256": "5be2796e9b552220e46826e38c2cac891f0bc14ae8814a374e7acee89c84a0a7"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/radio-contrast-1440x1000-dpr1-astylar.json",
+        "sha256": "892418438b170599ad390a4780db98c2971da969333d57de49fbf74bd09d94b6"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/radio-contrast-768x1024-dpr1-reference.json",
+        "sha256": "9b2d645ff5679cc2009c394b090189c5745518d3444021f9169f16b98e3a8bde"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/radio-contrast-768x1024-dpr1-astylar.json",
+        "sha256": "8e15622ee7732289549f33a655c9dea8a204ba9a2bb1ee1b1ee337c1a8e14356"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/radio-contrast-390x844-dpr2-reference.json",
+        "sha256": "7757599b7bd40e8313bcab4353387a0ff62b6d2c5823b9aa5b490f9f853617f2"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/radio-contrast-390x844-dpr2-astylar.json",
+        "sha256": "dfaec37900b44492b4025acc789c8daff5a5d4abdd01e26a2788ed6f6adca4b3"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/radio-custom-1440x1000-dpr1-reference.json",
+        "sha256": "22f062c71ac1069aa6903f838e7352154bfbe48a1a28e63166a407e0c3d24ddd"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/radio-custom-1440x1000-dpr1-astylar.json",
+        "sha256": "f0e157dd163dcfe70582690c1a2b5b5b992ca5c5c0e15b29b665afe4581daf77"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/radio-custom-768x1024-dpr1-reference.json",
+        "sha256": "30403ba4b76af861414afb20f6478271eee6380f98a1046be73070bbef1ffa0b"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/radio-custom-768x1024-dpr1-astylar.json",
+        "sha256": "8053414c3f1d92b2f93eafc279bd697408414de10ef6ce678190d5ac5f182da0"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/radio-custom-390x844-dpr2-reference.json",
+        "sha256": "6ea9835d4d0f7828c21558fcc69ae25d3fb11280bed49a0a5daaff11fafe9660"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/radio-custom-390x844-dpr2-astylar.json",
+        "sha256": "2677a03abafb17b3c8bf194689533a49b925ae83e0184a27091bc7bcfd8ded31"
+      }
+    ],
+    "boundary": "Twelve enabled static pairs per new finding and initial/current executed authoring. Checkbox reuses its existing cause/history separately. Not full control/form behavior,all disabled states,AT,paint,current whole rendering or case closure."
+  }),
+  Object.freeze({
+    "id": "fixture-switch-native-button-replaced-by-role-div",
+    "file": "examples/material-showcase/src/app/astylar.component.ts",
+    "pattern": "    if \\(family === 'slide-toggle'\\) return \\[\\{ type: 'div', id: 'slide-toggle-primary', role: 'switch', tabindex: state\\.disabled \\? -1 : 0, ariaLabel: 'Automatic updates', ariaChecked: state\\.selected, ariaDisabled: state\\.disabled, children: \\[",
+    "introducedBy": "Initial2f440115 already authors the role-DIV representation;historical runtime/motive unproven.",
+    "classification": "application-plugin-authoring-defect",
+    "owner": "Material switch native button and label composition authoring",
+    "focusedProof": "node scripts/review-checkable-semantic-inputs.mjs",
+    "history": [
+      {
+        "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24",
+        "observation": {
+          "states": [
+            {
+              "family": "checkbox",
+              "selected": false,
+              "controls": [
+                {
+                  "type": "input",
+                  "inputType": "checkbox",
+                  "id": "checkbox-primary",
+                  "checked": false,
+                  "disabled": false,
+                  "ariaLabel": "Include archived"
+                }
+              ]
+            },
+            {
+              "family": "radio",
+              "selected": false,
+              "controls": [
+                {
+                  "type": "div",
+                  "id": "radio-solo",
+                  "class": "radio-option",
+                  "role": "radio",
+                  "tabindex": 0,
+                  "ariaChecked": true,
+                  "ariaDisabled": false
+                },
+                {
+                  "type": "div",
+                  "id": "radio-team",
+                  "class": "radio-option",
+                  "role": "radio",
+                  "tabindex": -1,
+                  "ariaChecked": false,
+                  "ariaDisabled": false
+                }
+              ]
+            },
+            {
+              "family": "slide-toggle",
+              "selected": false,
+              "controls": [
+                {
+                  "type": "div",
+                  "id": "slide-toggle-primary",
+                  "role": "switch",
+                  "tabindex": 0,
+                  "ariaLabel": "Automatic updates",
+                  "ariaChecked": false,
+                  "ariaDisabled": false
+                }
+              ]
+            },
+            {
+              "family": "checkbox",
+              "selected": true,
+              "controls": [
+                {
+                  "type": "input",
+                  "inputType": "checkbox",
+                  "id": "checkbox-primary",
+                  "checked": true,
+                  "disabled": false,
+                  "ariaLabel": "Include archived"
+                }
+              ]
+            },
+            {
+              "family": "radio",
+              "selected": true,
+              "controls": [
+                {
+                  "type": "div",
+                  "id": "radio-solo",
+                  "class": "radio-option",
+                  "role": "radio",
+                  "tabindex": -1,
+                  "ariaChecked": false,
+                  "ariaDisabled": false
+                },
+                {
+                  "type": "div",
+                  "id": "radio-team",
+                  "class": "radio-option",
+                  "role": "radio",
+                  "tabindex": 0,
+                  "ariaChecked": true,
+                  "ariaDisabled": false
+                }
+              ]
+            },
+            {
+              "family": "slide-toggle",
+              "selected": true,
+              "controls": [
+                {
+                  "type": "div",
+                  "id": "slide-toggle-primary",
+                  "role": "switch",
+                  "tabindex": 0,
+                  "ariaLabel": "Automatic updates",
+                  "ariaChecked": true,
+                  "ariaDisabled": false
+                }
+              ]
+            }
+          ],
+          "wholeMethodSha256": "f033583a668c3fa5df0ea0ac0d188730d0debc77ba6b73d82f116eb587805728",
+          "wholeHelperHashes": [],
+          "excerpts": {
+            "radio": "      { type: 'div', id: 'radio-solo', class: 'radio-option', role: 'radio', tabindex: state.selected ? -1 : 0, ariaChecked: !state.selected, ariaDisabled: state.disabled, children: [{ type: 'span', id: 'radio-solo-ring', class: `radio-ring${state.selected ? '' : ' selected'}`, children: state.selected ? [] : [{ type: 'span', id: 'radio-solo-dot', class: 'radio-dot' }] }, { type: 'span', id: 'radio-solo-label', class: 'radio-label', textContent: 'Solo' }] },",
+            "slide-toggle": "    if (family === 'slide-toggle') return [{ type: 'div', id: 'slide-toggle-primary', role: 'switch', tabindex: state.disabled ? -1 : 0, ariaLabel: 'Automatic updates', ariaChecked: state.selected, ariaDisabled: state.disabled, children: [{ type: 'span', id: 'slide-toggle-track', class: 'switch-track', children: [{ type: 'span', id: 'slide-toggle-thumb', class: 'switch-thumb', textContent: state.selected ? '✓' : '' }] }, { type: 'span', id: 'slide-toggle-label', class: 'switch-label', textContent: 'Automatic updates' }] }];"
+          }
+        }
+      }
+    ],
+    "observation": {
+      "component": "slide-toggle",
+      "staticPairs": 12,
+      "property": "native semantic control and label/form metadata",
+      "reference": "native BUTTON role switch with associated HTML label",
+      "astylar": "DIV role switch with direct ariaLabel and ariaChecked",
+      "stage": "authored control kind and metadata before projection"
+    },
+    "justification": "All12 enabled static pairs preserve names/checked state but expose the different primitive,validity and label association inputs. Complete current/initial family methods execute both selected states with actual selectionMark helper when present. Supported native types/control fields and fully bound current/installed/pinned projection distinguish application composition from a proven core projection failure. Native defaults and explicit reference aria-invalid metadata remain recorded separately;no form-submission,disabled-focus or keyboard outcome is inferred from static AX.",
+    "recommendation": "Preserve reference-equivalent button/label intent in future fixture correction. Do not turn generic role widgets into native form controls through core special cases or add offsets to hide the structural input difference.",
+    "evidence": [
+      {
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd"
+      },
+      {
+        "file": "src/app/types/dom-element.ts",
+        "sha256": "72eef2f09d5cdacaab10db7328c40e5b4748c3f22640e2b40f0436a268351e83"
+      },
+      {
+        "file": "src/lib/astylar-semantic-bridge.ts",
+        "sha256": "1a0011d3530701d9a74dc37b9f5a14d0fed0742dfd8793c39f8628e06b6a5725"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/latest-report.json",
+        "sha256": "407b996d780c12d025b82bc2392781422818674c360c8dce73b5c23f669db987"
+      },
+      {
+        "file": "artifacts/material-parity/material-semantic-visibility-binding-retry-20261021.log",
+        "sha256": "2f130ff825b7885e0c7d0a35eaea849d6560bc486cb88ee033899966e7bc7aaf"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/slide-toggle-light-1440x1000-dpr1-reference.json",
+        "sha256": "94dba97c05ab9c695c99cb0940581ce8529415fccac47470ac0d0ad4323e2b94"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/slide-toggle-light-1440x1000-dpr1-astylar.json",
+        "sha256": "f423d8a969e70dd3a96227567f6db8c0eaea68274d5ec6c2823fd23d6504a3f6"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/slide-toggle-light-768x1024-dpr1-reference.json",
+        "sha256": "6de88cdbca7534ee2fdf92e1bd0c08d4c4e9f13b3c05f0b55bf839eace472467"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/slide-toggle-light-768x1024-dpr1-astylar.json",
+        "sha256": "1a25c8b5698dab01afedf7810bbe7d4956cdbaad39035d996e956821430ba11e"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/slide-toggle-light-390x844-dpr2-reference.json",
+        "sha256": "6ce5eab92f6dbe3e7f8d4ffe28d84012f1567c68a639d07ab91c3be98ba0d5b1"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/slide-toggle-light-390x844-dpr2-astylar.json",
+        "sha256": "29eed3d3991a4145044b2cc6e07ccaa501115cea75c4362bd8df3fc5551d273a"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/slide-toggle-dark-1440x1000-dpr1-reference.json",
+        "sha256": "2e454381c17c6dccd6aba2d9ba396a2bbf330c310a66d1ce4d24f53e7d4a6afb"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/slide-toggle-dark-1440x1000-dpr1-astylar.json",
+        "sha256": "709fbd5988f74ef03f12caa47cd3415669afe8330895a481285dcddd93fd6fbe"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/slide-toggle-dark-768x1024-dpr1-reference.json",
+        "sha256": "4b0e3cf0a3efbc7b7afb4d69bd07063c51511f683f1d61e9f0d9c62b9b4d1feb"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/slide-toggle-dark-768x1024-dpr1-astylar.json",
+        "sha256": "b7e1691d0d1cd31bdf295a40dfe2554d6685b82976ff5c1b9a2f185479cebd34"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/slide-toggle-dark-390x844-dpr2-reference.json",
+        "sha256": "145b5e6e04944b544420c6f39471d8306fd25176bbf638752d50ddc2ebabc556"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/slide-toggle-dark-390x844-dpr2-astylar.json",
+        "sha256": "b0198b0cbffa0a94f647927767bd604c126ecd004d1ba848e5ba4abdafce125b"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/slide-toggle-contrast-1440x1000-dpr1-reference.json",
+        "sha256": "b420851e60dfeeac533d74aaef69a9f903f4174a8394ef3436bbf3a52a9f5511"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/slide-toggle-contrast-1440x1000-dpr1-astylar.json",
+        "sha256": "f69c972cd259885c610e770324981568b01311b69f456cef35dcb2322d4558e8"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/slide-toggle-contrast-768x1024-dpr1-reference.json",
+        "sha256": "2a3befe927978eafc93e4e6ac3bf3b8bdd47b230f1f8dce5ba69f81ee0bc1c81"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/slide-toggle-contrast-768x1024-dpr1-astylar.json",
+        "sha256": "75dca95d96945a21206792faceecac775c635f6d5ca9fe7e9964e435e1d45f1a"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/slide-toggle-contrast-390x844-dpr2-reference.json",
+        "sha256": "2eb2598c5c3e348bd4c19798cfb0ca2e80a3f508a6ea937cd521af14ba715dd0"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/slide-toggle-contrast-390x844-dpr2-astylar.json",
+        "sha256": "7c38bd3e8377aa9547dc9633adfe6a0bb2a9777644daf2975ff7ffe094b744b0"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/slide-toggle-custom-1440x1000-dpr1-reference.json",
+        "sha256": "b46b951d852f7b96ee8093a94997f6a99bd95473d6498f69f41e1559cd8edf7c"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/slide-toggle-custom-1440x1000-dpr1-astylar.json",
+        "sha256": "30e80ce473f3cba6986d4a055b65accbaf7b6e3285b0f6c69ecf478d861cfa28"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/slide-toggle-custom-768x1024-dpr1-reference.json",
+        "sha256": "d738da55bf5a629123a4fb5b23836addaaeedbc6b5fc967a673cf22b6479ce2f"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/slide-toggle-custom-768x1024-dpr1-astylar.json",
+        "sha256": "1f260befb178940c9eadeee189ab3a5efdac9e03b4d2bc0df46b342d32c12358"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/slide-toggle-custom-390x844-dpr2-reference.json",
+        "sha256": "b1908b6831535f88520d75aaffc40a13aafb33d59bc6203a6cf6c94a313a06de"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/slide-toggle-custom-390x844-dpr2-astylar.json",
+        "sha256": "8043b15cb28ea5f7498e533ada0c5055b965106d92221bfc68fc9ea1cd2eb27e"
+      }
+    ],
+    "boundary": "Twelve enabled static pairs per new finding and initial/current executed authoring. Checkbox reuses its existing cause/history separately. Not full control/form behavior,all disabled states,AT,paint,current whole rendering or case closure."
+  }),
+  Object.freeze({
+    "id": "core-hidden-referenced-description-targets-pruned",
+    "file": "src/lib/astylar-semantic-bridge.ts",
+    "pattern": "\\.filter\\(\\(element\\) => !element\\.hidden\\)|if \\(child\\.hidden\\) continue;",
+    "introducedBy": "Current hidden-root/child pruning confirmed;first-bad hidden-reference source revision/runtime not established.",
+    "classification": "confirmed-core-renderer-defect",
+    "owner": "Core semantic graph reconciliation:retention of hidden native ID-reference targets versus ordinary AX exposure",
+    "focusedProof": "node scripts/check-public-hidden-description.mjs",
+    "publicReproduction": {
+      "captureCommand": "node scripts/audit-public-hidden-description.mjs artifacts/material-parity/NEW-UNUSED-DIRECTORY",
+      "verification": {
+        "file": "artifacts/material-parity/public-hidden-description-verification-20261022.log",
+        "sha256": "85d39bc7fd73eeebd436b756a0c19c6ea0c5e223f854cc4dd4a476ca8e740358"
+      },
+      "verifiedRuns": [
+        {
+          "file": "artifacts/material-parity/public-hidden-description-20261022/latest-report.json",
+          "sha256": "77c303e3898c98c4725224e182a3093ec1f927526df13b918040a15e34868d73"
+        },
+        {
+          "file": "artifacts/material-parity/public-hidden-description-repeat-20261022/latest-report.json",
+          "sha256": "5597c93a23e286861d149bfc9d61bbe8f6fbe9ea5a5a1f7ffe048ff910745f7f"
+        }
+      ],
+      "packageEntry": "astylarui",
+      "authoredInputsEqualPerPair": true,
+      "applicationPlugins": false,
+      "publicDeclarations": [
+        {
+          "file": "examples/material-showcase/node_modules/astylarui/dist/lib/lib/index.d.ts",
+          "sha256": "cec7c69ce58df53f195e5e9e1602f0a1b7ad5e5220bf2e3330856f9664be8085"
+        },
+        {
+          "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/types/dom-element.d.ts",
+          "sha256": "5b497c3eefb06023ca0e3c088b78eb89e04e4023420d04a094907a933a18c0c0"
+        }
+      ]
+    },
+    "observation": {
+      "component": "core semantic bridge",
+      "property": "aria-describedby to hidden target/root/ancestor",
+      "states": [
+        "visible-description",
+        "hidden-child-target",
+        "hidden-root-target",
+        "hidden-ancestor"
+      ],
+      "dpr": [
+        1,
+        2
+      ],
+      "independentRuns": 2,
+      "captures": 32,
+      "reference": "All16 descriptions remain Help info;hidden text not ordinarily exposed",
+      "astylar": "Visible-description controls pass;all12 hidden candidate cases lose description and DOM target while reference attribute remains",
+      "stage": "Complete hidden authored identity graph reaches reconciliation;root filter/child skip precedes native target creation"
+    },
+    "justification": "Two independent package-root equal-input runs retain actual AX,DOM target presence,original SiteData and public semantic identity/reconciliation counts. Native reference creates hidden DOM nodes rather than eliding them. Both sides suppress ordinary hidden text;only candidate loses the referenced target and description. Six complete owning methods including child enumeration and ID mapping bind current TS,installed JS and both actual bundles through the existing guarded compiler comparator. The bridge elides hidden roots/children instead of preserving native hidden reference semantics;visible-description controls and101 mutations distinguish unsupported/dropped attributes from target pruning. This is separate from CSS-hidden AX overexposure and from Material fixtures that omit the association entirely.",
+    "evidence": [
+      {
+        "file": "src/lib/astylar-semantic-bridge.ts",
+        "sha256": "1a0011d3530701d9a74dc37b9f5a14d0fed0742dfd8793c39f8628e06b6a5725"
+      },
+      {
+        "file": "src/app/types/dom-element.ts",
+        "sha256": "72eef2f09d5cdacaab10db7328c40e5b4748c3f22640e2b40f0436a268351e83"
+      },
+      {
+        "file": "docs/compatibility/capabilities.json",
+        "sha256": "7bde70f23f806570bc3eb8b30a627677f11ef26b134e7d57a4d15f943266c0be"
+      },
+      {
+        "file": "scripts/audit-public-hidden-description.mjs",
+        "sha256": "00fb39c4816d102e50a8ec127247c0a2d6049ac6b682e893ed474c2ee2ea9e02"
+      },
+      {
+        "file": "scripts/check-public-hidden-description.mjs",
+        "sha256": "71039d6688012970db4898c31e3e1c4b85a855de5969a778d175548a8de27433"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-verification-20261022.log",
+        "sha256": "85d39bc7fd73eeebd436b756a0c19c6ea0c5e223f854cc4dd4a476ca8e740358"
+      },
+      {
+        "file": "scripts/check-public-native-checkable-value.mjs",
+        "sha256": "7f3ff2c868ce9dc6c5eb52ce28f1e5f66db2fcd96e1bfb29bc743c72eb6998fc"
+      },
+      {
+        "file": "scripts/check-public-semantic-css-hidden.mjs",
+        "sha256": "8a5679624d560cd1950032c0a956d42847a3d7e1dfa67c4633ce5e296c81437d"
+      },
+      {
+        "file": "examples/material-showcase/node_modules/astylarui/dist/lib/lib/astylar-semantic-bridge.js",
+        "sha256": "7c892095300b0eb8f03a9f38ce421143579a5d90e687e3e80a045b48be8f5aee"
+      },
+      {
+        "file": "examples/material-showcase/node_modules/astylarui/dist/lib/lib/index.d.ts",
+        "sha256": "cec7c69ce58df53f195e5e9e1602f0a1b7ad5e5220bf2e3330856f9664be8085"
+      },
+      {
+        "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/types/dom-element.d.ts",
+        "sha256": "5b497c3eefb06023ca0e3c088b78eb89e04e4023420d04a094907a933a18c0c0"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-20261022/latest-report.json",
+        "sha256": "77c303e3898c98c4725224e182a3093ec1f927526df13b918040a15e34868d73"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-20261022/provenance.json",
+        "sha256": "a5d04ab0567e7576e8cd7ace4e6b2d721c567d481e95a0e02c98a009f9888e16"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-20261022/producer.mjs",
+        "sha256": "e37d3c9391c9ad08c8b88e25995e847e0c5a0fa0b64b805313271691773f3b8f"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-20261022/audit.js",
+        "sha256": "473a16724a4617df58a85f518fbe8b101e471783fbdd67bf04fa347de15a05ca"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-20261022/failure.json",
+        "sha256": "edbca03503ee93942158c22516b93061d17b55d8e6e187edd3b4d907587dc35e"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-20261022/visible-reference-dpr1.json",
+        "sha256": "39877a927cc92ff531d425d1bddfc60853cf1cc149544521c4b13c25962f2796"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-20261022/visible-astylar-dpr1.json",
+        "sha256": "c5679b47b4cac1a887ab99226bcf2abbe797fe3d6aaea46d8fc386a9024b3f5d"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-20261022/hidden-child-reference-dpr1.json",
+        "sha256": "ee829842abaa6d09ac9d2938bd787645ceb26515ad59047d5283512c80691bc3"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-20261022/hidden-child-astylar-dpr1.json",
+        "sha256": "8542f26aa58ee9d06aeb09b9389489f75fbd026a1bb9ee70db7ad30977d87fba"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-20261022/hidden-root-reference-dpr1.json",
+        "sha256": "13fd7cfb62c96f816c0149fb3855ad77ad5681d9e0b3939f49baf5ffd5ccb4e3"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-20261022/hidden-root-astylar-dpr1.json",
+        "sha256": "c6c2cbdc534fd9e2697af14fff5fa68f6f267bbc40b6f9685ed525a963d5988e"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-20261022/hidden-parent-reference-dpr1.json",
+        "sha256": "579f774789e1a1ddf6ba521908791e6ca5fbf5ff210544bc0d8fd633fde8e1d5"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-20261022/hidden-parent-astylar-dpr1.json",
+        "sha256": "f29ae53e564fbad9d66d1a70d2f7d290c36f5e41d4100e174e860135d03cfe16"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-20261022/visible-reference-dpr2.json",
+        "sha256": "4f828fd631b97d9502a0cc5e669bd2fbcbeab9b4a2f9a9eb06f44ce8ccd7066b"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-20261022/visible-astylar-dpr2.json",
+        "sha256": "3c3767cc98587a74da9799410a3e86d1922f302f32a856370424f617f128c722"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-20261022/hidden-child-reference-dpr2.json",
+        "sha256": "32161e92fd838e02ad71e77701db3af0603915fc1c58e40ea4b79567f5ea192d"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-20261022/hidden-child-astylar-dpr2.json",
+        "sha256": "8c76ed62fd7c880aab7325f5a0f2d3076e9937ede502d41599426bf6ed731ba2"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-20261022/hidden-root-reference-dpr2.json",
+        "sha256": "55282fce0e949e8d93c0a651ac651d1481776851246cd95f6061155045a4746a"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-20261022/hidden-root-astylar-dpr2.json",
+        "sha256": "8f5f657470ef32fa5e220078e88c4b1716e22712938774f7aabf206d2fa46d7e"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-20261022/hidden-parent-reference-dpr2.json",
+        "sha256": "7217767c31be12458f1bf7599e350b82190f52f01acda3d1cb7fea1f3cd31dc3"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-20261022/hidden-parent-astylar-dpr2.json",
+        "sha256": "02b7094d0d26d697496ea6e999f14be2d3e5cd5d68c125e3cb70f04acc5d10f6"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-repeat-20261022/latest-report.json",
+        "sha256": "5597c93a23e286861d149bfc9d61bbe8f6fbe9ea5a5a1f7ffe048ff910745f7f"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-repeat-20261022/provenance.json",
+        "sha256": "479da1013c011165350db83b28e0b4edd2f86142d95b340ced978366a2ef0200"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-repeat-20261022/producer.mjs",
+        "sha256": "e37d3c9391c9ad08c8b88e25995e847e0c5a0fa0b64b805313271691773f3b8f"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-repeat-20261022/audit.js",
+        "sha256": "473a16724a4617df58a85f518fbe8b101e471783fbdd67bf04fa347de15a05ca"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-repeat-20261022/failure.json",
+        "sha256": "cce97748807ae1da516af12102d164a9faff706f8c7035bf8149854a95d3a692"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-repeat-20261022/visible-reference-dpr1.json",
+        "sha256": "adc5d990ec5f1e2758247b1d973408dae59897f360cfd948c5ee2e0924b8a413"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-repeat-20261022/visible-astylar-dpr1.json",
+        "sha256": "2aa663b9a97baaafe41178e7bff268d91d60585364cc02e647a5257d30fd2943"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-repeat-20261022/hidden-child-reference-dpr1.json",
+        "sha256": "65afa072bea0a6c77627218d303597211735d7373810238599cbbc9c3cc8e044"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-repeat-20261022/hidden-child-astylar-dpr1.json",
+        "sha256": "f0b52da6d186ac52e1df758686aa5ea4e16e96ee58993f5ac276621e43a29990"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-repeat-20261022/hidden-root-reference-dpr1.json",
+        "sha256": "34fdff59331e64ab222b50396b714dea2815137851e8bcab32219f08ee144919"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-repeat-20261022/hidden-root-astylar-dpr1.json",
+        "sha256": "3d1d6b748f786d6825a8ec6ab718d272df110beb46721368d5aa54aad8aec121"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-repeat-20261022/hidden-parent-reference-dpr1.json",
+        "sha256": "ec14b55b685b00675fcfe8e58be2b5f256b9e638586f7dfad596d1030fa9703a"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-repeat-20261022/hidden-parent-astylar-dpr1.json",
+        "sha256": "4b4a8698122267b1516d6d5d6c51c1bd4db0688316d0129f3395956839549d13"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-repeat-20261022/visible-reference-dpr2.json",
+        "sha256": "f57e6454651ae26646be3b5d75456ec7160b8fe4ae6fc9d1dd87f6f6c8ef4b3f"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-repeat-20261022/visible-astylar-dpr2.json",
+        "sha256": "1ecfa1baf80bbf1e748bfe0bc625e2bca56e19c779c4c5358155118b5aea2a2c"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-repeat-20261022/hidden-child-reference-dpr2.json",
+        "sha256": "a927a08e309c1854e1a2d11ec5c9213b5478e4e3f4d983229c34d9bba547cd6d"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-repeat-20261022/hidden-child-astylar-dpr2.json",
+        "sha256": "a261c1ec069fce34c83c9f90c113a3c116e721d65b488d7abeb6a77262e791f9"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-repeat-20261022/hidden-root-reference-dpr2.json",
+        "sha256": "a72ba1d25b28203d2da8398977136b1447c9bcdcb78edfcb687646cb6af66755"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-repeat-20261022/hidden-root-astylar-dpr2.json",
+        "sha256": "679a13a990cc0540f388e8396cc3cba231931737f6d9ad001af1ab28627759b6"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-repeat-20261022/hidden-parent-reference-dpr2.json",
+        "sha256": "cdcb51b2ad21701a69a7f0556ced25efe9b68962b5d4f9734b8b5de1fee245c6"
+      },
+      {
+        "file": "artifacts/material-parity/public-hidden-description-repeat-20261022/hidden-parent-astylar-dpr2.json",
+        "sha256": "72243f340fe0287439065241983821b508243faa2949e0647c6ab7b3d5ce17cc"
+      }
+    ],
+    "recommendation": "At the general semantic reconciliation boundary,preserve native hidden ID-reference graph semantics while keeping hidden content out of ordinary exposure,focus and visual layout. Do not remove hiding,copy help text into a different ARIA field,add fixture-specific IDs,modify Material authoring to mask the defect or change coordinate/paint calculations. Add update/removal and other-reference controls before broadening support.",
+    "boundary": "Static supported hidden plus ariaDescribedby atDPR1/2 only. Not CSS hiding,ariaLabelledby or all relationships,updates/inherited overrides,AT behavior,Material tooltip/sort causality,paint,current whole rendering or case closure. Historical first-bad execution remains uncertain."
+  }),
+  Object.freeze({
+    "id": "fixture-sort-description-association-omitted",
+    "file": "examples/material-showcase/src/app/astylar.component.ts",
+    "pattern": "type: 'div', id: 'sort-trigger', class:",
+    "classification": "application-plugin-authoring-defect",
+    "introducedBy": "Initial2f440115 already omits the sort description input;first runtime/motive and public support at that revision are unproven.",
+    "owner": "Material sort action-description relationship and target authoring before semantic projection",
+    "focusedProof": "node scripts/review-sort-description-inputs.mjs",
+    "history": [
+      {
+        "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24",
+        "observation": {
+          "wholeMethodSha256": "f033583a668c3fa5df0ea0ac0d188730d0debc77ba6b73d82f116eb587805728",
+          "states": [
+            {
+              "open": false,
+              "focused": false,
+              "sortTrigger": {
+                "type": "button",
+                "id": "sort-trigger",
+                "ariaSort": "ascending",
+                "value": "Sort by name"
+              },
+              "tooltipAssociation": null
+            },
+            {
+              "open": false,
+              "focused": true,
+              "sortTrigger": {
+                "type": "button",
+                "id": "sort-trigger",
+                "ariaSort": "ascending",
+                "value": "Sort by name"
+              },
+              "tooltipAssociation": null
+            },
+            {
+              "open": true,
+              "focused": false,
+              "sortTrigger": {
+                "type": "button",
+                "id": "sort-trigger",
+                "ariaSort": "ascending",
+                "value": "Sort by name"
+              },
+              "tooltipAssociation": "tooltip-popup"
+            },
+            {
+              "open": true,
+              "focused": true,
+              "sortTrigger": {
+                "type": "button",
+                "id": "sort-trigger",
+                "ariaSort": "ascending",
+                "value": "Sort by name"
+              },
+              "tooltipAssociation": "tooltip-popup"
+            }
+          ]
+        }
+      }
+    ],
+    "observation": {
+      "component": "sort",
+      "staticPairs": 12,
+      "property": "aria-describedby/AX description",
+      "reference": "related target resolves;AX description Sort",
+      "astylar": "no relationship or Sort help target supplied;AX description absent",
+      "stage": "authored SiteData"
+    },
+    "justification": "All12 pinned static pairs authenticate actual backend DOM/AX association and target identity. Complete initial/current authoring executes across open/focused variants and omits the sort relationship and help target. Complete current familyElements matches the captured source map;reference source also binds. This establishes unequal fixture input before the renderer,not hidden-target pruning or a coordinate defect. The separately demonstrated equal-input hidden-reference core failure remains required and must not be masked when equivalent hidden help is eventually authored. Tooltip static observations reuse its existing persistent-description finding rather than adding a duplicate.",
+    "recommendation": "Preserve native action-help intent through the shared public relationship contract in later implementation,after fixing the independently demonstrated core hidden-target behavior. Do not copy help into the accessible name,expose hidden help visually,change reference truth or use placement offsets.",
+    "evidence": [
+      {
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd"
+      },
+      {
+        "file": "examples/material-showcase/src/app/reference.component.ts",
+        "sha256": "debe55bc492d0fa1e48a9c7f09e1b668d435a2260588710207ab878b23c1d4aa"
+      },
+      {
+        "file": "artifacts/material-parity/list-static-ax-review-20261021.log",
+        "sha256": "a5ebaffa495e23a3b35362fee84cf2348dba54771533564d2b1f4bbff8a99473"
+      },
+      {
+        "file": "examples/material-showcase/dist/material-showcase/browser/chunk-PCHQTLJM.js.map",
+        "sha256": "55fedcbf88e93c3e0ca413d6458495aeb36087e947314dd4f0671358af8727b8"
+      },
+      {
+        "file": "examples/material-showcase/dist/material-showcase/browser/chunk-7SL66K3U.js.map",
+        "sha256": "67e956a6f4b3b0325fc51b7b45688a27d5e9307095f8b4a20391a96f68244df4"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/latest-report.json",
+        "sha256": "407b996d780c12d025b82bc2392781422818674c360c8dce73b5c23f669db987"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/sort-light-1440x1000-dpr1-reference.json",
+        "sha256": "a7b3e91a50524de0ecc32221848751b9208272756609cb8a6595842845f30234"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/sort-light-1440x1000-dpr1-astylar.json",
+        "sha256": "e67ad690837076288840e1458e0eae2fb9cdac49f4edceccd09b6d2c14602968"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/sort-light-768x1024-dpr1-reference.json",
+        "sha256": "1edc8fc17a22a543f70a81dd538af126e17ca431928fdd1da860d2853edc6b58"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/sort-light-768x1024-dpr1-astylar.json",
+        "sha256": "f44cb8f351ce9690c32ebb0a4c10f4e5bb4e85ae7b14b39f4e6079db671816a6"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/sort-light-390x844-dpr2-reference.json",
+        "sha256": "8c38d33bbffdc64ff7f091d207737c67bdffff34fd71ad4d434ef79324287bea"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/sort-light-390x844-dpr2-astylar.json",
+        "sha256": "c18c88a1632bc5077b593b68479d587ab83bf8e196307a66b45837916b7f248a"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/sort-dark-1440x1000-dpr1-reference.json",
+        "sha256": "d4d39d69a57feb51a3ce0b81cb1d9b33e3b326956225658cde55d62fdc35652c"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/sort-dark-1440x1000-dpr1-astylar.json",
+        "sha256": "2de5d30a2e3404271b0e04fe91e4665a14cde4b7666866334d558d093055cb87"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/sort-dark-768x1024-dpr1-reference.json",
+        "sha256": "352ea4394191c828774954fbc5f31cea73a2af0838066d576760383e995cec19"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/sort-dark-768x1024-dpr1-astylar.json",
+        "sha256": "ddb120f28a683adcce82ca2accda1d30bba0b2eca617a2bcba5f4baf2c1789d4"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/sort-dark-390x844-dpr2-reference.json",
+        "sha256": "2e9948852d4bfadf7444b7ff2bcf8681ccd6b6d60ad9c0702495d26c5fcaf675"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/sort-dark-390x844-dpr2-astylar.json",
+        "sha256": "4590b24f1211fe5638043d28110cb58ab572918a05e30dedc03ab9ff2df77e11"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/sort-contrast-1440x1000-dpr1-reference.json",
+        "sha256": "9a9fdde95b80bae0edfe1975ae9747d14dcdb2e39a9d44c87fba231c093a1884"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/sort-contrast-1440x1000-dpr1-astylar.json",
+        "sha256": "4cc488454f3750a9051dee17f4793298bfcf68acd96103234dc68fa7a81bac1a"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/sort-contrast-768x1024-dpr1-reference.json",
+        "sha256": "a40c8adbf9fd97930614f7770a45163e2609de842b3d50c9fd9192b8e5c7282f"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/sort-contrast-768x1024-dpr1-astylar.json",
+        "sha256": "f1100bf038adf0a626e4b120ca8af2370dc4d773f25f51b5e0bcdd7651721d0f"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/sort-contrast-390x844-dpr2-reference.json",
+        "sha256": "138db50c48ff37923fb74fb66f14d8e5511aede76e8eafbe4e770d4d43ba981e"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/sort-contrast-390x844-dpr2-astylar.json",
+        "sha256": "d6ec8cb71d9c7fcc3b38aaa6f2c42c94888572e8a71293fac0958a52e1fdabb0"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/sort-custom-1440x1000-dpr1-reference.json",
+        "sha256": "28313421c17374258152b11c9c848374ed3ce4967ab5d28c603645d6d19f780d"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/sort-custom-1440x1000-dpr1-astylar.json",
+        "sha256": "39856ce12df7287ac5288eaa7dd720a3637174a4599f65ed4a2e32de323623cc"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/sort-custom-768x1024-dpr1-reference.json",
+        "sha256": "05ccff6ea23abe5816739975082dfe515bdc5bb356cf8c4eabf1a01c1c094ab7"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/sort-custom-768x1024-dpr1-astylar.json",
+        "sha256": "47940385db042828413b9a3da5b5c7f6a432a9106df51339bfc2fd3bd971020f"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/sort-custom-390x844-dpr2-reference.json",
+        "sha256": "e8453f700fdaf471682a0c0de23f0602c1d607fa3f5e166965eb3cc0ac0ed738"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/sort-custom-390x844-dpr2-astylar.json",
+        "sha256": "37ad49349a3c80fa71c26cf3ffd522fb54ad2eec3d5965f7e7bed6e8fa6c9d63"
+      }
+    ],
+    "boundary": "Twelve initial-state sort pairs,plus12 tooltip controls and executed authored open/focused variants. Not all interactive AX endpoints,AT behavior,sort toggling,paint or complete-case/current whole-rendering acceptance."
+  }),
+  Object.freeze({
+    "id": "fixture-toggle-group-accessible-name-substitution",
+    "file": "examples/material-showcase/src/app/astylar.component.ts",
+    "pattern": "role: 'radiogroup', ariaLabel: 'ListGrid'",
+    "introducedBy": "c47d589ac2cf1967cc321df38339cb64dabb3732 adds explicit group name while replacing native controls;initial and immediate parent leave group unnamed.",
+    "classification": "application-plugin-authoring-defect",
+    "owner": "Material button-toggle group accessible-name authoring",
+    "focusedProof": "node scripts/review-toggle-group-inputs.mjs",
+    "history": [
+      {
+        "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24",
+        "observation": {
+          "states": [
+            {
+              "selected": false,
+              "root": {
+                "type": "div",
+                "id": "button-toggle-primary",
+                "role": "radiogroup",
+                "class": "row",
+                "ariaDisabled": false
+              },
+              "controls": [
+                {
+                  "type": "button",
+                  "id": "button-toggle-one",
+                  "class": "material-button",
+                  "tabindex": 0,
+                  "value": "List"
+                },
+                {
+                  "type": "button",
+                  "id": "button-toggle-two",
+                  "class": "material-button outlined",
+                  "tabindex": -1,
+                  "value": "Grid"
+                }
+              ]
+            },
+            {
+              "selected": true,
+              "root": {
+                "type": "div",
+                "id": "button-toggle-primary",
+                "role": "radiogroup",
+                "class": "row",
+                "ariaDisabled": false
+              },
+              "controls": [
+                {
+                  "type": "button",
+                  "id": "button-toggle-one",
+                  "class": "material-button",
+                  "tabindex": 0,
+                  "value": "List"
+                },
+                {
+                  "type": "button",
+                  "id": "button-toggle-two",
+                  "class": "material-button outlined",
+                  "tabindex": -1,
+                  "value": "Grid"
+                }
+              ]
+            }
+          ],
+          "completeMethodHashes": {
+            "familyElements": "f033583a668c3fa5df0ea0ac0d188730d0debc77ba6b73d82f116eb587805728",
+            "composite": "dbe80b9873425e39234f6ee1c5a45667b2523e10bef3126ccb04b3c2b98ef733"
+          }
+        }
+      },
+      {
+        "revision": "705cf584b749caaf59149bba4b017567ca794c23",
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "eec792f05fda94b04ffb22415752c1924b037e30908b9fc28d236abf392a5170",
+        "observation": {
+          "states": [
+            {
+              "selected": false,
+              "root": {
+                "type": "div",
+                "id": "button-toggle-primary",
+                "role": "radiogroup",
+                "class": "row",
+                "ariaDisabled": false
+              },
+              "controls": [
+                {
+                  "type": "button",
+                  "id": "button-toggle-one",
+                  "class": "material-button",
+                  "tabindex": 0,
+                  "value": "List"
+                },
+                {
+                  "type": "button",
+                  "id": "button-toggle-two",
+                  "class": "material-button outlined",
+                  "tabindex": -1,
+                  "value": "Grid"
+                }
+              ]
+            },
+            {
+              "selected": true,
+              "root": {
+                "type": "div",
+                "id": "button-toggle-primary",
+                "role": "radiogroup",
+                "class": "row",
+                "ariaDisabled": false
+              },
+              "controls": [
+                {
+                  "type": "button",
+                  "id": "button-toggle-one",
+                  "class": "material-button",
+                  "tabindex": 0,
+                  "value": "List"
+                },
+                {
+                  "type": "button",
+                  "id": "button-toggle-two",
+                  "class": "material-button outlined",
+                  "tabindex": -1,
+                  "value": "Grid"
+                }
+              ]
+            }
+          ],
+          "completeMethodHashes": {
+            "familyElements": "d1dac035014645261140604665282825f0b32efd3d514d5db11217200d64b186",
+            "composite": "dbe80b9873425e39234f6ee1c5a45667b2523e10bef3126ccb04b3c2b98ef733"
+          }
+        }
+      },
+      {
+        "revision": "c47d589ac2cf1967cc321df38339cb64dabb3732",
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "761c0291cc2160c08d83d21a21db8a831f91ed061b136698612c85775ee5c69b",
+        "observation": {
+          "states": [
+            {
+              "selected": false,
+              "root": {
+                "type": "div",
+                "id": "button-toggle-primary",
+                "role": "radiogroup",
+                "ariaLabel": "ListGrid",
+                "ariaDisabled": false
+              },
+              "controls": [
+                {
+                  "type": "div",
+                  "id": "button-toggle-one",
+                  "class": "button-toggle-option selected",
+                  "role": "radio",
+                  "tabindex": 0,
+                  "ariaLabel": "List",
+                  "ariaChecked": true
+                },
+                {
+                  "type": "div",
+                  "id": "button-toggle-two",
+                  "class": "button-toggle-option",
+                  "role": "radio",
+                  "tabindex": -1,
+                  "ariaLabel": "Grid",
+                  "ariaChecked": false
+                }
+              ]
+            },
+            {
+              "selected": true,
+              "root": {
+                "type": "div",
+                "id": "button-toggle-primary",
+                "role": "radiogroup",
+                "ariaLabel": "ListGrid",
+                "ariaDisabled": false
+              },
+              "controls": [
+                {
+                  "type": "div",
+                  "id": "button-toggle-one",
+                  "class": "button-toggle-option",
+                  "role": "radio",
+                  "tabindex": -1,
+                  "ariaLabel": "List",
+                  "ariaChecked": false
+                },
+                {
+                  "type": "div",
+                  "id": "button-toggle-two",
+                  "class": "button-toggle-option selected",
+                  "role": "radio",
+                  "tabindex": 0,
+                  "ariaLabel": "Grid",
+                  "ariaChecked": true
+                }
+              ]
+            }
+          ],
+          "completeMethodHashes": {
+            "familyElements": "b463ed5cb0472f2fd5a74fa4ca414bed7c0e412d761e3d32396df9a7d80f7e77",
+            "composite": "dbe80b9873425e39234f6ee1c5a45667b2523e10bef3126ccb04b3c2b98ef733",
+            "selectionMark": "73d79e4ac5ab3073cdee9672e4396cb4b35df46059a9ec066fbd5913519338e8"
+          }
+        }
+      }
+    ],
+    "observation": {
+      "component": "button-toggle",
+      "staticPairs": 12,
+      "property": "group aria-label/AX name",
+      "reference": "no aria-label;empty AX group name",
+      "astylar": "explicit ListGrid label and AX name",
+      "stage": "authored group metadata before semantic projection"
+    },
+    "justification": "All12 pinned static pairs authenticate the root group and child backend identities. Current complete authoring and its actual selectionMark/composite helpers execute both selection states and match captured source-map methods. Complete initial and immediate pre/post c47d589a methods locate addition of ListGrid at authoring. Existing native-button-substitution finding owns the separate BUTTON-to-DIV difference;the checked/name/tabstop projections agree but do not erase native naming/validity/form-name input differences. This is not a core default accessible-name failure or evidence that the native group should be renamed.",
+    "recommendation": "Preserve reference group-name intent in later fixture correction;restore native-control intent under its existing finding before assessing remaining defaults. Do not change the reference label,core naming algorithm or paint geometry to manufacture parity.",
+    "evidence": [
+      {
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd"
+      },
+      {
+        "file": "artifacts/material-parity/list-static-ax-review-20261021.log",
+        "sha256": "a5ebaffa495e23a3b35362fee84cf2348dba54771533564d2b1f4bbff8a99473"
+      },
+      {
+        "file": "examples/material-showcase/dist/material-showcase/browser/chunk-PCHQTLJM.js.map",
+        "sha256": "55fedcbf88e93c3e0ca413d6458495aeb36087e947314dd4f0671358af8727b8"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/latest-report.json",
+        "sha256": "407b996d780c12d025b82bc2392781422818674c360c8dce73b5c23f669db987"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/button-toggle-light-1440x1000-dpr1-reference.json",
+        "sha256": "1a49a9a90e3c8e7de91f79c1d4d458882f884e66ede67b3f87d5069e5e1bec43"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/button-toggle-light-1440x1000-dpr1-astylar.json",
+        "sha256": "55eae97480c4203eed3f22f682cbcb4077ff5c7106b5bd58ce8f07862e8a37dd"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/button-toggle-light-768x1024-dpr1-reference.json",
+        "sha256": "2d6d847988b6fd46a352054c7b0a1be38b0ee324ec6d1dc8453134fb92e3e729"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/button-toggle-light-768x1024-dpr1-astylar.json",
+        "sha256": "afb897aee4f266233814ff9f19a6de4251712550c5026b05c2adf4f1add440f4"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/button-toggle-light-390x844-dpr2-reference.json",
+        "sha256": "85735ae4dc8f1cd1ebda0566b0da3f7d5758e34385f0cb70fafcd8d61fdef6bc"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/button-toggle-light-390x844-dpr2-astylar.json",
+        "sha256": "9dee6ee847932558c80e82df1f8680ff63b4798ab8402b9e04993cb6db73cfec"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/button-toggle-dark-1440x1000-dpr1-reference.json",
+        "sha256": "d3f8c35b40e0657096f415f18928a0a78357d135f3ba089e7477787765612cbe"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/button-toggle-dark-1440x1000-dpr1-astylar.json",
+        "sha256": "2dbe971cf84a46e948d41033233caa978c26969155777c1f92aefffcd4fb2ffd"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/button-toggle-dark-768x1024-dpr1-reference.json",
+        "sha256": "6da30a40860bb0371d863c5b654687a65dda4bc39b03851eaaeffc235f98c2bd"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/button-toggle-dark-768x1024-dpr1-astylar.json",
+        "sha256": "f4e6c5f9c68cebb0baba701e734e5c72e4ca652f5cb84f9cba6b4709d5c5be01"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/button-toggle-dark-390x844-dpr2-reference.json",
+        "sha256": "5298e317d263ad598c4c81ea4e423527ccb0d9b2208071fa9debae4488649c7c"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/button-toggle-dark-390x844-dpr2-astylar.json",
+        "sha256": "e1a279a2eed3577b479811ab5d233dc41f051df0a32d501f71bceb21a4b849d9"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/button-toggle-contrast-1440x1000-dpr1-reference.json",
+        "sha256": "8c7f9cc48fff9253cda7f41c2eb3586f5fa0e9384e8926ae999da59f82c2be54"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/button-toggle-contrast-1440x1000-dpr1-astylar.json",
+        "sha256": "20224eaf23d42d85d7270606d25576db94301d5f45c0fce73398dae6dc505271"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/button-toggle-contrast-768x1024-dpr1-reference.json",
+        "sha256": "ba5abd49f7c66921eb67f045dc53e5e36090f151462624ab94d3cc3e75a3ebb9"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/button-toggle-contrast-768x1024-dpr1-astylar.json",
+        "sha256": "831dd9fc8d0d8be1c87a3a4affe6bd48b3ce52054d8ba5993a2807be1c01377f"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/button-toggle-contrast-390x844-dpr2-reference.json",
+        "sha256": "c2708d261a00cfb1c482d64ff47871443b883958ab131a42fe3d75f9d46a7b84"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/button-toggle-contrast-390x844-dpr2-astylar.json",
+        "sha256": "1e5fdcd286aa46056ceb37ab90e1206051768482aa9b55c1b4bf70ffeea157b2"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/button-toggle-custom-1440x1000-dpr1-reference.json",
+        "sha256": "d113e4604a2774e983741dc352a88c3d193351dbc0306a89d6eae4ee0f49a2c7"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/button-toggle-custom-1440x1000-dpr1-astylar.json",
+        "sha256": "b4c14540a8b9397d26bddab24dd0ac1a913809dacf59a050d48378bd3bbb9331"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/button-toggle-custom-768x1024-dpr1-reference.json",
+        "sha256": "2fb682e2fff7e043f0901ae2ab79c61904547de7427777d2ac36c86057787df4"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/button-toggle-custom-768x1024-dpr1-astylar.json",
+        "sha256": "f1331a35d9d7e9407536b1070bd60db807f3daecd1efa0049556eb7b3cbbf48b"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/button-toggle-custom-390x844-dpr2-reference.json",
+        "sha256": "fe059faeddaad75a21fb14ae926ec5d954b12514c51d3355dbcfc9f50102d419"
+      },
+      {
+        "file": "artifacts/material-parity/remaining-static-ax-resume-20261022/button-toggle-custom-390x844-dpr2-astylar.json",
+        "sha256": "4c17ec79b40ecd41de5a8bfc12e57cf27570062cc4b7a36665268e707f9defc4"
+      }
+    ],
+    "boundary": "Twelve enabled static pairs and executed authored selection variants only. Native primitive metadata is preserved under its existing finding,not a new defect. Not keyboard/form submission,disabled states,paint,current whole rendering or case closure."
+  }),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({

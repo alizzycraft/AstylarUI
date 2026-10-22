@@ -2,6 +2,24 @@
 
 ## Current versus historical evidence
 
+Retain static-semantic-registration.mjs,static-semantic-inputs.spec.mjs and the
+restricted static-semantic-historical-loader.mjs with all registration-focused,
+registration-regression,registration-source-focused,registration-integration and
+registration-census20261022 log/stderr pairs. Final sequential integration passes
+7/7;earlier6/6 predates producer/case-join registration and is narrower evidence.
+The census authenticates complete accepted180/243/873 tables and current191/248/
+928 counts,all prior claims/paths,55 additions and seven reviewed source changes.
+Original reviewer/actual capture/failure files remain unchanged. Current registry
+and production have191 definitions;historical module view alone returns180 for
+nine exact authenticated reviewers. Registration is not export/cold acceptance.
+
+Retain static-semantic-case-proposal-compression-20261022 log/empty stderr with
+executable producerArgs. Exact physical82191909 proposal was transparently LZX-
+compressed;189866594 logical bytes and SHAaa576ead3b3ef8e4ba06fbf1825e1d13f19519d6c954258321cdd11f4a439eb5
+are unchanged. No deletion,renaming or pointer change. Observed volume free space
+1995558912→2233561088 is not uniquely attributable physical savings;other activity
+can change free space. Complete proposal remains retained at its original path.
+
 Retain static-semantic-selection.spec.mjs,the source-restoration changes and
 static-semantic-selection-regression-20261022 log/empty stderr(4/4 pass),plus
 static-semantic-selected-review-verification-20261022 log/empty stderr. The latter

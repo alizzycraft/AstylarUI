@@ -3,95 +3,50 @@
 ## Current audit pointer — October22
 
 - Scope unchanged:36 families/2311 cases(436 static/1875 interaction),all partial;
-  current rendering unverified. No inspection/acceptance promotion.
-- Accepted canonical7fa7ca35/index77af769e/review7eb107de has180 findings/243
-  proofs/873 paths. Source/section/receipt conservation,independent cold99596,
-  verified main import and publication7176fc4a complete. Earlier live notes below
-  are historical. Latest coherent increments are pushed to the integration branch.
-- New core finding pending in source review841cdeeb(189 definitions,all188 prior
-  definitions preserve):hidden referenced description targets are pruned from
-  native semantic DOM. Two independent package-root equal-input runs retain32
-  captures;all12 hidden candidate cases lose descriptions,while native and
-  visible controls pass. Hidden ordinary text stays unexposed. Public semantic
-  identity counts retain the authored graph,but root/child filters prevent target
-  creation. Six complete methods bind current/installed/both actual bundles;
-  public declarations support both fields,101 controls/exact replay pass.
-  Evidence:public-hidden-description20261022 and repeat,verification and hidden-
-  description-input-review logs. No Material position/association causality claim.
-  General future owner:semantic graph retention versus visibility,not fixture
-  text copying,ARIA substitution or coordinate/paint compensation.
-- Pending source review4d8dd04e now preserves186 predecessors and adds native
-  radio-input/group/value/label versus role-DIV composition and native switch-
-  button/label versus role-DIV composition.188 proposed definitions(8 additions)
-  remain unregistered;accepted180 unchanged.36 enabled static pairs/72 raw rows,
-  146 mutation controls and exact replay pass. Checkbox reuses existing cause and
-  source-history proof57f53967/c47d589a,not a new rediscovery or broadened disabled
-  runtime claim. Evidence:review-checkable-semantic-inputs.mjs and checkable-
-  semantic-input-review-20261022 log/empty stderr. Form/keyboard/AT behavior open.
-- Earlier pending findings and proofs remain intact:sheet name835eba45,chip
-  orientation a876acae,group metadata17e767f2,picker metadata0951b7ae. Complete
-  case proposal48e8e7ca preserves869 queued element/AX/history children and prior
-  case status/remaining-work lists;now conserved by successor82191909 below.
-- Actual initial AX capture covers all436 static pairs(872 authenticated raw
-  observations),same pinned9d0f1220. Bounded widget-state review covers108 pairs/
-  nine families,with known progress focusability explicit;other review populations
-  overlap and do not imply full semantic coverage. Labels/landmarks/AT/paint and
-  current whole-runtime applicability remain open. Source and projection bindings
-  reused/authenticated rather than another browser matrix.
-- Sort follow-up complete at bounded scope:source review6f890ed1 preserves189
-  predecessors and adds fixture-sort-description-association-omitted(190 pending
-  definitions;accepted registry180 unchanged). Initial/current full familyElements
-  execute across open/focused variants;current method and full reference source
-  bind captured source maps. Native actionable inner button is verified through
-  its named sort-trigger parent,not assumed to carry the host ID.97 mutation
-  controls/exact replay pass. Tooltip reuses its existing finding. Initial runtime,
-  AT,interactive AX and paint remain open;no claim that all sort states are closed.
-- Button-toggle source reviewaf08f832 adds explicit ListGrid group-name substitution
-  (191 pending definitions;all190 predecessors preserve).12 static pairs/24 raw
-  observations,74 negative controls/exact replay pass. Complete initial and
-  immediate pre/post c47d589a methods establish that commit adds the group name;
-  current familyElements/composite/selectionMark match captured source-map methods.
-  Existing native-button substitution finding is reused,not duplicated. Child
-  checked/name/tabstop agreement does not certify native form/naming defaults,
-  interaction or paint. Evidence:toggle-group-input-review-20261022 log/empty
-  stderr and review-toggle-group-inputs.mjs. No renderer/fixture changes.
-- Bounded follow-up:all48 retained static sort/tooltip observations authenticate
-  their raw SHA256 and have no runtime errors. In each family's12 paired cases,
-  native buttons have aria-describedby and AX descriptions(Sort/Create a project),
-  candidate buttons have neither. Current complete sort branch authors no
-  ariaDescribedby;tooltip authors it only when open. This excludes hidden-target
-  pruning as the first divergence for these closed static fixtures:the relationship
-  was never supplied. Tooltip reuses existing persistent-description finding;
-  sort now has source-history/pinned-method applicability in review6f890ed1.
-  Evidence:remaining-static-ax-resume-20261022/latest-report.json and its48
-  sort/tooltip raw files;astylar.component.ts familyElements;existing tooltip
-  source definition. No new capture,core change or whole-case closure.
-- Coherent static semantic join82191909 succeeds:240 new bounded review children
-  across228 unique static cases/19 families;seven focused reviews replay exactly,
-  16180 dependencies validate and complete48e8 predecessor recovers. Total1109
-  queued children beyond accepted7eb107de;all2311 case statuses/remaining-work
-  preserve,accepted pointer unchanged. Overlapping chip reviews are not unique
-  coverage twice. Evidence:static-semantic-input-join-20261022 log/empty stderr,
-  join-static-semantic-input-evidence.mjs. This is not canonical or case closure.
-- Case selection support now explicit via --static-semantic-inputs(exact82191909).
-  Full production reader authenticates16180 dependencies/twelve current sources,
-  all2311 cases partial;accepted pointer unchanged.4/4 new-selector/existing-tabs
-  regression tests pass. Complete current case-reader/runner/launcher sources
-  restore exactly to21de384a;drift and mixed/unknown selections reject.
-  Evidence:static-semantic-selection-regression-20261022 and static-semantic-
-  selected-review-verification-20261022 logs/empty stderr. No export yet.
-- NEXT:register the coherent191-definition/82191909 case batch with exact
-  accepted180-definition/873-source predecessor conservation,then use the existing
-  export/conservation/cold/import milestone. Read-only inventory confirms producer
-  still has873 paths and unchanged7e0caa32 normalized SHA;new join/sort/toggle/widget
-  scripts are not consumed. Case selection changed only;policy/producer still
-  need11-finding/proof/source registration. Do not export or present pending
-  proofs as canonical. Remaining static roles,full relationships,interaction and
-  paint obligations continue after integration;do not reopen settled causes.
-- Final unfiltered canonical/audit harness/browser/units/builds/consumer/
-  capability/example/skills/diff/handoff gates remain unchanged. Storage:closed
-  JSON LZX conversion saved453483648 physical bytes with hashes/paths/indexes
-  unchanged,no deletion. Detailed receipts and prior checkpoints follow.
+  current rendering unverified. No inspection/acceptance promotion or renderer fix.
+- Last accepted package7fa7ca35/index77af769e/review7eb107de remains180 findings/
+  243 proofs/873 source paths. Publication7176fc4a conserved source/sections/receipts,
+  independent cold replay and verified import. It predates the registration below;
+  do not describe it as matching the changed current audit sources.
+- Working batch now registers191 findings/248 proofs/928 paths. Source census
+  authenticates complete accepted predecessor tables;all180 findings,243 proof
+  claims and873 paths preserve,with11 findings/five proofs/55 paths added and
+  exactly seven existing source fingerprints reconciled. Two old proof line
+  numbers shift only by the explicit historical population import.
+  Evidence:static-semantic-registration-census-20261022 log/empty stderr.
+- Seven sequential integration tests pass,including nine exact frozen reviewer
+  replays and full case-join replay after registration. Historical module loader
+  authenticates exact allowed reviewer bytes and restores only the prior policy;
+  arbitrary/production/capture imports reject. Current production sees191 findings.
+  Evidence:static-semantic-registration-integration-20261022 log/empty stderr;
+  static-semantic-inputs.spec.mjs/static-semantic-registration.mjs.
+- New core finding retains two equal public-input runs/32 captures with12 hidden
+  description losses. Six whole current/installed/actual-bundle methods bind;
+  hidden graph pruning is distinct from fixtures omitting description links.
+  Ten additional findings classify sheet/group names,chip orientation/tabstop,
+  picker host/popup metadata,radio/switch primitives and sort description inputs.
+  All exact findings/recommendations/limits are in registered source definitions;
+  source reviewaf08f832 preserves the complete191-definition proposal.
+- Case review82191909 preserves869 prior queued children and adds240 bounded
+  semantic children across228 unique static cases/19 families,for1109 beyond
+  accepted7eb107de.16180 dependencies/twelve current-source checks authenticate;
+  all2311 original partial statuses/remaining-work preserve. Explicit launcher
+  --static-semantic-inputs selects only82191909;old selections remain supported.
+  Joined evidence is not full semantic inspection,case closure or a parity pass.
+- Actual initial AX corpus covers436 configured pairs/872 raw observations at
+  pinned9d0f1220. Captures alone do not inspect every relationship/anonymous node,
+  event/AT behavior,paint or current whole runtime. Remaining static roles,
+  interaction and full input/rendering obligations remain open after integration.
+- NEXT:freeze registered sources,export the coherent batch with the named launcher,
+  then compare sections/coverage/receipts against accepted7fa7ca35 before independent
+  cold verification and candidate/main import. Do not repeat the prior canonical
+  investigations or treat this registration as publication. Final unfiltered
+  canonical/audit-harness/browser/units/builds/consumer/capability/examples/skills/
+  diff/handoff gates and original acceptance remain unchanged.
+- Storage:closed82191909 case proposal transparently LZX-compressed in place;
+  189866594 logical bytes and raw SHAaa576ead unchanged,no deletion/repointing.
+  Compression log records observed free space,not an attribution of all volume
+  changes. Earlier old302-build review found all candidates already absent.
 
 ## October22 earlier current-pointer detail — superseded milestones
 
