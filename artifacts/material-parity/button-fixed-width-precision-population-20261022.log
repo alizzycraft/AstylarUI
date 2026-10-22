@@ -1,0 +1,113 @@
+TAP version 13
+# Subtest: button fixed widths production integration preserves matching authoring and prior unrelated rows
+not ok 1 - button fixed widths production integration preserves matching authoring and prior unrelated rows
+  ---
+  duration_ms: 1026600.1004
+  type: 'test'
+  location: 'D:\\dev\\github\\AstylarUI-audit-integration\\tests\\material-parity\\button-fixed-width-canonical-integration.spec.mjs:82:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    ... Skipped lines
+    
+      {
+        astylar: 'rgba(246,241,249,1)',
+        cases: [
+          'static:bottom-sheet@light/desktop',
+          'static:bottom-sheet@light/tablet',
+    ...
+          'interaction:bottom-sheet@light/desktop-dpr2/held',
+    -     'interaction:bottom-sheet@light/desktop-dpr2/activate',
+    -     'interaction:bottom-sheet@light/desktop-dpr2/activate-leave',
+    -     'interaction:bottom-sheet@light/desktop-dpr2/open',
+    -     'interaction:bottom-sheet@light/comparison-pane-dpr1/activate',
+    -     'interaction:bottom-sheet@light/mobile-dpr2/open-dismiss'
+        ],
+        element: 'bottom-sheet-root',
+        family: 'bottom-sheet',
+        occurrences: 17,
+        property: 'backgroundColor',
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    family: 'bottom-sheet'
+    element: 'bottom-sheet-root'
+    property: 'backgroundColor'
+    reference: 'rgba(245.879925,240.73989,248.60001,1)'
+    astylar: 'rgba(246,241,249,1)'
+    occurrences: 17
+    cases:
+      0: 'static:bottom-sheet@light/desktop'
+      1: 'static:bottom-sheet@light/tablet'
+      2: 'static:bottom-sheet@light/mobile'
+      3: 'interaction:bottom-sheet@light/desktop-dpr1/focus'
+      4: 'interaction:bottom-sheet@light/desktop-dpr1/hover'
+      5: 'interaction:bottom-sheet@light/desktop-dpr1/held'
+      6: 'interaction:bottom-sheet@light/desktop-dpr1/activate'
+      7: 'interaction:bottom-sheet@light/desktop-dpr1/activate-leave'
+      8: 'interaction:bottom-sheet@light/desktop-dpr1/open'
+      9: 'interaction:bottom-sheet@light/desktop-dpr2/focus'
+      10: 'interaction:bottom-sheet@light/desktop-dpr2/hover'
+      11: 'interaction:bottom-sheet@light/desktop-dpr2/held'
+      12: 'interaction:bottom-sheet@light/desktop-dpr2/activate'
+      13: 'interaction:bottom-sheet@light/desktop-dpr2/activate-leave'
+      14: 'interaction:bottom-sheet@light/desktop-dpr2/open'
+      15: 'interaction:bottom-sheet@light/comparison-pane-dpr1/activate'
+      16: 'interaction:bottom-sheet@light/mobile-dpr2/open-dismiss'
+    states:
+      0: 'static'
+      1: 'focus'
+      2: 'hover'
+      3: 'held'
+      4: 'activate'
+      5: 'activate-leave'
+      6: 'open'
+      7: 'open-dismiss'
+  actual:
+    family: 'bottom-sheet'
+    element: 'bottom-sheet-root'
+    property: 'backgroundColor'
+    reference: 'rgba(245.879925,240.73989,248.60001,1)'
+    astylar: 'rgba(246,241,249,1)'
+    occurrences: 17
+    cases:
+      0: 'static:bottom-sheet@light/desktop'
+      1: 'static:bottom-sheet@light/tablet'
+      2: 'static:bottom-sheet@light/mobile'
+      3: 'interaction:bottom-sheet@light/desktop-dpr1/focus'
+      4: 'interaction:bottom-sheet@light/desktop-dpr1/hover'
+      5: 'interaction:bottom-sheet@light/desktop-dpr1/held'
+      6: 'interaction:bottom-sheet@light/desktop-dpr1/activate'
+      7: 'interaction:bottom-sheet@light/desktop-dpr1/activate-leave'
+      8: 'interaction:bottom-sheet@light/desktop-dpr1/open'
+      9: 'interaction:bottom-sheet@light/desktop-dpr2/focus'
+      10: 'interaction:bottom-sheet@light/desktop-dpr2/hover'
+      11: 'interaction:bottom-sheet@light/desktop-dpr2/held'
+    states:
+      0: 'static'
+      1: 'focus'
+      2: 'hover'
+      3: 'held'
+      4: 'activate'
+      5: 'activate-leave'
+      6: 'open'
+      7: 'open-dismiss'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///D:/dev/github/AstylarUI-audit-integration/tests/material-parity/button-fixed-width-canonical-integration.spec.mjs:141:14)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1030282.2349

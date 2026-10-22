@@ -2,6 +2,11 @@
 
 ## Current versus historical evidence
 
+Retain button-fixed-width-precision-population-20261022.log/.stderr.log:
+session80722 terminates1,0/1,1030282.2349ms at new helper's incorrect complete-case
+expectation. Production retains twelve example IDs;occurrences remain complete.
+Do not delete this instrumentation failure or describe the full test as passing.
+
 Fixed-width precise-measurement session63343 now terminates1,0/1,
 1173113.6562ms. Preserve both logs as failure evidence. Earlier scalar conservation
 passes;next count assertion1146 versus1174 fails before complete unrelated-row

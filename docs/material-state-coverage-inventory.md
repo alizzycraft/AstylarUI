@@ -2,6 +2,23 @@
 
 ## Current audit pointer — October22
 
+- Precision-population integration80722 TERMINATES1,0/1,1030282.2349ms.
+  New28-group cardinality/uniqueness pass;first matching row agrees in values,
+  occurrences17 and states,but helper incorrectly expected17 case IDs versus
+  production's first12 examples(input-equivalence-audit.mjs:2210). Correct helper
+  to preserve that bounded serialization;raw480-case derivation/occurrence count
+  stay complete. This is verifier instrumentation,not missing captured cases or
+  permission to call scalar example IDs complete membership. Remaining assertions
+  still pending. Preserve both precision-measurement/population failure logs.
+- Independent raw-input check accounts for exactly28 newly visible precision-only
+  background groups across480 selected cases,seven families/four profiles. Exact
+  historical30357/current canonicalStyle function extraction reproduces the
+  transition;every newly unequal property is backgroundColor on its family root.
+  Existing fixed-width test now derives complete group values/counts/cases/states
+  from raw selected inputs,checks every matching current row,and retains1146
+  remaining rows plus full unrelated-row equality. Syntax/diff checks pass.
+  New integration logs:button-fixed-width-precision-population-20261022.log/.stderr
+  .log;terminal verification pending. No raw input,reference or renderer change.
 - Fixed-width measurement-aligned integration63343 TERMINATES1,0/1,
   duration1173113.6562ms. The first scalar equality now passes,as do all preceding
   eight width/nine box groups,600 owners,later gap/caret reviews and eight reviewed
