@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Export5359 is terminal success(exit0,2587840ms). Retain closed tabs-coherent-
+export-20261022 stdout/stderr and tabs-export-census-binding-20261022 log/empty
+stderr(census75129 exit0). New docs package7fa7ca35/180 findings/243 proofs/873
+paths is exported,not accepted/imported. Full80-section comparison59897 remains
+live;retain its logs but do not commit live results. Prior accepted8d6c5964 and
+every original/failure capture stay retained. Keep873 source inputs frozen through
+conservation and independent cold. Older live5359 notes below are historical.
+
 Retain check-retained-core-initial-ax.mjs and core-initial-ax-partial-review-
 20261022 log/empty stderr. Reuses the2 completed raw observations from the failed
 remaining-static batch;producer/checkpoint/component/source-map/full semantic

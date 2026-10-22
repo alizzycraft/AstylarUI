@@ -1,0 +1,9 @@
+{"auditProgress":"read-reference","elapsedMs":0.4410000000000309,"memory":{"rss":150007808,"heapTotal":108732416,"heapUsed":88170200,"external":3878778,"arrayBuffers":85762}}
+{"auditProgress":"build-audit","elapsedMs":884.1029999999998,"memory":{"rss":245489664,"heapTotal":213590016,"heapUsed":175606776,"external":3881874,"arrayBuffers":85618}}
+{"auditProgress":"join-case-obligations","elapsedMs":1008751.3066,"memory":{"rss":5014454272,"heapTotal":2515357696,"heapUsed":2410356968,"external":213380625,"arrayBuffers":209561884}}
+{"auditProgress":"validate-audit","elapsedMs":1047358.7275,"memory":{"rss":5942505472,"heapTotal":2544717824,"heapUsed":2391706608,"external":1740223797,"arrayBuffers":1728895660}}
+{"auditProgress":"verify-evidence-session","elapsedMs":2417791.6971,"memory":{"rss":5766950912,"heapTotal":4212609024,"heapUsed":4111823120,"external":1788437016,"arrayBuffers":1778054169}}
+{"auditProgress":"render-markdown","elapsedMs":2439664.7706999998,"memory":{"rss":5504053248,"heapTotal":2551455744,"heapUsed":2404266912,"external":1764215894,"arrayBuffers":1760397153}}
+{"auditProgress":"encode-canonical","elapsedMs":2440584.0086,"memory":{"rss":5497950208,"heapTotal":2552000512,"heapUsed":2410426544,"external":1732002405,"arrayBuffers":1728183664}}
+{"auditProgress":"write-canonical","elapsedMs":2587740.0239999997,"memory":{"rss":2849599488,"heapTotal":2561454080,"heapUsed":2411155360,"external":182305047,"arrayBuffers":178355234}}
+{"auditProgress":"complete","elapsedMs":2587840.3345,"memory":{"rss":2849984512,"heapTotal":2561454080,"heapUsed":2411170616,"external":182305047,"arrayBuffers":178355234}}

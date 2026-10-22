@@ -11,9 +11,14 @@
   source registry180/proofs243/paths873. All179 prior findings,proof claims and
   paths preserve;17 paths added/exactly7 old receipts changed. Full predecessor
   restoration,20 focused tests and exact source-census freeze replay pass.
-  Registered0b304f51,pushed. Export5359 is confirmed live;poll that same handle.
-  Logs:tabs-coherent-export-20261022/stdout.log and stderr.log. Do not commit
-  live logs or change frozen873 sources. No accepted180 publication yet.
+  Registered0b304f51,pushed. Export5359 completes exit0 in2587840ms;1 collector/
+  10 memory hits/1 disk hit,16847 files/1720170485 bytes authenticated. Exported
+  docs package7fa7ca35(88642938 compressed/2335199967 decoded bytes,SHA30b47518)
+  remains unaccepted. Exact exported census75129 passes:873 paths/243 proofs/
+  180 findings match frozen source selection. Logs:tabs-coherent-export-20261022
+  stdout/stderr and tabs-export-census-binding-20261022 log/empty stderr.
+  Full80-section comparison59897 is live;poll that handle. Keep873 sources frozen
+  through conservation/cold. No accepted180 publication or working-index import.
 - Its pending201 case children cover70 tabs/94 menu node records,25 sheet action
   presence and12 tabs AX pairs. Source finding:explicit content-as-tab-panel-name
   replaces reference labelledby intent. Known private text-paint causes separate.
@@ -34,9 +39,9 @@
   methods and new pinned source map;old request precedes tree update. New AX
   endpoints do not establish timing cause for every execution. See sheet activate,
   name-input and focus-source-applicability20261022 logs;no repeated reduction.
-- Next:finish export5359,then full section/coverage/receipt reconciliation,
+- Next:finish full section/coverage/receipt reconciliation,
   independent cold comparison and accepted import. Batch queued evidence later.
-  Remaining initial-state AX batch is deferred until that export closes:reuse
+  Remaining initial-state AX batch is deferred through this reconciliation:reuse
   authenticates192 existing observations/96 pairs across8 families,leaving340
   configured pairs across28 families. First preflight rejects legacy list's
   absent family field;exact bedbf723 envelope+list-primary target guard repairs
@@ -45,7 +50,7 @@
   pair. Its2 raw observations/producer/checkpoint authenticate with no page errors;
   not full verification or semantic failure. Retain remaining-static-ax-20261022,
   both capture log pairs and capture-remaining-static-ax.mjs. Do not restart the
-  same browser work while export remains CPU-heavy;failure cause is unproven.
+  same browser work while heavy verification is active;failure cause is unproven.
   The completed core/light/desktop pair now has a separate bounded named-role/
   backend review:button/region names agree,known heading-case and duplicate-main
   findings reproduce. Existing full semantic/source-map bindings reauthenticate;
