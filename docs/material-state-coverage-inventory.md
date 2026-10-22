@@ -37,9 +37,24 @@
   pinned9d0f1220. Captures alone do not inspect every relationship/anonymous node,
   event/AT behavior,paint or current whole runtime. Remaining static roles,
   interaction and full input/rendering obligations remain open after integration.
-- NEXT:freeze registered sources,export the coherent batch with the named launcher,
-  then compare sections/coverage/receipts against accepted7fa7ca35 before independent
-  cold verification and candidate/main import. Do not repeat the prior canonical
+- Export84145 completed exit0 from frozen03fafef8 sources. Pending packagee7d22b1a
+  is91375500 compressed/2340736618 decoded bytes,decoded SHAb87db14a. All436/1875
+  configured cases and8483 differences/389202 occurrences retain;191 source
+  findings,input-equivalent false. Session:one collector/ten memory hits/one disk
+  hit,17370 files/1746229963 bytes authenticated. Actual total elapsed6499270.7ms
+  includes a substantially delayed tool observation;do not infer a like-for-like
+  performance regression or a sleep cause from these observations alone.
+  Evidence:static-semantic-export-20261022 log/stderr(progress,not empty).
+- Full80-section comparison completed exit0:70 identical,ten changed(source
+  fingerprints,coverage,controlLineBoxes,summary,discrepancies,ownerCaretInputs,
+  reviewedSourceBatchInputs,controlTypography,sourceFindings,focusedProofs).
+  Accepted predecessor digests reused;current compressed/decoded bytes authenticate.
+  Evidence:static-semantic-full-section-comparison-20261022 log/empty stderr.
+  Changed sections still require detailed conservation;this is not acceptance.
+- NEXT:finish live combined source-census/coverage/receipt conservation95158,
+  then independent cold verification and candidate/main import. Main accepted
+  pointer remains7fa7ca35;generated docs packagee7d22b1a is pending. Registered
+  source/proof/evidence files stay frozen. Do not repeat the prior canonical
   investigations or treat this registration as publication. Final unfiltered
   canonical/audit-harness/browser/units/builds/consumer/capability/examples/skills/
   diff/handoff gates and original acceptance remain unchanged.

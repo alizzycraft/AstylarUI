@@ -2,6 +2,16 @@
 
 ## Current versus historical evidence
 
+Retain static-semantic-export-20261022 log/stderr and static-semantic-full-section-
+comparison-20261022 log/empty stderr. Export84145 exits0;pending packagee7d22b1a
+has91375500 compressed/2340736618 decoded bytes,decoded SHAb87db14a. Actual session
+authenticates17370 files/1746229963 bytes with one collector/ten memory hits/one
+disk hit. Original elapsed/progress receipts remain unmodified,including a
+substantially delayed observation;no unsupported performance/suspend explanation.
+All80 sections compare,70 identical/ten changed;detailed conservation95158 remains
+live at this checkpoint. Keep accepted7fa package/index and main pointer unchanged
+until conservation,cold and import verification finish. No rendering/case promotion.
+
 Retain static-semantic-registration.mjs,static-semantic-inputs.spec.mjs and the
 restricted static-semantic-historical-loader.mjs with all registration-focused,
 registration-regression,registration-source-focused,registration-integration and
