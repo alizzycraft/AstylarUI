@@ -31,10 +31,17 @@
   agree. Backend identities,DOM attributes and list ancestry bind;current component/
   source-map receipts reauthenticate. Pinned9d0f1220/Chrome155.0.8059.80 unchanged.
   Evidence:tabs-static-ax-20261022,capture/review log pairs and both tabs AX scripts.
-- Next:trace tab panel naming/identity relationships through authored input and
-  history before classifying a distinct finding. Keep known private-paint and
-  typography causes separate;do not infer a core defect from unequal inputs.
-  Then remaining
+- Tab semantic source/history review now closes that bounded question: current
+  content-as-panel-name is explicitly authored,not a lost supplied labelledby.
+  Initial2f440115 already omits labelledby/reuses one panel;a0f3328b parent/child
+  introduces the explicit content name. Existing full semantic binding and12-pair
+  AX proof replay exactly. Pending proposal4eb7698c preserves all179 definitions
+  and adds fixture-tab-panel-accessible-name-substitution;not registered/exported.
+  Evidence:review-tabs-semantic-inputs.mjs,tabs-semantic-input-review-20261022
+  log/empty stderr. No renderer/fixture edit or current rendering acceptance.
+- Next:coherently join the pending bounded node/AX/source evidence using existing
+  registration and conservation infrastructure,without recapturing unchanged
+  evidence or promoting partial cases. Then remaining
   descendant/first-stage/anonymous and semantic gaps;
   interaction histories/resources(1875),editable caret/selection(443) and complete
   current input/runtime/rendering applicability(2311) remain open and overlapping.

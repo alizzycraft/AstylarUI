@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain review-tabs-semantic-inputs.mjs,tabs-semantic-input-review-20261022 log/
+empty stderr and pending proposal4eb7698c. Existing full semantic-binding and
+12-pair AX verifiers replay byte-exactly;all179 prior definitions preserve.
+Whole historical component bytes authenticate initial2f440115 and a0f3328b
+parent/child. Explicit content-name substitution is authored,not supplied
+labelledby lost in core. This pending180 proposal is not canonical registration,
+current rendering acceptance or disposal authority for original evidence.
+
 Publication upload17645 terminates0;c5ebd32f is pushed. Retain all27 tabs-static-
 ax-20261022 files,both tabs AX scripts and capture/review20261022 log pairs.
 All24 captures/producers/source-binding receipts authenticate;full12-pair review
