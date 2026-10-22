@@ -2,6 +2,17 @@
 
 ## Current versus historical evidence
 
+Keep entire tooltip-actual-theme-short-boundary-20261022 capture(97 files,
+6430285 logical bytes),its checkpoint manifest and original capture log/empty
+stderr. New report5ec72aca authenticates actual dark/contrast/custom themes and
+24 paired-side open/closed observations;retain all source/runtime/PNG/tree receipts.
+Keep tooltip-short-boundary-configuration(-final),tooltip-actual-theme-short-
+boundary-validation and tooltip-short-boundary-integration20261022 log/stderr
+pairs. Three-test integration passes with original light fallback assertion
+unchanged;new data checks reject51 mutations. No settled-raster/current-renderer
+acceptance or broad lifetime claim. Original light and ordinary theme captures
+remain separately retained;new producer source does not rewrite their receipts.
+
 Keep tab-pagination-display-exclusion(-verified,-final)-20261022 log/stderr pairs.
 First fails a new instrumentation schema assumption;verified/final pass the exact
 70 retained reference-tree checks and280 mutation controls. Final binds its test

@@ -2,6 +2,28 @@
 
 ## Current audit pointer — October22
 
+- Actual-theme tooltip fallback question answered for12 frozen-application
+  contexts:dark/contrast/custom at900x1000/900x240,DPR1/2. Reused the existing
+  applied-theme producer with explicit --short-boundary;original light boundary
+  producer/captures unchanged. New report tooltip-actual-theme-short-boundary-
+  20261022/latest-report.json SHA5ec72acad66a4c3be382df77ae3d8fb32af3141da2ddcc03748ed645d05d6c83.
+  All24 runtimes/theme backgrounds/open trees/PNGs authenticate;Chrome155.0.8059.85,
+  1887 retained served assets,zero recorded runtime errors. Six short native
+  overlays select above with8px gap;all12 candidate layout boxes remain8px below.
+  Four short candidate boxes exceed240px,two contrast boxes fit:do not infer a
+  universal off-screen coordinate cause. Existing stacking/ancestry proof binds
+  unequal inputs in all12 pairs;corroborates fixture-tooltip-replaces-connected-
+  overlay-with-flow,not a new core finding. Native samples are mid-animation;
+  this does NOT establish settled height,sharpness or calibrated paint. Visual
+  contrast pair confirms that candidate box visibility is not visible glyph proof;
+  no fresh camera-depth causality inferred here. Existing light control plus new
+  configuration/data assertions pass3/3 in4947.7372ms;51 data mutations reject.
+  Logs:tooltip-short-boundary-configuration(-final),tooltip-actual-theme-short-
+  boundary-validation and tooltip-short-boundary-integration20261022. Existing
+  three-cycle/disposal observations remain bounded,not lifetime acceptance.
+  Standalone capture is not canonically joined. Registered append-only tab/tooltip
+  test-source changes await a coherent batch;no per-edit canonical export. Old
+  theme-capture producer receipts remain historical,not silently refreshed.
 - Current gap-navigation correction:do NOT reopen the already-proved mixed-text
   capture limitation,chip empty-focus-indicator exclusion or default-light
   tooltip fallback merely because the broad family table still lists anonymous/

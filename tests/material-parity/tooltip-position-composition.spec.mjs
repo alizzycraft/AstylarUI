@@ -387,3 +387,101 @@ test('connected placement is a reference behavior and only a private select prim
     publicConnectedPlacementProven: false, privateSelectPrimitive: true,
     liveTooltipEdgeFallbackProven: false }));
 });
+
+test('tooltip short-boundary opt-in preserves the original applied-theme viewport matrix', () => {
+  const source = readFileSync('scripts/audit-material-tooltip-applied-theme-ownership.mjs', 'utf8');
+  const ast = ts.createSourceFile('producer.mjs', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const initializer = name => ast.statements.filter(ts.isVariableStatement)
+    .flatMap(statement => [...statement.declarationList.declarations])
+    .find(declaration => declaration.name.getText(ast) === name).initializer.getText(ast);
+  const original = new Function(`return (${initializer('defaultViewports')});`)();
+  assert.deepEqual(original, [
+    { id: 'desktop-dpr1', width: 1440, height: 1000, deviceScaleFactor: 1 },
+    { id: 'desktop-dpr2', width: 1440, height: 1000, deviceScaleFactor: 2 },
+    { id: 'tablet-dpr1', width: 768, height: 1024, deviceScaleFactor: 1 },
+    { id: 'mobile-dpr2', width: 390, height: 844, deviceScaleFactor: 2 },
+  ]);
+  const select = new Function('shortBoundary', 'defaultViewports', `return (${initializer('viewports')});`);
+  assert.equal(select(false, original), original);
+  const contexts = select(true, original);
+  assert.deepEqual(contexts.map(v => [v.width, v.height, v.deviceScaleFactor]),
+    [[900, 1000, 1], [900, 240, 1], [900, 1000, 2], [900, 240, 2]]);
+  assert.equal(new Set(contexts.map(v => v.id)).size, 4);
+  assert.deepEqual(select(false, original), original, 'opt-in must not mutate ordinary context inputs');
+});
+
+import { execFileSync } from 'node:child_process';
+
+test('actual-theme short tooltip contexts preserve fallback versus flow input inequality', () => {
+  const file = 'artifacts/material-parity/tooltip-actual-theme-short-boundary-20261022/latest-report.json';
+  const bytes = readFileSync(file), hash = value => createHash('sha256').update(value).digest('hex');
+  assert.equal(hash(bytes), '5ec72acad66a4c3be382df77ae3d8fb32af3141da2ddcc03748ed645d05d6c83');
+  const report = JSON.parse(bytes);
+  const verified = JSON.parse(execFileSync(process.execPath,
+    ['scripts/audit-material-tooltip-applied-theme-ownership.mjs', '--verify', file, '--short-boundary'], { encoding: 'utf8' }));
+  assert.deepEqual(verified, { contexts: 12, pairedCycles: 36, currentRenderingAccepted: false });
+  const contexts = [['tall-dpr1', 1000, 1], ['short-dpr1', 240, 1], ['tall-dpr2', 1000, 2], ['short-dpr2', 240, 2]];
+  const expected = ['dark', 'contrast', 'custom'].flatMap(profile => contexts.map(([id]) => `${profile}/${id}`));
+  const analyze = rows => {
+    assert.deepEqual(rows.map(row => `${row.profile}/${row.viewport.id}`), expected);
+    let above = 0, below = 0, candidateOutside = 0, candidateInside = 0;
+    const near = (value, expected) => assert.ok(Math.abs(value - expected) < 1e-6,
+      'CSS anchor relationship changed; this is not a raster tolerance');
+    for (const row of rows) {
+      const [, height, dpr] = contexts.find(([id]) => id === row.viewport.id);
+      assert.deepEqual([row.viewport.width, row.viewport.height, row.viewport.deviceScaleFactor], [900, height, dpr]);
+      for (const side of ['reference', 'astylar']) {
+        assert.deepEqual(row[side].runtime.errors, []);
+        assert.equal(row[side].benchmarkMode, false);
+        assert.deepEqual(row[side].openBoundary.viewport, { width: 900, height });
+      }
+      const native = row.reference.openBoundary, candidate = row.astylar.openBoundary;
+      near(candidate.popup.top - candidate.trigger.bottom, 8);
+      if (height === 240) {
+        near(native.trigger.top - native.popup.bottom, 8);
+        assert.ok(native.popup.bottom < native.trigger.top); above++;
+        if (candidate.popup.bottom > height) candidateOutside++; else candidateInside++;
+      } else {
+        near(native.popup.top - native.trigger.bottom, 8); below++;
+      }
+    }
+    return { nativeAboveShort: above, nativeBelowTall: below, candidateOutsideShort: candidateOutside,
+      candidateInsideShort: candidateInside, candidateLayoutBelow: rows.length };
+  };
+  const result = analyze(report.results);
+  assert.deepEqual(result, { nativeAboveShort: 6, nativeBelowTall: 6,
+    candidateOutsideShort: 4, candidateInsideShort: 2, candidateLayoutBelow: 12 });
+  for (const row of report.results) {
+    const trees = ['reference', 'astylar'].map(side => {
+      const open = row[side].openBoundary;
+      assert.equal(hash(readFileSync(open.inputTree.file)), open.inputTree.sha256);
+      assert.equal(hash(readFileSync(open.screenshot.file)), open.screenshot.sha256);
+      const image = PNG.sync.read(readFileSync(open.screenshot.file));
+      assert.deepEqual([image.width, image.height],
+        [row.viewport.width * row.viewport.deviceScaleFactor, row.viewport.height * row.viewport.deviceScaleFactor]);
+      return JSON.parse(readFileSync(open.inputTree.file));
+    });
+    const proof = proveTooltipStackingComposition(...trees);
+    assert.equal(proof.classification, 'application-plugin-authoring-defect');
+    assert.equal(proof.inputEquivalent, false); assert.equal(proof.rendererCauseProven, false);
+    const expectedClass = row.viewport.height === 240 ? 'mat-mdc-tooltip-panel-above' : 'mat-mdc-tooltip-panel-below';
+    assert.equal(trees[0].nodes.filter(node => node.attributes?.class?.split(/\s+/).includes(expectedClass)).length, 1);
+  }
+  let rejected = 0;
+  for (let i = 0; i < report.results.length; i++) for (const mutate of [
+    row => { row.reference.openBoundary.trigger.top += 1; row.reference.openBoundary.trigger.bottom += 1; },
+    row => { row.astylar.openBoundary.popup.top += 1; },
+    row => { row.astylar.runtime.errors.push('invented runtime failure'); },
+    row => { row.viewport.width += 1; },
+  ]) {
+    const rows = structuredClone(report.results); mutate(rows[i]); assert.throws(() => analyze(rows)); rejected++;
+  }
+  for (const mutate of [rows => rows.pop(), rows => { rows[1] = structuredClone(rows[0]); }, rows => { rows[0].profile = 'light'; }]) {
+    const rows = structuredClone(report.results); mutate(rows); assert.throws(() => analyze(rows)); rejected++;
+  }
+  assert.equal(rejected, 51);
+  console.log(JSON.stringify({ proof: 'actual-theme-tooltip-short-fallback-inputs', evidence: { file, sha256: hash(bytes) },
+    ...result, negativeControlsRejected: rejected, existingFinding: 'fixture-tooltip-replaces-connected-overlay-with-flow',
+    boundary: 'Frozen application with verified actual themes and viewport geometry. Native capture is mid-animation;do not compare settled height/sharpness or infer current-renderer paint causality. Candidate layout boxes do not prove visible popup paint. Not complete scroll/lifetime,canonical case closure or rendering acceptance.',
+    canonicalPublication: false, currentRenderingAccepted: false }));
+});

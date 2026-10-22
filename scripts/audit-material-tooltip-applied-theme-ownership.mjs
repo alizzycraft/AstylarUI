@@ -21,13 +21,22 @@ const themes = {};
 new Function('exports', ts.transpileModule(readFileSync(themeFile, 'utf8'), {
   compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS },
 }).outputText)(themes);
-const viewports = [
+const shortBoundary = process.argv.includes('--short-boundary');
+assert.equal(process.argv.filter(arg => arg === '--short-boundary').length, Number(shortBoundary));
+const defaultViewports = [
   { id: 'desktop-dpr1', width: 1440, height: 1000, deviceScaleFactor: 1 },
   { id: 'desktop-dpr2', width: 1440, height: 1000, deviceScaleFactor: 2 },
   { id: 'tablet-dpr1', width: 768, height: 1024, deviceScaleFactor: 1 },
   { id: 'mobile-dpr2', width: 390, height: 844, deviceScaleFactor: 2 },
 ];
+const viewports = shortBoundary ? [
+  { id: 'tall-dpr1', width: 900, height: 1000, deviceScaleFactor: 1 },
+  { id: 'short-dpr1', width: 900, height: 240, deviceScaleFactor: 1 },
+  { id: 'tall-dpr2', width: 900, height: 1000, deviceScaleFactor: 2 },
+  { id: 'short-dpr2', width: 900, height: 240, deviceScaleFactor: 2 },
+] : defaultViewports;
 function verify(raw, file) {
+  assert.equal(raw.kind, shortBoundary ? 'actual-theme-tooltip-short-boundary' : undefined);
   const manifest = JSON.parse(readFileSync(raw.capture.checkpointManifest.file));
   assert.deepEqual(validateSupplementalCapture(raw, { reportFile: file,
     expectedProvenance: manifest.provenance, script, styleProperties: properties }),
@@ -39,6 +48,16 @@ function verify(raw, file) {
     const observation = row[side];
     assert.deepEqual(observation.appliedTheme, themes.MATERIAL_THEME_PROFILES[row.profile]);
     assert.equal(observation.benchmarkMode, false);
+    if (shortBoundary) {
+      const open = observation.openBoundary;
+      assert.ok(open && open.viewport.width === row.viewport.width && open.viewport.height === row.viewport.height);
+      for (const box of [open.trigger, open.popup]) {
+        for (const key of ['left', 'top', 'right', 'bottom', 'width', 'height']) assert.ok(Number.isFinite(box[key]));
+        assert.ok(box.width > 0 && box.height > 0);
+      }
+      for (const receipt of [open.inputTree, open.screenshot]) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+      assert.deepEqual(JSON.parse(readFileSync(open.inputTree.file)).errors, []);
+    }
     const tree = JSON.parse(readFileSync(observation.inputTree.file));
     const surface = observation.appliedTheme.surface;
     assert.match(surface, /^#[0-9a-f]{6}$/i);
@@ -129,9 +148,36 @@ if (process.argv[2] === '--verify') {
           }, side);
           const selector = side === 'reference' ? '.mat-mdc-tooltip-surface' : '[data-astylar-id="tooltip-popup"]';
           const cycles = [];
+          let openBoundary;
           for (let i = 0; i < 3; i++) {
             await page.mouse.move(point.x, point.y); await page.locator(selector).waitFor({ state: 'visible' }); await settle();
             assert.equal(await page.locator(selector).count(), 1);
+            if (shortBoundary && i === 0) {
+              openBoundary = await page.evaluate(side => {
+                const rect = node => {
+                  const b = node.getBoundingClientRect();
+                  return { left: b.left, top: b.top, right: b.right, bottom: b.bottom, width: b.width, height: b.height };
+                };
+                const localRect = id => {
+                  const b = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([id], false).elements[id].borderBox;
+                  const canvas = document.querySelector('canvas').getBoundingClientRect();
+                  const left = canvas.left + b.left, top = canvas.top + b.top;
+                  return { left, top, right: left + b.width, bottom: top + b.height, width: b.width, height: b.height };
+                };
+                return { viewport: { width: innerWidth, height: innerHeight }, scrollY,
+                  scrollHeight: document.documentElement.scrollHeight,
+                  trigger: side === 'reference' ? rect(document.getElementById('tooltip-primary')) : localRect('tooltip-primary'),
+                  popup: side === 'reference' ? rect(document.querySelector('.mat-mdc-tooltip-surface')) : localRect('tooltip-popup') };
+              }, side);
+              const openTree = side === 'reference' ? await page.evaluate(captureBrowserInputTree, { styleProperties: properties })
+                : await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([]).inputTree);
+              const stem = `${evidence.directory}/${profile}-${viewport.id}-${side}-open`;
+              const treeBytes = Buffer.from(JSON.stringify(openTree)), pixels = await page.screenshot({ animations: 'allow' });
+              writeFileSync(stem + '-input-tree.json', treeBytes, { flag: 'wx' });
+              writeFileSync(stem + '.png', pixels, { flag: 'wx' });
+              openBoundary.inputTree = { file: stem + '-input-tree.json', sha256: hash(treeBytes) };
+              openBoundary.screenshot = { file: stem + '.png', sha256: hash(pixels) };
+            }
             await page.mouse.move(10, 10); await page.locator(selector).waitFor({ state: 'detached' }); await settle();
             cycles.push(await page.evaluate(side => {
               if (side === 'reference') return { popupCount: document.querySelectorAll('.mat-mdc-tooltip-surface').length };
@@ -146,13 +192,14 @@ if (process.argv[2] === '--verify') {
           const stem = `${evidence.directory}/${profile}-${viewport.id}-${side}`, treeBytes = Buffer.from(JSON.stringify(tree)), pixels = await page.screenshot({ animations: 'allow' });
           writeFileSync(stem + '-input-tree.json', treeBytes, { flag: 'wx' }); writeFileSync(stem + '.png', pixels, { flag: 'wx' });
           const disposal = side === 'astylar' ? await page.evaluate(() => { const s = window.ng.getComponent(document.querySelector('app-astylar-showcase')).surface, scene = s.scene; s.dispose(); return { disposed: s.disposed, meshes: scene.meshes.length, materials: scene.materials.length, textures: scene.textures.length }; }) : null;
-          row[side] = { ...setup, cycles, disposal, runtime: await finishRuntime(), inputTree: { file: stem + '-input-tree.json', sha256: hash(treeBytes) }, screenshot: { file: stem + '.png', sha256: hash(pixels) } };
+          row[side] = { ...setup, cycles, ...(shortBoundary ? { openBoundary } : {}), disposal, runtime: await finishRuntime(), inputTree: { file: stem + '-input-tree.json', sha256: hash(treeBytes) }, screenshot: { file: stem + '.png', sha256: hash(pixels) } };
         } finally { await page.close(); }
       }
       results.push(row); console.log(JSON.stringify({ profile, viewport: viewport.id, live: row.astylar.cycles.map(x => x.live.materials) }));
     }
-    const report = { schemaVersion: 1, browser: browser.version(), capture: evidence.capture, themeSource: { file: themeFile, sha256: hash(readFileSync(themeFile)) }, results,
-      scope: 'Twelve missing ordinary applied-theme pointer-cycle contexts;not all states,paint,async,remount,GPU or rendering acceptance.' };
+    const report = { schemaVersion: 1, ...(shortBoundary ? { kind: 'actual-theme-tooltip-short-boundary' } : {}), browser: browser.version(), capture: evidence.capture, themeSource: { file: themeFile, sha256: hash(readFileSync(themeFile)) }, results,
+      scope: shortBoundary ? 'Twelve ordinary actual-theme tall/short fallback contexts with retained open geometry/trees/rasters. Frozen application;not equal inputs,current renderer,complete scroll/lifetime or rendering acceptance.'
+        : 'Twelve missing ordinary applied-theme pointer-cycle contexts;not all states,paint,async,remount,GPU or rendering acceptance.' };
     const file = `${evidence.directory}/latest-report.json`; writeFileSync(file, JSON.stringify(report, null, 2) + '\n', { flag: 'wx' });
     console.log(JSON.stringify(verify(report, file)));
   } finally { await browser.close(); await new Promise(resolve => server.close(resolve)); }
