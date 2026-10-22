@@ -8922,6 +8922,8 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'tests/material-parity/popup-depth-case-review-source.mjs',
+    'scripts/join-popup-depth-input-evidence.mjs',
     'src/app/services/babylon-camera.service.ts',
     'src/app/services/css-babylon-projection.ts',
     'src/app/services/css-render-boundary.ts',
@@ -9861,6 +9863,24 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/tooltip-position-composition.spec.mjs', /test\('popup depth queued reader authenticates full case proposal without promoting inspection'/,
+      'popup depth queued case source applicability', 'Exact133-child proposal recovers complete predecessor;existing loader authenticates2311 partial cases/16186 dependencies. Historical source restoration and unknown/source-drift rejection do not establish current rendering.'),
+    proof(root, 'tests/material-parity/tooltip-position-composition.spec.mjs', /test\('retained tooltip and snackbar endpoints distinguish high-z root inputs from absent popups'/,
+      'retained popup endpoint depth-input applicability', 'All133 retained endpoint receipts authenticate:60 high-z popups and73 absent owners.300 mutations reject;synthetic-root styles and actual world depth remain unobserved.'),
+    proof(root, 'tests/material-parity/tooltip-position-composition.spec.mjs', /test\('root depth producer inventory conserves all prior proofs and source paths'/,
+      'popup depth coherent producer inventory conservation', 'Complete prior producer bytes,proofs and source paths survive exact additive registration. New listed assertions exist;changed descriptions/source drift reject. Not publication.'),
+    proof(root, 'tests/material-parity/static-semantic-selection.spec.mjs', /test\('popup depth export selection preserves complete predecessor sources and exact invocation'/,
+      'popup depth exact export selection', 'New explicit launcher flag selects only the exact proposal. Actual runner factory preserves old readers and rejects unknown review selection;complete old sources conserve and mixed supplement flags reject.'),
+    proof(root, 'tests/material-parity/tab-position-substitution.spec.mjs', /test\('retained tab pagination helpers are excluded by display none in all70 cases'/,
+      'retained hidden tab pagination exclusion', 'All70 recorded native trees bind140 hidden disabled controls/280 owners.280 mutations reject;not overflowing pagination behavior,complete structure or case closure.'),
+    proof(root, 'tests/material-parity/tooltip-position-composition.spec.mjs', /test\('tooltip short-boundary opt-in preserves the original applied-theme viewport matrix'/,
+      'tooltip supplemental capture matrix conservation', 'Opt-in short/depth modes preserve the original actual-theme matrix and select bounded diagnostic contexts only. No default matrix or acceptance change.'),
+    proof(root, 'tests/material-parity/tooltip-position-composition.spec.mjs', /test\('actual-theme short tooltip contexts preserve fallback versus flow input inequality'/,
+      'actual-theme short tooltip fallback input inequality', 'Twelve dark/contrast/custom contexts authenticate native above fallback versus candidate below flow;51 mutations reject. Mid-animation native raster and candidate box visibility are not paint acceptance.'),
+    proof(root, 'tests/material-parity/tooltip-position-composition.spec.mjs', /test\('actual-theme tooltip capture conserves depth-proof assets but does not retain new depth observations'/,
+      'tooltip frozen-build depth applicability boundary', 'All1887 old/new served assets agree while browser identity changes. Earlier actual-theme capture lacks final camera/depth fields;do not transplant historical causal measurements.'),
+    proof(root, 'tests/material-parity/tooltip-position-composition.spec.mjs', /test\('contrast tooltip remains in bounds and open while short camera crosses its retained depth'/,
+      'contrast tooltip bounded camera-depth paint failure', 'Frozen-build contrast DPR1 tall/short pair retains identical open trees and in-bounds boxes;actual camera crosses fixed mesh depth and dark pixels disappear.12 mutations reject;not current Material whole-case acceptance.'),
     proof(root, 'tests/material-parity/tooltip-position-composition.spec.mjs', /test\('root depth registration preserves all191 predecessor findings and binds current failure receipts'/,
       'root depth additive finding registration', 'Complete191 predecessor definitions and policy bytes conserve;new core finding binds current public failure receipts,not full Material case acceptance.'),
     proof(root, 'tests/material-parity/tooltip-position-composition.spec.mjs', /test\('root depth historical boundary conserves exact prior population and rejects source drift'/,
@@ -10376,6 +10396,7 @@ function proof(root, file, expression, status, description) {
 
 function implementationPlan() {
   return [
+    { priority: -.05, rootCause: 'Unbounded root paint depth crosses the viewport-dependent camera', action: 'Correct shared core stacking-depth allocation and final camera clipping without changing CSS z-index intent,layout or fractional geometry. Current equal-input public controls preserve CSS/projected boxes but high-z1000 at240px places meshZ250 behind cameraZ207.8461 and loses all2880 pane pixels;three low-z/tall controls paint. Preserve ordering across root and nested contexts and extend negative/large z-index,resize,DPR and update coverage before accepting a general correction. Keep separate Material connected-overlay/flow authoring and absent-popup endpoints explicit. Do not lower fixture z-index,move overlays,or duplicate camera/depth calculations in plugins. Reassess and remove historical compensations only after the general renderer contract is proved.' },
     { priority: -.1, rootCause: 'Equivalent document updates detach inspected nodes from retained renderer ancestry', action: 'Verify the core inspection query-context repair through fresh/update/semantic-only/structural-selector and packed-consumer tests, then recapture affected evidence before accepting resolved-style attributions. The correction uses the existing core resolver with current-document ancestry and remapped pseudo sources, restores live rendering ancestry, and preserves visual reuse. Do not use fixture-side selector matching, rewrite old captures, force all updates to rebuild, or substitute retained glyph color for resolved inputs. Actual interaction and raster behavior remain separate verification obligations.' },
     { priority: 0, rootCause: 'Diagnostic declarations are not fully resolved typography', action: 'Complete trustworthy input-stage coverage before accepting the audit. The existing core retained-text stage and inherited-typography reduction now expose font size and line height independently of declarations; preserve that separation and extend missing control/plugin/anonymous-text mappings and current pseudo-state paint provenance. Do not add a competing inheritance algorithm to the showcase or infer resolved values from projected geometry.' },
     { priority: .1, rootCause: 'Computed inherited/default values are compared against local field-host declarations', action: 'Expose the authoritative core computed/inherited stage for mapped field hosts, keeping authored requests and local diagnostics separate. The eight-property source-backed survey establishes an observation-stage gap, not candidate computed values or correct consumers. Verify ancestor overrides, shorthand/reset requests, wrapping, pointer targeting and visibility before accepting equal inputs; do not populate fixture defaults or add a harness inheritance algorithm. Existing Material component typography and alignment omissions must remain independent findings.' },

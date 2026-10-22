@@ -2,6 +2,27 @@
 
 ## Current audit pointer — October22
 
+- October23 coherent queued census now192 findings/261 proofs/934 source paths.
+  Nine pending assertions(tab hidden helpers,tooltip short/theme/depth boundaries,
+  endpoint/case reader,inventory and export selection) and two missing adapter/
+  joiner paths register in the existing producer. Full source6479b848 reverses
+  exactly to d590419e then accepted a0480845;all prior248 proofs/928 paths and
+  implementation-plan entries conserve. One new high-priority shared core depth
+  recommendation precedes fixture cleanup and explicitly forbids z-index/offset
+  workarounds. Existing synthetic-root and absent-endpoint limits remain.
+  Focused coherent integration passes16/16,48615.7313ms;log popup-depth-coherent-
+  inventory-integration-20261023. Subsequent plan conservation passes2/2 after
+  correcting an AST array-versus-sort-call extraction assumption;retain initial
+  failure and final logs. No owning renderer/fixture input changed.
+  Actual production source/proof functions executed in popup-depth-production-
+  inventory-20261023.log:all934 unique paths read,all261 proof targets found,
+  zero missing,63 plan entries. Source population digest58a7dbab;proof digest
+  c8636342. This is registry/conservation evidence,not261 passing runtime tests.
+  Queued-reader suite restoration authenticates current38aac86c and reverses
+  ONLY the two new census assertions before its original whole-suite recovery.
+  Sources are ready to freeze for canonical milestone export with explicit
+  --popup-depth-inputs;conservation,independent cold verification and accepted
+  import remain mandatory. Accepted5ed659b3/all2311 partial cases unchanged.
 - October23 export selection now supports explicit --popup-depth-inputs on the
   existing current-ancestry launcher,selecting exacteb8ca85a proposal and reader.
   Default and all six older supplements retain original invocation;combining

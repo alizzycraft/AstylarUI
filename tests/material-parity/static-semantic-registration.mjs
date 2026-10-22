@@ -61,7 +61,7 @@ export function restoreStaticSemanticProducer(source) {
 }
 
 export function restoreRootDepthProducer(source) {
-  const text = source.toString().replaceAll('\r\n', '\n');
+  const text = restorePopupDepthEvidenceProducer(source);
   if (!text.includes('root depth additive finding registration')) return text;
   assert.equal(hash(text), 'd590419ede4a8f37a4fe392cf3dcec806122b32f3550df98f3530c140130d5d0');
   const ast = ts.createSourceFile('producer.mjs', text, 99, true);
@@ -75,6 +75,29 @@ export function restoreRootDepthProducer(source) {
   for (const [start, end] of [[proofs[0].getFullStart(), proofs[3].end + 1], [files[0].getFullStart(), files[3].end + 1]].sort((a,b) => b[0]-a[0]))
     prior = prior.slice(0,start) + prior.slice(end);
   assert.equal(hash(prior), 'a0480845099038416ce2f420dca03e3cd99712ea083c18075c8bebabbc00f747');
+  return prior;
+}
+
+export function restorePopupDepthEvidenceProducer(source) {
+  const text = source.toString().replaceAll('\r\n', '\n');
+  if (!text.includes('popup depth queued case source applicability')) return text;
+  assert.equal(hash(text), '6479b848b42c90c7435c4792dd83e630acb6f7e7b9254aeac8aeec2d2e7cc34b');
+  const ast = ts.createSourceFile('producer.mjs', text, 99, true);
+  const owner = name => ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+  const proofs = owner('focusedProofInventory').body.statements[0].expression.elements;
+  const files = owner('sourceFingerprints').body.statements[0].declarationList.declarations[0].initializer.elements;
+  assert.equal(proofs.length, 261); assert.equal(files.length, 934);
+  assert.equal(proofs[0].arguments[3].text, 'popup depth queued case source applicability');
+  assert.equal(files[0].text, 'tests/material-parity/popup-depth-case-review-source.mjs');
+  const planReturn = owner('implementationPlan').body.statements[0].expression;
+  assert.ok(ts.isCallExpression(planReturn) && ts.isPropertyAccessExpression(planReturn.expression)
+    && ts.isArrayLiteralExpression(planReturn.expression.expression));
+  const plan = planReturn.expression.expression.elements;
+  assert.ok(plan[0].getText(ast).includes('Unbounded root paint depth crosses the viewport-dependent camera'));
+  let prior = text;
+  for (const [start,end] of [[proofs[0].getFullStart(),proofs[8].end+1],[files[0].getFullStart(),files[1].end+1],[plan[0].getFullStart(),plan[0].end+1]].sort((a,b)=>b[0]-a[0]))
+    prior = prior.slice(0,start)+prior.slice(end);
+  assert.equal(hash(prior), 'd590419ede4a8f37a4fe392cf3dcec806122b32f3550df98f3530c140130d5d0');
   return prior;
 }
 

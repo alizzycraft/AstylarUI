@@ -2,6 +2,12 @@
 
 ## Current versus historical evidence
 
+Keep popup-depth-coherent-inventory-integration-20261023 log/stderr (16/16),
+popup-depth-plan-conservation-initial-20261023 (original AST extraction failure),
+popup-depth-plan-conservation-final-20261023 (2/2) and popup-depth-production-
+inventory-20261023.log (actual934-source/261-proof production census).
+None is a rendering acceptance result or disposable successful scratch.
+
 Keep popup-depth-export-selection-integration-20261023 and popup-depth-export-
 factory-routing-20261023 log/stderr pairs. First validates the complete queued
 proposal plus original/new selection checks(5/5);second executes actual runner

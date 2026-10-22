@@ -33,8 +33,16 @@ export function createPopupDepthReviewReader({ root, read, reviewSha256 }) {
   assert.equal(hash(historical), 'ee4f273b041dec7f2dd0e242e4441b6cc6690b72d7a27d01270682c98e30d10a');
   const suite = 'tests/material-parity/tooltip-position-composition.spec.mjs';
   const currentSuite = read(path.resolve(root, suite));
-  assert.equal(hash(currentSuite), '4bf360e2877d6b10e9dc0944fa9da61d3a24269e8fd9db236f9e325f65a5c09b');
-  const text = currentSuite.toString(), ast = ts.createSourceFile(suite, text, 99, true);
+  let text = currentSuite.toString();
+  if (hash(currentSuite) === '38aac86ccd974432a908d3d0c64ed35ba74096a15fe820ba6c9ecc639cbd4a27') {
+    for (const [current, prior] of [
+      ['assert.equal(files.length, 934); assert.equal(new Set(files.map(n => n.text)).size, 934);',
+        'assert.equal(files.length, 932); assert.equal(new Set(files.map(n => n.text)).size, 932);'],
+      ['assert.equal(proofs.length, 261);', 'assert.equal(proofs.length, 252);'],
+    ]) { assert.equal(text.split(current).length, 2); text = text.replace(current, prior); }
+  }
+  assert.equal(hash(text), '4bf360e2877d6b10e9dc0944fa9da61d3a24269e8fd9db236f9e325f65a5c09b');
+  const ast = ts.createSourceFile(suite, text, 99, true);
   const addedTests = ast.statements.filter(n => ts.isExpressionStatement(n) && ts.isCallExpression(n.expression)
     && n.expression.arguments[0]?.text === 'popup depth queued reader authenticates full case proposal without promoting inspection');
   assert.equal(addedTests.length, 1);
