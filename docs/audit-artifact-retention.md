@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain check-retained-core-initial-ax.mjs and core-initial-ax-partial-review-
+20261022 log/empty stderr. Reuses the2 completed raw observations from the failed
+remaining-static batch;producer/checkpoint/component/source-map/full semantic
+bindings authenticate. Named button/region agreement and existing heading-case/
+duplicate-main discrepancies verify with8 mutations and exact replay. This is
+bounded useful evidence,not successful batch/current rendering or case closure.
+Keep failed run and its originals;no browser recapture or frozen-source change.
+
 Retain capture-remaining-static-ax.mjs,initial remaining-static-ax-capture-
 20261022 preflight failure log/stderr,retry log/stderr and all5 partial remaining-
 static-ax-20261022 files. Retry74762 terminates1 with navigation/load timeout

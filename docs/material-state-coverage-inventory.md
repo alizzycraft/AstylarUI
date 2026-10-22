@@ -46,6 +46,12 @@
   not full verification or semantic failure. Retain remaining-static-ax-20261022,
   both capture log pairs and capture-remaining-static-ax.mjs. Do not restart the
   same browser work while export remains CPU-heavy;failure cause is unproven.
+  The completed core/light/desktop pair now has a separate bounded named-role/
+  backend review:button/region names agree,known heading-case and duplicate-main
+  findings reproduce. Existing full semantic/source-map bindings reauthenticate;
+  8 mutation controls and exact replay pass. Evidence:check-retained-core-initial-
+  ax.mjs,core-initial-ax-partial-review-20261022 log/empty stderr. Retain for later
+  reuse;failed batch remains failed and this case remains partial. No new capture.
   Continue unresolved descendant/full-style/anonymous/semantic coverage,1875
   interaction histories/resources,443 editable caret/selection and2311 complete
   current-input/runtime/rendering applicability obligations. Do not reopen settled
