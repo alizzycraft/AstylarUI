@@ -9,7 +9,8 @@
   Independent cold92085 exits0(2531277ms),2 collectors/10 memory hits/0 disk hits,
   16812 files/1715970043 bytes authenticated. Main import48477 exits0;all shards
   verify and main/candidate pointers match. Publicationc5ebd32f is pushed;Git
-  returned success with an84.12MB recommendation warning,not rejection. No audit collector is live.
+  returned success with an84.12MB recommendation warning,not rejection. New
+  --tabs-menu-sheet export5359 is live;poll the same handle,do not start another.
 - Scope remains36 families/2311 cases(436 static/1875 interaction),all partial;
   current rendering remains unverified. No inspected-complete or rendering-pass
   promotion follows from source classification,recorded trees,AX or cold export.
@@ -36,7 +37,8 @@
   Initial2f440115 already omits labelledby/reuses one panel;a0f3328b parent/child
   introduces the explicit content name. Existing full semantic binding and12-pair
   AX proof replay exactly. Pending proposal4eb7698c preserves all179 definitions
-  and adds fixture-tab-panel-accessible-name-substitution;not registered/exported.
+  and adds fixture-tab-panel-accessible-name-substitution(now registered below,
+  still not accepted/export-reconciled).
   Evidence:review-tabs-semantic-inputs.mjs,tabs-semantic-input-review-20261022
   log/empty stderr. No renderer/fixture edit or current rendering acceptance.
 - Pending case proposal7eb107de now joins70 tabs/94 menu recorded-node records,
@@ -64,6 +66,17 @@
   interaction histories/resources(1875),editable caret/selection(443) and complete
   current input/runtime/rendering applicability(2311) remain open and overlapping.
   Do not reopen settled typography/private-tab-paint causes without changed inputs.
+- Outside frozen873-source export:bottom-sheet complete recorded-node accounting
+  now covers63 cases/1020 native+478 candidate records,252 mutations reject and
+  exact replay passes. Four shapes(12 static closed,24 interactive closed,25 open,
+  2 closed with empty native portal) account every record. Both native links/
+  content/labels/focus indicators remain distinct from candidate value buttons;
+  native focus traps/navigation and local overlay/panel are explicit groups.
+  Existing composition/fixed-constraint findings reused,not structural equivalence.
+  Panel-name difference is retained for later actual-AX/source classification;
+  visibility/paint/reachability/currentness remain unproven. Evidence:
+  check-bottom-sheet-recorded-nodes.mjs,bottom-sheet-recorded-node-accounting-
+  20261022 log/empty stderr. Join only after current export/cold milestone closes.
 - Evidence:stepper-coherent-export-20261022,stepper-cold-check-20261022 and
   stepper-main-import-verification-20261022;full-section-comparison,export-census-
   binding,receipt-leaf-comparison,coverage-conservation,candidate-import and

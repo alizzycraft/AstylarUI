@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Export5359 with --tabs-menu-sheet is confirmed live;retain tabs-coherent-export-
+20261022 stdout/stderr without treating them as terminal or committing live logs.
+Freeze873 source paths through export/conservation/cold;new bottom-sheet proof
+below is outside that inventory and must not be added mid-session.
+Retain check-bottom-sheet-recorded-nodes.mjs and bottom-sheet-recorded-node-
+accounting-20261022 log/empty stderr. All63 pairs/1498 records account,252 controls
+reject,exact replay passes. Original trees including empty portals stay retained.
+Panel naming observations need later semantic classification;no rendering claim.
+
 Retain tabs registration helper/suite and tabs-registration-owning20261022 plus
 owning-final log/empty stderr pairs. Both20tests pass;final run42760ms includes
 the literal-to-regex escaping correction. Census and export-source-freeze20261022
