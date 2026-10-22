@@ -5,11 +5,12 @@
 - Publication7176fc4a and subsequent checkpoints through82a1a8b0 are pushed.
   Push54598 exits0 despite84.54MB recommendation warning;follow-up push succeeds.
   Earlier DNS-failed probe10384 is historical,not an outstanding blocker.
-- Actual-static AX resume81226 is confirmed live in remaining-static-ax-resume-
-  20261022;capture log/stderr use remaining-static-ax-resume-capture-20261022.
-  Original97 reused pairs remain intact;355/678 new observations reached during
-  this checkpoint,not a terminal count. Poll same handle;do not restart or commit
-  live logs. After completion authenticate/report/review before coverage claims.
+- Actual-static AX resume81226 terminates0:678 new+194 reused observations now
+  account exactly for436 configured static pairs,without overlap. Every raw
+  receipt/browser/viewport/mode/runtime-error check passes;all share checkpoint
+  9d0f1220. Evidence:remaining-static-ax-resume-20261022 and resume-capture/
+  resume-verification20261022 log pairs. Original failed run stays immutable.
+  This closes capture membership,not role/name/property attribution,AT or paint.
 - Scope unchanged:36 families/2311 cases(436 static/1875 interaction),all partial;
   current rendering unverified. No case closure or acceptance promotion.
 - Accepted canonical7fa7ca35/index77af769e/review7eb107de:180 findings/243 proofs/
@@ -33,7 +34,7 @@
   input-join-final-20261022. Initial absolute-evidence-path failure2fd3236c retained;
   byte-identical2c2979ad source archived workspace-relative,original stays intact.
   Both proposals remain unregistered/unexported;name source proposal835eba45
-  remains pending. NEXT:finish/review live static AX capture before coherent
+  remains pending. NEXT:review completed static AX observations before coherent
   source/proof registration,not another export for each intermediate proposal.
 - Remaining:full-style/anonymous/first-stage/semantic correspondence,1875 event/
   resource histories,443 editable caret/selection and2311 full runtime/currentness

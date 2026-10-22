@@ -1,0 +1,11 @@
+{
+  "sessionId": 81226,
+  "exitCode": 0,
+  "command": "node scripts/resume-remaining-static-ax.mjs artifacts/material-parity/remaining-static-ax-resume-20261022",
+  "newObservations": 678,
+  "reusedObservations": 194,
+  "configuredStaticPairs": 436,
+  "rawReceiptAndMembershipVerification": "artifacts/material-parity/remaining-static-ax-resume-verification-20261022.log",
+  "inspectionComplete": false,
+  "renderingAccepted": false
+}

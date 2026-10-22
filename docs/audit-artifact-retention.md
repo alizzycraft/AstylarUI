@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Resume81226 terminates0. Retain all remaining-static-ax-resume-20261022 raw/
+producer/provenance/report files and terminal.json,plus remaining-static-ax-
+resume-capture and resume-verification20261022 log/empty stderr pairs.678 new+
+194 reused observations authenticate and exactly partition all436 static pairs
+on pinned9d0f1220,with empty raw runtime errors. Original failed capture and
+prior192+2 observations stay unchanged. Verification retains executable inline
+producerArgs. Capture completeness is not semantic attribution or case closure;
+older live81226/pending-resume notes below are historical,not another live job.
+
 Retain join-bottom-sheet-ax-input-evidence.mjs,bottom-sheet-ax-input-join and
 bottom-sheet-ax-input-join-final20261022 log/stderr pairs. First fails canonical
 workspace-relative path validation;failed proposal2fd3236c remains ignored and
