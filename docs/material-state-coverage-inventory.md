@@ -2,6 +2,17 @@
 
 ## Current audit pointer — October22
 
+- Diagnostic export25178 is live,Node PID24044 confirmed with increasing CPU.
+  Uses original named-launcher dry-run arguments and unchanged producer source;
+  an in-process Node debugger observes validation-call boundaries selected from
+  the existing validator AST. No source/test/fixture edits or acceptance changes.
+  Bounded debugger check first passes:one coverage entry observed and existing
+  validator returns normally. Logs:post-gate-debugger-observation-20261022 and
+  post-gate-canonical-debugger-export-20261022(stdout/stderr);latter is live and
+  initially empty during setup,not a terminal result. Fatal-error reports enabled
+  at existing artifact root. Observation can affect timing;not performance proof.
+  Preserve original export failure;do not restart this live handle or promote
+  applicability before terminal validation/conservation/cold/import checks.
 - Validation isolation,without rebuilding/exporting:authenticated accepted index
   against pointer80632431,then existing assertCaseObligationCoverage passes all2311
   joined cases in652.6838ms. Existing held-content-paint collector independently

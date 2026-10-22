@@ -2,6 +2,12 @@
 
 ## Current versus historical evidence
 
+Retain post-gate-debugger-observation-20261022 log/stderr and live post-gate-
+canonical-debugger-export-20261022 log/stderr. Debugger setup changes no producer
+source;original fatal export logs remain separate. Keep any native fatal-error
+report emitted by this diagnostic process. Live setup/phase output is not a pass
+or canonical acceptance;retain terminal status before scheduling another export.
+
 Retain post-gate-coverage-isolation-20261022.log/.stderr.log and post-gate-held-
 paint-isolation-20261022.log/.stderr.log. Both existing operations pass standalone;
 index hash is authenticated,coverage remains2311 partial. These are bounded crash
