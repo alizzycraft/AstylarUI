@@ -2,6 +2,19 @@
 
 ## Current audit pointer — October22
 
+- Post-gate conservation completes:80 authenticated sections,77 identical;only
+  sourceFingerprints,coverage,focusedProofs differ. Existing leaf comparator
+  checks3864850 entries and finds exactly71 changes:seven reviewed source hashes,
+  one benchmark currentSha256 applicability receipt,63 proof line anchors. Exact
+  Git03fafef8/current seven-file census and complete248-proof non-line/order
+  conservation reproduce every emitted change;no case evidence/disposition change.
+  Logs:post-gate-full-section-comparison,post-gate-changed-section-leaves and
+  post-gate-leaf-reconciliation20261022(all terminal0,empty stderrs). Independent
+  cold canonical check now RUNNING79913 with original named --static-semantic-
+  inputs --check,ASTYLAR_AUDIT_COLD=1,8GB and no debugger. Logs:post-gate-cold-
+  check-20261022;direct file descriptors expose live phases. Keep source batch
+  frozen and accepted pointer e7d22b1a pending cold verification/import;pending
+  canonical5ed659b3 is not yet accepted. All2311 partial/unverified remain.
 - Diagnostic export25178 TERMINATES0:all validation reaches completion,then
   evidence-session verification/encoding/write complete at3556009.545ms. Existing
   unchanged-source debugger observes172 hits across154 validation-call sites;

@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Preserve terminal post-gate-full-section-comparison,post-gate-changed-section-
+leaves and post-gate-leaf-reconciliation20261022 log/empty-stderr pairs. Complete
+80-section authentication and3864850 selected-entry comparisons reconcile exactly
+71 changes to seven sources,one applicability receipt and63 anchors. No evidence
+or dispositions changed. Retain live post-gate-cold-check-20261022 logs while
+79913 executes the unchanged named canonical check independently without debugger.
+Keep accepted e7d22b1a and pending5ed659b3 separately;no import acceptance yet.
+
 Post-gate diagnostic export25178 terminates0. Preserve its complete stdout/stderr
 including172 debugger boundary observations and final complete marker;original
 native-failure logs remain independently retained. Pending package5ed659b3 must
