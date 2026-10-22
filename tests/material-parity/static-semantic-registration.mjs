@@ -44,7 +44,7 @@ export function restoreStaticSemanticPolicy(source) {
   assert.equal(hash(prior), 'b85f901b0b19ce6422ba4194aef63f558b6ca476f0e20b9f903b3a51c0bff0b3'); return prior;
 }
 export function restoreStaticSemanticProducer(source) {
-  const text = source.toString().replaceAll('\r\n', '\n');
+  const text = restoreRootDepthProducer(source);
   if (!text.includes('static semantic additive registration conserves accepted findings')) return text;
   assert.equal(hash(text), 'a0480845099038416ce2f420dca03e3cd99712ea083c18075c8bebabbc00f747');
   const ast = ts.createSourceFile('producer.mjs', text, 99, true), owner = name => ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
@@ -58,4 +58,22 @@ export function restoreStaticSemanticProducer(source) {
   for (const [start, end] of [[proofs[0].getFullStart(), proofs[4].end + 1], [files[0].getFullStart(), files[54].end + 1]].sort((a, b) => b[0] - a[0]))
     prior = prior.slice(0, start) + prior.slice(end);
   assert.equal(hash(prior), '7e0caa327de5fbde079ee59b469aa4f18f2cf030a3e5a137770d5fe5ac0b0a22'); return prior;
+}
+
+export function restoreRootDepthProducer(source) {
+  const text = source.toString().replaceAll('\r\n', '\n');
+  if (!text.includes('root depth additive finding registration')) return text;
+  assert.equal(hash(text), 'd590419ede4a8f37a4fe392cf3dcec806122b32f3550df98f3530c140130d5d0');
+  const ast = ts.createSourceFile('producer.mjs', text, 99, true);
+  const owner = name => ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+  const proofs = owner('focusedProofInventory').body.statements[0].expression.elements;
+  const files = owner('sourceFingerprints').body.statements[0].declarationList.declarations[0].initializer.elements;
+  assert.equal(proofs.length, 252); assert.equal(files.length, 932);
+  assert.equal(proofs[0].arguments[3].text, 'root depth additive finding registration');
+  assert.equal(files[0].text, 'src/app/services/babylon-camera.service.ts');
+  let prior = text;
+  for (const [start, end] of [[proofs[0].getFullStart(), proofs[3].end + 1], [files[0].getFullStart(), files[3].end + 1]].sort((a,b) => b[0]-a[0]))
+    prior = prior.slice(0,start) + prior.slice(end);
+  assert.equal(hash(prior), 'a0480845099038416ce2f420dca03e3cd99712ea083c18075c8bebabbc00f747');
+  return prior;
 }

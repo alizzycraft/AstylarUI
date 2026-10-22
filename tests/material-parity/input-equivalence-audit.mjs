@@ -8922,6 +8922,10 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'src/app/services/babylon-camera.service.ts',
+    'src/app/services/css-babylon-projection.ts',
+    'src/app/services/css-render-boundary.ts',
+    'scripts/audit-material-tooltip-applied-theme-ownership.mjs',
     'tests/material-parity/static-semantic-inputs.spec.mjs',
     'tests/material-parity/static-semantic-registration.mjs',
     'tests/material-parity/static-semantic-selection.spec.mjs',
@@ -9857,6 +9861,14 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/tooltip-position-composition.spec.mjs', /test\('root depth registration preserves all191 predecessor findings and binds current failure receipts'/,
+      'root depth additive finding registration', 'Complete191 predecessor definitions and policy bytes conserve;new core finding binds current public failure receipts,not full Material case acceptance.'),
+    proof(root, 'tests/material-parity/tooltip-position-composition.spec.mjs', /test\('root depth historical boundary conserves exact prior population and rejects source drift'/,
+      'root depth historical population conservation', 'Exact192 current population and policy restore the complete191 predecessor for historical readers only;altered definitions and source drift reject. Production retains the new finding.'),
+    proof(root, 'tests/material-parity/tooltip-position-composition.spec.mjs', /test\('current public depth reduction loses only the high-z short pane despite equal CSS geometry'/,
+      'current public root depth camera failure', 'Authenticated104 compiled/source owners and2516 bundle inputs bind four equal-input DPR1 panes:one honest high-z short-viewport paint failure and three controls despite identical CSS/projected geometry.'),
+    proof(root, 'tests/material-parity/tooltip-position-composition.spec.mjs', /test\('current source retains viewport-dependent camera crossing for unbounded root paint depth'/,
+      'current root depth camera source applicability', 'Complete extracted owning methods and actual camera-distance expression retain unbounded paint depth versus viewport-dependent camera. Source arithmetic corroborates,not replaces,the public browser failure.'),
     proof(root, 'tests/material-parity/static-semantic-inputs.spec.mjs', /test\('static semantic registration preserves180 findings and exact predecessor policy'/,
       'static semantic additive registration conserves accepted findings', 'All180 definitions and complete prior policy survive;11 reviewed additions retain exact receipt-backed classifications. Drift rejects;not publication or case closure.'),
     proof(root, 'tests/material-parity/static-semantic-inputs.spec.mjs', /test\('static semantic retained reviewers replay through restricted180-definition module boundary'/,

@@ -53,6 +53,26 @@ test('root depth historical boundary conserves exact prior population and reject
   assert.equal(sourceAuditDefinitions.length, 192, 'Historical read must not mutate production');
 });
 
+test('root depth producer inventory conserves all prior proofs and source paths', async () => {
+  const { restoreRootDepthProducer } = await import('./static-semantic-registration.mjs');
+  const file = 'tests/material-parity/input-equivalence-audit.mjs', text = readFileSync(file, 'utf8');
+  const prior = restoreRootDepthProducer(text);
+  assert.equal(createHash('sha256').update(prior).digest('hex'), 'a0480845099038416ce2f420dca03e3cd99712ea083c18075c8bebabbc00f747');
+  assert.throws(() => restoreRootDepthProducer(text + '\n// drift'));
+  assert.throws(() => restoreRootDepthProducer(text.replace('one honest high-z short-viewport', 'no high-z short-viewport')));
+  const ast = ts.createSourceFile(file, text, 99, true);
+  const owner = name => ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+  const files = owner('sourceFingerprints').body.statements[0].declarationList.declarations[0].initializer.elements;
+  assert.equal(files.length, 932); assert.equal(new Set(files.map(n => n.text)).size, 932);
+  for (const n of files.slice(0,4)) assert.ok(readFileSync(n.text).length > 0);
+  const proofs = owner('focusedProofInventory').body.statements[0].expression.elements;
+  assert.equal(proofs.length, 252);
+  for (const n of proofs.slice(0,4)) {
+    const pattern = new Function(`return ${n.arguments[2].getText(ast)};`)();
+    assert.ok(pattern.test(readFileSync(n.arguments[1].text, 'utf8')));
+  }
+});
+
 test('current public depth reduction loses only the high-z short pane despite equal CSS geometry', () => {
   const sha = bytes => createHash('sha256').update(bytes).digest('hex');
   const dir = 'artifacts/material-parity/current-depth-public-reduction-20261022';

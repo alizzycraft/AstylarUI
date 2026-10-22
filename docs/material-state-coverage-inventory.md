@@ -2,6 +2,23 @@
 
 ## Current audit pointer — October22
 
+- Root-depth producer integration now registers four existing owning assertions
+  and four missing source dependencies(camera,projection,final CSS boundary,
+  applied-theme producer). Working census192 findings/252 proofs/932 paths;
+  accepted191/248/928 remains unchanged. Existing historical helper binds full
+  new producer SHA d590419e,removes exactly four proofs/four source paths and
+  recovers complete a0480845 predecessor before its original static-semantic
+  transition. All prior248 proofs/928 paths are conserved;no duplicate source
+  paths,new listed assertions present,source/description drift controls reject.
+  Combined current registration/boundary/producer/public/source and original
+  static-registration checks pass6/6;log root-depth-proof-inventory-integration-
+  20261022/empty stderr. No browser recapture or canonical export at this step.
+  Exact coverage inspection locates62 tooltip cases and existing sourceCurrentness/
+  localPaint obligations;the root-pane reduction is shared mechanism evidence,
+  NOT proof of failure in every tooltip/snackbar endpoint. Next case join must
+  bind actual retained popup presence/z-index and distinguish closed/absent
+  endpoints;do not clear remaining work or call frozen captures current. Review
+  source transition/case proposal integration and all canonical gates remain.
 - Root-depth historical registration mismatch reconciled without rewriting the
   old191-population assertions or captured receipts. Existing static-semantic
   helper authenticates complete current192-definition digest2e14f5df and policy
