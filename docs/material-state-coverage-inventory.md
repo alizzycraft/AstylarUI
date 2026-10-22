@@ -2,6 +2,15 @@
 
 ## Current audit pointer — October22
 
+- Tooltip original configured-description test82 passes1/1,4919.1161ms after
+  replacing mutable dist census with existing retained-asset verifier. Its exact
+  capture checkpoint is current-full-20261005;all1887 original asset hashes verify.
+  Missing asset/altered hash controls reject. All original62 input-tree/closed-open
+  associations,actual AX states,theme boundaries,producer/core receipts remain.
+  Evidence:tooltip-retained-assets-reconciliation-20261022.log/empty stderr.
+  Original unfiltered failure stays retained. This is historical asset applicability,
+  not current rendering/tooltip placement acceptance;canonical source reconciliation
+  must include changed benchmark test bytes/anchors in the next coherent batch.
 - Existing antialias/selection historical wrapper passes1/1,4525.2753ms,
   executing all three original antialias/selected-caret/selection-pixel assertion
   sets with authenticated core/sorter/inspector transitions. Existing historical

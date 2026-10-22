@@ -2,6 +2,10 @@
 
 ## Current versus historical evidence
 
+Retain tooltip-retained-assets-reconciliation-20261022.log/.stderr.log:original
+configured tooltip description test passes with1887 authenticated retained assets
+and missing/hash controls. Historical checkpoint/raw AX/failure evidence unchanged.
+
 Retain harness-antialias-selection-replay-20261022.log/.stderr.log(1/1 wrapper,
 three original assertion sets) and harness-radius-receipt-replay-20261022.log/
 .stderr.log(4/4). Both terminal0,stderr empty;no fresh browser acceptance claimed.

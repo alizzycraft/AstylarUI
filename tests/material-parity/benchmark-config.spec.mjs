@@ -919,7 +919,13 @@ test('configured tooltip descriptions preserve closed input omissions and actual
   assert.equal(log.length, 5); const terminal = log.at(-1);
   assert.equal(terminal.terminal, 'verified'); assert.equal(terminal.browser, '154.0.8037.58');
   const manifest = JSON.parse(descriptionEvidenceBytes(terminal.capture.checkpointManifest.file, terminal.capture.checkpointManifest.sha256));
-  assert.deepEqual(fingerprintDirectory(path.resolve('examples/material-showcase/dist/material-showcase/browser')), manifest.provenance.browserFiles);
+  // This historical AX capture owns retained assets, not today's mutable dist.
+  assert.deepEqual(verifyRetainedMaterialBrowserFiles(manifest.provenance.browserFiles),
+    { authenticatedFiles: 1887, currentRenderingAccepted: false });
+  assert.throws(() => verifyRetainedMaterialBrowserFiles(manifest.provenance.browserFiles.slice(1)));
+  const alteredTooltipAssets = structuredClone(manifest.provenance.browserFiles);
+  alteredTooltipAssets[0].sha256 = '0'.repeat(64);
+  assert.throws(() => verifyRetainedMaterialBrowserFiles(alteredTooltipAssets));
   assert.deepEqual(terminal.capture.styleProperties, Object.values(propertyGroups).flat());
   assert.deepEqual(terminal.capture.sources.map(r => r.file).sort(), ['scripts/audit-material-tooltip-description.mjs',
     'tests/material-parity/supplemental-capture-evidence.mjs', 'tests/material-parity/input-tree-evidence.mjs'].sort());
