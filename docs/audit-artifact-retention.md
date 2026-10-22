@@ -2,6 +2,12 @@
 
 ## Current versus historical evidence
 
+Retain post-gate-coverage-isolation-20261022.log/.stderr.log and post-gate-held-
+paint-isolation-20261022.log/.stderr.log. Both existing operations pass standalone;
+index hash is authenticated,coverage remains2311 partial. These are bounded crash
+isolation results,not complete validation/current rendering acceptance. No scratch
+capture or replacement canonical package was generated.
+
 Retain post-gate-canonical-export-20261022.log/.stderr.log unchanged as native
 failure evidence:session69850 exit -1073740791(0xC0000409),last phase validate-audit,
 no successful validation/publication. Accepted e7d22b1a package/index unchanged

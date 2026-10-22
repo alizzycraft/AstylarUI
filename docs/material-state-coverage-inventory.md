@@ -2,6 +2,15 @@
 
 ## Current audit pointer — October22
 
+- Validation isolation,without rebuilding/exporting:authenticated accepted index
+  against pointer80632431,then existing assertCaseObligationCoverage passes all2311
+  joined cases in652.6838ms. Existing held-content-paint collector independently
+  passes in581.7074ms(three rows,83556 encoded bytes). Logs:post-gate-coverage-
+  isolation-20261022 and post-gate-held-paint-isolation-20261022,empty stderrs.
+  These eliminate deterministic standalone failure in those exact retained
+  operations,not aggregate memory pressure or a later validator. No current
+  package acceptance follows. Next add bounded phase visibility at the existing
+  validation boundary before another full export;do not repeat collectors blindly.
 - Post-gate export69850 is TERMINAL with native exit -1073740791(0xC0000409),
   not a validation pass. Last phase is validate-audit at1570942.2219ms;
   no verify-evidence-session,encoding or publication receipt follows. Original
