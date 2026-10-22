@@ -2,6 +2,18 @@
 
 ## Current audit pointer — October22
 
+- Publication confirmed throughb51f0ee1,current held-update capture retained.
+  Reuse existing docs/material-button-held-update-root-cause.json and recorder's
+  ownership classification,not a duplicate finding. New current validator's12
+  traced cases authenticate actual bundle frames:semantic syncFocus node.focus
+  blurs canvas→Babylon _pointerBlurEvent→AstylarInteractionRuntime.handlePointer
+  dispatchPointer(pointerup),plus early click and pressed-state loss before native
+  release. All40cases retain equal authored input at every boundary;stack/no-stack
+  controls agree. Source map/package receipts establish installed runtime,not
+  automatic current-repository whole-method equality or historical Material stacks.
+  Original producer limitation persists:console error messages are not collected;
+  checked runtimeErrors are page exceptions and structured diagnostics only.
+  Current capture is standalone corroboration,not yet joined to canonical coverage.
 - Current public held-update reproduction29914 TERMINATES1 only after all40
   cases complete:invalid0/runtimeErrors[],24 behavioral failures/16 controls.
   Existing validateHeldUpdateEvidence authenticates every current bundle input,
