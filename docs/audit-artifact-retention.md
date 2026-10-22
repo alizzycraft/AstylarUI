@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+Retain check-expansion-recorded-nodes.mjs and expansion-recorded-node-accounting-
+20261022 log/empty stderr. The proof authenticates all68 accepted paired trees,
+accounts for996 native/748 candidate records and rejects280 mutations. Disabled
+candidate indicator presence is distinguished from its three-stage display:none.
+All original trees remain required;this does not prove anonymous-box or rendering
+equivalence. Standalone evidence awaits coherent case-obligation integration.
+
 October22 expansion batch is closed and published after terminal cold check55327
 (exit0,3943126ms) and main import29141(exit0). Retain expansion-semantic-cold-check-
 20261022 stdout/stderr/resources/terminal and expansion-semantic-main-import-

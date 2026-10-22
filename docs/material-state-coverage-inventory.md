@@ -15,6 +15,20 @@ Updated October22. Current conclusions only;earlier next/live statements in reta
   then interaction/editable obligations and complete current-rendering/final gates.
   Counts below are overlapping baselines,not a completion percentage.
 
+- Standalone October22 expansion descendant question answered outside canonical:
+  all68 accepted paired trees account for996 native/748 candidate element records;
+  280 forged records reject. Two topologies:60 ordinary and8 disabled. Disabled
+  native SVG subtree is omitted;candidate indicator stays authored but resolves
+  display:none in all three captured stages,so presence alone is not a paint bug.
+  Header-content wrapper omission,indicator SVG/border ownership,grid/region/body
+  omissions and offset text wrapper remain explicitly unequal groups. Existing
+  flow and semantic causes are reused,not reopened or counted as new findings.
+  Evidence:check-expansion-recorded-nodes.mjs and expansion-recorded-node-
+  accounting-20261022 log pair,terminal0. This answers recorded-element accounting,
+  not anonymous formatting boxes/full styles/paint/AX/currentness/case closure.
+  Next:join these68 bounded children with the next coherent evidence batch;
+  no full export is justified solely by this standalone addition.
+
 - October22 reconciliation:expansion export17464 is TERMINAL SUCCESS(exit0,
   2959235ms),not a live job. Candidate3175514b has178 findings;accepted796984e0
   remains the working pointer pending conservation,cold check and import.
