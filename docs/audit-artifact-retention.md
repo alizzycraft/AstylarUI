@@ -2,6 +2,17 @@
 
 ## Current versus historical evidence
 
+Retain review-picker-semantic-inputs.mjs,picker-semantic-input-review-20261022
+log/empty stderr,readonly-combobox-native-probe-20261022 log/empty stderr and
+pending source proposal0951b7ae. All184 predecessors preserve;48 observations/
+24 pairs,98 negative controls and exact replay pass. Native diagnostic includes
+full AX/backend DOM,readOnly=true and unchanged readonly value after typing X;
+editable token alone does not prove a readonly failure. Timepicker historical
+7159b1d5 parent/child methods and initial/current inputs remain distinct from
+date behavior and known focus/readonly keyboard findings. Not registered or
+current whole-rendering acceptance. Native probe is original retained evidence,
+not disposable successful scratch;its browser was closed in finally.
+
 Retain review-group-semantic-inputs.mjs,group-semantic-input-review-20261022 log/
 empty stderr and pending source proposal17e767f2. All182 predecessor definitions
 preserve;48 raw observations/24 pairs,98 negative controls and exact replay pass.

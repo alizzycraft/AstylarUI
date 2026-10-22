@@ -2,6 +2,17 @@
 
 ## Current audit pointer — October22
 
+- Pending source proposal0951b7ae preserves184 predecessors and adds timepicker
+  popup/toggle metadata plus select readonly-input/non-text-host substitution.
+ 24 static pairs/48 observations,98 negative controls/exact replay pass. Initial
+  input already authors dialog popup;7159b1d5 parent/child introduces current
+  differently named button without native popup/expanded metadata. Datepicker
+  behavior remains separate. Native Chromium probe reproduces editable=plaintext
+  on readonly text input while typed X leaves value unchanged;candidate readonly
+  is present in actual DOM. Not a demonstrated readonly-projection failure.
+  Evidence:review-picker-semantic-inputs.mjs,picker-semantic-input-review and
+  readonly-combobox-native-probe20261022 log pairs.186 proposed definitions are
+  pending registration;accepted canonical remains180. No fixture/core changes.
 - Pending source proposal17e767f2 preserves all182 prior pending definitions
   and adds chip-container tabindex omission plus paginator group-name
   substitution.24 static pairs/48 observations,98 negative controls and exact
