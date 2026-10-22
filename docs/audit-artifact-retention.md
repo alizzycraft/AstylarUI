@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+Retain stepper-static-ax-20261022(all24 raw AX/DOM records,exact derived producer,
+provenance and report),capture/review log pairs and both stepper AX scripts. These
+close a specific static relationship observation gap,not disposable successful
+scratch. Pinned9d0f1220 served graph is unchanged;source bindings authenticate.
+Verifier rejects72 mutations and replays byte-exactly. No source finding/canonical
+case promotion follows until authored-input/history review and coherent joining.
+
 Retain check-stepper-recorded-nodes.mjs and stepper-recorded-node-accounting-
 20261022 log/empty stderr. All68 accepted pairs authenticate and1996 native/1104
 candidate nodes are accounted for;272 mutations reject and exact replay passes.

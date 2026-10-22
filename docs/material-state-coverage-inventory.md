@@ -49,6 +49,18 @@ Updated October22. Current conclusions only;earlier next/live statements in reta
   20261022 log pair,terminal0. Queue68 bounded children with expansion accounting
   for the next coherent join;anonymous/pseudo/style/paint/AX/event/resource/current
   applicability and whole-case closure remain open. No canonical export needed yet.
+- New October22 stepper actual-AX question:24 pages/12 static pairs captured with
+  the unchanged passive CDP procedure and pinned9d0f1220 build;all1887 served files
+  verify before/after,fonts/two frames/candidate settlement preserved. Tablist name
+  and selected states agree;native active tab/panel controls↔labelledby backend
+  identities resolve,while candidate DOM omits both attributes and panel name is
+  empty. Native Details/Review names differ from1Details/2Review. All72 forged
+  records reject and exact verifier replay passes. Evidence:stepper-static-ax-
+  20261022,capture/review log pairs,capture-stepper-static-ax.mjs and
+  check-stepper-static-ax.mjs. Full current component/source-map receipts reused
+  only after hashes match. No AT/interaction/paint/case-closure claim. Next:trace
+  relationship/name omissions through authored inputs/history before registering
+  a distinct finding;keep inactive-panel omission and aria-hiding support separate.
 
 - October22 reconciliation:expansion export17464 is TERMINAL SUCCESS(exit0,
   2959235ms),not a live job. Candidate3175514b has178 findings;accepted796984e0
