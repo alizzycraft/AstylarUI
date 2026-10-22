@@ -2,6 +2,15 @@
 
 ## Current audit pointer — October22
 
+- Publication7176fc4a is committed locally;push54598 remains confirmed live.
+  Independent remote-ref probe10384 exits1(Could not resolve host:github.com),
+  so remote publication is unconfirmed. Do not restart live push or claim pushed.
+  Verified join checkpointaf211172 also awaits the next successful push.
+- Actual-static AX resume81226 is confirmed live in remaining-static-ax-resume-
+  20261022;capture log/stderr use remaining-static-ax-resume-capture-20261022.
+  Original97 reused pairs remain intact;137/678 new observations reached at
+  06:40 local,not a terminal count. Poll same handle;do not restart or commit
+  live logs. After completion authenticate/report/review before coverage claims.
 - Scope unchanged:36 families/2311 cases(436 static/1875 interaction),all partial;
   current rendering unverified. No case closure or acceptance promotion.
 - Accepted canonical7fa7ca35/index77af769e/review7eb107de:180 findings/243 proofs/

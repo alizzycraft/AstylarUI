@@ -2,6 +2,12 @@
 
 ## Current versus historical evidence
 
+Resume capture81226 is live;retain remaining-static-ax-resume-20261022 directory
+and remaining-static-ax-resume-capture-20261022 log/stderr without committing live
+results. Original97 reused pairs are unchanged. No successful full capture claim
+before terminal/report authentication. Publication push54598 remains live;remote
+probe10384 fails DNS. Local7176fc4a/af211172 are not yet confirmed pushed.
+
 Field/overlay sized join terminates0 after cold completion. Retain field-overlay-
 node-join-sized-20261022 log/empty stderr and ignored proposal9f9dfaf0. All851
 children/10 families/15675 dependencies validate,complete predecessor7eb107de
