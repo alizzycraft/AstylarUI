@@ -2,6 +2,16 @@
 
 ## Current audit pointer — October22
 
+- Datepicker next-question reconnaissance:the retained111 cases have seven
+  recorded-node shapes:25/17(12),25/18(16),26/17(16),228/67(33),179/47(8),
+  27/17(18),24/17(8),reference/candidate respectively. Receipt-authenticated
+  static and open-secondary examples establish that the dormant mat-datepicker
+  and SVG toggle composition must be distinguished from the connected portal;
+  open-secondary contains24 native year cells versus24 candidate year buttons.
+  This is inventory,not complete node accounting or new root-cause evidence.
+  Next:reuse577-case wrapper proof,then exhaust remaining month/year/closed
+  descendants with exact membership and parent checks. Keep outside frozen873
+  sources while independent cold99596 remains live;no case promotion.
 - Scope unchanged:36 families/2311 cases(436 static/1875 interaction),all partial;
   current rendering unverified. No case closure or acceptance promotion.
 - Accepted canonical8d6c5964/index889691e1/reviewff305b14:179 findings/241 proofs/
