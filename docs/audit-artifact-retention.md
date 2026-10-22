@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain join-field-overlay-node-evidence.mjs and field-overlay-node-join-
+20261022,field-overlay-node-join-final-20261022 and heap-guard-20261022 log/
+stderr pairs. Initial canonical snack-bar naming guard failure and second V8
+heap exhaustion are original failures,not successful joins. No proposal written.
+Explicit >=3GiB early heap guard now rejects512MiB before parsing;syntax passes.
+Defer full4096MiB retry until cold99596/import completes and memory is available.
+Do not register this unverified851-child join or modify frozen873 sources.
+
 Retain resume-remaining-static-ax.mjs and remaining-static-ax-resume-preflight-
 20261022 plus final-20261022 log/empty stderr pairs. Exact failure/provenance
 bytes and prior producer pinned;194 observations reused/678 pending,all872

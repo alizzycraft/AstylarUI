@@ -2,6 +2,15 @@
 
 ## Current audit pointer — October22
 
+- Field/overlay851-child join is prepared,not verified or published. First run
+  rejected verifier-name snackbar versus canonical family snack-bar;exact alias
+  corrected. Second run exhausted V8 heap before producing a proposal while
+  cold99596 was active. Preserve both failures;do not repeat under the same
+  memory conditions. New early >=3GiB heap guard rejects512MiB before review
+  parsing;syntax passes. After cold/import closes,run node --max-old-space-size=
+  4096 scripts/join-field-overlay-node-evidence.mjs and verify complete7eb107de
+  predecessor recovery/851 children/unchanged statuses before registration.
+  No new proposal or accepted-pointer change;script remains outside frozen873.
 - Remaining-static AX resume preflight now authenticates97 reused pairs(96
   completed+one partial-run core/light/desktop),leaving339 pairs,exactly436
   configured contexts without overlap. resume-remaining-static-ax.mjs derives

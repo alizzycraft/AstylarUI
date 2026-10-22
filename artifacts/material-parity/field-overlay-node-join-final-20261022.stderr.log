@@ -1,0 +1,25 @@
+
+<--- Last few GCs --->
+
+[18556:00000238AE8C9000]    32936 ms: Mark-Compact (reduce) 387.4 (423.1) -> 387.3 (392.1) MB, pooled: 0 MB, 170.18 / 0.00 ms  (+ 0.0 ms in 0 steps since start of marking, biggest step 0.0 ms, walltime since start of marking 560 ms) (average mu = 0.992, c[18556:00000238AE8C9000]    33022 ms: Mark-Compact (reduce) 387.3 (392.1) -> 386.1 (390.9) MB, pooled: 0 MB, 86.47 / 0.00 ms  (average mu = 0.987, current mu = 0.000) last resort; GC in old space requested
+
+
+<--- JS stacktrace --->
+
+FATAL ERROR: CALL_AND_RETRY_LAST Allocation failed - JavaScript heap out of memory
+----- Native stack trace -----
+
+ 1: 00007FF700C13A37 node::SetCppgcReference+21127
+ 2: 00007FF700B73C8B v8::base::CPU::num_virtual_address_bits+102587
+ 3: 00007FF70177FD91 v8::Isolate::ReportExternalAllocationLimitReached+65
+ 4: 00007FF70176C846 v8::Function::Experimental_IsNopFunction+3302
+ 5: 00007FF7015DD241 v8::Isolate::GetHeapProfiler+14001
+ 6: 00007FF7015E7441 v8::Isolate::GetHeapProfiler+55473
+ 7: 00007FF7015F7206 v8::Isolate::GetHeapProfiler+120438
+ 8: 00007FF7015FC018 v8::Isolate::GetHeapProfiler+140424
+ 9: 00007FF7015F278E v8::Isolate::GetHeapProfiler+101374
+10: 00007FF7015F27EA v8::Isolate::GetHeapProfiler+101466
+11: 00007FF7014E822A v8::Message::GetIsolate+329354
+12: 00007FF7014E6862 v8::Message::GetIsolate+322754
+13: 00007FF7017234BD v8::SharedValueConveyor::SharedValueConveyor+266813
+14: 00007FF6A17EDA3A 
