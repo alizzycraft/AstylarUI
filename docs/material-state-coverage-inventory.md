@@ -2,6 +2,17 @@
 
 ## Current audit pointer — October22
 
+- Runtime-compilation source transition isolated:comparing exact96be6b7c test
+  body with current leaves only the map-read preamble changed. Old mutable dist
+  map read becomes retained component-map-recovery-20261011 bytes plus exact
+  dba48404 SHA assertion. All remaining class/function/import/export/metadata
+  comparisons are byte-identical. This strengthens provenance,not a removed
+  runtime assertion. Import differences add fingerprintModuleGraph/materialCaseKey/
+  openMaterialCheckpoint and sourceAuditDefinitions alongside existing bindings.
+  Next extend existing verifier's exact171bf9fa intermediate by restoring only
+  these two import declarations/map preamble,then reuse its existing two named
+  diagnostic-body extension checks against42-statement96be predecessor. Whole
+  current/append hashes remain mandatory;no unrestricted AST-name whitelist.
 - Input-boundary applicability narrowed without new whitelist:existing
   restoreInputBoundaryReadonlyAppend authenticates58fe244d→cdcfd338→171bf9fa
   exactly. Independent AST comparison of171bf9fa against verifier's96be6b7c
