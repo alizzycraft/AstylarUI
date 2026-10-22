@@ -2,6 +2,19 @@
 
 ## Current audit pointer — October22
 
+- Test130 first-divergence question answered by reusing the October18 precise-
+  color investigation:its actual baseline30357b9f8c7b95da668914032557c5f7416c81db
+  normalizes identical native color(srgb0.9642350.9440780.974902) to rounded
+  rgba(246,241,249,1);current code preserves245.879925/240.73989/248.60001.
+  A read-only AST extraction of normalizeColor/formatNumber from that exact Git
+  baseline and current producer exits0,asserting both exact values and unchanged
+  candidate rgb246/241/249. This reproduces the first retained test130 delta
+  without a full builder. Existing button-box-sizing-canonical-integration already
+  pins/reconciles this measurement transition;fixed-width integration still
+  compares old/current measurement directly at line68. Reuse that owning guarded
+  transition rather than rounding current evidence or exempting root rows.
+  This settles only the first divergence,not the complete row delta or later
+  fixed-width assertions. Original full-harness failure remains retained.
 - Incomplete-harness triage,not a renderer diagnosis:15 of18 recorded failures
   stop at exact source/file-inventory receipt comparisons(tests82,85,87,92,93,
   100,102,124,128,134,139,146,148,150,170 are the receipt failures;the other
