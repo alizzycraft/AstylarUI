@@ -2,6 +2,46 @@
 
 ## Current audit pointer — October22
 
+- Scope unchanged:36 families/2311 cases(436 static/1875 interaction),all partial;
+  current rendering unverified. No case closure or acceptance promotion.
+- Accepted canonical8d6c5964/index889691e1/reviewff305b14:179 findings/241 proofs/
+  856 paths. Stepper cold/export/conservation/import complete and publication
+  c5ebd32f pushed. Original/failure evidence and predecessor3175514b retained.
+- In-flight tabs/menu/sheet batch:explicit --tabs-menu-sheet selects7eb107de;
+  source registry180/proofs243/paths873. All179 prior findings,proof claims and
+  paths preserve;17 paths added/exactly7 old receipts changed. Full predecessor
+  restoration,20 focused tests and exact source-census freeze replay pass.
+  Registered0b304f51,pushed. Export5359 is confirmed live;poll that same handle.
+  Logs:tabs-coherent-export-20261022/stdout.log and stderr.log. Do not commit
+  live logs or change frozen873 sources. No accepted180 publication yet.
+- Its pending201 case children cover70 tabs/94 menu node records,25 sheet action
+  presence and12 tabs AX pairs. Source finding:explicit content-as-tab-panel-name
+  replaces reference labelledby intent. Known private text-paint causes separate.
+- Outside frozen export,queued for a later coherent join:
+  bottom-sheet63 pairs/1498 nodes,dialog78/2238,snackbar71/1805;full retained
+  element accounting and252/312/284 mutation controls plus exact replays pass.
+  Scripts:check-bottom-sheet-recorded-nodes.mjs,check-dialog-recorded-nodes.mjs,
+  check-snackbar-recorded-nodes.mjs;matching20261022 node-accounting log pairs.
+  Empty retained native portals are not open/painted overlays.
+- Sheet activate AX9 pairs/18 captures plus108 mutation controls bind actual
+  names/roles/focus. Pending source proposal835eba45 preserves180 definitions:
+  current/initial methods author Sharing options versus Open bottom sheet.
+  Authenticated prior focus tracecc12796e applies to unchanged complete authored
+  methods and new pinned source map;old request precedes tree update. New AX
+  endpoints do not establish timing cause for every execution. See sheet activate,
+  name-input and focus-source-applicability20261022 logs;no repeated reduction.
+- Next:finish export5359,then full section/coverage/receipt reconciliation,
+  independent cold comparison and accepted import. Batch queued evidence later.
+  Continue unresolved descendant/full-style/anonymous/semantic coverage,1875
+  interaction histories/resources,443 editable caret/selection and2311 complete
+  current-input/runtime/rendering applicability obligations. Do not reopen settled
+  causes absent changed inputs or contradictory evidence.
+- Final unfiltered canonical/audit harness/browser parity/units/builds/consumer/
+  capability/example/skill/handoff gates remain required. Detailed immutable
+  checkpoint references follow;historical live/next statements are not current.
+
+## October22 working detail — historical checkpoints
+
 - Accepted canonical8d6c596421e6b96018328199aea28981b85d15921c611fe2b1837b3b412a976f,
   index889691e1fe057d44dc87a454ef54fbab82d8bcbd571df069737d55e4ae950593,
   reviewff305b14:179 findings/241 proofs/856 source paths. Gzip88202430 bytes,

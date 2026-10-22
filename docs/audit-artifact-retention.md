@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+Retain check-snackbar-recorded-nodes.mjs and snackbar-recorded-node-accounting-
+20261022 log/empty stderr. All71 pairs/1805 records account;all34 open pairs retain
+message/action owners,284 mutation controls reject and exact replay passes. Raw
+whitespace/live-owner inputs remain explicit. Preserve original trees including
+one empty native portal. Not evidence of visibility,paint,currentness or older
+screenshot cause;keep outside live873-source export5359 for a later coherent join.
+
 Retain check-dialog-recorded-nodes.mjs and dialog-recorded-node-accounting-
 20261022 log/empty stderr. All78 pairs/2238 records account,312 mutations reject
 and byte-exact replay passes. Preserve original trees,including10 empty native
