@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Independent cold99596 is live with ASTYLAR_AUDIT_COLD=1 and --tabs-menu-sheet
+--check. Retain tabs-cold-check-20261022 stdout/stderr without committing live
+logs. Freeze873 consumed sources;older finished export/conservation jobs must
+not be restarted. Retain new check-basic-field-recorded-nodes.mjs and basic-field-
+recorded-node-accounting-20261022 log/empty stderr outside that snapshot. Reuses
+authenticated577-case wrapper proof,checks524 caption records and accounts4160
+records across152 cases;608 mutations and exact replay pass. Original trees and
+TAP proof remain required evidence,not successful disposable scratch.
+
 Receipt comparison35762 and propagated derivation55118 terminate success(exit0).
 Retain tabs-receipt-leaf-comparison and tabs-propagated-receipt-reconciliation-
 20261022 log/empty stderr pairs. All148 changed leaves exhaust(98 direct producer

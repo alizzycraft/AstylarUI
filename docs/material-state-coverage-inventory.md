@@ -35,6 +35,12 @@
   retain8 known candidate-only open states;native persistent description targets
   outside these visual trees are not proven missing. Existing findings reused.
   Empty retained native portals are not open/painted overlays.
+  Basic-field/input152 cases now account2484 native+1676 candidate nodes by
+  reusing the prior577-case wrapper proof and checking524 previously unaccounted
+  native caption records;608 mutation controls/exact replay pass. No repeated
+  wrapper/corner diagnosis. Evidence:check-basic-field-recorded-nodes.mjs and
+  basic-field-recorded-node-accounting-20261022 log/empty stderr. Still outside
+  frozen export;editing/caret,AX,paint,currentness and full-case gaps remain.
 - Sheet activate AX9 pairs/18 captures plus108 mutation controls bind actual
   names/roles/focus. Pending source proposal835eba45 preserves180 definitions:
   current/initial methods author Sharing options versus Open bottom sheet.
@@ -44,6 +50,8 @@
   name-input and focus-source-applicability20261022 logs;no repeated reduction.
 - Next:finish full section/coverage/receipt reconciliation,
   independent cold comparison and accepted import. Batch queued evidence later.
+  Independent cold99596 is live with ASTYLAR_AUDIT_COLD=1 and --tabs-menu-sheet
+  --check;logs tabs-cold-check-20261022. Keep873 consumed sources unchanged.
   Coverage52254 exits0:complete prior coverage and15622 ordered dependencies
   recover;35 dependencies and201 exact children added,zero status changes.
   Candidate-only import48299 exits0:all shards verify,index77af769e selects7fa7ca35;
