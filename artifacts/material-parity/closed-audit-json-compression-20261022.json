@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "method": "compact.exe /C /F /EXE:LZX on each exact closed file",
+  "resolvedRoot": "D:\\dev\\github\\AstylarUI-material\\artifacts\\material-parity\\working-audit",
+  "safety": "Each target verified plain file within resolved root;both index hashes pinned to77af769e;all SHA256 bytes unchanged before/after;accepted pointer unchanged. Compression is transparent/reversible. No files deleted or repointed.",
+  "rows": [
+    {
+      "Target": "D:\\dev\\github\\AstylarUI-material\\artifacts\\material-parity\\working-audit\\proposals\\9f9dfaf0059239d5bef5132dbcd5318984eccffad44d46cc7d65f98c1ca08763.json",
+      "LogicalBytes": 187128714,
+      "PhysicalBefore": 87166976,
+      "PhysicalAfter": 40308736,
+      "SHA256": "8f4ae2e513489ae7683fb6b941a4df0b262508d10f8c0e962782d71ee22cad46",
+      "HashUnchanged": true
+    },
+    {
+      "Target": "D:\\dev\\github\\AstylarUI-material\\artifacts\\material-parity\\working-audit\\proposals\\48e8e7caf8d66cde0536ac9592f76e60c2ea47d9ac8e9bb295b453ed48ad991b.json",
+      "LogicalBytes": 187245509,
+      "PhysicalBefore": 87203840,
+      "PhysicalAfter": 40341504,
+      "SHA256": "2646b560d127754ef32513e35c8ccb9adc604bc95b52f8d7406e9a0a7cbb1a45",
+      "HashUnchanged": true
+    },
+    {
+      "Target": "D:\\dev\\github\\AstylarUI-material\\artifacts\\material-parity\\working-audit\\proposals\\2fd3236c7b0c2bf0c474907f93b0e6aa058d7e6cba6c873d461fef32a7833c27.json",
+      "LogicalBytes": 187245536,
+      "PhysicalBefore": 87203840,
+      "PhysicalAfter": 40341504,
+      "SHA256": "f0aab7e49e675e53d0520f2b21bb951f02beaaf5089ad72cffa4f821b268f21c",
+      "HashUnchanged": true
+    },
+    {
+      "Target": "D:\\dev\\github\\AstylarUI-material\\artifacts\\material-parity\\working-audit\\7fa7ca3503d018f59009dd4dfdcd86213d1af3f5d31bc089d3d201f42c0ae802\\index.json",
+      "LogicalBytes": 196988480,
+      "PhysicalBefore": 196988480,
+      "PhysicalAfter": 40538112,
+      "SHA256": "77af769e6e8a0054f6247bc3ffc9919e546e55702bb8abda97619d02847a20f8",
+      "HashUnchanged": true
+    },
+    {
+      "Target": "D:\\dev\\github\\AstylarUI-material\\artifacts\\material-parity\\working-audit\\candidate-validation\\7fa7ca3503d018f59009dd4dfdcd86213d1af3f5d31bc089d3d201f42c0ae802\\index.json",
+      "LogicalBytes": 196988480,
+      "PhysicalBefore": 196988480,
+      "PhysicalAfter": 40538112,
+      "SHA256": "77af769e6e8a0054f6247bc3ffc9919e546e55702bb8abda97619d02847a20f8",
+      "HashUnchanged": true
+    }
+  ],
+  "summary": {
+    "Files": 5,
+    "PhysicalBytesSaved": 453483648,
+    "DeletedFiles": 0,
+    "AcceptedPointerUnchanged": true,
+    "ObservedVolumeFree": 2398261248
+  },
+  "volumeBoundary": "Observed volume free is not attributed entirely to these operations."
+}

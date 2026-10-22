@@ -2,6 +2,12 @@
 
 ## Current audit pointer — October22
 
+- Storage headroom:five exact closed JSON files(three case proposals and both
+  accepted/candidate7fa indexes) transparently LZX-compressed under established
+  retention procedure.453483648 physical bytes saved;all logical byte hashes/
+  paths and accepted pointer unchanged,both stores/all shards verify. Nothing
+  deleted. Evidence:closed-audit-json-compression-20261022.json and matching
+  verification log/empty stderr. No canonical/source/rendering status change.
 - Bounded initial widget-state AX review now covers108 static pairs across
   input,autocomplete,tree,menu,dialog,bottom-sheet,snack-bar and both progress
   families. Exact role/name/description/value/all scalar properties agree except

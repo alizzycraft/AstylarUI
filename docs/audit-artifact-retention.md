@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Closed audit JSON storage:retain closed-audit-json-compression-20261022.json
+and closed-audit-json-compression-verification-20261022 log/empty stderr. Exact
+resolved plain files9f9dfaf0,48e8e7ca,failed2fd3236c and both7fa/index.json files
+converted losslessly with compact /C /F /EXE:LZX.453483648 physical bytes saved;
+before/after raw SHA256 and logical lengths unchanged. Both77af indexes and all
+shards reverify,pointers match,no file deleted/repointed. Original failed proposal
+remains available at the same path. Observed volume free2398261248bytes is not
+attributed entirely to this operation. No audit acceptance/source change.
+
 Retain check-static-widget-state-ax.mjs and static-widget-state-ax-review-
 20261022 log/empty stderr.216 observations/108 pairs/nine families inspect exact
 widget role/name/description/value/all scalar states;progress focusability stays
