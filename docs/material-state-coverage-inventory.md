@@ -73,11 +73,19 @@
   preserve,accepted pointer unchanged. Overlapping chip reviews are not unique
   coverage twice. Evidence:static-semantic-input-join-20261022 log/empty stderr,
   join-static-semantic-input-evidence.mjs. This is not canonical or case closure.
-- NEXT:register/select the coherent191-definition/82191909 case batch with exact
+- Case selection support now explicit via --static-semantic-inputs(exact82191909).
+  Full production reader authenticates16180 dependencies/twelve current sources,
+  all2311 cases partial;accepted pointer unchanged.4/4 new-selector/existing-tabs
+  regression tests pass. Complete current case-reader/runner/launcher sources
+  restore exactly to21de384a;drift and mixed/unknown selections reject.
+  Evidence:static-semantic-selection-regression-20261022 and static-semantic-
+  selected-review-verification-20261022 logs/empty stderr. No export yet.
+- NEXT:register the coherent191-definition/82191909 case batch with exact
   accepted180-definition/873-source predecessor conservation,then use the existing
   export/conservation/cold/import milestone. Read-only inventory confirms producer
   still has873 paths and unchanged7e0caa32 normalized SHA;new join/sort/toggle/widget
-  scripts are not consumed. Do not export the unchanged producer or present pending
+  scripts are not consumed. Case selection changed only;policy/producer still
+  need11-finding/proof/source registration. Do not export or present pending
   proofs as canonical. Remaining static roles,full relationships,interaction and
   paint obligations continue after integration;do not reopen settled causes.
 - Final unfiltered canonical/audit harness/browser/units/builds/consumer/

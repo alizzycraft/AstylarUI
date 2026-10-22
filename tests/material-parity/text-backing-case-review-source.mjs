@@ -18,6 +18,7 @@ export const passiveStaticAxReview='33b7ccf93a9df72a878ba302c5a0b8867ef01a2b24cb
 export const cardInputsReview='20dfb80485f094eaec4025e56ac7d5bb4a375f388643d192cb14f5d5fecbf82b';
 export const expansionSemanticsReview='5caa57e5f2254471d9d082ff0831db36704f73997b41ae48aa4b4064b45c4c99';
 export const tabsMenuSheetReview='7eb107dec98a464f2c859c3c6f205d678719649b890c586bb52ce2d1d59640b4';
+export const staticSemanticInputsReview='821919099916339a177403d8c6cc66ede9aeaa20501a23ace9c568df75160f11';
 export const stepperInputsReview='ff305b14217b7123b98a2e00f3ecb9ad443cd89606eaf688ea11f6118b7fb069';
 const hash=b=>createHash('sha256').update(b).digest('hex');
 export function restoreInputBoundaryReadonlyAppend(source){
@@ -64,7 +65,7 @@ export function restoreQueuedControlHelperSource(source){
 export function createDividerReviewedBoundariesReader({root,read,reviewSha256}){
   // Both exact reviews retain the same pre-extension alignment-suite receipt.
   // Supporting the predecessor does not change the three-source base contract.
-  assert.ok([textBackingRetainedReview,dividerReviewedBoundariesReview,inactiveParagraphInputsReview,filledFieldStructureReview,chipPaintReview,chipGraphicReview,controlInputReview,dividerPropertyContextReview,sharedButtonTouchReview,passiveStaticAxReview,cardInputsReview,expansionSemanticsReview,stepperInputsReview,tabsMenuSheetReview].includes(reviewSha256));
+  assert.ok([textBackingRetainedReview,dividerReviewedBoundariesReview,inactiveParagraphInputsReview,filledFieldStructureReview,chipPaintReview,chipGraphicReview,controlInputReview,dividerPropertyContextReview,sharedButtonTouchReview,passiveStaticAxReview,cardInputsReview,expansionSemanticsReview,stepperInputsReview,tabsMenuSheetReview,staticSemanticInputsReview].includes(reviewSha256));
   const owner='scripts/join-material-divider-paint-boundaries.mjs';
   const source=read(path.resolve(root,owner),'utf8');
   assert.equal(hash(source),'b187103f2f773955dd97ea3e0ee4e0b5d4b4b9faab4af0ebb6fe5d6627f681da');
@@ -82,7 +83,7 @@ export function createDividerReviewedBoundariesReader({root,read,reviewSha256}){
     `${boundary}\nreturn {trackedRead};`)(assert,read,hash,path,createBase,textBackingRetainedReview);
   const suite='tests/material-parity/alignment-crop-provenance.spec.mjs';
   const currentSourceChecks=[];
-  if([dividerPropertyContextReview,sharedButtonTouchReview,passiveStaticAxReview,cardInputsReview,expansionSemanticsReview,stepperInputsReview,tabsMenuSheetReview].includes(reviewSha256)){
+  if([dividerPropertyContextReview,sharedButtonTouchReview,passiveStaticAxReview,cardInputsReview,expansionSemanticsReview,stepperInputsReview,tabsMenuSheetReview,staticSemanticInputsReview].includes(reviewSha256)){
     const file=path.resolve(root,`artifacts/material-parity/working-audit/proposals/${reviewSha256}.json`);
     const envelope=JSON.parse(read(file));
     assert.equal(envelope.sha256,reviewSha256);assert.equal(hash(JSON.stringify(envelope.review)),reviewSha256);

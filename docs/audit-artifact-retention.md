@@ -2,6 +2,17 @@
 
 ## Current versus historical evidence
 
+Retain static-semantic-selection.spec.mjs,the source-restoration changes and
+static-semantic-selection-regression-20261022 log/empty stderr(4/4 pass),plus
+static-semantic-selected-review-verification-20261022 log/empty stderr. The latter
+contains executable producerArgs and authenticates16180 dependencies/twelve
+current sources through exact82191909 production selection. Preserve first
+static-semantic-selection-focused-20261022 log/stderr:one negative control made
+no mutation because the runner imports the review constant rather than its ID.
+Corrected control asserts a real constant-name mutation before rejection. No
+evidence/fixture normalization or acceptance relaxation. Selection only;191
+finding registration,source reconciliation,export/cold/import remain pending.
+
 Retain join-static-semantic-input-evidence.mjs,static-semantic-input-join-20261022
 log/empty stderr and complete case proposal82191909(large generated JSON remains
 ignored,not forced into Git). It preserves complete48e8 predecessor and adds240

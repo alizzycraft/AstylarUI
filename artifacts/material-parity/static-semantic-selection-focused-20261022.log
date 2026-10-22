@@ -1,0 +1,34 @@
+TAP version 13
+# Subtest: static semantic case selection restores complete accepted predecessor sources and rejects drift
+not ok 1 - static semantic case selection restores complete accepted predecessor sources and rejects drift
+  ---
+  duration_ms: 103.1163
+  type: 'test'
+  location: 'D:\\dev\\github\\AstylarUI-audit-integration\\tests\\material-parity\\static-semantic-selection.spec.mjs:13:1'
+  failureType: 'testCodeFailure'
+  error: 'Missing expected exception.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  operator: 'throws'
+  stack: |-
+    TestContext.<anonymous> (file:///D:/dev/github/AstylarUI-audit-integration/tests/material-parity/static-semantic-selection.spec.mjs:20:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: static semantic named launcher selects only the exact new proposal and preserves old invocation
+ok 2 - static semantic named launcher selects only the exact new proposal and preserves old invocation
+  ---
+  duration_ms: 403.0129
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 1
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 903.4622

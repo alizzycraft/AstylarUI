@@ -15,7 +15,7 @@ import {
 import { materialInputAuditPayloadFile } from '../tests/material-parity/input-audit-report-codec.mjs';
 import { withAuditEvidenceSession, auditReadFileSync } from '../tests/material-parity/audit-evidence-session.mjs';
 import { attachCaseObligationCoverage, assertCaseObligationCoverage } from './audit-findings-store.mjs';
-import { createTextBackingReviewReader, textBackingRetainedReview, createDividerReviewedBoundariesReader, dividerReviewedBoundariesReview, inactiveParagraphInputsReview, filledFieldStructureReview, chipPaintReview, chipGraphicReview, controlInputReview, dividerPropertyContextReview, sharedButtonTouchReview, passiveStaticAxReview, cardInputsReview, expansionSemanticsReview, stepperInputsReview, tabsMenuSheetReview } from '../tests/material-parity/text-backing-case-review-source.mjs';
+import { createTextBackingReviewReader, textBackingRetainedReview, createDividerReviewedBoundariesReader, dividerReviewedBoundariesReview, inactiveParagraphInputsReview, filledFieldStructureReview, chipPaintReview, chipGraphicReview, controlInputReview, dividerPropertyContextReview, sharedButtonTouchReview, passiveStaticAxReview, cardInputsReview, expansionSemanticsReview, stepperInputsReview, tabsMenuSheetReview, staticSemanticInputsReview } from '../tests/material-parity/text-backing-case-review-source.mjs';
 
 const root = process.cwd();
 const options = parseMaterialInputAuditArguments(process.argv.slice(2), root);
@@ -38,7 +38,7 @@ const { audit, errors } = withAuditEvidenceSession(() => {
   const audit = buildMaterialInputAudit(parityReport, { ...options, root });
   if (options.caseObligationReview !== undefined) {
     progress('join-case-obligations');
-    const readerFactory=[dividerReviewedBoundariesReview,inactiveParagraphInputsReview,filledFieldStructureReview,chipPaintReview,chipGraphicReview,controlInputReview,dividerPropertyContextReview,sharedButtonTouchReview,passiveStaticAxReview,cardInputsReview,expansionSemanticsReview,stepperInputsReview,tabsMenuSheetReview].includes(options.caseObligationReviewSha256)
+    const readerFactory=[dividerReviewedBoundariesReview,inactiveParagraphInputsReview,filledFieldStructureReview,chipPaintReview,chipGraphicReview,controlInputReview,dividerPropertyContextReview,sharedButtonTouchReview,passiveStaticAxReview,cardInputsReview,expansionSemanticsReview,stepperInputsReview,tabsMenuSheetReview,staticSemanticInputsReview].includes(options.caseObligationReviewSha256)
       ? createDividerReviewedBoundariesReader
       : options.caseObligationReviewSha256===textBackingRetainedReview ? createTextBackingReviewReader : undefined;
     const applicability=readerFactory?.({root,read:auditReadFileSync,reviewSha256:options.caseObligationReviewSha256});

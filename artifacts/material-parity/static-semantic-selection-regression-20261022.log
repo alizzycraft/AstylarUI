@@ -1,0 +1,34 @@
+TAP version 13
+# Subtest: static semantic case selection restores complete accepted predecessor sources and rejects drift
+ok 1 - static semantic case selection restores complete accepted predecessor sources and rejects drift
+  ---
+  duration_ms: 179.8664
+  type: 'test'
+  ...
+# Subtest: static semantic named launcher selects only the exact new proposal and preserves old invocation
+ok 2 - static semantic named launcher selects only the exact new proposal and preserves old invocation
+  ---
+  duration_ms: 476.7637
+  type: 'test'
+  ...
+# Subtest: tabs semantic registration preserves179 findings and complete predecessor sources
+ok 3 - tabs semantic registration preserves179 findings and complete predecessor sources
+  ---
+  duration_ms: 1040.3667
+  type: 'test'
+  ...
+# Subtest: tabs semantic history and queued node AX presence evidence replay
+ok 4 - tabs semantic history and queued node AX presence evidence replay
+  ---
+  duration_ms: 30226.4199
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 31709.6936
