@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+Full-section comparison59897 is terminal success(exit0):retain tabs-full-section-
+comparison-20261022 log/empty stderr. Authenticated accepted80 prior digests and
+new package7fa7ca35 conserve70 sections;10 expected changed sections still need
+detailed reconciliation. Coverage52254,leaf comparison35762 and candidate import
+48299 are live;retain their logs without committing live results. Do not repeat
+the completed export/comparison. Older live59897 notes below are historical.
+
 Export5359 is terminal success(exit0,2587840ms). Retain closed tabs-coherent-
 export-20261022 stdout/stderr and tabs-export-census-binding-20261022 log/empty
 stderr(census75129 exit0). New docs package7fa7ca35/180 findings/243 proofs/873

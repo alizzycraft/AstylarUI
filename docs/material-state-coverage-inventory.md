@@ -17,8 +17,11 @@
   remains unaccepted. Exact exported census75129 passes:873 paths/243 proofs/
   180 findings match frozen source selection. Logs:tabs-coherent-export-20261022
   stdout/stderr and tabs-export-census-binding-20261022 log/empty stderr.
-  Full80-section comparison59897 is live;poll that handle. Keep873 sources frozen
-  through conservation/cold. No accepted180 publication or working-index import.
+  Full80-section comparison59897 completes exit0:70 unchanged/10 expected changed
+  (sources,coverage,proofs/findings and six receipt-propagating sections).
+  Evidence:tabs-full-section-comparison-20261022 log/empty stderr;prior accepted
+  80 digests reused/authenticated,not another prior-package scan. Keep873 sources
+  frozen through conservation/cold. No accepted180 publication or main import.
 - Its pending201 case children cover70 tabs/94 menu node records,25 sheet action
   presence and12 tabs AX pairs. Source finding:explicit content-as-tab-panel-name
   replaces reference labelledby intent. Known private text-paint causes separate.
@@ -41,6 +44,8 @@
   name-input and focus-source-applicability20261022 logs;no repeated reduction.
 - Next:finish full section/coverage/receipt reconciliation,
   independent cold comparison and accepted import. Batch queued evidence later.
+  Live checks:coverage52254,receipt leaves35762,candidate-only import48299;
+  poll existing handles. Main accepted pointer must stay8d6c5964 until all gates.
   Remaining initial-state AX batch is deferred through this reconciliation:reuse
   authenticates192 existing observations/96 pairs across8 families,leaving340
   configured pairs across28 families. First preflight rejects legacy list's
