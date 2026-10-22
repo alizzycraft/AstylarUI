@@ -2,6 +2,17 @@
 
 ## Current audit pointer — October22
 
+- Input-boundary restoration integrated into existing historical verifier:
+  exact58fe append owner→171bf9fa,then two exact import reversals and retained-map
+  preamble reversal. All42 original progress-stage statements conserve except
+  the same two already named diagnostic extensions;existing older33→41 stage
+  and sorter/component/border/runner/spec guards clear. Appended-source negative
+  controls reject. Replay now executes eight original retained tests:three pass,
+  five fail at shared conservedPrePassiveDefinitions length191 versus155 before
+  their runtime assertions. Evidence:harness-component-boundary-replay-20261022
+  .log/empty stderr. Next reuse exact historical registry conservation rather
+  than changing the original155/150/148/147 predecessor assertions. Full historical
+  batch remains failing;later button phases not reached. No rendering promotion.
 - Runtime-compilation source transition isolated:comparing exact96be6b7c test
   body with current leaves only the map-read preamble changed. Old mutable dist
   map read becomes retained component-map-recovery-20261011 bytes plus exact

@@ -2,6 +2,10 @@
 
 ## Current versus historical evidence
 
+Retain harness-component-boundary-replay-20261022.log/.stderr.log:source guards
+clear,eight original tests execute,three pass/five fail at historical registry
+population191 versus155. Later phases unexecuted;preserve prior guard failures.
+
 Retain harness-component-restored-replay-20261022.log/.stderr.log:existing sorter
 whole-source restoration clears prior guard,then input-boundary snapshot guard
 fails. Preserve both historical verifier failure pairs;batch remains unverified.

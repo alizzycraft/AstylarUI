@@ -10,6 +10,7 @@ import ts from 'typescript';
 import { restoreAstylarDiagnostics } from '../tests/material-parity/alignment-survey-conservation.mjs';
 import { readGapSurveySource } from '../tests/material-parity/gap-survey-source-replay.mjs';
 import { readRetainedSortFocusSource } from '../tests/material-parity/position-composition-producer-transition.mjs';
+import { restoreInputBoundaryReadonlyAppend } from '../tests/material-parity/text-backing-case-review-source.mjs';
 
 const main = process.argv[1] && pathToFileURL(path.resolve(process.argv[1])).href === import.meta.url;
 if (main) {
@@ -117,14 +118,33 @@ if (main) {
   const originalBoundary = execFileSync('git', ['show', `0a0b5d6be8f1cabe6b6852e17d01145437de7c69:${boundary}`],
     { maxBuffer: 4_000_000 });
   assert.equal(hash(originalBoundary), 'b6eff6c1419e114ba6f177dbde7c941bbf8ceeefa00165dcdbe9c4babc826f3b');
-  const currentBoundary = read(boundary);
+  let currentBoundary = read(boundary);
+  const expandedBoundary = hash(currentBoundary) === '58fe244dc56a251e144dcc6eab2c36cb18f017291da968e1d002dc36404d60ea';
+  if (expandedBoundary) {
+    const bytes = currentBoundary;
+    assert.throws(() => restoreInputBoundaryReadonlyAppend(Buffer.from(bytes.toString() + '\nconst forged = true;\n')));
+    let text = restoreInputBoundaryReadonlyAppend(bytes);
+    assert.equal(hash(text), '171bf9fae8fe2e701f5a42d5eef896685085ef267200956729ab447e04a032d5');
+    for (const [addition, prior] of [
+      ["import { fingerprintDirectory, fingerprintModuleGraph, materialCaseKey, openMaterialCheckpoint } from './run-checkpoint.mjs';",
+        "import { fingerprintDirectory } from './run-checkpoint.mjs';"],
+      ["import { propertyGroups, sourceAuditDefinitions } from './input-equivalence-policy.mjs';",
+        "import { propertyGroups } from './input-equivalence-policy.mjs';"],
+      ["  const mapBytes = readFileSync('artifacts/material-parity/retained-evidence/component-map-recovery-20261011/chunk-3JXWRYJY.js.map');\n  assert.equal(hash(mapBytes), 'dba484044ca0dea965d8ef4b12635673f0f055d7711099d2f6476ca490988ec4');\n  const map = JSON.parse(mapBytes);",
+        "  const map = JSON.parse(readFileSync(path.join(consumer,\n    'dist/material-showcase/browser/chunk-3JXWRYJY.js.map'), 'utf8'));"],
+    ]) {
+      assert.equal(text.split(addition).length, 2, 'exact reviewed import/map preamble transition');
+      text = text.replace(addition, prior);
+    }
+    currentBoundary = Buffer.from(text);
+  }
   const priorBoundaryHash = 'de260e2fbee31686bccd940582e1503fc378881d2c94e6e35b66b67877cbc141';
   const progressBoundaryHash = 'd07df06e4ee6996f9fc06b778fc0b429620f1e0526813f33f8c52e6d083c27c0';
   const diagnosticBoundaryHash = 'cfd2f64ec26ffa1108a421d14fea8ba86c707aa3a285ee2dd482913a9e91a801';
-  assert.ok([priorBoundaryHash, progressBoundaryHash, diagnosticBoundaryHash].includes(hash(currentBoundary)),
+  assert.ok(expandedBoundary || [priorBoundaryHash, progressBoundaryHash, diagnosticBoundaryHash].includes(hash(currentBoundary)),
     'Unreviewed input-boundary snapshot drift');
   let reviewedBoundary = currentBoundary;
-  if (hash(currentBoundary) === diagnosticBoundaryHash) {
+  if (expandedBoundary || hash(currentBoundary) === diagnosticBoundaryHash) {
     const originalProgress = execFileSync('git', ['show', `96be6b7c:${boundary}`], { maxBuffer: 4_000_000 });
     assert.equal(hash(originalProgress), progressBoundaryHash);
     const keyed = bytes => {
@@ -137,7 +157,7 @@ if (main) {
       return result;
     };
     const before = keyed(originalProgress), after = keyed(currentBoundary);
-    assert.equal(before.size, 42); assert.equal(after.size, 60);
+    assert.equal(before.size, 42); assert.equal(after.size, expandedBoundary ? 80 : 60);
     const extended = new Set([
       'public divider typography reduction observes equal paragraph span inputs and opaque backing control',
       'retained progress focus caps and update disposal preserve complete configured cohort evidence']);
