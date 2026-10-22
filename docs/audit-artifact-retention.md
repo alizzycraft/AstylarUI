@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain join-stepper-expansion-input-evidence.mjs,stepper-expansion-input-evidence-
+join-20261022 log/empty stderr and queued case proposal
+ff305b14217b7123b98a2e00f3ecb9ad443cd89606eaf688ea11f6118b7fb069.
+The existing loader authenticates15622 dependencies;148 additive children recover
+whole accepted5caa predecessor when removed. Do not force-add this large proposal
+to Git or remove its referenced raw trees/AX captures. Accepted pointer/statuses
+stay unchanged;selection/export/cold/import remain pending for this queued batch.
+
 Retain review-stepper-semantic-inputs.mjs,stepper-semantic-source-review-20261022
 log/empty stderr and source proposal5d5c15f9532ea5446bad81e49280432e9393cf83db986f21cc5aac048d24ddd9.
 It preserves178 predecessor definitions and adds one pending authored tab/panel

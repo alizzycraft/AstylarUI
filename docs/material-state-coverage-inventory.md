@@ -77,6 +77,17 @@ Updated October22. Current conclusions only;earlier next/live statements in reta
   20261022 log pair,terminal0. Next:coherent registration/obligation join for queued
   expansion68/stepper68 recorded-node and stepper12 actual-AX evidence;do not
   promote entire cases or rerun settled source-history/capture questions.
+- Coherent queued evidence join78799 exits0:proposalff305b14217b7123b98a2e00f3ecb9ad443cd89606eaf688ea11f6118b7fb069
+  adds exactly148 children(68 expansion/68 stepper recorded-node,12 stepper AX),
+  authenticating15622 dependencies/all2311 cases via the existing strict loader
+  and accepted5caa source-applicability reader. Removing exactly148 children
+  recovers complete predecessor5caa;accepted pointer and all dispositions/remaining
+  work preserve. Full paired-tree bytes match,not merely shared IDs. Evidence:
+  join-stepper-expansion-input-evidence.mjs and stepper-expansion-input-evidence-
+  join-20261022 log pair. This is queued/unselected,not canonical publication.
+  Next:one coherent source registration/selection batch for pending179 source
+  proposal5d5c15f9 and case successorff305b14,with existing owning/historical tests;
+  export/cold/import only at that integrated milestone. No case closure implied.
 
 - October22 reconciliation:expansion export17464 is TERMINAL SUCCESS(exit0,
   2959235ms),not a live job. Candidate3175514b has178 findings;accepted796984e0
