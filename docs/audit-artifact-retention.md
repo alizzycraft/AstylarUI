@@ -2,6 +2,16 @@
 
 ## Current versus historical evidence
 
+Retain review-checkable-semantic-inputs.mjs,checkable-semantic-input-review-
+20261022 log/empty stderr and pending source review4d8dd04e. All186 predecessor
+definitions preserve;72 observations/36 enabled pairs,146 negative controls and
+exact replay pass. Complete initial/current authored controls and actual helper
+execute;native label references resolve to LABEL/for controls. Checkbox reuses
+existing primitive finding and authenticated57f53967 history/c47d589a transition,
+not another history reduction. New radio/switch composition findings do not prove
+form submission,all disabled focus,keyboard/AT or rendering. No canonical/source
+registration or acceptance promotion.
+
 Closed audit JSON storage:retain closed-audit-json-compression-20261022.json
 and closed-audit-json-compression-verification-20261022 log/empty stderr. Exact
 resolved plain files9f9dfaf0,48e8e7ca,failed2fd3236c and both7fa/index.json files

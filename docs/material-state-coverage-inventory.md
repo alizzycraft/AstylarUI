@@ -2,6 +2,41 @@
 
 ## Current audit pointer — October22
 
+- Scope unchanged:36 families/2311 cases(436 static/1875 interaction),all partial;
+  current rendering unverified. No inspection/acceptance promotion.
+- Accepted canonical7fa7ca35/index77af769e/review7eb107de has180 findings/243
+  proofs/873 paths. Source/section/receipt conservation,independent cold99596,
+  verified main import and publication7176fc4a complete. Earlier live notes below
+  are historical. Latest coherent increments are pushed to the integration branch.
+- Pending source review4d8dd04e now preserves186 predecessors and adds native
+  radio-input/group/value/label versus role-DIV composition and native switch-
+  button/label versus role-DIV composition.188 proposed definitions(8 additions)
+  remain unregistered;accepted180 unchanged.36 enabled static pairs/72 raw rows,
+  146 mutation controls and exact replay pass. Checkbox reuses existing cause and
+  source-history proof57f53967/c47d589a,not a new rediscovery or broadened disabled
+  runtime claim. Evidence:review-checkable-semantic-inputs.mjs and checkable-
+  semantic-input-review-20261022 log/empty stderr. Form/keyboard/AT behavior open.
+- Earlier pending findings and proofs remain intact:sheet name835eba45,chip
+  orientation a876acae,group metadata17e767f2,picker metadata0951b7ae. Complete
+  case proposal48e8e7ca preserves869 queued element/AX/history children and prior
+  case status/remaining-work lists;not selected/exported yet.
+- Actual initial AX capture covers all436 static pairs(872 authenticated raw
+  observations),same pinned9d0f1220. Bounded widget-state review covers108 pairs/
+  nine families,with known progress focusability explicit;other review populations
+  overlap and do not imply full semantic coverage. Labels/landmarks/AT/paint and
+  current whole-runtime applicability remain open. Source and projection bindings
+  reused/authenticated rather than another browser matrix.
+- NEXT:check the distinct public hidden-reference/description contract before
+  classifying remaining sort/tooltip associations;do not repeat settled checkbox
+  history or current known core/fixture findings. Continue remaining static-role
+  reviews,then join/register the coherent pending batch before another export.
+- Final unfiltered canonical/audit harness/browser/units/builds/consumer/
+  capability/example/skills/diff/handoff gates remain unchanged. Storage:closed
+  JSON LZX conversion saved453483648 physical bytes with hashes/paths/indexes
+  unchanged,no deletion. Detailed receipts and prior checkpoints follow.
+
+## October22 earlier current-pointer detail — superseded milestones
+
 - Storage headroom:five exact closed JSON files(three case proposals and both
   accepted/candidate7fa indexes) transparently LZX-compressed under established
   retention procedure.453483648 physical bytes saved;all logical byte hashes/
