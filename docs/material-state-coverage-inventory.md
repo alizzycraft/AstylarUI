@@ -38,7 +38,18 @@
   overlap and do not imply full semantic coverage. Labels/landmarks/AT/paint and
   current whole-runtime applicability remain open. Source and projection bindings
   reused/authenticated rather than another browser matrix.
-- NEXT:classify remaining sort/tooltip associations without conflating missing
+- Bounded follow-up:all48 retained static sort/tooltip observations authenticate
+  their raw SHA256 and have no runtime errors. In each family's12 paired cases,
+  native buttons have aria-describedby and AX descriptions(Sort/Create a project),
+  candidate buttons have neither. Current complete sort branch authors no
+  ariaDescribedby;tooltip authors it only when open. This excludes hidden-target
+  pruning as the first divergence for these closed static fixtures:the relationship
+  was never supplied. Tooltip reuses existing persistent-description finding;
+  sort still needs source-history/pinned-method applicability before a new finding.
+  Evidence:remaining-static-ax-resume-20261022/latest-report.json and its48
+  sort/tooltip raw files;astylar.component.ts familyElements;existing tooltip
+  source definition. No new capture,core change or whole-case closure.
+- NEXT:finish sort association history/applicability without conflating missing
   authored links with the now demonstrated hidden-reference core defect. Do not
   repeat settled checkbox history or current known findings. Continue static-role
   reviews,then join/register the coherent pending batch before another export.
