@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Keep popup-depth-coherent-canonical-export-20261023 log/stderr (terminal0),
+popup-depth-full-section-comparison-20261023.log (both complete packages),
+popup-depth-fixed-shape-leaves-20261023.log (14085648 entries/147 differences)
+and popup-depth-complete-conservation-20261023 log/stderr (terminal0). Preserve
+old5ed659b3 package separately;candidate2035d379 is not accepted merely because
+export/conservation passed. Independent cold-check log/stderr are live and must
+not be compressed,removed or treated as terminal. No evidence deleted.
+
 Keep popup-depth-coherent-inventory-integration-20261023 log/stderr (16/16),
 popup-depth-plan-conservation-initial-20261023 (original AST extraction failure),
 popup-depth-plan-conservation-final-20261023 (2/2) and popup-depth-production-

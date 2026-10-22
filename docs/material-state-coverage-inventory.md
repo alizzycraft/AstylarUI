@@ -2,6 +2,38 @@
 
 ## Current audit pointer — October22
 
+- October23 frozen export TERMINAL0:3215449.6026ms,all436 static/1875 interaction
+  records,8483 groups/389202 occurrences/192 source findings,inputEquivalent:false.
+  Evidence session authenticates17377 files/1937392254 bytes(equal verification
+  bytes),one collector/10 memory hits/one disk hit/zero invalidations. Candidate
+  package2035d3791c7973ff4b117349684113ca5add0fccb14a2a5ec69fdb03ce6423ef,
+  compressed91493351 bytes,decoded2341106454 bytes,SHA
+  d04a56213e2a285c6de20ce5443aeeaa3e70f723d40ab491c268d0fbd07ec0b8.
+  Export log SHA6d9887ac839d63b6e07d4ed08d6ed8eea74adce9662794b5d9b06009b709562e;
+  stderr7d3b72345309020a999d08e861252ec8fc66150b34ceba72fdbb35e3db39b910.
+  Accepted working pointer remains5ed659b3,not advanced by export.
+  Full existing streaming section comparison authenticates both complete payloads:
+  80 sections each,no added/removed,69 identical/11 changed. Comparison log SHA
+  c1e2d9f8aed09de25e6b5433370b7880fe69fe9c78c0f493728c1bd7d9ce3022.
+  Fixed-shape comparison preserves order/shape across14085648 entries in five
+  changed sections;147 differences reconcile as98 direct module receipts,48
+  independently recomputed control-proof hashes andone derived motion-report
+  hash. Physical observations,values and classifications remain unchanged there.
+  Specific check-popup-depth-canonical-conservation uses the existing parser,
+  readers and actual production source/proof/plan functions to verify the six
+  structural sections:all191 findings,248 non-line proof fields,928 old source
+  paths,62 old plan entries and2311 complete old case records conserve;only one
+  finding,13 proofs,six paths,one plan entry and133 bounded children add. Ten
+  changed source receipts bind exact Git3e753aa4→a0ffa23e bytes. All prior case
+  dependencies/remaining work/statuses preserve;source-applicability derives from
+  the exact queued reader. Complete conservation TERMINAL0,log popup-depth-
+  complete-conservation-20261023 SHA6aa616b9885773c746c2a7a75119ba0400335e5a58936b7f3cbc2965eb49535d,
+  empty stderr. Leaf log SHA6bdb03e463235b8099e89b91fdb35434121ea5a63ed3e73c52d33ff264a97521.
+  No current rendering/inspection
+  promotion. Independent cold check is live(session88597,PID38744),last phase
+  validate-audit;keep934 registered sources frozen. No accepted import/publication
+  until cold equality and full existing shard verification pass. Candidate package
+  files intentionally remain uncommitted while those gates are pending.
 - October23 coherent queued census now192 findings/261 proofs/934 source paths.
   Nine pending assertions(tab hidden helpers,tooltip short/theme/depth boundaries,
   endpoint/case reader,inventory and export selection) and two missing adapter/
