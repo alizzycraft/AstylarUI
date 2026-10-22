@@ -4,6 +4,22 @@
 
 Updated October22. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- Standalone menu recorded-element gap answered across94 accepted pairs:
+  1416 native/724 candidate records account explicitly. Four shapes distinguish
+  trigger children/portal records:20(4/0),24(5/0),32 open(5/12),18 dismissed(5/1).
+  The18 remaining native portal roots are empty,not open/painted-leak evidence.
+  Native template/trigger descendants,portal/backdrop/connected-position/content
+  wrappers,item labels/ripples map to explicit groups versus authored local popup
+  and offset labels. Existing shared-button/menu composition/font/density causes
+  are reused without reopening history. Initial verifier mutation failure allowed
+  an erased empty portal to look like another valid closed shape;the rejection
+  now also binds the original case shape. All376 controls reject and exact replay
+  passes. Evidence:check-menu-recorded-nodes.mjs,initial menu-recorded-node-
+  accounting-20261022 failure pair and retry log/empty stderr. New files remain
+  outside frozen856-source batch;no renderer/fixture/frozen-source changes.
+  Next:queue94 children for a later coherent join;anonymous/pseudo/full-style/
+  actual-AX/paint/event/resource/current applicability and case closure remain open.
+
 - Standalone tabs recorded-element gap answered while frozen stepper cold replay
   runs:all70 accepted paired trees authenticate and account for2458 native/840
   candidate records. Two topologies:62 ordinary/8 held(extra native ripple).

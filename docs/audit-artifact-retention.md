@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Retain check-menu-recorded-nodes.mjs,initial menu-recorded-node-accounting-
+20261022 failure log/stderr and menu-recorded-node-accounting-retry-20261022
+log/empty stderr. All94 pairs/1416 native/724 candidate elements account,376
+mutation controls reject and exact replay passes. The initial missing-exception
+failure exposed a verifier context gap for deleting an empty portal;binding the
+original shape repairs that gap,not fixture/renderer behavior. Keep all original
+trees and empty portal records. New proof is outside frozen stepper source batch;
+join only in a later coherent batch,not during cold replay. No case promotion.
+
 Retain check-tabs-recorded-nodes.mjs and tabs-recorded-node-accounting-20261022
 log/empty stderr. All70 retained pairs authenticate,2458 native/840 candidate
 records account explicitly,280 mutations reject and exact replay passes. This is
