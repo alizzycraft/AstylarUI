@@ -2,6 +2,25 @@
 
 ## Current audit pointer — October22
 
+- PUBLICATION:independent cold23328 exits0 for the frozen static-semantic batch;
+  two collectors/ten memory hits/zero disk hits authenticate17370 files and
+  1746229963 bytes,with equal verification bytes. Total3503031.6052ms;original
+  progress/observation timings remain retained without an inferred delay cause.
+  Main import then exits0,reusing the authenticated candidate without decoding
+  the complete package again. All shards verify before/after copy and import;
+  accepted pointer now e7d22b1ad3a17ae1d00cfd131dd0c51164fc8b5efe39484fb31b95561240c678,
+  index80632431bbb91f34d7513ba5096208074f7d204c1a86b65017f505ef9b8f4e1d.
+  Evidence:static-semantic-cold-check and static-semantic-main-import-verification
+  20261022 log/stderr pairs.191 findings/248 proofs/928 paths and case review
+  82191909 are now published evidence,not current rendering or case acceptance.
+  Prior generations/originals/failures remain retained. Source freeze is released.
+- NEXT:remaining static semantic relationships/roles and anonymous-node/style
+  obligations,then interaction/rendering coverage. Prioritize shared control and
+  overlay ownership before isolated paint details;form specific competing causes
+  and reuse the captured corpus before scheduling new captures. All2311 cases
+  remain partial,current rendering unverified;all original final gates remain.
+- The milestone bullets below describe the preserved pre-publication sequence;
+  their pending/main-pointer statements are superseded by the publication above.
 - Scope unchanged:36 families/2311 cases(436 static/1875 interaction),all partial;
   current rendering unverified. No inspection/acceptance promotion or renderer fix.
 - Last accepted package7fa7ca35/index77af769e/review7eb107de remains180 findings/

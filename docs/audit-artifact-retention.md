@@ -2,6 +2,18 @@
 
 ## Current versus historical evidence
 
+Retain static-semantic-cold-check-20261022 log/stderr(progress,not empty) and
+static-semantic-main-import-verification-20261022 log/empty stderr with executable
+producerArgs. Cold23328 exits0:two collectors/ten memory hits/zero disk hits,
+17370 files/1746229963 bytes and equal verification bytes,total3503031.6052ms.
+Main import exits0 after existing all-shard verification before/after copying the
+authenticated candidate and importing through the existing reuse path. Accepted
+generatione7d22b1a/index80632431 now matches candidate and canonical package;
+no repeat full decode. Preserve predecessor7fa,candidate,new main generation,
+originals and failures.191 findings/248 proofs/928 paths are published,all2311
+cases remain partial/current rendering unverified. Earlier pending statements
+below are historical milestones,superseded by this terminal publication record.
+
 Retain static-semantic-export-conservation,static-semantic-candidate-import,
 static-semantic-propagated-receipt-reconciliation and static-semantic-candidate-
 index-compression20261022 log/empty stderr pairs,all with executable producerArgs.
