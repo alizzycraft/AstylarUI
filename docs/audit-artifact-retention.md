@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Receipt comparison35762 and propagated derivation55118 terminate success(exit0).
+Retain tabs-receipt-leaf-comparison and tabs-propagated-receipt-reconciliation-
+20261022 log/empty stderr pairs. All148 changed leaves exhaust(98 direct producer
+receipts,48 control-proof hashes,1 motion-report hash,count179→180);all selected
+non-receipt values/container shapes conserve and prior producer recovers exactly.
+All10 changed sections now reconcile. Keep873 sources frozen for independent
+cold;candidate/main publication remain separate gates. Earlier live35762 notes
+below are historical,not another outstanding comparison or reason to repeat it.
+
 Coverage52254 and candidate import48299 are terminal success(exit0). Retain tabs-
 coverage-conservation and tabs-candidate-import20261022 log/empty stderr pairs.
 Complete prior coverage/15622 ordered dependencies recover,35 dependencies and

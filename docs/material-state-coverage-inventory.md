@@ -48,8 +48,13 @@
   recover;35 dependencies and201 exact children added,zero status changes.
   Candidate-only import48299 exits0:all shards verify,index77af769e selects7fa7ca35;
   main accepted pointer unchanged8d6c5964. Logs:tabs-coverage-conservation and
-  tabs-candidate-import20261022 pairs. Receipt leaves35762 is still live;poll it.
-  Main acceptance still requires receipt derivation,cold comparison and import.
+  tabs-candidate-import20261022 pairs. Receipt leaves35762 and derivation55118
+  both complete exit0. All148 changed leaves exhaust:98 producer receipts,
+  48 recomputed control-proof hashes,1 motion-report hash,count179→180. All
+  selected non-receipt values/container shapes conserve and exact prior producer
+  recovers. Logs:tabs-receipt-leaf-comparison and tabs-propagated-receipt-
+  reconciliation20261022 pairs. All10 changed sections now reconcile;main
+  acceptance still requires independent cold comparison and accepted import.
   Remaining initial-state AX batch is deferred through this reconciliation:reuse
   authenticates192 existing observations/96 pairs across8 families,leaving340
   configured pairs across28 families. First preflight rejects legacy list's
