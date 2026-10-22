@@ -8,6 +8,18 @@
   proofs/873 paths. Source/section/receipt conservation,independent cold99596,
   verified main import and publication7176fc4a complete. Earlier live notes below
   are historical. Latest coherent increments are pushed to the integration branch.
+- New core finding pending in source review841cdeeb(189 definitions,all188 prior
+  definitions preserve):hidden referenced description targets are pruned from
+  native semantic DOM. Two independent package-root equal-input runs retain32
+  captures;all12 hidden candidate cases lose descriptions,while native and
+  visible controls pass. Hidden ordinary text stays unexposed. Public semantic
+  identity counts retain the authored graph,but root/child filters prevent target
+  creation. Six complete methods bind current/installed/both actual bundles;
+  public declarations support both fields,101 controls/exact replay pass.
+  Evidence:public-hidden-description20261022 and repeat,verification and hidden-
+  description-input-review logs. No Material position/association causality claim.
+  General future owner:semantic graph retention versus visibility,not fixture
+  text copying,ARIA substitution or coordinate/paint compensation.
 - Pending source review4d8dd04e now preserves186 predecessors and adds native
   radio-input/group/value/label versus role-DIV composition and native switch-
   button/label versus role-DIV composition.188 proposed definitions(8 additions)
@@ -26,9 +38,9 @@
   overlap and do not imply full semantic coverage. Labels/landmarks/AT/paint and
   current whole-runtime applicability remain open. Source and projection bindings
   reused/authenticated rather than another browser matrix.
-- NEXT:check the distinct public hidden-reference/description contract before
-  classifying remaining sort/tooltip associations;do not repeat settled checkbox
-  history or current known core/fixture findings. Continue remaining static-role
+- NEXT:classify remaining sort/tooltip associations without conflating missing
+  authored links with the now demonstrated hidden-reference core defect. Do not
+  repeat settled checkbox history or current known findings. Continue static-role
   reviews,then join/register the coherent pending batch before another export.
 - Final unfiltered canonical/audit harness/browser/units/builds/consumer/
   capability/example/skills/diff/handoff gates remain unchanged. Storage:closed

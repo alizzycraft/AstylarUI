@@ -2,6 +2,29 @@
 
 ## Current versus historical evidence
 
+Retain audit-public-hidden-description.mjs,check-public-hidden-description.mjs,
+review-hidden-description-inputs.mjs,all public-hidden-description-20261022 and
+repeat files(including actual bundles,original failure/terminal records),both
+capture log/stderr pairs,public-hidden-description-verification and hidden-
+description-input-review20261022 log/empty stderr pairs,and source proposal841cdeeb.
+Capture2467/47467 both exit1 only after16 complete captures/six actual description
+failures each;runtime errors empty. Verifier passes101 controls and binds six
+complete current/installed/actual-bundle methods;32 site inputs pair-equal,hidden
+text exposure controls pass,target DOM loss/identity retention explicit. Installed
+root declarations support hidden/ariaDescribedby. All188 predecessors preserve;
+189 pending definitions not registered/canonical/current whole-rendering accepted.
+Reference builder correction creates native hidden DOM rather than deleting it;
+old CSS-hiding producer/captures unchanged and their narrower controls stay valid.
+No new renderer or fixture fix;do not delete these failures as successful scratch.
+
+Raw public hidden-description bundles retain639 trailing-whitespace diagnostics
+each inside captured upstream shader strings. Do not normalize these immutable
+actual bundles. public-hidden-description-owned-diff-review-20261022 log/empty
+stderr records all1278 warnings as confined to the two audit.js files,both raw
+hashes matching capture provenance and all other focused commit paths passing
+git diff --check. This is a documented raw-evidence warning,not a claim that the
+unfiltered raw diff check passed or permission to weaken source/acceptance checks.
+
 Retain review-checkable-semantic-inputs.mjs,checkable-semantic-input-review-
 20261022 log/empty stderr and pending source review4d8dd04e. All186 predecessor
 definitions preserve;72 observations/36 enabled pairs,146 negative controls and
