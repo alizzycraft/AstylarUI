@@ -2,6 +2,21 @@
 
 ## Current audit pointer — October22
 
+- Incomplete-harness triage,not a renderer diagnosis:15 of18 recorded failures
+  stop at exact source/file-inventory receipt comparisons(tests82,85,87,92,93,
+  100,102,124,128,134,139,146,148,150,170 are the receipt failures;the other
+  three are36,57,130). Test57 still asserts historical219 proofs/old digest
+  although cold-verified current inventory has248. Test36 compares a166-group
+  historical proposal predecessor against the entire growing191-definition
+  registry minus one finding. These two test assumptions require bounded
+  historical/current conservation,not replacing original receipts with new hashes.
+  Test130 fails scalar population equality:current bottom-sheet root background
+  rows differ from its historical production baseline. This needs attribution to
+  the already reviewed later input batch versus an unexplained producer change;
+  do not waive unrelated-row conservation. Source inspected:audit-workflow.spec
+  lines94–122,audit-findings-store.spec lines475 onward,and button-fixed-width-
+  canonical-integration.spec line47 onward. Next:reuse existing source transitions
+  for receipt groups,then independently reconcile the exact test130 row delta.
 - October22 revalidation:session65418 is unavailable and no matching harness,
   test runner or canonical-integration child process remains. The original stdout
   ends at test173 without a TAP aggregate or terminal exit receipt;18 explicit
