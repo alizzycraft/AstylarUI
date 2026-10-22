@@ -2,6 +2,32 @@
 
 ## Current versus historical evidence
 
+Keep current-depth-public-reduction-20261022 (bundle,provenance,result,eight PNGs)
+and capture/validation logs. It contains the honest one-failure/three-control
+current public depth reproduction;do not delete as failed scratch. Keep all
+root-depth registration,historical-boundary and proof-inventory integration logs,
+including original historical192-versus191 failure. Keep popup-depth-endpoint-
+input-initial-20261022 failure and corrected endpoint log/empty stderr.
+
+Keep popup-depth-case-join-20261022 (TAP chunk parsing failure),retry (ENOSPC),
+headroom (strict historical producer receipt rejection) and source-bound-20261023
+success logs/stderr. Keep zero-byte failed atomic save
+working-audit/proposals/2019d89b4c1d5efe6ef143b75eb63a1e5c5056c87f8d87a835f540ae5e2ec6df.json.20616.tmp.
+The complete2019 proposal is unaccepted failure-stage evidence;eb8ca85a is the
+validated pending133-child case join,not canonical publication. Both retain all
+2311 groups/partial statuses. Do not repoint the accepted5ed659b3 index/package.
+
+October23 headroom recovery changed no bytes or paths. Closed census log
+configured-editing-root-canonical-census-20261015.log SHA
+41198dc1ac802f2fd2dc35901638d4060a05e39ab49315270d3f20c4ba86e265 was
+LZX-compressed from210350586 to31346688 physical bytes. Failed-stage proposal
+2019d89b complete file SHA6d7bd3a248ab35a07d4efba4411d0639f3210828e007725f1cb3889736feee70
+retains190422455 logical bytes in40898560 physical bytes. Complete SHA256 checks
+agree before/after. Earlier no-force attempts on already-compressed proposals
+recovered no demonstrated space;do not count them as cleanup. No original or
+failure evidence was deleted. Current validated pending proposal is likewise
+compressed only with full before/after hash equality;retain it for integration.
+
 Keep tooltip-contrast-depth-pair-20261022(17 files/1004424 logical bytes),its
 checkpoint manifest and terminal capture log/empty stderr. Reporta52ca04c binds
 new open/camera/mesh-depth/canvas observations plus original trees/PNGs;do not

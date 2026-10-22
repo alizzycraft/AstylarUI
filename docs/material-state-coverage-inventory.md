@@ -2,6 +2,29 @@
 
 ## Current audit pointer — October22
 
+- October23 popup-depth case join succeeds through existing proposal save/loader:
+  eb8ca85a92bc8707f6fe2ba7404bf1e7caaacc9e57c733faf5a4cda6588862d4 adds133
+  bounded localPaint children to exact62 tooltip/71 snackbar endpoints. Original
+  2311 groups,statuses,remaining lists and all predecessor fields conserve;
+  removing exactly133 children recovers82191909. Existing loader authenticates
+  16186 dependencies. Present60/absent73 and unobserved synthetic-root ancestry
+  remain explicit;shared core reproduction is supporting evidence with
+  applicableToCaseRuntimeProven:false,not133 paint claims. Accepted pointer stays
+  unchanged;proposal is NOT selected for export or canonically published.
+  Existing endpoint assertion replay agrees exactly;join terminal0/empty stderr,
+  log popup-depth-case-join-source-bound-20261023 SHA
+  8b73755471eeb4382c0495ba5c6427403ea342753371877055c112644a6b1af8.
+  New join script closes the demonstrated missing case linkage using existing
+  infrastructure,not a new audit framework. Exact pre-short-boundary producer
+  Git9f7dc468 SHAee4f273b restores only that historical dependency after complete
+  current98347c3b hash check;no capture/source bytes rewritten or current rendering
+  inferred. Initial TAP64KiB comment split,ENOSPC and strict old-source rejection
+  logs stay retained. Storage recovery compressed closed census210350586→31346688
+  bytes with unchanged full SHA41198dc1ac802f2fd2dc35901638d4060a05e39ab49315270d3f20c4ba86e265;
+  no evidence deleted. Next extend the existing named export source/selection
+  boundary to this exact proposal,including current queued suite/helper sources,
+  before coherent canonical conservation/cold/import. No full harness or final
+  acceptance claim;accepted5ed659b3 unchanged.
 - Retained popup depth-input applicability now accounts for133 exact configured
   endpoints:tooltip62(26 popup present/36 absent),snackbar71(34 overlay present/
   37 absent). All133 original candidate tree SHA receipts authenticate against
