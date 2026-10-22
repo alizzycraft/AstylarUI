@@ -2,6 +2,30 @@
 
 ## Current audit pointer — October22
 
+- Contrast DPR1 tall/short paint question now has actual new depth observations,
+  not transplanted light values. Existing producer's explicit --paint-depth-pair
+  (requires --short-boundary) selects only contrast/900x1000+900x240/DPR1.
+  Report tooltip-contrast-depth-pair-20261022/latest-report.json SHA
+  a52ca04cc72a504d312b3596a6cee14d44bbe274bd6eae005598f496829d162d.
+  Both candidate open input trees are byte-identical,as are trigger/popup bounds;
+  popup is inside both canvases,opened/enabled/visible with visibility1. MeshZ
+  249.84799999999998 stays fixed;cameraZ866.0254037844387→207.84609690826528
+  crosses it in the short viewport. Same in-bounds crop85,214→183,229 has1000→0
+  dark pixels. Zero recorded runtime errors;actual canvas/drawing-buffer sizes
+  bind both observations. Corroborates the existing camera/depth core failure,
+  separately from unequal native fallback/flow authoring;no fixture/z-index fix.
+  New owning assertion rejects12 changed-state/visibility/geometry/camera/data
+  controls. Existing light proofs,configuration,retained actual-theme assertions,
+  build applicability and new pair pass6/6 in4517.9801ms. Logs:tooltip-contrast-
+  depth-pair,tooltip-contrast-depth-validation,tooltip-depth-pair-configuration-
+  retained,tooltip-short-boundary-retained-producer,tooltip-depth-pair-integration
+  20261022. Historical5ec72aca verification executes its exact ac2b624d producer
+  verifier under full captured-source hash,with all original assertions and a
+  forged-source rejection;current producer/fresh depth verification stays strict.
+  Original capture is not rewritten. Scope is this frozen contrast DPR1 pair,
+  not current-repository/all-theme paint,settled native raster or full lifetime.
+  Still standalone/not canonically joined;combine pending source/case evidence
+  integration coherently instead of rebuilding after each appended proof.
 - Short-tooltip paint applicability narrowed without recapture:old light depth
   proof79573fb4 and new actual-theme report5ec72aca bind byte-identical ordered
   manifests for all1887 served assets. Changed served build is excluded,not browser

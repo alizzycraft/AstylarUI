@@ -408,18 +408,54 @@ test('tooltip short-boundary opt-in preserves the original applied-theme viewpor
     [[900, 1000, 1], [900, 240, 1], [900, 1000, 2], [900, 240, 2]]);
   assert.equal(new Set(contexts.map(v => v.id)).size, 4);
   assert.deepEqual(select(false, original), original, 'opt-in must not mutate ordinary context inputs');
+  const active = new Function('depthPair', 'viewports', `return (${initializer('activeViewports')});`);
+  assert.equal(active(false, contexts), contexts);
+  assert.deepEqual(active(true, contexts).map(v => [v.width, v.height, v.deviceScaleFactor]),
+    [[900, 1000, 1], [900, 240, 1]]);
+  const profiles = new Function('depthPair', `return (${initializer('profiles')});`);
+  assert.deepEqual(profiles(false), ['dark', 'contrast', 'custom']);
+  assert.deepEqual(profiles(true), ['contrast']);
+  assert.match(source, /!depthPair \|\| shortBoundary/);
 });
 
 import { execFileSync } from 'node:child_process';
+import { resolve } from 'node:path';
+
+function verifyRetainedAppliedThemeBoundary(report, file) {
+  const script = 'scripts/audit-material-tooltip-applied-theme-ownership.mjs';
+  const original = execFileSync('git', ['show', `ac2b624d:${script}`], { maxBuffer: 4000000 });
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  assert.equal(hash(original), report.capture.sources.find(receipt => receipt.file === script).sha256);
+  const ast = ts.createSourceFile(script, original.toString(), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const initializer = name => ast.statements.filter(ts.isVariableStatement)
+    .flatMap(statement => [...statement.declarationList.declarations])
+    .find(declaration => declaration.name.getText(ast) === name).initializer.getText(ast);
+  const defaultViewports = new Function(`return (${initializer('defaultViewports')});`)();
+  const viewports = new Function('shortBoundary', 'defaultViewports', `return (${initializer('viewports')});`)(true, defaultViewports);
+  const themes = {};
+  new Function('exports', ts.transpileModule(readFileSync(report.themeSource.file, 'utf8'), {
+    compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS },
+  }).outputText)(themes);
+  const readBytes = path => resolve(path) === resolve(script) ? original : readFileSync(path);
+  const validate = (raw, options) => validateSupplementalCapture(raw, { ...options, readBytes });
+  const verify = ast.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === 'verify').getText(ast);
+  // Execute every original assertion with its actual captured producer bytes.
+  // This is historical source validation, not a waiver for the current producer.
+  return new Function('raw', 'file', 'assert', 'hash', 'readFileSync', 'validateSupplementalCapture',
+    'script', 'properties', 'themes', 'viewports', 'shortBoundary', `${verify};return verify(raw,file);`)(
+    report, file, assert, hash, readBytes, validate, script, Object.values(propertyGroups).flat(), themes, viewports, true);
+}
 
 test('actual-theme short tooltip contexts preserve fallback versus flow input inequality', () => {
   const file = 'artifacts/material-parity/tooltip-actual-theme-short-boundary-20261022/latest-report.json';
   const bytes = readFileSync(file), hash = value => createHash('sha256').update(value).digest('hex');
   assert.equal(hash(bytes), '5ec72acad66a4c3be382df77ae3d8fb32af3141da2ddcc03748ed645d05d6c83');
   const report = JSON.parse(bytes);
-  const verified = JSON.parse(execFileSync(process.execPath,
-    ['scripts/audit-material-tooltip-applied-theme-ownership.mjs', '--verify', file, '--short-boundary'], { encoding: 'utf8' }));
+  const verified = verifyRetainedAppliedThemeBoundary(report, file);
   assert.deepEqual(verified, { contexts: 12, pairedCycles: 36, currentRenderingAccepted: false });
+  const forgedSource = structuredClone(report);
+  forgedSource.capture.sources.find(receipt => receipt.file === 'scripts/audit-material-tooltip-applied-theme-ownership.mjs').sha256 = '0'.repeat(64);
+  assert.throws(() => verifyRetainedAppliedThemeBoundary(forgedSource, file));
   const contexts = [['tall-dpr1', 1000, 1], ['short-dpr1', 240, 1], ['tall-dpr2', 1000, 2], ['short-dpr2', 240, 2]];
   const expected = ['dark', 'contrast', 'custom'].flatMap(profile => contexts.map(([id]) => `${profile}/${id}`));
   const analyze = rows => {
@@ -517,5 +553,76 @@ test('actual-theme tooltip capture conserves depth-proof assets but does not ret
     previousBrowser: previous.browser, currentBrowser: current.browser, browserIdentityChanged: true,
     freshDepthObservationPresent: false, freshCameraCauseProven: false,
     boundary: 'Changed served application bytes are excluded. Browser and theme/state applicability remain separate;prior camera observations are not observations of the new capture.',
+    canonicalPublication: false, currentRenderingAccepted: false }));
+});
+
+test('contrast tooltip remains in bounds and open while short camera crosses its retained depth', () => {
+  const file = 'artifacts/material-parity/tooltip-contrast-depth-pair-20261022/latest-report.json';
+  const bytes = readFileSync(file), hash = value => createHash('sha256').update(value).digest('hex');
+  assert.equal(hash(bytes), 'a52ca04cc72a504d312b3596a6cee14d44bbe274bd6eae005598f496829d162d');
+  const report = JSON.parse(bytes);
+  assert.deepEqual(JSON.parse(execFileSync(process.execPath,
+    ['scripts/audit-material-tooltip-applied-theme-ownership.mjs', '--verify', file, '--short-boundary', '--paint-depth-pair'],
+    { encoding: 'utf8' })), { contexts: 2, pairedCycles: 6, currentRenderingAccepted: false });
+  const cropCounts = report.results.map(row => {
+    const open = row.astylar.openBoundary;
+    assert.equal(hash(readFileSync(open.screenshot.file)), open.screenshot.sha256);
+    const image = PNG.sync.read(readFileSync(open.screenshot.file)), box = open.popup;
+    assert.deepEqual([image.width, image.height], [900, row.viewport.height]);
+    const crop = { left: Math.ceil(box.left + 4), top: Math.ceil(box.top + 4),
+      right: Math.floor(box.right - 4), bottom: Math.floor(box.bottom - 4) };
+    assert.deepEqual(crop, { left: 85, top: 214, right: 183, bottom: 229 });
+    let dark = 0;
+    for (let y = crop.top; y < crop.bottom; y++) for (let x = crop.left; x < crop.right; x++) {
+      const at = (y * image.width + x) * 4;
+      if (image.data[at] < 80 && image.data[at + 1] < 80 && image.data[at + 2] < 80) dark++;
+    }
+    return dark;
+  });
+  assert.deepEqual(cropCounts, [1000, 0]);
+  const trees = report.results.map(row => {
+    const receipt = row.astylar.openBoundary.inputTree, raw = readFileSync(receipt.file);
+    assert.equal(hash(raw), receipt.sha256); return raw;
+  });
+  assert.deepEqual(trees[0], trees[1], 'complete recorded candidate inputs differ');
+  const inspect = rows => {
+    assert.deepEqual(rows.map(row => [row.profile, row.viewport.id, row.viewport.width, row.viewport.height, row.viewport.deviceScaleFactor]),
+      [['contrast', 'tall-dpr1', 900, 1000, 1], ['contrast', 'short-dpr1', 900, 240, 1]]);
+    const observations = rows.map(row => {
+      assert.deepEqual(row.astylar.runtime.errors, []); assert.deepEqual(row.reference.runtime.errors, []);
+      const open = row.astylar.openBoundary;
+      assert.equal(open.opened, true);
+      assert.deepEqual(open.paintDepth, { meshZ: 249.84799999999998, enabled: true, visible: true, visibility: 1 });
+      assert.deepEqual(open.drawingBuffer, { width: 900, height: row.viewport.height });
+      assert.ok(open.popup.left >= open.canvas.left && open.popup.right <= open.canvas.right);
+      assert.ok(open.popup.top >= open.canvas.top && open.popup.bottom <= open.canvas.bottom);
+      return open;
+    });
+    const [tall, short] = observations;
+    assert.deepEqual(tall.popup, short.popup); assert.deepEqual(tall.trigger, short.trigger);
+    assert.equal(tall.camera.position.z, 866.0254037844387);
+    assert.equal(short.camera.position.z, 207.84609690826528);
+    assert.ok(tall.paintDepth.meshZ < tall.camera.position.z);
+    assert.ok(short.paintDepth.meshZ > short.camera.position.z);
+  };
+  inspect(report.results);
+  const mutations = [
+    rows => { rows[1].astylar.openBoundary.opened = false; },
+    rows => { rows[1].astylar.openBoundary.paintDepth.enabled = false; },
+    rows => { rows[1].astylar.openBoundary.paintDepth.visible = false; },
+    rows => { rows[1].astylar.openBoundary.paintDepth.visibility = 0; },
+    rows => { rows[1].astylar.openBoundary.paintDepth.meshZ = 0; },
+    rows => { rows[1].astylar.openBoundary.camera.position.z = rows[0].astylar.openBoundary.camera.position.z; },
+    rows => { rows[1].astylar.openBoundary.popup.bottom = 241; },
+    rows => { rows[1].astylar.runtime.errors.push('invented'); },
+    rows => { rows[1].astylar.openBoundary.drawingBuffer.height = 1000; },
+    rows => { delete rows[1].astylar.openBoundary.camera; },
+    rows => { rows.pop(); },
+    rows => { rows[1] = structuredClone(rows[0]); },
+  ];
+  for (const mutate of mutations) { const rows = structuredClone(report.results); mutate(rows); assert.throws(() => inspect(rows)); }
+  console.log(JSON.stringify({ proof: 'contrast-tooltip-short-camera-depth', evidence: { file, sha256: hash(bytes) },
+    byteIdenticalCandidateTrees: true, identicalInBoundsPopupGeometry: true, cropCounts, negativeControlsRejected: mutations.length,
+    boundary: 'New contrast DPR1 frozen-build tall/short observation corroborates the existing depth failure. Native fallback authoring and mid-animation raster remain separate;not current-repository,all-theme/DPR,scroll or whole-case acceptance.',
     canonicalPublication: false, currentRenderingAccepted: false }));
 });

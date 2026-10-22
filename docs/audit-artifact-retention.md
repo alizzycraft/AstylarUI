@@ -2,6 +2,16 @@
 
 ## Current versus historical evidence
 
+Keep tooltip-contrast-depth-pair-20261022(17 files/1004424 logical bytes),its
+checkpoint manifest and terminal capture log/empty stderr. Reporta52ca04c binds
+new open/camera/mesh-depth/canvas observations plus original trees/PNGs;do not
+replace fields in earlier5ec72aca. Keep tooltip-contrast-depth-validation,
+tooltip-depth-pair-configuration-retained,tooltip-short-boundary-retained-producer
+and tooltip-depth-pair-integration20261022 log/stderr pairs. Six-test integration
+passes,including original light proofs;12 data mutations and forged historical
+producer reject. Exact ac2b624d original verifier/source bytes preserve earlier
+capture validation,not an unchecked current-source allowance. No scratch deleted.
+
 Keep tooltip-depth-build-applicability-20261022.log/.stderr.log. Existing old/new
 report and checkpoint manifests authenticate1887 identical served assets;two
 forged/missing asset controls reject. Browser identities differ and new report
