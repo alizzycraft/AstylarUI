@@ -44,8 +44,12 @@
   name-input and focus-source-applicability20261022 logs;no repeated reduction.
 - Next:finish full section/coverage/receipt reconciliation,
   independent cold comparison and accepted import. Batch queued evidence later.
-  Live checks:coverage52254,receipt leaves35762,candidate-only import48299;
-  poll existing handles. Main accepted pointer must stay8d6c5964 until all gates.
+  Coverage52254 exits0:complete prior coverage and15622 ordered dependencies
+  recover;35 dependencies and201 exact children added,zero status changes.
+  Candidate-only import48299 exits0:all shards verify,index77af769e selects7fa7ca35;
+  main accepted pointer unchanged8d6c5964. Logs:tabs-coverage-conservation and
+  tabs-candidate-import20261022 pairs. Receipt leaves35762 is still live;poll it.
+  Main acceptance still requires receipt derivation,cold comparison and import.
   Remaining initial-state AX batch is deferred through this reconciliation:reuse
   authenticates192 existing observations/96 pairs across8 families,leaving340
   configured pairs across28 families. First preflight rejects legacy list's

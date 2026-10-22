@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Coverage52254 and candidate import48299 are terminal success(exit0). Retain tabs-
+coverage-conservation and tabs-candidate-import20261022 log/empty stderr pairs.
+Complete prior coverage/15622 ordered dependencies recover,35 dependencies and
+201 exact evidence children added,no case/status/remaining-work changes. Candidate
+7fa7ca35/index77af769e shards authenticate;main accepted8d6c5964 stays unchanged.
+Leaf comparison35762 remains live. Preserve both generations and frozen873 sources
+through detailed receipt derivation and independent cold. Earlier live notes for
+closed coverage/import handles below are historical checkpoints.
+
 Full-section comparison59897 is terminal success(exit0):retain tabs-full-section-
 comparison-20261022 log/empty stderr. Authenticated accepted80 prior digests and
 new package7fa7ca35 conserve70 sections;10 expected changed sections still need
