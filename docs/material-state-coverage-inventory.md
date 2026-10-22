@@ -2,6 +2,16 @@
 
 ## Current audit pointer — October22
 
+- Sorter applicability gap has an existing owner:readRetainedSortFocusSource
+  authenticates current9fafec85 through exact whole-source intermediate hashes,
+  restoring opt-in lifecycle/browser/plateau additions and returning65d7256f.
+  Reuse in check-historical-component-proofs preserves its older26-test body/
+  assertion comparison;forged appended source rejects. New replay terminates1
+  at NEXT guard,input-boundary snapshot(script line124),after sorter/component
+  conservation clears. Logs:harness-component-restored-replay-20261022.log/empty
+  stderr. Full historical batch is NOT passing. No new hash-only sorter whitelist,
+  no original assertion removed. Next reuse the existing input-boundary restoration
+  owner after comparing its exact snapshot transition;do not repeat sorter work.
 - Existing historical-component verifier replay TERMINATES1 before owning tests:
   exact launch-addition guard fails at script line93. Current sorter9fafec85 has37
   tests versus original26;all original names remain,three bodies differ(slider

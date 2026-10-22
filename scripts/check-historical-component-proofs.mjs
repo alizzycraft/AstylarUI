@@ -9,6 +9,7 @@ import { pathToFileURL } from 'node:url';
 import ts from 'typescript';
 import { restoreAstylarDiagnostics } from '../tests/material-parity/alignment-survey-conservation.mjs';
 import { readGapSurveySource } from '../tests/material-parity/gap-survey-source-replay.mjs';
+import { readRetainedSortFocusSource } from '../tests/material-parity/position-composition-producer-transition.mjs';
 
 const main = process.argv[1] && pathToFileURL(path.resolve(process.argv[1])).href === import.meta.url;
 if (main) {
@@ -45,6 +46,15 @@ if (main) {
     `a6217c5173f956ab57dba74013e14dd89b61245f:${sorter}`], { maxBuffer: 4_000_000 });
   assert.equal(hash(originalSorter), '7f1af071e1204192337c22774d4b76889992bfc9631c136ed33f744f6101ce83');
   let currentSorter = lf(read(sorter));
+  // Reuse the owning whole-source transition chain for later opt-in probes.
+  // It restores the original browser/plateau assertions before this older
+  // component boundary runs; no current runtime assertion is waived.
+  if (hash(read(sorter)) === '9fafec85d890122fa1ad2bb2ac712975b7982c603c28f036d534f875aab0effa') {
+    const bytes = read(sorter);
+    assert.throws(() => readRetainedSortFocusSource(Buffer.from(bytes.toString() + '\nconst forged = true;\n')));
+    currentSorter = lf(readRetainedSortFocusSource(bytes));
+  }
+  const sorterSnapshotHash = hash(Buffer.from(currentSorter));
   // Exact reviewed later snapshot: replay historical bytes, never execute newer
   // launch/state tests as though they were equivalent historical evidence.
   const reviewedSorterCounts = new Map([
@@ -55,7 +65,7 @@ if (main) {
     // Original bodies/assertions are still conserved below before historical replay.
     ['d2b35a773912a2b58ecbc744577378edac16cff2b09a281e8c3e28ae9439c03b', 36],
   ]);
-  if (reviewedSorterCounts.has(hash(read(sorter)))) {
+  if (reviewedSorterCounts.has(sorterSnapshotHash)) {
     const tests = text => {
       const ast = ts.createSourceFile('sorter.mjs', text, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
       return new Map(ast.statements.filter(node => ts.isExpressionStatement(node) &&
@@ -63,7 +73,7 @@ if (main) {
         .map(node => [node.expression.arguments[0].text, { node, ast }]));
     };
     const before = tests(lf(originalSorter)), after = tests(currentSorter);
-    assert.equal(before.size, 26); assert.equal(after.size, reviewedSorterCounts.get(hash(read(sorter))));
+    assert.equal(before.size, 26); assert.equal(after.size, reviewedSorterCounts.get(sorterSnapshotHash));
     const changed = new Set(['slider pointer-down ownership is measured at both visual thumb centers',
       'dark mobile timepicker wheel separates scroll state from scrollbar paint']);
     const assertions = ({ node, ast }) => {

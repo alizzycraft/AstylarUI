@@ -2,6 +2,10 @@
 
 ## Current versus historical evidence
 
+Retain harness-component-restored-replay-20261022.log/.stderr.log:existing sorter
+whole-source restoration clears prior guard,then input-boundary snapshot guard
+fails. Preserve both historical verifier failure pairs;batch remains unverified.
+
 Retain harness-component-receipt-replay-20261022.log/.stderr.log as original
 failed historical-loader evidence. Current37-test sorter is outside reviewed
 snapshot allowlist;original assertion changes require explicit applicability
