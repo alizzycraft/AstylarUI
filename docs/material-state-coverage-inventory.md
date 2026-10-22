@@ -4,14 +4,18 @@
 
 Updated October22. Current conclusions only;earlier next/live statements in retained detail are historical.
 
-- Coherent stepper milestone export is live(session15105),explicit
-  `node scripts/export-material-input-audit-current-ancestry.mjs --stepper-inputs`.
-  Before launch,stepper-export-source-freeze-20261022 log pair exits0 and replays
-  complete selection census byte-exact(856 sources/241 proofs/179 findings).
-  Retain stepper-coherent-export-20261022 stdout/stderr;do not start another heavy
-  collector or mutate frozen sources. Accepted3175514b remains unchanged until
-  export/full80-section and changed-leaf/coverage conservation,independent cold
-  check and accepted import. Next:poll same live handle,not a duplicate export.
+- Coherent stepper milestone export15105 is terminal success(exit0),explicit
+  --stepper-inputs;elapsed2677363ms. Candidate8d6c596421e6b96018328199aea28981b85d15921c611fe2b1837b3b412a976f
+  is88202430 compressed bytes/2334127261 decoded bytes,decodedSHA
+  c4dfe40587d5544984248904d827f64e9e4ce52868b1de9e0877f66cafdbe8ed.
+  Validation/evidence verification succeed:1 collector/10 memory hits/1 disk hit,
+  16812 files/1715970043 bytes authenticated. Preserve independent cold check;
+  cached export is not cold evidence. Before launch,complete856/241/179 census
+  replays byte-exact. Retain stepper-coherent-export-20261022 stdout/stderr.
+  Full80-section comparison18531 is live,using accepted3175514b retained section
+  hashes rather than rescanning the old package. Next:poll same comparison handle,
+  explain changed leaves/coverage,independent cold/import. Main accepted pointer
+  remains3175514b;generated docs package is pending,not published acceptance.
   All2311 cases remain partial/current-rendering unverified;no final gate waived.
 
 - Explicit --stepper-inputs now selects queuedff305b14 via existing reader and

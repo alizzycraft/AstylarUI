@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Stepper export15105 is terminal success(exit0,2677363ms);retain closed
+stepper-coherent-export-20261022 stdout/stderr,including phase/memory/evidence
+metrics. Candidate8d6c5964 is88202430 compressed/2334127261 decoded bytes.
+Accepted3175514b remains retained and main pointer unchanged. Full80-section
+comparison18531 is live;keep its output but do not present it as terminal proof.
+Changed-leaf/coverage conservation,independent cold and import remain pending.
+Older references below calling export15105 live are historical,not another job.
+
 Retain stepper-export-source-freeze-20261022 log pair:selection census replays
 byte-exact at856/241/179 before coherent export15105 starts with --stepper-inputs.
 Retain live stepper-coherent-export-20261022 stdout/stderr and any failure output;
