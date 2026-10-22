@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+Retain check-tooltip-recorded-nodes.mjs and tooltip-recorded-node-accounting-
+20261022 log/empty stderr. All62 pairs/1200 records account,248 mutations reject
+and exact replay passes. Keep native visual aria-hidden and persistent described-
+by references distinct;hidden description targets outside these retained trees
+are not proven absent. Existing8 candidate-only open states/findings retained,
+not normalized or reopened. Keep outside live873-source export5359 for later join.
+
 Retain check-snackbar-recorded-nodes.mjs and snackbar-recorded-node-accounting-
 20261022 log/empty stderr. All71 pairs/1805 records account;all34 open pairs retain
 message/action owners,284 mutation controls reject and exact replay passes. Raw

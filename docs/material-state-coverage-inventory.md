@@ -18,10 +18,14 @@
   presence and12 tabs AX pairs. Source finding:explicit content-as-tab-panel-name
   replaces reference labelledby intent. Known private text-paint causes separate.
 - Outside frozen export,queued for a later coherent join:
-  bottom-sheet63 pairs/1498 nodes,dialog78/2238,snackbar71/1805;full retained
-  element accounting and252/312/284 mutation controls plus exact replays pass.
+  bottom-sheet63 pairs/1498 nodes,dialog78/2238,snackbar71/1805,tooltip62/1200;
+  full retained element accounting and252/312/284/248 mutation controls plus
+  exact replays pass.
   Scripts:check-bottom-sheet-recorded-nodes.mjs,check-dialog-recorded-nodes.mjs,
-  check-snackbar-recorded-nodes.mjs;matching20261022 node-accounting log pairs.
+  check-snackbar-recorded-nodes.mjs,check-tooltip-recorded-nodes.mjs;matching
+  20261022 node-accounting log pairs. Tooltip18 native/26 candidate visual popups
+  retain8 known candidate-only open states;native persistent description targets
+  outside these visual trees are not proven missing. Existing findings reused.
   Empty retained native portals are not open/painted overlays.
 - Sheet activate AX9 pairs/18 captures plus108 mutation controls bind actual
   names/roles/focus. Pending source proposal835eba45 preserves180 definitions:
