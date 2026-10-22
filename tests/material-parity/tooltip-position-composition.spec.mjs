@@ -12,6 +12,30 @@ import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { propertyGroups } from './input-equivalence-policy.mjs';
 
+test('popup depth queued reader authenticates full case proposal without promoting inspection', async () => {
+  const { createPopupDepthReviewReader, popupDepthInputsReview } = await import('./popup-depth-case-review-source.mjs');
+  const { loadCaseObligationReview } = await import('../../scripts/audit-findings-store.mjs');
+  assert.throws(() => createPopupDepthReviewReader({ root: process.cwd(), read: readFileSync, reviewSha256: '0'.repeat(64) }));
+  const pointer = readFileSync('artifacts/material-parity/working-audit/current.json');
+  const file = `artifacts/material-parity/working-audit/proposals/${popupDepthInputsReview}.json`;
+  const envelope = JSON.parse(readFileSync(file));
+  const adapter = createPopupDepthReviewReader({ root: process.cwd(), read: readFileSync, reviewSha256: popupDepthInputsReview });
+  assert.equal(adapter.sourceApplicability.completePredecessorRecovered, true);
+  const result = loadCaseObligationReview(file, popupDepthInputsReview, envelope.review.groups.map(g => g.case), { read: adapter.read });
+  assert.equal(result.cases.length, 2311); assert.equal(result.evidenceFingerprints.length, 16186);
+  assert.equal(result.inspectionComplete, false); assert.equal(result.currentRenderingAccepted, false);
+  assert.deepEqual(result.unjoinedCases, []);
+  assert.deepEqual(readFileSync('artifacts/material-parity/working-audit/current.json'), pointer);
+  const wrong = (file, encoding) => {
+    const bytes = readFileSync(file, encoding);
+    return String(file).endsWith('audit-material-tooltip-applied-theme-ownership.mjs')
+      ? (encoding ? bytes + '\n// drift' : Buffer.concat([bytes, Buffer.from('\n// drift')])) : bytes;
+  };
+  assert.throws(() => createPopupDepthReviewReader({ root: process.cwd(), read: wrong, reviewSha256: popupDepthInputsReview }));
+  console.log(JSON.stringify({ proof: 'popup-depth-queued-reader', cases: 2311, dependencies: 16186,
+    completePredecessorRecovered: true, selectedForExport: false, canonicalPublication: false, currentRenderingAccepted: false }));
+});
+
 test('retained tooltip and snackbar endpoints distinguish high-z root inputs from absent popups', () => {
   const sha = bytes => createHash('sha256').update(bytes).digest('hex');
   const id = '821919099916339a177403d8c6cc66ede9aeaa20501a23ace9c568df75160f11';

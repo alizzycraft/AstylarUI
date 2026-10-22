@@ -2,6 +2,13 @@
 
 ## Current versus historical evidence
 
+Keep popup-depth-queued-reader-20261023.log/.stderr.log (original changed-suite
+receipt failure) and popup-depth-queued-reader-source-bound-20261023.log/.stderr.log
+(terminal0,one focused assertion validating2311 cases/16186 dependencies).
+The queued reader restores exact historical dependency bytes only after complete
+current/prior hash checks;the original proposal and captures remain untouched.
+This is source applicability,not current rendering or canonical publication.
+
 Keep current-depth-public-reduction-20261022 (bundle,provenance,result,eight PNGs)
 and capture/validation logs. It contains the honest one-failure/three-control
 current public depth reproduction;do not delete as failed scratch. Keep all

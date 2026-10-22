@@ -2,6 +2,21 @@
 
 ## Current audit pointer — October22
 
+- October23 exact queued-reader adapter is verified for eb8ca85a. It uses the
+  existing case loader and existing82191909 predecessor reader;133-child removal
+  recovers the COMPLETE predecessor before any dependency read. Two bounded
+  historical source transitions authenticate current+prior whole-file hashes:
+  pre-short-boundary tooltip producer9f7dc468,plus removal of ONLY the additive
+  queued-reader test from the tooltip suite to recover exact2f4f5b45 captured
+  verifier. All current reads remain observable to the supplied evidence session.
+  Unknown review and changed producer reject. Existing loader revalidates2311
+  cases/16186 dependencies,unchanged partial/current-unverified flags and accepted
+  pointer. Focused1/1 passes81473.1532ms,total84099.8905ms;retain popup-depth-
+  queued-reader-source-bound-20261023.log/empty stderr. Original queued-reader
+  test failure proves the suite receipt needed reconciliation;keep it separately.
+  No raw receipts rewritten,current rendering inferred,new capture or export.
+  Next wire this exact adapter into the existing general export selection and
+  conserve prior runner/launcher invocation;do not publish until coherent gates.
 - October23 popup-depth case join succeeds through existing proposal save/loader:
   eb8ca85a92bc8707f6fe2ba7404bf1e7caaacc9e57c733faf5a4cda6588862d4 adds133
   bounded localPaint children to exact62 tooltip/71 snackbar endpoints. Original
