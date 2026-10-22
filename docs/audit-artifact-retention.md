@@ -2,6 +2,17 @@
 
 ## Current versus historical evidence
 
+Retain entire button-held-update-current-20261022 directory(83 files/26275454
+logical bytes),capture log/empty stderr and current-validation log/empty stderr.
+Capture terminal1 is valid failure evidence:40 cases,24 failures,16 controls,
+zero invalid/runtime errors. Existing validator passes12 causal traces and three
+negative controls. Keep original historical capture separately;no cleanup of
+failure screenshots/bundle/provenance and no current whole-Material acceptance.
+Raw captured audit.js retains upstream shader-string whitespace:staged diff check
+reports639 trailing-whitespace diagnostics(1278 output lines),as in earlier actual
+Babylon bundles. Preserve exact served bytes/provenance;do not normalize evidence.
+Owned ledger/retention changes pass diff check separately;raw check is not green.
+
 Retain tooltip-retained-assets-reconciliation-20261022.log/.stderr.log:original
 configured tooltip description test passes with1887 authenticated retained assets
 and missing/hash controls. Historical checkpoint/raw AX/failure evidence unchanged.

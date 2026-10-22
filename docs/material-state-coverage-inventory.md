@@ -2,6 +2,25 @@
 
 ## Current audit pointer — October22
 
+- Current public held-update reproduction29914 TERMINATES1 only after all40
+  cases complete:invalid0/runtimeErrors[],24 behavioral failures/16 controls.
+  Existing validateHeldUpdateEvidence authenticates every current bundle input,
+  served bundle/HTML,80 screenshots and all40 state/action boundaries;12 traced
+  causal cases validate. Browser155.0.8059.85,Angular20.3.31,Babylon8.56.2,
+  Astylar0.2.0,esbuild0.28.1. Three missing-case/runtime-error/bundle-substitution
+  controls reject. Evidence:button-held-update-current-20261022 directory/logs
+  and button-held-update-current-validation-20261022 log/empty stderr. The public
+  defect persists under current installed dependencies;do not substitute this
+  capture for historical receipts or infer Material-wide historical causality.
+  Original capture/27 dependency mismatches remain preserved and explicit.
+- Held-update receipt failure148 reuses existing applicability conclusion:current
+  census still27 changed inputs(original Angular common ecd9→current0ec9 is first),
+  not script drift. Capture script equals committed3f55f189 bytes. Existing40-case
+  public reproduction is now running with new --output button-held-update-current-
+  20261022,original directory untouched. Specific question:whether historical
+  update-while-held failure persists under today's changed installed dependencies.
+  No historical receipt substitution or implied equivalence between installations.
+  Free disk1242275840 bytes before capture;existing producer refuses overwrite.
 - Tooltip original configured-description test82 passes1/1,4919.1161ms after
   replacing mutable dist census with existing retained-asset verifier. Its exact
   capture checkpoint is current-full-20261005;all1887 original asset hashes verify.
