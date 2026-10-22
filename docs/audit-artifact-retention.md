@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Retain all six closed stepper20261022 conservation log pairs:full-section-
+comparison,export-census-binding,receipt-leaf-comparison,coverage-conservation,
+candidate-import,propagated-receipt-reconciliation. All exit0 and authenticate
+candidate8d6c5964;all148 changed leaves exhaust and complete prior coverage
+recovers. Candidate index889691e1 verifies;main pointer remains3175514b/bd602e66.
+Keep accepted predecessor and original/failure evidence. These results do not
+replace independent cold replay,accepted import,full rendering or final gates.
+Earlier live comparison18531 references below are historical,not current jobs.
+
 Stepper export15105 is terminal success(exit0,2677363ms);retain closed
 stepper-coherent-export-20261022 stdout/stderr,including phase/memory/evidence
 metrics. Candidate8d6c5964 is88202430 compressed/2334127261 decoded bytes.

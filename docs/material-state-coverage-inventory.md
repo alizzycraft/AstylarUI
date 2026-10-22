@@ -4,6 +4,23 @@
 
 Updated October22. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- Stepper candidate8d6c5964 pre-cold conservation is closed:full80-section
+  comparison18531 exits0(70 unchanged/10 changed);export census75715 exits0 and
+  matches frozen856 sources/241 proofs/179 findings exactly. Six-section leaf
+  comparison82432 exits0,148 values changed/no path or shape changes. Derived
+  reconciliation34391 exits0 and exhausts all148:98 producer receipts(50c2182b
+  to43ee1e67),48 recomputed control-proof hashes,one motion-report hash and source
+  finding count178 to179. Coverage99717 exits0:15588 prior dependencies preserve,
+  34 added;removing148 exact children and reversing two review IDs plus the
+  documented policy current receipt recovers complete prior coverage. All2311
+  cases preserve partial/current-unverified dispositions and remaining work.
+  Candidate import29558 exits0,all shards verify,index889691e1;main accepted
+  pointer stays3175514b/bd602e66. Evidence:stepper-full-section-comparison,
+  export-census-binding,receipt-leaf-comparison,coverage-conservation,candidate-
+  import and propagated-receipt-reconciliation20261022 log pairs. No comparison
+  or export collector remains live. Next:independent --stepper-inputs --check
+  with ASTYLAR_AUDIT_COLD=1,then accepted import/publication;no final gate waived.
+
 - Coherent stepper milestone export15105 is terminal success(exit0),explicit
   --stepper-inputs;elapsed2677363ms. Candidate8d6c596421e6b96018328199aea28981b85d15921c611fe2b1837b3b412a976f
   is88202430 compressed bytes/2334127261 decoded bytes,decodedSHA
