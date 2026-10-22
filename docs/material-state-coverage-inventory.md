@@ -2,6 +2,15 @@
 
 ## Current audit pointer — October22
 
+- New pending source proposala876acae preserves all181 pending predecessor
+  definitions and adds chip-listbox orientation omission. All12 static AX/DOM
+  pairs show native horizontal versus candidate omitted attribute/AX vertical.
+  Complete current/initial authored methods omit ariaOrientation;current public
+  type and full bound current/installed/pinned semantic projection support it.
+  First divergence is authored input,not demonstrated bridge failure.49 negative
+  controls/exact replay pass. Evidence:review-chip-orientation-inputs.mjs and
+  chip-orientation-input-review-20261022 log/empty stderr. Not registered/exported;
+  chip focusability/descriptions/keyboard/paint remain separate unresolved work.
 - Publication7176fc4a and subsequent checkpoints through82a1a8b0 are pushed.
   Push54598 exits0 despite84.54MB recommendation warning;follow-up push succeeds.
   Earlier DNS-failed probe10384 is historical,not an outstanding blocker.

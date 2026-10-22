@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain review-chip-orientation-inputs.mjs,chip-orientation-input-review-20261022
+log/empty stderr and pending source proposala876acae. All181 predecessor
+definitions preserve;24 raw observations/12 pairs,49 mutation controls and exact
+replay pass. Complete current/initial authored omission and current public field/
+full projection binding distinguish fixture input from bridge support. Initial
+runtime/API support at that revision unproven. Not registered/current rendering
+or whole-case acceptance. Raw captures belong to completed resume run below.
+
 Resume81226 terminates0. Retain all remaining-static-ax-resume-20261022 raw/
 producer/provenance/report files and terminal.json,plus remaining-static-ax-
 resume-capture and resume-verification20261022 log/empty stderr pairs.678 new+
