@@ -8922,6 +8922,23 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'tests/material-parity/stepper-semantic-inputs.spec.mjs',
+    'tests/material-parity/stepper-semantic-registration.mjs',
+    'scripts/check-expansion-recorded-nodes.mjs',
+    'scripts/check-stepper-recorded-nodes.mjs',
+    'scripts/capture-stepper-static-ax.mjs',
+    'scripts/check-stepper-static-ax.mjs',
+    'scripts/review-stepper-semantic-inputs.mjs',
+    'scripts/join-stepper-expansion-input-evidence.mjs',
+    'artifacts/material-parity/expansion-recorded-node-accounting-20261022.log',
+    'artifacts/material-parity/stepper-label-owner-context-20261022.log',
+    'artifacts/material-parity/stepper-recorded-node-accounting-20261022.log',
+    'artifacts/material-parity/stepper-static-ax-capture-20261022.log',
+    'artifacts/material-parity/stepper-static-ax-review-20261022.log',
+    'artifacts/material-parity/stepper-semantic-source-review-20261022.log',
+    'artifacts/material-parity/stepper-expansion-input-evidence-join-20261022.log',
+    'artifacts/material-parity/working-audit/proposals/5d5c15f9532ea5446bad81e49280432e9393cf83db986f21cc5aac048d24ddd9.json',
+    'artifacts/material-parity/stepper-static-ax-20261022/latest-report.json',
     'tests/material-parity/expansion-semantic-inputs.spec.mjs',
     'tests/material-parity/expansion-semantic-registration.mjs',
     'scripts/capture-expansion-static-ax.mjs',
@@ -9768,6 +9785,12 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/stepper-semantic-inputs.spec.mjs', /test\('stepper semantic registration preserves178 findings and complete predecessor sources'/,
+      'stepper semantic additive registration preserves accepted findings', 'All178 predecessor findings preserve exactly;the supported tab/panel relationship omission is an authoring defect distinct from inactive panel omission and accessibility-only hiding support. Whole source/vector recovery and mutation controls reject drift. Not canonical publication or case acceptance.'),
+    proof(root, 'tests/material-parity/stepper-semantic-inputs.spec.mjs', /test\('stepper semantic actual AX and initial authoring history retain distinct public support limits'/,
+      'stepper semantic actual AX and initial authoring history', 'All12 static pairs retain actual backend-bound tab/panel relationship and name observations;33 evidence files and two initial whole sources authenticate. Public relationship fields exist while ariaHidden remains unsupported. Not interactive updates,AT navigation,paint,current rendering or case closure.'),
+    proof(root, 'tests/material-parity/stepper-semantic-inputs.spec.mjs', /test\('stepper and expansion recorded node accounting replays complete retained populations'/,
+      'stepper and expansion complete recorded node accounting', 'Both68-case populations replay exactly:3100 stepper and1744 expansion element records,272 and280 mutation controls. Unequal wrappers/glyphs/panels remain classified under existing causes. Not anonymous formatting,pseudo elements,full style,paint or case acceptance.'),
     proof(root, 'tests/material-parity/expansion-semantic-inputs.spec.mjs', /test\('expansion semantic registration preserves176 findings and exact predecessor sources'/,
       'expansion semantic additive registration preserves accepted findings', 'All176 predecessor findings preserve exactly;core CSS visibility and authored labelled-region substitution remain separate. Whole vector/policy/source reversal and mutation controls reject drift. Not canonical publication or complete case acceptance.'),
     proof(root, 'tests/material-parity/expansion-semantic-inputs.spec.mjs', /test\('expansion semantic public failures and pinned Material AX replay independently'/,

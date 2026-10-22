@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
-import { stepperSemanticPredecessor, restoreStepperSemanticPolicy } from './stepper-semantic-registration.mjs';
+import { stepperSemanticPredecessor, restoreStepperSemanticPolicy, restoreStepperSemanticProducer } from './stepper-semantic-registration.mjs';
 const hash = value => createHash('sha256').update(value).digest('hex');
 const normalize = bytes => bytes.toString().replaceAll('\r\n', '\n');
 const previous = file => normalize(execFileSync('git', ['show', `e38618a0:${file}`], { maxBuffer: 4000000 }));
@@ -32,9 +32,10 @@ test('stepper semantic registration preserves178 findings and complete predecess
   const helperFile = 'tests/material-parity/expansion-semantic-registration.mjs';
   let helper = normalize(readFileSync(helperFile));
   for (const [addition, before] of [
-    ["import { stepperSemanticPredecessor, restoreStepperSemanticPolicy } from './stepper-semantic-registration.mjs';\n", ''],
+    ["import { stepperSemanticPredecessor, restoreStepperSemanticPolicy, restoreStepperSemanticProducer } from './stepper-semantic-registration.mjs';\n", ''],
     ['  current = stepperSemanticPredecessor(current);\n', ''],
     ['  const text = restoreStepperSemanticPolicy(source);', "  const text = source.toString().replaceAll('\\r\\n', '\\n');"],
+    ['  const text = restoreStepperSemanticProducer(source);', "  const text = source.toString().replaceAll('\\r\\n', '\\n');"],
   ]) { assert.equal(helper.split(addition).length, 2); helper = helper.replace(addition, before); }
   assert.equal(helper, previous(helperFile));
   const suiteFile = 'tests/material-parity/expansion-semantic-inputs.spec.mjs';
@@ -43,6 +44,10 @@ test('stepper semantic registration preserves178 findings and complete predecess
     + 'const sourceAuditDefinitions = stepperSemanticPredecessor(stepperSemanticRegisteredDefinitions);';
   const suite = normalize(readFileSync(suiteFile)); assert.equal(suite.split(prelude).length, 2);
   assert.equal(suite.replace(prelude, "import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';"), previous(suiteFile));
+  const producerFile = 'tests/material-parity/input-equivalence-audit.mjs', producer = normalize(readFileSync(producerFile));
+  assert.equal(restoreStepperSemanticProducer(producer), previous(producerFile));
+  for (const altered of [producer + '\n// drift', producer.replace('stepper semantic additive registration preserves accepted findings', 'forged-proof')])
+    assert.throws(() => restoreStepperSemanticProducer(altered));
 });
 
 test('stepper semantic actual AX and initial authoring history retain distinct public support limits', () => {
@@ -57,4 +62,10 @@ test('stepper semantic actual AX and initial authoring history retain distinct p
   const types = readFileSync('src/app/types/dom-element.ts', 'utf8');
   for (const name of ['ariaControls', 'ariaLabelledby']) assert.ok(types.includes(`${name}?: string;`));
   assert.ok(!/\bariaHidden\??\s*:/.test(types));
+});
+
+test('stepper and expansion recorded node accounting replays complete retained populations', () => {
+  for (const family of ['stepper', 'expansion'])
+    assert.deepEqual(execFileSync(process.execPath, [`scripts/check-${family}-recorded-nodes.mjs`], { maxBuffer: 4000000 }),
+      readFileSync(`artifacts/material-parity/${family}-recorded-node-accounting-20261022.log`));
 });

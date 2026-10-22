@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
-import { stepperSemanticPredecessor, restoreStepperSemanticPolicy } from './stepper-semantic-registration.mjs';
+import { stepperSemanticPredecessor, restoreStepperSemanticPolicy, restoreStepperSemanticProducer } from './stepper-semantic-registration.mjs';
 const hash = value => createHash('sha256').update(value).digest('hex');
 const ids = ['core-semantic-css-visibility-not-projected', 'fixture-expansion-controlled-region-replaced-with-paragraph'];
 export function expansionSemanticPredecessor(current) {
@@ -31,7 +31,7 @@ export function restoreExpansionSemanticPolicy(source) {
   return prior;
 }
 export function restoreExpansionSemanticProducer(source) {
-  const text = source.toString().replaceAll('\r\n', '\n');
+  const text = restoreStepperSemanticProducer(source);
   if (!text.includes('expansion semantic additive registration preserves accepted findings')) {
     assert.ok(!text.includes("'tests/material-parity/expansion-semantic-inputs.spec.mjs'"), 'Partial expansion proof registration');
     return text;

@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain stepper-semantic-registration-census-20261022 log/empty stderr. It records
+the exact reusable producerArgs and working856/241/179 source/proof/finding
+inventories,with complete839/238/178 predecessor conservation and exactly four
+reviewed changed paths. The three new proof entries execute original stepper AX,
+initial history and both68-case recorded-node verifiers;all18 owning/predecessor
+tests pass. Preserve original proposals and captured files;this census does not
+publish a canonical snapshot or establish current rendering/complete inspection.
+
 Retain stepper-semantic-registration.mjs and stepper-semantic-inputs.spec.mjs
 with source proposal5d5c15f9 and all referenced33 evidence files/two historical
 sources. Working179 definitions preserve accepted178 exactly;owning checks bind

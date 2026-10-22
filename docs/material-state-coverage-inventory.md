@@ -4,6 +4,19 @@
 
 Updated October22. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- Stepper registration census now proves working856 source paths/241 proofs/179
+  findings versus complete accepted839/238/178. All prior paths,proof claims and
+  findings preserve;only four existing files change(policy,producer,expansion
+  helper/suite),plus17 additive paths. Producer reversal43ee1e67 recovers exact
+  accepted50c2182b;proof line changes are explicit,not hidden claim changes.
+  Evidence:stepper-semantic-registration-census-20261022 log/empty stderr,
+  terminal0. All18 owning/predecessor tests pass(session21623,exit0),including
+  byte-exact replay of both68-case node-accounting populations. No extra report
+  framework or browser recapture. Next:select queuedff305b14 through the existing
+  explicit review reader/launcher with full old-source recovery and dependency
+  authentication;then freeze coherent sources before export/cold/import.
+  Accepted canonical3175514b remains unchanged;all2311 cases remain partial.
+
 - Working stepper source registration now contains179 findings,matching exact
   pending5d5c15f9 groups and preserving all178 predecessors. New owning suite
   stepper-semantic-inputs.spec.mjs authenticates33 evidence files/two initial
