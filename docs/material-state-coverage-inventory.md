@@ -4,6 +4,16 @@
 
 Updated October22. Current conclusions only;earlier next/live statements in retained detail are historical.
 
+- Independent stepper cold check is live(session92085),same frozen invocation
+  `node scripts/export-material-input-audit-current-ancestry.mjs --stepper-inputs --check`
+  with ASTYLAR_AUDIT_COLD=1 and progress diagnostics. Retain stepper-cold-check-
+  20261022 stdout/stderr;do not mutate frozen sources or start a duplicate/heavy
+  collector. Pre-cold conservation is committed63fd4c4a. Next:poll same handle;
+  only terminal successful validation/evidence verification/canonical comparison
+  can permit accepted import. Accepted main3175514b/bd602e66 remains unchanged,
+  candidate8d6c5964/index889691e1 stays pending. All2311 cases remain partial and
+  current rendering unverified;full audit/browser/release gates remain required.
+
 - Stepper candidate8d6c5964 pre-cold conservation is closed:full80-section
   comparison18531 exits0(70 unchanged/10 changed);export census75715 exits0 and
   matches frozen856 sources/241 proofs/179 findings exactly. Six-section leaf

@@ -2,6 +2,12 @@
 
 ## Current versus historical evidence
 
+Independent cold check92085 is live with ASTYLAR_AUDIT_COLD=1 and
+--stepper-inputs --check. Retain stepper-cold-check-20261022 stdout/stderr and
+any failure evidence;do not commit live logs as terminal results. Preserve frozen
+sources,accepted3175514b and candidate8d6c5964/index889691e1. Conservation is
+closed in63fd4c4a,but cold success and accepted import remain pending.
+
 Retain all six closed stepper20261022 conservation log pairs:full-section-
 comparison,export-census-binding,receipt-leaf-comparison,coverage-conservation,
 candidate-import,propagated-receipt-reconciliation. All exit0 and authenticate
