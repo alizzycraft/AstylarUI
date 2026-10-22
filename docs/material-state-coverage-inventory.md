@@ -9,7 +9,7 @@
   Complete prior e7d22b1a remains retained. Counts unchanged:191 findings/248 proofs/
   928 source paths,8483 scalar groups,389202 occurrences,39904 controls. All2311
   cases remain partial/current-rendering-unverified,acceptance false. Candidate
-  and main index LZX compression preserves full209079838-byte index SHA;no evidence
+  and main index LZX compression preserves full209079837-byte index SHA;no evidence
   deleted. Logs:post-gate-candidate-import,post-gate-main-import-verification,
   post-gate-candidate-index-compression,post-gate-main-index-compression20261022.
   This closes seven-source export/applicability reconciliation,not audit completion.
