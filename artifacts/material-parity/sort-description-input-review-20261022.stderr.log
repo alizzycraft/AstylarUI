@@ -1,0 +1,23 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ undefined
+- 'sort-trigger'
+
+    at inspect (file:///D:/dev/github/AstylarUI-audit-integration/scripts/review-sort-description-inputs.mjs:69:10)
+    at file:///D:/dev/github/AstylarUI-audit-integration/scripts/review-sort-description-inputs.mjs:84:18
+    at Array.map (<anonymous>)
+    at file:///D:/dev/github/AstylarUI-audit-integration/scripts/review-sort-description-inputs.mjs:81:27 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: undefined,
+  expected: 'sort-trigger',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.22.3

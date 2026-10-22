@@ -38,6 +38,14 @@
   overlap and do not imply full semantic coverage. Labels/landmarks/AT/paint and
   current whole-runtime applicability remain open. Source and projection bindings
   reused/authenticated rather than another browser matrix.
+- Sort follow-up complete at bounded scope:source review6f890ed1 preserves189
+  predecessors and adds fixture-sort-description-association-omitted(190 pending
+  definitions;accepted registry180 unchanged). Initial/current full familyElements
+  execute across open/focused variants;current method and full reference source
+  bind captured source maps. Native actionable inner button is verified through
+  its named sort-trigger parent,not assumed to carry the host ID.97 mutation
+  controls/exact replay pass. Tooltip reuses its existing finding. Initial runtime,
+  AT,interactive AX and paint remain open;no claim that all sort states are closed.
 - Bounded follow-up:all48 retained static sort/tooltip observations authenticate
   their raw SHA256 and have no runtime errors. In each family's12 paired cases,
   native buttons have aria-describedby and AX descriptions(Sort/Create a project),
@@ -45,12 +53,12 @@
   ariaDescribedby;tooltip authors it only when open. This excludes hidden-target
   pruning as the first divergence for these closed static fixtures:the relationship
   was never supplied. Tooltip reuses existing persistent-description finding;
-  sort still needs source-history/pinned-method applicability before a new finding.
+  sort now has source-history/pinned-method applicability in review6f890ed1.
   Evidence:remaining-static-ax-resume-20261022/latest-report.json and its48
   sort/tooltip raw files;astylar.component.ts familyElements;existing tooltip
   source definition. No new capture,core change or whole-case closure.
-- NEXT:finish sort association history/applicability without conflating missing
-  authored links with the now demonstrated hidden-reference core defect. Do not
+- NEXT:continue remaining static-role/composite input reviews without conflating
+  missing authored links with the demonstrated hidden-reference core defect. Do not
   repeat settled checkbox history or current known findings. Continue static-role
   reviews,then join/register the coherent pending batch before another export.
 - Final unfiltered canonical/audit harness/browser/units/builds/consumer/

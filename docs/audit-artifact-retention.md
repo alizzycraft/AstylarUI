@@ -2,6 +2,17 @@
 
 ## Current versus historical evidence
 
+Retain review-sort-description-inputs.mjs,sort-description-input-review-final-
+20261022 log/empty stderr and source proposal6f890ed1.48 retained static raw
+observations authenticate;97 negative controls/exact replay pass. Complete
+initial/current authoring and captured-method/source applicability distinguish
+omitted fixture relationships from the separate core hidden-reference failure.
+The native inner sort button is bound through its named header parent. Preserve
+original sort-description-input-review-20261022 log/stderr:the first verifier
+incorrectly expected the header ID on the inner actionable node. Final verification
+corrects this instrumentation assumption;raw evidence and reference stay unchanged.
+All189 predecessor definitions preserve;190 pending,not registered or canonical.
+
 Retain audit-public-hidden-description.mjs,check-public-hidden-description.mjs,
 review-hidden-description-inputs.mjs,all public-hidden-description-20261022 and
 repeat files(including actual bundles,original failure/terminal records),both
