@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Retain join-static-semantic-input-evidence.mjs,static-semantic-input-join-20261022
+log/empty stderr and complete case proposal82191909(large generated JSON remains
+ignored,not forced into Git). It preserves complete48e8 predecessor and adds240
+bounded semantic review children across228 unique static cases/19 families.
+Seven exact focused replays and16180 dependency checks pass;accepted pointer and
+all2311 partial statuses/remaining-work preserve. Existing869 queued children
+remain,for1109 total beyond accepted7eb107de. Do not delete predecessor/proof/raw
+files;source registration,selection and coherent export/cold/import still pending.
+
 Retain review-toggle-group-inputs.mjs,toggle-group-input-review-20261022 log/empty
 stderr and source proposalaf08f832.24 raw observations/12 pairs authenticate;
 74 negative controls/exact replay pass. Initial/immediate pre/post c47d589a

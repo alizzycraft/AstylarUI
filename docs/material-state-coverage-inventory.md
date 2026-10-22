@@ -31,7 +31,7 @@
 - Earlier pending findings and proofs remain intact:sheet name835eba45,chip
   orientation a876acae,group metadata17e767f2,picker metadata0951b7ae. Complete
   case proposal48e8e7ca preserves869 queued element/AX/history children and prior
-  case status/remaining-work lists;not selected/exported yet.
+  case status/remaining-work lists;now conserved by successor82191909 below.
 - Actual initial AX capture covers all436 static pairs(872 authenticated raw
   observations),same pinned9d0f1220. Bounded widget-state review covers108 pairs/
   nine families,with known progress focusability explicit;other review populations
@@ -66,13 +66,20 @@
   Evidence:remaining-static-ax-resume-20261022/latest-report.json and its48
   sort/tooltip raw files;astylar.component.ts familyElements;existing tooltip
   source definition. No new capture,core change or whole-case closure.
-- NEXT:continue remaining static-role/composite input reviews without conflating
-  missing authored links with the demonstrated hidden-reference core defect. Do not
-  repeat settled checkbox history or current known findings. Continue static-role
-  reviews,then join/register the coherent pending batch before another export.
-  Pending source batch now has11 additions beyond accepted180;case proposal48e8
-  still preserves869 queued children. Selection/registration/source conservation
-  must precede export;exporting the unchanged producer would not integrate these.
+- Coherent static semantic join82191909 succeeds:240 new bounded review children
+  across228 unique static cases/19 families;seven focused reviews replay exactly,
+  16180 dependencies validate and complete48e8 predecessor recovers. Total1109
+  queued children beyond accepted7eb107de;all2311 case statuses/remaining-work
+  preserve,accepted pointer unchanged. Overlapping chip reviews are not unique
+  coverage twice. Evidence:static-semantic-input-join-20261022 log/empty stderr,
+  join-static-semantic-input-evidence.mjs. This is not canonical or case closure.
+- NEXT:register/select the coherent191-definition/82191909 case batch with exact
+  accepted180-definition/873-source predecessor conservation,then use the existing
+  export/conservation/cold/import milestone. Read-only inventory confirms producer
+  still has873 paths and unchanged7e0caa32 normalized SHA;new join/sort/toggle/widget
+  scripts are not consumed. Do not export the unchanged producer or present pending
+  proofs as canonical. Remaining static roles,full relationships,interaction and
+  paint obligations continue after integration;do not reopen settled causes.
 - Final unfiltered canonical/audit harness/browser/units/builds/consumer/
   capability/example/skills/diff/handoff gates remain unchanged. Storage:closed
   JSON LZX conversion saved453483648 physical bytes with hashes/paths/indexes
