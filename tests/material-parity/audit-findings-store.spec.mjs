@@ -484,7 +484,19 @@ test('readonly source finding proposal preserves every prior definition and rece
   assert.equal(proposal.review.groups.length, 166);
   const finding = proposal.review.groups.at(-1);
   assert.equal(finding.id, 'core-readonly-text-keyboard-defaults-mutate-value');
-  assert.deepEqual(proposal.review.groups.slice(0, -1), sourceAuditDefinitions.filter(r => r.id !== finding.id));
+  // A historical proposal must conserve its complete predecessor, not reject
+  // unrelated definitions registered after that proposal was written.
+  const predecessor = proposal.review.groups.slice(0, -1);
+  const predecessorIds = new Set(predecessor.map(row => row.id));
+  assert.equal(predecessorIds.size, 165);
+  const assertPredecessor = definitions => assert.deepEqual(
+    definitions.filter(row => predecessorIds.has(row.id)), predecessor);
+  assertPredecessor(sourceAuditDefinitions);
+  assert.throws(() => assertPredecessor(sourceAuditDefinitions.filter(row => row.id !== predecessor[0].id)));
+  assert.throws(() => assertPredecessor([...sourceAuditDefinitions, predecessor[0]]));
+  const changedPredecessor = structuredClone(sourceAuditDefinitions);
+  changedPredecessor.find(row => row.id === predecessor[0].id).classification = 'unreviewed-change';
+  assert.throws(() => assertPredecessor(changedPredecessor));
   const registered = sourceAuditDefinitions.find(r => r.id === finding.id);
   if (registered) assert.deepEqual(registered, finding);
   assert.equal(finding.classification, 'confirmed-core-renderer-defect');

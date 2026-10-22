@@ -2,6 +2,13 @@
 
 ## Current audit pointer — October22
 
+- Readonly historical proposal test36 corrected and focused command exits0.
+  Exact165 predecessor definitions remain unchanged/in-order within current191;
+  prior test incorrectly required historical proposal to contain later additions.
+  Existing proposal digest,registered finding equality,public reproduction and
+  every original evidence receipt still checked. Three new controls reject a
+  missing,duplicated or altered predecessor. Evidence:readonly-proposal-
+  conservation-20261022.log/empty stderr. No canonical definition or receipt edits.
 - Fixed-width integration26249 TERMINATES0,1/1,2575359.8652ms in
   button-fixed-width-bounded-examples-20261022.log/empty stderr. Complete scalar
   equality passes under pinned identical color measurement;28 independently

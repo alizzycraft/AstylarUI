@@ -2,6 +2,11 @@
 
 ## Current versus historical evidence
 
+Retain readonly-proposal-conservation-20261022.log/.stderr.log:focused original
+test36 now checks exact ordered165 historical predecessor definitions within191,
+all prior receipt checks and three missing/duplicate/alteration controls. Exit0.
+Original unfiltered failure remains retained;no proposal/receipt rewritten.
+
 Fixed-width bounded-examples integration26249 terminates0,1/1,
 2575359.8652ms. Retain terminal stdout/empty stderr and both prior failure pairs.
 Complete unrelated-row conservation and existing negative controls now pass;
