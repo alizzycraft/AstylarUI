@@ -2,6 +2,23 @@
 
 ## Current audit pointer — October22
 
+- Fixed-width integration26249 TERMINATES0,1/1,2575359.8652ms in
+  button-fixed-width-bounded-examples-20261022.log/empty stderr. Complete scalar
+  equality passes under pinned identical color measurement;28 independently
+  derived precision-only groups/480 occurrences/twelve serialized example IDs
+  agree. Original1146 remaining-row count and complete unrelated-row equality
+  pass,along with width/box/gap/caret/reviewed-input checks and existing validation/
+  mutation assertions. This resolves recorded harness test130's measurement/count
+  mismatch without renderer/fixture edits or weakening whole-row conservation.
+  Earlier failure logs remain. Full harness,canonical source applicability and
+  all current rendering/case acceptance gates remain outstanding;no case closes.
+- Corrected precisionOnlyPopulation helper executes directly through AST/VM
+  against all480 selected raw cases in4.8s:28 groups/480 occurrences,each12
+  example IDs. This executes the actual new helper,not a substitute implementation.
+  Existing full integration restarted with new immutable logs
+  button-fixed-width-bounded-examples-20261022.log/.stderr.log;verification pending.
+  No prior logs overwritten;no source/acceptance normalization beyond the pinned
+  historical color measurement and documented scalar example serialization.
 - Precision-population integration80722 TERMINATES1,0/1,1030282.2349ms.
   New28-group cardinality/uniqueness pass;first matching row agrees in values,
   occurrences17 and states,but helper incorrectly expected17 case IDs versus

@@ -51,6 +51,35 @@ const select = rows => rows.filter(e => selectedButtonInputs(e).length).map(e =>
 });
 const scalar = r => [r.family, r.element, r.property, r.reference, r.astylar, r.occurrences, r.cases, r.states];
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+const normalizationNames = ['canonicalStyle', 'expandQuad', 'expandPair', 'splitCssTerms', 'normalizeValue', 'normalizeColor', 'formatNumber'];
+const normalizeAt = tree => new Function(normalizationNames.map(name => functionText(tree, name)).join('\n') + '\nreturn canonicalStyle;')();
+const rounded = normalizeAt(parsed), precise = normalizeAt(current);
+assert.equal(functionText(parsed, 'caseKey'), functionText(current, 'caseKey'));
+const capturedCaseKey = new Function(functionText(current, 'caseKey') + '\nreturn caseKey;')();
+const precisionKey = row => JSON.stringify([row.family, row.element, row.property, row.reference, row.astylar]);
+function precisionOnlyPopulation(raw) {
+  const groups = new Map();
+  for (const entry of [...raw.results, ...raw.interactions]) for (const input of entry.styleInputs) {
+    const oldReference = rounded(input.reference ?? {}), oldCandidate = rounded(input.astylar ?? {});
+    const reference = precise(input.reference ?? {}), candidate = precise(input.astylar ?? {});
+    for (const property of new Set([...Object.keys(reference), ...Object.keys(candidate)])) {
+      if (oldReference[property] !== oldCandidate[property] || reference[property] === candidate[property]) continue;
+      assert.equal(property, 'backgroundColor'); assert.equal(input.id, `${entry.family}-root`);
+      const row = { family: entry.family, element: input.id, property, reference: reference[property], astylar: candidate[property] };
+      const key = precisionKey(row), group = groups.get(key) ?? { ...row, occurrences: 0, cases: [], states: [] };
+      group.occurrences++;
+      const caseId = capturedCaseKey(entry), state = entry.state ?? 'static';
+      // Scalar rows retain twelve example case IDs, not complete membership.
+      // All selected raw inputs still contribute to occurrences above.
+      if (!group.cases.includes(caseId) && group.cases.length < 12) group.cases.push(caseId);
+      if (!group.states.includes(state)) group.states.push(state);
+      groups.set(key, group);
+    }
+  }
+  assert.equal(groups.size, 28);
+  assert.equal([...groups.values()].reduce((n, row) => n + row.occurrences, 0), 480);
+  return groups;
+}
 
 test('button fixed widths production integration preserves matching authoring and prior unrelated rows', () => {
   const directory = mkdtempSync(path.resolve('artifacts/material-parity/button-fixed-width-integration-'));
@@ -105,7 +134,15 @@ test('button fixed widths production integration preserves matching authoring an
       const key = JSON.stringify(scalar(d));
       return !keys.has(key) && !laterGaps.has(key) && !laterCarets.has(key);
     });
-    assert.equal(others(audit).length, 1146);
+    const precision = precisionOnlyPopulation(raw);
+    const precisionRows = others(audit).filter(row => precision.has(precisionKey(row)));
+    assert.equal(precisionRows.length, precision.size);
+    assert.equal(new Set(precisionRows.map(precisionKey)).size, precision.size);
+    for (const row of precisionRows) {
+      const expected = precision.get(precisionKey(row));
+      assert.deepEqual(Object.fromEntries(Object.keys(expected).map(key => [key, row[key]])), expected);
+    }
+    assert.equal(others(audit).length - precisionRows.length, 1146);
     // Exact structural equality, with a bounded assertion diagnostic rather
     // than a multi-megabyte rendering of the complete captured trees on failure.
     assert.ok(isDeepStrictEqual(others(audit), others(previous)), 'all complete rows outside original width/box groups and independently verified later gap/caret reviews remain unchanged');

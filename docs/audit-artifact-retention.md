@@ -2,6 +2,16 @@
 
 ## Current versus historical evidence
 
+Fixed-width bounded-examples integration26249 terminates0,1/1,
+2575359.8652ms. Retain terminal stdout/empty stderr and both prior failure pairs.
+Complete unrelated-row conservation and existing negative controls now pass;
+this is focused audit-instrumentation acceptance,not final rendering acceptance.
+
+Retain button-fixed-width-bounded-examples-20261022.log/.stderr.log as original
+focused integration evidence. Corrected actual helper has separately executed
+against480 raw selected cases,28 groups/480 occurrences/twelve examples per group.
+Full production integration is pending;both earlier failure log pairs remain.
+
 Retain button-fixed-width-precision-population-20261022.log/.stderr.log:
 session80722 terminates1,0/1,1030282.2349ms at new helper's incorrect complete-case
 expectation. Production retains twelve example IDs;occurrences remain complete.

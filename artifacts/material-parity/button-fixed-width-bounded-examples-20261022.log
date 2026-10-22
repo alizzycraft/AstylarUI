@@ -1,0 +1,17 @@
+TAP version 13
+# {"baselineCommit":"30357b9f8c7b95da668914032557c5f7416c81db","diagnosticCases":480,"sourceBoundOwners":600,"authoringGroups":9,"retainedScalarMatchingOwners":52,"attributedScalarGroups":8,"attributedScalarObservations":548,"laterBoxSizingGroups":9,"unchangedScalarRows":1229,"independentlyVerifiedLaterGapGroups":18,"independentlyVerifiedLaterCaretGroups":20,"independentlyVerifiedLaterCaretObservations":600,"independentlyVerifiedLaterInputGroups":8,"independentlyVerifiedLaterInputObservations":24,"unchangedCompleteRows":1174,"unchangedCompleteRowsSha256":"08c15b1c2ff7b3bffc4265954a70000ac05e44159c7ce171ffa93088a08f5f5f","inputEquivalent":false,"limitation":"Actual production normalization/precedence with all original button owners; full unrelated-family report conservation and final enforced matrix remain separate."}
+# Subtest: button fixed widths production integration preserves matching authoring and prior unrelated rows
+ok 1 - button fixed widths production integration preserves matching authoring and prior unrelated rows
+  ---
+  duration_ms: 2571512.9516
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2575359.8652
