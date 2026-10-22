@@ -199,6 +199,19 @@ export function createTextBackingReviewReader({root,read,reviewSha256}){
     const benchmark='tests/material-parity/benchmark-config.spec.mjs';
     const benchmarkCurrentText=read(path.resolve(root,benchmark),'utf8');
     let benchmarkText=benchmarkCurrentText;
+    if(hash(benchmarkText)==='31f2cb8ec0aa6299e4854d07b70f8031e0e646a2a39812841e984e5a7098ab57'){
+      const current="  // This historical AX capture owns retained assets, not today's mutable dist.\n"+
+        "  assert.deepEqual(verifyRetainedMaterialBrowserFiles(manifest.provenance.browserFiles),\n"+
+        "    { authenticatedFiles: 1887, currentRenderingAccepted: false });\n"+
+        "  assert.throws(() => verifyRetainedMaterialBrowserFiles(manifest.provenance.browserFiles.slice(1)));\n"+
+        "  const alteredTooltipAssets = structuredClone(manifest.provenance.browserFiles);\n"+
+        "  alteredTooltipAssets[0].sha256 = '0'.repeat(64);\n"+
+        "  assert.throws(() => verifyRetainedMaterialBrowserFiles(alteredTooltipAssets));";
+      assert.equal(benchmarkText.split(current).length,2);
+      benchmarkText=benchmarkText.replace(current,
+        "  assert.deepEqual(fingerprintDirectory(path.resolve('examples/material-showcase/dist/material-showcase/browser')), manifest.provenance.browserFiles);");
+      assert.equal(hash(benchmarkText),'dc30dfac735721633f6fe04d8319255f41b305f113118fe96de0d757c313cb47');
+    }
     if(hash(benchmarkText)==='dc30dfac735721633f6fe04d8319255f41b305f113118fe96de0d757c313cb47'){
       const queued='58fe244dc56a251e144dcc6eab2c36cb18f017291da968e1d002dc36404d60ea';
       assert.equal(benchmarkText.split(queued).length,3);

@@ -2,6 +2,26 @@
 
 ## Current audit pointer — October22
 
+- Selected-review10264 TERMINATES0,authenticating16180 dependencies/twelve current
+  source checks and all2311 partial/current-rendering-unverified cases through
+  existing producerArgs;accepted pointer unchanged. Evidence:post-gate-selected-
+  review-verification-20261022.log/empty stderr. Distinct named-selection source
+  conservation remains pending:current reader8e9ce4c6 versus frozen1d0821a9 fails
+  restoreStaticSemanticCaseSelection before earlier selection reversal. Exact
+  new benchmark-restoration block must itself be reversed with whole-source
+  authentication at that existing boundary;do not replace its expected hash.
+  Full review success does not waive named-selection/source conservation or
+  authorize canonical publication;next address that precise reader transition.
+- Exact case-reader boundary reproduced:current benchmark31f2cb8e fails retained
+  benchmark preamble restoration,not a capture mismatch. Existing text-backing
+  reader now reverses ONLY the exact tooltip retained-asset test block under whole
+  current31f2/prior dc30 hashes before its prior restoration chain. Current/live
+  test remains fixed;production fingerprints remain current. Reader construction
+  authenticates12 current source checks and forged benchmark append rejects.
+  Full original selected-review producerArgs replay is RUNNING session10264,
+  post-gate-selected-review-verification-20261022.log/.stderr.log. No full-review
+  success yet. Reader implementation change adds a fifth registered source to
+  pending batch;do not reuse the earlier four-file census as the final count.
 - Post-gate registered-source census:AST inventory still928 paths. Git-tracked
   changes versus frozen03fafef8,filtered to that inventory and LF-normalized,
   identify exactly four substantive changed registered sources:store spec

@@ -2,6 +2,11 @@
 
 ## Current versus historical evidence
 
+Retain post-gate-selected-review-verification-20261022.log/.stderr.log:terminal0,
+16180 dependencies/twelve current checks,all2311 partial/unverified statuses and
+pointer unchanged. Separate named-selection reader-source guard still fails;
+full review loading does not establish complete source-batch publication.
+
 Retain entire button-held-update-current-20261022 directory(83 files/26275454
 logical bytes),capture log/empty stderr and current-validation log/empty stderr.
 Capture terminal1 is valid failure evidence:40 cases,24 failures,16 controls,
