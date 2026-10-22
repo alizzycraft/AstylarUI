@@ -2,6 +2,15 @@
 
 ## Current audit pointer — October22
 
+- Pending source proposal17e767f2 preserves all182 prior pending definitions
+  and adds chip-container tabindex omission plus paginator group-name
+  substitution.24 static pairs/48 observations,98 negative controls and exact
+  replay pass. Current/initial complete authored methods resolve the unequal
+  metadata;current public fields and full bound projection support both.
+  These are authored-input first divergences,not demonstrated bridge failures.
+  Evidence:review-group-semantic-inputs.mjs,group-semantic-input-review-20261022
+  log/empty stderr. All184 proposed definitions remain pending registration;
+  accepted canonical stays180. No reference,fixture or renderer change.
 - New pending source proposala876acae preserves all181 pending predecessor
   definitions and adds chip-listbox orientation omission. All12 static AX/DOM
   pairs show native horizontal versus candidate omitted attribute/AX vertical.
@@ -10,7 +19,7 @@
   First divergence is authored input,not demonstrated bridge failure.49 negative
   controls/exact replay pass. Evidence:review-chip-orientation-inputs.mjs and
   chip-orientation-input-review-20261022 log/empty stderr. Not registered/exported;
-  chip focusability/descriptions/keyboard/paint remain separate unresolved work.
+  chip child-focus histories/descriptions/keyboard/paint remain separate work.
 - Publication7176fc4a and subsequent checkpoints through82a1a8b0 are pushed.
   Push54598 exits0 despite84.54MB recommendation warning;follow-up push succeeds.
   Earlier DNS-failed probe10384 is historical,not an outstanding blocker.

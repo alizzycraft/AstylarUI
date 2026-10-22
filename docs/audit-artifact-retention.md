@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Retain review-group-semantic-inputs.mjs,group-semantic-input-review-20261022 log/
+empty stderr and pending source proposal17e767f2. All182 predecessor definitions
+preserve;48 raw observations/24 pairs,98 negative controls and exact replay pass.
+Supported but omitted chip-container tabindex and added paginator ariaLabel
+explain the bounded actual AX/DOM differences. Existing chip orientation,
+disabled-button behavior,description and keyboard findings stay separate.
+Not registered/canonical acceptance or current whole rendering.
+
 Retain review-chip-orientation-inputs.mjs,chip-orientation-input-review-20261022
 log/empty stderr and pending source proposala876acae. All181 predecessor
 definitions preserve;24 raw observations/12 pairs,49 mutation controls and exact
