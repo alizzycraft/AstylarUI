@@ -2,6 +2,32 @@
 
 ## Current audit pointer — October23
 
+- Radio regional paint now has an owning regression outside accepted945 inputs:
+  radio-retained-label-paint.spec authenticates original report/checkpoints,112 PNG
+  and tree receipts,exact56 interaction cases/112 owner-ID bounds and both complete
+  zero/standard-phase metrics. All12 static missing-bound cases remain explicit;
+  112 zero-phase/106 standard-phase regional failures preserve. Fourteen wrong-
+  case/owner/bounds/font/metric/receipt/acceptance controls reject. First regression
+  incorrectly expected a cross-profile geometry-only check to reject identical
+  geometry;that failed log833da655 remains. Corrected parent case/checkpoint check
+  rejects wrong cases without changing pixels,thresholds or accepted evidence.
+  Final1/1 passes9958.6637ms,radio-retained-label-region-replay-bound-cases-20261023
+  SHA f5fd87a2a03e3561b4daab3854dc5d30f8a2044e168753db66b9da806b1cc6f1.
+  This does not establish pure glyph,ring/ripple,current rendering or case closure.
+  No canonical rebuild/registration/coverage promotion;next bounded join may use
+  this verified supplement while preserving static12 and other remaining work.
+
+- Remote publication remains pending after direct recheck:d6aa7c15,not local
+  Tabled4bd3189/Radio2d332487. Read-only SSH availability investigation verified
+  the Ed25519 public key against the official GitHub Docs fingerprint
+  SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU
+  (https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints).
+  Workspace-only github-verified-host-20261023.known_hosts preserves that public
+  key;strict checking stayed enabled and no global config/trust/auth changed.
+  SSH then reached GitHub but failed Permission denied(publickey). Do not invent
+  credentials or keep unchanged HTTP retries;working transport/authentication or
+  an external push is needed before claiming publication. Local audit can progress.
+
 - Post-Table remaining-paint triage:Radio has68 pending cases;Input has68 pending
   of76 total(the eight edit-empty-blur target rasters were already inspected).
   Original Radio report provides measured paired label rectangles only for56
