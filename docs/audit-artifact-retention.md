@@ -7,8 +7,31 @@ popup-depth-full-section-comparison-20261023.log (both complete packages),
 popup-depth-fixed-shape-leaves-20261023.log (14085648 entries/147 differences)
 and popup-depth-complete-conservation-20261023 log/stderr (terminal0). Preserve
 old5ed659b3 package separately;candidate2035d379 is not accepted merely because
-export/conservation passed. Independent cold-check log/stderr are live and must
-not be compressed,removed or treated as terminal. No evidence deleted.
+export/conservation passed. Independent cold-check log/stderr are now closed,
+terminal0 with complete canonical equality;retain both. Their SHA256 values are
+2746ab7cca422706feba18f4cf6f68418f843cfaa78242a3e965e1f242f85c67 and
+058688cc7f41cfd5177c291eafa699733a36980e4523ffeacf94fbeb1207197a.
+No evidence deleted. Isolated verified import and accepted-store publication now
+pass terminal0. Keep popup-depth-isolated-import-20261023 log/empty stderr(SHA
+0e1311164688ae2503a913a2cb32b35cf64aa184a8be49d32085e32081a374e3) and
+popup-depth-main-publication-20261023 log/empty stderr(SHA
+6422e2ed128dbeb799468ab3ad8767e27b8cdfeff23a84dd77acda85c9efb8dd).
+Accepted2035d379/index4ac21acb and isolated candidate remain separately verified;
+prior5ed659b3 is retained,not overwritten. Both new generations' index and84
+JSONL shards were LZX-compressed with all85 complete before/after hashes equal.
+Observed free338546688 bytes after publication/compression. No acceptance
+promotion or renderer/fixture change;full final gates remain.
+
+October23 import headroom:closed full-audit-harness-cd867bbe-20261018.log and
+legacy-clip-queued-candidate-index-20261019.log were LZX-compressed with exact
+before/after SHA256 equality(6c5f3936de70d994061f93bd4a46b1cdcd05f5484f36f1e7c9c197edd3d95353,
+577d1d78343ab188aecdb7a5ebfa71a2605fc8587914fbe6b6921d1cd35d2a1e).
+Closed historical indexes e7d22b1a,7fa7ca35,8d6c5964 likewise retain whole-file
+hashes80632431bbb91f34d7513ba5096208074f7d204c1a86b65017f505ef9b8f4e1d,
+77af769e6e8a0054f6247bc3ffc9919e546e55702bb8abda97619d02847a20f8,
+889691e1fe057d44dc87a454ef54fbab82d8bcbd571df069737d55e4ae950593.
+Paths,logical bytes and evidence stay intact;observed D:free625848320 bytes
+before isolated import. No deletion or rendering-acceptance claim.
 
 Keep popup-depth-coherent-inventory-integration-20261023 log/stderr (16/16),
 popup-depth-plan-conservation-initial-20261023 (original AST extraction failure),

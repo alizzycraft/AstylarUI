@@ -1,6 +1,6 @@
 # Material comparison/state coverage inventory
 
-## Current audit pointer — October22
+## Current audit pointer — October23
 
 - October23 frozen export TERMINAL0:3215449.6026ms,all436 static/1875 interaction
   records,8483 groups/389202 occurrences/192 source findings,inputEquivalent:false.
@@ -29,11 +29,24 @@
   the exact queued reader. Complete conservation TERMINAL0,log popup-depth-
   complete-conservation-20261023 SHA6aa616b9885773c746c2a7a75119ba0400335e5a58936b7f3cbc2965eb49535d,
   empty stderr. Leaf log SHA6bdb03e463235b8099e89b91fdb35434121ea5a63ed3e73c52d33ff264a97521.
-  No current rendering/inspection
-  promotion. Independent cold check is live(session88597,PID38744),last phase
-  validate-audit;keep934 registered sources frozen. No accepted import/publication
-  until cold equality and full existing shard verification pass. Candidate package
-  files intentionally remain uncommitted while those gates are pending.
+  No current rendering/inspection promotion. Independent cold check TERMINAL0,
+  2962939.5797ms,including validation,evidence-session verification and complete
+  canonical/Markdown equality. Session:two collectors,10 memory hits,zero disk
+  hits/invalidations,17377 files/1937392254 bytes read and verified. Cold log SHA
+  2746ab7cca422706feba18f4cf6f68418f843cfaa78242a3e965e1f242f85c67;
+  stderr058688cc7f41cfd5177c291eafa699733a36980e4523ffeacf94fbeb1207197a.
+  Isolated import and full index/shard verification now TERMINAL0,then copied
+  generation verified before existing import reused it and advanced the accepted
+  pointer to2035d379,index4ac21acb40a7c1e4f3521bb1754b4790b1f7f6f6a293923309cb547e4d260f70.
+  Final accepted-store verification passes;old5ed659b3 remains preserved.
+  Import log0e1311164688ae2503a913a2cb32b35cf64aa184a8be49d32085e32081a374e3;
+  publication log6422e2ed128dbeb799468ab3ad8767e27b8cdfeff23a84dd77acda85c9efb8dd;
+  both stderr empty. Existing80-section/14085648-leaf conservation and cold
+  equality cover the published package. All2311 cases remain partial/current
+  rendering unverified. Next inspect remaining applicable-obligation gaps,prioritize
+  shared overlay/scrollbar input-to-paint ownership;do not rerun settled depth,
+  endpoint absence,caret width or scroll-driver applicability questions. Full
+  unfiltered canonical/browser/release acceptance remains outstanding.
 - October23 coherent queued census now192 findings/261 proofs/934 source paths.
   Nine pending assertions(tab hidden helpers,tooltip short/theme/depth boundaries,
   endpoint/case reader,inventory and export selection) and two missing adapter/
