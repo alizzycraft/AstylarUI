@@ -2,6 +2,28 @@
 
 ## Current audit pointer — October23
 
+- October23 scrollbar supplements are now registered in working producer:
+  192 findings/264 proofs/936 source paths. Actual production functions read all
+  936 unique paths,find all264 proof targets,and preserve the complete prior261
+  proof records/current line anchors and934 source records after removing only
+  three/two additions. Whole producer46b9ac10 reverses exactly to accepted6479b848.
+  Source population20188117;proof population0be0022b. Production census log SHA
+  a0b608e07a03164c492f4dedb789895ee4f2cac9f1c4c284fd6e5f664fcc89e5.
+  All five owning scrollbar assertions pass in scrollbar-registration-integration-
+  20261023(first phase7207.8638ms). Initial reader phase correctly rejects changed
+  sort-suite receipt;preserve that failure. Explicit reader transition now reads
+  current suite then removes only three additive tests to recover complete9fafec85
+  original. Updated current264/936 census assertions restore whole prior tooltip
+  suite38aac86c before its existing historical boundary;original receipts survive.
+  Final reader+producer assertions2/2 pass28790.1812ms with all2311 cases/16186
+  dependencies;reader-final log SHA8d7f9cf0cd6977b4d59b73c87b310d8bb019a08eeff964d27ef67a791a07ece2.
+  Standalone guard initially accepted a changed recognition label;retained failure
+  and corrected three-entry recognition plus four producer drift controls now
+  reject altered names/extra source. Source changes remain explicit applicability
+  evidence,not refreshed capture receipts. Accepted2035d379 stays unchanged;
+  Sixteen-case coverage-child integration and coherent canonical conservation/cold/import
+  remain before publication. Do not export merely to refresh this ledger.
+
 - October23 source/export preflight identifies exactly three standalone scrollbar
   assertions missing from accepted261-proof inventory;no new source finding or
   renderer change is needed. Tested restoreScrollbarSupplementSuite in the

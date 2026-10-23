@@ -6,6 +6,7 @@ import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import { createDividerReviewedBoundariesReader, staticSemanticInputsReview } from './text-backing-case-review-source.mjs';
+import { restoreScrollbarSupplementSuite } from './static-semantic-registration.mjs';
 
 export const popupDepthInputsReview = 'eb8ca85a92bc8707f6fe2ba7404bf1e7caaacc9e57c733faf5a4cda6588862d4';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -34,7 +35,15 @@ export function createPopupDepthReviewReader({ root, read, reviewSha256 }) {
   const suite = 'tests/material-parity/tooltip-position-composition.spec.mjs';
   const currentSuite = read(path.resolve(root, suite));
   let text = currentSuite.toString();
-  if (hash(currentSuite) === '38aac86ccd974432a908d3d0c64ed35ba74096a15fe820ba6c9ecc639cbd4a27') {
+  if (hash(text) === '46d0c6cabc58db8bcf7dfc159dca4192ec000461707c9587bb9a298821a42c2a') {
+    for (const [current, prior] of [
+      ['assert.equal(files.length, 936); assert.equal(new Set(files.map(n => n.text)).size, 936);',
+        'assert.equal(files.length, 934); assert.equal(new Set(files.map(n => n.text)).size, 934);'],
+      ['assert.equal(proofs.length, 264);', 'assert.equal(proofs.length, 261);'],
+    ]) { assert.equal(text.split(current).length, 2); text = text.replace(current, prior); }
+    assert.equal(hash(text), '38aac86ccd974432a908d3d0c64ed35ba74096a15fe820ba6c9ecc639cbd4a27');
+  }
+  if (hash(text) === '38aac86ccd974432a908d3d0c64ed35ba74096a15fe820ba6c9ecc639cbd4a27') {
     for (const [current, prior] of [
       ['assert.equal(files.length, 934); assert.equal(new Set(files.map(n => n.text)).size, 934);',
         'assert.equal(files.length, 932); assert.equal(new Set(files.map(n => n.text)).size, 932);'],
@@ -52,6 +61,11 @@ export function createPopupDepthReviewReader({ root, read, reviewSha256 }) {
     [path.resolve(root, logicalFile), { current, historical }],
     [path.resolve(root, suite), { current: currentSuite, historical: retainedSuite }],
   ]);
+  const scrollbarSuite = 'tests/material-parity/sort-focus-structure.spec.mjs';
+  const currentScrollbarSuite = read(path.resolve(root, scrollbarSuite));
+  const retainedScrollbarSuite = Buffer.from(restoreScrollbarSupplementSuite(currentScrollbarSuite));
+  assert.equal(hash(retainedScrollbarSuite), '9fafec85d890122fa1ad2bb2ac712975b7982c603c28f036d534f875aab0effa');
+  sources.set(path.resolve(root, scrollbarSuite), { current: currentScrollbarSuite, historical: retainedScrollbarSuite });
   return {
     read(file, encoding) {
       const source = sources.get(path.resolve(file));
@@ -68,6 +82,9 @@ export function createPopupDepthReviewReader({ root, read, reviewSha256 }) {
       }, {
         logicalFile: suite, currentSha256: hash(currentSuite), historicalSha256: hash(retainedSuite),
         boundary: 'Only the complete additive queued-reader test is removed;all original assertions conserve.',
+      }, {
+        logicalFile: scrollbarSuite, currentSha256: hash(currentScrollbarSuite), historicalSha256: hash(retainedScrollbarSuite),
+        boundary: 'Only three complete additive scrollbar assertions are removed;whole accepted suite bytes conserve.',
       }],
       boundary: 'Exact133-child queued extension only. Original source receipts and all partial statuses remain;no current-rendering or case-completion claim.',
     },

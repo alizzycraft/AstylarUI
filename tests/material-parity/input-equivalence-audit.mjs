@@ -8922,6 +8922,8 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'artifacts/material-parity/scrollbar-clip-projection-final-20261023.log',
+    'artifacts/material-parity/working-audit/2035d3791c7973ff4b117349684113ca5add0fccb14a2a5ec69fdb03ce6423ef/index.json',
     'tests/material-parity/popup-depth-case-review-source.mjs',
     'scripts/join-popup-depth-input-evidence.mjs',
     'src/app/services/babylon-camera.service.ts',
@@ -9863,6 +9865,12 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/sort-focus-structure.spec.mjs', /test\('retained scrollbar constructor wiring preserves current CSS geometry and paint owners'/,
+      'retained scrollbar constructor source applicability', 'Complete current-emitted,installed and captured constructor wiring agrees. Eight owner mutations reject;three source-drift controls preserve the complete accepted suite after removing only three additive tests. Not callback implementation,current rendering or case closure.'),
+    proof(root, 'tests/material-parity/sort-focus-structure.spec.mjs', /test\('retained scrollbar clipping and projection implementations preserve captured method bodies'/,
+      'retained scrollbar clipping projection implementation applicability', 'All38 complete bodies,runtime fields,six constants and runtime imports match authenticated captured code;43 mutations reject. Angular compiler metadata,live clip state,reconciliation timing and current rendering remain separate.'),
+    proof(root, 'tests/material-parity/sort-focus-structure.spec.mjs', /test\('retained scrollbar paint evidence maps to exact configured open and scroll obligations'/,
+      'retained scrollbar exact configured endpoint paint evidence', 'Sixteen open/open-scroll endpoints across four desktop themes and DPR1/2 bind32 screenshots,paired trees and documented thumb/track/arrow/overdraw differences to exact accepted case IDs.96 wrong-context controls reject. Remaining work and partial/unverified status preserve;not a new canonical coverage proposal or current rendering acceptance.'),
     proof(root, 'tests/material-parity/tooltip-position-composition.spec.mjs', /test\('popup depth queued reader authenticates full case proposal without promoting inspection'/,
       'popup depth queued case source applicability', 'Exact133-child proposal recovers complete predecessor;existing loader authenticates2311 partial cases/16186 dependencies. Historical source restoration and unknown/source-drift rejection do not establish current rendering.'),
     proof(root, 'tests/material-parity/tooltip-position-composition.spec.mjs', /test\('retained tooltip and snackbar endpoints distinguish high-z root inputs from absent popups'/,

@@ -3402,7 +3402,7 @@ test('retained scrollbar constructor wiring preserves current CSS geometry and p
     assert.notEqual(wiring(expected.replace(before, after)), expected, `reject changed caller: ${before}`);
   }
   assert.throws(() => wiring(emitted.outputText.replace('new AstylarScrollRuntime(', 'new WrongRuntime(')));
-  const { restoreScrollbarSupplementSuite } = await import('./static-semantic-registration.mjs');
+  const { restoreScrollbarSupplementSuite, restoreScrollbarSupplementProducer } = await import('./static-semantic-registration.mjs');
   const suiteFile = 'tests/material-parity/sort-focus-structure.spec.mjs';
   const suiteSource = readFileSync(suiteFile, 'utf8');
   const priorSuite = restoreScrollbarSupplementSuite(suiteSource);
@@ -3414,12 +3414,22 @@ test('retained scrollbar constructor wiring preserves current CSS geometry and p
     assert.notEqual(altered, suiteSource);
     assert.throws(() => restoreScrollbarSupplementSuite(altered));
   }
+  const producerSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8');
+  const priorProducer = restoreScrollbarSupplementProducer(producerSource);
+  assert.equal(digest(priorProducer), '6479b848b42c90c7435c4792dd83e630acb6f7e7b9254aeac8aeec2d2e7cc34b');
+  for (const title of ['retained scrollbar constructor source applicability',
+    'retained scrollbar clipping projection implementation applicability',
+    'retained scrollbar exact configured endpoint paint evidence']) {
+    assert.throws(() => restoreScrollbarSupplementProducer(producerSource.replace(title, 'changed registration')));
+  }
+  assert.throws(() => restoreScrollbarSupplementProducer(producerSource + '\n// drift'));
   t.diagnostic(JSON.stringify({ scrollbarConstructorApplicability: {
     sourceFile, sourceSha256: digest(source), installedFile, installedSha256: digest(installed),
     mapFile, mapSha256: digest(mapBytes), capturedModuleSha256: digest(captured[0]),
     constructorSha256: digest(expected), typescript: ts.version, esbuild: esbuildVersion,
     mutationControls: mutations.length + 1, sourceConservationControls: 3,
     acceptedSuiteSha256: digest(priorSuite), acceptance: false,
+    acceptedProducerSha256: digest(priorProducer), producerConservationControls: 4,
     scope: 'constructor callback/member/projection wiring only; callback implementations, reconciliation timing, other owners and current rendering remain separate',
   } }));
 });

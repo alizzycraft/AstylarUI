@@ -2,6 +2,19 @@
 
 ## Current versus historical evidence
 
+Keep scrollbar-registration-drift-initial-20261023 log/stderr(original guard
+failure;stderr SHAea5d2ece33c6b0e0620ae643dc241dd34331077045593ef6b9d7c18af1b47c4f).
+Keep scrollbar-registration-integration-20261023 log/stderr:five owning assertions
+pass,then original queued reader fails on changed sort-suite receipt(log SHA
+ef2388b2bf68802c5fd910af08bf0bd9ba2e9302b829686bb804f38871143875).
+Keep corrected scrollbar-registration-reader-final-20261023 log/empty stderr,
+terminal0,two assertions/2311 cases/16186 dependencies;log SHA
+8d7f9cf0cd6977b4d59b73c87b310d8bb019a08eeff964d27ef67a791a07ece2.
+Keep scrollbar-production-registration-20261023 log/empty stderr,actual936-path/
+264-proof census and whole prior registry conservation;log SHA
+a0b608e07a03164c492f4dedb789895ee4f2cac9f1c4c284fd6e5f664fcc89e5.
+No original evidence deleted,new build/capture or canonical package generated.
+
 Keep scrollbar-suite-conservation-20261023 log/empty stderr(terminal0,5/5),log SHA
 6bc0608fc489c0c1f2209f0aefba317ca43cae46dc4d517871d84b28ea28dd9a.
 It authenticates complete accepted suite recovery after removing exactly three
