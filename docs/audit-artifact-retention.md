@@ -2,6 +2,17 @@
 
 ## Current versus historical evidence
 
+Keep scrollbar-clip-projection-applicability-20261023(body-only),scrollbar-clip-
+projection-complete-bindings-20261023 and scrollbar-clip-projection-final-20261023
+log/empty stderr pairs. All terminal0;final4/4 includes43 changed-body/binding
+controls and original retained desktop/mobile paint assertions. Log SHA256 values
+respectively430080d4279b5d26666dcc32029e6047eb10999e6228abba55025d2745afbb67,
+551d695549069dddb89e2622b1c44c100a42878d9806f1109cd9e9ad034068d0,
+e877a723cf7d5544cc366be611f724dffadc3e4c748a5f09767dfa0056966137.
+These close a bounded captured/current implementation-applicability gap;they
+are not fresh renderer acceptance or disposable capture scratch. No evidence
+deleted,no new build/browser capture and no canonical export in this increment.
+
 Keep scrollbar-constructor-applicability-20261023 and scrollbar-retained-paint-
 integration-20261023 log/empty stderr pairs(terminal0,1/1 and3/3). SHA256 logs
 a6c9330dba6d8d546dd802494c05f9966a66e9aa6b02b245dfaaf28f1342ba56 and

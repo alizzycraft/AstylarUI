@@ -3411,6 +3411,117 @@ test('retained scrollbar constructor wiring preserves current CSS geometry and p
   } }));
 });
 
+test('retained scrollbar clipping and projection implementations preserve captured method bodies', async t => {
+  const { transformSync, version: esbuildVersion } = await import('esbuild');
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  const mapFile = 'artifacts/material-parity/retained-evidence/component-map-recovery-20261011/chunk-3JXWRYJY.js.map';
+  const mapBytes = readFileSync(mapFile);
+  assert.equal(digest(mapBytes), 'dba484044ca0dea965d8ef4b12635673f0f055d7711099d2f6476ca490988ec4');
+  const map = JSON.parse(mapBytes);
+  const configBytes = readFileSync('tsconfig.lib.json');
+  const config = ts.convertCompilerOptionsFromJson(JSON.parse(configBytes).compilerOptions, process.cwd());
+  assert.deepEqual(config.errors, []);
+  // Compare complete bodies, including string/shader literals, operators and
+  // calls. Whitespace-only bundle formatting is not an implementation change.
+  const bodies = text => {
+    const ast = ts.createSourceFile('clip-projection.js', text, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    const rows = [];
+    const visit = node => {
+      if (ts.isMethodDeclaration(node) || ts.isConstructorDeclaration(node) || ts.isFunctionDeclaration(node)) {
+        const name = ts.isConstructorDeclaration(node) ? 'constructor' : node.name?.getText(ast);
+        assert.ok(name && node.body);
+        const expression = ts.isFunctionDeclaration(node) ? node.getText(ast).replace(/^export\s+/, '')
+          : `class X ${ts.isConstructorDeclaration(node) && node.parameters.length ? 'extends Base ' : ''}{${node.getText(ast)}}`;
+        rows.push({ name, code: transformSync(expression, { target: 'es2022', minifyWhitespace: true,
+          minifySyntax: false, minifyIdentifiers: false, treeShaking: false }).code });
+      }
+      ts.forEachChild(node, visit);
+    };
+    visit(ast);
+    assert.ok(rows.length);
+    return rows;
+  };
+  const bindings = (text, constantNames) => {
+    const ast = ts.createSourceFile('clip-bindings.js', text, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    const format = code => transformSync(code, { target: 'es2022', minifyWhitespace: true,
+      minifySyntax: false, minifyIdentifiers: false, treeShaking: false }).code;
+    const fields = [], constants = [], imports = [];
+    const visit = node => {
+      if (ts.isPropertyDeclaration(node) && !['ɵfac', 'ɵprov'].includes(node.name.getText(ast))) {
+        fields.push(format(`class X {${node.getText(ast)}}`));
+      }
+      if (ts.isVariableDeclaration(node) && constantNames.includes(node.name.getText(ast))) {
+        assert.ok(node.initializer); constants.push(format(`const ${node.getText(ast)};`));
+      }
+      ts.forEachChild(node, visit);
+    };
+    visit(ast);
+    assert.equal(constants.length, constantNames.length);
+    for (const node of ast.statements.filter(ts.isImportDeclaration)) {
+      // Angular's emitted DI metadata adds i0 plus static ɵfac/ɵprov. This
+      // check does not claim DI/compiler equivalence; preserve runtime imports.
+      if (node.moduleSpecifier.text === '@angular/core' &&
+          node.importClause?.namedBindings?.name?.text === 'i0') continue;
+      imports.push(format(node.getText(ast)));
+    }
+    return { fields, constants, imports };
+  };
+  const modules = [];
+  let bindingMutationControls = 0;
+  for (const [relative, capturedSha256, expectedNames] of [
+    ['app/services/dom/elements/overflow-clip.service', '13c6fc79a94d35a41a3b28a1fd1a58149aabb505d77d0943ab98895aace3f2a6',
+      ['constructor', 'setRegions', 'getUniforms', 'bindForSubMesh', 'getCustomCode', 'refresh', 'apply', 'intersect', 'applyPlanes', 'applyRoundedRegions', 'clearClip']],
+    ['app/services/babylon-camera.service', '7d800f0d6b0432ff24b31c4ca84d623d876411a5ae8616cfcbd7fe7b4393f936',
+      ['constructor', 'initialize', 'getCamera', 'updateViewport', 'getFOV', 'calculateUiClipRange', 'calculateViewportDimensions', 'getPixelToWorldScale', 'projectCssViewportPoint', 'projectCssLocalPoint', 'unprojectRenderLocalPoint', 'projectCssSize', 'projectCssLength', 'getCssProjection', 'cleanup']],
+    ['app/services/css-babylon-projection', 'a9b1f45066f48054489f2686766706f2a8676b9e8d03afbfc8381ba888925db3',
+      ['constructor', 'projectViewportPoint', 'unprojectViewportPoint', 'projectLocalPoint', 'unprojectLocalPoint', 'projectSize', 'projectRect']],
+    ['app/services/css-layout-geometry', '514b62c117809d6c80184ff6d945d92f61f4d5f14006fbb703b37c8bad25f514',
+      ['createCssLayoutBox', 'updateCssLayoutNode', 'cssLocalCenter', 'resolveCssViewportRect', 'resolveCssRectRelativeToAncestor']],
+  ]) {
+    const sourceFile = `src/${relative}.ts`, installedFile = `examples/material-showcase/node_modules/astylarui/dist/lib/${relative}.js`;
+    const source = readFileSync(sourceFile, 'utf8'), installed = readFileSync(installedFile, 'utf8');
+    const captured = map.sources.flatMap((file, i) => file.endsWith(`/${relative}.js`) ? [map.sourcesContent[i]] : []);
+    assert.equal(captured.length, 1); assert.equal(digest(captured[0]), capturedSha256);
+    const emitted = ts.transpileModule(source, { compilerOptions: config.options, fileName: path.resolve(sourceFile), reportDiagnostics: true });
+    assert.deepEqual(emitted.diagnostics, []);
+    const expected = bodies(captured[0]);
+    assert.deepEqual(expected.map(row => row.name), expectedNames);
+    assert.deepEqual(bodies(emitted.outputText), expected);
+    assert.deepEqual(bodies(installed), expected);
+    const constantNames = relative.endsWith('overflow-clip.service')
+      ? ['CLIP_BOUNDS_METADATA', 'CLIP_REGIONS_METADATA', 'BORDER_RADIUS_METADATA', 'ROUNDED_CLIP_PLUGIN', 'MAX_ROUNDED_CLIPS']
+      : relative.endsWith('css-layout-geometry') ? ['ZERO_INSETS'] : [];
+    const expectedBindings = bindings(captured[0], constantNames);
+    assert.deepEqual(bindings(emitted.outputText, constantNames), expectedBindings);
+    assert.deepEqual(bindings(installed, constantNames), expectedBindings);
+    const bindingChanges = relative.endsWith('overflow-clip.service')
+      ? [['MAX_ROUNDED_CLIPS = 8', 'MAX_ROUNDED_CLIPS = 7'], ['regions = []', 'regions = [null]']]
+      : relative.endsWith('babylon-camera.service')
+        ? [["from './css-babylon-projection'", "from './wrong-projection'"]]
+        : relative.endsWith('css-babylon-projection')
+          ? [['worldUnitsPerCssPixel;', 'worldUnitsPerCssPixel = 2;']]
+          : [['top: 0', 'top: 1']];
+    for (const [before, after] of bindingChanges) {
+      assert.ok(emitted.outputText.includes(before));
+      assert.notDeepEqual(bindings(emitted.outputText.replace(before, after), constantNames), expectedBindings);
+      bindingMutationControls++;
+    }
+    // A changed body must not be accepted merely because its method name matches.
+    for (const row of expected) assert.notDeepEqual(bodies(row.code.replace(/\)\s*\{/, ') {throw new Error("changed implementation");')),
+      [row], `${relative}/${row.name}: changed implementation rejects`);
+    modules.push({ sourceFile, sourceSha256: digest(source), installedFile, installedSha256: digest(installed),
+      capturedSha256, names: expectedNames, bodyPopulationSha256: digest(JSON.stringify(expected)),
+      bindingSha256: digest(JSON.stringify(expectedBindings)), constantNames,
+      runtimeFields: expectedBindings.fields.length, runtimeImports: expectedBindings.imports.length });
+  }
+  assert.equal(modules.reduce((count, row) => count + row.names.length, 0), 38);
+  t.diagnostic(JSON.stringify({ scrollbarClipProjectionApplicability: { modules, mapFile,
+    mapSha256: digest(mapBytes), configSha256: digest(configBytes), typescript: ts.version, esbuild: esbuildVersion,
+    mutationControls: 38 + bindingMutationControls, acceptance: false,
+    scope: '38 complete bodies plus runtime fields, six constants and runtime imports; excludes Angular DI/compiler metadata, live layout state, timing and current raster acceptance',
+  } }));
+});
+
 test('retained mobile scrollbar masks inspect light dark open and wheel boundaries', () => {
   const digest = bytes => createHash('sha256').update(bytes).digest('hex');
   const hashes = {

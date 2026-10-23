@@ -2,6 +2,27 @@
 
 ## Current audit pointer — October23
 
+- October23 scrollbar clipping/projection staleness resolved at the inspected
+  implementation boundary:38 complete method/constructor/function bodies from
+  overflow clipping,camera,CSS projection and CSS layout geometry agree across
+  current TypeScript emit,installed code and authenticated captured mapdba48404.
+  Runtime fields,six constants and runtime imports also agree. Only Angular
+  compiler DI metadata is explicitly outside this comparison;no body,shader
+  literal,operator or projection callback is dropped.43 body/binding mutation
+  controls reject. Original desktop/mobile masks and constructor proof remain
+  green in final4/4 integration,3610.7453ms. Log scrollbar-clip-projection-final-
+  20261023 SHAe877a723cf7d5544cc366be611f724dffadc3e4c748a5f09767dfa0056966137.
+  Earlier body-only and complete-binding results are retained,not failed runs.
+  Current source receipts clipf66a26a2,camera0b207f9a,projection8f37fe4c,
+  geometry7ac98d4b and complete installed/captured receipts are in that log.
+  This rules out inspected implementation drift,not wrong live clip state,
+  reconciliation timing,DI equivalence or current raster failure. Geometry/paint
+  modules and constructor were already settled;do not reopen them without drift.
+  Next:join existing exact configured scrollbar paint/source evidence to remaining
+  case obligations;identify genuinely missing live state before new capture.
+  Both additive suite proofs remain pending coherent source applicability/export
+  integration;accepted2035d379 and all2311 partial statuses stay unchanged.
+
 - October23 remaining scrollbar caller question answered without recapture:
   complete AstylarScrollRuntime constructor expressions from current TypeScript
   emit,installed module and authenticated captured component map have identical
