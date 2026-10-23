@@ -16,7 +16,8 @@
   SHA fc733f073ed68c32fe4801fbe0fde1eb8ee02242d906718206eb1697c7904c8f,
   terminal0/empty stderr. Source/proof vectors and72 unchanged sections were
   independently authenticated above. No statuses/criteria/renderer inputs changed.
-  Independent cold --scrollbar-paint --check is now launched with COLD=1/PROGRESS=1;
+  Independent cold --scrollbar-paint --check is live(session83533,authoritatively
+  polled after launch),with COLD=1/PROGRESS=1;
   retain scrollbar-independent-cold-check-20261023 stdout/stderr. Do not import or
   claim acceptance before terminal success;accepted2035d379 remains unchanged.
 

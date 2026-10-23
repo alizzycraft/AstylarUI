@@ -3906,3 +3906,15 @@ old run is unnecessary or that the input audit is complete.
   regenerable test input, not original captured findings.
 - D: free space increased from approximately 3.63 GiB to 6.30 GiB. This is a
   volume measurement, not a sum of hard-linked path sizes.
+# October23 scrollbar conservation working extract
+
+The closed `scrollbar-candidate-structural-extraction-20261023.log` retains only
+the three required candidate structural sections and48 complete control rows,
+avoiding another full2.34GB decode during conservation. Its complete before/after
+SHA256 remains ad0c08daa799fc86edc64337e185f8b66abee3d17a12565fd68527edd76a1ddb
+after transparent LZX compression:117248401 logical bytes occupy36311040 physical
+bytes. Observed D:free269221888 afterward. No evidence deleted or paths/pointers
+changed. Compact conclusion is scrollbar-canonical-conservation-20261023.log,
+SHA fc733f073ed68c32fe4801fbe0fde1eb8ee02242d906718206eb1697c7904c8f.
+The extract is reusable working evidence for pending publication,not acceptance.
+
