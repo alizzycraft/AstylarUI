@@ -128,24 +128,25 @@ export function restoreScrollbarSupplementProducer(source) {
   if (!['retained scrollbar constructor source applicability',
     'retained scrollbar clipping projection implementation applicability',
     'retained scrollbar exact configured endpoint paint evidence'].some(title => text.includes(title))) return text;
-  assert.equal(hash(text), '46b9ac10702962d1d8e6bac5471637462ed607392efb3b3cbc06622231baab3d');
+  assert.equal(hash(text), '757ae11832c1ee02ae42ceb795731aa4f02df93d8b541c4781c692b942cde3e5');
   const ast = ts.createSourceFile('producer.mjs', text, 99, true);
   const owner = name => ast.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === name);
   const proofs = owner('focusedProofInventory').body.statements[0].expression.elements;
   const files = owner('sourceFingerprints').body.statements[0].declarationList.declarations[0].initializer.elements;
-  assert.equal(proofs.length, 264); assert.equal(files.length, 936);
+  assert.equal(proofs.length, 265); assert.equal(files.length, 936);
   assert.equal(proofs[0].arguments[3].text, 'retained scrollbar constructor source applicability');
   assert.equal(proofs[2].arguments[3].text, 'retained scrollbar exact configured endpoint paint evidence');
+  assert.equal(proofs[3].arguments[3].text, 'retained scrollbar exact export selection');
   assert.equal(files[0].text, 'artifacts/material-parity/scrollbar-clip-projection-final-20261023.log');
   let prior = text;
-  for (const [start,end] of [[proofs[0].getFullStart(),proofs[2].end+1], [files[0].getFullStart(),files[1].end+1]].sort((a,b)=>b[0]-a[0]))
+  for (const [start,end] of [[proofs[0].getFullStart(),proofs[3].end+1], [files[0].getFullStart(),files[1].end+1]].sort((a,b)=>b[0]-a[0]))
     prior = prior.slice(0,start) + prior.slice(end);
   assert.equal(hash(prior), '6479b848b42c90c7435c4792dd83e630acb6f7e7b9254aeac8aeec2d2e7cc34b');
   return prior;
 }
 
 export function restorePopupDepthExportSource(source, kind) {
-  let text = source.toString().replaceAll('\r\n', '\n');
+  let text = restoreScrollbarExportSource(source, kind);
   if (kind === 'case' || !text.includes('popupDepthInputs')) return text;
   const entries = {
     runner: ['f345a665eb3f517aef958a054cfc4f18c4bd26927cb582e5b45a5d8945040add', '1473d7324b68f6e312305837e71ab7a68e2878beb306c977b5d21ec998d9b290', [
@@ -160,6 +161,30 @@ export function restorePopupDepthExportSource(source, kind) {
       "if (popupDepthInputs) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=eb8ca85a92bc8707f6fe2ba7404bf1e7caaacc9e57c733faf5a4cda6588862d4';\n",
     ]],
   };
+  const [current, prior, removals] = entries[kind]; assert.equal(hash(text), current);
+  for (const addition of removals) { assert.equal(text.split(addition).length, 2); text = text.replace(addition, ''); }
+  assert.equal(hash(text), prior); return text;
+}
+
+export function restoreScrollbarExportSource(source, kind) {
+  let text = source.toString().replaceAll('\r\n', '\n');
+  if (kind === 'case' || !text.includes('scrollbarPaint')) return text;
+  const entries = {
+    runner: ['6c9652289a93aa8186e2c8a123eac0cfdee7409ecb17edeeaa7a162ad710c06a',
+      'f345a665eb3f517aef958a054cfc4f18c4bd26927cb582e5b45a5d8945040add', [
+        "import { scrollbarPaintInputsReview } from '../tests/material-parity/popup-depth-case-review-source.mjs';\n",
+        'options.caseObligationReviewSha256===scrollbarPaintInputsReview ? createPopupDepthReviewReader : ',
+      ]],
+    launcher: ['d416710a6e81da0fa2078fe680374c163922da199c437c2ae4de93070abb95f4',
+      '9f258608bd31db7c581ce1c6d6268affe86a1559aaf27a8869925bb53ae93f3f', [
+        "const scrollbarPaint = rawRequested.includes('--scrollbar-paint');\n",
+        "assert.ok(!(scrollbarPaint && (staticAx || cardInputs || expansionSemantics || stepperInputs || tabsMenuSheet || staticSemanticInputs || popupDepthInputs)), 'Choose one case-review supplement');\n",
+        ", '--scrollbar-paint'", '|--scrollbar-paint',
+        "if (scrollbarPaint) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/eb30019d906e601dfdaf10cd7ed8a9c9de141764e92316506b5ebfb2e0a392ac.json';\n",
+        "if (scrollbarPaint) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=eb30019d906e601dfdaf10cd7ed8a9c9de141764e92316506b5ebfb2e0a392ac';\n",
+      ]],
+  };
+  assert.ok(Object.hasOwn(entries, kind));
   const [current, prior, removals] = entries[kind]; assert.equal(hash(text), current);
   for (const addition of removals) { assert.equal(text.split(addition).length, 2); text = text.replace(addition, ''); }
   assert.equal(hash(text), prior); return text;

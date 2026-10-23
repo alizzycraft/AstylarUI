@@ -2,6 +2,16 @@
 
 ## Current versus historical evidence
 
+Keep scrollbar-export-selection-20261023 log/empty stderr(terminal0,4/4),log SHA
+e97883d611434848062dd57ce18f0bce33a6d45e778984688167169f4944d7ac.
+Keep scrollbar-selection-census-integration-20261023 log/empty stderr(terminal0,
+three sequential suites4/3/2 passing),log SHA
+f186741928667135438af88e6bdc9dce2fe994da7ddbf152c4ae4c81541aa772.
+Keep scrollbar-selected-production-census-20261023 log/empty stderr(actual265
+proofs/936 paths,complete261/934 registry conservation),log SHA
+3b04806ffca33534b2c858eae02ecdb38261c5b01923cdca8794b32bfcbbc4be.
+No new browser/build/canonical package or deletion in this selection increment.
+
 Keep scrollbar-case-obligation-join-20261023 and scrollbar-selected-case-reader-
 20261023 log/empty stderr pairs(terminal0). SHA256 logs respectively
 4fc4c2d29f1b3148056f1f11fd148a569cb2fc87f501f0c7b3aa4dbb8c0480b2 and

@@ -5,6 +5,7 @@ import { execFileSync } from 'node:child_process';
 import { restoreStaticSemanticCaseSelection } from './tabs-semantic-registration.mjs';
 import { staticSemanticInputsReview, createDividerReviewedBoundariesReader } from './text-backing-case-review-source.mjs';
 import { restorePopupDepthExportSource, restorePopupDepthTabsHelper } from './static-semantic-registration.mjs';
+import { restoreScrollbarExportSource } from './static-semantic-registration.mjs';
 import ts from 'typescript';
 const files = [
   ['case', 'tests/material-parity/text-backing-case-review-source.mjs'],
@@ -12,6 +13,37 @@ const files = [
   ['launcher', 'scripts/export-material-input-audit-current-ancestry.mjs'],
 ];
 const normalize = b => b.toString().replaceAll('\r\n', '\n');
+
+test('scrollbar paint export selection preserves older sources flags and actual reader routing', async () => {
+  const review = 'eb30019d906e601dfdaf10cd7ed8a9c9de141764e92316506b5ebfb2e0a392ac';
+  for (const [kind, file] of files.filter(([kind]) => kind !== 'case')) {
+    const source = normalize(fs.readFileSync(file));
+    const prior = normalize(execFileSync('git', ['show', `c4d0db6a:${file}`]));
+    assert.equal(restoreScrollbarExportSource(source, kind), prior);
+    assert.throws(() => restoreScrollbarExportSource(source + '\n// drift', kind));
+    assert.throws(() => restoreScrollbarExportSource(source.replace('scrollbarPaint', 'scrollbarPaintForged'), kind));
+  }
+  const launcher = files[2][1], run = flags => JSON.parse(execFileSync(process.execPath, [launcher, ...flags, '--dry-run'], { encoding: 'utf8' }));
+  const selected = run(['--scrollbar-paint']), old = run(['--popup-depth-inputs']);
+  const oldReview = 'eb8ca85a92bc8707f6fe2ba7404bf1e7caaacc9e57c733faf5a4cda6588862d4';
+  assert.equal(selected.args.filter(arg => arg.includes(review)).length, 2);
+  assert.deepEqual({ ...selected, args: selected.args.map(arg => arg.replaceAll(review, oldReview)) }, old);
+  for (const flag of ['--static-ax', '--card-inputs', '--expansion-semantics', '--stepper-inputs', '--tabs-menu-sheet', '--static-semantic-inputs', '--popup-depth-inputs'])
+    assert.throws(() => execFileSync(process.execPath, [launcher, '--scrollbar-paint', flag, '--dry-run'], { stdio: 'pipe' }));
+  const text = normalize(fs.readFileSync(files[1][1])), ast = ts.createSourceFile(files[1][1], text, 99, true), factories = [];
+  const visit = node => {
+    if (ts.isVariableDeclaration(node) && node.name.getText(ast) === 'readerFactory') factories.push(node.initializer);
+    ts.forEachChild(node, visit);
+  };
+  visit(ast); assert.equal(factories.length, 1);
+  const bindings = { ...(await import('./text-backing-case-review-source.mjs')), ...(await import('./popup-depth-case-review-source.mjs')) };
+  const select = new Function('options', ...Object.keys(bindings), `return ${factories[0].getText(ast)};`);
+  const factory = id => select({ caseObligationReviewSha256: id }, ...Object.values(bindings));
+  assert.equal(factory(review), bindings.createPopupDepthReviewReader);
+  assert.equal(factory(oldReview), bindings.createPopupDepthReviewReader);
+  assert.equal(factory(staticSemanticInputsReview), bindings.createDividerReviewedBoundariesReader);
+  assert.equal(factory('0'.repeat(64)), undefined);
+});
 
 test('popup depth export selection preserves complete predecessor sources and exact invocation', async () => {
   const review = 'eb8ca85a92bc8707f6fe2ba7404bf1e7caaacc9e57c733faf5a4cda6588862d4';

@@ -43,6 +43,15 @@ index for current counts and pending integration work, not the figures above.
 
 ## One investigation per question
 
+The existing current-ancestry launcher accepts explicit `--scrollbar-paint`
+(also with `--dry-run` or `--check`) for exact16-child successor revieweb30019d.
+All older selections,including `--popup-depth-inputs`,remain unchanged;the eight
+supplement flags are mutually exclusive. The general runner routes only exact
+new/old depth digests to the existing authenticated reader.265 proofs/936 paths
+are registered in the working batch,not accepted merely by dry-run preflight.
+Use the existing coherent export,conservation,independent cold and verified import
+gates. All2311 case statuses remain partial/current-rendering unverified.
+
 The existing current-ancestry launcher accepts explicit `--popup-depth-inputs`
 (also with `--dry-run` or `--check`) for exact queued revieweb8ca85a. It is
 mutually exclusive with all older supplement flags;default/older invocations

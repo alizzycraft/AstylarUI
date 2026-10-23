@@ -2,6 +2,26 @@
 
 ## Current audit pointer — October23
 
+- October23 explicit --scrollbar-paint export selection now chooses exacteb30019d
+  through the existing current-ancestry launcher and actual runner factory. All
+  seven conflicting older flags reject;old defaults/selections remain unchanged.
+  New runner6c965228/launcherd416710a restore complete priorf345a665/9f258608
+  before existing whole-source history checks. Selection suite4/4 passes;log SHA
+  e97883d611434848062dd57ce18f0bce33a6d45e778984688167169f4944d7ac.
+  Coherent integration has nine passing assertions(4 selection,3 owning scrollbar,
+  2 root-inventory/complete old-reader);all2311 cases/16186 old dependencies still
+  authenticate. Integration log SHA
+  f186741928667135438af88e6bdc9dce2fe994da7ddbf152c4ae4c81541aa772.
+  Working census is now192 findings/265 proofs/936 source paths,not accepted261/934.
+  Actual production functions find all265 targets/read936 unique paths and
+  preserve all prior261 proofs/current line anchors and934 paths. Four/two additions
+  restore whole accepted producer6479b848 from current757ae118. Census log SHA
+  3b04806ffca33534b2c858eae02ecdb38261c5b01923cdca8794b32bfcbbc4be;
+  source populationb114d2f9,proof populationb32f13d5. Updated265-count suite
+  restores complete264-count predecessor before original receipt boundaries.
+  Batch is ready to freeze for justified coherent export/conservation/cold/import;
+  accepted2035d379 is untouched and no rendering/case status is promoted.
+
 - October23 sixteen scrollbar localPaint children now join validated proposal
   eb30019d906e601dfdaf10cd7ed8a9c9de141764e92316506b5ebfb2e0a392ac,
   exact successor ofeb8ca85a. Existing generic proposal API was used;no new join

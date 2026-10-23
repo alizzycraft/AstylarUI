@@ -157,7 +157,7 @@ test('root depth producer inventory conserves all prior proofs and source paths'
   assert.equal(files.length, 936); assert.equal(new Set(files.map(n => n.text)).size, 936);
   for (const n of files.slice(0,4)) assert.ok(readFileSync(n.text).length > 0);
   const proofs = owner('focusedProofInventory').body.statements[0].expression.elements;
-  assert.equal(proofs.length, 264);
+  assert.equal(proofs.length, 265);
   for (const n of proofs.slice(0,4)) {
     const pattern = new Function(`return ${n.arguments[2].getText(ast)};`)();
     assert.ok(pattern.test(readFileSync(n.arguments[1].text, 'utf8')));
