@@ -167,7 +167,7 @@ export function restorePopupDepthExportSource(source, kind) {
 }
 
 export function restoreScrollbarExportSource(source, kind) {
-  let text = source.toString().replaceAll('\r\n', '\n');
+  let text = restoreTableLabelExportSource(source, kind);
   if (kind === 'case' || !text.includes('scrollbarPaint')) return text;
   const entries = {
     runner: ['6c9652289a93aa8186e2c8a123eac0cfdee7409ecb17edeeaa7a162ad710c06a',
@@ -200,4 +200,28 @@ export function restorePopupDepthTabsHelper(source) {
   ]) { assert.equal(text.split(addition).length, 2); text = text.replace(addition, ''); }
   assert.equal(hash(text), 'ce23ce76c049d845ba790fe295f1e908a5f0f585e66fb00086252d8fa6e4229f');
   return text;
+}
+
+export function restoreTableLabelExportSource(source, kind) {
+  let text = source.toString().replaceAll('\r\n', '\n');
+  if (kind === 'case' || !text.includes('tableLabelPaint')) return text;
+  const entries = {
+    runner: ['7630b948d2663bb07e5c6178d76087690a38a3bdddc0ca68c71c1ba819277a6c',
+      '6c9652289a93aa8186e2c8a123eac0cfdee7409ecb17edeeaa7a162ad710c06a', [
+        "import { tableLabelPaintReview, createTableLabelReviewReader } from '../tests/material-parity/table-label-case-review-source.mjs';\n",
+        'options.caseObligationReviewSha256===tableLabelPaintReview ? createTableLabelReviewReader : ',
+      ]],
+    launcher: ['1823788710af5dae7f294b674437c1b7643fb99e9b12ef29a32f45fce2b4931b',
+      'd416710a6e81da0fa2078fe680374c163922da199c437c2ae4de93070abb95f4', [
+        "const tableLabelPaint = rawRequested.includes('--table-label-paint');\n",
+        "assert.ok(!(tableLabelPaint && (staticAx || cardInputs || expansionSemantics || stepperInputs || tabsMenuSheet || staticSemanticInputs || popupDepthInputs || scrollbarPaint)), 'Choose one case-review supplement');\n",
+        ", '--table-label-paint'", '|--table-label-paint',
+        "if (tableLabelPaint) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/075fa58b82b7cf4f04d7496cefaec3e444b7136fed154e255ac192addea36c7a.json';\n",
+        "if (tableLabelPaint) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=075fa58b82b7cf4f04d7496cefaec3e444b7136fed154e255ac192addea36c7a';\n",
+      ]],
+  };
+  assert.ok(Object.hasOwn(entries, kind));
+  const [current, prior, removals] = entries[kind]; assert.equal(hash(text), current);
+  for (const addition of removals) { assert.equal(text.split(addition).length, 2); text = text.replace(addition, ''); }
+  assert.equal(hash(text), prior); return text;
 }

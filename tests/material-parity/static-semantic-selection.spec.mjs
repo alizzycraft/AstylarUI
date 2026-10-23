@@ -36,7 +36,7 @@ test('scrollbar paint export selection preserves older sources flags and actual 
     ts.forEachChild(node, visit);
   };
   visit(ast); assert.equal(factories.length, 1);
-  const bindings = { ...(await import('./text-backing-case-review-source.mjs')), ...(await import('./popup-depth-case-review-source.mjs')) };
+  const bindings = { ...(await import('./text-backing-case-review-source.mjs')), ...(await import('./popup-depth-case-review-source.mjs')), ...(await import('./table-label-case-review-source.mjs')) };
   const select = new Function('options', ...Object.keys(bindings), `return ${factories[0].getText(ast)};`);
   const factory = id => select({ caseObligationReviewSha256: id }, ...Object.values(bindings));
   assert.equal(factory(review), bindings.createPopupDepthReviewReader);
@@ -70,7 +70,7 @@ test('popup depth export selection preserves complete predecessor sources and ex
     ts.forEachChild(node, visit);
   };
   visit(ast); assert.equal(factories.length, 1);
-  const bindings = { ...(await import('./text-backing-case-review-source.mjs')), ...(await import('./popup-depth-case-review-source.mjs')) };
+  const bindings = { ...(await import('./text-backing-case-review-source.mjs')), ...(await import('./popup-depth-case-review-source.mjs')), ...(await import('./table-label-case-review-source.mjs')) };
   const select = new Function('options', ...Object.keys(bindings), `return ${factories[0].getText(ast)};`);
   const factory = id => select({ caseObligationReviewSha256: id }, ...Object.values(bindings));
   assert.equal(factory(review), bindings.createPopupDepthReviewReader);

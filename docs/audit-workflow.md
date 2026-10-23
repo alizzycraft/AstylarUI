@@ -43,6 +43,17 @@ index for current counts and pending integration work, not the figures above.
 
 ## One investigation per question
 
+The existing current-ancestry launcher accepts explicit `--table-label-paint`
+(also `--dry-run`/`--check`) for exact40-child Table successor075fa58b. Nine
+supplement flags are mutually exclusive;all older/default selections preserve.
+Actual runner routing selects the exact Table reader only for that digest.
+Complete prior runner/launcher/helper bytes and original selection-test assertions
+conserve after bounded additions. Six selection/reader checks pass,including
+full16347-dependency validation. This is selection,not canonical registration or
+publication:register the existing Table proof/source inventory in a coherent batch
+before export/conservation/independent cold/import. All2311 cases remain partial
+and current rendering unverified. Do not run a full export for selection prose.
+
 The existing current-ancestry launcher accepts explicit `--scrollbar-paint`
 (also with `--dry-run` or `--check`) for exact16-child successor revieweb30019d.
 All older selections,including `--popup-depth-inputs`,remain unchanged;the eight

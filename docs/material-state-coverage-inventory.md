@@ -2,6 +2,22 @@
 
 ## Current audit pointer — October23
 
+- Explicit Table selection is now verified:--table-label-paint selects exact075fa58b
+  through the existing launcher and exact Table reader. Eight conflicting older
+  flags reject;default/older invocations remain unchanged. Whole prior runner and
+  launcher sources recover by removing only bounded additions. Existing restoration
+  helper conserves outside its one call/additive function;the two existing factory
+  tests retain all prior bytes/assertions except adding actual Table import bindings.
+  Actual runner factory preserves scrollbar,popup/static and unknown routing.
+  Combined old selection/full Table-reader checks pass6/6;16347 dependencies and
+  all2311 partial/unverified cases validate after these source edits. Log
+  table-label-selection-integration-20261023 SHA
+  8e63a6da99ce7bb5b9820324ce4b7e6729aa205231dff732143166611f13f3c9.
+  Working invocation source changed,so accepted62c7 is a historical conserved
+  package,not current-source equivalence. Next:complete Table proof/path registration
+  and whole prior producer conservation;batch before canonical export/cold/import.
+  No renderer/fixture/acceptance change and no additional full export this step.
+
 - Next Table integration boundary now has a strict owning reader,without changing
   accepted scrollbar sources. New table-label-case-review-source accepts only
   exact075fa58b;removing40 label children and restoring their prior pending paint

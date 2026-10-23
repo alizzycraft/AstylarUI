@@ -3,6 +3,9 @@ import test from 'node:test';
 import fs from 'node:fs';
 import { loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
 import { createTableLabelReviewReader, tableLabelPaintReview } from './table-label-case-review-source.mjs';
+import { execFileSync } from 'node:child_process';
+import ts from 'typescript';
+import { restoreTableLabelExportSource } from './static-semantic-registration.mjs';
 
 test('table label successor reader preserves accepted cases and authenticates all evidence without promotion', () => {
   const root = process.cwd(), read = fs.readFileSync;
@@ -32,4 +35,53 @@ test('table label successor reader preserves accepted cases and authenticates al
   console.log(JSON.stringify({ proof: 'table-label-successor-reader', cases: 2311, dependencies: 16347,
     addedChildren: 40, completePredecessorRecovered: true, selectedForExport: false,
     canonicalPublication: false, currentRenderingAccepted: false }));
+});
+
+test('table label export selection preserves complete older sources and actual reader routing', async () => {
+  const files = { runner: 'scripts/run-material-input-audit.mjs', launcher: 'scripts/export-material-input-audit-current-ancestry.mjs' };
+  const normalize = bytes => bytes.toString().replaceAll('\r\n', '\n');
+  for (const [kind, file] of Object.entries(files)) {
+    const source = normalize(fs.readFileSync(file));
+    assert.equal(restoreTableLabelExportSource(source, kind), normalize(execFileSync('git', ['show', `655b02b8:${file}`])));
+    assert.throws(() => restoreTableLabelExportSource(source + '\n// drift', kind));
+    assert.throws(() => restoreTableLabelExportSource(source.replace('tableLabelPaint', 'tableLabelPaintForged'), kind));
+  }
+  const run = flags => JSON.parse(execFileSync(process.execPath, [files.launcher, ...flags, '--dry-run'], { encoding: 'utf8' }));
+  const selected = run(['--table-label-paint']), prior = run(['--scrollbar-paint']);
+  const predecessor = 'eb30019d906e601dfdaf10cd7ed8a9c9de141764e92316506b5ebfb2e0a392ac';
+  assert.equal(selected.args.filter(arg => arg.includes(tableLabelPaintReview)).length, 2);
+  assert.deepEqual({ ...selected, args: selected.args.map(arg => arg.replaceAll(tableLabelPaintReview, predecessor)) }, prior);
+  for (const flag of ['--static-ax', '--card-inputs', '--expansion-semantics', '--stepper-inputs', '--tabs-menu-sheet', '--static-semantic-inputs', '--popup-depth-inputs', '--scrollbar-paint'])
+    assert.throws(() => execFileSync(process.execPath, [files.launcher, '--table-label-paint', flag, '--dry-run'], { stdio: 'pipe' }));
+  const text = normalize(fs.readFileSync(files.runner)), ast = ts.createSourceFile(files.runner, text, 99, true), factories = [];
+  const visit = node => {
+    if (ts.isVariableDeclaration(node) && node.name.getText(ast) === 'readerFactory') factories.push(node.initializer);
+    ts.forEachChild(node, visit);
+  };
+  visit(ast); assert.equal(factories.length, 1);
+  const bindings = { ...(await import('./text-backing-case-review-source.mjs')), ...(await import('./popup-depth-case-review-source.mjs')),
+    ...(await import('./table-label-case-review-source.mjs')) };
+  const select = new Function('options', ...Object.keys(bindings), `return ${factories[0].getText(ast)};`);
+  const factory = id => select({ caseObligationReviewSha256: id }, ...Object.values(bindings));
+  assert.equal(factory(tableLabelPaintReview), createTableLabelReviewReader);
+  assert.equal(factory(predecessor), bindings.createPopupDepthReviewReader);
+  assert.equal(factory(bindings.popupDepthInputsReview), bindings.createPopupDepthReviewReader);
+  assert.equal(factory(bindings.staticSemanticInputsReview), bindings.createDividerReviewedBoundariesReader);
+  assert.equal(factory('0'.repeat(64)), undefined);
+
+  const helper = 'tests/material-parity/static-semantic-registration.mjs';
+  let source = normalize(fs.readFileSync(helper));
+  const helperAst = ts.createSourceFile(helper, source, 99, true);
+  const addition = helperAst.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === 'restoreTableLabelExportSource');
+  assert.equal(addition.length, 1);
+  source = source.slice(0, addition[0].getFullStart()) + source.slice(addition[0].end);
+  const call = '  let text = restoreTableLabelExportSource(source, kind);';
+  assert.equal(source.split(call).length, 2);
+  source = source.replace(call, "  let text = source.toString().replaceAll('\\r\\n', '\\n');");
+  assert.equal(source, normalize(execFileSync('git', ['show', `655b02b8:${helper}`])));
+  const suite = 'tests/material-parity/static-semantic-selection.spec.mjs';
+  const suiteSource = normalize(fs.readFileSync(suite));
+  const binding = ", ...(await import('./table-label-case-review-source.mjs'))";
+  assert.equal(suiteSource.split(binding).length, 3);
+  assert.equal(suiteSource.replaceAll(binding, ''), normalize(execFileSync('git', ['show', `655b02b8:${suite}`])));
 });

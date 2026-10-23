@@ -17,6 +17,7 @@ import { withAuditEvidenceSession, auditReadFileSync } from '../tests/material-p
 import { attachCaseObligationCoverage, assertCaseObligationCoverage } from './audit-findings-store.mjs';
 import { popupDepthInputsReview, createPopupDepthReviewReader } from '../tests/material-parity/popup-depth-case-review-source.mjs';
 import { scrollbarPaintInputsReview } from '../tests/material-parity/popup-depth-case-review-source.mjs';
+import { tableLabelPaintReview, createTableLabelReviewReader } from '../tests/material-parity/table-label-case-review-source.mjs';
 import { createTextBackingReviewReader, textBackingRetainedReview, createDividerReviewedBoundariesReader, dividerReviewedBoundariesReview, inactiveParagraphInputsReview, filledFieldStructureReview, chipPaintReview, chipGraphicReview, controlInputReview, dividerPropertyContextReview, sharedButtonTouchReview, passiveStaticAxReview, cardInputsReview, expansionSemanticsReview, stepperInputsReview, tabsMenuSheetReview, staticSemanticInputsReview } from '../tests/material-parity/text-backing-case-review-source.mjs';
 
 const root = process.cwd();
@@ -40,7 +41,7 @@ const { audit, errors } = withAuditEvidenceSession(() => {
   const audit = buildMaterialInputAudit(parityReport, { ...options, root });
   if (options.caseObligationReview !== undefined) {
     progress('join-case-obligations');
-    const readerFactory=options.caseObligationReviewSha256===scrollbarPaintInputsReview ? createPopupDepthReviewReader : options.caseObligationReviewSha256===popupDepthInputsReview ? createPopupDepthReviewReader : [dividerReviewedBoundariesReview,inactiveParagraphInputsReview,filledFieldStructureReview,chipPaintReview,chipGraphicReview,controlInputReview,dividerPropertyContextReview,sharedButtonTouchReview,passiveStaticAxReview,cardInputsReview,expansionSemanticsReview,stepperInputsReview,tabsMenuSheetReview,staticSemanticInputsReview].includes(options.caseObligationReviewSha256)
+    const readerFactory=options.caseObligationReviewSha256===tableLabelPaintReview ? createTableLabelReviewReader : options.caseObligationReviewSha256===scrollbarPaintInputsReview ? createPopupDepthReviewReader : options.caseObligationReviewSha256===popupDepthInputsReview ? createPopupDepthReviewReader : [dividerReviewedBoundariesReview,inactiveParagraphInputsReview,filledFieldStructureReview,chipPaintReview,chipGraphicReview,controlInputReview,dividerPropertyContextReview,sharedButtonTouchReview,passiveStaticAxReview,cardInputsReview,expansionSemanticsReview,stepperInputsReview,tabsMenuSheetReview,staticSemanticInputsReview].includes(options.caseObligationReviewSha256)
       ? createDividerReviewedBoundariesReader
       : options.caseObligationReviewSha256===textBackingRetainedReview ? createTextBackingReviewReader : undefined;
     const applicability=readerFactory?.({root,read:auditReadFileSync,reviewSha256:options.caseObligationReviewSha256});
