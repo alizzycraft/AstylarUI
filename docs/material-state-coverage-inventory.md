@@ -2,6 +2,22 @@
 
 ## Current audit pointer — October23
 
+- Read-only conservation preparation avoids another old2.34GB payload parse for
+  three required structural inventories. Actual accepted6479b848 producer at
+  Git5f3df121,with nine exact historical source overrides,reconstructs934 source
+  entries/261 proofs/63 plan entries. Existing sectionDigests yields exact accepted
+  sourceFingerprints27e68a7f,focusedProofs4ae13c92,implementationPlana8da218e,
+  authenticated by original comparisonc1e2d9f8. Source population58a7dbab matches
+  accepted;working936/265 vectors match frozenf3664e0c/b32f13d5. All prior proof
+  fields preserve except independently current line anchors;plan unchanged.
+  Retained complete inventories/current counterparts in scrollbar-inventory-
+  conservation-reconstruction-20261023.log(619301 bytes),SHA
+  6df12defecae22b209716bcdeb4c6ec72ed37b950c5aabc2fa05e68213d6c70b.
+  Use this authenticated baseline/expected-vector evidence after live export4598
+  returns;it does NOT authenticate/accept the unexported candidate. Remaining
+  sections,case/receipt conservation,cold comparison and verified import stay
+  required. No frozen source or accepted package changed.
+
 - Separate pending Table proposal075fa58b82b7cf4f04d7496cefaec3e444b7136fed154e255ac192addea36c7a
   now extends exacteb30019d with40 retainedTableLabelPaint children. Original
   Table interaction localPaint dispositions move evidence-join-pending→partial,

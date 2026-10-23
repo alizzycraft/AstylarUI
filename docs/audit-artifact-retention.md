@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Keep scrollbar-inventory-conservation-reconstruction-20261023 log/empty stderr,
+terminal0,619301 bytes,log SHA
+6df12defecae22b209716bcdeb4c6ec72ed37b950c5aabc2fa05e68213d6c70b.
+It retains complete accepted934-source/261-proof/63-plan inventories authenticated
+against three original accepted section hashes,plus frozen working936/265 vectors.
+Nine exact Git source overrides and source/proof population receipts preserve
+reproducibility. This is required conservation data reuse,not a new collector,
+candidate authentication or current-rendering acceptance. No originals deleted.
+
 Keep table-label-case-obligation-join-20261023 log/empty stderr(terminal0),log SHA
 a08bb85d9242bc28cec9316bf9a5c85edf05288ff1cae198de8e35765503a299.
 Keep separate pending Table proposal075fa58b and selected predecessoreb30019d.
