@@ -3909,6 +3909,22 @@ old run is unnecessary or that the input audit is complete.
 
 ## October23 scrollbar conservation working extract
 
+Table pending-import headroom:four closed historical indexes absent from both
+the frozen945 source paths and16347 evidence-receipt paths were LZX-compressed
+with complete before/after SHA256 equality. Candidatef663c88e was an input and
+was explicitly excluded. Compression session24135 terminal0;generation/hash pairs:
+
+- cc89031af37771133ec134e84fe92df86627d6d1fe1819b81290e254e6c14e2a /8d185f4b443f67bb0e11e19372d02154f13b51c02c11a2809d1ff53f61b2007a
+- 0dd7dce32ed7c049ab32a0909ca40d30e161e8a255756b3cfbef991c8c0ec454 /37486eaa7500efc999bd5ccdca90f5e848e2da289b540b7716e53563aa0888b7
+- 9234605241791fcd5d15af1747b83921800a7b31f0dc0ec9440ff83e0345081d /478d24484da0c18b3fa1a09b19fc7f42d0b37e360b819e48fca5e8a141b26bb2
+- 6e20a3217422ad732228889d4c859a91c4bb413204f6828f63e6aca644803602 /6d3df3e7a1518cad3d38bb385921c4098f0dacb8ae2f77cea2a776ff9da72b23
+
+Observed D:free437125120→811970560bytes. No originals/failures deleted,pointers
+advanced or decoded bytes changed. Independent cold36938 remains live on child
+5236,parent15876. Recheck headroom after isolated import;copy/verify/compress each
+closed index/shard in sequence to avoid repeating the prior all-at-once copy's
+peak allocation. Do not publish before cold and complete-store verification.
+
 The analogous closed Table extract `table-label-candidate-structural-extraction-20261023.log`
 retains required candidate coverage/inventories and48 complete control rows.
 Its complete SHA256 remains5ef31718d6b4de3244d04bcd1d6862b531eb516d7b4dab5be92a32f9a1a0c435
