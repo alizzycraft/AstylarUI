@@ -2,6 +2,19 @@
 
 ## Current audit pointer — October23
 
+- Radio/caret batch reader now passes its focused integration proof1/1
+  (41633.8444ms body;42336.2079ms total). Existing generic loader authenticates
+  all17481 dependencies/2311 exact partial cases through the existing Table
+  receipt boundary. New radio-caret-case-review-source accepts only6889b546,
+  recovers whole00deb after removing40 caret children/restoring16 dispositions,
+  then whole075fa58b after removing56 Radio regions/12 static-bound gaps.
+  Unknown digest and tampered acceptance reject. No replacement source bytes
+  or new storage framework;prior remaining work conserves through whole-digest
+  recovery. This is standalone registration preparation,not export selection or
+  accepted945-source/269-proof reconciliation. Next:wire the explicit selector
+  and actual runner through existing guarded source-restoration mechanisms,
+  then perform one coherent inventory/export milestone. No browser recapture.
+
 - Pending caret successor6889b546f95572c1df93b4c598634b3ad3565553bc69a99ff2a9e1c6b791590c
   extends exact Radio00deb2bd. Membership check found all40 configured focus
   captures already joined under programmaticFocus,but none under localPaint.
