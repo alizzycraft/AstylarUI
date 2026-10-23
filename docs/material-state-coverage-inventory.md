@@ -2,6 +2,22 @@
 
 ## Current audit pointer — October23
 
+- Scrollbar coherent export4598 is now terminal0;do not poll/restart it.
+  Candidate62c7b7525f2265d0c8841ba4a3a65ef5c6bb210776b95b9d954bc24b39b6ae35
+  passed producer validation and evidence-session verification before writing.
+  It remains UNACCEPTED:accepted pointer2035d379 is unchanged. Full-byte/80-section
+  comparison authenticates both packages:72 sections identical,eight changed,
+  no added/removed sections. Summary,192 source findings and63 implementation-plan
+  entries are unchanged. Comparison log scrollbar-full-section-comparison-20261023
+  SHA d539e4b204994be00b85c7bf52c5637e12ab947fecb8336ce3d438f5afc1cec8.
+  Fixed-shape comparison86982 is terminal0:14085648 entries across five sections,
+  exactly147 changed leaves(48 controlLineBoxes,48 controlTypography,48 discrepancy
+  proof hashes,one ownerCaretInputs,two reviewedSourceBatchInputs). These counts
+  do not yet prove semantic conservation of the changed receipts. Next:authenticate
+  candidate source/proof vectors against retained reconstruction,conserve complete
+  coverage and independently derive proof/motion hashes,then cold check/import.
+  All2311 cases remain partial/current-rendering unverified;no renderer fixes.
+
 - Read-only conservation preparation avoids another old2.34GB payload parse for
   three required structural inventories. Actual accepted6479b848 producer at
   Git5f3df121,with nine exact historical source overrides,reconstructs934 source
@@ -13,8 +29,8 @@
   Retained complete inventories/current counterparts in scrollbar-inventory-
   conservation-reconstruction-20261023.log(619301 bytes),SHA
   6df12defecae22b209716bcdeb4c6ec72ed37b950c5aabc2fa05e68213d6c70b.
-  Use this authenticated baseline/expected-vector evidence after live export4598
-  returns;it does NOT authenticate/accept the unexported candidate. Remaining
+  Use this authenticated baseline/expected-vector evidence for exported candidate62c7;
+  it does NOT independently authenticate/accept that candidate. Remaining
   sections,case/receipt conservation,cold comparison and verified import stay
   required. No frozen source or accepted package changed.
 
@@ -49,7 +65,7 @@
   Existing font-authoring finding owns these unequal input observations;no new
   core/current-rendering/whole-table claim. Keep live retry4598 inputs frozen.
 
-- Corrected coherent scrollbar export is LIVE:session4598,childPID15956,
+- Historical launch checkpoint(corrected export4598 is now terminal0):childPID15956,
   source freezec13181f6,explicit --scrollbar-paint/exacteb30019d. Separate logs
   scrollbar-coherent-canonical-export-reconciled-20261023/stderr;progress reached
   build-audit. Poll this handle,not closed15860. Keep936 inputs frozen;the shared
