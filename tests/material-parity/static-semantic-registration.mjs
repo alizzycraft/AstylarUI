@@ -124,7 +124,7 @@ export function restorePopupDepthEvidenceProducer(source) {
 }
 
 export function restoreScrollbarSupplementProducer(source) {
-  const text = source.toString().replaceAll('\r\n', '\n');
+  const text = restoreTableLabelProducer(source);
   if (!['retained scrollbar constructor source applicability',
     'retained scrollbar clipping projection implementation applicability',
     'retained scrollbar exact configured endpoint paint evidence'].some(title => text.includes(title))) return text;
@@ -224,4 +224,24 @@ export function restoreTableLabelExportSource(source, kind) {
   const [current, prior, removals] = entries[kind]; assert.equal(hash(text), current);
   for (const addition of removals) { assert.equal(text.split(addition).length, 2); text = text.replace(addition, ''); }
   assert.equal(hash(text), prior); return text;
+}
+
+export function restoreTableLabelProducer(source) {
+  const text = source.toString().replaceAll('\r\n', '\n');
+  if (!text.includes('retained Table producer inventory conservation')) return text;
+  assert.equal(hash(text), 'c61c93b222f0c63d2f34a16da3a75ece660060342bc33ac610502c74c777d4a6');
+  const ast = ts.createSourceFile('producer.mjs', text, 99, true);
+  const owner = name => ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+  const proofs = owner('focusedProofInventory').body.statements[0].expression.elements;
+  const files = owner('sourceFingerprints').body.statements[0].declarationList.declarations[0].initializer.elements;
+  assert.equal(proofs.length, 269); assert.equal(files.length, 945);
+  assert.equal(proofs[0].arguments[3].text, 'retained Table label paint exact configured evidence');
+  assert.equal(proofs[3].arguments[3].text, 'retained Table producer inventory conservation');
+  assert.equal(files[0].text, 'tests/material-parity/table-retained-label-paint.spec.mjs');
+  assert.equal(files[8].text, 'artifacts/material-parity/table-label-selection-integration-20261023.log');
+  let prior = text;
+  for (const [start,end] of [[proofs[0].getFullStart(),proofs[3].end+1], [files[0].getFullStart(),files[8].end+1]].sort((a,b)=>b[0]-a[0]))
+    prior = prior.slice(0,start) + prior.slice(end);
+  assert.equal(hash(prior), '757ae11832c1ee02ae42ceb795731aa4f02df93d8b541c4781c692b942cde3e5');
+  return prior;
 }

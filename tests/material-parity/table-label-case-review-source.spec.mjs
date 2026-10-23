@@ -5,7 +5,9 @@ import { loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs
 import { createTableLabelReviewReader, tableLabelPaintReview } from './table-label-case-review-source.mjs';
 import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
-import { restoreTableLabelExportSource } from './static-semantic-registration.mjs';
+import { restoreTableLabelExportSource, restoreTableLabelProducer } from './static-semantic-registration.mjs';
+import path from 'node:path';
+import { createHash } from 'node:crypto';
 
 test('table label successor reader preserves accepted cases and authenticates all evidence without promotion', () => {
   const root = process.cwd(), read = fs.readFileSync;
@@ -72,16 +74,47 @@ test('table label export selection preserves complete older sources and actual r
   const helper = 'tests/material-parity/static-semantic-registration.mjs';
   let source = normalize(fs.readFileSync(helper));
   const helperAst = ts.createSourceFile(helper, source, 99, true);
-  const addition = helperAst.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === 'restoreTableLabelExportSource');
-  assert.equal(addition.length, 1);
-  source = source.slice(0, addition[0].getFullStart()) + source.slice(addition[0].end);
+  const additions = helperAst.statements.filter(n => ts.isFunctionDeclaration(n) && ['restoreTableLabelExportSource', 'restoreTableLabelProducer'].includes(n.name?.text));
+  assert.equal(additions.length, 2);
+  for (const node of additions.reverse()) source = source.slice(0, node.getFullStart()) + source.slice(node.end);
   const call = '  let text = restoreTableLabelExportSource(source, kind);';
   assert.equal(source.split(call).length, 2);
   source = source.replace(call, "  let text = source.toString().replaceAll('\\r\\n', '\\n');");
+  const producerCall = '  const text = restoreTableLabelProducer(source);';
+  assert.equal(source.split(producerCall).length, 2);
+  source = source.replace(producerCall, "  const text = source.toString().replaceAll('\\r\\n', '\\n');");
   assert.equal(source, normalize(execFileSync('git', ['show', `655b02b8:${helper}`])));
   const suite = 'tests/material-parity/static-semantic-selection.spec.mjs';
   const suiteSource = normalize(fs.readFileSync(suite));
   const binding = ", ...(await import('./table-label-case-review-source.mjs'))";
   assert.equal(suiteSource.split(binding).length, 3);
   assert.equal(suiteSource.replaceAll(binding, ''), normalize(execFileSync('git', ['show', `655b02b8:${suite}`])));
+});
+
+test('table label registration preserves the complete accepted producer and inventories', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs', text = fs.readFileSync(file, 'utf8');
+  const previous = execFileSync('git', ['show', `b8a300e1:${file}`], { encoding: 'utf8', maxBuffer: 8000000 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreTableLabelProducer(text), previous);
+  assert.throws(() => restoreTableLabelProducer(text + '\n// drift'));
+  assert.throws(() => restoreTableLabelProducer(text.replace('Four proofs and nine source paths', 'Forged proof description')));
+  const ast = ts.createSourceFile(file, text, 99, true);
+  const owner = name => ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+  const files = owner('sourceFingerprints').body.statements[0].declarationList.declarations[0].initializer.elements;
+  const proofs = owner('focusedProofInventory').body.statements[0].expression.elements;
+  assert.equal(files.length, 945); assert.equal(new Set(files.map(n => n.text)).size, 945);
+  assert.equal(proofs.length, 269);
+  for (const n of files.slice(0,9)) assert.ok(fs.readFileSync(n.text).length > 0);
+  for (const n of proofs.slice(0,4)) {
+    const pattern = new Function(`return ${n.arguments[2].getText(ast)};`)();
+    assert.ok(pattern.test(fs.readFileSync(n.arguments[1].text, 'utf8')));
+  }
+  const code = ['proof','sourceFingerprints','focusedProofInventory'].map(name => owner(name).getText(ast)).join('\n');
+  const current = new Function('readFileSync','path','createHash',code + ';return {sources:sourceFingerprints(process.cwd()),proofs:focusedProofInventory(process.cwd())};')(fs.readFileSync,path,createHash);
+  assert.equal(current.sources.length, 945); assert.equal(current.proofs.length, 269);
+  const oldAst = ts.createSourceFile(file, previous, 99, true);
+  const oldOwner = name => oldAst.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+  const oldCode = ['proof','sourceFingerprints','focusedProofInventory'].map(name => oldOwner(name).getText(oldAst)).join('\n');
+  const prior = new Function('readFileSync','path','createHash',oldCode + ';return {sources:sourceFingerprints(process.cwd()),proofs:focusedProofInventory(process.cwd())};')(fs.readFileSync,path,createHash);
+  assert.deepEqual(current.sources.slice(9), prior.sources);
+  assert.deepEqual(current.proofs.slice(4), prior.proofs);
 });

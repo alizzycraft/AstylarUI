@@ -49,9 +49,12 @@ supplement flags are mutually exclusive;all older/default selections preserve.
 Actual runner routing selects the exact Table reader only for that digest.
 Complete prior runner/launcher/helper bytes and original selection-test assertions
 conserve after bounded additions. Six selection/reader checks pass,including
-full16347-dependency validation. This is selection,not canonical registration or
-publication:register the existing Table proof/source inventory in a coherent batch
-before export/conservation/independent cold/import. All2311 cases remain partial
+full16347-dependency validation. The subsequent ten-test integration and complete
+source census register269 proofs/945 unique paths,conserving accepted265/936 with
+four/nine additions and seven explicitly reconciled source changes. Whole prior
+producer bytes and non-line proof fields conserve. Freeze this coherent batch
+before export/conservation/independent cold/import;registration is not publication.
+All2311 cases remain partial
 and current rendering unverified. Do not run a full export for selection prose.
 
 The existing current-ancestry launcher accepts explicit `--scrollbar-paint`

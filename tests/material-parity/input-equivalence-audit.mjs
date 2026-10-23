@@ -8922,6 +8922,15 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'tests/material-parity/table-retained-label-paint.spec.mjs',
+    'tests/material-parity/table-label-case-review-source.mjs',
+    'tests/material-parity/table-label-case-review-source.spec.mjs',
+    'artifacts/material-parity/table-retained-interaction-paint-20261023.log',
+    'artifacts/material-parity/table-retained-interaction-phase-boundary-20261023.log',
+    'artifacts/material-parity/table-retained-paint-cohort-applicability-20261023.log',
+    'artifacts/material-parity/table-retained-label-paint-replay-final-20261023.log',
+    'artifacts/material-parity/table-label-successor-reader-exact-states-20261023.log',
+    'artifacts/material-parity/table-label-selection-integration-20261023.log',
     'artifacts/material-parity/scrollbar-clip-projection-final-20261023.log',
     'artifacts/material-parity/working-audit/2035d3791c7973ff4b117349684113ca5add0fccb14a2a5ec69fdb03ce6423ef/index.json',
     'tests/material-parity/popup-depth-case-review-source.mjs',
@@ -9865,6 +9874,14 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/table-retained-label-paint.spec.mjs', /test\('retained table interaction label paint authenticates all cases and replays unique physical cohorts'/,
+      'retained Table label paint exact configured evidence', 'Forty cases authenticate160 checkpoint files and120 label observations. Eight physical cohorts replay24 standard-phase measurements,14 below the existing threshold. Unequal font inputs retain the existing authoring finding;not new core causality,current rendering or whole-case closure.'),
+    proof(root, 'tests/material-parity/table-label-case-review-source.spec.mjs', /test\('table label successor reader preserves accepted cases and authenticates all evidence without promotion'/,
+      'retained Table exact successor source applicability', 'Removing40 children and restoring only their paint dispositions recovers the complete accepted predecessor. All16347 dependencies and2311 partial/unverified cases authenticate. Unknown review and verifier drift reject;not rendering acceptance.'),
+    proof(root, 'tests/material-parity/table-label-case-review-source.spec.mjs', /test\('table label export selection preserves complete older sources and actual reader routing'/,
+      'retained Table exact export selection', 'Explicit --table-label-paint selects only075fa58b. Eight conflicting flags reject;whole prior runner,launcher,helper and original selection assertions conserve. Actual routing preserves older/unknown cases;not publication.'),
+    proof(root, 'tests/material-parity/table-label-case-review-source.spec.mjs', /test\('table label registration preserves the complete accepted producer and inventories'/,
+      'retained Table producer inventory conservation', 'Four proofs and nine source paths are additive to the complete265-proof/936-path predecessor. Whole prior producer bytes conserve;actual owning assertions and source paths exist. Drift rejects;not canonical or case acceptance.'),
     proof(root, 'tests/material-parity/sort-focus-structure.spec.mjs', /test\('retained scrollbar constructor wiring preserves current CSS geometry and paint owners'/,
       'retained scrollbar constructor source applicability', 'Complete current-emitted,installed and captured constructor wiring agrees. Eight owner mutations reject;three source-drift controls preserve the complete accepted suite after removing only three additive tests. Not callback implementation,current rendering or case closure.'),
     proof(root, 'tests/material-parity/sort-focus-structure.spec.mjs', /test\('retained scrollbar clipping and projection implementations preserve captured method bodies'/,

@@ -2,6 +2,26 @@
 
 ## Current audit pointer — October23
 
+- Table registration/source census now verified:working269 proofs/945 paths adds
+  exactly4/9 to accepted265/936. Complete accepted producer757ae118 recovers from
+  currentc61c93b2 by deleting only the four proof/nine path entries. Actual production
+  functions evaluate all945 unique paths/269 owning proof anchors. All265 prior
+  proof fields preserve except current line anchors;all936 prior source paths/order
+  preserve. Exactly seven changed old sources authenticate against Git2ebf5e77,
+  not assumed historical-current equality. New popup reader branch reverses only
+  exact945/269 suite counts to completea3800445 before existing historical layers.
+  Existing helper/selection sources preserve all original bytes outside bounded
+  calls/additions. Source population405c0c11d1ca64d523c6b2347c1c85f39ad8a758cce84a2b54195527596be24a;
+  proof population97cd429e4b67b5993ff53282bef283468c55c8abe7c909e29befdc3dcf30923a.
+  Source census log SHA aeaf8790d5a1fd915afc417e0ea01ccf731cb14c728aeb92edac2eaaa675f7ed.
+  Integration10/10 passes57490.7961ms(original Table paint,old selections,full
+  exact Table/old-popup readers,root inventory),log table-label-registration-
+  integration-20261023 SHA714b1f07bde4a9c307964639aa4fd5d79432a6f1498103fe334cefa6f063e341.
+  Existing192 classifications unchanged;Table's14 below-threshold cohort strips
+  remain honest unequal-input diagnostics. Accepted package62c7/pointer unchanged.
+  Next:freeze this coherent Table batch before its named export/conservation/cold/
+  verified import milestone;no full run for each metadata edit. All2311 stillpartial.
+
 - Explicit Table selection is now verified:--table-label-paint selects exact075fa58b
   through the existing launcher and exact Table reader. Eight conflicting older
   flags reject;default/older invocations remain unchanged. Whole prior runner and
