@@ -2,6 +2,22 @@
 
 ## Current audit pointer — October23
 
+- Separate pending Table proposal075fa58b82b7cf4f04d7496cefaec3e444b7136fed154e255ac192addea36c7a
+  now extends exacteb30019d with40 retainedTableLabelPaint children. Original
+  Table interaction localPaint dispositions move evidence-join-pending→partial,
+  not complete;all2311 case/current-rendering statuses and original remaining work
+  preserve. Existing font-authoring finding,120 label observations,standard-phase
+  diagnostics,eight physical cohorts,original checkpoint/tree/PNG receipts and
+  verified owning test join exact case IDs. Generic proposal API/full loader
+  validates16347 dependencies. Removing only40 children and restoring only those
+  old dispositions recovers completeeb30019d;accepted2035d379 is unchanged.
+  Join log table-label-case-obligation-join-20261023 SHA
+  a08bb85d9242bc28cec9316bf9a5c85edf05288ff1cae198de8e35765503a299.
+  This successor is NOT selected by the live scrollbar export or its reader;
+  current export4598 still useseb30019d/c13181f6/936 inputs. No existing frozen
+  source/proposal changed. Next Table step after that batch:explicit exact-reader
+  adoption/registration and coverage integration,not a competing export now.
+
 - Standalone Table owning regression now replays the newly inspected boundary:
   table-retained-label-paint.spec.mjs is outside the live936-path/265-proof
   scrollbar batch(no existing frozen source modified). It loads all40 exact

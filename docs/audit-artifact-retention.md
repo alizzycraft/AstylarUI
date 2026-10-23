@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Keep table-label-case-obligation-join-20261023 log/empty stderr(terminal0),log SHA
+a08bb85d9242bc28cec9316bf9a5c85edf05288ff1cae198de8e35765503a299.
+Keep separate pending Table proposal075fa58b and selected predecessoreb30019d.
+New file SHA0be369326c2a21274e9664b6d47b461d8bd1783b905d469c8aced840529ffd27
+is unchanged by compression:191552525 logical/41046016 physical bytes. Its40
+new children/full predecessor recovery/16347 dependencies validate;it is not
+selected or canonically published. Original dispositions/remaining work and
+active frozen scrollbar inputs preserve. No capture/scratch/evidence deletion.
+
 Keep table-retained-label-paint-replay-20261023(original signed-zero serialization
 comparison failure) and table-retained-label-paint-replay-final-20261023 log/empty
 stderr pairs. Log SHA256 values respectively
