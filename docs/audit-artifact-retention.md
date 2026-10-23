@@ -2,6 +2,17 @@
 
 ## Current versus historical evidence
 
+Keep table-retained-interaction-paint-20261023 and table-retained-interaction-
+phase-boundary-20261023 log/empty stderr pairs(terminal0). SHA256 logs respectively
+cf0ed917473aa4b3e93405ecbb8e9c2b860e3e03a7dc8ca61f09197ef34f3322 and
+610216b68632f5ce6a4b0d9a426614a083d2756c32034883e974f08dd76377f4.
+They bind original per-case checkpoint/output receipts and120 equal-origin label
+strips,then the existing standard phase allowance. No PNG/build/capture/source
+was generated or changed. Original Table files/checkpoint records must remain;
+accepted-index absence was not absence of original capture-time receipts. These
+standalone measurements do not enter the live scrollbar export or accept current
+rendering;owning regression/coverage integration remains a subsequent batch.
+
 scrollbar-coherent-canonical-export-20261023 log/stderr are LIVE(session15860,
 childPID5948). Do not compress,remove,hash as final or mistake quiet build-audit
 output for terminal state. Source inputs freeze atbd81343c;accepted2035d379 stays

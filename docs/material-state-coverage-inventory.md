@@ -2,6 +2,28 @@
 
 ## Current audit pointer — October23
 
+- Table interaction output-binding gap is now resolved without recapture or frozen
+  source edits. Existing openMaterialCheckpoint/materialCaseKey loads all40 exact
+  interaction records;record results equal authenticated reportab42dbec and all160
+  original files(including80 PNGs) authenticate. Checkpoint manifest7ae2cba1 equals
+  the report's complete captureProvenance. This supersedes the prior accepted-index
+  receipt gap below:receipts exist in the original per-case checkpoint store.
+  Existing cropRgba/evaluateFocusedRaster inspect120 Name/Atlas/Northstar strips
+  at identical integer crop origins,using captured row heights and table geometry.
+  All120 native/candidate font-size inputs differ,corroborating existing
+  fixture-table-font-increased-during-renderer-fix,not a new core diagnosis or sole
+  pixel cause.90 zero-phase strips fall below0.80;the existing standard one-pixel
+  phase allowance reduces that to70/120,SSIM0.46742476529231025–0.8879752243881859.
+  These are diagnostic label strips,not new acceptance gates or full-table paint.
+  Retain both results:table-retained-interaction-paint-20261023 SHA
+  cf0ed917473aa4b3e93405ecbb8e9c2b860e3e03a7dc8ca61f09197ef34f3322;
+  table-retained-interaction-phase-boundary-20261023 SHA
+  610216b68632f5ce6a4b0d9a426614a083d2756c32034883e974f08dd76377f4.
+  Next(after live scrollbar batch):owning replay/rejection controls and exact-case
+  joining of these newly measured local-paint boundaries;remaining separator,
+  full-cell/semantic/history/current-runtime obligations preserve. No current
+  rendering/inspection promotion or modification of the live936-source export.
+
 - Read-only next-gap triage while scrollbar inputs remain frozen:all40 configured
   Table interaction rows(focus/hover/held/activate/activate-leave,eight desktop
   contexts) have focusedRasters:[] in authenticated reportab42dbec. Maximum outer
