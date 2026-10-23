@@ -2,6 +2,27 @@
 
 ## Current audit pointer — October23
 
+- October23 remaining scrollbar caller question answered without recapture:
+  complete AstylarScrollRuntime constructor expressions from current TypeScript
+  emit,installed module and authenticated captured component map have identical
+  wiring after the same esbuild formatting transform. All seven callback/paint
+  owner inputs preserve,including CSS layout boxes and final clipping projection.
+  Eight mutation/missing-constructor controls reject. This closes constructor
+  wiring staleness only,not callback implementations,timing or current rendering.
+  Source5742ba6c/installeda18630bd/capturee778fb10/mapdba48404 receipts recorded
+  in scrollbar-constructor-applicability-20261023.log SHA
+  a6c9330dba6d8d546dd802494c05f9966a66e9aa6b02b245dfaaf28f1342ba56.
+  Focused1/1 and original desktop/mobile retained-paint integration3/3 pass;
+  integration3381.2303ms,log SHA
+  9e7027f0aaab476c6aa5fef8c38645f082e39ea05f76bc49263b05f5386369e6.
+  No existing assertion changed. Additive owning-suite source fingerprint is
+  standalone/pending next coherent applicability/export batch;accepted2035d379
+  remains the frozen package,not silently current for this new test source.
+  Next decisive caller boundary:trace captured/current refreshClipping and CSS
+  projection implementations before attributing unsampled fringe to projection;
+  do not repeat settled constructor,thumb/track shape or motion checks. All2311
+  case statuses and full final gates remain unchanged.
+
 - October23 frozen export TERMINAL0:3215449.6026ms,all436 static/1875 interaction
   records,8483 groups/389202 occurrences/192 source findings,inputEquivalent:false.
   Evidence session authenticates17377 files/1937392254 bytes(equal verification

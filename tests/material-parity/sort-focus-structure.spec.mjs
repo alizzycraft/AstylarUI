@@ -3354,6 +3354,63 @@ async function withFrozenShowcase(run, launchOptions = {}, evidence = {}) {
   }
 }
 
+test('retained scrollbar constructor wiring preserves current CSS geometry and paint owners', async t => {
+  const { transformSync, version: esbuildVersion } = await import('esbuild');
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  const mapFile = 'artifacts/material-parity/retained-evidence/component-map-recovery-20261011/chunk-3JXWRYJY.js.map';
+  const mapBytes = readFileSync(mapFile);
+  assert.equal(digest(mapBytes), 'dba484044ca0dea965d8ef4b12635673f0f055d7711099d2f6476ca490988ec4');
+  const map = JSON.parse(mapBytes);
+  const captured = map.sources.flatMap((file, i) => file.endsWith('/lib/astylar.js') ? [map.sourcesContent[i]] : []);
+  assert.equal(captured.length, 1);
+  assert.equal(digest(captured[0]), 'e778fb1072d9382931b9ef6642f08bd338eb346e49f68f986dd1fa2261edc768');
+  const sourceFile = 'src/lib/astylar.ts';
+  const installedFile = 'examples/material-showcase/node_modules/astylarui/dist/lib/lib/astylar.js';
+  const source = readFileSync(sourceFile, 'utf8'), installed = readFileSync(installedFile, 'utf8');
+  const config = ts.convertCompilerOptionsFromJson(JSON.parse(readFileSync('tsconfig.lib.json')).compilerOptions, process.cwd());
+  assert.deepEqual(config.errors, []);
+  const emitted = ts.transpileModule(source, { compilerOptions: config.options, fileName: path.resolve(sourceFile), reportDiagnostics: true });
+  assert.deepEqual(emitted.diagnostics, []);
+  const wiring = text => {
+    const ast = ts.createSourceFile('scroll-wiring.js', text, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    const matches = [];
+    const visit = node => {
+      if (ts.isNewExpression(node) && node.expression.getText(ast) === 'AstylarScrollRuntime') matches.push(node.getText(ast));
+      ts.forEachChild(node, visit);
+    };
+    visit(ast);
+    assert.equal(matches.length, 1, 'exactly one scrollbar runtime constructor must remain');
+    // Only bundle formatting differs (single-argument arrow parentheses and
+    // trailing commas). Transform all three complete expressions identically;
+    // do not remove callbacks, constants, member paths or projection calls.
+    return transformSync(matches[0], { target: 'es2022', minify: false, treeShaking: false }).code;
+  };
+  const expected = wiring(captured[0]);
+  assert.equal(wiring(emitted.outputText), expected);
+  assert.equal(wiring(installed), expected);
+  const mutations = [
+    ['elementsMap.get(elementId)', 'wrongMeshes.get(elementId)'],
+    ['elementDimensionsMap.get(elementId)', 'wrongDimensions.get(elementId)'],
+    ['getLayoutBoxes: () => this.elementManager.layoutBoxesMap', 'getLayoutBoxes: () => this.elementManager.wrongBoxes'],
+    ['elementStylesMap.get(elementId)?.normal', 'elementStylesMap.get(elementId)?.hover'],
+    ['findStyleForElement(element, currentSiteData.styles)', 'findStyleForElement(element, [])'],
+    ['new BabylonScrollPaintAdapter(renderContext.actions.camera)', 'new BabylonScrollPaintAdapter(null)'],
+    ['projectCssViewportPoint(point)', 'projectCssViewportPoint({x:0,y:0})'],
+  ];
+  for (const [before, after] of mutations) {
+    assert.ok(expected.includes(before));
+    assert.notEqual(wiring(expected.replace(before, after)), expected, `reject changed caller: ${before}`);
+  }
+  assert.throws(() => wiring(emitted.outputText.replace('new AstylarScrollRuntime(', 'new WrongRuntime(')));
+  t.diagnostic(JSON.stringify({ scrollbarConstructorApplicability: {
+    sourceFile, sourceSha256: digest(source), installedFile, installedSha256: digest(installed),
+    mapFile, mapSha256: digest(mapBytes), capturedModuleSha256: digest(captured[0]),
+    constructorSha256: digest(expected), typescript: ts.version, esbuild: esbuildVersion,
+    mutationControls: mutations.length + 1, acceptance: false,
+    scope: 'constructor callback/member/projection wiring only; callback implementations, reconciliation timing, other owners and current rendering remain separate',
+  } }));
+});
+
 test('retained mobile scrollbar masks inspect light dark open and wheel boundaries', () => {
   const digest = bytes => createHash('sha256').update(bytes).digest('hex');
   const hashes = {

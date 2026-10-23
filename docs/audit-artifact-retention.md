@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Keep scrollbar-constructor-applicability-20261023 and scrollbar-retained-paint-
+integration-20261023 log/empty stderr pairs(terminal0,1/1 and3/3). SHA256 logs
+a6c9330dba6d8d546dd802494c05f9966a66e9aa6b02b245dfaaf28f1342ba56 and
+9e7027f0aaab476c6aa5fef8c38645f082e39ea05f76bc49263b05f5386369e6.
+These bind a new bounded caller-applicability conclusion and preserve original
+desktop/mobile mask assertions,not new screenshots or current-render acceptance.
+No scratch generated or evidence deleted;new suite source remains a pending
+coherent source-reconciliation obligation rather than triggering another export.
+
 Keep popup-depth-coherent-canonical-export-20261023 log/stderr (terminal0),
 popup-depth-full-section-comparison-20261023.log (both complete packages),
 popup-depth-fixed-shape-leaves-20261023.log (14085648 entries/147 differences)
