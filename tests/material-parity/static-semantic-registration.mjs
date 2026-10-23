@@ -275,7 +275,7 @@ export function restoreTableLabelProducer(source) {
 }
 
 export function restoreRadioCaretProducer(source) {
-  const text = source.toString().replaceAll('\r\n', '\n');
+  const text = restoreRetainedFocusProducer(source);
   if (!text.includes('retained Radio caret producer inventory conservation')) return text;
   const ast = ts.createSourceFile('producer.mjs', text, 99, true);
   const owner = name => ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
@@ -316,4 +316,23 @@ export function restoreRetainedFocusExportSource(source, kind) {
     assert.equal(hash(text),'e0085ac574c765b8c22dadb81a4817e195e8d79da819597fdf7539954892d432');
   }
   return text;
+}
+
+export function restoreRetainedFocusProducer(source) {
+  const text=source.toString().replaceAll('\r\n','\n');
+  if(!text.includes('retained focus producer inventory conservation'))return text;
+  const ast=ts.createSourceFile('producer.mjs',text,99,true);
+  const owner=name=>ast.statements.find(node=>ts.isFunctionDeclaration(node)&&node.name?.text===name);
+  const proofs=owner('focusedProofInventory').body.statements[0].expression.elements;
+  const files=owner('sourceFingerprints').body.statements[0].declarationList.declarations[0].initializer.elements;
+  assert.equal(proofs.length,278);assert.equal(files.length,955);
+  assert.equal(proofs[0].arguments[3].text,'retained pointer-focus exact measured boundaries');
+  assert.equal(proofs[4].arguments[3].text,'retained focus producer inventory conservation');
+  assert.equal(files[0].text,'scripts/join-material-retained-pointer-focus.mjs');
+  assert.equal(files[1].text,'tests/material-parity/retained-pointer-focus-reuse.spec.mjs');
+  let prior=text;
+  for(const[start,end]of[[proofs[0].getFullStart(),proofs[4].end+1],[files[0].getFullStart(),files[1].end+1]].sort((a,b)=>b[0]-a[0]))
+    prior=prior.slice(0,start)+prior.slice(end);
+  assert.equal(hash(prior),'0d5d56e87b3474630a211f685d0817ff94b5dd7eb32a07036f78e20366aa3392');
+  return prior;
 }

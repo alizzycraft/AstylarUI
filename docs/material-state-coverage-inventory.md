@@ -2,6 +2,24 @@
 
 ## Current audit pointer — October23
 
+- Retained-focus registration is now955 unique source paths/278 proofs:two/five
+  additions to accepted953/273. Complete producer3aa377997071b510e233e95e7ad084c0413223fdc57ec833c5788f1c70a50ee7
+  recovers whole accepted0d5d56e8 by removing only those literal entries. Existing
+  Radio/Table registration tests retain their original assertions after bounded
+  predecessor preparation. Tooltip suite changes only955/278 counts;exact prior
+ 16f62a79 suite bytes recover before historical receipt handling. Seven integration
+  selection/registration checks pass7/7 in15695.6591ms;owning reader then passes
+  1/1 in42464.3698ms,authenticating17481 dependencies/all2311 partial cases.
+  Census against authenticated accepted f199 vectors adds exactlytwo paths,
+  changes eight old sources and removes none. All273 prior non-line proof fields
+  preserve. Changed paths are Radio/Table suites,popup reader,registration helper,
+  launcher,tooltip suite,producer and runner;no renderer/fixture inputs changed.
+  Census logSHA269b25fda87132a42a7ec54dd1d1212f9e36c6db664d0af1509c1fe212d3d8a1.
+  This is source/proof registration,not accepted publication. Next freeze and run
+  one --retained-focus export/conservation/independent cold/import milestone for
+  all138 links. Accepted f199 stays unchanged until those gates pass;all original
+  final gates remain and no case is promoted.
+
 - Explicit --retained-focus now selects onlyaeb1ef14 in the existing launcher;
   actual exporter routes that exact digest to createRetainedFocusReviewReader.
   Ten older supplement invocations/defaults preserve;all conflicting pairs reject.

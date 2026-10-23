@@ -8922,6 +8922,8 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'scripts/join-material-retained-pointer-focus.mjs',
+    'tests/material-parity/retained-pointer-focus-reuse.spec.mjs',
     'scripts/audit-material-retained-radio-label-paint.mjs',
     'tests/material-parity/radio-retained-label-paint.spec.mjs',
     'tests/material-parity/radio-caret-case-review-source.mjs',
@@ -9882,6 +9884,16 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/retained-pointer-focus-reuse.spec.mjs', /test\('retained pointer focus reuses exact measured boundaries without substituting focus actions'/,
+      'retained pointer-focus exact measured boundaries', '113 exact pointer cases reuse678 direct focus boundaries and226 authenticated trees. Complete predecessor recovers;pointer observations do not substitute programmatic or keyboard focus.'),
+    proof(root, 'tests/material-parity/retained-pointer-focus-reuse.spec.mjs', /test\('disabled and AX focus reuse bind exact retained observations without widening action scope'/,
+      'retained disabled and AX focus endpoint evidence', 'Sixteen disabled anchors bind39 original raw action records;additional modes stay supplementary. Nine Bottom-Sheet activate pairs bind actual focused AX/DOM backends. Menu supplements stay pending;no trapping,current rendering or new core-cause claim.'),
+    proof(root, 'tests/material-parity/retained-pointer-focus-reuse.spec.mjs', /test\('retained focus successor reader conserves both prior reviews and authenticates all dependencies'/,
+      'retained focus exact successor applicability', 'Whole6c39 and6889 predecessors recover after only25 and113 children/dispositions are removed. All17481 dependencies/2311 partial cases authenticate. Not rendering acceptance or case closure.'),
+    proof(root, 'tests/material-parity/retained-pointer-focus-reuse.spec.mjs', /test\('retained focus selection preserves prior sources invocations and actual reader routing'/,
+      'retained focus exact export selection', 'Explicit --retained-focus selects onlyaeb1ef14. Ten conflicting flags reject;complete accepted runner/launcher bytes,older/default invocations and actual reader routing preserve. Not publication.'),
+    proof(root, 'tests/material-parity/retained-pointer-focus-reuse.spec.mjs', /test\('retained focus producer registration preserves complete accepted sources and proofs'/,
+      'retained focus producer inventory conservation', 'Five proofs and two paths add to the complete273-proof/953-path predecessor. Whole producer bytes and prior inventory entries conserve;no case promotion or canonical publication.'),
     proof(root, 'tests/material-parity/radio-retained-label-paint.spec.mjs', /test\('retained Radio label regions preserve exact original cases owners bounds and paint failures'/,
       'retained Radio regional label paint', 'Fifty-six original interaction cases authenticate112 label regions;all112 zero-phase and106 standard-phase failures preserve. Twelve static missing bounds remain explicit. Not isolated glyph/ring/ripple paint or current rendering acceptance.'),
     proof(root, 'tests/material-parity/radio-caret-case-review.spec.mjs', /test\('Radio caret reader conserves complete predecessors and authenticates partial evidence'/,

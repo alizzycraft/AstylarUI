@@ -51,6 +51,14 @@ index for current counts and pending integration work, not the figures above.
 
 ## One investigation per question
 
+The retained-focus batch is registered at955 paths/278 proofs,adding two/five to
+the complete accepted953/273 population. Complete prior producer bytes and prior
+inventory entries conserve. Accepted-vector census records eight bounded old-
+source transitions,no removals,and unchanged273 non-line proof fields. Seven
+integration checks and owning17481-dependency reader pass. Freeze this coherent
+batch before one export/conservation/independent cold/import milestone. Registration
+does not publish the pendingaeb1ef14 review or close cases;all2311 stay partial.
+
 The pending focus successor has explicit `--retained-focus` (also `--dry-run` or
 `--check`) on the existing launcher,selecting exactaeb1ef14 only. Eleven supplement
 flags are mutually exclusive;older/default selections preserve. Actual exporter

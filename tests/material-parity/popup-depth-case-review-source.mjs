@@ -51,6 +51,14 @@ export function createPopupDepthReviewReader({ root, read, reviewSha256 }) {
   const suite = 'tests/material-parity/tooltip-position-composition.spec.mjs';
   const currentSuite = read(path.resolve(root, suite));
   let text = currentSuite.toString();
+  if (hash(text) === 'f095c31938b5a9ef5ad88b0913b78ab427ec7b1cbe83a7bc51561a620b5ac498') {
+    for (const [current, prior] of [
+      ['assert.equal(files.length, 955); assert.equal(new Set(files.map(n => n.text)).size, 955);',
+        'assert.equal(files.length, 953); assert.equal(new Set(files.map(n => n.text)).size, 953);'],
+      ['assert.equal(proofs.length, 278);', 'assert.equal(proofs.length, 273);'],
+    ]) { assert.equal(text.split(current).length, 2); text = text.replace(current, prior); }
+    assert.equal(hash(text), '16f62a795af1c5e91ff7d1b014bcaf7b2dc8426d061c56530a5311c4ea4f5acd');
+  }
   if (hash(text) === '16f62a795af1c5e91ff7d1b014bcaf7b2dc8426d061c56530a5311c4ea4f5acd') {
     for (const [current, prior] of [
       ['assert.equal(files.length, 953); assert.equal(new Set(files.map(n => n.text)).size, 953);',

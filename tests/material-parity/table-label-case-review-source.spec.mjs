@@ -77,8 +77,8 @@ test('table label export selection preserves complete older sources and actual r
   // conservation assertions. The final whole-source Git comparison still owns
   // every prior byte; this is not a waiver for arbitrary helper changes.
   const radioAst = ts.createSourceFile(helper, source, 99, true);
-  const radioAddition = radioAst.statements.filter(n => ts.isFunctionDeclaration(n) && ['restoreRadioCaretExportSource','restoreRadioCaretProducer','restoreRetainedFocusExportSource'].includes(n.name?.text));
-  assert.equal(radioAddition.length, 3);
+  const radioAddition = radioAst.statements.filter(n => ts.isFunctionDeclaration(n) && ['restoreRadioCaretExportSource','restoreRadioCaretProducer','restoreRetainedFocusExportSource','restoreRetainedFocusProducer'].includes(n.name?.text));
+  assert.equal(radioAddition.length, 4);
   for (const node of radioAddition.reverse()) source = source.slice(0, node.getFullStart()) + source.slice(node.end);
   const radioCall = '  let text = restoreRadioCaretExportSource(source, kind);';
   assert.equal(source.split(radioCall).length, 2);

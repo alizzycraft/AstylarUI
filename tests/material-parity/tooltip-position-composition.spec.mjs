@@ -154,10 +154,10 @@ test('root depth producer inventory conserves all prior proofs and source paths'
   const ast = ts.createSourceFile(file, text, 99, true);
   const owner = name => ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
   const files = owner('sourceFingerprints').body.statements[0].declarationList.declarations[0].initializer.elements;
-  assert.equal(files.length, 953); assert.equal(new Set(files.map(n => n.text)).size, 953);
+  assert.equal(files.length, 955); assert.equal(new Set(files.map(n => n.text)).size, 955);
   for (const n of files.slice(0,4)) assert.ok(readFileSync(n.text).length > 0);
   const proofs = owner('focusedProofInventory').body.statements[0].expression.elements;
-  assert.equal(proofs.length, 273);
+  assert.equal(proofs.length, 278);
   for (const n of proofs.slice(0,4)) {
     const pattern = new Function(`return ${n.arguments[2].getText(ast)};`)();
     assert.ok(pattern.test(readFileSync(n.arguments[1].text, 'utf8')));

@@ -6,7 +6,7 @@ import { spawnSync } from 'node:child_process';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
-import { restoreRadioCaretExportSource, restoreRadioCaretProducer } from './static-semantic-registration.mjs';
+import { restoreRadioCaretExportSource, restoreRadioCaretProducer, restoreRetainedFocusProducer } from './static-semantic-registration.mjs';
 import { loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
 import { createRadioCaretReviewReader, radioCaretPaintReview } from './radio-caret-case-review-source.mjs';
 
@@ -72,7 +72,7 @@ test('Radio caret selection preserves old launcher and runner bytes and rejects 
 
 test('Radio caret registration conserves the complete predecessor producer and inventories', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';
-  const source = readFileSync(file, 'utf8'), prior = restoreRadioCaretProducer(source);
+  const source = restoreRetainedFocusProducer(readFileSync(file, 'utf8')), prior = restoreRadioCaretProducer(source);
   assert.equal(prior, execFileSync('git', ['show', `d53a8293:${file}`], {encoding:'utf8',maxBuffer:8000000}).replaceAll('\r\n','\n'));
   assert.throws(() => restoreRadioCaretProducer(source + '\n// drift'));
   const collect = text => {

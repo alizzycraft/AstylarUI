@@ -2,9 +2,10 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import path from 'node:path';
 import { spawnSync, execFileSync } from 'node:child_process';
 import ts from 'typescript';
-import { restoreRetainedFocusExportSource } from './static-semantic-registration.mjs';
+import { restoreRetainedFocusExportSource, restoreRetainedFocusProducer } from './static-semantic-registration.mjs';
 import { loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
 import { joinRetainedPointerFocus, pointerFocusCapture, pointerFocusPredecessor,
   joinRetainedFocusObservationBatch, disabledFocusPredecessor,
@@ -115,4 +116,23 @@ test('retained focus selection preserves prior sources invocations and actual re
     assert.equal(restoreRetainedFocusExportSource(text,kind),prior);
     assert.throws(()=>restoreRetainedFocusExportSource(text+'\n// drift\n',kind));
   }
+});
+
+test('retained focus producer registration preserves complete accepted sources and proofs', () => {
+  const file='tests/material-parity/input-equivalence-audit.mjs',source=readFileSync(file,'utf8');
+  const prior=restoreRetainedFocusProducer(source);
+  assert.equal(prior,execFileSync('git',['show',`6f40e1e0:${file}`],{encoding:'utf8',maxBuffer:8000000}).replaceAll('\r\n','\n'));
+  assert.throws(()=>restoreRetainedFocusProducer(source+'\n// drift\n'));
+  const collect=text=>{
+    const ast=ts.createSourceFile(file,text,99,true);
+    const owner=name=>ast.statements.find(node=>ts.isFunctionDeclaration(node)&&node.name?.text===name);
+    const code=['proof','sourceFingerprints','focusedProofInventory'].map(name=>owner(name).getText(ast)).join('\n');
+    return new Function('readFileSync','path','createHash',code+';return {sources:sourceFingerprints(process.cwd()),proofs:focusedProofInventory(process.cwd())};')(readFileSync,path,createHash);
+  };
+  const current=collect(source),previous=collect(prior);
+  assert.equal(current.sources.length,955);assert.equal(new Set(current.sources.map(row=>row.file)).size,955);
+  assert.equal(current.proofs.length,278);
+  assert.deepEqual(current.sources.slice(2),previous.sources);
+  assert.deepEqual(current.proofs.slice(5),previous.proofs);
+  assert.ok(current.proofs.slice(0,5).every(row=>row.line>0));
 });
