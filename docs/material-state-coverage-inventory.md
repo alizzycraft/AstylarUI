@@ -2,6 +2,18 @@
 
 ## Current audit pointer — October23
 
+- Read-only next-gap triage while scrollbar inputs remain frozen:all40 configured
+  Table interaction rows(focus/hover/held/activate/activate-leave,eight desktop
+  contexts) have focusedRasters:[] in authenticated reportab42dbec. Maximum outer
+  edge error0.0162506103515625CSSpx is geometry evidence,not local text/separator
+  paint. All40 accepted localPaint records remain evidence-join-pending;accepted
+  index4ac21acb has no interaction/table PNG receipts. This does not prove no
+  receipts exist elsewhere or that PNG files are missing. Next inspect the original
+  capture/output binding before local crop claims;do not substitute whole-page
+  similarity or newly fingerprinted files for capture-time authentication. Existing
+  table typography/semantic findings stay settled;no recapture,metric report or
+  source edit was started. The live scrollbar export still owns the current batch.
+
 - October23 coherent scrollbar export is LIVE:session15860,childPID5948,
   source freezebd81343c,explicit --scrollbar-paint/exacteb30019d. Invocation
   preflight and clean task-owned source status checked;D:free476078080 bytes
