@@ -202,8 +202,36 @@ export function restorePopupDepthTabsHelper(source) {
   return text;
 }
 
-export function restoreTableLabelExportSource(source, kind) {
+export function restoreRadioCaretExportSource(source, kind) {
   let text = source.toString().replaceAll('\r\n', '\n');
+  if (kind === 'case' || !text.includes('radioCaretPaint')) return text;
+  const digest = '6889b546f95572c1df93b4c598634b3ad3565553bc69a99ff2a9e1c6b791590c';
+  const remove = addition => {
+    assert.equal(text.split(addition).length, 2, 'Exact Radio/caret addition required');
+    text = text.replace(addition, '');
+  };
+  if (kind === 'runner') {
+    remove("import { radioCaretPaintReview, createRadioCaretReviewReader } from '../tests/material-parity/radio-caret-case-review-source.mjs';\n");
+    remove('    const selectedReaderFactory = options.caseObligationReviewSha256===radioCaretPaintReview ? createRadioCaretReviewReader : readerFactory;\n');
+    assert.equal(text.split('const applicability=selectedReaderFactory?.').length, 2);
+    text = text.replace('const applicability=selectedReaderFactory?.', 'const applicability=readerFactory?.');
+    assert.equal(hash(text), '7630b948d2663bb07e5c6178d76087690a38a3bdddc0ca68c71c1ba819277a6c');
+  } else {
+    assert.equal(kind, 'launcher');
+    for (const addition of [
+      "const radioCaretPaint = rawRequested.includes('--radio-caret-paint');\n",
+      "assert.ok(!(radioCaretPaint && (staticAx || cardInputs || expansionSemantics || stepperInputs || tabsMenuSheet || staticSemanticInputs || popupDepthInputs || scrollbarPaint || tableLabelPaint)), 'Choose one case-review supplement');\n",
+      ", '--radio-caret-paint'", '|--radio-caret-paint',
+      `if (radioCaretPaint) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/${digest}.json';\n`,
+      `if (radioCaretPaint) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=${digest}';\n`,
+    ]) remove(addition);
+    assert.equal(hash(text), '1823788710af5dae7f294b674437c1b7643fb99e9b12ef29a32f45fce2b4931b');
+  }
+  return text;
+}
+
+export function restoreTableLabelExportSource(source, kind) {
+  let text = restoreRadioCaretExportSource(source, kind);
   if (kind === 'case' || !text.includes('tableLabelPaint')) return text;
   const entries = {
     runner: ['7630b948d2663bb07e5c6178d76087690a38a3bdddc0ca68c71c1ba819277a6c',

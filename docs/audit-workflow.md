@@ -43,6 +43,16 @@ index for current counts and pending integration work, not the figures above.
 
 ## One investigation per question
 
+The pending Radio/caret batch has explicit `--radio-caret-paint` on the same
+launcher (also `--dry-run`/`--check`),selecting exact6889b546. Ten supplement flags
+are mutually exclusive;older/default selections preserve. Actual runner routing
+uses the exact new reader only for that digest. Complete prior runner/launcher
+bytes and Table-era helper assertions conserve through bounded reversal. Focused
+reader/selection and earlier selector checks pass;this is not producer source/proof
+census completion,canonical publication or case closure. Reconcile the accepted
+945-path/269-proof population before coherent export/cold/import. No recapture is
+needed merely because selection wiring changed.
+
 The existing current-ancestry launcher accepts explicit `--table-label-paint`
 (also `--dry-run`/`--check`) for exact40-child Table successor075fa58b. Nine
 supplement flags are mutually exclusive;all older/default selections preserve.

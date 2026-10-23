@@ -73,6 +73,16 @@ test('table label export selection preserves complete older sources and actual r
 
   const helper = 'tests/material-parity/static-semantic-registration.mjs';
   let source = normalize(fs.readFileSync(helper));
+  // Remove only the newer Radio/caret adapter before the unchanged Table-era
+  // conservation assertions. The final whole-source Git comparison still owns
+  // every prior byte; this is not a waiver for arbitrary helper changes.
+  const radioAst = ts.createSourceFile(helper, source, 99, true);
+  const radioAddition = radioAst.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === 'restoreRadioCaretExportSource');
+  assert.equal(radioAddition.length, 1);
+  source = source.slice(0, radioAddition[0].getFullStart()) + source.slice(radioAddition[0].end);
+  const radioCall = '  let text = restoreRadioCaretExportSource(source, kind);';
+  assert.equal(source.split(radioCall).length, 2);
+  source = source.replace(radioCall, "  let text = source.toString().replaceAll('\\r\\n', '\\n');");
   const helperAst = ts.createSourceFile(helper, source, 99, true);
   const additions = helperAst.statements.filter(n => ts.isFunctionDeclaration(n) && ['restoreTableLabelExportSource', 'restoreTableLabelProducer'].includes(n.name?.text));
   assert.equal(additions.length, 2);

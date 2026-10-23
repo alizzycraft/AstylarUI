@@ -2,6 +2,19 @@
 
 ## Current audit pointer — October23
 
+- Explicit --radio-caret-paint now selects only6889b546 in the existing launcher;
+  actual runner selects createRadioCaretReviewReader only for that exact digest.
+  All nine older supplement invocations/default preserve;conflicting combinations
+  reject. New bounded source restoration recovers complete previous runner and
+  launcher hashes;extra drift rejects. The existing Table helper conservation test
+  removes only the newer adapter before its unchanged whole-Git-source assertions.
+  Reader+selection2/2 passed44714.5932ms before adding actual-route assertions;
+  final actual-route/Table-selection2/2 passed1867.6186ms. Existing four scrollbar/
+  popup/static-semantic selection checks pass2285.0759ms. No producer inventory
+  update or canonical export yet:accepted945/269 remains the reference population.
+  Next:register Radio/caret proofs and paths with complete producer/inventory
+  conservation and reconcile the bounded source changes before a coherent export.
+
 - Radio/caret batch reader now passes its focused integration proof1/1
   (41633.8444ms body;42336.2079ms total). Existing generic loader authenticates
   all17481 dependencies/2311 exact partial cases through the existing Table
