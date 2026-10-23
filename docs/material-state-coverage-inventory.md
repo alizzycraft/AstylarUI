@@ -2,6 +2,23 @@
 
 ## Current audit pointer — October23
 
+- Next bounded focus reuse is prepared outside accepted953/273:113 exact
+  activate/activate-leave cases already contain direct pointer-focus observations
+  under authoredActivation.configuredRawPointerObservation,but all113 focus-plane
+  dispositions remain pending. New pure joinRetainedPointerFocus reuses those
+  exact before/after-action/settled owners,ancestry and focus events in memory;
+  no capture or state/action substitution. Owning standalone test authenticates
+  original945d1232 report/226 trees and678 direct boundaries,passes1/1 in6912.9927ms.
+  Complete6889b546 predecessor recovers after removing only113 children and their
+  pending→partial focus dispositions. Source-observation hashes bind each cross-
+  plane link;wrong predecessor/capture bytes reject. Focus-selector candidate is
+  not asserted to be pointer-hit target;later trees are not action-time inputs.
+  No programmatic/keyboard delivery,full restoration,currentness,paint or case
+  closure inferred. Not saved as a proposal,registered or exported yet;accepted
+  counts/pointer unchanged. Next:save/validate this bounded successor through the
+  existing store API with adequate write headroom,then batch further missing
+  activation/focus joins before another canonical milestone.
+
 - Accepted Radio/caret generation is now
   f19911ec5e302f7c8ac2587009dbdb2488600f9c2306abea9954c6b9b8472890,
   index6e25ece3b860f1756df9910799c3f688fee192f62d2016253520acfa5423aec0.
