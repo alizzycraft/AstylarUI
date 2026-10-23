@@ -2,6 +2,28 @@
 
 ## Current audit pointer — October23
 
+- Accepted canonical/compact generation is now
+  db04feee9eb4538c138d1dc47cc114d26d7f2aa9397e281b2e4284e986497c06,
+  indexSHA2342986e44cc2100ea7ec851c7ca865dc6bc888347a5cdbfd72e974042cfbc7e.
+  Independent cold36938 terminal0:2 collectors/10 memory hits/0 disk hits/0
+  invalidations;17539 files/2343126367 bytes read and rehashed. Canonical comparison
+  passes,total2535536.8395ms. Stdout8bcb5c4999a941c5afe43642023c5d3a3c4ce171a3401546284a9c5f01b551f6;
+  progress stderr3176fe158a3201ebdfa4e2334d073844caaffac5615dcf6cac738c3d524bb503.
+  Isolated import49014/full verification terminal0,log85700a70731888f13535eec439db98ef8ad4463147cf1497e7632275559ad874.
+  Accepted copy32972 authenticates86 files,compresses85 index/shards with unchanged
+  whole hashes,verifies complete store before existing import reuse advances pointer,
+  then verifies again. Log table-label-accepted-import-20261023 SHA
+  7590c19f3d3cbaa7ea066f976a6c3e3bdf5325bb00464cbedd5fb832afad1ff7.
+  No copy failures this batch. Prior62c7/originals/failures remain preserved.
+  Counts remain192 findings/8483 scalar groups/39904 controls/389202 occurrences;
+  zero unresolved scalar attributions is NOT equivalence. All2311 cases remain
+  partial/current-rendering unverified;inspectionComplete/currentRenderingAccepted
+  false. Actual accepted paint join backlog is1021 cases,largest Input68/Radio68,
+  followed by Sidenav/Slider/Dialog62 each. Next:check existing Input/Radio owning
+  paint receipts versus exact pending obligations before any new capture;do not
+  assume their symptoms share a cause or reopen settled diagnoses. All final
+  canonical/browser/release gates and original scope remain unchanged.
+
 - Table export88432 is terminal0;do not poll/restart it. Candidate
   db04feee9eb4538c138d1dc47cc114d26d7f2aa9397e281b2e4284e986497c06
   (91622219 compressed/2341624572 decoded bytes) passed validation/session rehash

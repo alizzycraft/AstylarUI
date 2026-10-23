@@ -3909,6 +3909,19 @@ old run is unnecessary or that the input audit is complete.
 
 ## October23 scrollbar conservation working extract
 
+Table publication completed after cold/conservation:isolated db04feee store has
+index2342986e44cc2100ea7ec851c7ca865dc6bc888347a5cdbfd72e974042cfbc7e and84
+shards. All85 files were LZX-compressed with individual complete hashes unchanged;
+existing verifyFindings passes afterward. Free648568832 before accepted copy.
+Accepted-copy streaming authenticates every86 source/destination file;each index
+or shard is compressed and rehashed before copying the next file. All85 before/
+after hashes agree;complete copied-store verification passes before pointer
+advancement through existing import reuse,and again afterward. Free504881152
+after copy. Accepted-import log7590c19f3d3cbaa7ea066f976a6c3e3bdf5325bb00464cbedd5fb832afad1ff7.
+This bounded copy avoids the previous batch's allocation failures. Prior62c7,
+original/failure evidence and current working extracts remain intact. No deletion
+or rendering/case acceptance inferred from storage operations.
+
 Table pending-import headroom:four closed historical indexes absent from both
 the frozen945 source paths and16347 evidence-receipt paths were LZX-compressed
 with complete before/after SHA256 equality. Candidatef663c88e was an input and
