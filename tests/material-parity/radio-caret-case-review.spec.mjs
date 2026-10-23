@@ -3,8 +3,10 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import ts from 'typescript';
-import { restoreRadioCaretExportSource } from './static-semantic-registration.mjs';
+import { restoreRadioCaretExportSource, restoreRadioCaretProducer } from './static-semantic-registration.mjs';
 import { loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
 import { createRadioCaretReviewReader, radioCaretPaintReview } from './radio-caret-case-review-source.mjs';
 
@@ -66,4 +68,25 @@ test('Radio caret selection preserves old launcher and runner bytes and rejects 
     restoreRadioCaretExportSource(source, kind);
     assert.throws(() => restoreRadioCaretExportSource(source + '\n// unreviewed drift\n', kind));
   }
+});
+
+test('Radio caret registration conserves the complete predecessor producer and inventories', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const source = readFileSync(file, 'utf8'), prior = restoreRadioCaretProducer(source);
+  assert.equal(prior, execFileSync('git', ['show', `d53a8293:${file}`], {encoding:'utf8',maxBuffer:8000000}).replaceAll('\r\n','\n'));
+  assert.throws(() => restoreRadioCaretProducer(source + '\n// drift'));
+  const collect = text => {
+    const ast = ts.createSourceFile(file,text,99,true);
+    const owner = name => ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+    const code = ['proof','sourceFingerprints','focusedProofInventory'].map(name => owner(name).getText(ast)).join('\n');
+    return new Function('readFileSync','path','createHash',code+';return {sources:sourceFingerprints(process.cwd()),proofs:focusedProofInventory(process.cwd())};')(readFileSync,path,createHash);
+  };
+  const current = collect(source), previous = collect(prior);
+  assert.equal(current.sources.length,953);
+  assert.equal(new Set(current.sources.map(row=>row.file)).size,953);
+  assert.equal(current.proofs.length,273);
+  assert.deepEqual(current.sources.slice(8),previous.sources);
+  assert.deepEqual(current.proofs.slice(4),previous.proofs);
+  assert.ok(current.sources.slice(0,8).every(row=>row.sha256.length===64));
+  assert.ok(current.proofs.slice(0,4).every(row=>row.line>0));
 });

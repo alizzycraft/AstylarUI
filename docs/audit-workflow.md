@@ -43,6 +43,16 @@ index for current counts and pending integration work, not the figures above.
 
 ## One investigation per question
 
+The Radio/caret batch is registered at273 proofs/953 unique paths,adding four/eight
+to the complete accepted269/945 population. Existing caret proof is reused,not
+duplicated. Seven changed prior source paths are bounded selector/restoration/
+inventory transitions. Six focused integration checks and three full dependency
+reader checks pass;source registration is not canonical publication. Freeze before
+the existing export/conservation/independent cold/import milestone. Use the current
+coverage ledger for exact source hashes and uncertainties;do not recapture browser
+output merely for inventory changes or treat provenance-incomplete caret evidence
+as complete original-procedure/current-rendering acceptance.
+
 The pending Radio/caret batch has explicit `--radio-caret-paint` on the same
 launcher (also `--dry-run`/`--check`),selecting exact6889b546. Ten supplement flags
 are mutually exclusive;older/default selections preserve. Actual runner routing

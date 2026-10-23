@@ -255,7 +255,7 @@ export function restoreTableLabelExportSource(source, kind) {
 }
 
 export function restoreTableLabelProducer(source) {
-  const text = source.toString().replaceAll('\r\n', '\n');
+  const text = restoreRadioCaretProducer(source);
   if (!text.includes('retained Table producer inventory conservation')) return text;
   assert.equal(hash(text), 'c61c93b222f0c63d2f34a16da3a75ece660060342bc33ac610502c74c777d4a6');
   const ast = ts.createSourceFile('producer.mjs', text, 99, true);
@@ -271,5 +271,24 @@ export function restoreTableLabelProducer(source) {
   for (const [start,end] of [[proofs[0].getFullStart(),proofs[3].end+1], [files[0].getFullStart(),files[8].end+1]].sort((a,b)=>b[0]-a[0]))
     prior = prior.slice(0,start) + prior.slice(end);
   assert.equal(hash(prior), '757ae11832c1ee02ae42ceb795731aa4f02df93d8b541c4781c692b942cde3e5');
+  return prior;
+}
+
+export function restoreRadioCaretProducer(source) {
+  const text = source.toString().replaceAll('\r\n', '\n');
+  if (!text.includes('retained Radio caret producer inventory conservation')) return text;
+  const ast = ts.createSourceFile('producer.mjs', text, 99, true);
+  const owner = name => ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+  const proofs = owner('focusedProofInventory').body.statements[0].expression.elements;
+  const files = owner('sourceFingerprints').body.statements[0].declarationList.declarations[0].initializer.elements;
+  assert.equal(proofs.length, 273); assert.equal(files.length, 953);
+  assert.equal(proofs[0].arguments[3].text, 'retained Radio regional label paint');
+  assert.equal(proofs[3].arguments[3].text, 'retained Radio caret producer inventory conservation');
+  assert.equal(files[0].text, 'scripts/audit-material-retained-radio-label-paint.mjs');
+  assert.equal(files[7].text, 'artifacts/material-parity/configured-caret-vertical-temporal-scope-20261014.log');
+  let prior = text;
+  for (const [start,end] of [[proofs[0].getFullStart(),proofs[3].end+1], [files[0].getFullStart(),files[7].end+1]].sort((a,b)=>b[0]-a[0]))
+    prior = prior.slice(0,start) + prior.slice(end);
+  assert.equal(hash(prior), 'c61c93b222f0c63d2f34a16da3a75ece660060342bc33ac610502c74c777d4a6');
   return prior;
 }

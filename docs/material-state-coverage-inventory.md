@@ -2,6 +2,24 @@
 
 ## Current audit pointer — October23
 
+- Radio/caret producer registration now has273 proofs/953 unique paths:four/eight
+  additive to accepted269/945. Complete producer0d5d56e8 recovers acceptedc61c93b2
+  by removing only those literal entries. Prior inventory values preserve in the
+  owning registration test;no paths removed. Census against the retained Table
+  working vectors finds seven changed old paths only:Table selection suite,
+  popup-depth reader,static-semantic registration,launcher,tooltip suite,producer,
+  runner. These are bounded selector/restoration/registration changes,not renderer
+  or fixture inputs. Tooltip suite changes only953/273 counts;exact complete
+  predecessor47aa6fcb recovers before historical receipt handling.
+  Six focused registration/selection checks pass12113.9469ms;three actual new/
+  Table/popup readers pass43999.5554ms,including17481/16347/16186 dependency checks.
+  Existing caret proof was already registered,so no duplicate proof added. Raw
+  image/log receipts remain raw hashes;source census normalizes CRLF by its old
+  contract (vertical log normalizedb41cbce0 differs from rawd8c24d95 legitimately).
+  No canonical export/import or case promotion yet. Next:freeze this coherent
+  source batch,authenticate prior vectors and run export/conservation/independent
+  cold/import once with sufficient disk headroom;all final browser gates remain.
+
 - Explicit --radio-caret-paint now selects only6889b546 in the existing launcher;
   actual runner selects createRadioCaretReviewReader only for that exact digest.
   All nine older supplement invocations/default preserve;conflicting combinations

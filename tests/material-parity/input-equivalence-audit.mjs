@@ -8922,6 +8922,14 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'scripts/audit-material-retained-radio-label-paint.mjs',
+    'tests/material-parity/radio-retained-label-paint.spec.mjs',
+    'tests/material-parity/radio-caret-case-review-source.mjs',
+    'tests/material-parity/radio-caret-case-review.spec.mjs',
+    'artifacts/material-parity/radio-retained-label-region-paint-exact-population-20261023.log',
+    'artifacts/material-parity/radio-retained-label-region-replay-bound-cases-20261023.log',
+    'artifacts/material-parity/configured-input-focus-temporal-edges-20261008.log',
+    'artifacts/material-parity/configured-caret-vertical-temporal-scope-20261014.log',
     'tests/material-parity/table-retained-label-paint.spec.mjs',
     'tests/material-parity/table-label-case-review-source.mjs',
     'tests/material-parity/table-label-case-review-source.spec.mjs',
@@ -9874,6 +9882,14 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/radio-retained-label-paint.spec.mjs', /test\('retained Radio label regions preserve exact original cases owners bounds and paint failures'/,
+      'retained Radio regional label paint', 'Fifty-six original interaction cases authenticate112 label regions;all112 zero-phase and106 standard-phase failures preserve. Twelve static missing bounds remain explicit. Not isolated glyph/ring/ripple paint or current rendering acceptance.'),
+    proof(root, 'tests/material-parity/radio-caret-case-review.spec.mjs', /test\('Radio caret reader conserves complete predecessors and authenticates partial evidence'/,
+      'retained Radio caret exact source applicability', 'Whole Radio and Table predecessors recover. Existing loader authenticates17481 dependencies/2311 partial cases. Forty caret children preserve original runner provenance gaps and unequal caret intent;not case closure.'),
+    proof(root, 'tests/material-parity/radio-caret-case-review.spec.mjs', /test\('Radio caret selection preserves old launcher and runner bytes and rejects combined supplements'/,
+      'retained Radio caret exact export selection', 'Explicit --radio-caret-paint selects only6889b546. Nine conflicting flags reject;prior complete runner and launcher conserve,older/default invocations and actual routing preserve. Not canonical publication.'),
+    proof(root, 'tests/material-parity/radio-caret-case-review.spec.mjs', /test\('Radio caret registration conserves the complete predecessor producer and inventories'/,
+      'retained Radio caret producer inventory conservation', 'Four proofs and eight source paths add to accepted269/945 without changing earlier entries or conclusions. Complete predecessor producer bytes recover;current source changes require explicit reconciliation before export.'),
     proof(root, 'tests/material-parity/table-retained-label-paint.spec.mjs', /test\('retained table interaction label paint authenticates all cases and replays unique physical cohorts'/,
       'retained Table label paint exact configured evidence', 'Forty cases authenticate160 checkpoint files and120 label observations. Eight physical cohorts replay24 standard-phase measurements,14 below the existing threshold. Unequal font inputs retain the existing authoring finding;not new core causality,current rendering or whole-case closure.'),
     proof(root, 'tests/material-parity/table-label-case-review-source.spec.mjs', /test\('table label successor reader preserves accepted cases and authenticates all evidence without promotion'/,

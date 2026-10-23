@@ -5,7 +5,7 @@ import { loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs
 import { createTableLabelReviewReader, tableLabelPaintReview } from './table-label-case-review-source.mjs';
 import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
-import { restoreTableLabelExportSource, restoreTableLabelProducer } from './static-semantic-registration.mjs';
+import { restoreTableLabelExportSource, restoreTableLabelProducer, restoreRadioCaretProducer } from './static-semantic-registration.mjs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 
@@ -77,12 +77,15 @@ test('table label export selection preserves complete older sources and actual r
   // conservation assertions. The final whole-source Git comparison still owns
   // every prior byte; this is not a waiver for arbitrary helper changes.
   const radioAst = ts.createSourceFile(helper, source, 99, true);
-  const radioAddition = radioAst.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === 'restoreRadioCaretExportSource');
-  assert.equal(radioAddition.length, 1);
-  source = source.slice(0, radioAddition[0].getFullStart()) + source.slice(radioAddition[0].end);
+  const radioAddition = radioAst.statements.filter(n => ts.isFunctionDeclaration(n) && ['restoreRadioCaretExportSource','restoreRadioCaretProducer'].includes(n.name?.text));
+  assert.equal(radioAddition.length, 2);
+  for (const node of radioAddition.reverse()) source = source.slice(0, node.getFullStart()) + source.slice(node.end);
   const radioCall = '  let text = restoreRadioCaretExportSource(source, kind);';
   assert.equal(source.split(radioCall).length, 2);
   source = source.replace(radioCall, "  let text = source.toString().replaceAll('\\r\\n', '\\n');");
+  const radioProducerCall = '  const text = restoreRadioCaretProducer(source);';
+  assert.equal(source.split(radioProducerCall).length, 2);
+  source = source.replace(radioProducerCall, "  const text = source.toString().replaceAll('\\r\\n', '\\n');");
   const helperAst = ts.createSourceFile(helper, source, 99, true);
   const additions = helperAst.statements.filter(n => ts.isFunctionDeclaration(n) && ['restoreTableLabelExportSource', 'restoreTableLabelProducer'].includes(n.name?.text));
   assert.equal(additions.length, 2);
@@ -102,7 +105,7 @@ test('table label export selection preserves complete older sources and actual r
 });
 
 test('table label registration preserves the complete accepted producer and inventories', () => {
-  const file = 'tests/material-parity/input-equivalence-audit.mjs', text = fs.readFileSync(file, 'utf8');
+  const file = 'tests/material-parity/input-equivalence-audit.mjs', text = restoreRadioCaretProducer(fs.readFileSync(file, 'utf8'));
   const previous = execFileSync('git', ['show', `b8a300e1:${file}`], { encoding: 'utf8', maxBuffer: 8000000 }).replaceAll('\r\n', '\n');
   assert.equal(restoreTableLabelProducer(text), previous);
   assert.throws(() => restoreTableLabelProducer(text + '\n// drift'));
