@@ -9,12 +9,28 @@ import { createDividerReviewedBoundariesReader, staticSemanticInputsReview } fro
 import { restoreScrollbarSupplementSuite } from './static-semantic-registration.mjs';
 
 export const popupDepthInputsReview = 'eb8ca85a92bc8707f6fe2ba7404bf1e7caaacc9e57c733faf5a4cda6588862d4';
+export const scrollbarPaintInputsReview = 'eb30019d906e601dfdaf10cd7ed8a9c9de141764e92316506b5ebfb2e0a392ac';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 export function createPopupDepthReviewReader({ root, read, reviewSha256 }) {
-  assert.equal(reviewSha256, popupDepthInputsReview, 'Unknown popup-depth review');
+  assert.ok([popupDepthInputsReview, scrollbarPaintInputsReview].includes(reviewSha256), 'Unknown popup-depth review');
   const file = path.resolve(root, `artifacts/material-parity/working-audit/proposals/${reviewSha256}.json`);
   const envelope = JSON.parse(read(file));
   assert.equal(envelope.sha256, reviewSha256); assert.equal(hash(JSON.stringify(envelope.review)), reviewSha256);
+  let scrollbarChildren = 0;
+  if (reviewSha256 === scrollbarPaintInputsReview) {
+    for (const group of envelope.review.groups) {
+      const child = group.obligations.localPaint?.retainedConfiguredScrollbarEvidence;
+      if (!child) continue;
+      assert.equal(group.family, 'timepicker');
+      assert.equal(group.inspection, 'partial'); assert.equal(group.currentRendering, 'unverified');
+      assert.match(group.case, /^interaction:timepicker@(light|dark|contrast|custom)\/desktop-dpr[12]\/open(-scroll)?$/);
+      assert.equal(child.observation.case, group.case);
+      assert.deepEqual(child.observation.remaining, group.obligations.localPaint.remaining);
+      delete group.obligations.localPaint.retainedConfiguredScrollbarEvidence; scrollbarChildren++;
+    }
+    assert.equal(scrollbarChildren, 16);
+    assert.equal(hash(JSON.stringify(envelope.review)), popupDepthInputsReview, 'Complete scrollbar predecessor not recovered');
+  }
   let added = 0;
   for (const group of envelope.review.groups) {
     const child = group.obligations.localPaint?.retainedPopupDepthInputApplicability;
@@ -75,8 +91,11 @@ export function createPopupDepthReviewReader({ root, read, reviewSha256 }) {
       return encoding ? source.historical.toString(encoding) : source.historical;
     },
     sourceApplicability: {
-      mode: 'exact-popup-depth-queued-review-historical-dependency', reviewSha256,
-      predecessorReview: staticSemanticInputsReview, completePredecessorRecovered: true, addedChildren: added,
+      mode: scrollbarChildren ? 'exact-scrollbar-paint-queued-review-historical-dependency'
+        : 'exact-popup-depth-queued-review-historical-dependency', reviewSha256,
+      predecessorReview: staticSemanticInputsReview, completePredecessorRecovered: true, addedChildren: added + scrollbarChildren,
+      ...(scrollbarChildren ? { immediatePredecessorReview: popupDepthInputsReview,
+        completeImmediatePredecessorRecovered: true, scrollbarChildren } : {}),
       transitions: [...base.sourceApplicability.transitions, {
         logicalFile, currentSha256: hash(current), historicalSha256: hash(historical), historicalRevision: '9f7dc468',
       }, {
@@ -86,7 +105,9 @@ export function createPopupDepthReviewReader({ root, read, reviewSha256 }) {
         logicalFile: scrollbarSuite, currentSha256: hash(currentScrollbarSuite), historicalSha256: hash(retainedScrollbarSuite),
         boundary: 'Only three complete additive scrollbar assertions are removed;whole accepted suite bytes conserve.',
       }],
-      boundary: 'Exact133-child queued extension only. Original source receipts and all partial statuses remain;no current-rendering or case-completion claim.',
+      boundary: scrollbarChildren
+        ? 'Exact16-child scrollbar successor of the retained133-child depth extension only. Original receipts,statuses and remaining work preserve;not current rendering or case closure.'
+        : 'Exact133-child queued extension only. Original source receipts and all partial statuses remain;no current-rendering or case-completion claim.',
     },
   };
 }

@@ -2,6 +2,19 @@
 
 ## Current versus historical evidence
 
+Keep scrollbar-case-obligation-join-20261023 and scrollbar-selected-case-reader-
+20261023 log/empty stderr pairs(terminal0). SHA256 logs respectively
+4fc4c2d29f1b3148056f1f11fd148a569cb2fc87f501f0c7b3aa4dbb8c0480b2 and
+3893a9de6d1c83f04e84a052ca7d855aab483d78f0048db9e35de7e7573bdc9f.
+Keep new exact16-child proposaleb30019d and originaleb8 separately. Proposal
+file SHA4650999fe365e4ccdbdc77cdaa6d026af07ee153443acaae70bbe9be6c6b56a0
+is unchanged by LZX compression:190770971 logical/40931328 physical bytes.
+Before joining,closed historical indexes3175514b and796984e0 were compressed
+with full SHA equality,respectivelybd602e66ac05e78911dd89dd1f0628525a51ae2ccb7ab7133b876d6d723fed3d
+anddcca1c764f991591ab6ddcdaa097acabf5413a3f9ef5990e2e387e6606dafd56c.
+Observed D:free521347072 before join/479936512 after proposal compression.
+No evidence deleted;new proposal is validated,not selected/canonically published.
+
 Keep scrollbar-registration-drift-initial-20261023 log/stderr(original guard
 failure;stderr SHAea5d2ece33c6b0e0620ae643dc241dd34331077045593ef6b9d7c18af1b47c4f).
 Keep scrollbar-registration-integration-20261023 log/stderr:five owning assertions

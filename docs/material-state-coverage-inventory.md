@@ -2,6 +2,26 @@
 
 ## Current audit pointer — October23
 
+- October23 sixteen scrollbar localPaint children now join validated proposal
+  eb30019d906e601dfdaf10cd7ed8a9c9de141764e92316506b5ebfb2e0a392ac,
+  exact successor ofeb8ca85a. Existing generic proposal API was used;no new join
+  framework or browser capture. Current owning assertion replays the retained16
+  observations exactly before joining;all original case/evidence/remaining-work
+  bytes recover after removing only those16 children. Full loader authenticates
+  2311 cases/16222 dependencies,all partial/current-rendering unverified. Accepted
+  pointer2035d379 is unchanged. Join log SHA
+  4fc4c2d29f1b3148056f1f11fd148a569cb2fc87f501f0c7b3aa4dbb8c0480b2.
+  Existing popup-depth reader explicitly accepts only originaleb8 and exactnew
+  eb30019d;new selection removes16 children to recover completeeb8,then original
+  133 children recover complete82191909. Unknown review and changed suite source
+  reject. New full reader validation passes;original old-review assertion also
+  passes27886.4559ms. Reader log SHA
+  3893a9de6d1c83f04e84a052ca7d855aab483d78f0048db9e35de7e7573bdc9f;
+  reader source75962b4b. Not yet named-launcher/general-runner selected or canonical.
+  Next add explicit successor selection preserving old flags,then verify coherent
+  source census before justified export/conservation/cold/import. No whole-case
+  completion or changed final gate follows.
+
 - October23 scrollbar supplements are now registered in working producer:
   192 findings/264 proofs/936 source paths. Actual production functions read all
   936 unique paths,find all264 proof targets,and preserve the complete prior261
