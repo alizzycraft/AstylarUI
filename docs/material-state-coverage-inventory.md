@@ -2,6 +2,17 @@
 
 ## Current audit pointer — October23
 
+- Coherent Table export is LIVE:session88432,parent3048/child21948,source freeze
+  c987111a,explicit --table-label-paint/exact075fa58b. Named invocation preflight
+  passed;no competing exporter was live before launch. Retain separate
+  table-label-coherent-canonical-export-20261023 stdout/stderr. Keep945 source
+  inputs/269 proofs frozen. Accepted62c7 remains unchanged pending terminal export,
+  full conservation,independent cold check and verified import. D:free565223424
+  before launch;recheck before publication. Read-only List backlog triage found
+  prior label/container/corner investigations already recorded below;do not repeat
+  their retained crop attempts or infer label paint from container scores. No
+  new finding/capture/proposal or coverage promotion was made by that triage.
+
 - Table registration/source census now verified:working269 proofs/945 paths adds
   exactly4/9 to accepted265/936. Complete accepted producer757ae118 recovers from
   currentc61c93b2 by deleting only the four proof/nine path entries. Actual production
