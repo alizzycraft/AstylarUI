@@ -2,6 +2,22 @@
 
 ## Current audit pointer — October23
 
+- Next Table integration boundary now has a strict owning reader,without changing
+  accepted scrollbar sources. New table-label-case-review-source accepts only
+  exact075fa58b;removing40 label children and restoring their prior pending paint
+  dispositions recovers completeeb30019d. Existing predecessor reader/receipts stay
+  unchanged. New focused assertion authenticates16347 dependencies/all2311 cases,
+  preserves accepted pointer,partial/unverified statuses and rejects unknown review
+  and verifier-source drift. Exact captured state population is focus/hover/held/
+  activate/activate-leave;two initial guessed state allowlists failed and remain
+  recorded,not passes. Final1/1 passes26140.6862ms,log
+  table-label-successor-reader-exact-states-20261023 SHA
+  83c7ad2080cd01aa2a402f7002cace60ef46fafdfd858962fd3c1ed80a57797c.
+  Both new files remain outside accepted936 paths/265 proofs. Next:register the
+  existing Table proof and this exact reader,with complete prior producer/source
+  conservation and explicit selection;batch before another canonical milestone.
+  No export/current-rendering/inspection completion is implied by this reader.
+
 - Accepted canonical/compact generation is now62c7b7525f2265d0c8841ba4a3a65ef5c6bb210776b95b9d954bc24b39b6ae35,
   indexSHA1fd9520371bb2367bac8a05b5ba718e0f1a02ece4743b4e118f2298db60264f8.
   Full conservation and independent cold comparison passed before isolated import;
