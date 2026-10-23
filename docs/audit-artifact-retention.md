@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+scrollbar-coherent-canonical-export-20261023 log/stderr are LIVE(session15860,
+childPID5948). Do not compress,remove,hash as final or mistake quiet build-audit
+output for terminal state. Source inputs freeze atbd81343c;accepted2035d379 stays
+preserved pending full conservation/cold/import. Reuse accepted80-section digests
+from authenticated popup-depth-full-section-comparison-20261023.log SHA
+c1e2d9f8aed09de25e6b5433370b7880fe69fe9c78c0f493728c1bd7d9ce3022;
+that saves old-payload parsing,not new-candidate authentication or comparison.
+
 Keep scrollbar-export-selection-20261023 log/empty stderr(terminal0,4/4),log SHA
 e97883d611434848062dd57ce18f0bce33a6d45e778984688167169f4944d7ac.
 Keep scrollbar-selection-census-integration-20261023 log/empty stderr(terminal0,

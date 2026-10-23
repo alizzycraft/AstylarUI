@@ -2,6 +2,20 @@
 
 ## Current audit pointer — October23
 
+- October23 coherent scrollbar export is LIVE:session15860,childPID5948,
+  source freezebd81343c,explicit --scrollbar-paint/exacteb30019d. Invocation
+  preflight and clean task-owned source status checked;D:free476078080 bytes
+  before launch. Progress reached build-audit;process CPU/working-set observations
+  confirm execution. Keep936 registered inputs frozen and poll this handle,not a
+  replacement run. Log scrollbar-coherent-canonical-export-20261023/stderr are
+  live,not terminal evidence. Accepted2035d379/package files remain unchanged;
+  no export/validation/current-rendering acceptance yet. Once terminal,authenticate
+  and compare every candidate section against accepted baseline. Existing complete
+  comparison logc1e2d9f8 authenticates all80 accepted2035 section digests;reuse that
+  immutable baseline rather than reparsing the old2.34GB package. New candidate
+  still requires complete payload authentication/section conservation,independent
+  cold comparison and verified import. All2311 cases remain partial/unverified.
+
 - October23 explicit --scrollbar-paint export selection now chooses exacteb30019d
   through the existing current-ancestry launcher and actual runner factory. All
   seven conflicting older flags reject;old defaults/selections remain unchanged.
