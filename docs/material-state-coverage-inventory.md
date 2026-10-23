@@ -2,6 +2,16 @@
 
 ## Current audit pointer — October23
 
+- Candidate structural extraction45156 is terminal0:complete compressed/decoded
+  hashes authenticate62c7,all936 source entries and265 proof entries exactly match
+  the retained independently reconstructed working vectors. Extraction reuses
+  the existing selected-section reader unchanged and retains coverage plus48
+  complete control rows for the remaining conservation checks. Log
+  scrollbar-candidate-structural-extraction-20261023 SHA
+  ad0c08daa799fc86edc64337e185f8b66abee3d17a12565fd68527edd76a1ddb.
+  Source/proof vector conservation is proven;coverage/derived hashes,cold and
+  import remain pending. Do not rerun extraction absent relevant drift.
+
 - Scrollbar coherent export4598 is now terminal0;do not poll/restart it.
   Candidate62c7b7525f2265d0c8841ba4a3a65ef5c6bb210776b95b9d954bc24b39b6ae35
   passed producer validation and evidence-session verification before writing.
