@@ -2,6 +2,38 @@
 
 ## Current audit pointer — October23
 
+- Accepted canonical/compact generation is now62c7b7525f2265d0c8841ba4a3a65ef5c6bb210776b95b9d954bc24b39b6ae35,
+  indexSHA1fd9520371bb2367bac8a05b5ba718e0f1a02ece4743b4e118f2298db60264f8.
+  Full conservation and independent cold comparison passed before isolated import;
+  isolated import53471/full verification terminal0,logSHA
+  f88dc5bb657595bc91bd6a8fd0aa5f79be56b91b52d6aafe481d0105e6836447.
+  CopyFile then streaming-copy attempts failed ENOSPC without pointer advancement;
+  retain both logs and partial index(59158ab8),now outside the generation. After
+  additional verified historical-index compression,recovered streaming copy86792
+  authenticated all86 files,verified the full store,then reused existing importer
+  to advance pointer and verified again. Log scrollbar-accepted-import-recovered-
+  20261023 records success. Both isolated/main85 index/shard files were compressed
+  with every before/after SHA unchanged;whole-store verification passes afterward.
+  Counts8483 scalar groups/192 findings/39904 controls/389202 occurrences/0 unresolved
+  scalar attributions do NOT establish equivalence. All2311 cases remain partial,
+  inspectionComplete/currentRenderingAccepted false. Prior2035/originals/failures
+  remain retained. Next:adopt/register already validated Table proposal075fa58b
+  through the existing reader/inventory boundary,then continue unresolved coverage.
+  No renderer/fixture fixes or acceptance changes;all final gates remain required.
+
+- Independent cold verification83533 is terminal0. Exact --scrollbar-paint --check
+  completed validation,evidence-session rehash and canonical comparison against62c7.
+  COLD=1 yielded2 collectors/10 memory hits/0 disk hits/0 invalidations;
+  17413 files/2148578504 bytes read and independently rehashed. Complete elapsed
+  2638003.4855ms. Stdout SHA
+  acf4e9aa944e75c1dc3dc9cdfb333ccc45c3490f427da69fda560d235881039b;
+  stderr(progress only)SHA
+  c5ba7eaae16e7775600f24779c1d44bf140c96cb977e27d622d9e6504bd240e7.
+  Logs scrollbar-independent-cold-check-20261023. Isolated import53471 now runs
+  existing importFindings/verifyFindings at scrollbar-import-working-20261023;
+  accepted2035d379 stays unchanged until isolated and copied-store verification.
+  Cold package reproducibility is not current rendering/whole-case acceptance.
+
 - Scrollbar candidate62c7 full conservation is now proven,not merely counted.
   Existing accepted index4ac21acb authenticates all2311 complete prior cases;
   removing exactly16 new scrollbar children recovers them byte-structurally,

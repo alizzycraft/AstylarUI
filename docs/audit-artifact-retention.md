@@ -3909,6 +3909,26 @@ old run is unnecessary or that the input audit is complete.
 
 ## October23 scrollbar conservation working extract
 
+Publication recovery:CopyFile ENOSPC left no installed file;subsequent streaming
+copy ENOSPC left206962688 bytes of index,now preserved at
+`scrollbar-accepted-import-streaming-20261023.partial-index.json`,SHA
+59158ab8ee4fa927eae405d970acaf4e2a6dcae59d7d6c59da3670381f0be3d2.
+Both original failure logs remain. No failed attempt advanced current.json.
+The partial file and three closed historical indexes were compressed in place
+with complete hash equality. Historical generation/hash pairs:
+
+- 8259d4f708e5ffec9a55f629674cdd2c4811c56937fab36b1004207bde2b6f6c /84421c53d880bb3c5241888e61859accf883acb58e1c4e3d2d9a747ea601fb3a
+- 90467e5a8a17a1b51f374c21aec44e1ef82734db34cd394c3abf2443e754936c /681dba6ca394189bbe7dd62604be466bcabd77cd24101f202fd6c170a7ee20cc
+- b6610e71ef744b5d589d07c18e562df9927202a3adb7a5b31acb334b100839f2 /d0e7623de72caddf94446cf4de1396975e59c9cf1e0d9a0865f8d5b0a8761bce
+
+Observed D:free803000320 before recovered copy. Recovered copy/full verification
+and existing import reuse succeeded before pointer advancement. Both isolated
+and accepted62c7 index+84 shards were LZX-compressed with all85 complete hashes
+unchanged per store;existing verifyFindings passes after each compression.
+Observed D:free570916864 after accepted-store compression. No originals/failures
+deleted. Isolated store and working extract remain reusable until publication
+handoff/reference closure;do not delete merely because accepted import exists.
+
 Pending-import headroom:two closed historical index.json files were LZX-compressed
 in place,with complete SHA256 equality before/after. Generationc2a58b7c35fed299da02fe92043d58f98102d3724ce69070bc4ef6aaa2c744e8:
 191043631 logical/39829504 physical bytes,SHA
