@@ -2,6 +2,16 @@
 
 ## Current audit pointer — October23
 
+- Corrected coherent scrollbar export is LIVE:session4598,childPID15956,
+  source freezec13181f6,explicit --scrollbar-paint/exacteb30019d. Separate logs
+  scrollbar-coherent-canonical-export-reconciled-20261023/stderr;progress reached
+  build-audit. Poll this handle,not closed15860. Keep936 inputs frozen;the shared
+  historical-reader repair and source census f3664e0c/265 proofs passed before
+  retry. D:free434778112 after launch. Accepted2035d379 stays unchanged pending
+  terminal success,full conservation,independent cold comparison and verified
+  import. Original failure9531c645 remains separately retained. Table standalone
+  diagnostics are outside this frozen batch;all2311 cases remain partial.
+
 - October23 initial scrollbar export is TERMINAL1(session15860/child5948 closed),
   not live:collector collectHeldContentPaintInputs reached an older raw sort-suite
   guard in readRetainedSortFocusSource. Actual6ea5ba46 versus expected9fafec85

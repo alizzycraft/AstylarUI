@@ -2,6 +2,11 @@
 
 ## Current versus historical evidence
 
+scrollbar-coherent-canonical-export-reconciled-20261023 log/stderr are LIVE:
+session4598/child15956,source freezec13181f6. Do not compress/remove/treat as final
+until authoritative terminal state. Original scrollbar-coherent-canonical-export
+failure stays separate;never overwrite or restart a live retry on quiet output.
+
 Initial scrollbar-coherent-canonical-export-20261023 is CLOSED TERMINAL1,not live.
 Keep its empty stdout and failure/progress stderr SHA
 9531c645e84d16fa038e01e458c6b16112663f67582a23bf526d4a3591c13438.
