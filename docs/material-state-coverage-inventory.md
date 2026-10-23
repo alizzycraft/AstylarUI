@@ -2,6 +2,23 @@
 
 ## Current audit pointer — October23
 
+- Further focus reuse prepared in the same standalone join/test,not a new report
+  layer:16 disabled checkbox/slider anchors have39 exact raw action records with
+  measured owner strings (15 keyboard/16 pointer/eight held-slider). Each full
+  source observation matches its authenticated original JSONL record. Additional
+  modes stay supplementary;BODY/CANVAS/control owner differences are retained,
+  not normalized to equality or interpreted as complete descendant association.
+  Removing only16 proposed children/dispositions recovers complete6c39 predecessor.
+  The original113-case test and new disabled test pass2/2 in12901.5546ms. Initial
+  expected32 records missed seven retained keyboard probes;strict three-log
+  membership proves39 without changing any captured values. Fifty other raw-control
+  anchors lacking owner fields are not inferred. Eight Menu supplements remain
+  pending because they record different supplementary actions,not exact configured
+  open-hover-content actions. No new proposal save,source/proof registration or
+  canonical export yet. Accepted f199 and pending6c39 stay unchanged. Next inspect
+  genuinely missing links in other obligation planes,then save a coherent batch;
+  do not recapture these disabled/control observations.
+
 - Pending pointer-focus successor6c39adadf48ddcfd2a2b80f732b4d09114e2c8ed53810cf61786026b99253e40
   is saved through the existing store API and validates17481 dependencies/all2311
   partial cases through the existing Radio/caret receipt reader. Adds only113
