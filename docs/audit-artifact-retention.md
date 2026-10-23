@@ -3909,6 +3909,29 @@ old run is unnecessary or that the input audit is complete.
 
 ## October23 scrollbar conservation working extract
 
+Radio proposal save recovery:initial existing atomic writer failed ENOSPC before
+publication,leaving zero-byte
+`working-audit/proposals/00deb2bd42bed77e96afd0d22234456450044792b0faa84a5660d7dd4045a826.json.35764.tmp`.
+Retain it and radio-label-regions-case-obligation-join-20261023 stderr. No live
+cold/export session existed during recovery. Five closed historical index files
+were LZX-compressed,with complete index/payload/shard verifyFindings checks before
+and after,unchanged complete index SHA values and historical counts:
+
+- f663c88ea2d75257049f26fe33add569a2fcb7529395f291a2db966db7489948 /bc481df111dc424d221d2f610b53e6f6008a3e5710ddab7a205c12a56854787c
+- 86961b43b2c7b811b883b5945466fee14e6e1de41ff117cd7574def3a43ff5c1 /ec90ff41e99dcb1223bf02422516aca796b34ec02ed787f5eb62e64793935fe7
+- b246c590c7a4a19228c7ad97034ee44f69e7c1f63323b0cc2ce108d2abc2d4d8 /1bb855030b25dc58fd28b0e92351aaae390fad4d9b86fea38cb30e2b8c7fa286
+- 14affae195adcdab430dfe73eccfb725614767c4e86bb91bf4b5e4d3f6652ec5 /9e6f15412ea88455ff482b6f24891c02632574afbec8e5503459f8c10da1b9a4
+- a81eef01473d3281dc19390f6fd8de458b79b6f7647b5a4c72265711bbc7257b /fc451a28338db854749b4aee1f7a47c525d05a63259a20c0ef61f01b3aa24e07
+
+All retain8483 scalar groups/39904 controls/389202 occurrences/0 unresolved;
+historical finding counts159/159/158/157/157. D:free377389056→738922496 before
+retry. f663 was excluded while cold was live;now closed,its content hashes stay
+unchanged. Successful retry saves the exact originally intended00deb digest,
+validates16519 dependencies and complete predecessor recovery. Proposal complete
+fileSHA1bfcfbea6162bdc1964b5d6463d3944477cbb381f041d85fd34fab75eb06df55
+unchanged after LZX:192519122 logical/41222144 physical bytes. Free697692160
+afterward. No original/failure evidence deleted,pointer advanced or case accepted.
+
 Table publication completed after cold/conservation:isolated db04feee store has
 index2342986e44cc2100ea7ec851c7ca865dc6bc888347a5cdbfd72e974042cfbc7e and84
 shards. All85 files were LZX-compressed with individual complete hashes unchanged;

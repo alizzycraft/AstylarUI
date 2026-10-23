@@ -2,6 +2,25 @@
 
 ## Current audit pointer — October23
 
+- Pending Radio proposal00deb2bd42bed77e96afd0d22234456450044792b0faa84a5660d7dd4045a826
+  extends exact accepted Table review075fa58b using existing proposal/loader APIs.
+  Adds56 retainedRadioLabelRegionPaint children and12 retainedRadioLabelBoundsGap
+  children. Only56 paint dispositions move pending→partial;static12 stay pending.
+  All2311 case statuses,other fields and remaining work preserve:remove68 children
+  and restore56 prior paint dispositions to recover complete075fa58b digest.
+  Existing Table reader validates16519 dependencies;no new reader/export selector
+  or canonical rebuild. Accepted db04 pointer unchanged. Join recovered log
+  cc2512f76681fdaf2f067a901cebce89dfc12e21e90750785725be05adfc4297,
+  terminal0/empty stderr. Initial save ENOSPC retained as failure plus zero-byte
+  00deb2bd...json.35764.tmp;retry proves exactly the same intended review digest.
+  Complete proposal fileSHA1bfcfbea6162bdc1964b5d6463d3944477cbb381f041d85fd34fab75eb06df55,
+  192519122 logical/41222144 physical bytes after unchanged-hash compression.
+  No isolated-glyph/ring/ripple/current rendering or case-completion inference.
+  Next:batch further genuinely missing evidence joins,checking existing configured
+  Input caret pixel evidence before any new capture. Radio static bounds remain
+  an actual measurement gap,not permission to infer boxes from styles. Publication
+  transport remains pending;do not repeat unchanged push attempts without new evidence.
+
 - Radio regional paint now has an owning regression outside accepted945 inputs:
   radio-retained-label-paint.spec authenticates original report/checkpoints,112 PNG
   and tree receipts,exact56 interaction cases/112 owner-ID bounds and both complete
