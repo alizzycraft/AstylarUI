@@ -203,7 +203,7 @@ export function restorePopupDepthTabsHelper(source) {
 }
 
 export function restoreRadioCaretExportSource(source, kind) {
-  let text = source.toString().replaceAll('\r\n', '\n');
+  let text = restoreRetainedFocusExportSource(source, kind);
   if (kind === 'case' || !text.includes('radioCaretPaint')) return text;
   const digest = '6889b546f95572c1df93b4c598634b3ad3565553bc69a99ff2a9e1c6b791590c';
   const remove = addition => {
@@ -291,4 +291,29 @@ export function restoreRadioCaretProducer(source) {
     prior = prior.slice(0,start) + prior.slice(end);
   assert.equal(hash(prior), 'c61c93b222f0c63d2f34a16da3a75ece660060342bc33ac610502c74c777d4a6');
   return prior;
+}
+
+export function restoreRetainedFocusExportSource(source, kind) {
+  let text=source.toString().replaceAll('\r\n','\n');
+  if(kind==='case'||!text.includes('retainedFocus'))return text;
+  const digest='aeb1ef1452d65ab53677088ee2944bdf453a7b0d2e0e9f6fed0f987a4e3f4a36';
+  const remove=addition=>{assert.equal(text.split(addition).length,2);text=text.replace(addition,'');};
+  if(kind==='runner'){
+    remove("import { retainedFocusObservationReview, createRetainedFocusReviewReader } from './join-material-retained-pointer-focus.mjs';\n");
+    remove('    const finalReaderFactory = options.caseObligationReviewSha256===retainedFocusObservationReview ? createRetainedFocusReviewReader : selectedReaderFactory;\n');
+    assert.equal(text.split('const applicability=finalReaderFactory?.').length,2);
+    text=text.replace('const applicability=finalReaderFactory?.','const applicability=selectedReaderFactory?.');
+    assert.equal(hash(text),'cf8de010e0545bb2a37f5cd482f15a9eb5b377d19d093b107f72b965a87c9c52');
+  }else{
+    assert.equal(kind,'launcher');
+    for(const addition of [
+      "const retainedFocus = rawRequested.includes('--retained-focus');\n",
+      "assert.ok(!(retainedFocus && (staticAx || cardInputs || expansionSemantics || stepperInputs || tabsMenuSheet || staticSemanticInputs || popupDepthInputs || scrollbarPaint || tableLabelPaint || radioCaretPaint)), 'Choose one case-review supplement');\n",
+      ", '--retained-focus'",'|--retained-focus',
+      `if (retainedFocus) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/${digest}.json';\n`,
+      `if (retainedFocus) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=${digest}';\n`,
+    ])remove(addition);
+    assert.equal(hash(text),'e0085ac574c765b8c22dadb81a4817e195e8d79da819597fdf7539954892d432');
+  }
+  return text;
 }

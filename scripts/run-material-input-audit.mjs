@@ -19,6 +19,7 @@ import { popupDepthInputsReview, createPopupDepthReviewReader } from '../tests/m
 import { scrollbarPaintInputsReview } from '../tests/material-parity/popup-depth-case-review-source.mjs';
 import { tableLabelPaintReview, createTableLabelReviewReader } from '../tests/material-parity/table-label-case-review-source.mjs';
 import { radioCaretPaintReview, createRadioCaretReviewReader } from '../tests/material-parity/radio-caret-case-review-source.mjs';
+import { retainedFocusObservationReview, createRetainedFocusReviewReader } from './join-material-retained-pointer-focus.mjs';
 import { createTextBackingReviewReader, textBackingRetainedReview, createDividerReviewedBoundariesReader, dividerReviewedBoundariesReview, inactiveParagraphInputsReview, filledFieldStructureReview, chipPaintReview, chipGraphicReview, controlInputReview, dividerPropertyContextReview, sharedButtonTouchReview, passiveStaticAxReview, cardInputsReview, expansionSemanticsReview, stepperInputsReview, tabsMenuSheetReview, staticSemanticInputsReview } from '../tests/material-parity/text-backing-case-review-source.mjs';
 
 const root = process.cwd();
@@ -46,7 +47,8 @@ const { audit, errors } = withAuditEvidenceSession(() => {
       ? createDividerReviewedBoundariesReader
       : options.caseObligationReviewSha256===textBackingRetainedReview ? createTextBackingReviewReader : undefined;
     const selectedReaderFactory = options.caseObligationReviewSha256===radioCaretPaintReview ? createRadioCaretReviewReader : readerFactory;
-    const applicability=selectedReaderFactory?.({root,read:auditReadFileSync,reviewSha256:options.caseObligationReviewSha256});
+    const finalReaderFactory = options.caseObligationReviewSha256===retainedFocusObservationReview ? createRetainedFocusReviewReader : selectedReaderFactory;
+    const applicability=finalReaderFactory?.({root,read:auditReadFileSync,reviewSha256:options.caseObligationReviewSha256});
     audit.coverage = attachCaseObligationCoverage(audit.coverage, options.caseObligationReview,
       options.caseObligationReviewSha256, { root, read: applicability?.read ?? auditReadFileSync });
     if(applicability)audit.coverage.inspectionEvidence.sourceApplicability=applicability.sourceApplicability;

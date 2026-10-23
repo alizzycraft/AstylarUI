@@ -2,6 +2,18 @@
 
 ## Current audit pointer — October23
 
+- Explicit --retained-focus now selects onlyaeb1ef14 in the existing launcher;
+  actual exporter routes that exact digest to createRetainedFocusReviewReader.
+  Ten older supplement invocations/defaults preserve;all conflicting pairs reject.
+  New guarded reversal recovers complete accepted6f40 runner/launcher bytes and
+  rejects extra drift. Earlier Table helper conservation removes only the newer
+  adapter before its unchanged whole-source comparison. Six retained-focus/Radio/
+  Table/scrollbar/popup/static selector checks pass6/6 in2628.3236ms. No reader
+  receipt replacement,new capture or accepted f199 pointer change. Source/proof
+  inventory remains accepted953/273,not newly registered just by selector preflight.
+  Next add the standalone focus join/test proofs and paths,conserve the complete
+  prior producer/vectors and reconcile source changes before one full milestone.
+
 - Saved combined focus successor
   aeb1ef1452d65ab53677088ee2944bdf453a7b0d2e0e9f6fed0f987a4e3f4a36 adds25
   bounded focus children to pending6c39,with all113 earlier pointer links intact.

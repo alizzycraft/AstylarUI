@@ -2,6 +2,9 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { spawnSync, execFileSync } from 'node:child_process';
+import ts from 'typescript';
+import { restoreRetainedFocusExportSource } from './static-semantic-registration.mjs';
 import { loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
 import { joinRetainedPointerFocus, pointerFocusCapture, pointerFocusPredecessor,
   joinRetainedFocusObservationBatch, disabledFocusPredecessor,
@@ -81,4 +84,35 @@ test('disabled and AX focus reuse bind exact retained observations without widen
   assert.throws(() => joinRetainedFocusObservationBatch(predecessor,
     file => Buffer.concat([readFileSync(file),Buffer.from(' ')])));
   assert.ok(predecessor.groups.every(g => !g.obligations.programmaticFocus.retainedDisabledFocusOwners));
+});
+
+test('retained focus selection preserves prior sources invocations and actual reader routing', () => {
+  const launcher='scripts/export-material-input-audit-current-ancestry.mjs';
+  const launch=flags=>spawnSync(process.execPath,[launcher,'--dry-run',...flags],{encoding:'utf8',windowsHide:true});
+  const selected=launch(['--retained-focus']);assert.equal(selected.status,0,selected.stderr);
+  const invocation=JSON.parse(selected.stdout);
+  assert.ok(invocation.args.includes(`--case-obligation-review-sha256=${retainedFocusObservationReview}`));
+  assert.ok(invocation.args.includes(`--case-obligation-review=artifacts/material-parity/working-audit/proposals/${retainedFocusObservationReview}.json`));
+  for(const flag of ['--static-ax','--card-inputs','--expansion-semantics','--stepper-inputs','--tabs-menu-sheet',
+    '--static-semantic-inputs','--popup-depth-inputs','--scrollbar-paint','--table-label-paint','--radio-caret-paint']){
+    const older=launch([flag]);assert.equal(older.status,0,older.stderr);
+    assert.ok(!older.stdout.includes(retainedFocusObservationReview));
+    const combined=launch([flag,'--retained-focus']);assert.notEqual(combined.status,0);
+    assert.match(combined.stderr,/Choose one case-review supplement/);
+  }
+  const ordinary=launch([]);assert.equal(ordinary.status,0);assert.ok(!ordinary.stdout.includes(retainedFocusObservationReview));
+  const runnerFile='scripts/run-material-input-audit.mjs',source=readFileSync(runnerFile,'utf8');
+  const ast=ts.createSourceFile(runnerFile,source,99,true),declarations=[];
+  const visit=node=>{if(ts.isVariableDeclaration(node)&&node.name.getText(ast)==='finalReaderFactory')declarations.push(node);ts.forEachChild(node,visit);};
+  visit(ast);assert.equal(declarations.length,1);
+  const choose=new Function('options','retainedFocusObservationReview','createRetainedFocusReviewReader','selectedReaderFactory',
+    `return ${declarations[0].initializer.getText(ast)};`),older=()=>{};
+  assert.equal(choose({caseObligationReviewSha256:retainedFocusObservationReview},retainedFocusObservationReview,createRetainedFocusReviewReader,older),createRetainedFocusReviewReader);
+  assert.equal(choose({caseObligationReviewSha256:'0'.repeat(64)},retainedFocusObservationReview,createRetainedFocusReviewReader,older),older);
+  for(const[file,kind]of[[runnerFile,'runner'],[launcher,'launcher']]){
+    const text=readFileSync(file,'utf8');
+    const prior=execFileSync('git',['show',`6f40e1e0:${file}`],{encoding:'utf8'}).replaceAll('\r\n','\n');
+    assert.equal(restoreRetainedFocusExportSource(text,kind),prior);
+    assert.throws(()=>restoreRetainedFocusExportSource(text+'\n// drift\n',kind));
+  }
 });

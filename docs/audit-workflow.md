@@ -51,6 +51,15 @@ index for current counts and pending integration work, not the figures above.
 
 ## One investigation per question
 
+The pending focus successor has explicit `--retained-focus` (also `--dry-run` or
+`--check`) on the existing launcher,selecting exactaeb1ef14 only. Eleven supplement
+flags are mutually exclusive;older/default selections preserve. Actual exporter
+routing uses the bounded focus reader only for that digest. Six selector/source
+conservation checks pass,including whole accepted runner/launcher recovery. This
+does not register new source/proof inventories or publish a canonical generation.
+Reconcile against accepted953/273 before export/conservation/cold/import;all2311
+cases remain partial/current-rendering unverified and original final gates apply.
+
 The Radio/caret batch is registered at273 proofs/953 unique paths,adding four/eight
 to the complete accepted269/945 population. Existing caret proof is reused,not
 duplicated. Seven changed prior source paths are bounded selector/restoration/
