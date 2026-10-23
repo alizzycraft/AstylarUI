@@ -2,6 +2,24 @@
 
 ## Current audit pointer — October23
 
+- Scrollbar candidate62c7 full conservation is now proven,not merely counted.
+  Existing accepted index4ac21acb authenticates all2311 complete prior cases;
+  removing exactly16 new scrollbar children recovers them byte-structurally,
+  including remaining work. All base coverage/other inspection metadata conserve;
+  all16186 prior dependency receipts remain plus36 authenticated additions.
+  Candidate sourceApplicability exactly matches the actual selected reader.
+  All48 complete prior control rows authenticate through accepted shard/full-row
+  hashes after reversing ONLY the normalization source receipt. This independently
+  derives48 discrepancy-proof hashes;existing motion collector derives the single
+  changed report hash. All147 changed leaves reconcile as98 direct receipts,
+  48 proof hashes and one report hash. Log scrollbar-canonical-conservation-20261023
+  SHA fc733f073ed68c32fe4801fbe0fde1eb8ee02242d906718206eb1697c7904c8f,
+  terminal0/empty stderr. Source/proof vectors and72 unchanged sections were
+  independently authenticated above. No statuses/criteria/renderer inputs changed.
+  Independent cold --scrollbar-paint --check is now launched with COLD=1/PROGRESS=1;
+  retain scrollbar-independent-cold-check-20261023 stdout/stderr. Do not import or
+  claim acceptance before terminal success;accepted2035d379 remains unchanged.
+
 - Candidate structural extraction45156 is terminal0:complete compressed/decoded
   hashes authenticate62c7,all936 source entries and265 proof entries exactly match
   the retained independently reconstructed working vectors. Extraction reuses
