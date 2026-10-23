@@ -2,6 +2,22 @@
 
 ## Current audit pointer — October23
 
+- October23 source/export preflight identifies exactly three standalone scrollbar
+  assertions missing from accepted261-proof inventory;no new source finding or
+  renderer change is needed. Tested restoreScrollbarSupplementSuite in the
+  existing historical-registration helper removes ONLY those three complete
+  additive tests and recovers whole accepted suite9fafec85d890122fa1ad2bb2ac712975b7982c603c28f036d534f875aab0effa.
+  Current suitea5d6f935 and helper1c4d33d3 are explicit pending source transitions;
+  accepted helper remainseececdf8. Changed original assertion,supplement name and
+  extra-source drift all reject;historical input is idempotent. Five owning
+  integration assertions pass6460.9155ms;scrollbar-suite-conservation-20261023
+  log SHA6bc0608fc489c0c1f2209f0aefba317ca43cae46dc4d517871d84b28ea28dd9a.
+  This establishes the bounded source restoration,not automatic reader selection
+  or current canonical equality. Keep accepted2035d379 frozen. Register the three
+  proofs,evidence paths and exact reader transitions together at the next coherent
+  batch,then run conservation/cold/import;do not export just this metadata.
+  Original scope,remaining case work and acceptance gates are unchanged.
+
 - October23 exact scrollbar evidence cross-reference now covers16 configured
   timepicker endpoints:open and open-scroll in light/dark/contrast/custom at
   desktop-dpr1/desktop-dpr2. All32 screenshot receipts and both tree receipts per
@@ -20,7 +36,7 @@
   This is standalone exact-case evidence,pending the next coherent source/proof
   registration and coverage integration;accepted2035d379 is unchanged. No new
   renderer cause,current raster pass or full-case closure follows. Next prioritize
-  other genuinely unjoined overlay/input paint obligations;do not reopen these
+  other genuinely unjoined overlay/input paint obligations;do not reopen
   those16 endpoint membership/shape/source questions absent changed inputs.
 
 - October23 scrollbar clipping/projection staleness resolved at the inspected

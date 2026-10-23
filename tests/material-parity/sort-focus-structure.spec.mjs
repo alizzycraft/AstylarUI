@@ -3402,11 +3402,24 @@ test('retained scrollbar constructor wiring preserves current CSS geometry and p
     assert.notEqual(wiring(expected.replace(before, after)), expected, `reject changed caller: ${before}`);
   }
   assert.throws(() => wiring(emitted.outputText.replace('new AstylarScrollRuntime(', 'new WrongRuntime(')));
+  const { restoreScrollbarSupplementSuite } = await import('./static-semantic-registration.mjs');
+  const suiteFile = 'tests/material-parity/sort-focus-structure.spec.mjs';
+  const suiteSource = readFileSync(suiteFile, 'utf8');
+  const priorSuite = restoreScrollbarSupplementSuite(suiteSource);
+  assert.equal(digest(priorSuite), '9fafec85d890122fa1ad2bb2ac712975b7982c603c28f036d534f875aab0effa');
+  assert.equal(restoreScrollbarSupplementSuite(priorSuite), priorSuite);
+  for (const altered of [suiteSource + '\n// drift',
+    suiteSource.replace('candidate painted thumb currently has no pointer scrolling behavior', 'changed original assertion'),
+    suiteSource.replace('retained scrollbar clipping and projection implementations', 'changed supplemental assertion')]) {
+    assert.notEqual(altered, suiteSource);
+    assert.throws(() => restoreScrollbarSupplementSuite(altered));
+  }
   t.diagnostic(JSON.stringify({ scrollbarConstructorApplicability: {
     sourceFile, sourceSha256: digest(source), installedFile, installedSha256: digest(installed),
     mapFile, mapSha256: digest(mapBytes), capturedModuleSha256: digest(captured[0]),
     constructorSha256: digest(expected), typescript: ts.version, esbuild: esbuildVersion,
-    mutationControls: mutations.length + 1, acceptance: false,
+    mutationControls: mutations.length + 1, sourceConservationControls: 3,
+    acceptedSuiteSha256: digest(priorSuite), acceptance: false,
     scope: 'constructor callback/member/projection wiring only; callback implementations, reconciliation timing, other owners and current rendering remain separate',
   } }));
 });

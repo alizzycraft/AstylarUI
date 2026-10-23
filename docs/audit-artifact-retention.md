@@ -2,6 +2,14 @@
 
 ## Current versus historical evidence
 
+Keep scrollbar-suite-conservation-20261023 log/empty stderr(terminal0,5/5),log SHA
+6bc0608fc489c0c1f2209f0aefba317ca43cae46dc4d517871d84b28ea28dd9a.
+It authenticates complete accepted suite recovery after removing exactly three
+additive scrollbar tests,with original/supplement/extra-source drift controls.
+No snapshot,proposal or capture was generated. Current helper/suite transitions
+remain pending explicit coherent registration/reader integration,not a waiver
+of original dependency receipts or permission to replace accepted package bytes.
+
 Keep scrollbar-exact-case-evidence-20261023 and scrollbar-exact-case-integration-
 20261023 log/empty stderr pairs(terminal0,1/1 and5/5). SHA256 logs respectively
 2ebb6e3b5b170d01cbb98ea584fd47fd0a1d04aab2fcb9d0e5e8cc60575982d5 and

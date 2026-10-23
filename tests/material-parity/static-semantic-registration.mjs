@@ -12,6 +12,28 @@ export function retainedStaticSemanticPopulation(current) {
   assert.equal(hash(JSON.stringify(prior)), '13c86852010dbff5153a44c53756eff3c59344c66b5391b9a2b3f2430c22c064');
   return prior;
 }
+
+// Source applicability for the three standalone scrollbar supplements only.
+// This does not publish their proof inventory or rewrite any retained capture.
+export function restoreScrollbarSupplementSuite(source) {
+  const text = source.toString().replaceAll('\r\n', '\n');
+  const priorHash = '9fafec85d890122fa1ad2bb2ac712975b7982c603c28f036d534f875aab0effa';
+  if (hash(text) === priorHash) return text;
+  assert.equal(hash(text), 'a5d6f935341a05ff32a8b3d6fa6c0054efae3e66f751504f2e4f8442693d4173');
+  const names = [
+    'retained scrollbar constructor wiring preserves current CSS geometry and paint owners',
+    'retained scrollbar clipping and projection implementations preserve captured method bodies',
+    'retained scrollbar paint evidence maps to exact configured open and scroll obligations',
+  ];
+  const ast = ts.createSourceFile('scrollbar-suite.mjs', text, 99, true);
+  const additions = ast.statements.filter(node => ts.isExpressionStatement(node) && ts.isCallExpression(node.expression) &&
+    names.includes(node.expression.arguments[0]?.text));
+  assert.deepEqual(additions.map(node => node.expression.arguments[0].text), names);
+  let prior = text;
+  for (const node of additions.reverse()) prior = prior.slice(0, node.getFullStart()) + prior.slice(node.end);
+  assert.equal(hash(prior), priorHash, 'Every original suite byte must conserve');
+  return prior;
+}
 export function restoreRootDepthPolicy(source) {
   const text = source.toString().replaceAll('\r\n', '\n');
   if (!text.includes('core-root-paint-depth-crosses-viewport-camera')) return text;
