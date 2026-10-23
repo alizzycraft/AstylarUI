@@ -2,6 +2,21 @@
 
 ## Current audit pointer — October23
 
+- Standalone Table owning regression now replays the newly inspected boundary:
+  table-retained-label-paint.spec.mjs is outside the live936-path/265-proof
+  scrollbar batch(no existing frozen source modified). It loads all40 exact
+  checkpoints/160 files,rechecks120 label inputs/common integer crop bounds,
+  and recomputes zero/standard-phase metrics for24 unique cohort labels.
+  Fourteen unique standard-phase strips remain below existing0.80 threshold.
+  Thirteen wrong-case/receipt/owner/font/crop controls reject. First replay failed
+  only on JS -0 versus JSON0 phase metadata;complete serialized-value comparison
+  preserves every score/threshold and physical crop,without rounding. Original
+  failure retained. Corrected1/1 passes4463.0275ms;final replay log SHA
+  c2394d66951b4a926b7f278f2e1c0b9c0cbdb070b47f0ad6de970005bd4c5e72.
+  New test raw9d366b8d;not yet canonical registration or case-child integration.
+  Existing font-authoring finding owns these unequal input observations;no new
+  core/current-rendering/whole-table claim. Keep live retry4598 inputs frozen.
+
 - Corrected coherent scrollbar export is LIVE:session4598,childPID15956,
   source freezec13181f6,explicit --scrollbar-paint/exacteb30019d. Separate logs
   scrollbar-coherent-canonical-export-reconciled-20261023/stderr;progress reached

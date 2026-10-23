@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Keep table-retained-label-paint-replay-20261023(original signed-zero serialization
+comparison failure) and table-retained-label-paint-replay-final-20261023 log/empty
+stderr pairs. Log SHA256 values respectively
+28977b4fec39c09212c9253d486155c5b55887ad5ba6b3f0783e28345d0e4a69 and
+c2394d66951b4a926b7f278f2e1c0b9c0cbdb070b47f0ad6de970005bd4c5e72.
+Final1/1 verifies40 checkpoint cases/160 files,120 label inputs,24 replayed label
+metrics and13 mutations. No new screenshot/build or synthetic scratch;source
+addition is outside the frozen scrollbar producer and pending later registration.
+
 scrollbar-coherent-canonical-export-reconciled-20261023 log/stderr are LIVE:
 session4598/child15956,source freezec13181f6. Do not compress/remove/treat as final
 until authoritative terminal state. Original scrollbar-coherent-canonical-export
