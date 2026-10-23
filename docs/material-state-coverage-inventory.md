@@ -2,6 +2,28 @@
 
 ## Current audit pointer — October23
 
+- Table export88432 is terminal0;do not poll/restart it. Candidate
+  db04feee9eb4538c138d1dc47cc114d26d7f2aa9397e281b2e4284e986497c06
+  (91622219 compressed/2341624572 decoded bytes) passed validation/session rehash
+  before writing;export stdout1758f1ed58f68f5dcb8553b8e5a7572b4dcca0ffb339d4448df641369f797398,
+  stderrbb78c41a8b3faccbbab005faafb8058ac49da267f58115c349bd153c9136670a.
+  Full-byte/80-section comparison authenticates72 identical/eight changed sections,
+  no additions/removals;findings192,summary and63-entry plan unchanged.
+  Full-section log SHA86e13d85d88ecd5dbd425cbbd32a83d9e48f81178b0a6e5cfa6f2519a12976d1.
+  Fixed-shape147 changes over14085648 entries fully reconcile as98 source receipts,
+  48 independently derived complete-control proof hashes and one derived motion
+  report. All2311 prior cases/remaining work and16222 dependency receipts preserve;
+  exactly40 Table children/disposition updates and125 authenticated dependencies
+  added. Actual selected reader applicability matches. Candidate945-source/269-proof
+  vectors exactly equal frozen baseline. Conservation log
+  table-label-canonical-conservation-20261023 SHA
+  e91413dbf1b2843e63a9ca261f1bb3bc59cadfb995f16dcc7fb7ac85966e3e32,
+  terminal0/empty stderr. No status promotion or current-rendering acceptance.
+  Independent COLD=1/PROGRESS=1 --table-label-paint --check is live(session36938,
+  authoritatively polled after launch);retain
+  table-label-independent-cold-check-20261023 stdout/stderr. Accepted62c7 remains
+  unchanged pending terminal cold success and isolated/main verified import.
+
 - Table conservation baseline prepared without another previous2.34GB decode.
   Retained936-source/265-proof/63-plan vectors yield the exact accepted62c7
   structural sectionDigests from authenticated scrollbar comparisond539e4b2.

@@ -3909,6 +3909,16 @@ old run is unnecessary or that the input audit is complete.
 
 ## October23 scrollbar conservation working extract
 
+The analogous closed Table extract `table-label-candidate-structural-extraction-20261023.log`
+retains required candidate coverage/inventories and48 complete control rows.
+Its complete SHA256 remains5ef31718d6b4de3244d04bcd1d6862b531eb516d7b4dab5be92a32f9a1a0c435
+before/after LZX compression:117668441 logical/36417536 physical bytes. Observed
+D:free439046144 afterward. Whole candidate payload had been authenticated before
+extraction;compact conservation result is table-label-canonical-conservation-20261023,
+SHAe91413dbf1b2843e63a9ca261f1bb3bc59cadfb995f16dcc7fb7ac85966e3e32.
+Keep the extract for pending publication/reference closure. No evidence deleted,
+paths/pointers changed or case/rendering acceptance inferred from compression.
+
 Publication recovery:CopyFile ENOSPC left no installed file;subsequent streaming
 copy ENOSPC left206962688 bytes of index,now preserved at
 `scrollbar-accepted-import-streaming-20261023.partial-index.json`,SHA
