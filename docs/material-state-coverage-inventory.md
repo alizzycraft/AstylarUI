@@ -2,6 +2,18 @@
 
 ## Current audit pointer — October23
 
+- Table conservation baseline prepared without another previous2.34GB decode.
+  Retained936-source/265-proof/63-plan vectors yield the exact accepted62c7
+  structural sectionDigests from authenticated scrollbar comparisond539e4b2.
+  Actual frozen c61c93b2 producer yields945/269;prior source order/non-line proof
+  fields and complete implementation plan conserve. Expected populations still
+  match405c0c11/97cd429e. Complete accepted/working vectors retained in
+  table-label-inventory-conservation-baseline-20261023.log(666652 bytes),SHA
+  1f32adfb347d6a59be24e44c57ddc7bf81c2a6d1a6d196dfc9d30feac12ba0e1;
+  terminal0/empty stderr. Reuse after live88432 returns;this is not candidate
+  authentication or publication. No frozen source was changed and no old payload
+  was reparsed. Remaining coverage/receipt conservation,cold/import still required.
+
 - Coherent Table export is LIVE:session88432,parent3048/child21948,source freeze
   c987111a,explicit --table-label-paint/exact075fa58b. Named invocation preflight
   passed;no competing exporter was live before launch. Retain separate
