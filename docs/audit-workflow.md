@@ -6,6 +6,14 @@ approve existing findings, finish the audit, or authorize renderer fixes.
 
 ## Small working records; immutable original evidence
 
+October23 Radio/caret batch is accepted locally as generationf19911ec/index6e25ece3,
+after complete predecessor/section/receipt conservation,independent cold replay
+and verified isolated/accepted imports. Use its953-source/273-proof population for
+the next coherent batch;prior pending-selection paragraphs below are historical
+milestones,not reasons to rerun this completed integration. All2311 cases remain
+partial and current rendering unverified. Full original acceptance gates and
+remote publication remain open;see the current coverage ledger for evidence.
+
 ```powershell
 npm run audit:findings:import
 npm run audit:findings:query -- slider

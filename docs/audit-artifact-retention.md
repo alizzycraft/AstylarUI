@@ -1,5 +1,21 @@
 # Audit artifact retention
 
+October23 Radio/caret publication:independent cold session66594 and export76057
+are terminal0. Generationf19911ec/index6e25ece3 is verified in isolated
+radio-caret-import-working-20261023 and accepted working-audit stores. Each store
+has85 index/shard files LZX-compressed with complete before/after hash equality;
+all86 copied files authenticate,with complete verification before/after pointer
+advancement. Accepted-import logSHA
+3be47961b53c3a71e95caf1a6f86a7d11c1a1123776a9bfbb70512a20729efc3.
+Observed free290353152 bytes after publication. Preserve prior db04,originals,
+failure logs and closed working extracts until reference closure. Candidate
+structural extractSHA813405dec90b671526e103f22918655ff998b882001c8a4c0169f0f2f9f64958
+is unchanged after LZX:118259715 logical/36651008 physical bytes. Preserve initial
+structural-conservation and receipt-conservation failures separately from their
+reconciled/recovered successors;they document precise review assumptions,not
+discarded product failures. No evidence deleted or case/rendering acceptance
+inferred from storage operations. Recheck headroom before any further large write.
+
 October23 pending caret successor6889b546 was saved through the existing proposal
 API and validated with17481 dependencies before in-place LZX compression.
 Complete fileSHA16a77b7950b9c8636ebe2060258ffad6c8c37dab548aaeb9f6b3ef4b06a1dca0

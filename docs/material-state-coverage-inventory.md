@@ -2,6 +2,46 @@
 
 ## Current audit pointer — October23
 
+- Accepted Radio/caret generation is now
+  f19911ec5e302f7c8ac2587009dbdb2488600f9c2306abea9954c6b9b8472890,
+  index6e25ece3b860f1756df9910799c3f688fee192f62d2016253520acfa5423aec0.
+  Source freeze473c9d85 selects exact review6889b546;953 paths/273 proofs conserve
+  accepted945/269 plus eight/four additions and seven bounded source transitions.
+  All2311 cases remain partial/current-rendering unverified;192 findings/8483
+  scalar groups/39904 controls/389202 occurrences/0 unresolved scalar attributions.
+  Zero unresolved scalar attribution is not input equivalence or inspection closure.
+  Canonical gzip92111056 bytes;decoded2342726998 bytes/SHA
+  bd16019447e2e3e4e7a5546b34e973d383e0c6778f2b0c67797948b6aa5e2429.
+  Full section comparison:80 sections,72 identical/eight changed,no added/removed;
+  summary,192 findings and63 implementation-plan entries preserve. Structural
+  conservation recovers complete prior coverage,all16347 dependencies and remaining
+  work;adds1134 dependencies,56 Radio paint children/12 explicit static-bound gaps/
+  40 caret children and only72 pending→partial paint dispositions.
+  One exact tooltip-suite current receipt is independently reversed to its complete
+  predecessor;the initial over-strict structural failure remains retained.
+  All14085648 fixed-shape entries compare:147 changes are exactly98 direct module
+  receipts/48 independently derived full control hashes/one derived motion-report
+  hash. Initial receipt-check failure assumed transitive motion sources were all
+  top-level census entries;recovery uses actual source receipts and exact complete
+  old/new report hashes. Neither failure changed inputs or waived evidence.
+  Independent cold terminal0:two collectors/10 memory hits/zero disk hits/zero
+  invalidations;18675 files/2735743859 bytes read and rehashed;3050545.8198ms total.
+  Isolated import/full verify succeeds,then all86 accepted files copy/authenticate;
+  85 files per store compress with unchanged hashes. Complete verification passes
+  before pointer advancement via existing import reuse and after advancement.
+  Evidence logs (all material-parity,20261023):coherent export1777d42c,
+  full-section-comparisona5ce78f1,inventory-baselinee9c9bcdf,structural-conservation-
+  reconciled61ce630a,fixed-shape-leavesffd98099,receipt-conservation-recoveredeca6c7e7,
+  independent-cold-check4e372624,isolated-import641d1e96,accepted-import3be47961.
+  Required original/failure evidence and prior db04 generation remain retained.
+  No renderer/fixture changes or browser recapture. Remote publication remains
+  pending the previously demonstrated transport/authentication issue.
+  Next:prioritize genuinely missing activation/focus evidence and shared causes,
+  not repeated Radio/caret paint checks. Current pending obligations:activation1482,
+  focus1741,paint949 (overlapping obligations,not additive case counts). Static
+  Radio trees authenticate24 receipts/48 exact labels but contain no measured label
+  bounds;do not infer these from styles or substitute interaction rectangles.
+
 - Radio/caret producer registration now has273 proofs/953 unique paths:four/eight
   additive to accepted269/945. Complete producer0d5d56e8 recovers acceptedc61c93b2
   by removing only those literal entries. Prior inventory values preserve in the
