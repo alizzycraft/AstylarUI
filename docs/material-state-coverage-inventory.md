@@ -2,6 +2,38 @@
 
 ## Current audit pointer — October23
 
+- Post-Table remaining-paint triage:Radio has68 pending cases;Input has68 pending
+  of76 total(the eight edit-empty-blur target rasters were already inspected).
+  Original Radio report provides measured paired label rectangles only for56
+  interaction cases,not12 static cases. New standalone retained-radio-label-paint
+  check reuses existing checkpoint,crop and metric machinery;no new capture or
+  renderer/fixture changes. All56 checkpoint records/112 original PNGs and trees
+  bind112 exact label-ID union regions. Three image/bounds controls reject.
+  Zero-phase112/112 and standard-phase106/112 remain below existing default;
+  standard similarity.08503097454332835–.8776423707489294. These common absolute
+  union regions may contain neighbouring control pixels;not isolated glyph,
+  ring/ripple,full Radio paint,equal-input cause,current rendering or case closure.
+  Native/candidate placement/font data stay explicit. Initial attempt correctly
+  rejected ancestry-population descendant-map receipts versus original full-run
+  trees;failure retained. Corrected check uses original checkpoint-local unique
+  label IDs only,never relabels historical evidence. Successful log
+  radio-retained-label-region-paint-exact-population-20261023 SHA
+  85af4cd3aad32a0c4145145b02668096651aaf8f6f36ca8f5a67f6325370f2f8.
+  This supplement is outside accepted945-path/269-proof inventory and not joined
+  into canonical coverage. Next:owning receipt/owner/bounds regression,then coherent
+  coverage integration;static12 and ring/ripple actual bounds remain separate gaps.
+  Input's configured-caret visibility/color/width questions are already settled
+  for their declared40-context evidence;do not recapture those unchanged proofs.
+
+- Publication transport remains incomplete:local Table commitd4bd3189 is not on
+  remote branch,which ls-remote still identifies asd6aa7c15. Three terminal HTTP
+  pushes failed(connection reset,then two HTTP408;third used per-command HTTP/1.1
+  and postBuffer without changing config). Remote checked before retry;no success
+  inferred from contradictory “Everything up-to-date” footer. Read-only batch SSH
+  check refused an unknown host key under strict checking;no trust/config/auth
+  changes or bypass performed. Local accepted db04 store/package remains verified.
+  Preserve local progress;resolve transport before claiming pushed publication.
+
 - Accepted canonical/compact generation is now
   db04feee9eb4538c138d1dc47cc114d26d7f2aa9397e281b2e4284e986497c06,
   indexSHA2342986e44cc2100ea7ec851c7ca865dc6bc888347a5cdbfd72e974042cfbc7e.
