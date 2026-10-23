@@ -1,5 +1,14 @@
 # Audit artifact retention
 
+October23 pending caret successor6889b546 was saved through the existing proposal
+API and validated with17481 dependencies before in-place LZX compression.
+Complete fileSHA16a77b7950b9c8636ebe2060258ffad6c8c37dab548aaeb9f6b3ef4b06a1dca0
+is identical before/after:193232812 logical bytes occupy41299968 physical bytes.
+The first non-forced compression invocation skipped the already compressed file;
+the forced invocation completed successfully. D:free653160448 afterward. Preserve
+this pending proposal with its Radio00deb predecessor and original capture/failure
+evidence;no canonical pointer,case acceptance or evidence bytes changed.
+
 ## Current versus historical evidence
 
 Keep scrollbar-inventory-conservation-reconstruction-20261023 log/empty stderr,

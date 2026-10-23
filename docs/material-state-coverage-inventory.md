@@ -2,6 +2,24 @@
 
 ## Current audit pointer — October23
 
+- Pending caret successor6889b546f95572c1df93b4c598634b3ad3565553bc69a99ff2a9e1c6b791590c
+  extends exact Radio00deb2bd. Membership check found all40 configured focus
+  captures already joined under programmaticFocus,but none under localPaint.
+  Added40 retainedConfiguredCaretTemporalPaint children with six paired samples,
+  all960 image receipts,horizontal columns and existing vertical observations.
+  Exact recorded controls agree with each existing focus observation;email null
+  selection endpoints remain null. Only16 paint dispositions move pending→partial;
+  other24 were already partial. Removing40 children and restoring those16 values
+  recovers complete00deb digest. Existing Table reader/generic loader authenticate
+  17481 dependencies and all2311 cases;inspectionComplete/currentRenderingAccepted
+  remain false. Original runner provenance gap,unequal caret intent and all prior
+  remaining work preserve. No canonical selector/export/pointer advancement.
+  Proposal fileSHA16a77b7950b9c8636ebe2060258ffad6c8c37dab548aaeb9f6b3ef4b06a1dca0;
+  unchanged after forced LZX compression:193232812 logical/41299968 physical bytes.
+  D:free653160448 afterward;no originals/failures deleted. Next:integrate the
+  coherent Radio/caret batch through existing selector/source-conservation gates,
+  not another caret capture or already-settled blink/width investigation.
+
 - Configured caret reuse preflight: the existing exact benchmark-config test
   `configured input focus evidence records exact controls without replacing reference actions`
   passes 1/1 (9665.982ms body;11599.7789ms total) on local0e4e036e.
