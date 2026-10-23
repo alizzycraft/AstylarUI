@@ -134,3 +134,62 @@ export function joinRetainedDisabledFocusOwners(predecessor, read) {
   assert.equal(hash(JSON.stringify(restored)), disabledFocusPredecessor);
   return review;
 }
+
+export function joinRetainedFocusObservationBatch(predecessor, read) {
+  const review = joinRetainedDisabledFocusOwners(predecessor, read);
+  let pairs = 0;
+  for (const group of review.groups) {
+    const source = group.obligations.semantics.retainedConfiguredActivateActualAx;
+    const focus = group.obligations.programmaticFocus;
+    if (!source || focus.disposition !== 'evidence-join-pending') continue;
+    assert.equal(group.family, 'bottom-sheet');
+    assert.match(group.case, /^interaction:bottom-sheet@[^/]+\/[^/]+\/activate$/);
+    const observations = [];
+    for (const receipt of source.evidence.raw) {
+      const bytes = read(receipt.file); assert.equal(hash(bytes),receipt.sha256);
+      const raw = JSON.parse(bytes);
+      assert.equal(`interaction:${raw.family}@${raw.profile}/${raw.viewport.id}/${raw.state}`,group.case);
+      assert.equal(raw.boundary,'after-configured-activate-and-settlement');
+      assert.deepEqual(raw.runtimeErrors,[]);
+      const nodes = raw.nodes.filter(node => !node.ignored && node.role.value !== 'RootWebArea' &&
+        node.properties.some(property => property.name === 'focused' && property.value.value === true));
+      assert.equal(nodes.length,1);
+      const node = nodes[0], result = {backend:node.backendDOMNodeId,role:node.role.value,name:node.name.value};
+      const saved = source.observations.filter(observation => observation.mode === raw.mode);
+      assert.equal(saved.length,1); assert.deepEqual(result,saved[0].result.focused);
+      const dom = raw.dom.filter(item => item.backendNodeId === result.backend);
+      assert.equal(dom.length,1);
+      observations.push({mode:raw.mode,focused:result,domNodeName:dom[0].nodeName,evidence:receipt});
+    }
+    assert.deepEqual(observations.map(o=>o.mode).sort(),['astylar','reference']);
+    assert.deepEqual(observations.find(o=>o.mode==='reference').focused.role,'link');
+    assert.deepEqual(observations.find(o=>o.mode==='reference').focused.name,'Share');
+    assert.deepEqual(observations.find(o=>o.mode==='astylar').focused.role,'button');
+    assert.deepEqual(observations.find(o=>o.mode==='astylar').focused.name,'Open bottom sheet');
+    assert.equal(focus.retainedAxEndpointFocus,undefined);
+    const history = group.obligations.historyOwnership.retainedAuthoredFocusRequestSourceApplicability;
+    assert.ok(history);
+    focus.retainedAxEndpointFocus = {
+      disposition:'inspected-actual-ax-endpoint-only',case:group.case,
+      sourceObligation:'semantics.retainedConfiguredActivateActualAx',
+      completeSourceObservationSha256:hash(JSON.stringify(source)),observations,
+      historySourceObligation:'historyOwnership.retainedAuthoredFocusRequestSourceApplicability',
+      completeHistoryObservationSha256:hash(JSON.stringify(history)),currentRenderingAccepted:false,
+      boundary:'Actual backend-bound AX focus after the exact retained activate/settlement endpoint. Different focused roles/names remain observations,not a new core diagnosis. Historical request ordering does not establish current endpoint timing for all nine pairs.',
+      remaining:['First current focus-request/update divergence and complete trapping/restoration remain open.',
+        'Current rendering,paint,lifetime and whole-case acceptance remain unverified.'],
+    };
+    focus.disposition='partial'; pairs++;
+  }
+  assert.equal(pairs,9);
+  const restored=structuredClone(review);
+  for(const group of restored.groups){
+    const focus=group.obligations.programmaticFocus;
+    for(const key of ['retainedDisabledFocusOwners','retainedAxEndpointFocus']){
+      if(!focus[key])continue;
+      delete focus[key];focus.disposition='evidence-join-pending';
+    }
+  }
+  assert.equal(hash(JSON.stringify(restored)),disabledFocusPredecessor);
+  return review;
+}

@@ -2,6 +2,24 @@
 
 ## Current audit pointer — October23
 
+- Cross-plane focus review finds nine further Bottom-Sheet activate anchors:
+  semantics.retainedConfiguredActivateActualAx already authenticates focused AX
+  nodes after the exact maintained action/settlement endpoint. New combined
+  in-memory batch reuses these18 raw observations,verifies unique focused AX node
+  plus matching DOM backend,exact physical case/mode and existing semantic result.
+  Native Share/link versus candidate Open bottom sheet/button remains an observed
+  focus divergence,not a new core diagnosis. Existing historyOwnership source
+  applicability is linked by its complete observation hash;historical request
+  ordering is not asserted as observed timing in all nine endpoints. No focus-
+  trapping/restoration,current renderer or paint acceptance inferred.
+  Combined disabled/AX batch prepares25 focus children beyond pending6c39;only
+  their pending→partial dispositions change and complete6c39 recovers. Original113
+  and combined25 tests pass2/2 in15417.2016ms. Menu supplements remain excluded
+  from this exact-action join. Accepted f199/pending6c39 unchanged;no new proposal
+  write or export yet. In-memory pending focus would be1603,not accepted coverage.
+  Next save/validate the coherent25-child successor,then integrate all138 focus
+  links through existing source/proof/selector conservation at one milestone.
+
 - Further focus reuse prepared in the same standalone join/test,not a new report
   layer:16 disabled checkbox/slider anchors have39 exact raw action records with
   measured owner strings (15 keyboard/16 pointer/eight held-slider). Each full
