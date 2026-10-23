@@ -2,6 +2,23 @@
 
 ## Current versus historical evidence
 
+Initial scrollbar-coherent-canonical-export-20261023 is CLOSED TERMINAL1,not live.
+Keep its empty stdout and failure/progress stderr SHA
+9531c645e84d16fa038e01e458c6b16112663f67582a23bf526d4a3591c13438.
+It failed on the unreconciled old paint-reader sort-suite receipt before export;
+accepted2035d379 stays intact. Do not replace the failed log with retry output.
+Keep scrollbar-retained-paint-reader-reconciliation-20261023,scrollbar-reader-
+applicability-consumers-20261023,scrollbar-reconciled-reader-final-20261023 and
+scrollbar-reconciled-source-census-20261023 log/empty stderr pairs(terminal0).
+Their log SHA values respectively4f37735eab7477636012fbc23fba65be2432ff70e73ad68a1dc6f825ca92a99c,
+a2e293d87f7b7cf5294c493a5592ff111ae5b6dc430e074088dcb4c774429147,
+711ccf9dd76c11e1b7e1dfde354d55c7e5f1a0e3a0a9c9dab2faa0028876f124,
+f7ffc9b6d133902a5bacf185970e6f9b13fb26a19d9f7a156f94dbf053eceb8b.
+Keep table-retained-paint-cohort-applicability-20261023 log/empty stderr SHA
+31e19444b8a05bc708907af49f50e57cb265d7f2963731c2da0916c51087437a.
+It preserves all40 case IDs/raw receipts while proving24 local label measurements
+cover eight byte-identical paint cohorts. No original capture/duplicate deleted.
+
 Keep table-retained-interaction-paint-20261023 and table-retained-interaction-
 phase-boundary-20261023 log/empty stderr pairs(terminal0). SHA256 logs respectively
 cf0ed917473aa4b3e93405ecbb8e9c2b860e3e03a7dc8ca61f09197ef34f3322 and
@@ -13,9 +30,9 @@ accepted-index absence was not absence of original capture-time receipts. These
 standalone measurements do not enter the live scrollbar export or accept current
 rendering;owning regression/coverage integration remains a subsequent batch.
 
-scrollbar-coherent-canonical-export-20261023 log/stderr are LIVE(session15860,
-childPID5948). Do not compress,remove,hash as final or mistake quiet build-audit
-output for terminal state. Source inputs freeze atbd81343c;accepted2035d379 stays
+scrollbar-coherent-canonical-export-20261023 log/stderr are CLOSED TERMINAL1
+(initial session15860/childPID5948). Preserve this failure separately from retries.
+Initial source inputs froze atbd81343c;accepted2035d379 stays
 preserved pending full conservation/cold/import. Reuse accepted80-section digests
 from authenticated popup-depth-full-section-comparison-20261023.log SHA
 c1e2d9f8aed09de25e6b5433370b7880fe69fe9c78c0f493728c1bd7d9ce3022;

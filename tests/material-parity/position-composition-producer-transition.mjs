@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
 import { restoreSemanticTextTransformPolicy, restoreSemanticTextTransformProducer } from './semantic-text-transform-registration.mjs';
+import { restoreScrollbarSupplementSuite } from './static-semantic-registration.mjs';
 
 const hash = text => createHash('sha256').update(text).digest('hex');
 export function restoreRootEditingProducerRegistration(source) {
@@ -796,6 +797,9 @@ export function restoreLayoutDiagnosticRegistration(source) {
 }
 // Historical replay only. Never use this reader for current capture or rendering acceptance.
 export function readRetainedSortFocusSource(current = readFileSync('tests/material-parity/sort-focus-structure.spec.mjs')) {
+  if (current.toString().includes("test('retained scrollbar constructor wiring preserves current CSS geometry and paint owners'")) {
+    current = Buffer.from(restoreScrollbarSupplementSuite(current));
+  }
   const mobileMaskTest = "\ntest('retained mobile scrollbar masks inspect light dark open and wheel boundaries', () => {";
   if (current.toString().includes(mobileMaskTest)) {
     assert.equal(hash(current), '9fafec85d890122fa1ad2bb2ac712975b7982c603c28f036d534f875aab0effa',

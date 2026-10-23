@@ -50,7 +50,8 @@ if (main) {
   // Reuse the owning whole-source transition chain for later opt-in probes.
   // It restores the original browser/plateau assertions before this older
   // component boundary runs; no current runtime assertion is waived.
-  if (hash(read(sorter)) === '9fafec85d890122fa1ad2bb2ac712975b7982c603c28f036d534f875aab0effa') {
+  if (['9fafec85d890122fa1ad2bb2ac712975b7982c603c28f036d534f875aab0effa',
+    '6ea5ba46281a96565edd8599976ca90969f10cd653976f12a05202bfcc45107b'].includes(hash(read(sorter)))) {
     const bytes = read(sorter);
     assert.throws(() => readRetainedSortFocusSource(Buffer.from(bytes.toString() + '\nconst forged = true;\n')));
     currentSorter = lf(readRetainedSortFocusSource(bytes));

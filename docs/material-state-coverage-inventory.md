@@ -2,6 +2,36 @@
 
 ## Current audit pointer — October23
 
+- October23 initial scrollbar export is TERMINAL1(session15860/child5948 closed),
+  not live:collector collectHeldContentPaintInputs reached an older raw sort-suite
+  guard in readRetainedSortFocusSource. Actual6ea5ba46 versus expected9fafec85
+  is the three already-reviewed additive tests,not rendering/input changes.
+  No canonical file/pointer changed;retain stderr9531c645(original stdout empty).
+  Owning reader now invokes the existing exact-suite restoration first;outside
+  its import/three-line boundary,complete previous reader source conserves.
+  Historical component preload's exact old/new source allowlist likewise routes
+  through the same reader,not new capture bytes. Two drift controls,original held
+  paint collector,table/list AX replay,progress focus replay and preload all pass.
+  Owning retained-sorter regression plus full selected2311-case/16222-dependency
+  loader pass;reconciled-reader-final log SHA
+  711ccf9dd76c11e1b7e1dfde354d55c7e5f1a0e3a0a9c9dab2faa0028876f124.
+  Reconciled census936/265 passes:source populationf3664e0c,proofb32f13d5,
+  producer757ae118 unchanged;reader5132fefc. Census log SHA
+  f7ffc9b6d133902a5bacf185970e6f9b13fb26a19d9f7a156f94dbf053eceb8b.
+  Freeze corrected sources in this increment before retrying one coherent export.
+  Accepted2035d379,all2311 partial statuses and final gates remain unchanged.
+
+- Table label replay can use eight physical paint cohorts/24 unique label
+  measurements while retaining40 exact case IDs. Original80 PNG paths authenticate
+  and are byte-identical across the five states within each theme/DPR cohort.
+  All local label inputs/crops/zero/standard-phase metrics also agree within each
+  cohort. One dark-DPR1 raw input-tree variant differs only in resolvedStyleRevision;
+  three cases carry that variant. Both raw receipts remain,not normalized away.
+  Fourteen/24 unique standard-phase label crops fall below existing0.80 threshold.
+  Cohort-applicability log SHA31e19444b8a05bc708907af49f50e57cb265d7f2963731c2da0916c51087437a.
+  No cache implemented or evidence deleted;this permits local measurement reuse,
+  not collapsing state/behavior/whole-tree obligations or current acceptance.
+
 - Table interaction output-binding gap is now resolved without recapture or frozen
   source edits. Existing openMaterialCheckpoint/materialCaseKey loads all40 exact
   interaction records;record results equal authenticated reportab42dbec and all160
@@ -36,15 +66,14 @@
   table typography/semantic findings stay settled;no recapture,metric report or
   source edit was started. The live scrollbar export still owns the current batch.
 
-- October23 coherent scrollbar export is LIVE:session15860,childPID5948,
+- Initial October23 scrollbar export started(session15860,childPID5948;now closed),
   source freezebd81343c,explicit --scrollbar-paint/exacteb30019d. Invocation
   preflight and clean task-owned source status checked;D:free476078080 bytes
   before launch. Progress reached build-audit;process CPU/working-set observations
-  confirm execution. Keep936 registered inputs frozen and poll this handle,not a
-  replacement run. Log scrollbar-coherent-canonical-export-20261023/stderr are
-  live,not terminal evidence. Accepted2035d379/package files remain unchanged;
-  no export/validation/current-rendering acceptance yet. Once terminal,authenticate
-  and compare every candidate section against accepted baseline. Existing complete
+  confirmed execution. Its terminal1/source-reader correction is recorded above;
+  do not poll the closed handle or overwrite its failure logs. Accepted2035d379/
+  package files remain unchanged. A successful retry must authenticate and compare
+  every candidate section against accepted baseline. Existing complete
   comparison logc1e2d9f8 authenticates all80 accepted2035 section digests;reuse that
   immutable baseline rather than reparsing the old2.34GB package. New candidate
   still requires complete payload authentication/section conservation,independent
