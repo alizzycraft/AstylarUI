@@ -3522,6 +3522,70 @@ test('retained scrollbar clipping and projection implementations preserve captur
   } }));
 });
 
+test('retained scrollbar paint evidence maps to exact configured open and scroll obligations', t => {
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  const indexFile = 'artifacts/material-parity/working-audit/2035d3791c7973ff4b117349684113ca5add0fccb14a2a5ec69fdb03ce6423ef/index.json';
+  const indexBytes = readFileSync(indexFile);
+  assert.equal(digest(indexBytes), '4ac21acb40a7c1e4f3521bb1754b4790b1f7f6f6a293923309cb547e4d260f70');
+  const cases = JSON.parse(indexBytes).metadata.coverage.inspectionEvidence.cases;
+  const reportFile = 'artifacts/material-parity/current-full-20261005/latest-report.json';
+  const reportBytes = readFileSync(reportFile);
+  assert.equal(digest(reportBytes), 'ab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62');
+  const report = JSON.parse(reportBytes);
+  const proofFile = 'artifacts/material-parity/scrollbar-clip-projection-final-20261023.log';
+  const proofBytes = readFileSync(proofFile);
+  assert.equal(digest(proofBytes), 'e877a723cf7d5544cc366be611f724dffadc3e4c748a5f09767dfa0056966137');
+  assert.match(proofBytes.toString(), /# pass 4\r?\n# fail 0/);
+  const records = proofBytes.toString().split(/\r?\n/).filter(line => line.startsWith('# {'))
+    .map(line => JSON.parse(line.slice(2).replaceAll('\\#', '#')));
+  const masks = records.find(row => row.retainedScrollbarThumbMasks)?.retainedScrollbarThumbMasks;
+  const tracks = records.find(row => row.retainedScrollbarTrackRows)?.retainedScrollbarTrackRows;
+  assert.equal(masks?.length, 32); assert.equal(tracks?.length, 32);
+  const observations = [], seen = new Set(); let contextControls = 0;
+  for (const profile of ['light', 'dark', 'contrast', 'custom']) for (const dpr of [1, 2]) {
+    for (const state of ['open', 'open-scroll']) {
+      const viewport = `desktop-dpr${dpr}`, id = `interaction:timepicker@${profile}/${viewport}/${state}`;
+      const matched = cases.filter(row => row.case === id); assert.equal(matched.length, 1);
+      const group = matched[0], rows = report.interactions.filter(row => row.family === 'timepicker' &&
+        row.profile === profile && row.viewport.id === viewport && row.state === state);
+      assert.equal(rows.length, 1); const captured = rows[0];
+      assert.deepEqual(captured.inputTrees, group.evidence.pairedTrees);
+      assert.equal(captured.viewport.deviceScaleFactor, dpr);
+      assert.equal(group.inspection, 'partial'); assert.equal(group.currentRendering, 'unverified');
+      const sides = {};
+      for (const side of ['reference', 'astylar']) {
+        const matches = masks.filter(row => row.profile === profile && row.viewport === viewport && row.side === side &&
+          row.state === (state === 'open' ? 'before' : 'after'));
+        const track = tracks.filter(row => row.profile === profile && row.viewport === viewport && row.side === side &&
+          row.state === (state === 'open' ? 'before' : 'after'));
+        assert.equal(matches.length, 1); assert.equal(track.length, 1);
+        const mask = matches[0], receipt = captured.inputTrees[side];
+        assert.equal(path.resolve(path.dirname(mask.receipt.file)), path.resolve(path.dirname(receipt.file)), 'same exact action boundary');
+        assert.equal(digest(readFileSync(mask.receipt.file)), mask.receipt.sha256);
+        assert.equal(digest(readFileSync(receipt.file)), receipt.sha256);
+        // Reject a different profile, DPR or action boundary rather than joining
+        // by component name or superficially similar pixels alone.
+        for (const altered of [{ ...mask, profile: 'other' }, { ...mask, viewport: 'desktop-dpr3' },
+          { ...mask, state: state === 'open' ? 'after' : 'before' }]) {
+          assert.equal(altered.profile === profile && altered.viewport === viewport &&
+            altered.state === (state === 'open' ? 'before' : 'after'), false); contextControls++;
+        }
+        sides[side] = { mask, track: track[0], inputTree: receipt };
+      }
+      assert.ok(!seen.has(id)); seen.add(id);
+      observations.push({ case: id, classification: 'intentional-documented-limitation', sides,
+        obligation: 'localPaint', disposition: 'inspected-retained-thumb-track-arrow-and-overdraw-only',
+        remaining: group.obligations.localPaint.remaining,
+        boundary: 'Exact retained open/open-scroll endpoints only; not full option/glyph/fringe paint,live clip-state causality,other cases,current rendering or full-case closure.' });
+    }
+  }
+  assert.equal(observations.length, 16); assert.equal(contextControls, 96);
+  t.diagnostic(JSON.stringify({ configuredScrollbarCaseEvidence: { observations, contextControls,
+    evidence: { index: { file: indexFile, sha256: digest(indexBytes) }, report: { file: reportFile, sha256: digest(reportBytes) },
+      proof: { file: proofFile, sha256: digest(proofBytes) } },
+    proposalWritten: false, canonicalPublication: false, inspectionComplete: false, currentRenderingAccepted: false } }));
+});
+
 test('retained mobile scrollbar masks inspect light dark open and wheel boundaries', () => {
   const digest = bytes => createHash('sha256').update(bytes).digest('hex');
   const hashes = {

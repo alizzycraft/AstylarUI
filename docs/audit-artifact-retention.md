@@ -2,6 +2,15 @@
 
 ## Current versus historical evidence
 
+Keep scrollbar-exact-case-evidence-20261023 and scrollbar-exact-case-integration-
+20261023 log/empty stderr pairs(terminal0,1/1 and5/5). SHA256 logs respectively
+2ebb6e3b5b170d01cbb98ea584fd47fd0a1d04aab2fcb9d0e5e8cc60575982d5 and
+6733b6571b88633c831e38b57072a121f3f3c24fedc4fa4959c2350ee30d286a.
+They retain16 exact configured endpoint records,32 screenshot receipts and96
+wrong-context controls. No new proposal/build/screenshots were produced;all
+original captures and failures remain. These records are standalone case evidence
+pending coherent registration/integration,not accepted current rendering.
+
 Keep scrollbar-clip-projection-applicability-20261023(body-only),scrollbar-clip-
 projection-complete-bindings-20261023 and scrollbar-clip-projection-final-20261023
 log/empty stderr pairs. All terminal0;final4/4 includes43 changed-body/binding

@@ -2,6 +2,27 @@
 
 ## Current audit pointer — October23
 
+- October23 exact scrollbar evidence cross-reference now covers16 configured
+  timepicker endpoints:open and open-scroll in light/dark/contrast/custom at
+  desktop-dpr1/desktop-dpr2. All32 screenshot receipts and both tree receipts per
+  endpoint authenticate against exact report/case identities in accepted2035d379.
+  Retained native rounded thumbs/tracks/arrows versus candidate plain indicators
+  and original overdraw evidence map to localPaint as inspected documented
+  limitations,not equal rendering.96 wrong-profile/DPR/action controls reject.
+  Evidence was absent as a named scrollbar child in those16 accepted obligation
+  records;the new owning assertion emits exact case/evidence/remaining-work
+  records without another190MB proposal or broad capture. Original generic
+  raster children,remaining work and partial/unverified statuses stay intact.
+  Focused1/1,3336.8617ms;log scrollbar-exact-case-evidence-20261023 SHA
+  2ebb6e3b5b170d01cbb98ea584fd47fd0a1d04aab2fcb9d0e5e8cc60575982d5.
+  Integration5/5,6626.25ms;log scrollbar-exact-case-integration-20261023 SHA
+  6733b6571b88633c831e38b57072a121f3f3c24fedc4fa4959c2350ee30d286a.
+  This is standalone exact-case evidence,pending the next coherent source/proof
+  registration and coverage integration;accepted2035d379 is unchanged. No new
+  renderer cause,current raster pass or full-case closure follows. Next prioritize
+  other genuinely unjoined overlay/input paint obligations;do not reopen these
+  those16 endpoint membership/shape/source questions absent changed inputs.
+
 - October23 scrollbar clipping/projection staleness resolved at the inspected
   implementation boundary:38 complete method/constructor/function bodies from
   overflow clipping,camera,CSS projection and CSS layout geometry agree across
