@@ -3909,6 +3909,18 @@ old run is unnecessary or that the input audit is complete.
 
 ## October23 scrollbar conservation working extract
 
+Pending-import headroom:two closed historical index.json files were LZX-compressed
+in place,with complete SHA256 equality before/after. Generationc2a58b7c35fed299da02fe92043d58f98102d3724ce69070bc4ef6aaa2c744e8:
+191043631 logical/39829504 physical bytes,SHA
+7fba06b9180bf1d55dba0221183cba81a4dd395f8302d00a5fe5c4d9a0e8f872.
+Generatione828ab280554c84469fbe00e839d08c4534cd1b6911341fb2c7ecabe44724b1a:
+191260223 logical/39878656 physical bytes,SHA
+7e45bbd15f9bfa08abde9052d1ef282add9773be5d5ddc3538ccd88a680ed382.
+Observed D:free267493376→570093568bytes. Compression session67633 terminal0;
+no source/payload/shard/pointer paths or bytes changed,no evidence deleted.
+Cold verification83533 remains independently live(child16740,parent24688);
+compression touched neither its frozen sources nor its candidate payload.
+
 The closed `scrollbar-candidate-structural-extraction-20261023.log` retains only
 the three required candidate structural sections and48 complete control rows,
 avoiding another full2.34GB decode during conservation. Its complete before/after
