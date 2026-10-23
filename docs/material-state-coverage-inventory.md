@@ -2,6 +2,29 @@
 
 ## Current audit pointer — October23
 
+- Pending pointer-focus successor6c39adadf48ddcfd2a2b80f732b4d09114e2c8ed53810cf61786026b99253e40
+  is saved through the existing store API and validates17481 dependencies/all2311
+  partial cases through the existing Radio/caret receipt reader. Adds only113
+  retainedPointerFocusBoundaries children and113 pending→partial focus dispositions;
+  complete6889b546 predecessor/remaining work recover. No programmatic/keyboard
+  action substitution,case promotion or accepted f199 pointer change. Working
+  focus pending count becomes1628;accepted1741 remains until coherent integration.
+  Complete fileSHA14c4f59011cbe24f55955f96a547e104fdb0a6f8cab50a83d13b0ce4e64af3f2;
+  LZX preserves bytes:198046321 logical/41574400 physical bytes. Validation log
+  retained-pointer-focus-successor-complete-20261023 SHA276029f2caf531e392fb8785403ce19aef98b7050d8f0a186693f71fbffe4898.
+  Initial and later raw writes failed ENOSPC with zero-byte current6c39 temporaries;
+  an intermediate guard correctly rejected mistakenly using an unrelated October14
+  0c7 temporary digest. No replacement was saved by those attempts. Duplicate
+  isolated-store reference closure verifies87 identical files,no live dependencies,
+  but policy rejected cleanup;the directory remains. Fifteen closed smaller
+  proposals were instead losslessly compressed with every raw hash unchanged;
+  headroom rose to678219776 before successful save. Larger7eb compression failed
+  for headroom;complete reviewed values and original writer encoding still verify.
+  All failure records/temporaries/originals retained. Inherited compression and
+  free bytes exceeding file length did not guarantee raw-write headroom;do not
+  repeat low-margin writes. No new canonical export or selector yet. Next:batch
+  further genuinely missing activation/focus links before the next integration.
+
 - Next bounded focus reuse is prepared outside accepted953/273:113 exact
   activate/activate-leave cases already contain direct pointer-focus observations
   under authoredActivation.configuredRawPointerObservation,but all113 focus-plane

@@ -1,5 +1,30 @@
 # Audit artifact retention
 
+October23 pointer-focus successor save:198046321-byte atomic writes failed at
+approximately174MB and342MB free,leaving zero-byte6c39adad...json.24856.tmp and
+...json.39792.tmp. Keep failure logs and temporaries. The intermediate recovered
+attempt stopped before write on a wrong historical0c7 digest;the committed pure
+join deterministically produces6c39. Successful final save uses the same current
+digest after conservative headroom recovery;all17481 dependencies validate and
+accepted f199 pointer stays unchanged. FileSHA
+14c4f59011cbe24f55955f96a547e104fdb0a6f8cab50a83d13b0ce4e64af3f2 is unchanged by
+LZX;physical41574400 bytes. Validation log276029f2caf531e392fb8785403ce19aef98b7050d8f0a186693f71fbffe4898.
+
+Closed isolated f199 store reference closure authenticated87 byte-identical files
+and no live dependencies,but scoped cleanup was rejected by policy. Nothing was
+removed;retain the isolated store and closure log. Do not bypass the rejected
+cleanup through another deletion mechanism. A larger7eb proposal recompression
+also lacked workspace;its complete review digest and original writer encoding
+still verify,rawSHA22e695596f242f44074eb15880e7dc052b46601d6e3907db8ac21013ddfea8a7.
+Instead15 smaller closed proposal files were LZX-compressed with individual raw
+hash equality. Detailed file/hash/physical-size records remain in
+retained-pointer-focus-headroom-compression-20261023 (SHA614777ba838b61e686f8f8f1f1b106f312aba7202d9c2fb9d5010423a7ccd70d)
+and retained-pointer-focus-headroom-margin-20261023 (SHA3fe3f9acc0a4fb45ed18c1eead9b72d3b54c9c1873fa8c499205c3d83d1f9465).
+Observed free152473600→344608768,then341987328→678219776 bytes before final save;
+623947776 afterward. No decoded evidence bytes,paths,accepted pointer or acceptance
+criteria changed. Leave substantially more than the logical file length before
+future atomic writes;these observations do not establish a precise filesystem cause.
+
 October23 Radio/caret publication:independent cold session66594 and export76057
 are terminal0. Generationf19911ec/index6e25ece3 is verified in isolated
 radio-caret-import-working-20261023 and accepted working-audit stores. Each store
