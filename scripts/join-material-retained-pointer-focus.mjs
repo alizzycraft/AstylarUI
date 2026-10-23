@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import path from 'node:path';
+import { createRadioCaretReviewReader, radioCaretPaintReview } from '../tests/material-parity/radio-caret-case-review-source.mjs';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
 export const pointerFocusPredecessor = '6889b546f95572c1df93b4c598634b3ad3565553bc69a99ff2a9e1c6b791590c';
@@ -192,4 +194,45 @@ export function joinRetainedFocusObservationBatch(predecessor, read) {
   }
   assert.equal(hash(JSON.stringify(restored)),disabledFocusPredecessor);
   return review;
+}
+
+export const retainedFocusObservationReview = 'aeb1ef1452d65ab53677088ee2944bdf453a7b0d2e0e9f6fed0f987a4e3f4a36';
+
+export function createRetainedFocusReviewReader({root,read,reviewSha256}) {
+  assert.equal(reviewSha256,retainedFocusObservationReview,'Unknown retained focus review');
+  const file=path.resolve(root,`artifacts/material-parity/working-audit/proposals/${reviewSha256}.json`);
+  const envelope=JSON.parse(read(file));
+  assert.equal(envelope.sha256,reviewSha256);
+  assert.equal(hash(JSON.stringify(envelope.review)),reviewSha256);
+  let disabled=0,ax=0,pointer=0;
+  for(const group of envelope.review.groups){
+    assert.equal(group.inspection,'partial');assert.equal(group.currentRendering,'unverified');
+    const focus=group.obligations.programmaticFocus;
+    for(const [key,kind] of [['retainedDisabledFocusOwners','disabled'],['retainedAxEndpointFocus','ax']]){
+      if(!focus[key])continue;
+      assert.equal(focus[key].case,group.case);assert.equal(focus[key].currentRenderingAccepted,false);
+      assert.equal(focus.disposition,'partial');
+      delete focus[key];focus.disposition='evidence-join-pending';
+      if(kind==='disabled')disabled++;else ax++;
+    }
+  }
+  assert.deepEqual([disabled,ax],[16,9]);
+  assert.equal(hash(JSON.stringify(envelope.review)),disabledFocusPredecessor);
+  for(const group of envelope.review.groups){
+    const focus=group.obligations.programmaticFocus,child=focus.retainedPointerFocusBoundaries;
+    if(!child)continue;
+    assert.equal(child.case,group.case);assert.equal(child.currentRenderingAccepted,false);
+    assert.equal(focus.disposition,'partial');
+    delete focus.retainedPointerFocusBoundaries;focus.disposition='evidence-join-pending';pointer++;
+  }
+  assert.equal(pointer,113);
+  assert.equal(hash(JSON.stringify(envelope.review)),pointerFocusPredecessor);
+  const base=createRadioCaretReviewReader({root,read,reviewSha256:radioCaretPaintReview});
+  return {read:base.read,sourceApplicability:{
+    mode:'exact-retained-focus-observation-successor',reviewSha256,
+    predecessorReviews:[disabledFocusPredecessor,pointerFocusPredecessor],completePredecessorsRecovered:true,
+    pointerFocusChildren:pointer,disabledFocusChildren:disabled,axFocusChildren:ax,
+    predecessorApplicability:base.sourceApplicability,
+    boundary:'Only138 exact partial focus links and their pending-to-partial dispositions. Pointer,supplementary disabled probes and AX endpoints retain separate limits;no programmatic/keyboard substitution,current rendering acceptance or case closure.',
+  }};
 }

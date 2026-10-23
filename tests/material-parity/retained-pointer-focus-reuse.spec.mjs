@@ -2,8 +2,10 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
 import { joinRetainedPointerFocus, pointerFocusCapture, pointerFocusPredecessor,
-  joinRetainedFocusObservationBatch, disabledFocusPredecessor } from '../../scripts/join-material-retained-pointer-focus.mjs';
+  joinRetainedFocusObservationBatch, disabledFocusPredecessor,
+  retainedFocusObservationReview, createRetainedFocusReviewReader } from '../../scripts/join-material-retained-pointer-focus.mjs';
 
 test('retained pointer focus reuses exact measured boundaries without substituting focus actions', () => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -34,6 +36,22 @@ test('retained pointer focus reuses exact measured boundaries without substituti
   altered.groups[0].currentRendering = 'accepted';
   assert.throws(() => joinRetainedPointerFocus(altered, capture));
   assert.throws(() => joinRetainedPointerFocus(predecessor, Buffer.concat([capture,Buffer.from(' ')])));
+});
+
+test('retained focus successor reader conserves both prior reviews and authenticates all dependencies', () => {
+  const root=process.cwd(),file=`artifacts/material-parity/working-audit/proposals/${retainedFocusObservationReview}.json`;
+  const pointer=readFileSync('artifacts/material-parity/working-audit/current.json');
+  const envelope=JSON.parse(readFileSync(file));
+  const reader=createRetainedFocusReviewReader({root,read:readFileSync,reviewSha256:retainedFocusObservationReview});
+  assert.equal(reader.sourceApplicability.completePredecessorsRecovered,true);
+  assert.deepEqual([reader.sourceApplicability.pointerFocusChildren,reader.sourceApplicability.disabledFocusChildren,
+    reader.sourceApplicability.axFocusChildren],[113,16,9]);
+  const loaded=loadCaseObligationReview(file,retainedFocusObservationReview,envelope.review.groups.map(g=>g.case),{root,read:reader.read});
+  assert.equal(loaded.cases.length,2311);assert.equal(loaded.evidenceFingerprints.length,17481);
+  assert.equal(loaded.inspectionComplete,false);assert.equal(loaded.currentRenderingAccepted,false);
+  assert.ok(loaded.cases.every(g=>g.inspection==='partial'&&g.currentRendering==='unverified'));
+  assert.throws(()=>createRetainedFocusReviewReader({root,read:readFileSync,reviewSha256:'0'.repeat(64)}));
+  assert.deepEqual(readFileSync('artifacts/material-parity/working-audit/current.json'),pointer);
 });
 
 test('disabled and AX focus reuse bind exact retained observations without widening action scope', () => {

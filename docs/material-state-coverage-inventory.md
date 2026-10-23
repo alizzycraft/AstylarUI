@@ -2,6 +2,24 @@
 
 ## Current audit pointer — October23
 
+- Saved combined focus successor
+  aeb1ef1452d65ab53677088ee2944bdf453a7b0d2e0e9f6fed0f987a4e3f4a36 adds25
+  bounded focus children to pending6c39,with all113 earlier pointer links intact.
+  Existing generic loader authenticates17481 dependencies/all2311 partial cases;
+  accepted f199 pointer unchanged. Raw preflight609132544 free versus198158224
+  proposed bytes passes conservative three-times headroom. Complete fileSHA
+  3d6b1e67066919b081b2ecd35a2995e5196ae5e1d110bc1f7f2b99430564f3b0 is unchanged
+  by compression. Successor logSHA2e43b9828e8eebad5c197cf19c9c7e31e718e6c099471195c8da90ea71e8801c.
+  Bounded reader in the existing join module accepts onlyaeb1ef14;removing25 new
+  children/dispositions recovers complete6c39,then removing113 pointer children/
+  dispositions recovers complete6889. Existing Radio/caret reader handles earlier
+  receipts without replacement source bytes. Three focused reuse/reader tests
+  pass3/3 in60075.1897ms,including17481-dependency validation and unknown-digest
+  rejection. No original/failure evidence overwritten,new capture or case closure.
+  Not yet an export selection or953/273 source/proof registration. Next wire the
+  exact new selector/reader and conserve the complete prior source/inventory batch
+  before one export/conservation/cold/import milestone for all138 focus links.
+
 - Cross-plane focus review finds nine further Bottom-Sheet activate anchors:
   semantics.retainedConfiguredActivateActualAx already authenticates focused AX
   nodes after the exact maintained action/settlement endpoint. New combined

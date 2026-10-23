@@ -1,5 +1,15 @@
 # Audit artifact retention
 
+October23 combined focus successor aeb1ef14 saved successfully with conservative
+raw allocation headroom609132544 versus198158224 proposed bytes. Complete fileSHA
+3d6b1e67066919b081b2ecd35a2995e5196ae5e1d110bc1f7f2b99430564f3b0 remains
+unchanged after LZX compression. Existing loader validates17481 dependencies and
+all2311 partial cases;accepted f199 pointer unchanged. Retain the new proposal,
+6c39/6889 predecessors and prior failure records. Exact successor logSHA
+2e43b9828e8eebad5c197cf19c9c7e31e718e6c099471195c8da90ea71e8801c.
+No browser capture,evidence deletion,source receipt replacement or acceptance
+promotion occurred. Observed free567218176 bytes afterward;recheck before export.
+
 October23 pointer-focus successor save:198046321-byte atomic writes failed at
 approximately174MB and342MB free,leaving zero-byte6c39adad...json.24856.tmp and
 ...json.39792.tmp. Keep failure logs and temporaries. The intermediate recovered
