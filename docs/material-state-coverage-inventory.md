@@ -2,6 +2,20 @@
 
 ## Current audit pointer — October23
 
+- Configured caret reuse preflight: the existing exact benchmark-config test
+  `configured input focus evidence records exact controls without replacing reference actions`
+  passes 1/1 (9665.982ms body;11599.7789ms total) on local0e4e036e.
+  It authenticates40 configured focus contexts/240 paired observations/960 PNGs,
+  exact controls and fourteen complete captured/installed/current owner methods.
+  Competing explanations were stale dependencies versus reusable bounded evidence;
+  this replay supports the latter only within its explicit limits. Original runner
+  e01ef9dc remains unavailable-unresolved; replay86ece08b and focus/theme body
+  checks do not establish the complete original capture procedure. Unequal caret
+  intent and temporal1px native/2px candidate edges remain observations,not equal-
+  input current rendering acceptance. No browser recapture,source receipt rewrite,
+  proposal change or case closure. Next:check exact40-case ledger membership and
+  attach only missing bounded observations with this provenance gap preserved.
+
 - Pending Radio proposal00deb2bd42bed77e96afd0d22234456450044792b0faa84a5660d7dd4045a826
   extends exact accepted Table review075fa58b using existing proposal/loader APIs.
   Adds56 retainedRadioLabelRegionPaint children and12 retainedRadioLabelBoundsGap
