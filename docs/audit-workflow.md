@@ -6,6 +6,16 @@ approve existing findings, finish the audit, or authorize renderer fixes.
 
 ## Small working records; immutable original evidence
 
+October25 owner-context local batch is registered at1041 sources/365 proofs/198
+definitions with explicit --divider-owner-context selecting pendingf812d8d9.
+Complete1028/353/196 predecessor recovery,17 live integration checks and full
+2311-case/18289-dependency loader pass. Freeze this coherent batch;do not repeat
+settled probes/registration for metadata edits. It is NOT canonical publication.
+Accepted88be4d47 remains authoritative. Existing upload/headroom blocker prohibits
+another large canonical generation until a viable publication route exists.
+Continue specific remaining audit obligations without treating local registration
+or public general failures as original-case/current-rendering acceptance.
+
 October24 recovered-source/Slider/paint batch is accepted locally as generation
 88be4d47/indexb185409b,after complete predecessor/section/receipt conservation,
 independent cold replay and verified isolated/accepted imports. Use its990-source/

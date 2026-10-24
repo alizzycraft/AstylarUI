@@ -6,12 +6,14 @@ import path from 'node:path';
 import { loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
 import { createMenuSelectDisabledReviewReader, menuSelectDisabledReview } from './menu-select-disabled-review-source.mjs';
 import { joinDividerOutsideOwnerEvidence, restoreDividerOutsideOwnerEvidence } from '../../scripts/join-material-divider-outside-owner-evidence.mjs';
+import { createDividerOwnerContextHistoricalRead } from './divider-owner-context-review-source.mjs';
+const ownerRead=createDividerOwnerContextHistoricalRead({root:process.cwd(),read:readFileSync});
 
 test('outside-scalar Divider owner evidence joins only exact property/context records and conserves all parent gaps',()=>{
   const reader=createMenuSelectDisabledReviewReader({root:process.cwd(),read:readFileSync,reviewSha256:menuSelectDisabledReview});
   const predecessor=JSON.parse(reader.read(`artifacts/material-parity/working-audit/proposals/${menuSelectDisabledReview}.json`)).review;
   const hash=r=>createHash('sha256').update(JSON.stringify(r)).digest('hex');
-  const joined=joinDividerOutsideOwnerEvidence(predecessor);
+  const joined=joinDividerOutsideOwnerEvidence(predecessor,ownerRead);
   assert.equal(joined.review.groups.length,2311);assert.equal(joined.cases,24);assert.equal(joined.physicalAliases,8);
   assert.equal(hash(predecessor),menuSelectDisabledReview);assert.equal(hash(restoreDividerOutsideOwnerEvidence(joined.review)),menuSelectDisabledReview);
   let changed=0;
@@ -30,11 +32,11 @@ test('outside-scalar Divider owner evidence joins only exact property/context re
     const remaining={...group.obligations.inputStyleStructure};delete remaining.boundedOutsideScalarOwnerInputs;
     assert.deepEqual(remaining,predecessor.groups[index].obligations.inputStyleStructure);
   });assert.equal(changed,24);assert.equal(cursorAliases,8);
-  assert.throws(()=>joinDividerOutsideOwnerEvidence(joined.review));
-  assert.throws(()=>joinDividerOutsideOwnerEvidence(predecessor,file=>file.endsWith('divider-outside-owner-border-attribution-20261025.log')?Buffer.from('forged'):readFileSync(file)));
-  assert.throws(()=>joinDividerOutsideOwnerEvidence(predecessor,file=>file.endsWith('divider-wrapper-leaf-typography-inputs-20261025.log')?Buffer.from('forged'):readFileSync(file)));
-  assert.throws(()=>joinDividerOutsideOwnerEvidence(predecessor,file=>file.endsWith('divider-owner-block-alignment-context-20261025.log')?Buffer.from('forged'):readFileSync(file)));
-  assert.throws(()=>joinDividerOutsideOwnerEvidence(predecessor,file=>file.endsWith('divider-owner-cursors-20261025.log')?Buffer.from('forged'):readFileSync(file)));
+  assert.throws(()=>joinDividerOutsideOwnerEvidence(joined.review,ownerRead));
+  assert.throws(()=>joinDividerOutsideOwnerEvidence(predecessor,file=>file.endsWith('divider-outside-owner-border-attribution-20261025.log')?Buffer.from('forged'):ownerRead(file)));
+  assert.throws(()=>joinDividerOutsideOwnerEvidence(predecessor,file=>file.endsWith('divider-wrapper-leaf-typography-inputs-20261025.log')?Buffer.from('forged'):ownerRead(file)));
+  assert.throws(()=>joinDividerOutsideOwnerEvidence(predecessor,file=>file.endsWith('divider-owner-block-alignment-context-20261025.log')?Buffer.from('forged'):ownerRead(file)));
+  assert.throws(()=>joinDividerOutsideOwnerEvidence(predecessor,file=>file.endsWith('divider-owner-cursors-20261025.log')?Buffer.from('forged'):ownerRead(file)));
   const file=`artifacts/material-parity/working-audit/proposals/${joined.sha256}.json`;
   const bytes=Buffer.from(JSON.stringify({status:'proposal-not-canonical',sha256:joined.sha256,review:joined.review}));
   const read=(name,options)=>{

@@ -9,6 +9,38 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Owner-context batch is now LIVE REGISTERED locally at1041 sources/365 proofs/
+198 definitions. Exact prepared additions applied to producer/policy/launcher/
+runner;CLI --divider-owner-context selects f812d8d9. All1028 prior sources,353
+prior proofs and196 prior definitions conserve through complete source recovery.
+Two core alignment findings are now local registered definitions,not canonical
+findings/current-case passes. Accepted88be4d47 remains193/990/319 until publication.
+
+Current owning tests explicitly read the conserved predecessor and assert actual
+live bytes equal prepared registration/selection;their read-only checks no longer
+mistake live additions for the historical baseline. Direct outside-owner loader
+uses the same exact historical boundary for old normalizer/source receipts;
+original assertions and all remaining tasks preserve. Initial apply_patch rejected
+relative main-checkout paths before edits;retry used absolute audit-worktree
+targets. No renderer,fixture or historical report changed.
+
+Keep divider-context-live-registration-integration-20261025 pair,17/17,0skip,
+76989.6157ms,stdout SHA256
+1e37c5249214449a0d79e985067bea7e0b7f3f26649c93a8a2a3f6c6b5f88c9f;
+and divider-context-live-full-reader-20261025 pair,1/1,0skip,94343.7429ms,
+stdout SHA2563656fb0169e801eb380e828bcf4db759a6ba100eaae2f66ddffd08d621d76bb0.
+Both nativeExit0/stderr empty. Full selected loader authenticates2311 cases/
+18289 dependencies,inspectionComplete false,currentRenderingAccepted false;
+pending digestf812d8d9 unchanged,no physical proposal. Actual live launcher
+dry-run emits exact path/digest;it is not export or acceptance.
+
+Freeze this coherent batch. Publication/large export remains blocked by existing
+transport/headroom constraint;do not retry unchanged uploads or create another
+large generation. Next resume a specific remaining inspection obligation using
+existing evidence,not recapture settled owner/default/cursor proofs or rerun
+registration/full closure for ledger-only changes. All2311 cases remain partial/
+current-unverified and original final gates remain required.
+
 Direct historical consumers now recognize the staged owner-context registration.
 Shared Menu read entry calls the same exact prior-stage adapter as the selected
 owner reader;no duplicated layout/evidence collector or global filesystem patch.

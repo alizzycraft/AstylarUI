@@ -1,5 +1,18 @@
 # Audit artifact retention
 
+October25 owner-context local registration does not supersede original/failure
+evidence or authorize deletion. Keep public-block-align-content-20261025 input,
+15934235-byte served audit.js and report for the equal-input failure;no duplicate
+bundle/screenshots were generated for registration. Keep owner-context live17-test
+integration and full-reader log/stderr pairs. Their stdout hashes are
+1e37c5249214449a0d79e985067bea7e0b7f3f26649c93a8a2a3f6c6b5f88c9f
+and3656fb0169e801eb380e828bcf4db759a6ba100eaae2f66ddffd08d621d76bb0.
+All earlier raw/context/control/history/causal logs remain required by the pending
+f812d8d9 review. No physical200MB proposal or new canonical generation saved.
+Live1041/365/198 registration is not publication;accepted88be4d47 stays unchanged.
+Do not repeat unchanged upload failures or create another large generation while
+the documented publication/headroom constraint remains unresolved.
+
 Recovered original Material runner is required evidence,not scratch:
 docs/evidence/material-original-runner-e01.mjs.gz.b64 preserves21869 compressed
 bytes and96666 decoded bytes matching original raw SHAe01ef9dc. Keep it with

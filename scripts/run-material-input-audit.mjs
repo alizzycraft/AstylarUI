@@ -26,6 +26,7 @@ import { originalRunnerReview, createOriginalRunnerReviewReader } from '../tests
 import { dividerComputedPaintReview, createDividerComputedPaintReviewReader } from '../tests/material-parity/divider-computed-paint-review-source.mjs';
 import { dividerOwnerFrameReview, createDividerOwnerFrameReviewReader } from '../tests/material-parity/divider-owner-frame-review-source.mjs';
 import { menuSelectDisabledReview, createMenuSelectDisabledReviewReader } from '../tests/material-parity/menu-select-disabled-review-source.mjs';
+import { dividerOwnerContextReview, createDividerOwnerContextReviewReader } from '../tests/material-parity/divider-owner-context-review-source.mjs';
 import { createTextBackingReviewReader, textBackingRetainedReview, createDividerReviewedBoundariesReader, dividerReviewedBoundariesReview, inactiveParagraphInputsReview, filledFieldStructureReview, chipPaintReview, chipGraphicReview, controlInputReview, dividerPropertyContextReview, sharedButtonTouchReview, passiveStaticAxReview, cardInputsReview, expansionSemanticsReview, stepperInputsReview, tabsMenuSheetReview, staticSemanticInputsReview } from '../tests/material-parity/text-backing-case-review-source.mjs';
 
 const root = process.cwd();
@@ -60,7 +61,8 @@ const { audit, errors } = withAuditEvidenceSession(() => {
     const paintReaderFactory = options.caseObligationReviewSha256===dividerComputedPaintReview ? createDividerComputedPaintReviewReader : recoveredReaderFactory;
     const ownerFrameReaderFactory = options.caseObligationReviewSha256===dividerOwnerFrameReview ? createDividerOwnerFrameReviewReader : paintReaderFactory;
     const menuSelectReaderFactory = options.caseObligationReviewSha256===menuSelectDisabledReview ? createMenuSelectDisabledReviewReader : ownerFrameReaderFactory;
-    const applicability=menuSelectReaderFactory?.({root,read:auditReadFileSync,reviewSha256:options.caseObligationReviewSha256});
+    const dividerContextReaderFactory = options.caseObligationReviewSha256===dividerOwnerContextReview ? createDividerOwnerContextReviewReader : menuSelectReaderFactory;
+    const applicability=dividerContextReaderFactory?.({root,read:auditReadFileSync,reviewSha256:options.caseObligationReviewSha256});
     audit.coverage = attachCaseObligationCoverage(audit.coverage, options.caseObligationReview,
       options.caseObligationReviewSha256, { root, read: applicability?.read ?? auditReadFileSync });
     if(applicability)audit.coverage.inspectionEvidence.sourceApplicability=applicability.sourceApplicability;
