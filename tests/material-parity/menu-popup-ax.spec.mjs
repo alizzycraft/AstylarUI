@@ -62,16 +62,21 @@ test('popup tabindex omission predates later parity changes and remains an autho
   const receipts = {};
   for (const [revision, bytes] of Object.entries(sources)) {
     const ast = ts.createSourceFile(file, bytes.toString(), 99, true, ts.ScriptKind.TS);
-    const matches = [];
+    const matches = [], triggers = [];
     const visit = node => {
       if (ts.isObjectLiteralExpression(node) && node.properties.some(p => ts.isPropertyAssignment(p) &&
         p.name.getText(ast) === 'id' && ts.isStringLiteral(p.initializer) && p.initializer.text === 'menu-popup')) matches.push(node);
+      if (ts.isObjectLiteralExpression(node) && node.properties.some(p => ts.isPropertyAssignment(p) &&
+        p.name.getText(ast) === 'id' && ts.isStringLiteral(p.initializer) && p.initializer.text === 'menu-primary')) triggers.push(node);
       ts.forEachChild(node, visit);
     };
     visit(ast); assert.equal(matches.length, 1);
     const properties = matches[0].properties.map(p => p.name?.getText(ast));
     assert.ok(properties.includes('role')); assert.ok(properties.includes('children'));
     assert.equal(properties.includes('tabindex'), false); assert.equal(properties.includes('tabIndex'), false);
+    assert.equal(triggers.length, 1);
+    const controls = triggers[0].properties.find(p => p.name?.getText(ast) === 'ariaControls');
+    assert.ok(ts.isStringLiteral(controls.initializer)); assert.equal(controls.initializer.text, 'menu-popup');
     receipts[revision] = { sourceSha256: hash(bytes), popupObjectSha256: hash(matches[0].getText(ast)), properties };
   }
   console.log(JSON.stringify({ receipts, boundary: 'Initial/current authored objects only; not every intermediate revision,motive,initial runtime or current-core rendering proof.' }));
@@ -84,4 +89,20 @@ test('all eight retained desktop themes and DPRs preserve exact popup AX associa
   const forged = structuredClone(report); forged.results[7].profile = forged.results[0].profile;
   forged.results[7].viewport.id = forged.results[0].viewport.id;
   assert.throws(() => inspect(forged, 8));
+});
+
+test('supplementary Escape removes Menu AX owners but preserves candidate dangling authored controls', () => {
+  const bytes = readFileSync('artifacts/material-parity/menu-dismissal-ax-retry-20261024/latest-report.json');
+  assert.equal(hash(bytes), '6cca3cbb686397037da63b543ad3544039fa26356e60fb5d62ac5643d3997b86');
+  const report = JSON.parse(bytes); inspect(report, 8);
+  for (const row of report.results) for (const side of ['reference', 'astylar']) {
+    const result = row[side].dismissalAX;
+    assert.equal(result.action, 'supplementary-Escape-after-maintained-open');
+    assert.equal(result.popupCount, 0); assert.equal(result.trigger.expanded, 'false');
+    assert.equal(result.trigger.focused, true);
+    assert.equal(result.trigger.controls, side === 'reference' ? null : row[side].ax.popup.dom.id);
+    assert.equal(result.nodes.some(n => !n.ignored && n.role?.value === 'menu'), false);
+    const trigger = result.nodes.find(n => n.backendDOMNodeId === row[side].ax.trigger.backendNodeId);
+    assert.ok(trigger); assert.equal(trigger.properties.some(p => p.name === 'controls'), false);
+  }
 });

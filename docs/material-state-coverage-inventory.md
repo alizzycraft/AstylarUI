@@ -9,6 +9,34 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Supplementary Escape/AX boundary now distinguishes stale popup lifetime from
+dangling authored association across all eight desktop theme/DPR contexts.
+`audit-material-menu-dismissal-ax.mjs` pins/reuses desktop collector3d6be8a7;
+original open captures/producers unchanged. Initial nested package-resolution
+failure occurs before capture;keep menu-dismissal-ax-20261024 log pair. Retry
+uses explicit file-owned package URLs and exits native0. Report
+menu-dismissal-ax-retry-20261024/latest-report.json SHA256
+6cca3cbb686397037da63b543ad3544039fa26356e60fb5d62ac5643d3997b86;
+separate --verify native0. Original row state remains open;dismissalAX is
+EXPLICIT supplementary Escape after it,not configured open-dismiss replay.
+
+All16 side observations remove the popup DOM and nonignored menu AX owner,
+set expanded=false and focus the trigger. HTML clears controls;candidate leaves
+its removed popup ID in aria-controls,but Chrome exposes no controls AX property
+on either side afterward. Thus no stale visible AX popup owner is demonstrated;
+the retained DOM relation is unequal and dangling on candidate. Initial2f440115
+and current menu-primary object both author the literal unconditional
+ariaControls='menu-popup',while popup existence is conditional. First divergence
+is application authoring,not proven core retention of an omitted relationship.
+
+Existing AX test now passes4/4,nativeExit0,with both captured owner disappearance/
+DOM relation and initial/current AST checks. Retain menu-dismissal-ax-history-
+independent-20261024 log pair and preceding independent pair. No frozen source,
+fixture,renderer,case status or canonical pointer change. Other dismissal actions,
+mobile,AT speech,resource teardown,current runtime and whole-case closure remain
+open. Do not recapture the established open roles/names/controls merely to join
+this supplementary boundary later.
+
 Verified Menu AX evidence is now attached to its eight EXACT configured open
 case records by standalone `join-material-menu-ax-evidence.mjs`,not aliased onto
 open-hover-content or mobile cases. Virtual successord7ce8d6e2d5b9a3025e1f7a80a62ca383d08636e1b1d44d4d5c0959f6fa267aa
