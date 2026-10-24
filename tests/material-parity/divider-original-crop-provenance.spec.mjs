@@ -6,6 +6,7 @@ import { gunzipSync } from 'node:zlib';
 import ts from 'typescript';
 import { PNG } from 'pngjs';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
+import { transformSync } from 'esbuild';
 
 const hash=b=>createHash('sha256').update(b).digest('hex');
 test('Original Divider light desktop crops are unique exact screenshot regions',t=>{
@@ -86,6 +87,20 @@ test('Exact Divider requirement review reconciles crop provenance without cleari
   const fontTests=readFileSync('src/lib/astylar-isolation.spec.ts','utf8');
   assert.ok(fontTests.includes('does not revive an Angular-owned surface when initial fonts resolve after destruction'));
   assert.ok(fontTests.includes("expect(() => loadingDone!(new Event('loadingdone'))).not.toThrow()"));
+  const mapBytes=readFileSync('examples/material-showcase/dist/material-showcase/browser/chunk-XOU37TRR.js.map');
+  assert.equal(hash(mapBytes),'8692027f86a8d2d5571de110d92ad3fdda97ea35da86adc10f1522a5134a686d');
+  const map=JSON.parse(mapBytes),module='node_modules/astylarui/dist/lib/lib/astylar.js';
+  const captured=map.sourcesContent[map.sources.indexOf(module)];assert.ok(captured);
+  const createScene=source=>{
+    const ast=ts.createSourceFile('owner.js',source,99,true,ts.ScriptKind.JS),matches=[];
+    const visit=node=>{if(ts.isMethodDeclaration(node)&&node.name.getText(ast)==='createScene')matches.push(node.getText(ast));ts.forEachChild(node,visit);};visit(ast);
+    assert.equal(matches.length,1);
+    return transformSync('class Owner{'+matches[0]+'}',{loader:'js',minifyWhitespace:true,minifySyntax:true}).code;
+  };
+  const current=ts.transpileModule(readFileSync('src/lib/astylar.ts','utf8'),{compilerOptions:{target:99,module:99,experimentalDecorators:true}}).outputText;
+  assert.equal(createScene(current),createScene(captured));
+  assert.equal(createScene(readFileSync('examples/material-showcase/'+module,'utf8')),createScene(captured));
+  for(const guard of ['if (session.isDisposed)', 'if (scene.isDisposed)', "fontSet.removeEventListener('loadingdone', handleFontsLoaded)"])assert.ok(captured.includes(guard));
   const structure=parent.obligations.inputStyleStructure;
   const natural=structure.retainedDividerPropertyContexts;
   assert.equal(hash(readFileSync(natural.evidence.naturalLineBoxes.file)),natural.evidence.naturalLineBoxes.sha256);

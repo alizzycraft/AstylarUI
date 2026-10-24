@@ -9,6 +9,18 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Font lifetime source-applicability question answered at the complete owning method:
+current TS createScene(transpiled),installed package createScene and retained
+captured createScene agree after esbuild syntax/whitespace normalization,without
+identifier renaming. Whole captured map authenticates8692027f. The capture thus
+contains the initial scene-disposed guard,later session-disposed guard and exact
+loadingdone listener removal;missing captured guard is not the source explanation.
+This is source correspondence,NOT evidence that the historical capture exercised
+pending network fonts or those disposal paths. Controlled test execution and
+runtime timing remain separate. Existing focused requirement proof now checks
+this whole-method agreement;no renderer,bundle or fixture changed.
+Verification:existing requirement suite passes5/5,exit0;diff check passes.
+
 Late-work applicability review recovers already recorded controlled font-disposal
 coverage:initial readiness released after genuine Angular destruction and exact
 retained loadingdone callback invoked after disposal. Current test declarations
