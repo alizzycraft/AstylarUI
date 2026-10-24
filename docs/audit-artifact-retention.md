@@ -1,5 +1,17 @@
 # Audit artifact retention
 
+October24 standalone Slider state-layer review reuses the original32 PNGs and
+32 trees in slider-hover-held-20261024;no new browser assets or result set.
+Keep slider-retained-state-layer-20261024 initial proof log,the failed
+slider-retained-state-layer-served-modules-20261024 instrumentation assertion,
+the corrected slider-retained-state-layer-final-20261024 log and their stderr.
+Failure was requiring a candidate lazy route script on the reference route,
+not a renderer defect. Final owning/raw integration passes2/2;keep
+slider-state-layer-integration-20261024.log,SHA
+3fa1036462542187360234904e9df1f7ca0ba960fee59280075cc0433f287137,
+and empty stderr. This is standalone next-batch proof,not a new canonical
+generation,case closure or permission to delete original/historical evidence.
+
 October24 Slider publication completed:isolated import5164,compression81937 and
 accepted import28057 all exit0. Generationa65965fb/index6d77ad44 retains the whole
 package;all86 copied files authenticate and85 index/shard complete hashes remain

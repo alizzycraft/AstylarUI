@@ -2,6 +2,40 @@
 
 ## Current audit pointer — October24
 
+### Current next action and publication status
+
+- Slider state-layer input mismatch is now demonstrated for all16 retained
+  hover/held contexts,without a new capture. Reference trees request one48px
+  hover layer at.05 alpha,or active AND focus layers each at.2 while held.
+  The application instead drives one plugin disc at.08 hover/.12 held;the
+  other handle's disc remains transparent. Theme RGB values agree;alpha and
+  composition do not. Owning stage is application/plugin state-layer authoring,
+  not an equal-input core alpha diagnosis. This extends state-layer ownership
+  beyond the existing hardcoded-ripple-bounds finding's geometry-only scope.
+  Focused proof:tests/material-parity/slider-retained-state-layer.spec.mjs.
+  It authenticates reportde4228f9,all32 trees/PNGs,two served scripts/maps and
+  complete captured/current application71e2d41f/plugin dee2c10a modules,then
+  executes their original handlers/material updates. Missing candidate served
+  chunk rejects. Initial extra assertion incorrectly required the candidate's
+  lazy route chunk on the reference route;retain that failed instrumentation
+  log,not as a rendering failure. Corrected owning+raw-action integration
+  passes2/2,zero skips,in3824.7056ms;no browser replay or canonical export.
+  Logslider-state-layer-integration-20261024 SHA
+  3fa1036462542187360234904e9df1f7ca0ba960fee59280075cc0433f287137;
+  stderr empty. This standalone proof still needs coherent finding/coverage
+  registration in a later batch;do not rebuild the canonical package for prose.
+  Direct mutable material-update path appears in2cb8b198;its parent already
+  contains the.08/.12 alpha intent,so that commit is not claimed as the first
+  introduction of unequal alpha. Historical black-circle causality,actual
+  composited/fringe paint,equal-input core behavior and whole-case acceptance
+  remain unresolved. No accepted coverage/finding count changes from this proof.
+- Remote publication of verified canonical commit92cfda19 remains pending:
+  two terminal HTTPS push attempts return HTTP408,and ls-remote still reports
+  645c99b8. Buffered HTTP/1.1 retry did not resolve it. Strict read-only SSH check
+  finds no trusted GitHub host setup;no credentials,host trust,remote configuration
+  or acceptance gates are changed. Continue safe audit work without repeatedly
+  retrying the same failing upload or claiming local commits are pushed.
+
 - Accepted canonical/compact is a65965fb/index6d77ad44 (962 paths/285 proofs),
   following complete conservation,independent cold replay and verified imports.
   All2311 cases remain partial/current-rendering unverified;no rendering or
