@@ -40,3 +40,28 @@ test('configured focus action scope is 248 programmatic requests and eight point
   // Paired call counts represent 248/8 configured cases, not measured browser success.
   // The saved maintained runner is not the missing original e01 capture procedure.
 });
+
+test('configured focus labels preserve forty already-inspected noninteractive exclusions', () => {
+  const file = 'artifacts/material-parity/working-audit/proposals/c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823.json';
+  const bytes = readFileSync(file);
+  assert.equal(hash(bytes), 'ed7ecfea82fef0406fc9e0430a2df16a7db4555d2fdd074568c96cb5f3b39868');
+  const envelope = JSON.parse(bytes);
+  assert.equal(envelope.sha256, 'c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823');
+  const excluded = new Map(); let applicableProgrammatic = 0, applicablePointer = 0;
+  const byCase = new Map(envelope.review.groups.map(g => [g.case, g]));
+  for (const row of materialInteractionCases.filter(c => c.state === 'focus')) {
+    const key = `interaction:${row.family}@${row.profile}/${row.viewport.id}/focus`;
+    const group = byCase.get(key); assert.ok(group, key);
+    const focus = group.obligations.programmaticFocus;
+    if (focus.applicability === 'not-applicable') {
+      assert.equal(focus.disposition, 'inspected-authored-exclusion');
+      excluded.set(row.family, (excluded.get(row.family) ?? 0) + 1);
+    } else {
+      assert.equal(focus.applicability, 'applicable');
+      if (row.family === 'timepicker') applicablePointer++; else applicableProgrammatic++;
+    }
+  }
+  assert.deepEqual([...excluded].sort(), [['badge', 8], ['grid-list', 8], ['list', 8], ['sidenav', 8], ['table', 8]]);
+  assert.equal(applicableProgrammatic, 208); assert.equal(applicablePointer, 8);
+  // Reuse the authenticated review's exclusions, not fresh browser success or revised applicability.
+});

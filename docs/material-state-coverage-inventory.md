@@ -7,6 +7,21 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+October24 focus-label eligibility reconciled against complete raw c394 envelope
+SHAed7ecfea82fef0406fc9e0430a2df16a7db4555d2fdd074568c96cb5f3b39868.
+Of256 focus-labelled cases,40 already have inspected-authored-exclusion for
+programmaticFocus:badge,grid-list,list,sidenav,table,eight each. Preserve those
+reviewed exclusions instead of treating a driver's request as a meaningful
+interactive success/failure. Remaining applicable population is208 programmatic
+request cases plus8 Timepicker pointer-click cases. This narrows prioritization;
+it does not newly inspect actual selector resolution,activeElement,focus
+delivery/paint or Tab traversal. No applicability or remaining-work flag was
+changed. Existing owning source/applicability evidence is reused,not a repeated
+browser census. Updated focus-action-scope suite2/2 passes,zero skips,2332.4764ms,
+including driver classification and the complete authenticated review lookup.
+No new output artifacts,capture,registered-source/canonical mutation or acceptance
+promotion. Future focus coverage summaries must distinguish all three populations.
+
 October24 full configured-focus action scope:all256 configured focus cases in
 32 families are checked against maintained performInteraction bytes,which equal
 the digest-authenticated action-runner snapshot from configured-input-focus-
