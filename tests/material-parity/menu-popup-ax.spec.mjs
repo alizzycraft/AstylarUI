@@ -7,11 +7,13 @@ import ts from 'typescript';
 
 const file = 'artifacts/material-parity/menu-popup-ax-20261024/latest-report.json';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
-function inspect(report) {
-  assert.equal(report.results.length, 1);
-  const row = report.results[0];
-  assert.equal(row.family, 'menu'); assert.equal(row.profile, 'light');
-  assert.equal(row.viewport.id, 'desktop-dpr1'); assert.equal(row.state, 'open');
+function inspect(report, expectedCases = 1) {
+  assert.equal(report.results.length, expectedCases);
+  assert.equal(new Set(report.results.map(r => `${r.profile}/${r.viewport.id}`)).size, expectedCases);
+  for (const row of report.results) {
+  assert.equal(row.family, 'menu'); assert.equal(row.state, 'open');
+  if (expectedCases === 1) { assert.equal(row.profile, 'light'); assert.equal(row.viewport.id, 'desktop-dpr1'); }
+  else { assert.ok(['light', 'dark', 'contrast', 'custom'].includes(row.profile)); assert.ok(['desktop-dpr1', 'desktop-dpr2'].includes(row.viewport.id)); }
   for (const side of ['reference', 'astylar']) {
     assert.deepEqual(row[side].runtime.errors, []);
     const targets = row[side].ax;
@@ -41,6 +43,7 @@ function inspect(report) {
   assert.equal(property('astylar', 'trigger', 'focused'), true);
   assert.equal(property('reference', 'popup', 'focusable'), true);
   assert.equal(property('astylar', 'popup', 'focusable'), undefined);
+  }
 }
 test('retained Menu AX links resolve exact popup owners; focus and authored tabindex differences remain visible', () => {
   const bytes = readFileSync(file);
@@ -72,4 +75,13 @@ test('popup tabindex omission predates later parity changes and remains an autho
     receipts[revision] = { sourceSha256: hash(bytes), popupObjectSha256: hash(matches[0].getText(ast)), properties };
   }
   console.log(JSON.stringify({ receipts, boundary: 'Initial/current authored objects only; not every intermediate revision,motive,initial runtime or current-core rendering proof.' }));
+});
+
+test('all eight retained desktop themes and DPRs preserve exact popup AX associations and visible authoring differences', () => {
+  const bytes = readFileSync('artifacts/material-parity/menu-popup-ax-contexts-retry-20261024/latest-report.json');
+  assert.equal(hash(bytes), '819932e79b0bae14534f399643ac01a05942d581a2c28239d1ce88f39e49c9a1');
+  const report = JSON.parse(bytes); inspect(report, 8);
+  const forged = structuredClone(report); forged.results[7].profile = forged.results[0].profile;
+  forged.results[7].viewport.id = forged.results[0].viewport.id;
+  assert.throws(() => inspect(forged, 8));
 });

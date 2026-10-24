@@ -9,6 +9,29 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+The focused popup AX observation now covers all eight configured desktop theme/
+DPR open contexts,64 actual target observations. Bounded adapter
+`audit-material-menu-ax-contexts.mjs` pins original one-context producer6a11d250;
+the first capture and producer remain unchanged. Exact maintained action,
+settlement,theme application,unique per-context trees and CDP targets preserve.
+Initial launch failed before capture with nested data-module package resolution;
+retain menu-popup-ax-contexts-20261024 failure log pair. Explicit resolution from
+the file-owned adapter fixes that instrumentation prerequisite,not app behavior.
+
+Retry report menu-popup-ax-contexts-retry-20261024/latest-report.json SHA256
+819932e79b0bae14534f399643ac01a05942d581a2c28239d1ce88f39e49c9a1.
+Capture and separate --verify both native0. Independent existing AX test now
+passes3/3 and rejects duplicate physical contexts as well as link/owner/name
+corruption. Across ALL eight:exact AX controls backend association and roles/
+names match;native Rename versus candidate trigger focus differs;native popup
+explicit tabindex=-1/focusable versus candidate omitted tabindex/not focusable
+persists. Both runtime error arrays are empty in all pairs. Thus this observed
+association result and authored focusability difference are not restricted to
+light/DPR1. No mobile,dismissed-state/hidden AX,AT speech,current-renderer or
+whole-case acceptance is implied. Keep retry provenance/logs and independent
+menu-popup-ax-contexts-independent-20261024 pair. New adapter/test remain outside
+frozen1002/326 registration;canonical pointer and all2311 case flags unchanged.
+
 Popup focusability history check now distinguishes initial unequal authoring
 from later parity compensation. AST extraction finds exactly one menu-popup
 object in initial2f440115 and current component source;both have role/children
