@@ -9,6 +9,24 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Consolidated pending e0e4a2a9 review now passes EXISTING full case-obligation
+dependency loader:2311 cases/18280 authenticated dependencies,inspectionComplete
+false,currentRenderingAccepted false. Test overlays only exact virtual proposal
+bytes in memory and delegates other reads to authenticated d00b reader;no
+physical200MB proposal or canonical rebuild. Existing24 child scope,predecessor
+recovery,tamper/duplicate rejection and all parent gaps/statuses still checked.
+Review digest stays e0e4a2a9;only owning test gained the missing integration gate.
+
+Keep divider-owner-full-dependency-integration-20261025 pair,nativeExit0,1/1,
+0skip,98115.5063ms,stderr empty;stdout SHA256
+9e4b61a295155d1247e8ab8797dea5f8336ea8af3d80303a8dbdea92dfd4d0ed.
+This authenticates combined references,not current rendering or original final
+matrix. Four next-batch source paths remain outside frozen1028/353/196 and
+accepted88be4d47 remains unchanged. Next pick a specific remaining shared owner
+input(such as frame ink/token inheritance) and check existing scalar/source
+classifications before diagnosing anything new. No additional typography or
+border recapture is justified by this successful dependency check.
+
 Outside-owner pending review now CONSOLIDATES border/clip/box evidence with
 24 eyebrow margin records,scoped fixed-font title UA length corroboration,
 48 unequal wrapper-position/height records and48 eight-field retained leaf

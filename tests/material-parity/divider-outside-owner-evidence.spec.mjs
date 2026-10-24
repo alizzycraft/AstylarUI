@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import path from 'node:path';
+import { loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
 import { createMenuSelectDisabledReviewReader, menuSelectDisabledReview } from './menu-select-disabled-review-source.mjs';
 import { joinDividerOutsideOwnerEvidence, restoreDividerOutsideOwnerEvidence } from '../../scripts/join-material-divider-outside-owner-evidence.mjs';
 
@@ -26,5 +28,15 @@ test('outside-scalar Divider owner evidence joins only exact property/context re
   assert.throws(()=>joinDividerOutsideOwnerEvidence(joined.review));
   assert.throws(()=>joinDividerOutsideOwnerEvidence(predecessor,file=>file.endsWith('divider-outside-owner-border-attribution-20261025.log')?Buffer.from('forged'):readFileSync(file)));
   assert.throws(()=>joinDividerOutsideOwnerEvidence(predecessor,file=>file.endsWith('divider-wrapper-leaf-typography-inputs-20261025.log')?Buffer.from('forged'):readFileSync(file)));
+  const file=`artifacts/material-parity/working-audit/proposals/${joined.sha256}.json`;
+  const bytes=Buffer.from(JSON.stringify({status:'proposal-not-canonical',sha256:joined.sha256,review:joined.review}));
+  const read=(name,options)=>{
+    if(path.resolve(name)!==path.resolve(file))return reader.read(name,options);
+    const encoding=typeof options==='string'?options:options?.encoding;
+    return encoding?bytes.toString(encoding):Buffer.from(bytes);
+  };
+  const loaded=loadCaseObligationReview(file,joined.sha256,joined.review.groups.map(g=>g.case),{root:process.cwd(),read});
+  assert.equal(loaded.cases.length,2311);assert.equal(loaded.inspectionComplete,false);assert.equal(loaded.currentRenderingAccepted,false);
+  console.log(JSON.stringify({dependencies:loaded.evidenceFingerprints.length,inspectionComplete:loaded.inspectionComplete,currentRenderingAccepted:loaded.currentRenderingAccepted,physicalProposalSaved:false}));
   console.log(JSON.stringify({reviewSha256:joined.sha256,predecessor:menuSelectDisabledReview,cases:joined.cases,physicalAliases:joined.physicalAliases,canonicalPublished:false}));
 });
