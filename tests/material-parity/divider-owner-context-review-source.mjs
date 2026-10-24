@@ -3,7 +3,8 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { createMenuSelectDisabledReviewReader,menuSelectDisabledReview } from './menu-select-disabled-review-source.mjs';
 import { joinDividerOutsideOwnerEvidence } from '../../scripts/join-material-divider-outside-owner-evidence.mjs';
-import { dividerOwnerRegistrationPrior,restoreDividerOwnerContextProducer,restoreDividerOwnerContextPolicy } from './divider-owner-context-registration.mjs';
+import { dividerOwnerRegistrationPrior,restoreDividerOwnerContextProducer,restoreDividerOwnerContextPolicy,
+  dividerOwnerContextSelectionPrior,restoreDividerOwnerContextSelection } from './divider-owner-context-registration.mjs';
 
 const hash=b=>createHash('sha256').update(b).digest('hex');
 export const dividerOwnerContextReview='f812d8d9e169b51afd03ae43ea06f8b8ac69e6df5147f11589112919c6ef7083';
@@ -11,6 +12,8 @@ export function createDividerOwnerContextHistoricalRead({root,read}){
   const transitions=new Map([
     [path.resolve(root,'tests/material-parity/input-equivalence-audit.mjs'),{prior:dividerOwnerRegistrationPrior.producer,restore:b=>restoreDividerOwnerContextProducer(b,f=>read(path.resolve(root,f)))}],
     [path.resolve(root,'tests/material-parity/input-equivalence-policy.mjs'),{prior:dividerOwnerRegistrationPrior.policy,restore:restoreDividerOwnerContextPolicy}],
+    [path.resolve(root,'scripts/export-material-input-audit-current-ancestry.mjs'),{prior:dividerOwnerContextSelectionPrior.launcher,restore:b=>restoreDividerOwnerContextSelection(b,'launcher')}],
+    [path.resolve(root,'scripts/run-material-input-audit.mjs'),{prior:dividerOwnerContextSelectionPrior.runner,restore:b=>restoreDividerOwnerContextSelection(b,'runner')}],
   ]);
   return (name,options)=>{
     const transition=transitions.get(path.resolve(root,name));if(!transition)return read(name,options);
@@ -37,6 +40,6 @@ export function createDividerOwnerContextReviewReader({root,read,reviewSha256}){
     },
     sourceApplicability:{mode:'exact-pending-divider-owner-context',reviewSha256,addedChildren:joined.addedChildren,
       predecessorApplicability:prior.sourceApplicability,
-      boundary:'Only complete producer/policy registration reversal plus existing predecessor boundaries. No canonical publication,current rendering,case closure or changed criteria.'},
+      boundary:'Only complete producer/policy/launcher/runner additive reversal plus existing predecessor boundaries. No canonical publication,current rendering,case closure or changed criteria.'},
   };
 }

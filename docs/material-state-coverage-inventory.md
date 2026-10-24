@@ -9,6 +9,30 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Owner-context launcher/runner routing now validated IN MEMORY,not live. Explicit
+--divider-owner-context selects exactf812d8d9,accepts existing --dry-run/--check
+forms and rejects combination with all17 older supplements. Every older/default
+dry invocation equals the frozen prior invocation. Exact runner expression selects
+new reader only forf812d8d9 and preserves older fallback;whole prior launcher/
+runner sources recover after reversing only bounded additions.
+
+Historical owner-context reader now reverses FOUR exact staged sources(producer,
+policy,launcher,runner) before old reader boundaries. Complete selected proposal
+still hashes tof812d8d9 with all2311 groups partial/current-unverified;unknown
+digest,unexpected source drift and unrelated-read substitution checks remain.
+No production file changed or physical proposal written. Adding two selection
+tests changes staged proposal census to13 added sources/12 proofs:1041/365/198,
+not live1028/353/196. Do not copy prior363 planned-proof count forward.
+
+Keep divider-context-staged-selection-20261025 focused4/4 log pair and
+divider-context-four-source-staged-integration-20261025 pair,5/5,0skip,
+75283.7618ms,nativeExit0,stderr empty,stdout SHA256
+6908e89075428f43ce867dceeed08452dbf3dfd9f0214a62dd63876d475a854e.
+Existing full dependency closure is not rerun for selector-only changes. Next
+adapt/verify direct historical consumers against the four-source staged boundary
+before applying production registration/routing. Do not bypass old receipt guards
+or assume the new selected reader alone fixes unrelated historical entry points.
+
 Exact pending owner-context reader now constructs f812d8d9 against STAGED new
 producer/policy bytes. It reverses only complete known additive transitions on
 two exact paths before invoking existing Menu predecessor reader;unknown digests,

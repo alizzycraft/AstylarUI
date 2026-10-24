@@ -31,7 +31,7 @@ export function dividerOwnerContextProofRows(read){
         scope:'Bounded retained owner inputs,desktop-DPR1 cursor observations and general public alignment reductions. Not whole-case closure,current rendering or transfer of public center failure to Material cases.'});
     }
   }
-  assert.equal(rows.length,10);assert.equal(new Set(rows.map(r=>r.file+':'+r.title)).size,10);return rows;
+  assert.equal(rows.length,12);assert.equal(new Set(rows.map(r=>r.file+':'+r.title)).size,12);return rows;
 }
 const sourceAnchor='function sourceFingerprints(root) {\n  const files = [\n';
 const proofAnchor='function focusedProofInventory(root) {\n  return [\n';
@@ -63,4 +63,30 @@ export function prepareDividerOwnerContextPolicy(source){
 export function restoreDividerOwnerContextPolicy(source){
   const text=once(source.toString().replaceAll('\r\n','\n'),policyAnchor+policyPrefix,policyAnchor);
   assert.equal(hash(text),dividerOwnerRegistrationPrior.policy);return text;
+}
+
+export const dividerOwnerContextSelectionPrior=Object.freeze({launcher:'625e585f51d670cceb52a2eaa0600c70d6051d91c7c743bed1ad4e71f2f6673c',runner:'d6b7a4f8704689f5e1a44b0b45795c43913aca48181eefd12179c125856e8bb9'});
+const selectedReview='f812d8d9e169b51afd03ae43ea06f8b8ac69e6df5147f11589112919c6ef7083';
+const selectionTransitions=kind=>{
+  assert.ok(Object.hasOwn(dividerOwnerContextSelectionPrior,kind));
+  if(kind==='runner')return [
+    ["import { menuSelectDisabledReview, createMenuSelectDisabledReviewReader } from '../tests/material-parity/menu-select-disabled-review-source.mjs';\n","import { menuSelectDisabledReview, createMenuSelectDisabledReviewReader } from '../tests/material-parity/menu-select-disabled-review-source.mjs';\nimport { dividerOwnerContextReview, createDividerOwnerContextReviewReader } from '../tests/material-parity/divider-owner-context-review-source.mjs';\n"],
+    ['    const applicability=menuSelectReaderFactory?.','    const dividerContextReaderFactory = options.caseObligationReviewSha256===dividerOwnerContextReview ? createDividerOwnerContextReviewReader : menuSelectReaderFactory;\n    const applicability=dividerContextReaderFactory?.'],
+  ];
+  return [
+    ['const rawRequested = process.argv.slice(2);\n',"const rawRequested = process.argv.slice(2);\nconst dividerOwnerContext = rawRequested.includes('--divider-owner-context');\nassert.ok(!dividerOwnerContext || rawRequested.every(argument => ['--divider-owner-context', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');\n"],
+    ['const requested = rawRequested.filter',"const requested = rawRequested.filter(argument => argument !== '--divider-owner-context').filter"],
+    ['|--menu-select-disabled]','|--menu-select-disabled|--divider-owner-context]'],
+    ['for (const [name, relative] of Object.entries(inputs)) {',`if (dividerOwnerContext) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/${selectedReview}.json';\nfor (const [name, relative] of Object.entries(inputs)) {`],
+    ['(originalRunnerRecovery || dividerComputedPaint || dividerOwnerFrame || menuSelectDisabled)','(originalRunnerRecovery || dividerComputedPaint || dividerOwnerFrame || menuSelectDisabled || dividerOwnerContext)'],
+    ["if (requested.includes('--dry-run'))",`if (dividerOwnerContext) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=${selectedReview}';\nif (requested.includes('--dry-run'))`],
+  ];
+};
+export function prepareDividerOwnerContextSelection(source,kind){
+  let s=source.toString().replaceAll('\r\n','\n');assert.equal(hash(s),dividerOwnerContextSelectionPrior[kind]);
+  for(const [a,b]of selectionTransitions(kind))s=once(s,a,b);return s;
+}
+export function restoreDividerOwnerContextSelection(source,kind){
+  let s=source.toString().replaceAll('\r\n','\n');for(const [a,b]of selectionTransitions(kind).toReversed())s=once(s,b,a);
+  assert.equal(hash(s),dividerOwnerContextSelectionPrior[kind]);return s;
 }
