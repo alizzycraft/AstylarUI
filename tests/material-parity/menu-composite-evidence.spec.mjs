@@ -4,9 +4,10 @@ import { createHash } from 'node:crypto';
 import test from 'node:test';
 import { createDividerOwnerFrameReviewReader, dividerOwnerFrameReview } from './divider-owner-frame-review-source.mjs';
 import { joinMenuCompositeEvidence, restoreMenuCompositeEvidence } from '../../scripts/join-material-menu-composite-evidence.mjs';
+import { createMenuHistoricalRead } from './menu-select-disabled-registration.mjs';
 
 test('Menu retained composite join preserves exact predecessor, scope and unresolved status', () => {
-  const reader = createDividerOwnerFrameReviewReader({ root: process.cwd(), read: readFileSync, reviewSha256: dividerOwnerFrameReview });
+  const reader = createDividerOwnerFrameReviewReader({ root: process.cwd(), read: createMenuHistoricalRead({ root: process.cwd(), read: readFileSync }), reviewSha256: dividerOwnerFrameReview });
   const predecessor = JSON.parse(reader.read(`artifacts/material-parity/working-audit/proposals/${dividerOwnerFrameReview}.json`)).review;
   const hash = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
   const before = hash(predecessor);

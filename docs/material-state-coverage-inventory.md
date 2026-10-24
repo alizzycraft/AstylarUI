@@ -9,6 +9,35 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Menu/focus/Select/disabled batch is now REGISTERED LOCALLY,not merely prepared:
+1028 source paths/353 proof declarations/196 source findings. Four live files
+(producer,policy,launcher,runner) exactly equal their tested prepared transitions;
+all prior1002/326/193 restore intact. --menu-select-disabled opt-in selects exact
+d00beaa8 via the live named launcher and new owning reader. Default/older
+selections preserve. Accepted canonical pointer remains88be4d47/indexb185409b;
+no export/import/canonical publication,current rendering or case closure.
+
+First live coherent run retained at menu-live-batch-integration-20261025:
+29/32,three failures exposed two missed historical-policy read entry points.
+Menu composite standalone reader and mobile AX receipt checker now explicitly
+use existing exact historical adapter. Mobile realpath-root guard and all raw
+report/producer/AX/receipt assertions preserve;no hash waiver or recapture.
+Coherent retry menu-live-batch-integration-retry-20261025 passes32/32,0skip,
+nativeExit0,184071.452ms,stderr empty;stdout SHA256
+b6dd99d890f0db9d28f5457787111e83a12e7d434c41d2d378ccd0dd524560c2.
+Retained reader authenticates18270 dependencies/all2311 records and33 children;
+inspectionComplete=false,currentRenderingAccepted=false. Every parent status
+and remaining task preserves. All32 checks are audit integration,not353 proof
+execution or enforced rendering acceptance.
+
+Exact live-source conservation log menu-live-source-conservation-20261025
+SHA2569edaf8146e06f2b8d44700d75e78122841cdf72b08f710a91b35a626ac295c6c
+records four before/after source hashes and unchanged accepted pointer. Existing
+historical spec transitions remain bounded;no renderer/fixture/reference edits.
+Next freeze this coherent local batch before any justified export/conservation/
+cold/import milestone. Storage/publication/push route remains unresolved;do not
+repeat known failing uploads or spend disk on another incomplete canonical run.
+
 Two old owner/frame owning specs now explicitly use createMenuHistoricalRead
 for their direct source reads. Only fs import alias plus helper import/adapter
 binding change;all original test statements/assertions remain. Exact reversal

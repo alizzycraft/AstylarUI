@@ -10,11 +10,12 @@ import { restoreDividerOwnerFrameExportSource } from './pending-evidence-registr
 import { menuPendingSources, menuPendingProofRows, prepareMenuProducerRegistration, restoreMenuProducerRegistration,
   menuPendingFindingDefinitions, prepareMenuPolicyRegistration, restoreMenuPolicyRegistration, createMenuHistoricalRead,
   menuHistoricalSpecHashes, restoreMenuHistoricalSpec } from './menu-select-disabled-registration.mjs';
+const frozenRead = createMenuHistoricalRead({ root: process.cwd(), read: readFileSync });
 
 test('historical read restores only four authenticated staged transitions and rejects modified staged content', () => {
   const root = process.cwd(), names = ['tests/material-parity/input-equivalence-audit.mjs','tests/material-parity/input-equivalence-policy.mjs',
     'scripts/export-material-input-audit-current-ancestry.mjs','scripts/run-material-input-audit.mjs'];
-  const originals = names.map(f => readFileSync(f, 'utf8').replaceAll('\r\n', '\n'));
+  const originals = names.map(f => frozenRead(f, 'utf8').replaceAll('\r\n', '\n'));
   const staged = [prepareMenuProducerRegistration(originals[0], readFileSync), prepareMenuPolicyRegistration(originals[1]),
     prepareMenuSelection(originals[2], 'launcher'), prepareMenuSelection(originals[3], 'runner')];
   const overlay = new Map(names.map((f,i) => [path.resolve(root,f), Buffer.from(staged[i])]));
@@ -38,7 +39,7 @@ test('historical read restores only four authenticated staged transitions and re
     assert.throws(() => historical(names[i])); overlay.set(key,saved);
   }
   const frozen = createMenuHistoricalRead({ root, read: readFileSync });
-  names.forEach(file => assert.deepEqual(frozen(file), readFileSync(file)));
+  names.forEach((file,i) => assert.equal(frozen(file).toString(), originals[i]));
   for (const [file,priorHash] of Object.entries(menuHistoricalSpecHashes)) {
     const bytes = readFileSync(file), restored = restoreMenuHistoricalSpec(bytes,file);
     assert.equal(createHash('sha256').update(restored).digest('hex'),priorHash);
@@ -48,7 +49,7 @@ test('historical read restores only four authenticated staged transitions and re
 });
 
 test('pending policy registration conserves all193 definitions and binds three exact source anchors and receipts', () => {
-  const file = 'tests/material-parity/input-equivalence-policy.mjs', original = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const file = 'tests/material-parity/input-equivalence-policy.mjs', live = readFileSync(file, 'utf8').replaceAll('\r\n', '\n'), original = frozenRead(file, 'utf8').replaceAll('\r\n', '\n');
   const definitions = source => new Function(source.replace(/^export const /gm, 'const ') + ';return sourceAuditDefinitions;')();
   const before = definitions(original), prepared = prepareMenuPolicyRegistration(original), after = definitions(prepared);
   assert.equal(before.length, 193); assert.equal(after.length, 196); assert.equal(new Set(after.map(f => f.id)).size, 196);
@@ -60,7 +61,7 @@ test('pending policy registration conserves all193 definitions and binds three e
     assert.ok(finding.owner && finding.classification && finding.justification && finding.focusedProof && finding.observation);
   }
   assert.equal(restoreMenuPolicyRegistration(prepared), original);
-  assert.equal(readFileSync(file, 'utf8').replaceAll('\r\n', '\n'), original);
+  assert.equal(readFileSync(file, 'utf8').replaceAll('\r\n', '\n'), live);
   assert.throws(() => prepareMenuPolicyRegistration(original + '\n'));
 });
 
@@ -79,7 +80,7 @@ function inventory(source) {
 }
 test('pending producer registration conserves complete frozen inventories and verifies every new proof declaration', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';
-  const original = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const live = readFileSync(file, 'utf8').replaceAll('\r\n', '\n'), original = frozenRead(file, 'utf8').replaceAll('\r\n', '\n');
   const before = inventory(original), prepared = prepareMenuProducerRegistration(original, readFileSync), after = inventory(prepared);
   assert.equal(before.sources.length, 1002); assert.equal(before.proofs.length, 326);
   assert.equal(after.sources.length, 1028); assert.equal(after.proofs.length, 353);
@@ -88,10 +89,10 @@ test('pending producer registration conserves complete frozen inventories and ve
   assert.deepEqual(after.sources.slice(0,26), menuPendingSources);
   for (const row of menuPendingProofRows(readFileSync)) assert.ok(new RegExp(row.pattern).test(readFileSync(row.file, 'utf8')));
   assert.equal(restoreMenuProducerRegistration(prepared, readFileSync), original);
-  assert.equal(readFileSync(file, 'utf8').replaceAll('\r\n', '\n'), original);
+  assert.equal(readFileSync(file, 'utf8').replaceAll('\r\n', '\n'), live);
 });
 test('pending registration rejects changed frozen producer or missing proof source', () => {
-  const source = readFileSync('tests/material-parity/input-equivalence-audit.mjs');
+  const source = frozenRead('tests/material-parity/input-equivalence-audit.mjs');
   assert.throws(() => prepareMenuProducerRegistration(source.toString() + '\n', readFileSync));
   assert.throws(() => prepareMenuProducerRegistration(source, file => file.endsWith('menu-popup-ax.spec.mjs') ? Buffer.from('') : readFileSync(file)));
 });

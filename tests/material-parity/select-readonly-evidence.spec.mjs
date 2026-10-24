@@ -14,7 +14,7 @@ import { joinDisabledControlEvidence, restoreDisabledControlEvidence, disabledCo
 import { createMenuSelectDisabledReviewReader, menuSelectDisabledReview } from './menu-select-disabled-review-source.mjs';
 import { loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
 import path from 'node:path';
-import { prepareMenuProducerRegistration, prepareMenuPolicyRegistration } from './menu-select-disabled-registration.mjs';
+import { prepareMenuProducerRegistration, prepareMenuPolicyRegistration, createMenuHistoricalRead } from './menu-select-disabled-registration.mjs';
 import { prepareMenuSelection } from './menu-select-disabled-selection.mjs';
 
 test('six retained disabled contexts preserve values while exposing native Select focusability difference', () => {
@@ -67,11 +67,12 @@ test('disabled editing cohorts have no configured focus or activation attempt in
 
 test('exact Select supplementary readonly evidence preserves all parent obligations and rejects forged receipts', () => {
   const root = process.cwd();
+  const frozenRead = createMenuHistoricalRead({ root, read: readFileSync });
   const staged = new Map([
-    ['tests/material-parity/input-equivalence-audit.mjs', prepareMenuProducerRegistration(readFileSync('tests/material-parity/input-equivalence-audit.mjs'), readFileSync)],
-    ['tests/material-parity/input-equivalence-policy.mjs', prepareMenuPolicyRegistration(readFileSync('tests/material-parity/input-equivalence-policy.mjs'))],
-    ['scripts/export-material-input-audit-current-ancestry.mjs', prepareMenuSelection(readFileSync('scripts/export-material-input-audit-current-ancestry.mjs'), 'launcher')],
-    ['scripts/run-material-input-audit.mjs', prepareMenuSelection(readFileSync('scripts/run-material-input-audit.mjs'), 'runner')],
+    ['tests/material-parity/input-equivalence-audit.mjs', prepareMenuProducerRegistration(frozenRead('tests/material-parity/input-equivalence-audit.mjs'), readFileSync)],
+    ['tests/material-parity/input-equivalence-policy.mjs', prepareMenuPolicyRegistration(frozenRead('tests/material-parity/input-equivalence-policy.mjs'))],
+    ['scripts/export-material-input-audit-current-ancestry.mjs', prepareMenuSelection(frozenRead('scripts/export-material-input-audit-current-ancestry.mjs'), 'launcher')],
+    ['scripts/run-material-input-audit.mjs', prepareMenuSelection(frozenRead('scripts/run-material-input-audit.mjs'), 'runner')],
   ].map(([file, source]) => [path.resolve(root,file), Buffer.from(source)]));
   const overlayRead = (file, options) => {
     const bytes = staged.get(path.resolve(root,file)); if (!bytes) return readFileSync(file,options);

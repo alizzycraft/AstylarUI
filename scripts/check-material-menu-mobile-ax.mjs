@@ -6,6 +6,7 @@ import path from 'node:path';
 import ts from 'typescript';
 import { validateSupplementalCapture } from '../tests/material-parity/supplemental-capture-evidence.mjs';
 import { propertyGroups } from '../tests/material-parity/input-equivalence-policy.mjs';
+import { createMenuHistoricalRead } from '../tests/material-parity/menu-select-disabled-registration.mjs';
 
 const file = process.argv[2]; assert.ok(file);
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -76,11 +77,12 @@ if (hash(currentProducer) !== producerReceipt.sha256) {
 }
 const inside = (base, file) => file === base || file.startsWith(base + path.sep);
 const allowedRoots = [realpathSync(process.cwd()), realpathSync('artifacts/material-parity')];
-const read = file => {
+const guardedRead = file => {
   if (historicalProducer && path.resolve(file) === path.resolve(producerFile)) return historicalProducer;
   assert.ok(allowedRoots.some(root => inside(root, realpathSync(file))), 'Evidence symlink escapes allowed roots');
   return readFileSync(file);
 };
+const read = createMenuHistoricalRead({ root: process.cwd(), read: guardedRead });
 // Only reshape side/boundary containers; all original receipts/runtime records
 // pass unchanged through the existing validator. Raw report is never rewritten.
 assert.deepEqual(validateSupplementalCapture({ ...report, results: pairs }, {

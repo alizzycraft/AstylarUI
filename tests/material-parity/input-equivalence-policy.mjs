@@ -110,6 +110,211 @@ export const reviewedValueNormalizations = Object.freeze([
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+  "id": "fixture-menu-popup-programmatic-focusability-omitted",
+  "file": "examples/material-showcase/src/app/astylar.component.ts",
+  "classification": "application-plugin-authoring-defect",
+  "owner": "showcase menu popup semantic authoring",
+  "introducedBy": "Initial2f440115 and current popup object omit tabindex;intermediate history and motive unproven.",
+  "focusedProof": "tests/material-parity/menu-popup-ax.spec.mjs",
+  "evidence": [
+    {
+      "file": "artifacts/material-parity/menu-popup-ax-contexts-retry-20261024/latest-report.json",
+      "sha256": "819932e79b0bae14534f399643ac01a05942d581a2c28239d1ce88f39e49c9a1"
+    },
+    {
+      "file": "artifacts/material-parity/menu-mobile-ax-retry-20261024/latest-report.json",
+      "sha256": "04ab953a6db5773212b85c9bc09c20d01708d065c38704a36ce1f58038620ba0"
+    }
+  ],
+  "observation": {
+    "component": "menu",
+    "element": "menu-popup",
+    "states": [
+      "open"
+    ],
+    "profiles": [
+      "light",
+      "dark",
+      "contrast",
+      "custom"
+    ],
+    "dpr": [
+      1,
+      2
+    ],
+    "property": "authored tabindex and actual AX focusability",
+    "reference": "tabindex=-1;AX focusable=true",
+    "astylar": "tabindex omitted;AX focusable absent",
+    "stage": "authored popup object before semantic DOM projection"
+  },
+  "justification": "Actual popup/menuitem roles,names and exact controls backend associations match across eight retained desktop contexts. Popup focusability differs with unequal authored tabindex. Initial/current AST and retained trees show the omission. This is not evidence that core loses a supplied tabindex or that matching numeric DOM tabIndex properties imply equivalent attributes. Existing opening-focus/navigation failure remains under its original finding.",
+  "mobileEvidence": "Light/dark390x844 DPR2;three open/Escape cycles with actual AX at all boundaries,not touch emulation or original-e01 replay.",
+  "boundary": "Retained desktop/mobile cohorts only;not initial runtime,all history,AT speech,equal-input core proof,current rendering or case closure.",
+  "implementationOrder": "Later restore reference-equivalent tabindex intent through the public lowercase tabindex field;verify shared core support with equal inputs rather than adding custom focus/layout behavior.",
+  "pattern": "id: 'menu-popup', role: 'menu'"
+}),
+  Object.freeze({
+  "id": "fixture-menu-controls-association-outlives-popup",
+  "file": "examples/material-showcase/src/app/astylar.component.ts",
+  "classification": "application-plugin-authoring-defect",
+  "owner": "showcase menu trigger/popup relationship lifecycle",
+  "introducedBy": "Initial2f440115 and current trigger object author literal ariaControls=menu-popup independent of conditional popup existence.",
+  "focusedProof": "tests/material-parity/menu-popup-ax.spec.mjs",
+  "evidence": [
+    {
+      "file": "artifacts/material-parity/menu-dismissal-ax-retry-20261024/latest-report.json",
+      "sha256": "6cca3cbb686397037da63b543ad3544039fa26356e60fb5d62ac5643d3997b86"
+    },
+    {
+      "file": "artifacts/material-parity/menu-mobile-ax-retry-20261024/latest-report.json",
+      "sha256": "04ab953a6db5773212b85c9bc09c20d01708d065c38704a36ce1f58038620ba0"
+    }
+  ],
+  "observation": {
+    "component": "menu",
+    "element": "menu-primary/menu-popup",
+    "states": [
+      "supplementary Escape after maintained open"
+    ],
+    "profiles": [
+      "light",
+      "dark",
+      "contrast",
+      "custom"
+    ],
+    "dpr": [
+      1,
+      2
+    ],
+    "property": "aria-controls after popup removal",
+    "reference": "controls absent",
+    "astylar": "controls retains removed popup ID",
+    "stage": "unconditional authored trigger association versus conditional popup object"
+  },
+  "justification": "All eight paired contexts remove the menu DOM/AX owner,mark trigger expanded=false and return focus to the trigger. Candidate DOM retains a dangling popup ID while native clears it;Chrome omits controls from both closed trigger AX nodes. This is not stale popup AX retention or failure to clear an omitted renderer input:the candidate still authors the relationship. Existing Escape success does not establish complete lifetime or current-renderer acceptance.",
+  "mobileEvidence": "Initial closed plus three real open/Escape cycles in light/dark390x844 DPR2;both initial and later closed candidate controls references remain dangling.",
+  "boundary": "Desktop supplementary Escape and retained mobile three-cycle producer only;not original-e01 replay,other dismissal paths,AT speech,current rendering or whole-case closure.",
+  "implementationOrder": "Later make relationship lifecycle match popup lifecycle at the authoring boundary;retain exact AX IDREF and no-stale-owner checks without coordinate/style compensation.",
+  "pattern": "ariaControls: 'menu-popup'"
+}),
+  Object.freeze({
+  "id": "core-public-focus-does-not-synchronize-native-semantic-owner",
+  "classification": "confirmed-core-renderer-defect",
+  "owner": "core public focus request to scene/semantic DOM synchronization",
+  "file": "src/lib/astylar.ts",
+  "introducedBy": "cd222388 introduces the public renderer focus API with the exact current delegating method;it inherits the focus-event exclusion already present from dbe4d8ed. Source introduction only,not historical runtime bisect.",
+  "history": {
+    "APIRevision": "cd222388",
+    "priorGateRevision": "dbe4d8ed",
+    "evidence": {
+      "file": "artifacts/material-parity/public-focus-initial-api-history-retry-20261024.log",
+      "sha256": "cf320ba25889189c46c2a9fb535a0a3d3763eddf1c40dbe65250679878cf7a7a"
+    },
+    "boundary": "Parent lacks public focus method;exact initial/current method bytes and ancestry checked. Historical runtime,motivation and every intermediate behavior remain unproven."
+  },
+  "focusedProof": "tests/material-parity/menu-popup-ax.spec.mjs: public negative-tabindex failure remains unfocused after settlement until an unrelated update",
+  "publicReproduction": {
+    "file": "artifacts/material-parity/public-menu-negative-tabindex-settled-20261024/latest-report.json",
+    "sha256": "a75f974f1b8570c4a8dadde51f65115e93703d3ea796a5993f4deadf7f4d889c"
+  },
+  "controls": {
+    "file": "artifacts/material-parity/public-programmatic-focus-controls-20261024/latest-report.json",
+    "sha256": "4696d253fbd95a1504b7de4d067c3eb92904bf595e5dfd8bad8aab32fb9144ab",
+    "pairs": 12,
+    "kinds": [
+      "div",
+      "span",
+      "button"
+    ],
+    "tabindex": [
+      -1,
+      0
+    ],
+    "role": "menu",
+    "conclusion": "Failure is not specific to negative tabindex. Button element retains menu role;default button semantics are not certified."
+  },
+  "observation": {
+    "component": "plugin-free public div/span menu-role reduction",
+    "element": "focus-control",
+    "states": [
+      "public focus request",
+      "settled before update",
+      "unchanged update"
+    ],
+    "dpr": [
+      1,
+      2
+    ],
+    "property": "scene request acceptance versus actual native semantic focus",
+    "reference": "native focus succeeds and stays focused",
+    "astylar": "surface.focus=true but immediate and settled native focus=false;unchanged update then focuses",
+    "stage": "public renderer focus delegates to interaction state without scheduling semantic focus synchronization"
+  },
+  "sourceApplicability": {
+    "currentMethodSha256": "3814563ee560c51ef0974a3d97aa2ae384828669e91914960dc293a548290737",
+    "installedMethodSha256": "ee9a015e976d288f47177c2264057f02d83e6a046ecb81d88fa2d84f4df7f3fa",
+    "comparison": "Complete current typed method transpiles to the installed method after whitespace-only comparison;installed file hash is a captured bundle input."
+  },
+  "causalSource": {
+    "currentEventCallbackSha256": "c92afd2d70afdf17e82cb619f723ab1e9ab0e171168f74ba2865de774bc654a2",
+    "installedEventCallbackSha256": "4896b71296450ee0f09fc0cab9ac5cbcefdda6e7fd6c0e808298d8fa47a4c2a4",
+    "evidence": {
+      "file": "artifacts/material-parity/public-focus-event-gate-full-path-proof-20261024.log",
+      "sha256": "3d3c03b253a8603f5d7dae31c575b574c3d6a5d9ea91d66cd246d516b2f55c99"
+    },
+    "chain": "Public renderer delegates to focusElement;actual runtime setFocus emits focus;actual event callback excludes focus from queueFocusSync. No pointer transaction or text selection is active. Keydown/click controls queue sync.",
+    "proof": "tests/material-parity/menu-popup-ax.spec.mjs: actual renderer event callback excludes public focus events from semantic synchronization"
+  },
+  "methodNegativeControl": {
+    "action": "blurElement",
+    "observation": "Complete current/installed runtime blur clears logical owner and actual event callback queues semantic focus synchronization for undefined owner.",
+    "conclusion": "The tested callback is not generally dead;focus exclusion is specific. This is isolated scheduling evidence,not public browser blur acceptance."
+  },
+  "justification": "All four equal-input package-root pairs author tabindex=-1. Request returns true yet semantic DOM remains unfocused after surface.whenSettled and two animation frames,before any update. An unchanged-document update moves focus. Current/installed renderer focus methods delegate directly to interaction.focusElement;the update path separately queues semantic focus synchronization. This is not the showcase omitted-tabindex input defect. The inherited pass verifier still fails;focused audit assertions preserve the failure rather than weaken it.",
+  "boundary": "Confirmed in the tested public menu-role request path;not all control kinds,public blur,modal/pointer/selection/lifetime or whole current rendering. Both failed original/settled probes and twelve-pair controls are retained.",
+  "applicationAttribution": {
+    "source": "examples/material-showcase/src/app/astylar.component.ts",
+    "sourceSha256": "71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd",
+    "focusCallSites": 7,
+    "menuOpening": "No focus request;core synchronization correction alone cannot supply missing item-focus intent.",
+    "dialogOpening": "Requests nonexistent dialog-dismiss while authored autofocus target is dialog-cancel;keep application target mismatch separate.",
+    "bottomSheetOpening": "Requests existing bottom-sheet-dismiss after settlement;the same target is already autofocus.",
+    "restoration": "Most requests accompany state changes;an update may synchronize semantic focus and mask the standalone API gap. Not seven proven runtime failures."
+  },
+  "configuredActionApplicability": {
+    "family": "menu",
+    "state": "focus",
+    "originalRunner": "e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0",
+    "action": "Both original/current runner focus branches call native HTMLElement.focus on the semantic target,not public surface.focus.",
+    "proof": "tests/material-parity/menu-popup-ax.spec.mjs: original and current configured Menu focus actions target native semantic DOM rather than public surface focus",
+    "boundary": "Do not attach this public-request failure to configured native-focus cases or count native-focus results as public API coverage."
+  },
+  "nextChecks": [
+    "Compare ordinary default-role button public-focus controls;tabindex=0 menu-role controls already reproduce the gap.",
+    "General correction should distinguish programmatic scene-origin focus from native DOM-origin focus;do not simply remove focus/pointer/selection guards.",
+    "Keep directional selection,held pointer and modal ownership constraints in the eventual general fix;do not add Menu-specific focus workarounds."
+  ],
+  "pattern": "focus\\(elementId: string, options: AstylarFocusOptions \\| undefined, scene: Scene\\): boolean",
+  "evidence": [
+    {
+      "file": "artifacts/material-parity/public-menu-negative-tabindex-settled-20261024/latest-report.json",
+      "sha256": "a75f974f1b8570c4a8dadde51f65115e93703d3ea796a5993f4deadf7f4d889c"
+    },
+    {
+      "file": "artifacts/material-parity/public-programmatic-focus-controls-20261024/latest-report.json",
+      "sha256": "4696d253fbd95a1504b7de4d067c3eb92904bf595e5dfd8bad8aab32fb9144ab"
+    },
+    {
+      "file": "artifacts/material-parity/public-focus-event-gate-full-path-proof-20261024.log",
+      "sha256": "3d3c03b253a8603f5d7dae31c575b574c3d6a5d9ea91d66cd246d516b2f55c99"
+    },
+    {
+      "file": "artifacts/material-parity/public-focus-initial-api-history-retry-20261024.log",
+      "sha256": "cf320ba25889189c46c2a9fb535a0a3d3763eddf1c40dbe65250679878cf7a7a"
+    }
+  ]
+}),
+  Object.freeze({
     "id": "core-readonly-text-keyboard-defaults-mutate-value",
     "introducedBy": "Six current/installed method bodies agree;first-bad revision and historical runtime not established",
     "file": "src/app/services/dom/input/keyboard-input.handler.ts",
