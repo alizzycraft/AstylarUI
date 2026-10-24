@@ -9,6 +9,32 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Avoid speculative heading GPU probe:retained texture-boundary producer targets
+Above/Below only;heading-specific clipping failure is not established. Known
+reviewed-heading-mask already prevents equal-input visible heading paint verdict.
+That uncertainty remains,not a new defect/capture requirement. Priority moved
+to a finite unclassified property domain outside the four scalar targets.
+
+Existing initial-border-color attribution now applies to120 outside-scalar owner
+pairs(24 each page,title,eyebrow,above-row,below-row). Reuse COMPLETE current
+canonicalStyle/normalization bodies and existing object/colorOrResetKey/
+noColorOrReset declaration predicates,not new color/selector normalization.
+Owner review1079d7c6/48 paired trees authenticate. All120 exclude explicit native
+inline/rule and possibly applicable candidate color/reset/motion declarations;
+native side colors equal currentColor,all three candidate stages transparent,
+both sides retain0/none border widths/styles. Red explicit-color control rejects.
+Classification reuses core-border-initial-color-differs-from-css as intentional-
+documented-limitation,INPUT EQUIVALENT FALSE. Zero widths do not waive unequal
+inputs or prove raster equivalence. No fabricated native IDs/fixture edits.
+
+Read-only attribution assertions nativeExit0,stderr empty;retain
+divider-outside-owner-border-attribution-20261025 log pair,including all120 exact
+case/owner rows and source/method receipts. Unclassified0 is only this border
+domain,not zero remaining owner properties or whole-case completion. No new
+source finding/canonical registration;frozen1028/353/196 unchanged. Next use
+this exact bounded property evidence in owner-obligation joins or move to the
+remaining margin/sizing/typography domains,not repeat known border default cause.
+
 Heading clipping DECLARATION context is now bounded across24 retained Divider
 cases/48 heading pairs,using owner review1079d7c6 and48 authenticated trees.
 Native title/eyebrow and in-tree frame ancestors have overflowX/Y visible,clip
