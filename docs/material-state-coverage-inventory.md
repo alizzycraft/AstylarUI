@@ -9,6 +9,28 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Standalone owner-context registration now has TESTED IN-MEMORY prepare/restore
+using the established exact-prefix mechanism. No production files changed.
+Twelve proposed source paths comprise the ten audited sources plus registration
+helper/spec;their nine literal focused declarations would extend1028/353 to
+1040/362. Two bounded policy copies(with exact source anchors,flat receipt lists
+and owning proof names) would extend196 definitions to198. These are STAGED
+counts,not live registration. Original standalone finding definitions preserve.
+
+divider-owner-context-registration.spec.mjs passes2/2,0skip,nativeExit0,stderr
+empty;keep divider-context-staged-registration-20261025 log pair. Complete prior
+source/proof arrays and all196 definitions conserve after removing only additions;
+whole producer/policy predecessor hashes recover. Duplicate staging,unexpected
+drift and duplicate source/proof/ID membership reject;every new literal proof
+and source anchor matches exactly once and every supplied evidence receipt hashes.
+Checks also prove production producer/policy bytes unchanged.
+
+Next integrate selected-review routing and bounded prior-source applicability
+before applying registration. Existing Menu historical reader only understands
+the earlier additive stage;do not mutate production then bypass its failures or
+rewrite original receipts. Pendingf812d8d9 and accepted88be4d47 remain unchanged;
+no full loader replay,canonical export or browser recapture for this staged step.
+
 Standalone registration census corrects prior NINE-source prose:there are TEN
 unregistered source files(including divider-block-alignment-context.spec.mjs),
 with SEVEN top-level focused test declarations across four owning suites.

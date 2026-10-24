@@ -1,0 +1,65 @@
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import ts from 'typescript';
+import { publicBlockAlignmentFindings } from './public-block-alignment-findings.mjs';
+
+const hash=b=>createHash('sha256').update(b).digest('hex');
+export const dividerOwnerRegistrationPrior=Object.freeze({producer:'d791949cfe8a3821d76250379e0c68795759d2f88650ad3414ceeaa7dbd52b17',policy:'cbf641365e8ab55748befc3e59c283e30eadab314519c8f9fbf7f5647f4a7b30'});
+export const dividerOwnerContextSources=Object.freeze([
+  'scripts/audit-material-divider-heading-boxes.mjs',
+  'scripts/audit-material-divider-heading-ua.mjs',
+  'scripts/join-material-divider-outside-owner-evidence.mjs',
+  'tests/material-parity/divider-outside-owner-evidence.spec.mjs',
+  'scripts/audit-material-divider-owner-cursors.mjs',
+  'tests/material-parity/divider-owner-cursors.spec.mjs',
+  'tests/material-parity/divider-block-alignment-context.spec.mjs',
+  'scripts/audit-public-block-align-content.mjs',
+  'tests/material-parity/public-block-align-content.spec.mjs',
+  'tests/material-parity/public-block-alignment-findings.mjs',
+  'tests/material-parity/divider-owner-context-registration.mjs',
+  'tests/material-parity/divider-owner-context-registration.spec.mjs',
+]);
+export function dividerOwnerContextProofRows(read){
+  const rows=[];
+  for(const file of dividerOwnerContextSources.filter(f=>f.endsWith('.spec.mjs'))){
+    const ast=ts.createSourceFile(file,read(file).toString(),99,true,ts.ScriptKind.JS);assert.equal(ast.parseDiagnostics.length,0);
+    for(const n of ast.statements){
+      if(!ts.isExpressionStatement(n)||!ts.isCallExpression(n.expression)||n.expression.expression.getText(ast)!=='test')continue;
+      const title=n.expression.arguments[0];assert.ok(ts.isStringLiteral(title));
+      rows.push({file,title:title.text,pattern:"test\\('"+title.text.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+"'",
+        scope:'Bounded retained owner inputs,desktop-DPR1 cursor observations and general public alignment reductions. Not whole-case closure,current rendering or transfer of public center failure to Material cases.'});
+    }
+  }
+  assert.equal(rows.length,9);assert.equal(new Set(rows.map(r=>r.file+':'+r.title)).size,9);return rows;
+}
+const sourceAnchor='function sourceFingerprints(root) {\n  const files = [\n';
+const proofAnchor='function focusedProofInventory(root) {\n  return [\n';
+const policyAnchor='export const sourceAuditDefinitions = Object.freeze([\n';
+const once=(s,a,b)=>{assert.equal(s.split(a).length,2,'Exact additive registration boundary required');return s.replace(a,b);};
+const prefixes=read=>({sources:dividerOwnerContextSources.map(f=>'    '+JSON.stringify(f)+',\n').join(''),
+  proofs:dividerOwnerContextProofRows(read).map(r=>'    proof(root, '+JSON.stringify(r.file)+', new RegExp('+JSON.stringify(r.pattern)+'),\n      '+JSON.stringify(r.title)+', '+JSON.stringify(r.scope)+'),\n').join('')});
+export function prepareDividerOwnerContextProducer(source,read){
+  let text=source.toString().replaceAll('\r\n','\n');assert.equal(hash(text),dividerOwnerRegistrationPrior.producer);
+  for(const file of dividerOwnerContextSources)assert.equal(text.includes(JSON.stringify(file)),false);
+  const p=prefixes(read);text=once(text,sourceAnchor,sourceAnchor+p.sources);return once(text,proofAnchor,proofAnchor+p.proofs);
+}
+export function restoreDividerOwnerContextProducer(source,read){
+  const p=prefixes(read);let text=source.toString().replaceAll('\r\n','\n');
+  text=once(text,sourceAnchor+p.sources,sourceAnchor);text=once(text,proofAnchor+p.proofs,proofAnchor);
+  assert.equal(hash(text),dividerOwnerRegistrationPrior.producer);return text;
+}
+export const dividerOwnerContextFindingDefinitions=Object.freeze(publicBlockAlignmentFindings.map((finding,index)=>({...finding,
+  pattern:index===0?'alignContent: "stretch"':'private layoutBlockChildren\\(',
+  focusedProof:'tests/material-parity/public-block-align-content.spec.mjs: '+(index===0?'Public block alignment reduction preserves wrong default separately from explicit center failure':'Actual block placement omits alignment before the CSS projection boundary'),
+  evidence:[finding.publicReproduction,finding.sourceBinding,finding.history.evidence,finding.causalExecution?.evidence].filter(Boolean).map(({file,sha256})=>({file,sha256})),
+})));
+const policyPrefix=dividerOwnerContextFindingDefinitions.map(f=>'  Object.freeze('+JSON.stringify(f,null,2)+'),\n').join('');
+export function prepareDividerOwnerContextPolicy(source){
+  const text=source.toString().replaceAll('\r\n','\n');assert.equal(hash(text),dividerOwnerRegistrationPrior.policy);
+  for(const f of dividerOwnerContextFindingDefinitions)assert.equal(text.includes(f.id),false);
+  return once(text,policyAnchor,policyAnchor+policyPrefix);
+}
+export function restoreDividerOwnerContextPolicy(source){
+  const text=once(source.toString().replaceAll('\r\n','\n'),policyAnchor+policyPrefix,policyAnchor);
+  assert.equal(hash(text),dividerOwnerRegistrationPrior.policy);return text;
+}
