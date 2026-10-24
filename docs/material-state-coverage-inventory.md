@@ -7,6 +7,27 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Reversible registration stage implemented — October24
+
+New pending-evidence-registration.mjs defines the exact15 source paths and21
+focused proof rows:the previously verified13/19 plus owning registration helper/
+two tests. registerPendingEvidenceProducer extends ONLY the exact frozen0aba1870
+producer;restorePendingEvidenceProducer removes exactly those additions and
+requires complete original hash recovery. Existing arrays/order and every293
+old proof record preserve;actual pure collectors validate the virtual983-source/
+314-proof population with positive line anchors. The one modeled old source row
+that changes is producer's own hash,explicitly checked against the new content;
+all other old source rows match. Unknown old content,altered added path/scope and
+unrelated drift reject. Owning2/2 passes,zero skips,10711.1785ms.
+
+This is tested in-memory registration preparation,NOT actual installed inventory
+or export selection. Actual producer and old historical readers remain unchanged
+at968/293 until the complete bounded legacy-reader restoration is wired in the
+same cutover. No accepted pointer,review file,policy definition,case status or
+rendering acceptance changed. Next implement that old-reader/source compatibility
+against the already tested transformation,then install/register coherently;do
+not run another browser/canonical capture for this metadata stage.
+
 ### Coherent pending evidence registration census — October24
 
 Before changing inventory/export wiring,read-only census verifies current
