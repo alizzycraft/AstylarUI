@@ -424,3 +424,22 @@ test('retained Menu AX ancestors reuse region equivalence and existing duplicate
   }
   assert.equal(observations, 60);
 });
+
+test('fixed Menu item accessible names retain equivalent content fallback despite explicit candidate labels', () => {
+  const bytes = readFileSync('artifacts/material-parity/menu-popup-ax-contexts-retry-20261024/latest-report.json');
+  assert.equal(hash(bytes), '819932e79b0bae14534f399643ac01a05942d581a2c28239d1ce88f39e49c9a1');
+  const report = JSON.parse(bytes); let owners = 0;
+  for (const row of report.results) for (const side of ['reference', 'astylar']) for (const [key, label] of [['rename', 'Rename'], ['delete', 'Delete']]) {
+    const target = row[side].ax[key], own = target.nodes.find(n => n.backendDOMNodeId === target.backendNodeId);
+    assert.equal(own.name.value, label);
+    const contents = own.name.sources.find(s => s.type === 'contents');
+    assert.equal(contents.value.value, label);
+    if (side === 'reference') { assert.equal(target.dom.ariaLabel, null); assert.notEqual(contents.superseded, true); }
+    else {
+      assert.equal(target.dom.ariaLabel, label); assert.equal(contents.superseded, true);
+      assert.equal(own.name.sources.find(s => s.attribute === 'aria-label').value.value, label);
+    }
+    owners++;
+  }
+  assert.equal(owners, 32);
+});

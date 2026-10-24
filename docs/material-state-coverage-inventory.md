@@ -9,6 +9,25 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Fixed Menu item accessible-name source difference now has a technical
+equivalence explanation rather than a new presumed bridge defect. Current
+authored items explicitly supply ariaLabel Rename/Delete;the semantic bridge
+copies that request. Existing canonical label-composition finding already traces
+its introduction with nested spans to994da86b;do not reopen that history.
+Across all32 item owners in eight desktop open pairs,actual AX names equal
+Rename/Delete AND computed contents fallback independently contains the same
+fixed string. Native uses contents;candidate explicit aria-label supersedes that
+identical contents source. Thus the fixed accessible-name property is an
+equivalent representation in this observed scope,not evidence of missing child
+semantic text being hidden by a renderer-generated label.
+
+This does not establish equivalent item composition,layout,font tokens,density,
+navigation,localized/dynamic labels,all states/AT or visual text paint. Existing
+authoring/core findings remain intact. Read-only receipt query native0,keep
+menu-item-accessible-name-source-equivalence-20261024 pair. Focused regression
+1/1/native0,menu-item-name-source-equivalence-proof-20261024 pair. No new capture,
+finding count,source registration,case promotion or acceptance change.
+
 Retained AX ancestors close the named-region measurement question without new
 capture. All60 side-boundary observations(16 desktop open partial trees +16
 desktop dismissal full trees +28 mobile full trees) contain exactly one live
