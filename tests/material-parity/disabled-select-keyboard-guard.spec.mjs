@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
+import { materialInteractionCases } from './benchmark.config.mjs';
 
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const authenticate=receipt=>{
@@ -63,4 +64,25 @@ for(const [directory,sha256,count]of [
   }
   }
   assert.equal(report.inputEquivalent,false);assert.equal(report.renderingEquivalent,false);
+});
+
+test('Disabled text-control supplements cover the exact 48 configured contexts without borrowed Select behavior',()=>{
+  const original=JSON.parse(authenticate({file:'artifacts/material-parity/disabled-control-boundaries-20261025/latest-report.json',sha256:'654ef78a448876e3ac4ad84673017e49ed0ea1eff527d4c5230f3c515dc2d6bc'}));
+  const remaining=JSON.parse(authenticate({file:'artifacts/material-parity/disabled-control-remaining-contexts-20261025/latest-report.json',sha256:'b59849e11047041d992617520323dd4b2fc7a02f537d511d4911d75024162006'}));
+  const select=JSON.parse(authenticate({file:'artifacts/material-parity/disabled-select-focused-contexts-20261025/latest-report.json',sha256:'436dd9625e30a42ef4bd49c3e6ce5c22524a6d2fa74017ea56275ef1c06a29c2'}));
+  authenticate(remaining.capture.checkpointManifest);assert.equal(remaining.results.length,35);
+  const nonSelect=[...original.results.filter(r=>r.family!=='select'),...remaining.results];assert.equal(nonSelect.length,40);
+  for(const row of nonSelect)for(const side of ['reference','astylar']){
+    const result=row[side];authenticate(result.inputTree);authenticate(result.screenshot);assert.deepEqual(result.runtime.errors,[]);
+    assert.deepEqual(result.observations.map(o=>o.boundary),['before','after-focus-attempt','after-pointer-attempt','after-key-attempt','settled']);
+    for(const o of result.observations){
+      assert.equal(o.target.disabledState,true);assert.equal(o.activeEqualsTarget,false);
+      assert.equal(o.target.value,result.observations[0].target.value);
+      assert.equal(o.events.some(e=>e.type==='input'||e.type==='change'),false);
+      assert.equal(o.appEvents.some(e=>e.type==='input'||e.type==='change'),false);
+    }
+  }
+  const key=r=>`${r.family}/${r.profile}/${r.viewport.id}`;
+  const expected=materialInteractionCases.filter(r=>['form-field','input','autocomplete','select','datepicker','timepicker'].includes(r.family)&&r.state==='disabled').map(key).sort();
+  const actual=[...nonSelect,...select.results].map(key).sort();assert.equal(new Set(actual).size,48);assert.deepEqual(actual,expected);
 });

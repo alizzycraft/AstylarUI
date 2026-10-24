@@ -9,6 +9,26 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Disabled text-control supplementary focus/pointer/x coverage now accounts for
+the exact48 configured contexts:40 non-Select cases(five families×eight physical
+contexts) plus eight Select focus/key cases. New run captured only35 previously
+unobserved non-Select contexts,skipping existing light/DPR1. All40 non-Select
+cases reject observed DOM-focus attempts and retain initial values through
+pointer/x/settlement with no input/change in DOM or application events. Select's
+separate native ARIA-disabled focusability difference is preserved,not borrowed.
+This completes these bounded supplementary boundaries,NOT entire disabled-case
+inspection or all input/paint/currentness obligations.
+
+Capture/independent --verify exit0,Chrome155.0.8059.85,175 newly paired boundaries;
+disabled-control-remaining-contexts-20261025/latest-report.json
+SHAb59849e11047041d992617520323dd4b2fc7a02f537d511d4911d75024162006.
+Standalone owning suite passes4/4,exit0,775.0137ms. It authenticates paired outputs
+and proves the disjoint35+5+8 union equals the existing configured48-case matrix.
+No unobserved-context inference,fixture/renderer change,new build,canonical join
+or whole-case promotion. Retain19.78MB evidence per retention document. Remaining
+behavior includes other keys,picker-icon activation,dynamic disable and local
+paint;original disabled recipes are still no-ops,not these supplementary actions.
+
 Select disabled focused-key supplementary coverage now spans ALL EIGHT existing
 physical contexts(four profiles×DPR1/2),not just light/DPR1. Reused proven sequence
 and immutable retained build;no pointer between focus and trusted x. Across all8,

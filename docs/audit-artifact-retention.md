@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep disabled-control-remaining-contexts-20261025(141 files,19778836 bytes),its
+-provenance checkpoint and log/stderr pair. Report SHAb59849e11047041d992617520323dd4b2fc7a02f537d511d4911d75024162006.
+These35 new context pairs complement existing light/DPR1 and Select supplements;
+retain exact trees/PNGs/runtime receipts,not a duplicate build. They are required
+for the explicit48-context union proof,not successful disposable scratch.
+
 Keep disabled-select-focused-contexts-20261025(33 files,4850754 bytes),its
 -provenance checkpoint and log/stderr pair. Report SHA436dd9625e30a42ef4bd49c3e6ce5c22524a6d2fa74017ea56275ef1c06a29c2.
 Eight configured Select disabled physical contexts retain paired trees,PNGs,
