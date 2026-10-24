@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
-import { restorePendingEvidenceProducer, restorePendingEvidenceRegisteredSource } from './pending-evidence-registration.mjs';
+import { restorePendingEvidenceProducer, restorePendingEvidenceRegisteredSource, restoreOriginalRunnerExportSource } from './pending-evidence-registration.mjs';
 
 const hash = source => createHash('sha256').update(source).digest('hex');
 const successor = {
@@ -21,6 +21,7 @@ const edit = (source, before, after = '') => {
 };
 
 export function restoreSliderStateInputExportSource(source, kind) {
+  source = restoreOriginalRunnerExportSource(source, kind);
   assert.ok(['runner', 'launcher'].includes(kind));
   let text = source.toString().replaceAll('\r\n', '\n'); assert.equal(hash(text), successor[kind]);
   if (kind === 'runner') {

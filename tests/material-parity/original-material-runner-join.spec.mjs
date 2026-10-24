@@ -3,6 +3,9 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import test from 'node:test';
 import path from 'node:path';
+import { spawnSync } from 'node:child_process';
+import ts from 'typescript';
+import { restoreOriginalRunnerExportSource } from './pending-evidence-registration.mjs';
 import { joinOriginalRunnerSource, restoreMissingOriginalRunner, originalRunnerPredecessor } from '../../scripts/join-material-original-runner-source.mjs';
 import { loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
 import { createOriginalRunnerReviewReader, originalRunnerReview } from './original-material-runner-review-source.mjs';
@@ -12,6 +15,35 @@ const bytes = readFileSync(`artifacts/material-parity/working-audit/proposals/${
 assert.equal(hash(bytes), 'ed7ecfea82fef0406fc9e0430a2df16a7db4555d2fdd074568c96cb5f3b39868');
 const predecessor = JSON.parse(bytes).review;
 test('original runner recovery reconciles only 9016 source conditions and conserves complete predecessor', () => {
+  const launcher = 'scripts/export-material-input-audit-current-ancestry.mjs';
+  const launch = flags => spawnSync(process.execPath, [launcher, '--dry-run', ...flags], { encoding: 'utf8', windowsHide: true });
+  const selected = launch(['--original-runner-recovery']);
+  assert.equal(selected.status, 0, selected.stderr);
+  const args = JSON.parse(selected.stdout).args;
+  assert.ok(args.includes(`--case-obligation-review-sha256=${originalRunnerReview}`));
+  assert.ok(args.includes(`--case-obligation-review=artifacts/material-parity/working-audit/proposals/${originalRunnerReview}.json`));
+  for (const flag of ['--static-ax', '--card-inputs', '--expansion-semantics', '--stepper-inputs', '--tabs-menu-sheet',
+    '--static-semantic-inputs', '--popup-depth-inputs', '--scrollbar-paint', '--table-label-paint', '--radio-caret-paint',
+    '--retained-focus', '--slider-hover-held', '--slider-state-inputs']) {
+    const older = launch([flag]); assert.equal(older.status, 0, older.stderr);
+    assert.ok(!older.stdout.includes(originalRunnerReview));
+    const conflict = launch([flag, '--original-runner-recovery']); assert.notEqual(conflict.status, 0);
+    assert.match(conflict.stderr, /Choose one case-review supplement/);
+  }
+  assert.equal(launch([]).status, 0);
+  for (const [file, kind] of [['scripts/run-material-input-audit.mjs', 'runner'], [launcher, 'launcher']]) {
+    const source = readFileSync(file);
+    restoreOriginalRunnerExportSource(source, kind);
+    assert.throws(() => restoreOriginalRunnerExportSource(Buffer.concat([source, Buffer.from('\n// drift')]), kind));
+  }
+  const source = readFileSync('scripts/run-material-input-audit.mjs', 'utf8');
+  const ast = ts.createSourceFile('runner.mjs', source, 99, true), owners = [];
+  const visit = node => { if (ts.isVariableDeclaration(node) && node.name.getText(ast) === 'recoveredReaderFactory') owners.push(node); ts.forEachChild(node, visit); };
+  visit(ast); assert.equal(owners.length, 1);
+  const choose = new Function('options', 'originalRunnerReview', 'createOriginalRunnerReviewReader', 'currentReaderFactory', `return ${owners[0].initializer.getText(ast)};`);
+  const old = () => {};
+  assert.equal(choose({ caseObligationReviewSha256: originalRunnerReview }, originalRunnerReview, createOriginalRunnerReviewReader, old), createOriginalRunnerReviewReader);
+  assert.equal(choose({ caseObligationReviewSha256: '0'.repeat(64) }, originalRunnerReview, createOriginalRunnerReviewReader, old), old);
   const result = joinOriginalRunnerSource(predecessor);
   assert.equal(result.records, 9016); assert.equal(result.cases, 2311);
   assert.equal(result.sha256, '7dfee06dc72de1cc4a7d94f1d10594ec0b7d703a7a151e35ae803eadadc51385');

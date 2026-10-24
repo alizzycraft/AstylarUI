@@ -8937,6 +8937,7 @@ function sourceFingerprints(root) {
     "tests/material-parity/snackbar-live-policy.spec.mjs",
     "tests/material-parity/pending-evidence-registration.mjs",
     "tests/material-parity/pending-evidence-registration.spec.mjs",
+    "tests/material-parity/original-material-runner-review-source.mjs",
     'tests/material-parity/slider-retained-state-layer.spec.mjs',
     'scripts/join-material-slider-state-inputs.mjs',
     'tests/material-parity/slider-state-input-join.spec.mjs',

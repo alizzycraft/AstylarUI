@@ -34,12 +34,12 @@ test('pending evidence inventory addition preserves every frozen source and proo
   });
   const after = collect(registered, readRegistered);
   assert.equal(before.sources.length, 968); assert.equal(before.proofs.length, 293);
-  assert.equal(pendingEvidenceSourceFiles.length, 15); assert.equal(pendingEvidenceProofRows.length, 21);
-  assert.equal(after.sources.length, 983); assert.equal(after.proofs.length, 314);
-  assert.deepEqual(after.sources.slice(0, 15).map(r => r.file), pendingEvidenceSourceFiles);
+  assert.equal(pendingEvidenceSourceFiles.length, 16); assert.equal(pendingEvidenceProofRows.length, 21);
+  assert.equal(after.sources.length, 984); assert.equal(after.proofs.length, 314);
+  assert.deepEqual(after.sources.slice(0, 16).map(r => r.file), pendingEvidenceSourceFiles);
   const withoutLine = rows => rows.map(({ line, ...row }) => row);
   assert.deepEqual(withoutLine(after.proofs.slice(21)), withoutLine(before.proofs));
-  const oldRows = after.sources.slice(15);
+  const oldRows = after.sources.slice(16);
   assert.deepEqual(oldRows.map(r => r.file), before.sources.map(r => r.file));
   for (let i = 0; i < oldRows.length; i++) {
     if (Object.hasOwn(pendingEvidencePreviousSourceHashes, oldRows[i].file)) {

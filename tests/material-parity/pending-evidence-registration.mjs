@@ -17,7 +17,8 @@ export const pendingEvidenceSourceFiles = Object.freeze([
   "tests/material-parity/original-material-runner-source.spec.mjs",
   "tests/material-parity/snackbar-live-policy.spec.mjs",
   "tests/material-parity/pending-evidence-registration.mjs",
-  "tests/material-parity/pending-evidence-registration.spec.mjs"
+  "tests/material-parity/pending-evidence-registration.spec.mjs",
+  "tests/material-parity/original-material-runner-review-source.mjs"
 ]);
 export const pendingEvidenceProofRows = Object.freeze([
   {
@@ -175,6 +176,8 @@ export function restorePendingEvidenceProducer(source) {
 }
 
 export const pendingEvidencePreviousSourceHashes = Object.freeze({
+  'scripts/run-material-input-audit.mjs': '15654c97560e355b825b330116514e4e64a8d61769998e9eb7dca5e47e936928',
+  'scripts/export-material-input-audit-current-ancestry.mjs': '13a8ae61f8d0fb5f93d230a7a77da1ccd08d90c03cfa193d3d63d34c9e920f54',
   'tests/material-parity/input-equivalence-audit.mjs': frozen,
   'tests/material-parity/static-semantic-registration.mjs': '683270d89cbce258a3372d89129f3f8094a29330b9bb36c6f0fb2dfbf7ab3286',
   'tests/material-parity/slider-state-registration.mjs': '98166d83d2ad2dc89ddf1c39e376474d727877c8bcf88163c4f214cff736cc18',
@@ -183,11 +186,13 @@ export const pendingEvidencePreviousSourceHashes = Object.freeze({
 });
 const compatibilityEdits = {
   'tests/material-parity/static-semantic-registration.mjs': [
-    ["import { restorePendingEvidenceProducer } from './pending-evidence-registration.mjs';\n", ''],
+    ["import { restorePendingEvidenceProducer, restoreOriginalRunnerExportSource } from './pending-evidence-registration.mjs';\n", ''],
+    ["  if(kind!=='case'&&source.toString().includes('originalRunner'))source=restoreOriginalRunnerExportSource(source,kind);\n", ''],
     ["  if(text.includes('\"docs/evidence/material-original-runner-e01.mjs.gz.b64\"'))text=restorePendingEvidenceProducer(text);\n", ''],
   ],
   'tests/material-parity/slider-state-registration.mjs': [
-    ["import { restorePendingEvidenceProducer, restorePendingEvidenceRegisteredSource } from './pending-evidence-registration.mjs';\n", ''],
+    ["import { restorePendingEvidenceProducer, restorePendingEvidenceRegisteredSource, restoreOriginalRunnerExportSource } from './pending-evidence-registration.mjs';\n", ''],
+    ['  source = restoreOriginalRunnerExportSource(source, kind);\n', ''],
     ["  source = restorePendingEvidenceRegisteredSource(source, 'tests/material-parity/static-semantic-registration.mjs');\n", ''],
     ['  text = restorePendingEvidenceProducer(text);\n', ''],
   ],
@@ -202,11 +207,33 @@ const compatibilityEdits = {
 };
 export function restorePendingEvidenceRegisteredSource(source, file) {
   assert.ok(Object.hasOwn(pendingEvidencePreviousSourceHashes, file), 'Unknown pending-evidence source boundary');
+  if (file === 'scripts/run-material-input-audit.mjs') return restoreOriginalRunnerExportSource(source, 'runner');
+  if (file === 'scripts/export-material-input-audit-current-ancestry.mjs') return restoreOriginalRunnerExportSource(source, 'launcher');
   if (file === 'tests/material-parity/input-equivalence-audit.mjs') return restorePendingEvidenceProducer(source);
   let text = source.toString().replaceAll('\r\n', '\n');
   if (hash(text) === pendingEvidencePreviousSourceHashes[file]) return text;
   for (const [before, after] of compatibilityEdits[file]) text = replaceOnce(text, before, after);
   assert.equal(hash(text), pendingEvidencePreviousSourceHashes[file], 'Whole historical source must recover');
+  return text;
+}
+export function restoreOriginalRunnerExportSource(source, kind) {
+  assert.ok(['runner', 'launcher'].includes(kind));
+  let text = source.toString().replaceAll('\r\n', '\n');
+  const file = kind === 'runner' ? 'scripts/run-material-input-audit.mjs' : 'scripts/export-material-input-audit-current-ancestry.mjs';
+  if (hash(text) === pendingEvidencePreviousSourceHashes[file]) return text;
+  if (kind === 'runner') {
+    text = replaceOnce(text, "import { originalRunnerReview, createOriginalRunnerReviewReader } from '../tests/material-parity/original-material-runner-review-source.mjs';\n", '');
+    text = replaceOnce(text, '    const recoveredReaderFactory = options.caseObligationReviewSha256===originalRunnerReview ? createOriginalRunnerReviewReader : currentReaderFactory;\n', '');
+    text = replaceOnce(text, 'const applicability=recoveredReaderFactory?.', 'const applicability=currentReaderFactory?.');
+  } else {
+    text = replaceOnce(text, "const originalRunnerRecovery = rawRequested.includes('--original-runner-recovery');\nassert.ok(!originalRunnerRecovery || rawRequested.every(argument => ['--original-runner-recovery', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');\n", '');
+    text = replaceOnce(text, ".filter(argument => argument !== '--original-runner-recovery')", '');
+    text = replaceOnce(text, '|--original-runner-recovery', '');
+    text = replaceOnce(text, "if (originalRunnerRecovery) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/7dfee06dc72de1cc4a7d94f1d10594ec0b7d703a7a151e35ae803eadadc51385.json';\n", '');
+    text = replaceOnce(text, "  const retained = originalRunnerRecovery && name === 'case-obligation-review' ? 'artifacts/material-parity/working-audit/proposals/c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823.json' : relative;\n  const stat = statSync(path.join(root, retained));", '  const stat = statSync(path.join(root, relative));');
+    text = replaceOnce(text, "if (originalRunnerRecovery) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=7dfee06dc72de1cc4a7d94f1d10594ec0b7d703a7a151e35ae803eadadc51385';\n", '');
+  }
+  assert.equal(hash(text), pendingEvidencePreviousSourceHashes[file], 'Complete pre-recovery export source must recover');
   return text;
 }
 export function pendingEvidenceHistoricalRead({ root, read }) {

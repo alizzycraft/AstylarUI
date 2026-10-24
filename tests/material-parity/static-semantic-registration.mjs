@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
-import { restorePendingEvidenceProducer } from './pending-evidence-registration.mjs';
+import { restorePendingEvidenceProducer, restoreOriginalRunnerExportSource } from './pending-evidence-registration.mjs';
 const hash = b => createHash('sha256').update(b).digest('hex');
 // Explicit historical population only. Production continues to use all193.
 export function retainedStaticSemanticPopulation(current) {
@@ -313,6 +313,7 @@ export function restoreRadioCaretProducer(source) {
 }
 
 export function restoreRetainedFocusExportSource(source, kind) {
+  if(kind!=='case'&&source.toString().includes('originalRunner'))source=restoreOriginalRunnerExportSource(source,kind);
   let text=source.toString().replaceAll('\r\n','\n');
   // Strip the newest selector at the shared owner,not at individual callers.
   // Keep this function self-contained for historical whole-module restoration.

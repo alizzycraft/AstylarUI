@@ -7,6 +7,42 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Recovered-source export routing and complete inventory verified (October24)
+
+Existing current-ancestry launcher now accepts --original-runner-recovery,
+selecting only exact7dfee derived review. Preflight checks the retained c394
+predecessor rather than requiring a duplicate virtual proposal file. Existing
+runner explicitly selects the authenticated derived reader for that digest only;
+all other digests retain prior routing. Thirteen older supplement selections and
+default selection preserve;mixing supplements rejects. Complete runner/launcher
+predecessor bytes recover and unrelated drift rejects,including direct shared
+historical entry checks. This is not an existence-only acceptance waiver.
+
+Actual inventory984 paths/314 proofs includes the new reader:16/21 additions to
+frozen968/293,all193 definitions unchanged. Seven old source paths now have
+bounded whole-byte restoration (the prior five plus runner/launcher). Prior
+source order and non-line proof fields conserve. Recovered-source case statuses
+remain partial/current-unverified;no canonical pointer or accepted result moved.
+
+Final frozen-source integration5/5,zero skips,69933.9802ms;log
+original-runner-routing-final-20261024.log SHA256
+0eb8a949231d16a8fade5ace09333bf027635a82ebaa8898ff99cc8d9a71ea33.
+Includes complete2311-case/17555-dependency validation,selection routing,
+corrupt-source rejection and registration conservation. Legacy Slider/Table
+checks5/5,zero skips,16647.3449ms;original-runner-routing-legacy-final-20261024.log
+SHA25636db9fe9f68d18bef13438fb3f3d7d86389023d81bde3ab5415c36f0e4f2871d.
+Both stderr files empty. Earlier integration4/5 is retained:editing launcher
+usage text during the run invalidated its last complete-source assertion. The
+frozen rerun above supersedes it;do not describe that interrupted-source run as
+fully passing or as a renderer defect.
+
+Next coherent milestone is export/conservation/independent cold/import with
+adequate storage and an explicit publication decision,not another browser
+recapture or source-recovery investigation. Repeated transport408 and limited
+disk headroom remain operational constraints. Original acceptance gates and
+remaining anonymous line-box/property mapping,paint/lifetime/currentness
+investigations are unchanged. No full audit completion inferred.
+
 ### Reusable exact derived-review reader verified (October24)
 
 original-material-runner-review-source.mjs extracts the previously tested virtual
