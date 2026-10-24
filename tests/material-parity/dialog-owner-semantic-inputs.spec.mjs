@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import test from 'node:test';
+import path from 'node:path';
+import { materialInteractionCases } from './benchmark.config.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 test('all retained open dialogs preserve real owner label/modal differences omitted by inner-surface comparator', () => {
@@ -37,4 +39,36 @@ test('all retained open dialogs preserve real owner label/modal differences omit
   assert.equal(open, 32); assert.equal(contexts.size, 8);
   assert.deepEqual([...states].sort(), ['activate', 'activate-leave', 'open', 'open-hover-content']);
   // Authenticated captured DOM/authored inputs only, not AX names, current rendering or modality behavior.
+});
+
+test('all eight retained-build activate contexts expose unequal actual dialog AX names and modal properties', () => {
+  const root = 'artifacts/material-parity/dialog-owner-ax-20261024';
+  const bytes = readFileSync(`${root}/latest-report.json`);
+  assert.equal(hash(bytes), '4e0eb63acc179362f8e6d4bc92c994d35f630fdbc44d08fa68a30af9de3012ea');
+  const report = JSON.parse(bytes);
+  for (const value of Object.values(report.provenance)) if (value?.file && value.sha256) {
+    assert.equal(hash(readFileSync(value.file)), value.sha256, value.file);
+  }
+  const expected = materialInteractionCases.filter(c => c.family === 'dialog' && c.state === 'activate')
+    .flatMap(c => ['reference', 'astylar'].map(mode => `${c.profile}/${c.viewport.id}/${mode}`));
+  assert.deepEqual(report.observations.map(r => `${r.profile}/${r.viewport.id}/${r.mode}`), expected);
+  assert.equal(expected.length, 16);
+  for (const receipt of report.observations) {
+    assert.equal(path.basename(receipt.file), receipt.file);
+    const bytes = readFileSync(`${root}/${receipt.file}`); assert.equal(hash(bytes), receipt.sha256);
+    const row = JSON.parse(bytes); assert.deepEqual(row.runtimeErrors, []);
+    assert.equal(row.state, 'activate'); assert.equal(row.boundary, 'after-configured-activate-and-settlement');
+    const owners = row.nodes.filter(n => n.role?.value === 'dialog' && !n.ignored); assert.equal(owners.length, 1);
+    const owner = owners[0];
+    assert.ok(row.dom.some(n => n.backendNodeId === owner.backendDOMNodeId));
+    assert.equal(owner.name.value, row.mode === 'reference' ? 'Confirm action' : 'Open dialog');
+    assert.equal(owner.properties.find(p => p.name === 'modal').value.value, row.mode === 'astylar');
+    if (row.mode === 'reference') {
+      const labels = owner.properties.find(p => p.name === 'labelledby').value.relatedNodes;
+      assert.equal(labels.length, 1); assert.equal(labels[0].text, 'Confirm action');
+      assert.ok(row.dom.some(n => n.backendNodeId === labels[0].backendDOMNodeId));
+      assert.ok(owner.name.sources.some(s => s.attribute === 'aria-labelledby' && s.value?.value === 'Confirm action'));
+    } else assert.ok(owner.name.sources.some(s => s.attribute === 'aria-label' && s.value?.value === 'Open dialog'));
+  }
+  // Actual AX at these endpoints, not AT behavior, focus-trap equivalence or current source applicability.
 });

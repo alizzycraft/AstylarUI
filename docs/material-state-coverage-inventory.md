@@ -7,6 +7,28 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+October24 actual outer dialog AX gap closed for eight configured desktop activate
+contexts: scripts/capture-dialog-owner-ax.mjs derives the existing passive full-
+AX/server procedure with current configured actions,theme settlement,reduced
+motion and profile color scheme. Complete generated producer bytes,derivation,
+base,action-runner,config,cursor helper,server helper and original full-report
+receipts are retained. Pinned retained icon-fresh-producer build is authenticated
+against the existing postdelay checkpoint before/after;no build/fixture change.
+Capture dialog-owner-ax-20261024 TERMINAL0,16 paired full AX/backend-DOM records;
+report SHA4e0eb63acc179362f8e6d4bc92c994d35f630fdbc44d08fa68a30af9de3012ea.
+All eight native dialog AX owners are exposed with computed name Confirm action,
+labelledby association to the actual title backend node,and modal=false. All
+eight candidate owners are exposed with computed name Open dialog from aria-label
+and modal=true. All association/backend nodes and record/source receipts verify;
+zero page errors. This establishes the named outer-owner difference hidden by
+the earlier inner-surface comparator,not a root core default,AT speech,focus-trap
+behavior or current-source rendering acceptance. Existing actual focus containment
+evidence remains separate;aria-modal=false does not imply nonmodal interaction.
+Focused dialog-owner-semantic-inputs.spec.mjs2/2 passes,zero skips,1757.4127ms,
+including original32-row DOM/authored census plus all16 new actual AX records.
+New script/proof are standalone pending coherent registration;no old registered
+sources,canonical pointers,c394 review or2311 partial dispositions are changed.
+
 October24 full pending-obligation census selects shared interaction/focus/paint
 work rather than more settled snackbar checks:current c394 has input204,
 datepicker202,dialog194,form-field/autocomplete/timepicker192 each pending
