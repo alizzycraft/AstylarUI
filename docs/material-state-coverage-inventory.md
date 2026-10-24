@@ -9,6 +9,32 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Public/core versus application focus responsibility now has a bounded call-site
+map,not a claim that one core correction fixes every overlay. AST query finds
+exactly7 surface.focus calls in current source71e2d41f(already byte-matched to
+captured app):field close callback1,handleClick4,outside-dismiss1,Escape1. Menu
+opening branch only patches open state and requests no item focus. Dialog opening
+requests dialog-dismiss,but no such authored ID exists;dialog-cancel is autofocus.
+Bottom-sheet requests existing bottom-sheet-dismiss after settlement,and that
+target is also autofocus. These are distinct authored contracts. Do not invent
+seven native focus failures or use state-change restoration as a standalone
+public API control;queued render/native autofocus can mask missing request sync.
+
+Retained-overlay-focus's EXISTING actual-authoring method probe is reused,not
+duplicated:new focused invocation passes1/1,native0,no browser capture;keep
+public-focus-showcase-authoring-reuse-20261024 pair. Authenticated AST map query
+also native0;keep public-focus-showcase-callsite-attribution-20261024 pair. Its
+application mapping is recorded in the pending core finding with uncertainty.
+
+Focus implementation ordering for later authorized work:general origin-aware
+core request-to-semantic sync first,with pointer/selection/modal safeguards and
+non-update public regression controls;then restore native-equivalent application
+targets,tabindex/association lifecycle and composite focus/navigation intent.
+Neither force an update nor synthesize key/click as a Menu focus workaround.
+Core fix cannot create an omitted application request or repair a nonexistent
+target. No implementation/fixture change,canonical publication,case promotion or
+relaxation of original audit gates follows from this ownership assessment.
+
 Public-focus source history now answers regression-versus-initial-API omission.
 Git-S identifiescd222388 as the public renderer focus signature's introduction.
 Its parent has no public focus method;initial methodSHA3814563e is byte-identical
