@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, realpathSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+import path from 'node:path';
+import ts from 'typescript';
 import { validateSupplementalCapture } from '../tests/material-parity/supplemental-capture-evidence.mjs';
 import { propertyGroups } from '../tests/material-parity/input-equivalence-policy.mjs';
 
@@ -49,12 +52,42 @@ for (const profile of ['light', 'dark']) {
   }
 }
 const manifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
+const producerFile = 'scripts/audit-material-menu-mobile-ax.mjs';
+const producerReceipt = manifest.provenance.diagnosticFiles.find(r => r.file === producerFile);
+assert.ok(producerReceipt);
+const currentProducer = readFileSync(producerFile);
+let historicalProducer;
+if (hash(currentProducer) !== producerReceipt.sha256) {
+  assert.equal(producerReceipt.sha256, '07e1a052fc49ee423efaa0f671cc6b388b58548d479ba8d07f899b8a4b3c357e');
+  historicalProducer = execFileSync('git', ['show', `0b2f7a41:${producerFile}`]);
+  assert.equal(hash(historicalProducer), producerReceipt.sha256);
+  const captureBranch = bytes => {
+    const ast = ts.createSourceFile(producerFile, bytes.toString(), 99, true, ts.ScriptKind.JS);
+    const branches = ast.statements.filter(n => ts.isIfStatement(n) && n.expression.getText(ast) === "process.argv[2] === '--verify'");
+    assert.equal(branches.length, 1); return branches[0].elseStatement.getText(ast);
+  };
+  assert.equal(captureBranch(currentProducer), captureBranch(historicalProducer), 'Collection branch changed; historical verifier exception no longer applies');
+  const nonVerifierSource = bytes => {
+    const ast = ts.createSourceFile(producerFile, bytes.toString(), 99, true, ts.ScriptKind.JS);
+    return ast.statements.filter(n => !(ts.isIfStatement(n) && n.expression.getText(ast) === "process.argv[2] === '--verify'") &&
+      n.getText(ast) !== "import { execFileSync } from 'node:child_process';").map(n => n.getText(ast)).join('\n');
+  };
+  assert.equal(nonVerifierSource(currentProducer), nonVerifierSource(historicalProducer), 'Non-verification producer statements changed');
+}
+const inside = (base, file) => file === base || file.startsWith(base + path.sep);
+const allowedRoots = [realpathSync(process.cwd()), realpathSync('artifacts/material-parity')];
+const read = file => {
+  if (historicalProducer && path.resolve(file) === path.resolve(producerFile)) return historicalProducer;
+  assert.ok(allowedRoots.some(root => inside(root, realpathSync(file))), 'Evidence symlink escapes allowed roots');
+  return readFileSync(file);
+};
 // Only reshape side/boundary containers; all original receipts/runtime records
 // pass unchanged through the existing validator. Raw report is never rewritten.
 assert.deepEqual(validateSupplementalCapture({ ...report, results: pairs }, {
   reportFile: file, expectedProvenance: manifest.provenance,
   script: 'scripts/audit-material-menu-mobile-ax.mjs', styleProperties: Object.values(propertyGroups).flat(),
+  readBytes: read,
 }), { status: 'checkpoint-bound', errors: [] });
-for (const receipt of [...manifest.provenance.harnessFiles, ...manifest.provenance.diagnosticFiles]) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+for (const receipt of [...manifest.provenance.harnessFiles, ...manifest.provenance.diagnosticFiles]) assert.equal(hash(read(receipt.file)), receipt.sha256);
 console.log(JSON.stringify({ reportSha256: hash(bytes), physicalContexts: 2, pairedBoundaries: pairs.length,
-  sideBoundaries: 28, rawReportPreserved: true, currentRenderingAccepted: false }));
+  sideBoundaries: 28, rawReportPreserved: true, historicalProducerAuthenticated: !!historicalProducer, currentRenderingAccepted: false }));

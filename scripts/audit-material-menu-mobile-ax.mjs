@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import ts from 'typescript';
@@ -15,17 +16,7 @@ const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const bytes = readFileSync(base);
 assert.equal(hash(bytes), '470ea048ee10980b422987c096ab4b479bfe2f25697eaf3657cc6c96cf5b4022');
 if (process.argv[2] === '--verify') {
-  const file = process.argv[3], report = JSON.parse(readFileSync(file));
-  const manifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
-  assert.deepEqual(validateSupplementalCapture(report, { reportFile: file, expectedProvenance: manifest.provenance,
-    script, styleProperties: Object.values(propertyGroups).flat() }), { status: 'checkpoint-bound', errors: [] });
-  for (const receipt of [...manifest.provenance.harnessFiles, ...manifest.provenance.diagnosticFiles]) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
-  assert.equal(report.results.length, 4);
-  for (const row of report.results) {
-    assert.deepEqual(row.boundaries.map(b => b.state), ['initial-closed', 'open-1', 'closed-1', 'open-2', 'closed-2', 'open-3', 'closed-3']);
-    for (const b of row.boundaries) { assert.ok(b.observation.actualAX.nodes.length); assert.ok(b.observation.actualAX.dom.trigger); }
-  }
-  console.log(JSON.stringify({ reportSha256: hash(readFileSync(file)), physicalContexts: 2, sides: 4, AXBoundaries: 28 }));
+  process.stdout.write(execFileSync(process.execPath, ['scripts/check-material-menu-mobile-ax.mjs', process.argv[3]], { encoding: 'utf8', windowsHide: true }));
 } else {
   const output = path.resolve(process.argv[2] ?? '');
   assert.ok(output.startsWith(path.resolve('artifacts/material-parity') + path.sep));

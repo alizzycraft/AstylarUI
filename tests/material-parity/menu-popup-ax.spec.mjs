@@ -169,3 +169,12 @@ test('Menu semantic declaration attribution binds map content and actual loaded 
   }
   assert.equal(candidateLoads, 18);
 });
+
+test('mobile producer verification entry point authenticates captured source without rerunning collection', () => {
+  const output = execFileSync(process.execPath, ['scripts/audit-material-menu-mobile-ax.mjs', '--verify',
+    'artifacts/material-parity/menu-mobile-ax-retry-20261024/latest-report.json'], { encoding: 'utf8' });
+  const result = JSON.parse(output);
+  assert.equal(result.reportSha256, '04ab953a6db5773212b85c9bc09c20d01708d065c38704a36ce1f58038620ba0');
+  assert.equal(result.historicalProducerAuthenticated, true);
+  assert.equal(result.sideBoundaries, 28); assert.equal(result.currentRenderingAccepted, false);
+});

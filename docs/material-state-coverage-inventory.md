@@ -9,6 +9,27 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Mobile producer --verify instrumentation defect is corrected without capture
+repetition or receipt rewriting. Entry point now delegates to the independently
+validated side/boundary adapter instead of passing flat rows to paired validator.
+Captured producer bytes07e1a052 are recovered read-only from exact Git0b2f7a41
+and hashed against the unchanged manifest. Before this one-path historical read
+is allowed,the checker proves the entire capture else-branch AND every other
+top-level statement match,except the explicit verifier branch and added execFileSync
+import. Unknown captured hash or additional producer change rejects. Nonproducer
+reads retain allowed-root/realpath checks;generic source/asset/tree checks and
+all screenshot hashes still run. This authenticates historical capture,not a new
+current-source receipt or relaxed runtime/applicability criterion.
+
+Actual `node scripts/audit-material-menu-mobile-ax.mjs --verify <retained-report>`
+now exits native0. Existing suite passes9/9,nativeExit0,including the CLI route,
+old report hash and historicalProducerAuthenticated=true. Keep menu-mobile-ax-
+cli-verifier-fixed,verifier-integration and verifier-conservation-integration-
+20261024 log pairs. First verification shape failure remains documented below.
+This is a bounded audit-tool/source transition outside frozen1002/326;later
+registration must retain its exact prior07e1a052 receipt and conservation proof.
+No runtime collection/fixture/renderer/case/canonical change or browser rerun.
+
 New semantic findings' authoring applicability is now bound to ACTUAL loaded
 assets,not only a map found on disk. Retained chunk-JPEJK334.js.map hash47654b64
 is authenticated in all three AX capture checkpoint browser inventories. Its
