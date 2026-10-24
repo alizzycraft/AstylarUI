@@ -2,6 +2,36 @@
 
 ## Current audit pointer — October24
 
+- Canonical milestone8e3e54ffa726a6679fdbd6fc3bdddf92869a2a67 is confirmed on
+  origin/codex/material-audit-alignment-integration by independent ls-remote,
+  after push59905 terminal0. GitHub reports large-file recommendations,not a
+  rejection. No force push,history rewriting or authentication bypass was used.
+  A subsequent standalone focus-snapshot proof is intentionally not yet in the
+  canonical955-source/278-proof population;integrate it with the next coherent
+  evidence batch,not another full export for this ledger update.
+  Question answered:do the retained input-focus rows name the wrong renderer
+  control,or only use a different ID namespace? Across40 exact historical cases
+  (five input families,four profiles,desktop DPR1/2),all renderer logical owners
+  map to input descendants within their expected primary components. The80 trees
+  and full report ab42dbec are authenticated. This is not actual paired DOM-focus
+  ownership:the single resource snapshots have no endpoint/time labels and the
+  component IDs/events are normalized. Captured e01ef9dc producer identity stays
+  pinned without claiming its missing original bytes recovered or using today's
+  procedure as historical proof. Native input presence is not observed native
+  activeElement. Thirty-two rows report focus callbacks only with focusVisible
+  true;all8 Timepicker rows retain pointer/focus callback sequences and a false
+  flag. Do not call those eight programmatic-focus observations or infer a core
+  visibility defect/cause. Other pointerenter/move records remain in the source.
+  Standalone tests in retained-input-focus-snapshot.spec.mjs pass2/2,including
+  wrong-owner,missing-visibility,removed-pointer-modality and invented-timing
+  controls. Initial all-true visibility assumption was rejected and corrected to
+  preserve the actual32/8 split,not to normalize it away. Final modality-aware
+  logSHA6e36e8bf4f51557f49bf837d8455e9a19174745a3ea4eca95bd93ef8b6fdb169
+  records1269.6884ms. No browser capture or renderer/fixture change. Next obtain
+  paired actual DOM/renderer owners at explicitly bound request/settlement/read
+  boundaries with input modality preserved,using existing capture infrastructure.
+  Current canonical coverage dispositions and all original final gates remain.
+
 - Accepted local canonical/compact generation:
   7e02d8f007a0e18bf7423bf10bf67bc16e8ad3d7b39dc4b4a2681fbead50c07c,
   index620874d6916bd0973a368007490a7637ae89e73a0e77d8303fdfea2c7247835c.
@@ -21,9 +51,9 @@
   No original acceptance gate,fixture,renderer or source receipt was relaxed.
   Keep original/failure evidence,prior f199 and closed extracts/stores pending
   reference closure. Free400281600 after accepted copy;recheck before large writes.
-  Next commit/publish this coherent milestone,then shared input/overlay focus and
-  activation gaps;do not rerun this completed integration. Remote publication is
-  not yet confirmed. Original full canonical/browser/release gates remain open.
+  Next shared input/overlay focus and activation gaps;do not rerun this completed
+  integration. Canonical commit publication is confirmed above. Original full
+  canonical/browser/release gates remain open.
 
 ### Milestone history (stage statuses below are historical)
 
