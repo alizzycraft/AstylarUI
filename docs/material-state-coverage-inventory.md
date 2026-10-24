@@ -9,6 +9,28 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Shaping-context census reuses existing core-canvas-default-shaping-differs-from-
+css-text instead of inventing a duplicate or generalizing its cause. Across24
+retained Divider cases,168 mapped pairs comprise96 actual own-text pairs and72
+containers. Native fontKerning/textRendering auto and fontVariantLigatures/
+fontFeatureSettings/fontVariationSettings normal are recorded;candidate declaration
+and supplied retainedText stages omit those five. Exact font/content/node/tree
+receipts are retained. Missing stage fields are NOT observed canvas defaults.
+
+Keep divider-owner-shaping-context-20261025 pair,nativeExit0,stderr empty.
+Existing registered finding/source anchor still matches exactly once. Its proof
+is Arial office AV bound-control advance versus DOM Range/configured canvas;
+that is a shared risk,NOT demonstrated cause for Roboto Above/Below or masked
+heading text. No actual kerning state,advance,raster,all-font behavior or current
+case acceptance inferred. No duplicate public reduction,new finding,renderer,
+fixture or canonical change. Live1041/365/198 remains frozen.
+
+Next review exact-case inspection requirements against the accumulated evidence,
+separating genuinely missing closure proof from recorded field/stage limitations.
+Do not keep generating property inventories or another kerning experiment without
+a specific acceptance/inspection question they would settle. Scope and schema2
+closure rules remain unchanged;no case is promoted by this census alone.
+
 Outside-owner direction/bidi context check prevents a false default-equivalence
 claim:all120 owner pairs/24 retained cases record native direction ltr,
 writingMode horizontal-tb,unicodeBidi ISOLATE,textAlignLast auto,textJustify auto;
