@@ -4,6 +4,33 @@
 
 ### Current next action and publication status
 
+- Historical black Slider material path is now reproduced before rasterization.
+  Exact parentf3c8254c of2cb8b198 has alphaHex returning rgba(...);the plugin's
+  six-digit-only color filter rejects it and returns fallback#6750a414. Original
+  material() passes that nine-character value to Color3.FromHexString and leaves
+  alpha1. Replaying the original functions creates diffuse/emissive black,
+  opaque StandardMaterials in all eight theme/hover-held input combinations.
+  Both historical lock and installed Babylon are8.15.1. A valid six-digit control
+  stays tinted;the current helper decodes the encoded-alpha control correctly.
+  Confirmed historical application/plugin color/material configuration defect,
+  not a core CSS renderer or equal-input projection diagnosis. It is a candidate
+  explanation for the September3 black-circle screenshot,NOT exact old browser/
+  fixture attribution:that screenshot's served build remains unbound here.
+  NullEngine proves material configuration only. No renderer/plugin fix made.
+  Historical whole source hashes and current owning-module hash are asserted in
+  slider-retained-state-layer.spec.mjs;four raw/input/pixel/historical checks
+  pass,zero skips,in3406.3903ms. No new browser capture or canonical registration.
+  Logslider-historical-black-material-integration-20261024 SHA
+  00472e2a7281b330b5cdf3d29e79f65007d3297f45f7f20f3d913616e6f3ec94;
+  stderr empty. Accepted192-finding/962-source/285-proof counts stay unchanged
+  until coherent registration of these standalone proofs.
+  Babylon skill guided exact installed-version replay and explicit resource
+  disposal,not migration to its default9.12.0. Official8.15.1 Color3 source also
+  rejects non-seven-character hex strings:
+  https://raw.githubusercontent.com/BabylonJS/Babylon.js/8.15.1/packages/dev/core/src/Maths/math.color.ts
+  First barrel-import run takes32044.7268ms;verified narrow imports plus owning
+  integration take3406.3903ms. OS cache differs;not a controlled speedup claim.
+
 - Retained Slider interior paint now has a bounded four-context light-theme
   proof (hover/held × desktop DPR1/2),reusing8 original PNGs. Each image's right
   knob is located independently from its solid primary pixels;only a flat patch

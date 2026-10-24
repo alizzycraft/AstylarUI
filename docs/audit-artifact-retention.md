@@ -1,5 +1,15 @@
 # Audit artifact retention
 
+October24 historical Slider material replay uses immutable git blob sources at
+f3c8254c,not a new browser build or screenshot set. Preserve
+slider-historical-black-material-20261024 initial successful barrel-import log
+and stderr,plus slider-historical-black-material-integration-20261024.log,SHA
+00472e2a7281b330b5cdf3d29e79f65007d3297f45f7f20f3d913616e6f3ec94,
+and empty stderr. Four focused checks pass after verified narrower Babylon8.15.1
+imports. Original material functions reproduce opaque black configuration;
+NullEngine does not establish old screenshot's exact revision or GPU pixels.
+Keep original PNGs and prior source/interior proof logs;none is superseded.
+
 October24 Slider light interior-paint check reuses8 original PNGs within the
 same slider-hover-held-20261024 set;no derived crops or additional capture run.
 Keep slider-state-layer-interiors-integration-20261024.log,SHA

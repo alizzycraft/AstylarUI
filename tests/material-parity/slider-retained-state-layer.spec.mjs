@@ -4,6 +4,12 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import { PNG } from 'pngjs';
+import { execFileSync } from 'node:child_process';
+import { Color3 } from '@babylonjs/core/Maths/math.color.js';
+import { Material as BabylonMaterial } from '@babylonjs/core/Materials/material.js';
+import { NullEngine } from '@babylonjs/core/Engines/nullEngine.js';
+import { Scene } from '@babylonjs/core/scene.js';
+import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial.js';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const load = receipt => {
@@ -143,4 +149,65 @@ test('retained light Slider state-layer interiors differ at both DPRs', t => {
   assert.notDeepEqual(observed.reference.hover, observed.astylar.hover);
   assert.notDeepEqual(observed.reference.held, observed.astylar.held);
   t.diagnostic('8 authenticated light DPR1/2 PNG interiors retain different hover/held colors. No opaque black patch in these sampled interiors. Unequal inputs are established separately;not historical black-circle causality,exact effective-alpha inversion,edge/track/glyph sharpness,other themes or whole-case acceptance.');
+});
+
+test('historical Slider color fallback produces an opaque black material before rasterization', t => {
+  const revision = 'f3c8254c2aa63197c03e0fb2bd43cc98c0e57fed';
+  const historical = (file, expected) => {
+    const bytes = execFileSync('git', ['show', `${revision}:${file}`], { maxBuffer: 8000000 });
+    assert.equal(hash(bytes), expected);
+    return ts.createSourceFile(file, bytes.toString(), 99, true, ts.ScriptKind.TS);
+  };
+  const pluginFile = 'examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts';
+  const plugin = historical(pluginFile, 'b4e54b11712660b5e6e773b46150e08fd23bd50da5c0ad0f7459cd98b2328f47');
+  const app = historical('examples/material-showcase/src/app/astylar.component.ts',
+    '944417c135e7f917f88ff9772096d2b527b47c1c9911369bcecef71ed540d94c');
+  const theme = historical('examples/material-showcase/src/app/theme.ts',
+    '60a0737e357b6cf03f19256212f26f27d6a54d6153e9ee3a433246a37a39c609');
+  const lock = JSON.parse(execFileSync('git', ['show', `${revision}:package-lock.json`], { maxBuffer: 8000000 }));
+  const installed = JSON.parse(readFileSync('node_modules/@babylonjs/core/package.json'));
+  assert.equal(lock.packages['node_modules/@babylonjs/core'].version, '8.15.1');
+  assert.equal(installed.version, '8.15.1');
+  const alpha = find(theme, node => ts.isFunctionDeclaration(node) && node.name?.text === 'alphaHex');
+  const alphaHex = new Function(compile(alpha.getText(theme).replace(/^export /, '')) + ';return alphaHex;')();
+  const data = find(app, node => ts.isPropertyAssignment(node) && node.name.getText(app) === "'state-color'");
+  const request = new Function('alphaHex',
+    compile('const requested = ' + data.initializer.getText(app)) + ';return requested;');
+  const rangeColor = find(plugin, node => ts.isCallExpression(node) && node.expression.getText(plugin) === 'this.color'
+    && node.arguments[1]?.text === 'state-color');
+  const colorArgument = new Function('context', compile('const value = ' + rangeColor.getText(plugin)) + ';return value;');
+  const makeHelper = ast => {
+    const methods = ['color', 'material'].map(name => find(ast,
+      node => ts.isMethodDeclaration(node) && node.name.getText(ast) === name).getText(ast));
+    return new Function('Color3', 'StandardMaterial', 'Material',
+      compile('class Owner {' + methods.join('\n') + '}') + ';return new Owner();')
+      (Color3, StandardMaterial, BabylonMaterial);
+  };
+  const helper = makeHelper(plugin), engine = new NullEngine(), scene = new Scene(engine);
+  try {
+    const context = { meshId: 'historical-slider', scene, properties: {},
+      resources: { own: value => value }, element: { data: {} } };
+    for (const primary of ['#6750a4', '#d0bcff', '#000000', '#006a6a']) for (const held of [false, true]) {
+      const authored = request.call({ store: { tokens: () => ({ primary }) }, pressedSliderId: () => held }, alphaHex);
+      assert.match(authored, /^rgba\(/);
+      context.element.data['state-color'] = authored;
+      const selected = colorArgument.call(helper, context);
+      assert.equal(selected, '#6750a414'); // Original invalid fallback,not an invented input.
+      const material = helper.material(context, 'state-layer', selected);
+      assert.deepEqual(material.diffuseColor.asArray(), [0, 0, 0]);
+      assert.deepEqual(material.emissiveColor.asArray(), [0, 0, 0]);
+      assert.equal(material.alpha, 1);
+    }
+    // A valid original six-digit input passes the helper unchanged and stays tinted.
+    context.element.data['state-color'] = '#6750a4';
+    assert.equal(colorArgument.call(helper, context), '#6750a4');
+    assert.equal(helper.material(context, 'valid-control', '#6750a4').diffuseColor.toHexString(), '#6750A4');
+    const current = readFileSync(pluginFile); assert.equal(hash(current),
+      'dee2c10af7f3116bc6a476d63182ac182e5717b90f5333a327b77213e0b9107e');
+    const currentHelper = makeHelper(ts.createSourceFile(pluginFile, current.toString(), 99, true, ts.ScriptKind.TS));
+    const retainedCurrent = currentHelper.material(context, 'current-control', '#6750a41f');
+    assert.equal(retainedCurrent.diffuseColor.toHexString(), '#6750A4');
+    assert.equal(retainedCurrent.alpha, 31 / 255);
+  } finally { scene.dispose(); engine.dispose(); }
+  t.diagnostic('Original pre-2cb8 plugin path: rgba request rejected→9-character fallback→Color3 black with material alpha1. Historical/installed Babylon8.15.1 agree. Current helper decodes encoded alpha. Confirmed historical application/plugin material-config defect;NullEngine is not old browser raster/fixture-revision attribution or current rendering parity.');
 });
