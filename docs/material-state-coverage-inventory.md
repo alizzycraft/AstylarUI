@@ -9,6 +9,28 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Accumulated standalone proofs pass together:node --test --test-reporter=dot
+tests/material-parity/divider-original-crop-provenance.spec.mjs
+tests/material-parity/ordinary-wrapping-request-path.spec.mjs
+tests/material-parity/disabled-select-keyboard-guard.spec.mjs
+tests/material-parity/select-readonly-focus-contexts.spec.mjs exits0,11 tests.
+This coherent check covers requirement/crop/source/lifetime boundaries,ordinary
+wrapping request execution,disabled native guard plus48-context union,and eight
+readonly focus failures. It is not the unfiltered audit or rendering final gate.
+
+AST inventory census confirms1041 frozen registered paths and EIGHT committed
+post-registration code paths,none included in that inventory:four capture adapters
+(disabled-control-remaining-contexts,disabled-select-focused-key,
+disabled-select-focused-contexts,select-readonly-focus-contexts) and four proof
+files(divider-original-crop-provenance,ordinary-wrapping-request-path,
+disabled-select-keyboard-guard,select-readonly-focus-contexts). They remain explicit
+standalone evidence,not silently counted as registered/exported. The small Divider
+requirement JSON and pending block-alignment implementation-plan delta also need
+explicit evidence/source integration. Preserve the frozen1041/365/198 boundary;
+next coherent integration must reconcile this exact delta and retained historical
+producer receipts(including the readonly verifier summary),not rerun these captures.
+Canonical88be4d47 and all current-rendering/whole-case statuses remain unchanged.
+
 Readonly Select supplementary failure now observed in all EIGHT configured focus
 contexts(four profiles×DPR1/2),not inferred from shared code. Native focused
 MAT-SELECT retains Team;candidate focused readonly INPUT emits input(value=xTeam)
