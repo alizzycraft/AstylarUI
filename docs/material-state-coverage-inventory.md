@@ -9,6 +9,32 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Outside-owner property triage now enumerates the entire recorded104-property
+population for five owners across24 Divider cases(120 pairs/48 authenticated
+trees). Existing canonicalStyle yields101 fields per owner after shorthand
+expansion:12120 normalized slots split3768 equal supplied tokens,1536 different
+supplied values and6816 missing candidate declaration fields. These are FIELD
+counts,not inspected cases or classifications. Exactly five signature patterns
+occur,one per owner,each repeated24 times;no candidate-only canonical fields.
+
+Keep divider-outside-owner-property-triage-20261025 log pair,stdout SHA256
+2ccdd7d5d8bd560ca80c05b3b9a9e28aad7805f1c69da9d45d549d001f25e40f,
+nativeExit0,stderr empty. Follow-up per-row partition assertions pass. Initial
+follow-up incorrectly equated raw12480 with canonical12120 and failed;corrected
+assertion explicitly preserves both counts(padding,margin,gap shorthands expand).
+No report was rewritten. This triage does NOT promote omitted fields to defaults
+or certify equal tokens as complete CSS/rendering equivalence.
+
+Differences prioritize existing border/masking/flow findings,then point-specific
+cursor and block formatting-context alignment evidence. Existing scalar policy
+already retains auto/default cursor and normal/stretch-or-flex-start alignment
+as context-dependent harness gaps;do not globally normalize them. Numeric
+opacity1/1.0 already has equivalentValue support and is not a new defect.
+Next inspect applicability of existing effective-cursor evidence to these exact
+five owner paths,then resolve the block alignment context;avoid another broad
+capture or property-by-property matching-token investigation. Remaining missing
+fields still require declaration/inheritance/default applicability review.
+
 Retained Divider frame/leaf ink question is now resolved for24 cases/48
 authenticated trees:all24 frame color requests and48 retained leaf colors match
 the native values through the existing canonicalStyle normalizer,including dark
