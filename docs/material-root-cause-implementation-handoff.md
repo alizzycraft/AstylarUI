@@ -41,6 +41,17 @@ unproven,not an already confirmed renderer defect. Existing documented modal
 semantics must be preserved during future contract/design work. Evidence:
 `tests/material-parity/dialog-owner-semantic-inputs.spec.mjs` and current ledger.
 
+Caret font-response evidence now includes new replayable full-stage blink PNGs,
+not recovered October14 pixels. In the public equal-input reduction,native full
+footprints are17CSSpx Arial/19CSSpx monospace at both DPRs;candidate full blended
+footprint is20CSSpx for either. Exact-color-only candidate bands omitted blended
+edge rows. Reuse `tests/material-parity/caret-retained-frames.spec.mjs` and the
+current ledger before another capture. Native logical metrics,actual selected
+font identity and correct replacement rule remain unproved;classification stays
+suspected. Do not implement a20px rule or font/DPR-specific compensation from
+these measurements. The new evidence closes a raster-retention/footprint gap,
+not the original full caret compatibility decision or all Material case coverage.
+
 The latest shared-button evidence adds this dependency to tracks6–7:
 
 1. Resolve the EXISTING documented CSS transform unit/reference-box limitation

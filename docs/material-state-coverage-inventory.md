@@ -7,6 +7,56 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Pending caret PNG evidence — October24
+
+Specific old gap:the suspected font-insensitive caret finding had exact-RGB
+summaries but no replayable original PNGs/full blended footprint. Reuse existing
+public equal-input empty-caret test,not a new renderer or fixture. New
+scripts/capture-public-caret-frames.mjs extracts that complete maintained test
+and raster helper;bounded edits save existing full-stage frames/bundle/dependency
+receipts,report native stage delta,and change only shared Arial to monospace
+for the contrast. Reversing all edits recovers the complete original test body.
+Original actions,geometry,style constraints and assertions are unchanged. This
+is new evidence,not recovery of old October14 pixels or a metric implementation.
+
+Initial public-caret-frames-arial-20261024 fails report publication with font
+undefined after rendering assertions;keep28 PNGs,bundle,generated producer and
+failure log9256b0aa943f87a321eff2244c870bb942706ffefd66a630b4a698763f5f8cd2.
+Fixed generator scopes font;fresh receipted Arial/monospace captures TERMINAL0,
+1/1 each,14818.4031/14792.6796ms. Full reports:
+
+- public-caret-frames-arial-receipted-20261024/latest-report.json:508da18107728877c325cc480fb6f3cd43ba18ab8cb75927df60434717a9dd97
+- public-caret-frames-monospace-20261024/latest-report.json:6fa0cb7a747a1f308e2cc6bbbbbc991782c590884da4957f31e3cbfc4192eaa9
+
+Together56 retained full-stage PNGs,2515 complete dependency receipts per font,
+exact generated producers and actual served bundles. Chrome155.0.8059.85,
+Angular20.3.31,Babylon8.56.2,installed Astylar0.2.0;this public consumer's Babylon
+version is distinct from older/root diagnostic environments. Installed cursor
+owner remains83817ad4. No package changed. developer skill validation preserves
+package-root mount,matching SiteData,settlement,diagnostics and disposal;core
+investigation stays in maintainer scope. No private mutation or app workaround.
+
+Whole same-focused-state blink ON/OFF frame subtraction now includes ALL changed
+RGBA pixels,not an exact-color filter. At both DPRs,native Arial footprint17CSSpx,
+native monospace19CSSpx;candidate20CSSpx for both. Width native1/candidate2CSSpx.
+Native changed pixels are exact208,188,255;candidate adds blended edge colors
+220,206,245 atDPR1/226,215,240 atDPR2. These resolve the previously missing blended
+footprint boundary for this reduction,not native logical metrics,actual selected
+font identity,universal height/centering law,all backgrounds or historical Material
+attribution. Inspected Arial full frames also retain native focus outline and
+candidate default outside-surface clear color;those static differences cancel in
+blink subtraction and are NOT full-frame parity passes. Suspected finding remains
+suspected;do not install a20px rule or fixture offset from this measurement.
+
+caret-retained-frames.spec.mjs2/2 passes,zero skips,1788.5269ms:all frames,bundles,
+dependencies/source reversals plus complete blink delta replay. Closed three
+audit.js bundles LZX-compressed with unchanged individual hashes:two Arial
+5614de9791b8711740299f023b2c23d3e02918db74e9929f12d4dc7a8f59f968;
+monospace92373135e77e4ce98b60c05e95719334865e2603d3a7d0e0b92970e90e068d6b.
+Each~15.93MB logical occupies3141632 bytes. No evidence deleted;D:free532377600.
+New two source/proof files are standalone pending coherent registration;frozen
+c394/accepted a659 and2311 partial/current-unverified case statuses unchanged.
+
 ### Pending standalone batch:snackbar/dialog/focus — verified October24
 
 Coherent owning integration TERMINAL0:10/10 tests,zero skips,9829.4026ms.
