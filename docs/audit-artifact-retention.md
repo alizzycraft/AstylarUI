@@ -1,5 +1,15 @@
 # Audit artifact retention
 
+October24 full-object publication attempt60891 exits1/HTTP408. Preserve
+slider-state-publication-full-object-20261024.log (empty SHAe3b0c442...) and
+its stderrSHA0f9e5f80ccbe43af8a6a78ea8565345c0e972afebbce1aa285e0c4a2a22d15f7.
+Client pack reports97 objects/82.49MiB/zero deltas;remote remains645c99b8 on an
+independent ls-remote check. No publication is inferred from client pack progress
+or "Everything up-to-date" following an RPC failure. Code freezeb521bafd and
+proposalc394 remain local. Do not add another large canonical generation until
+a working publication route is available. No renderer/reference edits,evidence
+deletion,credential/host-trust changes or Git history rewrite was attempted.
+
 October24 Slider registration is complete at193 findings/968 sources/293 proofs.
 Keep slider-state-accepted-vector-census-20261024 and
 slider-state-complete-registration-integration-20261024 (18/18) logs/stderr.

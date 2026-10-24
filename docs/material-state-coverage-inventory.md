@@ -7,6 +7,20 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+Publication status:registered code is frozen atb521bafd. A third bounded push
+uses full objects,pack.window/depth0,no thin pack,buffered HTTP/1.1 and progress.
+Session60891 exits1 with HTTP408 after the client completes97 objects/82.49MiB,
+zero deltas. Independent ls-remote still shows645c99b8,so no remote publication
+is claimed despite Git's misleading final "Everything up-to-date" message.
+This different strategy did not resolve the failure;do not repeat unchanged
+uploads or create another large canonical blob while the transport is unresolved.
+No available app-native Git push tool was found;Sites repository credentials
+are unrelated and were not requested/used. Existing GitHub SSH trust/auth is
+not configured;no credentials,host trust,remote settings or history changed.
+Keep the verified local commits and obtain a working large-push transport.
+Current canonical remains a659;next registered c394 milestone is deferred,not
+accepted or waived. All original audit coverage and final gates remain open.
+
 - Slider batch is registered at193 findings/968 source paths/293 focused proofs.
   Six paths/eight proofs add to accepted962/285 with no removals. Current producer
   0aba1870 restores complete prior4d6fe33d after only those array additions.
