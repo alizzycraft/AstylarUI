@@ -31,9 +31,12 @@ export const publicBlockAlignmentFindings = Object.freeze([
     publicReproduction:reproduction,sourceBinding,
     observation:{property:'child top relative to parent',element:'child',state:'fresh explicit center block',dpr:[1,2],reference:'55 CSSpx',astylar:'20 CSSpx'},
     firstDivergence:'Explicit center survives candidate resolved style but the rendered child does not move from the normal/stretch control offset. The35px divergence is after style resolution,not omission/default serialization.',
+    causalExecution:{evidence:{file:'artifacts/material-parity/public-block-alignment-causal-execution-20261025.log',sha256:'fcc1734eff58748a456a996fcfc69fff43f6de7df6798738589254b01193c269'},
+      observation:'Actual current and captured-installed layoutBlockChildren plus ten complete real helpers pass y20 to positionRenderedCssBox for normal,stretch,center without reading parent alignContent. Other parent height/position reads are observed.',
+      boundary:'Creation returns the recorded fixed10x10 child;projection records CSS boxes and unexpected resize/paint branches throw. Not whole browser call tracing,nested/auto-height behavior or proof of every downstream renderer path.'},
     history:{boundary:'First-bad runtime revision not established. Current/installed six-method equivalence does not date the behavior or prove every internal call path.'},
     justification:'Eight equal-input package-root pairs separate omitted/normal/stretch/center atDPR1/2. Both center cases fail by35px despite equal center declarations;normal/stretch controls agree. Absolute block parent excludes parent-child margin collapse in this reduction. Layout/default source methods match captured installed bundle inputs.',
     nextAction:'Trace and implement general block content alignment at the owning CSS layout boundary,with explicit normal/stretch/center and margin-collapse controls. Do not substitute flex or tune offsets.',
-    boundary:'Confirmed projected geometry failure,not local raster,all block alignment values,Material symptom causality or historical runtime. Exact internal causal statement still requires targeted execution evidence.',
+    boundary:'Confirmed projected geometry failure with missing block content-alignment offset before projection in the bounded actual-method execution. Not local raster,all block alignment values,Material symptom causality or historical runtime.',
   }),
 ]);

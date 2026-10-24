@@ -9,6 +9,32 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Explicit block-center failure now has targeted causal EXECUTION evidence before
+projection,not source-name inference. Actual current and captured-installed
+layoutBlockChildren plus ten real margin/flow/constraint helpers execute for
+normal/stretch/center. All six executions pass CSS box{x:0,y:20,width:10,height:10}
+into recording positionRenderedCssBox with100x100 containing dimensions. Proxy
+records parent height/position reads but NO alignContent read. Thus the missing
+35px center offset already exists in CSS child placement;Babylon projection is
+not its source in this reduction. No renderer code or author offsets changed.
+
+Adapters only supply fixed recorded child creation,ancestry/default display and
+recording projection;unexpected resize/paint/update branches throw. Real margin,
+collapse and flow calculations remain. This is not complete browser call tracing,
+nested/auto-height/all formatting-context coverage or historical execution.
+Keep public-block-alignment-causal-execution-20261025 pair(stdout SHA256
+fcc1734eff58748a456a996fcfc69fff43f6de7df6798738589254b01193c269),
+4/4,0skip,1240.1594ms,nativeExit0,stderr empty. Pending explicit-center finding now
+references this proof and no longer claims exact internal boundary is wholly
+unknown. Retain separate initial-value finding and native-only collapse control.
+
+Updated owning finding integration passes4/4,0skip,nativeExit0;keep
+public-block-alignment-causal-finding-integration-20261025 pair. No new browser,
+bundle,canonical generation or source registration. Next consolidate bounded
+outside-owner/alignment evidence through existing review mechanisms in a coherent
+batch while preserving unreviewed fields/currentness and all2311 partial cases.
+Do not repeat settled default/history/browser/causal probes merely for metadata.
+
 Two standalone pending core findings now preserve the separate block failures:
 core-block-align-content-omission-resolves-to-stretch owns wrong CSS initial
 resolution;core-block-align-content-center-does-not-align-contents owns equal-

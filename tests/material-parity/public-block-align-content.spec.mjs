@@ -93,9 +93,43 @@ test('Pending block alignment findings distinguish resolution from explicit layo
   assert.equal(new Set(publicBlockAlignmentFindings.map(f=>f.id)).size,2);
   for(const finding of publicBlockAlignmentFindings){
     assert.equal(finding.classification,'confirmed-core-renderer-defect');
-    for(const receipt of [finding.publicReproduction,finding.sourceBinding,finding.history.evidence].filter(Boolean))assert.equal(hash(readFileSync(receipt.file)),receipt.sha256);
+    for(const receipt of [finding.publicReproduction,finding.sourceBinding,finding.history.evidence,finding.causalExecution?.evidence].filter(Boolean))assert.equal(hash(readFileSync(receipt.file)),receipt.sha256);
     assert.deepEqual(finding.observation.dpr,[1,2]);
   }
   assert.match(publicBlockAlignmentFindings[0].boundary,/not a demonstrated omission-driven geometry failure/);
-  assert.match(publicBlockAlignmentFindings[1].boundary,/Exact internal causal statement still requires/);
+  assert.match(publicBlockAlignmentFindings[1].boundary,/offset before projection/);
+});
+
+test('Actual block placement omits alignment before the CSS projection boundary', t => {
+  const report=JSON.parse(readFileSync('artifacts/material-parity/public-block-align-content-20261025/latest-report.json'));
+  const names=['layoutBlockChildren','hasFlexAssignedHeight','calculateBlockFlow','clampAutoBlockHeight','definiteContainingBlockContentHeight','parseAutoBlockConstraint','parseMarginBox','parseBorderWidthBox','collapseVerticalMargins','parseFontSize','parseLengthValue'];
+  const results=[];
+  for(const file of ['src/app/services/dom/elements/element-creation.service.ts','examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/element-creation.service.js']){
+    const bytes=readFileSync(file),ast=ts.createSourceFile(file,bytes.toString(),99,true,file.endsWith('.ts')?ts.ScriptKind.TS:ts.ScriptKind.JS);
+    if(file.endsWith('.js'))assert.equal(report.inputs.find(r=>r.file===file)?.sha256,hash(bytes));
+    const cls=ast.statements.find(n=>ts.isClassDeclaration(n)&&n.name?.text==='ElementCreationService');assert.ok(cls);
+    const methods=names.map(name=>{const found=cls.members.filter(n=>ts.isMethodDeclaration(n)&&n.name.getText(ast)===name);assert.equal(found.length,1);return found[0].getText(ast);});
+    const emitted=ts.transpileModule('class Probe {'+methods.join('\n')+'}',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText;
+    for(const value of ['normal','stretch','center']){
+      const projected=[],reads=[],parentElement={type:'div',id:'parent'},childElement={type:'div',id:'child'};
+      const sourceStyles=report.results.find(r=>r.value===value).astylar.site.styles;
+      const parentStyle=new Proxy({...sourceStyles[0],...sourceStyles[1]},{get:(obj,key)=>{reads.push(String(key));return obj[key];}});
+      const childStyle={...sourceStyles[0],...sourceStyles[2]};
+      const zero={top:0,right:0,bottom:0,left:0};
+      const parent={name:'parent',metadata:{},position:{z:0}},child={name:'child',metadata:{},position:{z:0}};
+      const dom={context:{elementDimensions:new Map([['parent',{width:100,height:100,padding:zero}],['child',{width:10,height:10,padding:zero}]]),elementStyles:new Map(),layoutBoxes:new Map(),elements:new Map()}};
+      const render={actions:{style:{findStyleForElement:element=>element.id==='parent'?parentStyle:childStyle}}};
+      const fail=()=>{throw Error('Unexpected projection/resize/paint branch');};
+      const Probe=new Function('positionRenderedCssBox','updateCssLayoutNode','projectCssSize','projectCssLength','console',emitted+';return Probe;')(
+        (_render,mesh,box,containing)=>projected.push({id:mesh.name,box:{...box},containing:{...containing}}),fail,fail,fail,{error:fail});
+      const probe=new Probe();probe.createElement=()=>child;probe.ancestry={getParent:()=>undefined};probe.styleDefaults={getElementTypeDefaults:()=>({display:'block'})};
+      probe.layoutBlockChildren(dom,render,[childElement],parent,[],parentElement);
+      assert.deepEqual(projected,[{id:'child',box:{x:0,y:20,width:10,height:10},containing:{width:100,height:100}}]);
+      assert.ok(reads.includes('height')&&reads.includes('position'));
+      assert.equal(reads.includes('alignContent'),false);
+      results.push({file,sourceSha256:hash(bytes),methodsSha256:hash(methods.join('\n')),value,parentStyleReads:[...new Set(reads)],projected});
+    }
+  }
+  assert.equal(results.length,6);
+  t.diagnostic(JSON.stringify({methodNames:names,results,boundary:'Actual current and captured-installed block methods with real margin/flow helpers;creation returns fixed recorded10x10 child and projection only records CSS box. Not whole browser call tracing,auto height,nested flow,paint or historical runtime. All three produce y20 before projection without reading alignContent.'}));
 });
