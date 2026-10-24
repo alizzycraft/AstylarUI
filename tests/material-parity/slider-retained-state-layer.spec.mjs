@@ -3,6 +3,7 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
+import { PNG } from 'pngjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const load = receipt => {
@@ -104,4 +105,42 @@ test('retained Slider state layers diverge in application inputs before plugin p
   missing.astylar.runtime.assets = missing.astylar.runtime.assets.filter(asset => asset.file !== 'chunk-PCHQTLJM.js');
   assert.throws(() => servedCandidate(missing));
   t.diagnostic('16 retained contexts: native hover .05 versus plugin .08; native held active+focus .2/.2 versus one plugin .12 disc. Whole captured/current application and plugin modules agree. Application state-layer composition differs before paint;not equal-input alpha/projection causality,historical black-circle causality,local raster parity or whole-case acceptance.');
+});
+
+test('retained light Slider state-layer interiors differ at both DPRs', t => {
+  const report = load({ file: 'artifacts/material-parity/slider-hover-held-20261024/latest-report.json',
+    sha256: 'de4228f971a0b0b341a21c9d71a20d9f351701ec634257732c6ed6d929a8ec98' });
+  const rows = report.results.filter(row => row.profile === 'light'); assert.equal(rows.length, 4);
+  const observed = { reference: { hover: [238, 233, 244, 255], held: [195, 183, 219, 255] },
+    astylar: { hover: [235, 228, 242, 255], held: [229, 221, 239, 255] } };
+  for (const row of rows) for (const side of ['reference', 'astylar']) {
+    const receipt = row[side].screenshot, bytes = readFileSync(receipt.file);
+    assert.equal(hash(bytes), receipt.sha256);
+    const image = PNG.sync.read(bytes), dpr = row.viewport.deviceScaleFactor;
+    assert.equal(image.width, row.viewport.width * dpr);
+    assert.equal(image.height, row.viewport.height * dpr);
+    let minY = image.height, maxY = -1, maxX = -1, count = 0;
+    for (let y = 0; y < image.height; y++) for (let x = 0; x < image.width; x++) {
+      const i = (y * image.width + x) * 4;
+      if ([103, 80, 164, 255].every((value, channel) => image.data[i + channel] === value)) {
+        minY = Math.min(minY, y); maxY = Math.max(maxY, y); maxX = Math.max(maxX, x); count++;
+      }
+    }
+    assert.ok(count > 100 * dpr * dpr);
+    assert.ok(maxY - minY >= 18 * dpr && maxY - minY <= 20 * dpr);
+    // Locate each retained image independently from its solid primary knob/track.
+    // Inspect only a flat interior patch 18CSSpx above the right knob center:
+    // outside its10px radius and inside the24px state-layer radius. This is
+    // output sampling,not a fixture offset or claimed cross-image registration.
+    const x = Math.round(maxX - (maxY - minY) / 2);
+    const y = Math.round((minY + maxY) / 2 - 18 * dpr);
+    assert.ok(x >= 2 * dpr && y >= 2 * dpr && x + 2 * dpr < image.width);
+    for (let dy = -2 * dpr; dy <= 2 * dpr; dy++) for (let dx = -2 * dpr; dx <= 2 * dpr; dx++) {
+      const i = ((y + dy) * image.width + x + dx) * 4;
+      assert.deepEqual([...image.data.subarray(i, i + 4)], observed[side][row.state]);
+    }
+  }
+  assert.notDeepEqual(observed.reference.hover, observed.astylar.hover);
+  assert.notDeepEqual(observed.reference.held, observed.astylar.held);
+  t.diagnostic('8 authenticated light DPR1/2 PNG interiors retain different hover/held colors. No opaque black patch in these sampled interiors. Unequal inputs are established separately;not historical black-circle causality,exact effective-alpha inversion,edge/track/glyph sharpness,other themes or whole-case acceptance.');
 });

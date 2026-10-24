@@ -4,6 +4,25 @@
 
 ### Current next action and publication status
 
+- Retained Slider interior paint now has a bounded four-context light-theme
+  proof (hover/held × desktop DPR1/2),reusing8 original PNGs. Each image's right
+  knob is located independently from its solid primary pixels;only a flat patch
+  inside the24px state layer and outside the10px knob is sampled. Native hover
+  RGBA238/233/244/255 versus candidate235/228/242/255;held195/183/219/255 versus
+  229/221/239/255. All sampled interiors are uniform at both DPRs,with no opaque
+  black patch there. The separate16-context input proof establishes unequal
+  layer composition;these pixels do not invert effective alpha or establish
+  historical black-circle causality,equal-input core paint,other profiles,fringe/
+  track/knob sharpness or whole-case parity. Both are standalone next-batch
+  evidence in slider-retained-state-layer.spec.mjs,not canonical registrations.
+  Raw-action/input/interior integration passes3/3,zero skips,in3028.7077ms.
+  Logslider-state-layer-interiors-integration-20261024 SHA
+  4448413422aad9af28568fab4c8a0abc78ebc89ba5e1617956f0ff4e99706bc0;
+  stderr empty. No new capture,proposal or canonical generation was created.
+  The swapped-thumb question was not reopened:the existing full-domain proof
+  already demonstrates that60/80 start hits the end half-owner,and20/40 end
+  hits the start half-owner. Remaining smoothness/paint scopes stay explicit.
+
 - Slider state-layer input mismatch is now demonstrated for all16 retained
   hover/held contexts,without a new capture. Reference trees request one48px
   hover layer at.05 alpha,or active AND focus layers each at.2 while held.

@@ -1,5 +1,14 @@
 # Audit artifact retention
 
+October24 Slider light interior-paint check reuses8 original PNGs within the
+same slider-hover-held-20261024 set;no derived crops or additional capture run.
+Keep slider-state-layer-interiors-integration-20261024.log,SHA
+4448413422aad9af28568fab4c8a0abc78ebc89ba5e1617956f0ff4e99706bc0,
+and empty stderr. Three focused raw/input/pixel checks pass. Uniform sampled
+interiors differ at DPR1/2,but do not establish edge/other-theme/equal-input
+paint or historical black-circle causality. Prior source/input proof logs and
+the failed instrumentation assertion remain required,not superseded evidence.
+
 October24 standalone Slider state-layer review reuses the original32 PNGs and
 32 trees in slider-hover-held-20261024;no new browser assets or result set.
 Keep slider-retained-state-layer-20261024 initial proof log,the failed
