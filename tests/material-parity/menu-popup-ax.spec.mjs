@@ -227,3 +227,24 @@ test('isolated current focus eligibility and semantic projection honor supplied 
       boundary: 'Complete extracted methods and native browser DOM only;not package-root/full-surface proof,AX,paint,focus update lifetime or current whole-renderer acceptance.' }));
   } finally { await browser.close(); }
 });
+
+test('public negative-tabindex failure remains unfocused after settlement until an unrelated update', () => {
+  const bytes = readFileSync('artifacts/material-parity/public-menu-negative-tabindex-settled-20261024/latest-report.json');
+  assert.equal(hash(bytes), 'a75f974f1b8570c4a8dadde51f65115e93703d3ea796a5993f4deadf7f4d889c');
+  const report = JSON.parse(bytes);
+  assert.deepEqual(report.errors, []); assert.equal(report.results.length, 4);
+  for (const receipt of [report.inputSource, report.bundle, report.html, ...report.inputs]) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  assert.equal(report.scriptSha256, hash(readFileSync('scripts/audit-public-menu-negative-tabindex.mjs')));
+  for (const row of report.results) {
+    assert.deepEqual(row.reference.site, row.astylar.site);
+    assert.equal(row.astylar.site.root.children[0].children[0].tabindex, -1);
+    assert.equal(row.astylar.site.root.children[0].children[0].role, 'menu');
+    const sample = row.astylar.updates[0];
+    assert.equal(sample.publicFocusResult, true); assert.equal(sample.immediateFocus, false);
+    assert.equal(sample.settledBeforeUpdate, true); assert.equal(sample.initiallyFocused, false);
+    assert.equal(sample.focused, true); assert.deepEqual(sample.events.map(e => e.type), ['focusin']);
+    assert.equal(row.reference.updates[0].initiallyFocused, true);
+    for (const side of ['reference', 'astylar']) for (const [type, receipt] of [['document', report.html], ['script', report.bundle]])
+      assert.ok(row[side].assets.some(a => a.type === type && a.sha256 === receipt.sha256));
+  }
+});

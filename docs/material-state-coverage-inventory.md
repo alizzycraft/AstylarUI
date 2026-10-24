@@ -9,6 +9,35 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Settlement-before-update control CONTRADICTS a timing-only explanation of the
+public negative-tabindex diagnostic. New report public-menu-negative-tabindex-
+settled-20261024/latest-report.json SHA256
+a75f974f1b8570c4a8dadde51f65115e93703d3ea796a5993f4deadf7f4d889c
+retains four package-root pairs(DPR1/2,div/span menu role). All request=true,
+immediateFocus=false AND initiallyFocused=false AFTER surface.whenSettled/two
+frames,before update. Unchanged update then focuses all four. Native succeeds
+immediately. No page errors. Inherited pass assertion still fails/nativeExit1;
+both failed original and settlement-control reports/bundles remain immutable.
+
+Source attribution query native0 matches complete current AstylarRenderer.focus
+to actual installed bundled method after TS transpilation/whitespace comparison.
+The public renderer delegates to interaction.focusElement without queueFocusSync;
+update path separately schedules the bridge sync. Record separate pending
+`core-public-focus-does-not-synchronize-native-semantic-owner` in
+tests/material-parity/public-programmatic-focus-finding.mjs as SUSPECTED core
+synchronization defect,not a Menu authoring omission or confirmed all-controls
+cause. Prior isolated-method success did not prove public composition;this public
+failure is stronger contradictory evidence and must remain explicit.
+
+Keep public-menu-focus-source-attribution-20261024 pair and public-menu-focus-
+failure-integration-20261024 pair. Existing suite passes11/11 as audit assertions
+that preserve failures;not11 rendering passes. It authenticates bundle,input,
+all package build inputs,served document/script assets and exact failing states.
+Next controls are public tabindex=0/ordinary button and direct scheduling trace,
+not CSS compensation. No core/reference/fixture fix. New diagnostic/findings
+remain outside frozen registry;previous standalone12-path/10-proof census is
+historical and must be refreshed before any registration. No case accepted.
+
 Public-package negative-tabindex diagnostic exposes an action-timing assumption,
 not yet a core focusability failure. Adapter audit-public-menu-negative-tabindex
 pins existing public-role-focus-refresh producerb0ffd789,uses only package-root

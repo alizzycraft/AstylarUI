@@ -16,9 +16,9 @@ replace("const kinds = ['div', 'span', 'input', 'button'];", "const kinds = ['di
 replace("id:'focus-control',tabindex:0,", "id:'focus-control',tabindex:-1,");
 replace("role:kind==='input'?'textbox':'button'", "role:kind==='input'?'textbox':'menu'");
 replace("control.tabIndex=0;control.setAttribute('role',kind==='input'?'textbox':'button');", "control.tabIndex=-1;control.setAttribute('role',kind==='input'?'textbox':'menu');");
-replace(" control.focus();const initiallyFocused=", " const publicFocusResult=surface?surface.focus('focus-control',{scrollIntoView:false}):(control.focus(),true);const initiallyFocused=");
-replace('updates.push({index,initiallyFocused,', 'updates.push({index,publicFocusResult,initiallyFocused,');
-replace('assert.equal(sample.initiallyFocused, true);', 'assert.equal(sample.publicFocusResult, true); assert.equal(sample.initiallyFocused, true);');
+replace(" control.focus();const initiallyFocused=", " const publicFocusResult=surface?surface.focus('focus-control',{scrollIntoView:false}):(control.focus(),true);const immediateFocus=document.activeElement===control;await settle();const initiallyFocused=");
+replace('updates.push({index,initiallyFocused,', 'updates.push({index,publicFocusResult,immediateFocus,settledBeforeUpdate:true,initiallyFocused,');
+replace('assert.equal(sample.initiallyFocused, true);', 'assert.equal(sample.publicFocusResult, true); assert.equal(typeof sample.immediateFocus, \'boolean\'); assert.equal(sample.settledBeforeUpdate, true); assert.equal(sample.initiallyFocused, true);');
 replace('return { pairs: 8,', 'return { pairs: 4,');
 replace('children[0].children[0].tabindex = -1,', 'children[0].children[0].tabindex = 0,');
 const ast = ts.createSourceFile(base, source, 99, true, ts.ScriptKind.JS); assert.equal(ast.parseDiagnostics.length, 0);
