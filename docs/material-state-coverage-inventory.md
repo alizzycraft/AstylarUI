@@ -9,6 +9,33 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Ordinary wrapping request-path branch gap now has bounded execution evidence,
+not just source inclusion. New standalone ordinary-wrapping-request-path.spec.mjs
+executes actual current AND captured-installed parser instance members and three
+renderer methods. Supplied omission reaches createStyledCanvas as normal/normal/
+clip;explicit pre/break-word/ellipsis remains distinct;pre-parsed element.textStyle
+overrides a contradictory supplied rule without reparsing or mutation. A FORCED
+recording cache hit parses supplied rules before lookup and skips the canvas call.
+This is not real cache validity/reuse,GPU ownership or actual historical texture.
+
+Recording scene/cache/canvas adapters stop before raster;DPR1 window is supplied
+only for the real generateCacheKey default parameter. Initial
+ordinary-wrapping-request-path-20261025 run fails because this adapter was omitted
+(window undefined),not a renderer bug. Preserve original log/stderr. Corrected
+ordinary-wrapping-request-path-dpr-context-20261025 pair passes1/1,0skip,
+nativeExit0,stderr empty. Method/source receipts and all eight branch observations
+are recorded;installed hashes bind existing captured bundle inputs. No browser,
+bundle or renderer changes. New standalone spec remains outside frozen1041/365/198.
+
+Together with120 owner declaration/ancestry rows,this distinguishes missing
+declaration fields from parser omission defaults and preserves override/cache
+branches. It does NOT establish original bound texture inputs,external inheritance,
+wordBreak/overflowWrap support,used wrapping or raster acceptance. Do not rerun
+the settled parser or branch controls;actual paint-request evidence belongs with
+the outstanding original/current-runtime paint obligation rather than another
+default-only capture. Next prioritize a different concrete unreviewed owner
+property domain using existing records. Pendingf812d8d9/canonical88be4d47 unchanged.
+
 Ordinary wrapping request-path source binding now authenticates five COMPLETE
 current/emitted/installed methods:TextStyleParserService.parseTextProperties;
 TextRenderingService.parseElementTextStyle,renderTextToTexture,generateCacheKey;
