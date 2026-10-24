@@ -9,6 +9,28 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Outstanding source/proof reconciliation is now explicitly censused,not inferred
+from HEAD alone. Existing producer functions collect1002 sources/326 proofs.
+Authenticated accepted extracte7f8cc38 plus prior owner/frame vector prove ALL
+four changed-old-source hashes unchanged,all12 frozen added-source bytes match
+Git26652070,and every319 earlier non-line proof field preserves. Thus later
+Menu work did not accidentally mutate the frozen export batch,despite broad
+unrelated dirty worktree state. No full canonical parse/export/repeated gate.
+
+Scoped26652070..HEAD census identifies12 standalone code/proof paths outside
+the1002 registered set:four Menu AX collectors,two checkers(including recovered
+endpoint replay),three Menu joins,two test files and one pending finding module.
+Their current normalized SHA receipts and ten exact test declarations(1 composite
++9 AX) are retained in menu-pending-source-proof-census-20261024 stdout,
+SHA380140a10f5ec30e4ee346d5028ef0bb164dcdddd0761d45140fe68d9b897092;
+nativeExit0,stderr empty. Two pending finding IDs remain distinct and unregistered.
+Projected1014/336/195 is ONLY a possible additive inventory boundary,not an
+applied or accepted count;future source/proof selection wiring may add paths and
+must authenticate whole prior producer and preserve original proof definitions.
+The recovered endpoint helper replays existing assertions,not three automatically
+new proof entries. Canonical stays990/319/193;frozen next batch1002/326/193.
+Source registration,publication prerequisites and original final gates remain open.
+
 Mobile producer --verify instrumentation defect is corrected without capture
 repetition or receipt rewriting. Entry point now delegates to the independently
 validated side/boundary adapter instead of passing flat rows to paired validator.
