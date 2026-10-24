@@ -9,6 +9,29 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Eyebrow margin INPUT lengths now have bounded equivalent-representation proof
+for all24 retained Divider cases/48 authenticated trees. Native authored
+margin-block:calc(16px * var(--scale)) is present in serialized cssText even
+where CSSOM margin-block longhands are empty;do not treat those empties as absent
+authoring. Exact captured scale1/.9/1.15,horizontal-tb/LTR and one active margin
+rule bind translation to candidate #eyebrow margin ${16*scale}px 0. Native four
+computed sides and all three candidate stages match via existing complete
+canonicalStyle helpers. No new length normalizer or computed-only attribution.
+
+Keep divider-eyebrow-margin-inputs-20261025 log pair,nativeExit0,stderr empty,
+with all exact case/declaration/scale rows and normalizer source/method hashes.
+Scope is captured logical-axis lengths,not calc/variable support,margin collapse,
+positioned flow,current rendering or full owner equivalence. Title fixed21.44px
+has matching computed values but captured authored UA margin is absent from
+CSSOM inventory;do not confuse that with a zero native margin or treat core's
+own .67em default as proof of browser UA authoring. Existing ee42cb3 source
+history removes older flow formulas and introduces literal title margin;that
+alone does not establish an em-renderer workaround or author motive. Paragraph
+wrapper1em/absolute positioning remains separate from the settled block/flex
+public margin proof. Next recover exact native UA margin rule if needed for
+title provenance,not another general em-margin reproduction. Local frozen batch
+and all case/acceptance flags remain unchanged.
+
 Bounded outside-owner evidence now has a tested PENDING virtual join over d00b:
 successor4ad4f342e9c5026e3392406734254c76e02bcf6a2f9c7b642096eddae8c80454
 adds24 property-evidence children,one per retained Divider case. Each carries
