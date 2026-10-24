@@ -9,6 +9,27 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Wrapper/leaf typography correspondence now checked across48 Above/Below pairs
+in24 retained Divider cases,48 authenticated trees. Eight SUPPLIED retained
+leaf request fields(fontFamily,fontSize,fontWeight,fontStyle,lineHeight,
+letterSpacing,wordSpacing,textTransform) equal native leaf and native wrapper
+values through existing complete canonicalStyle helpers. This includes reviewed
+normal/400 weight and normal/zero tracking serializations,not new normalization.
+Candidate font family/size owner traces through wrapper ancestors to page and
+matches recorded terminal core-text-registry style. Empty font fields in sparse
+wrapper resolvedStyle are not evidence of missing inherited text formatting.
+
+384 field comparisons are NOT384 cases,a full typography-coverage percentage,
+used line-height/glyph equality or a renderer inheritance certification. Normal
+line-height tokens remain requests;absent whitespace/OpenType/other fields are
+not synthesized as defaults. Existing absolute/pixel-height/top substitution
+remains unequal despite these matching tokens. Keep
+divider-wrapper-leaf-typography-inputs-20261025 log pair,nativeExit0,stderr empty,
+with exact case/ancestor/value and normalizer receipts. No new capture,defect,
+source-registry or case-status change. Next consolidate these margin/typography
+property records with the bounded outside-owner review and explicitly enumerate
+remaining owner domains;do not recapture matching font request values.
+
 Paragraph wrapper margin/position correspondence now binds48 exact pairs(two
 per24 retained cases) to EXISTING fixture-divider-replaces-paragraph-flow-with-
 coordinates. Owner review1079d7c6 and48 tree receipts authenticate. Native p
