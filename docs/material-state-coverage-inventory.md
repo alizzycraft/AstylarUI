@@ -9,6 +9,33 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Exact-case closure-readiness review of
+`interaction:menu@light/desktop-dpr1/open-hover-content` confirms substantive
+gaps,not merely schema1's forced partial flag. Read-only virtual reconstruction
+exits native0;menu-closure-readiness-20261024 stdout SHA256
+2e263be475489940983c231cc0de645847c9b48c9f655223dcfa65ff4dbc74a5.
+The existing eight-obligation closure contract is unchanged:
+
+- Authored editing is an inspected authored exclusion with no remaining work;
+  do not add text-editing captures for this noneditable branch.
+- Activation retains supplementary failure evidence but still lacks complete
+  configured-action/currentness disposition. Lost raw event fields cannot be
+  reconstructed from normalized arrays;default matches are not passes.
+- Programmatic focus is evidence-join-pending with an existing retained identity
+  comparison and recorded control applicability. Review those dependencies next
+  before deciding whether any new focus observation is necessary.
+- Input/structure retains recorded node accounting,shared heading and button
+  mappings,but anonymous descendants and remaining-owner first-stage/paint
+  applicability are open. Do not repeat the completed94-pair node census.
+- Local paint remains bounded to retained target metrics;semantics lacks actual
+  AX/description/association disposition;history/ownership lacks complete live
+  disposal/history applicability;source currentness lacks complete runtime/input
+  and enforced-rendering evidence. None is closed by the Menu behavior join.
+
+Prioritize the finite retained-focus integration question,then owner/semantic
+evidence applicability;defer costly fresh/full gates to a coherent milestone.
+This is one exact-case requirement review,not a family-wide closure census.
+
 Persistent focused regression now passes1/1,zero skips,nativeExit0:
 `node --max-old-space-size=8192 --test tests/material-parity/menu-composite-evidence.spec.mjs`.
 It pins the exact successor,proves predecessor nonmutation/full recovery and
