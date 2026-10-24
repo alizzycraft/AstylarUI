@@ -6,8 +6,45 @@ import test from 'node:test';
 import ts from 'typescript';
 import { chromium } from 'playwright-core';
 import { captureBrowserInputTree } from './input-tree-evidence.mjs';
+import path from 'node:path';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+
+test('retained served Divider computed paint excludes image filters and blending through actual HTML hosts', () => {
+  const bytes = readFileSync('artifacts/material-parity/divider-computed-paint-context-20261024.log');
+  assert.equal(hash(bytes), '9d43d99a8832060378094f4c241250061d08b6db28107858e09d0865f62c6807');
+  const report = JSON.parse(bytes.toString('utf16le').replace(/^\ufeff/, ''));
+  assert.equal(report.producerSha256, hash(readFileSync('scripts/audit-material-divider-paint-context.mjs')));
+  assert.equal(report.browser, '155.0.8059.85');
+  assert.equal(report.baseline.sha256, '4be9c6d199952f35203f31d08def08d0d936071f4eb313b75ad3bbf72dd46f11');
+  const baselineBytes = readFileSync(report.baseline.file);
+  assert.equal(hash(baselineBytes), report.baseline.sha256);
+  const baseline = JSON.parse(baselineBytes), expected = new Map(baseline.captureProvenance.browserFiles.map(row => [row.file, row.sha256]));
+  assert.equal(expected.size, 1887); assert.equal(report.results.length, 8);
+  assert.deepEqual(report.results.map(row => `${row.profile}/${row.side}`),
+    ['light', 'dark', 'contrast', 'custom'].flatMap(profile => ['reference', 'astylar'].map(side => `${profile}/${side}`)));
+  const usedFiles = new Map(), defaults = { backgroundImage: 'none', filter: 'none', backdropFilter: 'none', mixBlendMode: 'normal', isolation: 'auto', opacity: '1' };
+  const inspect = values => { for (const [property, value] of Object.entries(defaults)) assert.equal(values[property], value); };
+  let owners = 0, controls = 0;
+  for (const row of report.results) {
+    assert.equal(row.assets.length, row.side === 'reference' ? 518 : 519);
+    for (const asset of row.assets) { assert.equal(asset.sha256, expected.get(asset.file)); usedFiles.set(asset.file, asset.sha256); }
+    assert.deepEqual(row.observation.targets.map(target => target.id), row.side === 'reference' ? ['divider-above', 'divider-below'] : ['canvas-host']);
+    for (const target of row.observation.targets) {
+      assert.deepEqual(target.chain.map(node => node.tag), row.side === 'reference'
+        ? ['span', 'p', 'section', 'main', 'app-reference', 'app-root', 'body', 'html']
+        : ['canvas', 'astylar-surface', 'main', 'app-astylar-showcase', 'app-root', 'body', 'html']);
+      for (const node of target.chain) {
+        inspect(node.values); owners++;
+        for (const property of Object.keys(defaults)) { assert.throws(() => inspect({ ...node.values, [property]: 'mutated' })); controls++; }
+      }
+    }
+  }
+  for (const [file, sha256] of usedFiles) assert.equal(hash(readFileSync(path.join('examples/material-showcase/dist/material-showcase/browser', file))), sha256);
+  assert.equal(owners, 92); assert.equal(controls, 552);
+  console.log(JSON.stringify({ contexts: 8, owners, controls, servedFilesAuthenticated: usedFiles.size,
+    boundary: 'Missing computed fields and actual DOM ancestors only,in four retained desktop DPR1 themes. Not all24 configured Divider contexts,candidate logical materials,shader/group compositing,current code or whole-case parity.' }));
+});
 
 test('all retained Divider chains preserve variable background shorthand but no explicit filter or blend requests', () => {
   const file = 'artifacts/material-parity/working-audit/proposals/c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823.json';

@@ -7,6 +7,41 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Missing Divider computed paint/outer host fields observed (October24)
+
+Reused existing authenticated baseline server/assets/settlement workflow in
+audit-material-divider-paint-context.mjs. Exact prior baseline producerbb87aa65
+is required before bounded replacement;old baseline markers/draw instrumentation
+are removed rather than repeated. Original retained baseline4be9c6d1 binds all
+1887 served files;capture verifies actual response assets and complete served
+directory again afterward. No build,fixture,renderer or original capture changed.
+
+Eight paired-side contexts (light/dark/contrast/custom,desktop DPR1),Chrome
+155.0.8059.85:92 physical owner occurrences cover native Above/Below all the
+way through app-reference/app-root/BODY/HTML,and candidate canvas through
+astylar-surface/app-root/BODY/HTML. All report backgroundImage/filter/backdropFilter
+none,mixBlendMode normal,isolation auto,opacity1. This positively resolves the
+previously absent computed fields and outside-frame DOM ancestors for these
+retained contexts. No claim for all24 cases,candidate logical materials or
+Babylon shader/group-compositing execution,current-core or whole-case parity.
+
+Capture terminal0,empty stderr,916400-byte log
+divider-computed-paint-context-20261024.log SHA256
+9d43d99a8832060378094f4c241250061d08b6db28107858e09d0865f62c6807;
+producerbbac18bb5c6fcc0c1d3ccfda7843d8a46b63e99d39cf70305a439bb5e389b1a3.
+Owning retained-paint-property-coverage.spec.mjs proof1/1,zero skips,947.9115ms,
+empty stderr:521 unique actually served files rehashed against pinned receipts,
+all92 owner observations verified,552 property mutations rejected. Proof log
+divider-computed-paint-context-proof-20261024.log SHA256
+62b239eb8bcfba31d39f83ba01445cd249e75375b9448e2417eeadcd8e656e27.
+
+These three standalone paint proofs and two source paths await coherent
+inventory/finding integration;installed984/314 and accepted a659 stay unchanged.
+Do not recapture these same computed fields/DOM chains. Remaining used material/
+sampling/compositing attribution and viewport/current-runtime/lifetime obligations
+must reuse this positive exclusion and the already retained canvas-generation,
+baseline,material-state and shader-input evidence. All2311 cases remain partial.
+
 ### Concrete retained Divider paint requests inspected (October24)
 
 Extended existing retained-paint-property-coverage.spec.mjs;no new collector or
