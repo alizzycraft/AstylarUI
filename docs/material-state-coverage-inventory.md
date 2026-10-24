@@ -7,6 +7,35 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Divider paint evidence joined without case promotion (October24)
+
+Settled sampling review confirms no new upload/interior/edge experiment is
+justified for the already bounded retained populations. Existing native/canvas
+generation evidence places a difference before Babylon;the public DPR2 CPU-model
+residual was separately rejected by actual sampler-address reconstruction. Do
+not infer a new GPU defect from those old models or reopen these investigations.
+
+join-material-divider-computed-paint.mjs now adds ONLY48 nested input/local-paint
+children across24 Divider cases to exact7dfee. Proposed in-memory successor
+abdd4f47d8681dbdbedd24a5e954b7ad3063261150a9758dffcdce460155898a.
+Children bind both captured computed-field reports,their producers,four-proof
+verification and source,and exact physical cohort selection. Desktop-DPR1
+passive inspect is explicitly a physical alias,not an original interaction replay.
+The original raw-declaration projection limitation is distinct from the new
+positive used-DOM-field/host exclusions. Babylon internal material/group paint,
+other inputs/anonymous owners,lifetime/currentness and every remaining task stay
+open. All2311 case dispositions remain partial/current-rendering-unverified.
+
+Owning1/1 passes,zero skips,67543.0047ms,empty stderr;complete existing reader
+authenticates2311 cases/17562 dependencies. Removing only48 added children recovers
+the entire7dfee predecessor;forged capture rejects. Log
+divider-computed-paint-join-20261024.log retains exact successor/counts/receipt
+validation. No duplicate proposal saved,canonical pointer advanced or acceptance
+criteria changed. Five standalone paint/join source paths and five focused proofs
+now await the next coherent inventory/export integration;installed984/314 and
+accepted a659 remain unchanged. Do not repeat completed browser observations
+solely for metadata registration.
+
 ### Remaining Divider physical paint cohorts verified (October24)
 
 Four-profile tablet/mobile-DPR2/comparison-width/desktop-DPR2 capture completed
