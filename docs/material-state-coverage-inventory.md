@@ -1,6 +1,153 @@
 # Material comparison/state coverage inventory
 
-## Current audit pointer — October23
+## Current audit pointer — October24
+
+- Accepted local canonical/compact generation:
+  7e02d8f007a0e18bf7423bf10bf67bc16e8ad3d7b39dc4b4a2681fbead50c07c,
+  index620874d6916bd0973a368007490a7637ae89e73a0e77d8303fdfea2c7247835c.
+  Source population955/proofs278,192 findings,8483 scalar groups,39904 controls,
+  389202 occurrences,zero unresolved scalar attributions (not equivalence).
+  Export,cold replay,all80-section and147-leaf conservation,complete prior
+  coverage/inventory recovery,and isolated/accepted whole-store verification pass.
+  Isolated import48433/compression83020 and accepted import76904 are terminal0.
+  All86 copied files authenticate;85 index/shard hashes agree before/after LZX;
+  accepted store verifies before/after existing import reuse advances the pointer.
+  Accepted-import logSHA7bfe7983c42ea0d8bd20219f9c7c13d53d619f7e293c165a48320c2d55027dcd.
+  Isolated-import logSHAcc53aa0d4d174f6850cc0c538d623360ef9a7cb3cbe5514ecdb0b6af08ffb2ea;
+  isolated-compression logSHAf5789754eacd708556e16e94233a63d263c1ff871bcbc8529968eb120a1cbfc2.
+  This canonically joins138 bounded retained focus observations;pending focus
+  joins1603/activation1482/local-paint949 are overlapping obligations,not cases.
+  All2311 cases across36 families remain partial/current-rendering unverified.
+  No original acceptance gate,fixture,renderer or source receipt was relaxed.
+  Keep original/failure evidence,prior f199 and closed extracts/stores pending
+  reference closure. Free400281600 after accepted copy;recheck before large writes.
+  Next commit/publish this coherent milestone,then shared input/overlay focus and
+  activation gaps;do not rerun this completed integration. Remote publication is
+  not yet confirmed. Original full canonical/browser/release gates remain open.
+
+### Milestone history (stage statuses below are historical)
+
+- Independent cold --retained-focus --check completed exit0 (session22978),
+  reproducing candidate7e02. Two collectors/ten memory hits/zero disk hits/zero
+  invalidations;18676 files,2933902083 bytes read and rehashed. Total2763722.5587ms.
+  Cold logSHA746ac809279b2cf03b3a464da8d8f74353f30b2c2a830905a0f9c31f448c5951;
+  stderrSHA0ef2717fa7b3a5998fa49ce6b4336bb1efe4ce7f83545f5efaa3def7aacb3b93.
+  Isolated import is now live (session48433),using the existing import/whole-store
+  verifier and keeping accepted f199 unchanged. Conservative headroom includes
+  the complete old index plus proposal growth,not a guessed final index size.
+  Closed proposal6905d41f was LZX-compressed after its complete review digest and
+  raw file hash authenticated;rawSHAb342ee8971b591121c088b8787d8be59a74df32ed7363e3ce196cb18ed8e4f7e
+  agrees before/after.65505399 logical bytes occupy16986112 physical bytes.
+  Headroom logSHAd160f9d42a46706c65c7575fc1c285d58412d907379664099d301c4ec3ebdab6;
+  free690642944 before import. No evidence deleted. Next verify isolated store,
+  compress closed index/shards with individual complete hashes,then authenticated
+  sequential accepted copy and existing import reuse before commit/publication.
+  Export/cold/conservation are evidence integration,not rendering/case acceptance.
+
+- Closed candidate structural extract is LZX-compressed without content change:
+  120829568 logical bytes/36966400 physical bytes,complete SHA164e36b3 unchanged
+  before/after. Compression logSHA7f8706e56665af622768aa9793825b47d4de109ea1278b56c3b97ba934a070a0.
+  Observed free528183296 bytes afterward;no evidence deleted,no cold inputs or
+  accepted pointer changed. Recheck before isolated import/copy.
+
+- Candidate7e02 conservation is complete,not yet accepted publication. Fixed-shape
+  comparison terminal0 (session86290) compares14085648 entries across all five
+  receipt-bearing sections,unchanged shapes/counts and147 changed leaves. LogSHA
+  10de68dccc89560b5d45316261c09e6badc3115999789194722c7bfde5e1d1ce.
+  Independent receipt derivation passes exit0:98 direct complete-producer receipts,
+  48 hashes reconstructed from complete Table rows and authenticated accepted
+  f199 transitions,plus complete motion report dd8de901→89cca616 after validating
+  all four actual source fingerprints. Current extracted control rows match the
+  reconstructed full rows;no non-receipt observation changes. Recovered logSHA
+  f1bcd1ad221fcaa21a3aeac364c55406e7cdad98bb59d19e239ead59b335170f.
+  Initial derivation used compact JSON for the motion receipt instead of the
+  existing collector's indented-JSON-plus-newline contract. Preserve its failure
+  stderrSHAc6dd11b07318e69c46fc01b352ebe27a876d53fe667ac71640cdf545511d31aa;
+  correction changes serialization only,not data,hash thresholds or source bytes.
+  Independent cold22978 remains live (child18608). Next its successful check,
+  isolated verified import,accepted import and coherent commit/publication. Source
+  freeze and accepted f199 pointer remain;all2311 cases stay partial/unverified.
+
+- Candidate7e02 full-section comparison is terminal0:80 sections,no additions or
+  removals,72 identical/eight changed (sourceFingerprints,coverage,controlLineBoxes,
+  discrepancies,ownerCaretInputs,reviewedSourceBatchInputs,controlTypography,
+  focusedProofs). LogSHA954e3ff0a34fab1dfb9f0c26c7291e5bb3bc7b361a31a2cf3bad940174113fb7.
+  Authenticated candidate structural extract is terminal0,120829568 bytes,SHA
+  164e36b3cf0737638a03dfc94c0a55650942fde7ec8f5d3b2ab866913ddcd7b6;
+  retains complete coverage,source/proof/plan inventories and48 control rows.
+  Structural conservation is terminal0 (session93788),logSHA
+  849e0e97fe76abcd3336c1005c800942ff54c28bb4b088087245b890c04e7ff8:
+  actual production inventories match955 paths/278 proofs;two/five additions,
+  eight bounded source transitions,no removals;all273 prior non-line proof fields
+  and complete implementation plan preserve. Complete prior2311-case coverage,
+  all17481 receipts and remaining work recover after exactly138 focus children/
+  pending-to-partial dispositions. Complete6c39/6889 review digests recover.
+  One nested tooltip current-source receipt reverses only two inventory-count
+  literals to the complete prior16f62a79 suite. Five-section fixed-shape receipt
+  comparison is still live (session86290);its changes need independent derivation.
+  Independent cold22978 remains live. Accepted f199 pointer unchanged;no case or
+  rendering acceptance,source/Git freeze remains in force.
+
+- October24 retained-focus export retry completed exit0 (session7662),candidate
+  7e02d8f007a0e18bf7423bf10bf67bc16e8ad3d7b39dc4b4a2681fbead50c07c:
+  92253571 compressed/2344450955 decoded bytes,decodedSHA
+  9fc2962930bf8fb911fe3cd5f05e92c98847812156392ae92bdac40d771e4535.
+  Validation and evidence-session verification pass;one collector/ten memory
+  hits/one disk hit/zero invalidations,18676 files and2933902083 bytes read and
+  rehashed. Total3175577.1338ms. Retained export logSHA
+  2405361bd51c69ce6e30d6a28ca15b6a04e3b2d9650f3b6f2fac7c2d31494347;
+  stderrSHA3ef50782b25d4e45cdaf8480e4c3043a83ec20c4e69cb9c32b4df0ddabdeb513;
+  completionSHA6b7966c0447aff2685f5d8b0e858e4cc93796a10ef09f4c9d327402b0585daa3.
+  These are original PowerShell log bytes;stderr formats progress as native-error
+  records,but actual completion is exit0,not an inferred failure from that label.
+  Accepted compact pointer remains f19911ec. Full-section conservation is live
+  (session92460),reusing authenticated prior80 section hashes without reparsing
+  the old payload. Independent cold --retained-focus --check is live separately
+  (session22978,parent21784/child18608). Keep sources/Git frozen. Candidate export
+  is not accepted import,current rendering or case closure;all2311 remain partial.
+
+- October24 resume: the October23 retained-focus export has no live process,
+  both original logs remain zero bytes, and canonical/accepted pointers still
+  identify f19911ec. Its outcome is unproven, not a successful export or a
+  diagnosed product failure. Preserve both logs. Before retry, the authenticated
+  f199 structural extract and focus source census reproduced all955 current
+  normalized source fingerprints with zero drift. One separately named retry is
+  live: retained-focus-coherent-canonical-export-resumed-20261024 (session7662,
+  parent11532/child24276 at observation). Its completion.json records exit status
+  when the wrapper returns; absence of that record does not establish success.
+  The955 sources and Git inputs stay frozen through this milestone. This ledger
+  is absent from both the registered source set and selected review receipts.
+  Pending review aeb1 has1603 focus/1482 activation/949 local-paint evidence joins
+  outstanding (overlapping obligations,not case counts). All2311 cases remain
+  partial/current-rendering unverified. Divider static light/desktop still has
+  explicit anonymous-line-box,paint/compositing and runtime/lifetime applicability
+  gaps; its retained findings do not justify schema-2 closure. Next reconcile the
+  completed retry,then independent cold/import before canonical acceptance;
+  prioritize shared input/overlay focus and activation gaps afterward.
+
+  Bounded Divider follow-up: authenticated original static light/desktop trees
+  (reference5a802f95/candidate2fafa072,already bound by aeb1) contain nine/ten
+  nodes. Complete node-field census finds no native measured line-box geometry;
+  the two paragraphs and two spans contain authored/computed style evidence,
+  while candidate spans additionally retain text data. Thus these exact trees
+  cannot settle native anonymous strut/used-line-box equivalence by remapping
+  fields. This does not claim absence from separate geometry reports. Reuse the
+  existing line-box reports before proposing a new measurement;do not repeat
+  the already inspected explicit paragraph placement/border-initial attribution.
+  The three named current-ancestry line-box indexes (normal96,control477,
+  supplemental50 rows) contain zero Divider cases,so none supplies that missing
+  correspondence. Exact latest-report hashes,normal/control/supplemental:
+  e1eb3f65f84a8f9e9e1cb3fafa35bfada72a111a453ce0439626a5ac24b24477,
+  9e689c9a5d828a16214abbe55804a6ff72037d300c7f26272123ae008d948d11,
+  a630cc4061b3739e7fe1cb656b1e1c93ef51e01298d413bd49e25920c7c6b9e7.
+  This is exact index membership only,not a claim that all retained Divider
+  reductions lack measurements. The separately joined paragraph-stage review
+  explicitly excludes full anonymous-line-box/current-runtime acceptance:it
+  establishes box/opacity parsing,inline dispatch and ten retained glyph-owner
+  typography fields,not native anonymous strut geometry. Preserve those settled
+  results;another replay of them cannot answer the missing used-line-box question.
+  Any later probe must measure that boundary explicitly with equivalent public
+  inputs,separate from the unequal absolute-positioned showcase paragraphs.
 
 - Retained-focus registration is now955 unique source paths/278 proofs:two/five
   additions to accepted953/273. Complete producer3aa377997071b510e233e95e7ad084c0413223fdc57ec833c5788f1c70a50ee7

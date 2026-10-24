@@ -1,5 +1,47 @@
 # Audit artifact retention
 
+October24 retained-focus publication is verified locally:isolated import48433,
+compression83020 and accepted import76904 are terminal0. Generation7e02d8f0/index
+620874d6 preserves its whole package;all86 copied files authenticate and85 index/
+shard files have complete before/after LZX hash equality in both stores. Existing
+verifyFindings passes before/after accepted pointer advancement through import
+reuse. Accepted-import logSHA7bfe7983c42ea0d8bd20219f9c7c13d53d619f7e293c165a48320c2d55027dcd;
+isolated-import logSHAcc53aa0d4d174f6850cc0c538d623360ef9a7cb3cbe5514ecdb0b6af08ffb2ea;
+isolated-compression logSHAf5789754eacd708556e16e94233a63d263c1ff871bcbc8529968eb120a1cbfc2.
+Free400281600 after accepted copy. Keep both closed stores,prior f199,original/
+failure captures and structural extracts until reference closure;do not bypass
+previously rejected cleanup. No evidence deleted or case/rendering accepted.
+
+October24 isolated-import headroom:closed proposal6905d41f335ac9eaf0c50426b9683f1a49669b0359fe62991e38270492dd3588
+has its complete review digest authenticated and raw file SHA
+b342ee8971b591121c088b8787d8be59a74df32ed7363e3ce196cb18ed8e4f7e unchanged
+before/after LZX.65505399 logical bytes now occupy16986112 physical bytes.
+Headroom logSHA d160f9d42a46706c65c7575fc1c285d58412d907379664099d301c4ec3ebdab6;
+observed free642121728→690642944. No evidence deleted or paths/pointers changed.
+Independent cold verification is terminal0 before isolated import starts;the
+accepted pointer remains f199 pending complete isolated/copy verification.
+
+October24 retained-focus candidate extract is closed,authenticated conservation
+evidence,not disposable scratch. Preserve
+retained-focus-candidate-structural-extraction-20261024.log with complete SHA
+164e36b3cf0737638a03dfc94c0a55650942fde7ec8f5d3b2ab866913ddcd7b6.
+In-place LZX compression leaves that hash unchanged:120829568 logical bytes now
+occupy36966400 physical bytes versus120829568 before. Compression logSHA
+7f8706e56665af622768aa9793825b47d4de109ea1278b56c3b97ba934a070a0;
+observed free444317696→528183296 bytes. No evidence deleted or paths changed;
+current cold sources/package were not compressed or modified. Recheck headroom
+before isolated import and accepted copy;compress closed index/shards individually
+with complete hash equality through the established workflow.
+
+Keep the October24 receipt-conservation initial failure separately from its
+recovered success. The initial compact-JSON reconstruction did not implement
+the existing motion collector's indented-JSON-plus-newline hash contract;the
+recovered result independently derives all147 changed leaves without changing
+observations or original receipts. Keep the empty October23 export logs too:
+their process was absent at resume and no outcome could be established. The
+separately named October24 export has explicit exit0 completion;do not relabel
+the interrupted attempt as successful or overwrite its files.
+
 October23 combined focus successor aeb1ef14 saved successfully with conservative
 raw allocation headroom609132544 versus198158224 proposed bytes. Complete fileSHA
 3d6b1e67066919b081b2ecd35a2995e5196ae5e1d110bc1f7f2b99430564f3b0 remains
