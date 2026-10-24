@@ -9,6 +9,31 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Exact requirement review now distinguishes three retained text-paint diagnostic
+hypotheses rather than calling all paint attribution unknown. Fresh native/
+canvas controls show transparent backing differs BEFORE Babylon while opaque
+controls match;fresh settled candidate backing equals same-font control hashes
+and differs from Arial fallback;fresh material/readiness/recorded opacity requests
+are unit. Each result retains its original exact boundary and authenticated
+capture/verification receipts. They do NOT prove original historical font timing,
+whole shader/group compositing or the original case's precise paint cause.
+
+Existing core-text-transparent-backing-and-local-raster-phase remains SUSPECTED
+and compatibility-qualified,not promoted to a blanket confirmed raster defect.
+Requirement record explicitly leaves originalCaseCauseConfirmed false and rejects
+opaque-atlas/layout-snapping recommendations. Separate public equal-input evidence
+does not automatically transfer to the compensated/masked Material inputs.
+No original/current field or remaining task cleared by these fresh controls.
+
+Keep divider-text-paint-hypothesis-review-20261025 initial4/4 log pair and
+divider-text-paint-hypothesis-policy-integration-20261025 pair,4/4,0skip,
+nativeExit0,stderr empty. Existing standalone suite checks exact parent evidence,
+source policy classification,live/same/fallback hashes and material observations
+while preserving partial/current-unverified review. No fresh captures,fonts,
+bundles,renderer or fixture changes. Next review exact-case currentness/lifetime
+evidence gaps rather than repeating source/pixel/backing/font controls. Local
+1041/365/198 and canonical88be4d47/pendingf812d8d9 remain unchanged.
+
 Exact original light/desktop separator paint attribution now resolves the
 generic compositing question FOR THIS BAND. Authenticated native mat-divider
 requests a1px top border RGB123/117/127;candidate requests absolute1px fill

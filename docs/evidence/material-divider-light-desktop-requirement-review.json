@@ -87,10 +87,25 @@
         "disposition": "inspected-bounded-original-separator-input-attribution",
         "classification": "application-plugin-authoring-defect",
         "firstDivergence": "Native 1px top-border RGB123/117/127 versus candidate positioned 1px fill RGB202/196/208 before paint.",
-        "nativeRequestedInk": [123, 117, 127, 255],
-        "candidateRequestedInk": [202, 196, 208, 255],
+        "nativeRequestedInk": [
+          123,
+          117,
+          127,
+          255
+        ],
+        "candidateRequestedInk": [
+          202,
+          196,
+          208,
+          255
+        ],
         "exactRequestedPixelsPerSide": 720,
-        "sharedFootprint": {"left": 65, "top": 232, "right": 785, "bottom": 233},
+        "sharedFootprint": {
+          "left": 65,
+          "top": 232,
+          "right": 785,
+          "bottom": 233
+        },
         "observedCoverageAlphaDiscrepancy": false,
         "evidence": {
           "file": "artifacts/material-parity/divider-light-desktop-separator-paint-attribution-20261025.log",
@@ -200,6 +215,264 @@
             }
           ]
         }
+      },
+      "textPaintHypothesisReview": {
+        "disposition": "inspected-bounded-diagnostic-hypotheses",
+        "records": [
+          {
+            "name": "actualNativeCanvasGeneration",
+            "disposition": "inspected-diagnostic-backing-boundary",
+            "conclusion": "Measured native crops match opaque controls exactly;transparent controls differ before Babylon. Tested rounded Y controls are identical here;no production opaque-atlas/layout snapping workaround.",
+            "observations": [
+              {
+                "profile": "light",
+                "id": "divider-above",
+                "transparent": {
+                  "differingPixels": 296,
+                  "aboveOne": 279,
+                  "maximumRGBError": 86
+                }
+              },
+              {
+                "profile": "light",
+                "id": "divider-below",
+                "transparent": {
+                  "differingPixels": 309,
+                  "aboveOne": 289,
+                  "maximumRGBError": 86
+                }
+              }
+            ],
+            "scope": "Eight actual divider Roboto contexts atdesktop DPR1 only. Opaque alpha:false versus transparent canvas affects glyph generation before Babylon;tested baseline rounding gives same pixels. Not a production opaque-atlas recommendation,general baseline-snapping rule,full input equivalence,all-DPR or whole-case acceptance.",
+            "evidence": {
+              "capture": {
+                "file": "artifacts/material-parity/divider-native-canvas-20261019.log",
+                "sha256": "af1d47ea60c1b7b1052d5fad5e2a0f9d59185bfaa2c40ec16b8ef174a2a15f35"
+              },
+              "verification": {
+                "file": "artifacts/material-parity/divider-native-canvas-visible-control-verification-20261019.log",
+                "sha256": "29425dc24fc6c821c5009cac3299c608b3c2caf67663920e393161f4dcc921b3"
+              }
+            }
+          },
+          {
+            "name": "actualSettledFontFreshness",
+            "disposition": "inspected-diagnostic-font-freshness",
+            "conclusion": "Live backing equals fresh same-font/draw/copy bytes and differs from Arial fallback;settled fallback hypothesis excluded only in this observed context.",
+            "observations": [
+              {
+                "profile": "light",
+                "id": "divider-above",
+                "font": "16px Roboto, Arial, sans-serif",
+                "sameRGBA": "5a54dec0b2a1141eeb27671142407ab8e6bfe0f2c4695419ef985e3a2736254d",
+                "liveRGBA": "5a54dec0b2a1141eeb27671142407ab8e6bfe0f2c4695419ef985e3a2736254d",
+                "fallbackAlphaDifferences": 313
+              },
+              {
+                "profile": "light",
+                "id": "divider-below",
+                "font": "16px Roboto, Arial, sans-serif",
+                "sameRGBA": "1b91edf29c944afa207b4e6fca77fa5a380b4fd9a6b66c94851117d3fe22f043",
+                "liveRGBA": "1b91edf29c944afa207b4e6fca77fa5a380b4fd9a6b66c94851117d3fe22f043",
+                "fallbackAlphaDifferences": 310
+              }
+            ],
+            "scope": "Four settled candidate desktop DPR1 theme contexts. Live texture equals fresh same-font/draw-state/unscaled-copy control and differs from Arial fallback. No historical font timing,physical-font-name API,all viewport/lifecycle or current rendering acceptance.",
+            "evidence": {
+              "capture": {
+                "file": "artifacts/material-parity/divider-font-freshness-resolved-20261019.log",
+                "sha256": "e468bff835e6921d1f351c5180e3d3004bd4e76ff3bd45fed444abe964e73496"
+              },
+              "verification": {
+                "file": "artifacts/material-parity/divider-font-freshness-verification-20261019.log",
+                "sha256": "7f424dc5f8693fd074c4a077f4a22d113ad98c851caa7bce8c63af255e30f2d3"
+              }
+            }
+          },
+          {
+            "name": "observedTextMaterialState",
+            "disposition": "inspected-diagnostic-material-state",
+            "conclusion": "Recorded text alpha/readiness/visibility state only;not compiled shader or group-compositing equivalence.",
+            "observations": [
+              {
+                "id": "divider-above",
+                "material": {
+                  "alpha": 1,
+                  "alphaMode": 2,
+                  "transparencyMode": 2,
+                  "useAlphaFromDiffuseTexture": true,
+                  "disableLighting": true,
+                  "useEmissiveAsIllumination": true,
+                  "emissiveTextureIsDiffuse": true,
+                  "diffuse": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "emissive": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "specular": [
+                    0,
+                    0,
+                    0
+                  ]
+                },
+                "ready": true,
+                "chain": [
+                  {
+                    "name": "divider-above_text",
+                    "elementId": "divider-above",
+                    "enabled": true,
+                    "visibility": 1,
+                    "isVisible": true,
+                    "materialAlpha": 1
+                  },
+                  {
+                    "name": "divider-above",
+                    "elementId": "divider-above",
+                    "enabled": true,
+                    "visibility": 1,
+                    "isVisible": true,
+                    "materialAlpha": 0
+                  },
+                  {
+                    "name": "divider-above-row",
+                    "elementId": "divider-above-row",
+                    "enabled": true,
+                    "visibility": 1,
+                    "isVisible": true,
+                    "materialAlpha": 0
+                  },
+                  {
+                    "name": "divider-root",
+                    "elementId": "divider-root",
+                    "enabled": true,
+                    "visibility": 1,
+                    "isVisible": true,
+                    "materialAlpha": 1
+                  },
+                  {
+                    "name": "page",
+                    "elementId": "page",
+                    "enabled": true,
+                    "visibility": 1,
+                    "isVisible": true,
+                    "materialAlpha": 1
+                  },
+                  {
+                    "name": "root-body",
+                    "enabled": true,
+                    "visibility": 1,
+                    "isVisible": true,
+                    "materialAlpha": 1
+                  }
+                ],
+                "allRecordedOpacityRequestsUnit": true
+              },
+              {
+                "id": "divider-below",
+                "material": {
+                  "alpha": 1,
+                  "alphaMode": 2,
+                  "transparencyMode": 2,
+                  "useAlphaFromDiffuseTexture": true,
+                  "disableLighting": true,
+                  "useEmissiveAsIllumination": true,
+                  "emissiveTextureIsDiffuse": true,
+                  "diffuse": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "emissive": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "specular": [
+                    0,
+                    0,
+                    0
+                  ]
+                },
+                "ready": true,
+                "chain": [
+                  {
+                    "name": "divider-below_text",
+                    "elementId": "divider-below",
+                    "enabled": true,
+                    "visibility": 1,
+                    "isVisible": true,
+                    "materialAlpha": 1
+                  },
+                  {
+                    "name": "divider-below",
+                    "elementId": "divider-below",
+                    "enabled": true,
+                    "visibility": 1,
+                    "isVisible": true,
+                    "materialAlpha": 0
+                  },
+                  {
+                    "name": "divider-below-row",
+                    "elementId": "divider-below-row",
+                    "enabled": true,
+                    "visibility": 1,
+                    "isVisible": true,
+                    "materialAlpha": 0
+                  },
+                  {
+                    "name": "divider-root",
+                    "elementId": "divider-root",
+                    "enabled": true,
+                    "visibility": 1,
+                    "isVisible": true,
+                    "materialAlpha": 1
+                  },
+                  {
+                    "name": "page",
+                    "elementId": "page",
+                    "enabled": true,
+                    "visibility": 1,
+                    "isVisible": true,
+                    "materialAlpha": 1
+                  },
+                  {
+                    "name": "root-body",
+                    "enabled": true,
+                    "visibility": 1,
+                    "isVisible": true,
+                    "materialAlpha": 1
+                  }
+                ],
+                "allRecordedOpacityRequestsUnit": true
+              }
+            ],
+            "scope": "Fresh candidate-only diagnostic matches this physical viewport/profile,not replay of the original case. Unit text alpha/visibility and present emissive flag do not prove compiled shader/native raster/group-compositing equivalence. No extension to interaction or other viewport IDs.",
+            "evidence": {
+              "capture": {
+                "file": "artifacts/material-parity/divider-material-state-20261019.log",
+                "sha256": "b29387269259568893908dcfa09a28942e05be26fdb0ee247afdf4f82482f2a3"
+              },
+              "verification": {
+                "file": "artifacts/material-parity/divider-material-state-method-verification-20261019.log",
+                "sha256": "c62385d808719444cfe11b310d9630e6113980e1a7049abb692204c0620ba579"
+              }
+            }
+          }
+        ],
+        "existingFinding": {
+          "id": "core-text-transparent-backing-and-local-raster-phase",
+          "classification": "suspected-core-renderer-defect",
+          "scope": "Separate public equal-input reduction plus scoped fresh Divider controls;not automatic historical-case cause."
+        },
+        "originalCaseCauseConfirmed": false,
+        "opaqueAtlasRecommended": false,
+        "layoutSnappingRecommended": false,
+        "boundary": "No original glyph-causality transfer,current rendering acceptance,whole shader proof,all-DPR/font or lifetime inference. Original paragraph-flow/masking input differences and remaining work preserve."
       }
     },
     "semantics": {

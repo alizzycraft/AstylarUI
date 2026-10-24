@@ -5,6 +5,7 @@ import { createHash } from 'node:crypto';
 import { gunzipSync } from 'node:zlib';
 import ts from 'typescript';
 import { PNG } from 'pngjs';
+import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 
 const hash=b=>createHash('sha256').update(b).digest('hex');
 test('Original Divider light desktop crops are unique exact screenshot regions',t=>{
@@ -111,4 +112,23 @@ test('Original light desktop separator paints both unequal requested inks over i
   }
   t.diagnostic(JSON.stringify({case:parent.case,classification:'application-plugin-authoring-defect',firstDivergence:'Native1px top-border RGB123/117/127 versus candidate positioned1px fill RGB202/196/208 before layout/paint.',observations,
     boundary:'Only exact original light/desktop separator band. Both observed footprints and requested opaque inks agree with own inputs;no observed coverage/alpha defect here. Does not accept unequal border/fill intent,other themes/DPR,paragraph text,GPU internals or current rendering.'}));
+});
+
+test('Text paint hypothesis review preserves fresh-control scope and suspected classification',()=>{
+  const review=JSON.parse(readFileSync('docs/evidence/material-divider-light-desktop-requirement-review.json'));
+  const b=readFileSync(review.basis.parent.file);assert.equal(hash(b),review.basis.parent.sha256);
+  const paint=JSON.parse(b).review.groups.find(r=>r.case===review.case).obligations.localPaint,record=review.requirements.localPaint.textPaintHypothesisReview;
+  assert.equal(record.originalCaseCauseConfirmed,false);assert.equal(record.opaqueAtlasRecommended,false);assert.equal(record.layoutSnappingRecommended,false);
+  assert.equal(record.existingFinding.id,'core-text-transparent-backing-and-local-raster-phase');assert.equal(record.existingFinding.classification,'suspected-core-renderer-defect');
+  assert.equal(sourceAuditDefinitions.find(f=>f.id===record.existingFinding.id)?.classification,record.existingFinding.classification);
+  assert.deepEqual(record.records.map(r=>r.name),['actualNativeCanvasGeneration','actualSettledFontFreshness','observedTextMaterialState']);
+  for(const r of record.records){
+    assert.equal(r.scope,paint[r.name].boundary);
+    assert.deepEqual(r.observations,paint[r.name].observations??paint[r.name].targets);
+    for(const q of Object.values(r.evidence))assert.equal(hash(readFileSync(q.file)),q.sha256);
+  }
+  for(const row of record.records[0].observations)assert.ok(row.transparent.differingPixels>0&&row.transparent.maximumRGBError>1);
+  for(const row of record.records[1].observations){assert.equal(row.liveRGBA,row.sameRGBA);assert.ok(row.fallbackAlphaDifferences>0);}
+  for(const row of record.records[2].observations){assert.equal(row.material.alpha,1);assert.equal(row.ready,true);assert.equal(row.allRecordedOpacityRequestsUnit,true);}
+  assert.equal(review.inspection,'partial');assert.equal(review.currentRendering,'unverified');assert.equal(review.inspectionClosureAllowed,false);
 });
