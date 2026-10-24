@@ -9,6 +9,39 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Block align-content normal/stretch is NOT a general equivalent representation.
+Native-only Chrome155.0.8059.85 diagnostic control distinguishes parent/child
+margin collapse:normal childOffset0,stretch20px,center55px for identical100px
+block parents and20px child margin. Exact diagnostic HTML is retained separately
+from canonical fixtures. Specification context:W3C CSS Alignment working draft
+2026-10-08,https://www.w3.org/TR/2026/WD-css-align-3-20261008/#distribution-block
+(non-normal block alignment establishes an independent formatting context).
+No Material styles,inputs or renderer changed. This is browser sensitivity,
+not candidate behavior or proof of a Material geometry symptom.
+
+All120 outside-owner pairs in24 retained cases are block/normal on native and
+block/stretch in all three candidate stages. Each of24 candidate trees has NO
+alignContent/placeContent/all authored rule anywhere;other components'888 rule
+entries involving alignItems/justifyContent are NOT applicable alignContent
+overrides. Current browser-defaults.ts supplies global alignContent stretch and
+StyleDefaultsService merges it into element defaults. This identifies a shared
+default-resolution suspect,not an author offset or a confirmed core rendering
+failure;current source receipts do not prove retained installed provenance.
+Do not infer that block align-content is irrelevant or change global normalization.
+justify-content/align-items applicability remains separately bounded.
+
+Keep block-align-content-native-control-20261025 log pair(stdout SHA256
+4b4934c072878e5b12c0a8ac9e2cbeb80fecfece9a985e6181d6452a0c769405),
+divider-owner-block-alignment-context-20261025 pair(stdout SHA256
+cd06cbc51d6959c551e982bff83184d11ede1e59139e62ee1dc95d3903887475),
+and divider-block-alignment-focused-20261025 pair. All nativeExit0/stderr empty;
+owning spec passes1/1,0skip,authenticates exact reports/sources/tree receipts,
+all120 pairs,authored-rule absence and native diagnostic HTML/results. Next use
+existing package-root reduction infrastructure to distinguish wrong initial
+value from unsupported block alignment/formatting-context behavior. Keep these
+causes separate;do not claim the default value alone proves layout failure.
+All2311 case dispositions,currentness,canonical pointer and final gates preserve.
+
 New bounded outside-owner cursor capture resolves the desktop-DPR1 point gap:
 four themes/eight side rows/40 observations agree. Native auto produces text
 over eyebrow/title text and default over blank frame/paragraph-wrapper regions;
