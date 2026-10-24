@@ -7,6 +7,28 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+October24 dialog owner first-stage attribution separates two issues. Exact
+retained app71e2d41f supplies Open dialog,modal=true;bridge590d49a2 copies the
+authored label and sets aria-modal=true for modal dialog elements. Native
+reference ownerdebe55bc opens Material with id/restoreFocus only;retained
+Material config00a9d69d defaults ariaModal=false. Initial2f440115 already authors
+candidate modal=true/ariaLabel=label;the name is original authoring,not a later
+compensation. Current typed DOMElement SHA
+72eef2f09d5cdacaab10db7328c40e5b4748c3f22640e2b40f0436a268351e83
+has modal?:boolean but no separate ariaModal property. Retained core also uses
+that modal flag to select interaction inertness. Thus do NOT propose modal=false
+merely to match the AX property:that would remove behavior while hiding a
+different contract. Label mismatch is demonstrated authoring;independent
+modality/aria-modal expression is a suspected public-model support gap requiring
+a minimal package-root reproduction and complete supported-composition review,
+not yet a confirmed core defect or proof every API path is incapable. Native
+ariaModal=false does not mean no modal focus/backdrop behavior. Source owners/
+maps authenticate against retained capture;current model is separately pinned,
+not current whole-render proof. Owning dialog suite3/3 passes,zero skips,
+1857.6735ms. No new capture,fixture workaround,core fix,canonical registration
+or case closure. Next investigation should reduce this independent-policy
+contract through the existing public semantic/modal fixture infrastructure.
+
 October24 actual outer dialog AX gap closed for eight configured desktop activate
 contexts: scripts/capture-dialog-owner-ax.mjs derives the existing passive full-
 AX/server procedure with current configured actions,theme settlement,reduced

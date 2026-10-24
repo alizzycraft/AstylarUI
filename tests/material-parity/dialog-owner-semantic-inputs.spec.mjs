@@ -72,3 +72,33 @@ test('all eight retained-build activate contexts expose unequal actual dialog AX
   }
   // Actual AX at these endpoints, not AT behavior, focus-trap equivalence or current source applicability.
 });
+
+test('dialog retained owner projection follows authored name while modality and aria-modal are coupled', () => {
+  const report = JSON.parse(readFileSync('artifacts/material-parity/dialog-owner-ax-20261024/latest-report.json'));
+  const manifest = JSON.parse(readFileSync(report.provenance.checkpoint.file));
+  const owner = (mapName, suffix, expected) => {
+    const bytes = readFileSync(`artifacts/material-parity/icon-fresh-producer-retained-build-20261016-browser/${mapName}`);
+    assert.equal(hash(bytes), manifest.provenance.browserFiles.find(x => x.file === mapName).sha256);
+    const map = JSON.parse(bytes), index = map.sources.findIndex(x => x.endsWith(suffix)); assert.ok(index >= 0);
+    const source = map.sourcesContent[index]; assert.equal(hash(Buffer.from(source)), expected); return source;
+  };
+  const app = owner('chunk-JPEJK334.js.map', 'src/app/astylar.component.ts',
+    '71e2d41f2589d1c8c17019eebb70b455a2363a4136c74eb42777a1328b2730cd');
+  assert.match(app, /const label = family === 'dialog' \? 'Open dialog'/);
+  assert.match(app, /type: 'dialog' as const,[\s\S]*?modal: true, ariaLabel: label/);
+  const bridge = owner('chunk-3JXWRYJY.js.map', '/astylar-semantic-bridge.js',
+    '590d49a2a4d5e205c10cf18a1e2e45a3f768079afad86f5ea330f7c6136088e8');
+  assert.match(bridge, /if \(element\.ariaLabel !== undefined\)\s*node\.setAttribute\('aria-label', element\.ariaLabel\)/);
+  assert.match(bridge, /if \(element\.modal\)\s*node\.setAttribute\('aria-modal', 'true'\)/);
+  assert.match(bridge, /element\.type === 'dialog' && element\.open && element\.modal && element\.id/);
+  const reference = owner('chunk-7SL66K3U.js.map', 'src/app/reference.component.ts',
+    'debe55bc492d0fa1e48a9c7f09e1b668d435a2260588710207ab878b23c1d4aa');
+  assert.match(reference, /this\.dialog\.open\(content, \{ id: 'material-dialog', restoreFocus: true \}\)/);
+  const native = owner('chunk-7SL66K3U.js.map', '/module-Ce6F7TNm.mjs',
+    '00a9d69dd72153dcd83b53c68328c9493d80636048ef215fcdea278e5931bd7b');
+  assert.match(native, /ariaModal = false/);
+  const model = readFileSync('src/app/types/dom-element.ts');
+  assert.equal(hash(model), '72eef2f09d5cdacaab10db7328c40e5b4748c3f22640e2b40f0436a268351e83');
+  assert.match(model.toString(), /modal\?: boolean/); assert.doesNotMatch(model.toString(), /ariaModal\??:/);
+  // A typed-model expressiveness question, not proof no public composition can express the reference contract.
+});
