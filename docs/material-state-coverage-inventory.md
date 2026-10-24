@@ -9,6 +9,27 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Menu semantic-target census now pins the precise retained measurement gap:
+all94 configured cases(12 static/82 interaction) contain exactly menu-root and
+menu-primary semantic results,all passing;ZERO popup or item targets exist.
+Read-only query authenticates complete original reportab42dbec,nativeExit0,
+empty stderr. menu-semantic-target-coverage-20261024 stdout SHA256
+6d9ace2721b457230fe440e14e4eb973a94792f300dfb7ca1da0b7b139989274.
+This is a harness coverage limitation,not evidence of a core semantic failure.
+Existing recorded-node verifier already checks authored/native menu/menuitem
+roles and each trigger's controls link;do not repeat that94-pair census or
+mislabel authored candidate relationships as emitted DOM/actual AX evidence.
+The original comparator is already covered by input-boundary-evidence's
+retainedTargetDOMComparison proof;it cannot establish omitted targets.
+
+Next decisive semantic check needs actual popup/item DOM and AX associations,
+with role/name/controls ownership and hidden-state applicability,not another
+root/trigger pass. Reuse existing CDP partial/full AX collection patterns in
+audit-material-field-description/choice-ax/snackbar-ax rather than inventing a
+framework. Confirm runtime/source prerequisites and scope a minimal matched
+open/dismiss cohort before collecting. Existing paint,focus,currentness and
+whole-case gates remain independent;no acceptance or frozen-source change.
+
 Retained-focus follow-up answers the proposed next integration question:do NOT
 promote programmaticFocus using the supplementary composite child. Authenticated
 reset/remaining action reports prove eight paired physical contexts:opened and
