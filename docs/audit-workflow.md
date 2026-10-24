@@ -6,14 +6,21 @@ approve existing findings, finish the audit, or authorize renderer fixes.
 
 ## Small working records; immutable original evidence
 
-October24 Slider/focus batch is accepted locally as generationa65965fb/index6d77ad44,
-after complete predecessor/section/receipt conservation,independent cold replay
-and verified isolated/accepted imports. Use its962-source/285-proof population for
-the next coherent batch;prior pending-selection paragraphs below are historical
+October24 recovered-source/Slider/paint batch is accepted locally as generation
+88be4d47/indexb185409b,after complete predecessor/section/receipt conservation,
+independent cold replay and verified isolated/accepted imports. Use its990-source/
+319-proof population for the next coherent batch;prior pending-selection paragraphs below are historical
 milestones,not reasons to rerun this completed integration. All2311 cases remain
 partial and current rendering unverified. Full original acceptance gates remain
-open;see the current coverage ledger for evidence. The former955/278 and7e02
+open;see the current coverage ledger for evidence. The formera659/962/285,955/278 and7e02
 milestones below are historical,not instructions to repeat finished integration.
+
+The existing schema1 format necessarily reports partial joins. Schema2 already
+permits receipt-bound inspected-failure closure while keeping current rendering
+unverified. Next prioritize exact-case requirement reviews against those existing
+closure rules;do not infer closure merely from format migration or run more
+captures without a specific missing requirement. Documented failures can count as
+inspected only when every applicable inspection obligation is actually evidenced.
 
 ```powershell
 npm run audit:findings:import

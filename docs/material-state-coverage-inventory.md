@@ -7,6 +7,42 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Cold verification and local accepted publication complete (October24)
+
+Independent --divider-computed-paint --check,ASTYLAR_AUDIT_COLD=1 completed with
+explicit nativeExit0 in2438487.564ms. Both collectors execute,10 memory hits,
+ZERO disk hits/invalidations;18759 files/3341455335 bytes are read and rehashed.
+Entire canonical package and rendered Markdown match candidate88be4d47. Logs:
+divider-paint-independent-cold-check-20261024.log SHA256
+2b76f0c5f7bc8d49a6a76a38dc8f563630c84515389e00893d86b0137df584bf;
+stderr SHA2566b476608f80fd03aa804b6adea4758da56cfb11198989c0b040b4fc55ecc8ab1.
+Stderr contains progress,not validation errors;the native exit is explicit.
+
+Accepted import native0 installs the exact isolated index and86 immutable files
+through verified hard links (86 linked,0 copied). Complete source/destination
+hashes,file identity checks and full-store verification pass BEFORE advancement
+through existing import reuse,and again afterward. Isolated pointer/source bytes
+remain unchanged;immutable generation links avoid another roughly400MB logical
+copy. Log divider-paint-accepted-import-20261024.log SHA256
+8769d2c529c4c255fd140b44cd0a1d3e136a39c46b8a9aa5b357e456ca9475af.
+Main accepted pointer is now88be4d476ddfeeb0c27fa8de21f943171aeac1553aeed2df135494e3b644d9a1,
+indexb185409b835f06fea84663ddeae0f0f4359b93b76a9186715095f4fa5dfff892.
+193 findings/990 sources/319 proofs;8483 scalar groups,39904 controls,389202
+occurrences,0 unresolved scalar groups. Prior a659 and failure evidence preserve.
+This is LOCAL audit-data publication,not remote push,whole-audit completion or
+rendering acceptance. The recorded remote HTTP408 blocker still needs resolution.
+
+Next priority is receipt-bound exact-case closure readiness,not another unchanged
+canonical/browser run. Read-only existing-validator review confirms schema1 forces
+partial status;schema2 already supports inspected-failure with receipt-bound
+findings,first-divergence/owner/public-reproduction evidence and every obligation
+concluded. Format migration alone cannot close a case or retire missing evidence.
+All2311 current records remain partial/current-rendering-unverified. Assess the
+remaining requirements against existing evidence and classify real gaps,without
+requiring renderer fixes or weakening original final gates. Workflow/ledger are
+outside both990 source fingerprints and17562 case receipts;documentation updates
+do not invalidate this frozen-source cold result.
+
 ### Candidate88be export/conservation complete; cold gate next (October24)
 
 Frozen source d12135a8 produced candidate88be4d476ddfeeb0c27fa8de21f943171aeac1553aeed2df135494e3b644d9a1:
