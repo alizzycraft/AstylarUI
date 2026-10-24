@@ -9,6 +9,30 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Exact pending Menu/Select/disabled dependency reader now validates complete
+d00beaa8 review through existing loadCaseObligationReview:2311 cases,18270
+authenticated evidence dependencies,33 additive child records over94f1a93d.
+Child count is NOT distinct cases or inspected completions. Every original
+parent/status remains partial,currentRendering unverified;loader reports
+inspectionComplete=false,currentRenderingAccepted=false. New
+menu-select-disabled-review-source.mjs composes existing joins in memory and
+delegates all unrelated reads to authenticated predecessor. Unknown digest
+rejects;test also verifies unchanged unrelated historical-file read. Optional
+already-built owner reader avoids repeating expensive predecessor reconstruction;
+each successor join still authenticates its exact predecessor digest.
+
+Accumulated Select/disabled3/3 tests pass,0skip,nativeExit0,102558.4559ms;
+retain menu-select-disabled-reader-integration-20261025 log pair(stdout SHA256
+364154348b7df5c715ec72fd0ddcc26c85153cc5de04bcba971ebf577463a03f,
+stderr empty). No full canonical builder/export or browser recapture.
+Source census updates only pending spec bytes and adds reader path:22 standalone
+paths/21 declarations. All other21-path census sources conserve. Retain
+menu-select-disabled-reader-source-census-20261025 log pair(stdout SHA256
+5e5e42fca802fb4e6bebfac25484c074659ffa3e6072c6993188c5f09d6cd3e8).
+Frozen1002/326/193 and accepted88be4d47 remain untouched. Next bounded action is
+registration/selection design for this exact pending successor,not recapture or
+claiming final gates satisfied. Publication/storage/push route remains unresolved.
+
 Pending Menu/focus/Select/disabled source reconciliation completes without
 registration or export. Rehash old censusdd39adb0 and all prior15 standalone
 sources:unchanged. All18 prior test titles conserve. Six added standalone paths

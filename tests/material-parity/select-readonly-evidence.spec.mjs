@@ -11,6 +11,8 @@ import { gunzipSync } from 'node:zlib';
 import ts from 'typescript';
 import { materialInteractionCases } from './benchmark.config.mjs';
 import { joinDisabledControlEvidence, restoreDisabledControlEvidence, disabledControlPredecessor } from '../../scripts/join-material-disabled-control-evidence.mjs';
+import { createMenuSelectDisabledReviewReader, menuSelectDisabledReview } from './menu-select-disabled-review-source.mjs';
+import { loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
 
 test('six retained disabled contexts preserve values while exposing native Select focusability difference', () => {
   const file = 'artifacts/material-parity/disabled-control-boundaries-20261025/latest-report.json';
@@ -101,4 +103,14 @@ test('exact Select supplementary readonly evidence preserves all parent obligati
   assert.throws(() => joinDisabledControlEvidence(joined.review, file => file.endsWith('latest-report.json') ? Buffer.from('forged') : readFileSync(file)));
   assert.throws(() => joinDisabledControlEvidence(disabled.review));
   console.log(JSON.stringify({ disabledCases: disabled.cases, reviewSha256: disabled.sha256, predecessor: disabledControlPredecessor }));
+  assert.equal(disabled.sha256, menuSelectDisabledReview);
+  const pendingReader = createMenuSelectDisabledReviewReader({ root: process.cwd(), read: readFileSync,
+    reviewSha256: menuSelectDisabledReview, ownerFrameReader: reader });
+  const file = `artifacts/material-parity/working-audit/proposals/${menuSelectDisabledReview}.json`;
+  const loaded = loadCaseObligationReview(file, menuSelectDisabledReview, disabled.review.groups.map(g => g.case), { root: process.cwd(), read: pendingReader.read });
+  assert.equal(loaded.cases.length, 2311); assert.equal(loaded.inspectionComplete, false); assert.equal(loaded.currentRenderingAccepted, false);
+  assert.throws(() => createMenuSelectDisabledReviewReader({ root: process.cwd(), read: readFileSync, reviewSha256: '0'.repeat(64) }));
+  assert.equal(pendingReader.read('docs/evidence/material-original-runner-e01.mjs.gz.b64', 'utf8'), reader.read('docs/evidence/material-original-runner-e01.mjs.gz.b64', 'utf8'));
+  console.log(JSON.stringify({ dependencies: loaded.evidenceFingerprints.length, addedChildren: pendingReader.sourceApplicability.addedChildren,
+    canonicalPublished: false, inspectionComplete: loaded.inspectionComplete, currentRenderingAccepted: loaded.currentRenderingAccepted }));
 });
