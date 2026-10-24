@@ -7,6 +7,36 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Remaining paint projection gap narrowed without recapture (October24)
+
+Question:can retained paragraph transparent-color/unit-opacity observations prove
+background-layer and compositing input completeness? No. New focused proof
+retained-paint-property-coverage.spec.mjs authenticates the original report
+(SHAab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62),
+exact recovered e01 runner and unchanged captured input-tree collector06197eda.
+It extracts the ORIGINAL materialStyleInputProperties through the AST rather
+than inventing a smaller field list. backgroundImage,filter,mixBlendMode and
+isolation are omitted from that list and the collector's context additions.
+
+Chrome155.0.8059.85 native diagnostic changes all four actual computed values
+from none/none/normal/auto to gradient/blur(2px)/multiply/isolate. The captured
+computed-style row remains identical and all four keys remain absent. Raw
+inline declarations DO change and remain captured;do not claim the entire
+tree loses authored inputs or that actual Material paragraphs use those values.
+This confirms a bounded computed-projection coverage gap,not a new core defect,
+new Material visual failure or reason to repeat baseline/texture investigations.
+
+Owning1/1 passes,zero skips,6501.3416ms;empty stderr. Log
+retained-paint-property-coverage-20261024.log SHA256
+555e84b5528f0fcb68b793bb1c406251af25f688444f452e5cccea81bc9ebeca2.
+No renderer,collector,fixture or canonical evidence changed. This standalone
+proof/path is pending the next coherent inventory/finding join;installed984/314
+does not yet include it. Next inspect preserved declarations for the concrete
+Divider owner/ancestor chain and collect only unresolved computed fields if
+needed. Preserve raw-declaration evidence and distinguish input classification
+from shader execution/ancestor-compositing equality. All2311 cases remain partial,
+current rendering unverified;original acceptance gates remain unchanged.
+
 ### Recovered-source export routing and complete inventory verified (October24)
 
 Existing current-ancestry launcher now accepts --original-runner-recovery,
