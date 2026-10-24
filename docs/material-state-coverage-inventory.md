@@ -9,6 +9,27 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Bounded outside-owner evidence now has a tested PENDING virtual join over d00b:
+successor4ad4f342e9c5026e3392406734254c76e02bcf6a2f9c7b642096eddae8c80454
+adds24 property-evidence children,one per retained Divider case. Each carries
+five exact border-owner attributions and two heading authored-clip paths;only
+the eight desktop/static-or-inspect physical aliases additionally carry four-
+context heading box observations. Eight aliases are NOT eight fresh captures.
+Matched owner receipts authenticate against original case paired trees. All
+2311 statuses remain partial/current-unverified;all parent dispositions and
+remaining tasks preserve. Complete d00b predecessor restores after child removal.
+
+Focused test1/1,0skip,nativeExit0,66433.9504ms;retain
+divider-outside-owner-join-20261025 pair,stdout SHA256
+4751fbe3bcb3f7ec824b5e351d92b4f165da1ae1ec8de0464cedf4b279f9c349,
+stderr empty. Duplicate join and forged border report reject. Source receipts,
+raw-tree mapping and geometry verification/capture bind;no physical200MB proposal
+or canonical export. New heading producer,join module and owning spec are three
+standalone next-batch paths,not added to frozen1028/353/196 registry. This is
+bounded property coverage,not five-owner/full-property or paint acceptance.
+Next inspect remaining owner sizing/margin/typography inputs using existing
+rules/history and general proofs;do not rerun settled border/heading geometry.
+
 Avoid speculative heading GPU probe:retained texture-boundary producer targets
 Above/Below only;heading-specific clipping failure is not established. Known
 reviewed-heading-mask already prevents equal-input visible heading paint verdict.
