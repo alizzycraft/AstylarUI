@@ -7,6 +7,27 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+October24 full pending-obligation census selects shared interaction/focus/paint
+work rather than more settled snackbar checks:current c394 has input204,
+datepicker202,dialog194,form-field/autocomplete/timepicker192 each pending
+obligation entries (not case counts or acceptance percentages). Dialog owning
+semantics check now authenticates reportab42dbec and all paired dialog trees:
+32 open rows/eight profile-DPR contexts/four states activate,activate-leave,open,
+open-hover-content. Native actual role=dialog ancestor points aria-labelledby
+to Confirm action and records aria-modal=false;candidate authors native dialog
+modal=true with ariaLabel Open dialog. All32 inner dialog-panel comparators
+pass equal concatenated text while recording no role;none compares dialog-overlay.
+This is exact-population support for the existing dialog structural/label input
+warning,not a new core defect or evidence of actual AX name/modality behavior.
+Do not equate aria-modal=false with absence of backdrop/focus containment.
+Focused dialog-owner-semantic-inputs.spec.mjs1/1 passes,zero skips,1646.7868ms.
+Initial test failed only its guessed activate-twice membership;actual fourth
+retained state is open-hover-content,now explicitly asserted. No original report,
+threshold or configured matrix changed. Standalone proof remains pending coherent
+registration;all2311 case dispositions and frozen c394/accepted a659 preserve.
+Next actual dialog AX check must target the outer role owner and IDREF title,
+not repeat already passing inner-surface text observations.
+
 October24 keyboard stream attribution:retained mapped semantic bridge590d49a2
 passes keyDown to its adapter and prevents non-Tab native default;surface owner
 e778fb1072d9382931b9ef6642f08bd338eb346e49f68f986dd1fa2261edc768
