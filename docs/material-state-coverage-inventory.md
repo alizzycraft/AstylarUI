@@ -9,6 +9,21 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Exact light/desktop line-box gap review distinguishes height from baseline:
+retained supplementary native paragraph/span/natural heights are19px,and retained
+candidate inline height is19px inside an authored22px absolute paragraph. Thus
+these records do not demonstrate a19px normal-height defect for this case.
+Neither the native natural-height observer nor the constrained candidate placement
+proof measures paired anonymous strut/baseline correspondence. That is the precise
+missing evidence,not an absent owner map or a reason to repeat natural-height
+captures. Separate public normal-line/replaced-inline failures cannot establish
+the cause of this unequal-input Material case. Original remaining tasks preserve.
+Focused existing suite passes5/5 with dot reporter,exit0;git diff --check passes.
+Next decisive layout investigation must use an equal-input paragraph/span
+composition and observe baseline/strut behavior,not another height-only observer
+or retuned Material offsets. Such fresh evidence cannot recover historical
+fractional target geometry or silently close the original case.
+
 Source-currentness requirement reconciliation authenticates29 unchanged nested
 receipts across the retained matching Divider capture,mapped-runtime applicability
 and fresh configured-case capture. The earlier no-matching-capture summary is

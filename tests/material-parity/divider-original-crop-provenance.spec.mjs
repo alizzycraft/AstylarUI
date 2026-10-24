@@ -81,6 +81,17 @@ test('Exact Divider requirement review reconciles crop provenance without cleari
     assert.equal(hash(readFileSync(paint.separatorPaintAttribution.evidence.file)),paint.separatorPaintAttribution.evidence.sha256);
   };
   validate(review);
+  const structure=parent.obligations.inputStyleStructure;
+  const natural=structure.retainedDividerPropertyContexts;
+  assert.equal(hash(readFileSync(natural.evidence.naturalLineBoxes.file)),natural.evidence.naturalLineBoxes.sha256);
+  assert.equal(natural.rows.lineBox.observations.length,2);
+  for(const row of natural.rows.lineBox.observations){
+    assert.equal(row.before.parentBox.height,19);assert.equal(row.before.labelBox.height,19);assert.equal(row.measured.naturalHeight,19);
+    assert.match(row.measured.scope,/does not establish wrapper layout, baseline/);
+    const placement=structure.retainedInlinePlacementAttribution.observations.find(p=>p.id===row.id);
+    assert.equal(placement.measuredInlineHeight,19);assert.equal(placement.declaredParagraphHeight,'22px');
+  }
+  assert.match(review.requirements.inputStyleStructure.conclusion,/strut\/baseline correspondence remains unproved/);
   const currentness=parent.obligations.sourceCurrentness;
   let receiptCount=0;
   const authenticate=value=>{
