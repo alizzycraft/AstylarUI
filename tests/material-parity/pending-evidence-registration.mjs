@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
+import { restoreDividerOwnerFrameProducer } from './divider-owner-frame-registration.mjs';
 
 export const pendingEvidenceSourceFiles = Object.freeze([
   "docs/evidence/material-original-runner-e01.mjs.gz.b64",
@@ -181,7 +182,7 @@ export function registerPendingEvidenceProducer(source) {
   return replaceOnce(text, proofAnchor, proofAnchor + proofAddition);
 }
 export function restorePendingEvidenceProducer(source) {
-  let text = source.toString().replaceAll('\r\n', '\n');
+  let text = restoreDividerOwnerFrameProducer(source);
   if (hash(text) === frozen) return text;
   text = replaceOnce(text, sourceAnchor + sourceAddition, sourceAnchor);
   text = replaceOnce(text, proofAnchor + proofAddition, proofAnchor);

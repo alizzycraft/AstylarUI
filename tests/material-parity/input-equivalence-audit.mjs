@@ -8922,6 +8922,18 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    "scripts/check-divider-inline-alignment-reads.mjs",
+    "scripts/audit-material-divider-alignment-inputs.mjs",
+    "scripts/check-divider-alignment-inputs.mjs",
+    "scripts/check-divider-owner-coverage.mjs",
+    "scripts/audit-material-divider-frame-sizes.mjs",
+    "scripts/check-divider-frame-sizes.mjs",
+    "scripts/join-material-divider-owner-frame-evidence.mjs",
+    "tests/material-parity/divider-owner-frame-review-source.mjs",
+    "tests/material-parity/divider-owner-frame-join.spec.mjs",
+    "tests/material-parity/divider-owner-frame-selection.spec.mjs",
+    "tests/material-parity/divider-owner-frame-registration.mjs",
+    "tests/material-parity/divider-owner-frame-registration.spec.mjs",
     "docs/evidence/material-original-runner-e01.mjs.gz.b64",
     "docs/evidence/material-original-runner-launch-patches.json",
     "scripts/audit-material-snackbar-ax.mjs",
@@ -9919,6 +9931,20 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, "tests/material-parity/divider-owner-frame-join.spec.mjs", new RegExp("test\\('owner/frame retained checks replay without browser or canonical rebuild'"),
+      "owner/frame retained checks replay without browser or canonical rebuild", "Bounded Divider owner/frame evidence only;all original case dispositions,remaining work and acceptance gates preserve. Not whole-case inspection or current rendering."),
+    proof(root, "tests/material-parity/divider-owner-frame-join.spec.mjs", new RegExp("test\\('Divider owner/frame evidence conserves complete predecessor and exact physical applicability'"),
+      "Divider owner/frame evidence conserves complete predecessor and exact physical applicability", "Bounded Divider owner/frame evidence only;all original case dispositions,remaining work and acceptance gates preserve. Not whole-case inspection or current rendering."),
+    proof(root, "tests/material-parity/divider-owner-frame-selection.spec.mjs", new RegExp("test\\('owner/frame export selection is explicit and rejects every older supplement combination'"),
+      "owner/frame export selection is explicit and rejects every older supplement combination", "Bounded Divider owner/frame evidence only;all original case dispositions,remaining work and acceptance gates preserve. Not whole-case inspection or current rendering."),
+    proof(root, "tests/material-parity/divider-owner-frame-selection.spec.mjs", new RegExp("test\\('owner/frame wiring conserves complete preceding runner launcher and historical helper'"),
+      "owner/frame wiring conserves complete preceding runner launcher and historical helper", "Bounded Divider owner/frame evidence only;all original case dispositions,remaining work and acceptance gates preserve. Not whole-case inspection or current rendering."),
+    proof(root, "tests/material-parity/divider-owner-frame-selection.spec.mjs", new RegExp("test\\('actual final exporter reader routes only the exact owner/frame review'"),
+      "actual final exporter reader routes only the exact owner/frame review", "Bounded Divider owner/frame evidence only;all original case dispositions,remaining work and acceptance gates preserve. Not whole-case inspection or current rendering."),
+    proof(root, "tests/material-parity/divider-owner-frame-registration.spec.mjs", new RegExp("test\\('owner/frame registration restores exact previous producer and preserves entire inventories'"),
+      "owner/frame registration restores exact previous producer and preserves entire inventories", "Bounded Divider owner/frame evidence only;all original case dispositions,remaining work and acceptance gates preserve. Not whole-case inspection or current rendering."),
+    proof(root, "tests/material-parity/divider-owner-frame-registration.spec.mjs", new RegExp("test\\('owner/frame registration rejects changed old producer and malformed additions'"),
+      "owner/frame registration rejects changed old producer and malformed additions", "Bounded Divider owner/frame evidence only;all original case dispositions,remaining work and acceptance gates preserve. Not whole-case inspection or current rendering."),
     proof(root, "tests/material-parity/retained-paint-property-coverage.spec.mjs", new RegExp("test\\('remaining retained Divider computed paint covers every configured physical viewport cohort'"),
       "remaining retained Divider computed paint covers every configured physical viewport cohort", "Bounded retained paint evidence only;all case dispositions,remaining tasks and final acceptance gates preserve. Not current rendering or whole-case acceptance."),
     proof(root, "tests/material-parity/retained-paint-property-coverage.spec.mjs", new RegExp("test\\('retained served Divider computed paint excludes image filters and blending through actual HTML hosts'"),

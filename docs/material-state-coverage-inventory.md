@@ -7,6 +7,42 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Owner/frame source and proof registration complete (October24)
+
+The coherent batch now registers1002 unique source paths/326 proofs,adding12/7
+to accepted990/319 without removal.193 source-finding definitions are unchanged.
+Actual producer vectors compare against the preserved,whole-hash-authenticated
+accepted extract e7f8cc38,not just a newly reconstructed population. All319 old
+non-line proof fields preserve. Exactly four old source paths change:producer,
+runner,launcher and pending-registration helper. Existing bounded reversals
+recover every complete accepted preimage,including helper52169564 back through
+6147f36d to accepted efade467. No original receipt is repinned.
+
+Registration introduces an additive prefix with an exact6e7f0d6d producer
+predecessor;the original22-source/26-proof registration assertions still execute
+unchanged against their own historical population. New focused assertions reject
+old-source drift,malformed prefixes and helper drift. A read-only replay assertion
+runs the existing inline/owner/frame/alignment check commands without a browser
+or canonical rebuild. Seven focused checks pass;the final coherent run passes
+9/9,zero skips,explicit nativeExit0 in109392.5314ms. It includes full2311-case/
+17576-dependency loading AFTER registration and preserves exact94f1a93d successor,
+all partial/current-unverified statuses and complete abdd predecessor recovery.
+
+Keep divider-owner-frame-registration,divider-owner-frame-accepted-vector and
+divider-owner-frame-registered-integration-20261024 log pairs;stderr empty.
+Accepted-vector stdout SHA256
+3b13541fd205a235e55f8ca1ef83f196a3e831063ace71a3d07a94954f62253a;
+integration stdout SHA256f67eba0f91a774eb75cb2bb8e775d42e619728f36c80292e0369db290b17a15a.
+The initial inline census command failed PowerShell parsing before execution;
+the successful stdin-script census above is the actual native0 receipt.
+
+Freeze this verified source batch. Accepted canonical remains88be/b185;94f1a93d
+is selected but NOT exported/imported. Recheck the recorded remote-publication
+prerequisite and storage headroom before scheduling the existing coherent export,
+conservation,cold and import milestone. Do not generate another large package
+solely to work around transport. No renderer/reference/criteria change,capture,
+large proposal copy or canonical generation was made during registration.
+
 ### Owner/frame successor explicit export selection wired (October24)
 
 Existing named launcher now accepts `--divider-owner-frame` (also with --dry-run

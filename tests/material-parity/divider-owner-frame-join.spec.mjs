@@ -6,6 +6,20 @@ import { dividerComputedPaintReview } from './divider-computed-paint-review-sour
 import { createDividerOwnerFrameReviewReader, dividerOwnerFrameReview } from './divider-owner-frame-review-source.mjs';
 import { restoreDividerOwnerFrameEvidence, joinDividerOwnerFrameEvidence } from '../../scripts/join-material-divider-owner-frame-evidence.mjs';
 import { loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
+import { spawnSync } from 'node:child_process';
+
+test('owner/frame retained checks replay without browser or canonical rebuild', () => {
+  for (const args of [
+    ['scripts/check-divider-inline-alignment-reads.mjs'],
+    ['scripts/check-divider-owner-coverage.mjs'],
+    ['scripts/check-divider-alignment-inputs.mjs', 'artifacts/material-parity/divider-alignment-inputs-public-updates-20261024.log'],
+    ['scripts/check-divider-frame-sizes.mjs', 'artifacts/material-parity/divider-frame-sizes-20261024.log'],
+  ]) {
+    const result = spawnSync(process.execPath, args, { encoding: 'utf8', windowsHide: true, maxBuffer: 4_000_000 });
+    assert.equal(result.status, 0, result.stderr);
+    assert.ok(JSON.parse(result.stdout).producer);
+  }
+});
 
 test('Divider owner/frame evidence conserves complete predecessor and exact physical applicability', () => {
   const root = process.cwd(), reader = createDividerOwnerFrameReviewReader({ root, read: readFileSync, reviewSha256: dividerOwnerFrameReview });

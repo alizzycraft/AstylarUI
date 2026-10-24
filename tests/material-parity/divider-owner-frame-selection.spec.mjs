@@ -6,6 +6,7 @@ import test from 'node:test';
 import ts from 'typescript';
 import { dividerOwnerFrameReview, createDividerOwnerFrameReviewReader } from './divider-owner-frame-review-source.mjs';
 import { restoreDividerOwnerFrameExportSource, restoreOriginalRunnerExportSource } from './pending-evidence-registration.mjs';
+import { restoreDividerOwnerFrameRegistrationHelper } from './divider-owner-frame-registration.mjs';
 
 test('owner/frame export selection is explicit and rejects every older supplement combination', () => {
   const run = flags => spawnSync(process.execPath, ['scripts/export-material-input-audit-current-ancestry.mjs', '--dry-run', ...flags],
@@ -35,7 +36,7 @@ test('owner/frame wiring conserves complete preceding runner launcher and histor
     assert.throws(() => restoreDividerOwnerFrameExportSource(Buffer.concat([readFileSync(file), Buffer.from('\n// drift')]), kind));
   }
   const file = 'tests/material-parity/pending-evidence-registration.mjs';
-  let source = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  let source = restoreDividerOwnerFrameRegistrationHelper(readFileSync(file));
   const ast = ts.createSourceFile(file, source, 99, true, ts.ScriptKind.JS);
   const declarations = ast.statements.filter(node => ts.isFunctionDeclaration(node) && node.name?.text === 'restoreDividerOwnerFrameExportSource');
   assert.equal(declarations.length, 1);
