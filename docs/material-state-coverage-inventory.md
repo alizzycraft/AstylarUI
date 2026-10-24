@@ -7,6 +7,35 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Owner/frame successor explicit export selection wired (October24)
+
+Existing named launcher now accepts `--divider-owner-frame` (also with --dry-run
+or --check),selecting exact94f1a93d. All15 older supplements/default selections
+preserve;every older/new combination rejects. Virtual proposal preflight checks
+the physical c394 predecessor,not a nonexistent duplicate successor file. The
+actual final exporter factory selects the new reader only for the exact digest;
+other IDs delegate unchanged. No canonical command was run for this wiring.
+
+Bounded reversal recovers complete preceding runner fb65d915,launcher6586a5a6
+and helper efade467 bytes (LF-normalized source contract),then the original
+earlier reversals still pass. Unexpected drift rejects;captured receipts are not
+repinned. Five selector/routing/inventory-compatibility assertions pass,zero skips,
+explicit nativeExit0 in7983.3806ms. Existing inventory remains990 sources/319
+proofs;new standalone source/proof registration is still the next step.
+
+The owning full-reader test then passes1/1 AGAINST THIS WIRED STATE,explicit
+nativeExit0 in49758.613ms:all2311 cases/17576 dependencies authenticate,
+80 children/24cases/eight desktop-DPR1 aliases,complete predecessor recovery and
+all partial/current-unverified flags preserve. This is not export,canonical
+publication,whole-case inspection closure or rendering acceptance.
+Keep divider-owner-frame-selection-20261024 log pair (stdout SHA256
+ca7fbc0a80561c878efe09ad54a07f0d7893371ee7e6655ab37fbc0c6737c6bb)
+and divider-owner-frame-wired-reader-20261024 pair (stdout SHA256
+5cddbf3efebd3c147bba5d5d6290b250d8a71e2eea5a36d4619a8e4203c19058);
+both stderr empty. Accepted88be/b185 remains unchanged. No new capture or large
+proposal/package created;freeze the coherent registration batch before the
+existing conservation/cold/import milestone. Remote publication still unresolved.
+
 ### Coherent Divider owner/frame successor validated (October24)
 
 Consolidated the new bounded evidence through the existing review/loader model.

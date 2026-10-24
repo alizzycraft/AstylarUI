@@ -252,7 +252,7 @@ export function restoreOriginalRunnerExportSource(source, kind) {
 }
 export function restoreDividerPaintExportSource(source, kind) {
   assert.ok(['runner', 'launcher'].includes(kind));
-  let text = source.toString().replaceAll('\r\n', '\n');
+  let text = restoreDividerOwnerFrameExportSource(source, kind);
   const expected = kind === 'runner' ? 'a7bbde2e2764a00d0b22ddafc401092987b71163543a7873fa42e5fb3a873809' : 'd9b081a5b5ae0b0e5253cf17c368b201f47f8c4f75a97f247014b190231e3642';
   if (hash(text) === expected || !text.includes(kind === 'runner' ? 'dividerComputedPaintReview' : 'const dividerComputedPaint =')) return text;
   if (kind === 'runner') {
@@ -268,6 +268,26 @@ export function restoreDividerPaintExportSource(source, kind) {
     text = replaceOnce(text, "if (dividerComputedPaint) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=abdd4f47d8681dbdbedd24a5e954b7ad3063261150a9758dffcdce460155898a';\n", '');
   }
   assert.equal(hash(text), expected, 'Complete pre-Divider export source must recover');
+  return text;
+}
+export function restoreDividerOwnerFrameExportSource(source, kind) {
+  assert.ok(['runner', 'launcher'].includes(kind));
+  let text = source.toString().replaceAll('\r\n', '\n');
+  const expected = kind === 'runner' ? 'fb65d915d60172eabeebf0af7e578fa21c166a0e1c2384fdc8d1e28212d76378' : '6586a5a6232887702e3ee644f0e4ce51de4d02aa760bbfef1f316bd6adfca4f8';
+  if (hash(text) === expected || !text.includes(kind === 'runner' ? 'dividerOwnerFrameReview' : 'const dividerOwnerFrame =')) return text;
+  if (kind === 'runner') {
+    text = replaceOnce(text, "import { dividerOwnerFrameReview, createDividerOwnerFrameReviewReader } from '../tests/material-parity/divider-owner-frame-review-source.mjs';\n", '');
+    text = replaceOnce(text, '    const ownerFrameReaderFactory = options.caseObligationReviewSha256===dividerOwnerFrameReview ? createDividerOwnerFrameReviewReader : paintReaderFactory;\n', '');
+    text = replaceOnce(text, 'const applicability=ownerFrameReaderFactory?.', 'const applicability=paintReaderFactory?.');
+  } else {
+    text = replaceOnce(text, "const dividerOwnerFrame = rawRequested.includes('--divider-owner-frame');\nassert.ok(!dividerOwnerFrame || rawRequested.every(argument => ['--divider-owner-frame', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');\n", '');
+    text = replaceOnce(text, ".filter(argument => argument !== '--divider-owner-frame')", '');
+    text = replaceOnce(text, '|--divider-owner-frame', '');
+    text = replaceOnce(text, "if (dividerOwnerFrame) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/94f1a93d5881bafd8f79fad0ccd52e20d0325bed06eb64dc1e1adbd315241cc4.json';\n", '');
+    text = replaceOnce(text, '(originalRunnerRecovery || dividerComputedPaint || dividerOwnerFrame)', '(originalRunnerRecovery || dividerComputedPaint)');
+    text = replaceOnce(text, "if (dividerOwnerFrame) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=94f1a93d5881bafd8f79fad0ccd52e20d0325bed06eb64dc1e1adbd315241cc4';\n", '');
+  }
+  assert.equal(hash(text), expected, 'Complete pre-owner/frame export source must recover');
   return text;
 }
 export function pendingEvidenceHistoricalRead({ root, read }) {
