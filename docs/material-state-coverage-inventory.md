@@ -9,6 +9,25 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Public-focus source history now answers regression-versus-initial-API omission.
+Git-S identifiescd222388 as the public renderer focus signature's introduction.
+Its parent has no public focus method;initial methodSHA3814563e is byte-identical
+to current. The focus-event exclusion/queue machinery was added earlier in
+dbe4d8ed;its parent callback has no queueFocusSync,and Git ancestry confirms gate
+predates API. Thus this path was introduced without an explicit public-origin
+semantic sync route,not shown to be a later Material CSS compensation. This is
+source birth/correspondence,NOT historical runtime execution,bisect or motive.
+
+Focused source-history proof1/1,native0,public-focus-initial-api-history-retry-
+20261024 stdout SHA256cf320ba25889189c46c2a9fb535a0a3d3763eddf1c40dbe65250679878cf7a7a.
+Initial test failed because pre-renderer-refactor dbe4 source uses classAstylar,
+not AstylarRenderer;retain public-focus-initial-api-history-20261024 failure pair.
+Parser now explicitly selects that historical owner when renderer class absent;
+no fixture/runtime threshold or evidence bytes changed. Pending finding records
+exact revisions and limitation. No repeat capture/full canonical/full browser
+gate for this history-only addition. Prior13-test integration remains its own
+milestone,not falsely relabeled14 passes. Registry/case/canonical unchanged.
+
 Public focus synchronization cause is now CONFIRMED within the tested path,
 not merely inferred from screenshot/final focus. Complete current renderer
 interactionEvents.onEvent callbackc92afd2d matches actual installed callback

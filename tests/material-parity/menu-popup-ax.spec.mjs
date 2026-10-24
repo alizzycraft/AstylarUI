@@ -327,3 +327,36 @@ test('actual renderer event callback excludes public focus events from semantic 
     focusEventsQueueNativeFocus: false, keyboardAndClickControlsQueueNativeFocus: true,
     boundary: 'Complete actual callback with explicit no-pointer/no-selection controls. Public request reproduction separately proves failure;not a fix or waiver of pointer/selection/modal safeguards.' }));
 });
+
+test('public focus API initially inherited the existing native-origin focus-event exclusion', () => {
+  const file = 'src/lib/astylar.ts';
+  const inspect = revision => {
+    const bytes = execFileSync('git', ['show', `${revision}:${file}`]);
+    const ast = ts.createSourceFile(file, bytes.toString(), 99, true, ts.ScriptKind.TS);
+    const renderer = ast.statements.find(n => ts.isClassDeclaration(n) && n.name?.text === 'AstylarRenderer') ??
+      ast.statements.find(n => ts.isClassDeclaration(n) && n.name?.text === 'Astylar');
+    assert.ok(renderer);
+    const focus = renderer.members.filter(n => ts.isMethodDeclaration(n) && n.name.getText(ast) === 'focus');
+    let callback;
+    const visit = n => {
+      if (ts.isVariableDeclaration(n) && n.name.getText(ast) === 'interactionEvents')
+        callback = n.initializer.whenTrue.properties.find(p => ts.isPropertyAssignment(p) && p.name.getText(ast) === 'onEvent').initializer.getText(ast);
+      ts.forEachChild(n, visit);
+    };
+    visit(ast);
+    return { revision, sourceSha256: hash(bytes), focus: focus.map(n => n.getText(ast)), callback };
+  };
+  const parent = inspect('cd222388^'), introduced = inspect('cd222388');
+  assert.equal(parent.focus.length, 0); assert.equal(introduced.focus.length, 1);
+  assert.equal(hash(introduced.focus[0]), '3814563ee560c51ef0974a3d97aa2ae384828669e91914960dc293a548290737');
+  assert.match(parent.callback, /event\.type !== 'focus'/); assert.match(introduced.callback, /event\.type !== 'focus'/);
+  const beforeGate = inspect('dbe4d8ed^'), gate = inspect('dbe4d8ed');
+  assert.doesNotMatch(beforeGate.callback, /queueFocusSync/); assert.match(gate.callback, /event\.type !== 'focus'/);
+  assert.equal(gate.focus.length, 0);
+  const ancestry = execFileSync('git', ['merge-base', '--is-ancestor', 'dbe4d8ed', 'cd222388']);
+  assert.equal(ancestry.length, 0);
+  console.log(JSON.stringify({ initialAPI: { revision: introduced.revision, sourceSha256: introduced.sourceSha256, methodSha256: hash(introduced.focus[0]) },
+    parent: { revision: parent.revision, sourceSha256: parent.sourceSha256, publicFocusAbsent: true },
+    priorGate: { revision: gate.revision, sourceSha256: gate.sourceSha256, callbackSha256: hash(gate.callback) },
+    boundary: 'Exact source introduction and ancestry only;not historical runtime execution,bisect,every intermediate behavior or motive.' }));
+});
