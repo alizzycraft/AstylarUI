@@ -9,6 +9,25 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Desktop dismissal/mobile AX integration now attaches ten bounded semantic
+children through `join-material-menu-semantic-boundaries.mjs`:eight desktop open
+source cases retain supplementary Escape labels;two exact mobile-dpr2/open-dismiss
+cases retain all initial/open/closed three-cycle AX observations. No desktop
+observation is relabeled as configured dismissal/mobile replay. Both pending
+source findings retain separate IDs,owners and first-divergence descriptions.
+Mobile paired tree/screenshot receipts,report/manifests and definition/producer
+receipts join the existing dependency graph without a new evidence framework.
+
+Virtual successor809d37ad8621d89e3b10dbbddd3eafec8aa2386667e8d993a28af71b8d7be11f
+recovers complete predecessord7ce8d6e after removing ONLY the ten children.
+Existing full reader authenticates all2311 cases/18238 dependencies,nativeExit0;
+forged mobile report rejected. All cases stay partial/current-rendering unverified
+and both completion flagsfalse. Keep menu-semantic-boundary-case-join-20261024
+log pair;stderr empty. No large physical proposal/canonical export or pointer
+advance. Frozen1002/326 batch remains untouched;new source/proof/finding registry
+integration and publication prerequisites stay pending. Other semantic actions,
+current input/runtime,paint/history/lifetime and original final gates remain open.
+
 Mobile Menu AX now has actual evidence rather than desktop extrapolation.
 `audit-material-menu-mobile-ax.mjs` pins and reuses original mobile-boundary
 producer470ea048,unchanged real three-cycle mouse/Escape actions and explicit
