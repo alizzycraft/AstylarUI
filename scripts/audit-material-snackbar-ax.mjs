@@ -39,8 +39,11 @@ function verify(report, file) {
     script, styleProperties: properties }), { status: 'checkpoint-bound', errors: [] });
   for (const r of [...manifest.provenance.harnessFiles, ...manifest.provenance.diagnosticFiles]) assert.equal(hash(readFileSync(r.file)), r.sha256);
   assert.deepEqual(report.actionSource, actionSource);
+  assert.ok([0, 300].includes(report.observationDelayMs));
   assert.deepEqual(report.results.map(r => r.caseId), cases.map(c => materialCaseKey('interaction', c)));
   for (const row of report.results) for (const side of ['reference', 'astylar']) {
+    assert.equal(row[side].observationDelayMs, report.observationDelayMs);
+    assert.ok(row[side].elapsedSinceSettlementMs >= report.observationDelayMs);
     assert.deepEqual(Object.keys(row[side].ax), ['surface', 'undo']);
     for (const [key, target] of Object.entries(row[side].ax)) {
       assert.equal(target.selector, selectors(side)[key]); assert.ok(target.backendNodeId > 0);
@@ -53,6 +56,7 @@ function verify(report, file) {
 if (process.argv[2] === '--verify') {
   const file = process.argv[3]; console.log(JSON.stringify(verify(JSON.parse(readFileSync(file)), file)));
 } else {
+  const observationDelayMs = process.argv.includes('--after-announcement') ? 300 : 0;
   const output = path.resolve(process.argv[2] ?? '');
   assert.ok(output.startsWith(path.resolve('artifacts/material-parity') + path.sep)); assert.ok(!existsSync(output));
   const root = path.resolve('artifacts/material-parity/icon-fresh-producer-retained-build-20261016-browser');
@@ -85,6 +89,8 @@ if (process.argv[2] === '--verify') {
             await actions.settleInteraction(page, side); await actions.sendShowcaseCommand(page, { type: 'showcase:benchmark', phase: 'start' });
             await actions.performInteraction(page, side, c); await actions.settleInteraction(page, side);
             await actions.sendShowcaseCommand(page, { type: 'showcase:benchmark', phase: 'settled' });
+            const settledAt = await page.evaluate(() => performance.now());
+            if (observationDelayMs) await page.waitForTimeout(observationDelayMs);
             const cdp = await context.newCDPSession(page), { root: document } = await cdp.send('DOM.getDocument'), ax = {};
             for (const [key, selector] of Object.entries(selectors(side))) {
               const { nodeId } = await cdp.send('DOM.querySelector', { nodeId: document.nodeId, selector }); assert.ok(nodeId);
@@ -97,13 +103,15 @@ if (process.argv[2] === '--verify') {
               : await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['snack-bar-surface', 'snack-bar-dismiss']).inputTree);
             const treeFile = `${evidence.directory}/${side}-input-tree.json`, treeBytes = Buffer.from(JSON.stringify(tree));
             writeFileSync(treeFile, treeBytes, { flag: 'wx' });
-            row[side] = { ax, runtime: await finish(), inputTree: { file: treeFile, sha256: hash(treeBytes) } };
+            row[side] = { ax, observationDelayMs,
+              elapsedSinceSettlementMs: await page.evaluate(start => performance.now() - start, settledAt),
+              runtime: await finish(), inputTree: { file: treeFile, sha256: hash(treeBytes) } };
           } finally { await page.close(); }
         }
         results.push(row);
       } finally { await context.close(); }
     }
-    const report = { schemaVersion: 1, browser: browser.version(), capture: evidence.capture, actionSource, results,
+    const report = { schemaVersion: 1, browser: browser.version(), capture: evidence.capture, actionSource, observationDelayMs, results,
       scope: 'Focused positive snackbar AX evidence on retained build; does not recover original e01 runner or establish current rendering/AT speech.' };
     const file = `${evidence.directory}/latest-report.json`; writeFileSync(file, JSON.stringify(report) + '\n', { flag: 'wx' });
     console.log(JSON.stringify(verify(report, file)));

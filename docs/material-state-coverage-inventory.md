@@ -7,6 +7,34 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+October24 post-delay snackbar AX boundary answers transient-versus-persistent
+UNDO exposure:existing standalone diagnostic now accepts explicit
+--after-announcement,adding300ms equally on both sides after normal settlement;
+the configured runner/fixture is unchanged. New separate report
+snackbar-open-ax-postdelay-20261024/latest-report.json SHA
+85bc6372c060c9ae4a5dc5e8bf6a4684c5e64a27186a932ad6d57b7c134c5a65
+passes checkpoint-bound capture and standalone replay validation. Both actual
+UNDO AX nodes are not ignored,role button,name UNDO,focusable. Observation-end
+elapsed times are423.7ms native/387.6ms candidate;these include collection time,
+not exact mutation timestamps. Native live region now contains message/action;
+native remains generic,polite,atomic=false and candidate status,polite,atomic=true.
+Thus persistent missing-native-UNDO is rejected for this one retained-build
+light desktop endpoint,not all profiles/current rendering/AT speech. Earlier
+immediate/failed captures stay intact;their diagnostic source is recoverable
+from74915a58,not reauthenticated using today's changed script bytes.
+Exact retained native chunk7SL66K3U JS is a served reference asset;its JS and map
+hashes match this capture's browser-file receipts. Map SHA
+67e956a6f4b3b0325fc51b7b45688a27d5e9307095f8b4a20391a96f68244df4
+contains snack-bar.mjs ownerSHA
+418aa2d9a5ab17b171eed626a2806249a2fffd10b6bb71894a293e25281dd6c2,
+with _announceDelay=150 and delayed aria-hidden removal. This closes retained
+timer-source applicability,not exact callback-stack causality or speech timing.
+Paired positive action AX and retained source assertions pass. Remaining policy
+question is whether candidate's explicit status/atomic declaration and immediate
+content insertion intentionally differ from Material's delayed non-atomic live
+owner;do not infer equivalence from the old semanticsMatch flag. No renderer/
+fixture correction,canonical export,registered-source mutation or case closure.
+
 October24 focused snackbar AX observation closes one missing measurement,not
 the family: scripts/audit-material-snackbar-ax.mjs reuses configured light/
 desktop-dpr1/open actions and existing supplemental/checkpoint/CDP infrastructure
