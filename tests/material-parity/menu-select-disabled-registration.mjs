@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
+import path from 'node:path';
+import { restoreMenuSelection, menuSelectionPriorHashes } from './menu-select-disabled-selection.mjs';
 import { menuPopupSemanticInputFindings } from './menu-popup-semantic-input-findings.mjs';
 import { publicProgrammaticFocusFinding } from './public-programmatic-focus-finding.mjs';
 
@@ -47,8 +49,8 @@ export function menuPendingProofRows(read) {
         scope: 'Bounded pending audit evidence only;declared observation/recipe/reader scopes remain. Not current rendering,equal inputs or whole-case acceptance.' });
     }
   }
-  assert.equal(rows.length, 26);
-  assert.equal(new Set(rows.map(r => r.file + ':' + r.title)).size, 26);
+  assert.equal(rows.length, 27);
+  assert.equal(new Set(rows.map(r => r.file + ':' + r.title)).size, 27);
   return rows;
 }
 const sourceAnchor = 'function sourceFingerprints(root) {\n  const files = [\n';
@@ -99,4 +101,25 @@ export function restoreMenuPolicyRegistration(source) {
   const text = once(source.toString().replaceAll('\r\n', '\n'), policyAnchor + policyPrefix, policyAnchor);
   assert.equal(hash(text), policyPrior, 'Complete prior policy must recover');
   return text;
+}
+
+// Exact prior-source applicability only;never normalize an unrelated read.
+export function createMenuHistoricalRead({ root, read }) {
+  const local = file => read(path.resolve(root, file));
+  const transitions = new Map([
+    ['tests/material-parity/input-equivalence-audit.mjs', { prior, restore: b => restoreMenuProducerRegistration(b, local) }],
+    ['tests/material-parity/input-equivalence-policy.mjs', { prior: policyPrior, restore: restoreMenuPolicyRegistration }],
+    ['scripts/export-material-input-audit-current-ancestry.mjs', { prior: menuSelectionPriorHashes.launcher, restore: b => restoreMenuSelection(b, 'launcher') }],
+    ['scripts/run-material-input-audit.mjs', { prior: menuSelectionPriorHashes.runner, restore: b => restoreMenuSelection(b, 'runner') }],
+  ].map(([file, value]) => [path.resolve(root, file), value]));
+  return (file, options) => {
+    const target = transitions.get(path.resolve(root, file));
+    if (!target) return read(file, options);
+    const bytes = read(path.resolve(root, file));
+    const text = bytes.toString().replaceAll('\r\n', '\n');
+    if (hash(text) === target.prior) return read(file, options);
+    const restored = Buffer.from(target.restore(bytes));
+    const encoding = typeof options === 'string' ? options : options?.encoding;
+    return encoding ? restored.toString(encoding) : restored;
+  };
 }

@@ -13,6 +13,9 @@ import { materialInteractionCases } from './benchmark.config.mjs';
 import { joinDisabledControlEvidence, restoreDisabledControlEvidence, disabledControlPredecessor } from '../../scripts/join-material-disabled-control-evidence.mjs';
 import { createMenuSelectDisabledReviewReader, menuSelectDisabledReview } from './menu-select-disabled-review-source.mjs';
 import { loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
+import path from 'node:path';
+import { prepareMenuProducerRegistration, prepareMenuPolicyRegistration, createMenuHistoricalRead } from './menu-select-disabled-registration.mjs';
+import { prepareMenuSelection } from './menu-select-disabled-selection.mjs';
 
 test('six retained disabled contexts preserve values while exposing native Select focusability difference', () => {
   const file = 'artifacts/material-parity/disabled-control-boundaries-20261025/latest-report.json';
@@ -63,7 +66,20 @@ test('disabled editing cohorts have no configured focus or activation attempt in
 });
 
 test('exact Select supplementary readonly evidence preserves all parent obligations and rejects forged receipts', () => {
-  const reader = createDividerOwnerFrameReviewReader({ root: process.cwd(), read: readFileSync, reviewSha256: dividerOwnerFrameReview });
+  const root = process.cwd();
+  const staged = new Map([
+    ['tests/material-parity/input-equivalence-audit.mjs', prepareMenuProducerRegistration(readFileSync('tests/material-parity/input-equivalence-audit.mjs'), readFileSync)],
+    ['tests/material-parity/input-equivalence-policy.mjs', prepareMenuPolicyRegistration(readFileSync('tests/material-parity/input-equivalence-policy.mjs'))],
+    ['scripts/export-material-input-audit-current-ancestry.mjs', prepareMenuSelection(readFileSync('scripts/export-material-input-audit-current-ancestry.mjs'), 'launcher')],
+    ['scripts/run-material-input-audit.mjs', prepareMenuSelection(readFileSync('scripts/run-material-input-audit.mjs'), 'runner')],
+  ].map(([file, source]) => [path.resolve(root,file), Buffer.from(source)]));
+  const overlayRead = (file, options) => {
+    const bytes = staged.get(path.resolve(root,file)); if (!bytes) return readFileSync(file,options);
+    const encoding = typeof options === 'string' ? options : options?.encoding;
+    return encoding ? bytes.toString(encoding) : Buffer.from(bytes);
+  };
+  const auditRead = createMenuHistoricalRead({root,read:overlayRead});
+  const reader = createDividerOwnerFrameReviewReader({ root, read: auditRead, reviewSha256: dividerOwnerFrameReview });
   const original = JSON.parse(reader.read(`artifacts/material-parity/working-audit/proposals/${dividerOwnerFrameReview}.json`)).review;
   const predecessor = joinMenuSemanticBoundaries(joinMenuAXEvidence(joinMenuCompositeEvidence(original).review).review).review;
   const hash = r => createHash('sha256').update(JSON.stringify(r)).digest('hex');
@@ -104,7 +120,7 @@ test('exact Select supplementary readonly evidence preserves all parent obligati
   assert.throws(() => joinDisabledControlEvidence(disabled.review));
   console.log(JSON.stringify({ disabledCases: disabled.cases, reviewSha256: disabled.sha256, predecessor: disabledControlPredecessor }));
   assert.equal(disabled.sha256, menuSelectDisabledReview);
-  const pendingReader = createMenuSelectDisabledReviewReader({ root: process.cwd(), read: readFileSync,
+  const pendingReader = createMenuSelectDisabledReviewReader({ root, read: auditRead,
     reviewSha256: menuSelectDisabledReview, ownerFrameReader: reader });
   const file = `artifacts/material-parity/working-audit/proposals/${menuSelectDisabledReview}.json`;
   const loaded = loadCaseObligationReview(file, menuSelectDisabledReview, disabled.review.groups.map(g => g.case), { root: process.cwd(), read: pendingReader.read });
@@ -112,5 +128,5 @@ test('exact Select supplementary readonly evidence preserves all parent obligati
   assert.throws(() => createMenuSelectDisabledReviewReader({ root: process.cwd(), read: readFileSync, reviewSha256: '0'.repeat(64) }));
   assert.equal(pendingReader.read('docs/evidence/material-original-runner-e01.mjs.gz.b64', 'utf8'), reader.read('docs/evidence/material-original-runner-e01.mjs.gz.b64', 'utf8'));
   console.log(JSON.stringify({ dependencies: loaded.evidenceFingerprints.length, addedChildren: pendingReader.sourceApplicability.addedChildren,
-    canonicalPublished: false, inspectionComplete: loaded.inspectionComplete, currentRenderingAccepted: loaded.currentRenderingAccepted }));
+    stagedTransitions: staged.size, canonicalPublished: false, inspectionComplete: loaded.inspectionComplete, currentRenderingAccepted: loaded.currentRenderingAccepted }));
 });

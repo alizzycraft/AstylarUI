@@ -3,8 +3,32 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import ts from 'typescript';
 import { createHash } from 'node:crypto';
+import path from 'node:path';
+import { prepareMenuSelection } from './menu-select-disabled-selection.mjs';
 import { menuPendingSources, menuPendingProofRows, prepareMenuProducerRegistration, restoreMenuProducerRegistration,
-  menuPendingFindingDefinitions, prepareMenuPolicyRegistration, restoreMenuPolicyRegistration } from './menu-select-disabled-registration.mjs';
+  menuPendingFindingDefinitions, prepareMenuPolicyRegistration, restoreMenuPolicyRegistration, createMenuHistoricalRead } from './menu-select-disabled-registration.mjs';
+
+test('historical read restores only four authenticated staged transitions and rejects modified staged content', () => {
+  const root = process.cwd(), names = ['tests/material-parity/input-equivalence-audit.mjs','tests/material-parity/input-equivalence-policy.mjs',
+    'scripts/export-material-input-audit-current-ancestry.mjs','scripts/run-material-input-audit.mjs'];
+  const originals = names.map(f => readFileSync(f, 'utf8').replaceAll('\r\n', '\n'));
+  const staged = [prepareMenuProducerRegistration(originals[0], readFileSync), prepareMenuPolicyRegistration(originals[1]),
+    prepareMenuSelection(originals[2], 'launcher'), prepareMenuSelection(originals[3], 'runner')];
+  const overlay = new Map(names.map((f,i) => [path.resolve(root,f), Buffer.from(staged[i])]));
+  const read = (file, options) => { const b = overlay.get(path.resolve(root,file)); if (!b) return readFileSync(file, options);
+    const encoding = typeof options === 'string' ? options : options?.encoding; return encoding ? b.toString(encoding) : Buffer.from(b); };
+  const historical = createMenuHistoricalRead({ root, read });
+  names.forEach((file,i) => { assert.equal(historical(file, 'utf8'), originals[i]); assert.equal(historical(file).toString(), originals[i]); });
+  const untouched = 'docs/evidence/material-original-runner-e01.mjs.gz.b64';
+  assert.deepEqual(historical(untouched), readFileSync(untouched));
+  for (let i=0;i<names.length;i++) {
+    const key = path.resolve(root,names[i]), saved = overlay.get(key);
+    overlay.set(key, Buffer.concat([saved, Buffer.from('\n// unexpected mutation')]));
+    assert.throws(() => historical(names[i])); overlay.set(key,saved);
+  }
+  const frozen = createMenuHistoricalRead({ root, read: readFileSync });
+  names.forEach(file => assert.deepEqual(frozen(file), readFileSync(file)));
+});
 
 test('pending policy registration conserves all193 definitions and binds three exact source anchors and receipts', () => {
   const file = 'tests/material-parity/input-equivalence-policy.mjs', original = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
@@ -41,9 +65,9 @@ test('pending producer registration conserves complete frozen inventories and ve
   const original = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
   const before = inventory(original), prepared = prepareMenuProducerRegistration(original, readFileSync), after = inventory(prepared);
   assert.equal(before.sources.length, 1002); assert.equal(before.proofs.length, 326);
-  assert.equal(after.sources.length, 1028); assert.equal(after.proofs.length, 352);
+  assert.equal(after.sources.length, 1028); assert.equal(after.proofs.length, 353);
   assert.equal(new Set(after.sources).size, 1028);
-  assert.deepEqual(after.sources.slice(26), before.sources); assert.deepEqual(after.proofs.slice(26), before.proofs);
+  assert.deepEqual(after.sources.slice(26), before.sources); assert.deepEqual(after.proofs.slice(27), before.proofs);
   assert.deepEqual(after.sources.slice(0,26), menuPendingSources);
   for (const row of menuPendingProofRows(readFileSync)) assert.ok(new RegExp(row.pattern).test(readFileSync(row.file, 'utf8')));
   assert.equal(restoreMenuProducerRegistration(prepared, readFileSync), original);

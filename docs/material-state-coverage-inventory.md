@@ -9,6 +9,28 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Four-file historical boundary is now verified against actual STAGED overlay,
+not just unchanged live source. createMenuHistoricalRead handles only exact
+absolute producer,policy,launcher,runner paths. Each frozen original passes
+through;each complete prepared transition reverses with prior SHA validation;
+unexpected suffix mutation rejects on every path. Unrelated historical bytes
+delegate unchanged. No broad hash waiver,receipt replacement or disk mutation.
+
+Combined9/9 tests pass,nativeExit0,0skip,110712.9144ms. Existing pending reader
+replays with all four prepared files present in memory and authenticates18270
+dependencies/all2311 case records;33 child records remain additive. All parent
+remaining tasks/statuses preserve,inspectionComplete=false,currentRendering-
+Accepted=false. Retain menu-staged-historical-reader-integration-20261025 log
+pair(stdout SHA25673524f6b28f59cc07afb584f328564230ed8d6b8301d395171d83d05b1ed0d0d;
+stderr empty). Every earlier source/proof and new policy conservation check is
+included. New historical-boundary test brings pending proof declarations27,
+prepared producer1028/353,prepared policy196;live1002/326/193 still unchanged.
+
+Next integrate historicalRead into the new exact reader before coherent live
+application of four staged files. Current test explicitly supplies the bounded
+historical read;do not assume raw live runner routing will apply it automatically.
+No canonical export,publication,push or rendering acceptance follows this test.
+
 Policy registration preparation exposed a real staging incompatibility:three
 standalone findings lacked scanner pattern;new RegExp(undefined,'g') would
 produce empty matches rather than exact source attribution. Staged copies now
