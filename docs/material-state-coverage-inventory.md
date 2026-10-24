@@ -13,18 +13,24 @@ all118 input-tree receipts authenticate across59 interaction rows. All34 rows
 containing the candidate overlay have native aria-live=polite and candidate
 snack-bar-surface authored ariaLive=polite;all34 also author an UNDO button.
 Thus missing authored live intent is not supported by this population. Existing
-semantic observations include root/trigger59 times each,and overlay/surface25
-times each only with expected/actual exists=false after dismissal. No open
-surface or UNDO accessible-name/role observation is recorded. Authored trees
-are not generated DOM/AX observations or announcement timing evidence. This
-narrows the remaining semantic gap to positive runtime live-region/action
-exposure and announcement behavior;do not infer either a core failure or parity
-from authoring agreement or closed absence passes. No new capture,fixture/core
-edit,canonical export or case promotion. First eight-open-state diagnostic was
-explicitly superseded by the complete59-row/118-receipt census,not generalized.
-Next decisive check:reuse actual retained open AX/DOM observations if present;
-otherwise obtain a focused positive-runtime semantic observation with provenance,
-not another visibility/timer replay or compensating fixture change.
+general semantic observations include root/trigger59 times each,and overlay/
+surface25 times each only with expected/actual exists=false after dismissal.
+Follow-up corrects the initial overbroad missing-runtime-evidence conclusion:
+the separate overlayPlacement section DOES retain34 positive DOM observations.
+All34 candidate surfaces expose role=status,aria-live=polite,textContent
+"Project savedUNDO";native live owners expose aria-live=polite,no explicit role,
+textContent "Project saved UNDO". All34 semanticsMatch flags are true under the
+existing collector's status/generic-polite equivalence and whitespace-removing
+text comparison. Its field named name is normalized textContent,not a browser
+computed accessible name or AX snapshot. No separate UNDO role/name observation
+exists in the59 general semantic arrays. Thus positive DOM live attributes are
+already observed;do not recapture them as missing. Computed action accessibility,
+implicit atomic/relevant behavior and actual announcement timing remain unproven,
+not demonstrated failures. Authored trees alone cannot settle those questions.
+No new capture,fixture/core edit,canonical export or case promotion. First
+eight-open-state diagnostic was superseded by complete59-row/118-receipt census.
+Next decisive check must target computed UNDO semantics or announcement policy,
+not repeat the settled authored/live-DOM,visibility or timer observations.
 
 Read-only original-runner provenance follow-up:bounded imported activity pages
 17901–18000 and18201–18600 contain user/assistant messages,not original tool
