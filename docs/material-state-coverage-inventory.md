@@ -9,6 +9,24 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Native disabled-Select keyboard delegation question narrowed without capture:
+disabled-control report654ef78a authenticates manifest9a4ffe70 and retained native
+source map67e956a6. Exact MatSelect._handleKeydown method agrees with installed
+package under trivia-only token comparison. Executing that captured method with
+disabled=true for x/Enter/Space/ArrowDown/Home and both nominal panel states reads
+neither the event nor panelOpen;ten enabled controls delegate to the correct
+open/closed handler. Thus disabled keyboard delegation is guarded even though
+ARIA-disabled native Select can accept DOM focus. Focusability is not editability.
+
+Standalone disabled-select-keyboard-guard.spec.mjs passes1/1,exit0,636.3625ms;
+method SHA612a7f6bb6fbf961e87004bde5724f942148a95775673f65f5166588fc83a662.
+Initial assertion compared indentation and failed;corrected to exact token kind/
+text comparison,not semantic normalization. No production change. Controlled
+method evidence does NOT prove trusted event delivery,other listeners,typeahead,
+application handlers,candidate behavior or complete focused browser sequence.
+That end-to-end uncertainty remains;do not count ten method trials as ten cases.
+New bounded proof is standalone,not inserted into the frozen producer inventory.
+
 Readonly action applicability now resolved without browser recapture:86 enabled
 Select cases comprise12 static and74 interaction cases. Extracted original AND
 current performInteraction execute148 side invocations each using inert box/
