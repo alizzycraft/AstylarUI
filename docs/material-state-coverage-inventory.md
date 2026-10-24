@@ -9,6 +9,24 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+New standalone editing-context join attaches bounded evidence to56 EXACT rows:
+48 disabled contexts and eight Select focus contexts. It authenticates four
+retained reports,manifests and paired outputs,checks exact configured membership,
+and adds only supplementaryEditingContextCoverage children. Every parent remaining
+task/status survives;readonly mutation remains failure,not editing success.
+Complete removal recovers f812d8d9 byte-digest/values;duplicate application and
+corrupt report input are rejected. Existing original captures remain anchors.
+
+Owning editing-context-evidence-join.spec.mjs passes1/1,0skip,exit0,79713.0149ms,
+stderr empty. Keep editing-context-evidence-join-20261025 pair. New review digest
+043361b010508502f4c2be7b7f2b9bf21059e8f2cb71c503d91b61a29b34dadd is
+computed IN MEMORY only:no large physical proposal,canonical export,producer/
+launcher switch or status promotion. Frozen1041/365/198 remains unchanged.
+The prior eight-path standalone delta now has TWO further paths:the new join
+module and owning proof. Reconcile all ten plus requirement/plan records at a
+coherent integration milestone;do not treat this proof as full dependency-loader
+acceptance or regenerate the browser captures for metadata registration.
+
 Accumulated standalone proofs pass together:node --test --test-reporter=dot
 tests/material-parity/divider-original-crop-provenance.spec.mjs
 tests/material-parity/ordinary-wrapping-request-path.spec.mjs

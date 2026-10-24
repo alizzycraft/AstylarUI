@@ -1,5 +1,11 @@
 # Audit artifact retention
 
+Keep editing-context-evidence-join-20261025 log/stderr pair:complete in-memory
+f812 predecessor recovery and56-child evidence join proof. No198MB successor
+proposal was written. Pending standalone review digest043361b010508502f4c2be7b7f2b9bf21059e8f2cb71c503d91b61a29b34dadd
+does not replace canonical or frozen pending pointers. Existing capture outputs
+referenced by the join remain required;this log is not their replacement.
+
 Keep select-readonly-focus-contexts-unique-outputs-20261025(17 files,2446720
 bytes),its provenance and log/stderr pair. Report SHA06ff959a06ad3f85d0e9014079f4de98db904cd58039175d00187da82937d35f
 retains eight readonly mutation failures. Also preserve the three preceding
