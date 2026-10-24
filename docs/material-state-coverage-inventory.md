@@ -7,6 +7,41 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Recovered runner closes three historical endpoint replay barriers (October24)
+
+While publication/storage direction remains pending,the registered1002/326
+batch was left frozen. Reviewed existing incomplete-harness failures rather than
+rerunning the full gate. Tests36/57/130 and older component/antialias/selection
+groups already have bounded resolutions;do not restart those investigations.
+The now-recovered originale01 bytes exactly match field-popup/menu action
+receipts AND their complete extracted-function hashes;cursor dependency0f230eda
+and benchmark configa55e95ab are already byte-identical. This new applicability
+fact justifies replay of the three original endpoint assertions,not recapture.
+
+`node scripts/check-recovered-original-endpoint-proofs.mjs` now passes3/3,
+zero skips,explicit nativeExit0 in26012.2018ms. It follows the existing read-only
+historical-preload pattern and selects only the unchanged original field-popup,
+overlay-census and menu-bound tests. Only four exact virtual reads differ:
+runner bytes authenticated at e01ef9dc,plus retained maps3JXWRYJY(dba48404),
+JPEJK334(47654b64) and7SL66K3U(67e956a6). No disk path/receipt/test body is
+rewritten;all original manifest,action,geometry,input and source assertions run.
+The80 field endpoints and685-case/174-measured-popup census pass. Menu's eight
+contexts retain unequal fixed anchor/height inputs;its original three complete
+dimension-method current/installed/served comparisons and handler checks pass.
+These are retained-proof applicability results,not fresh captures,current
+whole-renderer applicability,whole-case closure or a full final-harness pass.
+
+Retain recovered-runner-original-endpoint-tests[-with-maps/-complete-maps]-
+20261024 log pairs. Initial2/3 replay exposed missing JPEJK334 path;the next
+cleared app/native maps and reached missing3JXWRYJY before later assertions.
+Both are preserved failures,not renderer diagnoses. All three original maps
+already existed with exact manifest hashes;no map search/rebuild/copy was needed.
+Final stdout SHA2569906e2c9b82317fef44af5e0cbcd54a76ae735b54c64d3edb49329e21b510aa9;
+stderr empty. New narrow launcher is standalone pending later source/proof
+registration;it does not expand/change the frozen owner/frame batch or accepted
+88be package. Direct unpreloaded historical-path failures remain historical;
+complete final-gate integration is still required. No Git-internal action taken.
+
 ### Publication/storage prerequisites rechecked (October24)
 
 Fresh ls-remote confirms remote branch remains645c99b841a1589119e0f2f644b60d8c7c97a9ee.
