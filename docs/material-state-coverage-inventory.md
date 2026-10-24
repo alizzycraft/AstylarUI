@@ -9,6 +9,24 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Exact configured-scope guard now prevents supplementary AX coverage inflation.
+Menu inventory is12 static +80 materialInteractionCases +2 separately exported
+materialMobileFlowCases =94. The latter are light/dark mobile-dpr2/open-dismiss
+flows with three cycles in the owning runner,NOT additional ordinary open rows.
+Both new AX report populations match the EXACT eight configured desktop open
+keys;neither matches either mobile flow. Supplementary Escape records preserve
+the original open case label and do not certify configured dismissal cycles.
+No denominator inferred from only materialInteractionCases is valid for the
+whole Menu family. Recorded AX8-open-context coverage is not whole-case coverage.
+
+Existing suite passes6/6,nativeExit0;keep menu-semantic-configured-scope-proof-
+20261024 log pair. This closes a scope-accounting ambiguity,not the mobile
+evidence gap. Any next mobile AX collection should reuse the existing actual
+mobile boundary/cycle producer and its explicit theme setup,not relabel desktop
+open actions or add fake mobile open IDs. Other desktop states/static cases
+also remain outside these bounded actual-popup AX reports. Original94-case
+DOM target census and all2311 partial/current-unverified dispositions preserve.
+
 Pending machine-readable source findings now distinguish two semantic authoring
 causes from the existing Menu activation/navigation finding:
 `fixture-menu-popup-programmatic-focusability-omitted` and

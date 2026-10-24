@@ -5,6 +5,7 @@ import test from 'node:test';
 import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
 import { menuPopupSemanticInputFindings } from './menu-popup-semantic-input-findings.mjs';
+import { materialStaticCases, materialInteractionCases, materialMobileFlowCases } from './benchmark.config.mjs';
 
 const file = 'artifacts/material-parity/menu-popup-ax-20261024/latest-report.json';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -116,5 +117,22 @@ test('pending Menu semantic input findings retain distinct first divergences and
     assert.equal(finding.file, 'examples/material-showcase/src/app/astylar.component.ts');
     assert.ok(finding.owner && finding.observation.stage && finding.justification && finding.boundary);
     for (const receipt of finding.evidence) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  }
+});
+
+test('Menu AX context coverage binds only eight configured desktop open cases, not mobile flows or all ninety-four cases', () => {
+  const staticCases = materialStaticCases.filter(c => c.family === 'menu');
+  const interactions = materialInteractionCases.filter(c => c.family === 'menu');
+  const mobile = materialMobileFlowCases.filter(c => c.family === 'menu');
+  assert.equal(staticCases.length, 12); assert.equal(interactions.length, 80); assert.equal(mobile.length, 2);
+  assert.deepEqual(mobile.map(c => [c.profile, c.viewport.id, c.state]),
+    [['light', 'mobile-dpr2', 'open-dismiss'], ['dark', 'mobile-dpr2', 'open-dismiss']]);
+  const key = c => `interaction:${c.family}@${c.profile}/${c.viewport.id}/${c.state}`;
+  const expected = interactions.filter(c => c.state === 'open').map(key).sort();
+  assert.equal(expected.length, 8);
+  for (const reportFile of ['menu-popup-ax-contexts-retry-20261024', 'menu-dismissal-ax-retry-20261024']) {
+    const report = JSON.parse(readFileSync(`artifacts/material-parity/${reportFile}/latest-report.json`));
+    assert.deepEqual(report.results.map(key).sort(), expected);
+    assert.ok(report.results.every(c => !mobile.map(key).includes(key(c))));
   }
 });
