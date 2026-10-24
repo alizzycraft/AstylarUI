@@ -9,6 +9,38 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Exact-case closure review(static:divider@light/desktop) finds3 existing inspected
+authored exclusions and5 still-partial applicable obligations. Schema2 still
+requires a receipt-bound requirement review and every applicable obligation
+inspected/inspected-failure with no outstanding tasks;this review promotes none.
+The authenticated c394 parent plus recentf812 parent-conservation/full-loader
+evidence permits gap inspection without reconstructing another200MB proposal.
+
+One old localPaint marker is stale as a SOURCE availability statement:recovered
+96666 original runner bytes hash exactly toe01ef9dc and match both the original
+capture harness receipt and storedTextRasters.evidence.cropProducer.recordedSha256.
+Complete compareTextAlignment/writeAlignmentArtifacts/cropPng functions are now
+available. Both images are cropped using native expectedBox,4CSSpx padding and
+floor/ceil/clamp bounds. This authenticates producer source,NOT original input
+rectangle or paint causality. Original geometry.elements records root/separator,
+not Above/Below text boxes;style-input structure records have no box coordinates.
+Do not synthesize authoritative original bounds from dimensions/current layout.
+
+Keep divider-exact-case-closure-gaps-20261025 initial failure pair(wrong nested
+evidence path),and corrected divider-exact-case-closure-gaps-correct-evidence-path-
+20261025 pair,nativeExit0/stderr empty,stdout SHA256
+9ca42ad929bfa0a16258c0968accdb73deb692c9e121019a78da009b502c4355.
+Correct report preserves all8 obligation statuses/remaining tasks and separates
+source availability,original crop parameters,material/anonymous owner coverage,
+runtime/lifetime and unchanged final gates. No inspection percentage or closure
+is inferred from the many nested diagnostic passes.
+
+Next smallest decisive check:verify stored crop pixel provenance against ORIGINAL
+full screenshots,keeping pixel containment distinct from unrecoverable fractional
+layout parameters. No fresh browser can retroactively supply those parameters;
+do not repeat source recovery or broad captures for that question. Live1041/365/
+198,pendingf812d8d9 and accepted88be4d47 remain unchanged.
+
 Shaping-context census reuses existing core-canvas-default-shaping-differs-from-
 css-text instead of inventing a duplicate or generalizing its cause. Across24
 retained Divider cases,168 mapped pairs comprise96 actual own-text pairs and72
