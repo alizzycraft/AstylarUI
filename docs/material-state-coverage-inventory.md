@@ -7,6 +7,67 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Candidate88be export/conservation complete; cold gate next (October24)
+
+Frozen source d12135a8 produced candidate88be4d476ddfeeb0c27fa8de21f943171aeac1553aeed2df135494e3b644d9a1:
+94801920 compressed/2352207798 decoded bytes,decoded SHA
+bd3105d1084caf38d1c725db531539874a8b989a9d1524eb53d0bc7383443864.
+Producer reached complete in2948471.7128ms without validation errors,rehashing
+18759 files/3341455335 bytes (1 collector,10 memory hits,1 disk hit,0 invalidations).
+Outer shell reported1:an explicit Node exit0/stderr probe reproduces shell1 with
+nativeExit0. Original native exit was not separately recorded;do not claim a
+direct terminal0 receipt for that launch. Subsequent commands record native exit.
+Export stdoutSHA1b01f759b7a841e77c4b785449ed7ba172ed824c4ddf066f2ce7649bdb244c8e;
+stderrSHAa8ed5c37f828f64b10b6a18729ca37c11b4f987539d8de5e7002acbfe642ac42.
+
+Existing whole-section comparison native0 authenticates both packages:80 sections,
+70 identical/10 changed,no additions/removals;log divider-paint-section-conservation-
+20261024 SHA b093d4ff42998231b2f5417674cc4dc93e83b353ffce0d6adc5c536e35ee1968.
+All ten changes are now explained and conserved:
+
+- Source/proof inventories:990/319 versus962/285,28/34 additions,no removals;
+  all285 prior non-line proof fields preserve,eight changed old source files
+  recover complete predecessors. Actual canonical vectors equal fresh pure
+  producer collectors. The inventory contract hashes CRLF-normalized UTF8 TEXT,
+  separately from raw-byte evidence receipts. All192 prior complete source
+  findings are identical;only fixture-slider-state-layer-composition adds.
+- Coverage:all2311 cases conserve through exact bounded joins;all17549 prior
+  receipts preserve and13 add. Other coverage,case flags,remaining tasks and
+  original source-applicability predecessor preserve. Summary changes only
+  sourceFindings192 to193. Legacy schema1 is implicit,not explicit version1.
+- Five fixed-shape sections:14085648 entries preserve membership/shape and all
+  observations/classifications. Exactly147 provenance leaves change:98 module
+  hashes,48 dependent control hashes and one motion-report hash. Whole producer
+  restoration6e7f0d6d to4d6fe33d authenticates the module transition. Complete49-row
+  evidence independently derives48 proof hashes and retains unaffected proofs.
+  Four-source receipt substitution in the pinned motion report reproduces BOTH
+  021e4ab8 and04708cb6 hashes without rerunning7254 unchanged observations.
+
+Conservation log SHA256 receipts (all native0,empty stderr for corrected checks):
+coverage-metadata-conservation-corrected3e44606e92d74273dd04f636f776ded2e9253d0862c9569b9e47f27f474dab20;
+fixed-section-leaves b76050a45ccb795db459cc2ab9db795b8fca944b927737c08aa39ae079476de7;
+motion-report-hash-derivation877ed457b6ae137513c38fd9675fa168424bff9b8178789e7bbee6f42edfda3e;
+dependent-control-receipts-corrected d6fc41f4054fe8d66e8fa2d3abfd45913d928d5e8e64fe93d5a540da40a39d0d;
+source-proof-canonical-conservation-corrected26042252205c8ac82deb2dfa1b3cbbef99953b180e8aff3eb8ca5b2d37fec92d.
+All names have divider-paint- prefix and -20261024.log suffix. Initial diagnostic
+query failures (schema reconstruction,raw-vs-text fingerprint,and mapping untouched
+proofs) remain retained;they are not passing checks or renderer failures.
+
+Existing isolated import native0 yields indexb185409b835f06fea84663ddeae0f0f4359b93b76a9186715095f4fa5dfff892,
+8483 discrepancies/193 findings/39904 controls/389202 occurrences/0 unresolved.
+Closed231611094-byte index LZX-compressed to44871680 physical bytes;complete
+index hash and existing full-store verification agree before/after. Required
+selected metadata and49-row working extracts likewise compressed with complete
+hash equality,not deleted. Prior package snapshot uses a verified hard link to
+the accepted immutable payload,not another92MB copy. Accepted main pointer stays
+a659/6d77;no cold gate,accepted import or remote publication claimed yet.
+
+This ledger is in neither the990 source paths nor17562 case receipts,explicitly
+checked before documentation update. Keep all frozen source/evidence bytes intact
+for one independent --divider-computed-paint --check with ASTYLAR_AUDIT_COLD=1,
+recording the actual native exit. All2311 cases remain partial/current rendering
+unverified and every original final acceptance gate remains mandatory.
+
 ### Coherent Divider paint inventory/export integration verified (October24)
 
 Actual producer now registers990 source paths/319 proofs (six/five additions to
