@@ -7,6 +7,43 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Exact Divider closure-readiness review (October24, after local publication)
+
+Question: is `static:divider@light/desktop` incomplete only because schema1
+forces partial status, or are there substantive inspection gaps? The latter.
+The accepted b185409b index authenticates; a read-only SHA256 check of15 unique
+report/verification receipts in the selected children below passes (native0).
+This is a requirement review,not another capture or a full dependency replay.
+
+- Do not repeat completed lifecycle work: `historyOwnership.actualDividerPublicRemount`
+  and `actualAngularComponentLifetime` already evidence three remounts and actual
+  Angular destruction,retired-resource cleanup and passive-peer survival. The
+  latter report is c4085cff905e8aed82ded6a30e2e96b92ddaabbfd9103d57d62f75d7a7888790;
+  independent verifier dfd344840505861cd7b59679be44b98c9c017123cca0aaccee0d5d56119f6a8f.
+  They explicitly exclude late font/media cancellation and interactive-peer
+  callbacks. Whether those exclusions are applicable here still needs a specific
+  source/input-based decision;an exclusion is not proof of failure or equivalence.
+- Paint-context evidence closes the recorded DOM-property blind spot,not the
+  remaining candidate logical-material/shader/group-compositing question.
+  `localPaint.retainedDOMPaintContext` and `actualNativeCanvasGeneration` retain
+  that boundary. Native transparent-canvas differences arise before Babylon;
+  repeating sampler/texture or opaque-versus-transparent controls would not
+  answer the remaining question. Existing failing paint evidence remains valid
+  within its recorded context,not a complete owner-by-owner attribution.
+- `sourceCurrentness.freshCurrentBrowserDividerCapture` records a passing broad
+  row but explicitly not equal inputs/local paint/full current-core applicability.
+  Report4be5d06fb652e9fbdc754ec14adfbe312eebe8b6e1df8a1b5e3f72d607dc10cc and
+  verification7cdcc629d7ec8bbbdf8acda0cb509847c4c6454ebd03a57015f0169d8090fcd3
+  authenticate. The four `newerMappedRuntimeApplicability` logs also authenticate;
+  mapped member correspondence does not establish execution/environment equivalence.
+
+Next resolve the finite `inputStyleStructure` owner/property and anonymous-line-box
+gap first,using its existing retained-property/public-line-box proofs. Then scope
+the still-unknown paint mechanism and lifecycle applicability against those inputs.
+Defer current-code final gates to the coherent milestone;do not use them as an
+excuse to repeat settled historical work. No remaining item,case status,criterion,
+canonical pointer or rendering acceptance was changed by this readiness review.
+
 ### Cold verification and local accepted publication complete (October24)
 
 Independent --divider-computed-paint --check,ASTYLAR_AUDIT_COLD=1 completed with
