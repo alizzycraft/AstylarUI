@@ -1,0 +1,25 @@
+{
+  "kind": "historical-runner-source-patch-evidence",
+  "transcript": "C:/Users/solar/.codex/sessions/2026/08/23/rollout-2026-08-23T02-35-12-01a02c0a-fd0d-7ee3-a4f8-712adc30dc7f.jsonl",
+  "targetFile": "tests/material-parity/run-material-parity.mjs",
+  "targetRawSha256": "e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0",
+  "boundary": "Exact tool-call patch strings,not recovered raw runner bytes. Source transcript is external and not copied.",
+  "patches": [
+    {
+      "timestamp": "2026-09-30T19:38:54.002Z",
+      "byteOffset": 3921191603,
+      "recordSha256": "7111fa39e33265bfc24dc01ae635334d52a236f010b6a3644a5c9ff5e50f87df",
+      "toolInputSha256": "0db14a6bc73167f7f1b9bfbde476f5d05b8e6c613cc28215fb5f32d1ea8d6906",
+      "patchSha256": "1ea993304fbff69dd00ea045b4175b4b4420db9413799dc01b747ed895680fcb",
+      "patch": "*** Begin Patch\n*** Update File: D:/dev/github/AstylarUI-audit-integration/tests/material-parity/run-material-parity.mjs\n@@\n-import { fingerprintDirectory, fingerprintModuleGraph, materialCaseKey, openMaterialCheckpoint } from './run-checkpoint.mjs';\n+import { fingerprintDirectory, fingerprintModuleGraph, materialBrowserLaunchOptions, inspectMaterialBrowserLaunch, materialCaseKey, openMaterialCheckpoint } from './run-checkpoint.mjs';\n@@\n let browser;\n let server;\n+const browserLaunchOptions = materialBrowserLaunchOptions(process.env['ASTYLAR_MATERIAL_BROWSER_CHANNEL'] ?? 'chrome');\n@@\n     browser: await browser.version(), platform: process.platform, architecture: process.arch, node: process.version,\n+    browserLaunch: await inspectMaterialBrowserLaunch(browser, browserLaunchOptions),\n@@\n async function launchBrowser() {\n-  return chromium.launch({\n-    channel: process.env['ASTYLAR_MATERIAL_BROWSER_CHANNEL'] ?? 'chrome',\n-    headless: true,\n-  });\n+  const launched = await chromium.launch(browserLaunchOptions);\n+  try {\n+    await inspectMaterialBrowserLaunch(launched, browserLaunchOptions);\n+    return launched;\n+  } catch (error) {\n+    await launched.close();\n+    throw error;\n+  }\n }\n*** End Patch"
+    },
+    {
+      "timestamp": "2026-09-30T19:42:57.699Z",
+      "byteOffset": 3921331011,
+      "recordSha256": "1e6caffa1f8afdb8e02fa90fa05e80448b9200841f206c0fba5ee628c9a12089",
+      "toolInputSha256": "f1c33c971f84cac561b6ab2a1ef69e0f63fa45dd2365de987dd177ab41e5d760",
+      "patchSha256": "53a6502f01e9e0bc6ad8c1debf2760b5ce775ba63fb70ecb6858d09628718ada",
+      "patch": "*** Begin Patch\n*** Update File: D:/dev/github/AstylarUI-audit-integration/tests/material-parity/run-material-parity.mjs\n@@\n let browser;\n let server;\n+let browserLaunchEvidence;\n@@\n-    browserLaunch: await inspectMaterialBrowserLaunch(browser, browserLaunchOptions),\n+    browserLaunch: browserLaunchEvidence,\n@@\n   const summary = summarize(results);\n   const interactionSummary = summarizeInteractions(interactions);\n+  assert.deepEqual(await inspectMaterialBrowserLaunch(browser, browserLaunchOptions), browserLaunchEvidence,\n+    'Material browser launch dependencies changed during capture.');\n@@\n   const launched = await chromium.launch(browserLaunchOptions);\n   try {\n-    await inspectMaterialBrowserLaunch(launched, browserLaunchOptions);\n+    const evidence = await inspectMaterialBrowserLaunch(launched, browserLaunchOptions);\n+    if (browserLaunchEvidence) assert.deepEqual(evidence, browserLaunchEvidence,\n+      'Material browser restart changed launch evidence.');\n+    else browserLaunchEvidence = evidence;\n*** End Patch"
+    }
+  ]
+}

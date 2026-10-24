@@ -7,6 +7,42 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Original runner provenance:new local transcript route — October24
+
+Divider closure readiness was checked against actual c394 obligations,not inferred
+from three passive exclusions:anonymous material/line-box mapping,remaining owner
+paint/compositing,late completion and currentness still remain. No case promoted.
+
+New source for missing e01 provenance:original local rollout exists at
+C:/Users/solar/.codex/sessions/2026/08/23/rollout-2026-08-23T02-35-12-01a02c0a-fd0d-7ee3-a4f8-712adc30dc7f.jsonl
+(6042329564 bytes at inspection). Unlike imported message-only pages,it retains
+full tool inputs/results. Read bounded byte slices,not a transcript copy or an
+unbounded dump. First target-hash record begins3921614166,September30T19:50:00Z;
+it identifies current runner e01 and older capture d0ded55f. This establishes e01
+already existed September30,not only at the October4 launch anchor. A hash
+mention is not source-byte recovery.
+
+Preserved ONLY the two exact September30 runner apply_patch strings plus record/
+tool-input hashes/timestamps/byte offsets in
+docs/evidence/material-original-runner-launch-patches.json,SHA
+10b79b3f6287c6810540d3a42eeb3e2ccfbb06646d2f79a93a880e133ea7b552.
+Patch records3921191603/3921331011 at19:38:54/19:42:57 add launch provenance.
+Both patch hashes verify. Reversing them from known normalized33c5a4b3 recovers
+complete prelaunch4ed6abe8 (git b39e85d8);applying them restores33c5a4b3. Eight
+bounded LF/CRLF/context-ending hypotheses do NOT match e01;no candidate saved
+or old receipt repinned. Raw byte-format history remains unresolved.
+
+Branch reflog locates creation67db724e September20T12:01:55+02. Runner content
+changes before launch are9a0bd473,e534c820,b39e85d8 onSeptember28;their normalized
+hashes f0a473d8/fcf3b0c6/4ed6abe8 differ from the older c3cabcf baseline. Uniform
+CRLF baseline958a7452 is not the older captured d0 hash;current autocrlf=true and
+absence of .gitattributes at creation do not prove original working bytes. Next
+decisive recovery check must inspect exact September28 tool patches and an
+authenticated mixed-ending predecessor,not repeat whole-file LF/CRLF guesses or
+the imported-history search. Original6GB transcript stays external,not copied.
+Frozen sources,canonical pointers,focus-proof uncertainty and all case statuses
+remain unchanged. No raw e01 source recovery is claimed yet.
+
 October24 caret native font identity gap narrowed without rebuild or PNG recapture:
 scripts/inspect-public-caret-fonts.mjs serves the two exact retained public bundles
 by authenticated hash,performs original placeholder-keyboard Tab/settlement and
