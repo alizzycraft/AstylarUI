@@ -9,6 +9,32 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Next outside-owner wrapping question now has retained declaration/context triage,
+not another parser/browser run. All120 mapped owner pairs across24 cases traverse
+264 native and384 candidate ancestor visits. Native whiteSpace/overflowWrap/
+wordBreak compute normal and textOverflow clip throughout captured paths;
+candidate terminal declarations omit all four. Existing conservative selector
+predicate finds NO potentially applicable request,alias/reset or motion conflict
+in captured stages/rules/inline objects for those paths. Follow-up raw inline-
+attribute check excludes unparsed wrapping/reset/motion declarations too.
+
+Keep divider-outside-owner-wrapping-context-20261025 log pair,nativeExit0,
+stderr empty,stdout SHA256
+a3ad217d7c02d3420bff3f271af3cac049354413fce3417b545c44ba11b7f6fc.
+All120 rows are captured-default-versus-local-omission with computedCandidateVerified
+false/renderingEquivalent false;follow-up partition/absence/raw-attribute
+assertions pass. Source tree receipts and selector-helper receipt are retained.
+These are visits/field observations,not new case inspection completion counts.
+
+Existing registered ordinary-text parser proof already executes omission/normal
+and pre/break-word/ellipsis sensitivities;do not repeat it. It does NOT establish
+wordBreak/overflowWrap output support,installed call-path,external inheritance,
+used wrapping or raster. Thus no conflicting authored wrapping input is found
+for these owners,but general computed/default/behavior equivalence is still NOT
+certified. Next bind the relevant actual installed parser/render request path
+using retained source receipts before any new wrapping layout capture. Live
+1041/365/198 and pendingf812d8d9/canonical88be4d47 remain unchanged.
+
 Owner-context batch is now LIVE REGISTERED locally at1041 sources/365 proofs/
 198 definitions. Exact prepared additions applied to producer/policy/launcher/
 runner;CLI --divider-owner-context selects f812d8d9. All1028 prior sources,353
