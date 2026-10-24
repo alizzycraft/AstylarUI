@@ -7,6 +7,25 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+October24 snackbar live-policy ownership is an application authoring difference,
+not an observed core default:retained app owner71e2d41f explicitly supplies
+status/polite/ariaAtomic=true;retained bridge590d49a2 conditionally copies authored
+ariaAtomic into DOM. Exact served JS and source-map receipts authenticate both
+owners against the post-delay capture manifest. Native retained owner418aa2d9
+implements the separate150ms hidden-to-live transfer. Git -S and original
+2f440115 source place the explicit status/atomic declaration in the initial
+August23 showcase,not a later compensation fix. Do not change the core to
+force non-atomic behavior against explicit authored intent. This does not prove
+the full two live-region strategies technically equivalent or their AT speech
+different;those remain separate claims. Future parity work should align the
+intended authored announcement contract before diagnosing equal-input core faults.
+Focused tests/material-parity/snackbar-live-policy.spec.mjs passes2/2,zero skips,
+751.1543ms:positive paired post-delay UNDO AX,unequal live atomic policies,and
+exact served/map-owner attribution. No new capture needed. It is standalone,
+pending coherent registration alongside the new diagnostic;accepted a659 and
+frozen c394 registration/2311 partial cases remain unchanged. Original capture
+source e01 is still missing and not recovered by this retained-build observation.
+
 October24 post-delay snackbar AX boundary answers transient-versus-persistent
 UNDO exposure:existing standalone diagnostic now accepts explicit
 --after-announcement,adding300ms equally on both sides after normal settlement;
