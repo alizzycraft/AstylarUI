@@ -9,6 +9,17 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Persistent focused regression now passes1/1,zero skips,nativeExit0:
+`node --max-old-space-size=8192 --test tests/material-parity/menu-composite-evidence.spec.mjs`.
+It pins the exact successor,proves predecessor nonmutation/full recovery and
+eight-case-only scope,checks both sides'7/11/7 boundaries,and rejects forged
+report/theme witnesses plus duplicate application. This reuses the existing
+virtual predecessor and does not repeat the18157-dependency gate or captures.
+Retain menu-composite-focused-proof-20261024 log pair;stdout SHA256
+df89970a63210e025d4f84ea63b78daf686dae6a44187143225a260e21b64535,
+stderr empty,total53657.4368ms. Test remains standalone pending later coherent
+source/proof registration;no frozen producer or acceptance status changed.
+
 The existing four Menu action reports are now joined to the eight matching
 desktop open-hover-content case records by the standalone
 `scripts/join-material-menu-composite-evidence.mjs`. This closes a bookkeeping
