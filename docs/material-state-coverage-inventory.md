@@ -9,6 +9,34 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Coherent outside-owner context successor is now
+f812d8d9e169b51afd03ae43ea06f8b8ac69e6df5147f11589112919c6ef7083.
+It consolidates retained ink/complete property triage/block request rows with
+the existing border/clip/margin/typography evidence,plus scoped four-theme
+desktop-DPR1 cursor observations and two general public alignment findings.
+Earlier e0e4a2a9 remains a historical standalone draft,not canonical. Removing
+the same24 additive children recovers exact d00beaa8;all parent gaps/statuses
+and2311 partial/current-unverified cases conserve. No physical proposal saved.
+
+Eight desktop/static-or-inspect aliases receive four actual physical cursor
+contexts,not eight captures or mobile/DPR2 coverage. Public explicit-center
+failure is expressly NOT attributed to the original Material case. Other
+unreviewed fields,used-flow behavior,glyph/raster/currentness/lifetime and final
+gates remain. Complete captured public bundle input receipts are retained in
+the join alongside pending finding/source-binding/causal/history dependencies.
+Nine standalone next-batch source paths now exist outside frozen1028/353/196;
+two additional core definitions remain pending,not registered/accepted findings.
+
+Existing full loader passes2311 cases/18289 authenticated dependencies with
+inspectionComplete false,currentRenderingAccepted false. Owning conservation/
+tamper test passes1/1,0skip,107273.3948ms,nativeExit0,stderr empty. Keep
+divider-owner-context-consolidation-20261025 log pair,stdout SHA256
+c6e81e9870c8ce3fb9159a18efafc3b5f3f4c8d70240e99fe9aa0994e46aba71.
+No recapture or canonical generation. Next reconcile this coherent standalone
+source/proof/finding batch through existing registration mechanisms;do not redo
+settled probes or full dependency replay after ledger-only edits. Accepted
+88be4d47 remains unchanged and publication transport/headroom blocker persists.
+
 Explicit block-center failure now has targeted causal EXECUTION evidence before
 projection,not source-name inference. Actual current and captured-installed
 layoutBlockChildren plus ten real margin/flow/constraint helpers execute for

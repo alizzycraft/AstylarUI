@@ -15,19 +15,26 @@ test('outside-scalar Divider owner evidence joins only exact property/context re
   assert.equal(joined.review.groups.length,2311);assert.equal(joined.cases,24);assert.equal(joined.physicalAliases,8);
   assert.equal(hash(predecessor),menuSelectDisabledReview);assert.equal(hash(restoreDividerOutsideOwnerEvidence(joined.review)),menuSelectDisabledReview);
   let changed=0;
+  let cursorAliases=0;
   joined.review.groups.forEach((group,index)=>{
     assert.equal(group.inspection,'partial');assert.equal(group.currentRendering,'unverified');
     if(group===predecessor.groups[index])return;changed++;assert.equal(group.family,'divider');
     const child=group.obligations.inputStyleStructure.boundedOutsideScalarOwnerInputs;
     assert.equal(child.marginInputs.wrappers.length,2);assert.equal(child.retainedLeafTypography.length,2);
     assert.equal(child.marginInputs.title.fontSize,'32px');assert.equal(child.remainingDomains.length,4);
+    assert.equal(child.retainedInkContext.case,group.case);assert.equal(child.propertyTriage.rows.length,5);
+    assert.equal(child.blockAlignmentContext.rows.length,5);assert.equal(child.blockAlignmentContext.generalPublicFindings.length,2);
+    assert.match(child.blockAlignmentContext.boundary,/NOT an observed center failure/);
+    if(child.ownerCursorPoints){cursorAliases++;assert.equal(child.ownerCursorPoints.observations.length,2);for(const row of child.ownerCursorPoints.observations)assert.equal(row.points.length,5);}
     assert.ok(child.marginInputs.wrappers.every(r=>r.inputEquivalent===false));
     const remaining={...group.obligations.inputStyleStructure};delete remaining.boundedOutsideScalarOwnerInputs;
     assert.deepEqual(remaining,predecessor.groups[index].obligations.inputStyleStructure);
-  });assert.equal(changed,24);
+  });assert.equal(changed,24);assert.equal(cursorAliases,8);
   assert.throws(()=>joinDividerOutsideOwnerEvidence(joined.review));
   assert.throws(()=>joinDividerOutsideOwnerEvidence(predecessor,file=>file.endsWith('divider-outside-owner-border-attribution-20261025.log')?Buffer.from('forged'):readFileSync(file)));
   assert.throws(()=>joinDividerOutsideOwnerEvidence(predecessor,file=>file.endsWith('divider-wrapper-leaf-typography-inputs-20261025.log')?Buffer.from('forged'):readFileSync(file)));
+  assert.throws(()=>joinDividerOutsideOwnerEvidence(predecessor,file=>file.endsWith('divider-owner-block-alignment-context-20261025.log')?Buffer.from('forged'):readFileSync(file)));
+  assert.throws(()=>joinDividerOutsideOwnerEvidence(predecessor,file=>file.endsWith('divider-owner-cursors-20261025.log')?Buffer.from('forged'):readFileSync(file)));
   const file=`artifacts/material-parity/working-audit/proposals/${joined.sha256}.json`;
   const bytes=Buffer.from(JSON.stringify({status:'proposal-not-canonical',sha256:joined.sha256,review:joined.review}));
   const read=(name,options)=>{
