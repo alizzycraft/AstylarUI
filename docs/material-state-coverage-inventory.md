@@ -7,6 +7,27 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Reusable exact derived-review reader verified (October24)
+
+original-material-runner-review-source.mjs extracts the previously tested virtual
+7dfee proposal into a reusable factory. It authenticates the complete saved c394
+through its existing reader,regenerates the exact bounded recovered-source join,
+requires the pinned successor digest,and delegates all non-proposal reads to
+the historical reader. Only the exact derived proposal path is virtualized;
+this is not fallback permission for arbitrary missing/stale evidence. Buffer
+reads (including empty options/null encoding) preserve readFileSync semantics.
+
+Existing complete case/dependency test now uses this factory:1/1,zero skips,
+46850.4297ms,empty stderr;original-runner-reusable-reader-20261024.log retains
+the result. All2311 cases/17555 dependencies validate,9016 recovered-source
+conditions remain bounded,and wrong review digest rejects. No duplicate200MB
+proposal saved,no pointer/export routing changed. Observed D:free522141696 bytes
+before this step supports avoiding unnecessary copies,not a claim that canonical
+publication has sufficient headroom. New reader path still needs registration
+in the next coherent routing/inventory increment;983/314 remains the installed
+inventory,not proof that every new path is already registered. Preserve all
+partial/current-unverified dispositions and original final gates.
+
 ### Pending evidence inventory cutover verified (October24)
 
 Actual producer now registers983 source paths/314 focused proofs,adding15/21

@@ -5,7 +5,7 @@ import test from 'node:test';
 import path from 'node:path';
 import { joinOriginalRunnerSource, restoreMissingOriginalRunner, originalRunnerPredecessor } from '../../scripts/join-material-original-runner-source.mjs';
 import { loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
-import { createSliderStateInputReviewReader } from './slider-state-input-review-source.mjs';
+import { createOriginalRunnerReviewReader, originalRunnerReview } from './original-material-runner-review-source.mjs';
 
 const hash = b => createHash('sha256').update(b).digest('hex');
 const bytes = readFileSync(`artifacts/material-parity/working-audit/proposals/${originalRunnerPredecessor}.json`);
@@ -28,17 +28,14 @@ test('corrupt encoded original source cannot reconcile a valid predecessor or mu
 
 test('original source successor validates through the existing complete case/dependency reader without a duplicate proposal', () => {
   const root = process.cwd();
-  const prior = createSliderStateInputReviewReader({ root, read: readFileSync, reviewSha256: originalRunnerPredecessor });
-  const result = joinOriginalRunnerSource(predecessor);
-  const reviewFile = `artifacts/material-parity/working-audit/proposals/${result.sha256}.json`;
+  const reader = createOriginalRunnerReviewReader({ root, read: readFileSync, reviewSha256: originalRunnerReview });
+  const reviewFile = `artifacts/material-parity/working-audit/proposals/${originalRunnerReview}.json`;
   assert.equal(path.isAbsolute(reviewFile), false);
-  const virtualFile = path.resolve(root, reviewFile);
-  const virtualBytes = Buffer.from(JSON.stringify({ status: 'proposal-not-canonical', sha256: result.sha256, review: result.review }));
-  const read = (file, options) => {
-    if (path.resolve(file) !== virtualFile) return prior.read(file, options);
-    return options ? virtualBytes.toString(typeof options === 'string' ? options : options.encoding ?? 'utf8') : virtualBytes;
-  };
-  const loaded = loadCaseObligationReview(reviewFile, result.sha256, predecessor.groups.map(g => g.case), { root, read });
+  assert.ok(Buffer.isBuffer(reader.read(reviewFile, {})));
+  assert.ok(Buffer.isBuffer(reader.read(reviewFile, { encoding: null })));
+  const loaded = loadCaseObligationReview(reviewFile, originalRunnerReview, predecessor.groups.map(g => g.case), { root, read: reader.read });
   assert.equal(loaded.cases.length, 2311); assert.equal(loaded.evidenceFingerprints.length, 17555);
   assert.ok(loaded.cases.every(g => g.inspection === 'partial' && g.currentRendering === 'unverified'));
+  assert.equal(reader.sourceApplicability.sourceConditionsReconciled, 9016);
+  assert.throws(() => createOriginalRunnerReviewReader({ root, read: readFileSync, reviewSha256: '0'.repeat(64) }));
 });
