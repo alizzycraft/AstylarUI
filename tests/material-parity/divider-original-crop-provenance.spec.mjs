@@ -81,6 +81,19 @@ test('Exact Divider requirement review reconciles crop provenance without cleari
     assert.equal(hash(readFileSync(paint.separatorPaintAttribution.evidence.file)),paint.separatorPaintAttribution.evidence.sha256);
   };
   validate(review);
+  const currentness=parent.obligations.sourceCurrentness;
+  let receiptCount=0;
+  const authenticate=value=>{
+    if(!value||typeof value!=='object')return;
+    if(value.file&&value.sha256){assert.equal(hash(readFileSync(value.file)),value.sha256);receiptCount++;}
+    else for(const child of Object.values(value))authenticate(child);
+  };
+  for(const name of ['retainedMatchingDividerCapture','newerMappedRuntimeApplicability','freshCurrentBrowserDividerCapture'])authenticate(currentness[name].evidence);
+  assert.equal(receiptCount,29);
+  assert.equal(currentness.retainedMatchingDividerCapture.matchingServedFiles,1887);
+  assert.equal(currentness.newerMappedRuntimeApplicability.modules,88);
+  assert.equal(currentness.freshCurrentBrowserDividerCapture.aggregateAcceptance,false);
+  assert.match(review.requirements.sourceCurrentness.conclusion,/do not establish current execution/);
   const promoted=structuredClone(review);promoted.inspection='complete';assert.throws(()=>validate(promoted));
   const cleared=structuredClone(review);cleared.requirements.localPaint.remaining=[];assert.throws(()=>validate(cleared));
   const rewritten=structuredClone(review);rewritten.requirements.historyOwnership.remaining=[];assert.throws(()=>validate(rewritten));

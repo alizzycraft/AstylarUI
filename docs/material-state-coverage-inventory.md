@@ -9,6 +9,18 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Source-currentness requirement reconciliation authenticates29 unchanged nested
+receipts across the retained matching Divider capture,mapped-runtime applicability
+and fresh configured-case capture. The earlier no-matching-capture summary is
+historical,not evidence that these later captures are absent. Matching1887 served
+files and88 mapped modules establish only their recorded correspondence;the fresh
+capture's aggregateAcceptance remains false. Small exact-case conclusion now
+states this distinction without clearing any remaining requirement or promoting
+current rendering. No capture,build,canonical export or renderer change performed.
+Verification:node --test tests/material-parity/divider-original-crop-provenance.spec.mjs
+passes5/5,0skip,exit0,9003.2881ms. Existing requirement check authenticates the29
+receipts and rejects loss of remaining work;no additional test framework added.
+
 Lifetime requirement review now reuses existing stronger evidence,not resource
 counts alone:public light/desktop-DPR1 remount capture has3 remounts/14 boundaries,
 10 authored node records/293 identical rules and passive-peer survival. Actual
