@@ -9,6 +9,24 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Retained Divider frame/leaf ink question is now resolved for24 cases/48
+authenticated trees:all24 frame color requests and48 retained leaf colors match
+the native values through the existing canonicalStyle normalizer,including dark
+theme. Sparse leaf declaration-stage color is omitted,not proof of missing
+inherited ink. Exact title/eyebrow paths reuse48 accepted reviewed-heading-mask
+records and complete-row receipts;their unequal masking inputs remain explicit.
+No new color-core defect is demonstrated and no wrapper computed value is
+synthesized from sparse declarations.
+
+Keep divider-frame-ink-context-20261025 log pair,stdout SHA256
+878d02a1538794e4f0d6b71a9502f7892d2d162d9c549816a7f998245eb59342,
+stderr empty. Resumed read-only assertions confirm24/48/24/48/48 populations,
+24 exact rows and empty stderr,nativeExit0. This is retained request/stage
+context only,not intermediate paint behavior,current rendering or case closure.
+Accepted88be4d47 and pending e0e4a2a9 remain unchanged;no capture/export rerun.
+Next review remaining owner-property obligations against existing findings,
+prioritizing a demonstrated gap over repeating matching color/font requests.
+
 Consolidated pending e0e4a2a9 review now passes EXISTING full case-obligation
 dependency loader:2311 cases/18280 authenticated dependencies,inspectionComplete
 false,currentRenderingAccepted false. Test overlays only exact virtual proposal
