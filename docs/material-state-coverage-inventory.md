@@ -7,6 +7,38 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Divider inline alignment consumption answered (October24)
+
+The remaining alignment-default question is now bounded more precisely without
+another browser capture. `node scripts/check-divider-inline-alignment-reads.mjs`
+reuses the unchanged complete placement proof a163ef61,including authentication
+of current/installed/captured method tokens and all48 retained placements. It
+additionally authenticates48 paired trees:paragraphs are block on both sides;
+native alignItems/alignContent/justifyContent are normal/normal/normal while
+candidate resolved values are stretch/stretch/flex-start. These unequal values
+are preserved,not normalized into equivalent defaults.
+
+A guarded reader rejects any access to those three fields. All48 executions
+complete;the observed style reads are display,height,left,top. Identical guards
+on consumed height and display reject as positive instrumentation controls.
+Conclusion:these three fields do not affect placement THROUGH THIS INLINE METHOD
+in the retained single-span contexts. Child creation,dimension calculation,
+margin and border consumers are mocked in the reused proof;this does not close
+their applicability or establish whole-pipeline/native alignment equivalence.
+Next check must target one of those still-unobserved consumers,not repeat this
+method-level experiment or the already-settled baseline/texture diagnostics.
+
+Final explicit nativeExit0;stdout SHA256
+3e7be917fc26d72dedc86280cb0b06e3f3a4075e57a110f59de58f1be004bf2f;
+stderr empty. Keep divider-inline-alignment-reads-{final,recovered}-20261024
+log pairs and initial unsuffixed failure:the first wrapper incorrectly expected
+an import.meta occurrence in the reused script and stopped before execution.
+The corrected wrapper authenticates its absence;the final version also checks
+actual retained values. Producer SHA256
+a1d4da65ceff0d8bb8c0e6d4cfdcd5c711fc719795a992c37fef90da2148056d.
+This is standalone next-batch evidence,not registered canonical coverage or a
+new rendering pass. No old receipts,remaining tasks or acceptance flags changed.
+
 ### Exact Divider closure-readiness review (October24, after local publication)
 
 Question: is `static:divider@light/desktop` incomplete only because schema1
