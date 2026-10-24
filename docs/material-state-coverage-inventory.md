@@ -7,6 +7,28 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+October24 caret native font identity gap narrowed without rebuild or PNG recapture:
+scripts/inspect-public-caret-fonts.mjs serves the two exact retained public bundles
+by authenticated hash,performs original placeholder-keyboard Tab/settlement and
+uses CDP CSS.getPlatformFontsForNode on the input plus its UA-shadow descendants.
+Four native observations (two fonts,DPR1/2),zero page errors,dispose succeeds.
+Report public-caret-font-identity-20261024/latest-report.json SHA
+8d66e629f06330ab8ddf3874830a0c20060719ae1d349ada2b38da3fb8413388
+retains full input/UA-shadow DOM descriptions,platform fonts,computed styles and
+TextMetrics. Actual input/placeholder font is Arial/ArialMT versus Consolas for
+generic monospace,12 glyphs each,not custom fonts. document.fonts.check alone was
+not used as chosen-font evidence. Font-size16/line-height24 and focused-empty
+state agree;canvas fontBoundingBox ascent/descent14+3 versus15+4 CSSpx at both
+DPRs numerically match the17/19 native retained blink footprints. This is bounded
+corroboration,not proof of Chromium's logical caret algorithm or a universal rule.
+It does not identify candidate canvas's actual selected font or recover old
+October14 observations. Existing font-insensitive finding remains suspected;
+correct centering/metrics and compatibility policy are not inferred from four
+samples. New metadata probe reuses existing bundles;no source/fixture/core,
+geometry,style or rendering input was altered. Scoped owning suite3/3 passes,
+zero skips,1756.0913ms,including prior56 PNG/bundle/dependency proofs. New script
+is standalone pending integration;frozen c394/accepted a659 unchanged.
+
 ### Pending caret PNG evidence — October24
 
 Specific old gap:the suspected font-insensitive caret finding had exact-RGB

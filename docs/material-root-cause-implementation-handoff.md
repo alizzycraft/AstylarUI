@@ -51,6 +51,12 @@ font identity and correct replacement rule remain unproved;classification stays
 suspected. Do not implement a20px rule or font/DPR-specific compensation from
 these measurements. The new evidence closes a raster-retention/footprint gap,
 not the original full caret compatibility decision or all Material case coverage.
+Follow-up on the unchanged retained public bundles identifies native input and
+placeholder fonts through Chromium:ArialMT versus Consolas for monospace at both
+DPRs. Native same-font canvas bounding-box sums17/19 agree with retained blink
+footprints,but do not establish a general caret algorithm. Candidate canvas font
+identity and correct logical sizing/centering remain unproved. Reuse the new
+font-identity metadata before repeating font-availability investigations.
 
 The latest shared-button evidence adds this dependency to tracks6–7:
 

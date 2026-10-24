@@ -67,3 +67,29 @@ test('whole focused blink-frame delta includes blended caret edges without inven
   }
   // New exact retained pixels only: not historical recovery, chosen-font proof, logical metrics, or a replacement algorithm.
 });
+
+test('retained-bundle native font identity is ArialMT versus Consolas, distinct from logical caret metrics', () => {
+  const file = 'artifacts/material-parity/public-caret-font-identity-20261024/latest-report.json';
+  const report = JSON.parse(read(file, '8d66e629f06330ab8ddf3874830a0c20060719ae1d349ada2b38da3fb8413388'));
+  read(report.producer.file, report.producer.sha256);
+  assert.equal(hash(readFileSync('artifacts/material-parity/public-caret-font-identity-20261024/producer.mjs')), report.producer.sha256);
+  for (const source of report.sources) { read(source.file, source.sha256); read(source.bundleFile, source.bundleSha256); }
+  assert.deepEqual(report.observations.map(r => [r.font, r.dpr]), [['Arial', 1], ['Arial', 2], ['monospace', 1], ['monospace', 2]]);
+  for (const row of report.observations) {
+    assert.equal(row.snapshot.focused, true); assert.equal(row.snapshot.value, '');
+    assert.equal(row.computed.fontsReady, 'loaded'); assert.equal(row.computed.fontCheck, true);
+    assert.equal(row.computed.fontSize, '16px'); assert.equal(row.computed.lineHeight, '24px');
+    assert.equal(row.snapshot.site.styles[0].fontFamily, row.font);
+    assert.equal(row.fonts.length, 3);
+    const text = row.fonts.filter(r => r.nodeName === '#text' && r.nodeValue === 'Project name'); assert.equal(text.length, 1);
+    for (const node of row.fonts) {
+      assert.equal(node.fonts.length, 1);
+      assert.equal(node.fonts[0].familyName, row.font === 'Arial' ? 'Arial' : 'Consolas');
+      assert.equal(node.fonts[0].postScriptName, row.font === 'Arial' ? 'ArialMT' : 'Consolas');
+      assert.equal(node.fonts[0].glyphCount, 12); assert.equal(node.fonts[0].isCustomFont, false);
+    }
+    assert.equal(row.computed.textMetrics.fontBoundingBoxAscent + row.computed.textMetrics.fontBoundingBoxDescent,
+      row.font === 'Arial' ? 17 : 19);
+  }
+  // Native input/placeholder font observations; candidate canvas-font identity and a universal caret law are not proved.
+});
