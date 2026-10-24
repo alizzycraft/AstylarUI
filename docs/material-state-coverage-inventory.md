@@ -9,6 +9,29 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Paragraph wrapper margin/position correspondence now binds48 exact pairs(two
+per24 retained cases) to EXISTING fixture-divider-replaces-paragraph-flow-with-
+coordinates. Owner review1079d7c6 and48 tree receipts authenticate. Native p
+owners are static;all48 inline declaration objects are empty and captured author
+rules contain no position/height/top/bottom override. Their19px/etc heights are
+COMPUTED flow output,not authored fixed pixel requests. Candidate normal/effective/
+interaction stages all request absolute position,pixel height,pixel top and
+margin1em 0. Thus authored layout diverges before unit/layout evaluation;the
+margin token's presence is not proof that flex-em or absolute-margin bugs caused
+this fixture substitution. Existing block/flex equal-input reductions do not
+implicitly certify this absolute-wrapper contract.
+
+Read-only48-pair assertions nativeExit0,stderr empty;keep
+divider-wrapper-position-margin-inputs-20261025 log pair,stdout SHA256
+7d5f8724ae8852dc4cf9c8a2a6b3d7d6e07464c6d84c3943545a7efbdb127dd4.
+Rows preserve computed native heights/margins,font size and candidate height/top/
+margin requests separately,with existing source-finding ID and inputEquivalent
+false. No new defect/history investigation,current-runtime/paint claim,source
+registry or case promotion. This closes exact cohort attribution for position/
+fixed-height input substitution,not core margin behavior or remaining typography.
+Next review wrapper/leaf font and line-height ownership before any new layout
+probe;do not reproduce known paragraph substitution or shared margin reductions.
+
 Title UA margin provenance now observed via read-only CDP matched styles on
 authenticated retained build:one light/desktop-DPR1 native context,Chrome155.
 Only matching margin rule is user-agent h1:margin-block-start/end0.67em,
