@@ -41,3 +41,21 @@ test('Captured native Select disabled guard rejects keyboard delegation before r
   t.diagnostic(JSON.stringify({methodSha256:hash(method),disabledTrials:10,enabledDelegations:10,
     boundary:'Exact retained native MatSelect method with controlled disabled state and trap adapters. No browser focus,event delivery,typeahead,popup,application callbacks,candidate behavior or current rendering acceptance.'}));
 });
+
+test('Focused disabled Select retains value through trusted x without pointer blur',()=>{
+  const report=JSON.parse(authenticate({file:'artifacts/material-parity/disabled-select-focused-key-20261025/latest-report.json',sha256:'3d78f59ddb888d67316675f8bc3c82332f6bad3df33da0b2248483cc894fdf5f'}));
+  authenticate(report.capture.checkpointManifest);assert.equal(report.results.length,1);
+  const row=report.results[0];assert.equal(row.family,'select');assert.equal(row.profile,'light');assert.equal(row.viewport.id,'desktop-dpr1');
+  for(const side of ['reference','astylar']){
+    const result=row[side];authenticate(result.inputTree);authenticate(result.screenshot);assert.deepEqual(result.runtime.errors,[]);
+    assert.deepEqual(result.observations.map(o=>o.boundary),['before','after-focus-attempt','before-key-without-pointer','after-key-attempt','settled']);
+    for(const o of result.observations){
+      assert.equal(o.target.value,'Team');assert.equal(o.target.expanded,'false');
+      assert.equal(o.events.some(e=>e.type==='input'||e.type==='change'),false);
+      if(o.boundary!=='before')assert.equal(o.activeEqualsTarget,side==='reference');
+    }
+    const final=result.observations.at(-1);
+    assert.ok(final.events.some(e=>e.type==='keydown'&&e.trusted&&(side!=='reference'||e.target.token===final.target.token)));
+  }
+  assert.equal(report.inputEquivalent,false);assert.equal(report.renderingEquivalent,false);
+});

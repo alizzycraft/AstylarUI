@@ -9,6 +9,23 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Focused disabled Select end-to-end gap answered for light/desktop-DPR1 ONLY:
+new diagnostic reuses existing disabled probe and retained build,removing the
+intervening pointer action. Native MAT-SELECT remains focused,receives trusted
+keydown on its exact observed target and retains Team/expanded=false through
+settlement;no input/change event. Candidate disabled INPUT rejects focus and
+retains Team/expanded=false. This agrees with the separately executed native
+guard and existing authored native-ARIA-disabled versus disabled-input mismatch.
+It is not equal-input core parity or evidence for the other42 disabled contexts.
+
+Capture/independent --verify exit0,Chrome155.0.8059.85;report
+disabled-select-focused-key-20261025/latest-report.json SHA3d78f59ddb888d67316675f8bc3c82332f6bad3df33da0b2248483cc894fdf5f.
+Existing checkpoint helper creates only provenance manifest,not another build.
+Standalone disabled-select-keyboard-guard.spec.mjs now passes2/2,exit0,
+583.653ms,including exact trusted-target/focus/value/tree/PNG assertions. Keep
+report,paired original outputs,provenance and log pair per retention ledger.
+No canonical join,case promotion,renderer/fixture change or network-font inference.
+
 Native disabled-Select keyboard delegation question narrowed without capture:
 disabled-control report654ef78a authenticates manifest9a4ffe70 and retained native
 source map67e956a6. Exact MatSelect._handleKeydown method agrees with installed

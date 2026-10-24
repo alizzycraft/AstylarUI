@@ -1,5 +1,13 @@
 # Audit artifact retention
 
+Keep disabled-select-focused-key-20261025 and its -provenance checkpoint plus
+log/stderr pair:one paired retained-build focus-then-trusted-x diagnostic without
+pointer blur. Report SHA3d78f59ddb888d67316675f8bc3c82332f6bad3df33da0b2248483cc894fdf5f.
+Five output files total585879 bytes;no build/bundle copy was made. Preserve both
+paired trees/screenshots and manifest/runtime receipts for the bounded conclusion.
+This is retained audit evidence,not successful disposable scratch or whole-case
+acceptance. The existing ignored artifact storage remains local/unpublished.
+
 October25 owner-context local registration does not supersede original/failure
 evidence or authorize deletion. Keep public-block-align-content-20261025 input,
 15934235-byte served audit.js and report for the equal-input failure;no duplicate
