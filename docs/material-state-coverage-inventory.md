@@ -9,6 +9,33 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Actual Menu popup AX gap partially answered with one focused retained-build
+light/desktop-dpr1/open cohort,not another root/trigger-only report. Adapter
+`audit-material-menu-ax.mjs` pins and reuses existing snackbar checkpoint/CDP
+collector14be7d0d,with exact maintained action/settlement and guarded candidate
+tree measurement. No fixture/renderer edits or build. Eight target observations
+bind trigger,popup,Rename,Delete on both sides. Report
+`artifacts/material-parity/menu-popup-ax-20261024/latest-report.json` SHA256
+244244e3ccb780d97a05a079c83677de3b23df56820f9c142dfe0c99795d99aa.
+Capture and separate --verify exit native0;both runtime error arrays empty.
+
+Both actual trigger AX controls IDREFs resolve the EXACT captured popup backend
+node,not merely a nonempty ID. Both expose button/Open menu,menu/empty name,
+menuitem/Rename and menuitem/Delete. Native Rename is focused,candidate trigger
+focused,consistent with existing authoring evidence. Native popup AX focusable
+true versus candidate absent has a prior authored-input divergence:reference
+explicit tabindex=-1,candidate popup has no authored tabIndex. Equal DOM property
+tabIndex=-1 does not imply equal attributes or programmatic focusability;do not
+attribute this unequal-input observation to core. No core fix or fixture patch.
+
+Independent `node --test tests/material-parity/menu-popup-ax.spec.mjs` passes1/1,
+including corrupted controls link,backend owner and accessible-name rejection.
+It rehashes paired trees and preserves opening-focus/tabindex differences.
+Keep menu-popup-ax-20261024 capture/log pair and provenance plus independent log
+pair. Adapter/test are standalone outside frozen1002/326. Other themes/DPR/mobile,
+dismissal/hidden AX,AT speech,current-runtime applicability and whole-case closure
+remain open. Supplementary maintained open action is not original-e01 replay.
+
 Menu semantic-target census now pins the precise retained measurement gap:
 all94 configured cases(12 static/82 interaction) contain exactly menu-root and
 menu-primary semantic results,all passing;ZERO popup or item targets exist.
