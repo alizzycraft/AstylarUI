@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import path from 'node:path';
 
 export const pendingEvidenceSourceFiles = Object.freeze([
   "docs/evidence/material-original-runner-e01.mjs.gz.b64",
@@ -171,4 +172,48 @@ export function restorePendingEvidenceProducer(source) {
   text = replaceOnce(text, proofAnchor + proofAddition, proofAnchor);
   assert.equal(hash(text), frozen, 'Every complete frozen producer byte must recover');
   return text;
+}
+
+export const pendingEvidencePreviousSourceHashes = Object.freeze({
+  'tests/material-parity/input-equivalence-audit.mjs': frozen,
+  'tests/material-parity/static-semantic-registration.mjs': '683270d89cbce258a3372d89129f3f8094a29330b9bb36c6f0fb2dfbf7ab3286',
+  'tests/material-parity/slider-state-registration.mjs': '98166d83d2ad2dc89ddf1c39e376474d727877c8bcf88163c4f214cff736cc18',
+  'tests/material-parity/slider-state-input-review-source.mjs': '10a800adc3e5d6d85d07aa2123bd8c2fa30e263368d7a4a363e79ff5b5284a08',
+  'tests/material-parity/slider-state-input-review-source.spec.mjs': 'b5bb6f3e815aa02e60f19d23d9a6788bc8431b7cca7fac9649c0c24427c0b34f',
+});
+const compatibilityEdits = {
+  'tests/material-parity/static-semantic-registration.mjs': [
+    ["import { restorePendingEvidenceProducer } from './pending-evidence-registration.mjs';\n", ''],
+    ["  if(text.includes('\"docs/evidence/material-original-runner-e01.mjs.gz.b64\"'))text=restorePendingEvidenceProducer(text);\n", ''],
+  ],
+  'tests/material-parity/slider-state-registration.mjs': [
+    ["import { restorePendingEvidenceProducer, restorePendingEvidenceRegisteredSource } from './pending-evidence-registration.mjs';\n", ''],
+    ["  source = restorePendingEvidenceRegisteredSource(source, 'tests/material-parity/static-semantic-registration.mjs');\n", ''],
+    ['  text = restorePendingEvidenceProducer(text);\n', ''],
+  ],
+  'tests/material-parity/slider-state-input-review-source.mjs': [
+    ["import { pendingEvidenceHistoricalRead } from './pending-evidence-registration.mjs';\n", ''],
+    ['  read = pendingEvidenceHistoricalRead({ root, read });\n', ''],
+  ],
+  'tests/material-parity/slider-state-input-review-source.spec.mjs': [
+    ["import { restorePendingEvidenceProducer } from './pending-evidence-registration.mjs';\n", ''],
+    ["source = restorePendingEvidenceProducer(readFileSync(file, 'utf8'));", "source = readFileSync(file, 'utf8');"],
+  ],
+};
+export function restorePendingEvidenceRegisteredSource(source, file) {
+  assert.ok(Object.hasOwn(pendingEvidencePreviousSourceHashes, file), 'Unknown pending-evidence source boundary');
+  if (file === 'tests/material-parity/input-equivalence-audit.mjs') return restorePendingEvidenceProducer(source);
+  let text = source.toString().replaceAll('\r\n', '\n');
+  if (hash(text) === pendingEvidencePreviousSourceHashes[file]) return text;
+  for (const [before, after] of compatibilityEdits[file]) text = replaceOnce(text, before, after);
+  assert.equal(hash(text), pendingEvidencePreviousSourceHashes[file], 'Whole historical source must recover');
+  return text;
+}
+export function pendingEvidenceHistoricalRead({ root, read }) {
+  return (file, options) => {
+    const absolute = path.resolve(root, file), relative = path.relative(root, absolute).replaceAll('\\', '/');
+    if (!Object.hasOwn(pendingEvidencePreviousSourceHashes, relative)) return read(file, options);
+    const bytes = Buffer.from(restorePendingEvidenceRegisteredSource(read(absolute), relative));
+    return options ? bytes.toString(typeof options === 'string' ? options : options.encoding ?? 'utf8') : bytes;
+  };
 }

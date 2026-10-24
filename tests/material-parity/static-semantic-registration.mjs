@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
+import { restorePendingEvidenceProducer } from './pending-evidence-registration.mjs';
 const hash = b => createHash('sha256').update(b).digest('hex');
 // Explicit historical population only. Production continues to use all193.
 export function retainedStaticSemanticPopulation(current) {
@@ -377,6 +378,7 @@ export function restoreRetainedFocusExportSource(source, kind) {
 
 export function restoreRetainedFocusProducer(source) {
   let text=source.toString().replaceAll('\r\n','\n');
+  if(text.includes('"docs/evidence/material-original-runner-e01.mjs.gz.b64"'))text=restorePendingEvidenceProducer(text);
   // Current Slider state inventory precedes every older producer stage.
   if(text.includes('Slider state input producer inventory conservation')){
     assert.equal(hash(text),'0aba1870b5ee9f0231cfb2528d6d89a581ae8558a0c9859e116a145febcbe3e1');

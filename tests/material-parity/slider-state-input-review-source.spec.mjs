@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { restorePendingEvidenceProducer } from './pending-evidence-registration.mjs';
 import { readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
@@ -12,7 +13,7 @@ import { restoreSliderStateInputExportSource, restoreSliderStateInputSharedRegis
 import { restoreRetainedFocusExportSource, retainedStaticSemanticPopulation, restoreRootDepthPolicy, restoreRetainedFocusProducer } from './static-semantic-registration.mjs';
 
 test('Slider state input inventory preserves accepted sources and proofs', () => {
-  const file = 'tests/material-parity/input-equivalence-audit.mjs', source = readFileSync(file, 'utf8');
+  const file = 'tests/material-parity/input-equivalence-audit.mjs', source = restorePendingEvidenceProducer(readFileSync(file, 'utf8'));
   const prior = restoreSliderStateInputProducer(source);
   const collect = text => {
     const ast = ts.createSourceFile(file, text, 99, true);

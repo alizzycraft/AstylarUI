@@ -7,6 +7,35 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Pending evidence inventory cutover verified (October24)
+
+Actual producer now registers983 source paths/314 focused proofs,adding15/21
+to frozen968/293. All193 policy definitions remain unchanged. Complete prior
+source order and all293 non-line proof fields conserve;positive line anchors
+are checked. Five changed historical source paths have exact bounded reversal
+and complete predecessor-hash checks,with unrelated drift rejected. This is
+source/proof registration,not rendering acceptance or canonical publication.
+
+Seven focused checks pass with zero skips and empty stderr:owning registration
+2/2 (9192.3379ms),legacy Slider/Table entry checks4/4 (13915.626ms),and existing
+complete reader1/1 (66919.3165ms). Logs under artifacts/material-parity:
+
+- pending-evidence-cutover-source-check-20261024.log SHA256
+  fc0e2d3dc96ff4d26468ba88daf0707ee145aa5c41afcd38e4248c6293178392
+- pending-evidence-legacy-entry-check-20261024.log SHA256
+  0b6ecae567a67a8e906350e3bd92f6f1e39206f58951b0f13154d30f22a5ba09
+- pending-evidence-cutover-complete-reader-20261024.log SHA256
+  fe577734272ec6c033f6390842419e6d1ab66233cea4e6304bc04c1f555bf6ac
+
+Complete reader authenticates2311 cases/17555 dependencies for the in-memory
+7dfee successor without saving another200MB proposal. All2311 cases remain
+partial/current-rendering-unverified;accepted a659 and saved c394 preserve.
+No export selector,review pointer or canonical generation advanced. Next resolve
+the explicit successor export routing and safe publication headroom;do not
+repeat the completed19-proof/browser investigations for metadata edits. Remote
+publication remains blocked by the previously recorded repeated HTTP408 failure;
+do not repeat identical large uploads without new transport evidence.
+
 ### Reversible registration stage implemented — October24
 
 New pending-evidence-registration.mjs defines the exact15 source paths and21

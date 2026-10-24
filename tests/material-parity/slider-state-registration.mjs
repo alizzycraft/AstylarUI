@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
+import { restorePendingEvidenceProducer, restorePendingEvidenceRegisteredSource } from './pending-evidence-registration.mjs';
 
 const hash = source => createHash('sha256').update(source).digest('hex');
 const successor = {
@@ -37,6 +38,7 @@ export function restoreSliderStateInputExportSource(source, kind) {
 }
 
 export function restoreSliderStateInputSharedRegistration(source) {
+  source = restorePendingEvidenceRegisteredSource(source, 'tests/material-parity/static-semantic-registration.mjs');
   let text = source.toString().replaceAll('\r\n', '\n'); assert.equal(hash(text), successor.shared);
   text = edit(text, '// Explicit historical population only. Production continues to use all193.', '// Explicit historical population only. Production continues to use all192.');
   const population = text.indexOf('  // Historical cohorts retain the complete accepted192-finding population.');
@@ -90,6 +92,7 @@ export function restoreSliderStateInputPreviousTableTest(source) {
 
 export function restoreSliderStateInputProducer(source) {
   let text = source.toString().replaceAll('\r\n', '\n');
+  text = restorePendingEvidenceProducer(text);
   assert.equal(hash(text), '0aba1870b5ee9f0231cfb2528d6d89a581ae8558a0c9859e116a145febcbe3e1');
   const ast = ts.createSourceFile('producer.mjs', text, 99, true);
   const owner = name => ast.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === name);

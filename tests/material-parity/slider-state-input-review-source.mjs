@@ -3,12 +3,14 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { joinSliderStateInputs, sliderStatePredecessor } from '../../scripts/join-material-slider-state-inputs.mjs';
 import { createSliderHoverHeldReviewReader } from './slider-hover-held-case-review-source.mjs';
+import { pendingEvidenceHistoricalRead } from './pending-evidence-registration.mjs';
 import { restoreSliderStateInputExportSource, restoreSliderStateInputSharedRegistration, restoreSliderStateInputPreviousTest, restoreSliderStateInputPolicy, restoreSliderStateInputPreviousTableTest, restoreSliderStateInputProducer, restoreSliderStateInputPreviousReader } from './slider-state-registration.mjs';
 
 export const sliderStateInputReview = 'c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 
 export function createSliderStateInputReviewReader({ root, read, reviewSha256 }) {
+  read = pendingEvidenceHistoricalRead({ root, read });
   assert.equal(reviewSha256, sliderStateInputReview);
   const envelope = JSON.parse(read(path.resolve(root,
     `artifacts/material-parity/working-audit/proposals/${reviewSha256}.json`)));

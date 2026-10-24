@@ -5,7 +5,7 @@ import path from 'node:path';
 import test from 'node:test';
 import ts from 'typescript';
 import { pendingEvidenceSourceFiles, pendingEvidenceProofRows, registerPendingEvidenceProducer,
-  restorePendingEvidenceProducer } from './pending-evidence-registration.mjs';
+  restorePendingEvidenceProducer, pendingEvidencePreviousSourceHashes, restorePendingEvidenceRegisteredSource } from './pending-evidence-registration.mjs';
 
 const file = 'tests/material-parity/input-equivalence-audit.mjs';
 const hash = value => createHash('sha256').update(value).digest('hex');
@@ -23,18 +23,29 @@ test('pending evidence inventory addition preserves every frozen source and proo
   assert.equal(hash(prior), '0aba1870b5ee9f0231cfb2528d6d89a581ae8558a0c9859e116a145febcbe3e1');
   const readRegistered = (name, options) => path.resolve(name) === path.resolve(file)
     ? options ? registered : Buffer.from(registered) : readFileSync(name, options);
-  const before = collect(prior, (name, options) => path.resolve(name) === path.resolve(file)
-    ? options ? prior : Buffer.from(prior) : readFileSync(name, options));
+  const before = collect(prior, (name, options) => {
+    const relative = path.relative(process.cwd(), name).replaceAll('\\', '/');
+    if (relative === file) return options ? prior : Buffer.from(prior);
+    if (Object.hasOwn(pendingEvidencePreviousSourceHashes, relative)) {
+      const restored = restorePendingEvidenceRegisteredSource(readFileSync(name), relative);
+      return options ? restored : Buffer.from(restored);
+    }
+    return readFileSync(name, options);
+  });
   const after = collect(registered, readRegistered);
   assert.equal(before.sources.length, 968); assert.equal(before.proofs.length, 293);
   assert.equal(pendingEvidenceSourceFiles.length, 15); assert.equal(pendingEvidenceProofRows.length, 21);
   assert.equal(after.sources.length, 983); assert.equal(after.proofs.length, 314);
   assert.deepEqual(after.sources.slice(0, 15).map(r => r.file), pendingEvidenceSourceFiles);
-  assert.deepEqual(after.proofs.slice(21), before.proofs);
+  const withoutLine = rows => rows.map(({ line, ...row }) => row);
+  assert.deepEqual(withoutLine(after.proofs.slice(21)), withoutLine(before.proofs));
   const oldRows = after.sources.slice(15);
   assert.deepEqual(oldRows.map(r => r.file), before.sources.map(r => r.file));
   for (let i = 0; i < oldRows.length; i++) {
-    if (oldRows[i].file === file) assert.equal(oldRows[i].sha256, hash(registered));
+    if (Object.hasOwn(pendingEvidencePreviousSourceHashes, oldRows[i].file)) {
+      assert.equal(before.sources[i].sha256, pendingEvidencePreviousSourceHashes[oldRows[i].file]);
+      assert.equal(oldRows[i].sha256, hash(oldRows[i].file === file ? registered : readFileSync(oldRows[i].file)));
+    }
     else assert.deepEqual(oldRows[i], before.sources[i]);
   }
   assert.ok(after.proofs.slice(0, 21).every(r => r.line > 0));
@@ -47,4 +58,9 @@ test('pending evidence inventory restoration rejects changed old content and alt
   assert.throws(() => restorePendingEvidenceProducer(registered + '\n// unrelated drift\n'));
   assert.throws(() => restorePendingEvidenceProducer(registered.replace(pendingEvidenceSourceFiles[0], 'forged/source')));
   assert.throws(() => restorePendingEvidenceProducer(registered.replace('Bounded verified evidence only;', 'unproved full acceptance;')));
+  for (const [file, sha] of Object.entries(pendingEvidencePreviousSourceHashes)) {
+    const bytes = readFileSync(file);
+    assert.equal(hash(restorePendingEvidenceRegisteredSource(bytes, file)), sha);
+    assert.throws(() => restorePendingEvidenceRegisteredSource(Buffer.concat([bytes, Buffer.from('\n// drift')]), file));
+  }
 });
