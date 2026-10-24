@@ -9,6 +9,24 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Pending exact reader now OWNS createMenuHistoricalRead instead of requiring
+caller/test to supply it. Full integration passes raw four-file staged overlay
+directly to createMenuSelectDisabledReviewReader without prebuilt owner reader
+or externally restored reads. Default path builds authenticated predecessor,
+joins exactd00beaa8 and validates all18270 dependencies/all2311 cases. This
+closes the actual exported reader entry-point gap noted in the preceding entry;
+33 child additions,all partial/current-unverified statuses and remaining tasks
+preserve. Live four exporter/registry files are still untouched.
+
+Combined9/9 tests pass,0skip,nativeExit0,109638.2426ms;retain
+menu-owned-historical-reader-integration-20261025 log pair(stdout SHA256
+10b22450676a4267cd0b5e40b62e97f55d77c0343a2e6ab21af462b52194717a;
+stderr empty). Not a canonical export,current rendering or all registered proof
+execution. Before live application,check older standalone selection/registration
+tests' direct source restoration entry points:owned new reader protects its
+retained dependency replay,not automatically every test that reads live files.
+Do not silently weaken old exact source hashes or assume them covered here.
+
 Four-file historical boundary is now verified against actual STAGED overlay,
 not just unchanged live source. createMenuHistoricalRead handles only exact
 absolute producer,policy,launcher,runner paths. Each frozen original passes

@@ -6,13 +6,15 @@ import { joinMenuAXEvidence } from '../../scripts/join-material-menu-ax-evidence
 import { joinMenuSemanticBoundaries } from '../../scripts/join-material-menu-semantic-boundaries.mjs';
 import { joinSelectReadonlyEvidence } from '../../scripts/join-material-select-readonly-evidence.mjs';
 import { joinDisabledControlEvidence } from '../../scripts/join-material-disabled-control-evidence.mjs';
+import { createMenuHistoricalRead } from './menu-select-disabled-registration.mjs';
 
 export const menuSelectDisabledReview = 'd00beaa884a5639f4294c5b81f4c49e1ec0c9cd1072fc77d4f7041fc6ff9bd3d';
 export function createMenuSelectDisabledReviewReader({ root, read, reviewSha256, ownerFrameReader }) {
   assert.equal(reviewSha256, menuSelectDisabledReview);
-  const prior = ownerFrameReader ?? createDividerOwnerFrameReviewReader({ root, read, reviewSha256: dividerOwnerFrameReview });
+  const historicalRead = createMenuHistoricalRead({ root, read });
+  const prior = ownerFrameReader ?? createDividerOwnerFrameReviewReader({ root, read: historicalRead, reviewSha256: dividerOwnerFrameReview });
   const predecessor = JSON.parse(prior.read(`artifacts/material-parity/working-audit/proposals/${dividerOwnerFrameReview}.json`)).review;
-  const readLocal = file => read(path.resolve(root, file));
+  const readLocal = file => historicalRead(path.resolve(root, file));
   const composite = joinMenuCompositeEvidence(predecessor, readLocal);
   const ax = joinMenuAXEvidence(composite.review, readLocal);
   const semantic = joinMenuSemanticBoundaries(ax.review, readLocal);

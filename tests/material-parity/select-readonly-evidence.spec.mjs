@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { createDividerOwnerFrameReviewReader, dividerOwnerFrameReview } from './divider-owner-frame-review-source.mjs';
+import { dividerOwnerFrameReview } from './divider-owner-frame-review-source.mjs';
 import { joinMenuCompositeEvidence } from '../../scripts/join-material-menu-composite-evidence.mjs';
 import { joinMenuAXEvidence } from '../../scripts/join-material-menu-ax-evidence.mjs';
 import { joinMenuSemanticBoundaries } from '../../scripts/join-material-menu-semantic-boundaries.mjs';
@@ -14,7 +14,7 @@ import { joinDisabledControlEvidence, restoreDisabledControlEvidence, disabledCo
 import { createMenuSelectDisabledReviewReader, menuSelectDisabledReview } from './menu-select-disabled-review-source.mjs';
 import { loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
 import path from 'node:path';
-import { prepareMenuProducerRegistration, prepareMenuPolicyRegistration, createMenuHistoricalRead } from './menu-select-disabled-registration.mjs';
+import { prepareMenuProducerRegistration, prepareMenuPolicyRegistration } from './menu-select-disabled-registration.mjs';
 import { prepareMenuSelection } from './menu-select-disabled-selection.mjs';
 
 test('six retained disabled contexts preserve values while exposing native Select focusability difference', () => {
@@ -78,8 +78,8 @@ test('exact Select supplementary readonly evidence preserves all parent obligati
     const encoding = typeof options === 'string' ? options : options?.encoding;
     return encoding ? bytes.toString(encoding) : Buffer.from(bytes);
   };
-  const auditRead = createMenuHistoricalRead({root,read:overlayRead});
-  const reader = createDividerOwnerFrameReviewReader({ root, read: auditRead, reviewSha256: dividerOwnerFrameReview });
+  const pendingReader = createMenuSelectDisabledReviewReader({ root, read: overlayRead, reviewSha256: menuSelectDisabledReview });
+  const reader = pendingReader;
   const original = JSON.parse(reader.read(`artifacts/material-parity/working-audit/proposals/${dividerOwnerFrameReview}.json`)).review;
   const predecessor = joinMenuSemanticBoundaries(joinMenuAXEvidence(joinMenuCompositeEvidence(original).review).review).review;
   const hash = r => createHash('sha256').update(JSON.stringify(r)).digest('hex');
@@ -120,8 +120,6 @@ test('exact Select supplementary readonly evidence preserves all parent obligati
   assert.throws(() => joinDisabledControlEvidence(disabled.review));
   console.log(JSON.stringify({ disabledCases: disabled.cases, reviewSha256: disabled.sha256, predecessor: disabledControlPredecessor }));
   assert.equal(disabled.sha256, menuSelectDisabledReview);
-  const pendingReader = createMenuSelectDisabledReviewReader({ root, read: auditRead,
-    reviewSha256: menuSelectDisabledReview, ownerFrameReader: reader });
   const file = `artifacts/material-parity/working-audit/proposals/${menuSelectDisabledReview}.json`;
   const loaded = loadCaseObligationReview(file, menuSelectDisabledReview, disabled.review.groups.map(g => g.case), { root: process.cwd(), read: pendingReader.read });
   assert.equal(loaded.cases.length, 2311); assert.equal(loaded.inspectionComplete, false); assert.equal(loaded.currentRenderingAccepted, false);
