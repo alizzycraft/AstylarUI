@@ -9,6 +9,39 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Public package-root block alignment reduction separates TWO failures. At DPR1/2,
+omitted parent alignContent computes normal natively but retains stretch in
+AstylarUI. Equal explicit normal/stretch controls both produce20px child offset
+on both sides. Equal explicit center is retained as center by candidate style
+inspection,but native child offset55px versus candidate20px exposes35px layout
+failure in BOTH DPR contexts. Thus default mismatch alone cannot explain explicit
+alignment failure. Parent is absolute/block100x100;child is10x10 with20px top
+margin. Positioning deliberately excludes margin collapse in this reduction;
+the separate native normal/stretch collapse control is not candidate evidence.
+
+New scripts/audit-public-block-align-content.mjs reuses public relative-margin
+mount/esbuild/server/projection methodology:package-root Astylar import,equal
+serialized SiteData/CSS,unchanged authored inputs,settled real browser and actual
+served bundle receipts. Projection only measures rendered bounds;no world-space
+layout or alternate fixture correction. Four variants/eight paired contexts,
+Chrome155.0.8059.85,no runtime/diagnostic errors. Source ownership is suspected
+block/default resolution,not a proven exact internal statement;source/installed
+implementation reconciliation precedes registry integration. Missing block-center
+behavior is a demonstrated public geometry defect,not proof of a Material symptom,
+glyph/raster quality,all formatting contexts or historical capture causality.
+
+Keep public-block-align-content-20261025 directory(input.mjs,audit.js and
+latest-report.json),capture stdout/stderr and focused log pair. Report SHA256
+e13cac751581f025897691bd8279e23fd2b0068f64b8f31e8d222dff8c1519c5;
+bundle15934235 bytes is required failure reproduction,not successful scratch.
+No extra screenshots or build result sets. Focused owning spec passes1/1,0skip,
+authenticating all bundle inputs,producer,served bundle and exact eight pairs;
+unequal authored input and missing DPR/variant controls reject. Green conservation
+test preserves observed failures;it is NOT a parity pass. No renderer/reference
+edits,new canonical generation or case promotion. Next bind actual installed
+block-layout/default methods to source and existing findings,then register the
+bounded evidence coherently rather than recapturing these eight controls.
+
 Block align-content normal/stretch is NOT a general equivalent representation.
 Native-only Chrome155.0.8059.85 diagnostic control distinguishes parent/child
 margin collapse:normal childOffset0,stretch20px,center55px for identical100px
