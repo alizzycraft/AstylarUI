@@ -9,6 +9,37 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Supplementary disabled-control capture answers the missing rejection question
+for SIX retained-build light/desktop-dpr1 contexts only(one per family). Reuses
+pinned configured-control-focus collector with actual family-control targets,
+disabled query state and separate DOM focus,pointer-centre,x,settled boundaries.
+No canonical recipe/fixture changed. Report disabled-control-boundaries-20261025/
+latest-report.json SHA256654ef78a448876e3ac4ad84673017e49ed0ea1eff527d4c5230f3c515dc2d6bc;
+capture and separate --verify nativeExit0,6 contexts/30 paired boundaries.
+
+Five native text inputs and all six candidate disabled inputs remain unfocused
+and value-stable;no observed input/change DOM or candidate app events. Native
+SELECT IS DIFFERENT:MAT-SELECT aria-disabled=true,tabindex=-1,no native disabled
+attribute accepts programmatic DOM focus at after-focus-attempt. Candidate
+native disabled INPUT rejects it. Subsequent pointer clears native Select focus;
+x is therefore NOT a focused disabled-Select key experiment. Values remain Team.
+This is the already classified custom-host/native-input authoring distinction,
+not evidence of a lost supplied disabled flag or a newly confirmed core defect.
+Do not generalize native disabled-input focus rejection to ARIA-disabled hosts.
+
+First diagnostic assertion incorrectly expected unfocused in all60 side
+boundaries and caught this exception;preserve disabled-control-boundaries-proof-
+20261025 failure pair. Corrected exact observation test passes1/1,nativeExit0 in
+disabled-control-boundaries-proof-retry-20261025 pair,checking tree/screenshot
+hashes,values,events,disabled flags and the explicit Select focus exception.
+Capture producer is unchanged after capture;no browser rerun or ignored failure.
+Initial commentary's blanket unfocused summary was corrected on inspection.
+Remaining:other42 disabled contexts,current runtime/equal inputs,local paint,
+picker-icon attempts,keyboard immediately after focused ARIA-disabled host,
+and dynamic disable-while-focused are NOT established. No48-case/whole-case pass,
+exclusion closure or canonical publication. Next join exact six-case observations
+and shared source applicability,not repeated representative captures.
+
 Original disabled endpoints cannot fill the disabled interaction gap:focused
 executable recipe check recovers e01 runner from preserved base64/gzip and
 authenticates full e01ef9dc bytes. Original/current performInteraction methods

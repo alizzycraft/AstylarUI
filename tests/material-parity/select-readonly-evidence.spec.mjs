@@ -11,6 +11,30 @@ import { gunzipSync } from 'node:zlib';
 import ts from 'typescript';
 import { materialInteractionCases } from './benchmark.config.mjs';
 
+test('six retained disabled contexts preserve values while exposing native Select focusability difference', () => {
+  const file = 'artifacts/material-parity/disabled-control-boundaries-20261025/latest-report.json';
+  const hash = b => createHash('sha256').update(b).digest('hex');
+  const bytes = readFileSync(file); assert.equal(hash(bytes), '654ef78a448876e3ac4ad84673017e49ed0ea1eff527d4c5230f3c515dc2d6bc');
+  const report = JSON.parse(bytes);
+  assert.deepEqual(report.results.map(r => r.family), ['form-field', 'input', 'autocomplete', 'select', 'datepicker', 'timepicker']);
+  for (const row of report.results) {
+    assert.equal(row.state, 'disabled'); assert.equal(row.profile, 'light'); assert.equal(row.viewport.id, 'desktop-dpr1');
+    for (const side of ['reference', 'astylar']) {
+      const result = row[side]; assert.deepEqual(result.runtime.errors, []);
+      for (const key of ['inputTree', 'screenshot']) assert.equal(hash(readFileSync(result[key].file)), result[key].sha256);
+      assert.deepEqual(result.observations.map(o => o.boundary), ['before', 'after-focus-attempt', 'after-pointer-attempt', 'after-key-attempt', 'settled']);
+      for (const o of result.observations) {
+        assert.equal(o.target.disabledState, true);
+        assert.equal(o.activeEqualsTarget, row.family === 'select' && side === 'reference' && o.boundary === 'after-focus-attempt');
+        assert.equal(o.target.value, result.observations[0].target.value);
+        assert.equal(o.events.some(e => e.type === 'input' || e.type === 'change'), false);
+        assert.equal(o.appEvents.some(e => e.type === 'input' || e.type === 'change'), false);
+      }
+    }
+  }
+  assert.equal(report.inputEquivalent, false); assert.equal(report.renderingEquivalent, false);
+});
+
 test('disabled editing cohorts have no configured focus or activation attempt in original and current action recipes', async () => {
   const hash = b => createHash('sha256').update(b).digest('hex');
   const original = gunzipSync(Buffer.from(readFileSync('docs/evidence/material-original-runner-e01.mjs.gz.b64', 'utf8').trim(), 'base64'));

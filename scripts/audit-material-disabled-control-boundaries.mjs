@@ -1,0 +1,42 @@
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import path from 'node:path';
+import { pathToFileURL } from 'node:url';
+import ts from 'typescript';
+
+const base = 'scripts/audit-material-configured-control-focus.mjs';
+const bytes = readFileSync(base);
+assert.equal(createHash('sha256').update(bytes).digest('hex'), 'dc9305e44f29548ac6b7fbc890d0029467cf01015ba5828eef5b8e22ad491dc3');
+let source = bytes.toString();
+const replace = (before, after) => { assert.equal(source.split(before).length, 2, before); source = source.replace(before, after); };
+replace("const script = 'scripts/audit-material-configured-control-focus.mjs';", "const script = 'scripts/audit-material-disabled-control-boundaries.mjs';");
+replace("const families = ['chips', 'slide-toggle', 'button', 'menu', 'expansion', 'snack-bar', 'tooltip'];", "const families = ['form-field', 'input', 'autocomplete', 'select', 'datepicker', 'timepicker'];");
+replace("c.state === 'focus'", "c.state === 'disabled' && c.profile === 'light' && c.viewport.id === 'desktop-dpr1'");
+replace('assert.equal(cases.length, 56);', 'assert.equal(cases.length, 6);');
+replace("path.resolve('examples/material-showcase/dist/material-showcase/browser')", "path.resolve('artifacts/material-parity/icon-fresh-producer-retained-build-20261016-browser')");
+replace('interaction=focus', 'interaction=disabled');
+replace("assert.equal(evidence.observations.length, 3)", "assert.equal(evidence.observations.length, 5)");
+replace("['before', 'after-action', 'settled']", "['before', 'after-focus-attempt', 'after-pointer-attempt', 'after-key-attempt', 'settled']");
+replace('report.results.length * 3', 'report.results.length * 5');
+replace('await actions.performInteraction(page, mode, c); observations.push(await sample(\'after-action\'));', `const selector = mode === 'reference' ? '#' + c.family + '-control' : '[data-astylar-id="' + c.family + '-control"]';
+            assert.equal(observations[0].target.disabledState, true);
+            await page.locator(selector).evaluate(n => n.focus());
+            await actions.settleInteraction(page, mode); observations.push(await sample('after-focus-attempt'));
+            const box = await page.locator(selector).boundingBox(); assert.ok(box);
+            await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+            await actions.settleInteraction(page, mode); observations.push(await sample('after-pointer-attempt'));
+            await page.keyboard.press('x'); await actions.settleInteraction(page, mode);
+            observations.push(await sample('after-key-attempt'));`);
+replace("for (const type of ['focus', 'blur', 'focusin', 'focusout'])", "for (const type of ['focus', 'blur', 'focusin', 'focusout', 'pointerdown', 'pointerup', 'click', 'keydown', 'keyup', 'input', 'change'])");
+replace("disabled: node.hasAttribute('disabled')", "disabled: node.hasAttribute('disabled'), disabledState: node.hasAttribute('disabled') || node.getAttribute('aria-disabled') === 'true', value: 'value' in node ? node.value : node.textContent?.trim(), expanded: node.getAttribute('aria-expanded')");
+replace("const target = host?.matches(selector) ? host : host?.querySelector(selector);", "const target = mode === 'reference' ? document.getElementById(family + '-control') : document.querySelector('[data-astylar-id=\"' + family + '-control\"]');");
+replace('activeWithinHost: !!active && host.contains(active), activeAncestry, events: structuredClone(events)', "activeWithinHost: !!active && host.contains(active), activeAncestry, events: structuredClone(events), appEvents: mode === 'astylar' ? window.__ASTYLAR_MATERIAL_BENCHMARK__.events() : []");
+replace('56 exact configured focus contexts; direct active owners before/after action and settlement. Not equal-input,paint,current-package or whole-case acceptance.', 'Six retained-build light/desktop-DPR1 disabled contexts with supplementary DOM focus,pointer and x attempts. Not canonical action replay,all48 cases,current rendering,equal inputs or paint acceptance.');
+const ast = ts.createSourceFile(base, source, 99, true, ts.ScriptKind.JS); assert.equal(ast.parseDiagnostics.length, 0);
+for (const node of ast.statements.filter(ts.isImportDeclaration).toReversed()) {
+  const name = node.moduleSpecifier.text; if (name.startsWith('node:')) continue;
+  const url = name.startsWith('.') ? pathToFileURL(path.resolve(path.dirname(base), name)).href : import.meta.resolve(name);
+  source = source.slice(0, node.moduleSpecifier.getStart(ast)) + JSON.stringify(url) + source.slice(node.moduleSpecifier.end);
+}
+await import('data:text/javascript;base64,' + Buffer.from(source).toString('base64'));
