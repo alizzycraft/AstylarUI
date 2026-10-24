@@ -67,7 +67,7 @@ test('Exact Divider requirement review reconciles crop provenance without cleari
       assert.equal(r.applicability,parent.obligations[name].applicability);assert.equal(r.disposition,parent.obligations[name].disposition);
       assert.equal(r.evidence.sha256,value.basis.parent.sha256);
       if(!['localPaint','historyOwnership'].includes(name))assert.deepEqual(r.remaining,parent.obligations[name].remaining??[]);
-      if(name==='historyOwnership')assert.deepEqual(r.remaining,parent.obligations[name].remaining.map(s=>s==='late completion/remount/peer isolation applicability'?'Late font/media cancellation and interactive-peer callbacks remain unproved;public/Angular remount and passive-peer survival are already inspected only in their recorded scope.':s));
+      if(name==='historyOwnership')assert.deepEqual(r.remaining,parent.obligations[name].remaining.map(s=>s==='late completion/remount/peer isolation applicability'?'Historical network-font timing and captured-runtime applicability of controlled font-disposal tests remain unproved;interactive-peer callbacks remain unproved. No authored image/media leaf requires a media-cancellation test. Public/Angular remount and passive-peer survival retain their recorded scope.':s));
     }
     const paint=value.requirements.localPaint,provenance=paint.originalCropProvenance;
     assert.deepEqual(paint.remaining,parent.obligations.localPaint.remaining.map((s,index)=>index===0?'Remaining paragraph/text or unreviewed-owner coverage/compositing attribution is unproved;the exact original separator footprint and opaque ink difference are attributed to unequal requests.':s.replace(',original crop-producer applicability','')).concat('Fractional original native expectedBox and semantic target rectangle association remain unproved;integer pixel provenance does not replace them.'));
@@ -81,6 +81,11 @@ test('Exact Divider requirement review reconciles crop provenance without cleari
     assert.equal(hash(readFileSync(paint.separatorPaintAttribution.evidence.file)),paint.separatorPaintAttribution.evidence.sha256);
   };
   validate(review);
+  const dividerTree=JSON.parse(readFileSync('artifacts/material-parity/current-full-20261005/divider/light/desktop/astylar-input-tree.json'));
+  assert.ok(dividerTree.nodes.every(n=>!['img','image','video','audio','source'].includes(n.authored?.type)&&!n.authored?.src));
+  const fontTests=readFileSync('src/lib/astylar-isolation.spec.ts','utf8');
+  assert.ok(fontTests.includes('does not revive an Angular-owned surface when initial fonts resolve after destruction'));
+  assert.ok(fontTests.includes("expect(() => loadingDone!(new Event('loadingdone'))).not.toThrow()"));
   const structure=parent.obligations.inputStyleStructure;
   const natural=structure.retainedDividerPropertyContexts;
   assert.equal(hash(readFileSync(natural.evidence.naturalLineBoxes.file)),natural.evidence.naturalLineBoxes.sha256);

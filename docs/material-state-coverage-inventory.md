@@ -9,6 +9,19 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Late-work applicability review recovers already recorded controlled font-disposal
+coverage:initial readiness released after genuine Angular destruction and exact
+retained loadingdone callback invoked after disposal. Current test declarations
+remain present;this turn does NOT rerun or promote those historical Angular tests.
+Their execution boundary is controlled readiness/callback ordering,not historical
+network-font timing or complete captured-runtime applicability. Authenticated
+exact Divider tree contains no image/media leaf or src request,so a leaf-media
+cancellation test is inapplicable here rather than perpetually pending.
+Small requirement record now names the real remaining font/runtime uncertainty
+and interactive-peer gap. It retains all other obligations and case status.
+Existing standalone requirement suite passes5/5,exit0;diff check passes. This
+validates declarations/tree applicability,not fresh Angular/browser execution.
+
 Correction to the preceding baseline next-action proposal:existing October19
 public AND Material live baseline diagnostics already answer the local numeric
 question. Recovered logs authenticate as7b86cc08(public) and7a23e92d(Material).
