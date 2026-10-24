@@ -9,6 +9,31 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Ordinary wrapping request-path source binding now authenticates five COMPLETE
+current/emitted/installed methods:TextStyleParserService.parseTextProperties;
+TextRenderingService.parseElementTextStyle,renderTextToTexture,generateCacheKey;
+BabylonDOMRendererService.handleTextContent. Complete DEFAULT_TEXT_STYLE initializer
+also token-matches installed,including normal whiteSpace/wordWrap and clip
+textOverflow. Scanner comparison preserves literal contents. Installed whole-file
+hashes are included inputs of the existing public-block reduction bundle.
+
+Important applicability boundary:that reduction has no text,so inclusion does
+NOT prove these methods ran there. Source path prefers pre-parsed element.textStyle
+before supplied style rules,then parses before cache lookup;cache hits can bypass
+repaint. Do not infer retained texture requests from declaration omission or
+ignore either branch. No historical October5 installed/current equivalence,
+wordBreak/overflowWrap support,used wrapping or paint accepted.
+
+Initial ordinary-wrapping-request-source-binding-20261025 pair fails an owning
+class assertion because diagnostic used RendererService instead of actual
+BabylonDOMRendererService. Preserve it as instrumentation failure,not a renderer
+failure. Corrected ordinary-wrapping-request-source-binding-correct-owner-20261025
+pair nativeExit0/stderr empty authenticates the five methods/default initializer
+and source/raw capture receipts;no browser or parser-control rerun. Next execute
+the exact request path with bounded recording adapters to distinguish supplied
+rule/pre-parsed override and cache behavior before requesting fresh text evidence.
+Frozen live1041/365/198 and canonical88be4d47/pendingf812d8d9 stay unchanged.
+
 Next outside-owner wrapping question now has retained declaration/context triage,
 not another parser/browser run. All120 mapped owner pairs across24 cases traverse
 264 native and384 candidate ancestor visits. Native whiteSpace/overflowWrap/
