@@ -4,6 +4,28 @@
 
 ### Current next action and publication status
 
+- Next-batch Slider join is implemented and dry-run verified,NOT saved/published.
+  Existing reviewed-case format receives52 children across exactly16 cases:
+  16 unequal state-layer inputs,16 pointer/hover-only focus observations,
+  16 bounded historical material mechanisms,and4 light interior-paint records.
+  Complete c0e397e0 predecessor recovers after removing only these children and
+  restoring16 focus dispositions. All2311 case flags and original remaining
+  tasks preserve. Prospective pending joins:focus1587/activation1466/paint949;
+  accepted counts remain1603/1466/949. Pointer evidence does not substitute
+  actual programmatic/keyboard focus or close its obligation. Producer:
+  scripts/join-material-slider-state-inputs.mjs;owning regression:
+  tests/material-parity/slider-state-input-join.spec.mjs. Changed proof,verification
+  log or capture bytes reject. Five focused integration checks pass,zero skips,
+  in7785.8082ms,logSHA860dfd9e5713d577293be6fbc54d5bf5c907b05313cc1944a6e0deffd44a3b83.
+  Dry-run digest0b3b7964bafe4e7f4094cd640c906b4dea8fc73ed1d5b0beb6e9c3318a290bf0,
+  logSHA3b4b7607b34fd9836913ec5809dfb33de7b454b611a15d47750c274f355867a2.
+  Both stderr files empty. No full review result set was written:remaining
+  work is conservative save headroom,owning reader/dependency validation,
+  coherent source/finding/proof registration and later canonical milestone.
+  Do not run export merely to update these notes. Calendar frozen navigation
+  and eight-context shortcut delivery were checked against existing records,
+  not reopened or recaptured;they already have bounded classifications.
+
 - Historical black Slider material path is now reproduced before rasterization.
   Exact parentf3c8254c of2cb8b198 has alphaHex returning rgba(...);the plugin's
   six-digit-only color filter rejects it and returns fallback#6750a414. Original

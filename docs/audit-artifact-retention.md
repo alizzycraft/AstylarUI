@@ -1,5 +1,16 @@
 # Audit artifact retention
 
+October24 Slider next-batch join is DRY ONLY. No additional~199MB review snapshot
+or canonical payload was written. Keep slider-state-input-join-focused-20261024,
+slider-state-join-integration-20261024 (5/5),and
+slider-state-input-join-dry-run-20261024 logs and their stderr. IntegrationSHA
+860dfd9e5713d577293be6fbc54d5bf5c907b05313cc1944a6e0deffd44a3b83;
+dry-runSHA3b4b7607b34fd9836913ec5809dfb33de7b454b611a15d47750c274f355867a2.
+The exact predecessor c0e397e0 and original raw captures remain required.
+Dry-run digest0b3b7964 is not an installed proposal/pointer or accepted coverage.
+Check conservative atomic-writer headroom and complete reader/source integration
+before saving/publishing a coherent successor. No original/failure evidence removed.
+
 October24 historical Slider material replay uses immutable git blob sources at
 f3c8254c,not a new browser build or screenshot set. Preserve
 slider-historical-black-material-20261024 initial successful barrel-import log
