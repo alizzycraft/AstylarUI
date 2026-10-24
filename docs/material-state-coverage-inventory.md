@@ -9,6 +9,28 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Pending Menu/focus/Select/disabled source reconciliation completes without
+registration or export. Rehash old censusdd39adb0 and all prior15 standalone
+sources:unchanged. All18 prior test titles conserve. Six added standalone paths
+are the three Select/disabled capture adapters,two exact-case join modules and
+select-readonly-evidence.spec.mjs;the latter has three test declarations. Total
+pending21 unique source paths/21 test declarations,not new cases or new defects.
+Every pending path is outside the frozen1002-source literal inventory;no duplicate
+or replacement source is hidden. AST checks independently confirm326 registered
+proof calls and actual imported policy remains193 definitions. Pending findings
+remain the same two Menu authoring findings and one public-focus core finding;
+Select readonly/authoring findings reuse existing IDs rather than creating more.
+
+Retain menu-focus-select-disabled-pending-census-20261025 log pair,nativeExit0,
+stderr empty,stdout SHA256
+685e50f9f0b7d3a31f4be0ad4cf0e228ae29f7a8a3ae75ef82ed4dd724f66795.
+This records exact raw source hashes,proof titles and predecessor census receipt.
+Frozen producer9e936a24 and accepted pointer88be4d47 remain unchanged. Registration
+and canonical publication are still pending;do not represent declaration counts
+as passing executions or broaden the3-test Select integration to the18 Menu tests.
+Next use this single reconciled batch for bounded dependency-reader/registration
+planning;do not recapture unchanged browser evidence or rerun old investigations.
+
 Select/disabled evidence batch integration passes3/3,0skip,nativeExit0 in
 62931.6725ms. Six disabled supplementary observation children now join exact
 authoredEditing obligations through join-material-disabled-control-evidence.mjs;
