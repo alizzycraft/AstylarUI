@@ -7,6 +7,39 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Menu theme-input applicability narrowed without recapture (October24)
+
+Do not repeat Menu's already-inspected desktop navigation/item action probes.
+The registered fixture-menu-item-dismissal-focus-navigation-and-typeahead-omitted
+finding already binds reset/remaining actions,keyboard remainder and matched
+item-key/typeahead reports. Their paired row populations are2+14,16 and16,
+covering all eight requested desktop theme/DPR contexts. The selected case's
+older supplementaryMenuActions child records only the initial seven-state
+sequence;that is an integration boundary,not absence of the later keyboard data.
+
+Specific question:are matching profile labels hiding unequal actual frame-theme
+inputs when applying those supplementary records? Reused actual normalizeColor
+method72ccd810 and unchanged theme source60a0737e,not a new color normalizer.
+All400 supplemental boundary-tree receipts authenticate against the four pinned
+reports. Recorded native/candidate frame surface,ink and font-size values match
+the requested theme resolver in EVERY tree. The same check against all82 original
+configured Menu cases authenticates164 trees with zero mismatches. Thus564 trees
+support these three input witnesses;profile labels alone were not the evidence.
+
+Both read-only Node queries exit native0. Keep menu-retained-theme-input-witnesses-
+20261024 log pair (stdout SHA256
+539191d820a8f4d159089810129f738874cacd6e4ff9ec335397cfedf9ecf163)
+and menu-configured-theme-input-witnesses-20261024 pair (stdout SHA256
+3a3103a0e5fcde7c3f74805ec88e6b7581f29fb250dd52b1845d094301ec4cf9);
+stderr empty. Existing reports preserve all other raw values/receipts.
+This excludes a frame surface/ink/font-size mismatch as the explanation for the
+recorded Menu interaction differences. It does NOT establish store identity,
+all theme tokens,full input equivalence,identical actions,paint or current runtime.
+Next exact-case integration should reuse those existing bounded keyboard proofs
+and these witnesses;do not recapture to fill a bookkeeping gap. Full remaining
+activation/currentness,paint/ownership and final gates stay open. No source in
+the frozen1002/326 batch,case flag,canonical pointer or Git-internal file changed.
+
 ### Recovered runner closes three historical endpoint replay barriers (October24)
 
 While publication/storage direction remains pending,the registered1002/326
