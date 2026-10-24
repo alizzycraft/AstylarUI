@@ -9,6 +9,25 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Public-package negative-tabindex diagnostic exposes an action-timing assumption,
+not yet a core focusability failure. Adapter audit-public-menu-negative-tabindex
+pins existing public-role-focus-refresh producerb0ffd789,uses only package-root
+Astylar import,and authors equal menu-role div/span tabindex=-1 at DPR1/2. It
+calls public surface.focus rather than directly focusing semantic DOM. Capture
+completes four pairs with no page errors and preserves report/bundle/input/source
+receipts,but inherited verifier fails(nativeExit1):all candidate API calls return
+true,first immediate DOM focus false,then focus true after later update/settlement.
+Second iteration is already focused. Native controls are immediately focused.
+Keep public-menu-negative-tabindex-20261024 report/log pair and build inputs.
+
+Do NOT classify this as missing negative-tabindex support or silently pass the
+inherited assertion. Immediate public-scene focus request versus settled semantic
+DOM,or update-induced repair,are competing explanations. Smallest decisive next
+control observes after surface settlement BEFORE unchanged-document update,
+keeping equal authored inputs and original failure immutable. Actual public
+API request success alone is not native DOM focus;later update endpoint alone
+cannot establish when focus arrived. No renderer/fixture changes or acceptance.
+
 Menu semantic support question narrowed with actual current owning methods,
 not another showcase capture or a fixture workaround. Existing runtime spec
 already exercises focusElement on tabindex=-1. New isolated-method proof executes
