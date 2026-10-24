@@ -9,6 +9,27 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Small exact-case requirement record now checked in at
+docs/evidence/material-divider-light-desktop-requirement-review.json for existing
+coverage integration. It reconciles only the original crop producer/pixel-
+provenance subcondition with explicit four-image/source receipts. All8 parent
+obligation statuses/applicabilities preserve;3 authored exclusions remain inspected
+and5 applicable obligations remain partial. Original fractional rectangle/semantic
+association is explicitly outstanding,not silently replaced by integer bounds.
+Other material/anonymous owner,paint attribution,history/lifetime,currentness and
+final gates remain. inspectionClosureAllowed false,currentRendering unverified.
+
+Existing standalone crop provenance suite now passes2/2,0skip,nativeExit0,
+stderr empty;keep divider-crop-requirement-review-20261025 log pair. Second check
+authenticates parent/proof receipts,exact requirement membership and all unchanged
+remaining lists;false case promotion,cleared paint work and cleared history work
+reject. This is requirement reconciliation,not a second coverage framework or
+canonical proposal. No large review/package generation or browser capture.
+Both standalone spec/review stay outside frozen1041/365/198;pendingf812d8d9 and
+accepted88be4d47 unchanged. Next answer the remaining local-paint first-divergence/
+coverage question using existing unequal owner input and paint evidence,not repeat
+the settled source/pixel provenance or relabel diagnostic thresholds as passes.
+
 Exact historical crop PIXEL provenance now established for static:divider@light/
 desktop,Above/Below on both sides. All four stored decoded crops occur exactly
 once within authenticated ORIGINAL full screenshots. Every RGBA byte agrees.

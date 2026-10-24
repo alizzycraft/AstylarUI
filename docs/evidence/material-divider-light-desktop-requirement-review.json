@@ -1,0 +1,238 @@
+{
+  "kind": "material-case-requirement-review",
+  "status": "partial-not-inspection-closure",
+  "case": "static:divider@light/desktop",
+  "inspection": "partial",
+  "currentRendering": "unverified",
+  "inspectionClosureAllowed": false,
+  "basis": {
+    "parent": {
+      "file": "artifacts/material-parity/working-audit/proposals/c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823.json",
+      "sha256": "ed7ecfea82fef0406fc9e0430a2df16a7db4555d2fdd074568c96cb5f3b39868"
+    },
+    "pendingReview": "f812d8d9e169b51afd03ae43ea06f8b8ac69e6df5147f11589112919c6ef7083",
+    "parentConservation": {
+      "file": "artifacts/material-parity/divider-context-live-full-reader-20261025.log",
+      "sha256": "3656fb0169e801eb380e828bcf4db759a6ba100eaae2f66ddffd08d621d76bb0"
+    }
+  },
+  "requirements": {
+    "authoredActivation": {
+      "applicability": "not-applicable",
+      "disposition": "inspected-authored-exclusion",
+      "conclusion": "Recorded divider declarations contain passive paragraphs/spans and a separator,not an authored activation control. Ordinary DOM pointer-event delivery is not excluded or claimed absent.",
+      "remaining": [],
+      "evidence": {
+        "file": "artifacts/material-parity/working-audit/proposals/c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823.json",
+        "sha256": "ed7ecfea82fef0406fc9e0430a2df16a7db4555d2fdd074568c96cb5f3b39868",
+        "case": "static:divider@light/desktop",
+        "obligation": "authoredActivation"
+      }
+    },
+    "authoredEditing": {
+      "applicability": "not-applicable",
+      "disposition": "inspected-authored-exclusion",
+      "conclusion": "Recorded divider declarations have no input,textarea,select or writable contenteditable owner. Text content is not an authored editable field.",
+      "remaining": [],
+      "evidence": {
+        "file": "artifacts/material-parity/working-audit/proposals/c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823.json",
+        "sha256": "ed7ecfea82fef0406fc9e0430a2df16a7db4555d2fdd074568c96cb5f3b39868",
+        "case": "static:divider@light/desktop",
+        "obligation": "authoredEditing"
+      }
+    },
+    "programmaticFocus": {
+      "applicability": "not-applicable",
+      "disposition": "inspected-authored-exclusion",
+      "conclusion": "Recorded divider declarations contain no native focusable control,link target,tabindex owner or interactive callback attribute. Unlike determinate progress fixtures,no programmatic focus target is authored here.",
+      "remaining": [],
+      "evidence": {
+        "file": "artifacts/material-parity/working-audit/proposals/c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823.json",
+        "sha256": "ed7ecfea82fef0406fc9e0430a2df16a7db4555d2fdd074568c96cb5f3b39868",
+        "case": "static:divider@light/desktop",
+        "obligation": "programmaticFocus"
+      }
+    },
+    "inputStyleStructure": {
+      "applicability": "applicable",
+      "disposition": "partial",
+      "conclusion": "Partial;retain the original obligation and outstanding inspection work.",
+      "remaining": [
+        "Complete material property/anonymous line-box correspondence beyond the identified explicit paragraph/span owners",
+        "First-stage and paint applicability of remaining owners"
+      ],
+      "evidence": {
+        "file": "artifacts/material-parity/working-audit/proposals/c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823.json",
+        "sha256": "ed7ecfea82fef0406fc9e0430a2df16a7db4555d2fdd074568c96cb5f3b39868",
+        "case": "static:divider@light/desktop",
+        "obligation": "inputStyleStructure"
+      }
+    },
+    "localPaint": {
+      "applicability": "applicable",
+      "disposition": "partial",
+      "conclusion": "Partial;retain the original obligation and outstanding inspection work.",
+      "remaining": [
+        "Coverage/compositing mechanism where attribution remains uncertain; retained endpoints and footprint are now inspected",
+        "Complete equal-input owner paint attribution and final current-code gates",
+        "Fractional original native expectedBox and semantic target rectangle association remain unproved;integer pixel provenance does not replace them."
+      ],
+      "evidence": {
+        "file": "artifacts/material-parity/working-audit/proposals/c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823.json",
+        "sha256": "ed7ecfea82fef0406fc9e0430a2df16a7db4555d2fdd074568c96cb5f3b39868",
+        "case": "static:divider@light/desktop",
+        "obligation": "localPaint"
+      },
+      "originalCropProvenance": {
+        "disposition": "inspected-bounded-source-and-pixel-provenance",
+        "originalProducerSourceAuthenticated": true,
+        "uniqueOriginalPixelRegions": 4,
+        "originalCropFunctionEncodedReplayMatches": 4,
+        "referenceCandidateIntegerBoundsAgree": true,
+        "fractionalTargetGeometryRecovered": false,
+        "equalInputsAccepted": false,
+        "rasterAcceptanceChanged": false,
+        "evidence": {
+          "proof": {
+            "file": "artifacts/material-parity/divider-original-crop-provenance-20261025.log",
+            "sha256": "bf781d314c9f637c4b202b4182510d799b06b94413701cd76ed0c10e0463862e"
+          },
+          "originalSource": {
+            "file": "docs/evidence/material-original-runner-e01.mjs.gz.b64",
+            "sha256": "311eafef8c158ad3d251c319cc8d26b6c25816c59c5eb8c8133de68ee4fbdc9b"
+          },
+          "cropMethodSha256": "955eac03891a2baf60c09e877a6bb660581ef45cb3d6bc7fb87f9c842f888d38",
+          "observations": [
+            {
+              "id": "divider-above",
+              "side": "reference",
+              "crop": {
+                "file": "artifacts\\\\material-parity\\\\current-full-20261005\\\\divider\\\\light\\\\desktop\\\\divider-above-alignment-reference.png",
+                "sha256": "2d7cc40f3da1b8df1691d259bfa525aa64c0d7b92adcf8a6c3066f35ff3cfadb"
+              },
+              "full": {
+                "file": "artifacts\\\\material-parity\\\\current-full-20261005\\\\divider\\\\light\\\\desktop\\\\reference.png",
+                "sha256": "2fe5e92a0d9c34ffbe2b063cbb5d14082e1171a566fffb1f95ddf8ffabcafe30"
+              },
+              "bounds": {
+                "left": 61,
+                "top": 193,
+                "right": 114,
+                "bottom": 221
+              },
+              "decodedBytes": 5936,
+              "encodedReplayMatches": true
+            },
+            {
+              "id": "divider-above",
+              "side": "astylar",
+              "crop": {
+                "file": "artifacts\\\\material-parity\\\\current-full-20261005\\\\divider\\\\light\\\\desktop\\\\divider-above-alignment-astylar.png",
+                "sha256": "382ef97d34542b2a8c1c3b04349c4e4613294aade72605d4536be864c28449f9"
+              },
+              "full": {
+                "file": "artifacts\\\\material-parity\\\\current-full-20261005\\\\divider\\\\light\\\\desktop\\\\astylar.png",
+                "sha256": "0f8421550566ec06557cd0e455fa20659f854177ca8e4f9d78baf1837754da4e"
+              },
+              "bounds": {
+                "left": 61,
+                "top": 193,
+                "right": 114,
+                "bottom": 221
+              },
+              "decodedBytes": 5936,
+              "encodedReplayMatches": true
+            },
+            {
+              "id": "divider-below",
+              "side": "reference",
+              "crop": {
+                "file": "artifacts\\\\material-parity\\\\current-full-20261005\\\\divider\\\\light\\\\desktop\\\\divider-below-alignment-reference.png",
+                "sha256": "135783a21a5ad00a16c2eef121db46fe075d5b44360958b6e08ae1c809709c85"
+              },
+              "full": {
+                "file": "artifacts\\\\material-parity\\\\current-full-20261005\\\\divider\\\\light\\\\desktop\\\\reference.png",
+                "sha256": "2fe5e92a0d9c34ffbe2b063cbb5d14082e1171a566fffb1f95ddf8ffabcafe30"
+              },
+              "bounds": {
+                "left": 61,
+                "top": 245,
+                "right": 113,
+                "bottom": 273
+              },
+              "decodedBytes": 5824,
+              "encodedReplayMatches": true
+            },
+            {
+              "id": "divider-below",
+              "side": "astylar",
+              "crop": {
+                "file": "artifacts\\\\material-parity\\\\current-full-20261005\\\\divider\\\\light\\\\desktop\\\\divider-below-alignment-astylar.png",
+                "sha256": "6de1edcaabcf842dceda4e1f662d4353078fbbb0306468b3387ed63328160f41"
+              },
+              "full": {
+                "file": "artifacts\\\\material-parity\\\\current-full-20261005\\\\divider\\\\light\\\\desktop\\\\astylar.png",
+                "sha256": "0f8421550566ec06557cd0e455fa20659f854177ca8e4f9d78baf1837754da4e"
+              },
+              "bounds": {
+                "left": 61,
+                "top": 245,
+                "right": 113,
+                "bottom": 273
+              },
+              "decodedBytes": 5824,
+              "encodedReplayMatches": true
+            }
+          ]
+        }
+      }
+    },
+    "semantics": {
+      "applicability": "applicable",
+      "disposition": "partial",
+      "conclusion": "Partial;retain the original obligation and outstanding inspection work.",
+      "remaining": [
+        "Runtime applicability beyond recorded served-build checkpoints and complete final current-code gates"
+      ],
+      "evidence": {
+        "file": "artifacts/material-parity/working-audit/proposals/c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823.json",
+        "sha256": "ed7ecfea82fef0406fc9e0430a2df16a7db4555d2fdd074568c96cb5f3b39868",
+        "case": "static:divider@light/desktop",
+        "obligation": "semantics"
+      }
+    },
+    "historyOwnership": {
+      "applicability": "applicable",
+      "disposition": "partial",
+      "conclusion": "Partial;retain the original obligation and outstanding inspection work.",
+      "remaining": [
+        "Renderer-causality attribution beyond classified coordinate branches and inspected unchanged divider root-height lineage",
+        "late completion/remount/peer isolation applicability",
+        "current rendering and lifetime validity",
+        "Other compensation/history branches and live resource ownership/currentness"
+      ],
+      "evidence": {
+        "file": "artifacts/material-parity/working-audit/proposals/c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823.json",
+        "sha256": "ed7ecfea82fef0406fc9e0430a2df16a7db4555d2fdd074568c96cb5f3b39868",
+        "case": "static:divider@light/desktop",
+        "obligation": "historyOwnership"
+      }
+    },
+    "sourceCurrentness": {
+      "applicability": "applicable",
+      "disposition": "partial",
+      "conclusion": "Partial;retain the original obligation and outstanding inspection work.",
+      "remaining": [
+        "Full runtime/environment/input applicability and complete enforced current rendering evidence"
+      ],
+      "evidence": {
+        "file": "artifacts/material-parity/working-audit/proposals/c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823.json",
+        "sha256": "ed7ecfea82fef0406fc9e0430a2df16a7db4555d2fdd074568c96cb5f3b39868",
+        "case": "static:divider@light/desktop",
+        "obligation": "sourceCurrentness"
+      }
+    }
+  },
+  "nextAction": "Review remaining local-paint first-divergence/coverage attribution against existing unequal input findings;do not repeat original source recovery or the four crop provenance checks.",
+  "boundary": "A small exact-case requirement record for future existing coverage integration,not a new audit framework or canonical proposal. Only original crop source/pixel provenance condition is reconciled. All other parent statuses/tasks,unknown fractional target geometry,current runtime/lifetime and original final gates remain. No case promotion or scope/acceptance change."
+}

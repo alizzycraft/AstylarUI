@@ -54,3 +54,28 @@ test('Original Divider light desktop crops are unique exact screenshot regions',
   t.diagnostic(JSON.stringify({case:parent.case,encodedSource:{file:encodedFile,sha256:hash(encoded)},cropMethodSha256:hash(nodes[0].getText(ast)),observations,
     boundary:'Exact historical full-image/crop byte provenance and original cropPng replay at uniquely recovered integer bounds. This does not recover fractional native expectedBox or all writeAlignmentArtifacts parameters,prove semantic target bounds,equal rendering inputs,current code,or change any raster threshold/acceptance.'}));
 });
+
+test('Exact Divider requirement review reconciles crop provenance without clearing other gaps',()=>{
+  const review=JSON.parse(readFileSync('docs/evidence/material-divider-light-desktop-requirement-review.json'));
+  const b=readFileSync(review.basis.parent.file);assert.equal(hash(b),review.basis.parent.sha256);
+  const parent=JSON.parse(b).review.groups.find(r=>r.case===review.case);assert.ok(parent);
+  const validate=value=>{
+    assert.equal(value.status,'partial-not-inspection-closure');assert.equal(value.inspection,'partial');assert.equal(value.currentRendering,'unverified');assert.equal(value.inspectionClosureAllowed,false);
+    assert.deepEqual(Object.keys(value.requirements),Object.keys(parent.obligations));
+    for(const [name,r]of Object.entries(value.requirements)){
+      assert.equal(r.applicability,parent.obligations[name].applicability);assert.equal(r.disposition,parent.obligations[name].disposition);
+      assert.equal(r.evidence.sha256,value.basis.parent.sha256);
+      if(name!=='localPaint')assert.deepEqual(r.remaining,parent.obligations[name].remaining??[]);
+    }
+    const paint=value.requirements.localPaint,provenance=paint.originalCropProvenance;
+    assert.deepEqual(paint.remaining,parent.obligations.localPaint.remaining.map(s=>s.replace(',original crop-producer applicability','')).concat('Fractional original native expectedBox and semantic target rectangle association remain unproved;integer pixel provenance does not replace them.'));
+    assert.equal(provenance.originalProducerSourceAuthenticated,true);assert.equal(provenance.uniqueOriginalPixelRegions,4);assert.equal(provenance.originalCropFunctionEncodedReplayMatches,4);
+    assert.equal(provenance.fractionalTargetGeometryRecovered,false);assert.equal(provenance.equalInputsAccepted,false);assert.equal(provenance.rasterAcceptanceChanged,false);
+    assert.equal(hash(readFileSync(provenance.evidence.proof.file)),provenance.evidence.proof.sha256);
+    assert.equal(provenance.evidence.observations.length,4);
+  };
+  validate(review);
+  const promoted=structuredClone(review);promoted.inspection='complete';assert.throws(()=>validate(promoted));
+  const cleared=structuredClone(review);cleared.requirements.localPaint.remaining=[];assert.throws(()=>validate(cleared));
+  const rewritten=structuredClone(review);rewritten.requirements.historyOwnership.remaining=[];assert.throws(()=>validate(rewritten));
+});
