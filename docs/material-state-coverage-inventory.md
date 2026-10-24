@@ -7,6 +7,40 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Divider alignment through actual public updates (October24)
+
+The mocked creation/dimension boundary below now has a separate actual-pipeline
+check. `audit-material-divider-alignment-inputs.mjs` reuses the unchanged
+bb87aa65 frozen-build workflow,not a rebuild or another baseline/texture capture.
+Four themes at1440x1000/DPR1 execute the original candidate document,then public
+updates setting each of alignItems/alignContent/justifyContent to normal,then all
+three together. Overrides apply to the two paragraph and two span owners only.
+Resolved styles confirm each requested change from stretch/stretch/flex-start;
+all16 variant snapshots retain identical core-dimension-registry layouts.
+Four positive controls increase the first paragraph height by3CSSpx and observe
+that exact increase. Restoring original SiteData restores all original snapshots;
+component data remains unchanged. No canonical comparison input is edited.
+
+Capture explicit nativeExit0 on Chromium155.0.8059.85. Original1887 served-file
+inventory authenticates before/after;read-only verifier rehashes519 unique actual
+response assets and all observations,checks initial/changed values,controls and
+restoration,and rejects four mutations. Final verifier explicit nativeExit0.
+Keep divider-alignment-inputs-public-{updates,verification,verification-final}-
+20261024 log pairs (stderr empty). Capture SHA256
+6e66daee958d3b3d58a9a419ff2a8c4425138e629a517279e9faec27731b8ab7;
+final verification SHA256164d0bad58575ed17c5736505429a9689af31e0ab0ca7434fa8e1e57bab24e94.
+Replay without a browser:
+`node scripts/check-divider-alignment-inputs.mjs artifacts/material-parity/divider-alignment-inputs-public-updates-20261024.log`.
+
+Conclusion:the three differing alignment inputs do not explain retained dimension
+differences in these four settled served-build contexts,including delegated
+creation/dimension work. This is bounded input sensitivity,not a claim of no
+consumer in every branch,native alignment equivalence,projected mesh/glyph paint,
+other viewport/DPR,lifecycle or current-core acceptance. Do not repeat this check
+to answer those different questions. Standalone next-batch evidence only;source/
+proof registration and any exact-case join remain pending. Existing parent gaps,
+canonical findings,criteria and all2311 partial/current-unverified statuses survive.
+
 ### Divider inline alignment consumption answered (October24)
 
 The remaining alignment-default question is now bounded more precisely without
