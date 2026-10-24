@@ -269,3 +269,61 @@ test('public focus failure is not specific to negative tabindex across twelve me
       assert.ok(row[side].assets.some(a => a.type === type && a.sha256 === receipt.sha256));
   }
 });
+
+test('actual renderer event callback excludes public focus events from semantic synchronization', () => {
+  const callback = (file, typed) => {
+    const bytes = readFileSync(file), ast = ts.createSourceFile(file, bytes.toString(), 99, true, typed ? ts.ScriptKind.TS : ts.ScriptKind.JS);
+    const declarations = [];
+    const visit = n => { if (ts.isVariableDeclaration(n) && n.name.getText(ast) === 'interactionEvents') declarations.push(n); ts.forEachChild(n, visit); };
+    visit(ast); assert.equal(declarations.length, 1);
+    const object = declarations[0].initializer.whenTrue;
+    assert.ok(ts.isObjectLiteralExpression(object));
+    const property = object.properties.filter(p => ts.isPropertyAssignment(p) && p.name.getText(ast) === 'onEvent');
+    assert.equal(property.length, 1);
+    const original = property[0].initializer.getText(ast);
+    const code = ts.transpileModule('const cb = ' + original + ';', {
+      compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.None },
+    }).outputText;
+    return { code, originalSha256: hash(original), file, sourceSha256: hash(bytes) };
+  };
+  const current = callback('src/lib/astylar.ts', true);
+  const installed = callback('examples/material-showcase/node_modules/astylarui/dist/lib/lib/astylar.js', false);
+  assert.equal(current.code.replace(/\s/g, ''), installed.code.replace(/\s/g, ''));
+  const trace = [], bridge = {
+    queueControlStateSync: () => trace.push('control-state'),
+    queueFocusSync: (getId, keepCanvas, visible) => trace.push({ focus: getId(), keepCanvas: keepCanvas('popup'), visible: visible() }),
+  };
+  const owner = { inputElementService: { getFocusedElementId: () => undefined, isFocusVisible: () => true },
+    hasLiveTextSelection: () => false, getLiveSemanticControlState: () => ({}) };
+  const handler = new Function('semanticBridge', 'options', 'interaction',
+    'let pointerFocusTransaction = false; ' + current.code + ';return cb;').call(owner,
+      bridge, {}, { snapshot: { focusedElementId: 'popup', focusVisible: true } });
+  handler({ type: 'focus' });
+  assert.deepEqual(trace, ['control-state']);
+  const runtimeMethods = ['focusElement', 'setFocus', 'getFocusedElementId', 'liveState'];
+  const runtimeCode = file => {
+    const bytes = readFileSync(file), ast = ts.createSourceFile(file, bytes.toString(), 99, true, ts.ScriptKind.TS);
+    const owner = ast.statements.find(n => ts.isClassDeclaration(n) && n.name?.text === 'AstylarInteractionRuntime');
+    const methods = runtimeMethods.map(name => {
+      const nodes = owner.members.filter(n => ts.isMethodDeclaration(n) && n.name.getText(ast) === name);
+      assert.equal(nodes.length, 1); return nodes[0].getText(ast);
+    });
+    return ts.transpileModule('class Probe {' + methods.join('\n') + '}', { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
+  };
+  const typedRuntime = runtimeCode('src/lib/astylar-interaction-runtime.ts');
+  const installedRuntime = runtimeCode('examples/material-showcase/node_modules/astylarui/dist/lib/lib/astylar-interaction-runtime.js');
+  assert.equal(typedRuntime.replace(/\s/g, ''), installedRuntime.replace(/\s/g, ''));
+  const Runtime = new Function(typedRuntime + ';return Probe;')(), runtime = new Runtime();
+  Object.assign(runtime, { disposed: false, focusableElementIds: new Set(['popup']), controlTypes: new Map(),
+    isAllowedByModal: () => true, dispatcher: { hasEnabledTarget: () => true, getElementState: () => ({}), dispatch: event => handler(event) } });
+  trace.length = 0;
+  assert.equal(runtime.focusElement('popup', { scrollIntoView: false }), true);
+  assert.equal(runtime.getFocusedElementId(), 'popup'); assert.deepEqual(trace, ['control-state']);
+  trace.length = 0; handler({ type: 'keydown' });
+  assert.deepEqual(trace, ['control-state', { focus: 'popup', keepCanvas: false, visible: true }]);
+  trace.length = 0; handler({ type: 'click' });
+  assert.deepEqual(trace, ['control-state', { focus: 'popup', keepCanvas: false, visible: true }]);
+  console.log(JSON.stringify({ current: { ...current, code: undefined }, installed: { ...installed, code: undefined },
+    focusEventsQueueNativeFocus: false, keyboardAndClickControlsQueueNativeFocus: true,
+    boundary: 'Complete actual callback with explicit no-pointer/no-selection controls. Public request reproduction separately proves failure;not a fix or waiver of pointer/selection/modal safeguards.' }));
+});

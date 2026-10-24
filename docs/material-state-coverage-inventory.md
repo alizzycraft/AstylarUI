@@ -9,6 +9,32 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Public focus synchronization cause is now CONFIRMED within the tested path,
+not merely inferred from screenshot/final focus. Complete current renderer
+interactionEvents.onEvent callbackc92afd2d matches actual installed callback
+4896b712 after TS transpilation/whitespace comparison. Execute complete current/
+installed focusElement,setFocus,getFocusedElementId,liveState methods with the
+actual callback:request returns true and logical owner becomes popup,emits focus,
+queues control-state sync but NEVER native-focus sync. Pointer transaction=false,
+no live text selection. Keydown/click controls reach queueFocusSync with the
+expected owner/visibility. Hence the event.type!='focus' gate assumes native DOM
+origin even for public scene-origin focus;public renderer.focus separately queues
+nothing. Unchanged update independently queues the bridge and accounts for the
+observed later native focus. This cause is distinct from the existing held-pointer
+transaction suppression finding and the two Menu authored-input omissions.
+
+Pending core-public-focus-does-not-synchronize-native-semantic-owner now records
+confirmed classification,exact callback hashes,public reproduction and causal
+receipt. First-bad history and untested role/blur/modal/selection/lifetime cases
+remain unknown. Later correction belongs at core origin-aware focus scheduling,
+not Menu offsets/plugin focus patches or indiscriminate removal of safety gates.
+No implementation authorized/performed. Focused proof1/1/native0:
+public-focus-event-gate-full-path-proof-20261024 stdout SHA256
+3d3c03b253a8603f5d7dae31c575b574c3d6a5d9ea91d66cd246d516b2f55c99.
+Existing suite passes13/13,native0;keep public-focus-causal-integration-20261024
+pair plus first callback proof. Audit assertions preserve12 public failures;
+not rendering acceptance. Frozen registry,canonical pointer and case flags unchanged.
+
 Public focus control matrix answers the negative-tabindex hypothesis without
 changing the expected native-focus behavior. One reused package-root producer
 captures12 equal-input pairs:DPR1/2 x div/span/button elements x tabindex-1/0.

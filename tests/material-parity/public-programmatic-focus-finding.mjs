@@ -1,7 +1,7 @@
 // Pending core finding, distinct from unequal Menu tabindex/controls authoring.
 export const publicProgrammaticFocusFinding = Object.freeze({
   id: 'core-public-focus-does-not-synchronize-native-semantic-owner',
-  classification: 'suspected-core-renderer-defect',
+  classification: 'confirmed-core-renderer-defect',
   owner: 'core public focus request to scene/semantic DOM synchronization',
   file: 'src/lib/astylar.ts',
   introducedBy: 'Historical first-bad revision not established.',
@@ -21,9 +21,15 @@ export const publicProgrammaticFocusFinding = Object.freeze({
   sourceApplicability: { currentMethodSha256: '3814563ee560c51ef0974a3d97aa2ae384828669e91914960dc293a548290737',
     installedMethodSha256: 'ee9a015e976d288f47177c2264057f02d83e6a046ecb81d88fa2d84f4df7f3fa',
     comparison: 'Complete current typed method transpiles to the installed method after whitespace-only comparison;installed file hash is a captured bundle input.' },
+  causalSource: { currentEventCallbackSha256: 'c92afd2d70afdf17e82cb619f723ab1e9ab0e171168f74ba2865de774bc654a2',
+    installedEventCallbackSha256: '4896b71296450ee0f09fc0cab9ac5cbcefdda6e7fd6c0e808298d8fa47a4c2a4',
+    evidence: { file: 'artifacts/material-parity/public-focus-event-gate-full-path-proof-20261024.log',
+      sha256: '3d3c03b253a8603f5d7dae31c575b574c3d6a5d9ea91d66cd246d516b2f55c99' },
+    chain: 'Public renderer delegates to focusElement;actual runtime setFocus emits focus;actual event callback excludes focus from queueFocusSync. No pointer transaction or text selection is active. Keydown/click controls queue sync.',
+    proof: 'tests/material-parity/menu-popup-ax.spec.mjs: actual renderer event callback excludes public focus events from semantic synchronization' },
   justification: 'All four equal-input package-root pairs author tabindex=-1. Request returns true yet semantic DOM remains unfocused after surface.whenSettled and two animation frames,before any update. An unchanged-document update moves focus. Current/installed renderer focus methods delegate directly to interaction.focusElement;the update path separately queues semantic focus synchronization. This is not the showcase omitted-tabindex input defect. The inherited pass verifier still fails;focused audit assertions preserve the failure rather than weaken it.',
-  boundary: 'Suspected causal synchronization gap,not complete public contract diagnosis,all control kinds,public blur,modal/pointer/selection/lifetime or whole current rendering. Both failed original/settled probes are retained.',
+  boundary: 'Confirmed in the tested public menu-role request path;not all control kinds,public blur,modal/pointer/selection/lifetime or whole current rendering. Both failed original/settled probes and twelve-pair controls are retained.',
   nextChecks: ['Compare ordinary default-role button public-focus controls;tabindex=0 menu-role controls already reproduce the gap.',
-    'Trace accepted request through logical focus and semantic bridge scheduling without an unrelated update.',
+    'General correction should distinguish programmatic scene-origin focus from native DOM-origin focus;do not simply remove focus/pointer/selection guards.',
     'Keep directional selection,held pointer and modal ownership constraints in the eventual general fix;do not add Menu-specific focus workarounds.'],
 });
