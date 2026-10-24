@@ -9,6 +9,33 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Exact original light/desktop separator paint attribution now resolves the
+generic compositing question FOR THIS BAND. Authenticated native mat-divider
+requests a1px top border RGB123/117/127;candidate requests absolute1px fill
+RGB202/196/208. Both original PNGs have identical footprint x65..784,y232:
+exactly720 opaque pixels equal their OWN requested ink,with identical clear
+padded background,one connected component and no extra coverage pixels. Thus
+this observed color delta is unequal authoring before paint,not an observed
+alpha/coverage discrepancy. Different border/fill inputs are still NOT equivalent.
+
+Existing crop provenance spec gains exact original image/tree/request/full-band
+assertions;no blend fit,threshold relaxation,recapture or new image. Keep
+divider-light-desktop-separator-paint-attribution-20261025 pair,3/3,0skip,
+5066.0326ms,nativeExit0,stderr empty,stdout SHA256
+4d6c63c773e3bbffac381befc4366a7f8d7fa21b562259b9b1ab8ae3b84d2c7c.
+The small requirement review now records bounded inspected authoring attribution
+for the separator and narrows generic remaining work to paragraph/text or other
+unreviewed owners;no case/parent obligation promoted. Fractional original target
+geometry,equal-input owner paint,currentness/lifetime and final gates remain.
+
+Requirement integration passes3/3,0skip,nativeExit0;keep
+divider-local-paint-requirement-attribution-20261025 log pair. Do not transfer
+this no-observed-coverage result to other themes/DPR where footprints differ or
+to text/GPU internals. Next review the exact remaining text-paint evidence scope
+against existing opaque/transparent backing and settled-font controls,not repeat
+the now-settled separator band or generic mixed-coverage models. Local registered
+and canonical/pending audit populations remain unchanged.
+
 Small exact-case requirement record now checked in at
 docs/evidence/material-divider-light-desktop-requirement-review.json for existing
 coverage integration. It reconciles only the original crop producer/pixel-

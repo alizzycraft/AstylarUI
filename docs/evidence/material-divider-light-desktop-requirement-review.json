@@ -73,7 +73,7 @@
       "disposition": "partial",
       "conclusion": "Partial;retain the original obligation and outstanding inspection work.",
       "remaining": [
-        "Coverage/compositing mechanism where attribution remains uncertain; retained endpoints and footprint are now inspected",
+        "Remaining paragraph/text or unreviewed-owner coverage/compositing attribution is unproved;the exact original separator footprint and opaque ink difference are attributed to unequal requests.",
         "Complete equal-input owner paint attribution and final current-code gates",
         "Fractional original native expectedBox and semantic target rectangle association remain unproved;integer pixel provenance does not replace them."
       ],
@@ -82,6 +82,21 @@
         "sha256": "ed7ecfea82fef0406fc9e0430a2df16a7db4555d2fdd074568c96cb5f3b39868",
         "case": "static:divider@light/desktop",
         "obligation": "localPaint"
+      },
+      "separatorPaintAttribution": {
+        "disposition": "inspected-bounded-original-separator-input-attribution",
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "Native 1px top-border RGB123/117/127 versus candidate positioned 1px fill RGB202/196/208 before paint.",
+        "nativeRequestedInk": [123, 117, 127, 255],
+        "candidateRequestedInk": [202, 196, 208, 255],
+        "exactRequestedPixelsPerSide": 720,
+        "sharedFootprint": {"left": 65, "top": 232, "right": 785, "bottom": 233},
+        "observedCoverageAlphaDiscrepancy": false,
+        "evidence": {
+          "file": "artifacts/material-parity/divider-light-desktop-separator-paint-attribution-20261025.log",
+          "sha256": "4d6c63c773e3bbffac381befc4366a7f8d7fa21b562259b9b1ab8ae3b84d2c7c"
+        },
+        "boundary": "Exact original light/desktop separator band only;not text,other themes/DPR,GPU internals,current code or acceptance of different border/fill inputs."
       },
       "originalCropProvenance": {
         "disposition": "inspected-bounded-source-and-pixel-provenance",

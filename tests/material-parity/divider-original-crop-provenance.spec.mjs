@@ -68,14 +68,47 @@ test('Exact Divider requirement review reconciles crop provenance without cleari
       if(name!=='localPaint')assert.deepEqual(r.remaining,parent.obligations[name].remaining??[]);
     }
     const paint=value.requirements.localPaint,provenance=paint.originalCropProvenance;
-    assert.deepEqual(paint.remaining,parent.obligations.localPaint.remaining.map(s=>s.replace(',original crop-producer applicability','')).concat('Fractional original native expectedBox and semantic target rectangle association remain unproved;integer pixel provenance does not replace them.'));
+    assert.deepEqual(paint.remaining,parent.obligations.localPaint.remaining.map((s,index)=>index===0?'Remaining paragraph/text or unreviewed-owner coverage/compositing attribution is unproved;the exact original separator footprint and opaque ink difference are attributed to unequal requests.':s.replace(',original crop-producer applicability','')).concat('Fractional original native expectedBox and semantic target rectangle association remain unproved;integer pixel provenance does not replace them.'));
     assert.equal(provenance.originalProducerSourceAuthenticated,true);assert.equal(provenance.uniqueOriginalPixelRegions,4);assert.equal(provenance.originalCropFunctionEncodedReplayMatches,4);
     assert.equal(provenance.fractionalTargetGeometryRecovered,false);assert.equal(provenance.equalInputsAccepted,false);assert.equal(provenance.rasterAcceptanceChanged,false);
     assert.equal(hash(readFileSync(provenance.evidence.proof.file)),provenance.evidence.proof.sha256);
     assert.equal(provenance.evidence.observations.length,4);
+    assert.equal(paint.separatorPaintAttribution.classification,'application-plugin-authoring-defect');
+    assert.equal(paint.separatorPaintAttribution.observedCoverageAlphaDiscrepancy,false);
+    assert.equal(paint.separatorPaintAttribution.exactRequestedPixelsPerSide,720);
+    assert.equal(hash(readFileSync(paint.separatorPaintAttribution.evidence.file)),paint.separatorPaintAttribution.evidence.sha256);
   };
   validate(review);
   const promoted=structuredClone(review);promoted.inspection='complete';assert.throws(()=>validate(promoted));
   const cleared=structuredClone(review);cleared.requirements.localPaint.remaining=[];assert.throws(()=>validate(cleared));
   const rewritten=structuredClone(review);rewritten.requirements.historyOwnership.remaining=[];assert.throws(()=>validate(rewritten));
+});
+
+test('Original light desktop separator paints both unequal requested inks over identical footprints',t=>{
+  const file='artifacts/material-parity/working-audit/proposals/c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823.json',b=readFileSync(file);
+  assert.equal(hash(b),'ed7ecfea82fef0406fc9e0430a2df16a7db4555d2fdd074568c96cb5f3b39868');
+  const parent=JSON.parse(b).review.groups.find(r=>r.case==='static:divider@light/desktop'),paint=parent.obligations.localPaint;
+  assert.equal(hash(readFileSync(paint.separatorEndpointFootprints.evidence.file)),paint.separatorEndpointFootprints.evidence.sha256);
+  const rows=paint.separatorEndpointFootprints.observations;assert.equal(rows.length,2);const observations=[];
+  for(const row of rows){
+    const bytes=readFileSync(row.image.file);assert.equal(hash(bytes),row.image.sha256);const image=PNG.sync.read(bytes);
+    const tb=readFileSync(row.tree.file);assert.equal(hash(tb),row.tree.sha256);const tree=JSON.parse(tb);
+    const native=row.side==='reference';
+    const node=tree.nodes.find(n=>native?n.attributes?.id==='divider-primary':n.authored?.id==='divider-primary');assert.ok(node);
+    const style=native?tree.styles[node.style]:node.resolvedStyle;
+    let ink;
+    if(native){assert.equal(style.borderTopWidth,'1px');assert.equal(style.height,'0px');ink=style.borderTopColor.match(/\d+/g).map(Number).concat(255);}
+    else{assert.equal(style.borderWidth,'0');assert.equal(style.height,'1px');assert.equal(style.position,'absolute');ink=[1,3,5].map(i=>parseInt(style.background.slice(i,i+2),16)).concat(255);}
+    assert.deepEqual(ink,native?[123,117,127,255]:[202,196,208,255]);
+    assert.deepEqual(row.footprint,{left:65,top:232,right:785,bottom:233});assert.equal(row.changedPixels,720);assert.equal(row.connectedComponents,1);assert.equal(row.clearPaddedRing,true);
+    const background=[246,241,249,255];let changed=0;
+    for(let y=row.band.top;y<row.band.bottom;y++)for(let x=row.band.left;x<row.band.right;x++){
+      const inside=x>=65&&x<785&&y===232,at=(y*image.width+x)*4;
+      assert.deepEqual([...image.data.subarray(at,at+4)],inside?ink:background);
+      if(inside)changed++;
+    }
+    assert.equal(changed,720);observations.push({side:row.side,image:row.image,tree:row.tree,requestedInk:ink,footprint:row.footprint,exactRequestedPixels:changed});
+  }
+  t.diagnostic(JSON.stringify({case:parent.case,classification:'application-plugin-authoring-defect',firstDivergence:'Native1px top-border RGB123/117/127 versus candidate positioned1px fill RGB202/196/208 before layout/paint.',observations,
+    boundary:'Only exact original light/desktop separator band. Both observed footprints and requested opaque inks agree with own inputs;no observed coverage/alpha defect here. Does not accept unequal border/fill intent,other themes/DPR,paragraph text,GPU internals or current rendering.'}));
 });
