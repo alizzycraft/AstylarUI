@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import ts from 'typescript';
 const hash = b => createHash('sha256').update(b).digest('hex');
 test('Public block alignment reduction preserves wrong default separately from explicit center failure', () => {
   const root = 'artifacts/material-parity/public-block-align-content-20261025/';
@@ -40,4 +41,48 @@ test('Public block alignment reduction preserves wrong default separately from e
   const hidden=structuredClone(report.results);hidden.pop();assert.throws(()=>validate(hidden));
   // This test conserves a documented failure;passing it is NOT parity acceptance.
   assert.match(report.boundary,/Not local pixel\/raster/);
+});
+
+test('Public block alignment capture uses current default and block routing implementations', t => {
+  const root='artifacts/material-parity/public-block-align-content-20261025/';
+  const report=JSON.parse(readFileSync(root+'latest-report.json'));
+  const prefix='examples/material-showcase/node_modules/astylarui/dist/lib/';
+  const tokens = source => {
+    const scanner=ts.createScanner(ts.ScriptTarget.Latest,true,ts.LanguageVariant.Standard,source),result=[];
+    for(let kind=scanner.scan();kind!==ts.SyntaxKind.EndOfFileToken;kind=scanner.scan())result.push([kind,scanner.getTokenText()]);
+    return result;
+  };
+  const methods=(file,owner,names)=>{
+    const bytes=readFileSync(file),ast=ts.createSourceFile(file,bytes.toString(),99,true,file.endsWith('.ts')?ts.ScriptKind.TS:ts.ScriptKind.JS);
+    const cls=ast.statements.find(n=>ts.isClassDeclaration(n)&&n.name?.text===owner);assert.ok(cls);
+    return {file,sha256:hash(bytes),methods:names.map(name=>{
+      const nodes=cls.members.filter(n=>ts.isMethodDeclaration(n)&&n.name.getText(ast)===name);assert.equal(nodes.length,1);
+      return {name,source:nodes[0].getText(ast)};
+    })};
+  };
+  const evidence=[];
+  for(const [relative,owner,names]of [
+    ['app/services/dom/elements/element-creation.service','ElementCreationService',['processChildren','shouldUseInlineFlow','layoutInlineChildren','layoutBlockChildren']],
+    ['app/services/dom/style-defaults.service','StyleDefaultsService',['getGlobalDefaultStyle','getElementTypeDefaults']],
+  ]){
+    const current=methods('src/'+relative+'.ts',owner,names),installed=methods(prefix+relative+'.js',owner,names);
+    assert.equal(report.inputs.find(r=>r.file===installed.file)?.sha256,installed.sha256);
+    const emitted=ts.transpileModule('class Probe {'+current.methods.map(m=>m.source).join('\n')+'}',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText;
+    const ast=ts.createSourceFile('emitted.js',emitted,99,true,ts.ScriptKind.JS),cls=ast.statements.find(ts.isClassDeclaration);
+    for(const method of installed.methods){
+      const node=cls.members.find(n=>ts.isMethodDeclaration(n)&&n.name.getText(ast)===method.name);assert.ok(node);
+      assert.deepEqual(tokens(node.getText(ast)),tokens(method.source),relative+'/'+method.name);
+    }
+    evidence.push({current:{file:current.file,sha256:current.sha256},installed:{file:installed.file,sha256:installed.sha256},methods:names});
+  }
+  const initializer=file=>{
+    const bytes=readFileSync(file),ast=ts.createSourceFile(file,bytes.toString(),99,true);
+    const found=[];const visit=n=>{if(ts.isVariableDeclaration(n)&&n.name.getText(ast)==='globalDefaultStyle')found.push(n.initializer.getText(ast));ts.forEachChild(n,visit);};visit(ast);assert.equal(found.length,1);
+    return {file,sha256:hash(bytes),source:found[0]};
+  };
+  const current=initializer('src/app/config/browser-defaults.ts'),installed=initializer(prefix+'app/config/browser-defaults.js');
+  assert.equal(report.inputs.find(r=>r.file===installed.file)?.sha256,installed.sha256);
+  assert.deepEqual(tokens(current.source),tokens(installed.source));
+  evidence.push({current:{file:current.file,sha256:current.sha256},installed:{file:installed.file,sha256:installed.sha256},initializer:'globalDefaultStyle'});
+  t.diagnostic(JSON.stringify({sourceApplicability:evidence,boundary:'Complete six methods and global initializer token equality only;not entire package/source equality or historical runtime. Candidate center geometry failure remains separately observed.'}));
 });

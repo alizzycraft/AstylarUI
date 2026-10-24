@@ -9,6 +9,29 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Block alignment public failure now has exact CURRENT-to-INSTALLED applicability:
+complete processChildren,shouldUseInlineFlow,layoutInlineChildren,
+layoutBlockChildren and StyleDefaultsService getGlobalDefaultStyle/
+getElementTypeDefaults transpile to identical token streams in captured installed
+modules. Whole globalDefaultStyle initializer also matches. Scanner comparison
+preserves literal/token contents rather than stripping whitespace within strings.
+Installed whole-file hashes are actual captured bundle inputs;current/installed
+raw receipts and six-method membership appear in source-binding test diagnostics.
+No entire-package or historical-source equivalence is inferred.
+
+Existing public-block-align-content owning spec now passes2/2,0skip,
+1130.5741ms,nativeExit0,stderr empty;keep
+public-block-align-content-source-binding-20261025 log pair. Original eight-pair
+failure conservation and unequal/missing-input rejection still run unchanged.
+No browser recapture,bundle regeneration or report overwrite. Registered policy
+search has only the alignment property inventory and no specific alignContent
+finding;generic normal-context harness labels remain distinct from this equal-
+input public failure. Source review locates block/inline routing separately from
+flex/grid alignment;do not repair this by styling Material blocks as flex.
+Next inspect default-source introduction/history and define bounded pending
+findings for wrong initial alignContent versus unsupported explicit block-center
+layout,retaining their separate evidence and remaining causality limits.
+
 Public package-root block alignment reduction separates TWO failures. At DPR1/2,
 omitted parent alignContent computes normal natively but retains stretch in
 AstylarUI. Equal explicit normal/stretch controls both produce20px child offset
