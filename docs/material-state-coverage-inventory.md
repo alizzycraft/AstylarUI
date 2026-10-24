@@ -7,6 +7,23 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+October24 full configured-focus action scope:all256 configured focus cases in
+32 families are checked against maintained performInteraction bytes,which equal
+the digest-authenticated action-runner snapshot from configured-input-focus-
+boundaries-20261024 report8e176417. Exact configa55e95ab is unchanged. Running
+that actual driver body with request-recording page stubs (not fake browser DOM)
+records248 cases requesting HTMLElement.focus and8 Timepicker cases clicking;
+both sides yield496 focus requests/16 clicks. No configured focus driver action
+uses Tab. Focus-action-scope.spec.mjs1/1 passes,zero skips,676.5546ms. This
+classifies procedure scope only:it proves neither successful focus delivery nor
+keyboard modality/paint nor actual Tab traversal. Saved maintained procedure
+does not recover original e01 bytes. Keep separate existing actual-browser focus
+and real-keyboard proofs;do not relabel eight Timepicker click cases as
+programmatic focus or aggregate256 focus-labelled cases as keyboard coverage.
+No new browser run,output artifact,old registered source modification or case
+promotion;new standalone proof awaits coherent registration. This broad scope
+guard complements,not replaces,the existing40-case retained owner/modality proof.
+
 October24 package-root modal-policy boundary checked without a new browser run:
 virtual TypeScript source imports DOMElement only from installed 'astylarui'.
 Normal dialog/open/modal/label declaration compiles;adding ariaModal:false yields
