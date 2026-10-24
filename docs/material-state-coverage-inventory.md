@@ -9,6 +9,22 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Bounded storage follow-up checked six explicit Angular cache paths(read-only,
+realpath-deduplicated,no link traversal):five exist,372212100 logical bytes total,
+no links. No matching Angular/Vite server process found;that does NOT establish
+evidence exclusion or physical recoverable bytes. No cache deleted/compressed,
+no Git trust/config change or upload retry. Combined cache logical size does not
+establish safe publication capacity. Stop expanding storage inventory merely
+to restate blocker. Asked user asynchronously for disk/transport assistance or
+read-only SSH443 investigation;automatic goal continuation is not approval.
+
+Audit itself can still progress:reuse finite remaining-owner/anonymous-input
+mapping and existing dependency-validated evidence. Prior809d gap census labels
+are historical after additive d00b joins,not new current case completion counts;
+do not rerun its large reconstruction solely for labels or interpret generic
+2287/2271 owner/AX tasks as that many new browser investigations. Publication
+block is separate from safe unresolved coverage work and does not complete goal.
+
 Storage/publication recheck: D:262418432 bytes free,C:2045992960;do not start
 large export. Important stale-cleanup correction:old-test-build-removal-review-
 20261020.json(SHA25615bb2076943f54c6f2287a7051d089df903531903c26e0bd1b9ef4725e35850c)
