@@ -7,6 +7,23 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+October24 keyboard stream attribution:retained mapped semantic bridge590d49a2
+passes keyDown to its adapter and prevents non-Tab native default;surface owner
+e778fb1072d9382931b9ef6642f08bd338eb346e49f68f986dd1fa2261edc768
+wires that adapter to handleSemanticKeyDown. Retained runtime owner
+bf298d47902aa9db73afefb4fe703596cd11ae58aeaa1603f8228d44bd1a17ca
+routes Enter-capable controls through activateAndClick,which dispatches a logical
+click through the Astylar dispatcher rather than a browser DOM click. All three
+complete owner hashes and serving JS/map receipts authenticate against the
+retained capture. Thus absent candidate DOM click in the keyboard witness is
+not evidence of absent logical click;do not collapse the namespaces or mark
+the raw streams equal. Positive trusted Enter dismissal remains bounded to the
+captured endpoint;exact per-execution callback stack was not observed. Added
+owning-suite assertion passes with previous three tests:4/4,zero skips,
+1647.7892ms. No new capture,source/fixture modification,policy workaround or
+canonical registration. Settled snackbar visibility,timer,AX and Enter questions
+should not be reopened without changed inputs or contradictory evidence.
+
 October24 trusted keyboard UNDO boundary:existing standalone diagnostic adds
 explicit --keyboard-undo only with300ms post-announcement observation. New
 snackbar-undo-keyboard-20261024/latest-report.json SHA

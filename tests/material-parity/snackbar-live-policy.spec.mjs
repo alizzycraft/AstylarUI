@@ -79,3 +79,19 @@ test('snackbar retained status atomic policy is authored and conditionally copie
   assert.match(native, /_announceDelay = 150/);
   assert.match(native, /inertElement\.removeAttribute\('aria-hidden'\)/);
 });
+
+test('snackbar retained keyboard route dispatches logical click instead of relying on native DOM click', () => {
+  const { report, manifest } = load();
+  const bridge = mappedOwner(manifest, report, 'chunk-3JXWRYJY.js.map', '/astylar-semantic-bridge.js',
+    '590d49a2a4d5e205c10cf18a1e2e45a3f768079afad86f5ea330f7c6136088e8');
+  assert.match(bridge, /this\.interactionAdapter\?\.keyDown\(event\);/);
+  assert.match(bridge, /if \(event\.key !== 'Tab'\)\s*event\.preventDefault\(\)/);
+  const surface = mappedOwner(manifest, report, 'chunk-3JXWRYJY.js.map', '/astylar.js',
+    'e778fb1072d9382931b9ef6642f08bd338eb346e49f68f986dd1fa2261edc768');
+  assert.match(surface, /keyDown: event => interaction\?\.handleSemanticKeyDown\(event\)/);
+  const runtime = mappedOwner(manifest, report, 'chunk-3JXWRYJY.js.map', '/astylar-interaction-runtime.js',
+    'bf298d47902aa9db73afefb4fe703596cd11ae58aeaa1603f8228d44bd1a17ca');
+  assert.match(runtime, /canActivateWithEnter\?\.\(targetId\)\)\) \{\s*event\.preventDefault\(\);\s*this\.activateAndClick\(targetId\)/);
+  assert.match(runtime, /activateAndClick\(targetId, pointerInfo\) \{[\s\S]*?this\.dispatcher\.dispatch\(\{\s*type: 'click',\s*targetId,/);
+  // This establishes retained routing, not an exact stack witness or identical raw event streams.
+});
