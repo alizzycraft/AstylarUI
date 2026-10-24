@@ -9,6 +9,26 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Resumed interrupted Select capture completed without restarting it. Retained
+select-readonly-exact-context-20261024/latest-report.json SHA256
+5d00a00786b842473dbf4ae1d75f431db732cb22e9b71a9933bd337c8544f7fa;
+existing adapter --verify returns nativeExit0,one case/two target observations.
+Explicit case is select/light/focus,desktop-dpr1 1440x1000. Supplementary trusted
+x reaches candidate select-control while readonly=true,disabled=false,focused=
+true;events retain input xTeam before application state changes selected=false
+and displayed value Solo. This closes missing candidate context provenance,
+not a new readonly root-cause investigation or an original editing action.
+
+The retained native observation is NOT a valid paired target assertion:selector
+#select-primary resolves MAT-FORM-FIELD rather than focused #select-control.
+Trusted key delivery records select-control,but wrapper focused=false/value=null
+cannot establish actual host state. Generic verifier authenticates receipts and
+trusted delivery,not correct semantic target selection. Preserve this partial
+capture and its producer unchanged;next decisive check must observe the actual
+native host and assert target/focus preconditions before key delivery. Do not
+count this as paired AX acceptance,all86 enabled cases,disabled coverage,current
+rendering or case closure. No canonical/frozen registry or renderer inputs changed.
+
 Readonly/disabled evidence transfer now has a finer behavioral partition than
 the authored94+40 family split. Rehashed exact taxonomy3f36958c shows86 ENABLED
 readonly Select cases and8 DISABLED readonly Select cases;with40 other disabled
