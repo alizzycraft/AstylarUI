@@ -1,5 +1,38 @@
 # Material audit: evidence-led implementation priorities
 
+## Pending plan delta — block alignment, October25
+
+The current generated63-track implementation plan has no block `align-content`
+track. The live registered198-finding registry includes these two findings,so
+the implementation handoff requires the following delta. This is future work,
+not authorization to implement within this audit. Preserve the frozen1041-source/
+365-proof producer batch;merge this delta into the generated plan at the next
+coherent source-reconciled integration,not through an unrecorded producer edit.
+
+Before removing paragraph-flow compensations,and after containing-block/used-size
+ownership is correct,repair these separate core CSS-space rules:
+
+- `core-block-align-content-omission-resolves-to-stretch`: omitted block alignment
+  must resolve according to CSS `normal`,not the current global `stretch`
+  default. Do not globally alias normal and stretch:the native margin-collapse
+  control distinguishes them. Preserve flex/grid-specific behavior.
+- `core-block-align-content-center-does-not-align-contents`: honor equal explicit
+  block `align-content:center` during content layout. The retained public
+  absolute100×100 parent/10×10 child/20px top-margin reduction places the child
+  at55px natively versus20px in AstylarUI at DPR1/2;normal/stretch controls stay
+  at20px. The owning CSS layout execution omits the offset before projection.
+  Do not change camera conventions,add paragraph offsets or compensate in plugins.
+
+Reuse `tests/material-parity/public-block-align-content.spec.mjs` and
+`tests/material-parity/divider-block-alignment-context.spec.mjs`,the retained
+`public-block-align-content-20261025/latest-report.json` and causal-execution
+receipt linked by the current coverage ledger. The reduction confirms these
+general defects,not causality for unequal Material paragraph inputs. Extend
+auto/intrinsic sizing,overflow,margin collapse,nesting,updates and other alignment
+values before claiming general support. Remove Material flow substitutions only
+after their original structure/declarations pass unchanged through core;run the
+existing full acceptance gates at the appropriate integration milestone.
+
 ## Current reading guide — October24
 
 Use [the current coverage pointer](material-state-coverage-inventory.md#current-audit-pointer--october24)
