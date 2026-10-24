@@ -9,6 +9,25 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Outside-owner cursor applicability is now checked against BOTH authenticated
+October11 cursor logs:20 physical contexts/40 side rows/160 points cover only
+divider-root,divider-above,divider-primary,divider-below. None directly samples
+page,eyebrow,title,divider-above-row or divider-below-row. Paragraph leaf text
+points do not establish cursor behavior over blank paragraph-wrapper regions;
+empty divider-root is not the outer frame. Existing successful four-target
+evidence remains valid in its bounded historical scope,not generalized.
+
+Keep divider-outside-owner-cursor-applicability-20261025 log pair,nativeExit0,
+stderr empty,stdout SHA256
+5514900b4f48bf7b33ad6cbfb0dd88ac583e26d4acad81d8debe9c626f988a97.
+Whole original log hashes,target order,terminal context counts and exact zero
+outside-target intersection authenticate. This is applicability-only,not full
+dependency replay,fresh runtime or a cursor failure. Next extend the existing
+authenticated owner/heading capture with distinct blank-frame,heading-text and
+blank-wrapper points,retaining actual hit/selection evidence. Do not repeat
+the already measured four points or accept auto/default from scalar values.
+Block alignment context and omitted fields remain independent review gaps.
+
 Outside-owner property triage now enumerates the entire recorded104-property
 population for five owners across24 Divider cases(120 pairs/48 authenticated
 trees). Existing canonicalStyle yields101 fields per owner after shorthand
