@@ -9,6 +9,23 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Readonly action applicability now resolved without browser recapture:86 enabled
+Select cases comprise12 static and74 interaction cases. Extracted original AND
+current performInteraction execute148 side invocations each using inert box/
+settlement/page adapters;both issue ZERO keyboard calls and16 focus requests.
+Held cleanup callbacks are invoked. This proves action-source reachability only,
+not DOM focus success,callback delivery or readonly behavior. Both complete action
+methods hash7a392beb7a20cd562d0537fc9b90018ea31972d09382ccaa8f44a1c46eb2635d;
+original runner authenticatese01ef9dc,current runner hashes86ece08b. Command exits0.
+
+Therefore the supplementary trusted-x mutation is a demonstrated failure beyond
+the configured action recipe,not evidence that all86 original outputs exercised
+editing or failed it. Shared readonly authoring remains relevant,but transferring
+that one runtime result to86 cases would be unsound. Preserve the known failure,
+do not repeat original capture recipes expecting them to test keyboard mutation,
+and keep source applicability separate from execution incidence. Existing suite/
+join boundaries already say supplementary-only;no canonical/status change needed.
+
 Editing-gap census answers whether134 not-applicable/partial rows are one stale
 exclusion bucket:they are NOT. Authenticated all268 paired-tree receipts in the
 retained c394 parent. Exact targets partition into86 readonly enabled Select
