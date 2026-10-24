@@ -9,6 +9,30 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Outside-owner direction/bidi context check prevents a false default-equivalence
+claim:all120 owner pairs/24 retained cases record native direction ltr,
+writingMode horizontal-tb,unicodeBidi ISOLATE,textAlignLast auto,textJustify auto;
+candidate all three declaration stages omit all five. The native value is NOT
+normal bidi. Existing horizontal-start/left justification concerns alignment
+only and cannot establish equivalent bidi isolation from Latin-only output.
+
+Keep divider-outside-owner-bidi-context-20261025 pair,nativeExit0,stderr empty,
+with exact owner/tree/source receipts and120 rows. Current StyleRule and parsed
+TextStyleProperties have no direction/writingMode/unicodeBidi members;existing
+capabilities.json explicitly lists writing-mode unsupported. This documents the
+existing writing-mode limitation,not a new generalized direction/bidi support
+classification or confirmation of an observed rendering defect. Omitted fields
+remain omitted;no computed candidate normal/ltr/isolate is synthesized.
+
+No UA-rule provenance,mixed-bidi runtime or external inheritance established.
+Existing one-context heading-UA receipt retains margin evidence only and has
+no unicode-bidi source record;do not cite it as isolation provenance. Need a
+specific behavior/default provenance question before new bidi capture;do not
+reopen the settled Latin start/left alignment proof or run a broad bidi suite
+merely because these fields are absent. Remaining context gap stays explicit
+alongside documented writing-mode limits. Live1041/365/198,pendingf812d8d9 and
+accepted88be4d47 remain unchanged;no renderer,fixture or canonical mutation.
+
 Ordinary wrapping request-path branch gap now has bounded execution evidence,
 not just source inclusion. New standalone ordinary-wrapping-request-path.spec.mjs
 executes actual current AND captured-installed parser instance members and three
