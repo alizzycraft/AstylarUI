@@ -9,6 +9,34 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Coherent standalone Menu/focus batch now passes18/18,zero fail/skip,nativeExit0
+in66731.2287ms. Command:
+`node --max-old-space-size=8192 --test --test-concurrency=1 tests/material-parity/menu-composite-evidence.spec.mjs tests/material-parity/menu-popup-ax.spec.mjs`.
+Keep menu-focus-standalone-batch-integration-20261024 pair;stdout SHA256
+38f824c472cc14145bfbe9d7ca0beda2f832656a61e8a6b091379ac345a512fe,
+stderr empty. This is a justified accumulated-proof integration milestone,not
+another canonical/full browser acceptance run. Tests authenticate retained
+evidence,source/history/action applicability and preserve known public failures;
+18 passing audit assertions are NOT18 rendering passes or inspected cases.
+
+Refreshed static census authenticates frozen producer9e936a24 and its1002-path
+inventory. Exactly15 later standalone source paths remain outside it,with18
+declared tests and3 unique unregistered findings(2 application authoring,1
+confirmed core). Current working registry stays193 definitions;no pending IDs
+are silently inserted. Keep menu-focus-pending-batch-census-20261024 pair,
+stdout SHAdd39adb04daeb1a98a682f5150de1904caf6459d2819f62217be8e99903fd6b3;
+native0,stderr empty. It records current standalone hashes,titles and classes,
+superseding older12-path/10-proof censuses. Selection/source registration still
+needs a later coherent transition;frozen1002/326 and accepted990/319 unchanged.
+
+Storage preflight still finds exact Git temporary pack tmp_pack_vAx7fc at
+286916608 bytes,Oct17 timestamp,SHA6ee0fefa409814ab51b599ebd1962aadb7b8638ca0d9400d41f86f28f8618692,
+no Git process. D:free290566144/C:2080710656 at check. Explicit recoverable C:
+quarantine approval was requested again;no response/action is inferred from
+automatic goal continuations. No Git object moved/deleted,no unchanged failed
+upload repeated,no new large canonical generation. Publication and original
+acceptance gates remain open;all2311 cases partial/current rendering unverified.
+
 Fixed Menu item accessible-name source difference now has a technical
 equivalence explanation rather than a new presumed bridge defect. Current
 authored items explicitly supply ariaLabel Rename/Delete;the semantic bridge
