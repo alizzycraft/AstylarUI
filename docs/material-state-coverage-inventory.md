@@ -9,6 +9,28 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+New semantic findings' authoring applicability is now bound to ACTUAL loaded
+assets,not only a map found on disk. Retained chunk-JPEJK334.js.map hash47654b64
+is authenticated in all three AX capture checkpoint browser inventories. Its
+complete AstylarShowcaseComponent source is byte-identical to current source
+71e2d41f,not just selected excerpts. Exact trigger/popup objects also match:
+14fea121e8e5086e4f4b32baba83c100da8a76cc06e419731a21e993af672bf9 /
+aac9345eded8bcfbc37c3c3745d348cb3ab369c2728224a2aa550b81e55e91b0.
+Read-only query native0;menu-semantic-authoring-source-applicability-20261024
+stdout SHAbc39cfb2c39a2c8af14c5e49110c6e1ab83e3683e2ddfe8472d2063bc6f08f5d.
+
+Separate query checks actual chunk sourceMappingURL and compiled menu-primary/
+menu-popup declarations,then matches complete JS hash to18 recorded candidate
+runtime asset loads(8 open +8 supplementary-dismissal +2 mobile). It exits0;
+keep menu-semantic-served-declarations-20261024 log pair. This excludes an unused
+map/current-only declaration as explanation for the observed authoring mismatch.
+Existing suite passes8/8,nativeExit0 with persistent manifest/map/full-source/
+actual-loaded-asset checks;keep menu-semantic-source-binding-integration-20261024
+pair. No new capture needed. Byte-identical app authoring does NOT establish
+current core execution,environment/equal-input equivalence or full rendering;
+those remaining sourceCurrentness obligations are not retired. Frozen registry,
+queued review digests,canonical pointer and case flags remain unchanged.
+
 Desktop dismissal/mobile AX integration now attaches ten bounded semantic
 children through `join-material-menu-semantic-boundaries.mjs`:eight desktop open
 source cases retain supplementary Escape labels;two exact mobile-dpr2/open-dismiss

@@ -145,3 +145,27 @@ test('mobile Menu AX uses the original side/boundary shape without weakening che
   assert.equal(result.sideBoundaries, 28); assert.equal(result.rawReportPreserved, true);
   assert.equal(result.currentRenderingAccepted, false);
 });
+
+test('Menu semantic declaration attribution binds map content and actual loaded JavaScript receipts', () => {
+  const root = 'artifacts/material-parity/icon-fresh-producer-retained-build-20261016-browser';
+  const mapBytes = readFileSync(root + '/chunk-JPEJK334.js.map');
+  assert.equal(hash(mapBytes), '47654b641610e1d56e02948b17fab41aff25e9c6aedc6f83b70a26b6f349ce9e');
+  const map = JSON.parse(mapBytes), index = map.sources.findIndex(s => s.endsWith('/astylar.component.ts'));
+  assert.ok(index >= 0);
+  assert.equal(map.sourcesContent[index], readFileSync('examples/material-showcase/src/app/astylar.component.ts', 'utf8'));
+  const js = readFileSync(root + '/chunk-JPEJK334.js');
+  assert.match(js.toString(), /sourceMappingURL=chunk-JPEJK334\.js\.map/);
+  let candidateLoads = 0;
+  for (const name of ['menu-popup-ax-contexts-retry-20261024', 'menu-dismissal-ax-retry-20261024', 'menu-mobile-ax-retry-20261024']) {
+    const report = JSON.parse(readFileSync(`artifacts/material-parity/${name}/latest-report.json`));
+    const manifestReceipt = report.capture.checkpointManifest, manifestBytes = readFileSync(manifestReceipt.file);
+    assert.equal(hash(manifestBytes), manifestReceipt.sha256);
+    const manifest = JSON.parse(manifestBytes);
+    assert.equal(manifest.provenance.browserFiles.find(f => f.file.endsWith('chunk-JPEJK334.js.map')).sha256, hash(mapBytes));
+    for (const row of report.results) for (const side of row.mode === 'astylar' ? [row] : row.astylar ? [row.astylar] : []) {
+      const assets = side.runtime.assets.filter(a => a.file === 'chunk-JPEJK334.js');
+      assert.equal(assets.length, 1); assert.equal(assets[0].sha256, hash(js)); candidateLoads++;
+    }
+  }
+  assert.equal(candidateLoads, 18);
+});
