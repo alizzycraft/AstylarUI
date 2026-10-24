@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import test from 'node:test';
+import { execFileSync } from 'node:child_process';
+import ts from 'typescript';
 
 const file = 'artifacts/material-parity/menu-popup-ax-20261024/latest-report.json';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -28,7 +30,11 @@ function inspect(report) {
     assert.equal(hash(bytes), receipt.sha256);
     const tree = JSON.parse(bytes);
     if (side === 'reference') assert.equal(tree.nodes.find(n => n.attributes?.role === 'menu').attributes.tabindex, '-1');
-    else assert.equal(Object.hasOwn(tree.nodes.find(n => n.authored?.id === 'menu-popup').authored, 'tabIndex'), false);
+    else {
+      const authored = tree.nodes.find(n => n.authored?.id === 'menu-popup').authored;
+      assert.equal(Object.hasOwn(authored, 'tabindex'), false);
+      assert.equal(Object.hasOwn(authored, 'tabIndex'), false);
+    }
   }
   const property = (side, target, name) => row[side].ax[target].nodes.find(n => n.backendDOMNodeId === row[side].ax[target].backendNodeId).properties.find(p => p.name === name)?.value.value;
   assert.equal(property('reference', 'rename', 'focused'), true);
@@ -45,4 +51,25 @@ test('retained Menu AX links resolve exact popup owners; focus and authored tabi
     r => { r.results[0].reference.ax.rename.nodes.find(n => n.backendDOMNodeId === r.results[0].reference.ax.rename.backendNodeId).name.value = 'wrong'; }]) {
     const forged = structuredClone(report); mutate(forged); assert.throws(() => inspect(forged));
   }
+});
+
+test('popup tabindex omission predates later parity changes and remains an authored-input divergence', () => {
+  const file = 'examples/material-showcase/src/app/astylar.component.ts';
+  const sources = { initial: execFileSync('git', ['show', `2f440115:${file}`]), current: readFileSync(file) };
+  const receipts = {};
+  for (const [revision, bytes] of Object.entries(sources)) {
+    const ast = ts.createSourceFile(file, bytes.toString(), 99, true, ts.ScriptKind.TS);
+    const matches = [];
+    const visit = node => {
+      if (ts.isObjectLiteralExpression(node) && node.properties.some(p => ts.isPropertyAssignment(p) &&
+        p.name.getText(ast) === 'id' && ts.isStringLiteral(p.initializer) && p.initializer.text === 'menu-popup')) matches.push(node);
+      ts.forEachChild(node, visit);
+    };
+    visit(ast); assert.equal(matches.length, 1);
+    const properties = matches[0].properties.map(p => p.name?.getText(ast));
+    assert.ok(properties.includes('role')); assert.ok(properties.includes('children'));
+    assert.equal(properties.includes('tabindex'), false); assert.equal(properties.includes('tabIndex'), false);
+    receipts[revision] = { sourceSha256: hash(bytes), popupObjectSha256: hash(matches[0].getText(ast)), properties };
+  }
+  console.log(JSON.stringify({ receipts, boundary: 'Initial/current authored objects only; not every intermediate revision,motive,initial runtime or current-core rendering proof.' }));
 });

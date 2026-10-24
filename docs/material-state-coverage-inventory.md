@@ -9,6 +9,23 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Popup focusability history check now distinguishes initial unequal authoring
+from later parity compensation. AST extraction finds exactly one menu-popup
+object in initial2f440115 and current component source;both have role/children
+but omit public lowercase `tabindex` (and alternate `tabIndex`). Retained candidate
+tree also omits BOTH spellings,while native panel explicitly authors tabindex=-1.
+The AX test was tightened to check lowercase public API,not only DOM camelcase.
+Current semantic bridge applyAttributes line429 reads element.tabindex and sets
+node.tabIndex;this source observation is not proof of full current runtime.
+No supplied popup tabindex is shown lost by core in this case. First meaningful
+input divergence is application authoring. Initial runtime,intermediate history,
+motivation and equal-input negative-tabindex core behavior remain separate.
+
+`node --test tests/material-parity/menu-popup-ax.spec.mjs` passes2/2,nativeExit0,
+with initial/current full-source/object hashes in menu-popup-ax-history-proof-
+20261024 stdout and empty stderr. Existing independent AX owner/name corruption
+controls still pass. No collector/capture receipt changed or new browser run.
+
 Actual Menu popup AX gap partially answered with one focused retained-build
 light/desktop-dpr1/open cohort,not another root/trigger-only report. Adapter
 `audit-material-menu-ax.mjs` pins and reuses existing snackbar checkpoint/CDP
