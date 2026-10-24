@@ -7,6 +7,40 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Actual Divider frame extents measured (October24)
+
+Closed the missing actual frame-box observation,not another baseline/texture
+question. New read-only capture reuses frozen bb87aa65 workflow and unchanged
+1887 served-file inventory. Twenty physical contexts cover four themes at
+desktop1440x1000/DPR1,tablet768x1024/DPR1,mobile390x844/DPR2,
+comparison609x844/DPR1,and desktop1440x1000/DPR2. These map to24 configured case
+aliases;the supplement is NOT replay of their original actions/browser.
+
+Native getBoundingClientRect(.frame) and candidate #page boxes from the existing
+public benchmark projection helper agree on all six edges/size fields in every
+pair:maximum observed absolute frame error0CSSpx. Candidate public core-dimension
+snapshots and raw normal/effective page declarations are retained alongside host
+and canvas boxes. No SiteData/style/DOM intervention or new projection formula.
+Native computed pixel sizes and candidate percentage declarations therefore do
+not,by themselves,demonstrate a frame dimension bug. The separately inspected
+explicit-border-box versus omission mismatch remains;equal measured extents do
+not make those requests or general percentage/min-height constraints equivalent.
+
+Capture and independent read-only verification both explicit nativeExit0 on
+Chromium155.0.8059.85. Verifier checks all40 side observations,complete20-context
+membership against original case dimensions/DPR,unchanged input-stage distinction,
+and rehashes521 unique actual served assets. All errors arrays empty. Commands:
+`node scripts/audit-material-divider-frame-sizes.mjs` and
+`node scripts/check-divider-frame-sizes.mjs artifacts/material-parity/divider-frame-sizes-20261024.log`.
+Keep divider-frame-sizes-20261024 and divider-frame-sizes-verification-20261024
+log pairs (stderr empty). Capture SHA256
+5f13b3c4acc99e075ec7d8b92383358ce91270ea3cd4611c6766dbe300ca6c48;
+verification SHA2560909ca0ac5706678995bd2941f13fbcac2167de17ca62ecbb5638376ddb5ea88.
+No screenshots,build/result directory or canonical generation added. This is
+standalone next-batch geometry evidence,not descendant overflow/paint,current
+full-core,whole-case or aggregate rendering acceptance. Do not repeat these
+frame measurements for those different questions;accepted88be remains unchanged.
+
 ### Divider frame box-model request attributed (October24)
 
 The same retained-owner check now answers one concrete frame domain in all24
