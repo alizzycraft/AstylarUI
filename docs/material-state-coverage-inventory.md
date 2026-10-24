@@ -9,6 +9,25 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Pending machine-readable source findings now distinguish two semantic authoring
+causes from the existing Menu activation/navigation finding:
+`fixture-menu-popup-programmatic-focusability-omitted` and
+`fixture-menu-controls-association-outlives-popup`. Definitions live in
+tests/material-parity/menu-popup-semantic-input-findings.mjs with exact state,
+property/reference/candidate values,first stage,owner,initial/current history,
+authenticated AX report receipts,uncertainty and later implementation order.
+Do not merge these distinct declarations into an Escape-handler root cause or
+claim core retention/loss from unequal input. Restoring authored semantic intent
+later must use shared public fields,not custom focus/layout/coordinate machinery.
+
+Existing AX suite passes5/5,nativeExit0 with exact pending evidence rehashes;
+retain menu-semantic-findings-proof-20261024 log pair. This is pending finding
+data,not registration:canonical remains193 findings/990 sources/319 proofs and
+frozen next batch1002/326 stays unchanged. Later coherent registration must
+explicitly incorporate these two definitions and all standalone producers/proofs,
+conserve prior definitions,and reconcile bounded source changes before export.
+No new capture,fixture/renderer edit,case promotion or remote publication.
+
 Supplementary Escape/AX boundary now distinguishes stale popup lifetime from
 dangling authored association across all eight desktop theme/DPR contexts.
 `audit-material-menu-dismissal-ax.mjs` pins/reuses desktop collector3d6be8a7;

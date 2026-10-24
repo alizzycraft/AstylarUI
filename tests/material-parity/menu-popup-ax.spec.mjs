@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import test from 'node:test';
 import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
+import { menuPopupSemanticInputFindings } from './menu-popup-semantic-input-findings.mjs';
 
 const file = 'artifacts/material-parity/menu-popup-ax-20261024/latest-report.json';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -104,5 +105,16 @@ test('supplementary Escape removes Menu AX owners but preserves candidate dangli
     assert.equal(result.nodes.some(n => !n.ignored && n.role?.value === 'menu'), false);
     const trigger = result.nodes.find(n => n.backendDOMNodeId === row[side].ax.trigger.backendNodeId);
     assert.ok(trigger); assert.equal(trigger.properties.some(p => p.name === 'controls'), false);
+  }
+});
+
+test('pending Menu semantic input findings retain distinct first divergences and authenticated evidence', () => {
+  assert.equal(menuPopupSemanticInputFindings.length, 2);
+  assert.equal(new Set(menuPopupSemanticInputFindings.map(f => f.id)).size, 2);
+  for (const finding of menuPopupSemanticInputFindings) {
+    assert.equal(finding.classification, 'application-plugin-authoring-defect');
+    assert.equal(finding.file, 'examples/material-showcase/src/app/astylar.component.ts');
+    assert.ok(finding.owner && finding.observation.stage && finding.justification && finding.boundary);
+    for (const receipt of finding.evidence) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
   }
 });
