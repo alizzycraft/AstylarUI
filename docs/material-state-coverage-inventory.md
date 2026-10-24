@@ -9,6 +9,31 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Readonly Select supplementary failure now observed in all EIGHT configured focus
+contexts(four profiles×DPR1/2),not inferred from shared code. Native focused
+MAT-SELECT retains Team;candidate focused readonly INPUT emits input(value=xTeam)
+before its callback changes selected value toSolo and blurs. Exact trusted-x target
+identity,readonly/enabled flags and input event are retained in every context.
+This strengthens existing core-readonly-text-keyboard-defaults-mutate-value plus
+separate host-substitution authoring finding,not a new defect or86-case execution
+claim. Seven additional focus-context failures observed;other78 readonly states
+still do not inherit this supplementary runtime result.
+
+Report select-readonly-focus-contexts-unique-outputs-20261025/latest-report.json
+SHA06ff959a06ad3f85d0e9014079f4de98db904cd58039175d00187da82937d35f;
+capture and checkpoint/asset/AX/case-ID verifier exit0. Verifier's PRINTED cases1/
+targetObservations2 summary is inherited stale metadata;its actual eight-row
+membership assertion passes and raw report scope correctly says eight. Do not
+quote that summary as the row count. New focused consumer explicitly asserts
+all8 profile/DPR rows,tree hashes,events and existing classification:1/1,exit0,
+129.0703ms. No current-rendering/whole-case promotion or frozen-registry edit.
+
+Before successful capture,three setup attempts failed:adapter escaped newline,
+positional-output argument convention,then single-case tree filename collision.
+Each remains retained separately. Context-qualified tree filenames correct only
+the new diagnostic output ownership,not fixture inputs. No further browser repeat
+is justified for the stale verifier summary;reconcile it at source integration.
+
 Disabled text-control supplementary focus/pointer/x coverage now accounts for
 the exact48 configured contexts:40 non-Select cases(five families×eight physical
 contexts) plus eight Select focus/key cases. New run captured only35 previously

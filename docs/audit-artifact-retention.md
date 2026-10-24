@@ -1,5 +1,13 @@
 # Audit artifact retention
 
+Keep select-readonly-focus-contexts-unique-outputs-20261025(17 files,2446720
+bytes),its provenance and log/stderr pair. Report SHA06ff959a06ad3f85d0e9014079f4de98db904cd58039175d00187da82937d35f
+retains eight readonly mutation failures. Also preserve the three preceding
+select-readonly-focus-contexts*,*-retry*,*-correct-args* failure log pairs and
+the partial correct-args output:adapter newline syntax,argument convention,and
+single-case filename collision are harness setup failures,not renderer outcomes.
+Do not overwrite the original one-context failure or raw eight-row report.
+
 Keep disabled-control-remaining-contexts-20261025(141 files,19778836 bytes),its
 -provenance checkpoint and log/stderr pair. Report SHAb59849e11047041d992617520323dd4b2fc7a02f537d511d4911d75024162006.
 These35 new context pairs complement existing light/DPR1 and Select supplements;
