@@ -1,13 +1,31 @@
 # Material audit: evidence-led implementation priorities
 
-## Current reading guide — October20
+## Current reading guide — October24
 
-Use [the current coverage pointer](material-state-coverage-inventory.md#current-audit-pointer--october20)
+Use [the current coverage pointer](material-state-coverage-inventory.md#current-audit-pointer--october24)
 for accepted versus queued evidence,live process handles and remaining work.
 The checkpoint narratives below are retained history,not additional current
 ledgers. Their old counts and next/live statements must not override that pointer.
 The numbered implementation tracks remain a future plan;this audit authorizes
 neither renderer fixes nor compensating fixture changes. Final gates are unchanged.
+
+Snackbar announcement-policy prerequisite:the retained showcase explicitly
+authors status/polite/atomic=true,whereas Material's retained live owner is
+generic/polite/non-atomic and receives content after its150ms announcement delay.
+Core's retained semantic bridge copies the explicit authored atomic value;this
+is not evidence of an unwanted core default. The declaration originates in the
+initial2f440115 showcase,not a later rendering compensation. Paired post-delay
+AX confirms both UNDO controls expose button/name UNDO/focusable;the native
+immediate endpoint was temporarily aria-hidden,not persistently inaccessible.
+Before any equal-input core diagnosis,resolve the intended authored announcement
+contract;do not force core to contradict explicit input or call these strategies
+equivalent based on the existing DOM comparator. Speech timing,current rendering,
+all-context AX,keyboard activation and whole-case closure remain unproved.
+Evidence/limits:current coverage pointer and standalone
+`node --test tests/material-parity/snackbar-live-policy.spec.mjs` (2/2 passed).
+This is a future input-contract decision,not authorization to rewrite fixtures
+within this audit. Frozen registered c394/accepted a659 remain separate from
+these pending standalone proofs;publication still requires working Git transport.
 
 The latest shared-button evidence adds this dependency to tracks6–7:
 
