@@ -9,6 +9,25 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Pending selection is now reversibly PREPARED,not applied to frozen live files.
+menu-select-disabled-selection.mjs authenticates complete current launcher4195a39f
+and runner976cd582,prepares explicit --menu-select-disabled and exactd00beaa8
+reader routing in memory,and restores complete originals. Two focused tests
+pass(nativeExit0,0skip) in menu-select-disabled-selection-20261025 log pair.
+Actual prepared launcher dry-run selects exact proposal path/digest,all16 older
+supplements reject combination with new flag,all16 older invocations plus default
+retain byte-equivalent parsed invocation records. AST-executed prepared runner
+selector routes only exactd00beaa8;unknown digest keeps prior reader. Live files
+remain byte-identical,so historical receipts and frozen export remain valid.
+
+This deliberately does NOT enable the new flag on the live launcher or claim
+registration/publication. Applying selection must be a coherent bounded source
+transition with historical-reader reconciliation,not an unrecorded frozen edit.
+Two new standalone selection files/two tests bring pending scope to24 source
+paths/23 test declarations(before registration helper additions). No browser or
+full canonical rerun. Next prepare exact source/proof/finding registration and
+jointly verify conservation before deciding a safe integration/publication step.
+
 Exact pending Menu/Select/disabled dependency reader now validates complete
 d00beaa8 review through existing loadCaseObligationReview:2311 cases,18270
 authenticated evidence dependencies,33 additive child records over94f1a93d.
