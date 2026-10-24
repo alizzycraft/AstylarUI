@@ -9,6 +9,27 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Two old owner/frame owning specs now explicitly use createMenuHistoricalRead
+for their direct source reads. Only fs import alias plus helper import/adapter
+binding change;all original test statements/assertions remain. Exact reversal
+recovers COMPLETE old selection spec6285cc5e and registration specdac335c2,
+including old hashes/counts/routing assertions. Historical reader now handles
+six exact paths(four prepared live-file transitions plus these two spec edits).
+Each adapted spec rejects unexpected mutation and delegates unrelated reads;
+no global fs interception or current-production historical substitution.
+
+Owning historical selection3 + registration2 + staged registration4/selection2
+tests pass11/11,nativeExit0,0skip,17498.6099ms;retain
+menu-old-spec-adapter-integration-20261025 log pair(stderr empty). This run
+executes old specs with their new explicit reader while four live exporter/
+registry files are still frozen. Staged four-file restoration was also asserted
+by the focused adapter tests;do not describe this as a live applied export.
+Current raw source hashes for the two adapted specs differ;their old evidence
+remains historical through exact restoration,not silently declared current.
+No new source paths or test declarations added;prepared counts1028/353/196
+remain,live producer/policy1002/326/193. Next coherent application must include
+these six bounded source transitions and validate actual live owning paths.
+
 Older standalone source-read inspection identifies concrete integration work,
 not a reason for another browser or full-review replay. Existing owner/frame
 registration tests read live producer directly and expect1002/326;their

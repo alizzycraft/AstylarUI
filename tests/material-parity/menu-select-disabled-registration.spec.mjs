@@ -8,7 +8,8 @@ import { prepareMenuSelection } from './menu-select-disabled-selection.mjs';
 import { restoreDividerOwnerFrameProducer } from './divider-owner-frame-registration.mjs';
 import { restoreDividerOwnerFrameExportSource } from './pending-evidence-registration.mjs';
 import { menuPendingSources, menuPendingProofRows, prepareMenuProducerRegistration, restoreMenuProducerRegistration,
-  menuPendingFindingDefinitions, prepareMenuPolicyRegistration, restoreMenuPolicyRegistration, createMenuHistoricalRead } from './menu-select-disabled-registration.mjs';
+  menuPendingFindingDefinitions, prepareMenuPolicyRegistration, restoreMenuPolicyRegistration, createMenuHistoricalRead,
+  menuHistoricalSpecHashes, restoreMenuHistoricalSpec } from './menu-select-disabled-registration.mjs';
 
 test('historical read restores only four authenticated staged transitions and rejects modified staged content', () => {
   const root = process.cwd(), names = ['tests/material-parity/input-equivalence-audit.mjs','tests/material-parity/input-equivalence-policy.mjs',
@@ -38,6 +39,12 @@ test('historical read restores only four authenticated staged transitions and re
   }
   const frozen = createMenuHistoricalRead({ root, read: readFileSync });
   names.forEach(file => assert.deepEqual(frozen(file), readFileSync(file)));
+  for (const [file,priorHash] of Object.entries(menuHistoricalSpecHashes)) {
+    const bytes = readFileSync(file), restored = restoreMenuHistoricalSpec(bytes,file);
+    assert.equal(createHash('sha256').update(restored).digest('hex'),priorHash);
+    assert.equal(frozen(file).toString(),restored);
+    assert.throws(() => restoreMenuHistoricalSpec(bytes.toString() + '\n// unexpected mutation',file));
+  }
 });
 
 test('pending policy registration conserves all193 definitions and binds three exact source anchors and receipts', () => {

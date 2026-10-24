@@ -103,6 +103,18 @@ export function restoreMenuPolicyRegistration(source) {
   return text;
 }
 
+export const menuHistoricalSpecHashes = Object.freeze({
+  'tests/material-parity/divider-owner-frame-selection.spec.mjs': '6285cc5ee007b9b760fdf75aba7723ca373499ea7ed7d56d976effe067111626',
+  'tests/material-parity/divider-owner-frame-registration.spec.mjs': 'dac335c2fea73a83a07359371ebf62986675106c9c7de37ff2ce8b7442de1de4',
+});
+export function restoreMenuHistoricalSpec(source, file) {
+  assert.ok(Object.hasOwn(menuHistoricalSpecHashes,file));
+  let text = source.toString().replaceAll('\r\n','\n');
+  text = once(text, "import { readFileSync as nativeReadFileSync } from 'node:fs';\nimport { createMenuHistoricalRead } from './menu-select-disabled-registration.mjs';\nconst readFileSync = createMenuHistoricalRead({ root: process.cwd(), read: nativeReadFileSync });\n", "import { readFileSync } from 'node:fs';\n");
+  assert.equal(hash(text),menuHistoricalSpecHashes[file], 'Complete historical spec and all assertions must recover');
+  return text;
+}
+
 // Exact prior-source applicability only;never normalize an unrelated read.
 export function createMenuHistoricalRead({ root, read }) {
   const local = file => read(path.resolve(root, file));
@@ -111,6 +123,7 @@ export function createMenuHistoricalRead({ root, read }) {
     ['tests/material-parity/input-equivalence-policy.mjs', { prior: policyPrior, restore: restoreMenuPolicyRegistration }],
     ['scripts/export-material-input-audit-current-ancestry.mjs', { prior: menuSelectionPriorHashes.launcher, restore: b => restoreMenuSelection(b, 'launcher') }],
     ['scripts/run-material-input-audit.mjs', { prior: menuSelectionPriorHashes.runner, restore: b => restoreMenuSelection(b, 'runner') }],
+    ...Object.entries(menuHistoricalSpecHashes).map(([file, prior]) => [file, { prior, restore: b => restoreMenuHistoricalSpec(b,file) }]),
   ].map(([file, value]) => [path.resolve(root, file), value]));
   return (file, options) => {
     const target = transitions.get(path.resolve(root, file));

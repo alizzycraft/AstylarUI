@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync as nativeReadFileSync } from 'node:fs';
+import { createMenuHistoricalRead } from './menu-select-disabled-registration.mjs';
+const readFileSync = createMenuHistoricalRead({ root: process.cwd(), read: nativeReadFileSync });
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import test from 'node:test';
