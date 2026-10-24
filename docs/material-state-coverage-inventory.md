@@ -7,6 +7,38 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Concrete retained Divider paint requests inspected (October24)
+
+Extended existing retained-paint-property-coverage.spec.mjs;no new collector or
+report framework. Whole c394 raw/review hashes and every paired tree authenticate.
+All24 cases/48 Above-Below pairs walk complete recorded chains:192 native owners
+(leaf,paragraph,demo,frame) and240 candidate owners (leaf,row,demo,page,root).
+All native collectors report zero stylesheet errors. No recorded inline/matching
+rule on those native chains explicitly requests filter,backdrop-filter,
+mix-blend-mode or isolation;192 injected-declaration controls reject. All three
+recorded candidate style stages omit corresponding keys and backgroundImage.
+This omission is not a computed-default or public-support claim.
+
+96 encountered background rules preserve the two original shorthands:
+var(--surface) and color-mix(in srgb,var(--surface)94%,var(--primary));all matching
+frame surface/primary tokens are explicit six-digit colors. Their serialized
+background-image/background-color LONGHANDS are empty strings. Raw shorthand
+is retained in cssText;empty serialization is not computed none/transparent.
+This narrows the remaining question from possible explicit image/filter/blend
+requests on recorded owners to unresolved computed values and ancestors outside
+the captured frame/root. It does not establish complete cascade,UA/host/pseudo
+paint,used group compositing,shader execution or current-runtime equivalence.
+
+Focused1/1 passes,zero skips,3118.3294ms,empty stderr;log
+divider-retained-paint-chain-inputs-20261024.log SHA256
+25bc6951fb537b767c884769864d5c6382c19289c4562fb4fff3b7d5c42cddac.
+Previous independent browser projection test source/body remains unchanged.
+Two standalone paint proofs/path remain pending coherent inventory/finding join;
+installed984/314 and accepted a659 unchanged. All2311 cases stay partial/current
+rendering unverified. Next smallest decisive check is only missing computed
+paint fields on the authenticated retained served owner/host chain,not a new
+full snapshot or repetition of settled baseline/material flag measurements.
+
 ### Remaining paint projection gap narrowed without recapture (October24)
 
 Question:can retained paragraph transparent-color/unit-opacity observations prove
