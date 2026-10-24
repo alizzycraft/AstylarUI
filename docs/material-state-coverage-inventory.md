@@ -9,6 +9,28 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Original disabled endpoints cannot fill the disabled interaction gap:focused
+executable recipe check recovers e01 runner from preserved base64/gzip and
+authenticates full e01ef9dc bytes. Original/current performInteraction methods
+have IDENTICAL SHA2567a392beb7a20cd562d0537fc9b90018ea31972d09382ccaa8f44a1c46eb2635d.
+For exact48 disabled cases(six families),each recipe executes96 paired-side
+invocations with a browser-access-rejecting proxy:all return undefined with zero
+browser accesses. Thus configured disabled ACTION endpoints are passive;this
+does not claim surrounding setup/settlement/measurement never touches focus.
+
+New focused test in select-readonly-evidence.spec.mjs passes1/1,0skip,nativeExit0,
+688.1492ms with --test-name-pattern="disabled editing cohorts";the expensive
+existing join test was not selected,not silently represented as rerun. Retain
+disabled-configured-action-gap-20261025 log pair,stdout SHA256
+54a2745a139ab5caab6fb3392b6bc19563d78f67a0c37924129752ecba968bd6.
+Existing configured-input-focus report423b2587 rehashes,but its240 observation
+records have configured-focus-0..5 labels,no disabled records;producer explicitly
+selects40 enabled focus contexts. Do not alias these boundaries to disabled
+cases or count240 records as240 configured cases. A genuinely missing disabled
+behavior check remains;reuse the existing direct-owner observer with explicit
+supplementary actions rather than changing canonical disabled recipes. No new
+finding,closure,rendering acceptance or canonical export follows.
+
 Disabled editing applicability now has a precise evidence-transfer boundary.
 Authenticated taxonomy3f36958c yields48 disabled cases:8 each form-field,input,
 autocomplete,select,datepicker,timepicker. All96 paired tree receipts rehash;
