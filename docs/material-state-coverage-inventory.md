@@ -9,6 +9,30 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Exact Select readonly evidence now has a tested PENDING virtual obligation join:
+scripts/join-material-select-readonly-evidence.mjs adds one supplementary child
+to authoredEditing for interaction:select@light/desktop-dpr1/focus only. Successor
+21ade0b49a6e2f84b4a96256667e25d0411022426a30ed7c0ede8eeb8c73f52d
+recovers complete prior809d37ad after removing that child. No parent disposition,
+remaining task,applicability or case status changes;all2311 remain partial and
+current-rendering unverified. Existing readonly core/input-authoring finding IDs
+are referenced,not duplicated or newly classified. Hash-authenticated report,
+paired trees,physical context,trusted target delivery and observed intermediate
+mutation are checked;broader/current/disabled claims remain excluded.
+
+Focused select-readonly-evidence.spec.mjs passes1/1,0skip,nativeExit0 in
+59595.8785ms;retain select-readonly-obligation-join-retry-20261025 log pair.
+Forged report rejection,duplicate-join rejection,all-case statuses,unchanged
+predecessor and exact reverse conservation are asserted. First attempt failed
+on new adapter's mistaken editing key;actual schema authoredEditing was then
+used without altering original obligations. Preserve first failure log pair.
+No browser rerun,physical200MB proposal,full canonical export or registry edit.
+Frozen producer SHA256 remains9e936a24c2fdef6d5c95a8e9773cfd804c8227a8b9331fab91dfb6f1fbbcf766;
+accepted pointer remains88be4d47/indexb185409b. Pending join still requires
+coherent registration/dependency-reader integration before canonical publication.
+Next prioritize the48 disabled-case applicability boundary using existing source
+and positive controls,not extrapolation from enabled readonly mutation.
+
 Corrected actual-host Select observation closes the prior observer gap for ONE
 exact retained-build select/light/focus desktop-dpr1 case,not the86-case cohort.
 Adapter audit-material-select-readonly-host.mjs pins the preceding producer and
