@@ -9,6 +9,28 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Outside-owner pending review now CONSOLIDATES border/clip/box evidence with
+24 eyebrow margin records,scoped fixed-font title UA length corroboration,
+48 unequal wrapper-position/height records and48 eight-field retained leaf
+typography records. New successor
+e0e4a2a957947075c053988c644a6c2b87aef44c9e141f1e0389b06a96a618a6
+still reverses completely to d00beaa8 by removing its24 additive children.
+Prior4ad4f342 was an earlier standalone draft,not canonical;its complete join
+source remains Gitd933fe2f. Original raw evidence/pointers are not rewritten.
+
+Focused conservation/tamper test passes1/1,0skip,nativeExit0,63874.5969ms;
+keep divider-owner-margin-typography-join-20261025 log pair(stdout SHA256
+cbbbb36ad42adc400dcd46a3d7cd7e9dfb4b3253b105207840b4609d9bd252dd,
+stderr empty). Every original parent obligation/remaining task and2311 partial/
+current-unverified statuses preserve. New child explicitly separates other
+unreviewed owner properties,used-margin/layout behavior,glyph/material/raster
+and currentness/lifetime/final-gate domains. This is scope accounting,not new
+acceptance requirements or complete owner coverage. Duplicate/forged border and
+typography receipts reject. No browser,physical proposal or canonical rebuild.
+Four standalone next-batch paths now exist(two heading probes,owner join/spec),
+outside frozen1028/353/196. Next target an exact remaining owner-property input
+or dependency gap,not recapture consolidated border/margin/font request values.
+
 Wrapper/leaf typography correspondence now checked across48 Above/Below pairs
 in24 retained Divider cases,48 authenticated trees. Eight SUPPLIED retained
 leaf request fields(fontFamily,fontSize,fontWeight,fontStyle,lineHeight,
