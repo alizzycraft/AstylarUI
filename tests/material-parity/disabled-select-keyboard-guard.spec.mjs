@@ -42,10 +42,14 @@ test('Captured native Select disabled guard rejects keyboard delegation before r
     boundary:'Exact retained native MatSelect method with controlled disabled state and trap adapters. No browser focus,event delivery,typeahead,popup,application callbacks,candidate behavior or current rendering acceptance.'}));
 });
 
-test('Focused disabled Select retains value through trusted x without pointer blur',()=>{
-  const report=JSON.parse(authenticate({file:'artifacts/material-parity/disabled-select-focused-key-20261025/latest-report.json',sha256:'3d78f59ddb888d67316675f8bc3c82332f6bad3df33da0b2248483cc894fdf5f'}));
-  authenticate(report.capture.checkpointManifest);assert.equal(report.results.length,1);
-  const row=report.results[0];assert.equal(row.family,'select');assert.equal(row.profile,'light');assert.equal(row.viewport.id,'desktop-dpr1');
+for(const [directory,sha256,count]of [
+  ['disabled-select-focused-key-20261025','3d78f59ddb888d67316675f8bc3c82332f6bad3df33da0b2248483cc894fdf5f',1],
+  ['disabled-select-focused-contexts-20261025','436dd9625e30a42ef4bd49c3e6ce5c22524a6d2fa74017ea56275ef1c06a29c2',8],
+])test(`Focused disabled Select retains value through trusted x without pointer blur (${count} contexts)`,()=>{
+  const report=JSON.parse(authenticate({file:`artifacts/material-parity/${directory}/latest-report.json`,sha256}));
+  authenticate(report.capture.checkpointManifest);assert.equal(report.results.length,count);
+  assert.deepEqual(report.results.map(r=>[r.profile,r.viewport.deviceScaleFactor]),count===1?[['light',1]]:['light','dark','contrast','custom'].flatMap(p=>[1,2].map(d=>[p,d])));
+  for(const row of report.results){assert.equal(row.family,'select');assert.equal(row.state,'disabled');
   for(const side of ['reference','astylar']){
     const result=row[side];authenticate(result.inputTree);authenticate(result.screenshot);assert.deepEqual(result.runtime.errors,[]);
     assert.deepEqual(result.observations.map(o=>o.boundary),['before','after-focus-attempt','before-key-without-pointer','after-key-attempt','settled']);
@@ -56,6 +60,7 @@ test('Focused disabled Select retains value through trusted x without pointer bl
     }
     const final=result.observations.at(-1);
     assert.ok(final.events.some(e=>e.type==='keydown'&&e.trusted&&(side!=='reference'||e.target.token===final.target.token)));
+  }
   }
   assert.equal(report.inputEquivalent,false);assert.equal(report.renderingEquivalent,false);
 });

@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Keep disabled-select-focused-contexts-20261025(33 files,4850754 bytes),its
+-provenance checkpoint and log/stderr pair. Report SHA436dd9625e30a42ef4bd49c3e6ce5c22524a6d2fa74017ea56275ef1c06a29c2.
+Eight configured Select disabled physical contexts retain paired trees,PNGs,
+runtime asset/focus/key boundaries. No new build/bundle copy. The earlier one-
+context diagnostic remains original sequence-validation evidence,not deleted.
+Both remain local/unpublished and do not supersede original configured captures.
+
 Keep disabled-select-focused-key-20261025 and its -provenance checkpoint plus
 log/stderr pair:one paired retained-build focus-then-trusted-x diagnostic without
 pointer blur. Report SHA3d78f59ddb888d67316675f8bc3c82332f6bad3df33da0b2248483cc894fdf5f.

@@ -9,6 +9,27 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Select disabled focused-key supplementary coverage now spans ALL EIGHT existing
+physical contexts(four profiles×DPR1/2),not just light/DPR1. Reused proven sequence
+and immutable retained build;no pointer between focus and trusted x. Across all8,
+native target stays focused,receives exact-target trusted keydown and retains
+Team/expanded=false with no input/change;candidate disabled input rejects focus
+and retains Team/expanded=false. This is consistent unequal focusability from
+authored native ARIA-disabled MAT-SELECT versus native-disabled INPUT,not a core
+keyboard mutation or equivalent input/rendering result.
+
+Capture and independent --verify exit0,Chrome155.0.8059.85,40 paired action
+boundaries;report disabled-select-focused-contexts-20261025/latest-report.json
+SHA436dd9625e30a42ef4bd49c3e6ce5c22524a6d2fa74017ea56275ef1c06a29c2.
+Owning standalone suite passes3/3,exit0,624.0625ms;checks exact eight profile/DPR
+memberships,all original side observations and hashes. Retain4.85MB outputs and
+provenance/logs per retention document. Frozen1041/365 batch remains untouched.
+This narrows the disabled population's uncovered physical contexts from42 to35
+for these supplementary focus/x boundaries(one context each for five other
+families already observed). Other keys,picker icons,dynamic disable,equal inputs,
+local paint,current package and whole-case inspection remain unproved. No case
+promotion or claim that original disabled action recipes exercised these keys.
+
 Focused disabled Select end-to-end gap answered for light/desktop-DPR1 ONLY:
 new diagnostic reuses existing disabled probe and retained build,removing the
 intervening pointer action. Native MAT-SELECT remains focused,receives trusted
