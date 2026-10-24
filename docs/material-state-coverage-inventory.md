@@ -9,6 +9,24 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Verified Menu AX evidence is now attached to its eight EXACT configured open
+case records by standalone `join-material-menu-ax-evidence.mjs`,not aliased onto
+open-hover-content or mobile cases. Virtual successord7ce8d6e2d5b9a3025e1f7a80a62ca383d08636e1b1d44d4d5c0959f6fa267aa
+adds eight semantics.actualRetainedMenuPopupAX children. Complete predecessor
+169d4655 recovers after removing only those children. Raw AX nodes,exact backend
+controls associations,report/manifest/paired-tree receipts and classified
+tabindex input difference remain machine-readable;no observations normalized
+to hide opening-focus or focusability failures.
+
+Existing full reader authenticates2311 cases/18176 dependencies,nativeExit0;
+forged report rejected,all cases partial/current-rendering unverified,both
+completion flagsfalse. No200MB proposal was saved or canonical pointer advanced.
+Keep menu-popup-ax-case-join-20261024 log pair;stdout SHA256
+85f355e399a78923b8818b2a5fd0954f5e6087cdbaa301dd8c50abf237513607,
+stderr empty. New source/proof registration and selection wiring remain pending
+outside frozen1002/326;publication/storage prerequisites and original gates
+remain open. This closes bounded evidence integration,not whole-case inspection.
+
 The focused popup AX observation now covers all eight configured desktop theme/
 DPR open contexts,64 actual target observations. Bounded adapter
 `audit-material-menu-ax-contexts.mjs` pins original one-context producer6a11d250;
