@@ -7,6 +7,33 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+October24 focused snackbar AX observation closes one missing measurement,not
+the family: scripts/audit-material-snackbar-ax.mjs reuses configured light/
+desktop-dpr1/open actions and existing supplemental/checkpoint/CDP infrastructure
+on retained icon-fresh-producer-retained-build-20261016-browser. No source-built
+fixture or current-code claim. Report snackbar-open-ax-receipted-20261024/
+latest-report.json SHA3fa049b361f2752a147206cf690a3cdb7b22cf76eec882146acec8df779e2458
+validates checkpoint-bound twice,one case/four target observations,with paired
+input-tree/runtime receipts. First snackbar-open-ax-20261024 report remains a
+validation failure:diagnostic omitted mandatory inputTree receipts;validator was
+not weakened. Corrected run uses a separate directory and original tree collector.
+At the configured immediate endpoint,candidate UNDO is AX button,name UNDO,
+focusable,not ignored. Native UNDO is ignored with ariaHiddenSubtree reason;
+native polite live owner is empty,generic,atomic=false,while candidate is status,
+atomic=true and already contains Project savedUNDO. Paired input tree confirms
+the native content remains inside aria-hidden=true. This is a timing-bound
+observation,NOT a persistent missing-native-action defect. Installed Material
+snack-bar.mjs _announceDelay=150 and _announce implementation moves content from
+the hidden owner into the live owner after a timeout;installed source alone is
+not exact retained-map applicability. Next decisive check is a separate recorded
+post-delay endpoint and original retained-source timer ownership,not changing
+the configured settlement or relabeling this endpoint as settled AX parity.
+The normal runner does not request snack-bar-dismiss or map its native selector;
+its semanticName helper computes label/text approximations,not browser AX names.
+Existing CDP query infrastructure suffices;no additional audit framework needed.
+No old registered source changes,case promotion,canonical export or final-gate
+waiver. New standalone diagnostic is pending future coherent registration.
+
 October24 read-only snackbar semantic coverage question answered:complete report
 SHAab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62 and
 all118 input-tree receipts authenticate across59 interaction rows. All34 rows
