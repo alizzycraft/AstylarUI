@@ -7,6 +7,40 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Remaining Divider physical paint cohorts verified (October24)
+
+Four-profile tablet/mobile-DPR2/comparison-width/desktop-DPR2 capture completed
+terminal0 with empty stderr,using the unchanged authenticated desktop producer
+and retained baseline/served files. New wrapper
+audit-material-divider-paint-context-remaining.mjs requires complete prior producer
+bbac18bb before bounded extension. Initial wrapper launch failed bare package
+resolution inside a data module before capture;retain original remaining-20261024
+failure logs. Corrected wrapper resolves Playwright before the data-module boundary;
+no fixture,renderer,baseline producer or captured desktop evidence changed.
+
+Successful32 side observations add16 paired physical cohorts,368 actual DOM
+owner occurrences,with observed innerWidth/innerHeight/DPR matching every request.
+All chains again have image/filter/backdrop none,blend normal,isolation auto,
+opacity1. Capture log divider-computed-paint-context-remaining-resolved-20261024.log
+SHA2562d9b69e805b4a114c4b2fbdcca3263ec60de3ebebcd2f83d480a3f1f09f84c3a;
+producer e319a5b2dd12f2fb051525b71ecf39d23f69a86430579cc1fe0cde67d38d5c2f.
+
+Existing paint proof now authenticates both captured reports,all actually served
+asset receipts,exact remaining contexts and physical mapping to current config:
+20 paired physical cohorts represent24 configured aliases (static desktop and
+passive inspect DPR1 share dimensions). This mapping is NOT execution or passage
+of the original24-case rendering test. Additional2208 property mutations reject.
+Coherent four-proof file4/4,zero skips,5689.4863ms,empty stderr:
+divider-paint-coverage-coherent-20261024.log SHA256
+32feb82531cf7301a0105376bab5535546e200ebb2fa0e0a5dba6b85400f8555.
+
+No more recapture of these computed DOM fields is justified absent changed inputs.
+Internal candidate material/sampling/group compositing,other input/structure and
+lifetime/currentness requirements remain. Four standalone paint proofs/three
+paths await the next coherent finding/inventory join;installed984/314 and accepted
+a659 preserve. All2311 cases remain partial/current rendering unverified,with
+original final gates unchanged and remote transport publication still unresolved.
+
 ### Missing Divider computed paint/outer host fields observed (October24)
 
 Reused existing authenticated baseline server/assets/settlement workflow in

@@ -7,8 +7,65 @@ import ts from 'typescript';
 import { chromium } from 'playwright-core';
 import { captureBrowserInputTree } from './input-tree-evidence.mjs';
 import path from 'node:path';
+import { materialStaticCases, materialInteractionCases } from './benchmark.config.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+
+test('remaining retained Divider computed paint covers every configured physical viewport cohort', () => {
+  const bytes = readFileSync('artifacts/material-parity/divider-computed-paint-context-remaining-resolved-20261024.log');
+  assert.equal(hash(bytes), '2d9b69e805b4a114c4b2fbdcca3263ec60de3ebebcd2f83d480a3f1f09f84c3a');
+  const report = JSON.parse(bytes.toString('utf16le').replace(/^\ufeff/, ''));
+  assert.equal(report.producerSha256, hash(readFileSync('scripts/audit-material-divider-paint-context-remaining.mjs')));
+  assert.equal(hash(readFileSync('scripts/audit-material-divider-paint-context.mjs')), 'bbac18bb5c6fcc0c1d3ccfda7843d8a46b63e99d39cf70305a439bb5e389b1a3');
+  assert.equal(report.browser, '155.0.8059.85');
+  const baselineBytes = readFileSync(report.baseline.file); assert.equal(hash(baselineBytes), report.baseline.sha256);
+  assert.equal(report.baseline.sha256, '4be9c6d199952f35203f31d08def08d0d936071f4eb313b75ad3bbf72dd46f11');
+  const assets = new Map(JSON.parse(baselineBytes).captureProvenance.browserFiles.map(row => [row.file, row.sha256]));
+  const contexts = [
+    { id: 'tablet', width: 768, height: 1024, deviceScaleFactor: 1 },
+    { id: 'mobile', width: 390, height: 844, deviceScaleFactor: 2 },
+    { id: 'comparison', width: 609, height: 844, deviceScaleFactor: 1 },
+    { id: 'desktop-dpr2', width: 1440, height: 1000, deviceScaleFactor: 2 },
+  ];
+  assert.deepEqual(report.results.map(row => `${row.context.id}/${row.profile}/${row.side}`), contexts.flatMap(context =>
+    ['light', 'dark', 'contrast', 'custom'].flatMap(profile => ['reference', 'astylar'].map(side => `${context.id}/${profile}/${side}`))));
+  const defaults = { backgroundImage: 'none', filter: 'none', backdropFilter: 'none', mixBlendMode: 'normal', isolation: 'auto', opacity: '1' };
+  const inspect = values => { for (const [property, value] of Object.entries(defaults)) assert.equal(values[property], value); };
+  const observed = new Map(), usedFiles = new Map(); let owners = 0, controls = 0;
+  const desktopBytes = readFileSync('artifacts/material-parity/divider-computed-paint-context-20261024.log');
+  assert.equal(hash(desktopBytes), '9d43d99a8832060378094f4c241250061d08b6db28107858e09d0865f62c6807');
+  const desktop = JSON.parse(desktopBytes.toString('utf16le').replace(/^\ufeff/, ''));
+  assert.equal(desktop.results.length, 8);
+  for (const row of desktop.results) {
+    const key = `${row.profile}/1440/1000/1`;
+    if (!observed.has(key)) observed.set(key, new Set()); observed.get(key).add(row.side);
+  }
+  for (const row of report.results) {
+    assert.deepEqual(row.context, contexts.find(context => context.id === row.context.id));
+    const { width, height, deviceScaleFactor: dpr } = row.context;
+    assert.deepEqual(row.observation.viewport, { width, height, dpr });
+    const key = `${row.profile}/${width}/${height}/${dpr}`;
+    if (!observed.has(key)) observed.set(key, new Set()); observed.get(key).add(row.side);
+    assert.equal(row.observation.targets.length, row.side === 'reference' ? 2 : 1);
+    for (const target of row.observation.targets) {
+      assert.equal(target.chain.length, row.side === 'reference' ? 8 : 7); assert.equal(target.chain.at(-1).tag, 'html');
+      for (const node of target.chain) {
+        inspect(node.values); owners++;
+        for (const property of Object.keys(defaults)) { assert.throws(() => inspect({ ...node.values, [property]: 'mutated' })); controls++; }
+      }
+    }
+    for (const asset of row.assets) { assert.equal(asset.sha256, assets.get(asset.file)); usedFiles.set(asset.file, asset.sha256); }
+  }
+  const configured = [...materialStaticCases, ...materialInteractionCases].filter(row => row.family === 'divider');
+  const expected = new Set(configured.map(row => `${row.profile}/${row.viewport.width}/${row.viewport.height}/${row.viewport.deviceScaleFactor}`));
+  assert.equal(configured.length, 24); assert.equal(expected.size, 20);
+  assert.deepEqual([...observed.keys()].sort(), [...expected].sort());
+  assert.ok([...observed.values()].every(sides => sides.size === 2));
+  for (const [file, sha256] of usedFiles) assert.equal(hash(readFileSync(path.join('examples/material-showcase/dist/material-showcase/browser', file))), sha256);
+  assert.equal(owners, 368); assert.equal(controls, 2208);
+  console.log(JSON.stringify({ additionalPairedContexts: 16, owners, controls, physicalCohorts: expected.size, configuredAliases: configured.length,
+    boundary: 'Only missing computed DOM paint/host properties in retained served viewport cohorts;desktop DPR1 evidence remains separately pinned. Physical alias mapping is not execution of the original24-case test or current/case rendering acceptance.' }));
+});
 
 test('retained served Divider computed paint excludes image filters and blending through actual HTML hosts', () => {
   const bytes = readFileSync('artifacts/material-parity/divider-computed-paint-context-20261024.log');
