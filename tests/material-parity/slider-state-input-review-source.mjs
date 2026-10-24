@@ -3,7 +3,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { joinSliderStateInputs, sliderStatePredecessor } from '../../scripts/join-material-slider-state-inputs.mjs';
 import { createSliderHoverHeldReviewReader } from './slider-hover-held-case-review-source.mjs';
-import { restoreSliderStateInputExportSource, restoreSliderStateInputSharedRegistration, restoreSliderStateInputPreviousTest, restoreSliderStateInputPolicy, restoreSliderStateInputPreviousTableTest } from './slider-state-registration.mjs';
+import { restoreSliderStateInputExportSource, restoreSliderStateInputSharedRegistration, restoreSliderStateInputPreviousTest, restoreSliderStateInputPolicy, restoreSliderStateInputPreviousTableTest, restoreSliderStateInputProducer, restoreSliderStateInputPreviousReader } from './slider-state-registration.mjs';
 
 export const sliderStateInputReview = 'c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -35,6 +35,10 @@ export function createSliderStateInputReviewReader({ root, read, reviewSha256 })
       restored = restoreSliderStateInputPolicy(read(absolute));
     if (absolute === path.resolve(root, 'tests/material-parity/table-label-case-review-source.spec.mjs'))
       restored = restoreSliderStateInputPreviousTableTest(read(absolute));
+    if (absolute === path.resolve(root, 'tests/material-parity/input-equivalence-audit.mjs'))
+      restored = restoreSliderStateInputProducer(read(absolute));
+    if (absolute === path.resolve(root, 'tests/material-parity/slider-hover-held-case-review-source.mjs'))
+      restored = restoreSliderStateInputPreviousReader(read(absolute));
     if (restored === undefined) return read(absolute, options);
     const bytes = Buffer.from(restored);
     return options ? bytes.toString(typeof options === 'string' ? options : options.encoding ?? 'utf8') : bytes;

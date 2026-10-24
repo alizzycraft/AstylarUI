@@ -377,6 +377,22 @@ export function restoreRetainedFocusExportSource(source, kind) {
 
 export function restoreRetainedFocusProducer(source) {
   let text=source.toString().replaceAll('\r\n','\n');
+  // Current Slider state inventory precedes every older producer stage.
+  if(text.includes('Slider state input producer inventory conservation')){
+    assert.equal(hash(text),'0aba1870b5ee9f0231cfb2528d6d89a581ae8558a0c9859e116a145febcbe3e1');
+    const ast=ts.createSourceFile('producer.mjs',text,99,true);
+    const owner=name=>ast.statements.find(node=>ts.isFunctionDeclaration(node)&&node.name?.text===name);
+    const proofs=owner('focusedProofInventory').body.statements[0].expression.elements;
+    const files=owner('sourceFingerprints').body.statements[0].declarationList.declarations[0].initializer.elements;
+    assert.equal(proofs.length,293);assert.equal(files.length,968);
+    assert.equal(proofs[0].arguments[3].text,'Slider state input layer request boundary');
+    assert.equal(proofs[7].arguments[3].text,'Slider state input producer inventory conservation');
+    assert.equal(files[0].text,'tests/material-parity/slider-retained-state-layer.spec.mjs');
+    assert.equal(files[5].text,'tests/material-parity/slider-state-registration.mjs');
+    for(const[start,end]of[[proofs[0].getFullStart(),proofs[7].end+1],[files[0].getFullStart(),files[5].end+1]].sort((a,b)=>b[0]-a[0]))
+      text=text.slice(0,start)+text.slice(end);
+    assert.equal(hash(text),'4d6fe33dde4efeb07359040ab7c1ab6407f0825f804cd8df97efbc1a11a2b60f');
+  }
   // All historical provenance callers enter here. Remove the exact newer
   // inventory once,not through a growing set of caller-specific test wrappers.
   if(text.includes('Slider hover held producer inventory conservation')){

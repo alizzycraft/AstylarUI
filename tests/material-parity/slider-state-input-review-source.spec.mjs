@@ -8,8 +8,59 @@ import path from 'node:path';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
 import { createSliderStateInputReviewReader, sliderStateInputReview } from './slider-state-input-review-source.mjs';
-import { restoreSliderStateInputExportSource, restoreSliderStateInputSharedRegistration, restoreSliderStateInputPreviousTest, restoreSliderStateInputPolicy, restoreSliderStateInputPreviousTableTest } from './slider-state-registration.mjs';
-import { restoreRetainedFocusExportSource, retainedStaticSemanticPopulation, restoreRootDepthPolicy } from './static-semantic-registration.mjs';
+import { restoreSliderStateInputExportSource, restoreSliderStateInputSharedRegistration, restoreSliderStateInputPreviousTest, restoreSliderStateInputPolicy, restoreSliderStateInputPreviousTableTest, restoreSliderStateInputProducer, restoreSliderStateInputPreviousReader } from './slider-state-registration.mjs';
+import { restoreRetainedFocusExportSource, retainedStaticSemanticPopulation, restoreRootDepthPolicy, restoreRetainedFocusProducer } from './static-semantic-registration.mjs';
+
+test('Slider state input inventory preserves accepted sources and proofs', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs', source = readFileSync(file, 'utf8');
+  const prior = restoreSliderStateInputProducer(source);
+  const collect = text => {
+    const ast = ts.createSourceFile(file, text, 99, true);
+    const owner = name => ast.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === name);
+    const code = ['proof', 'sourceFingerprints', 'focusedProofInventory'].map(name => owner(name).getText(ast)).join('\n');
+    return new Function('readFileSync', 'path', 'createHash', code + ';return {sources:sourceFingerprints(process.cwd()),proofs:focusedProofInventory(process.cwd())};')
+      (readFileSync, path, createHash);
+  };
+  const current = collect(source), accepted = collect(prior);
+  assert.equal(current.sources.length, 968); assert.equal(current.proofs.length, 293);
+  assert.equal(new Set(current.sources.map(row => row.file)).size, 968);
+  assert.deepEqual(current.sources.slice(6), accepted.sources);
+  assert.deepEqual(current.proofs.slice(8), accepted.proofs);
+  assert.ok(current.proofs.slice(0, 8).every(row => row.line > 0));
+  // Compare against the authenticated accepted-generation vector,not only two
+  // evaluations using today's files. Reuse its bounded extract,not a2GB decode.
+  const extract = readFileSync('artifacts/material-parity/slider-focus-candidate-structural-extraction-20261024.log');
+  assert.equal(createHash('sha256').update(extract).digest('hex'),
+    '79831b46ed0c0486237d03700456d3a72383d0d4f36a9d2ec606008d41601aa8');
+  const archived = JSON.parse(extract.toString('utf16le').replace(/^\ufeff/, ''));
+  assert.equal(archived.manifest.compressedSha256, 'a65965fb3c03198c1f50dccb10521dc7411bf9346da89416846975edfc1605af');
+  const before = new Map(archived.sourceFingerprints.map(row => [row.file, row]));
+  const after = new Map(current.sources.map(row => [row.file, row]));
+  assert.deepEqual([...before.keys()].filter(file => !after.has(file)), []);
+  assert.deepEqual(current.sources.filter(row => !before.has(row.file)).map(row => row.file), current.sources.slice(0, 6).map(row => row.file));
+  const restores = new Map([
+    ['scripts/run-material-input-audit.mjs', source => restoreSliderStateInputExportSource(source, 'runner')],
+    ['scripts/export-material-input-audit-current-ancestry.mjs', source => restoreSliderStateInputExportSource(source, 'launcher')],
+    ['tests/material-parity/static-semantic-registration.mjs', restoreSliderStateInputSharedRegistration],
+    ['tests/material-parity/slider-hover-held-case-review-source.spec.mjs', restoreSliderStateInputPreviousTest],
+    ['tests/material-parity/input-equivalence-policy.mjs', restoreSliderStateInputPolicy],
+    ['tests/material-parity/table-label-case-review-source.spec.mjs', restoreSliderStateInputPreviousTableTest],
+    ['tests/material-parity/input-equivalence-audit.mjs', restoreSliderStateInputProducer],
+    ['tests/material-parity/slider-hover-held-case-review-source.mjs', restoreSliderStateInputPreviousReader],
+  ]);
+  const changed = current.sources.filter(row => before.has(row.file) && before.get(row.file).sha256 !== row.sha256);
+  assert.deepEqual(changed.map(row => row.file).sort(), [...restores.keys()].sort());
+  for (const row of changed) assert.equal(createHash('sha256').update(restores.get(row.file)(readFileSync(row.file))).digest('hex'), before.get(row.file).sha256);
+  for (const [file, row] of before) if (!restores.has(file)) assert.deepEqual(after.get(file), row);
+  const withoutLine = rows => rows.map(({ line, ...row }) => row);
+  assert.deepEqual(withoutLine(current.proofs.slice(8)), withoutLine(archived.focusedProofs));
+  assert.equal(restoreRetainedFocusProducer(source), restoreRetainedFocusProducer(prior));
+  assert.throws(() => restoreSliderStateInputProducer(source + '\n// drift\n'));
+  assert.throws(() => restoreRetainedFocusProducer(source + '\n// drift\n'));
+  const restored = restoreSliderStateInputPreviousReader(readFileSync('tests/material-parity/slider-hover-held-case-review-source.mjs'));
+  assert.equal(createHash('sha256').update(restored).digest('hex'),
+    'e5928dd86ad6780d9de3b299890e13afd9c94eae6c5c5ecc0f70573b2d7d70a2');
+});
 
 test('Slider state-layer source finding preserves every accepted definition and production detection', () => {
   const file = 'tests/material-parity/input-equivalence-policy.mjs', current = readFileSync(file, 'utf8');

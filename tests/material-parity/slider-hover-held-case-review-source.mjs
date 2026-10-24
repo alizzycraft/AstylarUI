@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import { createRetainedFocusReviewReader } from '../../scripts/join-material-retained-pointer-focus.mjs';
 import { sliderHoverHeldPredecessor, sliderHoverHeldCapture } from '../../scripts/join-material-slider-hover-held.mjs';
+import { restoreSliderStateInputProducer } from './slider-state-registration.mjs';
 
 export const sliderHoverHeldReview = 'c0e397e0a5912d3f492c0d55a3d2b5421d6892f5403ba355c90560da6dbf2cea';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -39,6 +40,8 @@ export function restoreSliderHoverHeldSharedRegistration(source) {
 
 export function restoreSliderHoverHeldProducer(source) {
   const text = source.toString().replaceAll('\r\n', '\n');
+  if (text.includes('Slider state input producer inventory conservation'))
+    return restoreSliderHoverHeldProducer(restoreSliderStateInputProducer(text));
   assert.equal(hash(text), '4d6fe33dde4efeb07359040ab7c1ab6407f0825f804cd8df97efbc1a11a2b60f');
   const ast = ts.createSourceFile('producer.mjs', text, 99, true);
   const owner = name => ast.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === name);

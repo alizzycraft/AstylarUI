@@ -4,6 +4,33 @@
 
 ### Current next action and publication status
 
+The first entry is current. Subsequent entries retain intermediate milestones;
+superseded pending instructions there are historical,not reasons to repeat work.
+
+- Slider batch is registered at193 findings/968 source paths/293 focused proofs.
+  Six paths/eight proofs add to accepted962/285 with no removals. Current producer
+  0aba1870 restores complete prior4d6fe33d after only those array additions.
+  Authenticated accepted a659 extract79831b46 confirms all285 previous non-line
+  proof fields/order and exactly EIGHT bounded old-source changes,not merely
+  two evaluations against today's files:runner,launcher,shared helper,older Slider
+  cohort test,policy,Table cohort test,producer,and older Slider reader. Every
+  complete old file SHA recovers;all other prior source rows are identical.
+  Shared helper is now683270d8,older Slider reader71baf715 and its cohort test
+  5a9be867. The shared producer entry strips293/968 before older stages;older
+  direct producer restoration also recognizes the exact new stage. No new
+  caller-only waiver or discarded finding. All193 production definitions retain
+  the accepted192 prefix. Eighteen coherent focused checks pass,zero skips,
+  including source census,legacy selections,raw input/pixel/history proofs and
+  the complete2311-case/17552-dependency reader,in103760.4995ms. Integration log
+  SHAa2e0752745784d7030bd9fbb493d1f850b2799429fc3c4519b5f53011f88398f;
+  stderr empty. Census logSHA9f961591788ceb2627ae3113035c65e1d5242e0fb597bac5e64cece473e3bce9.
+  All2311 remain partial/current-
+  unverified. No new canonical generation yet:accepted stays a659/192/962/285;
+  review c394 is registered and ready for a frozen milestone. Pending canonical
+  focus1603/activation1466/paint949 remain until publication;prospective focus1587
+  is pointer/hover-only partial evidence,not programmatic-focus acceptance.
+  Do not recapture the settled Slider questions or rerun full checks for prose.
+
 - Current source policy now has193 definitions,adding only
   fixture-slider-state-layer-composition. Actual production scanMaterialSources
   executes all193 and detects the new app handler once;all prior192 definitions

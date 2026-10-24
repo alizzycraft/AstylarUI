@@ -7,10 +7,10 @@ import ts from 'typescript';
 import path from 'node:path';
 import { restoreSliderHoverHeldBenchmark, createSliderHoverHeldReviewReader, restoreSliderHoverHeldExportSource, restoreSliderHoverHeldProducer, restoreSliderHoverHeldRetainedTest, restoreSliderHoverHeldSharedRegistration, sliderHoverHeldReview } from './slider-hover-held-case-review-source.mjs';
 import { restoreRetainedFocusProducer, restoreStaticSemanticProducer, restoreRetainedFocusExportSource } from './static-semantic-registration.mjs';
-import { restoreSliderStateInputExportSource, restoreSliderStateInputSharedRegistration } from './slider-state-registration.mjs';
+import { restoreSliderStateInputExportSource, restoreSliderStateInputSharedRegistration, restoreSliderStateInputProducer } from './slider-state-registration.mjs';
 
 test('slider hover-held producer registration conserves accepted inventories', () => {
-  const file = 'tests/material-parity/input-equivalence-audit.mjs', source = readFileSync(file, 'utf8');
+  const file = 'tests/material-parity/input-equivalence-audit.mjs', source = restoreSliderStateInputProducer(readFileSync(file, 'utf8'));
   const prior = restoreSliderHoverHeldProducer(source);
   assert.throws(() => restoreSliderHoverHeldProducer(source + '\n// drift\n'));
   const collect = text => {

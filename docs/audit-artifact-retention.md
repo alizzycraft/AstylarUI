@@ -1,5 +1,18 @@
 # Audit artifact retention
 
+October24 Slider registration is complete at193 findings/968 sources/293 proofs.
+Keep slider-state-accepted-vector-census-20261024 and
+slider-state-complete-registration-integration-20261024 (18/18) logs/stderr.
+CensusSHA9f961591788ceb2627ae3113035c65e1d5242e0fb597bac5e64cece473e3bce9;
+integrationSHAa2e0752745784d7030bd9fbb493d1f850b2799429fc3c4519b5f53011f88398f,
+duration103760.4995ms;integration stderr empty.
+The census reuses authenticated extract79831b46 from accepted a659;it does not
+decode another2GB package. It verifies6 added paths,no removals,eight complete
+old-source preimages and285 conserved non-line proof records. Full coherent
+integration includes all2311 cases/17552 dependencies after inventory edits;
+prior pre-registration reader logs remain historical,not substitutes for this.
+No image/build/proposal/canonical result set added,and no evidence deleted.
+
 October24 current Slider source-finding registration reuses the existing raw
 capture and proof logs;no new image/build/proposal/result set. Keep
 slider-state-policy-registration-20261024 (2/2) and

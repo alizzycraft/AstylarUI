@@ -8922,6 +8922,12 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'tests/material-parity/slider-retained-state-layer.spec.mjs',
+    'scripts/join-material-slider-state-inputs.mjs',
+    'tests/material-parity/slider-state-input-join.spec.mjs',
+    'tests/material-parity/slider-state-input-review-source.mjs',
+    'tests/material-parity/slider-state-input-review-source.spec.mjs',
+    'tests/material-parity/slider-state-registration.mjs',
     'scripts/audit-material-configured-input-focus.mjs',
     'docs/evidence/material-configured-input-focus-runner-20261008.mjs.b64',
     'tests/material-parity/retained-input-focus-snapshot.spec.mjs',
@@ -9891,6 +9897,22 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/slider-retained-state-layer.spec.mjs', /test\('retained Slider state layers diverge in application inputs before plugin paint'/,
+      'Slider state input layer request boundary', 'Sixteen retained contexts authenticate complete captured/current app and plugin modules. Original handlers request .08/.12 instead of native .05 or two .2 layers. Unequal inputs,not a core alpha diagnosis or whole-case acceptance.'),
+    proof(root, 'tests/material-parity/slider-retained-state-layer.spec.mjs', /test\('retained light Slider state-layer interiors differ at both DPRs'/,
+      'Slider retained light interior paint boundary', 'Eight original light hover/held DPR1/2 PNGs retain uniform but different state-layer interiors. Independent pixel-derived sampling is not fixture positioning,equal-input paint,edge sharpness or exact historical black-circle causality.'),
+    proof(root, 'tests/material-parity/slider-retained-state-layer.spec.mjs', /test\('historical Slider color fallback produces an opaque black material before rasterization'/,
+      'Slider historical opaque black material boundary', 'Original pre-2cb8 functions on matching Babylon8.15.1 reject rgba and pass an invalid fallback to Color3,creating opaque black. Valid/current controls differ. Material configuration,not old browser raster attribution or current core failure.'),
+    proof(root, 'tests/material-parity/slider-state-input-join.spec.mjs', /test\('Slider state-input join adds only scoped children and preserves whole predecessor'/,
+      'Slider state input bounded case join', 'Fifty-two scoped children across sixteen cases recover complete c0 predecessor. Pointer/hover focus stays distinct from programmatic or keyboard focus;all case flags and remaining work preserve. Changed proof/log/capture rejects.'),
+    proof(root, 'tests/material-parity/slider-state-input-review-source.spec.mjs', /test\('Slider state-layer source finding preserves every accepted definition and production detection'/,
+      'Slider state input production finding conservation', 'Actual source scanner detects the193rd application input finding while all192 definitions/results conserve. Complete prior policy and explicit historical populations recover;altered attribution/source rejects. Not rendering acceptance.'),
+    proof(root, 'tests/material-parity/slider-state-input-review-source.spec.mjs', /test\('Slider state-input export selection preserves prior sources and actual routing'/,
+      'Slider state input exact export selection', 'Explicit successor selects only c394;all12 conflicting supplements reject and older/default routing preserves. Direct shared provenance entry and whole runner/launcher/helper/cohort predecessors recover. Not publication.'),
+    proof(root, 'tests/material-parity/slider-state-input-review-source.spec.mjs', /test\('Slider state-input successor authenticates the whole review and every evidence dependency'/,
+      'Slider state input complete dependency reader', 'Complete bounded successor recomputes and all2311 partial cases/17552 dependencies authenticate through owning source restoration. Unknown review and changed proof reject. No current rendering or whole-case acceptance.'),
+    proof(root, 'tests/material-parity/slider-state-input-review-source.spec.mjs', /test\('Slider state input inventory preserves accepted sources and proofs'/,
+      'Slider state input producer inventory conservation', 'Six sources/eight proofs add to the complete962/285 predecessor. Whole producer,prior inventory order and direct historical entry conserve;arbitrary drift rejects. Source registration is not canonical publication.'),
     proof(root, 'tests/material-parity/retained-input-focus-snapshot.spec.mjs', /test\('configured focus dependency transition preserves semantic owner and maintained action bytes'/,
       'configured input focus dependency transition', 'Forty exact cases overlap earlier observed descendant-loss traces. Complete semantic module and six action methods preserve;five diagnostic additions recover both changed mapped modules. Not a fresh first-loss stack or whole-pipeline acceptance.'),
     proof(root, 'tests/material-parity/retained-input-focus-snapshot.spec.mjs', /test\('retained input focus snapshots bind declared logical owners without proving paired DOM focus'/,

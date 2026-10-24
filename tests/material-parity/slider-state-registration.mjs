@@ -6,8 +6,8 @@ const hash = source => createHash('sha256').update(source).digest('hex');
 const successor = {
   runner: '15654c97560e355b825b330116514e4e64a8d61769998e9eb7dca5e47e936928',
   launcher: '13a8ae61f8d0fb5f93d230a7a77da1ccd08d90c03cfa193d3d63d34c9e920f54',
-  shared: '15893a03ee951b30da515610ac71a08fe30f0f68cef12a804034b43f3ad1d976',
-  previousTest: '2fae33c53e46de9ac3839c561461ff00ed5348dea0191b99586a1796a8f0d9df',
+  shared: '683270d89cbce258a3372d89129f3f8094a29330b9bb36c6f0fb2dfbf7ab3286',
+  previousTest: '5a9be8679673bda30bfe896c7a85abd7357ed4d194ca3d67724a5ec6117cd0f9',
 };
 const predecessor = {
   runner: '69565e8cd8b0d0e5c464f5ba51a5244f4cb95575d51a34f9d82a06668ca8645d',
@@ -49,12 +49,16 @@ export function restoreSliderStateInputSharedRegistration(source) {
   const begin = text.indexOf('  // Strip the newest selector at the shared owner,not at individual callers.');
   const end = text.indexOf('  // Newest export-selection boundary is shared by every historical caller.', begin);
   assert.ok(begin >= 0 && end > begin); text = text.slice(0, begin) + text.slice(end);
+  const inventory = text.indexOf('  // Current Slider state inventory precedes every older producer stage.');
+  const inventoryEnd = text.indexOf('  // All historical provenance callers enter here.', inventory);
+  assert.ok(inventory >= 0 && inventoryEnd > inventory); text = text.slice(0, inventory) + text.slice(inventoryEnd);
   assert.equal(hash(text), predecessor.shared); return text;
 }
 
 export function restoreSliderStateInputPreviousTest(source) {
   let text = source.toString().replaceAll('\r\n', '\n'); assert.equal(hash(text), successor.previousTest);
-  text = edit(text, "import { restoreSliderStateInputExportSource, restoreSliderStateInputSharedRegistration } from './slider-state-registration.mjs';\n");
+  text = edit(text, "import { restoreSliderStateInputExportSource, restoreSliderStateInputSharedRegistration, restoreSliderStateInputProducer } from './slider-state-registration.mjs';\n");
+  text = edit(text, "  const file = 'tests/material-parity/input-equivalence-audit.mjs', source = restoreSliderStateInputProducer(readFileSync(file, 'utf8'));", "  const file = 'tests/material-parity/input-equivalence-audit.mjs', source = readFileSync(file, 'utf8');");
   text = edit(text, "  const shared = restoreSliderStateInputSharedRegistration(readFileSync('tests/material-parity/static-semantic-registration.mjs', 'utf8'));", "  const shared = readFileSync('tests/material-parity/static-semantic-registration.mjs', 'utf8');");
   text = edit(text, 'restoreSliderHoverHeldExportSource(restoreSliderStateInputExportSource(source, kind), kind)', 'restoreSliderHoverHeldExportSource(source, kind)');
   assert.equal(hash(text), predecessor.previousTest); return text;
@@ -82,4 +86,29 @@ export function restoreSliderStateInputPreviousTableTest(source) {
     '  let source = normalize(fs.readFileSync(helper));');
   assert.equal(hash(text), '99d0fe415834800b1ebdefbb076a2618ec2d1b79045e8e34910b0d73c9e1daa5');
   return text;
+}
+
+export function restoreSliderStateInputProducer(source) {
+  let text = source.toString().replaceAll('\r\n', '\n');
+  assert.equal(hash(text), '0aba1870b5ee9f0231cfb2528d6d89a581ae8558a0c9859e116a145febcbe3e1');
+  const ast = ts.createSourceFile('producer.mjs', text, 99, true);
+  const owner = name => ast.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === name);
+  const proofs = owner('focusedProofInventory').body.statements[0].expression.elements;
+  const files = owner('sourceFingerprints').body.statements[0].declarationList.declarations[0].initializer.elements;
+  assert.equal(proofs.length, 293); assert.equal(files.length, 968);
+  assert.equal(proofs[0].arguments[3].text, 'Slider state input layer request boundary');
+  assert.equal(proofs[7].arguments[3].text, 'Slider state input producer inventory conservation');
+  assert.equal(files[0].text, 'tests/material-parity/slider-retained-state-layer.spec.mjs');
+  assert.equal(files[5].text, 'tests/material-parity/slider-state-registration.mjs');
+  for (const [start, end] of [[proofs[0].getFullStart(), proofs[7].end + 1], [files[0].getFullStart(), files[5].end + 1]].sort((a, b) => b[0] - a[0]))
+    text = text.slice(0, start) + text.slice(end);
+  assert.equal(hash(text), '4d6fe33dde4efeb07359040ab7c1ab6407f0825f804cd8df97efbc1a11a2b60f'); return text;
+}
+
+export function restoreSliderStateInputPreviousReader(source) {
+  let text = source.toString().replaceAll('\r\n', '\n');
+  assert.equal(hash(text), '71baf715caf2e56ea819da874b922499d44eca1d1206f2a5f2ab9f3ee763db56');
+  text = edit(text, "import { restoreSliderStateInputProducer } from './slider-state-registration.mjs';\n");
+  text = edit(text, "  if (text.includes('Slider state input producer inventory conservation'))\n    return restoreSliderHoverHeldProducer(restoreSliderStateInputProducer(text));\n");
+  assert.equal(hash(text), 'e5928dd86ad6780d9de3b299890e13afd9c94eae6c5c5ecc0f70573b2d7d70a2'); return text;
 }
