@@ -9,6 +9,30 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Editing-gap census answers whether134 not-applicable/partial rows are one stale
+exclusion bucket:they are NOT. Authenticated all268 paired-tree receipts in the
+retained c394 parent. Exact targets partition into86 readonly enabled Select
+cases and48 disabled cases(six families×eight configured contexts),with no
+unexpected writable target. Select's94 total includes its eight disabled cases.
+Authored lack of writability is not demonstrated suppression of editing defaults.
+
+Existing readonly supplementary focus/x capture establishes an actual input
+mutation in ONE light/DPR1 Select context and links the existing general core
+readonly failure plus unequal noneditable-host/text-input authoring finding.
+Existing disabled supplement covers six light/DPR1 cases only;its pointer attempt
+clears the focus accepted by native ARIA-disabled Select before x,so it does not
+test focused ARIA-disabled keyboard handling. The other42 configured disabled
+contexts cannot inherit that behavioral result. Original/current disabled action
+recipes are no-ops,not successful focus/key suppression trials.
+
+Prioritize the86 readonly cases by exact source/action applicability of the known
+failure,then the focused ARIA-disabled keyboard boundary,then remaining physical
+disabled contexts if needed by their requirements. Do not synthesize86/48 passing
+editing tests or mark all134 excluded from target attributes alone. Existing
+select-readonly-evidence.spec.mjs and the two existing join modules already retain
+the bounded evidence;no duplicate capture/framework/status rewrite added. Census
+command exits0;case/global coverage and final acceptance remain unchanged.
+
 Implementation-plan completeness check finds a concrete gap:current generated
 plan has63 tracks but no block align-content default/explicit-center track,
 despite both findings being registered. Human root-cause handoff now contains
