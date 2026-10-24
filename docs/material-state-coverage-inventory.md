@@ -9,6 +9,24 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Retained AX ancestors close the named-region measurement question without new
+capture. All60 side-boundary observations(16 desktop open partial trees +16
+desktop dismissal full trees +28 mobile full trees) contain exactly one live
+region named menu showcase on BOTH sides. Native ancestors expose1 MAIN versus
+candidate2 in all30 observations per side. This corroborates existing
+fixture-showcase-outer-and-semantic-page-duplicate-main-landmarks,already an
+application/plugin authoring defect with source/history evidence;do not add a
+new Menu/core finding or suppress authored MAIN in the renderer. The named
+region agrees while landmark ownership remains unequal. These are60 retained
+observations,not60 configured cases,new failure groups or whole-case closures.
+
+Read-only report-receipt query native0,menu-retained-region-landmark-ax-20261024
+pair. Existing-test-file focused guard1/1,native0;keep menu-region-landmark-
+retained-proof-20261024 pair. Scope is exactly the three authenticated new AX
+reports and their original boundaries. Other states/current applicability and
+remaining semantics/paint/history are not inferred. Frozen inventory,canonical,
+source-finding count and case dispositions remain unchanged.
+
 Blur method control further bounds the confirmed public-focus cause without
 another browser/build. The owning proof now executes complete blurElement as
 well as focusElement,setFocus,getFocusedElementId/liveState;all five current
@@ -22,7 +40,7 @@ selection/lifetime behavior. Pending finding records that exact boundary.
 
 Focused1/1,nativeExit0;keep public-focus-versus-blur-event-control-20261024 pair.
 No full-canonical or browser rerun for this owner-method control;prior package
-failure evidence and14/15-test historical milestones retain their original
+failure evidence and full-suite/focused historical milestones retain their original
 scope. Frozen inventory,case flags and canonical pointer unchanged. No core fix.
 
 Configured Menu focus action is now distinguished from the newly confirmed

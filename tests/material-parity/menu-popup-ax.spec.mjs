@@ -9,6 +9,7 @@ import { materialStaticCases, materialInteractionCases, materialMobileFlowCases 
 import { chromium } from 'playwright-core';
 import { materialBrowserLaunchOptions } from './run-checkpoint.mjs';
 import { gunzipSync } from 'node:zlib';
+import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 
 const file = 'artifacts/material-parity/menu-popup-ax-20261024/latest-report.json';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -396,4 +397,30 @@ test('original and current configured Menu focus actions target native semantic 
       assert.equal(evaluations, 1); assert.equal(nativeFocusCalls, 1);
     }
   }
+});
+
+test('retained Menu AX ancestors reuse region equivalence and existing duplicate-main authoring finding', () => {
+  const finding = sourceAuditDefinitions.find(f => f.id === 'fixture-showcase-outer-and-semantic-page-duplicate-main-landmarks');
+  assert.equal(finding.classification, 'application-plugin-authoring-defect');
+  let observations = 0;
+  const inspect = (nodes, side) => {
+    const live = nodes.filter(n => !n.ignored);
+    assert.equal(live.filter(n => n.role?.value === 'region' && n.name?.value === 'menu showcase').length, 1);
+    assert.equal(live.filter(n => n.role?.value === 'main').length, side === 'reference' ? 1 : 2);
+    observations++;
+  };
+  const reports = [
+    ['menu-popup-ax-contexts-retry-20261024', '819932e79b0bae14534f399643ac01a05942d581a2c28239d1ce88f39e49c9a1'],
+    ['menu-dismissal-ax-retry-20261024', '6cca3cbb686397037da63b543ad3544039fa26356e60fb5d62ac5643d3997b86'],
+    ['menu-mobile-ax-retry-20261024', '04ab953a6db5773212b85c9bc09c20d01708d065c38704a36ce1f58038620ba0'],
+  ];
+  for (const [name, expected] of reports) {
+    const bytes = readFileSync(`artifacts/material-parity/${name}/latest-report.json`); assert.equal(hash(bytes), expected);
+    const report = JSON.parse(bytes);
+    for (const row of report.results) {
+      if (row.mode) for (const b of row.boundaries) inspect(b.observation.actualAX.nodes, row.mode);
+      else for (const side of ['reference', 'astylar']) inspect(row[side].dismissalAX?.nodes ?? row[side].ax.trigger.nodes, side);
+    }
+  }
+  assert.equal(observations, 60);
 });
