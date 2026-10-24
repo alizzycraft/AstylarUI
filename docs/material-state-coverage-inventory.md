@@ -7,6 +7,31 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Menu composite evidence joined with artifact dependencies (October24)
+
+The existing four Menu action reports are now joined to the eight matching
+desktop open-hover-content case records by the standalone
+`scripts/join-material-menu-composite-evidence.mjs`. This closes a bookkeeping
+gap,not a rendering failure:later navigation,item-key and delayed-typeahead
+observations previously remained outside the case child. Existing application-
+plugin authoring classification is unchanged. Supplementary sequences are NOT
+represented as exact configured action replay or full activation coverage.
+
+Virtual successor169d465544c70efebc3e805b4c0f70cedbf39fae5eff08ed84241da74455ccee
+passes the existing full case reader:2311 cases,18157 authenticated dependencies,
+eight added children,complete predecessor94f1a93d recovery,and forged-report
+rejection. Every boundary tree/screenshot and capture manifest is included in
+the receipt graph,alongside the retained theme witnesses. All cases remain
+partial/current-rendering unverified. No large proposal file was saved and no
+canonical pointer advanced;the frozen1002/326 registration is untouched.
+
+Retain menu-composite-evidence-full-receipts-20261024 log pair;stdout SHA256
+b9031968a803cbeb59eaeb2fbcd582c155c3095afa2619e340f59212d26a7d40;
+stderr is empty.
+The earlier99db0ae9 virtual digest is superseded by direct artifact receipts,
+not a competing accepted generation. Source/proof registration,publication,
+remaining exact-action/currentness,paint/ownership and final gates remain open.
+
 ### Menu theme-input applicability narrowed without recapture (October24)
 
 Do not repeat Menu's already-inspected desktop navigation/item action probes.
