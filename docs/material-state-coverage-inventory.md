@@ -9,6 +9,31 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Policy registration preparation exposed a real staging incompatibility:three
+standalone findings lacked scanner pattern;new RegExp(undefined,'g') would
+produce empty matches rather than exact source attribution. Staged copies now
+have explicit anchors matching exactly once(actual menu-popup object,trigger
+ariaControls and renderer focus signature). Reviewed original definition modules
+and joined review digest are unchanged. Public-focus staged copy adds flat
+evidence receipts for reproduction,controls,causal-source and history logs so
+existing policy receipt checks can authenticate them;all original fields retain.
+
+prepareMenuPolicyRegistration requires exact frozen193-definition policy
+1e7cb51d39ba3e93899143dddb081769b7569fe7b9ece610dc4b2da3543c38f4.
+Prepared196 definitions have unique IDs and complete prior193 deep-equal suffix;
+reverse recovers full policy bytes after declared newline normalization. Every
+new exact anchor and receipt revalidates;required owning/classification/proof/
+observation/justification fields persist. Live policy remains193. This is scanner
+and inventory compatibility,not a new runtime diagnosis or final audit acceptance.
+
+Coherent staged selection/registration tests pass5/5,nativeExit0,0skip in
+menu-policy-selection-registration-20261025 log pair. Added policy test brings
+pending declarations to26 and prepared producer to1028 sources/352 proofs;
+prior1002/326 still verbatim. Live counts1002/326/193 remain unchanged. No browser
+or canonical rerun. Next reconcile historical readers for four prepared live-file
+transitions before applying selection,producer and policy together;do not run an
+export merely because in-memory preparation passes.
+
 Source/proof registration now PREPARED reversibly in memory,not applied.
 menu-select-disabled-registration.mjs declares26 unique pending source paths
 (prior24 plus registration helper/spec) and derives25 literal test declarations

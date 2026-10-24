@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
+import { menuPopupSemanticInputFindings } from './menu-popup-semantic-input-findings.mjs';
+import { publicProgrammaticFocusFinding } from './public-programmatic-focus-finding.mjs';
 
 const hash = b => createHash('sha256').update(b).digest('hex');
 const prior = '9e936a24c2fdef6d5c95a8e9773cfd804c8227a8b9331fab91dfb6f1fbbcf766';
@@ -45,8 +47,8 @@ export function menuPendingProofRows(read) {
         scope: 'Bounded pending audit evidence only;declared observation/recipe/reader scopes remain. Not current rendering,equal inputs or whole-case acceptance.' });
     }
   }
-  assert.equal(rows.length, 25);
-  assert.equal(new Set(rows.map(r => r.file + ':' + r.title)).size, 25);
+  assert.equal(rows.length, 26);
+  assert.equal(new Set(rows.map(r => r.file + ':' + r.title)).size, 26);
   return rows;
 }
 const sourceAnchor = 'function sourceFingerprints(root) {\n  const files = [\n';
@@ -72,4 +74,29 @@ export function restoreMenuProducerRegistration(source, read) {
   s = once(s, proofAnchor + p.proofs, proofAnchor);
   assert.equal(hash(s), prior, 'Complete frozen producer must recover');
   return s;
+}
+
+const policyPrior = '1e7cb51d39ba3e93899143dddb081769b7569fe7b9ece610dc4b2da3543c38f4';
+const policyAnchor = 'export const sourceAuditDefinitions = Object.freeze([\n';
+export const menuPendingFindingDefinitions = Object.freeze([
+  { ...menuPopupSemanticInputFindings[0], pattern: "id: 'menu-popup', role: 'menu'" },
+  { ...menuPopupSemanticInputFindings[1], pattern: "ariaControls: 'menu-popup'" },
+  { ...publicProgrammaticFocusFinding,
+    pattern: 'focus\\(elementId: string, options: AstylarFocusOptions \\| undefined, scene: Scene\\): boolean',
+    evidence: [publicProgrammaticFocusFinding.publicReproduction, publicProgrammaticFocusFinding.controls,
+      publicProgrammaticFocusFinding.causalSource.evidence, publicProgrammaticFocusFinding.history.evidence]
+      .map(({file, sha256}) => ({file, sha256})),
+  },
+]);
+const policyPrefix = menuPendingFindingDefinitions.map(f => '  Object.freeze(' + JSON.stringify(f, null, 2) + '),\n').join('');
+export function prepareMenuPolicyRegistration(source) {
+  const text = source.toString().replaceAll('\r\n', '\n');
+  assert.equal(hash(text), policyPrior, 'Complete frozen193-definition policy must authenticate');
+  for (const finding of menuPendingFindingDefinitions) assert.equal(text.includes(finding.id), false);
+  return once(text, policyAnchor, policyAnchor + policyPrefix);
+}
+export function restoreMenuPolicyRegistration(source) {
+  const text = once(source.toString().replaceAll('\r\n', '\n'), policyAnchor + policyPrefix, policyAnchor);
+  assert.equal(hash(text), policyPrior, 'Complete prior policy must recover');
+  return text;
 }
