@@ -34,6 +34,20 @@
   dependency. Focused historical test passes1/1 (12332.3283ms total),without
   claiming missing e01 action-runner bytes recovered. New40-case verifier passes
   separately. Source transition and new snapshot require next-batch registration.
+  Dependency-checked overlap review authenticates complete older text report
+  21387e63992d907e6a5675a0c3bad150c5face9073d9f1d39d42c146279f6cd0 (24cases)
+  and picker reportb649d152f7bed697890045bac86f03b59d6aa67f99a6acc9c88a50b3936cb123
+  (16cases),plus both checkpoint manifests. All40 exact case IDs overlap:older
+  traces already directly observe first INPUT loss inside descendant
+  replaceChildren/reconcileElement on family-primary. Do not reinvestigate this
+  as a newly discovered root cause or count duplicate endpoint coverage.
+  Applicability is NOT wholesale:both1887-file served manifests differ from the
+  new capture in seven files (chunk-PCHQTLJM.js/map,chunk-XOU37TRR.js/map,
+  compare/index.html,index.csr.html,main.js). Picker actionSource is identical;
+  text actionSource differs. Thus the newer observations do not by themselves
+  re-prove that historical first-loss cause. Next compare those changed source
+  dependencies and exact text action-method receipts;reuse unchanged owner proof
+  only where that comparison permits. No new browser run needed for this check.
 
 - Canonical milestone8e3e54ffa726a6679fdbd6fc3bdddf92869a2a67 is confirmed on
   origin/codex/material-audit-alignment-integration by independent ls-remote,
