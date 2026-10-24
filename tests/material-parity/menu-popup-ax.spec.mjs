@@ -136,3 +136,12 @@ test('Menu AX context coverage binds only eight configured desktop open cases, n
     assert.ok(report.results.every(c => !mobile.map(key).includes(key(c))));
   }
 });
+
+test('mobile Menu AX uses the original side/boundary shape without weakening checkpoint validation', () => {
+  const output = execFileSync(process.execPath, ['scripts/check-material-menu-mobile-ax.mjs',
+    'artifacts/material-parity/menu-mobile-ax-retry-20261024/latest-report.json'], { encoding: 'utf8' });
+  const result = JSON.parse(output);
+  assert.equal(result.physicalContexts, 2); assert.equal(result.pairedBoundaries, 14);
+  assert.equal(result.sideBoundaries, 28); assert.equal(result.rawReportPreserved, true);
+  assert.equal(result.currentRenderingAccepted, false);
+});

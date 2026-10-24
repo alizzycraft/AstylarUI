@@ -9,6 +9,41 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Mobile Menu AX now has actual evidence rather than desktop extrapolation.
+`audit-material-menu-mobile-ax.mjs` pins and reuses original mobile-boundary
+producer470ea048,unchanged real three-cycle mouse/Escape actions and explicit
+light/dark theme setup at390x844/DPR2. Only retained build root,guarded tree
+measurement and added CDP DOM/fullAX observations differ. New checkpoint binds
+521-file runtime and current action/diagnostic source receipts. This is retained-
+build evidence,not current application/core or original-e01 execution equivalence.
+
+First launch fails before capture because checkpoint manifest lives in checkpoint/
+and supplemental parser needs --output=. Preserve menu-mobile-ax-20261024 log
+pair/provenance. Corrected retry captures28 side-boundaries(2 profiles x2 sides
+x initial/three open/three closed),nativeExit0,all runtime errors empty. Report
+menu-mobile-ax-retry-20261024/latest-report.json SHA256
+04ab953a6db5773212b85c9bc09c20d01708d065c38704a36ce1f58038620ba0.
+Initial producer --verify invocation fails because old mobile rows are flat
+side/boundary records while generic validator expects paired-side records;that
+tool-output failure is not runtime/capture acceptance. Use independent
+`node scripts/check-material-menu-mobile-ax.mjs <report>` instead. It pairs only
+containers IN MEMORY,retains each original runtime/tree receipt,then runs the
+unchanged generic checkpoint/asset/tree checks and rehashes all28 screenshots
+and provenance sources. Raw report is never rewritten. Independent native0;
+stdout SHAfaf3447d21f7f2573ac475d9b7324af5f4c3634e5062dcfbf647e5ed2c242acc.
+
+Every open cycle resolves controls to the exact live menu backend owner and
+exposes Rename/Delete names. Every closed cycle removes menu AX owners and
+restores trigger focus. Native popup tabindex=-1 versus candidate omitted,
+candidate opening trigger focus,and closed dangling controls persist in both
+profiles;candidate relation is already dangling at initial-closed. No stale AX
+menu owner is demonstrated. Existing two pending semantic-input definitions now
+include this report without adding duplicate findings. Existing suite passes7/7,
+nativeExit0,including independent mobile verifier;keep menu-mobile-semantic-
+findings-integration-20261024 pair and earlier mobile integration/proof pairs.
+Mobile exact-case join,remaining semantic actions/AT,current applicability,paint
+and lifetime remain open;no case status,canonical or frozen1002/326 change.
+
 Exact configured-scope guard now prevents supplementary AX coverage inflation.
 Menu inventory is12 static +80 materialInteractionCases +2 separately exported
 materialMobileFlowCases =94. The latter are light/dark mobile-dpr2/open-dismiss
