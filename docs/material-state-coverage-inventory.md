@@ -9,6 +9,26 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Source/proof registration now PREPARED reversibly in memory,not applied.
+menu-select-disabled-registration.mjs declares26 unique pending source paths
+(prior24 plus registration helper/spec) and derives25 literal test declarations
+from those exact specs(prior23 plus two registration tests). Preparation requires
+complete frozen producer9e936a24. AST census of prepared producer gives1028
+unique sources/351 proof calls;all original1002 paths and326 complete proof-call
+texts remain verbatim suffixes. Reverse recovers complete original source bytes
+after declared CRLF normalization. Each new proof regex matches its actual
+literal declaration;changed frozen source and missing proof-source rejection
+pass. This is inventory conservation,not execution of all351 proofs.
+
+Two focused registration tests pass,nativeExit0,0skip;retain
+menu-select-disabled-registration-20261025 log pair. Live producer remains
+unchanged,no canonical export or capture. Source/proof preparation does NOT
+register the three pending Menu/public-focus definitions:policy registry still
+193,requiring its own exact additive/restoration and schema checks before any
+coherent application. Keep this separation explicit;do not call prepared
+1028/351 counts the current registered population. Next prepare those three
+definitions against actual frozen policy,then verify the coherent staging batch.
+
 Pending selection is now reversibly PREPARED,not applied to frozen live files.
 menu-select-disabled-selection.mjs authenticates complete current launcher4195a39f
 and runner976cd582,prepares explicit --menu-select-disabled and exactd00beaa8
