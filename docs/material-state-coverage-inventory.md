@@ -7,6 +7,25 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+October24 read-only snackbar semantic coverage question answered:complete report
+SHAab42dbec6280e0e27784ec4bbc6697d4ea451bfab307bccb720c0dec89a83b62 and
+all118 input-tree receipts authenticate across59 interaction rows. All34 rows
+containing the candidate overlay have native aria-live=polite and candidate
+snack-bar-surface authored ariaLive=polite;all34 also author an UNDO button.
+Thus missing authored live intent is not supported by this population. Existing
+semantic observations include root/trigger59 times each,and overlay/surface25
+times each only with expected/actual exists=false after dismissal. No open
+surface or UNDO accessible-name/role observation is recorded. Authored trees
+are not generated DOM/AX observations or announcement timing evidence. This
+narrows the remaining semantic gap to positive runtime live-region/action
+exposure and announcement behavior;do not infer either a core failure or parity
+from authoring agreement or closed absence passes. No new capture,fixture/core
+edit,canonical export or case promotion. First eight-open-state diagnostic was
+explicitly superseded by the complete59-row/118-receipt census,not generalized.
+Next decisive check:reuse actual retained open AX/DOM observations if present;
+otherwise obtain a focused positive-runtime semantic observation with provenance,
+not another visibility/timer replay or compensating fixture change.
+
 Read-only original-runner provenance follow-up:bounded imported activity pages
 17901–18000 and18201–18600 contain user/assistant messages,not original tool
 calls or patch bodies. Items18515–18521 locate the complete Material capture
