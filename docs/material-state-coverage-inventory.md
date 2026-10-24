@@ -7,6 +7,32 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Publication/storage prerequisites rechecked (October24)
+
+Fresh ls-remote confirms remote branch remains645c99b841a1589119e0f2f644b60d8c7c97a9ee.
+Before this note,55 local commits were unpublished. The FIRST is92cfda19,
+already containing the92279340-byte canonical gzip,so there is no preceding
+small code-only fast-forward prefix to publish as a different small-payload
+transport check. No unchanged large push was repeated. Configured TLS backend
+remains Schannel;no environment proxy is set. This does not diagnose HTTP408.
+
+D:free384376832 bytes;C:free2076872704. Git count-objects identifies
+objects/pack/tmp_pack_vAx7fc as garbage:286916608 bytes,last written October17
+02:36:53. No Git process was running before the connectivity check. Exact file
+SHA2566ee0fefa409814ab51b599ebd1962aadb7b8638ca0d9400d41f86f28f8618692.
+`git fsck --connectivity-only --no-dangling` exits native0;retained
+owner-frame-storage-connectivity-20261024 stdout/stderr are both empty (e3b0c442).
+Connectivity is not full object-integrity validation or permission to delete an
+unreferenced file. Nothing was removed,moved,repacked or garbage-collected.
+
+Asked for direction before relocating this shared Git-internal temporary file
+to a verified recoverable C:quarantine,and before using another publication
+route. Revalidate processes,file identity/hash and target boundaries before any
+approved relocation. Do not alter credentials,host trust,refs or history as a
+workaround. Until prerequisites are settled,keep the registered batch frozen
+and avoid another large canonical generation. Other unresolved audit questions
+remain available;this is not whole-goal blocked status or audit completion.
+
 ### Owner/frame source and proof registration complete (October24)
 
 The coherent batch now registers1002 unique source paths/326 proofs,adding12/7
