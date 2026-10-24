@@ -9,6 +9,27 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Heading clipping DECLARATION context is now bounded across24 retained Divider
+cases/48 heading pairs,using owner review1079d7c6 and48 authenticated trees.
+Native title/eyebrow and in-tree frame ancestors have overflowX/Y visible,clip
+auto,clipPath none. Candidate heading/page/synthetic-envelope normal/effective/
+interaction stages have no clipping or animation override;possibly applicable
+authored rules likewise have none. Existing conservative selector matcher used,
+not a new selector evaluator;hidden-overflow/main positive controls detect the
+relevant declaration. Path incidence counts include repeated shared ancestors,
+not extra owners or cases.
+
+Read-only assertion nativeExit0,stderr empty;keep
+divider-heading-authored-clip-context-20261025 log pair. This excludes a captured
+authored in-tree clip request as the explanation,not an actual rendering failure
+or universal absence of clipping. External DOM/canvas viewport,texture allocation,
+shader clipping and actual glyph coverage remain distinct. Existing masking/input
+difference remains classified;do not manufacture equal-input glyph parity from
+hidden native paint or repeat now-settled38px layout/declaration checks. Next
+assess whether actual texture/clip observations are applicable/available through
+existing retained diagnostics,without requiring renderer fixes or new broad gates.
+No source-registry,case status,canonical pointer or acceptance criteria changed.
+
 Missing heading geometry now observed through existing retained-build workflow,
 without build,marker/style/input edits or raster. Standalone
 audit-material-divider-heading-boxes.mjs pins baseline producerbb87aa65 and
