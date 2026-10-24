@@ -9,6 +9,20 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Correction to the preceding baseline next-action proposal:existing October19
+public AND Material live baseline diagnostics already answer the local numeric
+question. Recovered logs authenticate as7b86cc08(public) and7a23e92d(Material).
+Public Arial16/24 normal/explicit native offsets14/15/22/23 match candidate
+texture-local draw y;Material live texture ancestry binds final y15/15/14/17
+across light/dark/contrast/custom to matching native local offsets. This is not
+global projected baseline equality or original anonymous strut correspondence.
+No fresh capture or public reduction is justified merely to repeat that result.
+Small requirement record and existing focused proof now retain these receipts,
+paired local comparisons and false global/original-strut acceptance flags.
+Verification:existing standalone suite passes5/5,exit0 with dot reporter. No
+new test file,bundle,browser run or canonical generation. This reconciliation
+supersedes the proposed repeat investigation,not any original acceptance gate.
+
 Exact light/desktop line-box gap review distinguishes height from baseline:
 retained supplementary native paragraph/span/natural heights are19px,and retained
 candidate inline height is19px inside an authored22px absolute paragraph. Thus
@@ -19,10 +33,10 @@ missing evidence,not an absent owner map or a reason to repeat natural-height
 captures. Separate public normal-line/replaced-inline failures cannot establish
 the cause of this unequal-input Material case. Original remaining tasks preserve.
 Focused existing suite passes5/5 with dot reporter,exit0;git diff --check passes.
-Next decisive layout investigation must use an equal-input paragraph/span
-composition and observe baseline/strut behavior,not another height-only observer
-or retuned Material offsets. Such fresh evidence cannot recover historical
-fractional target geometry or silently close the original case.
+This entry initially proposed another equal-input paragraph/span baseline probe;
+the correction above supersedes it because retained diagnostics already exist.
+Original fractional geometry and complete line-box correspondence remain open;
+do not silently close them or repeat the now-reconciled local baseline controls.
 
 Source-currentness requirement reconciliation authenticates29 unchanged nested
 receipts across the retained matching Divider capture,mapped-runtime applicability

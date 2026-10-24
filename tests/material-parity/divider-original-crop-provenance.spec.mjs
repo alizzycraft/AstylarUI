@@ -91,7 +91,26 @@ test('Exact Divider requirement review reconciles crop provenance without cleari
     const placement=structure.retainedInlinePlacementAttribution.observations.find(p=>p.id===row.id);
     assert.equal(placement.measuredInlineHeight,19);assert.equal(placement.declaredParagraphHeight,'22px');
   }
-  assert.match(review.requirements.inputStyleStructure.conclusion,/strut\/baseline correspondence remains unproved/);
+  const baseline=review.requirements.inputStyleStructure.scopedBaselineEvidence;
+  const readEvidence=receipt=>{
+    const bytes=readFileSync(receipt.file);assert.equal(hash(bytes),receipt.sha256);
+    return JSON.parse(bytes.toString(bytes[0]===255?'utf16le':'utf8').replace(/^\ufeff/,''));
+  };
+  const publicBaseline=readEvidence(baseline.public),liveBaseline=readEvidence(baseline.materialLive);
+  assert.equal(publicBaseline.results.length,8);assert.equal(liveBaseline.results.length,8);
+  for(const row of publicBaseline.results.filter(r=>r.mode==='reference')){
+    assert.equal(row.nativeBaseline.markerDidNotChangeParagraph,true);assert.equal(row.nativeBaseline.markerDidNotMoveText,true);
+    const peer=publicBaseline.results.find(r=>r.mode==='astylar'&&r.font===row.font&&r.unit===row.unit);
+    assert.ok(peer.draws.some(d=>d.y===row.nativeBaseline.offset));
+  }
+  for(const row of liveBaseline.results.filter(r=>r.side==='reference')){
+    const peer=liveBaseline.results.find(r=>r.side==='astylar'&&r.profile===row.profile);
+    for(const target of row.observation.native){
+      const live=peer.observation.live.find(t=>t.id===target.id);assert.equal(live.draws.length,1);
+      assert.equal(live.draws[0].y,target.baselineOffset);
+    }
+  }
+  assert.equal(baseline.globalBaselineEqualityAccepted,false);assert.equal(baseline.originalAnonymousStrutCorrespondenceAccepted,false);
   const currentness=parent.obligations.sourceCurrentness;
   let receiptCount=0;
   const authenticate=value=>{

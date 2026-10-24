@@ -56,7 +56,19 @@
     "inputStyleStructure": {
       "applicability": "applicable",
       "disposition": "partial",
-      "conclusion": "Explicit paragraph/span ownership is mapped. Supplementary native light/desktop natural,parent and span heights are all19px;retained candidate inline height is also19px inside an authored22px absolute paragraph. These separate observations do not demonstrate a19px normal-height error here or establish equal paragraph layout. The retained natural-height probe measures no baseline,and candidate placement proof uses constrained child dimensions;original anonymous strut/baseline correspondence remains unproved. Do not transfer separate public normal-line or replaced-inline failures to this compensated case without a decisive paired proof.",
+      "conclusion": "Explicit paragraph/span ownership is mapped. Supplementary native light/desktop natural,parent and span heights are all19px;retained candidate inline height is also19px inside an authored22px absolute paragraph. Later retained baseline diagnostics also exist:public Arial controls have numerically matching native offsets and texture-local draw y,and Material light/dark,contrast,custom offsets match live texture-local y15,14,17 respectively. Thus baseline measurement is not wholly absent. These are local numeric observations,not global projected baseline equality,original anonymous strut correspondence or equal paragraph layout. Do not repeat height-only or public Arial baseline captures or transfer separate public defects to this compensated case.",
+      "scopedBaselineEvidence": {
+        "public": {
+          "file": "artifacts/material-parity/paragraph-baseline-boundary-20261019.log",
+          "sha256": "7b86cc08c1882e88cf6a29fab95c170c1c269420c19c35b187fda6353f94b83b"
+        },
+        "materialLive": {
+          "file": "artifacts/material-parity/divider-live-baseline-copy-diagnostic-20261019.log",
+          "sha256": "7a23e92dcfb69b3dc4f5af360d87a446725ed0b6b6e9df47058a046abd6041bc"
+        },
+        "globalBaselineEqualityAccepted": false,
+        "originalAnonymousStrutCorrespondenceAccepted": false
+      },
       "remaining": [
         "Complete material property/anonymous line-box correspondence beyond the identified explicit paragraph/span owners",
         "First-stage and paint applicability of remaining owners"
