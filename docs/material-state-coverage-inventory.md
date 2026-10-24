@@ -9,6 +9,30 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Exact historical crop PIXEL provenance now established for static:divider@light/
+desktop,Above/Below on both sides. All four stored decoded crops occur exactly
+once within authenticated ORIGINAL full screenshots. Every RGBA byte agrees.
+Actual recovered original cropPng executes at those uniquely located INTEGER
+bounds and PNG encoding reproduces each original crop SHA byte-for-byte. For
+each target,the reference and candidate crop bounds agree,as original producer
+uses shared native expectedBox-derived bounds. No new images/files generated.
+
+New standalone divider-original-crop-provenance.spec.mjs uses a distinctive full
+scanline only as search acceleration,then checks every crop row byte and unique
+origin. It authenticates original full/crop receipts,parent record,decoded e01
+producer and actual complete crop function. Keep divider-original-crop-provenance-
+20261025 log pair,1/1,0skip,nativeExit0,stderr empty,with exact four bounds/receipts
+in diagnostics. This closes original source/pixel containment questions,not the
+fractional native expectedBox or semantic/layout association of its rectangle.
+Do not derive an authoritative fractional box from inverse integer crop bounds.
+
+Existing diagnostic raster scores are not recalculated or promoted;equal inputs,
+compositing/root paint causality,current runtime and final gates remain separate.
+One-case evidence,not all24 Divider cases or any case closure. Spec stays outside
+frozen1041/365/198. Next incorporate this precise provenance conclusion when
+reviewing localPaint requirements;do not recapture/recover/replay these same four
+images merely to change the old historical source-availability marker.
+
 Exact-case closure review(static:divider@light/desktop) finds3 existing inspected
 authored exclusions and5 still-partial applicable obligations. Schema2 still
 requires a receipt-bound requirement review and every applicable obligation
