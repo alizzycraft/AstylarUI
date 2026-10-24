@@ -51,6 +51,15 @@ index for current counts and pending integration work, not the figures above.
 
 ## One investigation per question
 
+The Slider/focus batch is registered at962 paths/285 proofs,adding7/7 to the
+complete accepted955/278 population. Five old-source transitions are bounded
+and reversible;no sources or prior proof non-line fields are removed. Ten focused
+integration checks and full17549-dependency reader pass. Freeze these sources
+for one coherent --slider-hover-held export/conservation/cold/import milestone;
+do not recapture browser output or repeat completed source investigation merely
+to change this bookkeeping. Accepted7e02 and all2311 partial/current-unverified
+case dispositions remain until publication gates pass.
+
 The queued Slider hover/held successor has explicit --slider-hover-held on the
 existing named launcher (also separately --dry-run or --check),selecting exact
 c0e397e0 only. Twelve supplement selections are mutually exclusive;all older/

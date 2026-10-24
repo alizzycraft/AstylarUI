@@ -4,7 +4,30 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import ts from 'typescript';
-import { restoreSliderHoverHeldBenchmark, createSliderHoverHeldReviewReader, restoreSliderHoverHeldExportSource, sliderHoverHeldReview } from './slider-hover-held-case-review-source.mjs';
+import path from 'node:path';
+import { restoreSliderHoverHeldBenchmark, createSliderHoverHeldReviewReader, restoreSliderHoverHeldExportSource, restoreSliderHoverHeldProducer, restoreSliderHoverHeldRetainedTest, sliderHoverHeldReview } from './slider-hover-held-case-review-source.mjs';
+
+test('slider hover-held producer registration conserves accepted inventories', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs', source = readFileSync(file, 'utf8');
+  const prior = restoreSliderHoverHeldProducer(source);
+  assert.throws(() => restoreSliderHoverHeldProducer(source + '\n// drift\n'));
+  const collect = text => {
+    const ast = ts.createSourceFile(file, text, 99, true);
+    const owner = name => ast.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === name);
+    const code = ['proof', 'sourceFingerprints', 'focusedProofInventory'].map(name => owner(name).getText(ast)).join('\n');
+    return new Function('readFileSync', 'path', 'createHash', code + ';return {sources:sourceFingerprints(process.cwd()),proofs:focusedProofInventory(process.cwd())};')(readFileSync, path, createHash);
+  };
+  const current = collect(source), previous = collect(prior);
+  assert.equal(current.sources.length, 962); assert.equal(new Set(current.sources.map(row => row.file)).size, 962);
+  assert.equal(current.proofs.length, 285);
+  assert.deepEqual(current.sources.slice(7), previous.sources);
+  assert.deepEqual(current.proofs.slice(7), previous.proofs);
+  assert.ok(current.proofs.slice(0, 7).every(row => row.line > 0));
+  const retainedTest = readFileSync('tests/material-parity/retained-pointer-focus-reuse.spec.mjs', 'utf8');
+  assert.equal(createHash('sha256').update(restoreSliderHoverHeldRetainedTest(retainedTest)).digest('hex'),
+    '69186088c5f756679132657b9e89c39556076f666446c030fa749de044cfdd5b');
+  assert.throws(() => restoreSliderHoverHeldRetainedTest(retainedTest + '\n// drift\n'));
+});
 
 test('slider hover-held selection preserves older invocations and routes only the exact successor', () => {
   const launcher = 'scripts/export-material-input-audit-current-ancestry.mjs';

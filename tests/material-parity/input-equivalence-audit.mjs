@@ -8922,6 +8922,13 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'scripts/audit-material-configured-input-focus.mjs',
+    'docs/evidence/material-configured-input-focus-runner-20261008.mjs.b64',
+    'tests/material-parity/retained-input-focus-snapshot.spec.mjs',
+    'scripts/audit-material-slider-hover-held.mjs',
+    'scripts/join-material-slider-hover-held.mjs',
+    'tests/material-parity/slider-hover-held-case-review-source.mjs',
+    'tests/material-parity/slider-hover-held-case-review-source.spec.mjs',
     'scripts/join-material-retained-pointer-focus.mjs',
     'tests/material-parity/retained-pointer-focus-reuse.spec.mjs',
     'scripts/audit-material-retained-radio-label-paint.mjs',
@@ -9884,6 +9891,20 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/retained-input-focus-snapshot.spec.mjs', /test\('configured focus dependency transition preserves semantic owner and maintained action bytes'/,
+      'configured input focus dependency transition', 'Forty exact cases overlap earlier observed descendant-loss traces. Complete semantic module and six action methods preserve;five diagnostic additions recover both changed mapped modules. Not a fresh first-loss stack or whole-pipeline acceptance.'),
+    proof(root, 'tests/material-parity/retained-input-focus-snapshot.spec.mjs', /test\('retained input focus snapshots bind declared logical owners without proving paired DOM focus'/,
+      'retained input focus logical snapshot boundary', 'Forty original cases and80 trees authenticate logical input ownership and32/8 visibility modality split. Normalized component IDs and unlabelled snapshots do not prove paired DOM ownership or focus paint.'),
+    proof(root, 'tests/material-parity/retained-input-focus-snapshot.spec.mjs', /test\('matching normalized IDs cannot conceal wrong owners, missing modality or fabricated timing'/,
+      'retained input focus snapshot negative controls', 'Wrong logical owner,missing visibility,removed pointer modality and invented timing reject without normalizing retained data or claiming original runner recovery.'),
+    proof(root, 'tests/material-parity/benchmark-config.spec.mjs', /test\('configured slider hover and held retain raw pointer boundaries without accepting paint'/,
+      'configured Slider hover held raw action boundary', 'Sixteen exact configured cases authenticate48 paired boundaries. Held native INPUT versus candidate CANVAS focus and unchanged30/65 values remain observations;removed pointerdown rejects. Not paint,target equivalence or whole-case acceptance.'),
+    proof(root, 'tests/material-parity/slider-hover-held-case-review-source.spec.mjs', /test\('slider hover-held selection preserves older invocations and routes only the exact successor'/,
+      'Slider hover held exact export selection', 'Explicit successor selection rejects all11 conflicting supplements and preserves older/default invocation and complete prior runner/launcher source. Exact actual reader routing only;not publication.'),
+    proof(root, 'tests/material-parity/slider-hover-held-case-review-source.spec.mjs', /test\('slider hover-held source boundary recovers the complete prior benchmark and rejects drift'/,
+      'Slider hover held benchmark source conservation', 'Complete31f2 benchmark source recovers after two bounded test changes;changed or prior source and unknown review reject. Historical producer30771940 remains separate from superseding capture.'),
+    proof(root, 'tests/material-parity/slider-hover-held-case-review-source.spec.mjs', /test\('slider hover-held producer registration conserves accepted inventories'/,
+      'Slider hover held producer inventory conservation', 'Seven source paths and seven focused proofs add to the complete955/278 predecessor. Whole producer and prior inventory order conserve;source receipts still require coherent export/cold/import.'),
     proof(root, 'tests/material-parity/retained-pointer-focus-reuse.spec.mjs', /test\('retained pointer focus reuses exact measured boundaries without substituting focus actions'/,
       'retained pointer-focus exact measured boundaries', '113 exact pointer cases reuse678 direct focus boundaries and226 authenticated trees. Complete predecessor recovers;pointer observations do not substitute programmatic or keyboard focus.'),
     proof(root, 'tests/material-parity/retained-pointer-focus-reuse.spec.mjs', /test\('disabled and AX focus reuse bind exact retained observations without widening action scope'/,

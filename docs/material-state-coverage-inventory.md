@@ -2,6 +2,22 @@
 
 ## Current audit pointer — October24
 
+- Slider/focus batch registration is frozen at962 unique source paths/285 focused
+  proofs,adding exactly7/7 to accepted955/278. Complete prior producer3aa37799
+  recovers from4d6fe33d after only the inventory additions;all278 prior proof
+  non-line fields/order conserve. Authenticated accepted extract164e36b3 census
+  finds no removals and five bounded old-source changes:benchmark31f2→d410,
+  retained-focus test69186088→834e992b,launcher a0e5→652bdd20,runner834e43c9→
+  69565e8c,and producer3aa→4d6. Each has complete source restoration;seven
+  new paths retain the new probes,original producer snapshot and owning proofs.
+  Ten focused integration tests pass with zero skips in35523.5846ms;
+  logSHA578f72f21f7d2ff1167d92ff125ae4df249f5e325aa3a4763eee0b1de862b141.
+  Final existing reader passes2311 cases/17549 dependencies in97718.3138ms,
+  logSHAa70a19e90673f3b403434ae72a33029db778b1696c3e1eb555a87a0a1a60e852.
+  Both stderr logs empty. Accepted7e02/955/278 remains unchanged until coherent
+  --slider-hover-held export,conservation,independent cold and verified import.
+  No new browser capture or whole-case/rendering acceptance follows registration.
+
 - Slider successor export selection is wired,not yet source-inventory registered
   or canonical:existing named launcher accepts explicit --slider-hover-held,
   selecting onlyc0e397e0. It rejects combinations with all11 older supplements;

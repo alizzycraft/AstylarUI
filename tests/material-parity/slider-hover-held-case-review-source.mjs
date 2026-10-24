@@ -1,11 +1,46 @@
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
+import ts from 'typescript';
 import { createRetainedFocusReviewReader } from '../../scripts/join-material-retained-pointer-focus.mjs';
 import { sliderHoverHeldPredecessor, sliderHoverHeldCapture } from '../../scripts/join-material-slider-hover-held.mjs';
 
 export const sliderHoverHeldReview = 'c0e397e0a5912d3f492c0d55a3d2b5421d6892f5403ba355c90560da6dbf2cea';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+
+export function restoreSliderHoverHeldRetainedTest(source) {
+  assert.equal(hash(source), '834e992bd667da88e1708af08ff79cdc2f2b295c3f8573af9525bb5666a6e408');
+  const edits = [
+    ["import { restoreSliderHoverHeldExportSource, restoreSliderHoverHeldProducer } from './slider-hover-held-case-review-source.mjs';\n", ''],
+    ['restoreRetainedFocusExportSource(restoreSliderHoverHeldExportSource(text,kind),kind)', 'restoreRetainedFocusExportSource(text,kind)'],
+    ['restoreRetainedFocusProducer(restoreSliderHoverHeldProducer(source))', 'restoreRetainedFocusProducer(source)'],
+    ['const current=collect(restoreSliderHoverHeldProducer(source)),previous=collect(prior);', 'const current=collect(source),previous=collect(prior);'],
+  ];
+  for (const [before, after] of edits) {
+    assert.equal(source.split(before).length, 2); source = source.replace(before, after);
+  }
+  assert.equal(hash(source), '69186088c5f756679132657b9e89c39556076f666446c030fa749de044cfdd5b');
+  return source;
+}
+
+export function restoreSliderHoverHeldProducer(source) {
+  const text = source.toString().replaceAll('\r\n', '\n');
+  assert.equal(hash(text), '4d6fe33dde4efeb07359040ab7c1ab6407f0825f804cd8df97efbc1a11a2b60f');
+  const ast = ts.createSourceFile('producer.mjs', text, 99, true);
+  const owner = name => ast.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === name);
+  const proofs = owner('focusedProofInventory').body.statements[0].expression.elements;
+  const files = owner('sourceFingerprints').body.statements[0].declarationList.declarations[0].initializer.elements;
+  assert.equal(proofs.length, 285); assert.equal(files.length, 962);
+  assert.equal(proofs[0].arguments[3].text, 'configured input focus dependency transition');
+  assert.equal(proofs[6].arguments[3].text, 'Slider hover held producer inventory conservation');
+  assert.equal(files[0].text, 'scripts/audit-material-configured-input-focus.mjs');
+  assert.equal(files[6].text, 'tests/material-parity/slider-hover-held-case-review-source.spec.mjs');
+  let prior = text;
+  for (const [start, end] of [[proofs[0].getFullStart(), proofs[6].end + 1], [files[0].getFullStart(), files[6].end + 1]].sort((a, b) => b[0] - a[0]))
+    prior = prior.slice(0, start) + prior.slice(end);
+  assert.equal(hash(prior), '3aa377997071b510e233e95e7ad084c0413223fdc57ec833c5788f1c70a50ee7');
+  return prior;
+}
 
 export function restoreSliderHoverHeldExportSource(source, kind) {
   const current = kind === 'runner' ? '69565e8cd8b0d0e5c464f5ba51a5244f4cb95575d51a34f9d82a06668ca8645d' : '652bdd20b22c306229b4f88e4dcaf014b431139d77d6ac11663b2ff225936876';
@@ -78,6 +113,14 @@ export function createSliderHoverHeldReviewReader({ root, read, reviewSha256 }) 
   assert.equal(removed, 16);
   assert.equal(hash(JSON.stringify(envelope.review)), sliderHoverHeldPredecessor);
   const priorRead = (absolute, options) => {
+    if (absolute === path.resolve(root, 'tests/material-parity/retained-pointer-focus-reuse.spec.mjs')) {
+      const bytes = Buffer.from(restoreSliderHoverHeldRetainedTest(read(absolute).toString()));
+      return options ? bytes.toString(typeof options === 'string' ? options : options.encoding ?? 'utf8') : bytes;
+    }
+    if (absolute === path.resolve(root, 'tests/material-parity/input-equivalence-audit.mjs')) {
+      const bytes = Buffer.from(restoreSliderHoverHeldProducer(read(absolute)));
+      return options ? bytes.toString(typeof options === 'string' ? options : options.encoding ?? 'utf8') : bytes;
+    }
     for (const [file, kind] of [['scripts/run-material-input-audit.mjs', 'runner'], ['scripts/export-material-input-audit-current-ancestry.mjs', 'launcher']]) {
       if (absolute !== path.resolve(root, file)) continue;
       const bytes = Buffer.from(restoreSliderHoverHeldExportSource(read(absolute).toString(), kind));
