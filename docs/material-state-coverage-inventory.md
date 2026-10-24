@@ -7,6 +7,30 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+October24 trusted keyboard UNDO boundary:existing standalone diagnostic adds
+explicit --keyboard-undo only with300ms post-announcement observation. New
+snackbar-undo-keyboard-20261024/latest-report.json SHA
+355427c50acac7e37580421e54ca63053e34a1fd5ab1a8cd6ed82fc680c783fb
+passes checkpoint/source/tree/runtime validation. Programmatic DOM focus reaches
+UNDO on both sides,then actual page.keyboard Enter produces trusted keydown and
+zero popup owners after exit observation on both. Native recorded DOM sequence
+focus,keydown,click,keyup;candidate focus,keydown. These remain unequal observed
+streams;no claim of identical activation delivery or of where the removed-node
+keyup lands. This is one retained-build light desktop open/action endpoint,not
+tab traversal,Space,disabled suppression,focus restoration,all contexts,current
+code or whole-case closure. No fresh pixel capture or fixture/core change.
+The diagnostic source addition correctly makes the older standalone proof fail
+its original capture-source receipt (2/2 fail). Exact git-show2a73f7fb historical
+diagnostic bytes SHAa18b81cbe8a125d66e9246e54db459e509b2b47f598ad2559f619c5bf0a167a2
+now supply ONLY that old logical source through existing validator readBytes;
+the hash authenticates before use,all other reads remain actual and old report
+receipts unchanged. New keyboard capture uses today's actual source,not that
+historical adapter. Final snackbar-live-policy.spec.mjs3/3 passes,zero skips,
+822.904ms,including exact observed stream differences and both positive AX/source
+tests. Keep earlier immediate/postdelay/failed artifacts and commits;no report
+is repinned. Standalone additions remain pending coherent registration;frozen
+c394/accepted a659 and all2311 partial/current-unverified dispositions preserve.
+
 October24 snackbar live-policy ownership is an application authoring difference,
 not an observed core default:retained app owner71e2d41f explicitly supplies
 status/polite/ariaAtomic=true;retained bridge590d49a2 conditionally copies authored

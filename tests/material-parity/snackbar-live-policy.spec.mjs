@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import test from 'node:test';
+import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 import { propertyGroups } from './input-equivalence-policy.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 
@@ -11,8 +13,11 @@ function load() {
   const bytes = readFileSync(file);
   assert.equal(hash(bytes), '85bc6372c060c9ae4a5dc5e8bf6a4684c5e64a27186a932ad6d57b7c134c5a65');
   const report = JSON.parse(bytes), manifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
+  const historicalScript = execFileSync('git', ['show', '2a73f7fb:scripts/audit-material-snackbar-ax.mjs']);
+  assert.equal(hash(historicalScript), 'a18b81cbe8a125d66e9246e54db459e509b2b47f598ad2559f619c5bf0a167a2');
   assert.deepEqual(validateSupplementalCapture(report, { reportFile: file, expectedProvenance: manifest.provenance,
-    script: 'scripts/audit-material-snackbar-ax.mjs', styleProperties: Object.values(propertyGroups).flat() }),
+    script: 'scripts/audit-material-snackbar-ax.mjs', styleProperties: Object.values(propertyGroups).flat(),
+    readBytes: absolute => absolute === path.resolve('scripts/audit-material-snackbar-ax.mjs') ? historicalScript : readFileSync(absolute) }),
   { status: 'checkpoint-bound', errors: [] });
   return { report, manifest };
 }
@@ -42,6 +47,23 @@ test('snackbar post-delay action AX is positive while live atomic policies remai
   const atomic = n => n.properties.find(x => x.name === 'atomic').value.value;
   assert.equal(atomic(native), false); assert.equal(atomic(candidate), true);
   // DOM intent/AX exposure is evidence, not proof of speech or all configured cases.
+});
+
+test('snackbar retained post-announcement keyboard UNDO dismisses with trusted Enter on both sides', () => {
+  const file = 'artifacts/material-parity/snackbar-undo-keyboard-20261024/latest-report.json', bytes = readFileSync(file);
+  assert.equal(hash(bytes), '355427c50acac7e37580421e54ca63053e34a1fd5ab1a8cd6ed82fc680c783fb');
+  const report = JSON.parse(bytes), manifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
+  assert.deepEqual(validateSupplementalCapture(report, { reportFile: file, expectedProvenance: manifest.provenance,
+    script: 'scripts/audit-material-snackbar-ax.mjs', styleProperties: Object.values(propertyGroups).flat() }),
+  { status: 'checkpoint-bound', errors: [] });
+  assert.equal(report.keyboardUndo, true); assert.equal(report.observationDelayMs, 300);
+  for (const side of ['reference', 'astylar']) {
+    const observation = report.results[0][side].keyboardUndo;
+    assert.equal(observation.focused, true); assert.equal(observation.popupCountAfter, 0);
+    assert.ok(observation.events.some(e => e.type === 'keydown' && e.key === 'Enter' && e.trusted));
+  }
+  assert.deepEqual(report.results[0].reference.keyboardUndo.events.map(e => e.type), ['focus', 'keydown', 'click', 'keyup']);
+  assert.deepEqual(report.results[0].astylar.keyboardUndo.events.map(e => e.type), ['focus', 'keydown']);
 });
 
 test('snackbar retained status atomic policy is authored and conditionally copied by core', () => {

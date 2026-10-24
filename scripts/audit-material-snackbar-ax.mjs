@@ -40,6 +40,7 @@ function verify(report, file) {
   for (const r of [...manifest.provenance.harnessFiles, ...manifest.provenance.diagnosticFiles]) assert.equal(hash(readFileSync(r.file)), r.sha256);
   assert.deepEqual(report.actionSource, actionSource);
   assert.ok([0, 300].includes(report.observationDelayMs));
+  assert.equal(typeof report.keyboardUndo, 'boolean');
   assert.deepEqual(report.results.map(r => r.caseId), cases.map(c => materialCaseKey('interaction', c)));
   for (const row of report.results) for (const side of ['reference', 'astylar']) {
     assert.equal(row[side].observationDelayMs, report.observationDelayMs);
@@ -49,6 +50,12 @@ function verify(report, file) {
       assert.equal(target.selector, selectors(side)[key]); assert.ok(target.backendNodeId > 0);
       assert.ok(target.nodes.some(n => n.backendDOMNodeId === target.backendNodeId));
     }
+    if (report.keyboardUndo) {
+      assert.equal(report.observationDelayMs, 300);
+      assert.equal(row[side].keyboardUndo.focused, true);
+      assert.equal(typeof row[side].keyboardUndo.popupCountAfter, 'number');
+      assert.ok(row[side].keyboardUndo.events.some(x => x.type === 'keydown' && x.key === 'Enter' && x.trusted));
+    }
   }
   return { cases: 1, targetObservations: 4, reportSha256: hash(readFileSync(file)),
     scope: 'One retained-build light desktop open endpoint; actual AX/DOM, not AT speech, paint, current-code or whole-case acceptance.' };
@@ -57,6 +64,8 @@ if (process.argv[2] === '--verify') {
   const file = process.argv[3]; console.log(JSON.stringify(verify(JSON.parse(readFileSync(file)), file)));
 } else {
   const observationDelayMs = process.argv.includes('--after-announcement') ? 300 : 0;
+  const keyboardUndo = process.argv.includes('--keyboard-undo');
+  assert.ok(!keyboardUndo || observationDelayMs === 300);
   const output = path.resolve(process.argv[2] ?? '');
   assert.ok(output.startsWith(path.resolve('artifacts/material-parity') + path.sep)); assert.ok(!existsSync(output));
   const root = path.resolve('artifacts/material-parity/icon-fresh-producer-retained-build-20261016-browser');
@@ -103,15 +112,34 @@ if (process.argv[2] === '--verify') {
               : await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['snack-bar-surface', 'snack-bar-dismiss']).inputTree);
             const treeFile = `${evidence.directory}/${side}-input-tree.json`, treeBytes = Buffer.from(JSON.stringify(tree));
             writeFileSync(treeFile, treeBytes, { flag: 'wx' });
+            let keyboardObservation;
+            if (keyboardUndo) {
+              const undo = page.locator(selectors(side).undo);
+              await undo.evaluate(n => {
+                window.__snackbarKeyboardEvents = [];
+                for (const type of ['focus', 'keydown', 'keyup', 'click']) n.addEventListener(type, e =>
+                  window.__snackbarKeyboardEvents.push({ type, key: e.key ?? null, trusted: e.isTrusted }));
+                n.focus();
+              });
+              const focused = await undo.evaluate(n => n === document.activeElement);
+              await page.keyboard.press('Enter');
+              await actions.settleInteraction(page, side);
+              // Observe after exit animation without changing the configured action/settlement.
+              await page.waitForTimeout(300);
+              keyboardObservation = { focused,
+                events: await page.evaluate(() => window.__snackbarKeyboardEvents),
+                popupCountAfter: await page.locator(selectors(side).surface).count() };
+            }
             row[side] = { ax, observationDelayMs,
               elapsedSinceSettlementMs: await page.evaluate(start => performance.now() - start, settledAt),
+              ...(keyboardUndo ? { keyboardUndo: keyboardObservation } : {}),
               runtime: await finish(), inputTree: { file: treeFile, sha256: hash(treeBytes) } };
           } finally { await page.close(); }
         }
         results.push(row);
       } finally { await context.close(); }
     }
-    const report = { schemaVersion: 1, browser: browser.version(), capture: evidence.capture, actionSource, observationDelayMs, results,
+    const report = { schemaVersion: 1, browser: browser.version(), capture: evidence.capture, actionSource, observationDelayMs, keyboardUndo, results,
       scope: 'Focused positive snackbar AX evidence on retained build; does not recover original e01 runner or establish current rendering/AT speech.' };
     const file = `${evidence.directory}/latest-report.json`; writeFileSync(file, JSON.stringify(report) + '\n', { flag: 'wx' });
     console.log(JSON.stringify(verify(report, file)));
