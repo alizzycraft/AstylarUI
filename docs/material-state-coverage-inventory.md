@@ -9,6 +9,33 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Readonly/disabled evidence transfer now has a finer behavioral partition than
+the authored94+40 family split. Rehashed exact taxonomy3f36958c shows86 ENABLED
+readonly Select cases and8 DISABLED readonly Select cases;with40 other disabled
+text cases,the behavioral cohorts are86 enabled readonly +48 disabled=134.
+Do not apply an enabled/focused readonly-mutation failure to the eight disabled
+Select cases or treat them as additional cases outside the94. Authored partition
+is unchanged;the behavior precondition is newly made explicit.
+
+Existing intermediate-event log54408eb5 reauthenticates readonly=true,disabled=
+false,focused=true before trusted x,then input event xTeam before app-normalized
+Solo. Existing public readonly report8a541560 has two failing readonly pairs,
+not86 Material failures. Complete saved six-method owning proof4d4dd844 is
+reused with every unique current/installed source file rehashed:all6 files still
+match receipts. No repeat public browser experiment or method proof needed.
+Structured transfer map is readonly-disabled-evidence-transfer-map-20261024
+log pair,nativeExit0,stderr empty. It preserves all scope limitations.
+
+Do not count the old showcase probe as an exact configured case automatically:
+its recorded observation has no explicit configured case ID/viewport. Its helper/
+checkpoint receipts and documented light/DPR1 description support a bounded
+diagnostic,not an invented case/physical-context match. Next exact-case work
+must recover recipe/context provenance or obtain a genuinely required matched
+observation;do not alias helper defaults from unrelated tests. The old records
+already documented94+40 and readonly cause;this turn answers the narrower
+86/48 precondition/transfer question rather than claiming a new defect or
+rediscovery. No134 exclusions cleared,no new finding or case promotion.
+
 The134 remaining nonapplicable editing obligations are now exactly identified,
 not a generic source-exclusion backlog. Reuse the COMPLETE editingTargets
 predicate and its two input-type sets from unchanged accepted input-boundary
