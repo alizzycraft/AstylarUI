@@ -18,9 +18,23 @@ export const pendingEvidenceSourceFiles = Object.freeze([
   "tests/material-parity/snackbar-live-policy.spec.mjs",
   "tests/material-parity/pending-evidence-registration.mjs",
   "tests/material-parity/pending-evidence-registration.spec.mjs",
-  "tests/material-parity/original-material-runner-review-source.mjs"
+  "tests/material-parity/original-material-runner-review-source.mjs",
+  "scripts/audit-material-divider-paint-context.mjs",
+  "scripts/audit-material-divider-paint-context-remaining.mjs",
+  "scripts/join-material-divider-computed-paint.mjs",
+  "tests/material-parity/retained-paint-property-coverage.spec.mjs",
+  "tests/material-parity/divider-computed-paint-join.spec.mjs",
+  "tests/material-parity/divider-computed-paint-review-source.mjs"
 ]);
 export const pendingEvidenceProofRows = Object.freeze([
+  ...[
+    ['tests/material-parity/retained-paint-property-coverage.spec.mjs', 'remaining retained Divider computed paint covers every configured physical viewport cohort'],
+    ['tests/material-parity/retained-paint-property-coverage.spec.mjs', 'retained served Divider computed paint excludes image filters and blending through actual HTML hosts'],
+    ['tests/material-parity/retained-paint-property-coverage.spec.mjs', 'all retained Divider chains preserve variable background shorthand but no explicit filter or blend requests'],
+    ['tests/material-parity/retained-paint-property-coverage.spec.mjs', 'authenticated retained computed paint projection omits image and compositing properties without losing raw declarations'],
+    ['tests/material-parity/divider-computed-paint-join.spec.mjs', 'Divider computed paint adds only bounded evidence and preserves complete predecessor and all case statuses'],
+  ].map(([file, title]) => ({ file, title, pattern: "test\\('" + title + "'",
+    scope: 'Bounded retained paint evidence only;all case dispositions,remaining tasks and final acceptance gates preserve. Not current rendering or whole-case acceptance.' })),
   {
     "file": "tests/material-parity/caret-retained-frames.spec.mjs",
     "title": "public caret frames preserve the complete original reproduction after bounded evidence edits",
@@ -218,7 +232,7 @@ export function restorePendingEvidenceRegisteredSource(source, file) {
 }
 export function restoreOriginalRunnerExportSource(source, kind) {
   assert.ok(['runner', 'launcher'].includes(kind));
-  let text = source.toString().replaceAll('\r\n', '\n');
+  let text = restoreDividerPaintExportSource(source, kind);
   const file = kind === 'runner' ? 'scripts/run-material-input-audit.mjs' : 'scripts/export-material-input-audit-current-ancestry.mjs';
   if (hash(text) === pendingEvidencePreviousSourceHashes[file]) return text;
   if (kind === 'runner') {
@@ -234,6 +248,26 @@ export function restoreOriginalRunnerExportSource(source, kind) {
     text = replaceOnce(text, "if (originalRunnerRecovery) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=7dfee06dc72de1cc4a7d94f1d10594ec0b7d703a7a151e35ae803eadadc51385';\n", '');
   }
   assert.equal(hash(text), pendingEvidencePreviousSourceHashes[file], 'Complete pre-recovery export source must recover');
+  return text;
+}
+export function restoreDividerPaintExportSource(source, kind) {
+  assert.ok(['runner', 'launcher'].includes(kind));
+  let text = source.toString().replaceAll('\r\n', '\n');
+  const expected = kind === 'runner' ? 'a7bbde2e2764a00d0b22ddafc401092987b71163543a7873fa42e5fb3a873809' : 'd9b081a5b5ae0b0e5253cf17c368b201f47f8c4f75a97f247014b190231e3642';
+  if (hash(text) === expected || !text.includes(kind === 'runner' ? 'dividerComputedPaintReview' : 'const dividerComputedPaint =')) return text;
+  if (kind === 'runner') {
+    text = replaceOnce(text, "import { dividerComputedPaintReview, createDividerComputedPaintReviewReader } from '../tests/material-parity/divider-computed-paint-review-source.mjs';\n", '');
+    text = replaceOnce(text, '    const paintReaderFactory = options.caseObligationReviewSha256===dividerComputedPaintReview ? createDividerComputedPaintReviewReader : recoveredReaderFactory;\n', '');
+    text = replaceOnce(text, 'const applicability=paintReaderFactory?.', 'const applicability=recoveredReaderFactory?.');
+  } else {
+    text = replaceOnce(text, "const dividerComputedPaint = rawRequested.includes('--divider-computed-paint');\nassert.ok(!dividerComputedPaint || rawRequested.every(argument => ['--divider-computed-paint', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');\n", '');
+    text = replaceOnce(text, ".filter(argument => argument !== '--divider-computed-paint')", '');
+    text = replaceOnce(text, '|--divider-computed-paint', '');
+    text = replaceOnce(text, "if (dividerComputedPaint) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/abdd4f47d8681dbdbedd24a5e954b7ad3063261150a9758dffcdce460155898a.json';\n", '');
+    text = replaceOnce(text, '(originalRunnerRecovery || dividerComputedPaint)', 'originalRunnerRecovery');
+    text = replaceOnce(text, "if (dividerComputedPaint) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=abdd4f47d8681dbdbedd24a5e954b7ad3063261150a9758dffcdce460155898a';\n", '');
+  }
+  assert.equal(hash(text), expected, 'Complete pre-Divider export source must recover');
   return text;
 }
 export function pendingEvidenceHistoricalRead({ root, read }) {

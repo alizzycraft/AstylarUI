@@ -7,6 +7,40 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Coherent Divider paint inventory/export integration verified (October24)
+
+Actual producer now registers990 source paths/319 proofs (six/five additions to
+984/314,including derived-review reader). All193 definitions and complete frozen
+968-source/293-proof population conserve;22/26 total pending-stage additions
+reverse to exact0aba producer. Seven changed old source paths retain complete
+bounded restoration;no arbitrary source drift or evidence normalization allowed.
+
+Existing current-ancestry launcher explicit --divider-computed-paint selects only
+abdd4f47. Factory regenerates exact predecessor7dfee and exact bounded48-child
+successor in memory,with full digest checks and historical read delegation.
+Preflight validates retained c394,not a fabricated physical successor file.
+All14 older supplement selections/defaults preserve;combined supplements reject.
+Runner's actual final reader initializer selects the new factory for this digest
+only. Argument-parser source has no physical-review existence precondition;this
+inspection is not represented as a completed full runner/export execution.
+
+Owning join/full dependency/inventory integration3/3,zero skips,83605.4029ms,
+empty stderr;complete2311 cases/17562 dependencies authenticate,all statuses
+preserve,wrong capture/source drift reject and exact predecessor recovers.
+divider-paint-routing-integration-20261024.log SHA256
+5bc5990c4ab6f8546777bd75612c7ae7cc7c38abc48991042738982c93156f59.
+Legacy Slider/Table inventory/selection/registration5/5,zero skips,21314.0429ms,
+empty stderr;divider-paint-routing-legacy-20261024.log SHA256
+fe52a386da517665f8210f11233ed508294628d953d303d972ac53a6910d4e73.
+No need to rerun the unchanged four browser/retained paint proofs for this wiring.
+
+No large proposal copy,canonical generation,pointer or case acceptance changed.
+Accepted a659 remains;all2311 partial/current-rendering-unverified. Next justified
+milestone is coherent export/conservation/cold/import when storage and transport
+permit,or another specific unresolved case requirement using retained evidence.
+Do not reopen settled DOM-field/sampler/source recovery questions. Original full
+acceptance gates remain mandatory;local commits are not remote publication.
+
 ### Divider paint evidence joined without case promotion (October24)
 
 Settled sampling review confirms no new upload/interior/edge experiment is

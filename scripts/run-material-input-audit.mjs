@@ -23,6 +23,7 @@ import { retainedFocusObservationReview, createRetainedFocusReviewReader } from 
 import { sliderHoverHeldReview, createSliderHoverHeldReviewReader } from '../tests/material-parity/slider-hover-held-case-review-source.mjs';
 import { sliderStateInputReview, createSliderStateInputReviewReader } from '../tests/material-parity/slider-state-input-review-source.mjs';
 import { originalRunnerReview, createOriginalRunnerReviewReader } from '../tests/material-parity/original-material-runner-review-source.mjs';
+import { dividerComputedPaintReview, createDividerComputedPaintReviewReader } from '../tests/material-parity/divider-computed-paint-review-source.mjs';
 import { createTextBackingReviewReader, textBackingRetainedReview, createDividerReviewedBoundariesReader, dividerReviewedBoundariesReview, inactiveParagraphInputsReview, filledFieldStructureReview, chipPaintReview, chipGraphicReview, controlInputReview, dividerPropertyContextReview, sharedButtonTouchReview, passiveStaticAxReview, cardInputsReview, expansionSemanticsReview, stepperInputsReview, tabsMenuSheetReview, staticSemanticInputsReview } from '../tests/material-parity/text-backing-case-review-source.mjs';
 
 const root = process.cwd();
@@ -54,7 +55,8 @@ const { audit, errors } = withAuditEvidenceSession(() => {
     const effectiveReaderFactory = options.caseObligationReviewSha256===sliderHoverHeldReview ? createSliderHoverHeldReviewReader : finalReaderFactory;
     const currentReaderFactory = options.caseObligationReviewSha256===sliderStateInputReview ? createSliderStateInputReviewReader : effectiveReaderFactory;
     const recoveredReaderFactory = options.caseObligationReviewSha256===originalRunnerReview ? createOriginalRunnerReviewReader : currentReaderFactory;
-    const applicability=recoveredReaderFactory?.({root,read:auditReadFileSync,reviewSha256:options.caseObligationReviewSha256});
+    const paintReaderFactory = options.caseObligationReviewSha256===dividerComputedPaintReview ? createDividerComputedPaintReviewReader : recoveredReaderFactory;
+    const applicability=paintReaderFactory?.({root,read:auditReadFileSync,reviewSha256:options.caseObligationReviewSha256});
     audit.coverage = attachCaseObligationCoverage(audit.coverage, options.caseObligationReview,
       options.caseObligationReviewSha256, { root, read: applicability?.read ?? auditReadFileSync });
     if(applicability)audit.coverage.inspectionEvidence.sourceApplicability=applicability.sourceApplicability;
