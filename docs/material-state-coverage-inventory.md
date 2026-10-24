@@ -7,6 +7,38 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Divider frame box-model request attributed (October24)
+
+The same retained-owner check now answers one concrete frame domain in all24
+cases. Reference .frame has an active authored box-sizing:border-box rule and
+computed border-box. Candidate #page omits boxSizing in normal,effective and
+resolved snapshots,its inline authoring,and every potentially applicable recorded
+rule (using the existing conservative selector helper). Both retain36px padding.
+First meaningful divergence is authored box-model input,not Babylon projection.
+Classify this exact request difference as application-plugin-authoring-defect,
+owned by showcase #page authoring (astylar.component.ts:471 versus reference
+component.ts:106). No new general renderer defect is invented.
+
+The existing core-box-sizing-omission-violates-content-box-default finding is
+explicitly linked with its original public reproduction receipt80902a40. Its
+already-proved omission path uses legacy border-box sizing rather than the
+documented CSS content-box initial value. Therefore coincident frame extents
+would not prove equivalent inputs;do not normalize candidate omission to the
+native explicit request or preserve legacy pixels by retuning dimensions when
+the general default is corrected. Historical author intent is not established.
+
+Native computed pixel width/height and candidate width100%/minHeight100% remain
+recorded as different stages,not declared unequal dimensions by this check.
+Percentage/min-height used sizing,overflow and complete frame paint remain open.
+No additional browser run or repeated general box-sizing experiment was needed.
+
+Command `node scripts/check-divider-owner-coverage.mjs`,explicit nativeExit0.
+Keep divider-frame-box-inputs[-final]-20261024 log pairs;final stdout SHA256
+1079d7c625336f18169c3aee9ac3629b69c266a88e8a59669cfbd2ebed15b71e,
+stderr empty.997c3ff6 preserves the prior checker. This classification is
+standalone next-batch exact-owner evidence,not a new canonical finding count,
+case closure or renderer/fixture fix. Accepted88be and all parent flags preserve.
+
 ### Existing Divider heading dispositions reconciled (October24)
 
 The five-owner scope below does NOT mean the headings lack all classifications.
