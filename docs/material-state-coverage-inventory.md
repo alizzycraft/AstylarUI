@@ -9,6 +9,30 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Retained-focus follow-up answers the proposed next integration question:do NOT
+promote programmaticFocus using the supplementary composite child. Authenticated
+reset/remaining action reports prove eight paired physical contexts:opened and
+reopened native active text is Rename,candidate logical active ID menu-primary;
+ArrowDown native active text is Delete,candidate remains menu-primary. Escape
+returns both recorded owners to menu-primary in all eight. These are existing
+authoring-failure observations,not a new core diagnosis. Native text alone is not
+complete descendant/AX identity,and pointer/key focus is not programmatic focus.
+
+The eight original configured open-hover-content rows authenticate against
+ab42dbec and have reference identity omitted,candidate menu-primary,and matches
+true. Existing exact gate skips comparison outside focus state;this is unknown
+original native identity,not a passing focus result. The preexisting focusedIdentity
+and retained-overlay-focus tests already diagnose that measurement blind spot;
+do not repeat a browser demonstration. Thus this branch cannot retire the
+programmatic-focus obligation by merely moving the supplementary observations.
+Keep its applicability/actions separate from exact configured focus cases.
+
+Read-only query exits native0,empty stderr;menu-retained-focus-readiness-20261024
+stdout SHA256fcf34b6dcfc6461d838d6f32e30853e7a23efc26a83c65992256d5eec318088c.
+This narrows next work away from a redundant focus join toward remaining
+owner/semantic applicability and genuine missing action evidence. No new capture,
+source registry,case status or canonical data change.
+
 Exact-case closure-readiness review of
 `interaction:menu@light/desktop-dpr1/open-hover-content` confirms substantive
 gaps,not merely schema1's forced partial flag. Read-only virtual reconstruction
