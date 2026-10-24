@@ -27,6 +27,20 @@ This is a future input-contract decision,not authorization to rewrite fixtures
 within this audit. Frozen registered c394/accepted a659 remain separate from
 these pending standalone proofs;publication still requires working Git transport.
 
+Dialog semantic-policy prerequisite:the actual outer AX owner is labelled
+Confirm action by native Material but Open dialog by candidate authoring across
+all eight retained desktop activate contexts. Fixing the latter input is distinct
+from modality policy. Material uses an independent ariaModal=false default while
+retaining dialog interaction isolation;Astylar's supported modal flag also
+projects aria-modal=true. Installed package-root DOMElement accepts modal:true
+but rejects an additional ariaModal:false with TS2353. Do not set modal:false
+to make AX properties appear equal:that changes the supported top-layer behavior.
+Classify the independent typed declaration as unavailable in the inspected API;
+broader plugin/composition expressibility and any required API extension remain
+unproven,not an already confirmed renderer defect. Existing documented modal
+semantics must be preserved during future contract/design work. Evidence:
+`tests/material-parity/dialog-owner-semantic-inputs.spec.mjs` and current ledger.
+
 The latest shared-button evidence adds this dependency to tracks6–7:
 
 1. Resolve the EXISTING documented CSS transform unit/reference-box limitation

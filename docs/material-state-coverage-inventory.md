@@ -7,6 +7,27 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+October24 package-root modal-policy boundary checked without a new browser run:
+virtual TypeScript source imports DOMElement only from installed 'astylarui'.
+Normal dialog/open/modal/label declaration compiles;adding ariaModal:false yields
+exactly one diagnostic2353 at that property,no unresolved-import/other failures.
+Installed declaration SHA5b497c3eefb06023ca0e3c088b78eb89e04e4023420d04a094907a933a18c0c0
+is authenticated. The current documented subset (html-css.md SHA
+e710a551f52fdcf6c0cbc85e2037a896a41cf482f9dd7030b76757e0bca3ad50)
+explicitly uses modal:true for initial focus,inertness,wrapped Tab,Escape/close
+and restoration. Mounted surface exposes focus/blur and update,not an independent
+declarative aria-modal override. Plugin semantics invalidation is not itself a
+semantic-attribute override API;exported bridge access/manual DOM patching would
+not establish equivalent mounted declarative input. Do not infer all public
+compositions impossible or promote this to a confirmed core rendering failure.
+Scoped conclusion:independent ariaModal declaration is unavailable in the
+inspected installed typed model;modal:false is not a safe parity compensation.
+Dialog suite4/4 passes10620.7549ms;after adding complete installed type receipt,
+focused package-root assertion1/1 passes7086.4237ms. No temporary TS files,
+bundles,capture or core/fixture edits;virtual source exists only in compiler host.
+Implementation handoff now preserves this contract decision separately from
+the demonstrated authored name mismatch. Frozen c394/accepted a659 unchanged.
+
 October24 dialog owner first-stage attribution separates two issues. Exact
 retained app71e2d41f supplies Open dialog,modal=true;bridge590d49a2 copies the
 authored label and sets aria-modal=true for modal dialog elements. Native

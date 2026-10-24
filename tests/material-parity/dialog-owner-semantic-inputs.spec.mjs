@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import test from 'node:test';
 import path from 'node:path';
 import { materialInteractionCases } from './benchmark.config.mjs';
+import ts from 'typescript';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 test('all retained open dialogs preserve real owner label/modal differences omitted by inner-surface comparator', () => {
@@ -101,4 +102,27 @@ test('dialog retained owner projection follows authored name while modality and 
   assert.equal(hash(model), '72eef2f09d5cdacaab10db7328c40e5b4748c3f22640e2b40f0436a268351e83');
   assert.match(model.toString(), /modal\?: boolean/); assert.doesNotMatch(model.toString(), /ariaModal\??:/);
   // A typed-model expressiveness question, not proof no public composition can express the reference contract.
+});
+
+test('installed package-root DOMElement accepts modal but rejects independent ariaModal declaration', () => {
+  const file = path.resolve('examples/material-showcase/audit/virtual-dialog-modal-policy.ts');
+  const source = `import type { DOMElement } from 'astylarui';
+const supported: DOMElement = {type:'dialog',id:'modal',open:true,modal:true,ariaLabel:'Confirm action'};
+const independent: DOMElement = {type:'dialog',id:'modal',open:true,modal:true,ariaModal:false};
+void supported; void independent;
+`;
+  const options = { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext,
+    moduleResolution: ts.ModuleResolutionKind.Bundler, noEmit: true, strict: true, skipLibCheck: true };
+  const host = ts.createCompilerHost(options), originalRead = host.readFile.bind(host), originalExists = host.fileExists.bind(host);
+  host.readFile = name => path.resolve(name) === file ? source : originalRead(name);
+  host.fileExists = name => path.resolve(name) === file || originalExists(name);
+  const program = ts.createProgram([file], options, host);
+  const diagnostics = ts.getPreEmitDiagnostics(program);
+  assert.equal(diagnostics.length, 1, diagnostics.map(d => ts.flattenDiagnosticMessageText(d.messageText, '\n')).join('\n'));
+  const error = diagnostics[0]; assert.equal(error.code, 2353); assert.equal(path.resolve(error.file.fileName), file);
+  assert.match(ts.flattenDiagnosticMessageText(error.messageText, '\n'), /'ariaModal' does not exist in type 'DOMElement'/);
+  const installed = program.getSourceFiles().filter(s => s.fileName.replaceAll('\\', '/').includes('/node_modules/astylarui/') && s.fileName.endsWith('/dom-element.d.ts'));
+  assert.equal(installed.length, 1); assert.match(installed[0].text, /modal\?: boolean/);
+  assert.equal(hash(readFileSync(installed[0].fileName)), '5b497c3eefb06023ca0e3c088b78eb89e04e4023420d04a094907a933a18c0c0');
+  // No runtime behavior is inferred from a deliberately rejected unsupported declaration.
 });
