@@ -9,6 +9,26 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Select/disabled evidence batch integration passes3/3,0skip,nativeExit0 in
+62931.6725ms. Six disabled supplementary observation children now join exact
+authoredEditing obligations through join-material-disabled-control-evidence.mjs;
+successor d00beaa884a5639f4294c5b81f4c49e1ec0c9cd1072fc77d4f7041fc6ff9bd3d
+recovers21ade0b4 exactly. Only six light/desktop-dpr1/disabled records change;
+all parent dispositions,remaining tasks and2311 partial/current-unverified
+statuses preserve. The earlier readonly child remains intact. Tests authenticate
+reports/trees/screenshots,assert Select's native focus exception,unchanged values
+and absent input/change,and reject forged report and duplicate join. No new
+physical proposal or browser capture. This is pending evidence,not canonical.
+
+Retain select-disabled-integration-20261025 log pair,stdout SHA256
+7b78944ea7d18ddf7da4dfb3672720038f126de06da99bd495a31d494cfac348;
+stderr empty. Frozen producer still9e936a24;remote branch read-only check still
+645c99b841a1589119e0f2f644b60d8c7c97a9ee. No repeat failing upload,Git storage
+operation or canonical export. Next reconcile the pending Select/disabled source
+and proof inventory with the already pending Menu/focus batch before registration;
+do not alter frozen1002/326 or regenerate accepted88be4d47 for bookkeeping alone.
+Other42 disabled contexts and every broader boundary listed below remain open.
+
 Supplementary disabled-control capture answers the missing rejection question
 for SIX retained-build light/desktop-dpr1 contexts only(one per family). Reuses
 pinned configured-control-focus collector with actual family-control targets,

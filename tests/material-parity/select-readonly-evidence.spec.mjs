@@ -10,6 +10,7 @@ import { joinSelectReadonlyEvidence, restoreSelectReadonlyEvidence, selectReadon
 import { gunzipSync } from 'node:zlib';
 import ts from 'typescript';
 import { materialInteractionCases } from './benchmark.config.mjs';
+import { joinDisabledControlEvidence, restoreDisabledControlEvidence, disabledControlPredecessor } from '../../scripts/join-material-disabled-control-evidence.mjs';
 
 test('six retained disabled contexts preserve values while exposing native Select focusability difference', () => {
   const file = 'artifacts/material-parity/disabled-control-boundaries-20261025/latest-report.json';
@@ -83,4 +84,21 @@ test('exact Select supplementary readonly evidence preserves all parent obligati
   assert.throws(() => joinSelectReadonlyEvidence(predecessor, file => file.endsWith('latest-report.json') ? Buffer.from('forged') : readFileSync(file)));
   assert.throws(() => joinSelectReadonlyEvidence(joined.review));
   console.log(JSON.stringify({ cases: joined.cases, reviewSha256: joined.sha256, predecessor: selectReadonlyPredecessor, boundary: 'Pending virtual join only; no canonical publication or case closure.' }));
+  assert.equal(joined.sha256, disabledControlPredecessor);
+  const disabled = joinDisabledControlEvidence(joined.review);
+  assert.equal(disabled.cases, 6); assert.equal(disabled.review.groups.length, 2311);
+  assert.equal(hash(restoreDisabledControlEvidence(disabled.review)), joined.sha256);
+  let disabledChanges = 0;
+  disabled.review.groups.forEach((group, index) => {
+    assert.equal(group.inspection, 'partial'); assert.equal(group.currentRendering, 'unverified');
+    if (group === joined.review.groups[index]) return;
+    disabledChanges++;
+    assert.match(group.case, /^interaction:(form-field|input|autocomplete|select|datepicker|timepicker)@light\/desktop-dpr1\/disabled$/);
+    const parent = { ...group.obligations.authoredEditing }; delete parent.supplementaryDisabledControlBoundaries;
+    assert.deepEqual(parent, joined.review.groups[index].obligations.authoredEditing);
+  });
+  assert.equal(disabledChanges, 6);
+  assert.throws(() => joinDisabledControlEvidence(joined.review, file => file.endsWith('latest-report.json') ? Buffer.from('forged') : readFileSync(file)));
+  assert.throws(() => joinDisabledControlEvidence(disabled.review));
+  console.log(JSON.stringify({ disabledCases: disabled.cases, reviewSha256: disabled.sha256, predecessor: disabledControlPredecessor }));
 });
