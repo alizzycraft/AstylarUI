@@ -7,6 +7,24 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+Read-only original-runner provenance follow-up:bounded imported activity pages
+17901–18000 and18201–18600 contain user/assistant messages,not original tool
+calls or patch bodies. Items18515–18521 locate the complete Material capture
+start after pushed9f795e54 and its first unchanged ten-file harness checkpoint;
+item18521 mentions subsequent12461c2d outside that capture graph. These are
+historical narrative anchors,not recovered runner bytes or hash authentication.
+The missing e01ef9dc runner remains unresolved;do not substitute current code,
+method-level equality or narrative assurances for its complete source receipt.
+The bounded history search did not recover source bytes and is not an exhaustive
+search of all history. No capture rerun,source registration or acceptance change
+follows from it. Next provenance check must use an actual retained source/object
+at that anchored capture boundary,not repeat the already settled focus tests.
+Direct git-show checks of the runner at both9f795e54 and12461c2d return96107
+bytes and complete SHA256
+33c5a4b31a5140bb19e524eaa9fba5bbbb877b45a38f6f0be5722fbe09113f6a,
+not e01ef9dc. Thus neither anchored committed copy supplies the missing source;
+an uncommitted/copy or byte-format difference remains possible,not established.
+
 Publication status:registered code is frozen atb521bafd. A third bounded push
 uses full objects,pack.window/depth0,no thin pack,buffered HTTP/1.1 and progress.
 Session60891 exits1 with HTTP408 after the client completes97 objects/82.49MiB,
