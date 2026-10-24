@@ -9,6 +9,27 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Heading applicability review does not transfer the known normal-height failure
+indiscriminately. Existing normal-line-height-audit.spec.ts declares9 controls,
+weights400/500,no32px/700 heading. Existing public paragraph report has8 paired
+cases,Arial16/24px p/span,not Roboto title. Three retained Divider line-box/
+baseline producers target divider-above/below,not title/eyebrow. Reuse their
+settled normal-height owner diagnosis,do not repeat Arial/fallback controls or
+claim those failures prove the masked Roboto32/700 title fails.
+
+Read-only scope assertions nativeExit0 in
+divider-heading-public-proof-scope-20261025 log pair;source/report hashes and
+configured scopes retained,not fresh execution/current applicability. Original
+title tree has retainedText {source,style} only,no layout/bounds/glyph metrics.
+Original exact light/desktop report geometry targets root/primary,textAlignment
+targets above/below,and focusedRasters empty. Those endpoints likewise do not
+supply heading used-line-box/clip proof. This narrows a real missing observable,
+not a new defect or changed acceptance requirement. Next inspect whether the
+existing retained-build public inspector can observe title registry dimensions
+and native h1 range without authored changes;only a specifically missing matched
+heading observation could justify a focused probe. No source registry/canonical
+or case status changed;local batch stays1028/353/196 awaiting publication route.
+
 Next finite owner question answered without capture:the three named retained
 natural-line-box collectors cannot close Divider heading line-box/clip attribution.
 Accepted selected extracte7f8cc38 and its raw control-report receipt authenticate;
