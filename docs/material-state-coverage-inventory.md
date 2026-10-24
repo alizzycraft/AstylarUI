@@ -9,6 +9,31 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Missing heading geometry now observed through existing retained-build workflow,
+without build,marker/style/input edits or raster. Standalone
+audit-material-divider-heading-boxes.mjs pins baseline producerbb87aa65 and
+captures native h1/eyebrow boxes+DOM ranges,public retained CSS dimensions/text
+styles and existing benchmark-projected boxes. Four requested desktop-DPR1
+themes are verified by four distinct native eyebrow colors. Capture nativeExit0,
+Chrome155.0.8059.85;all8 side contexts fonts loaded. Original1887 served-byte
+inventory authenticates before/after through inherited workflow.
+
+Independent verification nativeExit0 rehashes producer,baseline,actual loaded
+assets and all physical-context observations. Title native height,retained CSS
+height and projected height are38px in all four contexts;both title line-height
+tokens normal. Thus known normal-height defect is NOT demonstrated for this
+Roboto32/700 title. Eyebrow logical heights retain normal fractional CSS rounding;
+matched owner-box heights/positions do not prove glyph baseline,clip or raster.
+Native opacity0 versus candidate1.0 and unequal paint requests remain explicit;
+do not call this equal-input rendering acceptance or remove masking to force it.
+
+Keep divider-heading-boxes-20261025 and divider-heading-boxes-verification-
+20261025 log pairs(stderr empty). New producer is standalone next-batch source,
+not added to frozen1028/353/196. Capture fills only four supplementary physical
+contexts,not original action/browser replay,all24 cases or current-code proof.
+Next target actual heading glyph/clip applicability if required;do not repeat
+the now-answered38px used-height question or public Arial normal-height defect.
+
 Heading applicability review does not transfer the known normal-height failure
 indiscriminately. Existing normal-line-height-audit.spec.ts declares9 controls,
 weights400/500,no32px/700 heading. Existing public paragraph report has8 paired
