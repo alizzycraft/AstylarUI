@@ -1,5 +1,39 @@
 # Audit artifact retention
 
+October24 Slider publication completed:isolated import5164,compression81937 and
+accepted import28057 all exit0. Generationa65965fb/index6d77ad44 retains the whole
+package;all86 copied files authenticate and85 index/shard complete hashes remain
+unchanged through compression in both stores. Whole-store verification passes
+before/after accepted pointer advancement through existing import reuse. Logs:
+isolated importSHAad11f7a58e697634dd7f4ec98fe7d670eeec3f78f809946a600a31472a92fa15;
+isolated compressionSHA25d71b42a797067a057900e307f30ca5fd795f42cf35e4d223c19660e6a05df7;
+accepted importSHA0e663f37fb0b34178aed5ab87f71c8ed2d9140c2e0a693d2ac5ca356d8875956.
+All three stderr files are empty. Observed D:free470507520 after accepted copy.
+Keep both stores,prior7e02,conservation extracts and original/failure evidence
+until reference closure. No deletion or case/rendering acceptance follows import.
+
+October24 pending Slider import headroom:16 additional closed audit.js bundles
+were explicitly absent from all962 registered sources and17549 case receipts.
+Lossless LZX compression completed(session36777,exit0),with every complete
+before/after SHA256 equal. The exact run names,hashes and logical sizes are in
+slider-focus-import-headroom-20261024.log,SHA
+33f80c0a8dccb034e48a66dd7aa583c66fb090443b823c5a8d36458db71c6fac.
+Observed D:free536465408→761036800 bytes. No original/failure evidence deleted,
+bytes or paths changed,or accepted pointer advanced by that operation. Cold62809
+was live then;it subsequently exits0. Compression alone is not cold success.
+
+October24 Slider candidate structural extract is required working evidence until
+publication/reference closure. Its UTF-16 generated output occupies242055760
+logical bytes. After all structural/receipt derivations completed,it was LZX-
+compressed to44404736 physical bytes (session47228 terminal0),with complete
+before/after SHA79831b46ed0c0486237d03700456d3a72383d0d4f36a9d2ec606008d41601aa8.
+Explicit962-source/17549-case-receipt exclusion check passes before compression;
+it is a closed generated output,not an input of the frozen source/case lists.
+Observed D:free338817024→536469504. No source,evidence bytes,paths,pointers or
+original/failure capture changed. Cold62809 was live then;its subsequent exit0
+is separate from storage recovery. Keep 80-section,structural,fixed-shape and independently
+derived receipt logs for7e02→a659 and their empty stderr records.
+
 October24 first Slider canonical export is intentionally stopped,not accepted:
 session51017 exits-1 after verified child23276 is stopped during build-audit.
 Preserve slider-focus-canonical-export-20261024.log (empty SHAe3b0c442...) and

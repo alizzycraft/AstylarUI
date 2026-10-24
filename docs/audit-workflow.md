@@ -6,13 +6,14 @@ approve existing findings, finish the audit, or authorize renderer fixes.
 
 ## Small working records; immutable original evidence
 
-October24 retained-focus batch is accepted locally as generation7e02d8f0/index620874d6,
+October24 Slider/focus batch is accepted locally as generationa65965fb/index6d77ad44,
 after complete predecessor/section/receipt conservation,independent cold replay
-and verified isolated/accepted imports. Use its955-source/278-proof population for
+and verified isolated/accepted imports. Use its962-source/285-proof population for
 the next coherent batch;prior pending-selection paragraphs below are historical
 milestones,not reasons to rerun this completed integration. All2311 cases remain
-partial and current rendering unverified. Full original acceptance gates and
-remote publication remain open;see the current coverage ledger for evidence.
+partial and current rendering unverified. Full original acceptance gates remain
+open;see the current coverage ledger for evidence. The former955/278 and7e02
+milestones below are historical,not instructions to repeat finished integration.
 
 ```powershell
 npm run audit:findings:import

@@ -2,10 +2,11 @@
 
 ## Current audit pointer — October24
 
-- Accepted canonical/compact remains7e02d8f0/index620874d6 (955 paths/278 proofs).
+- Accepted canonical/compact is a65965fb/index6d77ad44 (962 paths/285 proofs),
+  following complete conservation,independent cold replay and verified imports.
   All2311 cases remain partial/current-rendering unverified;no rendering or
-  inspection acceptance gate is relaxed. Working Slider successor remainsc0e397e0,
-  at962 paths/285 proofs,seven additions and now SIX bounded old-source changes.
+  inspection acceptance gate is relaxed. Published Slider review is c0e397e0,
+  with seven additions and SIX bounded old-source changes against7e02.
   All278 previous proof non-line fields/order conserve;no source removals.
 - First Slider export51017 was intentionally stopped in build-audit after a
   decisive check exposed a shared legacy provenance gap:direct restoration
@@ -24,11 +25,66 @@
   logSHAa33effdf53209475472928761ebab11e6c3e8dca31cc6116636210bf26e0600b;
   stderr empty. Census6 changed paths are benchmark,retained-focus test,shared
   registration helper,launcher,runner,producer;all full predecessors recover.
-  Next freeze this corrected boundary and use a NEW export-log prefix,then
-  complete conservation,cold replay and verified import. Do not restart the
-  stopped handle or treat earlier registration as canonical publication.
+  Corrected export78368 exits0 in3079410.0831ms from frozen645c99b8. Candidate
+  a65965fb3c03198c1f50dccb10521dc7411bf9346da89416846975edfc1605af is now in
+  docs and now accepted:92279340 compressed/2344651461 decoded bytes,decodedSHA
+  999b6b13598b222b9e88bf72ba15b00318a71f0d0cd686cac7cb85952936034f.
+  One collector,10 memory hits,1 disk hit,zero invalidations;18745 files and
+  3137855054 bytes read AND rehashed. Export stdoutSHA7828f9c596805636488588ba7eb55d677c433b3364275fb874e901c8089839a3;
+  stderrSHA26f61a99d88a05e8957463169f625a982df756ca91c42a49beaf21bcae0d13ab.
+  All80-section comparison96087 passes:72 identical/eight changed,no additions/
+  removals,logSHA41d65099e7007eac99d730b14347b4aae1aafee801ee4b999d25fc322cd0c25b.
+  Bounded extraction79475 authenticates entire candidate,rawSHA79831b46ed0c0486237d03700456d3a72383d0d4f36a9d2ec606008d41601aa8.
+  Structural conservation53201 passes actual962/285 inventories,complete plan,
+  all278 prior non-line proof fields and complete2311-case coverage recovery;
+  only16 raw-action children/partial dispositions and68 receipts add,all17481
+  prior receipts preserve. LogSHA2dbf224d4e23c0467022862735c76a926870cf8cc851fce4315cbf6f44b313a5.
+  Fixed-shape comparison19469 passes14085648 entries with unchanged membership/
+  shape and147 receipt changes,logSHA734504e8ca9cddfe4135ca667093c969e1f07f1dd21dd0e144713f2a6b41c2a3.
+  Independent derivation authenticates98 module receipts,48 complete-control
+  hashes and whole motion-report hash89cca616→021e4ab8 (pretty JSON+newline).
+  No non-receipt observations change. Derivation logSHA20edc30dba5ac78280c6d52486f023ce135bba4c98564f336aebbc65f7780cd8.
+  Independent cold --check62809 exits0 from the same frozen source,completing
+  in6362288.5683ms. Whole canonical byte reproduction passes,not rendering parity.
+  Cold stdoutSHA5fa95c10df5f97d9f15c0e0c87b580d7cdaf335715f558ec69e5542986bfa324;
+  stderrSHAc8faf362656038676763277fc69021f83e35ebf84c9148630a36ef85a0e04437.
+  Cold evidence session executes2 collectors/10 memory hits/zero disk hits or
+  invalidations;all18745 files/3137855054 bytes are read AND independently rehashed.
+  Isolated import5164 exits0 in83192.6315ms with84 shards,then compression81937
+  exits0 with85 complete before/after hashes unchanged and full-store verification.
+  Isolated-import logSHAad11f7a58e697634dd7f4ec98fe7d670eeec3f78f809946a600a31472a92fa15;
+  compression logSHA25d71b42a797067a057900e307f30ca5fd795f42cf35e4d223c19660e6a05df7.
+  Accepted import28057 exits0:all86 copied files authenticate,85 index/shard files
+  retain their hashes through LZX compression,and full-store verification passes
+  before/after pointer advancement through existing import reuse. Accepted index
+  SHA6d77ad44af9fceb5fc487dade922168192a2820886d4dec2ac7668f514d2c087;
+  accepted-import logSHA0e663f37fb0b34178aed5ab87f71c8ed2d9140c2e0a693d2ac5ca356d8875956.
+  All three import/compression stderr files are empty.192 source findings,8483
+  scalar groups,39904 controls,389202 occurrences and0 unresolved scalar groups
+  preserve. Accepted pending joins are focus1603/activation1466/paint949.
+  Read-only next-gap check authenticatesc0e397e0 and finds all16 new raw Slider
+  records (8 hover/8 held) already contain paired active owners,ancestry and events,
+  while their applicable programmaticFocus obligations stay evidence-join-pending.
+  Next,reuse these as explicitly pointer/hover-only partial evidence
+  in a coherent next batch;do not recapture or substitute them for keyboard or
+  actual programmatic focus. No current proposal,counter or case status changed.
 
 ### Slider/focus milestone history (earlier stage statuses below are historical)
+
+Read-only interpretation note while corrected export is live:authenticated
+de4228f9 raw capture shows all8 held candidate configured-event streams report
+pointerdown and focus for slider-primary,value65,matching native logical labels;
+the direct candidate DOM focus is still CANVAS. This does not prove semantic
+focus/actual hit-target equivalence,but prevents treating the DOM substrate
+difference alone as evidence of a wrong logical thumb. Both original streams
+already reside in the joined16 records;no new finding,case credit or source edit.
+Existing core-enabled-held-focus-delays-native-mirror is the relevant established
+candidate owner,not a new finding:its public two-button proof bounds transaction-
+wide native-focus suppression during held pointer actions. The source guard
+excludes pointer transitions/focus and postpones queueFocusSync while the
+transaction is active. Slider's paired logical/DOM streams are consistent with
+that mechanism,but this capture contains no transaction-branch stack witness;
+do not promote it to a newly confirmed Slider-specific cause or full parity.
 
 - Slider/focus batch registration is frozen at962 unique source paths/285 focused
   proofs,adding exactly7/7 to accepted955/278. Complete prior producer3aa37799
