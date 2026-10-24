@@ -48,6 +48,26 @@
   re-prove that historical first-loss cause. Next compare those changed source
   dependencies and exact text action-method receipts;reuse unchanged owner proof
   only where that comparison permits. No new browser run needed for this check.
+  That dependency comparison is now executable in the existing retained-input-
+  focus-snapshot.spec.mjs:both1887-entry manifests conserve except four renamed
+  chunk/map paths and three entry files. All three entry files recover exactly
+  by reversing the two chunk-name substitutions. Across both renamed maps,all
+  1072 source entries preserve order/content except astylar.js and material-input-
+  evidence.ts. Those complete predecessor modules recover by reversing five
+  retained-layout diagnostic additions;the captured getElementDimensions method
+  is solely a Map.get. Complete semantic bridge bytes remain590d49a2,including
+  the previously proved owner methods. The same raw action runner86ece08b is
+  pinned in both generations:the text methods hash differs only because its
+  extraction includes seventh helper measureAstylarInputs after observations;
+  the six action/settlement methods reproduce49724a44 exactly. Three focused
+  tests pass,including existing negative controls. This permits bounded owner/
+  action evidence reuse,not an assertion that newer uninstrumented traces contain
+  first-loss stacks or that diagnostic timing/current rendering is equivalent.
+  No need to repeat the already answered focus-owner investigation. Next join
+  the genuinely additional measurement-boundary evidence without duplicate
+  configured-action credit,then prioritize uninspected activation/local-paint
+  obligations using the accepted compact ledger. Canonical integration remains
+  pending for this coherent evidence batch;all2311 cases remain partial.
 
 - Canonical milestone8e3e54ffa726a6679fdbd6fc3bdddf92869a2a67 is confirmed on
   origin/codex/material-audit-alignment-integration by independent ls-remote,

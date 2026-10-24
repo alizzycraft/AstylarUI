@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import ts from 'typescript';
 
 // This is a retained-data boundary check, not a fresh browser observation or
 // a replacement for paired, action-timed DOM/renderer focus measurements.
@@ -11,6 +12,109 @@ const families = ['form-field', 'input', 'autocomplete', 'datepicker', 'timepick
 const profiles = ['light', 'dark', 'contrast', 'custom'];
 const viewports = ['desktop-dpr1', 'desktop-dpr2'];
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+
+test('configured focus dependency transition preserves semantic owner and maintained action bytes', t => {
+  const load = (file, sha) => {
+    const bytes = readFileSync(file); assert.equal(hash(bytes), sha, file);
+    return JSON.parse(bytes);
+  };
+  const current = load('artifacts/material-parity/configured-input-focus-boundaries-20261024/latest-report.json',
+    '8e176417defd6d8bbd2f9276adc8d37828867fce006cf80b4a74e4034aa9d118');
+  const inputs = [
+    ['text-input-focus-events-bound-20261019', '21387e63992d907e6a5675a0c3bad150c5face9073d9f1d39d42c146279f6cd0', 24],
+    ['picker-focus-mutations-bound-20261019', 'b649d152f7bed697890045bac86f03b59d6aa67f99a6acc9c88a50b3936cb123', 16],
+  ];
+  const manifest = report => load(report.capture.checkpointManifest.file, report.capture.checkpointManifest.sha256);
+  const next = manifest(current);
+  const oldRoot = 'artifacts/material-parity/icon-fresh-producer-retained-build-20261016-browser/';
+  const newRoot = 'examples/material-showcase/dist/material-showcase/browser/';
+  let previous;
+  for (const [name, sha, count] of inputs) {
+    const report = load(`artifacts/material-parity/${name}/latest-report.json`, sha);
+    const prior = manifest(report); previous ??= prior;
+    assert.deepEqual(prior.provenance.browserFiles, previous.provenance.browserFiles);
+    assert.equal(report.results.length, count);
+    for (const row of report.results) {
+      assert.ok(current.results.some(candidate => candidate.caseId === row.caseId));
+      const losses = row.astylar.observations.at(-1).events.filter(event => event.type === 'blur' && event.target.tag === 'INPUT');
+      assert.equal(losses.length, 1);
+      assert.equal(losses[0].mutation.method, 'replaceChildren');
+      assert.equal(losses[0].mutation.target.logicalId, row.family + '-primary');
+      assert.match(losses[0].mutation.stack, /\.reconcileElement \(/);
+    }
+    // Text capture includes measureAstylarInputs after the action observations;
+    // it does not use a different action runner or focus implementation.
+    assert.equal(report.actionSource.sha256, current.actionSource.sha256);
+  }
+  const oldFiles = new Map(previous.provenance.browserFiles.map(row => [row.file, row.sha256]));
+  const newFiles = new Map(next.provenance.browserFiles.map(row => [row.file, row.sha256]));
+  assert.equal(oldFiles.size, 1887); assert.equal(newFiles.size, 1887);
+  assert.deepEqual([...oldFiles.keys()].filter(file => !newFiles.has(file)).sort(),
+    ['chunk-3JXWRYJY.js', 'chunk-3JXWRYJY.js.map', 'chunk-JPEJK334.js', 'chunk-JPEJK334.js.map']);
+  assert.deepEqual([...newFiles.keys()].filter(file => oldFiles.get(file) !== newFiles.get(file)).sort(),
+    ['chunk-PCHQTLJM.js', 'chunk-PCHQTLJM.js.map', 'chunk-XOU37TRR.js', 'chunk-XOU37TRR.js.map', 'compare/index.html', 'index.csr.html', 'main.js']);
+  for (const file of ['main.js', 'index.csr.html', 'compare/index.html']) {
+    const a = readFileSync(oldRoot + file), b = readFileSync(newRoot + file);
+    assert.equal(hash(a), oldFiles.get(file)); assert.equal(hash(b), newFiles.get(file));
+    assert.equal(b.toString().replaceAll('chunk-XOU37TRR', 'chunk-3JXWRYJY')
+      .replaceAll('chunk-PCHQTLJM', 'chunk-JPEJK334'), a.toString());
+  }
+  const runner = Buffer.from(current.sourceRecipe.actionRunnerSnapshot.base64, 'base64');
+  assert.equal(hash(runner), current.actionSource.sha256);
+  const ast = ts.createSourceFile('runner.mjs', runner.toString(), 99, true, ts.ScriptKind.JS);
+  const names = ['performInteraction', 'interactionTargetBox', 'settleInteraction', 'profileTheme', 'sendShowcaseCommand', 'waitForThemeApplied'];
+  const methods = list => list.map(name => {
+    const nodes = ast.statements.filter(node => ts.isFunctionDeclaration(node) && node.name?.text === name);
+    assert.equal(nodes.length, 1); return nodes[0].getText(ast);
+  }).join('\n');
+  assert.equal(hash(methods(names)), current.actionSource.methodsSha256);
+  assert.equal(hash(methods([...names, 'measureAstylarInputs'])),
+    'a1680f600c223e2d6c538a170954573f14a35a23ada78c35d0c9fbedacde7d88');
+  const mapped = [];
+  for (const [oldName, newName, expectedChanged] of [
+    ['chunk-3JXWRYJY.js.map', 'chunk-XOU37TRR.js.map', 'node_modules/astylarui/dist/lib/lib/astylar.js'],
+    ['chunk-JPEJK334.js.map', 'chunk-PCHQTLJM.js.map', 'src/app/material-input-evidence.ts'],
+  ]) {
+    const a = load(oldRoot + oldName, previous.provenance.browserFiles.find(row => row.file === oldName).sha256);
+    const b = load(newRoot + newName, next.provenance.browserFiles.find(row => row.file === newName).sha256);
+    assert.deepEqual(a.sources, b.sources);
+    const changed = a.sources.filter((source, index) => a.sourcesContent[index] !== b.sourcesContent[index]);
+    assert.deepEqual(changed, [expectedChanged]);
+    const index = a.sources.indexOf(expectedChanged);
+    mapped.push({ source: expectedChanged, before: hash(a.sourcesContent[index]), after: hash(b.sourcesContent[index]) });
+    let restored = b.sourcesContent[index];
+    const additions = oldName === 'chunk-3JXWRYJY.js.map' ? [
+      '      const layoutMesh = element.id && authoredById.get(element.id) === element ? this.elementManager.elementsMap.get(element.id) : undefined;\n      const retainedDimensions = layoutMesh ? this.elementManager.getElementDimensions(layoutMesh.name) : undefined;\n',
+      "        ...(retainedDimensions ? {\n          retainedLayout: {\n            source: 'core-dimension-registry',\n            ...structuredClone(retainedDimensions)\n          }\n        } : {}),\n",
+    ] : [
+      "  retainedLayout?: AstylarResolvedStyleSnapshot['elements'][number]['retainedLayout'];\n",
+      '      ...(entry.retainedLayout ? { retainedLayout: structuredClone(entry.retainedLayout) } : {}),\n',
+      '      // Registry observations remain numeric and distinct from authored styles\n      // and projected geometry. Missing observations must stay missing.\n      ...(inspected?.retainedLayout ? { retainedLayout: structuredClone(inspected.retainedLayout) } : {}),\n',
+    ];
+    for (const addition of additions) {
+      assert.equal(restored.split(addition).length, 2, 'Only the reviewed diagnostic addition may be removed');
+      restored = restored.replace(addition, '');
+    }
+    assert.equal(restored, a.sourcesContent[index], 'Complete predecessor module must recover');
+    if (oldName === 'chunk-3JXWRYJY.js.map') {
+      const bridge = a.sources.findIndex(source => source.endsWith('/lib/astylar-semantic-bridge.js'));
+      assert.ok(bridge >= 0); assert.equal(hash(a.sourcesContent[bridge]),
+        '590d49a2a4d5e205c10cf18a1e2e45a3f768079afad86f5ea330f7c6136088e8');
+      assert.equal(a.sourcesContent[bridge], b.sourcesContent[bridge]);
+      const manager = b.sourcesContent[b.sources.findIndex(source => source.endsWith('/element-manager.service.js'))];
+      const parsed = ts.createSourceFile('manager.js', manager, 99, true, ts.ScriptKind.JS);
+      const getters = [];
+      const visit = node => {
+        if (ts.isMethodDeclaration(node) && node.name.getText(parsed) === 'getElementDimensions') getters.push(node.getText(parsed));
+        ts.forEachChild(node, visit);
+      };
+      visit(parsed);
+      assert.deepEqual(getters, ['getElementDimensions(id) {\n    return this.elementDimensions.get(id);\n  }']);
+    }
+  }
+  t.diagnostic(JSON.stringify({ cases: 40, mapped,
+    conclusion: 'Complete semantic module and six action methods preserve; text hash difference is the seventh measurement helper. Two mapped modules recover completely by removing five read-only retained-layout diagnostic additions; dimension getter is a Map read. Not a fresh first-loss stack or whole-pipeline acceptance claim.' }));
+});
 const trees = new Map();
 let retained;
 
