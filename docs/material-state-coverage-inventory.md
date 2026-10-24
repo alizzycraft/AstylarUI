@@ -9,6 +9,30 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Direct historical consumers now recognize the staged owner-context registration.
+Shared Menu read entry calls the same exact prior-stage adapter as the selected
+owner reader;no duplicated layout/evidence collector or global filesystem patch.
+Adapter handles only producer,policy,launcher,runner and the bounded Menu helper
+source transition. Removing exactly its import/entry binding recovers complete
+Menu helper SHA6d36eb153c21a9c66ec6b6ef3004d80aa4fa1d5de74bd2a055bb651d9ac1bb48.
+Any other helper/source drift rejects. Unrelated reads remain untouched.
+
+Combined staged integration passes11/11,0skip,80157.13ms,nativeExit0,stderr empty;
+keep divider-context-direct-consumer-staged-integration-20261025 log pair,stdout
+SHA256dce54f45550feb19bf2ed006d1b7b217fe44461a9714dc53c287a3b8b9833698.
+It runs current owner registration/selection/actual selected review plus BOTH
+existing Menu suites. Direct old reads of all four staged files equal complete
+unstaged historical results;actual selected virtual proposal staysf812d8d9 and
+all2311 case dispositions preserve. Earlier shared-entry6/6 checks are retained
+in divider-context-shared-entry-compatibility-20261025,not substitutes for this.
+
+Only compatibility helper wiring is live;production producer/policy/launcher/
+runner still frozen1028/353/196 and prior routing. Staged1041/365/198 now has
+the demonstrated prerequisite for applying the batch. Next apply exact verified
+prepare output through apply_patch,update owning staged tests to explicitly read
+the conserved predecessor while checking actual files remain unchanged,and run
+coherent batch checks once. No canonical export or browser recapture is justified.
+
 Owner-context launcher/runner routing now validated IN MEMORY,not live. Explicit
 --divider-owner-context selects exactf812d8d9,accepts existing --dry-run/--check
 forms and rejects combination with all17 older supplements. Every older/default

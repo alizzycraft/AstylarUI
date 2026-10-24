@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
+import path from 'node:path';
 import { publicBlockAlignmentFindings } from './public-block-alignment-findings.mjs';
 
 const hash=b=>createHash('sha256').update(b).digest('hex');
@@ -89,4 +90,26 @@ export function prepareDividerOwnerContextSelection(source,kind){
 export function restoreDividerOwnerContextSelection(source,kind){
   let s=source.toString().replaceAll('\r\n','\n');for(const [a,b]of selectionTransitions(kind).toReversed())s=once(s,b,a);
   assert.equal(hash(s),dividerOwnerContextSelectionPrior[kind]);return s;
+}
+
+export function restoreDividerOwnerContextMenuRegistration(source){
+  let text=source.toString().replaceAll('\r\n','\n');
+  text=once(text,"import { createDividerOwnerContextPriorRead } from './divider-owner-context-registration.mjs';\n",'');
+  text=once(text,'export function createMenuHistoricalRead({ root, read }) {\n  read = createDividerOwnerContextPriorRead({ root, read });\n','export function createMenuHistoricalRead({ root, read }) {\n');
+  assert.equal(hash(text),'6d36eb153c21a9c66ec6b6ef3004d80aa4fa1d5de74bd2a055bb651d9ac1bb48');return text;
+}
+export function createDividerOwnerContextPriorRead({root,read}){
+  const transitions=new Map([
+    ['tests/material-parity/input-equivalence-audit.mjs',{prior:dividerOwnerRegistrationPrior.producer,restore:b=>restoreDividerOwnerContextProducer(b,f=>read(path.resolve(root,f)))}],
+    ['tests/material-parity/input-equivalence-policy.mjs',{prior:dividerOwnerRegistrationPrior.policy,restore:restoreDividerOwnerContextPolicy}],
+    ['scripts/export-material-input-audit-current-ancestry.mjs',{prior:dividerOwnerContextSelectionPrior.launcher,restore:b=>restoreDividerOwnerContextSelection(b,'launcher')}],
+    ['scripts/run-material-input-audit.mjs',{prior:dividerOwnerContextSelectionPrior.runner,restore:b=>restoreDividerOwnerContextSelection(b,'runner')}],
+    ['tests/material-parity/menu-select-disabled-registration.mjs',{prior:'6d36eb153c21a9c66ec6b6ef3004d80aa4fa1d5de74bd2a055bb651d9ac1bb48',restore:restoreDividerOwnerContextMenuRegistration}],
+  ].map(([file,value])=>[path.resolve(root,file),value]));
+  return (name,options)=>{
+    const transition=transitions.get(path.resolve(root,name));if(!transition)return read(name,options);
+    const bytes=read(name),normalized=bytes.toString().replaceAll('\r\n','\n');
+    const restored=hash(normalized)===transition.prior?normalized:transition.restore(bytes);assert.equal(hash(restored),transition.prior);
+    const encoding=typeof options==='string'?options:options?.encoding;return encoding?Buffer.from(restored).toString(encoding):Buffer.from(restored);
+  };
 }

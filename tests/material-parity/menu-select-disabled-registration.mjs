@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import path from 'node:path';
+import { createDividerOwnerContextPriorRead } from './divider-owner-context-registration.mjs';
 import { restoreMenuSelection, menuSelectionPriorHashes } from './menu-select-disabled-selection.mjs';
 import { menuPopupSemanticInputFindings } from './menu-popup-semantic-input-findings.mjs';
 import { publicProgrammaticFocusFinding } from './public-programmatic-focus-finding.mjs';
@@ -117,6 +118,7 @@ export function restoreMenuHistoricalSpec(source, file) {
 
 // Exact prior-source applicability only;never normalize an unrelated read.
 export function createMenuHistoricalRead({ root, read }) {
+  read = createDividerOwnerContextPriorRead({ root, read });
   const local = file => read(path.resolve(root, file));
   const transitions = new Map([
     ['tests/material-parity/input-equivalence-audit.mjs', { prior, restore: b => restoreMenuProducerRegistration(b, local) }],

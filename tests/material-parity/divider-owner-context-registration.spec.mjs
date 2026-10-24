@@ -6,6 +6,7 @@ import ts from 'typescript';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { createDividerOwnerContextHistoricalRead,createDividerOwnerContextReviewReader,dividerOwnerContextReview } from './divider-owner-context-review-source.mjs';
+import { createMenuHistoricalRead } from './menu-select-disabled-registration.mjs';
 import { dividerOwnerContextSources,dividerOwnerContextProofRows,prepareDividerOwnerContextProducer,restoreDividerOwnerContextProducer,
   dividerOwnerContextFindingDefinitions,prepareDividerOwnerContextPolicy,restoreDividerOwnerContextPolicy,
   prepareDividerOwnerContextSelection,restoreDividerOwnerContextSelection } from './divider-owner-context-registration.mjs';
@@ -65,6 +66,10 @@ test('Divider context reader restores only staged producer and policy and reject
   const read=(name,options)=>{const b=staged.get(path.resolve(root,name));if(!b)return readFileSync(name,options);const encoding=typeof options==='string'?options:options?.encoding;return encoding?b.toString(encoding):Buffer.from(b);};
   const historical=createDividerOwnerContextHistoricalRead({root,read});
   for(const [name,text]of original){assert.equal(historical(name,'utf8'),text);assert.equal(historical(name).toString(),text);}
+  const directPrior=createMenuHistoricalRead({root,read}),unmodifiedPrior=createMenuHistoricalRead({root,read:readFileSync});
+  for(const name of original.keys())assert.deepEqual(directPrior(name),unmodifiedPrior(name),'Direct old consumer must recover complete original bytes');
+  const shared='tests/material-parity/menu-select-disabled-registration.mjs';
+  assert.equal(hash(historical(shared)),'6d36eb153c21a9c66ec6b6ef3004d80aa4fa1d5de74bd2a055bb651d9ac1bb48');
   for(const [name,b]of staged){staged.set(name,Buffer.concat([b,Buffer.from('\n// unexpected')]));assert.throws(()=>historical(name));staged.set(name,b);}
   const untouched='docs/evidence/material-original-runner-e01.mjs.gz.b64';assert.deepEqual(historical(untouched),readFileSync(untouched));
   assert.throws(()=>createDividerOwnerContextReviewReader({root,read,reviewSha256:'0'.repeat(64)}));
