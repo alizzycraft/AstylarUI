@@ -9,17 +9,31 @@ export const sliderHoverHeldReview = 'c0e397e0a5912d3f492c0d55a3d2b5421d6892f540
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 
 export function restoreSliderHoverHeldRetainedTest(source) {
-  assert.equal(hash(source), '834e992bd667da88e1708af08ff79cdc2f2b295c3f8573af9525bb5666a6e408');
+  assert.equal(hash(source), '629426b43c9c9b022c89e1e161ef2cd24bc50ad698a28caf2c1365d1bfde70a4');
   const edits = [
-    ["import { restoreSliderHoverHeldExportSource, restoreSliderHoverHeldProducer } from './slider-hover-held-case-review-source.mjs';\n", ''],
-    ['restoreRetainedFocusExportSource(restoreSliderHoverHeldExportSource(text,kind),kind)', 'restoreRetainedFocusExportSource(text,kind)'],
-    ['restoreRetainedFocusProducer(restoreSliderHoverHeldProducer(source))', 'restoreRetainedFocusProducer(source)'],
+    ["import { restoreSliderHoverHeldProducer } from './slider-hover-held-case-review-source.mjs';\n", ''],
     ['const current=collect(restoreSliderHoverHeldProducer(source)),previous=collect(prior);', 'const current=collect(source),previous=collect(prior);'],
   ];
   for (const [before, after] of edits) {
     assert.equal(source.split(before).length, 2); source = source.replace(before, after);
   }
   assert.equal(hash(source), '69186088c5f756679132657b9e89c39556076f666446c030fa749de044cfdd5b');
+  return source;
+}
+
+export function restoreSliderHoverHeldSharedRegistration(source) {
+  assert.equal(hash(source), '68db8454d18727ef1aeee13a39d1f96a619ae4389713b7d5c961d349f5d36654');
+  for (const [begin, end] of [
+    ['  // Newest export-selection boundary is shared by every historical caller.', "  if(kind==='case'||!text.includes('retainedFocus'))"],
+    ['  // All historical provenance callers enter here.', "  if(!text.includes('retained focus producer inventory conservation'))"],
+  ]) {
+    const start = source.indexOf(begin), finish = source.indexOf(end, start);
+    assert.ok(start >= 0 && finish > start); source = source.slice(0, start) + source.slice(finish);
+  }
+  const before = "export function restoreRetainedFocusProducer(source) {\n  let text=source.toString().replaceAll('\\r\\n','\\n');";
+  const after = "export function restoreRetainedFocusProducer(source) {\n  const text=source.toString().replaceAll('\\r\\n','\\n');";
+  assert.equal(source.split(before).length, 2); source = source.replace(before, after);
+  assert.equal(hash(source), '0c5e1521276c8721d245b7dfd8fbf12a11aa109162059897df298d2108ee033b');
   return source;
 }
 
@@ -113,6 +127,10 @@ export function createSliderHoverHeldReviewReader({ root, read, reviewSha256 }) 
   assert.equal(removed, 16);
   assert.equal(hash(JSON.stringify(envelope.review)), sliderHoverHeldPredecessor);
   const priorRead = (absolute, options) => {
+    if (absolute === path.resolve(root, 'tests/material-parity/static-semantic-registration.mjs')) {
+      const bytes = Buffer.from(restoreSliderHoverHeldSharedRegistration(read(absolute).toString()));
+      return options ? bytes.toString(typeof options === 'string' ? options : options.encoding ?? 'utf8') : bytes;
+    }
     if (absolute === path.resolve(root, 'tests/material-parity/retained-pointer-focus-reuse.spec.mjs')) {
       const bytes = Buffer.from(restoreSliderHoverHeldRetainedTest(read(absolute).toString()));
       return options ? bytes.toString(typeof options === 'string' ? options : options.encoding ?? 'utf8') : bytes;

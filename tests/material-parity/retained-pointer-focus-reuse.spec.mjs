@@ -6,7 +6,7 @@ import path from 'node:path';
 import { spawnSync, execFileSync } from 'node:child_process';
 import ts from 'typescript';
 import { restoreRetainedFocusExportSource, restoreRetainedFocusProducer } from './static-semantic-registration.mjs';
-import { restoreSliderHoverHeldExportSource, restoreSliderHoverHeldProducer } from './slider-hover-held-case-review-source.mjs';
+import { restoreSliderHoverHeldProducer } from './slider-hover-held-case-review-source.mjs';
 import { loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
 import { joinRetainedPointerFocus, pointerFocusCapture, pointerFocusPredecessor,
   joinRetainedFocusObservationBatch, disabledFocusPredecessor,
@@ -114,14 +114,14 @@ test('retained focus selection preserves prior sources invocations and actual re
   for(const[file,kind]of[[runnerFile,'runner'],[launcher,'launcher']]){
     const text=readFileSync(file,'utf8');
     const prior=execFileSync('git',['show',`6f40e1e0:${file}`],{encoding:'utf8'}).replaceAll('\r\n','\n');
-    assert.equal(restoreRetainedFocusExportSource(restoreSliderHoverHeldExportSource(text,kind),kind),prior);
+    assert.equal(restoreRetainedFocusExportSource(text,kind),prior);
     assert.throws(()=>restoreRetainedFocusExportSource(text+'\n// drift\n',kind));
   }
 });
 
 test('retained focus producer registration preserves complete accepted sources and proofs', () => {
   const file='tests/material-parity/input-equivalence-audit.mjs',source=readFileSync(file,'utf8');
-  const prior=restoreRetainedFocusProducer(restoreSliderHoverHeldProducer(source));
+  const prior=restoreRetainedFocusProducer(source);
   assert.equal(prior,execFileSync('git',['show',`6f40e1e0:${file}`],{encoding:'utf8',maxBuffer:8000000}).replaceAll('\r\n','\n'));
   assert.throws(()=>restoreRetainedFocusProducer(source+'\n// drift\n'));
   const collect=text=>{

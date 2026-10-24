@@ -295,6 +295,25 @@ export function restoreRadioCaretProducer(source) {
 
 export function restoreRetainedFocusExportSource(source, kind) {
   let text=source.toString().replaceAll('\r\n','\n');
+  // Newest export-selection boundary is shared by every historical caller.
+  if(kind!=='case'&&text.includes('sliderHoverHeld')){
+    assert.equal(hash(text),kind==='runner'?'69565e8cd8b0d0e5c464f5ba51a5244f4cb95575d51a34f9d82a06668ca8645d':'652bdd20b22c306229b4f88e4dcaf014b431139d77d6ac11663b2ff225936876');
+    const remove=addition=>{assert.equal(text.split(addition).length,2);text=text.replace(addition,'');};
+    if(kind==='runner'){
+      remove("import { sliderHoverHeldReview, createSliderHoverHeldReviewReader } from '../tests/material-parity/slider-hover-held-case-review-source.mjs';\n");
+      remove('    const effectiveReaderFactory = options.caseObligationReviewSha256===sliderHoverHeldReview ? createSliderHoverHeldReviewReader : finalReaderFactory;\n');
+      assert.equal(text.split('const applicability=effectiveReaderFactory?.').length,2);
+      text=text.replace('const applicability=effectiveReaderFactory?.','const applicability=finalReaderFactory?.');
+      assert.equal(hash(text),'834e43c9f191e205b263bea230384211a058e80886d75e1188e076c5ec65a092');
+    }else{
+      assert.equal(kind,'launcher');
+      remove("const sliderHoverHeld = rawRequested.includes('--slider-hover-held');\nassert.ok(!sliderHoverHeld || rawRequested.every(argument => ['--slider-hover-held', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');\n");
+      remove(", '--slider-hover-held'");remove('|--slider-hover-held');
+      remove("if (sliderHoverHeld) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/c0e397e0a5912d3f492c0d55a3d2b5421d6892f5403ba355c90560da6dbf2cea.json';\n");
+      remove("if (sliderHoverHeld) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=c0e397e0a5912d3f492c0d55a3d2b5421d6892f5403ba355c90560da6dbf2cea';\n");
+      assert.equal(hash(text),'a0e5c567becc970c55b86d32cbf4809b4330ee52023a1cb0c25135770489c06f');
+    }
+  }
   if(kind==='case'||!text.includes('retainedFocus'))return text;
   const digest='aeb1ef1452d65ab53677088ee2944bdf453a7b0d2e0e9f6fed0f987a4e3f4a36';
   const remove=addition=>{assert.equal(text.split(addition).length,2);text=text.replace(addition,'');};
@@ -319,7 +338,24 @@ export function restoreRetainedFocusExportSource(source, kind) {
 }
 
 export function restoreRetainedFocusProducer(source) {
-  const text=source.toString().replaceAll('\r\n','\n');
+  let text=source.toString().replaceAll('\r\n','\n');
+  // All historical provenance callers enter here. Remove the exact newer
+  // inventory once,not through a growing set of caller-specific test wrappers.
+  if(text.includes('Slider hover held producer inventory conservation')){
+    assert.equal(hash(text),'4d6fe33dde4efeb07359040ab7c1ab6407f0825f804cd8df97efbc1a11a2b60f');
+    const ast=ts.createSourceFile('producer.mjs',text,99,true);
+    const owner=name=>ast.statements.find(node=>ts.isFunctionDeclaration(node)&&node.name?.text===name);
+    const proofs=owner('focusedProofInventory').body.statements[0].expression.elements;
+    const files=owner('sourceFingerprints').body.statements[0].declarationList.declarations[0].initializer.elements;
+    assert.equal(proofs.length,285);assert.equal(files.length,962);
+    assert.equal(proofs[0].arguments[3].text,'configured input focus dependency transition');
+    assert.equal(proofs[6].arguments[3].text,'Slider hover held producer inventory conservation');
+    assert.equal(files[0].text,'scripts/audit-material-configured-input-focus.mjs');
+    assert.equal(files[6].text,'tests/material-parity/slider-hover-held-case-review-source.spec.mjs');
+    for(const[start,end]of[[proofs[0].getFullStart(),proofs[6].end+1],[files[0].getFullStart(),files[6].end+1]].sort((a,b)=>b[0]-a[0]))
+      text=text.slice(0,start)+text.slice(end);
+    assert.equal(hash(text),'3aa377997071b510e233e95e7ad084c0413223fdc57ec833c5788f1c70a50ee7');
+  }
   if(!text.includes('retained focus producer inventory conservation'))return text;
   const ast=ts.createSourceFile('producer.mjs',text,99,true);
   const owner=name=>ast.statements.find(node=>ts.isFunctionDeclaration(node)&&node.name?.text===name);

@@ -2,6 +2,34 @@
 
 ## Current audit pointer — October24
 
+- Accepted canonical/compact remains7e02d8f0/index620874d6 (955 paths/278 proofs).
+  All2311 cases remain partial/current-rendering unverified;no rendering or
+  inspection acceptance gate is relaxed. Working Slider successor remainsc0e397e0,
+  at962 paths/285 proofs,seven additions and now SIX bounded old-source changes.
+  All278 previous proof non-line fields/order conserve;no source removals.
+- First Slider export51017 was intentionally stopped in build-audit after a
+  decisive check exposed a shared legacy provenance gap:direct restoration
+  expected278 proofs but received285. Narrow caller wrappers had concealed that
+  entry-point failure. Child23276 was identity-checked before termination;
+  wrapper exits-1. Accepted gzipSHA7e02 and manifest are unchanged;keep its logs.
+  Shared restoreRetainedFocusProducer/ExportSource now remove the exact newest
+  inventory/selection before older provenance stages. Complete old helper0c5e1521
+  recovers from68db8454;arbitrary drift rejects. Older callers need no new
+  export/producer wrappers;the historical955/278 inventory test retains only its
+  explicit cohort view. Current retained-test629426b4 recovers original69186088.
+- New source/selection suite3/3 and retained selection/inventory2/2 pass;five
+  additional direct Radio,Table and static-semantic compatibility checks pass
+  in22311.4599ms,logSHA41f87151bbf6b107828952c73f031fb61855f8fa57bdbdc8ce993bdeca4b5024.
+  Full corrected reader passes2311 cases/17549 dependencies in50240.4534ms,
+  logSHAa33effdf53209475472928761ebab11e6c3e8dca31cc6116636210bf26e0600b;
+  stderr empty. Census6 changed paths are benchmark,retained-focus test,shared
+  registration helper,launcher,runner,producer;all full predecessors recover.
+  Next freeze this corrected boundary and use a NEW export-log prefix,then
+  complete conservation,cold replay and verified import. Do not restart the
+  stopped handle or treat earlier registration as canonical publication.
+
+### Slider/focus milestone history (earlier stage statuses below are historical)
+
 - Slider/focus batch registration is frozen at962 unique source paths/285 focused
   proofs,adding exactly7/7 to accepted955/278. Complete prior producer3aa37799
   recovers from4d6fe33d after only the inventory additions;all278 prior proof

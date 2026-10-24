@@ -1,5 +1,15 @@
 # Audit artifact retention
 
+October24 first Slider canonical export is intentionally stopped,not accepted:
+session51017 exits-1 after verified child23276 is stopped during build-audit.
+Preserve slider-focus-canonical-export-20261024.log (empty SHAe3b0c442...) and
+its stderr progress record. A direct shared provenance check demonstrated
+285-versus278 rejection before source edits;this is not a timeout/restart loop.
+Accepted compressed payload still hashes7e02d8f0. Corrected shared-owner proof
+logs slider-focus-shared-provenance-integration-20261024 (5/5) and
+slider-focus-shared-reader-integration-20261024 (2311 cases/17549 dependencies)
+are required evidence;keep their empty stderr logs. Retry uses new log names.
+
 October24 Slider proposal storage recovery:initial atomic save of217fe38c failed
 ENOSPC despite289MB observed free,leaving zero-byte
 proposals/217fe38c055fedc1bad4bb13b4d4204f09eca5d954662fd2de40a438ea0537b4.json.25468.tmp.

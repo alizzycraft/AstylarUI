@@ -5,7 +5,8 @@ import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import ts from 'typescript';
 import path from 'node:path';
-import { restoreSliderHoverHeldBenchmark, createSliderHoverHeldReviewReader, restoreSliderHoverHeldExportSource, restoreSliderHoverHeldProducer, restoreSliderHoverHeldRetainedTest, sliderHoverHeldReview } from './slider-hover-held-case-review-source.mjs';
+import { restoreSliderHoverHeldBenchmark, createSliderHoverHeldReviewReader, restoreSliderHoverHeldExportSource, restoreSliderHoverHeldProducer, restoreSliderHoverHeldRetainedTest, restoreSliderHoverHeldSharedRegistration, sliderHoverHeldReview } from './slider-hover-held-case-review-source.mjs';
+import { restoreRetainedFocusProducer, restoreStaticSemanticProducer, restoreRetainedFocusExportSource } from './static-semantic-registration.mjs';
 
 test('slider hover-held producer registration conserves accepted inventories', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs', source = readFileSync(file, 'utf8');
@@ -27,6 +28,15 @@ test('slider hover-held producer registration conserves accepted inventories', (
   assert.equal(createHash('sha256').update(restoreSliderHoverHeldRetainedTest(retainedTest)).digest('hex'),
     '69186088c5f756679132657b9e89c39556076f666446c030fa749de044cfdd5b');
   assert.throws(() => restoreSliderHoverHeldRetainedTest(retainedTest + '\n// drift\n'));
+  const shared = readFileSync('tests/material-parity/static-semantic-registration.mjs', 'utf8');
+  assert.equal(createHash('sha256').update(restoreSliderHoverHeldSharedRegistration(shared)).digest('hex'),
+    '0c5e1521276c8721d245b7dfd8fbf12a11aa109162059897df298d2108ee033b');
+  assert.throws(() => restoreSliderHoverHeldSharedRegistration(shared + '\n// drift\n'));
+  assert.equal(createHash('sha256').update(restoreRetainedFocusProducer(source)).digest('hex'),
+    '0d5d56e87b3474630a211f685d0817ff94b5dd7eb32a07036f78e20366aa3392');
+  assert.equal(createHash('sha256').update(restoreStaticSemanticProducer(source)).digest('hex'),
+    '7e0caa327de5fbde079ee59b469aa4f18f2cf030a3e5a137770d5fe5ac0b0a22');
+  assert.throws(() => restoreRetainedFocusProducer(source + '\n// drift\n'));
 });
 
 test('slider hover-held selection preserves older invocations and routes only the exact successor', () => {
@@ -62,6 +72,7 @@ test('slider hover-held selection preserves older invocations and routes only th
   for (const [file, kind] of [['scripts/run-material-input-audit.mjs', 'runner'], [launcher, 'launcher']]) {
     const source = readFileSync(file, 'utf8');
     assert.ok(restoreSliderHoverHeldExportSource(source, kind).length > 0);
+    assert.ok(restoreRetainedFocusExportSource(source, kind).length > 0);
     assert.throws(() => restoreSliderHoverHeldExportSource(source + '\n// unreviewed drift\n', kind));
   }
 });

@@ -51,6 +51,16 @@ index for current counts and pending integration work, not the figures above.
 
 ## One investigation per question
 
+Before the Slider export retry,the shared historical provenance entry is now
+explicitly tested with the current962/285 producer and current runner/launcher,
+not only via newest case-reader wrappers. The first export was intentionally
+stopped after that direct check exposed285-versus278 rejection. Shared owner
+now removes the exact newest inventory/selection before old stages;whole helper
+predecessor recovers. Five older Radio/Table/static compatibility checks plus
+new/retained suites and full17549-dependency replay pass. There are now six
+bounded changed old paths,not the earlier five. Preserve first-run logs and use
+a new prefix for retry;accepted7e02 and all original case/gate statuses remain.
+
 The Slider/focus batch is registered at962 paths/285 proofs,adding7/7 to the
 complete accepted955/278 population. Five old-source transitions are bounded
 and reversible;no sources or prior proof non-line fields are removed. Ten focused
