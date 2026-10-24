@@ -296,12 +296,13 @@ test('actual renderer event callback excludes public focus events from semantic 
   };
   const owner = { inputElementService: { getFocusedElementId: () => undefined, isFocusVisible: () => true },
     hasLiveTextSelection: () => false, getLiveSemanticControlState: () => ({}) };
+  const interactionState = { snapshot: { focusedElementId: 'popup', focusVisible: true } };
   const handler = new Function('semanticBridge', 'options', 'interaction',
     'let pointerFocusTransaction = false; ' + current.code + ';return cb;').call(owner,
-      bridge, {}, { snapshot: { focusedElementId: 'popup', focusVisible: true } });
+      bridge, {}, interactionState);
   handler({ type: 'focus' });
   assert.deepEqual(trace, ['control-state']);
-  const runtimeMethods = ['focusElement', 'setFocus', 'getFocusedElementId', 'liveState'];
+  const runtimeMethods = ['focusElement', 'blurElement', 'setFocus', 'getFocusedElementId', 'liveState'];
   const runtimeCode = file => {
     const bytes = readFileSync(file), ast = ts.createSourceFile(file, bytes.toString(), 99, true, ts.ScriptKind.TS);
     const owner = ast.statements.find(n => ts.isClassDeclaration(n) && n.name?.text === 'AstylarInteractionRuntime');
@@ -316,7 +317,9 @@ test('actual renderer event callback excludes public focus events from semantic 
   assert.equal(typedRuntime.replace(/\s/g, ''), installedRuntime.replace(/\s/g, ''));
   const Runtime = new Function(typedRuntime + ';return Probe;')(), runtime = new Runtime();
   Object.assign(runtime, { disposed: false, focusableElementIds: new Set(['popup']), controlTypes: new Map(),
-    isAllowedByModal: () => true, dispatcher: { hasEnabledTarget: () => true, getElementState: () => ({}), dispatch: event => handler(event) } });
+    isAllowedByModal: () => true, dispatcher: { hasEnabledTarget: () => true, getElementState: () => ({}), dispatch: event => {
+      interactionState.snapshot.focusedElementId = runtime.getFocusedElementId(); handler(event);
+    } } });
   trace.length = 0;
   assert.equal(runtime.focusElement('popup', { scrollIntoView: false }), true);
   assert.equal(runtime.getFocusedElementId(), 'popup'); assert.deepEqual(trace, ['control-state']);
@@ -324,8 +327,12 @@ test('actual renderer event callback excludes public focus events from semantic 
   assert.deepEqual(trace, ['control-state', { focus: 'popup', keepCanvas: false, visible: true }]);
   trace.length = 0; handler({ type: 'click' });
   assert.deepEqual(trace, ['control-state', { focus: 'popup', keepCanvas: false, visible: true }]);
+  trace.length = 0;
+  assert.equal(runtime.blurElement(), true); assert.equal(runtime.getFocusedElementId(), undefined);
+  assert.equal(trace.length, 2); assert.equal(trace[0], 'control-state');
+  assert.equal(trace[1].focus, undefined); assert.equal(trace[1].keepCanvas, false);
   console.log(JSON.stringify({ current: { ...current, code: undefined }, installed: { ...installed, code: undefined },
-    focusEventsQueueNativeFocus: false, keyboardAndClickControlsQueueNativeFocus: true,
+    focusEventsQueueNativeFocus: false, keyboardAndClickControlsQueueNativeFocus: true, blurQueuesNativeFocus: true,
     boundary: 'Complete actual callback with explicit no-pointer/no-selection controls. Public request reproduction separately proves failure;not a fix or waiver of pointer/selection/modal safeguards.' }));
 });
 

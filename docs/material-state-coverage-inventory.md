@@ -9,6 +9,22 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Blur method control further bounds the confirmed public-focus cause without
+another browser/build. The owning proof now executes complete blurElement as
+well as focusElement,setFocus,getFocusedElementId/liveState;all five current
+methods transpile-match actual installed methods. Runtime dispatcher feeds the
+actual renderer callback with updated logical owner. Focus accepts/emits but
+does not queue native sync;blur clears owner,emits blur and reaches the native
+sync queue for undefined owner. Key/click controls remain positive. This excludes
+an entirely inactive callback/queue as the mechanism in the tested no-pointer/
+no-selection path. It does NOT prove public blur's complete browser/modal/
+selection/lifetime behavior. Pending finding records that exact boundary.
+
+Focused1/1,nativeExit0;keep public-focus-versus-blur-event-control-20261024 pair.
+No full-canonical or browser rerun for this owner-method control;prior package
+failure evidence and14/15-test historical milestones retain their original
+scope. Frozen inventory,case flags and canonical pointer unchanged. No core fix.
+
 Configured Menu focus action is now distinguished from the newly confirmed
 public surface.focus defect using authenticated ORIGINAL source,not current
 runner assumptions. Recovered e01 raw bytes authenticate;complete original and
