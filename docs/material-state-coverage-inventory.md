@@ -9,6 +9,30 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Menu semantic support question narrowed with actual current owning methods,
+not another showcase capture or a fixture workaround. Existing runtime spec
+already exercises focusElement on tabindex=-1. New isolated-method proof executes
+complete buildFocusableElementIds/buildFocusOrder:explicit -1 popup is eligible
+for programmatic focus and excluded from sequential order;omitted generic menu
+is ineligible. Complete current semantic applyAttributes/nativeId/nativeIdRefs
+methods execute against real Chrome DOM. Equal explicit negative-tabindex native/
+candidate divs both focus;omitted candidate does not. Reapplying an input without
+ariaControls removes the previous controls attribute. Thus these owners do not
+lose a supplied -1 or retain a relationship omitted by authoring in the tested
+reduction. Known attribute-refresh focus-lifetime findings are not contradicted:
+the proof explicitly does not test update while focused or whole-surface behavior.
+
+Full existing AX suite passes10/10,nativeExit0;keep menu-semantic-negative-
+tabindex-method-proof-20261024 pair. Focused rerun after compact log formatting
+passes1/1,native0;menu-semantic-negative-tabindex-focused-20261024 pair retains
+whole-source/method hashes and exact browser results. This is isolated current
+method/native DOM evidence,NOT package-root/full WebGL/AX/current-rendering proof;
+public package composition remains a separate applicability boundary. No core or
+fixture change. Standalone test declarations now11 rather than prior census10;
+12 standalone source paths and frozen1002/326 inventory remain unchanged. Later
+registration must recensus current standalone hashes,not reuse superseded10-test
+metadata. No canonical pointer or case status advanced.
+
 Outstanding source/proof reconciliation is now explicitly censused,not inferred
 from HEAD alone. Existing producer functions collect1002 sources/326 proofs.
 Authenticated accepted extracte7f8cc38 plus prior owner/frame vector prove ALL

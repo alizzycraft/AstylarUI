@@ -6,6 +6,8 @@ import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
 import { menuPopupSemanticInputFindings } from './menu-popup-semantic-input-findings.mjs';
 import { materialStaticCases, materialInteractionCases, materialMobileFlowCases } from './benchmark.config.mjs';
+import { chromium } from 'playwright-core';
+import { materialBrowserLaunchOptions } from './run-checkpoint.mjs';
 
 const file = 'artifacts/material-parity/menu-popup-ax-20261024/latest-report.json';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -177,4 +179,51 @@ test('mobile producer verification entry point authenticates captured source wit
   assert.equal(result.reportSha256, '04ab953a6db5773212b85c9bc09c20d01708d065c38704a36ce1f58038620ba0');
   assert.equal(result.historicalProducerAuthenticated, true);
   assert.equal(result.sideBoundaries, 28); assert.equal(result.currentRenderingAccepted, false);
+});
+
+test('isolated current focus eligibility and semantic projection honor supplied negative tabindex and removed controls', async () => {
+  const extract = (file, owner, names) => {
+    const bytes = readFileSync(file), ast = ts.createSourceFile(file, bytes.toString(), 99, true, ts.ScriptKind.TS);
+    const cls = ast.statements.find(n => ts.isClassDeclaration(n) && n.name?.text === owner);
+    assert.ok(cls);
+    const methods = names.map(name => {
+      const matches = cls.members.filter(n => ts.isMethodDeclaration(n) && n.name.getText(ast) === name);
+      assert.equal(matches.length, 1); return matches[0].getText(ast);
+    });
+    const code = ts.transpileModule(`class Probe { ${methods.join('\n')} }`, {
+      compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.None },
+    }).outputText;
+    return { code, file, sha256: hash(bytes), methodsSha256: hash(methods.join('\n')) };
+  };
+  const runtime = extract('src/lib/astylar-interaction-runtime.ts', 'AstylarInteractionRuntime', ['buildFocusableElementIds', 'buildFocusOrder']);
+  const Runtime = new Function(runtime.code + ';return Probe;')(), probe = new Runtime();
+  const site = { styles: [], root: { children: [
+    { type: 'div', id: 'popup', role: 'menu', tabindex: -1 },
+    { type: 'div', id: 'omitted', role: 'menu' }, { type: 'button', id: 'trigger' },
+  ] } };
+  assert.deepEqual([...probe.buildFocusableElementIds(site)], ['popup', 'trigger']);
+  assert.deepEqual(probe.buildFocusOrder(site), ['trigger']);
+  const bridge = extract('src/lib/astylar-semantic-bridge.ts', 'AstylarSemanticBridge', ['applyAttributes', 'nativeId', 'nativeIdRefs']);
+  const browser = await chromium.launch(materialBrowserLaunchOptions());
+  try {
+    const page = await browser.newPage();
+    const result = await page.evaluate(code => {
+      const Probe = new Function(code + ';return Probe;')(), bridge = new Probe(); bridge.prefix = '';
+      const reset = document.createElement('button'), reference = document.createElement('div'), candidate = document.createElement('div');
+      document.body.append(reset, reference, candidate);
+      reference.setAttribute('role', 'menu'); reference.setAttribute('tabindex', '-1');
+      bridge.applyAttributes(candidate, { type: 'div', id: 'popup', role: 'menu', tabindex: -1, ariaControls: 'item' });
+      reference.focus(); const nativeFocused = document.activeElement === reference;
+      reset.focus(); candidate.focus(); const candidateFocused = document.activeElement === candidate;
+      const negativeTabindex = candidate.getAttribute('tabindex');
+      reset.focus(); bridge.applyAttributes(candidate, { type: 'div', id: 'popup', role: 'menu' });
+      candidate.focus();
+      return { nativeFocused, candidateFocused, negativeTabindex, omittedTabindex: candidate.getAttribute('tabindex'),
+        omittedFocused: document.activeElement === candidate, removedControls: candidate.getAttribute('aria-controls') };
+    }, bridge.code);
+    assert.deepEqual(result, { nativeFocused: true, candidateFocused: true, negativeTabindex: '-1',
+      omittedTabindex: null, omittedFocused: false, removedControls: null });
+    console.log(JSON.stringify({ runtime: { ...runtime, code: undefined }, bridge: { ...bridge, code: undefined }, result,
+      boundary: 'Complete extracted methods and native browser DOM only;not package-root/full-surface proof,AX,paint,focus update lifetime or current whole-renderer acceptance.' }));
+  } finally { await browser.close(); }
 });
