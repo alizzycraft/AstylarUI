@@ -9,6 +9,28 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Public focus control matrix answers the negative-tabindex hypothesis without
+changing the expected native-focus behavior. One reused package-root producer
+captures12 equal-input pairs:DPR1/2 x div/span/button elements x tabindex-1/0.
+ALL retain role=menu,including button elements;this is NOT a default-role button
+proof. Every native first focus succeeds,every candidate public request returns
+true but immediate AND settled-before-update DOM focus remainfalse;unchanged
+update then focuses. Thus the gap is not confined to negative tabindex,span/div
+element kind or DPR1. Default-role button,other roles/text controls and public
+blur still need their own applicability decisions rather than extrapolation.
+
+Keep public-programmatic-focus-controls-20261024 bundle/input/build receipts,
+report and failed pass-verifier log pair(nativeExit1,no page errors). Report SHA
+4696d253fbd95a1504b7de4d067c3eb92904bf595e5dfd8bad8aab32fb9144ab.
+The isolated diagnostic adds query-derived equal authored tabindex to both sides
+and records exact case identity;no canonical/showcase/core input is changed.
+Pending public-programmatic-focus finding now references this control report
+separately from the earlier four-pair reduction. Existing audit assertions pass
+12/12,nativeExit0,rehashing every public bundle/input and serving receipt while
+preserving the failing first-focus endpoint. Keep public-programmatic-focus-
+controls-proof-20261024 pair. Twelve audit assertions are not twelve parity passes.
+No frozen inventory,case flags,canonical or remote publication changed.
+
 Settlement-before-update control CONTRADICTS a timing-only explanation of the
 public negative-tabindex diagnostic. New report public-menu-negative-tabindex-
 settled-20261024/latest-report.json SHA256

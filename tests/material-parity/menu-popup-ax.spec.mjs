@@ -248,3 +248,24 @@ test('public negative-tabindex failure remains unfocused after settlement until 
       assert.ok(row[side].assets.some(a => a.type === type && a.sha256 === receipt.sha256));
   }
 });
+
+test('public focus failure is not specific to negative tabindex across twelve menu-role controls', () => {
+  const bytes = readFileSync('artifacts/material-parity/public-programmatic-focus-controls-20261024/latest-report.json');
+  assert.equal(hash(bytes), '4696d253fbd95a1504b7de4d067c3eb92904bf595e5dfd8bad8aab32fb9144ab');
+  const report = JSON.parse(bytes); assert.deepEqual(report.errors, []);
+  const expected = [1, 2].flatMap(d => ['div', 'span', 'button'].flatMap(k => [-1, 0].map(t => `${d}/${k}/${t}`)));
+  assert.deepEqual(report.results.map(r => `${r.dpr}/${r.controlKind}/${r.tabIndex}`), expected);
+  for (const receipt of [report.inputSource, report.bundle, report.html, ...report.inputs]) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256);
+  assert.equal(report.scriptSha256, hash(readFileSync('scripts/audit-public-programmatic-focus-controls.mjs')));
+  for (const row of report.results) {
+    assert.deepEqual(row.reference.site, row.astylar.site);
+    const control = row.astylar.site.root.children[0].children[0];
+    assert.equal(control.tabindex, row.tabIndex); assert.equal(control.type, row.controlKind); assert.equal(control.role, 'menu');
+    assert.equal(row.reference.updates[0].initiallyFocused, true);
+    const sample = row.astylar.updates[0];
+    assert.equal(sample.publicFocusResult, true); assert.equal(sample.immediateFocus, false);
+    assert.equal(sample.settledBeforeUpdate, true); assert.equal(sample.initiallyFocused, false); assert.equal(sample.focused, true);
+    for (const side of ['reference', 'astylar']) for (const [type, receipt] of [['document', report.html], ['script', report.bundle]])
+      assert.ok(row[side].assets.some(a => a.type === type && a.sha256 === receipt.sha256));
+  }
+});
