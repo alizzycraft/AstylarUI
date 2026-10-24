@@ -9,6 +9,24 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Configured Menu focus action is now distinguished from the newly confirmed
+public surface.focus defect using authenticated ORIGINAL source,not current
+runner assumptions. Recovered e01 raw bytes authenticate;complete original and
+current performInteraction functions execute through a minimal DOM target
+boundary in both modes. Their entire focus branch is identical after CRLF-only
+normalization. Each resolves menu-primary and calls native HTMLElement.focus
+exactly once;no public surface object or pointer click is used. Thus eight
+configured Menu focus IDs do not exercise the failing public request path.
+Do not invalidate those records using the new API defect,or count their native
+focus behavior as public API coverage. Focus-obligation status still needs its
+own complete evidence/remaining-task review;this is action routing,not browser
+focus or whole-case closure. Timepicker's explicit click branch remains untouched.
+
+Focused routing proof1/1,nativeExit0;keep menu-configured-focus-action-routing-
+20261024 log pair. Pending public finding records applicability distinction.
+No new browser/build/canonical export or fixture/core change. Earlier public
+failure and original Menu identity/measurement limitations remain preserved.
+
 Public/core versus application focus responsibility now has a bounded call-site
 map,not a claim that one core correction fixes every overlay. AST query finds
 exactly7 surface.focus calls in current source71e2d41f(already byte-matched to

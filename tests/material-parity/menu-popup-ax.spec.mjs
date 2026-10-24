@@ -8,6 +8,7 @@ import { menuPopupSemanticInputFindings } from './menu-popup-semantic-input-find
 import { materialStaticCases, materialInteractionCases, materialMobileFlowCases } from './benchmark.config.mjs';
 import { chromium } from 'playwright-core';
 import { materialBrowserLaunchOptions } from './run-checkpoint.mjs';
+import { gunzipSync } from 'node:zlib';
 
 const file = 'artifacts/material-parity/menu-popup-ax-20261024/latest-report.json';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -359,4 +360,33 @@ test('public focus API initially inherited the existing native-origin focus-even
     parent: { revision: parent.revision, sourceSha256: parent.sourceSha256, publicFocusAbsent: true },
     priorGate: { revision: gate.revision, sourceSha256: gate.sourceSha256, callbackSha256: hash(gate.callback) },
     boundary: 'Exact source introduction and ancestry only;not historical runtime execution,bisect,every intermediate behavior or motive.' }));
+});
+
+test('original and current configured Menu focus actions target native semantic DOM rather than public surface focus', async () => {
+  const original = gunzipSync(Buffer.from(readFileSync('docs/evidence/material-original-runner-e01.mjs.gz.b64', 'utf8').replace(/\s/g, ''), 'base64'));
+  assert.equal(hash(original), 'e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0');
+  let originalFocusBranch;
+  for (const [name, bytes] of [['original', original], ['current', readFileSync('tests/material-parity/run-material-parity.mjs')]]) {
+    const ast = ts.createSourceFile(name, bytes.toString(), 99, true, ts.ScriptKind.JS);
+    const method = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'performInteraction');
+    assert.ok(method);
+    const focus = method.body.statements.find(n => ts.isIfStatement(n) && n.expression.getText(ast) === "state === 'focus'");
+    const branch = focus.thenStatement.getText(ast).replaceAll('\r\n', '\n');
+    if (name === 'original') originalFocusBranch = branch; else assert.equal(branch, originalFocusBranch);
+    const perform = new Function('assert', 'interactionTargetBox', method.getText(ast) + ';return performInteraction;')(
+      assert, async () => ({ x: 0, y: 0, width: 100, height: 40 }));
+    for (const side of ['reference', 'astylar']) {
+      let nativeFocusCalls = 0, evaluations = 0;
+      class Element { matches() { return true; } focus() { nativeFocusCalls++; } }
+      const target = new Element();
+      const document = { getElementById: id => { assert.equal(side, 'reference'); assert.equal(id, 'menu-primary'); return target; },
+        querySelector: selector => { assert.equal(side, 'astylar'); assert.equal(selector, '[data-astylar-id="menu-primary"]'); return target; } };
+      const page = { evaluate: async (fn, id) => {
+        evaluations++; assert.equal(id, 'menu-primary');
+        return new Function('document', 'HTMLElement', 'CSS', 'id', `return (${fn.toString()})(id);`)(document, Element, { escape: id => id }, id);
+      }, mouse: { click: () => assert.fail('Menu focus must not become a pointer action') } };
+      await perform(page, side, { family: 'menu', state: 'focus' });
+      assert.equal(evaluations, 1); assert.equal(nativeFocusCalls, 1);
+    }
+  }
 });
