@@ -9,6 +9,27 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Standalone registration census corrects prior NINE-source prose:there are TEN
+unregistered source files(including divider-block-alignment-context.spec.mjs),
+with SEVEN top-level focused test declarations across four owning suites.
+No source is already in the frozen1028-entry producer inventory;all353 existing
+proof declarations remain. Literal artifact references identify17 files not
+directly in that source list,but this is NOT the complete dependency closure or
+evidence that those receipts were lost:the owning pending loader already checked
+18289 dependencies. Source registration and receipt closure are distinct.
+
+Keep divider-standalone-registration-census-20261025 log pair,nativeExit0,
+stderr empty,stdout SHA256
+27c2a8cf34a5cc99ddb8bc2ce10f640366000ba31f04c5635932d8b1929e291b.
+Census records exact ten raw source hashes,seven literal test titles and current
+producer SHA d791949cfe8a3821d76250379e0c68795759d2f88650ad3414ceeaa7dbd52b17,
+policy SHA cbf641365e8ab55748befc3e59c283e30eadab314519c8f9fbf7f5647f4a7b30.
+Neither file was changed. Existing registration prepare/restore mechanism was
+inspected:next stage must prove complete1028/353/196 predecessor recovery before
+adding these sources/proofs and two scoped findings. Do not blindly register all
+literal evidence paths or describe planned counts as current registration.
+Pendingf812d8d9/canonical88be4d47 and all case statuses remain unchanged.
+
 Coherent outside-owner context successor is now
 f812d8d9e169b51afd03ae43ea06f8b8ac69e6df5147f11589112919c6ef7083.
 It consolidates retained ink/complete property triage/block request rows with
