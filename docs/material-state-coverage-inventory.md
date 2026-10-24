@@ -7,6 +7,32 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Coherent pending evidence registration census — October24
+
+Before changing inventory/export wiring,read-only census verifies current
+registered968-source/293-proof builder and all committed standalone additions
+since frozenb521bafd:13 added paths,19 actual top-level focused test titles,
+no changed existing script/test paths in that commit range. Complete new path
+hashes/title locations retained in pending-evidence-source-proof-census-20261024.log,
+SHA8133d97002ea7284e5b3792e8c20fdb92df046fb2c5b57e4ed9dffc142effbf1.
+981/312 is the arithmetic population BEFORE any needed registration/reader wiring,
+not a registered/final source count. Current193 source definitions are unchanged.
+
+Coherent six-suite integration runs sequential files (not parallel multi-GB
+review loads):caret-retained-frames,dialog-owner-semantic-inputs,focus-action-scope,
+original-material-runner-join,original-material-runner-source,snackbar-live-policy.
+TERMINAL0,19/19,zero skips,93678.5349ms;includes existing complete2311-case/17555-
+dependency reader,not a browser recapture or full canonical rebuild. Log
+pending-evidence-coherent-integration-20261024 SHA
+8e62957e0654f47da8c34cdcf6298b19a13a04eef69c1f00453d5df77bacdd11;
+stderr empty. Keep these two compact records for the next coherent registration.
+Do not repeat all19 for documentation-only changes or create another full proposal
+just to store this census. Accepted a659/frozen c394/virtual7dfee remain distinct;
+no case flags,acceptance,source inventory or export selector changed yet.
+Next stage is bounded inventory/export-reader integration with complete old-source
+restoration,not more variants of settled AX/font/focus observations. Preserve the
+original source/hash recovery,all standalone findings and final acceptance gates.
+
 ### Recovered-runner case-source reconciliation — verified October24
 
 scripts/join-material-original-runner-source.mjs authenticates the complete c394
