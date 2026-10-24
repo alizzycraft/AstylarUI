@@ -20,6 +20,16 @@ not configured;no credentials,host trust,remote settings or history changed.
 Keep the verified local commits and obtain a working large-push transport.
 Current canonical remains a659;next registered c394 milestone is deferred,not
 accepted or waived. All original audit coverage and final gates remain open.
+Read-only follow-up finds no proxy environment/configuration names among the
+checked keys;Git2.50.0.windows.1 is configured for Schannel. GitHub's public
+Git Operations component reports operational at the check,which does not rule
+out a limited route/server issue. OpenSSL passes read-only ls-remote with peer
+verification enabled,but a bounded fourth full-object upload99994 also exits1/
+HTTP408 (102 objects/83.31MiB/zero deltas). Remote still645c99b8. TLS-backend
+substitution did not resolve this failure;global Schannel setting is unchanged.
+No more unchanged upload combinations without new connection evidence. Local
+read-only provenance work may continue under frozen sources;publication and
+canonical final gates still require a working large-push route.
 
 - Slider batch is registered at193 findings/968 source paths/293 focused proofs.
   Six paths/eight proofs add to accepted962/285 with no removals. Current producer

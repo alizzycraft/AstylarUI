@@ -1,5 +1,15 @@
 # Audit artifact retention
 
+October24 OpenSSL publication follow-up99994 also exits1/HTTP408. Retain
+slider-state-publication-openssl-20261024.log (empty SHAe3b0c442...) and
+stderrSHA0c19cf166079dee8e346e7317d94ebaf16525e33d4070c5b8438e00b953d5de6.
+Pack completes102 objects/83.31MiB/zero deltas locally;independent remote lookup
+still645c99b8. Per-command OpenSSL/peer verification leaves configured Schannel
+unchanged. Public GitHub status reports operational;no proxy key values,secrets
+or curl credential traces were collected. This does not locate the network/
+server failure. Preserve local verified commits and stop unchanged upload retries;
+do not create another large canonical generation solely to work around transport.
+
 October24 full-object publication attempt60891 exits1/HTTP408. Preserve
 slider-state-publication-full-object-20261024.log (empty SHAe3b0c442...) and
 its stderrSHA0f9e5f80ccbe43af8a6a78ea8565345c0e972afebbce1aa285e0c4a2a22d15f7.
