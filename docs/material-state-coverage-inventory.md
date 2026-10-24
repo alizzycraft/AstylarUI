@@ -9,6 +9,28 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Storage/publication recheck: D:262418432 bytes free,C:2045992960;do not start
+large export. Important stale-cleanup correction:old-test-build-removal-review-
+20261020.json(SHA25615bb2076943f54c6f2287a7051d089df903531903c26e0bd1b9ef4725e35850c)
+authenticates its original302-directory inventory6e6f8a77 and11.47GB logical
+estimate,but current realpath D:/dev/github/AstylarUI-material/dist/test-out is
+EMPTY. Exact302 reviewed child paths checked with existsSync:0 present,302
+absent. No additional cleanup space exists there;who/when removed them is not
+established. This turn performed no deletion/move/compression. Do not ask to
+delete those nonexistent directories or quote historical logical size as current
+recoverable space. Old deletionAuthorized=false is historical record,not evidence
+that directories still exist.
+
+Exact tmp_pack_vAx7fc remains286916608 bytes,Oct17 timestamp. git count-objects
+reports it as garbage plus worktree refs garbage;this is not deletion authority
+or proof that Git-internal manipulation is needed/sufficient. No pack moved or
+deleted,no gc/repack. Known buffered HTTP/1.1/full-object/OpenSSL failures already
+documented;no unchanged push retry. Retention policy still forbids another large
+canonical generation before viable publication route. Next investigate other
+safe storage candidates/read-only transport alternatives,or continue remaining
+coverage gaps without publication;do not let stale cleanup inventory trigger
+destruction or mark entire audit complete/blocked while safe work remains.
+
 Menu/focus/Select/disabled batch is now REGISTERED LOCALLY,not merely prepared:
 1028 source paths/353 proof declarations/196 source findings. Four live files
 (producer,policy,launcher,runner) exactly equal their tested prepared transitions;
