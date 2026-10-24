@@ -2,6 +2,31 @@
 
 ## Current audit pointer — October24
 
+- Slider raw hover/held gap:accepted aeb1ef14 review has16 authoredActivation
+  evidence-join-pending cases (four profiles,desktop DPR1/2,both states),separate
+  from its50 partial activation anchors. Existing drag/keyboard/disabled proofs
+  do not inspect these actions. New exact maintained-action capture
+  artifacts/material-parity/slider-hover-held-20261024/latest-report.json,
+  SHAde4228f971a0b0b341a21c9d71a20d9f351701ec634257732c6ed6d929a8ec98,
+  completes exit0 and existing checkpoint/source/runtime/tree/screenshot verifier
+  passes16 cases/48 paired boundaries. Retains32 trees/32 PNGs,original pointer
+  actions,raw maintained state/events and direct DOM capture-listener events.
+  Held release callback runs only after its held screenshot;no replacement drag,
+  semantic focus or application state correction. All8 held contexts observe
+  trusted pointerdown/focus on native INPUT slider-primary versus candidate
+  CANVAS. No pointerup/click/input/change occurs before the held checkpoint;
+  both values remain30/65. All8 hover contexts retain BODY/no pointerdown.
+  Configured candidate logical events and actual DOM events remain distinct;
+  CANVAS versus INPUT alone is not a demonstrated core bug or equal hit target.
+  New owning benchmark test passes1/1,including removed-pointerdown rejection.
+  This closes raw-action evidence acquisition only:local paint,cursor/target
+  equivalence,other input/history/currentness/lifetime and whole-case inspection
+  remain open. These16 records are not yet joined/canonical;do not decrement
+  accepted obligation counts until the existing reviewed-proposal integration.
+  Next join exactly these16 raw-action receipts while preserving remaining work,
+  and integrate the bounded source transitions in a coherent batch. No full
+  export or new browser run is justified merely to record this capture.
+
 - Configured input-focus boundary capture completed exit0 and its existing
   checkpoint/receipt/source-recipe verifier passes40 cases,120 paired action
   boundaries and80 paired measurement boundaries. Report:

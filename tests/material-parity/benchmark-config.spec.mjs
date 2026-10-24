@@ -18,6 +18,47 @@ import { restoreSizingDefaultPolicyRegistration, restoreFlexMarginPolicyRegistra
 import { materialAbsoluteTextAlignmentTargets, materialAdditionalMeasurementTargets, materialComparisonViewport, materialFamilies, materialFocusedRasterTargets, materialGeometryExcludedTargets, materialInteractionCases, materialInteractionFocusedRasterTargets, materialInteractionTextAlignmentTargets, materialInteractionViewports, materialLeftAlignedTextTargets, materialMobileFlowCases, materialMobileFlowFamilies, materialProfiles, materialSemanticExcludedTargets, materialStaticCases, materialSupplementalStaticCases, materialTextAlignmentTargets, materialTextAlignmentToleranceOverrides, materialTextAuditTargets, materialTextlessFamilies, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets, materialViewports } from './benchmark.config.mjs';
 
 const sourceAuditDefinitions = historicalSemanticDefinitions(currentSourceAuditDefinitions);
+test('configured slider hover and held retain raw pointer boundaries without accepting paint', t => {
+  const file = 'artifacts/material-parity/slider-hover-held-20261024/latest-report.json';
+  const bytes = readFileSync(file);
+  const hash = value => createHash('sha256').update(value).digest('hex');
+  assert.equal(hash(bytes), 'de4228f971a0b0b341a21c9d71a20d9f351701ec634257732c6ed6d929a8ec98');
+  const report = JSON.parse(bytes);
+  const manifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
+  assert.deepEqual(validateSupplementalCapture(report, { reportFile: file, expectedProvenance: manifest.provenance,
+    script: 'scripts/audit-material-slider-hover-held.mjs', styleProperties: Object.values(propertyGroups).flat() }),
+  { status: 'checkpoint-bound', errors: [] });
+  const expected = materialInteractionCases.filter(row => row.family === 'slider' && ['hover', 'held'].includes(row.state));
+  assert.equal(expected.length, 16);
+  assert.deepEqual(report.results.map(row => row.caseId).sort(), expected.map(row => materialCaseKey('interaction', row)).sort());
+  const inspect = row => {
+    for (const side of ['reference', 'astylar']) {
+      const observations = row[side].observations;
+      assert.deepEqual(observations.map(value => value.boundary), ['before', 'after-action', row.state === 'held' ? 'held' : 'settled']);
+      const last = observations.at(-1);
+      assert.deepEqual([last.state.sliderStart, last.state.sliderValue], [30, 65]);
+      assert.equal(last.events.some(event => ['pointerup', 'click', 'input', 'change'].includes(event.type)), false);
+      if (row.state === 'held') {
+        const downs = last.events.filter(event => event.type === 'pointerdown');
+        assert.equal(downs.length, 1); assert.equal(downs[0].trusted, true);
+        assert.equal(downs[0].target.tag, side === 'reference' ? 'INPUT' : 'CANVAS');
+        assert.equal(last.active.tag, side === 'reference' ? 'INPUT' : 'CANVAS');
+        if (side === 'reference') assert.equal(last.active.logicalId, 'slider-primary');
+      } else {
+        assert.equal(last.events.some(event => event.type === 'pointerdown'), false);
+        assert.equal(last.active.tag, 'BODY');
+      }
+      assert.equal(hash(readFileSync(row[side].screenshot.file)), row[side].screenshot.sha256);
+    }
+  };
+  report.results.forEach(inspect);
+  const altered = structuredClone(report.results.find(row => row.state === 'held'));
+  altered.astylar.observations.at(-1).events = altered.astylar.observations.at(-1).events.filter(event => event.type !== 'pointerdown');
+  assert.throws(() => inspect(altered));
+  assert.equal(report.inputEquivalent, false); assert.equal(report.renderingEquivalent, false);
+  t.diagnostic('16 exact raw-action cases:8 held native INPUT versus candidate CANVAS focus,8 hover BODY on both;values30/65 remain. DOM and configured logical event streams are distinct. Not local-paint,equal-hit-target,current-library or whole-case acceptance.');
+});
+
 test('retained public unchanged-root updates preserve semantic focus failure at both DPRs', async () => {
     const hash = bytes => createHash('sha256').update(bytes).digest('hex');
     // Conserve the complete previous suite, not merely its old assertion count.

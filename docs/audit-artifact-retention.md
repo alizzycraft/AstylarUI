@@ -1,5 +1,13 @@
 # Audit artifact retention
 
+October24 slider-hover-held-20261024 is unique unresolved-difference evidence,
+not successful disposable scratch. Retain32 PNGs,32 trees,complete report
+SHAde4228f971a0b0b341a21c9d71a20d9f351701ec634257732c6ed6d929a8ec98,
+provenance/checkpoint and capture logs. The source recipe embeds the exact new
+wrapper,activation owner and maintained action runner. Verifier passes16 cases/
+48 paired boundaries;this is not whole-case/rendering acceptance. No older
+slider evidence is superseded or eligible for deletion merely because this exists.
+
 October24 input-focus boundary evidence:retain configured-input-focus-boundaries-
 20261024 and its provenance/checkpoint,80 trees,80 PNGs and complete report
 SHA8e176417defd6d8bbd2f9276adc8d37828867fce006cf80b4a74e4034aa9d118.
