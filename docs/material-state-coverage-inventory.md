@@ -9,6 +9,31 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Title UA margin provenance now observed via read-only CDP matched styles on
+authenticated retained build:one light/desktop-DPR1 native context,Chrome155.
+Only matching margin rule is user-agent h1:margin-block-start/end0.67em,
+inline-start/end0px;computed font32px,horizontal-tb gives21.44px top/bottom.
+No authored style/DOM marker/build change. Original24 retained title pairs/48
+tree receipts all retain font32px,native computed21.44px and candidate21.44px 0
+in all three stages;native captured author rules do not supply a margin override.
+Equivalent-representation classification is scoped RESOLVED LENGTH at fixed32px,
+not UA-source identity,arbitrary font updates,margin collapse or default handling.
+Do not claim historical original-browser UA replay from this fresh corroboration.
+Candidate explicit pixels bypass its own.67em default path;this result cannot
+prove that omitted/default/em layout behavior works or justify new compensations.
+
+New standalone producer audit-material-divider-heading-ua.mjs and corrected-scope
+capture nativeExit0;independent divider-heading-ua-verification-20261025 native0
+rehashes actual loaded assets,baseline,producer and48 trees. Preserve initial
+divider-heading-ua-20261025 pair plus initial-producer archive:its inherited
+summary incorrectly said four themes though rows correctly contained one.
+Archive full SHA matches initial capture producer receipt. Metadata corrected
+and only this tiny CDP probe rerun into divider-heading-ua-correct-scope-20261025;
+no old result/source receipt rewritten. All stderr empty. Core/source registry,
+canonical pointer,case flags and original criteria unchanged. Next focus the
+remaining paragraph wrapper margin/positioning input correspondence,not repeat
+UA or generic normal-line-height tests.
+
 Eyebrow margin INPUT lengths now have bounded equivalent-representation proof
 for all24 retained Divider cases/48 authenticated trees. Native authored
 margin-block:calc(16px * var(--scale)) is present in serialized cssText even
