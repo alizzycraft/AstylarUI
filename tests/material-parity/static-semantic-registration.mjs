@@ -2,8 +2,15 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
 const hash = b => createHash('sha256').update(b).digest('hex');
-// Explicit historical population only. Production continues to use all192.
+// Explicit historical population only. Production continues to use all193.
 export function retainedStaticSemanticPopulation(current) {
+  // Historical cohorts retain the complete accepted192-finding population.
+  if(current.length===193){
+    assert.equal(hash(JSON.stringify(current)),'9943fcf0439d16163b547610002e214afb1086bedcdba83e0f5769050bb36a73');
+    assert.equal(current[192].id,'fixture-slider-state-layer-composition');
+    current=current.slice(0,192);
+    assert.equal(hash(JSON.stringify(current)),'2e14f5dfc62d16eba75b481615f3f3bc148fb59856aafa96cdc18e6d36c74ab8');
+  }
   if (current.length <= 191) return current;
   assert.equal(current.length, 192);
   assert.equal(hash(JSON.stringify(current)), '2e14f5dfc62d16eba75b481615f3f3bc148fb59856aafa96cdc18e6d36c74ab8');
@@ -35,7 +42,18 @@ export function restoreScrollbarSupplementSuite(source) {
   return prior;
 }
 export function restoreRootDepthPolicy(source) {
-  const text = source.toString().replaceAll('\r\n', '\n');
+  let text = source.toString().replaceAll('\r\n', '\n');
+  // Remove only the exact newer Slider input finding before older policy stages.
+  if(text.includes('fixture-slider-state-layer-composition')){
+    assert.equal(hash(text),'1e7cb51d39ba3e93899143dddb081769b7569fe7b9ece610dc4b2da3543c38f4');
+    const next=ts.createSourceFile('policy.mjs',text,99,true);
+    const entries=next.statements.filter(ts.isVariableStatement).flatMap(n=>[...n.declarationList.declarations])
+      .find(n=>n.name.getText(next)==='sourceAuditDefinitions').initializer.arguments[0].elements;
+    assert.equal(entries.length,193);
+    assert.equal(entries[192].arguments[0].properties.find(p=>p.name?.getText(next)==='id').initializer.text,'fixture-slider-state-layer-composition');
+    text=text.slice(0,entries[192].getFullStart())+text.slice(entries[192].end+1);
+    assert.equal(hash(text),'bcd145e1efc0d45a4285420a8e8b0166ec102aaa8a921a532be30fba6a65c0f9');
+  }
   if (!text.includes('core-root-paint-depth-crosses-viewport-camera')) return text;
   assert.equal(hash(text), 'bcd145e1efc0d45a4285420a8e8b0166ec102aaa8a921a532be30fba6a65c0f9');
   const ast = ts.createSourceFile('policy.mjs', text, 99, true);

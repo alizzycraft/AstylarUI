@@ -8,6 +8,7 @@ import ts from 'typescript';
 import { restoreTableLabelExportSource, restoreTableLabelProducer, restoreRadioCaretProducer } from './static-semantic-registration.mjs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
+import { restoreSliderStateInputSharedRegistration } from './slider-state-registration.mjs';
 
 test('table label successor reader preserves accepted cases and authenticates all evidence without promotion', () => {
   const root = process.cwd(), read = fs.readFileSync;
@@ -72,7 +73,7 @@ test('table label export selection preserves complete older sources and actual r
   assert.equal(factory('0'.repeat(64)), undefined);
 
   const helper = 'tests/material-parity/static-semantic-registration.mjs';
-  let source = normalize(fs.readFileSync(helper));
+  let source = restoreSliderStateInputSharedRegistration(normalize(fs.readFileSync(helper)));
   // Remove only the newer Radio/caret adapter before the unchanged Table-era
   // conservation assertions. The final whole-source Git comparison still owns
   // every prior byte; this is not a waiver for arbitrary helper changes.

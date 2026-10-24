@@ -4,6 +4,32 @@
 
 ### Current next action and publication status
 
+- Current source policy now has193 definitions,adding only
+  fixture-slider-state-layer-composition. Actual production scanMaterialSources
+  executes all193 and detects the new app handler once;all prior192 definitions
+  and scanner results preserve. Complete policy1e7cb51d restores bcd145e1 after
+  removing only the new last entry. Historical population selection explicitly
+  removes that exact193rd entry before the existing192/191 stages;production
+  remains193. Altered owner/source controls reject. Current policy population
+  SHA9943fcf0439d16163b547610002e214afb1086bedcdba83e0f5769050bb36a73
+  recovers prior192 SHA2e14f5dfc62d16eba75b481615f3f3bc148fb59856aafa96cdc18e6d36c74ab8.
+  New finding is current unequal application/plugin alpha/composition,NOT a
+  current core black-circle finding. Historical opaque-black mechanism remains
+  bounded history evidence. Shared helper is now15893a03;complete prior68db
+  still recovers. Table cohort test bafea9d9 uses the explicitly restored shared
+  source before its unchanged historical comparisons;its complete prior99d0fe41
+  recovers. The new source-finding proof separately checks actual193 production
+  behavior,not just the historical view. Eleven focused compatibility checks
+  pass,zero skips,in19439.974ms,logSHA
+  d149fffef1833e394545de60fd86d69a7e120bf6162c5b9c223efb145d59e95b;
+  stderr empty. No new capture/canonical export/full reader
+  replay merely for this metadata stage. Final17552-dependency check must be
+  rerun after the remaining source/proof inventory registration. Canonical
+  remains192 findings/962 sources/285 proofs with all2311 cases partial.
+  Next register the standalone state-layer proof,joiner,join test,successor
+  reader,reader tests and shared restoration helper as one complete inventory
+  delta;preserve all prior entries and bounded changed-path predecessors.
+
 - Slider successor export selection is wired,not inventory-registered/canonical.
   Explicit --slider-state-inputs selects onlyc394338e;all12 older supplements
   conflict with it,and older/default invocations plus check/dry-run exclusivity

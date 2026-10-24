@@ -6496,6 +6496,26 @@ Object.freeze({
     recommendation: 'Keep CSS z-index as paint order and allocate final render depth within the camera-visible range at the shared core boundary. Preserve stacking-context ordering and fractional CSS geometry. Do not lower fixture z-index,move popups,or add plugin camera calculations to hide clipping.',
     boundary: 'Current reduced root-pane failure at observed DPR1 only. Not full Material tooltip/snackbar causality,current configured-case parity,all z-indices,DPRs or complete raster equivalence. First-bad history and canonical case joins remain open.',
   }),
+  Object.freeze({
+    id: 'fixture-slider-state-layer-composition',
+    introducedBy: 'Current source and captured modules agree;2cb8b198 introduced mutable dispatch but its parent already has the .08/.12 alpha intent;first-bad revision not established',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`this\.updateSliderStateLayer\(sliderHandleName\(event\.targetId\), \.12\)`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase Material state-layer composition and alpha inputs before plugin paint',
+    focusedProof: 'tests/material-parity/slider-retained-state-layer.spec.mjs: retained Slider state layers diverge in application inputs before plugin paint',
+    observation: { component: 'slider', states: ['hover', 'held'], profiles: ['light', 'dark', 'contrast', 'custom'], dpr: [1, 2],
+      reference: 'One48px hover layer at.05 alpha;held active and focus layers each at.2 alpha',
+      astylar: 'One plugin state disc driven at.08 hover/.12 held,other handle transparent;theme RGB agrees',
+      stage: 'application state-layer requests/composition before material paint' },
+    evidence: [
+      { file: 'artifacts/material-parity/slider-hover-held-20261024/latest-report.json', sha256: 'de4228f971a0b0b341a21c9d71a20d9f351701ec634257732c6ed6d929a8ec98' },
+      { file: 'artifacts/material-parity/slider-historical-black-material-integration-20261024.log', sha256: '00472e2a7281b330b5cdf3d29e79f65007d3297f45f7f20f3d913616e6f3ec94' },
+    ],
+    justification: 'Sixteen exact retained contexts authenticate paired trees/PNGs,two served scripts/maps and whole captured/current application and plugin modules. Executing the original handlers/material updates preserves unequal layer counts and alpha despite matching RGB. Four light hover/held DPR1/2 interiors also differ. These inputs diverge before core rendering;do not classify their color difference as an equal-input alpha/projection defect. The separately reproduced historical opaque-black fallback is not claimed as a current renderer failure or exact old screenshot attribution.',
+    recommendation: 'Preserve the reference state-layer composition and resolved ink/alpha through supported public APIs in later implementation. Do not tune fixture opacity or offsets to match screenshots. Any missing general rendering capability must remain an explicit core/public-API issue.',
+    boundary: 'Current input mismatch for16 retained desktop contexts,not whole-case/current rendering acceptance,edge/track/knob sharpness,other actions or exact historical black-circle causality.',
+  }),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({

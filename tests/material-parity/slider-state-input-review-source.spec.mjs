@@ -4,10 +4,42 @@ import { readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
+import path from 'node:path';
+import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
 import { createSliderStateInputReviewReader, sliderStateInputReview } from './slider-state-input-review-source.mjs';
-import { restoreSliderStateInputExportSource, restoreSliderStateInputSharedRegistration, restoreSliderStateInputPreviousTest } from './slider-state-registration.mjs';
-import { restoreRetainedFocusExportSource } from './static-semantic-registration.mjs';
+import { restoreSliderStateInputExportSource, restoreSliderStateInputSharedRegistration, restoreSliderStateInputPreviousTest, restoreSliderStateInputPolicy, restoreSliderStateInputPreviousTableTest } from './slider-state-registration.mjs';
+import { restoreRetainedFocusExportSource, retainedStaticSemanticPopulation, restoreRootDepthPolicy } from './static-semantic-registration.mjs';
+
+test('Slider state-layer source finding preserves every accepted definition and production detection', () => {
+  const file = 'tests/material-parity/input-equivalence-policy.mjs', current = readFileSync(file, 'utf8');
+  const prior = restoreSliderStateInputPolicy(current);
+  const ast = ts.createSourceFile(file, prior, 99, true);
+  const owner = ast.statements.filter(ts.isVariableStatement).flatMap(node => [...node.declarationList.declarations])
+    .find(node => node.name.getText(ast) === 'sourceAuditDefinitions');
+  const accepted = new Function('return ' + owner.initializer.getText(ast))();
+  assert.equal(sourceAuditDefinitions.length, 193); assert.equal(accepted.length, 192);
+  assert.deepEqual(sourceAuditDefinitions.slice(0, 192), accepted);
+  assert.deepEqual(retainedStaticSemanticPopulation(sourceAuditDefinitions), retainedStaticSemanticPopulation(accepted));
+  assert.equal(restoreRootDepthPolicy(current), restoreRootDepthPolicy(prior));
+  const producer = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8');
+  const tree = ts.createSourceFile('producer.mjs', producer, 99, true);
+  const scan = tree.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === 'scanMaterialSources');
+  const execute = definitions => new Function('sourceAuditDefinitions', 'path', 'readFileSync',
+    scan.getText(tree) + ';return scanMaterialSources(process.cwd());')(definitions, path, readFileSync);
+  const findings = execute(sourceAuditDefinitions); assert.equal(findings.length, 193);
+  assert.deepEqual(findings.slice(0, 192), execute(accepted));
+  const added = findings[192]; assert.equal(added.id, 'fixture-slider-state-layer-composition');
+  assert.equal(added.detected, true); assert.equal(added.locations.length, 1);
+  assert.equal(added.classification, 'application-plugin-authoring-defect');
+  assert.match(added.boundary, /not whole-case/);
+  const altered = structuredClone(sourceAuditDefinitions); altered[192].owner = 'invented core alpha diagnosis';
+  assert.throws(() => retainedStaticSemanticPopulation(altered));
+  assert.throws(() => restoreSliderStateInputPolicy(current + '\n// drift\n'));
+  assert.equal(createHash('sha256').update(restoreSliderStateInputPreviousTableTest(
+    readFileSync('tests/material-parity/table-label-case-review-source.spec.mjs'))).digest('hex'),
+  '99d0fe415834800b1ebdefbb076a2618ec2d1b79045e8e34910b0d73c9e1daa5');
+});
 
 test('Slider state-input export selection preserves prior sources and actual routing', () => {
   const launcher = 'scripts/export-material-input-audit-current-ancestry.mjs';

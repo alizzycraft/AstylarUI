@@ -1,5 +1,17 @@
 # Audit artifact retention
 
+October24 current Slider source-finding registration reuses the existing raw
+capture and proof logs;no new image/build/proposal/result set. Keep
+slider-state-policy-registration-20261024 (2/2) and
+slider-state-policy-compatibility-20261024 (11/11) logs plus empty stderr.
+RegistrationSHAf35066cae85675cf3c52027bddd91ea8625994ccf0125277a464ebd5bc4adb82;
+compatibilitySHAd149fffef1833e394545de60fd86d69a7e120bf6162c5b9c223efb145d59e95b.
+These validate193 production definitions and complete192-entry predecessor
+recovery,not canonical publication or fresh post-registration full dependency
+replay. Earlier final-reader success precedes this policy change;rerun the final
+owning reader after complete source/proof inventory registration,not after each
+status edit. No original/failure evidence deleted or accepted pointer changed.
+
 October24 Slider export-selection integration retains the failed
 slider-state-shared-entry-compatibility-20261024 log,SHA
 69ea0b2a0d039c7180c2a71f2bbaf0756a910776e89813c18620e4421d37f3d4.
