@@ -2,6 +2,39 @@
 
 ## Current audit pointer — October24
 
+- Configured input-focus boundary capture completed exit0 and its existing
+  checkpoint/receipt/source-recipe verifier passes40 cases,120 paired action
+  boundaries and80 paired measurement boundaries. Report:
+  artifacts/material-parity/configured-input-focus-boundaries-20261024/latest-report.json,
+  SHA8e176417defd6d8bbd2f9276adc8d37828867fce006cf80b4a74e4034aa9d118.
+  Five input families,four profiles,desktop DPR1/2:both sides have the requested
+  actual DOM input active at all four post-action checkpoints;all160 candidate
+  logical-owner observations align. No active-owner change occurs across the
+  diagnostic reads. However,all40 candidate event traces contain blur/refocus
+  transitions versus zero reference traces;checkpoint agreement is not continuous
+  ownership or focus-paint parity. Candidate final focusVisible retains32 true
+  and8 Timepicker false;the maintained Timepicker action clicks,other families
+  use focus(),and Datepicker behavior is unchanged. Exact producer/action bytes
+  are embedded in report/checkpoint provenance. This uses the retained served
+  build,not proof of current package equivalence or historical e01 procedure.
+  No renderer/fixture changes or case acceptance. Next locate those transient
+  transitions within action/settlement/measurement intervals and reconcile with
+  already classified semantic-mutation findings before attributing a new cause.
+  Probe and prior standalone snapshot proof await coherent canonical integration;
+  do not repeat the completed7e02 export merely for this ledger entry.
+  Interval census now bounds all40 INPUT blurs before after-action;each retains
+  the final input's object token. Existing October19 picker mutation and October17
+  public role-control proofs already establish distinct root/descendant/attribute
+  mechanisms;this event-only capture does not assign one to the other24 cases.
+  Historical October8 producer bytes are retained portably at
+  docs/evidence/material-configured-input-focus-runner-20261008.mjs.b64,
+  decoding to307719402d9a19d5e9204ab0f7609e2d43bb52c14de9979c833e9ce5a644f089.
+  The existing benchmark evidence test resolves only that exact old producer
+  through the snapshot,still authenticating its original receipt and every other
+  dependency. Focused historical test passes1/1 (12332.3283ms total),without
+  claiming missing e01 action-runner bytes recovered. New40-case verifier passes
+  separately. Source transition and new snapshot require next-batch registration.
+
 - Canonical milestone8e3e54ffa726a6679fdbd6fc3bdddf92869a2a67 is confirmed on
   origin/codex/material-audit-alignment-integration by independent ls-remote,
   after push59905 terminal0. GitHub reports large-file recommendations,not a

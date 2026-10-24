@@ -2296,8 +2296,14 @@ test('configured input focus evidence records exact controls without replacing r
   const file = 'artifacts/material-parity/configured-input-focus-20261008/latest-report.json';
   const capture = JSON.parse(readFileSync(file));
   const manifest = JSON.parse(readFileSync(capture.capture.checkpointManifest.file));
+  // The new direct-owner probe supersedes this producer, not its historical
+  // captured bytes. Resolve only this exact source from the retained snapshot;
+  // the validator still authenticates it against the original capture receipt.
+  const originalProducer = Buffer.from(readFileSync('docs/evidence/material-configured-input-focus-runner-20261008.mjs.b64', 'utf8').trim(), 'base64');
+  assert.equal(createHash('sha256').update(originalProducer).digest('hex'), '307719402d9a19d5e9204ab0f7609e2d43bb52c14de9979c833e9ce5a644f089');
   assert.deepEqual(validateSupplementalCapture(capture, { reportFile: file, expectedProvenance: manifest.provenance,
-    script: 'scripts/audit-material-configured-input-focus.mjs', styleProperties: Object.values(propertyGroups).flat() }),
+    script: 'scripts/audit-material-configured-input-focus.mjs', styleProperties: Object.values(propertyGroups).flat(),
+    readBytes: absolute => absolute === path.resolve('scripts/audit-material-configured-input-focus.mjs') ? originalProducer : readFileSync(absolute) }),
   { status: 'checkpoint-bound', errors: [] });
   const hash = b => createHash('sha256').update(b).digest('hex');
   const ownerSourceFile = 'src/app/services/text/text-selection.service.ts';

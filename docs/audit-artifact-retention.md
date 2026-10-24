@@ -1,5 +1,15 @@
 # Audit artifact retention
 
+October24 input-focus boundary evidence:retain configured-input-focus-boundaries-
+20261024 and its provenance/checkpoint,80 trees,80 PNGs and complete report
+SHA8e176417defd6d8bbd2f9276adc8d37828867fce006cf80b4a74e4034aa9d118.
+The report/checkpoint embed exact new producer and maintained action-runner bytes.
+Also retain docs/evidence/material-configured-input-focus-runner-20261008.mjs.b64:
+it decodes to the original producer307719402d9a19d5e9204ab0f7609e2d43bb52c14de9979c833e9ce5a644f089,
+preserving older capture validation after that producer is superseded. It is
+not the missing historical e01 action runner and does not repair that separate
+provenance gap. No capture or failed evidence is deleted or repointed.
+
 October24 retained-focus publication is verified locally:isolated import48433,
 compression83020 and accepted import76904 are terminal0. Generation7e02d8f0/index
 620874d6 preserves its whole package;all86 copied files authenticate and85 index/
