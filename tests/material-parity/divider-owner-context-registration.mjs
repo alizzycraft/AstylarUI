@@ -18,6 +18,7 @@ export const dividerOwnerContextSources=Object.freeze([
   'tests/material-parity/public-block-alignment-findings.mjs',
   'tests/material-parity/divider-owner-context-registration.mjs',
   'tests/material-parity/divider-owner-context-registration.spec.mjs',
+  'tests/material-parity/divider-owner-context-review-source.mjs',
 ]);
 export function dividerOwnerContextProofRows(read){
   const rows=[];
@@ -30,7 +31,7 @@ export function dividerOwnerContextProofRows(read){
         scope:'Bounded retained owner inputs,desktop-DPR1 cursor observations and general public alignment reductions. Not whole-case closure,current rendering or transfer of public center failure to Material cases.'});
     }
   }
-  assert.equal(rows.length,9);assert.equal(new Set(rows.map(r=>r.file+':'+r.title)).size,9);return rows;
+  assert.equal(rows.length,10);assert.equal(new Set(rows.map(r=>r.file+':'+r.title)).size,10);return rows;
 }
 const sourceAnchor='function sourceFingerprints(root) {\n  const files = [\n';
 const proofAnchor='function focusedProofInventory(root) {\n  return [\n';

@@ -9,6 +9,28 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Exact pending owner-context reader now constructs f812d8d9 against STAGED new
+producer/policy bytes. It reverses only complete known additive transitions on
+two exact paths before invoking existing Menu predecessor reader;unknown digests,
+drifted registration and unreviewed content reject. Unrelated reads pass through.
+Actual selected virtual proposal hashes to f812d8d9 and preserves all2311 partial/
+current-unverified groups. No physical200MB proposal,canonical export or recapture.
+
+Reader adds one required source path to staged census:13 proposed source paths/
+10 proof declarations imply1041 sources/363 proofs/198 definitions,NOT live counts.
+Actual live remains1028/353/196. Existing complete-prefix prepare/restore tests
+updated for that exact additive reader dependency;all predecessor arrays/bytes
+still conserve. No assertions or original receipts weakened.
+
+Keep divider-context-reader-registration-20261025 initial3/3 lightweight log pair
+and divider-context-reader-selected-integration-20261025 log pair,3/3,0skip,
+72999.4135ms,nativeExit0,stderr empty. Selected integration stdout SHA256
+6caee5f7669b32c1163ee7f3e2702ac9497ab5f5d046df23e818feea3659350d.
+This is actual selected-reader/staged-source execution,not repeat of the full
+18289-dependency loader. Next wire an explicit selection in the existing launcher/
+runner with bounded whole-source prior recovery,then apply coherent registration.
+Pending and canonical digests,scope and acceptance criteria remain unchanged.
+
 Standalone owner-context registration now has TESTED IN-MEMORY prepare/restore
 using the established exact-prefix mechanism. No production files changed.
 Twelve proposed source paths comprise the ten audited sources plus registration
