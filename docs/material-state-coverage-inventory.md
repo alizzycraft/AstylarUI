@@ -9,6 +9,24 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Next finite owner question answered without capture:the three named retained
+natural-line-box collectors cannot close Divider heading line-box/clip attribution.
+Accepted selected extracte7f8cc38 and its raw control-report receipt authenticate;
+all671 control observations have no Divider target/title/eyebrow rows. Normal
+report e1eb3f65 has96 case entries,no Divider;supplemental a630cc40 has50 entries,
+no Divider. Specialized collector absence is NOT absence from all audit evidence
+or permission to invent a missing-renderer diagnosis/new capture requirement.
+
+Authenticated owner review1079d7c6 plus48 paired tree receipts confirm24 title
+and24 eyebrow pairs. Native/candidate retained title line-height both normal;
+computed native owner heights alone do not supply paired glyph/line-box or clip
+evidence. Existing heading-mask/offset classifications remain settled. Keep
+divider-heading-natural-linebox-applicability-20261025 log pair,nativeExit0,
+stderr empty. Next query retained public text-layout/baseline evidence for actual
+heading applicability;do not repeat these specialized collector checks or infer
+equal used layout from equal normal tokens. No status/criteria/source registration
+or canonical pointer changed;local1028/353/196 batch remains frozen.
+
 Bounded storage follow-up checked six explicit Angular cache paths(read-only,
 realpath-deduplicated,no link traversal):five exist,372212100 logical bytes total,
 no links. No matching Angular/Vite server process found;that does NOT establish
