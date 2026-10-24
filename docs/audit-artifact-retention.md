@@ -1,5 +1,34 @@
 # Audit artifact retention
 
+October24 Slider proposal storage recovery:initial atomic save of217fe38c failed
+ENOSPC despite289MB observed free,leaving zero-byte
+proposals/217fe38c055fedc1bad4bb13b4d4204f09eca5d954662fd2de40a438ea0537b4.json.25468.tmp.
+Retain that failure. The writer guard now requires three times the exact pretty
+envelope size,not size plus64MiB. Twenty-four closed audit.js bundles were
+transparently LZX-compressed with individual complete SHA256 equality before/
+after (terminal sessions49658 and subsequent four-file command). Runs:
+layout-inspection-package-zoned-20261009-dpr1/dpr2,
+layout-inspection-package-20261009-dpr1,
+divider-context-verified-angular-20261013-dpr1/dpr2,
+divider-current-reduction-20261006-dpr1/dpr2,
+current-depth-public-reduction-20261022,
+overlay-depth-ba5873b[-v2]-dpr1/dpr2,
+snack-intrinsic-control-ea138b0-dpr1/dpr2,snack-intrinsic-ea138b0-dpr1,
+dialog-inheritance-proof-310208e-dpr1,dialog-inheritance-trace-310208e-dpr1,
+dialog-width-trace-66af77e-dpr1/dpr2,
+dialog-sizing-trace-80efa42-v2-dpr1/dpr2,dialog-sizing-trace-80efa42-dpr1,
+dialog-sizing-controls-277af68-v2-dpr1/dpr2.
+Observed free289857536→627261440 bytes;no content,paths or original/failure
+evidence removed. Recovered existing atomic writer succeeds for198638588-byte
+c0e397e0 proposal at627261440 free. The guard change alters its producer receipt,
+so successful digest differs from failed217fe38c;case observations are unchanged.
+Accepted7e02 pointer is not advanced by proposal save.
+After full17549-dependency replay completed,the closed c0e397e0 proposal was
+LZX-compressed:198638588 logical/41627648 physical bytes. Complete raw SHA256
+c49ecf57f911c79f36e1765ad0ab1c379d93037cb944cde83da7ad660383bf60
+matches before/after. Observed free585613312 bytes afterward. Keep this proposal,
+the zero-byte failed temporary and all predecessor receipts pending publication.
+
 October24 slider-hover-held-20261024 is unique unresolved-difference evidence,
 not successful disposable scratch. Retain32 PNGs,32 trees,complete report
 SHAde4228f971a0b0b341a21c9d71a20d9f351701ec634257732c6ed6d929a8ec98,

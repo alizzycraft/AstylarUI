@@ -2,6 +2,28 @@
 
 ## Current audit pointer — October24
 
+- Slider hover/held exact-case join is saved as noncanonical successor
+  c0e397e0a5912d3f492c0d55a3d2b5421d6892f5403ba355c90560da6dbf2cea.
+  Only16 authoredActivation.configuredSliderHoverHeld children and associated
+  pending→partial dispositions are added;removing only them recovers the
+  complete acceptedaeb1ef14 predecessor. All2311 partial/current-unverified
+  cases,existing remaining tasks,focus,paint and other obligations preserve.
+  Full existing loadCaseObligationReview with the bounded successor reader
+  passes2311 cases/17549 authenticated dependencies (session5618 terminal0).
+  Reader recovers entire prior benchmark31f2cb8e by reversing exactly the new
+  Slider test and prior-producer snapshot reader edit;all other drift rejects.
+  Historical input-focus producer30771940 resolves only to its authenticated
+  retained bytes,not the superseding probe. First adapter replay failed because
+  it returned Buffer for a requested text read;forwarding read options fixes the
+  instrumentation contract,not an evidence assertion. Focused source-boundary
+  test passes1/1 with changed-source,prior-source and unknown-review controls.
+  Proposal-level pending activation joins are1466 versus accepted1482;accepted
+  focus1603/activation1482/paint949 counts do NOT change until canonical export,
+  conservation,cold replay and verified import. Next wire this exact successor
+  through the existing named launcher/runner,then reconcile the955-source/
+  278-proof inventory plus the bounded standalone additions as one batch.
+  Do not rerun settled browser/root-cause captures or claim whole-case closure.
+
 - Slider raw hover/held gap:accepted aeb1ef14 review has16 authoredActivation
   evidence-join-pending cases (four profiles,desktop DPR1/2,both states),separate
   from its50 partial activation anchors. Existing drag/keyboard/disabled proofs
