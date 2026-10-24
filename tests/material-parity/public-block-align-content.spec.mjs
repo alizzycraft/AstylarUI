@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
+import { publicBlockAlignmentFindings } from './public-block-alignment-findings.mjs';
 const hash = b => createHash('sha256').update(b).digest('hex');
 test('Public block alignment reduction preserves wrong default separately from explicit center failure', () => {
   const root = 'artifacts/material-parity/public-block-align-content-20261025/';
@@ -85,4 +86,16 @@ test('Public block alignment capture uses current default and block routing impl
   assert.deepEqual(tokens(current.source),tokens(installed.source));
   evidence.push({current:{file:current.file,sha256:current.sha256},installed:{file:installed.file,sha256:installed.sha256},initializer:'globalDefaultStyle'});
   t.diagnostic(JSON.stringify({sourceApplicability:evidence,boundary:'Complete six methods and global initializer token equality only;not entire package/source equality or historical runtime. Candidate center geometry failure remains separately observed.'}));
+});
+
+test('Pending block alignment findings distinguish resolution from explicit layout failure', () => {
+  assert.equal(publicBlockAlignmentFindings.length,2);
+  assert.equal(new Set(publicBlockAlignmentFindings.map(f=>f.id)).size,2);
+  for(const finding of publicBlockAlignmentFindings){
+    assert.equal(finding.classification,'confirmed-core-renderer-defect');
+    for(const receipt of [finding.publicReproduction,finding.sourceBinding,finding.history.evidence].filter(Boolean))assert.equal(hash(readFileSync(receipt.file)),receipt.sha256);
+    assert.deepEqual(finding.observation.dpr,[1,2]);
+  }
+  assert.match(publicBlockAlignmentFindings[0].boundary,/not a demonstrated omission-driven geometry failure/);
+  assert.match(publicBlockAlignmentFindings[1].boundary,/Exact internal causal statement still requires/);
 });

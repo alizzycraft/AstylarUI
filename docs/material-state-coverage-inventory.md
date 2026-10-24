@@ -9,6 +9,34 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Two standalone pending core findings now preserve the separate block failures:
+core-block-align-content-omission-resolves-to-stretch owns wrong CSS initial
+resolution;core-block-align-content-center-does-not-align-contents owns equal-
+input35px explicit-center geometry failure. Definitions live in
+tests/material-parity/public-block-alignment-findings.mjs,with exact public and
+source-binding receipts,DPR/control membership,implementation next actions and
+explicit limits. They are NOT registered in frozen1028/353/196 or accepted88be4d47.
+The first does not claim omission-driven geometry failure in positioned control;
+the second does not claim exact internal causal execution or Material symptom.
+
+History review authenticates four exact Git blobs:75bb2430 changes shared
+alignContent from INVALID left to stretch;2c16e148 later extracts inherited
+stretch into browser-defaults.ts. Neither is first-bad runtime evidence. Do not
+describe the extraction as introduction or the invalid predecessor as a correct
+baseline. Keep block-align-content-default-history-20261025 log pair(stdout
+SHA256c7998a58cff837cb77130764e4c42fa0c12712c1c8af5f443b7ea3ce48499e3b),
+nativeExit0/stderr empty. Historical runtime/first-bad center/motivation remain
+unproven rather than prompting an unbounded bisect without a specific need.
+
+Owning public suite passes3/3,0skip,nativeExit0,with pending finding receipt/
+scope checks added to unchanged eight-pair and complete-source binding checks.
+Keep public-block-alignment-findings-focused-20261025 log pair. No recapture,
+renderer,fixture,canonical export or current-case acceptance change. Next close
+the exact block child-placement causal boundary with existing extraction/stub
+methods before coherent standalone evidence integration;source labels alone are
+not execution proof. Publication remains blocked,so do not rerun unchanged pushes
+or generate another large canonical artifact while investigating this local gap.
+
 Block alignment public failure now has exact CURRENT-to-INSTALLED applicability:
 complete processChildren,shouldUseInlineFlow,layoutInlineChildren,
 layoutBlockChildren and StyleDefaultsService getGlobalDefaultStyle/
