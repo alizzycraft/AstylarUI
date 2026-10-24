@@ -7,6 +7,35 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Pending standalone batch:snackbar/dialog/focus — verified October24
+
+Coherent owning integration TERMINAL0:10/10 tests,zero skips,9829.4026ms.
+Command:node --test tests/material-parity/snackbar-live-policy.spec.mjs
+tests/material-parity/dialog-owner-semantic-inputs.spec.mjs
+tests/material-parity/focus-action-scope.spec.mjs. stdout retained at
+artifacts/material-parity/standalone-snackbar-dialog-focus-integration-20261024.log,
+SHA68b9595df8081c8a239683e13a653de067da187e24a30c17288a5f2bbdf9116b;
+stderr empty. No canonical/export/full-reader recapture was repeated. This batch
+answers positive snackbar action AX/Enter exposure and authored policy ownership,
+actual dialog outer-owner AX/name/modal scope,and configured-focus action versus
+applicability counts. It does not close complete cases or prove current rendering.
+
+Five standalone paths (not yet registered in frozen c394's968/293 population):
+
+- scripts/audit-material-snackbar-ax.mjs:14be7d0dde205b6ff1bea32ee740bf9f22b9eb4501b36a99ff475552f39169ca
+- scripts/capture-dialog-owner-ax.mjs:874a415e93b32ced52df83ac9b06be753fae3ea18cb6fc27c2f65b29d40156d4
+- tests/material-parity/snackbar-live-policy.spec.mjs:03185398fad377f75cea23e7b8edbfc853fb9bee35eaab2a88470c40abf10029
+- tests/material-parity/dialog-owner-semantic-inputs.spec.mjs:eb54210f168373b2eee1a087cb4c8d8244d79de8fcea934045c4bdcc451e0722
+- tests/material-parity/focus-action-scope.spec.mjs:20b1abea5c4ec7b2bab6f2fad7fb3af6080fb2c1c05ff1106a2695ff716d7676
+
+Keep required capture/checkpoint/generated-producer/tree/AX evidence and original
+failure attempts for these tests;they are not successful disposable scratch.
+No additional canonical blob or200MB proposal copy was generated. Observed D:
+free544399360 bytes;recheck before any capture/publication. Accepted a659 and
+frozen registered c394 remain separate from this pending batch. Do not reopen
+its answered questions without changed dependencies or contradictory evidence;
+next work is remaining coverage,not more variants of the same settled checks.
+
 October24 focus-label eligibility reconciled against complete raw c394 envelope
 SHAed7ecfea82fef0406fc9e0430a2df16a7db4555d2fdd074568c96cb5f3b39868.
 Of256 focus-labelled cases,40 already have inspected-authored-exclusion for
