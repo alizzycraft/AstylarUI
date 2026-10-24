@@ -5,6 +5,8 @@ import ts from 'typescript';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { prepareMenuSelection } from './menu-select-disabled-selection.mjs';
+import { restoreDividerOwnerFrameProducer } from './divider-owner-frame-registration.mjs';
+import { restoreDividerOwnerFrameExportSource } from './pending-evidence-registration.mjs';
 import { menuPendingSources, menuPendingProofRows, prepareMenuProducerRegistration, restoreMenuProducerRegistration,
   menuPendingFindingDefinitions, prepareMenuPolicyRegistration, restoreMenuPolicyRegistration, createMenuHistoricalRead } from './menu-select-disabled-registration.mjs';
 
@@ -19,6 +21,14 @@ test('historical read restores only four authenticated staged transitions and re
     const encoding = typeof options === 'string' ? options : options?.encoding; return encoding ? b.toString(encoding) : Buffer.from(b); };
   const historical = createMenuHistoricalRead({ root, read });
   names.forEach((file,i) => { assert.equal(historical(file, 'utf8'), originals[i]); assert.equal(historical(file).toString(), originals[i]); });
+  // Old direct entry points do not know the new stage. Demonstrate that gap,
+  // then prove exact historical reads preserve their original assertions.
+  assert.throws(() => restoreDividerOwnerFrameProducer(staged[0]));
+  assert.doesNotThrow(() => restoreDividerOwnerFrameProducer(historical(names[0])));
+  for (const [index,kind] of [[2,'launcher'],[3,'runner']]) {
+    assert.throws(() => restoreDividerOwnerFrameExportSource(staged[index],kind));
+    assert.doesNotThrow(() => restoreDividerOwnerFrameExportSource(historical(names[index]),kind));
+  }
   const untouched = 'docs/evidence/material-original-runner-e01.mjs.gz.b64';
   assert.deepEqual(historical(untouched), readFileSync(untouched));
   for (let i=0;i<names.length;i++) {

@@ -9,6 +9,28 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Older standalone source-read inspection identifies concrete integration work,
+not a reason for another browser or full-review replay. Existing owner/frame
+registration tests read live producer directly and expect1002/326;their
+restoreDividerOwnerFrameProducer correctly REJECTS raw new prepared producer.
+Existing owner/frame selection tests call restoreDividerOwnerFrameExportSource
+directly on live launcher/runner and likewise correctly REJECT prepared versions.
+All three direct restorers ACCEPT exact prior bytes through bounded historical
+read. New focused assertions demonstrate both sides without editing old hashes.
+
+Six staged registration/selection tests pass,nativeExit0,0skip in
+menu-old-direct-source-boundaries-20261025 pair. No full dependency replay needed:
+only explicit old restoration preconditions were newly tested. Separate old
+selection AST assertion also expects applicability to call ownerFrameReaderFactory
+directly;new current selector intentionally delegates through menuSelectReaderFactory
+and its fallback is already tested. Therefore simply applying four files now
+would break historical tests despite new reader success. Next adapt the two old
+owning specs through explicit bounded historical reads,conserving their complete
+old source/receipt applicability and assertions;do not weaken hashes,count tests
+as obsolete or globally substitute historical reads in current production.
+Live sources/registries/canonical remain unchanged. This resolves WHICH tests
+need integration rather than blindly rerunning the full harness.
+
 Pending exact reader now OWNS createMenuHistoricalRead instead of requiring
 caller/test to supply it. Full integration passes raw four-file staged overlay
 directly to createMenuSelectDisabledReviewReader without prebuilt owner reader
