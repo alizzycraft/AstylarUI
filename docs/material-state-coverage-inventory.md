@@ -7,6 +7,35 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Divider remaining-owner scope is finite (October24)
+
+`node scripts/check-divider-owner-coverage.mjs` passes nativeExit0 using the
+existing collectFullTreeInventory,not a new collector or canonical rebuild.
+All24 retained cases authenticate original report ab42dbec and48 paired trees.
+Nine native owners map one-to-one to nine authored candidate owners,with exact
+hierarchy,child order,types (recorded mat-divider/div representation),and raw text.
+The extra candidate root is the already-known synthetic SiteData envelope.
+No tree/style/state-capture gaps are reported in this bounded inventory.
+
+The four actual scalar targets are divider-root,divider-primary,divider-above
+and divider-below. Five other owner pairs are inventoried but not passed to that
+scalar loop:frame/page,eyebrow,title,and the Above/Below paragraph wrappers.
+Each retains104 reference properties:520 recorded reference slots per case,
+12480 across24 cases. These are REVIEW SCOPE counts,not12480 new differences or
+an inspection-coverage percentage. Existing shared-frame,heading,font,paragraph,
+paint and history proofs already inspect subsets. Zero unresolved scalar groups
+cannot prove completion of these separate obligations;neither can this census.
+
+Next reconcile those five named owner pairs against their actual property-domain
+proofs,starting with frame/heading domains beyond the already-inspected font
+mapping. Do not repeat the complete nine-owner mapping,paragraph baseline,
+texture or alignment-sensitivity checks to answer that different question.
+Keep divider-owner-coverage[-final]-20261024 log pairs;final stdout SHA256
+8523fe2e07e90b9108a37ed32fe0ae48b3a52af614fd67828c9a548fd33e986d,
+stderr empty. Final version additionally asserts child order. No raw values,
+scalar classifications,case flags or acceptance criteria changed. This is
+standalone next-batch evidence,not canonical integration or case closure.
+
 ### Divider alignment through actual public updates (October24)
 
 The mocked creation/dimension boundary below now has a separate actual-pipeline
