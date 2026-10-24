@@ -7,6 +7,38 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Original e01 runner bytes RECOVERED — October24
+
+Complete raw SHAe01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0
+now matches,not merely normalized content or selected methods. Local transcript
+bounded12MB slice3595710000..3607710000 adds FIVE exact September28 runner
+patches to the two September30 launch patches. All payload hashes/chronology
+are retained in material-original-runner-launch-patches.json. Applying all seven
+uniquely to retained mixed-ending Material predecessorb2477a12,with new/context
+lines LF and untouched line endings preserved,produces96666 bytes matching e01.
+Other bounded baseline/ending policies do not match and are not accepted. This
+is digest-authenticated reconstruction,not a claim about patch-tool internals.
+
+Portable docs/evidence/material-original-runner-e01.mjs.gz.b64 decodes to21869
+gzip bytes SHAe4922400a7ee2d64bb531a93a2b490b7478636f45d77dc4d5d854b5321949a85,
+then96666 raw bytes/e01. Replay needs neither external6GB transcript nor mutable
+predecessor. Normalized33c5a4b3 is NOT used to satisfy the raw receipt. JS parses
+and complete source equals original reportab42dbec harness receipt,436 static/
+1875 interaction/mobile cases. original-material-runner-source.spec.mjs3/3
+passes,zero skips,2146.4172ms:complete decode/hash/capture receipt,seven patch
+hashes and six original/maintained action/theme method bodies (normalization
+only for method comparison,not raw-source authentication). No original report/
+receipt,renderer,fixture or fresh capture changed.
+
+This supersedes CURRENT missing-e01 assertions in earlier narrative,not immutable
+historical findings or their other limitations. Frozen c394 retains old
+unavailableActionSource records;next coherent integration must attach exact
+source and retire ONLY that missing-source condition. Do not promote normalized
+events,collapsed descendants,uncompared defaults,omitted states,old environment,
+current rendering or whole-case acceptance from producer recovery. New source/
+proof artifacts are standalone;accepted a659/frozen c394 inventories and pointers
+remain unchanged. Retain this portable original source,not disposable scratch.
+
 ### Original runner provenance:new local transcript route — October24
 
 Divider closure readiness was checked against actual c394 obligations,not inferred

@@ -9,6 +9,14 @@ ledgers. Their old counts and next/live statements must not override that pointe
 The numbered implementation tracks remain a future plan;this audit authorizes
 neither renderer fixes nor compensating fixture changes. Final gates are unchanged.
 
+Original capture producer recovery:the complete e01ef9dc runner source is now
+portable at docs/evidence/material-original-runner-e01.mjs.gz.b64. Decoded raw
+bytes match the original capture receipt exactly;see current ledger and
+original-material-runner-source.spec.mjs. Earlier missing-source warnings are
+historical. Recovery removes only that gap,not event-normalization,endpoint,
+environment,paint or currentness limits. Do not replace immutable receipts or
+use the historical source for fresh captures. Case-review integration is pending.
+
 Snackbar announcement-policy prerequisite:the retained showcase explicitly
 authors status/polite/atomic=true,whereas Material's retained live owner is
 generic/polite/non-atomic and receives content after its150ms announcement delay.

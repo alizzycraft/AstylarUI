@@ -3,8 +3,58 @@
   "transcript": "C:/Users/solar/.codex/sessions/2026/08/23/rollout-2026-08-23T02-35-12-01a02c0a-fd0d-7ee3-a4f8-712adc30dc7f.jsonl",
   "targetFile": "tests/material-parity/run-material-parity.mjs",
   "targetRawSha256": "e01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0",
-  "boundary": "Exact tool-call patch strings,not recovered raw runner bytes. Source transcript is external and not copied.",
+  "boundary": "Exact tool-call patch strings. Reconstruction matches the pinned complete raw runner SHA256; external transcript is not needed for portable decode.",
+  "reconstruction": {
+    "predecessorFile": "D:/dev/github/AstylarUI-material/tests/material-parity/run-material-parity.mjs",
+    "predecessorRawSha256": "b2477a124293aec6bba3a2413ff58d41f409288dcf0cb53a54ed17d162b9fa97",
+    "method": "Apply each exact hunk uniquely by line content, retaining untouched predecessor line endings. Inserted and hunk-context lines use LF; removed lines are discarded. No other normalization.",
+    "portableSource": "docs/evidence/material-original-runner-e01.mjs.gz.b64",
+    "gzipSha256": "e4922400a7ee2d64bb531a93a2b490b7478636f45d77dc4d5d854b5321949a85",
+    "gzipBytes": 21869,
+    "decodedBytes": 96666,
+    "scope": "Historical producer source,not runtime/rendering acceptance. Portable replay needs neither external transcript nor mutable predecessor."
+  },
   "patches": [
+    {
+      "timestamp": "2026-09-28T11:03:33.113Z",
+      "byteOffset": 3602977633,
+      "recordSha256": "7d59a7ca2718c38d20eea9c728c66060ae9d1f03ab7d26d567e9984bd32ab092",
+      "toolInputSha256": "43f6ea5c73cc24eb953f6445fde61dc1b7003b7e37b53c63d4a6d47120b1d392",
+      "patchSha256": "33136c015a7dc7a80d7baa251396bb3569593bfb81d5d62f9efebc7d197936ee",
+      "patch": "*** Begin Patch\n*** Update File: D:/dev/github/AstylarUI-audit-integration/tests/material-parity/run-material-parity.mjs\n@@\n     return {\n       family, profile, viewport, state, screenshotSimilarity, styleInputs, textAlignment, focusedRasters, semantics, eventComparison, interactionState, overlayPlacement, statePaint, cursor,\n+      // Retain measured interaction boxes for input/paint diagnosis. This is\n+      // diagnostic evidence, not a new acceptance gate or a static-box fallback.\n+      geometry: compareGeometry(referenceMeasurement.elements, astylarMeasurement.elements),\n       inputTrees: persistInputTrees(directory, referenceMeasurement.inputTree, astylarMeasurement.inputTree),\n*** End Patch"
+    },
+    {
+      "timestamp": "2026-09-28T11:18:33.067Z",
+      "byteOffset": 3604368009,
+      "recordSha256": "98c4153206fa71e4e8706e3d009989decc003c46b0dc6bb468f7b2d09afe4db0",
+      "toolInputSha256": "63c25cc29c10948cb09514dab6a8ec7b7120fd07251ab694985049c0eedbed0f",
+      "patchSha256": "f3f4b9efbcd5e12ee444386826ff073f786998b14c7c2cba27c32601dd84c924",
+      "patch": "*** Begin Patch\n*** Update File: D:/dev/github/AstylarUI-audit-integration/tests/material-parity/run-material-parity.mjs\n@@\n     const astylarMeasurement = await measureAstylarInputs(astylar.page, ids);\n+    // Read-only paint-boundary evidence for measured button controls. This\n+    // observes production meshes; it does not substitute requested CSS boxes.\n+    const controlPaintGeometry = await astylar.page.evaluate(ids => {\n+      const scene = window.ng?.getComponent(document.querySelector('app-astylar-showcase'))?.surface?.scene;\n+      if (!scene?.activeCamera) return null;\n+      const engine = scene.getEngine(), canvas = document.querySelector('canvas').getBoundingClientRect();\n+      const viewport = scene.activeCamera.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight());\n+      return ids.flatMap(id => scene.meshes.filter(mesh => mesh.name === `button_${id}`).map(mesh => {\n+        mesh.computeWorldMatrix(true);\n+        const positions = mesh.getVerticesData('position') ?? [];\n+        const Vector = mesh.position.constructor;\n+        const projected = Array.from({ length: positions.length / 3 }, (_, i) => {\n+          const point = Vector.Project(new Vector(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]),\n+            mesh.getWorldMatrix(), scene.getTransformMatrix(), viewport);\n+          return { x: point.x * canvas.width / engine.getRenderWidth(), y: point.y * canvas.height / engine.getRenderHeight() };\n+        });\n+        return { id, name: mesh.name, vertices: positions.length / 3, projected,\n+          material: mesh.material?.getClassName(), diffuseTexture: mesh.material?.diffuseTexture?.name ?? null,\n+          scaling: mesh.scaling.asArray(), cameraZ: scene.activeCamera.position.z,\n+          z: mesh.getAbsolutePosition().z, enabled: mesh.isEnabled(), visible: mesh.isVisible };\n+      }));\n+    }, ids);\n@@\n       geometry: compareGeometry(referenceMeasurement.elements, astylarMeasurement.elements),\n+      controlPaintGeometry,\n*** End Patch"
+    },
+    {
+      "timestamp": "2026-09-28T11:20:47.698Z",
+      "byteOffset": 3604420227,
+      "recordSha256": "0ec19611f0a867632e74dd78ef589aec052c499e0eb4b682a4a98ed0b4dceb26",
+      "toolInputSha256": "feb37600ae2a92d7c08eb1b8c5d8223c26cff2e46f52354d12f0f40b202a6518",
+      "patchSha256": "dc87e347d9f33d68176c4583135d7c310c217219e3f3a526030c2cc277e578eb",
+      "patch": "*** Begin Patch\n*** Update File: D:/dev/github/AstylarUI-audit-integration/tests/material-parity/run-material-parity.mjs\n@@\n-      const scene = window.ng?.getComponent(document.querySelector('app-astylar-showcase'))?.surface?.scene;\n+      const surface = window.ng?.getComponent(document.querySelector('app-astylar-showcase'))?.surface;\n+      const scene = surface?.scene;\n@@\n-      return ids.flatMap(id => scene.meshes.filter(mesh => mesh.name === `button_${id}`).map(mesh => {\n+      return ids.flatMap(id => {\n+        const input = surface.inputElementService.getInputElement(id);\n+        if (input?.type !== 'button' || !input.mesh) return [];\n+        const mesh = input.mesh;\n@@\n-        return { id, name: mesh.name, vertices: positions.length / 3, projected,\n+        return [{ id, name: mesh.name, vertices: positions.length / 3, projected,\n@@\n-          z: mesh.getAbsolutePosition().z, enabled: mesh.isEnabled(), visible: mesh.isVisible };\n-      }));\n+          z: mesh.getAbsolutePosition().z, enabled: mesh.isEnabled(), visible: mesh.isVisible }];\n+      });\n*** End Patch"
+    },
+    {
+      "timestamp": "2026-09-28T11:21:54.329Z",
+      "byteOffset": 3604463112,
+      "recordSha256": "cd732d77007d04b0c57eb14091abe60620354c90270b70accea5292d3e9ea85b",
+      "toolInputSha256": "c4319dc27981d0dcc0e9d9453106f49d6da1c2c0f0eddaffa3176d5e203fd36c",
+      "patchSha256": "4424f0d07aab72049cb54131324059aea31f0f75c6e3a55800ccb4759df12bbb",
+      "patch": "*** Begin Patch\n*** Update File: D:/dev/github/AstylarUI-audit-integration/tests/material-parity/run-material-parity.mjs\n@@\n-        const input = surface.inputElementService.getInputElement(id);\n+        const input = surface.host.inputElementService.getInputElement(id);\n*** End Patch"
+    },
+    {
+      "timestamp": "2026-09-28T11:27:37.211Z",
+      "byteOffset": 3604691756,
+      "recordSha256": "c04e6ad6cc7ead81b674470ac3d1ae07d11efab5ba859159db6fdff9eff83e2d",
+      "toolInputSha256": "e5677ee28141a5563dbf447a44a3b85b0096d595b0e79b8e5cd842224060f036",
+      "patchSha256": "d90f2b9ab1e7b0881cc93d91d983b5bc1230e5feaa14807ead17123105b4eda0",
+      "patch": "*** Begin Patch\n*** Update File: D:/dev/github/AstylarUI-audit-integration/tests/material-parity/run-material-parity.mjs\n@@\n         return [{ id, name: mesh.name, vertices: positions.length / 3, projected,\n+          rasterization: { antialias: engine._gl?.getContextAttributes()?.antialias ?? null,\n+            samples: engine._gl?.getParameter(engine._gl.SAMPLES) ?? null,\n+            renderWidth: engine.getRenderWidth(), renderHeight: engine.getRenderHeight(),\n+            canvasWidth: canvas.width, canvasHeight: canvas.height },\n           material: mesh.material?.getClassName(), diffuseTexture: mesh.material?.diffuseTexture?.name ?? null,\n*** End Patch"
+    },
     {
       "timestamp": "2026-09-30T19:38:54.002Z",
       "byteOffset": 3921191603,

@@ -1,5 +1,13 @@
 # Audit artifact retention
 
+Recovered original Material runner is required evidence,not scratch:
+docs/evidence/material-original-runner-e01.mjs.gz.b64 preserves21869 compressed
+bytes and96666 decoded bytes matching original raw SHAe01ef9dc. Keep it with
+material-original-runner-launch-patches.json and original-material-runner-source
+proof. Replay no longer requires the external6GB rollout or mutable predecessor;
+do not copy that transcript into the repo or normalize recovered runner bytes.
+Recovery does not repin old receipts or establish whole-case/current acceptance.
+
 October24 OpenSSL publication follow-up99994 also exits1/HTTP408. Retain
 slider-state-publication-openssl-20261024.log (empty SHAe3b0c442...) and
 stderrSHA0c19cf166079dee8e346e7317d94ebaf16525e33d4070c5b8438e00b953d5de6.
