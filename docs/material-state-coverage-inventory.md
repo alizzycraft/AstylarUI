@@ -9,6 +9,29 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+The134 remaining nonapplicable editing obligations are now exactly identified,
+not a generic source-exclusion backlog. Reuse the COMPLETE editingTargets
+predicate and its two input-type sets from unchanged accepted input-boundary
+proof;current normalized source hash matches authenticated e7f8cc38 extract.
+Original ab42dbec report and ALL268 selected input-tree receipts reauthenticate.
+Result:94 Select cases(native no text target,candidate one readonly text input)
++40 disabled text cases(8 each form-field,input,autocomplete,datepicker,timepicker;
+both sides retain disabled text targets). Exact case/state/target/receipt records
+are in remaining-editing-exclusion-taxonomy-20261024 stdout SHA256
+3f36958c720dc6998a109737d460c23b6ad0ff901b6737b7247368f638a977e6;
+nativeExit0,stderr empty. No reconstruction/capture/full canonical rerun.
+
+This answers why the1380 no-editor source exclusion did not close these134:
+their text targets EXIST. Readonly/disabled behavior is substantive evidence,
+not absence-of-editor or stale-label bookkeeping. Existing public readonly
+failure(actual edit despite readonly) and four disabled positive controls are
+already recorded with complete six-method source applicability. Do not rerun
+that settled reproduction,blanket-clear134 obligations,or add editing actions
+to families proven to have no editor. Next map existing readonly/disabled raw
+behavior/source evidence to these exact94/40 cohorts and explicitly retain
+uncaptured action/currentness/selection boundaries. No new finding,count change,
+status promotion,fixture/core edit or source registry mutation follows.
+
 Whole-ledger gap census now selects the next finite question rather than
 continuing settled Menu expansions. Read-only exact809d37ad reconstruction
 nativeExit0;keep current-obligation-gap-census-20261024 pair,stdout SHA256
