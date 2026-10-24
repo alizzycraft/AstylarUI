@@ -7,6 +7,41 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Recovered-runner case-source reconciliation — verified October24
+
+scripts/join-material-original-runner-source.mjs authenticates the complete c394
+predecessor,portable gzip/raw e01,original report receipt and owning source proof.
+It replaces ONLY9016 unavailableActionSource records across2311 cases with
+originalActionSource/complete-original-source-authenticated plus portable evidence.
+8976 original three-field records and40 focus/theme-hash variants retain every
+original field other than the missing-source disposition. Every parent/case
+disposition,observation,remaining limitation and rendering status preserves.
+Reversing only this source substitution restores complete predecessorc394.
+Proposed review digest7dfee06dc72de1cc4a7d94f1d10594ec0b7d703a7a151e35ae803eadadc51385;
+dry-run only,no duplicate200MB proposal saved,no canonical publication.
+
+Five original-source/join/corruption controls pass together8831.7934ms;log
+original-runner-recovery-join-integration-20261024 SHA
+7fc1756900f581737f7c36d4893249c5b5378b6b14ddfccb7b46db61a74f9504.
+New complete-reader call initially fails absolute proposal path before dependency
+validation (existing workspace-relative guard unchanged);retain failed integration
+logSHAe5f37c7b27c8b01f13add013ef574d5fbce7b508415ac7f4892ae721f42045a3.
+Corrected caller supplies relative virtual path,serving the proposal only in
+memory through the existing exact c394 reader. Focused full-reader check1/1,
+zero skips,70193.5119ms validates ALL2311 cases/17555 dependencies (three new
+portable-source/proof/producer paths,not changed old receipts). Corrected log
+original-runner-complete-reader-corrected-20261024 SHA
+cce20acfd333981a6bc94947084b8bf900231bb28c329db8c6bbd32281250e0f;
+stderr empty. No broad browser or canonical rebuild repeated for this join.
+
+This is a verified pending successor,not a saved/selected/registered/canonical
+generation. Accepted a659/frozen c394 remain unchanged and all2311 cases stay
+partial/current-unverified. Next coherent integration must preserve existing
+standalone AX/focus/caret work,register bounded source/proof changes,and use the
+existing export/conservation/cold/import gates after working publication transport
+is available. Never equate retired source-unavailability with complete events,
+endpoint timing,paint,currentness or whole-case acceptance.
+
 ### Original e01 runner bytes RECOVERED — October24
 
 Complete raw SHAe01ef9dc44386d93885ca06428da0b8b42ccb8bad37f9de99bdd61a5c95c6eb0
