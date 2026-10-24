@@ -9,6 +9,34 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+New bounded outside-owner cursor capture resolves the desktop-DPR1 point gap:
+four themes/eight side rows/40 observations agree. Native auto produces text
+over eyebrow/title text and default over blank frame/paragraph-wrapper regions;
+candidate canvas updates to those same effective cursors. All intended points
+are in viewport;native actual hits are main,p,h1,p,p as appropriate. Candidate
+actual DOM hit is canvas,not proof of its internal visual owner. Heading masking
+inputs remain unequal;do not promote this observation to input or paint parity.
+
+scripts/audit-material-divider-owner-cursors.mjs reuses complete hash-pinned
+retained baseline server/authentication/settlement/lifecycle workflow,removes the
+baseline marker instrumentation and observes only the five previously absent
+owner targets. No build,style or DOM mutation. Chrome155.0.8059.85;521 unique
+served assets authenticate before/after through existing capture workflow and
+independent rehash. Four physical contexts are NOT24 original-case replays or
+coverage of mobile,DPR2,comparison,held/click or all hit regions.
+
+Keep divider-owner-cursors-20261025 capture pair(stdout SHA256
+ac5fd38bc77ecddf2008debd6c5bc6d54412056c9ce406d2a3e816621d4c175b),
+verification pair(stdout167184872b7660a998d004877421054248fd766553a097d23193c6f8b3922636),
+and focused pair(stdout6c20e28816802277d19c9c9be03d2d13ab6898d9a4aeb562c1600b78d4bedc7c).
+All nativeExit0/stderr empty. New owning spec passes1/1,0skip,210.395ms,
+authenticates producer/baseline/metric/capture/assets and rejects changed cursor
+or retargeted owner. Two new standalone paths remain OUTSIDE frozen1028/353/196
+registration and accepted88be4d47;no canonical generation or case promotion.
+Next resolve block formatting-context alignment and missing-field applicability;
+do not recapture these settled desktop cursor points unchanged. Publication
+transport/headroom blocker remains;no unchanged push retry or data deletion.
+
 Outside-owner cursor applicability is now checked against BOTH authenticated
 October11 cursor logs:20 physical contexts/40 side rows/160 points cover only
 divider-root,divider-above,divider-primary,divider-below. None directly samples
