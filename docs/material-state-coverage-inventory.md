@@ -9,6 +9,30 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Corrected actual-host Select observation closes the prior observer gap for ONE
+exact retained-build select/light/focus desktop-dpr1 case,not the86-case cohort.
+Adapter audit-material-select-readonly-host.mjs pins the preceding producer and
+changes only diagnostic identity,target selector and pre-key/verification guards.
+Both actual hosts must be focused and enabled before trusted x;native is
+MAT-SELECT #select-control,candidate INPUT readonly=true. Native remains Team
+and focused;candidate emits input xTeam,then app normalizes to Solo,selected=
+false and focus=false. This connects the already isolated readonly core failure
+and existing authoring mismatch to a receipt-bound configured context,not a new
+root cause or proof of equal input structure. Supplementary x is NOT an original
+configured editing action. All134 editing exclusions and case closures remain open.
+
+Retain select-readonly-host-retry-20261025/latest-report.json SHA256
+f0957245178c2a0769ae011ba2d7d20f7d738cb7ee89bfeabe393643d6c88102;
+capture and separate --verify nativeExit0. Verifier's inherited summary says
+open endpoint,but exact row and filtered configured state are focus;do not use
+that generic summary to relabel this case. First host attempt failed before
+capture because nested data-module bare-package resolution lacked a file base;
+retain select-readonly-host-20261025 stderr. Retry resolves only the two known
+external imports explicitly;no rendering/fixture/source-registry mutation.
+Next use this bounded result in the pending obligation join;do not recapture
+all86 merely to repeat the shared diagnosis. Disabled48 still need their own
+applicability assessment. Frozen1002/326 export remains pending storage/publication.
+
 Resumed interrupted Select capture completed without restarting it. Retained
 select-readonly-exact-context-20261024/latest-report.json SHA256
 5d00a00786b842473dbf4ae1d75f431db732cb22e9b71a9933bd337c8544f7fa;
