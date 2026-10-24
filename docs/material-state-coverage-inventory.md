@@ -9,6 +9,33 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Whole-ledger gap census now selects the next finite question rather than
+continuing settled Menu expansions. Read-only exact809d37ad reconstruction
+nativeExit0;keep current-obligation-gap-census-20261024 pair,stdout SHA256
+8292deb2c086eab7cffd0ce29e1c3c4e980d63a578b5a142e5d2bac68e5293c2,
+stderr empty. All2311 remain partial/current-unverified. Existing scope has eight
+common obligations PLUS keyboardInteraction on128 memberships;that additional
+existing obligation must not be dropped by a closure review or counted as new
+configured cases. No full dependency/canonical/browser rerun was needed.
+
+Recorded dispositions:activation1466 join-pending/491 partial/354 exclusions;
+focus1587 join-pending/370 partial/40 inspected-failure/314 exclusions;local
+paint949 join-pending/1362 partial. Input/structure,semantics,history and source
+currentness remain partial across2311. These are stored labels,NOT counts of
+missing evidence or newly inspected failures;children can already answer part
+of a parent remaining task. Do not repeat captures on the strength of a label.
+
+Next priority:134 editing obligations are not-applicable but still partial
+(1868 nonapplicable minus1734 inspected exclusions;also577 partial minus443
+applicable). Their source-wide/uncaptured-state applicability remains explicit.
+Inspect existing exact target/source receipts to decide whether this is stale
+bookkeeping or a genuine exclusion gap;do not invent text editing for non-text
+controls or mark them excluded without proof. Then prioritize shared remaining-
+owner/anonymous-input mapping and known proof joins before expensive final
+current-rendering gates. Existing2287 generic owner-gap tasks and2271 generic AX
+tasks are not2287/2271 fresh browser investigations. Publication/storage approval
+remains pending;no Git object moved or new large generation produced.
+
 Coherent standalone Menu/focus batch now passes18/18,zero fail/skip,nativeExit0
 in66731.2287ms. Command:
 `node --max-old-space-size=8192 --test --test-concurrency=1 tests/material-parity/menu-composite-evidence.spec.mjs tests/material-parity/menu-popup-ax.spec.mjs`.
