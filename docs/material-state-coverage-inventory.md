@@ -4,6 +4,29 @@
 
 ### Current next action and publication status
 
+- Slider successor export selection is wired,not inventory-registered/canonical.
+  Explicit --slider-state-inputs selects onlyc394338e;all12 older supplements
+  conflict with it,and older/default invocations plus check/dry-run exclusivity
+  preserve. Actual currentReaderFactory dispatch is executed by the owning test.
+  Four changed prior paths have complete byte recovery:runner69565e8c→15654c97,
+  launcher652bdd20→13a8ae61,shared helper68db8454→94a60939,and older Slider
+  cohort test30e3cd3f→2fae33c5. Shared historical export entry handles the newest
+  selection directly;the new reader restores these exact predecessors before
+  invoking older readers. The older Slider cohort keeps an explicit source view,
+  not altered invocation expectations. Its three tests pass. A broader check
+  initially passes5/6:the unchanged Table whole-module comparison detects a
+  leftover imported helper binding after removing newer functions. It is NOT
+  a runtime ReferenceError or rendering failure. Shared restoration is now
+  self-contained;Table assertions are unchanged,and seven current/retained/
+  Radio/Table checks pass in14810.9758ms,logSHA
+  2ba1e1a91e52d2331943d657c23a2351c467df9bced6b00b4debd17d668e3afc.
+  Final selected-reader pass covers2 tests/all2311 cases/17552 dependencies,
+  zero skips,in54655.2151ms,logSHA
+  15a05e9045e5594e3607028356b02ae722e3efd9fc6a3e7b1bce03583920c734;
+  stderr empty. No new capture or canonical export. Next reconcile
+  accepted962 sources/285 proofs and the standalone additions/classifications;
+  do not treat selector wiring as publication or whole-case closure.
+
 - Next-batch Slider successor c394338e is SAVED and reader-verified,NOT canonical.
   Existing reviewed-case format receives52 children across exactly16 cases:
   16 unequal state-layer inputs,16 pointer/hover-only focus observations,

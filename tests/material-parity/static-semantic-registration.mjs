@@ -295,6 +295,26 @@ export function restoreRadioCaretProducer(source) {
 
 export function restoreRetainedFocusExportSource(source, kind) {
   let text=source.toString().replaceAll('\r\n','\n');
+  // Strip the newest selector at the shared owner,not at individual callers.
+  // Keep this function self-contained for historical whole-module restoration.
+  if(kind!=='case'&&text.includes('sliderStateInput')){
+    assert.equal(hash(text),kind==='runner'?'15654c97560e355b825b330116514e4e64a8d61769998e9eb7dca5e47e936928':'13a8ae61f8d0fb5f93d230a7a77da1ccd08d90c03cfa193d3d63d34c9e920f54');
+    const remove=addition=>{assert.equal(text.split(addition).length,2);text=text.replace(addition,'');};
+    if(kind==='runner'){
+      remove("import { sliderStateInputReview, createSliderStateInputReviewReader } from '../tests/material-parity/slider-state-input-review-source.mjs';\n");
+      remove('    const currentReaderFactory = options.caseObligationReviewSha256===sliderStateInputReview ? createSliderStateInputReviewReader : effectiveReaderFactory;\n');
+      assert.equal(text.split('const applicability=currentReaderFactory?.').length,2);
+      text=text.replace('const applicability=currentReaderFactory?.','const applicability=effectiveReaderFactory?.');
+      assert.equal(hash(text),'69565e8cd8b0d0e5c464f5ba51a5244f4cb95575d51a34f9d82a06668ca8645d');
+    }else{
+      assert.equal(kind,'launcher');
+      remove("const sliderStateInputs = rawRequested.includes('--slider-state-inputs');\nassert.ok(!sliderStateInputs || rawRequested.every(argument => ['--slider-state-inputs', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');\n");
+      remove(".filter(argument => argument !== '--slider-state-inputs')");remove('|--slider-state-inputs');
+      remove("if (sliderStateInputs) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823.json';\n");
+      remove("if (sliderStateInputs) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823';\n");
+      assert.equal(hash(text),'652bdd20b22c306229b4f88e4dcaf014b431139d77d6ac11663b2ff225936876');
+    }
+  }
   // Newest export-selection boundary is shared by every historical caller.
   if(kind!=='case'&&text.includes('sliderHoverHeld')){
     assert.equal(hash(text),kind==='runner'?'69565e8cd8b0d0e5c464f5ba51a5244f4cb95575d51a34f9d82a06668ca8645d':'652bdd20b22c306229b4f88e4dcaf014b431139d77d6ac11663b2ff225936876');

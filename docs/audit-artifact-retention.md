@@ -1,5 +1,23 @@
 # Audit artifact retention
 
+October24 Slider export-selection integration retains the failed
+slider-state-shared-entry-compatibility-20261024 log,SHA
+69ea0b2a0d039c7180c2a71f2bbaf0756a910776e89813c18620e4421d37f3d4.
+Five of six checks pass;Table's unchanged whole-module comparison detects the
+new import left after removal of newer functions. It is an instrumentation
+source-conservation failure,not runtime key delivery or renderer behavior.
+Owning shared function is made self-contained,without changing Table assertions.
+Keep slider-state-shared-entry-fixed-20261024 (7/7),SHA
+2ba1e1a91e52d2331943d657c23a2351c467df9bced6b00b4debd17d668e3afc,
+slider-state-previous-selection-integration-20261024 (3/3),earlier
+slider-state-export-reader-integration-20261024,and final
+slider-state-final-export-reader-20261024 (2/2,2311 cases/17552 dependencies)
+logs and stderr. Final reader follows the shared-boundary correction;do not
+lose its SHA15a05e9045e5594e3607028356b02ae722e3efd9fc6a3e7b1bce03583920c734;
+both final-reader and fixed-shared-entry stderr files are empty. Do not
+cite earlier success as if it covered that later source. All cases remain
+partial/current-unverified;no new canonical package or capture set was created.
+
 October24 Slider successor c394338e is now saved and dependency-verified,not
 canonical. Existing atomic writer saves198913430 bytes with a three-times-size
 headroom guard;complete installed digest authenticates. Reader passes2311 cases/

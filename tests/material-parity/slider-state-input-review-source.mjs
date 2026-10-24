@@ -3,6 +3,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { joinSliderStateInputs, sliderStatePredecessor } from '../../scripts/join-material-slider-state-inputs.mjs';
 import { createSliderHoverHeldReviewReader } from './slider-hover-held-case-review-source.mjs';
+import { restoreSliderStateInputExportSource, restoreSliderStateInputSharedRegistration, restoreSliderStateInputPreviousTest } from './slider-state-registration.mjs';
 
 export const sliderStateInputReview = 'c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -20,7 +21,21 @@ export function createSliderStateInputReviewReader({ root, read, reviewSha256 })
   const expected = joinSliderStateInputs(predecessor.review, (file, ...options) => read(path.resolve(root, file), ...options));
   assert.equal(hash(JSON.stringify(expected)), reviewSha256,
     'Whole successor must equal the authenticated bounded join,not merely its counts');
-  const prior = createSliderHoverHeldReviewReader({ root, read, reviewSha256: sliderStatePredecessor });
+  const priorRead = (absolute, options) => {
+    let restored;
+    for (const [file, kind] of [['scripts/run-material-input-audit.mjs', 'runner'],
+      ['scripts/export-material-input-audit-current-ancestry.mjs', 'launcher']]) {
+      if (absolute === path.resolve(root, file)) restored = restoreSliderStateInputExportSource(read(absolute), kind);
+    }
+    if (absolute === path.resolve(root, 'tests/material-parity/static-semantic-registration.mjs'))
+      restored = restoreSliderStateInputSharedRegistration(read(absolute));
+    if (absolute === path.resolve(root, 'tests/material-parity/slider-hover-held-case-review-source.spec.mjs'))
+      restored = restoreSliderStateInputPreviousTest(read(absolute));
+    if (restored === undefined) return read(absolute, options);
+    const bytes = Buffer.from(restored);
+    return options ? bytes.toString(typeof options === 'string' ? options : options.encoding ?? 'utf8') : bytes;
+  };
+  const prior = createSliderHoverHeldReviewReader({ root, read: priorRead, reviewSha256: sliderStatePredecessor });
   return { read: prior.read, sourceApplicability: {
     mode: 'exact-slider-state-input-successor', reviewSha256, cases: 16, children: 52,
     completePredecessorRecovered: true, predecessorApplicability: prior.sourceApplicability,

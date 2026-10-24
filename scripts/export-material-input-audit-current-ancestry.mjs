@@ -9,6 +9,8 @@ import { spawnSync } from 'node:child_process';
 // default supplemental/line-box paths for this historical capture.
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const rawRequested = process.argv.slice(2);
+const sliderStateInputs = rawRequested.includes('--slider-state-inputs');
+assert.ok(!sliderStateInputs || rawRequested.every(argument => ['--slider-state-inputs', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');
 const sliderHoverHeld = rawRequested.includes('--slider-hover-held');
 assert.ok(!sliderHoverHeld || rawRequested.every(argument => ['--slider-hover-held', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');
 const staticAx = rawRequested.includes('--static-ax');
@@ -32,9 +34,9 @@ assert.ok(!(expansionSemantics && (staticAx || cardInputs)), 'Choose one case-re
 assert.ok(!(stepperInputs && (staticAx || cardInputs || expansionSemantics)), 'Choose one case-review supplement');
 assert.ok(!(tabsMenuSheet && (staticAx || cardInputs || expansionSemantics || stepperInputs)), 'Choose one case-review supplement');
 assert.ok(!(staticSemanticInputs && (staticAx || cardInputs || expansionSemantics || stepperInputs || tabsMenuSheet)), 'Choose one case-review supplement');
-const requested = rawRequested.filter(argument => !['--static-ax', '--card-inputs', '--expansion-semantics', '--stepper-inputs', '--tabs-menu-sheet', '--static-semantic-inputs', '--popup-depth-inputs', '--scrollbar-paint', '--table-label-paint', '--radio-caret-paint', '--retained-focus', '--slider-hover-held'].includes(argument));
+const requested = rawRequested.filter(argument => argument !== '--slider-state-inputs').filter(argument => !['--static-ax', '--card-inputs', '--expansion-semantics', '--stepper-inputs', '--tabs-menu-sheet', '--static-semantic-inputs', '--popup-depth-inputs', '--scrollbar-paint', '--table-label-paint', '--radio-caret-paint', '--retained-focus', '--slider-hover-held'].includes(argument));
 assert.ok(requested.length <= 1 && requested.every(a => ['--check', '--dry-run'].includes(a)),
-  'Usage: node scripts/export-material-input-audit-current-ancestry.mjs [--check|--dry-run] [--static-ax|--card-inputs|--expansion-semantics|--stepper-inputs|--tabs-menu-sheet|--static-semantic-inputs|--popup-depth-inputs|--scrollbar-paint|--table-label-paint|--radio-caret-paint|--retained-focus|--slider-hover-held]');
+  'Usage: node scripts/export-material-input-audit-current-ancestry.mjs [--check|--dry-run] [--static-ax|--card-inputs|--expansion-semantics|--stepper-inputs|--tabs-menu-sheet|--static-semantic-inputs|--popup-depth-inputs|--scrollbar-paint|--table-label-paint|--radio-caret-paint|--retained-focus|--slider-hover-held|--slider-state-inputs]');
 const inputs = {
   'parity-report': 'artifacts/material-parity/current-ancestry-audit/latest-report.json',
   'normal-line-box-report': 'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',
@@ -49,6 +51,7 @@ if (tableLabelPaint) inputs['case-obligation-review'] = 'artifacts/material-pari
 if (radioCaretPaint) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/6889b546f95572c1df93b4c598634b3ad3565553bc69a99ff2a9e1c6b791590c.json';
 if (retainedFocus) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/aeb1ef1452d65ab53677088ee2944bdf453a7b0d2e0e9f6fed0f987a4e3f4a36.json';
 if (sliderHoverHeld) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/c0e397e0a5912d3f492c0d55a3d2b5421d6892f5403ba355c90560da6dbf2cea.json';
+if (sliderStateInputs) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823.json';
 for (const [name, relative] of Object.entries(inputs)) {
   const stat = statSync(path.join(root, relative));
   assert.ok(name === 'supplemental-root' ? stat.isDirectory() : stat.isFile(), `Invalid ${name}: ${relative}`);
@@ -63,6 +66,7 @@ if (tableLabelPaint) args[args.findIndex(argument => argument.startsWith('--case
 if (radioCaretPaint) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=6889b546f95572c1df93b4c598634b3ad3565553bc69a99ff2a9e1c6b791590c';
 if (retainedFocus) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=aeb1ef1452d65ab53677088ee2944bdf453a7b0d2e0e9f6fed0f987a4e3f4a36';
 if (sliderHoverHeld) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=c0e397e0a5912d3f492c0d55a3d2b5421d6892f5403ba355c90560da6dbf2cea';
+if (sliderStateInputs) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823';
 if (requested.includes('--dry-run')) console.log(JSON.stringify({ cwd: root, executable: process.execPath, args }, null, 2));
 else {
   // Forward the caller's cold/progress settings and preserve validation failure
