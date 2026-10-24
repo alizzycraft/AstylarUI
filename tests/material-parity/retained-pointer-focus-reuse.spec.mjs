@@ -6,6 +6,7 @@ import path from 'node:path';
 import { spawnSync, execFileSync } from 'node:child_process';
 import ts from 'typescript';
 import { restoreRetainedFocusExportSource, restoreRetainedFocusProducer } from './static-semantic-registration.mjs';
+import { restoreSliderHoverHeldExportSource } from './slider-hover-held-case-review-source.mjs';
 import { loadCaseObligationReview } from '../../scripts/audit-findings-store.mjs';
 import { joinRetainedPointerFocus, pointerFocusCapture, pointerFocusPredecessor,
   joinRetainedFocusObservationBatch, disabledFocusPredecessor,
@@ -113,7 +114,7 @@ test('retained focus selection preserves prior sources invocations and actual re
   for(const[file,kind]of[[runnerFile,'runner'],[launcher,'launcher']]){
     const text=readFileSync(file,'utf8');
     const prior=execFileSync('git',['show',`6f40e1e0:${file}`],{encoding:'utf8'}).replaceAll('\r\n','\n');
-    assert.equal(restoreRetainedFocusExportSource(text,kind),prior);
+    assert.equal(restoreRetainedFocusExportSource(restoreSliderHoverHeldExportSource(text,kind),kind),prior);
     assert.throws(()=>restoreRetainedFocusExportSource(text+'\n// drift\n',kind));
   }
 });

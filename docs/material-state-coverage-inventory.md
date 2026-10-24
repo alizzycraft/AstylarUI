@@ -2,6 +2,20 @@
 
 ## Current audit pointer — October24
 
+- Slider successor export selection is wired,not yet source-inventory registered
+  or canonical:existing named launcher accepts explicit --slider-hover-held,
+  selecting onlyc0e397e0. It rejects combinations with all11 older supplements;
+  default/older selections and the check/dry-run exclusivity contract preserve.
+  Actual runner effectiveReaderFactory selects the bounded Slider reader only
+  for the exact successor digest. Complete prior runner834e43c9 and launcher
+  a0e5c567 recover after reversing only this selection addition. Existing retained
+  selection test now first removes this bounded successor before applying its
+  unchanged older restoration. New selection/source suite passes2/2;older retained
+  selection passes1/1. Initial new test incorrectly combined --check/--dry-run;
+  corrected test preserves existing rejection instead of loosening the launcher.
+  No browser replay or export yet. Next reconcile the full955-source/278-proof
+  predecessor and newly added source/proof entries before one coherent milestone.
+
 - Slider hover/held exact-case join is saved as noncanonical successor
   c0e397e0a5912d3f492c0d55a3d2b5421d6892f5403ba355c90560da6dbf2cea.
   Only16 authoredActivation.configuredSliderHoverHeld children and associated

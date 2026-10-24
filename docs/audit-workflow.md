@@ -51,6 +51,16 @@ index for current counts and pending integration work, not the figures above.
 
 ## One investigation per question
 
+The queued Slider hover/held successor has explicit --slider-hover-held on the
+existing named launcher (also separately --dry-run or --check),selecting exact
+c0e397e0 only. Twelve supplement selections are mutually exclusive;all older/
+default selections preserve. Three focused selection/source checks pass,with
+complete prior runner/launcher restoration and actual routing. The proposal's
+17549 dependencies already authenticate through its bounded reader;source/proof
+inventory registration and canonical publication remain pending. Do not run a
+full export before reconciling the accepted955-path/278-proof population and
+bounded standalone additions. No case closure or new rendering acceptance.
+
 The retained-focus batch is registered at955 paths/278 proofs,adding two/five to
 the complete accepted953/273 population. Complete prior producer bytes and prior
 inventory entries conserve. Accepted-vector census records eight bounded old-

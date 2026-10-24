@@ -7,6 +7,29 @@ import { sliderHoverHeldPredecessor, sliderHoverHeldCapture } from '../../script
 export const sliderHoverHeldReview = 'c0e397e0a5912d3f492c0d55a3d2b5421d6892f5403ba355c90560da6dbf2cea';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 
+export function restoreSliderHoverHeldExportSource(source, kind) {
+  const current = kind === 'runner' ? '69565e8cd8b0d0e5c464f5ba51a5244f4cb95575d51a34f9d82a06668ca8645d' : '652bdd20b22c306229b4f88e4dcaf014b431139d77d6ac11663b2ff225936876';
+  const prior = kind === 'runner' ? '834e43c9f191e205b263bea230384211a058e80886d75e1188e076c5ec65a092' : 'a0e5c567becc970c55b86d32cbf4809b4330ee52023a1cb0c25135770489c06f';
+  assert.ok(['runner', 'launcher'].includes(kind));
+  assert.equal(hash(source), current);
+  const replace = (before, after = '') => {
+    assert.equal(source.split(before).length, 2); source = source.replace(before, after);
+  };
+  if (kind === 'runner') {
+    replace("import { sliderHoverHeldReview, createSliderHoverHeldReviewReader } from '../tests/material-parity/slider-hover-held-case-review-source.mjs';\n");
+    replace('    const effectiveReaderFactory = options.caseObligationReviewSha256===sliderHoverHeldReview ? createSliderHoverHeldReviewReader : finalReaderFactory;\n');
+    replace('const applicability=effectiveReaderFactory?.', 'const applicability=finalReaderFactory?.');
+  } else {
+    replace("const sliderHoverHeld = rawRequested.includes('--slider-hover-held');\nassert.ok(!sliderHoverHeld || rawRequested.every(argument => ['--slider-hover-held', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');\n");
+    replace("'--retained-focus', '--slider-hover-held'", "'--retained-focus'");
+    replace('--retained-focus|--slider-hover-held]', '--retained-focus]');
+    replace("if (sliderHoverHeld) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/c0e397e0a5912d3f492c0d55a3d2b5421d6892f5403ba355c90560da6dbf2cea.json';\n");
+    replace("if (sliderHoverHeld) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=c0e397e0a5912d3f492c0d55a3d2b5421d6892f5403ba355c90560da6dbf2cea';\n");
+  }
+  assert.equal(hash(source), prior);
+  return source;
+}
+
 // Only two reviewed test edits are reversed. Whole prior source authentication
 // is mandatory;the adapter does not normalize arbitrary new changes away.
 export function restoreSliderHoverHeldBenchmark(bytes) {
@@ -55,6 +78,11 @@ export function createSliderHoverHeldReviewReader({ root, read, reviewSha256 }) 
   assert.equal(removed, 16);
   assert.equal(hash(JSON.stringify(envelope.review)), sliderHoverHeldPredecessor);
   const priorRead = (absolute, options) => {
+    for (const [file, kind] of [['scripts/run-material-input-audit.mjs', 'runner'], ['scripts/export-material-input-audit-current-ancestry.mjs', 'launcher']]) {
+      if (absolute !== path.resolve(root, file)) continue;
+      const bytes = Buffer.from(restoreSliderHoverHeldExportSource(read(absolute).toString(), kind));
+      return options ? bytes.toString(typeof options === 'string' ? options : options.encoding ?? 'utf8') : bytes;
+    }
     if (absolute === path.resolve(root, 'tests/material-parity/benchmark-config.spec.mjs')) {
       const bytes = restoreSliderHoverHeldBenchmark(read(absolute));
       return options ? bytes.toString(typeof options === 'string' ? options : options.encoding ?? 'utf8') : bytes;
