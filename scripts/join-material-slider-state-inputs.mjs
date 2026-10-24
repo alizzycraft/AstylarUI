@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, statfsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
+import { saveReviewProposal } from './audit-findings-store.mjs';
 
 export const sliderStatePredecessor = 'c0e397e0a5912d3f492c0d55a3d2b5421d6892f5403ba355c90560da6dbf2cea';
 const captureReceipt = { file: 'artifacts/material-parity/slider-hover-held-20261024/latest-report.json',
@@ -95,10 +96,22 @@ export function joinSliderStateInputs(predecessor, read = readFileSync) {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  assert.deepEqual(process.argv.slice(2), ['--dry-run']);
+  assert.ok(process.argv.length === 3 && ['--dry-run', '--save'].includes(process.argv[2]));
   const envelope = JSON.parse(readFileSync(`artifacts/material-parity/working-audit/proposals/${sliderStatePredecessor}.json`));
   assert.equal(envelope.sha256, sliderStatePredecessor);
   const review = joinSliderStateInputs(envelope.review);
-  console.log(JSON.stringify({ reviewSha256: hash(JSON.stringify(review)), cases: 16, children: 52,
+  const reviewSha256 = hash(JSON.stringify(review));
+  if (process.argv[2] === '--save') {
+    const bytes = Buffer.byteLength(JSON.stringify({ status: 'proposal-not-canonical', sha256: reviewSha256, review }, null, 2) + '\n');
+    const disk = statfsSync('artifacts/material-parity/working-audit');
+    assert.ok(disk.bavail * disk.bsize > bytes * 3, 'Insufficient conservative atomic-writer headroom');
+    const saved = saveReviewProposal('artifacts/material-parity/working-audit', review);
+    assert.equal(saved.sha256, reviewSha256);
+    const installed = JSON.parse(readFileSync(saved.file));
+    assert.equal(installed.sha256, reviewSha256);
+    assert.equal(hash(JSON.stringify(installed.review)), reviewSha256);
+    console.log(JSON.stringify({ reviewSha256, cases: 16, children: 52, bytes,
+      saved: true, canonical: false, predecessorRecovered: true, dependencyReplayPending: true }));
+  } else console.log(JSON.stringify({ reviewSha256, cases: 16, children: 52,
     saved: false, canonical: false, predecessorRecovered: true, dependencyReplayPending: true }));
 }

@@ -1,15 +1,32 @@
 # Audit artifact retention
 
-October24 Slider next-batch join is DRY ONLY. No additional~199MB review snapshot
-or canonical payload was written. Keep slider-state-input-join-focused-20261024,
+October24 Slider successor c394338e is now saved and dependency-verified,not
+canonical. Existing atomic writer saves198913430 bytes with a three-times-size
+headroom guard;complete installed digest authenticates. Reader passes2311 cases/
+17552 dependencies. Proposal complete raw SHA
+ed7ecfea82fef0406fc9e0430a2df16a7db4555d2fdd074568c96cb5f3b39868
+remains unchanged through transparent compression. Initial operation left
+inherited NTFS compression (90734592 physical bytes);explicit compact /F with
+/EXE:LZX produces41680896 physical bytes,with the same complete SHA. Observed
+free569077760 afterward. Recompression is required when inherited compressed
+attributes make a non-forced command skip the stronger format;do not infer LZX
+from exit0 alone. No originals/failures deleted or accepted pointers advanced.
+Sixteen additional closed audit.js bundles were excluded from all962 sources/
+17549 prior case receipts before individual before/after hash-verified LZX:
+headroom386285568→610783232,exact run/hash list in
+slider-state-input-save-headroom-20261024.log,SHA
+e8a544ce5f0f9f516ce45e605c1cd786ab4c3de5b318f0cac479f6b15093541d.
+Keep save,source-conservation,reader-integration,proposal-compression and forced-
+LZX query logs;current ledger records verification receipts. Earlier join was
+dry only;keep slider-state-input-join-focused-20261024,
 slider-state-join-integration-20261024 (5/5),and
 slider-state-input-join-dry-run-20261024 logs and their stderr. IntegrationSHA
 860dfd9e5713d577293be6fbc54d5bf5c907b05313cc1944a6e0deffd44a3b83;
 dry-runSHA3b4b7607b34fd9836913ec5809dfb33de7b454b611a15d47750c274f355867a2.
 The exact predecessor c0e397e0 and original raw captures remain required.
 Dry-run digest0b3b7964 is not an installed proposal/pointer or accepted coverage.
-Check conservative atomic-writer headroom and complete reader/source integration
-before saving/publishing a coherent successor. No original/failure evidence removed.
+Reader integration is now complete;source/finding/proof registration and canonical
+publication remain pending. No original/failure evidence removed.
 
 October24 historical Slider material replay uses immutable git blob sources at
 f3c8254c,not a new browser build or screenshot set. Preserve

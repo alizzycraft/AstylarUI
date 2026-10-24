@@ -4,7 +4,7 @@
 
 ### Current next action and publication status
 
-- Next-batch Slider join is implemented and dry-run verified,NOT saved/published.
+- Next-batch Slider successor c394338e is SAVED and reader-verified,NOT canonical.
   Existing reviewed-case format receives52 children across exactly16 cases:
   16 unequal state-layer inputs,16 pointer/hover-only focus observations,
   16 bounded historical material mechanisms,and4 light interior-paint records.
@@ -19,9 +19,22 @@
   in7785.8082ms,logSHA860dfd9e5713d577293be6fbc54d5bf5c907b05313cc1944a6e0deffd44a3b83.
   Dry-run digest0b3b7964bafe4e7f4094cd640c906b4dea8fc73ed1d5b0beb6e9c3318a290bf0,
   logSHA3b4b7607b34fd9836913ec5809dfb33de7b454b611a15d47750c274f355867a2.
-  Both stderr files empty. No full review result set was written:remaining
-  work is conservative save headroom,owning reader/dependency validation,
-  coherent source/finding/proof registration and later canonical milestone.
+  Those dry-run logs are historical pre-save evidence. Guarded --save mode
+  changes only the producer receipt:substituting the exact9c545fa5 producer
+  recovers complete0b3b7964 review,while current source produces complete
+  c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823.
+  Save-source conservation passes1/1 in9431.2837ms,logSHA
+  8d326a58d31ff0f569bf051aea1e212d436d36a35db10663d02725270933e1a2.
+  Existing atomic writer saves198913430 bytes after the three-times-size guard;
+  complete installed review digest reauthenticates. Save logSHA
+  e454eee39d5fec7716ceaab382cc58419d320aff0ebf754b24a3bd1ec8d7c8ef.
+  New slider-state-input-review-source reader recomputes the complete exact
+  bounded successor,then delegates prior-source restoration to the existing
+  c0 reader. Existing loader passes2311 cases/17552 authenticated dependencies
+  in57970.4702ms,including unknown-review and changed-proof rejection. Reader
+  logSHAa87bc5ecdba2646caf5002adb16bd830a27d65c8d475e0acd031580728a51ba0;
+  stderr empty. Whole-case flags stay partial/current-unverified. Remaining
+  work is coherent source/finding/proof registration and later canonical gates.
   Do not run export merely to update these notes. Calendar frozen navigation
   and eight-context shortcut delivery were checked against existing records,
   not reopened or recaptured;they already have bounded classifications.
