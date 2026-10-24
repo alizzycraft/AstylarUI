@@ -7,6 +7,38 @@
 The first entry is current. Subsequent entries retain intermediate milestones;
 superseded pending instructions there are historical,not reasons to repeat work.
 
+### Existing Divider heading dispositions reconciled (October24)
+
+The five-owner scope below does NOT mean the headings lack all classifications.
+Extended the same owner check to query authenticated accepted compact findings:
+all48 heading pairs already have reviewed-heading-mask parity-harness findings
+and reviewed-horizontal-start-alignment equivalent-value dispositions (96 rows).
+Exact case/element membership,classification and complete-row receipts are
+retained in the working reconciliation;no full2GB report decode is needed.
+Both headings remain explicitly relative-positioned on both sides. All48 top
+requests agree as literal CSS-pixel values;one preserved serialization difference
+is native0.5px versus candidate.5px. This does not prove equal used layout.
+
+Native opacity0 versus candidate opacity1 remains unequal masking,not hidden
+input equivalence or a renderer paint diagnosis. The existing shared-ancestor
+history assertion also passes1/1 with two mutation controls:the shared rules
+restore reference offsets rather than introduce fresh candidate-only offsets.
+No new finding,second history implementation or browser capture was needed.
+
+Commands: `node scripts/check-divider-owner-coverage.mjs` and
+`node --test --test-name-pattern="Icon shared ancestor history" tests/material-parity/icon-asset-input.spec.mjs`.
+Both explicit nativeExit0. Keep divider-owner-heading-reconciliation-20261024
+log pair (stdout SHAd506b99bda1b59a16f5534ecaa400c154ccc25a4bdfedf8083c541fe0a8baac5)
+and divider-reused-shared-heading-history-20261024 pair
+(stdout SHA339f3a9fc42d5cd9ad4dba9bc2c0414c05cf196814f896089a9d2100e95422e5);
+both stderr empty. Prior790ac052 preserves the earlier census producer exactly.
+
+These offset/masking/logical-alignment questions are answered within their
+recorded boundaries;do not recapture them. Remaining property domains include
+frame sizing/box model and heading used line-box/clipping applicability,not a
+blanket missing-heading classification. Source/proof registration and case join
+remain pending for the new standalone checks;parent dispositions are unchanged.
+
 ### Divider remaining-owner scope is finite (October24)
 
 `node scripts/check-divider-owner-coverage.mjs` passes nativeExit0 using the
