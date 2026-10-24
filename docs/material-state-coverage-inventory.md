@@ -9,6 +9,29 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Lifetime requirement review now reuses existing stronger evidence,not resource
+counts alone:public light/desktop-DPR1 remount capture has3 remounts/14 boundaries,
+10 authored node records/293 identical rules and passive-peer survival. Actual
+Angular cohort evidence has3 destroy/recreate cycles/4 deactivations,DestroyRef
+witnesses,new identities,zero retired resources/active registrations and inactive
+detached-canvas callbacks. Exact captures and independent verification receipts
+authenticate;no lifecycle capture repeated.
+
+Small requirement record narrows the blanket remount/peer remaining clause to
+late font/media cancellation and interactive-peer callbacks,which remain unproved.
+Public versus actual Angular scopes,clock differences on the absent calendar
+selector,non-original-action boundaries and trusted-navigation/currentness limits
+stay explicit. No currentLifetimeAccepted/originalStaticActionReplay flag enabled,
+and historyOwnership/case remain partial. Other history/current/final work unchanged.
+
+Standalone exact-case suite passes5/5,0skip,nativeExit0,stderr empty;keep
+divider-lifetime-requirement-scope-20261025 log pair. It checks the retained parent
+values,scope strings,report/verifier hashes and all false late-work/currentness
+acceptance flags. This is requirement reconciliation,not general peer/lifetime
+acceptance or a new canonical generation. Next review sourceCurrentness's scoped
+matching-capture/module correspondence against its remaining broad runtime gates,
+without recapturing merely because earlier summary fields are historical.
+
 Exact requirement review now distinguishes three retained text-paint diagnostic
 hypotheses rather than calling all paint attribution unknown. Fresh native/
 canvas controls show transparent backing differs BEFORE Babylon while opaque

@@ -495,7 +495,7 @@
       "conclusion": "Partial;retain the original obligation and outstanding inspection work.",
       "remaining": [
         "Renderer-causality attribution beyond classified coordinate branches and inspected unchanged divider root-height lineage",
-        "late completion/remount/peer isolation applicability",
+        "Late font/media cancellation and interactive-peer callbacks remain unproved;public/Angular remount and passive-peer survival are already inspected only in their recorded scope.",
         "current rendering and lifetime validity",
         "Other compensation/history branches and live resource ownership/currentness"
       ],
@@ -504,6 +504,92 @@
         "sha256": "ed7ecfea82fef0406fc9e0430a2df16a7db4555d2fdd074568c96cb5f3b39868",
         "case": "static:divider@light/desktop",
         "obligation": "historyOwnership"
+      },
+      "scopedLifetimeReview": {
+        "disposition": "inspected-bounded-public-and-angular-lifetime",
+        "publicRemount": {
+          "context": {
+            "profile": "light",
+            "viewport": {
+              "width": 1440,
+              "height": 1000
+            },
+            "dpr": 1,
+            "remounts": 3,
+            "boundaries": 14
+          },
+          "inputCorrespondence": {
+            "authoredNodes": 10,
+            "identicalRules": 293,
+            "inapplicableRuleDifferences": [
+              {
+                "ordinal": 129,
+                "selector": ".datepicker-selected",
+                "matchedAuthoredOwners": 0,
+                "fields": [
+                  {
+                    "property": "top",
+                    "before": "186px",
+                    "after": "226px"
+                  },
+                  {
+                    "property": "left",
+                    "before": "50px",
+                    "after": "170px"
+                  }
+                ]
+              }
+            ]
+          },
+          "evidence": {
+            "report": {
+              "file": "artifacts/material-parity/divider-remount-peer-20261015/latest-report.json",
+              "sha256": "87c793252052bec4f67ef6a2abcb9ab57515ff9e2da33cfaffa72ebb07edf65d"
+            },
+            "verification": {
+              "file": "artifacts/material-parity/divider-remount-peer-initial-source-replay-20261015.log",
+              "sha256": "e98a817e8193913f457a21dd1e06bae5b800daa3e3e49804a98e4da870f322ef"
+            }
+          },
+          "scope": "Supplementary public lifecycle execution in matching physical/input context,not original static/inspect actions. Ten authored node records and293 rules agree;two clock-derived values on the one absent calendar selector remain unequal and recorded. No old mount-option,plugin-list serialization,resolved paint,Angular remount,late-font,semantic isolation or full-case/current-rendering acceptance."
+        },
+        "angularLifetime": {
+          "profile": "light",
+          "viewport": {
+            "id": "desktop",
+            "width": 1440,
+            "height": 1000,
+            "deviceScaleFactor": 1
+          },
+          "observedViewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "observedDpr": 1,
+          "physicalCohortCases": [
+            "static:divider@light/desktop",
+            "interaction:divider@light/desktop-dpr1/inspect"
+          ],
+          "remounts": 3,
+          "deactivations": 4,
+          "conclusion": "Actual routed and surface DestroyRef witnesses,new identities,zero retired tracked/live objects and active registrations,detached-canvas callbacks inactive;passive peer survives and independently disposes.",
+          "evidence": {
+            "report": {
+              "file": "artifacts/material-parity/divider-angular-cohorts-observed-20261019/latest-report.json",
+              "sha256": "c4085cff905e8aed82ded6a30e2e96b92ddaabbfd9103d57d62f75d7a7888790"
+            },
+            "verification": {
+              "file": "artifacts/material-parity/divider-angular-cohorts-independent-20261019.log",
+              "sha256": "dfd344840505861cd7b59679be44b98c9c017123cca0aaccee0d5d56119f6a8f"
+            }
+          },
+          "scope": "Observed viewport/canvas/theme/DPR,real Angular component destruction and tracked resource/registration cleanup at20 physical cohorts. Configured callback count is separately preserved. Not trusted navigation,late font/media cancellation,interactive peer callbacks,paint/current rendering or whole-case acceptance."
+        },
+        "lateFontMediaCancellationAccepted": false,
+        "interactivePeerCallbacksAccepted": false,
+        "originalStaticActionReplay": false,
+        "currentLifetimeAccepted": false,
+        "boundary": "Public remount and actual Angular destruction/passive peer witnesses are supplementary scoped evidence,not solely resource counts. Late work,trusted navigation,interactive peers,current-code ownership and original remaining final gates are not accepted."
       }
     },
     "sourceCurrentness": {

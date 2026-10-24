@@ -66,7 +66,8 @@ test('Exact Divider requirement review reconciles crop provenance without cleari
     for(const [name,r]of Object.entries(value.requirements)){
       assert.equal(r.applicability,parent.obligations[name].applicability);assert.equal(r.disposition,parent.obligations[name].disposition);
       assert.equal(r.evidence.sha256,value.basis.parent.sha256);
-      if(name!=='localPaint')assert.deepEqual(r.remaining,parent.obligations[name].remaining??[]);
+      if(!['localPaint','historyOwnership'].includes(name))assert.deepEqual(r.remaining,parent.obligations[name].remaining??[]);
+      if(name==='historyOwnership')assert.deepEqual(r.remaining,parent.obligations[name].remaining.map(s=>s==='late completion/remount/peer isolation applicability'?'Late font/media cancellation and interactive-peer callbacks remain unproved;public/Angular remount and passive-peer survival are already inspected only in their recorded scope.':s));
     }
     const paint=value.requirements.localPaint,provenance=paint.originalCropProvenance;
     assert.deepEqual(paint.remaining,parent.obligations.localPaint.remaining.map((s,index)=>index===0?'Remaining paragraph/text or unreviewed-owner coverage/compositing attribution is unproved;the exact original separator footprint and opaque ink difference are attributed to unequal requests.':s.replace(',original crop-producer applicability','')).concat('Fractional original native expectedBox and semantic target rectangle association remain unproved;integer pixel provenance does not replace them.'));
@@ -131,4 +132,18 @@ test('Text paint hypothesis review preserves fresh-control scope and suspected c
   for(const row of record.records[1].observations){assert.equal(row.liveRGBA,row.sameRGBA);assert.ok(row.fallbackAlphaDifferences>0);}
   for(const row of record.records[2].observations){assert.equal(row.material.alpha,1);assert.equal(row.ready,true);assert.equal(row.allRecordedOpacityRequestsUnit,true);}
   assert.equal(review.inspection,'partial');assert.equal(review.currentRendering,'unverified');assert.equal(review.inspectionClosureAllowed,false);
+});
+
+test('Scoped lifetime review distinguishes actual remount witnesses from late-work acceptance',()=>{
+  const review=JSON.parse(readFileSync('docs/evidence/material-divider-light-desktop-requirement-review.json'));
+  const b=readFileSync(review.basis.parent.file);assert.equal(hash(b),review.basis.parent.sha256);
+  const h=JSON.parse(b).review.groups.find(r=>r.case===review.case).obligations.historyOwnership,r=review.requirements.historyOwnership.scopedLifetimeReview;
+  assert.deepEqual(r.publicRemount.context,h.actualDividerPublicRemount.context);assert.equal(r.publicRemount.context.remounts,3);assert.equal(r.publicRemount.context.boundaries,14);
+  assert.equal(r.publicRemount.inputCorrespondence.authoredNodes,10);assert.equal(r.publicRemount.inputCorrespondence.identicalRules,293);
+  assert.equal(r.publicRemount.scope,h.actualDividerPublicRemount.boundary);
+  assert.equal(r.angularLifetime.conclusion,h.actualAngularComponentLifetime.conclusion);assert.equal(r.angularLifetime.scope,h.actualAngularComponentLifetime.boundary);
+  assert.equal(r.angularLifetime.remounts,3);assert.equal(r.angularLifetime.deactivations,4);assert.ok(r.angularLifetime.physicalCohortCases.includes(review.case));
+  for(const context of [r.publicRemount,r.angularLifetime])for(const q of Object.values(context.evidence))assert.equal(hash(readFileSync(q.file)),q.sha256);
+  for(const key of ['lateFontMediaCancellationAccepted','interactivePeerCallbacksAccepted','originalStaticActionReplay','currentLifetimeAccepted'])assert.equal(r[key],false);
+  assert.equal(review.requirements.historyOwnership.disposition,'partial');assert.equal(review.inspectionClosureAllowed,false);
 });
