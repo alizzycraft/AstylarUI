@@ -9,6 +9,31 @@ superseded pending instructions there are historical,not reasons to repeat work.
 
 ### Menu composite evidence joined with artifact dependencies (October24)
 
+Disabled editing applicability now has a precise evidence-transfer boundary.
+Authenticated taxonomy3f36958c yields48 disabled cases:8 each form-field,input,
+autocomplete,select,datepicker,timepicker. All96 paired tree receipts rehash;
+native Select's actual MAT-SELECT #select-control has aria-disabled=true even
+though it has no text editing target. Other target lists retain disabled=true.
+This establishes authored retained-state applicability,not observed rejection
+of interactions in48 Material cases and not absence of a control.
+
+Reused public report8a541560:four disabled side observations(DPR1/2 paired) have
+16 boundaries focused-home/typed-x/delete/backspace,total. Every boundary is
+UNFOCUSED,value Atlas,events empty. Thus these controls prove the isolated
+focus-rejection/stable-value path,not a disabled-but-logically-focused handler
+guard or Material popup/focus/pointer/currentness coverage. Current dispatch
+methods route based on focused owner;absence of a disabled check there alone
+does not prove a reachable public failure. Do not manufacture that conclusion
+or run a private forced-focus experiment as browser parity.
+
+Read-only decisive check nativeExit0,stderr empty;retain
+disabled-editing-applicability-boundary-20261025 log pair,stdout SHA256
+1d2acdbe08bcb9845886206bba6ae9ac8d369a30918b3fcb0c73898c7a244665.
+No capture or large review reconstruction. All48(and all134 editing exclusion
+obligations) remain partial;no new defect/pass/current-rendering claim. Next
+inspect existing exact Material disabled focus/activation evidence before
+requesting a new capture;dynamic disabled transition remains a distinct gap.
+
 Exact Select readonly evidence now has a tested PENDING virtual obligation join:
 scripts/join-material-select-readonly-evidence.mjs adds one supplementary child
 to authoredEditing for interaction:select@light/desktop-dpr1/focus only. Successor
