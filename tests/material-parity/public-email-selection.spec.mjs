@@ -8,10 +8,11 @@ import ts from 'typescript';
 const hash=b=>createHash('sha256').update(b).digest('hex');
 
 test('Focus selection staged registry preserves every accepted source proof finding and plan',async t=>{
-  const {prepareFocusSelectionAuditRegistry:prepare,restoreFocusSelectionAuditRegistry:restore}=await import('./public-tab-selection-finding.mjs');
+  const {prepareFocusSelectionAuditRegistry:prepare,restoreFocusSelectionAuditRegistry:restore,createFocusSelectionAuditPriorRead:priorFactory}=await import('./public-tab-selection-finding.mjs');
+  const acceptedRead=priorFactory({root:process.cwd(),read:readFileSync});
   const raw={},staged={};for(const [kind,file]of Object.entries({producer:'tests/material-parity/input-equivalence-audit.mjs',policy:'tests/material-parity/input-equivalence-policy.mjs'})){
-    raw[kind]=readFileSync(file,'utf8').replaceAll('\r\n','\n');staged[kind]=prepare(raw[kind],kind,readFileSync);
-    assert.equal(restore(staged[kind],kind),raw[kind]);assert.equal(readFileSync(file,'utf8').replaceAll('\r\n','\n'),raw[kind]);
+    const live=readFileSync(file,'utf8').replaceAll('\r\n','\n');raw[kind]=acceptedRead(file,'utf8');staged[kind]=prepare(raw[kind],kind,readFileSync);
+    assert.equal(restore(staged[kind],kind),raw[kind]);assert.equal(readFileSync(file,'utf8').replaceAll('\r\n','\n'),live);if(live!==raw[kind])assert.equal(live,staged[kind]);
     assert.throws(()=>prepare(raw[kind]+'\n// drift',kind,readFileSync));assert.throws(()=>restore(staged[kind]+'\n// drift',kind));assert.throws(()=>prepare(staged[kind],kind,readFileSync));
   }
   assert.throws(()=>prepare(raw.producer,'producer',()=>Buffer.alloc(0)));
@@ -35,7 +36,7 @@ test('Focus selection staged registry preserves every accepted source proof find
   const api=await import('./public-tab-selection-finding.mjs'),root=process.cwd();
   const entries=[['tests/material-parity/input-equivalence-audit.mjs','producer'],['tests/material-parity/input-equivalence-policy.mjs','policy'],['scripts/run-material-input-audit.mjs','runner'],['scripts/export-material-input-audit-current-ancestry.mjs','launcher']];
   for(const [file,kind]of entries.slice(2)){
-    raw[kind]=readFileSync(file,'utf8').replaceAll('\r\n','\n');staged[kind]=api.prepareFocusSelectionAuditSelection(raw[kind],kind);
+    const live=readFileSync(file,'utf8').replaceAll('\r\n','\n');raw[kind]=acceptedRead(file,'utf8');staged[kind]=api.prepareFocusSelectionAuditSelection(raw[kind],kind);if(live!==raw[kind])assert.equal(live,staged[kind]);
     assert.equal(api.restoreFocusSelectionAuditSelection(staged[kind],kind),raw[kind]);
     assert.throws(()=>api.restoreFocusSelectionAuditSelection(staged[kind]+'\n// drift',kind));
   }
@@ -67,6 +68,12 @@ test('Focus selection staged registry preserves every accepted source proof find
   const {createTreeFocusPriorRead,restoreTreeFocusSelection}=await import('./tree-focus-registration.mjs');
   for(const kind of ['runner','launcher'])assert.equal(restoreTreeFocusSelection(staged[kind],kind),restoreTreeFocusSelection(raw[kind],kind));
   const historical=createTreeFocusPriorRead({root,read});assert.equal(historical(sharedFile,'utf8'),oldShared);
+  const directPrior=api.createFocusSelectionAuditPriorRead({root,read});
+  for(const [file,kind]of entries)assert.equal(directPrior(file,'utf8'),raw[kind]);
+  const sortFile='tests/material-parity/sort-arrow-findings.mjs',sortSource=readFileSync(sortFile,'utf8').replaceAll('\r\n','\n'),oldSort=api.restoreFocusSelectionSortSource(sortSource);
+  assert.equal(api.prepareFocusSelectionSortSource(oldSort),sortSource);assert.throws(()=>api.restoreFocusSelectionSortSource(sortSource+'\n// drift'));
+  const {createSortArrowPriorRead}=await import('./sort-arrow-findings.mjs'),sortRead=createSortArrowPriorRead({root,read}),sortControl=createSortArrowPriorRead({root,read:readFileSync});
+  for(const [file]of entries)assert.equal(sortRead(file,'utf8'),sortControl(file,'utf8'));
   if(process.env.ASTYLAR_AUDIT_FOCUS_SELECTION_FULL==='1'){
     const reader=await api.createFocusSelectionAuditReviewReader({root,read,reviewSha256:api.focusSelectionReview});
     const {loadCaseObligationReview}=await import('../../scripts/audit-findings-store.mjs');

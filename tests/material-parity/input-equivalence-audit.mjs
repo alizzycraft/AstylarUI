@@ -8922,6 +8922,13 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    "scripts/audit-material-timepicker-programmatic-focus.mjs",
+    "scripts/join-material-timepicker-programmatic-focus.mjs",
+    "scripts/audit-public-email-selection.mjs",
+    "scripts/audit-public-email-tab-entry.mjs",
+    "scripts/audit-public-tab-selection-trace.mjs",
+    "tests/material-parity/public-email-selection.spec.mjs",
+    "tests/material-parity/public-tab-selection-finding.mjs",
     "scripts/join-material-sort-arrow-evidence.mjs",
     "tests/material-parity/sort-arrow-findings.mjs",
     "tests/material-parity/sort-arrow-geometry.spec.mjs",
@@ -9999,6 +10006,24 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, "tests/material-parity/focus-action-scope.spec.mjs", new RegExp("test\\('supplementary Timepicker staged reader recovers exact historical tests and validates all dependencies'"),
+      "supplementary Timepicker staged reader recovers exact historical tests and validates all dependencies", "Bounded supplementary Timepicker action and public Tab-selection cause evidence;not current rendering,original Material causality or whole-case acceptance."),
+    proof(root, "tests/material-parity/focus-action-scope.spec.mjs", new RegExp("test\\('supplementary Timepicker focus join preserves the complete accepted predecessor and rejects forged evidence'"),
+      "supplementary Timepicker focus join preserves the complete accepted predecessor and rejects forged evidence", "Bounded supplementary Timepicker action and public Tab-selection cause evidence;not current rendering,original Material causality or whole-case acceptance."),
+    proof(root, "tests/material-parity/focus-action-scope.spec.mjs", new RegExp("test\\('supplementary Timepicker DOM focus opens only the candidate popup across eight retained contexts'"),
+      "supplementary Timepicker DOM focus opens only the candidate popup across eight retained contexts", "Bounded supplementary Timepicker action and public Tab-selection cause evidence;not current rendering,original Material causality or whole-case acceptance."),
+    proof(root, "tests/material-parity/public-email-selection.spec.mjs", new RegExp("test\\('Focus selection staged registry preserves every accepted source proof finding and plan'"),
+      "Focus selection staged registry preserves every accepted source proof finding and plan", "Bounded supplementary Timepicker action and public Tab-selection cause evidence;not current rendering,original Material causality or whole-case acceptance."),
+    proof(root, "tests/material-parity/public-email-selection.spec.mjs", new RegExp("test\\('pending public Tab-selection finding authenticates its bounded cause without promoting the audit'"),
+      "pending public Tab-selection finding authenticates its bounded cause without promoting the audit", "Bounded supplementary Timepicker action and public Tab-selection cause evidence;not current rendering,original Material causality or whole-case acceptance."),
+    proof(root, "tests/material-parity/public-email-selection.spec.mjs", new RegExp("test\\('public Tab trace observes native selection overwritten by queued semantic control sync'"),
+      "public Tab trace observes native selection overwritten by queued semantic control sync", "Bounded supplementary Timepicker action and public Tab-selection cause evidence;not current rendering,original Material causality or whole-case acceptance."),
+    proof(root, "tests/material-parity/public-email-selection.spec.mjs", new RegExp("test\\('Tab selection trace binds complete current and installed selection-sync methods'"),
+      "Tab selection trace binds complete current and installed selection-sync methods", "Bounded supplementary Timepicker action and public Tab-selection cause evidence;not current rendering,original Material causality or whole-case acceptance."),
+    proof(root, "tests/material-parity/public-email-selection.spec.mjs", new RegExp("test\\('public text and email Tab-entry failures separate initial selection from explicit replacement'"),
+      "public text and email Tab-entry failures separate initial selection from explicit replacement", "Bounded supplementary Timepicker action and public Tab-selection cause evidence;not current rendering,original Material causality or whole-case acceptance."),
+    proof(root, "tests/material-parity/public-email-selection.spec.mjs", new RegExp("test\\('public selection controls reuse authenticated installed keyboard-owner applicability'"),
+      "public selection controls reuse authenticated installed keyboard-owner applicability", "Bounded supplementary Timepicker action and public Tab-selection cause evidence;not current rendering,original Material causality or whole-case acceptance."),
     proof(root, "tests/material-parity/sort-arrow-geometry.spec.mjs", new RegExp("test\\('Sort staged selection and reader preserve older routes and authenticate the exact successor'"),
       "Sort staged selection and reader preserve older routes and authenticate the exact successor", "Bounded retained Sort presence and vector/pixel evidence;not fresh current rendering or complete case acceptance."),
     proof(root, "tests/material-parity/sort-arrow-geometry.spec.mjs", new RegExp("test\\('Sort staged registry preserves all existing sources proofs findings and plans'"),
@@ -10806,6 +10831,7 @@ function proof(root, file, expression, status, description) {
 
 function implementationPlan() {
   return [
+    {"priority":2.06,"rootCause":"core native-origin focus and semantic control-selection synchronization","action":"Preserve browser-owned selection at the native-origin focus/control-sync boundary before managed editing consumes it. Keep scene-origin programmatic focus,pointer/directional selection,updates and unsupported selection APIs separate. Do not globally selectAll,patch Material callbacks,change input types or invent email endpoints. Core mechanism demonstrated for one public text Tab-entry trace with four text/email failing pairs and four explicit-selection controls. Not email-specific setter attribution,original Material runtime causality,all focus origins,IME/clipboard,raster,full current rendering or whole-case closure. No implementation fix authorized by this audit."},
     {"priority":2.2,"rootCause":"showcase Sort arrow presence/state translation","action":"Match native hover/focus/activation arrow presence through authored state;do not add renderer offsets or duplicate input routing. Retained input presence and current source/history only;not raw hover timing,animation,paint,current served build or whole-case closure."},
     {"priority":2.2,"rootCause":"Material sort-arrow CSS-space vector paint geometry","action":"Preserve native path and dimensions with faithful nonoverlapping vector geometry;do not retune scale,offset,color or opacity to hide the mismatch. Current geometry and source history plus two retained local observations. Captured-plugin linkage and fresh current raster remain unverified;not all-context paint or case closure."},
     {"priority":0.15,"rootCause":"Babylon pointer move reintroduces canvas sequential focus and semantic sync recaptures backward exit","action":"Coordinate core/Babylon canvas tab ownership while preserving pointer/selection focus and genuine modal containment;verify forward/backward exit without replacing native Tab navigation. Preserve the uninstrumented equal-input pair and authenticated causal trace;historical introduction and broader contexts remain open."},

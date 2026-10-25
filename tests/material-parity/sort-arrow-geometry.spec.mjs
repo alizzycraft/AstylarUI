@@ -1,14 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFileSync,existsSync} from 'node:fs';
+import {readFileSync as nativeReadFileSync,existsSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import {spawnSync} from 'node:child_process';
 import path from 'node:path';
 import ts from 'typescript';
+import {createFocusSelectionAuditPriorRead} from './public-tab-selection-finding.mjs';
 import {PNG} from 'pngjs';
 import {evaluateFocusedRaster} from './focused-raster-metrics.mjs';
 
+const readFileSync=createFocusSelectionAuditPriorRead({root:process.cwd(),read:nativeReadFileSync});
 const hash=b=>createHash('sha256').update(b).digest('hex');
 test('Sort staged registry preserves all existing sources proofs findings and plans',async t=>{
   const {prepareSortArrowRegistry:prepare,restoreSortArrowRegistry:restore,createSortArrowPriorRead,sortArrowSources,sortArrowProofTitles}=await import('./sort-arrow-findings.mjs');

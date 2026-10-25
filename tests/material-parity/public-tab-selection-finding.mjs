@@ -75,7 +75,7 @@ export function restoreFocusSelectionAuditRegistry(bytes,kind){
   assert.equal(hash(source),registryPrior[kind]);return source;
 }
 
-export const focusSelectionReview='ef9d31ce6f077ca57c548c3cd86f63d3a5558d1a609740467ccd73e0a682473c';
+export const focusSelectionReview='0da5443578c79b0b58ee4fc8b4902df6185ad08fee2d03fd863a0a466fefcb6b';
 const selectionPrior={runner:'3eca9c8cc977ca99a05f039b8a1a1d6a47e7edd325af0bd3e15db606194f07ca',launcher:'3dc88f081af3b239d59d85a915a62495c9344cf2fa04ed98e3eafd52577bdf70'};
 const selectionChanges=kind=>kind==='launcher'?[
   ["const sortArrow = rawRequested.includes('--sort-arrow');","const focusSelection = rawRequested.includes('--focus-selection');\nassert.ok(!focusSelection || rawRequested.every(argument => ['--focus-selection', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');\nconst sortArrow = rawRequested.includes('--sort-arrow');"],
@@ -113,19 +113,31 @@ export function restoreFocusSelectionSharedSource(bytes){
   for(const [before,after]of sharedChanges.toReversed())source=once(source,after,before);
   assert.equal(hash(source),sharedPrior,'Complete shared replay predecessor must recover');return source;
 }
-export async function createFocusSelectionAuditReviewReader({root,read,reviewSha256}){
-  assert.equal(reviewSha256,focusSelectionReview,'Only exact supplementary focus/selection review selects this reader');
+const sortSharedPrior='4cfa22bd2a6ebd16e2a612cb19e9c01d7219151a16839877ff1cacc304882813';
+const sortSharedChanges=[
+  ["import {createHash} from 'node:crypto';","import {createHash} from 'node:crypto';\nimport {createFocusSelectionAuditPriorRead} from './public-tab-selection-finding.mjs';"],
+  ['export function createSortArrowPriorRead({root,read}){','export function createSortArrowPriorRead({root,read}){\n  read=createFocusSelectionAuditPriorRead({root,read});'],
+];
+export function prepareFocusSelectionSortSource(bytes){let source=bytes.toString().replaceAll('\r\n','\n');assert.equal(hash(source),sortSharedPrior);for(const [a,b]of sortSharedChanges)source=once(source,a,b);return source;}
+export function restoreFocusSelectionSortSource(bytes){let source=bytes.toString().replaceAll('\r\n','\n');if(hash(source)===sortSharedPrior)return source;for(const [a,b]of sortSharedChanges.toReversed())source=once(source,b,a);assert.equal(hash(source),sortSharedPrior);return source;}
+export function createFocusSelectionAuditPriorRead({root,read}){
   const kinds=new Map(Object.entries({
     'tests/material-parity/input-equivalence-audit.mjs':'producer','tests/material-parity/input-equivalence-policy.mjs':'policy',
     'scripts/run-material-input-audit.mjs':'runner','scripts/export-material-input-audit-current-ancestry.mjs':'launcher',
+    'tests/material-parity/tree-focus-registration.mjs':'tree-replay','tests/material-parity/sort-arrow-findings.mjs':'sort-replay',
   }).map(([file,kind])=>[path.resolve(root,file),kind]));
   const priorRead=(name,options)=>{
     const kind=kinds.get(path.resolve(root,name));if(!kind)return read(name,options);
     const source=read(name).toString().replaceAll('\r\n','\n');
-    const prior=hash(source)===(registryPrior[kind]??selectionPrior[kind])?source:
+    const prior=kind==='tree-replay'?restoreFocusSelectionSharedSource(source):kind==='sort-replay'?restoreFocusSelectionSortSource(source):hash(source)===(registryPrior[kind]??selectionPrior[kind])?source:
       Object.hasOwn(registryPrior,kind)?restoreFocusSelectionAuditRegistry(source,kind):restoreFocusSelectionAuditSelection(source,kind);
     const encoding=typeof options==='string'?options:options?.encoding;return encoding?Buffer.from(prior).toString(encoding):Buffer.from(prior);
   };
+  return priorRead;
+}
+export async function createFocusSelectionAuditReviewReader({root,read,reviewSha256}){
+  assert.equal(reviewSha256,focusSelectionReview,'Only exact supplementary focus/selection review selects this reader');
+  const priorRead=createFocusSelectionAuditPriorRead({root,read});
   const {createTimepickerProgrammaticFocusReviewReader}=await import('../../scripts/join-material-timepicker-programmatic-focus.mjs');
   const reader=await createTimepickerProgrammaticFocusReviewReader({root,read:priorRead});assert.equal(reader.sha256,reviewSha256);
   return {...reader,sourceApplicability:{mode:'exact-focus-selection-partial-review',restoredRegistrySelectionSources:4,

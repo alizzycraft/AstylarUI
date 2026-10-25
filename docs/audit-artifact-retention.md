@@ -1,5 +1,12 @@
 # Audit artifact retention
 
+Keep focus-selection shared-entry,owner-corrected,initial live-failure/restored
+and final verified integration logs named in the current ledger. No failed
+attempt is superseded by deleting it. Accepted7a22 and its authenticated selected
+metadata remain the required predecessor for the next canonical milestone.
+The new public controls/trace and Timepicker supplementary capture remain unique
+evidence;live registration alone authorizes no cleanup or case acceptance.
+
 Keep `public-tab-selection-trace-20261025`,its capture log,the initial
 `public-tab-selection-cause-20261025.log` AST-selector failure,the owner-corrected
 suite log and pending-finding log. The trace references the retained uninstrumented

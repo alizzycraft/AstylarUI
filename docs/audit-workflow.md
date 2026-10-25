@@ -1,5 +1,14 @@
 # Efficient Material input-audit workflow
 
+October25 focus/selection batch is live1077/407/203/70;explicit --focus-selection
+selects0da54435. Direct/nested historical readers and complete source restoration
+are verified,including all1070 old paths,seven additions and eight bounded old
+changes. Full18439-dependency reader and live compatibility/public controls pass.
+Freeze for one canonical export/conservation/independent cold/import milestone;
+accepted7a22 remains historical until publication gates pass. Do not rerun
+settled public matrices,causal trace or registration for metadata. All2311 cases
+remain partial/current-rendering unverified;original acceptance gates apply.
+
 October25 Sort milestone accepted locally as7a22e84a/index0d9f52fa. Corrected
 export,complete conservation,independent cold comparison (exit0,diskHits0) and
 verified isolated/accepted imports pass. See the current ledger for exact logs.

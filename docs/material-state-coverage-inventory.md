@@ -4,6 +4,34 @@
 
 ### Current next action and publication status
 
+October25 focus/selection batch is now LIVE registered at1077 sources/407 proof
+declarations/203 findings/70 implementation tracks. Explicit --focus-selection
+selects `0da5443578c79b0b58ee4fc8b4902df6185ad08fee2d03fd863a0a466fefcb6b`.
+The earlier ef9 digest is historical:its join producer gained exact source-read
+reconciliation,not new observations. Direct Sort entry now applies the common
+bounded prior reader before its own restoration;the Sort suite explicitly reads
+its historical registration population. Complete Sort helper/proof predecessors
+recover,including the known730fd78e intermediate;unknown drift rejects.
+
+Evidence under `artifacts/material-parity/`:
+- `focus-selection-direct-sort-replay-20261025.log`:four controls pass;
+- `focus-selection-direct-sort-full-reader-20261025.log`:1/1,0skip,
+  141314.557ms,18439 dependencies/2311 cases with complete historical restoration;
+- `focus-selection-live-registration-verified-20261025.log`:actual live new/
+  Text-held/Sort/Tree controls pass4/4,10489.1533ms;
+- `focus-selection-live-source-conservation-20261025.log`:authenticated accepted
+  metadata extract,all1070 old paths retained,seven exact additions,eight changed
+  old source paths all recover their complete accepted hashes,no removals;
+- `focus-selection-live-public-controls-20261025.log`:6/6,0skip,12720.3702ms.
+
+Freeze these sources for ONE coherent --focus-selection canonical export,
+complete conservation,independent cold comparison and isolated/accepted imports.
+Current7a22 remains accepted historical evidence,not current-source equality.
+All2311 cases remain partial/current-rendering unverified;scope,original final
+gates and equal-input contract are unchanged. No renderer/plugin implementation
+or comparison fixture changes. Retain initial shared-entry/live failures;do not
+repeat settled captures,registration or the18439-dependency check for prose.
+
 October25 Tree-level shared replay now strips the exact focus/selection registry
 and selector stage before existing Sort/Tree restoration. Complete shared helper
 restores SHA256d6fbdca941896c58f162c47748792183fd218015dabd8cff628979fc4d222892;

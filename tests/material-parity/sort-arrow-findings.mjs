@@ -1,6 +1,7 @@
 // Pending findings;the frozen live policy/source inventory is not changed here.
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
+import {createFocusSelectionAuditPriorRead} from './public-tab-selection-finding.mjs';
 import path from 'node:path';
 import {createTreeFocusReviewReader,treeFocusReview} from './tree-focus-registration.mjs';
 import {joinSortArrowEvidence,sortArrowPredecessor} from '../../scripts/join-material-sort-arrow-evidence.mjs';
@@ -112,6 +113,7 @@ export function restoreSortArrowSelection(bytes,kind){
   for(const [a,b]of selectionChanges(kind).toReversed())text=once(text,b,a);assert.equal(digest(text),selectionPrior[kind]);return text;
 }
 export function createSortArrowPriorRead({root,read}){
+  read=createFocusSelectionAuditPriorRead({root,read});
   const kinds=new Map(Object.entries({
     'tests/material-parity/input-equivalence-audit.mjs':'producer','tests/material-parity/input-equivalence-policy.mjs':'policy',
     'scripts/run-material-input-audit.mjs':'runner','scripts/export-material-input-audit-current-ancestry.mjs':'launcher',
