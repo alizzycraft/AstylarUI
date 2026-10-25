@@ -72,7 +72,8 @@ const { audit, errors } = withAuditEvidenceSession(() => {
     const treeFocusReaderFactory = options.caseObligationReviewSha256===treeFocusReview ? createTreeFocusReviewReader : textHeldReaderFactory;
     const sortArrowReaderFactory = options.caseObligationReviewSha256===sortArrowReview ? createSortArrowReviewReader : treeFocusReaderFactory;
     const focusSelectionReaderFactory = options.caseObligationReviewSha256===focusSelectionReview ? createFocusSelectionAuditReviewReader : sortArrowReaderFactory;
-    const applicability=await focusSelectionReaderFactory?.({root,read:auditReadFileSync,reviewSha256:options.caseObligationReviewSha256});
+    const applicability=focusSelectionReaderFactory?.({root,read:auditReadFileSync,reviewSha256:options.caseObligationReviewSha256});
+    assert.ok(!applicability || typeof applicability.then !== 'function', 'Audit evidence readers must be synchronous within evidence session');
     audit.coverage = attachCaseObligationCoverage(audit.coverage, options.caseObligationReview,
       options.caseObligationReviewSha256, { root, read: applicability?.read ?? auditReadFileSync });
     if(applicability)audit.coverage.inspectionEvidence.sourceApplicability=applicability.sourceApplicability;

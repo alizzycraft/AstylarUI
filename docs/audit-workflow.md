@@ -1,5 +1,13 @@
 # Efficient Material input-audit workflow
 
+October25 focus/selection export retry prerequisite is corrected:the initial
+attempt failed parsing await in a synchronous session callback before writes.
+Readers now stay synchronous;complete-runner Node syntax and rejecting Promise
+controls pass. Actual session verifies18439 dependencies/3.35GB with diskHits0;
+four compatibility controls pass. Explicit --focus-selection now selectsd47c41d3.
+Reuse verified pre-export7a22 backup and a fresh sync-corrected retry log. Do not
+repeat captures or weaken/async-relax the evidence session. Original gates remain.
+
 October25 focus/selection batch is live1077/407/203/70;explicit --focus-selection
 selects0da54435. Direct/nested historical readers and complete source restoration
 are verified,including all1070 old paths,seven additions and eight bounded old

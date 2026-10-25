@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
+import {createTimepickerProgrammaticFocusReviewReader} from '../../scripts/join-material-timepicker-programmatic-focus.mjs';
 export const publicTabSelectionFinding=Object.freeze({
   id:'core-native-tab-selection-overwritten-by-control-sync',
   classification:'confirmed-core-renderer-defect',
@@ -75,7 +76,7 @@ export function restoreFocusSelectionAuditRegistry(bytes,kind){
   assert.equal(hash(source),registryPrior[kind]);return source;
 }
 
-export const focusSelectionReview='0da5443578c79b0b58ee4fc8b4902df6185ad08fee2d03fd863a0a466fefcb6b';
+export const focusSelectionReview='d47c41d3d6ac4dff3632688a36e8e20e2ec631fe0c9feca1bc05a198f36d3bab';
 const selectionPrior={runner:'3eca9c8cc977ca99a05f039b8a1a1d6a47e7edd325af0bd3e15db606194f07ca',launcher:'3dc88f081af3b239d59d85a915a62495c9344cf2fa04ed98e3eafd52577bdf70'};
 const selectionChanges=kind=>kind==='launcher'?[
   ["const sortArrow = rawRequested.includes('--sort-arrow');","const focusSelection = rawRequested.includes('--focus-selection');\nassert.ok(!focusSelection || rawRequested.every(argument => ['--focus-selection', '--check', '--dry-run'].includes(argument)), 'Choose one case-review supplement');\nconst sortArrow = rawRequested.includes('--sort-arrow');"],
@@ -86,7 +87,8 @@ const selectionChanges=kind=>kind==='launcher'?[
   ["if (requested.includes('--dry-run'))",`if (focusSelection) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=${focusSelectionReview}';\nif (requested.includes('--dry-run'))`],
 ]:[
   ["import { sortArrowReview, createSortArrowReviewReader } from '../tests/material-parity/sort-arrow-findings.mjs';","import { sortArrowReview, createSortArrowReviewReader } from '../tests/material-parity/sort-arrow-findings.mjs';\nimport { focusSelectionReview, createFocusSelectionAuditReviewReader } from '../tests/material-parity/public-tab-selection-finding.mjs';"],
-  ['const applicability=sortArrowReaderFactory?.','const focusSelectionReaderFactory = options.caseObligationReviewSha256===focusSelectionReview ? createFocusSelectionAuditReviewReader : sortArrowReaderFactory;\n    const applicability=await focusSelectionReaderFactory?.'],
+  ['const applicability=sortArrowReaderFactory?.','const focusSelectionReaderFactory = options.caseObligationReviewSha256===focusSelectionReview ? createFocusSelectionAuditReviewReader : sortArrowReaderFactory;\n    const applicability=focusSelectionReaderFactory?.'],
+  ['    audit.coverage = attachCaseObligationCoverage(audit.coverage,',"    assert.ok(!applicability || typeof applicability.then !== 'function', 'Audit evidence readers must be synchronous within evidence session');\n    audit.coverage = attachCaseObligationCoverage(audit.coverage,"],
 ];
 export function prepareFocusSelectionAuditSelection(bytes,kind){
   assert.ok(Object.hasOwn(selectionPrior,kind));let source=bytes.toString().replaceAll('\r\n','\n');assert.equal(hash(source),selectionPrior[kind]);
@@ -135,11 +137,10 @@ export function createFocusSelectionAuditPriorRead({root,read}){
   };
   return priorRead;
 }
-export async function createFocusSelectionAuditReviewReader({root,read,reviewSha256}){
+export function createFocusSelectionAuditReviewReader({root,read,reviewSha256}){
   assert.equal(reviewSha256,focusSelectionReview,'Only exact supplementary focus/selection review selects this reader');
   const priorRead=createFocusSelectionAuditPriorRead({root,read});
-  const {createTimepickerProgrammaticFocusReviewReader}=await import('../../scripts/join-material-timepicker-programmatic-focus.mjs');
-  const reader=await createTimepickerProgrammaticFocusReviewReader({root,read:priorRead});assert.equal(reader.sha256,reviewSha256);
+  const reader=createTimepickerProgrammaticFocusReviewReader({root,read:priorRead});assert.equal(reader.sha256,reviewSha256);
   return {...reader,sourceApplicability:{mode:'exact-focus-selection-partial-review',restoredRegistrySelectionSources:4,
     predecessorApplicability:reader.sourceApplicability,boundary:'Exact whole-source registry/selection plus historical test restorations only;not canonical publication,original Material cause,current rendering or case closure.'}};
 }

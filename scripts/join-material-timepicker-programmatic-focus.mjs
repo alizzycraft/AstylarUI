@@ -4,6 +4,7 @@ import {createHash} from 'node:crypto';
 import path from 'node:path';
 import ts from 'typescript';
 import {createFocusSelectionAuditPriorRead} from '../tests/material-parity/public-tab-selection-finding.mjs';
+import {createSortArrowReviewReader,sortArrowReview} from '../tests/material-parity/sort-arrow-findings.mjs';
 
 const hash=b=>createHash('sha256').update(b).digest('hex');
 export const timepickerProgrammaticFocusPredecessor='8554f8ef7d18ee02a80a409eddb7f96a1aad188983d124d49f9c9d556799f71e';
@@ -100,8 +101,7 @@ export function createTimepickerProgrammaticFocusPriorRead({root,read}){
   };
 }
 
-export async function createTimepickerProgrammaticFocusReviewReader({root,read}){
-  const {createSortArrowReviewReader,sortArrowReview}=await import('../tests/material-parity/sort-arrow-findings.mjs');
+export function createTimepickerProgrammaticFocusReviewReader({root,read}){
   assert.equal(sortArrowReview,timepickerProgrammaticFocusPredecessor);
   const priorRead=createTimepickerProgrammaticFocusPriorRead({root,read});
   const prior=createSortArrowReviewReader({root,read:priorRead,reviewSha256:sortArrowReview});

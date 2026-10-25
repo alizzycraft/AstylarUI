@@ -81,7 +81,7 @@ if (editingContext) inputs['case-obligation-review'] = 'artifacts/material-parit
 if (textHeld) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/45d3fb0779cfa4d53137cfbc47225791634874026936b1abb5135222dee75588.json';
 if (treeFocus) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/6ea59073771388cec874ad6985e38823f68d1d72ab7c37d72cb61c5e11a0e411.json';
 if (sortArrow) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/8554f8ef7d18ee02a80a409eddb7f96a1aad188983d124d49f9c9d556799f71e.json';
-if (focusSelection) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/0da5443578c79b0b58ee4fc8b4902df6185ad08fee2d03fd863a0a466fefcb6b.json';
+if (focusSelection) inputs['case-obligation-review'] = 'artifacts/material-parity/working-audit/proposals/d47c41d3d6ac4dff3632688a36e8e20e2ec631fe0c9feca1bc05a198f36d3bab.json';
 for (const [name, relative] of Object.entries(inputs)) {
   const retained = (originalRunnerRecovery || dividerComputedPaint || dividerOwnerFrame || menuSelectDisabled || dividerOwnerContext || editingContext || textHeld || treeFocus || sortArrow || focusSelection) && name === 'case-obligation-review' ? 'artifacts/material-parity/working-audit/proposals/c394338eb185b3f410e7e18825cd370391b8daeb827f9b60f4d7355b46862823.json' : relative;
   const stat = statSync(path.join(root, retained));
@@ -107,7 +107,7 @@ if (editingContext) args[args.findIndex(argument => argument.startsWith('--case-
 if (textHeld) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=45d3fb0779cfa4d53137cfbc47225791634874026936b1abb5135222dee75588';
 if (treeFocus) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=6ea59073771388cec874ad6985e38823f68d1d72ab7c37d72cb61c5e11a0e411';
 if (sortArrow) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=8554f8ef7d18ee02a80a409eddb7f96a1aad188983d124d49f9c9d556799f71e';
-if (focusSelection) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=0da5443578c79b0b58ee4fc8b4902df6185ad08fee2d03fd863a0a466fefcb6b';
+if (focusSelection) args[args.findIndex(argument => argument.startsWith('--case-obligation-review-sha256='))] = '--case-obligation-review-sha256=d47c41d3d6ac4dff3632688a36e8e20e2ec631fe0c9feca1bc05a198f36d3bab';
 if (requested.includes('--dry-run')) console.log(JSON.stringify({ cwd: root, executable: process.execPath, args }, null, 2));
 else {
   // Forward the caller's cold/progress settings and preserve validation failure

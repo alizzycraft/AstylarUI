@@ -4,6 +4,35 @@
 
 ### Current next action and publication status
 
+October25 first focus/selection exporter attempt FAILED immediately,before writes:
+`focus-selection-canonical-export-20261025.log` records SyntaxError at await
+inside the evidence-session's synchronous callback. The prior extracted routing
+test evaluated that declaration in an artificial async wrapper and missed the
+full module's context;its earlier pass was not runner syntax/execution proof.
+
+Correction preserves the established synchronous evidence-session contract:
+new readers use static imports and return synchronously;the actual runner rejects
+Promise-valued applicability. Focused proof now runs Node's syntax checker on
+the COMPLETE prepared runner and executes its actual synchronous guard with a
+rejecting async-reader control. Fast contract check passes1/1,6666.5563ms in
+`focus-selection-sync-runner-contract-20261025.log`. The real synchronous session
+then authenticates18439 dependencies and reverifies18604 files/3349149297 bytes,
+diskHits0:1/1,0skip,217804.6614ms in
+`focus-selection-sync-session-reader-20261025.log`. Compatibility controls pass
+4/4,10167.6232ms in `focus-selection-sync-compatibility-20261025.log`.
+All logs use artifacts/material-parity. No session lifetime relaxation or validator
+waiver;no renderer/fixture changes.
+
+Current explicit --focus-selection digest is
+`d47c41d3d6ac4dff3632688a36e8e20e2ec631fe0c9feca1bc05a198f36d3bab`;
+0da is historical because the self-receipted join producer became synchronous.
+Observations and counts1077/407/203/70 preserve. Hash-verified predecessor backup
+is `focus-selection-pre-export-7a22-20261025`,with receipt log
+`focus-selection-pre-export-backup-20261025.log`. Accepted7a22 is untouched.
+Use one fresh sync-corrected export log for retry;retain the failure and reuse
+the existing backup. Freeze sources for conservation/cold/import;all original
+acceptance gates and2311 partial/current-rendering-unverified cases remain open.
+
 October25 focus/selection batch is now LIVE registered at1077 sources/407 proof
 declarations/203 findings/70 implementation tracks. Explicit --focus-selection
 selects `0da5443578c79b0b58ee4fc8b4902df6185ad08fee2d03fd863a0a466fefcb6b`.
