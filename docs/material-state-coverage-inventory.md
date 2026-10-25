@@ -26,9 +26,23 @@ source equivalence;GPU alpha blending,historical/current screenshot attribution,
 other contexts and whole-case acceptance remain unproven. No new browser run.
 
 The proof is a standalone pending addition,outside frozen1067/392/200/67. Do not
-change widths,offsets,styles or reference path to hide it. Next authenticate the
-captured plugin implementation if reusable evidence exists,and inspect history;
-only then decide whether another bounded raster check closes a real gap. Keep
+change widths,offsets,styles or reference path to hide it. Source history now
+identifies5b74d1b3e79016a1ba402090d66c60a123718e71,parent6a43034a,as introduction
+of this five-triangle function and replacement of the prior text-arrow glyph.
+Executed initial vertices at unit scale equal current CSS vertices;the later
+e4ca3db4070b1aaac0c1a43dda67bc135f18900a CSS-coordinate-boundary revision also
+preserves them exactly. Thus the demonstrated topology mismatch is not introduced
+by that later coordinate API refactor. This is source/model history,not historical
+rendering or proof of the September reference path. Initial source b07e7788 and
+boundary source86e38216 are printed by the existing focused test,which passes1/1,
+exit0,1786.427ms (assertion1358.5507ms).
+
+The pinned original report exposes installedDependencies as a64-character digest,
+not an application-source/bundle receipt;its root contains only report/summary.
+No direct capture-time plugin-source equality was established from those records.
+This is a specific provenance limitation,not proof that no other retained receipt
+exists. Before a new raster run,check whether the needed capture-time source can
+be authenticated from already indexed evidence. Keep
 the separate Sort typography,focus-border and authored keyboard findings intact.
 No renderer/plugin implementation or canonical generation changed.
 

@@ -11,8 +11,10 @@ opacity.54,so overdraw may also affect blending,but that GPU effect is unproven.
 Future work must preserve the same native path,dimensions and CSS-space intent
 and use faithful nonoverlapping vector geometry;do not compensate with scale,
 offset,color or opacity changes. This is application-plugin paint ownership,
-not established core projection failure. Capture-time plugin equivalence,history
-and final raster verification remain open. Audit only;no fix is authorized here.
+not established core projection failure. Source5b74d1b3 introduced the function
+while replacing the text glyph;the e4ca3db4 CSS-coordinate API refactor preserves
+the same vertices. Historical reference/runtime and capture-time plugin equality
+remain unproven,as does final raster impact. Audit only;no fix is authorized here.
 
 ## Pending Tree tab-stop input delta,October25
 
