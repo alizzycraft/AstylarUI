@@ -4,6 +4,27 @@
 
 ### Current next action and publication status
 
+October25 Sort batch is LIVE registered at1070 sources/398 proof declarations/
+202 findings/69 implementation tracks. Explicit --sort-arrow selects8554f8ef;
+default/older selections conserve and mixed flags reject. Complete prior
+1067/392/200/67 entries preserve. Shared Tree registry/selection restoration now
+strips only the exact guarded Sort additions before older replay;the original
+Tree suite retains its historical population through the existing Sort prior
+reader. New Sort checks separately inspect raw live registry bytes.
+
+Combined actual-source Sort/Tree suite passes15/15,exit0,247512.271ms:
+artifacts/material-parity/sort-live-registration-integration-20261025.log.
+The Sort loader authenticates18404 dependencies/2311 partial,rendering-unverified
+cases. Earlier Text-held registration conservation passes1/1,7489.948ms in
+sort-prior-held-registration-20261025.log;shared preflight passes2/2,6009.4181ms
+in sort-shared-replay-preflight-20261025.log (same artifact parent). All previous
+failures remain retained. No browser capture,fixture/renderer changes or full
+physical proposal. Freeze this coherent batch before one justified canonical
+export/conservation/independent-cold/import milestone. Historical canonical8848
+is NOT current-source equality;all2311 case dispositions and final gates remain
+open. Do not repeat the completed Sort census,pixel sampling or registration
+suite merely for publication prose.
+
 October25 Sort staged selection/reader integration now authenticates18404
 dependencies/2311 cases for exact8554f8ef,with explicit --sort-arrow prepared
 IN MEMORY only. Default and every older selection preserve;combined supplement

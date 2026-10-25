@@ -11,15 +11,16 @@ import {evaluateFocusedRaster} from './focused-raster-metrics.mjs';
 
 const hash=b=>createHash('sha256').update(b).digest('hex');
 test('Sort staged registry preserves all existing sources proofs findings and plans',async t=>{
-  const {prepareSortArrowRegistry:prepare,restoreSortArrowRegistry:restore,sortArrowSources,sortArrowProofTitles}=await import('./sort-arrow-findings.mjs');
-  const files={producer:'tests/material-parity/input-equivalence-audit.mjs',policy:'tests/material-parity/input-equivalence-policy.mjs'},before={},staged={};
+  const {prepareSortArrowRegistry:prepare,restoreSortArrowRegistry:restore,createSortArrowPriorRead,sortArrowSources,sortArrowProofTitles}=await import('./sort-arrow-findings.mjs');
+  const files={producer:'tests/material-parity/input-equivalence-audit.mjs',policy:'tests/material-parity/input-equivalence-policy.mjs'},before={},staged={},raw={};
+  const readPrior=createSortArrowPriorRead({root:process.cwd(),read:readFileSync});
   for(const [kind,file]of Object.entries(files)){
-    before[kind]=readFileSync(file,'utf8').replaceAll('\r\n','\n');staged[kind]=prepare(before[kind],kind,readFileSync);
+    raw[kind]=readFileSync(file,'utf8').replaceAll('\r\n','\n');before[kind]=readPrior(file,'utf8');staged[kind]=prepare(before[kind],kind,readFileSync);
     assert.equal(restore(staged[kind],kind),before[kind]);
     assert.throws(()=>prepare(before[kind]+'\n// drift',kind,readFileSync));
     assert.throws(()=>restore(staged[kind]+'\n// drift',kind));
     assert.throws(()=>prepare(staged[kind],kind,readFileSync));
-    assert.equal(readFileSync(file,'utf8').replaceAll('\r\n','\n'),before[kind]);
+    assert.equal(readFileSync(file,'utf8').replaceAll('\r\n','\n'),raw[kind]);if(raw[kind]!==before[kind])assert.equal(raw[kind],staged[kind]);
   }
   assert.throws(()=>prepare(before.producer,'producer',()=>Buffer.alloc(0)));
   const arrays=source=>{const tree=ts.createSourceFile('registry.mjs',source,99,true,ts.ScriptKind.JS);assert.equal(tree.parseDiagnostics.length,0);
@@ -37,15 +38,24 @@ test('Sort staged registry preserves all existing sources proofs findings and pl
   const oldPolicy=arrays(before.policy).definitions,newPolicy=arrays(staged.policy).definitions;
   assert.equal(oldPolicy.length,200);assert.equal(newPolicy.length,202);assert.deepEqual(newPolicy.slice(2),oldPolicy);
   for(const entry of newPolicy.slice(0,2)){const f=new Function('return '+entry)();assert.equal([...readFileSync(f.file,'utf8').matchAll(new RegExp(f.pattern,'g'))].length,1);assert.ok(f.justification);}
+  const {restoreTextHeldProducer,restoreTextHeldSelection}=await import('./text-held-registration.mjs');
+  assert.equal(restoreTextHeldProducer(staged.producer),restoreTextHeldProducer(before.producer));
+  const {createTreeFocusPriorRead}=await import('./tree-focus-registration.mjs');
+  const stages=new Map(Object.entries(files).map(([kind,file])=>[path.resolve(file),staged[kind]]));
+  const read=(file,encoding)=>stages.has(path.resolve(file))?(encoding?stages.get(path.resolve(file)):Buffer.from(stages.get(path.resolve(file)))):readFileSync(file,encoding);
+  const historical=createTreeFocusPriorRead({root:process.cwd(),read});
+  const control=createTreeFocusPriorRead({root:process.cwd(),read:readPrior});
+  for(const file of Object.values(files))assert.equal(historical(file,'utf8'),control(file,'utf8'));
   t.diagnostic(JSON.stringify({stagedSources:1070,stagedProofs:398,stagedFindings:202,stagedTracks:69,completePredecessorRecovered:true,liveWrites:false,readerReconciled:false,canonicalPublished:false}));
 });
 test('Sort staged selection and reader preserve older routes and authenticate the exact successor',async t=>{
   const api=await import('./sort-arrow-findings.mjs'),root=process.cwd(),staged=new Map();
   const entries=[['tests/material-parity/input-equivalence-audit.mjs','producer'],['tests/material-parity/input-equivalence-policy.mjs','policy'],['scripts/run-material-input-audit.mjs','runner'],['scripts/export-material-input-audit-current-ancestry.mjs','launcher']];
-  for(const [file,kind]of entries){const bytes=readFileSync(file),prepare=['producer','policy'].includes(kind)?api.prepareSortArrowRegistry:api.prepareSortArrowSelection;
+  const previous=api.createSortArrowPriorRead({root,read:readFileSync});
+  for(const [file,kind]of entries){const bytes=previous(file),prepare=['producer','policy'].includes(kind)?api.prepareSortArrowRegistry:api.prepareSortArrowSelection;
     staged.set(path.resolve(file),Buffer.from(prepare(bytes,kind,readFileSync)));}
   const read=(file,options)=>{const b=staged.get(path.resolve(file));if(!b)return readFileSync(file,options);const encoding=typeof options==='string'?options:options?.encoding;return encoding?b.toString(encoding):Buffer.from(b);};
-  const prior=api.createSortArrowPriorRead({root,read});for(const [file]of entries){assert.equal(prior(file,'utf8'),readFileSync(file,'utf8').replaceAll('\r\n','\n'));
+  const prior=api.createSortArrowPriorRead({root,read});for(const [file]of entries){assert.equal(prior(file,'utf8'),previous(file,'utf8'));
     const key=path.resolve(file),bytes=staged.get(key);staged.set(key,Buffer.concat([bytes,Buffer.from('\n// drift')]));assert.throws(()=>prior(file));staged.set(key,bytes);}
   // Derive the intermediate through its owning inverse, then prove repeated
   // Tree routing preserves it and still rejects unrecognized source drift.
@@ -55,7 +65,7 @@ test('Sort staged selection and reader preserve older routes and authenticate th
   assert.equal(hash(restoredDivider),'035e13aab28532b8e832992c1027ab15d340193d5940df46af5917e0a67380e7');
   const repeated=createTreeFocusPriorRead({root,read:(_file,encoding)=>encoding?restoredDivider:Buffer.from(restoredDivider)});assert.equal(repeated(divider,'utf8'),restoredDivider);
   assert.throws(()=>createTreeFocusPriorRead({root,read:()=>Buffer.from(restoredDivider+'\n// drift')})(divider));
-  const launcherFile=entries[3][0],before=readFileSync(launcherFile,'utf8').replaceAll('\r\n','\n'),after=read(launcherFile,'utf8');
+  const launcherFile=entries[3][0],before=previous(launcherFile,'utf8'),after=read(launcherFile,'utf8');
   const rootLine="const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');";
   const run=(source,flags)=>spawnSync(process.execPath,['--input-type=module','-','--dry-run',...flags],{input:source.replace(rootLine,`const root = ${JSON.stringify(root)};`),encoding:'utf8',windowsHide:true});
   const selected=run(after,['--sort-arrow']);assert.equal(selected.status,0,selected.stderr);assert.ok(JSON.parse(selected.stdout).args.includes('--case-obligation-review-sha256='+api.sortArrowReview));

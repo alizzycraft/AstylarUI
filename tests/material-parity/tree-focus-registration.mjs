@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {treeFocusFindings} from './tree-focus-findings.mjs';
+import {restoreSortArrowRegistry,restoreSortArrowSelection} from './sort-arrow-findings.mjs';
 import path from 'node:path';
 import {createTextHeldReviewReader,textHeldReview} from './text-held-registration.mjs';
 import {joinTreeFocusEvidence,treeFocusPredecessor} from '../../scripts/join-material-tree-focus-evidence.mjs';
@@ -52,6 +53,7 @@ export function prepareTreeFocusRegistry(bytes,kind,read){
   return once(text,planAnchor,planAnchor+planPrefix);
 }
 export function restoreTreeFocusRegistry(bytes,kind){
+  if(bytes.toString().includes('fixture-sort-hover-arrow-omitted')||bytes.toString().includes('"scripts/join-material-sort-arrow-evidence.mjs"'))bytes=restoreSortArrowRegistry(bytes,kind);
   assert.ok(Object.hasOwn(prior,kind));let text=bytes.toString().replaceAll('\r\n','\n');
   if(kind==='policy')text=once(text,definitionAnchor+definitionPrefix,definitionAnchor);
   else{for(const [anchor,prefix]of [[sourceAnchor,sourcePrefix],[proofAnchor,proofPrefix],[planAnchor,planPrefix]])text=once(text,anchor+prefix,anchor);}
@@ -75,6 +77,7 @@ export function prepareTreeFocusSelection(bytes,kind){
   for(const [a,b]of selectionTransitions(kind))text=once(text,a,b);return text;
 }
 export function restoreTreeFocusSelection(bytes,kind){
+  if(bytes.toString().includes('--sort-arrow')||bytes.toString().includes('sortArrowReaderFactory'))bytes=restoreSortArrowSelection(bytes,kind);
   assert.ok(Object.hasOwn(selectionPrior,kind));let text=bytes.toString().replaceAll('\r\n','\n');
   for(const [a,b]of selectionTransitions(kind).toReversed())text=once(text,b,a);assert.equal(hash(text),selectionPrior[kind]);return text;
 }

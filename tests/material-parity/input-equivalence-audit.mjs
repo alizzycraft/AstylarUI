@@ -8922,6 +8922,9 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    "scripts/join-material-sort-arrow-evidence.mjs",
+    "tests/material-parity/sort-arrow-findings.mjs",
+    "tests/material-parity/sort-arrow-geometry.spec.mjs",
     "scripts/audit-material-tree-pointer-tabstop.mjs",
     "scripts/audit-public-tree-fixed-tabstop.mjs",
     "scripts/audit-public-tree-tab-exit-trace.mjs",
@@ -9996,6 +9999,18 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, "tests/material-parity/sort-arrow-geometry.spec.mjs", new RegExp("test\\('Sort staged selection and reader preserve older routes and authenticate the exact successor'"),
+      "Sort staged selection and reader preserve older routes and authenticate the exact successor", "Bounded retained Sort presence and vector/pixel evidence;not fresh current rendering or complete case acceptance."),
+    proof(root, "tests/material-parity/sort-arrow-geometry.spec.mjs", new RegExp("test\\('Sort staged registry preserves all existing sources proofs findings and plans'"),
+      "Sort staged registry preserves all existing sources proofs findings and plans", "Bounded retained Sort presence and vector/pixel evidence;not fresh current rendering or complete case acceptance."),
+    proof(root, "tests/material-parity/sort-arrow-geometry.spec.mjs", new RegExp("test\\('Sort arrow partial join conserves the complete Tree predecessor and all remaining work'"),
+      "Sort arrow partial join conserves the complete Tree predecessor and all remaining work", "Bounded retained Sort presence and vector/pixel evidence;not fresh current rendering or complete case acceptance."),
+    proof(root, "tests/material-parity/sort-arrow-geometry.spec.mjs", new RegExp("test\\('pending Sort arrow findings preserve separate state and vector ownership'"),
+      "pending Sort arrow findings preserve separate state and vector ownership", "Bounded retained Sort presence and vector/pixel evidence;not fresh current rendering or complete case acceptance."),
+    proof(root, "tests/material-parity/sort-arrow-geometry.spec.mjs", new RegExp("test\\('all retained Sort hover contexts omit the candidate arrow despite visible native opacity'"),
+      "all retained Sort hover contexts omit the candidate arrow despite visible native opacity", "Bounded retained Sort presence and vector/pixel evidence;not fresh current rendering or complete case acceptance."),
+    proof(root, "tests/material-parity/sort-arrow-geometry.spec.mjs", new RegExp("test\\('Sort arrow bounds conceal extra filled area and overlapping current plugin triangles'"),
+      "Sort arrow bounds conceal extra filled area and overlapping current plugin triangles", "Bounded retained Sort presence and vector/pixel evidence;not fresh current rendering or complete case acceptance."),
     proof(root, "tests/material-parity/tree-tabstop-inputs.spec.mjs", new RegExp("test\\('pending Tree findings keep authoring and public core failure scopes separate'"),
       "pending Tree findings keep authoring and public core failure scopes separate", "Bounded Tree input,raw-owner,public Tab-exit and conservation evidence;not current rendering or whole-case acceptance."),
     proof(root, "tests/material-parity/tree-tabstop-inputs.spec.mjs", new RegExp("test\\('Tree partial evidence join conserves its exact predecessor and all remaining case work'"),
@@ -10791,6 +10806,8 @@ function proof(root, file, expression, status, description) {
 
 function implementationPlan() {
   return [
+    {"priority":2.2,"rootCause":"showcase Sort arrow presence/state translation","action":"Match native hover/focus/activation arrow presence through authored state;do not add renderer offsets or duplicate input routing. Retained input presence and current source/history only;not raw hover timing,animation,paint,current served build or whole-case closure."},
+    {"priority":2.2,"rootCause":"Material sort-arrow CSS-space vector paint geometry","action":"Preserve native path and dimensions with faithful nonoverlapping vector geometry;do not retune scale,offset,color or opacity to hide the mismatch. Current geometry and source history plus two retained local observations. Captured-plugin linkage and fresh current raster remain unverified;not all-context paint or case closure."},
     {"priority":0.15,"rootCause":"Babylon pointer move reintroduces canvas sequential focus and semantic sync recaptures backward exit","action":"Coordinate core/Babylon canvas tab ownership while preserving pointer/selection focus and genuine modal containment;verify forward/backward exit without replacing native Tab navigation. Preserve the uninstrumented equal-input pair and authenticated causal trace;historical introduction and broader contexts remain open."},
     {"priority":2.1,"rootCause":"Tree authored roving tab stop remains fixed on the first item","action":"Restore equivalent roving tab-stop inputs through public semantics;do not compensate in layout or implement a plugin input engine. Preserve the independent core Tab-exit finding;do not confuse equivalent fixed-tabstop forward behavior with Material roving-state parity."},
     {"priority":3.05,"rootCause":"Block align-content omission resolves to stretch instead of normal","action":"Resolve omitted block align-content as CSS normal at the owning defaults/layout boundary. Preserve the native normal/stretch margin-collapse distinction and flex/grid behavior;do not globally alias the keywords or retune Material paragraph heights. Reuse the existing public block-alignment reduction before removing flow substitutions."},

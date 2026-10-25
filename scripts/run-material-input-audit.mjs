@@ -30,6 +30,7 @@ import { dividerOwnerContextReview, createDividerOwnerContextReviewReader } from
 import { editingContextReview, createEditingContextReviewReader } from '../tests/material-parity/editing-context-review-source.mjs';
 import { textHeldReview, createTextHeldReviewReader } from '../tests/material-parity/text-held-registration.mjs';
 import { treeFocusReview, createTreeFocusReviewReader } from '../tests/material-parity/tree-focus-registration.mjs';
+import { sortArrowReview, createSortArrowReviewReader } from '../tests/material-parity/sort-arrow-findings.mjs';
 import { createTextBackingReviewReader, textBackingRetainedReview, createDividerReviewedBoundariesReader, dividerReviewedBoundariesReview, inactiveParagraphInputsReview, filledFieldStructureReview, chipPaintReview, chipGraphicReview, controlInputReview, dividerPropertyContextReview, sharedButtonTouchReview, passiveStaticAxReview, cardInputsReview, expansionSemanticsReview, stepperInputsReview, tabsMenuSheetReview, staticSemanticInputsReview } from '../tests/material-parity/text-backing-case-review-source.mjs';
 
 const root = process.cwd();
@@ -68,7 +69,8 @@ const { audit, errors } = withAuditEvidenceSession(() => {
     const editingReaderFactory = options.caseObligationReviewSha256===editingContextReview ? createEditingContextReviewReader : dividerContextReaderFactory;
     const textHeldReaderFactory = options.caseObligationReviewSha256===textHeldReview ? createTextHeldReviewReader : editingReaderFactory;
     const treeFocusReaderFactory = options.caseObligationReviewSha256===treeFocusReview ? createTreeFocusReviewReader : textHeldReaderFactory;
-    const applicability=treeFocusReaderFactory?.({root,read:auditReadFileSync,reviewSha256:options.caseObligationReviewSha256});
+    const sortArrowReaderFactory = options.caseObligationReviewSha256===sortArrowReview ? createSortArrowReviewReader : treeFocusReaderFactory;
+    const applicability=sortArrowReaderFactory?.({root,read:auditReadFileSync,reviewSha256:options.caseObligationReviewSha256});
     audit.coverage = attachCaseObligationCoverage(audit.coverage, options.caseObligationReview,
       options.caseObligationReviewSha256, { root, read: applicability?.read ?? auditReadFileSync });
     if(applicability)audit.coverage.inspectionEvidence.sourceApplicability=applicability.sourceApplicability;

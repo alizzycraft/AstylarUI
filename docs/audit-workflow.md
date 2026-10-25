@@ -1,5 +1,16 @@
 # Efficient Material input-audit workflow
 
+October25 Sort batch is live1070 sources/398 proofs/202 findings/69 tracks;
+explicit --sort-arrow selects8554f8ef. Combined Sort/Tree integration passes15/15
+and actual-source review loading authenticates18404 dependencies/2311 partial,
+current-rendering-unverified cases. Whole-source guarded shared replay preserves
+older inventories and selectors. Freeze this batch for one coherent canonical
+export/conservation/independent-cold/import milestone;accepted8848 remains
+historical until those gates pass. Disk headroom and HTTPS publication are now
+available,not the earlier blockers. Recheck space before large writes;no repeat
+capture or registration run is justified solely by prose changes. Original
+equal-input contract,scope and final acceptance criteria remain unchanged.
+
 October25 held-control batch is live registered1060/383 with explicit --text-held
 selecting45d3fb07. Actual live-reader integration validates18402 receipts/2311
 partial,current-rendering-unverified cases;old selectors and complete1055/378

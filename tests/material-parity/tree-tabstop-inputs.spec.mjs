@@ -1,12 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync as rawReadFileSync } from 'node:fs';
+import { createSortArrowPriorRead } from './sort-arrow-findings.mjs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import { materialInteractionCases,materialProfiles,materialViewports } from './benchmark.config.mjs';
 
 const hash=b=>createHash('sha256').update(b).digest('hex');
+// These original Tree-stage assertions retain their exact population. New Sort
+// registration is checked separately against raw live files by the Sort suite.
+const readFileSync=createSortArrowPriorRead({root:process.cwd(),read:rawReadFileSync});
 const ids=['tree-item-0','tree-item-1','tree-item-2'];
 test('Tree staged registry conserves every live source proof finding and plan without writes',async t=>{
   const {prepareTreeFocusRegistry,restoreTreeFocusRegistry,treeFocusSources,treeFocusProofTitles,

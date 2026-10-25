@@ -1,5 +1,13 @@
 # Audit artifact retention
 
+Keep sort-live-registration-integration-20261025.log (15/15),
+sort-prior-held-registration-20261025.log (1/1) and
+sort-shared-replay-preflight-20261025.log (2/2),alongside the staged Sort reader
+integration/corrected failures and verified retry. These are registration/replay
+evidence,not current-rendering acceptance or replacement captures. Original
+Sort report,120 trees,four PNGs,Tree public reductions and canonical8848 remain
+required;live registration alone does not establish reference closure for deletion.
+
 Keep tree-pointer-tabstop-20261025 and its provenance/capture/verify log pairs,
 plus tree-tabstop-actual-dom-integration-20261025 log/stderr. One raw-DOM context
 and disclosed Tab/Shift+Tab supplement,report SHA256
