@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
+import { readFileSync } from 'node:fs';
+import { createMenuHistoricalRead } from './menu-select-disabled-registration.mjs';
 import { restoreDividerOwnerFrameProducer } from './divider-owner-frame-registration.mjs';
 
 export const pendingEvidenceSourceFiles = Object.freeze([
@@ -182,6 +184,13 @@ export function registerPendingEvidenceProducer(source) {
   return replaceOnce(text, proofAnchor, proofAnchor + proofAddition);
 }
 export function restorePendingEvidenceProducer(source) {
+  if (source.toString().includes('"scripts/audit-material-menu-ax-contexts.mjs"')) {
+    const file = path.resolve('tests/material-parity/input-equivalence-audit.mjs');
+    const read = (name, options) => path.resolve(name) === file
+      ? (typeof options === 'string' ? source.toString(options) : Buffer.from(source))
+      : readFileSync(name, options);
+    source = createMenuHistoricalRead({ root: process.cwd(), read })(file);
+  }
   let text = restoreDividerOwnerFrameProducer(source);
   if (hash(text) === frozen) return text;
   text = replaceOnce(text, sourceAnchor + sourceAddition, sourceAnchor);

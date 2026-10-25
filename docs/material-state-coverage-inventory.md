@@ -4,6 +4,25 @@
 
 ### Current next action and publication status
 
+October25 focused replay correction: `restorePendingEvidenceProducer` now
+composes the existing authenticated Menu/prior-registration reader before the
+older owner/frame restoration when the exact newer source marker is present.
+The complete older producer still recovers SHA256
+`0aba1870b5ee9f0231cfb2528d6d89a581ae8558a0c9859e116a145febcbe3e1`;
+appended unrelated source drift rejects. The existing registration rejection
+test and alignment integration/conservation test each pass (1/1,0 skipped).
+All four original-capture collectors now bind: alignment/font72 groups/4016
+observations,text-align49/2677,LTR4/178,reviewed inputs134/3325. Their259 groups
+exactly account for the failed export's unresolved count. This is focused
+binding recovery,not a full production export or canonical acceptance.
+The older `historical read restores...` staged-registration test also failed
+before reaching the added assertion: the newest reader tried removing its
+prefix from an intermediate Menu-only producer. Preserve that failure as an
+additional compatibility question;do not describe the complete suite as green.
+Next reconcile changed source fingerprints/historical helper bytes and resolve
+that staged-reader compatibility before retrying the full export. No renderer,
+fixture,reference receipt or acceptance threshold was changed.
+
 October25 export checkpoint: the original `--editing-context` export terminated
 with exit1 before `encode-canonical`/`write-canonical`. Preserve
 `artifacts/material-parity/editing-canonical-export-20261025.log` and its

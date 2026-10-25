@@ -7,6 +7,7 @@ import path from 'node:path';
 import { prepareMenuSelection } from './menu-select-disabled-selection.mjs';
 import { restoreDividerOwnerFrameProducer } from './divider-owner-frame-registration.mjs';
 import { restoreDividerOwnerFrameExportSource } from './pending-evidence-registration.mjs';
+import { restorePendingEvidenceProducer } from './pending-evidence-registration.mjs';
 import { menuPendingSources, menuPendingProofRows, prepareMenuProducerRegistration, restoreMenuProducerRegistration,
   menuPendingFindingDefinitions, prepareMenuPolicyRegistration, restoreMenuPolicyRegistration, createMenuHistoricalRead,
   menuHistoricalSpecHashes, restoreMenuHistoricalSpec } from './menu-select-disabled-registration.mjs';
@@ -95,4 +96,10 @@ test('pending registration rejects changed frozen producer or missing proof sour
   const source = frozenRead('tests/material-parity/input-equivalence-audit.mjs');
   assert.throws(() => prepareMenuProducerRegistration(source.toString() + '\n', readFileSync));
   assert.throws(() => prepareMenuProducerRegistration(source, file => file.endsWith('menu-popup-ax.spec.mjs') ? Buffer.from('') : readFileSync(file)));
+  const liveProducer = readFileSync('tests/material-parity/input-equivalence-audit.mjs');
+  assert.equal(createHash('sha256').update(restorePendingEvidenceProducer(liveProducer)).digest('hex'),
+    '0aba1870b5ee9f0231cfb2528d6d89a581ae8558a0c9859e116a145febcbe3e1');
+  assert.throws(() => restorePendingEvidenceProducer(Buffer.concat([
+    liveProducer, Buffer.from('\n// unexpected mutation'),
+  ])));
 });
